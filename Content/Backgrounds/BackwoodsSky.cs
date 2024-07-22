@@ -1,0 +1,65 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using Newtonsoft.Json.Linq;
+
+using RiseofAges.Common.Utilities.Extensions;
+using RiseofAges.Content.Biomes.Backwoods;
+
+using RoA.Common.Common;
+using RoA.Content.World.Generations;
+using RoA.Core;
+
+using System;
+
+using Terraria;
+using Terraria.GameContent;
+using Terraria.Graphics.Effects;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Backgrounds;
+
+[Autoload(Side = ModSide.Client)]
+sealed class BackwoodsSky : CustomSky {
+    private bool _skyActive;
+    private float _opacity;
+
+    public override void Update(GameTime gameTime) {
+        if (!Main.LocalPlayer.InModBiome(ModContent.GetInstance<BackwoodsBiome>()) || Main.gameMenu) {
+            _skyActive = false;
+        }
+        if (_skyActive && _opacity < 1f) {
+            _opacity += 0.02f;
+        }
+        else if (!_skyActive && _opacity > 0f) {
+            _opacity -= 0.02f;
+        }
+    }
+
+    public override Color OnTileColor(Color inColor) {
+		float amt = _opacity * .3f;
+		return inColor.MultiplyRGB(new Color(1f - amt, 1f - amt, 1f - amt));
+	}
+
+	public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
+        if (maxDepth >= 3E+38f && minDepth < 3E+38f && !Main.gameMenu) {
+            Texture2D skyTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsSky").Value;
+            spriteBatch.Draw(skyTexture,
+				new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
+				Main.ColorOfTheSkies * 0.95f * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _opacity));
+            spriteBatch.Draw(skyTexture,
+                new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
+                Color.Black.MultiplyRGB(Main.ColorOfTheSkies) * 0.15f * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _opacity));
+        }
+    }
+
+    public override float GetCloudAlpha() => 1f - _opacity;
+
+    public override void Activate(Vector2 position, params object[] args) => _skyActive = true;
+
+    public override void Deactivate(params object[] args) => _skyActive = Main.LocalPlayer.InModBiome(ModContent.GetInstance<BackwoodsBiome>());
+
+    public override void Reset() => _skyActive = false;
+
+    public override bool IsActive() => _skyActive || _opacity > 0f;
+}

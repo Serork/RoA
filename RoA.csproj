@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- Import tModLoader mod properties -->
+	<Import Project="..\tModLoader.targets" />
+
+	<!-- General -->
+	<PropertyGroup>
+		
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Localization\en-US_Mods.RoA.hjson" />
+	  <None Remove="Localization\en-US_Mods.RoA.Tiles.hjson" />
+	  <None Remove="Localization\en-US_Mods.RoA.WorldGen.hjson" />
+	  <None Remove="Resources\Textures\Backgrounds\BackwoodsClose.png" />
+	  <None Remove="Resources\Textures\Backgrounds\BackwoodsFar.png" />
+	  <None Remove="Resources\Textures\Backgrounds\BackwoodsMid.png" />
+	  <None Remove="Resources\Textures\Backgrounds\BackwoodsMid2.png" />
+	  <None Remove="Resources\Textures\Backgrounds\BackwoodsSky.png" />
+	  <None Remove="Resources\Textures\Dusts\BackwoodsWoodTrash.png" />
+	  <None Remove="Resources\Textures\Empty.png" />
+	  <None Remove="Resources\Textures\Gores\Leaf.png" />
+	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
+	  <None Remove="Resources\Textures\Items\Placeable\ElderwoodChest.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\AshwalkerCane.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\BloomingDoom.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\BrilliantBouquet.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\CactiCaster.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\EbonwoodStaff.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\ExoticTulip.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\MushroomStaff.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\PastoralRod.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\PineCone.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\RipePumpkin.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\SacrificialSickleOfTheMoon.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\SapStream.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\ShadewoodStaff.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\SpikedIceStaff.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\SweetTulip.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\WeepingTulip.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\Woodbinder.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ElderwoodClaws.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ElderwoodClaws_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\GutwrenchingHooks.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\GutwrenchingHooks_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\HellfireClaws.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\HellfireClaws_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\HorrorPincers.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\HorrorPincers_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ThornyClaws.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ThornyClaws_Outfit.png" />
+	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsBush.png" />
+	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsPlants.png" />
+	  <None Remove="Resources\Textures\Tiles\Ambient\MiracleMint.png" />
+	  <None Remove="Resources\Textures\Tiles\Furniture\ElderwoodChest.png" />
+	  <None Remove="Resources\Textures\Tiles\Furniture\ElderwoodChest_Highlight.png" />
+	  <None Remove="Resources\Textures\Tiles\Platforms\TreeBranch.png" />
+	  <None Remove="Resources\Textures\Tiles\Solid\Backwoods\BackwoodsDirt.png" />
+	  <None Remove="Resources\Textures\Tiles\Solid\Backwoods\BackwoodsGrass.png" />
+	  <None Remove="Resources\Textures\Tiles\Solid\Backwoods\BackwoodsStone.png" />
+	  <None Remove="Resources\Textures\Tiles\Solid\Backwoods\LivingElderwoodlLeaves.png" />
+	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialSapling.png" />
+	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree.png" />
+	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Branches.png" />
+	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Tops.png" />
+	  <None Remove="Resources\Textures\Tiles\Walls\LivingBackwoodsLeavesWall.png" />
+	</ItemGroup>
+
+	<!-- References -->
+
+</Project>

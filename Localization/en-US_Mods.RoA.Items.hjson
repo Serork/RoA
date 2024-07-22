@@ -1,0 +1,34 @@
+ElderwoodClaws: {
+	DisplayName: Elderwood Claws
+	Tooltip: ""
+}
+
+Elderwood: {
+	DisplayName: Elderwood
+	Tooltip: ""
+}
+
+GutwrenchingHooks: {
+	DisplayName: Gutwrenching Hooks
+	Tooltip: ""
+}
+
+HellfireClaws: {
+	DisplayName: Hellfire Claws
+	Tooltip: ""
+}
+
+HorrorPincers: {
+	DisplayName: Horror Pincers
+	Tooltip: ""
+}
+
+ThornyClaws: {
+	DisplayName: Thorny Claws
+	Tooltip: ""
+}
+
+ElderwoodChest: {
+	DisplayName: Elderwood Chest
+	Tooltip: ""
+}

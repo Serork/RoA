@@ -1,0 +1,8 @@
+DamageClasses.DruidClass.DisplayName: nature damage
+
+Biomes: {
+	BackwoodsBiome: {
+		DisplayName: Backwoods Biome
+		TownNPCDialogueName: the Backwoods Biome
+	}
+}
