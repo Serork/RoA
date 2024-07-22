@@ -10,25 +10,21 @@ namespace RoA.Common.Common;
 [Autoload(Side = ModSide.Client)]
 sealed class BackwoodsVars : ModSystem {
     public static int FirstTileYAtCenter { get; internal set; }
-    public static int FirstTileYAtCenterBackground { get; internal set; }
-    public static float BackgroundOffset { get; internal set; }
+    public static int BackwoodsTileForBackground { get; internal set; }
 
     public override void ClearWorld() => ResetAllFlags();
 
     public override void SaveWorldData(TagCompound tag) {
         tag[nameof(FirstTileYAtCenter)] = FirstTileYAtCenter;
-        tag[nameof(FirstTileYAtCenterBackground)] = FirstTileYAtCenterBackground;
-        tag[nameof(BackgroundOffset)] = BackgroundOffset;
+        tag[nameof(BackwoodsTileForBackground)] = BackwoodsTileForBackground;
     }
 
     public override void LoadWorldData(TagCompound tag) {
         FirstTileYAtCenter = tag.GetInt(nameof(FirstTileYAtCenter));
-        FirstTileYAtCenterBackground = tag.GetInt(nameof(FirstTileYAtCenterBackground));
-        BackgroundOffset = tag.GetFloat(nameof(BackgroundOffset));
+        BackwoodsTileForBackground = tag.GetInt(nameof(BackwoodsTileForBackground));
     }
 
     private static void ResetAllFlags() {
-        FirstTileYAtCenter = FirstTileYAtCenterBackground = 0;
-        BackgroundOffset = 0f;
+        FirstTileYAtCenter = BackwoodsTileForBackground = 0;
     }
 }

@@ -77,7 +77,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         if (WorldGen.drunkWorldGen) {
             offset = -180;
         }
-        float surfacePosition = (float)BackwoodsVars.FirstTileYAtCenterBackground;
+        float surfacePosition = (float)BackwoodsVars.BackwoodsTileForBackground;
         if (surfacePosition == 0f) {
             surfacePosition = 1f;
         }
