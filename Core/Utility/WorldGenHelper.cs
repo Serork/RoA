@@ -93,7 +93,7 @@ static class WorldGenHelper {
     }
 
     public static int GetFirstTileY(int i, int type) {
-        int result = SafeFloatingIslandY + 10;
+        int result = SafeFloatingIslandY;
         while (!GetTileSafely(i, result).ActiveTile(type)) {
             result++;
             if (GetTileSafely(i, result).WallType != WallID.None) {
@@ -107,7 +107,7 @@ static class WorldGenHelper {
     }
 
     public static int GetFirstTileY2(int i, bool skipWater = false, bool skipWalls = false) {
-        int result = SafeFloatingIslandY + 10;
+        int result = SafeFloatingIslandY;
         while (!WorldGen.SolidTile(i, result)) {
             result++;
             if (!skipWater && GetTileSafely(i, result).AnyLiquid()) {

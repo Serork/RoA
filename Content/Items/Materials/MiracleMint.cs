@@ -10,6 +10,7 @@ sealed class MiracleMint : ModItem {
 	public override void SetStaticDefaults() {
 		// DisplayName.SetDefault("Miracle Mint");
 		Item.ResearchUnlockCount = 25;
+
 		ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 	}
 
