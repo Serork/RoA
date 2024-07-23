@@ -20,6 +20,7 @@
 	  <None Remove="Resources\Textures\Empty.png" />
 	  <None Remove="Resources\Textures\Gores\Leaf.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
+	  <None Remove="Resources\Textures\Items\Placeable\Decorations\DryadStatue.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\ElderwoodChest.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\AshwalkerCane.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\BloomingDoom.png" />

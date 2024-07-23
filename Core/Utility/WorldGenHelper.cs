@@ -93,7 +93,7 @@ static class WorldGenHelper {
     }
 
     public static int GetFirstTileY(int i, int type) {
-        int result = SafeFloatingIslandY;
+        int result = SafeFloatingIslandY + 10;
         while (!GetTileSafely(i, result).ActiveTile(type)) {
             result++;
             if (GetTileSafely(i, result).WallType != WallID.None) {
@@ -107,7 +107,7 @@ static class WorldGenHelper {
     }
 
     public static int GetFirstTileY2(int i, bool skipWater = false, bool skipWalls = false) {
-        int result = SafeFloatingIslandY;
+        int result = SafeFloatingIslandY + 10;
         while (!WorldGen.SolidTile(i, result)) {
             result++;
             if (!skipWater && GetTileSafely(i, result).AnyLiquid()) {
@@ -173,7 +173,68 @@ static class WorldGenHelper {
 
     public static bool IsCloud(int i, int j) {
         Tile tile = GetTileSafely(i, j);
-        return tile.TileType == TileID.Cloud || tile.TileType == TileID.RainCloud;
+        return tile.ActiveTile(TileID.Cloud) || tile.ActiveTile(TileID.RainCloud);
+    }
+
+    // adapted vanilla
+    public static bool Place2x3(int x, int y, ushort type, int style = 0) {
+        int num = style * 36;
+        int num2 = 0;
+        int num3 = 3;
+
+        bool flag = true;
+        Tile tile2;
+        for (int i = y - num3 + 1; i < y + 1; i++) {
+            tile2 = Main.tile[x, i];
+            if (tile2.HasTile) {
+                flag = false;
+            }
+            tile2 = Main.tile[x + 1, i];
+            if (tile2.HasTile) {
+                flag = false;
+            }
+        }
+
+        if (flag && WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1)) {
+            for (int j = 0; j < num3; j++) {
+                tile2 = Main.tile[x, y - num3 + 1 + j];
+                tile2.HasTile = true;
+                tile2 = Main.tile[x, y - num3 + 1 + j];
+                tile2.TileFrameY = (short)(num2 + j * 18);
+                tile2 = Main.tile[x, y - num3 + 1 + j];
+                tile2.TileFrameX = (short)num;
+                tile2 = Main.tile[x, y - num3 + 1 + j];
+                tile2.TileType = type;
+                tile2 = Main.tile[x + 1, y - num3 + 1 + j];
+                tile2.HasTile = true;
+                tile2 = Main.tile[x + 1, y - num3 + 1 + j];
+                tile2.TileFrameY = (short)(num2 + j * 18);
+                tile2 = Main.tile[x + 1, y - num3 + 1 + j];
+                tile2.TileFrameX = (short)(num + 18);
+                tile2 = Main.tile[x + 1, y - num3 + 1 + j];
+                tile2.TileType = type;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // adapted vanilla 
+    public static void PlaceVines(int x, int y, int numVines, ushort vineType, bool finished = false) {
+        for (int j = y; j <= y + numVines && !finished; j++) {
+            Tile tileBelow = Framing.GetTileSafely(x, j + 1);
+
+            if ((!tileBelow.HasTile || tileBelow.TileType == TileID.Cobweb) && WorldGen.InWorld(x, j)) {
+                WorldGen.PlaceTile(x, j, vineType);
+            }
+            else {
+                finished = true;
+            }
+
+            if (numVines <= 1) {
+                finished = true;
+            }
+        }
     }
 
     // adapted vanilla
@@ -872,7 +933,7 @@ static class WorldGenHelper {
                     if (num5 == 5 || num5 == 7) {
                         tile = Main.tile[i - 1, i1];
                         tile.HasTile = true;
-                        if (WorldGen.genRand.NextBool(3) ? WorldGen.genRand.NextBool(3) : WorldGen.genRand.NextBool(2)) {
+                        if (WorldGen.genRand.Next(5) < 3) {
                             tile.TileType = (ushort)ModContent.TileType<T>();
                         }
                         else {
@@ -911,7 +972,7 @@ static class WorldGenHelper {
                     if (num5 == 6 || num5 == 7) {
                         tile = Main.tile[i + 1, i1];
                         tile.HasTile = true;
-                        if (WorldGen.genRand.NextBool(3) ? WorldGen.genRand.NextBool(3) : WorldGen.genRand.NextBool(2)) {
+                        if (WorldGen.genRand.Next(5) < 3) {
                             tile.TileType = (ushort)ModContent.TileType<T>();
                         }
                         else {

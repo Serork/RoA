@@ -14,7 +14,8 @@ static class ResourceManager {
     public const string RESOURCESPATH = "Resources";
     public const string TEXTURESPATH = RESOURCESPATH + "/Textures";
 
-    public static string BackgroundTextures => RoA.ModName + "/Resources/Textures/Backgrounds/";
+    public static string Textures => RoA.ModName + "/Resources/Textures/";
+    public static string BackgroundTextures => Textures + "Backgrounds/";
 
     public static IEnumerable<Asset<Texture2D>> GetAllTexturesInPath(string path, string? searchPattern = null) {
         string texturesPath = Path.Combine(RoA.ModSourcePath, RoA.ModName + path);

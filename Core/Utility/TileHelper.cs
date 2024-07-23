@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RiseofAges.Common.Utilities.Extensions;
+
 using RoA.Content.Tiles.Plants;
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 using Terraria;
@@ -13,8 +16,9 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static class TileHelper {
-    public static FieldInfo _addSpecialPointSpecialPositions;
-    public static FieldInfo _addSpecialPointSpecialsCount;
+    private static Point[][] _addSpecialPointSpecialPositions; 
+    private static int[] _addSpecialPointSpecialsCount;
+    private static List<Point> _addVineRootsPositions;
 
     public static T GetTE<T>(int i, int j) where T : ModTileEntity {
         if (TileEntity.ByPosition.TryGetValue(new Point16(i, j), out TileEntity entity) && entity is T) {
@@ -41,21 +45,21 @@ static class TileHelper {
     }
 
     public static void Load() {
-        _addSpecialPointSpecialPositions = typeof(TileDrawing).GetField("_specialPositions", BindingFlags.NonPublic | BindingFlags.Instance);
-        _addSpecialPointSpecialsCount = typeof(TileDrawing).GetField("_specialsCount", BindingFlags.NonPublic | BindingFlags.Instance);
+        _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
+        _addSpecialPointSpecialsCount = (int[])typeof(TileDrawing).GetFieldValue("_specialsCount", Main.instance.TilesRenderer);
+        _addVineRootsPositions = (List<Point>)typeof(TileDrawing).GetFieldValue("_vineRootsPositions", Main.instance.TilesRenderer);
     }
 
     public static void Unload() {
         _addSpecialPointSpecialPositions = null;
         _addSpecialPointSpecialsCount = null;
+        _addVineRootsPositions = null;
     }
 
-    public static void AddSpecialPoint(int x, int y, int type) {
-        TileDrawing tileDrawing = Main.instance.TilesRenderer;
-        if (_addSpecialPointSpecialPositions.GetValue(tileDrawing) is Point[][] _specialPositions) {
-            if (_addSpecialPointSpecialsCount.GetValue(tileDrawing) is int[] _specialsCount) {
-                _specialPositions[type][_specialsCount[type]++] = new Point(x, y);
-            }
+    public static void AddSpecialPoint(int i, int j, ushort tileType) => _addSpecialPointSpecialPositions[tileType][_addSpecialPointSpecialsCount[tileType]++] = new Point(i, j);
+    public static void AddVineRootPosition(Point item) {
+        if (!_addVineRootsPositions.Contains(item)) {
+            _addVineRootsPositions.Add(item);
         }
     }
 }

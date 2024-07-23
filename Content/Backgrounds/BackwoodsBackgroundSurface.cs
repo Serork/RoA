@@ -94,18 +94,6 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         pushBGTopHack = menuOffset;
         pushBGTopHack += offset;
         pushBGTopHack += offset2;
-        //int factor = 2;
-        if (WorldGenHelper.SmallWorld) {
-            pushBGTopHack += 50;
-        }
-        if (WorldGenHelper.MediumWorld) {
-            pushBGTopHack += 100;
-        }
-        //if (WorldGenHelper.BigWorld) {
-        //    pushBGTopHack += 100;
-        //}
-        //pushBGTopHack -= (int)surfacePosition * factor;
-        pushBGTopHack -= 100;
         if (canBGDraw) {
             var bgScale = 1.25f;
             var bgParallax = 0.4;
@@ -170,6 +158,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
             if ((double)Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
+                    //Main.EntitySpriteDraw(ModContent.Request<Texture2D>(ResourceManager.Textures + "BackwoodsBackground").Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset + close.Height * 3 - 186), new Rectangle(0, 0, close.Width, 300), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None);
                     Main.spriteBatch.Draw(close, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset), new Rectangle(0, 0, close.Width, close.Height), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
                 }
             }

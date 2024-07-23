@@ -9,6 +9,6 @@ abstract class BaseClawsItem : NatureItem {
     protected sealed override void SafeSetDefaults2() {
         Item.noMelee = true;
 
-        Item.SetUsableValues(ItemUseStyleID.Swing, 18, false);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false);
     }
 }

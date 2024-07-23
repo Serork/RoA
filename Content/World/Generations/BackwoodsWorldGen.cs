@@ -71,7 +71,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private int _biomeWidth = 100, _biomeHeight = 162;
     private ushort _dirtTileType, _grassTileType, _stoneTileType, _mossTileType, _mossGrowthTileType, _elderwoodTileType, _elderwoodTileType2, _leavesTileType;
     private ushort _dirtWallType, _grassWallType, _elderwoodWallType, _elderwoodWallType2, _leavesWallType;
-    private ushort _fallenTreeTileType, _plantsTileType, _bushTileType, _elderWoodChestTileType, _altarTileType, _mintTileType;
+    private ushort _fallenTreeTileType, _plantsTileType, _bushTileType, _elderWoodChestTileType, _altarTileType, _mintTileType, _vinesTileType;
 
     public int CenterX {
         get => _positionToPlaceBiome.X;
@@ -83,7 +83,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     public int CenterY {
         get => _positionToPlaceBiome.Y;
         private set {
-            _positionToPlaceBiome.Y = Math.Clamp(value, (int)GenVars.worldSurface - 100, (int)Main.rockLayer);
+            _positionToPlaceBiome.Y = Math.Max(value, (int)GenVars.worldSurface - 100);
         }
     }
 
@@ -114,9 +114,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step11_AddOre();
         Step7_AddStone();
         Step8_AddCaves();
-        Step9_SpreadMoss();
-        Step10_SpreadMossGrass();
         Step12_AddRoots();
+        Step9_SpreadMoss();
+        Step17_AddStatues();
+        Step10_SpreadMossGrass();
         Step13_GrowBigTrees();
         Step14_ClearRockLayerWalls();
 
@@ -202,7 +203,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 ushort treeBranch = (ushort)ModContent.TileType<TreeBranch>();
-                if (tile.ActiveTile(ModContent.TileType<TreeBranch>()) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(treeBranch) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(treeBranch)) {
+                if (tile.ActiveTile(ModContent.TileType<TreeBranch>()) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
                     WorldGen.KillTile(i, j);
                 }
             }
@@ -937,7 +938,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
                     if (tile.ActiveTile(TileID.Vines) || tile.ActiveTile(TileID.VineFlowers)) {
-                        WorldGen.KillTile(i, j);
+                        tile.TileType = _vinesTileType;
                     }
                     if (tile.ActiveTile(TileID.Grass)) {
                         Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
@@ -992,8 +993,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (belowTile.HasTile && belowTile.WallType == _dirtWallType && !tile.HasTile) {
                         WorldGenHelper.ReplaceTile(surface.X, surface.Y + j, _grassTileType);
                     }
-                    if (j <= 0 && tile.WallType == _dirtWallType) {
-                        tile.WallType = WallID.None;
+                    if (j < 0) {
+                        if (tile.ActiveTile(TileID.Sand)) {
+                            WorldGen.KillTile(surface.X, surface.Y + j);
+                        }
+                        if (tile.WallType == _dirtWallType) {
+                            tile.WallType = WallID.None;
+                        }
                     }
                     if (tile.ActiveTile(_grassTileType) && aboveTile.HasTile && !Main.tileSolid[aboveTile.TileType]) {
                         if (!_backwoodsPlants.Contains(aboveTile.TileType)) {
@@ -1066,7 +1072,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         progress.Set(0.9f);
 
-        // place plants
+        // place vines
+        for (int i = Left - 50; i <= Right + 50; i++) {
+            for (int j = BackwoodsVars.FirstTileYAtCenter - 15; j < CenterY + EdgeY; j++) {
+                Tile tile = Main.tile[i, j];
+                if (tile.TileType == _grassTileType && !Main.tile[i, j + 1].HasTile) {
+                    if (WorldGen.genRand.NextBool(2)) {
+                        WorldGen.PlaceTile(i, j + 1, _vinesTileType);
+                    }
+                }
+                if (tile.TileType == _vinesTileType) {
+                    WorldGenHelper.PlaceVines(i, j, WorldGen.genRand.Next(1, 4), _vinesTileType);
+                }
+            }
+        }
+
+         // place plants
         for (int i = Left - 25; i <= Right + 25; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 20; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
@@ -1082,7 +1103,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     else {
                         if (_random.NextBool(10)) {
                             tile.TileType = _mintTileType;
-                            tile.TileFrameX = (short)(18 * (_random.Next(4) < 3 ? 2 : _random.NextBool() ? 0 : 1));
+                            tile.TileFrameX = (short)(18 * (_random.Next(4) < 2 ? 2 : _random.NextBool() ? 0 : 1));
                             ModContent.GetInstance<MiracleMintTE>().Place(i, j - 1);
                         }
                         else {
@@ -1113,6 +1134,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Set(1f);
         Step16_PlaceAltar();
         //Step15_AddLootRooms();
+    }
+
+    private void Step17_AddStatues() {
+        int statueCount = 15 + 5 * (WorldGenHelper.WorldSize - 1);
+        int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY;
+        while (statueCount > 0) {
+            int x = _random.Next(Left - 15, Right + 15);
+            int y = _random.Next(minY, Bottom + 15);
+            Tile tile = Framing.GetTileSafely(x, y);
+            if (tile.HasTile && tile.Slope == SlopeType.Solid && !tile.IsHalfBlock && (tile.TileType == _grassTileType || tile.TileType == TileID.Dirt || tile.TileType == _dirtTileType || tile.TileType == _stoneTileType || tile.TileType == _elderwoodTileType || tile.TileType == _leavesTileType || tile.TileType == _mossTileType)) {
+                if (WorldGenHelper.Place2x3(x, y - 1, (ushort)ModContent.TileType<DryadStatue>(), _random.Next(6))) {
+                    statueCount--;
+                    //Console.WriteLine(123);
+                }
+            }
+        }
     }
 
     private void Step11_AddOre() {
@@ -1249,6 +1286,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _leavesWallType = (ushort)ModContent.WallType<LivingBackwoodsLeavesWall>();
         _elderWoodChestTileType = (ushort)ModContent.TileType<ElderwoodChest>();
         _altarTileType = (ushort)ModContent.TileType<OvergrownAltar>();
+        _vinesTileType = (ushort)ModContent.TileType<BackwoodsVines>();
 
         _backwoodsPlants.Add(_fallenTreeTileType = (ushort)ModContent.TileType<FallenTree>());
         _backwoodsPlants.Add(_plantsTileType = (ushort)ModContent.TileType<BackwoodsPlants>());
@@ -1263,7 +1301,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX);
         CenterY = BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX);
-        BackwoodsVars.BackgroundOffset = 1850f + (int)(BackwoodsVars.FirstTileYAtCenter / 2f);
         CenterY += _biomeHeight / 2;
     }
 

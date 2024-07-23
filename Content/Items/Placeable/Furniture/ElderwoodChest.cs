@@ -9,7 +9,7 @@ sealed class ElderwoodChest : ModItem {
 	public override void SetDefaults() {
 		Item.SetSize(28, 14);
 
-		Item.SetUsableValues(ItemUseStyleID.Swing, 10, 15, useTurn: true, autoReuse: true);
+		Item.SetDefaultToUsable(ItemUseStyleID.Swing, 10, 15, useTurn: true, autoReuse: true);
 
         Item.SetDefaultToStackable(99);
 

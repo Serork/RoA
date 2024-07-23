@@ -16,7 +16,7 @@ sealed class Elderwood : ModItem {
 	public override void SetDefaults() {
 		Item.SetSize(24, 22);
 
-		Item.SetUsableValues(ItemUseStyleID.Swing, 15, 10, useTurn: true, autoReuse: true);
+		Item.SetDefaultToUsable(ItemUseStyleID.Swing, 15, 10, useTurn: true, autoReuse: true);
 
 		Item.rare = ItemRarityID.White;
 

@@ -25,7 +25,7 @@ static class ItemDefaults {
         item.consumable = consumable;
     }
 
-    public static void SetUsableValues(this Item item, int useStyleID, int useTime, int animationTime, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false) {
+    public static void SetDefaultToUsable(this Item item, int useStyleID, int useTime, int animationTime, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false) {
         item.useStyle = useStyleID;
         item.useTime = useTime;
         item.useAnimation = animationTime;
@@ -34,5 +34,5 @@ static class ItemDefaults {
         item.autoReuse = autoReuse;
     }
 
-    public static void SetUsableValues(this Item item, int useStyleID, int timeToUse, bool showItemOnUse = true) => item.SetUsableValues(useStyleID, timeToUse, timeToUse, showItemOnUse);
+    public static void SetDefaultToUsable(this Item item, int useStyleID, int timeToUse, bool showItemOnUse = true) => item.SetDefaultToUsable(useStyleID, timeToUse, timeToUse, showItemOnUse);
 }

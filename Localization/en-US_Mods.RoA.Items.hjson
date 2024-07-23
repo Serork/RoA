@@ -32,3 +32,8 @@ ElderwoodChest: {
 	DisplayName: Elderwood Chest
 	Tooltip: ""
 }
+
+DryadStatue: {
+	DisplayName: Dryad Statue
+	Tooltip: "'Lost and forsaken'"
+}
