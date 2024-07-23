@@ -3,14 +3,15 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
+using Terraria.ObjectData;
 
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
+using RoA.Common.Common;
 
 using System;
-using RoA.Common.Common;
-using Terraria.DataStructures;
-using Terraria.ObjectData;
+using System.Collections.Generic;
 
 namespace RoA.Content.Tiles.Plants;
 
@@ -55,6 +56,12 @@ sealed class MiracleMint : Plant1x {
         TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
         TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<MiracleMintTE>().Hook_AfterPlacement, -1, 0, false);
         TileObjectData.addTile(Type);
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        if (IsGrown(i, j)) {
+            yield return new Item(ModContent.ItemType<Items.Materials.MiracleMint>());
+        }
     }
 
     protected override int[] AnchorValidTiles => [ModContent.TileType<BackwoodsGrass>()];

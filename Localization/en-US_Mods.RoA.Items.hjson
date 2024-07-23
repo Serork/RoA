@@ -37,3 +37,8 @@ DryadStatue: {
 	DisplayName: Dryad Statue
 	Tooltip: "'Lost and forsaken'"
 }
+
+MiracleMint: {
+	DisplayName: Miracle Mint
+	Tooltip: ""
+}
