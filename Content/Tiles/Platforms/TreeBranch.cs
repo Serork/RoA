@@ -42,7 +42,7 @@ class TreeBranch : ModTile {
 
         RegisterItemDrop(ModContent.ItemType<Items.Materials.Elderwood>());
         DustType = ModContent.DustType<BackwoodsWoodTrash>();
-        AddMapEntry(new Color(162, 82, 45));
+        AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
     }
 
     public override void PostSetDefaults() => Main.tileNoSunLight[Type] = false;
