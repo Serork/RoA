@@ -48,13 +48,13 @@ sealed class TransformTileSystem : ModSystem {
         }
 
         private sealed class TileReplacementSystem : ModPlayer {
-            private readonly struct ReplacementData(Point positionInWorld, ushort replaceToType) {
+            readonly struct ReplacementData(Point positionInWorld, ushort replaceToType) {
                 public readonly Point PositionInWorld = positionInWorld;
                 public readonly ushort ReplaceToType = replaceToType;
             }
 
-            private static ReplacementData _tileToReplaceData;
-            private static bool _replaced;
+            static ReplacementData _tileToReplaceData;
+            static bool _replaced;
 
             public static void SetReplacementData(int i, int j, ushort type) {
                 _tileToReplaceData = new(new Point(i, j), type);
