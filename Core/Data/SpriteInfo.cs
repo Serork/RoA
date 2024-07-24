@@ -19,7 +19,7 @@ struct SpriteInfo(Asset<Texture2D> textureAsset, SpriteFrame frame) {
     public float Rotation;
     public SpriteEffects Effects;
 
-    public readonly Texture2D Texture => Asset?.Value;
+    public readonly Texture2D? Texture => Asset?.Value;
     public Rectangle SourceRectangle => Frame.GetSourceRectangle(Texture);
     public Vector2 Origin => SourceRectangle.Centered();
     public Vector2 Center => VisualPosition + Origin;
@@ -31,7 +31,7 @@ struct SpriteInfo(Asset<Texture2D> textureAsset, SpriteFrame frame) {
         return result;
     }
 
-    public void Draw() {
+    public void DrawSelf() {
         if (Texture == null) {
             return;
         }

@@ -74,7 +74,7 @@ public sealed class DruidItemTooltipLeafsVisual : GlobalItem {
                     _spriteInfo.Rotation = rotation;
 
                     Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
-                        _spriteInfo.Draw();
+                        _spriteInfo.DrawSelf();
                     }, SamplerState.PointClamp);
 
                     DruidTooltipFallingLeafsVisualSystem.FallingLeafData data;
@@ -155,7 +155,7 @@ public sealed class DruidItemTooltipLeafsVisual : GlobalItem {
                     spriteInfo.VisualPosition += Vector2.UnitY * maxY - velocity;
                     spriteInfo.Color *= alpha;
                     spriteInfo.Rotation += velocityAffectedExtraRotation;
-                    spriteInfo.Draw();
+                    spriteInfo.DrawSelf();
                 }, SamplerState.PointClamp);
             }
 

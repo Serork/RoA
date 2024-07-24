@@ -1,6 +1,5 @@
-using Microsoft.Xna.Framework;
-
 using RoA.Common;
+using RoA.Core;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -21,4 +20,6 @@ sealed class BackwoodsBiome : ModBiome {
     }
 
     public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>(RoA.RoA.ModName +  "/BackwoodsBackgroundSurface");
+
+    public override int Music => Main.dayTime ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") : MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight");
 }
