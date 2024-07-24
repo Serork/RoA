@@ -1083,7 +1083,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 if (tile.TileType == _vinesTileType) {
-                    WorldGenHelper.PlaceVines(i, j, WorldGen.genRand.Next(1, 4), _vinesTileType);
+                    WorldGenHelper.PlaceVines(i, j, WorldGen.genRand.Next(1, 8), _vinesTileType);
                 }
             }
         }

@@ -47,7 +47,7 @@ sealed class ClawsSlash : ModProjectile {
         Vector2 offset = new(0.2f);
         Vector2 velocity = 1.5f * offset;
         Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
-        Color color = Utils.MultiplyRGB(Lighting.GetColor(target.Center.ToTileCoordinates()) * 0.75f, Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()));
+        Color color = Utils.MultiplyRGB(Lighting.GetColor(target.Center.ToTileCoordinates()) * 1f, Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()) * 0.75f) * 1.5f;
         color.A = 50;
         VisualEffectSystem.New<ClawsSlashHit>(VisualEffectLayer.AboveNPCs).
             Setup(target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f),
@@ -65,7 +65,7 @@ sealed class ClawsSlash : ModProjectile {
     public override bool? CanCutTiles() => CanFunction;
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        float coneLength = 80f * Projectile.scale;
+        float coneLength = 85f * Projectile.scale;
         float num1 = 0.5105088f * Projectile.ai[0];
         float maximumAngle = 0.3926991f;
         float coneRotation = Projectile.rotation + num1;
