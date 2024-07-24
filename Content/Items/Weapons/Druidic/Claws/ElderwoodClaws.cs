@@ -1,4 +1,6 @@
-﻿using RoA.Core;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Core;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
@@ -8,4 +10,6 @@ sealed class ElderwoodClaws : BaseClawsItem {
 
         Item.SetWeaponValues(12, 3f);
     }
+
+    protected override (Color, Color) SlashColors() => (new(72, 86, 214), new(114, 126, 255));
 }

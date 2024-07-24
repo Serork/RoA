@@ -1,6 +1,10 @@
-﻿using RoA.Common.Common;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Common;
 
 using System;
+
+using Terraria;
 
 namespace RoA.Utilities;
 
@@ -10,4 +14,10 @@ static class Helper {
 
     public static void AddClamp(ref int value, int add, int min, int max) => AddClamp(ref value, add, min, max);
     public static void AddClamp(ref float value, float add, float min = 0f, float max = 1f) => value = Math.Clamp(value + add, min, max);
+
+    public static Vector2 VelocityToPoint(Vector2 a, Vector2 b, float speed) {
+        Vector2 vector2 = b - a;
+        Vector2 velocity = vector2 * (speed / vector2.Length());
+        return !velocity.HasNaNs() ? velocity : Vector2.Zero;
+    }
 }

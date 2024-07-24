@@ -6,3 +6,5 @@ Biomes: {
 		TownNPCDialogueName: the Backwoods Biome
 	}
 }
+
+Projectiles.ClawsSlash.DisplayName: Claws Slash

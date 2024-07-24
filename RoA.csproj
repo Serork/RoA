@@ -11,12 +11,8 @@
 	  <None Remove="Localization\en-US_Mods.RoA.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Tiles.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.WorldGen.hjson" />
-	  <None Remove="Resources\Textures\Backgrounds\BackwoodsClose.png" />
-	  <None Remove="Resources\Textures\Backgrounds\BackwoodsFar.png" />
-	  <None Remove="Resources\Textures\Backgrounds\BackwoodsMid.png" />
-	  <None Remove="Resources\Textures\Backgrounds\BackwoodsMid2.png" />
-	  <None Remove="Resources\Textures\Backgrounds\BackwoodsSky.png" />
 	  <None Remove="Resources\Textures\Dusts\BackwoodsWoodTrash.png" />
+	  <None Remove="Resources\Textures\Dusts\Slash.png" />
 	  <None Remove="Resources\Textures\Empty.png" />
 	  <None Remove="Resources\Textures\Gores\Leaf.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
@@ -50,6 +46,7 @@
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\HorrorPincers_Outfit.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ThornyClaws.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ThornyClaws_Outfit.png" />
+	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\ClawsSlash.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsBush.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsPlants.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\MiracleMint.png" />
@@ -65,9 +62,6 @@
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Branches.png" />
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Tops.png" />
 	  <None Remove="Resources\Textures\Tiles\Walls\LivingBackwoodsLeavesWall.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Core\VisualEffects\" />
 	</ItemGroup>
 
 	<!-- References -->

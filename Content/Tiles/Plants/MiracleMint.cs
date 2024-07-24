@@ -69,7 +69,7 @@ sealed class MiracleMint : Plant1x {
     public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<MiracleMintTE>().Place(i, j);
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<MiracleMintTE>().Kill(i, j);
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = IsGrowing(i, j) || IsGrown(i, j) ? Main.rand.Next(3, 6) : Main.rand.Next(1, 3);
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = IsGrown(i, j) ? Main.rand.Next(3, 6) : IsGrowing(i, j) ? Main.rand.Next(2, 5) : Main.rand.Next(1, 3);
 
     public override bool CreateDust(int i, int j, ref int type) {
         if (IsGrown(i, j)) {

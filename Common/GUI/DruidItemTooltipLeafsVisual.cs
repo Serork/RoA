@@ -15,7 +15,7 @@ using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace RoA.Common.Common.Visuals;
+namespace RoA.Common.Common.GUI;
 
 [Autoload(Side = ModSide.Client)]
 public sealed class DruidItemTooltipLeafsVisual : GlobalItem {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using System;
 
@@ -6,7 +7,7 @@ using Terraria;
 
 namespace RoA.Core.Utility;
 
-public static class SpriteBatchExtensions {
+static class SpriteBatchExtensions {
     public static void With(this SpriteBatch spriteBatch,
                             BlendState blendState,
                             Action drawAction,
@@ -35,5 +36,25 @@ public static class SpriteBatchExtensions {
                           RasterizerState.CullCounterClockwise,
                           null,
                           isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+    }
+
+    public static void BeginBlendState(this SpriteBatch spriteBatch, BlendState state, SamplerState samplerState = null, bool isUI = false, bool isUI2 = false) {
+        spriteBatch.End();
+        spriteBatch.Begin(isUI2 ? SpriteSortMode.Immediate : isUI ? SpriteSortMode.Deferred : SpriteSortMode.Immediate, state, samplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+    }
+
+    public static void EndBlendState(this SpriteBatch spriteBatch, bool isUI = false) {
+        spriteBatch.End();
+        spriteBatch.Begin(isUI ? SpriteSortMode.Deferred : SpriteSortMode.Immediate, BlendState.AlphaBlend, isUI ? SamplerState.AnisotropicClamp : Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+    }
+
+    public static void BeginWorld(this SpriteBatch spriteBatch, bool shader = false, Matrix? overrideMatrix = null) {
+        var matrix = overrideMatrix ?? Main.Transform;
+        if (!shader) {
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, matrix);
+        }
+        else {
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.Default, Main.Rasterizer, null, matrix);
+        }
     }
 }

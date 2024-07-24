@@ -7,6 +7,6 @@ enum WeaponType {
 }
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-sealed class WeaponAttribute(WeaponType weaponType) : Attribute {
+sealed class WeaponOverlayAttribute(WeaponType weaponType) : Attribute {
     public readonly WeaponType WeaponType = weaponType;
 }

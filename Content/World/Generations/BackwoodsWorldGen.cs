@@ -15,7 +15,6 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Biomes;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.IO;
@@ -1332,9 +1331,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (WorldGenHelper.IsCloud(i, j)) {
                     continue;
                 }
-                if (SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) {
-                    continue;
-                }
                 if (!SandInvalidTileTypesToKill.Contains(tile.TileType) && !SandInvalidWallTypesToKill.Contains(tile.WallType) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                     bool killTile = true;
                     bool replace = false;
@@ -1349,6 +1345,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (((edgeLeft || edgeRight)) || (!edgeLeft && !edgeRight)) {
                             WorldGenHelper.ReplaceWall(i + num1048, j, _dirtWallType);
                         }
+                    }
+                    if (SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) {
+                        continue;
                     }
                     int spreadY = 0;
                     bool killSand = false;

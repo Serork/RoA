@@ -17,7 +17,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.DrawLayers;
 
 [Autoload(Side = ModSide.Client)]
-sealed class ClawsDrawLayer : PlayerDrawLayer {
+sealed class WeaponOverlay : PlayerDrawLayer {
     private const string CLAWSTEXTURESPATH = $"/{ResourceManager.TEXTURESPATH}/Items/Weapons/Druidic/Claws";
     private const string REQUIREMENT = "_Outfit";
 
@@ -30,13 +30,18 @@ sealed class ClawsDrawLayer : PlayerDrawLayer {
     public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.HandOnAcc);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {  
+        DrawClawsOnPlayer(drawInfo);
+    }
+
+    private void DrawClawsOnPlayer(PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
+
         Item item = player.GetSelectedItem();
         if (item.IsEmpty()) {
             return;
         }
 
-        WeaponAttribute? weaponAttribute = item.GetAttribute<WeaponAttribute>();
+        WeaponOverlayAttribute? weaponAttribute = item.GetAttribute<WeaponOverlayAttribute>();
         if (weaponAttribute == null || weaponAttribute.WeaponType != WeaponType.Claws) {
             return;
         }
@@ -49,7 +54,7 @@ sealed class ClawsDrawLayer : PlayerDrawLayer {
         float offsetX = (int)(drawInfo.Position.X - drawInfo.drawPlayer.bodyFrame.Width / 2 + drawInfo.drawPlayer.width / 2),
               offsetY = (int)(drawInfo.Position.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4f);
         Vector2 offset = new Vector2(offsetX, offsetY) + drawInfo.drawPlayer.bodyFrame.Size() / 2f;
-        Vector2 drawPosition = drawInfo.drawPlayer.bodyPosition + offset; 
+        Vector2 drawPosition = drawInfo.drawPlayer.bodyPosition + offset;
         DrawData drawData = new(asset.Value, drawPosition - Main.screenPosition, player.bodyFrame, drawInfo.colorArmorBody, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect);
         drawInfo.DrawDataCache.Add(drawData);
     }
