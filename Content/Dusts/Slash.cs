@@ -12,13 +12,13 @@ sealed class Slash : ModDust {
     }
 
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-		Color color = dust.color.MultiplyRGB(lightColor) * _opacity;
+		Color color = dust.color.MultiplyRGB(lightColor).MultiplyRGB(Color.White) * _opacity;
 		color.A = 50;
 
 		return color;
     }
 
-	public override bool Update(Dust dust) {
+    public override bool Update(Dust dust) {
 		if (dust.noGravity) {
 			dust.velocity *= 0.95f;
 			if (dust.fadeIn == 0.0) {
