@@ -24,10 +24,6 @@ public sealed class DruidItemTooltipLeafsVisual : GlobalItem {
     private static SpriteInfo _spriteInfo;
 
     public override void SetStaticDefaults() {
-        if (Main.dedServ) {
-            return;
-        }
-
         _spriteInfo = new SpriteInfo(ModContent.Request<Texture2D>(ResourceManager.Textures + "Leafs"), new SpriteFrame(3, 1));
     }
 

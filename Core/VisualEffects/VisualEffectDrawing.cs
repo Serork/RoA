@@ -30,38 +30,30 @@ sealed class VisualEffectDrawing : ModSystem {
 
     private static void Main_DrawNPCs(On_Main.orig_DrawNPCs orig, Main self, bool behindTiles) {
         ParticleRendererSettings particleSettings = new();
-        try {
-            if (!behindTiles) {
-                DrawBehindNPCs(ref particleSettings);
-            }
-            else {
-                DrawBehindTilesBehindNPCs();
-            }
+        if (!behindTiles) {
+            DrawBehindNPCs(ref particleSettings);
         }
-        catch { }
+        else {
+            DrawBehindTilesBehindNPCs();
+        }
 
         orig(self, behindTiles);
 
-        try {
-            if (!behindTiles) {
-                DrawAboveNPCs(ref particleSettings);
-            }
-            else {
-                DrawBehindTilesAboveNPCs();
-            }
+        if (!behindTiles) {
+            DrawAboveNPCs(ref particleSettings);
         }
-        catch { }
+        else {
+            DrawBehindTilesAboveNPCs();
+        }
     }
 
     private static void DrawBehindTilesBehindNPCs() {
         VisualEffectSystem.GetLayer(VisualEffectLayer.BehindAllNPCs).Draw(Main.spriteBatch);
     }
 
-    private static void DrawBehindTilesAboveNPCs() {
-    }
+    private static void DrawBehindTilesAboveNPCs() { }
 
-    private static void DrawBehindNPCs(ref ParticleRendererSettings particleSettings) {
-    }
+    private static void DrawBehindNPCs(ref ParticleRendererSettings particleSettings) { }
 
     private static void DrawAboveNPCs(ref ParticleRendererSettings particleSettings) {
         VisualEffectSystem.GetLayer(VisualEffectLayer.AboveNPCs).Draw(Main.spriteBatch);

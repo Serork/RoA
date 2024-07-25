@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ReLogic.Content;
-
 using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
@@ -64,10 +62,13 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         float length = Velocity.Length();
         Rotation += length * 0.0314f;
         Scale -= 0.05f - length / 1000f;
+
         if (Scale <= 0.1f || float.IsNaN(Scale) || --TimeLeft <= 0) {
             RestInPool();
+
             return;
         }
+
         if (!DontEmitLight) {
             Lighting.AddLight(Position, Color.ToVector3() * 0.5f);
         }
@@ -94,11 +95,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     public virtual void OnLoad(Mod mod) { }
 
     public void Unload() {
-        try {
-            VisualEffectSystem.ParticlePools<T>.Pool = null;
-        }
-        catch { }
-
+        VisualEffectSystem.ParticlePools<T>.Pool = null;
         OnUnload();
     }
 

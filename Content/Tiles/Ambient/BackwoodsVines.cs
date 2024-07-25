@@ -59,7 +59,7 @@ sealed class BackwoodsVines : ModTile {
             type = tileAbove.TileType;
         }
 
-        if (type == ModContent.TileType<BackwoodsGrass>() || type == Type) {
+        if (type == ModContent.TileType<BackwoodsGrass>() || type == ModContent.TileType<LivingElderwoodlLeaves>() || type == Type) {
             return true;
         }
 
@@ -78,7 +78,7 @@ sealed class BackwoodsVines : ModTile {
                     break;
                 }
 
-                else if (!tile.HasTile || tile.TileType != ModContent.TileType<BackwoodsGrass>()) {
+                else if (!tile.HasTile || tile.TileType != ModContent.TileType<BackwoodsGrass>() || tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
                     j2--;
 
                     continue;
