@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-namespace RoA.Core.VisualEffects;
+namespace RoA.Common.VisualEffects;
 
 sealed class VisualEffectSystem : ModSystem {
     internal class ParticlePools<T> where T : VisualEffect<T>, new() {

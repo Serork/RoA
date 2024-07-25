@@ -6,9 +6,9 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 
 using RoA.Content.Dusts;
-using RoA.Core.VisualEffects;
 using RoA.Core.Utility;
 using RoA.Core;
+using RoA.Common.VisualEffects;
 
 namespace RoA.Content.VisualEffects;
 
@@ -38,7 +38,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
     }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spriteBatch) {
-        Color color = Color;
+        Color color = Color * 0.8f;
         Vector2 origin = Texture.Size() / 2f;
         Vector2 position = Position - Main.screenPosition;
         SpriteEffects effects = SpriteEffects.None;

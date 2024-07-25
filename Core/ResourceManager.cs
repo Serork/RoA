@@ -16,9 +16,10 @@ static class ResourceManager {
     public const string SOUNDSPATH = RESOURCESPATH + "/Sounds";
 
     public static string Textures => RoA.ModName + $"/{TEXTURESPATH}/";
-    public static string Sounds => RoA.ModName + $"/{SOUNDSPATH}/";
+    public static string GUITextures => Textures + "GUI/";
     public static string BackgroundTextures => Textures + "Backgrounds/";
 
+    public static string Sounds => RoA.ModName + $"/{SOUNDSPATH}/";
     public static string Music => Sounds + "Music/";
 
     public static IEnumerable<Asset<Texture2D>> GetAllTexturesInPath(string path, string? searchPattern = null) {

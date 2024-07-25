@@ -22,10 +22,10 @@ sealed class DryadStatue : ModTile {
 		Main.tileLavaDeath[Type] = false;
 		Main.tileLighted[Type] = true;
 
-		TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
+        TileObjectData.newTile.DrawYOffset = 2;
 		TileObjectData.newTile.Width = 2;
 		TileObjectData.newTile.Height = 3;
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
 		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.newTile.CoordinateHeights = [16, 16, 16];

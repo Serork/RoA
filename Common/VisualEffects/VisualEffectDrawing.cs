@@ -7,7 +7,7 @@ using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-namespace RoA.Core.VisualEffects;
+namespace RoA.Common.VisualEffects;
 
 sealed class VisualEffectDrawing : ModSystem {
     public override void Load() {

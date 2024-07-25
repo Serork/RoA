@@ -18,8 +18,8 @@ sealed class OvergrownAltar : ModTile {
 		Main.tileLavaDeath[Type] = false;
 		Main.tileLighted[Type] = true;
 
-		TileObjectData.newTile.Origin = new Point16(1, 1);
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
+        TileObjectData.newTile.Origin = new Point16(1, 1);
 		TileObjectData.newTile.DrawYOffset = 2;
 		//TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<OvergrownAltarTE>().Hook_AfterPlacement, -1, 0, false);
 		TileObjectData.addTile(Type);

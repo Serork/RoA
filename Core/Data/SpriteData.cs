@@ -10,7 +10,7 @@ using Terraria.DataStructures;
 
 namespace RoA.Core.Data;
 
-struct SpriteInfo(Asset<Texture2D> textureAsset, SpriteFrame frame) {
+struct SpriteData(Asset<Texture2D> textureAsset, SpriteFrame frame) {
     public Asset<Texture2D> Asset = textureAsset;
     public SpriteFrame Frame = frame;
     public Vector2 VisualPosition;
@@ -20,12 +20,15 @@ struct SpriteInfo(Asset<Texture2D> textureAsset, SpriteFrame frame) {
     public SpriteEffects Effects;
 
     public readonly Texture2D? Texture => Asset?.Value;
+
     public Rectangle SourceRectangle => Frame.GetSourceRectangle(Texture);
     public Vector2 Origin => SourceRectangle.Centered();
     public Vector2 Center => VisualPosition + Origin;
 
-    public readonly SpriteInfo Framed(byte frameIndexX, byte frameIndexY) {
-        SpriteInfo result = this;
+    public int FrameWidth => SourceRectangle.Width;
+
+    public readonly SpriteData Framed(byte frameIndexX, byte frameIndexY) {
+        SpriteData result = this;
         result.Frame.CurrentColumn = frameIndexX;
         result.Frame.CurrentRow = frameIndexY;
         return result;

@@ -12,7 +12,7 @@ sealed class Slash : ModDust {
     }
 
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-		Color color = dust.color.MultiplyRGB(lightColor).MultiplyRGB(Color.White) * _opacity;
+		Color color = dust.color.MultiplyRGB(lightColor) * _opacity;
 		color.A = 50;
 
 		return color;

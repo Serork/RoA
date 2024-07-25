@@ -24,7 +24,7 @@ sealed class RoA : Mod {
         _instance = this;
     }
 
-    public static RoA Instance => _instance;
+    public static RoA Instance => _instance ??= ModContent.GetInstance<RoA>();
 
     public static string ModName => Instance.Name;
 

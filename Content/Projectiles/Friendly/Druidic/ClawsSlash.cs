@@ -12,20 +12,22 @@ using Terraria.Enums;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Core.Utility;
 using RoA.Content.Dusts;
-using RoA.Core.VisualEffects;
 using Terraria.ID;
 using RoA.Content.VisualEffects;
+using RoA.Common.VisualEffects;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class ClawsSlash : ModProjectile {
+sealed class ClawsSlash : NatureProjectile {
     private Player Owner => Main.player[Projectile.owner];
+
     private (Color, Color) SlashColors => Owner.GetModPlayer<BaseClawsItem.ClawsStats>().SlashColors;
     private Color FirstSlashColor => SlashColors.Item1;
     private Color SecondSlashColor => SlashColors.Item2;
+
     private bool CanFunction => Projectile.localAI[0] >= Projectile.ai[1] * 0.5f;
 
-    public override void SetDefaults() {
+    protected override void SafeSetDefaults() {
         Projectile.width = Projectile.height = 0;
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
@@ -47,7 +49,7 @@ sealed class ClawsSlash : ModProjectile {
         Vector2 offset = new(0.2f);
         Vector2 velocity = 1.5f * offset;
         Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
-        Color color = Utils.MultiplyRGB(Lighting.GetColor(target.Center.ToTileCoordinates()), Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()));
+        Color color = Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()));
         color.A = 50;
         VisualEffectSystem.New<ClawsSlashHit>(VisualEffectLayer.AboveNPCs).
             Setup(target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f),
@@ -85,8 +87,8 @@ sealed class ClawsSlash : ModProjectile {
         float num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float num3 = 0.975f;
         float num4 = Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
-        Color color1 = FirstSlashColor;
-        Color color2 = SecondSlashColor;
+        Color color1 = FirstSlashColor.MultiplyRGB(lightColor);
+        Color color2 = SecondSlashColor.MultiplyRGB(lightColor);
         float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);
         if (CanFunction) {
             SpriteBatch spriteBatch = Main.spriteBatch;

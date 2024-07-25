@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core;
+
 using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-namespace RoA.Core.VisualEffects;
+namespace RoA.Common.VisualEffects;
 
 abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffect<T>, new() {
     public Vector2 Position;

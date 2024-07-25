@@ -18,13 +18,13 @@ using Terraria.UI;
 namespace RoA.Common.Common.GUI;
 
 [Autoload(Side = ModSide.Client)]
-public sealed class DruidItemTooltipLeafsVisual : GlobalItem {
+public sealed class DruidItemTooltipLeafs : GlobalItem {
     private const byte LEAFS_COUNT = 8;
 
-    private static SpriteInfo _spriteInfo;
+    private static SpriteData _leafsSpriteData;
 
     public override void SetStaticDefaults() {
-        _spriteInfo = new SpriteInfo(ModContent.Request<Texture2D>(ResourceManager.Textures + "Leafs"), new SpriteFrame(3, 1));
+        _leafsSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Leafs"), new SpriteFrame(3, 1));
     }
 
     public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {
@@ -65,17 +65,17 @@ public sealed class DruidItemTooltipLeafsVisual : GlobalItem {
                           extraRotation = 0.5f * multiplier * direction,
                           rotation = baseRotation * -i + extraRotation;
 
-                    _spriteInfo.VisualPosition = position - _spriteInfo.Origin;
-                    _spriteInfo.Framed((byte)Utils.RandomInt(ref seedForRandomness, 3), 0);
-                    _spriteInfo.Rotation = rotation;
+                    _leafsSpriteData.VisualPosition = position - _leafsSpriteData.Origin;
+                    _leafsSpriteData.Framed((byte)Utils.RandomInt(ref seedForRandomness, 3), 0);
+                    _leafsSpriteData.Rotation = rotation;
 
                     Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
-                        _spriteInfo.DrawSelf();
+                        _leafsSpriteData.DrawSelf();
                     }, SamplerState.PointClamp);
 
                     DruidTooltipFallingLeafsVisualSystem.FallingLeafData data;
                     data.Index = i;
-                    data.SpriteInfo = _spriteInfo;
+                    data.SpriteInfo = _leafsSpriteData;
                     DruidTooltipFallingLeafsVisualSystem.MatchData(data);
                 }
             }
@@ -89,7 +89,7 @@ public sealed class DruidItemTooltipLeafsVisual : GlobalItem {
     private sealed class DruidTooltipFallingLeafsVisualSystem : ModSystem {
         internal struct FallingLeafData {
             public byte Index;
-            public SpriteInfo SpriteInfo;
+            public SpriteData SpriteInfo;
         }
 
         const float DELAY = 0f;
@@ -147,7 +147,7 @@ public sealed class DruidItemTooltipLeafsVisual : GlobalItem {
                 float velocityAffectedExtraRotation = velocity.X * 0.05f;
 
                 Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
-                    SpriteInfo spriteInfo = fallingLeafData.SpriteInfo;
+                    SpriteData spriteInfo = fallingLeafData.SpriteInfo;
                     spriteInfo.VisualPosition += Vector2.UnitY * maxY - velocity;
                     spriteInfo.Color *= alpha;
                     spriteInfo.Rotation += velocityAffectedExtraRotation;
