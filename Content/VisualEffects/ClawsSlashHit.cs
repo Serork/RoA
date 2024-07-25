@@ -38,7 +38,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
     }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spriteBatch) {
-        Color color = Color * 0.8f;
+        Color color = Color;
         Vector2 origin = Texture.Size() / 2f;
         Vector2 position = Position - Main.screenPosition;
         SpriteEffects effects = SpriteEffects.None;

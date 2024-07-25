@@ -5,14 +5,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class Slash : ModDust {
-	private float _opacity;
-
-    public override void OnSpawn(Dust dust) {
-		_opacity = Main.rand.NextFloat(0.5f, 1f);
-    }
-
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-		Color color = dust.color.MultiplyRGB(lightColor) * _opacity;
+		Color color = dust.color.MultiplyRGB(lightColor);
 		color.A = 50;
 
 		return color;
@@ -29,10 +23,11 @@ sealed class Slash : ModDust {
 			dust.velocity *= 0.98f;
 			dust.scale -= 1f / 1000f;
 		}
-		if (WorldGen.SolidTile(Framing.GetTileSafely(dust.position)) && dust.fadeIn == 0.0 && !dust.noGravity) {
+		if (WorldGen.SolidTile(Framing.GetTileSafely(dust.position)) && dust.fadeIn == 0f && !dust.noGravity) {
 			dust.scale *= 0.99f;
 			dust.velocity *= 0.9f;
 		}
+		Lighting.AddLight(dust.position, dust.color.ToVector3());
 		return true;
 	}
 }

@@ -49,7 +49,7 @@ sealed class ClawsSlash : NatureProjectile {
         Vector2 offset = new(0.2f);
         Vector2 velocity = 1.5f * offset;
         Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
-        Color color = Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()));
+        Color color = Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat())/*Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()))*/;
         color.A = 50;
         VisualEffectSystem.New<ClawsSlashHit>(VisualEffectLayer.AboveNPCs).
             Setup(target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f),
