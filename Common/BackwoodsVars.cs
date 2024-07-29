@@ -1,7 +1,7 @@
 ﻿using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace RoA.Common.Common;
+namespace RoA.Common;
 
 [Autoload(Side = ModSide.Client)]
 sealed class BackwoodsVars : ModSystem {

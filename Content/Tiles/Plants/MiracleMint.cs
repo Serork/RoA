@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
-using RoA.Common.Common;
+using RoA.Common;
 
 using System;
 using System.Collections.Generic;

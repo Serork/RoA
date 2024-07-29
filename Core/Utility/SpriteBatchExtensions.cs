@@ -11,22 +11,25 @@ static class SpriteBatchExtensions {
     public static void With(this SpriteBatch spriteBatch,
                             BlendState blendState,
                             Action drawAction,
+                            Effect effect = null,
                             SamplerState samplerState = null) {
-        spriteBatch.With(blendState, false, drawAction, samplerState);
+        spriteBatch.With(blendState, false, drawAction, effect, samplerState);
     }
 
     public static void With(this SpriteBatch spriteBatch,
                             BlendState blendState,
                             bool isUI,
                             Action drawAction,
+                            Effect effect = null,
                             SamplerState samplerState = null) {
+        bool activeShader = effect != null;
         spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Immediate,
+        spriteBatch.Begin(activeShader ? default : SpriteSortMode.Immediate,
                           blendState,
                           samplerState ?? Main.DefaultSamplerState,
-                          DepthStencilState.None,
-                          RasterizerState.CullCounterClockwise,
-                          null,
+                          activeShader ? default : DepthStencilState.None,
+                          activeShader ? RasterizerState.CullNone : RasterizerState.CullCounterClockwise,
+                          effect,
                           isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
         drawAction();
         spriteBatch.End();
@@ -34,7 +37,7 @@ static class SpriteBatchExtensions {
                           BlendState.AlphaBlend, isUI ? SamplerState.AnisotropicClamp : Main.DefaultSamplerState,
                           DepthStencilState.None,
                           RasterizerState.CullCounterClockwise,
-                          null,
+                          effect,
                           isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
     }
 

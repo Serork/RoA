@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Common;
+using RoA.Common;
 
 using System;
 

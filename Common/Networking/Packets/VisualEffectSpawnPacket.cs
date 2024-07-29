@@ -3,7 +3,6 @@
 using RoA.Common.VisualEffects;
 using RoA.Content.VisualEffects;
 
-using RoA.Core.Networking;
 using RoA.Core.Utility;
 
 using System.IO;
@@ -11,7 +10,7 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 
-namespace RoA.Common.Packets;
+namespace RoA.Common.Networking.Packets;
 
 sealed class VisualEffectSpawnPacket : NetPacket {
     public enum VisualEffectPacketType {

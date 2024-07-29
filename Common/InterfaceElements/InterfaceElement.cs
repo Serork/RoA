@@ -1,12 +1,12 @@
-﻿using RoA.Common.Wreath;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace RoA.Common.Common;
+namespace RoA.Common.InterfaceElements;
 
 [Autoload(Side = ModSide.Client)]
 abstract class InterfaceElement(string name, InterfaceScaleType scaleType) : GameInterfaceLayer(name, scaleType), ILoadable {
@@ -24,7 +24,10 @@ sealed class InterfaceElementsSystem : ModSystem {
     public static void Register(InterfaceElement element) => _interfaceElements.Add(element.GetType(), element);
 
     public override void Load() {
-        Register(new WreathSystem());
+        foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(InterfaceElement)))) {
+            var instance = Activator.CreateInstance(type);
+            Register((InterfaceElement)instance);
+        }
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {

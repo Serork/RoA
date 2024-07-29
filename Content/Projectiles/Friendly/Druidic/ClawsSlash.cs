@@ -14,12 +14,12 @@ using RoA.Core.Utility;
 using RoA.Content.Dusts;
 using RoA.Content.VisualEffects;
 using RoA.Common.VisualEffects;
-using RoA.Common.Claws;
 
 using Terraria.ID;
 
-using RoA.Core.Networking;
-using RoA.Common.Packets;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Druid.Claws;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 

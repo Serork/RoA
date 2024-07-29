@@ -25,6 +25,8 @@ struct SpriteData(Asset<Texture2D> textureAsset, SpriteFrame frame) {
     public Vector2 Origin => SourceRectangle.Centered();
     public Vector2 Center => VisualPosition + Origin;
 
+    public int FrameX => SourceRectangle.X;
+    public int FrameY => SourceRectangle.Y;
     public int FrameWidth => SourceRectangle.Width;
     public int FrameHeight => SourceRectangle.Height;
 
@@ -35,14 +37,14 @@ struct SpriteData(Asset<Texture2D> textureAsset, SpriteFrame frame) {
         return result;
     }
 
-    public void DrawSelf() {
+    public void DrawSelf(Rectangle? rectangle = null) {
         if (Texture == null) {
             return;
         }
 
         Main.EntitySpriteDraw(Texture,
                               Center,
-                              SourceRectangle,
+                              rectangle ?? SourceRectangle,
                               Color,
                               Rotation,
                               Origin,

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RiseofAges.Common.Utilities.Extensions;
 
-using RoA.Common.Common;
+using RoA.Common;
 using RoA.Content.Tiles.Walls;
 using RoA.Content.World.Generations;
 using RoA.Core;

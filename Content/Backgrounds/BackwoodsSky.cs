@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using RiseofAges.Common.Utilities.Extensions;
 using RiseofAges.Content.Biomes.Backwoods;
 
-using RoA.Common.Common;
+using RoA.Common;
 using RoA.Content.World.Generations;
 using RoA.Core;
 

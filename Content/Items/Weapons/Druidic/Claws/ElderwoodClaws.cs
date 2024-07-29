@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid;
 using RoA.Core;
+
+using Terraria;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 

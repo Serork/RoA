@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Common.Common;
+namespace RoA.Common;
 
 [Autoload(Side = ModSide.Client)]
 sealed class TimeSystem : ModSystem {
