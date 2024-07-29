@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
+
 using System;
 
 namespace RoA.Core;
@@ -28,6 +30,14 @@ static class Ease {
     public static Easer QuadIn => value => value * value;
     public static Easer QuadOut => Invert(QuadIn);
     public static Easer QuadInOut => Follow(QuadIn, QuadOut);
+
+    public static Easer QuartIn => value => value * value * value * value;
+    public static Easer QuartOut => value => 1f - (float)Math.Pow(1.0 - (double)value, 4);
+    public static Easer QuartInOut => Follow(QuartIn, QuartIn);
+
+    public static Easer QuintOut => value => 1f - (float)Math.Pow(1.0 - (double)value, 5);
+
+    public static Easer CircOut => value => (float)Math.Sqrt(1 - Math.Pow(value - 1.0, 2));
 
     private const float B1 = 1f / 2.75f;
     private const float B2 = 2f / 2.75f;

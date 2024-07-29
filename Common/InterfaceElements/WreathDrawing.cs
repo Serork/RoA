@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Common.Druid.Wreath;
 using RoA.Common.InterfaceElements;
 using RoA.Core;
 using RoA.Core.Data;
@@ -12,10 +14,10 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace RoA.Common.Druid.Wreath;
+namespace RoA.Common.InterfaceElements;
 
 [Autoload(Side = ModSide.Client)]
-sealed class WreathSystem() : InterfaceElement(RoA.ModName + ": Wreath", InterfaceScaleType.Game) {
+sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", InterfaceScaleType.Game) {
     private static SpriteData _wreathSpriteData;
 
     private Vector2 _oldPosition;
@@ -32,6 +34,11 @@ sealed class WreathSystem() : InterfaceElement(RoA.ModName + ": Wreath", Interfa
     protected override bool DrawSelf() {
         Vector2 playerPosition = Utils.Floor(Player.Top + Vector2.UnitY * Player.gfxOffY);
         playerPosition.Y -= 15f;
+        Vector2 position;
+        bool breathUI = Player.breath < Player.breathMax || Player.lavaTime < Player.lavaMax;
+        float offsetX = -_wreathSpriteData.FrameWidth / 2f + 2, offsetY = _wreathSpriteData.FrameHeight;
+        playerPosition.X += offsetX;
+        playerPosition.Y += breathUI ? (float)(-(float)offsetY * ((Player.breathMax - 1) / 200 + 1)) : -offsetY;
 
         Item selectedItem = Player.GetSelectedItem();
         if (Player.dead || Player.ghost || !selectedItem.IsADruidicWeapon()) {
@@ -40,11 +47,6 @@ sealed class WreathSystem() : InterfaceElement(RoA.ModName + ": Wreath", Interfa
             return true;
         }
 
-        Vector2 position;
-        bool breathUI = Player.breath < Player.breathMax || Player.lavaTime < Player.lavaMax;
-        float offsetX = -_wreathSpriteData.FrameWidth / 2f + 2, offsetY = _wreathSpriteData.FrameHeight;
-        playerPosition.X += offsetX;
-        playerPosition.Y += breathUI ? (float)(-(float)offsetY * ((Player.breathMax - 1) / 200 + 1)) : -offsetY;
         position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f) - Main.screenPosition;
         _oldPosition = playerPosition;
         Color mainColor = new(255, 255, 200, 200);
