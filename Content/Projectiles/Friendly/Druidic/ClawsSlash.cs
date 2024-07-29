@@ -12,16 +12,21 @@ using Terraria.Enums;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Core.Utility;
 using RoA.Content.Dusts;
-using Terraria.ID;
 using RoA.Content.VisualEffects;
 using RoA.Common.VisualEffects;
+using RoA.Common.Claws;
+
+using Terraria.ID;
+
+using RoA.Core.Networking;
+using RoA.Common.Packets;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class ClawsSlash : NatureProjectile {
     private Player Owner => Main.player[Projectile.owner];
 
-    private (Color, Color) SlashColors => Owner.GetModPlayer<BaseClawsItem.ClawsStats>().SlashColors;
+    private (Color, Color) SlashColors => Owner.GetModPlayer<ClawsStats>().SlashColors;
     private Color FirstSlashColor => SlashColors.Item1;
     private Color SecondSlashColor => SlashColors.Item2;
 
@@ -41,20 +46,23 @@ sealed class ClawsSlash : NatureProjectile {
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         float angle = MathHelper.PiOver2;
         Vector2 offset = new(0.2f);
         Vector2 velocity = 1.5f * offset;
         Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
         Color color = Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat())/*Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()))*/;
         color.A = 50;
-        VisualEffectSystem.New<ClawsSlashHit>(VisualEffectLayer.AboveNPCs).
-            Setup(target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f),
-                  angle.ToRotationVector2() * velocity * 0.5f, 
+        position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
+        velocity = angle.ToRotationVector2() * velocity * 0.5f;
+        int layer = VisualEffectLayer.AboveNPCs;
+        VisualEffectSystem.New<ClawsSlashHit>(layer).
+            Setup(position,
+                  velocity,
                   color);
+
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
+        }
     }
 
     public override bool? CanDamage() => CanFunction;

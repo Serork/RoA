@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Utilities;
@@ -13,24 +14,13 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 [WeaponOverlay(WeaponType.Claws)]
 abstract class BaseClawsItem : NatureItem {
-    public sealed class ClawsStats : ModPlayer {
-        private Color _firstSlashColor, _secondSlashColor;
-
-        public (Color, Color) SlashColors => (_firstSlashColor, _secondSlashColor);
-
-        public void SetColors(Color firstSlashColor, Color secondSlashColor) {
-            _firstSlashColor = firstSlashColor;
-            _secondSlashColor = secondSlashColor;
-        }
-    }
-
     protected sealed override void SafeSetDefaults2() {
         Item.noMelee = true;
 
         Item.shoot = ModContent.ProjectileType<ClawsSlash>();
         Item.shootSpeed = 1.2f;
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, 18, false, autoReuse: true);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, 18, false, autoReuse: false);
     }
 
     protected abstract (Color, Color) SlashColors();

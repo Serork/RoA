@@ -26,6 +26,7 @@ struct SpriteData(Asset<Texture2D> textureAsset, SpriteFrame frame) {
     public Vector2 Center => VisualPosition + Origin;
 
     public int FrameWidth => SourceRectangle.Width;
+    public int FrameHeight => SourceRectangle.Height;
 
     public readonly SpriteData Framed(byte frameIndexX, byte frameIndexY) {
         SpriteData result = this;

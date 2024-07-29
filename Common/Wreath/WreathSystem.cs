@@ -41,13 +41,12 @@ sealed class WreathSystem() : InterfaceElement(RoA.ModName + ": Wreath", Interfa
 
         Vector2 position;
         Vector2 playerPosition = Utils.Floor(Player.Top + Vector2.UnitY * Player.gfxOffY);
-        playerPosition.Y -= 60f;
+        playerPosition.Y -= 15f;
         bool breathUI = Player.breath < Player.breathMax || Player.lavaTime < Player.lavaMax;
-        float offsetX = _wreathSpriteData.FrameWidth / 2f + 5, offsetY = -3f;
+        float offsetX = -_wreathSpriteData.FrameWidth / 2f, offsetY = _wreathSpriteData.FrameHeight;
         playerPosition.X += offsetX;
         playerPosition.Y += breathUI ? (float)(-(float)offsetY * ((Player.breathMax - 1) / 200 + 1)) : -offsetY;
-        position = Vector2.Transform(Vector2.Lerp(_oldPosition, playerPosition, 0.3f) - Main.screenPosition, Main.GameViewMatrix.ZoomMatrix) / Main.UIScale;
-        position += _wreathSpriteData.Texture.Size() / 2f;
+        position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f) - Main.screenPosition;
         _oldPosition = playerPosition;
         Color mainColor = new(255, 255, 200, 200);
         Color color = Utils.MultiplyRGB(mainColor, Lighting.GetColor(new Point((int)Player.Center.X / 16, (int)Player.Center.Y / 16)));

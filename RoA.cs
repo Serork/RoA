@@ -11,6 +11,7 @@ using System.IO;
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
+using RoA.Core.Networking;
 
 namespace RoA;
 
@@ -29,6 +30,9 @@ sealed class RoA : Mod {
     public static string ModName => Instance.Name;
 
     public override IContentSource CreateDefaultContentSource() => new CustomContentSource(base.CreateDefaultContentSource());
+
+    public override void HandlePacket(BinaryReader reader, int sender)
+        => MultiplayerSystem.HandlePacket(reader, sender);
 
     public override void Load() {
         TileHelper.Load();

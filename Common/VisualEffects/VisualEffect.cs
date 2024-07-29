@@ -29,7 +29,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
 
     public bool IsRestingInPool => ShouldBeRemovedFromRenderer;
 
-    public virtual Texture2D Texture => ModContent.Request<Texture2D>(ResourceManager.Textures + $"VisualEffects/{typeof(T).Name}").Value;
+    public virtual Texture2D Texture => ModContent.Request<Texture2D>(ResourceManager.Textures + $"VisualEffects/{typeof(T).Name}", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
     protected void SetFramedTexture(int frames, int frameChoice = -1) {
         Frame = Texture.Frame(verticalFrames: frames, frameY: (frameChoice == -1 ? Main.rand.Next(frames) : frameChoice));
@@ -41,7 +41,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         Origin = Frame.Size() / 2f;
     }
 
-    public T Setup(Vector2 position, Vector2 velocity, Color color = default(Color), float scale = 1f, float rotation = 0f) {
+    public T Setup(Vector2 position, Vector2 velocity, Color color = default, float scale = 1f, float rotation = 0f, int timeLeft = 0) {
         Position = position;
         Velocity = velocity;
         Color = color;
@@ -54,10 +54,10 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     }
 
     protected virtual void SetDefaults() {
-        TimeLeft = MaxTimeLeft;
+        TimeLeft = MaxTimeLeft = 60;
     }
 
-    public virtual Color GetParticleColor(ref ParticleRendererSettings settings) => Color;
+    public virtual Color GetParticleColor() => Color;
 
     public virtual void Update(ref ParticleRendererSettings settings) {
         Velocity *= 0.9f;
@@ -78,7 +78,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     }
 
     public virtual void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
-        spritebatch.Draw(Texture, Position - Main.screenPosition, Frame, GetParticleColor(ref settings), Rotation, Origin, Scale, SpriteEffects.None, 0f);
+        spritebatch.Draw(Texture, Position - Main.screenPosition, Frame, GetParticleColor(), Rotation, Origin, Scale, SpriteEffects.None, 0f);
     }
 
     public virtual void RestInPool() {

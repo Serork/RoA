@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
@@ -26,10 +25,6 @@ sealed class VisualEffectSystem : ModSystem {
     }
 
     public override void Load() {
-        if (Main.dedServ) {
-            return;
-        }
-
         _layers = new ParticleRenderer[VisualEffectLayer.Count];
         for (int i = 0; i < VisualEffectLayer.Count; i++) {
             _layers[i] = new ParticleRenderer();
@@ -41,10 +36,6 @@ sealed class VisualEffectSystem : ModSystem {
     }
 
     public void InitWorldData() {
-        if (Main.dedServ) {
-            return;
-        }
-
         foreach (ParticleRenderer layer in _layers) {
             layer.Particles.Clear();
         }
@@ -59,10 +50,6 @@ sealed class VisualEffectSystem : ModSystem {
     }
 
     public override void PreUpdatePlayers() {
-        if (Main.dedServ) {
-            return;
-        }
-
         foreach (ParticleRenderer layer in _layers) {
             layer.Particles = layer.Particles.Distinct().ToList();
             layer.Update();
