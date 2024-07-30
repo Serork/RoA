@@ -12,6 +12,8 @@ using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 using RoA.Common.Networking;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 
 namespace RoA;
 
@@ -36,25 +38,15 @@ sealed class RoA : Mod {
     public override void Load() {
         TileHelper.Load();
         LoadFilters();
-        LoadShaders();
     }
 
     public override void Unload() {
         TileHelper.Unload();
-        UnloadShaders();
     }
 
     private static void LoadFilters() {
         Filters.Scene[BackwoodsSky] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon").UseColor(0.2f, 0.2f, 0.2f).UseOpacity(0.05f), EffectPriority.High);
         SkyManager.Instance[BackwoodsSky] = new BackwoodsSky();
         Filters.Scene[BackwoodsSky].Load();
-    }
-
-    private static void LoadShaders() {
-
-    }
-
-    private static void UnloadShaders() {
-
     }
 }

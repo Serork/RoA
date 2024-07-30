@@ -1,6 +1,7 @@
 ﻿using RoA.Content;
 
 using Terraria;
+using Terraria.Audio;
 
 namespace RoA.Core;
 
@@ -25,13 +26,16 @@ static class ItemDefaults {
         item.consumable = consumable;
     }
 
-    public static void SetDefaultToUsable(this Item item, int useStyleID, int useTime, int animationTime, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false) {
+    public static void SetDefaultToUsable(this Item item, int useStyleID, int useTime, int animationTime, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) {
         item.useStyle = useStyleID;
         item.useTime = useTime;
         item.useAnimation = animationTime;
         item.noUseGraphic = !showItemOnUse;
         item.useTurn = useTurn;
         item.autoReuse = autoReuse;
+        if (useSound != null) {
+            item.UseSound = useSound;
+        }
     }
 
     public static void SetDefaultToUsable(this Item item, int useStyleID, int timeToUse, bool showItemOnUse = true) => item.SetDefaultToUsable(useStyleID, timeToUse, timeToUse, showItemOnUse);

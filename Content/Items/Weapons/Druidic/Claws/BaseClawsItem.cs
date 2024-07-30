@@ -19,7 +19,7 @@ abstract class BaseClawsItem : NatureItem {
         Item.shoot = ModContent.ProjectileType<ClawsSlash>();
         Item.shootSpeed = 1.2f;
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, 18, false, autoReuse: false);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, 18, false, autoReuse: false, useSound: SoundID.Item1);
     }
 
     protected abstract (Color, Color) SlashColors();

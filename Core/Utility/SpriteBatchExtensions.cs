@@ -21,14 +21,15 @@ static class SpriteBatchExtensions {
                             bool isUI,
                             Action drawAction,
                             Effect effect = null,
-                            SamplerState samplerState = null) {
+                            SamplerState samplerState = null,
+                            RasterizerState rasterizerState = null) {
         bool activeShader = effect != null;
         spriteBatch.End();
         spriteBatch.Begin(activeShader ? default : SpriteSortMode.Immediate,
                           blendState,
                           samplerState ?? Main.DefaultSamplerState,
                           activeShader ? default : DepthStencilState.None,
-                          activeShader ? RasterizerState.CullNone : RasterizerState.CullCounterClockwise,
+                          rasterizerState ?? (activeShader ? RasterizerState.CullNone : RasterizerState.CullCounterClockwise),
                           effect,
                           isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
         drawAction();

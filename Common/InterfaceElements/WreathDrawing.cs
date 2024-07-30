@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Druid.Wreath;
 using RoA.Common.InterfaceElements;
 using RoA.Core;
@@ -12,6 +14,8 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -20,6 +24,11 @@ namespace RoA.Common.InterfaceElements;
 [Autoload(Side = ModSide.Client)]
 sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", InterfaceScaleType.Game) {
     private const byte HORIZONTALFRAMECOUNT = 6;
+
+    private static readonly RasterizerState OverflowHiddenRasterizerState = new() {
+        CullMode = CullMode.None,
+        ScissorTestEnable = true
+    };
 
     private static SpriteData _wreathSpriteData;
 
@@ -62,11 +71,21 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         wreathSpriteData.DrawSelf();
 
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed(0, 1);
-        wreathSpriteData2.Color = color;
-        wreathSpriteData2.DrawSelf(new Rectangle(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY, wreathSpriteData2.FrameWidth, (int)(wreathSpriteData2.FrameHeight * progress)));
+        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY, wreathSpriteData2.FrameWidth, (int)(wreathSpriteData2.FrameHeight * progress));
+        wreathSpriteData2.Color = color * 0.7f;
+        wreathSpriteData2.DrawSelf(sourceRectangle);
+
+        opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
+        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 6f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
+        wreathSpriteData2.Color = color * factor * opacity * 1.2f;
+        wreathSpriteData2.Scale = factor + 0.525f;
+        wreathSpriteData2.DrawSelf(sourceRectangle);
+
+        wreathSpriteData2.Scale += 0.075f * progress * 1.8f;
+        wreathSpriteData2.DrawSelf(sourceRectangle);
 
         SpriteData wreathSpriteData3 = wreathSpriteData.Framed(3, 1);
-        opacity = Math.Min(progress * 1.25f, 0.75f);
+        opacity = Math.Min(progress * 1.25f, 0.85f);
         wreathSpriteData3.Color = color * opacity;
         wreathSpriteData3.DrawSelf();
 
