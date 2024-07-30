@@ -81,7 +81,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         wreathSpriteData2.Scale = factor + 0.525f;
         wreathSpriteData2.DrawSelf(sourceRectangle);
 
-        wreathSpriteData2.Scale += 0.075f * progress * 1.8f;
+        wreathSpriteData2.Scale += 0.075f * progress * 2f;
         wreathSpriteData2.DrawSelf(sourceRectangle);
 
         SpriteData wreathSpriteData3 = wreathSpriteData.Framed(3, 1);
