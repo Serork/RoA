@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -18,6 +19,8 @@ namespace RoA.Common.InterfaceElements;
 
 [Autoload(Side = ModSide.Client)]
 sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", InterfaceScaleType.Game) {
+    private const byte HORIZONTALFRAMECOUNT = 6;
+
     private static SpriteData _wreathSpriteData;
 
     private Vector2 _oldPosition;
@@ -28,7 +31,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
     public override int GetInsertIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Ingame Options"));
 
     public override void Load(Mod mod) {
-        _wreathSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.Textures + "Wreath"), new SpriteFrame(3, 3));
+        _wreathSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.Textures + "Wreath"), new SpriteFrame(HORIZONTALFRAMECOUNT, 3));
     }
 
     protected override bool DrawSelf() {
@@ -49,18 +52,23 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
 
         position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f) - Main.screenPosition;
         _oldPosition = playerPosition;
-        Color mainColor = new(255, 255, 200, 200);
-        Color color = Utils.MultiplyRGB(mainColor, Lighting.GetColor(new Point((int)Player.Center.X / 16, (int)Player.Center.Y / 16)));
-
+        float progress = Stats.Progress;
+        Color color = Stats.DrawColor;
+        float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.75f);
         SpriteData wreathSpriteData = _wreathSpriteData;
         wreathSpriteData.Rotation = MathHelper.Pi;
-        wreathSpriteData.Color = color;
+        wreathSpriteData.Color = color * opacity;
         wreathSpriteData.VisualPosition = position;
         wreathSpriteData.DrawSelf();
 
-        float progress = Stats.Progress;
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed(0, 1);
+        wreathSpriteData2.Color = color;
         wreathSpriteData2.DrawSelf(new Rectangle(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY, wreathSpriteData2.FrameWidth, (int)(wreathSpriteData2.FrameHeight * progress)));
+
+        SpriteData wreathSpriteData3 = wreathSpriteData.Framed(3, 1);
+        opacity = Math.Min(progress * 1.25f, 0.75f);
+        wreathSpriteData3.Color = color * opacity;
+        wreathSpriteData3.DrawSelf();
 
         return true;
     }
