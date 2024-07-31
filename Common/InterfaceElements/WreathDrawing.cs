@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Common.Druid.Wreath;
-using RoA.Common.InterfaceElements;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
@@ -14,8 +11,6 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Graphics.Shaders;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 

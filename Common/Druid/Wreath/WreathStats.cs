@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Claws;
 using RoA.Content;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -47,6 +49,7 @@ sealed class WreathStats : ModPlayer {
 
     public float Progress => (float)CurrentResource / TotalResource;
     public float IncreasingProgress => Ease.CircOut(Math.Min(1f - _currentIncreasingTime, 0.999f));
+    public bool IsFull => Progress > 0.998f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsIncreasingValue => _currentIncreasingTime > 0f;
@@ -63,11 +66,21 @@ sealed class WreathStats : ModPlayer {
     public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(Progress), 0.35f);
 
+    public ClawsStats ClawsStats => Player.GetModPlayer<ClawsStats>();
+    public ClawsStats.SpecialAttackSpawnInfo SpecialAttackData => ClawsStats.SpecialAttackData;
+
     public ushort AddResourceValue() => (ushort)(AddValue * TotalResource);
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (!hit.DamageType.CountsAsClass(DruidClass.NatureDamage)) {
+        bool hitByNatureDamage = hit.DamageType.CountsAsClass(DruidClass.NatureDamage);
+        if (!hitByNatureDamage) {
             return;
+        }
+
+        Item selectedItem = Player.GetSelectedItem();
+        bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
+        if (playerUsingClaws && IsFull && Main.myPlayer == Player.whoAmI) {
+            Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
         }
 
         IncreaseCurrentResourceValue();
@@ -116,7 +129,7 @@ sealed class WreathStats : ModPlayer {
     }
 
     private void MakeDusts() {
-        if (Progress <= 0.998f) {
+        if (!IsFull) {
             if (Main.netMode != NetmodeID.Server) {
                 float progress = Progress * 1.25f + 0.1f;
                 int count = (int)(15 * progress);

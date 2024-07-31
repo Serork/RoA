@@ -24,10 +24,15 @@ abstract class BaseClawsItem : NatureItem {
 
     protected abstract (Color, Color) SlashColors();
 
+    public virtual void SafeOnUse(Player player, ClawsStats clawsStats) { }
+
     public override bool? UseItem(Player player) {
         if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
             (Color, Color) slashColors = SlashColors();
-            player.GetModPlayer<ClawsStats>().SetColors(slashColors.Item1, slashColors.Item2);
+            ClawsStats clawsStats = player.GetModPlayer<ClawsStats>();
+            clawsStats.SetColors(slashColors.Item1, slashColors.Item2);
+
+            SafeOnUse(player, clawsStats);
         }
 
         return base.UseItem(player);
