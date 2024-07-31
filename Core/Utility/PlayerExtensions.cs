@@ -13,4 +13,6 @@ static class PlayerExtensions {
 
         return true;
     }
+
+    public static bool IsLocal(this Player player) => Main.myPlayer == player.whoAmI;
 }

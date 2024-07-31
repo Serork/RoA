@@ -3,6 +3,7 @@
 using RoA.Common.Druid.Claws;
 using RoA.Content;
 using RoA.Content.Items.Weapons.Druidic.Claws;
+using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -18,11 +19,12 @@ sealed class WreathStats : ModPlayer {
     private const float BASEADDVALUE = 0.115f;
     private const float INCREASINGTIME = TimeSystem.LogicDeltaTime * 60f;
     private const float DRAWCOLORINTENSITY = 3f;
+    private const byte MAXBOOSTINCREMENT = 7;
 
     private ushort _currentResource, _tempResource;
     private float _addExtraValue;
 
-    private byte _increasingFactor;
+    private byte _boost;
     private ushort _increaseValue;
     private float _currentIncreasingTime;
 
@@ -71,16 +73,30 @@ sealed class WreathStats : ModPlayer {
 
     public ushort AddResourceValue() => (ushort)(AddValue * TotalResource);
 
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        bool hitByNatureDamage = hit.DamageType.CountsAsClass(DruidClass.NatureDamage);
-        if (!hitByNatureDamage) {
+    public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
+        //bool hitByNatureDamage = hit.DamageType.CountsAsClass(DruidClass.NatureDamage);
+        //if (!hitByNatureDamage) {
+        //    return;
+        //}
+
+        if (!Player.IsLocal()) {
+            return;
+        }
+        if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
+            return;
+        }
+        if (!natureProjectile.ShouldApplyWreathPoints) {
             return;
         }
 
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
-        if (playerUsingClaws && IsFull && Main.myPlayer == Player.whoAmI) {
-            Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
+        if (playerUsingClaws && IsFull) {
+            if (SpecialAttackData.Owner == selectedItem) {
+                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
+            }
+
+            Reset(false);
         }
 
         IncreaseCurrentResourceValue();
@@ -103,8 +119,10 @@ sealed class WreathStats : ModPlayer {
         _tempResource = CurrentResource;
 
         if (IsIncreasingValue) {
-            _increasingFactor++;
-            _addExtraValue += BASEADDVALUE / _increasingFactor * BASEADDVALUE;
+            if (_boost < MAXBOOSTINCREMENT) {
+                _boost++;
+            }
+            _addExtraValue += BASEADDVALUE / _boost * BASEADDVALUE;
         }
 
         _increaseValue = AddResourceValue();
@@ -112,19 +130,21 @@ sealed class WreathStats : ModPlayer {
 
     private void HandleIncreasing() {
         if (!IsIncreasingValue) {
-            _increasingFactor = 0;
+            _boost = 0;
 
             return;
         }
 
-        _currentIncreasingTime -= TimeSystem.LogicDeltaTime * 1.75f * Math.Max((byte)1, _increasingFactor);
+        _currentIncreasingTime -= TimeSystem.LogicDeltaTime * 1.75f * Math.Max((byte)1, _boost);
 
         CurrentResource = (ushort)(_tempResource + _increaseValue * IncreasingProgress);
     }
 
-    private void Reset() {
+    private void Reset(bool resetBoost = true) {
         _currentIncreasingTime = _addExtraValue = 0f;
-        _increasingFactor = 0;
+        if (resetBoost) {
+            _boost = 0;
+        }
         CurrentResource = _tempResource = _increaseValue = 0;
     }
 

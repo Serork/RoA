@@ -1,5 +1,4 @@
 ﻿using RoA.Core;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -7,6 +6,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly;
 
 abstract class NatureProjectile : ModProjectile {
+    public bool ShouldApplyWreathPoints { get; protected set; } = true;
+
     public sealed override void SetDefaults() {
         SafeSetDefaults();
 
