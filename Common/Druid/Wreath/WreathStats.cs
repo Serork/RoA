@@ -60,7 +60,7 @@ sealed class WreathStats : ModPlayer {
     }
     public Color DrawColor => Utils.MultiplyRGB(new Color(255, 255, 200, 200), Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
     public Color LightingColor => _lightingColor;
-    public Vector2 LightingPosition => Player.Top - Vector2.UnitY * 30f;
+    public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(Progress), 0.35f);
 
     public ushort AddResourceValue() => (ushort)(AddValue * TotalResource);
@@ -116,7 +116,7 @@ sealed class WreathStats : ModPlayer {
     }
 
     private void MakeDusts() {
-        if (Progress <= 0.995f) {
+        if (Progress <= 0.998f) {
             if (Main.netMode != NetmodeID.Server) {
                 float progress = Progress * 1.25f + 0.1f;
                 int count = (int)(15 * progress);

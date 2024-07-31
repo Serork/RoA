@@ -63,7 +63,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         _oldPosition = playerPosition;
         float progress = Stats.Progress;
         Color color = Stats.DrawColor;
-        float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.75f);
+        float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.8f);
         SpriteData wreathSpriteData = _wreathSpriteData;
         wreathSpriteData.Rotation = MathHelper.Pi;
         wreathSpriteData.Color = color * opacity;
@@ -72,20 +72,22 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
 
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed(0, 1);
         Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY, wreathSpriteData2.FrameWidth, (int)(wreathSpriteData2.FrameHeight * progress));
-        wreathSpriteData2.Color = color * 0.7f;
+        wreathSpriteData2.Color = color;
         wreathSpriteData2.DrawSelf(sourceRectangle);
 
+        color *= 1.4f;
+        color.A = 80;
         opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
-        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 6f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
-        wreathSpriteData2.Color = color * factor * opacity * 1.2f;
-        wreathSpriteData2.Scale = factor + 0.525f;
+        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
+        wreathSpriteData2.Color = color * factor * opacity * 1.4f;
+        wreathSpriteData2.Scale = factor + 0.475f;
         wreathSpriteData2.DrawSelf(sourceRectangle);
 
-        wreathSpriteData2.Scale += 0.075f * progress * 2f;
+        wreathSpriteData2.Scale += 0.13f * progress * 2f;
         wreathSpriteData2.DrawSelf(sourceRectangle);
 
         SpriteData wreathSpriteData3 = wreathSpriteData.Framed(3, 1);
-        opacity = Math.Min(progress * 1.25f, 0.85f);
+        opacity = Math.Min(progress * 1.25f, 0.6f);
         wreathSpriteData3.Color = color * opacity;
         wreathSpriteData3.DrawSelf();
 
