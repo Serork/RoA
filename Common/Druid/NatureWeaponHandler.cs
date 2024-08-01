@@ -15,9 +15,11 @@ namespace RoA.Common.Druid;
 sealed class NatureWeaponHandler : GlobalItem {
     private ushort _basePotentialDamage;
 
-    public int GetExtraDamage(Player player) {
+    public ushort GetPotentialDamage(Item item) => (ushort)(_basePotentialDamage - item.damage);
+
+    public int GetExtraDamage(Player player, Item item) {
         float progress = GetWreathStats(player).Progress;
-        return (int)(progress * _basePotentialDamage) + (progress > 0.01f ? 1 : 0);
+        return (int)(progress * GetPotentialDamage(item)) + (progress > 0.01f ? 1 : 0);
     }
 
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
@@ -33,7 +35,7 @@ sealed class NatureWeaponHandler : GlobalItem {
             return;
         }
 
-        int extraDamage = GetExtraDamage(player);
+        int extraDamage = GetExtraDamage(player, item);
         damage.Flat += extraDamage;
         damage.Flat = Math.Min(item.damage + _basePotentialDamage, damage.Flat);
     }
@@ -49,7 +51,7 @@ sealed class NatureWeaponHandler : GlobalItem {
 
         int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Damage"));
         if (index != -1) {
-            int extraDamage = Math.Min(GetExtraDamage(Main.LocalPlayer), _basePotentialDamage);
+            int extraDamage = Math.Min(GetExtraDamage(Main.LocalPlayer, item), GetPotentialDamage(item));
             if (extraDamage > 0) {
                 string damageTooltip = tooltips[index].Text;
                 string[] damageTooltipWords = damageTooltip.Split(' ');
