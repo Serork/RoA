@@ -179,7 +179,7 @@ sealed class WreathHandler : ModPlayer {
         if (!IsFull) {
             if (Main.netMode != NetmodeID.Server) {
                 float progress = Progress * 1.25f + 0.1f;
-                int count = (int)(15 * progress);
+                int count = Math.Min((int)(15 * progress), 10);
                 if (Main.netMode != NetmodeID.Server) {
                     for (int i = 0; i < count; i++) {
                         if (Main.rand.NextChance(0.5)) {
