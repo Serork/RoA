@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class ShadewoodLeaves : ModDust {
+abstract class Leaves : ModDust {
 	public override void OnSpawn(Dust dust) {
 		dust.velocity *= 0.1f;
 		dust.noGravity = true;
@@ -21,3 +21,7 @@ sealed class ShadewoodLeaves : ModDust {
 		return false;
 	}
 }
+
+sealed class ShadewoodLeaves : Leaves { }
+
+sealed class EbonwoodLeaves : Leaves { }
