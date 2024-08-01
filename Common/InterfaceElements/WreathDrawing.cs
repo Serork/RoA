@@ -83,7 +83,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         wreathSpriteData2.DrawSelf(sourceRectangle);
 
         SpriteData wreathSpriteData3 = wreathSpriteData.Framed(3, 1);
-        opacity = Math.Min(progress * 1.25f, 0.6f);
+        opacity = Math.Min(progress * 1.15f, 0.6f);
         wreathSpriteData3.Color = color * opacity;
         wreathSpriteData3.DrawSelf();
 

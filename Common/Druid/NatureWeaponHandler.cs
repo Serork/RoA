@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Druid.Wreath;
+using RoA.Content;
 using RoA.Core.Utility;
 
 using System;
@@ -14,7 +15,10 @@ namespace RoA.Common.Druid;
 sealed class NatureWeaponHandler : GlobalItem {
     private ushort _basePotentialDamage;
 
-    public int GetExtraDamage(Player player) => (int)(GetWreathStats(player).Progress * _basePotentialDamage);
+    public int GetExtraDamage(Player player) {
+        float progress = GetWreathStats(player).Progress;
+        return (int)(progress * _basePotentialDamage) + (progress > 0.01f ? 1 : 0);
+    }
 
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
 
@@ -29,7 +33,9 @@ sealed class NatureWeaponHandler : GlobalItem {
             return;
         }
 
-        damage.Flat += GetExtraDamage(player);
+        int extraDamage = GetExtraDamage(player);
+        damage.Flat += extraDamage;
+        damage.Flat = Math.Min(item.damage + _basePotentialDamage, damage.Flat);
     }
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
@@ -43,7 +49,7 @@ sealed class NatureWeaponHandler : GlobalItem {
 
         int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Damage"));
         if (index != -1) {
-            int extraDamage = GetExtraDamage(Main.LocalPlayer);
+            int extraDamage = Math.Min(GetExtraDamage(Main.LocalPlayer), _basePotentialDamage);
             if (extraDamage > 0) {
                 string damageTooltip = tooltips[index].Text;
                 string[] damageTooltipWords = damageTooltip.Split(' ');
