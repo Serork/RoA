@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Druid.Wreath;
 
-sealed class WreathStats : ModPlayer {
+sealed class WreathHandler : ModPlayer {
     private const float BASEADDVALUE = 0.115f;
     private const float CHANGINGTIME = TimeSystem.LogicDeltaTime * 60f;
     private const float DRAWCOLORINTENSITY = 3f;
@@ -71,8 +71,8 @@ sealed class WreathStats : ModPlayer {
     public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(Progress), 0.35f);
 
-    public ClawsStats ClawsStats => Player.GetModPlayer<ClawsStats>();
-    public ClawsStats.SpecialAttackSpawnInfo SpecialAttackData => ClawsStats.SpecialAttackData;
+    public ClawsHandler ClawsStats => Player.GetModPlayer<ClawsHandler>();
+    public ClawsHandler.SpecialAttackSpawnInfo SpecialAttackData => ClawsStats.SpecialAttackData;
 
     public ushort AddResourceValue() => (ushort)(AddValue * TotalResource);
 

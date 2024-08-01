@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Druid.Claws;
 
-sealed class ClawsStats : ModPlayer {
+sealed class ClawsHandler : ModPlayer {
     public readonly struct SpecialAttackSpawnInfo(Item owner, ushort projectileTypeToSpawn, Vector2 spawnPosition, Vector2? startVelocity = null, SoundStyle? playSoundStyle = null) {
         public readonly Item Owner = owner;
         public readonly ushort ProjectileTypeToSpawn = projectileTypeToSpawn;

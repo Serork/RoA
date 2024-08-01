@@ -26,7 +26,7 @@ namespace RoA.Content.Projectiles.Friendly.Druidic;
 sealed class ClawsSlash : NatureProjectile {
     private Player Owner => Main.player[Projectile.owner];
 
-    private (Color, Color) SlashColors => Owner.GetModPlayer<ClawsStats>().SlashColors;
+    private (Color, Color) SlashColors => Owner.GetModPlayer<ClawsHandler>().SlashColors;
     private Color FirstSlashColor => SlashColors.Item1;
     private Color SecondSlashColor => SlashColors.Item2;
 

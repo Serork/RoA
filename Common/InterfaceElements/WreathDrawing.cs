@@ -11,6 +11,8 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Localization;
+using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -30,7 +32,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
     private Vector2 _oldPosition;
 
     private static Player Player => Main.LocalPlayer;
-    private static WreathStats Stats => Player.GetModPlayer<WreathStats>();  
+    private static WreathHandler Stats => Player.GetModPlayer<WreathHandler>();  
 
     public override int GetInsertIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Ingame Options"));
 
@@ -47,7 +49,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         playerPosition.X += offsetX;
         playerPosition.Y += breathUI ? (float)(-(float)offsetY * ((Player.breathMax - 1) / 200 + 1)) : -offsetY;
 
-        if (Player.dead || Player.ghost || !Player.IsHoldingNatureWeapon()) {
+        if (Player.dead || Player.ghost || Player.ShouldNotDraw || !Player.IsHoldingNatureWeapon()) {
             _oldPosition = playerPosition;
 
             return true;
@@ -84,6 +86,19 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         opacity = Math.Min(progress * 1.25f, 0.6f);
         wreathSpriteData3.Color = color * opacity;
         wreathSpriteData3.DrawSelf();
+
+        Microsoft.Xna.Framework.Rectangle mouseRectangle = new Microsoft.Xna.Framework.Rectangle((int)((float)Main.mouseX + Main.screenPosition.X), (int)((float)Main.mouseY + Main.screenPosition.Y), 1, 1);
+        if (Player.gravDir == -1f)
+            mouseRectangle.Y = (int)Main.screenPosition.Y + Main.screenHeight - Main.mouseY;
+        Microsoft.Xna.Framework.Rectangle value2 = new Microsoft.Xna.Framework.Rectangle((int)((double)wreathSpriteData.VisualPosition.X + Main.screenPosition.X), (int)(wreathSpriteData.VisualPosition.Y + Main.screenPosition.Y), (int)(29 * Main.UIScale), (int)(29 * Main.UIScale));
+        if (!Main.mouseText && mouseRectangle.Intersects(value2)) {
+            Player.cursorItemIconEnabled = false;
+
+            string text2 = Stats.CurrentResource + "/" + Stats.TotalResource;
+
+            Main.instance.MouseTextHackZoom(text2);
+            Main.mouseText = true;
+        }
 
         return true;
     }

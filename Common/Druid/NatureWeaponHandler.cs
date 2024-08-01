@@ -11,16 +11,16 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Druid;
 
-sealed class NatureWeaponStats : GlobalItem {
+sealed class NatureWeaponHandler : GlobalItem {
     private ushort _basePotentialDamage;
 
     public int GetExtraDamage(Player player) => (int)(GetWreathStats(player).Progress * _basePotentialDamage);
 
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
 
-    public static WreathStats GetWreathStats(Player player) => player.GetModPlayer<WreathStats>();
+    public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
-    public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponStats>()._basePotentialDamage = (ushort)Math.Max(potentialDamage, item.damage);
+    public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = (ushort)Math.Max(potentialDamage, item.damage);
 
     public override bool InstancePerEntity => true;
 
