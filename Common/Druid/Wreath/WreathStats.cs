@@ -10,6 +10,7 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,16 +18,17 @@ namespace RoA.Common.Druid.Wreath;
 
 sealed class WreathStats : ModPlayer {
     private const float BASEADDVALUE = 0.115f;
-    private const float INCREASINGTIME = TimeSystem.LogicDeltaTime * 60f;
+    private const float CHANGINGTIME = TimeSystem.LogicDeltaTime * 60f;
     private const float DRAWCOLORINTENSITY = 3f;
     private const byte MAXBOOSTINCREMENT = 7;
 
-    private ushort _currentResource, _tempResource;
+    private ushort _currentResource, _tempResource, _tempResource2;
     private float _addExtraValue;
 
     private byte _boost;
     private ushort _increaseValue;
-    private float _currentIncreasingTime;
+    private float _currentChangingTime;
+    private bool _shouldDecrease;
 
     private Color _lightingColor;
 
@@ -50,11 +52,12 @@ sealed class WreathStats : ModPlayer {
     public ushort TotalResource => (ushort)(MaxResource + ExtraResource);
 
     public float Progress => (float)CurrentResource / TotalResource;
-    public float IncreasingProgress => Ease.CircOut(Math.Min(1f - _currentIncreasingTime, 0.999f));
-    public bool IsFull => Progress > 0.998f;
+    public float IncreasingProgress => Ease.CircOut(Math.Min(1f - _currentChangingTime, 0.999f));
+    public bool IsEmpty => Progress <= 0.01f;
+    public bool IsFull => Progress > 0.95f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
-    public bool IsIncreasingValue => _currentIncreasingTime > 0f;
+    public bool IsChangingValue => _currentChangingTime > 0f;
 
     public float DrawColorOpacity {
         get {
@@ -93,10 +96,11 @@ sealed class WreathStats : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && IsFull) {
             if (SpecialAttackData.Owner == selectedItem) {
-                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
-            }
+                Reset(false);
 
-            Reset(false);
+                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
+                SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
+            }
         }
 
         IncreaseCurrentResourceValue();
@@ -110,15 +114,19 @@ sealed class WreathStats : ModPlayer {
     }
 
     public override void PostUpdateMiscEffects() {
-        HandleIncreasing();
+        ChangingHandler();
         AddLight();
     }
 
     private void IncreaseCurrentResourceValue() {
-        _currentIncreasingTime = INCREASINGTIME;
+        if (_shouldDecrease) {
+            return;
+        }
+
+        _currentChangingTime = CHANGINGTIME;
         _tempResource = CurrentResource;
 
-        if (IsIncreasingValue) {
+        if (IsChangingValue) {
             if (_boost < MAXBOOSTINCREMENT) {
                 _boost++;
             }
@@ -128,24 +136,43 @@ sealed class WreathStats : ModPlayer {
         _increaseValue = AddResourceValue();
     }
 
-    private void HandleIncreasing() {
-        if (!IsIncreasingValue) {
+    private void ChangingHandler() {
+        if (IsFull && _addExtraValue > 0f) {
+            _addExtraValue = 0f;
+        }
+
+        if (!IsChangingValue) {
             _boost = 0;
 
             return;
         }
 
-        _currentIncreasingTime -= TimeSystem.LogicDeltaTime * 1.75f * Math.Max((byte)1, _boost);
+        _currentChangingTime -= TimeSystem.LogicDeltaTime * 1.75f * Math.Max((byte)1, _boost);
 
+        if (_shouldDecrease) {
+            CurrentResource = (ushort)(_tempResource - _tempResource2 * IncreasingProgress);
+            if (IsEmpty) {
+                _shouldDecrease = false;
+                _boost = 0;
+                _increaseValue = _tempResource = _tempResource2 = 0;
+            }
+
+            return;
+        }
         CurrentResource = (ushort)(_tempResource + _increaseValue * IncreasingProgress);
     }
 
     private void Reset(bool resetBoost = true) {
-        _currentIncreasingTime = _addExtraValue = 0f;
-        if (resetBoost) {
-            _boost = 0;
-        }
-        CurrentResource = _tempResource = _increaseValue = 0;
+        _shouldDecrease = true;
+
+        _currentChangingTime = CHANGINGTIME;
+        _tempResource2 = _tempResource;
+
+        //_currentChangingTime = _addExtraValue = 0f;
+        //if (resetBoost) {
+        //    _boost = 0;
+        //}
+        //CurrentResource = _tempResource = _increaseValue = 0;
     }
 
     private void MakeDusts() {

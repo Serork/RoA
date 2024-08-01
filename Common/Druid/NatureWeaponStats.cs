@@ -47,7 +47,7 @@ sealed class NatureWeaponStats : GlobalItem {
             if (extraDamage > 0) {
                 string damageTooltip = tooltips[index].Text;
                 string[] damageTooltipWords = damageTooltip.Split(' ');
-                string damage = (item.damage + _basePotentialDamage).ToString();
+                string damage = (item.damage + extraDamage).ToString();
                 tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
             }
             string tag = "PotentialDamage";

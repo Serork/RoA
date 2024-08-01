@@ -9,6 +9,7 @@ using RoA.Core;
 using RoA.Utilities;
 
 using Terraria;
+using Terraria.ID;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
@@ -27,6 +28,6 @@ sealed class HorrorPincers : BaseClawsItem {
         int offset = 30 * player.direction;
         var position = new Vector2(player.Center.X + offset, player.Center.Y);
         Vector2 point = Helper.VelocityToPoint(player.Center, Main.MouseWorld, 1.2f);
-        clawsStats.SetSpecialAttackData<InfectedWave>(Item, new Vector2(position.X, position.Y - 14f), point);
+        clawsStats.SetSpecialAttackData<InfectedWave>(Item, new Vector2(position.X, position.Y - 14f), point, playSoundStyle: SoundID.Item95);
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -9,12 +10,28 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RiseofAges.Content.Projectiles.Friendly.Druid;
 
-sealed class InfectedWave : NatureProjectile {
-	public override string Texture => ResourceManager.ProjectileTextures + "EvilBiomeClawsSpecialAttack";
+sealed class InfectedWave : Wave {
+	public override Color UsedColor() => new Color(66, 54, 112, 255);
+    public override (int, int, int) UsedDustTypes() => (ModContent.DustType<CorruptedFoliage>(), ModContent.DustType<EbonwoodLeaves>(), DustID.CorruptPlants);
+}
+
+sealed class HemorrhageWave : Wave {
+	public override Color UsedColor() => new Color(85, 0, 15, 255);
+    public override (int, int, int) UsedDustTypes() => (ModContent.DustType<CrimsonFoliage>(), ModContent.DustType<ShadewoodLeaves>(), DustID.CrimsonPlants);
+}
+
+abstract class Wave : NatureProjectile {
+	public abstract Color UsedColor();
+	public abstract (int, int, int) UsedDustTypes();
+
+    public override Color? GetAlpha(Color lightColor) => UsedColor().Bright(2f).MultiplyRGB(lightColor);
+
+    public override string Texture => ResourceManager.ProjectileTextures + "EvilBiomeClawsSpecialAttack";
 
     protected override void SafeSetDefaults() {
         int width = 62; int height = width;
@@ -65,23 +82,24 @@ sealed class InfectedWave : NatureProjectile {
 				return;
 			}
 		}
-		//if (Main.rand.Next(5) == 0) {
-		//	int dust = Dust.NewDust(Projectile.position + Projectile.velocity * 0.25f, Projectile.width, Projectile.height, ModContent.DustType<CrimsonFoliage>(), -Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), -Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
-		//	Main.dust[dust].noGravity = false;
-		//	Main.dust[dust].noLight = true;
-		//}
-		//if (Main.rand.Next(3) == 0) {
-		//	int dust = Dust.NewDust(Projectile.position + Projectile.velocity * 0.25f, Projectile.width, Projectile.height, ModContent.DustType<ShadewoodLeaves>(), -Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), -Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
-		//	Main.dust[dust].noGravity = true;
-		//	Main.dust[dust].noLight = true;
-		//}
+		(int, int, int) dustTypes = UsedDustTypes();
+        if (Main.rand.Next(5) == 0) {
+			int dust = Dust.NewDust(Projectile.position + Projectile.velocity * 0.25f, Projectile.width, Projectile.height, dustTypes.Item1, -Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), -Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
+			Main.dust[dust].noGravity = false;
+			Main.dust[dust].noLight = true;
+		}
 		if (Main.rand.Next(3) == 0) {
-			int dust = Dust.NewDust(Projectile.position + Projectile.velocity * 0.25f, Projectile.width, Projectile.height, 17, -Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), -Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+			int dust = Dust.NewDust(Projectile.position + Projectile.velocity * 0.25f, Projectile.width, Projectile.height, dustTypes.Item2, -Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), -Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+			Main.dust[dust].noGravity = true;
+			Main.dust[dust].noLight = true;
+		}
+		if (Main.rand.Next(3) == 0) {
+			int dust = Dust.NewDust(Projectile.position + Projectile.velocity * 0.25f, Projectile.width, Projectile.height, dustTypes.Item3, -Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), -Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
 			Main.dust[dust].noGravity = true;
 			Main.dust[dust].noLight = true;
 		}
 		if (Projectile.Opacity > 0.1f) {
-			Projectile.Opacity -= 0.085f;
+			Projectile.Opacity -= 0.065f;
 		}
 		else {
 			Projectile.Kill();
@@ -105,7 +123,4 @@ sealed class InfectedWave : NatureProjectile {
 		spriteBatch.EndBlendState();
 		return false;
 	}
-
-
-    public override Color? GetAlpha(Color lightColor) => new Color(66, 54, 112, 255).Bright(2f);
 }
