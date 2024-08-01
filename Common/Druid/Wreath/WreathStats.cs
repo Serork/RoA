@@ -66,7 +66,7 @@ sealed class WreathStats : ModPlayer {
             return opacity;
         }
     }
-    public Color DrawColor => Utils.MultiplyRGB(new Color(255, 255, 200, 200), Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
+    public Color DrawColor => Utils.MultiplyRGB(new Color(255, 255, 200, 200), Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity) * Lighting.Brightness((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16);
     public Color LightingColor => _lightingColor;
     public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(Progress), 0.35f);

@@ -12,7 +12,7 @@ sealed class ElderwoodWall2 : ElderwoodWall {
 
 class ElderwoodWall : ModWall {
 	public override void SetStaticDefaults() {
-        DustType = (ushort)ModContent.DustType<BackwoodsWoodTrash>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.WoodTrash>();
 		AddMapEntry(new Color(112, 55, 31));
 	}
 

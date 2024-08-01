@@ -44,7 +44,7 @@ sealed class ElderwoodChest : ModTile {
 
         Color mapColor = new(110, 91, 74);
         AddMapEntry(mapColor, CreateMapEntryName());
-        DustType = (ushort)ModContent.DustType<BackwoodsFurniture>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
 		HitSound = SoundID.Dig;
 	}
 

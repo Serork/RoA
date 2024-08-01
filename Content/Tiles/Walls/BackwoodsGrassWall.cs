@@ -8,7 +8,7 @@ namespace RoA.Content.Tiles.Walls;
 
 sealed class BackwoodsGrassWall : ModWall {
 	public override void SetStaticDefaults() {
-		DustType = (ushort)ModContent.DustType<BackwoodsGrass>();
+		DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
 		AddMapEntry(new Color(19, 82, 44));
 	}
 

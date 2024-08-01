@@ -26,7 +26,7 @@ sealed class BackwoodsBush : ModTile {
         TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<BackwoodsGrass>()];
         TileObjectData.addTile(Type);
 
-        DustType = (ushort)ModContent.DustType<Dusts.BackwoodsGrass>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         HitSound = SoundID.Grass;
         AddMapEntry(new Microsoft.Xna.Framework.Color(19, 82, 44));
     }
@@ -37,7 +37,7 @@ sealed class BackwoodsBush : ModTile {
         height = 32;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = Main.rand.Next(3, 6);
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = Main.rand.Next(5, 10);
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
         if (i % 2 == 1) {

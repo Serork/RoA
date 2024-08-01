@@ -25,7 +25,7 @@ sealed class BackwoodsPlants : ModTile {
         TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<BackwoodsGrass>()];
         TileObjectData.addTile(Type);
 
-        DustType = (ushort)ModContent.DustType<Dusts.BackwoodsGrass>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         HitSound = SoundID.Grass;
         AddMapEntry(new Microsoft.Xna.Framework.Color(19, 82, 44));
     }

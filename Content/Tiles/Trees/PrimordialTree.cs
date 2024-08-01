@@ -26,7 +26,7 @@ sealed class PrimordialTree : ModTree {
 
     public override int TreeLeaf() => ModContent.GoreType<Leaf>();
 
-    public override int CreateDust() => ModContent.DustType<BackwoodsWoodTrash>();
+    public override int CreateDust() => ModContent.DustType<Dusts.Backwoods.WoodTrash>();
 
     public override int DropWood() => ModContent.ItemType<Items.Materials.Elderwood>();
 

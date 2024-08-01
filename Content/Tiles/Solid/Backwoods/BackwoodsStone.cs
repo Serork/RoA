@@ -15,7 +15,7 @@ sealed class BackwoodsStone : ModTile {
         TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-        DustType = (ushort)ModContent.DustType<Dusts.BackwoodsStone>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
         HitSound = SoundID.Tink;
 		AddMapEntry(new Color(53, 55, 54));
 	}

@@ -28,7 +28,7 @@ class LivingElderwood : ModTile {
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
         RegisterItemDrop(ModContent.ItemType<Elderwood>());
-        DustType = (ushort)ModContent.DustType<BackwoodsWoodTrash>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.WoodTrash>();
 		AddMapEntry(new Color(162, 82, 45));
 	}
 }

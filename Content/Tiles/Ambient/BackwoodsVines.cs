@@ -18,7 +18,7 @@ sealed class BackwoodsVines : ModTile {
 
         TileID.Sets.VineThreads[Type] = true;
 
-        DustType = (ushort)ModContent.DustType<Dusts.BackwoodsGrass>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         HitSound = SoundID.Grass;
         AddMapEntry(new Color(46, 130, 69));
     }

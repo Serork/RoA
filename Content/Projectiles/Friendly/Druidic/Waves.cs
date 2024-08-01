@@ -16,12 +16,12 @@ using Terraria.ModLoader;
 namespace RiseofAges.Content.Projectiles.Friendly.Druid;
 
 sealed class InfectedWave : Wave {
-	public override Color UsedColor() => new Color(66, 54, 112, 255);
+	public override Color UsedColor() => new(66, 54, 112, 255);
     public override (int, int, int) UsedDustTypes() => (ModContent.DustType<CorruptedFoliage>(), ModContent.DustType<EbonwoodLeaves>(), DustID.CorruptPlants);
 }
 
 sealed class HemorrhageWave : Wave {
-	public override Color UsedColor() => new Color(85, 0, 15, 255);
+	public override Color UsedColor() => new(85, 0, 15, 255);
     public override (int, int, int) UsedDustTypes() => (ModContent.DustType<CrimsonFoliage>(), ModContent.DustType<ShadewoodLeaves>(), DustID.CrimsonPlants);
 }
 
@@ -84,17 +84,17 @@ abstract class Wave : NatureProjectile {
 		}
 		(int, int, int) dustTypes = UsedDustTypes();
         if (Main.rand.Next(5) == 0) {
-			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item1, Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
+			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item1, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
 			Main.dust[dust].noGravity = false;
 			Main.dust[dust].noLight = true;
 		}
 		if (Main.rand.Next(3) == 0) {
-			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item2, Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item2, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
 			Main.dust[dust].noGravity = true;
 			Main.dust[dust].noLight = true;
 		}
 		if (Main.rand.Next(3) == 0) {
-			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item3, Projectile.velocity.X * 5f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item3, Projectile.velocity.X * 8f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
 			Main.dust[dust].noGravity = true;
 			Main.dust[dust].noLight = true;
 		}

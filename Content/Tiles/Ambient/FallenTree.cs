@@ -36,7 +36,7 @@ sealed class FallenTree : ModTile {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        DustType = ModContent.DustType<BackwoodsWoodTrash>();
+        DustType = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
         AddMapEntry(new Microsoft.Xna.Framework.Color(91, 74, 67), CreateMapEntryName());
     }
 

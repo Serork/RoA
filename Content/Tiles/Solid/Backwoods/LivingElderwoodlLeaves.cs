@@ -17,7 +17,7 @@ sealed class LivingElderwoodlLeaves : ModTile {
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
         HitSound = SoundID.Grass;
-        DustType = (ushort)ModContent.DustType<Dusts.BackwoodsGrass>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
 		AddMapEntry(new Color(0, 128, 0));
 	}
 }

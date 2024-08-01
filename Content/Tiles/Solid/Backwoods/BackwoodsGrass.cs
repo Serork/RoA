@@ -22,7 +22,7 @@ sealed class BackwoodsGrass : ModTile {
         TransformTileSystem.TransformOnKill[Type] = false;
         TransformTileSystem.ReplaceOnKillType[Type] = TileID.Dirt;
 
-        DustType = (ushort)ModContent.DustType<Dusts.BackwoodsGrass>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         AddMapEntry(new Color(38, 107, 57));
 	}
 }
