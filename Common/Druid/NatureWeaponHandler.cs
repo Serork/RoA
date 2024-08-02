@@ -24,6 +24,8 @@ sealed class NatureWeaponHandler : GlobalItem {
 
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
 
+    public bool CanItemBeHandled(Item item) => item.IsADruidicWeapon() && HasPotentialDamage();
+
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
     public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = (ushort)Math.Max(potentialDamage, item.damage);
@@ -31,7 +33,7 @@ sealed class NatureWeaponHandler : GlobalItem {
     public override bool InstancePerEntity => true;
 
     public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage) {
-        if (!player.IsHoldingNatureWeapon()) {
+        if (!CanItemBeHandled(item)) {
             return;
         }
 
@@ -41,11 +43,7 @@ sealed class NatureWeaponHandler : GlobalItem {
     }
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
-        if (!item.IsADruidicWeapon()) {
-            return;
-        }
-
-        if (!HasPotentialDamage()) {
+        if (!CanItemBeHandled(item)) {
             return;
         }
 

@@ -17,13 +17,13 @@ using Terraria.ModLoader;
 namespace RoA.Common.DrawLayers;
 
 [Autoload(Side = ModSide.Client)]
-sealed class WeaponOverlay : PlayerDrawLayer {
+sealed class ItemOverlay : PlayerDrawLayer {
     private const string CLAWSTEXTURESPATH = $"/{ResourceManager.TEXTURESPATH}/Items/Weapons/Druidic/Claws";
     private const string REQUIREMENT = "_Outfit";
 
     private readonly Dictionary<string, Asset<Texture2D>?> _clawsOutfitTextures = [];
 
-    public override void Load() => LoadClawsOutfitTextures();
+    public override void Load() => LoadOutfitTextures();
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.shadow == 0f && drawInfo.drawPlayer.active;
 
@@ -59,10 +59,12 @@ sealed class WeaponOverlay : PlayerDrawLayer {
         drawInfo.DrawDataCache.Add(drawData);
     }
 
-    private void LoadClawsOutfitTextures() {
+    private void LoadOutfitTextures() {
         foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(CLAWSTEXTURESPATH, REQUIREMENT)) {
-            string key = texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
-            _clawsOutfitTextures.Add(key, texture);
+            string getName() {
+                return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
+            }
+            _clawsOutfitTextures.Add(getName(), texture);
         }
     }
 }

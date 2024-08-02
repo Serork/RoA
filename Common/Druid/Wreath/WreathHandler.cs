@@ -114,6 +114,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PostUpdateMiscEffects() {
+        if (!Player.IsLocal()) {
+            return;
+        }
         ChangingHandler();
         AddLight();
     }
