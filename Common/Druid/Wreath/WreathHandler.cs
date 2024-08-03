@@ -91,13 +91,12 @@ sealed class WreathHandler : ModPlayer {
         if (playerUsingClaws && IsFull) {
             if (SpecialAttackData.Owner == selectedItem) {
                 Reset();
-
                 Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
                 SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
             }
         }
 
-        IncreaseCurrentResourceValue();
+        IncreaseCurrentResourceValue(natureProjectile.WreathPointsFine);
         MakeDusts();
     }
 
@@ -111,17 +110,15 @@ sealed class WreathHandler : ModPlayer {
         if (!Player.IsLocal()) {
             return;
         }
+
         ChangingHandler();
         AddLight();
     }
 
-    private void IncreaseCurrentResourceValue() {
+    private void IncreaseCurrentResourceValue(float fine = 0f) {
         if (_shouldDecrease) {
             return;
         }
-
-        _currentChangingTime = ChangingTimeValue;
-        _tempResource = CurrentResource;
 
         if (IsChangingValue) {
             if (_boost < MAXBOOSTINCREMENT) {
@@ -130,7 +127,10 @@ sealed class WreathHandler : ModPlayer {
             _addExtraValue += BASEADDVALUE / _boost * BASEADDVALUE;
         }
 
-        _increaseValue = AddResourceValue();
+        _currentChangingTime = ChangingTimeValue;
+        _tempResource = CurrentResource;
+        _increaseValue = (ushort)(AddResourceValue() - AddResourceValue() * fine);
+        Main.NewText(_increaseValue);
     }
 
     private void ChangingHandler() {

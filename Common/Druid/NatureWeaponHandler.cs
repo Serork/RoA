@@ -14,6 +14,9 @@ namespace RoA.Common.Druid;
 
 sealed class NatureWeaponHandler : GlobalItem {
     private ushort _basePotentialDamage;
+    private float _fillingRate = 1f;
+
+    public float FillingRate => _fillingRate;
 
     public ushort GetPotentialDamage(Item item) => (ushort)(_basePotentialDamage - item.damage);
 
@@ -29,6 +32,11 @@ sealed class NatureWeaponHandler : GlobalItem {
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
     public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = (ushort)Math.Max(potentialDamage, item.damage);
+
+    public static void SetFillingRate(Item item, float fillingRate) {
+        NatureWeaponHandler self = item.GetGlobalItem<NatureWeaponHandler>();
+        self._fillingRate = Math.Clamp(fillingRate, 0f, 1f);
+    }
 
     public override bool InstancePerEntity => true;
 
@@ -59,6 +67,10 @@ sealed class NatureWeaponHandler : GlobalItem {
             string tag = "PotentialDamage";
             string potentialDamage = _basePotentialDamage.ToString();
             string tooltip = potentialDamage.PadRight(potentialDamage.Length + 1) + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
+            tooltips.Insert(index + 1, new(Mod, tag, tooltip));
+
+            tag = "FillingRate";
+            tooltip = Math.Ceiling(_fillingRate * 100f).ToString() + "%";
             tooltips.Insert(index + 1, new(Mod, tag, tooltip));
         }
     }

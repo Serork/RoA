@@ -24,6 +24,7 @@ sealed class MushroomStaff : NatureItem {
         Item.damage = 4;
 
         NatureWeaponHandler.SetPotentialDamage(Item, 12);
+        NatureWeaponHandler.SetFillingRate(Item, 0.5f);
 
         Item.value = Item.sellPrice(silver: 10);
         Item.rare = ItemRarityID.Blue;

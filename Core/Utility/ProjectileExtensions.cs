@@ -18,4 +18,6 @@ static class ProjectileExtensions {
         result = null;
         return false;
     }
+
+    public static Player GetOwnerAsPlayer(this Projectile projectile) => Main.player[projectile.owner];
 }

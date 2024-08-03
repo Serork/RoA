@@ -5,8 +5,10 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.Runtime.InteropServices;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
@@ -70,9 +72,14 @@ sealed class MushroomSpore : NatureProjectile {
         Projectile.rotation += -Projectile.ai[2] * 0.0125f;
     }
 
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
+        return base.OnTileCollide(oldVelocity);
+    }
+
     public override void OnKill(int timeLeft) {
         if (Main.netMode != NetmodeID.Server) {
-            for (int k = 0; k < 6; k++) {
+            for (int i = 0; i < 6; i++) {
                 int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 4, 4, DustID.Pumpkin, Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 100, default, 1.1f);
                 Main.dust[dust].velocity.Y *= 0.1f;
                 Main.dust[dust].scale *= 0.8f;
