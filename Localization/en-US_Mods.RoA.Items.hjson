@@ -42,3 +42,8 @@ MiracleMint: {
 	DisplayName: Miracle Mint
 	Tooltip: ""
 }
+
+MushroomStaff: {
+	DisplayName: Mushroom Staff
+	Tooltip: ""
+}

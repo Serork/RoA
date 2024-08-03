@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Claws;
-using RoA.Content;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
@@ -18,7 +17,6 @@ namespace RoA.Common.Druid.Wreath;
 
 sealed class WreathHandler : ModPlayer {
     private const float BASEADDVALUE = 0.115f;
-    private const float CHANGINGTIME = TimeSystem.LogicDeltaTime * 60f;
     private const float DRAWCOLORINTENSITY = 3f;
     private const byte MAXBOOSTINCREMENT = 7;
 
@@ -58,6 +56,7 @@ sealed class WreathHandler : ModPlayer {
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
+    public float ChangingTimeValue => TimeSystem.LogicDeltaTime * 60f;
 
     public float DrawColorOpacity {
         get {
@@ -77,11 +76,6 @@ sealed class WreathHandler : ModPlayer {
     public ushort AddResourceValue() => (ushort)(AddValue * TotalResource);
 
     public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
-        //bool hitByNatureDamage = hit.DamageType.CountsAsClass(DruidClass.NatureDamage);
-        //if (!hitByNatureDamage) {
-        //    return;
-        //}
-
         if (!Player.IsLocal()) {
             return;
         }
@@ -96,7 +90,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && IsFull) {
             if (SpecialAttackData.Owner == selectedItem) {
-                Reset(false);
+                Reset();
 
                 Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
                 SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
@@ -126,7 +120,7 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
-        _currentChangingTime = CHANGINGTIME;
+        _currentChangingTime = ChangingTimeValue;
         _tempResource = CurrentResource;
 
         if (IsChangingValue) {
@@ -165,17 +159,11 @@ sealed class WreathHandler : ModPlayer {
         CurrentResource = (ushort)(_tempResource + _increaseValue * IncreasingProgress);
     }
 
-    private void Reset(bool resetBoost = true) {
+    private void Reset() {
         _shouldDecrease = true;
 
-        _currentChangingTime = CHANGINGTIME;
+        _currentChangingTime = ChangingTimeValue;
         _tempResource2 = _tempResource;
-
-        //_currentChangingTime = _addExtraValue = 0f;
-        //if (resetBoost) {
-        //    _boost = 0;
-        //}
-        //CurrentResource = _tempResource = _increaseValue = 0;
     }
 
     private void MakeDusts() {

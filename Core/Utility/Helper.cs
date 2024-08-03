@@ -20,4 +20,26 @@ static class Helper {
         Vector2 velocity = vector2 * (speed / vector2.Length());
         return !velocity.HasNaNs() ? velocity : Vector2.Zero;
     }
+
+    public static float VelocityAngle(Vector2 velocity) => (float)Math.Atan2(velocity.Y, velocity.X) + (float)Math.PI / 2f;
+
+    // terraria overhaul
+    public static float Damp(float source, float destination, float smoothing, float dt) => MathHelper.Lerp(source, destination, 1f - MathF.Pow(smoothing, dt));
+
+    public static float SmoothAngleLerp(this float curAngle, float targetAngle, float amount) {
+        float angle;
+        if (targetAngle < curAngle) {
+            float num = targetAngle + (float)Math.PI * 2f;
+            angle = ((num - curAngle > curAngle - targetAngle) ? MathHelper.SmoothStep(curAngle, targetAngle, amount) : MathHelper.SmoothStep(curAngle, num, amount));
+        }
+        else {
+            if (!(targetAngle > curAngle))
+                return curAngle;
+
+            float num = targetAngle - (float)Math.PI * 2f;
+            angle = ((targetAngle - curAngle > curAngle - num) ? MathHelper.SmoothStep(curAngle, num, amount) : MathHelper.SmoothStep(curAngle, targetAngle, amount));
+        }
+
+        return MathHelper.WrapAngle(angle);
+    }
 }

@@ -1,0 +1,82 @@
+using Microsoft.Xna.Framework;
+
+using RoA.Common;
+using RoA.Core.Utility;
+using RoA.Utilities;
+
+using System;
+
+using Terraria;
+using Terraria.ID;
+
+namespace RoA.Content.Projectiles.Friendly.Druidic;
+
+sealed class MushroomSpore : NatureProjectile {
+    private enum State {
+        Direct, 
+        Float
+    }
+
+    private State _state = State.Direct;
+
+	public override void SetStaticDefaults()  => Main.projFrames[Projectile.type] = 3;
+
+    protected override void SafeSetDefaults() {
+        int width = 10; int height = width;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.penetrate = 1;
+        Projectile.timeLeft = 1000;
+
+        Projectile.tileCollide = true;
+        Projectile.friendly = true;
+    }
+
+    public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
+
+    public override void AI() {
+        float speed = 0.05f;
+        switch (_state) {
+            case State.Direct:
+                if (Projectile.velocity.Length() > 2f) {
+                    Projectile.velocity *= 0.98f;
+                }
+                else {
+                    Projectile.ai[0] = Math.Sign(Projectile.velocity.X);
+                    float max = 5f;
+                    Projectile.ai[1] = Math.Clamp(Math.Abs(Projectile.velocity.X), -max, max);
+                    Projectile.ai[2] = Projectile.ai[1] * speed;
+                    _state = State.Float;
+                    Projectile.netUpdate = true;
+                }
+                break;
+            case State.Float:
+                Projectile.ai[2] += Projectile.ai[0] * speed;
+                if (Projectile.ai[2] <= -Projectile.ai[1] || Projectile.ai[2] >= Projectile.ai[1]) {
+                    Projectile.ai[0] *= -1f;
+                }
+                Projectile.velocity.X *= 0.98f;
+                Projectile.position.X += Projectile.ai[2];
+                Projectile.velocity.Y += 0.01f;
+                Projectile.velocity.Y = Math.Min(Projectile.velocity.Y, 12f);
+                Projectile.netUpdate = true;
+                break;
+        }
+        if (Projectile.velocity.Length() > 4.5f) {
+            Projectile.rotation = Helper.VelocityAngle(Projectile.velocity);
+            return;
+        }
+        Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, 0f, Math.Abs(Projectile.rotation) * Projectile.velocity.Length() * TimeSystem.LogicDeltaTime);
+        Projectile.rotation += -Projectile.ai[2] * 0.0125f;
+    }
+
+    public override void OnKill(int timeLeft) {
+        if (Main.netMode != NetmodeID.Server) {
+            for (int k = 0; k < 6; k++) {
+                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 4, 4, DustID.Pumpkin, Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 100, default, 1.1f);
+                Main.dust[dust].velocity.Y *= 0.1f;
+                Main.dust[dust].scale *= 0.8f;
+            }
+        }
+    }
+}
