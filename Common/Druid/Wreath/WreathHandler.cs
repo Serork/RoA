@@ -42,7 +42,6 @@ sealed class WreathHandler : ModPlayer {
             if (value > TotalResource) {
                 value = TotalResource;
             }
-
             _currentResource = value;
         }
     }
@@ -130,7 +129,6 @@ sealed class WreathHandler : ModPlayer {
         _currentChangingTime = ChangingTimeValue;
         _tempResource = CurrentResource;
         _increaseValue = (ushort)(AddResourceValue() - AddResourceValue() * fine);
-        Main.NewText(_increaseValue);
     }
 
     private void ChangingHandler() {

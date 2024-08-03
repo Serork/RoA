@@ -27,7 +27,7 @@ sealed class NatureWeaponHandler : GlobalItem {
 
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
 
-    public bool CanItemBeHandled(Item item) => item.IsADruidicWeapon() && HasPotentialDamage();
+    public bool CanItemBeHandled(Item item) => item.IsADruidicWeapon();
 
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
@@ -57,20 +57,24 @@ sealed class NatureWeaponHandler : GlobalItem {
 
         int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Damage"));
         if (index != -1) {
-            int extraDamage = Math.Min(GetExtraDamage(Main.LocalPlayer, item), GetPotentialDamage(item));
-            if (extraDamage > 0) {
-                string damageTooltip = tooltips[index].Text;
-                string[] damageTooltipWords = damageTooltip.Split(' ');
-                string damage = (item.damage + extraDamage).ToString();
-                tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
+            string tag, tooltip;
+            if (HasPotentialDamage()) {
+                int extraDamage = Math.Min(GetExtraDamage(Main.LocalPlayer, item), GetPotentialDamage(item));
+                if (extraDamage > 0) {
+                    string damageTooltip = tooltips[index].Text;
+                    string[] damageTooltipWords = damageTooltip.Split(' ');
+                    string damage = (item.damage + extraDamage).ToString();
+                    tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
+                }
+                tag = "PotentialDamage";
+                string potentialDamage = _basePotentialDamage.ToString();
+                tooltip = potentialDamage.PadRight(potentialDamage.Length + 1) + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
+                tooltips.Insert(index + 1, new(Mod, tag, tooltip));
+                index++;
             }
-            string tag = "PotentialDamage";
-            string potentialDamage = _basePotentialDamage.ToString();
-            string tooltip = potentialDamage.PadRight(potentialDamage.Length + 1) + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
-            tooltips.Insert(index + 1, new(Mod, tag, tooltip));
 
             tag = "FillingRate";
-            tooltip = Math.Ceiling(_fillingRate * 100f).ToString() + "%";
+            tooltip = Math.Ceiling(_fillingRate * 100f).ToString() + "% filling rate";
             tooltips.Insert(index + 1, new(Mod, tag, tooltip));
         }
     }

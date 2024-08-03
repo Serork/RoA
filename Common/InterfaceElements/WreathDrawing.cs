@@ -87,6 +87,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         wreathSpriteData3.Color = color * opacity;
         wreathSpriteData3.DrawSelf();
 
+        // adapted vanilla
         Microsoft.Xna.Framework.Rectangle mouseRectangle = new Microsoft.Xna.Framework.Rectangle((int)((float)Main.mouseX + Main.screenPosition.X), (int)((float)Main.mouseY + Main.screenPosition.Y), 1, 1);
         if (Player.gravDir == -1f)
             mouseRectangle.Y = (int)Main.screenPosition.Y + Main.screenHeight - Main.mouseY;
