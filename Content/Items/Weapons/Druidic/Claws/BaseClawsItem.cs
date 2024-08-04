@@ -14,12 +14,8 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 [WeaponOverlay(WeaponType.Claws)]
 abstract class BaseClawsItem : NatureItem {
     protected sealed override void SafeSetDefaults2() {
-        Item.noMelee = true;
-
-        Item.shoot = ModContent.ProjectileType<ClawsSlash>();
-        Item.shootSpeed = 1.2f;
-
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, 18, false, autoReuse: false, useSound: SoundID.Item1);
+        Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }
 
     protected abstract (Color, Color) SlashColors();

@@ -47,3 +47,8 @@ MushroomStaff: {
 	DisplayName: Mushroom Staff
 	Tooltip: ""
 }
+
+PastoralRod: {
+	DisplayName: Pastoral Rod
+	Tooltip: ""
+}

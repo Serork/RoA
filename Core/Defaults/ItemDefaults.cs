@@ -38,5 +38,16 @@ static class ItemDefaults {
         }
     }
 
-    public static void SetDefaultToUsable(this Item item, int useStyleID, int timeToUse, bool showItemOnUse = true) => item.SetDefaultToUsable(useStyleID, timeToUse, timeToUse, showItemOnUse);
+    public static void SetDefaultToUsable(this Item item, int useStyleID, int timeToUse, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) => item.SetDefaultToUsable(useStyleID, timeToUse, timeToUse, showItemOnUse, useTurn, autoReuse, useSound);
+
+    public static void SetDefaultOthers(this Item item, int value, int rare) {
+        item.value = value;
+        item.rare = rare;
+    }
+
+    public static void SetDefaultToShootable(this Item item, ushort shootType, float shootSpeed, bool noMelee = true) {
+        item.shoot = shootType;
+        item.shootSpeed = shootSpeed;
+        item.noMelee = noMelee;
+    }
 }
