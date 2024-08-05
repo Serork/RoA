@@ -43,7 +43,12 @@ sealed class ClawsSlash : NatureProjectile {
         Projectile.localNPCHitCooldown = -1;
         Projectile.ownerHitCheck = true;
         Projectile.ownerHitCheckDistance = 300f;
+        Projectile.usesOwnerMeleeHitCD = true;
+        Projectile.stopsDealingDamageAfterPenetrateHits = true;
+        Projectile.noEnchantmentVisuals = true;
     }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => Projectile.ApplyFlaskEffects(target);
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         float angle = MathHelper.PiOver2;
@@ -59,7 +64,6 @@ sealed class ClawsSlash : NatureProjectile {
             Setup(position,
                   velocity,
                   color);
-
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
         }
@@ -163,6 +167,12 @@ sealed class ClawsSlash : NatureProjectile {
             }
         }
         Projectile.scale *= player.GetAdjustedItemScale(player.inventory[player.selectedItem]);
+        if (CanFunction) {
+            for (float i = -MathHelper.PiOver4; i <= MathHelper.PiOver4; i += MathHelper.PiOver2) {
+                Rectangle rectangle = Utils.CenteredRectangle(Projectile.Center + (Projectile.rotation + i).ToRotationVector2() * 60f * Projectile.scale, new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
+                Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+            }
+        }
         if (Projectile.localAI[0] < (double)(Projectile.ai[1] + Projectile.ai[1] * 0.3f)) {
             return;
         }
