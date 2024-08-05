@@ -1,1 +1,8 @@
 PotentialDamage: potential damage
+FillingRate1: Extremely slow filling rate
+FillingRate2: Very slow filling rate
+FillingRate3: Slow filling rate
+FillingRate4: Average filling rate
+FillingRate5: Fast filling rate
+FillingRate6: Very fast filling rate
+FillingRate7: Extremely fast filling rate

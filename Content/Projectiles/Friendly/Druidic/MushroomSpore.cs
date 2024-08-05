@@ -5,7 +5,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
-using System.Runtime.InteropServices;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -21,7 +21,7 @@ sealed class MushroomSpore : NatureProjectile {
 
     private State _state = State.Direct;
 
-	public override void SetStaticDefaults()  => Main.projFrames[Projectile.type] = 3;
+	public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
 
     protected override void SafeSetDefaults() {
         int width = 10; int height = width;
@@ -33,6 +33,9 @@ sealed class MushroomSpore : NatureProjectile {
         Projectile.tileCollide = true;
         Projectile.friendly = true;
     }
+
+    public override void SendExtraAI(BinaryWriter writer) => writer.Write((int)_state);
+    public override void ReceiveExtraAI(BinaryReader reader) => _state = (State)reader.ReadInt32();
 
     public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
 

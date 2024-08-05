@@ -23,6 +23,15 @@ static class Helper {
 
     public static float VelocityAngle(Vector2 velocity) => (float)Math.Atan2(velocity.Y, velocity.X) + (float)Math.PI / 2f;
 
+    public static void SmoothClamp(ref float value, float min, float max, float lerpValue) {
+        if (value < min) {
+            value = MathHelper.Lerp(value, min, lerpValue);
+        }
+        if (value > max) {
+            value = MathHelper.Lerp(value, max, lerpValue);
+        }
+    }
+
     // terraria overhaul
     public static float Damp(float source, float destination, float smoothing, float dt) => MathHelper.Lerp(source, destination, 1f - MathF.Pow(smoothing, dt));
 

@@ -12,8 +12,6 @@ namespace RoA.Content.Items.Weapons.Druidic.Staffs;
 
 sealed class MushroomStaff : NatureItem {
     protected override void SafeSetDefaults() {
-        Item.staff[Type] = true;
-
         Item.SetSize(38);
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 30, useSound: SoundID.Item156);
         Item.SetWeaponValues(4, 2f);
@@ -24,7 +22,7 @@ sealed class MushroomStaff : NatureItem {
         NatureWeaponHandler.SetFillingRate(Item, 0.5f);
     }
 
-	public override bool Shoot (Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
 		int count = 3;
 		for (int i = 0; i < count; i++) {
             Vector2 newVelocity = new Vector2(velocity.X, velocity.Y).RotatedByRandom(MathHelper.ToRadians(30)) * 1.6f;

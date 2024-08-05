@@ -15,4 +15,9 @@ static class PlayerExtensions {
     }
 
     public static bool IsLocal(this Player player) => Main.myPlayer == player.whoAmI;
+
+    public static void SetCompositeBothArms(this Player player, float armRotation, Player.CompositeArmStretchAmount compositeArmStretchAmount = Player.CompositeArmStretchAmount.Full) {
+        player.SetCompositeArmBack(true, compositeArmStretchAmount, armRotation);
+        player.SetCompositeArmFront(true, compositeArmStretchAmount, armRotation);
+    }
 }

@@ -1,10 +1,8 @@
 ﻿using RoA.Common.Druid.Wreath;
-using RoA.Content;
 using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.Localization;
@@ -18,14 +16,18 @@ sealed class NatureWeaponHandler : GlobalItem {
 
     public float FillingRate => _fillingRate;
 
-    public ushort GetPotentialDamage(Item item) => (ushort)(_basePotentialDamage - item.damage);
+    public bool HasPotentialDamage() => _basePotentialDamage > 0;
 
-    public int GetExtraDamage(Player player, Item item) {
+    public static ushort GetPotentialDamage(Item item) => (ushort)(item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage - item.damage);
+
+    public static int GetExtraPotentialDamage(Player player, Item item) {
         float progress = GetWreathStats(player).Progress;
         return (int)(progress * GetPotentialDamage(item)) + (progress > 0.01f ? 1 : 0);
     }
 
-    public bool HasPotentialDamage() => _basePotentialDamage > 0;
+    public static int GetExtraDamage(Item item) => Math.Min(GetExtraPotentialDamage(Main.LocalPlayer, item), GetPotentialDamage(item));
+
+    public static int GetNatureDamage(Item item) => item.damage + GetExtraDamage(item);
 
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
@@ -43,7 +45,7 @@ sealed class NatureWeaponHandler : GlobalItem {
             return;
         }
 
-        int extraDamage = GetExtraDamage(player, item);
+        int extraDamage = GetExtraPotentialDamage(player, item);
         damage.Flat += extraDamage;
         damage.Flat = Math.Min(item.damage + _basePotentialDamage, damage.Flat);
     }
@@ -57,11 +59,11 @@ sealed class NatureWeaponHandler : GlobalItem {
         if (index != -1) {
             string tag, tooltip;
             if (HasPotentialDamage()) {
-                int extraDamage = Math.Min(GetExtraDamage(Main.LocalPlayer, item), GetPotentialDamage(item));
+                int extraDamage = GetExtraDamage(item);
                 if (extraDamage > 0) {
                     string damageTooltip = tooltips[index].Text;
                     string[] damageTooltipWords = damageTooltip.Split(' ');
-                    string damage = (item.damage + extraDamage).ToString();
+                    string damage = GetNatureDamage(item).ToString();
                     tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
                 }
                 tag = "PotentialDamage";
@@ -72,7 +74,9 @@ sealed class NatureWeaponHandler : GlobalItem {
             }
 
             tag = "FillingRate";
-            tooltip = Math.Ceiling(_fillingRate * 100f).ToString() + "% filling rate";
+            int fillingRate = (int)(_fillingRate * 100);
+            byte tooltipValue = (byte)(fillingRate / 25 + 1); 
+            tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.FillingRate{tooltipValue}").Value;
             tooltips.Insert(index + 1, new(Mod, tag, tooltip));
         }
     }

@@ -11,8 +11,6 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Localization;
-using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -21,11 +19,6 @@ namespace RoA.Common.InterfaceElements;
 [Autoload(Side = ModSide.Client)]
 sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", InterfaceScaleType.Game) {
     private const byte HORIZONTALFRAMECOUNT = 6;
-
-    private static readonly RasterizerState OverflowHiddenRasterizerState = new() {
-        CullMode = CullMode.None,
-        ScissorTestEnable = true
-    };
 
     private static SpriteData _wreathSpriteData;
 
