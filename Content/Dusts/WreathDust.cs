@@ -8,7 +8,7 @@ namespace RoA.Content.Dusts;
 
 sealed class WreathDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-        Color color = dust.color * Lighting.Brightness((int)dust.position.X / 16, (int)dust.position.Y / 16);
+        Color color = dust.color * Lighting.Brightness((int)dust.position.X / 16, (int)dust.position.Y / 16) * 1.1f;
         return color;
     }
     

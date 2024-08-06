@@ -51,7 +51,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f) - Main.screenPosition;
         _oldPosition = playerPosition;
         float progress = Stats.Progress;
-        Color color = Stats.DrawColor * Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
+        Color color = Stats.DrawColor * Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16) * 1.1f;
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.8f);
         SpriteData wreathSpriteData = _wreathSpriteData;
         wreathSpriteData.Rotation = MathHelper.Pi;
