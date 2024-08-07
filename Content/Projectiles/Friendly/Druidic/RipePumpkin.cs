@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class RipePumpkin : NatureProjectile {
-    private readonly Wiggler _rotateWiggler = Wiggler.Create(1f, 5f);
+    private static Wiggler _rotateWiggler = Wiggler.Create(1f, 5.5f);
 
     protected override void SafeSetDefaults() {
         Projectile.Size = 20 * Vector2.One;
@@ -25,6 +25,8 @@ sealed class RipePumpkin : NatureProjectile {
     }
 
     public override bool? CanDamage() => false;
+
+    public override void Unload() => _rotateWiggler = null;
 
     public override void AI() {
         if (Main.windPhysics) {
@@ -46,9 +48,10 @@ sealed class RipePumpkin : NatureProjectile {
                     _rotateWiggler.Start();
                 }
                 _rotateWiggler.Update();
-                float progress = Math.Min((Projectile.ai[0] - min2 * 0.95f) / (max - min2), 1f);
-                Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 90.0)) * progress;
+                float progress = Math.Min((Projectile.ai[0] - min2) / (max - min2), 1f);
+                Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
                 if (Projectile.ai[0] >= max) {
+                    _rotateWiggler.Stop();
                     Projectile.Kill();
                     SoundEngine.PlaySound(SoundID.NPCDeath22, Projectile.position);
                     int count = Projectile.ai[2] <= 4.5f ? 2 : 3;

@@ -1509,7 +1509,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             int testJ = startY;
             while (true) {
-                if (WorldGen.SolidTile(cliffX, testJ)) {
+                if (testJ > startY + 30) {
                     break;
                 }
                 WorldGenHelper.ReplaceTile(cliffX, testJ, CliffPlaceholderTileType);
