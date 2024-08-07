@@ -1,18 +1,23 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class RipePumpkin : NatureProjectile {
     private static Wiggler _rotateWiggler = Wiggler.Create(1f, 5.5f);
+
+    private float _pulseScale = 3;
+    private float _pulseAlpha;
 
     protected override void SafeSetDefaults() {
         Projectile.Size = 20 * Vector2.One;
@@ -27,6 +32,18 @@ sealed class RipePumpkin : NatureProjectile {
     public override bool? CanDamage() => false;
 
     public override void Unload() => _rotateWiggler = null;
+
+    public override bool PreDraw(ref Color lightColor) {
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+        Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
+        Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+        Color color = Projectile.GetAlpha(lightColor) * _pulseAlpha;
+        spriteBatch.Draw(texture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale * _pulseScale, SpriteEffects.None, 0f);
+        return true;
+    }
 
     public override void AI() {
         if (Main.windPhysics) {
@@ -44,26 +61,34 @@ sealed class RipePumpkin : NatureProjectile {
                 Projectile.ai[1] = Projectile.rotation;
             }
             else {
-                if (!_rotateWiggler.Active) {
+                if (_pulseScale > 1f) {
+                    _pulseScale -= 0.1f;
+                    if (_pulseAlpha < 1f) {
+                        _pulseAlpha += 0.05f;
+                    }
+                }
+                if (!_rotateWiggler.Active && _pulseScale <= 1.5f) {
                     _rotateWiggler.Start();
                 }
                 _rotateWiggler.Update();
                 float progress = Math.Min((Projectile.ai[0] - min2) / (max - min2), 1f);
                 Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
-                if (Projectile.ai[0] >= max) {
-                    _rotateWiggler.Stop();
-                    Projectile.Kill();
-                    SoundEngine.PlaySound(SoundID.NPCDeath22, Projectile.position);
-                    int count = Projectile.ai[2] <= 4.5f ? 2 : 3;
-                    for (int i = 0; i < count; i++) {
-                        float posX = Main.rand.Next(-15, 16);
-                        float posY = Main.rand.Next(-15, 16);
-                        Vector2 mousePos = new Vector2(Main.MouseWorld.X + posX, Main.MouseWorld.Y + posY);
-                        Vector2 projectilePos = new Vector2(Projectile.position.X + posX, Projectile.position.Y + posY);
-                        Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);
-                        direction.Normalize();
-                        direction *= 15 * Main.rand.NextFloat(0.9f, 1.1f);
-                        Projectile.NewProjectile(Projectile.GetSource_Death(), new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, 0f, Projectile.owner, 0f, 0f);
+                if (Projectile.ai[0] >= max * 0.9f) {
+                    if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && !Main.mouseText && Main.player[Projectile.owner].GetSelectedItem().type == ModContent.ItemType<Items.Weapons.Druidic.RipePumpkin>()) {
+                        _rotateWiggler.Stop();
+                        Projectile.Kill();
+                        SoundEngine.PlaySound(SoundID.NPCDeath22, Projectile.position);
+                        int count = Projectile.ai[2] <= 4.5f ? 2 : 3;
+                        for (int i = 0; i < count; i++) {
+                            float posX = Main.rand.Next(-15, 16);
+                            float posY = Main.rand.Next(-15, 16);
+                            Vector2 mousePos = new Vector2(Main.MouseWorld.X + posX, Main.MouseWorld.Y + posY);
+                            Vector2 projectilePos = new Vector2(Projectile.position.X + posX, Projectile.position.Y + posY);
+                            Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);
+                            direction.Normalize();
+                            direction *= 15 * Main.rand.NextFloat(0.9f, 1.1f);
+                            Projectile.NewProjectile(Projectile.GetSource_Death(), new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, 0f, Projectile.owner, 0f, 0f);
+                        }
                     }
                 }
             }

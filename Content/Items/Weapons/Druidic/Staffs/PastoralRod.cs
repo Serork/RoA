@@ -18,7 +18,7 @@ sealed class PastoralRod : BaseRodItem<PastoralRodBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(38);
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 40, useSound: SoundID.Item7);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 30, useSound: SoundID.Item7);
         Item.SetWeaponValues(4, 2f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 12);
