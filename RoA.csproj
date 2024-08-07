@@ -32,9 +32,11 @@
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\HorrorPincers_Outfit.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ThornyClaws.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ThornyClaws_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Druidic\RipePumpkin.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Staffs\MushroomStaff.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\ClawsSlash.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\MushroomSpore.png" />
+	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\PumpkinSeed.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsBush.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsPlants.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\MiracleMint.png" />

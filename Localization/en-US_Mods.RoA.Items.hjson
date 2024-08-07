@@ -52,3 +52,8 @@ PastoralRod: {
 	DisplayName: Pastoral Rod
 	Tooltip: ""
 }
+
+RipePumpkin: {
+	DisplayName: Ripe Pumpkin
+	Tooltip: ""
+}

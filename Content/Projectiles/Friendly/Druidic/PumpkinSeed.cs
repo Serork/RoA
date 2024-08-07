@@ -1,0 +1,39 @@
+using Microsoft.Xna.Framework;
+
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+
+namespace RoA.Content.Projectiles.Friendly.Druidic;
+
+sealed class PumpkinSeed : NatureProjectile {
+    protected override void SafeSetDefaults() {
+        int width = 10, height = 16;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.ignoreWater = true;
+        Projectile.friendly = true;
+
+        Projectile.tileCollide = true;
+        Projectile.friendly = true;
+
+        Projectile.aiStyle = 1;
+        AIType = ProjectileID.Bullet;
+
+        Projectile.timeLeft = 150;
+
+        DrawOffsetX = -2;
+    }
+
+    protected override void SafeOnSpawn(IEntitySource source) => Projectile.scale = Main.rand.NextFloat(0.8f, 1.2f);
+
+    public override void OnKill(int timeLeft) {
+        if (Main.netMode != NetmodeID.Server) {
+            for (int i = 0; i < 5; i++) {
+                int dust = Dust.NewDust(Projectile.position, 20, 20, DustID.Water_Desert, Projectile.velocity.X * 0.3f, Projectile.velocity.Y * 0.3f, 0, new Color(250, 220, 120), 1f);
+                Main.dust[dust].noGravity = false;
+                Main.dust[dust].scale *= 0.8f;
+            }
+        }
+    }
+}

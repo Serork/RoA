@@ -77,6 +77,7 @@ sealed class MushroomSpore : NatureProjectile {
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
+
         return base.OnTileCollide(oldVelocity);
     }
 
