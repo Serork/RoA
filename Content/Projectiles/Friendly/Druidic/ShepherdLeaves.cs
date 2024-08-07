@@ -31,12 +31,12 @@ sealed class ShepherdLeaves : NatureProjectile {
             Projectile.ai[0] = 0.2f;
         }
         Player player = Main.player[Projectile.owner];
+        if (Projectile.IsOwnerMyPlayer(player)) {
+            Projectile.ai[1] = Main.MouseWorld.X;
+            Projectile.ai[2] = Main.MouseWorld.Y;
+        }
         if (Projectile.ai[0] > 0.1f) {
             Projectile.ai[0] -= TimeSystem.LogicDeltaTime;
-            if (Projectile.IsOwnerMyPlayer(player)) {
-                Projectile.ai[1] = Main.MouseWorld.X;
-                Projectile.ai[2] = Main.MouseWorld.Y;
-            }
             Projectile.netUpdate = true;
         }
         Vector2 mousePosition = new(Projectile.ai[1], Projectile.ai[2]);

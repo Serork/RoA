@@ -28,7 +28,7 @@ sealed class PastoralRod : BaseRodItem<PastoralRodBase> {
 
 sealed class PastoralRodBase : BaseRodProjectile {
     protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count) {
-        count = 2;
+        count = 3;
         Vector2 direction = (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.One);
         velocity = direction.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2) + MathHelper.Pi) * 4f;
     }

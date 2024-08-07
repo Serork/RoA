@@ -46,8 +46,8 @@ sealed class RipePumpkin : NatureProjectile {
                     _rotateWiggler.Start();
                 }
                 _rotateWiggler.Update();
-                float progress = Math.Min((Projectile.ai[0] - min2 * 0.75f) / (max - min2), 1f);
-                Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 12.5 * (Math.PI / 90.0)) * progress;
+                float progress = Math.Min((Projectile.ai[0] - min2 * 0.95f) / (max - min2), 1f);
+                Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 90.0)) * progress;
                 if (Projectile.ai[0] >= max) {
                     Projectile.Kill();
                     SoundEngine.PlaySound(SoundID.NPCDeath22, Projectile.position);

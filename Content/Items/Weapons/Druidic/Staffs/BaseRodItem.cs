@@ -11,6 +11,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -75,6 +76,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected abstract void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count);
 
     protected virtual void ShootProjectile() {
+        SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
         Vector2 spawnPosition = CorePosition;
         Vector2 velocity = Vector2.Zero;
         ushort count = 1;

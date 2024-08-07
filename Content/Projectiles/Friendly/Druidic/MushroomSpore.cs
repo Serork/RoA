@@ -28,7 +28,7 @@ sealed class MushroomSpore : NatureProjectile {
         Projectile.Size = new Vector2(width, height);
 
         Projectile.penetrate = 1;
-        Projectile.timeLeft = 1000;
+        Projectile.timeLeft = 300;
 
         Projectile.tileCollide = true;
         Projectile.friendly = true;
@@ -61,6 +61,7 @@ sealed class MushroomSpore : NatureProjectile {
                     Projectile.ai[0] *= -1f;
                 }
                 Projectile.velocity.X *= 0.98f;
+                Projectile.velocity.X -= 0.02f * Projectile.ai[2];
                 Projectile.position.X += Projectile.ai[2];
                 Projectile.velocity.Y += 0.01f;
                 Projectile.velocity.Y = Math.Min(Projectile.velocity.Y, 12f);
@@ -71,7 +72,8 @@ sealed class MushroomSpore : NatureProjectile {
             Projectile.rotation = Helper.VelocityAngle(Projectile.velocity);
             return;
         }
-        Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, 0f, Math.Abs(Projectile.rotation) * Projectile.velocity.Length() * TimeSystem.LogicDeltaTime);
+        float lerp = Math.Abs(Projectile.rotation) * Projectile.velocity.Length() * TimeSystem.LogicDeltaTime;
+        Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, 0f, lerp);
         Projectile.rotation += -Projectile.ai[2] * 0.0125f;
     }
 
