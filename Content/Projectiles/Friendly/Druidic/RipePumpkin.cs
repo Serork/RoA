@@ -76,7 +76,8 @@ sealed class RipePumpkin : NatureProjectile {
                 float progress = Math.Min((Projectile.ai[0] - min2) / (max - min2), 1f);
                 Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
                 if (Projectile.ai[0] >= max * 0.9f) {
-                    if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && !Main.mouseText && Main.player[Projectile.owner].GetSelectedItem().type == ModContent.ItemType<Items.Weapons.Druidic.RipePumpkin>()) {
+                    int type = ModContent.ItemType<Items.Weapons.Druidic.RipePumpkin>();
+                    if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && (Main.player[Projectile.owner].GetSelectedItem().type == type || Main.mouseItem.type == type)) {
                         _rotateWiggler.Stop();
                         Projectile.Kill();
                         SoundEngine.PlaySound(SoundID.NPCDeath22, Projectile.position);

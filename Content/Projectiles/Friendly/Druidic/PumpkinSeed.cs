@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 
@@ -26,6 +27,12 @@ sealed class PumpkinSeed : NatureProjectile {
     }
 
     protected override void SafeOnSpawn(IEntitySource source) => Projectile.scale = Main.rand.NextFloat(0.8f, 1.2f);
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
+
+        return base.OnTileCollide(oldVelocity);
+    }
 
     public override void OnKill(int timeLeft) {
         if (Main.netMode != NetmodeID.Server) {
