@@ -29,10 +29,11 @@ sealed class RipePumpkin : NatureItem {
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
 		if (player.ownedProjectileCounts[type] < 1 && player.IsLocal()) {
-			Vector2 lastPosition = Main.MouseWorld;
-			float speed = (lastPosition - position).Length() * 0.05f, minSpeed = 4f, maxSpeed = 6f;
+            Vector2 pointPoisition = Main.MouseWorld;
+            player.LimitPointToPlayerReachableArea(ref pointPoisition);
+            float speed = (pointPoisition - position).Length() * 0.05f, minSpeed = 4f, maxSpeed = 6f;
 			speed = Math.Clamp(speed, minSpeed, maxSpeed);
-            Projectile.NewProjectile(source, position, Helper.VelocityToPoint(position, lastPosition, speed), type, damage, knockback, player.whoAmI, ai2: speed);
+            Projectile.NewProjectile(source, position, Helper.VelocityToPoint(position, pointPoisition, speed), type, damage, knockback, player.whoAmI, ai2: speed);
 
 			return false;
 		}

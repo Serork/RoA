@@ -34,8 +34,8 @@ sealed class MushroomSpore : NatureProjectile {
         Projectile.friendly = true;
     }
 
-    public override void SendExtraAI(BinaryWriter writer) => writer.Write((int)_state);
-    public override void ReceiveExtraAI(BinaryReader reader) => _state = (State)reader.ReadInt32();
+    //public override void SendExtraAI(BinaryWriter writer) => writer.Write((int)_state);
+    //public override void ReceiveExtraAI(BinaryReader reader) => _state = (State)reader.ReadInt32();
 
     public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
 

@@ -60,11 +60,14 @@ abstract class Wave : NatureProjectile {
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Player player = Main.player[Projectile.owner];
+        Vector2 pointPoisition = Main.MouseWorld;
+        player.LimitPointToPlayerReachableArea(ref pointPoisition);
         Vector2 velocity = Vector2.Subtract(Main.MouseWorld, player.RotatedRelativePoint(player.MountedCenter, true));
         velocity.Normalize();
         if (!Utils.HasNaNs(velocity)) {
             Projectile.velocity = velocity;
         }
+		Projectile.netUpdate = true;
     }
 
     public override void AI() {
@@ -104,7 +107,7 @@ abstract class Wave : NatureProjectile {
 		else {
 			Projectile.Kill();
 		}
-		Projectile.netUpdate = true;
+		//Projectile.netUpdate = true;
 	}
 
 	//public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<Infected>(), 180);

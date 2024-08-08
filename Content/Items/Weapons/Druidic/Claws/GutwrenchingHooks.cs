@@ -25,7 +25,9 @@ sealed class GutwrenchingHooks : BaseClawsItem {
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
         int offset = 30 * player.direction;
         var position = new Vector2(player.Center.X + offset, player.Center.Y);
-        Vector2 point = Helper.VelocityToPoint(player.Center, Main.MouseWorld, 1.2f);
+        Vector2 pointPoisition = Main.MouseWorld;
+        player.LimitPointToPlayerReachableArea(ref pointPoisition);
+        Vector2 point = Helper.VelocityToPoint(player.Center, pointPoisition, 1.2f);
         clawsStats.SetSpecialAttackData<HemorrhageWave>(Item, new Vector2(position.X, position.Y - 14f), point, playSoundStyle: SoundID.Item95);
     }
 }

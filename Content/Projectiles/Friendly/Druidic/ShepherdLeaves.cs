@@ -32,8 +32,11 @@ sealed class ShepherdLeaves : NatureProjectile {
         }
         Player player = Main.player[Projectile.owner];
         if (Projectile.IsOwnerMyPlayer(player)) {
-            Projectile.ai[1] = Main.MouseWorld.X;
-            Projectile.ai[2] = Main.MouseWorld.Y;
+            Vector2 pointPoisition = Main.MouseWorld;
+            Main.player[Projectile.owner].LimitPointToPlayerReachableArea(ref pointPoisition);
+            Projectile.ai[1] = pointPoisition.X;
+            Projectile.ai[2] = pointPoisition.Y;
+            Projectile.netUpdate = true;
         }
         if (Projectile.ai[0] > 0.1f) {
             Projectile.ai[0] -= TimeSystem.LogicDeltaTime;

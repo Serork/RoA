@@ -34,14 +34,16 @@ sealed class RipePumpkin : NatureProjectile {
     public override void Unload() => _rotateWiggler = null;
 
     public override bool PreDraw(ref Color lightColor) {
-        SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-        Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
-        Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
-        Color color = Projectile.GetAlpha(lightColor) * _pulseAlpha;
-        spriteBatch.Draw(texture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale * _pulseScale, SpriteEffects.None, 0f);
+        if (Projectile.owner == Main.myPlayer) {
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+            Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+            Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
+            Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+            Color color = Projectile.GetAlpha(lightColor) * _pulseAlpha;
+            spriteBatch.Draw(texture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale * _pulseScale, SpriteEffects.None, 0f);
+        }
         return true;
     }
 
@@ -82,7 +84,9 @@ sealed class RipePumpkin : NatureProjectile {
                         for (int i = 0; i < count; i++) {
                             float posX = Main.rand.Next(-15, 16);
                             float posY = Main.rand.Next(-15, 16);
-                            Vector2 mousePos = new Vector2(Main.MouseWorld.X + posX, Main.MouseWorld.Y + posY);
+                            Vector2 pointPoisition = Main.MouseWorld;
+                            Main.player[Projectile.owner].LimitPointToPlayerReachableArea(ref pointPoisition);
+                            Vector2 mousePos = new Vector2(pointPoisition.X + posX, pointPoisition.Y + posY);
                             Vector2 projectilePos = new Vector2(Projectile.position.X + posX, Projectile.position.Y + posY);
                             Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);
                             direction.Normalize();

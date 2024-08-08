@@ -12,10 +12,12 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI.Chat;
 
 namespace RoA.Content.Items.Weapons.Druidic.Staffs;
 
@@ -50,6 +52,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     private short _leftTimeToReuse;
     private float _maxUseTime, _maxUseTime2;
     private bool _shoot;
+    private float _rotation;
 
     private Player Owner => Projectile.GetOwnerAsPlayer();
     private bool FacedLeft => Owner.direction == -1;
@@ -101,12 +104,14 @@ abstract class BaseRodProjectile : NatureProjectile {
         writer.Write(_leftTimeToReuse);
         writer.Write(_maxUseTime);
         writer.Write(_shoot);
+        writer.Write(_rotation);
     }
 
     public sealed override void ReceiveExtraAI(BinaryReader reader) {
         _leftTimeToReuse = reader.ReadInt16();
         _maxUseTime = reader.ReadSingle();
         _shoot = reader.ReadBoolean();
+        _rotation = reader.ReadSingle();
     }
 
     public sealed override bool PreDraw(ref Color lightColor) {
@@ -129,11 +134,11 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     public sealed override void AI() {
-        if (_leftTimeToReuse <= 0) {
-            Projectile.rotation = FacedLeft ? STARTROTATION : -STARTROTATION;
+        if (_leftTimeToReuse <= 0f && Projectile.IsOwnerMyPlayer(Owner)) {
+            _rotation = FacedLeft ? STARTROTATION : -STARTROTATION;
             Projectile.spriteDirection = Owner.direction;
-
             _maxUseTime = _maxUseTime2 = CurrentUseTime;
+            Projectile.netUpdate = true;
         }
 
         ActiveCheck();
@@ -158,7 +163,7 @@ abstract class BaseRodProjectile : NatureProjectile {
             _leftTimeToReuse /= 2;
         }
 
-        Projectile.netUpdate = true;
+        Projectile.rotation = _rotation;
     }
 
     private void ActiveCheck() {
@@ -190,7 +195,10 @@ abstract class BaseRodProjectile : NatureProjectile {
         center.Y = (int)center.Y;
         Projectile.Center = center;
         if (Projectile.IsOwnerMyPlayer(Owner)) {
-            Projectile.velocity = (Main.MouseWorld - center).SafeNormalize(Vector2.One);
+            Vector2 pointPoisition = Main.MouseWorld;
+            Owner.LimitPointToPlayerReachableArea(ref pointPoisition);
+            Projectile.velocity = (pointPoisition - center).SafeNormalize(Vector2.One);
+            Projectile.netUpdate = true;
         }
         Projectile.Center += Projectile.velocity;
     }
@@ -204,9 +212,9 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     private void SetRotation() {
         float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
-        float rotationLerp = Math.Clamp(Math.Abs(Projectile.rotation) * 0.2f, 0.14f, 0.3f);
-        float mouseRotation = Helper.SmoothAngleLerp(Projectile.rotation, rotation, rotationLerp);
+        float rotationLerp = Math.Clamp(Math.Abs(_rotation) * 0.25f, 0.14f, 0.3f);
+        float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);
         Helper.SmoothClamp(ref mouseRotation, FacedLeft ? MINROTATION : -MAXROTATION, FacedLeft ? MAXROTATION : -MINROTATION, rotationLerp);
-        Projectile.rotation = mouseRotation;
+        _rotation = mouseRotation;
     }
 }
