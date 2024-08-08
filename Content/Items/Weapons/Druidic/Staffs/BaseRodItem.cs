@@ -133,14 +133,16 @@ abstract class BaseRodProjectile : NatureProjectile {
         return false;
     }
 
-    public sealed override void AI() {
-        if (_leftTimeToReuse <= 0f && Projectile.IsOwnerMyPlayer(Owner)) {
+    protected override void SafeOnSpawn(IEntitySource source) {
+        if (Projectile.IsOwnerMyPlayer(Owner)) {
             _rotation = FacedLeft ? STARTROTATION : -STARTROTATION;
             Projectile.spriteDirection = Owner.direction;
             _maxUseTime = _maxUseTime2 = CurrentUseTime;
             Projectile.netUpdate = true;
         }
+    }
 
+    public sealed override void AI() {
         ActiveCheck();
         SetPosition();
         SetDirection();
@@ -212,7 +214,7 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     private void SetRotation() {
         float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
-        float rotationLerp = Math.Clamp(Math.Abs(_rotation) * 0.25f, 0.14f, 0.3f);
+        float rotationLerp = Math.Clamp(Math.Abs(_rotation) * 0.2f, 0.16f, 0.24f);
         float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);
         Helper.SmoothClamp(ref mouseRotation, FacedLeft ? MINROTATION : -MAXROTATION, FacedLeft ? MAXROTATION : -MINROTATION, rotationLerp);
         _rotation = mouseRotation;
