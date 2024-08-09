@@ -214,7 +214,7 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     private void SetRotation() {
         float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
-        float rotationLerp = Math.Clamp(Math.Abs(_rotation) * 0.2f, 0.16f, 0.24f);
+        float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;
         float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);
         Helper.SmoothClamp(ref mouseRotation, FacedLeft ? MINROTATION : -MAXROTATION, FacedLeft ? MAXROTATION : -MINROTATION, rotationLerp);
         _rotation = mouseRotation;

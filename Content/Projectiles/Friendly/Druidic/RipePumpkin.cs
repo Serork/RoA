@@ -64,9 +64,14 @@ sealed class RipePumpkin : NatureProjectile {
             }
             else {
                 if (_pulseScale > 1f) {
-                    _pulseScale -= 0.1f;
+                    float getValue(float x) {
+                        return (x - (x * 1.2f * f)) * 0.8f;
+                    }
+                    float value = 0.1f;
+                    _pulseScale -= value + getValue(value);
                     if (_pulseAlpha < 1f) {
-                        _pulseAlpha += 0.05f;
+                        value = 0.05f;
+                        _pulseAlpha += value + getValue(value);
                     }
                 }
                 if (!_rotateWiggler.Active && _pulseScale <= 1.5f) {
