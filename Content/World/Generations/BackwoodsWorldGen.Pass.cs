@@ -50,6 +50,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private ushort _dirtTileType, _grassTileType, _stoneTileType, _mossTileType, _mossGrowthTileType, _elderwoodTileType, _elderwoodTileType2, _leavesTileType;
     private ushort _dirtWallType, _grassWallType, _elderwoodWallType, _elderwoodWallType2, _leavesWallType;
     private ushort _fallenTreeTileType, _plantsTileType, _bushTileType, _elderWoodChestTileType, _altarTileType, _mintTileType, _vinesTileType;
+    private int _lastCliffX;
+    private bool _toLeft;
 
     private int CenterX {
         get => _positionToPlaceBiome.X;
@@ -328,9 +330,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step13_GrowBigTrees() {
-        int i = _random.Next(Left + 15, Left + 30);
+        int left = _toLeft ? _lastCliffX + 20 : Left;
+        int i = _random.Next(left + 15, left + 30);
         GrowBigTree(i);
-        i = _random.Next(Right - 30, Right - 15);
+        int right = !_toLeft ? _lastCliffX - 20 : Right;
+        i = _random.Next(right - 30, right - 15);
         GrowBigTree(i);
     }
 
@@ -1242,7 +1246,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int i = Left - 10; i < Right + 10; i++) {
+        for (int i = Left - 20; i < Right + 20; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 15; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(CliffPlaceholderTileType)) {
@@ -1384,7 +1388,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int between = Math.Clamp(topRightTileY - topLeftTileY, -angle, angle);
         int leftY = WorldGenHelper.GetFirstTileY(topLeftTileX), rightY = WorldGenHelper.GetFirstTileY(topRightTileX);
         int max = Math.Min(leftY, rightY) == leftY ? topLeftTileX : topRightTileX;
-        bool toLeft = max == topLeftTileX;
+        _toLeft = max == topLeftTileX;
         //for (int k = 0; k < 30; k++) {
         //    WorldGenHelper.ReplaceTile(toLeft ? topLeftTileX - 1 : (topRightTileX + 1), (toLeft ? topLeftTileY : (topRightTileY)) - k, CliffPlaceholderTileType);
         //}
@@ -1481,7 +1485,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             setSurfaceY();
         }
-        if (toLeft) {
+        if (_toLeft) {
             for (int i = topRightTileX; i > topLeftTileX; i--) {
                 generateBase(i, true);
             }
@@ -1492,7 +1496,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         Point cliffTileCoords = Point.Zero;
-        cliffTileCoords.X = toLeft ? topLeftTileX - 5 : (topRightTileX + 5);
+        cliffTileCoords.X = _toLeft ? topLeftTileX - 10 : (topRightTileX + 10);
         cliffTileCoords.Y = WorldGenHelper.GetFirstTileY2(cliffTileCoords.X);
         // cliff
         int lastSurfaceY = _biomeSurface.Last().Y;
@@ -1503,19 +1507,29 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             while (_random.Next(0, 6) <= _random.Next(1, 4)) {
                 startY++;
             }
-            bool flag = Math.Abs(cliffX - cliffTileCoords.X) > 15;
+            bool flag = Math.Abs(cliffX - cliffTileCoords.X) > 20;
             if ((_random.NextChance(0.75) && flag) || !flag) {
-                cliffX -= toLeft ? -1 : 1;
+                cliffX -= _toLeft ? -1 : 1;
             }
+            bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
             int testJ = startY;
             while (true) {
-                if (testJ > startY + 30) {
+                if (testJ > startY + _biomeHeight / 3) {
                     break;
                 }
-                WorldGenHelper.ReplaceTile(cliffX, testJ, CliffPlaceholderTileType);
+                bool flag3 = !flag2 && Main.tile[cliffX, testJ].HasTile;
+                if (flag3 || flag2) {
+                    if (flag3) {
+                        WorldGenHelper.ReplaceTile(cliffX, testJ, _random.NextChance(0.75f) ? CliffPlaceholderTileType : TileID.Mud);
+                    }
+                    else {
+                        WorldGenHelper.ReplaceTile(cliffX, testJ, CliffPlaceholderTileType);
+                    }
+                }
                 testJ++;
             }
         }
+        _lastCliffX = cliffX;
 
         foreach (Point surface in _biomeSurface) {
             for (int j = EdgeY; j > -50; j--) {
