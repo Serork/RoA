@@ -85,21 +85,25 @@ abstract class Wave : NatureProjectile {
 				return;
 			}
 		}
-		(int, int, int) dustTypes = UsedDustTypes();
-        if (Main.rand.Next(5) == 0) {
-			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item1, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
-			Main.dust[dust].noGravity = false;
-			Main.dust[dust].noLight = true;
-		}
-		if (Main.rand.Next(3) == 0) {
-			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item2, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
-			Main.dust[dust].noGravity = true;
-			Main.dust[dust].noLight = true;
-		}
-		if (Main.rand.Next(3) == 0) {
-			int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item3, Projectile.velocity.X * 8f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
-			Main.dust[dust].noGravity = true;
-			Main.dust[dust].noLight = true;
+		if (Projectile.Opacity > 0.2f) {
+			(int, int, int) dustTypes = UsedDustTypes();
+			if (Main.rand.Next(5) == 0) {
+				int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item1, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
+				Main.dust[dust].fadeIn = 1f;
+				Main.dust[dust].noGravity = false;
+				Main.dust[dust].noLight = true;
+			}
+			if (Main.rand.Next(3) == 0) {
+				int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item2, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+				Main.dust[dust].fadeIn = 1f;
+				Main.dust[dust].noGravity = true;
+				Main.dust[dust].noLight = true;
+			}
+			if (Main.rand.Next(3) == 0) {
+				int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item3, Projectile.velocity.X * 8f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+				Main.dust[dust].noGravity = true;
+				Main.dust[dust].noLight = true;
+			}
 		}
 		if (Projectile.Opacity > 0.05f) {
 			Projectile.Opacity -= 0.0715f;

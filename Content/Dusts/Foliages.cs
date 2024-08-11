@@ -21,9 +21,15 @@ abstract class FolliageDust : ModDust {
         if (Main.rand.Next(3) <= 1) {
             dust.velocity *= 0.995f - Main.rand.NextFloat(0.001f, 0.1f);
         }
-        dust.alpha += 3;
-        if (dust.alpha >= 250) {
-            dust.active = false;
+        if (dust.fadeIn > 0f) {
+            dust.alpha = (int)(255 * dust.fadeIn);
+            dust.fadeIn -= 0.1f;
+        }
+        else {
+            dust.alpha += 3;
+            if (dust.alpha >= 250) {
+                dust.active = false;
+            }
         }
         return false;
     }

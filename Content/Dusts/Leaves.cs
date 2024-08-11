@@ -8,7 +8,6 @@ abstract class Leaves : ModDust {
 		dust.velocity *= 0.1f;
 		dust.noGravity = true;
 		dust.noLight = true;
-		dust.scale *= 1f;
 	}
 
 	public override bool Update(Dust dust) {
