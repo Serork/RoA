@@ -199,8 +199,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         center.Y = (int)center.Y;
         Projectile.Center = center;
         if (Projectile.IsOwnerMyPlayer(Owner)) {
-            Vector2 pointPosition = Main.MouseWorld;
-            Owner.LimitPointToPlayerReachableArea(ref pointPosition);
+            Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - center).SafeNormalize(Vector2.One);
             Projectile.netUpdate = true;
         }

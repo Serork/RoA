@@ -90,8 +90,7 @@ sealed class RipePumpkin : NatureProjectile {
                         for (int i = 0; i < count; i++) {
                             float posX = Main.rand.Next(-15, 16);
                             float posY = Main.rand.Next(-15, 16);
-                            Vector2 pointPosition = Main.MouseWorld;
-                            Main.player[Projectile.owner].LimitPointToPlayerReachableArea(ref pointPosition);
+                            Vector2 pointPosition = Main.player[Projectile.owner].GetViableMousePosition();
                             Vector2 mousePos = new Vector2(pointPosition.X + posX, pointPosition.Y + posY);
                             Vector2 projectilePos = new Vector2(Projectile.position.X + posX, Projectile.position.Y + posY);
                             Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);

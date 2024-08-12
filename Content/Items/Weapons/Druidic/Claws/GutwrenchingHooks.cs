@@ -5,6 +5,7 @@ using RiseofAges.Content.Projectiles.Friendly.Druid;
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
 using RoA.Core;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using Terraria;
@@ -25,8 +26,7 @@ sealed class GutwrenchingHooks : BaseClawsItem {
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
         int offset = 30 * player.direction;
         var position = new Vector2(player.Center.X + offset, player.Center.Y);
-        Vector2 pointPosition = Main.MouseWorld;
-        player.LimitPointToPlayerReachableArea(ref pointPosition);
+        Vector2 pointPosition = player.GetViableMousePosition();
         Vector2 point = Helper.VelocityToPoint(player.Center, pointPosition, 1.2f);
         clawsStats.SetSpecialAttackData<HemorrhageWave>(Item, new Vector2(position.X, position.Y - 14f), point, playSoundStyle: SoundID.Item95);
     }

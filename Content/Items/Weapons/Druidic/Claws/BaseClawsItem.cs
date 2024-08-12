@@ -2,6 +2,7 @@
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using Terraria;
@@ -35,8 +36,7 @@ abstract class BaseClawsItem : NatureItem {
     }
 
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        Vector2 pointPosition = Main.MouseWorld;
-        player.LimitPointToPlayerReachableArea(ref pointPosition);
+        Vector2 pointPosition = player.GetViableMousePosition();
         Vector2 point = Helper.VelocityToPoint(player.Center, pointPosition, 1f);
         position += point * 15f;
         velocity = point;
