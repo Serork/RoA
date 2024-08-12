@@ -73,8 +73,8 @@ sealed class MushroomSpore : NatureProjectile {
             Projectile.rotation = Helper.VelocityAngle(Projectile.velocity);
             return;
         }
-        float lerp = Math.Abs(Projectile.rotation) * (minSpeed - Projectile.velocity.Length()) * TimeSystem.LogicDeltaTime;
-        Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, 0f, lerp * minSpeed * 0.7f);
+        float lerp = Math.Abs(Projectile.rotation) * Math.Max(1f, minSpeed - 1f - Projectile.velocity.Length()) * TimeSystem.LogicDeltaTime;
+        Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, 0f, lerp * minSpeed);
         Projectile.rotation += -Projectile.ai[2] * 0.0125f;
     }
 
