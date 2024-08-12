@@ -35,9 +35,9 @@ abstract class BaseClawsItem : NatureItem {
     }
 
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        Vector2 pointPoisition = Main.MouseWorld;
-        player.LimitPointToPlayerReachableArea(ref pointPoisition);
-        Vector2 point = Helper.VelocityToPoint(player.Center, pointPoisition, 1f);
+        Vector2 pointPosition = Main.MouseWorld;
+        player.LimitPointToPlayerReachableArea(ref pointPosition);
+        Vector2 point = Helper.VelocityToPoint(player.Center, pointPosition, 1f);
         position += point * 15f;
         velocity = point;
     }

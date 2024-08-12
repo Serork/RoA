@@ -54,29 +54,31 @@ abstract class BaseRodProjectile : NatureProjectile {
     private bool _shoot;
     private float _rotation;
 
-    private Player Owner => Projectile.GetOwnerAsPlayer();
-    private bool FacedLeft => Owner.direction == -1;
+    protected Player Owner => Projectile.GetOwnerAsPlayer();
+    protected bool FacedLeft => Owner.direction == -1;
 
-    private float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
+    protected float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
 
-    private bool IsInUse => !Owner.CCed;
-    private float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
+    protected bool IsInUse => !Owner.CCed;
+    protected float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
 
-    private Item HeldItem => Owner.HeldItem;
-    private Texture2D HeldItemTexture => TextureAssets.Item[HeldItem.type].Value;
+    protected Item HeldItem => Owner.HeldItem;
+    protected Texture2D HeldItemTexture => TextureAssets.Item[HeldItem.type].Value;
 
-    private Vector2 Offset => (new Vector2(0f, 1f) * HeldItemTexture.Width).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
-    private Vector2 CorePosition => Projectile.Center + Offset;
+    protected Vector2 Offset => (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
+    protected Vector2 CorePosition => Projectile.Center + Offset;
 
-    public int CurrentUseTime { get => (int)Projectile.ai[0]; set => Projectile.ai[0] = value < 0 ? 0 : value; }
-    public ushort ShootType => (ushort)Projectile.ai[1];
-    public bool ShouldBeActive { get => Projectile.ai[2] == 0f; set => Projectile.ai[2] = value ? 0f : 1f; }
+    protected int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
+    protected ushort ShootType => (ushort)Projectile.ai[1];
+    protected bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = value ? 0f : 1f; }
 
     public override string Texture => ResourceManager.EmptyTexture;
 
     protected abstract void SpawnCoreDusts(float step, Player player, Vector2 corePosition);
 
     protected abstract void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count);
+
+    protected virtual Vector2 CorePositionOffsetFactor() => Vector2.Zero;
 
     protected virtual void ShootProjectile() {
         SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
@@ -197,9 +199,9 @@ abstract class BaseRodProjectile : NatureProjectile {
         center.Y = (int)center.Y;
         Projectile.Center = center;
         if (Projectile.IsOwnerMyPlayer(Owner)) {
-            Vector2 pointPoisition = Main.MouseWorld;
-            Owner.LimitPointToPlayerReachableArea(ref pointPoisition);
-            Projectile.velocity = (pointPoisition - center).SafeNormalize(Vector2.One);
+            Vector2 pointPosition = Main.MouseWorld;
+            Owner.LimitPointToPlayerReachableArea(ref pointPosition);
+            Projectile.velocity = (pointPosition - center).SafeNormalize(Vector2.One);
             Projectile.netUpdate = true;
         }
         Projectile.Center += Projectile.velocity;

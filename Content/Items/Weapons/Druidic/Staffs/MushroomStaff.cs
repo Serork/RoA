@@ -28,7 +28,8 @@ sealed class MushroomStaff : NatureItem {
             Vector2 newVelocity = new Vector2(velocity.X, velocity.Y).RotatedByRandom(MathHelper.ToRadians(30)) * 1.6f;
 			Projectile.NewProjectile(source, position.X + Main.rand.NextFloatRange(0.05f), position.Y, newVelocity.X, newVelocity.Y, type, damage, knockback, player.whoAmI);
 		}
-		return false;
+
+        return false;
 	}
 
 	public override Vector2? HoldoutOffset() => new Vector2(-18f, -4f);

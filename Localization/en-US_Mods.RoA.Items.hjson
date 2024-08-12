@@ -57,3 +57,18 @@ RipePumpkin: {
 	DisplayName: Ripe Pumpkin
 	Tooltip: ""
 }
+
+ExoticTulip: {
+	DisplayName: Exotic Tulip
+	Tooltip: ""
+}
+
+SweetTulip: {
+	DisplayName: Sweet Tulip
+	Tooltip: ""
+}
+
+WeepingTulip: {
+	DisplayName: Weeping Tulip
+	Tooltip: ""
+}

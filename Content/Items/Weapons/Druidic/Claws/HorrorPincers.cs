@@ -23,8 +23,8 @@ sealed class HorrorPincers : BaseClawsItem {
     protected override (Color, Color) SlashColors() => (new Color(132, 75, 140), new Color(160, 100, 200));
 
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
-        Vector2 pointPoisition = Main.MouseWorld;
-        player.LimitPointToPlayerReachableArea(ref pointPoisition);
-        clawsStats.SetSpecialAttackData<InfectedWave>(Item, new(player.Center.X + 30f * player.direction, player.Center.Y - 14f), Helper.VelocityToPoint(player.Center, pointPoisition, 1.2f), playSoundStyle: SoundID.Item95);
+        Vector2 pointPosition = Main.MouseWorld;
+        player.LimitPointToPlayerReachableArea(ref pointPosition);
+        clawsStats.SetSpecialAttackData<InfectedWave>(Item, new(player.Center.X + 30f * player.direction, player.Center.Y - 14f), Helper.VelocityToPoint(player.Center, pointPosition, 1.2f), playSoundStyle: SoundID.Item95);
     }
 }

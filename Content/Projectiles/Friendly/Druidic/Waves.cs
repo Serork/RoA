@@ -60,8 +60,8 @@ abstract class Wave : NatureProjectile {
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Player player = Main.player[Projectile.owner];
-        Vector2 pointPoisition = Main.MouseWorld;
-        player.LimitPointToPlayerReachableArea(ref pointPoisition);
+        Vector2 pointPosition = Main.MouseWorld;
+        player.LimitPointToPlayerReachableArea(ref pointPosition);
         Vector2 velocity = Vector2.Subtract(Main.MouseWorld, player.RotatedRelativePoint(player.MountedCenter, true));
         velocity.Normalize();
         if (!Utils.HasNaNs(velocity)) {
