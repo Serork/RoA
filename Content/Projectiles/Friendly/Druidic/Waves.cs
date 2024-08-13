@@ -63,9 +63,7 @@ abstract class Wave : NatureProjectile {
         Vector2 pointPosition = player.GetViableMousePosition();
         Vector2 velocity = Vector2.Subtract(Main.MouseWorld, player.RotatedRelativePoint(player.MountedCenter, true));
         velocity.Normalize();
-        if (!Utils.HasNaNs(velocity)) {
-            Projectile.velocity = velocity;
-        }
+        Projectile.velocity = velocity;
 		Projectile.netUpdate = true;
     }
 

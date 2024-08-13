@@ -12,17 +12,15 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI.Chat;
 
 namespace RoA.Content.Items.Weapons.Druidic.Staffs;
 
 abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
-    protected abstract ushort ShootType();
+    protected virtual ushort ShootType() => (ushort)ProjectileID.WoodenArrowFriendly;
 
     protected sealed override void SafeSetDefaults2() {
         Item.noMelee = true;
@@ -102,14 +100,14 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected sealed override void SafeSetDefaults2() { }
 
-    public sealed override void SendExtraAI(BinaryWriter writer) {
+    public override void SendExtraAI(BinaryWriter writer) {
         writer.Write(_leftTimeToReuse);
         writer.Write(_maxUseTime);
         writer.Write(_shoot);
         writer.Write(_rotation);
     }
 
-    public sealed override void ReceiveExtraAI(BinaryReader reader) {
+    public override void ReceiveExtraAI(BinaryReader reader) {
         _leftTimeToReuse = reader.ReadInt16();
         _maxUseTime = reader.ReadSingle();
         _shoot = reader.ReadBoolean();
