@@ -102,7 +102,6 @@ sealed class RipePumpkin : NatureProjectile {
                 }
             }
         }
-        Projectile.netUpdate = true;
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {

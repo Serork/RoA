@@ -22,18 +22,18 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
         Item.SetWeaponValues(4, 1f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 12);
-        NatureWeaponHandler.SetFillingRate(Item, 0.75f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
     }
 
     public sealed class PastoralRodBase : BaseRodProjectile {
-        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count) {
+        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
             count = 3;
             Vector2 pointPosition = player.GetViableMousePosition();
             Vector2 direction = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
             velocity = direction.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2) + MathHelper.Pi) * 4f;
         }
 
-        protected override void SpawnCoreDusts(float step, Player player, Vector2 corePosition) {
+        protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
             for (int i = 0; i < 2; i++) {
                 Vector2 randomPosition = Main.rand.NextVector2Unit();
                 float areaSize = step * 2f;

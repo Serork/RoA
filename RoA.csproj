@@ -16,6 +16,7 @@
 	  <None Remove="Localization\en-US_Mods.RoA.WorldGen.hjson" />
 	  <None Remove="Resources\Textures\Dusts\BackwoodsWoodTrash.png" />
 	  <None Remove="Resources\Textures\Dusts\Slash.png" />
+	  <None Remove="Resources\Textures\Dusts\Tulip.png" />
 	  <None Remove="Resources\Textures\Empty.png" />
 	  <None Remove="Resources\Textures\Gores\Leaf.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />

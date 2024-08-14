@@ -21,6 +21,7 @@ static class ResourceManager {
     public static string GUITextures => Textures + "GUI/";
     public static string BackgroundTextures => Textures + "Backgrounds/";
     public static string ProjectileTextures => Textures + "Projectiles/";
+    public static string DustTextures => Textures + "Dusts/";
 
     public static string Sounds => RoA.ModName + $"/{SOUNDSPATH}/";
     public static string Music => Sounds + "Music/";

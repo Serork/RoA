@@ -59,6 +59,7 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected bool IsInUse => !Owner.CCed;
     protected float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
+    protected float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
     protected Item HeldItem => Owner.HeldItem;
     protected Texture2D HeldItemTexture => TextureAssets.Item[HeldItem.type].Value;
@@ -72,9 +73,13 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     public override string Texture => ResourceManager.EmptyTexture;
 
-    protected abstract void SpawnCoreDusts(float step, Player player, Vector2 corePosition);
+    protected abstract void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition);
 
-    protected abstract void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count);
+    protected virtual void SpawnCoreDustsWhileShotProjectileIsActive(float step, Player player, Vector2 corePosition) { }
+
+    protected abstract void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2);
+    
+    protected virtual void SpawnDustsOnShoot(Player player, Vector2 corePosition) { }
 
     protected virtual Vector2 CorePositionOffsetFactor() => Vector2.Zero;
 
@@ -83,10 +88,14 @@ abstract class BaseRodProjectile : NatureProjectile {
         Vector2 spawnPosition = CorePosition;
         Vector2 velocity = Vector2.Zero;
         ushort count = 1;
+        float ai0 = 0f, ai1 = 0f, ai2 = 0f;
         if (Projectile.IsOwnerMyPlayer(Owner)) {
             for (int i = 0; i < count; i++) {
-                SetSpawnProjectileSettings(Owner, ref spawnPosition, ref velocity, ref count);
-                Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), spawnPosition, velocity, ShootType, Projectile.damage, Projectile.knockBack, Owner.whoAmI);
+                SetSpawnProjectileSettings(Owner, ref spawnPosition, ref velocity, ref count, ref ai0, ref ai1, ref ai2);
+                Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), spawnPosition, velocity, ShootType, Projectile.damage, Projectile.knockBack, Owner.whoAmI, ai0, ai1, ai2);
+                if (Main.netMode != NetmodeID.Server) {
+                    SpawnDustsOnShoot(Owner, CorePosition);
+                }
             }
         }
     }
@@ -138,6 +147,7 @@ abstract class BaseRodProjectile : NatureProjectile {
             _rotation = FacedLeft ? STARTROTATION : -STARTROTATION;
             Projectile.spriteDirection = Owner.direction;
             _maxUseTime = _maxUseTime2 = CurrentUseTime;
+
             Projectile.netUpdate = true;
         }
     }
@@ -155,11 +165,12 @@ abstract class BaseRodProjectile : NatureProjectile {
             CurrentUseTime--;
 
             if (Main.netMode != NetmodeID.Server) {
-                SpawnCoreDusts(Math.Clamp(1f - UseTime, 0f, 1f), Owner, CorePosition);
+                SpawnCoreDustsBeforeShoot(Step, Owner, CorePosition);
             }
         }
         else if (!_shoot) {
             ShootProjectile();
+
             _shoot = true;
             ShouldBeActive = false;
             _leftTimeToReuse /= 2;
@@ -175,6 +186,11 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (!ShouldBeActive) {
             if (Owner.ownedProjectileCounts[ShootType] < 1) {
                 _leftTimeToReuse--;
+            }
+            else {
+                if (Main.netMode != NetmodeID.Server) {
+                    SpawnCoreDustsWhileShotProjectileIsActive(Step, Owner, CorePosition);
+                }
             }
 
             if (IsInUse && !_shoot) {

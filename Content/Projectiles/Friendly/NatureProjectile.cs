@@ -32,7 +32,7 @@ abstract class NatureProjectile : ModProjectile {
     public sealed override void SetDefaults() {
         SafeSetDefaults();
 
-        if (Projectile.IsDamageable()) {
+        if (Projectile.IsDamageable() && Projectile.friendly) {
             Projectile.SetDefaultToDruidicProjectile();
         }
 

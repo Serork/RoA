@@ -34,12 +34,12 @@ sealed class MushroomSpore : NatureProjectile {
         Projectile.friendly = true;
     }
 
-    //public override void SendExtraAI(BinaryWriter writer) => writer.Write((int)_state);
-    //public override void ReceiveExtraAI(BinaryReader reader) => _state = (State)reader.ReadInt32();
-
     public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
 
     public override void AI() {
+        if (Main.windPhysics) {
+            Projectile.velocity.X += Main.windSpeedCurrent * Main.windPhysicsStrength;
+        }
         float speed = 0.05f;
         switch (_state) {
             case State.Direct:
@@ -52,7 +52,6 @@ sealed class MushroomSpore : NatureProjectile {
                     Projectile.ai[1] = Math.Clamp(Math.Abs(Projectile.velocity.X), -max, max);
                     Projectile.ai[2] = Projectile.ai[1] * speed;
                     _state = State.Float;
-                    Projectile.netUpdate = true;
                 }
                 break;
             case State.Float:
@@ -65,7 +64,6 @@ sealed class MushroomSpore : NatureProjectile {
                 Projectile.position.X += Projectile.ai[2];
                 Projectile.velocity.Y += 0.01f;
                 Projectile.velocity.Y = Math.Min(Projectile.velocity.Y, 12f);
-                Projectile.netUpdate = true;
                 break;
         }
         float minSpeed = 4.5f;
