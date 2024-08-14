@@ -29,7 +29,6 @@ sealed class TulipPetal : NatureProjectile {
     private Vector2 Offset => Vector2.UnitY * (146 * 0.6f - Projectile.Size.Y);
 
     private bool ParentFound => !(_parent == null || !_parent.active);
-
     private bool IsWeepingTulip => UsedFrameX == 2;
 
     public override string Texture => ResourceManager.EmptyTexture;
@@ -116,7 +115,7 @@ sealed class TulipPetal : NatureProjectile {
                     if (Projectile.localAI[0] != 0f) {
                         if (Main.rand.NextChance(0.5)) {
                             Vector2 spawnPosition = Projectile.position + _parent.velocity * 8f + Offset.RotatedBy(Projectile.rotation);
-                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), spawnPosition, (Vector2.UnitX * -Math.Sign(_parent.velocity.X)).RotatedBy(Projectile.rotation) * Projectile.width * 0.1f, ProjectileID.Bone, Projectile.damage, Projectile.knockBack, Projectile.owner);
+                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), spawnPosition, (Vector2.UnitX * -Math.Sign(_parent.velocity.X)).RotatedBy(Projectile.rotation) * Projectile.width * 0.1f, ModContent.ProjectileType<Bone>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         }
                     }
 
@@ -225,6 +224,7 @@ sealed class TulipFlower : NatureProjectile {
     public const float MAX = 180f;
 
     private byte UsedFrameX => (byte)Projectile.ai[0];
+    private bool IsWeepingTulip => UsedFrameX == 2;
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -263,10 +263,10 @@ sealed class TulipFlower : NatureProjectile {
             return;
         }
 
-        Projectile.scale = Utils.GetLerpValue(0f, 10f, Projectile.localAI[0], clamped: true) * Utils.GetLerpValue(MAX, MAX - 15f, Projectile.localAI[0], clamped: true);
+        Projectile.scale = Ease.SineIn(Utils.GetLerpValue(0f, 10f, Projectile.localAI[0], clamped: true)) * Ease.SineOut(Utils.GetLerpValue(MAX, MAX - 15f, Projectile.localAI[0], clamped: true));
 
         Player player = Main.player[Projectile.owner];
-        float inertia = 15f * Projectile.scale, speed = 4f * Projectile.scale;
+        float inertia = 15f * Projectile.scale, speed = (IsWeepingTulip ? 4f : 3.35f) * Projectile.scale;
         if (Projectile.owner == Main.myPlayer) {
             Vector2 pointPosition = player.GetViableMousePosition();
             Projectile.ai[1] = pointPosition.X;
@@ -305,5 +305,15 @@ sealed class TulipFlower : NatureProjectile {
                               SpriteEffects.None);
 
         return false;
+    }
+}
+
+sealed class Bone : NatureProjectile {
+    public override string Texture => $"Terraria/Images/Projectile_{21}";
+
+    protected override void SafeSetDefaults() {
+        Projectile.CloneDefaults(ProjectileID.Bone);
+        Projectile.friendly = true;
+        Projectile.hostile = false;
     }
 }
