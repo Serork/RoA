@@ -12,7 +12,6 @@ sealed class BackwoodsVines : ModTile {
     public override void SetStaticDefaults() {
         Main.tileLighted[Type] = true;
         Main.tileCut[Type] = true;
-        Main.tileSolid[Type] = false;
         Main.tileNoFail[Type] = true;
         Main.tileNoAttach[Type] = true;
 

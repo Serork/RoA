@@ -23,13 +23,14 @@ sealed class TulipPetal : NatureProjectile {
     private static Projectile _parent;
 
     private byte UsedFrameX => (byte)Projectile.ai[0];
+    private bool ParentFound => !(_parent == null || !_parent.active);
+    private bool IsWeepingTulip => UsedFrameX == 2;
+    public float Max => IsWeepingTulip ? 180f : 120f;
+
     private int MeInQueue => (int)Projectile.ai[2];
     private bool IsFirst => MeInQueue < 1;
 
-    private Vector2 Offset => Vector2.UnitY * (146 * 0.6f - Projectile.Size.Y);
-
-    private bool ParentFound => !(_parent == null || !_parent.active);
-    private bool IsWeepingTulip => UsedFrameX == 2;
+    private Vector2 Offset => Vector2.UnitY * (146 * 0.55f - Projectile.Size.Y);
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -40,7 +41,8 @@ sealed class TulipPetal : NatureProjectile {
         Projectile.penetrate = -1;
         Projectile.friendly = true;
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 40;
+        Projectile.localNPCHitCooldown = 120;
+        Projectile.stopsDealingDamageAfterPenetrateHits = true;
         Projectile.hide = true;
         Projectile.netImportant = true;
         Projectile.alpha = 255;
@@ -156,7 +158,7 @@ sealed class TulipPetal : NatureProjectile {
         Vector2 position = Projectile.position + Vector2.UnitY * -3f;
 
         float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
-        Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * new Vector2(Utils.GetLerpValue(TulipFlower.MAX, TulipFlower.MAX - 15f, _parent.localAI[0], clamped: true)) * Projectile.scale * 0.75f;
+        Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true)) * Projectile.scale * 0.65f;
 
         SpriteFrame frame = new(3, 1);
         frame = frame.With(UsedFrameX, 0);
@@ -205,7 +207,7 @@ sealed class TulipPetal : NatureProjectile {
             }
 
             float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
-            Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * Projectile.scale * new Vector2(Utils.GetLerpValue(TulipFlower.MAX, TulipFlower.MAX - 15f, _parent.localAI[0], clamped: true), 1f);
+            Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * Projectile.scale * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true), 1f);
 
             ulong seedForRandomness = (ulong)i;
             Main.EntitySpriteDraw(textureToDraw,
@@ -221,10 +223,9 @@ sealed class TulipPetal : NatureProjectile {
 }
 
 sealed class TulipFlower : NatureProjectile {
-    public const float MAX = 180f;
-
     private byte UsedFrameX => (byte)Projectile.ai[0];
     private bool IsWeepingTulip => UsedFrameX == 2;
+    public float Max => IsWeepingTulip ? 180f : 120f;
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -233,13 +234,14 @@ sealed class TulipFlower : NatureProjectile {
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
         Projectile.tileCollide = false;
-        Projectile.timeLeft = (int)MAX;
         Projectile.netImportant = true;
     }
 
     public override bool? CanDamage() => false;
 
     protected override void SafeOnSpawn(IEntitySource source) {
+        Projectile.timeLeft = (int)Max;
+
         if (Projectile.owner == Main.myPlayer) {
             for (int i = 0; i < 6; i++) {
                 Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
@@ -257,13 +259,13 @@ sealed class TulipFlower : NatureProjectile {
 
     public override void AI() {
         Projectile.localAI[0] += 1f;
-        if (Projectile.localAI[0] >= MAX) {
+        if (Projectile.localAI[0] >= Max) {
             Projectile.Kill();
 
             return;
         }
 
-        Projectile.scale = Utils.GetLerpValue(0f, 10f, Projectile.localAI[0], clamped: true) * Utils.GetLerpValue(MAX, MAX - 15f, Projectile.localAI[0], clamped: true);
+        Projectile.scale = Utils.GetLerpValue(0f, 10f, Projectile.localAI[0], clamped: true) * Utils.GetLerpValue(Max, Max - 15f, Projectile.localAI[0], clamped: true);
 
         Player player = Main.player[Projectile.owner];
         float inertia = 15f * Projectile.scale, speed = (IsWeepingTulip ? 4f : 3.35f) * Projectile.scale;
@@ -315,5 +317,6 @@ sealed class Bone : NatureProjectile {
         Projectile.CloneDefaults(ProjectileID.Bone);
         Projectile.friendly = true;
         Projectile.hostile = false;
+        Projectile.scale *= 0.9f;
     }
 }

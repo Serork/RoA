@@ -3,6 +3,7 @@
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -15,7 +16,6 @@ sealed class OvergrownAltar : ModTile {
 		Main.tileLighted[Type] = true;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
-		Main.tileLavaDeath[Type] = false;
 		Main.tileLighted[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
@@ -24,9 +24,12 @@ sealed class OvergrownAltar : ModTile {
 		//TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<OvergrownAltarTE>().Hook_AfterPlacement, -1, 0, false);
 		TileObjectData.addTile(Type);
 
-		//LocalizedText modTranslation = CreateMapEntryName(null);
-		//// modTranslation.SetDefault("Overgrown Altar");
-		AddMapEntry(new Color(197, 254, 143));
+        TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
+        TileID.Sets.PreventsSandfall[Type] = true;
+
+        //LocalizedText modTranslation = CreateMapEntryName(null);
+        //// modTranslation.SetDefault("Overgrown Altar");
+        AddMapEntry(new Color(197, 254, 143));
 		DustType = 59;
 	}
 

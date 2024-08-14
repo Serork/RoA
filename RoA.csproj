@@ -43,6 +43,7 @@
 	  <None Remove="Resources\Textures\Tiles\Ambient\MiracleMint.png" />
 	  <None Remove="Resources\Textures\Tiles\Furniture\ElderwoodChest.png" />
 	  <None Remove="Resources\Textures\Tiles\Furniture\ElderwoodChest_Highlight.png" />
+	  <None Remove="Resources\Textures\Tiles\Miscellaneous\Tulips.png" />
 	  <None Remove="Resources\Textures\Tiles\Platforms\TreeBranch.png" />
 	  <None Remove="Resources\Textures\Tiles\Solid\Backwoods\BackwoodsDirt.png" />
 	  <None Remove="Resources\Textures\Tiles\Solid\Backwoods\BackwoodsGrass.png" />

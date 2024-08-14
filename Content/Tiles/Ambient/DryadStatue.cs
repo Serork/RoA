@@ -17,7 +17,6 @@ namespace RoA.Content.Tiles.Ambient;
 sealed class DryadStatue : ModTile {
 	public override void SetStaticDefaults() {
 		Main.tileFrameImportant[Type] = true;
-		Main.tileSolid[Type] = false;
 		Main.tileNoAttach[Type] = true;
 		Main.tileLavaDeath[Type] = false;
 		Main.tileLighted[Type] = true;

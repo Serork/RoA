@@ -13,7 +13,6 @@ namespace RoA.Content.Tiles.Ambient;
 sealed class FallenTree : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
-        Main.tileSolid[Type] = false;
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = true;
         Main.tileLighted[Type] = true;

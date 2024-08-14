@@ -13,7 +13,6 @@ sealed class BackwoodsPlants : ModTile {
 	public override void SetStaticDefaults () {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
-        Main.tileSolid[Type] = false;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
