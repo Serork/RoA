@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class BackwoodsVines : ModTile {
+    private static readonly ushort[] ValidTilesToGrowFrom = [(ushort)ModContent.TileType<BackwoodsGrass>(), (ushort)ModContent.TileType<LivingElderwoodlLeaves>()];
+
     public override void SetStaticDefaults() {
         Main.tileLighted[Type] = true;
         Main.tileCut[Type] = true;
@@ -58,7 +60,12 @@ sealed class BackwoodsVines : ModTile {
             type = tileAbove.TileType;
         }
 
-        if (type == ModContent.TileType<BackwoodsGrass>() || type == ModContent.TileType<LivingElderwoodlLeaves>() || type == Type) {
+        foreach (ushort validType in ValidTilesToGrowFrom) {
+            if (type == validType) {
+                return true;
+            }
+        }
+        if (type == Type) {
             return true;
         }
 
@@ -76,11 +83,24 @@ sealed class BackwoodsVines : ModTile {
                 if (tile.BottomSlope) {
                     break;
                 }
+                else {
+                    bool flag = false;
+                    foreach (ushort validType in ValidTilesToGrowFrom) {
+                        if (tile.TileType != validType) {
+                            j2--;
 
-                else if (!tile.HasTile || tile.TileType != ModContent.TileType<BackwoodsGrass>() || tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
-                    j2--;
+                            flag = true; ;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        continue;
+                    }
+                    if (!tile.HasTile) {
+                        j2--;
 
-                    continue;
+                        continue;
+                    }
                 }
 
                 placed = true;

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Content.Projectiles.Friendly.Druidic;
+using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -77,7 +78,7 @@ abstract class TulipBaseItem<T> : BaseRodItem<T> where T : BaseRodProjectile {
 
 abstract class TulipBase : BaseRodProjectile {
     public sealed class TulipBaseExtraData : ModPlayer {
-        public Vector2 TempMousePosition { get; set; }
+        public Vector2 TempMousePosition { get; set; } = Vector2.Zero;
 
         public Vector2 SpawnPositionRandomlySelected => GetTilePosition(Player, TempMousePosition).ToWorldCoordinates();
         public Vector2 SpawnPositionMid => GetTilePosition(Player, TempMousePosition, false).ToWorldCoordinates();
@@ -108,7 +109,8 @@ abstract class TulipBase : BaseRodProjectile {
 
         if (player.whoAmI == Main.myPlayer) {
             if (step <= 0.5f) {
-                TulipBaseData.TempMousePosition = player.GetViableMousePosition();
+                bool isWeepingTulip = DustFrameXUsed() == 2;
+                TulipBaseData.TempMousePosition = isWeepingTulip ? player.GetViableMousePosition(480f, 300f) : player.GetViableMousePosition(240f, 150f);
             }
             Projectile.netUpdate = true;
         }

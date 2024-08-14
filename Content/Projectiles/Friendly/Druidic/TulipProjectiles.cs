@@ -270,7 +270,7 @@ sealed class TulipFlower : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         float inertia = 15f * Projectile.scale, speed = (IsWeepingTulip ? 4f : 3.35f) * Projectile.scale;
         if (Projectile.owner == Main.myPlayer) {
-            Vector2 pointPosition = player.GetViableMousePosition();
+            Vector2 pointPosition = IsWeepingTulip ? player.GetViableMousePosition(640f, 420f) : player.GetViableMousePosition(480f, 300f);
             Projectile.ai[1] = pointPosition.X;
             Projectile.ai[2] = pointPosition.Y;
 
