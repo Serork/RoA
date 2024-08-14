@@ -263,7 +263,7 @@ sealed class TulipFlower : NatureProjectile {
             return;
         }
 
-        Projectile.scale = Ease.SineIn(Utils.GetLerpValue(0f, 10f, Projectile.localAI[0], clamped: true)) * Ease.SineOut(Utils.GetLerpValue(MAX, MAX - 15f, Projectile.localAI[0], clamped: true));
+        Projectile.scale = Utils.GetLerpValue(0f, 10f, Projectile.localAI[0], clamped: true) * Utils.GetLerpValue(MAX, MAX - 15f, Projectile.localAI[0], clamped: true);
 
         Player player = Main.player[Projectile.owner];
         float inertia = 15f * Projectile.scale, speed = (IsWeepingTulip ? 4f : 3.35f) * Projectile.scale;
