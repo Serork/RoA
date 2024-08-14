@@ -82,7 +82,7 @@ abstract class Wave : NatureProjectile {
 				return;
 			}
 		}
-		if (Projectile.Opacity > 0.2f) {
+		if (Projectile.Opacity > 0.15f) {
 			(int, int, int) dustTypes = UsedDustTypes();
 			if (Main.rand.Next(5) == 0) {
 				int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 0.8f, Projectile.width, Projectile.height, dustTypes.Item1, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
