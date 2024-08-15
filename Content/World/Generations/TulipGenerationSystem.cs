@@ -8,12 +8,11 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria;
 using System.Linq;
-using Terraria.WorldBuilding;
 
 namespace RoA.Content.World.Generations;
 
 sealed class TulipGenerationSystem : ModSystem {
-    public readonly struct TulipTileData(ModTile instance, int[] anchorValidTiles, byte index, byte styleX, bool onSurface, bool inDungeon, byte amount, int[] anchorValidWalls) {
+    public readonly struct TulipTileData(ModTile instance, int[] anchorValidTiles, byte index, byte styleX, bool onSurface, bool inDungeon, byte amount, ushort chance, int[] anchorValidWalls) {
         public readonly ModTile Instance = instance;
         public readonly int[] AnchorValidTiles = anchorValidTiles;
         public readonly int[] AnchorValidWalls = anchorValidWalls;
@@ -22,25 +21,15 @@ sealed class TulipGenerationSystem : ModSystem {
         public readonly bool OnSurface = onSurface;
         public readonly bool InDungeon = inDungeon;
         public readonly byte Amount = amount;
+        public readonly ushort Chance = chance;
     }
 
     private static byte _nextId;
 
-    private static Dictionary<byte, TulipTileData> _tulipGenerationInfo;
-    private static Dictionary<byte, bool> _generatedTulips;
-    private static Dictionary<byte, byte> _tulipsAmountToGenerate;
+    private static readonly Dictionary<byte, TulipTileData> _tulipGenerationInfo = [];
+    private static readonly Dictionary<byte, bool> _generatedTulips = [];
+    private static readonly Dictionary<byte, byte> _tulipsAmountToGenerate = [];
 
-    public override void Load() {
-        _tulipGenerationInfo = [];
-        _generatedTulips = [];
-        _tulipsAmountToGenerate = [];
-    }
-
-    public override void Unload() {
-        _tulipGenerationInfo = null;
-        _generatedTulips = null;
-        _tulipsAmountToGenerate = null;
-    }
 
     public static TulipTileData GetInfo<T>(T instance) where T : ModTile => _tulipGenerationInfo.Values.Single(tulipData => tulipData.Instance == instance);
     public static bool Generated<T>(T instance) where T : ModTile => _generatedTulips[GetInfo(instance).Index];
@@ -51,11 +40,11 @@ sealed class TulipGenerationSystem : ModSystem {
         _tulipsAmountToGenerate[index]++;
     }
 
-    public static void Register<T>(T instance, int[] anchorValidTiles, byte styleX, bool onSurface, bool inDungeon, byte amount, int[] anchorValidWalls) where T : ModTile {
+    public static void Register<T>(T instance, int[] anchorValidTiles, byte styleX, bool onSurface, bool inDungeon, byte amount, ushort chance, int[] anchorValidWalls) where T : ModTile {
         if (_tulipGenerationInfo.ContainsKey(_nextId)) {
             return;
         }
-        _tulipGenerationInfo.Add(_nextId, new TulipTileData(instance, anchorValidTiles, _nextId, styleX, onSurface && !inDungeon, inDungeon, amount, anchorValidWalls));
+        _tulipGenerationInfo.Add(_nextId, new TulipTileData(instance, anchorValidTiles, _nextId, styleX, onSurface && !inDungeon, inDungeon, amount, chance, anchorValidWalls));
         _generatedTulips.Add(_nextId, false);
         _tulipsAmountToGenerate.Add(_nextId, amount);
         _nextId++;
@@ -114,7 +103,7 @@ sealed class TulipGenerationSystem : ModSystem {
             }
 
             if (_tulipsAmountToGenerate[keyValuePair.Key] > 0) {
-                bool onSurface = keyValuePair.Value.OnSurface, inDungeon = keyValuePair.Value.InDungeon;
+                bool onSurface = keyValuePair.Value.OnSurface;
                 int i = genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
                 int j = !onSurface ? genRand.Next((int)Main.worldSurface - 1, (int)Main.maxTilesY - 100 + 1) : genRand.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface - 1);
 
@@ -135,7 +124,7 @@ sealed class TulipGenerationSystem : ModSystem {
                     num4 = Main.maxTilesY - 10;
 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                if (!tile.HasTile || tile.AnyLiquid()) {
+                if (!tile.HasTile) {
                     continue;
                 }
 
@@ -150,7 +139,7 @@ sealed class TulipGenerationSystem : ModSystem {
     }
 
     private static bool TryToPlace(int i, int j, TulipTileData tulipTileData) {
-        if (!Main.rand.NextBool(50)) {
+        if (!Main.rand.NextBool(tulipTileData.Chance)) {
             return false;
         }
 
@@ -168,9 +157,6 @@ sealed class TulipGenerationSystem : ModSystem {
 
                 return true;
             }
-            else {
-                return false;
-            }
         }
 
         return false;
@@ -180,7 +166,11 @@ sealed class TulipGenerationSystem : ModSystem {
         if (!WorldGen.InWorld(x, y, 2))
             return false;
 
-        Tile tile = Main.tile[x, y + 1];
+        Tile tile = Main.tile[x, y];
+        if (tile.AnyLiquid())
+            return false;
+
+        tile = Main.tile[x, y + 1];
         if (!tile.HasTile)
             return false;
 

@@ -8,6 +8,8 @@ namespace RoA.Content.Tiles.Miscellaneous;
 sealed class ExoticTulip : TulipBase {
     protected override int[] AnchorValidTiles => [TileID.Sand];
 
+    protected override ushort Chance => 50;
+
     protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Staffs.ExoticTulip>();
 
     protected override Color MapColor => new(216, 78, 142);

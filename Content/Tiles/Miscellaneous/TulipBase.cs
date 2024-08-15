@@ -24,6 +24,8 @@ abstract class TulipBase : ModTile {
 
     protected virtual byte Amount { get; } = 1;
 
+    protected virtual ushort Chance { get; } = 1;
+
     protected abstract Color MapColor { get; }
 
     protected virtual ushort DropItem { get; }
@@ -50,7 +52,7 @@ abstract class TulipBase : ModTile {
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(MapColor, name);
 
-        TulipGenerationSystem.Register(this, AnchorValidTiles, StyleX, OnSurface, InDungeon, Amount, AnchorValidWalls);
+        TulipGenerationSystem.Register(this, AnchorValidTiles, StyleX, OnSurface, InDungeon, Amount, Chance, AnchorValidWalls);
 
         SafeSetStaticDefaults();
     }

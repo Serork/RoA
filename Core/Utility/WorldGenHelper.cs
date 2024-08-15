@@ -17,7 +17,7 @@ using System.Buffers.Text;
 namespace RoA.Core.Utility;
 
 static class WorldGenHelper {
-    public static int SafeFloatingIslandY => Main.maxTilesY / 7 - 3;
+    public static int SafeFloatingIslandY => Main.maxTilesY / 7 + 2;
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;
