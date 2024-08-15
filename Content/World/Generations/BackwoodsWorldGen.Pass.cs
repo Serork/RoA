@@ -400,10 +400,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void GrowBigTree(int i) {
-        int j = WorldGenHelper.GetFirstTileY(i);
+        int j = WorldGenHelper.GetFirstTileY(i, true);
         j += 2;
         if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
-            j = WorldGenHelper.GetFirstTileY(i);
+            j = WorldGenHelper.GetFirstTileY(i, true);
             j += 2;
         }
         int height = _random.Next(40, 50);
@@ -543,7 +543,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         // fallen trees
         bool flag = false;
         for (int i2 = i - 15; i2 < i; i2++) {
-            int j2 = WorldGenHelper.GetFirstTileY(i2, _grassTileType);
+            int j2 = WorldGenHelper.GetFirstTileY(i2, type: _grassTileType);
             WorldGenHelper.Place3x2(i2, j2 - 1, _fallenTreeTileType, styleX: _random.Next(2), onPlaced: () => {
                 flag = true;
             });
@@ -553,7 +553,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
         flag = false;
         for (int i2 = i + 15; i2 > i; i2--) {
-            int j2 = WorldGenHelper.GetFirstTileY(i2, _grassTileType);
+            int j2 = WorldGenHelper.GetFirstTileY(i2, type: _grassTileType);
             WorldGenHelper.Place3x2(i2, j2 - 1, _fallenTreeTileType, styleX: _random.Next(2), onPlaced: () => {
                 flag = true;
             });
@@ -1497,7 +1497,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         Point cliffTileCoords = Point.Zero;
-        cliffTileCoords.X = _toLeft ? topLeftTileX - 10 : (topRightTileX + 10);
+        cliffTileCoords.X = _toLeft ? topLeftTileX - 5 : (topRightTileX + 5);
         cliffTileCoords.Y = WorldGenHelper.GetFirstTileY2(cliffTileCoords.X);
         // cliff
         int lastSurfaceY = _biomeSurface.Last().Y;

@@ -81,11 +81,11 @@ static class WorldGenHelper {
         return tile.AnyWall();
     }
 
-    public static int GetFirstTileY(int i) {
+    public static int GetFirstTileY(int i, bool ignoreWalls = false) {
         int result = SafeFloatingIslandY;
         while (!GetTileSafely(i, result).HasTile) {
             result++;
-            if (GetTileSafely(i, result).WallType != WallID.None) {
+            if (!ignoreWalls && GetTileSafely(i, result).WallType != WallID.None) {
                 break;
             }
         }
