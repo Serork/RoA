@@ -24,6 +24,7 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Content.World.Generations;
 
+// one hella mess
 sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight) {
     public static readonly ushort[] SandInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone };
     public static readonly ushort[] SandInvalidWallTypesToKill = { 187, 220, 222, 221, 275, 308, 310, 309, 216, 217, 219, 218, 304, 305, 307, 306, 216, 187, 304, 275 };
@@ -399,10 +400,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void GrowBigTree(int i) {
-        int j = WorldGenHelper.GetFirstTileY2(i);
+        int j = WorldGenHelper.GetFirstTileY(i);
         j += 2;
         if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
-            j = WorldGenHelper.GetFirstTileY2(i);
+            j = WorldGenHelper.GetFirstTileY(i);
             j += 2;
         }
         int height = _random.Next(40, 50);
@@ -1496,7 +1497,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         Point cliffTileCoords = Point.Zero;
-        cliffTileCoords.X = _toLeft ? topLeftTileX - 10 : (topRightTileX + 10);
+        cliffTileCoords.X = _toLeft ? topLeftTileX - 5 : (topRightTileX + 5);
         cliffTileCoords.Y = WorldGenHelper.GetFirstTileY2(cliffTileCoords.X);
         // cliff
         int lastSurfaceY = _biomeSurface.Last().Y;
@@ -1514,7 +1515,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
             int testJ = startY;
             while (true) {
-                if (testJ > startY + _biomeHeight / 3) {
+                if (testJ > startY + _biomeHeight / 2) {
                     break;
                 }
                 bool flag3 = !flag2 && Main.tile[cliffX, testJ].HasTile;
@@ -1619,7 +1620,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int worldSize = Main.maxTilesX / 4200;
         int k = worldSize == 1 ? (int)(_biomeHeight * 0.25) : worldSize == 2 ? (int)(_biomeHeight * 0.2) : (int)(_biomeHeight * 0.15);
         int y2 = BackwoodsVars.FirstTileYAtCenter;
-        int minY = (int)Main.worldSurface - (20 * WorldGenHelper.WorldSize);
+        int minY = (int)Main.worldSurface - (10 * WorldGenHelper.WorldSize);
         int maxY = Bottom + EdgeY;
         int stoneCount = (int)(tileCount * 0.0003f * 0.75f);
         int x;

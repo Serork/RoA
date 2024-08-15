@@ -1,59 +1,45 @@
 using Terraria.ID;
-using Terraria.Localization;
-using Terraria;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 
 using Microsoft.Xna.Framework;
 
-using RoA.Core.Utility;
-
 namespace RoA.Content.Tiles.Miscellaneous;
 
-sealed class SweepTulip : TulipTileBase {
-    protected override int[] AnchorValidTiles => [TileID.JungleGrass];
-
-    protected override Color MapColor => new(216, 78, 142);
-}
-
-sealed class ExoticTulip : TulipTileBase {
+sealed class ExoticTulip : TulipBase {
     protected override int[] AnchorValidTiles => [TileID.Sand];
+
+    protected override byte Amount => 2;
+
+    protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Staffs.ExoticTulip>();
 
     protected override Color MapColor => new(255, 165, 0);
 }
 
-sealed class WeepingTulip : TulipTileBase {
-    protected override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
+sealed class SweetTulip : TulipBase {
+    protected override int[] AnchorValidTiles => [TileID.JungleGrass];
 
-    protected override Color MapColor => new(0, 0, 255);
+    protected override byte StyleX => 1;
+
+    protected override byte Amount => 2;
+
+    protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Staffs.SweetTulip>();
+
+    protected override Color MapColor => new(216, 78, 142);
 }
 
-abstract class TulipTileBase : ModTile {
-    protected virtual int[] AnchorValidTiles { get; }
+sealed class WeepingTulip : TulipBase {
+    protected override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
+    protected override int[] AnchorValidWalls => [WallID.PinkDungeonTileUnsafe, WallID.GreenDungeonTileUnsafe, WallID.BlueDungeonTileUnsafe, WallID.PinkDungeonUnsafe, WallID.GreenDungeonUnsafe, WallID.GreenDungeonTile];
 
-    protected abstract Color MapColor { get; }
+    protected override byte StyleX => 2;
 
-    public sealed override string Texture => GetType().Namespace.Replace('.', '/') + "/Tulips";
+    protected override byte Amount => 3;
 
-    public sealed override void SetStaticDefaults() {
-        Main.tileFrameImportant[Type] = true;
-        Main.tileCut[Type] = true;
+    protected override bool OnSurface => false;
 
-        foreach (int mergeType in AnchorValidTiles) {
-            TileHelper.MergeWith(Type, (ushort)mergeType);
-        }
+    protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Staffs.WeepingTulip>();
 
-        TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
-        TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
-        TileObjectData.newTile.CoordinatePadding = 2;
-        TileObjectData.newTile.CoordinateHeights = [16, 18];
-        TileObjectData.newTile.DrawYOffset = 2;
-        TileObjectData.addTile(Type);
+    protected override Color MapColor => new(0, 0, 255);
 
-        HitSound = SoundID.Grass;
-        DustType = 2;
-
-        LocalizedText name = CreateMapEntryName();
-        AddMapEntry(MapColor, name);
-    }
+    protected override void SafeSetStaticDefaults() => DustType = DustID.Bone;
 }
