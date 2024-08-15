@@ -1497,7 +1497,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         Point cliffTileCoords = Point.Zero;
-        cliffTileCoords.X = _toLeft ? topLeftTileX - 5 : (topRightTileX + 5);
+        cliffTileCoords.X = _toLeft ? topLeftTileX - 10 : (topRightTileX + 10);
         cliffTileCoords.Y = WorldGenHelper.GetFirstTileY2(cliffTileCoords.X);
         // cliff
         int lastSurfaceY = _biomeSurface.Last().Y;
@@ -1515,7 +1515,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
             int testJ = startY;
             while (true) {
-                if (testJ > startY + _biomeHeight / 2) {
+                if (testJ > startY + _biomeHeight / 2 - _biomeHeight / 5) {
                     break;
                 }
                 bool flag3 = !flag2 && Main.tile[cliffX, testJ].HasTile;

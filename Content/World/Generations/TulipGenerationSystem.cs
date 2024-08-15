@@ -105,8 +105,9 @@ sealed class TulipGenerationSystem : ModSystem {
             return;
         }
 
+        double num21 = 1.5E-05f * (float)worldUpdateRate;
         UnifiedRandom genRand = WorldGen.genRand;
-        for (int k = 0; k < _nextId; k++) {
+        for (int k = 0; k < (double)(Main.maxTilesX * Main.maxTilesY) * num21; k++) {
             foreach (KeyValuePair<byte, TulipTileData> keyValuePair in _tulipGenerationInfo) {
                 if (_generatedTulips[keyValuePair.Key]) {
                     continue;
@@ -115,7 +116,7 @@ sealed class TulipGenerationSystem : ModSystem {
                 if (_tulipsAmountToGenerate[keyValuePair.Key] > 0) {
                     bool onSurface = keyValuePair.Value.OnSurface;
                     int i = genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
-                    int j = onSurface ? genRand.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface - 1) : genRand.Next((int)Main.worldSurface - 1, (int)Main.maxTilesY / 2 + Main.maxTilesY / 3 + 1);
+                    int j = onSurface ? genRand.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface - 1) : genRand.Next((int)Main.worldSurface - 1, (int)Main.maxTilesY - 100 + 1);
 
                     int num = i - 1;
                     int num2 = i + 2;
@@ -175,8 +176,24 @@ sealed class TulipGenerationSystem : ModSystem {
             return false;
 
         Tile tile = Main.tile[x, y - 1];
-        if (tile.HasTile)
-            return false;
+        if (tile.HasTile) {
+            if (TileID.Sets.SwaysInWindBasic[tile.TileType]) {
+                WorldGen.KillTile(x, y - 1);
+            }
+            else {
+                return false;
+            }
+        }
+
+        tile = Main.tile[x, y];
+        if (tile.HasTile) {
+            if (TileID.Sets.SwaysInWindBasic[tile.TileType]) {
+                WorldGen.KillTile(x, y);
+            }
+            else {
+                return false;
+            }
+        }
 
         tile = Main.tile[x, y + 1];
         if (!tile.HasTile)
