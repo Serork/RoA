@@ -135,7 +135,7 @@ sealed class TulipGenerationSystem : ModSystem {
                     num4 = Main.maxTilesY - 10;
 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                if (!tile.HasTile) {
+                if (!tile.HasTile || tile.AnyLiquid()) {
                     continue;
                 }
 
@@ -150,7 +150,7 @@ sealed class TulipGenerationSystem : ModSystem {
     }
 
     private static bool TryToPlace(int i, int j, TulipTileData tulipTileData) {
-        if (!Main.rand.NextBool(30)) {
+        if (!Main.rand.NextBool(50)) {
             return false;
         }
 

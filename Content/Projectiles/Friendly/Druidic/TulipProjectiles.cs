@@ -150,7 +150,7 @@ sealed class TulipPetal : NatureProjectile {
         }
 
         if (IsFirst) {
-            DrawStem(ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerStem").Value, _parent.Center, _spawnPosition - Vector2.UnitX * 2f);
+            DrawStem(ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerStem").Value, _parent.Center - Vector2.UnitY * 10f, _spawnPosition);
         }
 
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerPetal").Value;
