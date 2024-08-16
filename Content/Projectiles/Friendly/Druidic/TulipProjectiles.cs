@@ -1,9 +1,8 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
-using RoA.Content.Items.Weapons.Druidic.Staffs;
+using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Core;
 using RoA.Core.Utility;
 

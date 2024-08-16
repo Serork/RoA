@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
@@ -22,7 +23,10 @@ sealed class PineCone : NatureProjectile {
 
         Projectile.tileCollide = true;
 
-        Projectile.penetrate = 2;
+        Projectile.penetrate = 1;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 40;
 
         Projectile.aiStyle = -1;
         Projectile.timeLeft = 240;
@@ -33,12 +37,14 @@ sealed class PineCone : NatureProjectile {
         if (player.whoAmI != Main.myPlayer) {
             return;
         }
-        Vector2 center = player.GetViableMousePosition(480f * 0.6f, 300f * 0.6f) + new Vector2(Projectile.width * 0.2f, Projectile.Size.Y / 2f + Projectile.height * 0.1f) - new Vector2(2f, 2f);
+        Vector2 center = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 200f) + new Vector2(Projectile.width * 0.2f, Projectile.Size.Y / 2f + Projectile.height * 0.1f) - new Vector2(2f, 2f);
         Projectile.Center = center;
         Projectile.netUpdate = true;
     }
 
     public override bool ShouldUpdatePosition() => false;
+
+    public override bool? CanDamage() => Projectile.ai[1] != 0f;
 
     public override void AI() {
         Player player = Projectile.GetOwnerAsPlayer();
@@ -60,8 +66,9 @@ sealed class PineCone : NatureProjectile {
                 Projectile.rotation += Projectile.ai[0] * TimeSystem.LogicDeltaTime;
                 float maxAngle = 0.6f;
                 Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -maxAngle, maxAngle);
+                bool flag = Projectile.Center.Distance(player.GetViableMousePosition()) > 15f && player.whoAmI == Main.myPlayer;
                 if ((Math.Abs(Projectile.rotation) < 0.1f && Math.Abs(Projectile.ai[0]) < 0.5f) || Projectile.ai[1] != 0f) {
-                    if (Projectile.Center.Distance(player.GetViableMousePosition()) > 15f && player.whoAmI == Main.myPlayer) {
+                    if (flag || Projectile.ai[1] != 0f) {
                         Projectile.rotation *= 0.925f;
 
                         Projectile.ai[1] = 1f;
@@ -74,6 +81,8 @@ sealed class PineCone : NatureProjectile {
                     }
                 }
             }
+
+            return;
         }
         else {
             if (Projectile.ai[0] == 0f) {

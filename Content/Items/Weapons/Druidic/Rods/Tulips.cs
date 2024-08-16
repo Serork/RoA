@@ -15,11 +15,12 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Druidic.Staffs;
+namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
 sealed class ExoticTulip : TulipBaseItem<ExoticTulip.ExoticTulipBase> {
     protected override void SafeSetDefaults() {
         Item.SetWeaponValues(6, 1.5f);
+        Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -36,6 +37,7 @@ sealed class ExoticTulip : TulipBaseItem<ExoticTulip.ExoticTulipBase> {
 sealed class SweetTulip : TulipBaseItem<SweetTulip.SweepTulipBase> {
     protected override void SafeSetDefaults() {
         Item.SetWeaponValues(6, 1.5f);
+        Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -52,6 +54,7 @@ sealed class SweetTulip : TulipBaseItem<SweetTulip.SweepTulipBase> {
 sealed class WeepingTulip : TulipBaseItem<WeepingTulip.WeepingTulipBase> {
     protected override void SafeSetDefaults() {
         Item.SetWeaponValues(6, 1.5f);
+        Item.SetDefaultToUsable(-1, 45, useSound: SoundID.Item65);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -70,7 +73,6 @@ abstract class TulipBaseItem<T> : BaseRodItem<T> where T : BaseRodProjectile {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(34);
-        Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65);
 
         NatureWeaponHandler.SetFillingRate(Item, 0.4f);
     }

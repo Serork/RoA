@@ -34,6 +34,12 @@ static class Helper {
         }
     }
 
+    public static Vector2 GetLimitedPosition(Vector2 startPosition, Vector2 endPosition, float maxLength) {
+        Vector2 dif = endPosition - startPosition;
+        Vector2 result = startPosition + dif.SafeNormalize(Vector2.UnitY) * Math.Min(dif.Length(), maxLength);
+        return result;
+    }
+
     // terraria overhaul
     public static float Damp(float source, float destination, float smoothing, float dt) => MathHelper.Lerp(source, destination, 1f - MathF.Pow(smoothing, dt));
 

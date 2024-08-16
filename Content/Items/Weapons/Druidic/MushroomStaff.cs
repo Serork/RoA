@@ -8,7 +8,7 @@ using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 
-namespace RoA.Content.Items.Weapons.Druidic.Staffs;
+namespace RoA.Content.Items.Weapons.Druidic;
 
 sealed class MushroomStaff : NatureItem {
     protected override void SafeSetDefaults() {

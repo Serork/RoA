@@ -22,13 +22,13 @@ sealed class PineCone : NatureItem {
 		Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.White);
 
 		NatureWeaponHandler.SetPotentialDamage(Item, 10);
-        NatureWeaponHandler.SetFillingRate(Item, 1f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.8f);
     }
 
 	public override bool CanUseItem(Player player) {
 		if (player.IsLocal()) {
 			if (Collision.CanHitLine(player.Center, 2, 2, player.GetViableMousePosition(), 2, 2)) {
-				return player.ownedProjectileCounts[Item.shoot] < 3;
+				return player.ownedProjectileCounts[Item.shoot] <= 2;
 			}
 		}
 

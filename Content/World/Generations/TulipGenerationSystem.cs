@@ -139,9 +139,9 @@ sealed class TulipGenerationSystem : ModSystem {
     }
 
     private static bool TryToPlace(int i, int j, TulipTileData tulipTileData) {
-        if (!Main.rand.NextBool(30 + tulipTileData.ExtraChance)) {
-            return false;
-        }
+        //if (!Main.rand.NextBool(30 + tulipTileData.ExtraChance)) {
+        //    return false;
+        //}
 
         UnifiedRandom genRand = WorldGen.genRand;
         int num2 = genRand.Next(Math.Max(WorldGen.beachDistance, i - 10), Math.Min(Main.maxTilesX - WorldGen.beachDistance, i + 10));

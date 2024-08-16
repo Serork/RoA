@@ -11,7 +11,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Druidic.Staffs;
+namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
 sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<ShepherdLeaves>();

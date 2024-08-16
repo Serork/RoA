@@ -17,7 +17,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Druidic.Staffs;
+namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
 abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
     protected virtual ushort ShootType() => (ushort)ProjectileID.WoodenArrowFriendly;
