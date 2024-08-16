@@ -52,7 +52,7 @@ static class WorldGenHelper {
 
     public static bool ActiveWall(this Tile tile) => !tile.ActiveWall(WallID.None);
 
-    public static void ReplaceTile(int i, int j, int type, bool noItem = true, bool mute = false, int style = 0) {
+    public static void ReplaceTile(int i, int j, int type, bool noItem = true, bool mute = true, int style = 0) {
         if (ActiveTile(i, j, type)) {
             return;
         }
@@ -61,7 +61,7 @@ static class WorldGenHelper {
         //WorldGen.SquareTileFrame(i, j);
     }
 
-    public static void ReplaceTile(Point position, int type, bool noItem = true, bool mute = false, int style = 0) => ReplaceTile(position.X, position.Y, type, noItem, mute, style);
+    public static void ReplaceTile(Point position, int type, bool noItem = true, bool mute = true, int style = 0) => ReplaceTile(position.X, position.Y, type, noItem, mute, style);
 
     public static void ReplaceWall(int i, int j, int type, bool mute = true) {
         if (ActiveWall(i, j, type)) {
