@@ -8,7 +8,7 @@ namespace RoA.Content.Tiles.Miscellaneous;
 sealed class ExoticTulip : TulipBase {
     protected override int[] AnchorValidTiles => [TileID.Sand];
 
-    protected override ushort Chance => 50;
+    protected override ushort ExtraChance => 200;
 
     protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Staffs.ExoticTulip>();
 
@@ -17,6 +17,8 @@ sealed class ExoticTulip : TulipBase {
 
 sealed class SweetTulip : TulipBase {
     protected override int[] AnchorValidTiles => [TileID.JungleGrass];
+
+    protected override ushort ExtraChance => 30;
 
     protected override byte StyleX => 1;
 
@@ -27,6 +29,8 @@ sealed class SweetTulip : TulipBase {
 
 sealed class WeepingTulip : TulipBase {
     protected override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
+
+    protected override ushort ExtraChance => 30;
 
     protected override byte StyleX => 2;
 

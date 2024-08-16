@@ -72,3 +72,8 @@ WeepingTulip: {
 	DisplayName: Weeping Tulip
 	Tooltip: ""
 }
+
+PineCone: {
+	DisplayName: Pine Cone
+	Tooltip: ""
+}

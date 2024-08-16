@@ -1,0 +1,142 @@
+using Microsoft.Xna.Framework;
+
+using RoA.Common;
+using RoA.Core;
+using RoA.Core.Utility;
+
+using System;
+
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.ID;
+
+namespace RoA.Content.Projectiles.Friendly.Druidic;
+
+sealed class PineCone : NatureProjectile {
+    protected override void SafeSetDefaults() {
+        Projectile.Size = 20 * Vector2.One;
+
+        Projectile.ignoreWater = true;
+        Projectile.friendly = true;
+
+        Projectile.tileCollide = true;
+
+        Projectile.penetrate = 2;
+
+        Projectile.aiStyle = -1;
+        Projectile.timeLeft = 240;
+    }
+
+    protected override void SafeOnSpawn(IEntitySource source) {
+        Player player = Projectile.GetOwnerAsPlayer();
+        if (player.whoAmI != Main.myPlayer) {
+            return;
+        }
+        Vector2 center = player.GetViableMousePosition(480f * 0.6f, 300f * 0.6f) + new Vector2(Projectile.width * 0.2f, Projectile.Size.Y / 2f + Projectile.height * 0.1f) - new Vector2(2f, 2f);
+        Projectile.Center = center;
+        Projectile.netUpdate = true;
+    }
+
+    public override bool ShouldUpdatePosition() => false;
+
+    public override void AI() {
+        Player player = Projectile.GetOwnerAsPlayer();
+        if (Projectile.localAI[0] > 0f) {
+            if (Projectile.ai[0] == 0f && Projectile.ai[1] == 0f) {
+                Projectile.ai[0] = -(10f + Main.rand.NextFloat() * 5f) * Projectile.GetOwnerAsPlayer().direction;
+            }
+            else {
+                float angle = Math.Sign(Projectile.rotation) == Math.Sign(Projectile.ai[0]) ? 4f : 3f;
+                if (Math.Abs(Projectile.rotation) < 0.5f) {
+                    angle *= 0.5f;
+                }
+                if (Math.Abs(Projectile.rotation) < 0.25f) {
+                    angle *= 0.25f;
+                }
+                float rotation = Projectile.rotation;
+                Projectile.ai[0] += (float)-Math.Sign(Projectile.rotation) * angle;
+                Projectile.ai[0] *= 0.95f;
+                Projectile.rotation += Projectile.ai[0] * TimeSystem.LogicDeltaTime;
+                float maxAngle = 0.6f;
+                Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -maxAngle, maxAngle);
+                if ((Math.Abs(Projectile.rotation) < 0.1f && Math.Abs(Projectile.ai[0]) < 0.5f) || Projectile.ai[1] != 0f) {
+                    if (Projectile.Center.Distance(player.GetViableMousePosition()) > 15f && player.whoAmI == Main.myPlayer) {
+                        Projectile.rotation *= 0.925f;
+
+                        Projectile.ai[1] = 1f;
+                        Projectile.velocity.Y += 0.35f;
+                        Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
+
+                        Projectile.position.Y += Projectile.velocity.Y;
+
+                        Projectile.netUpdate = true;
+                    }
+                }
+            }
+        }
+        else {
+            if (Projectile.ai[0] == 0f) {
+                Projectile.ai[0] = -10f * (Main.rand.NextFloat() < 0.5f).ToDirectionInt();
+            }
+        }
+        Projectile.localAI[0] += 1f;
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 4;
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        if (Main.netMode != NetmodeID.Server) {
+            Point point = Projectile.TopLeft.ToTileCoordinates();
+            Point point2 = Projectile.BottomRight.ToTileCoordinates();
+            int num2 = point.X / 2 + point2.X / 2;
+            int num3 = Projectile.width / 2;
+            int num4 = (int)Projectile.ai[0] / 3;
+            for (int i = point.X; i <= point2.X; i++) {
+                for (int j = point.Y; j <= point2.Y; j++) {
+                    if (Vector2.Distance(Projectile.Center, new Vector2(i * 16, j * 16)) > num3)
+                        continue;
+                    Tile tileSafely = Framing.GetTileSafely(i, j);
+                    if (!tileSafely.HasTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType] || Main.tileFrameImportant[tileSafely.TileType]) {
+                        continue;
+                    }
+                    Tile tileSafely2 = Framing.GetTileSafely(i, j - 1);
+                    if (tileSafely2.HasTile && Main.tileSolid[tileSafely2.TileType] && !Main.tileSolidTop[tileSafely2.TileType]) {
+                        continue;
+                    }
+                    int num5 = WorldGen.KillTile_GetTileDustAmount(fail: true, tileSafely, i, j);
+                    for (int k = 0; k < num5; k++) {
+                        Dust obj = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
+                        obj.velocity.Y -= 1f + num4 * 1.5f;
+                        obj.velocity.Y *= Main.rand.NextFloat();
+                        obj.velocity.Y *= 0.75f;
+                        obj.scale += num4 * 0.03f;
+                    }
+                }
+            }
+        }
+
+        SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
+
+        return base.OnTileCollide(oldVelocity);
+    }
+
+    public override void OnKill(int timeLeft) {
+        if (Main.netMode == NetmodeID.Server)
+            return;
+
+        int type = 76;
+        for (int i = 0; i < Main.rand.Next(4, 8); i++) {
+            if (Main.rand.Next(2) == 0)
+                type = 53;
+            Dust dust = Dust.NewDustDirect(Projectile.Center - Projectile.velocity * 0.1f, 8, 8, type, Projectile.velocity.X / 10f * 0.25f, Projectile.velocity.Y / 10f * 0.25f, 0, default, Main.rand.NextFloat(0.8f, 1f) * Main.rand.NextFloat(0.75f, 0.9f) * 0.85f);
+            dust.fadeIn = (float)(1.3 + (double)Main.rand.NextFloat() * 0.2);
+            dust.noGravity = true;
+            Dust dust2 = dust;
+            dust2.position += dust.velocity;
+        }
+    }
+}

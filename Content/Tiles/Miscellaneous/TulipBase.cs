@@ -24,7 +24,7 @@ abstract class TulipBase : ModTile {
 
     protected virtual byte Amount { get; } = 1;
 
-    protected virtual ushort Chance { get; } = 1;
+    protected virtual ushort ExtraChance { get; }
 
     protected abstract Color MapColor { get; }
 
@@ -52,7 +52,7 @@ abstract class TulipBase : ModTile {
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(MapColor, name);
 
-        TulipGenerationSystem.Register(this, AnchorValidTiles, StyleX, OnSurface, InDungeon, Amount, Chance, AnchorValidWalls);
+        TulipGenerationSystem.Register(this, AnchorValidTiles, StyleX, OnSurface, InDungeon, Amount, ExtraChance, AnchorValidWalls);
 
         SafeSetStaticDefaults();
     }
@@ -67,9 +67,11 @@ abstract class TulipBase : ModTile {
     }
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
-        if (i % 2 == 1) {
-            spriteEffects = SpriteEffects.FlipHorizontally;
+        if (i % 2 != 1) {
+            return;
         }
+
+        spriteEffects = SpriteEffects.FlipHorizontally;
     }
 
     public override void MouseOver(int i, int j) {

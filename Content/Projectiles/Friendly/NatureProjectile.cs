@@ -15,15 +15,18 @@ abstract class NatureProjectile : ModProjectile {
     private float _wreathPointsFine;
 
     public bool ShouldApplyWreathPoints { get; protected set; } = true;
+
+    // if the value is a negative number we get more wreath points
     public float WreathPointsFine {
         get => _wreathPointsFine;
         private set {
-            _wreathPointsFine = Math.Clamp(value, 0f, 1f);
+            _wreathPointsFine = Math.Clamp(value, -1f, 1f);
         }
     }
 
     public sealed override void OnSpawn(IEntitySource source) {
-        WreathPointsFine = 1f - Projectile.GetOwnerAsPlayer().GetSelectedItem().GetGlobalItem<NatureWeaponHandler>().FillingRate;
+        float fillingRate = Projectile.GetOwnerAsPlayer().GetSelectedItem().GetGlobalItem<NatureWeaponHandler>().FillingRate;
+        WreathPointsFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
         SafeOnSpawn(source);
     }
 

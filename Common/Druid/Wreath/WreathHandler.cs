@@ -95,7 +95,7 @@ sealed class WreathHandler : ModPlayer {
             }
         }
 
-        IncreaseCurrentResourceValue(natureProjectile.WreathPointsFine);
+        IncreaseResourceValue(natureProjectile.WreathPointsFine);
         MakeDusts();
     }
 
@@ -114,7 +114,7 @@ sealed class WreathHandler : ModPlayer {
         AddLight();
     }
 
-    private void IncreaseCurrentResourceValue(float fine = 0f) {
+    private void IncreaseResourceValue(float fine = 0f) {
         if (_shouldDecrease) {
             return;
         }

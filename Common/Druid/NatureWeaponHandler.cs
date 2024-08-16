@@ -35,7 +35,7 @@ sealed class NatureWeaponHandler : GlobalItem {
 
     public static void SetFillingRate(Item item, float fillingRate) {
         NatureWeaponHandler self = item.GetGlobalItem<NatureWeaponHandler>();
-        self._fillingRate = Math.Clamp(fillingRate, 0f, 1f);
+        self._fillingRate = Math.Clamp(fillingRate, 0f, 2f);
     }
 
     public override bool InstancePerEntity => true;

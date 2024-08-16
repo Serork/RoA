@@ -12,7 +12,7 @@ using System.Linq;
 namespace RoA.Content.World.Generations;
 
 sealed class TulipGenerationSystem : ModSystem {
-    public readonly struct TulipTileData(ModTile instance, int[] anchorValidTiles, byte index, byte styleX, bool onSurface, bool inDungeon, byte amount, ushort chance, int[] anchorValidWalls) {
+    public readonly struct TulipTileData(ModTile instance, int[] anchorValidTiles, byte index, byte styleX, bool onSurface, bool inDungeon, byte amount, ushort extraChance, int[] anchorValidWalls) {
         public readonly ModTile Instance = instance;
         public readonly int[] AnchorValidTiles = anchorValidTiles;
         public readonly int[] AnchorValidWalls = anchorValidWalls;
@@ -21,7 +21,7 @@ sealed class TulipGenerationSystem : ModSystem {
         public readonly bool OnSurface = onSurface;
         public readonly bool InDungeon = inDungeon;
         public readonly byte Amount = amount;
-        public readonly ushort Chance = chance;
+        public readonly ushort ExtraChance = extraChance;
     }
 
     private static byte _nextId;
@@ -40,11 +40,11 @@ sealed class TulipGenerationSystem : ModSystem {
         _tulipsAmountToGenerate[index]++;
     }
 
-    public static void Register<T>(T instance, int[] anchorValidTiles, byte styleX, bool onSurface, bool inDungeon, byte amount, ushort chance, int[] anchorValidWalls) where T : ModTile {
+    public static void Register<T>(T instance, int[] anchorValidTiles, byte styleX, bool onSurface, bool inDungeon, byte amount, ushort extraChance, int[] anchorValidWalls) where T : ModTile {
         if (_tulipGenerationInfo.ContainsKey(_nextId)) {
             return;
         }
-        _tulipGenerationInfo.Add(_nextId, new TulipTileData(instance, anchorValidTiles, _nextId, styleX, onSurface && !inDungeon, inDungeon, amount, chance, anchorValidWalls));
+        _tulipGenerationInfo.Add(_nextId, new TulipTileData(instance, anchorValidTiles, _nextId, styleX, onSurface && !inDungeon, inDungeon, amount, extraChance, anchorValidWalls));
         _generatedTulips.Add(_nextId, false);
         _tulipsAmountToGenerate.Add(_nextId, amount);
         _nextId++;
@@ -139,7 +139,7 @@ sealed class TulipGenerationSystem : ModSystem {
     }
 
     private static bool TryToPlace(int i, int j, TulipTileData tulipTileData) {
-        if (!Main.rand.NextBool(tulipTileData.Chance)) {
+        if (!Main.rand.NextBool(30 + tulipTileData.ExtraChance)) {
             return false;
         }
 

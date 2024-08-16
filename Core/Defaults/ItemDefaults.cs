@@ -17,7 +17,6 @@ static class ItemDefaults {
 
     public static void SetDefaultToDruidicWeapon(this Item item, int damage, float knockback = 0f) {
         item.SetDefaultToDruidicWeapon();
-
         item.SetWeaponValues(damage, knockback);
     }
 
