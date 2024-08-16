@@ -44,7 +44,7 @@ static class ItemDefaults {
         item.rare = rare;
     }
 
-    public static void SetDefaultToShootable(this Item item, ushort shootType, float shootSpeed, bool noMelee = true) {
+    public static void SetDefaultToShootable(this Item item, ushort shootType, float shootSpeed = 0f, bool noMelee = true) {
         item.shoot = shootType;
         item.shootSpeed = shootSpeed;
         item.noMelee = noMelee;

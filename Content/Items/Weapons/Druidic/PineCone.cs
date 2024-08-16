@@ -18,7 +18,7 @@ sealed class PineCone : NatureItem {
 		Item.SetSize(18, 28);
 		Item.SetWeaponValues(2, 0.25f);
 		Item.SetDefaultToUsable(ItemUseStyleID.Swing, 35, false, useSound: SoundID.Item1);
-		Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Druidic.PineCone>(), 0f);
+		Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Druidic.PineCone>());
 		Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.White);
 
 		NatureWeaponHandler.SetPotentialDamage(Item, 10);
@@ -32,7 +32,7 @@ sealed class PineCone : NatureItem {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

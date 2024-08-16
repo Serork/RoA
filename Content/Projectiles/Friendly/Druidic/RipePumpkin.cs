@@ -96,8 +96,9 @@ sealed class RipePumpkin : NatureProjectile {
                             Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);
                             direction.Normalize();
                             direction *= 15 * Main.rand.NextFloat(0.9f, 1.1f);
-                            Projectile.NewProjectile(Projectile.GetSource_Death(), new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, 0f, Projectile.owner, 0f, 0f);
+                            Projectile.NewProjectile(Projectile.GetSource_Death(), new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
                         }
+                        Projectile.netUpdate = true;
                     }
                 }
             }
