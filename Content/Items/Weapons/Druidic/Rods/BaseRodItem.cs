@@ -49,7 +49,7 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     private short _leftTimeToReuse;
     private float _maxUseTime, _maxUseTime2;
-    private bool _shot;
+    private bool _shot, _shot2;
     private float _rotation;
 
     private Player Owner => Projectile.GetOwnerAsPlayer();
@@ -79,6 +79,7 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected virtual void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) { }
     
+    protected virtual void SpawnDustsWhenReady(Player player, Vector2 corePosition) { }
     protected virtual void SpawnDustsOnShoot(Player player, Vector2 corePosition) { }
 
     protected virtual Vector2 CorePositionOffsetFactor() => Vector2.Zero;
@@ -87,10 +88,11 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected virtual bool ShouldWaitUntilProjDespawns() => true;
 
+    protected virtual float MinUseTimeToShootFactor() => 0f;
+
     protected virtual bool DespawnWithProj() => false;
 
     protected virtual void ShootProjectile() {
-        SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
         Vector2 spawnPosition = CorePosition;
         Vector2 velocity = Vector2.Zero;
         ushort count = 1;
@@ -99,9 +101,6 @@ abstract class BaseRodProjectile : NatureProjectile {
             for (int i = 0; i < count; i++) {
                 SetSpawnProjectileSettings(Owner, ref spawnPosition, ref velocity, ref count, ref ai0, ref ai1, ref ai2);
                 Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), spawnPosition, velocity, ShootType, Projectile.damage, Projectile.knockBack, Owner.whoAmI, ai0, ai1, ai2);
-                if (Main.netMode != NetmodeID.Server) {
-                    SpawnDustsOnShoot(Owner, CorePosition);
-                }
             }
         }
     }
@@ -119,6 +118,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         writer.Write(_leftTimeToReuse);
         writer.Write(_maxUseTime);
         writer.Write(_shot);
+        writer.Write(_shot2);
         writer.Write(_rotation);
     }
 
@@ -126,6 +126,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         _leftTimeToReuse = reader.ReadInt16();
         _maxUseTime = reader.ReadSingle();
         _shot = reader.ReadBoolean();
+        _shot2 = reader.ReadBoolean();
         _rotation = reader.ReadSingle();
     }
 
@@ -174,9 +175,18 @@ abstract class BaseRodProjectile : NatureProjectile {
                 SpawnCoreDustsBeforeShoot(Step, Owner, CorePosition);
             }
         }
-        else if (!_shot) {
+        else if (!_shot2) {
+            _shot2 = true;
+            SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
+            if (Main.netMode != NetmodeID.Server) {
+                SpawnDustsWhenReady(Owner, CorePosition);
+            }
+        }
+        if (CurrentUseTime <= _maxUseTime * MinUseTimeToShootFactor() && !_shot) {
             ShootProjectile();
-
+            if (Main.netMode != NetmodeID.Server) {
+                SpawnDustsOnShoot(Owner, CorePosition);
+            }
             _shot = true;
             ShouldBeActive = false;
             byte timeAfterShootToExist = TimeAfterShootToExist(Owner);

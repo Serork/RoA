@@ -32,9 +32,9 @@ sealed class Cacti : NatureProjectile {
         Projectile.friendly = true;
         Projectile.timeLeft = 200;
         Projectile.penetrate = -1;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 30;
     }
-
-    //public override bool ShouldUpdatePosition() => false;
 
     protected override void SafeOnSpawn(IEntitySource source) {
         if (Projectile.owner != Main.myPlayer) {
@@ -91,8 +91,8 @@ sealed class Cacti : NatureProjectile {
                         if (Math.Abs(i) + Math.Abs(j) == size) {
                             Main.EntitySpriteDraw(trailTexture, Projectile.Center + new Vector2(i, j) * 2f - Main.screenPosition,
                                                   null,
-                                                  color * 0.5f,
-                                                  Projectile.rotation,
+                                                  color * 0.35f,
+                                                  Projectile.rotation + Projectile.velocity.X * 0.05f,
                                                   origin,
                                                   Projectile.scale,
                                                   default);
@@ -112,9 +112,15 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void OnKill(int timeLeft) {
+        if (Projectile.owner == Main.myPlayer) {
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CactiExplosion>(), Projectile.damage, Projectile.knockBack * 2.25f, Projectile.owner);
+        }
+
+        SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+
         if (Main.netMode != NetmodeID.Server) {
             for (int num559 = 0; num559 < 10; num559++) {
-                int num560 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.JunglePlants);
+                int num560 = Dust.NewDust(Projectile.Center - Projectile.velocity, Projectile.width, Projectile.height, DustID.JunglePlants);
                 Dust dust2 = Main.dust[num560];
                 dust2.noLight = true;
                 if (Main.rand.NextBool(2)) {
@@ -131,8 +137,6 @@ sealed class Cacti : NatureProjectile {
                 dust2.velocity *= 1.01f;
             }
         }
-
-        //Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CactiExplosion>(), Projectile.damage * 2, Projectile.knockBack * 2.25f, Projectile.owner);
     }
 
     public override void AI() {
@@ -190,5 +194,25 @@ sealed class Cacti : NatureProjectile {
                 }
                 break;
         }
+    }
+
+    private sealed class CactiExplosion : NatureProjectile {
+        public override string Texture => ResourceManager.EmptyTexture;
+
+        protected override void SafeSetDefaults() {
+            Projectile.Size = new Vector2(125, 75);
+            Projectile.aiStyle = -1;
+            Projectile.penetrate = -1;
+
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
+
+            Projectile.timeLeft = 10;
+        }
+
+        public override bool? CanCutTiles() => false;
     }
 }

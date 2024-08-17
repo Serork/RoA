@@ -27,6 +27,8 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
     }
 
     public sealed class CactiCasterBase : BaseRodProjectile {
+        protected override float MinUseTimeToShootFactor() => 0.5f;
+
         protected override Vector2 CorePositionOffsetFactor() => new(0.1f, 0.1f);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
@@ -51,7 +53,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             }
         }
 
-        protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
+        protected override void SpawnDustsWhenReady(Player player, Vector2 corePosition) {
             for (int i = 0; i < 15; i++) {
                 int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
                 Main.dust[dust].noGravity = true;

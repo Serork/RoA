@@ -122,7 +122,7 @@ abstract class TulipBase : BaseRodProjectile {
 
     protected override void SpawnCoreDustsWhileShotProjectileIsActive(float step, Player player, Vector2 corePosition) => SpawnGroundDusts(CoreDustType(), TulipBaseData, 1f);
 
-    protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
+    protected override void SpawnDustsWhenReady(Player player, Vector2 corePosition) {
         for (int i = 0; i < 12; i++) {
             float offset = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset),
