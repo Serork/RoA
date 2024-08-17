@@ -43,7 +43,7 @@ sealed class Cacti : NatureProjectile {
 
         Player player = Main.player[Projectile.owner];
         Vector2 mousePoint = player.GetViableMousePosition();
-        float y = player.MountedCenter.Y - player.height * 5f;
+        float y = player.MountedCenter.Y - player.height * 3f;
         float lastY = Math.Abs(y - Main.screenPosition.Y + Main.screenHeight);
         Vector2 pointPosition = new(mousePoint.X, y);
         Projectile.Center = pointPosition + Vector2.UnitY * lastY;

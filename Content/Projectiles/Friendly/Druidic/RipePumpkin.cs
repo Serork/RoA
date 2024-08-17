@@ -84,7 +84,7 @@ sealed class RipePumpkin : NatureProjectile {
                     int type = ModContent.ItemType<Items.Weapons.Druidic.RipePumpkin>();
                     if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && (Main.player[Projectile.owner].GetSelectedItem().type == type || Main.mouseItem.type == type)) {
                         Player player = Main.player[Projectile.owner];
-                        player.itemAnimation = player.itemTime = player.itemAnimationMax;
+                        player.itemAnimation = player.itemTime = player.itemAnimationMax / 2;
                         
                         _rotateWiggler.Stop();
                         Projectile.Kill();

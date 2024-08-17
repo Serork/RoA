@@ -27,7 +27,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
     }
 
     public sealed class CactiCasterBase : BaseRodProjectile {
-        protected override float MinUseTimeToShootFactor() => 0.5f;
+        protected override float MinUseTimeToShootFactor() => 0.61f;
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.1f, 0.1f);
 
