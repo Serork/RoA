@@ -1,14 +1,25 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Projectiles.Friendly;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
 static class ProjectileExtensions {
+    public static Texture2D GetTexture(this Projectile projectile) => TextureAssets.Projectile[projectile.type].Value;
+
+    public static void SetTrail(this Projectile projectile, int trailingMode = 2, int length = -1) {
+        if (length > 0) {
+            ProjectileID.Sets.TrailCacheLength[projectile.type] = length;
+        }
+        ProjectileID.Sets.TrailingMode[projectile.type] = trailingMode;
+    }
+
     public static bool IsDamageable(this Projectile projectile) => projectile.damage > 0;
 
     public static bool IsDruidic(this Projectile projectile) => projectile.ModProjectile is NatureProjectile;

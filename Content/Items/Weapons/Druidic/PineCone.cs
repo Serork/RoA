@@ -25,18 +25,14 @@ sealed class PineCone : NatureItem {
         NatureWeaponHandler.SetFillingRate(Item, 0.8f);
     }
 
-	public override bool CanUseItem(Player player) {
-		if (player.IsLocal()) {
-			if (Collision.CanHitLine(player.Center, 2, 2, player.GetViableMousePosition(), 2, 2)) {
-				return player.ownedProjectileCounts[Item.shoot] <= 2;
-			}
-		}
-
-		return true;
-	}
+	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 2;
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-		Projectile.NewProjectile(source, Vector2.Zero, Vector2.Zero, type, damage, knockback, player.whoAmI);
+		if (player.IsLocal()) {
+			if (Collision.CanHitLine(player.Center, 2, 2, player.GetViableMousePosition(), 2, 2)) {
+				Projectile.NewProjectile(source, Vector2.Zero, Vector2.Zero, type, damage, knockback, player.whoAmI);
+			}
+		}
 
 		return false;
 	}

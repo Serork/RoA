@@ -44,9 +44,11 @@ sealed class PineCone : NatureProjectile {
 
     public override bool ShouldUpdatePosition() => false;
 
-    public override bool? CanDamage() => Projectile.ai[1] != 0f;
+    public override bool? CanDamage() => (Math.Abs(Projectile.rotation) < 0.1f && Math.Abs(Projectile.ai[0]) < 0.5f) || Projectile.ai[1] != 0f;
 
     public override void AI() {
+        Projectile.Opacity = Utils.GetLerpValue(240, 235, Projectile.timeLeft, true);
+
         Player player = Projectile.GetOwnerAsPlayer();
         if (Projectile.localAI[0] > 0f) {
             if (Projectile.ai[0] == 0f && Projectile.ai[1] == 0f) {

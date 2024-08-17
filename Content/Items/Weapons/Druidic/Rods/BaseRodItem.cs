@@ -49,27 +49,27 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     private short _leftTimeToReuse;
     private float _maxUseTime, _maxUseTime2;
-    private bool _shoot;
+    private bool _shot;
     private float _rotation;
 
-    protected Player Owner => Projectile.GetOwnerAsPlayer();
-    protected bool FacedLeft => Owner.direction == -1;
+    private Player Owner => Projectile.GetOwnerAsPlayer();
+    private bool FacedLeft => Owner.direction == -1;
 
-    protected float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
+    private float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
 
-    protected bool IsInUse => !Owner.CCed;
-    protected float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
-    protected float Step => Math.Clamp(1f - UseTime, 0f, 1f);
+    private bool IsInUse => !Owner.CCed;
+    private float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
+    private float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
-    protected Item HeldItem => Owner.HeldItem;
-    protected Texture2D HeldItemTexture => TextureAssets.Item[HeldItem.type].Value;
+    private Item HeldItem => Owner.HeldItem;
+    private Texture2D HeldItemTexture => TextureAssets.Item[HeldItem.type].Value;
 
-    protected Vector2 Offset => (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
-    protected Vector2 CorePosition => Projectile.Center + Offset;
+    private Vector2 Offset => (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
+    private Vector2 CorePosition => Projectile.Center + Offset;
 
-    protected int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
-    protected ushort ShootType => (ushort)Projectile.ai[1];
-    protected bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = value ? 0f : 1f; }
+    private int CurrentUseTime { get => (int)Projectile.ai[0]; set => Projectile.ai[0] = value < 0 ? 0 : value; }
+    private ushort ShootType => (ushort)Projectile.ai[1];
+    private bool ShouldBeActive { get => Projectile.ai[2] == 0f; set => Projectile.ai[2] = value ? 0f : 1f; }
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -77,11 +77,17 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected virtual void SpawnCoreDustsWhileShotProjectileIsActive(float step, Player player, Vector2 corePosition) { }
 
-    protected abstract void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2);
+    protected virtual void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) { }
     
     protected virtual void SpawnDustsOnShoot(Player player, Vector2 corePosition) { }
 
     protected virtual Vector2 CorePositionOffsetFactor() => Vector2.Zero;
+
+    protected virtual byte TimeAfterShootToExist(Player player) => 0;
+
+    protected virtual bool ShouldWaitUntilProjDespawns() => true;
+
+    protected virtual bool DespawnWithProj() => false;
 
     protected virtual void ShootProjectile() {
         SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
@@ -112,14 +118,14 @@ abstract class BaseRodProjectile : NatureProjectile {
     public override void SendExtraAI(BinaryWriter writer) {
         writer.Write(_leftTimeToReuse);
         writer.Write(_maxUseTime);
-        writer.Write(_shoot);
+        writer.Write(_shot);
         writer.Write(_rotation);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         _leftTimeToReuse = reader.ReadInt16();
         _maxUseTime = reader.ReadSingle();
-        _shoot = reader.ReadBoolean();
+        _shot = reader.ReadBoolean();
         _rotation = reader.ReadSingle();
     }
 
@@ -168,12 +174,25 @@ abstract class BaseRodProjectile : NatureProjectile {
                 SpawnCoreDustsBeforeShoot(Step, Owner, CorePosition);
             }
         }
-        else if (!_shoot) {
+        else if (!_shot) {
             ShootProjectile();
 
-            _shoot = true;
+            _shot = true;
             ShouldBeActive = false;
-            _leftTimeToReuse /= 2;
+            byte timeAfterShootToExist = TimeAfterShootToExist(Owner);
+            if (ShouldWaitUntilProjDespawns()) {
+                if (timeAfterShootToExist != 0) {
+                    _leftTimeToReuse = timeAfterShootToExist;
+                }
+                else {
+                    _leftTimeToReuse /= 2;
+                }
+            }
+            else {
+                if (timeAfterShootToExist != 0) {
+                    _leftTimeToReuse = timeAfterShootToExist;
+                }
+            }
         }
 
         Projectile.rotation = _rotation;
@@ -183,8 +202,9 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (!Owner.active) {
             Projectile.Kill();
         }
+        bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= 1;
         if (!ShouldBeActive) {
-            if (Owner.ownedProjectileCounts[ShootType] < 1) {
+            if (!haveProjsActive || !ShouldWaitUntilProjDespawns()) {
                 _leftTimeToReuse--;
             }
             else {
@@ -193,7 +213,7 @@ abstract class BaseRodProjectile : NatureProjectile {
                 }
             }
 
-            if (IsInUse && !_shoot) {
+            if (IsInUse && !_shot) {
                 ShouldBeActive = true;
             }
         }
@@ -204,6 +224,9 @@ abstract class BaseRodProjectile : NatureProjectile {
             Owner.itemAnimation = Owner.itemTime = 2;
             Projectile.timeLeft = 2;
             Owner.heldProj = Projectile.whoAmI;
+        }
+        if (_shot && DespawnWithProj() && !haveProjsActive) {
+            Projectile.Kill();
         }
     }
 

@@ -77,3 +77,8 @@ PineCone: {
 	DisplayName: Pine Cone
 	Tooltip: ""
 }
+
+CactiCaster: {
+	DisplayName: Cacti Caster
+	Tooltip: ""
+}

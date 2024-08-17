@@ -86,7 +86,7 @@ abstract class TulipBase : BaseRodProjectile {
         public Vector2 SpawnPositionMid => GetTilePosition(Player, TempMousePosition, false).ToWorldCoordinates();
     }
 
-    private TulipBaseExtraData TulipBaseData => Owner.GetModPlayer<TulipBaseExtraData>();
+    private TulipBaseExtraData TulipBaseData => Main.player[Projectile.owner].GetModPlayer<TulipBaseExtraData>();
 
     protected abstract ushort CoreDustType();
 
