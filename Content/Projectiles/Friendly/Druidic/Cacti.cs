@@ -2,11 +2,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -24,6 +26,9 @@ sealed class Cacti : NatureProjectile {
 
     private State _state = State.Normal;
 
+    private float UseTimeFactor => 0.0275f * (float)(1f - Main.player[Projectile.owner].itemAnimationMax / 35);
+    private Vector2 CorePosition => Main.projectile[(int)Projectile.ai[1]].As<CactiCaster.CactiCasterBase>().CorePosition;
+
     public override void SetStaticDefaults() => Projectile.SetTrail(length: 6);
 
     protected override void SafeSetDefaults() {
@@ -36,6 +41,18 @@ sealed class Cacti : NatureProjectile {
         Projectile.localNPCHitCooldown = 30;
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        base.SendExtraAI(writer);
+
+        writer.Write((int)_state);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        base.ReceiveExtraAI(reader);
+
+        _state = (State)reader.ReadInt32();
+    }
+
     protected override void SafeOnSpawn(IEntitySource source) {
         if (Projectile.owner != Main.myPlayer) {
             return;
@@ -43,14 +60,14 @@ sealed class Cacti : NatureProjectile {
 
         Player player = Main.player[Projectile.owner];
         Vector2 mousePoint = player.GetViableMousePosition();
-        float y = player.MountedCenter.Y - player.height * 3f;
+        float y = player.MountedCenter.Y - player.height * (3f + UseTimeFactor * player.height * 0.75f);
         float lastY = Math.Abs(y - Main.screenPosition.Y + Main.screenHeight);
         Vector2 pointPosition = new(mousePoint.X, y);
         Projectile.Center = pointPosition + Vector2.UnitY * lastY;
         Vector2 dif = pointPosition - Projectile.Center;
         Projectile.velocity.X = 0f;
-        Projectile.velocity.Y = -dif.Length() * 0.05f;
-        Projectile.ai[1] = Main.player[Projectile.owner].direction;
+        Projectile.velocity.Y = -dif.Length() * (0.05f + UseTimeFactor);
+        Projectile.ai[0] = Main.player[Projectile.owner].direction;
 
         Projectile.netUpdate = true;
     }
@@ -113,7 +130,7 @@ sealed class Cacti : NatureProjectile {
 
     public override void OnKill(int timeLeft) {
         if (Projectile.owner == Main.myPlayer) {
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CactiExplosion>(), Projectile.damage, Projectile.knockBack * 2.25f, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CactiExplosion>(), Projectile.damage, Projectile.knockBack * 1.5f, Projectile.owner);
         }
 
         SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
@@ -140,6 +157,8 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void AI() {
+        Projectile.Opacity = Utils.GetLerpValue(200, 160, Projectile.timeLeft, true);
+
         Projectile.tileCollide = _state == State.Enchanted;
 
         switch (_state) { 
@@ -149,18 +168,30 @@ sealed class Cacti : NatureProjectile {
                     Main.dust[dust].noGravity = true;
                 }
 
-                Projectile.velocity.Y *= 0.95f;
-                Projectile.rotation = Projectile.velocity.Y * Projectile.ai[1];
+                if (Projectile.velocity.Length() < 10f && Projectile.ai[2] == 0f) {
+                    SoundEngine.PlaySound(SoundID.Item20, CorePosition);
+
+                    Projectile.ai[2] = 1f;
+
+                    for (int i = 0; i < 15; i++) {
+                        int dust = Dust.NewDust(CorePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
+                        Main.dust[dust].noGravity = true;
+                    }
+                }
+
+                Projectile.velocity.Y *= 0.95f - UseTimeFactor;
+                Projectile.rotation = Projectile.velocity.Y * Projectile.ai[0];
                 if (Math.Abs(Projectile.velocity.Y) <= 0.5f) {
                     Player player = Main.player[Projectile.owner];
                     if (player.whoAmI == Main.myPlayer) {
+                        _state = State.Enchanted;
+
                         Vector2 mousePoint = player.GetViableMousePosition();
-                        float speed = MathHelper.Clamp((mousePoint - Projectile.Center).Length() * 0.0375f, 9.25f, 11f);
+                        float speed = MathHelper.Clamp((mousePoint - Projectile.Center).Length() * 0.0375f, 9.5f, 11f);
                         Projectile.velocity = Helper.VelocityToPoint(Projectile.Center, mousePoint, speed);
                         Projectile.netUpdate = true;
                     }
 
-                    _state = State.Enchanted;
 
                     if (Main.netMode != NetmodeID.Server) {
                         for (int i = 0; i < 30; i++) {

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Druid;
 using RoA.Common.InterfaceElements;
 using RoA.Core;
@@ -17,7 +19,7 @@ using Terraria.UI;
 namespace RoA.Common.GUI;
 
 [Autoload(Side = ModSide.Client)]
-sealed class TooltipFallingLeafs() : InterfaceElement(RoA.ModName + ": Tooltip Falling Leafs", InterfaceScaleType.UI) {
+sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip Falling Leafs", InterfaceScaleType.UI) {
     public const float DELAY = 0f;
 
     internal struct FallingLeafData {
@@ -26,35 +28,44 @@ sealed class TooltipFallingLeafs() : InterfaceElement(RoA.ModName + ": Tooltip F
     }
 
     private static float _counter;
-    private static FallingLeafData[] _fallingLeafs;
+    private static FallingLeafData[] _fallingLeaves;
+    private static bool _draw;
 
     private static float CounterMax => 1f + DELAY;
 
+    internal static void ResetData() => _draw = false;
+
     internal static void MatchData(FallingLeafData data) {
+        _draw = true;
+
         _counter = CounterMax;
 
-        _fallingLeafs[data.Index] = data;
+        _fallingLeaves[data.Index] = data;
     }
 
     public override void Load(Mod mod) {
-        _fallingLeafs = new FallingLeafData[ItemTooltipLeafs.LEAFSCOUNT];
+        _fallingLeaves = new FallingLeafData[ItemTooltipLeaves.LEAVESCOUNT];
     }
 
     public override void Unload() {
-        _fallingLeafs = null;
+        _fallingLeaves = null;
     }
 
     protected override bool DrawSelf() {
+        if (!_draw) {
+            return true;
+        }
+        
         Helper.AddClamp(ref _counter, -TimeSystem.LogicDeltaTime, 0f, CounterMax);
 
         float maxY = 28f;
 
-        foreach (FallingLeafData fallingLeafData in _fallingLeafs) {
+        foreach (FallingLeafData fallingLeafData in _fallingLeaves) {
             float counter = Math.Clamp(_counter, 0f, 1f);
 
             float maxX = 5f * Ease.SineOut(counter), speedX = 2.5f;
             float offsetY = 30f;
-            Vector2 velocity = new(Helper.Wave(-maxX, maxX, speedX, (fallingLeafData.Index + 1) * ItemTooltipLeafs.LEAFSCOUNT), offsetY * Ease.QuadOut(counter));
+            Vector2 velocity = new(Helper.Wave(-maxX, maxX, speedX, (fallingLeafData.Index + 1) * ItemTooltipLeaves.LEAVESCOUNT), offsetY * Ease.QuadOut(counter));
             float oscMultiplier = (1f - counter) * 5f;
             velocity.X *= oscMultiplier;
 

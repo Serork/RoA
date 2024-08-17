@@ -65,11 +65,11 @@ abstract class BaseRodProjectile : NatureProjectile {
     private Texture2D HeldItemTexture => TextureAssets.Item[HeldItem.type].Value;
 
     private Vector2 Offset => (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
-    private Vector2 CorePosition => Projectile.Center + Offset;
+    public Vector2 CorePosition => Projectile.Center + Offset;
 
-    private int CurrentUseTime { get => (int)Projectile.ai[0]; set => Projectile.ai[0] = value < 0 ? 0 : value; }
-    private ushort ShootType => (ushort)Projectile.ai[1];
-    private bool ShouldBeActive { get => Projectile.ai[2] == 0f; set => Projectile.ai[2] = value ? 0f : 1f; }
+    public int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
+    protected ushort ShootType => (ushort)Projectile.ai[1];
+    public bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = value ? 0f : 1f; }
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -91,6 +91,8 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected virtual float MinUseTimeToShootFactor() => 0f;
 
     protected virtual bool DespawnWithProj() => false;
+
+    protected virtual bool ShouldPlayShootSound() => true;
 
     protected virtual void ShootProjectile() {
         Vector2 spawnPosition = CorePosition;
@@ -177,7 +179,9 @@ abstract class BaseRodProjectile : NatureProjectile {
         }
         else if (!_shot2) {
             _shot2 = true;
-            SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
+            if (ShouldPlayShootSound()) {
+                SoundEngine.PlaySound(SoundID.Item20, CorePosition);
+            }
             if (Main.netMode != NetmodeID.Server) {
                 SpawnDustsWhenReady(Owner, CorePosition);
             }

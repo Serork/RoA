@@ -1039,7 +1039,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step10_SpreadMossGrass();
 
         progress.Set(0.8f);
-        // destroy non solid above leafs
+        // destroy non solid above leaves
         for (int i = Left - 25; i < Right + 25; i++) {
             for (int j = Top - 15; j < CenterY - EdgeY; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);

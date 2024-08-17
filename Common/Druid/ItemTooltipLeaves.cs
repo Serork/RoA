@@ -16,31 +16,33 @@ using Terraria.ModLoader;
 namespace RoA.Common.Druid;
 
 [Autoload(Side = ModSide.Client)]
-sealed class ItemTooltipLeafs : GlobalItem {
-    public const byte LEAFSCOUNT = 8;
+sealed class ItemTooltipLeaves : GlobalItem {
+    public const byte LEAVESCOUNT = 8;
 
-    private static SpriteData _leafsSpriteData;
+    private static SpriteData _leavesSpriteData;
 
     public override void SetStaticDefaults() {
-        _leafsSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Leafs"), new SpriteFrame(3, 1));
+        _leavesSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Leaves"), new SpriteFrame(3, 1));
     }
 
     public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {
         if (!item.IsDruidic()) {
+            TooltipFallingLeaves.ResetData();
+
             return base.PreDrawTooltipLine(item, line, ref yOffset);
         }
 
         bool isNameLine = line.Name.Contains("Name");
         if (isNameLine) {
-            void drawTooltipLineLeafs(DrawableTooltipLine line, byte leafsCount, ulong seedForRandomness) {
+            void drawTooltipLineLeaves(DrawableTooltipLine line, byte leavesCount, ulong seedForRandomness) {
                 string text = line.Text;
                 Vector2 size = line.Font.MeasureString(text);
 
-                for (byte i = 0; i < leafsCount; i++) {
-                    int mid = leafsCount / 2;
+                for (byte i = 0; i < leavesCount; i++) {
+                    int mid = leavesCount / 2;
                     bool inFirstHalf = i < mid;
                     int inversed = i - mid;
-                    bool isFirstOrLast = i == 0 || i == mid - 1 || i == mid || i == leafsCount - 1;
+                    bool isFirstOrLast = i == 0 || i == mid - 1 || i == mid || i == leavesCount - 1;
 
                     int direction = inFirstHalf ? 1 : -1;
 
@@ -63,24 +65,24 @@ sealed class ItemTooltipLeafs : GlobalItem {
                           extraRotation = 0.5f * multiplier * direction,
                           rotation = baseRotation * -i + extraRotation;
 
-                    _leafsSpriteData.Effects = (SpriteEffects)inFirstHalf.ToInt();
-                    _leafsSpriteData.VisualPosition = position - _leafsSpriteData.Origin;
-                    _leafsSpriteData = _leafsSpriteData.Framed((byte)Utils.RandomInt(ref seedForRandomness, 3), 0);
-                    _leafsSpriteData.Rotation = rotation;
+                    _leavesSpriteData.Effects = (SpriteEffects)inFirstHalf.ToInt();
+                    _leavesSpriteData.VisualPosition = position - _leavesSpriteData.Origin;
+                    _leavesSpriteData = _leavesSpriteData.Framed((byte)Utils.RandomInt(ref seedForRandomness, 3), 0);
+                    _leavesSpriteData.Rotation = rotation;
 
                     Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
-                        _leafsSpriteData.DrawSelf();
+                        _leavesSpriteData.DrawSelf();
                     }, samplerState: SamplerState.PointClamp);
 
-                    TooltipFallingLeafs.FallingLeafData data;
+                    TooltipFallingLeaves.FallingLeafData data;
                     data.Index = i;
-                    data.SpriteInfo = _leafsSpriteData;
-                    TooltipFallingLeafs.MatchData(data);
+                    data.SpriteInfo = _leavesSpriteData;
+                    TooltipFallingLeaves.MatchData(data);
                 }
             }
 
             ulong seed = (ulong)item.type;
-            drawTooltipLineLeafs(line, LEAFSCOUNT, seed);
+            drawTooltipLineLeaves(line, LEAVESCOUNT, seed);
         }
 
         return base.PreDrawTooltipLine(item, line, ref yOffset);

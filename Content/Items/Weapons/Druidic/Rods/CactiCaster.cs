@@ -19,7 +19,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(38);
-        Item.SetDefaultToUsable(-1, 35, useSound: SoundID.Item7);
+        Item.SetDefaultToUsable(-1, 30, useSound: SoundID.Item7);
         Item.SetWeaponValues(8, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 26);
@@ -37,6 +37,10 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
 
         protected override bool DespawnWithProj() => true;
 
+        protected override bool ShouldPlayShootSound() => false;
+
+        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) => ai1 = Projectile.whoAmI;
+
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
             float offset = 10f;
             float reversed = 1f - step;
@@ -50,13 +54,6 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                                                     Scale: Main.rand.NextFloat(1.25f, 1.5f));
                     dust.noGravity = true;
                 }
-            }
-        }
-
-        protected override void SpawnDustsWhenReady(Player player, Vector2 corePosition) {
-            for (int i = 0; i < 15; i++) {
-                int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
-                Main.dust[dust].noGravity = true;
             }
         }
     }
