@@ -14,7 +14,7 @@ namespace RoA.Content.Projectiles.Friendly;
 abstract class NatureProjectile : ModProjectile {
     private float _wreathPointsFine;
 
-    public bool ShouldApplyWreathPoints { get; protected set; } = true;
+    public bool ShouldIncreaseWreathPoints { get; protected set; } = true;
 
     // if the value is a negative number we get more wreath points
     public float WreathPointsFine {

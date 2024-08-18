@@ -81,7 +81,7 @@ sealed class WreathHandler : ModPlayer {
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;
         }
-        if (!natureProjectile.ShouldApplyWreathPoints) {
+        if (!natureProjectile.ShouldIncreaseWreathPoints) {
             return;
         }
 

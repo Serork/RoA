@@ -50,7 +50,7 @@ abstract class Wave : NatureProjectile {
         Projectile.ignoreWater = true;
         Projectile.localNPCHitCooldown = 100;
 
-		ShouldApplyWreathPoints = false;
+		ShouldIncreaseWreathPoints = false;
     }
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
@@ -104,6 +104,7 @@ abstract class Wave : NatureProjectile {
 		}
 		if (Projectile.Opacity > 0.05f) {
 			Projectile.Opacity -= 0.0715f;
+			Projectile.Opacity *= 0.95f;
 		}
 		else {
 			Projectile.Kill();
