@@ -52,12 +52,12 @@ abstract class BaseRodProjectile : NatureProjectile {
     private bool _shot, _shot2;
     private float _rotation;
 
-    private Player Owner => Projectile.GetOwnerAsPlayer();
+    protected Player Owner => Projectile.GetOwnerAsPlayer();
     private bool FacedLeft => Owner.direction == -1;
 
     private float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
 
-    private bool IsInUse => !Owner.CCed;
+    protected virtual bool IsInUse => !Owner.CCed;
     private float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
     private float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
@@ -93,6 +93,15 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected virtual bool DespawnWithProj() => false;
 
     protected virtual bool ShouldPlayShootSound() => true;
+
+    protected virtual bool ShouldBeActiveAfterShoot() => false;
+
+    protected virtual byte ProjActiveCount() => 1;
+
+    protected bool ShouldShootInternal() => CurrentUseTime <= _maxUseTime * MinUseTimeToShootFactor();
+    protected virtual bool ShouldShoot() => ShouldShootInternal() || !IsInUse;
+
+    protected virtual bool IsActive() => true;
 
     protected virtual void ShootProjectile() {
         Vector2 spawnPosition = CorePosition;
@@ -186,13 +195,15 @@ abstract class BaseRodProjectile : NatureProjectile {
                 SpawnDustsWhenReady(Owner, CorePosition);
             }
         }
-        if (CurrentUseTime <= _maxUseTime * MinUseTimeToShootFactor() && !_shot) {
+        if (ShouldShoot() && !_shot) {
             ShootProjectile();
             if (Main.netMode != NetmodeID.Server) {
                 SpawnDustsOnShoot(Owner, CorePosition);
             }
             _shot = true;
-            ShouldBeActive = false;
+            if (!ShouldBeActiveAfterShoot()) {
+                ShouldBeActive = false;
+            }
             byte timeAfterShootToExist = TimeAfterShootToExist(Owner);
             if (ShouldWaitUntilProjDespawns()) {
                 if (timeAfterShootToExist != 0) {
@@ -216,10 +227,12 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (!Owner.active) {
             Projectile.Kill();
         }
-        bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= 1;
+        bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= ProjActiveCount();
         if (!ShouldBeActive) {
             if (!haveProjsActive || !ShouldWaitUntilProjDespawns()) {
-                _leftTimeToReuse--;
+                if (IsActive()) {
+                    _leftTimeToReuse--;
+                }
             }
             else {
                 if (Main.netMode != NetmodeID.Server) {

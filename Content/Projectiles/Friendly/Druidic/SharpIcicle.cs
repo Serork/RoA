@@ -32,21 +32,13 @@ sealed class SharpIcicle : NatureProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        if (player.whoAmI != Main.myPlayer) {
-            return;
-        }
 
-        Vector2 pointPosition = player.GetViableMousePosition();
         Projectile.rotation = Helper.VelocityAngle(Projectile.velocity);
-        Projectile.ai[0]++;
-        bool flag = Projectile.ai[0] > 35f;
-        if ((pointPosition.X >= player.position.X && Projectile.position.X >= pointPosition.X) || (pointPosition.X <= player.position.X && Projectile.position.X <= pointPosition.X) || flag) {
-            Projectile.ai[1] = 1f;
-        }
+
         if (Projectile.ai[1] == 1f) {
-            if (Projectile.ai[0] % 4f == 0f) {
-                Projectile.damage++;
-            }
+            //if (Projectile.ai[0] % 4f == 0f) {
+            //    Projectile.damage++;
+            //}
             Projectile.velocity.Y += Projectile.ai[2] * 0.1f;
             Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
             Projectile.velocity.X *= 0.95f;
@@ -56,7 +48,22 @@ sealed class SharpIcicle : NatureProjectile {
                 Main.dust[dust].scale *= 0.6f;
                 Main.dust[dust].noLight = true;
             }
+
+            return;
         }
+
+        if (player.whoAmI != Main.myPlayer) {
+            return;
+        }
+
+        Vector2 pointPosition = player.GetViableMousePosition();
+        Projectile.ai[0]++;
+        bool flag = Projectile.ai[0] > 35f;
+        if ((pointPosition.X >= player.position.X && Projectile.position.X >= pointPosition.X) || (pointPosition.X <= player.position.X && Projectile.position.X <= pointPosition.X) || flag) {
+            Projectile.ai[1] = 1f;
+        }
+
+        Projectile.netUpdate = true;
     }
 
     public override void OnKill(int timeLeft) {
