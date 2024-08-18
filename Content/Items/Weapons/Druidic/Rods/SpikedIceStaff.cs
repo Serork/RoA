@@ -12,6 +12,7 @@ using RoA.Utilities;
 using RoA.Content.Dusts;
 using System;
 using Terraria.Audio;
+using System.Drawing;
 
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
@@ -43,7 +44,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool IsInUse => !Owner.CCed && (Owner.controlUseItem || !MinPassed);
 
-        protected override Vector2 CorePositionOffsetFactor() => new(0.08f, 0.11f);
+        protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.08f);
 
         protected override bool DespawnWithProj() => false;
 
@@ -59,6 +60,29 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                         _shootCount--;
 
                         SoundEngine.PlaySound(SoundID.Item20, CorePosition);
+
+                        if (Main.netMode != NetmodeID.Server) {
+                            void spawnAttackDust(float num) {
+                                if (Main.rand.NextChance(0.5f)) {
+                                    Vector2 velocity = Helper.VelocityToPoint(CorePosition, Owner.GetViableMousePosition(), 3f + Main.rand.NextFloatRange(0.5f));
+                                    Vector2 vector2 = velocity.RotatedBy(num * (MathHelper.Pi + MathHelper.PiOver4) / 25f);
+                                    Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, 176, Scale: Main.rand.NextFloat(1.05f, 1.35f));
+                                    dust.velocity = vector2;
+                                    dust.noGravity = true;
+                                }
+                            }
+                            float min = 10f, max = 10f;
+                            if (Owner.direction == 1) {
+                                for (float num = -min; num < max; num += 1f) {
+                                    spawnAttackDust(num);
+                                }
+                            }
+                            else {
+                                for (float num = -max; num < min; num += 1f) {
+                                    spawnAttackDust(num);
+                                }
+                            }
+                        }
                     }
                     Projectile.localAI[0]--;
                 }
@@ -74,6 +98,10 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         }
 
         protected override void ShootProjectile() {
+            if (!Collision.CanHit(Owner.Center, 0, 0, CorePosition, 0, 0)) {
+                return;
+            }
+
             if (MinPassed && Projectile.localAI[0] < Min + PerShoot) {
                 base.ShootProjectile();
 
@@ -103,7 +131,8 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
             if (Main.rand.NextChance(step)) {
                 for (int i = 0; i < (int)(2 * step) + 1; i++) {
-                    Dust.NewDustPerfect(corePosition, (ushort)DustID.IceTorch, Scale: 1f);
+                    Dust dust = Dust.NewDustPerfect(corePosition, 176, Scale: 1f);
+                    dust.noGravity = true;
                 }
             }
         }

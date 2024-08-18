@@ -25,10 +25,16 @@ sealed class SharpIcicle : NatureProjectile {
         Projectile.aiStyle = -1;
 
         Projectile.timeLeft = 200;
-        Projectile.penetrate = 2;
+        Projectile.penetrate = 1;
     }
 
     protected override void SafeOnSpawn(IEntitySource source) => Projectile.ai[2] = Projectile.velocity.Length();
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 4;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];

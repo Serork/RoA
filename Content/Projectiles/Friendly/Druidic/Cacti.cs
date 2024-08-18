@@ -177,6 +177,8 @@ sealed class Cacti : NatureProjectile {
                     if (player.whoAmI == Main.myPlayer) {
                         _state = State.Enchanted;
 
+                        SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
+
                         Vector2 mousePoint = player.GetViableMousePosition();
                         float speed = MathHelper.Clamp((mousePoint - Projectile.Center).Length() * 0.0375f, 10.5f, 12f);
                         Projectile.velocity = Helper.VelocityToPoint(Projectile.Center, mousePoint, speed);

@@ -96,6 +96,7 @@ sealed class PineCone : NatureProjectile {
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 4;
+
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
