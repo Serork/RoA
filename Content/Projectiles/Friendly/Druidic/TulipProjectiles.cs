@@ -179,11 +179,9 @@ sealed class TulipPetal : NatureProjectile {
         Vector2 velocity = (endPosition - currentPosition).SafeNormalize(Vector2.UnitY) * height;
         float progress = 0f;
         float maxOffsetX = 50f;
-
         for (int i = 2; i < 500; i++) {
             Vector2 between = endPosition - currentPosition;
             float length = between.Length();
-
             Vector2 velocityToAdd = velocity;
             if (progress > 0.25f && progress <= 0.75f) {
                 velocityToAdd = Vector2.Normalize(Vector2.Lerp(velocityToAdd, between, (progress - 0.1f) / 0.2f) * 0.02f) * height;
@@ -192,7 +190,6 @@ sealed class TulipPetal : NatureProjectile {
                 velocityToAdd = velocityToAdd.RotatedBy(Math.Sin(i + i * maxOffsetX + currentPosition.Length() / 64f) * 0.25f);
             }
             endPosition -= velocityToAdd;
-
             progress += Main.rand.NextFloat(0.0001f, 0.00033f);
 
             if (length <= height) {
@@ -207,7 +204,6 @@ sealed class TulipPetal : NatureProjectile {
 
             float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
             Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * Projectile.scale * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true), 1f);
-
             ulong seedForRandomness = (ulong)i;
             Main.EntitySpriteDraw(textureToDraw,
                                   position - Main.screenPosition,

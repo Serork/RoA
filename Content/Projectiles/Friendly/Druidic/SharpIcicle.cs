@@ -68,7 +68,6 @@ sealed class SharpIcicle : NatureProjectile {
         if ((pointPosition.X >= player.position.X && Projectile.position.X >= pointPosition.X) || (pointPosition.X <= player.position.X && Projectile.position.X <= pointPosition.X) || flag) {
             Projectile.ai[1] = 1f;
         }
-
         Projectile.netUpdate = true;
     }
 

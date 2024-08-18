@@ -67,20 +67,14 @@ sealed class Cacti : NatureProjectile {
         if (_state == State.Enchanted) {
             Texture2D texture = Projectile.GetTexture(),
                       trailTexture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "CactiTrail").Value;
-
             Vector2 origin = texture.Size() / 2f;
-
             Color color = lightColor;
-
             int length = Projectile.oldPos.Length;
             for (int i = 0; i < length - 1; i++) {
                 float progress = (length - i) / (float)length * 1.25f;
                 color *= Utils.Remap(progress, 0f, 1f, 0.5f, 1f);
-
                 float scale = Projectile.scale * Math.Clamp(progress, 0.5f, 1f);
-
                 float offsetYBetween = Projectile.Size.Y * 0.15f;
-
                 Vector2 dif = (Projectile.position - Projectile.oldPos[i]).SafeNormalize(Vector2.UnitY);
                 Main.EntitySpriteDraw(trailTexture,
                                       Projectile.oldPos[i] + dif * offsetYBetween / 2f + origin - dif * offsetYBetween * i - Main.screenPosition,
