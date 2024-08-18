@@ -82,3 +82,8 @@ CactiCaster: {
 	DisplayName: Cacti Caster
 	Tooltip: ""
 }
+
+SpikedIceStaff: {
+	DisplayName: Spiked Ice Staff
+	Tooltip: ""
+}
