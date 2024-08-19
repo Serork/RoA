@@ -25,7 +25,6 @@ sealed class Fleder : ModNPC {
     private State _state = State.Normal;
     private Vector2 _sittingPosition = Vector2.Zero;
 
-    private bool IsNormal => _state == State.Normal;
     private bool IsSittingOnBranch => _state == State.Sitting && _sittingPosition != Vector2.Zero;
     private bool IsAttacking => _state == State.Attacking;
 
@@ -79,18 +78,35 @@ sealed class Fleder : ModNPC {
         NPC.rotation = rotation;
 
         Rectangle playerRect;
+        Rectangle npcRect = new((int)NPC.position.X - 100, (int)NPC.position.Y - 100, NPC.width + 200, NPC.height + 200);
+        bool isTriggeredBy(Player player) {
+            playerRect = new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height);
+            return (npcRect.Intersects(playerRect) || NPC.life < NPC.lifeMax) && !player.dead && player.active;
+        }
+        void flyAway() {
+            float maxSpeed = 5.5f;
+            if (NPC.velocity.Y < -maxSpeed) {
+                NPC.velocity.Y = -maxSpeed;
+            }
+            NPC.velocity.Y -= 0.15f;
+            NPC.velocity.X += NPC.direction * 0.125f;
+            if (NPC.velocity.X < -maxSpeed) {
+                NPC.velocity.X = -maxSpeed;
+            }
+            if (NPC.velocity.X > maxSpeed) {
+                NPC.velocity.X = maxSpeed;
+            }
+        }
         if (IsSittingOnBranch) {
             NPC.Center = _sittingPosition;
             NPC.velocity = Vector2.Zero;
 
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 foreach (Player activePlayer in Main.ActivePlayers) {
-                    playerRect = new((int)activePlayer.position.X, (int)activePlayer.position.Y, activePlayer.width, activePlayer.height);
-                    Rectangle npcRect = new((int)NPC.position.X - 100, (int)NPC.position.Y - 100, NPC.width + 200, NPC.height + 200);
-                    if (/*npcRect.Intersects(playerRect) || */(NPC.life < NPC.lifeMax && !activePlayer.dead)) {
+                    if (isTriggeredBy(activePlayer)) {
                         NPC.target = activePlayer.whoAmI;
-
                         _state = State.Attacking;
+
                         NPC.velocity.Y -= 8f;
 
                         NPC.netUpdate = true;
@@ -112,7 +128,15 @@ sealed class Fleder : ModNPC {
 
                 return true;
             }, 30);
-            if (nearestTile >= 25 * 25 && treeBranch != null) {
+            foreach (Player activePlayer in Main.ActivePlayers) {
+                if (isTriggeredBy(activePlayer)) {
+                    NPC.target = activePlayer.whoAmI;
+                    _state = State.Attacking;
+
+                    NPC.netUpdate = true;
+                }
+            }
+            if (nearestTile >= 25 * 25 && treeBranch != null && NPC.life >= NPC.lifeMax * 0.5f) {
                 NPC.noTileCollide = true;
 
                 NPC.localAI[1] = 0f;
@@ -123,6 +147,7 @@ sealed class Fleder : ModNPC {
                 if (NPC.WithinRange(destination, 8f) && Math.Abs(NPC.Center.X - destination.X) <= 6f) {
                     NPC.Center = destination;
                     NPC.velocity = Vector2.Zero;
+                    NPC.rotation = 0f;
 
                     _sittingPosition = destination;
                     _state = State.Sitting;
@@ -135,18 +160,7 @@ sealed class Fleder : ModNPC {
                 return;
             }
             else if (player.dead || !player.active) {
-                float maxSpeed = 5.5f;
-                if (NPC.velocity.Y < -maxSpeed) {
-                    NPC.velocity.Y = -maxSpeed;
-                }
-                NPC.velocity.Y -= 0.15f;
-                NPC.velocity.X += NPC.direction * 0.125f;
-                if (NPC.velocity.X < -maxSpeed) {
-                    NPC.velocity.X = -maxSpeed;
-                }
-                if (NPC.velocity.X > maxSpeed) {
-                    NPC.velocity.X = maxSpeed;
-                }
+                flyAway();
             }
         }
 
@@ -167,7 +181,7 @@ sealed class Fleder : ModNPC {
 
             NPC.TargetClosest();
 
-            Rectangle npcRect = new((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height);
+            npcRect = new((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height);
             if (npcRect.Intersects(playerRect) || NPC.collideX) {
                 float maxSpeedAfterCollideX = 4f;
                 float speedAfterCollideX = 2.5f;
@@ -246,6 +260,9 @@ sealed class Fleder : ModNPC {
                 NPC.velocity.Y = maxSpeedY;
             }
         }
+        else {
+            flyAway();
+        }
     }
 
     public override void FindFrame(int frameHeight) {
@@ -254,6 +271,7 @@ sealed class Fleder : ModNPC {
 
             return;
         }
+
         NPC.spriteDirection = NPC.direction;
         if (++NPC.frameCounter >= (double)Math.Max(10f - Math.Abs(NPC.velocity.Y) * 2f, 4f)) {
             NPC.frameCounter = 0.0;

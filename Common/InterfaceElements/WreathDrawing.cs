@@ -16,7 +16,6 @@ using Terraria.UI;
 
 namespace RoA.Common.InterfaceElements;
 
-[Autoload(Side = ModSide.Client)]
 sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", InterfaceScaleType.Game) {
     private const byte HORIZONTALFRAMECOUNT = 6;
 

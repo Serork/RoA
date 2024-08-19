@@ -18,7 +18,6 @@ using Terraria.UI;
 
 namespace RoA.Common.GUI;
 
-[Autoload(Side = ModSide.Client)]
 sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip Falling Leaves", InterfaceScaleType.UI) {
     public const float DELAY = 0f;
 

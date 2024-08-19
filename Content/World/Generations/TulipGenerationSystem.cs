@@ -30,7 +30,6 @@ sealed class TulipGenerationSystem : ModSystem {
     private static readonly Dictionary<byte, bool> _generatedTulips = [];
     private static readonly Dictionary<byte, byte> _tulipsAmountToGenerate = [];
 
-
     public static TulipTileData GetInfo<T>(T instance) where T : ModTile => _tulipGenerationInfo.Values.Single(tulipData => tulipData.Instance == instance);
     public static bool Generated<T>(T instance) where T : ModTile => _generatedTulips[GetInfo(instance).Index];
     public static void ResetState<T>(T instance) where T : ModTile {

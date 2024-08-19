@@ -16,6 +16,7 @@ abstract class InterfaceElement(string name, InterfaceScaleType scaleType) : Gam
     public virtual void Unload() { }
 }
 
+[Autoload(Side = ModSide.Client)]
 sealed class InterfaceElementsSystem : ModSystem {
     private static readonly Dictionary<Type, InterfaceElement> _interfaceElements = [];
 
