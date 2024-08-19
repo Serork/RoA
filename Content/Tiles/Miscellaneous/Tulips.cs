@@ -13,7 +13,7 @@ namespace RoA.Content.Tiles.Miscellaneous;
 sealed class ExoticTulip : TulipBase {
     protected override int[] AnchorValidTiles => [TileID.Sand];
 
-    protected override ushort ExtraChance => 200;
+    protected override ushort ExtraChance => 300;
 
     protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.ExoticTulip>();
 

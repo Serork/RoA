@@ -84,12 +84,14 @@ sealed class Fleder : ModNPC {
             return (npcRect.Intersects(playerRect) || NPC.life < NPC.lifeMax) && !player.dead && player.active;
         }
         void flyAway() {
-            float maxSpeed = 5.5f;
+            float maxSpeed = 4.5f;
             if (NPC.velocity.Y < -maxSpeed) {
                 NPC.velocity.Y = -maxSpeed;
             }
-            NPC.velocity.Y -= 0.075f;
-            NPC.velocity.X += NPC.direction * 0.1f;
+            float speedY = 0.075f * 0.6f;
+            NPC.velocity.Y -= speedY + speedY / 2f * Main.rand.NextFloat();
+            float speedX = NPC.direction * 0.1f * 0.6f;
+            NPC.velocity.X += speedX + speedX / 2f * Main.rand.NextFloat();
             if (NPC.velocity.X < -maxSpeed) {
                 NPC.velocity.X = -maxSpeed;
             }
