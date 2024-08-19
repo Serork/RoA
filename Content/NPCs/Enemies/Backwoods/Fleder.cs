@@ -78,7 +78,7 @@ sealed class Fleder : ModNPC {
         NPC.rotation = rotation;
 
         Rectangle playerRect;
-        Rectangle npcRect = new((int)NPC.position.X - 100, (int)NPC.position.Y - 100, NPC.width + 200, NPC.height + 200);
+        Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 150, NPC.width + 400, NPC.height + 300);
         bool isTriggeredBy(Player player) {
             playerRect = new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height);
             return (npcRect.Intersects(playerRect) || NPC.life < NPC.lifeMax) && !player.dead && player.active;
@@ -88,8 +88,8 @@ sealed class Fleder : ModNPC {
             if (NPC.velocity.Y < -maxSpeed) {
                 NPC.velocity.Y = -maxSpeed;
             }
-            NPC.velocity.Y -= 0.15f;
-            NPC.velocity.X += NPC.direction * 0.125f;
+            NPC.velocity.Y -= 0.075f;
+            NPC.velocity.X += NPC.direction * 0.1f;
             if (NPC.velocity.X < -maxSpeed) {
                 NPC.velocity.X = -maxSpeed;
             }
@@ -142,7 +142,17 @@ sealed class Fleder : ModNPC {
                 NPC.localAI[1] = 0f;
 
                 Vector2 destination = treeBranch.Value.ToWorldCoordinates();
-                Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, destination);
+                if (Collision.CanHitLine(NPC.Center, 0, 0, destination, 2, 2)) {
+                    Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, destination);
+                }
+                else {
+                    if (NPC.velocity.LengthSquared() < 1f) {
+                        NPC.velocity = new Vector2(1.2f, 0f).RotatedByRandom(MathHelper.TwoPi);
+                    }
+                    else {
+                        NPC.velocity = NPC.velocity.RotatedBy(Main.rand.Next(-1, 2) * 0.2f);
+                    }
+                }
 
                 if (NPC.WithinRange(destination, 8f) && Math.Abs(NPC.Center.X - destination.X) <= 6f) {
                     NPC.Center = destination;

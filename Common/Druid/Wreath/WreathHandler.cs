@@ -90,6 +90,7 @@ sealed class WreathHandler : ModPlayer {
         if (playerUsingClaws && IsFull) {
             if (SpecialAttackData.Owner == selectedItem) {
                 Reset();
+
                 Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
                 SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
             }

@@ -104,7 +104,7 @@ abstract class Wave : NatureProjectile {
 		}
 		if (Projectile.Opacity > 0.05f) {
 			Projectile.Opacity -= 0.0715f;
-			Projectile.Opacity *= 0.95f;
+			Projectile.Opacity *= 0.975f;
 		}
 		else {
 			Projectile.Kill();
