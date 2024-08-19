@@ -46,7 +46,7 @@ sealed class SharpIcicle : NatureProjectile {
             //    Projectile.damage++;
             //}
             Projectile.velocity.Y += Projectile.ai[2] * 0.1f;
-            Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
+            Projectile.velocity.Y = Math.Min(15f, Projectile.velocity.Y);
             Projectile.velocity.X *= 0.95f;
             if (Main.netMode != NetmodeID.Server) {
                 int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 8, 8, 176, 0, 0, 0, new Color(Color.Azure.ToVector3()), 1.2f);

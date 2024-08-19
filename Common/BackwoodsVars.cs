@@ -1,9 +1,10 @@
-﻿using Terraria.ModLoader;
+﻿using System.IO;
+
+using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace RoA.Common;
 
-[Autoload(Side = ModSide.Client)]
 sealed class BackwoodsVars : ModSystem {
     public static int FirstTileYAtCenter { get; internal set; }
     public static int BackwoodsTileForBackground { get; internal set; }
@@ -22,5 +23,15 @@ sealed class BackwoodsVars : ModSystem {
 
     private static void ResetAllFlags() {
         FirstTileYAtCenter = BackwoodsTileForBackground = 0;
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        writer.Write(FirstTileYAtCenter);
+        writer.Write(BackwoodsTileForBackground);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        FirstTileYAtCenter = reader.ReadInt32();
+        BackwoodsTileForBackground = reader.ReadInt32();
     }
 }

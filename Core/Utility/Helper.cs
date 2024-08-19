@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Content.Tiles.Platforms;
+using RoA.Core.Utility;
 
 using System;
 
@@ -25,6 +27,17 @@ static class Helper {
 
     public static float VelocityAngle(Vector2 velocity) => (float)Math.Atan2(velocity.Y, velocity.X) + (float)Math.PI / 2f;
 
+    public static void InertiaMoveTowards(ref Vector2 velocity, Vector2 position, Vector2 destination, float inertia = 15f, float speed = 5f, float minDistance = 10f) {
+        Vector2 direction = destination - position;
+        if (direction.Length() > minDistance) {
+            direction.Normalize();
+            velocity = (velocity * inertia + direction * speed) / (inertia + 1f);
+        }
+        else {
+            velocity *= (float)Math.Pow(0.97, inertia * 2.0 / inertia);
+        }
+    }
+
     public static void SmoothClamp(ref float value, float min, float max, float lerpValue) {
         if (value < min) {
             value = MathHelper.Lerp(value, min, lerpValue);
@@ -34,10 +47,52 @@ static class Helper {
         }
     }
 
+    public static int GetDirection(this float value) {
+        int result = Math.Sign(value);
+        if (result != 0) {
+            return result;
+        }
+
+        return 1;
+    }
+
     public static Vector2 GetLimitedPosition(Vector2 startPosition, Vector2 endPosition, float maxLength) {
         Vector2 dif = endPosition - startPosition;
         Vector2 result = startPosition + dif.SafeNormalize(Vector2.UnitY) * Math.Min(dif.Length(), maxLength);
         return result;
+    }
+
+    public static float SearchForNearestTile<T>(this Entity entity, out Point tile, out Point? searchTile, Predicate<Point>? condition = null, int maxDist = 10) where T : ModTile {
+        searchTile = null;
+        tile = Point.Zero;
+        Point center = entity.Center.ToTileCoordinates();
+        bool foundTile = false;
+        for (int i = center.X - maxDist; i < center.X + maxDist; i++) {
+            for (int j = center.Y - maxDist; j < center.Y + maxDist; j++) {
+                Tile searchedTile = WorldGenHelper.GetTileSafely(i, j);
+                if (searchedTile.HasTile) {
+                    bool closer = Vector2.DistanceSquared(tile.ToVector2(), center.ToVector2()) > Vector2.DistanceSquared(new Vector2(i, j), center.ToVector2());
+                    if (WorldGen.SolidTile(searchedTile) && closer) {
+                        tile = new Point(i, j);
+                        foundTile = true;
+                    }
+
+                    Point tilePointPosition = new(i, j);
+                    bool isTileValid = searchedTile.TileType == ModContent.TileType<T>() && Vector2.DistanceSquared((searchTile ?? Point.Zero).ToWorldCoordinates(), entity.Center) > Vector2.DistanceSquared(new Vector2(i, j) * 16, entity.Center);
+                    if (condition != null && !condition(tilePointPosition)) {
+                        isTileValid = false;
+                    }
+                    if (isTileValid) {
+                        searchTile = tilePointPosition;
+                    }
+                }
+            }
+        }
+
+        if (!foundTile) {
+            return -1f;
+        }
+        return Vector2.DistanceSquared(tile.ToWorldCoordinates(), center.ToWorldCoordinates());
     }
 
     // terraria overhaul
