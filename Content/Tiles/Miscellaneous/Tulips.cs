@@ -60,7 +60,7 @@ sealed class WeepingTulip : TulipBase {
                 return;
             if (Main.tile[i, j - 1].TileType != ModContent.TileType<WeepingTulip>())
                 return;
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen)
                 zero = Vector2.Zero;
             Color color = Lighting.GetColor(i, j);
