@@ -32,6 +32,7 @@ sealed class MiracleMintTE : ModTileEntity {
     public override void Update() {
         if (Main.netMode != NetmodeID.Server) {
             Counting += (float)Math.Round(TimeSystem.LogicDeltaTime / 3f + Main.rand.NextFloatRange(0.015f), 2);
+
             if (Counting >= 1f) {
                 Counting = 0f;
             }
