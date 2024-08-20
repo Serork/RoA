@@ -25,6 +25,7 @@ sealed class MiracleMintTE : ModTileEntity {
 
             return -1;
         }
+
         return Place(i, j);
     }
 
@@ -37,12 +38,9 @@ sealed class MiracleMintTE : ModTileEntity {
         }
     }
 
-    public override void OnNetPlace() => NetMessage.SendData(86, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
+    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
 
-    public override bool IsTileValidForEntity(int i, int j) {
-        Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return tile.ActiveTile(ModContent.TileType<MiracleMint>());
-    }
+    public override bool IsTileValidForEntity(int i, int j) => WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<MiracleMint>());
 }
 
 sealed class MiracleMint : Plant1x {
