@@ -116,23 +116,6 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
                 bool onSurface = keyValuePair.Value.OnSurface;
                 int i = genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
                 int j = !onSurface ? genRand.Next((int)Main.worldSurface - 1, (int)Main.maxTilesY - 100 + 1) : genRand.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface - 1);
-
-                int num = i - 1;
-                int num2 = i + 2;
-                int num3 = j - 1;
-                int num4 = j + 2;
-                if (num < 10)
-                    num = 10;
-
-                if (num2 > Main.maxTilesX - 10)
-                    num2 = Main.maxTilesX - 10;
-
-                if (num3 < 10)
-                    num3 = 10;
-
-                if (num4 > Main.maxTilesY - 10)
-                    num4 = Main.maxTilesY - 10;
-
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (!tile.HasTile) {
                     continue;
