@@ -3,7 +3,7 @@
 using System;
 using RoA.Content.Tiles.Solid.Backwoods;
 
-namespace RoA.Common;
+namespace RoA.Common.Tiles;
 
 [Autoload(Side = ModSide.Client)]
 sealed class TileCount : ModSystem {

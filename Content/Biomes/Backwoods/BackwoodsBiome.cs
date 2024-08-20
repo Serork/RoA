@@ -1,4 +1,4 @@
-using RoA.Common;
+using RoA.Common.Tiles;
 using RoA.Core;
 
 using Terraria;

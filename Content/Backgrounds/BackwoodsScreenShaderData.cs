@@ -1,5 +1,4 @@
-﻿using RoA.Common;
-
+﻿using RoA.Common.Tiles;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;

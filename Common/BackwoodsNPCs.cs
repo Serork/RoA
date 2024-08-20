@@ -1,15 +1,11 @@
 ﻿using RiseofAges.Content.Biomes.Backwoods;
 
 using RoA.Content.NPCs.Enemies.Backwoods;
-using RoA.Content.Tiles.Platforms;
-using RoA.Content.Tiles.Solid.Backwoods;
 
 using System.Collections.Generic;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
 
 namespace RoA.Common;
 

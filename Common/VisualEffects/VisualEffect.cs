@@ -21,7 +21,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     public int TimeLeft;
     public int MaxTimeLeft;
 
-    public virtual int InitalPoolSize => 1;
+    public virtual int InitialPoolSize => 1;
 
     public virtual T CreateBaseInstance() => new();
 
@@ -90,7 +90,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     }
 
     public void Load(Mod mod) {
-        VisualEffectSystem.ParticlePools<T>.Pool = new ParticlePool<T>(InitalPoolSize, CreateBaseInstance);
+        VisualEffectSystem.ParticlePools<T>.Pool = new ParticlePool<T>(InitialPoolSize, CreateBaseInstance);
         OnLoad(mod);
     }
 

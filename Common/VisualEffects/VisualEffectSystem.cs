@@ -25,29 +25,22 @@ sealed class VisualEffectSystem : ModSystem {
     }
 
     public override void Load() {
-        _layers = new ParticleRenderer[VisualEffectLayer.Count];
-        for (int i = 0; i < VisualEffectLayer.Count; i++) {
+        _layers = new ParticleRenderer[VisualEffectLayer.COUNT];
+        for (int i = 0; i < VisualEffectLayer.COUNT; i++) {
             _layers[i] = new ParticleRenderer();
         }
     }
 
-    public override void Unload() {
-        _layers = null;
-    }
+    public override void Unload() => _layers = null;
 
-    public void InitWorldData() {
+    public static void InitWorldData() {
         foreach (ParticleRenderer layer in _layers) {
             layer.Particles.Clear();
         }
     }
 
-    public override void OnWorldLoad() {
-        InitWorldData();
-    }
-
-    public override void OnWorldUnload() {
-        InitWorldData();
-    }
+    public override void OnWorldLoad() => InitWorldData();
+    public override void OnWorldUnload() => InitWorldData();
 
     public override void PreUpdatePlayers() {
         foreach (ParticleRenderer layer in _layers) {
@@ -55,14 +48,4 @@ sealed class VisualEffectSystem : ModSystem {
             layer.Update();
         }
     }
-}
-
-class VisualEffectLayer {
-    public const int BehindAllNPCs = 0;
-    public const int AboveNPCs = 1;
-    public const int BehindProjs = 2;
-    public const int BehindPlayers = 3;
-    public const int AbovePlayers = 4;
-    public const int AboveDust = 5;
-    public const int Count = 7;
 }

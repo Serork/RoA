@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
-
-using RoA.Common;
+using RoA.Common.Tiles;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -20,8 +19,8 @@ sealed class BackwoodsGreenMoss : ModTile {
         TileID.Sets.NeedsGrassFramingDirt[Type] = stoneType;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-        TransformTileSystem.TransformOnKill[Type] = false;
-        TransformTileSystem.ReplaceOnKillType[Type] = stoneType;
+        TransformTileSystem.OnKillNormal[Type] = false;
+        TransformTileSystem.ReplaceToOnKill[Type] = stoneType;
 
         DustType = DustID.GreenMoss;
         HitSound = SoundID.Dig;

@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
-
-using RoA.Common;
+using RoA.Common.Tiles;
 using RoA.Core.Utility;
 
 using Terraria.ID;
@@ -19,8 +18,8 @@ sealed class BackwoodsGrass : ModTile {
 		TileID.Sets.NeedsGrassFramingDirt[Type] = ModContent.TileType<BackwoodsDirt>();
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-        TransformTileSystem.TransformOnKill[Type] = false;
-        TransformTileSystem.ReplaceOnKillType[Type] = TileID.Dirt;
+        TransformTileSystem.OnKillNormal[Type] = false;
+        TransformTileSystem.ReplaceToOnKill[Type] = TileID.Dirt;
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         AddMapEntry(new Color(38, 107, 57));

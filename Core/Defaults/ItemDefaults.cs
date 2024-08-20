@@ -2,6 +2,7 @@
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
 
 namespace RoA.Core;
 
@@ -39,7 +40,7 @@ static class ItemDefaults {
 
     public static void SetDefaultToUsable(this Item item, int useStyleID, int timeToUse, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) => item.SetDefaultToUsable(useStyleID, timeToUse, timeToUse, showItemOnUse, useTurn, autoReuse, useSound);
 
-    public static void SetDefaultOthers(this Item item, int value, int rare) {
+    public static void SetDefaultOthers(this Item item, int value, int rare = ItemRarityID.White) {
         item.value = value;
         item.rare = rare;
     }

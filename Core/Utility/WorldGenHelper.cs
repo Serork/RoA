@@ -497,15 +497,15 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static void Place2x2(int x, int y, ushort type, int style = 0, Action? onPlaced = null) {
+    public static bool Place2x2(int x, int y, ushort type, int style = 0, Action? onPlaced = null) {
         if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
-            return;
+            return false;
 
         for (int i = x - 1; i < x + 1; i++) {
             for (int j = y - 1; j < y + 1; j++) {
                 Tile tileSafely = Framing.GetTileSafely(i, j);
                 if (tileSafely.HasTile || (type == 98 && tileSafely.LiquidAmount > 0))
-                    return;
+                    return false;
             }
 
             switch (type) {
@@ -513,14 +513,14 @@ static class WorldGenHelper {
                 case 126: {
                     Tile tileSafely = Framing.GetTileSafely(i, y - 2);
                     if (!tileSafely.HasUnactuatedTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType])
-                        return;
+                        return false;
 
                     break;
                 }
                 default: {
                     Tile tileSafely = Framing.GetTileSafely(i, y + 1);
                     if (!tileSafely.HasUnactuatedTile || (!WorldGen.SolidTile2(tileSafely) && !Main.tileTable[tileSafely.TileType]))
-                        return;
+                        return false;
 
                     break;
                 }
@@ -542,6 +542,8 @@ static class WorldGenHelper {
             }
         }
         onPlaced?.Invoke();
+
+        return true;
     }
 
     // adapted vanilla

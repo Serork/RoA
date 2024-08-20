@@ -6,18 +6,18 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common;
+namespace RoA.Common.Tiles;
 
 sealed class TransformTileSystem : ModSystem {
-    public static bool[] TransformOnKill = TileID.Sets.Factory.CreateBoolSet(true);
-    public static ushort[] ReplaceOnKillType = TileID.Sets.Factory.CreateUshortSet(0);
+    public static bool[] OnKillNormal = TileID.Sets.Factory.CreateBoolSet(true);
+    public static ushort[] ReplaceToOnKill = TileID.Sets.Factory.CreateUshortSet(0);
 
     public override void Load() {
         On_Player.DoesPickTargetTransformOnKill += DoesPickTargetTransformOnKill;
     }
 
     private bool DoesPickTargetTransformOnKill(On_Player.orig_DoesPickTargetTransformOnKill original, Player self, HitTile hitCounter, int damage, int x, int y, int pickPower, int bufferIndex, Tile tileTarget) {
-        if (!TransformOnKill[tileTarget.TileType]) {
+        if (!OnKillNormal[tileTarget.TileType]) {
             return true;
         }
         
@@ -27,8 +27,9 @@ sealed class TransformTileSystem : ModSystem {
     [Autoload(Side = ModSide.Client)]
     private sealed class TileReplacement : GlobalTile {
         public override bool CanExplode(int i, int j, int type) {
-            if (!TransformOnKill[type]) {
+            if (!OnKillNormal[type]) {
                 WorldGen.KillTile(i, j);
+
                 return true;
             }
 
@@ -36,14 +37,14 @@ sealed class TransformTileSystem : ModSystem {
         }
 
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem) {
-            if (TransformOnKill[type]) {
+            if (OnKillNormal[type]) {
                 return;
             }
 
             fail = true;
 
             if (fail && !effectOnly) {
-                TileReplacementSystem.SetReplacementData(i, j, ReplaceOnKillType[type]);
+                TileReplacementSystem.SetReplacementData(i, j, ReplaceToOnKill[type]);
             }
         }
 

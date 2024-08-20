@@ -23,8 +23,9 @@ sealed class VisualEffectDrawing : ModSystem {
 
     private static void Main_DrawProjectiles(On_Main.orig_DrawProjectiles orig, Main self) {
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        VisualEffectSystem.GetLayer(VisualEffectLayer.BehindProjs).Draw(Main.spriteBatch);
+        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDPROJS).Draw(Main.spriteBatch);
         Main.spriteBatch.End();
+
         orig(self);
     }
 
@@ -48,20 +49,22 @@ sealed class VisualEffectDrawing : ModSystem {
     }
 
     private static void DrawBehindTilesBehindNPCs() {
-        VisualEffectSystem.GetLayer(VisualEffectLayer.BehindAllNPCs).Draw(Main.spriteBatch);
+        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDNPCS).Draw(Main.spriteBatch);
     }
 
-    private static void DrawBehindTilesAboveNPCs() { }
+    private static void DrawBehindTilesAboveNPCs() {
+    }
 
-    private static void DrawBehindNPCs(ref ParticleRendererSettings particleSettings) { }
+    private static void DrawBehindNPCs(ref ParticleRendererSettings particleSettings) {
+    }
 
     private static void DrawAboveNPCs(ref ParticleRendererSettings particleSettings) {
-        VisualEffectSystem.GetLayer(VisualEffectLayer.AboveNPCs).Draw(Main.spriteBatch);
+        VisualEffectSystem.GetLayer(VisualEffectLayer.ABOVENPCS).Draw(Main.spriteBatch);
     }
 
     private void On_LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Camera camera, System.Collections.Generic.IEnumerable<Player> players) {
         Main.spriteBatch.BeginWorld(shader: false);
-        VisualEffectSystem.GetLayer(VisualEffectLayer.BehindPlayers).Draw(Main.spriteBatch);
+        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDPLAYERS).Draw(Main.spriteBatch);
         Main.spriteBatch.End();
 
         orig(self, camera, players);
@@ -69,13 +72,13 @@ sealed class VisualEffectDrawing : ModSystem {
 
     private static void Main_DrawDust(On_Main.orig_DrawDust orig, Main self) {
         Main.spriteBatch.BeginWorld(shader: false);
-        VisualEffectSystem.GetLayer(VisualEffectLayer.AbovePlayers).Draw(Main.spriteBatch);
+        VisualEffectSystem.GetLayer(VisualEffectLayer.ABOVEPLAYERS).Draw(Main.spriteBatch);
         Main.spriteBatch.End();
 
         orig(self);
 
         Main.spriteBatch.BeginWorld(shader: false);
-        VisualEffectSystem.GetLayer(VisualEffectLayer.AboveDust).Draw(Main.spriteBatch);
+        VisualEffectSystem.GetLayer(VisualEffectLayer.ABOVEDUSTS).Draw(Main.spriteBatch);
         Main.spriteBatch.End();
     }
 }

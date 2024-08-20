@@ -21,6 +21,7 @@
 	  <None Remove="Resources\Textures\Gores\Leaf.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
 	  <None Remove="Resources\Textures\Items\Materials\MiracleMint.png" />
+	  <None Remove="Resources\Textures\Items\Miscellaneous\LuminousFlower.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\Decorations\DryadStatue.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\ElderwoodChest.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ElderwoodClaws.png" />
@@ -45,6 +46,7 @@
 	  <None Remove="Resources\Textures\Tiles\Ambient\MiracleMint.png" />
 	  <None Remove="Resources\Textures\Tiles\Furniture\ElderwoodChest.png" />
 	  <None Remove="Resources\Textures\Tiles\Furniture\ElderwoodChest_Highlight.png" />
+	  <None Remove="Resources\Textures\Tiles\Miscellaneous\LuminousFlower.png" />
 	  <None Remove="Resources\Textures\Tiles\Miscellaneous\Tulips.png" />
 	  <None Remove="Resources\Textures\Tiles\Platforms\TreeBranch.png" />
 	  <None Remove="Resources\Textures\Tiles\Solid\Backwoods\BackwoodsDirt.png" />

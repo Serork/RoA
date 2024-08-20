@@ -87,3 +87,8 @@ SpikedIceStaff: {
 	DisplayName: Spiked Ice Staff
 	Tooltip: ""
 }
+
+LuminousFlower: {
+	DisplayName: Luminous Flower
+	Tooltip: ""
+}
