@@ -14,19 +14,13 @@ using Terraria;
 namespace RoA.Common.Tiles;
 
 sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
-    public readonly struct TileGenerationData(ModTile instance, int[] anchorValidTiles, byte index, byte styleX, bool onSurface, bool inDungeon, byte amount, ushort extraChance, int[] anchorValidWalls, byte xSize, byte ySize) {
-        public readonly ModTile Instance = instance;
-        public readonly int[] AnchorValidTiles = anchorValidTiles;
-        public readonly int[] AnchorValidWalls = anchorValidWalls;
+    public readonly struct TileGenerationData(SimpleTileBaseToGenerateOverTime instance, byte index, byte amount) {
+        public readonly SimpleTileBaseToGenerateOverTime Instance = instance;
         public readonly byte Index = index;
-        public readonly byte StyleX = styleX;
-        public readonly bool OnSurface = onSurface;
-        public readonly bool InDungeon = inDungeon;
         public readonly byte Amount = amount;
-        public readonly ushort ExtraChance = extraChance;
-        public readonly byte XSize = xSize;
-        public readonly byte YSize = ySize;
 
+        public readonly byte XSize => Instance.XSize;
+        public readonly byte YSize => Instance.YSize;
         public readonly bool Is1x1 => XSize == 1 && YSize == 1;
         public readonly bool Is2x2 => XSize == 2 && YSize == 2;
         public readonly bool Is2x3 => XSize == 2 && YSize == 3;
@@ -37,18 +31,18 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
     private static readonly Dictionary<byte, bool> _generatedTiles = [];
     private static readonly Dictionary<byte, byte> _tileAmountToGenerate = [];
 
-    public static TileGenerationData GetInfo<T>(T instance) where T : ModTile => _tileGenerationsInfo.Values.Single(tulipData => tulipData.Instance == instance);
-    public static bool Generated<T>(T instance) where T : ModTile => _generatedTiles[GetInfo(instance).Index];
-    public static void ResetState<T>(T instance) where T : ModTile {
+    public static TileGenerationData GetInfo<T>(T instance) where T : SimpleTileBaseToGenerateOverTime => _tileGenerationsInfo.Values.Single(tulipData => tulipData.Instance == instance);
+    public static bool Generated<T>(T instance) where T : SimpleTileBaseToGenerateOverTime => _generatedTiles[GetInfo(instance).Index];
+    public static void ResetState<T>(T instance) where T : SimpleTileBaseToGenerateOverTime {
         byte index = GetInfo(instance).Index;
         _generatedTiles[index] = false;
         _tileAmountToGenerate[index]++;
     }
 
-    public static void Register<T>(T instance, int[] anchorValidTiles, byte styleX, bool onSurface, bool inDungeon, byte amount, ushort extraChance, int[] anchorValidWalls, byte xSize, byte ySize) where T : ModTile {
-        _tileGenerationsInfo.Add(_nextId, new TileGenerationData(instance, anchorValidTiles, _nextId, styleX, onSurface && !inDungeon, inDungeon, amount, extraChance, anchorValidWalls, xSize, ySize));
+    public static void Register<T>(T instance) where T : SimpleTileBaseToGenerateOverTime {
+        _tileGenerationsInfo.Add(_nextId, new TileGenerationData(instance, _nextId, instance.Amount));
         _generatedTiles.Add(_nextId, false);
-        _tileAmountToGenerate.Add(_nextId, amount);
+        _tileAmountToGenerate.Add(_nextId, instance.Amount);
         _nextId++;
     }
 
@@ -113,8 +107,15 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
             }
 
             if (_tileAmountToGenerate[keyValuePair.Key] > 0) {
-                bool onSurface = keyValuePair.Value.OnSurface;
-                int i = genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
+                var instance = keyValuePair.Value.Instance;
+                bool onSurface = instance.OnSurface && !instance.InUnderground;
+
+                int i = genRand.Next(10, Main.maxTilesX - 10);
+                int checkX = (int)(Main.maxTilesX * 0.08f);
+                while (i > Main.spawnTileX - checkX && i < Main.spawnTileX + checkX) {
+                    i = genRand.Next(10, Main.maxTilesX - 10);
+                }
+
                 int j = !onSurface ? genRand.Next((int)Main.worldSurface - 1, (int)Main.maxTilesY - 100 + 1) : genRand.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (!tile.HasTile) {
@@ -132,22 +133,26 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
     }
 
     private static bool TryToPlace(int i, int j, TileGenerationData tileGenerationData) {
-        if (!Main.rand.NextBool(30 + tileGenerationData.ExtraChance)) {
+        var instance = tileGenerationData.Instance;
+        if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
             return false;
         }
 
         UnifiedRandom genRand = WorldGen.genRand;
-        int num2 = genRand.Next(Math.Max(WorldGen.beachDistance, i - 10), Math.Min(Main.maxTilesX - WorldGen.beachDistance, i + 10));
-        int num3 = tileGenerationData.OnSurface ? WorldGenHelper.GetFirstTileY(num2) : j;
-        num3 -= 1;
-        ushort tileType = tileGenerationData.Instance.Type;
-        if (HasValidGroundOnSpot(num2, num3, tileGenerationData) && NoNearbySame(num2, num3, tileGenerationData) &&
-            (tileGenerationData.Is2x3 ? WorldGenHelper.Place2x3(num2, num3, tileType, style: tileGenerationData.StyleX) : tileGenerationData.Is2x2 ? WorldGenHelper.Place2x2(num2, num3, tileType, style: tileGenerationData.StyleX) : WorldGen.PlaceTile(num2, num3, tileType, mute: true, style: tileGenerationData.StyleX))) {
-            if ((tileGenerationData.Is1x1 && WorldGenHelper.GetTileSafely(num2, num3).ActiveTile(tileType)) || !tileGenerationData.Is1x1) {
-                Main.LocalPlayer.position = new Microsoft.Xna.Framework.Vector2(num2, num3).ToWorldCoordinates();
+        i = genRand.Next(Math.Max(10, i - 10), Math.Min(Main.maxTilesX - 10, i + 10));
+        bool onSurface = instance.OnSurface && !instance.InUnderground;
+        j = onSurface ? WorldGenHelper.GetFirstTileY(i) : j;
+        j -= 1;
+        ushort tileType = instance.Type;
+        byte styleX = instance.StyleX;
+        if (HasValidGroundOnSpot(i, j, tileGenerationData) && NoNearbySame(i, j, tileGenerationData) &&
+            (tileGenerationData.Is2x3 ? WorldGenHelper.Place2x3(i, j, tileType, style: styleX) : 
+             tileGenerationData.Is2x2 ? WorldGenHelper.Place2x2(i, j, tileType, style: styleX) : WorldGen.PlaceTile(i, j, tileType, mute: true, style: styleX))) {
+            if ((tileGenerationData.Is1x1 && WorldGenHelper.GetTileSafely(i, j).ActiveTile(tileType)) || !tileGenerationData.Is1x1) {
+                Main.LocalPlayer.position = new Microsoft.Xna.Framework.Vector2(i, j).ToWorldCoordinates();
 
-                if (Main.netMode == NetmodeID.Server && Main.tile[num2, num3] != null && Main.tile[num2, num3].HasTile)
-                    NetMessage.SendTileSquare(-1, num2, num3);
+                if (Main.netMode == NetmodeID.Server && Main.tile[i, j] != null && Main.tile[i, j].HasTile)
+                    NetMessage.SendTileSquare(-1, i, j);
 
                 return true;
             }
@@ -161,21 +166,23 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
             if (!WorldGen.InWorld(i, j, 2))
                 return false;
 
-            Tile tile = Main.tile[i, j];
-            if (tile.AnyLiquid())
+            Tile main = Main.tile[i, j];
+            if (main.AnyLiquid())
                 return false;
 
-            tile = Main.tile[i, j + 1];
+            Tile tile = Main.tile[i, j + 1];
             if (!tile.HasTile)
                 return false;
 
             ushort type = tile.TileType;
-            ushort wallType = tile.WallType;
+            ushort wallType = main.WallType;
             if (type < 0 || type >= TileID.Count)
                 return false;
 
-            int count = tileGenerationData.AnchorValidTiles.Length;
-            foreach (int anchorValidTileType in tileGenerationData.AnchorValidTiles) {
+            var instance = tileGenerationData.Instance;
+            int[] anchorValidTiles = instance.AnchorValidTiles;
+            int count = anchorValidTiles.Length;
+            foreach (int anchorValidTileType in anchorValidTiles) {
                 if (type != anchorValidTileType) {
                     count--;
                     continue;
@@ -187,14 +194,16 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
             if (count <= 0) {
                 return false;
             }
-            if (tileGenerationData.InDungeon) {
-                if (!Main.wallDungeon[wallType]) {
+            Predicate<ushort> conditionForWallToBeValid = instance.ConditionForWallToBeValid;
+            if (conditionForWallToBeValid != null) {
+                if (!conditionForWallToBeValid(wallType)) {
                     return false;
                 }
             }
-            if (tileGenerationData.AnchorValidWalls != null) {
-                int count2 = tileGenerationData.AnchorValidWalls.Length;
-                foreach (int anchorValidWallType in tileGenerationData.AnchorValidWalls) {
+            int[] anchorValidWalls = instance.AnchorValidWalls;
+            if (anchorValidWalls != null) {
+                int count2 = anchorValidWalls.Length;
+                foreach (int anchorValidWallType in anchorValidWalls) {
                     if (wallType != anchorValidWallType) {
                         count2--;
                         continue;

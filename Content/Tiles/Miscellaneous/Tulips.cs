@@ -4,45 +4,48 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Tiles;
+using System;
+using Terraria;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class ExoticTulip : TulipTileBase {
-    protected override int[] AnchorValidTiles => [TileID.Sand];
+    public override int[] AnchorValidTiles => [TileID.Sand];
 
-    protected override ushort ExtraChance => 300;
+    public override ushort ExtraChance => 300;
 
-    protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.ExoticTulip>();
+    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.ExoticTulip>();
 
-    protected override Color MapColor => new(216, 78, 142);
+    public override Color MapColor => new(216, 78, 142);
 }
 
 sealed class SweetTulip : TulipTileBase {
-    protected override int[] AnchorValidTiles => [TileID.JungleGrass];
+    public override int[] AnchorValidTiles => [TileID.JungleGrass];
 
-    protected override ushort ExtraChance => 30;
+    public override ushort ExtraChance => 30;
 
-    protected override byte StyleX => 1;
+    public override byte StyleX => 1;
 
-    protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.SweetTulip>();
+    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.SweetTulip>();
 
-    protected override Color MapColor => new(255, 165, 0);
+    public override Color MapColor => new(255, 165, 0);
 }
 
 sealed class WeepingTulip : TulipTileBase {
-    protected override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
+    public override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
+    public override Predicate<ushort> ConditionForWallToBeValid => (wallType) => { return Main.wallDungeon[wallType]; };
 
-    protected override ushort ExtraChance => 30;
+    public override ushort ExtraChance => 30;
 
-    protected override byte StyleX => 2;
+    public override byte StyleX => 2;
 
-    protected override byte Amount => 3;
+    public override byte Amount => 3;
 
-    protected override bool InDungeon => true;
+    public override bool InUnderground => true;
 
-    protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.WeepingTulip>();
+    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.WeepingTulip>();
 
-    protected override Color MapColor => new(0, 0, 255);
+    public override Color MapColor => new(0, 0, 255);
 
     protected override void SafeSetStaticDefaults() {
         DustType = DustID.Bone;

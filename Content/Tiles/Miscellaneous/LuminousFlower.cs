@@ -11,16 +11,16 @@ using RoA.Content.Tiles.Solid.Backwoods;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
-    protected override int[] AnchorValidTiles => [TileID.Grass, TileID.JungleGrass, TileID.CorruptGrass, TileID.CrimsonGrass, (ushort)ModContent.TileType<BackwoodsGrass>()];
+    public override int[] AnchorValidTiles => [TileID.Grass, TileID.JungleGrass, TileID.CorruptGrass, TileID.CrimsonGrass, (ushort)ModContent.TileType<BackwoodsGrass>()];
 
-    protected override ushort ExtraChance => 30;
+    public override ushort ExtraChance => 30;
 
-    protected override ushort DropItem => (ushort)ModContent.ItemType<Items.Miscellaneous.LuminousFlower>();
+    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Miscellaneous.LuminousFlower>();
 
-    protected override byte XSize => 2;
-	protected override byte YSize => 3;
+    public override byte XSize => 2;
+    public override byte YSize => 3;
 
-    protected override Color MapColor => new(211, 141, 162);
+    public override Color MapColor => new(211, 141, 162);
 
     protected override void SafeSetStaticDefaults() {
         Main.tileLighted[Type] = true;

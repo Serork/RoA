@@ -6,31 +6,33 @@ using Terraria.ID;
 
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using Terraria;
+
 using Microsoft.Xna.Framework;
+using System;
 
 namespace RoA.Common.Tiles;
 
 abstract class SimpleTileBaseToGenerateOverTime : ModTile {
-    protected virtual int[] AnchorValidTiles { get; }
-    protected virtual int[] AnchorValidWalls { get; } = null;
+    public virtual int[] AnchorValidTiles { get; }
+    public virtual int[] AnchorValidWalls { get; } = null;
+    public virtual Predicate<ushort> ConditionForWallToBeValid { get; } = null;
 
-    protected virtual byte StyleX { get; }
+    public virtual byte StyleX { get; }
 
-    protected virtual bool OnSurface { get; } = true;
-    protected virtual bool InDungeon { get; }
+    public virtual bool OnSurface { get; } = true;
+    public virtual bool InUnderground { get; }
 
-    protected virtual byte Amount { get; } = 1;
+    public virtual byte Amount { get; } = 1;
 
-    protected virtual ushort ExtraChance { get; }
+    public virtual ushort ExtraChance { get; }
 
-    protected abstract Color MapColor { get; }
+    public abstract Color MapColor { get; }
 
-    protected virtual ushort DropItem { get; }
+    public virtual ushort DropItem { get; }
 
-    protected virtual byte XSize { get; } = 1;
-    protected virtual byte YSize { get; } = 1;
+    public virtual byte XSize { get; } = 1;
+    public virtual byte YSize { get; } = 1;
 
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
@@ -42,7 +44,7 @@ abstract class SimpleTileBaseToGenerateOverTime : ModTile {
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(MapColor, name);
 
-        SimpleTileGenerationOverTimeSystem.Register(this, AnchorValidTiles, StyleX, OnSurface, InDungeon, Amount, ExtraChance, AnchorValidWalls, XSize, YSize);
+        SimpleTileGenerationOverTimeSystem.Register(this);
 
         SafeSetStaticDefaults();
     }
