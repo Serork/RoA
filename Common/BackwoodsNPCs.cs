@@ -1,10 +1,15 @@
 ﻿using RiseofAges.Content.Biomes.Backwoods;
 
 using RoA.Content.NPCs.Enemies.Backwoods;
+using RoA.Content.Tiles.Platforms;
+using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Core.Utility;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common;
@@ -24,6 +29,10 @@ sealed class BackwoodsNPCs : GlobalNPC {
         pool[0] = 0f;
         pool.Clear();
 
-        pool.Add(ModContent.NPCType<Fleder>(), 1f);
+        List<int> flederValidTiles = [ModContent.TileType<BackwoodsGrass>(), ModContent.TileType<BackwoodsGreenMoss>()];
+        Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
+        if (flederValidTiles.Contains(tile.TileType)) {
+            pool.Add(ModContent.NPCType<Fleder>(), 10f);
+        }
     }
 }
