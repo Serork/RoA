@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<!-- Import tModLoader mod properties -->
 	<Import Project="..\tModLoader.targets" />
@@ -19,6 +19,7 @@
 	  <None Remove="Resources\Textures\Dusts\Tulip.png" />
 	  <None Remove="Resources\Textures\Empty.png" />
 	  <None Remove="Resources\Textures\Gores\Leaf.png" />
+	  <None Remove="Resources\Textures\Items\Materials\Bonerose.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
 	  <None Remove="Resources\Textures\Items\Materials\MiracleMint.png" />
 	  <None Remove="Resources\Textures\Items\Miscellaneous\LuminousFlower.png" />

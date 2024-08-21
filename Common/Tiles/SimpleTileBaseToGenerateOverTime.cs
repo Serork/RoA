@@ -25,7 +25,7 @@ abstract class SimpleTileBaseToGenerateOverTime : ModTile {
 
     public virtual byte Amount { get; } = 1;
 
-    public virtual ushort ExtraChance { get; }
+    public virtual ushort ExtraChance { get; } = 30;
 
     public abstract Color MapColor { get; }
 

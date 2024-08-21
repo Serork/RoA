@@ -7,16 +7,11 @@ using Terraria;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core.Utility;
+using RoA.Core.Data;
 
 namespace RoA.Content.Tiles.Plants;
 
 abstract class Plant1x : ModTile {
-    public enum Stage : byte {
-        Planted,
-        Growing,
-        Grown
-    }
-
     protected virtual short FrameWidth => 18;
 
     protected virtual int[] AnchorValidTiles => [];
@@ -46,9 +41,11 @@ abstract class Plant1x : ModTile {
 
     protected virtual void SafeStaticDefaults() { }
 
-    protected virtual Stage GetStage(int i, int j) => (Stage)(WorldGenHelper.GetTileSafely(i, j).TileFrameX / FrameWidth);
-    protected virtual bool IsGrowing(int i, int j) => GetStage(i, j) == Stage.Growing;
-    protected virtual bool IsGrown(int i, int j) => GetStage(i, j) == Stage.Grown;
+    protected virtual PlantStage GetStage(int i, int j) => (PlantStage)(WorldGenHelper.GetTileSafely(i, j).TileFrameX / FrameWidth);
+    protected virtual bool IsGrowing(int i, int j) => GetStage(i, j) == PlantStage.Growing;
+    protected virtual bool IsGrown(int i, int j) => GetStage(i, j) == PlantStage.Grown;
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = IsGrown(i, j) ? Main.rand.Next(3, 6) : IsGrowing(i, j) ? Main.rand.Next(2, 5) : Main.rand.Next(1, 3);
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
         if (i % 2 != 1) {

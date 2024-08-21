@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using RoA.Core;
 using RoA.Core.Utility;
 using System;
+using RoA.Content.Items.Materials;
 
 namespace RoA.Common.Tiles;
 
@@ -17,10 +18,15 @@ sealed class RootsDrawing : GlobalTile {
     public static bool[] ShouldDraw = TileID.Sets.Factory.CreateBoolSet();
 
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
-        if (!ShouldDraw[WorldGenHelper.GetTileSafely(i, j - 1).TileType]) {
+        Tile tile = WorldGenHelper.GetTileSafely(i, j - 1);
+        if (!ShouldDraw[tile.TileType]) {
             return;
         }
 
+        DrawRoots(i, j, spriteBatch);
+    }
+
+    public static void DrawRoots(int i, int j, SpriteBatch spriteBatch) {
         byte frameCount = 3;
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen) {

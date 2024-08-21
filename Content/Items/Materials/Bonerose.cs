@@ -6,7 +6,7 @@ using RoA.Core;
 
 namespace RoA.Content.Items.Materials;
 
-sealed class MiracleMint : ModItem {
+sealed class Bonerose : ModItem {
 	public override void SetStaticDefaults() {
 		Item.ResearchUnlockCount = 25;
 
@@ -16,7 +16,7 @@ sealed class MiracleMint : ModItem {
 	public override void SetDefaults() {
         Item.SetSize(30, 22);
 
-        Item.SetDefaultOthers(Item.sellPrice(copper: 20));
+		Item.SetDefaultOthers(Item.sellPrice(copper: 20));
 
         Item.SetDefaultToStackable(999);
     }

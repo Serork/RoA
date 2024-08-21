@@ -9,7 +9,7 @@ using Terraria;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
-sealed class ExoticTulip : TulipTileBase {
+sealed class ExoticTulip : TulipLikeTileBase {
     public override int[] AnchorValidTiles => [TileID.Sand];
 
     public override ushort ExtraChance => 300;
@@ -19,10 +19,8 @@ sealed class ExoticTulip : TulipTileBase {
     public override Color MapColor => new(216, 78, 142);
 }
 
-sealed class SweetTulip : TulipTileBase {
+sealed class SweetTulip : TulipLikeTileBase {
     public override int[] AnchorValidTiles => [TileID.JungleGrass];
-
-    public override ushort ExtraChance => 30;
 
     public override byte StyleX => 1;
 
@@ -31,11 +29,9 @@ sealed class SweetTulip : TulipTileBase {
     public override Color MapColor => new(255, 165, 0);
 }
 
-sealed class WeepingTulip : TulipTileBase {
+sealed class WeepingTulip : TulipLikeTileBase {
     public override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
     public override Predicate<ushort> ConditionForWallToBeValid => (wallType) => { return Main.wallDungeon[wallType]; };
-
-    public override ushort ExtraChance => 30;
 
     public override byte StyleX => 2;
 

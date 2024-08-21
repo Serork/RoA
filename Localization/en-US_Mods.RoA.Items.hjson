@@ -92,3 +92,8 @@ LuminousFlower: {
 	DisplayName: Luminous Flower
 	Tooltip: ""
 }
+
+Bonerose: {
+	DisplayName: Bonerose
+	Tooltip: ""
+}
