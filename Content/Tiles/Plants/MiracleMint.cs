@@ -45,7 +45,7 @@ sealed class MiracleMintTE : ModTileEntity {
     public override bool IsTileValidForEntity(int i, int j) => WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<MiracleMint>());
 }
 
-sealed class MiracleMint : Plant1x {
+sealed class MiracleMint : Plant {
     protected override void SafeStaticDefaults() {
         Main.tileLighted[Type] = true;
 

@@ -11,7 +11,7 @@ using RoA.Core.Data;
 
 namespace RoA.Common.Tiles;
 
-abstract class Plant1x : ModTile {
+abstract class Plant : ModTile {
     protected virtual short FrameWidth => 18;
 
     protected virtual int[] AnchorValidTiles => [];
