@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Core.Utility;
 using RoA.Core.Data;
 
-namespace RoA.Content.Tiles.Plants;
+namespace RoA.Common.Tiles;
 
 abstract class Plant1x : ModTile {
     protected virtual short FrameWidth => 18;

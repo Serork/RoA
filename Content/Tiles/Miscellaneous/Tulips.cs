@@ -35,8 +35,6 @@ sealed class WeepingTulip : TulipLikeTileBase {
 
     public override byte StyleX => 2;
 
-    public override byte Amount => 3;
-
     public override bool InUnderground => true;
 
     public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.WeepingTulip>();

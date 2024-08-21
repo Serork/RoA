@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Tiles;
 using Terraria.ID;
 using Terraria.ObjectData;
 
-namespace RoA.Content.Tiles.Miscellaneous;
+namespace RoA.Common.Tiles;
 
 abstract class TulipLikeTileBase : SimpleTileBaseToGenerateOverTime {
     public override string Texture => GetType().Namespace.Replace('.', '/') + "/Tulips";
