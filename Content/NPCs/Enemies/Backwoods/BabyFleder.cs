@@ -96,6 +96,8 @@ sealed class BabyFleder : ModNPC {
     }
 
     public override void AI() {
+        NPC.noGravity = true;
+
         if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
             NPC.TargetClosest();
         }
@@ -122,7 +124,6 @@ sealed class BabyFleder : ModNPC {
                 }
                 AITimer += 1f;
                 if (AITimer >= 15f && Main.rand.NextChance(AITimer / 200f)) {
-                    NPC.noGravity = false;
                     NPC.velocity.Y += 0.15f;
                     NPC.velocity.Y = Math.Min(3f, NPC.velocity.Y);
                     if (Main.tile[(int)NPC.Bottom.X / 16, (int)NPC.Bottom.Y / 16 + 1].HasTile || NPC.collideY) {
@@ -304,19 +305,14 @@ sealed class BabyFleder : ModNPC {
             ResetParentState();
             if (IsSitting) {
                 NPC.velocity *= 0.9f;
-                if (player.dead) {
-                    NPC.noGravity = false;
-                }
-                else {
-                    Rectangle playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
-                    Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 150, NPC.width + 400, NPC.height + 300);
-                    if (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax)) {
-                        _state = State.Normal;
-                        NPC.velocity.Y -= 1f;
-                        AITimer = 0f;
+                Rectangle playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
+                Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 150, NPC.width + 400, NPC.height + 300);
+                if (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax)) {
+                    _state = State.Normal;
+                    NPC.velocity.Y -= 1f;
+                    AITimer = 0f;
 
-                        NPC.netUpdate = true;
-                    }
+                    NPC.netUpdate = true;
                 }
             }
             else {
@@ -351,12 +347,8 @@ sealed class BabyFleder : ModNPC {
             if (Main.tile[x, y].HasTile && NPC.frame.Intersects(tileRect2)) {
                 NPC.position.Y -= 0.2f;
             }
-            NPC.noGravity = false;
             NPC.velocity.Y += 0.15f;
             NPC.velocity.Y = Math.Min(3f, NPC.velocity.Y);
-        }
-        else {
-            NPC.noGravity = true;
         }
 
         NPC.netUpdate = true;
