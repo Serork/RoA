@@ -24,7 +24,6 @@ sealed class TransformTileSystem : ModSystem {
         return original(self, hitCounter, damage, x, y, pickPower, bufferIndex, tileTarget);
     }
 
-    [Autoload(Side = ModSide.Client)]
     private sealed class TileReplacement : GlobalTile {
         public override bool CanExplode(int i, int j, int type) {
             if (!OnKillNormal[type]) {

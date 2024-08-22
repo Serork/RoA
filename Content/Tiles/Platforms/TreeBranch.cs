@@ -8,9 +8,10 @@ using Microsoft.Xna.Framework;
 
 using Terraria.GameContent;
 
-using RoA.Content.Dusts;
 using RoA.Core.Utility;
+
 using System;
+using RoA.Common.Tiles;
 
 namespace RoA.Content.Tiles.Platforms;
 
@@ -28,6 +29,8 @@ class TreeBranch : ModTile {
 
         TileID.Sets.Platforms[Type] = true;
 
+        CanBeSlopedTileSystem.Included[Type] = true;
+
         TileObjectData.newTile.CoordinateHeights = [16];
         TileObjectData.newTile.CoordinateWidth = 32;
         TileObjectData.newTile.CoordinatePadding = 2;
@@ -42,6 +45,7 @@ class TreeBranch : ModTile {
 
         RegisterItemDrop(ModContent.ItemType<Items.Materials.Elderwood>());
         DustType = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+
         AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
     }
 
