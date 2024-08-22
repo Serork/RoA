@@ -2,11 +2,9 @@
 
 using System;
 using RoA.Content.Tiles.Solid.Backwoods;
-using System.Collections.Generic;
 
 namespace RoA.Common.Tiles;
 
-[Autoload(Side = ModSide.Client)]
 sealed class TileCount : ModSystem {
 	public int BackwoodsTiles { get; private set; }
 

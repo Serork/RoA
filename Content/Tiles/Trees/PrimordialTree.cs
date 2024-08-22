@@ -24,7 +24,7 @@ sealed class PrimordialTree : ModTree {
 
     public override void SetStaticDefaults() => GrowsOnTileId = [ModContent.TileType<Solid.Backwoods.BackwoodsGrass>()];
 
-    public override int TreeLeaf() => ModContent.GoreType<Leaf>();
+    public override int TreeLeaf() => ModContent.GoreType<BackwoodsLeaf>();
 
     public override int CreateDust() => ModContent.DustType<Dusts.Backwoods.WoodTrash>();
 

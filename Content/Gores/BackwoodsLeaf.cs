@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Gores;
 
-sealed class Leaf : ModGore {
+sealed class BackwoodsLeaf : ModGore {
 	public override void OnSpawn(Gore gore, IEntitySource source) {
 		ChildSafety.SafeGore[gore.type] = true;
 

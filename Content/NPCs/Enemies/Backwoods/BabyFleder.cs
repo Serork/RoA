@@ -7,24 +7,37 @@ using RoA.Common;
 using RoA.Core.Utility;
 using RoA.Utilities;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class BabyFleder : ModNPC {
-    public bool HasParent => ParentIndex > -1f;
-
-    private bool IsSitting {
-        get => NPC.ai[1] == 0f;
-        set => NPC.ai[1] = value ? 0f : 1f;
+    private enum State {
+        Normal,
+        Sitting
     }
+
+    private State _state = State.Sitting;
+
+    public bool HasParent => ParentIndex > -1;
+
+    private bool IsSitting => _state == State.Sitting;
 
     public int ParentIndex {
         get => (int)NPC.ai[2] - 1;
         set => NPC.ai[2] = value + 1;
     }
 
-    private ref float State => ref NPC.ai[0];
-    private ref float Timer => ref NPC.ai[3];
+    private ref float StateTimer => ref NPC.ai[0];
+    private ref float AITimer => ref NPC.ai[3];
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write((int)_state);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _state = (State)reader.ReadInt32();
+    }
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 4;
@@ -83,22 +96,6 @@ sealed class BabyFleder : ModNPC {
     }
 
     public override void AI() {
-        if (!IsSitting) {
-            //if (NPC.collideX) {
-            //    NPC.direction = NPC.oldVelocity.X > 0f ? -1 : 1;
-            //    NPC.velocity.X = -NPC.velocity.X;
-            //}
-            //if (NPC.collideY) {
-            //    if (NPC.oldVelocity.Y > 0f) {
-            //        NPC.directionY = -1;
-            //    }
-            //    else {
-            //        NPC.directionY = 1;
-            //    }
-            //    NPC.velocity.Y = -NPC.velocity.Y;
-            //}
-            NPC.noGravity = true;
-        }
         if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
             NPC.TargetClosest();
         }
@@ -115,61 +112,59 @@ sealed class BabyFleder : ModNPC {
         else if (NPC.velocity.X <= -5f) {
             NPC.velocity.X = -5f;
         }
+        if (hasParent && parent.As<Fleder>().IsAttacking) {
+            ResetParentState();
+        }
         void move(bool flag) {
             if (!HasParent) {
                 if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
-                    Timer = 0f;
+                    AITimer = 0f;
                 }
-                Timer += 1f;
-                if (Timer >= 15f && Main.rand.NextChance(Timer / 200f)) {
+                AITimer += 1f;
+                if (AITimer >= 15f && Main.rand.NextChance(AITimer / 200f)) {
                     NPC.noGravity = false;
                     NPC.velocity.Y += 0.15f;
                     NPC.velocity.Y = Math.Min(3f, NPC.velocity.Y);
                     if (Main.tile[(int)NPC.Bottom.X / 16, (int)NPC.Bottom.Y / 16 + 1].HasTile || NPC.collideY) {
-                        Timer = 0f;
-                        IsSitting = true;
+                        AITimer = 0f;
+                        _state = State.Sitting;
+
                         NPC.netUpdate = true;
                     }
-                    if (NPC.velocity.LengthSquared() < 0.25f) {
-                        NPC.velocity = new Vector2(1.2f, 0f).RotatedByRandom(MathHelper.TwoPi);
-                    }
-                    else {
-                        NPC.velocity = NPC.velocity.RotatedBy(Main.rand.Next(-1, 2) * 0.2f);
-                    }
-                    return;
                 }
+                NPC.netUpdate = true;
             }
             hasParent = flag;
 
             float accelerationX = 0.05f;
             float accelerationY = 0.02f;
-            float maxAcceleration = 4f;
-            float maxSpeed = 1.25f;
+            float maxAcceleration = 2f;
+            float maxSpeed = 2f;
             float distance = 40f;
-            float maxDistance = 250f;
+            float maxDistance = 350f;
             float distanceBetween = Math.Abs(NPC.position.X + NPC.width / 2 - (position.X + player.width / 2));
             float currentMovement = center.Y - NPC.height / 2;
-            bool isMovingRight = (position.X >= NPC.position.X + 5f && NPC.velocity.X <= -0.5f) || (position.X <= NPC.position.X - 5d && NPC.velocity.X >= 0.5f);
+            bool isMovingRight = (position.X >= NPC.position.X + 5f && NPC.velocity.X <= -0.5f) || (position.X <= NPC.position.X - 5f && NPC.velocity.X >= 0.5f);
             bool flag2 = ParentIndex != -1f && HasParent && hasParent;
+            NPC.noTileCollide = false;
             if (flag2) {
+                NPC.SlightlyMoveTo(center, 5f, 40f);
                 if (NPC.target == 255 || player.dead || Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) {
-                    State -= 1f;
+                    StateTimer -= 1f;
                     NPC.TargetClosest(false);
+                    NPC.netUpdate = true;
                 }
-                else if (State > 0f) {
-                    State = 90f;
+                else if (StateTimer > 0f) {
+                    StateTimer = 90f;
                     NPC.TargetClosest(false);
-                }
-                if (NPC.netUpdate && target == NPC.target && direction == NPC.direction) {
-                    NPC.netUpdate = false;
+
+                    NPC.netUpdate = true;
                 }
                 if (distanceBetween > maxDistance) {
-                    NPC.SlightlyMoveTo(position, 25f, 30f);
+                    NPC.SlightlyMoveTo(position, 25f, 20f);
                     NPC.noTileCollide = true;
                 }
-                if (State <= 0f) {
-                    maxAcceleration *= 0.8f;
-                    accelerationX *= 0.7f;
+                if (StateTimer <= 0f) {
                     currentMovement = NPC.Center.Y + NPC.directionY * 1000;
                     if (NPC.velocity.X < 0f) {
                         NPC.direction = -1;
@@ -189,9 +184,9 @@ sealed class BabyFleder : ModNPC {
                             NPC.velocity.Y -= accelerationY;
                         }
                     }
-                    NPC.netUpdate = true;
                 }
             }
+            currentMovement -= maxDistance / 2f;
             if (NPC.direction == -1 && NPC.velocity.X > 0f - maxAcceleration) {
                 NPC.velocity.X -= accelerationX;
                 if (NPC.velocity.X > maxAcceleration) {
@@ -216,11 +211,10 @@ sealed class BabyFleder : ModNPC {
                     NPC.velocity.X = maxAcceleration;
                 }
             }
-            currentMovement -= maxDistance / 2f;
             if (flag2 && !(distanceBetween > maxDistance || distanceBetween < distance)) {
                 Vector2 position2 = Vector2.Normalize(center - NPC.Center - NPC.velocity) * 5f;
-                float speed2 = 0.25f;
-                float maxSpeed2 = 2f;
+                float speed2 = 0.1f;
+                float maxSpeed2 = 1.5f;
                 if (NPC.velocity.X < position2.X) {
                     if (NPC.velocity.X > maxSpeed2) {
                         NPC.velocity.X = maxSpeed2;
@@ -249,6 +243,7 @@ sealed class BabyFleder : ModNPC {
                     NPC.velocity.X = 0f;
 
                 }
+                speed2 += 0.025f;
                 if (NPC.velocity.Y < position2.Y) {
                     if (NPC.velocity.Y > maxSpeed2) {
                         NPC.velocity.Y = maxSpeed2;
@@ -306,19 +301,20 @@ sealed class BabyFleder : ModNPC {
         NPC.noGravity = true;
         bool flag4 = NPC.Distance(player.Center) < 150f;
         if (!hasParent) {
+            ResetParentState();
             if (IsSitting) {
                 NPC.velocity *= 0.9f;
                 if (player.dead) {
                     NPC.noGravity = false;
-                    return;
                 }
-                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                else {
                     Rectangle playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
-                    Rectangle npcRect = new((int)NPC.position.X - 150, (int)NPC.position.Y - 150, NPC.width + 300, NPC.height + 300);
+                    Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 150, NPC.width + 400, NPC.height + 300);
                     if (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax)) {
-                        IsSitting = false;
-                        NPC.velocity.Y -= 2f;
-                        Timer = 0f;
+                        _state = State.Normal;
+                        NPC.velocity.Y -= 1f;
+                        AITimer = 0f;
+
                         NPC.netUpdate = true;
                     }
                 }
@@ -340,7 +336,11 @@ sealed class BabyFleder : ModNPC {
             }
         }
         else {
-            IsSitting = false;
+            if (_state != State.Normal) {
+                _state = State.Normal;
+
+                NPC.netUpdate = true;
+            }
             move(true);
         }
 
@@ -354,6 +354,19 @@ sealed class BabyFleder : ModNPC {
             NPC.noGravity = false;
             NPC.velocity.Y += 0.15f;
             NPC.velocity.Y = Math.Min(3f, NPC.velocity.Y);
+        }
+        else {
+            NPC.noGravity = true;
+        }
+
+        NPC.netUpdate = true;
+    }
+
+    private void ResetParentState() {
+        if (HasParent) {
+            ParentIndex = -1;
+
+            NPC.netUpdate = true;
         }
     }
 }

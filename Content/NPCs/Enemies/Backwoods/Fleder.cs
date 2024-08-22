@@ -26,7 +26,7 @@ sealed class Fleder : ModNPC {
     private Vector2 _sittingPosition = Vector2.Zero;
 
     private bool IsSittingOnBranch => _state == State.Sitting && _sittingPosition != Vector2.Zero;
-    private bool IsAttacking => _state == State.Attacking;
+    public bool IsAttacking => _state == State.Attacking;
 
     public override void SendExtraAI(BinaryWriter writer) {
         writer.Write((int)_state);

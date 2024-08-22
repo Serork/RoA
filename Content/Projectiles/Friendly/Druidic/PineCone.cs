@@ -88,7 +88,7 @@ sealed class PineCone : NatureProjectile {
         }
         else {
             if (Projectile.ai[0] == 0f) {
-                Projectile.ai[0] = -10f * (Main.rand.NextFloat() < 0.5f).ToDirectionInt();
+                Projectile.ai[0] = -10f * Main.rand.NextBool().ToDirectionInt();
             }
         }
         Projectile.localAI[0] += 1f;

@@ -6,9 +6,10 @@ using Terraria.ModLoader;
 
 namespace RiseofAges.Content.Biomes.Backwoods;
 
-[Autoload(Side = ModSide.Client)]
 sealed class BackwoodsBiome : ModBiome {
     public static float TransitionSpeed => 0.05f;
+
+    public static BackwoodsBiome Instance => ModContent.GetInstance<BackwoodsBiome>();
 
     public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
 

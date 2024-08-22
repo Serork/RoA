@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
@@ -38,6 +39,14 @@ static class NPCExtensions {
     public static void OffsetTheSameNPC(this NPC npc1, float offsetSpeed = 0.05f) {
         if (npc1.NearestTheSame(out NPC npc2)) {
             npc1.OffsetNPC(npc2, offsetSpeed);
+        }
+    }
+
+    public static void KillNPC(this NPC npc) {
+        npc.active = false;
+        npc.life = -1;
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc.whoAmI, 0f, 0f, 0f, 0, 0, 0);
         }
     }
 }
