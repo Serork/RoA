@@ -70,6 +70,8 @@ sealed class Fleder : ModNPC {
     public override bool? CanFallThroughPlatforms() => true;
 
     public override void AI() {
+        NPC.OffsetTheSameNPC();
+
         float rotation = NPC.rotation;
         if (NPC.velocity.Y != 0f && Math.Abs(NPC.velocity.X) > 0.05f) {
             rotation = NPC.velocity.X * (MathHelper.PiOver2 * 0.135f);
@@ -109,7 +111,7 @@ sealed class Fleder : ModNPC {
                         NPC.target = activePlayer.whoAmI;
                         _state = State.Attacking;
 
-                        NPC.velocity.Y -= 8f;
+                        NPC.velocity.Y -= 5f;
 
                         NPC.netUpdate = true;
                     }

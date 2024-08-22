@@ -23,7 +23,7 @@ sealed class Bonerose : TulipLikeTileBaseButPlant {
 
     public override Color MapColor => new(178, 178, 137);
 
-    public override byte Amount => 2;
+    public override byte Amount => 5;
 
     public override bool InUnderground => true;
 

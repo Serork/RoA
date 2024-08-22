@@ -95,6 +95,78 @@ static class Helper {
         return Vector2.DistanceSquared(tile.ToWorldCoordinates(), center.ToWorldCoordinates());
     }
 
+    public static void BasicFlier(this Entity entity, float moveIntervalX = 0.1f, float moveIntervalY = 0.04f, float maxSpeedX = 4f, float maxSpeedY = 1.5f) {
+        if (entity.direction == -1 && entity.velocity.X > -maxSpeedX) {
+            entity.velocity.X -= moveIntervalX;
+            if (entity.velocity.X > maxSpeedX) {
+                entity.velocity.X -= moveIntervalX;
+            }
+            else if (entity.velocity.X > 0f) {
+                entity.velocity.X += moveIntervalX * 0.5f;
+            }
+            if (entity.velocity.X < -maxSpeedX) {
+                entity.velocity.X = -maxSpeedX;
+            }
+        }
+        else if (entity.direction == 1 && entity.velocity.X < maxSpeedX) {
+            entity.velocity.X += moveIntervalX;
+            if (entity.velocity.X < -maxSpeedX) {
+                entity.velocity.X += moveIntervalX;
+            }
+            else if (entity.velocity.X < 0f) {
+                entity.velocity.X -= moveIntervalX * 0.5f;
+            }
+            if (entity.velocity.X > maxSpeedX) {
+                entity.velocity.X = maxSpeedX;
+            }
+        }
+        if (entity is NPC npc) {
+            if (npc.directionY == -1 && (double)npc.velocity.Y > -maxSpeedY) {
+                npc.velocity.Y -= moveIntervalY;
+                if ((double)npc.velocity.Y > maxSpeedY) {
+                    npc.velocity.Y -= moveIntervalY;
+                }
+                else if (npc.velocity.Y > 0f) {
+                    npc.velocity.Y += moveIntervalY * 0.5f;
+                }
+                if ((double)npc.velocity.Y < -maxSpeedY) {
+                    npc.velocity.Y = -maxSpeedY;
+                }
+            }
+            else if (npc.directionY == 1 && (double)npc.velocity.Y < maxSpeedY) {
+                npc.velocity.Y += moveIntervalY;
+                if ((double)npc.velocity.Y < -maxSpeedY) {
+                    npc.velocity.Y += moveIntervalY;
+                }
+                else if (npc.velocity.Y < 0f) {
+                    npc.velocity.Y -= moveIntervalY * 0.5f;
+                }
+                if ((double)npc.velocity.Y > maxSpeedY) {
+                    npc.velocity.Y = maxSpeedY;
+                }
+            }
+            if (npc.collideX) {
+                npc.direction = npc.oldVelocity.X > 0f ? -1 : 1;
+                npc.velocity.X = -npc.velocity.X * 3f;
+            }
+            if (npc.collideY) {
+                if (npc.oldVelocity.Y > 0f) {
+                    npc.directionY = -1;
+                }
+                else {
+                    npc.directionY = 1;
+                }
+                npc.velocity.Y = -npc.velocity.Y * 3f;
+            }
+        }
+    }
+
+    public static void SlightlyMoveTo(this Entity entity, Vector2 position, float speed = 10f, float inertia = 15f) {
+        Vector2 movement = position - entity.position;
+        Vector2 movement2 = movement * (speed / movement.Length());
+        entity.velocity += (movement2 - entity.velocity) / inertia;
+    }
+
     // terraria overhaul
     public static float Damp(float source, float destination, float smoothing, float dt) => MathHelper.Lerp(source, destination, 1f - MathF.Pow(smoothing, dt));
 

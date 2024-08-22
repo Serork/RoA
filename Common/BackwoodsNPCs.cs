@@ -29,10 +29,14 @@ sealed class BackwoodsNPCs : GlobalNPC {
         pool[0] = 0f;
         pool.Clear();
 
-        List<int> flederValidTiles = [ModContent.TileType<BackwoodsGrass>(), ModContent.TileType<BackwoodsGreenMoss>()];
-        Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
-        if (flederValidTiles.Contains(tile.TileType)) {
-            pool.Add(ModContent.NPCType<Fleder>(), 10f);
+        if (NPC.downedBoss2) {
+            List<int> flederValidTiles = [ModContent.TileType<BackwoodsGrass>(), ModContent.TileType<BackwoodsGreenMoss>()];
+            Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
+            if (flederValidTiles.Contains(tile.TileType)) {
+                pool.Add(ModContent.NPCType<Fleder>(), 1f);
+            }
         }
+
+        pool.Add(ModContent.NPCType<BabyFleder>(), 1f);
     }
 }
