@@ -8,6 +8,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
+using Terraria.DataStructures;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -69,7 +70,12 @@ sealed class BabyFleder : ModNPC {
         }
     }
 
-    public override bool? CanFallThroughPlatforms() => true;
+    public override void OnSpawn(IEntitySource source) {
+        NPC.velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
+        NPC.netUpdate = true;
+    }
+
+    public override bool? CanFallThroughPlatforms() => !IsSitting;
 
     public override void FindFrame(int frameHeight) {
         NPC.spriteDirection = NPC.direction;
@@ -129,11 +135,10 @@ sealed class BabyFleder : ModNPC {
                     if (Main.tile[(int)NPC.Bottom.X / 16, (int)NPC.Bottom.Y / 16 + 1].HasTile || NPC.collideY) {
                         AITimer = 0f;
                         _state = State.Sitting;
-
-                        NPC.netUpdate = true;
                     }
+
+                    NPC.netUpdate = true;
                 }
-                NPC.netUpdate = true;
             }
             hasParent = flag;
 
@@ -153,9 +158,10 @@ sealed class BabyFleder : ModNPC {
                 if (NPC.target == 255 || player.dead || Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) {
                     StateTimer -= 1f;
                     NPC.TargetClosest(false);
+
                     NPC.netUpdate = true;
                 }
-                else if (StateTimer > 0f) {
+                else if (StateTimer > 0f && StateTimer != 90f) {
                     StateTimer = 90f;
                     NPC.TargetClosest(false);
 
@@ -306,10 +312,9 @@ sealed class BabyFleder : ModNPC {
             if (IsSitting) {
                 NPC.velocity *= 0.9f;
                 Rectangle playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
-                Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 150, NPC.width + 400, NPC.height + 300);
+                Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 400, NPC.width + 400, NPC.height + 800);
                 if (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax)) {
                     _state = State.Normal;
-                    NPC.velocity.Y -= 1f;
                     AITimer = 0f;
 
                     NPC.netUpdate = true;
@@ -349,9 +354,11 @@ sealed class BabyFleder : ModNPC {
             }
             NPC.velocity.Y += 0.15f;
             NPC.velocity.Y = Math.Min(3f, NPC.velocity.Y);
-        }
 
-        NPC.netUpdate = true;
+            if (Math.Abs(NPC.velocity.Y) < 0.1f) {
+                NPC.velocity.X *= 0.9f;
+            }
+        }
     }
 
     private void ResetParentState() {
