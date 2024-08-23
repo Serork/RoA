@@ -1,5 +1,10 @@
-﻿using System.IO;
+﻿using RoA.Content.Tiles.Platforms;
+using RoA.Content.Tiles.Solid.Backwoods;
 
+using System.Collections.Generic;
+using System.IO;
+
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -8,6 +13,8 @@ namespace RoA.Common;
 sealed class BackwoodsVars : ModSystem {
     public static int FirstTileYAtCenter { get; internal set; }
     public static int BackwoodsTileForBackground { get; internal set; }
+
+    public static IReadOnlyList<ushort> BackwoodsSurfaceTileTypes { get; } = [(ushort)ModContent.TileType<TreeBranch>(), (ushort)ModContent.TileType<BackwoodsGrass>(), (ushort)ModContent.TileType<BackwoodsGreenMoss>(), (ushort)ModContent.TileType<BackwoodsStone>()];
 
     public override void ClearWorld() => ResetAllFlags();
 

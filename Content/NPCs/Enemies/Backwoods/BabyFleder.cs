@@ -127,6 +127,8 @@ sealed class BabyFleder : ModNPC {
             if (!HasParent) {
                 if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
                     AITimer = 0f;
+
+                    NPC.netUpdate = true;
                 }
                 AITimer += 1f;
                 if (AITimer >= 15f && Main.rand.NextChance(AITimer / 200f)) {
@@ -136,7 +138,6 @@ sealed class BabyFleder : ModNPC {
                         AITimer = 0f;
                         _state = State.Sitting;
                     }
-
                     NPC.netUpdate = true;
                 }
             }
@@ -311,13 +312,16 @@ sealed class BabyFleder : ModNPC {
             ResetParentState();
             if (IsSitting) {
                 NPC.velocity *= 0.9f;
-                Rectangle playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
-                Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 400, NPC.width + 400, NPC.height + 800);
-                if (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax)) {
-                    _state = State.Normal;
-                    AITimer = 0f;
+                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                    Rectangle playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
+                    Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 400, NPC.width + 400, NPC.height + 800);
+                    if (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax)) {
+                        _state = State.Normal;
+                        AITimer = 0f;
+                        NPC.ai[1] = 10f;
 
-                    NPC.netUpdate = true;
+                        NPC.netUpdate = true;
+                    }
                 }
             }
             else {
@@ -357,6 +361,12 @@ sealed class BabyFleder : ModNPC {
 
             if (Math.Abs(NPC.velocity.Y) < 0.1f) {
                 NPC.velocity.X *= 0.9f;
+            }
+        }
+        else {
+            if (NPC.ai[1] > 0f) {
+                NPC.ai[1] -= 1f;
+                NPC.velocity.Y -= 0.2f;
             }
         }
     }

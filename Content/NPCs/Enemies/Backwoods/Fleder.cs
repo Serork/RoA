@@ -132,12 +132,14 @@ sealed class Fleder : ModNPC {
 
                 return true;
             }, 30);
-            foreach (Player activePlayer in Main.ActivePlayers) {
-                if (isTriggeredBy(activePlayer)) {
-                    NPC.target = activePlayer.whoAmI;
-                    _state = State.Attacking;
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                foreach (Player activePlayer in Main.ActivePlayers) {
+                    if (isTriggeredBy(activePlayer)) {
+                        NPC.target = activePlayer.whoAmI;
+                        _state = State.Attacking;
 
-                    NPC.netUpdate = true;
+                        NPC.netUpdate = true;
+                    }
                 }
             }
             if (nearestTile >= 25 * 25 && treeBranch != null && NPC.life >= NPC.lifeMax * 0.5f) {

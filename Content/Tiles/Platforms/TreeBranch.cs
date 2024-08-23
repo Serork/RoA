@@ -66,7 +66,7 @@ class TreeBranch : ModTile {
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         ulong seedForRandomness = (ulong)(i + j);
-        int frame = Math.Clamp(Utils.RandomInt(ref seedForRandomness, FrameCount + 1), 0, FrameCount - 1);
+        int frame = Math.Min(Utils.RandomInt(ref seedForRandomness, FrameCount + 1), FrameCount - 1);
         bool reversed = true;
         Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j), rightTile = WorldGenHelper.GetTileSafely(i + 1, j);
         bool hasRightTile = rightTile.HasTile;
