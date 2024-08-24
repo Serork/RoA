@@ -7,7 +7,9 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
+using Terraria.Chat;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Utilities;
@@ -166,6 +168,17 @@ static class Helper {
         Vector2 movement2 = movement * (speed / movement.Length());
         entity.velocity += (movement2 - entity.velocity) / inertia;
     }
+
+    public static void NewMessage(string text, Color color) {
+        if (Main.netMode == NetmodeID.SinglePlayer) {
+            Main.NewText(text, color);
+        }
+        else {
+            ChatHelper.BroadcastChatMessage(NetworkText.FromKey(text), color);
+        }
+    }
+
+    public static string AddSpace(this string text) => text.PadRight(text.Length + 1);
 
     // terraria overhaul
     public static float Damp(float source, float destination, float smoothing, float dt) => MathHelper.Lerp(source, destination, 1f - MathF.Pow(smoothing, dt));

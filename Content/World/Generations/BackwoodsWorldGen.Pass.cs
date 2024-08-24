@@ -155,6 +155,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGenHelper.ActiveTile(i + 1, j, AltarPlaceholderTileType)) {
                     WorldGenHelper.Place3x2(i + 1, j - 1, _altarTileType, onPlaced: () => {
                         placed = true;
+
+                        for (int xSize = 0; xSize < 3; xSize++) {
+                            for (int ySize = 0; ySize < 2; ySize++) {
+                                ModContent.GetInstance<OvergrownAltarTE>().Place(i + xSize, j - 2 + ySize);
+                            }
+                        }
                     });
                 }
                 if (placed) {

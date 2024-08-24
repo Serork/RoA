@@ -1,5 +1,6 @@
 ﻿using RoA.Common.Druid.Wreath;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
@@ -68,7 +69,7 @@ sealed class NatureWeaponHandler : GlobalItem {
                 }
                 tag = "PotentialDamage";
                 string potentialDamage = _basePotentialDamage.ToString();
-                tooltip = potentialDamage.PadRight(potentialDamage.Length + 1) + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
+                tooltip = potentialDamage.AddSpace() + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
                 tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                 index++;
             }

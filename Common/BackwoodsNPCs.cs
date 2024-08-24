@@ -31,12 +31,13 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 if (NPC.downedBoss2) {
                     if (surfaceBackwoodsTile) {
                         pool.Add(ModContent.NPCType<Fleder>(), 1f);
-                        pool.Add(ModContent.NPCType<FlederSachem>(), 0.1f);
+                        pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
                     }
                 }
 
-                pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.25f : 1f);
+                pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);
             }
         }
     }
+
 }

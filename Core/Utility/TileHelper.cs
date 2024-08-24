@@ -25,7 +25,7 @@ static class TileHelper {
             return entity as T;
         }
 
-        throw new Exception("TileEntity not found");
+        return null;
     }
 
     public static void MergeWith(ushort type, params ushort[] types) {
