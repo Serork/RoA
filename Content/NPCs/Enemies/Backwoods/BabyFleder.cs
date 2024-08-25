@@ -318,7 +318,7 @@ sealed class BabyFleder : ModNPC {
                     if (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax)) {
                         _state = State.Normal;
                         AITimer = 0f;
-                        NPC.ai[1] = 10f;
+                        NPC.ai[1] = 17f + Main.rand.NextFloatRange(2f);
 
                         NPC.netUpdate = true;
                     }
@@ -366,7 +366,7 @@ sealed class BabyFleder : ModNPC {
         else {
             if (NPC.ai[1] > 0f) {
                 NPC.ai[1] -= 1f;
-                NPC.velocity.Y -= 0.2f;
+                NPC.velocity.Y -= 0.8f * (NPC.ai[1] / 25f);
             }
         }
     }

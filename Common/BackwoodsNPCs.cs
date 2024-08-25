@@ -24,15 +24,12 @@ sealed class BackwoodsNPCs : GlobalNPC {
 
     public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
         if (spawnInfo.Player.InModBiome(BackwoodsBiome.Instance)) {
-            bool surfaceBackwoodsTile = BackwoodsVars.BackwoodsSurfaceTileTypes.Contains((ushort)spawnInfo.SpawnTileType);
             pool.Clear();
 
-            if (surfaceBackwoodsTile) {
+            if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType)) {
                 if (NPC.downedBoss2) {
-                    if (surfaceBackwoodsTile) {
-                        pool.Add(ModContent.NPCType<Fleder>(), 1f);
-                        pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
-                    }
+                    pool.Add(ModContent.NPCType<Fleder>(), 1f);
+                    pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
                 }
 
                 pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);
