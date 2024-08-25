@@ -66,7 +66,7 @@ sealed class BabyFleder : ModNPC {
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) {
         if (NPC.downedBoss2) {
-            target.AddBuff(BuffID.Bleeding, Main.expertMode ? 60 : 30);
+            target.AddBuff(BuffID.Bleeding, Main.expertMode ? 90 : 60);
         }
     }
 
@@ -99,6 +99,15 @@ sealed class BabyFleder : ModNPC {
         spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(0f, IsSitting ? 3f : 0f) + new Vector2(NPC.width, NPC.height) / 2, NPC.frame, drawColor, NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
         
         return false;
+    }
+
+    private void SitIfTileBelow() {
+        if (WorldGen.SolidTile((int)NPC.Bottom.X / 16, (int)NPC.Bottom.Y / 16 + 1) || NPC.collideY) {
+            AITimer = 0f;
+            _state = State.Sitting;
+
+            NPC.netUpdate = true;
+        }
     }
 
     public override void AI() {
@@ -134,10 +143,7 @@ sealed class BabyFleder : ModNPC {
                 if (AITimer >= 15f && Main.rand.NextChance(AITimer / 200f)) {
                     NPC.velocity.Y += 0.15f;
                     NPC.velocity.Y = Math.Min(3f, NPC.velocity.Y);
-                    if (Main.tile[(int)NPC.Bottom.X / 16, (int)NPC.Bottom.Y / 16 + 1].HasTile || NPC.collideY) {
-                        AITimer = 0f;
-                        _state = State.Sitting;
-                    }
+                    SitIfTileBelow();
                     NPC.netUpdate = true;
                 }
             }
@@ -173,6 +179,8 @@ sealed class BabyFleder : ModNPC {
                     NPC.noTileCollide = true;
                 }
                 if (StateTimer <= 0f) {
+                    SitIfTileBelow();
+
                     currentMovement = NPC.Center.Y + NPC.directionY * 1000;
                     if (NPC.velocity.X < 0f) {
                         NPC.direction = -1;
@@ -353,7 +361,7 @@ sealed class BabyFleder : ModNPC {
             int x = (int)(NPC.Center.X / 16f);
             int y = (int)(NPC.Center.Y / 16f);
             Rectangle tileRect2 = new(x * 16, y * 16, 16, 16);
-            if (Main.tile[x, y].HasTile && NPC.frame.Intersects(tileRect2)) {
+            if (WorldGenHelper.GetTileSafely(x, y).HasTile && NPC.frame.Intersects(tileRect2)) {
                 NPC.position.Y -= 0.2f;
             }
             NPC.velocity.Y += 0.15f;
