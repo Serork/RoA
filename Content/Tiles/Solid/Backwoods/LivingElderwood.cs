@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Dusts;
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 

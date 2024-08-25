@@ -1,11 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-
-using RiseofAges.Content.Biomes.Backwoods;
+﻿using RiseofAges.Content.Biomes.Backwoods;
 using RiseofAges.Content.NPCs.Backwoods;
 
 using RoA.Content.NPCs.Enemies.Backwoods;
-using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Core.Utility;
 
 using System.Collections.Generic;
 using System.Linq;
