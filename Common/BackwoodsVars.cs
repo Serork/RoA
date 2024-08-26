@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -63,7 +64,7 @@ sealed class BackwoodsVars : ModSystem {
             return;
         }
 
-        if (_preDownedBoss2Timer == -1f) {
+        if (_preDownedBoss2Timer == -1f || Main.netMode == NetmodeID.MultiplayerClient) {
             return;
         }
         _preDownedBoss2Timer += TimeSystem.LogicDeltaTime;
@@ -75,6 +76,10 @@ sealed class BackwoodsVars : ModSystem {
             string text = text1.AddSpace() + Language.GetText("Mods.RoA.World.WorldEvil" + (WorldGen.crimson ? "1" : "2")).ToString().AddSpace() + Language.GetText("Mods.RoA.World.BackwoodsFreeLast");
             text += "...";
             Helper.NewMessage(text, color);
+
+            if (Main.netMode == NetmodeID.Server) {
+                NetMessage.SendData(MessageID.WorldData);
+            }
         }
     }
 }

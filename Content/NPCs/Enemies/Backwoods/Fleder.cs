@@ -167,6 +167,8 @@ sealed class Fleder : ModNPC {
 
                     _sittingPosition = destination;
                     _state = State.Sitting;
+
+                    NPC.netUpdate = true;
                 }
 
                 if (Math.Abs(NPC.velocity.X) > 0.05f) {
@@ -184,7 +186,11 @@ sealed class Fleder : ModNPC {
         if (player.dead || !player.active) {
             NPC.TargetClosest();
             if (player.dead || !player.active) {
-                _state = State.Normal;
+                if (_state != State.Normal) {
+                    _state = State.Normal;
+
+                    NPC.netUpdate = true;
+                }
             }
         }
 
@@ -193,6 +199,8 @@ sealed class Fleder : ModNPC {
         if (!player.dead) {
             if (NPC.localAI[1] > 100f) {
                 _state = State.Attacking;
+
+                NPC.netUpdate = true;
             }
 
             NPC.TargetClosest();

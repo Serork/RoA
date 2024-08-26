@@ -157,7 +157,6 @@ sealed class BabyFleder : ModNPC {
             float maxDistance = 350f;
             float distanceBetween = Math.Abs(NPC.position.X + NPC.width / 2 - (position.X + player.width / 2));
             float currentMovement = center.Y - NPC.height / 2;
-            bool isMovingRight = (position.X >= NPC.position.X + 5f && NPC.velocity.X <= -0.5f) || (position.X <= NPC.position.X - 5f && NPC.velocity.X >= 0.5f);
             bool flag2 = ParentIndex != -1f && HasParent && hasParent;
             NPC.noTileCollide = false;
             if (flag2) {
@@ -313,7 +312,7 @@ sealed class BabyFleder : ModNPC {
         else {
             NPC.rotation = 0f;
         }
-        NPC.OffsetTheSameNPC(0.2f);
+        NPC.OffsetTheSameNPC(0.1f);
         NPC.noGravity = true;
         bool flag4 = NPC.Distance(player.Center) < 150f;
         if (!hasParent) {
