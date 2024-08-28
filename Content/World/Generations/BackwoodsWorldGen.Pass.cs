@@ -1630,7 +1630,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         // cliff
         int lastSurfaceY = _biomeSurface.Last().Y;
         //int distance = lastSurfaceY - cliffTileCoords.Y;
-        int cliffX = cliffTileCoords.X;
+        int cliffX = cliffTileCoords.X - (_toLeft ? -2 : 2);
         int startY = cliffTileCoords.Y;
         while (startY < lastSurfaceY) {
             bool flag = Math.Abs(cliffX - cliffTileCoords.X) > 20;
