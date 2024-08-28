@@ -98,14 +98,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step7_2_AddStone();
         Step8_AddCaves();
         Step8_2_AddCaves();
-        Step13_GrowBigTrees();
         Step12_AddRoots();
         Step6_SpreadGrass();
         Step6_2_SpreadGrass();
         Step9_SpreadMoss();
         Step17_AddStatues();
         Step10_SpreadMossGrass();
-        //Step13_GrowBigTrees();
+        Step13_GrowBigTrees();
         Step14_ClearRockLayerWalls();
 
         GenVars.structures.AddProtectedStructure(new Rectangle(Left, Top, _biomeWidth * 2, _biomeHeight * 2), 10);
@@ -116,7 +115,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int num992 = (int)((double)Main.maxTilesX * 0.002 * 0.5);
         int num993 = (int)((double)Main.maxTilesX * 0.0007 * 0.5);
         int num994 = (int)((double)Main.maxTilesX * 0.0003 * 0.5);
-        int minY = BackwoodsVars.FirstTileYAtCenter + 5;
+        int minY = BackwoodsVars.FirstTileYAtCenter + 15;
         int maxY = CenterY - EdgeY;
         for (int num995 = 0; num995 < num992; num995++) {
             int num996 = _random.Next(Left - 50, Right + 50);
@@ -1819,7 +1818,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         stoneCount = (int)(tileCount * 0.006f);
         for (int i = 0; i < stoneCount; i++) {
             x = _random.Next(startX - 100, endX + 100);
-            int y = _random.Next(maxY, Bottom + EdgeY);
+            int y = _random.Next(maxY, Bottom + EdgeY * 2);
             int sizeX = _random.Next(4, 10);
             int sizeY = _random.Next(5, 30);
             if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
