@@ -88,9 +88,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step1_FindPosition();
         Step2_ClearZone();
         Step3_GenerateBase();
-        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX) + 15;
-        CenterY = BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX);
+        BackwoodsVars.FirstTileYAtCenter = CenterY = WorldGenHelper.GetFirstTileY(CenterX) + 15;
         CenterY += _biomeHeight / 2;
+        BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX);
         Step4_CleanUp();
         Step5_CleanUp();
         Step11_AddOre();
@@ -124,7 +124,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
 
             for (int num997 = minY; (double)num997 < maxY; num997++) {
-                while ((((double)num996 > (double)CenterX - EdgeX / 2 && (double)num996 < (double)CenterX + EdgeX / 2) || ((double)num996 > (double)_leftTreeX - 5 && (double)num996 < (double)_leftTreeX + 5) || ((double)num996 > (double)_rightTreeX - 5 && (double)num996 < (double)_rightTreeX + 5)) && num997 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                while ((((double)num996 > (double)CenterX - EdgeX / 2 && (double)num996 < (double)CenterX + EdgeX / 2) || ((double)num996 > (double)_leftTreeX - 10 && (double)num996 < (double)_leftTreeX + 10) || ((double)num996 > (double)_rightTreeX - 10 && (double)num996 < (double)_rightTreeX + 10)) && num997 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
                     num996 = _random.Next(Left - 50, Right + 50);
                 }
                 if (Main.tile[num996, num997].HasTile) {
@@ -141,7 +141,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
 
             for (int num1000 = minY; (double)num1000 < maxY; num1000++) {
-                while ((((double)num999 > (double)CenterX - EdgeX / 2 && (double)num999 < (double)CenterX + EdgeX / 2) || ((double)num999 > (double)_leftTreeX - 5 && (double)num999 < (double)_leftTreeX + 5) || ((double)num999 > (double)_rightTreeX - 5 && (double)num999 < (double)_rightTreeX + 5)) && num1000 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                while ((((double)num999 > (double)CenterX - EdgeX / 2 && (double)num999 < (double)CenterX + EdgeX / 2) || ((double)num999 > (double)_leftTreeX - 10 && (double)num999 < (double)_leftTreeX + 10) || ((double)num999 > (double)_rightTreeX - 10 && (double)num999 < (double)_rightTreeX + 10)) && num1000 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
                     num999 = _random.Next(Left - 50, Right + 50);
                 }
                 if (Main.tile[num999, num1000].HasTile) {
@@ -158,7 +158,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
 
             for (int num1003 = minY; (double)num1003 < maxY; num1003++) {
-                while ((((double)num1002 > (double)CenterX - EdgeX / 2 && (double)num1002 < (double)CenterX + EdgeX / 2) || ((double)num1002 > (double)_leftTreeX - 5 && (double)num1002 < (double)_leftTreeX + 5) || ((double)num1002 > (double)_rightTreeX - 5 && (double)num1002 < (double)_rightTreeX + 5)) && num1003 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                while ((((double)num1002 > (double)CenterX - EdgeX / 2 && (double)num1002 < (double)CenterX + EdgeX / 2) || ((double)num1002 > (double)_leftTreeX - 10 && (double)num1002 < (double)_leftTreeX + 10) || ((double)num1002 > (double)_rightTreeX - 10 && (double)num1002 < (double)_rightTreeX + 10)) && num1003 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
                     num1002 = _random.Next(Left - 50, Right + 50);
                 }
                 if (Main.tile[num1002, num1003].HasTile) {
@@ -177,7 +177,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
 
             for (int num1006 = minY; (double)num1006 < maxY; num1006++) {
-                while ((((double)num1005 > (double)CenterX - EdgeX / 2 && (double)num1005 < (double)CenterX + EdgeX / 2) || ((double)num1005 > (double)_leftTreeX - 5 && (double)num1005 < (double)_leftTreeX + 5) || ((double)num1005 > (double)_rightTreeX - 5 && (double)num1005 < (double)_rightTreeX + 5)) && num1006 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                while ((((double)num1005 > (double)CenterX - EdgeX / 2 && (double)num1005 < (double)CenterX + EdgeX / 2) || ((double)num1005 > (double)_leftTreeX - 10 && (double)num1005 < (double)_leftTreeX + 10) || ((double)num1005 > (double)_rightTreeX - 10 && (double)num1005 < (double)_rightTreeX + 10)) && num1006 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
                     num1005 = _random.Next(Left - 50, Right + 50);
                 }
                 if (Main.tile[num1005, num1006].HasTile) {
@@ -437,14 +437,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         // adapted vanilla 
         int num1047 = 0;
         for (int num1048 = Left - 25; num1048 < Right + 25; num1048++) {
+            num1047 += _random.Next(-1, 2);
+            if (num1047 < 0)
+                num1047 = 0;
+            if (num1047 > 10)
+                num1047 = 10;
             for (int num1049 = BackwoodsVars.FirstTileYAtCenter - 10; num1049 < Bottom + 10; num1049++) {
-                num1047 += _random.Next(-1, 2);
-                if (num1047 < 0)
-                    num1047 = 0;
-
-                if (num1047 > 10)
-                    num1047 = 10;
-
                 if (!(num1049 < Main.worldSurface + 10.0 && !((double)num1049 > Main.worldSurface + (double)num1047))) {
                     if (!SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[num1048, num1049].WallType) && !MidMustSkipWallTypes.Contains(Main.tile[num1048, num1049].WallType) && Main.tile[num1048, num1049].WallType != _grassWallType && Main.tile[num1048, num1049].WallType != _leavesWallType && Main.tile[num1048, num1049].WallType != _elderwoodWallType) {
                         Main.tile[num1048, num1049].WallType = WallID.None;
