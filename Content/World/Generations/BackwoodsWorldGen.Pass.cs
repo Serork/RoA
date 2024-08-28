@@ -29,10 +29,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     public static readonly ushort[] SandInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone };
     public static readonly ushort[] SandInvalidWallTypesToKill = { 187, 220, 222, 221, 275, 308, 310, 309, 216, 217, 219, 218, 304, 305, 307, 306, 216, 187, 304, 275 };
     public static readonly ushort[] MidInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone, TileID.Marble, TileID.Granite };
+    public static readonly ushort[] MidInvalidTileTypesToKill2 = { TileID.HardenedSand, TileID.Sandstone, TileID.Marble, TileID.Granite };
     public static readonly ushort[] MidInvalidWallTypesToKill = { WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidReplaceWallTypes = { WallID.MudUnsafe, WallID.MudWallEcho, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
     public static readonly ushort[] SkipBiomeInvalidTileTypeToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone };
     public static readonly ushort[] SkipBiomeInvalidWallTypeToKill = { WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
+    public static readonly ushort[] SkipBiomeInvalidWallTypeToKill2_1 = { WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] SkipBiomeInvalidWallTypeToKill2 = { WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidMustKillTileTypes = { TileID.Ebonstone, TileID.Crimstone };
     public static readonly ushort[] MidMustSkipWallTypes = { WallID.Marble, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
@@ -53,6 +55,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private ushort _fallenTreeTileType, _plantsTileType, _bushTileType, _elderWoodChestTileType, _altarTileType, _mintTileType, _vinesTileType;
     private int _lastCliffX;
     private bool _toLeft;
+    private int _leftTreeX, _rightTreeX;
 
     private int CenterX {
         get => _positionToPlaceBiome.X;
@@ -90,6 +93,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step11_AddOre();
         Step7_AddStone();
         Step7_2_AddStone();
+        Step13_GrowBigTrees();
         Step8_AddCaves();
         Step8_2_AddCaves();
         Step6_SpreadGrass();
@@ -98,7 +102,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step9_SpreadMoss();
         Step17_AddStatues();
         Step10_SpreadMossGrass();
-        Step13_GrowBigTrees();
+        //Step13_GrowBigTrees();
         Step14_ClearRockLayerWalls();
 
         GenVars.structures.AddProtectedStructure(new Rectangle(Left, Top, _biomeWidth * 2, _biomeHeight * 2), 10);
@@ -106,18 +110,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step8_2_AddCaves() {
         // adapted vanilla
-
-        int num992 = (int)((double)Main.maxTilesX * 0.002 * 0.35);
-        int num993 = (int)((double)Main.maxTilesX * 0.0007 * 0.25);
-        int num994 = (int)((double)Main.maxTilesX * 0.0003 * 0.25);
-
+        int num992 = (int)((double)Main.maxTilesX * 0.002 * 0.5);
+        int num993 = (int)((double)Main.maxTilesX * 0.0007 * 0.5);
+        int num994 = (int)((double)Main.maxTilesX * 0.0003 * 0.5);
+        int minY = BackwoodsVars.FirstTileYAtCenter + 5;
+        int maxY = CenterY - EdgeY;
         for (int num995 = 0; num995 < num992; num995++) {
-            int num996 = _random.Next(Left - 25, Right + 25);
+            int num996 = _random.Next(Left - 50, Right + 50);
             while (((double)num996 > (double)Main.maxTilesX * 0.45 && (double)num996 < (double)Main.maxTilesX * 0.55) || num996 < GenVars.leftBeachEnd + 20 || num996 > GenVars.rightBeachStart - 20) {
-                num996 = _random.Next(Left - 25, Right + 25);
+                num996 = _random.Next(Left - 50, Right + 50);
             }
 
-            for (int num997 = BackwoodsVars.FirstTileYAtCenter + 15; (double)num997 < GenVars.worldSurfaceHigh; num997++) {
+            for (int num997 = minY; (double)num997 < maxY; num997++) {
+                while ((((double)num996 > (double)CenterX - EdgeX / 2 && (double)num996 < (double)CenterX + EdgeX / 2) || ((double)num996 > (double)_leftTreeX - 3 && (double)num996 < (double)_leftTreeX + 3) || ((double)num996 > (double)_rightTreeX - 3 && (double)num996 < (double)_rightTreeX + 3)) && num997 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                    num996 = _random.Next(Left - 50, Right + 50);
+                }
                 if (Main.tile[num996, num997].HasTile) {
                     WorldGen.TileRunner(num996, num997, _random.Next(3, 6), _random.Next(5, 50), -1, addTile: false, (double)_random.Next(-10, 11) * 0.1, 1.0);
                     break;
@@ -126,12 +133,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         for (int num998 = 0; num998 < num993; num998++) {
-            int num999 = _random.Next(Left - 25, Right + 25);
+            int num999 = _random.Next(Left - 50, Right + 50);
             while (((double)num999 > (double)Main.maxTilesX * 0.43 && (double)num999 < (double)Main.maxTilesX * 0.5700000000000001) || num999 < GenVars.leftBeachEnd + 20 || num999 > GenVars.rightBeachStart - 20) {
-                num999 = _random.Next(Left - 25, Right + 25);
+                num999 = _random.Next(Left - 50, Right + 50);
             }
 
-            for (int num1000 = BackwoodsVars.FirstTileYAtCenter + 15; (double)num1000 < GenVars.worldSurfaceHigh; num1000++) {
+            for (int num1000 = minY; (double)num1000 < maxY; num1000++) {
+                while ((((double)num999 > (double)CenterX - EdgeX / 2 && (double)num999 < (double)CenterX + EdgeX / 2) || ((double)num999 > (double)_leftTreeX - 3 && (double)num999 < (double)_leftTreeX + 3) || ((double)num999 > (double)_rightTreeX - 3 && (double)num999 < (double)_rightTreeX + 3)) && num1000 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                    num999 = _random.Next(Left - 50, Right + 50);
+                }
                 if (Main.tile[num999, num1000].HasTile) {
                     WorldGen.TileRunner(num999, num1000, _random.Next(10, 15), _random.Next(50, 130), -1, addTile: false, (double)_random.Next(-10, 11) * 0.1, 2.0);
                     break;
@@ -140,12 +150,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         for (int num1001 = 0; num1001 < num994; num1001++) {
-            int num1002 = _random.Next(Left - 25, Right + 25);
+            int num1002 = _random.Next(Left - 50, Right + 50);
             while (((double)num1002 > (double)Main.maxTilesX * 0.4 && (double)num1002 < (double)Main.maxTilesX * 0.6) || num1002 < GenVars.leftBeachEnd + 20 || num1002 > GenVars.rightBeachStart - 20) {
-                num1002 = _random.Next(Left - 25, Right + 25);
+                num1002 = _random.Next(Left - 50, Right + 50);
             }
 
-            for (int num1003 = BackwoodsVars.FirstTileYAtCenter + 15; (double)num1003 < GenVars.worldSurfaceHigh; num1003++) {
+            for (int num1003 = minY; (double)num1003 < maxY; num1003++) {
+                while ((((double)num1002 > (double)CenterX - EdgeX / 2 && (double)num1002 < (double)CenterX + EdgeX / 2) || ((double)num1002 > (double)_leftTreeX - 3 && (double)num1002 < (double)_leftTreeX + 3) || ((double)num1002 > (double)_rightTreeX - 3 && (double)num1002 < (double)_rightTreeX + 3)) && num1003 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                    num1002 = _random.Next(Left - 50, Right + 50);
+                }
                 if (Main.tile[num1002, num1003].HasTile) {
                     WorldGen.TileRunner(num1002, num1003, _random.Next(12, 25), _random.Next(150, 500), -1, addTile: false, (double)_random.Next(-10, 11) * 0.1, 4.0);
                     WorldGen.TileRunner(num1002, num1003, _random.Next(8, 17), _random.Next(60, 200), -1, addTile: false, (double)_random.Next(-10, 11) * 0.1, 2.0);
@@ -156,12 +169,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         for (int num1004 = 0; num1004 < (int)((double)Main.maxTilesX * 0.0004); num1004++) {
-            int num1005 = _random.Next(Left - 25, Right + 25);
+            int num1005 = _random.Next(Left - 50, Right + 50);
             while (((double)num1005 > (double)Main.maxTilesX * 0.4 && (double)num1005 < (double)Main.maxTilesX * 0.6) || num1005 < GenVars.leftBeachEnd + 20 || num1005 > GenVars.rightBeachStart - 20) {
-                num1005 = _random.Next(Left - 25, Right + 25);
+                num1005 = _random.Next(Left - 50, Right + 50);
             }
 
-            for (int num1006 = BackwoodsVars.FirstTileYAtCenter + 15; (double)num1006 < GenVars.worldSurfaceHigh; num1006++) {
+            for (int num1006 = minY; (double)num1006 < maxY; num1006++) {
+                while ((((double)num1005 > (double)CenterX - EdgeX / 2 && (double)num1005 < (double)CenterX + EdgeX / 2) || ((double)num1005 > (double)_leftTreeX - 3 && (double)num1005 < (double)_leftTreeX + 3) || ((double)num1005 > (double)_rightTreeX - 3 && (double)num1005 < (double)_rightTreeX + 3)) && num1006 < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                    num1005 = _random.Next(Left - 50, Right + 50);
+                }
                 if (Main.tile[num1005, num1006].HasTile) {
                     WorldGen.TileRunner(num1005, num1006, _random.Next(7, 12), _random.Next(150, 250), -1, addTile: false, 0.0, 1.0, noYChange: true);
                     break;
@@ -170,17 +186,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         double num1007 = (double)Main.maxTilesX / 4200.0;
-        for (int num1008 = 0; (double)num1008 < 5.0 * num1007; num1008++) {
-            try {
-                int num1009 = (int)Main.rockLayer;
-                int num1010 = Main.maxTilesY - 400;
-                if (num1009 >= num1010)
-                    num1009 = num1010 - 1;
+        for (int num1008 = 0; (double)num1008 < 6.0 * num1007; num1008++) {
+            int num1009 = CenterY - EdgeY;
+            int num1010 = Main.maxTilesY - 400;
+            if (num1009 >= num1010)
+                num1009 = num1010 - 1;
 
-                WorldGen.Caverer(_random.Next(Left - 25, Right + 25), _random.Next(num1009, num1010));
-            }
-            catch {
-            }
+            WorldGen.Caverer(_random.Next(Left - 50, Right + 50), _random.Next(num1009, num1010));
         }
     }
 
@@ -195,7 +207,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
         foreach (Point surface in _biomeSurface) {
             Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y);
-            if (Main.rand.NextChance(0.0135) && tile.ActiveTile(_dirtTileType)) {
+            if ((((double)surface.X > (double)CenterX - EdgeX / 2 && (double)surface.X < (double)CenterX + EdgeX / 2)) && surface.Y < BackwoodsVars.FirstTileYAtCenter + EdgeY / 2) {
+                continue;
+            }
+            if (_random.NextChance(0.0135) && tile.ActiveTile(_dirtTileType)) {
                 int sizeX = _random.Next(4, 9);
                 int sizeY = _random.Next(20, 30);
                 WorldGen.TileRunner(surface.X, surface.Y, sizeX, sizeY, _stoneTileType);
@@ -439,11 +454,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step13_GrowBigTrees() {
         int left = _toLeft ? _lastCliffX + 20 : Left;
-        int i = _random.Next(left + 15, left + 30);
-        GrowBigTree(i);
+        _leftTreeX = _random.Next(left + 15, left + 30);
+        GrowBigTree(_leftTreeX);
         int right = !_toLeft ? _lastCliffX - 20 : Right;
-        i = _random.Next(right - 30, right - 15);
-        GrowBigTree(i);
+        _rightTreeX = _random.Next(right - 30, right - 15);
+        GrowBigTree(_rightTreeX);
     }
 
     private void BigTreeBranch(int i, int j) {
@@ -509,7 +524,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GrowBigTree(int i) {
         int j = WorldGenHelper.GetFirstTileY(i, true);
         j += 2;
-        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+        while (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+            i += _random.Next(-1, 2);
             j = WorldGenHelper.GetFirstTileY(i, true);
             j += 2;
         }
@@ -797,7 +813,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             baseY = posY;
         }
 
-        ushort[] skipTileTypes = [TileID.Dirt, _stoneTileType, _mossTileType];
+        ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
         int attempts = 20;
         while (WorldGenHelper.GetTileSafely(baseX, baseY).HasTile && !skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType)) {
             baseX = _random.Next(startX, endX);
@@ -994,6 +1010,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(_dirtTileType)) {
                     tile.TileType = TileID.Dirt;
                 }
+                //if (tile.AnyLiquid()) {
+                //    tile.LiquidAmount = 0;
+                //}
             }
         }
     }
@@ -1048,8 +1067,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (num1047 > 5)
                         num1047 = 5;
                     bool edgeLeft = i < Left - 5, edgeRight = i > Right + 5;
-                    bool edgeX = edgeLeft || edgeRight;
-                    bool flag = (edgeX && _random.NextBool(3)) || (!edgeLeft && !edgeRight);
+                    bool edgeX = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeRight : edgeLeft;
+                    bool flag = (edgeX && _random.NextBool(3)) || !edgeX;
                     tile = WorldGenHelper.GetTileSafely(i + (edgeX ? num1047 : 0), j);
                     if (flag) {
                         if (tile.WallType == WallID.MudUnsafe) {
@@ -1451,7 +1470,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 killTile = true;
                                 killSand = true;
                                 if (!edgeLeft2 && !edgeRight2) {
-                                    spreadY += Main.rand.Next(-2, 3);
+                                    spreadY += _random.Next(-2, 3);
                                 }
                             }
                         }
@@ -1533,7 +1552,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool edge = j > y2 + 25 && (edgeX || j > Bottom - 25);
                 if (edge) {
                     int randomnessX = (int)(_random.Next(-20, 21) * 0.1f);
-                    int strength = Main.rand.Next(15, 40), step = Main.rand.Next(2, 13);
+                    int strength = _random.Next(15, 40), step = _random.Next(2, 13);
                     WorldGenHelper.ModifiedTileRunnerForBackwoods(i + randomnessX, j, strength, step, _dirtTileType, _dirtWallType, true, 0f, 0f, true, true, true, false);
                 }
                 else {
@@ -1631,14 +1650,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     //    WorldGenHelper.ReplaceTile(cliffX, testJ, _random.NextChance(0.75f) ? CliffPlaceholderTileType : TileID.Mud);
                     //}
                     //else {
+                    if (!SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[cliffX, testJ].TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[cliffX, testJ].WallType)) {
                         WorldGenHelper.ReplaceTile(cliffX, testJ, CliffPlaceholderTileType);
+                    }
                     //}
                 }
                 testJ++;
             }
         }
         _lastCliffX = cliffX;
-        cliffX = cliffTileCoords.X;
+        cliffX = cliffTileCoords.X - 2;
         startY = cliffTileCoords.Y;
         while (startY < lastSurfaceY) {
             bool flag = Math.Abs(cliffX - cliffTileCoords.X) > 20;
@@ -1656,19 +1677,23 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 bool flag3 = !flag2 && Main.tile[cliffX, testJ].HasTile;
                 if (flag3 || flag2) {
-                    if (flag3) {
-                        WorldGenHelper.ReplaceTile(cliffX, testJ, _random.NextChance(0.75f) ? CliffPlaceholderTileType : TileID.Mud);
-                    }
-                    else {
+                    //if (flag3) {
+                    //    WorldGenHelper.ReplaceTile(cliffX, testJ, _random.NextChance(0.75f) ? CliffPlaceholderTileType : TileID.Mud);
+                    //}
+                    //else {
+                    if (!SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[cliffX, testJ].TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[cliffX, testJ].WallType)) {
                         WorldGenHelper.ReplaceTile(cliffX, testJ, CliffPlaceholderTileType);
                     }
+                    //}
                 }
                 testJ++;
             }
         }
 
+        int waterYRandomness = 0;
         foreach (Point surface in _biomeSurface) {
-            for (int j = EdgeY; j > -50; j--) {
+            waterYRandomness += _random.Next(-1, 2);
+            for (int j = EdgeY / 4 + waterYRandomness; j > -50; j--) {
                 Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
                 if (tile.AnyLiquid()) {
                     tile.LiquidAmount = 0;
@@ -1755,9 +1780,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int worldSize = Main.maxTilesX / 4200;
         int k = worldSize == 1 ? (int)(_biomeHeight * 0.25) : worldSize == 2 ? (int)(_biomeHeight * 0.2) : (int)(_biomeHeight * 0.15);
         int y2 = BackwoodsVars.FirstTileYAtCenter;
-        int minY = (int)Main.worldSurface;
-        int maxY = Bottom + EdgeY;
-        int stoneCount = (int)(tileCount * 0.0006f);
+        int minY = CenterY - (EdgeY / 2 + EdgeY / 4);
+        int stoneCount = (int)(tileCount * 0.000525f);
         int x;
         for (int i = 0; i < stoneCount; i++) {
             x = _random.Next(startX - 100, endX + 100);
@@ -1778,20 +1802,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         ////        WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
         ////    }
         ////}
-        stoneCount = (int)(tileCount * 0.003f);
+        stoneCount = (int)(tileCount * 0.0035f);
+        int maxY = CenterY + (int)(EdgeY * 1.5f);
         for (int i = 0; i < stoneCount; i++) {
             x = _random.Next(startX - 100, endX + 100);
-            int y = _random.Next(minY, CenterY + (int)(EdgeY * 2));
+            int y = _random.Next(minY, maxY);
             int sizeX = _random.Next(2, 7);
             int sizeY = _random.Next(2, 23);
             if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
                 WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
             }
         }
-        stoneCount = (int)(tileCount * 0.0045f);
+        stoneCount = (int)(tileCount * 0.006f);
         for (int i = 0; i < stoneCount; i++) {
             x = _random.Next(startX - 100, endX + 100);
-            int y = _random.Next(CenterY +  (int)(EdgeY * 1.5f), Main.maxTilesY / 2 + EdgeY);
+            int y = _random.Next(maxY, Bottom + EdgeY);
             int sizeX = _random.Next(4, 10);
             int sizeY = _random.Next(5, 30);
             if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
@@ -1814,9 +1839,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int y = _random.Next(minY + 5, maxY + 5);
             if (WorldGenHelper.ActiveTile(x, y, _dirtTileType) || WorldGenHelper.ActiveTile(x, y, _stoneTileType)) {
                 int type = -1;
-                if (_random.NextBool(6)) {
-                    type = -2;
-                }
+                //if (_random.NextBool(6)) {
+                //    type = -2;
+                //}
                 int sizeX = _random.Next(5, 15);
                 int sizeY = _random.Next(30, 200);
                 WorldGen.TileRunner(x, y, sizeX, sizeY, type);

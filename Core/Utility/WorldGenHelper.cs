@@ -1206,11 +1206,14 @@ static class WorldGenHelper {
                                 63, 64, 65, 66, 67, 68, 192, 10, 11, 12, 14, 15, 16, 17, 18, 19, 26, 28, 31,
                                 32, 33, 34, 42, 79, 86, 87, 88, 89, 90, 91, 92, 93, 100, 101, 104, 105, 374 };
 
-                            if ((!BackwoodsBiomePass.SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[k, l].WallType) &&
+                            if ((!BackwoodsBiomePass.SkipBiomeInvalidWallTypeToKill2_1.Contains(Main.tile[k, l].WallType) &&
                                  !BackwoodsBiomePass.SandInvalidTileTypesToKill.Contains(Main.tile[k, l].TileType) &&
                                  !BackwoodsBiomePass.SandInvalidWallTypesToKill.Contains(Main.tile[k, l].WallType) &&
-                                 !BackwoodsBiomePass.MidInvalidTileTypesToKill.Contains(Main.tile[k, l].TileType) &&
-                                 Main.tile[k, l].TileType != TileID.Sand) && !AnyLiquid(k, l)) {
+                                 !BackwoodsBiomePass.MidInvalidTileTypesToKill2.Contains(Main.tile[k, l].TileType) &&
+                                 Main.tile[k, l].TileType != TileID.Sand)) {
+                                if (Main.tile[k, l].AnyLiquid()) {
+                                    Main.tile[k, l].LiquidAmount = 0;
+                                }
                                 if (!noTiles) {
                                     if (Kill.Contains(Main.tile[k, l].TileType)) {
                                         WorldGen.KillTile(k, l);
