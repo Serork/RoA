@@ -962,8 +962,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 }
                             }
                             if (!hasItemInChest.Item1) {
-                                item.SetDefaults(itemType);
-                                item.stack = itemStack;
+                                chest.item[slotId].SetDefaults(itemType);
+                                chest.item[slotId].stack = itemStack;
                                 slotId++;
                             }
                             else {
@@ -1362,7 +1362,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step5_CleanUp() {
         foreach (Point surface in _biomeSurface) {
-            for (int j = -_biomeHeight / 3 + 10; j < -2; j++) {
+            for (int j = -_biomeHeight / 3 - 10; j < -2; j++) {
                 if (WorldGenHelper.IsCloud(surface.X, surface.Y + j)) {
                     break;
                 }
