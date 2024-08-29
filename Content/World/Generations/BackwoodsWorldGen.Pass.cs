@@ -114,7 +114,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step_AddGems() {
         // adapted vanilla
         for (int num198 = 0; (double)num198 < (double)Main.maxTilesX * 0.25; num198++) {
-            int num199 = _random.Next(CenterY, GenVars.lavaLine);
+            int num199 = _random.Next(CenterY - EdgeY / 2, GenVars.lavaLine);
             int num200 = _random.Next(Left - 25, Right + 25);
             if (Main.tile[num200, num199].HasTile && (Main.tile[num200, num199].TileType == _dirtTileType || Main.tile[num200, num199].TileType == _stoneTileType || Main.tile[num200, num199].TileType == TileID.Dirt)) {
                 int num201 = _random.Next(1, 4);
@@ -1103,7 +1103,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                     if (num1047 > 5)
                         num1047 = 5;
-                    bool edgeLeft = i < Left - 35, edgeRight = i > Right + 35;
+                    bool edgeLeft = i < Left - 25, edgeRight = i > Right + 25;
                     //bool edgeX = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeRight : edgeLeft;
                     bool edgeX = edgeRight || edgeLeft;
                     bool flag0 = (edgeRight || edgeLeft) && _random.NextBool(3);
