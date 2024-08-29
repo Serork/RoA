@@ -1,13 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RiseofAges.Common.Utilities.Extensions;
-
 using RoA.Common;
-using RoA.Content.Tiles.Walls;
-using RoA.Content.World.Generations;
+using RoA.Common.Utilities.Extensions;
 using RoA.Core;
-using RoA.Core.Utility;
 
 using System;
 
@@ -15,7 +11,8 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
-namespace RiseofAges.Content.Biomes.Backwoods;
+
+namespace RoA.Content.Biomes.Backwoods;
 
 [Autoload(Side = ModSide.Client)]
 sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
@@ -50,9 +47,9 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
 	public override bool PreDrawCloseBackground(SpriteBatch spriteBatch) {
         int[] slotAArray = [
             BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsFar"),
-            BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures +  "BackwoodsMid"),
-            BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures +  "BackwoodsClose"),
-            BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures +  "BackwoodsMid2")
+            BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsMid"),
+            BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsClose"),
+            BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsMid2")
         ];
         Texture2D close = TextureAssets.Background[slotAArray[2]].Value,
                   mid = TextureAssets.Background[slotAArray[1]].Value,

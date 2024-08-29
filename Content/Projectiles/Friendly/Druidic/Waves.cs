@@ -13,7 +13,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RiseofAges.Content.Projectiles.Friendly.Druid;
+namespace RoA.Content.Projectiles.Friendly.Druid;
 
 sealed class InfectedWave : Wave {
 	public override Color UsedColor() => new(66, 54, 112, 255);

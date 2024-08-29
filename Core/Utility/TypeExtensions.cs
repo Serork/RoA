@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace RiseofAges.Common.Utilities.Extensions;
+namespace RoA.Common.Utilities.Extensions;
 
 static class TypeExtensions {	
 	public static object GetFieldValue(this Type type, string fieldName, object obj = null, BindingFlags? flags = null) {

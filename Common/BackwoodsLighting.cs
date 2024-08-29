@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RiseofAges.Content.Biomes.Backwoods;
 using RoA.Common.Tiles;
+using RoA.Content.Biomes.Backwoods;
+
 using System;
 
 using Terraria;

@@ -1,19 +1,15 @@
-using Microsoft.Xna.Framework;
-
 using ReLogic.Content.Sources;
 
+using RoA.Common.Networking;
+using RoA.Content.Backgrounds;
 using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Content.Backgrounds;
 
 using System.IO;
 
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
-using RoA.Common.Networking;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 
 namespace RoA;
 

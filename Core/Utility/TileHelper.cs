@@ -1,12 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RiseofAges.Common.Utilities.Extensions;
+using RoA.Common.Utilities.Extensions;
 
-using RoA.Content.Tiles.Plants;
-
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;

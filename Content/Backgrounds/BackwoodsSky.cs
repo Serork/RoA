@@ -1,19 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
-using RiseofAges.Common.Utilities.Extensions;
-using RiseofAges.Content.Biomes.Backwoods;
-
-using RoA.Common;
-using RoA.Content.World.Generations;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 
 using System;
 
 using Terraria;
-using Terraria.GameContent;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 

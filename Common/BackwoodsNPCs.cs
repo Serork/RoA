@@ -1,6 +1,4 @@
-﻿using RiseofAges.Content.Biomes.Backwoods;
-using RiseofAges.Content.NPCs.Backwoods;
-
+﻿using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Enemies.Backwoods;
 
 using System.Collections.Generic;

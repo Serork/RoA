@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RiseofAges.Content.Projectiles.Friendly.Druid;
-
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Content.Projectiles.Friendly.Druid;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;

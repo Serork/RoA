@@ -1,4 +1,3 @@
-using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -6,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RiseofAges.Content.NPCs.Backwoods;
+namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class FlederSachem : ModNPC {
 	public override string Texture => ResourceManager.EmptyTexture;
