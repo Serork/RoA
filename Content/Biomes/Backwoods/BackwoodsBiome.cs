@@ -12,7 +12,7 @@ sealed class BackwoodsBiome : ModBiome {
 
     public static BackwoodsBiome Instance => ModContent.GetInstance<BackwoodsBiome>();
 
-    public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
+    public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 
     public override void SpecialVisuals(Player player, bool isActive) => player.ManageSpecialBiomeVisuals(RoA.BackwoodsSky, player.InModBiome(ModContent.GetInstance<BackwoodsBiome>()), player.Center);
 

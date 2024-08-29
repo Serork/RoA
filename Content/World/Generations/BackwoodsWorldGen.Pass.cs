@@ -98,6 +98,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step7_2_AddStone();
         Step8_AddCaves();
         Step8_2_AddCaves();
+        Step_AddGems();
         Step12_AddRoots();
         Step6_SpreadGrass();
         Step6_2_SpreadGrass();
@@ -108,6 +109,29 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step14_ClearRockLayerWalls();
 
         GenVars.structures.AddProtectedStructure(new Rectangle(Left, Top, _biomeWidth * 2, _biomeHeight * 2), 10);
+    }
+
+    private void Step_AddGems() {
+        // adapted vanilla
+        for (int num198 = 0; (double)num198 < (double)Main.maxTilesX * 0.25; num198++) {
+            int num199 = _random.Next(CenterY, GenVars.lavaLine);
+            int num200 = _random.Next(Left - 25, Right + 25);
+            if (Main.tile[num200, num199].HasTile && (Main.tile[num200, num199].TileType == _dirtTileType || Main.tile[num200, num199].TileType == _stoneTileType || Main.tile[num200, num199].TileType == TileID.Dirt)) {
+                int num201 = _random.Next(1, 4);
+                int num202 = _random.Next(1, 4);
+                int num203 = _random.Next(1, 4);
+                int num204 = _random.Next(1, 4);
+                int num205 = _random.Next(12);
+                int num206 = 0;
+                num206 = ((num205 >= 3) ? ((num205 < 6) ? 1 : ((num205 < 8) ? 2 : ((num205 < 10) ? 3 : ((num205 >= 11) ? 5 : 4)))) : 0);
+                for (int num207 = num200 - num201; num207 < num200 + num202; num207++) {
+                    for (int num208 = num199 - num203; num208 < num199 + num204; num208++) {
+                        if (!Main.tile[num207, num208].HasTile)
+                            WorldGen.PlaceTile(num207, num208, 178, mute: true, forced: false, -1, num206);
+                    }
+                }
+            }
+        }
     }
 
     private void Step8_2_AddCaves() {
@@ -534,7 +558,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GrowBigTree(int i, bool isLeft = true) {
         int j = WorldGenHelper.GetFirstTileY(i, true);
         j += 2;
-        while (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > BackwoodsVars.FirstTileYAtCenter + 15) {
+        while (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > BackwoodsVars.FirstTileYAtCenter + 8) {
             i += isLeft ? 1 : -1;
             j = WorldGenHelper.GetFirstTileY(i, true);
             j += 2;
@@ -1201,7 +1225,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = Main.tile[i, j];
                 if ((tile.TileType == _grassTileType || tile.TileType == _leavesTileType) && !Main.tile[i, j + 1].HasTile) {
                     if (WorldGen.genRand.NextBool(tile.TileType == _grassTileType ? 2 : 3)) {
-                        WorldGen.PlaceTile(i, j + 1, tile.WallType == _grassWallType ? _vinesTileType2 : _vinesTileType);
+                        WorldGen.PlaceTile(i, j + 1, (tile.WallType == _grassWallType || Main.tile[i, j + 1].WallType == _grassWallType) ? _vinesTileType2 : _vinesTileType);
                     }
                 }
                 if (tile.TileType == _vinesTileType) {
@@ -1580,7 +1604,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     Tile tile = WorldGenHelper.GetTileSafely(i, j);
                     if (mid || (!mid && !SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) || tile.AnyLiquid()) {
                         bool killTile = true, killWater = false;
-                        if (MidInvalidTileTypesToKill.Contains(tile.TileType) || MidMustSkipWallTypes.Contains(tile.WallType) ||
+                        if (MidInvalidTileTypesToKill2.Contains(tile.TileType) || MidMustSkipWallTypes.Contains(tile.WallType) ||
                             SandInvalidWallTypesToKill.Contains(tile.WallType) || SandInvalidTileTypesToKill.Contains(tile.TileType)) {
                             killTile = false;
                         }
