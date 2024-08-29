@@ -1104,7 +1104,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                     if (num1047 > 5)
                         num1047 = 5;
-                    bool edgeLeft = i < Left - 25, edgeRight = i > Right + 25;
+                    bool edgeLeft = i + 3 < Left - 30, edgeRight = i - 3 > Right + 30;
                     //bool edgeX = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeRight : edgeLeft;
                     bool edgeX = edgeRight || edgeLeft;
                     bool flag0 = (edgeRight || edgeLeft) && _random.NextBool(3);
