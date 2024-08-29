@@ -230,7 +230,5 @@ sealed class Cacti : NatureProjectile {
 
             Projectile.timeLeft = 10;
         }
-
-        public override bool? CanCutTiles() => false;
     }
 }

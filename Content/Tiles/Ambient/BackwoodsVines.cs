@@ -8,7 +8,9 @@ using Microsoft.Xna.Framework;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class BackwoodsVines : ModTile {
+sealed class BackwoodsVinesFlower : BackwoodsVines { }
+
+class BackwoodsVines : ModTile {
     private static readonly ushort[] ValidTilesToGrowFrom = [(ushort)ModContent.TileType<BackwoodsGrass>(), (ushort)ModContent.TileType<LivingElderwoodlLeaves>()];
 
     public override void SetStaticDefaults() {

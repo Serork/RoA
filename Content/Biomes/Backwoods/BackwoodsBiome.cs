@@ -25,7 +25,7 @@ sealed class BackwoodsBiome : ModBiome {
 
     public override int Music => Main.dayTime ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") : MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight");
 
-    public override string MapBackground => ResourceManager.Textures + "DruidBiomeMapBG";
+    public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG";
 
     public override string BackgroundPath => MapBackground;
 
