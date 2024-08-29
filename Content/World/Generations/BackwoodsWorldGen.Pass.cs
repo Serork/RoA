@@ -925,21 +925,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         foreach (Point killPos in killTiles) {
             WorldGen.KillTile(killPos.X, killPos.Y);
         }
-        //for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
-        //    for (int y2 = baseY - distance; y2 < baseY + distance; y2++) {
-        //        if (WorldGenHelper.ActiveTile(x2, y2, placeholderTileType)) {
-        //            WorldGenHelper.ReplaceTile(x2, y2, _elderwoodTileType);
-        //        }
-        //    }
-        //}
-
-        //for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
-        //    for (int y2 = baseY - distance; y2 < baseY + distance; y2++) {
-        //        if (WorldGenHelper.ActiveWall(x2, y2, placeholderWallType)) {
-        //            WorldGenHelper.ReplaceWall(x2, y2, _elderwoodWallType);
-        //        }
-        //    }
-        //}
 
         // place chest
         bool chestPlaced = false;
@@ -1031,6 +1016,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 break;
             }
             killTileCount--;
+        }
+
+        for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
+            for (int y2 = baseY - distance; y2 < baseY + distance; y2++) {
+                if (WorldGenHelper.ActiveTile(x2, y2, placeholderTileType)) {
+                    WorldGenHelper.ReplaceTile(x2, y2, _elderwoodTileType);
+                }
+            }
+        }
+
+        for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
+            for (int y2 = baseY - distance; y2 < baseY + distance; y2++) {
+                if (WorldGenHelper.ActiveWall(x2, y2, placeholderWallType)) {
+                    WorldGenHelper.ReplaceWall(x2, y2, _elderwoodWallType);
+                }
+            }
         }
 
         size = distance;
