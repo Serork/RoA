@@ -116,13 +116,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         // adapted vanilla
         for (int i = Left - 100; i <= Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY * 2; j++) {
+                Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                if (tile.ActiveTile(_mossTileType)) {
+                    WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
+                }
+            }
+        }
+        for (int i = Left - 100; i <= Right + 100; i++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY * 2; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_mossTileType)) {
                     bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
-                    if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.75))) && WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6))) {
+                    if (_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) {
+                        WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
                     }
-                    WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
                 }
             }
         }
@@ -1131,7 +1139,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     tile = WorldGenHelper.GetTileSafely(i + (edgeX ? num1047 : 0), j);
                     if (flag) {
                         if (tile.WallType == WallID.MudUnsafe) {
-                            WorldGenHelper.GetTileSafely(i - (edgeRight ? 3 : -3), j).WallType = _dirtWallType;
+                            if (!edgeX) {
+                                tile.WallType = _dirtWallType;
+                            }
+                            else {
+                                WorldGenHelper.GetTileSafely(i - (edgeRight ? _random.Next(-1, 2) : -_random.Next(-1, 2)), j).WallType = _dirtWallType;
+                            }
                         }
                         ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe, WallID.JungleUnsafe];
                         if (invalidWalls.Contains(tile.WallType)) {
