@@ -408,9 +408,9 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static void Place3x2(int x, int y, ushort type, int styleX = 0, int styleY = 0, Action? onPlaced = null) {
+    public static bool Place3x2(int x, int y, ushort type, int styleX = 0, int styleY = 0, Action? onPlaced = null) {
         if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
-            return;
+            return false;
 
         bool flag2 = true;
         int num = y - 1;
@@ -494,6 +494,8 @@ static class WorldGenHelper {
 
             onPlaced?.Invoke();
         }
+
+        return flag2;
     }
 
     // adapted vanilla

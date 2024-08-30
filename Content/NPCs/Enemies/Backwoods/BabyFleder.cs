@@ -141,8 +141,8 @@ sealed class BabyFleder : ModNPC {
                 }
                 AITimer += 1f;
                 if (AITimer >= 15f && Main.rand.NextChance(AITimer / 200f)) {
-                    NPC.velocity.Y += 0.15f;
-                    NPC.velocity.Y = Math.Min(3f, NPC.velocity.Y);
+                    ApplyGravity();
+
                     SitIfTileBelow();
                     NPC.netUpdate = true;
                 }
@@ -363,8 +363,7 @@ sealed class BabyFleder : ModNPC {
             if (WorldGenHelper.GetTileSafely(x, y).HasTile && NPC.frame.Intersects(tileRect2)) {
                 NPC.position.Y -= 0.2f;
             }
-            NPC.velocity.Y += 0.15f;
-            NPC.velocity.Y = Math.Min(3f, NPC.velocity.Y);
+            ApplyGravity();
 
             if (Math.Abs(NPC.velocity.Y) < 0.1f) {
                 NPC.velocity.X *= 0.9f;
@@ -376,6 +375,11 @@ sealed class BabyFleder : ModNPC {
                 NPC.velocity.Y -= 0.8f * (NPC.ai[1] / 25f);
             }
         }
+    }
+
+    private void ApplyGravity() {
+        NPC.velocity.Y += 0.15f;
+        NPC.velocity.Y = Math.Min(5f, NPC.velocity.Y);
     }
 
     private void ResetParentState() {
