@@ -94,10 +94,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true) + 2;
         Step11_AddOre();
-        Step7_AddStone();
-        Step7_2_AddStone();
         Step8_AddCaves();
         Step8_2_AddCaves();
+        Step7_AddStone();
+        Step7_2_AddStone();
         Step_AddGems();
         Step12_AddRoots();
         Step6_SpreadGrass();
@@ -117,7 +117,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = Left - 100; i <= Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                if (tile.ActiveTile(_mossTileType)) {
+                if (tile.ActiveTile(_mossTileType) && WorldGen.SolidTile2(tile)) {
                     WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
                 }
             }
@@ -128,9 +128,23 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_mossTileType)) {
                     bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
-                    if (_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) {
+                    if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) && WorldGen.SolidTile2(tile)) {
                         WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
                     }
+                }
+            }
+        }
+        for (int i = Left - 100; i <= Right + 100; i++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 20; j++) {
+                Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
+                Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                if (_random.NextBool(2) && tile.ActiveTile(_mossTileType) && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock && !aboveTile.HasTile) {
+                    tile = WorldGenHelper.GetTileSafely(i, j - 1);
+                    tile.HasTile = true;
+                    tile.TileFrameY = 0;
+                    tile.TileType = _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>();
+                    tile.TileFrameX = (short)(18 * _random.Next(6));
+                    break;
                 }
             }
         }
