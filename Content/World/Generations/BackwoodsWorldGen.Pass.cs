@@ -114,14 +114,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddPills() {
         // adapted vanilla
-        for (int i = Left - 50; i <= Right + 50; i++) {
+        for (int i = Left - 75; i <= Right + 75; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY * 2; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_mossTileType)) {
                     bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
-                    bool flag = (_random.NextBool(5) || flag2) && WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
-                    if (!flag || _random.NextChance(0.75) || flag2) {
+                    bool flag = (_random.NextBool(4) || flag2) && WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
+                    if (!flag || flag2) {
                         WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
                     }
                 }
@@ -257,7 +257,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (_random.NextChance(0.0135) && tile.ActiveTile(_dirtTileType)) {
                 int sizeX = _random.Next(4, 9);
                 int sizeY = _random.Next(20, 30);
-                WorldGen.TileRunner(surface.X, surface.Y + sizeY / 3, sizeX, sizeY, _stoneTileType);
+                WorldGen.TileRunner(surface.X, surface.Y, sizeX, sizeY, _stoneTileType);
             }
         }
     }
@@ -1624,7 +1624,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             while (true) {
                 bool edgeLeft = i < topLeftTileX + 15, edgeRight = i > topRightTileX - 15;
                 bool mid = i > topLeftTileX + _biomeWidth / 3 - 20 && i < topRightTileX - _biomeWidth / 3 + 20;
-                bool edgeX = edgeLeft || edgeRight, jungleEdge = GenVars.dungeonSide == 1 ? edgeLeft : edgeRight;
+                bool edgeX = edgeLeft || edgeRight, jungleEdge = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeLeft : edgeRight;
                 bool edge = j > y2 + 25 && (edgeX || j > Bottom - 25);
                 if (edge) {
                     int randomnessX = (int)(_random.Next(-20, 21) * 0.1f);
