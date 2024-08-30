@@ -114,13 +114,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddPills() {
         // adapted vanilla
-        for (int i = Left - 75; i <= Right + 75; i++) {
+        for (int i = Left - 100; i <= Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY * 2; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_mossTileType)) {
                     bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
-                    bool flag = (_random.NextBool(4) || flag2) && WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
+                    bool flag = (_random.NextBool(4) || (flag2 && _random.NextChance(0.75))) && WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
                     if (!flag || flag2) {
                         WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
                     }
@@ -819,7 +819,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step10_SpreadMossGrass() {
-        for (int i = Left - 25; i < Right + 25; i++) {
+        for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = Top - 10; j < Bottom + 10; j++) {
                 if (WorldGenHelper.ActiveTile(i, j, _mossTileType)) {
                     for (int offset = 0; offset < 4; offset++) {
@@ -894,7 +894,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 for (int j = (int)-num5 / 2; j < (int)num5 / 2; j++) {
                     int x3 = (int)x + i;
                     int y3 = (int)y + j;
-                    Main.tile[x3, y3].ClearTile();
+                    Main.tile[x3, y3].ClearEverything();
                     WorldGen.PlaceTile(x3, y3, placeholderTileType, true, true);
                     if (Main.tile[x3 - 1, y3].TileType == placeholderTileType && Main.tile[x3 + 1, y3].TileType == placeholderTileType && Main.tile[x3, y3 - 1].TileType == placeholderTileType && Main.tile[x3, y3 + 1].TileType == placeholderTileType && Main.tile[x3 - 1, y3 - 1].TileType == placeholderTileType && Main.tile[x3 + 1, y3 - 1].TileType == placeholderTileType && Main.tile[x3 + 1, y3 + 1].TileType == placeholderTileType && Main.tile[x3 - 1, y3 + 1].TileType == placeholderTileType) {
                         WorldGenHelper.ReplaceWall(x3, y3, placeholderWallType);
@@ -1132,7 +1132,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     tile = WorldGenHelper.GetTileSafely(i + (edgeX ? num1047 : 0), j);
                     if (flag) {
                         if (tile.WallType == WallID.MudUnsafe) {
-                            tile.WallType = _dirtWallType;
+                            WorldGenHelper.GetTileSafely(i - (edgeRight ? 3 : -3), j).WallType = _dirtWallType;
                         }
                         ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe, WallID.JungleUnsafe];
                         if (invalidWalls.Contains(tile.WallType)) {

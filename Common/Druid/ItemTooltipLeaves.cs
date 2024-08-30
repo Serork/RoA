@@ -26,6 +26,10 @@ sealed class ItemTooltipLeaves : GlobalItem {
     }
 
     public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {
+        if (Main.gameMenu) {
+            return false;
+        }
+
         if (!item.IsDruidic()) {
             TooltipFallingLeaves.ResetData();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -32,6 +33,10 @@ sealed class InterfaceElementsSystem : ModSystem {
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
+        if (Main.gameMenu) {
+            return;
+        }
+
         foreach (InterfaceElement element in GetElements()) {
             int index = element.GetInsertIndex(layers);
             if (index != -1) {
