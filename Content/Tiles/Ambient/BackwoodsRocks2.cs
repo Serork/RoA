@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework.Graphics;
+
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ModLoader;
@@ -36,4 +38,12 @@ class BackwoodsRocks1 : ModTile {
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 3;
+
+    public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
+        if (i % 2 != 1) {
+            return;
+        }
+
+        spriteEffects = SpriteEffects.FlipHorizontally;
+    }
 }
