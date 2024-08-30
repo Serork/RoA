@@ -98,11 +98,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step7_2_AddStone();
         Step8_AddCaves();
         Step8_2_AddCaves();
-        Step13_GrowBigTrees();
         Step_AddGems();
         Step12_AddRoots();
         Step6_SpreadGrass();
         Step6_2_SpreadGrass();
+        Step13_GrowBigTrees();
         Step9_SpreadMoss();
         Step17_AddStatues();
         Step_AddPills();
