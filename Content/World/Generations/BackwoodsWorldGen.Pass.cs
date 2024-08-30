@@ -119,9 +119,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_mossTileType)) {
-                    bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20;
+                    bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
                     bool flag = (_random.NextBool(5) || flag2) && WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
-                    if (!flag && (_random.NextBool(2) || flag2)) {
+                    if (!flag || _random.NextChance(0.75) || flag2) {
                         WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
                     }
                 }
@@ -1380,7 +1380,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step5_CleanUp() {
         foreach (Point surface in _biomeSurface) {
-            for (int j = -_biomeHeight / 3 - 10; j < -2; j++) {
+            for (int j = -(_biomeHeight / 3 + 10); j < -2; j++) {
                 if (WorldGenHelper.IsCloud(surface.X, surface.Y + j)) {
                     break;
                 }
@@ -1408,6 +1408,18 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 if (tile.WallType != WallID.None) {
                     tile.WallType = WallID.None;
+                }
+            }
+        }
+
+        foreach (Point surface in _biomeSurface) {
+            for (int j = -_biomeHeight / 4; j < -1; j++) {
+                if (WorldGenHelper.IsCloud(surface.X, surface.Y + j)) {
+                    break;
+                }
+                Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
+                if (SandTileTypes.Contains(tile.TileType)) {
+                    WorldGen.KillTile(surface.X, surface.Y + j);
                 }
             }
         }
