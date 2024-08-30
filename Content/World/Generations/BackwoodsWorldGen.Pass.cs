@@ -120,10 +120,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_mossTileType)) {
                     bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
-                    bool flag = (_random.NextBool(4) || (flag2 && _random.NextChance(0.75))) && WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
-                    if (!flag || flag2) {
-                        WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
+                    if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.75))) && WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6))) {
                     }
+                    WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
                 }
             }
         }
