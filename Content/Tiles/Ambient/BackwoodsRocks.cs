@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -7,6 +9,20 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
+
+sealed class BackwoodsRocks0 : BackwoodsRocks1 {
+    public override bool CreateDust(int i, int j, ref int type) {
+        Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        if (tile.TileFrameX <= 108) {
+            type = ModContent.DustType<Dusts.Backwoods.Stone>();
+        }
+        else {
+            type = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+        }
+
+        return true;
+    }
+}
 
 sealed class BackwoodsRocks2 : BackwoodsRocks1 { }
 

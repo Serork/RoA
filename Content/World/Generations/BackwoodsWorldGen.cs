@@ -30,5 +30,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex -= 3;
         tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsOtherPlacements));
+
+        tasks.Add(new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
     }
 }
