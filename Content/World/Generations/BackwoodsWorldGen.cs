@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
 
-using RoA.Core.Utility;
-
-using System.Collections.Generic;
-
-using Terraria;
 using Terraria.GameContent.Generation;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;

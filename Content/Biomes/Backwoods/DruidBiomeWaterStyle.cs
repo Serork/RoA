@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
+using RoA.Common.Tiles;
 using RoA.Core;
 
 using Terraria;
@@ -27,10 +28,11 @@ sealed class DruidBiomeWaterStyle : ModWaterStyle {
 
     public override byte GetRainVariant()  => (byte)Main.rand.Next(3);
 
-    public override void LightColorMultiplier(ref float r, ref float g, ref float b)  {
-        r = 0.1f;
-        g = 0.7f;
-        b = 0.3f;
+    public override void LightColorMultiplier(ref float r, ref float g, ref float b) {
+        float value = MathHelper.Clamp((ModContent.GetInstance<TileCount>().BackwoodsTiles - 1000f) / 500f, 0f, 1f);
+        r = MathHelper.Lerp(0.88f, 0.1f, value);
+        g = MathHelper.Lerp(0.96f, 0.7f, value);
+        b = MathHelper.Lerp(1.015f, 0.3f, value);
     }
 
     public override Color BiomeHairColor() => new(45, 140, 88);
