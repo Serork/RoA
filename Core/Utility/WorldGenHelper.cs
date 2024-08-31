@@ -1,23 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System.Linq;
+using ReLogic.Utilities;
+
+using RoA.Content.Tiles.Platforms;
+using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.World.Generations;
+
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Content.Tiles.Platforms;
-using RoA.Content.World.Generations;
-using ReLogic.Utilities;
 using Terraria.WorldBuilding;
-using System.Buffers.Text;
 
 namespace RoA.Core.Utility;
 
 static class WorldGenHelper {
-    public static int SafeFloatingIslandY => Main.maxTilesY / 7 + 5;
+    public static int SafeFloatingIslandY => (int)GenVars.worldSurfaceLow - 30;
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;

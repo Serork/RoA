@@ -33,7 +33,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     public static readonly ushort[] MidInvalidWallTypesToKill = { WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidReplaceWallTypes = { WallID.MudUnsafe, WallID.MudWallEcho, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
     public static readonly ushort[] SkipBiomeInvalidTileTypeToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone };
-    public static readonly ushort[] SkipBiomeInvalidWallTypeToKill = { WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
+    public static readonly ushort[] SkipBiomeInvalidWallTypeToKill = { WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] SkipBiomeInvalidWallTypeToKill2_1 = { WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] SkipBiomeInvalidWallTypeToKill2 = { WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidMustKillTileTypes = { TileID.Ebonstone, TileID.Crimstone };
