@@ -20,7 +20,7 @@ sealed class BabyFleder : ModNPC {
 
     private State _state = State.Sitting;
 
-    public bool HasParent => ParentIndex > -1;
+    private bool HasParent => ParentIndex > -1;
 
     private bool IsSitting => _state == State.Sitting;
 

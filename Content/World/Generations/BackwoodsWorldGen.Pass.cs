@@ -105,11 +105,77 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step13_GrowBigTrees();
         Step9_SpreadMoss();
         Step17_AddStatues();
+        Step_AddSpikes();
         Step_AddPills();
         Step10_SpreadMossGrass();
         Step14_ClearRockLayerWalls();
 
         GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
+    }
+
+    private void Step_AddSpikes() {
+        // adapted vanilla
+        ushort stalactite = (ushort)ModContent.TileType<BackwoodsRockSpikes1>(),
+               stalactiteSmall = (ushort)ModContent.TileType<BackwoodsRockSpikes3>(),
+               stalagmite = (ushort)ModContent.TileType<BackwoodsRockSpikes2>(),
+               stalagmiteSmall = (ushort)ModContent.TileType<BackwoodsRockSpikes4>();
+        for (int x = Left - 100; x <= Right + 100; x++) {
+            for (int y = (int)Main.worldSurface; y < Bottom + EdgeY * 2; y++) {
+                // stalactite
+                if (WorldGen.SolidTile(x, y - 1) && !Main.tile[x, y].HasTile && !Main.tile[x, y + 1].HasTile) {
+                    if (Main.tile[x, y - 1].TileType == _mossTileType && _random.NextBool(5)) {
+                        int variation = _random.Next(3);
+                        int num3 = variation * 18;
+                        bool preferSmall = _random.NextBool();
+                        Tile tile = Main.tile[x, y];
+                        tile.HasTile = true;
+                        if (preferSmall) {
+                            tile.TileType = stalactiteSmall;
+                            tile.TileFrameX = (short)num3;
+                            tile.TileFrameY = 0;
+                        }
+                        else {
+                            tile.TileType = stalactite;
+                            tile.TileFrameX = (short)num3;
+                            tile.TileFrameY = 0;
+
+                            tile = Main.tile[x, y + 1];
+                            tile.HasTile = true;
+                            tile.TileType = stalactite;
+                            tile.TileFrameX = (short)num3;
+                            tile.TileFrameY = 18;
+                        }
+                    }
+                }
+
+                // stalagmite
+                if (WorldGen.SolidTile(x, y + 1) && !Main.tile[x, y].HasTile && !Main.tile[x, y - 1].HasTile) {
+                    if (Main.tile[x, y + 1].TileType == _mossTileType && _random.NextBool(5)) {
+                        int variation = _random.Next(3);
+                        int num3 = variation * 18;
+                        bool preferSmall = _random.NextBool();
+                        Tile tile = Main.tile[x, y];
+                        tile.HasTile = true;
+                        if (preferSmall) {
+                            tile.TileType = stalagmiteSmall;
+                            tile.TileFrameX = (short)num3;
+                            tile.TileFrameY = 0;
+                        }
+                        else {
+                            tile.TileType = stalagmite;
+                            tile.TileFrameX = (short)num3;
+                            tile.TileFrameY = 18;
+
+                            tile = Main.tile[x, y - 1];
+                            tile.HasTile = true;
+                            tile.TileType = stalagmite;
+                            tile.TileFrameX = (short)num3;
+                            tile.TileFrameY = 0;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void Step_AddPills() {
@@ -129,7 +195,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(_mossTileType)) {
                     bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
                     if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) && WorldGen.SolidTile2(tile)) {
-                        WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3>(), _random.Next(6));
+                        WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3x2>(), _random.Next(6));
                     }
                 }
             }
@@ -1102,7 +1168,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks0>();
                 }
                 if (tile.ActiveTile(186)) {
-                    tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks3>();
+                    tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks3x2>();
                 }
             }
         }
