@@ -1338,7 +1338,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         void cleanUp() {
             int num1047 = 0;
+            int num1048 = 0;
             for (int i = Left - 50; i < Right + 50; i++) {
+                num1048 += _random.Next(-1, 2);
+                if (num1048 < 0)
+                    num1048 = 0;
+
+                if (num1048 > 10)
+                    num1048 = 10;
                 for (int j = Top - 15; j < Bottom + 15; j++) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j);
                     if (tile.ActiveTile(_mossTileType)) {
@@ -1385,10 +1392,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                     if (num1047 > 5)
                         num1047 = 5;
-                    bool edgeLeft = i < Left - 20 && i > Left - 40, edgeRight = i > Right + 20 && i < Right + 40;
+                    bool edgeLeft = i < Left - 20, edgeRight = i > Right + 20;
                     //bool edgeX = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeRight : edgeLeft;
                     bool edgeX = edgeRight || edgeLeft;
-                    bool flag2 = _random.NextBool(8);
+                    bool flag2 = _random.NextBool(4);
                     bool flag0 = (edgeRight || edgeLeft) && flag2;
                     bool flag = flag0 || !edgeX;
                     tile = WorldGenHelper.GetTileSafely(i + (edgeX ? num1047 : 0), j);
@@ -1398,7 +1405,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 tile.WallType = _dirtWallType;
                             }
                             else {
-                                WorldGenHelper.GetTileSafely(i - (edgeRight ? 5 + _random.Next(-2, 3) : -5 + -_random.Next(-2, 3)), j).WallType = _dirtWallType;
+                                WorldGenHelper.GetTileSafely(i + num1048 - (edgeRight ? 5 + _random.Next(-2, 3) : -5 + -_random.Next(-2, 3)), j).WallType = _dirtWallType;
                             }
                         }
                         ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe, WallID.JungleUnsafe];
