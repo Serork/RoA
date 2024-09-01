@@ -111,7 +111,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
     }
 
-    private void Step_AddSurfaceChests() {
+    private void Step_AddChests() {
         // adapted vanilla
         for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.005); num536++) {
             double value8 = (double)num536 / ((double)Main.maxTilesX * 0.005);
@@ -153,6 +153,37 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 }
                             }
                         }
+                    }
+                }
+
+                if (flag31 && WorldGen.AddBuriedChest(num538 + (flag32 ? _random.Next(1, 3) : 0), num539, 0, notNearOtherChests: true, -1, trySlope: false, 0)) {
+                    flag30 = true;
+                }
+                else {
+                    num537++;
+                    if (num537 >= 2000)
+                        flag30 = true;
+                }
+            }
+        }
+
+        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.005); num536++) {
+            double value8 = (double)num536 / ((double)Main.maxTilesX * 0.005);
+            bool flag30 = false;
+            int num537 = 0;
+            while (!flag30) {
+                int num538 = _random.Next(Left - 100, Right + 100);
+                int num539 = _random.Next((int)Main.worldSurface + 10, Bottom + EdgeY * 2);
+                while (WorldGen.oceanDepths(num538, num539)) {
+                    num538 = _random.Next(Left - 100, Right + 100);
+                    num539 = _random.Next((int)Main.worldSurface + 10, Bottom + EdgeY * 2);
+                }
+
+                bool flag31 = false;
+                bool flag32 = false;
+                if (Main.tile[num538, num539 + 1].TileType == _mossTileType) {
+                    if (_random.NextBool(5)) {
+                        flag31 = true;
                     }
                 }
 
@@ -1354,10 +1385,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                     if (num1047 > 5)
                         num1047 = 5;
-                    bool edgeLeft = i < Left - 30, edgeRight = i > Right + 30;
+                    bool edgeLeft = i < Left - 20 && i > Left - 40, edgeRight = i > Right + 20 && i < Right + 40;
                     //bool edgeX = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeRight : edgeLeft;
                     bool edgeX = edgeRight || edgeLeft;
-                    bool flag2 = _random.NextBool(5);
+                    bool flag2 = _random.NextBool(8);
                     bool flag0 = (edgeRight || edgeLeft) && flag2;
                     bool flag = flag0 || !edgeX;
                     tile = WorldGenHelper.GetTileSafely(i + (edgeX ? num1047 : 0), j);
@@ -1367,7 +1398,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 tile.WallType = _dirtWallType;
                             }
                             else {
-                                WorldGenHelper.GetTileSafely(i - (edgeRight ? 3 + _random.Next(-1, 2) : -3 + -_random.Next(-1, 2)), j).WallType = _dirtWallType;
+                                WorldGenHelper.GetTileSafely(i - (edgeRight ? 5 + _random.Next(-2, 3) : -5 + -_random.Next(-2, 3)), j).WallType = _dirtWallType;
                             }
                         }
                         ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe, WallID.JungleUnsafe];
@@ -1539,7 +1570,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Set(1f);
         Step16_PlaceAltar();
 
-        Step_AddSurfaceChests();
+        Step_AddChests();
         //Step15_AddLootRooms();
     }
 
@@ -2154,7 +2185,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int startX = Left - 25;
         int endX = Right + 25;
         int worldSize = Main.maxTilesX / 4200;
-        int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY;
+        int minY = BackwoodsVars.FirstTileYAtCenter;
         int maxY = Bottom + EdgeY;
         int x;
         int maxCaves = (int)(tileCount * 0.0001625f * 0.75f);
