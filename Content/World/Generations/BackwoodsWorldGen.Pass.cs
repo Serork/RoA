@@ -129,7 +129,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag32 = false;
                 if (!Main.tile[num538, num539].HasTile) {
                     bool flag = Main.tile[num538, num539].WallType == _elderwoodWallType;
-                    if (((Main.tile[num538, num539].WallType == _dirtWallType/* || Main.tile[num538, num539].WallType == _leavesWallType*/ || Main.tile[num538, num539].WallType == _grassWallType || Main.tile[num538, num539].WallType == WallID.GrassUnsafe || Main.tile[num538, num539].WallType == WallID.FlowerUnsafe) && _random.NextBool(5)) || flag)
+                    if (((Main.tile[num538, num539].WallType == _dirtWallType/* || Main.tile[num538, num539].WallType == _leavesWallType*/ || Main.tile[num538, num539].WallType == _grassWallType || Main.tile[num538, num539].WallType == WallID.GrassUnsafe || Main.tile[num538, num539].WallType == WallID.FlowerUnsafe) && _random.NextBool(12)) || flag)
                         flag31 = true;
                     if (flag) {
                         flag32 = true;
@@ -182,7 +182,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag31 = false;
                 bool flag32 = false;
                 if (Main.tile[num538, num539 + 1].TileType == _mossTileType) {
-                    if (_random.NextBool(5)) {
+                    if (_random.NextBool(10)) {
                         flag31 = true;
                     }
                 }
