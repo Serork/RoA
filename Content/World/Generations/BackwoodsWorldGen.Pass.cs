@@ -182,7 +182,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag31 = false;
                 bool flag32 = false;
                 if (Main.tile[num538, num539 + 1].TileType == _mossTileType) {
-                    if (_random.NextBool(10)) {
+                    if (_random.NextBool(8)) {
                         flag31 = true;
                     }
                 }
@@ -813,7 +813,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GrowBigTree(int i, bool isLeft = true) {
         int j = WorldGenHelper.GetFirstTileY(i, true);
         j += 2;
-        while (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > BackwoodsVars.FirstTileYAtCenter + 5) {
+        while (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.First(x => x.X == i).Y + 5) {
             i += isLeft ? 1 : -1;
             j = WorldGenHelper.GetFirstTileY(i, true);
             j += 2;
