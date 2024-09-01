@@ -1423,6 +1423,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Set(0.2f);
         foreach (Point surface in _biomeSurface) {
             for (int j = 3; j > -_biomeHeight / 3 + 10; j--) {
+                j = Math.Max(j, WorldGenHelper.SafeFloatingIslandY);
+
                 Tile aboveTile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j - 1);
                 Tile belowTile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j + 1);
                 Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
@@ -1483,6 +1485,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Set(0.6f);
         foreach (Point surface in _biomeSurface) {
             for (int j = -10; j < 4; j++) {
+                j = Math.Max(j, WorldGenHelper.SafeFloatingIslandY);
+
                 Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
                 if (MidMustKillWallTypes.Contains(tile.WallType)) {
                     tile.WallType = WallID.None;
@@ -1514,11 +1518,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         // place vines
         for (int i = Left - 50; i <= Right + 50; i++) {
-            for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + EdgeY; j++) {
+            for (int j = /*WorldGenHelper.SafeFloatingIsland*/Y; j < CenterY + EdgeY; j++) {
                 Tile tile = Main.tile[i, j];
                 if ((tile.TileType == _grassTileType || tile.TileType == _leavesTileType) && !Main.tile[i, j + 1].HasTile) {
                     if (_random.NextBool(tile.TileType == _grassTileType ? 2 : 3)) {
-                        WorldGen.PlaceTile(i, j + 1, (tile.WallType == _grassWallType || Main.tile[i, j + 1].WallType == _grassWallType || tile.WallType == _leavesTileType || Main.tile[i, j + 1].WallType == _leavesTileType) ? _vinesTileType2 : _vinesTileType);
+                        WorldGen.PlaceTile(i, j + 1, (tile.WallType == _grassWallType || Main.tile[i, j + 1].WallType == _grassWallType || tile.WallType == _leavesWallType || Main.tile[i, j + 1].WallType == _leavesWallType) ? _vinesTileType2 : _vinesTileType);
                     }
                 }
                 if (tile.TileType == _vinesTileType) {
@@ -1657,6 +1661,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step5_CleanUp() {
         foreach (Point surface in _biomeSurface) {
             for (int j = -(_biomeHeight / 3 + 10); j < -2; j++) {
+                j = Math.Max(j, WorldGenHelper.SafeFloatingIslandY);
+
                 if (WorldGenHelper.IsCloud(surface.X, surface.Y + j)) {
                     break;
                 }
@@ -1690,6 +1696,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         foreach (Point surface in _biomeSurface) {
             for (int j = -_biomeHeight / 4; j < -1; j++) {
+                j = Math.Max(j, WorldGenHelper.SafeFloatingIslandY);
+
                 if (WorldGenHelper.IsCloud(surface.X, surface.Y + j)) {
                     break;
                 }
@@ -1702,6 +1710,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         foreach (Point surface in _biomeSurface) {
             for (int j = -_biomeHeight / 4; j < 2; j++) {
+                j = Math.Max(j, WorldGenHelper.SafeFloatingIslandY);
+
                 if (WorldGenHelper.IsCloud(surface.X, surface.Y + j)) {
                     break;
                 }
@@ -1720,6 +1730,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         foreach (Point surface in _biomeSurface) {
             for (int j = -10; j < 2; j++) {
+                j = Math.Max(j, WorldGenHelper.SafeFloatingIslandY);
+
                 if (WorldGenHelper.IsCloud(surface.X, surface.Y + j)) {
                     break;
                 }
@@ -2056,6 +2068,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         foreach (Point surface in _biomeSurface) {
             waterYRandomness += _random.Next(-1, 2);
             for (int j = EdgeY / 4 + waterYRandomness; j > -50; j--) {
+                j = Math.Max(j, WorldGenHelper.SafeFloatingIslandY);
+
                 Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
                 if (tile.AnyLiquid()) {
                     tile.LiquidAmount = 0;
