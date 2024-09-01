@@ -182,7 +182,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag31 = false;
                 bool flag32 = false;
                 if (Main.tile[num538, num539 + 1].TileType == _mossTileType) {
-                    if (_random.NextBool(8)) {
+                    if (_random.NextBool(6)) {
                         flag31 = true;
                     }
                 }
