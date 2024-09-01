@@ -17,7 +17,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Core.Utility;
 
 static class WorldGenHelper {
-    public static int SafeFloatingIslandY => (int)GenVars.worldSurfaceLow - 30;
+    public static int SafeFloatingIslandY => (int)GenVars.worldSurfaceLow - 15;
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;
@@ -1208,7 +1208,7 @@ static class WorldGenHelper {
                                 63, 64, 65, 66, 67, 68, 192, 10, 11, 12, 14, 15, 16, 17, 18, 19, 26, 28, 31,
                                 32, 33, 34, 42, 79, 86, 87, 88, 89, 90, 91, 92, 93, 100, 101, 104, 105, 374 };
 
-                            if ((!BackwoodsBiomePass.SkipBiomeInvalidWallTypeToKill2_1.Contains(Main.tile[k, l].WallType) &&
+                            if ((!BackwoodsBiomePass.SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[k, l].WallType) &&
                                  !BackwoodsBiomePass.SandInvalidTileTypesToKill.Contains(Main.tile[k, l].TileType) &&
                                  !BackwoodsBiomePass.SandInvalidWallTypesToKill.Contains(Main.tile[k, l].WallType) &&
                                  !BackwoodsBiomePass.MidInvalidTileTypesToKill2.Contains(Main.tile[k, l].TileType) &&
