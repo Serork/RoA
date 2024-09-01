@@ -129,7 +129,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag32 = false;
                 if (!Main.tile[num538, num539].HasTile) {
                     bool flag = Main.tile[num538, num539].WallType == _elderwoodWallType;
-                    if ((Main.tile[num538, num539].WallType == _dirtWallType && _random.NextBool(5))/* || Main.tile[num538, num539].WallType == _leavesWallType*/ || Main.tile[num538, num539].WallType == _grassWallType || Main.tile[num538, num539].WallType == WallID.GrassUnsafe || Main.tile[num538, num539].WallType == WallID.FlowerUnsafe || flag)
+                    if (((Main.tile[num538, num539].WallType == _dirtWallType/* || Main.tile[num538, num539].WallType == _leavesWallType*/ || Main.tile[num538, num539].WallType == _grassWallType || Main.tile[num538, num539].WallType == WallID.GrassUnsafe || Main.tile[num538, num539].WallType == WallID.FlowerUnsafe) && _random.NextBool(5)) || flag)
                         flag31 = true;
                     if (flag) {
                         flag32 = true;
@@ -1405,7 +1405,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 tile.WallType = _dirtWallType;
                             }
                             else {
-                                WorldGenHelper.GetTileSafely(i + num1048 - (edgeRight ? 5 + _random.Next(-2, 3) : -5 + -_random.Next(-2, 3)), j).WallType = _dirtWallType;
+                                WorldGenHelper.GetTileSafely(i + (edgeRight ? -num1048 : num1048) - (edgeRight ? 5 + _random.Next(-2, 3) : -5 + -_random.Next(-2, 3)), j).WallType = _dirtWallType;
                             }
                         }
                         ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe, WallID.JungleUnsafe];
@@ -2192,7 +2192,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int startX = Left - 25;
         int endX = Right + 25;
         int worldSize = Main.maxTilesX / 4200;
-        int minY = BackwoodsVars.FirstTileYAtCenter;
+        int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY / 2;
         int maxY = Bottom + EdgeY;
         int x;
         int maxCaves = (int)(tileCount * 0.0001625f * 0.75f);
