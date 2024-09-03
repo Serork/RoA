@@ -18,7 +18,7 @@ sealed class BackwoodsSky : CustomSky {
     private float _opacity;
 
     public override void Update(GameTime gameTime) {
-        if (!Main.LocalPlayer.InModBiome(ModContent.GetInstance<BackwoodsBiome>()) || Main.gameMenu) {
+        if (!Main.LocalPlayer.InModBiome<BackwoodsBiome>() || Main.gameMenu) {
             _skyActive = false;
         }
         if (_skyActive && _opacity < 1f) {
@@ -50,7 +50,7 @@ sealed class BackwoodsSky : CustomSky {
 
     public override void Activate(Vector2 position, params object[] args) => _skyActive = true;
 
-    public override void Deactivate(params object[] args) => _skyActive = Main.LocalPlayer.InModBiome(ModContent.GetInstance<BackwoodsBiome>());
+    public override void Deactivate(params object[] args) => _skyActive = Main.LocalPlayer.InModBiome<BackwoodsBiome>();
 
     public override void Reset() => _skyActive = false;
 

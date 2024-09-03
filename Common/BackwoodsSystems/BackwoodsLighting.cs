@@ -9,7 +9,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace RoA.Common;
+namespace RoA.Common.BackwoodsSystems;
 
 sealed class BackwoodsLighting : ModSystem {
 	private float _alpha, _alpha2;

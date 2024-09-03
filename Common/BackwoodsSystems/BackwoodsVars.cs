@@ -13,7 +13,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace RoA.Common;
+namespace RoA.Common.BackwoodsSystems;
 
 sealed class BackwoodsVars : ModSystem {
     private static float _preDownedBoss2Timer;

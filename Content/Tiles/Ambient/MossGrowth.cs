@@ -1,16 +1,17 @@
-﻿using Terraria.ModLoader;
-using Terraria;
-
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Core.Utility;
+using RoA.Common.WorldEvents;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Core.Utility;
 
-using Terraria.ObjectData;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.ID;
-using Microsoft.Xna.Framework;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
@@ -21,6 +22,8 @@ sealed class MossGrowth : ModTile {
         Main.tileNoFail[Type] = true;
         Main.tileLavaDeath[Type] = true;
         Main.tileLighted[Type] = true;
+
+        TileID.Sets.SwaysInWindBasic[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, 0, 0);
@@ -34,6 +37,8 @@ sealed class MossGrowth : ModTile {
         DustType = DustID.GreenMoss;
         HitSound = SoundID.Grass;
     }
+
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => BackwoodsGreenMoss.SetupLight(ref r, ref g, ref b);
 
     public override void NearbyEffects(int i, int j, bool closer) {
         ushort moss = (ushort)ModContent.TileType<BackwoodsGreenMoss>();

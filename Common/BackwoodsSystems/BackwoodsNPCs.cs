@@ -7,17 +7,17 @@ using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Common;
+namespace RoA.Common.BackwoodsSystems;
 
 sealed class BackwoodsNPCs : GlobalNPC {
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns) {
-        if (player.InModBiome(BackwoodsBiome.Instance)) {
+        if (player.InModBiome<BackwoodsBiome>()) {
             spawnRate = (int)(spawnRate * 0.3f);
         }
     }
 
     public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
-        if (spawnInfo.Player.InModBiome(BackwoodsBiome.Instance)) {
+        if (spawnInfo.Player.InModBiome<BackwoodsBiome>()) {
             pool.Clear();
 
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType)) {
