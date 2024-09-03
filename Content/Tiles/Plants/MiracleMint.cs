@@ -16,7 +16,7 @@ using RoA.Common.Tiles;
 
 namespace RoA.Content.Tiles.Plants;
 
-sealed class MiracleMint : Plant {
+sealed class MiracleMint : PlantBase {
     protected override void SafeStaticDefaults() {
         Main.tileLighted[Type] = true;
 
