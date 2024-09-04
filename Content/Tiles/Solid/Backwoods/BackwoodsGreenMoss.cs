@@ -3,10 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
-using RoA.Core;
 using RoA.Core.Utility;
-
-using System;
 
 using Terraria;
 using Terraria.ID;
@@ -38,12 +35,22 @@ sealed class BackwoodsGreenMoss : ModTile {
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => SetupLight(ref r, ref g, ref b);
 
     public static void SetupLight(ref float r, ref float g, ref float b) {
-        if (!BackwoodsFogHandler.IsFogActive) {
-            return;
-        }
+        float value = BackwoodsFogShaderData.Opacity;
+        r = 49 / 255f * value;
+        g = 134 / 255f * value;
+        b = 114 / 255f * value;
+    }
 
-        r = 49 / 255f;
-        g = 134 / 255f;
-        b = 114 / 255f;
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        Tile tile = Main.tile[i, j];
+        Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+        if (Main.drawToScreen) {
+            zero = Vector2.Zero;
+        }
+        int height = tile.TileFrameY == 36 ? 18 : 16;
+        Main.spriteBatch.Draw(this.GetTileGlowTexture(),
+                              new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
+                              new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
+                              TileDrawingExtra.BackwoodsMossGlowColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
     }
 }

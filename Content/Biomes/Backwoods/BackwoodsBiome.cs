@@ -12,6 +12,8 @@ namespace RoA.Content.Biomes.Backwoods;
 sealed class BackwoodsBiome : ModBiome {
     public static float TransitionSpeed => 0.05f;
 
+    public static bool IsActiveForFogEffect => ModContent.GetInstance<TileCount>().BackwoodsTiles > 650;
+
     public static BackwoodsBiome Instance => ModContent.GetInstance<BackwoodsBiome>();
 
     public override SceneEffectPriority Priority => SceneEffectPriority.Environment;

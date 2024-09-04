@@ -319,6 +319,7 @@ sealed class BabyFleder : ModNPC {
             ResetParentState();
             if (IsSitting) {
                 NPC.velocity *= 0.9f;
+                NPC.TargetClosest();
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
                     Rectangle playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
                     Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 400, NPC.width + 400, NPC.height + 800);

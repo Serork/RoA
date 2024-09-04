@@ -1,16 +1,15 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Core;
+using RoA.Core.Utility;
+
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
-using Microsoft.Xna.Framework;
-using RoA.Core;
-using RoA.Core.Utility;
-using System;
-using RoA.Content.Items.Materials;
 
 namespace RoA.Common.Tiles;
 

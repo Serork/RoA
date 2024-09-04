@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Utilities.Extensions;
 
@@ -15,6 +16,8 @@ static class TileHelper {
     private static Point[][] _addSpecialPointSpecialPositions; 
     private static int[] _addSpecialPointSpecialsCount;
     private static List<Point> _addVineRootsPositions;
+
+    public static Texture2D GetTileGlowTexture(this ModTile modTile) => ModContent.Request<Texture2D>(ResourceManager.GlowTilesTextures + modTile.Name).Value;
 
     public static T GetTE<T>(int i, int j) where T : ModTileEntity {
         if (TileEntity.ByPosition.TryGetValue(new Point16(i, j), out TileEntity entity) && entity is T) {
