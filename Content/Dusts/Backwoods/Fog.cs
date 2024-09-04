@@ -28,7 +28,7 @@ sealed class Fog : ModDust {
         Tile tile = Main.tile[point.X, point.Y];
         Tile tile2 = Main.tile[point.X, point.Y + 1];
         Tile tile3 = Main.tile[point.X, point.Y + 2];
-        if (!tile.HasTile || !tile2.HasTile || !tile3.HasTile) {
+        if (tile == null || tile2 == null || tile3 == null) {
             dust.active = false;
             return false;
         }

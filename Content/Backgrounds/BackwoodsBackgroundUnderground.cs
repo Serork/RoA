@@ -1,6 +1,5 @@
 using RoA.Core;
 
-using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Biomes.Backwoods;
