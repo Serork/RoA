@@ -173,6 +173,8 @@ static class Helper {
         }
     }
 
+    public static void LookAtPlayer(this Entity entity, Player player) => entity.direction = -Math.Sign(entity.position.X - player.position.X);
+
     public static void SlightlyMoveTo(this Entity entity, Vector2 position, float speed = 10f, float inertia = 15f) {
         Vector2 movement = position - entity.position;
         Vector2 movement2 = movement * (speed / movement.Length());
