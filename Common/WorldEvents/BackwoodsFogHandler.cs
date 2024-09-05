@@ -7,6 +7,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.ID;
@@ -44,6 +45,14 @@ sealed class BackwoodsFogHandler : ModSystem {
     private static void Reset() {
         IsFogActive = false;
         Opacity = 0f;
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        writer.Write(IsFogActive);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        IsFogActive = reader.ReadBoolean();
     }
 
     private static void ToggleBackwoodsFog(bool naturally = true) {
