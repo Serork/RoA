@@ -4,15 +4,67 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Tiles.Ambient;
 using RoA.Core.Utility;
+using RoA.Utilities;
+
+using System;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Common.WorldEvents;
 
 sealed class BackwoodsFogHandler : ModSystem {
-    public static bool IsFogActive { get; set; } = false;
+    private sealed class ActivateFog : ModCommand {
+        public override CommandType Type => CommandType.World;
+        public override string Command => "togglebackwoodsfog";
+        public override string Usage => "/togglebackwoodsfog";
+
+        public override void Action(CommandCaller caller, string input, string[] args) => ToggleBackwoodsFog(false);
+    }
+
+    public static bool IsFogActive { get; private set; } = false;
+
+    public override void OnWorldLoad() => Reset();
+    public override void OnWorldUnload() => Reset();
+
+    public override void SaveWorldData(TagCompound tag) {
+        tag[nameof(IsFogActive)] = IsFogActive;
+    }
+
+    public override void LoadWorldData(TagCompound tag) {
+        IsFogActive = tag.GetBool(nameof(IsFogActive));
+    }
+
+    private static void Reset() {
+        IsFogActive = false;
+    }
+
+    private static void ToggleBackwoodsFog(bool naturally = true) {
+        if (!IsFogActive) {
+            if ((naturally && Main.rand.NextChance(0.33)) || !naturally) {
+                string message = Language.GetText("Mods.RoA.World.BackwoodsFog").ToString();
+                Helper.NewMessage($"{message}...", Helper.EventMessageColor);
+                IsFogActive = true;
+            }
+        }
+        else {
+            IsFogActive = false;
+        }
+        if (Main.netMode == NetmodeID.Server) {
+            NetMessage.SendData(MessageID.WorldData);
+        }
+    }
+
+    public override void PostUpdateNPCs() {
+        if (Main.dayTime) {
+            if (Main.time < 1 || (Main.IsFastForwardingTime() && Main.time < 61)) {
+                ToggleBackwoodsFog();
+            }
+        }
+    }
 
     public override void PostUpdatePlayers() {
         if (Main.gameMenu && Main.netMode != NetmodeID.Server) {

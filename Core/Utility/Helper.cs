@@ -15,6 +15,9 @@ using Terraria.ModLoader;
 namespace RoA.Utilities;
 
 static class Helper {
+    public static readonly Color AwakenMessageColor = new(175, 75, 255);
+    public static readonly Color EventMessageColor = new(50, 255, 130);
+
     public static float Wave(float minimum, float maximum, float speed = 1f, float offset = 0f) => Wave((float)TimeSystem.TimeForVisualEffects, minimum, maximum, speed, offset);
     public static float Wave(float step, float minimum, float maximum, float speed = 1f, float offset = 0f) => minimum + ((float)Math.Sin(step * (double)speed + (double)offset) + 1f) / 2f * (maximum - minimum);
 
