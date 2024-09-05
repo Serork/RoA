@@ -144,17 +144,20 @@ sealed class Lumberjack : ModNPC {
 			case (float)States.Spawned:
 				NPC.TargetClosest(false);
 				player = Main.player[NPC.target];
-				if (NPC.Distance(player.Center) > closeRange && ((NPC.position.X > player.position.X && player.direction == 1) || (NPC.position.X < player.position.X && player.direction == -1))) {
-					if (Main.netMode != NetmodeID.MultiplayerClient) {
-						NPC.KillNPC();
-						return;
+				if (NPC.position.ToTileCoordinates().Y < Main.worldSurface) {
+					if (NPC.Distance(player.Center) > closeRange && ((NPC.position.X > player.position.X && player.direction == 1) || (NPC.position.X < player.position.X && player.direction == -1))) {
+						if (Main.netMode != NetmodeID.MultiplayerClient) {
+							NPC.KillNPC();
+							return;
+						}
 					}
 				}
                 StateTimer = 0.2f;
                 ChangeState((int)States.Walking);
 				break;
 			case (float)States.Walking:
-				if (Attack) {
+                NPC.TargetClosest();
+                if (Attack) {
 					Attack = false;
 					NPC.netUpdate = true;
 				}
@@ -176,11 +179,11 @@ sealed class Lumberjack : ModNPC {
 				}
 				player = Main.player[NPC.target];
 				if (NPC.Distance(player.Center) < closeRange && !player.dead) {
-					ChangeState((int)States.Attacking);
+                    StateTimer = 0.1f;
+                    ChangeState((int)States.Attacking);
 				}
 				break;
 			case (float)States.Attacking:
-				NPC.TargetClosest();
 				player = Main.player[NPC.target];
 				bool inRange = NPC.Distance(player.Center) >= closeRange;
 				if ((inRange || player.dead) && StateTimer <= 0.2f) {
@@ -197,9 +200,7 @@ sealed class Lumberjack : ModNPC {
 					if (StateTimer >= 0.6f) {
 						if (!Attack) {
 							Attack = true;
-							if (Main.netMode != NetmodeID.Server) {
-								SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
-							}
+							SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
 							if (Main.netMode != NetmodeID.MultiplayerClient) {
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(NPC.width / 2 * NPC.direction + 10, 0f), Vector2.Zero, ModContent.ProjectileType<LumberjackAxeSlash>(), NPC.damage, 3f, Main.myPlayer);
 							}
