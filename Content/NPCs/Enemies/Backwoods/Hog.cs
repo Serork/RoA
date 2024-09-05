@@ -329,11 +329,11 @@ sealed class Hog : RoANPC {
 
 	public override void FindFrame(int frameHeight) {
 		void slowMovementAnimation() {
-            if (++NPC.frameCounter >= 6.0) {
+            if (++NPC.frameCounter >= 7.0) {
 				NPC.frameCounter = 0.0;
 				CurrentFrame++;
-				if (CurrentFrame >= 8) {
-					CurrentFrame = 0;
+				if (CurrentFrame > 8) {
+					CurrentFrame = 1;
 				}
 			}
 		}
@@ -362,7 +362,7 @@ sealed class Hog : RoANPC {
 				else if (++NPC.frameCounter >= Math.Clamp((double)(3f - Math.Abs(NPC.velocity.X)) * 2.0 + 4.0, 5.0, 20.0)) {
 					NPC.frameCounter = 0.0;
 					CurrentFrame++;
-					if (CurrentFrame < 9 || CurrentFrame >= 14) {
+					if (CurrentFrame < 9 || CurrentFrame > 14) {
 						CurrentFrame = 9;
 					}
 				}

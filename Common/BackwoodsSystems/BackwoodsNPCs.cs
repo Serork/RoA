@@ -28,6 +28,9 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 if (!Main.dayTime) {
                     pool.Add(ModContent.NPCType<Lumberjack>(), 0.2f);
                 }
+                if (spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter) {
+                    pool.Add(ModContent.NPCType<Hog>(), 0.2f);
+                }
 
                 pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);
             }
