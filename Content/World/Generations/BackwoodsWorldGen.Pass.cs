@@ -2244,7 +2244,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void GrowTrees() {
         for (int i = Left - 5; i <= Right + 5; i++) {
-            for (int j = 200; j < CenterY + 20; j++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 20; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (WorldGenHelper.ActiveTile(i, j, _grassTileType) && !_backwoodsPlants.Contains(WorldGenHelper.GetTileSafely(i, j - 1).TileType) && tile.Slope == SlopeType.Solid && !tile.IsHalfBlock) {
                     WorldGenHelper.GrowTreeWithBranches<TreeBranch>(i, j);
