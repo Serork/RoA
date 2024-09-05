@@ -44,6 +44,7 @@
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\RipePumpkin.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\MushroomStaff.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Fleder.png" />
+	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Lumberjack.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\ClawsSlash.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\MushroomSpore.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\PineCone.png" />

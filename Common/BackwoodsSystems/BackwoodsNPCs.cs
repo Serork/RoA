@@ -25,6 +25,9 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     pool.Add(ModContent.NPCType<Fleder>(), 1f);
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
                 }
+                if (!Main.dayTime) {
+                    pool.Add(ModContent.NPCType<Lumberjack>(), 0.2f);
+                }
 
                 pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);
             }
