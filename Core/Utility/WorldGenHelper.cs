@@ -17,7 +17,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Core.Utility;
 
 static class WorldGenHelper {
-    public static int SafeFloatingIslandY => (int)GenVars.worldSurfaceLow - 25;
+    public static int SafeFloatingIslandY => (int)GenVars.worldSurfaceLow - 22;
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;
@@ -53,9 +53,6 @@ static class WorldGenHelper {
     public static bool ActiveWall(this Tile tile) => !tile.ActiveWall(WallID.None);
 
     public static void ReplaceTile(int i, int j, int type, bool noItem = true, bool mute = true, int style = 0) {
-        if (ActiveTile(i, j, type)) {
-            return;
-        }
         WorldGen.KillTile(i, j, false, false, noItem);
         WorldGen.PlaceTile(i, j, type, mute, true, -1, style);
         //WorldGen.SquareTileFrame(i, j);
@@ -64,9 +61,6 @@ static class WorldGenHelper {
     public static void ReplaceTile(Point position, int type, bool noItem = true, bool mute = true, int style = 0) => ReplaceTile(position.X, position.Y, type, noItem, mute, style);
 
     public static void ReplaceWall(int i, int j, int type, bool mute = true) {
-        if (ActiveWall(i, j, type)) {
-            return;
-        }
         WorldGen.KillWall(i, j, false);
         WorldGen.PlaceWall(i, j, type, mute);
         //WorldGen.SquareWallFrame(i, j);

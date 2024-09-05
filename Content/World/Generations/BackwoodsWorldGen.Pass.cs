@@ -1734,7 +1734,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         WorldGen.KillTile(surface.X, surface.Y + j);
                     }
                     else if (_random.NextBool(3)) {
-
                         WorldGenHelper.ReplaceTile(surface.X, surface.Y + j, _dirtTileType);
                     }
                 }
@@ -1886,7 +1885,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                         else {
                             if ((killSand && _random.NextBool(3)) || !killSand) {
-                                WorldGen.KillTile(i, j);
+                                WorldGenHelper.ReplaceTile(i + num1047, j + spreadY, _dirtTileType);
                             }
                         }
                     }
