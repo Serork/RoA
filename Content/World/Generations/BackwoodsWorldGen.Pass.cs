@@ -720,14 +720,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int maxLeft = Left - 50;
         int maxRight = Right + 50;
         for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
-            if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15) {
-                num1047 += _random.Next(-1, 2);
-                if (num1047 < 0)
-                    num1047 = 0;
-                if (num1047 > 10)
-                    num1047 = 10;
-                for (int num1049 = BackwoodsVars.FirstTileYAtCenter - 10; num1049 < Bottom + 10; num1049++) {
-                    if (!(num1049 < y + 10.0 && !((double)num1049 > y + (double)num1047))) {
+            num1047 += _random.Next(-1, 2);
+            if (num1047 < 0)
+                num1047 = 0;
+            if (num1047 > 10)
+                num1047 = 10;
+            for (int num1049 = BackwoodsVars.FirstTileYAtCenter - 10; num1049 < Bottom + 10; num1049++) {
+                if (!(num1049 < y + 10.0 && !((double)num1049 > y + (double)num1047))) {
+                    if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15) {
                         if (!MidInvalidWallTypesToKill.Contains(Main.tile[num1048, num1049].WallType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[num1048, num1049].WallType) && !MidMustSkipWallTypes.Contains(Main.tile[num1048, num1049].WallType) && Main.tile[num1048, num1049].WallType != _grassWallType && Main.tile[num1048, num1049].WallType != _leavesWallType && Main.tile[num1048, num1049].WallType != _elderwoodWallType) {
                             Main.tile[num1048, num1049].WallType = WallID.None;
                         }
