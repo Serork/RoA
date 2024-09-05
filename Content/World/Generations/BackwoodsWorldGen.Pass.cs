@@ -487,10 +487,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
         foreach (Point surface in _biomeSurface) {
             Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y);
-            if ((((double)surface.X > (double)CenterX - EdgeX / 2 && (double)surface.X < (double)CenterX + EdgeX / 2)) && surface.Y < BackwoodsVars.FirstTileYAtCenter + EdgeY / 2) {
+            if ((((double)surface.X > (double)CenterX - EdgeX && (double)surface.X < (double)CenterX + EdgeX)) && surface.Y < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
                 continue;
             }
-            if (_random.NextChance(0.015) && tile.ActiveTile(_dirtTileType)) {
+            if (_random.NextChance(0.014) && tile.ActiveTile(_dirtTileType)) {
                 int sizeX = _random.Next(4, 9);
                 int sizeY = _random.Next(20, 30);
                 WorldGen.TileRunner(surface.X, surface.Y, sizeX, sizeY, _stoneTileType);
@@ -717,19 +717,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int num1050 = 0;
         //int y = CenterY - EdgeY / 2;
         double y = Main.worldSurface;
-        for (int num1048 = Left - 50; num1048 < Right + 50; num1048++) {
-            num1047 += _random.Next(-1, 2);
-            if (num1047 < 0)
-                num1047 = 0;
-            if (num1047 > 10)
-                num1047 = 10;
-            for (int num1049 = BackwoodsVars.FirstTileYAtCenter - 10; num1049 < Bottom + 10; num1049++) {
-                num1050 += _random.Next(-1, 2);
-                if (num1050 < 0)
-                    num1050 = 0;
-                if (num1050 > 10)
-                    num1050 = 10;
-                if (num1048 > Left - 40 - num1050 && num1048 < Right + 40 + num1050) {
+        int maxLeft = Left - 50;
+        int maxRight = Right + 50;
+        for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
+            if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15) {
+                num1047 += _random.Next(-1, 2);
+                if (num1047 < 0)
+                    num1047 = 0;
+                if (num1047 > 10)
+                    num1047 = 10;
+                for (int num1049 = BackwoodsVars.FirstTileYAtCenter - 10; num1049 < Bottom + 10; num1049++) {
                     if (!(num1049 < y + 10.0 && !((double)num1049 > y + (double)num1047))) {
                         if (!MidInvalidWallTypesToKill.Contains(Main.tile[num1048, num1049].WallType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[num1048, num1049].WallType) && !MidMustSkipWallTypes.Contains(Main.tile[num1048, num1049].WallType) && Main.tile[num1048, num1049].WallType != _grassWallType && Main.tile[num1048, num1049].WallType != _leavesWallType && Main.tile[num1048, num1049].WallType != _elderwoodWallType) {
                             Main.tile[num1048, num1049].WallType = WallID.None;
