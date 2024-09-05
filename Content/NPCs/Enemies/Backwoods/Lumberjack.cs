@@ -151,9 +151,6 @@ sealed class Lumberjack : RoANPC {
 				}
 				NPC.noTileCollide = false;
 				NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MAXSPEED, MAXSPEED);
-				if (NPC.velocity.Y >= 0f && !NPC.collideY && !NPC.collideX) {
-					NPC.velocity.X *= 0.875f;
-				}
 				player = Main.player[NPC.target];
 				if (NPC.Distance(player.Center) < closeRange && !player.dead) {
                     StateTimer = 0.1f;

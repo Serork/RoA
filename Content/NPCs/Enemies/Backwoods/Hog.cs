@@ -368,7 +368,7 @@ sealed class Hog : RoANPC {
 				if (speed < 3f) {
 					slowMovementAnimation();
 				}
-				else if (++NPC.frameCounter >= Math.Clamp((double)(3f - Math.Abs(NPC.velocity.X)) * 2.0 + 4.0, 5.0, 20.0)) {
+				else if (++NPC.frameCounter >= Math.Clamp((double)(3f - Math.Abs(NPC.velocity.X)) * 2.0 + 4.0, 6.0, 20.0)) {
 					NPC.frameCounter = 0.0;
 					CurrentFrame++;
 					if (CurrentFrame < 9 || CurrentFrame > 14) {

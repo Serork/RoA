@@ -1394,7 +1394,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     bool edgeLeft = i < Left - 20, edgeRight = i > Right + 20;
                     //bool edgeX = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeRight : edgeLeft;
                     bool edgeX = edgeRight || edgeLeft;
-                    bool flag2 = _random.NextBool(4);
+                    bool flag2 = _random.NextBool(7);
                     bool flag0 = (edgeRight || edgeLeft) && flag2;
                     bool flag = flag0 || !edgeX;
                     tile = WorldGenHelper.GetTileSafely(i + (edgeX ? num1047 : 0), j);
@@ -1404,7 +1404,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 tile.WallType = _dirtWallType;
                             }
                             else {
-                                WorldGenHelper.GetTileSafely(i + (edgeRight ? -num1048 : num1048) - (edgeRight ? 5 + _random.Next(-2, 3) : -5 + -_random.Next(-2, 3)), j).WallType = _dirtWallType;
+                                int i2 = i;
+                                if (j > BackwoodsVars.FirstTileYAtCenter) {
+                                    i2 += (edgeRight ? -num1048 : num1048) - (edgeRight ? _random.Next(-2, 3) : -_random.Next(-2, 3));
+                                }
+                                WorldGenHelper.GetTileSafely(i2, j).WallType = _dirtWallType;
                             }
                         }
                         ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe, WallID.JungleUnsafe];
