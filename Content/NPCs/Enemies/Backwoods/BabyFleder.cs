@@ -57,7 +57,7 @@ sealed class BabyFleder : ModNPC {
 
         NPC.aiStyle = -1;
 
-        NPC.npcSlots = 0.75f;
+        NPC.npcSlots = 0.8f;
         NPC.value = Item.buyPrice(0, 0, 0, 75);
 
         NPC.HitSound = SoundID.NPCHit1;

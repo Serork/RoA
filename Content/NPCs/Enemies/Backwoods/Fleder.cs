@@ -55,8 +55,6 @@ sealed class Fleder : ModNPC {
 
         NPC.aiStyle = -1;
 
-        NPC.npcSlots = 1f;
-
         NPC.value = Item.buyPrice(0, 0, 1, 5);
 
         NPC.HitSound = SoundID.NPCHit27;

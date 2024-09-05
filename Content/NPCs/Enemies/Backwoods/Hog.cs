@@ -8,6 +8,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.UI;
 using Terraria.ID;
 
@@ -29,10 +30,10 @@ sealed class Hog : RoANPC {
 		NPC.defense = 2;
         NPC.knockBackResist = 0.75f;
 
-		int width = 40; int height = 30;
+		int width = 45; int height = 35;
 		NPC.Size = new Vector2(width, height);
 
-		NPC.npcSlots = 1.1f;
+		NPC.npcSlots = 0.5f;
 		NPC.value = Item.buyPrice(0, 0, 0, 80);
 	}
 
@@ -117,8 +118,8 @@ sealed class Hog : RoANPC {
                 NPC.direction = 1;
         }
 
-        float num11 = 4f;
-        float num12 = 0.075f;
+        float num11 = 3.5f;
+        float num12 = 0.08f;
         if (!flag && (NPC.velocity.Y == 0f || NPC.wet || (NPC.velocity.X <= 0f && NPC.direction < 0) || (NPC.velocity.X >= 0f && NPC.direction > 0))) {
             if (NPC.velocity.X < 0f - num11 || NPC.velocity.X > num11) {
                 if (NPC.velocity.Y == 0f)
@@ -231,6 +232,9 @@ sealed class Hog : RoANPC {
             }
             NPC.LookAtPlayer(Main.player[NPC.target]);
         }
+        if (NPC.localAI[1] > 0f) {
+            NPC.localAI[1]--;
+        }
 		int currentAI = _currentAI;
 		switch (currentAI) {
 			case 0:
@@ -291,8 +295,10 @@ sealed class Hog : RoANPC {
 				Rectangle mouseRect = new((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 4, 4);
 				Rectangle npcRect = new((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height);
                 npcRect.Inflate(5, 5);
-                if (NPC.Distance(player.Center) < NPC.width * 2 && mouseRect.Intersects(npcRect)) {
-					item.stack -= 1;
+                if (NPC.Distance(player.Center) < NPC.width * 2 && mouseRect.Intersects(npcRect) && NPC.localAI[1] <= 0f) {
+                    NPC.localAI[1] = 80f;
+
+                    item.stack -= 1;
 					if (item.stack <= 0) {
 						item.SetDefaults();
 					}
@@ -304,6 +310,7 @@ sealed class Hog : RoANPC {
                         new(162, 189, 55)
                     };
                     npcRect = new((int)(NPC.Center.X + 35f * NPC.direction), (int)NPC.Center.Y - 15, 30, 30);
+                    SoundEngine.PlaySound(SoundID.Item2, npcRect.Center.ToVector2());
                     for (int i = 0; i < 10; i++) {
                         Vector2 position = npcRect.Center.ToVector2() + Main.rand.NextVector2Square(-10f, 10f);
                         if (NPC.direction == 1) {
@@ -315,7 +322,7 @@ sealed class Hog : RoANPC {
                                             newColor: particlesColor[Main.rand.Next(particlesColor.Length)],
                                             Scale: ((float)(0.8 + 0.2 * (double)Main.rand.NextFloat()))).fadeIn = 0f;
                     }
-                    int healAmount = NPC.life / 10;
+                    int healAmount = NPC.lifeMax / 10 + NPC.life / 5;
 					EmoteBubble.NewBubble(0, new WorldUIAnchor(NPC), 50);
 					NPC.life += healAmount;
                     if (NPC.life > NPC.lifeMax) {
@@ -329,13 +336,15 @@ sealed class Hog : RoANPC {
 
 	public override void FindFrame(int frameHeight) {
 		void slowMovementAnimation() {
-            if (++NPC.frameCounter >= 7.0) {
-				NPC.frameCounter = 0.0;
-				CurrentFrame++;
-				if (CurrentFrame > 8) {
-					CurrentFrame = 1;
-				}
-			}
+            if (Math.Abs(NPC.velocity.X) > 0.1f) {
+                if (++NPC.frameCounter >= 7.0) {
+                    NPC.frameCounter = 0.0;
+                    CurrentFrame++;
+                    if (CurrentFrame > 8) {
+                        CurrentFrame = 1;
+                    }
+                }
+            }
 		}
 
 		if (NPC.velocity.Y < 0f) {
