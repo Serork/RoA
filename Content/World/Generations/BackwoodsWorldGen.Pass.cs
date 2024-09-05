@@ -1394,7 +1394,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     bool edgeLeft = i < Left - 20, edgeRight = i > Right + 20;
                     //bool edgeX = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeRight : edgeLeft;
                     bool edgeX = edgeRight || edgeLeft;
-                    bool flag2 = _random.NextBool(7);
+                    int extra = 5 - (i < Left - 45 || i > Right + 45 ? 4 : i < Left - 40 || i > Right + 40 ? 3 : i < Left - 35 || i > Right + 35 ? 2 : i < Left - 30 || i > Right + 30 ? 2 : 1);
+                    bool flag2 = _random.NextBool(6 - extra);
                     bool flag0 = (edgeRight || edgeLeft) && flag2;
                     bool flag = flag0 || !edgeX;
                     tile = WorldGenHelper.GetTileSafely(i + (edgeX ? num1047 : 0), j);
@@ -1406,7 +1407,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             else {
                                 int i2 = i;
                                 if (j > BackwoodsVars.FirstTileYAtCenter + 10) {
-                                    i2 -= (edgeRight ? -num1048 : num1048) + (edgeRight ? _random.Next(-2, 3) : -_random.Next(-2, 3));
+                                    i2 += (edgeRight ? num1048 : -num1048) + (edgeRight ? _random.Next(-2, 3) : -_random.Next(-2, 3));
                                 }
                                 WorldGenHelper.GetTileSafely(i2, j).WallType = _dirtWallType;
                             }
@@ -1885,7 +1886,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                         else {
                             if ((killSand && _random.NextBool(3)) || !killSand) {
-                                WorldGenHelper.ReplaceTile(i + num1047, j + spreadY, _dirtTileType);
+                                //WorldGenHelper.ReplaceTile(i + num1047, j + spreadY, _dirtTileType);
                             }
                         }
                     }
