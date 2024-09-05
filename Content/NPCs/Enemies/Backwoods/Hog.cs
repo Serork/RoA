@@ -30,7 +30,9 @@ sealed class Hog : RoANPC {
 		NPC.defense = 2;
         NPC.knockBackResist = 0.75f;
 
-		int width = 45; int height = 35;
+        NPC.aiStyle = -1;
+
+        int width = 45; int height = 35;
 		NPC.Size = new Vector2(width, height);
 
 		NPC.npcSlots = 0.5f;
@@ -223,7 +225,6 @@ sealed class Hog : RoANPC {
 	public override void AI() {
         NPC.chaseable = _currentAI == 2;
         if (_currentAI == 1) {
-            NPC.aiStyle = -1;
             NPC.velocity.X *= 0.9f;
 			if (++_extraAITimer >= 30f) {
 				_extraAITimer = 0f;
@@ -238,14 +239,75 @@ sealed class Hog : RoANPC {
 		int currentAI = _currentAI;
 		switch (currentAI) {
 			case 0:
-				NPC.aiStyle = 7;
-				AIType = 46;
-				NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -0.9f, 0.9f);
-				break;
+                //NPC.aiStyle = 7;
+                //AIType = 46;
+                //NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -0.9f, 0.9f);
+                if (NPC.velocity.Y == 0f) {
+                    if (NPC.ai[2] == 1f) {
+                        if (NPC.direction == 0)
+                            NPC.TargetClosest();
+
+                        if (NPC.collideX)
+                            NPC.direction *= -1;
+
+                        if (NPC.localAI[3] != 0f && NPC.localAI[2] > NPC.localAI[3] * 0.75f) {
+                            NPC.velocity.X *= 0.9f;
+                        }
+                        else {
+                            if (NPC.localAI[3] > 0f) {
+                                NPC.localAI[3] = 0f;
+                                if (Main.rand.NextChance(0.75)) {
+                                    NPC.direction *= -1;
+                                }
+                            }
+                            Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+                            float num12 = 0.05f;
+                            float num11 = 1f;
+                            if (NPC.velocity.X < 0f - num11 || NPC.velocity.X > num11) {
+                                NPC.velocity *= 0.7f;
+                            }
+                            else if (NPC.velocity.X < num11 && NPC.direction == 1) {
+                                NPC.velocity.X += num12;
+                                if (NPC.velocity.X > num11)
+                                    NPC.velocity.X = num11;
+                            }
+                            else if (NPC.velocity.X > 0f - num11 && NPC.direction == -1) {
+                                NPC.velocity.X -= num12;
+                                if (NPC.velocity.X < 0f - num11)
+                                    NPC.velocity.X = 0f - num11;
+                            }
+                        }
+                    }
+                    else {
+                        NPC.velocity.X *= 0.7f;
+                    }
+
+                    if (Main.netMode != 1) {
+                        NPC.localAI[2] -= 1f;
+                        if (NPC.localAI[2] <= 0f) {
+                            if (NPC.ai[2] == 1f) {
+                                NPC.ai[2] = 0f;
+                                NPC.localAI[2] = NPC.localAI[3] = Main.rand.Next(300, 900) / 2;
+                            }
+                            else {
+                                NPC.ai[2] = 1f;
+                                NPC.localAI[2] = NPC.localAI[3] = Main.rand.Next(600, 1800) / 2;
+                            }
+
+                            NPC.netUpdate = true;
+                        }
+                    }
+                }
+                else if (NPC.direction == 0) {
+                    NPC.direction = 1;
+                    if (NPC.velocity.X < 0f) {
+                        NPC.direction = -1;
+                    }
+                }
+                break;
 			case 2:
                 //NPC.aiStyle = 26;
                 //AIType = 86;
-                NPC.aiStyle = -1;
                 AdaptedUnicornAI();
 				//float distance = Main.player[NPC.target].Distance(NPC.Center);
 				//float extraSpeed = (distance < 250f ? 1f + (1f - distance / 250f) : 1f) * 1.25f;
