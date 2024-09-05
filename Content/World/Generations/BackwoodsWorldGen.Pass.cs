@@ -1546,10 +1546,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 if (tile.TileType == _vinesTileType) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 3), _vinesTileType);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, _random.NextBool() ? 3 : 4), _vinesTileType);
                 }
                 if (tile.TileType == _vinesTileType2) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 4), _vinesTileType2);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, _random.NextBool() ? 3 : 4), _vinesTileType2);
                 }
             }
         }
@@ -1876,13 +1876,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                         else {
                             if (j > Top - 10) {
-                                num1047 += _random.Next(-1, 2);
-                                if (num1047 < 0)
-                                    num1047 = 0;
+                                //num1047 += _random.Next(-1, 2);
+                                //if (num1047 < 0)
+                                //    num1047 = 0;
 
-                                if (num1047 > 5)
-                                    num1047 = 5;
-                                replace = killTile = _random.NextBool(4);
+                                //if (num1047 > 5)
+                                //    num1047 = 5;
+                                //replace = killTile = _random.NextBool(4);
                             }
                         }
                     }
