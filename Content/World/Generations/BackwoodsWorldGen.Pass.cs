@@ -1407,9 +1407,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             else {
                                 int i2 = i;
                                 if (j > BackwoodsVars.FirstTileYAtCenter + 10) {
-                                    i2 += (edgeRight ? num1048 : -num1048) + (edgeRight ? _random.Next(-2, 3) : -_random.Next(-2, 3));
+                                    i2 -= (edgeRight ? num1048 : -num1048) - (edgeRight ? _random.Next(-2, 3) : -_random.Next(-2, 3));
                                 }
-                                WorldGenHelper.GetTileSafely(i2, j).WallType = _dirtWallType;
+                                Tile tile2 = WorldGenHelper.GetTileSafely(i2, j);
+                                if (tile2.TileType == TileID.Dirt || tile2.TileType == _dirtTileType) {
+                                    tile2.TileType = TileID.Mud;
+                                }
+                                tile2.WallType = _dirtWallType;
                             }
                         }
                         ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe, WallID.JungleUnsafe];
