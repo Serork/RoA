@@ -42,9 +42,9 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     private void TrySpawnFog(int x, int y) {
         Tile tile = WorldGenHelper.GetTileSafely(x, y);
-        if (y >= Main.worldSurface) {
-            return;
-        }
+        //if (y >= Main.worldSurface) {
+        //    return;
+        //}
         if (!tile.HasTile || tile.Slope > 0 || tile.IsHalfBlock || !Main.tileSolid[tile.TileType]) {
             return;
         }
