@@ -17,7 +17,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Core.Utility;
 
 static class WorldGenHelper {
-    public static int SafeFloatingIslandY => (int)GenVars.worldSurfaceLow - 15;
+    public static int SafeFloatingIslandY => (int)GenVars.worldSurfaceLow - 25;
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;

@@ -741,10 +741,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step13_GrowBigTrees() {
-        int left = _toLeft ? _lastCliffX + 20 : Left;
+        int left = _toLeft ? _lastCliffX + 15 : Left;
         _leftTreeX = _random.Next(left + 15, left + 30);
         GrowBigTree(_leftTreeX);
-        int right = !_toLeft ? _lastCliffX - 20 : Right;
+        int right = !_toLeft ? _lastCliffX - 15 : Right;
         _rightTreeX = _random.Next(right - 30, right - 15);
         GrowBigTree(_rightTreeX, false);
     }
@@ -1405,8 +1405,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             }
                             else {
                                 int i2 = i;
-                                if (j > BackwoodsVars.FirstTileYAtCenter) {
-                                    i2 += (edgeRight ? -num1048 : num1048) - (edgeRight ? _random.Next(-2, 3) : -_random.Next(-2, 3));
+                                if (j > BackwoodsVars.FirstTileYAtCenter + 10) {
+                                    i2 -= (edgeRight ? -num1048 : num1048) + (edgeRight ? _random.Next(-2, 3) : -_random.Next(-2, 3));
                                 }
                                 WorldGenHelper.GetTileSafely(i2, j).WallType = _dirtWallType;
                             }
@@ -1533,10 +1533,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 if (tile.TileType == _vinesTileType) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 4), _vinesTileType);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 3), _vinesTileType);
                 }
                 if (tile.TileType == _vinesTileType2) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 4), _vinesTileType2);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 3), _vinesTileType2);
                 }
             }
         }
