@@ -7,8 +7,6 @@ using Terraria.ModLoader;
 namespace RoA.Common.WorldEvents;
 
 sealed class BackwoodsFogShaderData : ModSceneEffect {
-    public static float Opacity { get; private set; }
-
     private string ShaderName => ShaderLoader.BackwoodsFog;
     private Filter Filter => Filters.Scene[ShaderName];
 
@@ -19,9 +17,8 @@ sealed class BackwoodsFogShaderData : ModSceneEffect {
     public override void SpecialVisuals(Player player, bool isActive) {
         if (!isActive || !ShouldBeActive(player)) {
             if (Filter.IsActive()) {
-                Opacity -= 0.005f;
-                Filter.GetShader().UseOpacity(Opacity);
-                if (Opacity <= 0f) {
+                Filter.GetShader().UseOpacity(BackwoodsFogHandler.Opacity);
+                if (BackwoodsFogHandler.Opacity <= 0f) {
                     Filter.GetShader().UseOpacity(0f);
                     Filter.Deactivate();
                 }
@@ -33,10 +30,7 @@ sealed class BackwoodsFogShaderData : ModSceneEffect {
             Filters.Scene.Activate(ShaderName);
         }
         else {
-            if (Opacity < 0.75f) {
-                Opacity += 0.0175f;
-            }
-            Filter.GetShader().UseOpacity(Opacity);
+            Filter.GetShader().UseOpacity(BackwoodsFogHandler.Opacity);
         }
     }
 }

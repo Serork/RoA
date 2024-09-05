@@ -35,7 +35,7 @@ sealed class BackwoodsGreenMoss : ModTile {
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => SetupLight(ref r, ref g, ref b);
 
     public static void SetupLight(ref float r, ref float g, ref float b) {
-        float value = BackwoodsFogShaderData.Opacity;
+        float value = BackwoodsFogHandler.Opacity;
         r = 49 / 255f * value;
         g = 134 / 255f * value;
         b = 114 / 255f * value;

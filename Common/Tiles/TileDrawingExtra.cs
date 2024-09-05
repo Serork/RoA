@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Tiles;
 
 sealed class TileDrawingExtra : GlobalTile {
-    public static Color BackwoodsMossGlowColor => new Color(0, 180, 250, 0) * 0.5f * BackwoodsFogShaderData.Opacity;
+    public static Color BackwoodsMossGlowColor => new Color(0, 180, 250, 0) * 0.5f * BackwoodsFogHandler.Opacity;
 
     public override void Load() {
         On_TileDrawing.GetTileDrawData += On_TileDrawing_GetTileDrawData;

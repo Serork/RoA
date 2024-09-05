@@ -26,20 +26,24 @@ sealed class BackwoodsFogHandler : ModSystem {
     }
 
     public static bool IsFogActive { get; private set; } = false;
+    public static float Opacity { get; private set; } = 0f;
 
     public override void OnWorldLoad() => Reset();
     public override void OnWorldUnload() => Reset();
 
     public override void SaveWorldData(TagCompound tag) {
-        tag[nameof(IsFogActive)] = IsFogActive;
+        tag["backwoods" + nameof(IsFogActive)] = IsFogActive;
+        tag["backwoods" + nameof(Opacity)] = Opacity;
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        IsFogActive = tag.GetBool(nameof(IsFogActive));
+        IsFogActive = tag.GetBool("backwoods" + nameof(IsFogActive));
+        Opacity = tag.GetFloat("backwoods" + nameof(Opacity));
     }
 
     private static void Reset() {
         IsFogActive = false;
+        Opacity = 0f;
     }
 
     private static void ToggleBackwoodsFog(bool naturally = true) {
@@ -72,7 +76,15 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
 
         if (!BackwoodsBiome.IsActiveForFogEffect || !IsFogActive) {
+            if (Opacity > 0f) {
+                Opacity -= 0.005f;
+            }
+
             return;
+        }
+
+        if (Opacity < 0.75f) {
+            Opacity += 0.0175f;
         }
 
         Rectangle tileWorkSpace = GetTileWorkSpace();
