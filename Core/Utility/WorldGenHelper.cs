@@ -7,17 +7,34 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.World.Generations;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.GameContent.Generation;
 using Terraria.ID;
+using Terraria.IO;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 
 namespace RoA.Core.Utility;
 
 static class WorldGenHelper {
-    public static int SafeFloatingIslandY => (int)GenVars.worldSurfaceLow - 17;
+    sealed class WorldGenHelperVars : ModSystem {
+        public static int worldSurfaceLow = 0;
+
+        private void GetWorldSurfaceLow(GenerationProgress progress, GameConfiguration configuration) => worldSurfaceLow = (int)GenVars.worldSurfaceLow;
+        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Insert(5, new PassLegacy(string.Empty, GetWorldSurfaceLow));
+
+        public override void OnWorldLoad() => worldSurfaceLow = 0;
+        public override void OnWorldUnload() => worldSurfaceLow = 0;
+
+        public override void SaveWorldData(TagCompound tag) => tag["backwoods" + nameof(worldSurfaceLow)] = worldSurfaceLow;
+        public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
+    }
+
+    public static int SafeFloatingIslandY => WorldGenHelperVars.worldSurfaceLow - 17;
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;
