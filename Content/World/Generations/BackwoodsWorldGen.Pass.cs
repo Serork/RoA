@@ -1335,8 +1335,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         void cleanUp() {
             int num1047 = 0;
             int num1048 = 0;
-            int maxLeft = Left - 50;
-            int maxRight = Right + 50;
+            int maxLeft = Left - 30;
+            int maxRight = Right + 30;
             for (int i = maxLeft; i < maxRight; i++) {
                 num1048 += _random.Next(-1, 2);
                 if (num1048 < 0)
@@ -1391,14 +1391,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                         if (num1047 > 5)
                             num1047 = 5;
-                        bool edgeLeft = i < Left - 20, edgeRight = i > Right + 20;
-                        bool edgeX = (GenVars.JungleX > Main.maxTilesX / 2) ? edgeRight : edgeLeft;
-                        //bool edgeX = edgeRight || edgeLeft;
-                        int extra = 5 - (i < Left - 45 || i > Right + 45 ? 4 : i < Left - 40 || i > Right + 40 ? 3 : i < Left - 35 || i > Right + 35 ? 2 : i < Left - 30 || i > Right + 30 ? 2 : 1);
+                        bool edgeLeft = i < Left - 10, edgeRight = i > Right + 10;
+                        bool edgeX = edgeRight || edgeLeft;
+                        int extra = 5 - (i < Left - 25 || i > Right + 25 ? 4 : i < Left - 20 || i > Right + 20 ? 3 : i < Left - 15 || i > Right + 15 ? 2 : i < Left - 10 || i > Right + 10 ? 2 : 1);
                         bool flag2 = _random.NextBool(6 - extra);
                         bool flag0 = (edgeRight || edgeLeft) && flag2;
                         bool flag = flag0 || !edgeX;
-                        tile = WorldGenHelper.GetTileSafely(i + (edgeX ? num1047 : 0), j);
+                        tile = WorldGenHelper.GetTileSafely(i, j);
                         if (flag) {
                             if (tile.WallType == WallID.MudUnsafe) {
                                 tile.WallType = _dirtWallType;
