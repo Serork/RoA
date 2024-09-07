@@ -850,7 +850,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         void placeBranch(bool directedRight = true) {
             takenYs = [];
             index = height / _random.Next(18, 30);
-            int attempts = 100;
+            int attempts = 10;
             while (index > 0) {
                 if (--attempts <= 0) {
                     break;
@@ -2175,7 +2175,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (tile.HasTile) {
                         if (j2 < Main.worldSurface - 1.0 && !spread) {
                             if (tile.TileType == _dirtTileType || tile.TileType == TileID.Dirt) {
-                                WorldGen.grassSpread = 0;
+                                //WorldGen.grassSpread = 0;
                                 WorldGen.SpreadGrass(i, j2, _dirtTileType, _grassTileType);
                             }
                         }
