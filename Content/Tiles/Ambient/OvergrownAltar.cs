@@ -63,13 +63,13 @@ sealed class OvergrownAltar : ModTile {
 
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
-            float counting = overgrownAltarTE.Counting * 1.5f;
-            float factor = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
-            float value = (factor > 0.5f ? 1f - factor : factor) + 0.5f;
-            Vector3 color3 = new(0.45f, 0.85f, 0.4f);
-            r = color3.X * value;
-            g = color3.Y * value;
-            b = color3.Z * value;
+            //float counting = overgrownAltarTE.Counting * 1.5f;
+            //float factor = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
+            //float value = (factor > 0.5f ? 1f - factor : factor) + 0.5f;
+            //Vector3 color3 = new(0.45f, 0.85f, 0.4f);
+            //r = color3.X * value;
+            //g = color3.Y * value;
+            //b = color3.Z * value;
         }
     }
 
@@ -86,10 +86,11 @@ sealed class OvergrownAltar : ModTile {
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
             float counting = overgrownAltarTE.Counting;
-            float factor = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
+            float value = (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f;
+            float factor = value;
             Color color = Lighting.GetColor(i, j);
             Tile tile = Main.tile[i, j];
-            int frame = (int)(factor * 6)/* + (flag || OvergrownCoords.Strength > 0.25f ? 6 : 0)*/;
+            int frame = 5 - (int)(factor * 6)/* + (flag || OvergrownCoords.Strength > 0.25f ? 6 : 0)*/;
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;
@@ -121,7 +122,7 @@ sealed class OvergrownAltar : ModTile {
             if (factor2 > 0f/* || flag3*/) {
                 //float factor4 = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
                 //factor3 = (factor4 > 0.5f ? 1f - factor4 : factor4) + 0.5f;
-                factor3 = /*flag3 ? OvergrownCoords.Strength : */1f;
+                factor3 = /*flag3 ? OvergrownCoords.Strength : */0f;
                 spriteBatch.Draw(texture, position, rectangle, color2 * factor2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
                     spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3 * factor2, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
