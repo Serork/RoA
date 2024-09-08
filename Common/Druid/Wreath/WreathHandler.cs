@@ -174,7 +174,7 @@ sealed class WreathHandler : ModPlayer {
                 if (Main.netMode != NetmodeID.Server) {
                     for (int i = 0; i < count; i++) {
                         if (Main.rand.NextChance(0.5)) {
-                            Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, ModContent.DustType<Content.Dusts.WreathDust>(), newColor: DrawColor, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
+                            Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, ModContent.DustType<Content.Dusts.WreathDust>(), newColor: DrawColor * Math.Max(DRAWCOLORINTENSITY - DrawColorOpacity, 0f), Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
                             dust.velocity *= 1.25f * progress;
                             if (i >= (int)(count * 0.8f)) {
                                 dust.velocity *= 2f * progress;
