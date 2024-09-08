@@ -167,14 +167,14 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts() {
-        if (!IsFull) {
+        if (Progress <= 0.985f) {
             if (Main.netMode != NetmodeID.Server) {
                 float progress = Progress * 1.25f + 0.1f;
                 int count = Math.Min((int)(15 * progress), 10);
                 if (Main.netMode != NetmodeID.Server) {
                     for (int i = 0; i < count; i++) {
                         if (Main.rand.NextChance(0.5)) {
-                            Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, ModContent.DustType<Content.Dusts.WreathDust>(), newColor: DrawColor * Math.Max(DRAWCOLORINTENSITY - DrawColorOpacity, 0f), Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
+                            Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, ModContent.DustType<Content.Dusts.WreathDust>(), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
                             dust.velocity *= 1.25f * progress;
                             if (i >= (int)(count * 0.8f)) {
                                 dust.velocity *= 2f * progress;
@@ -186,6 +186,7 @@ sealed class WreathHandler : ModPlayer {
                             dust.noGravity = true;
                             dust.position += dust.velocity * 0.75f;
                             dust.noLightEmittence = true;
+                            dust.alpha = (int)(DrawColorOpacity * 255f);
                         }
                     }
                 }
