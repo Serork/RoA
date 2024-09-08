@@ -32,7 +32,7 @@ sealed class Hog : RoANPC {
 
         NPC.aiStyle = -1;
 
-        int width = 45; int height = 35;
+        int width = 40; int height = 35;
 		NPC.Size = new Vector2(width, height);
 
 		NPC.npcSlots = 0.5f;
@@ -261,20 +261,20 @@ sealed class Hog : RoANPC {
                                 }
                             }
                             Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
-                            float num12 = 0.05f;
-                            float num11 = 1f;
-                            if (NPC.velocity.X < 0f - num11 || NPC.velocity.X > num11) {
+                            float acceleration = 0.05f;
+                            float speed = 1f;
+                            if (NPC.velocity.X < 0f - speed || NPC.velocity.X > speed) {
                                 NPC.velocity *= 0.7f;
                             }
-                            else if (NPC.velocity.X < num11 && NPC.direction == 1) {
-                                NPC.velocity.X += num12;
-                                if (NPC.velocity.X > num11)
-                                    NPC.velocity.X = num11;
+                            else if (NPC.velocity.X < speed && NPC.direction == 1) {
+                                NPC.velocity.X += acceleration;
+                                if (NPC.velocity.X > speed)
+                                    NPC.velocity.X = speed;
                             }
-                            else if (NPC.velocity.X > 0f - num11 && NPC.direction == -1) {
-                                NPC.velocity.X -= num12;
-                                if (NPC.velocity.X < 0f - num11)
-                                    NPC.velocity.X = 0f - num11;
+                            else if (NPC.velocity.X > 0f - speed && NPC.direction == -1) {
+                                NPC.velocity.X -= acceleration;
+                                if (NPC.velocity.X < 0f - speed)
+                                    NPC.velocity.X = 0f - speed;
                             }
                         }
                     }
@@ -293,7 +293,6 @@ sealed class Hog : RoANPC {
                                 NPC.ai[2] = 1f;
                                 NPC.localAI[2] = NPC.localAI[3] = Main.rand.Next(600, 1800) / 2;
                             }
-
                             NPC.netUpdate = true;
                         }
                     }
@@ -302,6 +301,48 @@ sealed class Hog : RoANPC {
                     NPC.direction = 1;
                     if (NPC.velocity.X < 0f) {
                         NPC.direction = -1;
+                    }
+                }
+
+                // adapted vanilla
+                int collisionHeight = 40;
+                int num20 = (int)((NPC.position.X + (float)(NPC.width / 2) + (float)(30 * NPC.direction)) / 16f);
+                int num21 = (int)((NPC.position.Y + (float)NPC.height - 16f) / 16f);
+                Tile tileSafely3 = Framing.GetTileSafely(num20, num21);
+                Tile tileSafely4 = Framing.GetTileSafely(num20, num21 - 1);
+                Tile tileSafely5 = Framing.GetTileSafely(num20, num21 - 2);
+                bool flag21 = collisionHeight / 16 < 3;
+                if ((NPC.velocity.X < 0f && NPC.direction == -1) || (NPC.velocity.X > 0f && NPC.direction == 1)) {
+                    bool flag22 = false;
+                    if (tileSafely5.HasUnactuatedTile && Main.tileSolid[tileSafely5.TileType] && !Main.tileSolidTop[tileSafely5.TileType] && (!flag21 || (tileSafely4.HasUnactuatedTile && Main.tileSolid[tileSafely4.TileType] && !Main.tileSolidTop[tileSafely4.TileType]))) {
+                        if (!Collision.SolidTilesVersatile(num20 - NPC.direction * 2, num20 - NPC.direction, num21 - 5, num21 - 1) && !Collision.SolidTiles(num20, num20, num21 - 5, num21 - 3)) {
+                            NPC.velocity.Y = -6.5f;
+                            NPC.netUpdate = true;
+                        }
+                    }
+                    else if (tileSafely4.HasUnactuatedTile && Main.tileSolid[tileSafely4.TileType] && !Main.tileSolidTop[tileSafely4.TileType]) {
+                        if (!Collision.SolidTilesVersatile(num20 - NPC.direction * 2, num20 - NPC.direction, num21 - 4, num21 - 1) && !Collision.SolidTiles(num20, num20, num21 - 4, num21 - 2)) {
+                            NPC.velocity.Y = -5.5f;
+                            NPC.netUpdate = true;
+                        }
+                        else {
+                            flag22 = true;
+                        }
+                    }
+                    else if (NPC.position.Y + (float)collisionHeight - (float)(num21 * 16) > 20f && tileSafely3.HasUnactuatedTile && Main.tileSolid[tileSafely3.TileType] && !tileSafely3.TopSlope) {
+                        if (!Collision.SolidTilesVersatile(num20 - NPC.direction * 2, num20, num21 - 3, num21 - 1)) {
+                            NPC.velocity.Y = -4.9f;
+                            NPC.netUpdate = true;
+                        }
+                        else {
+                            flag22 = true;
+                        }
+                    }
+
+                    if (flag22) {
+                        NPC.direction *= -1;
+                        NPC.velocity.X *= -1f;
+                        NPC.netUpdate = true;
                     }
                 }
                 break;
