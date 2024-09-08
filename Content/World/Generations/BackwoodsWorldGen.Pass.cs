@@ -1107,7 +1107,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
         int attempts = 20;
-        while (!skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType)) {
+        while (!skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
             baseX = _random.Next(startX, endX);
             baseY = _random.Next(minY + EdgeY, Bottom - EdgeY);
             if (attempts-- <= 0) {
@@ -2028,6 +2028,26 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 generateBase(i);
             }
         }
+
+        AddCliffIfNeeded(topLeftTileX, topRightTileX);
+
+        int waterYRandomness = 0;
+        foreach (Point surface in _biomeSurface) {
+            waterYRandomness += _random.Next(-1, 2);
+            for (int j = EdgeY / 4 + waterYRandomness; j > -50; j--) {
+                if (surface.Y + j < WorldGenHelper.SafeFloatingIslandY) {
+                    continue;
+                }
+
+                Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
+                if (tile.AnyLiquid()) {
+                    tile.LiquidAmount = 0;
+                }
+            }
+        }
+    }
+
+    private void AddCliffIfNeeded(int topLeftTileX, int topRightTileX) {
         Point cliffTileCoords = Point.Zero;
         cliffTileCoords.X = _toLeft ? topLeftTileX - 10 : (topRightTileX + 10);
         cliffTileCoords.Y = WorldGenHelper.GetFirstTileY2(cliffTileCoords.X);
@@ -2046,10 +2066,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
             int testJ = startY;
-            while (true) {
-                if (testJ > startY + _biomeHeight / 2 - _biomeHeight / 5) {
-                    break;
-                }
+            while (testJ <= startY + _biomeHeight / 2 - _biomeHeight / 5) {
                 bool flag3 = !flag2 && Main.tile[cliffX, testJ].HasTile;
                 if (flag3 || flag2) {
                     //if (flag3) {
@@ -2098,21 +2115,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //        testJ++;
         //    }
         //}
-
-        int waterYRandomness = 0;
-        foreach (Point surface in _biomeSurface) {
-            waterYRandomness += _random.Next(-1, 2);
-            for (int j = EdgeY / 4 + waterYRandomness; j > -50; j--) {
-                if (surface.Y + j < WorldGenHelper.SafeFloatingIslandY) {
-                    continue;
-                }
-
-                Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
-                if (tile.AnyLiquid()) {
-                    tile.LiquidAmount = 0;
-                }
-            }
-        }
     }
 
     private void Step4_CleanUp() {

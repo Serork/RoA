@@ -64,7 +64,8 @@ sealed class WreathHandler : ModPlayer {
             return opacity;
         }
     }
-    public Color DrawColor => Utils.MultiplyRGB(new Color(255, 255, 200, 200), Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
+    public Color BaseColor => new(255, 255, 200, 200);
+    public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
     public Color LightingColor => _lightingColor;
     public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(Progress), 0.35f);
@@ -173,7 +174,7 @@ sealed class WreathHandler : ModPlayer {
                 if (Main.netMode != NetmodeID.Server) {
                     for (int i = 0; i < count; i++) {
                         if (Main.rand.NextChance(0.5)) {
-                            Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, ModContent.DustType<Content.Dusts.WreathDust>(), newColor: DrawColor * Math.Max(DRAWCOLORINTENSITY - DrawColorOpacity, 0f), Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
+                            Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, ModContent.DustType<Content.Dusts.WreathDust>(), newColor: DrawColor, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
                             dust.velocity *= 1.25f * progress;
                             if (i >= (int)(count * 0.8f)) {
                                 dust.velocity *= 2f * progress;
@@ -193,9 +194,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void AddLight() {
-        _lightingColor = Color.LightGreen;
-        if (!Main.dedServ) {
-            Lighting.AddLight(LightingPosition, _lightingColor.ToVector3() * LightingIntensity);
-        }
+        //_lightingColor = Color.LightGreen;
+        //if (!Main.dedServ) {
+        //    Lighting.AddLight(LightingPosition, _lightingColor.ToVector3() * LightingIntensity);
+        //}
     }
 }
