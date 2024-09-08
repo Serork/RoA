@@ -332,7 +332,7 @@ sealed class Hog : RoANPC {
                     }
                     else if (NPC.position.Y + (float)collisionHeight - (float)(num21 * 16) > 20f && tileSafely3.HasUnactuatedTile && Main.tileSolid[tileSafely3.TileType] && !tileSafely3.TopSlope) {
                         if (!Collision.SolidTilesVersatile(num20 - NPC.direction * 2, num20, num21 - 3, num21 - 1)) {
-                            NPC.velocity.Y = -4.7f;
+                            NPC.velocity.Y = -4.8f;
                             NPC.netUpdate = true;
                         }
                         else {
