@@ -226,13 +226,13 @@ sealed class Hog : RoANPC {
 	public override void AI() {
         NPC.chaseable = _currentAI == 2;
         if (_currentAI == 1) {
-            NPC.velocity.X *= 0.9f;
+            NPC.velocity.X *= 0.7f;
 			if (++_extraAITimer >= 30f) {
 				_extraAITimer = 0f;
 				_currentAI = 0;
                 NPC.netUpdate = true;
             }
-            NPC.LookAtPlayer(Main.player[NPC.target]);
+            NPC.spriteDirection = NPC.direction = Main.player[NPC.target].Center.DirectionFrom(NPC.Center).X.GetDirection();
         }
         if (NPC.localAI[1] > 0f) {
             NPC.localAI[1]--;
@@ -386,7 +386,7 @@ sealed class Hog : RoANPC {
     //}
 
     public override void EmoteBubblePosition(ref Vector2 position, ref SpriteEffects spriteEffects) {
-        position.X += NPC.width / 2f * NPC.spriteDirection;
+        position.X += NPC.width / 2f * NPC.direction;
     }
 
     public override void PostAI() {
@@ -413,6 +413,7 @@ sealed class Hog : RoANPC {
 						item.SetDefaults();
 					}
 					_currentAI = 1;
+                    NPC.target = player.whoAmI;
                     NPC.spriteDirection = NPC.direction = player.Center.DirectionFrom(NPC.Center).X.GetDirection();
                     Color[] particlesColor = {
                         new(169, 148, 91),
