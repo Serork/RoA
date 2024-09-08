@@ -305,6 +305,7 @@ sealed class Hog : RoANPC {
                 }
 
                 // adapted vanilla
+                // it allows the enemy to jump over 1-3 height tiles
                 int collisionHeight = 40;
                 int num20 = (int)((NPC.position.X + (float)(NPC.width / 2) + (float)(30 * NPC.direction)) / 16f);
                 int num21 = (int)((NPC.position.Y + (float)NPC.height - 16f) / 16f);
