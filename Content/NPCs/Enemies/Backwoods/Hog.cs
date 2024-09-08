@@ -249,7 +249,7 @@ sealed class Hog : RoANPC {
                 if (NPC.velocity.Y == 0f) {
                     int collisionWidth = 18;
                     int collisionHeight = 40;
-                    int num20 = (int)((NPC.position.X + (float)(collisionWidth / 2) + (float)(30 * NPC.direction)) / 16f);
+                    int num20 = (int)((NPC.position.X + (float)(collisionWidth / 2) + (float)(15 * NPC.direction)) / 16f);
                     int num21 = (int)((NPC.position.Y + (float)collisionHeight - 16f) / 16f);
                     Tile tileSafely3 = Framing.GetTileSafely(num20, num21);
                     Tile tileSafely4 = Framing.GetTileSafely(num20, num21 - 1);
