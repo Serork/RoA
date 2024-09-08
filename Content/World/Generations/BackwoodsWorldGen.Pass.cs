@@ -2188,18 +2188,18 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step6_SpreadGrass() {
-        double randomnessY = Main.worldSurface + 40.0;
+        double randomnessY = Main.worldSurface + 50.0;
         for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
                 randomnessY += (double)_random.NextFloat(-2f, 3f);
-                randomnessY = Math.Clamp(randomnessY, Main.worldSurface + 30.0, Main.worldSurface + 50.0);
+                randomnessY = Math.Clamp(randomnessY, Main.worldSurface + 30.0, Main.worldSurface + 60.0);
                 bool spread = false;
                 for (int j2 = (int)GenVars.worldSurfaceLow; j2 < randomnessY; j2++) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j2);
                     if (tile.HasTile) {
                         if (j2 < Main.worldSurface - 1.0 && !spread) {
                             if (tile.TileType == _dirtTileType || tile.TileType == TileID.Dirt) {
-                                WorldGen.grassSpread = 0;
+                                //WorldGen.grassSpread = 0;
                                 WorldGen.SpreadGrass(i, j2, _dirtTileType, _grassTileType);
                             }
                         }

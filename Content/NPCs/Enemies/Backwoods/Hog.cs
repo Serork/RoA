@@ -306,9 +306,10 @@ sealed class Hog : RoANPC {
 
                 // adapted vanilla
                 // it allows the enemy to jump over 1-3 height tiles
+                int collisionWidth = 18;
                 int collisionHeight = 40;
-                int num20 = (int)((NPC.position.X + (float)(NPC.width / 2) + (float)(30 * NPC.direction)) / 16f);
-                int num21 = (int)((NPC.position.Y + (float)NPC.height - 16f) / 16f);
+                int num20 = (int)((NPC.position.X + (float)(collisionWidth / 2) + (float)(30 * NPC.direction)) / 16f);
+                int num21 = (int)((NPC.position.Y + (float)collisionHeight - 16f) / 16f);
                 Tile tileSafely3 = Framing.GetTileSafely(num20, num21);
                 Tile tileSafely4 = Framing.GetTileSafely(num20, num21 - 1);
                 Tile tileSafely5 = Framing.GetTileSafely(num20, num21 - 2);
@@ -317,13 +318,13 @@ sealed class Hog : RoANPC {
                     bool flag22 = false;
                     if (tileSafely5.HasUnactuatedTile && Main.tileSolid[tileSafely5.TileType] && !Main.tileSolidTop[tileSafely5.TileType] && (!flag21 || (tileSafely4.HasUnactuatedTile && Main.tileSolid[tileSafely4.TileType] && !Main.tileSolidTop[tileSafely4.TileType]))) {
                         if (!Collision.SolidTilesVersatile(num20 - NPC.direction * 2, num20 - NPC.direction, num21 - 5, num21 - 1) && !Collision.SolidTiles(num20, num20, num21 - 5, num21 - 3)) {
-                            NPC.velocity.Y = -6.2f;
+                            NPC.velocity.Y = -6.5f;
                             NPC.netUpdate = true;
                         }
                     }
                     else if (tileSafely4.HasUnactuatedTile && Main.tileSolid[tileSafely4.TileType] && !Main.tileSolidTop[tileSafely4.TileType]) {
                         if (!Collision.SolidTilesVersatile(num20 - NPC.direction * 2, num20 - NPC.direction, num21 - 4, num21 - 1) && !Collision.SolidTiles(num20, num20, num21 - 4, num21 - 2)) {
-                            NPC.velocity.Y = -5.2f;
+                            NPC.velocity.Y = -5.5f;
                             NPC.netUpdate = true;
                         }
                         else {
@@ -332,7 +333,7 @@ sealed class Hog : RoANPC {
                     }
                     else if (NPC.position.Y + (float)collisionHeight - (float)(num21 * 16) > 20f && tileSafely3.HasUnactuatedTile && Main.tileSolid[tileSafely3.TileType] && !tileSafely3.TopSlope) {
                         if (!Collision.SolidTilesVersatile(num20 - NPC.direction * 2, num20, num21 - 3, num21 - 1)) {
-                            NPC.velocity.Y = -4.8f;
+                            NPC.velocity.Y = -4.9f;
                             NPC.netUpdate = true;
                         }
                         else {
