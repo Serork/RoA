@@ -1122,7 +1122,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             baseX = posX;
         }
         if (posY == 0) {
-            baseY = _random.Next(minY, Bottom + EdgeY * 4);
+            baseY = _random.Next(minY, Bottom + EdgeY * 3);
         }
         else {
             baseY = posY;
