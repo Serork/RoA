@@ -43,8 +43,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private static ushort AltarPlaceholderTileType2 => TileID.StoneSlab;
     private static ushort CliffPlaceholderTileType => TileID.StoneSlab;
 
-    private List<ushort> _backwoodsPlants;
-    private List<Point> _biomeSurface, _altarTiles;
+    private HashSet<ushort> _backwoodsPlants;
+    private HashSet<Point> _biomeSurface, _altarTiles;
     private GenerationProgress _progress;
     private Point _positionToPlaceBiome;
     private int _biomeWidth = 100, _biomeHeight = 162;
@@ -1304,7 +1304,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
             for (int y2 = baseY - distance; y2 < baseY + distance; y2++) {
                 if (WorldGenHelper.ActiveTile(x2, y2, placeholderTileType)) {
-                    WorldGenHelper.ReplaceTile(x2, y2, _elderwoodTileType);
+                    WorldGenHelper.ReplaceTile(x2, y2, _elderwoodTileType, clearEverything: true);
                 }
             }
         }

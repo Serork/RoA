@@ -69,9 +69,14 @@ static class WorldGenHelper {
 
     public static bool ActiveWall(this Tile tile) => !tile.ActiveWall(WallID.None);
 
-    public static void ReplaceTile(int i, int j, int type, bool noItem = true, bool mute = true, int style = 0) {
+    public static void ReplaceTile(int i, int j, int type, bool noItem = true, bool mute = true, int style = 0, bool clearEverything = false) {
         if (GetTileSafely(i, j).HasTile) {
-            GetTileSafely(i, j).ClearEverything();
+            if (clearEverything) {
+                GetTileSafely(i, j).ClearEverything();
+            }
+            else {
+                GetTileSafely(i, j).ClearTile();
+            }
             //WorldGen.KillTile(i, j, false, false, noItem);
         }
         WorldGen.PlaceTile(i, j, type, mute, true, -1, style);

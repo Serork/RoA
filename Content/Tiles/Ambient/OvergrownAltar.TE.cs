@@ -25,7 +25,7 @@ sealed class OvergrownAltarTE : ModTileEntity {
 
     public override void Update() {
         if (Main.netMode != NetmodeID.Server) {
-            Counting += TimeSystem.LogicDeltaTime / 3f * Math.Max(0.01f, Counting) * 10f;
+            Counting += TimeSystem.LogicDeltaTime / 3f * Math.Max(0.01f, Counting) * 5f;
             if (Counting >= 1f) {
                 Counting = 0f;
             }

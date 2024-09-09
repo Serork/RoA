@@ -149,7 +149,7 @@ sealed class Fleder : ModNPC {
                 if (Collision.CanHitLine(NPC.Center, 0, 0, destination, 2, 2)) {
                     Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, destination, minDistance: 15f);
                 }
-                else {
+                else if (Main.rand.NextBool(10)) {
                     if (NPC.velocity.LengthSquared() < 1f) {
                         NPC.velocity = new Vector2(1.2f, 0f).RotatedByRandom(MathHelper.TwoPi);
                     }
