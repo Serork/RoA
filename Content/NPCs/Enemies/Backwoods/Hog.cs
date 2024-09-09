@@ -9,7 +9,6 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent.UI;
 using Terraria.ID;
 
@@ -393,6 +392,9 @@ sealed class Hog : RoANPC {
 		if (Main.netMode != NetmodeID.MultiplayerClient) {
 			foreach (Player player in Main.ActivePlayers) {
 				Item item = player.inventory[player.selectedItem];
+                if (player.whoAmI != Main.myPlayer) {
+                    return;
+                }
 				if (item.IsEmpty()) {
 					return;
 				}
