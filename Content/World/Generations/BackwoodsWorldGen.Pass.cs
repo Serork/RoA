@@ -1122,7 +1122,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             baseX = posX;
         }
         if (posY == 0) {
-            baseY = _random.Next(minY, Bottom + EdgeY * 3);
+            baseY = _random.Next(minY + EdgeY, Bottom + EdgeY * 3);
         }
         else {
             baseY = posY;
@@ -1132,7 +1132,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int attempts = 20;
         while (!skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
             baseX = _random.Next(startX, endX);
-            baseY = _random.Next(minY + EdgeY, Bottom + EdgeY * 4);
+            baseY = _random.Next(minY + EdgeY, Bottom + EdgeY * 3);
             if (attempts-- <= 0) {
                 break;
             }
