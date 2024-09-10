@@ -33,7 +33,7 @@ sealed class Lumberjack : RoANPC {
 		NPC.defense = 8;
 		NPC.knockBackResist = 0.1f;
 
-		int width = 30; int height = 68;
+		int width = 28; int height = 44;
 		NPC.Size = new Vector2(width, height);
 
 		NPC.aiStyle = -1;
@@ -146,13 +146,18 @@ sealed class Lumberjack : RoANPC {
 				}
                 NPC.aiStyle = 3;
 				AIType = 580;
-				if (NPC.velocity.Y <= -6f) {
+                Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+                if (Math.Abs(NPC.Center.X - Main.player[NPC.target].Center.X) <= 20f && Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
+                    NPC.velocity.X *= 0.99f;
+                    NPC.velocity.X += (float)NPC.direction * 0.025f;
+                }
+                if (NPC.velocity.Y <= -6f) {
 					NPC.velocity.Y = -6f;
 				}
 				NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MAXSPEED, MAXSPEED);
 				player = Main.player[NPC.target];
 				if (NPC.Distance(player.Center) < closeRange && !player.dead) {
-                    StateTimer = 0.1f;
+                    StateTimer = 0.2f;
                     ChangeState((int)States.Attacking);
 				}
 				break;
@@ -167,8 +172,8 @@ sealed class Lumberjack : RoANPC {
 				if (NPC.velocity.Y == 0f) {
 					NPC.aiStyle = 0;
 					AIType = -1;
-					NPC.velocity.X *= 0.8f;
-					StateTimer += TimeSystem.LogicDeltaTime / 2f;
+                    NPC.velocity.X *= 0.8f;
+                    StateTimer += TimeSystem.LogicDeltaTime / 2f;
 					StateTimer *= 1.05f;
 					if (StateTimer >= 0.6f) {
 						if (!Attack) {

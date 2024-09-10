@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class GrimDruidDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(200, 200, 200, 0) * 0.75f;
+    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(200, 200, 200, 0);
 
     public override void OnSpawn(Dust dust) {
         //UpdateType = DustID.Clentaminator_Red;

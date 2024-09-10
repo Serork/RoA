@@ -225,8 +225,10 @@ sealed class Hog : RoANPC {
 	public override void AI() {
         NPC.chaseable = _currentAI == 2;
         if (_currentAI == 1) {
-            NPC.velocity.X *= 0.8f;
-			if (++_extraAITimer >= 30f) {
+            if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
+                NPC.velocity.X *= 0.8f;
+            }
+            if (++_extraAITimer >= 30f) {
 				_extraAITimer = 0f;
 				_currentAI = 0;
                 NPC.netUpdate = true;
@@ -333,7 +335,7 @@ sealed class Hog : RoANPC {
                         }
                     }
                 }
-                else {
+                else if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
                     NPC.velocity.X *= 0.7f;
                 }
 

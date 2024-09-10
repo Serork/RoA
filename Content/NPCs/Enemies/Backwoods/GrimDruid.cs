@@ -48,20 +48,12 @@ abstract class DruidNPC : RoANPC {
                     NPC.velocity.Y = 0f;
                 }
                 StateTimer += TimeSystem.LogicDeltaTime;
-                bool canHit = Collision.CanHit(NPC.Center, 0, 0, player.Center, 0, 0);
+                bool canHit = Collision.CanHit(NPC.Center, 4, 4, player.Center, 4, 4);
                 if (NPC.justHit) {
                     StateTimer = -TimeToRecoveryAfterGettingHit();
                 }
                 if (ShouldBeAttacking().Item1() && NPC.Distance(player.Center) < ShouldBeAttacking().Item2 && !player.dead && StateTimer >= 0f && canHit) {
-                    NPC.aiStyle = 0;
-                    AIType = -1;
-                    if (NPC.velocity.Y < 0f) {
-                        NPC.velocity.Y = 0f;
-                    }
-                    else {
-                        NPC.velocity.X *= 0.8f;
-                    }
-                    if (Math.Abs(NPC.velocity.X) < 0.1f && NPC.velocity.Y == 0f) {
+                    if (NPC.velocity.Y == 0f) {
                         StateTimer = 0f;
 
                         ChangeState((int)States.Attacking);
@@ -132,11 +124,13 @@ sealed class GrimDruid : DruidNPC {
     public override void FindFrame(int frameHeight) {
         NPC.spriteDirection = NPC.direction;
         double walkingCounter = 4.0;
+        if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
+            CurrentFrame = 1;
+        }
         switch (State) {
             case (float)States.Walking:
                 bool dead = Main.player[NPC.target].dead;
                 if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
-                    CurrentFrame = 1;
                 }
                 else if (NPC.velocity.X == 0f) {
                     CurrentFrame = 0;
@@ -160,7 +154,9 @@ sealed class GrimDruid : DruidNPC {
                     NPC.frameCounter += 1;
                     float factor = Helper.EaseInOut2((float)(NPC.frameCounter / maxTime)) * 3f;
                     bool flag = NPC.frameCounter <= maxTime;
-                    if (flag) {
+                    if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
+                    }
+                    else if (flag) {
                         CurrentFrame = Main.npcFrameCount[Type] - 3 + (int)factor;
                     }
                     if (++CastTimer > 4) {
@@ -205,34 +201,38 @@ sealed class GrimDruid : DruidNPC {
         NPC.direction = Main.player[NPC.target].Center.DirectionFrom(NPC.Center).X.GetDirection();
         NPC.aiStyle = 3;
         AIType = 580;
+        Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+        if (Math.Abs(NPC.Center.X - Main.player[NPC.target].Center.X) <= 20f && Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
+            NPC.velocity.X *= 0.99f;
+            NPC.velocity.X += (float)NPC.direction * 0.025f;
+        }
         NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -1.1f, 1.1f);
     }
 
     protected override void Attacking() {
-        if (NPC.velocity.Y < 0f) {
-            NPC.velocity.Y = 0f;
-        }
-        NPC.aiStyle = 0;
-        AIType = -1;
-        Player player = Main.player[NPC.target];
-        NPC.direction = player.Center.DirectionFrom(NPC.Center).X.GetDirection();
-        NPC.velocity.X *= 0.8f;
-        StateTimer += TimeSystem.LogicDeltaTime;
-        Vector2 position = new(player.Center.X, player.Center.Y + 32);
-        if (StateTimer >= 0.25f) {
-            Attack = true;
-            NPC.netUpdate = true;
-        }
-        if (StateTimer >= 0.25f) {
-            Dusts(position);
-        }
-        if (StateTimer >= 1.75f) {
-            Attack = false;
-            GrimDruidAttack(position);
-            StateTimer = float.NegativeInfinity;
-            AttackType = Main.rand.Next(0, 2);
-            //ChangeState((int)States.Walking);
-            NPC.netUpdate = true;
+        if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
+            NPC.aiStyle = 0;
+            AIType = -1;
+            Player player = Main.player[NPC.target];
+            NPC.direction = player.Center.DirectionFrom(NPC.Center).X.GetDirection();
+            NPC.velocity.X *= 0.8f;
+            StateTimer += TimeSystem.LogicDeltaTime;
+            Vector2 position = new(player.Center.X, player.Center.Y + 32);
+            if (StateTimer >= 0.25f) {
+                Attack = true;
+                NPC.netUpdate = true;
+            }
+            if (StateTimer >= 0.25f) {
+                Dusts(position);
+            }
+            if (StateTimer >= 1.75f) {
+                Attack = false;
+                GrimDruidAttack(position);
+                AttackType = Main.rand.Next(0, 2);
+                StateTimer = -TimeToChangeState();
+                ChangeState((int)States.Walking);
+                NPC.netUpdate = true;
+            }
         }
     }
 
