@@ -3,11 +3,11 @@
 namespace RoA.Content.NPCs;
 
 abstract class RoANPC : ModNPC {
-    protected ref float CurrentFrame => ref NPC.localAI[0];
+    public ref float CurrentFrame => ref NPC.localAI[0];
 
-    protected ref float StateTimer => ref NPC.ai[0];
-    protected ref float State => ref NPC.ai[1];
-    protected bool Attack {
+    public ref float StateTimer => ref NPC.ai[0];
+    public ref float State => ref NPC.ai[1];
+    public bool Attack {
         get => NPC.ai[2] == 1f;
         set => NPC.ai[2] = value ? 1f : 0f;
     }

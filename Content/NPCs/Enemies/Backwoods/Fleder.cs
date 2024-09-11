@@ -123,13 +123,19 @@ sealed class Fleder : ModNPC {
         playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
         if (!IsAttacking) {
             List<NPC> others = Main.npc.Where(npc => npc.active && npc.type == NPC.type && npc.whoAmI != NPC.whoAmI).ToList();
-            float nearestTile = NPC.SearchForNearestTile<TreeBranch>(out Point tile, out Point? treeBranch, (tilePosition) => {
-                if (others.Any(npc => npc.As<Fleder>()._state == State.Sitting && npc.WithinRange(tilePosition.ToWorldCoordinates(), 10f))) {
-                    return false;
-                }
+            Tile centerTile = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16);
+            Point tile;
+            Point? treeBranch = null;
+            float nearestTile = 0f;
+            if (!centerTile.AnyWall()) {
+                nearestTile = NPC.SearchForNearestTile<TreeBranch>(out tile, out treeBranch, (tilePosition) => {
+                    if (others.Any(npc => npc.As<Fleder>()._state == State.Sitting && npc.WithinRange(tilePosition.ToWorldCoordinates(), 10f))) {
+                        return false;
+                    }
 
-                return true;
-            }, 30);
+                    return true;
+                }, 30);
+            }
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 foreach (Player activePlayer in Main.ActivePlayers) {
                     if (isTriggeredBy(activePlayer)) {
@@ -145,17 +151,20 @@ sealed class Fleder : ModNPC {
 
                 NPC.localAI[1] = 0f;
 
+                NPC.localAI[2] += 1f * Main.rand.NextFloat();
                 Vector2 destination = treeBranch.Value.ToWorldCoordinates();
                 if (Collision.CanHitLine(NPC.Center, 0, 0, destination, 2, 2)) {
                     Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, destination, minDistance: 15f);
                 }
-                else if (Main.rand.NextBool(10)) {
+                else if (NPC.localAI[2] >= 15f) {
+                    NPC.localAI[2] = 0f;
                     if (NPC.velocity.LengthSquared() < 1f) {
                         NPC.velocity = new Vector2(1.2f, 0f).RotatedByRandom(MathHelper.TwoPi);
                     }
                     else {
                         NPC.velocity = NPC.velocity.RotatedBy(Main.rand.Next(-1, 2) * 0.2f);
                     }
+                    NPC.netUpdate = true;
                 }
 
                 if (NPC.WithinRange(destination, 8f) && Math.Abs(NPC.Center.X - destination.X) <= 6f) {

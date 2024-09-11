@@ -20,6 +20,7 @@
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Slope.png" />
 	  <None Remove="Resources\Textures\DruidBiomeWaterStyle.png" />
 	  <None Remove="Resources\Textures\Dusts\BackwoodsWoodTrash.png" />
+	  <None Remove="Resources\Textures\Dusts\GhostLeaf.png" />
 	  <None Remove="Resources\Textures\Dusts\Slash.png" />
 	  <None Remove="Resources\Textures\Dusts\Tulip.png" />
 	  <None Remove="Resources\Textures\Empty.png" />
@@ -46,6 +47,7 @@
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Fleder.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Hog.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Lumberjack.png" />
+	  <None Remove="Resources\Textures\Projectiles\Enemies\PrimordialLeaf.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\ClawsSlash.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\MushroomSpore.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\PineCone.png" />

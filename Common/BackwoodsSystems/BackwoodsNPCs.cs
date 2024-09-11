@@ -6,10 +6,8 @@ using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.BackwoodsSystems;
@@ -30,6 +28,8 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 if (NPC.downedBoss2) {
                     pool.Add(ModContent.NPCType<Fleder>(), 1f);
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
+
+                    pool.Add(ModContent.NPCType<EntLegs>(), 0.1f);
                 }
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
                     if (!Main.dayTime) {

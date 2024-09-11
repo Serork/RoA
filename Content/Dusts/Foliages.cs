@@ -36,5 +36,4 @@ abstract class FolliageDust : ModDust {
 }
 
 sealed class CrimsonFoliage : FolliageDust { }
-
 sealed class CorruptedFoliage : FolliageDust { }
