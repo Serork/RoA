@@ -129,12 +129,12 @@ sealed class Fleder : ModNPC {
             float nearestTile = 0f;
             if (!centerTile.AnyWall()) {
                 nearestTile = NPC.SearchForNearestTile<TreeBranch>(out tile, out treeBranch, (tilePosition) => {
-                    if (others.Any(npc => npc.As<Fleder>()._state == State.Sitting && npc.WithinRange(tilePosition.ToWorldCoordinates(), 10f))) {
+                    if (others.Any(npc => npc.As<Fleder>()._state == State.Sitting && npc.WithinRange(tilePosition.ToWorldCoordinates(), 20f))) {
                         return false;
                     }
 
                     return true;
-                }, 20);
+                }, 30);
             }
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 foreach (Player activePlayer in Main.ActivePlayers) {
@@ -167,7 +167,7 @@ sealed class Fleder : ModNPC {
                     NPC.netUpdate = true;
                 }
 
-                if (NPC.WithinRange(destination, 10f) && Math.Abs(NPC.Center.X - destination.X) <= 8f) {
+                if (NPC.WithinRange(destination, 8f) && Math.Abs(NPC.Center.X - destination.X) <= 6f) {
                     NPC.Center = destination;
                     NPC.velocity = Vector2.Zero;
                     NPC.rotation = 0f;

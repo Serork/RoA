@@ -15,7 +15,7 @@ namespace RoA.Common.BackwoodsSystems;
 sealed class BackwoodsNPCs : GlobalNPC {
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns) {
         if (player.InModBiome<BackwoodsBiome>()) {
-            spawnRate = (int)(spawnRate * 0.3f);
+            spawnRate = (int)(spawnRate * (NPC.downedBoss2 ? 0.2f : 0.3f));
         }
     }
 
@@ -25,12 +25,6 @@ sealed class BackwoodsNPCs : GlobalNPC {
 
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType)) {
-                if (NPC.downedBoss2) {
-                    pool.Add(ModContent.NPCType<Fleder>(), 1.25f);
-                    pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
-
-                    pool.Add(ModContent.NPCType<EntLegs>(), 0.2f);
-                }
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
                     if (!Main.dayTime) {
                         pool.Add(ModContent.NPCType<Lumberjack>(), 0.4f);
@@ -40,8 +34,13 @@ sealed class BackwoodsNPCs : GlobalNPC {
                         pool.Add(ModContent.NPCType<Hog>(), 0.4f);
                     }
                 }
-
                 pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);
+
+                if (NPC.downedBoss2) {
+                    pool.Add(ModContent.NPCType<Fleder>(), 1f);
+                    pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
+                    pool.Add(ModContent.NPCType<EntLegs>(), 0.2f);
+                }
             }
         }
     }
