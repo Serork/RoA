@@ -17,6 +17,8 @@ using RoA.Content.Projectiles.Enemies;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 abstract class DruidNPC : RoANPC {
+    protected float AttackTimer { get; set; }
+
     protected ref float CastTimer => ref NPC.localAI[1];
     protected ref float CastFrame => ref NPC.localAI[2];
 
@@ -38,23 +40,31 @@ abstract class DruidNPC : RoANPC {
     protected abstract void Attacking();
     protected abstract (Func<bool>, float) ShouldBeAttacking();
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(AttackTimer);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        AttackTimer = reader.ReadSingle();
+    }
+
     public sealed override void AI() {
         Player player;
         switch (State) {
             case (float)States.Walking:
                 NPC.TargetClosest();
                 player = Main.player[NPC.target];
-                if (StateTimer < -TimeToChangeState() + 0.2f && NPC.velocity.Y < 0f) {
+                if (AttackTimer < -TimeToChangeState() + 0.2f && NPC.velocity.Y < 0f) {
                     NPC.velocity.Y = 0f;
                 }
-                StateTimer += TimeSystem.LogicDeltaTime;
+                AttackTimer += TimeSystem.LogicDeltaTime;
                 bool canHit = Collision.CanHit(NPC.Center, 4, 4, player.Center, 4, 4);
                 if (NPC.justHit) {
-                    StateTimer = -TimeToRecoveryAfterGettingHit();
+                    AttackTimer = -TimeToRecoveryAfterGettingHit();
                 }
-                if (ShouldBeAttacking().Item1() && NPC.Distance(player.Center) < ShouldBeAttacking().Item2 && !player.dead && StateTimer >= 0f && canHit) {
+                if (ShouldBeAttacking().Item1() && NPC.Distance(player.Center) < ShouldBeAttacking().Item2 && !player.dead && AttackTimer >= 0f && canHit) {
                     if (NPC.velocity.Y == 0f) {
-                        StateTimer = 0f;
+                        AttackTimer = 0f;
 
                         ChangeState((int)States.Attacking);
                     }
@@ -72,8 +82,8 @@ abstract class DruidNPC : RoANPC {
                 //if (NPC.justHit && !Attack) {
                 //    StateTimer = -TimeToRecoveryAfterGettingHit();
                 //}
-                if ((inRange || player.dead || StateTimer < 0f) && !Attack) {
-                    StateTimer = -TimeToChangeState();
+                if ((inRange || player.dead || AttackTimer < 0f) && !Attack) {
+                    AttackTimer = -TimeToChangeState();
                     ChangeState((int)States.Walking);
                     return;
                 }
@@ -124,9 +134,6 @@ sealed class GrimDruid : DruidNPC {
     public override void FindFrame(int frameHeight) {
         NPC.spriteDirection = NPC.direction;
         double walkingCounter = 4.0;
-        if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
-            CurrentFrame = 1;
-        }
         switch (State) {
             case (float)States.Walking:
                 bool dead = Main.player[NPC.target].dead;
@@ -172,16 +179,23 @@ sealed class GrimDruid : DruidNPC {
                 }
                 break;
         }
+        if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
+            CurrentFrame = 1;
+        }
         int currentFrame = Math.Min((int)CurrentFrame, Main.npcFrameCount[Type] - 1);
         ChangeFrame((currentFrame, frameHeight));
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
+        base.SendExtraAI(writer);
+
         writer.Write(AttackType);
         writer.WriteVector2(_playersOldPosition);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
+        base.ReceiveExtraAI(reader);
+
         AttackType = reader.ReadInt32();
         _playersOldPosition = reader.ReadVector2(); 
     }
@@ -206,7 +220,8 @@ sealed class GrimDruid : DruidNPC {
             NPC.velocity.X *= 0.99f;
             NPC.velocity.X += (float)NPC.direction * 0.025f;
         }
-        NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -1.1f, 1.1f);
+        float maxSpeed = 1.1f;
+        NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -maxSpeed, maxSpeed);
     }
 
     protected override void Attacking() {
@@ -218,7 +233,7 @@ sealed class GrimDruid : DruidNPC {
             NPC.velocity.X *= 0.8f;
             StateTimer += TimeSystem.LogicDeltaTime;
             Vector2 position = new(player.Center.X, player.Center.Y + 32);
-            if (StateTimer >= 0.25f) {
+            if (StateTimer >= 0.17f) {
                 Attack = true;
                 NPC.netUpdate = true;
             }
@@ -229,7 +244,8 @@ sealed class GrimDruid : DruidNPC {
                 Attack = false;
                 GrimDruidAttack(position);
                 AttackType = Main.rand.Next(0, 2);
-                StateTimer = -TimeToChangeState();
+                StateTimer = 0f;
+                AttackTimer = -TimeToChangeState();
                 ChangeState((int)States.Walking);
                 NPC.netUpdate = true;
             }
