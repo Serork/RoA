@@ -76,7 +76,7 @@ static class Helper {
         return result;
     }
 
-    public static float SearchForNearestTile<T>(this Entity entity, out Point tile, out Point? searchTile, Predicate<Point>? condition = null, int maxDist = 10) where T : ModTile {
+    public static float SearchForNearestTile<T>(this Entity entity, out Point tile, out Point? searchTile, Predicate<Point>? condition = null, int maxDist = 2) where T : ModTile {
         searchTile = null;
         tile = Point.Zero;
         Point center = entity.Center.ToTileCoordinates();

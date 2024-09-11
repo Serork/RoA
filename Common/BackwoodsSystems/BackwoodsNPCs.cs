@@ -26,10 +26,10 @@ sealed class BackwoodsNPCs : GlobalNPC {
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType)) {
                 if (NPC.downedBoss2) {
-                    pool.Add(ModContent.NPCType<Fleder>(), 1f);
+                    pool.Add(ModContent.NPCType<Fleder>(), 1.25f);
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
 
-                    pool.Add(ModContent.NPCType<EntLegs>(), 0.1f);
+                    pool.Add(ModContent.NPCType<EntLegs>(), 0.2f);
                 }
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
                     if (!Main.dayTime) {

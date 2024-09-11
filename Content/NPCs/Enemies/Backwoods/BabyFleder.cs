@@ -22,7 +22,7 @@ sealed class BabyFleder : ModNPC {
 
     private bool HasParent => ParentIndex > -1;
 
-    private bool IsSitting => _state == State.Sitting;
+    private bool IsSitting => !HasParent && _state == State.Sitting;
 
     public int ParentIndex {
         get => (int)NPC.ai[2] - 1;

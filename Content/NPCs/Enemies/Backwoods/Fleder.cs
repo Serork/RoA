@@ -134,7 +134,7 @@ sealed class Fleder : ModNPC {
                     }
 
                     return true;
-                }, 30);
+                }, 20);
             }
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 foreach (Player activePlayer in Main.ActivePlayers) {
@@ -167,7 +167,7 @@ sealed class Fleder : ModNPC {
                     NPC.netUpdate = true;
                 }
 
-                if (NPC.WithinRange(destination, 8f) && Math.Abs(NPC.Center.X - destination.X) <= 6f) {
+                if (NPC.WithinRange(destination, 10f) && Math.Abs(NPC.Center.X - destination.X) <= 8f) {
                     NPC.Center = destination;
                     NPC.velocity = Vector2.Zero;
                     NPC.rotation = 0f;
