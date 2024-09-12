@@ -42,7 +42,9 @@ sealed class EntLegs : RoANPC {
 
 		NPC.aiStyle = -1;
 
-		NPC.HitSound = SoundID.NPCHit52;
+        NPC.npcSlots = 3f;
+
+        NPC.HitSound = SoundID.NPCHit52;
 		NPC.DeathSound = SoundID.NPCDeath27;
 
 		NPC.dontTakeDamage = true;
@@ -50,7 +52,15 @@ sealed class EntLegs : RoANPC {
 
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
 
-	public override void AI() {
+    public override bool PreAI() {
+        if (NPC.oldVelocity.Y >= 1f && NPC.velocity.Y == 0f) {
+            Stomp(true);
+        }
+
+        return base.PreAI();
+    }
+
+    public override void AI() {
 		if (NPC.localAI[3] == 0f) {
 			NPC.localAI[3] = 1f;
 
@@ -73,7 +83,7 @@ sealed class EntLegs : RoANPC {
 		short state = (short)State;
 		switch (state) {
 			case WALK:
-				NPC.direction = Main.player[NPC.target].Center.DirectionFrom(NPC.Center).X.GetDirection();
+                //NPC.TargetClosest();
                 NPC.aiStyle = 3;
                 AIType = 580;
                 Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
@@ -83,11 +93,13 @@ sealed class EntLegs : RoANPC {
                 }
 				float maxSpeed = 1.25f;
 				NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -maxSpeed, maxSpeed);
-				if (++NPC.ai[2] >= 300f) {
-					NPC.ai[2] = 0f;
-                    ChangeState(SHIELD, keepState: false);
+				if (++NPC.ai[2] >= 300f && NPC.velocity.Y == 0f) {
+					if (Collision.CanHit(NPC.Center, 2, 2, Main.player[NPC.target].position, 2, 2)) {
+						NPC.ai[2] = 0f;
+						ChangeState(SHIELD, keepState: false);
 
-					NPC.defense += 500;
+						NPC.defense += 500;
+					}
 				}
 				break;
 			case SHIELD:
@@ -107,6 +119,9 @@ sealed class EntLegs : RoANPC {
 				}
 				break;
 			case ATTACK:
+                NPC.aiStyle = 0;
+                AIType = -1;
+                
 				if (NPC.ai[2] >= 20f && NPC.ai[2] % 10f == 0f) {
 					SoundEngine.PlaySound(SoundID.Item104, NPC.position);
 
@@ -143,22 +158,19 @@ sealed class EntLegs : RoANPC {
 	}
 
 	public override void FindFrame(int frameHeight) {
-		NPC.spriteDirection = -NPC.direction;
+		NPC.spriteDirection = NPC.direction;
 		short state = (short)State;
 		switch (state) {
 			case WALK:
-				if (NPC.velocity.X == 0f) {
+				if (Math.Abs(NPC.velocity.X) < 0.1f) {
 					CurrentFrame = 0;
 				}
 				else {
 					if (++NPC.frameCounter >= 6.0) {
 						NPC.frameCounter = 0.0;
 						CurrentFrame++;
-						if ((CurrentFrame == 4 || CurrentFrame == 9) || (NPC.oldVelocity.Y > 3f && NPC.velocity.Y == 0f)) {
-							string tag = "Ent Stomp";
-							PunchCameraModifier punchCameraModifier = new(NPC.Bottom, MathHelper.PiOver2.ToRotationVector2(), 4f, 5f, 20, 1000f, tag);
-							Main.instance.CameraModifiers.Add(punchCameraModifier);
-							SoundEngine.PlaySound(SoundID.Item73, NPC.Bottom);
+						if (NPC.velocity.Y == 0f && (CurrentFrame == 4 || CurrentFrame == 9)) {
+							Stomp();
 						}
 						if (CurrentFrame >= 13 || CurrentFrame < 3) {
 							CurrentFrame = 3;
@@ -184,5 +196,14 @@ sealed class EntLegs : RoANPC {
         }
         int currentFrame = Math.Min((int)CurrentFrame, Main.npcFrameCount[Type] - 1);
         ChangeFrame((currentFrame, frameHeight));
+    }
+
+	private void Stomp(bool empowered = false) {
+        string tag = "Ent Stomp";
+        PunchCameraModifier punchCameraModifier = new(NPC.Bottom, MathHelper.PiOver2.ToRotationVector2(), 4f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 5f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 20, 1000f, tag);
+        Main.instance.CameraModifiers.Add(punchCameraModifier);
+		if (!empowered) {
+			SoundEngine.PlaySound(SoundID.Item73, NPC.Bottom);
+		}
     }
 }

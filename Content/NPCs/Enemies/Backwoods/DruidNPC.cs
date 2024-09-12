@@ -47,7 +47,7 @@ abstract class DruidNPC : RoANPC {
         Player player;
         switch (State) {
             case (float)States.Walking:
-                NPC.TargetClosest();
+                //NPC.TargetClosest();
                 player = Main.player[NPC.target];
                 if (AttackTimer < -TimeToChangeState() + 0.2f && NPC.velocity.Y < 0f) {
                     NPC.velocity.Y = 0f;

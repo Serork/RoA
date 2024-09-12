@@ -125,7 +125,7 @@ sealed class GrimDruid : DruidNPC {
     protected override (Func<bool>, float) ShouldBeAttacking() => (() => true, 450f);
 
     protected override void Walking() {
-        NPC.direction = Main.player[NPC.target].Center.DirectionFrom(NPC.Center).X.GetDirection();
+        //NPC.direction = Main.player[NPC.target].Center.DirectionFrom(NPC.Center).X.GetDirection();
         NPC.aiStyle = 3;
         AIType = 580;
         Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);

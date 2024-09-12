@@ -85,12 +85,12 @@ sealed class OvergrownAltar : ModTile {
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
-            float counting = overgrownAltarTE.Counting;
-            float value = (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f;
-            float factor = value;
+            float counting = MathHelper.Clamp(overgrownAltarTE.Counting, 0f, 0.95f);
+            //float value = (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f;
+            float factor = counting;
             Color color = Lighting.GetColor(i, j);
             Tile tile = Main.tile[i, j];
-            int frame = 5 - (int)(factor * 6)/* + (flag || OvergrownCoords.Strength > 0.25f ? 6 : 0)*/;
+            int frame = /*5 - */(int)(factor * 6)/* + (flag || OvergrownCoords.Strength > 0.25f ? 6 : 0)*/;
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;

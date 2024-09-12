@@ -133,7 +133,7 @@ sealed class Lumberjack : RoANPC {
                 ChangeState((int)States.Walking);
 				break;
 			case (float)States.Walking:
-                NPC.TargetClosest();
+                //NPC.TargetClosest();
                 if (Attack) {
 					Attack = false;
 					NPC.netUpdate = true;

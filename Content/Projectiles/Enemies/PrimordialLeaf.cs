@@ -13,7 +13,7 @@ sealed class PrimordialLeaf : ModProjectile {
 		Main.projFrames[Projectile.type] = 5;
 	}
 
-	public override Color? GetAlpha(Color lightColor) => Color.White;
+	//public override Color? GetAlpha(Color lightColor) => Color.White;
 
 	public override void SetDefaults() {
 		Projectile.damage = 40;
@@ -52,5 +52,5 @@ sealed class PrimordialLeaf : ModProjectile {
         }
     }
 
-    public override void Kill(int timeLeft) => Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 2, 2, ModContent.DustType<GhostLeaf>(), Projectile.velocity.X, Projectile.velocity.Y * 0.02f, 125, default, 1f);
+    public override void OnKill(int timeLeft) => Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 2, 2, ModContent.DustType<GhostLeaf>(), Projectile.velocity.X, Projectile.velocity.Y * 0.02f, 125, default, 1f);
 }
