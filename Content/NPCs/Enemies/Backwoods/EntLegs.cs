@@ -52,6 +52,8 @@ sealed class EntLegs : RoANPC {
 
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
 
+	public override bool? CanFallThroughPlatforms() => true;
+
     public override bool PreAI() {
         if (NPC.oldVelocity.Y >= 1f && NPC.velocity.Y == 0f) {
             Stomp(true);
@@ -93,6 +95,9 @@ sealed class EntLegs : RoANPC {
                 }
 				float maxSpeed = 1.25f;
 				NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -maxSpeed, maxSpeed);
+				if (NPC.ai[2] < 0f && NPC.velocity.Y < 0f) {
+					NPC.velocity.Y = 0f;
+				}
 				if (++NPC.ai[2] >= 300f && NPC.velocity.Y == 0f) {
 					if (Collision.CanHit(NPC.Center, 2, 2, Main.player[NPC.target].position, 2, 2)) {
 						NPC.ai[2] = 0f;
@@ -148,7 +153,7 @@ sealed class EntLegs : RoANPC {
 					}
 				}
 				if (++NPC.ai[2] >= 100f) {
-                    NPC.ai[2] = 0f;
+                    NPC.ai[2] = -10f;
                     ChangeState(WALK, keepState: false);
 
                     NPC.defense += 6;
