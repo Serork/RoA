@@ -13,7 +13,7 @@ sealed class PrimordialLeaf : ModProjectile {
 		Main.projFrames[Projectile.type] = 5;
 	}
 
-	//public override Color? GetAlpha(Color lightColor) => Color.White;
+	public override Color? GetAlpha(Color lightColor) => Color.White;
 
 	public override void SetDefaults() {
 		Projectile.damage = 40;
