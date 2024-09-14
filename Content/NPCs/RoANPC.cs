@@ -7,6 +7,7 @@ abstract class RoANPC : ModNPC {
 
     public ref float StateTimer => ref NPC.ai[0];
     public ref float State => ref NPC.ai[1];
+
     public bool Attack {
         get => NPC.ai[2] == 1f;
         set => NPC.ai[2] = value ? 1f : 0f;

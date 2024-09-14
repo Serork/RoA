@@ -1,22 +1,25 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
+using RoA.Core;
 
 using System.IO;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Enemies;
 
-sealed class VileSpike : ModProjectile {
+sealed class ArchVileSpike : ModProjectile {
+	public override string Texture => ResourceManager.EnemyProjectileTextures + nameof(VileSpike);
+
     private const int MAX_TIMELEFT = 270;
     
 	private bool _spawnedNext;
 
 	public override void SendExtraAI(BinaryWriter writer) => writer.Write(_spawnedNext);
-
 	public override void ReceiveExtraAI(BinaryReader reader) => _spawnedNext = reader.ReadBoolean();
 
 	public override void SetDefaults () {
@@ -44,10 +47,10 @@ sealed class VileSpike : ModProjectile {
 		float height = 6f;
 		float height2 = 4f;
 		Projectile.velocity = Vector2.Zero;
-		Projectile.ai[0]++;
+		Projectile.ai[0] += 2f;
 		if (Projectile.ai[1] == 0f && Projectile.ai[0] < 55f) {
 			if (Main.netMode != NetmodeID.Server) {
-                int dust = Dust.NewDust(new Vector2(Projectile.Center.X + Main.rand.Next(-32, 32), Projectile.Center.Y + 12f), 8, 8, ModContent.DustType<GrimDruidDust>(), 0f, Main.rand.NextFloat(-2.5f, -0.5f), 255, Scale: 0.9f + Main.rand.NextFloat(0f, 0.4f));
+                int dust = Dust.NewDust(new Vector2(Projectile.Center.X + Main.rand.Next(-32, 32), Projectile.Center.Y + 12f), 8, 8, ModContent.DustType<ArchdruidDust>(), 0f, Main.rand.NextFloat(-2.5f, -0.5f), 255, Scale: 0.9f + Main.rand.NextFloat(0f, 0.4f));
                 Main.dust[dust].velocity *= 0.25f;
             }
 		}
@@ -62,9 +65,9 @@ sealed class VileSpike : ModProjectile {
 		}
 		if (Projectile.ai[0] % height2 == 0 && !_spawnedNext) {
 			if (Main.netMode != NetmodeID.MultiplayerClient) {
-				int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y - 32), Vector2.Zero, ModContent.ProjectileType<VileSpike>(), Projectile.damage, Projectile.knockBack, 0);
-                Main.projectile[projectile].ai[1] = Projectile.ai[1] + 1f;
-                Main.projectile[projectile].netUpdate = true;
+				int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y - 32), Vector2.Zero, ModContent.ProjectileType<ArchVileSpike>(), Projectile.damage, Projectile.knockBack, 0, 0f);
+				Main.projectile[projectile].ai[1] = Projectile.ai[1] + 1f;
+				Main.projectile[projectile].netUpdate = true;
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
             }
 			_spawnedNext = true;
@@ -74,13 +77,13 @@ sealed class VileSpike : ModProjectile {
 			Projectile.ai[1] = height + 1;
 			Projectile.Kill();
             Projectile.netUpdate = true;
-        }
+		}
 	}
 
     public override void OnKill(int timeLeft) {
-        if (Projectile.ai[1] < 6f) {
-            return;
-        }
+		if (Projectile.ai[1] < 6f) {
+			return;
+		}
 
         if (Main.netMode != NetmodeID.MultiplayerClient) {
             int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ArchVileSpikeTip>(), Projectile.damage, Projectile.knockBack);
@@ -104,8 +107,12 @@ sealed class VileSpike : ModProjectile {
     //}
 }
 
-sealed class VileSpikeTip : ModProjectile {
-	public override void SetDefaults() {
+sealed class ArchVileSpikeTip : ModProjectile {
+    public override string Texture => ResourceManager.EnemyProjectileTextures + nameof(VileSpikeTip);
+
+    public override bool ShouldUpdatePosition() => false;
+
+    public override void SetDefaults() {
 		int width = 30; int height = 32;
 		Projectile.Size = new Vector2(width, height);
 
@@ -124,13 +131,11 @@ sealed class VileSpikeTip : ModProjectile {
 
 	public override void AI() => Projectile.velocity = Vector2.Zero;
 
-    public override bool ShouldUpdatePosition() => false;
-
-    //public override void Kill(int timeLeft) {
-    //	if (Main.netMode == NetmodeID.Server) {
-    //		return;
-    //	}
-    //	SoundEngine.PlaySound(SoundID.Dig, new Vector2(Projectile.position.X, Projectile.position.Y));
-    //	Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.Find<ModGore>(nameof(RiseofAges) + "/VileSpikeGore").Type, 1f);
-    //}
+	//public override void Kill(int timeLeft) {
+	//	if (Main.netMode == NetmodeID.Server) {
+	//		return;
+	//	}
+	//	SoundEngine.PlaySound(SoundID.Dig, new Vector2(Projectile.position.X, Projectile.position.Y));
+	//	Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.Find<ModGore>(nameof(RiseofAges) + "/VileSpikeGore").Type, 1f);
+	//}
 }

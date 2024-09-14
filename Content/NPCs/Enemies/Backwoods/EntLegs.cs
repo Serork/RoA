@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using System;
 
@@ -39,10 +39,12 @@ sealed class EntLegs : RoANPC {
 
 		int width = 35; int height = 40;
 		NPC.Size = new Vector2(width, height);
-
+        
 		NPC.aiStyle = -1;
 
         NPC.npcSlots = 3f;
+
+        NPC.value = Item.buyPrice(0, 0, 6, 7);
 
         NPC.HitSound = SoundID.NPCHit52;
 		NPC.DeathSound = SoundID.NPCDeath27;
@@ -67,15 +69,20 @@ sealed class EntLegs : RoANPC {
 			NPC.localAI[3] = 1f;
 
 			if (Main.netMode != NetmodeID.MultiplayerClient) {
-				int npc = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X, (int)NPC.position.Y, ModContent.NPCType<Ent>(), ai0: NPC.whoAmI);
-				Main.npc[npc].life = Main.npc[npc].lifeMax = NPC.lifeMax;
-				NPC.realLife = Main.npc[npc].whoAmI;
-				if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-					NetMessage.SendData(MessageID.SyncNPC, number: npc);
-				}
+				int npcSlot = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X, (int)NPC.position.Y, ModContent.NPCType<Ent>(), ai0: NPC.whoAmI);
+				NPC npc = Main.npc[npcSlot];
+				npc.ai[3] = NPC.ai[3];
+                npc.life = npc.lifeMax = NPC.lifeMax;
+				npc.SpawnedFromStatue = NPC.SpawnedFromStatue;
 
-				NPC.ai[3] = npc;
-			}
+                NPC.realLife = npc.whoAmI;
+
+				NPC.ai[3] = npcSlot;
+
+                npc.netUpdate = true;
+
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
+            }
 
 			NPC.netUpdate = true;
 
@@ -85,22 +92,14 @@ sealed class EntLegs : RoANPC {
 		short state = (short)State;
 		switch (state) {
 			case WALK:
-                //NPC.TargetClosest();
-                NPC.aiStyle = 3;
-                AIType = 580;
-                Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
-                if (Math.Abs(NPC.Center.X - Main.player[NPC.target].Center.X) <= 20f && Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
-                    NPC.velocity.X *= 0.99f;
-                    NPC.velocity.X += (float)NPC.direction * 0.025f;
-                }
-				float maxSpeed = 1.25f;
-				NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -maxSpeed, maxSpeed);
-				if (NPC.ai[2] < 0f && NPC.velocity.Y < 0f) {
+                NPC.PseudoGolemAI(0.3f);
+
+                if (StateTimer < 0f && NPC.velocity.Y < 0f) {
 					NPC.velocity.Y = 0f;
 				}
-				if (++NPC.ai[2] >= 300f && NPC.velocity.Y == 0f) {
+				if (++StateTimer >= 300f && NPC.velocity.Y == 0f) {
 					if (Collision.CanHit(NPC.Center, 2, 2, Main.player[NPC.target].position, 2, 2)) {
-						NPC.ai[2] = 0f;
+                        StateTimer = 0f;
 						ChangeState(SHIELD, keepState: false);
 
 						NPC.defense += 500;
@@ -111,12 +110,11 @@ sealed class EntLegs : RoANPC {
 				if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
 					NPC.velocity.X *= 0.8f;
 
-					NPC.aiStyle = 0;
-					AIType = -1;
-					if (++NPC.ai[2] >= 180f) {
+                    NPC.ResetAIStyle();
+                    if (++StateTimer >= 180f) {
 						bool flag = Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height);
 
-                        NPC.ai[2] = 0f;
+                        StateTimer = 0f;
                         ChangeState(flag ? ATTACK : WALK);
 
 						NPC.defense -= flag ? 506 : 500;
@@ -124,10 +122,9 @@ sealed class EntLegs : RoANPC {
 				}
 				break;
 			case ATTACK:
-                NPC.aiStyle = 0;
-                AIType = -1;
-                
-				if (NPC.ai[2] >= 20f && NPC.ai[2] % 10f == 0f) {
+                NPC.ResetAIStyle();
+
+                if (StateTimer >= 20f && StateTimer % 10f == 0f) {
 					SoundEngine.PlaySound(SoundID.Item104, NPC.position);
 
 					float dustCount = 14f;
@@ -152,9 +149,9 @@ sealed class EntLegs : RoANPC {
 						NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
 					}
 				}
-				if (++NPC.ai[2] >= 100f) {
-                    NPC.ai[2] = -10f;
-                    ChangeState(WALK, keepState: false);
+				if (++StateTimer >= 100f) {
+                    StateTimer = -10f;
+                    ChangeState(WALK);
 
                     NPC.defense += 6;
 				}

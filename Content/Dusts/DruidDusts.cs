@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class GrimDruidDust : ModDust {
+class GrimDruidDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(200, 200, 200, 0);
 
     public override void OnSpawn(Dust dust) {
@@ -41,3 +40,5 @@ sealed class GrimDruidDust : ModDust {
         return false;
     }
 }
+
+sealed class ArchdruidDust : GrimDruidDust { }

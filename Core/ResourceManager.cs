@@ -23,6 +23,7 @@ static class ResourceManager {
     public static string BackgroundTextures => Textures + "Backgrounds/";
 
     public static string ProjectileTextures => Textures + "Projectiles/";
+    public static string EnemyProjectileTextures => ProjectileTextures + "Enemies/";
 
     public static string DustTextures => Textures + "Dusts/";
 

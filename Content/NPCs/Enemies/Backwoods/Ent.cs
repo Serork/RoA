@@ -16,38 +16,40 @@ sealed class Ent : RoANPC {
 	}
 
 	public override void SetDefaults() {
-		NPC.lifeMax = 600;
-		NPC.damage = 36;
-		NPC.defense = 6;
-		NPC.knockBackResist = 0f;
-
+        NPC.lifeMax = 500;
+        NPC.damage = 36;
+        NPC.defense = 6;
+        NPC.knockBackResist = 0f;
+        
 		int width = 80; int height = 100;
 		NPC.Size = new Vector2(width, height);
 
-		NPC.aiStyle = -1;
+        NPC.netAlways = true;
+        NPC.dontCountMe = true;
 
-		NPC.npcSlots = 1f;
+        NPC.aiStyle = -1;
 
-		NPC.value = Item.buyPrice(0, 0, 6, 7);
+        NPC.HitSound = SoundID.NPCHit52;
+        NPC.DeathSound = SoundID.NPCDeath27;
+    }
 
-		NPC.noTileCollide = true;
-		NPC.noGravity = true;
+    public override void AI() {
+        NPC npc = Parent;
+        if (!npc.active) {
+            NPC.KillNPC();
+		}
 
-		NPC.HitSound = SoundID.NPCHit52;
-		NPC.DeathSound = SoundID.NPCDeath27;
-	}
-
-	public override void AI() {
 		NPC.realLife = NPC.whoAmI;
 
-		NPC npc = Parent;
-		if (!npc.active) {
-			NPC.KillNPC();
-		}
-		NPC.defense = npc.defense;
+		NPC.lifeMax = 500 - (int)(50 * NPC.ai[3]);
+
+        npc.value = NPC.value;
+        NPC.defense = npc.defense;
 		NPC.Center = npc.Center - Vector2.UnitY * 32f;
 		NPC.velocity = npc.velocity;
-	}
+
+		NPC.netUpdate = true;
+    }
 
 	public override void OnKill() => Parent.KillNPC();
 
@@ -56,6 +58,7 @@ sealed class Ent : RoANPC {
 		if (!npc.active) {
 			return;
 		}
+
         NPC.direction = npc.direction;
 		NPC.spriteDirection = -NPC.direction;
 		ChangeFrame(((int)(npc.ModNPC as RoANPC).CurrentFrame, frameHeight));
