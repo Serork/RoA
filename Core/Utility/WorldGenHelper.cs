@@ -34,7 +34,7 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
     }
 
-    public static int SafeFloatingIslandY => WorldGenHelperVars.worldSurfaceLow - 18;
+    public static int SafeFloatingIslandY => WorldGenHelperVars.worldSurfaceLow - 24;
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;

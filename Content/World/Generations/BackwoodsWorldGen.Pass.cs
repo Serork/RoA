@@ -1408,7 +1408,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                 if (num1048 > 10)
                     num1048 = 10;
-                for (int j = Top - 15; j < Bottom; j++) {
+                for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
                     if (i > maxLeft + _random.NextFloat() * 15 && i < maxRight - _random.NextFloat() * 15) {
                         Tile tile = WorldGenHelper.GetTileSafely(i, j);
                         if (tile.ActiveTile(_mossTileType)) {
