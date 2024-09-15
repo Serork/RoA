@@ -1115,6 +1115,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int centerY = BackwoodsVars.FirstTileYAtCenter + EdgeY;
         int minY = centerY;
         int baseX, baseY;
+        int generateY = Bottom + EdgeY * 2;
         if (posX == 0) {
             baseX = _random.Next(startX, endX);
         }
@@ -1122,18 +1123,44 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             baseX = posX;
         }
         if (posY == 0) {
-            baseY = _random.Next(minY, Bottom + EdgeY);
+            baseY = _random.Next(minY, generateY);
         }
         else {
             baseY = posY;
         }
-
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
-        int attempts = 20;
-        while (!skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
-            baseX = _random.Next(startX, endX);
-            baseY = _random.Next(minY, Bottom + EdgeY);
-            if (attempts-- <= 0) {
+        while (true) {
+            int attempts = 20;
+            while (!skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
+                baseX = _random.Next(startX, endX);
+                baseY = _random.Next(minY, generateY);
+                if (attempts-- <= 0) {
+                    break;
+                }
+            }
+            bool flag = false;
+            int check = 10;
+            attempts = 20;
+            for (int x2 = baseX - check; x2 < baseX + check; x2++) {
+                for (int y2 = baseY - check; y2 < baseY + check; y2++) {
+                    if (WorldGenHelper.ActiveTile(x2, y2, _elderWoodChestTileType)) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    baseX = _random.Next(startX, endX);
+                    baseY = _random.Next(minY, generateY);
+                    break;
+                }
+            }
+            if (flag) {
+                if (attempts-- <= 0) {
+                    break;
+                }
+                continue;
+            }
+            else {
                 break;
             }
         }

@@ -49,7 +49,7 @@ sealed class Archdruid : DruidNPC {
 
     protected override float TimeToChangeState() => 2f;
     protected override float TimeToRecoveryAfterGettingHit() => 1f;
-    protected override (Func<bool>, float) ShouldBeAttacking() => (() => true, 450f);
+    protected override (Func<bool>, float) ShouldBeAttacking() => (() => true, 550f);
 
     protected override bool ShouldAttack() => ShouldBeAttacking().Item1() && ((NPC.Distance(Main.player[NPC.target].Center) < ShouldBeAttacking().Item2 && Collision.CanHit(NPC.Center, 4, 4, Main.player[NPC.target].Center, 4, 4) && !_entAttack) || _entAttack);
 
