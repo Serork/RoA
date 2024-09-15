@@ -729,6 +729,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 for (int y = y1; y < y2; y++) {
                     double min = Math.Abs((double)(x - i)) + Math.Abs((double)(y - j));
                     double max = (double)sizeX * 0.5 * (1.0 + _random.Next(-5, 10) * 0.025);
+                    for (int x3 = x - 1; x3 < x + 1; x3++) {
+                        for (int y3 = y - 1; y3 < y + 1; y3++) {
+                            if (WorldGenHelper.ActiveTile(x3, y3, _elderwoodTileType) || WorldGenHelper.ActiveTile(x3, y3, _leavesTileType) || WorldGenHelper.GetTileSafely(x3, y3).WallType == _elderwoodWallType) {
+                                return;
+                            }
+                        }
+                    }
                     if (min < max && WorldGenHelper.GetTileSafely(x, y).WallType != _leavesWallType && (WorldGenHelper.GetTileSafely(x, y).WallType != _elderwoodWallType && (!WorldGen.SolidTile2(x, y) || WorldGenHelper.ActiveTile(x, y, _grassTileType)))) {
                         WorldGenHelper.ReplaceWall(x, y, _leavesWallType);
                     }
@@ -1375,7 +1382,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods2").Value;
 
         for (int i = Left - 50; i < Right + 50; i++) {
-            for (int j = BackwoodsVars.FirstTileYAtCenter - EdgeY / 2; j < Bottom + EdgeY * 2; j++) {
+            for (int j = BackwoodsVars.FirstTileYAtCenter - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(185) && tile.TileFrameX <= 216) {
                     tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks0>();
