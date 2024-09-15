@@ -39,10 +39,10 @@ sealed class BackwoodsLighting : ModSystem {
 	}
 
 	public override void PostUpdateWorld() {
-        if (Main.dayTime && (double)_alpha > 0.95f) {
+        if (Main.IsItDay() && (double)_alpha > 0.95f) {
             _alpha -= BackwoodsBiome.TransitionSpeed;
         }
-        if (!Main.dayTime && (double)_alpha < 1.025f) {
+        if (!Main.IsItDay() && (double)_alpha < 1.025f) {
             _alpha += BackwoodsBiome.TransitionSpeed;
         }
     }

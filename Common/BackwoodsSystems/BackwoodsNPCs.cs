@@ -26,7 +26,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType)) {
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
-                    if (!Main.dayTime) {
+                    if (!Main.IsItDay()) {
                         pool.Add(ModContent.NPCType<Lumberjack>(), 0.4f);
                     }
                     Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);
