@@ -654,8 +654,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = y + 1; j < y + 4; j++) {
                 if (j != y + 1 || i != x && i != x + 1 && i != x + 2) {
                     if (j != y + 3 || j == y + 3 && i > x - 2 && i < x + 4) {
-                        WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
-                        WorldGenHelper.ReplaceTile(i, j, _leavesTileType);
+                        if (_random.NextChance(0.5)) {
+                            WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
+                            WorldGenHelper.ReplaceTile(i, j, _leavesTileType);
+                        }
                     }
                 }
                 if (j > y + 1 && i > x - 1 && i < x + 3) {
