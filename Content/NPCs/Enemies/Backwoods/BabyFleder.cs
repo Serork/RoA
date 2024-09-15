@@ -71,6 +71,10 @@ sealed class BabyFleder : ModNPC {
     }
 
     public override void OnSpawn(IEntitySource source) {
+        if (!HasParent && Main.rand.NextBool(3)) {
+            _state = State.Normal;
+        }
+
         NPC.velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
         NPC.netUpdate = true;
     }
