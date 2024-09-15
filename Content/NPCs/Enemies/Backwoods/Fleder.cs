@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RoA.Core.Utility;
 using System.IO;
+using RoA.Common.BackwoodsSystems;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -127,7 +128,7 @@ sealed class Fleder : ModNPC {
             Point tile;
             Point? treeBranch = null;
             float nearestTile = 0f;
-            if (!centerTile.AnyWall()) {
+            if (!centerTile.AnyWall() && ((int)(NPC.Center.Y / 16) < BackwoodsVars.FirstTileYAtCenter + 15)) {
                 nearestTile = NPC.SearchForNearestTile<TreeBranch>(out tile, out treeBranch, (tilePosition) => {
                     if (others.Any(npc => npc.As<Fleder>()._state == State.Sitting && npc.WithinRange(tilePosition.ToWorldCoordinates(), 20f))) {
                         return false;
