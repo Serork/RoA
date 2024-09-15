@@ -1559,7 +1559,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         progress.Set(0.5f);
         for (int i = Left; i < Right; i++) {
-            for (int j = Top - 15; j < Bottom; j++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(TileID.Grass)) {
                     WorldGenHelper.ReplaceTile(i, j, _grassTileType);
@@ -2137,6 +2137,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
             int testJ = startY;
+            bool flag4 = startY >= lastSurfaceY - 3;
             while (testJ <= startY + _biomeHeight / 2 - _biomeHeight / 5) {
                 bool flag3 = !flag2 && Main.tile[cliffX, testJ].HasTile;
                 if (flag3 || flag2) {
@@ -2149,7 +2150,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         break;
                     }
                     if (!SkipBiomeInvalidTileTypeToKill.Contains(tile.TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) {
-                        WorldGenHelper.ReplaceTile(cliffX, testJ, CliffPlaceholderTileType);
+                        if ((flag4 && _random.NextBool(3)) || !flag4) {
+                            WorldGenHelper.ReplaceTile(cliffX, testJ, CliffPlaceholderTileType);
+                        }
                     }
                     //}
                 }

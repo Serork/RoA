@@ -13,7 +13,7 @@ sealed class BackwoodsWorldGen : ModSystem {
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
-        genIndex += 7;
+        genIndex += 6;
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new(GENLAYERNAME, LAYERWEIGHT));
         genIndex += 2;
         tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsLootRooms));
@@ -23,7 +23,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME2, BackwoodsWorldGenPass.BackwoodsCleanup));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
-        genIndex -= 3;
+        genIndex += 1;
         tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsOtherPlacements));
         tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
     }
