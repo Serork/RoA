@@ -15,7 +15,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         genIndex += 6;
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new(GENLAYERNAME, LAYERWEIGHT));
-        genIndex += 1;
+        genIndex += 2;
         tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsLootRooms));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));

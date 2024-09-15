@@ -1114,10 +1114,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GenerateLootRoom(int posX = 0, int posY = 0) {
         int startX = Left - 1;
         int endX = Right + 1;
-        int centerY = BackwoodsVars.FirstTileYAtCenter + EdgeY;
+        int centerY = BackwoodsVars.FirstTileYAtCenter + EdgeY / 2;
         int minY = centerY;
         int baseX, baseY;
-        int generateY = Bottom + EdgeY * 2;
+        int generateY = Bottom + EdgeY * 3;
         if (posX == 0) {
             baseX = _random.Next(startX, endX);
         }
@@ -1141,7 +1141,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
             bool flag = false;
-            int check = 15;
+            int check = 20;
             attempts = 20;
             for (int x2 = baseX - check; x2 < baseX + check; x2++) {
                 for (int y2 = baseY - check; y2 < baseY + check; y2++) {
@@ -1186,8 +1186,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 for (int j = (int)-num5 / 2; j < (int)num5 / 2; j++) {
                     int x3 = (int)x + i;
                     int y3 = (int)y + j;
-                    Main.tile[x3, y3].ClearEverything();
-                    WorldGen.PlaceTile(x3, y3, placeholderTileType, true, true);
+                    try {
+                        Main.tile[x3, y3].ClearEverything();
+                        WorldGen.PlaceTile(x3, y3, placeholderTileType, true, true);
+                    }
+                    catch {
+                        return;
+                    }
                     if (Main.tile[x3 - 1, y3].TileType == placeholderTileType && Main.tile[x3 + 1, y3].TileType == placeholderTileType && Main.tile[x3, y3 - 1].TileType == placeholderTileType && Main.tile[x3, y3 + 1].TileType == placeholderTileType && Main.tile[x3 - 1, y3 - 1].TileType == placeholderTileType && Main.tile[x3 + 1, y3 - 1].TileType == placeholderTileType && Main.tile[x3 + 1, y3 + 1].TileType == placeholderTileType && Main.tile[x3 - 1, y3 + 1].TileType == placeholderTileType) {
                         WorldGenHelper.ReplaceWall(x3, y3, placeholderWallType);
                     }
@@ -1380,7 +1385,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
 
                 // place extra pots
-                if (WorldGen.SolidTile(i, j + 1) && _random.NextBool(3)) {
+                ushort tileType = WorldGenHelper.GetTileSafely(i, j + 1).TileType;
+                if (WorldGen.SolidTile(i, j + 1) && !MidInvalidTileTypesToKill.Contains(tileType) && tileType != _leavesTileType && _random.NextBool(3)) {
                     WorldGen.PlacePot(i, j, 28, _random.Next(4));
                 }
             }
