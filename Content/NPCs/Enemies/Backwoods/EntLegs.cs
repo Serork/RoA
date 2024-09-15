@@ -112,7 +112,7 @@ sealed class EntLegs : RoANPC {
 
                     NPC.ResetAIStyle();
                     if (++StateTimer >= 180f) {
-						bool flag = Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height);
+						bool flag = Collision.CanHit(NPC.Center, 4, 4, Main.player[NPC.target].Center, 4, 4);
 
                         StateTimer = 0f;
                         ChangeState(flag ? ATTACK : WALK);
