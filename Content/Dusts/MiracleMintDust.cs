@@ -18,7 +18,7 @@ sealed class MiracleMintDust : ModDust {
     }
 
     public override bool PreDraw(Dust dust) {
-        Lighting.AddLight(dust.position, new Microsoft.Xna.Framework.Vector3(0.3f, 0.6f, 1.2f) * 0.35f);
+        Lighting.AddLight(dust.position, new Microsoft.Xna.Framework.Vector3(0.3f, 0.6f, 1.2f) * 0.5f);
 
         return base.PreDraw(dust);
     }
