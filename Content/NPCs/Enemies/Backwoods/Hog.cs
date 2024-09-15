@@ -11,6 +11,8 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI;
 using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -37,7 +39,7 @@ sealed class Hog : RoANPC {
 
 		NPC.npcSlots = 0.5f;
 		NPC.value = Item.buyPrice(0, 0, 0, 80);
-	}
+    }
 
     public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers) => RageMode();
     public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers) => RageMode();

@@ -8,6 +8,7 @@ using RoA.Core.Utility;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.BackwoodsSystems;

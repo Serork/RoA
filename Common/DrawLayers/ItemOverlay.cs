@@ -46,7 +46,7 @@ sealed class ItemOverlay : PlayerDrawLayer {
             return;
         }
 
-        Asset<Texture2D>? asset = _clawsOutfitTextures[item.Name.Replace(" ", string.Empty)];
+        Asset<Texture2D>? asset = _clawsOutfitTextures[item.ModItem.GetType().Name.Replace(" ", string.Empty)];
         if (asset?.IsLoaded != true) {
             return;
         }

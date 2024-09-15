@@ -1,18 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
-using Terraria.ObjectData;
-
+using RoA.Common.Tiles;
+using RoA.Content.Dusts;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
-using RoA.Common;
 
 using System;
 using System.Collections.Generic;
-using RoA.Common.Tiles;
+
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Plants;
 
@@ -40,8 +40,6 @@ sealed class MiracleMint : PlantBase {
     public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<MiracleMintTE>().Place(i, j);
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<MiracleMintTE>().Kill(i, j);
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = IsGrown(i, j) ? Main.rand.Next(3, 6) : IsGrowing(i, j) ? Main.rand.Next(2, 5) : Main.rand.Next(1, 3);
-
     public override bool CreateDust(int i, int j, ref int type) {
         if (IsGrown(i, j)) {
             type = DustID.BlueTorch;
@@ -61,6 +59,10 @@ sealed class MiracleMint : PlantBase {
             r = 0.3f * lightValue;
             g = 0.6f * lightValue;
             b = 1.2f * lightValue;
+
+            if (Main.rand.NextBool(50)) {
+                Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, ModContent.DustType<MiracleMintDust>());
+            }
         }
     }
 }
