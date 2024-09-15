@@ -1378,6 +1378,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(186)) {
                     tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks3x2>();
                 }
+                if (WorldGen.SolidTile(i, j + 1) && _random.NextBool(3)) {
+                    WorldGen.PlacePot(i, j, 28, _random.Next(4));
+                }
             }
         }
     }
