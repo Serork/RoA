@@ -1370,7 +1370,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods2").Value;
 
         for (int i = Left - 50; i < Right + 50; i++) {
-            for (int j = BackwoodsVars.FirstTileYAtCenter - 15; j < Bottom + EdgeY * 2; j++) {
+            for (int j = BackwoodsVars.FirstTileYAtCenter - EdgeY / 2; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(185) && tile.TileFrameX <= 216) {
                     tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks0>();
