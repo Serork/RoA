@@ -8,7 +8,6 @@ using RoA.Core.Utility;
 using System.Collections.Generic;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.BackwoodsSystems;
@@ -16,7 +15,8 @@ namespace RoA.Common.BackwoodsSystems;
 sealed class BackwoodsNPCs : GlobalNPC {
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns) {
         if (player.InModBiome<BackwoodsBiome>()) {
-            spawnRate = (int)(spawnRate * (NPC.downedBoss2 ? 0.2f : 0.3f));
+            spawnRate = (int)(spawnRate * 0.2f);
+            maxSpawns = (int)(maxSpawns * 1.5f);
         }
     }
 

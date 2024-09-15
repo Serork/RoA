@@ -71,7 +71,7 @@ sealed class BabyFleder : ModNPC {
     }
 
     public override void OnSpawn(IEntitySource source) {
-        if (!HasParent && Main.rand.NextBool(3)) {
+        if (!HasParent && Main.rand.NextBool()) {
             _state = State.Normal;
         }
 
