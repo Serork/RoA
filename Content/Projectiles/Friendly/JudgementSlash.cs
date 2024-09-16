@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Data;
 
@@ -61,9 +62,9 @@ sealed class JudgementSlash : ModProjectile {
 
     public override void AI() {
         Projectile.velocity *= 0.95f;
-        if (Main.rand.NextBool(9) && Projectile.timeLeft > 20 && Projectile.timeLeft < 105) {
+        if (Main.rand.NextBool(9) && Projectile.timeLeft > 30 && Projectile.timeLeft < 105) {
             Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(3f, 6f);
-            int type = DustID.BlueTorch;
+            int type = ModContent.DustType<DaikatanaDust>();
             Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, type, 0, 0, 0, default, Main.rand.NextFloat(0.45f, 0.7f) * Main.rand.NextFloat(1.25f, 1.75f));
             dust.velocity = vel * 0.5f;
             dust.noGravity = true;
@@ -81,7 +82,7 @@ sealed class JudgementSlash : ModProjectile {
         float width = (float)(1f - Math.Cos(value1 * 2f * Math.PI)) * 9f;
         Vector2 normalizedVelocity = Utils.SafeNormalize(Projectile.velocity, Vector2.Zero);
         Vector2 normalize = normalizedVelocity.RotatedBy(Math.PI / 2f) * width;
-        Color color = (_baseColor * 1.25f).MultiplyRGB(lightColor);
+        Color color = _baseColor.MultiplyRGB(lightColor);
         color *= width / 9.5f;
         normalize *= width * width / 375f;
         List<Vertex2D> bars = [new(_startCenter + normalize - Main.screenPosition, color, new Vector3(0f, 0f, 0f)),
@@ -89,7 +90,7 @@ sealed class JudgementSlash : ModProjectile {
                                new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
                                new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
         Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "StabbingProjectileShadow").Value;
+        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "JudgementSlashShadow").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
         color = _slashColor.MultiplyRGB(lightColor);
@@ -99,7 +100,7 @@ sealed class JudgementSlash : ModProjectile {
                                new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
                                new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
                                new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
-        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "StabbingProjectile").Value;
+        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "JudgementSlash").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
         Main.spriteBatch.End();  
