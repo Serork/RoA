@@ -187,7 +187,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
                 for (int i = 0; i < amt; i++) {
                     Vector2 velocity = AngleVector.RotatedBy(MathHelper.PiOver2 * -Projectile.direction) * Main.rand.NextFloat(2f, 8f);
                     int type = ModContent.DustType<DaikatanaDust>();
-                    Dust dust = Dust.NewDustPerfect(player.Center + AngleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), type, velocity, Scale: Main.rand.NextFloat(0.45f, 0.7f) * Main.rand.NextFloat(1.25f, 1.75f));
+                    Dust dust = Dust.NewDustPerfect(player.Center + AngleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), type, velocity, Scale: Main.rand.NextFloat(0.45f, 0.7f) * 1.25f * Main.rand.NextFloat(1.25f, 1.75f));
                     dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                     dust.scale *= Projectile.scale;
                     dust.fadeIn = dust.scale + 0.2f;

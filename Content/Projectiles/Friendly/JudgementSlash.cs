@@ -65,7 +65,7 @@ sealed class JudgementSlash : ModProjectile {
         if (Main.rand.NextBool(9) && Projectile.timeLeft > 30 && Projectile.timeLeft < 105) {
             Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(3f, 6f);
             int type = ModContent.DustType<DaikatanaDust>();
-            Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, type, 0, 0, 0, default, Main.rand.NextFloat(0.45f, 0.7f) * Main.rand.NextFloat(1.25f, 1.75f));
+            Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, type, 0, 0, 0, default, Main.rand.NextFloat(0.45f, 0.7f) * 0.95f * Main.rand.NextFloat(1.25f, 1.75f));
             dust.velocity = vel * 0.5f;
             dust.noGravity = true;
         }
