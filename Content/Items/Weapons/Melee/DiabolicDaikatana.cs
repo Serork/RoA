@@ -197,9 +197,9 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
                 Projectile.netUpdate = true;
             }
             if (Progress > 0.375f && Progress < 0.575f && Projectile.numUpdates == -1) {
+                float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver2 * player.direction);
+                angleVector = BaseAngleVector.RotatedBy((swingProgress * (MathHelper.Pi * 1.75f) - MathHelper.PiOver2 * 1.75f) * -Projectile.direction * (0.9f + 0.1f) + offset);
                 for (int i = 0; i < 4; i++) {
-                    float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver2 * player.direction);
-                    angleVector = BaseAngleVector.RotatedBy((swingProgress * (MathHelper.Pi * 1.75f) - MathHelper.PiOver2 * 1.75f) * -Projectile.direction * (0.9f + 0.1f) + offset);
                     Vector2 velocity = angleVector.RotatedBy(MathHelper.PiOver2 * -Projectile.direction * player.gravDir) * Main.rand.NextFloat(2f, 8f);
                     int type = ModContent.DustType<DaikatanaDust>();
                     Dust dust = Dust.NewDustPerfect(player.Center + angleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), type, velocity, Scale: Main.rand.NextFloat(0.45f, 0.7f) * 1.25f * Main.rand.NextFloat(1.25f, 1.75f));
@@ -209,7 +209,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
                     dust.noGravity = true;
                 }
                 for (int i = 0; i < 8; i++) {
-                    Rectangle rectangle = Utils.CenteredRectangle(player.Center + AngleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), new Vector2(20f, 80f * Projectile.scale));
+                    Rectangle rectangle = Utils.CenteredRectangle(player.Center + angleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), new Vector2(20f, 80f * Projectile.scale));
                     Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
                 }
             }
