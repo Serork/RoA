@@ -182,7 +182,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.MountedCenter + velocity * 2f, velocity, ModContent.ProjectileType<JudgementCut>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                 Projectile.netUpdate = true;
             }
-            if (Progress > 0.375f && Progress < 0.55f && Projectile.numUpdates == -1) {
+            if (Progress > 0.375f && Progress < 0.575f && Projectile.numUpdates == -1) {
                 int amt = 4;
                 for (int i = 0; i < amt; i++) {
                     Vector2 velocity = AngleVector.RotatedBy(MathHelper.PiOver2 * -Projectile.direction) * Main.rand.NextFloat(2f, 8f);
