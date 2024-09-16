@@ -64,8 +64,9 @@ abstract class BaseRodProjectile : NatureProjectile {
     private Item HeldItem => Owner.HeldItem;
     private Texture2D HeldItemTexture => TextureAssets.Item[HeldItem.type].Value;
 
+    private Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
     private Vector2 Offset => (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
-    public Vector2 CorePosition => Projectile.Center + Offset;
+    public Vector2 CorePosition => Projectile.Center + Offset + GravityOffset;
 
     public int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
     protected ushort ShootType => (ushort)Projectile.ai[1];
@@ -144,17 +145,17 @@ abstract class BaseRodProjectile : NatureProjectile {
     public sealed override bool PreDraw(ref Color lightColor) {
         Texture2D texture = HeldItemTexture;
         Rectangle sourceRectangle = texture.Bounds;
-        Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY - Owner.gfxOffY);
+        Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY - Owner.gfxOffY) + GravityOffset;
         float offsetY = 5f;
-        Vector2 origin = new(texture.Width * 0.5f * (1f - Owner.direction), (Owner.gravDir == -1f) ? 0 : texture.Height);
+        Vector2 origin = new(texture.Width * 0.5f * (1f - Owner.direction), texture.Height);
         Color color = lightColor;
         float extraRotation = MathHelper.PiOver4 * Owner.direction;
-        if (Owner.gravDir == -1f) {
-            extraRotation -= MathHelper.PiOver2 * Owner.direction;
-        }
+        //if (Owner.gravDir == -1) {
+        //    extraRotation -= MathHelper.PiOver2 * Owner.direction;
+        //}
         float rotation = Projectile.rotation + extraRotation;
         float scale = 1f;
-        SpriteEffects effects = (SpriteEffects)(Owner.direction != 1).ToInt();
+        SpriteEffects effects = (SpriteEffects)(Owner.direction /** Owner.gravDir*/ != 1).ToInt();
         Main.EntitySpriteDraw(texture, position + Vector2.UnitY * offsetY, sourceRectangle, color, rotation, origin, scale, effects);
 
         return false;
@@ -163,6 +164,9 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected override void SafeOnSpawn(IEntitySource source) {
         if (Projectile.IsOwnerMyPlayer(Owner)) {
             _rotation = FacedLeft ? STARTROTATION : -STARTROTATION;
+            if (Owner.gravDir == -1) {
+                _rotation -= MathHelper.Pi;
+            }
             Projectile.spriteDirection = Owner.direction;
             _maxUseTime = _maxUseTime2 = CurrentUseTime;
 
