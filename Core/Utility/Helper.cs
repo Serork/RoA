@@ -194,6 +194,20 @@ static class Helper {
 
     public static string AddSpace(this string text) => text.PadRight(text.Length + 1);
 
+    // aequus
+    public static bool DeathrayHitbox(Vector2 center, Rectangle targetHitbox, float rotation, float length, float size, float startLength = 0f) {
+        return DeathrayHitbox(center, targetHitbox, rotation.ToRotationVector2(), length, size, startLength);
+    }
+
+    public static bool DeathrayHitbox(Vector2 center, Rectangle targetHitbox, Vector2 normal, float length, float size, float startLength = 0f) {
+        return DeathrayHitbox(center + normal * startLength, center + normal * startLength + normal * length, targetHitbox, size);
+    }
+
+    public static bool DeathrayHitbox(Vector2 from, Vector2 to, Rectangle targetHitbox, float size) {
+        float _ = float.NaN;
+        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), from, to, size, ref _);
+    }
+
     // terraria overhaul
     public static float Damp(float source, float destination, float smoothing, float dt) => MathHelper.Lerp(source, destination, 1f - MathF.Pow(smoothing, dt));
 

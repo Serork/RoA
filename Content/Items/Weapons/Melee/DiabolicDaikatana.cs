@@ -121,12 +121,11 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     private int _swingTime;
     private int _swingTimeMax;
     private Vector2 _angleVector;
-
-    public int swordHeight = 100;
-    public int swordWidth = 30;
+    private int _swordHeight = 100;
+    private int _swordWidth = 30;
 
     public Vector2 BaseAngleVector { get; private set; }
-    public Vector2 AngleVector { get => _angleVector; set => _angleVector = Vector2.Normalize(value); }
+    public Vector2 AngleVector { get => _angleVector; private set => _angleVector = Vector2.Normalize(value); }
 
     public float Progress => Math.Clamp(1f - _swingTime / (float)_swingTimeMax, 0f, 1f);
 
@@ -137,12 +136,20 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.ownerHitCheck = true;
         Projectile.aiStyle = -1;
-        Projectile.width = 90;
-        Projectile.height = 90;
+        Projectile.width = Projectile.height = 90;
+
+        Projectile.penetrate = -1;
+        Projectile.friendly = true;
+        Projectile.DamageType = DamageClass.Melee;
 
         Projectile.tileCollide = false;
 
-        swordHeight = 60;
+        _swordHeight = 60;
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        Vector2 center = Main.player[Projectile.owner].Center;
+        return Helper.DeathrayHitbox(center - AngleVector * 20f, center + AngleVector * (70 * Projectile.scale/* * baseSwordScale*/), targetHitbox, _swordWidth * Projectile.scale/* * baseSwordScale*/);
     }
 
     public override void AI() {
@@ -170,18 +177,18 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             SetArmRotation(player, swingProgress);
             var arm = Main.GetPlayerArmPosition(Projectile);
             AngleVector = angleVector;
-            Projectile.position = arm + AngleVector * swordHeight / 2f;
+            Projectile.position = arm + AngleVector * _swordHeight / 2f;
             Projectile.position.X -= Projectile.width / 2f;
             Projectile.position.Y -= Projectile.height / 2f;
             Projectile.rotation = angleVector.ToRotation();
             bool flag = Projectile.timeLeft <= _swingTimeMax * 0.6f;
-            if (flag && Main.myPlayer == Projectile.owner && Projectile.ai[0] == 0f) {
-                Projectile.ai[0] = 1f;
-                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
-                Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, Main.MouseWorld, 12f);
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.MountedCenter + velocity * 2f, velocity, ModContent.ProjectileType<JudgementCut>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-                Projectile.netUpdate = true;
-            }
+            //if (flag && Main.myPlayer == Projectile.owner && Projectile.ai[0] == 0f) {
+            //    Projectile.ai[0] = 1f;
+            //    SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+            //    Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, Main.MouseWorld, 12f);
+            //    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.MountedCenter + velocity * 2f, velocity, ModContent.ProjectileType<JudgementCut>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+            //    Projectile.netUpdate = true;
+            //}
             if (Progress > 0.375f && Progress < 0.575f && Projectile.numUpdates == -1) {
                 int amt = 4;
                 for (int i = 0; i < amt; i++) {
