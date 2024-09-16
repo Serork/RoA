@@ -4,13 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Data;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly;
@@ -58,6 +58,8 @@ sealed class JudgementSlash : ModProjectile {
         //Projectile.localNPCHitCooldown = 60;
         Projectile.timeLeft = 120;
         Projectile.extraUpdates = 2;
+
+        Projectile.noEnchantments = true;
     }
 
     public override void AI() {
@@ -68,6 +70,9 @@ sealed class JudgementSlash : ModProjectile {
             Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, type, 0, 0, 0, default, Main.rand.NextFloat(0.45f, 0.7f) * 0.95f * Main.rand.NextFloat(1.25f, 1.75f));
             dust.velocity = vel * 0.5f;
             dust.noGravity = true;
+
+            Rectangle rectangle = Utils.CenteredRectangle(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), new Vector2(Projectile.width, Projectile.height));
+            Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
         }
     }
 

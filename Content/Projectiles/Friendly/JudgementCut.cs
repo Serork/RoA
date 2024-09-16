@@ -19,6 +19,8 @@ sealed class JudgementCut : ModProjectile {
         Projectile.timeLeft = 25;
         Projectile.extraUpdates = 1;
 
+        Projectile.noEnchantments = true;
+
         Projectile.DamageType = DamageClass.Melee;
 
         AIType = ProjectileID.Bullet;

@@ -8,6 +8,7 @@ using ReLogic.Content;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
@@ -116,6 +117,7 @@ sealed class DiabolicDaikatana : ModItem {
     }
 }
 
+// adapted aequus 
 sealed class DiabolicDaikatanaProj : ModProjectile {
     private float _armRotation;
     private int _swingTime;
@@ -144,12 +146,15 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
 
         Projectile.tileCollide = false;
 
+        Projectile.noEnchantments = true;
+
         _swordHeight = 60;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Vector2 center = Main.player[Projectile.owner].Center;
-        return Helper.DeathrayHitbox(center - AngleVector * 20f, center + AngleVector * (70 * Projectile.scale/* * baseSwordScale*/), targetHitbox, _swordWidth * Projectile.scale/* * baseSwordScale*/);
+        bool flag = Progress > 0.375f && Progress < 0.575f;
+        return flag && Helper.DeathrayHitbox(center - AngleVector * 20f, center + AngleVector * (75 * Projectile.scale/* * baseSwordScale*/), targetHitbox, _swordWidth * Projectile.scale/* * baseSwordScale*/);
     }
 
     public override void AI() {
@@ -182,13 +187,13 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             Projectile.position.Y -= Projectile.height / 2f;
             Projectile.rotation = angleVector.ToRotation();
             bool flag = Projectile.timeLeft <= _swingTimeMax * 0.6f;
-            //if (flag && Main.myPlayer == Projectile.owner && Projectile.ai[0] == 0f) {
-            //    Projectile.ai[0] = 1f;
-            //    SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
-            //    Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, Main.MouseWorld, 12f);
-            //    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.MountedCenter + velocity * 2f, velocity, ModContent.ProjectileType<JudgementCut>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-            //    Projectile.netUpdate = true;
-            //}
+            if (flag && Main.myPlayer == Projectile.owner && Projectile.ai[0] == 0f) {
+                Projectile.ai[0] = 1f;
+                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+                Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, Main.MouseWorld, 12f);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.MountedCenter + velocity * 2f, velocity, ModContent.ProjectileType<JudgementCut>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                Projectile.netUpdate = true;
+            }
             if (Progress > 0.375f && Progress < 0.575f && Projectile.numUpdates == -1) {
                 int amt = 4;
                 for (int i = 0; i < amt; i++) {
@@ -199,9 +204,10 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
                     dust.scale *= Projectile.scale;
                     dust.fadeIn = dust.scale + 0.2f;
                     dust.noGravity = true;
-                    //if (Projectile.numUpdates == -1) {
-                    //    AequusPlayer.SpawnEnchantmentDusts(Main.player[Projectile.owner].Center + AngleVector * Main.rand.NextFloat(40f, 120f * Projectile.scale), velocity, Main.player[Projectile.owner]);
-                    //}
+                }
+                for (int i = 0; i < amt * 2; i++) {
+                    Rectangle rectangle = Utils.CenteredRectangle(player.Center + AngleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), new Vector2(20f, 80f * Projectile.scale));
+                    Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
                 }
             }
         }
