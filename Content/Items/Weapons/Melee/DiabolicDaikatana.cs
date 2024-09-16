@@ -58,10 +58,6 @@ sealed class DiabolicDaikatana : ModItem {
         Item.shootSpeed = 1f;
     }
 
-    //public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-    //    return base.Shoot(player, source, position, velocity, type, damage, knockback);
-    //}
-
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient(ItemID.Muramasa)
@@ -74,44 +70,51 @@ sealed class DiabolicDaikatana : ModItem {
         private static Asset<Texture2D> _daikatanaTexture;
         private Vector2 _daikatanaPosition;
 
-        public override void Load() => _daikatanaTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsWeaponsMeleeTextures + nameof(DiabolicDaikatana));
+        public override void Load() => _daikatanaTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse");
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.inventory[drawInfo.drawPlayer.selectedItem].type == ModContent.ItemType<DiabolicDaikatana>();
 
         public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.ArmOverItem);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
-            if (drawInfo.shadow != 0f || drawInfo.drawPlayer.dead) {
-                return;
-            }
-
-            if (drawInfo.drawPlayer.ItemAnimationActive) {
-                return;
-            }
-
             Player player = drawInfo.drawPlayer;
+            if (drawInfo.shadow != 0f || player.dead) {
+                return;
+            }
+
+            if (player.ItemAnimationActive) {
+                return;
+            }
+
             Texture2D texture = _daikatanaTexture.Value;
             if (player.direction < 0) {
-                _daikatanaPosition.X = drawInfo.Position.X + (float)player.width / 2f + texture.Width / 2 * 1.35f - 7;
-                _daikatanaPosition.Y = drawInfo.Position.Y + (float)player.height / 2f - texture.Height / 2.8f - 5;
+                _daikatanaPosition.X = drawInfo.Position.X + (float)player.width / 2f + 44 / 2 * 1.35f - 7;
+                _daikatanaPosition.Y = drawInfo.Position.Y + (float)player.height / 2f - 46 / 2.8f - 5;
             }
             else {
-                _daikatanaPosition.X = drawInfo.Position.X + (float)player.width / 2f - texture.Width * 1.35f + 6;
-                _daikatanaPosition.Y = drawInfo.Position.Y + (float)player.height / 2f + texture.Height / 2.8f - 5;
+                _daikatanaPosition.X = drawInfo.Position.X + (float)player.width / 2f - 44 * 1.35f + 6;
+                _daikatanaPosition.Y = drawInfo.Position.Y + (float)player.height / 2f + 46 / 2.8f - 5;
             }
             _daikatanaPosition += player.Size / 2f;
             _daikatanaPosition.X += player.width;
             _daikatanaPosition.X += 8 * -player.direction;
-            _daikatanaPosition.Y += 8;
+            _daikatanaPosition.Y += 8 * player.gravDir;
+            if (player.gravDir == -1) {
+                if (player.direction != -1) {
+                    _daikatanaPosition.X += 3;
+                }
+            }
             Vector2 position = _daikatanaPosition - Main.screenPosition;
             SpriteEffects effects = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            Color color = Lighting.GetColor((int)((player.position.X + (float)player.width / 2f) / 16f), (int)((player.position.Y - 4f - (float)texture.Height / 2f) / 16f));
+            Color color = Lighting.GetColor((int)((player.position.X + (float)player.width / 2f) / 16f), (int)((player.position.Y - 4f - (float)46 / 2f) / 16f));
+            float rotation = 2.3f + (player.gravDir == -1 ? 0.1f : 0f);
             DrawData drawData = new(texture,
                                     position,
-                                    new Rectangle?(new Rectangle(0, 0, 44, 46)),
+                                    new Rectangle((player.gravDir == -1).ToInt() * 46, 0, 46, 46),
                                     color, 
-                                    player.direction > 0 ? -2.3f : 2.3f,
-                                    Vector2.Zero, 1f, effects);
+                                    player.direction > 0 ? -rotation : rotation,
+                                    Vector2.Zero, player.GetAdjustedItemScale(player.GetSelectedItem()), 
+                                    effects);
             drawInfo.DrawDataCache.Add(drawData);
         }
     }
@@ -123,7 +126,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     private int _swingTime;
     private int _swingTimeMax;
     private Vector2 _angleVector;
-    private int _swordHeight = 100;
+    private int _swordHeight = 60;
     private int _swordWidth = 30;
 
     public Vector2 BaseAngleVector { get; private set; }
@@ -131,7 +134,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
 
     public float Progress => Math.Clamp(1f - _swingTime / (float)_swingTimeMax, 0f, 1f);
 
-    public override string Texture => ResourceManager.ItemsWeaponsMeleeTextures + nameof(DiabolicDaikatana);
+    public override string Texture => ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse";
 
     public override void SetDefaults() {
         Projectile.localNPCHitCooldown = 500;
@@ -147,8 +150,6 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         Projectile.tileCollide = false;
 
         Projectile.noEnchantments = true;
-
-        _swordHeight = 60;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -158,8 +159,9 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     }
 
     public override void AI() {
-        Projectile.extraUpdates = 6;
+        Projectile.extraUpdates = 5;
         Player player = Main.player[Projectile.owner];
+        Projectile.scale = player.GetAdjustedItemScale(player.GetSelectedItem());
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
             _swingTimeMax = player.itemAnimationMax;
@@ -185,7 +187,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             Projectile.position = arm + AngleVector * _swordHeight / 2f;
             Projectile.position.X -= Projectile.width / 2f;
             Projectile.position.Y -= Projectile.height / 2f;
-            Projectile.rotation = angleVector.ToRotation();
+            Projectile.rotation = angleVector.ToRotation() * player.gravDir;
             bool flag = Projectile.timeLeft <= _swingTimeMax * 0.6f;
             if (flag && Main.myPlayer == Projectile.owner && Projectile.ai[0] == 0f) {
                 Projectile.ai[0] = 1f;
@@ -195,17 +197,18 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
                 Projectile.netUpdate = true;
             }
             if (Progress > 0.375f && Progress < 0.575f && Projectile.numUpdates == -1) {
-                int amt = 4;
-                for (int i = 0; i < amt; i++) {
-                    Vector2 velocity = AngleVector.RotatedBy(MathHelper.PiOver2 * -Projectile.direction) * Main.rand.NextFloat(2f, 8f);
+                for (int i = 0; i < 4; i++) {
+                    float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver2 * player.direction);
+                    angleVector = BaseAngleVector.RotatedBy((swingProgress * (MathHelper.Pi * 1.75f) - MathHelper.PiOver2 * 1.75f) * -Projectile.direction * (0.9f + 0.1f) + offset);
+                    Vector2 velocity = angleVector.RotatedBy(MathHelper.PiOver2 * -Projectile.direction * player.gravDir) * Main.rand.NextFloat(2f, 8f);
                     int type = ModContent.DustType<DaikatanaDust>();
-                    Dust dust = Dust.NewDustPerfect(player.Center + AngleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), type, velocity, Scale: Main.rand.NextFloat(0.45f, 0.7f) * 1.25f * Main.rand.NextFloat(1.25f, 1.75f));
+                    Dust dust = Dust.NewDustPerfect(player.Center + angleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), type, velocity, Scale: Main.rand.NextFloat(0.45f, 0.7f) * 1.25f * Main.rand.NextFloat(1.25f, 1.75f));
                     dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                     dust.scale *= Projectile.scale;
                     dust.fadeIn = dust.scale + 0.2f;
                     dust.noGravity = true;
                 }
-                for (int i = 0; i < amt * 2; i++) {
+                for (int i = 0; i < 8; i++) {
                     Rectangle rectangle = Utils.CenteredRectangle(player.Center + AngleVector * Main.rand.NextFloat(20f, 80f * Projectile.scale), new Vector2(20f, 80f * Projectile.scale));
                     Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
                 }
@@ -221,14 +224,26 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         Color drawColor = Projectile.GetAlpha(lightColor) * Projectile.Opacity;
         GetSwordDrawInfo(out var texture, out var handPosition, out var rotationOffset, out var origin, out var effects);
-        DrawSword(texture, handPosition - Vector2.UnitX * (Progress > 0.5f ? (Main.player[Projectile.owner].direction != 1 ? 4 : -2) : 0), null, drawColor, rotationOffset, origin, effects);
+        DrawSword(texture, handPosition - Vector2.UnitX * (Progress > 0.5f ? (Main.player[Projectile.owner].direction != 1 ? 4 : -2) : 0), 
+                  new Rectangle((Main.player[Projectile.owner].gravDir == -1).ToInt() * 46, 0, 46, 46), drawColor, rotationOffset, origin, effects);
 
         return false;
     }
 
     private void GetSwordDrawInfo(out Texture2D texture, out Vector2 handPosition, out float rotationOffset, out Vector2 origin, out SpriteEffects effects) {
         texture = TextureAssets.Projectile[Type].Value;
-        handPosition = Main.GetPlayerArmPosition(Projectile) - new Vector2(0f, Main.player[Projectile.owner].gfxOffY);
+        Player player = Main.player[Projectile.owner];
+        handPosition = Main.GetPlayerArmPosition(Projectile) - new Vector2(0f, player.gfxOffY);
+        if (player.gravDir == -1) {
+            if (player.direction == -1) {
+                handPosition.Y -= 3;
+                //handPosition.X -= 2;
+            }
+            else {
+            }
+            //handPosition.X -= 4;
+            //handPosition -26;
+        }
         rotationOffset = 0f;
         int direction = 1;
         if (AngleVector.X < 0f) {
@@ -237,16 +252,16 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         else if (AngleVector.X > 0f) {
             direction = 1;
         }
-        if (Main.player[Projectile.owner].direction == direction * -Main.player[Projectile.owner].direction) {
+        if (player.direction == direction * -player.direction) {
             effects = SpriteEffects.None;
             origin.X = 0f;
-            origin.Y = texture.Height;
+            origin.Y = 46;
             rotationOffset += MathHelper.PiOver4;
         }
         else {
             effects = SpriteEffects.FlipHorizontally;
-            origin.X = texture.Width;
-            origin.Y = texture.Height;
+            origin.X = 44;
+            origin.Y = 46;
             rotationOffset += MathHelper.PiOver4 * 3f;
         }
     }
@@ -266,16 +281,17 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
 
     private void InterpolateSword(float progress, out Vector2 angleVector, out float swingProgress, out float scale) {
         swingProgress = progress >= 0.5f ? 0.5f + (0.5f - (float)Math.Pow(2f, 30f * (0.5f - (progress - 0.5f)) - 15f) / 2f) : (float)Math.Pow(2f, 30f * progress - 15f) / 2f;
+        Player player = Main.player[Projectile.owner];
         angleVector = BaseAngleVector.RotatedBy((swingProgress * (MathHelper.Pi * 1.75f) - MathHelper.PiOver2 * 1.75f) * -Projectile.direction * (0.9f + 0.1f));
         scale = 1f;
     }
 
     private void SetArmRotation(Player player, float progress) {
-        var diff = Main.player[Projectile.owner].MountedCenter - Projectile.Center;
+        Vector2 diff = player.MountedCenter - Projectile.Center;
         if (Math.Sign(diff.X) == -player.direction) {
-            var v = diff;
-            v.X = Math.Abs(diff.X);
-            _armRotation = v.ToRotation();
+            Vector2 velocity = diff;
+            velocity.X = Math.Abs(diff.X);
+            _armRotation = velocity.ToRotation();
         }
         else if (_armRotation < 0.1f) {
             if (Projectile.direction * (progress >= 0.5f ? -1 : 1) * -player.direction == -1) {

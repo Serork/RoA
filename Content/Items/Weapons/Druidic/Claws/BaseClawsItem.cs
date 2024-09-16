@@ -43,7 +43,7 @@ abstract class BaseClawsItem : NatureItem {
     }
 
     public sealed override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax);
+        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/, player.itemAnimationMax);
         NetMessage.SendData(MessageID.PlayerControls, number: player.whoAmI);
 
         return false;

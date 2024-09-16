@@ -95,6 +95,7 @@ sealed class ClawsSlash : NatureProjectile {
         Vector2 origin = r.Size() / 2f;
         float scale = Projectile.scale * 1.1f;
         SpriteEffects effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+        //SpriteEffects effects = Projectile.ai[0] >= 0.0 ? ((player.gravDir == 1f) ? SpriteEffects.None : SpriteEffects.FlipVertically) : ((player.gravDir == 1f) ? SpriteEffects.FlipVertically : SpriteEffects.None);
         float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float num3 = 0.975f;
@@ -155,12 +156,13 @@ sealed class ClawsSlash : NatureProjectile {
         Projectile.scale = num3 + fromValue * num2;
 
         float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
+        float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
         Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
         if (Projectile.localAI[0] >= Projectile.ai[1] * 0.7f && Projectile.localAI[0] < Projectile.ai[1] + Projectile.ai[1] * 0.2f) {
-            Vector2 position = Projectile.Center + f.ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
+            Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
             if (position.Distance(player.Center) > 45f) {
                 int type = ModContent.DustType<Slash>();
-                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * 1f), 0, Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat() * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat() * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                 dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                 dust.noLight = dust.noLightEmittence = true;
                 dust.noGravity = true;
@@ -169,7 +171,7 @@ sealed class ClawsSlash : NatureProjectile {
         Projectile.scale *= player.GetAdjustedItemScale(player.inventory[player.selectedItem]);
         if (CanFunction) {
             for (float i = -MathHelper.PiOver4; i <= MathHelper.PiOver4; i += MathHelper.PiOver2) {
-                Rectangle rectangle = Utils.CenteredRectangle(Projectile.Center + (Projectile.rotation + i).ToRotationVector2() * 60f * Projectile.scale, new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
+                Rectangle rectangle = Utils.CenteredRectangle(Projectile.Center + (Projectile.rotation * player.gravDir + i).ToRotationVector2() * 60f * Projectile.scale, new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
                 Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
             }
         }

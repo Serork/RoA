@@ -48,6 +48,8 @@ sealed class JudgementSlash : ModProjectile {
     }
 
     public override void SetDefaults() {
+        Projectile.localNPCHitCooldown = 500;
+        Projectile.usesLocalNPCImmunity = true;
         Projectile.width = Projectile.height = 30;
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
