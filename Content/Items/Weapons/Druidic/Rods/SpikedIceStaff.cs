@@ -66,12 +66,12 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                                 if (Main.rand.NextChance(0.5f)) {
                                     Vector2 velocity = Helper.VelocityToPoint(CorePosition, Owner.GetViableMousePosition(), 3f + Main.rand.NextFloatRange(0.5f));
                                     Vector2 vector2 = velocity.RotatedBy(num * (MathHelper.Pi + MathHelper.PiOver4) / 25f);
-                                    Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, 176, Scale: Main.rand.NextFloat(1.05f, 1.35f));
+                                    Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, DustID.BubbleBurst_Blue, Scale: Main.rand.NextFloat(1.05f, 1.35f));
                                     dust.velocity = vector2;
                                     dust.noGravity = true;
                                 }
                             }
-                            float min = 10f, max = 10f;
+                            float min = 12f, max = 8f;
                             if (Owner.direction == 1) {
                                 for (float num = -min; num < max; num += 1f) {
                                     spawnAttackDust(num);
