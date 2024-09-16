@@ -278,6 +278,9 @@ abstract class BaseRodProjectile : NatureProjectile {
         Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
         Owner.direction = Projectile.spriteDirection;
         float armRotation = Projectile.rotation - MathHelper.PiOver4 * Owner.direction;
+        if (Owner.gravDir == -1) {
+            armRotation = MathHelper.Pi - armRotation + MathHelper.PiOver2 * Owner.direction;
+        }
         Owner.SetCompositeBothArms(armRotation);
     }
 
