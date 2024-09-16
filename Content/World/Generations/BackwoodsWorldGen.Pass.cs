@@ -731,7 +731,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     double max = (double)sizeX * 0.5 * (1.0 + _random.Next(-5, 10) * 0.025);
                     for (int x3 = x - 1; x3 < x + 1; x3++) {
                         for (int y3 = y - 1; y3 < y + 1; y3++) {
-                            if (WorldGenHelper.ActiveTile(x3, y3, _elderwoodTileType) || WorldGenHelper.ActiveTile(x3, y3, _leavesTileType) || WorldGenHelper.GetTileSafely(x3, y3).WallType == _elderwoodWallType) {
+                            if (WorldGenHelper.ActiveTile(x3, y3, _leavesTileType) || WorldGenHelper.GetTileSafely(x3, y3).WallType == _elderwoodWallType) {
                                 return;
                             }
                         }

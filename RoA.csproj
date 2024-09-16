@@ -44,6 +44,7 @@
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ThornyClaws_Outfit.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\RipePumpkin.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\MushroomStaff.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Melee\DiabolicDaikatana.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Fleder.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Hog.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Lumberjack.png" />
@@ -52,6 +53,8 @@
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\MushroomSpore.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\PineCone.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\PumpkinSeed.png" />
+	  <None Remove="Resources\Textures\Projectiles\StabbingProjectile.png" />
+	  <None Remove="Resources\Textures\Projectiles\StabbingProjectileShade.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsBush.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsPlants.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\MiracleMint.png" />
