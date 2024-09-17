@@ -7,6 +7,13 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static class NPCExtensions {
+    public static bool FindBuff(this NPC npc, int type, out int index) {
+        index = npc.FindBuffIndex(type);
+        return index != -1;
+    }
+
+    public static bool HasBuff(this NPC npc, int type) => npc.FindBuffIndex(type) != -1;
+
     public static T As<T>(this NPC npc) where T : ModNPC => npc.ModNPC as T;
 
     public static void PseudoGolemAI(this NPC npc, float maxSpeed = 1f, float speed = 0.035f) {

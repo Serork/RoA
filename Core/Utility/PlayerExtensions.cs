@@ -8,6 +8,13 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static class PlayerExtensions {
+    public static bool FindBuff(this Player player, int type, out int index) {
+        index = player.FindBuffIndex(type);
+        return index != -1;
+    }
+
+    public static bool HasBuff(this Player player, int type) => player.FindBuffIndex(type) != -1;
+
     public static Item GetSelectedItem(this Player player) => player.inventory[player.selectedItem];
 
     public static bool IsHoldingNatureWeapon(this Player player) {

@@ -18,6 +18,7 @@
 	  <None Remove="Localization\en-US_Mods.RoA.WorldGen.hjson" />
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Block.png" />
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Slope.png" />
+	  <None Remove="Resources\Textures\Buffs\Deceleration.png" />
 	  <None Remove="Resources\Textures\DruidBiomeWaterStyle.png" />
 	  <None Remove="Resources\Textures\Dusts\BackwoodsWoodTrash.png" />
 	  <None Remove="Resources\Textures\Dusts\GhostLeaf.png" />
@@ -44,6 +45,7 @@
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ThornyClaws_Outfit.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\RipePumpkin.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\MushroomStaff.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Magic\RodOfTheDragonfire.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Melee\DiabolicDaikatana.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Fleder.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Hog.png" />
