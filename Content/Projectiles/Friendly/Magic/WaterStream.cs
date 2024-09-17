@@ -48,13 +48,16 @@ public class WaterStream : ModProjectile {
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 4;
+
         return true;
     }
 
     public override void AI() {
 		Projectile.velocity *= Projectile.ai[1] == -5f ? 0.985f : 0.95f;
 		if (Projectile.ai[1] == -5f) {
-			return;
+            Projectile.tileCollide = false;
+
+            return;
 		}
 
 		int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
@@ -66,14 +69,14 @@ public class WaterStream : ModProjectile {
 
 			if (++Projectile.ai[2] <= Projectile.alpha) {
 				Projectile.timeLeft = 70;
-                parent.timeLeft = Projectile.timeLeft;
-			} 
+				parent.timeLeft = Projectile.timeLeft;
+			}
 			else if (Projectile.timeLeft <= 55) {
 				Vector2 movement = parent.position - Projectile.position;
 				Vector2 speed = movement * (25f / movement.Length());
 				Projectile.velocity += (speed - Projectile.velocity) / 30f;
 				if (Vector2.Distance(parent.Center, Projectile.Center) <= 5f) {
-                    parent.Kill();
+					parent.Kill();
 					Projectile.Kill();
 				}
 			}
@@ -91,12 +94,13 @@ public class WaterStream : ModProjectile {
 				Main.dust[dust].velocity *= 0.5f;
 				Main.dust[dust].velocity += Projectile.velocity * 0.5f;
 			}
-		} else Projectile.Kill();
+		}
+		else {
+			Projectile.Kill();
+		}
 	}
 
-	public override bool? CanDamage() {
-		return Projectile.ai[1] != -5f;
-	}
+	public override bool? CanDamage() => Projectile.ai[1] != -5f;
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
 		int type = BuffID.OnFire;

@@ -49,8 +49,8 @@ sealed class RodOfTheStream : Rod {
             int amount = 2;
             for (int i = -amount + 1; i < amount; i++) {
                 Vector2 vector2 = Utils.RotatedBy(velocity, i / 2d);
-                var _projectile = Projectile.NewProjectileDirect(source, position, velocity * 40f, type, damage, knockback, player.whoAmI, 0f, -5f);
-                Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI, 0f, _projectile.whoAmI);
+                Projectile projectile = Projectile.NewProjectileDirect(source, position, velocity * 40f, type, damage, knockback, player.whoAmI, 0f, -5f);
+                Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI, 0f, projectile.whoAmI);
             }
         }
 
