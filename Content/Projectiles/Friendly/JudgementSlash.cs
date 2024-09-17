@@ -64,6 +64,8 @@ sealed class JudgementSlash : ModProjectile {
         Projectile.noEnchantments = true;
     }
 
+    public override bool? CanDamage() => Projectile.timeLeft > 30 && Projectile.timeLeft < 105;
+
     public override void AI() {
         Projectile.velocity *= 0.95f;
         if (Main.rand.NextBool(9) && Projectile.timeLeft > 30 && Projectile.timeLeft < 105) {
