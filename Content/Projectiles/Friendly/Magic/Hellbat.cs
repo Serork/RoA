@@ -14,7 +14,7 @@ sealed class Hellbat : ModProjectile {
 	public override Color? GetAlpha(Color lightColor) => new Color(255, 255, 255, 0) * (1f - Projectile.alpha / 255f);
 
 	public override void SetStaticDefaults() {
-		Main.projFrames[Projectile.type] = 5;
+		Main.projFrames[Type] = 5;
 	}
 
 	public override void SetDefaults() {
@@ -24,7 +24,7 @@ sealed class Hellbat : ModProjectile {
 		Projectile.friendly = true;
 
 		Projectile.DamageType = DamageClass.Magic;
-		Projectile.penetrate = -1;
+		Projectile.penetrate = 1;
 
 		Projectile.aiStyle = 1;
 		AIType = ProjectileID.Bullet;
@@ -53,14 +53,14 @@ sealed class Hellbat : ModProjectile {
 		Projectile.spriteDirection = -Projectile.direction;
 	}
 
-    public override void PostDraw(Color lightColor) {
+    public override void PostAI() {
         Projectile.frameCounter++;
         if (Projectile.frameCounter >= 6) {
             Projectile.frame++; Projectile.frameCounter = 0;
         }
-		if (Projectile.frame >= Main.projFrames[Type]) {
-			Projectile.frame = 0;
-		}
+        if (Projectile.frame >= Main.projFrames[Type]) {
+            Projectile.frame = 0;
+        }
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {

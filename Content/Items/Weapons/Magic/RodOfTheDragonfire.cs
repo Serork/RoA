@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Projectiles.Friendly.Magic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -30,22 +32,25 @@ sealed class RodOfTheDragonfire : Rod {
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item73;
 
-        Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Magic.Hellbat>();
+        Item.shoot = ModContent.ProjectileType<Hellbat>();
         Item.shootSpeed = 5f;
     }
 
-    public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        velocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
-        position -= velocity * 10f;
-        position += new Vector2(-velocity.Y, velocity.X) * (10f * player.direction);
+    public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+        Vector2 newVelocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
+        position -= newVelocity * 10f;
+        position += new Vector2(-newVelocity.Y, newVelocity.X) * (10f * player.direction);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        int amount = Main.rand.Next(2, 4);
-        for (int i = -amount + 1; i < amount; i++) {
-            Vector2 vector2 = Utils.RotatedBy(velocity, (double)(i / 10f)) * Main.rand.NextFloat(0.75f, 1.35f);
-            Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI);
+        if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
+            int amount = Main.rand.Next(2, 4);
+            for (int i = -amount + 1; i < amount; i++) {
+                Vector2 vector2 = Utils.RotatedBy(velocity, (double)(i / 10f)) * Main.rand.NextFloat(0.75f, 1.35f);
+                Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI);
+            }
         }
+
         return false;
     }
 

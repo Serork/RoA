@@ -46,6 +46,7 @@
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\RipePumpkin.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Rods\MushroomStaff.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Magic\RodOfTheDragonfire.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Magic\RodOfTheStream.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Melee\DiabolicDaikatana.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Fleder.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Hog.png" />

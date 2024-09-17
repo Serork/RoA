@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-abstract class Rod : ModItem {
+abstract class Rod : ShootingWeapon {
     public override void SetDefaults() {
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.noMelee = true;

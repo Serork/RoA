@@ -142,7 +142,7 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void AI() {
-        Projectile.Opacity = Utils.GetLerpValue(200, 160, Projectile.timeLeft, true);
+        Projectile.Opacity = Utils.GetLerpValue(180, 155, Projectile.timeLeft, true);
 
         Projectile.tileCollide = _state == State.Enchanted;
 

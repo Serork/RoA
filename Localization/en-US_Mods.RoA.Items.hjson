@@ -102,3 +102,13 @@ DiabolicDaikatana: {
 	DisplayName: Diabolic Daikatana
 	Tooltip: ""
 }
+
+RodOfTheDragonfire: {
+	DisplayName: Rod Of The Dragonfire
+	Tooltip: ""
+}
+
+RodOfTheStream: {
+	DisplayName: Rod Of The Stream
+	Tooltip: ""
+}

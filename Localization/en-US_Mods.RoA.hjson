@@ -1,1 +1,8 @@
 DamageClasses.DruidClass.DisplayName: nature damage
+
+Buffs: {
+	Deceleration: {
+		DisplayName: Deceleration
+		Description: Mods.RoA.Buffs.Deceleration.Description
+	}
+}
