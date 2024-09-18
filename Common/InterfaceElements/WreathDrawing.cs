@@ -29,6 +29,10 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
     public override int GetInsertIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Ingame Options"));
 
     public override void Load(Mod mod) {
+        if (Main.dedServ) {
+            return;
+        }
+
         _wreathSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.Textures + "Wreath"), new SpriteFrame(HORIZONTALFRAMECOUNT, 3));
     }
 

@@ -22,6 +22,10 @@ sealed class ItemTooltipLeaves : GlobalItem {
     private static SpriteData _leavesSpriteData;
 
     public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
         _leavesSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Leaves"), new SpriteFrame(3, 1));
     }
 

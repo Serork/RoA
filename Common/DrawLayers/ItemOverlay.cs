@@ -60,6 +60,10 @@ sealed class ItemOverlay : PlayerDrawLayer {
     }
 
     private void LoadOutfitTextures() {
+        if (Main.dedServ) {
+            return;
+        }
+
         foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(CLAWSTEXTURESPATH, REQUIREMENT)) {
             string getName() {
                 return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);

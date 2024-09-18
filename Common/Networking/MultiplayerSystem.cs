@@ -36,14 +36,11 @@ sealed class MultiplayerSystem : ModSystem {
 	}
 
 	// Get
-	public static NetPacket GetPacket(byte id)
-		=> packets[id];
+	public static NetPacket GetPacket(byte id) => packets[id];
 
-	public static NetPacket GetPacket(Type type)
-		=> packetsByType[type];
+	public static NetPacket GetPacket(Type type) => packetsByType[type];
 
-	public static T GetPacket<T>() where T : NetPacket
-		=> ModContent.GetInstance<T>();
+	public static T GetPacket<T>() where T : NetPacket => ModContent.GetInstance<T>();
 
 	// Send
 	public static void SendPacket<T>(T packet, int toClient = -1, int ignoreClient = -1, Func<Player, bool>? sendDelegate = null) where T : NetPacket {
@@ -75,19 +72,14 @@ sealed class MultiplayerSystem : ModSystem {
 	}
 
 	internal static void HandlePacket(BinaryReader reader, int sender) {
-		try {
-			byte packetId = reader.ReadByte();
+		byte packetId = reader.ReadByte();
 
-			if (packetId > packets.Count) {
-				return;
-			}
-
-			var packet = packets[packetId];
-
-			packet.Read(reader, sender);
+		if (packetId > packets.Count) {
+			return;
 		}
-		catch {
-			//TODO: Log
-		}
+
+		var packet = packets[packetId];
+
+		packet.Read(reader, sender);
 	}
 }
