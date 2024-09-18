@@ -41,8 +41,8 @@ sealed class UsageItemGlowMaskHandler : PlayerDrawLayer {
 			return;
 		}
 
-		if (player.HeldItem.type >= ItemID.Count && _glowMasks.TryGetValue(player.HeldItem.type, out Asset<Texture2D> _textureItem)) {
-			Texture2D texture = _textureItem.Value;
+		if (player.HeldItem.type >= ItemID.Count && _glowMasks.TryGetValue(player.HeldItem.type, out Asset<Texture2D> textureItem)) {
+			Texture2D texture = textureItem.Value;
 			Vector2 offset = new();
 			float rotOffset = 0f;
 			Vector2 origin = new();
