@@ -88,23 +88,28 @@ sealed class DiabolicDaikatana : ModItem {
 
             Texture2D texture = _daikatanaTexture.Value;
             if (player.direction < 0) {
-                _daikatanaPosition.X = drawInfo.Position.X + (float)player.width / 2f + 44 / 2 * 1.35f - 7;
-                _daikatanaPosition.Y = drawInfo.Position.Y + (float)player.height / 2f - 46 / 2.8f - 5;
+                _daikatanaPosition.X = player.itemLocation.X + (float)player.width / 2f + 44 / 2 * 1.35f - 7;
+                _daikatanaPosition.Y = player.itemLocation.Y + (float)player.height / 2f - 46 / 2.8f - 5;
             }
             else {
-                _daikatanaPosition.X = drawInfo.Position.X + (float)player.width / 2f - 44 * 1.35f + 6;
-                _daikatanaPosition.Y = drawInfo.Position.Y + (float)player.height / 2f + 46 / 2.8f - 5;
+                _daikatanaPosition.X = player.itemLocation.X + (float)player.width / 2f - 44 * 1.35f + 6;
+                _daikatanaPosition.Y = player.itemLocation.Y + (float)player.height / 2f + 46 / 2.8f - 5;
             }
             _daikatanaPosition += player.Size / 2f;
             _daikatanaPosition.X += player.width;
             _daikatanaPosition.X += 8 * -player.direction;
             _daikatanaPosition.Y += 8 * player.gravDir;
+            _daikatanaPosition.X -= 8;
+            _daikatanaPosition.Y += 2;
+            if (player.direction == -1) {
+                _daikatanaPosition.X -= 4;
+            }
             if (player.gravDir == -1) {
                 if (player.direction != -1) {
                     _daikatanaPosition.X += 3;
                 }
             }
-            Vector2 position = _daikatanaPosition - Main.screenPosition;
+            Vector2 position = _daikatanaPosition - Main.screenPosition + new Vector2(0f, player.gfxOffY);
             SpriteEffects effects = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             Color color = Lighting.GetColor((int)((player.position.X + (float)player.width / 2f) / 16f), (int)((player.position.Y - 4f - (float)46 / 2f) / 16f));
             float rotation = 2.3f + (player.gravDir == -1 ? 0.1f : 0f);
@@ -115,6 +120,7 @@ sealed class DiabolicDaikatana : ModItem {
                                     player.direction > 0 ? -rotation : rotation,
                                     Vector2.Zero, player.GetAdjustedItemScale(player.GetSelectedItem()), 
                                     effects);
+
             drawInfo.DrawDataCache.Add(drawData);
         }
     }

@@ -72,6 +72,7 @@ sealed class UsageItemGlowMaskHandler : PlayerDrawLayer {
 			else {
 				origin = new Vector2(texture.Width * 0.5f * (1 - player.direction), flag ? 0 : texture.Height);
 			}
+
 			drawInfo.DrawDataCache.Add(new DrawData(texture, player.itemLocation - Main.screenPosition + offset + new Vector2(0f, player.gfxOffY), texture.Bounds,
 													new Color(250, 250, 250, item.alpha), player.itemRotation + rotOffset, origin, item.scale, drawInfo.itemEffect, 0));
 		}
