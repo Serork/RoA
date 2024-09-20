@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
-public class WaterStream : ModProjectile {
+sealed class WaterStream : ModProjectile {
 	public override string Texture => ResourceManager.EmptyTexture;
 
 	public override void SetDefaults() {

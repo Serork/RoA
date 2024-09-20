@@ -18,6 +18,8 @@ static class Helper {
     public static readonly Color AwakenMessageColor = new(175, 75, 255);
     public static readonly Color EventMessageColor = new(50, 255, 130);
 
+    public static readonly Color GlowMaskColor = new Color(255, 255, 255, 0) * 0.8f;
+
     public static float EaseInOut2(float value) => (float)Math.Pow((double)value, 2.0) * (3.0f - 2.0f * value);
 
     public static float EaseInOut3(float value) {

@@ -106,9 +106,9 @@ sealed class JudgementSlash : ModProjectile {
         color *= width / 9.5f;
         normalize *= width * width / 385f;
         bars = [new(_startCenter + normalize - Main.screenPosition, color, new Vector3(0f, 0f, 0f)),
-                               new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
-                               new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
-                               new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
+                new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
+                new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
+                new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
         Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "JudgementSlash").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 

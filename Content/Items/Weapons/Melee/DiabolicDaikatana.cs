@@ -58,13 +58,13 @@ sealed class DiabolicDaikatana : ModItem {
         Item.shootSpeed = 1f;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.Muramasa)
-            .AddIngredient(ItemID.HellstoneBar, 10)
-            .AddTile(TileID.DemonAltar)
-            .Register();
-    }
+    //public override void AddRecipes() {
+    //    CreateRecipe()
+    //        .AddIngredient(ItemID.Muramasa)
+    //        .AddIngredient(ItemID.HellstoneBar, 10)
+    //        .AddTile(TileID.DemonAltar)
+    //        .Register();
+    //}
 
     private class DaikatanaLayer : PlayerDrawLayer {
         private static Asset<Texture2D> _daikatanaTexture;

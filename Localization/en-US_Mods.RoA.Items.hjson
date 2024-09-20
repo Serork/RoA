@@ -112,3 +112,8 @@ RodOfTheStream: {
 	DisplayName: Rod Of The Stream
 	Tooltip: ""
 }
+
+RodOfTheShock: {
+	DisplayName: Rod Of The Shock
+	Tooltip: ""
+}
