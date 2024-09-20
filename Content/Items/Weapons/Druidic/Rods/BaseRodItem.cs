@@ -30,6 +30,8 @@ abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
         Item.shoot = ProjectileID.WoodenArrowFriendly;
     }
 
+    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[(ushort)ModContent.ProjectileType<T>()] < 1;
+
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         ushort baseRodProjectileType = (ushort)ModContent.ProjectileType<T>();
         if (player.ownedProjectileCounts[baseRodProjectileType] < 1) {
@@ -123,7 +125,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         Projectile.tileCollide = false;
         Projectile.netImportant = true;
 
-        ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+        //ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
 
     protected sealed override void SafeSetDefaults2() { }
@@ -147,7 +149,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     public sealed override bool PreDraw(ref Color lightColor) {
         Texture2D texture = HeldItemTexture;
         Rectangle sourceRectangle = texture.Bounds;
-        Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY - Owner.gfxOffY) + GravityOffset;
+        Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY/* - Owner.gfxOffY*/) + GravityOffset;
         float offsetY = 5f;
         Vector2 origin = new(texture.Width * 0.5f * (1f - Owner.direction), texture.Height);
         Color color = lightColor;
@@ -266,12 +268,11 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     private void SetPosition() {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
-        center.X = (int)center.X;
-        center.Y = (int)center.Y;
+        center -= Vector2.UnitY * Owner.gfxOffY;
         Projectile.Center = center;
         if (Projectile.IsOwnerMyPlayer(Owner)) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
-            Projectile.velocity = (pointPosition - center).SafeNormalize(Vector2.One);
+            Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
             Projectile.netUpdate = true;
         }
         Projectile.Center += Projectile.velocity;
