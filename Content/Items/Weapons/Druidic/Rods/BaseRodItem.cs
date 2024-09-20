@@ -17,6 +17,8 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static Terraria.GameContent.Animations.Actions.Sprites;
+
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
 abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
@@ -125,7 +127,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         Projectile.tileCollide = false;
         Projectile.netImportant = true;
 
-        //ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+        ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
 
     protected sealed override void SafeSetDefaults2() { }
@@ -149,7 +151,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     public sealed override bool PreDraw(ref Color lightColor) {
         Texture2D texture = HeldItemTexture;
         Rectangle sourceRectangle = texture.Bounds;
-        Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY/* - Owner.gfxOffY*/) + GravityOffset;
+        Vector2 position = Projectile.Center - Main.screenPosition /*+ new Vector2(0f, Projectile.gfxOffY - Owner.gfxOffY)*/ + GravityOffset;
         float offsetY = 5f;
         Vector2 origin = new(texture.Width * 0.5f * (1f - Owner.direction), texture.Height);
         Color color = lightColor;
@@ -160,7 +162,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         float rotation = Projectile.rotation + extraRotation;
         float scale = 1f;
         SpriteEffects effects = (SpriteEffects)(Owner.direction /** Owner.gravDir*/ != 1).ToInt();
-        Main.EntitySpriteDraw(texture, (position + Vector2.UnitY * offsetY + Owner.PlayerMovementOffset()).Floor(), sourceRectangle, color, rotation, origin, scale, effects);
+        Main.EntitySpriteDraw(texture, (position + Vector2.UnitY * offsetY + Owner.PlayerMovementOffset())/*.Floor()*/, sourceRectangle, color, rotation, origin, scale, effects);
 
         return false;
     }
@@ -256,8 +258,8 @@ abstract class BaseRodProjectile : NatureProjectile {
             _leftTimeToReuse = TICKSTOREUSE;
         }
         if (_leftTimeToReuse > 2) {
-            Owner.itemTime = 2;
-            Owner.itemAnimation = 0;
+            Owner.itemTime = Owner.itemAnimation = 2;
+            Owner.bodyFrame.Y = Owner.legFrame.Y;
             Projectile.timeLeft = 2;
             Owner.heldProj = Projectile.whoAmI;
         }
@@ -268,7 +270,7 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     private void SetPosition() {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
-        center -= Vector2.UnitY * Owner.gfxOffY;
+        //center += Vector2.UnitY * Owner.gfxOffY;
         Projectile.Center = center;
         if (Projectile.IsOwnerMyPlayer(Owner)) {
             Vector2 pointPosition = Owner.GetViableMousePosition();

@@ -37,7 +37,7 @@ sealed class ExoticTulip : TulipBaseItem<ExoticTulip.ExoticTulipBase> {
 sealed class SweetTulip : TulipBaseItem<SweetTulip.SweepTulipBase> {
     protected override void SafeSetDefaults() {
         Item.SetWeaponValues(6, 1.5f);
-        Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65);
+        Item.SetDefaultToUsable(ItemUseStyleID.None, 60, useSound: SoundID.Item65);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
 

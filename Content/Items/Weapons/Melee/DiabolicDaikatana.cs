@@ -40,7 +40,7 @@ sealed class DiabolicDaikatana : ModItem {
 
         Item.DamageType = DamageClass.Melee;
         Item.damage = 18;
-        Item.knockBack = 4f;
+        Item.knockBack = 5f;
 
         Item.value = Item.buyPrice(gold: 1, silver: 60);
         Item.rare = ItemRarityID.Orange;
