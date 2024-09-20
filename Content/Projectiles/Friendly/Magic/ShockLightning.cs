@@ -128,7 +128,7 @@ sealed class ShockLightning : ModProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * length * 1.25f;
-        return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 8f);
+        return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 12f);
     }
 
     private struct Line {

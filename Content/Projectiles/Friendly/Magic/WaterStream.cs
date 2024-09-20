@@ -47,7 +47,7 @@ sealed class WaterStream : ModProjectile {
 	}
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        width = height = 4;
+        width = height = 2;
 
         return true;
     }
