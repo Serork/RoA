@@ -68,11 +68,16 @@ sealed class DiabolicDaikatana : ModItem {
 
     private class DaikatanaLayer : PlayerDrawLayer {
         private static Asset<Texture2D> _daikatanaTexture;
-        private Vector2 _daikatanaPosition;
 
-        public override void Load() => _daikatanaTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse");
+        public override void SetStaticDefaults() {
+            if (Main.dedServ) {
+                return;
+            }
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.inventory[drawInfo.drawPlayer.selectedItem].type == ModContent.ItemType<DiabolicDaikatana>();
+            _daikatanaTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse");
+        }
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => true;
 
         public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.ArmOverItem);
 
@@ -82,43 +87,53 @@ sealed class DiabolicDaikatana : ModItem {
                 return;
             }
 
+            if (player.inventory[player.selectedItem].type != ModContent.ItemType<DiabolicDaikatana>()) {
+                return;
+            }
+
             if (player.ItemAnimationActive) {
                 return;
             }
 
             Texture2D texture = _daikatanaTexture.Value;
+            Vector2 position = new((int)(drawInfo.ItemLocation.X - Main.screenPosition.X), (int)(drawInfo.ItemLocation.Y - Main.screenPosition.Y));
+            Vector2 offset = new(texture.Width / 2f * player.direction, 0f);
             if (player.direction < 0) {
-                _daikatanaPosition.X = player.itemLocation.X + (float)player.width / 2f + 44 / 2 * 1.35f - 7;
-                _daikatanaPosition.Y = player.itemLocation.Y + (float)player.height / 2f - 46 / 2.8f - 5;
+                offset.Y += (int)(texture.Height * 0.8f - 2f);
+                offset.X += (int)(-texture.Width * (float)player.direction);
+                offset.X += 1;
             }
-            else {
-                _daikatanaPosition.X = player.itemLocation.X + (float)player.width / 2f - 44 * 1.35f + 6;
-                _daikatanaPosition.Y = player.itemLocation.Y + (float)player.height / 2f + 46 / 2.8f - 5;
-            }
-            _daikatanaPosition += player.Size / 2f;
-            _daikatanaPosition.X += player.width;
-            _daikatanaPosition.X += 8 * -player.direction;
-            _daikatanaPosition.Y += 8 * player.gravDir;
-            _daikatanaPosition.X -= 8;
-            _daikatanaPosition.Y += 2;
-            if (player.direction == -1) {
-                _daikatanaPosition.X -= 4;
-            }
-            if (player.gravDir == -1) {
-                if (player.direction != -1) {
-                    _daikatanaPosition.X += 3;
+            offset.X -= (int)(texture.Width * 0.7f - 2f);
+            offset.X -= (int)(player.width * 0.75f * player.direction);
+            offset.Y += (int)(player.height / 3f);
+            if (player.gravDir == -1f) {
+                if (player.direction > 0) {
+                    Main.NewText(1);
+                    offset.X += 1;
+                    offset.X -= 2;
                 }
+                else {
+                    Main.NewText(2);
+                    offset.X -= 2;
+                    offset.Y -= 4;
+                }
+                offset.Y -= 13;
             }
-            Vector2 position = _daikatanaPosition - Main.screenPosition + new Vector2(0f, player.gfxOffY);
+            if (player.gravDir == -1f) {
+                position.Y -= 1;
+            }
+            position += offset;
+            //position += Vector2.UnitY * player.gfxOffY;
             SpriteEffects effects = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            Color color = Lighting.GetColor((int)((player.position.X + (float)player.width / 2f) / 16f), (int)((player.position.Y - 4f - (float)46 / 2f) / 16f));
             float rotation = 2.3f + (player.gravDir == -1 ? 0.1f : 0f);
+            bool gravReversed = player.gravDir == -1f;
             DrawData drawData = new(texture,
-                                    position,
+                                    position.Floor(),
                                     new Rectangle((player.gravDir == -1).ToInt() * 46, 0, 46, 46),
-                                    color, 
+                                    player.HeldItem.GetAlpha(drawInfo.itemColor), 
                                     player.direction > 0 ? -rotation : rotation,
-                                    Vector2.Zero, player.GetAdjustedItemScale(player.GetSelectedItem()), 
+                                    texture.Size() / 2f,
+                                    player.GetAdjustedItemScale(player.HeldItem), 
                                     effects);
 
             drawInfo.DrawDataCache.Add(drawData);
@@ -240,6 +255,18 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         texture = TextureAssets.Projectile[Type].Value;
         Player player = Main.player[Projectile.owner];
         handPosition = Main.GetPlayerArmPosition(Projectile) - new Vector2(0f, player.gfxOffY);
+        if (player.gravDir == -1f) {
+            handPosition.Y -= 1;
+        }
+        if (Progress <= 0.5f) {
+            handPosition += new Vector2(11f * player.direction, 1f).Floor();
+            if (player.direction > 0) {
+                handPosition.X += 1;
+            }
+            else {
+                handPosition.Y -= 1;
+            }
+        }
         if (player.gravDir == -1) {
             if (player.direction == -1) {
                 handPosition.Y -= 3;

@@ -8,6 +8,33 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static class PlayerExtensions {
+    public static Vector2 PlayerMovementOffset(this Player player) {
+        Vector2[] positions = [
+            new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(-1f, -3f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, -2f),
+                new Vector2(0f, -2f),
+                new Vector2(0f, -2f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, -2f),
+                new Vector2(0f, -2f),
+                new Vector2(0f, -2f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+            ];
+
+        return new Vector2(positions[player.legFrame.Y / 56].X * player.direction, positions[player.legFrame.Y / 56].Y);
+    }
+
     public static bool FindBuff(this Player player, int type, out int index) {
         index = player.FindBuffIndex(type);
         return index != -1;

@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-[AutoloadGlowMask]
+//[AutoloadGlowMask]
 sealed class RodOfTheDragonfire : Rod {
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;

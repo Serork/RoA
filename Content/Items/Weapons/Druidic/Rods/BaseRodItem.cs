@@ -122,6 +122,8 @@ abstract class BaseRodProjectile : NatureProjectile {
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
         Projectile.netImportant = true;
+
+        ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
 
     protected sealed override void SafeSetDefaults2() { }
@@ -156,7 +158,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         float rotation = Projectile.rotation + extraRotation;
         float scale = 1f;
         SpriteEffects effects = (SpriteEffects)(Owner.direction /** Owner.gravDir*/ != 1).ToInt();
-        Main.EntitySpriteDraw(texture, position + Vector2.UnitY * offsetY, sourceRectangle, color, rotation, origin, scale, effects);
+        Main.EntitySpriteDraw(texture, (position + Vector2.UnitY * offsetY + Owner.PlayerMovementOffset()).Floor(), sourceRectangle, color, rotation, origin, scale, effects);
 
         return false;
     }
@@ -252,7 +254,8 @@ abstract class BaseRodProjectile : NatureProjectile {
             _leftTimeToReuse = TICKSTOREUSE;
         }
         if (_leftTimeToReuse > 2) {
-            Owner.itemAnimation = Owner.itemTime = 2;
+            Owner.itemTime = 2;
+            Owner.itemAnimation = 0;
             Projectile.timeLeft = 2;
             Owner.heldProj = Projectile.whoAmI;
         }
