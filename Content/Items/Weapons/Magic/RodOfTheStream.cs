@@ -49,7 +49,7 @@ sealed class RodOfTheStream : Rod {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
+        if (player.whoAmI == Main.myPlayer && base.Shoot(player, source, position, velocity, type, damage, knockback)) {
             int amount = 2;
             for (int i = -amount + 1; i < amount; i++) {
                 Vector2 vector2 = Utils.RotatedBy(velocity, i / 2d);

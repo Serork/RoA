@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.GlowMasks;
+using RoA.Content.Projectiles.Friendly.Magic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -7,6 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
+[AutoloadGlowMask]
 sealed class RodOfTheTerra : Rod {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Rod of the Terra");
@@ -24,7 +28,7 @@ sealed class RodOfTheTerra : Rod {
         Item.useTime = Item.useAnimation = 8;
         Item.autoReuse = false;
 
-        Item.damage = 21;
+        Item.damage = 30;
 
         Item.mana = 4;
 
@@ -32,7 +36,7 @@ sealed class RodOfTheTerra : Rod {
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item69;
 
-        Item.channel = true;
+        //Item.channel = true;
 
         Item.noUseGraphic = true;
 

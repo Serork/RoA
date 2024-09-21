@@ -25,6 +25,7 @@ static class ResourceManager {
     public static string ItemsTextures => Textures + "Items/";
     public static string ItemsWeaponsTextures => ItemsTextures + "Weapons/";
     public static string ItemsWeaponsMeleeTextures => ItemsWeaponsTextures + "Melee/";
+    public static string ItemsWeaponsMagicTextures => ItemsWeaponsTextures + "Magic/";
 
     public static string ProjectileTextures => Textures + "Projectiles/";
     public static string EnemyProjectileTextures => ProjectileTextures + "Enemies/";

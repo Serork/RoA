@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Magic;
+namespace RoA.Content.Projectiles.Friendly.Magic;
 
 sealed class ShockLightning : ModProjectile {
     private const float SWAY = 80f;

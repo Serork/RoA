@@ -22,6 +22,7 @@
 	  <None Remove="Resources\Textures\DruidBiomeWaterStyle.png" />
 	  <None Remove="Resources\Textures\Dusts\BackwoodsWoodTrash.png" />
 	  <None Remove="Resources\Textures\Dusts\GhostLeaf.png" />
+	  <None Remove="Resources\Textures\Dusts\NatureLaser.png" />
 	  <None Remove="Resources\Textures\Dusts\Slash.png" />
 	  <None Remove="Resources\Textures\Dusts\Tulip.png" />
 	  <None Remove="Resources\Textures\Empty.png" />
@@ -58,6 +59,7 @@
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\MushroomSpore.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\PineCone.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\PumpkinSeed.png" />
+	  <None Remove="Resources\Textures\Projectiles\Friendly\Magic\TerraProj.png" />
 	  <None Remove="Resources\Textures\Projectiles\StabbingProjectile.png" />
 	  <None Remove="Resources\Textures\Projectiles\StabbingProjectileShade.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsBush.png" />

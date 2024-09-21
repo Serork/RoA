@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Content.Projectiles.Friendly.Magic;
 
 using Terraria;
 using Terraria.ID;

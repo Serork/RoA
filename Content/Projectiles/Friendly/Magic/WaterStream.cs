@@ -12,7 +12,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
 sealed class WaterStream : ModProjectile {
-	public override string Texture => ResourceManager.EmptyTexture;
+	private bool IsMain => Projectile.ai[1] == -5f;
+
+    public override string Texture => ResourceManager.EmptyTexture;
 
 	public override void SetDefaults() {
         Projectile.localNPCHitCooldown = 500;
@@ -54,51 +56,59 @@ sealed class WaterStream : ModProjectile {
     }
 
     public override void AI() {
-		Projectile.velocity *= Projectile.ai[1] == -5f ? 0.985f : 0.95f;
-		if (Projectile.ai[1] == -5f) {
+		Projectile.velocity *= IsMain ? 0.985f : 0.95f;
+		if (IsMain) {
             Projectile.tileCollide = false;
 
             return;
 		}
 
-		int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
-		if (byUUID != -1) {
-			Projectile parent = Main.projectile[byUUID];
-			if (!parent.active) {
-				Projectile.Kill();
-			}
-
-			if (++Projectile.ai[2] <= Projectile.alpha) {
-				Projectile.timeLeft = 70;
-				parent.timeLeft = Projectile.timeLeft;
-			}
-			else if (Projectile.timeLeft <= 55) {
-				Vector2 movement = parent.position - Projectile.position;
-				Vector2 speed = movement * (25f / movement.Length());
-				Projectile.velocity += (speed - Projectile.velocity) / 30f;
-				if (Vector2.Distance(parent.Center, Projectile.Center) <= 5f) {
-					parent.Kill();
+        if (Projectile.owner == Main.myPlayer) {
+			int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
+			if (Main.projectile.IndexInRange(byUUID)) {
+				Projectile parent = Main.projectile[byUUID];
+                if (!parent.active) {
 					Projectile.Kill();
 				}
+
+				if (++Projectile.ai[2] <= Projectile.alpha) {
+					Projectile.timeLeft = 70;
+					parent.timeLeft = Projectile.timeLeft;
+					parent.netUpdate = true;
+					Projectile.netUpdate = true;
+                }
+				else if (Projectile.timeLeft <= 55) {
+					Vector2 movement = parent.position - Projectile.position;
+					Vector2 speed = movement * (25f / movement.Length());
+					Projectile.velocity += (speed - Projectile.velocity) / 30f;
+					if (Vector2.Distance(parent.Center, Projectile.Center) <= 5f) {
+						parent.Kill();
+						Projectile.Kill();
+						parent.netUpdate = true;
+                    }
+				}
 			}
-			for (int k = 0; k < 3; k++) {
-				int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.DungeonWater, 0.0f, 0.0f, 100, new Color(), 1.2f);
-				Dust dust2 = Main.dust[dust];
-				dust2.noGravity = true;
-				dust2.velocity *= 0.3f;
-				dust2.velocity += Projectile.velocity * 0.5f;
-				dust2.position.X -= Projectile.velocity.X / 3f * k;
-				dust2.position.Y -= Projectile.velocity.Y / 3f * k;
-			}
-			if (Main.rand.NextBool(1, 5)) {
-				int dust = Dust.NewDust(new Vector2(Projectile.position.X + 6.0f, Projectile.position.Y + 6.0f), Projectile.width - 12, Projectile.height - 12, DustID.DungeonWater, 0.0f, 0.0f, 100, new Color(), 0.72f);
-				Main.dust[dust].velocity *= 0.5f;
-				Main.dust[dust].velocity += Projectile.velocity * 0.5f;
+			else {
+				Projectile.Kill();
 			}
 		}
-		else {
-			Projectile.Kill();
-		}
+
+        for (int k = 0; k < 3; k++) {
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.DungeonWater, 0.0f, 0.0f, 100, new Color(), 1.2f);
+            Dust dust2 = Main.dust[dust];
+            dust2.noGravity = true;
+            dust2.velocity *= 0.3f;
+            dust2.velocity += Projectile.velocity * 0.5f;
+            dust2.position.X -= Projectile.velocity.X / 3f * k;
+            dust2.position.Y -= Projectile.velocity.Y / 3f * k;
+        }
+        if (Main.rand.NextBool(1, 5)) {
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X + 6.0f, Projectile.position.Y + 6.0f), Projectile.width - 12, Projectile.height - 12, DustID.DungeonWater, 0.0f, 0.0f, 100, new Color(), 0.72f);
+            Main.dust[dust].velocity *= 0.5f;
+            Main.dust[dust].velocity += Projectile.velocity * 0.5f;
+        }
+
+        Projectile.netUpdate = true;
 	}
 
 	public override bool? CanDamage() => Projectile.ai[1] != -5f;
