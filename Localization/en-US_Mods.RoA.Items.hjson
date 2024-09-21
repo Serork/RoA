@@ -117,3 +117,8 @@ RodOfTheShock: {
 	DisplayName: Rod Of The Shock
 	Tooltip: ""
 }
+
+RodOfTheTerra: {
+	DisplayName: Rod Of The Terra
+	Tooltip: ""
+}

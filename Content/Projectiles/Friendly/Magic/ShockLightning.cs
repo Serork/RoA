@@ -12,19 +12,36 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
 sealed class ShockLightning : ModProjectile {
-    private static readonly Asset<Texture2D> segmentTexture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningSegment");
-    private static readonly Asset<Texture2D> endTexture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningEnd");
+    private const float SWAY = 80f;
+    private const float JAGGEDNESS = 1f / SWAY;
+
+    private static Asset<Texture2D> _segmentTexture, _endTexture, _endTexture2;
 
     public override string Texture => ResourceManager.EmptyTexture;
 
-    private float length = 1f;
-    private static List<Line> _results = new List<Line>();
+    private float _lightningLength = 1f;
+    private static List<Line> _results = [];
+
+    public override void Load() => _results = [];
+    public override void Unload() {
+        _results.Clear();
+        _results = null;
+    }
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _segmentTexture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningSegment");
+        _endTexture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningEnd");
+        _endTexture2 = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningLight2");
+    }
 
     public override void SetDefaults() {
         int width = 12; int height = width;
@@ -51,7 +68,7 @@ sealed class ShockLightning : ModProjectile {
             Projectile.hostile = true;
             Projectile.friendly = false;
         }
-        length += Projectile.velocity.Length() * 1.35f;
+        _lightningLength += Projectile.velocity.Length() * 1.35f;
         Projectile.localAI[0]--;
         Player player = Main.player[Projectile.owner];
         if (Projectile.ai[0] <= 4f && player.itemAnimation > 1) {
@@ -62,7 +79,7 @@ sealed class ShockLightning : ModProjectile {
         }
         else Projectile.Kill();
 
-        Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * length;
+        Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * _lightningLength;
         if (Collision.SolidCollision(lineEnd, 4, 4)) {
             Projectile.Kill();
         }
@@ -72,46 +89,43 @@ sealed class ShockLightning : ModProjectile {
         Player player = Main.player[Projectile.owner];
         Vector2 source = player.itemLocation + Utils.SafeNormalize(Projectile.velocity, Vector2.One) * (player.HeldItem.width + player.HeldItem.width / 4);
         float thickness = 4f;
-        Vector2 dest = source + Vector2.Normalize(Projectile.velocity) * length;
+        Vector2 dest = source + Vector2.Normalize(Projectile.velocity) * _lightningLength;
         Vector2 dif = dest - source;
         Vector2 normal = Vector2.Normalize(new Vector2(dif.Y, -dif.X));
-        float _length = dif.Length();
-        int _positionCount = Math.Min(100, (int)(_length / 4));
-        _results = new List<Line>();
-        List<float> _positions = new List<float>(_positionCount + 50) {
+        float length = dif.Length();
+        int positionCount = Math.Min(100, (int)(length / 4));
+        _results.Clear();
+        List<float> positions = new List<float>(positionCount + 50) {
                 0
             };
-        for (int i = 0; i < _positionCount; i++)
-            _positions.Add(Main.rand.NextFloat(0, 1));
-        _positions.Sort();
-        const float _sway = 80;
-        const float _jaggedness = 1 / _sway;
+        for (int i = 0; i < positionCount; i++) {
+            positions.Add(Main.rand.NextFloat(0, 1));
+        }
+        positions.Sort();
         Vector2 prevPoint = source;
         float prevDisplacement = 0;
-        float _thickness = thickness;
-        for (int i = 1; i < _positions.Count; i++) {
-            float _position = _positions[i];
-            float _scale = (_length * _jaggedness) * (_position - _positions[i - 1]);
-            float _envelope = _position > 0.95f ? 20 * (1 - _position) : 1;
-            float _displacement = Main.rand.NextFloat(-_sway, _sway);
-            _displacement -= (_displacement - prevDisplacement) * (1 - _scale);
-            _displacement *= _envelope;
-            var _point = source + _position * dif + _displacement * normal;
+        float tempThickness = thickness;
+        for (int i = 1; i < positions.Count; i++) {
+            float position = positions[i];
+            float scale = (length * JAGGEDNESS) * (position - positions[i - 1]);
+            float envelope = position > 0.95f ? 20 * (1 - position) : 1;
+            float displacement = Main.rand.NextFloatRange(SWAY);
+            displacement -= (displacement - prevDisplacement) * (1 - scale);
+            displacement *= envelope;
+            Vector2 to = source + position * dif + displacement * normal;
             if (Main.rand.NextChance(0.25)) {
-                _thickness -= _thickness / 10;
+                tempThickness -= tempThickness / 10;
             }
-            _results.Add(new Line(Projectile, segmentTexture.Value, endTexture.Value, prevPoint, _point, _thickness));
-            prevPoint = _point;
-            prevDisplacement = _displacement;
+            _results.Add(new Line(Projectile, prevPoint, to, tempThickness));
+            prevPoint = to;
+            prevDisplacement = displacement;
         }
-        _results.Add(new Line(Projectile, segmentTexture.Value, endTexture.Value, prevPoint, dest, _thickness));
+        _results.Add(new Line(Projectile, prevPoint, dest, tempThickness));
     }
 
     public override bool ShouldUpdatePosition() => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        //bolt.Draw(Main.spriteBatch, Color.White);
-
         UpdateSegments();
 
         foreach (var segment in _results) {
@@ -126,23 +140,20 @@ sealed class ShockLightning : ModProjectile {
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * length * 1.15f;
+        Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * _lightningLength * 1.15f;
         return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 16f);
     }
 
     private struct Line {
         private readonly Projectile _projectile;
         private readonly Vector2 _a, _b;
-        private readonly Texture2D _endTexture, _segmentTexture;
         private readonly float _thickness;
 
         public readonly Vector2 Position => _a + (_b - _a);
         public readonly Player Player => Main.player[_projectile.owner];
 
-        public Line(Projectile projectile, Texture2D segmentTexture, Texture2D endTexture, Vector2 a, Vector2 b, float thickness = 1) {
+        public Line(Projectile projectile, Vector2 a, Vector2 b, float thickness = 1) {
             _projectile = projectile;
-            _segmentTexture = segmentTexture;
-            _endTexture = endTexture;
             _a = a;
             _b = b;
             _thickness = thickness;
@@ -165,15 +176,15 @@ sealed class ShockLightning : ModProjectile {
             }
 
             float rotation = (dest - source).ToRotation();
-            float thicknessScale = _thickness / _segmentTexture.Height;
-            Vector2 capOrigin = new(_endTexture.Width, _endTexture.Height / 2f);
-            Vector2 middleOrigin = new(0, _segmentTexture.Height / 2f);
+            float thicknessScale = _thickness / _segmentTexture.Height();
+            Vector2 capOrigin = new(_endTexture.Width(), _endTexture.Height() / 2f);
+            Vector2 middleOrigin = new(0, _segmentTexture.Height() / 2f);
             Vector2 middleScale = new((dest - source).Length(), thicknessScale);
-            spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningLight2").Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.01f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_endTexture2.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.01f, SpriteEffects.None, 0f);
             //spriteBatch.BeginBlendState(BlendState.Additive);
-            spriteBatch.Draw(_segmentTexture, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(_endTexture, source - Main.screenPosition, null, color, rotation, capOrigin, thicknessScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(_endTexture, dest - Main.screenPosition, null, color, rotation + MathHelper.Pi, capOrigin, thicknessScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_endTexture.Value, source - Main.screenPosition, null, color, rotation, capOrigin, thicknessScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_endTexture.Value, dest - Main.screenPosition, null, color, rotation + MathHelper.Pi, capOrigin, thicknessScale, SpriteEffects.None, 0f);
             //spriteBatch.EndBlendState();
         }
     }
