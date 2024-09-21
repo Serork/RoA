@@ -28,11 +28,11 @@ sealed class BackwoodsNPCs : GlobalNPC {
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType)) {
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
                     if (!Main.IsItDay()) {
-                        pool.Add(ModContent.NPCType<Lumberjack>(), 0.4f);
+                        pool.Add(ModContent.NPCType<Lumberjack>(), 0.25f);
                     }
                     Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);
                     if (!belowTile.AnyWall() || belowTile.WallType == ModContent.WallType<LivingBackwoodsLeavesWall>()) {
-                        pool.Add(ModContent.NPCType<Hog>(), 0.4f);
+                        pool.Add(ModContent.NPCType<Hog>(), 0.25f);
                     }
                 }
                 pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);

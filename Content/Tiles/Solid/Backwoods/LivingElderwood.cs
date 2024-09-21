@@ -28,6 +28,6 @@ class LivingElderwood : ModTile {
 
         RegisterItemDrop(ModContent.ItemType<Elderwood>());
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.WoodTrash>();
-		AddMapEntry(new Color(162, 82, 45));
+		AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
 	}
 }

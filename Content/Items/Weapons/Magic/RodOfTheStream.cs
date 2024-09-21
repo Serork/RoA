@@ -30,7 +30,7 @@ sealed class RodOfTheStream : Rod {
         Item.useTime = Item.useAnimation = 24;
         Item.autoReuse = false;
 
-        Item.damage = 26;
+        Item.damage = 28;
         Item.knockBack = 6f;
 
         Item.mana = 11;

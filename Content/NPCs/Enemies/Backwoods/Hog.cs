@@ -11,8 +11,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI;
 using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -37,7 +35,7 @@ sealed class Hog : RoANPC {
         int width = 40; int height = 35;
 		NPC.Size = new Vector2(width, height);
 
-		NPC.npcSlots = 0.5f;
+		NPC.npcSlots = 1f;
 		NPC.value = Item.buyPrice(0, 0, 0, 80);
     }
 

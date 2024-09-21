@@ -27,7 +27,7 @@ sealed class RodOfTheDragonfire : Rod {
         Item.useTime = Item.useAnimation = 6;
         Item.autoReuse = true;
 
-        Item.damage = 24;
+        Item.damage = 11;
         Item.knockBack = 2f;
 
         Item.mana = 14;

@@ -25,7 +25,7 @@ sealed class RodOfTheShock : Rod {
         Item.useTime = Item.useAnimation = 8;
         Item.autoReuse = true;
 
-        Item.damage = 27;
+        Item.damage = 20;
 
         Item.mana = 10;
 

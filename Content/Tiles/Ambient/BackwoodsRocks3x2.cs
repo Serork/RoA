@@ -44,7 +44,7 @@ sealed class BackwoodsRocks3x2 : ModTile, TileHooks.IGetTileDrawData {
         TileObjectData.addTile(Type);
 
         DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
-        //AddMapEntry(new Microsoft.Xna.Framework.Color(91, 74, 67), CreateMapEntryName());
+        AddMapEntry(new Color(34, 37, 46));
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 5;

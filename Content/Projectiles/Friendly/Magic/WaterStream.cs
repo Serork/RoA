@@ -43,6 +43,7 @@ sealed class WaterStream : ModProjectile {
 		if (Collision.LavaCollision(Projectile.position, Projectile.width, Projectile.height) && Projectile.ai[1] != -5f) {
 			Projectile.Kill();
 		}
+
 		return base.PreAI();
 	}
 

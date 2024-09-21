@@ -41,6 +41,9 @@ sealed class ShockLightning : ModProjectile {
         Projectile.ignoreWater = true;
 
         Projectile.netImportant = true;
+
+        Projectile.localNPCHitCooldown = 500;
+        Projectile.usesLocalNPCImmunity = true;
     }
 
     public override void AI() {
@@ -104,10 +107,6 @@ sealed class ShockLightning : ModProjectile {
         _results.Add(new Line(Projectile, segmentTexture.Value, endTexture.Value, prevPoint, dest, _thickness));
     }
 
-    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
-        target.immune[Projectile.owner] = 4;
-    }
-
     public override bool ShouldUpdatePosition() => false;
 
     public override bool PreDraw(ref Color lightColor) {
@@ -127,8 +126,8 @@ sealed class ShockLightning : ModProjectile {
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * length * 1.25f;
-        return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 12f);
+        Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * length * 1.15f;
+        return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 16f);
     }
 
     private struct Line {
@@ -158,7 +157,7 @@ sealed class ShockLightning : ModProjectile {
             Vector2 source = pos - offset;
 
             if (Main.rand.NextChance(0.05)) {
-                Dust dust = Dust.NewDustPerfect(source, ModContent.DustType<Electric>(), Utils.SafeNormalize(source.DirectionTo(dest), Vector2.Zero) * 10f * Main.rand.NextFloat(), 0, Color.White);
+                Dust dust = Dust.NewDustPerfect(source, ModContent.DustType<Electric>(), Utils.SafeNormalize(source.DirectionTo(dest), Vector2.Zero) * 7.5f * Main.rand.NextFloat(0.25f, 1f), 0, Color.White);
                 dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 dust.scale *= 0.325f;
                 dust.fadeIn = dust.scale + 0.1f;

@@ -40,12 +40,20 @@ sealed class Hellbat : ModProjectile {
 	}
 
 	public override void AI() {
+        if (Projectile.alpha < 65 && Main.rand.NextBool(6)) {
+            int num179 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, Projectile.velocity.X, Projectile.velocity.Y, 100, default, 1.2f + Main.rand.NextFloat() * 0.5f);
+            //Main.dust[num179].noLightEmittence = true;
+            Main.dust[num179].noGravity = true;
+            Main.dust[num179].velocity *= 0.2f;
+        }
+        
 		if (Projectile.ai[0] == 1f) {
 			Projectile.scale += 0.008f;
 			if (Projectile.scale >= 1.4f) {
 				Projectile.alpha += 25;
 			}
-		} else if (Projectile.alpha > 0) {
+		} 
+		else if (Projectile.alpha > 0) {
 			Projectile.alpha -= 15;
 			Projectile.ai[0] = 1f;
 		}
@@ -77,7 +85,7 @@ sealed class Hellbat : ModProjectile {
 			target.DelBuff(buffIndex);
 		}
 		if (!Projectile.wet && !target.wet) {
-			target.AddBuff(BuffID.OnFire3, Main.rand.Next(30, 60), false);
+			target.AddBuff(BuffID.OnFire3, Main.rand.Next(20, 50), false);
 		}
 	}
 
