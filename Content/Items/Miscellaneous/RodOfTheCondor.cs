@@ -144,7 +144,7 @@ sealed class RodOfTheCondor : ModItem {
         }
 
         public override void PostUpdateRunSpeeds() {
-            if (_active && WorldGen.SolidTileAllowBottomSlope((int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16) && Player.wingTime < (int)(Player.wingTimeMax * 0.95f)) {
+            if (_active && WorldGenHelper.SolidTile((int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16) && Player.wingTime < (int)(Player.wingTimeMax * 0.95f)) {
                 _active = false;
                 _wingsTime = AnimationBound2;
             }

@@ -34,6 +34,11 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
     }
 
+    public static bool SolidTile(int i, int j) {
+        Tile tile = GetTileSafely(i, j);
+        return tile.HasTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] || (TileID.Sets.Platforms[tile.TileType] && WorldGen.PlatformProperTopFrame(tile.TileFrameX)));
+    }
+
     public static int SafeFloatingIslandY => WorldGenHelperVars.worldSurfaceLow - 24;
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
