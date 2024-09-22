@@ -20,7 +20,7 @@ sealed class RodOfTheShock : Rod {
     public override void SetDefaults() {
         base.SetDefaults();
 
-        int width = 40; int height = 40;
+        int width = 42; int height = width;
         Item.Size = new Vector2(width, height);
 
         Item.useTime = Item.useAnimation = 8;

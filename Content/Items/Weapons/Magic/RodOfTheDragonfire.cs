@@ -21,7 +21,7 @@ sealed class RodOfTheDragonfire : Rod {
     public override void SetDefaults() {
         base.SetDefaults();
 
-        int width = 42; int height = 42;
+        int width = 42; int height = width;
         Item.Size = new Vector2(width, height);
 
         Item.useTime = Item.useAnimation = 6;

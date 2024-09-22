@@ -12,6 +12,8 @@ namespace RoA.Content.Items.Weapons.Magic;
 
 [AutoloadGlowMask]
 sealed class RodOfTheTerra : Rod {
+    protected override Color? LightingColor => new(73, 170, 104);
+
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Rod of the Terra");
         // Tooltip.SetDefault("Casts a damaging beam of earth energy\n'Forged with Terra'");
@@ -22,7 +24,7 @@ sealed class RodOfTheTerra : Rod {
     public override void SetDefaults() {
         base.SetDefaults();
 
-        int width = 36; int height = 36;
+        int width = 42; int height = width;
         Item.Size = new Vector2(width, height);
 
         Item.useTime = Item.useAnimation = 8;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
 using Terraria.ID;
@@ -20,6 +21,12 @@ abstract class Rod : ShootingWeapon {
     public override void UseStyle(Player player, Rectangle heldItemFrame) {
         if (!Main.dedServ && LightingColor != null) {
             Lighting.AddLight(player.itemLocation + Utils.SafeNormalize(player.itemLocation.DirectionFrom(player.Center), Vector2.Zero) * Item.width, LightingColor.Value.ToVector3() * 0.75f);
+        }
+    }
+
+    public override void PostUpdate() {
+        if (!Main.dedServ && LightingColor != null) {
+            Lighting.AddLight(Item.getRect().TopRight(), LightingColor.Value.ToVector3() * 0.75f);
         }
     }
 

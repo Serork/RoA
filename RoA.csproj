@@ -32,6 +32,8 @@
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
 	  <None Remove="Resources\Textures\Items\Materials\MiracleMint.png" />
 	  <None Remove="Resources\Textures\Items\Miscellaneous\LuminousFlower.png" />
+	  <None Remove="Resources\Textures\Items\Miscellaneous\RodOfTheCondor.png" />
+	  <None Remove="Resources\Textures\Items\Miscellaneous\RodOfTheCondor_Glow.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\Decorations\DryadStatue.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\ElderwoodChest.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ElderwoodClaws.png" />

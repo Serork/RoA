@@ -108,12 +108,10 @@ sealed class DiabolicDaikatana : ModItem {
             offset.Y += (int)(player.height / 3f);
             if (player.gravDir == -1f) {
                 if (player.direction > 0) {
-                    Main.NewText(1);
                     offset.X += 1;
                     offset.X -= 2;
                 }
                 else {
-                    Main.NewText(2);
                     offset.X -= 2;
                     offset.Y -= 4;
                 }
@@ -130,7 +128,7 @@ sealed class DiabolicDaikatana : ModItem {
             DrawData drawData = new(texture,
                                     position.Floor(),
                                     new Rectangle((player.gravDir == -1).ToInt() * 46, 0, 46, 46),
-                                    player.HeldItem.GetAlpha(drawInfo.itemColor), 
+                                    player.HeldItem.GetAlpha(drawInfo.itemColor) * drawInfo.stealth * (1f - drawInfo.shadow), 
                                     player.direction > 0 ? -rotation : rotation,
                                     texture.Size() / 2f,
                                     player.GetAdjustedItemScale(player.HeldItem), 

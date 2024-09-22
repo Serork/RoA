@@ -122,3 +122,8 @@ RodOfTheTerra: {
 	DisplayName: Rod Of The Terra
 	Tooltip: ""
 }
+
+RodOfTheCondor: {
+	DisplayName: Rod Of The Condor
+	Tooltip: ""
+}
