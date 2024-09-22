@@ -59,10 +59,13 @@ sealed class RodOfTheCondor : ModItem {
         }
     }
 
-    public override bool CanUseItem(Player player) => !GetHandler(player).IsActive;
+    public override bool CanUseItem(Player player) => player.whoAmI == Main.myPlayer && !GetHandler(player).IsActive;
 
     public override bool? UseItem(Player player) {
-        GetHandler(player).ActivateCondor();
+        if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) {
+            Main.NewText(1);
+            GetHandler(player).ActivateCondor();
+        }
 
         return base.UseItem(player);
     }
