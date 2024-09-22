@@ -7,6 +7,7 @@ using RoA.Common;
 using RoA.Common.GlowMasks;
 using RoA.Content.Dusts;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
@@ -62,8 +63,7 @@ sealed class RodOfTheCondor : ModItem {
     public override bool CanUseItem(Player player) => player.whoAmI == Main.myPlayer && !GetHandler(player).IsActive;
 
     public override bool? UseItem(Player player) {
-        if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) {
-            Main.NewText(1);
+        if (player.whoAmI == Main.myPlayer && player.itemAnimation > player.itemAnimationMax * 0.85f) {
             GetHandler(player).ActivateCondor();
         }
 
@@ -144,12 +144,12 @@ sealed class RodOfTheCondor : ModItem {
         }
 
         public override void PostUpdateRunSpeeds() {
-            if (_active && Player.velocity.Y == 0f && Player.wingTime < (int)(Player.wingTimeMax * 0.95f)) {
+            if (_active && WorldGen.SolidTileAllowBottomSlope((int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16) && Player.wingTime < (int)(Player.wingTimeMax * 0.95f)) {
                 _active = false;
                 _wingsTime = AnimationBound2;
             }
 
-            if (IsInUse) {
+            if (_wingsTime > 0f) {
                 if (!_active && Player.velocity.Y < 0f && Player.controlJump) {
                     _active = true;
                 }
@@ -179,7 +179,7 @@ sealed class RodOfTheCondor : ModItem {
 
         public override void FrameEffects() => HandleCondorWings();
 
-        public override void SetStaticDefaults() => ArmorIDs.Wing.Sets.Stats[_wingsSlot] = new WingStats(50, 5f, 0.75f);
+        public override void SetStaticDefaults() => ArmorIDs.Wing.Sets.Stats[_wingsSlot] = new WingStats(60, 5f, 0.8f);
 
         public override void Load() => _wingsSlot = EquipLoader.AddEquipTexture(Mod, WingsTextureName, EquipType.Wings, name: WingsLayerName);
 
