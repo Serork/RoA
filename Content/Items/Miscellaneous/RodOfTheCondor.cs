@@ -217,11 +217,11 @@ sealed class RodOfTheCondor : ModItem {
 
                 var handler = GetHandler(drawInfo.drawPlayer);
 
-                int num58 = 13;
-                if (drawInfo.drawPlayer.direction == 1)
-                    num58 = -42;
-
                 if (Main.rand.NextBool(drawInfo.drawPlayer.velocity.Y != 0f ? 4 : 14)) {
+                    int num58 = 12;
+                    if (drawInfo.drawPlayer.direction == 1)
+                        num58 = -42;
+
                     int num59 = Dust.NewDust(new Vector2(drawInfo.drawPlayer.position.X + (float)(drawInfo.drawPlayer.width / 2) + (float)num58, drawInfo.drawPlayer.position.Y + 10), 26, drawInfo.drawPlayer.height / 2 + 4, ModContent.DustType<CondorDust>(), 0f, 0f, (int)(255 * handler.Opacity), default, 1.2f);
                     Main.dust[num59].velocity *= 0.15f;
                     Main.dust[num59].noLightEmittence = true;
