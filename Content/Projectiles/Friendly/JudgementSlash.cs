@@ -66,6 +66,8 @@ sealed class JudgementSlash : ModProjectile {
 
     public override bool? CanDamage() => Projectile.timeLeft > 15 && Projectile.timeLeft < 110;
 
+    public override bool? CanCutTiles() => Projectile.timeLeft > 15 && Projectile.timeLeft < 110;
+
     public override void AI() {
         Projectile.velocity *= 0.95f;
         if (Main.rand.NextBool(9) && Projectile.timeLeft > 35 && Projectile.timeLeft < 105) {
