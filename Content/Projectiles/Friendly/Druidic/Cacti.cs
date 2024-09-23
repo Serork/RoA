@@ -70,6 +70,7 @@ sealed class Cacti : NatureProjectile {
             Vector2 origin = texture.Size() / 2f;
             Color color = lightColor;
             int length = Projectile.oldPos.Length;
+            float baseRotation = (Projectile.velocity.SafeNormalize(Vector2.One) * 2f).ToRotation() - MathHelper.PiOver2;
             for (int i = 0; i < length - 1; i++) {
                 float progress = (length - i) / (float)length * 1.25f;
                 color *= Utils.Remap(progress, 0f, 1f, 0.5f, 1f);
@@ -80,7 +81,7 @@ sealed class Cacti : NatureProjectile {
                                       Projectile.oldPos[i] + dif * offsetYBetween / 2f + origin - dif * offsetYBetween * i - Main.screenPosition,
                                       null,
                                       color,
-                                      Projectile.rotation,
+                                      baseRotation,
                                       origin,
                                       scale,
                                       default);
@@ -93,8 +94,8 @@ sealed class Cacti : NatureProjectile {
                         if (Math.Abs(i) + Math.Abs(j) == size) {
                             Main.EntitySpriteDraw(trailTexture, Projectile.Center + new Vector2(i, j) * 2f - Main.screenPosition,
                                                   null,
-                                                  color * 0.5f,
-                                                  Projectile.rotation + Projectile.velocity.X * 0.05f,
+                                                  color * 0.325f,
+                                                  baseRotation + Projectile.velocity.X * 0.05f,
                                                   origin,
                                                   Projectile.scale,
                                                   default);
@@ -194,18 +195,20 @@ sealed class Cacti : NatureProjectile {
                 }
                 break;
             case State.Enchanted:
-                Projectile.rotation = (Projectile.velocity.SafeNormalize(Vector2.One) * 2f).ToRotation() - MathHelper.PiOver2;
+                float baseRotation = (Projectile.velocity.SafeNormalize(Vector2.One) * 2f).ToRotation() - MathHelper.PiOver2;
+                Projectile.rotation = baseRotation + Projectile.localAI[2];
+                //Projectile.localAI[2] += Projectile.velocity.X * 0.0075f;
                 if (Main.netMode != NetmodeID.Server) {
                     for (int i = 0; i < 2; i++) {
                         int direction = i != 0 ? 1 : -1;
                         Vector2 vector32 = new(Projectile.Size.X * 0.4f * direction, Projectile.Size.Y * 0.15f);
-                        vector32 = vector32.RotatedBy(Projectile.rotation);
+                        vector32 = vector32.RotatedBy(baseRotation);
                         int type = Dust.NewDust(Projectile.Center - Vector2.One * 2f + Projectile.velocity + vector32, 4, 4, ModContent.DustType<CactiCasterDust>());
                         Dust dust = Main.dust[type];
                         dust.scale = Main.rand.NextFloat(0.8f, 1f) * 1.4f;
                         dust.noGravity = true;
                         dust.velocity = (dust.velocity * 0.25f + Vector2.Normalize(vector32)).SafeNormalize(new Vector2(10f * direction, -1f)) * Main.rand.NextFloat(1f, 1.5f) * 3f;
-                        dust.velocity -= new Vector2(3f * direction, 5f).RotatedBy(Projectile.rotation);
+                        dust.velocity -= new Vector2(3f * direction, 5f).RotatedBy(baseRotation);
                         dust.fadeIn = 1f;
                         dust.scale *= 0.95f;
                     }
