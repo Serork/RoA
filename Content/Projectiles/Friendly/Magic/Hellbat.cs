@@ -37,9 +37,15 @@ sealed class Hellbat : ModProjectile {
 		Projectile.timeLeft = 70;
 
 		Projectile.alpha = 255;
+
+		DrawOriginOffsetY = -1;
 	}
 
-	public override void AI() {
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+		hitbox = new Rectangle((int)Projectile.Center.X - 6, (int)Projectile.Center.Y - 6, 12, 12);
+    }
+
+    public override void AI() {
         if (Projectile.alpha < 65 && Main.rand.NextBool(6)) {
             int num179 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, Projectile.velocity.X, Projectile.velocity.Y, 100, default, 1.2f + Main.rand.NextFloat() * 0.5f);
             //Main.dust[num179].noLightEmittence = true;
