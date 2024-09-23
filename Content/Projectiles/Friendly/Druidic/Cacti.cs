@@ -93,7 +93,7 @@ sealed class Cacti : NatureProjectile {
                         if (Math.Abs(i) + Math.Abs(j) == size) {
                             Main.EntitySpriteDraw(trailTexture, Projectile.Center + new Vector2(i, j) * 2f - Main.screenPosition,
                                                   null,
-                                                  color * 0.425f,
+                                                  color * 0.5f,
                                                   Projectile.rotation + Projectile.velocity.X * 0.05f,
                                                   origin,
                                                   Projectile.scale,
