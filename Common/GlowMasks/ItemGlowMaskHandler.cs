@@ -60,7 +60,10 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         }
     }
 
-    public override void Unload() => _glowMasks.Clear();
+	public override void Unload() {
+		_glowMasks.Clear();
+		_glowMasks = null;
+    }
 
 	public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => _glowMasks != null;
 

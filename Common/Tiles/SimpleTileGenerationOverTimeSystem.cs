@@ -27,9 +27,18 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
     }
 
     private static byte _nextId;
-    private static readonly Dictionary<byte, TileGenerationData> _tileGenerationsInfo = [];
-    private static readonly Dictionary<byte, bool> _generatedTiles = [];
-    private static readonly Dictionary<byte, byte> _tileAmountToGenerate = [];
+    private static Dictionary<byte, TileGenerationData> _tileGenerationsInfo = [];
+    private static Dictionary<byte, bool> _generatedTiles = [];
+    private static Dictionary<byte, byte> _tileAmountToGenerate = [];
+
+    public override void Unload() {
+        _tileGenerationsInfo.Clear();
+        _tileGenerationsInfo = null;
+        _generatedTiles.Clear();
+        _generatedTiles = null;
+        _tileAmountToGenerate.Clear();
+        _tileAmountToGenerate = null;
+    }
 
     public static TileGenerationData GetInfo<T>(T instance) where T : SimpleTileBaseToGenerateOverTime => _tileGenerationsInfo.Values.Single(tulipData => tulipData.Instance == instance);
     public static bool Generated<T>(T instance) where T : SimpleTileBaseToGenerateOverTime => _generatedTiles[GetInfo(instance).Index];

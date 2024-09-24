@@ -12,48 +12,34 @@ using Terraria.ModLoader.IO;
 namespace RoA.Common.BackwoodsSystems;
 
 sealed class BackwoodsLighting : ModSystem {
-	private float _alpha, _alpha2;
-
-    public override void ClearWorld() {
-		_alpha = 1f;
-		_alpha2 = 0f;
-    }
-
-    public override void SaveWorldData(TagCompound tag) {
-        tag[nameof(_alpha)] = _alpha;
-        tag[nameof(_alpha2)] = _alpha2;
-    }
-
-    public override void LoadWorldData(TagCompound tag) {
-        _alpha = tag.GetFloat(nameof(_alpha));
-        _alpha2 = tag.GetFloat(nameof(_alpha2));
-    }
+	public float Brightness { get; private set; }
+    public float Brightness2 { get; private set; }
 
     public override void ModifyLightingBrightness(ref float scale) {
-		if (_alpha2 > 0f) {
+		if (Brightness2 > 0f) {
             float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1500f;
-			strength = Math.Min(strength, 1f) * 0.85f * _alpha * _alpha2;
+			strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2;
             float value = Utils.Remap(strength, 0f, 0.78f, scale, 0.95f);
 			scale = value;
 		}
 	}
 
 	public override void PostUpdateWorld() {
-        if (Main.IsItDay() && (double)_alpha > 0.95f) {
-            _alpha -= BackwoodsBiome.TransitionSpeed;
+        if (Main.IsItDay() && (double)Brightness > 0.95f) {
+            Brightness -= BackwoodsBiome.TransitionSpeed;
         }
-        if (!Main.IsItDay() && (double)_alpha < 1.025f) {
-            _alpha += BackwoodsBiome.TransitionSpeed;
+        if (!Main.IsItDay() && (double)Brightness < 1.025f) {
+            Brightness += BackwoodsBiome.TransitionSpeed;
         }
     }
 
 	public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor) {
 		if (ModContent.GetInstance<TileCount>().BackwoodsTiles > 0) {
-            if (_alpha2 < 1f) {
-				_alpha2 += BackwoodsBiome.TransitionSpeed;
+            if (Brightness2 < 1f) {
+				Brightness2 += BackwoodsBiome.TransitionSpeed;
 			}
 			float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1500f;
-			strength = Math.Min(strength, 1f) * 0.85f * _alpha * _alpha2/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;
+			strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;
             int sunR = backgroundColor.R;
 			int sunG = backgroundColor.G;
 			int sunB = backgroundColor.B;
@@ -135,9 +121,24 @@ sealed class BackwoodsLighting : ModSystem {
 			return;
 		}
 
-		if (_alpha2 <= 0f) {
+		if (Brightness2 <= 0f) {
 			return;
 		}
-        _alpha2 -= BackwoodsBiome.TransitionSpeed;
+        Brightness2 -= BackwoodsBiome.TransitionSpeed;
+    }
+
+    public override void ClearWorld() {
+        Brightness = 1f;
+        Brightness2 = 0f;
+    }
+
+    public override void SaveWorldData(TagCompound tag) {
+        tag[nameof(Brightness)] = Brightness;
+        tag[nameof(Brightness2)] = Brightness2;
+    }
+
+    public override void LoadWorldData(TagCompound tag) {
+        Brightness = tag.GetFloat(nameof(Brightness));
+        Brightness2 = tag.GetFloat(nameof(Brightness2));
     }
 }
