@@ -116,7 +116,8 @@ sealed class Cacti : NatureProjectile {
 
     public override void OnKill(int timeLeft) {
         if (Projectile.owner == Main.myPlayer) {
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CactiExplosion>(), Projectile.damage, Projectile.knockBack * 1.5f, Projectile.owner);
+            Player player = Main.player[Projectile.owner];
+            Projectile.NewProjectile(player.GetSource_ItemUse(player.GetSelectedItem()), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CactiExplosion>(), Projectile.damage, Projectile.knockBack * 1.5f, Projectile.owner);
         }
 
         SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);

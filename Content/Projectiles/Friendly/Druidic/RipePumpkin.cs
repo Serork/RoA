@@ -8,6 +8,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -29,7 +30,12 @@ sealed class RipePumpkin : NatureProjectile {
         Projectile.timeLeft = 240;
     }
 
-    public override bool? CanDamage() => false;
+    //protected override void SafeOnSpawn(IEntitySource source) {
+    //    Player player = Main.player[Projectile.owner];
+    //    Projectile.CritChance = player.GetWeaponCrit(player.HeldItem);
+    //}
+
+    //public override bool? CanDamage() => false;
 
     public override void Unload() => _rotateWiggler = null;
 
@@ -99,7 +105,9 @@ sealed class RipePumpkin : NatureProjectile {
                             Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);
                             direction.Normalize();
                             direction *= 15 * Main.rand.NextFloat(0.9f, 1.1f);
-                            Projectile.NewProjectile(Projectile.GetSource_Death(), new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
+                            Projectile.NewProjectile(player.GetSource_ItemUse(player.GetSelectedItem()), new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
+                            //Main.projectile[projectile].CritChance = Projectile.CritChance;
+                            //Main.newT
                         }
                         Projectile.netUpdate = true;
                     }

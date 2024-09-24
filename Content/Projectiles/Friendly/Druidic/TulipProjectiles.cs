@@ -238,8 +238,9 @@ sealed class TulipFlower : NatureProjectile {
         Projectile.timeLeft = (int)Max;
 
         if (Projectile.owner == Main.myPlayer) {
+            Player player = Main.player[Projectile.owner];
             for (int i = 0; i < 6; i++) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
+                Projectile.NewProjectileDirect(player.GetSource_ItemUse(player.GetSelectedItem()),
                                                Projectile.Center, Vector2.Zero,
                                                ModContent.ProjectileType<TulipPetal>(),
                                                Projectile.damage, Projectile.knockBack,

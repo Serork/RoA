@@ -16,7 +16,6 @@ sealed class PumpkinSeed : NatureProjectile {
         Projectile.friendly = true;
 
         Projectile.tileCollide = true;
-        Projectile.friendly = true;
 
         Projectile.aiStyle = 1;
         AIType = ProjectileID.Bullet;

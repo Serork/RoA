@@ -116,7 +116,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (Projectile.IsOwnerMyPlayer(Owner)) {
             for (int i = 0; i < count; i++) {
                 SetSpawnProjectileSettings(Owner, ref spawnPosition, ref velocity, ref count, ref ai0, ref ai1, ref ai2);
-                Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), spawnPosition, velocity, ShootType, Projectile.damage, Projectile.knockBack, Owner.whoAmI, ai0, ai1, ai2);
+                Projectile.NewProjectileDirect(Owner.GetSource_ItemUse(Owner.GetSelectedItem()), spawnPosition, velocity, ShootType, Projectile.damage, Projectile.knockBack, Owner.whoAmI, ai0, ai1, ai2);
             }
         }
     }

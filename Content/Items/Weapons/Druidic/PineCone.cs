@@ -1,15 +1,13 @@
 using Microsoft.Xna.Framework;
 
-using Terraria;
-using Terraria.ID;
-using Terraria.DataStructures;
-
-using RoA.Core;
 using RoA.Common.Druid;
-using Terraria.ModLoader;
-using RoA.Utilities;
+using RoA.Core;
 using RoA.Core.Utility;
-using System;
+
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic;
 
@@ -30,7 +28,7 @@ sealed class PineCone : NatureItem {
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
 		if (player.IsLocal()) {
 			if (Collision.CanHitLine(player.Center, 2, 2, player.GetViableMousePosition(), 2, 2)) {
-				Projectile.NewProjectile(source, Vector2.Zero, Vector2.Zero, type, damage, knockback, player.whoAmI);
+				Projectile.NewProjectile(player.GetSource_ItemUse(Item), Vector2.Zero, Vector2.Zero, type, damage, knockback, player.whoAmI);
 			}
 		}
 
