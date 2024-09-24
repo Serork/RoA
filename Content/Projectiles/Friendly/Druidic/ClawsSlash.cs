@@ -110,7 +110,7 @@ sealed class ClawsSlash : NatureProjectile {
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             Color shineColor = new(255, 200, 150);
             Color color3 = lightColor * num2 * 0.5f;
-            color3.A = (byte)(color3.A * (1.0 - (double)num4));
+            //color3.A = (byte)(color3.A * (1.0 - (double)num4));
             Color color4 = color3 * num4 * 0.5f;
             color4.G = (byte)(color4.G * (double)num4);
             color4.B = (byte)(color4.R * (0.25 + (double)num4 * 0.75));

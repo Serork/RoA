@@ -201,7 +201,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts() {
-        if (Progress >= 0.1f && Progress <= 0.97f) {
+        if (Progress >= 0.1f && Progress <= 0.95f) {
             if (Main.netMode != NetmodeID.Server) {
                 float progress = Progress * 1.25f + 0.1f;
                 int count = Math.Min((int)(15 * progress), 10);
