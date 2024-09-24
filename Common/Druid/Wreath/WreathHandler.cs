@@ -19,13 +19,14 @@ sealed class WreathHandler : ModPlayer {
     private const float BASEADDVALUE = 0.115f;
     private const float DRAWCOLORINTENSITY = 3f;
     private const byte MAXBOOSTINCREMENT = 7;
+    private const float STAYTIMEMAX = 5f;
 
     private ushort _currentResource, _tempResource, _tempResource2;
     private float _addExtraValue;
 
     private byte _boost;
     private ushort _increaseValue;
-    private float _currentChangingTime, _decreaseTime;
+    private float _currentChangingTime, _currentChangingMult, _stayTime;
     private bool _shouldDecrease, _shouldDecrease2;
 
     private Color _lightingColor;
@@ -49,7 +50,12 @@ sealed class WreathHandler : ModPlayer {
     public ushort TotalResource => (ushort)(MaxResource + ExtraResource);
 
     public float Progress => (float)CurrentResource / TotalResource;
-    public float IncreasingProgress => Ease.CircOut(Math.Min(1f - _currentChangingTime, 0.999f));
+    public float ChangingProgress {
+        get {
+            float value = ChangingTimeValue - _currentChangingTime;
+            return _shouldDecrease2 ? value : Ease.CircOut(value);
+        }
+    }
     public bool IsEmpty => Progress <= 0.01f;
     public bool IsFull => Progress > 0.95f;
 
@@ -58,6 +64,7 @@ sealed class WreathHandler : ModPlayer {
     public float ChangingTimeValue => TimeSystem.LogicDeltaTime * 60f;
 
     public bool ShouldDraw => !IsEmpty || Player.IsHoldingNatureWeapon();
+    public float PulseIntensity => _stayTime <= 1f ? Ease.CubeInOut(_stayTime) : 1f;
 
     public float DrawColorOpacity {
         get {
@@ -92,7 +99,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && IsFull) {
             if (SpecialAttackData.Owner == selectedItem) {
-                Reset(true);
+                Reset();
 
                 Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
                 SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
@@ -104,26 +111,15 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PostUpdateEquips() {
-        if (!Player.IsHoldingNatureWeapon()) {
-            if (_shouldDecrease2) {
-                _decreaseTime -= TimeSystem.LogicDeltaTime;
-                if (_decreaseTime <= 0f) {
-                    _shouldDecrease2 = false;
-
-                    Reset2();
-                }
-
-                return;
-            }
-
-            Reset();
+        if (_stayTime <= 0f && !_shouldDecrease) {
+            Reset(true);
         }
         else {
-            _shouldDecrease2 = false;
+            _stayTime -= TimeSystem.LogicDeltaTime;
         }
     }
 
-    public override void PostUpdateMiscEffects() {
+    public override void PreUpdate() {
         if (!Player.IsLocal()) {
             return;
         }
@@ -133,6 +129,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void IncreaseResourceValue(float fine = 0f) {
+        if (_shouldDecrease2) {
+            _shouldDecrease = _shouldDecrease2 = false;
+        }
+
         if (_shouldDecrease) {
             return;
         }
@@ -144,6 +144,7 @@ sealed class WreathHandler : ModPlayer {
             _addExtraValue += BASEADDVALUE / _boost * BASEADDVALUE;
         }
 
+        _stayTime = STAYTIMEMAX;
         _currentChangingTime = ChangingTimeValue;
         _tempResource = CurrentResource;
         _increaseValue = (ushort)(AddResourceValue() - AddResourceValue() * fine);
@@ -160,39 +161,41 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
-        _currentChangingTime -= TimeSystem.LogicDeltaTime * 1.75f * Math.Max((byte)1, _boost);
+        float mult = 1.75f;
+        if (!_shouldDecrease2) {
+            _currentChangingMult = mult;
+        }
+        else {
+            mult = 1f;
+            if (_currentChangingMult < mult) {
+                _currentChangingMult += TimeSystem.LogicDeltaTime;
+            }
+        }
+        _currentChangingTime -= TimeSystem.LogicDeltaTime * _currentChangingMult * Math.Max((byte)1, _boost);
 
         if (_shouldDecrease) {
-            CurrentResource = (ushort)(_tempResource - _tempResource2 * IncreasingProgress);
+            CurrentResource = (ushort)(_tempResource - _tempResource2 * ChangingProgress);
             if (IsEmpty) {
                 _shouldDecrease = false;
-                _boost = 0;
                 _increaseValue = _tempResource = _tempResource2 = 0;
             }
 
             return;
         }
-        CurrentResource = (ushort)(_tempResource + _increaseValue * IncreasingProgress);
+        CurrentResource = (ushort)(_tempResource + _increaseValue * ChangingProgress);
     }
 
-    private void Reset(bool forced = false) {
-        if (forced) {
-            Reset2();
-
-            return;
+    private void Reset(bool resetAfterStaying = false) {
+        if (resetAfterStaying) {
+            _shouldDecrease2 = true;
+            _currentChangingMult = TimeSystem.LogicDeltaTime;
         }
 
-        if (_shouldDecrease2) {
-            return;
-        }
-
-        _shouldDecrease2 = true;
-        _decreaseTime = 5f;
-    }
-
-    private void Reset2() {
         _shouldDecrease = true;
 
+        _boost = 0;
+
+        _tempResource = CurrentResource;
         _currentChangingTime = ChangingTimeValue;
         _tempResource2 = _tempResource;
     }

@@ -113,7 +113,7 @@ sealed class BeastProj : ModProjectile  {
 			Projectile.rotation = (float)Math.Atan2(mouseWorld.Y - center.Y, mouseWorld.X - center.X) + rotation;
 			Projectile.netUpdate = true;
 		}
-		Projectile.ai[1] += 0.0025f;
+		Projectile.ai[1] += 0.0045f;
 		double rads = 1.0 * player.direction - (double)(Projectile.ai[1] - 0.5f) * player.direction * (3.14 + 2.0) + (float)Math.PI;
 		float x = (float)Math.Cos(rads);
 		float y = (float)Math.Sin(rads);

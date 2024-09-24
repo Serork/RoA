@@ -68,9 +68,9 @@ abstract class DruidNPC : RoANPC {
             }
             float factor = Helper.EaseInOut2((float)(NPC.frameCounter / maxTime)) * 3f;
             bool flag = NPC.frameCounter <= maxTime;
-            if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
-            }
-            else if (flag) {
+            //if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
+            //}
+            if (flag) {
                 CurrentFrame = 19 - 3 + (int)factor;
             }
             if (++CastTimer > 4) {
