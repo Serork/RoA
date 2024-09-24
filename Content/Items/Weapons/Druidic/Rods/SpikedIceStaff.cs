@@ -71,7 +71,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                                     dust.noGravity = true;
                                 }
                             }
-                            float min = 12f, max = 8f;
+                            float min = 8f, max = 8f;
                             if (Owner.direction == 1) {
                                 for (float num = -min; num < max; num += 1f) {
                                     spawnAttackDust(num);

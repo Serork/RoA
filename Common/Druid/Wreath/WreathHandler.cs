@@ -25,8 +25,8 @@ sealed class WreathHandler : ModPlayer {
 
     private byte _boost;
     private ushort _increaseValue;
-    private float _currentChangingTime;
-    private bool _shouldDecrease;
+    private float _currentChangingTime, _decreaseTime;
+    private bool _shouldDecrease, _shouldDecrease2;
 
     private Color _lightingColor;
 
@@ -56,6 +56,8 @@ sealed class WreathHandler : ModPlayer {
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
     public float ChangingTimeValue => TimeSystem.LogicDeltaTime * 60f;
+
+    public bool ShouldDraw => !IsEmpty || Player.IsHoldingNatureWeapon();
 
     public float DrawColorOpacity {
         get {
@@ -90,7 +92,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && IsFull) {
             if (SpecialAttackData.Owner == selectedItem) {
-                Reset();
+                Reset(true);
 
                 Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
                 SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
@@ -103,7 +105,21 @@ sealed class WreathHandler : ModPlayer {
 
     public override void PostUpdateEquips() {
         if (!Player.IsHoldingNatureWeapon()) {
+            if (_shouldDecrease2) {
+                _decreaseTime -= TimeSystem.LogicDeltaTime;
+                if (_decreaseTime <= 0f) {
+                    _shouldDecrease2 = false;
+
+                    Reset2();
+                }
+
+                return;
+            }
+
             Reset();
+        }
+        else {
+            _shouldDecrease2 = false;
         }
     }
 
@@ -159,7 +175,22 @@ sealed class WreathHandler : ModPlayer {
         CurrentResource = (ushort)(_tempResource + _increaseValue * IncreasingProgress);
     }
 
-    private void Reset() {
+    private void Reset(bool forced = false) {
+        if (forced) {
+            Reset2();
+
+            return;
+        }
+
+        if (_shouldDecrease2) {
+            return;
+        }
+
+        _shouldDecrease2 = true;
+        _decreaseTime = 5f;
+    }
+
+    private void Reset2() {
         _shouldDecrease = true;
 
         _currentChangingTime = ChangingTimeValue;

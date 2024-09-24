@@ -45,7 +45,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         playerPosition.X += offsetX;
         playerPosition.Y += breathUI ? (float)(-(float)offsetY * ((Player.breathMax - 1) / 200 + 1)) : -offsetY;
 
-        if (Player.dead || Player.ghost || Player.ShouldNotDraw || !Player.IsHoldingNatureWeapon()) {
+        if (Player.dead || Player.ghost || Player.ShouldNotDraw || !Stats.ShouldDraw) {
             _oldPosition = playerPosition;
 
             return true;

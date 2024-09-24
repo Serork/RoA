@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Druid.Wreath;
+using RoA.Content;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -19,16 +20,19 @@ sealed class NatureWeaponHandler : GlobalItem {
 
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
 
-    public static ushort GetPotentialDamage(Item item) => (ushort)(item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage - item.damage);
+    public static ushort GetFinalBaseDamage(Item item, Player player) => (ushort)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(item.damage);
+
+    public static ushort GetBasePotentialDamage(Item item) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage;
+    public static ushort GetPotentialDamage(Item item, Player player) => (ushort)(GetBasePotentialDamage(item) - GetFinalBaseDamage(item, player));
 
     public static int GetExtraPotentialDamage(Player player, Item item) {
         float progress = GetWreathStats(player).Progress;
-        return (int)(progress * GetPotentialDamage(item)) + (progress > 0.01f ? 1 : 0);
+        return (int)(progress * GetPotentialDamage(item, player)) + (progress > 0.01f ? 1 : 0);
     }
 
-    public static int GetExtraDamage(Item item) => Math.Min(GetExtraPotentialDamage(Main.LocalPlayer, item), GetPotentialDamage(item));
+    public static int GetExtraDamage(Item item) => Math.Min(GetExtraPotentialDamage(Main.LocalPlayer, item), GetPotentialDamage(item, Main.LocalPlayer));
 
-    public static int GetNatureDamage(Item item) => item.damage + GetExtraDamage(item);
+    public static int GetNatureDamage(Item item) => GetFinalBaseDamage(item, Main.LocalPlayer) + GetExtraDamage(item);
 
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
@@ -43,6 +47,10 @@ sealed class NatureWeaponHandler : GlobalItem {
 
     public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage) {
         if (!item.IsADruidicWeapon()) {
+            return;
+        }
+
+        if (GetBasePotentialDamage(item) <= 0) {
             return;
         }
 

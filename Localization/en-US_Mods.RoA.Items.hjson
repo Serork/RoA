@@ -127,3 +127,13 @@ RodOfTheCondor: {
 	DisplayName: Rod Of The Condor
 	Tooltip: ""
 }
+
+BeastBow: {
+	DisplayName: Beast Bow
+	Tooltip: ""
+}
+
+DoubleFocusCharm: {
+	DisplayName: Double Focus Charm
+	Tooltip: ""
+}
