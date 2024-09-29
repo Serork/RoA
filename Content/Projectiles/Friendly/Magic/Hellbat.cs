@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
 sealed class Hellbat : ModProjectile {
-	public override Color? GetAlpha(Color lightColor) => new Color(255, 255, 255, 0) * (1f - Projectile.alpha / 255f);
+	public override Color? GetAlpha(Color lightColor) => Color.White * (1f - Projectile.alpha / 255f) * Projectile.Opacity;
 
 	public override void SetStaticDefaults() {
 		Main.projFrames[Type] = 5;
@@ -36,8 +36,6 @@ sealed class Hellbat : ModProjectile {
 		Projectile.alpha = 255;
 		Projectile.timeLeft = 70;
 
-		Projectile.alpha = 255;
-
 		DrawOriginOffsetY = -1;
 	}
 
@@ -52,17 +50,26 @@ sealed class Hellbat : ModProjectile {
             Main.dust[num179].noGravity = true;
             Main.dust[num179].velocity *= 0.2f;
         }
-        
-		if (Projectile.ai[0] == 1f) {
-			Projectile.scale += 0.008f;
-			if (Projectile.scale >= 1.4f) {
-				Projectile.alpha += 25;
+
+		if (Projectile.timeLeft >= 10) {
+            if (Projectile.ai[0] == 1f) {
+				Projectile.scale += 0.008f;
+				if (Projectile.scale >= 1.4f) {
+					Projectile.alpha += 25;
+				}
 			}
-		} 
-		else if (Projectile.alpha > 0) {
-			Projectile.alpha -= 15;
-			Projectile.ai[0] = 1f;
+			else if (Projectile.alpha > 0) {
+				Projectile.alpha -= 15;
+			}
+			else {
+				Projectile.ai[0] = 1f;
+			}
 		}
+		else {
+			Projectile.alpha = 0;
+			Projectile.Opacity = 1f - Utils.GetLerpValue(10, 0, Projectile.timeLeft, true);
+
+        }
 		Projectile.rotation = 0f;
 		Projectile.spriteDirection = -Projectile.direction;
 	}

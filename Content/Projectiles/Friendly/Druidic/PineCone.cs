@@ -62,16 +62,19 @@ sealed class PineCone : NatureProjectile {
                 if (Math.Abs(Projectile.rotation) < 0.25f) {
                     angle *= 0.25f;
                 }
-                float rotation = Projectile.rotation;
                 Projectile.ai[0] += (float)-Math.Sign(Projectile.rotation) * angle;
                 Projectile.ai[0] *= 0.95f;
                 Projectile.rotation += Projectile.ai[0] * TimeSystem.LogicDeltaTime;
                 float maxAngle = 0.6f;
                 Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -maxAngle, maxAngle);
                 bool flag = Projectile.Center.Distance(player.GetViableMousePosition()) > 15f && player.whoAmI == Main.myPlayer;
-                if ((Math.Abs(Projectile.rotation) < 0.1f && Math.Abs(Projectile.ai[0]) < 0.5f) || Projectile.ai[1] != 0f) {
+                bool flag2 = Math.Abs(Projectile.rotation) < 0.1f && Math.Abs(Projectile.ai[0]) < 0.5f;
+                if (flag2) {
+                    Projectile.ai[1] = 1f;
+                }
+                if (flag2 || Projectile.ai[1] != 0f) {
                     if (flag || Projectile.ai[1] != 0f) {
-                        Projectile.rotation *= 0.925f;
+                        Projectile.rotation *= 0.975f;
 
                         Projectile.ai[1] = 1f;
                         Projectile.velocity.Y += 0.35f;
