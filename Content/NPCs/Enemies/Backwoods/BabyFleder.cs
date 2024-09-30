@@ -71,12 +71,14 @@ sealed class BabyFleder : ModNPC {
     }
 
     public override void OnSpawn(IEntitySource source) {
-        if (!HasParent && Main.rand.NextBool()) {
-            _state = State.Normal;
-        }
+        if (!HasParent) {
+            if (Main.rand.NextBool()) {
+                _state = State.Normal;
+            }
 
-        NPC.velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
-        NPC.netUpdate = true;
+            NPC.velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 0.75f;
+            NPC.netUpdate = true;
+        }
     }
 
     public override bool? CanFallThroughPlatforms() => !IsSitting;
@@ -164,7 +166,7 @@ sealed class BabyFleder : ModNPC {
             bool flag2 = ParentIndex != -1f && HasParent && hasParent;
             NPC.noTileCollide = false;
             if (flag2) {
-                NPC.SlightlyMoveTo(center, 5f, 30f);
+                NPC.SlightlyMoveTo(center, 5f, 30f * (Utils.GetLerpValue(0f, 100f, NPC.Distance(center), true) + 1f));
                 if (NPC.target == 255 || player.dead || Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) {
                     StateTimer -= 1f;
                     NPC.TargetClosest(false);
