@@ -46,7 +46,26 @@ sealed class GrimDruid : DruidNPC {
     protected override (Func<bool>, float) ShouldBeAttacking() => (() => true, 450f);
 
     protected override void Walking() {
-        NPC.PseudoGolemAI(0.3f);
+        NPC.ApplyFighterAI(true, (npc) => {
+            float num87 = 1f * 0.8f;
+            float num88 = 0.07f * 0.8f;
+            //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
+            //num88 += (1f - (float)life / (float)lifeMax) * 0.15f;
+            if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
+                if (npc.velocity.Y == 0f)
+                    npc.velocity *= 0.7f;
+            }
+            else if (npc.velocity.X < num87 && npc.direction == 1) {
+                npc.velocity.X += num88;
+                if (npc.velocity.X > num87)
+                    npc.velocity.X = num87;
+            }
+            else if (npc.velocity.X > 0f - num87 && npc.direction == -1) {
+                npc.velocity.X -= num88;
+                if (npc.velocity.X < 0f - num87)
+                    npc.velocity.X = 0f - num87;
+            }
+        });
     }
 
     protected override void Attacking() {

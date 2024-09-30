@@ -133,30 +133,32 @@ abstract class DruidNPC : RoANPC {
         Player player;
         switch (State) {
             case (float)States.Walking:
-                NPC.TargetClosest();
-                player = Main.player[NPC.target];
-                if (AttackTimer < -TimeToChangeState() + 0.2f && NPC.velocity.Y < 0f) {
-                    NPC.velocity.Y = 0f;
-                }
-                if (ShouldAttack()) {
-                    AttackTimer += TimeSystem.LogicDeltaTime;
-                }
-                if (NPC.justHit) {
-                    AttackTimer += TimeToRecoveryAfterGettingHit() * 0.1f;
-                }
-                //if (NPC.justHit && AttackTimer > -TimeToRecoveryAfterGettingHit()) {
-                //    AttackTimer -= -TimeToRecoveryAfterGettingHit() * 0.25f;
-                //}
-                if (!Main.player[NPC.target].dead && AttackTimer >= 0f) {
-                    if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
-                        AttackTimer = 0f;
-                        AttackType = Main.rand.Next(0, 2);
-                        ChangeToAttackState();
-                        ChangeState((int)States.Attacking);
-                    }
-                    return;
-                }
+                //NPC.TargetClosest();
                 Walking();
+                if (NPC.HasPlayerTarget) {
+                    player = Main.player[NPC.target];
+                    if (AttackTimer < -TimeToChangeState() + 0.2f && NPC.velocity.Y < 0f) {
+                        NPC.velocity.Y = 0f;
+                    }
+                    if (ShouldAttack()) {
+                        AttackTimer += TimeSystem.LogicDeltaTime;
+                    }
+                    if (NPC.justHit) {
+                        AttackTimer += TimeToRecoveryAfterGettingHit() * 0.1f;
+                    }
+                    //if (NPC.justHit && AttackTimer > -TimeToRecoveryAfterGettingHit()) {
+                    //    AttackTimer -= -TimeToRecoveryAfterGettingHit() * 0.25f;
+                    //}
+                    if (!Main.player[NPC.target].dead && AttackTimer >= 0f) {
+                        if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
+                            AttackTimer = 0f;
+                            AttackType = Main.rand.Next(0, 2);
+                            ChangeToAttackState();
+                            ChangeState((int)States.Attacking);
+                        }
+                        return;
+                    }
+                }
                 break;
             case (float)States.Attacking:
                 //if (NPC.velocity.Y < 0f) {

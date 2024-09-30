@@ -25,6 +25,8 @@ sealed class EntLegs : RoANPC {
 	private const short SHIELD = (short)States.Shielding;
 	private const short ATTACK = (short)States.Attacking;
 
+	private float _attackTimer;
+
 	public override string Texture => ResourceManager.EmptyTexture;
 
     public override void SetStaticDefaults() {
@@ -92,14 +94,34 @@ sealed class EntLegs : RoANPC {
 		short state = (short)State;
 		switch (state) {
 			case WALK:
-                NPC.PseudoGolemAI(0.3f);
+				NPC.ApplyFighterAI(true, (npc) => {
+                    float num87 = 1f * 0.8f;
+                    float num88 = 0.07f * 0.8f;
+                    //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
+                    //num88 += (1f - (float)life / (float)lifeMax) * 0.15f;
+                    if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
+						if (npc.velocity.Y == 0f)
+							npc.velocity *= 0.7f;
+					}
+					else if (npc.velocity.X < num87 && npc.direction == 1) {
+						npc.velocity.X += num88;
+						if (npc.velocity.X > num87)
+							npc.velocity.X = num87;
+					}
+					else if (npc.velocity.X > 0f - num87 && npc.direction == -1) {
+						npc.velocity.X -= num88;
+						if (npc.velocity.X < 0f - num87)
+							npc.velocity.X = 0f - num87;
+					}
+				});
+				//NPC.PseudoGolemAI(0.3f);
 
-                if (StateTimer < 0f && NPC.velocity.Y < 0f) {
+                if (_attackTimer < 0f && NPC.velocity.Y < 0f) {
 					NPC.velocity.Y = 0f;
 				}
-				if (++StateTimer >= 300f && NPC.velocity.Y == 0f) {
-					if (Collision.CanHit(NPC.Center, 2, 2, Main.player[NPC.target].position, 2, 2)) {
-                        StateTimer = 0f;
+				if (++_attackTimer >= 300f && NPC.velocity.Y == 0f) {
+					if (Collision.CanHit(NPC, Main.player[NPC.target])) {
+                        _attackTimer = 0f;
 						ChangeState(SHIELD, keepState: false);
 
 						NPC.defense += 500;
@@ -111,10 +133,10 @@ sealed class EntLegs : RoANPC {
 					NPC.velocity.X *= 0.8f;
 
                     NPC.ResetAIStyle();
-                    if (++StateTimer >= 180f) {
+                    if (++_attackTimer >= 180f) {
 						bool flag = Collision.CanHit(NPC.Center, 4, 4, Main.player[NPC.target].Center, 4, 4);
 
-                        StateTimer = 0f;
+                        _attackTimer = 0f;
                         ChangeState(flag ? ATTACK : WALK);
 
 						NPC.defense -= flag ? 506 : 500;
@@ -124,7 +146,7 @@ sealed class EntLegs : RoANPC {
 			case ATTACK:
                 NPC.ResetAIStyle();
 
-                if (StateTimer >= 20f && StateTimer % 10f == 0f) {
+                if (_attackTimer >= 20f && _attackTimer % 10f == 0f) {
 					SoundEngine.PlaySound(SoundID.Item104, NPC.position);
 
 					float dustCount = 14f;
@@ -149,8 +171,8 @@ sealed class EntLegs : RoANPC {
 						NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
 					}
 				}
-				if (++StateTimer >= 100f) {
-                    StateTimer = -10f;
+				if (++_attackTimer >= 100f) {
+                    _attackTimer = -10f;
                     ChangeState(WALK);
 
                     NPC.defense += 6;

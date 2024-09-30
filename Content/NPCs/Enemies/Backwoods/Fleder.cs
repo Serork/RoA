@@ -13,6 +13,7 @@ using System.Linq;
 using RoA.Core.Utility;
 using System.IO;
 using RoA.Common.BackwoodsSystems;
+using RoA.Content.Biomes.Backwoods;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -51,7 +52,7 @@ sealed class Fleder : ModNPC {
         NPC.defense = 3;
         NPC.knockBackResist = 0.5f;
 
-        int width = 50; int height = 30;
+        int width = 30; int height = 30;
         NPC.Size = new Vector2(width, height);
 
         NPC.aiStyle = -1;
@@ -82,7 +83,7 @@ sealed class Fleder : ModNPC {
         Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 200, NPC.width + 400, NPC.height + 400);
         bool isTriggeredBy(Player player) {
             playerRect = new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height);
-            return (npcRect.Intersects(playerRect) || NPC.life < NPC.lifeMax) && !player.dead && player.active;
+            return (npcRect.Intersects(playerRect) || NPC.life < NPC.lifeMax) && !player.dead && player.active && player.InModBiome<BackwoodsBiome>();
         }
         void flyAway() {
             float maxSpeed = 4.5f;
@@ -185,15 +186,15 @@ sealed class Fleder : ModNPC {
 
                 return;
             }
-            else if (player.dead || !player.active) {
+            else if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
                 flyAway();
             }
         }
 
         NPC.localAI[1] += 1f;
-        if (player.dead || !player.active) {
+        if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
             NPC.TargetClosest();
-            if (player.dead || !player.active) {
+            if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
                 if (_state != State.Normal) {
                     _state = State.Normal;
 
@@ -204,7 +205,7 @@ sealed class Fleder : ModNPC {
 
         NPC.noTileCollide = false;
 
-        if (!player.dead) {
+        if (!player.dead && player.InModBiome<BackwoodsBiome>()) {
             if (NPC.localAI[1] > 100f) {
                 _state = State.Attacking;
 
