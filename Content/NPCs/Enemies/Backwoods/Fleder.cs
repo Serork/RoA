@@ -14,6 +14,7 @@ using RoA.Core.Utility;
 using System.IO;
 using RoA.Common.BackwoodsSystems;
 using RoA.Content.Biomes.Backwoods;
+using Terraria.DataStructures;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -68,6 +69,11 @@ sealed class Fleder : ModNPC {
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) => target.AddBuff(BuffID.Bleeding, Main.expertMode ? 135 : 85);
 
     public override bool? CanFallThroughPlatforms() => true;
+
+    public override void OnSpawn(IEntitySource source) {
+        NPC.velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 0.75f;
+        NPC.netUpdate = true;
+    }
 
     public override void AI() {
         if (!IsSittingOnBranch) {
