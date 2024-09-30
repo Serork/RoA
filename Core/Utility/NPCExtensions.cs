@@ -552,6 +552,12 @@ static class NPCExtensions {
                 bool flag15 = ignoreBranches || (!ignoreBranches && Main.player[npc.target].position.Y > npc.Center.Y - npc.height);
                 //flag15 = false;
                 if ((npc.velocity.X < 0f && num197 == -1) || (npc.velocity.X > 0f && num197 == 1)) {
+                    bool flag16 = (Main.tile[num194 + npc.direction, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15);
+                    //flag16 = true;
+                    bool flag17 = (Main.tile[num194, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15);
+                    //flag17 = true;
+                    bool flag18 = ((!Main.tile[num194, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194, num195 + 1].TileType]));
+                    bool flag19 = ((!Main.tile[num194 + npc.direction, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194 + npc.direction, num195 + 1].TileType]));
                     if (npc.height >= 32 && Main.tile[num194, num195 - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 2].TileType]) {
                         if (Main.tile[num194, num195 - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 3].TileType]) {
                             if (Main.tile[num194, num195 - 3].TileType != ModContent.TileType<TreeBranch>() || !flag15) {
@@ -588,10 +594,12 @@ static class NPCExtensions {
                         npc.velocity.Y = -5f;
                         npc.netUpdate = true;
                     }
-                    else if (npc.directionY < 0 && npc.type != 67 && ((!Main.tile[num194, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194, num195 + 1].TileType]) && (Main.tile[num194, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15)) && ((!Main.tile[num194 + npc.direction, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194 + npc.direction, num195 + 1].TileType]) && (Main.tile[num194 + npc.direction, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15))) {
-                        npc.velocity.Y = -8f;
-                        //npc.velocity.X *= 1.5f;
-                        npc.netUpdate = true;
+                    else if (npc.directionY < 0 && npc.type != 67 && (flag18 || flag19)) {
+                        if ((flag18 | !flag17) || (flag19 | !flag16)) {
+                            npc.velocity.Y = -8f;
+                            //npc.velocity.X *= 1.5f;
+                            npc.netUpdate = true;
+                        }
                     }
                     else if (canOpenDoor) {
                         npc.ai[1] = 0f;
