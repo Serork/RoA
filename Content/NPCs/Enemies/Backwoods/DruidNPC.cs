@@ -142,6 +142,8 @@ abstract class DruidNPC : RoANPC {
         if (NPC.localAI[3] == 0f) {
             NPC.localAI[3] = 1f;
             NPC.TargetClosest();
+            AttackTimer = -TimeToChangeState();
+            NPC.netUpdate = true;
         }
 
         Player player;

@@ -43,7 +43,7 @@ sealed class EntLegs : RoANPC {
 
         NPC.aiStyle = -1;
 
-        NPC.npcSlots = 3f;
+        NPC.npcSlots = 4f;
 
         NPC.value = Item.buyPrice(0, 0, 6, 7);
 
