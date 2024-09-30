@@ -51,6 +51,15 @@ abstract class DruidNPC : RoANPC {
         AttackEndTimer = reader.ReadSingle();
     }
 
+    public override bool? CanFallThroughPlatforms() {
+        if (Main.player[NPC.target].dead) {
+            return true;
+        }
+        else {
+            return Main.player[NPC.target].position.Y > NPC.position.Y + NPC.height;
+        }
+    }
+
     protected abstract float TimeToChangeState();
     protected abstract float TimeToRecoveryAfterGettingHit();
     protected abstract void Walking();

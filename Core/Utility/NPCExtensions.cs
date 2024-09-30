@@ -120,23 +120,23 @@ static class NPCExtensions {
             npc.TargetClosest();
             if (npc.direction == -1 && npc.velocity.X > -3f) {
                 npc.velocity.X -= 0.05f;
-                if (npc.velocity.X > 3f)
+                if (npc.velocity.X > 2.5f)
                     npc.velocity.X -= 0.05f;
                 else if (npc.velocity.X > 0f)
                     npc.velocity.X -= 0.025f;
 
-                if (npc.velocity.X < -3f)
-                    npc.velocity.X = -3f;
+                if (npc.velocity.X < -2.5f)
+                    npc.velocity.X = -2.5f;
             }
             else if (npc.direction == 1 && npc.velocity.X < 3f) {
                 npc.velocity.X += 0.05f;
-                if (npc.velocity.X < -3f)
+                if (npc.velocity.X < -2.5f)
                     npc.velocity.X += 0.05f;
                 else if (npc.velocity.X < 0f)
                     npc.velocity.X += 0.025f;
 
-                if (npc.velocity.X > 3f)
-                    npc.velocity.X = 3f;
+                if (npc.velocity.X > 2.5f)
+                    npc.velocity.X = 2.5f;
             }
 
             float num269 = Math.Abs(npc.position.X + (float)(npc.width / 2) - (Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2)));
@@ -155,11 +155,11 @@ static class NPCExtensions {
                     npc.velocity.Y -= 0.01f;
             }
 
-            if (npc.velocity.Y < -3f)
-                npc.velocity.Y = -3f;
+            if (npc.velocity.Y < -2.5f)
+                npc.velocity.Y = -2.5f;
 
-            if (npc.velocity.Y > 3f)
-                npc.velocity.Y = 3f;
+            if (npc.velocity.Y > 2.5f)
+                npc.velocity.Y = 2.5f;
         }
         else {
             npc.TargetClosest();
@@ -169,9 +169,9 @@ static class NPCExtensions {
             if (npc.velocity.Y > 0f)
                 npc.velocity.Y *= 0.95f;
 
-            npc.velocity.Y -= 0.5f;
-            if (npc.velocity.Y < -4f)
-                npc.velocity.Y = -4f;
+            npc.velocity.Y -= 0.25f;
+            if (npc.velocity.Y < -3f)
+                npc.velocity.Y = -3f;
 
             npc.TargetClosest();
         }
@@ -315,7 +315,6 @@ static class NPCExtensions {
         }
         else if (!(npc.ai[2] > 0f) || !NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
             bool flag12 = backwoods && flag13/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
-            Main.NewText(flag12);
             if (!flag12 && (double)(npc.position.Y / 16f) < Main.worldSurface/* && npc.type != 624 && npc.type != 631*/) {
                 npc.EncourageDespawn(10);
             }
@@ -550,38 +549,41 @@ static class NPCExtensions {
                 if (npc.type == 425)
                     num197 *= -1;
 
+                bool flag15 = Main.player[npc.target].position.Y > npc.Center.Y - npc.height;
                 if ((npc.velocity.X < 0f && num197 == -1) || (npc.velocity.X > 0f && num197 == 1)) {
                     if (npc.height >= 32 && Main.tile[num194, num195 - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 2].TileType]) {
-                        if (Main.tile[num194, num195 - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 3].TileType]) {
+                        if (Main.tile[num194, num195 - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 3].TileType] && (Main.tile[num194, num195 - 3].TileType != ModContent.TileType<TreeBranch>() || !flag15)) {
                             npc.velocity.Y = -8f;
                             npc.netUpdate = true;
                         }
-                        else {
+                        else if ((Main.tile[num194, num195 - 2].TileType != ModContent.TileType<TreeBranch>() && Main.tile[num194, num195 - 3].TileType != ModContent.TileType<TreeBranch>()) || !flag15) {
                             npc.velocity.Y = -7f;
                             npc.netUpdate = true;
                         }
                     }
                     else if (Main.tile[num194, num195 - 1].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 1].TileType]) {
-                        if (npc.type == 624) {
-                            npc.velocity.Y = -8f;
-                            int num198 = (int)(npc.position.Y + (float)npc.height) / 16;
-                            if (WorldGen.SolidTile((int)npc.Center.X / 16, num198 - 8)) {
-                                npc.direction *= -1;
-                                npc.spriteDirection = npc.direction;
-                                npc.velocity.X = 3 * npc.direction;
+                        if (Main.tile[num194, num195 - 1].TileType != ModContent.TileType<TreeBranch>() || !flag15) {
+                            if (npc.type == 624) {
+                                npc.velocity.Y = -8f;
+                                int num198 = (int)(npc.position.Y + (float)npc.height) / 16;
+                                if (WorldGen.SolidTile((int)npc.Center.X / 16, num198 - 8)) {
+                                    npc.direction *= -1;
+                                    npc.spriteDirection = npc.direction;
+                                    npc.velocity.X = 3 * npc.direction;
+                                }
                             }
-                        }
-                        else {
-                            npc.velocity.Y = -6f;
-                        }
+                            else {
+                                npc.velocity.Y = -6f;
+                            }
 
-                        npc.netUpdate = true;
+                            npc.netUpdate = true;
+                        }
                     }
                     else if (npc.position.Y + (float)npc.height - (float)(num195 * 16) > 20f && Main.tile[num194, num195].HasUnactuatedTile && !Main.tile[num194, num195].TopSlope && Main.tileSolid[Main.tile[num194, num195].TileType]) {
                         npc.velocity.Y = -5f;
                         npc.netUpdate = true;
                     }
-                    else if (npc.directionY < 0 && npc.type != 67 && (!Main.tile[num194, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194, num195 + 1].TileType]) && (!Main.tile[num194 + npc.direction, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194 + npc.direction, num195 + 1].TileType])) {
+                    else if (npc.directionY < 0 && npc.type != 67 && ((!Main.tile[num194, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194, num195 + 1].TileType]) && (Main.tile[num194, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15)) && ((!Main.tile[num194 + npc.direction, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194 + npc.direction, num195 + 1].TileType]) && (Main.tile[num194 + npc.direction, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15))) {
                         npc.velocity.Y = -8f;
                         npc.velocity.X *= 1.5f;
                         npc.netUpdate = true;
@@ -594,24 +596,24 @@ static class NPCExtensions {
                     if (npc.velocity.Y == 0f && flag6 && npc.ai[3] == 1f)
                         npc.velocity.Y = -5f;
 
-                    if (npc.velocity.Y == 0f && (Main.expertMode || npc.type == 586) && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
-                        if (npc.type == 586) {
-                            int num199 = (int)((npc.Bottom.Y - 16f - Main.player[npc.target].Bottom.Y) / 16f);
-                            if (num199 < 14 && Collision.CanHit(npc, Main.player[npc.target])) {
-                                if (num199 < 7)
-                                    npc.velocity.Y = -8.8f;
-                                else if (num199 < 8)
-                                    npc.velocity.Y = -9.2f;
-                                else if (num199 < 9)
-                                    npc.velocity.Y = -9.7f;
-                                else if (num199 < 10)
-                                    npc.velocity.Y = -10.3f;
-                                else if (num199 < 11)
-                                    npc.velocity.Y = -10.6f;
-                                else
-                                    npc.velocity.Y = -11f;
-                            }
-                        }
+                    if (npc.velocity.Y == 0f && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
+                        //if (npc.type == 586) {
+                        //    int num199 = (int)((npc.Bottom.Y - 16f - Main.player[npc.target].Bottom.Y) / 16f);
+                        //    if (num199 < 14 && Collision.CanHit(npc, Main.player[npc.target])) {
+                        //        if (num199 < 7)
+                        //            npc.velocity.Y = -8.8f;
+                        //        else if (num199 < 8)
+                        //            npc.velocity.Y = -9.2f;
+                        //        else if (num199 < 9)
+                        //            npc.velocity.Y = -9.7f;
+                        //        else if (num199 < 10)
+                        //            npc.velocity.Y = -10.3f;
+                        //        else if (num199 < 11)
+                        //            npc.velocity.Y = -10.6f;
+                        //        else
+                        //            npc.velocity.Y = -11f;
+                        //    }
+                        //}
 
                         if (npc.velocity.Y == 0f) {
                             int num200 = 6;
@@ -622,7 +624,7 @@ static class NPCExtensions {
                                 int num201 = (int)(npc.Center.X / 16f);
                                 int num202 = (int)(npc.Bottom.Y / 16f) - 1;
                                 for (int num203 = num202; num203 > num202 - num200; num203--) {
-                                    if (Main.tile[num201, num203].HasUnactuatedTile && TileID.Sets.Platforms[Main.tile[num201, num203].TileType] && Main.tile[num201, num203].TileType != ModContent.TileType<TreeBranch>()) {
+                                    if (Main.tile[num201, num203].HasUnactuatedTile && TileID.Sets.Platforms[Main.tile[num201, num203].TileType] && (Main.tile[num201, num203].TileType != ModContent.TileType<TreeBranch>() || !flag15)) {
                                         npc.velocity.Y = -7.9f;
                                         break;
                                     }

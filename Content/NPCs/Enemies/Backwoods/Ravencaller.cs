@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.WorldEvents;
 using RoA.Core.Utility;
 
 using System;
@@ -36,6 +37,7 @@ sealed class Ravencaller : ModNPC {
         NPC.knockBackResist = 0.2f;
         NPC.HitSound = SoundID.NPCHit19;
         NPC.DeathSound = SoundID.NPCDeath1;
+        NPC.alpha = 175;
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
@@ -50,16 +52,25 @@ sealed class Ravencaller : ModNPC {
         timer = reader.ReadSingle();
     }
 
+    public override bool? CanFallThroughPlatforms() {
+        if (Main.player[NPC.target].dead) {
+            return true;
+        }
+        else {
+            return Main.player[NPC.target].position.Y > NPC.position.Y + NPC.height;
+        }
+    }
+
     public override void AI() {
         NPC npc = NPC;
         if (whenYouWalking)
-            NPC.ApplyFighterAI(true);
+            NPC.ApplyFighterAI(BackwoodsFogHandler.IsFogActive);
         else {
             NPC.ResetAIStyle();
             NPC.velocity.X *= 0.8f;
         }
 
-        NPC.chaseable = npc.alpha < 80;
+        NPC.chaseable = npc.alpha < 50;
 
         if (timer >= 270 && whenYouWalking) {
             retreat = false;
@@ -80,10 +91,12 @@ sealed class Ravencaller : ModNPC {
             npc.alpha -= 5;
         }
 
-        if (NPC.velocity.Y == 0f && timer > 280 && Collision.CanHit(npc, Main.player[npc.target]) && Vector2.Distance(player.position, npc.position) < 320.0 && whenYouWalking && Main.rand.Next(15) == 0) {
-            timer = 280;
-            whenYouWalking = false;
-            NPC.netUpdate = true;
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (NPC.velocity.Y == 0f && timer > 280 && Collision.CanHit(npc, Main.player[npc.target]) && Vector2.Distance(player.position, npc.position) < 320.0 && whenYouWalking && Main.rand.Next(15) == 0) {
+                timer = 280;
+                whenYouWalking = false;
+                NPC.netUpdate = true;
+            }
         }
         if (timer == 320 && !whenYouWalking)
             Summon();
@@ -96,7 +109,7 @@ sealed class Ravencaller : ModNPC {
             }
         }
         if (timer >= 434 && timer < 442 && !whenYouWalking) {
-            if (npc.alpha < 200) {
+            if (npc.alpha < 175) {
                 npc.alpha += 30;
             }
         }

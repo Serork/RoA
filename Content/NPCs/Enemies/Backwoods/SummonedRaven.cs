@@ -1,11 +1,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -52,19 +57,19 @@ sealed class SummonedRaven : ModNPC {
         //};
     }
 
-	public override bool? CanFallThroughPlatforms() => true;
+    public override bool? CanFallThroughPlatforms() => true;
 
     public override void AI() {
 		if (NPC.NearestTheSame(out NPC npc)) {
-            NPC.OffsetNPC(npc, 0.25f);
+            NPC.OffsetNPC(npc, 0.2f);
 		}
 
 		if (Acceleration < 1.5f) {
-			Acceleration += 0.0615f;
+			Acceleration += 0.065f;
 			Acceleration *= 1.05f;
 		}
 
-		short state = (short)State;
+        short state = (short)State;
 		if (state == SPAWN) {
 			NPC.noGravity = true;
 
@@ -74,11 +79,10 @@ sealed class SummonedRaven : ModNPC {
 				State = ATTACKING;
 			}
 
-			NPC.velocity = new Vector2(NPC.ai[0], NPC.ai[1]) * Acceleration;
+			NPC.velocity = new Vector2(NPC.ai[0], NPC.ai[1]) * Acceleration * 0.75f;
+            NPC.rotation = NPC.velocity.ToRotation() + MathHelper.ToRadians(90f);
 
-			NPC.rotation = NPC.velocity.ToRotation() + MathHelper.ToRadians(90f);
-
-			if (Main.netMode != NetmodeID.Server && Main.rand.NextBool()) {
+            if (Main.netMode != NetmodeID.Server && Main.rand.NextBool()) {
 				int dust = Dust.NewDust(NPC.position, 16, 16, 108, NPC.velocity.X * 0.01f, NPC.velocity.Y * 0.01f, NPC.alpha, new Color(30, 30, 55), Main.rand.NextFloat(1.1f, 1.3f));
 				Main.dust[dust].noLight = true;
 				Main.dust[dust].noGravity = true;
@@ -87,10 +91,10 @@ sealed class SummonedRaven : ModNPC {
 			}
 
 			if (NPC.alpha > 0) {
-				NPC.alpha -= 15 - Main.rand.Next(1, 8);
+                NPC.alpha -= 20 - Main.rand.Next(1, 10);
 
-				if (Main.netMode != NetmodeID.Server && NPC.alpha % 20 == 0) {
-					if (Main.rand.NextBool()) {
+                if (Main.netMode != NetmodeID.Server) {
+					if (Main.rand.NextBool(10)) {
 						for (int i = 0; i < 16; i++) {
 							int dust = Dust.NewDust(NPC.position, 20, 20, 108, (float)Math.Cos(MathHelper.Pi / 6 * i), (float)Math.Sin(MathHelper.Pi / 6 * i), 140, new Color(30, 30, 55), 1.2f);
 							Main.dust[dust].noGravity = true;
@@ -102,21 +106,46 @@ sealed class SummonedRaven : ModNPC {
 			State = ATTACKING;
 			NPC.netUpdate = true;
 			return;
-		}
+        }
 
-		NPC.alpha = 0;
+        NPC.ApplyAdvancedFlierAI();
 
-		NPC.ApplyAdvancedFlierAI();
-		AnimationType = 301;
+        float value = NPC.velocity.X * 0.1f;
+        NPC.rotation = Helper.SmoothAngleLerp(NPC.rotation, value, (Math.Abs(value) * 0.2f + 0.2f));
+
+        NPC.alpha = 0;
+		//AnimationType = 301;
 	}
 
 
 	public override void FindFrame(int frameHeight) {
 		short state = (short)State;
-		if (state != SPAWN) {
-			return;
+        int num = 1;
+        if ((double)NPC.velocity.X > 0.5)
+            NPC.spriteDirection = -1;
+        if ((double)NPC.velocity.X < -0.5)
+            NPC.spriteDirection = 1;
+        if (!Main.dedServ) {
+            if (!TextureAssets.Npc[Type].IsLoaded)
+                return;
+
+            num = TextureAssets.Npc[Type].Height() / Main.npcFrameCount[Type];
+        }
+        if (state != SPAWN) {
+            if (NPC.velocity.X == 0f && NPC.velocity.Y == 0f) {
+                NPC.frame.Y = 0;
+                NPC.frameCounter = 0.0;
+				return;
+            }
+            NPC.frameCounter += 1.0;
+            if (NPC.frameCounter > 4.0) {
+                NPC.frameCounter = 0.0;
+                NPC.frame.Y += num;
+            }
+            if (NPC.frame.Y > num * 4 || NPC.frame.Y == 0)
+                NPC.frame.Y = num;
+            return;
 		}
-		NPC.spriteDirection = NPC.direction;
 		NPC.frame.Y = 0;
 	}
 
