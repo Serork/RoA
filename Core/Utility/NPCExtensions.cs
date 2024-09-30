@@ -585,7 +585,7 @@ static class NPCExtensions {
                     }
                     else if (npc.directionY < 0 && npc.type != 67 && ((!Main.tile[num194, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194, num195 + 1].TileType]) && (Main.tile[num194, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15)) && ((!Main.tile[num194 + npc.direction, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194 + npc.direction, num195 + 1].TileType]) && (Main.tile[num194 + npc.direction, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15))) {
                         npc.velocity.Y = -8f;
-                        npc.velocity.X *= 1.5f;
+                        //npc.velocity.X *= 1.5f;
                         npc.netUpdate = true;
                     }
                     else if (canOpenDoor) {

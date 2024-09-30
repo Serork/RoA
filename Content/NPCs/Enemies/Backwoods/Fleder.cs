@@ -70,7 +70,9 @@ sealed class Fleder : ModNPC {
     public override bool? CanFallThroughPlatforms() => true;
 
     public override void AI() {
-        NPC.OffsetTheSameNPC();
+        if (IsAttacking) {
+            NPC.OffsetTheSameNPC();
+        }
 
         float rotation = NPC.rotation;
         if (NPC.velocity.Y != 0f && Math.Abs(NPC.velocity.X) > 0.05f) {
@@ -119,7 +121,7 @@ sealed class Fleder : ModNPC {
             }
 
             return;
-        }
+        }    
 
         Player player = Main.player[NPC.target];
         playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
