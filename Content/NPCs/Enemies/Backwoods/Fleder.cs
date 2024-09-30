@@ -306,6 +306,24 @@ sealed class Fleder : ModNPC {
             if (NPC.velocity.Y > maxSpeedY) {
                 NPC.velocity.Y = maxSpeedY;
             }
+
+            if (NPC.collideX) {
+                NPC.velocity.X = -NPC.oldVelocity.X;
+                if (NPC.direction == -1 && NPC.velocity.X > 0f && NPC.velocity.X < 2f)
+                    NPC.velocity.X = 2f;
+
+                if (NPC.direction == 1 && NPC.velocity.X < 0f && NPC.velocity.X > -2f)
+                    NPC.velocity.X = -2f;
+            }
+
+            if (NPC.collideY) {
+                NPC.velocity.Y = -NPC.oldVelocity.Y;
+                if (NPC.velocity.Y > 0f && NPC.velocity.Y < 1f)
+                    NPC.velocity.Y = 1f;
+
+                if (NPC.velocity.Y < 0f && NPC.velocity.Y > -1f)
+                    NPC.velocity.Y = -1f;
+            }
         }
         else {
             flyAway();

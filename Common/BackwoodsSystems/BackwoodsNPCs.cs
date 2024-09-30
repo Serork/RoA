@@ -26,9 +26,23 @@ sealed class BackwoodsNPCs : GlobalNPC {
             pool.Clear();
 
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
-            if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType)) {
+            bool flag = false;
+            for (int i = spawnInfo.SpawnTileX - 1; i < spawnInfo.SpawnTileX + 1; i++) {
+                if (flag) {
+                    break;
+                }
+                for (int j = spawnInfo.SpawnTileY - 1; j < spawnInfo.SpawnTileY + 1; j++) {
+                    if (WorldGenHelper.GetTileSafely(i, j).WallType == ModContent.WallType<ElderwoodWall>()) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter;
+            float chance = surface ? 1f : 0.5f;
+            if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
-                    if (!Main.IsItDay()) {
+                    if (!Main.IsItDay() && surface) {
                         pool.Add(ModContent.NPCType<Lumberjack>(), 0.25f);
                     }
                     Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);
@@ -42,8 +56,8 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);
 
                 if (NPC.downedBoss2) {
-                    pool.Add(ModContent.NPCType<Fleder>(), 1f);
-                    pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
+                    pool.Add(ModContent.NPCType<Fleder>(), 1f * chance);
+                    pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f * (chance - 0.5f));
                     if (!NPC.AnyNPCs(ModContent.NPCType<EntLegs>())) {
                         pool.Add(ModContent.NPCType<EntLegs>(), 0.05f);
                     }
