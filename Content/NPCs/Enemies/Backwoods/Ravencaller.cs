@@ -85,9 +85,12 @@ sealed class Ravencaller : ModNPC {
         //if (Collision.CanHit(npc, Main.player[npc.target]))
         if (NPC.HasPlayerTarget)
             timer++;
+        else {
+            timer = 438;
+        }
         npc.spriteDirection = npc.direction;
 
-        if (npc.alpha > 0 && timer >= 270 && timer < 440) {
+        if (npc.alpha > 0 && ((timer >= 270 && timer < 440) || !NPC.HasPlayerTarget)) {
             npc.alpha -= 5;
         }
 
@@ -108,7 +111,7 @@ sealed class Ravencaller : ModNPC {
                 Main.dust[dust5].noGravity = true;
             }
         }
-        if (timer >= 434 && timer < 442 && !whenYouWalking) {
+        if (timer >= 439 && timer < 447/* && !whenYouWalking*/) {
             if (npc.alpha < 175) {
                 npc.alpha += 30;
             }
