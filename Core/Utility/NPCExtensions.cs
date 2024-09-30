@@ -119,24 +119,24 @@ static class NPCExtensions {
 
             npc.TargetClosest();
             if (npc.direction == -1 && npc.velocity.X > -3f) {
-                npc.velocity.X -= 0.05f;
-                if (npc.velocity.X > 2.5f)
-                    npc.velocity.X -= 0.05f;
+                npc.velocity.X -= 0.075f;
+                if (npc.velocity.X > 2.75f)
+                    npc.velocity.X -= 0.075f;
                 else if (npc.velocity.X > 0f)
-                    npc.velocity.X -= 0.025f;
+                    npc.velocity.X -= 0.035f;
 
-                if (npc.velocity.X < -2.5f)
-                    npc.velocity.X = -2.5f;
+                if (npc.velocity.X < -2.75f)
+                    npc.velocity.X = -2.75f;
             }
             else if (npc.direction == 1 && npc.velocity.X < 3f) {
-                npc.velocity.X += 0.05f;
-                if (npc.velocity.X < -2.5f)
-                    npc.velocity.X += 0.05f;
+                npc.velocity.X += 0.075f;
+                if (npc.velocity.X < -2.75f)
+                    npc.velocity.X += 0.075f;
                 else if (npc.velocity.X < 0f)
-                    npc.velocity.X += 0.025f;
+                    npc.velocity.X += 0.035f;
 
-                if (npc.velocity.X > 2.5f)
-                    npc.velocity.X = 2.5f;
+                if (npc.velocity.X > 2.75f)
+                    npc.velocity.X = 2.75f;
             }
 
             float num269 = Math.Abs(npc.position.X + (float)(npc.width / 2) - (Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2)));
@@ -145,21 +145,21 @@ static class NPCExtensions {
                 num270 -= 100f;
 
             if (npc.position.Y < num270) {
-                npc.velocity.Y += 0.025f;
+                npc.velocity.Y += 0.035f;
                 if (npc.velocity.Y < 0f)
                     npc.velocity.Y += 0.01f;
             }
             else {
-                npc.velocity.Y -= 0.025f;
+                npc.velocity.Y -= 0.035f;
                 if (npc.velocity.Y > 0f)
                     npc.velocity.Y -= 0.01f;
             }
 
-            if (npc.velocity.Y < -2.5f)
-                npc.velocity.Y = -2.5f;
+            if (npc.velocity.Y < -2.75f)
+                npc.velocity.Y = -2.75f;
 
-            if (npc.velocity.Y > 2.5f)
-                npc.velocity.Y = 2.5f;
+            if (npc.velocity.Y > 2.75f)
+                npc.velocity.Y = 2.75f;
         }
         else {
             npc.TargetClosest();
