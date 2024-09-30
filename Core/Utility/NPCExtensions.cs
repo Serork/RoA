@@ -177,7 +177,7 @@ static class NPCExtensions {
         }
     }
 
-    public static void ApplyFighterAI(this NPC npc, bool backwoods = false, Action<NPC>? movementX = null) {
+    public static void ApplyFighterAI(this NPC npc, bool backwoods = false, Action<NPC>? movementX = null, bool ignoreBranches = false) {
         npc.aiStyle = -1;
         npc.ModNPC.AIType = -1;
 
@@ -549,7 +549,7 @@ static class NPCExtensions {
                 if (npc.type == 425)
                     num197 *= -1;
 
-                bool flag15 = Main.player[npc.target].position.Y > npc.Center.Y - npc.height;
+                bool flag15 = ignoreBranches || (!ignoreBranches && Main.player[npc.target].position.Y > npc.Center.Y - npc.height);
                 if ((npc.velocity.X < 0f && num197 == -1) || (npc.velocity.X > 0f && num197 == 1)) {
                     if (npc.height >= 32 && Main.tile[num194, num195 - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 2].TileType]) {
                         if (Main.tile[num194, num195 - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 3].TileType] && (Main.tile[num194, num195 - 3].TileType != ModContent.TileType<TreeBranch>() || !flag15)) {

@@ -59,7 +59,7 @@ sealed class EntLegs : RoANPC {
 
     public override bool PreAI() {
         if (NPC.oldVelocity.Y >= 1f && NPC.velocity.Y == 0f) {
-            Stomp();
+            Stomp(true);
         }
 
         return base.PreAI();
@@ -112,7 +112,7 @@ sealed class EntLegs : RoANPC {
 						if (npc.velocity.X < 0f - num87)
 							npc.velocity.X = 0f - num87;
 					}
-				});
+				}, true);
 				//NPC.PseudoGolemAI(0.3f);
 
                 if (_attackTimer < 0f && NPC.velocity.Y < 0f) {

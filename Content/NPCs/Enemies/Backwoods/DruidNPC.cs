@@ -136,9 +136,14 @@ abstract class DruidNPC : RoANPC {
         ChangeFrame((currentFrame, frameHeight));
     }
 
-    protected virtual bool ShouldAttack() => ShouldBeAttacking().Item1() && NPC.Distance(Main.player[NPC.target].Center) < ShouldBeAttacking().Item2 && Collision.CanHit(NPC.Center, 2, 2, Main.player[NPC.target].Center, 2, 2);
+    protected virtual bool ShouldAttack() => ShouldBeAttacking().Item1() && NPC.Distance(Main.player[NPC.target].Center) < ShouldBeAttacking().Item2 && Collision.CanHit(NPC, Main.player[NPC.target]);
 
     public sealed override void AI() {
+        if (NPC.localAI[3] == 0f) {
+            NPC.localAI[3] = 1f;
+            NPC.TargetClosest();
+        }
+
         Player player;
         switch (State) {
             case (float)States.Walking:

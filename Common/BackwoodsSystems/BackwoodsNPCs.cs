@@ -35,6 +35,9 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     if (!belowTile.AnyWall() || belowTile.WallType == ModContent.WallType<LivingBackwoodsLeavesWall>()) {
                         pool.Add(ModContent.NPCType<Hog>(), 0.25f);
                     }
+                    if (NPC.downedBoss2) {
+                        pool.Add(ModContent.NPCType<GrimDruid>(), 0.35f);
+                    }
                 }
                 pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);
 
@@ -42,7 +45,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     pool.Add(ModContent.NPCType<Fleder>(), 1f);
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
                     if (!NPC.AnyNPCs(ModContent.NPCType<EntLegs>())) {
-                        pool.Add(ModContent.NPCType<EntLegs>(), 0.2f);
+                        pool.Add(ModContent.NPCType<EntLegs>(), 0.1f);
                     }
                     if (BackwoodsFogHandler.IsFogActive) {
                         pool.Add(ModContent.NPCType<Ravencaller>(), 0.2f);
