@@ -116,7 +116,7 @@ sealed class EntLegs : RoANPC {
                 if (_attackTimer < 0f && NPC.velocity.Y < 0f) {
 					NPC.velocity.Y = 0f;
 				}
-				if (++_attackTimer >= 300f && NPC.velocity.Y == 0f && Vector2.Distance(Main.player[NPC.target].position, NPC.position) < 500.0) {
+				if (!Main.player[NPC.target].dead && ++_attackTimer >= 300f && NPC.velocity.Y == 0f && Vector2.Distance(Main.player[NPC.target].position, NPC.position) < 500.0) {
 					if (Collision.CanHit(NPC, Main.player[NPC.target])) {
                         _attackTimer = 0f;
 						ChangeState(SHIELD, keepState: false);

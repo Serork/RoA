@@ -104,7 +104,8 @@ sealed class Fleder : ModNPC {
             }
         }
         if (IsSittingOnBranch) {
-            NPC.Center = Vector2.SmoothStep(NPC.Center, _sittingPosition, 1f);
+            Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, _sittingPosition, minDistance: 0f);
+            //NPC.Center = Vector2.SmoothStep(NPC.Center, _sittingPosition, 1f);
             NPC.velocity = Vector2.Zero;
 
             if (Main.netMode != NetmodeID.MultiplayerClient) {
@@ -157,8 +158,8 @@ sealed class Fleder : ModNPC {
 
                 NPC.localAI[2] += 1f * Main.rand.NextFloat();
                 Vector2 destination = treeBranch.Value.ToWorldCoordinates();
-                if (Collision.CanHitLine(NPC.Center, 0, 0, destination, 2, 2)) {
-                    Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, destination, minDistance: 15f);
+                if (Collision.CanHitLine(NPC.Center, 0, 0, destination, 0, 0)) {
+                    Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, destination, minDistance: 8f);
                 }
                 else if (NPC.localAI[2] >= 15f) {
                     NPC.localAI[2] = 0f;
@@ -171,7 +172,7 @@ sealed class Fleder : ModNPC {
                     NPC.netUpdate = true;
                 }
 
-                if (NPC.WithinRange(destination, 9f) && Math.Abs(NPC.Center.X - destination.X) <= 9f) {
+                if (NPC.WithinRange(destination, 8f) && Math.Abs(NPC.Center.X - destination.X) <= 7f) {
                     //NPC.Center = destination;
                     NPC.velocity = Vector2.Zero;
                     NPC.rotation = 0f;

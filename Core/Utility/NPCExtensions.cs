@@ -550,15 +550,20 @@ static class NPCExtensions {
                     num197 *= -1;
 
                 bool flag15 = ignoreBranches || (!ignoreBranches && Main.player[npc.target].position.Y > npc.Center.Y - npc.height);
+                //flag15 = false;
                 if ((npc.velocity.X < 0f && num197 == -1) || (npc.velocity.X > 0f && num197 == 1)) {
                     if (npc.height >= 32 && Main.tile[num194, num195 - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 2].TileType]) {
-                        if (Main.tile[num194, num195 - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 3].TileType] && (Main.tile[num194, num195 - 3].TileType != ModContent.TileType<TreeBranch>() || !flag15)) {
-                            npc.velocity.Y = -8f;
-                            npc.netUpdate = true;
+                        if (Main.tile[num194, num195 - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 3].TileType]) {
+                            if (Main.tile[num194, num195 - 3].TileType != ModContent.TileType<TreeBranch>() || !flag15) {
+                                npc.velocity.Y = -8f;
+                                npc.netUpdate = true;
+                            }
                         }
-                        else if ((Main.tile[num194, num195 - 2].TileType != ModContent.TileType<TreeBranch>() && Main.tile[num194, num195 - 3].TileType != ModContent.TileType<TreeBranch>()) || !flag15) {
-                            npc.velocity.Y = -7f;
-                            npc.netUpdate = true;
+                        else {
+                            if (Main.tile[num194, num195 - 3].TileType != ModContent.TileType<TreeBranch>() || !flag15) {
+                                npc.velocity.Y = -7f;
+                                npc.netUpdate = true;
+                            }
                         }
                     }
                     else if (Main.tile[num194, num195 - 1].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 1].TileType]) {
