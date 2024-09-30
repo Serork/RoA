@@ -43,13 +43,13 @@ static class Helper {
 
     public static float VelocityAngle(Vector2 velocity) => (float)Math.Atan2(velocity.Y, velocity.X) + (float)Math.PI / 2f;
 
-    public static void InertiaMoveTowards(ref Vector2 velocity, Vector2 position, Vector2 destination, float inertia = 15f, float speed = 5f, float minDistance = 10f) {
+    public static void InertiaMoveTowards(ref Vector2 velocity, Vector2 position, Vector2 destination, float inertia = 15f, float speed = 5f, float minDistance = 10f, bool max = false) {
         Vector2 direction = destination - position;
         if (direction.Length() > minDistance) {
             direction.Normalize();
             velocity = (velocity * inertia + direction * speed) / (inertia + 1f);
         }
-        else {
+        else if ((max && velocity.Length() >= 0.5f) || !max) {
             velocity *= (float)Math.Pow(0.97, inertia * 2.0 / inertia);
         }
     }

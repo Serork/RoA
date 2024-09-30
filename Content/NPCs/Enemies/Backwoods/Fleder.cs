@@ -70,16 +70,21 @@ sealed class Fleder : ModNPC {
     public override bool? CanFallThroughPlatforms() => true;
 
     public override void AI() {
-        if (IsAttacking) {
+        if (!IsSittingOnBranch) {
             NPC.OffsetTheSameNPC();
         }
 
-        float rotation = NPC.rotation;
-        if (NPC.velocity.Y != 0f && Math.Abs(NPC.velocity.X) > 0.05f) {
-            rotation = NPC.velocity.X * (MathHelper.PiOver2 * 0.135f);
+        if (!IsSittingOnBranch) {
+            float rotation = NPC.rotation;
+            if (NPC.velocity.Y != 0f && Math.Abs(NPC.velocity.X) > 0.05f) {
+                rotation = NPC.velocity.X * (MathHelper.PiOver2 * 0.135f);
+            }
+            rotation = (float)Math.Sin(rotation) * (float)Math.PI * 0.12f;
+            NPC.rotation = rotation;
         }
-        rotation = (float)Math.Sin(rotation) * (float)Math.PI * 0.12f;
-        NPC.rotation = rotation;
+        else {
+            NPC.rotation = Helper.SmoothAngleLerp(NPC.rotation, 0f, 0.25f);
+        }
 
         Rectangle playerRect;
         Rectangle npcRect = new((int)NPC.position.X - 250, (int)NPC.position.Y - 200, NPC.width + 500, NPC.height + 400);
@@ -104,9 +109,9 @@ sealed class Fleder : ModNPC {
             }
         }
         if (IsSittingOnBranch) {
-            Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, _sittingPosition, minDistance: 0f);
-            //NPC.Center = Vector2.SmoothStep(NPC.Center, _sittingPosition, 1f);
-            NPC.velocity = Vector2.Zero;
+            //Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, _sittingPosition, minDistance: 5f);
+            NPC.Center = Vector2.SmoothStep(NPC.Center, _sittingPosition, 0.4f);
+            //NPC.velocity = Vector2.Zero;
 
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 foreach (Player activePlayer in Main.ActivePlayers) {
@@ -159,7 +164,7 @@ sealed class Fleder : ModNPC {
                 NPC.localAI[2] += 1f * Main.rand.NextFloat();
                 Vector2 destination = treeBranch.Value.ToWorldCoordinates();
                 if (Collision.CanHitLine(NPC.Center, 0, 0, destination, 0, 0)) {
-                    Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, destination, minDistance: 8f);
+                    Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, destination, minDistance: 25f, max: true);
                 }
                 else if (NPC.localAI[2] >= 15f) {
                     NPC.localAI[2] = 0f;
@@ -172,10 +177,10 @@ sealed class Fleder : ModNPC {
                     NPC.netUpdate = true;
                 }
 
-                if (NPC.WithinRange(destination, 8f) && Math.Abs(NPC.Center.X - destination.X) <= 7f) {
+                if (Vector2.DistanceSquared(NPC.Center + NPC.velocity, destination) <= 15f * 15f && Math.Abs(NPC.Center.X + NPC.velocity.X - destination.X) <= 15f) {
                     //NPC.Center = destination;
                     NPC.velocity = Vector2.Zero;
-                    NPC.rotation = 0f;
+                    //NPC.rotation = 0f;
 
                     _sittingPosition = destination;
                     _state = State.Sitting;
@@ -303,9 +308,11 @@ sealed class Fleder : ModNPC {
 
     public override void FindFrame(int frameHeight) {
         if (_state == State.Sitting) {
-            NPC.frame.Y = 2 * frameHeight;
+            if (NPC.WithinRange(_sittingPosition, 2f)) {
+                NPC.frame.Y = 2 * frameHeight;
 
-            return;
+                return;
+            }
         }
 
         NPC.spriteDirection = NPC.direction;
