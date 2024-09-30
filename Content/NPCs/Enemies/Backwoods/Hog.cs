@@ -60,11 +60,13 @@ sealed class Hog : RoANPC {
 		_extraAITimer = reader.ReadSingle();
 	}
 
-    public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone) => _currentAI = 2;
-    public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone) => _currentAI = 2;
 	public override bool CanHitPlayer(Player target, ref int cooldownSlot) => _currentAI == 2;
 
-	private void AdaptedUnicornAI() {
+    public override void HitEffect(NPC.HitInfo hit) {
+        _currentAI = 2;
+    }
+
+    private void AdaptedUnicornAI() {
         int num = 10;
         int num2 = 10;
         bool flag = false;
