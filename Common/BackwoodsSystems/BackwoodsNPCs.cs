@@ -1,4 +1,5 @@
-﻿using RoA.Content.Biomes.Backwoods;
+﻿using RoA.Common.WorldEvents;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -40,7 +41,12 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 if (NPC.downedBoss2) {
                     pool.Add(ModContent.NPCType<Fleder>(), 1f);
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f);
-                    pool.Add(ModContent.NPCType<EntLegs>(), 0.2f);
+                    if (!NPC.AnyNPCs(ModContent.NPCType<EntLegs>())) {
+                        pool.Add(ModContent.NPCType<EntLegs>(), 0.2f);
+                    }
+                    if (BackwoodsFogHandler.IsFogActive) {
+                        pool.Add(ModContent.NPCType<Ravencaller>(), 0.2f);
+                    }
                 }
             }
         }

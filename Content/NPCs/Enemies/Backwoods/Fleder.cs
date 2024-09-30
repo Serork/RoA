@@ -80,7 +80,7 @@ sealed class Fleder : ModNPC {
         NPC.rotation = rotation;
 
         Rectangle playerRect;
-        Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 200, NPC.width + 400, NPC.height + 400);
+        Rectangle npcRect = new((int)NPC.position.X - 300, (int)NPC.position.Y - 200, NPC.width + 600, NPC.height + 400);
         bool isTriggeredBy(Player player) {
             playerRect = new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height);
             return (npcRect.Intersects(playerRect) || NPC.life < NPC.lifeMax) && !player.dead && player.active && player.InModBiome<BackwoodsBiome>();
@@ -102,7 +102,7 @@ sealed class Fleder : ModNPC {
             }
         }
         if (IsSittingOnBranch) {
-            NPC.Center = _sittingPosition;
+            NPC.Center = Vector2.SmoothStep(NPC.Center, _sittingPosition, 1f);
             NPC.velocity = Vector2.Zero;
 
             if (Main.netMode != NetmodeID.MultiplayerClient) {
@@ -169,8 +169,8 @@ sealed class Fleder : ModNPC {
                     NPC.netUpdate = true;
                 }
 
-                if (NPC.WithinRange(destination, 9f) && Math.Abs(NPC.Center.X - destination.X) <= 7f) {
-                    NPC.Center = destination;
+                if (NPC.WithinRange(destination, 9f) && Math.Abs(NPC.Center.X - destination.X) <= 8f) {
+                    //NPC.Center = destination;
                     NPC.velocity = Vector2.Zero;
                     NPC.rotation = 0f;
 

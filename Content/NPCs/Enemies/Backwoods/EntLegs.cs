@@ -39,10 +39,9 @@ sealed class EntLegs : RoANPC {
 		NPC.defense = 6;
 		NPC.knockBackResist = 0f;
 
-		int width = 35; int height = 40;
-		NPC.Size = new Vector2(width, height);
-        
-		NPC.aiStyle = -1;
+        NPC.width = 35; NPC.height = 40;
+
+        NPC.aiStyle = -1;
 
         NPC.npcSlots = 3f;
 
@@ -60,7 +59,7 @@ sealed class EntLegs : RoANPC {
 
     public override bool PreAI() {
         if (NPC.oldVelocity.Y >= 1f && NPC.velocity.Y == 0f) {
-            Stomp(true);
+            Stomp();
         }
 
         return base.PreAI();
@@ -119,7 +118,7 @@ sealed class EntLegs : RoANPC {
                 if (_attackTimer < 0f && NPC.velocity.Y < 0f) {
 					NPC.velocity.Y = 0f;
 				}
-				if (++_attackTimer >= 300f && NPC.velocity.Y == 0f) {
+				if (++_attackTimer >= 300f && NPC.velocity.Y == 0f && Vector2.Distance(Main.player[NPC.target].position, NPC.position) < 500.0) {
 					if (Collision.CanHit(NPC, Main.player[NPC.target])) {
                         _attackTimer = 0f;
 						ChangeState(SHIELD, keepState: false);

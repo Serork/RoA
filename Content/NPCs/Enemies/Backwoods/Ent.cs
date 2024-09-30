@@ -26,6 +26,7 @@ sealed class Ent : RoANPC {
 
         NPC.netAlways = true;
         NPC.dontCountMe = true;
+		NPC.noTileCollide = true;
 
         NPC.aiStyle = -1;
 
