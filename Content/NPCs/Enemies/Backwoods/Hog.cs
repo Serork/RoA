@@ -35,7 +35,6 @@ sealed class Hog : RoANPC {
         int width = 40; int height = 35;
 		NPC.Size = new Vector2(width, height);
 
-		NPC.npcSlots = 1f;
 		NPC.value = Item.buyPrice(0, 0, 0, 80);
     }
 
@@ -64,6 +63,7 @@ sealed class Hog : RoANPC {
 
     public override void HitEffect(NPC.HitInfo hit) {
         _currentAI = 2;
+        NPC.netUpdate = true;
     }
 
     private void AdaptedUnicornAI() {

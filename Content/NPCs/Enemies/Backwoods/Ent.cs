@@ -28,6 +28,8 @@ sealed class Ent : RoANPC {
         NPC.dontCountMe = true;
 		NPC.noTileCollide = true;
 
+		NPC.npcSlots = 0f;
+
         NPC.aiStyle = -1;
 
         NPC.HitSound = SoundID.NPCHit52;

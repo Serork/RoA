@@ -164,7 +164,7 @@ sealed class BabyFleder : ModNPC {
             bool flag2 = ParentIndex != -1f && HasParent && hasParent;
             NPC.noTileCollide = false;
             if (flag2) {
-                NPC.SlightlyMoveTo(center, 5f, 40f);
+                NPC.SlightlyMoveTo(center, 5f, 30f);
                 if (NPC.target == 255 || player.dead || Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) {
                     StateTimer -= 1f;
                     NPC.TargetClosest(false);

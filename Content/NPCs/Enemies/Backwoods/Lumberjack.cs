@@ -38,7 +38,7 @@ sealed class Lumberjack : RoANPC {
 
 		NPC.aiStyle = -1;
 
-		NPC.npcSlots = 2f;
+		NPC.npcSlots = 1.25f;
 		NPC.value = Item.buyPrice(0, 0, 25, 5);
 
 		NPC.HitSound = SoundID.NPCHit1;

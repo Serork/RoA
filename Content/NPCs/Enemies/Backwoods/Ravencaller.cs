@@ -32,7 +32,7 @@ sealed class Ravencaller : ModNPC {
         NPC.damage = 32;
         NPC.lifeMax = 300;
         NPC.defense = 3;
-        NPC.npcSlots = 0.8f;
+        NPC.npcSlots = 1.25f;
         NPC.aiStyle = -1;
         NPC.knockBackResist = 0.2f;
         NPC.HitSound = SoundID.NPCHit19;

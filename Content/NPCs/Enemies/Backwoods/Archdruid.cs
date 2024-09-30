@@ -43,7 +43,7 @@ sealed class Archdruid : DruidNPC {
 
         NPC.aiStyle = -1;
 
-        NPC.npcSlots = 3f;
+        NPC.npcSlots = 2f;
         NPC.value = Item.buyPrice(0, 4, 10, 0);
     }
 
