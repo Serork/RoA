@@ -3,6 +3,7 @@
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -37,6 +38,18 @@ sealed class Ravencaller : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath1;
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(retreat);
+        writer.Write(whenYouWalking);
+        writer.Write(timer);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        retreat = reader.ReadBoolean();
+        whenYouWalking = reader.ReadBoolean();
+        timer = reader.ReadSingle();
+    }
+
     public override void AI() {
         NPC npc = NPC;
         if (whenYouWalking)
@@ -50,6 +63,7 @@ sealed class Ravencaller : ModNPC {
 
         if (timer >= 270 && whenYouWalking) {
             retreat = false;
+            NPC.netUpdate = true;
         }
 
         if (!retreat)
@@ -69,6 +83,7 @@ sealed class Ravencaller : ModNPC {
         if (NPC.velocity.Y == 0f && timer > 280 && Collision.CanHit(npc, Main.player[npc.target]) && Vector2.Distance(player.position, npc.position) < 320.0 && whenYouWalking && Main.rand.Next(15) == 0) {
             timer = 280;
             whenYouWalking = false;
+            NPC.netUpdate = true;
         }
         if (timer == 320 && !whenYouWalking)
             Summon();
@@ -91,6 +106,7 @@ sealed class Ravencaller : ModNPC {
             retreat = true;
             timer = 0;
             whenYouWalking = true;
+            NPC.netUpdate = true;
         }
     }
 
