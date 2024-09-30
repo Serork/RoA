@@ -82,7 +82,7 @@ sealed class Fleder : ModNPC {
         NPC.rotation = rotation;
 
         Rectangle playerRect;
-        Rectangle npcRect = new((int)NPC.position.X - 230, (int)NPC.position.Y - 200, NPC.width + 460, NPC.height + 400);
+        Rectangle npcRect = new((int)NPC.position.X - 250, (int)NPC.position.Y - 200, NPC.width + 500, NPC.height + 400);
         bool isTriggeredBy(Player player) {
             playerRect = new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height);
             return (npcRect.Intersects(playerRect) || NPC.life < NPC.lifeMax) && !player.dead && player.active && player.InModBiome<BackwoodsBiome>();
