@@ -37,9 +37,12 @@ sealed class GrimDefender : ModNPC {
 
     public override void FindFrame(int frameHeight) {
         if (NPC.ai[0] == 0f) {
-            float num = 130f;
-            if (NPC.ai[1] <= num * 0.5f) {
-                NPC.frame.Y = 0;
+            float num = 145f;
+            if (NPC.ai[1] <= num * 0.7f) {
+                if (++NPC.frameCounter > 3 && NPC.localAI[0] > 0) {
+                    NPC.frameCounter = 0.0;
+                    NPC.localAI[0]--;
+                }
             }
             else if (++NPC.frameCounter > 6 && NPC.localAI[0] < 3) {
                 NPC.frameCounter = 0.0;
@@ -79,17 +82,20 @@ sealed class GrimDefender : ModNPC {
                 NPC.spriteDirection = 1;
             }
             NPC.ai[1]++;
-            Vector2 desiredVelocity = new(NPC.ai[2], NPC.ai[3]);
-            directedRotation(desiredVelocity);
             _extraVelocity *= value;
             NPC.ai[0] = MathHelper.Lerp(NPC.ai[0], (float)Math.Sqrt(Math.Abs(NPC.ai[2] * NPC.ai[3])), 0.01f);
             NPC.ai[2] *= value;
             NPC.ai[3] *= value;
+            Vector2 desiredVelocity = new(NPC.ai[2], NPC.ai[3]);
             NPC.velocity = Vector2.SmoothStep(NPC.velocity, desiredVelocity, NPC.ai[0] - 2f);
             NPC.velocity += (Utils.MoveTowards(NPC.Center, Main.player[NPC.target].Center, NPC.ai[0]) - NPC.Center) * MathHelper.Clamp(NPC.ai[0], 0f, 0.2f) * 0.6f;
-            if (NPC.ai[1] >= 60f || NPC.justHit) {
+            float num = 60f;
+            if (NPC.ai[1] >= num || NPC.justHit) {
                 NPC.ai[0] = 0f;
                 NPC.ai[1] = NPC.justHit ? (60f - NPC.ai[1]) : 0f;
+            }
+            if (NPC.ai[1] <= num * 0.75f) {
+                directedRotation(desiredVelocity);
             }
         }
         else if (NPC.ai[0] == 1f && NPC.ai[1] >= 100f) {
@@ -99,8 +105,10 @@ sealed class GrimDefender : ModNPC {
             Vector2 desiredVelocity = diff * 8f;
             NPC.ai[2] = desiredVelocity.X;
             NPC.ai[3] = desiredVelocity.Y;
-            NPC.localAI[0] = 0f;
-            NPC.frameCounter = 0.0;
+            NPC.dontTakeDamage = false;
+            NPC.netUpdate = true;
+            //NPC.localAI[0] = 0f;
+            //NPC.frameCounter = 0.0;
         }
         else {
             NPC.TargetClosest();
@@ -110,7 +118,8 @@ sealed class GrimDefender : ModNPC {
             float speed = 5f;
             NPC.knockBackResist = 0.9f;
 
-            float num = 130f;
+            float num = 145f;
+            NPC.dontTakeDamage = NPC.ai[1] <= num * 0.7f;
             if (NPC.ai[1] < num) {
                 NPC.ai[1]++;
                 if (dist <= minDist * 1.25f) {
