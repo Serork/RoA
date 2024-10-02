@@ -14,7 +14,7 @@ sealed class GrimDefender : ModNPC {
     private Vector2 _tempPosition, _extraVelocity;
 
     public override void SetStaticDefaults() {
-        Main.npcFrameCount[Type] = 4;
+        Main.npcFrameCount[Type] = 8;
     }
 
     public override void SetDefaults() {

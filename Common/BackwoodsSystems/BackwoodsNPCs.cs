@@ -23,7 +23,10 @@ sealed class BackwoodsNPCs : GlobalNPC {
 
     public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
         if (spawnInfo.Player.InModBiome<BackwoodsBiome>()) {
-            pool.Clear();
+            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter;
+            if (surface) {
+                pool.Clear();
+            }
 
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
             bool flag = false;
@@ -38,16 +41,17 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     }
                 }
             }
-            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter;
             float chance = surface ? 1f : 0.5f;
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
-                    if (!Main.IsItDay() && surface) {
-                        pool.Add(ModContent.NPCType<Lumberjack>(), 0.25f);
-                    }
                     Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);
-                    if (!belowTile.AnyWall() || belowTile.WallType == ModContent.WallType<LivingBackwoodsLeavesWall>()) {
-                        pool.Add(ModContent.NPCType<Hog>(), 0.25f);
+                    if (surface) {
+                        if (!Main.IsItDay()) {
+                            pool.Add(ModContent.NPCType<Lumberjack>(), 0.25f);
+                        }
+                        if (!belowTile.AnyWall() || belowTile.WallType == ModContent.WallType<LivingBackwoodsLeavesWall>()) {
+                            pool.Add(ModContent.NPCType<Hog>(), 0.25f);
+                        }
                     }
                     if (NPC.downedBoss2) {
                         pool.Add(ModContent.NPCType<GrimDruid>(), 0.35f);
