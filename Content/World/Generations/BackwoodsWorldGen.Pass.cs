@@ -568,6 +568,27 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
             }
+        }
+        Point checkedPos = _altarTiles.First();
+        int tileX = checkedPos.X, tileY = checkedPos.Y;
+        for (int i = tileX - 40; i < tileX + 40; i++) {
+            for (int j = tileY - 40; j < tileY + 40; j++) {
+                Tile tile = Framing.GetTileSafely(i, j);
+                int x2 = i, y2 = j;
+                if (Main.tile[x2, y2].ActiveTile(_elderwoodTileType)) {
+                    if (!Main.tile[x2 - 1, y2].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2].ActiveTile(_elderwoodTileType) && !Main.tile[x2, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2, y2 + 1].ActiveTile(_elderwoodTileType) ||
+                        !Main.tile[x2 - 1, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2 + 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 - 1, y2 + 1].ActiveTile(_elderwoodTileType)) {
+                        WorldGen.KillTile(i, j);
+                    }
+                }
+                ushort treeBranch = (ushort)ModContent.TileType<TreeBranch>();
+                if (tile.ActiveTile(ModContent.TileType<TreeBranch>()) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
+                    WorldGen.KillTile(i, j);
+                }
+            }
+        }
+        index = 3;
+        while (index-- > 0) {
             bool placed = false;
             foreach (Point pos in _altarTiles) {
                 int i = pos.X, j = pos.Y;
@@ -588,8 +609,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        Point checkedPos = _altarTiles.First();
-        int tileX = checkedPos.X, tileY = checkedPos.Y;
         for (int i = tileX - 40; i < tileX + 40; i++) {
             for (int j = tileY - 40; j < tileY + 40; j++) {
                 Tile tile = Framing.GetTileSafely(i, j);
@@ -598,17 +617,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 if (WorldGenHelper.ActiveTile(i, j, AltarPlaceholderTileType2)) {
                     WorldGenHelper.GetTileSafely(i, j).TileType = TileID.Dirt;
-                }
-                int x2 = i, y2 = j;
-                if (Main.tile[x2, y2].ActiveTile(_elderwoodTileType)) {
-                    if (!Main.tile[x2 - 1, y2].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2].ActiveTile(_elderwoodTileType) && !Main.tile[x2, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2, y2 + 1].ActiveTile(_elderwoodTileType) ||
-                        !Main.tile[x2 - 1, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2 + 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 - 1, y2 + 1].ActiveTile(_elderwoodTileType)) {
-                        WorldGen.KillTile(i, j);
-                    }
-                }
-                ushort treeBranch = (ushort)ModContent.TileType<TreeBranch>();
-                if (tile.ActiveTile(ModContent.TileType<TreeBranch>()) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
-                    WorldGen.KillTile(i, j);
                 }
             }
         }

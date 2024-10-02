@@ -9,6 +9,7 @@ using RoA.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria.DataStructures;
+using RoA.Content.Biomes.Backwoods;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -136,6 +137,9 @@ sealed class BabyFleder : ModNPC {
             NPC.velocity.X = -5f;
         }
         if (hasParent && parent.As<Fleder>().IsAttacking) {
+            ResetParentState();
+        }
+        if (hasParent && !Main.player[parent.target].InModBiome<BackwoodsBiome>()) {
             ResetParentState();
         }
         void move(bool flag) {
