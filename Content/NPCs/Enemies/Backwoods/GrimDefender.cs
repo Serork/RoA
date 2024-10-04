@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core;
 using RoA.Utilities;
 
 using System;
@@ -35,6 +38,9 @@ sealed class GrimDefender : ModNPC {
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 8;
+
+        NPCID.Sets.TrailingMode[NPC.type] = 7;
+        NPCID.Sets.TrailCacheLength[NPC.type] = 6;
     }
 
     public override void SetDefaults() {
@@ -70,8 +76,47 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        Texture2D texture = TextureAssets.Npc[Type].Value;
-        Main.EntitySpriteDraw(texture, NPC.position - Main.screenPosition + new Vector2(22, 28) / 2f, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, NPC.spriteDirection != -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+        Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Body").Value;
+        Vector2 offset = new Vector2(22, 28) / 2f;
+        Vector2 position = NPC.position - Main.screenPosition + offset;
+        Vector2 origin = NPC.frame.Size() / 2f;
+        SpriteEffects effects = NPC.spriteDirection != -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        float attackCd = ATTACKTIME;
+        float num = attackCd * 0.5f;
+        float progress = NPC.ai[1] > num ? Ease.CubeInOut(1f - (NPC.ai[1] - num) / (attackCd - num)) : 1f;
+        float speed = 1.5f;
+        bool flag = NPC.localAI[2] == 1f;
+        if (NPC.ai[0] > 1f) {
+            float num170 = NPC.velocity.Length() / 5f;
+            if (num170 > 1f || flag) {
+                num170 = 1f;
+            }
+            float mult = 1f / NPCID.Sets.TrailCacheLength[Type];
+            Color trailColor = drawColor * num170 * (!flag ? Utils.GetLerpValue(0f, 5f, NPC.velocity.Length(), true) : 1f);
+            if (flag) {
+                trailColor *= 1f - NPC.localAI[1] / 12f;
+            }
+            for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
+                Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, trailColor * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
+            }
+        }
+        for (int i = 0; i < 4; i++) {
+            Main.EntitySpriteDraw(texture,
+                                  position + (i * MathHelper.PiOver2 + progress * MathHelper.PiOver2).ToRotationVector2() * (progress * 18f) * NPC.scale,
+                                  NPC.frame,
+                                  drawColor * (1f - progress) * 0.85f,
+                                  NPC.rotation,
+                                  origin,
+                                  NPC.scale,
+                                  effects);
+        }
+        Main.EntitySpriteDraw(texture, position, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects);
+        texture = TextureAssets.Npc[Type].Value;
+        for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
+            float mult = 1f / NPCID.Sets.TrailCacheLength[Type];
+            Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, Color.White * 0.9f * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
+        }
+        Main.EntitySpriteDraw(texture, position, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects);
 
         return false;
     }
@@ -80,7 +125,7 @@ sealed class GrimDefender : ModNPC {
         if (NPC.ai[0] == 0f) {
             float num = ATTACKTIME;
             if (NPC.ai[1] <= num * 0.7f) {
-                if (++NPC.frameCounter > 3 && NPC.localAI[0] > 0) {
+                if (++NPC.frameCounter > 2 && NPC.localAI[0] > 0) {
                     NPC.frameCounter = 0.0;
                     NPC.localAI[0]--;
                 }
@@ -162,12 +207,12 @@ sealed class GrimDefender : ModNPC {
                 if (NPC.velocity.Length() < 8f) {
                     float progress = NPC.ai[1] / num;
                     float num2 = 0.4f;
-                    if (Vector2.Distance(NPC.position, Main.player[NPC.target].position) <= 55f && NPC.localAI[3] != 1f) {
-                        NPC.localAI[3] = 1f;
+                    if (Vector2.Distance(NPC.position, Main.player[NPC.target].position) <= 55f && NPC.localAI[2] != 1f) {
+                        NPC.localAI[2] = 1f;
                         NPC.velocity *= 0.5f;
                     }
 
-                    bool flag3 = NPC.localAI[3] == 1f;
+                    bool flag3 = NPC.localAI[2] == 1f;
                     float speed = 1.5f;
                     if (!flag3) {
                         NPC.ai[2]++;
@@ -220,10 +265,10 @@ sealed class GrimDefender : ModNPC {
             NPC.TargetClosest();
             NPC.knockBackResist = 0.9f;
 
-            bool flag2 = NPC.ai[1] <= attackCd * 0.7f;
-            NPC.dontTakeDamage = NPC.ai[1] <= attackCd * 0.7f;
+            bool flag2 = NPC.ai[1] <= attackCd * 0.5f;
+            NPC.dontTakeDamage = flag2;
             if (NPC.ai[1] < attackCd) {
-                if (NPC.Distance(Main.player[NPC.target].Center) <= 400f) {
+                if (NPC.Distance(Main.player[NPC.target].Center) <= 240f) {
                     NPC.ai[1]++;
                 }
 
@@ -234,7 +279,7 @@ sealed class GrimDefender : ModNPC {
 
             ApplyExtraVelocity1();
 
-            diff = !_spearAttack ? toHead : (Main.player[NPC.target].Center - Vector2.UnitY * 20f - NPC.Center);
+            diff = !_spearAttack ? toHead : (Main.player[NPC.target].Center - NPC.Center);
             directedRotation(diff);
 
             if (flag2) {
@@ -281,7 +326,7 @@ sealed class GrimDefender : ModNPC {
             float num269 = Math.Abs(NPC.position.X + (float)(NPC.width / 2) - (Main.player[NPC.target].position.X + (float)(Main.player[NPC.target].width / 2)));
             float num270 = Main.player[NPC.target].position.Y - (float)(NPC.height / 2);
             if (num269 > 50f)
-                num270 -= 100f;
+                num270 -= 50f;
 
             if (NPC.position.Y < num270) {
                 _extraVelocity.Y += 0.03f;
