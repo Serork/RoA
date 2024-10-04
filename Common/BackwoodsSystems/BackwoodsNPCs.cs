@@ -27,6 +27,12 @@ sealed class BackwoodsNPCs : GlobalNPC {
             if (surface) {
                 pool.Clear();
             }
+            else {
+                var enumerator = pool.GetEnumerator();
+                while (enumerator.MoveNext()) {
+                    pool[enumerator.Current.Key] *= 0.5f;
+                }
+            }
 
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
             bool flag = false;
@@ -57,7 +63,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                         }
                     }
                     if (NPC.downedBoss2) {
-                        pool.Add(ModContent.NPCType<GrimDruid>(), 0.35f);
+                        pool.Add(ModContent.NPCType<GrimDruid>(), 0.25f);
                     }
                 }
                 pool.Add(ModContent.NPCType<BabyFleder>(), NPC.downedBoss2 ? 0.35f : 1f);
