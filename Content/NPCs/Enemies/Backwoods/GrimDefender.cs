@@ -3,6 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core;
 using RoA.Utilities;
@@ -47,9 +48,9 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 40;
-        NPC.damage = 25;
-        NPC.defense = 16;
+        NPC.lifeMax = 50;
+        NPC.damage = 24;
+        NPC.defense = 10;
 
         int width = 22; int height = 28;
         NPC.Size = new Vector2(width, height);
@@ -151,7 +152,7 @@ sealed class GrimDefender : ModNPC {
     public override void AI() {
         NPC.noTileCollide = NPC.noGravity = true;
 
-        Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? new Color(255, 47, 47) : new Color(148, 1, 26)).ToVector3() * 0.75f);
+        Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? new Color(255, 80, 80) : new Color(148, 1, 26)).ToVector3() * 0.75f);
 
         bool flag = true;
         Vector2 diff = Main.player[NPC.target].Center - NPC.Center;
@@ -288,48 +289,65 @@ sealed class GrimDefender : ModNPC {
 
             NPC.TargetClosest();
             NPC.knockBackResist = 0.9f;
-
-            bool flag2 = NPC.ai[1] <= attackCd * 0.5f;
-            NPC.dontTakeDamage = NPC.ai[1] <= attackCd * 0.7f;
-            if (NPC.justHit) {
-                //SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
-                NPC.ai[1] = 0f;
-                SpawnHitGores();
-                NPC.dontTakeDamage = true;
+            if (!Main.player[NPC.target].InModBiome<BackwoodsBiome>()) {
+                float maxSpeed = 3.5f;
+                if (NPC.velocity.Y < -maxSpeed) {
+                    NPC.velocity.Y = -maxSpeed;
+                }
+                float speedY = 0.075f * 0.3f;
+                NPC.velocity.Y += speedY + speedY / 2f * Main.rand.NextFloat();
+                float speedX = NPC.direction * 0.1f * 0.45f;
+                NPC.velocity.X += speedX + speedX / 2f * Main.rand.NextFloat();
+                if (NPC.velocity.X < -maxSpeed) {
+                    NPC.velocity.X = -maxSpeed;
+                }
+                if (NPC.velocity.X > maxSpeed) {
+                    NPC.velocity.X = maxSpeed;
+                }
             }
-            if (NPC.ai[1] < attackCd) {
-                if (NPC.Distance(Main.player[NPC.target].Center) <= 240f) {
-                    NPC.ai[1]++;
+            else {
+                bool flag2 = NPC.ai[1] <= attackCd * 0.5f;
+                NPC.dontTakeDamage = NPC.ai[1] <= attackCd * 0.7f;
+                if (NPC.justHit) {
+                    //SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
+                    NPC.ai[1] = 0f;
+                    SpawnHitGores();
+                    NPC.dontTakeDamage = true;
+                }
+                if (NPC.ai[1] < attackCd) {
+                    if (NPC.Distance(Main.player[NPC.target].Center) <= 240f) {
+                        NPC.ai[1]++;
+                    }
+
+                    NormalMovement();
+
+                    _tempPosition = Main.player[NPC.target].Center - new Vector2(Main.player[NPC.target].width / 2f, 0f);
                 }
 
-                NormalMovement();
+                ApplyExtraVelocity1();
 
-                _tempPosition = Main.player[NPC.target].Center - new Vector2(Main.player[NPC.target].width / 2f, 0f);
-            }
+                diff = !_spearAttack ? toHead : (Main.player[NPC.target].Center - NPC.Center);
+                directedRotation(diff);
 
-            ApplyExtraVelocity1();
-
-            diff = !_spearAttack ? toHead : (Main.player[NPC.target].Center - NPC.Center);
-            directedRotation(diff);
-
-            if (flag2) {
-                _extraVelocity *= 0.97f;
-                NPC.velocity *= 0.97f;
-            }
-            else if (NPC.localAI[2] == 0f) {
-                if (Main.rand.NextBool()) {
-                    _spearAttack = !_spearAttack;
+                if (flag2) {
+                    _extraVelocity *= 0.97f;
+                    NPC.velocity *= 0.97f;
                 }
-                if (_spearAttack) {
-                    //_tempPosition = Main.player[NPC.target].Center;
-                    //_extraVelocity = Vector2.Zero;
+                else if (NPC.localAI[2] == 0f) {
+                    if (Main.rand.NextBool()) {
+                        _spearAttack = !_spearAttack;
+                    }
+                    if (_spearAttack) {
+                        //_tempPosition = Main.player[NPC.target].Center;
+                        //_extraVelocity = Vector2.Zero;
+                    }
+                    NPC.localAI[2] = 1f;
                 }
-                NPC.localAI[2] = 1f;
-            }
 
-            if (NPC.ai[1] >= attackCd) {
-                NPC.ai[0] = 1f;
-                NPC.localAI[2] = 0f;
+                if (NPC.ai[1] >= attackCd) {
+                    NPC.ai[0] = 1f;
+                    NPC.localAI[2] = 0f;
+                }
             }
         }
 
