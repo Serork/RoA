@@ -129,7 +129,7 @@ sealed class GrimDefender : ModNPC {
         if (NPC.ai[0] == 0f) {
             float num = ATTACKTIME;
             if (NPC.ai[1] <= num * 0.7f) {
-                if (++NPC.frameCounter > 2 && NPC.localAI[0] > 0) {
+                if (++NPC.frameCounter > 3 && NPC.localAI[0] > 0) {
                     NPC.frameCounter = 0.0;
                     NPC.localAI[0]--;
                 }
