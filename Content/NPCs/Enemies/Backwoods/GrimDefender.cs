@@ -85,7 +85,7 @@ sealed class GrimDefender : ModNPC {
         Vector2 origin = NPC.frame.Size() / 2f;
         SpriteEffects effects = NPC.spriteDirection != -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         float attackCd = ATTACKTIME;
-        float num = attackCd * 0.5f;
+        float num = attackCd * 0.6f;
         float progress = NPC.ai[1] > num ? Ease.CubeInOut(1f - (NPC.ai[1] - num) / (attackCd - num)) : 1f;
         bool flag = NPC.localAI[2] == 1f;
         if (NPC.ai[0] > 1f) {
@@ -104,9 +104,9 @@ sealed class GrimDefender : ModNPC {
         }
         for (int i = 0; i < 4; i++) {
             Main.EntitySpriteDraw(texture,
-                                  position + (i * MathHelper.PiOver2 + progress * MathHelper.PiOver2).ToRotationVector2() * (progress * 18f) * NPC.scale,
-                                  NPC.frame,
-                                  drawColor * (1f - progress) * 0.85f,
+                                  position + (i * MathHelper.PiOver2 + progress * MathHelper.PiOver2 * NPC.direction).ToRotationVector2() * (progress * 12f) * NPC.scale,
+                                  new Rectangle(NPC.frame.X, Math.Max(NPC.frame.Y, NPC.frame.Height * (_spearAttack ? 6 : 2)), NPC.frame.Width, NPC.frame.Height),
+                                  drawColor * (1f - progress),
                                   NPC.rotation,
                                   origin,
                                   NPC.scale,
