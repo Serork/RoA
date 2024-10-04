@@ -28,6 +28,7 @@
 	  <None Remove="Resources\Textures\Empty.png" />
 	  <None Remove="Resources\Textures\Gores\BackwoodsLeaf.png" />
 	  <None Remove="Resources\Textures\Gores\DruidBiomeWaterDroplet.png" />
+	  <None Remove="Resources\Textures\Gores\VileSpikeGore.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Bonerose.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
 	  <None Remove="Resources\Textures\Items\Materials\MiracleMint.png" />

@@ -3,6 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts.Backwoods;
 using RoA.Core;
 using RoA.Utilities;
 
@@ -10,6 +11,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -40,7 +42,7 @@ sealed class GrimDefender : ModNPC {
         Main.npcFrameCount[Type] = 8;
 
         NPCID.Sets.TrailingMode[NPC.type] = 7;
-        NPCID.Sets.TrailCacheLength[NPC.type] = 6;
+        NPCID.Sets.TrailCacheLength[NPC.type] = 7;
     }
 
     public override void SetDefaults() {
@@ -56,8 +58,8 @@ sealed class GrimDefender : ModNPC {
         //NPC.npcSlots = 0.8f;
         //NPC.value = Item.buyPrice(0, 0, 0, 75);
 
-        NPC.HitSound = SoundID.NPCHit1;
-        NPC.DeathSound = SoundID.NPCDeath1;
+        NPC.HitSound = SoundID.NPCHit7;
+        NPC.DeathSound = SoundID.NPCDeath6;
     }
 
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {
@@ -84,10 +86,10 @@ sealed class GrimDefender : ModNPC {
         float attackCd = ATTACKTIME;
         float num = attackCd * 0.5f;
         float progress = NPC.ai[1] > num ? Ease.CubeInOut(1f - (NPC.ai[1] - num) / (attackCd - num)) : 1f;
-        float speed = 1.5f;
         bool flag = NPC.localAI[2] == 1f;
+        float rotation = NPC.spriteDirection == -1 ? MathHelper.Pi : 0f;
         if (NPC.ai[0] > 1f) {
-            float num170 = NPC.velocity.Length() / 5f;
+            float num170 = NPC.velocity.Length() / 8f;
             if (num170 > 1f || flag) {
                 num170 = 1f;
             }
@@ -97,7 +99,7 @@ sealed class GrimDefender : ModNPC {
                 trailColor *= 1f - NPC.localAI[1] / 12f;
             }
             for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
-                Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, trailColor * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
+                Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, trailColor * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i] - rotation, origin, NPC.scale, effects);
             }
         }
         for (int i = 0; i < 4; i++) {
@@ -110,13 +112,13 @@ sealed class GrimDefender : ModNPC {
                                   NPC.scale,
                                   effects);
         }
-        Main.EntitySpriteDraw(texture, position, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects);
+        Main.EntitySpriteDraw(texture, position, NPC.frame, drawColor, NPC.rotation - rotation, origin, NPC.scale, effects);
         texture = TextureAssets.Npc[Type].Value;
         for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
             float mult = 1f / NPCID.Sets.TrailCacheLength[Type];
-            Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, Color.White * 0.9f * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
+            Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, Color.White * 0.9f * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i] - rotation, origin, NPC.scale, effects);
         }
-        Main.EntitySpriteDraw(texture, position, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects);
+        Main.EntitySpriteDraw(texture, position, NPC.frame, Color.White, NPC.rotation - rotation, origin, NPC.scale, effects);
 
         return false;
     }
@@ -146,29 +148,34 @@ sealed class GrimDefender : ModNPC {
     public override void AI() {
         NPC.noTileCollide = NPC.noGravity = true;
 
+        Lighting.AddLight(NPC.Center, new Color(148, 1, 26).ToVector3() * 0.75f);
+
         bool flag = true;
         Vector2 diff = Main.player[NPC.target].Center - NPC.Center;
         diff.Normalize();
         void directedRotation(Vector2 destination) {
             flag = false;
             float rotation = Helper.VelocityAngle(destination.SafeNormalize(Vector2.Zero)) - MathHelper.PiOver2;
-            if (NPC.direction == -1) {
-                rotation -= MathHelper.Pi;
-            }
             NPC.rotation = Utils.AngleLerp(NPC.rotation, rotation, Math.Abs(rotation) * 0.075f + 0.05f);
         }
         Vector2 toHead = Main.player[NPC.target].Center - Vector2.UnitY * 18f - NPC.Center;
         float attackCd = ATTACKTIME;
         if (NPC.ai[0] > 1f) {
             NPC.knockBackResist = 0f;
-            if (NPC.velocity.X > 0.5f) {
-                NPC.spriteDirection = -1;
-            }
-            if (NPC.velocity.X < -0.5f) {
-                NPC.spriteDirection = 1;
-            }
+
             float num = 60f;
             Vector2 desiredVelocity = new(NPC.ai[2], NPC.ai[3]);
+
+            if (NPC.velocity.Length() > 1.5f && NPC.localAI[2] != 1f) {
+                for (int i = 0; i < 4; i++) {
+                    if (Main.rand.NextBool(4)) {
+                        int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<WoodTrash>());
+                        Main.dust[dust].velocity = -NPC.velocity * 0.3f * Main.rand.NextFloat();
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].scale = Main.rand.NextFloat(0.9f, 3f) * 0.38f * (1f + 0.2f * Main.rand.NextFloat());
+                    }
+                }
+            }
 
             if (!_spearAttack) {
                 NPC.ai[1]++;
@@ -191,15 +198,11 @@ sealed class GrimDefender : ModNPC {
                 center.X -= 11;
                 center.Y -= 9;
 
-                diff = Main.player[NPC.target].Center /*- Vector2.UnitY * 20f*/ - center;
-                directedRotation(diff);
+                diff = _tempPosition /*- Vector2.UnitY * 20f*/ - center;
                 diff.Normalize();
 
                 //NPC.Center = _tempPosition + NPC.velocity;
                 ////NPC.velocity = Utils.MoveTowards(NPC.Center, Main.player[NPC.target].Center, NPC.ai[2]) - NPC.Center;
-
-                NormalMovement();
-                ApplyExtraVelocity1();
 
                 //int width = 60; int height = width;
                 //NPC.Size = new Vector2(width, height);
@@ -207,7 +210,7 @@ sealed class GrimDefender : ModNPC {
                 if (NPC.velocity.Length() < 8f) {
                     float progress = NPC.ai[1] / num;
                     float num2 = 0.4f;
-                    if (Vector2.Distance(NPC.position, Main.player[NPC.target].position) <= 55f && NPC.localAI[2] != 1f) {
+                    if (Vector2.Distance(center, _tempPosition - new Vector2(10f, 0f)) <= 55f && NPC.localAI[2] != 1f) {
                         NPC.localAI[2] = 1f;
                         NPC.velocity *= 0.5f;
                     }
@@ -216,6 +219,9 @@ sealed class GrimDefender : ModNPC {
                     float speed = 1.5f;
                     if (!flag3) {
                         NPC.ai[2]++;
+                        if (NPC.ai[2] <= num * 0.2f) {
+                            _tempPosition = Main.player[NPC.target].Center;
+                        }
                         progress = NPC.ai[2] / num;
                         _extraVelocity2 = diff * speed * progress;
                     }
@@ -232,14 +238,27 @@ sealed class GrimDefender : ModNPC {
                     _extraVelocity2 = Vector2.Zero;
                     num *= 0.85f;
                 }
+
+                NormalMovement(true, _tempPosition);
+                ApplyExtraVelocity1();
+                directedRotation(_tempPosition /*- Vector2.UnitY * 20f*/ - center);
             }
 
             if (NPC.ai[1] >= num || NPC.justHit) {
+                if (NPC.justHit) {
+                    //SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
+                    int count = Main.rand.Next(3);
+                    for (int i = count - count / 2; i < 2 + count * 2; i++) {
+                        Gore.NewGore(NPC.GetSource_FromAI(), NPC.position, Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + "/VileSpikeGore").Type, 1f);
+                    }
+                    NPC.dontTakeDamage = true;
+                }
                 NPC.ai[0] = 0f;
                 NPC.ai[1] = NPC.justHit ? (60f - NPC.ai[1]) : 0f;
                 NPC.localAI[1] = 0f;
                 NPC.localAI[2] = 0f;
                 NPC.localAI[3] = 0f;
+                NPC.netUpdate = true;
             }
         }
         else if (NPC.ai[0] == 1f && NPC.ai[1] >= attackCd) {
@@ -266,7 +285,7 @@ sealed class GrimDefender : ModNPC {
             NPC.knockBackResist = 0.9f;
 
             bool flag2 = NPC.ai[1] <= attackCd * 0.5f;
-            NPC.dontTakeDamage = flag2;
+            NPC.dontTakeDamage = true;
             if (NPC.ai[1] < attackCd) {
                 if (NPC.Distance(Main.player[NPC.target].Center) <= 240f) {
                     NPC.ai[1]++;
@@ -274,7 +293,7 @@ sealed class GrimDefender : ModNPC {
 
                 NormalMovement();
 
-                _tempPosition = NPC.Center;
+                _tempPosition = Main.player[NPC.target].Center;
             }
 
             ApplyExtraVelocity1();
@@ -291,7 +310,7 @@ sealed class GrimDefender : ModNPC {
                     _spearAttack = !_spearAttack;
                 }
                 if (_spearAttack) {
-                    _tempPosition = NPC.Center;
+                    //_tempPosition = Main.player[NPC.target].Center;
                     //_extraVelocity = Vector2.Zero;
                 }
                 NPC.localAI[2] = 1f;
@@ -310,8 +329,9 @@ sealed class GrimDefender : ModNPC {
 
     private void ApplyExtraVelocity1() => NPC.velocity += _extraVelocity * 0.075f;
 
-    private void NormalMovement(bool applyExtraVelocity = true) {
-        Vector2 playerCenter = Main.player[NPC.target].Center;
+    private void NormalMovement(bool applyExtraVelocity = true, Vector2? center = null) {
+        center ??= Main.player[NPC.target].Center;
+        Vector2 playerCenter = center.Value;
         float dist = NPC.Distance(playerCenter);
         float minDist = 150f;
         float inertia = 22f;
@@ -323,8 +343,8 @@ sealed class GrimDefender : ModNPC {
             Helper.InertiaMoveTowards(ref NPC.velocity, NPC.Center, playerCenter, inertia * 0.75f, speed * 0.75f, minDist);
         }
         if (applyExtraVelocity) {
-            float num269 = Math.Abs(NPC.position.X + (float)(NPC.width / 2) - (Main.player[NPC.target].position.X + (float)(Main.player[NPC.target].width / 2)));
-            float num270 = Main.player[NPC.target].position.Y - (float)(NPC.height / 2);
+            float num269 = Math.Abs(NPC.position.X + (float)(NPC.width / 2) - center.Value.X);
+            float num270 = center.Value.Y - (float)(NPC.height);
             if (num269 > 50f)
                 num270 -= 50f;
 

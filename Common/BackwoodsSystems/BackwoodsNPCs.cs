@@ -42,6 +42,9 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 }
             }
             float chance = surface ? 1f : 0.5f;
+            if (!surface) {
+                pool.Add(ModContent.NPCType<GrimDefender>(), 0.35f);
+            }
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
                     Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);
