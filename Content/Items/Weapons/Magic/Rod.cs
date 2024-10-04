@@ -30,6 +30,8 @@ abstract class Rod : ShootingWeapon {
         }
     }
 
+    public override Vector2? HoldoutOrigin() => Vector2.UnitY * 4f;
+
     //public override bool? UseItem(Player player) {
     //    if (player.whoAmI == Main.myPlayer) {
     //        if (!Main.dedServ && LightingColor != null) {

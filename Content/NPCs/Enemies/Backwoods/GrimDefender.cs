@@ -102,11 +102,13 @@ sealed class GrimDefender : ModNPC {
                 Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, trailColor * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
             }
         }
+        float opacity = 1f - progress;
+        opacity = Math.Min(opacity, 0.8f);
         for (int i = 0; i < 4; i++) {
             Main.EntitySpriteDraw(texture,
                                   position + (i * MathHelper.PiOver2 + progress * MathHelper.PiOver2 * NPC.direction).ToRotationVector2() * (progress * 12f) * NPC.scale,
                                   new Rectangle(NPC.frame.X, Math.Max(NPC.frame.Y, NPC.frame.Height * (_spearAttack ? 6 : 2)), NPC.frame.Width, NPC.frame.Height),
-                                  drawColor * (1f - progress),
+                                  drawColor * opacity * 0.8f,
                                   NPC.rotation,
                                   origin,
                                   NPC.scale,

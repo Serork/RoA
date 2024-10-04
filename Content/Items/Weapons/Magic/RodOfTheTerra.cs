@@ -46,6 +46,8 @@ sealed class RodOfTheTerra : Rod {
         Item.shootSpeed = 10f;
     }
 
+    public override Vector2? HoldoutOrigin() => null;
+
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI, 0f, -50f);
         return false;
