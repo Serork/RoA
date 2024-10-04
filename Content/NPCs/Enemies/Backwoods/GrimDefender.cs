@@ -47,9 +47,9 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 80;
-        NPC.damage = 22;
-        NPC.defense = 3;
+        NPC.lifeMax = 40;
+        NPC.damage = 25;
+        NPC.defense = 16;
 
         int width = 22; int height = 28;
         NPC.Size = new Vector2(width, height);
@@ -116,11 +116,12 @@ sealed class GrimDefender : ModNPC {
         }
         Main.EntitySpriteDraw(texture, position, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects);
         texture = TextureAssets.Npc[Type].Value;
+        Color color = new Color(255, 255, 255, 0) * 0.8f;
         for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
             float mult = 1f / NPCID.Sets.TrailCacheLength[Type];
-            Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, Color.White * 0.9f * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
+            Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, color * 0.9f * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
         }
-        Main.EntitySpriteDraw(texture, position, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects);
+        Main.EntitySpriteDraw(texture, position, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects);
 
         return false;
     }
@@ -150,7 +151,7 @@ sealed class GrimDefender : ModNPC {
     public override void AI() {
         NPC.noTileCollide = NPC.noGravity = true;
 
-        Lighting.AddLight(NPC.Center, new Color(148, 1, 26).ToVector3() * 0.75f);
+        Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? new Color(255, 47, 47) : new Color(148, 1, 26)).ToVector3() * 0.75f);
 
         bool flag = true;
         Vector2 diff = Main.player[NPC.target].Center - NPC.Center;
