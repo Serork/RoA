@@ -215,7 +215,7 @@ sealed class GrimDefender : ModNPC {
                 if (NPC.velocity.Length() < 8f) {
                     float progress = NPC.ai[1] / num;
                     float num2 = 0.4f;
-                    if (Vector2.Distance(center, _tempPosition - new Vector2(10f, 0f)) <= 55f && NPC.localAI[2] != 1f) {
+                    if (Vector2.Distance(center, _tempPosition) <= 55f && NPC.localAI[2] != 1f) {
                         NPC.localAI[2] = 1f;
                         NPC.velocity *= 0.5f;
                     }
@@ -225,7 +225,7 @@ sealed class GrimDefender : ModNPC {
                     if (!flag3) {
                         NPC.ai[2]++;
                         if (NPC.ai[2] <= num * 0.4f) {
-                            _tempPosition = Main.player[NPC.target].Center;
+                            _tempPosition = Main.player[NPC.target].Center - new Vector2(Main.player[NPC.target].width / 2f, 0f);
                         }
                         progress = NPC.ai[2] / num;
                         _extraVelocity2 = diff * speed * progress;
@@ -301,7 +301,7 @@ sealed class GrimDefender : ModNPC {
 
                 NormalMovement();
 
-                _tempPosition = Main.player[NPC.target].Center;
+                _tempPosition = Main.player[NPC.target].Center - new Vector2(Main.player[NPC.target].width / 2f, 0f);
             }
 
             ApplyExtraVelocity1();
