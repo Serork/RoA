@@ -272,12 +272,14 @@ public class HouseBuilderCustom {
                 switch (i + num3 % 2) {
                     case 0: {
                         int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
-                        if (_random.NextBool(4)) {
+                        bool flag = !_painting1 || !_painting2 || !_painting3;
+                        if (_random.NextBool(4) || !flag) {
                             PaintingEntry paintingEntry = WorldGen.RandHousePicture();
                             WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
                         }
                         else {
-                            while (!_painting1 || !_painting2 || !_painting3) {
+                            int attempts = 20;
+                            while (--attempts > 0) {
                                 int value = _random.Next(3);
                                 if (value == 0) {
                                     if (_painting1) {
