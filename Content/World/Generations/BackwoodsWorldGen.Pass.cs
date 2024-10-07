@@ -1168,10 +1168,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Point origin = new(baseX, baseY);
 
-        int attempts = 50;
+        int attempts = 100;
         while (--attempts > 0) {
-            int num = 40;
+            int num = 35;
             bool flag = false;
+            origin = new(baseX, baseY);
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                     if (TileID.Sets.BasicChest[Main.tile[i, j].TileType]) {
@@ -1213,9 +1214,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             baseX = posX;
         }
         WeightedRandom<float> weightedRandom = new WeightedRandom<float>();
-        weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.15f);
-        weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.15f);
-        weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.35f);
+        weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.35f);
+        weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.35f);
+        weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.55f);
         weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.55f);
         weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.55f);
         weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.35f);
@@ -1269,10 +1270,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Point origin = new(baseX, baseY);
 
-        int attempts = 20;
+        int attempts = 100;
         while (--attempts > 0) {
-            int num = 50;
+            int num = 35;
             bool flag = false;
+            origin = new(baseX, baseY);
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                     if (TileID.Sets.BasicChest[Main.tile[i, j].TileType] || Main.tile[i, j].TileType == _elderWoodChestTileType) {
