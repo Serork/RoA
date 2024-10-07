@@ -119,9 +119,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step_AddWebs() {
-        for (int num874 = 0; num874 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0006); num874++) {
+        for (int num874 = 0; num874 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00005); num874++) {
             int num875 = _random.Next(Left - 20, Right + 20);
-            int num876 = _random.Next((int)GenVars.worldSurfaceHigh, Main.maxTilesY - 20);
+            int num876 = _random.Next(BackwoodsVars.FirstTileYAtCenter, Main.maxTilesY - 20);
             if (num874 < GenVars.numMCaves) {
                 num875 = GenVars.mCaveX[num874];
                 num876 = GenVars.mCaveY[num874];
@@ -1167,7 +1167,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Point origin = new(baseX, baseY);
 
-        int attempts = 25;
+        int attempts = 50;
         while (--attempts > 0) {
             int num = 25;
             bool flag = false;
@@ -1204,7 +1204,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int endX = Right + 20;
         int centerY = rootLootRoom ? (BackwoodsVars.FirstTileYAtCenter + EdgeY - EdgeY / 4) : ((int)Main.worldSurface);
         int minY = centerY;
-        int generateY = Bottom + EdgeY * 3;
+        int generateY = Bottom;
         if (posX == 0) {
             baseX = _random.Next(startX, endX);
         }
@@ -1729,10 +1729,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 if (tile.TileType == _vinesTileType) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, _random.NextBool(3) ? 4 : 3), _vinesTileType);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 4), _vinesTileType);
                 }
                 if (tile.TileType == _vinesTileType2) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, _random.NextBool(3) ? 4 : 3), _vinesTileType2);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 4), _vinesTileType2);
                 }
             }
         }

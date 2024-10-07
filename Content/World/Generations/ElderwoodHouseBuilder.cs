@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
@@ -148,9 +150,14 @@ public static class CustomHouseUtils {
 
 public class HouseBuilderCustom {
     private const int VERTICAL_EXIT_WIDTH = 3;
+
     public static readonly HouseBuilderCustom Invalid = new HouseBuilderCustom();
+
     public readonly HouseType Type;
     public readonly bool IsValid;
+
+    private bool _painting1, _painting2, _painting3;
+
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
         246,
@@ -270,16 +277,38 @@ public class HouseBuilderCustom {
                             WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
                         }
                         else {
-                            switch (_random.Next(3)) {
-                                case 0:
-                                    WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0);
-                                    break;
-                                case 1:
-                                    WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0);
-                                    break;
-                                case 2:
-                                    WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0);
-                                    break;
+                            while (!_painting1 || !_painting2 || !_painting3) {
+                                int value = _random.Next(3);
+                                if (value == 0) {
+                                    if (_painting1) {
+                                    }
+                                    else {
+                                        if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0)) {
+                                            _painting1 = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else if (value == 1) {
+                                    if (_painting2) {
+                                    }
+                                    else {
+                                        if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0)) {
+                                            _painting2 = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else if (value == 2) {
+                                    if (_painting3) {
+                                    }
+                                    else {
+                                        if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0)) {
+                                            _painting3 = true;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                         }
                         //WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, 0);

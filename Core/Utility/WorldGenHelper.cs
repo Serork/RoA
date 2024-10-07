@@ -88,7 +88,7 @@ static class WorldGenHelper {
         //WorldGen.SquareTileFrame(i, j);
     }
 
-    public static void Place6x4Wall(int x, int y, ushort type, int style, ushort? wallType = null) {
+    public static bool Place6x4Wall(int x, int y, ushort type, int style, ushort? wallType = null) {
         int num = x - 2;
         int num2 = y - 2;
         bool flag = true;
@@ -102,7 +102,7 @@ static class WorldGenHelper {
         }
 
         if (!flag)
-            return;
+            return false;
 
         int num3 = 27;
         int num4 = style / num3 * 108;
@@ -119,9 +119,12 @@ static class WorldGenHelper {
                 }
             }
         }
+
+
+        return true;
     }
 
-    public static void Place4x4Wall(int x, int y, ushort type, int style, ushort? wallType = null) {
+    public static bool Place4x4Wall(int x, int y, ushort type, int style, ushort? wallType = null) {
         int num = x - 1;
         int num2 = y - 1;
         bool flag = true;
@@ -135,7 +138,7 @@ static class WorldGenHelper {
         }
 
         if (!flag)
-            return;
+            return false;
 
         int num4 = 0;
         int num5 = style * 72;
@@ -151,6 +154,8 @@ static class WorldGenHelper {
                 }
             }
         }
+
+        return true;
     }
 
     public static void ReplaceTile(Point position, int type, bool noItem = true, bool mute = true, int style = 0) => ReplaceTile(position.X, position.Y, type, noItem, mute, style);
@@ -317,7 +322,12 @@ static class WorldGenHelper {
             Tile tileBelow = Framing.GetTileSafely(x, j + 1);
 
             if ((!tileBelow.HasTile || tileBelow.TileType == TileID.Cobweb) && WorldGen.InWorld(x, j)) {
-                WorldGen.PlaceTile(x, j, vineType);
+                int count = 0;
+                for (; Framing.GetTileSafely(x, j - count + 1).ActiveTile(vineType); count++) {
+                }
+                if (count < 5) {
+                    WorldGen.PlaceTile(x, j, vineType);
+                }
             }
             else {
                 finished = true;
