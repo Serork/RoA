@@ -26,7 +26,7 @@ sealed class Moss : ModTile {
 
 		LocalizedText name = CreateMapEntryName();
 		// name.SetDefault("MOX");
-		AddMapEntry(Color.Blue, name);
+		AddMapEntry(new Color(72, 139, 77), name);
 	}
 
 	public override void PlaceInWorld(int i, int j, Item item) {

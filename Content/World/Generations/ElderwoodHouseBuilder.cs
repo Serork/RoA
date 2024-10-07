@@ -265,7 +265,7 @@ public class HouseBuilderCustom {
                 switch (i + num3 % 2) {
                     case 0: {
                         int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
-                        if (_random.NextBool(5)) {
+                        if (_random.NextBool(3)) {
                             PaintingEntry paintingEntry = WorldGen.RandHousePicture();
                             WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
                         }
@@ -274,7 +274,7 @@ public class HouseBuilderCustom {
                                 case 0:
                                     WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0);
                                     break;
-                                case 10:
+                                case 1:
                                     WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0);
                                     break;
                                 case 2:
@@ -699,7 +699,8 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
             int y = WorldGen.genRand.Next(1, room.Height - 1) + room.Y;
             WorldUtils.Gen(new Point(x, y), new Shapes.Rectangle(2, 2), Actions.Chain(new Modifiers.Dither(), new Modifiers.Blotches(2, 2), new Modifiers.IsEmpty(), new Actions.SetTile(51, setSelfFrames: true)));
         }
-        //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.Blotches(), new Actions.ClearWall()));
+
+        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.985), new Modifiers.Blotches(1, 0.985), new Actions.ClearWall()));
 
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.Blotches(), new Modifiers.OnlyWalls(base.WallType), new Modifiers.SkipTiles(SkipTilesDuringWallAging), ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.OnlyTiles(30, 321, 158), new Actions.ClearTile(frameNeighbors: true)));

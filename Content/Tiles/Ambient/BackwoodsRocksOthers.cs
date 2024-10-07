@@ -15,13 +15,6 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
-class test : ModSystem {
-    public override void PostUpdateTime() {
-        Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
-        Main.NewText(tile.TileFrameX + " " + tile.TileFrameY);
-    }
-}
-
 sealed class BackwoodsRocks01 : BackwoodsRocks0 {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;

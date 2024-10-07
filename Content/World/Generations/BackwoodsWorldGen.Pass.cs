@@ -1130,18 +1130,20 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void GenerateLootRoom1(int posX = 0, int posY = 0) {
-        GetRandomPosition(posX, posY, out int baseX, out int baseY);
+        GetRandomPosition(posX, posY, out int baseX, out int baseY, false);
 
         Point origin = new(baseX, baseY);
 
-        while (true) {
+        int attempts = 20;
+        while (--attempts > 0) {
             int num = 35;
             bool flag = false;
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
-                    if (TileID.Sets.BasicChest[Main.tile[i, j].TileType] || Main.tile[i, j].TileType == _elderWoodChestTileType) {
+                    if (TileID.Sets.BasicChest[Main.tile[i, j].TileType]) {
                         flag = false;
-                        GetRandomPosition(posX, posY, out baseX, out baseY);
+                        GetRandomPosition(posX, posY, out baseX, out baseY, false);
+                        break;
                     }
                     else {
                         flag = true;
@@ -1152,6 +1154,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 break;
             }
         }
+        if (attempts <= 0) {
+            return;
+        }
 
         HouseBuilderCustom houseBuilder = CustomHouseUtils.CreateBuilder(origin, GenVars.structures);
         if (!houseBuilder.IsValid) {
@@ -1161,10 +1166,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         houseBuilder.Place(new HouseBuilderContext(), GenVars.structures);
     }
 
-    private void GetRandomPosition(int posX, int posY, out int baseX, out int baseY) {
+    private void GetRandomPosition(int posX, int posY, out int baseX, out int baseY, bool rootLootRoom = true) {
         int startX = Left - 20;
         int endX = Right + 20;
-        int centerY = BackwoodsVars.FirstTileYAtCenter + EdgeY - EdgeY / 4;
+        int centerY = rootLootRoom ? (BackwoodsVars.FirstTileYAtCenter + EdgeY - EdgeY / 4) : ((int)Main.worldSurface);
         int minY = centerY;
         int generateY = Bottom + EdgeY * 3;
         if (posX == 0) {
@@ -1182,7 +1187,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
         while (true) {
-            int attempts = 20;
+            int attempts = 100;
             while (!skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
                 baseX = _random.Next(startX, endX);
                 baseY = _random.Next(minY, generateY);
@@ -1192,7 +1197,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             bool flag = false;
             int check = 20;
-            attempts = 20;
+            attempts = 100;
             for (int x2 = baseX - check; x2 < baseX + check; x2++) {
                 for (int y2 = baseY - check; y2 < baseY + check; y2++) {
                     if (WorldGenHelper.ActiveTile(x2, y2, _elderWoodChestTileType)) {
@@ -1224,13 +1229,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Point origin = new(baseX, baseY);
 
         while (true) {
-            int num = 35;
+            int num = 100;
             bool flag = false;
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                     if (TileID.Sets.BasicChest[Main.tile[i, j].TileType] || Main.tile[i, j].TileType == _elderWoodChestTileType) {
                         flag = false;
                         GetRandomPosition(posX, posY, out baseX, out baseY);
+                        break;
                     }
                     else {
                         flag = true;

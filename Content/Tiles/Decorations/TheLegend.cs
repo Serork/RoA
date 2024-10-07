@@ -26,7 +26,7 @@ sealed class TheLegend : ModTile {
 
         LocalizedText name = CreateMapEntryName();
 		// name.SetDefault("The Legend");
-		AddMapEntry(Color.Blue, name);
+		AddMapEntry(new Color(65, 98, 168), name);
 
 		DustType = DustID.PlatinumCoin;
 	}
