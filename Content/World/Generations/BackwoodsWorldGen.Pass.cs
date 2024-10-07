@@ -23,6 +23,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 
+using static tModPorter.ProgressUpdate;
+
 namespace RoA.Content.World.Generations;
 
 // one hella mess
@@ -106,6 +108,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_2_SpreadGrass();
         Step13_GrowBigTrees();
         Step9_SpreadMoss();
+        Step_AddWebs();
         Step17_AddStatues();
         Step_AddSpikes();
         Step_AddPills();
@@ -113,6 +116,35 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step14_ClearRockLayerWalls();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
+    }
+
+    private void Step_AddWebs() {
+        for (int num874 = 0; num874 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0006); num874++) {
+            int num875 = _random.Next(Left - 20, Right + 20);
+            int num876 = _random.Next((int)GenVars.worldSurfaceHigh, Main.maxTilesY - 20);
+            if (num874 < GenVars.numMCaves) {
+                num875 = GenVars.mCaveX[num874];
+                num876 = GenVars.mCaveY[num874];
+            }
+
+            if (!Main.tile[num875, num876].HasTile && ((double)num876 > Main.worldSurface || Main.tile[num875, num876].WallType > 0)) {
+                while (!Main.tile[num875, num876].HasTile && num876 > (int)GenVars.worldSurfaceLow) {
+                    num876--;
+                }
+
+                num876++;
+                int num877 = 1;
+                if (_random.Next(2) == 0)
+                    num877 = -1;
+
+                for (; !Main.tile[num875, num876].HasTile && num875 > 10 && num875 < Main.maxTilesX - 10; num875 += num877) {
+                }
+
+                num875 -= num877;
+                if ((double)num876 > Main.worldSurface || Main.tile[num875, num876].WallType > 0)
+                    WorldGen.TileRunner(num875, num876, _random.Next(4, 11), _random.Next(2, 4), 51, addTile: true, num877, -1.0, noYChange: false, overRide: false);
+            }
+        }
     }
 
     private void Step_AddChests() {
