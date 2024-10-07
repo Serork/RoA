@@ -23,12 +23,12 @@ sealed class BackwoodsNPCs : GlobalNPC {
 
     public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
         if (spawnInfo.Player.InModBiome<BackwoodsBiome>()) {
-            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter;
+            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter + 5 * WorldGenHelper.WorldSize;
             if (surface) {
                 pool.Clear();
             }
             else {
-                var enumerator = pool.GetEnumerator();
+                IEnumerator<KeyValuePair<int, float>> enumerator = pool.GetEnumerator();
                 while (enumerator.MoveNext()) {
                     pool[enumerator.Current.Key] *= 0.5f;
                 }
@@ -49,7 +49,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
             }
             float chance = surface ? 1f : 0.5f;
             if (!surface) {
-                pool.Add(ModContent.NPCType<GrimDefender>(), 0.35f);
+                pool.Add(ModContent.NPCType<GrimDefender>(), 0.1f);
             }
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {

@@ -152,7 +152,7 @@ sealed class GrimDefender : ModNPC {
     public override void AI() {
         NPC.noTileCollide = NPC.noGravity = true;
 
-        Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? new Color(255, 80, 80) : new Color(148, 1, 26)).ToVector3() * 0.75f);
+        Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? new Color(255, 120, 120) * 0.5f : new Color(148, 1, 26)).ToVector3() * 0.75f);
 
         bool flag = true;
         Vector2 diff = Main.player[NPC.target].Center - NPC.Center;
@@ -229,7 +229,7 @@ sealed class GrimDefender : ModNPC {
                     if (!flag3) {
                         NPC.ai[2]++;
                         if (NPC.ai[2] <= num * 0.4f) {
-                            _tempPosition = Main.player[NPC.target].Center - new Vector2(Main.player[NPC.target].width / 2f, 0f);
+                            _tempPosition = Main.player[NPC.target].Center - new Vector2(Main.player[NPC.target].width * 0.75f, 0f);
                         }
                         progress = NPC.ai[2] / num;
                         _extraVelocity2 = diff * speed * progress;

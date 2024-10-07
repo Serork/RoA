@@ -88,12 +88,78 @@ static class WorldGenHelper {
         //WorldGen.SquareTileFrame(i, j);
     }
 
+    public static void Place6x4Wall(int x, int y, ushort type, int style, ushort? wallType = null) {
+        int num = x - 2;
+        int num2 = y - 2;
+        bool flag = true;
+        for (int i = num; i < num + 6; i++) {
+            for (int j = num2; j < num2 + 4; j++) {
+                if (Main.tile[i, j].HasTile || Main.tile[i, j].WallType == WallID.None) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+
+        if (!flag)
+            return;
+
+        int num3 = 27;
+        int num4 = style / num3 * 108;
+        int num5 = style % num3 * 72;
+        for (int k = num; k < num + 6; k++) {
+            for (int l = num2; l < num2 + 4; l++) {
+                Tile tile = Main.tile[k, l];
+                tile.HasTile = true;
+                tile.TileType = type;
+                tile.TileFrameX = (short)(num4 + 18 * (k - num));
+                tile.TileFrameY = (short)(num5 + 18 * (l - num2));
+                if (wallType.HasValue) {
+                    tile.WallType = wallType.Value;
+                }
+            }
+        }
+    }
+
+    public static void Place4x4Wall(int x, int y, ushort type, int style, ushort? wallType = null) {
+        int num = x - 1;
+        int num2 = y - 1;
+        bool flag = true;
+        for (int i = num; i < num + 4; i++) {
+            for (int j = num2; j < num2 + 4; j++) {
+                if (Main.tile[i, j].HasTile || Main.tile[i, j].WallType == WallID.None) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+
+        if (!flag)
+            return;
+
+        int num4 = 0;
+        int num5 = style * 72;
+        for (int k = num; k < num + 4; k++) {
+            for (int l = num2; l < num2 + 4; l++) {
+                Tile tile = Main.tile[k, l];
+                tile.HasTile = true;
+                tile.TileType = type;
+                tile.TileFrameX = (short)(num4 + 18 * (k - num));
+                tile.TileFrameY = (short)(num5 + 18 * (l - num2));
+                if (wallType.HasValue) {
+                    tile.WallType = wallType.Value;
+                }
+            }
+        }
+    }
+
     public static void ReplaceTile(Point position, int type, bool noItem = true, bool mute = true, int style = 0) => ReplaceTile(position.X, position.Y, type, noItem, mute, style);
 
     public static void ReplaceWall(int i, int j, int type, bool mute = true) {
         if (GetTileSafely(i, j).AnyWall()) {
             WorldGen.KillWall(i, j, false);
         }
+
         WorldGen.PlaceWall(i, j, type, mute);
         //WorldGen.SquareWallFrame(i, j);
     }

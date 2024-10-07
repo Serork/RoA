@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using Terraria.GameContent.Biomes.CaveHouse;
 using Terraria.GameContent.Generation;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
@@ -15,7 +16,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         genIndex += 6;
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new(GENLAYERNAME, LAYERWEIGHT));
-        genIndex += 2;
+        genIndex += 3;
         tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsLootRooms));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));

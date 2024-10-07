@@ -15,7 +15,47 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class BackwoodsRocks0 : BackwoodsRocks1 {
+sealed class BackwoodsRocks01 : BackwoodsRocks0 {
+    public override string Texture => base.Texture;
+
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.Width = 2;
+        TileObjectData.newTile.Height = 1;
+        TileObjectData.newTile.Origin = new Point16(0, 1);
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
+        TileObjectData.newTile.UsesCustomCanPlace = true;
+        TileObjectData.newTile.CoordinateHeights = [16];
+        TileObjectData.newTile.CoordinateWidth = 16;
+        TileObjectData.newTile.CoordinatePadding = 2;
+        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
+        TileObjectData.addAlternate(1);
+        TileObjectData.addTile(Type);
+
+        DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
+        AddMapEntry(new Color(34, 37, 46));
+    }
+
+    public override bool CreateDust(int i, int j, ref int type) {
+        Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        if (tile.TileFrameX <= 108 || ((tile.TileFrameX >= 31 * 36 || tile.TileFrameX <= 32 * 36) && tile.TileFrameY > 0)) {
+            type = ModContent.DustType<Dusts.Backwoods.Stone>();
+        }
+        else {
+            type = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+        }
+
+        return true;
+    }
+}
+
+class BackwoodsRocks0 : BackwoodsRocks1 {
     public override bool CreateDust(int i, int j, ref int type) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         if (tile.TileFrameX <= 108) {

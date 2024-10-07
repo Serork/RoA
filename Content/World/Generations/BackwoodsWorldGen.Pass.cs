@@ -14,6 +14,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Biomes.CaveHouse;
 using Terraria.GameContent.Generation;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
@@ -108,21 +109,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step10_SpreadMossGrass();
         Step14_ClearRockLayerWalls();
 
-        GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
+        //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
     }
 
     private void Step_AddChests() {
         // adapted vanilla
-        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.005); num536++) {
+        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.003); num536++) {
             double value8 = (double)num536 / ((double)Main.maxTilesX * 0.005);
             bool flag30 = false;
             int num537 = 0;
             while (!flag30) {
                 int num538 = _random.Next(Left - 100, Right + 100);
-                int num539 = _random.Next(WorldGenHelper.SafeFloatingIslandY, Bottom + EdgeY * 2);
+                int num539 = _random.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface + 10);
                 while (WorldGen.oceanDepths(num538, num539)) {
                     num538 = _random.Next(Left - 100, Right + 100);
-                    num539 = _random.Next(WorldGenHelper.SafeFloatingIslandY, Bottom + EdgeY * 2);
+                    num539 = _random.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface + 10);
                 }
 
                 bool flag31 = false;
@@ -167,36 +168,36 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.005); num536++) {
-            double value8 = (double)num536 / ((double)Main.maxTilesX * 0.005);
-            bool flag30 = false;
-            int num537 = 0;
-            while (!flag30) {
-                int num538 = _random.Next(Left - 100, Right + 100);
-                int num539 = _random.Next((int)Main.worldSurface + 10, Bottom + EdgeY * 2);
-                while (WorldGen.oceanDepths(num538, num539)) {
-                    num538 = _random.Next(Left - 100, Right + 100);
-                    num539 = _random.Next((int)Main.worldSurface + 10, Bottom + EdgeY * 2);
-                }
+        //for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.005); num536++) {
+        //    double value8 = (double)num536 / ((double)Main.maxTilesX * 0.005);
+        //    bool flag30 = false;
+        //    int num537 = 0;
+        //    while (!flag30) {
+        //        int num538 = _random.Next(Left - 100, Right + 100);
+        //        int num539 = _random.Next((int)Main.worldSurface + 10, Bottom + EdgeY * 2);
+        //        while (WorldGen.oceanDepths(num538, num539)) {
+        //            num538 = _random.Next(Left - 100, Right + 100);
+        //            num539 = _random.Next((int)Main.worldSurface + 10, Bottom + EdgeY * 2);
+        //        }
 
-                bool flag31 = false;
-                bool flag32 = false;
-                if (Main.tile[num538, num539 + 1].TileType == _mossTileType) {
-                    if (_random.NextBool(6)) {
-                        flag31 = true;
-                    }
-                }
+        //        bool flag31 = false;
+        //        bool flag32 = false;
+        //        if (Main.tile[num538, num539 + 1].TileType == _mossTileType) {
+        //            if (_random.NextBool(6)) {
+        //                flag31 = true;
+        //            }
+        //        }
 
-                if (flag31 && WorldGen.AddBuriedChest(num538 + (flag32 ? _random.Next(1, 3) : 0), num539, 0, notNearOtherChests: true, -1, trySlope: false, 0)) {
-                    flag30 = true;
-                }
-                else {
-                    num537++;
-                    if (num537 >= 2000)
-                        flag30 = true;
-                }
-            }
-        }
+        //        if (flag31 && WorldGen.AddBuriedChest(num538 + (flag32 ? _random.Next(1, 3) : 0), num539, 0, notNearOtherChests: true, -1, trySlope: false, 0)) {
+        //            flag30 = true;
+        //        }
+        //        else {
+        //            num537++;
+        //            if (num537 >= 2000)
+        //                flag30 = true;
+        //        }
+        //    }
+        //}
     }
 
     private void Step_AddGrassWalls() {
@@ -718,7 +719,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = 0; i < roomCount; i++) {
             progress.Set((float)(i + 1) / roomCount);
 
-            GenerateLootRoom();
+            GenerateLootRoom2();
         }
     }
 
@@ -1126,12 +1127,49 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
     }
 
-    private void GenerateLootRoom(int posX = 0, int posY = 0) {
-        int startX = Left - 1;
-        int endX = Right + 1;
-        int centerY = BackwoodsVars.FirstTileYAtCenter + EdgeY / 2;
+    private void GenerateLootRoom1(int posX = 0, int posY = 0) {
+        int startX = Left - 20;
+        int endX = Right + 20;
+        int centerY = (int)Main.worldSurface + 10;
         int minY = centerY;
         int baseX, baseY;
+        int generateY = Bottom + EdgeY * 2;
+        if (posX == 0) {
+            baseX = _random.Next(startX, endX);
+        }
+        else {
+            baseX = posX;
+        }
+        if (posY == 0) {
+            baseY = _random.Next(minY, generateY);
+        }
+        else {
+            baseY = posY;
+        }
+
+        Point origin = new(baseX, baseY);
+
+        int num = 25;
+        for (int i = origin.X - num; i <= origin.X + num; i++) {
+            for (int j = origin.Y - num; j <= origin.Y + num; j++) {
+                if (TileID.Sets.BasicChest[Main.tile[i, j].TileType])
+                    return;
+            }
+        }
+
+        HouseBuilderCustom houseBuilder = CustomHouseUtils.CreateBuilder(origin, GenVars.structures);
+        if (!houseBuilder.IsValid) {
+            return;
+        }
+        houseBuilder.ChestChance = 1;
+        houseBuilder.Place(new HouseBuilderContext(), GenVars.structures);
+    }
+
+    private void GetRandomPosition(int posX, int posY, out int baseX, out int baseY) {
+        int startX = Left - 20;
+        int endX = Right + 20;
+        int centerY = BackwoodsVars.FirstTileYAtCenter + EdgeY - EdgeY / 3;
+        int minY = centerY;
         int generateY = Bottom + EdgeY * 3;
         if (posX == 0) {
             baseX = _random.Next(startX, endX);
@@ -1145,6 +1183,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         else {
             baseY = posY;
         }
+
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
         while (true) {
             int attempts = 20;
@@ -1181,6 +1220,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 break;
             }
         }
+    }
+
+    private void GenerateLootRoom2(int posX = 0, int posY = 0) {
+        GetRandomPosition(posX, posY, out int baseX, out int baseY);
 
         float x = (float)baseX, y = (float)baseY;
         ushort placeholderTileType = _elderwoodTileType2,
@@ -1202,7 +1245,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     int x3 = (int)x + i;
                     int y3 = (int)y + j;
                     try {
-                        Main.tile[x3, y3].ClearEverything();
+                        Main.tile[x3, y3].ClearTile();
                         WorldGen.PlaceTile(x3, y3, placeholderTileType, true, true);
                     }
                     catch {
@@ -1392,8 +1435,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = Left - 50; i < Right + 50; i++) {
             for (int j = BackwoodsVars.FirstTileYAtCenter - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                if (tile.ActiveTile(185) && tile.TileFrameX <= 216) {
-                    tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks0>();
+                bool flag = (tile.TileFrameX >= 31 * 36 || tile.TileFrameX < 34 * 36) && tile.TileFrameY > 0;
+                if (tile.ActiveTile(185) && (tile.TileFrameX <= 216 || flag)) {
+                    if (flag) {
+                        tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks01>();
+                    }
+                    else {
+                        tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks0>();
+                    }
                 }
                 if (tile.ActiveTile(186)) {
                     tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks3x2>();
@@ -1679,7 +1728,17 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Set(1f);
         Step16_PlaceAltar();
 
+        int roomCount = 20 * WorldGenHelper.WorldSize;
+        for (int i = 0; i < roomCount; i++) {
+            //progress.Set((float)(i + 1) / roomCount);
+
+            GenerateLootRoom1();
+        }
+
         Step_AddChests();
+
+        Step10_SpreadMossGrass();
+
         //Step15_AddLootRooms();
     }
 
