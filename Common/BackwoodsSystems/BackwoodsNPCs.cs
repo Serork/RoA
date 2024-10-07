@@ -48,7 +48,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 }
             }
             float chance = surface ? 1f : 0.5f;
-            if (!surface) {
+            if (!surface && NPC.downedBoss2 && !NPC.AnyNPCs(ModContent.NPCType<GrimDefender>())) {
                 pool.Add(ModContent.NPCType<GrimDefender>(), 0.1f);
             }
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {

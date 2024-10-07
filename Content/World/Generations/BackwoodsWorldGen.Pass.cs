@@ -1134,9 +1134,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Point origin = new(baseX, baseY);
 
-        int attempts = 20;
+        int attempts = 25;
         while (--attempts > 0) {
-            int num = 35;
+            int num = 25;
             bool flag = false;
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
@@ -1229,7 +1229,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Point origin = new(baseX, baseY);
 
         while (true) {
-            int num = 100;
+            int num = 50;
             bool flag = false;
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {

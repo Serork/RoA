@@ -265,7 +265,7 @@ public class HouseBuilderCustom {
                 switch (i + num3 % 2) {
                     case 0: {
                         int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
-                        if (_random.NextBool(3)) {
+                        if (_random.NextBool(4)) {
                             PaintingEntry paintingEntry = WorldGen.RandHousePicture();
                             WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
                         }
