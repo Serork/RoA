@@ -41,7 +41,7 @@ public static class CustomHouseUtils {
     }
 
     private static List<Rectangle> CreateRooms(Point origin) {
-        if (!WorldUtils.Find(origin, Searches.Chain(new Searches.Down(200), new Conditions.IsSolid()), out var result) || result == origin)
+        if (!WorldUtils.Find(origin, Searches.Chain(new Searches.Down(100), new Conditions.IsSolid()), out var result) || result == origin)
             return new List<Rectangle>();
 
         Rectangle item = FindRoom(result);
@@ -120,29 +120,29 @@ public static class CustomHouseUtils {
 
     private static HouseType GetHouseType(IEnumerable<Rectangle> rooms) {
         Dictionary<ushort, int> dictionary = new Dictionary<ushort, int>();
+        ushort wood = (ushort)ModContent.TileType<LivingElderwood>(),
+               stone = (ushort)ModContent.TileType<BackwoodsStone>(), 
+               grass = (ushort)ModContent.TileType<BackwoodsGrass>(),
+               moss = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         foreach (Rectangle room in rooms) {
-            WorldUtils.Gen(new Point(room.X - 10, room.Y - 10), new Shapes.Rectangle(room.Width + 20, room.Height + 20), new Actions.TileScanner(0, 59, 147, 1, 161, 53, 396, 397, 368, 367, 60, 70).Output(dictionary));
+            WorldUtils.Gen(new Point(room.X - 10, room.Y - 10), new Shapes.Rectangle(room.Width + 20, room.Height + 20), new Actions.TileScanner(0, wood, stone, grass, moss).Output(dictionary));
         }
 
         List<Tuple<HouseType, int>> list = new List<Tuple<HouseType, int>>();
-        list.Add(Tuple.Create(HouseType.Wood, dictionary[0] + dictionary[1]));
+        list.Add(Tuple.Create(HouseType.Wood, dictionary[0] + dictionary[wood] + dictionary[stone] + dictionary[grass] + dictionary[moss]));
         list.Sort(SortBiomeResults);
         return list[0].Item1;
     }
 
     private static bool AreRoomsValid(IEnumerable<Rectangle> rooms, StructureMap structures, HouseType style) {
-        //foreach (Rectangle room in rooms) {
-        //    if (style != HouseType.Granite && WorldUtils.Find(new Point(room.X - 2, room.Y - 2), Searches.Chain(new Searches.Rectangle(room.Width + 4, room.Height + 4).RequireAll(mode: false), new Conditions.HasLava()), out var _))
-        //        return false;
+        foreach (Rectangle room in rooms) {
+            if (WorldUtils.Find(new Point(room.X - 2, room.Y - 2), Searches.Chain(new Searches.Rectangle(room.Width + 4, room.Height + 4).RequireAll(mode: false), new Conditions.HasLava()), out var _))
+                return false;
 
-        //    if (WorldGen.notTheBees) {
-        //        if (!structures.CanPlace(room, BeelistedTiles, 5))
-        //            return false;
-        //    }
-        //    else if (!structures.CanPlace(room, BlacklistedTiles, 5)) {
-        //        return false;
-        //    }
-        //}
+            if (!structures.CanPlace(room, BlacklistedTiles, 5)) {
+                return false;
+            }
+        }
 
         return true;
     }
