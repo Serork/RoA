@@ -26,6 +26,7 @@ sealed class BackwoodsRocks3x2 : ModTile, TileHooks.IGetTileDrawData {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
 
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 3;

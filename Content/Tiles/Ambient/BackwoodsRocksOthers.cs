@@ -19,21 +19,10 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
 
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;
-        TileObjectData.newTile.Width = 2;
-        TileObjectData.newTile.Height = 1;
-        TileObjectData.newTile.Origin = new Point16(0, 1);
-        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
-        TileObjectData.newTile.UsesCustomCanPlace = true;
-        TileObjectData.newTile.CoordinateHeights = [16];
-        TileObjectData.newTile.CoordinateWidth = 16;
-        TileObjectData.newTile.CoordinatePadding = 2;
-        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
-        TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
         DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
@@ -82,6 +71,7 @@ class BackwoodsRocks1 : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
 
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 1;

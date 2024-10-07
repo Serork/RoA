@@ -1172,10 +1172,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         int attempts = 100;
         while (--attempts > 0) {
-            int num = 50;
+            int num = 25;
             bool flag = false;
             origin = new(baseX, baseY);
-            for (int i = origin.X - num; i <= origin.X + num && !flag; i++) {
+            for (int i = origin.X - num; i <= origin.X + num; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                     if (TileID.Sets.BasicChest[Main.tile[i, j].TileType]) {
                         flag = false;
@@ -1184,20 +1184,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
             }
-            for (int i = origin.X - num; i <= origin.X + num && !flag; i++) {
-                for (int j = origin.Y - num; j <= origin.Y + num; j++) {
-                    if (!TileID.Sets.BasicChest[Main.tile[i, j].TileType]) {
-                        flag = true;
-                        break;
-                    }
-                }
-            }
             if (flag) {
                 break;
             }
-        }
-        if (attempts <= 0) {
-            return;
         }
 
         HouseBuilderCustom houseBuilder = CustomHouseUtils.CreateBuilder(origin, GenVars.structures);
@@ -1279,18 +1268,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         int attempts = 100;
         while (--attempts > 0) {
-            int num = 50;
+            int num = 35;
             bool flag = false;
             origin = new(baseX, baseY);
-            for (int i = origin.X - num; i <= origin.X + num; i++) {
+            for (int i = origin.X - num; i <= origin.X + num && !flag; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
-                    if (TileID.Sets.BasicChest[Main.tile[i, j].TileType] || Main.tile[i, j].TileType == _elderWoodChestTileType) {
+                    if (Main.tile[i, j].TileType == _elderWoodChestTileType) {
                         flag = false;
-                        GetRandomPosition(posX, posY, out baseX, out baseY);
+                        GetRandomPosition(posX, posY, out baseX, out baseY, false);
                         break;
-                    }
-                    else {
-                        flag = true;
                     }
                 }
             }
@@ -1448,7 +1434,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     int count = length;
                     while (count > 0) {
                         Action add = secondTierAddings[_random.Next(length)];
-                        int attempts2 = 100;
+                        int attempts2 = length;
                         while (cacheAddings.Contains(add)) {
                             add = secondTierAddings[_random.Next(length)];
                             if (attempts2-- <= 0) {
@@ -1483,7 +1469,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        size = distance;
+        size = distance / 2;
         WorldGenHelper.SlopeAreaNatural(baseX, baseY, size, placeholderTileType);
     }
 
@@ -1509,7 +1495,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = Left - 5; i < Right + 5; i++) {
             for (int j = BackwoodsVars.FirstTileYAtCenter - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                bool flag = (tile.TileFrameX >= 1116 && tile.TileFrameX <= 1206) && tile.TileFrameY > 0;
+                bool flag = tile.TileFrameX >= 1116 && tile.TileFrameX <= 1206 && tile.TileFrameY > 0;
                 if (tile.ActiveTile(185) && (tile.TileFrameX <= 216 || flag)) {
                     if (flag) {
                         tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks01>();
@@ -1809,6 +1795,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
             GenerateLootRoom1();
         }
+
+        HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
         Step_AddChests();
 

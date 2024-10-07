@@ -45,6 +45,7 @@ abstract class BackwoodsRockSpikes : ModTile, TileHooks.IGetTileDrawData {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
 
         TileObjectData.newTile.DrawYOffset = AnchorBottom ? 2 : -2;
         TileObjectData.newTile.Width = 1;
