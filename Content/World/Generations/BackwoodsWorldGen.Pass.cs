@@ -92,6 +92,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         BackwoodsVars.FirstTileYAtCenter = CenterY = WorldGenHelper.GetFirstTileY(CenterX, true) + 5;
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true) + 2;
+        _progress.Value = 0f;
+        _progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods4").Value;
         Step11_AddOre();
         Step8_AddCaves();
         Step8_2_AddCaves();
@@ -1132,11 +1134,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Point origin = new(baseX, baseY);
 
-        int num = 25;
-        for (int i = origin.X - num; i <= origin.X + num; i++) {
-            for (int j = origin.Y - num; j <= origin.Y + num; j++) {
-                if (TileID.Sets.BasicChest[Main.tile[i, j].TileType])
-                    return;
+        while (true) {
+            int num = 35;
+            bool flag = false;
+            for (int i = origin.X - num; i <= origin.X + num; i++) {
+                for (int j = origin.Y - num; j <= origin.Y + num; j++) {
+                    if (TileID.Sets.BasicChest[Main.tile[i, j].TileType] || Main.tile[i, j].TileType == _elderWoodChestTileType) {
+                        flag = false;
+                        GetRandomPosition(posX, posY, out baseX, out baseY);
+                    }
+                    else {
+                        flag = true;
+                    }
+                }
+            }
+            if (flag) {
+                break;
             }
         }
 
@@ -1207,6 +1220,27 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void GenerateLootRoom2(int posX = 0, int posY = 0) {
         GetRandomPosition(posX, posY, out int baseX, out int baseY);
+
+        Point origin = new(baseX, baseY);
+
+        while (true) {
+            int num = 35;
+            bool flag = false;
+            for (int i = origin.X - num; i <= origin.X + num; i++) {
+                for (int j = origin.Y - num; j <= origin.Y + num; j++) {
+                    if (TileID.Sets.BasicChest[Main.tile[i, j].TileType] || Main.tile[i, j].TileType == _elderWoodChestTileType) {
+                        flag = false;
+                        GetRandomPosition(posX, posY, out baseX, out baseY);
+                    }
+                    else {
+                        flag = true;
+                    }
+                }
+            }
+            if (flag) {
+                break;
+            }
+        }
 
         float x = (float)baseX, y = (float)baseY;
         ushort placeholderTileType = _elderwoodTileType2,
