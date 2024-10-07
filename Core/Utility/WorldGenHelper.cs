@@ -328,6 +328,9 @@ static class WorldGenHelper {
                 if (count < 5) {
                     WorldGen.PlaceTile(x, j, vineType);
                 }
+                else {
+                    break;
+                }
             }
             else {
                 finished = true;
