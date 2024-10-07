@@ -24,8 +24,6 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
-using static tModPorter.ProgressUpdate;
-
 namespace RoA.Content.World.Generations;
 
 // one hella mess
@@ -1170,7 +1168,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         int attempts = 100;
         while (--attempts > 0) {
-            int num = 35;
+            int num = 50;
             bool flag = false;
             origin = new(baseX, baseY);
             for (int i = origin.X - num; i <= origin.X + num; i++) {
@@ -1272,7 +1270,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         int attempts = 100;
         while (--attempts > 0) {
-            int num = 35;
+            int num = 50;
             bool flag = false;
             origin = new(baseX, baseY);
             for (int i = origin.X - num; i <= origin.X + num; i++) {
@@ -1974,7 +1972,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         for (int i = Left - 100; i < Right + 100; i++) {
-            for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 15; j++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(CliffPlaceholderTileType)) {
                     WorldGenHelper.ReplaceTile(i, j, _dirtTileType);
@@ -2121,7 +2119,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int topLeftTileX = TopLeft.X - 2, topLeftTileY = WorldGenHelper.GetFirstTileY(topLeftTileX);
         int topRightTileX = TopRight.X + 2, topRightTileY = WorldGenHelper.GetFirstTileY(topRightTileX);
         int surfaceY = 0;
-        int angle = 25;
+        int angle = 30;
         int between = Math.Clamp(topRightTileY - topLeftTileY, -angle, angle);
         int leftY = WorldGenHelper.GetFirstTileY(topLeftTileX), rightY = WorldGenHelper.GetFirstTileY(topRightTileX);
         int max = Math.Min(leftY, rightY) == leftY ? topLeftTileX : topRightTileX;
@@ -2272,7 +2270,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
             int testJ = startY;
             bool flag4 = startY >= lastSurfaceY - 3;
-            while (testJ <= startY + _biomeHeight / 2 - _biomeHeight / 5) {
+            while (testJ <= startY + _biomeHeight / 2) {
                 bool flag3 = !flag2 && Main.tile[cliffX, testJ].HasTile;
                 if (flag3 || flag2) {
                     //if (flag3) {
