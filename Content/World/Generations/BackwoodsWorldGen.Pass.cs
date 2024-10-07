@@ -1128,24 +1128,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void GenerateLootRoom1(int posX = 0, int posY = 0) {
-        int startX = Left - 20;
-        int endX = Right + 20;
-        int centerY = (int)Main.worldSurface + 10;
-        int minY = centerY;
-        int baseX, baseY;
-        int generateY = Bottom + EdgeY * 2;
-        if (posX == 0) {
-            baseX = _random.Next(startX, endX);
-        }
-        else {
-            baseX = posX;
-        }
-        if (posY == 0) {
-            baseY = _random.Next(minY, generateY);
-        }
-        else {
-            baseY = posY;
-        }
+        GetRandomPosition(posX, posY, out int baseX, out int baseY);
 
         Point origin = new(baseX, baseY);
 
@@ -1168,7 +1151,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GetRandomPosition(int posX, int posY, out int baseX, out int baseY) {
         int startX = Left - 20;
         int endX = Right + 20;
-        int centerY = BackwoodsVars.FirstTileYAtCenter + EdgeY - EdgeY / 3;
+        int centerY = BackwoodsVars.FirstTileYAtCenter + EdgeY - EdgeY / 4;
         int minY = centerY;
         int generateY = Bottom + EdgeY * 3;
         if (posX == 0) {
@@ -1435,7 +1418,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = Left - 50; i < Right + 50; i++) {
             for (int j = BackwoodsVars.FirstTileYAtCenter - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                bool flag = (tile.TileFrameX >= 31 * 36 || tile.TileFrameX < 34 * 36) && tile.TileFrameY > 0;
+                bool flag = (tile.TileFrameX >= 1116 && tile.TileFrameX <= 1206) && tile.TileFrameY > 0;
                 if (tile.ActiveTile(185) && (tile.TileFrameX <= 216 || flag)) {
                     if (flag) {
                         tile.TileType = (ushort)ModContent.TileType<BackwoodsRocks01>();
@@ -1728,7 +1711,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Set(1f);
         Step16_PlaceAltar();
 
-        int roomCount = 20 * WorldGenHelper.WorldSize;
+        int roomCount = 15 * WorldGenHelper.WorldSize;
         for (int i = 0; i < roomCount; i++) {
             //progress.Set((float)(i + 1) / roomCount);
 

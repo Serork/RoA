@@ -15,9 +15,14 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class BackwoodsRocks01 : BackwoodsRocks0 {
-    public override string Texture => base.Texture;
+class test : ModSystem {
+    public override void PostUpdateTime() {
+        Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+        Main.NewText(tile.TileFrameX + " " + tile.TileFrameY);
+    }
+}
 
+sealed class BackwoodsRocks01 : BackwoodsRocks0 {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -44,11 +49,12 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
 
     public override bool CreateDust(int i, int j, ref int type) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        if (tile.TileFrameX <= 108 || ((tile.TileFrameX >= 31 * 36 || tile.TileFrameX <= 32 * 36) && tile.TileFrameY > 0)) {
-            type = ModContent.DustType<Dusts.Backwoods.Stone>();
-        }
-        else {
+        bool flag = (tile.TileFrameX >= 1116 && tile.TileFrameX <= 1188) && tile.TileFrameY > 0;
+        if (flag) {
             type = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+        }
+        else if (tile.TileFrameX <= 108) {
+            type = ModContent.DustType<Dusts.Backwoods.Stone>();
         }
 
         return true;

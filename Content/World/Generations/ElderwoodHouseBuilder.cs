@@ -320,7 +320,7 @@ public class HouseBuilderCustom {
                             WorldGenHelper.Place3x2(num7, num8, (ushort)ModContent.TileType<BackwoodsRocks3x2>(), _random.Next(6));
                         }
                         else {
-                            WorldGen.PlaceTile(num7, num8, 186, mute: true, forced: false, -1, _random.Next(22, 25));
+                            WorldGen.PlaceTile(num7, num8, 186, mute: true, forced: false, -1, _random.Next(22, 26));
                         }
                         break;
                     case 2: {
