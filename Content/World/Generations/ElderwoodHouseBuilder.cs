@@ -156,7 +156,7 @@ public class HouseBuilderCustom {
     public readonly HouseType Type;
     public readonly bool IsValid;
 
-    private static bool _painting1, _painting2, _painting3;
+    internal static bool _painting1, _painting2, _painting3;
 
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
