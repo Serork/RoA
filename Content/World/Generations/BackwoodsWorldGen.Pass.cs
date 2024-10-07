@@ -1170,7 +1170,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         int attempts = 50;
         while (--attempts > 0) {
-            int num = 25;
+            int num = 40;
             bool flag = false;
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
@@ -1203,7 +1203,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GetRandomPosition(int posX, int posY, out int baseX, out int baseY, bool rootLootRoom = true) {
         int startX = Left - 20;
         int endX = Right + 20;
-        int centerY = rootLootRoom ? (BackwoodsVars.FirstTileYAtCenter + EdgeY - EdgeY / 4) : ((int)Main.worldSurface);
+        int centerY = rootLootRoom ? (BackwoodsVars.FirstTileYAtCenter + EdgeY) : ((int)Main.worldSurface);
         int minY = centerY;
         int generateY = Bottom;
         if (posX == 0) {
@@ -1217,8 +1217,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.15f);
         weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.35f);
         weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.55f);
-        weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.35f);
-        weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.15f);
+        weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.55f);
+        weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.35f);
         if (posY == 0) {
             baseY = (int)(minY + (generateY - minY) * weightedRandom);
         }
@@ -1269,7 +1269,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Point origin = new(baseX, baseY);
 
-        while (true) {
+        int attempts = 20;
+        while (--attempts > 0) {
             int num = 50;
             bool flag = false;
             for (int i = origin.X - num; i <= origin.X + num; i++) {
@@ -1737,10 +1738,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 if (tile.TileType == _vinesTileType) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 4), _vinesTileType);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(2, 5), _vinesTileType);
                 }
                 if (tile.TileType == _vinesTileType2) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 4), _vinesTileType2);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(2, 5), _vinesTileType2);
                 }
             }
         }

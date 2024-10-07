@@ -156,7 +156,7 @@ public class HouseBuilderCustom {
     public readonly HouseType Type;
     public readonly bool IsValid;
 
-    private bool _painting1, _painting2, _painting3;
+    private static bool _painting1, _painting2, _painting3;
 
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
@@ -273,14 +273,13 @@ public class HouseBuilderCustom {
                     case 0: {
                         int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
                         bool flag = !_painting1 || !_painting2 || !_painting3;
-                        if (_random.NextBool(4) || !flag) {
-                            PaintingEntry paintingEntry = WorldGen.RandHousePicture();
-                            WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
-                        }
-                        else {
+                        if (flag) {
                             int attempts = 20;
                             while (--attempts > 0) {
                                 int value = _random.Next(3);
+                                if (_painting1 && value == 0) {
+                                    value = _random.Next(1, 3);
+                                }
                                 if (value == 0) {
                                     if (_painting1) {
                                     }
@@ -312,6 +311,10 @@ public class HouseBuilderCustom {
                                     }
                                 }
                             }
+                        }
+                        else {
+                            PaintingEntry paintingEntry = WorldGen.RandHousePicture();
+                            WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
                         }
                         //WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, 0);
                         break;

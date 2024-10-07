@@ -323,13 +323,13 @@ static class WorldGenHelper {
 
             if ((!tileBelow.HasTile || tileBelow.TileType == TileID.Cobweb) && WorldGen.InWorld(x, j)) {
                 int count = 0;
-                for (; Framing.GetTileSafely(x, j - count + 1).ActiveTile(vineType); count++) {
+                for (; Framing.GetTileSafely(x, j - count).ActiveTile(vineType); count++) {
                 }
-                if (count < 5) {
+                if (count < 3) {
                     WorldGen.PlaceTile(x, j, vineType);
                 }
                 else {
-                    break;
+                    finished = true;
                 }
             }
             else {
