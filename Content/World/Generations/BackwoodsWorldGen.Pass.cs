@@ -94,7 +94,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         BackwoodsVars.FirstTileYAtCenter = CenterY = WorldGenHelper.GetFirstTileY(CenterX, true) + 5;
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true) + 2;
-        _progress.Value = 0f;
+        _progress.Value = 1f;
         _progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods4").Value;
         Step11_AddOre();
         Step8_AddCaves();
@@ -1171,15 +1171,20 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int num = 50;
             bool flag = false;
             origin = new(baseX, baseY);
-            for (int i = origin.X - num; i <= origin.X + num; i++) {
+            for (int i = origin.X - num; i <= origin.X + num && !flag; i++) {
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                     if (TileID.Sets.BasicChest[Main.tile[i, j].TileType]) {
                         flag = false;
                         GetRandomPosition(posX, posY, out baseX, out baseY, false);
                         break;
                     }
-                    else {
+                }
+            }
+            for (int i = origin.X - num; i <= origin.X + num && !flag; i++) {
+                for (int j = origin.Y - num; j <= origin.Y + num; j++) {
+                    if (!TileID.Sets.BasicChest[Main.tile[i, j].TileType]) {
                         flag = true;
+                        break;
                     }
                 }
             }
@@ -1681,7 +1686,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         progress.Set(0.5f);
         for (int i = Left; i < Right; i++) {
-            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom - EdgeY / 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(TileID.Grass)) {
                     WorldGenHelper.ReplaceTile(i, j, _grassTileType);
