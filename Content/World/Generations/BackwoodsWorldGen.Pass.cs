@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+
 using RoA.Common.BackwoodsSystems;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Furniture;
@@ -16,7 +17,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Biomes.CaveHouse;
 using Terraria.GameContent.Generation;
-using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.Localization;
@@ -26,6 +26,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.World.Generations;
 
 // one hella mess
+// god forgive me
 sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight) {
     public static readonly ushort[] SandInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone };
     public static readonly ushort[] SandInvalidWallTypesToKill = { 187, 220, 222, 221, 275, 308, 310, 309, 216, 217, 219, 218, 304, 305, 307, 306, 216, 187, 304, 275 };
@@ -506,7 +507,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int x = CenterX;
         int posX = x;
 
-        int y = WorldGenHelper.GetFirstTileY2(posX, true, true) + 1 - 3;
+        int y = WorldGenHelper.GetFirstTileY2(posX, true, true) + 2 - 3;
         if (y > BackwoodsVars.FirstTileYAtCenter) {
             y = BackwoodsVars.FirstTileYAtCenter;
         }
