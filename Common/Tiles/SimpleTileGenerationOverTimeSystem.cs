@@ -158,7 +158,7 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
             (tileGenerationData.Is2x3 ? WorldGenHelper.Place2x3(i, j, tileType, style: styleX) : 
              tileGenerationData.Is2x2 ? WorldGenHelper.Place2x2(i, j, tileType, style: styleX) : WorldGen.PlaceTile(i, j, tileType, mute: true, style: styleX))) {
             if ((tileGenerationData.Is1x1 && WorldGenHelper.GetTileSafely(i, j).ActiveTile(tileType)) || !tileGenerationData.Is1x1) {
-                Main.LocalPlayer.position = new Microsoft.Xna.Framework.Vector2(i, j).ToWorldCoordinates();
+                //Main.LocalPlayer.position = new Microsoft.Xna.Framework.Vector2(i, j).ToWorldCoordinates();
 
                 if (Main.netMode == NetmodeID.Server && Main.tile[i, j] != null && Main.tile[i, j].HasTile)
                     NetMessage.SendTileSquare(-1, i, j);
