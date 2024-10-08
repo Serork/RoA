@@ -25,22 +25,6 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Content.World.Generations;
 
-class test : ModPlayer {
-    public override void PostUpdate() {
-        Main.NewText(ElderwoodHouseBuilder._painting1 + " " + ElderwoodHouseBuilder._painting2 + " " + ElderwoodHouseBuilder._painting3);
-
-        //if (Main.mouseLeft && Main.mouseLeftRelease) {
-        //    for (int i = 0; i < Main.maxTilesX; i++) {
-        //        for (int j = 0; j < Main.maxTilesY; j++) {
-        //            if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<MillionDollarPainting>()) {
-        //                Player.position = new Vector2(i, j).ToWorldCoordinates();
-        //            }
-        //        }
-        //    }
-        //}
-    }
-}
-
 public static class CustomHouseUtils {
     internal static bool[] BlacklistedTiles = TileID.Sets.Factory.CreateBoolSet(true, 225, 41, 43, 44, 226, 203, 112, 25, 151, 21, 467);
     internal static bool[] BeelistedTiles = TileID.Sets.Factory.CreateBoolSet(true, 41, 43, 44, 226, 203, 112, 25, 151, 21, 467);
@@ -294,13 +278,8 @@ public class HouseBuilderCustom {
                             int attempts = 100;
                             while (--attempts > 0) {
                                 int value = _random.Next(3);
-                                if (_painting1 && value == 0) {
-                                    value = _random.Next(1, 3);
-                                }
                                 if (value == 0) {
-                                    if (_painting1) {
-                                    }
-                                    else {
+                                    if (!_painting1 || (_painting1 && _random.NextBool(4))) {
                                         if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
                                             _painting1 = true;
                                             break;
@@ -308,9 +287,7 @@ public class HouseBuilderCustom {
                                     }
                                 }
                                 else if (value == 1) {
-                                    if (_painting2) {
-                                    }
-                                    else {
+                                    if (!_painting2 || (_painting2 && _random.NextBool(4))) {
                                         if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
                                             _painting2 = true;
                                             break;
@@ -318,9 +295,7 @@ public class HouseBuilderCustom {
                                     }
                                 }
                                 else if (value == 2) {
-                                    if (_painting3) {
-                                    }
-                                    else {
+                                    if (!_painting3 || (_painting3 && _random.NextBool(4))) {
                                         if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
                                             _painting3 = true;
                                             break;

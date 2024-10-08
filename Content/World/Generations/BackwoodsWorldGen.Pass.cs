@@ -422,9 +422,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step8_2_AddCaves() {
         // adapted vanilla
-        int num992 = (int)((double)Main.maxTilesX * 0.002 * 0.55);
-        int num993 = (int)((double)Main.maxTilesX * 0.0007 * 0.55);
-        int num994 = (int)((double)Main.maxTilesX * 0.0003 * 0.55);
+        int num992 = (int)((double)Main.maxTilesX * 0.002 * 0.5);
+        int num993 = (int)((double)Main.maxTilesX * 0.0007 * 0.5);
+        int num994 = (int)((double)Main.maxTilesX * 0.0003 * 0.5);
         int minY = BackwoodsVars.FirstTileYAtCenter;
         int maxY = CenterY - EdgeY;
         for (int num995 = 0; num995 < num992; num995++) {
@@ -480,7 +480,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int num1004 = 0; num1004 < (int)((double)Main.maxTilesX * 0.000435); num1004++) {
+        for (int num1004 = 0; num1004 < (int)((double)Main.maxTilesX * 0.0004); num1004++) {
             int num1005 = _random.Next(Left - 50, Right + 50);
             while (((double)num1005 > (double)Main.maxTilesX * 0.4 && (double)num1005 < (double)Main.maxTilesX * 0.6) || num1005 < GenVars.leftBeachEnd + 20 || num1005 > GenVars.rightBeachStart - 20) {
                 num1005 = _random.Next(Left - 50, Right + 50);
@@ -1168,30 +1168,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GenerateLootRoom1(int posX = 0, int posY = 0) {
         //GetRandomPosition(posX, posY, out int baseX, out int baseY, false);
 
-        int baseX = _random.Next(Left + 5, Right - 5);
-        int baseY = _random.Next((int)(Main.worldSurface - 10), Bottom - 10);
+        int baseX = _random.Next(Left + 15, Right - 15);
+        int baseY = _random.Next((int)(Main.worldSurface - 10), Bottom - 20);
         Point origin = new(baseX, baseY);
 
-        int attempts = 100;
-        while (--attempts > 0) {
-            int num = 50;
-            bool flag = true;
-            origin = new(baseX, baseY);
-            for (int i = origin.X - num; i <= origin.X + num && !flag; i++) {
-                if (!flag) {
-                    break;
-                }
-                for (int j = origin.Y - num; j <= origin.Y + num; j++) {
-                    if (Main.tile[i, j].TileType == 21 || Main.tile[i, j].TileType == _elderWoodChestTileType) {
-                        flag = false;
-                        baseX = _random.Next(Left + 5, Right - 5);
-                        baseY = _random.Next((int)(Main.worldSurface - 10), Bottom - 10);
-                        break;
-                    }
-                }
-            }
-            if (flag) {
-                break;
+        int num = 50;
+        for (int i = origin.X - num; i <= origin.X + num; i++) {
+            for (int j = origin.Y - num; j <= origin.Y + num; j++) {
+                if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == 21)
+                    return;
             }
         }
 
@@ -1272,12 +1257,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Point origin = new(baseX, baseY);
 
-        int attempts = 100;
+        int attempts = 1000;
         while (--attempts > 0) {
-            int num = 50;
-            bool flag = false;
-            origin = new(baseX, baseY);
-            for (int i = origin.X - num; i <= origin.X + num && !flag; i++) {
+            int num = 35;
+            bool flag = true;
+            for (int i = origin.X - num; i <= origin.X + num; i++) {
+                if (!flag) {
+                    break;
+                }
                 for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                     if (Main.tile[i, j].TileType == _elderWoodChestTileType) {
                         flag = false;
@@ -1286,6 +1273,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
             }
+            origin = new(baseX, baseY);
             if (flag) {
                 break;
             }
