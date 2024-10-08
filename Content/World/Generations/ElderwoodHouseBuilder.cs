@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 
 using Newtonsoft.Json.Linq;
 
@@ -24,6 +25,22 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Content.World.Generations;
 
+class test : ModPlayer {
+    public override void PostUpdate() {
+        Main.NewText(ElderwoodHouseBuilder._painting1 + " " + ElderwoodHouseBuilder._painting2 + " " + ElderwoodHouseBuilder._painting3);
+
+        //if (Main.mouseLeft && Main.mouseLeftRelease) {
+        //    for (int i = 0; i < Main.maxTilesX; i++) {
+        //        for (int j = 0; j < Main.maxTilesY; j++) {
+        //            if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<MillionDollarPainting>()) {
+        //                Player.position = new Vector2(i, j).ToWorldCoordinates();
+        //            }
+        //        }
+        //    }
+        //}
+    }
+}
+
 public static class CustomHouseUtils {
     internal static bool[] BlacklistedTiles = TileID.Sets.Factory.CreateBoolSet(true, 225, 41, 43, 44, 226, 203, 112, 25, 151, 21, 467);
     internal static bool[] BeelistedTiles = TileID.Sets.Factory.CreateBoolSet(true, 41, 43, 44, 226, 203, 112, 25, 151, 21, 467);
@@ -41,7 +58,7 @@ public static class CustomHouseUtils {
     }
 
     private static List<Rectangle> CreateRooms(Point origin) {
-        if (!WorldUtils.Find(origin, Searches.Chain(new Searches.Down(100), new Conditions.IsSolid()), out var result) || result == origin)
+        if (!WorldUtils.Find(origin, Searches.Chain(new Searches.Down(10), new Conditions.IsSolid()), out var result) || result == origin)
             return new List<Rectangle>();
 
         Rectangle item = FindRoom(result);
@@ -54,11 +71,11 @@ public static class CustomHouseUtils {
         rectangle.Y += 3;
         rectangle2.Y += 3;
         List<Rectangle> list = new List<Rectangle>();
-        if (WorldGen.genRand.NextDouble() > roomSolidPrecentage + 0.2)
+        if (WorldGen.genRand.NextDouble() > roomSolidPrecentage)
             list.Add(rectangle);
 
         list.Add(item);
-        if (WorldGen.genRand.NextDouble() > roomSolidPrecentage2 + 0.2)
+        if (WorldGen.genRand.NextDouble() > roomSolidPrecentage2)
             list.Add(rectangle2);
 
         return list;
@@ -66,9 +83,9 @@ public static class CustomHouseUtils {
 
     private static Rectangle FindRoom(Point origin) {
         Point result;
-        bool flag = WorldUtils.Find(origin, Searches.Chain(new Searches.Left(25), new Conditions.IsSolid()), out result);
+        bool flag = WorldUtils.Find(origin, Searches.Chain(new Searches.Left(10), new Conditions.IsSolid()), out result);
         Point result2;
-        bool num = WorldUtils.Find(origin, Searches.Chain(new Searches.Right(25), new Conditions.IsSolid()), out result2);
+        bool num = WorldUtils.Find(origin, Searches.Chain(new Searches.Right(10), new Conditions.IsSolid()), out result2);
         if (!flag)
             result = new Point(origin.X - 25, origin.Y);
 
@@ -136,12 +153,12 @@ public static class CustomHouseUtils {
 
     private static bool AreRoomsValid(IEnumerable<Rectangle> rooms, StructureMap structures, HouseType style) {
         foreach (Rectangle room in rooms) {
-            if (WorldUtils.Find(new Point(room.X - 2, room.Y - 2), Searches.Chain(new Searches.Rectangle(room.Width + 4, room.Height + 4).RequireAll(mode: false), new Conditions.HasLava()), out var _))
-                return false;
+            //if (WorldUtils.Find(new Point(room.X - 2, room.Y - 2), Searches.Chain(new Searches.Rectangle(room.Width + 4, room.Height + 4).RequireAll(mode: false), new Conditions.HasLava()), out var _))
+            //    return false;
 
-            if (!structures.CanPlace(room, BlacklistedTiles, 5)) {
-                return false;
-            }
+            //if (!structures.CanPlace(room, BlacklistedTiles, 5)) {
+            //    return false;
+            //}
         }
 
         return true;
@@ -223,9 +240,9 @@ public class HouseBuilderCustom {
 
     public virtual void Place(HouseBuilderContext context, StructureMap structures) {
         PlaceEmptyRooms();
-        foreach (Rectangle room in Rooms) {
-            structures.AddProtectedStructure(room, 8);
-        }
+        //foreach (Rectangle room in Rooms) {
+        //    structures.AddProtectedStructure(room, 8);
+        //}
 
         PlaceStairs();
         PlaceDoors();
@@ -274,7 +291,7 @@ public class HouseBuilderCustom {
                         int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
                         bool flag = !_painting1 || !_painting2 || !_painting3;
                         if (flag) {
-                            int attempts = 20;
+                            int attempts = 100;
                             while (--attempts > 0) {
                                 int value = _random.Next(3);
                                 if (_painting1 && value == 0) {
@@ -284,7 +301,7 @@ public class HouseBuilderCustom {
                                     if (_painting1) {
                                     }
                                     else {
-                                        if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0)) {
+                                        if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
                                             _painting1 = true;
                                             break;
                                         }
@@ -294,7 +311,7 @@ public class HouseBuilderCustom {
                                     if (_painting2) {
                                     }
                                     else {
-                                        if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0)) {
+                                        if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
                                             _painting2 = true;
                                             break;
                                         }
@@ -304,7 +321,7 @@ public class HouseBuilderCustom {
                                     if (_painting3) {
                                     }
                                     else {
-                                        if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0)) {
+                                        if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
                                             _painting3 = true;
                                             break;
                                         }
@@ -727,7 +744,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.8), new Modifiers.Blotches(2, 0.5), new Modifiers.OnlyTiles(base.TileType), new Actions.SetTileKeepWall(grassTileType, setSelfFrames: true)));
         WorldUtils.Gen(new Point(room.X + 1, room.Y), new Shapes.Rectangle(room.Width - 2, 1), Actions.Chain(new Modifiers.Dither(0.7), new Modifiers.OnlyTiles(grassTileType), new Modifiers.Offset(0, -1), new Modifiers.IsEmpty(), new Actions.SetTile(mossGrowthTileType)));
         WorldUtils.Gen(new Point(room.X + 1, room.Y + room.Height - 1), new Shapes.Rectangle(room.Width - 2, 1), Actions.Chain(new Modifiers.Dither(0.8), new Modifiers.OnlyTiles(grassTileType), new Modifiers.Offset(0, -1), new Modifiers.IsEmpty(), new Actions.SetTile(mossGrowthTileType)));
-        
+
         for (int i = 0; i < room.Width * room.Height / 16; i++) {
             int x = WorldGen.genRand.Next(1, room.Width - 1) + room.X;
             int y = WorldGen.genRand.Next(1, room.Height - 1) + room.Y;
