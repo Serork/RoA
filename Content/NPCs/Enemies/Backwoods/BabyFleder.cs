@@ -20,6 +20,8 @@ sealed class BabyFleder : ModNPC {
     }
 
     private State _state = State.Sitting;
+    private bool _alwaysAngry;
+    private float _tireTimer, _tireTimer2;
 
     private bool HasParent => ParentIndex > -1;
 
@@ -35,10 +37,16 @@ sealed class BabyFleder : ModNPC {
 
     public override void SendExtraAI(BinaryWriter writer) {
         writer.Write((int)_state);
+        writer.Write(_alwaysAngry);
+        writer.Write(_tireTimer);
+        writer.Write(_tireTimer2);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         _state = (State)reader.ReadInt32();
+        _alwaysAngry = reader.ReadBoolean();
+        _tireTimer = reader.ReadSingle();
+        _tireTimer2 = reader.ReadSingle();
     }
 
     public override void SetStaticDefaults() {
@@ -73,7 +81,11 @@ sealed class BabyFleder : ModNPC {
 
     public override void OnSpawn(IEntitySource source) {
         if (!HasParent) {
-            if (Main.rand.NextBool()) {
+            if (Main.rand.NextBool(4)) {
+                _alwaysAngry = true;
+                _state = State.Normal;
+            }
+            else if (Main.rand.NextBool(3)) {
                 _state = State.Normal;
             }
 
@@ -145,16 +157,22 @@ sealed class BabyFleder : ModNPC {
         void move(bool flag) {
             if (!HasParent) {
                 if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
+                    ApplyGravity();
+
+                    SitIfTileBelow();
+
                     AITimer = 0f;
 
                     NPC.netUpdate = true;
                 }
-                AITimer += 1f;
-                if (AITimer >= 15f && Main.rand.NextChance(AITimer / 200f)) {
-                    ApplyGravity();
+                if (!_alwaysAngry) {
+                    AITimer += 1f;
+                    if (AITimer >= 15f && Main.rand.NextChance(AITimer / 200f)) {
+                        ApplyGravity();
 
-                    SitIfTileBelow();
-                    NPC.netUpdate = true;
+                        SitIfTileBelow();
+                        NPC.netUpdate = true;
+                    }
                 }
             }
             hasParent = flag;
@@ -343,18 +361,134 @@ sealed class BabyFleder : ModNPC {
                 }
             }
             else {
-                bool flag3 = NPC.direction == 1 && NPC.velocity.X > 0f && NPC.position.X < player.position.X | NPC.direction != 1 && NPC.velocity.X < 0f && NPC.position.X > player.position.X;
-                if (Collision.CanHit(NPC.Center, 1, 1, center, 1, 1) || flag3 || flag4) {
-                    NPC.BasicFlier(0.4f, 0.2f, 4f, 2f);
-                    NPC.velocity.X *= 0.9f;
-                    if (NPC.velocity.LengthSquared() > 1f) {
-                        NPC.velocity.Y *= 0.9f;
-                    }
-                    NPC.TargetClosest();
+                hasParent = false;
+                move(hasParent);
+
+                NPC.BasicFlier(0.4f * 0.4f, 0.2f * 0.4f, 4f * 0.4f, 2f * 0.4f);
+
+                NPC.TargetClosest();
+
+                int num201 = 1;
+                int num202 = 1;
+                if (NPC.velocity.X < 0f)
+                    num201 = -1;
+
+                if (NPC.velocity.Y < 0f)
+                    num202 = -1;
+
+                if (!Collision.CanHit(NPC, Main.player[target])) {
+                    //NPC.direction = num201;
+                    NPC.directionY = num202;
                 }
-                else {
-                    hasParent = false;
-                    move(hasParent);
+
+                if (NPC.collideX) {
+                    NPC.velocity.X = -NPC.oldVelocity.X * 0.75f;
+                    if (NPC.direction == -1 && NPC.velocity.X > 0f && NPC.velocity.X < 2f)
+                        NPC.velocity.X = 2f;
+
+                    if (NPC.direction == 1 && NPC.velocity.X < 0f && NPC.velocity.X > -2f)
+                        NPC.velocity.X = -2f;
+                }
+
+                if (NPC.collideY) {
+                    NPC.velocity.Y = -NPC.oldVelocity.Y * 0.75f;
+                    if (NPC.velocity.Y > 0f && NPC.velocity.Y < 2f)
+                        NPC.velocity.Y = 2f;
+
+                    if (NPC.velocity.Y < 0f && NPC.velocity.Y > -2f)
+                        NPC.velocity.Y = -2f;
+                }
+
+                if (direction == -1 && NPC.velocity.X > -4f) {
+                    NPC.velocity.X -= 0.1f;
+                    if (NPC.velocity.X > 4f)
+                        NPC.velocity.X -= 0.1f;
+                    else if (NPC.velocity.X > 0f)
+                        NPC.velocity.X += 0.05f;
+
+                    if (NPC.velocity.X < -4f)
+                        NPC.velocity.X = -4f;
+                }
+                else if (direction == 1 && NPC.velocity.X < 4f) {
+                    NPC.velocity.X += 0.1f;
+                    if (NPC.velocity.X < -4f)
+                        NPC.velocity.X += 0.1f;
+                    else if (NPC.velocity.X < 0f)
+                        NPC.velocity.X -= 0.05f;
+
+                    if (NPC.velocity.X > 4f)
+                        NPC.velocity.X = 4f;
+                }
+
+                if (NPC.directionY == -1 && (double)NPC.velocity.Y > -0.65f) {
+                    NPC.velocity.Y -= 0.04f;
+                    if ((double)NPC.velocity.Y > 0.65f)
+                        NPC.velocity.Y -= 0.05f;
+                    else if (NPC.velocity.Y > 0f)
+                        NPC.velocity.Y += 0.03f;
+
+                    if ((double)NPC.velocity.Y < -0.65f)
+                        NPC.velocity.Y = -0.65f;
+                }
+                else if (NPC.directionY == 1 && (double)NPC.velocity.Y < 1.5) {
+                    NPC.velocity.Y += 0.04f;
+                    if ((double)NPC.velocity.Y < -1.5)
+                        NPC.velocity.Y += 0.05f;
+                    else if (NPC.velocity.Y < 0f)
+                        NPC.velocity.Y -= 0.03f;
+
+                    if ((double)NPC.velocity.Y > 1.5)
+                        NPC.velocity.Y = 1.5f;
+                }
+
+                _tireTimer += 1f;
+                if (_tireTimer > 200f) {
+                    if (!Main.player[target].wet && Collision.CanHit(NPC, Main.player[target]))
+                        _tireTimer = 0f;
+
+                    if (_tireTimer >= 460f && !Collision.CanHit(NPC, Main.player[target])) {
+                        ApplyGravity();
+
+                        SitIfTileBelow();
+                    }
+                    if (_tireTimer > 500f) {
+                        if (!Collision.CanHit(NPC, Main.player[target])) {
+                            _alwaysAngry = false;
+                        }
+                        _tireTimer = 0f;
+                        NPC.netUpdate = true;
+                    }
+
+                    //_tireTimer2 += 1f;
+                    //if (_tireTimer2 > 0f) {
+                    //    if (NPC.velocity.Y < num214)
+                    //        NPC.velocity.Y += num212;
+                    //}
+                    //else if (NPC.velocity.Y > 0f - num214) {
+                    //    NPC.velocity.Y -= num212 / 2f;
+                    //}
+
+                    //if (_tireTimer2 < -150f || _tireTimer2 > 150f) {
+                    //    if (NPC.velocity.X < num213)
+                    //        NPC.velocity.X += num211;
+                    //}
+                    //else if (NPC.velocity.X > 0f - num213) {
+                    //    NPC.velocity.X -= num211;
+                    //}
+
+                    //if (_tireTimer >= 260f && !Collision.CanHit(NPC, Main.player[target])) {
+                    //    ApplyGravity();
+
+                    //    SitIfTileBelow();
+                    //}
+                    //if (_tireTimer2 > 300f) {
+                    //    //if (!Collision.CanHit(NPC, Main.player[target])) {
+                    //    //    _alwaysAngry = false;
+                    //    //    NPC.netUpdate = true;
+                    //    //}
+                    //    _tireTimer2 = -300f;
+                    //    NPC.netUpdate = true;
+                    //}
                 }
             }
         }

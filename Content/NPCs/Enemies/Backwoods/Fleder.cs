@@ -133,7 +133,7 @@ sealed class Fleder : ModNPC {
             }
 
             return;
-        }    
+        }
 
         Player player = Main.player[NPC.target];
         playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
@@ -201,15 +201,22 @@ sealed class Fleder : ModNPC {
                 return;
             }
             else if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
-                flyAway();
+                int y = (int)NPC.Center.Y / 16;
+                centerTile = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, y);
+                if (!centerTile.AnyWall() && y < BackwoodsVars.FirstTileYAtCenter + 10) {
+                    flyAway();
+                }
             }
         }
 
         NPC.localAI[1] += 1f;
+        int y2 = (int)NPC.Center.Y / 16;
+        Tile centerTile2 = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, y2);
+        bool flag = !centerTile2.AnyWall() && y2 < BackwoodsVars.FirstTileYAtCenter + 10;
         if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
             NPC.TargetClosest();
             if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
-                if (_state != State.Normal) {
+                if (flag && _state != State.Normal) {
                     _state = State.Normal;
 
                     NPC.netUpdate = true;
@@ -219,7 +226,7 @@ sealed class Fleder : ModNPC {
 
         NPC.noTileCollide = false;
 
-        if (!player.dead && player.InModBiome<BackwoodsBiome>()) {
+        if (!flag || (!player.dead && player.InModBiome<BackwoodsBiome>())) {
             if (NPC.localAI[1] > 100f) {
                 _state = State.Attacking;
 
@@ -279,32 +286,34 @@ sealed class Fleder : ModNPC {
                     NPC.velocity.X = maxSpeedX;
                 }
             }
-            float distX = Math.Abs((float)(NPC.position.X + (double)(NPC.width / 2) - ((player.position.X - player.oldVelocity.Y) + (double)(player.width / 2))));
-            float distY = player.position.Y - NPC.height / 2;
-            float minX = 50f;
-            float upY = 200f;
-            if (distX > minX && player.FindBuffIndex(BuffID.Bleeding) == -1) {
-                distY -= upY;
-            }
-            float speedY = 0.15f;
-            if (NPC.position.Y < distY) {
-                NPC.velocity.Y += speedY;
-                if (NPC.velocity.Y < 0f) {
-                    NPC.velocity.Y += speedY / 5f;
+            if (!player.dead) {
+                float distX = Math.Abs((float)(NPC.position.X + (double)(NPC.width / 2) - ((player.position.X - player.oldVelocity.Y) + (double)(player.width / 2))));
+                float distY = player.position.Y - NPC.height / 2;
+                float minX = 50f;
+                float upY = 200f;
+                if (distX > minX && player.FindBuffIndex(BuffID.Bleeding) == -1) {
+                    distY -= upY;
                 }
-            }
-            else {
-                NPC.velocity.Y -= speedY;
-                if (NPC.velocity.Y > 0f) {
-                    NPC.velocity.Y -= speedY / 5f;
+                float speedY = 0.15f;
+                if (NPC.position.Y < distY) {
+                    NPC.velocity.Y += speedY;
+                    if (NPC.velocity.Y < 0f) {
+                        NPC.velocity.Y += speedY / 5f;
+                    }
                 }
-            }
-            float maxSpeedY = 5f;
-            if (NPC.velocity.Y < -maxSpeedY) {
-                NPC.velocity.Y = -maxSpeedY;
-            }
-            if (NPC.velocity.Y > maxSpeedY) {
-                NPC.velocity.Y = maxSpeedY;
+                else {
+                    NPC.velocity.Y -= speedY;
+                    if (NPC.velocity.Y > 0f) {
+                        NPC.velocity.Y -= speedY / 5f;
+                    }
+                }
+                float maxSpeedY = 5f;
+                if (NPC.velocity.Y < -maxSpeedY) {
+                    NPC.velocity.Y = -maxSpeedY;
+                }
+                if (NPC.velocity.Y > maxSpeedY) {
+                    NPC.velocity.Y = maxSpeedY;
+                }
             }
 
             if (NPC.collideX) {
