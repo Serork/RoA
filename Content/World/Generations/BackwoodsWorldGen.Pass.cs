@@ -1731,6 +1731,37 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step9_SpreadMoss();
         Step10_SpreadMossGrass();
 
+        double num377 = (double)Main.maxTilesX * 0.05;
+        if (WorldGen.noTrapsWorldGen)
+            num377 = ((!WorldGen.tenthAnniversaryWorldGen && !WorldGen.notTheBees) ? (num377 * 100.0) : (num377 * 5.0));
+        else if (WorldGen.getGoodWorldGen)
+            num377 *= 1.5;
+        if (Main.starGame)
+            num377 *= Main.starGameMath(0.2);
+
+        for (int num378 = 0; (double)num378 < num377; num378++) {
+            for (int num379 = 0; num379 < 1150; num379++) {
+                if (WorldGen.noTrapsWorldGen) {
+                    int num380 = WorldGen.genRand.Next(Left - 20, Right + 20);
+                    int num381 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
+
+                    if (((double)num381 > Main.worldSurface || Main.tile[num380, num381].WallType > 0) && WorldGen.placeTrap(num380, num381, 0))
+                        break;
+                }
+                else {
+                    int num382 = WorldGen.genRand.Next(Left - 20, Right + 20);
+                    int num383 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
+                    while (WorldGen.oceanDepths(num382, num383)) {
+                        num382 = WorldGen.genRand.Next(Left - 20, Right + 20);
+                        num383 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
+                    }
+
+                    if (Main.tile[num382, num383].WallType == 0 && WorldGen.placeTrap(num382, num383, 0))
+                        break;
+                }
+            }
+        }
+
         progress.Set(0.8f);
         // destroy non solid above leaves
         for (int i = Left - 25; i < Right + 25; i++) {
