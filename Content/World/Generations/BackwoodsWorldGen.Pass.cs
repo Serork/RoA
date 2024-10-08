@@ -1516,6 +1516,27 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+
+        for (int i = Left - 25; i < Right + 25; i++) {
+            for (int j = Top - 15; j < Bottom; j++) {
+                if (WorldGenHelper.ActiveTile(i, j, 138)) {
+                    int j2 = 0;
+                    bool flag = false;
+                    while (!flag && j2 < 10) {
+                        j2++;
+                        for (int i2 = 0; i2 < 2; i2++) {
+                            if (WorldGenHelper.ActiveTile(i + i2, j + j2, 135)) {
+                                flag = true;
+                                break;
+                            }
+                            if (!WorldGenHelper.ActiveTile(i + i2, j + j2, 138) && !WorldGenHelper.ActiveTile(i + i2, j + j2, 130) && !WorldGenHelper.ActiveTile(i + i2, j + j2, TileID.InactiveStoneBlock) && !WorldGenHelper.ActiveTile(i + i2, j + j2, TileID.Stone)) {
+                                WorldGen.KillTile(i + i2, j + j2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void BackwoodsOtherPlacements(GenerationProgress progress, GameConfiguration config) {
