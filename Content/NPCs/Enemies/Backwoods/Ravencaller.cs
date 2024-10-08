@@ -8,13 +8,13 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class Ravencaller : ModNPC {
-    private Player player;
     private readonly int frameTime = 3;
     private readonly int frameHeight = 48;
     private int curFrame;
@@ -62,7 +62,6 @@ sealed class Ravencaller : ModNPC {
     }
 
     public override void AI() {
-        NPC npc = NPC;
         if (whenYouWalking)
             NPC.ApplyFighterAI(BackwoodsFogHandler.IsFogActive);
         else {
@@ -70,60 +69,61 @@ sealed class Ravencaller : ModNPC {
             NPC.velocity.X *= 0.8f;
         }
 
-        NPC.chaseable = npc.alpha < 50;
+        NPC.chaseable = NPC.alpha < 50;
 
-        if (timer >= 270 && whenYouWalking) {
+        if (timer >= 270 && whenYouWalking && retreat) {
             retreat = false;
             NPC.netUpdate = true;
         }
 
-        if (!retreat)
-            player = Main.player[npc.target];
+        Player player = Main.player[NPC.target];
 
-        //npc.TargetClosest();
+        //NPC.TargetClosest();
 
-        //if (Collision.CanHit(npc, Main.player[npc.target]))
+        //if (Collision.CanHit(npc, Main.player[NPC.target]))
         if (NPC.HasPlayerTarget)
             timer++;
         else {
             timer = 438;
         }
-        npc.spriteDirection = npc.direction;
+        NPC.spriteDirection = NPC.direction;
 
-        if (npc.alpha > 0 && ((timer >= 270 && timer < 440) || !NPC.HasPlayerTarget)) {
-            npc.alpha -= 5;
+        if (NPC.alpha > 0 && ((timer >= 270 && timer < 440) || !NPC.HasPlayerTarget)) {
+            NPC.alpha -= 5;
         }
 
-        if (Main.netMode != NetmodeID.MultiplayerClient) {
-            if (NPC.velocity.Y == 0f && timer > 280 && Collision.CanHit(npc, Main.player[npc.target]) && Vector2.Distance(player.position, npc.position) < 320.0 && whenYouWalking && Main.rand.Next(15) == 0) {
+        if (NPC.velocity.Y == 0f && timer > 280 && Collision.CanHit(NPC, Main.player[NPC.target]) && Vector2.Distance(player.position, NPC.position) < 320.0 && whenYouWalking) {
+            if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.Next(15) == 0) {
                 timer = 280;
                 whenYouWalking = false;
                 NPC.netUpdate = true;
             }
         }
+
         if (timer == 320 && !whenYouWalking)
             Summon();
         if (timer == 430 && !whenYouWalking) {
             for (int k = 0; k < 20; k++) {
-                int dust5 = Dust.NewDust(new Vector2(npc.Center.X, npc.Center.Y), npc.width, npc.height, 108, 0f, 0f, 120, new Color(30, 30, 55), 1f + Main.rand.NextFloat(0, 1f));
-                Main.dust[dust5].position = new Vector2(npc.Center.X + Main.rand.Next(-20, 20), npc.Center.Y - 6 + Main.rand.Next(-20, 20));
-                Main.dust[dust5].velocity = Vector2.Normalize(npc.Center - Main.dust[dust5].position) * 0.5f;
+                int dust5 = Dust.NewDust(new Vector2(NPC.Center.X, NPC.Center.Y), NPC.width, NPC.height, 108, 0f, 0f, 120, new Color(30, 30, 55), 1f + Main.rand.NextFloat(0, 1f));
+                Main.dust[dust5].position = new Vector2(NPC.Center.X + Main.rand.Next(-20, 20), NPC.Center.Y - 6 + Main.rand.Next(-20, 20));
+                Main.dust[dust5].velocity = Vector2.Normalize(NPC.Center - Main.dust[dust5].position) * 0.5f;
                 Main.dust[dust5].noGravity = true;
             }
         }
         if (timer >= 439 && timer < 447/* && !whenYouWalking*/) {
-            if (npc.alpha < 175) {
-                npc.alpha += 30;
+            if (NPC.alpha < 175) {
+                NPC.alpha += 30;
             }
         }
         if (timer == 480 && !whenYouWalking) {
-            npc.target = 0;
-            //npc.TargetClosest(false);
+            NPC.target = 0;
+            //NPC.TargetClosest(false);
             retreat = true;
             timer = 0;
             whenYouWalking = true;
             NPC.netUpdate = true;
         }
+
     }
 
     private void Summon() {
@@ -148,38 +148,34 @@ sealed class Ravencaller : ModNPC {
 
     public override void FindFrame(int frameHeight) {
         NPC npc = NPC;
-        npc.frame.Y = curFrame * frameHeight;
+        NPC.frame.Y = curFrame * frameHeight;
         if (whenYouWalking) {
-            if (npc.velocity.Y != 0) {
+            if (NPC.velocity.Y != 0) {
                 curFrame = 0;
             }
             else {
-                if (npc.frameCounter >= frameTime) {
+                if (NPC.frameCounter >= frameTime) {
                     ++curFrame;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                 }
                 else {
-                    npc.frameCounter++;
+                    NPC.frameCounter++;
                 }
                 if (curFrame >= 15) {
                     curFrame = 1;
                 }
             }
         }
-        else if (timer == 280) {
+        else if (timer >= 280 && timer <= 300) {
             curFrame = 15;
         }
-        /*else if (timer == 320)
-        {
-            curFrame = 15;
-        }*/
         else if ((timer > 300 && curFrame < 19 && curFrame != 1) || (timer > 420 && curFrame <= 21 && curFrame != 1)) {
-            if (npc.frameCounter >= frameTime) {
+            if (NPC.frameCounter >= frameTime) {
                 ++curFrame;
-                npc.frameCounter = 0;
+                NPC.frameCounter = 0;
             }
             else {
-                npc.frameCounter++;
+                NPC.frameCounter++;
             }
         }
         else if (curFrame > 21) {
