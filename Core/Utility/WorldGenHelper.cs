@@ -110,13 +110,18 @@ static class WorldGenHelper {
         for (int k = num; k < num + 6; k++) {
             for (int l = num2; l < num2 + 4; l++) {
                 Tile tile = Main.tile[k, l];
+                if (wallType.HasValue) {
+                    tile.WallType = wallType.Value;
+                }
+            }
+        }
+        for (int k = num; k < num + 6; k++) {
+            for (int l = num2; l < num2 + 4; l++) {
+                Tile tile = Main.tile[k, l];
                 tile.HasTile = true;
                 tile.TileType = type;
                 tile.TileFrameX = (short)(num4 + 18 * (k - num));
                 tile.TileFrameY = (short)(num5 + 18 * (l - num2));
-                if (wallType.HasValue) {
-                    tile.WallType = wallType.Value;
-                }
             }
         }
 
@@ -145,13 +150,18 @@ static class WorldGenHelper {
         for (int k = num; k < num + 4; k++) {
             for (int l = num2; l < num2 + 4; l++) {
                 Tile tile = Main.tile[k, l];
+                if (wallType.HasValue) {
+                    tile.WallType = wallType.Value;
+                }
+            }
+        }
+        for (int k = num; k < num + 4; k++) {
+            for (int l = num2; l < num2 + 4; l++) {
+                Tile tile = Main.tile[k, l];
                 tile.HasTile = true;
                 tile.TileType = type;
                 tile.TileFrameX = (short)(num4 + 18 * (k - num));
                 tile.TileFrameY = (short)(num5 + 18 * (l - num2));
-                if (wallType.HasValue) {
-                    tile.WallType = wallType.Value;
-                }
             }
         }
 

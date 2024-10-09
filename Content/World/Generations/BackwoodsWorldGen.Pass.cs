@@ -2,6 +2,7 @@
 
 using RoA.Common.BackwoodsSystems;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
 using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Platforms;
@@ -1838,8 +1839,35 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
         for (int num555 = 0; num555 < Main.maxTilesX * 0.0125; num555++) {
             //progress.Set((float)(i + 1) / roomCount);
+            bool painting1 = false, painting2 = false, painting3 = false;
 
             GenerateLootRoom1();
+
+            for (int i = Left + 15; i < Right - 15; i++) {
+                for (int j = (int)Main.worldSurface - 10; j < Bottom - 20; j++) {
+                    if (Main.tile[i, j].HasTile) {
+                        if (Main.tile[i, j].TileType == ModContent.TileType<MillionDollarPainting>()) {
+                            painting1 = true;
+                        }
+                        if (Main.tile[i, j].TileType == ModContent.TileType<Moss>()) {
+                            painting2 = true;
+                        }
+                        if (Main.tile[i, j].TileType == ModContent.TileType<TheLegend>()) {
+                            painting3 = true;
+                        }
+                    }
+                }
+            }
+            
+            if (!painting1) {
+                HouseBuilderCustom._painting1 = false;
+            }
+            if (!painting2) {
+                HouseBuilderCustom._painting2 = false;
+            }
+            if (!painting3) {
+                HouseBuilderCustom._painting3 = false;
+            }
         }
 
         Step_AddChests();
@@ -2526,8 +2554,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void GrowTrees() {
-        for (int i = Left - 5; i <= Right + 5; i++) {
-            for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 20; j++) {
+        for (int i = Left - 10; i <= Right + 10; i++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + EdgeY; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (WorldGenHelper.ActiveTile(i, j, _grassTileType) && !_backwoodsPlants.Contains(WorldGenHelper.GetTileSafely(i, j - 1).TileType) && tile.Slope == SlopeType.Solid && !tile.IsHalfBlock) {
                     WorldGenHelper.GrowTreeWithBranches<TreeBranch>(i, j);
