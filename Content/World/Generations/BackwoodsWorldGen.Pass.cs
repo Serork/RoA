@@ -679,7 +679,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(TileID.Trees) || tile.ActiveTile(ModContent.TileType<TreeBranch>())) {
                     WorldGen.KillTile(i, j);
                 }
-                if (!Main.tileSolid[tile.TileType]) {
+                if (i > x - 10 && !Main.tileSolid[tile.TileType]) {
                     WorldGen.KillTile(i, j);
                 }
                 if (tile.AnyLiquid()) {
@@ -1188,7 +1188,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //GetRandomPosition(posX, posY, out int baseX, out int baseY, false);
 
         int baseX = _random.Next(Left + 15, Right - 15);
-        int baseY = _random.Next((int)(Main.worldSurface - 10), Bottom - 20);
+        int baseY = _random.Next((int)Main.worldSurface, Bottom - 20);
         Point origin = new(baseX, baseY);
 
         int num = 50;
@@ -1828,7 +1828,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-         // place plants
+        progress.Set(1f);
+        Step16_PlaceAltar();
+
+        // place plants
         for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 20; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
@@ -1872,12 +1875,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        progress.Set(1f);
-        Step16_PlaceAltar();
-
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
-        for (int num555 = 0; num555 < Main.maxTilesX * 0.015; num555++) {
+        for (int num555 = 0; num555 < Main.maxTilesX * 0.02; num555++) {
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
         }
