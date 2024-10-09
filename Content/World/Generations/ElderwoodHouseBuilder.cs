@@ -274,7 +274,7 @@ public class HouseBuilderCustom {
                 switch (i + num3 % 2) {
                     case 0: {
                         int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
-                        bool flag2 = _random.NextBool(5);
+                        bool flag2 = _random.NextBool(8);
                         bool flag = !_painting1 || !_painting2 || !_painting3;
                         if (flag || flag2) {
                             int attempts = 1000;
