@@ -135,7 +135,7 @@ BeastBow: {
 
 DoubleFocusCharm: {
 	DisplayName: Double Focus Charm
-	Tooltip: 12% increased base nature damage
+	Tooltip: 12% increased nature base damage
 }
 
 BandOfNature: {
