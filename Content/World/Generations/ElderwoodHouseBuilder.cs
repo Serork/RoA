@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 
 using Newtonsoft.Json.Linq;
 
+using RoA.Common.Sets;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
@@ -273,13 +274,14 @@ public class HouseBuilderCustom {
                 switch (i + num3 % 2) {
                     case 0: {
                         int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
+                        bool flag2 = _random.NextBool(5);
                         bool flag = !_painting1 || !_painting2 || !_painting3;
-                        if (flag) {
-                            int attempts = 100;
+                        if (flag || flag2) {
+                            int attempts = 1000;
                             while (--attempts > 0) {
                                 int value = _random.Next(3);
                                 if (value == 0) {
-                                    if (!_painting1 || (_painting1 && _random.NextBool(4))) {
+                                    if (!_painting1 || (_painting1 && flag2)) {
                                         if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
                                             _painting1 = true;
                                             break;
@@ -287,7 +289,7 @@ public class HouseBuilderCustom {
                                     }
                                 }
                                 else if (value == 1) {
-                                    if (!_painting2 || (_painting2 && _random.NextBool(4))) {
+                                    if (!_painting2 || (_painting2 && flag2)) {
                                         if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
                                             _painting2 = true;
                                             break;
@@ -295,7 +297,7 @@ public class HouseBuilderCustom {
                                     }
                                 }
                                 else if (value == 2) {
-                                    if (!_painting3 || (_painting3 && _random.NextBool(4))) {
+                                    if (!_painting3 || (_painting3 && flag2)) {
                                         if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
                                             _painting3 = true;
                                             break;
@@ -726,7 +728,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
             WorldUtils.Gen(new Point(x, y), new Shapes.Rectangle(2, 2), Actions.Chain(new Modifiers.Dither(), new Modifiers.Blotches(2, 2), new Modifiers.IsEmpty(), new Actions.SetTile(51, setSelfFrames: true)));
         }
 
-        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.985), new Modifiers.Blotches(1, 0.985), new Actions.ClearWall()));
+        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles([.. TileSets.Paintings]), new Actions.ClearWall()));
 
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.Blotches(), new Modifiers.OnlyWalls(base.WallType), new Modifiers.SkipTiles(SkipTilesDuringWallAging), ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.OnlyTiles(30, 321, 158), new Actions.ClearTile(frameNeighbors: true)));
