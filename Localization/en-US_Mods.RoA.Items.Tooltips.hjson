@@ -6,3 +6,6 @@ FillingRate4: Average filling rate
 FillingRate5: Fast filling rate
 FillingRate6: Very fast filling rate
 FillingRate7: Extremely fast filling rate
+Wreath: "[c/4ED757:wreath]"
+Charged: "[c/4ED757:charged]"
+WhenCharged: while {$Wreath} is {$Charged}

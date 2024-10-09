@@ -23,6 +23,7 @@ sealed class WreathHandler : ModPlayer {
 
     private ushort _currentResource, _tempResource, _tempResource2;
     private float _addExtraValue;
+    private float _keepBonusesForTime;
 
     private byte _boost;
     private ushort _increaseValue;
@@ -49,15 +50,16 @@ sealed class WreathHandler : ModPlayer {
 
     public ushort TotalResource => (ushort)(MaxResource + ExtraResource);
 
-    public float Progress => (float)CurrentResource / TotalResource;
+    public float ActualProgress => (float)CurrentResource / TotalResource;
+    public float Progress => HasKeepTime ? 1f : ActualProgress;
     public float ChangingProgress {
         get {
             float value = ChangingTimeValue - _currentChangingTime;
             return _shouldDecrease2 ? value : Ease.CircOut(value);
         }
     }
-    public bool IsEmpty => Progress <= 0.01f;
-    public bool IsFull => Progress > 0.95f;
+    public bool IsEmpty => ActualProgress <= 0.01f;
+    public bool IsFull => ActualProgress > 0.95f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
@@ -66,9 +68,11 @@ sealed class WreathHandler : ModPlayer {
     public bool ShouldDraw => !IsEmpty || Player.IsHoldingNatureWeapon();
     public float PulseIntensity => _stayTime <= 1f ? Ease.CubeInOut(_stayTime) : 1f;
 
+    public bool HasKeepTime => _keepBonusesForTime > 0f;
+
     public float DrawColorOpacity {
         get {
-            float progress = Progress;
+            float progress = ActualProgress;
             float opacity = Math.Clamp(progress * 2f, 1f, DRAWCOLORINTENSITY);
             return opacity;
         }
@@ -77,7 +81,7 @@ sealed class WreathHandler : ModPlayer {
     public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
     public Color LightingColor => _lightingColor;
     public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
-    public float LightingIntensity => (float)Math.Min(Ease.CircOut(Progress), 0.35f);
+    public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress), 0.35f);
 
     public ClawsHandler ClawsStats => Player.GetModPlayer<ClawsHandler>();
     public ClawsHandler.SpecialAttackSpawnInfo SpecialAttackData => ClawsStats.SpecialAttackData;
@@ -105,6 +109,9 @@ sealed class WreathHandler : ModPlayer {
                 SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
             }
         }
+        //else {
+
+        //}
 
         IncreaseResourceValue(natureProjectile.WreathPointsFine);
         MakeDusts();
@@ -116,6 +123,9 @@ sealed class WreathHandler : ModPlayer {
         }
         else {
             _stayTime -= TimeSystem.LogicDeltaTime;
+        }
+        if (HasKeepTime) {
+            _keepBonusesForTime -= 1f;
         }
     }
 
@@ -191,6 +201,11 @@ sealed class WreathHandler : ModPlayer {
             _currentChangingMult = TimeSystem.LogicDeltaTime;
         }
 
+        if (IsFull && !HasKeepTime) {
+            _keepBonusesForTime = Player.GetModPlayer<DruidStats>().KeepBonusesForTime;
+            //VisualCurrentResource = CurrentResource;
+        }
+
         _shouldDecrease = true;
 
         _boost = 0;
@@ -201,9 +216,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts() {
-        if (Progress >= 0.1f && Progress <= 0.95f) {
+        if (ActualProgress >= 0.1f && ActualProgress <= 0.95f) {
             if (Main.netMode != NetmodeID.Server) {
-                float progress = Progress * 1.25f + 0.1f;
+                float progress = ActualProgress * 1.25f + 0.1f;
                 int count = Math.Min((int)(15 * progress), 10);
                 if (Main.netMode != NetmodeID.Server) {
                     for (int i = 0; i < count; i++) {

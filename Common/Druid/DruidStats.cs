@@ -4,10 +4,11 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Druid;
 
-sealed class NatureWeaponStats : ModPlayer {
+sealed class DruidStats : ModPlayer {
     private float _druidBaseDamageMultiplier = 1f;
     private float _druidPotentialDamageMultiplier = 1f;
     private float _druidDamageExtraIncreaseValueMultiplier = 1f;
+    private float _keepBonusesForTime = 0f;
 
     public float DruidBaseDamageMultiplier {
         get => _druidBaseDamageMultiplier;
@@ -30,9 +31,18 @@ sealed class NatureWeaponStats : ModPlayer {
         }
     }
 
+    public float KeepBonusesForTime {
+        get => _keepBonusesForTime;
+        set {
+            _keepBonusesForTime = MathHelper.Clamp(value, 0f, 300f);
+        }
+    }
+
     public override void ResetEffects() {
         DruidBaseDamageMultiplier = 1f;
         DruidPotentialDamageMultiplier = 1f;
         DruidDamageExtraIncreaseValueMultiplier = 1f;
+
+        KeepBonusesForTime = 0f;
     }
 }

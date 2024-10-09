@@ -135,20 +135,37 @@ BeastBow: {
 
 DoubleFocusCharm: {
 	DisplayName: Double Focus Charm
-	Tooltip: ""
+	Tooltip: 12% increased base nature damage
 }
 
 BandOfNature: {
 	DisplayName: Band Of Nature
-	Tooltip: ""
+	Tooltip:
+		'''
+		5% increased nature potential damage
+		Increases defense by 3 {$RoA.Items.Tooltips.WhenCharged}
+		'''
 }
 
 BandOfPurity: {
 	DisplayName: Band Of Purity
-	Tooltip: ""
+	Tooltip:
+		'''
+		5% increased nature potential damage
+		Regenerates life {$RoA.Items.Tooltips.WhenCharged}
+		'''
 }
 
 GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
-	Tooltip: ""
+	Tooltip:
+		'''
+		10% increased wreath filling rate
+		Increases maximum life by 20 {$RoA.Items.Tooltips.WhenCharged}
+		'''
+}
+
+FireflyPin: {
+	DisplayName: Firefly Pin
+	Tooltip: Keeps {$RoA.Items.Tooltips.Wreath} full charge bonuses for 2 seconds after discharging
 }

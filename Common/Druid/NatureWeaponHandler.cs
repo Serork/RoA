@@ -15,14 +15,14 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
     public float FillingRate => _fillingRate;
 
-    public float GetFillingRate(Player player) => _fillingRate * player.GetModPlayer<NatureWeaponStats>().DruidDamageExtraIncreaseValueMultiplier;
+    public float GetFillingRate(Player player) => _fillingRate * player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier;
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
 
     public static ushort GetFinalBaseDamage(Item item, Player player) => (ushort)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(item.damage);
 
     public static ushort GetBasePotentialDamage(Item item, Player player) {
         //Main.NewText(player.GetModPlayer<NatureWeaponStats>().DruidPotentialDamageMultiplier);
-        return (ushort)(item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage * player.GetModPlayer<NatureWeaponStats>().DruidPotentialDamageMultiplier);
+        return (ushort)(item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage * player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier);
     }
     public static ushort GetPotentialDamage(Item item, Player player) => (ushort)(GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));
 

@@ -28,7 +28,7 @@ sealed class BandOfPurity : ModItem {
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
-        player.GetModPlayer<NatureWeaponStats>().DruidPotentialDamageMultiplier += 0.05f;
+        player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.05f;
         if (player.GetModPlayer<WreathHandler>().IsFull) {
             player.lifeRegen += 10;
         }
