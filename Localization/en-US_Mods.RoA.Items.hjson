@@ -137,3 +137,18 @@ DoubleFocusCharm: {
 	DisplayName: Double Focus Charm
 	Tooltip: ""
 }
+
+BandOfNature: {
+	DisplayName: Band Of Nature
+	Tooltip: ""
+}
+
+BandOfPurity: {
+	DisplayName: Band Of Purity
+	Tooltip: ""
+}
+
+GiantTreeSapling: {
+	DisplayName: Giant Tree Sapling
+	Tooltip: ""
+}

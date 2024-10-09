@@ -15,12 +15,16 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
     public float FillingRate => _fillingRate;
 
+    public float GetFillingRate(Player player) => _fillingRate * player.GetModPlayer<NatureWeaponStats>().DruidDamageExtraIncreaseValueMultiplier;
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
 
     public static ushort GetFinalBaseDamage(Item item, Player player) => (ushort)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(item.damage);
 
-    public static ushort GetBasePotentialDamage(Item item) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage;
-    public static ushort GetPotentialDamage(Item item, Player player) => (ushort)(GetBasePotentialDamage(item) - GetFinalBaseDamage(item, player));
+    public static ushort GetBasePotentialDamage(Item item, Player player) {
+        //Main.NewText(player.GetModPlayer<NatureWeaponStats>().DruidPotentialDamageMultiplier);
+        return (ushort)(item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage * player.GetModPlayer<NatureWeaponStats>().DruidPotentialDamageMultiplier);
+    }
+    public static ushort GetPotentialDamage(Item item, Player player) => (ushort)(GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));
 
     public static int GetExtraPotentialDamage(Player player, Item item) {
         float progress = GetWreathStats(player).Progress;
@@ -47,12 +51,12 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             return;
         }
 
-        if (GetBasePotentialDamage(item) <= 0) {
+        if (GetBasePotentialDamage(item, player) <= 0) {
             return;
         }
 
         int extraDamage = GetExtraPotentialDamage(player, item);
         damage.Flat += extraDamage;
-        damage.Flat = Math.Min(item.damage + _basePotentialDamage, damage.Flat);
+        damage.Flat = Math.Min(item.damage + GetBasePotentialDamage(item, player), damage.Flat);
     }
 }

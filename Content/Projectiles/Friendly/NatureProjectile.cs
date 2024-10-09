@@ -24,8 +24,11 @@ abstract class NatureProjectile : ModProjectile {
     }
 
     public sealed override void OnSpawn(IEntitySource source) {
-        float fillingRate = Projectile.GetOwnerAsPlayer().GetSelectedItem().GetGlobalItem<NatureWeaponHandler>().FillingRate;
-        WreathPointsFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
+        if (Projectile.owner == Main.myPlayer) {
+            Player player = Projectile.GetOwnerAsPlayer();
+            float fillingRate = player.GetSelectedItem().GetGlobalItem<NatureWeaponHandler>().GetFillingRate(player);
+            WreathPointsFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
+        }
         SafeOnSpawn(source);
     }
 

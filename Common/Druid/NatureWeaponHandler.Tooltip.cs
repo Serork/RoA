@@ -28,14 +28,14 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                     tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
                 }
                 tag = "PotentialDamage";
-                string potentialDamage = _basePotentialDamage.ToString();
+                string potentialDamage = GetBasePotentialDamage(item, Main.LocalPlayer).ToString();
                 tooltip = potentialDamage.AddSpace() + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
                 tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                 index++;
             }
 
             tag = "FillingRate";
-            int fillingRate = (int)(_fillingRate * 100);
+            int fillingRate = (int)(GetFillingRate(Main.LocalPlayer) * 100);
             byte tooltipValue = (byte)(fillingRate / 25 + 1); 
             tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.FillingRate{tooltipValue}").Value;
             tooltips.Insert(index + 2, new(Mod, tag, tooltip));
