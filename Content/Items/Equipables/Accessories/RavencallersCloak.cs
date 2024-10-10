@@ -6,14 +6,11 @@ using RoA.Common.Utilities.Extensions;
 using System.Reflection;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
@@ -58,7 +55,7 @@ sealed class RavencallersCloak : ModItem {
             public int Direction;
             public Rectangle HeadFrame, BodyFrame, LegFrame;
             public int WingFrame;
-            public float GfxOffY, StepSpeed;
+            public float GfxOffY;
         }
 
         private bool _resetted = false;
@@ -143,7 +140,6 @@ sealed class RavencallersCloak : ModItem {
             int head = drawPlayer.head;
             bool shroomiteStealth = drawPlayer.shroomiteStealth;
             float gfxOffY = drawPlayer.gfxOffY;
-            float stepSpeed = drawPlayer.stepSpeed;
             Color skinColor = drawPlayer.skinColor;
             if (!drawPlayer.ShouldNotDraw && !drawPlayer.dead) {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
@@ -159,7 +155,6 @@ sealed class RavencallersCloak : ModItem {
                     drawPlayer.face = CloakFaceId;
                     drawPlayer.shroomiteStealth = true;
                     drawPlayer.stealth = 0.5f;
-                    drawPlayer.stepSpeed = lastPositionInfo.StepSpeed;
                     drawPlayer.gfxOffY = lastPositionInfo.GfxOffY;
                     drawPlayer.skinColor = Color.Transparent;
                     SamplerState samplerState = camera.Sampler;
@@ -185,7 +180,6 @@ sealed class RavencallersCloak : ModItem {
             drawPlayer.shroomiteStealth = shroomiteStealth;
             drawPlayer.gfxOffY = gfxOffY;
             drawPlayer.skinColor = skinColor;
-            drawPlayer.stepSpeed = stepSpeed;
             orig(self, camera, drawPlayer);
         }
 
