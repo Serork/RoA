@@ -174,3 +174,8 @@ RavencallersCloak: {
 	DisplayName: Ravencallers Cloak
 	Tooltip: ""
 }
+
+Tapper: {
+	DisplayName: Tapper
+	Tooltip: ""
+}

@@ -242,7 +242,6 @@ sealed class RodOfTheCondor : ModItem {
                 Vector2 vector = drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.Size / 2f;
                 Vector2 vector2 = new(0f, 7f);
                 vector = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2) + vector2;
-                float wingsTime = handler._wingsTime;
                 Color colorArmorBody3 = Color.White * drawInfo.stealth * (1f - drawInfo.shadow) * handler.Opacity;
                 Vector2 vector11 = new(-6f, -7f);
                 Texture2D value4 = _wingsTexture.Value;

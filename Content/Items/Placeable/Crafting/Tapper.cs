@@ -1,0 +1,42 @@
+using Microsoft.Xna.Framework;
+
+using Terraria;
+using Terraria.GameContent.Creative;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Items.Placeable.Crafting;
+
+sealed class Tapper : ModItem {
+    public override void SetStaticDefaults() {
+        //DisplayName.SetDefault("Tapper");
+        //Tooltip.SetDefault("Used to extract sap from trees");
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
+    }
+
+    public override void SetDefaults() {
+        int width = 26; int height = 24;
+        Item.Size = new Vector2(width, height);
+
+        Item.maxStack = 99;
+        Item.useTurn = true;
+        Item.autoReuse = true;
+
+        Item.useAnimation = 15;
+        Item.useTime = 15;
+        Item.useStyle = ItemUseStyleID.Swing;
+
+        Item.consumable = true;
+        Item.rare = ItemRarityID.White;
+        Item.value = Item.sellPrice(silver: 10);
+        Item.createTile = ModContent.TileType<Tiles.Crafting.Tapper>();
+    }
+
+    //public override void AddRecipes() {
+    //    CreateRecipe()
+    //        .AddRecipeGroup(RecipeGroupID.Wood, 10)
+    //        .AddRecipeGroup(RecipeGroupID.IronBar, 2)
+    //        .AddTile(TileID.WorkBenches)
+    //        .Register();
+    //}
+}

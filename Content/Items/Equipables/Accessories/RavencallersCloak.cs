@@ -49,7 +49,7 @@ sealed class RavencallersCloak : ModItem {
         private static MethodInfo? _drawPlayerInternal;
 
         private struct OldPositionInfo {
-            public Vector2 Position;
+            public Vector2 Position, Velocity;
             public float Rotation;
             public Vector2 RotationOrigin;
             public int Direction;
@@ -141,10 +141,12 @@ sealed class RavencallersCloak : ModItem {
             bool shroomiteStealth = drawPlayer.shroomiteStealth;
             float gfxOffY = drawPlayer.gfxOffY;
             Color skinColor = drawPlayer.skinColor;
+            Vector2 velocity = drawPlayer.velocity;
             if (!drawPlayer.ShouldNotDraw && !drawPlayer.dead) {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
                 if (lastPositionInfo.Position != Vector2.Zero) {
+                    drawPlayer.velocity = lastPositionInfo.Velocity;
                     drawPlayer.direction = lastPositionInfo.Direction;
                     drawPlayer.headFrame = lastPositionInfo.HeadFrame;
                     drawPlayer.bodyFrame = lastPositionInfo.BodyFrame;
@@ -180,6 +182,7 @@ sealed class RavencallersCloak : ModItem {
             drawPlayer.shroomiteStealth = shroomiteStealth;
             drawPlayer.gfxOffY = gfxOffY;
             drawPlayer.skinColor = skinColor;
+            drawPlayer.velocity = velocity;
             orig(self, camera, drawPlayer);
         }
 
@@ -197,6 +200,7 @@ sealed class RavencallersCloak : ModItem {
                     _oldPositionInfos[num2] = _oldPositionInfos[num2 - 1];
                 }
                 _oldPositionInfos[0].Position = Player.position;
+                _oldPositionInfos[0].Velocity = Player.velocity;
                 _oldPositionInfos[0].Rotation = Player.fullRotation;
                 _oldPositionInfos[0].RotationOrigin = Player.fullRotationOrigin;
                 _oldPositionInfos[0].Direction = Player.direction;

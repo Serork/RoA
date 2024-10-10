@@ -37,6 +37,7 @@
 	  <None Remove="Resources\Textures\Items\Miscellaneous\LuminousFlower.png" />
 	  <None Remove="Resources\Textures\Items\Miscellaneous\RodOfTheCondor.png" />
 	  <None Remove="Resources\Textures\Items\Miscellaneous\RodOfTheCondor_Glow.png" />
+	  <None Remove="Resources\Textures\Items\Placeable\Crafting\Tapper.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\Decorations\DryadStatue.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\ElderwoodChest.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Druidic\Claws\ElderwoodClaws.png" />
@@ -71,6 +72,7 @@
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsBush.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsPlants.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\MiracleMint.png" />
+	  <None Remove="Resources\Textures\Tiles\Crafting\Tapper.png" />
 	  <None Remove="Resources\Textures\Tiles\Furniture\ElderwoodChest.png" />
 	  <None Remove="Resources\Textures\Tiles\Furniture\ElderwoodChest_Highlight.png" />
 	  <None Remove="Resources\Textures\Tiles\Miscellaneous\LuminousFlower.png" />
