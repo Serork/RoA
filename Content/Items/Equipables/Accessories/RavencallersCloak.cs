@@ -58,7 +58,7 @@ sealed class RavencallersCloak : ModItem {
             public int Direction;
             public Rectangle HeadFrame, BodyFrame, LegFrame;
             public int WingFrame;
-            public float GfxOffY;
+            public float GfxOffY, StepSpeed;
         }
 
         private bool _resetted = false;
@@ -68,7 +68,8 @@ sealed class RavencallersCloak : ModItem {
         public bool RavencallersCloak { get; set; }
         public bool RavencallersCloakVisible { get; set; }
 
-        public int CloakFaceId => EquipLoader.GetEquipSlot(Mod, ItemLoader.GetItem(ModContent.ItemType<RavencallersCloak>()).Name, EquipType.Face);
+        public int ItemType => ModContent.ItemType<RavencallersCloak>();
+        public int CloakFaceId => EquipLoader.GetEquipSlot(Mod, ItemLoader.GetItem(ItemType).Name, EquipType.Face);
         public bool ReceivedDamage => _resetTime > 0f;
         public bool Available => RavencallersCloak && !ReceivedDamage;
         public bool AvailableForNPCs => Available;
@@ -142,31 +143,33 @@ sealed class RavencallersCloak : ModItem {
             int head = drawPlayer.head;
             bool shroomiteStealth = drawPlayer.shroomiteStealth;
             float gfxOffY = drawPlayer.gfxOffY;
+            float stepSpeed = drawPlayer.stepSpeed;
+            Color skinColor = drawPlayer.skinColor;
             if (!drawPlayer.ShouldNotDraw && !drawPlayer.dead) {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
                 if (lastPositionInfo.Position != Vector2.Zero) {
-                    if (lastPositionInfo.Position.Distance(drawPlayer.position) > 1f) {
-                        drawPlayer.direction = lastPositionInfo.Direction;
-                        drawPlayer.headFrame = lastPositionInfo.HeadFrame;
-                        drawPlayer.bodyFrame = lastPositionInfo.BodyFrame;
-                        drawPlayer.legFrame = lastPositionInfo.LegFrame;
-                        drawPlayer.wingFrame = lastPositionInfo.WingFrame;
-                        drawPlayer.itemAnimation = drawPlayer.itemTime = 0;
-                        drawPlayer.head = 0;
-                        drawPlayer.face = CloakFaceId;
-                        drawPlayer.shroomiteStealth = true;
-                        drawPlayer.stealth = 0.5f;
-                        drawPlayer.gfxOffY = lastPositionInfo.GfxOffY;
-                        SamplerState samplerState = camera.Sampler;
-                        if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f) {
-                            samplerState = LegacyPlayerRenderer.MountedSamplerState;
-                        }
-                        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, Matrix.Identity);
-                        _drawPlayerInternal.Invoke(self, [camera, drawPlayer, lastPositionInfo.Position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, 0f, 1f, 1f, false]);
-                        //self.DrawPlayer(camera, drawPlayer, lastPositionInfo.Position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, 0f);
-                        Main.spriteBatch.End();
+                    drawPlayer.direction = lastPositionInfo.Direction;
+                    drawPlayer.headFrame = lastPositionInfo.HeadFrame;
+                    drawPlayer.bodyFrame = lastPositionInfo.BodyFrame;
+                    drawPlayer.legFrame = lastPositionInfo.LegFrame;
+                    drawPlayer.wingFrame = lastPositionInfo.WingFrame;
+                    drawPlayer.itemAnimation = drawPlayer.itemTime = 0;
+                    drawPlayer.head = 0;
+                    drawPlayer.face = CloakFaceId;
+                    drawPlayer.shroomiteStealth = true;
+                    drawPlayer.stealth = 0.5f;
+                    drawPlayer.stepSpeed = lastPositionInfo.StepSpeed;
+                    drawPlayer.gfxOffY = lastPositionInfo.GfxOffY;
+                    drawPlayer.skinColor = Color.Transparent;
+                    SamplerState samplerState = camera.Sampler;
+                    if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f) {
+                        samplerState = LegacyPlayerRenderer.MountedSamplerState;
                     }
+                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
+                    _drawPlayerInternal.Invoke(self, [camera, drawPlayer, lastPositionInfo.Position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, 0f, 1f, 1f, false]);
+                    //self.DrawPlayer(camera, drawPlayer, lastPositionInfo.Position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, 0f);
+                    Main.spriteBatch.End();
                 }
             }
             drawPlayer.direction = direction;
@@ -181,11 +184,13 @@ sealed class RavencallersCloak : ModItem {
             drawPlayer.head = head;
             drawPlayer.shroomiteStealth = shroomiteStealth;
             drawPlayer.gfxOffY = gfxOffY;
+            drawPlayer.skinColor = skinColor;
+            drawPlayer.stepSpeed = stepSpeed;
             orig(self, camera, drawPlayer);
         }
 
         public override void PostUpdate() {
-            if (RavencallersCloak) {
+            if (RavencallersCloak || Main.mouseItem.type == ItemType) {
                 if (ReceivedDamage) {
                     _resetTime -= 1f;
 
@@ -224,7 +229,10 @@ sealed class RavencallersCloak : ModItem {
                         _before[player.whoAmI] = player.Center;
                         OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                         OldPositionInfo lastPositionInfo = playerOldPositions[^1];
-                        player.Center = lastPositionInfo.Position;
+                        Vector2 position = lastPositionInfo.Position;
+                        if (position != Vector2.Zero) {
+                            player.Center = lastPositionInfo.Position;
+                        }
 
                         return true;
                     }
