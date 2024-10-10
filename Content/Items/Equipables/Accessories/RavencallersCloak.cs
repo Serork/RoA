@@ -47,6 +47,8 @@ sealed class RavencallersCloak : ModItem {
 	}
 
     private class RavencallerPlayer : ModPlayer {
+        private const float RESETTIME = 300f;
+
         private static MethodInfo? _drawPlayerInternal;
 
         private struct OldPositionInfo {
@@ -56,29 +58,28 @@ sealed class RavencallersCloak : ModItem {
             public int Direction;
             public Rectangle HeadFrame, BodyFrame, LegFrame;
             public int WingFrame;
+            public float GfxOffY;
         }
 
         private bool _resetted = false;
         private OldPositionInfo[] _oldPositionInfos = new OldPositionInfo[20];
+        private float _resetTime;
 
         public bool RavencallersCloak { get; set; }
         public bool RavencallersCloakVisible { get; set; }
 
         public int CloakFaceId => EquipLoader.GetEquipSlot(Mod, ItemLoader.GetItem(ModContent.ItemType<RavencallersCloak>()).Name, EquipType.Face);
+        public bool ReceivedDamage => _resetTime > 0f;
+        public bool Available => RavencallersCloak && !ReceivedDamage;
+        public bool AvailableForNPCs => Available;
 
         public override void ResetEffects() {
             RavencallersCloak = RavencallersCloakVisible = false;
+        }
 
-            bool ravenCloak = Player.face == CloakFaceId;
-            if (!ravenCloak) {
-                if (!_resetted) {
-                    ResetPositions();
-                    _resetted = true;
-                }
-            }
-            else {
-                _resetted = false;
-            }
+        public override void OnHurt(Player.HurtInfo info) {
+            _resetTime = RESETTIME;
+            ResetPositions();
         }
 
         public void ResetPositions() {
@@ -124,7 +125,7 @@ sealed class RavencallersCloak : ModItem {
 
         private void On_LegacyPlayerRenderer_DrawPlayerFull(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
             RavencallerPlayer data = drawPlayer.GetModPlayer<RavencallerPlayer>();
-            if (!drawPlayer.active || Main.gameMenu || !data.RavencallersCloak) {
+            if (!data.Available || !drawPlayer.active || Main.gameMenu) {
                 orig(self, camera, drawPlayer);
                 return;
             }
@@ -140,6 +141,7 @@ sealed class RavencallersCloak : ModItem {
             float stealth = drawPlayer.stealth;
             int head = drawPlayer.head;
             bool shroomiteStealth = drawPlayer.shroomiteStealth;
+            float gfxOffY = drawPlayer.gfxOffY;
             if (!drawPlayer.ShouldNotDraw && !drawPlayer.dead) {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
@@ -155,6 +157,7 @@ sealed class RavencallersCloak : ModItem {
                         drawPlayer.face = CloakFaceId;
                         drawPlayer.shroomiteStealth = true;
                         drawPlayer.stealth = 0.5f;
+                        drawPlayer.gfxOffY = lastPositionInfo.GfxOffY;
                         SamplerState samplerState = camera.Sampler;
                         if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f) {
                             samplerState = LegacyPlayerRenderer.MountedSamplerState;
@@ -177,12 +180,20 @@ sealed class RavencallersCloak : ModItem {
             drawPlayer.stealth = stealth;
             drawPlayer.head = head;
             drawPlayer.shroomiteStealth = shroomiteStealth;
+            drawPlayer.gfxOffY = gfxOffY;
             orig(self, camera, drawPlayer);
         }
 
         public override void PostUpdate() {
-            RavencallerPlayer data = Player.GetModPlayer<RavencallerPlayer>();
-            if (data.RavencallersCloak) {
+            if (RavencallersCloak) {
+                if (ReceivedDamage) {
+                    _resetTime -= 1f;
+
+                    return;
+                }
+
+                _resetted = false;
+
                 for (int num2 = _oldPositionInfos.Length - 1; num2 > 0; num2--) {
                     _oldPositionInfos[num2] = _oldPositionInfos[num2 - 1];
                 }
@@ -195,6 +206,12 @@ sealed class RavencallersCloak : ModItem {
                 _oldPositionInfos[0].LegFrame = Player.legFrame;
                 _oldPositionInfos[0].WingFrame = Player.wingFrame;
             }
+            else {
+                if (!_resetted) {
+                    ResetPositions();
+                    _resetted = true;
+                }
+            }
         }
 
         private class NPCTargetSystem : GlobalNPC {
@@ -203,7 +220,7 @@ sealed class RavencallersCloak : ModItem {
             public override bool PreAI(NPC npc) {
                 foreach (Player player in Main.ActivePlayers) {
                     RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
-                    if (data.RavencallersCloak) {
+                    if (data.AvailableForNPCs) {
                         _before[player.whoAmI] = player.Center;
                         OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                         OldPositionInfo lastPositionInfo = playerOldPositions[^1];
@@ -219,7 +236,7 @@ sealed class RavencallersCloak : ModItem {
             public override void PostAI(NPC npc) {
                 foreach (Player player in Main.ActivePlayers) {
                     RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
-                    if (data.RavencallersCloak) {
+                    if (data.AvailableForNPCs) {
                         player.Center = _before[player.whoAmI];
                     }
                 }
