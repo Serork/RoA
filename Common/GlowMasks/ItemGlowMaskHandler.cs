@@ -76,7 +76,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 		}
 
         Item item = player.HeldItem;
-		if (player.frozen || ((drawInfo.drawPlayer.itemAnimation <= 0 || item.useStyle == ItemUseStyleID.None) && (item.holdStyle <= 0 || drawInfo.drawPlayer.pulley)) || drawInfo.drawPlayer.dead || item.noUseGraphic || (drawInfo.drawPlayer.wet && item.noWet)) {
+		if (player.frozen || ((player.itemAnimation <= 0 || item.useStyle == ItemUseStyleID.None) && (item.holdStyle <= 0 || player.pulley)) || player.dead || item.noUseGraphic || (player.wet && item.noWet)) {
 			return;
 		}
 

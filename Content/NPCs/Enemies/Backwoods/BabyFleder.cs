@@ -443,7 +443,7 @@ sealed class BabyFleder : ModNPC {
 
                 _tireTimer += 1f;
                 if (_tireTimer > 200f) {
-                    if (!Main.player[target].wet && Collision.CanHit(NPC, Main.player[target]))
+                    if (Collision.CanHit(NPC, Main.player[target]))
                         _tireTimer = 0f;
 
                     if (_tireTimer >= 460f && !Collision.CanHit(NPC, Main.player[target])) {

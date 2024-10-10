@@ -141,7 +141,7 @@ abstract class DruidNPC : RoANPC {
     public sealed override void AI() {
         if (NPC.localAI[3] == 0f) {
             NPC.localAI[3] = 1f;
-            NPC.TargetClosest();
+            //NPC.TargetClosest();
             AttackTimer = -TimeToChangeState();
             NPC.netUpdate = true;
         }
@@ -165,7 +165,7 @@ abstract class DruidNPC : RoANPC {
                     //if (NPC.justHit && AttackTimer > -TimeToRecoveryAfterGettingHit()) {
                     //    AttackTimer -= -TimeToRecoveryAfterGettingHit() * 0.25f;
                     //}
-                    if (!Main.player[NPC.target].dead && AttackTimer >= 0f) {
+                    if (!player.dead && AttackTimer >= 0f) {
                         if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
                             AttackTimer = 0f;
                             AttackType = Main.rand.Next(0, 2);

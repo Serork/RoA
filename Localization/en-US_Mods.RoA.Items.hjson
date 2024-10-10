@@ -169,3 +169,8 @@ FireflyPin: {
 	DisplayName: Firefly Pin
 	Tooltip: Keeps {$RoA.Items.Tooltips.Wreath} full charge bonuses for 2 seconds after discharging
 }
+
+RavencallersCloak: {
+	DisplayName: Ravencallers Cloak
+	Tooltip: ""
+}

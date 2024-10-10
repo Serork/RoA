@@ -29,6 +29,8 @@
 	  <None Remove="Resources\Textures\Gores\BackwoodsLeaf.png" />
 	  <None Remove="Resources\Textures\Gores\DruidBiomeWaterDroplet.png" />
 	  <None Remove="Resources\Textures\Gores\VileSpikeGore.png" />
+	  <None Remove="Resources\Textures\Items\Equipables\Accessories\RavencallersCloak.png" />
+	  <None Remove="Resources\Textures\Items\Equipables\Accessories\RavencallersCloak_Front.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Bonerose.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
 	  <None Remove="Resources\Textures\Items\Materials\MiracleMint.png" />
@@ -83,6 +85,9 @@
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Branches.png" />
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Tops.png" />
 	  <None Remove="Resources\Textures\Tiles\Walls\LivingBackwoodsLeavesWall.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Common\Players\" />
 	</ItemGroup>
 
 	<!-- References -->
