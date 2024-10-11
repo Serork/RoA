@@ -1,19 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Tiles;
+
+using System;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using System.Collections.Generic;
-
-using RoA.Content.Tiles.Miscellaneous;
-using RoA.Common.Tiles;
-
-using Terraria.GameContent.Metadata;
-
-using RoA.Core.Utility;
-using RoA.Core.Data;
-using System;
 
 namespace RoA.Content.Tiles.Plants;
 

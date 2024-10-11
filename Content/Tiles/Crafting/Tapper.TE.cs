@@ -53,6 +53,7 @@ class TapperTE : ModTileEntity {
     public float Progress => (float)(Time / TIMETOBECOLLECTABLE) * 0.9f;
 
     public void CollectGalipot(Player player) {
+        CollectDust(15);
         Time = 0.0;
         NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -78,7 +79,11 @@ class TapperTE : ModTileEntity {
     }
 
     public override void OnKill() {
-        for (int i2 = 0; i2 < 30; i2++) {
+        CollectDust();
+    }
+
+    private void CollectDust(int count = 30) {
+        for (int i2 = 0; i2 < count; i2++) {
             if (Main.rand.NextChance(Progress * 0.4f)) {
                 int dustId = Dust.NewDust(Position.ToWorldCoordinates() - new Vector2(16f, 12f), 24, 20, ModContent.DustType<Galipot>());
                 Dust dust = Main.dust[dustId];
