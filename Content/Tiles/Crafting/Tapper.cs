@@ -1,14 +1,24 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using RoA.Content.Items.Materials;
+using RoA.Core.Utility;
+
+using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 
-sealed class Tapper : ModTile {
-	public override void SetStaticDefaults() {
+partial class Tapper : ModTile {
+    public static bool[] ImATapper = TileID.Sets.Factory.CreateBoolSet();
+
+    public string BracingTexture => Texture + "_Bracing";
+    public string GalipotTexture => Texture + "_Galipot";
+
+    public override void SetStaticDefaults() {
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
 		Main.tileLavaDeath[Type] = true;
@@ -17,22 +27,82 @@ sealed class Tapper : ModTile {
 		Main.tileNoFail[Type] = true;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-		TileObjectData.newTile.AnchorLeft = new AnchorData(Terraria.Enums.AnchorType.Tree, TileObjectData.newTile.Width, 0);
+        TileObjectData.newTile.StyleWrapLimit = 0;
+        TileObjectData.newTile.CoordinateWidth = 30;
+        TileObjectData.newTile.CoordinateHeights = [28];
+        TileObjectData.newTile.AnchorRight = AnchorData.Empty;
+        TileObjectData.newTile.AnchorLeft = new AnchorData(Terraria.Enums.AnchorType.Tree, TileObjectData.newTile.Width, 0);
 		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
 		TileObjectData.newTile.AnchorTop = AnchorData.Empty;
-		//TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TapperEntity>().Hook_AfterPlacement, -1, 0, true);
+        TileObjectData.newTile.DrawXOffset = -8;
+        TileObjectData.newTile.DrawYOffset = -6;
+        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TapperTE>().Hook_AfterPlacement, -1, 0, true);
 
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x1);
-		TileObjectData.newAlternate.AnchorRight = new AnchorData(Terraria.Enums.AnchorType.Tree, TileObjectData.newTile.Width, 0);
-		TileObjectData.newAlternate.AnchorBottom = AnchorData.Empty;
-		TileObjectData.newAlternate.AnchorTop = AnchorData.Empty;
-		//TileObjectData.newAlternate.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TapperEntity>().Hook_AfterPlacement, -1, 0, true);
-		TileObjectData.addAlternate(1);
+        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+        TileObjectData.newAlternate.AnchorLeft = AnchorData.Empty;
+        TileObjectData.newAlternate.AnchorRight = new AnchorData(Terraria.Enums.AnchorType.Tree, TileObjectData.newTile.Width, 0);
+        TileObjectData.newAlternate.DrawXOffset = 8;
+        TileObjectData.addAlternate(1);
 
-		TileObjectData.addTile(Type);
+        TileObjectData.addTile(Type);
+
+        ImATapper[Type] = true;
 	}
 
-    public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+    public override IEnumerable<Item> GetItemDrops(int i, int j) { yield return new Item((ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>()); }
+
+    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<TapperTE>().Kill(i, j);
+
+    public override void MouseOver(int i, int j) {
+        Player player = Main.LocalPlayer;
+        player.noThrow = 2;
+        player.cursorItemIconEnabled = true;
+        TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
+        if (tapperTE != null) {
+            bool hasBottle = player.inventory[player.selectedItem].type == ItemID.Bottle;
+            if (hasBottle && tapperTE.IsReadyToCollectGalipot) {
+                player.cursorItemIconID = ModContent.ItemType<Galipot>();
+
+                return;
+            }
+
+            player.cursorItemIconID = tapperTE.IsReadyToCollectGalipot ? ItemID.Bottle : (ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>();
+        }
+    }
+
+    public override bool RightClick(int i, int j) {
+        Player player = Main.LocalPlayer;
+        TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
+        void dropItem(ushort itemType) {
+            int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
+            if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
+            }
+        }
+        if (tapperTE != null) {
+            Item item = player.GetSelectedItem();
+            bool hasBottle = item.type == ItemID.Bottle;
+            if (hasBottle && tapperTE.IsReadyToCollectGalipot) {
+                SoundEngine.PlaySound(SoundID.Drip, player.position);
+                if (--item.stack <= 0) {
+                    item.TurnToAir();
+                }
+                dropItem((ushort)ModContent.ItemType<Galipot>());
+                tapperTE.CollectGalipot(player);
+
+                return true;
+            }
+
+            //dropItem((ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>());
+            Tile tile = WorldGenHelper.GetTileSafely(i, j);
+            WorldGen.KillTile(i, j);
+            if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+            }
+
+            return true;
+        }
+
         return false;
     }
 }

@@ -179,3 +179,8 @@ Tapper: {
 	DisplayName: Tapper
 	Tooltip: ""
 }
+
+Galipot: {
+	DisplayName: Galipot
+	Tooltip: ""
+}

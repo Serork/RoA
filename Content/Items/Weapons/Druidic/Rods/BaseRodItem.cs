@@ -17,8 +17,6 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static Terraria.GameContent.Animations.Actions.Sprites;
-
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
 abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {

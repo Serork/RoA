@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Crafting;
 
-sealed class Tapper : ModItem {
+partial class Tapper : ModItem {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Tapper");
         //Tooltip.SetDefault("Used to extract sap from trees");

@@ -33,6 +33,7 @@
 	  <None Remove="Resources\Textures\Items\Equipables\Accessories\RavencallersCloak_Front.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Bonerose.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
+	  <None Remove="Resources\Textures\Items\Materials\Galipot.png" />
 	  <None Remove="Resources\Textures\Items\Materials\MiracleMint.png" />
 	  <None Remove="Resources\Textures\Items\Miscellaneous\LuminousFlower.png" />
 	  <None Remove="Resources\Textures\Items\Miscellaneous\RodOfTheCondor.png" />
