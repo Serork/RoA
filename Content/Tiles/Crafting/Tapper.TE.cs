@@ -15,12 +15,11 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Tiles.Crafting;
 
 class TapperTE : ModTileEntity {
-    sealed class GalipotPacket : NetPacket {
-        public GalipotPacket(Player player, int i, int j, double time) {
+    sealed class GalipotCollectPacket : NetPacket {
+        public GalipotCollectPacket(Player player, int i, int j) {
             Writer.TryWriteSenderPlayer(player);
             Writer.Write(i);
             Writer.Write(j);
-            Writer.Write(time);
         }
 
         public override void Read(BinaryReader reader, int sender) {
@@ -30,19 +29,18 @@ class TapperTE : ModTileEntity {
 
             int i = reader.ReadInt32();
             int j = reader.ReadInt32();
-            double time = reader.ReadDouble();
             TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
             if (tapperTE != null) {
-                tapperTE.Time = time;
+                tapperTE.Reset();
             }
 
             if (Main.netMode == NetmodeID.Server) {
-                MultiplayerSystem.SendPacket(new GalipotPacket(player, i, j, time), ignoreClient: sender);
+                MultiplayerSystem.SendPacket(new GalipotCollectPacket(player, i, j), ignoreClient: sender);
             }
         }
     }
 
-    private const double TIMETOBECOLLECTABLE = 43200.0 / 2.0; // half of day length
+    private const double TIMETOBECOLLECTABLE = 200 /*43200.0 / 2.0*/; // half of day length
 
     private bool _sync;
 
@@ -53,12 +51,16 @@ class TapperTE : ModTileEntity {
     public float Progress => (float)(Time / TIMETOBECOLLECTABLE) * 0.9f;
 
     public void CollectGalipot(Player player) {
-        CollectDust(15);
-        Time = 0.0;
+        Reset();
         NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new GalipotPacket(player, Position.X, Position.Y, Time));
+            MultiplayerSystem.SendPacket(new GalipotCollectPacket(player, Position.X, Position.Y));
         }
+    }
+
+    public void Reset() {
+        Time = 0.0;
+        CollectDust(15, true);
     }
 
     public override bool IsTileValidForEntity(int x, int y) {
@@ -82,12 +84,12 @@ class TapperTE : ModTileEntity {
         CollectDust();
     }
 
-    private void CollectDust(int count = 30) {
+    public void CollectDust(int count = 30, bool flag = false) {
         for (int i2 = 0; i2 < count; i2++) {
-            if (Main.rand.NextChance(Progress * 0.4f)) {
+            if (Main.rand.NextChance(flag ? 0.3f : (Progress * 0.4f))) {
                 int dustId = Dust.NewDust(Position.ToWorldCoordinates() - new Vector2(16f, 12f), 24, 20, ModContent.DustType<Galipot>());
                 Dust dust = Main.dust[dustId];
-                float progress = Progress * 1.25f;
+                float progress = (flag ? 0.9f : Progress) * 1.25f;
                 dust.velocity *= 1.25f;
                 dust.velocity *= 0.25f + 0.15f * progress;
                 dust.scale *= 0.85f;
