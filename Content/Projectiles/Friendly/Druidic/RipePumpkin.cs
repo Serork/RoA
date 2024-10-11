@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -91,7 +93,11 @@ sealed class RipePumpkin : NatureProjectile {
                     if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && (Main.player[Projectile.owner].GetSelectedItem().type == type || Main.mouseItem.type == type)) {
                         Player player = Main.player[Projectile.owner];
                         player.itemAnimation = player.itemTime = player.itemAnimationMax / 2;
-                        
+
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new ItemAnimationPacket(player, player.itemAnimation));
+                        }
+
                         _rotateWiggler.Stop();
                         Projectile.Kill();
                         SoundEngine.PlaySound(SoundID.NPCDeath22, Projectile.position);

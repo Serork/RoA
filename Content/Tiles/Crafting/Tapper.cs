@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 
@@ -108,6 +110,12 @@ partial class Tapper : ModTile {
                 }
                 dropItem((ushort)ModContent.ItemType<Galipot>());
                 tapperTE.CollectGalipot(player);
+
+                player.ApplyItemTime(item);
+                player.SetItemAnimation(item.useAnimation);
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new ItemAnimationPacket(player, item.useAnimation));
+                }
 
                 return true;
             }

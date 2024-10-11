@@ -43,8 +43,8 @@ sealed class BeastBow : ModItem {
 	}
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        if (player.ownedProjectileCounts[ModContent.ProjectileType<BeastProj>()] < 1) {
-            Projectile.NewProjectile(source, player.Center, Vector2.Zero, ModContent.ProjectileType<BeastProj>(), 0, 0f, player.whoAmI);
+        if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<BeastProj>()] < 1) {
+            Projectile.NewProjectile(source, player.Center, Vector2.Zero, ModContent.ProjectileType<BeastProj>(), 0, 0f, player.whoAmI, 0f, 0f, player.itemTimeMax);
         }
 
         return false;
@@ -64,6 +64,8 @@ sealed class BeastProj : ModProjectile  {
 		Projectile.penetrate = -1;
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 1;
+
+		Projectile.netImportant = true;
 
         ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
@@ -94,12 +96,21 @@ sealed class BeastProj : ModProjectile  {
 		return false;
 	}
 
-	private float rotation;
-	public override void SendExtraAI(BinaryWriter writer) 
-		=> writer.Write(rotation);
+	private float _rotation;
+	private float _attackTimer;
+	private float _rotation2;
 
-	public override void ReceiveExtraAI(BinaryReader reader)
-		=> rotation = reader.ReadSingle();
+	public override void SendExtraAI(BinaryWriter writer) {
+		writer.Write(_rotation);
+		writer.Write(_attackTimer);
+		writer.Write(_rotation2);
+	}
+
+	public override void ReceiveExtraAI(BinaryReader reader) {
+		_rotation = reader.ReadSingle();
+		_attackTimer = reader.ReadSingle();
+		_rotation2 = reader.ReadSingle();
+    }
 
 	public override void AI() {
 		Player player = Main.player[Projectile.owner];
@@ -119,10 +130,11 @@ sealed class BeastProj : ModProjectile  {
 			if (!Utils.HasNaNs(position)) 
 				Projectile.velocity = position;
 			player.ChangeDir(Projectile.direction);
-			Projectile.rotation = (float)Math.Atan2(mouseWorld.Y - center.Y, mouseWorld.X - center.X) + rotation;
+            _rotation2 = (float)Math.Atan2(mouseWorld.Y - center.Y, mouseWorld.X - center.X) + _rotation;
 			Projectile.netUpdate = true;
 		}
-		Projectile.ai[1] += 0.0045f * player.gravDir;
+		Projectile.rotation = _rotation2;
+        Projectile.ai[1] += 0.0045f * player.gravDir;
 		double rads = 1.0 * player.direction - (double)(Projectile.ai[1] - 0.5f) * player.direction * (3.14 + 2.0) + (float)Math.PI;
 		if (player.gravDir == -1f) {
 			rads -= MathHelper.PiOver4 * player.direction;
@@ -136,49 +148,28 @@ sealed class BeastProj : ModProjectile  {
 		Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true) + Projectile.velocity * 20f + new Vector2(offset * player.direction, 2f * player.direction * player.gravDir).RotatedBy(Projectile.velocity.ToRotation());
 		Vector2 velocity2 = Projectile.Center + velocity * (float)(31.4 + 31.4 * Projectile.ai[1]);
 		Projectile.direction = Projectile.spriteDirection = player.direction;
-		++Projectile.ai[0];
-		if (Projectile.ai[0] < player.itemTimeMax / 3f)
-			return;
-		rotation -= 0.075f * player.direction * player.gravDir;
-		Projectile.ai[0] = 0f;
-		SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
-		int projToShoot = -1;
-		Item? array = null;
-		bool num = false;
-		bool flag2 = true;
-		for (int num2 = 54; num2 < 58; num2++) {
-            if (player.inventory[num2].ammo != player.HeldItem.useAmmo) {
-                continue;
-            }
-            else {
-				array = player.inventory[num2];
-				if (player.inventory[num2].stack > 0) {
-                    num = true;
-                    if (player.inventory[num2].maxStack != 1 && Main.rand.NextBool(3)) {
-						player.inventory[num2].stack -= 1;
-					}
-
-				}
-				else {
-					continue;
-				}
-				flag2 = false;
-				break;
-			}
-		}
-		if (!num) {
-			flag2 = true;
-
-			for (int minValue = 0; minValue < 54; minValue++) {
-				if (player.inventory[minValue].ammo != player.HeldItem.useAmmo) {
+		++_attackTimer;
+		if (_attackTimer >= Projectile.ai[2] / 3f) {
+			_rotation -= 0.075f * player.direction * player.gravDir;
+            _attackTimer = 0f;
+			Projectile.netUpdate = true;
+			SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
+			int projToShoot = -1;
+			Item? array = null;
+			bool num = false;
+			bool flag2 = true;
+			for (int num2 = 54; num2 < 58; num2++) {
+				if (player.inventory[num2].ammo != player.HeldItem.useAmmo) {
 					continue;
 				}
 				else {
-					array = player.inventory[minValue];
-					if (player.inventory[minValue].stack > 0) {
-						if (player.inventory[minValue].maxStack != 1 && Main.rand.NextBool(3)) {
-							player.inventory[minValue].stack -= 1;
+					array = player.inventory[num2];
+					if (player.inventory[num2].stack > 0) {
+						num = true;
+						if (player.inventory[num2].maxStack != 1 && Main.rand.NextBool(3)) {
+							player.inventory[num2].stack -= 1;
 						}
+
 					}
 					else {
 						continue;
@@ -187,10 +178,32 @@ sealed class BeastProj : ModProjectile  {
 					break;
 				}
 			}
+			if (!num) {
+				flag2 = true;
+
+				for (int minValue = 0; minValue < 54; minValue++) {
+					if (player.inventory[minValue].ammo != player.HeldItem.useAmmo) {
+						continue;
+					}
+					else {
+						array = player.inventory[minValue];
+						if (player.inventory[minValue].stack > 0) {
+							if (player.inventory[minValue].maxStack != 1 && Main.rand.NextBool(3)) {
+								player.inventory[minValue].stack -= 1;
+							}
+						}
+						else {
+							continue;
+						}
+						flag2 = false;
+						break;
+					}
+				}
+			}
+			if (flag2 || array == null)
+				Projectile.Kill();
+			projToShoot = array.shoot;
+			Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 4f, Helper.VelocityToPoint(Projectile.Center, velocity2, 7f), projToShoot, 7, 2.15f, Projectile.owner);
 		}
-		if (flag2 || array == null)
-			Projectile.Kill();
-		projToShoot = array.shoot;
-		Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 4f, Helper.VelocityToPoint(Projectile.Center, velocity2, 7f), projToShoot, 7, 2.15f, Projectile.owner);
-	}
+    }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core.Utility;
@@ -95,8 +97,6 @@ sealed class SkinningPlayer : ModPlayer {
 			if (Player.ItemTimeIsZero
 				&& Player.itemAnimation > 0
 				&& Player.controlUseItem) {
-				Player.ApplyItemTime(item);
-                Player.SetItemAnimation(item.useAnimation);
                 foreach (Item inventoryItem in Player.inventory)
 					if (inventoryItem.type == item.type) {
 						int removed = Math.Min(inventoryItem.stack, 1);
@@ -111,8 +111,13 @@ sealed class SkinningPlayer : ModPlayer {
 				int item2 = Item.NewItem(Player.GetSource_ItemUse(item), (int)vector.X, (int)vector.Y, 1, 1, ItemID.Leather, 1, noBroadcast: false, -1);
 				if (Main.netMode == NetmodeID.MultiplayerClient && item2 >= 0)
 					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item2, 1f);
+                Player.ApplyItemTime(item);
+                Player.SetItemAnimation(item.useAnimation);
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new ItemAnimationPacket(Player, item.useAnimation));
+                }
                 //NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Player.whoAmI);
-                NetMessage.SendData(41, -1, -1, null, Player.whoAmI);
+                //NetMessage.SendData(41, -1, -1, null, Player.whoAmI);
             }
 		}
 	}
