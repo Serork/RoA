@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
@@ -15,32 +17,7 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Tiles.Crafting;
 
 class TapperTE : ModTileEntity {
-    sealed class GalipotCollectPacket : NetPacket {
-        public GalipotCollectPacket(Player player, int i, int j) {
-            Writer.TryWriteSenderPlayer(player);
-            Writer.Write(i);
-            Writer.Write(j);
-        }
-
-        public override void Read(BinaryReader reader, int sender) {
-            if (!reader.TryReadSenderPlayer(sender, out var player)) {
-                return;
-            }
-
-            int i = reader.ReadInt32();
-            int j = reader.ReadInt32();
-            TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
-            if (tapperTE != null) {
-                tapperTE.Reset();
-            }
-
-            if (Main.netMode == NetmodeID.Server) {
-                MultiplayerSystem.SendPacket(new GalipotCollectPacket(player, i, j), ignoreClient: sender);
-            }
-        }
-    }
-
-    private const double TIMETOBECOLLECTABLE = 200 /*43200.0 / 2.0*/; // half of day length
+    private const double TIMETOBECOLLECTABLE = TimeSystem.DAYLENGTH / 2.0; // half of day length
 
     private bool _sync;
 
@@ -58,7 +35,7 @@ class TapperTE : ModTileEntity {
         }
     }
 
-    public void Reset() {
+    internal void Reset() {
         Time = 0.0;
         CollectDust(15, true);
     }
