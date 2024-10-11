@@ -42,7 +42,7 @@ class TapperTE : ModTileEntity {
         }
     }
 
-    private const double TIMETOBECOLLECTABLE = 300 /*43200.0*/;
+    private const double TIMETOBECOLLECTABLE = 43200.0 / 2.0; // half of day length
 
     private bool _sync;
 

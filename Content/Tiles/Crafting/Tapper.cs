@@ -91,6 +91,7 @@ partial class Tapper : ModTile {
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
         TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
+        Vector2 position = new Vector2(i, j).ToWorldCoordinates();
         void dropItem(ushort itemType) {
             int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
             if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
@@ -101,7 +102,7 @@ partial class Tapper : ModTile {
             Item item = player.GetSelectedItem();
             bool hasBottle = item.type == ItemID.Bottle;
             if (hasBottle && tapperTE.IsReadyToCollectGalipot) {
-                SoundEngine.PlaySound(SoundID.Drip, player.position);
+                SoundEngine.PlaySound(SoundID.SplashWeak.WithPitchOffset(-0.1f), position);
                 if (--item.stack <= 0) {
                     item.TurnToAir();
                 }
