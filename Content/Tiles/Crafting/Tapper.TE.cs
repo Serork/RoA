@@ -67,16 +67,6 @@ class TapperTE : ModTileEntity {
     }
 
     public override void Update() {
-        if (Progress > 0.75f) {
-            if (Main.rand.NextChance(Progress * 0.05f)) {
-                int dustId = Dust.NewDust(Position.ToWorldCoordinates() - new Vector2(12f, 12f), 20, 6, ModContent.DustType<Galipot>());
-                Dust dust = Main.dust[dustId];
-                float progress = Progress * 1.25f;
-                dust.velocity *= 0.15f + 0.15f * progress;
-                dust.scale *= 0.7f * progress;
-            }
-        }
-
         if (!IsReadyToCollectGalipot) {
             Time += Main.dayRate;
             _sync = false;

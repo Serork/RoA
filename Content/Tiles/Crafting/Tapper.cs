@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
@@ -69,6 +70,21 @@ partial class Tapper : ModTile {
             }
 
             player.cursorItemIconID = tapperTE.IsReadyToCollectGalipot ? ItemID.Bottle : (ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>();
+        }
+    }
+
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
+        if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
+            float progress = 0.5f;
+            Vector2 position = new((float)i, (float)j);
+            if (Main.rand.NextChance(progress - 0.2f)) {
+                int dustId = Dust.NewDust(position.ToWorldCoordinates() - new Vector2(12f, 12f), 20, 6, ModContent.DustType<Dusts.Galipot>());
+                Dust dust = Main.dust[dustId];
+                progress = progress * 2.05f;
+                dust.velocity *= 0.15f + 0.15f * progress;
+                dust.scale *= 0.7f * progress;
+            }
         }
     }
 
