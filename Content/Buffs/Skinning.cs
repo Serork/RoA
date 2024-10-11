@@ -2,6 +2,7 @@
 
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Tiles.Crafting;
+using RoA.Core.Utility;
 
 using System;
 
@@ -25,26 +26,69 @@ sealed class Skinning : ModBuff {
 sealed class SkinningPlayer : ModPlayer {
 	public bool skinning;
 
-	public override void ResetEffects()
-		=> skinning = false;
-
 	public override void PostUpdateBuffs() {
-		int type = (ushort)ModContent.BuffType<Skinning>();
-		if (Player.FindBuffIndex(type) != -1)
-			return;
+		if (skinning) {
+			int type = (ushort)ModContent.BuffType<Skinning>();
+			if (Player.FindBuffIndex(type) != -1)
+				return;
+			goto reset;
+		}
+	reset:
+		skinning = false;
+		bool valid(Item item) {
+			return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
+		}
+		for (int i = 0; i < Player.bank.item.Length; i++) {
+			Item item = Player.bank.item[i];
+			if (valid(item)) {
+				int stack = item.stack;
+				Player.bank.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+				Player.bank.item[i].stack = stack;
+			}
+		}
+		for (int i = 0; i < Player.bank2.item.Length; i++) {
+			Item item = Player.bank2.item[i];
+			if (valid(item)) {
+				int stack = item.stack;
+				Player.bank2.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+				Player.bank2.item[i].stack = stack;
+			}
+		}
+		for (int i = 0; i < Player.bank3.item.Length; i++) {
+			Item item = Player.bank3.item[i];
+			if (valid(item)) {
+				int stack = item.stack;
+				Player.bank3.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+				Player.bank3.item[i].stack = stack;
+			}
+		}
+		for (int i = 0; i < Player.bank4.item.Length; i++) {
+			Item item = Player.bank3.item[i];
+			if (valid(item)) {
+				int stack = item.stack;
+				Player.bank4.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+				Player.bank4.item[i].stack = stack;
+			}
+		}
 		for (int i = 0; i < Player.inventory.Length; i++) {
 			Item item = Player.inventory[i];
-			if (item != new Item() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>())) {
+			if (valid(item)) {
 				int stack = item.stack;
 				Player.inventory[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
 				Player.inventory[i].stack = stack;
 			}
 		}
+		Item trashItem = Player.trashItem;
+		if (valid(trashItem)) {
+			int stack = trashItem.stack;
+			Player.trashItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+			Player.trashItem.stack = stack;
+		}
 	}
 
 	public override void PostItemCheck() {
 		Item item = Player.inventory[Player.selectedItem];
-		if ((item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>())
+		if (Player.whoAmI == Main.myPlayer && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>())
 			&& Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == (ushort)ModContent.TileType<TanningRack>()
 			&& Player.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)Player.blockRange <= (float)Player.tileTargetX
 			&& (Player.position.X + (float)Player.width) / 16f + (float)Player.tileRangeX + (float)item.tileBoost - 1f + (float)Player.blockRange >= (float)Player.tileTargetX && Player.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)Player.blockRange <= (float)Player.tileTargetY && (Player.position.Y + (float)Player.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)Player.blockRange >= (float)Player.tileTargetY) {
@@ -53,8 +97,6 @@ sealed class SkinningPlayer : ModPlayer {
 				&& Player.controlUseItem) {
 				Player.ApplyItemTime(item);
                 Player.SetItemAnimation(item.useAnimation);
-                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Player.whoAmI);
-                NetMessage.SendData(41, -1, -1, null, Player.whoAmI);
                 foreach (Item inventoryItem in Player.inventory)
 					if (inventoryItem.type == item.type) {
 						int removed = Math.Min(inventoryItem.stack, 1);
@@ -69,7 +111,9 @@ sealed class SkinningPlayer : ModPlayer {
 				int item2 = Item.NewItem(Player.GetSource_ItemUse(item), (int)vector.X, (int)vector.Y, 1, 1, ItemID.Leather, 1, noBroadcast: false, -1);
 				if (Main.netMode == NetmodeID.MultiplayerClient && item2 >= 0)
 					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item2, 1f);
-			}
+                //NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Player.whoAmI);
+                NetMessage.SendData(41, -1, -1, null, Player.whoAmI);
+            }
 		}
 	}
 }
