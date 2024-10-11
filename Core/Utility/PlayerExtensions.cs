@@ -90,11 +90,12 @@ static class PlayerExtensions {
     }
 
     public static Vector2 GetViableMousePosition(this Player player, float maxX = 960f, float maxY = 600f) {
-        float num14 = (float)Main.mouseX + Main.screenPosition.X;
-        float num15 = (float)Main.mouseY + Main.screenPosition.Y;
-        if (player.gravDir == -1f)
-            num15 = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY;
-        Vector2 result = new(num14, num15);
+        //float num14 = (float)Main.mouseX + Main.screenPosition.X;
+        //float num15 = (float)Main.mouseY + Main.screenPosition.Y;
+        //if (player.gravDir == -1f)
+        //    num15 = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY;
+        Vector2 result = Main.ReverseGravitySupport(Main.MouseScreen) + Main.screenPosition;
+
         player.LimitPointToPlayerReachableArea(ref result, maxX, maxY);
         return result;
     }

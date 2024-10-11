@@ -52,7 +52,10 @@ sealed class SkinningPlayer : ModPlayer {
 				&& Player.itemAnimation > 0
 				&& Player.controlUseItem) {
 				Player.ApplyItemTime(item);
-				foreach (Item inventoryItem in Player.inventory)
+                Player.SetItemAnimation(item.useAnimation);
+                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Player.whoAmI);
+                NetMessage.SendData(41, -1, -1, null, Player.whoAmI);
+                foreach (Item inventoryItem in Player.inventory)
 					if (inventoryItem.type == item.type) {
 						int removed = Math.Min(inventoryItem.stack, 1);
 						inventoryItem.stack -= removed;
@@ -65,7 +68,7 @@ sealed class SkinningPlayer : ModPlayer {
 					vector = Player.Center;
 				int item2 = Item.NewItem(Player.GetSource_ItemUse(item), (int)vector.X, (int)vector.Y, 1, 1, ItemID.Leather, 1, noBroadcast: false, -1);
 				if (Main.netMode == NetmodeID.MultiplayerClient && item2 >= 0)
-					NetMessage.SendData(21, -1, -1, null, item2, 1f);
+					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item2, 1f);
 			}
 		}
 	}

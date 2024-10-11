@@ -83,7 +83,14 @@ sealed class BeastProj : ModProjectile  {
 			_rotOffset -= 1.57f * _player.direction;
 		int x = -(int)_origin.X;
 		Vector2 _offset = new(_origin.X + x, 0);
-		Main.spriteBatch.Draw(_texture, Projectile.Center - Main.screenPosition/* + new Vector2(0f, Projectile.gfxOffY + 4f)*/, _texture.Bounds, lightColor, Projectile.rotation + _rotOffset - ((float)Math.PI / 2f + (float)Math.PI * 1.8f) * _player.direction + 0.45f * _player.direction, _origin, Projectile.scale, _player.direction != 1 ? SpriteEffects.FlipVertically : SpriteEffects.None, 0);
+		SpriteEffects effects = _player.direction != 1 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+        if (_player.gravDir == -1f) {
+            if (_player.direction == 1)
+                effects = SpriteEffects.FlipVertically;
+            else if (_player.direction == -1)
+                effects = SpriteEffects.None;
+        }
+        Main.spriteBatch.Draw(_texture, Projectile.Center - Main.screenPosition/* + new Vector2(0f, Projectile.gfxOffY + 4f)*/, _texture.Bounds, lightColor, Projectile.rotation + _rotOffset - ((float)Math.PI / 2f + (float)Math.PI * 1.8f) * _player.direction * _player.gravDir + 0.45f * _player.direction * _player.gravDir, _origin, Projectile.scale, effects, 0);
 		return false;
 	}
 
@@ -115,21 +122,24 @@ sealed class BeastProj : ModProjectile  {
 			Projectile.rotation = (float)Math.Atan2(mouseWorld.Y - center.Y, mouseWorld.X - center.X) + rotation;
 			Projectile.netUpdate = true;
 		}
-		Projectile.ai[1] += 0.0045f;
+		Projectile.ai[1] += 0.0045f * player.gravDir;
 		double rads = 1.0 * player.direction - (double)(Projectile.ai[1] - 0.5f) * player.direction * (3.14 + 2.0) + (float)Math.PI;
+		if (player.gravDir == -1f) {
+			rads -= MathHelper.PiOver4 * player.direction;
+        }
 		float x = (float)Math.Cos(rads);
 		float y = (float)Math.Sin(rads);
 		Vector2 vector = Projectile.velocity;
 		Vector2 velocity = new Vector2();
 		velocity.X += vector.X * x - vector.Y * y;
 		velocity.Y += vector.X * y + vector.Y * x;
-		Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true) + Projectile.velocity * 20f + new Vector2(offset * player.direction, 2f * player.direction).RotatedBy(Projectile.velocity.ToRotation());
+		Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true) + Projectile.velocity * 20f + new Vector2(offset * player.direction, 2f * player.direction * player.gravDir).RotatedBy(Projectile.velocity.ToRotation());
 		Vector2 velocity2 = Projectile.Center + velocity * (float)(31.4 + 31.4 * Projectile.ai[1]);
 		Projectile.direction = Projectile.spriteDirection = player.direction;
 		++Projectile.ai[0];
 		if (Projectile.ai[0] < player.itemTimeMax / 3f)
 			return;
-		rotation -= 0.075f * player.direction;
+		rotation -= 0.075f * player.direction * player.gravDir;
 		Projectile.ai[0] = 0f;
 		SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
 		int projToShoot = -1;

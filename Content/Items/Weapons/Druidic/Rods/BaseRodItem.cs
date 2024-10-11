@@ -160,6 +160,14 @@ abstract class BaseRodProjectile : NatureProjectile {
         float rotation = Projectile.rotation + extraRotation;
         float scale = 1f;
         SpriteEffects effects = (SpriteEffects)(Owner.direction /** Owner.gravDir*/ != 1).ToInt();
+        //if (Owner.gravDir == -1f) {
+        //    if (Owner.direction == 1) {
+        //        effects = SpriteEffects.None;
+        //    }
+        //    else {
+        //        effects = SpriteEffects.FlipHorizontally;
+        //    }
+        //}
         Main.EntitySpriteDraw(texture, (position + Vector2.UnitY * offsetY/* + Owner.PlayerMovementOffset()*/)/*.Floor()*/, sourceRectangle, color, rotation, origin, scale, effects);
 
         return false;
