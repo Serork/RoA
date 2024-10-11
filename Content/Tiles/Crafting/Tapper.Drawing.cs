@@ -102,7 +102,8 @@ sealed class TapperDrawing : GlobalTile {
         if (type == TileID.Trees) {
             ushort tapperTileType = (ushort)ModContent.TileType<Tapper>();
             bool flag = WorldGenHelper.GetTileSafely(i - 1, j).TileType == tapperTileType;
-            if (WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType || flag) {
+            bool flag2 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType;
+            if (flag2 || flag) {
                 int coordinateWidth = 30;
                 int num12 = 28;
                 Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
@@ -113,8 +114,9 @@ sealed class TapperDrawing : GlobalTile {
                 Color color = Lighting.GetColor(i, j);
                 int offset = WorldGenHelper.GetTileSafely(i + 1, j).TileType != (ushort)ModContent.TileType<Tapper>() ? -1 : 0;
                 int offsetX = flag ? 0 : 1;
+                bool flag4 = flag && flag2;
                 Asset<Texture2D>? tapperBracingAsset = ModContent.Request<Texture2D>((TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
-                spriteBatch.Draw(tapperBracingAsset.Value, new Vector2((float)((i + offset) * 16 - (int)position.X + offsetX), (float)(j * 16 - (int)position.Y) - 6), new Rectangle(0, 0, coordinateWidth, num12), color, 0f, Vector2.Zero, 1f, offset == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                spriteBatch.Draw(tapperBracingAsset.Value, new Vector2((float)((i + offset) * 16 - (int)position.X + offsetX - (flag4 ? 3 : 0)), (float)(j * 16 - (int)position.Y) - 6), new Rectangle(0, flag4 ? num12 : 0, coordinateWidth + (flag4 ? 2 : 0), num12), color, 0f, Vector2.Zero, 1f, offset == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             }
         }
     }
