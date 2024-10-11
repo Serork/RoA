@@ -184,3 +184,27 @@ Galipot: {
 	DisplayName: Galipot
 	Tooltip: ""
 }
+
+AnimalLeather: {
+	DisplayName: Animal Leather
+	Tooltip: ""
+}
+
+RoughLeather: {
+	DisplayName: Rough Leather
+	Tooltip: ""
+}
+
+SpoiledRawhide: {
+	DisplayName: Spoiled Rawhide
+	Tooltip: ""
+}
+
+TanningRack: {
+	DisplayName: Tanning Rack
+	Tooltip:
+		'''
+		Allows leather to be obtained from enemies
+		It must be processed at the rack before spoiling
+		'''
+}

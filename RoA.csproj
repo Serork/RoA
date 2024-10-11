@@ -9,6 +9,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Localization\en-US_Mods.RoA.Biomes.hjson" />
+	  <None Remove="Localization\en-US_Mods.RoA.Buffs.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Items.Tooltips.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.NPCs.hjson" />

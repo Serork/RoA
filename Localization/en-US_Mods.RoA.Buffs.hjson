@@ -1,0 +1,9 @@
+Deceleration: {
+	DisplayName: Deceleration
+	Description: The power of Aqua has corrupted your moving abilities and slowed down your speed
+}
+
+Skinning: {
+	DisplayName: Skinning
+	Description: Enemies have a chance to drop rawhides, which will spoil when the effect ends
+}
