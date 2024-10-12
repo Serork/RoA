@@ -9,6 +9,7 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -113,6 +114,7 @@ sealed class SkinningPlayer : ModPlayer {
 					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item2, 1f);
                 Player.ApplyItemTime(item);
                 Player.SetItemAnimation(item.useAnimation);
+
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     MultiplayerSystem.SendPacket(new ItemAnimationPacket(Player, item.useAnimation));
                 }

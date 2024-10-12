@@ -149,17 +149,31 @@ abstract class BaseRodProjectile : NatureProjectile {
     public sealed override bool PreDraw(ref Color lightColor) {
         Texture2D texture = HeldItemTexture;
         Rectangle sourceRectangle = texture.Bounds;
-        Vector2 position = Projectile.Center - Main.screenPosition /*+ new Vector2(0f, Projectile.gfxOffY - Owner.gfxOffY)*/ + GravityOffset;
-        float offsetY = 5f;
-        Vector2 origin = new(texture.Width * 0.5f * (1f - Owner.direction), texture.Height);
+        Vector2 position = Projectile.Center - Main.screenPosition /*+ new Vector2(0f, Projectile.gfxOffY - Owner.gfxOffY)*//* + GravityOffset*/;
+        float offsetY = 5f * Owner.gravDir;
+        Vector2 origin = new(texture.Width * 0.5f * (1f - Owner.direction), Owner.gravDir == -1f ? 0 : texture.Height);
         Color color = lightColor;
         float extraRotation = MathHelper.PiOver4 * Owner.direction;
         //if (Owner.gravDir == -1) {
         //    extraRotation -= MathHelper.PiOver2 * Owner.direction;
         //}
-        float rotation = Projectile.rotation + extraRotation;
+        float rotation = Projectile.rotation /*+ extraRotation*/;
         float scale = 1f;
-        SpriteEffects effects = (SpriteEffects)(Owner.direction /** Owner.gravDir*/ != 1).ToInt();
+        float rotationOffset = MathHelper.PiOver4 * Owner.direction;
+        if (Owner.gravDir == -1f) {
+            rotationOffset -= MathHelper.PiOver2 * Owner.direction;
+        }
+        SpriteEffects effects = Owner.direction != 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        if (Owner.gravDir == -1f) {
+            if (Owner.direction == 1) {
+                effects = SpriteEffects.FlipVertically;
+            }
+            else {
+                effects = SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically;
+            }
+        }
+        rotation += rotationOffset;
+        //SpriteEffects effects = (SpriteEffects)(Owner.direction /** Owner.gravDir*/ != 1).ToInt();
         //if (Owner.gravDir == -1f) {
         //    if (Owner.direction == 1) {
         //        effects = SpriteEffects.None;

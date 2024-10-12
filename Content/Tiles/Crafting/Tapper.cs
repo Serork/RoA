@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 
@@ -104,7 +104,7 @@ partial class Tapper : ModTile {
             Item item = player.GetSelectedItem();
             bool hasBottle = item.type == ItemID.Bottle;
             if (hasBottle && tapperTE.IsReadyToCollectGalipot) {
-                SoundEngine.PlaySound(SoundID.SplashWeak.WithPitchOffset(-0.1f), position);
+                SoundEngine.PlaySound(SoundID.Item112.WithPitchOffset(-0.1f), position);
                 if (--item.stack <= 0) {
                     item.TurnToAir();
                 }
