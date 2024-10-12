@@ -208,3 +208,17 @@ TanningRack: {
 		It must be processed at the rack before spoiling
 		'''
 }
+
+BloodlustPotion: {
+	DisplayName: Bloodlust Potion
+	Tooltip: Restores life on deadly hits
+}
+
+DeathWardPotion: {
+	DisplayName: Death Ward Potion
+	Tooltip: '''
+			 Prevents death
+			 Makes you potion sick for 60 seconds 
+			 'Rests in the hands of its master who sent it'
+			 '''
+}

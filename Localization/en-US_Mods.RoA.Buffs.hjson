@@ -25,3 +25,13 @@ WreathFullCharged: {
 		Provides full charge bonuses of equipped {$RoA.Items.Tooltips.Wreath}
 		'''
 }
+
+Bloodlust: {
+	DisplayName: Bloodlust
+	Description: You restore some health on deadly hits
+}
+
+DeathWard: {
+	DisplayName: Death Ward
+	Description: Your next fatal hit will be prevented
+}
