@@ -1,5 +1,10 @@
+using Microsoft.Xna.Framework;
+
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Content.Dusts;
+
+using System;
 
 using Terraria;
 using Terraria.Audio;
@@ -45,5 +50,14 @@ sealed class BehelitPlayer : ModPlayer {
     public void DeathWardImmune(int time) {
         Player.SetImmuneTimeForAllTypes(time);
         SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact with { Volume = 1.5f }, Player.Center);
+        for (int i = 0; i < 50; i++) {
+            int dust = Dust.NewDust(Player.position - new Vector2(20f, 20f), 40, 40, ModContent.DustType<DeathWardDust>(), 0f, -2f, 0, default);
+            Main.dust[dust].velocity.X *= Main.rand.NextFloat(-8f, 8f);
+            Main.dust[dust].velocity.Y *= Main.rand.NextFloat(-8f, 8f);
+            Main.dust[dust].velocity *= 0.9f;
+            Main.dust[dust].scale = Main.rand.NextFloat(2f, 3f) * 0.85f;
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].noLight = true;
+        }
     }
 }
