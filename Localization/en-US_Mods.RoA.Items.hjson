@@ -216,9 +216,10 @@ BloodlustPotion: {
 
 DeathWardPotion: {
 	DisplayName: Death Ward Potion
-	Tooltip: '''
-			 Prevents death
-			 Makes you potion sick for 60 seconds 
-			 'Rests in the hands of its master who sent it'
-			 '''
+	Tooltip:
+		'''
+		Prevents death
+		Makes you potion sick for 60 seconds 
+		'Rests in the hands of its master who sent it'
+		'''
 }

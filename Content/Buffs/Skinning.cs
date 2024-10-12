@@ -4,6 +4,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Tiles.Crafting;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -114,7 +115,10 @@ sealed class SkinningPlayer : ModPlayer {
 					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item2, 1f);
                 Player.ApplyItemTime(item);
                 Player.SetItemAnimation(item.useAnimation);
-				SoundEngine.PlaySound(SoundID.Item156, vector);
+                SoundStyle leatherSound = new(ResourceManager.Sounds + "Leather") {
+                    PitchVariance = 0.5f
+                };
+                SoundEngine.PlaySound(leatherSound);
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     MultiplayerSystem.SendPacket(new ItemAnimationPacket(Player, item.useAnimation));
                 }

@@ -11,7 +11,6 @@ namespace RoA.Common.Networking.Packets;
 sealed class DeathWardImmuneTimePacket : NetPacket {
     public DeathWardImmuneTimePacket(Player player, int immuneTime) {
         Writer.TryWriteSenderPlayer(player);
-        Writer.Write(whoAmI);
         Writer.Write(immuneTime);
     }
 

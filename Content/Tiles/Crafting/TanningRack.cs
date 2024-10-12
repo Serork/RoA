@@ -3,8 +3,10 @@ using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
 
 using System.Linq;
+using System.Numerics;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
@@ -58,7 +60,8 @@ sealed class TanningRack : ModTile {
 		}
 
 		player.AddBuff(SkinningBuffType, 18000);
-		return true;
+        SoundEngine.PlaySound(SoundID.Item156, player.GetViableMousePosition());
+        return true;
 	}
 
 	public override void MouseOver(int i, int j) {
