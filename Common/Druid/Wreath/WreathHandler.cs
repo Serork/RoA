@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Claws;
+using RoA.Content.Buffs;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
@@ -60,6 +61,7 @@ sealed class WreathHandler : ModPlayer {
     }
     public bool IsEmpty => ActualProgress <= 0.01f;
     public bool IsFull => ActualProgress > 0.95f;
+    public bool IsMinCharged => ActualProgress > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
@@ -115,6 +117,26 @@ sealed class WreathHandler : ModPlayer {
 
         IncreaseResourceValue(natureProjectile.WreathPointsFine);
         MakeDusts();
+    }
+
+    public override void PostUpdateBuffs() {
+        int buff = ModContent.BuffType<WreathCharged>();
+        int buff2 = ModContent.BuffType<WreathFullCharged>();
+        if (IsMinCharged) {
+            int buffIndex;
+            if (IsFull) {
+                Player.AddBuff(buff2, 10);
+                if (Player.FindBuff(buff, out buffIndex)) {
+                    Player.DelBuff(buffIndex);
+                }
+
+                return;
+            }
+            Player.AddBuff(buff, 10);
+            if (Player.FindBuff(buff2, out buffIndex)) {
+                Player.DelBuff(buffIndex);
+            }
+        }
     }
 
     public override void PostUpdateEquips() {

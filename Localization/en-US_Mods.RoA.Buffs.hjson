@@ -7,3 +7,21 @@ Skinning: {
 	DisplayName: Skinning
 	Description: Enemies have a chance to drop rawhides, which will spoil when the effect ends
 }
+
+WreathCharged: {
+	DisplayName: Wreath Charge [c/4ED757:I]
+	Description:
+		'''
+		Nature damage is improved
+		Provides charge bonuses of equipped {$RoA.Items.Tooltips.Wreath}
+		'''
+}
+
+WreathFullCharged: {
+	DisplayName: Wreath Charge [c/4ED757:II]
+	Description:
+		'''
+		Nature damage is at full potential
+		Provides full charge bonuses of equipped {$RoA.Items.Tooltips.Wreath}
+		'''
+}
