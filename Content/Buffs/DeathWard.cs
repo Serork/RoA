@@ -54,7 +54,7 @@ sealed class BehelitPlayer : ModPlayer {
             int dust = Dust.NewDust(Player.position - new Vector2(20f, 20f), 40, 40, ModContent.DustType<DeathWardDust>(), 0f, -2f, 0, default);
             Main.dust[dust].velocity.X *= Main.rand.NextFloat(-8f, 8f);
             Main.dust[dust].velocity.Y *= Main.rand.NextFloat(-8f, 8f);
-            Main.dust[dust].velocity *= 0.8f;
+            Main.dust[dust].velocity *= 0.75f;
             Main.dust[dust].scale = Main.rand.NextFloat(2f, 3f) * 0.8f;
             Main.dust[dust].noGravity = true;
             Main.dust[dust].noLight = true;
