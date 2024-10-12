@@ -7,7 +7,7 @@ namespace RoA.Content.Dusts;
 
 public class DeathWardDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-        return new Color(lightColor.R, lightColor.G, lightColor.B, 10);
+        return new Color(lightColor.R, lightColor.G, lightColor.B, 5);
     }
 
     public override bool Update(Dust dust) {
