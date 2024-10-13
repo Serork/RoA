@@ -160,7 +160,7 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		10% increased wreath filling rate
+		10% increased {$RoA.Items.Tooltips.Wreath} filling rate
 		Increases maximum life by 20 {$RoA.Items.Tooltips.WhenCharged}
 		'''
 }
@@ -222,4 +222,14 @@ DeathWardPotion: {
 		Makes you potion sick for 60 seconds 
 		'Rests in the hands of its master who sent it'
 		'''
+}
+
+WillpowerPotion: {
+	DisplayName: Willpower Potion
+	Tooltip: Increases {$RoA.Items.Tooltips.Wreath} filling rate by 10%
+}
+
+ResiliencePotion: {
+	DisplayName: Resilience Potion
+	Tooltip: Decreases {$RoA.Items.Tooltips.Wreath} discharge speed by 20%
 }

@@ -36,7 +36,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
             tag = "FillingRate";
             int fillingRate = (int)(GetFillingRate(Main.LocalPlayer) * 100);
-            byte tooltipValue = (byte)(fillingRate / 25 + 1); 
+            byte tooltipValue = (byte)Math.Clamp(fillingRate / 20, 1, 7); 
             tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.FillingRate{tooltipValue}").Value;
             tooltips.Insert(index + 2, new(Mod, tag, tooltip));
         }

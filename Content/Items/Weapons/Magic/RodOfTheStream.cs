@@ -33,8 +33,6 @@ sealed class RodOfTheStream : Rod {
         Item.damage = 28;
         Item.knockBack = 6f;
 
-        Item.noUseGraphic = true;
-
         Item.mana = 11;
 
         Item.value = Item.buyPrice(gold: 1, silver: 10);

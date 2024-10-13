@@ -9,6 +9,7 @@ sealed class DruidStats : ModPlayer {
     private float _druidPotentialDamageMultiplier = 1f;
     private float _druidDamageExtraIncreaseValueMultiplier = 1f;
     private float _keepBonusesForTime = 0f;
+    private float _dischargeTimeDecreaseMultiplier = 1f;
 
     public float DruidBaseDamageMultiplier {
         get => _druidBaseDamageMultiplier;
@@ -38,10 +39,18 @@ sealed class DruidStats : ModPlayer {
         }
     }
 
+    public float DischargeTimeDecreaseMultiplier {
+        get => _dischargeTimeDecreaseMultiplier;
+        set {
+            _dischargeTimeDecreaseMultiplier = MathHelper.Clamp(value, 0f, 2f);
+        }
+    }
+
     public override void ResetEffects() {
         DruidBaseDamageMultiplier = 1f;
         DruidPotentialDamageMultiplier = 1f;
         DruidDamageExtraIncreaseValueMultiplier = 1f;
+        DischargeTimeDecreaseMultiplier = 1f;
 
         KeepBonusesForTime = 0f;
     }

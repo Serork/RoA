@@ -35,3 +35,13 @@ DeathWard: {
 	DisplayName: Death Ward
 	Description: Your next fatal hit will be prevented
 }
+
+Willpower: {
+	DisplayName: Willpower
+	Description: 10% increased {$RoA.Items.Tooltips.Wreath} filling rate
+}
+
+Resilience: {
+	DisplayName: Resilience
+	Description: 20% decreased {$RoA.Items.Tooltips.Wreath} discharge speed
+}

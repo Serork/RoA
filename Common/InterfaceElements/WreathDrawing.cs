@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid.Wreath;
 using RoA.Core;
 using RoA.Core.Data;
-using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -67,7 +66,9 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         wreathSpriteData.DrawSelf();
 
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed(0, 1);
-        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY, wreathSpriteData2.FrameWidth, (int)(wreathSpriteData2.FrameHeight * progress));
+        int frameOffsetY = 2;
+        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)((wreathSpriteData2.FrameHeight + frameOffsetY) * progress));
+        wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;
         wreathSpriteData2.Color = color;
         wreathSpriteData2.DrawSelf(sourceRectangle);
 

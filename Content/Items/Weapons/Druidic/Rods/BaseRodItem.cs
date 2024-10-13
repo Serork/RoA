@@ -70,6 +70,8 @@ abstract class BaseRodProjectile : NatureProjectile {
     private Vector2 Offset => (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
     public Vector2 CorePosition => Projectile.Center + Offset + GravityOffset;
 
+    public bool PreparingAttack => !_shot;
+
     public int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
     protected ushort ShootType => (ushort)Projectile.ai[1];
     public bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = value ? 0f : 1f; }

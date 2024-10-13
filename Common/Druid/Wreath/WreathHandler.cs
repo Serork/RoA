@@ -3,6 +3,7 @@
 using RoA.Common.Druid.Claws;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Weapons.Druidic.Claws;
+using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -87,6 +88,7 @@ sealed class WreathHandler : ModPlayer {
 
     public ClawsHandler ClawsStats => Player.GetModPlayer<ClawsHandler>();
     public ClawsHandler.SpecialAttackSpawnInfo SpecialAttackData => ClawsStats.SpecialAttackData;
+    public DruidStats DruidPlayerStats => Player.GetModPlayer<DruidStats>();
 
     public ushort AddResourceValue() => (ushort)(AddValue * TotalResource);
 
@@ -144,7 +146,18 @@ sealed class WreathHandler : ModPlayer {
             Reset(true);
         }
         else {
-            _stayTime -= TimeSystem.LogicDeltaTime;
+            BaseRodProjectile? rodProjectile = null;
+            foreach (Projectile projectile in Main.ActiveProjectiles) {
+                if (projectile.owner == Player.whoAmI && projectile.ModProjectile is BaseRodProjectile baseRodProjectile) {
+                    rodProjectile = baseRodProjectile;
+                    break;
+                }
+            }
+            bool flag = rodProjectile == null;
+            bool flag2 = !flag && !rodProjectile.PreparingAttack;
+            if (flag || flag2) {
+                _stayTime -= TimeSystem.LogicDeltaTime;
+            }
         }
         if (HasKeepTime) {
             _keepBonusesForTime -= 1f;
@@ -198,9 +211,12 @@ sealed class WreathHandler : ModPlayer {
             _currentChangingMult = mult;
         }
         else {
-            mult = 1f;
+            mult = 0.5f * DruidPlayerStats.DischargeTimeDecreaseMultiplier;
             if (_currentChangingMult < mult) {
                 _currentChangingMult += TimeSystem.LogicDeltaTime;
+            }
+            else {
+                _currentChangingMult = mult;
             }
         }
         _currentChangingTime -= TimeSystem.LogicDeltaTime * _currentChangingMult * Math.Max((byte)1, _boost);
@@ -224,7 +240,7 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (IsFull && !HasKeepTime) {
-            _keepBonusesForTime = Player.GetModPlayer<DruidStats>().KeepBonusesForTime;
+            _keepBonusesForTime = DruidPlayerStats.KeepBonusesForTime;
             //VisualCurrentResource = CurrentResource;
         }
 
