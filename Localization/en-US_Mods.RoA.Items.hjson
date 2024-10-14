@@ -247,3 +247,33 @@ TwigWreath: {
 	DisplayName: Twig Wreath
 	Tooltip: ""
 }
+
+FenethsBlazingWreath: {
+	DisplayName: Feneths Blazing Wreath
+	Tooltip: ""
+}
+
+ForestWreath2: {
+	DisplayName: Forest Wreath2
+	Tooltip: ""
+}
+
+JungleWreath: {
+	DisplayName: Jungle Wreath
+	Tooltip: ""
+}
+
+JungleWreath2: {
+	DisplayName: Jungle Wreath2
+	Tooltip: ""
+}
+
+SnowWreath: {
+	DisplayName: Snow Wreath
+	Tooltip: ""
+}
+
+SnowWreath2: {
+	DisplayName: Snow Wreath2
+	Tooltip: ""
+}

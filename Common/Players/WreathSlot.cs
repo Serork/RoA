@@ -3,6 +3,7 @@
 using RoA.Common.InterfaceElements;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -11,6 +12,8 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 sealed class WreathSlot : ModAccessorySlot {
+    private static bool _equipped, _equipped2;
+
     public static Vector2 GetCustomLocation() {
         int mapH = (Main.mapEnabled && !Main.mapFullscreen && Main.mapStyle == 1) ? 256 : 0;
         mapH = (Main.mapEnabled && (mapH + 600) > Main.screenHeight) ? Main.screenHeight - 600 : mapH;
@@ -25,6 +28,20 @@ sealed class WreathSlot : ModAccessorySlot {
     public override bool IsHidden() => (!IsItemValidForSlot(Main.mouseItem) && !BeltButton.IsUsed) || Main.EquipPage == 2;
 
     public override string FunctionalTexture => ResourceManager.GUITextures + "Wreath_SlotBackground";
+
+    public override bool PreDraw(AccessorySlotType context, Item item, Vector2 position, bool isHovered) {
+        _equipped = !FunctionalItem.IsEmpty() || !VanityItem.IsEmpty() || !DyeItem.IsEmpty();
+        if (_equipped && !_equipped2) {
+            BeltButton.ToggleTo(true);
+        }
+
+        return base.PreDraw(context, item, position, isHovered);
+    }
+
+    public override void PostDraw(AccessorySlotType context, Item item, Vector2 position, bool isHovered) {
+        _equipped2 = _equipped;
+        _equipped = false;
+    }
 
     public override void OnMouseHover(AccessorySlotType context) {
         string slotName = "Wreath";
@@ -41,7 +58,11 @@ sealed class WreathSlot : ModAccessorySlot {
 
     public static bool IsItemValidForSlot(Item item) => item.ModItem is BaseWreathItem;
 
-    public override bool CanAcceptItem(Item checkItem, AccessorySlotType context) => IsItemValidForSlot(checkItem);
+    public override bool CanAcceptItem(Item checkItem, AccessorySlotType context) {
+        bool result = IsItemValidForSlot(checkItem);
+        return result;
+    }
+
     public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo) {
         bool result = IsItemValidForSlot(item);
         if (result) {
