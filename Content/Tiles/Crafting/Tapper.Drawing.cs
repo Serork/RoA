@@ -78,6 +78,17 @@ partial class Tapper : ModTile {
         Texture2D texture = TextureAssets.Tile[tileType].Value;
         Vector2 drawPosition = new Vector2(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
         spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+
+        if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
+            int num = (color.R + color.G + color.B) / 3;
+            if (num > 10) {
+                Texture2D highlightTexture = TextureAssets.HighlightMask[Type].Value;
+                Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
+                rect = new(0, 0, coordinateWidth, num12);
+                spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+            }
+        }
+
         TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
         if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
             texture = ModContent.Request<Texture2D>((TileLoader.GetTile(Type) as Tapper).GalipotTexture).Value;

@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -30,35 +31,35 @@ sealed class TanningRack : ModTile {
 		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 		TileObjectData.addTile(Type);
 
-		//ModTranslation name = CreateMapEntryName();
-		//name.SetDefault("Tanning Rack");
-		//AddMapEntry(new Color(111, 22, 22));
+        TileID.Sets.HasOutlines[Type] = true;
+        TileID.Sets.DisableSmartCursor[Type] = true;
 
-		//DustType = DustID.t_LivingWood;
-		//TileID.Sets.DisableSmartCursor[Type] = true;
-		//AdjTiles = new int[] { TileID.Dressers };
-	}
+        //ModTranslation name = CreateMapEntryName();
+        //name.SetDefault("Tanning Rack");
+        //AddMapEntry(new Color(111, 22, 22));
 
-	/*public override void NumDust(int i, int j, bool fail, ref int num) 
-		=> num = fail ? 1 : 3;*/
+        DustType = DustID.t_LivingWood;
+        //TileID.Sets.DisableSmartCursor[Type] = true;
+        //AdjTiles = new int[] { TileID.Dressers };
+    }
 
-	//public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-	//	int item = Item.NewItem(i * 16, j * 16, 28, 22, ModContent.ItemType<Items.Placeable.Crafting.TanningRack>(), 1, false, 0, false, false);
-	//	if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0)
-	//		NetMessage.SendData(21, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
-	//	Player player = Main.player[Main.myPlayer];
-	//	int type = (ushort)ModContent.BuffType<Skinning>();
-	//	if (player.FindBuffIndex(type) == -1)
-	//		return;
-	//	player.ClearBuff(type);
-	//}
+	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
-	public override bool RightClick(int i, int j) {
+    //public override void KillMultiTile(int i, int j, int frameX, int frameY) {
+    //	int item = Item.NewItem(i * 16, j * 16, 28, 22, ModContent.ItemType<Items.Placeable.Crafting.TanningRack>(), 1, false, 0, false, false);
+    //	if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0)
+    //		NetMessage.SendData(21, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
+    //	Player player = Main.player[Main.myPlayer];
+    //	int type = (ushort)ModContent.BuffType<Skinning>();
+    //	if (player.FindBuffIndex(type) == -1)
+    //		return;
+    //	player.ClearBuff(type);
+    //}
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
+
+    public override bool RightClick(int i, int j) {
 		Player player = Main.player[Main.myPlayer];
-		if (player.HasBuff(SkinningBuffType)) {
-			return false;
-		}
-
 		player.AddBuff(SkinningBuffType, 18000);
         SoundEngine.PlaySound(SoundID.Item156, player.GetViableMousePosition());
         return true;

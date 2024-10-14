@@ -30,17 +30,21 @@ sealed class WreathSlot : ModAccessorySlot {
     public override string FunctionalTexture => ResourceManager.GUITextures + "Wreath_SlotBackground";
 
     public override bool PreDraw(AccessorySlotType context, Item item, Vector2 position, bool isHovered) {
-        _equipped = !FunctionalItem.IsEmpty() || !VanityItem.IsEmpty() || !DyeItem.IsEmpty();
-        if (_equipped && !_equipped2) {
-            BeltButton.ToggleTo(true);
+        if (isHovered) {
+            _equipped = !FunctionalItem.IsEmpty() || !VanityItem.IsEmpty() || !DyeItem.IsEmpty();
+            if (_equipped && !_equipped2) {
+                BeltButton.ToggleTo(true);
+            }
         }
 
         return base.PreDraw(context, item, position, isHovered);
     }
 
     public override void PostDraw(AccessorySlotType context, Item item, Vector2 position, bool isHovered) {
-        _equipped2 = _equipped;
-        _equipped = false;
+        if (isHovered) {
+            _equipped2 = _equipped;
+            _equipped = false;
+        }
     }
 
     public override void OnMouseHover(AccessorySlotType context) {
@@ -56,12 +60,9 @@ sealed class WreathSlot : ModAccessorySlot {
         }
     }
 
-    public static bool IsItemValidForSlot(Item item) => item.ModItem is BaseWreathItem;
+    public override bool CanAcceptItem(Item checkItem, AccessorySlotType context) => IsItemValidForSlot(checkItem);
 
-    public override bool CanAcceptItem(Item checkItem, AccessorySlotType context) {
-        bool result = IsItemValidForSlot(checkItem);
-        return result;
-    }
+    public static bool IsItemValidForSlot(Item item) => item.ModItem is BaseWreathItem;
 
     public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo) {
         bool result = IsItemValidForSlot(item);
