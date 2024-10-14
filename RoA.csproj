@@ -33,6 +33,8 @@
 	  <None Remove="Resources\Textures\Items\Equipables\Accessories\RavencallersCloak.png" />
 	  <None Remove="Resources\Textures\Items\Equipables\Accessories\RavencallersCloak_Front.png" />
 	  <None Remove="Resources\Textures\Items\Equipables\Wreaths\ForestWreath_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Equipables\Wreaths\TwigWreath.png" />
+	  <None Remove="Resources\Textures\Items\Equipables\Wreaths\TwigWreath_Outfit.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Bonerose.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Elderwood.png" />
 	  <None Remove="Resources\Textures\Items\Materials\Galipot.png" />

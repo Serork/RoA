@@ -242,3 +242,8 @@ ForestWreath: {
 	DisplayName: Forest Wreath
 	Tooltip: ""
 }
+
+TwigWreath: {
+	DisplayName: Twig Wreath
+	Tooltip: ""
+}
