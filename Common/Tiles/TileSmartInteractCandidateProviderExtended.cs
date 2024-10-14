@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Tiles;
 
 sealed class TileSmartInteractCandidateProviderExtended : ModSystem {
-    public static bool[] ShouldBeAdded = TileID.Sets.Factory.CreateBoolSet();
+    public static bool[] AddMe = TileID.Sets.Factory.CreateBoolSet();
 
     public override void Load() {
         On_TileSmartInteractCandidateProvider.FillPotentialTargetTiles += On_TileSmartInteractCandidateProvider_FillPotentialTargetTiles;
@@ -22,7 +22,7 @@ sealed class TileSmartInteractCandidateProviderExtended : ModSystem {
         for (int i = settings.LX; i <= settings.HX; i++) {
             for (int j = settings.LY; j <= settings.HY; j++) {
                 Tile tile = Main.tile[i, j];
-                if (!tile.HasTile || !ShouldBeAdded[tile.TileType]) {
+                if (!tile.HasTile || !AddMe[tile.TileType]) {
                     continue;
                 }
 

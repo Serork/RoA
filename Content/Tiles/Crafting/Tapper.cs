@@ -58,7 +58,7 @@ partial class Tapper : ModTile {
         TileObjectData.addTile(Type);
 
         ImATapper[Type] = true;
-        TileSmartInteractCandidateProviderExtended.ShouldBeAdded[Type] = true;
+        TileSmartInteractCandidateProviderExtended.AddMe[Type] = true;
 
         TileID.Sets.InteractibleByNPCs[Type] = true;
     }
