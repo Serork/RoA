@@ -1,4 +1,7 @@
-﻿using RoA.Core.Utility;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
@@ -154,16 +157,17 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
         j -= 1;
         ushort tileType = instance.Type;
         byte styleX = instance.StyleX;
-        if (HasValidGroundOnSpot(i, j, tileGenerationData) && NoNearbySame(i, j, tileGenerationData) &&
+        if (!Main.tileAlch[Main.tile[i, j].TileType] && HasValidGroundOnSpot(i, j, tileGenerationData) && NoNearbySame(i, j, tileGenerationData) &&
             (tileGenerationData.Is2x3 ? WorldGenHelper.Place2x3(i, j, tileType, style: styleX) : 
              tileGenerationData.Is2x2 ? WorldGenHelper.Place2x2(i, j, tileType, style: styleX) : WorldGen.PlaceTile(i, j, tileType, mute: true, style: styleX))) {
             if ((tileGenerationData.Is1x1 && WorldGenHelper.GetTileSafely(i, j).ActiveTile(tileType)) || !tileGenerationData.Is1x1) {
                 if (tileGenerationData.Is1x1) {
                     Main.tile[i, j].CopyPaintAndCoating(Main.tile[i, j + 1]);
                 }
-                Main.LocalPlayer.position = new Microsoft.Xna.Framework.Vector2(i, j).ToWorldCoordinates();
 
-                if (Main.netMode == NetmodeID.Server && Main.tile[i, j] != null && Main.tile[i, j].HasTile)
+                Helper.NewMessage(new Vector2(i, j).ToString(), Color.White);
+
+                if (Main.netMode == NetmodeID.Server && Main.tile[i, j].HasTile)
                     NetMessage.SendTileSquare(-1, i, j);
 
                 return true;

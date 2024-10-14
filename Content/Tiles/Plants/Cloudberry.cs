@@ -3,7 +3,6 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Plants;
 

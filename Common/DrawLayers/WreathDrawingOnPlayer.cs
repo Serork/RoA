@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -12,6 +14,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.DrawLayers;
@@ -52,10 +55,9 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
     private static void DrawWreathsOnPlayer(PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
 
-        ModAccessorySlot wreathSlot = LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player);
-        Item wreathVanityItem = wreathSlot.VanityItem;
-        Item wreathItem = wreathVanityItem.IsEmpty() ? wreathSlot.FunctionalItem : wreathVanityItem;
-        if (wreathItem.IsEmpty() || wreathSlot.HideVisuals) {
+        WreathItemToShowHandler wreathItemToShowHandler = player.GetModPlayer<WreathItemToShowHandler>();
+        Item wreathItem = wreathItemToShowHandler.WreathToShow;
+        if (wreathItem.IsEmpty() || wreathItemToShowHandler.HideVisuals) {
             return;
         }
 
@@ -66,11 +68,11 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
 
         Texture2D texture = asset.Value;
         Vector2 position = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - drawInfo.drawPlayer.legFrame.Width / 2 + drawInfo.drawPlayer.width / 2),
-                                       (int)(drawInfo.Position.Y - Main.screenPosition.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect;
+                                        (int)(drawInfo.Position.Y - Main.screenPosition.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect;
         DrawData drawData = new(texture,
                                 position + drawInfo.drawPlayer.PlayerMovementOffset(),
                                 null, drawInfo.colorArmorLegs, drawInfo.drawPlayer.legRotation, drawInfo.legVect, 1f, drawInfo.playerEffect, 0) {
-            shader = wreathSlot.DyeItem.dye
+            shader = wreathItemToShowHandler.DyeItem.dye
         };
         drawInfo.DrawDataCache.Add(drawData);
     }

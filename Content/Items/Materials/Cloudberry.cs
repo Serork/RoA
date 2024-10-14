@@ -3,6 +3,7 @@
 using RoA.Content.Buffs;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,7 +16,16 @@ sealed class Cloudberry : ModItem {
         Item.ResearchUnlockCount = 25;
 
         ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
-	}
+
+        Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
+        ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
+            new(235, 150, 12),
+            new(209, 102, 36),
+            new(202, 66, 32)
+        };
+		ItemID.Sets.IsFood[Type] = true;
+
+    }
 
 	public override void SetDefaults() {
 		int width = 30; int height = 22;
