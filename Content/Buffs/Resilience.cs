@@ -11,5 +11,5 @@ sealed class Resilience : ModBuff {
 		//Description.SetDefault("Wreath takes longer to start discharging");
 	}
 
-	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.2f;
+	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.25f;
 }

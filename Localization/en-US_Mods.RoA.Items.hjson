@@ -226,10 +226,19 @@ DeathWardPotion: {
 
 WillpowerPotion: {
 	DisplayName: Willpower Potion
-	Tooltip: Increases {$RoA.Items.Tooltips.Wreath} filling rate by 10%
+	Tooltip:
+		'''
+		Increases {$RoA.Items.Tooltips.Wreath} filling rate by 15%
+		'Fifteen percent concentrated power of will'
+		'''
 }
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases {$RoA.Items.Tooltips.Wreath} discharge speed by 20%
+	Tooltip: Decreases {$RoA.Items.Tooltips.Wreath} discharge speed by 25%
+}
+
+ForestWreath: {
+	DisplayName: Forest Wreath
+	Tooltip: ""
 }

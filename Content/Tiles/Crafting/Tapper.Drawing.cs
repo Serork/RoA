@@ -60,7 +60,7 @@ partial class Tapper : ModTile {
         int coordinateWidth = 30;
         int num12 = 28;
         Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
-        Vector2 vector = new Vector2(Main.offScreenRange, Main.offScreenRange);
+        Vector2 vector = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen)
             vector = Vector2.Zero;
         Vector2 position = unscaledPosition - vector;
@@ -109,7 +109,7 @@ sealed class TapperDrawing : GlobalTile {
                 int coordinateWidth = 30;
                 int num12 = 28;
                 Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
-                Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+                Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
                 if (Main.drawToScreen)
                     zero = Vector2.Zero;
                 Vector2 position = unscaledPosition - zero;

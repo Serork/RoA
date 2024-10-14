@@ -64,7 +64,7 @@ class TapperTE : ModTileEntity {
     public void CollectDust(int count = 30, bool flag = false) {
         for (int i2 = 0; i2 < count; i2++) {
             if (Main.rand.NextChance(flag ? 0.3f : (Progress * 0.4f))) {
-                int dustId = Dust.NewDust(Position.ToWorldCoordinates() - new Vector2(16f, 12f), 24, 20, ModContent.DustType<Galipot>());
+                int dustId = Dust.NewDust(Position.ToWorldCoordinates() - new Vector2(16f, 14f), 24, 20, ModContent.DustType<Galipot>());
                 Dust dust = Main.dust[dustId];
                 float progress = (flag ? 0.9f : Progress) * 1.25f;
                 dust.velocity *= 1.25f;

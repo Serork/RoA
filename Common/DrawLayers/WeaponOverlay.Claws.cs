@@ -16,24 +16,21 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.DrawLayers;
 
-[Autoload(Side = ModSide.Client)]
-sealed class ItemOverlay : PlayerDrawLayer {
+sealed partial class WeaponOverlay : PlayerDrawLayer {
     private const string CLAWSTEXTURESPATH = $"/{ResourceManager.TEXTURESPATH}/Items/Weapons/Druidic/Claws";
-    private const string REQUIREMENT = "_Outfit";
 
-    private readonly Dictionary<string, Asset<Texture2D>?> _clawsOutfitTextures = [];
+    private static readonly Dictionary<string, Asset<Texture2D>?> _clawsOutfitTextures = [];
 
-    public override void Load() => LoadOutfitTextures();
-
-    public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.shadow == 0f && drawInfo.drawPlayer.active;
-
-    public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.HandOnAcc);
-
-    protected override void Draw(ref PlayerDrawSet drawInfo) {  
-        DrawClawsOnPlayer(drawInfo);
+    private static void LoadClawsOutfitTextures() {
+        foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(CLAWSTEXTURESPATH, REQUIREMENT)) {
+            string getName() {
+                return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
+            }
+            _clawsOutfitTextures.Add(getName(), texture);
+        }
     }
 
-    private void DrawClawsOnPlayer(PlayerDrawSet drawInfo) {
+    private static void DrawClawsOnPlayer(PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
 
         Item item = player.GetSelectedItem();
@@ -46,7 +43,7 @@ sealed class ItemOverlay : PlayerDrawLayer {
             return;
         }
 
-        Asset<Texture2D>? asset = _clawsOutfitTextures[item.ModItem.GetType().Name.Replace(" ", string.Empty)];
+        Asset<Texture2D>? asset = _clawsOutfitTextures[GetItemNameForTexture(item)];
         if (asset?.IsLoaded != true) {
             return;
         }
@@ -57,18 +54,5 @@ sealed class ItemOverlay : PlayerDrawLayer {
         Vector2 drawPosition = drawInfo.drawPlayer.bodyPosition + offset;
         DrawData drawData = new(asset.Value, drawPosition - Main.screenPosition, player.bodyFrame, drawInfo.colorArmorBody, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect);
         drawInfo.DrawDataCache.Add(drawData);
-    }
-
-    private void LoadOutfitTextures() {
-        if (Main.dedServ) {
-            return;
-        }
-
-        foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(CLAWSTEXTURESPATH, REQUIREMENT)) {
-            string getName() {
-                return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
-            }
-            _clawsOutfitTextures.Add(getName(), texture);
-        }
     }
 }
