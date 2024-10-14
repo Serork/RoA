@@ -24,9 +24,9 @@ sealed class WreathItemToShowHandler : ModPlayer {
     }
 
     public override void CopyClientState(ModPlayer targetCopy) {
-        var defaultInv = (WreathItemToShowHandler)targetCopy;
-        if (WreathToShow != null && defaultInv.WreathToShow != null) {
-            WreathToShow.CopyNetStateTo(defaultInv.WreathToShow);
+        WreathItemToShowHandler client = (WreathItemToShowHandler)targetCopy;
+        if (WreathToShow != null && client.WreathToShow != null) {
+            WreathToShow.CopyNetStateTo(client.WreathToShow);
         }
     }
 
@@ -37,11 +37,11 @@ sealed class WreathItemToShowHandler : ModPlayer {
     }
 
     public override void SendClientChanges(ModPlayer clientPlayer) {
-        var clientInv = (WreathItemToShowHandler)clientPlayer;
+        WreathItemToShowHandler client = (WreathItemToShowHandler)clientPlayer;
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            if ((WreathToShow != null && clientInv.WreathToShow != null && WreathToShow.IsNetStateDifferent(clientInv.WreathToShow)) ||
-                HideVisuals != clientInv.HideVisuals ||
-                (DyeItem != null && clientInv.DyeItem != null && DyeItem.IsNetStateDifferent(clientInv.DyeItem))) {
+            if ((WreathToShow != null && client.WreathToShow != null && WreathToShow.IsNetStateDifferent(client.WreathToShow)) ||
+                HideVisuals != client.HideVisuals ||
+                (DyeItem != null && client.DyeItem != null && DyeItem.IsNetStateDifferent(client.DyeItem))) {
                 MultiplayerSystem.SendPacket(new WreathItemPacket(Player, HideVisuals, WreathToShow, DyeItem));
             }
         }
