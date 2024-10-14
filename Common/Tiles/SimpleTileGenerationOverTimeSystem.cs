@@ -143,9 +143,9 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
     private static bool TryToPlace(int i, int j, TileGenerationData tileGenerationData) {
         var instance = tileGenerationData.Instance;
-        if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
-            return false;
-        }
+        //if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
+        //    return false;
+        //}
 
         UnifiedRandom genRand = WorldGen.genRand;
         i = genRand.Next(Math.Max(10, i - 10), Math.Min(Main.maxTilesX - 10, i + 10));
@@ -161,7 +161,7 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
                 if (tileGenerationData.Is1x1) {
                     Main.tile[i, j].CopyPaintAndCoating(Main.tile[i, j + 1]);
                 }
-                //Main.LocalPlayer.position = new Microsoft.Xna.Framework.Vector2(i, j).ToWorldCoordinates();
+                Main.LocalPlayer.position = new Microsoft.Xna.Framework.Vector2(i, j).ToWorldCoordinates();
 
                 if (Main.netMode == NetmodeID.Server && Main.tile[i, j] != null && Main.tile[i, j].HasTile)
                     NetMessage.SendTileSquare(-1, i, j);

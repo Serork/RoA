@@ -1203,6 +1203,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (!houseBuilder.IsValid) {
             return;
         }
+
         bool painting1 = false, painting2 = false, painting3 = false;
         for (int i = Left + 15; i < Right - 15; i++) {
             for (int j = (int)Main.worldSurface - 10; j < Bottom - 20; j++) {

@@ -27,6 +27,6 @@ sealed class Bonerose : PlantBase, TileHooks.IGlobalRandomUpdate {
             return;
         }
 
-        TryPlacePlant(i, j, WorldGen.gen ? WorldGen.genRand.Next(WorldGen.genRand.NextBool() ? 3 : WorldGen.genRand.Next(2)) : 0,  TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick);
+        TryPlacePlant(i, j, WorldGen.gen ? 2 : 0,  TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick);
     }
 }
