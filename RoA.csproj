@@ -20,6 +20,7 @@
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Block.png" />
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Slope.png" />
 	  <None Remove="Resources\Textures\Buffs\Deceleration.png" />
+	  <None Remove="Resources\Textures\Buffs\ExtraRegen.png" />
 	  <None Remove="Resources\Textures\DruidBiomeWaterStyle.png" />
 	  <None Remove="Resources\Textures\Dusts\BackwoodsWoodTrash.png" />
 	  <None Remove="Resources\Textures\Dusts\GhostLeaf.png" />

@@ -9,10 +9,12 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.VisualEffects;
 
-sealed class VisualEffectDrawing : ModSystem {
-    public override void Load() {
+sealed class VisualEffectDrawing : ILoadable {
+    public void Load(Mod mod) {
         LoadHooks();
     }
+
+    public void Unload() { }
 
     private void LoadHooks() {
         On_Main.DrawNPCs += Main_DrawNPCs;

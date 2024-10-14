@@ -8,13 +8,15 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Tiles;
 
-sealed class TransformTileSystem : ModSystem {
+sealed class TransformTileSystem : ILoadable {
     public static bool[] OnKillNormal = TileID.Sets.Factory.CreateBoolSet(true);
     public static ushort[] ReplaceToOnKill = TileID.Sets.Factory.CreateUshortSet(0);
 
-    public override void Load() {
+    public void Load(Mod mod) {
         On_Player.DoesPickTargetTransformOnKill += DoesPickTargetTransformOnKill;
     }
+
+    public void Unload() { }
 
     private bool DoesPickTargetTransformOnKill(On_Player.orig_DoesPickTargetTransformOnKill original, Player self, HitTile hitCounter, int damage, int x, int y, int pickPower, int bufferIndex, Tile tileTarget) {
         if (!OnKillNormal[tileTarget.TileType]) {

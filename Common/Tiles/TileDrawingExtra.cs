@@ -10,16 +10,16 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Tiles;
 
-sealed class TileDrawingExtra : GlobalTile {
+sealed class TileDrawingExtra : ILoadable {
     public static Color BackwoodsMossGlowColor => new Color(0, 180, 250, 0) * 0.5f * BackwoodsFogHandler.Opacity;
 
-    public override void Load() {
+    public void Load(Mod mod) {
         On_TileDrawing.GetTileDrawData += On_TileDrawing_GetTileDrawData;
 
         TileHelper.Load();
     }
 
-    public override void Unload() {
+    public void Unload() {
         TileHelper.Unload();
     }
 

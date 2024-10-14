@@ -4,12 +4,14 @@ using Terraria;
 
 namespace RoA.Common.Tiles;
 
-sealed class CanBeSlopedTileSystem : ModSystem {
+sealed class CanBeSlopedTileSystem : ILoadable {
     public static bool[] Included = TileID.Sets.Factory.CreateBoolSet();
 
-    public override void Load() {
+    public void Load(Mod mod) {
         On_Player.ItemCheck_UseMiningTools_TryPoundingTile += On_Player_ItemCheck_UseMiningTools_TryPoundingTile;
     }
+
+    public void Unload() { }
 
     private void On_Player_ItemCheck_UseMiningTools_TryPoundingTile(On_Player.orig_ItemCheck_UseMiningTools_TryPoundingTile orig, Player self, Item sItem, int tileHitId, ref bool hitWall, int x, int y) {
         Tile tile = Main.tile[x, y];

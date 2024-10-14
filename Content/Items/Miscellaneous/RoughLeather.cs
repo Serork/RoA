@@ -11,8 +11,8 @@ namespace RoA.Content.Items.Miscellaneous;
 sealed class RoughLeather : ModItem {
 	public override void SetStaticDefaults() {
 		// DisplayName.SetDefault("Rough Leather");
-            Item.ResearchUnlockCount = 50;
-        }
+		Item.ResearchUnlockCount = 50;
+	}
 
 	public override void SetDefaults() {
 		int width = 18; int height = 20;
@@ -25,8 +25,7 @@ sealed class RoughLeather : ModItem {
 		Item.value = Item.sellPrice(copper: 25);
 	}
 
-	public override bool CanUseItem(Player player)
-		=> Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == (ushort)ModContent.TileType<TanningRack>()
-		&& player.position.X / 16f - Player.tileRangeX - Item.tileBoost - player.blockRange <= Player.tileTargetX
-            && (player.position.X + player.width) / 16f + Player.tileRangeX + Item.tileBoost - 1f + player.blockRange >= Player.tileTargetX && player.position.Y / 16f - Player.tileRangeY - Item.tileBoost - player.blockRange <= Player.tileTargetY && (player.position.Y + player.height) / 16f + Player.tileRangeY + Item.tileBoost - 2f + player.blockRange >= Player.tileTargetY;
+	public override bool CanUseItem(Player player) => Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == (ushort)ModContent.TileType<TanningRack>() &&
+													  player.position.X / 16f - Player.tileRangeX - Item.tileBoost - player.blockRange <= Player.tileTargetX &&
+													  (player.position.X + player.width) / 16f + Player.tileRangeX + Item.tileBoost - 1f + player.blockRange >= Player.tileTargetX && player.position.Y / 16f - Player.tileRangeY - Item.tileBoost - player.blockRange <= Player.tileTargetY && (player.position.Y + player.height) / 16f + Player.tileRangeY + Item.tileBoost - 2f + player.blockRange >= Player.tileTargetY;
 }

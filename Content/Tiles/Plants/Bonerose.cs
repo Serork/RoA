@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-using RoA.Common.Tiles;
-
-using System;
+﻿using RoA.Common.Tiles;
 
 using Terraria;
 using Terraria.ID;
@@ -10,24 +6,27 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Plants;
 
-sealed class Bonerose : TulipLikeTileBaseButPlant {
-    public override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
-    public override Predicate<ushort> ConditionForWallToBeValid => (wallType) => { return Main.wallDungeon[wallType]; };
-
-    public override Color MapColor => new(178, 178, 137);
-
-    public override byte Amount => 5;
-
-    public override bool InUnderground => true;
-
-    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Materials.Bonerose>();
-
+sealed class Bonerose : PlantBase, TileHooks.IGlobalRandomUpdate {
     protected override void SafeSetStaticDefaults() {
-        base.SafeSetStaticDefaults();
+        AddMapEntry(new(178, 178, 137), CreateMapEntryName());
 
         DustType = DustID.Bone;
         HitSound = SoundID.NPCHit1;
 
+        DropItem = (ushort)ModContent.ItemType<Items.Materials.Bonerose>();
+
         RootsDrawing.ShouldDraw[Type] = true;
+    }
+
+    public void OnGlobalRandomUpdate(int i, int j) {
+        if (j < Main.worldSurface) {
+            return;
+        }
+
+        if (!Main.wallDungeon[Main.tile[i, j].WallType]/* || !WorldGen.genRand.NextBool(150)*/) {
+            return;
+        }
+
+        TryPlacePlant(i, j, WorldGen.gen ? WorldGen.genRand.Next(WorldGen.genRand.NextBool() ? 3 : WorldGen.genRand.Next(2)) : 0,  TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick);
     }
 }

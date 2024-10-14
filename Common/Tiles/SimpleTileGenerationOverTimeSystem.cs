@@ -1,15 +1,15 @@
 ﻿using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System;
 using System.Linq;
 
-using Terraria.ID;
-using Terraria.ModLoader.IO;
-using Terraria.ModLoader;
-using Terraria.Utilities;
 using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using Terraria.Utilities;
 
 namespace RoA.Common.Tiles;
 
@@ -158,6 +158,9 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
             (tileGenerationData.Is2x3 ? WorldGenHelper.Place2x3(i, j, tileType, style: styleX) : 
              tileGenerationData.Is2x2 ? WorldGenHelper.Place2x2(i, j, tileType, style: styleX) : WorldGen.PlaceTile(i, j, tileType, mute: true, style: styleX))) {
             if ((tileGenerationData.Is1x1 && WorldGenHelper.GetTileSafely(i, j).ActiveTile(tileType)) || !tileGenerationData.Is1x1) {
+                if (tileGenerationData.Is1x1) {
+                    Main.tile[i, j].CopyPaintAndCoating(Main.tile[i, j + 1]);
+                }
                 //Main.LocalPlayer.position = new Microsoft.Xna.Framework.Vector2(i, j).ToWorldCoordinates();
 
                 if (Main.netMode == NetmodeID.Server && Main.tile[i, j] != null && Main.tile[i, j].HasTile)

@@ -11,12 +11,14 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Tiles;
 
-sealed class TileSmartInteractCandidateProviderExtended : ModSystem {
+sealed class TileSmartInteractCandidateProviderExtended : ILoadable {
     public static bool[] AddMe = TileID.Sets.Factory.CreateBoolSet();
 
-    public override void Load() {
+    public void Load(Mod mod) {
         On_TileSmartInteractCandidateProvider.FillPotentialTargetTiles += On_TileSmartInteractCandidateProvider_FillPotentialTargetTiles;
     }
+
+    public void Unload() { }
 
     private void On_TileSmartInteractCandidateProvider_FillPotentialTargetTiles(On_TileSmartInteractCandidateProvider.orig_FillPotentialTargetTiles orig, TileSmartInteractCandidateProvider self, SmartInteractScanSettings settings) {
         for (int i = settings.LX; i <= settings.HX; i++) {

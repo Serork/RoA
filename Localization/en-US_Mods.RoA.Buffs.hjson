@@ -45,3 +45,8 @@ Resilience: {
 	DisplayName: Resilience
 	Description: 25% decreased {$RoA.Items.Tooltips.Wreath} discharge speed
 }
+
+ExtraRegen: {
+	DisplayName: Extra Regen
+	Description: Mods.RoA.Buffs.ExtraRegen.Description
+}
