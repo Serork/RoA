@@ -20,7 +20,11 @@ namespace RoA.Common.InterfaceElements;
 sealed class BeltButton() : InterfaceElement(RoA.ModName + ": Belt Button", InterfaceScaleType.UI) {
     private static Asset<Texture2D> _beltButtonTexture, _beltButtonTextureOutline;
 
+    private static bool _isUsedInternal;
+
     public static bool IsUsed { get; private set; }
+
+    internal static void ToggleTo(bool option) => IsUsed = _isUsedInternal = option;
 
     public override void Load(Mod mod) {
         if (Main.dedServ) {
@@ -39,7 +43,11 @@ sealed class BeltButton() : InterfaceElement(RoA.ModName + ": Belt Button", Inte
 
     protected override bool DrawSelf() {
         if (Main.playerInventory && Main.EquipPage != 2) {
-            SpriteFrame beltButtonFrame = new SpriteFrame(2, 1);
+            if (!_isUsedInternal) {
+                IsUsed = WreathSlot.IsItemValidForSlot(Main.mouseItem);
+            }
+
+            SpriteFrame beltButtonFrame = new(2, 1);
             Texture2D texture = (Texture2D)_beltButtonTexture;
             int num9 = 8 + Main.LocalPlayer.GetAmountOfExtraAccessorySlotsToShow();
             int inventoryTop = 174;
@@ -72,6 +80,7 @@ sealed class BeltButton() : InterfaceElement(RoA.ModName + ": Belt Button", Inte
                 if (Main.mouseLeft && Main.mouseLeftRelease) {
                     SoundEngine.PlaySound(SoundID.MenuOpen);
                     IsUsed = !IsUsed;
+                    _isUsedInternal = IsUsed;
                 }
                 Main.instance.MouseText(string.Concat(new object[] {
                             IsUsed ? "Hide Wreath Slot" : "Show Wreath Slot"

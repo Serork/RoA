@@ -42,5 +42,12 @@ sealed class WreathSlot : ModAccessorySlot {
     public static bool IsItemValidForSlot(Item item) => item.ModItem is BaseWreathItem;
 
     public override bool CanAcceptItem(Item checkItem, AccessorySlotType context) => IsItemValidForSlot(checkItem);
-    public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo) => IsItemValidForSlot(item);
+    public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo) {
+        bool result = IsItemValidForSlot(item);
+        if (result) {
+            BeltButton.ToggleTo(true);
+        }
+
+        return result;
+    }
 }
