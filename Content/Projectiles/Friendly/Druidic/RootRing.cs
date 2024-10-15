@@ -121,7 +121,7 @@ sealed class RootRing : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         var stats = player.GetModPlayer<WreathHandler>();
         float projOpacity = 1f - (float)_alpha / 255f;
-        Color color = stats.BaseColor * (0.7f + 0.5f * (1f - Projectile.ai[0]));
+        Color color = stats.BaseColor * (0.7f + 0.3f * (1f - Projectile.ai[0]));
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
         //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
@@ -136,9 +136,11 @@ sealed class RootRing : NatureProjectile {
         color *= opacity;
         opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
         color *= factor * opacity * 2f;
-        color *= 2f;
+        color *= 1.5f;
         float scale = Projectile.scale + factor * 0.035f;
-        spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
+        for (int i = 0; i < 2; i++) {
+            spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
+        }
 
         spriteBatch.EndBlendState();
         return false;
