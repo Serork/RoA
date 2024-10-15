@@ -29,7 +29,7 @@ sealed class RootRing : NatureProjectile {
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
 
-        Projectile.alpha = 255;
+        Projectile.alpha = 0;
 
         Projectile.light = 0.25f;
 
@@ -37,26 +37,11 @@ sealed class RootRing : NatureProjectile {
         Projectile.localNPCHitCooldown = 10;
     }
 
-    private float _fading, _fading2;
-    public override void SendExtraAI(BinaryWriter writer) {
-        writer.Write((float)_fading);
-        writer.Write((float)_fading2);
-    }
-
-    public override void ReceiveExtraAI(BinaryReader reader) {
-        _fading = reader.ReadSingle();
-        _fading2 = reader.ReadSingle();
-    }
-
     public override void AI() {
         Projectile.timeLeft = 2;
 
         if (Projectile.alpha >= 65)
             Projectile.ai[1] += Projectile.ai[1] + 0.000000005f;
-        float _acc = 0.01f;
-        _fading2 += _acc * (_fading == 0f ? 1f : -1f);
-        if (_fading2 >= 0.8f) _fading = 1f;
-        else if (_fading2 <= 0.2f) _fading = 0f;
         FadeIn();
 
         Player player = Main.player[Projectile.owner];
@@ -67,14 +52,16 @@ sealed class RootRing : NatureProjectile {
         if (player.gravDir == -1.0) Projectile.position.Y += 120f;
         Projectile.rotation += 0.06f;
 
-        if (!player.GetModPlayer<DruidStats>().SoulOfTheWoods || !player.GetModPlayer<WreathHandler>().IsFull2 || player.dead) {
-            Projectile.alpha += 15;
-            if (Projectile.alpha > 255) {
-                Projectile.alpha = 255;
-                Projectile.Kill();
+        if (Projectile.owner == Main.myPlayer) {
+            if (!player.GetModPlayer<DruidStats>().SoulOfTheWoods || !player.GetModPlayer<WreathHandler>().IsFull2 || player.dead) {
+                Projectile.alpha += 15;
+                if (Projectile.alpha > 255) {
+                    Projectile.alpha = 255;
+                    Projectile.Kill();
+                }
             }
         }
-        Projectile.netUpdate = true;
+        //Projectile.netUpdate = true;
     }
 
     private void FadeIn() {

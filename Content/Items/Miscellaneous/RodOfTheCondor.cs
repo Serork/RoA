@@ -5,6 +5,8 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.GlowMasks;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -59,7 +61,7 @@ sealed class RodOfTheCondor : ModItem {
         }
     }
 
-    public override bool CanUseItem(Player player) => player.whoAmI == Main.myPlayer && !GetHandler(player).IsActive;
+    public override bool CanUseItem(Player player) => !GetHandler(player).IsActive;
 
     public override bool? UseItem(Player player) {
         if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) {
@@ -69,7 +71,7 @@ sealed class RodOfTheCondor : ModItem {
         return base.UseItem(player);
     }
 
-    private class CondorWingsHandler : ModPlayer {
+    internal class CondorWingsHandler : ModPlayer {
         private const float MAXWINGSTIME = 3f;
 
         private bool _active;
@@ -186,14 +188,27 @@ sealed class RodOfTheCondor : ModItem {
             _wingsTime = MAXWINGSTIME;
             HandleCondorWings();
             Player.wingTime = Player.wingTimeMax;
+
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new CondorPacket(Player, MAXWINGSTIME, true, -1, _wingsSlot, Player.GetWingStats(Player.wingsLogic).FlyTime));
+            }
+        }
+
+        internal void ReceivePacket(float wingsTime, bool noFallDmg, int wings, int wingsLogic, int wingTimeMax) {
+            _wingsTime = wingsTime;
+            Player.noFallDmg = noFallDmg;
+            Player.wings = wings;
+            Player.wingTimeMax = wingTimeMax;
+            Player.wingsLogic = wingsLogic;
+            Player.wingTime = Player.wingTimeMax;
         }
 
         private void HandleCondorWings() {
             if (IsInUse || _active) {
                 Player.noFallDmg = true;
                 Player.wings = -1;
-                Player.wingTimeMax = Player.GetWingStats(_wingsSlot).FlyTime;
                 Player.wingsLogic = _wingsSlot;
+                Player.wingTimeMax = Player.GetWingStats(Player.wingsLogic).FlyTime;
             }
         }
 

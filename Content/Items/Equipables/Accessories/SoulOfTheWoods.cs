@@ -30,8 +30,8 @@ sealed class SoulOfTheWoods : ModItem {
 		player.GetModPlayer<DruidStats>().SoulOfTheWoods = true;
 
         int type = ModContent.ProjectileType<RootRing>();
-        if (player.whoAmI == Main.myPlayer && player.GetModPlayer<WreathHandler>().IsFull2 && player.ownedProjectileCounts[type] < 1) {
-            Projectile.NewProjectile(player.GetSource_Accessory(Item), player.Center, Vector2.Zero, type, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
-		}
+        if (player.GetModPlayer<WreathHandler>().IsFull2 && player.ownedProjectileCounts[type] < 1) {
+			Projectile.NewProjectile(player.GetSource_Accessory(Item), player.Center, Vector2.Zero, type, player.HeldItem.damage / 2, player.HeldItem.knockBack / 2, player.whoAmI);
+        }
     }
 }
