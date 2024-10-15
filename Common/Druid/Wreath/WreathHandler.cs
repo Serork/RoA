@@ -311,12 +311,12 @@ sealed class WreathHandler : ModPlayer {
     private void AddLight() {
         float progress = ActualProgress2;
         float progress2 = MathHelper.Clamp(progress, 0f, 1f);
-        float value = 0.4f + 0.2f * PulseIntensity;
+        float value = 0.5f;
         float value2 = ActualProgress2 - 1f;
         if (value2 > 0f) {
             progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
         }
-        Lighting.AddLight(LightingPosition, Color.LightGreen.ToVector3() * 0.35f * progress2 * (1.5f + value));
+        Lighting.AddLight(LightingPosition, Color.Green.ToVector3() * 0.35f * progress2 * (2f + value));
         if (SoulOfTheWoods) {
             progress = value2;
             Lighting.AddLight(LightingPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));
