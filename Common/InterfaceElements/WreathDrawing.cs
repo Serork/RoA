@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Players;
+using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
 using RoA.Core.Data;
 
@@ -23,7 +25,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
     private Vector2 _oldPosition;
 
     private static Player Player => Main.LocalPlayer;
-    private static WreathHandler Stats => Player.GetModPlayer<WreathHandler>();  
+    private static WreathHandler Stats => Player.GetModPlayer<WreathHandler>();
 
     public override int GetInsertIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Ingame Options"));
 
@@ -66,9 +68,9 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         wreathSpriteData.Color = color * opacity;
         wreathSpriteData.VisualPosition = position;
         wreathSpriteData.DrawSelf();
-
+        
         // filling
-        SpriteData wreathSpriteData2 = wreathSpriteData.Framed(0, 1);
+        SpriteData wreathSpriteData2 = wreathSpriteData.Framed((byte)(0 + Stats.IsPhoenixWreath.ToInt()), 1);
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
         void drawFilling(Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f) {
@@ -82,6 +84,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         float value = progress2;
         float progress3 = 1f - MathHelper.Clamp(progress2 * 0.8f, 0f, 0.8f);
         Rectangle sourceRectangle2 = sourceRectangle;
+        sourceRectangle2.X = 0;
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
         sourceRectangle2.Height = (int)(frameHeight * progress2);
         Vector2 offset = Vector2.Zero;
@@ -110,7 +113,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
             wreathSpriteData3.Color = color * opacity;
             wreathSpriteData3.DrawSelf(offset: offset);
         }
-        drawEffect(progress, sourceRectangle, opacity: progress3);
+        drawEffect(progress, sourceRectangle, opacity: progress3, frameX: (byte)(3 + Stats.IsPhoenixWreath.ToInt()), frameY: 1);
         if (soulOfTheWoods) {
             drawEffect(progress2, sourceRectangle2, offset, frameY: 2);
         }

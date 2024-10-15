@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Claws;
+using RoA.Common.Players;
 using RoA.Content.Buffs;
+using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Projectiles.Friendly;
@@ -14,9 +16,16 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
 
+using static RoA.Common.Druid.Wreath.WreathHandler;
+
 namespace RoA.Common.Druid.Wreath;
 
 sealed class WreathHandler : ModPlayer {
+    public enum WreathType : byte {
+        Normal,
+        Phoenix
+    }
+
     private const float BASEADDVALUE = 0.115f;
     private const float DRAWCOLORINTENSITY = 3f;
     private const byte MAXBOOSTINCREMENT = 7;
@@ -33,6 +42,7 @@ sealed class WreathHandler : ModPlayer {
     public ushort MaxResource { get; private set; } = 100;
     public ushort ExtraResource { get; private set; } = 0;
     public float ChangingTimeValue { get; private set; }
+    public WreathType CurrentType { get; private set; } = WreathType.Normal;
 
     public ushort CurrentResource {
         get => _currentResource;
@@ -94,6 +104,7 @@ sealed class WreathHandler : ModPlayer {
     public DruidStats DruidPlayerStats => Player.GetModPlayer<DruidStats>();
 
     public bool SoulOfTheWoods => DruidPlayerStats.SoulOfTheWoods && Progress > 1f && Progress <= 2f;
+    public bool IsPhoenixWreath => CurrentType == WreathType.Phoenix;
 
     public ushort AddResourceValue() => (ushort)(AddValue * MaxResource);
 
@@ -128,6 +139,7 @@ sealed class WreathHandler : ModPlayer {
 
     public override void PostUpdateEquips() {
         ApplyBuffs();
+        GetWreathType();
 
         if (_stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
@@ -181,6 +193,11 @@ sealed class WreathHandler : ModPlayer {
                 Player.DelBuff(buffIndex);
             }
         }
+    }
+
+    private void GetWreathType() {
+        bool phoenixWreathEquipped = WreathSlot.GetFunctionalItem(Player).type == ModContent.ItemType<FenethsBlazingWreath>();
+        CurrentType = phoenixWreathEquipped ? WreathType.Phoenix : WreathType.Normal;
     }
 
     public override void PreUpdate() {
@@ -297,7 +314,8 @@ sealed class WreathHandler : ModPlayer {
 
     private void MakeDusts() {
         float actualProgress = ActualProgress3;
-        ushort dustType = (ushort)(SoulOfTheWoods ? ModContent.DustType<Content.Dusts.WreathDust2>() : ModContent.DustType<Content.Dusts.WreathDust>());
+        ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() : ModContent.DustType<Content.Dusts.WreathDust>());
+        ushort dustType = (ushort)(SoulOfTheWoods ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
         if (actualProgress >= 0.1f && actualProgress <= 0.95f) {
             float progress = actualProgress * 1.25f + 0.1f;
             int count = Math.Min((int)(15 * progress), 10);
@@ -330,7 +348,7 @@ sealed class WreathHandler : ModPlayer {
         if (value2 > 0f) {
             progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
         }
-        Lighting.AddLight(LightingPosition, Color.Green.ToVector3() * 0.35f * progress2 * (2f + value));
+        Lighting.AddLight(LightingPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (2f + value));
         if (SoulOfTheWoods) {
             progress = value2;
             Lighting.AddLight(LightingPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));

@@ -14,6 +14,12 @@ namespace RoA.Common.Players;
 sealed class WreathSlot : ModAccessorySlot {
     private static bool _equipped, _equipped2;
 
+    public static WreathSlot GetSlot(Player player) => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot;
+    public static Item GetFunctionalItem(Player player) => GetSlot(player).FunctionalItem;
+    public static Item GetVanityItem(Player player) => GetSlot(player).VanityItem;
+    public static Item GetDyeItem(Player player) => GetSlot(player).DyeItem;
+    public static bool GetHideVisuals(Player player) => GetSlot(player).HideVisuals;
+
     public static Vector2 GetCustomLocation() {
         int mapH = (Main.mapEnabled && !Main.mapFullscreen && Main.mapStyle == 1) ? 256 : 0;
         mapH = (Main.mapEnabled && (mapH + 600) > Main.screenHeight) ? Main.screenHeight - 600 : mapH;

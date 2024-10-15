@@ -14,13 +14,12 @@ sealed class WreathItemToShowHandler : ModPlayer {
     public Item DyeItem { get; private set; }
 
     public override void PostUpdateEquips() {
-        ModAccessorySlot wreathSlot = LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, Player);
-        Item wreathVanityItem = wreathSlot.VanityItem;
-        Item wreathItem = wreathVanityItem.IsEmpty() ? wreathSlot.FunctionalItem : wreathVanityItem;
+        Item wreathVanityItem = WreathSlot.GetVanityItem(Player);
+        Item wreathItem = wreathVanityItem.IsEmpty() ? WreathSlot.GetFunctionalItem(Player) : wreathVanityItem;
 
         WreathToShow = wreathItem;
-        HideVisuals = wreathSlot.HideVisuals;
-        DyeItem = wreathSlot.DyeItem;
+        HideVisuals = WreathSlot.GetHideVisuals(Player);
+        DyeItem = WreathSlot.GetDyeItem(Player);
     }
 
     public override void CopyClientState(ModPlayer targetCopy) {

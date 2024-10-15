@@ -6,6 +6,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
+sealed class WreathDust3 : WreathDust { }
+
 sealed class WreathDust2 : WreathDust { }
 
 class WreathDust : ModDust {
