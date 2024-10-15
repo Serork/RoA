@@ -12,6 +12,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Druid.Wreath;
@@ -129,8 +130,17 @@ sealed class WreathHandler : ModPlayer {
     public override void PostUpdateBuffs() {
         int buff = ModContent.BuffType<WreathCharged>();
         int buff2 = ModContent.BuffType<WreathFullCharged>();
+        int buff3 = ModContent.BuffType<WreathFullCharged2>();
         if (IsMinCharged) {
             int buffIndex;
+            if (IsFull2) {
+                Player.AddBuff(buff3, 10);
+                if (Player.FindBuff(buff3, out buffIndex)) {
+                    Player.DelBuff(buffIndex);
+                }
+
+                return;
+            }
             if (IsFull) {
                 Player.AddBuff(buff2, 10);
                 if (Player.FindBuff(buff, out buffIndex)) {

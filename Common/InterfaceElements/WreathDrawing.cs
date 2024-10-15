@@ -69,7 +69,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
 
         // filling
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed(0, 1);
-        int frameOffsetY = 1;
+        int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
         void drawFilling(Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f) {
             wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;

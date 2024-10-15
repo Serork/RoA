@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -10,7 +10,6 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 

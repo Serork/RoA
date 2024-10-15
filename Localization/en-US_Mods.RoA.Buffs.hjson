@@ -9,20 +9,29 @@ Skinning: {
 }
 
 WreathCharged: {
-	DisplayName: Wreath Charge [c/4ED757:I]
+	DisplayName: Wreath Charge I
 	Description:
 		'''
 		Nature damage is improved
-		Provides charge bonuses of equipped {$RoA.Items.Tooltips.Wreath}
+		Provides charge bonuses of equipped wreath
 		'''
 }
 
 WreathFullCharged: {
-	DisplayName: Wreath Charge [c/4ED757:II]
+	DisplayName: Wreath Charge II
 	Description:
 		'''
 		Nature damage is at full potential
-		Provides full charge bonuses of equipped {$RoA.Items.Tooltips.Wreath}
+		Provides full charge bonuses of equipped wreath
+		'''
+}
+
+WreathFullCharged2: {
+	DisplayName: Wreath Charge III
+	Description:
+		'''
+		Nature damage is at full potential
+		Provides full charge bonuses of equipped wreath and soul of the woods
 		'''
 }
 
@@ -38,12 +47,12 @@ DeathWard: {
 
 Willpower: {
 	DisplayName: Willpower
-	Description: 15% increased {$RoA.Items.Tooltips.Wreath} filling rate
+	Description: 15% increased wreath filling rate
 }
 
 Resilience: {
 	DisplayName: Resilience
-	Description: 25% decreased {$RoA.Items.Tooltips.Wreath} discharge speed
+	Description: 25% decreased wreath discharge speed
 }
 
 ExtraRegen: {

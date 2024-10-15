@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Druid.Wreath;
+using RoA.Content.Projectiles.Friendly.Druidic;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -24,5 +26,12 @@ sealed class SoulOfTheWoods : ModItem {
         Item.value = Item.sellPrice(gold: 2, silver: 30);
     }
 
-	public override void UpdateAccessory(Player player, bool hideVisual)  => player.GetModPlayer<DruidStats>().SoulOfTheWoods = true;
+	public override void UpdateAccessory(Player player, bool hideVisual) {
+		player.GetModPlayer<DruidStats>().SoulOfTheWoods = true;
+
+        int type = ModContent.ProjectileType<RootRing>();
+        if (player.whoAmI == Main.myPlayer && player.GetModPlayer<WreathHandler>().IsFull2 && player.ownedProjectileCounts[type] < 1) {
+            Projectile.NewProjectile(player.GetSource_Accessory(Item), player.Center, Vector2.Zero, type, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+		}
+    }
 }
