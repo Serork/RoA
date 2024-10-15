@@ -240,7 +240,7 @@ sealed class GrimDefender : ModNPC {
             if (!_spearAttack) {
                 NPC.ai[1]++;
                 bool flag2 = NPC.ai[1] <= num * 0.75f;
-                Vector2 extraVelocity = (Utils.MoveTowards(NPC.Center, Main.player[NPC.target].Center, NPC.ai[0]) - NPC.Center) * MathHelper.Clamp(NPC.ai[0] - 2f, 0f, 0.2f) * 0.3f;
+                Vector2 extraVelocity = (Utils.MoveTowards(NPC.Center, Main.player[NPC.target].Center, NPC.ai[0]) - NPC.Center) * MathHelper.Clamp(NPC.ai[0] - 2f, 0f, 0.2f) * 0.4f;
                 if (flag2) {
                     directedRotation(desiredVelocity + extraVelocity);
                 }
@@ -256,7 +256,7 @@ sealed class GrimDefender : ModNPC {
             }
             else {
                 Vector2 center = new(NPC.position.X + 22 / 2, NPC.position.Y + 28 / 2 + NPC.gfxOffY);
-                center.X -= 5;
+                center.X -= 11;
                 center.Y -= 9;
 
                 diff = _tempPosition /*- Vector2.UnitY * 20f*/ - center;
@@ -281,7 +281,7 @@ sealed class GrimDefender : ModNPC {
                     if (!flag3) {
                         NPC.ai[2]++;
                         if (NPC.ai[2] <= num * 0.4f) {
-                            _tempPosition = Main.player[NPC.target].Center - new Vector2(Main.player[NPC.target].width * 0.75f, 0f);
+                            _tempPosition = Main.player[NPC.target].Center;
                         }
                         progress = NPC.ai[2] / num;
                         _extraVelocity2 = diff * speed * progress;
@@ -370,7 +370,7 @@ sealed class GrimDefender : ModNPC {
 
                     NormalMovement();
 
-                    _tempPosition = Main.player[NPC.target].Center - new Vector2(Main.player[NPC.target].width / 2f, 0f);
+                    _tempPosition = Main.player[NPC.target].Center;
                 }
 
                 ApplyExtraVelocity1();
