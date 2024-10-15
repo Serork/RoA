@@ -149,6 +149,8 @@ sealed class GrimDefender : ModNPC {
         NPC.spriteDirection = NPC.direction;
     }
 
+    public override bool CanHitPlayer(Player target, ref int cooldownSlot) => NPC.ai[0] > 1f && !_spearAttack;
+
     public override void AI() {
         NPC.noTileCollide = NPC.noGravity = true;
 
@@ -338,6 +340,9 @@ sealed class GrimDefender : ModNPC {
                         _spearAttack = !_spearAttack;
                     }
                     if (_spearAttack) {
+                        if (Main.netMode != NetmodeID.MultiplayerClient) {
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(), NPC.damage, 2f, Main.myPlayer, NPC.whoAmI);
+                        }
                         //_tempPosition = Main.player[NPC.target].Center;
                         //_extraVelocity = Vector2.Zero;
                     }
@@ -405,5 +410,41 @@ sealed class GrimDefender : ModNPC {
             if (_extraVelocity.Y > 1.35f)
                 _extraVelocity.Y = 1.35f;
         }
+    }
+
+    private class GrimDefenderSpearAttack : ModProjectile {
+        public override string Texture => ResourceManager.EmptyTexture;
+
+        public override void SetDefaults() {
+            int width = 40; int height = 40;
+            Projectile.Size = new Vector2(width, height);
+
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+
+            Projectile.aiStyle = -1;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 10;
+
+            Projectile.tileCollide = false;
+
+            Projectile.alpha = byte.MaxValue;
+        }
+
+        public override void AI() {
+            Projectile.timeLeft = 2;
+
+            NPC parent = Main.npc[(int)Projectile.ai[0]];
+            if (!parent.active) {
+                Projectile.Kill();
+                return;
+            }
+
+            Projectile.Center = parent.Center + parent.velocity.SafeNormalize(Vector2.Zero) * 40f;
+        }
+
+        public override bool? CanDamage() => Main.npc[(int)Projectile.ai[0]].velocity.Length() > 1.5f;
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) => Projectile.Kill();
     }
 }

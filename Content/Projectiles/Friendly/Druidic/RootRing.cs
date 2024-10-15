@@ -121,7 +121,7 @@ sealed class RootRing : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         var stats = player.GetModPlayer<WreathHandler>();
         float projOpacity = 1f - (float)_alpha / 255f;
-        Color color = stats.BaseColor * (0.75f + 0.4f * (1f - Projectile.ai[0]));
+        Color color = stats.BaseColor * (1f + 0.25f * (1f - Projectile.ai[0]));
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
         //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
@@ -130,13 +130,13 @@ sealed class RootRing : NatureProjectile {
 
         float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
-        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * Projectile.ai[0];
+        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * Projectile.ai[0];
         color *= 1.4f;
         color.A = 80;
         color *= opacity;
         opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
         color *= factor * opacity * 2f;
-        color *= 3f;
+        color *= 2f;
         float scale = Projectile.scale + factor * 0.035f;
         for (int i = 0; i < 2; i++) {
             spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
