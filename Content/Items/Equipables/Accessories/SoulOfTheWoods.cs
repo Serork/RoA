@@ -11,13 +11,13 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
-sealed class SoulOfTheWoods : ModItem {
+sealed class SoulOfTheWoods : NatureItem {
 	public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
-	public override void SetDefaults() {
-		int width = 28; int height = 38;
+    protected override void SafeSetDefaults() {
+        int width = 28; int height = 38;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Orange;

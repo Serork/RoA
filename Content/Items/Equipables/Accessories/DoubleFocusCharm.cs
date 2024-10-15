@@ -6,13 +6,13 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
-sealed class DoubleFocusCharm : ModItem {
+sealed class DoubleFocusCharm : NatureItem {
 	public override void SetStaticDefaults() {
 		Item.ResearchUnlockCount = 1;
 	}
 
-	public override void SetDefaults() {
-		int width = 28; int height = 20;
+    protected override void SafeSetDefaults() {
+        int width = 28; int height = 20;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;

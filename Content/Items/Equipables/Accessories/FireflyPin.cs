@@ -9,15 +9,15 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
-sealed class FireflyPin : ModItem {
+sealed class FireflyPin : NatureItem {
 	public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Firefly Pin");
         //Tooltip.SetDefault("Keeps Wreath full charge bonuses for 2 seconds after discharging");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
-	public override void SetDefaults() {
-		int width = 24; int height = 24;
+    protected override void SafeSetDefaults() {
+        int width = 24; int height = 24;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;
