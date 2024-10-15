@@ -26,12 +26,10 @@ sealed class WreathHandler : ModPlayer {
     private ushort _currentResource, _tempResource, _tempResource2;
     private float _addExtraValue;
     private float _keepBonusesForTime;
-
     private byte _boost;
     private ushort _increaseValue;
     private float _currentChangingTime, _currentChangingMult, _stayTime;
     private bool _shouldDecrease, _shouldDecrease2;
-
     private Color _lightingColor;
 
     public ushort MaxResource { get; private set; } = 100;
@@ -52,8 +50,11 @@ sealed class WreathHandler : ModPlayer {
 
     public ushort TotalResource => (ushort)(MaxResource + ExtraResource);
 
+    public float Max => TotalResource / MaxResource;
     public float ActualProgress => (float)CurrentResource / TotalResource;
-    public float Progress => HasKeepTime ? 1f : ActualProgress;
+    public float ActualProgress2 => (float)CurrentResource / MaxResource;
+    public float Progress => HasKeepTime ? Max : ActualProgress2;
+    public float Progress2 => HasKeepTime ? Max : ActualProgress;
     public float ChangingProgress {
         get {
             float value = ChangingTimeValue - _currentChangingTime;
@@ -61,7 +62,8 @@ sealed class WreathHandler : ModPlayer {
         }
     }
     public bool IsEmpty => ActualProgress <= 0.01f;
-    public bool IsFull => ActualProgress > 0.95f;
+    public bool IsFull => Progress > 0.95f;
+    public bool IsFull2 => Progress > Max - 0.05f;
     public bool IsMinCharged => ActualProgress > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
@@ -90,7 +92,9 @@ sealed class WreathHandler : ModPlayer {
     public ClawsHandler.SpecialAttackSpawnInfo SpecialAttackData => ClawsStats.SpecialAttackData;
     public DruidStats DruidPlayerStats => Player.GetModPlayer<DruidStats>();
 
-    public ushort AddResourceValue() => (ushort)(AddValue * TotalResource);
+    public bool SoulOfTheWoods => DruidPlayerStats.SoulOfTheWoods && Progress > 1f && Progress <= 2f;
+
+    public ushort AddResourceValue() => (ushort)(AddValue * MaxResource);
 
     public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
         if (!Player.IsLocal()) {
@@ -105,7 +109,7 @@ sealed class WreathHandler : ModPlayer {
 
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
-        if (playerUsingClaws && IsFull) {
+        if (playerUsingClaws && IsFull2) {
             if (SpecialAttackData.Owner == selectedItem) {
                 Reset();
 
@@ -167,6 +171,12 @@ sealed class WreathHandler : ModPlayer {
     public override void PreUpdate() {
         if (!Player.IsLocal()) {
             return;
+        }
+
+        MaxResource = 100;
+        ExtraResource = 0;
+        if (DruidPlayerStats.SoulOfTheWoods) {
+            ExtraResource += 100;
         }
 
         ChangingHandler();
@@ -254,29 +264,27 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts() {
-        if (ActualProgress >= 0.1f && ActualProgress <= 0.95f) {
-            if (Main.netMode != NetmodeID.Server) {
-                float progress = ActualProgress * 1.25f + 0.1f;
-                int count = Math.Min((int)(15 * progress), 10);
-                if (Main.netMode != NetmodeID.Server) {
-                    for (int i = 0; i < count; i++) {
-                        if (Main.rand.NextChance(0.5)) {
-                            Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, ModContent.DustType<Content.Dusts.WreathDust>(), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
-                            dust.velocity *= 1.25f * progress;
-                            if (i >= (int)(count * 0.8f)) {
-                                dust.velocity *= 2f * progress;
-                            }
-                            else if (i >= count / 2) {
-                                dust.velocity *= 1.5f * progress;
-                            }
-                            dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
-                            dust.noGravity = true;
-                            dust.position += dust.velocity * 0.75f;
-                            dust.noLightEmittence = true;
-                            dust.alpha = (int)(DrawColorOpacity * 255f);
-                            dust.customData = DrawColorOpacity;
-                        }
+        float actualProgress = SoulOfTheWoods ? (ActualProgress2 - 1f) : ActualProgress2;
+        ushort dustType = (ushort)(SoulOfTheWoods ? ModContent.DustType<Content.Dusts.WreathDust2>() : ModContent.DustType<Content.Dusts.WreathDust>());
+        if (actualProgress >= 0.1f && actualProgress <= 0.95f) {
+            float progress = actualProgress * 1.25f + 0.1f;
+            int count = Math.Min((int)(15 * progress), 10);
+            for (int i = 0; i < count; i++) {
+                if (Main.rand.NextChance(0.5)) {
+                    Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
+                    dust.velocity *= 1.25f * progress;
+                    if (i >= (int)(count * 0.8f)) {
+                        dust.velocity *= 2f * progress;
                     }
+                    else if (i >= count / 2) {
+                        dust.velocity *= 1.5f * progress;
+                    }
+                    dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
+                    dust.noGravity = true;
+                    dust.position += dust.velocity * 0.75f;
+                    dust.noLightEmittence = true;
+                    dust.alpha = (int)(DrawColorOpacity * 255f);
+                    dust.customData = DrawColorOpacity;
                 }
             }
         }

@@ -13,6 +13,8 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.UI;
 
+using static tModPorter.ProgressUpdate;
+
 namespace RoA.Common.InterfaceElements;
 
 sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", InterfaceScaleType.Game) {
@@ -53,40 +55,65 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f) - Main.screenPosition;
         _oldPosition = playerPosition;
 
-        float progress = Stats.ActualProgress;
+        float progress = MathHelper.Clamp(Stats.Progress, 0f, 1f);
         float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
         alpha = (alpha + 1f) / 2f;
         Color color = Color.Multiply(Stats.DrawColor, alpha);
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
 
+        // dark border
         SpriteData wreathSpriteData = _wreathSpriteData;
         wreathSpriteData.Rotation = MathHelper.Pi;
         wreathSpriteData.Color = color * opacity;
         wreathSpriteData.VisualPosition = position;
         wreathSpriteData.DrawSelf();
 
+        // filling
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed(0, 1);
         int frameOffsetY = 2;
-        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)((wreathSpriteData2.FrameHeight + frameOffsetY) * progress));
-        wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;
-        wreathSpriteData2.Color = color;
-        wreathSpriteData2.DrawSelf(sourceRectangle);
+        int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
+        void drawFilling(Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f) {
+            wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;
+            wreathSpriteData2.Color = color * opacity;
+            wreathSpriteData2.DrawSelf(sourceRectangle, offset);
+        }
+        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * progress));
+        bool soulOfTheWoods = Stats.SoulOfTheWoods;
+        float progress2 = Stats.Progress - 1f;
+        float value = progress2;
+        float progress3 = 1f - MathHelper.Clamp(progress2, 0f, 0.85f);
+        Rectangle sourceRectangle2 = sourceRectangle;
+        sourceRectangle2.Y += frameHeight;
+        sourceRectangle2.Height = (int)(frameHeight * progress2);
+        Vector2 offset = Vector2.Zero;
+        drawFilling(sourceRectangle, opacity: progress3);
+        if (soulOfTheWoods) {
+            drawFilling(sourceRectangle2, offset);
+        }
 
-        color *= 1.4f;
-        color.A = 80;
-        opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
-        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * Stats.PulseIntensity;
-        wreathSpriteData2.Color = color * factor * opacity * 2f;
-        wreathSpriteData2.Scale = factor + 0.475f;
-        wreathSpriteData2.DrawSelf(sourceRectangle);
-
-        wreathSpriteData2.Scale += 0.13f * progress * 2f;
-        wreathSpriteData2.DrawSelf(sourceRectangle);
-
-        SpriteData wreathSpriteData3 = wreathSpriteData.Framed(3, 1);
-        opacity = Math.Min(progress * 1.15f, 0.7f);
-        wreathSpriteData3.Color = color * opacity;
-        wreathSpriteData3.DrawSelf();
+        progress3 = 1f - MathHelper.Clamp(progress2 * 1.5f, 0f, 1f);
+        // effect
+        void drawEffect(float progress, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
+            color = Color.Multiply(Stats.DrawColor, alpha);
+            color *= 1.4f;
+            color.A = 80;
+            color *= opacity;
+            opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
+            float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * Stats.PulseIntensity;
+            wreathSpriteData2.Color = color * factor * opacity * 2f;
+            wreathSpriteData2.Scale = factor + 0.475f;
+            wreathSpriteData2.DrawSelf(sourceRectangle, offset);
+            wreathSpriteData2.Scale += 0.13f * progress * 2f;
+            wreathSpriteData2.DrawSelf(sourceRectangle, offset);
+            SpriteData wreathSpriteData3 = wreathSpriteData.Framed(frameX, frameY);
+            opacity = Math.Min(progress * 1.15f, 0.7f);
+            wreathSpriteData3.Color = color * opacity;
+            wreathSpriteData3.DrawSelf(offset: offset);
+        }
+        drawEffect(progress, sourceRectangle, opacity: progress3);
+        if (soulOfTheWoods) {
+            drawEffect(progress2, sourceRectangle2, offset, frameY: 2);
+        }
 
         // adapted vanilla
         Microsoft.Xna.Framework.Rectangle mouseRectangle = new Microsoft.Xna.Framework.Rectangle((int)((float)Main.mouseX + Main.screenPosition.X), (int)((float)Main.mouseY + Main.screenPosition.Y), 1, 1);

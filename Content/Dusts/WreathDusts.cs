@@ -6,7 +6,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class WreathDust : ModDust {
+sealed class WreathDust2 : WreathDust { }
+
+class WreathDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         float alpha = Lighting.Brightness((int)dust.position.X / 16, (int)dust.position.Y / 16);
         alpha = (alpha + 1f) / 2f;

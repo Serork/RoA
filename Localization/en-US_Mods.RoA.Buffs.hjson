@@ -47,6 +47,6 @@ Resilience: {
 }
 
 ExtraRegen: {
-	DisplayName: Extra Regen
-	Description: Mods.RoA.Buffs.ExtraRegen.Description
+	DisplayName: Regeneration
+	Description: Slowly recovering from injuries
 }

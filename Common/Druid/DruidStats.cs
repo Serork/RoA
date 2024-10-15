@@ -46,6 +46,8 @@ sealed class DruidStats : ModPlayer {
         }
     }
 
+    public bool SoulOfTheWoods { get; set; }
+
     public override void ResetEffects() {
         DruidBaseDamageMultiplier = 1f;
         DruidPotentialDamageMultiplier = 1f;
@@ -53,5 +55,7 @@ sealed class DruidStats : ModPlayer {
         DischargeTimeDecreaseMultiplier = 1f;
 
         KeepBonusesForTime = 0f;
+
+        SoulOfTheWoods = false;
     }
 }

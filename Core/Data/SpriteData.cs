@@ -37,13 +37,13 @@ struct SpriteData(Asset<Texture2D> textureAsset, SpriteFrame frame) {
         return result;
     }
 
-    public void DrawSelf(Rectangle? rectangle = null) {
+    public void DrawSelf(Rectangle? rectangle = null, Vector2? offset = null) {
         if (Texture == null) {
             return;
         }
 
         Main.EntitySpriteDraw(Texture,
-                              Center,
+                              Center + (offset ?? Vector2.Zero),
                               rectangle ?? SourceRectangle,
                               Color,
                               Rotation,
