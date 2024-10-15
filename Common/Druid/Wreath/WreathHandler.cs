@@ -12,10 +12,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.ModLoader;
-
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Common.Druid.Wreath;
 
@@ -32,7 +29,6 @@ sealed class WreathHandler : ModPlayer {
     private ushort _increaseValue;
     private float _currentChangingTime, _currentChangingMult, _stayTime;
     private bool _shouldDecrease, _shouldDecrease2;
-    private Color _lightingColor;
 
     public ushort MaxResource { get; private set; } = 100;
     public ushort ExtraResource { get; private set; } = 0;
@@ -90,7 +86,6 @@ sealed class WreathHandler : ModPlayer {
     }
     public Color BaseColor => new(255, 255, 200, 200);
     public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
-    public Color LightingColor => _lightingColor;
     public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress3), 0.35f);
 
@@ -179,6 +174,8 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
+        AddLight();
+
         MaxResource = 100;
         ExtraResource = 0;
         if (DruidPlayerStats.SoulOfTheWoods) {
@@ -189,7 +186,6 @@ sealed class WreathHandler : ModPlayer {
         }
 
         ChangingHandler();
-        AddLight();
     }
 
     private void IncreaseResourceValue(float fine = 0f) {
@@ -313,15 +309,17 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void AddLight() {
-        if (!Main.dedServ) {
-            _lightingColor = Color.LightGreen;
-            float progress = ActualProgress2 - 1f;
-            float progress2 = MathHelper.Clamp(1f - MathHelper.Clamp(progress * 1.5f, 0f, 1f) + (SoulOfTheWoods ? (0.25f * progress) : 0f), 0f, 1f);
-            Lighting.AddLight(LightingPosition, _lightingColor.ToVector3() * LightingIntensity * progress2 * 2f);
-            if (SoulOfTheWoods) {
-                _lightingColor = new Color(245, 172, 172);
-                Lighting.AddLight(LightingPosition, _lightingColor.ToVector3() * LightingIntensity * (progress * 3f));
-            }
+        float progress = ActualProgress2;
+        float progress2 = MathHelper.Clamp(progress, 0f, 1f);
+        float value = 0.4f + 0.2f * PulseIntensity;
+        float value2 = ActualProgress2 - 1f;
+        if (value2 > 0f) {
+            progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
+        }
+        Lighting.AddLight(LightingPosition, Color.LightGreen.ToVector3() * 0.35f * progress2 * (1.5f + value));
+        if (SoulOfTheWoods) {
+            progress = value2;
+            Lighting.AddLight(LightingPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));
         }
     }
 }
