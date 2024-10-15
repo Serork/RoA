@@ -77,7 +77,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsEmpty => ActualProgress2 <= 0.01f;
     public bool IsFull => Progress > 0.95f;
     public bool GetIsFull(ushort currentResource) => GetProgress(currentResource) > 0.95f;
-    public bool IsFull2 => Progress > Max - 0.05f;
+    public bool IsFull2 => Progress > 1.95f;
     public bool IsFull3 => Progress > 0.95f && Progress <= 1f;
     public bool IsMinCharged => ActualProgress2 > 0.1f;
 
