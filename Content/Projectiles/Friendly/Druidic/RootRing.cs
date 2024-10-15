@@ -116,7 +116,7 @@ sealed class RootRing : NatureProjectile {
         Vector2 position = Projectile.Center - Main.screenPosition;
         Player player = Main.player[Projectile.owner];
         var stats = player.GetModPlayer<WreathHandler>();
-        Color color = stats.BaseColor * (1f - (float)Projectile.alpha / 255f) * (0.75f + 0.35f * (1f - stats.PulseIntensity));
+        Color color = stats.BaseColor * (1f - (float)Projectile.alpha / 255f) * (0.75f + 0.4f * (1f - stats.PulseIntensity));
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
         //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
