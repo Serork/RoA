@@ -90,7 +90,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
             drawFilling(sourceRectangle2, offset);
         }
 
-        progress3 = 1f - MathHelper.Clamp(progress2 * 1.5f, 0f, 1f);
+        progress3 = 1f - MathHelper.Clamp(progress2 * 2.25f, 0f, 1f);
         // effect
         void drawEffect(float progress, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
             //color = Color.Multiply(Stats.DrawColor, alpha);
