@@ -77,8 +77,6 @@ sealed class RootRing : NatureProjectile {
             }
 
             if (!flag) {
-                if (_alpha >= 65)
-                    Projectile.ai[1] += Projectile.ai[1] + 0.000000005f;
                 FadeIn();
             }
 
@@ -87,11 +85,9 @@ sealed class RootRing : NatureProjectile {
     }
 
     private void FadeIn() {
-        if (Projectile.ai[1] <= 50f) {
-            _alpha -= 15;
-            if (_alpha < 70)
-                _alpha = 70;
-        }
+        _alpha -= 10;
+        if (_alpha < 70)
+            _alpha = 70;
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

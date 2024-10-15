@@ -13,7 +13,6 @@ sealed class TileSets : ModSystem {
         Paintings = [];
         for (ushort type = 1; type < TileLoader.TileCount; type++) {
             if (TileID.Sets.FramesOnKillWall[type]) {
-                Console.WriteLine(type);
                 Paintings.Add(type);
             }
         }
