@@ -319,7 +319,7 @@ sealed class WreathHandler : ModPlayer {
         ushort dustType = GetDustType();
         if (PulseIntensity > 0f && (IsFull2 || IsFull3)) {
             if (Player.miscCounter % 6 == 0 && Main.rand.NextChance(0.5)) {
-                Dust dust = Dust.NewDustPerfect(LightingPosition - new Vector2(0, 23) + Main.rand.NextVector2CircularEdge(20, 24) * (0.3f + Main.rand.NextFloat() * 0.5f), dustType, new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 0.35f), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, Main.rand.NextFloat()) * 1.25f);
+                Dust dust = Dust.NewDustPerfect(LightingPosition - new Vector2(0, 23) + Main.rand.NextVector2CircularEdge(20, 20) * (0.3f + Main.rand.NextFloat() * 0.5f), dustType, new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 0.35f), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, Main.rand.NextFloat()) * 1.25f);
                 dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
                 dust.alpha = (int)(DrawColorOpacity * 255f);
                 dust.noGravity = true;
