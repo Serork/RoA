@@ -52,7 +52,8 @@ sealed class RootRing : NatureProjectile {
 
         Player player = Main.player[Projectile.owner];
 
-        Lighting.AddLight(Projectile.Center, new Color(248, 119, 119).ToVector3());
+        float projOpacity = 1f - (float)_alpha / 255f;
+        Lighting.AddLight(Projectile.Center, new Color(248, 119, 119).ToVector3() * projOpacity);
 
         Vector2 position = new((float)(player.Center.X - (Projectile.width / 2)), (float)(player.Center.Y - 90 + (float)(player.gfxOffY - 60.0)));
         Projectile.position = new Vector2((int)position.X, (int)position.Y);
