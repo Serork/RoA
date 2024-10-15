@@ -64,6 +64,8 @@ sealed class Fleder : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath39;
 
         NPC.noGravity = true;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) => target.AddBuff(BuffID.Bleeding, Main.expertMode ? 135 : 85);

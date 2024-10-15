@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -43,7 +44,9 @@ sealed class Lumberjack : RoANPC {
 
 		NPC.HitSound = SoundID.NPCHit1;
 		NPC.DeathSound = SoundID.NPCDeath1;
-	}
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+    }
 
 	//public override void HitEffect(NPC.HitInfo hit) {
 	//	if (Main.netMode == NetmodeID.Server) {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.WorldEvents;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 
 using System;
@@ -38,6 +39,8 @@ sealed class Ravencaller : ModNPC {
         NPC.HitSound = SoundID.NPCHit19;
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.alpha = 175;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void SendExtraAI(BinaryWriter writer) {

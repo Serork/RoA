@@ -1,9 +1,11 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -34,6 +36,8 @@ sealed class Ent : RoANPC {
 
         NPC.HitSound = SoundID.NPCHit52;
         NPC.DeathSound = SoundID.NPCDeath27;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void AI() {

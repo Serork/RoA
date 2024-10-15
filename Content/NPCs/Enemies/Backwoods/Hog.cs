@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -11,6 +12,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -36,6 +38,8 @@ sealed class Hog : RoANPC {
 		NPC.Size = new Vector2(width, height);
 
 		NPC.value = Item.buyPrice(0, 0, 0, 80);
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers) => RageMode();

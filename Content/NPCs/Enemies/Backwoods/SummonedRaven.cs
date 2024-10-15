@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
 
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -55,6 +56,8 @@ sealed class SummonedRaven : ModNPC {
         //SpawnModBiomes = new int[] {
         //	ModContent.GetInstance<BackwoodsBiome>().Type
         //};
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override bool? CanFallThroughPlatforms() => true;

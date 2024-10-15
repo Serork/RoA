@@ -3,13 +3,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
 using System.IO;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -25,12 +28,16 @@ sealed class GrimDefender : ModNPC {
     private Vector2 _tempPosition, _extraVelocity, _extraVelocity2;
     private bool _spearAttack;
     private float _rotation;
+    private bool _isAngry;
+    private float _angryTimer;
 
     public override void SendExtraAI(BinaryWriter writer) {
         writer.WriteVector2(_tempPosition);
         writer.WriteVector2(_extraVelocity);
         writer.WriteVector2(_extraVelocity2);
         writer.Write(_spearAttack);
+        writer.Write(_isAngry);
+        writer.Write(_angryTimer);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -38,6 +45,8 @@ sealed class GrimDefender : ModNPC {
         _extraVelocity = reader.ReadVector2();
         _extraVelocity2 = reader.ReadVector2();
         _spearAttack = reader.ReadBoolean();
+        _isAngry = reader.ReadBoolean();
+        _angryTimer = reader.ReadSingle();
     }
 
     public override void SetStaticDefaults() {
@@ -62,6 +71,26 @@ sealed class GrimDefender : ModNPC {
 
         NPC.HitSound = SoundID.NPCHit7;
         NPC.DeathSound = SoundID.NPCDeath6;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+    }
+
+    private class RecognizeHit : ModPlayer {
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+            if (target.ModNPC.SpawnModBiomes.Contains(ModContent.GetInstance<BackwoodsBiome>().Type)) {
+                foreach (NPC npc in Main.ActiveNPCs) {
+                    if (npc.type == ModContent.NPCType<GrimDefender>()) {
+                        if (Player.whoAmI != npc.target) {
+                            return;
+                        }
+
+                        npc.As<GrimDefender>()._isAngry = true;
+                        npc.As<GrimDefender>()._angryTimer = 0f;
+                        npc.netUpdate = true;
+                    }
+                }
+            }
+        }
     }
 
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {
@@ -118,16 +147,20 @@ sealed class GrimDefender : ModNPC {
         Main.EntitySpriteDraw(texture, position, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects);
         texture = TextureAssets.Npc[Type].Value;
         Color color = new Color(255, 255, 255, 0) * 0.8f;
+        Rectangle sourceRectangle = NPC.frame;
+        sourceRectangle.X = _isAngry ? 0 : 72;
         for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
             float mult = 1f / NPCID.Sets.TrailCacheLength[Type];
-            Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, color * 0.9f * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
+            Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, sourceRectangle, color * 0.9f * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
         }
-        Main.EntitySpriteDraw(texture, position, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects);
+        Main.EntitySpriteDraw(texture, position, sourceRectangle, color, NPC.rotation, origin, NPC.scale, effects);
 
         return false;
     }
 
     public override void FindFrame(int frameHeight) {
+        NPC.frame.Width = 72;
+
         if (NPC.ai[0] == 0f) {
             float num = ATTACKTIME;
             if (NPC.ai[1] <= num * 0.7f) {
@@ -154,7 +187,7 @@ sealed class GrimDefender : ModNPC {
     public override void AI() {
         NPC.noTileCollide = NPC.noGravity = true;
 
-        Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? new Color(255, 120, 120) * 0.5f : new Color(148, 1, 26)).ToVector3() * 0.75f);
+        Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? (_isAngry ? new Color(255, 120, 120) : new Color(153, 244, 114)) * 0.5f : new Color(148, 1, 26)).ToVector3() * 0.75f);
 
         bool flag = true;
         Vector2 diff = Main.player[NPC.target].Center - NPC.Center;
@@ -291,7 +324,7 @@ sealed class GrimDefender : ModNPC {
 
             NPC.TargetClosest();
             NPC.knockBackResist = 0.9f;
-            if (!Main.player[NPC.target].InModBiome<BackwoodsBiome>()) {
+            if (!Main.player[NPC.target].InModBiome<BackwoodsBiome>() || (!_isAngry && _angryTimer >= 10f)) {
                 float maxSpeed = 3.5f;
                 if (NPC.velocity.Y < -maxSpeed) {
                     NPC.velocity.Y = -maxSpeed;
@@ -309,15 +342,20 @@ sealed class GrimDefender : ModNPC {
             }
             else {
                 bool flag2 = NPC.ai[1] <= attackCd * 0.5f;
-                NPC.dontTakeDamage = NPC.ai[1] <= attackCd * 0.7f;
+                NPC.dontTakeDamage = !_isAngry || NPC.ai[1] <= attackCd * 0.7f;
                 if (NPC.justHit) {
                     //SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
                     NPC.ai[1] = 0f;
                     SpawnHitGores();
                     NPC.dontTakeDamage = true;
                 }
+                if (!_isAngry) {
+                    if (_angryTimer < 10f) {
+                        _angryTimer += TimeSystem.LogicDeltaTime;
+                    }
+                }
                 if (NPC.ai[1] < attackCd) {
-                    if (NPC.Distance(Main.player[NPC.target].Center) <= 240f) {
+                    if ((!_isAngry && flag2) || (_isAngry && NPC.Distance(Main.player[NPC.target].Center) <= 240f)) {
                         NPC.ai[1]++;
                     }
 
@@ -335,7 +373,7 @@ sealed class GrimDefender : ModNPC {
                     _extraVelocity *= 0.97f;
                     NPC.velocity *= 0.97f;
                 }
-                else if (NPC.localAI[2] == 0f) {
+                else if (_isAngry && NPC.localAI[2] == 0f) {
                     if (Main.rand.NextBool()) {
                         _spearAttack = !_spearAttack;
                         foreach (Projectile projectile in Main.ActiveProjectiles) {
@@ -354,7 +392,7 @@ sealed class GrimDefender : ModNPC {
                     NPC.localAI[2] = 1f;
                 }
 
-                if (NPC.ai[1] >= attackCd) {
+                if (NPC.ai[1] >= attackCd && _isAngry) {
                     NPC.ai[0] = 1f;
                     NPC.localAI[2] = 0f;
                 }

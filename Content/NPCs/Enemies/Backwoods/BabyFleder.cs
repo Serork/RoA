@@ -71,6 +71,8 @@ sealed class BabyFleder : ModNPC {
 
         NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) {

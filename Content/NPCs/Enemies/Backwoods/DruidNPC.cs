@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -11,6 +12,7 @@ using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 abstract class DruidNPC : RoANPC {
@@ -35,6 +37,8 @@ abstract class DruidNPC : RoANPC {
     public override void SetDefaults() {
         NPC.HitSound = SoundID.NPCHit19;
         NPC.DeathSound = SoundID.NPCDeath30;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
