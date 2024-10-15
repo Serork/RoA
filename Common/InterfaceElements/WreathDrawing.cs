@@ -82,7 +82,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         bool soulOfTheWoods = Stats.SoulOfTheWoods;
         float progress2 = Stats.ActualProgress2 - 1f;
         float value = progress2;
-        float progress3 = 1f - MathHelper.Clamp(progress2 * 0.8f, 0f, 0.8f);
+        float progress3 = 1f - MathHelper.Clamp(progress2 * 0.8f, 0f, 0.7f);
         Rectangle sourceRectangle2 = sourceRectangle;
         sourceRectangle2.X = 0;
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;

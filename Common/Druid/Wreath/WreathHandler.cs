@@ -83,7 +83,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsChangingValue => _currentChangingTime > 0f;
 
     public bool ShouldDraw => !IsEmpty || Player.IsHoldingNatureWeapon();
-    public float PulseIntensity => _stayTime <= 1f ? Ease.CubeInOut(_stayTime) : 1f;
+    public float PulseIntensity => _stayTime <= 0.35f ? 0f : _stayTime > 0.35f && _stayTime <= 1.35f ? Ease.CubeInOut(_stayTime - 0.35f) : 1f;
 
     public bool HasKeepTime => _keepBonusesForTime > 0f;
 
@@ -348,7 +348,7 @@ sealed class WreathHandler : ModPlayer {
         if (value2 > 0f) {
             progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
         }
-        Lighting.AddLight(LightingPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (2f + value));
+        Lighting.AddLight(LightingPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (1.5f + value));
         if (SoulOfTheWoods) {
             progress = value2;
             Lighting.AddLight(LightingPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));
