@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
@@ -57,6 +58,9 @@ abstract class Wave : NatureProjectile {
         modifiers.SourceDamage += 2f;
         modifiers.SetCrit();
     }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Player player = Main.player[Projectile.owner];

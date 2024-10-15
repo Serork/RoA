@@ -18,6 +18,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Content.Buffs;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -497,6 +498,9 @@ sealed class GrimDefender : ModNPC {
 
         public override bool? CanDamage() => Main.npc[(int)Projectile.ai[0]].velocity.Length() > 1.5f;
 
-        public override void OnHitPlayer(Player target, Player.HurtInfo info) => Projectile.Kill();
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+            target.AddBuff(ModContent.BuffType<Hemorrhage>(), Main.expertMode ? 300 : 180);
+            Projectile.Kill();
+        }
     }
 }
