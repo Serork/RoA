@@ -320,7 +320,7 @@ sealed class GrimDefender : ModNPC {
             NPC.ai[1] = 0f;
             NPC.ai[0] = 2f;
             if (!_spearAttack) {
-                Vector2 desiredVelocity = diff * 7.5f;
+                Vector2 desiredVelocity = diff * 8f;
                 NPC.ai[2] = desiredVelocity.X;
                 NPC.ai[3] = desiredVelocity.Y;
             }
