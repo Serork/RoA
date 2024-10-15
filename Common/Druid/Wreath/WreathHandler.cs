@@ -75,10 +75,10 @@ sealed class WreathHandler : ModPlayer {
         }
     }
     public bool IsEmpty => ActualProgress2 <= 0.01f;
-    public bool IsFull => Progress > 0.95f;
+    public bool IsFull => Progress >= 0.95f;
     public bool GetIsFull(ushort currentResource) => GetProgress(currentResource) > 0.95f;
-    public bool IsFull2 => Progress > 1.95f;
-    public bool IsFull3 => Progress > 0.95f && Progress <= 1f;
+    public bool IsFull2 => Progress >= 1.95f;
+    public bool IsFull3 => IsFull && Progress <= 1.1f;
     public bool IsMinCharged => ActualProgress2 > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
@@ -360,7 +360,7 @@ sealed class WreathHandler : ModPlayer {
 
     private ushort GetDustType() {
         ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() : ModContent.DustType<Content.Dusts.WreathDust>());
-        ushort dustType = (ushort)(SoulOfTheWoods ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
+        ushort dustType = (ushort)(IsFull && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
         return dustType;
     }
 
