@@ -191,6 +191,15 @@ sealed class GrimDefender : ModNPC {
 
     public override bool CanHitPlayer(Player target, ref int cooldownSlot) => NPC.ai[0] > 1f && !_spearAttack;
 
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.ai[0] <= 1f) {
+            NPC.ai[1] = 0f;
+        }
+        NPC.dontTakeDamage = true;
+        SpawnHitGores();
+        NPC.netUpdate = true;
+    }
+
     public override void AI() {
         NPC.noTileCollide = NPC.noGravity = true;
 
@@ -296,12 +305,6 @@ sealed class GrimDefender : ModNPC {
             }
 
             if (NPC.ai[1] >= num || NPC.justHit) {
-                if (NPC.justHit) {
-                    //SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
-                    SpawnHitGores();
-                    NPC.dontTakeDamage = true;
-                    NPC.netUpdate = true;
-                }
                 NPC.ai[0] = 0f;
                 NPC.ai[1] = NPC.justHit ? (60f - NPC.ai[1]) : 0f;
                 NPC.localAI[1] = 0f;
@@ -354,13 +357,6 @@ sealed class GrimDefender : ModNPC {
             else {
                 bool flag2 = NPC.ai[1] <= attackCd * 0.5f;
                 NPC.dontTakeDamage = !_isAngry || NPC.ai[1] <= attackCd * 0.7f;
-                if (NPC.justHit) {
-                    //SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
-                    NPC.ai[1] = 0f;
-                    SpawnHitGores();
-                    NPC.dontTakeDamage = true;
-                    NPC.netUpdate = true;
-                }
                 if (!_isAngry) {
                     if (_angryTimer < 10f) {
                         _angryTimer += TimeSystem.LogicDeltaTime;
