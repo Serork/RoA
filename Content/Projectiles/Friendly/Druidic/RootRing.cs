@@ -85,9 +85,9 @@ sealed class RootRing : NatureProjectile {
     }
 
     private void FadeIn() {
-        _alpha -= 10;
-        if (_alpha < 70)
-            _alpha = 70;
+        if (_alpha >= 10) {
+            _alpha -= 10;
+        }
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -121,7 +121,7 @@ sealed class RootRing : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         var stats = player.GetModPlayer<WreathHandler>();
         float projOpacity = 1f - (float)_alpha / 255f;
-        Color color = stats.BaseColor * (1f + 0.25f * (1f - Projectile.ai[0]));
+        Color color = stats.BaseColor * (0.7f + 0.5f * (1f - Projectile.ai[0]));
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
         //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
@@ -138,9 +138,7 @@ sealed class RootRing : NatureProjectile {
         color *= factor * opacity * 2f;
         color *= 2f;
         float scale = Projectile.scale + factor * 0.035f;
-        for (int i = 0; i < 2; i++) {
-            spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
-        }
+        spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
 
         spriteBatch.EndBlendState();
         return false;
