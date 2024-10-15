@@ -12,7 +12,6 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Druid.Wreath;
@@ -64,11 +63,11 @@ sealed class WreathHandler : ModPlayer {
             return _shouldDecrease2 ? value : Ease.CircOut(value);
         }
     }
-    public bool IsEmpty => ActualProgress <= 0.01f;
+    public bool IsEmpty => ActualProgress2 <= 0.01f;
     public bool IsFull => Progress > 0.95f;
     public bool GetIsFull(ushort currentResource) => GetProgress(currentResource) > 0.95f;
     public bool IsFull2 => Progress > Max - 0.05f;
-    public bool IsMinCharged => ActualProgress > 0.1f;
+    public bool IsMinCharged => ActualProgress2 > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
@@ -127,36 +126,9 @@ sealed class WreathHandler : ModPlayer {
         MakeDusts();
     }
 
-    public override void PostUpdateBuffs() {
-        int buff = ModContent.BuffType<WreathCharged>();
-        int buff2 = ModContent.BuffType<WreathFullCharged>();
-        int buff3 = ModContent.BuffType<WreathFullCharged2>();
-        if (IsMinCharged) {
-            int buffIndex;
-            if (IsFull2) {
-                Player.AddBuff(buff3, 10);
-                if (Player.FindBuff(buff3, out buffIndex)) {
-                    Player.DelBuff(buffIndex);
-                }
-
-                return;
-            }
-            if (IsFull) {
-                Player.AddBuff(buff2, 10);
-                if (Player.FindBuff(buff, out buffIndex)) {
-                    Player.DelBuff(buffIndex);
-                }
-
-                return;
-            }
-            Player.AddBuff(buff, 10);
-            if (Player.FindBuff(buff2, out buffIndex)) {
-                Player.DelBuff(buffIndex);
-            }
-        }
-    }
-
     public override void PostUpdateEquips() {
+        ApplyBuffs();
+
         if (_stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
         }
@@ -176,6 +148,38 @@ sealed class WreathHandler : ModPlayer {
         }
         if (HasKeepTime && ActualProgress2 <= 1f) {
             _keepBonusesForTime -= 1f;
+        }
+    }
+
+    private void ApplyBuffs() {
+        int buff = ModContent.BuffType<WreathCharged>();
+        int buff2 = ModContent.BuffType<WreathFullCharged>();
+        int buff3 = ModContent.BuffType<WreathFullCharged2>();
+        if (IsMinCharged) {
+            int buffIndex;
+            if (DruidPlayerStats.SoulOfTheWoods && IsFull2) {
+                Player.AddBuff(buff3, 10);
+                if (Player.FindBuff(buff2, out buffIndex)) {
+                    Player.DelBuff(buffIndex);
+                }
+
+                return;
+            }
+            if (IsFull) {
+                Player.AddBuff(buff2, 10);
+                if (Player.FindBuff(buff, out buffIndex)) {
+                    Player.DelBuff(buffIndex);
+                }
+                if (Player.FindBuff(buff3, out buffIndex)) {
+                    Player.DelBuff(buffIndex);
+                }
+
+                return;
+            }
+            Player.AddBuff(buff, 10);
+            if (Player.FindBuff(buff2, out buffIndex)) {
+                Player.DelBuff(buffIndex);
+            }
         }
     }
 

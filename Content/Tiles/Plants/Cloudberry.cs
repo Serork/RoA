@@ -20,6 +20,10 @@ sealed class Cloudberry : PlantBase, TileHooks.IGlobalRandomUpdate {
             return;
         }
 
-        TryPlacePlant(i, j, WorldGen.gen ? 2 : 0, TileID.SnowBlock);
+        if (WorldGen.genRand.NextBool()) {
+            return;
+        }
+
+        TryPlacePlant(i, j, WorldGen.gen ? WorldGen.genRand.Next(3) : 0, TileID.SnowBlock);
     }
 }

@@ -3,8 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
 using System.IO;
 
 using Terraria;
@@ -15,14 +17,13 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class RootRing : NatureProjectile {
-    public override Color? GetAlpha(Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0) * (1f - (float)Projectile.alpha / 255f);
+    public override Color? GetAlpha(Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0);
 
     protected override void SafeSetDefaults() {
         int width = 296; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.penetrate = -1;
-        Projectile.hostile = false;
         Projectile.friendly = true;
 
         Projectile.tileCollide = false;
@@ -89,23 +90,20 @@ sealed class RootRing : NatureProjectile {
         => target.immune[Projectile.owner] = 5;
 
     public override bool? CanHitNPC(NPC target)
-        => target.immune[Projectile.owner] <= 0 && Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) >= 110f && Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) <= 170f;
+        => target.life <= target.lifeMax / 2 && target.immune[Projectile.owner] <= 0 && Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) >= 110f && Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) <= 170f;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        bool flag = target.life <= target.lifeMax / 2;
-        if (flag) {
-            Player player = Main.player[Projectile.owner];
-            SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
-            if (Vector2.Distance(target.Center, player.Center) < 135f)
-                return;
-            if (target.friendly || target.lifeMax <= 5 || target.knockBackResist <= 0f || target.dontTakeDamage)
-                return;
-            float hitDirectionX = target.position.X > player.position.X ? 1f : -1f;
-            float hitDirectionY = target.position.Y > player.position.Y ? 1f : -1f;
-            float knockback2 = hit.Knockback * Main.rand.NextFloat(3f, 8f) * target.knockBackResist;
-            target.velocity.X += knockback2 * hitDirectionX;
-            target.velocity.Y += knockback2 * hitDirectionY;
-        }
+        Player player = Main.player[Projectile.owner];
+        SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
+        if (Vector2.Distance(target.Center, player.Center) < 135f)
+            return;
+        if (target.friendly || target.lifeMax <= 5 || target.knockBackResist <= 0f || target.dontTakeDamage)
+            return;
+        float hitDirectionX = target.position.X > player.position.X ? 1f : -1f;
+        float hitDirectionY = target.position.Y > player.position.Y ? 1f : -1f;
+        float knockback2 = hit.Knockback * Main.rand.NextFloat(3f, 8f) * target.knockBackResist;
+        target.velocity.X += knockback2 * hitDirectionX;
+        target.velocity.Y += knockback2 * hitDirectionY;
     }
 
     public override bool? CanCutTiles()
@@ -116,11 +114,28 @@ sealed class RootRing : NatureProjectile {
         spriteBatch.BeginBlendState(BlendState.AlphaBlend, SamplerState.LinearClamp);
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 position = Projectile.Center - Main.screenPosition;
-        Color color = Projectile.GetAlpha(lightColor) * 0.75f;
-        float multiplier = 0.075f * _fading2;
-        for (int i = 0; i < 2; i++)
-            spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
+        Player player = Main.player[Projectile.owner];
+        var stats = player.GetModPlayer<WreathHandler>();
+        Color color = stats.BaseColor * (1f - (float)Projectile.alpha / 255f) * (0.75f + 0.35f * (1f - stats.PulseIntensity));
+        float multiplier = 0.035f;
+        //for (int i = 0; i < 2; i++)
+        //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
+
+        spriteBatch.Draw(texture, position, null, color, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SpriteEffects.None, 0);
+
+        float progress = MathHelper.Clamp(stats.ActualProgress2, 0f, 1f);
+        float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
+        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * stats.PulseIntensity;
+        color *= 1.4f;
+        color.A = 80;
+        color *= opacity;
+        opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
+        color *= factor * opacity * 2f;
+        color *= 3f;
+        float scale = Projectile.scale + factor * 0.035f;
+        spriteBatch.Draw(texture, position, null, color, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
+
         spriteBatch.EndBlendState();
-        return true;
+        return false;
     }
 }

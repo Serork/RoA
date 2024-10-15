@@ -1191,6 +1191,43 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int baseY = _random.Next((int)Main.worldSurface, Bottom - 20);
         Point origin = new(baseX, baseY);
 
+        ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
+        while (true) {
+            int attempts = 50;
+            while (!skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
+                baseX = _random.Next(Left + 15, Right - 15);
+                baseY = _random.Next((int)Main.worldSurface, Bottom - 20);
+                if (attempts-- <= 0) {
+                    break;
+                }
+            }
+            bool flag = false;
+            int check = 20;
+            attempts = 50;
+            for (int x2 = baseX - check; x2 < baseX + check; x2++) {
+                for (int y2 = baseY - check; y2 < baseY + check; y2++) {
+                    if (WorldGenHelper.ActiveTile(x2, y2, _elderWoodChestTileType)) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    baseX = _random.Next(Left + 15, Right - 15);
+                    baseY = _random.Next((int)Main.worldSurface, Bottom - 20);
+                    break;
+                }
+            }
+            if (flag) {
+                if (attempts-- <= 0) {
+                    break;
+                }
+                continue;
+            }
+            else {
+                break;
+            }
+        }
+
         int num = 50;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
