@@ -335,7 +335,7 @@ static class WorldGenHelper {
                 int count = 0;
                 for (; Framing.GetTileSafely(x, j - count).ActiveTile(vineType); count++) {
                 }
-                if (count < 5) {
+                if (count < 7) {
                     WorldGen.PlaceTile(x, j, vineType);
                 }
                 else {
