@@ -15,6 +15,8 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static tModPorter.ProgressUpdate;
+
 namespace RoA.Common.Druid.Wreath;
 
 sealed class WreathHandler : ModPlayer {
@@ -90,7 +92,7 @@ sealed class WreathHandler : ModPlayer {
     public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
     public Color LightingColor => _lightingColor;
     public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
-    public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress), 0.35f);
+    public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress3), 0.35f);
 
     public ClawsHandler ClawsStats => Player.GetModPlayer<ClawsHandler>();
     public ClawsHandler.SpecialAttackSpawnInfo SpecialAttackData => ClawsStats.SpecialAttackData;
@@ -311,9 +313,15 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void AddLight() {
-        //_lightingColor = Color.LightGreen;
-        //if (!Main.dedServ) {
-        //    Lighting.AddLight(LightingPosition, _lightingColor.ToVector3() * LightingIntensity);
-        //}
+        if (!Main.dedServ) {
+            _lightingColor = Color.LightGreen;
+            float progress = ActualProgress2 - 1f;
+            float progress2 = MathHelper.Clamp(1f - MathHelper.Clamp(progress * 1.5f, 0f, 1f) + (SoulOfTheWoods ? (0.25f * progress) : 0f), 0f, 1f);
+            Lighting.AddLight(LightingPosition, _lightingColor.ToVector3() * LightingIntensity * progress2 * 2f);
+            if (SoulOfTheWoods) {
+                _lightingColor = new Color(245, 172, 172);
+                Lighting.AddLight(LightingPosition, _lightingColor.ToVector3() * LightingIntensity * (progress * 3f));
+            }
+        }
     }
 }

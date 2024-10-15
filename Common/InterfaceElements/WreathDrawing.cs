@@ -54,9 +54,10 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         _oldPosition = playerPosition;
 
         float progress = MathHelper.Clamp(Stats.ActualProgress2, 0f, 1f);
-        float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
-        alpha = (alpha + 1f) / 2f;
-        Color color = Color.Multiply(Stats.DrawColor, alpha);
+        //float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
+        //alpha = (alpha + 1f) / 2f;
+        //Color color = Color.Multiply(Stats.DrawColor, alpha);
+        Color color = Stats.BaseColor;
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
 
         // dark border
@@ -68,7 +69,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
 
         // filling
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed(0, 1);
-        int frameOffsetY = 2;
+        int frameOffsetY = 1;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
         void drawFilling(Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f) {
             wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;
@@ -81,7 +82,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         float value = progress2;
         float progress3 = 1f - MathHelper.Clamp(progress2, 0f, 0.85f);
         Rectangle sourceRectangle2 = sourceRectangle;
-        sourceRectangle2.Y += frameHeight;
+        sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
         sourceRectangle2.Height = (int)(frameHeight * progress2);
         Vector2 offset = Vector2.Zero;
         drawFilling(sourceRectangle, opacity: progress3);
@@ -92,7 +93,8 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         progress3 = 1f - MathHelper.Clamp(progress2 * 1.5f, 0f, 1f);
         // effect
         void drawEffect(float progress, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
-            color = Color.Multiply(Stats.DrawColor, alpha);
+            //color = Color.Multiply(Stats.DrawColor, alpha);
+            color = Stats.BaseColor;
             color *= 1.4f;
             color.A = 80;
             color *= opacity;
