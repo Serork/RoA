@@ -338,10 +338,15 @@ sealed class GrimDefender : ModNPC {
                 else if (NPC.localAI[2] == 0f) {
                     if (Main.rand.NextBool()) {
                         _spearAttack = !_spearAttack;
+                        foreach (Projectile projectile in Main.ActiveProjectiles) {
+                            if (projectile.ai[0] == NPC.whoAmI) {
+                                projectile.Kill();
+                            }
+                        }
                     }
                     if (_spearAttack) {
                         if (Main.netMode != NetmodeID.MultiplayerClient) {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(), NPC.damage, 2f, Main.myPlayer, NPC.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(), NPC.damage / 2, 4f, Main.myPlayer, NPC.whoAmI);
                         }
                         //_tempPosition = Main.player[NPC.target].Center;
                         //_extraVelocity = Vector2.Zero;
@@ -416,7 +421,7 @@ sealed class GrimDefender : ModNPC {
         public override string Texture => ResourceManager.EmptyTexture;
 
         public override void SetDefaults() {
-            int width = 40; int height = 40;
+            int width = 20; int height = 20;
             Projectile.Size = new Vector2(width, height);
 
             Projectile.friendly = false;
