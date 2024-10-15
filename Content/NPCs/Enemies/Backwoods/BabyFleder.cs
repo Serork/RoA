@@ -366,7 +366,9 @@ sealed class BabyFleder : ModNPC {
 
                 NPC.BasicFlier(0.4f * 0.4f, 0.2f * 0.4f, 4f * 0.4f, 2f * 0.4f);
 
-                NPC.TargetClosest();
+                if (Main.player[NPC.target].InModBiome<BackwoodsBiome>()) {
+                    NPC.TargetClosest();
+                }
 
                 int num201 = 1;
                 int num202 = 1;
