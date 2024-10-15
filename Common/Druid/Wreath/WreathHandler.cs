@@ -23,7 +23,7 @@ sealed class WreathHandler : ModPlayer {
     private const byte MAXBOOSTINCREMENT = 7;
     private const float STAYTIMEMAX = 5f;
 
-    private ushort _currentResource, _tempResource, _tempResource2;
+    private ushort _currentResource, _tempResource;
     private float _addExtraValue;
     private float _keepBonusesForTime;
     private byte _boost;
@@ -34,6 +34,7 @@ sealed class WreathHandler : ModPlayer {
 
     public ushort MaxResource { get; private set; } = 100;
     public ushort ExtraResource { get; private set; } = 0;
+    public float ChangingTimeValue { get; private set; }
 
     public ushort CurrentResource {
         get => _currentResource;
@@ -53,22 +54,25 @@ sealed class WreathHandler : ModPlayer {
     public float Max => TotalResource / MaxResource;
     public float ActualProgress => (float)CurrentResource / TotalResource;
     public float ActualProgress2 => (float)CurrentResource / MaxResource;
-    public float Progress => HasKeepTime ? Max : ActualProgress2;
-    public float Progress2 => HasKeepTime ? Max : ActualProgress;
+    public float GetActualProgress2(ushort currentResource) => (float)currentResource / MaxResource;
+    public float ActualProgress3 => SoulOfTheWoods ? (ActualProgress2 - 1f) : ActualProgress2;
+    public float Progress => HasKeepTime ? Math.Max(1f, ActualProgress2) : ActualProgress2;
+    public float GetProgress(ushort currentResource) => HasKeepTime ? Math.Max(1f, GetActualProgress2(currentResource)) : GetActualProgress2(currentResource);
+    public float Progress2 => HasKeepTime ? Math.Max(1f, ActualProgress) : ActualProgress;
     public float ChangingProgress {
         get {
-            float value = ChangingTimeValue - _currentChangingTime;
+            float value = MathHelper.Clamp(ChangingTimeValue - _currentChangingTime, 0f, 1f);
             return _shouldDecrease2 ? value : Ease.CircOut(value);
         }
     }
     public bool IsEmpty => ActualProgress <= 0.01f;
     public bool IsFull => Progress > 0.95f;
+    public bool GetIsFull(ushort currentResource) => GetProgress(currentResource) > 0.95f;
     public bool IsFull2 => Progress > Max - 0.05f;
     public bool IsMinCharged => ActualProgress > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
-    public float ChangingTimeValue => TimeSystem.LogicDeltaTime * 60f;
 
     public bool ShouldDraw => !IsEmpty || Player.IsHoldingNatureWeapon();
     public float PulseIntensity => _stayTime <= 1f ? Ease.CubeInOut(_stayTime) : 1f;
@@ -109,7 +113,7 @@ sealed class WreathHandler : ModPlayer {
 
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
-        if (playerUsingClaws && IsFull2) {
+        if (playerUsingClaws && GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2))) {
             if (SpecialAttackData.Owner == selectedItem) {
                 Reset();
 
@@ -163,7 +167,7 @@ sealed class WreathHandler : ModPlayer {
                 _stayTime -= TimeSystem.LogicDeltaTime;
             }
         }
-        if (HasKeepTime) {
+        if (HasKeepTime && ActualProgress2 <= 1f) {
             _keepBonusesForTime -= 1f;
         }
     }
@@ -177,6 +181,9 @@ sealed class WreathHandler : ModPlayer {
         ExtraResource = 0;
         if (DruidPlayerStats.SoulOfTheWoods) {
             ExtraResource += 100;
+        }
+        if (CurrentResource > TotalResource) {
+            CurrentResource = TotalResource;
         }
 
         ChangingHandler();
@@ -200,10 +207,11 @@ sealed class WreathHandler : ModPlayer {
         }
 
         _stayTime = STAYTIMEMAX;
-        _currentChangingTime = ChangingTimeValue;
-        _tempResource = CurrentResource;
-        _increaseValue = (ushort)(AddResourceValue() - AddResourceValue() * fine);
+        ChangeItsValue();
+        _increaseValue = GetIncreaseValue(fine);
     }
+
+    private ushort GetIncreaseValue(float fine) => (ushort)(AddResourceValue() - AddResourceValue() * fine);
 
     private void ChangingHandler() {
         if (IsFull && _addExtraValue > 0f) {
@@ -216,12 +224,20 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
-        float mult = 1.75f;
+        float num = 1.75f, num2 = 0.5f;
+        float mult = num;
         if (!_shouldDecrease2) {
             _currentChangingMult = mult;
         }
         else {
-            mult = 0.5f * DruidPlayerStats.DischargeTimeDecreaseMultiplier;
+            float progressForThis = (float)_tempResource / MaxResource;
+            if (progressForThis > 1f) {
+                float value = progressForThis - 1f;
+                if (!float.IsNaN(value)) {
+                    num2 -= num2 * 0.5f * value;
+                }
+            }
+            mult = num2 * DruidPlayerStats.DischargeTimeDecreaseMultiplier;
             if (_currentChangingMult < mult) {
                 _currentChangingMult += TimeSystem.LogicDeltaTime;
             }
@@ -232,10 +248,10 @@ sealed class WreathHandler : ModPlayer {
         _currentChangingTime -= TimeSystem.LogicDeltaTime * _currentChangingMult * Math.Max((byte)1, _boost);
 
         if (_shouldDecrease) {
-            CurrentResource = (ushort)(_tempResource - _tempResource2 * ChangingProgress);
+            CurrentResource = (ushort)(_tempResource - _tempResource * ChangingProgress);
             if (IsEmpty) {
                 _shouldDecrease = false;
-                _increaseValue = _tempResource = _tempResource2 = 0;
+                _increaseValue = _tempResource = 0;
             }
 
             return;
@@ -258,13 +274,17 @@ sealed class WreathHandler : ModPlayer {
 
         _boost = 0;
 
+        ChangeItsValue();
+    }
+
+    private void ChangeItsValue() {
         _tempResource = CurrentResource;
+        ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
         _currentChangingTime = ChangingTimeValue;
-        _tempResource2 = _tempResource;
     }
 
     private void MakeDusts() {
-        float actualProgress = SoulOfTheWoods ? (ActualProgress2 - 1f) : ActualProgress2;
+        float actualProgress = ActualProgress3;
         ushort dustType = (ushort)(SoulOfTheWoods ? ModContent.DustType<Content.Dusts.WreathDust2>() : ModContent.DustType<Content.Dusts.WreathDust>());
         if (actualProgress >= 0.1f && actualProgress <= 0.95f) {
             float progress = actualProgress * 1.25f + 0.1f;

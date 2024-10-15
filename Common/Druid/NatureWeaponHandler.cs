@@ -1,4 +1,6 @@
-﻿using RoA.Common.Druid.Wreath;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Druid.Wreath;
 using RoA.Content;
 using RoA.Core.Utility;
 
@@ -27,13 +29,13 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static ushort GetPotentialDamage(Item item, Player player) => (ushort)(GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));
 
     public static int GetExtraPotentialDamage(Player player, Item item) {
-        float progress = GetWreathStats(player).Progress;
+        float progress = MathHelper.Clamp(GetWreathStats(player).Progress, 0f, 1f);
         return (int)(progress * GetPotentialDamage(item, player)) + (progress > 0.01f ? 1 : 0);
     }
 
-    public static int GetExtraDamage(Item item) => Math.Min(GetExtraPotentialDamage(Main.LocalPlayer, item), GetPotentialDamage(item, Main.LocalPlayer));
+    public static int GetExtraDamage(Item item, Player player) => Math.Min(GetExtraPotentialDamage(player, item), GetPotentialDamage(item, player));
 
-    public static int GetNatureDamage(Item item) => GetFinalBaseDamage(item, Main.LocalPlayer) + GetExtraDamage(item);
+    public static int GetNatureDamage(Item item, Player player) => GetFinalBaseDamage(item, player) + GetExtraDamage(item, player);
 
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
@@ -55,7 +57,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             return;
         }
 
-        int extraDamage = GetExtraPotentialDamage(player, item);
+        int extraDamage = GetExtraDamage(item, player);
         damage.Flat += extraDamage;
         damage.Flat = Math.Min(item.damage + GetBasePotentialDamage(item, player), damage.Flat);
     }

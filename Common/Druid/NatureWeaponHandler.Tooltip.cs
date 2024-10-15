@@ -20,11 +20,11 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         if (index != -1) {
             string tag, tooltip;
             if (HasPotentialDamage()) {
-                int extraDamage = GetExtraDamage(item);
+                int extraDamage = GetExtraDamage(item, Main.LocalPlayer);
                 if (extraDamage > 0) {
                     string damageTooltip = tooltips[index].Text;
                     string[] damageTooltipWords = damageTooltip.Split(' ');
-                    string damage = GetNatureDamage(item).ToString();
+                    string damage = GetNatureDamage(item, Main.LocalPlayer).ToString();
                     tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
                 }
                 tag = "PotentialDamage";

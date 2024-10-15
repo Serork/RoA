@@ -35,7 +35,7 @@ abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         ushort baseRodProjectileType = (ushort)ModContent.ProjectileType<T>();
         if (player.ownedProjectileCounts[baseRodProjectileType] < 1) {
-            Projectile.NewProjectileDirect(source, player.Center, default, baseRodProjectileType, NatureWeaponHandler.GetNatureDamage(Item), Item.knockBack, player.whoAmI, Item.useTime * 2, ShootType());
+            Projectile.NewProjectileDirect(source, player.Center, default, baseRodProjectileType, NatureWeaponHandler.GetNatureDamage(Item, player), Item.knockBack, player.whoAmI, Item.useTime * 2, ShootType());
         }
 
         return false;

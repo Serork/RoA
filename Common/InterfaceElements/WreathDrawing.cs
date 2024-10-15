@@ -13,8 +13,6 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-using static tModPorter.ProgressUpdate;
-
 namespace RoA.Common.InterfaceElements;
 
 sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", InterfaceScaleType.Game) {
@@ -55,7 +53,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f) - Main.screenPosition;
         _oldPosition = playerPosition;
 
-        float progress = MathHelper.Clamp(Stats.Progress, 0f, 1f);
+        float progress = MathHelper.Clamp(Stats.ActualProgress2, 0f, 1f);
         float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
         alpha = (alpha + 1f) / 2f;
         Color color = Color.Multiply(Stats.DrawColor, alpha);
@@ -79,7 +77,7 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         }
         Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * progress));
         bool soulOfTheWoods = Stats.SoulOfTheWoods;
-        float progress2 = Stats.Progress - 1f;
+        float progress2 = Stats.ActualProgress2 - 1f;
         float value = progress2;
         float progress3 = 1f - MathHelper.Clamp(progress2, 0f, 0.85f);
         Rectangle sourceRectangle2 = sourceRectangle;
