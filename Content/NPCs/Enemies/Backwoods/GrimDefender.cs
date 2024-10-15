@@ -1,9 +1,9 @@
-﻿using Humanizer;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core;
@@ -15,7 +15,6 @@ using System.IO;
 using System.Linq;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -77,20 +76,28 @@ sealed class GrimDefender : ModNPC {
 
     private class RecognizeHit : ModPlayer {
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-            if (target.ModNPC.SpawnModBiomes.Contains(ModContent.GetInstance<BackwoodsBiome>().Type)) {
+            if (target.ModNPC != null && target.ModNPC.SpawnModBiomes.Contains(ModContent.GetInstance<BackwoodsBiome>().Type)) {
                 foreach (NPC npc in Main.ActiveNPCs) {
                     if (npc.type == ModContent.NPCType<GrimDefender>()) {
                         if (Player.whoAmI != npc.target) {
                             return;
                         }
 
-                        npc.As<GrimDefender>()._isAngry = true;
-                        npc.As<GrimDefender>()._angryTimer = 0f;
-                        npc.netUpdate = true;
+                        npc.As<GrimDefender>().MakeAngry();
+
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new RecognizeHitPacket(Player, npc.whoAmI));
+                        }
                     }
                 }
             }
         }
+    }
+
+    internal void MakeAngry() {
+        _isAngry = true;
+        _angryTimer = 0f;
+        NPC.netUpdate = true;
     }
 
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {
@@ -293,6 +300,7 @@ sealed class GrimDefender : ModNPC {
                     //SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
                     SpawnHitGores();
                     NPC.dontTakeDamage = true;
+                    NPC.netUpdate = true;
                 }
                 NPC.ai[0] = 0f;
                 NPC.ai[1] = NPC.justHit ? (60f - NPC.ai[1]) : 0f;
@@ -322,7 +330,10 @@ sealed class GrimDefender : ModNPC {
             int width = 22; int height = 28;
             NPC.Size = new Vector2(width, height);
 
-            NPC.TargetClosest();
+            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
+                NPC.TargetClosest();
+            }
+
             NPC.knockBackResist = 0.9f;
             if (!Main.player[NPC.target].InModBiome<BackwoodsBiome>() || (!_isAngry && _angryTimer >= 10f)) {
                 float maxSpeed = 3.5f;
@@ -348,6 +359,7 @@ sealed class GrimDefender : ModNPC {
                     NPC.ai[1] = 0f;
                     SpawnHitGores();
                     NPC.dontTakeDamage = true;
+                    NPC.netUpdate = true;
                 }
                 if (!_isAngry) {
                     if (_angryTimer < 10f) {
@@ -370,6 +382,7 @@ sealed class GrimDefender : ModNPC {
                 directedRotation(diff);
 
                 if (flag2) {
+                    NPC.TargetClosest();
                     _extraVelocity *= 0.97f;
                     NPC.velocity *= 0.97f;
                 }
