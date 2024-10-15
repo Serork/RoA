@@ -17,6 +17,7 @@ using Terraria.Audio;
 using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Wreath.WreathHandler;
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Common.Druid.Wreath;
 
@@ -77,6 +78,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsFull => Progress > 0.95f;
     public bool GetIsFull(ushort currentResource) => GetProgress(currentResource) > 0.95f;
     public bool IsFull2 => Progress > Max - 0.05f;
+    public bool IsFull3 => Progress > 0.95f && Progress <= 1f;
     public bool IsMinCharged => ActualProgress2 > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
@@ -134,12 +136,13 @@ sealed class WreathHandler : ModPlayer {
         //}
 
         IncreaseResourceValue(natureProjectile.WreathPointsFine);
-        MakeDusts();
+        MakeDustsOnHit();
     }
 
     public override void PostUpdateEquips() {
         ApplyBuffs();
         GetWreathType();
+        MakeDusts();
 
         if (_stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
@@ -313,9 +316,23 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts() {
+        ushort dustType = GetDustType();
+        if (PulseIntensity > 0f && (IsFull2 || IsFull3)) {
+            if (Player.miscCounter % 6 == 0 && Main.rand.NextChance(0.5)) {
+                Dust dust = Dust.NewDustPerfect(LightingPosition - new Vector2(0, 23) + Main.rand.NextVector2CircularEdge(20, 24) * (0.3f + Main.rand.NextFloat() * 0.5f), dustType, new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 0.5f), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, Main.rand.NextFloat()) * 1.25f);
+                dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
+                dust.alpha = (int)(DrawColorOpacity * 255f);
+                dust.noGravity = true;
+                dust.noLight = true;
+                dust.noLightEmittence = true;
+                dust.customData = DrawColorOpacity;
+            }
+        }
+    }
+
+    private void MakeDustsOnHit() {
         float actualProgress = ActualProgress3;
-        ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() : ModContent.DustType<Content.Dusts.WreathDust>());
-        ushort dustType = (ushort)(SoulOfTheWoods ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
+        ushort dustType = GetDustType();
         if (actualProgress >= 0.1f && actualProgress <= 0.95f) {
             float progress = actualProgress * 1.25f + 0.1f;
             int count = Math.Min((int)(15 * progress), 10);
@@ -332,12 +349,19 @@ sealed class WreathHandler : ModPlayer {
                     dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
                     dust.noGravity = true;
                     dust.position += dust.velocity * 0.75f;
+                    dust.noLight = true;
                     dust.noLightEmittence = true;
                     dust.alpha = (int)(DrawColorOpacity * 255f);
                     dust.customData = DrawColorOpacity;
                 }
             }
         }
+    }
+
+    private ushort GetDustType() {
+        ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() : ModContent.DustType<Content.Dusts.WreathDust>());
+        ushort dustType = (ushort)(SoulOfTheWoods ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
+        return dustType;
     }
 
     private void AddLight() {
@@ -348,7 +372,7 @@ sealed class WreathHandler : ModPlayer {
         if (value2 > 0f) {
             progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
         }
-        Lighting.AddLight(LightingPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (1.5f + value));
+        Lighting.AddLight(LightingPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (1.35f + value));
         if (SoulOfTheWoods) {
             progress = value2;
             Lighting.AddLight(LightingPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));
