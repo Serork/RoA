@@ -61,10 +61,10 @@ sealed class RodOfTheCondor : ModItem {
         }
     }
 
-    public override bool CanUseItem(Player player) => !GetHandler(player).IsActive;
+    public override bool CanUseItem(Player player) => player.whoAmI == Main.myPlayer && !GetHandler(player).IsActive;
 
     public override bool? UseItem(Player player) {
-        if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) {
+        if (player.ItemAnimationJustStarted) {
             GetHandler(player).ActivateCondor();
         }
 
@@ -190,6 +190,7 @@ sealed class RodOfTheCondor : ModItem {
             Player.wingTime = Player.wingTimeMax;
 
             if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new ItemAnimationPacket(Player, Player.GetSelectedItem().useAnimation));
                 MultiplayerSystem.SendPacket(new CondorPacket(Player, MAXWINGSTIME, true, -1, _wingsSlot, Player.GetWingStats(Player.wingsLogic).FlyTime));
             }
         }

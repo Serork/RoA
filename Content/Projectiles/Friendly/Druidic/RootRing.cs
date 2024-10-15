@@ -17,6 +17,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class RootRing : NatureProjectile {
+    private int _alpha = 255;
+
     public override Color? GetAlpha(Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0);
 
     protected override void SafeSetDefaults() {
@@ -29,23 +31,28 @@ sealed class RootRing : NatureProjectile {
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
 
-        Projectile.alpha = 0;
+        Projectile.aiStyle = -1;
 
-        Projectile.light = 0.25f;
+        //Projectile.light = 0.25f;
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_alpha);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _alpha = reader.ReadInt32();
+    }
+
     public override void AI() {
         Projectile.timeLeft = 2;
 
-        if (Projectile.alpha >= 65)
-            Projectile.ai[1] += Projectile.ai[1] + 0.000000005f;
-        FadeIn();
-
         Player player = Main.player[Projectile.owner];
-        Lighting.AddLight(Projectile.Center, 0.8f, 0.1f, 0.3f);
+
+        Lighting.AddLight(Projectile.Center, new Color(248, 119, 119).ToVector3());
 
         Vector2 position = new((float)(player.Center.X - (Projectile.width / 2)), (float)(player.Center.Y - 90 + (float)(player.gfxOffY - 60.0)));
         Projectile.position = new Vector2((int)position.X, (int)position.Y);
@@ -53,23 +60,36 @@ sealed class RootRing : NatureProjectile {
         Projectile.rotation += 0.06f;
 
         if (Projectile.owner == Main.myPlayer) {
+            var stats = player.GetModPlayer<WreathHandler>();
+            Projectile.ai[0] = stats.PulseIntensity;
+            Projectile.ai[2] = stats.ActualProgress2;
+
+            bool flag = false;
             if (!player.GetModPlayer<DruidStats>().SoulOfTheWoods || !player.GetModPlayer<WreathHandler>().IsFull2 || player.dead) {
-                Projectile.alpha += 15;
-                if (Projectile.alpha > 255) {
-                    Projectile.alpha = 255;
+                flag = true;
+                _alpha += 15;
+                if (_alpha >= 255) {
+                    _alpha = 255;
                     Projectile.Kill();
+                    return;
                 }
             }
+
+            if (!flag) {
+                if (_alpha >= 65)
+                    Projectile.ai[1] += Projectile.ai[1] + 0.000000005f;
+                FadeIn();
+            }
+
+            Projectile.netUpdate = true;
         }
-        //Projectile.netUpdate = true;
     }
 
     private void FadeIn() {
         if (Projectile.ai[1] <= 50f) {
-            Projectile.alpha -= 15;
-            if (Projectile.alpha < 70)
-                Projectile.alpha = 70;
-            return;
+            _alpha -= 15;
+            if (_alpha < 70)
+                _alpha = 70;
         }
     }
 
@@ -103,16 +123,17 @@ sealed class RootRing : NatureProjectile {
         Vector2 position = Projectile.Center - Main.screenPosition;
         Player player = Main.player[Projectile.owner];
         var stats = player.GetModPlayer<WreathHandler>();
-        Color color = stats.BaseColor * (1f - (float)Projectile.alpha / 255f) * (0.75f + 0.4f * (1f - stats.PulseIntensity));
+        float projOpacity = 1f - (float)_alpha / 255f;
+        Color color = stats.BaseColor * (0.75f + 0.4f * (1f - Projectile.ai[0]));
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
         //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
 
-        spriteBatch.Draw(texture, position, null, color, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SpriteEffects.None, 0);
+        spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SpriteEffects.None, 0);
 
-        float progress = MathHelper.Clamp(stats.ActualProgress2, 0f, 1f);
+        float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
-        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * stats.PulseIntensity;
+        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * Projectile.ai[0];
         color *= 1.4f;
         color.A = 80;
         color *= opacity;
@@ -121,7 +142,7 @@ sealed class RootRing : NatureProjectile {
         color *= 3f;
         float scale = Projectile.scale + factor * 0.035f;
         for (int i = 0; i < 2; i++) {
-            spriteBatch.Draw(texture, position, null, color, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
         }
 
         spriteBatch.EndBlendState();
