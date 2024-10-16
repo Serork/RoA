@@ -72,7 +72,7 @@ Brightstone: {
 
 DryadBlood: {
 	DisplayName: Dryad Blood
-	Description: Damaging debuffs deal 50% less damage
+	Description: Damaging debuffs deal 75% less damage
 }
 
 Heavy: {

@@ -8,7 +8,7 @@ namespace RoA.Content.Buffs;
 sealed class DryadBlood : ModBuff {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Dryad Blood");
-		//Description.SetDefault("Damaging debuffs deal 50% less damage");
+		//Description.SetDefault("Damaging debuffs deal 75% less damage");
 	}
 
 	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<DryadBloodPlayer>().dryadBlood = true;
@@ -35,7 +35,7 @@ sealed class DryadBloodPlayer : ModPlayer {
         self(player);
 
         if (player.GetModPlayer<DryadBloodPlayer>().dryadBlood) {
-            player.lifeRegen += -player.lifeRegen / 2;
+            player.lifeRegen += (int)(-player.lifeRegen * 0.75f);
         }
     }
 }
