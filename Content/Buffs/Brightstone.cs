@@ -27,9 +27,9 @@ sealed class BrightstonePlayer : ModPlayer {
 			return;
 
 		//Lighting.AddLight(Player.Center, new Color(238, 225, 111).ToVector3());
-		if (Player.velocity.Length() >= 1f && !Player.rocketFrame) {
+		if (Player.velocity.Length() > 1f && (Player.controlLeft || Player.controlRight || Player.controlJump || Player.velocity.Y > 1f) && !Player.rocketFrame) {
 			if (Main.rand.NextBool(6))
-				Projectile.NewProjectile(Player.GetSource_Misc("Brightstone"), Player.direction > 0 ? Player.Center.X + 20 : Player.Center.X - 20, Player.Center.Y, 0, 0, ModContent.ProjectileType<Projectiles.Friendly.Brightstone>(), 0, 0, Player.whoAmI);
+				Projectile.NewProjectile(Player.GetSource_Misc("Brightstone"), Player.Center.X - 2f * Player.direction, Player.Center.Y, 0, 0, ModContent.ProjectileType<Projectiles.Friendly.Brightstone>(), 0, 0, Player.whoAmI);
 		}
 		else {
 			Lighting.AddLight(Player.Center, new Color(238, 225, 111).ToVector3() * 0.6f);
