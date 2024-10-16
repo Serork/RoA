@@ -24,8 +24,8 @@ sealed class BloodlustPotion : ModItem {
 		int width = 18; int height = 30;
 		Item.Size = new Vector2(width, height);
 
-		Item.maxStack = 20;
-		Item.rare = ItemRarityID.Green;
+        Item.maxStack = 9999;
+        Item.rare = ItemRarityID.Green;
 
 		Item.useTime = Item.useAnimation = 15;
 		Item.useStyle = ItemUseStyleID.DrinkLiquid;

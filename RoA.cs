@@ -1,9 +1,12 @@
+using MonoMod.RuntimeDetour;
+
 using ReLogic.Content.Sources;
 
 using RoA.Common.Networking;
 using RoA.Core;
 
 using System.IO;
+using System.Reflection;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -26,4 +29,11 @@ sealed class RoA : Mod {
     public override IContentSource CreateDefaultContentSource() => new CustomContentSource(base.CreateDefaultContentSource());
 
     public override void HandlePacket(BinaryReader reader, int sender) => MultiplayerSystem.HandlePacket(reader, sender);
+
+    public static Hook Detour(MethodInfo source, MethodInfo target) {
+        Hook hook = new(source, target);
+        hook.Apply();
+
+        return hook;
+    }
 }

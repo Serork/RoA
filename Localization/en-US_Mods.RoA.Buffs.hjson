@@ -69,3 +69,8 @@ Brightstone: {
 	DisplayName: Brightstone Lights
 	Description: You emit glowing lumps of light
 }
+
+DryadBlood: {
+	DisplayName: Dryad Blood
+	Description: Damaging debuffs deal 50% less damage
+}

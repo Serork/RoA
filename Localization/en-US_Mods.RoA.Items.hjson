@@ -296,3 +296,8 @@ BrightstonePotion: {
 	DisplayName: Brightstone Potion
 	Tooltip: Causes you to emit lumps of light
 }
+
+DryadBloodPotion: {
+	DisplayName: Dryad Blood Potion
+	Tooltip: Increases resistance to damaging debuffs
+}

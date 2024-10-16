@@ -2,21 +2,21 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
 
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Potions;
 
-sealed class WillpowerPotion : ModItem {
+sealed class DryadBloodPotion : ModItem {
 	public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Willpower Potion");
-        //Tooltip.SetDefault("Increases Wreath charge speed");
+        //DisplayName.SetDefault("Dryad Blood Potion");
+        //Tooltip.SetDefault("Increases resistance to damaging debuffs");
         Item.ResearchUnlockCount = 20;
-        ItemID.Sets.DrinkParticleColors[Type] = new Color[3] {
-            new Color(221, 82, 24),
-            new Color(248, 127, 63),
-            new Color(255, 168, 82)
+        ItemID.Sets.DrinkParticleColors[Type] = new Color[4] {
+            new Color(239, 221, 145),
+            new Color(214, 192, 71),
+            new Color(206, 209, 70),
+            new Color(161, 165, 44)
         };
     }
 
@@ -33,15 +33,15 @@ sealed class WillpowerPotion : ModItem {
         Item.UseSound = SoundID.Item3;
         Item.consumable = true;
 
-        Item.buffType = ModContent.BuffType<Willpower>();
-		Item.buffTime = 3600 * 6;
+        Item.buffType = ModContent.BuffType<DryadBlood>();
+		Item.buffTime = 3600 * 8;
 	}
 
 	//public override void AddRecipes() {
 	//	CreateRecipe()
 	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient<MiracleMint>()
-	//		.AddIngredient(ItemID.Shiverthorn)
+	//		.AddIngredient<Bonerose>()
+	//		.AddIngredient(ItemID.Waterleaf)
 	//		.AddIngredient<Galipot>()
 	//		.AddTile(TileID.Bottles)
 	//		.Register();
