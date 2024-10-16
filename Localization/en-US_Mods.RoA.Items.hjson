@@ -301,3 +301,12 @@ DryadBloodPotion: {
 	DisplayName: Dryad Blood Potion
 	Tooltip: Increases resistance to damaging debuffs
 }
+
+WeightPotion: {
+	DisplayName: Weight Potion
+	Tooltip:
+		'''
+		Negates fall damage
+		Accelerates falling speed
+		'''
+}

@@ -12,8 +12,10 @@ sealed class Heavy : ModBuff {
 	public override void Update(Player player, ref int buffIndex) {
 		player.noFallDmg = true;
 		player.maxFallSpeed += 6;
-		if (player.velocity.Y > 0)	
-			if (player.controlDown) player.velocity.Y *= 1.15f;	
-			else player.velocity.Y *= 1.05f;
+		if (player.velocity.Y > 0) {
+			player.velocity.Y *= 1.035f;
+            if (player.controlDown) player.velocity.Y *= 1.035f;
+
+        }
 	}
 }

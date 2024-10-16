@@ -74,3 +74,8 @@ DryadBlood: {
 	DisplayName: Dryad Blood
 	Description: Damaging debuffs deal 50% less damage
 }
+
+Heavy: {
+	DisplayName: Heavy
+	Description: Press Down to increase falling speed
+}
