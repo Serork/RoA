@@ -239,7 +239,7 @@ ResiliencePotion: {
 }
 
 ForestWreath: {
-	DisplayName: Forest Wreath
+	DisplayName: Forest Wreath I
 	Tooltip: ""
 }
 
@@ -254,27 +254,27 @@ FenethsBlazingWreath: {
 }
 
 ForestWreath2: {
-	DisplayName: Forest Wreath2
+	DisplayName: Forest Wreath II
 	Tooltip: ""
 }
 
 JungleWreath: {
-	DisplayName: Jungle Wreath
+	DisplayName: Jungle Wreath I
 	Tooltip: ""
 }
 
 JungleWreath2: {
-	DisplayName: Jungle Wreath2
+	DisplayName: Jungle Wreath II
 	Tooltip: ""
 }
 
 SnowWreath: {
-	DisplayName: Snow Wreath
+	DisplayName: Snow Wreath I
 	Tooltip: ""
 }
 
 SnowWreath2: {
-	DisplayName: Snow Wreath2
+	DisplayName: Snow Wreath II
 	Tooltip: ""
 }
 
