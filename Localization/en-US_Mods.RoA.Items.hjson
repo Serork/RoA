@@ -291,3 +291,8 @@ SoulOfTheWoods: {
 		Creates pulsing energy shield while wreath is charged
 		'''
 }
+
+BrightstonePotion: {
+	DisplayName: Brightstone Potion
+	Tooltip: Causes you to emit lumps of light
+}

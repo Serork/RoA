@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
 
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,11 +9,11 @@ namespace RoA.Content.Items.Potions;
 
 sealed class BloodlustPotion : ModItem {
 	public override void SetStaticDefaults () {
-		// DisplayName.SetDefault("Bloodlust Potion");
-		// Tooltip.SetDefault("Restores life on deadly hits");
+        // DisplayName.SetDefault("Bloodlust Potion");
+        // Tooltip.SetDefault("Restores life on deadly hits");
 
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId [Type] = 20;
-		ItemID.Sets.DrinkParticleColors [Type] = new Color [3] {
+        Item.ResearchUnlockCount = 20;
+        ItemID.Sets.DrinkParticleColors [Type] = new Color [3] {
 			new Color(255, 140, 10),
 			new Color(255, 140, 10),
 			new Color(255, 69, 20)

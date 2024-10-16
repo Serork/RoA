@@ -64,3 +64,8 @@ Hemorrhage: {
 	DisplayName: Hemorrhage
 	Description: Losing life
 }
+
+Brightstone: {
+	DisplayName: Brightstone Lights
+	Description: You emit glowing lumps of light
+}

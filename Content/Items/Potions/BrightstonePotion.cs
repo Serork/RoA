@@ -2,23 +2,22 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
 
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Potions;
 
-sealed class WillpowerPotion : ModItem {
+sealed class BrightstonePotion : ModItem {
 	public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Willpower Potion");
-        //Tooltip.SetDefault("Increases Wreath charge speed");
-        Item.ResearchUnlockCount = 20;
-        ItemID.Sets.DrinkParticleColors[Type] = new Color[3] {
-            new Color(221, 82, 24),
-            new Color(248, 127, 63),
-            new Color(255, 168, 82)
-        };
-    }
+		// DisplayName.SetDefault("Brightstone Potion");
+		// Tooltip.SetDefault("Causes you to emit lumps of light");
+		Item.ResearchUnlockCount = 20;
+		ItemID.Sets.DrinkParticleColors[Type] = new Color[3] {
+			new Color(255, 165, 0),
+			new Color(255, 215, 0),
+			new Color(255, 225, 0)
+		};
+	}
 
 	public override void SetDefaults() {
         int width = 18; int height = 30;
@@ -33,15 +32,15 @@ sealed class WillpowerPotion : ModItem {
         Item.UseSound = SoundID.Item3;
         Item.consumable = true;
 
-        Item.buffType = ModContent.BuffType<Willpower>();
-		Item.buffTime = 3600 * 6;
+        Item.buffType = ModContent.BuffType<Brightstone>();
+		Item.buffTime = 3600 * 10;
 	}
 
 	//public override void AddRecipes() {
 	//	CreateRecipe()
 	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient<MiracleMint>()
-	//		.AddIngredient(ItemID.Shiverthorn)
+	//		.AddIngredient(ItemID.Sunflower)
+	//		.AddIngredient(ItemID.Moonglow)
 	//		.AddIngredient<Galipot>()
 	//		.AddTile(TileID.Bottles)
 	//		.Register();

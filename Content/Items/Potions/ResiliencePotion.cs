@@ -10,9 +10,9 @@ namespace RoA.Content.Items.Potions;
 
 sealed class ResiliencePotion : ModItem {
 	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Resilience Potion");
-		//Tooltip.SetDefault("Decreases Wreath discharge speed");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 20;
+        //DisplayName.SetDefault("Resilience Potion");
+        //Tooltip.SetDefault("Decreases Wreath discharge speed");
+        Item.ResearchUnlockCount = 20;
         ItemID.Sets.DrinkParticleColors[Type] = new Color[4] {
             new Color(108, 145, 210),
             new Color(30, 183, 210),
