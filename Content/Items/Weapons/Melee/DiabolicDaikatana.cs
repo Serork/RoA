@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.GlowMasks;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
@@ -21,9 +22,9 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-
 namespace RoA.Content.Items.Weapons.Melee;
 
+[AutoloadGlowMask(0, 0, 178, 178)]
 sealed class DiabolicDaikatana : ModItem {
     public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -67,14 +68,16 @@ sealed class DiabolicDaikatana : ModItem {
     //}
 
     private class DaikatanaLayer : PlayerDrawLayer {
-        private static Asset<Texture2D> _daikatanaTexture;
+        private static Asset<Texture2D> _daikatanaTexture, _daikatanaTextureGlow;
 
         public override void SetStaticDefaults() {
             if (Main.dedServ) {
                 return;
             }
 
-            _daikatanaTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse");
+            string textureName = ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse";
+            _daikatanaTexture = ModContent.Request<Texture2D>(textureName);
+            _daikatanaTextureGlow = ModContent.Request<Texture2D>(textureName + "_Glow");
         }
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => true;
@@ -96,7 +99,7 @@ sealed class DiabolicDaikatana : ModItem {
             }
 
             Texture2D texture = _daikatanaTexture.Value;
-            Vector2 position = new((int)(drawInfo.ItemLocation.X - Main.screenPosition.X), (int)(drawInfo.ItemLocation.Y - Main.screenPosition.Y));
+            Vector2 position = new((int)(drawInfo.ItemLocation.X), (int)(drawInfo.ItemLocation.Y));
             Vector2 offset = new(texture.Width / 2f * player.direction, 0f);
             if (player.direction < 0) {
                 offset.Y += (int)(texture.Height * 0.8f - 2f);
@@ -125,16 +128,23 @@ sealed class DiabolicDaikatana : ModItem {
             SpriteEffects effects = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             float rotation = 2.3f + (player.gravDir == -1 ? 0.1f : 0f);
             bool gravReversed = player.gravDir == -1f;
-            DrawData drawData = new(texture,
-                                    position.Floor(),
-                                    new Rectangle((player.gravDir == -1).ToInt() * 46, 0, 46, 46),
-                                    player.HeldItem.GetAlpha(drawInfo.itemColor) * drawInfo.stealth * (1f - drawInfo.shadow), 
-                                    player.direction > 0 ? -rotation : rotation,
-                                    texture.Size() / 2f,
-                                    player.GetAdjustedItemScale(player.HeldItem), 
-                                    effects);
-
-            drawInfo.DrawDataCache.Add(drawData);
+            for (int i = 0; i < 2; i++) {
+                Color color = drawInfo.itemColor;
+                position = position.Floor();
+                if (i != 0) {
+                    texture = _daikatanaTextureGlow.Value;
+                    color = Color.Lerp(Color.Blue * 0.7f, Lighting.GetColor((int)position.X / 16, (int)position.Y / 16), Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
+                }
+                DrawData drawData = new(texture,
+                                        position - Main.screenPosition,
+                                        new Rectangle((player.gravDir == -1).ToInt() * 46, 0, 46, 46),
+                                        player.HeldItem.GetAlpha(color) * drawInfo.stealth * (1f - drawInfo.shadow),
+                                        player.direction > 0 ? -rotation : rotation,
+                                        texture.Size() / 2f,
+                                        player.GetAdjustedItemScale(player.HeldItem),
+                                        effects);
+                drawInfo.DrawDataCache.Add(drawData);
+            }
         }
     }
 }
@@ -241,10 +251,19 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Color drawColor = Projectile.GetAlpha(lightColor) * Projectile.Opacity;
         GetSwordDrawInfo(out var texture, out var handPosition, out var rotationOffset, out var origin, out var effects);
-        DrawSword(texture, handPosition - Vector2.UnitX * (Progress > 0.5f ? (Main.player[Projectile.owner].direction != 1 ? 4 : -2) : 0), 
-                  new Rectangle((Main.player[Projectile.owner].gravDir == -1).ToInt() * 46, 0, 46, 46), drawColor, rotationOffset, origin, effects);
+        handPosition += AngleVector;
+        Player player = Main.player[Projectile.owner];
+        handPosition += -Vector2.UnitX * (Progress > 0.5f ? (player.direction != 1 ? 4 : -2) : 0);
+        for (int i = 0; i < 2; i++) {
+            Color drawColor = Lighting.GetColor((int)((double)player.position.X + (double)player.width * 0.5) / 16, (int)(((double)player.position.Y + (double)player.height * 0.5) / 16.0));
+            if (i != 0) {
+                texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+                drawColor = Color.Lerp(Color.Blue * 0.7f, Lighting.GetColor((int)handPosition.X / 16, (int)handPosition.Y / 16), Lighting.Brightness((int)handPosition.X / 16, (int)handPosition.Y / 16) * 0.75f);
+            }
+            DrawSword(texture, handPosition,
+                  new Rectangle((player.gravDir == -1).ToInt() * 46, 0, 46, 46), drawColor * Projectile.Opacity, rotationOffset, origin, effects);
+        }
 
         return false;
     }
@@ -300,7 +319,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     private void DrawSword(Texture2D texture, Vector2 handPosition, Rectangle? frame, Color color, float rotationOffset, Vector2 origin, SpriteEffects effects) {
         Main.EntitySpriteDraw(
             texture,
-            handPosition - Main.screenPosition + AngleVector,
+            handPosition - Main.screenPosition,
             frame ?? null,
             color,
             Projectile.rotation + rotationOffset,

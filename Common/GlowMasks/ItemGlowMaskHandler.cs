@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Build.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
@@ -14,23 +15,29 @@ using Terraria.ModLoader;
 namespace RoA.Common.GlowMasks;
 
 sealed class ItemGlowMaskHandler : PlayerDrawLayer {
+	public readonly struct GlowMaskInfo(Asset<Texture2D> glowMask, Color glowColor) {
+		public readonly Asset<Texture2D> GlowMask = glowMask;
+        public readonly Color GlowColor = glowColor;
+    }
+
     private const string REQUIREMENT = "_Glow";
     
-	private static Dictionary<int, Asset<Texture2D>> _glowMasks;
+	private static Dictionary<int, GlowMaskInfo> _glowMasks;
 
 	private class ItemGlowMaskWorld : GlobalItem {
         public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
-            if (item.type >= ItemID.Count && _glowMasks.TryGetValue(item.type, out Asset<Texture2D> glowMask)) {
-                Texture2D glowMaskTexture = glowMask.Value;
-                Vector2 origin = glowMaskTexture.Size() / 2f;
-				Color color = item.GetAlpha(Color.White);
-				spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, color, rotation, origin, 1f, SpriteEffects.None, 0f);
+            if (item.type >= ItemID.Count && _glowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
+                Texture2D glowMaskTexture = glowMaskInfo.GlowMask.Value;
+				Vector2 origin = glowMaskTexture.Size() / 2f;
+                Color color = Color.Lerp(glowMaskInfo.GlowColor, Lighting.GetColor((int)item.Center.X / 16, (int)item.Center.Y / 16), Lighting.Brightness((int)item.Center.X / 16, (int)item.Center.Y / 16));
+				spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, item.GetAlpha(color), rotation, origin, 1f, SpriteEffects.None, 0f);
 			}
         }
     }
 
-    public static void AddGlowMask(ushort type, Asset<Texture2D> texture) => _glowMasks[type] = texture;
-    public static void AddGlowMask(ModItem modItem) => AddGlowMask((ushort)modItem.Type, ModContent.Request<Texture2D>(modItem.Texture + REQUIREMENT));
+    //ModContent.Request<Texture2D>(modItem.Texture + REQUIREMENT)
+    public static void AddGlowMask(ushort type, GlowMaskInfo glowMaskInfo) => _glowMasks[type] = glowMaskInfo;
+    public static void AddGlowMask(ModItem modItem, GlowMaskInfo glowMaskInfo) => AddGlowMask((ushort)modItem.Type, glowMaskInfo);
 
     public override void Load() {
         if (Main.dedServ) {
@@ -55,7 +62,8 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 string modItemTexture = item.Texture;
                 Asset<Texture2D> texture = ModContent.Request<Texture2D>(modItemTexture + REQUIREMENT, AssetRequestMode.ImmediateLoad);
                 texture.Value.Name = modItemTexture;
-				AddGlowMask((ushort)item.Type, texture);
+				GlowMaskInfo glowMaskInfo = new(texture, attribute.GlowColor);
+                AddGlowMask((ushort)item.Type, glowMaskInfo);
             }
         }
     }
@@ -80,8 +88,8 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 			return;
 		}
 
-		if (item.type >= ItemID.Count && _glowMasks.TryGetValue(item.type, out Asset<Texture2D> glowMask)) {
-			Texture2D texture = glowMask.Value;
+		if (item.type >= ItemID.Count && _glowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
+			Texture2D texture = glowMaskInfo.GlowMask.Value;
 			Vector2 offset = new();
 			float rotOffset = 0f;
 			Vector2 origin = new();
@@ -112,8 +120,10 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 				origin = new Vector2(texture.Width * 0.5f * (1 - player.direction), gravReversed ? 0 : texture.Height);
 			}
 
-			drawInfo.DrawDataCache.Add(new DrawData(texture, (player.itemLocation - Main.screenPosition + offset + new Vector2(0f, player.gfxOffY)).Floor(), texture.Bounds,
-                                                    item.GetAlpha(Color.White), player.itemRotation + rotOffset, origin, item.scale, drawInfo.itemEffect, 0));
+			Vector2 position = (player.itemLocation + offset + new Vector2(0f, player.gfxOffY)).Floor();
+            Color color = Color.Lerp(glowMaskInfo.GlowColor, drawInfo.itemColor, Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
+			drawInfo.DrawDataCache.Add(new DrawData(texture, position - Main.screenPosition, texture.Bounds,
+                                                    item.GetAlpha(color), player.itemRotation + rotOffset, origin, item.scale, drawInfo.itemEffect, 0));
 		}
 	}
 }
