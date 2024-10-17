@@ -11,8 +11,8 @@ sealed class JudgementCut : ModProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override void SetDefaults() {
-        Projectile.width = 8;
-        Projectile.height = 8;
+        Projectile.width = 5;
+        Projectile.height = 5;
         Projectile.friendly = true;
         Projectile.aiStyle = 1;
         Projectile.penetrate = -1;
