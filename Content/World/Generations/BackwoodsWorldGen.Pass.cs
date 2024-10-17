@@ -1274,7 +1274,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GetRandomPosition(int posX, int posY, out int baseX, out int baseY, bool rootLootRoom = true) {
         int startX = Left + 2;
         int endX = Right - 2;
-        int centerY = rootLootRoom ? (BackwoodsVars.FirstTileYAtCenter + EdgeY) : ((int)Main.worldSurface + 15);
+        int centerY = rootLootRoom ? (BackwoodsVars.FirstTileYAtCenter + EdgeY / 2) : ((int)Main.worldSurface + 15);
         int minY = centerY;
         int generateY = Bottom - 10;
         if (posX == 0) {

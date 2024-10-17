@@ -339,7 +339,7 @@ sealed class GrimDefender : ModNPC {
             }
 
             NPC.knockBackResist = 0.9f;
-            if (!Main.player[NPC.target].InModBiome<BackwoodsBiome>() || (!_isAngry && _angryTimer >= 10f)) {
+            if (!Main.player[NPC.target].InModBiome<BackwoodsBiome>() || Main.player[NPC.target].dead || (!_isAngry && _angryTimer >= 10f)) {
                 float maxSpeed = 3.5f;
                 if (NPC.velocity.Y < -maxSpeed) {
                     NPC.velocity.Y = -maxSpeed;
