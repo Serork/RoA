@@ -19,7 +19,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     public readonly int MidOffset = 1140;
     public readonly int MidOffset2 = 1700;
     public readonly int FarOffset = 1200;
-    
+
     public override void ModifyFarFades(float[] fades, float transitionSpeed) {
 		for (int i = 0; i < fades.Length; i++) {
 			if (i == Slot) {
@@ -73,7 +73,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         if (WorldGen.drunkWorldGen) {
             offset = -180;
         }
-        float surfacePosition = (float)BackwoodsVars.BackwoodsTileForBackground - 7;
+        float surfacePosition = (float)BackwoodsVars.BackwoodsTileForBackground - 3;
         if (surfacePosition == 0f) {
             surfacePosition = 1f;
         }

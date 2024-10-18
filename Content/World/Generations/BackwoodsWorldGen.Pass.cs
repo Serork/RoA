@@ -1940,7 +1940,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
-        for (int num555 = 0; num555 < Main.maxTilesX * 0.08; num555++) {
+        double count = WorldGenHelper.SmallWorld ? Main.maxTilesX * 0.08 : (Main.maxTilesX * 0.05);
+        for (int num555 = 0; num555 < count; num555++) {
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
         }
