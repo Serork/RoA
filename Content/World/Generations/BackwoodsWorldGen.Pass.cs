@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
@@ -653,7 +654,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     });
                 }
+
                 if (placed) {
+                    AltarHandler.SetPosition(new Point(i + 1, j - 2));
+
                     break;
                 }
             }

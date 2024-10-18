@@ -7,5 +7,6 @@ static class VisualEffectLayer {
     public const int BEHINDPLAYERS = 3;
     public const int ABOVEPLAYERS = 4;
     public const int ABOVEDUSTS = 5;
-    public const int COUNT = 6;
+    public const int BEHINDTILESBEHINDNPCS = 6;
+    public const int COUNT = 7;
 }

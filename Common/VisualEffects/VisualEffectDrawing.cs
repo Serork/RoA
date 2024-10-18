@@ -51,13 +51,14 @@ sealed class VisualEffectDrawing : ILoadable {
     }
 
     private static void DrawBehindTilesBehindNPCs() {
-        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDNPCS).Draw(Main.spriteBatch);
+        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Draw(Main.spriteBatch);
     }
 
     private static void DrawBehindTilesAboveNPCs() {
     }
 
     private static void DrawBehindNPCs(ref ParticleRendererSettings particleSettings) {
+        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDNPCS).Draw(Main.spriteBatch);
     }
 
     private static void DrawAboveNPCs(ref ParticleRendererSettings particleSettings) {
