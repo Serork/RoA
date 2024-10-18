@@ -839,10 +839,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step13_GrowBigTrees() {
-        int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX + 15 : Left) : Left;
+        int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX + EdgeX : Left) : Left;
         _leftTreeX = _random.Next(left + 15, left + 30);
         GrowBigTree(_leftTreeX);
-        int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX - 15 : Right) : Right;
+        int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX - EdgeX : Right) : Right;
         _rightTreeX = _random.Next(right - 30, right - 15);
         GrowBigTree(_rightTreeX, false);
     }
@@ -911,6 +911,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int j = WorldGenHelper.GetFirstTileY(i, true);
         j += 2;
         while (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.First(x => x.X == i).Y + 5) {
+            if (i < CenterX + EdgeX / 2 && i > CenterX - EdgeX / 2) {
+                break;
+            }
             i += isLeft ? 1 : -1;
             j = WorldGenHelper.GetFirstTileY(i, true);
             j += 2;
@@ -1202,15 +1205,18 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //GetRandomPosition(posX, posY, out int baseX, out int baseY, false);
 
         int baseX = _random.Next(Left + 15, Right - 15);
-        int baseY = _random.Next(Math.Min(BackwoodsVars.FirstTileYAtCenter + EdgeY / 2, ((int)Main.worldSurface)), Bottom - 20);
+        int y = Math.Min(CenterY, (int)Main.worldSurface);
+        int baseY = _random.Next(y, Bottom - 20);
         Point origin = new(baseX, baseY);
 
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
         while (true) {
             int attempts = 50;
-            while (!skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
+            Tile tile = WorldGenHelper.GetTileSafely(baseX, baseY);
+            ushort tileType = tile.TileType;
+            while (!skipTileTypes.Contains(tileType) || MidInvalidTileTypesToKill.Contains(tileType) || MidInvalidWallTypesToKill.Contains(tile.WallType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
                 baseX = _random.Next(Left + 15, Right - 15);
-                baseY = _random.Next((int)Main.worldSurface, Bottom - 20);
+                baseY = _random.Next(y, Bottom - 20);
                 if (attempts-- <= 0) {
                     break;
                 }
@@ -1227,7 +1233,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 if (flag) {
                     baseX = _random.Next(Left + 15, Right - 15);
-                    baseY = _random.Next((int)Main.worldSurface, Bottom - 20);
+                    baseY = _random.Next(y, Bottom - 20);
                     break;
                 }
             }
@@ -1242,7 +1248,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        int num = 50;
+        int num = 25;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                 if (Main.tile[i, j].HasTile && (Main.tile[i, j].TileType == 21 || Main.tile[i, j].TileType == _elderWoodChestTileType || TileID.Sets.BasicChest[Main.tile[i, j].TileType]))
@@ -1257,7 +1263,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         bool painting1 = false, painting2 = false, painting3 = false;
         for (int i = Left + 15; i < Right - 15; i++) {
-            for (int j = (int)Main.worldSurface - 10; j < Bottom - 20; j++) {
+            for (int j = BackwoodsVars.FirstTileYAtCenter; j < Bottom - 20; j++) {
                 if (Main.tile[i, j].HasTile) {
                     if (Main.tile[i, j].TileType == ModContent.TileType<MillionDollarPainting>()) {
                         painting1 = true;
@@ -1929,7 +1935,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
-        for (int num555 = 0; num555 < Main.maxTilesX * 0.05; num555++) {
+        for (int num555 = 0; num555 < Main.maxTilesX * 0.08; num555++) {
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
         }
