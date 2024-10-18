@@ -130,7 +130,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int x = CenterX + 10;
         int posX = x;
         int y = WorldGenHelper.GetFirstTileY2(posX, true, true) + 1;
-        WorldUtils.Gen(new Point(posX, y), new Shapes.Mound(20, 5), Actions.Chain(new Modifiers.Blotches(2, 1, 0.8), new Actions.SetTile(_dirtTileType), new Actions.SetFrames(frameNeighbors: true)));
+        WorldUtils.Gen(new Point(posX, y), new Shapes.Mound(20, 6), Actions.Chain(new Modifiers.Blotches(2, 1, 0.8), new Actions.SetTile(_dirtTileType), new Actions.SetFrames(frameNeighbors: true)));
     }
 
     private void Step_AddWebs() {
@@ -550,7 +550,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int x = CenterX + _random.Next(4);
         int posX = x;
 
-        int extraY = _random.Next(3);
+        int extraY = _random.Next(2);
         int y = WorldGenHelper.GetFirstTileY2(posX, true, true) + 1 - 3 - extraY;
         int maxY = BackwoodsVars.FirstTileYAtCenter + 5;
         if (y > maxY) {
