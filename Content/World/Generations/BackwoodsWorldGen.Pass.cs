@@ -88,6 +88,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step0_Setup();
         Step1_FindPosition();
         Step2_ClearZone();
+        //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
+    }
+
+    public void GrowBackwoods(GenerationProgress progress, GameConfiguration configuration) {
+        _progress = progress;
         _progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods").Value;
         Step3_GenerateBase();
         Step4_CleanUp();
@@ -122,8 +127,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddPills();
         Step10_SpreadMossGrass();
         Step14_ClearRockLayerWalls();
-
-        //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
     }
 
     private void Step_AddAltarMound() {
