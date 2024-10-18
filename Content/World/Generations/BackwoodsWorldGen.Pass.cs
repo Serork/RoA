@@ -84,11 +84,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
         _progress = progress;
-        _progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods").Value;
-
+        _progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods0").Value;
         Step0_Setup();
         Step1_FindPosition();
         Step2_ClearZone();
+        _progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods").Value;
         Step3_GenerateBase();
         Step4_CleanUp();
         Step5_CleanUp();
