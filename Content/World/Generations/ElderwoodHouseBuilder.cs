@@ -245,8 +245,8 @@ public class HouseBuilderCustom {
 
     private void PlaceEmptyRooms() {
         foreach (Rectangle room in Rooms) {
-            WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Actions.ClearTile(frameNeighbors: true), new Actions.SetTileKeepWall(TileType), new Actions.SetFrames(frameNeighbors: true)));
-            WorldUtils.Gen(new Point(room.X + 1, room.Y + 1), new Shapes.Rectangle(room.Width - 2, room.Height - 2), Actions.Chain(new Actions.ClearTile(frameNeighbors: true), new Actions.PlaceWall(WallType)));
+            WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.SkipTiles(21), new Actions.ClearTile(frameNeighbors: true), new Actions.SetTileKeepWall(TileType), new Actions.SetFrames(frameNeighbors: true)));
+            WorldUtils.Gen(new Point(room.X + 1, room.Y + 1), new Shapes.Rectangle(room.Width - 2, room.Height - 2), Actions.Chain(new Modifiers.SkipTiles(21), new Actions.ClearTile(frameNeighbors: true), new Actions.PlaceWall(WallType)));
         }
     }
 
