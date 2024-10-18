@@ -756,8 +756,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             float num5 = MathHelper.Lerp(startingSize, endingSize, num4);
             float angle2 = angle;
             angle += (angle2 - (float)Math.PI / 2f) * 0.1f * (1f - num4);
-            for (int i = 0; i < (int)num5; i++) {
-                for (int j = 0; j < (int)num5; j++) {
+            for (int i = 0; i < (int)Math.Max(1, num5); i++) {
+                for (int j = 0; j < (int)Math.Max(1, num5); j++) {
                     int x3 = (int)x2 + i;
                     int y3 = (int)y2 + j;
                     WorldGenHelper.ReplaceTile(x3, y3, _elderwoodTileType);
