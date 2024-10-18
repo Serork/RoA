@@ -17,7 +17,7 @@ namespace RoA.Content.Biomes.Backwoods;
 sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     public readonly int CloseOffset = 700;
     public readonly int MidOffset = 1140;
-    public readonly int MidOffset2 = 1720;
+    public readonly int MidOffset2 = 1750;
     public readonly int FarOffset = 1200;
 
     public override void ModifyFarFades(float[] fades, float transitionSpeed) {
