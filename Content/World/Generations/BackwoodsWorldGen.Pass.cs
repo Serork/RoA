@@ -912,7 +912,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         j += 2;
         int attempts = EdgeX;
         while (--attempts > 0 && (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.First(x => x.X == i).Y + 5)) {
-            if (i < CenterX + EdgeX / 2 && i > CenterX - EdgeX / 2) {
+            if (i <= CenterX + EdgeX && i >= CenterX - EdgeX) {
                 break;
             }
             i += isLeft ? 1 : -1;
