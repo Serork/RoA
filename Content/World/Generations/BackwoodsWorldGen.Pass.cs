@@ -1202,7 +1202,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //GetRandomPosition(posX, posY, out int baseX, out int baseY, false);
 
         int baseX = _random.Next(Left + 15, Right - 15);
-        int baseY = _random.Next(Math.Min(BackwoodsVars.FirstTileYAtCenter + EdgeY / 3, ((int)Main.worldSurface)), Bottom - 20);
+        int baseY = _random.Next(Math.Min(BackwoodsVars.FirstTileYAtCenter + EdgeY / 2, ((int)Main.worldSurface)), Bottom - 20);
         Point origin = new(baseX, baseY);
 
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
