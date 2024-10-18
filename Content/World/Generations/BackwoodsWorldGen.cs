@@ -16,7 +16,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex += 6;
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new(GENLAYERNAME, LAYERWEIGHT));
         genIndex += 3;
-        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsLootRooms, 1300f));
+        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
         genIndex -= 2;
@@ -24,7 +24,7 @@ sealed class BackwoodsWorldGen : ModSystem {
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex -= 3;
-        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 2600f));
+        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex += 4;

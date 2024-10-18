@@ -551,7 +551,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int posX = x;
 
         int extraY = _random.Next(2);
-        int y = WorldGenHelper.GetFirstTileY2(posX, true, true) + 1 - 3 - extraY;
+        int y = WorldGenHelper.GetFirstTileY2(posX, true, true) + 1 - 2 - extraY;
         int maxY = BackwoodsVars.FirstTileYAtCenter + 5;
         if (y > maxY) {
             y = maxY;
@@ -570,7 +570,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
         Spike(posX, y, MathHelper.Pi + 1.2f + Main._rand.NextFloat(-0.15f, 0.15f));
 
-        y = WorldGenHelper.GetFirstTileY2(posX + 14, true, true) - 3 - extraY;
+        y = WorldGenHelper.GetFirstTileY2(posX + 14, true, true) - 2 - extraY;
         if (y > maxY) {
             y = maxY;
         }
