@@ -129,7 +129,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step_AddAltarMound() {
         int x = CenterX + 10;
         int posX = x;
-        int y = WorldGenHelper.GetFirstTileY2(posX, true, true) + 1;
+        int y = WorldGenHelper.GetFirstTileY2(posX, true, true) + 2;
         WorldUtils.Gen(new Point(posX, y), new Shapes.Mound(20, 6), Actions.Chain(new Modifiers.Blotches(2, 1, 0.8), new Actions.SetTile(_dirtTileType), new Actions.SetFrames(frameNeighbors: true)));
     }
 
@@ -1248,7 +1248,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        int num = 25;
+        int num = 35;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                 if (Main.tile[i, j].HasTile && (Main.tile[i, j].TileType == 21 || Main.tile[i, j].TileType == _elderWoodChestTileType || TileID.Sets.BasicChest[Main.tile[i, j].TileType]))
