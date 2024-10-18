@@ -316,7 +316,7 @@ public class HouseBuilderCustom {
                     case 1: {
                         int num5 = room.Y + 1;
                         WorldGen.PlaceTile(num4, num5, ChandelierTileType, mute: true, forced: false, -1);
-                        if (_random.NextChance(0.95)) {
+                        if (_random.NextChance(0.975)) {
                             for (int j = -1; j < 2; j++) {
                                 for (int k = 0; k < 3; k++) {
                                     _tiles[j + num4, k + num5].TileFrameX += 54;
