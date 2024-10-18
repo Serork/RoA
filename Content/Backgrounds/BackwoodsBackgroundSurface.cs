@@ -16,9 +16,9 @@ namespace RoA.Content.Biomes.Backwoods;
 [Autoload(Side = ModSide.Client)]
 sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     public readonly int CloseOffset = 700;
-    public readonly int MidOffset = 1060;
-    public readonly int MidOffset2 = 1800;
-    public readonly int FarOffset = 1300;
+    public readonly int MidOffset = 1140;
+    public readonly int MidOffset2 = 1700;
+    public readonly int FarOffset = 1200;
     
     public override void ModifyFarFades(float[] fades, float transitionSpeed) {
 		for (int i = 0; i < fades.Length; i++) {
@@ -73,7 +73,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         if (WorldGen.drunkWorldGen) {
             offset = -180;
         }
-        float surfacePosition = (float)BackwoodsVars.BackwoodsTileForBackground;
+        float surfacePosition = (float)BackwoodsVars.BackwoodsTileForBackground - 7;
         if (surfacePosition == 0f) {
             surfacePosition = 1f;
         }
