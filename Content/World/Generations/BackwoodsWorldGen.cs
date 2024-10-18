@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using Terraria.GameContent.Biomes.CaveHouse;
 using Terraria.GameContent.Generation;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
@@ -8,16 +7,16 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.World.Generations;
 sealed class BackwoodsWorldGen : ModSystem {
     private const string GENLAYERNAME = "Backwoods", GENLAYERNAME2 = "Backwoods: Clean up", GENLAYERNAME3 = "Backwoods: Extra placements";
+    private const float LAYERWEIGHT = 5000f;
 
     private BackwoodsBiomePass BackwoodsWorldGenPass { get; set; }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         genIndex += 6;
-        tasks.Insert(genIndex, BackwoodsWorldGenPass = new(GENLAYERNAME, 600f));
-        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME, BackwoodsWorldGenPass.GrowBackwoods, 1200f));
+        tasks.Insert(genIndex, BackwoodsWorldGenPass = new(GENLAYERNAME, LAYERWEIGHT));
         genIndex += 3;
-        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsLootRooms, 800f));
+        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsLootRooms, 1300f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
         genIndex -= 2;
@@ -25,7 +24,7 @@ sealed class BackwoodsWorldGen : ModSystem {
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex -= 3;
-        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 1200f));
+        tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 2600f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex += 4;
