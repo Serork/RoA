@@ -104,7 +104,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddAltarMound();
 
         foreach (Point surface in _biomeSurface) {
-            if (!(surface.X > CenterX - 10 && surface.X < CenterX + 15) && Main.rand.NextBool(4)) {
+            if (!(surface.X > CenterX - 10 && surface.X < CenterX + 10) && Main.rand.NextBool(4)) {
                 WorldUtils.Gen(surface, new Shapes.Mound(20, 5), Actions.Chain(new Modifiers.Blotches(2, 1, 0.8), new Modifiers.OnlyTiles(_dirtTileType), new Actions.SetTile(_dirtTileType), new Actions.SetFrames(frameNeighbors: true)));
             }
         }

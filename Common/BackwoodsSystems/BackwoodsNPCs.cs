@@ -23,7 +23,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
 
     public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
         if (spawnInfo.Player.InModBiome<BackwoodsBiome>()) {
-            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter + 15 * WorldGenHelper.WorldSize;
+            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter + 25 * WorldGenHelper.WorldSize;
             if (surface) {
                 pool.Clear();
             }
