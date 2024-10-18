@@ -910,7 +910,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GrowBigTree(int i, bool isLeft = true) {
         int j = WorldGenHelper.GetFirstTileY(i, true);
         j += 2;
-        while (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.First(x => x.X == i).Y + 5) {
+        int attempts = EdgeX;
+        while (--attempts > 0 && (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.First(x => x.X == i).Y + 5)) {
             if (i < CenterX + EdgeX / 2 && i > CenterX - EdgeX / 2) {
                 break;
             }
