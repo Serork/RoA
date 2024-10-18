@@ -1929,7 +1929,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
-        for (int num555 = 0; num555 < Main.maxTilesX * 0.02; num555++) {
+        for (int num555 = 0; num555 < Main.maxTilesX * 0.05; num555++) {
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
         }
