@@ -9,7 +9,7 @@ sealed class BackwoodsWorldGen : ModSystem {
     private const string GENLAYERNAME = "Backwoods", GENLAYERNAME2 = "Backwoods: Clean up", GENLAYERNAME3 = "Backwoods: Extra placements";
     private const float LAYERWEIGHT = 5000f;
 
-    private BackwoodsBiomePass BackwoodsWorldGenPass { get; set; }
+    public BackwoodsBiomePass BackwoodsWorldGenPass { get; private set; }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
