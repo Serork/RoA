@@ -233,7 +233,7 @@ sealed class Hog : RoANPC {
         NPC.chaseable = _currentAI == 2;
         if (_currentAI == 1) {
             if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
-                NPC.velocity.X *= 0.8f;
+                NPC.velocity.X *= 0.85f;
             }
             if (++_extraAITimer >= 30f) {
 				_extraAITimer = 0f;
