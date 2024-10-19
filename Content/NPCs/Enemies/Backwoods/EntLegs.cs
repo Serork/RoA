@@ -221,7 +221,7 @@ sealed class EntLegs : RoANPC {
 
 	private void Stomp(bool empowered = false) {
         string tag = "Ent Stomp";
-        PunchCameraModifier punchCameraModifier = new(NPC.Bottom, MathHelper.PiOver2.ToRotationVector2(), 4f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 5f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 20, 1000f, tag);
+        PunchCameraModifier punchCameraModifier = new(NPC.Bottom, MathHelper.PiOver2.ToRotationVector2(), 4f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 5f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 20, 2000f, tag);
         Main.instance.CameraModifiers.Add(punchCameraModifier);
 		if (!empowered) {
 			SoundEngine.PlaySound(SoundID.Item73, NPC.Bottom);

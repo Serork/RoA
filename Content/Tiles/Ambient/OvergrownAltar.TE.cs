@@ -6,6 +6,9 @@ using RoA.Core.Utility;
 using RoA.Common;
 
 using System;
+using Terraria.Audio;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
+using RoA.Core;
 
 namespace RoA.Content.Tiles.Ambient;
 
@@ -25,7 +28,15 @@ sealed class OvergrownAltarTE : ModTileEntity {
 
     public override void Update() {
         if (Main.netMode != NetmodeID.Server) {
-            Counting += TimeSystem.LogicDeltaTime / 3f * Math.Max(0.05f, Counting) * 9f;
+            float factor = AltarHandler.GetAltarFactor();
+            Counting += TimeSystem.LogicDeltaTime / (3f - factor) * Math.Max(0.05f, Counting) * 7f;
+            var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = 1.5f };
+            var sound = SoundEngine.FindActiveSound(in style);
+            if (Counting >= 1f && (sound == null || !sound.IsPlaying)) {
+                if ((factor > 0f && Main.rand.NextChance(1f - (double)Math.Min(0f, factor - 0.5f)))/* || LothorInvasion.preArrivedLothorBoss.Item2*/) {
+                    SoundEngine.PlaySound(style, new Microsoft.Xna.Framework.Vector2(Position.X, Position.Y) * 16f);
+                }
+            }
             if (Counting >= 1.25f) {
                 Counting = 0f;
             }

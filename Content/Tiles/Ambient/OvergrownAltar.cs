@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -63,13 +64,15 @@ sealed class OvergrownAltar : ModTile {
 
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
-            //float counting = overgrownAltarTE.Counting * 1.5f;
-            //float factor = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
-            //float value = (factor > 0.5f ? 1f - factor : factor) + 0.5f;
-            //Vector3 color3 = new(0.45f, 0.85f, 0.4f);
-            //r = color3.X * value;
-            //g = color3.Y * value;
-            //b = color3.Z * value;
+            float counting = MathHelper.Clamp(1f - overgrownAltarTE.Counting, 0f, 1f);
+            float factor = Math.Max(0.1f, MathHelper.Clamp(counting, 0f, 0.98f) * (1f + AltarHandler.GetAltarFactor()));
+            factor = 1f - factor;
+            float value = Math.Clamp((factor > 0.5f ? 1f - factor : factor) + 0.5f, AltarHandler.GetAltarFactor(), 1f);
+            value = Math.Clamp(value, 0.25f, 1f);
+            Vector3 color3 = new(0.45f, 0.85f, 0.4f);
+            r = color3.X * 0.8f * value;
+            g = color3.Y * 0.8f * value;
+            b = color3.Z * 0.8f * value;
         }
     }
 
@@ -85,7 +88,7 @@ sealed class OvergrownAltar : ModTile {
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
-            float counting = MathHelper.Clamp(overgrownAltarTE.Counting, 0f, 0.95f);
+            float counting = MathHelper.Clamp(overgrownAltarTE.Counting, 0f, 0.98f);
             //float value = (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f;
             float factor = counting;
             Color color = Lighting.GetColor(i, j);
@@ -110,14 +113,13 @@ sealed class OvergrownAltar : ModTile {
 
             texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "OvergrownAltar_Glow").Value;
             Color color2 = new(255, 255, 200, 200);
-            float mult = /*flag ? */1f/* : MathUtils.EaseInOut3(OvergrownCoords.Strength)*/;
-            float factor2 = 1f - mult;
-            float factor3 = /*flag ? */1f/* : OvergrownCoords.Factor*/;
-            spriteBatch.Draw(texture, position, rectangle, color2 * factor2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            float mult = /*flag ? */0f/* : MathUtils.EaseInOut3(OvergrownCoords.Strength)*/;
+            float factor3 = AltarHandler.GetAltarFactor();
+            spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
-                spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3 * factor2, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
-            factor2 = mult;
+            float factor2 = mult;
             //bool flag3 = Lothor.ShouldLothorBeDead();
             if (factor2 > 0f/* || flag3*/) {
                 //float factor4 = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);

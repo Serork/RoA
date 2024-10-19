@@ -625,10 +625,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = tileY - 40; j < tileY + 40; j++) {
                 Tile tile = Framing.GetTileSafely(i, j);
                 int x2 = i, y2 = j;
+                int count = 0;
                 if (Main.tile[x2, y2].ActiveTile(_elderwoodTileType)) {
-                    if (!Main.tile[x2 - 1, y2].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2].ActiveTile(_elderwoodTileType) && !Main.tile[x2, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2, y2 + 1].ActiveTile(_elderwoodTileType) ||
-                        !Main.tile[x2 - 1, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2 - 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 + 1, y2 + 1].ActiveTile(_elderwoodTileType) && !Main.tile[x2 - 1, y2 + 1].ActiveTile(_elderwoodTileType)) {
-                        WorldGen.KillTile(i, j);
+                    if (!Main.tile[x2 - 1, y2].ActiveTile(_elderwoodTileType) || !Main.tile[x2 + 1, y2].ActiveTile(_elderwoodTileType) || !Main.tile[x2, y2 - 1].ActiveTile(_elderwoodTileType) || !Main.tile[x2, y2 + 1].ActiveTile(_elderwoodTileType) ||
+                        !Main.tile[x2 - 1, y2 - 1].ActiveTile(_elderwoodTileType) || !Main.tile[x2 + 1, y2 - 1].ActiveTile(_elderwoodTileType) || !Main.tile[x2 + 1, y2 + 1].ActiveTile(_elderwoodTileType) || !Main.tile[x2 - 1, y2 + 1].ActiveTile(_elderwoodTileType)) {
+                        count++;
+                    }
+                    if (count >= 7) {
+                        for (int i2 = -1; i2 < 2; i2++) {
+                            for (int j2 = -1; j2 < 2; j2++) {
+                                if (Main.tile[x2 + i2, y2 + j2].ActiveTile(_elderwoodTileType)) {
+                                    bool flag = _random.NextBool();
+                                    WorldGenHelper.ReplaceTile(x2 + i2 + (!flag ? 1 * (i > 0 ? -1 : 1) : 0), y2 + j2 - (flag ? 1 : 0), _elderwoodTileType);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 ushort treeBranch = (ushort)ModContent.TileType<TreeBranch>();

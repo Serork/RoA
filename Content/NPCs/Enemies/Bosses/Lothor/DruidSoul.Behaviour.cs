@@ -3,7 +3,6 @@
 using RoA.Common;
 using RoA.Common.VisualEffects;
 using RoA.Content.Biomes.Backwoods;
-using RoA.Content.Tiles.Ambient;
 using RoA.Content.VisualEffects;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -18,6 +17,8 @@ namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class DruidSoul : RoANPC {
     private const float OPACITYACC = 0.005f;
+
+    private Vector2 _velocity2, _velocity3;
 
     public override bool PreAI() {
         KillNPCIfIsntInBackwoods();
@@ -51,7 +52,7 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 altarPosition = GetAltarPosition();
         Vector2 npcCenter = NPC.Center;
         bool closeToAltar = Math.Abs(altarPosition.X - npcCenter.X) < 40f && altarPosition.Y - npcCenter.Y < 80f;
-        return closeToAltar;
+        return false;
     }
 
     private static Vector2 GetAltarPosition() => AltarHandler.GetAltarPosition().ToWorldCoordinates();
@@ -63,7 +64,7 @@ sealed partial class DruidSoul : RoANPC {
         }
         target = NPC.target;
         Player player = Main.player[target];
-        if (player.dead || !player.InModBiome<BackwoodsBiome>() || NPC.CountNPCS(Type) > 1) {
+        if (player.dead || !player.InModBiome<BackwoodsBiome>() || NPC.CountNPCS(Type) > 1 || !NPC.downedBoss2) {
             NPC.KillNPC();
             if (Main.netMode != NetmodeID.Server) {
                 SoundEngine.PlaySound(SoundID.NPCDeath6 with { Pitch = 0.2f, Volume = 0.5f }, NPC.Center);
@@ -87,10 +88,122 @@ sealed partial class DruidSoul : RoANPC {
             return;
         }
 
+        Movement();
+
         float minOpacity = 0.4f;
         if (NPC.Opacity > minOpacity) {
             NPC.Opacity -= OPACITYACC;
         }
+    }
+
+    private void Movement() {
+        Player player3 = Main.player[NPC.target];
+        float num66 = 0.1f;
+        NPC.noTileCollide = true;
+        int num67 = 150;
+        Vector2 center = NPC.Center;
+        Vector2 playerCenter = player3.Center + Main.rand.Random2(player3.width);
+        float num68 = playerCenter.X - center.X;
+        float num69 = playerCenter.Y - center.Y;
+        //num69 -= 65f;
+        num68 -= (float)(30 * player3.direction);
+        float num70 = (float)Math.Sqrt(num68 * num68 + num69 * num69);
+        float num71 = 8f;
+        float num72 = num70;
+        float num73 = 2000f;
+
+        MoveToAltar();
+
+        float dist = NPC.Distance(playerCenter);
+        if (dist < 100f) {
+            NPC.velocity *= 0.925f;
+            if (NPC.velocity.Length() < 0.25f)
+                NPC.velocity = Vector2.Zero;
+        }
+
+        bool num74 = num70 > num73;
+        if (num70 < (float)num67 && player3.velocity.Y == 0f && NPC.position.Y + (float)NPC.height <= player3.position.Y + (float)player3.height && !Collision.SolidCollision(NPC.position, NPC.width, NPC.height) && NPC.velocity.Y < -6f)
+            NPC.velocity.Y = -6f;
+
+        if (num70 < 10f) {
+            NPC.velocity *= 0.9f;
+            if (NPC.velocity.Length() < 0.5f)
+                NPC.velocity = Vector2.Zero;
+
+            num66 = 0f;
+        }
+        else {
+            if (num70 > (float)num67) {
+                num66 = 0.2f;
+                num71 = 12f;
+            }
+
+            num70 = num71 / num70;
+            num68 *= num70;
+            num69 *= num70;
+        }
+
+        if (num74) {
+            NPC.Center = player3.Center;
+            NPC.velocity = Vector2.Zero;
+            NPC.netUpdate = true;
+        }
+
+        float speed = 4f;
+        if (NPC.velocity.X < num68) {
+            if (NPC.velocity.X < speed) {
+                NPC.velocity.X += num66;
+            }
+            if (NPC.velocity.X < 0f)
+                NPC.velocity.X += num66;
+        }
+
+        if (NPC.velocity.X > num68) {
+            if (NPC.velocity.X > -speed) {
+                NPC.velocity.X -= num66;
+            }
+            if (NPC.velocity.X > 0f)
+                NPC.velocity.X -= num66;
+        }
+
+        if (NPC.velocity.Y < num69) {
+            if (NPC.velocity.Y < speed) {
+                NPC.velocity.Y += num66;
+            }
+            if (NPC.velocity.Y < 0f)
+                NPC.velocity.Y += num66;
+        }
+
+        if (NPC.velocity.Y > num69) {
+            if (NPC.velocity.Y > -speed) {
+                NPC.velocity.Y -= num66;
+            }
+            if (NPC.velocity.Y > 0f)
+                NPC.velocity.Y -= num66;
+        }
+
+        //if (Math.Abs(NPC.velocity.X) > 0.1f) {
+        //    NPC.direction = NPC.velocity.X.GetDirection();
+        //}
+        NPC.direction = NPC.DirectionTo(player3.Center).X.GetDirection();
+        NPC.spriteDirection = -NPC.direction;
+    }
+
+    private void MoveToAltar() {
+        Vector2 altarCoords = GetAltarPosition();
+        float distanceBetween = Math.Clamp(NPC.Distance(altarCoords), 0f, 600f) * 0.01f;
+        Vector2 moveTo = NPC.DirectionFrom(altarCoords);
+        Rectangle altarArea = Utils.CenteredRectangle(new Vector2((float)(altarCoords.X), (float)(altarCoords.Y)), Vector2.One * 5f);
+        float speed = 0.1f + distanceBetween * 0.001f;
+        _velocity2 += moveTo * -speed;
+        _velocity3 = NPC.CircleMovementVector2(++NPC.ai[1] / 3f);
+        _velocity2 += NPC.DirectionTo(altarArea.ClosestPointInRect(NPC.Center)) * speed;
+        float maxSpeed = 2.5f + distanceBetween * 0.005f;
+        float velocity = _velocity2.Length();
+        if (velocity > maxSpeed) {
+            _velocity2 *= maxSpeed / _velocity2.Length();
+        }
+        NPC.position += _velocity2 + _velocity3;
     }
 
     private void AbsorbSoulHandler() {
