@@ -1304,7 +1304,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (!painting3) {
             HouseBuilderCustom._painting3 = false;
         }
-        houseBuilder.ChestChance = 1;
+        houseBuilder.ChestChance = 0.8;
         houseBuilder.Place(new HouseBuilderContext(), GenVars.structures);
     }
 
