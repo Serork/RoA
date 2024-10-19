@@ -569,13 +569,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (y > maxY) {
             y = maxY;
         }
-        Spike(posX, y, MathHelper.Pi + 1.2f + Main._rand.NextFloat(-0.15f, 0.15f));
+        Spike(posX, y, MathHelper.Pi + 1.2f + Main._rand.NextFloat(-0.15f, 0.15f), endingSize: 0);
 
         y = WorldGenHelper.GetFirstTileY2(posX + 14, true, true) - 2 - extraY;
         if (y > maxY) {
             y = maxY;
         }
-        Spike(posX + 14, y, MathHelper.Pi + 0.5f + Main._rand.NextFloat(-0.15f, 0.15f), 6);
+        Spike(posX + 14, y, MathHelper.Pi + 0.5f + Main._rand.NextFloat(-0.15f, 0.15f), 6, endingSize: 0);
 
         y = WorldGenHelper.GetFirstTileY2(posX + 21, true, true) - 1 - extraY;
         if (y > maxY) {
@@ -623,27 +623,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int tileX = checkedPos.X, tileY = checkedPos.Y;
         for (int i = tileX - 40; i < tileX + 40; i++) {
             for (int j = tileY - 40; j < tileY + 40; j++) {
-                Tile tile = Framing.GetTileSafely(i, j);
-                int x2 = i, y2 = j;
-                int count = 0;
-                if (Main.tile[x2, y2].ActiveTile(_elderwoodTileType)) {
-                    if (!Main.tile[x2 - 1, y2].ActiveTile(_elderwoodTileType) || !Main.tile[x2 + 1, y2].ActiveTile(_elderwoodTileType) || !Main.tile[x2, y2 - 1].ActiveTile(_elderwoodTileType) || !Main.tile[x2, y2 + 1].ActiveTile(_elderwoodTileType) ||
-                        !Main.tile[x2 - 1, y2 - 1].ActiveTile(_elderwoodTileType) || !Main.tile[x2 + 1, y2 - 1].ActiveTile(_elderwoodTileType) || !Main.tile[x2 + 1, y2 + 1].ActiveTile(_elderwoodTileType) || !Main.tile[x2 - 1, y2 + 1].ActiveTile(_elderwoodTileType)) {
-                        count++;
-                    }
-                    if (count >= 7) {
-                        for (int i2 = -1; i2 < 2; i2++) {
-                            for (int j2 = -1; j2 < 2; j2++) {
-                                if (Main.tile[x2 + i2, y2 + j2].ActiveTile(_elderwoodTileType)) {
-                                    bool flag = _random.NextBool();
-                                    WorldGenHelper.ReplaceTile(x2 + i2 + (!flag ? 1 * (i > 0 ? -1 : 1) : 0), y2 + j2 - (flag ? 1 : 0), _elderwoodTileType);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
                 ushort treeBranch = (ushort)ModContent.TileType<TreeBranch>();
+                Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(ModContent.TileType<TreeBranch>()) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
                     WorldGen.KillTile(i, j);
                 }
@@ -761,11 +742,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
     }
 
-    private void Spike(int x, int y, float a, int distance = 8, int size = 4) {
-        float x2 = x;
-        float y2 = y;
+    private void Spike(int x, int y, float a, int distance = 8, int size = 4, int endingSize = 1) {
+        float i2 = x;
+        float j2 = y;
         int startingSize = size;
-        int endingSize = 1;
         float angle = a;
         for (int num3 = 0; num3 < distance; num3++) {
             float num4 = num3 / (float)distance;
@@ -774,16 +754,41 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             angle += (angle2 - (float)Math.PI / 2f) * 0.1f * (1f - num4);
             for (int i = 0; i < (int)Math.Max(1, num5); i++) {
                 for (int j = 0; j < (int)Math.Max(1, num5); j++) {
-                    int x3 = (int)x2 + i;
-                    int y3 = (int)y2 + j;
+                    int x3 = (int)i2 + i;
+                    int y3 = (int)j2 + j;
                     WorldGenHelper.ReplaceTile(x3, y3, _elderwoodTileType);
                     if (Main.tile[x3 - 1, y3].TileType == _elderwoodTileType && Main.tile[x3 + 1, y3].TileType == _elderwoodTileType && Main.tile[x3, y3 - 1].TileType == _elderwoodTileType && Main.tile[x3, y3 + 1].TileType == _elderwoodTileType && Main.tile[x3 - 1, y3 - 1].TileType == _elderwoodTileType && Main.tile[x3 + 1, y3 - 1].TileType == _elderwoodTileType && Main.tile[x3 + 1, y3 + 1].TileType == _elderwoodTileType && Main.tile[x3 - 1, y3 + 1].TileType == _elderwoodTileType) {
                         WorldGenHelper.ReplaceWall(x3, y3, _elderwoodWallType);
                     }
                 }
             }
-            x2 += (float)Math.Cos(angle);
-            y2 += (float)Math.Sin(angle);
+            i2 += (float)Math.Cos(angle);
+            j2 += (float)Math.Sin(angle);
+        }
+        for (int x2 = x - 3; x2 < x + 3; x2++) {
+            for (int y2 = y - 10; y2 < y + 5; y2++) {
+                if (Main.tile[x2, y2].ActiveTile(_elderwoodTileType)) {
+                    int count = 0;
+                    for (int i3 = -1; i3 < 2; i3++) {
+                        for (int j3 = -1; j3 < 2; j3++) {
+                            if (!Main.tile[x2 + i3, y2 + j3].ActiveTile(_elderwoodTileType)) {
+                                count++;
+                            }
+                        }
+                    }
+                    if (count > 6) {
+                        for (int i3 = -1; i3 < 2; i3++) {
+                            for (int j3 = -1; j3 < 2; j3++) {
+                                if (Main.tile[x2 + i3, y2 + j3].ActiveTile(_elderwoodTileType)) {
+                                    bool flag = _random.NextBool();
+                                    WorldGenHelper.ReplaceTile(x2 + i3 + (!flag ? 1 * (i3 > 0 ? -1 : 1) : 0), y2 + j3 - (flag ? 1 : 0), _elderwoodTileType);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1304,7 +1309,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (!painting3) {
             HouseBuilderCustom._painting3 = false;
         }
-        houseBuilder.ChestChance = 0.8;
+        houseBuilder.ChestChance = 0.9;
         houseBuilder.Place(new HouseBuilderContext(), GenVars.structures);
     }
 
