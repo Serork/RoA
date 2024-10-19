@@ -728,7 +728,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
             WorldUtils.Gen(new Point(x, y), new Shapes.Rectangle(2, 2), Actions.Chain(new Modifiers.Dither(), new Modifiers.Blotches(2, 2), new Modifiers.IsEmpty(), new Actions.SetTile(51, setSelfFrames: true)));
         }
 
-        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles([.. TileSets.Paintings]), new ClearWallCustom(false, WallID.DirtUnsafe)));
+        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles([.. TileSets.Paintings]), ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
 
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.Blotches(), new Modifiers.OnlyWalls(base.WallType), new Modifiers.SkipTiles(SkipTilesDuringWallAging), ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.OnlyTiles(30, 321, 158), new Actions.ClearTile(frameNeighbors: true)));
@@ -736,22 +736,23 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
 
     private class ClearWallCustom : GenAction {
         private bool _frameNeighbors;
-        private ushort _dontReplaceWallType;
+        private ushort[] replaceTiles;
 
-        public ClearWallCustom(bool frameNeighbors = false, ushort dontReplaceWallType = WallID.None) {
+        public ClearWallCustom(bool frameNeighbors = false, params ushort[] replaceTiles) {
             _frameNeighbors = frameNeighbors;
-            _dontReplaceWallType = dontReplaceWallType;
+            this.replaceTiles = replaceTiles;
         }
 
         public override bool Apply(Point origin, int x, int y, params object[] args) {
             Tile tile = WorldGenHelper.GetTileSafely(x, y);
-            if (tile.WallType != _dontReplaceWallType) {
+            if (replaceTiles.Contains(tile.WallType)) {
                 WorldUtils.ClearWall(x, y, _frameNeighbors);
+                return UnitApply(origin, x, y, args);
             }
+            return Fail();
             //else {
             //    WorldGenHelper.ReplaceWall(x, y, _dontReplaceWallType);
             //}
-            return UnitApply(origin, x, y, args);
         }
     }
 

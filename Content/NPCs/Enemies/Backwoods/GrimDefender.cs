@@ -359,7 +359,7 @@ sealed class GrimDefender : ModNPC {
                 bool flag2 = NPC.ai[1] <= attackCd * 0.5f;
                 NPC.dontTakeDamage = !_isAngry || NPC.ai[1] <= attackCd * 0.7f;
                 if (!_isAngry) {
-                    if (_angryTimer < 10f) {
+                    if (_angryTimer < 20f) {
                         _angryTimer += TimeSystem.LogicDeltaTime;
                     }
                 }
