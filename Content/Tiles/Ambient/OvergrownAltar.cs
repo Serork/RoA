@@ -65,14 +65,15 @@ sealed class OvergrownAltar : ModTile {
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
             float counting = MathHelper.Clamp(1f - overgrownAltarTE.Counting, 0f, 1f);
-            float factor = Math.Max(0.1f, MathHelper.Clamp(counting, 0f, 0.98f) * (1f + AltarHandler.GetAltarFactor()));
+            float altarFactor = AltarHandler.GetAltarFactor();
+            float factor = Math.Max(0.1f, MathHelper.Clamp(counting, 0f, 0.98f) * (1f + altarFactor));
             factor = 1f - factor;
-            float value = Math.Clamp((factor > 0.5f ? 1f - factor : factor) + 0.5f, AltarHandler.GetAltarFactor(), 1f);
-            value = Math.Clamp(value, 0.25f, 1f);
+            float value = Math.Clamp((factor > 0.5f ? 1f - factor : factor) + 0.5f, 0.25f, 1f);
+            value = Math.Clamp(value, 0.25f, 1f) * MathHelper.Clamp(altarFactor + 0.75f, 1f, 1.5f);
             Vector3 color3 = new(0.45f, 0.85f, 0.4f);
-            r = color3.X * 0.8f * value;
-            g = color3.Y * 0.8f * value;
-            b = color3.Z * 0.8f * value;
+            r = color3.X * 0.75f * value;
+            g = color3.Y * 0.75f * value;
+            b = color3.Z * 0.75f * value;
         }
     }
 

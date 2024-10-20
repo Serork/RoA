@@ -202,6 +202,25 @@ sealed class GrimDefender : ModNPC {
         NPC.netUpdate = true;
     }
 
+    public override bool PreAI() {
+        if (Main.dedServ) {
+            foreach (Player player in Main.ActivePlayers) {
+                if (!(player.active && !player.dead)) {
+                    continue;
+                }
+                if (player.active && !player.dead && player.ItemAnimationActive && !_isAngry) {
+                    MakeAngry();
+
+                    if (Main.netMode == NetmodeID.MultiplayerClient) {
+                        MultiplayerSystem.SendPacket(new RecognizeHitPacket(player, NPC.whoAmI));
+                    }
+                }
+            }
+        }
+
+        return base.PreAI();
+    }
+
     public override void AI() {
         NPC.noTileCollide = NPC.noGravity = true;
 
@@ -221,6 +240,11 @@ sealed class GrimDefender : ModNPC {
         }
         Vector2 toHead = Main.player[NPC.target].Center - Vector2.UnitY * 18f - NPC.Center;
         float attackCd = ATTACKTIME;
+
+        Vector2 center = new(NPC.position.X + 22 / 2, NPC.position.Y + 28 / 2 + NPC.gfxOffY);
+        center.X -= 11;
+        center.Y -= 9;
+
         if (NPC.ai[0] > 1f) {
             NPC.knockBackResist = 0f;
 
@@ -256,10 +280,6 @@ sealed class GrimDefender : ModNPC {
                 //NPC.velocity *= 0.95f;
             }
             else {
-                Vector2 center = new(NPC.position.X + 22 / 2, NPC.position.Y + 28 / 2 + NPC.gfxOffY);
-                center.X -= 11;
-                center.Y -= 9;
-
                 diff = _tempPosition /*- Vector2.UnitY * 20f*/ - center;
                 diff.Normalize();
 
@@ -376,7 +396,7 @@ sealed class GrimDefender : ModNPC {
 
                 ApplyExtraVelocity1();
 
-                diff = !_spearAttack ? toHead : (Main.player[NPC.target].Center - NPC.Center);
+                diff = !_spearAttack ? toHead : (_tempPosition - center);
                 directedRotation(diff);
 
                 if (flag2) {
