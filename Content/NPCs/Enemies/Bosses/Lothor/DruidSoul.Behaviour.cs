@@ -240,11 +240,12 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 towards = altarPosition + new Vector2(0f, 40f);
         bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
         if (flag2) {
-            NPC.velocity *= 0.05f;
             NPC.SlightlyMoveTo(towards, 20f, 10f);
+            NPC.velocity *= 0.05f;
             if (NPC.Opacity > 0.05f) {
                 NPC.Opacity -= OPACITYACC * 1.25f;
             }
+
             return;
         }
 
@@ -253,7 +254,7 @@ sealed partial class DruidSoul : RoANPC {
         }
         bool flag = Helper.EaseInOut3(altarStrength) > 0.4f;
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.1f;
-        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.02f;
+        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.04f;
         _velocity2 *= 0.9f;
         if (NPC.velocity.Length() >= 2f) {
             NPC.velocity *= 0.8f;
@@ -314,7 +315,7 @@ sealed partial class DruidSoul : RoANPC {
 
             if (Math.Abs(NPC.velocity.X) > 0.25f) {
                 NPC.spriteDirection = -NPC.direction;
-                NPC.direction = NPC.DirectionTo(altarPosition).X.GetDirection();
+                NPC.direction = NPC.DirectionTo(towards).X.GetDirection();
             }
 
             return;

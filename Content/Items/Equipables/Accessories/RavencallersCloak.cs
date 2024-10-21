@@ -92,7 +92,7 @@ sealed class RavencallersCloak : ModItem {
                 Main.dust[dust].velocity = (Main.dust[dust].velocity + Player.velocity) / 2f;
             }
 
-            SoundEngine.PlaySound(SoundID.NPCDeath6 with { PitchVariance = 0.5f }, lastPositionInfo.Position);
+            SoundEngine.PlaySound(SoundID.NPCDeath6 with { Volume = 0.5f, PitchVariance = 0.5f }, lastPositionInfo.Position);
             ResetPositions();
         }
 

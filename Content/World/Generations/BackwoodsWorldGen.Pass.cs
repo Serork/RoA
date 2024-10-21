@@ -675,6 +675,20 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+
+        for (int k = 0; k < 3; k++) {
+            for (int i = tileX - 30; i < tileX + 20; i++) {
+                for (int j = tileY - 20; j < tileY + 20; j++) {
+                    if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt) && (WorldGenHelper.ActiveTile(i, j + 1, _leavesTileType) || WorldGenHelper.ActiveTile(i, j + 1, _grassTileType)) && (WorldGenHelper.ActiveTile(i + 1, j, _grassTileType) || WorldGenHelper.ActiveTile(i + 1, j, _leavesTileType))) {
+                        WorldGenHelper.ReplaceTile(i, j, _grassTileType);
+                    }
+                    // pots
+                    if (WorldGen.SolidTile(i, j + 1) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(3)) {
+                        WorldGen.PlacePot(i, j, 28, _random.Next(4));
+                    }
+                }
+            }
+        }
     }
 
     private void Platform(int x, int y) {
@@ -2499,6 +2513,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int cliffX = cliffTileCoords.X;
         int startY = cliffTileCoords.Y;
         bool first = true;
+        int randomness = 0;
         while (startY < lastSurfaceY) {
             bool flag = Math.Abs(cliffX - cliffTileCoords.X) > 20;
             while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
@@ -2510,7 +2525,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
             int testJ = startY;
             bool flag4 = startY >= lastSurfaceY - 3;
-            int randomness = 0;
             while (testJ <= startY + _biomeHeight / 2) {
                 if (first) {
                     randomness += _random.Next(-1, 2);
@@ -2726,7 +2740,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void GrowTrees() {
-        for (int i = Left - 10; i <= Right + 10; i++) {
+        int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX : Left) : Left;
+        int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX : Right) : Right;
+        for (int i = left - 10; i <= right + 10; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + EdgeY; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (WorldGenHelper.ActiveTile(i, j, _grassTileType) && !_backwoodsPlants.Contains(WorldGenHelper.GetTileSafely(i, j - 1).TileType) && tile.Slope == SlopeType.Solid && !tile.IsHalfBlock) {
