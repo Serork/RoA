@@ -677,7 +677,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         for (int k = 0; k < 3; k++) {
-            for (int i = tileX - 30; i < tileX + 20; i++) {
+            for (int i = tileX - 20; i < tileX + 20; i++) {
                 for (int j = tileY - 20; j < tileY + 20; j++) {
                     if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt) &&
                         (WorldGenHelper.ActiveTile(i, j + 1, _leavesTileType) || WorldGenHelper.ActiveTile(i, j + 1, _grassTileType)) && 

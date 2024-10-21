@@ -9,11 +9,13 @@ using System;
 using Terraria.Audio;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
+using Microsoft.Xna.Framework;
 
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class OvergrownAltarTE : ModTileEntity {
     public float Counting { get; private set; }
+    public float Counting2 { get; private set; }
 
     public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -28,6 +30,7 @@ sealed class OvergrownAltarTE : ModTileEntity {
 
     public override void Update() {
         if (Main.netMode != NetmodeID.Server) {
+            Counting2 = MathHelper.Lerp(Counting2, MathHelper.Clamp(1f - Counting, 0f, 1f), 0.05f);
             float factor = AltarHandler.GetAltarFactor();
             Counting += TimeSystem.LogicDeltaTime / (3f - factor) * Math.Max(0.05f, Counting) * 7f;
             var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = 2.5f * Math.Max(0.1f, factor + 0.1f) };
