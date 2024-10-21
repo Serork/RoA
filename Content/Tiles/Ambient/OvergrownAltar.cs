@@ -66,10 +66,13 @@ sealed class OvergrownAltar : ModTile {
         if (overgrownAltarTE != null) {
             float counting = MathHelper.Clamp(1f - overgrownAltarTE.Counting, 0f, 1f);
             float altarFactor = AltarHandler.GetAltarFactor();
-            float factor = Math.Max(0.1f, (MathHelper.Clamp(counting, 0f, 0.98f) + altarFactor * 0.5f) * (1f + altarFactor * 0.5f));
-            factor = 1f - factor;
+            float getFactor(float counting, float altarFactor) {
+                return Math.Max(0.1f, (MathHelper.Clamp(counting, 0f, 0.98f) + altarFactor * 0.5f) * (1f + altarFactor * 0.5f));
+            }
+            float factor = getFactor(counting, altarFactor);
+            factor = getFactor(1f, 1f) - factor;
             float value = Math.Clamp((factor > 0.5f ? 1f - factor : factor) + 0.5f, altarFactor, 1f);
-            value = Math.Clamp(value, 0.5f, 2f) * 1.25f * MathHelper.Clamp(altarFactor + 0.25f, 1f, 1.25f);
+            value = Math.Clamp(value, 0.5f, 5f) * 1.25f * MathHelper.Clamp(altarFactor + 0.25f, 1f, 1.5f);
             bool flag = false;
             float altarStrength = AltarHandler.GetAltarStrength();
             float mult = flag ? 1f : Helper.EaseInOut3(altarStrength);

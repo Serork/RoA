@@ -679,7 +679,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int k = 0; k < 3; k++) {
             for (int i = tileX - 30; i < tileX + 20; i++) {
                 for (int j = tileY - 20; j < tileY + 20; j++) {
-                    if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt) && (WorldGenHelper.ActiveTile(i, j + 1, _leavesTileType) || WorldGenHelper.ActiveTile(i, j + 1, _grassTileType)) && (WorldGenHelper.ActiveTile(i + 1, j, _grassTileType) || WorldGenHelper.ActiveTile(i + 1, j, _leavesTileType))) {
+                    if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt) &&
+                        (WorldGenHelper.ActiveTile(i, j + 1, _leavesTileType) || WorldGenHelper.ActiveTile(i, j + 1, _grassTileType)) && 
+                        (WorldGenHelper.ActiveTile(i + 1, j, _grassTileType) || WorldGenHelper.ActiveTile(i + 1, j, _leavesTileType))) {
                         WorldGenHelper.ReplaceTile(i, j, _grassTileType);
                     }
                     // pots
@@ -1046,12 +1048,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         // branches
-        int index = (int)((float)height / _random.Next(18, 30));
+        int index = height / _random.Next(18, 30);
         int maxY = j - height / 6 - 3, minY = j - height / 2 + height / 10;
         List<(int, int)> takenYs = [];
         void placeBranch(bool directedRight = true) {
             takenYs = [];
-            index = (int)((float)height / _random.Next(18, 30));
+            index = height / _random.Next(18, 30);
             int attempts = 10;
             while (index > 0) {
                 if (--attempts <= 0) {
@@ -1079,8 +1081,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        placeBranch(false);
-        placeBranch();
+        if (_random.Next(10) <= 9) 
+            placeBranch(false);
+        if (_random.Next(10) <= 9) 
+            placeBranch();
 
         //// walls
         //for (int i2 = -25; i2 < 25; i2++) {
@@ -2196,7 +2200,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     break;
                 }
                 Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
-                if (SandTileTypes.Contains(tile.TileType)) {
+                if (SandTileTypes.Contains(tile.TileType)/* || MidInvalidTileTypesToKill.Contains(tile.TileType)*/) {
                     WorldGen.KillTile(surface.X, surface.Y + j);
                 }
             }
@@ -2302,7 +2306,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int num1048 = 0;
         for (int i = Left; i < Right; i++) {
             //_progress.Set(((float)i - Left) / (Right - Left));
-            for (int j = WorldGenHelper.SafeFloatingIslandY - 25; j < Bottom; j++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY - 20; j < Bottom; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (WorldGenHelper.IsCloud(i, j)) {
                     continue;
@@ -2310,7 +2314,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) {
                     continue;
                 }
-                if (!SandInvalidTileTypesToKill.Contains(tile.TileType) && !SandInvalidWallTypesToKill.Contains(tile.WallType) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
+                bool flag2 = !MidInvalidTileTypesToKill.Contains(tile.TileType) || (MidInvalidTileTypesToKill.Contains(tile.TileType) && j < BackwoodsVars.FirstTileYAtCenter + 5);
+                if (!SandInvalidTileTypesToKill.Contains(tile.TileType) && !SandInvalidWallTypesToKill.Contains(tile.WallType) && flag2) {
                     bool killTile = true;
                     bool replace = false;
                     if (MidInvalidWallTypesToKill.Contains(tile.WallType)) {

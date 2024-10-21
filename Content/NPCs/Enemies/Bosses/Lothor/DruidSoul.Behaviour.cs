@@ -240,8 +240,8 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 towards = altarPosition + new Vector2(0f, 40f);
         bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
         if (flag2) {
-            NPC.SlightlyMoveTo(towards, 20f, 10f);
             NPC.velocity *= 0.05f;
+            NPC.SlightlyMoveTo(towards, 20f, 10f);
             if (NPC.Opacity > 0.05f) {
                 NPC.Opacity -= OPACITYACC * 1.25f;
             }
@@ -254,10 +254,10 @@ sealed partial class DruidSoul : RoANPC {
         }
         bool flag = Helper.EaseInOut3(altarStrength) > 0.4f;
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.1f;
-        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.04f;
-        _velocity2 *= 0.9f;
+        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.02f;
+        _velocity2 *= 0.925f;
         if (NPC.velocity.Length() >= 2f) {
-            NPC.velocity *= 0.8f;
+            NPC.velocity *= 0.925f;
         }
         if ((altarPosition.Y > NPC.Center.Y && !flag) || flag) {
             _velocity3 = NPC.CircleMovementVector2(++NPC.ai[1] / 3f, 0.3f, 10);
