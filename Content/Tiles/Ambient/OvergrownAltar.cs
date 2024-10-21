@@ -65,29 +65,19 @@ sealed class OvergrownAltar : ModTile {
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
             float counting = overgrownAltarTE.Counting2;
-            float pureFactor = AltarHandler.GetAltarFactor();
-            float altarFactor = MathHelper.Clamp(pureFactor, 0.5f, 2f);
-            float getFactor(float counting, float altarFactor) {
-                return Math.Max(0.1f, (MathHelper.Clamp(counting, 0f, 0.98f) + altarFactor * 0.25f) * (1f + altarFactor * 0.5f));
-            }
-            float factor = getFactor(counting, altarFactor);
-            factor = getFactor(1f, 0f) - factor;
-            float value = Math.Clamp((factor > 0.5f ? 1f - factor : factor) + 0.5f, altarFactor, 1f);
-            value = Math.Clamp(value + altarFactor * 0.5f, 0.25f, 5f) * 1.25f * MathHelper.Clamp((MathHelper.Clamp(altarFactor, 0.5f, 2f) + 0.5f) * MathHelper.Clamp(counting, 0.5f, 1f), 1f, 2f);
-            value += pureFactor * 0.25f;
+            float altarFactor = AltarHandler.GetAltarFactor();
+            float value = 0.5f + 0.3f * altarFactor;
+            value += (1f - MathHelper.Clamp(counting, 0f, 0.98f)) * 0.4f;
             bool flag = false;
             float altarStrength = AltarHandler.GetAltarStrength();
-            float mult = flag ? 1f : Helper.EaseInOut3(altarStrength);
+            float mult = flag ? 1f : Helper.EaseInOut3(MathHelper.Clamp(altarStrength * 2f, 0f, 1f));
             //value = MathHelper.Clamp(value, 0f, 1.5f);
             float r2 = MathHelper.Lerp(0.45f, 0.9f, mult);
             float g2 = MathHelper.Lerp(0.85f, 0.2f, mult);
             float b2 = MathHelper.Lerp(0.4f, 0.3f, mult);
-            float value2 = 0.25f + MathHelper.Clamp(altarFactor, 0.3f, 0.65f) * (0.7f + 0.2f * MathHelper.Clamp(counting, 0.5f, 1f));
-            float value3 = value2 * value;
-            value3 *= 0.75f;
-            r = r2 * value3;
-            g = g2 * value3;
-            b = b2 * value3;
+            r = r2 * value;
+            g = g2 * value;
+            b = b2 * value;
         }
     }
 
@@ -106,10 +96,11 @@ sealed class OvergrownAltar : ModTile {
             float counting = MathHelper.Clamp(overgrownAltarTE.Counting, 0f, 0.98f);
             //float value = (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f;
             float factor = counting;
+            float strength = AltarHandler.GetAltarStrength();
             Color color = Lighting.GetColor(i, j);
             Tile tile = Main.tile[i, j];
             bool flag = false;
-            int frame = /*5 - */(int)(factor * 6) + (flag || AltarHandler.GetAltarStrength() > 0.3f ? 6 : 0);
+            int frame = /*5 - */(int)(factor * 6) + (flag || strength > 0.3f ? 6 : 0);
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;
@@ -129,7 +120,7 @@ sealed class OvergrownAltar : ModTile {
 
             texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "OvergrownAltar_Glow").Value;
             Color color2 = new(255, 255, 200, 200);
-            float mult = /*flag ? */0f/* : MathUtils.EaseInOut3(OvergrownCoords.Strength)*/;
+            float mult = Helper.EaseInOut3(strength);
             float factor3 = AltarHandler.GetAltarFactor();
             spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
@@ -140,7 +131,7 @@ sealed class OvergrownAltar : ModTile {
             if (factor2 > 0f/* || flag3*/) {
                 //float factor4 = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
                 //factor3 = (factor4 > 0.5f ? 1f - factor4 : factor4) + 0.5f;
-                factor3 = /*flag3 ? OvergrownCoords.Strength : */0f;
+                factor3 = /*flag3 ? OvergrownCoords.Strength : */1f;
                 spriteBatch.Draw(texture, position, rectangle, color2 * factor2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
                     spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3 * factor2, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);

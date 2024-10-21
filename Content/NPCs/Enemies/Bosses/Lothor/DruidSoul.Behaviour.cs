@@ -58,7 +58,8 @@ sealed partial class DruidSoul : RoANPC {
         Player player = Main.player[NPC.target];
         bool flag = NPC.Distance(altarPosition) <= 150f && Collision.CanHit(NPC.Center, 2, 2, altarPosition, 2, 2);
         bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 65f && player.Distance(altarPosition) < 100f) || (flag && (player.Distance(NPC.Center) < 125f));
-        return NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && Collision.CanHitLine(player.Center, 2, 2, altarPosition - Vector2.One * 4f, 2, 2));
+        float altarStrength = AltarHandler.GetAltarStrength();
+        return Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && Collision.CanHit(player.Center, 0, 0, altarPosition - Vector2.One * 1f, 2, 2));
     }
 
     private static Vector2 GetAltarPosition() => AltarHandler.GetAltarPosition().ToWorldCoordinates() - Vector2.UnitX * 5f;
@@ -110,9 +111,11 @@ sealed partial class DruidSoul : RoANPC {
             return;
         }
 
-        float minOpacity = 0.4f;
-        if (NPC.Opacity > minOpacity) {
-            NPC.Opacity -= OPACITYACC;
+        if (!ConsumesItself()) {
+            float minOpacity = 0.4f;
+            if (NPC.Opacity > minOpacity) {
+                NPC.Opacity -= OPACITYACC;
+            }
         }
     }
 
@@ -211,8 +214,11 @@ sealed partial class DruidSoul : RoANPC {
         //if (Math.Abs(NPC.velocity.X) > 0.1f) {
         //    NPC.direction = NPC.velocity.X.GetDirection();
         //}
-        NPC.direction = NPC.DirectionTo(player3.Center).X.GetDirection();
-        NPC.spriteDirection = -NPC.direction;
+        center = NPC.Center + Vector2.UnitX * 8f;
+        if (Math.Abs(player3.Center.X - center.X) > 8f) {
+            NPC.direction = (player3.Center.X - center.X).GetDirection();
+            NPC.spriteDirection = -NPC.direction;
+        }
     }
 
     private void MoveToAltar() {
@@ -241,95 +247,103 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 altarPosition = GetAltarPosition();
         Vector2 towards = altarPosition + new Vector2(0f, 40f);
         bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
+        if (flag2) {
+
+        }
         if (!ConsumesItself()) {
             return;
         }
         bool flag = Helper.EaseInOut3(altarStrength) > 0.4f;
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.1f;
-        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.015f;
-        _velocity2 *= 0.9f;
-        if (NPC.velocity.Length() >= 0.75f) {
-            NPC.velocity *= 0.9f;
-        }
+        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.02f;
+        _velocity2 *= 0.925f;
+        //NPC.velocity *= 0.925f;
         if ((altarPosition.Y > NPC.Center.Y && !flag) || flag) {
-            if (!flag) {
+            Vector2 towards2 = towards + Vector2.UnitX * 8f;
+            if (Math.Abs(towards2.X - NPC.Center.X) > 8f) {
+                NPC.spriteDirection = -NPC.direction;
+                NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
+            }
+
+            if (!flag2) {
                 _velocity3 = NPC.CircleMovementVector2(++NPC.ai[1] / 3f, 0.3f, 10);
-                _velocity3.Y *= 0.75f;
+                Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
+                _velocity2 *= 0.5f;
+                _velocity3.Y *= 0.9f;
                 NPC.position += _velocity2 + _velocity3;
-                if (Math.Abs(NPC.Center.X - altarPosition.X) < 40f) {
+                if (Math.Abs(NPC.Center.X - towards.X) < 50f) {
                     NPC.velocity.Y -= VELOCITYY / 2f;
                 }
-                if (NPC.Distance(altarPosition) > 50f || Math.Abs(NPC.Center.X - altarPosition.X) >= 50f) {
+                if (NPC.Distance(altarPosition) > 60f || Math.Abs(NPC.Center.X - towards.X) >= 60f) {
                     NPC.velocity.Y -= VELOCITYY * 0.75f;
-                    NPC.SlightlyMoveTo(altarPosition);
+                    NPC.SlightlyMoveTo(towards);
                 }
-                NPC.velocity.Y -= VELOCITYY;
+                NPC.velocity.Y -= VELOCITYY / 2f;
                 if (flag3) {
                     if (NPC.Opacity < 0.8f) {
-                        NPC.Opacity += OPACITYACC;
+                        NPC.Opacity += OPACITYACC * 0.75f;
                     }
                 }
                 else {
 
                 }
-                NPC.velocity.Y *= 0.75f;
+                NPC.velocity.Y *= 0.9f;
+                int max = 4;
+                if (Main.GameUpdateCount % 10 == 0) {
+                    if (NPC.ai[2] < max) {
+                        NPC.ai[2]++;
+                    }
+                }
+                int count = (int)(max - NPC.ai[2]);
                 if (flag4) {
-                    if (Main.rand.NextBool(2 + (int)(5 * MathHelper.Clamp(1f - altarStrength * 1.5f, 0f, 1f)))) {
+                    if (Main.rand.NextBool(3 + (int)((5 + count) * MathHelper.Clamp(1f - altarStrength * 1.5f - NPC.scale, 0f, 1f)))) {
                         Vector2 center = NPC.position + new Vector2(3f + Main.rand.Next(NPC.width - 3), NPC.height / 2f + 8f);
                         center.X += Main.rand.Next(-100, 100) * 0.05f;
                         center.Y += Main.rand.Next(-100, 100) * 0.05f;
-                        Vector2 velocity = center + NPC.velocity;
+                        Vector2 position = center + NPC.velocity;
                         //velocity *= MathHelper.Clamp(altarStrength + 0.5f, 0.5f, 1f);
-                        VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
+                        VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).
                                 SetupPart(1,
                                         Vector2.Zero,
-                                        velocity,
-                                        towards + Main.rand.Random2(15f),
+                                        position,
+                                        towards + Main.rand.Random2(15f) + Vector2.UnitY * 10f,
                                         Main.rand.Next(70, 85) * Main.rand.NextFloat(0.01f, 0.015f),
                                         0.8f);
                     }
                 }
             }
-            else {
-                if (NPC.Opacity > 0.05f && flag3) {
+            if (flag) {
+                if (NPC.Opacity > 0.025f) {
                     NPC.Opacity -= OPACITYACC * 1.615f;
-                    NPC.scale -= OPACITYACC * 0.5f;
                 }
+                //NPC.velocity *= 0.1f;
+                //NPC.SlightlyMoveTo(towards, 4f, 10f);
             }
-            if (flag && flag2) {
-                _velocity3 *= 0.5f;
-                NPC.velocity *= 0.5f;
-                NPC.SlightlyMoveTo(towards);
-                return;
-            }
-            if (!Main.rand.NextBool(3)) {
+            if (Main.rand.NextBool(2 + (int)(7 * MathHelper.Clamp(1f - altarStrength * 1.25f - NPC.scale, 0.25f, 1f)))) {
                 Vector2 center = NPC.position + new Vector2(6f + Main.rand.Next(NPC.width - 6), NPC.height / 2f + 10f);
                 center.X += Main.rand.Next(-100, 100) * 0.05f;
                 center.Y += Main.rand.Next(-100, 100) * 0.05f;
                 VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
-                      SetupPart(0,
+                        SetupPart(0,
                                 Vector2.Zero,
-                                center + NPC.velocity,
+                                center,
                                 towards,
                                 Main.rand.Next(70, 85) * 0.01f,
                                 NPC.Opacity + 0.15f);
             }
-
-            if (Math.Abs(NPC.velocity.X) > 0.25f) {
-                NPC.spriteDirection = -NPC.direction;
-                NPC.direction = NPC.DirectionTo(towards).X.GetDirection();
+            if (flag2) {
+                if (NPC.scale > 0f) {
+                    NPC.scale -= OPACITYACC * 0.5f;
+                }
+                _velocity2 *= 0.8f;
+                _velocity3 *= 0.8f;
+                NPC.velocity *= 0.8f;
+                NPC.SlightlyMoveTo(towards, 4f, 10f);
+                if (NPC.Opacity > 0.025f) {
+                    NPC.Opacity -= OPACITYACC * 1.615f;
+                }
+                return;
             }
-
-            return;
-        }
-
-        if (flag2) {
-            NPC.velocity *= 0.05f;
-            NPC.SlightlyMoveTo(towards, 20f, 10f);
-            if (NPC.Opacity > 0.05f) {
-                NPC.Opacity -= OPACITYACC * 1.25f;
-            }
-
             return;
         }
 

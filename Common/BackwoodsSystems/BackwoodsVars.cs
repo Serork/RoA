@@ -77,9 +77,7 @@ sealed class BackwoodsVars : ModSystem {
             _preDownedBossTimer = -1f;
 
             Color color = Color.LightGreen;
-            string text1 = Language.GetText("Mods.RoA.World.BackwoodsFree").ToString();
-            string text = text1.AddSpace() + Language.GetText("Mods.RoA.World.WorldEvil" + (WorldGen.crimson ? "1" : "2")).ToString().AddSpace() + Language.GetText("Mods.RoA.World.BackwoodsFreeLast");
-            text += "...";
+            string text = Language.GetText("Mods.RoA.World.BackwoodsFree" + (WorldGen.crimson ? "1" : "2")).ToString();
             Helper.NewMessage(text, color);
 
             if (Main.netMode == NetmodeID.Server) {

@@ -67,6 +67,8 @@ sealed class GrimDefender : ModNPC {
 
         NPC.aiStyle = -1;
 
+        NPC.dontTakeDamage = true;
+
         //NPC.npcSlots = 0.8f;
         //NPC.value = Item.buyPrice(0, 0, 0, 75);
 

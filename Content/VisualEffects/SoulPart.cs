@@ -61,6 +61,11 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             Velocity *= (Main.rand.NextVector2Circular(1f, 1f) + Vector2.One) * 0.5f;
             Scale += 0.01f;
             Opacity -= 0.0045f;
+            if (Opacity <= 0f || Vector2.Distance(Position + Velocity, MoveTo) < 40f || ShouldBeRemovedFromRenderer) {
+                Opacity = 0f;
+                TimeLeft = 0;
+                RestInPool();
+            }
         }
         else if (Type == 1) {
             Position += Velocity;
@@ -75,16 +80,17 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             Vector2 velocity2 = velocity * -counting;
             Velocity = (Velocity * 4f + velocity2) / 5f;
             Opacity -= 0.0075f;
+            if (Opacity <= 0f || Vector2.Distance(Position + Velocity, MoveTo) < 60f || ShouldBeRemovedFromRenderer) {
+                Opacity = 0f;
+                TimeLeft = 0;
+                RestInPool();
+            }
         }
         Array.Copy(Positions, 0, Positions, 1, Positions.Length - 1);
         Positions[0] = Position;
         for (int i = 0; i < Positions.Length; i++) {
             Positions[i] = Position;
             Positions[i] += Main.rand.Random2(Helper.Wave(0.25f, 1.5f, Main.rand.NextFloat(1f, 3f), 0.5f));
-        }
-        if (Opacity <= 0f || Vector2.Distance(Position, MoveTo) < 40f) {
-            TimeLeft = 0;
-            RestInPool();
         }
     }
 
