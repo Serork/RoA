@@ -15,7 +15,7 @@ static class PlayerExtensions {
             new Vector2(0f, 0f),
             new Vector2(0f, 0f),
             new Vector2(0f, 0f),
-            new Vector2(-1f, -2f),
+            new Vector2(0f, 0f),
             new Vector2(0f, 0f),
             new Vector2(0f, -2f),
             new Vector2(0f, -2f),

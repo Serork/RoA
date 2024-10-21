@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using RoA.Common.Networking;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -14,7 +12,6 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.DrawLayers;

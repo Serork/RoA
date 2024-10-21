@@ -2,10 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Utilities.Extensions;
+using RoA.Content.Buffs;
+using RoA.Core.Utility;
 
+using System;
 using System.Reflection;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.Graphics.Renderers;
@@ -61,6 +65,7 @@ sealed class RavencallersCloak : ModItem {
         private bool _resetted = false;
         private OldPositionInfo[] _oldPositionInfos = new OldPositionInfo[20];
         private float _resetTime;
+        private float _opacity;
 
         public bool RavencallersCloak { get; set; }
         public bool RavencallersCloakVisible { get; set; }
@@ -77,6 +82,17 @@ sealed class RavencallersCloak : ModItem {
 
         public override void OnHurt(Player.HurtInfo info) {
             _resetTime = RESETTIME;
+            OldPositionInfo[] playerOldPositions = _oldPositionInfos;
+            OldPositionInfo lastPositionInfo = playerOldPositions[^1];
+            for (int i = 0; i < 25; i++) {
+                int dust = Dust.NewDust(lastPositionInfo.Position, Player.width, Player.height, 240, lastPositionInfo.Velocity.X * 0.4f, lastPositionInfo.Velocity.Y * 0.4f, 110, default, 1.7f);
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].velocity.X *= 4f;
+                Main.dust[dust].velocity.Y *= 4f;
+                Main.dust[dust].velocity = (Main.dust[dust].velocity + Player.velocity) / 2f;
+            }
+
+            SoundEngine.PlaySound(SoundID.NPCDeath6 with { PitchVariance = 0.5f }, lastPositionInfo.Position);
             ResetPositions();
         }
 
@@ -125,6 +141,7 @@ sealed class RavencallersCloak : ModItem {
             RavencallerPlayer data = drawPlayer.GetModPlayer<RavencallerPlayer>();
             if (!data.Available || !drawPlayer.active || Main.gameMenu) {
                 orig(self, camera, drawPlayer);
+                _opacity = 0f;
                 return;
             }
 
@@ -146,6 +163,9 @@ sealed class RavencallersCloak : ModItem {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
                 if (lastPositionInfo.Position != Vector2.Zero) {
+                    if (_opacity < 1f) {
+                        _opacity += 0.025f;
+                    }
                     drawPlayer.velocity = lastPositionInfo.Velocity;
                     drawPlayer.direction = lastPositionInfo.Direction;
                     drawPlayer.headFrame = lastPositionInfo.HeadFrame;
@@ -156,7 +176,7 @@ sealed class RavencallersCloak : ModItem {
                     drawPlayer.head = 0;
                     drawPlayer.face = CloakFaceId;
                     drawPlayer.shroomiteStealth = true;
-                    drawPlayer.stealth = 0.5f;
+                    drawPlayer.stealth = 0.5f * _opacity;
                     drawPlayer.gfxOffY = lastPositionInfo.GfxOffY;
                     drawPlayer.skinColor = Color.Transparent;
                     SamplerState samplerState = camera.Sampler;
@@ -187,12 +207,14 @@ sealed class RavencallersCloak : ModItem {
         }
 
         public override void PostUpdate() {
+            int buffType = ModContent.BuffType<RavencallersCloakBuff>();
             if (RavencallersCloak || Main.mouseItem.type == ItemType) {
                 if (ReceivedDamage) {
                     _resetTime -= 1f;
-
                     return;
                 }
+
+                Player.AddBuff(buffType, 10);
 
                 _resetted = false;
 
@@ -211,6 +233,10 @@ sealed class RavencallersCloak : ModItem {
             }
             else {
                 if (!_resetted) {
+                    if (Player.FindBuff(buffType, out int buffIndex)) {
+                        Player.DelBuff(buffIndex);
+                    }
+
                     ResetPositions();
                     _resetted = true;
                 }

@@ -203,17 +203,18 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override bool PreAI() {
-        if (Main.dedServ) {
+        if (!_isAngry) {
             foreach (Player player in Main.ActivePlayers) {
                 if (!(player.active && !player.dead)) {
                     continue;
                 }
-                if (player.active && !player.dead && player.ItemAnimationActive && !_isAngry) {
+                if (player.active && !player.dead && player.GetSelectedItem().damage > 0 && player.ItemAnimationActive) {
                     MakeAngry();
 
                     if (Main.netMode == NetmodeID.MultiplayerClient) {
                         MultiplayerSystem.SendPacket(new RecognizeHitPacket(player, NPC.whoAmI));
                     }
+                    break;
                 }
             }
         }

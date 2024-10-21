@@ -1,8 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.Graphics.CameraModifiers;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -33,7 +39,11 @@ sealed class AltarHandler : ModSystem {
         int type = ModContent.NPCType<DruidSoul>();
         NPC druidSoul = null;
         bool flag = NPC.AnyNPCs(type);
+        bool flag6 = false;
         if (!flag) {
+            if (_altarStrength > 0f) {
+                _altarStrength -= 0.01f;
+            }
             if (_altarFactor > 0f) {
                 _altarFactor -= 0.01f;
             }
@@ -54,11 +64,23 @@ sealed class AltarHandler : ModSystem {
         float x = npcCenter.X - altarCoords.X;
         float y = npcCenter.Y - altarCoords.Y;
         float distance = (float)Math.Sqrt(x * x + y * y);
-        float maxDist = 750f;
+        float maxDist = 1000f;
         float distance2 = druidSoul.Distance(altarCoords);
         bool flag2 = distance2 < maxDist;
         bool flag3 = distance2 < radius;
-        _altarFactor = MathHelper.Lerp(_altarFactor, flag3 ? 1f : flag2 ? (float)Math.Round(1f - (distance / maxDist) * 1.25f, 2) : 0f, Math.Max(0.01f, _altarFactor * 0.1f));
+        _altarFactor = MathHelper.SmoothStep(_altarFactor, flag3 ? 1f : flag2 ? (float)Math.Round(1f - (distance / maxDist) * 1.25f, 2) : 0f, Math.Max(0.1f, _altarFactor * 0.1f));
+        _altarFactor = MathHelper.Clamp(_altarFactor, 0.01f, 1f);
+        bool flag7 = druidSoul.As<DruidSoul>().ConsumesItself() && !flag6 && _altarFactor >= 0.85f;
+        if (_altarStrength <= 0.6f && flag7 && _altarStrength >= 0.165f) {
+            SoundEngine.PlaySound(SoundID.Zombie53, altarCoords);
+            SoundEngine.PlaySound(SoundID.Zombie83, altarCoords);
+        }
+        _altarStrength += (float)Math.Round(TimeSystem.LogicDeltaTime / 5f * (flag7 ? 0.5f : (flag6 ? -1.65f : -2f)), 3);
+        _altarStrength = MathHelper.Clamp(_altarStrength, 0f, 1f);
+        if (_altarStrength >= 0.165f && _altarStrength <= 0.825f) {
+            PunchCameraModifier punchCameraModifier = new(altarCoords, (Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2(), _altarStrength * 1.25f * Main.rand.NextFloat(5f, 10f), _altarStrength * 1.25f * Main.rand.NextFloat(3f, 4.5f), 20, 200f, "Lothor");
+            Main.instance.CameraModifiers.Add(punchCameraModifier);
+        }
     }
 
     public override void OnWorldLoad() => Reset();

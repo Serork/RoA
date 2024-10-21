@@ -30,10 +30,10 @@ sealed class OvergrownAltarTE : ModTileEntity {
         if (Main.netMode != NetmodeID.Server) {
             float factor = AltarHandler.GetAltarFactor();
             Counting += TimeSystem.LogicDeltaTime / (3f - factor) * Math.Max(0.05f, Counting) * 7f;
-            var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = 1.5f };
+            var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = 2.5f * Math.Max(0.1f, factor + 0.1f) };
             var sound = SoundEngine.FindActiveSound(in style);
-            if (Counting >= 1f && (sound == null || !sound.IsPlaying)) {
-                if ((factor > 0f && Main.rand.NextChance(1f - (double)Math.Min(0f, factor - 0.5f)))/* || LothorInvasion.preArrivedLothorBoss.Item2*/) {
+            if (Counting >= 0.8f && (sound == null || !sound.IsPlaying)) {
+                if (factor > 0f && Main.rand.NextChance(1f - (double)Math.Min(0.25f, factor - 0.5f))/* || LothorInvasion.preArrivedLothorBoss.Item2*/) {
                     SoundEngine.PlaySound(style, new Microsoft.Xna.Framework.Vector2(Position.X, Position.Y) * 16f);
                 }
             }

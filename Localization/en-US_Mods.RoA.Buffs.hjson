@@ -79,3 +79,8 @@ Heavy: {
 	DisplayName: Heavy
 	Description: Press Down to increase falling speed
 }
+
+RavencallersCloakBuff: {
+	DisplayName: Cloak Stealth
+	Description: Enemies have lost true sight of you
+}

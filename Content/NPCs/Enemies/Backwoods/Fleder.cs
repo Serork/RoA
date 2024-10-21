@@ -145,7 +145,8 @@ sealed class Fleder : ModNPC {
             Point tile;
             Point? treeBranch = null;
             float nearestTile = 0f;
-            if (!centerTile.AnyWall() && ((int)(NPC.Center.Y / 16) < BackwoodsVars.FirstTileYAtCenter + 15)) {
+            bool flag2 = (int)(NPC.Center.Y / 16) > BackwoodsVars.FirstTileYAtCenter + 15;
+            if ((!centerTile.AnyWall() && flag2) || !flag2) {
                 nearestTile = NPC.SearchForNearestTile<TreeBranch>(out tile, out treeBranch, (tilePosition) => {
                     if (others.Any(npc => npc.As<Fleder>()._state == State.Sitting && npc.WithinRange(tilePosition.ToWorldCoordinates(), 20f))) {
                         return false;

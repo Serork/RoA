@@ -812,6 +812,46 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+        for (int x2 = x - 10; x2 < x + 10; x2++) {
+            bool flag2 = false;
+            for (int y2 = y - 15; y2 < y - 5; y2++) {
+                if (flag2) {
+                    break;
+                }
+                if (Main.tile[x2, y2].ActiveTile(_elderwoodTileType)) {
+                    int count = 0;
+                    for (int i3 = 0; i3 < 2; i3++) {
+                        for (int j3 = 0; j3 < 3; j3++) {
+                            if (i3 != 0 || j3 != 0) {
+                                if (Main.tile[x2 + i3, y2 + j3].ActiveTile(_elderwoodTileType)) {
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                    if (count == 5) {
+                        bool flag3 = true;
+                        bool flag4 = true;
+                        if (Main.tile[x2 - 1, y2 + 2].HasTile && Main.tile[x2, y2 + 3].HasTile) {
+                            flag3 = false;
+                        }
+                        if (Main.tile[x2 + 2, y2 + 2].HasTile && Main.tile[x2 + 1, y2 + 3].HasTile) {
+                            flag4 = false;
+                        }
+                        if (Main.tile[x2, y2 - 1].HasTile || Main.tile[x2 + 1, y2 - 1].HasTile) {
+                            flag3 = true;
+                        }
+                        if (Main.tile[x2, y2 - 1].HasTile || Main.tile[x2 - 1, y2 - 1].HasTile) {
+                            flag4 = true;
+                        }
+                        if (!flag3 || !flag4) {
+                            WorldGen.KillTile(x2 + (flag4 ? 1 : 0), y2);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void BackwoodsLootRooms(GenerationProgress progress, GameConfiguration configuration) {
@@ -2248,7 +2288,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int num1048 = 0;
         for (int i = Left; i < Right; i++) {
             //_progress.Set(((float)i - Left) / (Right - Left));
-            for (int j = WorldGenHelper.SafeFloatingIslandY - 20; j < Bottom; j++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY - 25; j < Bottom; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (WorldGenHelper.IsCloud(i, j)) {
                     continue;
@@ -2282,24 +2322,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         bool edgeLeft2 = i > topLeftTileX + _biomeWidth / 3 + 2, edgeRight2 = i < topRightTileX - _biomeWidth / 3 - 2;
                         int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY;
                         killTile = false;
-                        if (!edgeLeft && !edgeRight) {
-                            if (j < minY) {
-                                killTile = true;
-                                killSand = true;
-                                if (!edgeLeft2 && !edgeRight2) {
-                                    spreadY += _random.Next(-2, 3);
-                                }
-                            }
-                        }
-                        else {
-                            if (j > Top - 10) {
-                                //num1047 += _random.Next(-1, 2);
-                                //if (num1047 < 0)
-                                //    num1047 = 0;
-
-                                //if (num1047 > 5)
-                                //    num1047 = 5;
-                                //replace = killTile = _random.NextBool(4);
+                        if (j < minY) {
+                            killTile = true;
+                            killSand = true;
+                            if (!edgeLeft2 && !edgeRight2) {
+                                spreadY += _random.Next(-2, 3);
                             }
                         }
                     }

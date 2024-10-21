@@ -66,14 +66,20 @@ sealed class OvergrownAltar : ModTile {
         if (overgrownAltarTE != null) {
             float counting = MathHelper.Clamp(1f - overgrownAltarTE.Counting, 0f, 1f);
             float altarFactor = AltarHandler.GetAltarFactor();
-            float factor = Math.Max(0.1f, MathHelper.Clamp(counting, 0f, 0.98f) * (1f + altarFactor));
+            float factor = Math.Max(0.1f, (MathHelper.Clamp(counting, 0f, 0.98f) + altarFactor * 0.15f) * (1f + altarFactor * 0.5f));
             factor = 1f - factor;
-            float value = Math.Clamp((factor > 0.5f ? 1f - factor : factor) + 0.5f, 0.25f, 1f);
-            value = Math.Clamp(value, 0.25f, 1f) * MathHelper.Clamp(altarFactor + 0.75f, 1f, 1.5f);
-            Vector3 color3 = new(0.45f, 0.85f, 0.4f);
-            r = color3.X * 0.75f * value;
-            g = color3.Y * 0.75f * value;
-            b = color3.Z * 0.75f * value;
+            float value = Math.Clamp((factor > 0.5f ? 1f - factor : factor) + 0.5f, altarFactor, 1f);
+            value = Math.Clamp(value, 0.5f, 2f) * 1.25f * MathHelper.Clamp(altarFactor + 0.25f, 1f, 1.25f);
+            bool flag = false;
+            float altarStrength = AltarHandler.GetAltarStrength();
+            float mult = flag ? 1f : Helper.EaseInOut3(altarStrength);
+            //value = MathHelper.Clamp(value, 0f, 1.5f);
+            float r2 = MathHelper.Lerp(0.45f, 0.9f, mult);
+            float g2 = MathHelper.Lerp(0.85f, 0.2f, mult);
+            float b2 = MathHelper.Lerp(0.4f, 0.3f, mult);
+            r = r2 * 0.65f * value;
+            g = g2 * 0.65f * value;
+            b = b2 * 0.65f * value;
         }
     }
 
@@ -94,7 +100,8 @@ sealed class OvergrownAltar : ModTile {
             float factor = counting;
             Color color = Lighting.GetColor(i, j);
             Tile tile = Main.tile[i, j];
-            int frame = /*5 - */(int)(factor * 6)/* + (flag || OvergrownCoords.Strength > 0.25f ? 6 : 0)*/;
+            bool flag = false;
+            int frame = /*5 - */(int)(factor * 6) + (flag || AltarHandler.GetAltarStrength() > 0.5f ? 6 : 0);
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;

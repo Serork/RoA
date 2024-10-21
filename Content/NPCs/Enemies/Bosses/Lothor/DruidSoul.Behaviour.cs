@@ -4,6 +4,7 @@ using RoA.Common;
 using RoA.Common.VisualEffects;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.VisualEffects;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -11,12 +12,14 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class DruidSoul : RoANPC {
     private const float OPACITYACC = 0.005f;
+    private const float VELOCITYY = 0.25f;
 
     private Vector2 _velocity2, _velocity3;
 
@@ -48,14 +51,17 @@ sealed partial class DruidSoul : RoANPC {
         return false;
     }
 
-    private bool ConsumesItself() {
+    public bool ConsumesItself() {
         Vector2 altarPosition = GetAltarPosition();
         Vector2 npcCenter = NPC.Center;
         bool closeToAltar = Math.Abs(altarPosition.X - npcCenter.X) < 40f && altarPosition.Y - npcCenter.Y < 80f;
-        return false;
+        Player player = Main.player[NPC.target];
+        bool flag = NPC.Distance(altarPosition) <= 150f && Collision.CanHit(NPC.Center, 2, 2, altarPosition, 2, 2);
+        bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 65f && player.Distance(altarPosition) < 100f) || (flag && (player.Distance(NPC.Center) < 125f));
+        return NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && Collision.CanHitLine(player.Center, 2, 2, altarPosition - Vector2.One * 4f, 2, 2));
     }
 
-    private static Vector2 GetAltarPosition() => AltarHandler.GetAltarPosition().ToWorldCoordinates();
+    private static Vector2 GetAltarPosition() => AltarHandler.GetAltarPosition().ToWorldCoordinates() - Vector2.UnitX * 5f;
 
     private void KillNPCIfIsntInBackwoods() {
         int target = NPC.target;
@@ -84,11 +90,25 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     private void NormalBehaviourHandler() {
-        if (ConsumesItself()) {
-            return;
-        }
+        //if (ConsumesItself()) {
+        //    return;
+        //}
 
         Movement();
+
+        if (NPC.Opacity <= 0.05f && Helper.EaseInOut3(AltarHandler.GetAltarStrength()) > 0.925f) {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "AltarEcho") { Volume = 0.45f }, AltarHandler.GetAltarPosition().ToWorldCoordinates());
+
+            PunchCameraModifier punchCameraModifier = new PunchCameraModifier(NPC.Center, ((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2()), 12f, 20f, 10, 1000f, "Druid Soul");
+            Main.instance.CameraModifiers.Add(punchCameraModifier);
+            //OvergrownCoords.Strength = OvergrownCoords.Factor = 1f;
+            //NPC.SetEventFlagCleared(ref LothorInvasion.preArrivedLothorBoss.Item1, -1);
+            //if (Main.netMode == NetmodeID.Server) {
+            //    NetMessage.SendData(MessageID.WorldData);
+            //}
+            NPC.KillNPC();
+            return;
+        }
 
         float minOpacity = 0.4f;
         if (NPC.Opacity > minOpacity) {
@@ -97,6 +117,10 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     private void Movement() {
+        if (ConsumesItself()) {
+            return;
+        }
+
         Player player3 = Main.player[NPC.target];
         float num66 = 0.1f;
         NPC.noTileCollide = true;
@@ -190,11 +214,15 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     private void MoveToAltar() {
+        Player player3 = Main.player[NPC.target];
         Vector2 altarCoords = GetAltarPosition();
-        float distanceBetween = Math.Clamp(NPC.Distance(altarCoords), 0f, 600f) * 0.01f;
+        if (NPC.Distance(altarCoords) < 45f || player3.Center.Y < NPC.Center.Y) {
+            NPC.velocity.Y -= VELOCITYY * 0.75f;
+        }
+        float distanceBetween = Math.Clamp(NPC.Distance(altarCoords), 0.01f, 600f) * 0.01f;
         Vector2 moveTo = NPC.DirectionFrom(altarCoords);
         Rectangle altarArea = Utils.CenteredRectangle(new Vector2((float)(altarCoords.X), (float)(altarCoords.Y)), Vector2.One * 5f);
-        float speed = 0.1f + distanceBetween * 0.001f;
+        float speed = 0.1f + distanceBetween * 0.0007f;
         _velocity2 += moveTo * -speed;
         _velocity3 = NPC.CircleMovementVector2(++NPC.ai[1] / 3f);
         _velocity2 += NPC.DirectionTo(altarArea.ClosestPointInRect(NPC.Center)) * speed;
@@ -207,13 +235,92 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     private void AbsorbSoulHandler() {
-        if (!ConsumesItself()) {
+        float altarStrength = AltarHandler.GetAltarStrength();
+        Vector2 altarPosition = GetAltarPosition();
+        Vector2 towards = altarPosition + new Vector2(0f, 40f);
+        bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
+        if (flag2) {
+            NPC.velocity *= 0.05f;
+            NPC.SlightlyMoveTo(towards, 20f, 10f);
+            if (NPC.Opacity > 0.05f) {
+                NPC.Opacity -= OPACITYACC * 1.25f;
+            }
             return;
         }
 
-        NPC.velocity *= 0.8f;
+        if (!ConsumesItself()) {
+            return;
+        }
+        bool flag = Helper.EaseInOut3(altarStrength) > 0.4f;
+        bool flag3 = Helper.EaseInOut3(altarStrength) > 0.1f;
+        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.02f;
+        _velocity2 *= 0.9f;
+        if (NPC.velocity.Length() >= 2f) {
+            NPC.velocity *= 0.8f;
+        }
+        if ((altarPosition.Y > NPC.Center.Y && !flag) || flag) {
+            _velocity3 = NPC.CircleMovementVector2(++NPC.ai[1] / 3f, 0.3f, 10);
+            _velocity3 *= 1.5f;
+            NPC.position += _velocity2 + _velocity3;
+            if (!flag) {
+                if (Math.Abs(NPC.Center.X - altarPosition.X) < 40f) {
+                    NPC.velocity.Y -= VELOCITYY / 2f;
+                }
+                if (NPC.Distance(altarPosition) > 50f || Math.Abs(NPC.Center.X - altarPosition.X) >= 50f) {
+                    NPC.velocity.Y -= VELOCITYY * 0.75f;
+                    NPC.SlightlyMoveTo(altarPosition);
+                }
+                NPC.velocity.Y -= VELOCITYY;
+                if (NPC.Opacity < 0.8f && flag3) {
+                    NPC.Opacity += OPACITYACC * 0.25f;
+                }
+                if (flag4) {
+                    if (!Main.rand.NextBool(2)) {
+                        Vector2 center = NPC.position + new Vector2(3f + Main.rand.Next(NPC.width - 3), NPC.height / 2f + 8f);
+                        center.X += Main.rand.Next(-100, 100) * 0.05f;
+                        center.Y += Main.rand.Next(-100, 100) * 0.05f;
+                        Vector2 velocity = center + NPC.velocity;
+                        //velocity *= MathHelper.Clamp(altarStrength + 0.5f, 0.5f, 1f);
+                        VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
+                                SetupPart(1,
+                                        Vector2.Zero,
+                                        velocity,
+                                        towards + Main.rand.Random2(15f),
+                                        Main.rand.Next(70, 85) * Main.rand.NextFloat(0.01f, 0.015f),
+                                        0.8f);
+                    }
+                }
+            }
+            else {
+                NPC.velocity *= 0.1f;
+                NPC.SlightlyMoveTo(towards);
+                if (NPC.Opacity > 0.05f && flag3) {
+                    NPC.Opacity -= OPACITYACC * 1.615f;
+                    NPC.scale -= OPACITYACC * 0.5f;
+                }
+            }
+            if (!Main.rand.NextBool(3)) {
+                Vector2 center = NPC.position + new Vector2(6f + Main.rand.Next(NPC.width - 6), NPC.height / 2f + 10f);
+                center.X += Main.rand.Next(-100, 100) * 0.05f;
+                center.Y += Main.rand.Next(-100, 100) * 0.05f;
+                VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
+                      SetupPart(0,
+                                Vector2.Zero,
+                                center + NPC.velocity,
+                                towards,
+                                Main.rand.Next(70, 85) * 0.01f,
+                                NPC.Opacity + 0.15f);
+            }
 
-        SpawnEffects();
+            if (Math.Abs(NPC.velocity.X) > 0.25f) {
+                NPC.spriteDirection = -NPC.direction;
+                NPC.direction = NPC.DirectionTo(altarPosition).X.GetDirection();
+            }
+
+            return;
+        }
+
+        //SpawnEffects();
     }
 
     private void SpawnEffects() {
