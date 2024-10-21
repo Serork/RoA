@@ -117,7 +117,9 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     private void Movement() {
-        if (ConsumesItself()) {
+        bool flag2 = Helper.EaseInOut3(AltarHandler.GetAltarStrength()) > 0.65f;
+
+        if (ConsumesItself() || flag2) {
             return;
         }
 
@@ -239,31 +241,21 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 altarPosition = GetAltarPosition();
         Vector2 towards = altarPosition + new Vector2(0f, 40f);
         bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
-        if (flag2) {
-            NPC.velocity *= 0.05f;
-            NPC.SlightlyMoveTo(towards, 20f, 10f);
-            if (NPC.Opacity > 0.05f) {
-                NPC.Opacity -= OPACITYACC * 1.25f;
-            }
-
-            return;
-        }
-
         if (!ConsumesItself()) {
             return;
         }
         bool flag = Helper.EaseInOut3(altarStrength) > 0.4f;
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.1f;
-        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.02f;
-        _velocity2 *= 0.925f;
-        if (NPC.velocity.Length() >= 2f) {
-            NPC.velocity *= 0.925f;
+        bool flag4 = Helper.EaseInOut3(altarStrength) > 0.015f;
+        _velocity2 *= 0.9f;
+        if (NPC.velocity.Length() >= 0.75f) {
+            NPC.velocity *= 0.9f;
         }
         if ((altarPosition.Y > NPC.Center.Y && !flag) || flag) {
-            _velocity3 = NPC.CircleMovementVector2(++NPC.ai[1] / 3f, 0.3f, 10);
-            _velocity3 *= 1.5f;
-            NPC.position += _velocity2 + _velocity3;
             if (!flag) {
+                _velocity3 = NPC.CircleMovementVector2(++NPC.ai[1] / 3f, 0.3f, 10);
+                _velocity3.Y *= 0.75f;
+                NPC.position += _velocity2 + _velocity3;
                 if (Math.Abs(NPC.Center.X - altarPosition.X) < 40f) {
                     NPC.velocity.Y -= VELOCITYY / 2f;
                 }
@@ -272,11 +264,17 @@ sealed partial class DruidSoul : RoANPC {
                     NPC.SlightlyMoveTo(altarPosition);
                 }
                 NPC.velocity.Y -= VELOCITYY;
-                if (NPC.Opacity < 0.8f && flag3) {
-                    NPC.Opacity += OPACITYACC * 0.25f;
+                if (flag3) {
+                    if (NPC.Opacity < 0.8f) {
+                        NPC.Opacity += OPACITYACC;
+                    }
                 }
+                else {
+
+                }
+                NPC.velocity.Y *= 0.75f;
                 if (flag4) {
-                    if (!Main.rand.NextBool(2)) {
+                    if (Main.rand.NextBool(2 + (int)(5 * MathHelper.Clamp(1f - altarStrength * 1.5f, 0f, 1f)))) {
                         Vector2 center = NPC.position + new Vector2(3f + Main.rand.Next(NPC.width - 3), NPC.height / 2f + 8f);
                         center.X += Main.rand.Next(-100, 100) * 0.05f;
                         center.Y += Main.rand.Next(-100, 100) * 0.05f;
@@ -293,12 +291,16 @@ sealed partial class DruidSoul : RoANPC {
                 }
             }
             else {
-                NPC.velocity *= 0.1f;
-                NPC.SlightlyMoveTo(towards);
                 if (NPC.Opacity > 0.05f && flag3) {
                     NPC.Opacity -= OPACITYACC * 1.615f;
                     NPC.scale -= OPACITYACC * 0.5f;
                 }
+            }
+            if (flag && flag2) {
+                _velocity3 *= 0.5f;
+                NPC.velocity *= 0.5f;
+                NPC.SlightlyMoveTo(towards);
+                return;
             }
             if (!Main.rand.NextBool(3)) {
                 Vector2 center = NPC.position + new Vector2(6f + Main.rand.Next(NPC.width - 6), NPC.height / 2f + 10f);
@@ -316,6 +318,16 @@ sealed partial class DruidSoul : RoANPC {
             if (Math.Abs(NPC.velocity.X) > 0.25f) {
                 NPC.spriteDirection = -NPC.direction;
                 NPC.direction = NPC.DirectionTo(towards).X.GetDirection();
+            }
+
+            return;
+        }
+
+        if (flag2) {
+            NPC.velocity *= 0.05f;
+            NPC.SlightlyMoveTo(towards, 20f, 10f);
+            if (NPC.Opacity > 0.05f) {
+                NPC.Opacity -= OPACITYACC * 1.25f;
             }
 
             return;

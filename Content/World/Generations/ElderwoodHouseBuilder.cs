@@ -248,7 +248,7 @@ public class HouseBuilderCustom {
             if (!GenBase._tiles[x, y].HasTile)
                 return UnitApply(origin, x, y, args);
 
-            if (TileID.Sets.BasicChest[GenBase._tiles[x, y].TileType])
+            if (TileID.Sets.BasicChest[GenBase._tiles[x, y].TileType] || !Main.tileSolid[GenBase._tiles[x, y].TileType])
                 return Fail();
 
             return UnitApply(origin, x, y, args);

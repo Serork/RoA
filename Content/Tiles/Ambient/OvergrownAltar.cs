@@ -65,14 +65,16 @@ sealed class OvergrownAltar : ModTile {
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
             float counting = overgrownAltarTE.Counting2;
-            float altarFactor = AltarHandler.GetAltarFactor();
+            float pureFactor = AltarHandler.GetAltarFactor();
+            float altarFactor = MathHelper.Clamp(pureFactor, 0.5f, 2f);
             float getFactor(float counting, float altarFactor) {
-                return Math.Max(0.1f, (MathHelper.Clamp(counting, 0f, 0.98f) + altarFactor * 0.5f) * (1f + altarFactor * 0.5f));
+                return Math.Max(0.1f, (MathHelper.Clamp(counting, 0f, 0.98f) + altarFactor * 0.25f) * (1f + altarFactor * 0.5f));
             }
             float factor = getFactor(counting, altarFactor);
-            factor = getFactor(counting, 1f) - factor;
+            factor = getFactor(1f, 0f) - factor;
             float value = Math.Clamp((factor > 0.5f ? 1f - factor : factor) + 0.5f, altarFactor, 1f);
-            value = Math.Clamp(value, 0.5f, 5f) * 1.25f * MathHelper.Clamp(altarFactor + 0.25f, 1f, 3f);
+            value = Math.Clamp(value + altarFactor * 0.5f, 0.25f, 5f) * 1.25f * MathHelper.Clamp((MathHelper.Clamp(altarFactor, 0.5f, 2f) + 0.5f) * MathHelper.Clamp(counting, 0.5f, 1f), 1f, 2f);
+            value += pureFactor * 0.25f;
             bool flag = false;
             float altarStrength = AltarHandler.GetAltarStrength();
             float mult = flag ? 1f : Helper.EaseInOut3(altarStrength);
@@ -80,9 +82,12 @@ sealed class OvergrownAltar : ModTile {
             float r2 = MathHelper.Lerp(0.45f, 0.9f, mult);
             float g2 = MathHelper.Lerp(0.85f, 0.2f, mult);
             float b2 = MathHelper.Lerp(0.4f, 0.3f, mult);
-            r = r2 * 0.65f * value;
-            g = g2 * 0.65f * value;
-            b = b2 * 0.65f * value;
+            float value2 = 0.25f + MathHelper.Clamp(altarFactor, 0.3f, 0.65f) * (0.7f + 0.2f * MathHelper.Clamp(counting, 0.5f, 1f));
+            float value3 = value2 * value;
+            value3 *= 0.75f;
+            r = r2 * value3;
+            g = g2 * value3;
+            b = b2 * value3;
         }
     }
 
@@ -104,7 +109,7 @@ sealed class OvergrownAltar : ModTile {
             Color color = Lighting.GetColor(i, j);
             Tile tile = Main.tile[i, j];
             bool flag = false;
-            int frame = /*5 - */(int)(factor * 6) + (flag || AltarHandler.GetAltarStrength() > 0.5f ? 6 : 0);
+            int frame = /*5 - */(int)(factor * 6) + (flag || AltarHandler.GetAltarStrength() > 0.3f ? 6 : 0);
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;

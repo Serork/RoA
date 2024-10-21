@@ -50,7 +50,7 @@ sealed class MiracleMint : PlantBase {
         float counting = TileHelper.GetTE<MiracleMintTE>(i, j).Counting;
         float factor = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
         float lightValue = (factor > 0.5f ? 1f - factor : factor) + 0.5f;
-        lightValue *= 0.65f;
+        lightValue *= 0.75f;
         if (IsGrown(i, j)) {
             r = 0.3f * lightValue;
             g = 0.6f * lightValue;

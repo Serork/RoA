@@ -2523,9 +2523,23 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             bool flag = Math.Abs(cliffX - cliffTileCoords.X) > 20;
             while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
                 startY++;
+                if (first) {
+                    randomness += _random.Next(-1, 2);
+                    if (randomness < 0)
+                        randomness = 0;
+                    if (randomness > 5)
+                        randomness = 5;
+                }
             }
             if ((_random.NextChance(0.75) && flag) || !flag) {
                 cliffX -= _toLeft ? -1 : 1;
+                if (first) {
+                    randomness += _random.Next(-1, 2);
+                    if (randomness < 0)
+                        randomness = 0;
+                    if (randomness > 5)
+                        randomness = 5;
+                }
             }
             bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
             int testJ = startY;
@@ -2747,6 +2761,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GrowTrees() {
         int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX : Left) : Left;
         int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX : Right) : Right;
+        for (int i = left - 50; i <= right + 50; i++) {
+            if (i < left - 10 || i > right + 10) {
+                for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + EdgeY; j++) {
+                    Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                    if (WorldGenHelper.ActiveTile(i, j, _grassTileType) && !_backwoodsPlants.Contains(WorldGenHelper.GetTileSafely(i, j - 1).TileType) && tile.Slope == SlopeType.Solid && !tile.IsHalfBlock) {
+                        WorldGen.GrowTree(i, j);
+                    }
+                }
+            }
+        }
         for (int i = left - 10; i <= right + 10; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + EdgeY; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
