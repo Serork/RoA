@@ -319,17 +319,19 @@ sealed partial class DruidSoul : RoANPC {
                 //NPC.velocity *= 0.1f;
                 //NPC.SlightlyMoveTo(towards, 4f, 10f);
             }
-            if (Main.rand.NextBool(2 + (int)(7 * MathHelper.Clamp(1f - altarStrength * 1.25f - NPC.scale, 0.25f, 1f)))) {
-                Vector2 center = NPC.position + new Vector2(6f + Main.rand.Next(NPC.width - 6), NPC.height / 2f + 10f);
-                center.X += Main.rand.Next(-100, 100) * 0.05f;
-                center.Y += Main.rand.Next(-100, 100) * 0.05f;
-                VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
-                        SetupPart(0,
-                                Vector2.Zero,
-                                center,
-                                towards,
-                                Main.rand.Next(70, 85) * 0.01f,
-                                NPC.Opacity + 0.15f);
+            if (NPC.velocity.Length() < 2.5f) {
+                if (Main.rand.NextBool(2 + (int)(7 * MathHelper.Clamp(1f - altarStrength * 1.25f - NPC.scale, 0.25f, 1f)))) {
+                    Vector2 center = NPC.position + new Vector2(6f + Main.rand.Next(NPC.width - 6), NPC.height / 2f + 10f);
+                    center.X += Main.rand.Next(-100, 100) * 0.05f;
+                    center.Y += Main.rand.Next(-100, 100) * 0.05f;
+                    VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
+                            SetupPart(0,
+                                    Vector2.Zero,
+                                    center,
+                                    towards,
+                                    Main.rand.Next(70, 85) * 0.01f,
+                                    NPC.Opacity + 0.15f);
+                }
             }
             if (flag2) {
                 if (NPC.scale > 0f) {
