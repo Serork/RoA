@@ -32,7 +32,7 @@ sealed class OvergrownAltarTE : ModTileEntity {
         float counting = MathHelper.Clamp(1f - Counting, 0f, 1f);
         float factor = AltarHandler.GetAltarFactor();
         Counting2 = MathHelper.Lerp(Counting2, counting, factor > 0.5f ? Math.Max(0.1f, counting * 0.1f) : counting < 0.5f ? 0.075f : Math.Max(0.05f, counting * 0.025f));
-        Counting += TimeSystem.LogicDeltaTime / (3f - factor * 2.5f) * Math.Max(0.05f, Counting) * 7f;
+        Counting += TimeSystem.LogicDeltaTime / (3f - MathHelper.Min(0.9f, factor) * 2.5f) * Math.Max(0.05f, Counting) * 7f;
         var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = 2.5f * Math.Max(0.3f, factor + 0.1f) };
         var sound = SoundEngine.FindActiveSound(in style);
         if (Counting > 0.8f) {
