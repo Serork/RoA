@@ -64,17 +64,18 @@ sealed class OvergrownAltar : ModTile {
 
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
-            float counting = overgrownAltarTE.Counting2;
+            float counting = overgrownAltarTE.Counting2 * 0.95f;
             float altarFactor = AltarHandler.GetAltarFactor();
             float value = 0.5f + 0.3f * altarFactor;
-            value += (1f - MathHelper.Clamp(counting, 0f, 0.98f)) * 0.4f;
+            value += (1f - MathHelper.Clamp(counting, 0f, 0.98f)) * 0.55f;
             bool flag = false;
             float altarStrength = AltarHandler.GetAltarStrength();
             float mult = flag ? 1f : Helper.EaseInOut3(MathHelper.Clamp(altarStrength * 2f, 0f, 1f));
-            //value = MathHelper.Clamp(value, 0f, 1.5f);
             float r2 = MathHelper.Lerp(0.45f, 0.9f, mult);
             float g2 = MathHelper.Lerp(0.85f, 0.2f, mult);
             float b2 = MathHelper.Lerp(0.4f, 0.3f, mult);
+            float altarStrength2 = altarStrength * 2f;
+            value *= Math.Max(0.5f, 1f - (altarStrength2 > 0.5f ? 1f - altarStrength2 : altarStrength2));
             r = r2 * value;
             g = g2 * value;
             b = b2 * value;
