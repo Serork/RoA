@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -123,6 +125,8 @@ sealed class OvergrownAltar : ModTile {
             Color color2 = new(255, 255, 200, 200);
             float mult = Helper.EaseInOut3(strength);
             float factor3 = AltarHandler.GetAltarFactor();
+            float factor4 = factor3 * 1.5f;
+            factor3 *= Math.Max(0.75f, 1f - (factor4 > 0.5f ? 1f - factor4 : factor4));
             spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
                 spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
