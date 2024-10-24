@@ -75,7 +75,7 @@ sealed class OvergrownAltar : ModTile {
             float g2 = MathHelper.Lerp(0.85f, 0.2f, mult);
             float b2 = MathHelper.Lerp(0.4f, 0.3f, mult);
             float altarStrength2 = altarStrength * 1.5f;
-            value *= Math.Max(0.5f, 1f - (altarStrength2 > 0.5f ? 1f - altarStrength2 : altarStrength2));
+            value *= Math.Max(0.75f, 1f - (altarStrength2 > 0.5f ? 1f - altarStrength2 : altarStrength2));
             r = r2 * value;
             g = g2 * value;
             b = b2 * value;
