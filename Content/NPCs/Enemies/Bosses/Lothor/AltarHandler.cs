@@ -72,8 +72,8 @@ sealed class AltarHandler : ModSystem {
         _altarFactor = MathHelper.Clamp(_altarFactor, 0.01f, 1f);
         bool flag7 = druidSoul.As<DruidSoul>().ConsumesItself() && !flag6 && _altarFactor >= 0.85f;
         if (_altarStrength <= 0.6f && flag7 && _altarStrength >= 0.165f) {
-            SoundEngine.PlaySound(SoundID.Zombie53 with { PitchVariance = 0.3f, Volume = 0.5f }, altarCoords);
-            SoundEngine.PlaySound(SoundID.Zombie83 with { PitchVariance = 0.3f, Volume = 0.5f }, altarCoords);
+            SoundEngine.PlaySound(SoundID.Zombie53 with { PitchVariance = 0.3f, Volume = 0.2f }, altarCoords);
+            SoundEngine.PlaySound(SoundID.Zombie83 with { PitchVariance = 0.3f, Volume = 0.2f }, altarCoords);
         }
         _altarStrength += (float)Math.Round(TimeSystem.LogicDeltaTime / 5f * (flag7 ? 0.5f : (flag6 ? -1.65f : -2f)), 3);
         _altarStrength = MathHelper.Clamp(_altarStrength, 0f, 1f);
