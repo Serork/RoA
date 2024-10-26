@@ -327,7 +327,7 @@ sealed partial class DruidSoul : RoANPC {
     private void AbsorbSoulHandler() {
         float altarStrength = AltarHandler.GetAltarStrength();
         Vector2 altarPosition = GetAltarPosition();
-        Vector2 towards = altarPosition + new Vector2(-2f, 40f);
+        Vector2 towards = altarPosition + new Vector2(0f, 40f);
         bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
         if (flag2) {
 
@@ -358,7 +358,7 @@ sealed partial class DruidSoul : RoANPC {
                 _velocity3 = circle;
                 //_velocity3 += Vector2.UnitY * 1f;
                 //_velocity3 += Vector2.UnitX * 1f;
-                Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
+                Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards - Vector2.UnitX * 2f);
                 _velocity2 *= 0.8f;
                 //_velocity3.Y *= 0.8f;
                 _velocity3.Y *= 0.9f * (1f - altarStrength);
@@ -461,7 +461,7 @@ sealed partial class DruidSoul : RoANPC {
                     NPC.scale -= OPACITYACC * 0.5f;
                 }
                 NPC.velocity *= 0.85f;
-                NPC.SlightlyMoveTo(towards, 4f, 10f);
+                NPC.SlightlyMoveTo(towards - Vector2.UnitX * 2f, 4f, 10f);
                 NPC.velocity *= 0.75f;
                 if (NPC.Opacity > 0.01f) {
                     NPC.Opacity -= OPACITYACC * 1.6f;
