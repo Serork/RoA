@@ -27,17 +27,12 @@ sealed partial class DruidSoul : RoANPC {
     private SlotId _lothorSummonSound;
     private bool _lothorSummonSoundPlayed;
 
-    public override bool PreAI() {
+    public override void AI() {
         KillNPCIfIsntInBackwoods();
 
-        return base.PreAI();
-    }
-
-    public override void AI() {
         if (Appearance()) {
             return;
         }
-
         UpdatePositionsAndRotation();
         NormalBehaviourHandler();
         AbsorbSoulHandler();
@@ -138,6 +133,7 @@ sealed partial class DruidSoul : RoANPC {
 
         bool flag4 = Helper.EaseInOut3(altarStrength) > 0.0025f;
         if (!flag4) {
+            NPC.localAI[3] = 0f;
             /*NPC.ai[1] = */NPC.ai[2] = NPC.ai[3] = 0f;
             _lothorSummonSoundPlayed = false;
             if (SoundEngine.TryGetActiveSound(_lothorSummonSound, out ActiveSound activeSound)) {
@@ -403,7 +399,7 @@ sealed partial class DruidSoul : RoANPC {
                     if (Main.rand.NextBool(2 + (int)((3 + count) * MathHelper.Clamp(1f - altarStrength * 2f - (1f - NPC.scale), 0f, 1f)))) {
                         if (!_lothorSummonSoundPlayed) {
                             _lothorSummonSoundPlayed = true;
-                            _lothorSummonSound = SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorAltarSummon2") { Volume = 1f }, NPC.Center);
+                            _lothorSummonSound = SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorAltarSummon3") { Volume = 1f }, NPC.Center);
                         }
                         Vector2 center = NPC.position + new Vector2(3f + Main.rand.Next(NPC.width - 3), NPC.height / 2f + 8f);
                         center.X += Main.rand.Next(-100, 100) * 0.05f;
