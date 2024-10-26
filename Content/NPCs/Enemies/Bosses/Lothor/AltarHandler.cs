@@ -70,7 +70,7 @@ sealed class AltarHandler : ModSystem {
         bool flag3 = distance2 < radius;
         _altarFactor = MathHelper.SmoothStep(_altarFactor, flag3 ? 1f : flag2 ? (float)Math.Round(1f - (distance / maxDist) * 1.25f, 2) : 0f, Math.Max(0.1f, _altarFactor * 0.1f));
         _altarFactor = MathHelper.Clamp(_altarFactor, 0.01f, 1f);
-        bool flag7 = druidSoul.As<DruidSoul>().ConsumesItself() && !flag6 && _altarFactor >= 0.85f;
+        bool flag7 = druidSoul.As<DruidSoul>().ShouldConsumeItsEnergy && !flag6 && _altarFactor >= 0.85f;
         if (_altarStrength <= 0.6f && flag7 && _altarStrength >= 0.165f) {
             SoundEngine.PlaySound(SoundID.Zombie53 with { PitchVariance = 0.3f, Volume = 0.2f }, altarCoords);
             SoundEngine.PlaySound(SoundID.Zombie83 with { PitchVariance = 0.3f, Volume = 0.2f }, altarCoords);

@@ -28,12 +28,22 @@ sealed partial class DruidSoul : RoANPC {
     private bool _lothorSummonSoundPlayed;
     private float _y;
 
+    public bool ShouldConsumeItsEnergy => ConsumesItself();
+
     public override void AI() {
         KillNPCIfIsntInBackwoods();
 
         if (Appearance()) {
             return;
         }
+        //if (ConsumesItself() && !ShouldConsumeItsEnergy) {
+        //    if (StateTimer < 2f) {
+        //        StateTimer += TimeSystem.LogicDeltaTime * 5f;
+        //    }
+        //}
+        //else {
+        //    StateTimer = 1f;
+        //}
         UpdatePositionsAndRotation();
         NormalBehaviourHandler();
         AbsorbSoulHandler();
@@ -56,13 +66,13 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 npcCenter = NPC.Center;
         Player player = Main.player[NPC.target];
         bool playerCanReachAltar = Collision.CanHit(player.Center, 0, 0, altarPosition, 0, 0);
-        bool closeToAltar =  (playerCanReachAltar || Math.Abs(altarPosition.X - npcCenter.X) < 40f) && altarPosition.Y - npcCenter.Y < 80f;
+        bool closeToAltar =  (/*playerCanReachAltar || */Math.Abs(altarPosition.X - npcCenter.X) < 40f) && altarPosition.Y - npcCenter.Y < 80f;
         bool flag = NPC.Distance(altarPosition) <= 200f && (playerCanReachAltar || Collision.CanHit(NPC.Center, 2, 2, altarPosition, 2, 2) || NPC.Top.Y + 4f > altarPosition.Y);
         float altarStrength = AltarHandler.GetAltarStrength();
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.0025f;
-        bool flag2 = flag3 ? player.Distance(altarPosition) < 135f : player.Distance(NPC.Center) < 135f;
+        bool flag2 = flag3 ? player.Distance(altarPosition) < 130f : player.Distance(NPC.Center) < 130f;
         bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 100f && player.Distance(altarPosition) < 105f) || (flag && flag2);
-        return Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && (playerCanReachAltar));
+        return NPC.Top.Y < altarPosition.Y && (Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && (playerCanReachAltar)));
     }
 
     private static Vector2 GetAltarPosition() => AltarHandler.GetAltarPosition().ToWorldCoordinates() - Vector2.UnitX * 5f;
@@ -94,7 +104,7 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     private void NormalBehaviourHandler() {
-        //if (ConsumesItself()) {
+        //if (ShouldConsumeItsEnergy) {
         //    return;
         //}
 
@@ -112,7 +122,7 @@ sealed partial class DruidSoul : RoANPC {
             return;
         }
 
-        if (!ConsumesItself()) {
+        if (!ShouldConsumeItsEnergy) {
             float minOpacity = 0.4f;
             if (NPC.Opacity > minOpacity) {
                 NPC.Opacity -= OPACITYACC;
@@ -129,7 +139,7 @@ sealed partial class DruidSoul : RoANPC {
         Player player3 = Main.player[NPC.target];
         Vector2 altarCoords = AltarHandler.GetAltarPosition().ToWorldCoordinates();
         float dist2 = Math.Min(player3.Distance(altarCoords), NPC.Distance(altarCoords));
-        if (ConsumesItself() || flag2 /*|| dist2 > MAXDISTANCETOALTAR*/) {
+        if (ShouldConsumeItsEnergy || flag2 /*|| dist2 > MAXDISTANCETOALTAR*/) {
             _velocity *= 0.975f;
 
             return;
@@ -162,7 +172,7 @@ sealed partial class DruidSoul : RoANPC {
         if (NPC.direction == -1 && num68 < 25f) {
             dir = 1;
         }
-        if ((player3.Distance(altarCoords) < 100f || (center.Distance(altarCoords) < 100f && !ConsumesItself())) && !Collision.CanHit(player3.Center, 0, 0, altarCoords - Vector2.One * 1f, 2, 2)) {
+        if ((player3.Distance(altarCoords) < 100f || (center.Distance(altarCoords) < 100f && !ShouldConsumeItsEnergy)) && !Collision.CanHit(player3.Center, 0, 0, altarCoords - Vector2.One * 1f, 2, 2)) {
             if (dir == 1) {
                 playerCenter.X += player3.width + 20f;
                 num68 = playerCenter.X - center.X;
@@ -270,21 +280,21 @@ sealed partial class DruidSoul : RoANPC {
             dir = 1;
         }
         bool canPlayerReachAltar = Collision.CanHit(player3.Center, 0, 0, altarCoords - Vector2.One * 1f, 2, 2);
-        bool flag = (player3.Distance(altarCoords) < 100f || (center.Distance(altarCoords) < 100f && !ConsumesItself())) && !canPlayerReachAltar;
+        bool flag = (player3.Distance(altarCoords) < 100f || (center.Distance(altarCoords) < 100f && !ShouldConsumeItsEnergy)) && !canPlayerReachAltar;
         //if (flag) {
         //    if (dir == 1) {
         //        playerCenter.X += player3.width + 20f;
         //    }
         //}
         bool playerReachAltar = canPlayerReachAltar && player3.Distance(altarCoords) < 150f /*|| center.Distance(altarCoords) < 100f*/;
-        if (player3.Distance(altarCoords) < 200f && playerCenter.Y < NPC.Center.Y && !ConsumesItself() /*|| player3.Center.Y < NPC.Center.Y*/) {
+        if (player3.Distance(altarCoords) < 200f && playerCenter.Y < NPC.Center.Y && !ShouldConsumeItsEnergy /*|| player3.Center.Y < NPC.Center.Y*/) {
             _velocity.Y -= VELOCITYY * 0.75f;
         }
         float distanceBetween = Math.Clamp(NPC.Distance(altarCoords), 0.01f, 600f) * 0.01f;
         Vector2 moveTo = NPC.DirectionFrom(altarCoords);
         Rectangle altarArea = Utils.CenteredRectangle(new Vector2((float)(altarCoords.X), (float)(altarCoords.Y)), Vector2.One * 2f);
         float speed = 0.1f + distanceBetween * 0.0007f;
-        bool flag5 = NPC.Distance(altarCoords) > 50f && !ConsumesItself();
+        bool flag5 = NPC.Distance(altarCoords) > 50f && !ShouldConsumeItsEnergy;
         if (flag5) {
             _velocity2 += moveTo * -speed;
         }
@@ -316,7 +326,10 @@ sealed partial class DruidSoul : RoANPC {
         else {
             _velocity2 *= 0.95f;
         }
-        if (!playerReachAltar && _velocity2.Y > _velocity.Y && playerCenter.Y < NPC.Center.Y && !ConsumesItself()) {
+        if (playerReachAltar && NPC.Center.Y > playerCenter.Y) {
+            _velocity2.Y -= VELOCITYY / 2f;
+        }
+        if (!playerReachAltar && _velocity2.Y > _velocity.Y && playerCenter.Y < NPC.Center.Y && !ShouldConsumeItsEnergy) {
             _velocity.Y -= _velocity2.Y * 0.025f;
         }
         bool flag3 = Collision.CanHit(player3, NPC) && (player3.Distance(altarCoords) > 225f || (!Collision.CanHit(player3.Center, 0, 0, altarCoords - Vector2.One * 1f, 2, 2) && player3.Distance(altarCoords) < 50f)) /*|| center.Distance(altarCoords) < 100f*/;
@@ -342,7 +355,7 @@ sealed partial class DruidSoul : RoANPC {
         if (flag2) {
 
         }
-        if (!ConsumesItself()) {
+        if (!ShouldConsumeItsEnergy) {
             return;
         }
         bool flag = Helper.EaseInOut3(altarStrength) > 0.4f;
@@ -355,7 +368,7 @@ sealed partial class DruidSoul : RoANPC {
         if ((flag6 && !flag) || flag) {
             //_velocity.Y *= 0.95f;
             Vector2 towards2 = towards + Vector2.UnitX * 12f;
-            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(_velocity3.X) > 0.045f) {
+            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(_velocity3.X) > 0.05f) {
                 NPC.spriteDirection = -NPC.direction;
                 NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
             }
@@ -366,9 +379,11 @@ sealed partial class DruidSoul : RoANPC {
             if (!flag2) {
                 NPC.ai[1] += 1 * -NPC.direction;
                 Vector2 circle = NPC.CircleMovementVector2(NPC.ai[1] / 3f, 0.4f, 12);
-                NPC.localAI[0] += 0.15f;
-                _y = -circle.Y + NPC.localAI[0] * 0.415f;
-                _velocity3 = circle;
+                NPC.localAI[0] += NPC.localAI[0] < 1f ? 0.1f : 0.15f;
+                _y = -circle.Y + NPC.localAI[0] * 0.35f;
+                float value = Math.Max(_velocity.Length() * 0.01f, 1f);
+                float value2 = Math.Min(NPC.localAI[0], 1f);
+                _velocity3 = circle * value;
                 _velocity3.X *= MathHelper.Clamp(NPC.localAI[0], 0f, 1f);
                 Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
                 _velocity2 *= 0.8f;
@@ -384,19 +399,20 @@ sealed partial class DruidSoul : RoANPC {
                 if (Math.Abs(_velocity.Y) > 1f) {
                     _velocity.Y *= 0.925f;
                 }
+                float velocityY = VELOCITYY / 2f * value2;
                 if (Math.Abs(NPC.Center.X - towards.X) < 50f) {
-                    NPC.velocity.Y -= VELOCITYY / 2f;
+                    NPC.velocity.Y -= velocityY;
                 }
                 if (NPC.Distance(altarPosition) > 60f /*|| Math.Abs(NPC.Center.X - towards.X) >= 60f*/) {
-                    NPC.velocity.Y -= VELOCITYY / 2f;
+                    NPC.velocity.Y -= velocityY;
                     NPC.SlightlyMoveTo(towards, 8f, 13f);
-                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f, 1f);
+                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f, 1f) * value2;
                     //NPC.velocity *= 0.75f;
                 }
                 if (flag6) {
-                    NPC.velocity.Y -= VELOCITYY / 2f;
+                    NPC.velocity.Y -= velocityY;
                 }
-                NPC.velocity.Y -= VELOCITYY / 2f;
+                NPC.velocity.Y -= velocityY;
                 if (flag3) {
                     if (NPC.Opacity < 0.8f) {
                         NPC.Opacity += OPACITYACC * 0.7f;

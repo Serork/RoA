@@ -8,6 +8,20 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
+sealed class LivingElderwood3 : LivingElderwood {
+    public override string Texture => base.Texture[..^1];
+
+    public override void SetStaticDefaults() {
+        base.SetStaticDefaults();
+
+        TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
+    }
+
+    public override bool CanExplode(int i, int j) => false;
+
+    public override bool CanKillTile(int i, int j, ref bool blockDamaged) => false;
+}
+
 sealed class LivingElderwood2 : LivingElderwood {
     public override string Texture => base.Texture[..^1];
 }
