@@ -58,7 +58,7 @@ sealed partial class DruidSoul : RoANPC {
         bool flag = NPC.Distance(altarPosition) <= 150f && (Collision.CanHit(NPC.Center, 2, 2, altarPosition, 2, 2) || NPC.Center.Y > altarPosition.Y);
         bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 65f && player.Distance(altarPosition) < 100f) || (flag && (player.Distance(NPC.Center) < 125f));
         float altarStrength = AltarHandler.GetAltarStrength();
-        return Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && (Collision.CanHit(player.Center, 0, 0, altarPosition - Vector2.One * 1f, 2, 2) || player.Center.Y > altarStrength.Y));
+        return Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && (Collision.CanHit(player.Center, 0, 0, altarPosition - Vector2.One * 1f, 2, 2) || player.Center.Y > altarPosition.Y));
     }
 
     private static Vector2 GetAltarPosition() => AltarHandler.GetAltarPosition().ToWorldCoordinates() - Vector2.UnitX * 5f;
