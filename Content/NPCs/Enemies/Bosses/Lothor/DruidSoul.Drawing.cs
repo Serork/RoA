@@ -52,7 +52,7 @@ sealed partial class DruidSoul : RoANPC {
         float max = MAXDISTANCETOALTAR * 0.95f;
         Vector2 altarCoords2 = altarCoords.MoveTowards(playerCenter, 20f);
         float dist = npcCenter.Distance(altarCoords),
-              dist2 = Math.Min(Math.Abs(playerCenter.X - altarCoords2.X), Math.Abs(npcCenter.X - altarCoords2.X)) /*playerCenter*//*npcCenter.Distance(altarCoords2)*/;
+              dist2 = Math.Max(Math.Abs(playerCenter.X - altarCoords2.X), Math.Abs(npcCenter.X - altarCoords2.X)) /*playerCenter*//*npcCenter.Distance(altarCoords2)*/;
         float opacity = 1f - Utils.GetLerpValue(max * 1.025f, max * 1.225f, dist, true);
         float minDist = 60f;
         opacity *= Utils.GetLerpValue(minDist, 100f, dist2, true);
@@ -61,7 +61,7 @@ sealed partial class DruidSoul : RoANPC {
         }
         opacity = Helper.EaseInOut2(opacity);
         drawColor *= opacity;
-        drawColor *= 0.75f;
+        drawColor *= 0.85f;
         Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3;
         float mult = 1f - MathHelper.Clamp((altarCoords.Distance(npcCenter) + velocity.Length() * 4f) / max, 0f, 1f);
         //npcCenter = (from + Vector2.UnitY * 8f * (1f - mult)).MoveTowards(altarCoords, 10f);
