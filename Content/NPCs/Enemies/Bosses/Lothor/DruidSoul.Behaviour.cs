@@ -57,7 +57,7 @@ sealed partial class DruidSoul : RoANPC {
         bool playerCanReachAltar = Collision.CanHit(player.Center, 0, 0, altarPosition, 0, 0);
         bool closeToAltar =  (/*playerCanReachAltar || */Math.Abs(altarPosition.X - npcCenter.X) < 40f) && altarPosition.Y - npcCenter.Y < 80f;
         bool flag = NPC.Distance(altarPosition) <= 200f && (playerCanReachAltar || Collision.CanHit(NPC.Center, 2, 2, altarPosition, 2, 2) || NPC.Top.Y + 4f > altarPosition.Y);
-        bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 100f && player.Distance(altarPosition) < 100f) || (flag && (player.Distance(altarPosition) < 150f));
+        bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 100f && player.Distance(altarPosition) < 100f) || (flag && (player.Distance(altarPosition) < 130f));
         float altarStrength = AltarHandler.GetAltarStrength();
         return Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && (playerCanReachAltar));
     }
