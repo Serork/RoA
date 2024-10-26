@@ -349,13 +349,13 @@ sealed partial class DruidSoul : RoANPC {
                 NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
             }
             else {
-                _velocity3.X *= 0.85f;
+                _velocity3.X *= 0.8f;
             }
 
             if (!flag2) {
                 NPC.ai[1] += 1 * -NPC.direction;
                 _velocity3 = NPC.CircleMovementVector2(NPC.ai[1] / 3f, 0.4f, 12);
-                _velocity3.Y *= 2f;
+                _velocity3.Y *= 1.5f;
                 _velocity3 += Vector2.UnitX * 1f;
                 Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
                 _velocity2 *= 0.8f;
