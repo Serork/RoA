@@ -48,8 +48,9 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 altarCoords = altarPos + Vector2.UnitY * 5f;
         Vector2 from = NPC.Center/* + Vector2.UnitX * 4f * NPC.direction*/;
         Vector2 npcCenter = (from + Vector2.UnitY * 8f).MoveTowards(altarCoords, 10f);
-        Vector2 playerCenter = (Main.player[NPC.target].Center + Vector2.UnitY * 10f).MoveTowards(altarCoords, 10f);
-        float max = MAXDISTANCETOALTAR;
+        Player player = Main.player[NPC.target];
+        Vector2 playerCenter = (player.Center + Vector2.UnitY * 10f).MoveTowards(altarCoords, 10f);
+        float max = MAXDISTANCETOALTAR * 1.05f;
         Vector2 altarCoords2 = altarCoords.MoveTowards(playerCenter, 20f);
         float dist = npcCenter.Distance(altarCoords),
               dist2 = Math.Max(Math.Abs(playerCenter.X - altarCoords2.X), Math.Abs(npcCenter.X - altarCoords2.X)) /*playerCenter*//*npcCenter.Distance(altarCoords2)*/;
@@ -57,7 +58,11 @@ sealed partial class DruidSoul : RoANPC {
         NPC.localAI[1] = MathHelper.Lerp(NPC.localAI[1], Utils.GetLerpValue(max * 1.025f, max * 1.225f, dist, true), lerpValue);
         float opacity = 1f - NPC.localAI[1];
         float minDist = 60f;
-        NPC.localAI[2] = MathHelper.Lerp(NPC.localAI[2], Utils.GetLerpValue(minDist, 100f, dist2, true), lerpValue * 1.35f);
+        float value = 1f;
+        if (Collision.CanHit(player.Center, 0, 0, altarPos, 0, 0) && Math.Abs(player.Center.X - altarPos.X) < 130f) {
+            value = Utils.GetLerpValue(minDist, 100f, dist2, true);
+        }
+        NPC.localAI[2] = MathHelper.Lerp(NPC.localAI[2], value, lerpValue * 1.35f);
         opacity *= NPC.localAI[2];
         if (dist2 < NPC.localAI[2]) {
             opacity *= 0f;
