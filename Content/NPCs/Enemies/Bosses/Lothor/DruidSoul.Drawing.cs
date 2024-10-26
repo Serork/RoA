@@ -35,35 +35,60 @@ sealed partial class DruidSoul : RoANPC {
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         Color color = drawColor.MultiplyRGB(_color);
-        DrawChain(spriteBatch);
+        DrawChain(spriteBatch, color);
         DrawTextureUnderCustomSoulEffect(spriteBatch, (Texture2D)ModContent.Request<Texture2D>(Texture), color);
         return false;
     }
 
-    private void DrawChain(SpriteBatch spriteBatch) {
+    private void DrawChain(SpriteBatch spriteBatch, Color drawColor) {
         Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Chain").Value;
         Rectangle? sourceRectangle = null;
         Vector2 origin = (sourceRectangle.HasValue ? (sourceRectangle.Value.Size() / 2f) : (texture.Size() / 2f));
-        Vector2 altarCoords = (AltarHandler.GetAltarPosition().ToWorldCoordinates() + Vector2.UnitY * 10f);
-        Vector2 npcCenter = (NPC.Center + Vector2.UnitY * 10f).MoveTowards(altarCoords, 10f);
-        SimpleCurve curve = new(npcCenter, altarCoords, Vector2.Zero);
+        Vector2 altarPos = AltarHandler.GetAltarPosition().ToWorldCoordinates();
+        Vector2 altarCoords = altarPos + Vector2.UnitY * 5f;
+        Vector2 from = NPC.Center/* + Vector2.UnitX * 4f * NPC.direction*/;
+        Vector2 npcCenter = (from + Vector2.UnitY * 8f).MoveTowards(altarCoords, 10f);
+        Vector2 playerCenter = (Main.player[NPC.target].Center + Vector2.UnitY * 10f).MoveTowards(altarCoords, 10f);
+        float max = MAXDISTANCETOALTAR * 0.95f;
+        Vector2 altarCoords2 = altarCoords.MoveTowards(playerCenter, 20f);
+        float dist = npcCenter.Distance(altarCoords),
+              dist2 = Math.Max(Math.Abs(playerCenter.X - altarCoords2.X), Math.Abs(npcCenter.X - altarCoords2.X)) /*playerCenter*//*npcCenter.Distance(altarCoords2)*/;
+        float opacity = 1f - Utils.GetLerpValue(max * 1.025f, max * 1.225f, dist, true);
+        float minDist = 60f;
+        opacity *= Utils.GetLerpValue(minDist, 100f, dist2, true);
+        if (dist2 < minDist) {
+            opacity *= 0f;
+        }
+        opacity = Helper.EaseInOut2(opacity);
+        drawColor *= opacity;
+        drawColor *= 0.75f;
         Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3;
-        float max = MAXDISTANCETOALTAR * 0.8f;
-        float mult = MathHelper.Clamp((altarCoords.Distance(npcCenter) + velocity.Length() * 0.1f) / max, 0f, 1f);
-        float width = 100f * mult;
+        float mult = 1f - MathHelper.Clamp((altarCoords.Distance(npcCenter) + velocity.Length() * 4f) / max, 0f, 1f);
+        //npcCenter = (from + Vector2.UnitY * 8f * (1f - mult)).MoveTowards(altarCoords, 10f);
+        float width = 250f * mult;
+        altarCoords = altarPos + Vector2.UnitY * 5f * (1f - mult);
+        SimpleCurve curve = new(npcCenter, altarCoords, Vector2.Zero);
         curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, width);
         Vector2 start = curve.Begin, end = curve.End;
-        Vector2 dist = end - start;
-        float length = dist.Length();
-        length = Math.Max(200f, length);
+        Vector2 between = end - start;
+        float length = between.Length();
+        //length = Math.Max(200f, length);
         int amount = (int)(length / texture.Width * NPC.scale);
-        for (int index = 0; index < amount; ++index) {
-            Vector2 point = curve.GetPoint((float)index / amount);
-            float rotation = (point - start).SafeNormalize(Vector2.Zero).ToRotation() + (float)Math.PI / 2f;
-            Color color = Lighting.GetColor(start.ToTileCoordinates()).MultiplyRGB(_color) * NPC.Opacity;
-            float min = amount / 2;
-            if (index > min) {
-                float progress2 = (index - min) / (float)(amount - min);
+        for (int k = 0; k <= amount; ++k) {
+            Vector2 point = curve.GetPoint((float)k / amount);
+            Vector2 v = (point - start).SafeNormalize(Vector2.Zero);
+            float rotation = v.ToRotation() + (float)Math.PI / 2f;
+            Color color = drawColor /*Lighting.GetColor(start.ToTileCoordinates()).MultiplyRGB(_color)*/ * NPC.Opacity;
+            float min = amount / 2 + amount / 3;
+            int amount2 = 3;
+            if (k < amount2) {
+                float progress2 = k / (float)amount2 * 1.25f;
+                color *= progress2;
+            }
+            amount2 = 4;
+            int max2 = amount - amount2;
+            if (k > max2) {
+                float progress2 = 1f - (k - max2) / (float)(amount - max2);
                 color *= progress2;
             }
             color *= 1.5f;
@@ -74,7 +99,7 @@ sealed partial class DruidSoul : RoANPC {
                 spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
                 spriteBatch.EndBlendState();
             }
-            start = point;
+            start += v * texture.Width;
         }
     }
 

@@ -5,7 +5,7 @@ using Terraria;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class DruidSoul : RoANPC {
-    private const float MAXDISTANCETOALTAR = 800f;
+    private const float MAXDISTANCETOALTAR = 300f;
 
     public override void SetDefaults() {
         NPC.lifeMax = 10;
