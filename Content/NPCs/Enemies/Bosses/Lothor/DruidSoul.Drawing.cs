@@ -64,7 +64,7 @@ sealed partial class DruidSoul : RoANPC {
         }
         opacity = Helper.EaseInOut2(opacity);
         drawColor *= opacity;
-        drawColor *= 0.85f;
+        drawColor *= 0.9f;
         Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3;
         float mult = 1f - MathHelper.Clamp((altarCoords.Distance(npcCenter) + velocity.Length() * 4f) / max, 0f, 1f);
         //npcCenter = (from + Vector2.UnitY * 8f * (1f - mult)).MoveTowards(altarCoords, 10f);

@@ -55,10 +55,10 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 npcCenter = NPC.Center;
         bool closeToAltar = Math.Abs(altarPosition.X - npcCenter.X) < 40f && altarPosition.Y - npcCenter.Y < 80f;
         Player player = Main.player[NPC.target];
-        bool flag = NPC.Distance(altarPosition) <= 150f && Collision.CanHit(NPC.Center, 2, 2, altarPosition, 2, 2);
+        bool flag = NPC.Distance(altarPosition) <= 150f && (Collision.CanHit(NPC.Center, 2, 2, altarPosition, 2, 2) || NPC.Center.Y > altarPosition.Y);
         bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 65f && player.Distance(altarPosition) < 100f) || (flag && (player.Distance(NPC.Center) < 125f));
         float altarStrength = AltarHandler.GetAltarStrength();
-        return Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && Collision.CanHit(player.Center, 0, 0, altarPosition - Vector2.One * 1f, 2, 2));
+        return Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && (Collision.CanHit(player.Center, 0, 0, altarPosition - Vector2.One * 1f, 2, 2) || player.Center.Y > altarStrength.Y));
     }
 
     private static Vector2 GetAltarPosition() => AltarHandler.GetAltarPosition().ToWorldCoordinates() - Vector2.UnitX * 5f;
@@ -97,7 +97,7 @@ sealed partial class DruidSoul : RoANPC {
         Movement();
 
         if (NPC.Opacity <= 0.05f && Helper.EaseInOut3(AltarHandler.GetAltarStrength()) > 0.925f) {
-            PunchCameraModifier punchCameraModifier = new PunchCameraModifier(NPC.Center, ((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2()), 12f, 20f, 10, 1000f, "Druid Soul");
+            PunchCameraModifier punchCameraModifier = new PunchCameraModifier(NPC.Center, ((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2()), 12f, 20f, 10, 2000f, "Druid Soul");
             Main.instance.CameraModifiers.Add(punchCameraModifier);
             //OvergrownCoords.Strength = OvergrownCoords.Factor = 1f;
             //NPC.SetEventFlagCleared(ref LothorInvasion.preArrivedLothorBoss.Item1, -1);
@@ -356,11 +356,12 @@ sealed partial class DruidSoul : RoANPC {
                 NPC.ai[1] += 1 * -NPC.direction;
                 _velocity3 = NPC.CircleMovementVector2(NPC.ai[1] / 3f, 0.4f, 12);
                 _velocity3.Y *= 1.5f;
+                _velocity3 += Vector2.UnitY * 1f;
                 _velocity3 += Vector2.UnitX * 1f;
                 Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
                 _velocity2 *= 0.8f;
                 //_velocity3.Y *= 0.8f;
-                _velocity3.Y *= 0.95f * (1f - altarStrength);
+                _velocity3.Y *= 0.9f * (1f - altarStrength);
                 _velocity3.X *= 0.8f * (1f - altarStrength);
                 _velocity3.X *= 1f - altarStrength;
                 NPC.position += _velocity2 - _velocity3;
