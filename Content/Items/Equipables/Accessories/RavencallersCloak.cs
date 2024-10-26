@@ -247,18 +247,20 @@ sealed class RavencallersCloak : ModItem {
             private readonly static Vector2[] _before = new Vector2[256];
 
             public override bool PreAI(NPC npc) {
-                foreach (Player player in Main.ActivePlayers) {
-                    RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
-                    if (data.AvailableForNPCs) {
-                        _before[player.whoAmI] = player.Center;
-                        OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
-                        OldPositionInfo lastPositionInfo = playerOldPositions[^1];
-                        Vector2 position = lastPositionInfo.Position;
-                        if (position != Vector2.Zero) {
-                            player.Center = lastPositionInfo.Position;
-                        }
+                if (!npc.friendly) {
+                    foreach (Player player in Main.ActivePlayers) {
+                        RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
+                        if (data.AvailableForNPCs) {
+                            _before[player.whoAmI] = player.Center;
+                            OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
+                            OldPositionInfo lastPositionInfo = playerOldPositions[^1];
+                            Vector2 position = lastPositionInfo.Position;
+                            if (position != Vector2.Zero) {
+                                player.Center = lastPositionInfo.Position;
+                            }
 
-                        return true;
+                            return true;
+                        }
                     }
                 }
 
@@ -266,10 +268,12 @@ sealed class RavencallersCloak : ModItem {
             }
 
             public override void PostAI(NPC npc) {
-                foreach (Player player in Main.ActivePlayers) {
-                    RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
-                    if (data.AvailableForNPCs) {
-                        player.Center = _before[player.whoAmI];
+                if (!npc.friendly) {
+                    foreach (Player player in Main.ActivePlayers) {
+                        RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
+                        if (data.AvailableForNPCs) {
+                            player.Center = _before[player.whoAmI];
+                        }
                     }
                 }
             }
