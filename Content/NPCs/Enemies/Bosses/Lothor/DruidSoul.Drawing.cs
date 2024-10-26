@@ -49,14 +49,17 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 from = NPC.Center/* + Vector2.UnitX * 4f * NPC.direction*/;
         Vector2 npcCenter = (from + Vector2.UnitY * 8f).MoveTowards(altarCoords, 10f);
         Vector2 playerCenter = (Main.player[NPC.target].Center + Vector2.UnitY * 10f).MoveTowards(altarCoords, 10f);
-        float max = MAXDISTANCETOALTAR * 0.95f;
+        float max = MAXDISTANCETOALTAR;
         Vector2 altarCoords2 = altarCoords.MoveTowards(playerCenter, 20f);
         float dist = npcCenter.Distance(altarCoords),
               dist2 = Math.Max(Math.Abs(playerCenter.X - altarCoords2.X), Math.Abs(npcCenter.X - altarCoords2.X)) /*playerCenter*//*npcCenter.Distance(altarCoords2)*/;
-        float opacity = 1f - Utils.GetLerpValue(max * 1.025f, max * 1.225f, dist, true);
+        float lerpValue = 0.1f;
+        NPC.localAI[1] = MathHelper.Lerp(NPC.localAI[1], Utils.GetLerpValue(max * 1.025f, max * 1.225f, dist, true), lerpValue);
+        float opacity = 1f - NPC.localAI[1];
         float minDist = 60f;
-        opacity *= Utils.GetLerpValue(minDist, 100f, dist2, true);
-        if (dist2 < minDist) {
+        NPC.localAI[2] = MathHelper.Lerp(NPC.localAI[2], Utils.GetLerpValue(minDist, 100f, dist2, true), lerpValue);
+        opacity *= NPC.localAI[2];
+        if (dist2 < NPC.localAI[2]) {
             opacity *= 0f;
         }
         opacity = Helper.EaseInOut2(opacity);

@@ -167,10 +167,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             bool flag30 = false;
             int num537 = 0;
             while (!flag30) {
-                int num538 = _random.Next(Left - 100, Right + 100);
+                int num538 = _random.Next(Left - 50, Right + 50);
                 int num539 = _random.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface + 10);
                 while (WorldGen.oceanDepths(num538, num539)) {
-                    num538 = _random.Next(Left - 100, Right + 100);
+                    num538 = _random.Next(Left - 50, Right + 50);
                     num539 = _random.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface + 10);
                 }
 
