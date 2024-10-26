@@ -349,7 +349,7 @@ sealed partial class DruidSoul : RoANPC {
                 NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
             }
             else {
-                _velocity3.X *= 0.8f;
+                _velocity3.X *= 0.85f;
             }
 
             if (!flag2) {
@@ -360,7 +360,8 @@ sealed partial class DruidSoul : RoANPC {
                 Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
                 _velocity2 *= 0.8f;
                 //_velocity3.Y *= 0.8f;
-                _velocity3 *= 0.8f * (1f - altarStrength);
+                _velocity3.Y *= 0.95f * (1f - altarStrength);
+                _velocity3.X *= 0.8f * (1f - altarStrength);
                 _velocity3.X *= 1f - altarStrength;
                 NPC.position += _velocity2 - _velocity3;
                 if (Math.Abs(NPC.velocity.Y) > 1f) {

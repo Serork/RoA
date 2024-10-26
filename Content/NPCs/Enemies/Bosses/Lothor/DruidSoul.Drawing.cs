@@ -57,7 +57,7 @@ sealed partial class DruidSoul : RoANPC {
         NPC.localAI[1] = MathHelper.Lerp(NPC.localAI[1], Utils.GetLerpValue(max * 1.025f, max * 1.225f, dist, true), lerpValue);
         float opacity = 1f - NPC.localAI[1];
         float minDist = 60f;
-        NPC.localAI[2] = MathHelper.Lerp(NPC.localAI[2], Utils.GetLerpValue(minDist, 100f, dist2, true), lerpValue);
+        NPC.localAI[2] = MathHelper.Lerp(NPC.localAI[2], Utils.GetLerpValue(minDist, 100f, dist2, true), lerpValue * 1.35f);
         opacity *= NPC.localAI[2];
         if (dist2 < NPC.localAI[2]) {
             opacity *= 0f;
