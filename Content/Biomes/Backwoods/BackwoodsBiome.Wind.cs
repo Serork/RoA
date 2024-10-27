@@ -37,9 +37,9 @@ sealed partial class BackwoodsBiome : ModBiome {
             double num = BackwoodsFogHandler.IsFogActive ? 0 : Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f);
             num = Utils.GetLerpValue(0.08f, 1.2f, (float)num, clamped: true);
             treeWindCounter += 1.0 / 240.0 + 1.0 / 240.0 * num;
-            grassWindCounter += 1.0 / 180.0 + 1.0 / 180.0 * num * 4.0;
-            sunflowerWindCounter += 1.0 / 420.0 + 1.0 / 420.0 * num * 5.0;
-            vineWindCounter += 1.0 / 120.0 + 1.0 / 120.0 * num * 0.4000000059604645;
+            grassWindCounter += 1.0 / 180.0 + 1.0 / 180.0 * num * 2.0;
+            sunflowerWindCounter += 1.0 / 420.0 + 1.0 / 420.0 * num * 2.5;
+            vineWindCounter += 1.0 / 120.0 + 1.0 / 120.0 * num * 0.2000000059604645;
             typeof(TileDrawing).SetFieldValue<double>("_treeWindCounter", treeWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_grassWindCounter", grassWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_sunflowerWindCounter", sunflowerWindCounter, Main.instance.TilesRenderer);
