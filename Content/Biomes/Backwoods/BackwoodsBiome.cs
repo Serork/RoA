@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Biomes.Backwoods;
 
-sealed class BackwoodsBiome : ModBiome {
+sealed partial class BackwoodsBiome : ModBiome {
     public static float TransitionSpeed => 0.05f;
 
     public static bool IsActiveForFogEffect => ModContent.GetInstance<TileCount>().BackwoodsTiles > 650;

@@ -19,4 +19,12 @@ static class TypeExtensions {
 
 		return (T)type.GetField(fieldName, flags.Value).GetValue(obj);
 	}
+
+	public static void SetFieldValue<T>(this Type type, string fieldName, T value, object obj = null, BindingFlags? flags = null) {
+        if (!flags.HasValue) {
+            flags = new BindingFlags?(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+        }
+
+        type.GetField(fieldName, flags.Value).SetValue(obj, value);
+    }
 }

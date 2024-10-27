@@ -109,7 +109,7 @@ sealed class BackwoodsFogHandler : ModSystem {
     private Rectangle GetTileWorkSpace() {
         Point point = Main.LocalPlayer.Center.ToTileCoordinates();
         int num = 120;
-        int num2 = 45;
+        int num2 = 70;
         return new Rectangle(point.X - num / 2, point.Y - num2 / 2, num, num2);
     }
 
