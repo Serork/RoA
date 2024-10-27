@@ -34,7 +34,10 @@ static class Ease {
     public static Easer QuartOut => value => 1f - (float)Math.Pow(1.0 - (double)value, 4);
     public static Easer QuartInOut => Follow(QuartIn, QuartIn);
 
+    public static Easer QuintIn => value => value * value * value * value * value;
     public static Easer QuintOut => value => 1f - (float)Math.Pow(1.0 - (double)value, 5);
+
+    public static Easer TestIn => value => value * value * value * value * value * value * value;
 
     public static Easer CircOut => value => (float)Math.Sqrt(1 - Math.Pow(value - 1.0, 2));
 

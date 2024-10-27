@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -14,7 +15,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class DruidSoul : RoANPC {
-    private readonly Color _color = new(241, 53, 84, 200);
+    private readonly Color _color = new(241, 53, 84, 200), _color2 = new(114, 216, 102, 200);
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 4;
@@ -34,13 +35,13 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        DrawChain(spriteBatch, drawColor.MultiplyRGB(_color), drawColor.MultiplyRGB(_color2));
         Color color = drawColor.MultiplyRGB(_color);
-        DrawChain(spriteBatch, color);
         DrawTextureUnderCustomSoulEffect(spriteBatch, (Texture2D)ModContent.Request<Texture2D>(Texture), color);
         return false;
     }
 
-    private void DrawChain(SpriteBatch spriteBatch, Color drawColor) {
+    private void DrawChain(SpriteBatch spriteBatch, Color drawColor1, Color drawColor2) {
         Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Chain").Value;
         Rectangle? sourceRectangle = null;
         Vector2 origin = (sourceRectangle.HasValue ? (sourceRectangle.Value.Size() / 2f) : (texture.Size() / 2f));
@@ -68,8 +69,7 @@ sealed partial class DruidSoul : RoANPC {
             opacity *= 0f;
         }
         opacity = Helper.EaseInOut2(opacity);
-        drawColor *= opacity;
-        drawColor *= 0.9f;
+        Color drawColor = drawColor1;
         Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3;
         float mult = 1f - MathHelper.Clamp((altarCoords.Distance(npcCenter) + velocity.Length() * 4f) / max, 0f, 1f);
         //npcCenter = (from + Vector2.UnitY * 8f * (1f - mult)).MoveTowards(altarCoords, 10f);
@@ -86,19 +86,31 @@ sealed partial class DruidSoul : RoANPC {
             Vector2 point = curve.GetPoint((float)k / amount);
             Vector2 v = (point - start).SafeNormalize(Vector2.Zero);
             float rotation = v.ToRotation() + (float)Math.PI / 2f;
-            Color color = drawColor /*Lighting.GetColor(start.ToTileCoordinates()).MultiplyRGB(_color)*/ * NPC.Opacity;
-            float min = amount / 2 + amount / 3;
+            Color color = drawColor /*Lighting.GetColor(start.ToTileCoordinates()).MultiplyRGB(_color)*/;
+            int max2 = amount - Math.Clamp((int)(amount * 0.35f), amount < 7 ? 3 : 4, 6);
+            if (k > max2) {
+                float progress2 = 1f - (k - max2) / (float)(amount - max2);
+                progress2 = Ease.TestIn(progress2);
+                color = Color.Lerp(color, drawColor2, 1f - progress2);
+            }
+            max2 = amount - 4;
+            if (k > max2) {
+                float progress2 = 1f - (k - max2) / (float)(amount - max2);
+                color *= progress2;
+            }
             int amount2 = 3;
             if (k < amount2) {
                 float progress2 = k / (float)amount2 * 1.25f;
                 color *= progress2;
             }
-            amount2 = 4;
-            int max2 = amount - amount2;
+            max2 = amount - 4;
             if (k > max2) {
                 float progress2 = 1f - (k - max2) / (float)(amount - max2);
                 color *= progress2;
             }
+            color *= NPC.Opacity;
+            color *= opacity;
+            color *= 0.9f;
             color *= 1.5f;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
                 color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);

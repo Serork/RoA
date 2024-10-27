@@ -549,7 +549,7 @@ static class NPCExtensions {
                 if (npc.type == 425)
                     num197 *= -1;
 
-                bool flag15 = ignoreBranches || (!ignoreBranches && Main.player[npc.target].position.Y > npc.Center.Y - npc.height);
+                bool flag15 = ignoreBranches || (!ignoreBranches && Main.player[npc.target].position.Y > npc.Top.Y);
                 //flag15 = false;
                 if ((npc.velocity.X < 0f && num197 == -1) || (npc.velocity.X > 0f && num197 == 1)) {
                     bool flag16 = (Main.tile[num194 + npc.direction, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15);
