@@ -549,7 +549,7 @@ static class NPCExtensions {
                 if (npc.type == 425)
                     num197 *= -1;
 
-                bool flag15 = ignoreBranches || (!ignoreBranches && Main.player[npc.target].position.Y > npc.Top.Y);
+                bool flag15 = ignoreBranches || (!ignoreBranches && Main.player[npc.target].position.Y > npc.Center.Y - npc.height);
                 //flag15 = false;
                 if ((npc.velocity.X < 0f && num197 == -1) || (npc.velocity.X > 0f && num197 == 1)) {
                     bool flag16 = (Main.tile[num194 + npc.direction, num195 + 1].TileType != ModContent.TileType<TreeBranch>() || !flag15);
@@ -714,6 +714,7 @@ static class NPCExtensions {
             npc.ai[1] = 0f;
             npc.ai[2] = 0f;
         }
+        Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
 
         //if (Main.netMode != 1 && npc.type == 120 && npc.ai[3] >= (float)num56) {
         //    int targetTileX = (int)Main.player[target].Center.X / 16;

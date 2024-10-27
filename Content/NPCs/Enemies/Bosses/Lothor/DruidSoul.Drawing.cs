@@ -87,7 +87,7 @@ sealed partial class DruidSoul : RoANPC {
             Vector2 v = (point - start).SafeNormalize(Vector2.Zero);
             float rotation = v.ToRotation() + (float)Math.PI / 2f;
             Color color = drawColor /*Lighting.GetColor(start.ToTileCoordinates()).MultiplyRGB(_color)*/;
-            int max2 = amount - Math.Clamp((int)(amount * 0.35f), amount < 7 ? 3 : 4, 6);
+            int max2 = amount - Math.Clamp((int)(amount * 0.35f), amount < 8 ? 3 : 4, 6);
             if (k > max2) {
                 float progress2 = 1f - (k - max2) / (float)(amount - max2);
                 progress2 = Ease.TestIn(progress2);

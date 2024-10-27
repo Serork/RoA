@@ -413,9 +413,11 @@ sealed partial class DruidSoul : RoANPC {
                     NPC.velocity.Y -= velocityY;
                 }
                 NPC.velocity.Y -= velocityY;
-                float maxY = -2f;
-                if (NPC.velocity.Y < maxY) {
-                    NPC.velocity.Y = maxY;
+                if (NPC.Distance(altarPosition) > 30f) {
+                    float maxY = -2f;
+                    if (NPC.velocity.Y < maxY) {
+                        NPC.velocity.Y = maxY;
+                    }
                 }
                 if (flag3) {
                     if (NPC.Opacity < 0.8f) {
