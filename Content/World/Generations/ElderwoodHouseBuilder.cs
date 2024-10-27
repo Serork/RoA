@@ -526,7 +526,7 @@ public class HouseBuilderCustom {
             int num = room.Height - 1 + room.Y;
             bool num2 = num > (int)Main.worldSurface;
             ushort chestTileType = (ushort)((num2 && UsesContainers2) ? 467 : ChestTileType);
-            int style = 1;
+            int style = 0;
             for (int i = 0; i < 10; i++) {
                 if (flag = WorldGen.AddBuriedChest(_random.Next(2, room.Width - 2) + room.X, num, 0, notNearOtherChests: false, style, trySlope: false, chestTileType))
                     break;
@@ -549,7 +549,7 @@ public class HouseBuilderCustom {
                 int num3 = room2.Y - 1;
                 bool num4 = num3 > (int)Main.worldSurface;
                 ushort chestTileType2 = (ushort)((num4 && UsesContainers2) ? 467 : ChestTileType);
-                int style2 = 1;
+                int style2 = 0;
                 for (int k = 0; k < 10; k++) {
                     if (flag = WorldGen.AddBuriedChest(_random.Next(2, room2.Width - 2) + room2.X, num3, 0, notNearOtherChests: false, style2, trySlope: false, chestTileType2))
                         break;
@@ -576,7 +576,7 @@ public class HouseBuilderCustom {
             int num5 = _random.Next(Rooms[0].Y - 30, Rooms[0].Y + 30);
             bool num6 = num5 > (int)Main.worldSurface;
             ushort chestTileType3 = (ushort)((num6 && UsesContainers2) ? 467 : ChestTileType);
-            int style3 = 1;
+            int style3 = 0;
             if (flag = WorldGen.AddBuriedChest(i2, num5, 0, notNearOtherChests: false, style3, trySlope: false, chestTileType3))
                 break;
         }
@@ -723,7 +723,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         base.PianoTileType = (ushort)ModContent.TileType<ElderwoodPiano>();
         base.BookcaseTileType = (ushort)ModContent.TileType<ElderwoodBookcase>();
         base.ChairTileType = (ushort)ModContent.TileType<ElderwoodChair>();
-        base.ChestTileType = 21;
+        base.ChestTileType = (ushort)ModContent.TileType<ElderwoodChest2>();
         base.ChandelierTileType = (ushort)ModContent.TileType<ElderwoodChandelier>();
     }
 

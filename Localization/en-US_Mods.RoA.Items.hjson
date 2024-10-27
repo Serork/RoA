@@ -310,3 +310,8 @@ WeightPotion: {
 		Accelerates falling speed
 		'''
 }
+
+ElderwoodChest2: {
+	DisplayName: Elderwood Chest2
+	Tooltip: ""
+}

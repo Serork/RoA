@@ -162,6 +162,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (!tile.AnyWall() && y < Main.worldSurface) {
                             continue;
                         }
+                        if (tile.AnyLiquid()) {
+                            continue;
+                        }
 
                         Tile aboveTile = WorldGenHelper.GetTileSafely(placeX, placeY - 1);
                         if (validTiles.Contains(tile.TileType) && WorldGen.SolidTile(placeX, placeY) && !aboveTile.HasTile) {
@@ -2570,14 +2573,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         bool first = true;
         int randomness = 0;
         while (startY < lastSurfaceY) {
-            bool flag = Math.Abs(cliffX - cliffTileCoords.X) > 20;
+            bool flag = Math.Abs(cliffX + randomness - cliffTileCoords.X) > 20;
             while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
                 startY++;
             }
             if ((_random.NextChance(0.75) && flag) || !flag) {
                 cliffX -= _toLeft ? -1 : 1;
             }
-            bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
+            bool flag2 = Math.Abs(cliffX + randomness - cliffTileCoords.X) > 10;
             int testJ = startY;
             bool flag4 = startY >= lastSurfaceY - 3;
             bool flag5 = false;
@@ -2609,6 +2612,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 if (!SkipBiomeInvalidTileTypeToKill.Contains(tile.TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) {
                     if ((flag4 && _random.NextBool(3)) || !flag4) {
+                        for (int j = testJ - 15; j < testJ; j++) {
+                            if (!SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[cliffX + randomness, j].TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[cliffX + randomness, j].WallType)) {
+                                if (Main.tile[cliffX + randomness, j].TileType != CliffPlaceholderTileType) {
+                                    WorldGen.KillTile(cliffX + randomness, j);
+                                }
+                            }
+                        }
                         WorldGenHelper.ReplaceTile(cliffX + randomness, testJ, CliffPlaceholderTileType);
                     }
                 }
@@ -2620,7 +2630,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 first = false;
             }
         }
-        _lastCliffX = cliffX;
+        _lastCliffX = cliffX + randomness;
 
         //lastSurfaceY = BackwoodsVars.FirstTileYAtCenter;
         //cliffX = cliffTileCoords.X;
