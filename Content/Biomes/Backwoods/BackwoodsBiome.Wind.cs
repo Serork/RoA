@@ -77,7 +77,7 @@ sealed partial class BackwoodsBiome : ModBiome {
             else
                 leafFrequency = 10;
 
-            leafFrequency *= 7;
+            leafFrequency *= 5;
 
             typeof(TileDrawing).SetFieldValue<int>("_leafFrequency", leafFrequency, Main.instance.TilesRenderer);
             return;

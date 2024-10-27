@@ -117,6 +117,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_SpreadGrass();
         Step6_2_SpreadGrass();
         Step13_GrowBigTrees();
+        Step_AddHerbs();
         Step9_SpreadMoss();
         Step_AddWebs();
         Step17_AddStatues();
@@ -126,6 +127,46 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step14_ClearRockLayerWalls();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
+    }
+
+    private void Step_AddHerbs() {
+        for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00005); i++) {
+            int x = _random.Next(Left - 50, Right + 50),
+                y = _random.Next(BackwoodsVars.FirstTileYAtCenter, Bottom);
+
+            Tile tile = WorldGenHelper.GetTileSafely(x, y);
+            if (!tile.AnyWall() && y < Main.worldSurface) {
+                continue;
+            }
+
+            byte spreadX = (byte)(_random.Next(15, 30) / 2),
+                 spreadY = (byte)(_random.Next(15, 30) / 2);
+            Dictionary<ushort, int> dictionary = [];
+            WorldUtils.Gen(new Point(x - spreadX / 2, y - spreadY / 2), new Shapes.Rectangle(spreadX, spreadY), new Actions.TileScanner(TileID.BloomingHerbs).Output(dictionary));
+            if (dictionary[TileID.BloomingHerbs] > 0) {
+                continue;
+            }
+
+            byte plant = (byte)_random.Next(7);
+            if (tile.ActiveTile(_dirtTileType)) {
+                for (int placeX = x - spreadX; placeX < x + spreadX; placeX++) {
+                    for (int placeY = y - spreadY; placeY < y + spreadY; placeY++) {
+                        tile = WorldGenHelper.GetTileSafely(placeX, placeY);
+                        if (!tile.AnyWall() && y < Main.worldSurface) {
+                            continue;
+                        }
+
+                        Tile aboveTile = WorldGenHelper.GetTileSafely(placeX, placeY - 1);
+                        if (tile.ActiveTile(_dirtTileType) && WorldGen.SolidTile(placeX, placeY) && !aboveTile.HasTile) {
+                            aboveTile.HasTile = true;
+                            aboveTile.TileType = TileID.BloomingHerbs;
+                            aboveTile.TileFrameX = (short)(18 * plant);
+                            aboveTile.TileFrameY = 0;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void Step_AddAltarMound() {
@@ -1420,9 +1461,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.35f);
         weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.35f);
         weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.6f);
-        weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.6f);
+        weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.75f);
-        weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.75f);
+        weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.6f);
         if (posY == 0) {
             baseY = (int)(minY + (generateY - minY) * weightedRandom);
         }
@@ -1475,7 +1516,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         int attempts = 35;
         while (--attempts > 0) {
-            int num = _biomeWidth / 4;
+            int num = _biomeWidth / 3;
             bool flag = true;
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 if (!flag) {
@@ -1485,7 +1526,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (!Main.tile[i, j].HasTile) {
                         continue;
                     }
-                    if (Main.tile[i, j].TileType == _elderWoodChestTileType) {
+                    if (TileID.Sets.BasicChest[Main.tile[i, j].TileType]) {
                         flag = false;
                         GetRandomPosition(posX, posY, out baseX, out baseY, false);
                         break;
