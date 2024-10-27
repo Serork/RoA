@@ -86,14 +86,14 @@ sealed class BackwoodsFogHandler : ModSystem {
 
         if (!BackwoodsBiome.IsActiveForFogEffect || !IsFogActive) {
             if (Opacity > 0f) {
-                Opacity -= 0.005f;
+                Opacity -= 0.005f * 0.1f;
             }
 
             return;
         }
 
         if (Opacity < 0.75f) {
-            Opacity += 0.0175f;
+            Opacity += 0.0175f * 0.1f;
         }
 
         Rectangle tileWorkSpace = GetTileWorkSpace();
@@ -130,12 +130,20 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
         tile = WorldGenHelper.GetTileSafely(x, y - 1);
         int type = ModContent.TileType<OvergrownAltar>();
-        if (!WorldGen.SolidTile(tile) && tile.TileType != type && WorldGenHelper.GetTileSafely(x + 1, y - 1).TileType != type && WorldGenHelper.GetTileSafely(x - 1, y - 1).TileType != type && Main.rand.NextBool(20)) {
-            SpawnFloorCloud(x, y);
-            if (Main.rand.NextBool(3)) {
-                SpawnFloorCloud(x, y - 1);
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                if (i != 0 || j != 0) {
+                    if (WorldGenHelper.GetTileSafely(x + i, y + j).TileType != type) {
+                        if (!WorldGen.SolidTile(tile) && tile.TileType != type && Main.rand.NextBool(20)) {
+                            SpawnFloorCloud(x, y);
+                            if (Main.rand.NextBool(3)) {
+                                SpawnFloorCloud(x, y - 1);
+                            }
+                        }
+                    }
+                }
             }
-        }
+       }
     }
 
     private void SpawnFloorCloud(int x, int y) {

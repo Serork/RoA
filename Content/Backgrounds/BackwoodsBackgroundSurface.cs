@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Utilities.Extensions;
+using RoA.Common.WorldEvents;
 using RoA.Core;
 
 using System;
@@ -58,7 +59,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         float screenOff = typeof(Main).GetFieldValue<float>("screenOff", Main.instance);
         float scAdj = typeof(Main).GetFieldValue<float>("scAdj", Main.instance);
         Color colorOfSurfaceBackgroundsModified = typeof(Main).GetFieldValue<Color>("ColorOfSurfaceBackgroundsModified", Main.instance);
-        Color backgroundColor = colorOfSurfaceBackgroundsModified;
+        Color backgroundColor = colorOfSurfaceBackgroundsModified/* * Math.Max(0.5f, 1f - BackwoodsFogHandler.Opacity)*/;
         bool canBGDraw = false;
         if ((!Main.remixWorld || (Main.gameMenu && !WorldGen.remixWorldGen)) && (!WorldGen.remixWorldGen || !WorldGen.drunkWorldGen)) {
             canBGDraw = true;
@@ -156,6 +157,30 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                 for (int i = 0; i < bgLoops; i++) {
                     //Main.EntitySpriteDraw(ModContent.Request<Texture2D>(ResourceManager.Textures + "BackwoodsBackground").Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset + close.Height * 3 - 186), new Rectangle(0, 0, close.Width, 300), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None);
                     Main.spriteBatch.Draw(close, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset), new Rectangle(0, 0, close.Width, close.Height), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
+                }
+            }
+            float value2 = Main.GraveyardVisualIntensity * 0.92f;
+            bool flag = false;
+            if (Main.cloudAlpha > 0f || value2 > 0f || BackwoodsFogHandler.Opacity > 0f) {
+                backgroundColor *= Math.Max(BackwoodsFogHandler.Opacity * 0.1f, Math.Max(Main.cloudAlpha, value2) * 0.1f);
+                flag = true;
+            }
+            if (flag) {
+                Texture2D value = TextureAssets.Background[49].Value;
+                bgScale = 1f;
+                bgScale *= bgGlobalScaleMultiplier;
+                int backgroundWidth = Main.screenWidth;
+                bgWidthScaled = (int)(backgroundWidth * bgScale);
+                bgTopY = (int)((double)(0f - Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
+                bgParallax = 0.1;
+                SkyManager.Instance.DrawToDepth(Main.spriteBatch, 1f / (float)bgParallax);
+                bgStartX = 0;
+                bgLoops = Main.screenWidth / bgWidthScaled + 2;
+                if ((double)Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
+                    for (int i = 0; i < bgLoops; i++) {
+                        int height = Math.Max(Main.screenHeight + 210, value.Height);
+                        Main.spriteBatch.Draw(value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY), new Rectangle(0, 0, bgWidthScaled, height), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
+                    }
                 }
             }
         }
