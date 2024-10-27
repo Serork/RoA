@@ -17,7 +17,7 @@ sealed partial class BackwoodsBiome : ModBiome {
         On_TileDrawing.Update += On_TileDrawing_Update;
     }
 
-    private bool IsValid() => !BackwoodsFogHandler.IsFogActive && Main.LocalPlayer.InModBiome<BackwoodsBiome>();
+    private static bool IsValid() => !BackwoodsFogHandler.IsFogActive && Main.LocalPlayer.InModBiome<BackwoodsBiome>();
 
     private void On_TileDrawing_Update(On_TileDrawing.orig_Update orig, TileDrawing self) {
         if (Main.dedServ) {
@@ -79,7 +79,7 @@ sealed partial class BackwoodsBiome : ModBiome {
 
             leafFrequency *= 7;
 
-            typeof(TileDrawing).SetFieldValue<int>("_leafFrequency", BackwoodsFogHandler.IsFogActive ? (2000 * 7) : leafFrequency, Main.instance.TilesRenderer);
+            typeof(TileDrawing).SetFieldValue<int>("_leafFrequency", leafFrequency, Main.instance.TilesRenderer);
             return;
         }
 
