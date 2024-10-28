@@ -16,12 +16,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Trees;
 
-sealed class test : ModPlayer {
-    public override void PostUpdate() {
-        Main.NewText(WorldGenHelper.GetTileSafely(Player.tileTargetX, Player.tileTargetY).TileFrameX + " " + WorldGenHelper.GetTileSafely(Player.tileTargetX, Player.tileTargetY).TileFrameY);
-    }
-}
-
 sealed class PrimordialTreeGlow : GlobalTile {
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
@@ -43,7 +37,7 @@ sealed class PrimordialTreeGlow : GlobalTile {
                         Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.5f);
                     }
                 }
-                else if (Main.rand.NextBool(500)) {
+                else if (Main.rand.NextBool(1000)) {
                     Dust dust = Dust.NewDustPerfect(position + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
                     dust.velocity *= 0.75f + Main.rand.NextFloat() * 0.25f;
                     dust.scale *= 1.1f;

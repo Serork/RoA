@@ -130,20 +130,24 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
         tile = WorldGenHelper.GetTileSafely(x, y - 1);
         int type = ModContent.TileType<OvergrownAltar>();
+
+        bool flag = true;
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if (i != 0 || j != 0) {
-                    if (WorldGenHelper.GetTileSafely(x + i, y + j).TileType != type) {
-                        if (!WorldGen.SolidTile(tile) && tile.TileType != type && Main.rand.NextBool(20)) {
-                            SpawnFloorCloud(x, y);
-                            if (Main.rand.NextBool(3)) {
-                                SpawnFloorCloud(x, y - 1);
-                            }
-                        }
+                    if (WorldGenHelper.GetTileSafely(x + i, y + j).TileType == type) {
+                        flag = false;
+                        break;
                     }
                 }
             }
-       }
+        }
+        if (flag && !WorldGen.SolidTile(tile) && tile.TileType != type && Main.rand.NextBool(20)) {
+            SpawnFloorCloud(x, y);
+            if (Main.rand.NextBool(3)) {
+                SpawnFloorCloud(x, y - 1);
+            }
+        }
     }
 
     private void SpawnFloorCloud(int x, int y) {
