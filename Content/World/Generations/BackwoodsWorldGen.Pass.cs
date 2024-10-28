@@ -1009,10 +1009,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step13_GrowBigTrees() {
-        int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX + EdgeX / 3 : Left) : Left;
+        int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX/* + EdgeX / 3*/ : Left) : Left;
         _leftTreeX = _random.Next(left + 15, left + 30);
         GrowBigTree(_leftTreeX);
-        int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX - EdgeX / 3 : Right) : Right;
+        int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX/* - EdgeX / 3*/ : Right) : Right;
         _rightTreeX = _random.Next(right - 30, right - 15);
         GrowBigTree(_rightTreeX, false);
     }
