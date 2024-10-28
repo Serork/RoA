@@ -7,6 +7,7 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.GameContent;
@@ -33,15 +34,6 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
     public override void Load() {
         On_Main.DrawTileInWater += On_Main_DrawTileInWater;
         On_Liquid.DelWater += On_Liquid_DelWater;
-        On_WorldGen.TileFrame += On_WorldGen_TileFrame;
-    }
-
-    private void On_WorldGen_TileFrame(On_WorldGen.orig_TileFrame orig, int i, int j, bool resetFrame, bool noBreak) {
-        Tile tile = Main.tile[i, j];
-        if (tile.HasTile && tile.TileType == ModContent.TileType<BackwoodsLilypad>()) {
-            CheckTileFrame(i, j);
-        }
-        orig(i, j, resetFrame, noBreak);
     }
 
     private void On_Liquid_DelWater(On_Liquid.orig_DelWater orig, int l) {
@@ -151,11 +143,11 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
         }
     }
 
-    //public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
-    //    CheckTileFrame(i, j);
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        CheckTileFrame(i, j);
 
-    //    return false;
-    //}
+        return true;
+    }
 
     public override bool CreateDust(int i, int j, ref int type) {
         int num19 = (int)WorldGenHelper.GetTileSafely(i, j).LiquidAmount / 16;
@@ -173,7 +165,7 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
         //    return;
 
         int x = i, y = j;
-        if (Main.tile[x, y].LiquidType != LiquidID.Water) {
+        if (Main.tile[x, y].LiquidType != 0) {
             WorldGen.KillTile(x, y);
             if (Main.netMode == 2)
                 NetMessage.SendData(17, -1, -1, null, 0, x, y);
@@ -184,13 +176,24 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
         int num = y;
         while ((!Main.tile[x, num].HasTile || !Main.tileSolid[Main.tile[x, num].TileType] || Main.tileSolidTop[Main.tile[x, num].TileType]) && num < Main.maxTilesY - 50) {
             num++;
+            if (Main.tile[x, num] == null)
+                return;
         }
 
         int type = Main.tile[x, num].TileType;
         int num2 = -1;
 
-        if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)type))
+        if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)type)) {
             num2 = 0;
+        }
+        //if (type == 2 || type == 477)
+        //    num2 = 0;
+
+        //if (type == 109 || type == 109 || type == 116)
+        //    num2 = 18;
+
+        //if (type == 60)
+        //    num2 = 36;
 
         if (num2 >= 0) {
             if (num2 != Main.tile[x, y].TileFrameY) {
@@ -199,19 +202,18 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
                     NetMessage.SendTileSquare(-1, x, y);
             }
 
-            if (Main.tile[x, y - 1].AnyLiquid() && !Main.tile[x, y - 1].HasTile) {
+            if (Main.tile[x, y - 1].LiquidAmount > 0 && !Main.tile[x, y - 1].HasTile) {
                 Tile tile = Main.tile[x, y - 1];
                 tile.HasTile = true;
-                tile.TileType = Type;
+                tile.TileType = (ushort)ModContent.TileType<BackwoodsLilypad>();
                 tile.TileFrameX = Main.tile[x, y].TileFrameX;
                 tile.TileFrameY = Main.tile[x, y].TileFrameY;
                 tile.IsHalfBlock = false;
                 tile.Slope = 0;
 
-                tile = Main.tile[x, y];
-                tile.HasTile = false;
-                Main.tile[x, y].TileType = 0;
-
+                Tile tile2 = Main.tile[x, y];
+                tile2.HasTile = false;
+                tile2.TileType = 0;
                 WorldGen.SquareTileFrame(x, y - 1, resetFrame: false);
                 if (Main.netMode == 2)
                     NetMessage.SendTileSquare(-1, x, y - 1, 1, 2);
@@ -220,20 +222,19 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
                 if (Main.tile[x, y].LiquidAmount != 0)
                     return;
 
-                Tile tileSafely = WorldGenHelper.GetTileSafely(x, y + 1);
+                Tile tileSafely = Framing.GetTileSafely(x, y + 1);
                 if (!tileSafely.HasTile) {
                     Tile tile = Main.tile[x, y + 1];
                     tile.HasTile = true;
-                    tile.TileType = Type;
+                    tile.TileType = (ushort)ModContent.TileType<BackwoodsLilypad>();
                     tile.TileFrameX = Main.tile[x, y].TileFrameX;
                     tile.TileFrameY = Main.tile[x, y].TileFrameY;
                     tile.IsHalfBlock = false;
                     tile.Slope = 0;
 
-                    tile = Main.tile[x, y];
-                    tile.HasTile = false;
-                    Main.tile[x, y].TileType = 0;
-
+                    Tile tile2 = Main.tile[x, y];
+                    tile2.HasTile = false;
+                    tile2.TileType = 0;
                     WorldGen.SquareTileFrame(x, y + 1, resetFrame: false);
                     if (Main.netMode == 2)
                         NetMessage.SendTileSquare(-1, x, y + 1, 1, 2);
