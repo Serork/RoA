@@ -11,7 +11,7 @@ sealed class Bonerose : PlantBase, TileHooks.IGlobalRandomUpdate {
         AddMapEntry(new(178, 178, 137), CreateMapEntryName());
 
         DustType = DustID.Bone;
-        HitSound = SoundID.NPCHit1;
+        HitSound = SoundID.NPCHit2;
 
         DropItem = (ushort)ModContent.ItemType<Items.Materials.Bonerose>();
 

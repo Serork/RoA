@@ -53,15 +53,20 @@ class TreeBranch : ModTile {
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
-    public override void NearbyEffects(int i, int j, bool closer) {
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            return false;
+
         Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j), rightTile = WorldGenHelper.GetTileSafely(i + 1, j);
         if ((!rightTile.HasTile && !leftTile.HasTile) ||
             (rightTile.TileType != TileID.Trees && leftTile.TileType != TileID.Trees)) {
-            WorldGenHelper.GetTileSafely(i, j).HasTile = false;
+            WorldGen.KillTile(i, j);
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j, 1f);
             }
         }
+
+        return false;
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {

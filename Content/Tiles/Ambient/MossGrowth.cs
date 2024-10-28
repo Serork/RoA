@@ -26,9 +26,10 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
-        Main.tileNoFail[Type] = true;
         Main.tileLavaDeath[Type] = true;
         Main.tileLighted[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileNoFail[Type] = true;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
@@ -47,7 +48,10 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => BackwoodsGreenMoss.SetupLight(ref r, ref g, ref b);
 
-    public override void NearbyEffects(int i, int j, bool closer) {
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            return false;
+
         ushort moss = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
         Tile belowTile = WorldGenHelper.GetTileSafely(i, j + 1);
@@ -65,16 +69,18 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
                 hasTile = true;
             }
             if (rightTile.ActiveTile(moss)) {
-                hasTile = true; 
+                hasTile = true;
             }
         }
         if (hasTile) {
-            return;
+            return false;
         }
         WorldGenHelper.GetTileSafely(i, j).HasTile = false;
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j, 1f);
         }
+
+        return false;
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {

@@ -11,16 +11,13 @@ sealed class Cloudberry : PlantBase, TileHooks.IGlobalRandomUpdate {
         AddMapEntry(new(235, 150, 12), CreateMapEntryName());
 
         DustType = DustID.Shiverthorn;
+        HitSound = SoundID.Grass;
 
         DropItem = (ushort)ModContent.ItemType<Items.Materials.Cloudberry>();
     }
 
     public void OnGlobalRandomUpdate(int i, int j) {
         if (j >= Main.worldSurface) {
-            return;
-        }
-
-        if (WorldGen.genRand.NextBool()) {
             return;
         }
 
