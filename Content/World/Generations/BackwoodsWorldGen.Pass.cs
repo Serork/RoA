@@ -1412,7 +1412,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        int num = 35;
+        int num = _biomeWidth / 4;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                 if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == 21)
@@ -1425,7 +1425,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     return;
             }
         }
-        num = 25;
+        num = _biomeWidth / 4;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                 if (Main.tile[i, j].HasTile && TileSets.Paintings.Contains(Main.tile[i, j].TileType))
@@ -1489,7 +1489,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         WeightedRandom<float> weightedRandom = new WeightedRandom<float>();
         weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.35f);
         weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.35f);
-        weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.6f);
+        weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.45f);
         weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.6f);
