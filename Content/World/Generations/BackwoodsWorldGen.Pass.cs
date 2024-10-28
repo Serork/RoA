@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Common.Sets;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
@@ -159,7 +160,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 for (int placeX = x - spreadX; placeX < x + spreadX; placeX++) {
                     for (int placeY = y - spreadY; placeY < y + spreadY; placeY++) {
                         tile = WorldGenHelper.GetTileSafely(placeX, placeY);
-                        if (!tile.AnyWall() && y < Main.worldSurface) {
+                        if (!tile.AnyWall() && placeY < Main.worldSurface) {
                             continue;
                         }
                         if (tile.AnyLiquid()) {
@@ -167,6 +168,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
 
                         Tile aboveTile = WorldGenHelper.GetTileSafely(placeX, placeY - 1);
+                        if (!aboveTile.AnyWall() && placeY - 1 < Main.worldSurface) {
+                            continue;
+                        }
+                        if (aboveTile.AnyLiquid()) {
+                            continue;
+                        }
                         if (validTiles.Contains(tile.TileType) && WorldGen.SolidTile(placeX, placeY) && !aboveTile.HasTile) {
                             aboveTile.HasTile = true;
                             aboveTile.TileType = TileID.BloomingHerbs;
@@ -1412,10 +1419,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     return;
             }
         }
-        num = 25;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                 if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType != 21 && TileID.Sets.BasicChest[Main.tile[i, j].TileType])
+                    return;
+            }
+        }
+        num = 25;
+        for (int i = origin.X - num; i <= origin.X + num; i++) {
+            for (int j = origin.Y - num; j <= origin.Y + num; j++) {
+                if (Main.tile[i, j].HasTile && TileSets.Paintings.Contains(Main.tile[i, j].TileType))
+                    return;
+            }
+        }
+        for (int i = origin.X - num; i <= origin.X + num; i++) {
+            for (int j = origin.Y - num; j <= origin.Y + num; j++) {
+                if (Main.tile[i, j].HasTile && TileID.Sets.Platforms[Main.tile[i, j].TileType])
                     return;
             }
         }
@@ -1451,7 +1470,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (!painting3) {
             HouseBuilderCustom._painting3 = false;
         }
-        houseBuilder.ChestChance = 1;
+        houseBuilder.ChestChance = 0.85;
         houseBuilder.Place(new HouseBuilderContext(), GenVars.structures);
     }
 
@@ -2584,13 +2603,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int testJ = startY;
             bool flag4 = startY >= lastSurfaceY - 3;
             bool flag5 = false;
-            if (first) {
-                randomness += _random.Next(-1, 2);
-                if (randomness < 0)
-                    randomness = 0;
-                if (randomness > 5)
-                    randomness = 5;
-            }
+            //if (first) {
+            //    randomness += _random.Next(-1, 2);
+            //    if (randomness < 0)
+            //        randomness = 0;
+            //    if (randomness > 5)
+            //        randomness = 5;
+            //}
             while (testJ <= startY + _biomeHeight / 2) {
                 if (first) {
                     randomness += _random.Next(-1, 2);
