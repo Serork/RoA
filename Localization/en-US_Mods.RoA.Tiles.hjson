@@ -12,7 +12,7 @@ LuminousFlower.MapEntry: Luminous Flower
 Bonerose.MapEntry: Bonerose
 OvergrownAltar.MapEntry: Overgrown Altar
 LivingElderwood.MapEntry: Living Elderwood
-LivingElderwood2.MapEntry: Living Elderwood2
+LivingElderwood2.MapEntry: Living Elderwood
 ElderwoodChair.MapEntry: Elderwood Chair
 ElderwoodChandelier.MapEntry: Elderwood Chandelier
 ElderwoodDoorClosed.MapEntry: Elderwood Door Closed
@@ -26,5 +26,5 @@ MillionDollarPainting.MapEntry: Million Dollar Painting
 Moss.MapEntry: '''"Moss"'''
 TheLegend.MapEntry: '''"The Legend"'''
 Cloudberry.MapEntry: Cloudberry
-LivingElderwood3.MapEntry: Living Elderwood3
-ElderwoodChest2.MapEntry: Elderwood Chest2
+LivingElderwood3.MapEntry: Living Elderwood
+ElderwoodChest2.MapEntry: Backstone Chest

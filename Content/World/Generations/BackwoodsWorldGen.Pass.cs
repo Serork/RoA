@@ -2624,7 +2624,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     //    WorldGenHelper.ReplaceTile(cliffX, testJ, _random.NextChance(0.75f) ? CliffPlaceholderTileType : TileID.Mud);
                     //}
                     //else {
-                Tile tile = Main.tile[cliffX + randomness, testJ];
+
+                Tile tile = Main.tile[cliffX + randomness + 1, testJ];
                 if (SandTileTypes.Contains(tile.TileType)) {
                     flag5 = true;
                     break;
@@ -2632,13 +2633,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (!SkipBiomeInvalidTileTypeToKill.Contains(tile.TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) {
                     if ((flag4 && _random.NextBool(3)) || !flag4) {
                         for (int j = testJ - 15; j < testJ; j++) {
-                            if (!SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[cliffX + randomness, j].TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[cliffX + randomness, j].WallType)) {
-                                if (Main.tile[cliffX + randomness, j].TileType != CliffPlaceholderTileType) {
-                                    WorldGen.KillTile(cliffX + randomness, j);
+                            if (!SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[cliffX + randomness + 1, j].TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[cliffX + randomness + 1, j].WallType)) {
+                                if (Main.tile[cliffX + randomness + 1, j].TileType != CliffPlaceholderTileType) {
+                                    WorldGen.KillTile(cliffX + randomness + 1, j);
                                 }
                             }
                         }
-                        WorldGenHelper.ReplaceTile(cliffX + randomness, testJ, CliffPlaceholderTileType);
+                        WorldGenHelper.ReplaceTile(cliffX + randomness + 1, testJ, CliffPlaceholderTileType);
                     }
                 }
                     //}

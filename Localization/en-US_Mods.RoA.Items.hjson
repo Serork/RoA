@@ -312,6 +312,6 @@ WeightPotion: {
 }
 
 ElderwoodChest2: {
-	DisplayName: Elderwood Chest2
+	DisplayName: Backstone Chest
 	Tooltip: ""
 }
