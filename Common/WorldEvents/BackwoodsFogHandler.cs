@@ -86,14 +86,14 @@ sealed class BackwoodsFogHandler : ModSystem {
 
         if (!BackwoodsBiome.IsActiveForFogEffect || !IsFogActive) {
             if (Opacity > 0f) {
-                Opacity -= 0.005f * 0.1f;
+                Opacity -= 0.005f * 0.25f;
             }
 
             return;
         }
 
         if (Opacity < 0.75f) {
-            Opacity += 0.0175f * 0.1f;
+            Opacity += 0.0175f * 0.15f;
         }
 
         Rectangle tileWorkSpace = GetTileWorkSpace();
