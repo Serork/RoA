@@ -34,7 +34,7 @@ sealed class PrimordialTreeGlow : GlobalTile {
                 Vector2 position = new Vector2(i, j).ToWorldCoordinates();
                 if (bluePart) {
                     if (!Main.dedServ) {
-                        Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.75f);
+                        Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.7f);
                     }
                 }
                 else if (Main.rand.NextBool(1100)) {
@@ -46,7 +46,7 @@ sealed class PrimordialTreeGlow : GlobalTile {
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>(PrimordialTree.TexturePath + "_Glow").Value,
                                       new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
                                       new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
-                                      Color.Lerp(Color.White, Lighting.GetColor(i, j), bluePart ? 0.5f : 0.7f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                                      Color.Lerp(Color.White, Lighting.GetColor(i, j), bluePart ? 0.6f : 0.8f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
         }
     }
