@@ -2709,9 +2709,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int startY = cliffTileCoords.Y;
         bool first = true;
         int randomness = 0;
+        int dir = _toLeft ? -1 : 1;
+        int x = cliffX + (randomness + 1) * dir;
         while (startY < lastSurfaceY) {
-            int dir = _toLeft ? -1 : 1;
-            int x = cliffX + (randomness + 1) * dir;
+            x = cliffX + (randomness + 1) * dir;
             bool flag = Math.Abs(x - cliffTileCoords.X) > 20;
             while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
                 startY++;
@@ -2772,7 +2773,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 first = false;
             }
         }
-        _lastCliffX = cliffX + randomness;
+        _lastCliffX = x;
 
         //lastSurfaceY = BackwoodsVars.FirstTileYAtCenter;
         //cliffX = cliffTileCoords.X;
