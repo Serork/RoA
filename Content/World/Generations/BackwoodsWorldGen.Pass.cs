@@ -2711,7 +2711,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int randomness = 0;
         while (startY < lastSurfaceY) {
             int dir = _toLeft ? -1 : 1;
-            int x = cliffX + (randomness) * dir;
+            int x = cliffX + (randomness + 1) * dir;
             bool flag = Math.Abs(x - cliffTileCoords.X) > 20;
             while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
                 startY++;
@@ -2719,6 +2719,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if ((_random.NextChance(0.75) && flag) || !flag) {
                 cliffX -= dir;
             }
+            x = cliffX + (randomness + 1) * dir;
             bool flag2 = Math.Abs(x - cliffTileCoords.X) > 10;
             int testJ = startY;
             bool flag4 = startY >= lastSurfaceY - 3;
@@ -2745,7 +2746,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (randomness > 5)
                         randomness = 5;
                 }
-                x = cliffX + (randomness) * dir;
+                x = cliffX + (randomness + 1) * dir;
                 Tile tile = Main.tile[x, testJ];
                 if (SandTileTypes.Contains(tile.TileType)) {
                     flag5 = true;

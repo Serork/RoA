@@ -31,9 +31,10 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
     }
 
     public override void Load() {
-        On_Main.DrawTileInWater += On_Main_DrawTileInWater;
+        //On_Main.DrawTileInWater += On_Main_DrawTileInWater;
         On_Liquid.DelWater += On_Liquid_DelWater;
         On_TileDrawing.DrawSingleTile += On_TileDrawing_DrawSingleTile;
+        On_Main.DrawTileInWater += On_Main_DrawTileInWater;
     }
 
     private void On_TileDrawing_DrawSingleTile(On_TileDrawing.orig_DrawSingleTile orig, TileDrawing self, Terraria.DataStructures.TileDrawInfo drawData, bool solidLayer, int waterStyleOverride, Vector2 screenPosition, Vector2 screenOffset, int tileX, int tileY) {
@@ -198,18 +199,20 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
                     NetMessage.SendTileSquare(-1, x, y);
             }
 
-            if (Main.tile[x, y - 1].AnyLiquid() && !Main.tile[x, y - 1].HasTile) {
-                Tile tile = Main.tile[x, y - 1];
+            if (Main.tile[x, y - 1].LiquidAmount > 0 && !Main.tile[x, y - 1].HasTile) {
+                Tile tile = Main.tile[x, y];
+                short tileFrameX = tile.TileFrameX, tileFrameY = tile.TileFrameY;
+                tile.ClearTile();
+                tile.HasTile = false;
+
+                tile = Main.tile[x, y - 1];
+                tile.ClearTile();
                 tile.HasTile = true;
                 tile.TileType = Type;
-                tile.TileFrameX = Main.tile[x, y].TileFrameX;
-                tile.TileFrameY = Main.tile[x, y].TileFrameY;
+                tile.TileFrameX = tileFrameX;
+                tile.TileFrameY = tileFrameY;
                 tile.IsHalfBlock = false;
                 tile.Slope = 0;
-
-                tile = Main.tile[x, y];
-                tile.HasTile = false;
-                tile.TileType = 0;
 
                 WorldGen.SquareTileFrame(x, y - 1, resetFrame: false);
                 if (Main.netMode == 2)
@@ -219,19 +222,21 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
                 if (Main.tile[x, y].LiquidAmount != 0)
                     return;
 
-                Tile tileSafely = WorldGenHelper.GetTileSafely(x, y + 1);
+                Tile tileSafely = Framing.GetTileSafely(x, y + 1);
                 if (!tileSafely.HasTile) {
-                    Tile tile = Main.tile[x, y + 1];
+                    Tile tile = Main.tile[x, y];
+                    short tileFrameX = tile.TileFrameX, tileFrameY = tile.TileFrameY;
+                    tile.ClearTile();
+                    tile.HasTile = false;
+
+                    tile = Main.tile[x, y + 1];
+                    tile.ClearTile();
                     tile.HasTile = true;
                     tile.TileType = Type;
-                    tile.TileFrameX = Main.tile[x, y].TileFrameX;
-                    tile.TileFrameY = Main.tile[x, y].TileFrameY;
+                    tile.TileFrameX = tileFrameX;
+                    tile.TileFrameY = tileFrameY;
                     tile.IsHalfBlock = false;
                     tile.Slope = 0;
-
-                    tile = Main.tile[x, y];
-                    tile.HasTile = false;
-                    Main.tile[x, y].TileType = 0;
 
                     WorldGen.SquareTileFrame(x, y + 1, resetFrame: false);
                     if (Main.netMode == 2)
@@ -252,8 +257,10 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
     }
 
     private void On_Main_DrawTileInWater(On_Main.orig_DrawTileInWater orig, Vector2 drawOffset, int x, int y) {
+        orig(drawOffset, x, y);
+
         if (Main.tile[x, y].HasTile && Main.tile[x, y].TileType == Type) {
-            Main.instance.LoadTiles(Main.tile[x, y].TileType);
+            //Main.instance.LoadTiles(Main.tile[x, y].TileType);
             Tile tile = Main.tile[x, y];
             int num = (int)tile.LiquidAmount / 16;
             num -= 3;
@@ -261,12 +268,33 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
                 num = 8;
 
             Microsoft.Xna.Framework.Rectangle value = new Microsoft.Xna.Framework.Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 18);
-            Main.spriteBatch.Draw(TextureAssets.Tile[tile.TileType].Value, new Vector2(x * 16, y * 16 - num) + drawOffset, value, Lighting.GetColor(x, y), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+            if (Main.drawToScreen) {
+                zero = Vector2.Zero;
+            }
+            Main.spriteBatch.Draw(TextureAssets.Tile[tile.TileType].Value, new Vector2(x * 16, y * 16 - num - 2) - Main.screenPosition + zero, value, Lighting.GetColor(x, y), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
         }
-        orig(drawOffset, x, y);
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        int x = i, y = j;
+        //if (Main.tile[x, y].HasTile && Main.tile[x, y].TileType == Type) {
+        //Main.instance.LoadTiles(Main.tile[x, y].TileType);
+        Tile tile = Main.tile[x, y];
+        int num = (int)tile.LiquidAmount / 16;
+        num -= 3;
+        if (WorldGen.SolidTile(x, y - 1) && num > 8)
+            num = 8;
+
+        Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+        if (Main.drawToScreen) {
+            zero = Vector2.Zero;
+        }
+
+        Microsoft.Xna.Framework.Rectangle value = new Microsoft.Xna.Framework.Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 18);
+        Main.spriteBatch.Draw(TextureAssets.Tile[tile.TileType].Value, new Vector2(x * 16, y * 16 - num - 2) - Main.screenPosition + zero, value, Lighting.GetColor(x, y), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+        //}
+
         return false;
     }
 

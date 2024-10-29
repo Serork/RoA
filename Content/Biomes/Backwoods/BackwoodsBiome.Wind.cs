@@ -15,6 +15,35 @@ sealed partial class BackwoodsBiome : ModBiome {
     public override void Load() {
         On_TileDrawing.UpdateLeafFrequency += On_TileDrawing_UpdateLeafFrequency;
         On_TileDrawing.Update += On_TileDrawing_Update;
+        On_TileDrawing.GetWindCycle += On_TileDrawing_GetWindCycle;
+    }
+
+    private float On_TileDrawing_GetWindCycle(On_TileDrawing.orig_GetWindCycle orig, TileDrawing self, int x, int y, double windCounter) {
+        if (IsValid()) {
+            if (!Main.SettingsEnabled_TilesSwayInWind)
+                return 0f;
+
+            float num = (float)x * 0.5f + (float)(y / 100) * 0.5f;
+            float num2 = (float)Math.Cos(windCounter * 6.2831854820251465 + (double)num) * 0.5f;
+            float windForVisuals = Math.Max(1f, Main.WindForVisuals);
+            if (Main.remixWorld) {
+                if (!((double)y > Main.worldSurface))
+                    return 0f;
+
+                num2 += windForVisuals;
+            }
+            else {
+                if (!((double)y < Main.worldSurface))
+                    return 0f;
+
+                num2 += windForVisuals;
+            }
+
+            float lerpValue = Utils.GetLerpValue(0.08f, 0.18f, Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f), clamped: true);
+            return num2 * lerpValue;
+        }
+
+        return orig(self, x, y, windCounter);
     }
 
     private static bool IsValid() => !BackwoodsFogHandler.IsFogActive && Main.LocalPlayer.InModBiome<BackwoodsBiome>();
