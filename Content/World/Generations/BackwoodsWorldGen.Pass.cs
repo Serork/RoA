@@ -1815,6 +1815,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     public void BackwoodsOnLast(GenerationProgress progress, GameConfiguration config) {
         Step_AddCatTails();
         Step_AddLilypads();
+        Step_AddLilypads();
 
         Step_AddChests();
 
