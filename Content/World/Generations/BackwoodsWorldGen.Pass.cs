@@ -69,7 +69,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
     }
 
-    private int CenterY {
+    internal int CenterY {
         get => _positionToPlaceBiome.Y;
         set {
             _positionToPlaceBiome.Y = value/*Math.Max(value, (int)GenVars.worldSurface - 100)*/;
@@ -83,7 +83,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private Point TopLeft => new(Left, Top);
     private Point TopRight => new(Right, Top);
     private int EdgeX => _biomeWidth / 4;
-    private int EdgeY => _biomeHeight / 4;
+    internal int EdgeY => _biomeHeight / 4;
     
     private void SetUpMessage(LocalizedText message, float? value = null, GenerationProgress progress = null) {
         if (_progress == null) {
@@ -329,7 +329,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddGrassWalls() {
         // adapted vanilla
-        int count = 3;
+        int count = 3 + 2 * WorldGenHelper.WorldSize;
         for (int num298 = Left - 50; num298 < Right + 50; num298++) {
             for (int num299 = WorldGenHelper.SafeFloatingIslandY; (double)num299 < Main.worldSurface - 10.0; num299++) {
                 if (_random.Next(4) == 0) {
@@ -2800,7 +2800,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         int topLeftTileX = Left + 20, topRightTileX = Right - 20;
                         bool edgeLeft = i < topLeftTileX + _biomeWidth / 4, edgeRight = i > topRightTileX - _biomeWidth / 4;
                         bool edgeLeft2 = i > topLeftTileX + _biomeWidth / 3 + 2, edgeRight2 = i < topRightTileX - _biomeWidth / 3 - 2;
-                        int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY;
+                        int minY = BackwoodsVars.FirstTileYAtCenter + 10;
                         killTile = false;
                         if (j < minY) {
                             killTile = true;
@@ -3035,9 +3035,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     //}
                 //}
                 testJ++;
-            }
-            if (!flag5) {
-                first = false;
+                if (testJ >= max) {
+                    first = false;
+                }
             }
         }
         _lastCliffX = x;
