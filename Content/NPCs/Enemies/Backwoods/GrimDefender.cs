@@ -22,6 +22,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -38,6 +39,13 @@ sealed class GrimDefender : ModNPC {
     private float _rotation;
     private bool _isAngry;
     private float _angryTimer;
+
+    public override void OnSpawn(IEntitySource source) {
+        if (NPC.downedBoss2) {
+            _isAngry = true;
+            NPC.netUpdate = true;
+        }
+    }
 
     public override void Load() {
         On_Main.HoverOverNPCs += On_Main_HoverOverNPCs;
