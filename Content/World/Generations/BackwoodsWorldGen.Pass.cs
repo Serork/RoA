@@ -31,6 +31,7 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
+using static System.Net.Mime.MediaTypeNames;
 using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.World.Generations;
@@ -2198,11 +2199,60 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
                 }
-                if (Main.tile[i, j].WallType == _grassWallType && _random.NextBool(2)) {
+            }
+        }
+
+        for (int i = Left - 15; i <= Right + 15; i++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
+                if (Main.tile[i, j].WallType == _grassWallType && _random.NextBool(3)) {
                     WorldGen.PlaceLiquid(i, j, 0, 255);
                 }
             }
         }
+        void settleLiquids() {
+            Liquid.worldGenTilesIgnoreWater(ignoreSolids: true);
+            Liquid.QuickWater(3);
+            WorldGen.WaterCheck();
+            int num606 = 0;
+            Liquid.quickSettle = true;
+            int num607 = 10;
+            while (num606 < num607) {
+                int num608 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
+                num606++;
+                double num609 = 0.0;
+                int num610 = num608 * 5;
+                while (Liquid.numLiquid > 0) {
+                    num610--;
+                    if (num610 < 0)
+                        break;
+
+                    double num611 = (double)(num608 - (Liquid.numLiquid + LiquidBuffer.numLiquidBuffer)) / (double)num608;
+                    if (Liquid.numLiquid + LiquidBuffer.numLiquidBuffer > num608)
+                        num608 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
+
+                    if (num611 > num609)
+                        num609 = num611;
+                    else
+                        num611 = num609;
+
+                    if (num606 == 1)
+                        progress.Set(num611 / 3.0 + 0.33);
+
+                    int num612 = 10;
+                    if (num606 > num612)
+                        num612 = num606;
+
+                    Liquid.UpdateLiquid();
+                }
+
+                WorldGen.WaterCheck();
+                progress.Set((double)num606 * 0.1 / 3.0 + 0.66);
+            }
+
+            Liquid.quickSettle = false;
+            Liquid.worldGenTilesIgnoreWater(ignoreSolids: false);
+        }
+        settleLiquids();
 
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
@@ -2963,7 +3013,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGen.KillTile(i, y2 + j3);
                 }
             }
-            int j = y2;
+            int j = y2 - 10;
             int waterYRandomness = 0;
             while (j <= Bottom) {
                 bool edgeLeft = i < topLeftTileX + 15, edgeRight = i > topRightTileX - 15;
@@ -3079,6 +3129,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int dir = _toLeft ? -1 : 1;
         int randomness = 0;
         int x = cliffX + (randomness + 1) * dir;
+        int max = startY + _biomeHeight / 2;
+        int[] randomnessPoints = new int[max - startY + 1];
         while (startY < lastSurfaceY) {
             x = cliffX + (randomness + 1) * dir;
             bool flag = Math.Abs(x - cliffTileCoords.X) > 20;
@@ -3094,8 +3146,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             //    if (randomness > 5)
             //        randomness = 5;
             //}
-            int max = startY + _biomeHeight / 2;
-            int[] randomnessPoints = new int[max - testJ + 1];
             while (testJ <= max) {
                 //bool flag3 = !flag2 && Main.tile[cliffX + randomness, testJ].HasTile;
                 //if (flag3 || flag2) {
@@ -3255,9 +3305,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = 0; i < maxCaves; i++) {
             x = _random.Next(startX - 100, endX + 100);
             int y = _random.Next(minY + 5, maxY + 5);
+            if (_random.NextBool(5) && y < BackwoodsVars.FirstTileYAtCenter + EdgeY / 2 && WorldGenHelper.ActiveTile(x, y, _dirtTileType) || WorldGenHelper.ActiveTile(x, y, _stoneTileType)) {
+                int type = -2;
+                int sizeX = _random.Next(5, 15) / 2;
+                int sizeY = _random.Next(30, 200) / 2;
+                WorldGen.TileRunner(x, y, sizeX, sizeY, type);
+            }
             if (WorldGenHelper.ActiveTile(x, y, _dirtTileType) || WorldGenHelper.ActiveTile(x, y, _stoneTileType)) {
                 int type = -1;
-                if (y < CenterY - EdgeY && _random.NextBool(5)) { // water
+                if (y < BackwoodsVars.FirstTileYAtCenter + 5) {
                     type = -2;
                 }
                 int sizeX = _random.Next(5, 15);
