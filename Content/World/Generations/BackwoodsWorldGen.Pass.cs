@@ -171,7 +171,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
 
                         Tile aboveTile = WorldGenHelper.GetTileSafely(placeX, placeY - 1);
-                        if (tile.HasTile && Main.tileSolid[tile.TileType] && !Main.tileSolidTop[tile.TileType] && validTiles.Contains(tile.TileType) && !aboveTile.HasTile) {
+                        if (tile.HasTile && Main.tileSolid[tile.TileType] && !Main.tileSolidTop[tile.TileType] && validTiles.Contains(tile.TileType) && !aboveTile.HasTile && !WorldGenHelper.GetTileSafely(placeX, placeY - 2).HasTile) {
                             if (aboveTile.WallType == _grassWallType || tile.WallType == _leavesWallType) {
                                 continue;
                             }
@@ -338,7 +338,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int count = 3 + 3 * (WorldGenHelper.WorldSize - 1);
         for (int num298 = Left - 50; num298 < Right + 50; num298++) {
             for (int num299 = WorldGenHelper.SafeFloatingIslandY; (double)num299 < Main.worldSurface - 10.0; num299++) {
-                if (_random.Next(4) == 0) {
+                if (_random.Next(2) == 0) {
                     bool flag8 = false;
                     int num300 = -1;
                     int num301 = -1;
@@ -346,7 +346,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (Main.tile[num298, num299].HasTile && Main.tile[num298, num299].TileType == _grassTileType && (Main.tile[num298, num299].WallType == _dirtWallType || Main.tile[num298, num299].WallType == _leavesWallType)) {
                         for (int num302 = num298 - 1; num302 <= num298 + 1; num302++) {
                             for (int num303 = num299 - 1; num303 <= num299 + 1; num303++) {
-                                flag10 = (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(5) || (count > count / 2 && _random.NextBool(4))) && count > 0));
+                                flag10 = _random.NextBool() && (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(5) || (count > count / 2 && _random.NextBool(4))) && count > 0));
                                 if ((Main.tile[num302, num303].WallType == 0 || flag10) && !WorldGen.SolidTile(num302, num303))
                                     flag8 = true;
                             }
@@ -364,7 +364,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
 
-                    if (flag8 && num300 > -1 && num301 > -1 && WorldGen.countDirtTiles(num300, num301) < 2000) {
+                    if (flag8 && num300 > -1 && num301 > -1 && WorldGen.countDirtTiles(num300, num301) < (flag10 ? 2000 : WorldGen.maxTileCount)) {
                         try {
                             ushort wallType = 63;
                             if (flag10) {
@@ -2204,7 +2204,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         for (int i = Left - 15; i <= Right + 15; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
-                if (Main.tile[i, j].WallType == _grassWallType && _random.NextBool(3)) {
+                if (Main.tile[i, j].WallType == _grassWallType && _random.NextBool(4)) {
                     WorldGen.PlaceLiquid(i, j, 0, 255);
                 }
             }
