@@ -27,14 +27,14 @@ sealed partial class BackwoodsBiome : ModBiome {
             float num2 = (float)Math.Cos(windCounter * 6.2831854820251465 + (double)num) * 0.5f;
             float windForVisuals = Math.Max(1f, Main.WindForVisuals);
             if (Main.remixWorld) {
-                if (!((double)y > Main.worldSurface))
-                    return 0f;
+                //if (!((double)y > Main.worldSurface))
+                //    return 0f;
 
                 num2 += windForVisuals;
             }
             else {
-                if (!((double)y < Main.worldSurface))
-                    return 0f;
+                //if (!((double)y < Main.worldSurface))
+                //    return 0f;
 
                 num2 += windForVisuals;
             }

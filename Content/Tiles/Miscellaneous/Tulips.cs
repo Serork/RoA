@@ -43,7 +43,7 @@ sealed class WeepingTulip : TulipLikeTileBase {
 
     public override Color MapColor => new(0, 0, 255);
 
-    protected override void SafeSetStaticDefaults() {
+    protected override void SafeSetStaticDefaults2() {
         DustType = DustID.Bone;
 
         RootsDrawing.ShouldDraw[Type] = true;

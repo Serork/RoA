@@ -18,10 +18,13 @@ sealed class ElderwoodTable : ModTile {
 		Main.tileTable[Type] = true;
 		Main.tileLavaDeath[Type] = true;
 
-		TileObjectData.newTile.DrawYOffset = 2;
+
+        TileID.Sets.DisableSmartCursor[Type] = true;
+        TileID.Sets.IgnoredByNpcStepUp[Type] = true;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-		TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 		TileObjectData.addTile(Type);
 
@@ -32,9 +35,6 @@ sealed class ElderwoodTable : ModTile {
 		LocalizedText name = CreateMapEntryName();
 		// name.SetDefault("Elderwood Sink");
 		AddMapEntry(new Color(111, 22, 22));
-
-		TileID.Sets.DisableSmartCursor[Type] = true;
-		TileID.Sets.IgnoredByNpcStepUp[Type] = true;
 	}
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;

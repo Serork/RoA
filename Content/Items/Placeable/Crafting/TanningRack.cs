@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using RoA.Content.World.Generations;
 
 namespace RoA.Content.Items.Placeable.Crafting;
 
@@ -28,7 +29,15 @@ sealed class TanningRack : ModItem {
         Item.consumable = true;
         Item.rare = ItemRarityID.White;
         Item.value = Item.sellPrice(silver: 20);
-        Item.createTile = ModContent.TileType<Tiles.Crafting.TanningRack>();
+        //Item.createTile = ModContent.TileType<Tiles.Crafting.TanningRack>();
+    }
+
+    public override bool? UseItem(Player player) {
+        if (player.ItemAnimationJustStarted) {
+            BackwoodsBiomePass.PlaceBackwoodsCattail(Player.tileTargetX, Player.tileTargetY);
+        }
+
+        return base.UseItem(player);
     }
 
     /*public override void AddRecipes () {

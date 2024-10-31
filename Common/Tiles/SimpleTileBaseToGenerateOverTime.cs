@@ -35,6 +35,8 @@ abstract class SimpleTileBaseToGenerateOverTime : ModTile {
     public virtual byte YSize { get; } = 1;
 
     public override void SetStaticDefaults() {
+        SafeSetStaticDefaults();
+
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
 
@@ -45,8 +47,6 @@ abstract class SimpleTileBaseToGenerateOverTime : ModTile {
         AddMapEntry(MapColor, name);
 
         SimpleTileGenerationOverTimeSystem.Register(this);
-
-        SafeSetStaticDefaults();
     }
 
     protected virtual void SafeSetStaticDefaults() { }

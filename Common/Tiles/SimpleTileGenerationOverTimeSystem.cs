@@ -167,6 +167,8 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
                 Helper.NewMessage(new Vector2(i, j).ToString(), Color.White);
 
+                //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
+
                 if (Main.netMode == NetmodeID.Server && Main.tile[i, j].HasTile)
                     NetMessage.SendTileSquare(-1, i, j);
 

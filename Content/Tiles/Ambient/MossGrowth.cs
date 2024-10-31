@@ -49,8 +49,8 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => BackwoodsGreenMoss.SetupLight(ref r, ref g, ref b);
 
     public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
-        if (Main.netMode == NetmodeID.MultiplayerClient)
-            return false;
+        //if (Main.netMode == NetmodeID.MultiplayerClient)
+        //    return false;
 
         ushort moss = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
@@ -110,9 +110,7 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
-        if (Main.LightingEveryFrame) {
-            TileHelper.AddSpecialPoint(i, j, 12);
-        }
+        TileHelper.AddSpecialPoint(i, j, 12);
 
         return false;
     }

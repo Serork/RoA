@@ -8,7 +8,9 @@ namespace RoA.Common.Tiles;
 abstract class TulipLikeTileBase : SimpleTileBaseToGenerateOverTime {
     public override string Texture => GetType().Namespace.Replace('.', '/') + "/Tulips";
 
-    public sealed override void SetStaticDefaults() {
+    protected sealed override void SafeSetStaticDefaults() {
+        SafeSetStaticDefaults2();
+
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
@@ -18,9 +20,9 @@ abstract class TulipLikeTileBase : SimpleTileBaseToGenerateOverTime {
         TileObjectData.newTile.Style = 0;
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
-
-        base.SetStaticDefaults();
     }
+
+    protected virtual void SafeSetStaticDefaults2() { }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
         offsetY = -14;

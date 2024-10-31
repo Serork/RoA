@@ -13,7 +13,7 @@ namespace RoA.Content.Tiles.Miscellaneous;
 sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
     public override int[] AnchorValidTiles => [TileID.Grass, TileID.JungleGrass, TileID.CorruptGrass, TileID.CrimsonGrass, (ushort)ModContent.TileType<BackwoodsGrass>()];
 
-    public override ushort ExtraChance => 30;
+    public override ushort ExtraChance => 300;
 
     public override ushort DropItem => (ushort)ModContent.ItemType<Items.Miscellaneous.LuminousFlower>();
 

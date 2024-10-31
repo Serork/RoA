@@ -18,7 +18,7 @@ abstract class TulipLikeTileBaseButPlant : TulipLikeTileBase {
 
     public override string Texture => (GetType().Namespace + "." + Name).Replace('.', '/');
 
-    protected override void SafeSetStaticDefaults() {
+    protected override void SafeSetStaticDefaults2() {
         TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
     }
 

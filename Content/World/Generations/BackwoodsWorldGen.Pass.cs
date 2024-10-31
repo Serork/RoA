@@ -20,7 +20,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Biomes.CaveHouse;
 using Terraria.GameContent.Generation;
-using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.Localization;
@@ -176,6 +175,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             }
                             tile.IsHalfBlock = false;
                             tile.Slope = 0;
+                            aboveTile.ClearTile();
                             aboveTile.HasTile = true;
                             aboveTile.TileType = TileID.BloomingHerbs;
                             aboveTile.TileFrameX = (short)(18 * plant);
@@ -184,12 +184,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
             }
-            if (_nextHerb == 4) {
+            if (_nextHerb == 4 || _nextHerb == 0) {
                 if (_random.NextBool()) {
                     _nextHerb++;
                 }
                 else {
-                    _nextHerb += 2;
+                    _nextHerb += (byte)(_random.NextBool() ? 2 : 1);
                 }
             }
             else {
@@ -275,7 +275,17 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
 
-                if (flag31 && WorldGen.AddBuriedChest(num538 + (flag32 ? _random.Next(1, 3) : 0), num539, 0, notNearOtherChests: true, -1, trySlope: false, 0)) {
+                int x = num538 + (flag32 ? _random.Next(1, 3) : 0);
+                int y = num539;
+                int num = 10;
+                for (int i = x - num; i <= x + num; i++) {
+                    for (int j = y - num; j <= y + num; j++) {
+                        if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == 21) {
+                            flag31 = false;
+                        }
+                    }
+                }
+                if (flag31 && WorldGen.AddBuriedChest(x, y, 0, notNearOtherChests: true, -1, trySlope: false, 0)) {
                     flag30 = true;
                 }
                 else {
@@ -320,16 +330,19 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddGrassWalls() {
         // adapted vanilla
+        int count = 2;
         for (int num298 = Left - 50; num298 < Right + 50; num298++) {
             for (int num299 = WorldGenHelper.SafeFloatingIslandY; (double)num299 < Main.worldSurface - 10.0; num299++) {
                 if (_random.Next(4) == 0) {
                     bool flag8 = false;
                     int num300 = -1;
                     int num301 = -1;
+                    bool flag10 = false;
                     if (Main.tile[num298, num299].HasTile && Main.tile[num298, num299].TileType == _grassTileType && (Main.tile[num298, num299].WallType == _dirtWallType || Main.tile[num298, num299].WallType == _leavesWallType)) {
                         for (int num302 = num298 - 1; num302 <= num298 + 1; num302++) {
                             for (int num303 = num299 - 1; num303 <= num299 + 1; num303++) {
-                                if (Main.tile[num302, num303].WallType == 0 && !WorldGen.SolidTile(num302, num303))
+                                flag10 = (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(4) || (count > 0 && _random.NextBool(3))) && count > 0));
+                                if ((Main.tile[num302, num303].WallType == 0 || flag10) && !WorldGen.SolidTile(num302, num303))
                                     flag8 = true;
                             }
                         }
@@ -337,7 +350,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (flag8) {
                             for (int num304 = num298 - 1; num304 <= num298 + 1; num304++) {
                                 for (int num305 = num299 - 1; num305 <= num299 + 1; num305++) {
-                                    if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 15) && !WorldGen.SolidTile(num304, num305)) {
+                                    if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 15 || Main.tile[num304, num305].WallType == _dirtWallType) && !WorldGen.SolidTile(num304, num305)) {
                                         num300 = num304;
                                         num301 = num305;
                                     }
@@ -349,6 +362,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (flag8 && num300 > -1 && num301 > -1 && WorldGen.countDirtTiles(num300, num301) < WorldGen.maxTileCount) {
                         try {
                             ushort wallType = 63;
+                            if (flag10) {
+                                count--;
+                            }
+                            //if (flag10 && Main.rand.NextBool()) {
+                            //    wallType = _dirtWallType;
+                            //}
 
                             WorldGen.Spread.Wall2(num300, num301, wallType);
                         }
@@ -364,7 +383,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (Main.tile[num306, num307].WallType == 63 && _random.Next(10) == 0)
                     Main.tile[num306, num307].WallType = _grassWallType;
 
-                if (Main.tile[num306, num307].HasTile && Main.tile[num306, num307].TileType == 0) {
+                if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
                     bool flag9 = false;
                     for (int num308 = num306 - 1; num308 <= num306 + 1; num308++) {
                         for (int num309 = num307 - 1; num309 <= num307 + 1; num309++) {
@@ -377,6 +396,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                     if (flag9)
                         WorldGen.SpreadGrass(num306, num307, TileID.Dirt, _grassTileType);
+                }
+            }
+        }
+
+        for (int num306 = Left - 50; num306 < Right + 50; num306++) {
+            for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < Main.worldSurface - 1.0; num307++) {
+                if (Main.tile[num306, num307].HasTile) {
+                    WorldGen.grassSpread = 0;
+                    WorldGen.SpreadGrass(num306, num307, _dirtTileType, _grassTileType);
                 }
             }
         }
@@ -1080,8 +1108,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GrowBigTree(int i, bool isLeft = true) {
         int j = WorldGenHelper.GetFirstTileY(i, true);
         j += 2;
-        int attempts = EdgeX / 2;
-        while (--attempts > 0 && (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.First(x => x.X == i).Y + 5)) {
+        int attempts = EdgeX - EdgeX / 3;
+        while (--attempts > 0 && (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.First(x => x.X == i).Y + 3)) {
             if (i <= CenterX + 25 && i >= CenterX - 25) {
                 break;
             }
@@ -2020,7 +2048,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         progress.Set(0.7f);
         Step6_SpreadGrass();
-        Step9_SpreadMoss();
+        //Step9_SpreadMoss();
         Step10_SpreadMossGrass();
 
         double num377 = (double)Main.maxTilesX * 0.035;
@@ -2161,15 +2189,241 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step10_SpreadMossGrass();
 
+        Step_AddCatTails();
         Step_AddLilypads();
 
         //Step15_AddLootRooms();
     }
 
+    public static Point PlaceBackwoodsCatTail(int x, int j) {
+        int num = j;
+        Point result = new(-1, -1);
+        if (x < 50 || x > Main.maxTilesX - 50 || num < 50 || num > Main.maxTilesY - 50)
+            return result;
+
+        if (Main.tile[x, num].HasTile || Main.tile[x, num].LiquidAmount == 0 || Main.tile[x, num].LiquidType != 0)
+            return result;
+
+        while (Main.tile[x, num].LiquidAmount > 0 && num > 50) {
+            num--;
+        }
+
+        num++;
+        if (Main.tile[x, num].HasTile || Main.tile[x, num - 1].HasTile || Main.tile[x, num].LiquidAmount == 0 || Main.tile[x, num].LiquidType != 0)
+            return result;
+
+        //if (Main.tile[x, num].WallType != 0 && Main.tile[x, num].wall != 80 && Main.tile[x, num].wall != 81 && Main.tile[x, num].wall != 69 && (Main.tile[x, num].wall < 63 || Main.tile[x, num].wall > 68))
+        //    return result;
+
+        int tileType = ModContent.TileType<BackwoodsCatTail>();
+        int num2 = 7;
+        int num3 = 0;
+        for (int i = x - num2; i <= x + num2; i++) {
+            for (int k = num - num2; k <= num + num2; k++) {
+                if (Main.tile[i, k].HasTile && Main.tile[i, k].TileType == tileType) {
+                    num3++;
+                    break;
+                }
+            }
+        }
+
+        if (num3 > 3)
+            return result;
+
+        int l;
+        for (l = num; (!Main.tile[x, l].HasTile || !Main.tileSolid[Main.tile[x, l].TileType] || Main.tileSolidTop[Main.tile[x, l].TileType]) && l < Main.maxTilesY - 50; l++) {
+        }
+
+        int catTailDistance = 8;
+        int num4 = catTailDistance - 1;
+        if (l - num > num4)
+            return result;
+
+        if (l - num < 2)
+            return result;
+
+        int type = Main.tile[x, l].TileType;
+        //if (!Main.tile[x, l].HasUnactuatedTile)
+        //    return result;
+
+        int num5 = -1;
+
+        if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)type)) {
+            num5 = 0;
+        }
+        //switch (type) {
+        //    case 2:
+        //    case 477:
+        //        num5 = 0;
+        //        break;
+        //    case 53:
+        //        if (x < WorldGen.beachDistance || x > Main.maxTilesX - beachDistance)
+        //            return result;
+        //        num5 = 18;
+        //        break;
+        //    case 199:
+        //    case 234:
+        //    case 662:
+        //        num5 = 54;
+        //        break;
+        //    case 23:
+        //    case 112:
+        //    case 661:
+        //        num5 = 72;
+        //        break;
+        //    case 70:
+        //        num5 = 90;
+        //        break;
+        //}
+
+        if (num5 < 0)
+            return result;
+
+        if (Main.tile[x, l].TopSlope && WorldGen.gen && _random.Next(3) != 0) {
+            Tile checkTile = Main.tile[x, l];
+            checkTile.Slope = 0;
+        }
+        else if (Main.tile[x, l].TopSlope || Main.tile[x, l].IsHalfBlock)
+            return result;
+
+        num = l - 1;
+        Tile tile = Main.tile[x, num];
+        tile.HasTile = true;
+        tile.TileType = (ushort)tileType;
+        tile.TileFrameX = 0;
+        tile.TileFrameY = (short)num5;
+        tile.IsHalfBlock = false;
+        tile.Slope = 0;
+        tile.CopyPaintAndCoating(Main.tile[x, num + 1]);
+        WorldGen.SquareTileFrame(x, num);
+        return new Point(x, num);
+    }
+
+    public static void GrowBackwoodsCatTail(int x, int j) {
+        //if (Main.netMode == 1)
+        //    return;
+
+        int num = j;
+        while (Main.tile[x, num].LiquidAmount > 0 && num > 50) {
+            num--;
+        }
+
+        num++;
+        int i;
+        for (i = num; (!Main.tile[x, i].HasTile || !Main.tileSolid[Main.tile[x, i].TileType] || Main.tileSolidTop[Main.tile[x, i].TileType]) && i < Main.maxTilesY - 50; i++) {
+        }
+
+        int tileType = ModContent.TileType<BackwoodsCatTail>();
+        num = i - 1;
+        while (Main.tile[x, num].HasTile && Main.tile[x, num].TileType == tileType) {
+            num--;
+        }
+
+        num++;
+        if (Main.tile[x, num].TileFrameX == 90 && Main.tile[x, num - 1].HasTile && Main.tileCut[Main.tile[x, num - 1].TileType]) {
+            WorldGen.KillTile(x, num - 1);
+            if (Main.netMode == 2)
+                NetMessage.SendData(17, -1, -1, null, 0, x, num - 1);
+        }
+
+        if (Main.tile[x, num - 1].HasTile)
+            return;
+
+        if (Main.tile[x, num].TileFrameX == 0) {
+            Main.tile[x, num].TileFrameX = 18;
+            WorldGen.SquareTileFrame(x, num);
+            if (Main.netMode == 2)
+                NetMessage.SendTileSquare(-1, x, num);
+        }
+        else if (Main.tile[x, num].TileFrameX == 18) {
+            Main.tile[x, num].TileFrameX = (short)(18 * _random.Next(2, 5));
+            Tile tile = Main.tile[x, num - 1];
+            tile.HasTile = true;
+            tile.TileType = (ushort)tileType;
+            tile.TileFrameX = 90;
+            tile.TileFrameY = Main.tile[x, num].TileFrameY;
+            tile.IsHalfBlock = false;
+            tile.Slope = 0;
+            Main.tile[x, num - 1].CopyPaintAndCoating(Main.tile[x, num]);
+            WorldGen.SquareTileFrame(x, num);
+            if (Main.netMode == 2)
+                NetMessage.SendTileSquare(-1, x, num);
+        }
+        else if (Main.tile[x, num].TileFrameX == 90) {
+            if (Main.tile[x, num - 1].LiquidAmount == 0) {
+                if (!Main.tile[x, num - 2].HasTile && (Main.tile[x, num].LiquidAmount > 0 || Main.tile[x, num + 1].LiquidAmount > 0 || Main.tile[x, num + 2].LiquidAmount > 0) && _random.Next(3) == 0) {
+                    Main.tile[x, num].TileFrameX = 108;
+                    Tile tile = Main.tile[x, num - 1];
+                    tile.HasTile = true;
+                    tile.TileType = (ushort)tileType;
+                    tile.TileFrameX = 90;
+                    tile.TileFrameY = Main.tile[x, num].TileFrameY;
+                    tile.IsHalfBlock = false;
+                    tile.Slope = 0;
+                    tile.CopyPaintAndCoating(Main.tile[x, num]);
+                    WorldGen.SquareTileFrame(x, num);
+                }
+                else {
+                    int num2 = _random.Next(3);
+                    Main.tile[x, num].TileFrameX = (short)(126 + num2 * 18);
+                    Tile tile = Main.tile[x, num - 1];
+                    tile.HasTile = true;
+                    tile.TileType = (ushort)tileType;
+                    tile.TileFrameX = (short)(180 + num2 * 18);
+                    tile.TileFrameY = Main.tile[x, num].TileFrameY;
+                    tile.IsHalfBlock = false;
+                    tile.Slope = 0;
+                    tile.CopyPaintAndCoating(Main.tile[x, num]);
+                    WorldGen.SquareTileFrame(x, num);
+                }
+            }
+            else {
+                Main.tile[x, num].TileFrameX = 108;
+                Tile tile = Main.tile[x, num - 1];
+                tile.HasTile = true;
+                tile.TileType = (ushort)tileType;
+                tile.TileFrameX = 90;
+                tile.TileFrameY = Main.tile[x, num].TileFrameY;
+                tile.IsHalfBlock = false;
+                tile.Slope = 0;
+                tile.CopyPaintAndCoating(Main.tile[x, num]);
+                WorldGen.SquareTileFrame(x, num);
+            }
+        }
+
+        WorldGen.SquareTileFrame(x, num - 1, resetFrame: false);
+        if (Main.netMode == 2)
+            NetMessage.SendTileSquare(-1, x, num - 1, 1, 2);
+    }
+
+    private void Step_AddCatTails() {
+        for (int i = Left - 35; i <= Right + 35; i++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
+                if (Main.tile[i, j].LiquidAmount > 0 && !Main.tile[i, j].HasTile) {
+                    PlaceBackwoodsCattail(i, j);
+                }
+            }
+        }
+    }
+
+    public static void PlaceBackwoodsCattail(int i, int j) {
+        Point point = PlaceBackwoodsCatTail(i, j);
+        if (WorldGen.InWorld(point.X, point.Y)) {
+            int num31 = _random.Next(14);
+            for (int num32 = 0; num32 < num31; num32++) {
+                GrowBackwoodsCatTail(point.X, point.Y);
+            }
+
+            WorldGen.SquareTileFrame(point.X, point.Y);
+        }
+    }
+
     private void Step_AddLilypads() {
         for (int i = Left - 35; i <= Right + 35; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
-                PlaceLilypad(i, j);
+                if (Main.tile[i, j].LiquidAmount > 0) {
+                    PlaceBackwoodsLilypad(i, j);
+                }
                 //if (Main.netMode == 2)
                 //    NetMessage.SendTileSquare(-1, i, j);
                 //else if (genRand.Next(600) == 0) {
@@ -2181,7 +2435,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
     }
 
-    private bool PlaceLilypad(int x, int j) {
+    private bool PlaceBackwoodsLilypad(int x, int j) {
         int num = j;
         int tileType = ModContent.TileType<BackwoodsLilypad>();
         if (x < 50 || x > Main.maxTilesX - 50 || num < 50 || num > Main.maxTilesY - 50)
@@ -2214,8 +2468,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             return false;
 
         int l;
-        for (l = num; (!Main.tile[x, l].HasTile|| !Main.tileSolid[Main.tile[x, l].TileType] || Main.tileSolidTop[Main.tile[x, l].TileType]) && l < Main.maxTilesY - 50; l++) {
-            if (Main.tile[x, l].HasTile&& Main.tile[x, l].TileType == 519)
+        for (l = num; (!Main.tile[x, l].HasTile || !Main.tileSolid[Main.tile[x, l].TileType] || Main.tileSolidTop[Main.tile[x, l].TileType]) && l < Main.maxTilesY - 50; l++) {
+            if (Main.tile[x, l].HasTile && Main.tile[x, l].TileType == ModContent.TileType<BackwoodsCatTail>())
                 return false;
         }
 
@@ -2227,7 +2481,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             return false;
 
         int type = Main.tile[x, l].TileType;
-        int num5 = 0;
+        int num5 = -1;
         //if (type == 2 || type == 477)
         //    num5 = 0;
 
@@ -2236,6 +2490,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         //if (type == 60)
         //    num5 = 36;
+
+        if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)type)) {
+            num5 = 0;
+        }
 
         if (num5 < 0)
             return false;
@@ -2504,7 +2762,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) {
                     continue;
                 }
-                bool flag2 = !MidInvalidTileTypesToKill.Contains(tile.TileType) || (MidInvalidTileTypesToKill.Contains(tile.TileType) && j < BackwoodsVars.FirstTileYAtCenter + 5);
+                bool flag2 = !MidInvalidTileTypesToKill.Contains(tile.TileType) || (MidInvalidTileTypesToKill.Contains(tile.TileType) && j < BackwoodsVars.FirstTileYAtCenter + 15);
                 if (!SandInvalidTileTypesToKill.Contains(tile.TileType) && !SandInvalidWallTypesToKill.Contains(tile.WallType) && flag2) {
                     bool killTile = true;
                     bool replace = false;
@@ -2534,9 +2792,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (j < minY) {
                             killTile = true;
                             killSand = true;
-                            if (!edgeLeft2 && !edgeRight2) {
-                                spreadY += _random.Next(-2, 3);
-                            }
+                            //if (!edgeLeft2 && !edgeRight2) {
+                            //    spreadY += _random.Next(-2, 3);
+                            //}
                         }
                     }
                     if (killTile) {
@@ -2550,7 +2808,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             }
                         }
                         else {
-                            bool flag = killSand && _random.NextBool(3);
+                            bool flag = killSand;
                             if (flag || !killSand) {
                                 if (flag) {
                                     WorldGenHelper.ReplaceTile(i, j, _dirtTileType);
@@ -2740,13 +2998,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 //    WorldGenHelper.ReplaceTile(cliffX, testJ, _random.NextChance(0.75f) ? CliffPlaceholderTileType : TileID.Mud);
                 //}
                 //else {
-                if (first) {
-                    randomness += _random.Next(-1, 2);
-                    if (randomness < 0)
-                        randomness = 0;
-                    if (randomness > 5)
-                        randomness = 5;
-                }
                 x = cliffX + (randomness + 1) * dir;
                 Tile tile = Main.tile[x, testJ];
                 if (SandTileTypes.Contains(tile.TileType)) {
@@ -2754,6 +3005,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     break;
                 }
                 if (!SkipBiomeInvalidTileTypeToKill.Contains(tile.TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType)) {
+                    if (first) {
+                        randomness += _random.Next(-1, 2);
+                        if (randomness < 0)
+                            randomness = 0;
+                        if (randomness > 5)
+                            randomness = 5;
+                    }
+                    x = cliffX + (randomness + 1) * dir;
                     if (testJ == startY + 1) {
                         for (int j = testJ - 15; j < testJ; j++) {
                             if (!SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, j].TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[x, j].WallType)) {
