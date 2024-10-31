@@ -257,8 +257,8 @@ public class HouseBuilderCustom {
 
     private void PlaceEmptyRooms() {
         foreach (Rectangle room in Rooms) {
-            WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new SkipChestsTiles(), new Actions.ClearTile(frameNeighbors: true), new Actions.SetTileKeepWall(TileType), new Actions.SetFrames(frameNeighbors: true)));
-            WorldUtils.Gen(new Point(room.X + 1, room.Y + 1), new Shapes.Rectangle(room.Width - 2, room.Height - 2), Actions.Chain(new SkipChestsTiles(), new Actions.ClearTile(frameNeighbors: true), new Actions.PlaceWall(WallType)));
+            WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new SkipChestsTiles(), new Actions.ClearTile(), new Actions.SetTileKeepWall(TileType), new Actions.SetFrames()));
+            WorldUtils.Gen(new Point(room.X + 1, room.Y + 1), new Shapes.Rectangle(room.Width - 2, room.Height - 2), Actions.Chain(new SkipChestsTiles(), new Actions.ClearTile(), new Actions.PlaceWall(WallType)));
         }
     }
 
@@ -727,6 +727,21 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         base.ChandelierTileType = (ushort)ModContent.TileType<ElderwoodChandelier>();
     }
 
+    public class HasValidVall : GenAction {
+        private ushort _wallType;
+
+        public HasValidVall(ushort wallType) {
+            _wallType = wallType;
+        }
+
+        public override bool Apply(Point origin, int x, int y, params object[] args) {
+            if (GenBase._tiles[x, y].WallType == _wallType)
+                return UnitApply(origin, x, y, args);
+
+            return Fail();
+        }
+    }
+
     protected override void AgeRoom(Rectangle room) {
         ushort grassTileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         ushort mossGrowthTileType = (ushort)ModContent.TileType<MossGrowth>();
@@ -734,16 +749,16 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         WorldUtils.Gen(new Point(room.X + 1, room.Y), new Shapes.Rectangle(room.Width - 2, 1), Actions.Chain(new Modifiers.Dither(0.7), new Modifiers.OnlyTiles(grassTileType), new Modifiers.Offset(0, -1), new Modifiers.IsEmpty(), new Actions.SetTile(mossGrowthTileType)));
         WorldUtils.Gen(new Point(room.X + 1, room.Y + room.Height - 1), new Shapes.Rectangle(room.Width - 2, 1), Actions.Chain(new Modifiers.Dither(0.8), new Modifiers.OnlyTiles(grassTileType), new Modifiers.Offset(0, -1), new Modifiers.IsEmpty(), new Actions.SetTile(mossGrowthTileType)));
 
+        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.SkipWalls(
+            [WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2]), new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles([.. TileSets.Paintings]), new Modifiers.SkipWalls(
+            [WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2]),
+            ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
+
         for (int i = 0; i < room.Width * room.Height / 16; i++) {
             int x = WorldGen.genRand.Next(1, room.Width - 1) + room.X;
             int y = WorldGen.genRand.Next(1, room.Height - 1) + room.Y;
-            WorldUtils.Gen(new Point(x, y), new Shapes.Rectangle(2, 2), Actions.Chain(new Modifiers.Dither(), new Modifiers.Blotches(2, 2), new Modifiers.IsEmpty(), new Actions.SetTile(51, setSelfFrames: true)));
+            WorldUtils.Gen(new Point(x, y), new Shapes.Rectangle(2, 2), Actions.Chain(new Modifiers.Dither(), new Modifiers.Blotches(2, 2), new HasValidVall(WallType), new Modifiers.IsEmpty(), new Actions.SetTile(51, setSelfFrames: true)));
         }
-
-        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.SkipWalls(
-            [WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2]), new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles([.. TileSets.Paintings]), new Modifiers.SkipWalls( 
-            [WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2]),
-            ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
 
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.Blotches(), new Modifiers.OnlyWalls(base.WallType), new Modifiers.SkipTiles(SkipTilesDuringWallAging), ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.OnlyTiles(30, 321, 158), new Actions.ClearTile(frameNeighbors: true)));

@@ -126,10 +126,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step13_GrowBigTrees();
         Step9_SpreadMoss();
         Step_AddWebs();
-        Step17_AddStatues();
-        Step_AddSpikes();
-        Step_AddPills();
-        Step10_SpreadMossGrass();
+        //Step10_SpreadMossGrass();
         Step14_ClearRockLayerWalls();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
@@ -1381,7 +1378,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step10_SpreadMossGrass() {
         for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = Top - 10; j < Bottom + 10; j++) {
-                if (WorldGenHelper.ActiveTile(i, j, _mossTileType)) {
+                if (WorldGenHelper.ActiveTile(i, j, _mossTileType) && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock) {
                     for (int offset = 0; offset < 4; offset++) {
                         int i2 = i, j2 = j;
                         if (offset == 0) {
@@ -1807,6 +1804,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddGrassWalls();
     }
 
+    public void BackwoodsOnLast(GenerationProgress progress, GameConfiguration config) {
+        Step_AddHerbs();
+    }
+
     public void BackwoodsTilesReplacement(GenerationProgress progress, GameConfiguration config) {
         //progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods2").Value;
 
@@ -1836,11 +1837,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         for (int i = Left - 25; i < Right + 25; i++) {
-            for (int j = Top - 15; j < Bottom; j++) {
+            for (int j = Top - 15; j < Bottom + 15; j++) {
                 if (WorldGenHelper.ActiveTile(i, j, 138)) {
                     int j2 = 0;
                     bool flag = false;
-                    while (!flag && j2 < 10) {
+                    while (!flag && j2 < 20) {
                         j2++;
                         for (int i2 = 0; i2 < 2; i2++) {
                             if (WorldGenHelper.ActiveTile(i + i2, j + j2, 135)) {
@@ -1855,8 +1856,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-
-        Step_AddHerbs();
     }
 
     public void BackwoodsOtherPlacements(GenerationProgress progress, GameConfiguration config) {
@@ -2048,8 +2047,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         progress.Set(0.7f);
         Step6_SpreadGrass();
-        //Step9_SpreadMoss();
-        Step10_SpreadMossGrass();
+        Step9_SpreadMoss();
+        //Step10_SpreadMossGrass();
 
         double num377 = (double)Main.maxTilesX * 0.035;
         //if (WorldGen.noTrapsWorldGen)
@@ -2185,12 +2184,18 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             GenerateLootRoom1();
         }
 
-        Step_AddChests();
+        Step17_AddStatues();
+        Step_AddSpikes();
+        Step_AddPills();
 
         Step10_SpreadMossGrass();
 
+        Step_AddChests();
+
         Step_AddCatTails();
         Step_AddLilypads();
+
+        Step10_SpreadMossGrass();
 
         //Step15_AddLootRooms();
     }
