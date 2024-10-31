@@ -1,4 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
+
+using ReLogic.Utilities;
 
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Sets;
@@ -26,6 +30,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
+
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.World.Generations;
 
@@ -1017,6 +1023,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int maxLeft = Left - 50;
         int maxRight = Right + 50;
         ushort[] invalidWalls = [WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4, WallID.LihzahrdBrickUnsafe, 59, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
+        ushort[] invalidWalls2 = [196, 197, 198, 199, 212, 213, 214, 215, 208, 209, 210, 211];
         for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
             num1047 += _random.Next(-1, 2);
             if (num1047 < 0)
@@ -1026,7 +1033,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int num1049 = BackwoodsVars.FirstTileYAtCenter - 10; num1049 < Bottom + EdgeY; num1049++) {
                 if (!(num1049 < y + 10.0 && !((double)num1049 > y + (double)num1047))) {
                     if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15) {
-                        if (!invalidWalls.Contains(Main.tile[num1048, num1049].WallType) && !MidInvalidWallTypesToKill.Contains(Main.tile[num1048, num1049].WallType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[num1048, num1049].WallType) && !MidMustSkipWallTypes.Contains(Main.tile[num1048, num1049].WallType) && ((Main.tile[num1048, num1049].WallType != _grassWallType && Main.tile[num1048, num1049].WallType != _leavesWallType) || num1049 > y + (double)num1047) && Main.tile[num1048, num1049].WallType != _elderwoodWallType) {
+                        if (!invalidWalls2.Contains(Main.tile[num1048, num1049].WallType) && !invalidWalls.Contains(Main.tile[num1048, num1049].WallType) && !MidInvalidWallTypesToKill.Contains(Main.tile[num1048, num1049].WallType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[num1048, num1049].WallType) && !MidMustSkipWallTypes.Contains(Main.tile[num1048, num1049].WallType) && ((Main.tile[num1048, num1049].WallType != _grassWallType && Main.tile[num1048, num1049].WallType != _leavesWallType) || num1049 > y + (double)num1047) && Main.tile[num1048, num1049].WallType != _elderwoodWallType) {
                             Main.tile[num1048, num1049].WallType = WallID.None;
                         }
                     }
@@ -2126,7 +2133,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGenHelper.PlaceVines(i, j, _random.Next(1, 5), _vinesTileType);
                 }
                 if (tile.TileType == _vinesTileType2) {
-                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 5), _vinesTileType2);
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(3, 7), _vinesTileType2);
                 }
             }
         }
@@ -2209,7 +2216,85 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step10_SpreadMossGrass();
 
+        Step_WallVariety();
+
         //Step15_AddLootRooms();
+    }
+
+    private void Step7_AddStone() {
+        int tileCount = (int)(Main.maxTilesX * Main.maxTilesY * 0.0005) * 375;
+        int startX = Left - 1;
+        int endX = Right + 1;
+        int worldSize = Main.maxTilesX / 4200;
+        int k = worldSize == 1 ? (int)(_biomeHeight * 0.25) : worldSize == 2 ? (int)(_biomeHeight * 0.2) : (int)(_biomeHeight * 0.15);
+        int y2 = BackwoodsVars.FirstTileYAtCenter;
+        int minY = CenterY - EdgeY;
+        int stoneCount = (int)(tileCount * 0.000525f);
+        int x;
+        for (int i = 0; i < stoneCount; i++) {
+            x = _random.Next(startX - 100, endX + 100);
+            int y = _random.Next(y2 - EdgeY, minY);
+            if ((((double)x > (double)CenterX - 10 && (double)x < (double)CenterX + 10)) && y < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
+                continue;
+            }
+            int sizeX = _random.Next(4, 9);
+            int sizeY = _random.Next(5, 18);
+            if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
+                WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
+            }
+        }
+        stoneCount = (int)(tileCount * 0.0035f);
+        int maxY = CenterY + (int)(EdgeY * 1.5f);
+        for (int i = 0; i < stoneCount; i++) {
+            x = _random.Next(startX - 100, endX + 100);
+            int y = _random.Next(minY, maxY);
+            int sizeX = _random.Next(2, 7);
+            int sizeY = _random.Next(2, 23);
+            if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
+                WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
+            }
+        }
+        stoneCount = (int)(tileCount * 0.0055f);
+        for (int i = 0; i < stoneCount; i++) {
+            x = _random.Next(startX - 100, endX + 100);
+            int y = _random.Next(maxY, Bottom + EdgeY * 2);
+            int sizeX = _random.Next(4, 10);
+            int sizeY = _random.Next(5, 30);
+            if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
+                WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
+            }
+        }
+    }
+
+    private void Step_WallVariety() {
+        double num568 = (double)(Main.maxTilesX * Main.maxTilesY) / 5040000.0;
+        int num569 = (int)(800.0 * num568);
+        int num570 = num569;
+        ShapeData shapeData = new ShapeData();
+        while (num569 > 0) {
+            Point point2 = new Point(_random.Next(Left - 15, Right + 15), _random.Next(BackwoodsVars.FirstTileYAtCenter - 15, Bottom + 15));
+            //while (Vector2D.Distance(new Vector2D(point2.X, point2.Y), GenVars.shimmerPosition) < (double)WorldGen.shimmerSafetyDistance) {
+            //    point2 = new Point(_random.Next(Left - 15, Right + 15), _random.Next(Top - 15, Bottom + 15));
+            //}
+            Tile tile6 = Main.tile[point2.X, point2.Y];
+            Tile tile7 = Main.tile[point2.X, point2.Y - 1];
+            ushort num571 = 0;
+            if (tile6.TileType == 60)
+                num571 = (ushort)(204 + _random.Next(4));
+            else if ((tile6.TileType == _stoneTileType || tile6.TileType == _mossTileType || tile6.TileType == TileID.Stone) && tile7.WallType == 0)
+                num571 = (((double)point2.Y < CenterY + EdgeY + EdgeY / 3) ? ((ushort)(196 + _random.Next(4))) : ((point2.Y >= GenVars.lavaLine) ? ((ushort)(208 + _random.Next(4))) : ((ushort)(212 + _random.Next(4)))));
+
+            if (tile6.HasTile && num571 != 0) {
+                bool flag34 = WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData)));
+                if (shapeData.Count > 50 && flag34) {
+                    WorldUtils.Gen(new Point(point2.X, point2.Y), new ModShapes.OuterOutline(shapeData, useDiagonals: true, useInterior: true), Actions.Chain(new Modifiers.SkipWalls(87), new Modifiers.SkipWalls(_elderwoodWallType), new Actions.PlaceWall(num571)));
+                }
+
+                shapeData.Clear();
+
+                num569--;
+            }
+        }
     }
 
     public static Point PlaceCattail(int x, int j) {
@@ -2899,7 +2984,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             killTile = false;
                         }
                         if (tile.AnyLiquid()) {
-                            killTile = false;
+                            if (i > CenterX - EdgeX && i < CenterX + EdgeX) {
+                                killWater = true;
+                            }
+                            else {
+                                killTile = false;
+                            }
                             //if (j > y2 + 20 + waterYRandomness) {
                             //    killTile = false;
                             //}
@@ -2974,7 +3064,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //}
     }
 
-    int randomness = 0;
     private void AddCliffIfNeeded(int topLeftTileX, int topRightTileX) {
         Point cliffTileCoords = Point.Zero;
         cliffTileCoords.X = _toLeft ? topLeftTileX - 5 : (topRightTileX + 5);
@@ -2986,16 +3075,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int startY = cliffTileCoords.Y;
         bool first = true;
         int dir = _toLeft ? -1 : 1;
+        int randomness = 0;
         int x = cliffX + (randomness + 1) * dir;
         while (startY < lastSurfaceY) {
             x = cliffX + (randomness + 1) * dir;
             bool flag = Math.Abs(x - cliffTileCoords.X) > 20;
-            while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
-                startY++;
-            }
-            if ((_random.NextChance(0.75) && flag) || !flag) {
-                cliffX -= dir;
-            }
             x = cliffX + (randomness + 1) * dir;
             bool flag2 = Math.Abs(x - cliffTileCoords.X) > 10;
             int testJ = startY;
@@ -3041,6 +3125,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (testJ >= max) {
                     first = false;
                 }
+            }
+            while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
+                startY++;
+            }
+            if ((_random.NextChance(0.75) && flag) || !flag) {
+                cliffX -= dir;
             }
         }
         _lastCliffX = x;
@@ -3145,61 +3235,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         spread = true;
                     }
                 }
-            }
-        }
-    }
-
-    private void Step7_AddStone() {
-        int tileCount = (int)(Main.maxTilesX * Main.maxTilesY * 0.0005) * 375;
-        int startX = Left - 1;
-        int endX = Right + 1;
-        int worldSize = Main.maxTilesX / 4200;
-        int k = worldSize == 1 ? (int)(_biomeHeight * 0.25) : worldSize == 2 ? (int)(_biomeHeight * 0.2) : (int)(_biomeHeight * 0.15);
-        int y2 = BackwoodsVars.FirstTileYAtCenter;
-        int minY = CenterY - EdgeY;
-        int stoneCount = (int)(tileCount * 0.000525f);
-        int x;
-        for (int i = 0; i < stoneCount; i++) {
-            x = _random.Next(startX - 100, endX + 100);
-            int y = _random.Next(y2 - EdgeY, minY);
-            if ((((double)x > (double)CenterX - 10 && (double)x < (double)CenterX + 10)) && y < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
-                continue;
-            }
-            int sizeX = _random.Next(4, 9);
-            int sizeY = _random.Next(5, 18);
-            if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
-                WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
-            }
-        }
-        ////stoneCount = (int)(tileCount * 0.0002f);
-        ////for (int i = 0; i < stoneCount; i++) {
-        ////    x = _random.Next(startX - 100, endX + 100);
-        ////    int y = _random.Next(Math.Min(Top, Bottom) - 15, maxY);
-        ////    int sizeX = _random.Next(4, 15);
-        ////    int sizeY = _random.Next(5, 40);
-        ////    if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
-        ////        WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
-        ////    }
-        ////}
-        stoneCount = (int)(tileCount * 0.0035f);
-        int maxY = CenterY + (int)(EdgeY * 1.5f);
-        for (int i = 0; i < stoneCount; i++) {
-            x = _random.Next(startX - 100, endX + 100);
-            int y = _random.Next(minY, maxY);
-            int sizeX = _random.Next(2, 7);
-            int sizeY = _random.Next(2, 23);
-            if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
-                WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
-            }
-        }
-        stoneCount = (int)(tileCount * 0.0055f);
-        for (int i = 0; i < stoneCount; i++) {
-            x = _random.Next(startX - 100, endX + 100);
-            int y = _random.Next(maxY, Bottom + EdgeY * 2);
-            int sizeX = _random.Next(4, 10);
-            int sizeY = _random.Next(5, 30);
-            if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
-                WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
             }
         }
     }
