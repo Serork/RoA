@@ -2983,20 +2983,20 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             SandInvalidWallTypesToKill.Contains(tile.WallType) || SandInvalidTileTypesToKill.Contains(tile.TileType)) {
                             killTile = false;
                         }
-                        if (tile.AnyLiquid()) {
-                            if (i > CenterX - EdgeX && i < CenterX + EdgeX) {
-                                killWater = true;
-                            }
-                            else {
-                                killTile = false;
-                            }
-                            //if (j > y2 + 20 + waterYRandomness) {
-                            //    killTile = false;
-                            //}
-                            //else {
-                            //    killWater = true;
-                            //}
-                        }
+                        //if (tile.AnyLiquid()) {
+                        //    if (i > CenterX - EdgeX && i < CenterX + EdgeX) {
+                        //        killWater = true;
+                        //    }
+                        //    else {
+                        //        killTile = false;
+                        //    }
+                        //    //if (j > y2 + 20 + waterYRandomness) {
+                        //    //    killTile = false;
+                        //    //}
+                        //    //else {
+                        //    //    killWater = true;
+                        //    //}
+                        //}
                         if (SandTileTypes.Contains(tile.TileType)) {
                             if (j > y2 + 5) {
                                 killTile = false;
