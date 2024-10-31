@@ -1416,7 +1416,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         int baseX = _random.Next(Left + 15, Right - 15);
         int y = Math.Min(CenterY, (int)Main.worldSurface + 10);
-        int baseY = _random.Next(y, Bottom - 20);
+        int baseY = _random.Next(y + (int)(EdgeY * 2f * _random.NextFloat()), Bottom - 20);
         Point origin = new(baseX, baseY);
 
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
@@ -1443,7 +1443,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 if (flag) {
                     baseX = _random.Next(Left + 15, Right - 15);
-                    baseY = _random.Next(y, Bottom - 20);
+                    baseY = _random.Next(y + (int)(EdgeY * 2f * _random.NextFloat()), Bottom - 20);
                     break;
                 }
             }
@@ -2197,6 +2197,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             i += _random.Next(2, 8);
                         }
                     }
+                }
+                if (Main.tile[i, j].WallType == _grassWallType && _random.NextBool(2)) {
+                    WorldGen.PlaceLiquid(i, j, 0, 255);
                 }
             }
         }
@@ -3092,6 +3095,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             //        randomness = 5;
             //}
             int max = startY + _biomeHeight / 2;
+            int[] randomnessPoints = new int[max - testJ + 1];
             while (testJ <= max) {
                 //bool flag3 = !flag2 && Main.tile[cliffX + randomness, testJ].HasTile;
                 //if (flag3 || flag2) {
@@ -3105,8 +3109,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         randomness = 0;
                     if (randomness > 5)
                         randomness = 5;
+                    randomnessPoints[max - testJ] = randomness;
                 }
-                x = cliffX + (randomness + 1) * dir;
+                x = cliffX + (randomnessPoints[max - testJ] + 1) * dir;
                 Tile tile = Main.tile[x, testJ];
                 if (testJ == startY + 1) {
                     for (int j = testJ - 15; j < testJ; j++) {
@@ -3252,7 +3257,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int y = _random.Next(minY + 5, maxY + 5);
             if (WorldGenHelper.ActiveTile(x, y, _dirtTileType) || WorldGenHelper.ActiveTile(x, y, _stoneTileType)) {
                 int type = -1;
-                if (_random.NextBool(6)) { // water
+                if (y < CenterY - EdgeY && _random.NextBool(5)) { // water
                     type = -2;
                 }
                 int sizeX = _random.Next(5, 15);
