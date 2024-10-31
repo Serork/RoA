@@ -329,7 +329,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddGrassWalls() {
         // adapted vanilla
-        int count = 3 + 2 * WorldGenHelper.WorldSize;
+        int count = 3 + 2 * (WorldGenHelper.WorldSize - 1);
         for (int num298 = Left - 50; num298 < Right + 50; num298++) {
             for (int num299 = WorldGenHelper.SafeFloatingIslandY; (double)num299 < Main.worldSurface - 10.0; num299++) {
                 if (_random.Next(4) == 0) {
@@ -1941,9 +1941,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                         if (num1047 > 5)
                             num1047 = 5;
-                        bool edgeLeft = i < Left - 5, edgeRight = i > Right + 5;
+                        bool edgeLeft = i < Left - 10, edgeRight = i > Right + 10;
                         bool edgeX = edgeRight || edgeLeft;
-                        int extra = 5 - (i < Left - 20 || i > Right + 20 ? 4 : i < Left - 15 || i > Right + 15 ? 3 : i < Left - 10 || i > Right + 10 ? 2 : i < Left - 5 || i > Right + 5 ? 2 : 1);
+                        int extra = 5 - (i < Left - 25 || i > Right + 25 ? 4 : i < Left - 20 || i > Right + 20 ? 3 : i < Left - 15 || i > Right + 15 ? 2 : i < Left - 10 || i > Right + 10 ? 2 : 1);
                         bool flag2 = _random.NextBool(6 - extra);
                         bool flag0 = (edgeRight || edgeLeft) && flag2;
                         bool flag = flag0 || !edgeX;
@@ -2199,7 +2199,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
-        double count = WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.03) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055);
+        double count = WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.06);
         for (int num555 = 0; num555 < count; num555++) {
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
