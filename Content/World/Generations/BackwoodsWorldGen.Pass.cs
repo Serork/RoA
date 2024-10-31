@@ -129,7 +129,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddSpikes();
         Step_AddPills();
         Step10_SpreadMossGrass();
-        Step14_ClearRockLayerWalls();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
     }
@@ -1824,7 +1823,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step_AddHerbs();
         Step_AddSpikes();
-        Step_AddPills();
+        //Step_AddPills();
     }
 
     public void BackwoodsTilesReplacement(GenerationProgress progress, GameConfiguration config) {
@@ -2204,6 +2203,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
         }
+
+        Step_AddPills();
+
+        Step14_ClearRockLayerWalls();
+        cleanUp();
 
         //Step15_AddLootRooms();
     }
