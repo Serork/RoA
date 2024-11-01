@@ -1116,7 +1116,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 num1047 = 0;
             if (num1047 > 10)
                 num1047 = 10;
-            for (int num1049 = BackwoodsVars.FirstTileYAtCenter - 10; num1049 < Bottom + EdgeY; num1049++) {
+            for (int num1049 = BackwoodsVars.FirstTileYAtCenter - 10; num1049 < Bottom + EdgeY + num1047; num1049++) {
                 if (!(num1049 < y + 10.0 && !((double)num1049 > y + (double)num1047))) {
                     if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15) {
                         if (!invalidWalls2.Contains(Main.tile[num1048, num1049].WallType) && !invalidWalls.Contains(Main.tile[num1048, num1049].WallType) && !MidInvalidWallTypesToKill.Contains(Main.tile[num1048, num1049].WallType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[num1048, num1049].WallType) && !MidMustSkipWallTypes.Contains(Main.tile[num1048, num1049].WallType) && ((Main.tile[num1048, num1049].WallType != _grassWallType && Main.tile[num1048, num1049].WallType != _leavesWallType) || num1049 > y + (double)num1047) && Main.tile[num1048, num1049].WallType != _elderwoodWallType) {

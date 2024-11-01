@@ -374,21 +374,20 @@ sealed class GrimDefender : ModNPC {
 
         Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? (_isAngry ? new Color(255, 120, 120) : new Color(153, 244, 114)) * 0.5f : new Color(148, 1, 26)).ToVector3() * 0.75f);
 
-        Color value3 = Color.LimeGreen;
-        Color value4 = Color.LightSeaGreen;
-        int num17 = 4;
-        if (_isAngry) {
-            value3 = new(255, 147, 147, 200);
-        }
-        Vector2 dustCenter = NPC.position + new Vector2(22, 28) / 2f;
-        if (!_isAngry && NPC.velocity.Length() > 1.5f && (int)Main.timeForVisualEffects % 2 == 0) {
-            Dust dust = Dust.NewDustDirect(dustCenter - new Vector2(num17), num17 + 4, num17 + 4, DustID.FireworksRGB, 0f, 0f, 200, Color.Lerp(value3, value3, Main.rand.NextFloat()), 0.65f);
-            dust.velocity *= 0f;
-            dust.velocity += NPC.velocity * 0.3f;
-            dust.noGravity = true;
-            dust.noLight = true;
-        }
-
+        //Color value3 = Color.LimeGreen;
+        //Color value4 = Color.LightSeaGreen;
+        //int num17 = 4;
+        //if (_isAngry) {
+        //    value3 = new(255, 147, 147, 200);
+        //}
+        //Vector2 dustCenter = NPC.position + new Vector2(22, 28) / 2f;
+        //if (!_isAngry && NPC.velocity.Length() > 1.5f && (int)Main.timeForVisualEffects % 2 == 0) {
+        //    Dust dust = Dust.NewDustDirect(dustCenter - new Vector2(num17), num17 + 4, num17 + 4, DustID.FireworksRGB, 0f, 0f, 200, Color.Lerp(value3, value3, Main.rand.NextFloat()), 0.65f);
+        //    dust.velocity *= 0f;
+        //    dust.velocity += NPC.velocity * 0.3f;
+        //    dust.noGravity = true;
+        //    dust.noLight = true;
+        //}
 
         bool flag = true;
         Vector2 diff = Main.player[NPC.target].Center - NPC.Center;
