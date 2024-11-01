@@ -3,11 +3,13 @@ using FullSerializer.Internal;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Utilities.Extensions;
 using RoA.Content.Gores;
 using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -32,7 +34,7 @@ sealed class LivingElderwoodlLeaves : ModTile {
         IEntitySource entitySource = new EntitySource_TileUpdate(i, j);
         ushort leafGoreType = (ushort)ModContent.GoreType<BackwoodsLeaf>();
         int x = i, y = j;
-        if (Main.rand.NextBool(2500)) {
+        if (Main.rand.Next(typeof(TileDrawing).GetFieldValue<int>("_leafFrequency", Main.instance.TilesRenderer)) == 0) {
             Tile tile = Main.tile[x, y + 1];
             if (!WorldGen.SolidTile(tile) && !tile.AnyLiquid()) {
                 float windForVisuals = Main.WindForVisuals;

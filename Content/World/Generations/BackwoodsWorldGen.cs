@@ -31,6 +31,6 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex += 1;
         tasks.Insert(genIndex, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
 
-        tasks.Insert(tasks.Count - 1, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsOnLast));
+        tasks.Insert(tasks.Count - 2, new PassLegacy(GENLAYERNAME3, BackwoodsWorldGenPass.BackwoodsOnLast));
     }
 }

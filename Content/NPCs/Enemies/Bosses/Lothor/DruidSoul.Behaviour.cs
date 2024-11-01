@@ -141,7 +141,7 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 altarCoords = AltarHandler.GetAltarPosition().ToWorldCoordinates();
         float dist2 = Math.Min(player3.Distance(altarCoords), NPC.Distance(altarCoords));
         if (ShouldConsumeItsEnergy || flag2 /*|| dist2 > MAXDISTANCETOALTAR*/) {
-            //_velocity *= 0.975f;
+            _velocity *= 0.975f;
 
             return;
         }
@@ -400,19 +400,19 @@ sealed partial class DruidSoul : RoANPC {
                 //if (Math.Abs(_velocity.Y) > 1f) {
                 //    _velocity.Y *= 0.925f;
                 //}
-                float velocityY = VELOCITYY / 2f * value2 * value2;
+                value2 = MathHelper.Clamp(value2, 0.2f, 1f);
+                float velocityY = VELOCITYY / 2f * value2 * value2 * value2;
                 if (Math.Abs(NPC.Center.X - towards.X) < 50f) {
                     NPC.velocity.Y -= velocityY;
                 }
                 if (NPC.Distance(altarPosition) > 60f && NPC.velocity.Y < 1.5f /*|| Math.Abs(NPC.Center.X - towards.X) >= 60f*/) {
                     NPC.velocity.Y -= velocityY;
                     NPC.SlightlyMoveTo(towards, 8f, 13f);
-                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f, 1f) * value2 * value2;
+                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f, 1f);
                     //NPC.velocity *= 0.75f;
                 }
                 if (flag6) {
                     NPC.velocity.Y -= velocityY;
-                    NPC.velocity.Y -= NPC.oldVelocity.Y * 0.5f;
                 }
                 NPC.velocity.Y -= velocityY;
                 if (NPC.Distance(altarPosition) > 30f) {
