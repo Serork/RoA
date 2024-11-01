@@ -362,7 +362,7 @@ sealed partial class DruidSoul : RoANPC {
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.1f;
         bool flag4 = Helper.EaseInOut3(altarStrength) > 0.002f;
         bool flag5 = Helper.EaseInOut3(altarStrength) > 0.565f;
-        //_velocity2 *= 0.975f;
+        _velocity2 *= 0.975f;
         //NPC.velocity *= 0.925f;
         bool flag6 = altarPosition.Y > NPC.Center.Y;
         if ((flag6 && !flag) || flag) {
