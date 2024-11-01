@@ -362,7 +362,7 @@ sealed partial class DruidSoul : RoANPC {
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.1f;
         bool flag4 = Helper.EaseInOut3(altarStrength) > 0.002f;
         bool flag5 = Helper.EaseInOut3(altarStrength) > 0.565f;
-        _velocity2 *= 0.925f;
+        _velocity2 *= 0.975f;
         //NPC.velocity *= 0.925f;
         bool flag6 = altarPosition.Y > NPC.Center.Y;
         if ((flag6 && !flag) || flag) {
@@ -379,7 +379,7 @@ sealed partial class DruidSoul : RoANPC {
             if (!flag2) {
                 NPC.ai[1] += 1 * -NPC.direction;
                 Vector2 circle = NPC.CircleMovementVector2(NPC.ai[1] / 3f, 0.4f, 12);
-                NPC.localAI[0] += NPC.localAI[0] < 1f ? 0.1f : 0.15f;
+                NPC.localAI[0] += 0.15f;
                 _y = -circle.Y + NPC.localAI[0] * 0.35f;
                 float value = Math.Max(_velocity.Length() * 0.01f, 1f);
                 float value2 = Math.Min(NPC.localAI[0] * 0.25f, 1f);

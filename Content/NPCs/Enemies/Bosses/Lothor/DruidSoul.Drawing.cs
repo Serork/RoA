@@ -100,7 +100,7 @@ sealed partial class DruidSoul : RoANPC {
             }
             int amount2 = 3;
             if (k < amount2) {
-                float progress2 = k / (float)amount2 * 1.25f;
+                float progress2 = k / (float)amount2 * 2f;
                 color *= progress2;
             }
             max2 = amount - 4;

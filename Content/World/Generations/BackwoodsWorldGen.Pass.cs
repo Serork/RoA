@@ -1,8 +1,4 @@
-﻿using Humanizer;
-
-using Microsoft.Xna.Framework;
-
-using ReLogic.Utilities;
+﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Sets;
@@ -30,9 +26,6 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
-
-using static System.Net.Mime.MediaTypeNames;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.World.Generations;
 
@@ -335,10 +328,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddGrassWalls() {
         // adapted vanilla
-        int count = 3 + 3 * (WorldGenHelper.WorldSize - 1);
+        int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
         for (int num298 = Left - 50; num298 < Right + 50; num298++) {
             for (int num299 = WorldGenHelper.SafeFloatingIslandY; (double)num299 < Main.worldSurface - 10.0; num299++) {
-                if (_random.Next(2) == 0) {
+                if (_random.Next(3) == 0) {
                     bool flag8 = false;
                     int num300 = -1;
                     int num301 = -1;
@@ -2235,8 +2228,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     else
                         num611 = num609;
 
-                    if (num606 == 1)
-                        progress.Set(num611 / 3.0 + 0.33);
+                    //if (num606 == 1)
+                    //    progress.Set(num611 / 3.0 + 0.33);
 
                     int num612 = 10;
                     if (num606 > num612)
@@ -2246,7 +2239,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
 
                 WorldGen.WaterCheck();
-                progress.Set((double)num606 * 0.1 / 3.0 + 0.66);
+                //progress.Set((double)num606 * 0.1 / 3.0 + 0.66);
             }
 
             Liquid.quickSettle = false;
@@ -2335,7 +2328,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (tile6.TileType == 60)
                 num571 = (ushort)(204 + _random.Next(4));
             else if ((tile6.TileType == _stoneTileType || tile6.TileType == _mossTileType || tile6.TileType == TileID.Stone) && tile7.WallType == 0)
-                num571 = (((double)point2.Y < CenterY + EdgeY + EdgeY / 3) ? ((ushort)(196 + _random.Next(4))) : ((point2.Y >= GenVars.lavaLine) ? ((ushort)(208 + _random.Next(4))) : ((ushort)(212 + _random.Next(4)))));
+                num571 = (((double)point2.Y < CenterY + EdgeY + EdgeY / 3) ? ((ushort)(196 + _random.Next(4))) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4)))));
 
             if (tile6.HasTile && num571 != 0) {
                 bool flag34 = WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData)));
@@ -3013,7 +3006,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGen.KillTile(i, y2 + j3);
                 }
             }
-            int j = y2 - 10;
+            int j = y2 - 5;
             int waterYRandomness = 0;
             while (j <= Bottom) {
                 bool edgeLeft = i < topLeftTileX + 15, edgeRight = i > topRightTileX - 15;
@@ -3041,10 +3034,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             else {
                                 killTile = false;
                             }
-                            if (j > y2 + 20 + waterYRandomness) {
-                                killWater = false;
-                                killTile = false;
-                            }
+                            //if (j > y2 + 20 + waterYRandomness) {
+                            //    killWater = false;
+                            //    killTile = false;
+                            //}
                             //else {
                             //    killWater = true;
                             //}
