@@ -381,9 +381,10 @@ sealed partial class DruidSoul : RoANPC {
                 NPC.ai[1] += 1 * -NPC.direction;
                 Vector2 circle = NPC.CircleMovementVector2(NPC.ai[1] / 3f, 0.4f, 12);
                 NPC.localAI[0] += 0.15f;
-                _y = -circle.Y + NPC.localAI[0] * 0.35f;
+                float value2 = Math.Min(NPC.localAI[0] * 0.35f, 3f);
+                _y = -circle.Y + value2;
+                _y /= 2f;
                 float value = Math.Max(_velocity.Length() * 0.01f, 1f);
-                float value2 = Math.Min(NPC.localAI[0] * 0.25f, 1f);
                 _velocity3 = circle * value;
                 _velocity3.X *= MathHelper.Clamp(NPC.localAI[0], 0f, 1f);
                 Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
