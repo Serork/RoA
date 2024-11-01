@@ -350,7 +350,7 @@ sealed partial class DruidSoul : RoANPC {
     private void AbsorbSoulHandler() {
         float altarStrength = AltarHandler.GetAltarStrength();
         Vector2 altarPosition = GetAltarPosition();
-        Vector2 towards = altarPosition + new Vector2(-8f, 40f);
+        Vector2 towards = altarPosition + new Vector2(3f, 40f);
         bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
         if (flag2) {
 
@@ -368,8 +368,9 @@ sealed partial class DruidSoul : RoANPC {
         bool flag6 = altarPosition.Y > NPC.Center.Y;
         if ((flag6 && !flag) || flag) {
             //_velocity.Y *= 0.95f;
-            Vector2 towards2 = towards + Vector2.UnitX * 12f;
-            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(_velocity3.X) > 0.05f) {
+            Vector2 towards2 = towards + Vector2.UnitX * 10f;
+            Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3;
+            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.05f) {
                 NPC.spriteDirection = -NPC.direction;
                 NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
             }
@@ -410,7 +411,7 @@ sealed partial class DruidSoul : RoANPC {
                     NPC.velocity.Y -= velocityY;
                     NPC.SlightlyMoveTo(towards, 8f, 13f);
                     NPC.velocity *= Math.Min(0.9f, 1f - value2);
-                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f, 1f);
+                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f * (float)Math.Pow(value2, 7.0), 1f);
                     //NPC.velocity *= 0.75f;
                 }
                 if (flag6) {
@@ -464,7 +465,7 @@ sealed partial class DruidSoul : RoANPC {
                                 SetupPart(1,
                                         Vector2.Zero,
                                         position,
-                                        towards + Vector2.UnitX * 8f + Main.rand.Random2(15f) + Vector2.UnitY * 10f,
+                                        towards + Vector2.UnitX * 2f + Main.rand.Random2(15f) + Vector2.UnitY * 10f,
                                         Main.rand.Next(70, 85) * Main.rand.NextFloat(0.01f, 0.015f),
                                         0.8f);
                     }
@@ -494,7 +495,7 @@ sealed partial class DruidSoul : RoANPC {
                     VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
                             SetupPart(0,
                                     _velocity2 + _velocity3 + _velocity,
-                                    center + (flag2 ? Vector2.UnitY * 10f : Vector2.Zero),
+                                    center + (flag2 ? Vector2.UnitY * 2f : Vector2.Zero),
                                     towards + Vector2.UnitX * 8f,
                                     Main.rand.Next(70, 85) * 0.01f,
                                     NPC.Opacity + 0.15f);
