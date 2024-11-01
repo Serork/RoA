@@ -386,7 +386,7 @@ sealed partial class DruidSoul : RoANPC {
                 _velocity3 = circle * value;
                 _velocity3.X *= MathHelper.Clamp(NPC.localAI[0], 0f, 1f);
                 Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
-                _velocity2 *= 0.8f;
+                _velocity2 *= 0.95f;
                 //_velocity3.Y *= 0.8f;
                 _velocity3.Y *= 0.95f * (1f - altarStrength);
                 _velocity3.X *= 0.8f * (1f - altarStrength);
@@ -399,14 +399,14 @@ sealed partial class DruidSoul : RoANPC {
                 //if (Math.Abs(_velocity.Y) > 1f) {
                 //    _velocity.Y *= 0.925f;
                 //}
-                float velocityY = VELOCITYY / 2f * value2;
+                float velocityY = VELOCITYY / 2f * value2 * value2;
                 if (Math.Abs(NPC.Center.X - towards.X) < 50f) {
                     NPC.velocity.Y -= velocityY;
                 }
                 if (NPC.Distance(altarPosition) > 60f && NPC.velocity.Y < 1.5f /*|| Math.Abs(NPC.Center.X - towards.X) >= 60f*/) {
                     NPC.velocity.Y -= velocityY;
                     NPC.SlightlyMoveTo(towards, 8f, 13f);
-                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f, 1f) * value2;
+                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f, 1f) * value2 * value2;
                     //NPC.velocity *= 0.75f;
                 }
                 if (flag6) {

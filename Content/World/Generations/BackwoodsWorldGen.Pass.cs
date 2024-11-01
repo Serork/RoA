@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Iced.Intel;
+
+using Microsoft.Xna.Framework;
 
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Sets;
@@ -1601,7 +1603,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (!Main.tile[i, j].HasTile) {
                         continue;
                     }
-                    if (TileID.Sets.BasicChest[Main.tile[i, j].TileType]) {
+                    Tile tile = Main.tile[i, j];
+                    ushort tileType = tile.TileType;
+                    if (TileID.Sets.BasicChest[tile.TileType] || SkipBiomeInvalidTileTypeToKill.Contains(tileType) || SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType) || MidInvalidTileTypesToKill.Contains(tileType) || MidInvalidWallTypesToKill.Contains(tile.WallType)) {
                         flag = false;
                         GetRandomPosition(posX, posY, out baseX, out baseY, false);
                         break;
@@ -3359,7 +3363,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         tile.TileType = _mossGrowthTileType;
         tile.TileFrameX = 0;
         tile.TileFrameY = (short)(_random.Next(3) * 18);
-        WorldGen.SquareTileFrame(i, j);
+        //WorldGen.SquareTileFrame(i, j);
     }
 
     // adapted vanilla
