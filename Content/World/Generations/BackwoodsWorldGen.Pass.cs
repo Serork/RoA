@@ -184,12 +184,23 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
             }
-            if (_nextHerb == 4 || _nextHerb == 6) {
+            bool flag = _nextHerb == 4;
+            if (flag || _nextHerb == 6) {
                 if (_random.NextBool()) {
                     _nextHerb++;
                 }
                 else {
-                    _nextHerb += (byte)(_random.NextBool() ? 2 : 1);
+                    if (flag) {
+                        if (y < CenterY + EdgeY) {
+                            _nextHerb += (byte)(_random.NextBool() ? 2 : 1);
+                        }
+                        else {
+                            _nextHerb++;
+                        }
+                    }
+                    else {
+                        _nextHerb += (byte)(_random.NextBool() ? 2 : 1);
+                    }
                 }
             }
             else {
@@ -2109,7 +2120,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 //    tile2.WallType = _dirtWallType;
                                 //}
                             }
-                            ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe, WallID.JungleUnsafe];
+                            ushort[] invalidWalls = [WallID.FlowerUnsafe, WallID.GrassUnsafe/*, WallID.JungleUnsafe*/];
                             if (invalidWalls.Contains(tile.WallType)) {
                                 tile.WallType = _grassWallType;
                             }
