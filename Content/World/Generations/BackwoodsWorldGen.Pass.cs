@@ -341,11 +341,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddGrassWalls() {
         // adapted vanilla
+        int y = Math.Min(CenterY - EdgeY, (int)Main.worldSurface + 10);
         if (CenterX > Main.maxTilesX / 2) {
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
             bool flag = false;
             for (int num298 = Left - 50; num298 < Right + 50; num298++) {
-                for (int num299 = Top - 15; (double)num299 < Main.worldSurface - 15; num299++) {
+                for (int num299 = Top - 15; (double)num299 < y - 15; num299++) {
                     if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
                         int num300 = -1;
@@ -428,7 +429,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
             bool flag = false;
             for (int num298 = Right + 50; num298 > Left - 50; num298--) {
-                for (int num299 = Top - 15; (double)num299 < Main.worldSurface - 15; num299++) {
+                for (int num299 = Top - 15; (double)num299 < y - 15; num299++) {
                     if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
                         int num300 = -1;
@@ -1139,6 +1140,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 Main.tile[num1048, num1049].WallType = WallID.None;
                             }
                         }
+                    }
+                }
+                else {
+                    if (num1048 > Left && num1048 < Right && Main.tile[num1048, num1049].WallType == WallID.JungleUnsafe) {
+                        Main.tile[num1048, num1049].WallType = 59;
                     }
                 }
             }
@@ -2419,7 +2425,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         for (int num686 = 0; num686 < _biomeWidth / 2; num686++) {
             int num687 = _random.Next(Left - 30, Right + 30);
-            int num688 = _random.Next((int)Main.worldSurface - EdgeY - _random.Next(EdgeY), (int)Main.worldSurface + 10);
+            int y = Math.Min(CenterY - EdgeY, (int)Main.worldSurface);
+            int num688 = _random.Next((int)y - EdgeY - _random.Next(EdgeY), (int)y + 10);
             if (Main.tile[num687, num688].WallType == 2 || Main.tile[num687, num688].WallType == _dirtWallType)
                 WorldGen.DirtyRockRunner(num687, num688);
         }
