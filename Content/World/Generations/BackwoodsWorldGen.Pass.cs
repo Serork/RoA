@@ -345,7 +345,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
             bool flag = false;
             for (int num298 = Left - 50; num298 < Right + 50; num298++) {
-                for (int num299 = Top - 30; (double)num299 < Main.worldSurface; num299++) {
+                for (int num299 = Top - 15; (double)num299 < Main.worldSurface - 15; num299++) {
                     if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
                         int num300 = -1;
@@ -428,7 +428,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
             bool flag = false;
             for (int num298 = Right + 50; num298 > Left - 50; num298--) {
-                for (int num299 = Top - 30; (double)num299 < Main.worldSurface; num299++) {
+                for (int num299 = Top - 15; (double)num299 < Main.worldSurface - 15; num299++) {
                     if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
                         int num300 = -1;
@@ -3311,7 +3311,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             while (testJ <= max) {
                 x = cliffX + (randomnessPoints[max - testJ] + 1) * dir;
                 Tile tile = Main.tile[x, testJ];
-                if (testJ == startY + 1) {
+                if (testJ < startY + 3) {
                     for (int j = testJ - 15; j < testJ; j++) {
                         if (!SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, j].TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[x, j].WallType)) {
                             if (Main.tile[x, j].TileType != _dirtTileType && Main.tile[x, j].TileType != CliffPlaceholderTileType) {
@@ -3324,12 +3324,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 testJ++;
                 if (first) {
                     randomness += _random.Next(-1, 2);
-                    if (randomness < 1 && _toLeft) {
-                        randomness = 1;
-                    }
-                    if (randomness > -1 && !_toLeft) {
-                        randomness = -1;
-                    }
+                    //if (randomness < 1 && !_toLeft) {
+                    //    randomness = 1;
+                    //}
+                    //if (randomness > -1 && _toLeft) {
+                    //    randomness = -1;
+                    //}
                     randomnessPoints[max - testJ] = randomness;
                 }
                 if (SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, testJ].TileType) ||
