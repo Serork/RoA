@@ -41,9 +41,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     public static readonly ushort[] MidInvalidWallTypesToKill = { WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidReplaceWallTypes = { WallID.MudUnsafe, WallID.MudWallEcho, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
     public static readonly ushort[] SkipBiomeInvalidTileTypeToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone };
-    public static readonly ushort[] SkipBiomeInvalidWallTypeToKill = { WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
+    public static readonly ushort[] SkipBiomeInvalidWallTypeToKill = { WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite };
     public static readonly ushort[] MidMustKillTileTypes = { TileID.Ebonstone, TileID.Crimstone };
-    public static readonly ushort[] MidMustSkipWallTypes = { WallID.Marble, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
+    public static readonly ushort[] MidMustSkipWallTypes = { WallID.Granite, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidMustKillWallTypes = { WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
     public static readonly ushort[] SandTileTypes = { TileID.Sand, TileID.Crimsand, TileID.Ebonsand };
 
@@ -1120,7 +1120,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (!(num1049 < y + 10.0 && !((double)num1049 > y + (double)num1047))) {
                     if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15) {
                         if (!invalidWalls2.Contains(Main.tile[num1048, num1049].WallType) && !invalidWalls.Contains(Main.tile[num1048, num1049].WallType) && !MidInvalidWallTypesToKill.Contains(Main.tile[num1048, num1049].WallType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[num1048, num1049].WallType) && !MidMustSkipWallTypes.Contains(Main.tile[num1048, num1049].WallType) && ((Main.tile[num1048, num1049].WallType != _grassWallType && Main.tile[num1048, num1049].WallType != _leavesWallType) || num1049 > y + (double)num1047) && Main.tile[num1048, num1049].WallType != _elderwoodWallType) {
-                            Main.tile[num1048, num1049].WallType = WallID.None;
+                            if (!SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[num1048, num1049].WallType)) {
+                                Main.tile[num1048, num1049].WallType = WallID.None;
+                            }
                         }
                     }
                 }
@@ -2354,7 +2356,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
-        double count = WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.03) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055);
+        double count = WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055);
         for (int num555 = 0; num555 < count; num555++) {
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
