@@ -345,7 +345,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (CenterX > Main.maxTilesX / 2) {
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
             bool flag = false;
-            for (int num298 = Left - 50; num298 < Right + 50; num298++) {
+            for (int num298 = Left - 25; num298 < Right + 25; num298++) {
                 for (int num299 = Top - 15; (double)num299 < y - 15; num299++) {
                     if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
@@ -394,7 +394,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
 
-            for (int num306 = Left - 50; num306 < Right + 50; num306++) {
+            for (int num306 = Left - 25; num306 < Right + 25; num306++) {
                 for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < Main.worldSurface - 1.0; num307++) {
                     if (Main.tile[num306, num307].WallType == 63 && _random.Next(10) == 0)
                         Main.tile[num306, num307].WallType = _grassWallType;
@@ -416,7 +416,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
 
-            for (int num306 = Left - 50; num306 < Right + 50; num306++) {
+            for (int num306 = Left - 25; num306 < Right + 25; num306++) {
                 for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < Main.worldSurface - 1.0; num307++) {
                     if (Main.tile[num306, num307].HasTile) {
                         WorldGen.grassSpread = 0;
@@ -428,7 +428,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         else {
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
             bool flag = false;
-            for (int num298 = Right + 50; num298 > Left - 50; num298--) {
+            for (int num298 = Right + 25; num298 > Left - 25; num298--) {
                 for (int num299 = Top - 15; (double)num299 < y - 15; num299++) {
                     if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
@@ -477,7 +477,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
 
-            for (int num306 = Right + 50; num306 > Left - 50; num306--) {
+            for (int num306 = Right + 25; num306 > Left - 25; num306--) {
                 for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < Main.worldSurface - 1.0; num307++) {
                     if (Main.tile[num306, num307].WallType == 63 && _random.Next(10) == 0)
                         Main.tile[num306, num307].WallType = _grassWallType;
@@ -499,7 +499,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
 
-            for (int num306 = Right + 50; num306 > Left - 50; num306--) {
+            for (int num306 = Right + 25; num306 > Left - 25; num306--) {
                 for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < Main.worldSurface - 1.0; num307++) {
                     if (Main.tile[num306, num307].HasTile) {
                         WorldGen.grassSpread = 0;
@@ -1930,6 +1930,23 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddGrassWalls();
     }
 
+    public void BackwoodsOnLast0(GenerationProgress progress, GameConfiguration config) {
+        Point altarCoords = AltarHandler.GetAltarPosition();
+        int i = altarCoords.X, j = altarCoords.Y;
+        for (int i2 = i - 7; i2 < i + 8; i2++) {
+            for (int j2 = j - 2; j2 < j + 4; j2++) {
+                if (WorldGenHelper.ActiveTile(i2, j2, TileID.Dirt) || WorldGenHelper.ActiveTile(i2, j2, _dirtTileType)) {
+                    Main.tile[i2, j2].TileType = _grassTileType;
+                }
+                if (WorldGenHelper.ActiveTile(i2, j2, TileID.Dirt) &&
+                    (WorldGenHelper.ActiveTile(i2, j2 + 1, _leavesTileType) || WorldGenHelper.ActiveTile(i2, j2 + 1, _grassTileType)) &&
+                    (WorldGenHelper.ActiveTile(i2 + 1, j2, _grassTileType) || WorldGenHelper.ActiveTile(i2 + 1, j2, _leavesTileType))) {
+                    WorldGenHelper.ReplaceTile(i2, j2, _grassTileType);
+                }
+            }
+        }
+    }
+
     public void BackwoodsOnLast(GenerationProgress progress, GameConfiguration config) {
         Step_AddCatTails();
         Step_AddLilypads();
@@ -1943,7 +1960,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
                 if (tile.ActiveTile(_grassTileType) && WorldGen.SolidTile(x, y) && !aboveTile.HasTile) {
                     tile = WorldGenHelper.GetTileSafely(x, y - 1);
-                    if (_random.NextBool(11)) {
+                    if (_random.NextBool(8)) {
                         tile.HasTile = true;
                         tile.TileFrameY = 0;
                         tile.TileType = _mintTileType;
