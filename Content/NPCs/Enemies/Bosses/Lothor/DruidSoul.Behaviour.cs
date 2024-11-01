@@ -370,7 +370,7 @@ sealed partial class DruidSoul : RoANPC {
             //_velocity.Y *= 0.95f;
             Vector2 towards2 = towards + Vector2.UnitX * 3f;
             Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3;
-            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.05f) {
+            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.075f) {
                 NPC.spriteDirection = -NPC.direction;
                 NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
             }
