@@ -1921,8 +1921,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Point altarCoords = AltarHandler.GetAltarPosition();
         int i = altarCoords.X, j = altarCoords.Y;
-        for (int i2 = i - 4; i2 < i + 5; i2++) {
-            for (int j2 = j - 1; j2 < j + 3; j2++) {
+        for (int i2 = i - 7; i2 < i + 8; i2++) {
+            for (int j2 = j - 2; j2 < j + 4; j2++) {
                 if (WorldGenHelper.ActiveTile(i2, j2, TileID.Dirt) || WorldGenHelper.ActiveTile(i2, j2, _dirtTileType)) {
                     Main.tile[i2, j2].TileType = _grassTileType;
                 }
