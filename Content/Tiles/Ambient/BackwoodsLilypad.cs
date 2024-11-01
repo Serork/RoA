@@ -152,7 +152,9 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
     }
 
     public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
-        CheckTileFrame(i, j);
+        if (!WorldGen.gen) {
+            CheckTileFrame(i, j);
+        }
 
         return true;
     }

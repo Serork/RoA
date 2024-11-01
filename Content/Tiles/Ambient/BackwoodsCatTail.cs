@@ -213,7 +213,9 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
     }
 
     public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
-        CheckCatTail(i, j);
+        if (!WorldGen.gen) {
+            CheckCatTail(i, j);
+        }
 
         return true;
     }
