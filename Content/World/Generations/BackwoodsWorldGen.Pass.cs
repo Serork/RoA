@@ -1527,9 +1527,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int attempts = 50;
             Tile tile = WorldGenHelper.GetTileSafely(baseX, baseY);
             ushort tileType = tile.TileType;
-            while (!skipTileTypes.Contains(tileType) || SkipBiomeInvalidTileTypeToKill.Contains(tileType) || SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType) || MidInvalidTileTypesToKill.Contains(tileType) || MidInvalidWallTypesToKill.Contains(tile.WallType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
+            while (!skipTileTypes.Contains(tileType) || SandTileTypes.Contains(tileType) || SkipBiomeInvalidTileTypeToKill.Contains(tileType) || SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType) || MidInvalidTileTypesToKill.Contains(tileType) || MidInvalidWallTypesToKill.Contains(tile.WallType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
                 baseX = _random.Next(Left + 15, Right - 15);
-                baseY = _random.Next(y, Bottom - 20);
+                baseY = _random.Next(y + (int)(EdgeY * 2f * _random.NextFloat()), Bottom - 20);
                 if (attempts-- <= 0) {
                     break;
                 }
@@ -1973,6 +1973,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         //Step_AddPills();
+        Step10_SpreadMossGrass();
     }
 
     public void BackwoodsTilesReplacement(GenerationProgress progress, GameConfiguration config) {
@@ -2405,6 +2406,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
         }
+
+        Step9_SpreadMoss();
+        //Step10_SpreadMossGrass();
 
         Step_AddPills();
 
