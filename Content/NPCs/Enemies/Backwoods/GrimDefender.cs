@@ -355,7 +355,7 @@ sealed class GrimDefender : ModNPC {
                 if (!(player.active && !player.dead)) {
                     continue;
                 }
-                if (player.active && !player.dead && player.GetSelectedItem().damage > 0 && player.ItemAnimationActive) {
+                if (NPC.Distance(player.Center) < 400f && player.active && !player.dead && player.GetSelectedItem().damage > 0 && player.ItemAnimationActive) {
                     MakeAngry();
 
                     if (Main.netMode == NetmodeID.MultiplayerClient) {

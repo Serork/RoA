@@ -332,7 +332,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         // adapted vanilla
         int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
         for (int num298 = Left - 50; num298 < Right + 50; num298++) {
-            for (int num299 = WorldGenHelper.SafeFloatingIslandY; (double)num299 < Main.worldSurface - 10.0; num299++) {
+            for (int num299 = Top - 30; (double)num299 < Main.worldSurface; num299++) {
                 if (_random.Next(count > count / 2 ? 2 : 3) == 0) {
                     bool flag8 = false;
                     int num300 = -1;
