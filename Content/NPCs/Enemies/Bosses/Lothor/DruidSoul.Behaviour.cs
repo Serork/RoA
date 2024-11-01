@@ -72,7 +72,7 @@ sealed partial class DruidSoul : RoANPC {
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.0025f;
         bool flag2 = flag3 ? player.Distance(altarPosition) < 130f : player.Distance(NPC.Center) < 130f;
         bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 90f && player.Distance(altarPosition) < 95f) || (flag && flag2);
-        return (altarCondition && NPC.Center.Y - 4f > altarPosition.Y) || (Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && (playerCanReachAltar)));
+        return Collision.CanHit(NPC.Center, 0, 0, altarPosition, 0, 0) && ((altarCondition && NPC.Center.Y - 4f > altarPosition.Y) || (Helper.EaseInOut3(altarStrength) > 0.4f || NPC.Opacity <= 0.05f || (altarCondition && flag && closeToAltar && (playerCanReachAltar))));
     }
 
     private static Vector2 GetAltarPosition() => AltarHandler.GetAltarPosition().ToWorldCoordinates() - Vector2.UnitX * 5f;
@@ -368,7 +368,7 @@ sealed partial class DruidSoul : RoANPC {
         bool flag6 = altarPosition.Y > NPC.Center.Y;
         if ((flag6 && !flag) || flag) {
             //_velocity.Y *= 0.95f;
-            Vector2 towards2 = towards + Vector2.UnitX * 10f;
+            Vector2 towards2 = towards + Vector2.UnitX * 3f;
             Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3;
             if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.05f) {
                 NPC.spriteDirection = -NPC.direction;
@@ -465,7 +465,7 @@ sealed partial class DruidSoul : RoANPC {
                                 SetupPart(1,
                                         Vector2.Zero,
                                         position,
-                                        towards + Vector2.UnitX * 2f + Main.rand.Random2(15f) + Vector2.UnitY * 10f,
+                                        towards + Vector2.UnitX * 3f + Main.rand.Random2(15f) + Vector2.UnitY * 10f,
                                         Main.rand.Next(70, 85) * Main.rand.NextFloat(0.01f, 0.015f),
                                         0.8f);
                     }

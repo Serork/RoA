@@ -1518,7 +1518,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //GetRandomPosition(posX, posY, out int baseX, out int baseY, false);
 
         int baseX = _random.Next(Left + 15, Right - 15);
-        int y = Math.Min(CenterY, (int)Main.worldSurface + 10);
+        int y = Math.Min(CenterY - EdgeY, (int)Main.worldSurface + 10);
         int baseY = _random.Next(y + (int)(EdgeY * 2f * _random.NextFloat()), Bottom - 20);
         Point origin = new(baseX, baseY);
 
