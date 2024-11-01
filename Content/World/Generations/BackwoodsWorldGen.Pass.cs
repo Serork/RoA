@@ -1105,7 +1105,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int num1047 = 0;
         int num1050 = 0;
         //int y = CenterY - EdgeY / 2;
-        double y = Math.Max(CenterY - EdgeY, Main.worldSurface - 10);
+        double y = Math.Max(CenterY - EdgeY, Main.worldSurface);
         int maxLeft = Left - 50;
         int maxRight = Right + 50;
         ushort[] invalidWalls = [WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4, WallID.LihzahrdBrickUnsafe, 59, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
@@ -2374,7 +2374,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step10_SpreadMossGrass();
 
-        for (int num686 = 0; num686 < _biomeWidth / 3; num686++) {
+        for (int num686 = 0; num686 < _biomeWidth / 2; num686++) {
             int num687 = _random.Next(Left - 30, Right + 30);
             int num688 = _random.Next((int)Main.worldSurface - EdgeY - _random.Next(EdgeY), (int)Main.worldSurface + 10);
             if (Main.tile[num687, num688].WallType == 2 || Main.tile[num687, num688].WallType == _dirtWallType)
