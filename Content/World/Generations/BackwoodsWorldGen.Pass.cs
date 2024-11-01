@@ -332,9 +332,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         // adapted vanilla
         if (CenterX > Main.maxTilesX / 2) {
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
+            bool flag = false;
             for (int num298 = Left - 50; num298 < Right + 50; num298++) {
                 for (int num299 = Top - 30; (double)num299 < Main.worldSurface; num299++) {
-                    if (_random.Next(count > count / 2 ? 2 : 3) == 0) {
+                    if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
                         int num300 = -1;
                         int num301 = -1;
@@ -342,9 +343,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (Main.tile[num298, num299].HasTile && Main.tile[num298, num299].TileType == _grassTileType && (Main.tile[num298, num299].WallType == _dirtWallType || Main.tile[num298, num299].WallType == _leavesWallType)) {
                             for (int num302 = num298 - 1; num302 <= num298 + 1; num302++) {
                                 for (int num303 = num299 - 1; num303 <= num299 + 1; num303++) {
-                                    flag10 = _random.NextBool() && (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(5) || (count > count / 2 && _random.NextBool(4))) && count > 0));
-                                    if ((Main.tile[num302, num303].WallType == 0 || flag10) && !WorldGen.SolidTile(num302, num303))
+                                    flag10 = !flag && _random.NextBool() && (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(5) || (count > count / 2 && _random.NextBool(4))) && count > 0));
+                                    if ((Main.tile[num302, num303].WallType == 0 || flag10) && !WorldGen.SolidTile(num302, num303)) {
                                         flag8 = true;
+                                        flag = false;
+                                    }
                                 }
                             }
 
@@ -412,9 +415,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
         else {
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
+            bool flag = false;
             for (int num298 = Right + 50; num298 > Left - 50; num298--) {
                 for (int num299 = Top - 30; (double)num299 < Main.worldSurface; num299++) {
-                    if (_random.Next(count > count / 2 ? 2 : 3) == 0) {
+                    if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
                         int num300 = -1;
                         int num301 = -1;
@@ -422,9 +426,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (Main.tile[num298, num299].HasTile && Main.tile[num298, num299].TileType == _grassTileType && (Main.tile[num298, num299].WallType == _dirtWallType || Main.tile[num298, num299].WallType == _leavesWallType)) {
                             for (int num302 = num298 - 1; num302 <= num298 + 1; num302++) {
                                 for (int num303 = num299 - 1; num303 <= num299 + 1; num303++) {
-                                    flag10 = _random.NextBool() && (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(5) || (count > count / 2 && _random.NextBool(4))) && count > 0));
-                                    if ((Main.tile[num302, num303].WallType == 0 || flag10) && !WorldGen.SolidTile(num302, num303))
+                                    flag10 = !flag && _random.NextBool() && (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(5) || (count > count / 2 && _random.NextBool(4))) && count > 0));
+                                    if ((Main.tile[num302, num303].WallType == 0 || flag10) && !WorldGen.SolidTile(num302, num303)) {
                                         flag8 = true;
+                                        flag = false;
+                                    }
                                 }
                             }
 
@@ -864,18 +870,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int k = 0; k < 2; k++) {
-            for (int i = tileX - 20; i < tileX + 20; i++) {
-                for (int j = tileY - 20; j < tileY + 20; j++) {
-                    if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt) &&
-                        (WorldGenHelper.ActiveTile(i, j + 1, _leavesTileType) || WorldGenHelper.ActiveTile(i, j + 1, _grassTileType)) && 
-                        (WorldGenHelper.ActiveTile(i + 1, j, _grassTileType) || WorldGenHelper.ActiveTile(i + 1, j, _leavesTileType))) {
-                        WorldGenHelper.ReplaceTile(i, j, _grassTileType);
-                    }
-                    // pots
-                    if (WorldGen.SolidTile(i, j + 1) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(3)) {
-                        WorldGen.PlacePot(i, j, 28, _random.Next(4));
-                    }
+        for (int i = tileX - 20; i < tileX + 20; i++) {
+            for (int j = tileY - 20; j < tileY + 20; j++) {
+                if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt) &&
+                    (WorldGenHelper.ActiveTile(i, j + 1, _leavesTileType) || WorldGenHelper.ActiveTile(i, j + 1, _grassTileType)) && 
+                    (WorldGenHelper.ActiveTile(i + 1, j, _grassTileType) || WorldGenHelper.ActiveTile(i + 1, j, _leavesTileType))) {
+                    WorldGenHelper.ReplaceTile(i, j, _grassTileType);
+                }
+                // pots
+                if (WorldGen.SolidTile(i, j + 1) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(3)) {
+                    WorldGen.PlacePot(i, j, 28, _random.Next(4));
                 }
             }
         }
@@ -1915,6 +1919,28 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddLilypads();
 
         Step_AddChests();
+
+        for (int x = Left - 50; x <= Right + 50; x++) {
+            for (int y = BackwoodsVars.FirstTileYAtCenter; y < Main.worldSurface; y++) {
+                Tile aboveTile = WorldGenHelper.GetTileSafely(x, y - 1);
+                Tile tile = WorldGenHelper.GetTileSafely(x, y);
+                if (tile.ActiveTile(_grassTileType) && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock && !aboveTile.HasTile) {
+                    if (_random.NextBool(14)) {
+                        tile = WorldGenHelper.GetTileSafely(x, y - 1);
+                        tile.HasTile = true;
+                        tile.TileFrameY = 0;
+                        tile.TileType = _mintTileType;
+                        tile.TileFrameX = (short)(18 * (_random.Next(5) < 2 ? 2 : _random.NextBool() ? 0 : 1));
+                        ModContent.GetInstance<MiracleMintTE>().Place(x, y - 1);
+                    }
+                    else {
+                        tile.TileType = _plantsTileType;
+                        tile.TileFrameX = (short)(18 * _random.Next(20));
+                    }
+                    break;
+                }
+            }
+        }
 
         Step_AddHerbs();
         Step_AddSpikes();
