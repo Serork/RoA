@@ -400,8 +400,9 @@ sealed partial class DruidSoul : RoANPC {
                 //if (Math.Abs(_velocity.Y) > 1f) {
                 //    _velocity.Y *= 0.925f;
                 //}
+                value2 = Math.Min(NPC.localAI[0] * 0.5f, 1f);
                 value2 = MathHelper.Clamp(value2, 0.2f, 1f);
-                float velocityY = VELOCITYY / 2f * value2 * value2 * value2;
+                float velocityY = VELOCITYY / 2f * (float)Math.Pow(value2, 10.0);
                 if (Math.Abs(NPC.Center.X - towards.X) < 50f) {
                     NPC.velocity.Y -= velocityY;
                 }
@@ -416,7 +417,7 @@ sealed partial class DruidSoul : RoANPC {
                     NPC.velocity.Y -= _velocity.Y * 0.1f;
                     NPC.velocity.Y -= _velocity2.Y * 0.1f;
                 }
-                NPC.velocity.Y -= velocityY;
+                NPC.velocity.Y -= velocityY * 3f;
                 if (NPC.Distance(altarPosition) > 30f) {
                     float maxY = -2f;
                     if (NPC.velocity.Y < maxY) {

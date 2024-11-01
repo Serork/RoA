@@ -2429,7 +2429,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_WallVariety() {
         double num568 = (double)(Main.maxTilesX * Main.maxTilesY) / 5040000.0;
-        int num569 = (int)(800.0 * num568);
+        int num569 = (int)(1000.0 * num568);
         int num570 = num569;
         ShapeData shapeData = new ShapeData();
         while (num569 > 0) {
@@ -2442,6 +2442,32 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             ushort num571 = 0;
             if ((tile6.TileType == _stoneTileType || tile6.TileType == _mossTileType || tile6.TileType == TileID.Stone) && tile7.WallType == 0)
                 num571 = (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)(196 + _random.Next(4))) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4)))));
+
+            if (tile6.HasTile && num571 != 0) {
+                bool flag34 = WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData)));
+                if (shapeData.Count > 50 && flag34) {
+                    WorldUtils.Gen(new Point(point2.X, point2.Y), new ModShapes.OuterOutline(shapeData, useDiagonals: true, useInterior: true), Actions.Chain(new Modifiers.SkipWalls(87), new Modifiers.SkipWalls(_elderwoodWallType, _grassWallType), new Actions.PlaceWall(num571)));
+                }
+
+                shapeData.Clear();
+
+                num569--;
+            }
+        }
+        num568 = (double)(Main.maxTilesX * Main.maxTilesY) / 5040000.0;
+        num569 = (int)(300.0 * num568);
+        num570 = num569;
+        shapeData = new ShapeData();
+        while (num569 > 0) {
+            Point point2 = new Point(_random.Next(Left - 15, Right + 15), _random.Next(CenterY - EdgeY / 2, Bottom + 15));
+            //while (Vector2D.Distance(new Vector2D(point2.X, point2.Y), GenVars.shimmerPosition) < (double)WorldGen.shimmerSafetyDistance) {
+            //    point2 = new Point(_random.Next(Left - 15, Right + 15), _random.Next(Top - 15, Bottom + 15));
+            //}
+            Tile tile6 = Main.tile[point2.X, point2.Y];
+            Tile tile7 = Main.tile[point2.X, point2.Y - 1];
+            ushort num571 = 0;
+            if ((tile6.TileType == _stoneTileType || tile6.TileType == _mossTileType || tile6.TileType == TileID.Stone) && tile7.WallType == 0)
+                num571 = (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)0) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4)))));
 
             if (tile6.HasTile && num571 != 0) {
                 bool flag34 = WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData)));
