@@ -15,7 +15,7 @@ namespace RoA.Common.BackwoodsSystems;
 
 sealed class BackwoodsNPCs : GlobalNPC {
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns) {
-        if (player.InModBiome<BackwoodsBiome>()) {
+        if (player.InModBiome<BackwoodsBiome>() && !player.ZoneJungle) {
             spawnRate = (int)(spawnRate * 0.2f);
             maxSpawns = (int)(maxSpawns * 1.5f);
         }
