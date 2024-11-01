@@ -381,7 +381,7 @@ sealed class GrimDefender : ModNPC {
             value3 = new(255, 147, 147, 200);
         }
         Vector2 dustCenter = NPC.position + new Vector2(22, 28) / 2f;
-        if (!_isAngry && NPC.velocity.Length() > 3f && (int)Main.timeForVisualEffects % 2 == 0) {
+        if (!_isAngry && NPC.velocity.Length() > 2f && (int)Main.timeForVisualEffects % 2 == 0) {
             Dust dust = Dust.NewDustDirect(dustCenter - new Vector2(num17), num17 + 4, num17 + 4, DustID.FireworksRGB, 0f, 0f, 200, Color.Lerp(value3, value3, Main.rand.NextFloat()), 0.65f);
             dust.velocity *= 0f;
             dust.velocity += NPC.velocity * 0.3f;
