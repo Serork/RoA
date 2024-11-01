@@ -782,9 +782,11 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
             Tile tile = WorldGenHelper.GetTileSafely(x, y);
             if (!replaceTiles.Contains(tile.WallType)) {
                 WorldUtils.ClearWall(x, y, _frameNeighbors);
-                return UnitApply(origin, x, y, args);
             }
-            return Fail();
+            else {
+                WorldGenHelper.ReplaceWall(x, y, tile.WallType);
+            }
+            return UnitApply(origin, x, y, args);
             //else {
             //    WorldGenHelper.ReplaceWall(x, y, _dontReplaceWallType);
             //}

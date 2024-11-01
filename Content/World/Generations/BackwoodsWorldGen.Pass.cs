@@ -333,7 +333,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
         for (int num298 = Left - 50; num298 < Right + 50; num298++) {
             for (int num299 = WorldGenHelper.SafeFloatingIslandY; (double)num299 < Main.worldSurface - 10.0; num299++) {
-                if (_random.Next(3) == 0) {
+                if (_random.Next(count > count / 2 ? 2 : 3) == 0) {
                     bool flag8 = false;
                     int num300 = -1;
                     int num301 = -1;
@@ -350,7 +350,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (flag8) {
                             for (int num304 = num298 - 1; num304 <= num298 + 1; num304++) {
                                 for (int num305 = num299 - 1; num305 <= num299 + 1; num305++) {
-                                    if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 15 || Main.tile[num304, num305].WallType == _dirtWallType) && !WorldGen.SolidTile(num304, num305)) {
+                                    if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 59 || Main.tile[num304, num305].WallType == 15 || Main.tile[num304, num305].WallType == _dirtWallType) && !WorldGen.SolidTile(num304, num305)) {
                                         num300 = num304;
                                         num301 = num305;
                                     }
@@ -746,6 +746,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGenHelper.ActiveTile(i + 1, j, AltarPlaceholderTileType)) {
                     WorldGenHelper.Place3x2(i + 1, j - 1, _altarTileType, onPlaced: () => {
                         placed = true;
+
+                        for (int i2 = i - 3; i2 < i + 4; i2++) {
+                            for (int j2 = j - 1; j2 < j + 2; j2++) {
+                                if (WorldGenHelper.ActiveTile(i2, j2, TileID.Dirt) || WorldGenHelper.ActiveTile(i2, j2, _dirtTileType)) {
+                                    Main.tile[i2, j2].TileType = _grassTileType;
+                                }
+                            }
+                        }
 
                         for (int xSize = 0; xSize < 3; xSize++) {
                             for (int ySize = 0; ySize < 2; ySize++) {
@@ -2267,14 +2275,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step10_SpreadMossGrass();
 
-        for (int num686 = 0; num686 < Main.maxTilesX / 7; num686++) {
+        for (int num686 = 0; num686 < _biomeWidth / 3; num686++) {
             int num687 = _random.Next(Left - 30, Right + 30);
-            int num688 = _random.Next((int)Main.worldSurface - EdgeY / 2 - _random.Next(EdgeY), (int)Main.worldSurface);
+            int num688 = _random.Next((int)Main.worldSurface - EdgeY - _random.Next(EdgeY), (int)Main.worldSurface + 10);
             if (Main.tile[num687, num688].WallType == 2 || Main.tile[num687, num688].WallType == _dirtWallType)
                 WorldGen.DirtyRockRunner(num687, num688);
         }
 
-        Step_WallVariety();
 
         //Step15_AddLootRooms();
     }
@@ -2330,7 +2337,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int num570 = num569;
         ShapeData shapeData = new ShapeData();
         while (num569 > 0) {
-            Point point2 = new Point(_random.Next(Left - 15, Right + 15), _random.Next(BackwoodsVars.FirstTileYAtCenter - 15, Bottom + 15));
+            Point point2 = new Point(_random.Next(Left - 15, Right + 15), _random.Next(BackwoodsVars.FirstTileYAtCenter, Bottom + 15));
             //while (Vector2D.Distance(new Vector2D(point2.X, point2.Y), GenVars.shimmerPosition) < (double)WorldGen.shimmerSafetyDistance) {
             //    point2 = new Point(_random.Next(Left - 15, Right + 15), _random.Next(Top - 15, Bottom + 15));
             //}
@@ -3155,6 +3162,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 WorldGenHelper.ReplaceTile(x, testJ, CliffPlaceholderTileType);
                 testJ++;
+                if (SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, testJ].TileType) ||
+                    SandTileTypes.Contains(Main.tile[x, testJ].TileType)) {
+                    break;
+                }
                 if (testJ >= max) {
                     first = false;
                 }
