@@ -1924,7 +1924,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int y = BackwoodsVars.FirstTileYAtCenter; y < Main.worldSurface; y++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(x, y - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
-                if (tile.ActiveTile(_grassTileType) && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock && !aboveTile.HasTile) {
+                if (tile.ActiveTile(_grassTileType) && WorldGen.SolidTile(x, y) && !aboveTile.HasTile) {
                     if (_random.NextBool(14)) {
                         tile = WorldGenHelper.GetTileSafely(x, y - 1);
                         tile.HasTile = true;
@@ -1934,6 +1934,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         ModContent.GetInstance<MiracleMintTE>().Place(x, y - 1);
                     }
                     else {
+                        tile.HasTile = true;
+                        tile.TileFrameY = 0;
                         tile.TileType = _plantsTileType;
                         tile.TileFrameX = (short)(18 * _random.Next(20));
                     }
