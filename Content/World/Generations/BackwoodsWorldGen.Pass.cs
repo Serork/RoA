@@ -1834,6 +1834,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step_AddHerbs();
         Step_AddSpikes();
+
+        Point altarCoords = AltarHandler.GetAltarPosition();
+        int i = altarCoords.X, j = altarCoords.Y;
+        for (int i2 = i - 3; i2 < i + 4; i2++) {
+            for (int j2 = j - 1; j2 < j + 2; j2++) {
+                if (WorldGenHelper.ActiveTile(i2, j2, TileID.Dirt) || WorldGenHelper.ActiveTile(i2, j2, _dirtTileType)) {
+                    Main.tile[i2, j2].TileType = _grassTileType;
+                }
+            }
+        }
         //Step_AddPills();
     }
 
@@ -2566,7 +2576,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step_AddCatTails() {
         for (int i = Left - 35; i <= Right + 35; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY; j++) {
-                if (Main.tile[i, j].LiquidAmount > 0 && !Main.tile[i, j].HasTile) {
+                if (Main.tile[i, j].LiquidAmount > 0 && !Main.tile[i, j].HasTile && !Main.tile[i, j - 1].HasTile) {
                     PlaceBackwoodsCattail(i, j);
                 }
             }
