@@ -4,6 +4,7 @@ using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -57,6 +58,9 @@ sealed class AltarHandler : ModSystem {
             else if (flag6) {
                 _altarStrength += 0.015f;
             }
+            if (flag6) {
+                _altarFactor = 1f;
+            }
             //if (Factor != 0f) {
             //    Factor = 0f;
             //}
@@ -93,6 +97,18 @@ sealed class AltarHandler : ModSystem {
             PunchCameraModifier punchCameraModifier = new(altarCoords, (Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2(), _altarStrength * 1.25f * Main.rand.NextFloat(5f, 10f), _altarStrength * 1.25f * Main.rand.NextFloat(3f, 4.5f), 20, 2000f, "Lothor");
             Main.instance.CameraModifiers.Add(punchCameraModifier);
         }
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        writer.WriteVector2(_altarPosition.ToVector2());
+        writer.Write(_altarStrength);
+        writer.Write(_altarFactor);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        _altarPosition = reader.ReadVector2().ToPoint();
+        _altarStrength = reader.ReadSingle();
+        _altarFactor = reader.ReadSingle();
     }
 
     public override void OnWorldLoad() => Reset();

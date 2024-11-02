@@ -10,6 +10,10 @@ using Terraria.Audio;
 using RoA.Core;
 using Microsoft.Xna.Framework;
 using RoA.Common.WorldEvents;
+using System.IO;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
+using RoA.Utilities;
 
 namespace RoA.Content.Tiles.Ambient;
 
@@ -33,16 +37,36 @@ sealed class OvergrownAltarTE : ModTileEntity {
         float factor = AltarHandler.GetAltarFactor();
         Counting2 = MathHelper.Lerp(Counting2, counting, factor > 0.5f ? Math.Max(0.1f, counting * 0.1f) : counting < 0.5f ? 0.075f : Math.Max(0.05f, counting * 0.025f));
         Counting += TimeSystem.LogicDeltaTime / (3f - MathHelper.Min(0.9f, factor) * 2.5f) * Math.Max(0.05f, Counting) * 7f;
-        var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = 2.5f * Math.Max(0.3f, factor + 0.1f) };
-        var sound = SoundEngine.FindActiveSound(in style);
         if (Counting > 0.8f) {
             if (factor > 0f && Main.rand.NextChance(1f - (double)Math.Min(0.25f, factor - 0.5f))/* || LothorInvasion.preArrivedLothorBoss.Item2*/) {
-                SoundEngine.PlaySound(style, new Microsoft.Xna.Framework.Vector2(Position.X, Position.Y) * 16f);
+                float volume = 2.5f * Math.Max(0.3f, factor + 0.1f);
+                var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = volume };
+                var sound = SoundEngine.FindActiveSound(in style);
+                if (Main.netMode == NetmodeID.Server) {
+                    MultiplayerSystem.SendPacket(new PlayHeartbeatSoundPacket(Main.LocalPlayer, Position.X, Position.Y, volume), ignoreClient: -1);
+                }
+                else {
+                    SoundEngine.PlaySound(style, new Microsoft.Xna.Framework.Vector2(Position.X, Position.Y) * 16f);
+                }
             }
         }
         if (Counting >= 1.25f) {
             Counting = 0f;
         }
+
+        if (Main.netMode == NetmodeID.Server) {
+            NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
+        }
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        writer.Write(Counting);
+        writer.Write(Counting2);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        Counting = reader.ReadSingle();
+        Counting2 = reader.ReadSingle();
     }
 
     public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);

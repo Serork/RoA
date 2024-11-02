@@ -12,6 +12,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -28,8 +29,25 @@ sealed partial class DruidSoul : RoANPC {
     private SlotId _lothorSummonSound;
     private bool _lothorSummonSoundPlayed;
     private float _y;
+    private float _consumeValue;
 
     public bool ShouldConsumeItsEnergy => ConsumesItself();
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.WriteVector2(_velocity);
+        writer.WriteVector2(_velocity2);
+        writer.WriteVector2(_velocity3);
+        writer.Write(_y);
+        writer.Write(_consumeValue);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _velocity = reader.ReadVector2();
+        _velocity2 = reader.ReadVector2();
+        _velocity3 = reader.ReadVector2();
+        _y = reader.ReadSingle();
+        _consumeValue = reader.ReadSingle();    
+    }
 
     public override void AI() {
         KillNPCIfIsntInBackwoods();
@@ -153,7 +171,7 @@ sealed partial class DruidSoul : RoANPC {
 
         _y = MathHelper.Lerp(_y, 0f, 0.1f);
 
-        NPC.localAI[0] = 0f;
+        _consumeValue = 0f;
         NPC.ai[2] = NPC.ai[3] = 0f;
         bool flag4 = Helper.EaseInOut3(altarStrength) > 0.0025f;
         if (!flag4) {
@@ -269,6 +287,8 @@ sealed partial class DruidSoul : RoANPC {
             NPC.direction = (player3.Center.X - center.X).GetDirection();
             NPC.spriteDirection = -NPC.direction;
         }
+
+        NPC.netUpdate = true;
     }
 
     private void MoveToAltar() {
@@ -386,13 +406,13 @@ sealed partial class DruidSoul : RoANPC {
             if (!flag2) {
                 NPC.ai[1] += 1 * -NPC.direction * _velocity.X.GetDirection();
                 Vector2 circle = NPC.CircleMovementVector2(NPC.ai[1] / 3f, 0.4f, 12);
-                NPC.localAI[0] += (NPC.localAI[0] < 1f ? 0.1f : 0.15f) * 3f;
-                float value2 = Math.Min(NPC.localAI[0] * 0.35f, 2f);
+                _consumeValue += (_consumeValue < 1f ? 0.1f : 0.15f) * 3f;
+                float value2 = Math.Min(_consumeValue * 0.35f, 2f);
                 _y = -(-circle.Y + value2);
                 _y *= 0.5f;
                 float value = Math.Max(_velocity.Length() * 0.01f, 1f);
                 _velocity3 = circle * value;
-                _velocity3.X *= MathHelper.Clamp(NPC.localAI[0], 0f, 1f);
+                _velocity3.X *= MathHelper.Clamp(_consumeValue, 0f, 1f);
                 Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
                 _velocity2 *= 0.89f;
                 //_velocity3.Y *= 0.8f;
@@ -406,7 +426,7 @@ sealed partial class DruidSoul : RoANPC {
                 //if (Math.Abs(_velocity.Y) > 1f) {
                 //    _velocity.Y *= 0.925f;
                 //}
-                value2 = Math.Min(NPC.localAI[0], 1f);
+                value2 = Math.Min(_consumeValue, 1f);
                 value2 = MathHelper.Clamp(value2, 0.2f, 1f);
                 float value3 = (float)Math.Pow(value2, 7.0);
                 float velocityY = VELOCITYY / 2f * value3;
