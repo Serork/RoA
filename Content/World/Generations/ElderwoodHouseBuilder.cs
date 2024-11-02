@@ -761,9 +761,9 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         }
 
         WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.SkipWalls(
-            [179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2]), new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles([.. TileSets.Paintings]), new Modifiers.SkipWalls(
-            [179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2]),
-            ((double)room.Y > (Math.Min(BackwoodsWorldGen.BackwoodsWorldGenPass.CenterY, (int)Main.worldSurface + 10) + BackwoodsWorldGen.BackwoodsWorldGenPass.EdgeY / 2 + 5)) ? ((GenAction)new ClearWallCustom(frameNeighbors: true, [179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2])) : ((GenAction)new Actions.PlaceWall(2))));
+            [WallID.DirtUnsafe, 59, 179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2]), new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles([.. TileSets.Paintings]), new Modifiers.SkipWalls(
+            [WallID.DirtUnsafe, 59, 179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2]),
+            ((GenAction)new ClearWallCustom(frameNeighbors: true))));
 
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.Blotches(), new Modifiers.OnlyWalls(base.WallType), new Modifiers.SkipTiles(SkipTilesDuringWallAging), ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.OnlyTiles(30, 321, 158), new Actions.ClearTile(frameNeighbors: true)));
@@ -771,22 +771,29 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
 
     private class ClearWallCustom : GenAction {
         private bool _frameNeighbors;
-        private ushort[] replaceTiles;
 
-        public ClearWallCustom(bool frameNeighbors = false, params ushort[] replaceTiles) {
+        public ClearWallCustom(bool frameNeighbors = false) {
             _frameNeighbors = frameNeighbors;
-            this.replaceTiles = replaceTiles;
         }
 
         public override bool Apply(Point origin, int x, int y, params object[] args) {
             Tile tile = WorldGenHelper.GetTileSafely(x, y);
-            if (!replaceTiles.Contains(tile.WallType)) {
-                WorldUtils.ClearWall(x, y, _frameNeighbors);
+            ushort[] invalidWalls2 = [23, 24, 42, 45, 10, 179, 181, 196, 197, 198, 199, 212, 213, 214, 215, 208, 209, 210, 211];
+            ushort[] invalidWalls = [WallID.DirtUnsafe, 59, 179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
+            if (!invalidWalls2.Contains(tile.WallType) && !invalidWalls.Contains(tile.WallType)) {
+                tile.WallType = 0;
+                if (_frameNeighbors) {
+                    WorldGen.SquareWallFrame(x + 1, y);
+                    WorldGen.SquareWallFrame(x - 1, y);
+                    WorldGen.SquareWallFrame(x, y + 1);
+                    WorldGen.SquareWallFrame(x, y - 1);
+                }
+                return UnitApply(origin, x, y, args);
             }
             else {
                 WorldGenHelper.ReplaceWall(x, y, tile.WallType);
+                return Fail();
             }
-            return UnitApply(origin, x, y, args);
             //else {
             //    WorldGenHelper.ReplaceWall(x, y, _dontReplaceWallType);
             //}

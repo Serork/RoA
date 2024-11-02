@@ -31,6 +31,12 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Content.World.Generations;
 
+class test : ModPlayer {
+    public override void PostUpdate() {
+        Main.NewText(Main.tile[Player.tileTargetX, Player.tileTargetY].TileType);
+    }
+}
+
 // one hella mess
 // god forgive me
 sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight) {
@@ -127,10 +133,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_2_SpreadGrass();
         Step13_GrowBigTrees();
         Step9_SpreadMoss();
-        Step17_AddStatues();
-        Step_AddSpikes();
-        Step_AddPills();
-        Step10_SpreadMossGrass();
+        //Step_AddSpikes();
+        //Step_AddPills();
+        //Step10_SpreadMossGrass();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
     }
@@ -874,10 +879,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = tileY - 20; j < tileY + 20; j++) {
                 Tile tile = Framing.GetTileSafely(i, j);
                 if (WorldGenHelper.ActiveTile(i, j, AltarPlaceholderTileType)) {
-                    WorldGenHelper.GetTileSafely(i, j).TileType = !_random.NextBool(3) ? _grassTileType : TileID.Dirt;
+                    WorldGenHelper.GetTileSafely(i, j).TileType = _grassTileType;
                 }
                 if (WorldGenHelper.ActiveTile(i, j, AltarPlaceholderTileType2)) {
-                    WorldGenHelper.GetTileSafely(i, j).TileType = !_random.NextBool(3) ? _grassTileType : TileID.Dirt;
+                    WorldGenHelper.GetTileSafely(i, j).TileType = _grassTileType;
                 }
             }
         }
@@ -1084,6 +1089,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
             GenerateLootRoom2();
         }
+
+        Step17_AddStatues();
     }
 
     private void WallBush(int i, int j) {
@@ -1995,7 +2002,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        //Step_AddPills();
+        Step_AddPills();
         Step10_SpreadMossGrass();
     }
 
@@ -2121,7 +2128,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         bool flag = flag0 || !edgeX;
                         tile = WorldGenHelper.GetTileSafely(i, j);
                         if (flag) {
-                            if (tile.WallType == WallID.MudUnsafe) {
+                            if (i > Left && i < Right && tile.WallType == WallID.MudUnsafe) {
                                 tile.WallType = _dirtWallType;
                                 //if (!edgeX) {
                                 //    tile.WallType = _dirtWallType;
@@ -2434,6 +2441,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //Step10_SpreadMossGrass();
 
         Step_AddPills();
+        Step_AddSpikes();
 
         Step14_ClearRockLayerWalls();
         cleanUp();
@@ -3274,7 +3282,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             //}
                             //else {
                                 replaceTile();
-                                if (tile.WallType == WallID.MudUnsafe || tile.WallType == WallID.MudWallEcho) {
+                                if (i > Left && i < Right && (tile.WallType == WallID.MudUnsafe || tile.WallType == WallID.MudWallEcho)) {
                                     tile.WallType = _dirtWallType;
                                 }
                             //}
