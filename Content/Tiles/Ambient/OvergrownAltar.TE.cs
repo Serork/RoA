@@ -7,9 +7,9 @@ using RoA.Common;
 
 using System;
 using Terraria.Audio;
-using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 using Microsoft.Xna.Framework;
+using RoA.Common.WorldEvents;
 
 namespace RoA.Content.Tiles.Ambient;
 

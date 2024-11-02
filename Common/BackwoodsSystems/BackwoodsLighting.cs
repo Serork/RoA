@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Tiles;
+using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
-using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Utilities;
 
 using System;

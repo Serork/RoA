@@ -4,6 +4,7 @@ using ReLogic.Utilities;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
+using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.VisualEffects;
 using RoA.Core;
@@ -84,7 +85,7 @@ sealed partial class DruidSoul : RoANPC {
         }
         target = NPC.target;
         Player player = Main.player[target];
-        if (player.dead || !player.InModBiome<BackwoodsBiome>() || NPC.CountNPCS(Type) > 1 || !NPC.downedBoss2) {
+        if (LothorSummoningHandler.PreArrivedLothorBoss.Item1 || player.dead || !player.InModBiome<BackwoodsBiome>() || NPC.CountNPCS(Type) > 1 || !NPC.downedBoss2) {
             NPC.KillNPC();
             if (Main.netMode != NetmodeID.Server) {
                 SoundEngine.PlaySound(SoundID.NPCDeath6 with { Pitch = 0.2f, Volume = 0.5f }, NPC.Center);
@@ -112,13 +113,17 @@ sealed partial class DruidSoul : RoANPC {
         Movement();
 
         if (NPC.Opacity <= 0.05f && Helper.EaseInOut3(AltarHandler.GetAltarStrength()) > 0.925f) {
-            PunchCameraModifier punchCameraModifier = new PunchCameraModifier(NPC.Center, ((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2()), 12f, 20f, 10, 2000f, "Druid Soul");
+            PunchCameraModifier punchCameraModifier = new(NPC.Center, ((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2()), 12f, 20f, 10, 2000f, "Druid Soul");
             Main.instance.CameraModifiers.Add(punchCameraModifier);
             //OvergrownCoords.Strength = OvergrownCoords.Factor = 1f;
             //NPC.SetEventFlagCleared(ref LothorInvasion.preArrivedLothorBoss.Item1, -1);
             //if (Main.netMode == NetmodeID.Server) {
             //    NetMessage.SendData(MessageID.WorldData);
             //}
+            NPC.SetEventFlagCleared(ref LothorSummoningHandler.PreArrivedLothorBoss.Item1, -1);
+            if (Main.netMode == NetmodeID.Server) {
+                NetMessage.SendData(MessageID.WorldData);
+            }
             NPC.KillNPC();
             return;
         }
@@ -384,12 +389,12 @@ sealed partial class DruidSoul : RoANPC {
                 NPC.localAI[0] += (NPC.localAI[0] < 1f ? 0.1f : 0.15f) * 3f;
                 float value2 = Math.Min(NPC.localAI[0] * 0.35f, 2f);
                 _y = -(-circle.Y + value2);
-                _y *= 0.1f;
+                _y *= 0.5f;
                 float value = Math.Max(_velocity.Length() * 0.01f, 1f);
                 _velocity3 = circle * value;
                 _velocity3.X *= MathHelper.Clamp(NPC.localAI[0], 0f, 1f);
                 Helper.InertiaMoveTowards(ref _velocity2, NPC.Center, towards);
-                _velocity2 *= 0.88f;
+                _velocity2 *= 0.89f;
                 //_velocity3.Y *= 0.8f;
                 _velocity3 *= 0.8f * (1f - altarStrength);
                 _velocity3.X *= 1f - altarStrength;
@@ -403,15 +408,18 @@ sealed partial class DruidSoul : RoANPC {
                 //}
                 value2 = Math.Min(NPC.localAI[0], 1f);
                 value2 = MathHelper.Clamp(value2, 0.2f, 1f);
-                float velocityY = VELOCITYY / 2f * (float)Math.Pow(value2, 7.0);
+                float value3 = (float)Math.Pow(value2, 7.0);
+                float velocityY = VELOCITYY / 2f * value3;
                 if (Math.Abs(NPC.Center.X - towards.X) < 50f) {
                     NPC.velocity.Y -= velocityY;
                 }
                 if (NPC.Distance(altarPosition) > 60f && NPC.velocity.Y < 1.5f /*|| Math.Abs(NPC.Center.X - towards.X) >= 60f*/) {
+                    float value3_2 = (float)Math.Pow(value2, 2.0);
+                    float value4 = MathHelper.Clamp(value3_2, 0.1f, 1f);
                     NPC.velocity.Y -= velocityY;
-                    NPC.SlightlyMoveTo(towards, 8f, 13f);
+                    NPC.SlightlyMoveTo(towards, 8f * value4, 13f * value4);
                     NPC.velocity *= Math.Min(0.9f, 1f - value2);
-                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f * (float)Math.Pow(value2, 7.0), 1f);
+                    NPC.velocity *= Math.Max(_velocity.Length() * 0.01f * value3, 1f);
                     //NPC.velocity *= 0.75f;
                 }
                 if (flag6) {

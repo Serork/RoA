@@ -2,8 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
-
-using RoA.Content.NPCs.Enemies.Bosses.Lothor;
+using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -70,7 +69,7 @@ sealed class OvergrownAltar : ModTile {
             float altarFactor = AltarHandler.GetAltarFactor();
             float value = 0.5f + 0.3f * altarFactor;
             value += (1f - MathHelper.Clamp(counting, 0f, 0.98f)) * (0.5f + 0.35f * altarFactor);
-            bool flag = false;
+            bool flag = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
             float altarStrength = AltarHandler.GetAltarStrength();
             float mult = flag ? 1f : Helper.EaseInOut3(MathHelper.Clamp(altarStrength * 2f, 0f, 1f));
             float r2 = MathHelper.Lerp(0.45f, 0.9f, mult);
@@ -102,7 +101,7 @@ sealed class OvergrownAltar : ModTile {
             float strength = AltarHandler.GetAltarStrength();
             Color color = Lighting.GetColor(i, j);
             Tile tile = Main.tile[i, j];
-            bool flag = false;
+            bool flag = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
             int frame = /*5 - */(int)(factor * 6) + (flag || strength > 0.3f ? 6 : 0);
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
@@ -123,8 +122,8 @@ sealed class OvergrownAltar : ModTile {
 
             texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "OvergrownAltar_Glow").Value;
             Color color2 = new(255, 255, 200, 200);
-            float mult = Helper.EaseInOut3(strength);
-            float factor3 = AltarHandler.GetAltarFactor();
+            float mult = flag ? 1f : Helper.EaseInOut3(strength);
+            float factor3 = flag ? 1f : AltarHandler.GetAltarFactor();
             float factor4 = factor3 * 1.5f;
             factor3 *= Math.Max(0.75f, 1f - (factor4 > 0.5f ? 1f - factor4 : factor4));
             spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);

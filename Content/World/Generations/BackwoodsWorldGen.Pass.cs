@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Sets;
-using RoA.Content.NPCs.Enemies.Bosses.Lothor;
+using RoA.Common.WorldEvents;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;

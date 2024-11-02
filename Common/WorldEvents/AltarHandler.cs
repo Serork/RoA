@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core.Utility;
 
 using System;
@@ -12,7 +12,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
+namespace RoA.Common.WorldEvents;
 
 sealed class AltarHandler : ModSystem {
     private static Point _altarPosition;
@@ -39,8 +39,8 @@ sealed class AltarHandler : ModSystem {
         int type = ModContent.NPCType<DruidSoul>();
         NPC druidSoul = null;
         bool flag = NPC.AnyNPCs(type);
-        bool flag6 = false;
-        if (!flag) {
+        bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
+        if (!flag6 && !flag) {
             if (_altarStrength > 0f) {
                 _altarStrength -= 0.01f;
             }
@@ -49,7 +49,19 @@ sealed class AltarHandler : ModSystem {
             }
             return;
         }
-
+        if (!flag) {
+            if (_altarStrength >= 0.35f) {
+                _altarStrength -= 0.00075f;
+                _altarStrength *= 0.995f;
+            }
+            else if (flag6) {
+                _altarStrength += 0.015f;
+            }
+            //if (Factor != 0f) {
+            //    Factor = 0f;
+            //}
+            return;
+        }
         foreach (NPC npc in Main.ActiveNPCs) {
             if (npc.active && npc.type == type) {
                 druidSoul = npc;
