@@ -29,7 +29,7 @@ sealed class LothorSummoningHandler : ModSystem {
 
         _preArrivedLothorBossTimer += TimeSystem.LogicDeltaTime * 1.5f;
         Color color = new (160, 68, 234);
-        if (_preArrivedLothorBossTimer >= 2.4f && !_shake) {
+        if (_preArrivedLothorBossTimer >= 2.467f && !_shake) {
             _shake = true;
             NPC.SetEventFlagCleared(ref LothorShake.shake, -1);
             if (Main.netMode == NetmodeID.Server) {
@@ -42,7 +42,7 @@ sealed class LothorSummoningHandler : ModSystem {
             Helper.NewMessage(text, color);
             Shake(10f, 5f);
         }
-        else if (_preArrivedLothorBossTimer >= 4.3f && !_shake2) {
+        else if (_preArrivedLothorBossTimer >= 4.247f && !_shake2) {
             _shake2 = true;
             NPC.SetEventFlagCleared(ref LothorShake.shake, -1);
             if (Main.netMode == NetmodeID.Server) {

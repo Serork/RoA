@@ -365,7 +365,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             if (flag8) {
                                 for (int num304 = num298 - 2; num304 <= num298 + 2; num304++) {
                                     for (int num305 = num299 - 2; num305 <= num299 + 2; num305++) {
-                                        if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 59 || Main.tile[num304, num305].WallType == 15 || Main.tile[num304, num305].WallType == _dirtWallType) && !WorldGen.SolidTile(num304, num305)) {
+                                        if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 59 || Main.tile[num304, num305].WallType == _dirtWallType) && !WorldGen.SolidTile(num304, num305)) {
                                             num300 = num304;
                                             num301 = num305;
                                         }

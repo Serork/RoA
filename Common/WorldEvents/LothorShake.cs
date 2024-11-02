@@ -21,7 +21,7 @@ sealed class LothorShake : ModSystem {
 	public override void PostUpdateNPCs() {
 		if (shake) {
 			if ((_before && _shakeIntensity < 0.08f) || (!_before && _shakeIntensity < 1f)) {
-				_shakeIntensity += !_before ? 0.35f : 0.07f;
+				_shakeIntensity += !_before ? 0.325f : 0.075f;
 				_shakeIntensity *= 1.05f;
 			}
 			string shader = ShaderLoader.LothorSky;
