@@ -31,12 +31,6 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Content.World.Generations;
 
-class test : ModPlayer {
-    public override void PostUpdate() {
-        Main.NewText(Main.tile[Player.tileTargetX, Player.tileTargetY].TileType);
-    }
-}
-
 // one hella mess
 // god forgive me
 sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight) {
