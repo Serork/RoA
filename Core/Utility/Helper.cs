@@ -39,6 +39,8 @@ static class Helper {
         return MathHelper.Lerp(value1, value3, value);
     }
 
+    public static float EaseInOut4(float value) => (double)value < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)value) : 1f;
+
     public static float Wave(float minimum, float maximum, float speed = 1f, float offset = 0f) => Wave((float)TimeSystem.TimeForVisualEffects, minimum, maximum, speed, offset);
     public static float Wave(float step, float minimum, float maximum, float speed = 1f, float offset = 0f) => minimum + ((float)Math.Sin(step * (double)speed + (double)offset) + 1f) / 2f * (maximum - minimum);
 

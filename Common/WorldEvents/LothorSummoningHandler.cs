@@ -17,6 +17,7 @@ namespace RoA.Common.WorldEvents;
 
 sealed class LothorSummoningHandler : ModSystem {
     private float _preArrivedLothorBossTimer;
+    private bool _shake, _shake2;
 
     internal static (bool, bool) PreArrivedLothorBoss;
     internal static (bool, bool, bool) ActiveMessages;
@@ -28,11 +29,25 @@ sealed class LothorSummoningHandler : ModSystem {
 
         _preArrivedLothorBossTimer += TimeSystem.LogicDeltaTime * 1.5f;
         Color color = new (160, 68, 234);
-        if (_preArrivedLothorBossTimer >= 3f && !ActiveMessages.Item1) {
+        if (_preArrivedLothorBossTimer >= 2.4f && !_shake) {
+            _shake = true;
+            NPC.SetEventFlagCleared(ref LothorShake.shake, -1);
+            if (Main.netMode == NetmodeID.Server) {
+                NetMessage.SendData(MessageID.WorldData);
+            }
+        }
+        else if (_preArrivedLothorBossTimer >= 3f && !ActiveMessages.Item1) {
             ActiveMessages.Item1 = true;
             string text = "You noticed the smell of blood...";
             Helper.NewMessage(text, color);
             Shake(10f, 5f);
+        }
+        else if (_preArrivedLothorBossTimer >= 4.3f && !_shake2) {
+            _shake2 = true;
+            NPC.SetEventFlagCleared(ref LothorShake.shake, -1);
+            if (Main.netMode == NetmodeID.Server) {
+                NetMessage.SendData(MessageID.WorldData);
+            }
         }
         else if (_preArrivedLothorBossTimer >= 5f && !ActiveMessages.Item2) {
             ActiveMessages.Item2 = true;
@@ -42,7 +57,7 @@ sealed class LothorSummoningHandler : ModSystem {
         }
         else if (_preArrivedLothorBossTimer >= 7f && !ActiveMessages.Item3) {
             ActiveMessages.Item3 = true;
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.75f }, AltarHandler.GetAltarPosition().ToWorldCoordinates());
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.5f }, AltarHandler.GetAltarPosition().ToWorldCoordinates());
         }
         //else if (_preArrivedLothorBossTimer >= 9.5f && !flag2) {
         //    Player spawnPlayer = Main.LocalPlayer;
@@ -79,9 +94,5 @@ sealed class LothorSummoningHandler : ModSystem {
                 }
             }
         }
-        //NPC.SetEventFlagCleared(ref LothorShake.shake, -1);
-        //if (Main.netMode == NetmodeID.Server) {
-        //    NetMessage.SendData(MessageID.WorldData);
-        //}
     }
 }

@@ -1,4 +1,5 @@
-﻿using RoA.Content.Backgrounds;
+﻿using RoA.Common.WorldEvents;
+using RoA.Content.Backgrounds;
 
 using Terraria;
 using Terraria.Graphics.Effects;
@@ -10,6 +11,7 @@ namespace RoA.Common;
 sealed class ShaderLoader : ModSystem {
     public static readonly string BackwoodsSky = "Backwoods Sky";
     public static readonly string BackwoodsFog = "Backwoods Fog";
+    public static readonly string LothorSky = "Lothor Sky";
 
     public override void OnModLoad() {
         if (Main.netMode == NetmodeID.Server) {
@@ -22,5 +24,9 @@ sealed class ShaderLoader : ModSystem {
 
         Filters.Scene[BackwoodsFog] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon").UseColor(0.5f, 0.5f, 0.5f).UseOpacity(0.75f), EffectPriority.Medium);
         Filters.Scene[BackwoodsFog].Load();
+
+        SkyManager.Instance[LothorSky] = new LothorShakeSky();
+        Filters.Scene[LothorSky] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon"), EffectPriority.High);
+        Filters.Scene[LothorSky].Load();
     }
 }
