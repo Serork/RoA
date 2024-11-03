@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.VisualEffects;
+using RoA.Common.WorldEvents;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -61,7 +62,9 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             Velocity *= (Main.rand.NextVector2Circular(1f, 1f) + Vector2.One) * 0.5f;
             Scale += 0.01f;
             Opacity -= 0.0045f;
-            if (Opacity <= 0f || Vector2.Distance(Position + Velocity, MoveTo) < 50f || ShouldBeRemovedFromRenderer) {
+            float altarStrength = AltarHandler.GetAltarStrength();
+            bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
+            if (Opacity <= 0f || (!flag2 && Scale > 1.5f) || Vector2.Distance(Position + Velocity, MoveTo) < 40f || ShouldBeRemovedFromRenderer) {
                 Opacity = 0f;
                 TimeLeft = 0;
                 RestInPool();
@@ -95,6 +98,11 @@ sealed class SoulPart : VisualEffect<SoulPart> {
     }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spriteBatch) {
+        float altarStrength = AltarHandler.GetAltarStrength();
+        bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
+        if (Type == 0 && !flag2) {
+            Opacity *= 1f - Utils.GetLerpValue(1.4f, 1.7f, Scale, true);
+        }
         Color color = Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16).MultiplyRGB(new Color(241, 53, 84, 200)) * Opacity;
         for (int index = 0; index < Positions.Length; index++) {
             float factor = (Positions.Length - (float)index) / Positions.Length;
