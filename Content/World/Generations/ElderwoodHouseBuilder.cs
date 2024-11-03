@@ -788,12 +788,8 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
                     WorldGen.SquareWallFrame(x, y + 1);
                     WorldGen.SquareWallFrame(x, y - 1);
                 }
-                return UnitApply(origin, x, y, args);
             }
-            else {
-                WorldGenHelper.ReplaceWall(x, y, tile.WallType);
-                return Fail();
-            }
+            return UnitApply(origin, x, y, args);
             //else {
             //    WorldGenHelper.ReplaceWall(x, y, _dontReplaceWallType);
             //}

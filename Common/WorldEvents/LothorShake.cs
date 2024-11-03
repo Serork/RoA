@@ -23,7 +23,10 @@ sealed class LothorShake : ModSystem {
 		if (shake) {
             if ((before && _shakeIntensity < 0.035f) || (!before && _shakeIntensity < 1f)) {
 				_shakeIntensity += !before ? 0.325f : 0.2f;
-				_shakeIntensity *= !before ? 1.05f : 1.5f;
+				if (before) {
+					_shakeIntensity *= 0.1f;
+				}
+                _shakeIntensity *= !before ? 1.05f : 1.5f;
 				if (before) {
 					_shakeIntensity *= 1.25f;
                 }

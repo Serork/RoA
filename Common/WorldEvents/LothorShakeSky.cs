@@ -25,7 +25,7 @@ sealed class LothorShakeSky : CustomSky {
 		if (Main.dayTime || _alpha <= 0.3) {
 			return;
 		}
-        _alpha -= LothorShake.before ? 0.005f : 0.15f;
+        _alpha -= LothorShake.before ? 0.005f : 0.01f;
     }
 
 	public override Color OnTileColor(Color inColor) {
