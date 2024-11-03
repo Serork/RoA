@@ -1949,11 +1949,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     public void BackwoodsOnLast(GenerationProgress progress, GameConfiguration config) {
+        Step_AddChests();
+
         Step_AddCatTails();
         Step_AddLilypads();
         Step_AddLilypads();
-
-        Step_AddChests();
 
         for (int x = Left - 50; x <= Right + 50; x++) {
             for (int y = BackwoodsVars.FirstTileYAtCenter + 5; y < Main.worldSurface; y++) {
@@ -1979,8 +1979,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        Step_AddHerbs();
         Step_AddSpikes();
+        Step_AddHerbs();
 
         Point altarCoords = AltarHandler.GetAltarPosition();
         int i = altarCoords.X, j = altarCoords.Y;
@@ -1996,7 +1996,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        Step_AddPills();
+        //Step_AddPills();
         Step10_SpreadMossGrass();
     }
 
@@ -3495,7 +3495,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = 0; i < maxCaves; i++) {
             x = _random.Next(startX - 100, endX + 100);
             int y = _random.Next(minY + 5, maxY + 5);
-            if (_random.NextBool(5) && y < BackwoodsVars.FirstTileYAtCenter + EdgeY / 2 && WorldGenHelper.ActiveTile(x, y, _dirtTileType) || WorldGenHelper.ActiveTile(x, y, _stoneTileType)) {
+            if (_random.NextBool(5) && y > BackwoodsVars.FirstTileYAtCenter && y < BackwoodsVars.FirstTileYAtCenter + EdgeY / 2 && WorldGenHelper.ActiveTile(x, y, _dirtTileType) || WorldGenHelper.ActiveTile(x, y, _stoneTileType)) {
                 int type = -2;
                 int sizeX = _random.Next(5, 15) / 2;
                 int sizeY = _random.Next(30, 200) / 2;

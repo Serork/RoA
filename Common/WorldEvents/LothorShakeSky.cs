@@ -18,14 +18,14 @@ sealed class LothorShakeSky : CustomSky {
 	private float _alpha = 0;
 
 	public override void Update(GameTime gameTime) {
-		_intensity = !_hasTile ? Math.Max(0.0f, _intensity - 0.2f) : Math.Min(1f, (LothorShake._before ? 0.075f : 0.1f) + _intensity);
+		_intensity = !_hasTile ? Math.Max(0.0f, _intensity - 0.2f) : Math.Min(1f, (LothorShake.before ? 0.075f : 0.1f) + _intensity);
 		if (Main.dayTime && _alpha < 0.75) {
-			_alpha += LothorShake._before ? 0.005f : 0.01f;
+			_alpha += LothorShake.before ? 0.005f : 0.01f;
 		}
 		if (Main.dayTime || _alpha <= 0.3) {
 			return;
 		}
-        _alpha -= LothorShake._before ? 0.005f : 0.15f;
+        _alpha -= LothorShake.before ? 0.005f : 0.15f;
     }
 
 	public override Color OnTileColor(Color inColor) {

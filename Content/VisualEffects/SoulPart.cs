@@ -61,7 +61,7 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             Velocity *= (Main.rand.NextVector2Circular(1f, 1f) + Vector2.One) * 0.5f;
             Scale += 0.01f;
             Opacity -= 0.0045f;
-            if (Opacity <= 0f || Vector2.Distance(Position + Velocity, MoveTo) < 40f || ShouldBeRemovedFromRenderer) {
+            if (Opacity <= 0f || Vector2.Distance(Position + Velocity, MoveTo) < 50f || ShouldBeRemovedFromRenderer) {
                 Opacity = 0f;
                 TimeLeft = 0;
                 RestInPool();
