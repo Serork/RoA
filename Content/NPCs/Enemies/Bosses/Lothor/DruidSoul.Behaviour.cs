@@ -24,7 +24,7 @@ using Terraria.ID;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class DruidSoul : RoANPC {
-    private const float OPACITYACC = 0.005f;
+    private const float OPACITYACC = 0.0045f;
     private const float VELOCITYY = 0.25f;
 
     private Vector2 _velocity, _velocity2, _velocity3, _velocity4;
@@ -174,9 +174,10 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 altarCoords = AltarHandler.GetAltarPosition().ToWorldCoordinates();
         if (Collision.CanHit(player3.Center, 0, 0, altarCoords, 0, 0) && (!Collision.CanHit(NPC.Center, 0, 0, altarCoords - Vector2.One * 2, 4, 4) && (NPC.Top.Y > altarCoords.Y || altarStrength > 0.01f || NPC.Distance(altarCoords) > 30f))) {
             _velocity.Y -= VELOCITYY / 4f;
-            Vector2 movement = altarCoords - player3.position;
+            Vector2 movement = altarCoords - NPC.position;
             Vector2 movement2 = movement * (5f / movement.Length());
             NPC.position -= (movement2 - NPC.velocity) / 15f;
+            NPC.position.X += (altarCoords - NPC.position).SafeNormalize(Vector2.Zero).X * Math.Max(_velocity.X, 0.1f);
         }
     }
 
@@ -430,7 +431,7 @@ sealed partial class DruidSoul : RoANPC {
             //_velocity.Y *= 0.95f;
             Vector2 towards2 = towards + Vector2.UnitX * 3f;
             Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3 + _velocity4;
-            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.24f) {
+            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.22f) {
                 NPC.spriteDirection = -NPC.direction;
                 NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
             }
@@ -454,7 +455,7 @@ sealed partial class DruidSoul : RoANPC {
                 velocity4 *= 0.84f;
                 _velocity4 = Vector2.Lerp(_velocity4, velocity4, 0.5f);
                 //_velocity3.Y *= 0.8f;
-                _velocity.X *= 0.9f;
+                //_velocity.X *= 0.9f;
                 _velocity3 *= 0.8f * (1f - altarStrength);
                 _velocity3.X *= 1f - altarStrength;
                 NPC.position += _velocity2 + _velocity4 * 0.25f - _velocity3;

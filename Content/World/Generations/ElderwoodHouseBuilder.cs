@@ -811,6 +811,16 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles(51), new Modifiers.SkipTiles([.. TileSets.Paintings]), new Modifiers.OnlyWalls(WallType),
             ((double)room.Y > Main.worldSurface) ? (((GenAction)new ClearWallCustom(frameNeighbors: true))) : ((GenAction)new PlaceWall(2, fail: true))));
 
+        for (int i = room.X + 1; i < room.X + room.Width - 1; i++) {
+            for (int j = room.Y + 1; j < room.Y + room.Height - 1; j++) {
+                if (j <= Main.worldSurface) {
+                    if (Main.tile[i, j].WallType == 0 || !Main.tile[i, j].AnyWall()) {
+                        Main.tile[i, j].WallType = WallType;
+                    }
+                }
+            }
+        }
+
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.Blotches(), new Modifiers.OnlyWalls(base.WallType), new Modifiers.SkipTiles(SkipTilesDuringWallAging), ((double)room.Y > Main.worldSurface) ? ((GenAction)new Actions.ClearWall(frameNeighbors: true)) : ((GenAction)new Actions.PlaceWall(2))));
         //WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(1), new Modifiers.OnlyTiles(30, 321, 158), new Actions.ClearTile(frameNeighbors: true)));
     }

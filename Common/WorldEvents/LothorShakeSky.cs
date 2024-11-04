@@ -29,7 +29,7 @@ sealed class LothorShakeSky : CustomSky {
     }
 
 	public override Color OnTileColor(Color inColor) {
-		float amt = Helper.EaseInOut3(_intensity) * .5f;
+		float amt = Helper.EaseInOut3(_intensity) * .5f * LothorSummoningHandler._alpha;
 		return inColor.MultiplyRGB(new Color(1f - amt, 1f - amt, 1f - amt));
 	}
 
@@ -37,7 +37,7 @@ sealed class LothorShakeSky : CustomSky {
 		if (!Main.gameMenu) {
 			if ((double)maxDepth >= 3.00000000549776E+38 && (double)minDepth < 3.00000000549776E+38) {
 				Color color = Color.Red;
-				spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color * _alpha * 0.15f * Math.Min(1f, (float)((Main.screenPosition.Y - 800.0) / 1000.0) * _intensity));
+				spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color * _alpha * LothorSummoningHandler._alpha * 0.15f * Math.Min(1f, (float)((Main.screenPosition.Y - 800.0) / 1000.0) * _intensity));
 			}
 		}
 	}
