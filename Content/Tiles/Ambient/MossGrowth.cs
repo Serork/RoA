@@ -58,17 +58,17 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
         Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j);
         Tile rightTile = WorldGenHelper.GetTileSafely(i + 1, j);
         bool hasTile = false;
-        if (aboveTile.ActiveTile(moss)) {
+        if (aboveTile.ActiveTile(moss) && aboveTile.Slope == 0 && !aboveTile.IsHalfBlock) {
             hasTile = true;
         }
-        else if (belowTile.ActiveTile(moss)) {
+        else if (belowTile.ActiveTile(moss) && belowTile.Slope == 0 && !belowTile.IsHalfBlock) {
             hasTile = true;
         }
         else {
-            if (leftTile.ActiveTile(moss)) {
+            if (leftTile.ActiveTile(moss) && leftTile.Slope == 0 && !leftTile.IsHalfBlock) {
                 hasTile = true;
             }
-            if (rightTile.ActiveTile(moss)) {
+            if (rightTile.ActiveTile(moss) && rightTile.Slope == 0 && !rightTile.IsHalfBlock) {
                 hasTile = true;
             }
         }

@@ -24,7 +24,7 @@ using Terraria.ID;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class DruidSoul : RoANPC {
-    private const float OPACITYACC = 0.0045f;
+    private const float OPACITYACC = 0.005f;
     private const float VELOCITYY = 0.25f;
 
     private Vector2 _velocity, _velocity2, _velocity3, _velocity4;
@@ -172,7 +172,7 @@ sealed partial class DruidSoul : RoANPC {
         float altarStrength = AltarHandler.GetAltarStrength();
         Player player3 = Main.player[NPC.target];
         Vector2 altarCoords = AltarHandler.GetAltarPosition().ToWorldCoordinates();
-        if (Collision.CanHit(player3.Center, 0, 0, altarCoords, 0, 0) && (!Collision.CanHit(NPC.position, NPC.width, NPC.height, altarCoords - Vector2.One * 2, 4, 4) && (NPC.Center.Y > altarCoords.Y || altarStrength > 0.01f || NPC.Distance(altarCoords) > 15f))) {
+        if (Collision.CanHit(player3.Center, 0, 0, altarCoords, 0, 0) && (!Collision.CanHit(NPC.Center, 0, 0, altarCoords - Vector2.One * 2, 4, 4) && (NPC.Top.Y > altarCoords.Y || altarStrength > 0.01f || NPC.Distance(altarCoords) > 30f))) {
             _velocity.Y -= VELOCITYY / 4f;
             Vector2 movement = altarCoords - player3.position;
             Vector2 movement2 = movement * (5f / movement.Length());
@@ -428,8 +428,8 @@ sealed partial class DruidSoul : RoANPC {
         bool flag6 = altarPosition.Y > NPC.Bottom.Y;
         if ((flag6 && !flag) || flag) {
             //_velocity.Y *= 0.95f;
-            Vector2 towards2 = towards + Vector2.UnitX * 4f;
-            Vector2 velocity = _velocity + _velocity2 + _velocity3 + _velocity4;
+            Vector2 towards2 = towards + Vector2.UnitX * 3f;
+            Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3 + _velocity4;
             if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.24f) {
                 NPC.spriteDirection = -NPC.direction;
                 NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
@@ -449,13 +449,15 @@ sealed partial class DruidSoul : RoANPC {
                 float value = Math.Max(_velocity.Length() * 0.01f, 1f);
                 _velocity3 = circle * value;
                 _velocity3.X *= MathHelper.Clamp(_consumeValue, 0f, 1f);
-                Helper.InertiaMoveTowards(ref _velocity4, NPC.Center, towards);
-                _velocity4 *= 0.84f;
+                Vector2 velocity4 = _velocity4;
+                Helper.InertiaMoveTowards(ref velocity4, NPC.Center, towards);
+                velocity4 *= 0.84f;
+                _velocity4 = Vector2.Lerp(_velocity4, velocity4, 0.5f);
                 //_velocity3.Y *= 0.8f;
                 _velocity.X *= 0.9f;
                 _velocity3 *= 0.8f * (1f - altarStrength);
                 _velocity3.X *= 1f - altarStrength;
-                NPC.position += _velocity2 + _velocity4 * 0.3f - _velocity3;
+                NPC.position += _velocity2 + _velocity4 * 0.25f - _velocity3;
                 //NPC.position.Y += _velocity3.Y * 2f;
                 //if (Math.Abs(NPC.velocity.Y) > 1f) {
                 //    NPC.velocity.Y *= 0.925f;
@@ -569,7 +571,7 @@ sealed partial class DruidSoul : RoANPC {
                     VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
                             SetupPart(0,
                                     _velocity2 + _velocity3 + _velocity,
-                                    center - Vector2.UnitY * (flag2 ? -2f : 6f),
+                                    center - Vector2.UnitY * 2f,
                                     towards + Vector2.UnitX * 8f,
                                     Main.rand.Next(70, 85) * 0.01f,
                                     NPC.Opacity + 0.15f);
