@@ -18,13 +18,15 @@ using Terraria.ModLoader;
 namespace RoA.Common.WorldEvents;
 
 sealed class LothorSummoningHandler : ModSystem {
-    private float _preArrivedLothorBossTimer;
-    private bool _shake, _shake2;
+    private static float _preArrivedLothorBossTimer;
+    private static bool _shake, _shake2;
 
     internal static float _alpha;
 
     internal static (bool, bool) PreArrivedLothorBoss;
     internal static (bool, bool, bool) ActiveMessages;
+
+    internal static bool IsActive => _preArrivedLothorBossTimer >= 6f;
 
     public override void Load() {
         On_Main.SetBackColor += On_Main_SetBackColor;
@@ -39,21 +41,21 @@ sealed class LothorSummoningHandler : ModSystem {
         bool flag = Main.LocalPlayer.InModBiome<BackwoodsBiome>();
         if (!flag) {
             if (_alpha > 0f) {
-                _alpha -= TimeSystem.LogicDeltaTime * 0.5f;
+                _alpha -= TimeSystem.LogicDeltaTime * 1f;
             }
         }
         else {
             if (_alpha < 1f) {
-                _alpha += TimeSystem.LogicDeltaTime * 0.5f;
+                _alpha += TimeSystem.LogicDeltaTime * 0.35f;
             }
         }
-        bool isDayTime = Main.dayTime;
-        double num = (float)MathHelper.Lerp((float)Main.time, (float)(isDayTime ? Main.dayLength / 2 : 0), _alpha);
+        bool isDayTime = true;
+        double num = (float)MathHelper.Lerp((float)Main.time, 27000, _alpha);
         Microsoft.Xna.Framework.Color bgColorToSet = Microsoft.Xna.Framework.Color.White;
         sunColor = Microsoft.Xna.Framework.Color.White;
         moonColor = Microsoft.Xna.Framework.Color.White;
-        float num2 = 0f;
         bool isInGameMenuOrIsServer = info.isInGameMenuOrIsServer;
+        float num2 = 0f;
         if (isDayTime) {
             if (num < 13500.0) {
                 num2 = (float)(num / 13500.0);
@@ -132,47 +134,7 @@ sealed class LothorSummoningHandler : ModSystem {
                 DontStarveSeed.ModifyNightColor(ref bgColorToSet, ref moonColor);
         }
 
-        if (Main.cloudAlpha > 0f && !Main.remixWorld) {
-            float num3 = 1f - Main.cloudAlpha * 0.9f * Main.atmo;
-            bgColorToSet.R = (byte)((float)(int)bgColorToSet.R * num3);
-            bgColorToSet.G = (byte)((float)(int)bgColorToSet.G * num3);
-            bgColorToSet.B = (byte)((float)(int)bgColorToSet.B * num3);
-        }
-
-        if (info.GraveyardInfluence > 0f && !Main.remixWorld) {
-            float num4 = 1f - info.GraveyardInfluence * 0.6f;
-            bgColorToSet.R = (byte)((float)(int)bgColorToSet.R * num4);
-            bgColorToSet.G = (byte)((float)(int)bgColorToSet.G * num4);
-            bgColorToSet.B = (byte)((float)(int)bgColorToSet.B * num4);
-        }
-
-        if (isInGameMenuOrIsServer && !isDayTime) {
-            bgColorToSet.R = 35;
-            bgColorToSet.G = 35;
-            bgColorToSet.B = 35;
-        }
-
-        byte minimalLight = 15;
-        switch (Main.GetMoonPhase()) {
-            case MoonPhase.Empty:
-                minimalLight = 11;
-                break;
-            case MoonPhase.QuarterAtLeft:
-            case MoonPhase.QuarterAtRight:
-                minimalLight = 13;
-                break;
-            case MoonPhase.HalfAtLeft:
-            case MoonPhase.HalfAtRight:
-                minimalLight = 15;
-                break;
-            case MoonPhase.ThreeQuartersAtLeft:
-            case MoonPhase.ThreeQuartersAtRight:
-                minimalLight = 17;
-                break;
-            case MoonPhase.Full:
-                minimalLight = 19;
-                break;
-        }
+        byte minimalLight = 19;
 
         if (Main.dontStarveWorld)
             DontStarveSeed.ModifyMinimumLightColorAtNight(ref minimalLight);

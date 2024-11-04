@@ -8,6 +8,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.UI.Elements;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -60,6 +61,11 @@ sealed class AltarHandler : ModSystem {
             }
             if (flag6) {
                 _altarFactor = 1f;
+            }
+            if (flag6 && LothorSummoningHandler.IsActive) {
+                float value = MathHelper.Clamp((float)Math.Pow(LothorSummoningHandler._alpha * 5f, 5.0), 0f, 1f);
+                _altarStrength *= value;
+                _altarFactor *= value;
             }
             //if (Factor != 0f) {
             //    Factor = 0f;
