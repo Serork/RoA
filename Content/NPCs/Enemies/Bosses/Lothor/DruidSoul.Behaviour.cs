@@ -24,7 +24,7 @@ using Terraria.ID;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class DruidSoul : RoANPC {
-    private const float OPACITYACC = 0.0045f;
+    private const float OPACITYACC = 0.0046f;
     private const float VELOCITYY = 0.25f;
 
     private Vector2 _velocity, _velocity2, _velocity3, _velocity4;
@@ -432,6 +432,7 @@ sealed partial class DruidSoul : RoANPC {
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.1f;
         bool flag4 = Helper.EaseInOut3(altarStrength) > 0.0001f;
         bool flag5 = Helper.EaseInOut3(altarStrength) > 0.6f;
+        bool flag7 = Helper.EaseInOut3(altarStrength) > 0.8f;
         _velocity *= 0.96f;
         _velocity2 *= 0.975f;
         //NPC.velocity *= 0.925f;
@@ -440,7 +441,7 @@ sealed partial class DruidSoul : RoANPC {
             //_velocity.Y *= 0.95f;
             Vector2 towards2 = towards + Vector2.UnitX * 3f;
             Vector2 velocity = NPC.velocity + _velocity + _velocity2 + _velocity3 + _velocity4;
-            if (!flag5 && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.25f) {
+            if ((!flag5 || flag7) && Math.Abs(towards2.X - NPC.Center.X) > 5f && Math.Abs(velocity.X) > 0.4f) {
                 NPC.spriteDirection = -NPC.direction;
                 NPC.direction = NPC.DirectionTo(towards2).X.GetDirection();
             }
@@ -457,7 +458,7 @@ sealed partial class DruidSoul : RoANPC {
                 //_y = -(-circle.Y + value2);
                 //_y *= 0.5f;
                 float value = Math.Max(_velocity.Length() * 0.01f, 1f);
-                _velocity3 = circle * value;
+                _velocity3 = -circle * value;
                 _velocity3.X *= MathHelper.Clamp(_consumeValue, 0f, 1f);
                 Vector2 velocity4 = _velocity4;
                 Helper.InertiaMoveTowards(ref velocity4, NPC.Center, towards);
@@ -503,7 +504,7 @@ sealed partial class DruidSoul : RoANPC {
                     NPC.velocity.Y -= _velocity.Y * 0.05f;
                     NPC.velocity.Y -= _velocity2.Y * 0.05f;
                 }
-                NPC.position.X += (towards - NPC.position).SafeNormalize(Vector2.Zero).X * Math.Max(MathHelper.Clamp(Math.Abs(velocity.X), 1f, 5f), 1f) * value5 * NPC.direction;
+                NPC.position.X += (towards - NPC.position).SafeNormalize(Vector2.Zero).X * Math.Max(MathHelper.Clamp(Math.Abs(velocity.X), 1f, 5f), 1f) * value5;
                 NPC.velocity.Y -= velocityY;
                 if (_velocity.Y > 1f) {
                     _velocity.Y *= 0.99f;
