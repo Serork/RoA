@@ -65,7 +65,7 @@ sealed partial class DruidSoul : RoANPC {
         else if (ShouldConsumeItsEnergy) {
             Vector2 altarPosition = GetAltarPosition();
             Player player = Main.player[NPC.target];
-            if (player.Distance(altarPosition) > 100f || NPC.Distance(altarPosition) > 100f) {
+            if (player.Distance(altarPosition) > 75f || NPC.Distance(altarPosition) > 100f) {
                 ShouldConsumeItsEnergy = false;
             }
         }
