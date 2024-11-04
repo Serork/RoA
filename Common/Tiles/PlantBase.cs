@@ -49,6 +49,7 @@ abstract class PlantBase : ModTile {
         Main.tileObsidianKill[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;
+        Main.tileSpelunker[Type] = true;
 
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.IgnoredInHouseScore[Type] = true;

@@ -8,6 +8,7 @@ using Terraria.GameContent.Drawing;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria.Localization;
+using System.Collections.Generic;
 
 namespace RoA.Content.Tiles.Ambient;
 
@@ -25,6 +26,8 @@ sealed class Herbs : ModTile, TileHooks.IGetTileDrawData {
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;
         Main.tileAlch[Type] = true;
+        Main.tileSpelunker[Type] = true;
+        Main.tileLighted[Type] = true;
 
         HitSound = SoundID.Grass;
 
@@ -54,6 +57,52 @@ sealed class Herbs : ModTile, TileHooks.IGetTileDrawData {
         AddMapEntry(new Color(177, 69, 49), name);
         name = Lang.GetItemName(ItemID.Shiverthorn); 
         AddMapEntry(new Color(40, 152, 240), name);
+    }
+
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
+        int num2 = Main.tile[i, j].TileFrameX / 18;
+        float num3 = 0f;
+        switch (num2) {
+            case 2:
+                num3 = (float)(270 - Main.mouseTextColor) / 800f;
+                if (num3 > 1f)
+                    num3 = 1f;
+                else if (num3 < 0f)
+                    num3 = 0f;
+                r = num3 * 0.7f;
+                g = num3;
+                b = num3 * 0.1f;
+                break;
+            case 5:
+                num3 = 0.9f;
+                r = num3;
+                g = num3 * 0.8f;
+                b = num3 * 0.2f;
+                break;
+            case 6:
+                num3 = 0.08f;
+                g = num3 * 0.8f;
+                b = num3;
+                break;
+        }
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        var tileFrameX = Main.tile[i, j].TileFrameX;
+        if (tileFrameX < 18)
+            yield return new Item(ItemID.Daybloom);
+        else if (tileFrameX < 36)
+            yield return new Item(ItemID.Moonglow);
+        else if (tileFrameX < 54)
+            yield return new Item(ItemID.Blinkroot);
+        else if (tileFrameX < 72)
+            yield return new Item(ItemID.Deathweed);
+        else if (tileFrameX < 90)
+            yield return new Item(ItemID.Waterleaf);
+        else if (tileFrameX < 108)
+            yield return new Item(ItemID.Fireblossom);
+        else
+            yield return new Item(ItemID.Shiverthorn);
     }
 
     public override ushort GetMapOption(int i, int j) {

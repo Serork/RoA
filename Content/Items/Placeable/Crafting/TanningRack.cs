@@ -29,16 +29,16 @@ sealed class TanningRack : ModItem {
         Item.consumable = true;
         Item.rare = ItemRarityID.White;
         Item.value = Item.sellPrice(silver: 20);
-        //Item.createTile = ModContent.TileType<Tiles.Crafting.TanningRack>();
+        Item.createTile = ModContent.TileType<Tiles.Crafting.TanningRack>();
     }
 
-    public override bool? UseItem(Player player) {
-        if (player.ItemAnimationJustStarted) {
-            BackwoodsBiomePass.PlaceBackwoodsCattail(Player.tileTargetX, Player.tileTargetY);
-        }
+    //public override bool? UseItem(Player player) {
+    //    if (player.ItemAnimationJustStarted) {
+    //        BackwoodsBiomePass.PlaceBackwoodsCattail(Player.tileTargetX, Player.tileTargetY);
+    //    }
 
-        return base.UseItem(player);
-    }
+    //    return base.UseItem(player);
+    //}
 
     /*public override void AddRecipes () {
         CreateRecipe()

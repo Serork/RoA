@@ -129,8 +129,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step13_GrowBigTrees();
         Step9_SpreadMoss();
         Step_AddGems();
-        //Step_AddSpikes();
-        //Step_AddPills();
+        Step_AddSpikes();
+        Step_AddPills();
         Step10_SpreadMossGrass();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
@@ -511,6 +511,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
             }
+        }
+
+        for (int num686 = 0; num686 < _biomeWidth; num686++) {
+            int num687 = _random.Next(Left - 30, Right + 30);
+            y = Math.Min(CenterY - EdgeY, (int)Main.worldSurface + 10);
+            int num688 = _random.Next(BackwoodsVars.FirstTileYAtCenter - 10, (int)y + 10);
+            if (Main.tile[num687, num688].WallType == _grassWallType || Main.tile[num687, num688].WallType == 63)
+                FlowerGrassRunner(num687, num688);
         }
     }
 
@@ -1131,7 +1139,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int maxLeft = Left - 50;
         int maxRight = Right + 50;
         ushort[] invalidWalls = [WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4, WallID.LihzahrdBrickUnsafe, 59, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
-        ushort[] invalidWalls2 = [_grassWallType, _flowerGrassWallType, 23, 24, 42, 45, 10, 179, 181, 196, 197, 198, 199, 212, 213, 214, 215, 208, 209, 210, 211];
+        ushort[] invalidWalls2 = [23, 24, 42, 45, 10, 179, 181, 196, 197, 198, 199, 212, 213, 214, 215, 208, 209, 210, 211];
         for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
             num1047 += _random.Next(-1, 2);
             if (num1047 < 0)
@@ -1536,7 +1544,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
         while (true) {
-            int attempts = 50;
+            int attempts = 1000;
             Tile tile = WorldGenHelper.GetTileSafely(baseX, baseY);
             ushort tileType = tile.TileType;
             while (!skipTileTypes.Contains(tileType) || SandTileTypes.Contains(tileType) || SkipBiomeInvalidTileTypeToKill.Contains(tileType) || SkipBiomeInvalidWallTypeToKill.Contains(tile.WallType) || MidInvalidTileTypesToKill.Contains(tileType) || MidInvalidWallTypesToKill.Contains(tile.WallType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
@@ -1942,14 +1950,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         Step_AddGrassWalls();
-
-        for (int num686 = 0; num686 < _biomeWidth; num686++) {
-            int num687 = _random.Next(Left - 30, Right + 30);
-            int y = (int)Main.worldSurface;
-            int num688 = _random.Next(BackwoodsVars.FirstTileYAtCenter - 10, (int)y + 10);
-            if (Main.tile[num687, num688].WallType == _grassWallType || Main.tile[num687, num688].WallType == 63)
-                FlowerGrassRunner(num687, num688);
-        }
     }
 
     public void BackwoodsOnLast0(GenerationProgress progress, GameConfiguration config) {
@@ -2223,6 +2223,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         progress.Set(0.3f);
         cleanUp();
+
+        Step_AddGrassWalls();
 
         progress.Set(0.4f);
         for (int i = 0; i < 3; i++) {

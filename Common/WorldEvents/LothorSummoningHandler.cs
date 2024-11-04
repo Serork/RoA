@@ -20,6 +20,7 @@ namespace RoA.Common.WorldEvents;
 sealed class LothorSummoningHandler : ModSystem {
     private float _preArrivedLothorBossTimer;
     private bool _shake, _shake2;
+    private float _alpha;
 
     internal static (bool, bool) PreArrivedLothorBoss;
     internal static (bool, bool, bool) ActiveMessages;
@@ -29,13 +30,24 @@ sealed class LothorSummoningHandler : ModSystem {
     }
 
     private void On_Main_SetBackColor(On_Main.orig_SetBackColor orig, Main.InfoToSetBackColor info, out Color sunColor, out Color moonColor) {
-        if (!(PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2) || !Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
+        if ((!(PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2) || !Main.LocalPlayer.InModBiome<BackwoodsBiome>()) && _alpha <= 0f) {
             orig(info, out sunColor, out moonColor);
             return;
         }
 
-        double num = 16200.0;
-        bool isDayTime = true;
+        bool flag = Main.LocalPlayer.InModBiome<BackwoodsBiome>();
+        if (!flag) {
+            if (_alpha > 0f) {
+                _alpha -= TimeSystem.LogicDeltaTime * 2f;
+            }
+        }
+        else {
+            if (_alpha < 1f) {
+                _alpha += TimeSystem.LogicDeltaTime;
+            }
+        }
+        double num = (float)MathHelper.Lerp((float)Main.time, 16200, _alpha);
+        bool isDayTime = flag || Main.dayTime;
         Microsoft.Xna.Framework.Color bgColorToSet = Microsoft.Xna.Framework.Color.White;
         sunColor = Microsoft.Xna.Framework.Color.White;
         moonColor = Microsoft.Xna.Framework.Color.White;
