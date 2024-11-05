@@ -41,12 +41,14 @@ sealed class LothorSummoningHandler : ModSystem {
         bool flag = Main.LocalPlayer.InModBiome<BackwoodsBiome>();
         if (!flag) {
             if (_alpha > 0f) {
-                _alpha -= TimeSystem.LogicDeltaTime * 1f;
+                _alpha -= TimeSystem.LogicDeltaTime * 0.7f;
+                _alpha *= 0.98f;
             }
         }
         else {
             if (_alpha < 1f) {
-                _alpha += TimeSystem.LogicDeltaTime * 0.35f;
+                _alpha += TimeSystem.LogicDeltaTime * 0.27f;
+                _alpha *= 1.02f;
             }
         }
         bool isDayTime = true;
