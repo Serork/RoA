@@ -798,14 +798,14 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
     protected override void AgeRoom(Rectangle room) {
         ushort grassTileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         ushort mossGrowthTileType = (ushort)ModContent.TileType<MossGrowth>();
-        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.8), new Modifiers.Blotches(2, 0.5), new Modifiers.OnlyTiles(base.TileType), new Actions.SetTile(grassTileType, setSelfFrames: true, setNeighborFrames: false)));
+        WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.8), new Modifiers.Blotches(2, 0.5), new Modifiers.OnlyTiles(base.TileType), new Actions.SetTile(grassTileType, setSelfFrames: false, setNeighborFrames: false)));
         WorldUtils.Gen(new Point(room.X + 1, room.Y), new Shapes.Rectangle(room.Width - 2, 1), Actions.Chain(new Modifiers.Dither(0.7), new Modifiers.OnlyTiles(grassTileType), new Modifiers.Offset(0, -1), new Modifiers.IsEmpty(), new Actions.SetTile(mossGrowthTileType, setNeighborFrames: false)));
         WorldUtils.Gen(new Point(room.X + 1, room.Y + room.Height - 1), new Shapes.Rectangle(room.Width - 2, 1), Actions.Chain(new Modifiers.Dither(0.8), new Modifiers.OnlyTiles(grassTileType), new Modifiers.Offset(0, -1), new Modifiers.IsEmpty(), new Actions.SetTile(mossGrowthTileType, setNeighborFrames: false)));
 
         for (int i = 0; i < room.Width * room.Height / 16; i++) {
             int x = WorldGen.genRand.Next(1, room.Width - 1) + room.X;
             int y = WorldGen.genRand.Next(1, room.Height - 1) + room.Y;
-            WorldUtils.Gen(new Point(x, y), new Shapes.Rectangle(2, 2), Actions.Chain(new Modifiers.Dither(), new Modifiers.Blotches(2, 2), new HasValidVall(WallType), new Modifiers.IsEmpty(), new Actions.SetTile(51, setSelfFrames: true)));
+            WorldUtils.Gen(new Point(x, y), new Shapes.Rectangle(2, 2), Actions.Chain(new Modifiers.Dither(), new Modifiers.Blotches(2, 2), new HasValidVall(WallType), new Modifiers.IsEmpty(), new Actions.SetTile(51, false, false)));
         }
 
         WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles(51), new Modifiers.SkipTiles([.. TileSets.Paintings]), new Modifiers.OnlyWalls(WallType),

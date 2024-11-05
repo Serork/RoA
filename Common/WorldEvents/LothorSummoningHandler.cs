@@ -136,6 +136,220 @@ sealed class LothorSummoningHandler : ModSystem {
                 DontStarveSeed.ModifyNightColor(ref bgColorToSet, ref moonColor);
         }
 
+        if (Main.cloudAlpha > 0f && !Main.remixWorld) {
+            float num3 = 1f - Main.cloudAlpha * 0.9f * Main.atmo;
+            bgColorToSet.R = (byte)((float)(int)bgColorToSet.R * num3);
+            bgColorToSet.G = (byte)((float)(int)bgColorToSet.G * num3);
+            bgColorToSet.B = (byte)((float)(int)bgColorToSet.B * num3);
+        }
+
+        if (info.GraveyardInfluence > 0f && !Main.remixWorld) {
+            float num4 = 1f - info.GraveyardInfluence * 0.6f;
+            bgColorToSet.R = (byte)((float)(int)bgColorToSet.R * num4);
+            bgColorToSet.G = (byte)((float)(int)bgColorToSet.G * num4);
+            bgColorToSet.B = (byte)((float)(int)bgColorToSet.B * num4);
+        }
+
+        if (isInGameMenuOrIsServer && !isDayTime) {
+            bgColorToSet.R = 35;
+            bgColorToSet.G = 35;
+            bgColorToSet.B = 35;
+        }
+
+        if (info.CorruptionBiomeInfluence > 0f) {
+            float num5 = info.CorruptionBiomeInfluence;
+            if (num5 > 1f)
+                num5 = 1f;
+
+            int r = bgColorToSet.R;
+            int g = bgColorToSet.G;
+            int b = bgColorToSet.B;
+            r -= (int)(90f * num5 * ((float)(int)bgColorToSet.R / 255f));
+            g -= (int)(140f * num5 * ((float)(int)bgColorToSet.G / 255f));
+            b -= (int)(70f * num5 * ((float)(int)bgColorToSet.B / 255f));
+            if (r < 15)
+                r = 15;
+
+            if (g < 15)
+                g = 15;
+
+            if (b < 15)
+                b = 15;
+
+            DontStarveSeed.FixBiomeDarkness(ref bgColorToSet, ref r, ref g, ref b);
+            bgColorToSet.R = (byte)r;
+            bgColorToSet.G = (byte)g;
+            bgColorToSet.B = (byte)b;
+            r = sunColor.R;
+            g = sunColor.G;
+            b = sunColor.B;
+            r -= (int)(100f * num5 * ((float)(int)sunColor.R / 255f));
+            g -= (int)(100f * num5 * ((float)(int)sunColor.G / 255f));
+            b -= (int)(0f * num5 * ((float)(int)sunColor.B / 255f));
+            if (r < 15)
+                r = 15;
+
+            if (g < 15)
+                g = 15;
+
+            if (b < 15)
+                b = 15;
+
+            sunColor.R = (byte)r;
+            sunColor.G = (byte)g;
+            sunColor.B = (byte)b;
+        }
+
+        if (info.CrimsonBiomeInfluence > 0f) {
+            float num6 = info.CrimsonBiomeInfluence;
+            if (num6 > 1f)
+                num6 = 1f;
+
+            int r2 = bgColorToSet.R;
+            int g2 = bgColorToSet.G;
+            int b2 = bgColorToSet.B;
+            r2 -= (int)(40f * num6 * ((float)(int)bgColorToSet.G / 255f));
+            g2 -= (int)(110f * num6 * ((float)(int)bgColorToSet.G / 255f));
+            b2 -= (int)(140f * num6 * ((float)(int)bgColorToSet.B / 255f));
+            if (r2 < 15)
+                r2 = 15;
+
+            if (g2 < 15)
+                g2 = 15;
+
+            if (b2 < 15)
+                b2 = 15;
+
+            DontStarveSeed.FixBiomeDarkness(ref bgColorToSet, ref r2, ref g2, ref b2);
+            bgColorToSet.R = (byte)r2;
+            bgColorToSet.G = (byte)g2;
+            bgColorToSet.B = (byte)b2;
+            r2 = sunColor.R;
+            g2 = sunColor.G;
+            b2 = sunColor.B;
+            g2 -= (int)(90f * num6 * ((float)(int)sunColor.G / 255f));
+            b2 -= (int)(110f * num6 * ((float)(int)sunColor.B / 255f));
+            if (r2 < 15)
+                r2 = 15;
+
+            if (g2 < 15)
+                g2 = 15;
+
+            if (b2 < 15)
+                b2 = 15;
+
+            sunColor.R = (byte)r2;
+            sunColor.G = (byte)g2;
+            sunColor.B = (byte)b2;
+        }
+
+        if (info.JungleBiomeInfluence > 0f) {
+            float num7 = info.JungleBiomeInfluence;
+            if (num7 > 1f)
+                num7 = 1f;
+
+            int r3 = bgColorToSet.R;
+            int G = bgColorToSet.G;
+            int b3 = bgColorToSet.B;
+            r3 -= (int)(40f * num7 * ((float)(int)bgColorToSet.R / 255f));
+            b3 -= (int)(70f * num7 * ((float)(int)bgColorToSet.B / 255f));
+            if (G > 255)
+                G = 255;
+
+            if (G < 15)
+                G = 15;
+
+            if (r3 > 255)
+                r3 = 255;
+
+            if (r3 < 15)
+                r3 = 15;
+
+            if (b3 < 15)
+                b3 = 15;
+
+            DontStarveSeed.FixBiomeDarkness(ref bgColorToSet, ref r3, ref G, ref b3);
+            bgColorToSet.R = (byte)r3;
+            bgColorToSet.G = (byte)G;
+            bgColorToSet.B = (byte)b3;
+            r3 = sunColor.R;
+            G = sunColor.G;
+            b3 = sunColor.B;
+            r3 -= (int)(30f * num7 * ((float)(int)sunColor.R / 255f));
+            b3 -= (int)(10f * num7 * ((float)(int)sunColor.B / 255f));
+            if (r3 < 15)
+                r3 = 15;
+
+            if (G < 15)
+                G = 15;
+
+            if (b3 < 15)
+                b3 = 15;
+
+            sunColor.R = (byte)r3;
+            sunColor.G = (byte)G;
+            sunColor.B = (byte)b3;
+        }
+
+        if (info.MushroomBiomeInfluence > 0f) {
+            float mushroomBiomeInfluence = info.MushroomBiomeInfluence;
+            int r4 = bgColorToSet.R;
+            int g3 = bgColorToSet.G;
+            int b4 = bgColorToSet.B;
+            g3 -= (int)(250f * mushroomBiomeInfluence * ((float)(int)bgColorToSet.G / 255f));
+            r4 -= (int)(250f * mushroomBiomeInfluence * ((float)(int)bgColorToSet.R / 255f));
+            b4 -= (int)(250f * mushroomBiomeInfluence * ((float)(int)bgColorToSet.B / 255f));
+            if (g3 < 15)
+                g3 = 15;
+
+            if (r4 < 15)
+                r4 = 15;
+
+            if (b4 < 15)
+                b4 = 15;
+
+            DontStarveSeed.FixBiomeDarkness(ref bgColorToSet, ref r4, ref g3, ref b4);
+            bgColorToSet.R = (byte)r4;
+            bgColorToSet.G = (byte)g3;
+            bgColorToSet.B = (byte)b4;
+            r4 = sunColor.R;
+            g3 = sunColor.G;
+            b4 = sunColor.B;
+            g3 -= (int)(10f * mushroomBiomeInfluence * ((float)(int)sunColor.G / 255f));
+            r4 -= (int)(30f * mushroomBiomeInfluence * ((float)(int)sunColor.R / 255f));
+            b4 -= (int)(10f * mushroomBiomeInfluence * ((float)(int)sunColor.B / 255f));
+            if (r4 < 15)
+                r4 = 15;
+
+            if (g3 < 15)
+                g3 = 15;
+
+            if (b4 < 15)
+                b4 = 15;
+
+            sunColor.R = (byte)r4;
+            sunColor.G = (byte)g3;
+            sunColor.B = (byte)b4;
+            r4 = moonColor.R;
+            g3 = moonColor.G;
+            b4 = moonColor.B;
+            g3 -= (int)(140f * mushroomBiomeInfluence * ((float)(int)moonColor.R / 255f));
+            r4 -= (int)(170f * mushroomBiomeInfluence * ((float)(int)moonColor.G / 255f));
+            b4 -= (int)(190f * mushroomBiomeInfluence * ((float)(int)moonColor.B / 255f));
+            if (r4 < 15)
+                r4 = 15;
+
+            if (g3 < 15)
+                g3 = 15;
+
+            if (b4 < 15)
+                b4 = 15;
+
+            moonColor.R = (byte)r4;
+            moonColor.G = (byte)g3;
+            moonColor.B = (byte)b4;
+        }
+
         byte minimalLight = 19;
 
         if (Main.dontStarveWorld)
