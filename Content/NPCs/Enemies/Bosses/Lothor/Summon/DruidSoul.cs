@@ -2,7 +2,7 @@
 
 using Terraria;
 
-namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
+namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 
 sealed partial class DruidSoul : RoANPC {
     private const float MAXDISTANCETOALTAR = 300f;

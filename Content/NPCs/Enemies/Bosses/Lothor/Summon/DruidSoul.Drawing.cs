@@ -12,7 +12,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
+namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 
 sealed partial class DruidSoul : RoANPC {
     private readonly Color _color = new(241, 53, 84, 200), _color2 = new(114, 216, 102, 200);

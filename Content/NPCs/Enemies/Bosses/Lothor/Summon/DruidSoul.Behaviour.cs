@@ -21,7 +21,7 @@ using Terraria.Audio;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 
-namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
+namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 
 sealed partial class DruidSoul : RoANPC {
     private const float OPACITYACC = 0.005f;
