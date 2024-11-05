@@ -24,7 +24,7 @@ using Terraria.ID;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 
 sealed partial class DruidSoul : RoANPC {
-    private const float OPACITYACC = 0.005f;
+    private const float OPACITYACC = 0.00475f;
     private const float VELOCITYY = 0.25f;
 
     private Vector2 _velocity, _velocity2, _velocity3, _velocity4;
@@ -587,7 +587,7 @@ sealed partial class DruidSoul : RoANPC {
                     VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
                             SetupPart(0,
                                     _velocity2 + _velocity3 + _velocity,
-                                    center - Vector2.UnitY * 2f,
+                                    center - Vector2.UnitY * (2f + -8f * Ease.CircIn(altarStrength)),
                                     towards + Vector2.UnitX * 6f,
                                     Main.rand.Next(70, 85) * 0.01f,
                                     NPC.Opacity + 0.15f);

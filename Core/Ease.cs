@@ -40,6 +40,7 @@ static class Ease {
     public static Easer TestIn => value => value * value * value * value * value * value * value;
 
     public static Easer CircOut => value => (float)Math.Sqrt(1 - Math.Pow(value - 1.0, 2));
+    public static Easer CircIn => Invert(CircOut);
 
     private const float B1 = 1f / 2.75f;
     private const float B2 = 2f / 2.75f;
