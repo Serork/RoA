@@ -10,17 +10,19 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
-
 sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<Cacti>();
 
+    protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
+
     protected override void SafeSetDefaults() {
         Item.SetSize(38);
-        Item.SetDefaultToUsable(-1, 30, useSound: SoundID.Item7);
-        Item.SetWeaponValues(8, 4f);
+        Item.SetDefaultToUsable(-1, 35, useSound: SoundID.Item7);
+        Item.SetWeaponValues(14, 4f);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 26);
+        //NatureWeaponHandler.SetPotentialDamage(Item, 26);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
+        NatureWeaponHandler.SetPotentialUseSpeed(Item, 15);
     }
 
     public sealed class CactiCasterBase : BaseRodProjectile {
@@ -30,7 +32,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(player.itemAnimationMax * 4);
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(player.itemTimeMax * 4);
 
         protected override bool DespawnWithProj() => true;
 

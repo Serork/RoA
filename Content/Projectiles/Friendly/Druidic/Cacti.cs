@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Druid;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Core;
@@ -26,7 +27,7 @@ sealed class Cacti : NatureProjectile {
 
     private State _state = State.Normal;
 
-    private float UseTimeFactor => 0.0275f * (float)(1f - Main.player[Projectile.owner].itemAnimationMax / 35);
+    private float UseTimeFactor => 0.0275f * (float)(1f - Projectile.localAI[0] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
     private Vector2 CorePosition => Main.projectile[(int)Projectile.ai[1]].As<CactiCaster.CactiCasterBase>().CorePosition;
 
     public override void SetStaticDefaults() => Projectile.SetTrail(length: 6);
@@ -50,6 +51,9 @@ sealed class Cacti : NatureProjectile {
         }
 
         Player player = Main.player[Projectile.owner];
+
+        Projectile.localAI[0] = NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player);
+
         Vector2 mousePoint = player.GetViableMousePosition();
         float y = player.MountedCenter.Y - player.height * (3f + UseTimeFactor * player.height * 0.75f);
         float lastY = Math.Abs(y - Main.screenPosition.Y + Main.screenHeight);

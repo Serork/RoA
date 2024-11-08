@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Common.Druid;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -38,7 +39,7 @@ sealed class ShepherdLeaves : NatureProjectile {
             Projectile.netUpdate = true;
         }
         if (Projectile.ai[0] > 0.1f) {
-            Projectile.ai[0] -= TimeSystem.LogicDeltaTime;
+            Projectile.ai[0] -= TimeSystem.LogicDeltaTime * NatureWeaponHandler.GetUseSpeedMultiplier(player.GetSelectedItem(), player);
         }
         Vector2 mousePosition = new(Projectile.ai[1], Projectile.ai[2]);
         Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, Helper.VelocityToPoint(Projectile.Center, mousePosition, 6f), Projectile.ai[0]);

@@ -39,7 +39,7 @@ sealed class SkinningPlayer : ModPlayer {
 		}
 	reset:
 		skinning = false;
-		bool valid(Item item) {
+		static bool valid(Item item) {
 			return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
 		}
 		for (int i = 0; i < Player.bank.item.Length; i++) {

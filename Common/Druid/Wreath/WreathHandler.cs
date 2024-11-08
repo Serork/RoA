@@ -11,13 +11,12 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
-
-using static RoA.Common.Druid.Wreath.WreathHandler;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Common.Druid.Wreath;
 
@@ -39,6 +38,8 @@ sealed class WreathHandler : ModPlayer {
     private ushort _increaseValue;
     private float _currentChangingTime, _currentChangingMult, _stayTime;
     private bool _shouldDecrease, _shouldDecrease2;
+
+    private int[] _buffTypes = [ModContent.BuffType<WreathCharged>(), ModContent.BuffType<WreathFullCharged>(), ModContent.BuffType<WreathFullCharged2>()];
 
     public ushort MaxResource { get; private set; } = 100;
     public ushort ExtraResource { get; private set; } = 0;
@@ -164,6 +165,30 @@ sealed class WreathHandler : ModPlayer {
         if (HasKeepTime && ActualProgress2 <= 1f) {
             _keepBonusesForTime -= 1f;
         }
+    }
+
+    public override void Load() {
+        On_Player.AddBuff_ActuallyTryToAddTheBuff += On_Player_AddBuff_ActuallyTryToAddTheBuff;
+    }
+
+    private bool On_Player_AddBuff_ActuallyTryToAddTheBuff(On_Player.orig_AddBuff_ActuallyTryToAddTheBuff orig, Player self, int type, int time) {
+        int buff = ModContent.BuffType<WreathCharged>();
+        int buff2 = ModContent.BuffType<WreathFullCharged>();
+        int buff3 = ModContent.BuffType<WreathFullCharged2>();
+        List<int> buffTypes = [buff, buff2, buff3];
+        if (buffTypes.Contains(type)) {
+            int[] newArray = new int[self.buffType.Length + 1];
+            newArray[0] = type;
+            Array.Copy(self.buffType, 0, newArray, 1, self.buffType.Length);
+            self.buffType = newArray;
+            newArray = new int[self.buffTime.Length + 1];
+            newArray[0] = time;
+            Array.Copy(self.buffTime, 0, newArray, 1, self.buffTime.Length);
+            self.buffTime = newArray;
+            return true;
+        }
+
+        return orig(self, type, time);
     }
 
     private void ApplyBuffs() {

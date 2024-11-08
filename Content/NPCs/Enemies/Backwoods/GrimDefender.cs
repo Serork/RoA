@@ -370,6 +370,7 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override void AI() {
+        NPC.wet = false;
         NPC.noTileCollide = NPC.noGravity = true;
 
         Lighting.AddLight(NPC.Center, (NPC.ai[0] == 0f && NPC.ai[1] <= ATTACKTIME * 0.7f ? (_isAngry ? new Color(255, 120, 120) : new Color(153, 244, 114)) * 0.5f : new Color(148, 1, 26)).ToVector3() * 0.75f);

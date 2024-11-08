@@ -16,13 +16,16 @@ namespace RoA.Content.Items.Weapons.Druidic.Rods;
 sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<ShepherdLeaves>();
 
+    protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
+
     protected override void SafeSetDefaults() {
         Item.SetSize(38);
-        Item.SetDefaultToUsable(-1, 30, useSound: SoundID.Item7);
-        Item.SetWeaponValues(4, 1f);
+        Item.SetDefaultToUsable(-1, 35, useSound: SoundID.Item7);
+        Item.SetWeaponValues(8, 1f);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 12);
-        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
+        //NatureWeaponHandler.SetPotentialDamage(Item, 12);
+        NatureWeaponHandler.SetFillingRate(Item, 0.45f);
+        NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
     public sealed class PastoralRodBase : BaseRodProjectile {
@@ -30,7 +33,7 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
             count = 3;
             Vector2 pointPosition = player.GetViableMousePosition();
             Vector2 direction = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
-            velocity = direction.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2) + MathHelper.Pi) * 4f;
+            velocity = direction.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2) + MathHelper.Pi) * 4f * NatureWeaponHandler.GetUseSpeedMultiplier(player.GetSelectedItem(), player);
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {

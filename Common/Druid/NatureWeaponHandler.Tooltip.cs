@@ -1,8 +1,15 @@
-﻿using RoA.Core.Utility;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
+
+using RoA.Core;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Text;
 
 using Terraria;
 using Terraria.Localization;
@@ -11,6 +18,24 @@ using Terraria.ModLoader;
 namespace RoA.Common.Druid;
 
 sealed partial class NatureWeaponHandler : GlobalItem {
+    private static float _keywordColorOpacity = 1f;
+
+    public override void Load() {
+        On_Main.DrawInterface_36_Cursor += On_Main_DrawInterface_36_Cursor;
+    }
+
+    private void On_Main_DrawInterface_36_Cursor(On_Main.orig_DrawInterface_36_Cursor orig) {
+        if (!Main.HoverItem.IsEmpty() && Main.HoverItem.IsADruidicWeapon()) {
+            if (_keywordColorOpacity > 0f) {
+                _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
+            }
+        }
+        else if (_keywordColorOpacity != 1f) {
+            _keywordColorOpacity = 1f;
+        }
+        orig();
+    }
+
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
         if (!item.IsADruidicWeapon()) {
             return;
@@ -19,6 +44,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Damage"));
         if (index != -1) {
             string tag, tooltip;
+            string keyword = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.PotentialKeyWord").Value;
             if (HasPotentialDamage()) {
                 int extraDamage = GetExtraDamage(item, Main.LocalPlayer);
                 if (extraDamage > 0) {
@@ -30,15 +56,88 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 tag = "PotentialDamage";
                 string potentialDamage = GetBasePotentialDamage(item, Main.LocalPlayer).ToString();
                 tooltip = potentialDamage.AddSpace() + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
-                tooltips.Insert(index + 1, new(Mod, tag, tooltip));
+                tooltips.Insert(index + 1, new(Mod, tag, HighlightKeywords(tooltip, keyword)));
                 index++;
             }
+            int speedIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Speed"));
+            if (HasPotentialUseSpeed()) {
+                tooltips.RemoveAt(speedIndex);
+                speedIndex -= 1;
+                tag = "BaseSpeed";
+                ushort useSpeed = (ushort)(GetUseSpeed(item, Main.LocalPlayer) * 2);
+                useSpeed -= (ushort)(useSpeed / 3);
+                if (useSpeed <= 8)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{8}").Value;
+                else if (useSpeed <= 20)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{7}").Value;
+                else if (useSpeed <= 25)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{6}").Value;
+                else if (useSpeed <= 30)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{5}").Value;
+                else if (useSpeed <= 35)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{4}").Value;
+                else if (useSpeed <= 45)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{3}").Value;
+                else if (useSpeed <= 55)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{2}").Value;
+                else
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{1}").Value;
+                int extraUseSpeed = GetExtraUseSpeed(item, Main.LocalPlayer) * 2;
+                extraUseSpeed -= (ushort)(extraUseSpeed / 3);
+                if (extraUseSpeed > 0) {
+                    int maxUseSpeed = (GetFinalUseTime(item, Main.LocalPlayer) * 2);
+                    maxUseSpeed -= maxUseSpeed / 3;
+                    int procent = (int)(extraUseSpeed / (float)maxUseSpeed * 100f); 
+                    tooltip += $" (+{procent}%)";
+                }
+                tooltips.Insert(speedIndex + 1, new(Mod, tag, tooltip));
 
+                tag = "PotentialSpeed";
+                useSpeed = (ushort)(GetBasePotentialUseSpeed(item, Main.LocalPlayer) * 2);
+                useSpeed -= (ushort)(useSpeed / 3);
+                if (useSpeed <= 8)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{8}2").Value;
+                else if (useSpeed <= 20)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{7}2").Value;
+                else if (useSpeed <= 25)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{6}2").Value;
+                else if (useSpeed <= 30)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{5}2").Value;
+                else if (useSpeed <= 35)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{4}2").Value;
+                else if (useSpeed <= 45)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{3}2").Value;
+                else if (useSpeed <= 55)
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{2}2").Value;
+                else
+                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{1}2").Value;
+                
+                tooltips.Insert(speedIndex + 2, new(Mod, tag, HighlightKeywords(tooltip, keyword)));
+            }
+            int knockbackIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Knockback"));
             tag = "FillingRate";
             int fillingRate = (int)(GetFillingRate(Main.LocalPlayer) * 100);
             byte tooltipValue = (byte)Math.Clamp(fillingRate / 20, 1, 7); 
             tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.FillingRate{tooltipValue}").Value;
-            tooltips.Insert(index + 2, new(Mod, tag, tooltip));
+            tooltips.Insert(knockbackIndex + 1, new(Mod, tag, tooltip));
         }
+    }
+
+    private string HighlightKeywords(string tooltip, string keyword) {
+        StringBuilder stringBuilder = new();
+        float opacity = Ease.CubeOut(Helper.EaseInOut3(_keywordColorOpacity));
+        if (tooltip.Contains(keyword)) {
+            string[] tooltipWords = tooltip.Split();
+            for (int i = 0; i < tooltipWords.Length; i++) {
+                string word = tooltipWords[i];
+                if (word == keyword) {
+                    Color color = Color.Lerp(Main.MouseTextColorReal, Color.LimeGreen, opacity);
+                    word = $"[c/{color.Hex3()}:{word}]";
+                }
+                word = word.AddSpace();
+                stringBuilder.Append(word);
+            }
+        }
+        return stringBuilder.ToString();
     }
 }

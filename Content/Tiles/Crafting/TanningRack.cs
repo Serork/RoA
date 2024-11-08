@@ -1,5 +1,6 @@
 using RoA.Content.Buffs;
 using RoA.Content.Items.Miscellaneous;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System.Linq;
@@ -17,7 +18,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Crafting;
 
 sealed class TanningRack : ModTile {
-	private ushort SkinningBuffType => (ushort)ModContent.BuffType<Skinning>();
+	private static ushort SkinningBuffType => (ushort)ModContent.BuffType<Skinning>();
 
     public override void SetStaticDefaults() {
 		Main.tileFrameImportant[Type] = true;
@@ -61,7 +62,10 @@ sealed class TanningRack : ModTile {
     public override bool RightClick(int i, int j) {
 		Player player = Main.player[Main.myPlayer];
 		player.AddBuff(SkinningBuffType, 18000);
-        SoundEngine.PlaySound(SoundID.Item156, player.GetViableMousePosition());
+        SoundStyle leatherSound = new(ResourceManager.Sounds + "Leather") {
+            PitchVariance = 0.5f
+        };
+        SoundEngine.PlaySound(leatherSound, player.GetViableMousePosition());
         return true;
 	}
 

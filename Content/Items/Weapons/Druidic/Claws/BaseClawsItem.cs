@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
@@ -14,8 +16,10 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 [WeaponOverlay(WeaponType.Claws)]
 abstract class BaseClawsItem : NatureItem {
+    protected virtual ushort UseTime => 18;
+
     protected sealed override void SafeSetDefaults2() {
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, 18, false, autoReuse: false, useSound: SoundID.Item1);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, UseTime, UseTime, false, autoReuse: false, useSound: SoundID.Item1);
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }
 
@@ -43,7 +47,7 @@ abstract class BaseClawsItem : NatureItem {
     }
 
     public sealed override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/, player.itemAnimationMax);
+        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/, NatureWeaponHandler.GetUseSpeed(Item, player));
         NetMessage.SendData(MessageID.PlayerControls, number: player.whoAmI);
 
         return false;

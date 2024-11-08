@@ -22,6 +22,8 @@ namespace RoA.Content.Items.Weapons.Druidic.Rods;
 abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
     protected virtual ushort ShootType() => (ushort)ProjectileID.WoodenArrowFriendly;
 
+    protected virtual ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
+
     protected sealed override void SafeSetDefaults2() {
         Item.noMelee = true;
         Item.autoReuse = false;
@@ -35,7 +37,7 @@ abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         ushort baseRodProjectileType = (ushort)ModContent.ProjectileType<T>();
         if (player.ownedProjectileCounts[baseRodProjectileType] < 1) {
-            Projectile.NewProjectileDirect(source, player.Center, default, baseRodProjectileType, NatureWeaponHandler.GetNatureDamage(Item, player), Item.knockBack, player.whoAmI, Item.useTime * 2, ShootType());
+            Projectile.NewProjectileDirect(source, player.Center, default, baseRodProjectileType, NatureWeaponHandler.GetNatureDamage(Item, player), Item.knockBack, player.whoAmI, GetUseTime(player), ShootType());
         }
 
         return false;
@@ -74,7 +76,7 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     public int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
     protected ushort ShootType => (ushort)Projectile.ai[1];
-    public bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = value ? 0f : 1f; }
+    public bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = 1 - value.ToInt(); }
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -189,7 +191,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         return false;
     }
 
-    protected override void SafeOnSpawn(IEntitySource source) {
+    protected sealed override void SafeOnSpawn(IEntitySource source) {
         if (Projectile.IsOwnerMyPlayer(Owner)) {
             _rotation = FacedLeft ? STARTROTATION : -STARTROTATION;
             if (Owner.gravDir == -1) {
@@ -197,10 +199,13 @@ abstract class BaseRodProjectile : NatureProjectile {
             }
             Projectile.spriteDirection = Owner.direction;
             _maxUseTime = _maxUseTime2 = CurrentUseTime;
+            SafestOnSpawn(source);
 
             Projectile.netUpdate = true;
         }
     }
+
+    protected virtual void SafestOnSpawn(IEntitySource source) { }
 
     public sealed override void AI() {
         ActiveCheck();
@@ -214,24 +219,18 @@ abstract class BaseRodProjectile : NatureProjectile {
         else if (CurrentUseTime > 0) {
             CurrentUseTime--;
 
-            if (Main.netMode != NetmodeID.Server) {
-                SpawnCoreDustsBeforeShoot(Step, Owner, CorePosition);
-            }
+            SpawnCoreDustsBeforeShoot(Step, Owner, CorePosition);
         }
         else if (!_shot2) {
             _shot2 = true;
             if (ShouldPlayShootSound()) {
                 SoundEngine.PlaySound(SoundID.Item20, CorePosition);
             }
-            if (Main.netMode != NetmodeID.Server) {
-                SpawnDustsWhenReady(Owner, CorePosition);
-            }
+            SpawnDustsWhenReady(Owner, CorePosition);
         }
         if (ShouldShoot() && !_shot) {
             ShootProjectile();
-            if (Main.netMode != NetmodeID.Server) {
-                SpawnDustsOnShoot(Owner, CorePosition);
-            }
+            SpawnDustsOnShoot(Owner, CorePosition);
             _shot = true;
             if (!ShouldBeActiveAfterShoot()) {
                 ShouldBeActive = false;
@@ -267,9 +266,7 @@ abstract class BaseRodProjectile : NatureProjectile {
                 }
             }
             else {
-                if (Main.netMode != NetmodeID.Server) {
-                    SpawnCoreDustsWhileShotProjectileIsActive(Step, Owner, CorePosition);
-                }
+                SpawnCoreDustsWhileShotProjectileIsActive(Step, Owner, CorePosition);
             }
 
             if (IsInUse && !_shot) {

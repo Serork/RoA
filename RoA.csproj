@@ -5,7 +5,7 @@
 
 	<!-- General -->
 	<PropertyGroup>
-		
+	  <LangVersion>preview</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Localization\en-US_Mods.RoA.Biomes.hjson" />

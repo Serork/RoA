@@ -208,6 +208,7 @@ static class Helper {
     }
 
     public static string AddSpace(this string text) => text.PadRight(text.Length + 1);
+    public static string AddSpace2(this string text) => text.PadLeft(text.Length + 1);
 
     // aequus
     public static bool DeathrayHitbox(Vector2 center, Rectangle targetHitbox, float rotation, float length, float size, float startLength = 0f) {

@@ -18,12 +18,16 @@ sealed class HorrorPincers : BaseClawsItem {
         Item.SetWeaponValues(8, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 24);
+        NatureWeaponHandler.SetPotentialUseSpeed(Item, (ushort)(UseTime - UseTime / 3));
     }
 
     protected override (Color, Color) SlashColors() => (new Color(132, 75, 140), new Color(160, 100, 200));
 
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
+        int offset = 30 * player.direction;
+        var position = new Vector2(player.Center.X + offset, player.Center.Y);
         Vector2 pointPosition = player.GetViableMousePosition();
-        clawsStats.SetSpecialAttackData<InfectedWave>(Item, new(player.Center.X + 30f * player.direction, player.Center.Y - 14f), Helper.VelocityToPoint(player.Center, pointPosition, 1.2f), playSoundStyle: SoundID.Item95);
+        Vector2 point = Helper.VelocityToPoint(player.Center, pointPosition, 1.2f);
+        clawsStats.SetSpecialAttackData<InfectedWave>(Item, new Vector2(position.X, position.Y - 14f), point, playSoundStyle: SoundID.Item95);
     }
 }
