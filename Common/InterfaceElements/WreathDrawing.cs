@@ -21,11 +21,14 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
     private const byte HORIZONTALFRAMECOUNT = 6;
 
     private static SpriteData _wreathSpriteData;
+    private static float _factor;
 
     private Vector2 _oldPosition;
 
     private static Player Player => Main.LocalPlayer;
     private static WreathHandler Stats => Player.GetModPlayer<WreathHandler>();
+
+    public static bool DrawingAmount { get; private set; }
 
     public override int GetInsertIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Ingame Options"));
 
@@ -102,7 +105,9 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
             color.A = 80;
             color *= opacity;
             opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
-            float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * Stats.PulseIntensity;
+            float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
+            _factor = MathHelper.Lerp(_factor, factor, _factor < factor ? 0.1f : 0.025f);
+            factor = _factor * Stats.PulseIntensity;
             wreathSpriteData2.Color = color * factor * opacity * 2f;
             wreathSpriteData2.Scale = factor + 0.475f;
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
@@ -126,10 +131,14 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         if (!Main.mouseText && mouseRectangle.Intersects(value2)) {
             Player.cursorItemIconEnabled = false;
 
-            string text2 = Stats.CurrentResource + "/" + Stats.TotalResource;
+            string text2 = "[kw/n:" + Stats.CurrentResource + "]" + "/" + Stats.TotalResource;
 
             Main.instance.MouseTextHackZoom(text2);
             Main.mouseText = true;
+            DrawingAmount = true;
+        }
+        else {
+            DrawingAmount = false;
         }
 
         return true;

@@ -19,6 +19,8 @@ namespace RoA.Content.Projectiles.Friendly.Druidic;
 sealed class RootRing : NatureProjectile {
     private int _alpha = 255;
 
+    private static float _factor;
+
     public override Color? GetAlpha(Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0);
 
     protected override void SafeSetDefaults() {
@@ -130,7 +132,9 @@ sealed class RootRing : NatureProjectile {
 
         float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
-        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f) * Projectile.ai[0];
+        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
+        _factor = MathHelper.Lerp(_factor, factor, _factor < factor ? 0.1f : 0.025f);
+        factor = _factor * Projectile.ai[0];
         color *= 1.4f;
         color.A = 80;
         color *= opacity;

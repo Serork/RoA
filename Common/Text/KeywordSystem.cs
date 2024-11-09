@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.InterfaceElements;
 using RoA.Content.Items;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -68,7 +69,7 @@ sealed class KeywordSystem : ILoadable {
                     }
                 }
             }
-            if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag) {
+            if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || WreathDrawing.DrawingAmount) {
                 if (_keywordColorOpacity > 0f) {
                     _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
                 }
