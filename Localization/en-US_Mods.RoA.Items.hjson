@@ -142,8 +142,8 @@ BandOfNature: {
 	DisplayName: Band Of Nature
 	Tooltip:
 		'''
-		5% increased nature potential damage
-		Increases defense by 3 while wreath is charged
+		5% increased nature [kw/n:potential] damage
+		Increases defense by 3 while [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
@@ -151,8 +151,8 @@ BandOfPurity: {
 	DisplayName: Band Of Purity
 	Tooltip:
 		'''
-		5% increased nature potential damage
-		Regenerates life while wreath is charged
+		5% increased nature [kw/n:potential] damage
+		Regenerates life while [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
@@ -160,14 +160,14 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		10% increased wreath filling rate
-		Increases maximum life by 20 while wreath is charged
+		10% increased [kw/n:wreath] [kw/n:filling] rate
+		Increases maximum life by 20 while [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: Keeps wreath full charge bonuses for 2 seconds after discharging
+	Tooltip: Keeps [kw/n:wreath] full charge bonuses for 2 seconds after discharging
 }
 
 RavencallersCloak: {
@@ -228,14 +228,14 @@ WillpowerPotion: {
 	DisplayName: Willpower Potion
 	Tooltip:
 		'''
-		Increases wreath filling rate by 15%
+		Increases [kw/n:wreath] [kw/n:filling] rate by 15%
 		'Fifteen percent concentrated power of will'
 		'''
 }
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases wreath discharge speed by 25%
+	Tooltip: Decreases [kw/n:wreath] discharge speed by 25%
 }
 
 ForestWreath: {
@@ -287,8 +287,8 @@ SoulOfTheWoods: {
 	DisplayName: Soul Of The Woods
 	Tooltip:
 		'''
-		Allows to charge wreath twice
-		Creates pulsing energy shield while wreath is charged
+		Allows to charge [kw/n:wreath] twice
+		Creates pulsing energy shield while [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 

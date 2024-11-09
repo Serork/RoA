@@ -1,11 +1,11 @@
-PotentialDamage: potential damage
-FillingRate1: Extremely slow filling rate
-FillingRate2: Very slow filling rate
-FillingRate3: Slow filling rate
-FillingRate4: Average filling rate
-FillingRate5: Fast filling rate
-FillingRate6: Very fast filling rate
-FillingRate7: Insanely fast filling rate
+PotentialDamage: "[kw/n:potential] damage"
+FillingRate1: Extremely slow [kw/n:filling] rate
+FillingRate2: Very slow [kw/n:filling] rate
+FillingRate3: Slow [kw/n:filling] rate
+FillingRate4: Average [kw/n:filling] rate
+FillingRate5: Fast [kw/n:filling] rate
+FillingRate6: Very fast [kw/n:filling] rate
+FillingRate7: Insanely fast [kw/n:filling] rate
 AttackSpeed1: Extremely slow speed
 AttackSpeed2: Very slow speed
 AttackSpeed3: Slow speed
@@ -14,13 +14,12 @@ AttackSpeed5: Fast speed
 AttackSpeed6: Very fast speed
 AttackSpeed7: Extremely fast speed
 AttackSpeed8: Insanely fast speed
-AttackSpeed12: Extremely slow potential speed
-AttackSpeed22: Very slow potential speed
-AttackSpeed32: Slow potential speed
-AttackSpeed42: Average potential speed
-AttackSpeed52: Fast potential speed
-AttackSpeed62: Very fast potential speed
-AttackSpeed72: Extremely fast potential speed
-AttackSpeed82: Insanely fast potential speed
-WhenCharged: while wreath is charged
-PotentialKeyWord: potential
+AttackSpeed12: Extremely slow [kw/n:potential] speed
+AttackSpeed22: Very slow [kw/n:potential] speed
+AttackSpeed32: Slow [kw/n:potential] speed
+AttackSpeed42: Average [kw/n:potential] speed
+AttackSpeed52: Fast [kw/n:potential] speed
+AttackSpeed62: Very fast [kw/n:potential] speed
+AttackSpeed72: Extremely fast [kw/n:potential] speed
+AttackSpeed82: Insanely fast [kw/n:potential] speed
+WhenCharged: while [kw/n:wreath] is [kw/n:charged]

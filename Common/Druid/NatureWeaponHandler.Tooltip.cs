@@ -18,24 +18,6 @@ using Terraria.ModLoader;
 namespace RoA.Common.Druid;
 
 sealed partial class NatureWeaponHandler : GlobalItem {
-    private static float _keywordColorOpacity = 1f;
-
-    public override void Load() {
-        On_Main.DrawInterface_36_Cursor += On_Main_DrawInterface_36_Cursor;
-    }
-
-    private void On_Main_DrawInterface_36_Cursor(On_Main.orig_DrawInterface_36_Cursor orig) {
-        if (!Main.HoverItem.IsEmpty() && Main.HoverItem.IsADruidicWeapon()) {
-            if (_keywordColorOpacity > 0f) {
-                _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
-            }
-        }
-        else if (_keywordColorOpacity != 1f) {
-            _keywordColorOpacity = 1f;
-        }
-        orig();
-    }
-
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
         if (!item.IsADruidicWeapon()) {
             return;
@@ -56,7 +38,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 tag = "PotentialDamage";
                 string potentialDamage = GetBasePotentialDamage(item, Main.LocalPlayer).ToString();
                 tooltip = potentialDamage.AddSpace() + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
-                tooltips.Insert(index + 1, new(Mod, tag, HighlightKeywords(tooltip, keyword)));
+                tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                 index++;
             }
             int speedIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Speed"));
@@ -112,7 +94,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 else
                     tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{1}2").Value;
                 
-                tooltips.Insert(speedIndex + 2, new(Mod, tag, HighlightKeywords(tooltip, keyword)));
+                tooltips.Insert(speedIndex + 2, new(Mod, tag, tooltip));
             }
             int knockbackIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Knockback"));
             tag = "FillingRate";
@@ -121,23 +103,4 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.FillingRate{tooltipValue}").Value;
             tooltips.Insert(knockbackIndex + 1, new(Mod, tag, tooltip));
         }
-    }
-
-    private string HighlightKeywords(string tooltip, string keyword) {
-        StringBuilder stringBuilder = new();
-        float opacity = Ease.CubeOut(Helper.EaseInOut3(_keywordColorOpacity));
-        if (tooltip.Contains(keyword)) {
-            string[] tooltipWords = tooltip.Split();
-            for (int i = 0; i < tooltipWords.Length; i++) {
-                string word = tooltipWords[i];
-                if (word == keyword) {
-                    Color color = Color.Lerp(Main.MouseTextColorReal, Color.LimeGreen, opacity);
-                    word = $"[c/{color.Hex3()}:{word}]";
-                }
-                word = word.AddSpace();
-                stringBuilder.Append(word);
-            }
-        }
-        return stringBuilder.ToString();
-    }
-}
+    }}

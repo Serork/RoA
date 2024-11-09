@@ -13,7 +13,7 @@ WreathCharged: {
 	Description:
 		'''
 		Nature damage is improved
-		Provides charge bonuses of equipped wreath
+		Provides charge bonuses of equipped [kw/n:wreath]
 		'''
 }
 
@@ -21,8 +21,8 @@ WreathFullCharged: {
 	DisplayName: Wreath Charge II
 	Description:
 		'''
-		Nature damage is at full potential
-		Provides full charge bonuses of equipped wreath
+		Nature damage is at full [kw/n:potential]
+		Provides [kw/n:full charge] bonuses of equipped [kw/n:wreath]
 		'''
 }
 
@@ -30,8 +30,8 @@ WreathFullCharged2: {
 	DisplayName: Wreath Charge III
 	Description:
 		'''
-		Nature damage is at full potential
-		Provides full charge bonuses of equipped wreath and soul of the woods
+		Nature damage is at full [kw/n:potential]
+		Provides [kw/n:full charge] bonuses of equipped [kw/n:wreath] and soul of the woods
 		'''
 }
 
@@ -47,12 +47,12 @@ DeathWard: {
 
 Willpower: {
 	DisplayName: Willpower
-	Description: 15% increased wreath filling rate
+	Description: 15% increased [kw/n:wreath] [kw/n:filling] rate
 }
 
 Resilience: {
 	DisplayName: Resilience
-	Description: 25% decreased wreath discharge speed
+	Description: 25% decreased [kw/n:wreath] discharge speed
 }
 
 ExtraRegen: {

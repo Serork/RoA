@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using Newtonsoft.Json.Linq;
 
 using RoA.Common.Druid;
-using RoA.Common.InterfaceElements;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
@@ -16,7 +16,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace RoA.Common.GUI;
+namespace RoA.Common.InterfaceElements;
 
 sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip Falling Leaves", InterfaceScaleType.UI) {
     public const float DELAY = 0f;
@@ -54,7 +54,7 @@ sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip 
         if (!_draw) {
             return true;
         }
-        
+
         Helper.AddClamp(ref _counter, -TimeSystem.LogicDeltaTime, 0f, CounterMax);
 
         float maxY = 28f;
