@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Common.InterfaceElements;
 using RoA.Content.Items;
 using RoA.Core;
@@ -33,7 +34,7 @@ sealed class KeywordSystem : ILoadable {
                         // nature highlight
                         case 'n':
                             float opacity = Ease.CubeOut(Helper.EaseInOut3(_keywordColorOpacity));
-                            baseColor = Color.Lerp(Main.MouseTextColorReal, Color.LimeGreen, opacity);
+                            baseColor = Color.Lerp(Main.MouseTextColorReal, WreathHandler.GetCurrentColor(Main.LocalPlayer), opacity);
                             break;
                     }
                 }

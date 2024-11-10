@@ -41,6 +41,15 @@ sealed class WreathHandler : ModPlayer {
 
     private int[] _buffTypes = [ModContent.BuffType<WreathCharged>(), ModContent.BuffType<WreathFullCharged>(), ModContent.BuffType<WreathFullCharged2>()];
 
+    public static Color StandardColor => new(170, 252, 134);
+    public static Color PhoenixColor => new(251, 234, 94);
+    public static Color SoulOfTheWoodsColor => new(248, 119, 119);
+
+    public static Color GetCurrentColor(Player player) {
+        var self = player.GetModPlayer<WreathHandler>();
+        return self.SoulOfTheWoods ? SoulOfTheWoodsColor : self.IsPhoenixWreath ? PhoenixColor : StandardColor;
+    }
+
     public ushort MaxResource { get; private set; } = 100;
     public ushort ExtraResource { get; private set; } = 0;
     public float ChangingTimeValue { get; private set; }
@@ -350,7 +359,7 @@ sealed class WreathHandler : ModPlayer {
                 dust.noGravity = true;
                 dust.noLight = true;
                 dust.noLightEmittence = true;
-                dust.customData = DrawColorOpacity;
+                dust.customData = DrawColorOpacity * PulseIntensity * 2f;
             }
         }
     }
@@ -377,7 +386,7 @@ sealed class WreathHandler : ModPlayer {
                     dust.noLight = true;
                     dust.noLightEmittence = true;
                     dust.alpha = (int)(DrawColorOpacity * 255f);
-                    dust.customData = DrawColorOpacity;
+                    dust.customData = DrawColorOpacity * PulseIntensity * 1.6f;
                 }
             }
         }
@@ -390,10 +399,11 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void AddLight() {
-        float progress = ActualProgress2;
+        float value0 = ActualProgress2;
+        float progress = value0;
         float progress2 = MathHelper.Clamp(progress, 0f, 1f);
         float value = 0.5f;
-        float value2 = ActualProgress2 - 1f;
+        float value2 = value0 - 1f;
         if (value2 > 0f) {
             progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
         }

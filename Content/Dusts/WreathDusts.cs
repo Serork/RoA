@@ -25,12 +25,11 @@ class WreathDust : ModDust {
 
     public override void OnSpawn(Dust dust) => UpdateType = DustID.FireworksRGB;
 
-    public override bool PreDraw(Dust dust) {
+    public override bool PreDraw(Dust dust) {      
         Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, dust.GetAlpha(dust.color), dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
         Color color = dust.GetAlpha(dust.color);
         color *= 1.4f;
-        color.A = (byte)Math.Clamp(255 - (float)dust.customData * 110f, 180, 255);
-        Main.NewText(color.A);
+        color.A = (byte)Utils.Remap(Math.Clamp((float)dust.customData * 120f, 175, 255), 175, 255, 255, 175, false);
         Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
 
         return false;
