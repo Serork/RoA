@@ -106,7 +106,6 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
             color *= opacity;
             opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
             float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 7f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
-            Main.NewText(progress);
             if (progress > 0f && progress < 0.5f) {
                 factor *= 0.1f;
             }

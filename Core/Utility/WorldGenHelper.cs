@@ -61,9 +61,16 @@ static class WorldGenHelper {
 
     public static bool ActiveTile(this Tile tile, int tileType) => tile.HasTile && tile.TileType == tileType;
 
+    public static bool ActiveTile2(this Tile tile, int tileType) => tile.ActiveTile(tileType) && tile.Slope == 0 && !tile.IsHalfBlock;
+
     public static bool ActiveTile(int i, int j, int tileType) {
         Tile tile = GetTileSafely(i, j);
         return tile.ActiveTile(tileType);
+    }
+
+    public static bool ActiveTile2(int i, int j, int tileType) {
+        Tile tile = GetTileSafely(i, j);
+        return tile.ActiveTile2(tileType);
     }
 
     public static bool ActiveWall(int i, int j, int wallType) => GetTileSafely(i, j).ActiveWall(wallType);
