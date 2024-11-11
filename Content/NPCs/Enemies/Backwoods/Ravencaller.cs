@@ -69,7 +69,7 @@ sealed class Ravencaller : ModNPC {
             return;
         }
 
-        int npcSlot = NPC.NewNPC(source, x, y + 4, ModContent.NPCType<Ravencaller>());
+        int npcSlot = NPC.NewNPC(source, x, y + 5, ModContent.NPCType<Ravencaller>());
         (Main.npc[npcSlot].ModNPC as Ravencaller).timer = 300;
         (Main.npc[npcSlot].ModNPC as Ravencaller).whenYouWalking = false;
         (Main.npc[npcSlot].ModNPC as Ravencaller).curFrame = 16;
