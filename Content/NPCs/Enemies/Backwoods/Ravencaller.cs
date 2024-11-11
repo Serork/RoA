@@ -64,9 +64,24 @@ sealed class Ravencaller : ModNPC {
         }
     }
 
+    public static void SummonItself(IEntitySource source, int x, int y) {
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            return;
+        }
+
+        int npcSlot = NPC.NewNPC(source, x, y + 4, ModContent.NPCType<Ravencaller>());
+        (Main.npc[npcSlot].ModNPC as Ravencaller).timer = 300;
+        (Main.npc[npcSlot].ModNPC as Ravencaller).whenYouWalking = false;
+        (Main.npc[npcSlot].ModNPC as Ravencaller).curFrame = 16;
+        Main.npc[npcSlot].TargetClosest();
+        Main.npc[npcSlot].ai[3] = 1f;
+        Main.npc[npcSlot].netUpdate = true;
+        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
+    }
+
     public override void AI() {
         if (whenYouWalking)
-            NPC.ApplyFighterAI(BackwoodsFogHandler.IsFogActive);
+            NPC.ApplyFighterAI(BackwoodsFogHandler.IsFogActive, ignoreBranches: true);
         else {
             NPC.ResetAIStyle();
             NPC.velocity.X *= 0.8f;
@@ -103,7 +118,7 @@ sealed class Ravencaller : ModNPC {
             }
         }
 
-        if (timer == 320 && !whenYouWalking)
+        if (NPC.ai[3] != 1f && timer == 320 && !whenYouWalking)
             Summon();
         if (timer == 430 && !whenYouWalking) {
             for (int k = 0; k < 20; k++) {
@@ -120,6 +135,7 @@ sealed class Ravencaller : ModNPC {
         }
         if (timer == 480 && !whenYouWalking) {
             NPC.target = 0;
+            NPC.ai[3] = 0f;
             //NPC.TargetClosest(false);
             retreat = true;
             timer = 0;

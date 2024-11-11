@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 
@@ -79,7 +80,8 @@ sealed class CrowdRaven : ModNPC {
                     if (flag) {
                         continue;
                     }
-                    int npcSlot = NPC.NewNPC(NPC.GetSource_FromAI(), x, y, Type, ai3: 1f);
+                    int npcSlot = NPC.NewNPC(NPC.GetSource_FromAI(), x, y, Type, ai3: 2f);
+                    Main.npc[npcSlot].netUpdate = true;
                     NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
                 }
             }
@@ -93,13 +95,36 @@ sealed class CrowdRaven : ModNPC {
         if (NPC.ai[0] == 0f) {
             NPC.noGravity = false;
             NPC.TargetClosest();
+            if (NPC.ai[2] > 0f) {
+                if (NPC.localAI[1] < NPC.ai[2]) {
+                    NPC.localAI[1]++;
+                }
+                else {
+                    NPC.ai[0] = 1f;
+                    NPC.velocity.Y -= 6f;
+                    NPC.direction = Main.rand.NextFromList(-1, 1);
+                    if (NPC.ai[3] == 1f && BackwoodsFogHandler.IsFogActive) {
+                        Ravencaller.SummonItself(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y);
+                    }
+                    NPC.netUpdate = true;
+                }
+            }
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 Rectangle rectangle2 = new((int)Main.player[NPC.target].position.X, (int)Main.player[NPC.target].position.Y, Main.player[NPC.target].width, Main.player[NPC.target].height);
                 if (new Rectangle((int)NPC.position.X - 250, (int)NPC.position.Y - 250, NPC.width + 500, NPC.height + 500).Intersects(rectangle2) || NPC.life < NPC.lifeMax) {
+                    foreach (NPC npc in Main.ActiveNPCs) {
+                        if (npc.whoAmI != NPC.whoAmI && npc.type == Type && NPC.Distance(npc.Center) < 100f && npc.ai[2] == 0f) {
+                            npc.ai[2] = Main.rand.NextFloat(10f, 20f);
+                            npc.netUpdate = true;
+                        }
+                    }
                     NPC.ai[0] = 1f;
                     NPC.velocity.Y -= 6f;
-                    NPC.netUpdate = true;
                     NPC.direction = Main.rand.NextFromList(-1, 1);
+                    if (NPC.ai[3] == 1f && BackwoodsFogHandler.IsFogActive) {
+                        Ravencaller.SummonItself(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y);
+                    }
+                    NPC.netUpdate = true;
                 }
             }
         }
