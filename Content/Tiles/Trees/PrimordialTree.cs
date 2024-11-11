@@ -37,7 +37,7 @@ sealed class PrimordialTreeGlow : GlobalTile {
                         Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.7f);
                     }
                 }
-                else if (Main.rand.NextBool(1100)) {
+                else if (Main.rand.NextBool(1050)) {
                     Dust dust = Dust.NewDustPerfect(position + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
                     dust.velocity *= 0.5f + Main.rand.NextFloat() * 0.25f;
                     dust.scale *= 1.1f;

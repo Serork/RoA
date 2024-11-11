@@ -28,7 +28,7 @@ sealed class TransformTileSystem : ILoadable {
 
     private sealed class TileReplacement : GlobalTile {
         public override bool CanExplode(int i, int j, int type) {
-            if (!OnKillNormal[type]) {
+            if (!OnKillNormal[type] || WorldGen.gen) {
                 WorldGen.KillTile(i, j);
 
                 return true;
@@ -38,7 +38,7 @@ sealed class TransformTileSystem : ILoadable {
         }
 
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem) {
-            if (OnKillNormal[type]) {
+            if (OnKillNormal[type] || WorldGen.gen) {
                 return;
             }
 

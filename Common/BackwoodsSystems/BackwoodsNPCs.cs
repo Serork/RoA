@@ -35,6 +35,8 @@ sealed class BackwoodsNPCs : GlobalNPC {
             }
 
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
+            Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);
+            bool trulySurface = !belowTile.AnyWall() || belowTile.WallType == ModContent.WallType<LivingBackwoodsLeavesWall>();
             bool flag = false;
             for (int i = spawnInfo.SpawnTileX - 1; i < spawnInfo.SpawnTileX + 1; i++) {
                 if (flag) {
@@ -48,20 +50,20 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 }
             }
 
-            pool.Add(ModContent.NPCType<CrowdRaven>(), 1f);
-
             float chance = surface ? 1f : 0.5f;
             if (!surface/* && NPC.downedBoss2 */&& !NPC.AnyNPCs(ModContent.NPCType<GrimDefender>())) {
                 pool.Add(ModContent.NPCType<GrimDefender>(), 0.1f);
             }
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
-                    Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);
+                    if (!tile.AnyLiquid() && trulySurface && !NPC.AnyNPCs(ModContent.NPCType<CrowdRaven>())) {
+                        pool.Add(ModContent.NPCType<CrowdRaven>(), 1f);
+                    }
                     if (surface) {
                         if (!Main.IsItDay()) {
                             pool.Add(ModContent.NPCType<Lumberjack>(), 0.25f);
                         }
-                        if (!belowTile.AnyWall() || belowTile.WallType == ModContent.WallType<LivingBackwoodsLeavesWall>()) {
+                        if (trulySurface) {
                             pool.Add(ModContent.NPCType<Hog>(), 0.25f);
                         }
                     }
