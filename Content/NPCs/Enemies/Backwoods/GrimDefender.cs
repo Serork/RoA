@@ -39,6 +39,7 @@ sealed class GrimDefender : ModNPC {
     private float _rotation;
     private bool _isAngry;
     private float _angryTimer;
+    private byte _hitCount;
 
     public override void OnSpawn(IEntitySource source) {
         if (NPC.downedBoss2) {
@@ -184,6 +185,7 @@ sealed class GrimDefender : ModNPC {
         writer.Write(_spearAttack);
         writer.Write(_isAngry);
         writer.Write(_angryTimer);
+        writer.Write(_hitCount);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -193,6 +195,7 @@ sealed class GrimDefender : ModNPC {
         _spearAttack = reader.ReadBoolean();
         _isAngry = reader.ReadBoolean();
         _angryTimer = reader.ReadSingle();
+        _hitCount = reader.ReadByte();
     }
 
     public override void SetStaticDefaults() {
@@ -341,12 +344,28 @@ sealed class GrimDefender : ModNPC {
     public override bool CanHitPlayer(Player target, ref int cooldownSlot) => NPC.ai[0] > 1f && !_spearAttack;
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (NPC.ai[0] <= 1f) {
-            NPC.ai[1] = 0f;
+        void reset() {
+            NPC.ai[0] = 0f;
+            NPC.ai[1] = 60f - NPC.ai[1];
+            NPC.localAI[1] = 0f;
+            NPC.localAI[2] = 0f;
+            NPC.localAI[3] = 0f;
+            NPC.dontTakeDamage = true;
+            SpawnHitGores();
+            NPC.netUpdate = true;
         }
-        NPC.dontTakeDamage = true;
-        SpawnHitGores();
-        NPC.netUpdate = true;
+        if (!_spearAttack) {
+            if (_hitCount <= 0) {
+                _hitCount = 2;
+                reset();
+            }
+            else {
+                _hitCount--;
+                NPC.netUpdate = true;
+            }
+            return;
+        }
+        reset();
     }
 
     public override bool PreAI() {
@@ -490,9 +509,9 @@ sealed class GrimDefender : ModNPC {
                 directedRotation(_tempPosition /*- Vector2.UnitY * 20f*/ - center);
             }
 
-            if (NPC.ai[1] >= num || NPC.justHit) {
+            if (NPC.ai[1] >= num/* || NPC.justHit*/) {
                 NPC.ai[0] = 0f;
-                NPC.ai[1] = NPC.justHit ? (60f - NPC.ai[1]) : 0f;
+                NPC.ai[1] = /*NPC.justHit ? (60f - NPC.ai[1]) : */0f;
                 NPC.localAI[1] = 0f;
                 NPC.localAI[2] = 0f;
                 NPC.localAI[3] = 0f;
@@ -576,6 +595,9 @@ sealed class GrimDefender : ModNPC {
                                 projectile.Kill();
                             }
                         }
+                    }
+                    if (!_spearAttack && _hitCount != 2) {
+                        _hitCount = 2;
                     }
                     if (_spearAttack) {
                         if (Main.netMode != NetmodeID.MultiplayerClient) {
