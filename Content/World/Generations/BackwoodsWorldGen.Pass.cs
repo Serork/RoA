@@ -865,7 +865,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGen.KillTile(i, j);
                     if (_random.NextChance(0.5)) {
                         if (_random.NextChance(0.5)) {
-                            WallBush(i, j, false);
+                            WallBush(i, j + 3 + _random.Next(-1, 3), false);
                         }
                         WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
                     }

@@ -114,7 +114,7 @@ sealed class CrowdRaven : ModNPC {
                 if (new Rectangle((int)NPC.position.X - 250, (int)NPC.position.Y - 250, NPC.width + 500, NPC.height + 500).Intersects(rectangle2) || NPC.life < NPC.lifeMax) {
                     foreach (NPC npc in Main.ActiveNPCs) {
                         if (npc.whoAmI != NPC.whoAmI && npc.type == Type && NPC.Distance(npc.Center) < 100f && npc.ai[2] == 0f) {
-                            npc.ai[2] = Main.rand.NextFloat(10f, 20f);
+                            npc.ai[2] = Main.rand.NextFloat(15f, 30f);
                             npc.netUpdate = true;
                         }
                     }
