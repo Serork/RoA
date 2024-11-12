@@ -20,7 +20,7 @@ sealed partial class Lothor : ModNPC {
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         Vector2 origin = NPC.frame.Size() / 2f;
         Vector2 positionOffset = Vector2.UnitY * DrawOffsetY;
-        spriteBatch.Draw(ItsSpriteSheet, NPC.position + positionOffset - screenPos + origin / 2f, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, default, 0f);
+        spriteBatch.Draw(ItsSpriteSheet, NPC.position + positionOffset - screenPos + origin / 2f, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, NPC.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
 
         return false;
     }

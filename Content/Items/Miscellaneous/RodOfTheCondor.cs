@@ -99,7 +99,7 @@ sealed class RodOfTheCondor : ModItem {
         private static string WingsTextureName => ResourceManager.ItemsTextures + $"{nameof(RodOfTheCondor)}_Wings";
         private static string WingsLayerName => $"{nameof(RodOfTheCondor)}_Wings";
 
-        private static float AnimationBound => MAXWINGSTIME - 0.1f;
+        private static float AnimationBound => MAXWINGSTIME - 0.15f;
         private static float AnimationBound2 => -0.15f;
 
         public override void PostUpdate() {

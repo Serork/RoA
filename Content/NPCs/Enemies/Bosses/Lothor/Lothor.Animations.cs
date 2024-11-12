@@ -1,135 +1,130 @@
-﻿using System.Collections.Generic;
+﻿namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
-using Terraria;
-using Terraria.ModLoader;
+//ref struct ExecuteArgs {
+//    public byte CurrentFrame;
+//    public double FrameCounter;
+//    public bool Reset;
+//}
 
-namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
+//interface ILothorAnimation : ILoadable {
+//    public Lothor.SpriteSheetColumn UsedColumn { get; }
+//    public byte StartFrame { get; }
 
-ref struct ExecuteArgs {
-    public byte CurrentFrame;
-    public double FrameCounter;
-    public bool Reset;
-}
+//    public void Execute(ref ExecuteArgs executeArgs) { }
 
-interface ILothorAnimation : ILoadable {
-    public Lothor.SpriteSheetColumn UsedColumn { get; }
-    public byte StartFrame { get; }
+//    void ILoadable.Load(Mod mod) => Lothor.Animations.TryAdd(GetType().Name, this);
+//    void ILoadable.Unload() { }
+//}
 
-    public void Execute(ref ExecuteArgs executeArgs) { }
+//sealed partial class Lothor : ModNPC {
+//    internal static Dictionary<string, ILothorAnimation> Animations = [];
 
-    void ILoadable.Load(Mod mod) => Lothor.Animations.TryAdd(GetType().Name, this);
-    void ILoadable.Unload() { }
-}
+//    private ILothorAnimation _currentAnimation = null;
+//    private bool _isAnimationPlaying = false;
 
-sealed partial class Lothor : ModNPC {
-    internal static Dictionary<string, ILothorAnimation> Animations = [];
+//    partial void HandleAnimations() {
+//        if (!_isAnimationPlaying || _currentAnimation == null) {
+//            return;
+//        }
+//        ExecuteArgs executeArgs;
+//        executeArgs.Reset = false;
+//        executeArgs.FrameCounter = NPC.frameCounter;
+//        executeArgs.CurrentFrame = CurrentFrame;
+//        _currentAnimation.Execute(ref executeArgs);
+//        NPC.frameCounter = executeArgs.FrameCounter;
+//        if (executeArgs.Reset) {
+//            _currentAnimation = null;
+//            return;
+//        }
+//        CurrentFrame = executeArgs.CurrentFrame;
+//    }
 
-    private ILothorAnimation _currentAnimation = null;
-    private bool _isAnimationPlaying = false;
+//    partial void UnloadAnimations() {
+//        _currentAnimation = null;
 
-    partial void HandleAnimations() {
-        if (!_isAnimationPlaying || _currentAnimation == null) {
-            return;
-        }
-        ExecuteArgs executeArgs;
-        executeArgs.Reset = false;
-        executeArgs.FrameCounter = NPC.frameCounter;
-        executeArgs.CurrentFrame = CurrentFrame;
-        _currentAnimation.Execute(ref executeArgs);
-        NPC.frameCounter = executeArgs.FrameCounter;
-        if (executeArgs.Reset) {
-            _currentAnimation = null;
-            return;
-        }
-        CurrentFrame = executeArgs.CurrentFrame;
-    }
+//        Animations.Clear();
+//        Animations = null;
+//    }
 
-    partial void UnloadAnimations() {
-        _currentAnimation = null;
+//    private void PlayAnimation(string id) {
+//        ILothorAnimation animation = Animations[id];
+//        if (animation.Equals(_currentAnimation)) {
+//            return;
+//        }
+//        _currentAnimation = animation;
+//        _currentColumn = _currentAnimation.UsedColumn;
+//        _isAnimationPlaying = true;
+//        NPC.frameCounter = 0.0;
+//        CurrentFrame = _currentAnimation.StartFrame;
+//    }
+//}
 
-        Animations.Clear();
-        Animations = null;
-    }
+//sealed class FallingAnimation : ILothorAnimation {
+//    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
+//    public byte StartFrame => 18;
+//}
 
-    private void PlayAnimation(string id) {
-        ILothorAnimation animation = Animations[id];
-        if (animation.Equals(_currentAnimation)) {
-            return;
-        }
-        _currentAnimation = animation;
-        _currentColumn = _currentAnimation.UsedColumn;
-        _isAnimationPlaying = true;
-        NPC.frameCounter = 0.0;
-        CurrentFrame = _currentAnimation.StartFrame;
-    }
-}
+//sealed class IdleAnimation : ILothorAnimation {
+//    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
+//    public byte StartFrame => 0;
+//}
 
-sealed class FallingAnimation : ILothorAnimation {
-    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
-    public byte StartFrame => 18;
-}
+//sealed class ClawsAnimation : ILothorAnimation {
+//    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
+//    public byte StartFrame => 1;
 
-sealed class IdleAnimation : ILothorAnimation {
-    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
-    public byte StartFrame => 0;
-}
+//    public void Execute(ref ExecuteArgs executeArgs) {
+//        byte lastFrame = 6;
+//        double frameRate = 5.0;
+//        ref byte currentFrame = ref executeArgs.CurrentFrame;
+//        ref double frameCounter = ref executeArgs.FrameCounter;
+//        ref bool reset = ref executeArgs.Reset;
+//        if (++frameCounter > frameRate) {
+//            frameCounter = 0.0;
+//            currentFrame++;
+//        }
+//        if (currentFrame > lastFrame) {
+//            reset = true;
+//        }
+//    }
+//}
 
-sealed class ClawsAnimation : ILothorAnimation {
-    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
-    public byte StartFrame => 1;
+//sealed class SpittingAnimation : ILothorAnimation {
+//    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
+//    public byte StartFrame => 8;
 
-    public void Execute(ref ExecuteArgs executeArgs) {
-        byte lastFrame = 6;
-        double frameRate = 5.0;
-        ref byte currentFrame = ref executeArgs.CurrentFrame;
-        ref double frameCounter = ref executeArgs.FrameCounter;
-        ref bool reset = ref executeArgs.Reset;
-        if (++frameCounter > frameRate) {
-            frameCounter = 0.0;
-            currentFrame++;
-        }
-        if (currentFrame > lastFrame) {
-            reset = true;
-        }
-    }
-}
+//    public void Execute(ref ExecuteArgs executeArgs) {
+//        byte lastFrame = 14;
+//        double frameRate = 5.0;
+//        ref byte currentFrame = ref executeArgs.CurrentFrame;
+//        ref double frameCounter = ref executeArgs.FrameCounter;
+//        ref bool reset = ref executeArgs.Reset;
+//        if (++frameCounter > frameRate) {
+//            frameCounter = 0.0;
+//            currentFrame++;
+//        }
+//        if (currentFrame > lastFrame) {
+//            reset = true;
+//        }
+//    }
+//}
 
-sealed class SpittingAnimation : ILothorAnimation {
-    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
-    public byte StartFrame => 8;
+//sealed class BeforeJumpAnimation : ILothorAnimation {
+//    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
+//    public byte StartFrame => 16;
 
-    public void Execute(ref ExecuteArgs executeArgs) {
-        byte lastFrame = 14;
-        double frameRate = 5.0;
-        ref byte currentFrame = ref executeArgs.CurrentFrame;
-        ref double frameCounter = ref executeArgs.FrameCounter;
-        ref bool reset = ref executeArgs.Reset;
-        if (++frameCounter > frameRate) {
-            frameCounter = 0.0;
-            currentFrame++;
-        }
-        if (currentFrame > lastFrame) {
-            reset = true;
-        }
-    }
-}
-
-sealed class BeforeJumpAnimation : ILothorAnimation {
-    public Lothor.SpriteSheetColumn UsedColumn => Lothor.SpriteSheetColumn.Stand;
-    public byte StartFrame => 16;
-
-    public void Execute(ref ExecuteArgs executeArgs) {
-        byte lastFrame = 18;
-        double frameRate = 5.0;
-        ref byte currentFrame = ref executeArgs.CurrentFrame;
-        ref double frameCounter = ref executeArgs.FrameCounter;
-        ref bool reset = ref executeArgs.Reset;
-        if (++frameCounter > frameRate) {
-            frameCounter = 0.0;
-            currentFrame++;
-        }
-        if (currentFrame > lastFrame) {
-            reset = true;
-        }
-    }
-}
+//    public void Execute(ref ExecuteArgs executeArgs) {
+//        byte lastFrame = 18;
+//        double frameRate = 5.0;
+//        ref byte currentFrame = ref executeArgs.CurrentFrame;
+//        ref double frameCounter = ref executeArgs.FrameCounter;
+//        ref bool reset = ref executeArgs.Reset;
+//        if (++frameCounter > frameRate) {
+//            frameCounter = 0.0;
+//            currentFrame++;
+//        }
+//        if (currentFrame > lastFrame) {
+//            reset = true;
+//        }
+//    }
+//}

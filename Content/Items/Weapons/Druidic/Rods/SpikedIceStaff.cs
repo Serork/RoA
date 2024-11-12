@@ -94,6 +94,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                 if (!_stopCounting) {
                     Projectile.localAI[0]++;
                     if (!IsInUse) {
+                        SpawnDustsOnShoot(Owner, CorePosition);
                         _stopCounting = true;
                     }
                 }
@@ -123,7 +124,13 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         }
 
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
-            for (int i = 0; i < 15; i++) {
+            if (_stopCounting) {
+                return;
+            }
+            if (ShouldShootInternal()) {
+                SoundEngine.PlaySound(SoundID.MaxMana, corePosition);
+            }
+            for (int i = 0; i < MathHelper.Min(15, Projectile.localAI[0] / 4); i++) {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
                 Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, 176, 0f, 0f, 0, default, 0.7f);
@@ -143,6 +150,9 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
+            if (_shootCount < MAXSHOOTCOUNT) {
+                return;
+            }
             if (Main.rand.NextChance(step)) {
                 for (int i = 0; i < (int)(2 * step) + 1; i++) {
                     Dust dust = Dust.NewDustPerfect(corePosition, 176, Scale: 1f);
