@@ -19,11 +19,17 @@ namespace RoA.Content.Projectiles.Friendly.Druid;
 sealed class InfectedWave : Wave {
 	public override Color UsedColor() => new(66, 54, 112, 255);
     public override (int, int, int) UsedDustTypes() => (ModContent.DustType<CorruptedFoliage>(), ModContent.DustType<EbonwoodLeaves>(), DustID.CorruptPlants);
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<Infected>(), 180);
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(ModContent.BuffType<Infected>(), 180);
 }
 
 sealed class HemorrhageWave : Wave {
 	public override Color UsedColor() => new(85, 0, 15, 255);
     public override (int, int, int) UsedDustTypes() => (ModContent.DustType<CrimsonFoliage>(), ModContent.DustType<ShadewoodLeaves>(), DustID.CrimsonPlants);
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
 }
 
 abstract class Wave : NatureProjectile {
@@ -58,9 +64,6 @@ abstract class Wave : NatureProjectile {
         modifiers.SourceDamage += 2f;
         modifiers.SetCrit();
     }
-
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
-    public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Player player = Main.player[Projectile.owner];

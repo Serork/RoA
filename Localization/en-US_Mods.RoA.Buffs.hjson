@@ -84,3 +84,8 @@ RavencallersCloakBuff: {
 	DisplayName: Cloak Stealth
 	Description: Enemies have lost true sight of you
 }
+
+Infected: {
+	DisplayName: Infected
+	Description: Losing life
+}
