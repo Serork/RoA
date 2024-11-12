@@ -16,6 +16,16 @@ partial class Tapper : ModItem {
         int tileToCreate = item.createTile;
         if (Tiles.Crafting.Tapper.ImATapper[tileToCreate]) { 
             bool flag = (WorldGenHelper.ActiveTile(Player.tileTargetX - 1, Player.tileTargetY - 1, TileID.Trees) || WorldGenHelper.ActiveTile(Player.tileTargetX + 1, Player.tileTargetY - 1, TileID.Trees)) && !WorldGenHelper.ActiveTile(Player.tileTargetX, Player.tileTargetY - 1, tileToCreate) && !WorldGenHelper.ActiveTile(Player.tileTargetX, Player.tileTargetY + 1, tileToCreate);
+            for (int testJ = Player.tileTargetY; testJ > Player.tileTargetY - 8; testJ--) {
+                if (WorldGenHelper.ActiveTile(Player.tileTargetX, testJ, tileToCreate)) {
+                    flag = false;
+                }
+            }
+            for (int testJ = Player.tileTargetY; testJ < Player.tileTargetY + 8; testJ++) {
+                if (WorldGenHelper.ActiveTile(Player.tileTargetX, testJ, tileToCreate)) {
+                    flag = false;
+                }
+            }
             return flag;
         }
 

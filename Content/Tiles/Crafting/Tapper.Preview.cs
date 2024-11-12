@@ -87,6 +87,22 @@ partial class Tapper : ModTile {
                         color = Color.Red * 0.7f;
                     }
 
+                    bool flag5 = false;
+                    for (int testJ = num10; testJ > num10 - 8; testJ--) {
+                        if (WorldGenHelper.ActiveTile(num9, testJ, type)) {
+                            flag5 = true;
+                        }
+                    }
+                    for (int testJ = num10; testJ < num10 + 8; testJ++) {
+                        if (WorldGenHelper.ActiveTile(num9, testJ, type)) {
+                            flag5 = true;
+                        }
+                    }
+
+                    if (flag5) {
+                        color = Color.Red * 0.7f;
+                    }
+
                     color *= 0.5f;
                     if (i >= op.ObjectStart.X && i < op.ObjectStart.X + tileData.Width && j >= op.ObjectStart.Y && j < op.ObjectStart.Y + tileData.Height) {
                         int coordinateWidth = tileData.CoordinateWidth;
