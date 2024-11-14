@@ -50,6 +50,10 @@ sealed class WreathHandler : ModPlayer {
         return self.SoulOfTheWoods ? SoulOfTheWoodsColor : self.IsPhoenixWreath ? PhoenixColor : StandardColor;
     }
 
+    public delegate void OnResetedDelegate();
+
+    public OnResetedDelegate OnWreathReset = null;
+
     public ushort MaxResource { get; private set; } = 100;
     public ushort ExtraResource { get; private set; } = 0;
     public float ChangingTimeValue { get; private set; }
@@ -95,7 +99,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsChangingValue => _currentChangingTime > 0f;
 
     public bool ShouldDraw => !IsEmpty || Player.IsHoldingNatureWeapon();
-    public float PulseIntensity => _stayTime <= 0.35f ? 0f : _stayTime > 0.35f && _stayTime <= 1.35f ? Ease.CubeInOut(_stayTime - 0.35f) : 1f;
+    public float PulseIntensity { get; private set; }
 
     public bool HasKeepTime => _keepBonusesForTime > 0f;
 
@@ -120,6 +124,10 @@ sealed class WreathHandler : ModPlayer {
 
     public ushort AddResourceValue() => (ushort)(AddValue * MaxResource);
 
+    public override void Unload() {
+        OnWreathReset = null;
+    }
+
     public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
         if (!Player.IsLocal()) {
             return;
@@ -134,11 +142,15 @@ sealed class WreathHandler : ModPlayer {
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2))) {
-            if (SpecialAttackData.Owner == selectedItem) {
+            if (SpecialAttackData.Owner == selectedItem && SpecialAttackData.ShouldReset) {
                 Reset();
 
-                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
-                SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
+                OnWreathReset?.Invoke();
+
+                if (SpecialAttackData.ShouldSpawn) {
+                    Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
+                    SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
+                }
             }
         }
         //else {
@@ -174,6 +186,7 @@ sealed class WreathHandler : ModPlayer {
         if (HasKeepTime && ActualProgress2 <= 1f) {
             _keepBonusesForTime -= 1f;
         }
+        PulseIntensity = _stayTime <= 0.35f ? 0f : _stayTime > 0.35f && _stayTime <= 1.35f ? Ease.CubeInOut(_stayTime - 0.35f) : MathHelper.Lerp(PulseIntensity, 1f, 0.2f);
     }
 
     public override void Load() {

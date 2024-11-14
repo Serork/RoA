@@ -85,9 +85,9 @@ static class Helper {
         return 1;
     }
 
-    public static Vector2 GetLimitedPosition(Vector2 startPosition, Vector2 endPosition, float maxLength) {
+    public static Vector2 GetLimitedPosition(Vector2 startPosition, Vector2 endPosition, float maxLength, float minLength = 0f) {
         Vector2 dif = endPosition - startPosition;
-        Vector2 result = startPosition + dif.SafeNormalize(Vector2.UnitY) * Math.Min(dif.Length(), maxLength);
+        Vector2 result = startPosition + dif.SafeNormalize(Vector2.UnitY) * MathHelper.Clamp(dif.Length(), minLength, maxLength);
         return result;
     }
 

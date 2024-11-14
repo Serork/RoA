@@ -66,10 +66,10 @@ abstract class BaseRodProjectile : NatureProjectile {
     private float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
     private Item HeldItem => Owner.HeldItem;
-    private Texture2D HeldItemTexture => TextureAssets.Item[HeldItem.type].Value;
+    private Texture2D HeldItemTexture => HeldItem.IsEmpty() ? null : TextureAssets.Item[HeldItem.type].Value;
 
     private Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
-    private Vector2 Offset => (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
+    private Vector2 Offset => HeldItemTexture == null ? Vector2.Zero : (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
     public Vector2 CorePosition => Projectile.Center + Offset + GravityOffset;
 
     public bool PreparingAttack => !_shot;

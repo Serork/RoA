@@ -6,6 +6,8 @@ using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
+using System.IO;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -36,10 +38,12 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         private bool _shouldShoot;
         private bool _stopCounting;
         private byte _shootCount = MAXSHOOTCOUNT;
+        private float _attackTimer, _attackTime;
+        private Vector2 _mousePos;
 
-        private int Min => (int)(Projectile.localAI[1] * 0.9f);
-        private int PerShoot => (int)(Projectile.localAI[1] * 0.4f);
-        private bool MinPassed => Projectile.localAI[0] >= Min;
+        private int Min => (int)(_attackTime * 0.9f);
+        private int PerShoot => (int)(_attackTime * 0.4f);
+        private bool MinPassed => _attackTimer >= Min;
 
         protected override bool IsInUse => !Owner.CCed && (Owner.controlUseItem || !MinPassed);
 
@@ -47,27 +51,52 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool DespawnWithProj() => false;
 
-        protected override bool ShouldShoot() => base.ShouldShoot() || Projectile.localAI[0] >= Min + PerShoot * MAXSHOOTCOUNT;
+        protected override bool ShouldShoot() => base.ShouldShoot() || _attackTimer >= Min + PerShoot * MAXSHOOTCOUNT;
 
         protected override bool ShouldPlayShootSound() => false;
 
         protected override void SafestOnSpawn(IEntitySource source) {
-            Projectile.localAI[1] = NatureWeaponHandler.GetUseSpeed(Owner.GetSelectedItem(), Owner);
+            _attackTime = NatureWeaponHandler.GetUseSpeed(Owner.GetSelectedItem(), Owner);
+            Projectile.netUpdate = true;
+        }
+
+        public override void SendExtraAI(BinaryWriter writer) {
+            base.SendExtraAI(writer);
+
+            writer.Write(_shootCount);
+            writer.Write(_stopCounting);
+            writer.Write(_attackTimer);
+            writer.Write(_attackTime);
+            writer.WriteVector2(_mousePos);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader) {
+            base.ReceiveExtraAI(reader);
+
+            _shootCount = reader.ReadByte();
+            _stopCounting = reader.ReadBoolean();
+            _attackTimer = reader.ReadSingle();
+            _attackTime = reader.ReadSingle();
+            _mousePos = reader.ReadVector2();
         }
 
         public override void PostAI() {
             if (_shouldShoot) {
-                if (Projectile.localAI[0] >= Min - PerShoot && _shootCount > 0) {
-                    if (Projectile.localAI[0] % PerShoot == 0f) {
+                if (_attackTimer >= Min - PerShoot && _shootCount > 0) {
+                    if (_attackTimer % PerShoot == 0f) {
                         ShootProjectile();
                         _shootCount--;
+                        if (Owner.whoAmI == Main.myPlayer && _mousePos != Owner.GetViableMousePosition()) {
+                            _mousePos = Owner.GetViableMousePosition();
+                            Projectile.netUpdate = true;
+                        }
 
                         SoundEngine.PlaySound(SoundID.Item20, CorePosition);
 
                         if (Main.netMode != NetmodeID.Server) {
                             void spawnAttackDust(float num) {
                                 if (Main.rand.NextChance(0.435f)) {
-                                    Vector2 velocity = Helper.VelocityToPoint(CorePosition, Owner.GetViableMousePosition(), 2.5f + Main.rand.NextFloatRange(1f));
+                                    Vector2 velocity = Helper.VelocityToPoint(CorePosition, _mousePos, 2.5f + Main.rand.NextFloatRange(1f));
                                     Vector2 vector2 = velocity.RotatedBy(num * (MathHelper.Pi + MathHelper.PiOver4) / 25f);
                                     Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, DustID.BubbleBurst_Blue, Scale: Main.rand.NextFloat(1.05f, 1.35f));
                                     dust.velocity = vector2;
@@ -86,16 +115,19 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                                 }
                             }
                         }
+
+                        Projectile.netUpdate = true;
                     }
-                    Projectile.localAI[0]--;
+                    _attackTimer--;
                 }
             }
             else {
                 if (!_stopCounting) {
-                    Projectile.localAI[0]++;
+                    _attackTimer++;
                     if (!IsInUse) {
                         SpawnDustsOnShoot(Owner, CorePosition);
                         _stopCounting = true;
+                        Projectile.netUpdate = true;
                     }
                 }
             }
@@ -106,7 +138,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                 return;
             }
 
-            if (MinPassed && Projectile.localAI[0] < Min + PerShoot) {
+            if (MinPassed && _attackTimer < Min + PerShoot) {
                 base.ShootProjectile();
 
                 SoundEngine.PlaySound(SoundID.Item20, CorePosition);
@@ -130,7 +162,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
             if (ShouldShootInternal()) {
                 SoundEngine.PlaySound(SoundID.MaxMana, corePosition);
             }
-            for (int i = 0; i < MathHelper.Min(15, Projectile.localAI[0] / 4); i++) {
+            for (int i = 0; i < MathHelper.Min(15, _attackTimer / 4); i++) {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
                 Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, 176, 0f, 0f, 0, default, 0.7f);

@@ -27,6 +27,8 @@ abstract class BaseClawsItem : NatureItem {
 
     public virtual void SafeOnUse(Player player, ClawsHandler clawsStats) { }
 
+    protected virtual bool ShouldModifyShootStats => true;
+
     public override bool? UseItem(Player player) {
         if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
             (Color, Color) slashColors = SlashColors();
@@ -40,6 +42,10 @@ abstract class BaseClawsItem : NatureItem {
     }
 
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+        if (!ShouldModifyShootStats) {
+            return;
+        }
+
         Vector2 pointPosition = player.GetViableMousePosition();
         Vector2 point = Helper.VelocityToPoint(player.Center, pointPosition, 1f);
         position += point * 15f;

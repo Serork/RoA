@@ -1,0 +1,394 @@
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+
+using RoA.Common;
+using RoA.Common.Druid.Wreath;
+using RoA.Core.Utility;
+using RoA.Utilities;
+
+using System;
+using System.IO;
+using System.Reflection;
+
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent;
+using Terraria.Graphics.Renderers;
+using Terraria.ID;
+
+namespace RoA.Content.Projectiles.Friendly.Druidic;
+
+sealed class Snatcher : NatureProjectile {
+    private const float DIST = 75f;
+    private const ushort TIMELEFT = 300;
+
+    private Vector2 _targetVector, _targetVector2, _attackVector;
+    private float _rotation;
+    private Vector2 _mousePos, _mousePos2;
+    private float _lerpValue;
+
+    private bool IsAttacking => Projectile.ai[2] > 1f;
+    private Vector2 AttackPos => new(Projectile.localAI[1], Projectile.localAI[2]);
+    private float AttackFactor => IsAttacking ? Math.Min(1f, (Helper.EaseInOut3(1f - ((Projectile.ai[2] - 1f) / 4f)) + _attackVector.Length() * 0.01f)) : 0f;
+    private bool IsAttacking2 => _attackVector.Length() > 25f;
+    private bool IsAttacking3 => _attackVector.Length() > 10f;
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.WriteVector2(_mousePos);
+        writer.WriteVector2(_mousePos2);
+        writer.Write(Projectile.localAI[1]);
+        writer.Write(Projectile.localAI[2]);
+        writer.Write(_rotation);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _mousePos = reader.ReadVector2();
+        _mousePos2 = reader.ReadVector2();
+        Projectile.localAI[1] = reader.ReadSingle();
+        Projectile.localAI[2] = reader.ReadSingle();
+        _rotation = reader.ReadSingle();
+    }
+
+    protected override void SafeSetDefaults() {
+        int width = 20, height = width;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.friendly = true;
+
+        Projectile.tileCollide = false;
+        Projectile.friendly = true;
+
+        Projectile.aiStyle = -1;
+
+        Projectile.timeLeft = TIMELEFT;
+        Projectile.penetrate = -1;
+
+        ShouldIncreaseWreathPoints = false;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 30;
+
+        Projectile.netImportant = true;
+
+        Projectile.alpha = 255;
+    }
+
+    protected override void SafeOnSpawn(IEntitySource source) => Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset += OnReset;
+    public override void OnKill(int timeLeft) => Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset -= OnReset;
+
+    private Vector2 GetCenter() {
+        return GetPos() - Projectile.Size / 2f + (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2() * Projectile.height * 0.75f;
+    }
+
+    private void OnReset() {
+        if (Projectile.timeLeft > 20) {
+            Projectile.timeLeft += TIMELEFT;
+            Projectile.netUpdate = true;
+        }
+    }
+
+    public override bool? CanCutTiles() => false;
+
+    private void SnatcherCutTiles() {
+        if (Projectile.alpha == 0) {
+            return;
+        }
+        if (Projectile.owner != Main.myPlayer) {
+            return;
+        }
+        Vector2 boxPosition = GetCenter();
+        int boxWidth = Projectile.width;
+        int boxHeight = Projectile.height;
+        int num = (int)(boxPosition.X / 16f);
+        int num2 = (int)((boxPosition.X + (float)boxWidth) / 16f) + 1;
+        int num3 = (int)(boxPosition.Y / 16f);
+        int num4 = (int)((boxPosition.Y + (float)boxHeight) / 16f) + 1;
+        if (num < 0)
+            num = 0;
+
+        if (num2 > Main.maxTilesX)
+            num2 = Main.maxTilesX;
+
+        if (num3 < 0)
+            num3 = 0;
+
+        if (num4 > Main.maxTilesY)
+            num4 = Main.maxTilesY;
+
+        bool[] tileCutIgnorance = Main.player[Projectile.owner].GetTileCutIgnorance(allowRegrowth: false, Projectile.trap);
+        for (int i = num; i < num2; i++) {
+            for (int j = num3; j < num4; j++) {
+                if (Main.tile[i, j] != null && Main.tileCut[Main.tile[i, j].TileType] && !tileCutIgnorance[Main.tile[i, j].TileType] && WorldGen.CanCutTile(i, j, TileCuttingContext.AttackProjectile)) {
+                    WorldGen.KillTile(i, j);
+                    if (Main.netMode != 0)
+                        NetMessage.SendData(17, -1, -1, null, 0, i, j);
+                }
+            }
+        }
+    }
+
+    public override bool? CanDamage() => Projectile.alpha == 0;
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        if (!IsAttacking) {
+            return false;
+        }
+
+        return Collision.CheckAABBvAABBCollision(GetCenter(), Projectile.Size, targetHitbox.Location.ToVector2(), targetHitbox.Size());
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
+        target.AddBuff(20, (int)(60f * num2 * 2f));
+        //ResetAttackState();
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
+        target.AddBuff(20, (int)(60f * num2 * 2f));
+        //ResetAttackState();
+    }
+
+    private void ResetAttackState() {
+        Projectile.ai[2] = 1f;
+        Projectile.localAI[1] = Projectile.localAI[2] = 0f;
+        Projectile.netUpdate = true;
+    }
+
+    public override void PostAI() {
+        _lerpValue = MathHelper.Lerp(_lerpValue, AttackFactor, 0.1f);
+        //if (_attackCount > 2) {
+        //    Projectile.Kill();
+        //}
+        if (Projectile.timeLeft < 20) {
+            Projectile.alpha += 42;
+            if (Projectile.alpha > 255)
+                Projectile.alpha = 255;
+        }
+        else {
+            Projectile.alpha -= 42;
+            if (Projectile.alpha < 0)
+                Projectile.alpha = 0;
+        }
+        if (IsAttacking && Projectile.alpha == 0) {
+            Vector2 velocity = _attackVector.SafeNormalize(Vector2.One) * _attackVector.Length() * 0.01f;
+            for (int num78 = 0; num78 < 2; num78++) {
+                if (Main.rand.Next(10) == 0) {
+                    Dust obj = Main.dust[Dust.NewDust(GetCenter(), Projectile.width, Projectile.height, DustID.JunglePlants, -velocity.X, -velocity.Y, 0, default)];
+                    obj.noGravity = true;
+                    obj.velocity *= 2f;
+                    obj.fadeIn = 1.5f;
+                }
+            }
+
+            float num79 = 18f;
+            for (int num80 = 0; (float)num80 < num79; num80++) {
+                if (Main.rand.Next((int)num79) == 0) {
+                    Vector2 vector39 = GetCenter() - _attackVector.SafeNormalize(Vector2.Zero) * ((float)num80 / num79);
+                    Dust obj2 = Main.dust[Dust.NewDust(vector39, Projectile.width, Projectile.height, DustID.JunglePlants, -velocity.X, -velocity.Y, 0, default)];
+                    obj2.noGravity = true;
+                    obj2.fadeIn = 0.5f;
+                    obj2.noLight = true;
+                }
+            }
+        }
+        SnatcherCutTiles();
+        Player player = Main.player[Projectile.owner];
+        bool flag = false;
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.ai[0] != (Projectile.whoAmI + 1f)) {
+                if (projectile.ai[2] > 4.5f) {
+                    flag = true;
+                }
+                break;
+            }
+        }
+        if (Projectile.owner == Main.myPlayer && player.ItemAnimationJustStarted && !flag && !IsAttacking && !IsAttacking2) {
+            Projectile.ai[2] = 5f;
+            Vector2 mousePos = Helper.GetLimitedPosition(player.Center, _mousePos, 200f, DIST * 0.75f);
+            Projectile.localAI[1] = mousePos.X;
+            Projectile.localAI[2] = mousePos.Y;
+            Projectile.netUpdate = true;
+        }
+        if (IsAttacking) {
+            Projectile.ai[2] -= TimeSystem.LogicDeltaTime * 5f;
+            Vector2 mousePos = AttackPos;
+            Vector2 pos = mousePos - GetPos();
+            Vector2 to = pos.SafeNormalize(Vector2.Zero);
+            _attackVector += to + to * (pos.Length() * 0.04f);
+            if (GetPos().Distance(mousePos) < 10f) {
+                ResetAttackState();
+            }
+        }
+        else {
+            _attackVector = Vector2.Lerp(_attackVector, Vector2.Zero, 0.03f);
+        }
+    }
+
+    private Vector2 GetPos() {
+        int direction = (int)Projectile.ai[1];
+        float progress = 0.5f;
+        Vector2 drawPosition = Projectile.Center + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * DIST;
+        Vector2 endLocation = Projectile.Center + _targetVector2 + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * Math.Max(DIST * (1f - progress), 8f);
+        return Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
+    }
+
+    private Vector2 GetLookUpPos() {
+        Player player = Main.player[Projectile.owner];
+        Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, true);
+        int mouseDir = (_mousePos - playerCenter).X.GetDirection();
+        return IsAttacking ? AttackPos : (playerCenter + Vector2.UnitX * 50f * mouseDir);
+    }
+
+    public override void AI() {
+        Player player = Main.player[Projectile.owner];
+        Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, true);
+        Projectile.direction = player.direction;
+        Projectile.Center = playerCenter;
+        if (Projectile.ai[0] == 0f) {
+            Projectile.ai[0] = 1f;
+            Projectile.ai[1] = 1f;
+            Projectile.ai[2] = 0f;
+            if (Projectile.owner == Main.myPlayer) {
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f, -Projectile.ai[1], 0f);
+                Projectile.netUpdate = true;
+            }
+        }
+        int direction = (int)Projectile.ai[1];
+        Vector2 pos = GetPos();
+        Vector2 lookUpPos = GetLookUpPos();
+        float rotation = Vector2.Normalize(pos - lookUpPos).ToRotation() + MathHelper.PiOver2;
+        if (Projectile.ai[2] == 0f) {
+            Projectile.ai[2] = 1f;
+            _targetVector = _targetVector2 = _attackVector = Vector2.Zero;
+            _rotation = rotation;
+            Projectile.netUpdate = true;
+        }
+        if (Projectile.owner == Main.myPlayer) {
+            _mousePos = player.GetViableMousePosition();
+            _mousePos2 = new(Main.mouseX - Main.screenWidth / 2f, Main.mouseY - Main.screenHeight / 2f);
+            Projectile.netUpdate = true;
+        }
+        _targetVector.X = _mousePos2.X;
+        _targetVector.Y = _mousePos2.Y;
+        float maxLength = DIST;
+        if (_targetVector.Length() > maxLength) {
+            _targetVector = Vector2.Normalize(_targetVector) * maxLength;
+        }
+        float lerp = Math.Min(0.015f + player.velocity.Length() * 0.001f, 0.1f) * 0.5f;
+        Vector2 target = _targetVector;
+        Vector2 target2 = Helper.VelocityToPoint(Projectile.Center, _mousePos, 1f).SafeNormalize(Vector2.Zero);
+        Projectile.velocity = Helper.SmoothAngleLerp(Projectile.velocity.ToRotation(), target2.ToRotation(), lerp * (IsAttacking2 ? 10f : 3.5f)).ToRotationVector2().SafeNormalize(Vector2.Zero);
+        _targetVector2.X = MathHelper.Lerp(_targetVector2.X, target.X, lerp);
+        _targetVector2.Y = MathHelper.Lerp(_targetVector2.Y, target.Y, lerp * 0.1f);
+        if (Vector2.Distance(_targetVector2, _targetVector) >= DIST / 2f) {
+            _targetVector2 = Vector2.Lerp(_targetVector2, _targetVector, lerp * 3f);
+        }
+        if (_targetVector2.Length() > maxLength / 2f + maxLength / 5f) {
+            float inertia = _targetVector2.Length() * 0.015f;
+            _targetVector2 *= (float)Math.Pow(0.98, inertia * 2.0 / inertia);
+        }
+        _rotation = Utils.AngleLerp(_rotation, rotation, 0.05f + AttackFactor);
+        Projectile.rotation = _rotation;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        int direction = (int)Projectile.ai[1]/* * -(_targetVector2 - Projectile.Center).X.GetDirection()*/;
+        Vector2 drawPosition = GetPos();
+        Vector2 mountedCenter = Main.player[Projectile.owner].MountedCenter;
+        float opacity = 1f - (Projectile.alpha / 255f);
+        Color color = Color.White * opacity/*Lighting.GetColor((int)(drawPosition.X + Projectile.width * 0.5) / 16, (int)((drawPosition.Y + Projectile.height * 0.5) / 16.0))*/;
+        //if (Projectile.hide && !ProjectileID.Sets.DontAttachHideToAlpha[Type]) {
+        //    color = Lighting.GetColor((int)mountedCenter.X / 16, (int)(mountedCenter.Y / 16f));
+        //}
+        Vector2 position = Projectile.position;
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
+        Color alpha = Projectile.GetAlpha(color);
+        float num = _targetVector2.Length() + 16f;
+        bool flag = num < 100f;
+        Vector2 value = Vector2.Normalize(_targetVector2);
+        Rectangle rectangle = new Rectangle(0, 0, texture.Width, 36);
+        Vector2 value2 = new Vector2(0f, Main.player[Projectile.owner].gfxOffY);
+        float rotation = Projectile.rotation;
+        //Main.spriteBatch.Draw(texture, drawPosition.Floor() - Main.screenPosition, new Rectangle?(rectangle), Color.White, rotation, rectangle.Size() / 2f - Vector2.UnitY * 4f, Projectile.scale, SpriteEffects.None, 0f);
+
+        //num -= 40f * Projectile.scale;
+        Vector2 vector = drawPosition.Floor();
+        position = Projectile.Center /*+ value * 20f*/;
+        var velocity = (Projectile.rotation - (direction == 1 ? MathHelper.Pi : 0)).ToRotationVector2();
+        Vector2 baseValue = Vector2.Normalize(velocity.RotatedBy(MathHelper.PiOver2 * direction));
+        value = baseValue;
+        //value = value.RotatedBy(rotation);
+        //vector += value * 12f;
+        //Player player = Main.player[Projectile.owner];
+        rectangle = new Rectangle(0, 62, texture.Width, 18);
+        float distance = Vector2.Distance(vector, position);
+        for (int i = 0; i < 250; i++) {
+            if (distance < rectangle.Height || vector.Distance(Projectile.Center) < rectangle.Height) {
+                break;
+            }
+            //if (num - num2 < rectangle.Height) {
+            //    rectangle.Height = (int)(num - num2);
+            //}
+            //if (i != 0) {
+            //    rectangle = i % 2 == 0 ? new Rectangle(0, 40, texture.Width, 20) : new Rectangle(0, 62, texture.Width, 18);
+            //}
+            //else {
+            //    rectangle = new Rectangle(0, 0, texture.Width, 36);
+            //}
+            ulong randomSeed = (ulong)i;
+            int useFrame = Utils.RandomInt(ref randomSeed, 10);
+            if (useFrame < 3) {
+                rectangle = new Rectangle(0, 40, texture.Width, 20);
+            }
+            else {
+                rectangle = new Rectangle(0, 62, texture.Width, 18);
+            }
+            Vector2 lightPos = vector/* + value * rectangle.Height * 0.75f*/;
+            color = Lighting.GetColor((int)lightPos.X / 16, (int)lightPos.Y / 16) * opacity;
+            Main.spriteBatch.Draw(texture, vector - Main.screenPosition, new Rectangle?(rectangle), color, value.ToRotation() - MathHelper.PiOver2, new Vector2((rectangle.Width / 2), 0f), Projectile.scale, SpriteEffects.None, 0f);
+            Vector2 to = position - Vector2.Normalize(_targetVector2) * -direction;
+            distance = Vector2.Distance(vector, to);
+            vector += value.SafeNormalize(Vector2.Zero) * rectangle.Height;
+            Vector2 to2 = Helper.VelocityToPoint(vector, to, 1f).RotatedBy(-0.19634954631328583 * direction * _lerpValue);
+            Vector2 value3 = to2.SafeNormalize(Vector2.Zero) * 2f;
+            float lerpAmount = Math.Max(0f, 0.25f - Math.Max((i - 10) * 0.01f, 0));
+            value = Vector2.Lerp(value, value3, lerpAmount + _lerpValue);
+        }
+        //Vector2 value3 = vector;
+        //vector = drawPosition.Floor();
+        //vector += value * Projectile.scale * 12f;
+        //rectangle = new Rectangle(0, 30, texture.Width, 15);
+        //int num3 = 18;
+        //if (flag) {
+        //    num3 = 9;
+        //}
+        //float num4 = num;
+        //if (num > 0f) {
+        //    float num5 = 0f;
+        //    float num6 = num4 / num3;
+        //    num5 += num6 * 0.25f;
+        //    vector += value * num6 * 0.25f;
+        //    for (int i = 0; i < num3; i++) {
+        //        float num7 = num6;
+        //        if (i == 0) {
+        //            num7 *= 0.75f;
+        //        }
+        //        Main.spriteBatch.Draw(texture, vector - Main.screenPosition + value2, new Rectangle?(rectangle), alpha, rotation, new Vector2((rectangle.Width / 2), 0f), Projectile.scale, SpriteEffects.None, 0f);
+        //        num5 += num7;
+        //        vector += value * num7;
+        //    }
+        //}
+        Vector2 pos = GetPos() - Projectile.Size / 2f;
+        color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16) * opacity;
+        Rectangle frame = new(0, 84, texture.Width, 56);
+        SpriteEffects effects = direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        Main.EntitySpriteDraw(texture, drawPosition.Floor() - Main.screenPosition, frame, color, Projectile.rotation, texture.Frame(1, 1, 0, 0).Top(), Projectile.scale, effects, 0);
+
+        return false;
+    }
+}

@@ -100,6 +100,7 @@ sealed class RavencallersCloak : ModItem {
             for (int j = 0; j < _oldPositionInfos.Length; j++) {
                 _oldPositionInfos[j].Position = Vector2.Zero;
             }
+            _opacity = 0f;
         }
 
         public override void Load() {
@@ -141,7 +142,6 @@ sealed class RavencallersCloak : ModItem {
             RavencallerPlayer data = drawPlayer.GetModPlayer<RavencallerPlayer>();
             if (!data.Available || !drawPlayer.active || Main.gameMenu) {
                 orig(self, camera, drawPlayer);
-                _opacity = 0f;
                 return;
             }
 
@@ -163,9 +163,6 @@ sealed class RavencallersCloak : ModItem {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
                 if (lastPositionInfo.Position != Vector2.Zero) {
-                    if (_opacity < 1f) {
-                        _opacity += 0.025f;
-                    }
                     drawPlayer.velocity = lastPositionInfo.Velocity;
                     drawPlayer.direction = lastPositionInfo.Direction;
                     drawPlayer.headFrame = lastPositionInfo.HeadFrame;
@@ -176,7 +173,7 @@ sealed class RavencallersCloak : ModItem {
                     drawPlayer.head = 0;
                     drawPlayer.face = CloakFaceId;
                     drawPlayer.shroomiteStealth = true;
-                    drawPlayer.stealth = 0.5f * _opacity;
+                    drawPlayer.stealth = 0.5f * data._opacity;
                     drawPlayer.gfxOffY = lastPositionInfo.GfxOffY;
                     drawPlayer.skinColor = Color.Transparent;
                     SamplerState samplerState = camera.Sampler;
@@ -206,7 +203,7 @@ sealed class RavencallersCloak : ModItem {
             orig(self, camera, drawPlayer);
         }
 
-        public override void PostUpdate() {
+        public override void UpdateEquips() {
             int buffType = ModContent.BuffType<RavencallersCloakBuff>();
             if (RavencallersCloak || Main.mouseItem.type == ItemType) {
                 if (ReceivedDamage) {
@@ -230,6 +227,10 @@ sealed class RavencallersCloak : ModItem {
                 _oldPositionInfos[0].BodyFrame = Player.bodyFrame;
                 _oldPositionInfos[0].LegFrame = Player.legFrame;
                 _oldPositionInfos[0].WingFrame = Player.wingFrame;
+
+                if (_opacity < 1f) {
+                    _opacity += 0.025f;
+                }
             }
             else {
                 if (!_resetted) {

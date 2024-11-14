@@ -28,6 +28,11 @@ sealed class HorrorPincers : BaseClawsItem {
         var position = new Vector2(player.Center.X + offset, player.Center.Y);
         Vector2 pointPosition = player.GetViableMousePosition();
         Vector2 point = Helper.VelocityToPoint(player.Center, pointPosition, 1.2f);
-        clawsStats.SetSpecialAttackData<InfectedWave>(Item, new Vector2(position.X, position.Y - 14f), point, playSoundStyle: SoundID.Item95);
+        clawsStats.SetSpecialAttackData<InfectedWave>(new ClawsHandler.AttackSpawnInfoArgs() {
+            Owner = Item,
+            SpawnPosition = new Vector2(position.X, position.Y - 14f),
+            StartVelocity = point,
+            PlaySoundStyle = SoundID.Item95
+        });
     }
 }
