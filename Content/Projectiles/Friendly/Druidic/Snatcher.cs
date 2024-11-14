@@ -308,7 +308,7 @@ sealed class Snatcher : NatureProjectile {
             Projectile.ai[0] = 1f;
             Projectile.ai[1] = 1f;
             Projectile.ai[2] = 0f;
-            if (Projectile.owner == Main.myPlayer) {
+            if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[Type] < 2) {
                 Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f, -Projectile.ai[1], 0f);
                 Projectile.netUpdate = true;
             }
@@ -369,7 +369,7 @@ sealed class Snatcher : NatureProjectile {
         //Main.spriteBatch.Draw(texture, drawPosition.Floor() - Main.screenPosition, new Rectangle?(rectangle), Color.White, rotation, rectangle.Size() / 2f - Vector2.UnitY * 4f, Projectile.scale, SpriteEffects.None, 0f);
 
         //num -= 40f * Projectile.scale;
-        Vector2 vector = drawPosition.Floor();
+        Vector2 vector = drawPosition;
         position = Projectile.Center /*+ value * 20f*/;
         var velocity = (Projectile.rotation - (direction == 1 ? MathHelper.Pi : 0)).ToRotationVector2();
         Vector2 baseValue = Vector2.Normalize(velocity.RotatedBy(MathHelper.PiOver2 * direction));
@@ -403,7 +403,7 @@ sealed class Snatcher : NatureProjectile {
         color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16) * opacity;
         Rectangle frame = new(0, 84, texture.Width, 56);
         SpriteEffects effects = direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-        Main.EntitySpriteDraw(texture, drawPosition.Floor() - Main.screenPosition, frame, color, Projectile.rotation, texture.Frame(1, 1, 0, 0).Top(), Projectile.scale, effects, 0);
+        Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, color, Projectile.rotation, texture.Frame(1, 1, 0, 0).Top(), Projectile.scale, effects, 0);
 
         return false;
     }
