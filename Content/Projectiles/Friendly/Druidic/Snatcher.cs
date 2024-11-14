@@ -313,6 +313,11 @@ sealed class Snatcher : NatureProjectile {
                 Projectile.netUpdate = true;
             }
         }
+        if (Projectile.owner == Main.myPlayer) {
+            _mousePos = player.GetViableMousePosition();
+            _mousePos2 = new(Main.mouseX - Main.screenWidth / 2f, Main.mouseY - Main.screenHeight / 2f);
+            Projectile.netUpdate = true;
+        }
         int direction = (int)Projectile.ai[1];
         Vector2 pos = GetPos();
         Vector2 lookUpPos = GetLookUpPos();
@@ -321,11 +326,6 @@ sealed class Snatcher : NatureProjectile {
             Projectile.ai[2] = 1f;
             _targetVector = _targetVector2 = _attackVector = Vector2.Zero;
             _rotation = rotation;
-            Projectile.netUpdate = true;
-        }
-        if (Projectile.owner == Main.myPlayer) {
-            _mousePos = player.GetViableMousePosition();
-            _mousePos2 = new(Main.mouseX - Main.screenWidth / 2f, Main.mouseY - Main.screenHeight / 2f);
             Projectile.netUpdate = true;
         }
         _targetVector.X = _mousePos2.X;
