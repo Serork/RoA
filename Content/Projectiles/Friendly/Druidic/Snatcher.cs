@@ -100,7 +100,7 @@ sealed class Snatcher : NatureProjectile {
         Vector2 value = baseValue;
         float distance = Vector2.Distance(vector, position);
         for (int i = 0; i < 250; i++) {
-            if (distance < height || vector.Distance(Projectile.Center) < height) {
+            if (distance < height) {
                 break;
             }
             Vector2 to = position - Vector2.Normalize(_targetVector2) * -direction;
@@ -377,7 +377,7 @@ sealed class Snatcher : NatureProjectile {
         rectangle = new Rectangle(0, 62, texture.Width, 18);
         float distance = Vector2.Distance(vector, position);
         for (int i = 0; i < 250; i++) {
-            if (distance < rectangle.Height || vector.Distance(Projectile.Center) < rectangle.Height) {
+            if (distance < rectangle.Height) {
                 break;
             }
             ulong randomSeed = (ulong)i;
