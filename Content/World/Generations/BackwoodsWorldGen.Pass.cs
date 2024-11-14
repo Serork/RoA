@@ -132,6 +132,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddSpikes();
         Step_AddPills();
         Step10_SpreadMossGrass();
+        Step6_SpreadGrass();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
     }
@@ -1449,24 +1450,26 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         // fallen trees
-        bool flag = false;
-        for (int i2 = i - 15; i2 < i; i2++) {
-            int j2 = WorldGenHelper.GetFirstTileY(i2, type: _grassTileType);
-            WorldGenHelper.Place3x2(i2, j2 - 1, _fallenTreeTileType, styleX: _random.Next(2), onPlaced: () => {
-                flag = true;
-            });
-            if (flag) {
-                break;
+        for (int k = 0; k < 1; k++) {
+            bool flag = false;
+            for (int i2 = i - 15; i2 < i; i2++) {
+                int j2 = WorldGenHelper.GetFirstTileY(i2, type: _grassTileType);
+                WorldGenHelper.Place3x2(i2, j2 - 1, _fallenTreeTileType, styleX: _random.Next(2), onPlaced: () => {
+                    flag = true;
+                });
+                if (flag) {
+                    break;
+                }
             }
-        }
-        flag = false;
-        for (int i2 = i + 15; i2 > i; i2--) {
-            int j2 = WorldGenHelper.GetFirstTileY(i2, type: _grassTileType);
-            WorldGenHelper.Place3x2(i2, j2 - 1, _fallenTreeTileType, styleX: _random.Next(2), onPlaced: () => {
-                flag = true;
-            });
-            if (flag) {
-                break;
+            flag = false;
+            for (int i2 = i + 15; i2 > i; i2--) {
+                int j2 = WorldGenHelper.GetFirstTileY(i2, type: _grassTileType);
+                WorldGenHelper.Place3x2(i2, j2 - 1, _fallenTreeTileType, styleX: _random.Next(2), onPlaced: () => {
+                    flag = true;
+                });
+                if (flag) {
+                    break;
+                }
             }
         }
 
@@ -2094,10 +2097,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(_grassTileType)) {
                     if (!WorldGen.SolidTile2(i, j - 1)) {
                         bool flag = false;
-                        if ((((double)i > (double)CenterX && (double)i < (double)CenterX + 8)) && j < BackwoodsVars.FirstTileYAtCenter + 20) {
+                        if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 15)) && j < BackwoodsVars.FirstTileYAtCenter + 20) {
                             flag = true;
                         }
-                        if (_random.NextChance(flag ? 0.3 : 0.5)) {
+                        if (_random.NextChance(0.5)) {
                             WallBush(i, j + 3 + (flag ? _random.Next(-1, 3) : 0), !flag);
                             i += _random.Next(2, 8);
                         }
@@ -2118,7 +2121,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //    }
         //}
 
-        Step6_SpreadGrass();
+        Step6_SpreadGrass(true);
     }
 
     public void BackwoodsTilesReplacement(GenerationProgress progress, GameConfiguration config) {
@@ -2342,7 +2345,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         progress.Set(0.7f);
-        Step6_SpreadGrass();
+        Step6_SpreadGrass(true);
         Step9_SpreadMoss();
         //Step10_SpreadMossGrass();
 
@@ -3603,7 +3606,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
     }
 
-    private void Step6_SpreadGrass() {
+    private void Step6_SpreadGrass(bool flag = false) {
         double randomnessY = Main.worldSurface + 50.0;
         for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
@@ -3617,6 +3620,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             if (tile.TileType == _dirtTileType || tile.TileType == TileID.Dirt) {
                                 WorldGen.grassSpread = 0;
                                 WorldGen.SpreadGrass(i, j2, _dirtTileType, _grassTileType);
+                                if (flag) {
+                                    WorldGen.grassSpread = 0;
+                                    WorldGen.SpreadGrass(i, j2, TileID.Dirt, _grassTileType);
+                                }
                             }
                         }
                         spread = true;
