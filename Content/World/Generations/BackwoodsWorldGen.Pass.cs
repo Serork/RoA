@@ -866,7 +866,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGen.KillTile(i, j);
                     if (_random.NextChance(0.5)) {
                         if (_random.NextChance(0.5)) {
-                            WallBush(i, j + 3 + _random.Next(-1, 3), false);
+                            WallBush(i, j + 3 + _random.Next(-1, 2), false);
                         }
                         WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
                     }
@@ -2101,7 +2101,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             flag = true;
                         }
                         if (_random.NextChance(0.5)) {
-                            WallBush(i, j + 3 + (flag ? _random.Next(-1, 3) : 0), !flag);
+                            WallBush(i, j + 3 + (flag ? _random.Next(-1, 2) : 0), !flag);
                             i += _random.Next(2, 8);
                         }
                     }
@@ -3607,16 +3607,17 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step6_SpreadGrass(bool flag = false) {
-        double randomnessY = Main.worldSurface + 50.0;
+        int y = Math.Min(CenterY - EdgeY, (int)Main.worldSurface + 10);
+        double randomnessY = y + 50.0;
         for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
                 randomnessY += (double)_random.NextFloat(-2f, 3f);
-                randomnessY = Math.Clamp(randomnessY, Main.worldSurface + 30.0, Main.worldSurface + 60.0);
+                randomnessY = Math.Clamp(randomnessY, y + 30.0, y + 60.0);
                 bool spread = false;
-                for (int j2 = (int)GenVars.worldSurfaceLow; j2 < randomnessY; j2++) {
+                for (int j2 = BackwoodsVars.FirstTileYAtCenter - 20; j2 < randomnessY; j2++) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j2);
                     if (tile.HasTile) {
-                        if (j2 < Main.worldSurface - 1.0 && !spread) {
+                        if (j2 < y - 1.0 && !spread) {
                             if (tile.TileType == _dirtTileType || tile.TileType == TileID.Dirt) {
                                 WorldGen.grassSpread = 0;
                                 WorldGen.SpreadGrass(i, j2, _dirtTileType, _grassTileType);
