@@ -34,6 +34,76 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
     }
 
+
+    public static void CustomSpreadGrass(int i, int j, int dirt = 0, int grass = 2, bool repeat = true, TileColorCache color = default(TileColorCache), int maxY = -1, bool growUnderground = false) {
+        try {
+            if (!WorldGen.InWorld(i, j, 10) || !Main.tile[i, j].HasTile || Main.tile[i, j].TileType != dirt)
+                return;
+
+            if (WorldGen.gen && (grass == 199 || grass == 23)) {
+                int num = WorldGen.beachDistance;
+                if ((!WorldGen.tenthAnniversaryWorldGen && (double)i > (double)Main.maxTilesX * 0.45 && (double)i <= (double)Main.maxTilesX * 0.55) || i < num || i >= Main.maxTilesX - num)
+                    return;
+            }
+            else if ((WorldGen.gen || (grass != 199 && grass != 23 && grass != 661 && grass != 662)) && (Main.tile[i, j].TileType != dirt || !Main.tile[i, j].HasTile || ((double)j >= (maxY == -1 ? Main.worldSurface : maxY) && dirt == 0)) && growUnderground) {
+                return;
+            }
+
+            int num2 = i - 1;
+            int num3 = i + 2;
+            int num4 = j - 1;
+            int num5 = j + 2;
+            if (num2 < 0)
+                num2 = 0;
+
+            if (num3 > Main.maxTilesX)
+                num3 = Main.maxTilesX;
+
+            if (num4 < 0)
+                num4 = 0;
+
+            if (num5 > Main.maxTilesY)
+                num5 = Main.maxTilesY;
+
+            bool flag = true;
+            for (int k = num2; k < num3; k++) {
+                for (int l = num4; l < num5; l++) {
+                    if (!Main.tile[k, l].HasTile || !Main.tileSolid[Main.tile[k, l].TileType])
+                        flag = false;
+
+                    if (Main.tile[k, l].LiquidType == LiquidID.Lava && Main.tile[k, l].LiquidAmount > 0) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
+            if (flag || !TileID.Sets.CanBeClearedDuringGeneration[Main.tile[i, j].TileType] || ((grass == 23 || grass == 661) && Main.tile[i, j - 1].TileType == 27) || ((grass == 199 || grass == 662) && Main.tile[i, j - 1].TileType == 27) || (grass == 109 && Main.tile[i, j - 1].TileType == 27))
+                return;
+
+            Main.tile[i, j].TileType = (ushort)grass;
+            Main.tile[i, j].UseBlockColors(color);
+            for (int m = num2; m < num3; m++) {
+                for (int n = num4; n < num5; n++) {
+                    if (!Main.tile[m, n].HasTile || Main.tile[m, n].TileType != dirt)
+                        continue;
+
+                    try {
+                        if (repeat && WorldGen.grassSpread < 1000) {
+                            WorldGen.grassSpread++;
+                            CustomSpreadGrass(m, n, dirt, grass);
+                            WorldGen.grassSpread--;
+                        }
+                    }
+                    catch {
+                    }
+                }
+            }
+        }
+        catch {
+        }
+    }
+
     public static bool SolidTile(int i, int j) {
         Tile tile = GetTileSafely(i, j);
         return tile.HasTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] || (TileID.Sets.Platforms[tile.TileType] && WorldGen.PlatformProperTopFrame(tile.TileFrameX)));
