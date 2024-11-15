@@ -2,6 +2,8 @@
 
 using RoA.Content.Projectiles.Friendly;
 
+using System;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
@@ -17,6 +19,7 @@ sealed class ClawsHandler : ModPlayer {
         public SoundStyle? PlaySoundStyle = null;
         public bool ShouldReset = true;
         public bool ShouldSpawn = true;
+        public Action<Player>? SpawnProjectile = null;
     }
 
     public readonly struct SpecialAttackSpawnInfo(AttackSpawnInfoArgs args) {
@@ -27,6 +30,7 @@ sealed class ClawsHandler : ModPlayer {
         public readonly SoundStyle? PlaySoundStyle = args.PlaySoundStyle ?? null;
         public readonly bool ShouldReset = args.ShouldReset;
         public readonly bool ShouldSpawn = args.ShouldSpawn;
+        public readonly Action<Player>? SpawnProjectile = args.SpawnProjectile;
     }
 
     public (Color, Color) SlashColors { get; private set; }

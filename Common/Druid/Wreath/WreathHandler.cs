@@ -156,7 +156,12 @@ sealed class WreathHandler : ModPlayer {
                 OnWreathReset?.Invoke();
 
                 if (SpecialAttackData.ShouldSpawn) {
-                    Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
+                    if (SpecialAttackData.SpawnProjectile != null) {
+                        SpecialAttackData.SpawnProjectile.Invoke(Player);
+                    }
+                    else {
+                        Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
+                    }
                     SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
                 }
             }
