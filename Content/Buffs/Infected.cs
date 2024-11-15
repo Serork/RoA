@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Sets;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -14,6 +16,8 @@ sealed class Infected : ModBuff {
 		Main.buffNoSave[Type] = true;
 		Main.debuff[Type] = true;
 		Main.pvpBuff[Type] = true;
+
+		BuffSets.Debuffs[Type] = true;
 	}
 
 	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<InfectedPlayer>().infectedEffect = true;

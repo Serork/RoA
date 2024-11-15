@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ID;
+using RoA.Common.Sets;
 
 namespace RoA.Content.Buffs;
 
@@ -14,6 +15,8 @@ sealed class Hemorrhage : ModBuff {
 		Main.buffNoSave[Type] = true;
 		Main.debuff[Type] = true;
 		Main.pvpBuff[Type] = true;
+
+		BuffSets.Debuffs[Type] = true;	
 	}
 
 	public override void Update(Player player, ref int buffIndex)  => player.GetModPlayer<HemorrhagePlayer>().hemorrhageEffect = true;

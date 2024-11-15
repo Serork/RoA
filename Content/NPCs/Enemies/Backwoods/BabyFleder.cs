@@ -1,15 +1,18 @@
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using System;
-using RoA.Common;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Buffs;
 using RoA.Core.Utility;
 using RoA.Utilities;
-using Microsoft.Xna.Framework.Graphics;
+
+using System;
 using System.IO;
+
+using Terraria;
 using Terraria.DataStructures;
-using RoA.Content.Biomes.Backwoods;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -77,7 +80,7 @@ sealed class BabyFleder : ModNPC {
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) {
         if (NPC.downedBoss2) {
-            target.AddBuff(BuffID.Bleeding, Main.expertMode ? 90 : 60);
+            target.AddBuff(ModContent.BuffType<BeastPoison>(), 60);
         }
     }
 

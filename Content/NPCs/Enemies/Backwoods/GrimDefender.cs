@@ -706,7 +706,7 @@ sealed class GrimDefender : ModNPC {
         public override bool? CanDamage() => Main.npc[(int)Projectile.ai[0]].velocity.Length() > 1.5f;
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-            target.AddBuff(ModContent.BuffType<Hemorrhage>(), Main.expertMode ? 300 : 180);
+            target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
             Projectile.Kill();
         }
     }

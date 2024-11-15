@@ -89,3 +89,8 @@ Infected: {
 	DisplayName: Infected
 	Description: Losing life
 }
+
+BeastPoison: {
+	DisplayName: Beast Poison
+	Description: Losing life, movement speed decreased
+}

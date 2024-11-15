@@ -61,7 +61,7 @@ sealed class ElderwoodChest : ModTile {
 
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
-    public override bool IsLockedChest(int i, int j) => false;
+    public override bool IsLockedChest(int i, int j) => !NPC.downedBoss2;
 
 	public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual) {
 		bool flag = false;
