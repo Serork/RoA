@@ -31,16 +31,34 @@ sealed class SkinningPlayer : ModPlayer {
 	public bool skinning;
 
 	public override void PostUpdateBuffs() {
-		if (skinning) {
+        static bool valid(Item item) {
+            return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
+        }
+        if (skinning) {
 			int type = (ushort)ModContent.BuffType<Skinning>();
 			if (Player.FindBuffIndex(type) != -1)
 				return;
 			goto reset;
 		}
+		else {
+            if (Player.whoAmI == Main.myPlayer && !Main.mouseItem.IsEmpty() && valid(Main.mouseItem)) {
+                int stack = Main.mouseItem.stack;
+                Main.mouseItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+                Main.mouseItem.stack = stack;
+            }
+            return;
+		}
 	reset:
 		skinning = false;
-		static bool valid(Item item) {
-			return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
+		if (Player.chest != -1) {
+			for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
+				Item item = Main.chest[Player.chest].item[i];
+				if (valid(item)) {
+					int stack = item.stack;
+                    Main.chest[Player.chest].item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+                    Main.chest[Player.chest].item[i].stack = stack;
+				}
+			}
 		}
 		for (int i = 0; i < Player.bank.item.Length; i++) {
 			Item item = Player.bank.item[i];
@@ -88,6 +106,11 @@ sealed class SkinningPlayer : ModPlayer {
 			Player.trashItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
 			Player.trashItem.stack = stack;
 		}
+		if (Player.whoAmI == Main.myPlayer && valid(Main.mouseItem)) {
+            int stack = Main.mouseItem.stack;
+            Main.mouseItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+            Main.mouseItem.stack = stack;
+        }
 	}
 
 	public override void PostItemCheck() {

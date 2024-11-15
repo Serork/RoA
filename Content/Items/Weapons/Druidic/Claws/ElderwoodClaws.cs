@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid;
 using RoA.Core;
 
 using Terraria;
@@ -14,4 +13,10 @@ sealed class ElderwoodClaws : BaseClawsItem {
     }
 
     protected override (Color, Color) SlashColors() => (new(72, 86, 214), new(114, 126, 255));
+
+    public override void WhileBeingHold(Player player, float progress) {
+        if (progress >= 0.75f) {
+            Main.NewText(123);
+        }
+    }
 }

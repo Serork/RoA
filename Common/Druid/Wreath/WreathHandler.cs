@@ -3,6 +3,7 @@
 using RoA.Common.Druid.Claws;
 using RoA.Common.Players;
 using RoA.Content.Buffs;
+using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons.Druidic.Claws;
@@ -194,6 +195,10 @@ sealed class WreathHandler : ModPlayer {
             _keepBonusesForTime -= 1f;
         }
         PulseIntensity = _stayTime <= 0.35f ? 0f : _stayTime > 0.35f && _stayTime <= 1.35f ? Ease.CubeInOut(_stayTime - 0.35f) : MathHelper.Lerp(PulseIntensity, 1f, 0.2f);
+
+        if (Player.IsLocal() && Player.GetSelectedItem().ModItem is NatureItem natureItem) {
+            natureItem.WhileBeingHold(Player, Progress);
+        }
     }
 
     public override void Load() {
