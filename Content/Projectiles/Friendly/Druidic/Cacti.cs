@@ -155,7 +155,7 @@ sealed class Cacti : NatureProjectile {
         switch (_state) { 
             case State.Normal:
                 if (Main.netMode != NetmodeID.Server && Main.rand.NextBool(2)) {
-                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.JunglePlants, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 150, default, 1.2f);
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.JunglePlants, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 120, default, 1.4f + Main.rand.NextFloat(0f, 0.075f));
                     Main.dust[dust].noGravity = true;
                 }
 

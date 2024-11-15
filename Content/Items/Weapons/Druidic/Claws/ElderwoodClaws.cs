@@ -3,8 +3,10 @@
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
@@ -106,11 +108,11 @@ sealed class ElderwoodClaws : BaseClawsItem {
     }
 
     private static void GetPoints(Player player, int direction, out Point point1, out Point point2) {
-        Vector2 startPoint = player.Center - Vector2.UnitY * player.height * 5f;
+        Vector2 startPoint = player.Center - Vector2.UnitY * player.height * 2f;
         Vector2 dir = new(player.direction * direction, 0f);
         Vector2 destination = startPoint + dir * 75f;
         while (Vector2.Distance(startPoint, destination) > 32f) {
-            if (Collision.SolidCollision(startPoint, 0, 0)) {
+            if (WorldGenHelper.CustomSolidCollision(startPoint, 0, 0, TileID.Sets.Platforms)) {
                 break;
             }
             startPoint = Vector2.Lerp(startPoint, destination, 1f);
@@ -118,22 +120,28 @@ sealed class ElderwoodClaws : BaseClawsItem {
         Vector2 endPoint = player.Center;
         destination = endPoint + dir * 125f;
         while (Vector2.Distance(endPoint, destination) > 32f) {
-            if (Collision.SolidCollision(endPoint, 0, 0)) {
+            if (WorldGenHelper.CustomSolidCollision(endPoint, 0, 0, TileID.Sets.Platforms)) {
                 break;
             }
             endPoint = Vector2.Lerp(endPoint, destination, 1f);
         }
         point1 = startPoint.ToTileCoordinates();
         while (!WorldGen.SolidTile(point1)) {
+            if (TileID.Sets.Platforms[WorldGenHelper.GetTileSafely(point1.X, point1.Y).TileType]) {
+                break;
+            }
             point1.Y++;
-            if (Vector2.Distance(startPoint, player.Center) > player.height * 5) {
+            if (Vector2.Distance(startPoint, player.Center) > player.height * 3f) {
                 break;
             }
         }
         point2 = endPoint.ToTileCoordinates();
         while (!WorldGen.SolidTile(point2)) {
+            if (TileID.Sets.Platforms[WorldGenHelper.GetTileSafely(point2.X, point2.Y).TileType]) {
+                break;
+            }
             point2.Y++;
-            if (Vector2.Distance(endPoint, player.Center) > player.height * 5) {
+            if (Vector2.Distance(endPoint, player.Center) > player.height * 3f) {
                 break;
             }
         }
@@ -145,7 +153,9 @@ sealed class ElderwoodClaws : BaseClawsItem {
             return false;
         Tile tileSafely = Framing.GetTileSafely(i, j);
         if (!tileSafely.HasTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType] || Main.tileFrameImportant[tileSafely.TileType]) {
-            return false;
+            if (!TileID.Sets.Platforms[tileSafely.TileType]) {
+                return false;
+            }
         }
         Tile tileSafely2 = Framing.GetTileSafely(i, j - 1);
         if (tileSafely2.HasTile && Main.tileSolid[tileSafely2.TileType] && !Main.tileSolidTop[tileSafely2.TileType]) {

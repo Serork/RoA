@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Projectiles.Enemies;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -22,6 +23,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
 
     public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpike>()).Texture;
     public static string TipTexture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpikeTip>()).Texture;
+    public static string StartTexture => ResourceManager.EnemyProjectileTextures + "VileSpikeStart";
 
     private int Length => (int)Projectile.ai[0];
     private bool Temporary => Projectile.ai[1] >= 1f;
@@ -49,7 +51,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-        return Collision.CheckAABBvAABBCollision(Projectile.position - Vector2.UnitY * texture.Height, new Vector2(texture.Width, Projectile.localAI[0] + texture.Height), targetHitbox.Location.ToVector2(), targetHitbox.Size());
+        return Collision.CheckAABBvAABBCollision(new Vector2(Projectile.position.X, Projectile.ai[2] - Projectile.localAI[0]), new Vector2(texture.Width, Projectile.localAI[0]), targetHitbox.Location.ToVector2(), targetHitbox.Size());
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
@@ -103,7 +105,14 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
         Vector2 start = Projectile.Center + Vector2.UnitY * texture.Height * 2f;
         int index = 0;
         int length = Length + 2;
+        Texture2D startTexture = ModContent.Request<Texture2D>(StartTexture).Value;
         while (index < length) {
+            if (index == 0) {
+                texture = startTexture;
+            }
+            else {
+                texture = ModContent.Request<Texture2D>(Texture).Value;
+            }
             void next() {
                 start.Y -= texture.Height;
                 index++;
@@ -111,12 +120,15 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             if (index == length - 1) {
                 texture = ModContent.Request<Texture2D>(TipTexture).Value;
             }
-            Color color = Lighting.GetColor((int)start.X / 16, (int)start.Y / 16);
-            Vector2 origin = new(texture.Width / 2f, texture.Height);
-            if (start.Y <= Projectile.ai[2] + texture.Height * 2f) {
-                Main.EntitySpriteDraw(texture, start - Main.screenPosition, null, color, Projectile.rotation, origin, Projectile.scale, default);
-            }
+            float value = Projectile.ai[2];
             next();
+            if (start.Y <= value + texture.Height * 2f) {
+                bool flag = start.Y > value + texture.Height;
+                Color color = Lighting.GetColor((int)start.X / 16, (int)start.Y / 16);
+                Texture2D usedTexture = flag ? startTexture : texture;
+                Vector2 origin = new(usedTexture.Width / 2f, usedTexture.Height);
+                Main.EntitySpriteDraw(usedTexture, start - Main.screenPosition, null, color, Projectile.rotation, origin, Projectile.scale, default);
+            }
         }
         return false;
     }
