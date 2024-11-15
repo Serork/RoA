@@ -78,10 +78,14 @@ sealed class Snatcher : NatureProjectile {
 
         Projectile.netImportant = true;
 
-        Projectile.alpha = 255;
+        //Projectile.alpha = 255;
+        Projectile.Opacity = 1f;
     }
 
-    protected override void SafeOnSpawn(IEntitySource source) => Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset += OnReset;
+    protected override void SafeOnSpawn(IEntitySource source) {
+        Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset += OnReset;
+    }
+
     public override void OnKill(int timeLeft) {
         Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset -= OnReset;
         for (int i = 0; i < 10; i++) {
@@ -134,8 +138,10 @@ sealed class Snatcher : NatureProjectile {
 
     public override bool? CanCutTiles() => false;
 
+    private bool IsValid => Projectile.alpha == 0 || Projectile.Opacity <= 0f;
+
     private void SnatcherCutTiles() {
-        if (Projectile.alpha == 0) {
+        if (IsValid) {
             return;
         }
         if (Projectile.owner != Main.myPlayer) {
@@ -172,7 +178,7 @@ sealed class Snatcher : NatureProjectile {
         }
     }
 
-    public override bool? CanDamage() => Projectile.alpha == 0;
+    public override bool? CanDamage() => IsValid;
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         if (!IsAttacking) {
@@ -215,11 +221,12 @@ sealed class Snatcher : NatureProjectile {
             //    Projectile.alpha = 255;
         }
         else {
-            Projectile.alpha -= 42;
-            if (Projectile.alpha < 0)
-                Projectile.alpha = 0;
+            //Projectile.alpha = 0;
+            //Projectile.alpha -= 65;
+            //if (Projectile.alpha < 0)
+            //    Projectile.alpha = 0;
         }
-        if (IsAttacking && Projectile.alpha == 0) {
+        if (IsAttacking && IsValid) {
             Vector2 velocity = _attackVector.SafeNormalize(Vector2.One) * _attackVector.Length() * 0.01f;
             for (int num78 = 0; num78 < 2; num78++) {
                 if (Main.rand.Next(10) == 0) {
@@ -289,7 +296,12 @@ sealed class Snatcher : NatureProjectile {
         float progress = 0.5f;
         Vector2 drawPosition = Projectile.Center + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * DIST;
         Vector2 endLocation = Projectile.Center + _targetVector2 + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * Math.Max(DIST * (1f - progress), 8f);
-        return Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
+        Vector2 result = Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
+        Main.NewText(Projectile.Opacity);
+        if (Projectile.Opacity > 0f) {
+            return Vector2.Lerp(Projectile.Center, result, result.Length() * (1f - Projectile.Opacity));
+        }
+        return result;
     }
 
     private Vector2 GetLookUpPos() {
@@ -300,6 +312,9 @@ sealed class Snatcher : NatureProjectile {
     }
 
     public override void AI() {
+        if (Projectile.Opacity > 0f) {
+            Projectile.Opacity -= 0.1f;
+        }
         Player player = Main.player[Projectile.owner];
         Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, true);
         Projectile.direction = player.direction;
@@ -368,7 +383,7 @@ sealed class Snatcher : NatureProjectile {
         int direction = (int)Projectile.ai[1]/* * -(_targetVector2 - Projectile.Center).X.GetDirection()*/;
         Vector2 drawPosition = GetPos();
         Vector2 mountedCenter = Main.player[Projectile.owner].MountedCenter;
-        float opacity = 1f - (Projectile.alpha / 255f);
+        float opacity = 1f/* - (Projectile.alpha / 255f)*/;
         Color color = Color.White * opacity;
         Vector2 position = Projectile.position;
         Texture2D texture = TextureAssets.Projectile[Type].Value;

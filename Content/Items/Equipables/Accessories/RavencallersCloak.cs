@@ -74,7 +74,7 @@ sealed class RavencallersCloak : ModItem {
         public int CloakFaceId => EquipLoader.GetEquipSlot(Mod, ItemLoader.GetItem(ItemType).Name, EquipType.Face);
         public bool ReceivedDamage => _resetTime > 0f;
         public bool Available => RavencallersCloak && !ReceivedDamage;
-        public bool AvailableForNPCs => Available;
+        public bool AvailableForNPCs => Available && _opacity > 0.5f;
 
         public override void ResetEffects() {
             RavencallersCloak = RavencallersCloakVisible = false;
@@ -228,8 +228,15 @@ sealed class RavencallersCloak : ModItem {
                 _oldPositionInfos[0].LegFrame = Player.legFrame;
                 _oldPositionInfos[0].WingFrame = Player.wingFrame;
 
-                if (_opacity < 1f) {
-                    _opacity += 0.025f;
+                if (Player.velocity.Length() > 0.5f) {
+                    if (_opacity < 1f) {
+                        _opacity += 0.035f;
+                    }
+                }
+                else {
+                    if (_opacity > 0f) {
+                        _opacity -= 0.035f;
+                    }
                 }
             }
             else {
