@@ -107,13 +107,6 @@ sealed class Snatcher : NatureProjectile {
             if (distance < height) {
                 break;
             }
-            Vector2 to = position - Vector2.Normalize(_targetVector2) * -direction;
-            distance = Vector2.Distance(vector, to);
-            vector += value.SafeNormalize(Vector2.Zero) * height;
-            Vector2 to2 = Helper.VelocityToPoint(vector, to, 1f).RotatedBy(-0.2f * direction * _lerpValue);
-            Vector2 value3 = to2.SafeNormalize(Vector2.Zero) * 2f;
-            float lerpAmount = Math.Max(0f, 0.25f - Math.Max((i - 10) * 0.01f, 0));
-            value = Vector2.Lerp(value, value3, lerpAmount + _lerpValue);
             for (int i2 = 0; i2 < 5; i2++) {
                 Vector2 vector39 = vector - Vector2.One * 4;
                 Dust obj2 = Main.dust[Dust.NewDust(vector39, 8, 8, DustID.JunglePlants, 0f, 0f, 0, default, 1f + 0.1f * Main.rand.NextFloat())];
@@ -122,6 +115,13 @@ sealed class Snatcher : NatureProjectile {
                 obj2.fadeIn = 0.5f;
                 obj2.noLight = true;
             }
+            Vector2 to = position - Vector2.Normalize(_targetVector2) * -direction;
+            distance = Vector2.Distance(vector, to);
+            vector += value.SafeNormalize(Vector2.Zero) * height;
+            Vector2 to2 = Helper.VelocityToPoint(vector, to, 1f).RotatedBy(-0.2f * direction * _lerpValue);
+            Vector2 value3 = to2.SafeNormalize(Vector2.Zero) * 2f;
+            float lerpAmount = Math.Max(0f, 0.25f - Math.Max((i - 10) * 0.01f, 0));
+            value = Vector2.Lerp(value, value3, lerpAmount + _lerpValue);
         }
     }
 

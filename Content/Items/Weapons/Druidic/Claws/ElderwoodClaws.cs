@@ -3,9 +3,6 @@
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
-using RoA.Utilities;
-
-using System.Net;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -14,19 +11,53 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 sealed class ElderwoodClaws : BaseClawsItem {
     protected override void SafeSetDefaults() {
-        Item.SetSize(26);
+        Item.SetSize(28);
         Item.SetWeaponValues(12, 3f);
     }
 
     protected override (Color, Color) SlashColors() => (new(72, 86, 214), new(114, 126, 255));
 
     public override void WhileBeingHold(Player player, float progress) {
-        if (progress >= 0.5f) {
-            if (player.itemTime > player.itemTimeMax - 5) {
+        if (progress >= 0.85f) {
+            if (player.itemTime == player.itemTimeMax - 2) {
+                ushort type = (ushort)ModContent.ProjectileType<ElderwoodWallProjectile>();
+                progress -= 0.3f;
+                for (int k = 0; k < 2; k++) {
+                    switch (k) {
+                        case 0:
+                            GetPoints(player, 1, out Point point1, out Point point2);
+                            Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
+                            Projectile.NewProjectile(player.GetSource_ItemUse(Item),
+                                   position,
+                                   Vector2.Zero,
+                                   type,
+                                   Item.damage,
+                                   Item.knockBack,
+                                   player.whoAmI,
+                                   MathHelper.Min(4f, progress * 5f),
+                                   1f);
+                            break;
+                        case 1:
+                            GetPoints(player, -1, out point1, out point2);
+                            position = GetPoint(point1, point2).ToWorldCoordinates();
+                            Projectile.NewProjectile(player.GetSource_ItemUse(Item),
+                                   position,
+                                   Vector2.Zero,
+                                   type,
+                                   Item.damage,
+                                   Item.knockBack,
+                                   player.whoAmI,
+                                   MathHelper.Min(4f, progress * 5f),
+                                   1f);
+                            break;
+                    }
+                }
+            }
+            if (player.itemTime > player.itemTimeMax - 4) {
                 GetPoints(player, 1, out Point point1, out Point point2);
-                SpawnGroundDusts(point1, point2, progress * 6.5f);
+                SpawnGroundDusts(point1, point2, progress * 4f);
                 GetPoints(player, -1, out point1, out point2);
-                SpawnGroundDusts(point1, point2, progress * 6.5f);
+                SpawnGroundDusts(point1, point2, progress * 4f);
             }
         }
     }
@@ -39,30 +70,34 @@ sealed class ElderwoodClaws : BaseClawsItem {
                 for (int k = 0; k < 2; k++) {
                     switch (k) {
                         case 0:
-                            GetPoints(player, 1, out Point point1, out Point point2);
-                            Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
-                            Main.NewText(position);
-                            Projectile.NewProjectile(player.GetSource_ItemUse(Item),
-                                   position,
-                                   Vector2.Zero,
-                                   type,
-                                   Item.damage,
-                                   Item.knockBack,
-                                   player.whoAmI,
-                                   5f);
+                            for (int k2 = 0; k2 < 3; k2++) {
+                                GetPoints(player, 1, out Point point1, out Point point2);
+                                Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
+                                Projectile.NewProjectile(player.GetSource_ItemUse(Item),
+                                       position,
+                                       Vector2.Zero,
+                                       type,
+                                       Item.damage,
+                                       Item.knockBack,
+                                       player.whoAmI,
+                                       5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
+                                       2f);
+                            }
                             break;
                         case 1:
-                            GetPoints(player, -1, out point1, out point2);
-                            position = GetPoint(point1, point2).ToWorldCoordinates();
-                            Main.NewText(position);
-                            Projectile.NewProjectile(player.GetSource_ItemUse(Item),
-                                   position,
-                                   Vector2.Zero,
-                                   type,
-                                   Item.damage,
-                                   Item.knockBack,
-                                   player.whoAmI,
-                                   5f);
+                            for (int k2 = 0; k2 < 3; k2++) {
+                                GetPoints(player, -1, out Point point1, out Point point2);
+                                Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
+                                Projectile.NewProjectile(player.GetSource_ItemUse(Item),
+                                       position,
+                                       Vector2.Zero,
+                                       type,
+                                       Item.damage,
+                                       Item.knockBack,
+                                       player.whoAmI,
+                                       5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
+                                       2f);
+                            }
                             break;
                     }
                 }
@@ -73,7 +108,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
     private static void GetPoints(Player player, int direction, out Point point1, out Point point2) {
         Vector2 startPoint = player.Center - Vector2.UnitY * player.height * 5f;
         Vector2 dir = new(player.direction * direction, 0f);
-        Vector2 destination = startPoint + dir * 100f;
+        Vector2 destination = startPoint + dir * 75f;
         while (Vector2.Distance(startPoint, destination) > 32f) {
             if (Collision.SolidCollision(startPoint, 0, 0)) {
                 break;
@@ -81,7 +116,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
             startPoint = Vector2.Lerp(startPoint, destination, 1f);
         }
         Vector2 endPoint = player.Center;
-        destination = endPoint + dir * 150f;
+        destination = endPoint + dir * 125f;
         while (Vector2.Distance(endPoint, destination) > 32f) {
             if (Collision.SolidCollision(endPoint, 0, 0)) {
                 break;
@@ -116,6 +151,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
         if (tileSafely2.HasTile && Main.tileSolid[tileSafely2.TileType] && !Main.tileSolidTop[tileSafely2.TileType]) {
             return false;
         }
+
         if (spawnDust) {
             int num5 = WorldGen.KillTile_GetTileDustAmount(fail: true, tileSafely, i, j) / 2;
             for (int k = 0; k < num5; k++) {
@@ -174,7 +210,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
         return Point.Zero;
     }
 
-    private static void SpawnGroundDusts(Point startPoint, Point endPoint, float strength, float maxDist = 0f, Vector2? center = null) {
+    public static void SpawnGroundDusts(Point startPoint, Point endPoint, float strength, float maxDist = 0f, Vector2? center = null) {
         if (startPoint.X > endPoint.X) {
             for (int i = endPoint.X; i <= startPoint.X; i++) {
                 for (int j = startPoint.Y; j <= endPoint.Y; j++) {

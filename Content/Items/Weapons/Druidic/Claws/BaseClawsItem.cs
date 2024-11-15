@@ -23,6 +23,8 @@ abstract class BaseClawsItem : NatureItem {
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }
 
+    public virtual void OnHit(Player player, float progress) { }
+
     protected abstract (Color, Color) SlashColors();
 
     public virtual void SafeOnUse(Player player, ClawsHandler clawsStats) { }

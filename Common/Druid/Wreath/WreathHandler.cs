@@ -149,20 +149,23 @@ sealed class WreathHandler : ModPlayer {
 
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
-        if (playerUsingClaws && GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2))) {
-            if (SpecialAttackData.Owner == selectedItem && SpecialAttackData.ShouldReset) {
-                Reset();
+        if (playerUsingClaws) {
+            selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
+            if (GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2))) {
+                if (SpecialAttackData.Owner == selectedItem && SpecialAttackData.ShouldReset) {
+                    Reset();
 
-                OnWreathReset?.Invoke();
+                    OnWreathReset?.Invoke();
 
-                if (SpecialAttackData.ShouldSpawn) {
-                    if (SpecialAttackData.SpawnProjectile != null) {
-                        SpecialAttackData.SpawnProjectile.Invoke(Player);
+                    if (SpecialAttackData.ShouldSpawn) {
+                        if (SpecialAttackData.SpawnProjectile != null) {
+                            SpecialAttackData.SpawnProjectile.Invoke(Player);
+                        }
+                        else {
+                            Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
+                        }
+                        SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
                     }
-                    else {
-                        Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, selectedItem.damage, selectedItem.knockBack, Player.whoAmI);
-                    }
-                    SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
                 }
             }
         }

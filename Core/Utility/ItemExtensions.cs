@@ -5,6 +5,7 @@ using System.Reflection;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
@@ -18,4 +19,6 @@ static class ItemExtensions {
     public static bool IsDruidic(this Item item) => item.ModItem is NatureItem;
 
     public static bool IsADruidicWeapon(this Item item) => item.IsDruidic() && item.IsAWeapon();
+
+    public static T As<T>(this Item item) where T : ModItem => item.ModItem as T;
 }
