@@ -3,6 +3,7 @@
 using RoA.Common.Druid.Claws;
 using RoA.Common.Players;
 using RoA.Content.Buffs;
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
@@ -47,6 +48,12 @@ sealed class WreathHandler : ModPlayer {
 
     public static Color GetCurrentColor(Player player) {
         var self = player.GetModPlayer<WreathHandler>();
+        if (Main.HoverItem.type == ModContent.ItemType<SoulOfTheWoods>()) {
+            return SoulOfTheWoodsColor;
+        }
+        else if (Main.HoverItem.type == ModContent.ItemType<FenethsBlazingWreath>()) {
+            return PhoenixColor;
+        }
         return self.SoulOfTheWoods ? SoulOfTheWoodsColor : self.IsPhoenixWreath ? PhoenixColor : StandardColor;
     }
 
