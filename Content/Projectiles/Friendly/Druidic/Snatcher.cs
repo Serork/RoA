@@ -223,7 +223,7 @@ sealed class Snatcher : NatureProjectile {
             Vector2 velocity = _attackVector.SafeNormalize(Vector2.One) * _attackVector.Length() * 0.01f;
             for (int num78 = 0; num78 < 2; num78++) {
                 if (Main.rand.Next(10) == 0) {
-                    Dust obj = Main.dust[Dust.NewDust(GetCenter(), Projectile.width, Projectile.height, DustID.JunglePlants, -velocity.X, -velocity.Y, 0, default)];
+                    Dust obj = Main.dust[Dust.NewDust(GetCenter(), Projectile.width, Projectile.height, DustID.JunglePlants, -velocity.X, -velocity.Y, 0, default, 0.9f)];
                     obj.noGravity = true;
                     obj.velocity *= 2f;
                     obj.fadeIn = 1.5f;
@@ -234,7 +234,7 @@ sealed class Snatcher : NatureProjectile {
             for (int num80 = 0; (float)num80 < num79; num80++) {
                 if (Main.rand.Next((int)num79) == 0) {
                     Vector2 vector39 = GetCenter() - _attackVector.SafeNormalize(Vector2.Zero) * ((float)num80 / num79);
-                    Dust obj2 = Main.dust[Dust.NewDust(vector39, Projectile.width, Projectile.height, DustID.JunglePlants, -velocity.X, -velocity.Y, 0, default)];
+                    Dust obj2 = Main.dust[Dust.NewDust(vector39, Projectile.width, Projectile.height, DustID.JunglePlants, -velocity.X, -velocity.Y, 0, default, 0.9f)];
                     obj2.noGravity = true;
                     obj2.fadeIn = 0.5f;
                     obj2.noLight = true;
@@ -349,6 +349,19 @@ sealed class Snatcher : NatureProjectile {
         }
         _rotation = Utils.AngleLerp(_rotation, rotation, 0.05f - (0.04f * (_attackVector.Length() < 50f ? (_attackVector.Length() - 25f) / 25f : 1f)) + (IsAttacking ? Math.Min(1f, _lerpValue * 2f) : 0f));
         Projectile.rotation = _rotation;
+
+        if (IsAttacking) {
+            if (++Projectile.frameCounter > 4) {
+                Projectile.frame++;
+                if (Projectile.frame > 2) {
+                    Projectile.frame = 0;
+                }
+                Projectile.frameCounter = 0;
+            }
+        }
+        else {
+            Projectile.frame = 0;
+        }
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -362,8 +375,9 @@ sealed class Snatcher : NatureProjectile {
         Color alpha = Projectile.GetAlpha(color);
         float num = _targetVector2.Length() + 16f;
         bool flag = num < 100f;
+        int width = 42;
         Vector2 value = Vector2.Normalize(_targetVector2);
-        Rectangle rectangle = new Rectangle(0, 0, texture.Width, 36);
+        Rectangle rectangle = new Rectangle(0, 0, width, 36);
         Vector2 value2 = new Vector2(0f, Main.player[Projectile.owner].gfxOffY);
         float rotation = Projectile.rotation;
         //Main.spriteBatch.Draw(texture, drawPosition.Floor() - Main.screenPosition, new Rectangle?(rectangle), Color.White, rotation, rectangle.Size() / 2f - Vector2.UnitY * 4f, Projectile.scale, SpriteEffects.None, 0f);
@@ -374,7 +388,7 @@ sealed class Snatcher : NatureProjectile {
         var velocity = (Projectile.rotation - (direction == 1 ? MathHelper.Pi : 0)).ToRotationVector2();
         Vector2 baseValue = Vector2.Normalize(velocity.RotatedBy(MathHelper.PiOver2 * direction));
         value = baseValue;
-        rectangle = new Rectangle(0, 62, texture.Width, 18);
+        rectangle = new Rectangle(0, 62, width, 18);
         float distance = Vector2.Distance(vector, position);
         for (int i = 0; i < 250; i++) {
             if (distance < rectangle.Height) {
@@ -383,10 +397,10 @@ sealed class Snatcher : NatureProjectile {
             ulong randomSeed = (ulong)i;
             int useFrame = Utils.RandomInt(ref randomSeed, 10);
             if (useFrame < 3) {
-                rectangle = new Rectangle(0, 40, texture.Width, 20);
+                rectangle = new Rectangle(0, 40, width, 20);
             }
             else {
-                rectangle = new Rectangle(0, 62, texture.Width, 18);
+                rectangle = new Rectangle(0, 62, width, 18);
             }
             Vector2 lightPos = vector/* + value * rectangle.Height * 0.75f*/;
             color = Lighting.GetColor((int)lightPos.X / 16, (int)lightPos.Y / 16) * opacity;
@@ -401,9 +415,9 @@ sealed class Snatcher : NatureProjectile {
         }
         Vector2 pos = GetPos() - Projectile.Size / 2f;
         color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16) * opacity;
-        Rectangle frame = new(0, 84, texture.Width, 56);
+        Rectangle frame = new(Projectile.frame * width, 84, width, 30);
         SpriteEffects effects = direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-        Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, color, Projectile.rotation, texture.Frame(1, 1, 0, 0).Top(), Projectile.scale, effects, 0);
+        Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, color, Projectile.rotation, new Vector2(width / 2f, 0f), Projectile.scale, effects, 0);
 
         return false;
     }
