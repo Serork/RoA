@@ -12,14 +12,15 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria.ModLoader.UI.ModBrowser;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class ElderwoodWallProjectile : NatureProjectile {
     private const int MAX_TIMELEFT = 180;
+    private const float EXTRA = 2f;
 
     private bool _offseted;
+    private int _direction;
 
     public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpike>()).Texture;
     public static string TipTexture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpikeTip>()).Texture;
@@ -51,18 +52,12 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-        return Collision.CheckAABBvAABBCollision(new Vector2(Projectile.position.X, Projectile.ai[2] - Projectile.localAI[0]), new Vector2(texture.Width, Projectile.localAI[0]), targetHitbox.Location.ToVector2(), targetHitbox.Size());
+        return Collision.CheckAABBvAABBCollision(new Vector2(Projectile.position.X, Projectile.ai[2] - Projectile.localAI[0]), new Vector2(texture.Width, Projectile.localAI[0] + texture.Height * EXTRA), targetHitbox.Location.ToVector2(), targetHitbox.Size());
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-        foreach (Projectile projectile in Main.ActiveProjectiles) {
-            if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI &&
-                Projectile.position.X < projectile.position.X + texture.Width && Projectile.position.X > projectile.position.X - texture.Width) {
-                Projectile.position.X -= (texture.Width + 2) * (Projectile.position - Projectile.GetOwnerAsPlayer().position).X.GetDirection();
-                _offseted = true;
-            }
-        }
+        Offset();
         Projectile.localAI[0] = Projectile.localAI[1] = texture.Height * Length;
         Projectile.ai[2] = Projectile.position.Y;
         if (Temporary) {
@@ -70,6 +65,9 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             Projectile.localAI[2] = Projectile.localAI[2] * (1f + Projectile.ai[1] - 1f);
             Projectile.timeLeft = (int)Projectile.localAI[2];
         }
+        Main.rand.NextDouble();
+        Main.rand.NextBool();
+        _direction = Main.rand.NextBool() ? -1 : 1;
         Projectile.netUpdate = true;
     }
 
@@ -85,6 +83,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             if (Projectile.localAI[0] > 0f) {
                 Projectile.localAI[0] -= value;
             }
+            Offset();
         }
         else if (Projectile.timeLeft < min) {
             if (Projectile.localAI[0] < Projectile.localAI[1]) {
@@ -92,6 +91,21 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             }
         }
         Projectile.position.Y = Projectile.ai[2] + Projectile.localAI[0];
+    }
+
+    private void Offset() {
+        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            int attempts = 10;
+            while (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI &&
+                   Projectile.position.X < projectile.position.X + texture.Width && Projectile.position.X > projectile.position.X - texture.Width) {
+                Projectile.position.X -= (texture.Width + 2) * (Projectile.position - Projectile.GetOwnerAsPlayer().position).X.GetDirection();
+                _offseted = true;
+                if (--attempts <= 0) {
+                    break;
+                }
+            }
+        }
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -102,10 +116,11 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-        Vector2 start = Projectile.Center + Vector2.UnitY * texture.Height * 2f;
+        Vector2 start = Projectile.Center + Vector2.UnitY * texture.Height * EXTRA;
         int index = 0;
-        int length = Length + 2;
+        int length = Length + (int)EXTRA;
         Texture2D startTexture = ModContent.Request<Texture2D>(StartTexture).Value;
+        SpriteEffects effects = _direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         while (index < length) {
             if (index == 0) {
                 texture = startTexture;
@@ -120,15 +135,27 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             if (index == length - 1) {
                 texture = ModContent.Request<Texture2D>(TipTexture).Value;
             }
-            float value = Projectile.ai[2];
-            next();
-            if (start.Y <= value + texture.Height * 2f) {
-                bool flag = start.Y > value + texture.Height;
-                Color color = Lighting.GetColor((int)start.X / 16, (int)start.Y / 16);
-                Texture2D usedTexture = flag ? startTexture : texture;
-                Vector2 origin = new(usedTexture.Width / 2f, usedTexture.Height);
-                Main.EntitySpriteDraw(usedTexture, start - Main.screenPosition, null, color, Projectile.rotation, origin, Projectile.scale, default);
+            float value = Projectile.ai[2] + texture.Height;
+            float value2 = Projectile.ai[2] + texture.Height * 2;
+            bool flag = start.Y > value; // scissoring start
+            bool flag2 = start.Y > value2;
+            if (!flag2) {
+                Vector2 pos = start - Vector2.UnitY * texture.Height * EXTRA / 2f + Vector2.UnitY * Projectile.height;
+                float value3 = MathHelper.Clamp(start.Y - value, 0, texture.Height);
+                int value4 = (int)MathHelper.Clamp(texture.Height - value3, 0, texture.Height);
+                Rectangle rectangle = new(0, 0, texture.Width, flag ? value4 : texture.Height);
+                Color color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
+                Vector2 origin = new(texture.Width / 2f, texture.Height);
+                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, rectangle, color, Projectile.rotation, origin, Projectile.scale, effects);
+                if (flag) {
+                    texture = ModContent.Request<Texture2D>(StartTexture).Value;
+                    pos.Y += value4;
+                    color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
+                    origin = new(texture.Width / 2f, texture.Height);
+                    Main.EntitySpriteDraw(texture, pos - Main.screenPosition, null, color, Projectile.rotation, origin, Projectile.scale, effects);
+                }
             }
+            next();
         }
         return false;
     }
