@@ -21,16 +21,32 @@ sealed class ElderwoodClaws : BaseClawsItem {
 
     protected override (Color, Color) SlashColors() => (new(72, 86, 214), new(114, 126, 255));
 
+    private Vector2 GetPos(Player player, bool leftSided) {
+        int direction = leftSided ? -1 : 1;
+        GetPoints(player, direction, out Point point1, out Point point2);
+        Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            int attempts = 10;
+            while (projectile.owner == player.whoAmI && projectile.type == Type &&
+                   position.X < projectile.position.X + 30 && position.X > projectile.position.X - 30) {
+                position.X -= (30 + 2) * (position - player.position).X.GetDirection();
+                if (--attempts <= 0) {
+                    break;
+                }
+            }
+        }
+        return position;
+    }
+
     public override void WhileBeingHold(Player player, float progress) {
-        if (progress >= 0.85f && progress < 0.99f) {
+        if (progress >= 0.85f) {
             if (player.itemTime == player.itemTimeMax - 2) {
                 ushort type = (ushort)ModContent.ProjectileType<ElderwoodWallProjectile>();
                 progress -= 0.3f;
                 for (int k = 0; k < 2; k++) {
                     switch (k) {
                         case 0:
-                            GetPoints(player, 1, out Point point1, out Point point2);
-                            Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
+                            Vector2 position = GetPos(player, false);
                             Projectile.NewProjectile(player.GetSource_ItemUse(Item),
                                    position,
                                    Vector2.Zero,
@@ -42,8 +58,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
                                    1f);
                             break;
                         case 1:
-                            GetPoints(player, -1, out point1, out point2);
-                            position = GetPoint(point1, point2).ToWorldCoordinates();
+                            position = GetPos(player, true);
                             Projectile.NewProjectile(player.GetSource_ItemUse(Item),
                                    position,
                                    Vector2.Zero,
@@ -75,18 +90,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
                     switch (k) {
                         case 0:
                             for (int k2 = 0; k2 < 3; k2++) {
-                                GetPoints(player, 1, out Point point1, out Point point2);
-                                Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
-                                foreach (Projectile projectile in Main.ActiveProjectiles) {
-                                    int attempts = 10;
-                                    while (projectile.owner == player.whoAmI && projectile.type == Type &&
-                                           position.X < projectile.position.X + 30 && position.X > projectile.position.X - 30) {
-                                        position.X -= (30 + 2) * (position - player.position).X.GetDirection();
-                                        if (--attempts <= 0) {
-                                            break;
-                                        }
-                                    }
-                                }
+                                Vector2 position = GetPos(player, false);
                                 Projectile.NewProjectile(player.GetSource_ItemUse(Item),
                                        position,
                                        Vector2.Zero,
@@ -100,18 +104,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
                             break;
                         case 1:
                             for (int k2 = 0; k2 < 3; k2++) {
-                                GetPoints(player, -1, out Point point1, out Point point2);
-                                Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
-                                foreach (Projectile projectile in Main.ActiveProjectiles) {
-                                    int attempts = 10;
-                                    while (projectile.owner == player.whoAmI && projectile.type == Type &&
-                                           position.X < projectile.position.X + 30 && position.X > projectile.position.X - 30) {
-                                        position.X -= (30 + 2) * (position - player.position).X.GetDirection();
-                                        if (--attempts <= 0) {
-                                            break;
-                                        }
-                                    }
-                                }
+                                Vector2 position = GetPos(player, true);
                                 Projectile.NewProjectile(player.GetSource_ItemUse(Item),
                                        position,
                                        Vector2.Zero,
