@@ -20,6 +20,8 @@ using Terraria.ID;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Druid.Claws;
+using RoA.Utilities;
+using RoA.Core;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -133,6 +135,21 @@ sealed class ClawsSlash : NatureProjectile {
         }
         return false;
     }
+
+    //public override void PostAI() {
+    //    Player player = Owner;
+
+    //    float value = 1f - Projectile.localAI[0] / Projectile.ai[1];
+    //    value = Ease.ExpoInSinOut(value);
+    //    if (value < 0.25)
+    //        player.bodyFrame.Y = player.bodyFrame.Height * 3;
+    //    else if (value < 0.5)
+    //        player.bodyFrame.Y = player.bodyFrame.Height * 2;
+    //    else if (value < 0.75)
+    //        player.bodyFrame.Y = player.bodyFrame.Height * 1;
+    //    else
+    //        player.bodyFrame.Y = 0;
+    //}
 
     public override void AI() {
         Player player = Owner;

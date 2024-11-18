@@ -141,7 +141,7 @@ sealed class Snatcher : NatureProjectile {
     private bool IsValid => Projectile.alpha == 0 || Projectile.Opacity <= 0f;
 
     private void SnatcherCutTiles() {
-        if (IsValid) {
+        if (!IsValid) {
             return;
         }
         if (Projectile.owner != Main.myPlayer) {
@@ -294,11 +294,17 @@ sealed class Snatcher : NatureProjectile {
     private Vector2 GetPos() {
         int direction = (int)Projectile.ai[1];
         float progress = 0.5f;
-        Vector2 drawPosition = Projectile.Center + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * DIST;
-        Vector2 endLocation = Projectile.Center + _targetVector2 + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * Math.Max(DIST * (1f - progress), 8f);
+        Player player = Main.player[Projectile.owner];
+        Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, true);
+        Vector2 drawPosition = playerCenter + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * DIST;
+        Vector2 endLocation = playerCenter + _targetVector2 + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * Math.Max(DIST * (1f - progress), 8f);
         Vector2 result = Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
         if (Projectile.Opacity > 0f) {
-            return Vector2.Lerp(Projectile.Center, result, result.Length() * (1f - Projectile.Opacity));
+            Vector2 to = Vector2.Lerp(playerCenter, result, MathHelper.Clamp(result.Length() * (1f - Projectile.Opacity), 0f, 1f));
+            //if (to.Distance(playerCenter) > DIST * 2f) {
+            //    to = playerCenter;
+            //}
+            return to;
         }
         return result;
     }

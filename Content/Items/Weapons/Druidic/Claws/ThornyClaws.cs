@@ -4,6 +4,7 @@ using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druid;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using Terraria;
@@ -36,7 +37,7 @@ sealed class ThornyClaws : BaseClawsItem {
         clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
             Owner = Item,
             SpawnPosition = player.Center,
-            StartVelocity = Helper.VelocityToPoint(player.Center, Main.MouseWorld, 1f).SafeNormalize(Vector2.Zero),
+            StartVelocity = Helper.VelocityToPoint(player.Center, player.GetViableMousePosition(), 1f).SafeNormalize(Vector2.Zero),
             ProjectileTypeToSpawn = type,
             ShouldReset = shouldReset,
             ShouldSpawn = player.ownedProjectileCounts[type] < 1
