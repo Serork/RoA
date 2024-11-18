@@ -20,6 +20,7 @@ sealed class ClawsHandler : ModPlayer {
         public bool ShouldReset = true;
         public bool ShouldSpawn = true;
         public Action<Player>? SpawnProjectile = null;
+        public Action<Player>? OnSpawn = null;
     }
 
     public readonly struct SpecialAttackSpawnInfo(AttackSpawnInfoArgs args) {
@@ -31,6 +32,7 @@ sealed class ClawsHandler : ModPlayer {
         public readonly bool ShouldReset = args.ShouldReset;
         public readonly bool ShouldSpawn = args.ShouldSpawn;
         public readonly Action<Player>? SpawnProjectile = args.SpawnProjectile;
+        public readonly Action<Player>? OnSpawn = args.OnSpawn;
     }
 
     public (Color, Color) SlashColors { get; private set; }

@@ -20,5 +20,5 @@ sealed class DoubleFocusCharm : NatureItem {
 		Item.value = Item.sellPrice(gold: 1, silver: 80);
 	}
 
-	public override void UpdateAccessory(Player player, bool hideVisual) => player.GetDamage(DruidClass.NatureDamage) += 0.12f;
+	public override void UpdateAccessory(Player player, bool hideVisual) => player.GetDamage(DruidClass.NatureDamage) += 12f;
 }

@@ -25,7 +25,9 @@ abstract class BaseClawsItem : NatureItem {
 
     public virtual void OnHit(Player player, float progress) { }
 
-    protected abstract (Color, Color) SlashColors();
+    protected abstract (Color, Color) SlashColors(Player player);
+
+    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] < 1;
 
     public virtual void SafeOnUse(Player player, ClawsHandler clawsStats) { }
 
@@ -33,7 +35,7 @@ abstract class BaseClawsItem : NatureItem {
 
     public override bool? UseItem(Player player) {
         if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
-            (Color, Color) slashColors = SlashColors();
+            (Color, Color) slashColors = SlashColors(player);
             ClawsHandler clawsStats = player.GetModPlayer<ClawsHandler>();
             clawsStats.SetColors(slashColors.Item1, slashColors.Item2);
 
@@ -54,9 +56,9 @@ abstract class BaseClawsItem : NatureItem {
         velocity = point;
     }
 
-    public sealed override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/, NatureWeaponHandler.GetUseSpeed(Item, player));
-        NetMessage.SendData(MessageID.PlayerControls, number: player.whoAmI);
+        //NetMessage.SendData(MessageID.PlayerControls, number: player.whoAmI);
 
         return false;
     }

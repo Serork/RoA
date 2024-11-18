@@ -1,38 +1,39 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
+
+using RoA.Common.Druid.Claws;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
+using RoA.Common.VisualEffects;
+using RoA.Content.Dusts;
+using RoA.Content.Items.Weapons.Druidic.Claws;
+using RoA.Content.VisualEffects;
+using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
-using Terraria.ModLoader;
+using Terraria.DataStructures;
 using Terraria.Enums;
-
-using RoA.Content.Items.Weapons.Druidic.Claws;
-using RoA.Core.Utility;
-using RoA.Content.Dusts;
-using RoA.Content.VisualEffects;
-using RoA.Common.VisualEffects;
-
 using Terraria.ID;
-
-using RoA.Common.Networking;
-using RoA.Common.Networking.Packets;
-using RoA.Common.Druid.Claws;
-using RoA.Utilities;
-using RoA.Core;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class ClawsSlash : NatureProjectile {
-    private Player Owner => Main.player[Projectile.owner];
+class ClawsSlash : NatureProjectile {
+    protected Player Owner => Main.player[Projectile.owner];
 
-    private (Color, Color) SlashColors => Owner.GetModPlayer<ClawsHandler>().SlashColors;
-    private Color FirstSlashColor => SlashColors.Item1;
-    private Color SecondSlashColor => SlashColors.Item2;
+    protected (Color, Color) SlashColors => Owner.GetModPlayer<ClawsHandler>().SlashColors;
+    protected Color FirstSlashColor => SlashColors.Item1;
+    protected Color SecondSlashColor => SlashColors.Item2;
 
-    private bool CanFunction => Projectile.localAI[0] >= Projectile.ai[1] * 0.5f;
+    protected virtual bool CanFunction => Projectile.localAI[0] >= Projectile.ai[1] * 0.5f;
+
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.AllowsContactDamageFromJellyfish[Type] = true;
+    }
 
     protected override void SafeSetDefaults() {
         Projectile.width = Projectile.height = 0;
@@ -85,7 +86,8 @@ sealed class ClawsSlash : NatureProjectile {
         float num1 = 0.5105088f * Projectile.ai[0];
         float maximumAngle = 0.3926991f;
         float coneRotation = Projectile.rotation + num1;
-        return targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, coneLength, coneRotation, maximumAngle);
+        bool result = targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, coneLength, coneRotation, maximumAngle);
+        return result;
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -151,16 +153,14 @@ sealed class ClawsSlash : NatureProjectile {
     //        player.bodyFrame.Y = 0;
     //}
 
-    public override void AI() {
+    protected virtual void UpdateMainCycle() {
         Player player = Owner;
-
-        if (player.inventory[player.selectedItem].ModItem is not BaseClawsItem) {
-            Projectile.Kill();
-
-            return;
-        }
-
         Projectile.localAI[0] += 1f;
+        Update();
+    }
+
+    protected virtual void Update() {
+        Player player = Owner;
         float fromValue = Projectile.localAI[0] / Projectile.ai[1];
         float num1 = Projectile.ai[0];
         float num2 = 0.2f;
@@ -169,7 +169,6 @@ sealed class ClawsSlash : NatureProjectile {
         float rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver4 / 2f * Math.Sign(Projectile.velocity.X);
         Projectile.rotation = (float)(MathHelper.Pi * (double)num1 * (double)fromValue + (double)rotation + (double)num1 * MathHelper.Pi) + player.fullRotation;
 
-        Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity;
         Projectile.scale = num3 + fromValue * num2;
 
         float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
@@ -192,6 +191,24 @@ sealed class ClawsSlash : NatureProjectile {
                 Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
             }
         }
+    }
+
+    public override void AI() {
+        Player player = Owner;
+
+        if (player.inventory[player.selectedItem].ModItem is not BaseClawsItem) {
+            Projectile.Kill();
+
+            return;
+        }
+
+        float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1];
+        player.itemAnimation = player.itemTime = (int)(Projectile.ai[1] * fromValue);
+
+        Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity;
+
+        UpdateMainCycle();
+
         if (Projectile.localAI[0] < (double)(Projectile.ai[1] + Projectile.ai[1] * 0.3f)) {
             return;
         }

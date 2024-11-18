@@ -17,9 +17,10 @@ sealed class ElderwoodClaws : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(28);
         Item.SetWeaponValues(12, 3f);
+        Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }
 
-    protected override (Color, Color) SlashColors() => (new(72, 86, 214), new(114, 126, 255));
+    protected override (Color, Color) SlashColors(Player player) => (new(72, 86, 214), new(114, 126, 255));
 
     private Vector2 GetPos(Player player, bool leftSided) {
         int direction = leftSided ? -1 : 1;
@@ -51,8 +52,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
                                    position,
                                    Vector2.Zero,
                                    type,
-                                   Item.damage,
-                                   Item.knockBack,
+                                   player.GetWeaponDamage(Item),
+                                   player.GetWeaponKnockback(Item),
                                    player.whoAmI,
                                    MathHelper.Min(4f, progress * 5f),
                                    1f);
@@ -63,8 +64,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
                                    position,
                                    Vector2.Zero,
                                    type,
-                                   Item.damage,
-                                   Item.knockBack,
+                                   player.GetWeaponDamage(Item),
+                                   player.GetWeaponKnockback(Item),
                                    player.whoAmI,
                                    MathHelper.Min(4f, progress * 5f),
                                    1f);
@@ -95,8 +96,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
                                        position,
                                        Vector2.Zero,
                                        type,
-                                       Item.damage,
-                                       Item.knockBack,
+                                       player.GetWeaponDamage(Item),
+                                       player.GetWeaponKnockback(Item),
                                        player.whoAmI,
                                        5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
                                        2f);
@@ -109,8 +110,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
                                        position,
                                        Vector2.Zero,
                                        type,
-                                       Item.damage,
-                                       Item.knockBack,
+                                       player.GetWeaponDamage(Item),
+                                       player.GetWeaponKnockback(Item),
                                        player.whoAmI,
                                        5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
                                        2f);

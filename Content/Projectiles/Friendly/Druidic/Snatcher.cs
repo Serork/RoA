@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -130,6 +131,10 @@ sealed class Snatcher : NatureProjectile {
     }
 
     private void OnReset() {
+        Player player = Main.player[Projectile.owner];
+        if (player.GetSelectedItem().ModItem is not ThornyClaws) {
+            return;
+        }
         if (Projectile.timeLeft > 20) {
             Projectile.timeLeft += TIMELEFT;
             Projectile.netUpdate = true;

@@ -19,7 +19,7 @@ sealed class ThornyClaws : BaseClawsItem {
         Item.SetWeaponValues(14, 4f);
     }
 
-    protected override (Color, Color) SlashColors() => (new Color(75, 167, 85), new Color(100, 200, 110));
+    protected override (Color, Color) SlashColors(Player player) => (new Color(75, 167, 85), new Color(100, 200, 110));
 
     //protected override bool ShouldModifyShootStats => false;
 
