@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Enums;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Magic;
@@ -132,6 +133,8 @@ sealed class ShockLightning : ModProjectile {
             //Color color = Color.Lerp(Color.White, Lighting.GetColor((int)segment.Position.X / 16, (int)segment.Position.Y / 16), Lighting.Brightness((int)segment.Position.X / 16, (int)segment.Position.Y / 16));
             segment.Draw(Main.spriteBatch, Color.White);
 
+            LightingCutTiles(segment.Position);
+
             if (!Main.dedServ) {
                 Lighting.AddLight(segment.Position, new Color(70, 224, 226).ToVector3());
             }
@@ -140,10 +143,47 @@ sealed class ShockLightning : ModProjectile {
         return false;
     }
 
+    private void LightingCutTiles(Vector2 position) {
+        if (Projectile.owner != Main.myPlayer) {
+            return;
+        }
+        Vector2 boxPosition = position - Vector2.One * 2f;
+        int boxWidth = 4;
+        int boxHeight = 4;
+        int num = (int)(boxPosition.X / 16f);
+        int num2 = (int)((boxPosition.X + (float)boxWidth) / 16f) + 1;
+        int num3 = (int)(boxPosition.Y / 16f);
+        int num4 = (int)((boxPosition.Y + (float)boxHeight) / 16f) + 1;
+        if (num < 0)
+            num = 0;
+
+        if (num2 > Main.maxTilesX)
+            num2 = Main.maxTilesX;
+
+        if (num3 < 0)
+            num3 = 0;
+
+        if (num4 > Main.maxTilesY)
+            num4 = Main.maxTilesY;
+
+        bool[] tileCutIgnorance = Main.player[Projectile.owner].GetTileCutIgnorance(allowRegrowth: false, Projectile.trap);
+        for (int i = num; i < num2; i++) {
+            for (int j = num3; j < num4; j++) {
+                if (Main.tile[i, j] != null && Main.tileCut[Main.tile[i, j].TileType] && !tileCutIgnorance[Main.tile[i, j].TileType] && WorldGen.CanCutTile(i, j, TileCuttingContext.AttackProjectile)) {
+                    WorldGen.KillTile(i, j);
+                    if (Main.netMode != 0)
+                        NetMessage.SendData(17, -1, -1, null, 0, i, j);
+                }
+            }
+        }
+    }
+
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * _lightningLength;
         return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 16f);
     }
+
+    public override bool? CanCutTiles() => false;
 
     private readonly struct Line(Projectile projectile, Vector2 a, Vector2 b, float thickness = 1) {
         private readonly Projectile _projectile = projectile;
