@@ -16,7 +16,7 @@ sealed class Electric : ModDust {
 
     public override bool PreDraw(Dust dust) {
         if (!Main.dedServ) {
-            Lighting.AddLight(dust.position, new Color(86, 173, 177).ToVector3());
+            Lighting.AddLight(dust.position, new Color(183, 233, 222).ToVector3() * 0.625f);
         }
 
         return base.PreDraw(dust);

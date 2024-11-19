@@ -89,7 +89,7 @@ sealed class ShockLightning : ModProjectile {
     private void UpdateSegments() {
         Player player = Main.player[Projectile.owner];
         Vector2 source = player.itemLocation + (new Vector2(0f, 3f) * player.direction).RotatedBy(Projectile.velocity.ToRotation()) + Utils.SafeNormalize(Projectile.velocity, Vector2.One) * (player.HeldItem.width + player.HeldItem.width / 4);
-        float thickness = 3f;
+        float thickness = 3.25f;
         Vector2 dest = source + Vector2.Normalize(Projectile.velocity) * _lightningLength;
         Vector2 dif = dest - source;
         Vector2 normal = Vector2.Normalize(new Vector2(dif.Y, -dif.X));
@@ -136,7 +136,7 @@ sealed class ShockLightning : ModProjectile {
             LightingCutTiles(segment.Position);
 
             if (!Main.dedServ) {
-                Lighting.AddLight(segment.Position, new Color(70, 224, 226).ToVector3());
+                Lighting.AddLight(segment.Position, new Color(183, 233, 222).ToVector3() * 0.625f);
             }
         }
 
@@ -212,9 +212,8 @@ sealed class ShockLightning : ModProjectile {
             Vector2 capOrigin = new(_endTexture.Width(), _endTexture.Height() / 2f);
             Vector2 middleOrigin = new(0, _segmentTexture.Height() / 2f);
             Vector2 middleScale = new((dest - source).Length(), thicknessScale);
-            spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "LightTransparent").Value, source - Main.screenPosition, null, Color.Black.MultiplyRGB(color), rotation, middleOrigin, middleScale * 0.01f, SpriteEffects.None, 0f);
             spriteBatch.Draw(_endTexture2.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.01f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.85f, SpriteEffects.None, 0f);
             spriteBatch.Draw(_endTexture.Value, source - Main.screenPosition, null, color, rotation, capOrigin, thicknessScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(_endTexture.Value, dest - Main.screenPosition, null, color, rotation + MathHelper.Pi, capOrigin, thicknessScale, SpriteEffects.None, 0f);
         }
