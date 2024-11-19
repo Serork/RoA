@@ -136,7 +136,7 @@ sealed class ShockLightning : ModProjectile {
             LightingCutTiles(segment.Position);
 
             if (!Main.dedServ) {
-                Lighting.AddLight(segment.Position, new Color(183, 233, 222).ToVector3() * 0.625f);
+                Lighting.AddLight(segment.Position, new Color(99, 200, 204).ToVector3() * 0.625f);
             }
         }
 
