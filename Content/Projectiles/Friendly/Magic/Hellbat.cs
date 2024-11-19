@@ -36,7 +36,7 @@ sealed class Hellbat : ModProjectile {
 		Projectile.alpha = 255;
 		Projectile.timeLeft = 70;
 
-		DrawOriginOffsetY = -1;
+		DrawOriginOffsetY = 1;
 	}
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) {

@@ -65,13 +65,27 @@ sealed class ShockLightning : ModProjectile {
     }
 
     public override void AI() {
+        Player player = Main.player[Projectile.owner];
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+            Vector2 pos = player.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * (player.direction == 1 ? 49f : 56f);
+            for (int num155 = 0; num155 < 8; num155++) {
+                int num156 = ModContent.DustType<Electric>();
+                Dust obj7 = Main.dust[Dust.NewDust(pos, 0, 0, num156, Projectile.velocity.X, Projectile.velocity.Y, 100)];
+                obj7.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f * Main.rand.NextFloat() + Projectile.velocity.SafeNormalize(Vector2.Zero) * (2f + Main.rand.NextFloat());
+                obj7.noGravity = true;
+                obj7.scale *= 0.75f;
+                obj7.scale *= 0.4f + Main.rand.NextFloatRange(0.15f);
+                obj7.fadeIn = obj7.scale + 0.1f;
+            }
+        }
+
         if (Projectile.wet) {
             Projectile.hostile = true;
             Projectile.friendly = false;
         }
         _lightningLength += Projectile.velocity.Length() * 1.35f;
         Projectile.localAI[0]--;
-        Player player = Main.player[Projectile.owner];
         if (Projectile.ai[0] <= 4f && player.itemAnimation > 1) {
             if (Projectile.localAI[0] <= 0f) {
                 Projectile.localAI[0] = 2f;
@@ -180,7 +194,7 @@ sealed class ShockLightning : ModProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * _lightningLength;
-        return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 16f);
+        return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 26f);
     }
 
     public override bool? CanCutTiles() => false;
