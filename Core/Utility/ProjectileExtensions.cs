@@ -66,6 +66,33 @@ static class ProjectileExtensions {
         }
     }
 
+    public static void ApplyFlaskEffects(this Projectile projectile, Player target) {
+        Player player = Main.player[projectile.owner];
+        if (player.meleeEnchant > 0 && !projectile.noEnchantments) {
+            byte meleeEnchant = player.meleeEnchant;
+            if (meleeEnchant == 1)
+                target.AddBuff(70, 60 * Main.rand.Next(5, 10));
+
+            if (meleeEnchant == 2)
+                target.AddBuff(39, 60 * Main.rand.Next(3, 7));
+
+            if (meleeEnchant == 3)
+                target.AddBuff(24, 60 * Main.rand.Next(3, 7));
+
+            if (meleeEnchant == 5)
+                target.AddBuff(69, 60 * Main.rand.Next(10, 20));
+
+            if (meleeEnchant == 6)
+                target.AddBuff(31, 60 * Main.rand.Next(1, 4));
+
+            if (meleeEnchant == 8)
+                target.AddBuff(20, 60 * Main.rand.Next(5, 10));
+
+            if (meleeEnchant == 4)
+                target.AddBuff(72, 120);
+        }
+    }
+
     public static void EmitEnchantmentVisualsAtForNonMelee(this Projectile projectile, Vector2 boxPosition, int boxWidth, int boxHeight) {
         CombinedHooks.EmitEnchantmentVisualsAt(projectile, boxPosition, boxWidth, boxHeight);
         Player player = Main.player[projectile.owner];

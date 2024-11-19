@@ -51,6 +51,7 @@ class ClawsSlash : NatureProjectile {
         Projectile.noEnchantmentVisuals = true;
     }
 
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) => Projectile.ApplyFlaskEffects(target);
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => Projectile.ApplyFlaskEffects(target);
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
@@ -91,6 +92,12 @@ class ClawsSlash : NatureProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
+        DrawItself(ref lightColor);
+        return false;
+    }
+
+    protected void DrawItself(ref Color lightColor, float? rotation = null) {
+        float rot = rotation ?? Projectile.rotation;
         lightColor *= 2f;
         lightColor.A = 100;
         Vector2 position = Projectile.Center - Main.screenPosition;
@@ -111,31 +118,30 @@ class ClawsSlash : NatureProjectile {
             SpriteBatch spriteBatch = Main.spriteBatch;
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, rot + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             Color shineColor = new(255, 200, 150);
             Color color3 = lightColor * num2 * 0.5f;
             //color3.A = (byte)(color3.A * (1.0 - (double)num4));
             Color color4 = color3 * num4 * 0.5f;
             color4.G = (byte)(color4.G * (double)num4);
             color4.B = (byte)(color4.R * (0.25 + (double)num4 * 0.75));
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), shineColor * num4 * num2 * 0.3f, Projectile.rotation, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.6f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.5f * num2, Projectile.rotation + Projectile.ai[0] * -0.05f, origin, scale * 0.8f, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.4f * num2, Projectile.rotation + Projectile.ai[0] * -0.1f, origin, scale * 0.6f, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, rot + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), shineColor * num4 * num2 * 0.3f, rot, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, rot, origin, scale * num3, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.6f * num2, rot + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.5f * num2, rot + Projectile.ai[0] * -0.05f, origin, scale * 0.8f, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.4f * num2, rot + Projectile.ai[0] * -0.1f, origin, scale * 0.6f, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, rot + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, rot, origin, scale * num3, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, rot + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             for (int i = 0; i < 5; i++) {
-                spriteBatch.Draw(asset.Value, position + Utils.ToRotationVector2((float)(Projectile.timeLeft * 0.1 + i * Math.PI / 5.0)) * num12, new Rectangle?(r), color1 * num4 * num2 * 0.25f, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+                spriteBatch.Draw(asset.Value, position + Utils.ToRotationVector2((float)(Projectile.timeLeft * 0.1 + i * Math.PI / 5.0)) * num12, new Rectangle?(r), color1 * num4 * num2 * 0.25f, rot + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             }
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f * 0.15f, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f * 0.15f, rot + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, rot, origin, scale * num3, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, rot + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             spriteBatch.EndBlendState();
         }
-        return false;
     }
 
     //public override void PostAI() {
@@ -154,25 +160,24 @@ class ClawsSlash : NatureProjectile {
     //}
 
     protected virtual void UpdateMainCycle() {
-        Player player = Owner;
         Projectile.localAI[0] += 1f;
         Update();
     }
 
-    protected virtual void Update() {
+    protected virtual void Update(float extraRotation = 0f) {
         Player player = Owner;
         float fromValue = Projectile.localAI[0] / Projectile.ai[1];
         float num1 = Projectile.ai[0];
         float num2 = 0.2f;
         float num3 = 1f;
 
-        float rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver4 / 2f * Math.Sign(Projectile.velocity.X);
+        float rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver4 / 2f * Math.Sign(Projectile.velocity.X) + extraRotation;
         Projectile.rotation = (float)(MathHelper.Pi * (double)num1 * (double)fromValue + (double)rotation + (double)num1 * MathHelper.Pi) + player.fullRotation;
 
         Projectile.scale = num3 + fromValue * num2;
 
-        float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
         float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
+        float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
         Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
         if (Projectile.localAI[0] >= Projectile.ai[1] * 0.7f && Projectile.localAI[0] < Projectile.ai[1] + Projectile.ai[1] * 0.2f) {
             Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
@@ -202,7 +207,7 @@ class ClawsSlash : NatureProjectile {
             return;
         }
 
-        float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1];
+        float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1] * 0.75f;
         player.itemAnimation = player.itemTime = (int)(Projectile.ai[1] * fromValue);
 
         Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity;

@@ -144,7 +144,7 @@ sealed class ShockLightning : ModProjectile {
         return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 16f);
     }
 
-    private struct Line {
+    private readonly struct Line {
         private readonly Projectile _projectile;
         private readonly Vector2 _a, _b;
         private readonly float _thickness;
