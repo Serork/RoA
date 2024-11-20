@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
@@ -50,44 +51,29 @@ sealed class HellfireFractureTestProjectile : NatureProjectile {
     }
 
     public override void AI() {
-        //float height = 50f;
-        //Vector2 baseValue = Projectile.position;
-        //Vector2 half = Vector2.UnitY * height;
-        //_first = baseValue - half;
-        //_last = baseValue;
-        //if (Projectile.ai[0] < 5f && _last.Y < baseValue.Y + half.Y) {
-        //    _last.Y = baseValue.Y + Projectile.ai[0] * 0.2f * half.Y;
-        //}
         Player player = Main.player[Projectile.owner];
+        bool flag = Projectile.ai[0] < 5f;
+        if (flag && Projectile.ai[1] > 0f) {
+            Projectile.ai[1] -= TimeSystem.LogicDeltaTime * 5f;
+            Projectile.ai[0] += 0.25f;
+        }
+        Projectile.ai[0] = Math.Min(Projectile.ai[0], 5f);
         if (player.whoAmI != Main.myPlayer || Projectile.ai[2] == 0f) {
             return;
         }
         Projectile proj = Main.projectile[(int)Projectile.ai[2]];
-        if (Projectile.ai[0] < 5f && proj != null && proj.active) {
+        if (flag && proj != null && proj.active) {
             Projectile.position = proj.As<HellfireClawsSlash>().GetPos();
-            Projectile.position += Vector2.UnitY * 5f * -player.direction;
+            Projectile.position += Vector2.UnitY * 7f * -player.direction;
             Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 7f;
             Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
             float height = 100f;
             Vector2 baseValue = Projectile.position;
             _first = _last = baseValue;
             _last.Y = _first.Y + Projectile.ai[0] * 0.2f * height;
-            Projectile.ai[0] += 0.25f;
+            //Projectile.ai[0] += 0.25f;
         }
     }
-
-    //protected override void SafeOnSpawn(IEntitySource source) {
-    //    Player player = Main.player[Projectile.owner];
-    //    if (player.whoAmI != Main.myPlayer) {
-    //        return;
-    //    }
-    //    Projectile.position = player.GetViableMousePosition();
-    //    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero);
-    //    float height = 100f;
-    //    Vector2 baseValue = Projectile.position;
-    //    _first = _last = baseValue;
-    //    _last.Y = _first.Y + 4f * 0.2f * height;
-    //}
 
     private static uint PseudoRand(ref uint seed) {
         seed ^= seed << 13;
@@ -95,7 +81,7 @@ sealed class HellfireFractureTestProjectile : NatureProjectile {
         return seed;
     }
 
-    public static float PseudoRandRange(ref uint seed, float min, float max) => min + (float)((double)(PseudoRand(ref seed) & 1023U) / 1024.0 * ((double)max - (double)min));
+    private static float PseudoRandRange(ref uint seed, float min, float max) => min + (float)((double)(PseudoRand(ref seed) & 1023U) / 1024.0 * ((double)max - (double)min));
 
     public override bool PreDraw(ref Color lightColor) {
         DrawSlash();
@@ -107,6 +93,9 @@ sealed class HellfireFractureTestProjectile : NatureProjectile {
         uint seed = (uint)(Projectile.position.GetHashCode() + Projectile.velocity.GetHashCode());
         float rot = Helper.VelocityAngle(Projectile.velocity) + MathHelper.PiOver2;
         rot += MathHelper.Pi;
+        if (Projectile.direction == 1) {
+            rot += 0.2f;
+        }
         Vector2 pos1 = _first, pos2 = _last;
         Vector2 dif = pos2 - pos1;
         Vector2 vel = dif.SafeNormalize(Vector2.Zero) * dif.Length() / 2f;

@@ -98,15 +98,12 @@ sealed class HellfireClawsSlash : ClawsSlash {
             _oldItemAnimation = Owner.itemAnimation;
             //UpdateMainCycle();
         }
-        //if (_projectile != null) {
-        //    if (Projectile.localAI[0] < Projectile.ai[1] * 1.35f) {
-        //        _projectile.ai[0] += 1;
-        //        _projectile.position = GetPos();
-        //        _projectile.position += Helper.VelocityToPoint(_projectile.position, player.position, Projectile.ai[0]) * 7f;
-        //        _projectile.velocity = Helper.VelocityToPoint(player.position, _projectile.position, 1f).SafeNormalize(Vector2.Zero);
-        //        _projectile.netUpdate = true;
-        //    }
-        //}
+        if (_projectile != null) {
+            if (Projectile.localAI[0] < Projectile.ai[1] * 1.35f) {
+                _projectile.ai[1] = 1f;
+                _projectile.netUpdate = true;
+            }
+        }
     }   
 
     public Vector2 GetPos() {
