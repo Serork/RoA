@@ -85,12 +85,11 @@ sealed class HellfireClawsSlash : ClawsSlash {
         target.immune[Projectile.owner] = 0;
         Projectile.localNPCImmunity[target.whoAmI] = 10 + _hitAmount;
         Projectile.localAI[2] += 0.1f * Projectile.ai[0];
-        Player player = Main.player[Projectile.owner];
         if (!Hit) {
             if (Projectile.localAI[1] == 0f) {
                 Projectile.localAI[1] = 1f;
                 if (_projectile == null && Projectile.owner == Main.myPlayer) {
-                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(), Vector2.Zero, ModContent.ProjectileType<HellfireFractureTestProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(), Vector2.Zero, ModContent.ProjectileType<HellfireFractureTestProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai2: Projectile.whoAmI);
                 }
             }
             _oldTimeleft = Projectile.timeLeft;
@@ -99,17 +98,18 @@ sealed class HellfireClawsSlash : ClawsSlash {
             _oldItemAnimation = Owner.itemAnimation;
             //UpdateMainCycle();
         }
-        if (_projectile != null) {
-            if (Projectile.localAI[0] < Projectile.ai[1] * 1.35f) {
-                _projectile.position = GetPos();
-                _projectile.velocity = Helper.VelocityToPoint(player.Center, target.Center, 1f).SafeNormalize(Vector2.Zero);
-            }
-            _projectile.ai[0] += 1;
-            _projectile.netUpdate = true;
-        }
+        //if (_projectile != null) {
+        //    if (Projectile.localAI[0] < Projectile.ai[1] * 1.35f) {
+        //        _projectile.ai[0] += 1;
+        //        _projectile.position = GetPos();
+        //        _projectile.position += Helper.VelocityToPoint(_projectile.position, player.position, Projectile.ai[0]) * 7f;
+        //        _projectile.velocity = Helper.VelocityToPoint(player.position, _projectile.position, 1f).SafeNormalize(Vector2.Zero);
+        //        _projectile.netUpdate = true;
+        //    }
+        //}
     }   
 
-    private Vector2 GetPos() {
+    public Vector2 GetPos() {
         float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float offset = Owner.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);

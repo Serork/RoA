@@ -1,27 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 
-using Newtonsoft.Json.Linq;
-
-using RoA.Common.Druid;
-using RoA.Content.NPCs.Enemies.Sap;
 using RoA.Content.Projectiles.Friendly;
+using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Items.Weapons;
 
@@ -68,18 +59,20 @@ sealed class HellfireFractureTestProjectile : NatureProjectile {
         //    _last.Y = baseValue.Y + Projectile.ai[0] * 0.2f * half.Y;
         //}
         Player player = Main.player[Projectile.owner];
-        if (player.whoAmI != Main.myPlayer) {
+        if (player.whoAmI != Main.myPlayer || Projectile.ai[2] == 0f) {
             return;
         }
-        if (Projectile.ai[0] < 5f) {
-            Projectile.position = player.GetViableMousePosition();
-            Projectile.position += Helper.VelocityToPoint(Projectile.position, player.position, Projectile.ai[0]) * 7f;
-            Projectile.velocity = Helper.VelocityToPoint(player.position, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
+        Projectile proj = Main.projectile[(int)Projectile.ai[2]];
+        if (Projectile.ai[0] < 5f && proj != null && proj.active) {
+            Projectile.position = proj.As<HellfireClawsSlash>().GetPos();
+            Projectile.position += Vector2.UnitY * 5f * -player.direction;
+            Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 7f;
+            Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
             float height = 100f;
             Vector2 baseValue = Projectile.position;
             _first = _last = baseValue;
             _last.Y = _first.Y + Projectile.ai[0] * 0.2f * height;
-            Projectile.ai[0] += 0.05f;
+            Projectile.ai[0] += 0.25f;
         }
     }
 
@@ -145,7 +138,7 @@ sealed class HellfireFractureTestProjectile : NatureProjectile {
             count++;
             float progress = num4 / num1;
             float pi = MathHelper.Pi * 0.9f;
-            Vector2 vector2_2 = a + vec.RotatedBy(pi * progress - pi) * 0.75f * num4 + vec * num4 * 0.75f;
+            Vector2 vector2_2 = a + vec.RotatedBy(pi * progress - pi) * 0.6f * num4 + vec * num4 * 0.6f;
             Vector2 vector2_3 = /*(double)num4 >= (double)num1 ? b : */vector2_2 + (random.NextBool() ? (float)num2 * vector2_1 * PseudoRandRange(ref seed, -6f, 6f) : Vector2.Zero);
             Vector2 vector2_4 = vector2_3;
             Vector2 offset = Vector2.UnitY * num1 / 2f;
@@ -167,7 +160,7 @@ sealed class HellfireFractureTestProjectile : NatureProjectile {
                 if (decrease) {
                     float minSize2 = 1.75f;
                     if (size > minSize2) {
-                        size -= value * 0.225f;
+                        size -= value * 0.25f;
                         if (size < minSize2) {
                             size = minSize2;
                         }
@@ -177,7 +170,7 @@ sealed class HellfireFractureTestProjectile : NatureProjectile {
                     }
                 }
                 else {
-                    size += value * 0.225f;
+                    size += value * 0.25f;
                     if (size > maxSize) {
                         size = maxSize;
                     }
