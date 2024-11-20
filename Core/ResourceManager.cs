@@ -8,6 +8,8 @@ using System.IO;
 
 using System.Linq;
 
+using Terraria.ModLoader;
+
 namespace RoA.Core;
 
 static class ResourceManager {
@@ -17,6 +19,9 @@ static class ResourceManager {
 
     public static string Textures => RoA.ModName + $"/{TEXTURESPATH}/";
     public static string EmptyTexture => Textures + "Empty";
+    public static string PixelTexture => Textures + "Pixel";
+
+    public static Texture2D Pixel => ModContent.Request<Texture2D>(PixelTexture, AssetRequestMode.ImmediateLoad).Value;
 
     public static string GUITextures => Textures + "GUI/";
 

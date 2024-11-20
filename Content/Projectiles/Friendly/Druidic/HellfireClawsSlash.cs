@@ -7,6 +7,7 @@ using RoA.Common.Druid.Claws;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
+using RoA.Content.Items.Weapons;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -30,6 +31,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
     private int _hitAmount;
     private float _knockBack;
     private float[] oldRot = new float[MAX];
+    private Projectile _projectile = null;
 
     public bool Charged { get; private set; } = true;
 
@@ -83,14 +85,38 @@ sealed class HellfireClawsSlash : ClawsSlash {
         target.immune[Projectile.owner] = 0;
         Projectile.localNPCImmunity[target.whoAmI] = 10 + _hitAmount;
         Projectile.localAI[2] += 0.1f * Projectile.ai[0];
+        Player player = Main.player[Projectile.owner];
         if (!Hit) {
+            if (Projectile.localAI[1] == 0f) {
+                Projectile.localAI[1] = 1f;
+                if (_projectile == null && Projectile.owner == Main.myPlayer) {
+                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(), Vector2.Zero, ModContent.ProjectileType<HellfireFractureTestProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                }
+            }
             _oldTimeleft = Projectile.timeLeft;
             _hitTimer = 10;
             _oldItemUse = Owner.itemTime;
             _oldItemAnimation = Owner.itemAnimation;
             //UpdateMainCycle();
         }
+        if (_projectile != null) {
+            if (Projectile.localAI[0] < Projectile.ai[1] * 1.35f) {
+                _projectile.position = GetPos();
+                _projectile.velocity = Helper.VelocityToPoint(player.Center, target.Center, 1f).SafeNormalize(Vector2.Zero);
+            }
+            _projectile.ai[0] += 1;
+            _projectile.netUpdate = true;
+        }
     }   
+
+    private Vector2 GetPos() {
+        float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
+        float num = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
+        float offset = Owner.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
+        float f = Projectile.rotation + (float)(Projectile.ai[0] * MathHelper.PiOver2 * 0f);
+        Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)(50.0 * Projectile.scale + 20.0 * Projectile.scale);
+        return position + (Projectile.rotation + Utils.Remap(num1, 0f, 1f, 0f, (float)Math.PI / 2f) * Projectile.ai[0]).ToRotationVector2() * num;
+    }
 
     public override bool PreDraw(ref Color lightColor) {
         for (int index = 0; index < 10; index += 2) {
@@ -115,15 +141,12 @@ sealed class HellfireClawsSlash : ClawsSlash {
         color *= num * 1.5f;
         color2 *= num * 1.5f;
         SpriteEffects dir = Projectile.ai[0] >= 0.0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
-        float offset = Owner.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
-        float f = Projectile.rotation + (float)(Projectile.ai[0] * MathHelper.PiOver2 * 0f);
-        Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)(50.0 * Projectile.scale + 20.0 * Projectile.scale) - Main.screenPosition;
-        Vector2 drawpos = position + (Projectile.rotation + Utils.Remap(num1, 0f, 1f, 0f, (float)Math.PI / 2f) * Projectile.ai[0]).ToRotationVector2() * num;
+        Vector2 drawpos = GetPos();
         float rot = Projectile.rotation + num1 + Projectile.localAI[2];
-        Main.EntitySpriteDraw(value, drawpos, null, color, (float)Math.PI / 2f + rot, origin, vector, dir);
-        Main.EntitySpriteDraw(value, drawpos, null, color, 0f + rot, origin, vector2, dir);
-        Main.EntitySpriteDraw(value, drawpos, null, color2, (float)Math.PI / 2f + rot, origin, vector * 0.6f, dir);
-        Main.EntitySpriteDraw(value, drawpos, null, color2, 0f + rot, origin, vector2 * 0.6f, dir);
+        Main.EntitySpriteDraw(value, drawpos - Main.screenPosition, null, color, (float)Math.PI / 2f + rot, origin, vector, dir);
+        Main.EntitySpriteDraw(value, drawpos - Main.screenPosition, null, color, 0f + rot, origin, vector2, dir);
+        Main.EntitySpriteDraw(value, drawpos - Main.screenPosition, null, color2, (float)Math.PI / 2f + rot, origin, vector * 0.6f, dir);
+        Main.EntitySpriteDraw(value, drawpos - Main.screenPosition, null, color2, 0f + rot, origin, vector2 * 0.6f, dir);
         return false;
     }
 

@@ -315,3 +315,8 @@ ElderwoodChest2: {
 	DisplayName: Backstone Chest
 	Tooltip: ""
 }
+
+HellfireFractureTest: {
+	DisplayName: Hellfire Fracture Test
+	Tooltip: ""
+}
