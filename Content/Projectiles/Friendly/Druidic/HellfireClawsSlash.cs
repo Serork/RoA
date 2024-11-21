@@ -84,6 +84,14 @@ sealed class HellfireClawsSlash : ClawsSlash {
         Projectile.localNPCImmunity[target.whoAmI] = 10 + _hitAmount;
         Projectile.localAI[2] += 0.1f * Projectile.ai[0];
         if (!Hit) {
+            for (int i = 0; i < 25; i++) {
+                if (Main.rand.NextBool(3)) {
+                    Vector2 pos = GetPos(MathHelper.PiOver4 * 0.3f);
+                    Vector2 to = pos.DirectionTo(GetPos(MathHelper.PiOver4 * 0.4f));
+                    Dust dust = Dust.NewDustPerfect(GetPos(MathHelper.PiOver4 * 0.1f), 6, -to.RotatedBy(Main.rand.NextFloatRange(0.275f)) * Main.rand.NextFloat(3f, 6f) * Main.rand.NextFloat(0.5f, 1f), 0, default, 2.25f + Main.rand.NextFloatRange(0.25f));
+                    //dust.noGravity = true;
+                }
+            }
             if (Projectile.localAI[1] == 0f) {
                 Projectile.localAI[1] = 1f;
                 if (_projectile == null && Projectile.owner == Main.myPlayer) {
@@ -96,7 +104,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
             _oldItemAnimation = Owner.itemAnimation;
             //UpdateMainCycle();
         }
-        if (_projectile != null) {
+        if (_projectile != null && _projectile.ai[0] < 4f) {
             /*if (Projectile.localAI[0] < Projectile.ai[1] * 1.35f)*/ {
                 //_projectile.ai[1] = 1f;
                 _projectile.ai[1] = 1f;
@@ -187,7 +195,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
                                 offsetY = -5;
                             }
                             if (location.Distance(Owner.Center) > 37.5f + offsetY) {
-                                if (Main.GameUpdateCount % 10 == 0) {
+                                if (Main.GameUpdateCount % 12 == 0) {
                                     Dust dust = Dust.NewDustPerfect(location, 6, vector * 4.5f * Main.rand.NextFloat() /*- new Vector2?(rotationVector2 * Owner.gravDir) * 4f*/, 100, default(Color), 2.5f + Main.rand.NextFloatRange(0.25f));
                                     dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                                     dust.noGravity = true;
