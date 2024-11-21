@@ -99,7 +99,8 @@ sealed class Ravencaller : ModNPC {
         //NPC.TargetClosest();
 
         //if (Collision.CanHit(npc, Main.player[NPC.target]))
-        if (NPC.HasPlayerTarget)
+        bool flag = NPC.CountNPCS(ModContent.NPCType<SummonedRaven>()) < 8;
+        if (NPC.HasPlayerTarget && flag)
             timer++;
         else {
             timer = 438;
@@ -117,7 +118,6 @@ sealed class Ravencaller : ModNPC {
                 NPC.netUpdate = true;
             }
         }
-
         if (NPC.ai[3] != 1f && timer == 320 && !whenYouWalking)
             Summon();
         if (timer == 430 && !whenYouWalking) {
@@ -142,7 +142,10 @@ sealed class Ravencaller : ModNPC {
             whenYouWalking = true;
             NPC.netUpdate = true;
         }
-
+        if (!flag) {
+            whenYouWalking = true;
+            timer = 200;
+        }
     }
 
     private void Summon() {

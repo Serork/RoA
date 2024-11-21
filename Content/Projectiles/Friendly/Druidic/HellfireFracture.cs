@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -45,25 +46,26 @@ sealed class HellfireFracture : NatureProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        bool flag = Projectile.ai[0] < 5f;
+        float max = 4.5f;
+        bool flag = Projectile.ai[0] < max;
         //if (flag && Projectile.ai[1] > 0f) {
-        //    Projectile.ai[1] -= TimeSystem.LogicDeltaTime * 5f;
-        //    Projectile.ai[0] += 0.25f;
+        //    Projectile.ai[1] -= TimeSystem.LogicDeltaTime * max;
+        //    Projectile.ai[0] += 0.15f;
         //}
-        Projectile.ai[0] = Math.Min(Projectile.ai[0], 5f);
+        Projectile.ai[0] = Math.Min(Projectile.ai[0], max);
         float height = 100f;
         Vector2 baseValue = Projectile.position;
         _first = _last = baseValue;
         _last.Y = _first.Y + Projectile.ai[0] * 0.2f * height;
         Projectile? proj = GetParent();
-        if (flag && proj != null) {
+        if (flag && proj != null && Projectile.ai[1] == 1f) {
             var slash = proj.As<HellfireClawsSlash>();
-            if (slash != null && Projectile.ai[1] == 1f) {
-                Projectile.position = proj.As<HellfireClawsSlash>().GetPos(MathHelper.PiOver4 * 0.35f);
-                Projectile.position += Vector2.UnitY * 7f * -player.direction;
-                Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 7f;
-                Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
+            if (slash != null) {
                 Projectile.ai[1] = 0f;
+                Projectile.position = proj.As<HellfireClawsSlash>().GetPos();
+                Projectile.position += Vector2.UnitY * 10f * -player.direction;
+                Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 10f;
+                Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
             }
         }
         else if (Projectile.ai[0] < 1f) {
@@ -278,7 +280,7 @@ sealed class HellfireFracture : NatureProjectile {
                 }
             }
             float drawSize = size * 1f;
-            int max = (int)(4 * Math.Min(2f, progress / gap2) * (progress <= gap1 ? 1f : (1f - (progress - gap1) / gap2)));
+            int max = (int)(5 * Math.Min(2f, progress / gap2) * (progress <= gap1 ? 1f : (1f - (progress - gap1) / gap2)));
             for (int i = 0; i < max; i++) {
                 int index = i;
                 if (i > max / 2) {
@@ -292,6 +294,8 @@ sealed class HellfireFracture : NatureProjectile {
             Vector2 second = vector2_4 + vec - offset + offset2;
             float f = Helper.VelocityToPoint(first, second, 1f).SafeNormalize(Vector2.Zero).ToRotation();
             Vector2 vector = f.ToRotationVector2();
+            int value5 = (int)Projectile.ai[0];
+            bool flag6 = Projectile.ai[0] > value5 - 0.2f && Projectile.ai[0] < value5 + 0.2f;
             if (progress > 0.25f && progress < 0.9f && flag4) {
                 float width = 0f;
                 float width2 = PseudoRandRange(ref seed, 25f, 40f);
@@ -314,6 +318,7 @@ sealed class HellfireFracture : NatureProjectile {
                             vector.RotatedBy((float)Math.PI * 2f * Main.rand.NextFloatDirection() * 0.02f + Main.rand.NextFloatRange(MathHelper.PiOver4)) * Main.rand.NextFromList(2f, 4f) * Main.rand.NextFloat(0.35f, 0.6f) * Main.rand.NextFloat(), 0, default, (Math.Max(0.75f, size2) * 0.6f + Main.rand.NextFloatRange(0.25f)) * Main.rand.NextFloat(0.75f, 1.1f));
                         dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                         dust.noGravity = !Main.rand.NextBool(40);
+                        dust.customData = 0;
                     }
                 }
                 while (width < width2);
@@ -325,6 +330,7 @@ sealed class HellfireFracture : NatureProjectile {
                     vector.RotatedBy((float)Math.PI * 2f * Main.rand.NextFloatDirection() * 0.02f + Main.rand.NextFloatRange(MathHelper.PiOver4)) * Main.rand.NextFromList(2f, 4f) * Main.rand.NextFloat(0.35f, 0.6f) * Main.rand.NextFloat(), 0, default, (Math.Max(2f, size) * 0.6f + Main.rand.NextFloatRange(0.25f)) * Main.rand.NextFloat(0.75f, 1.1f));
                 dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                 dust.noGravity = !Main.rand.NextBool(40);
+                dust.customData = 0;
             }
             start = vector2_3;
         }

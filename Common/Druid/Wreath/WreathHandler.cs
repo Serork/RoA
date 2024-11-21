@@ -140,10 +140,20 @@ sealed class WreathHandler : ModPlayer {
         if (!Player.IsLocal()) {
             return;
         }
+
+        ClawsReset(proj);
+        //else {
+
+        //}
+    }
+
+    public bool IsFool(NatureProjectile natureProjectile) => GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2));
+
+    public void ClawsReset(Projectile proj, bool nonDataReset = false) {
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;
         }
-        if (!natureProjectile.ShouldIncreaseWreathPoints) {
+        if (!natureProjectile.ShouldIncreaseWreathPoints && !nonDataReset) {
             return;
         }
 
@@ -151,30 +161,29 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws) {
             selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
-            if (GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2))) {
-                if (SpecialAttackData.Owner == selectedItem && SpecialAttackData.ShouldReset) {
-                    Reset();
+            if (IsFool(natureProjectile)) {
+                if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
+                    if (!SpecialAttackData.OnlySpawn || nonDataReset) {
+                        Reset();
+                        OnWreathReset?.Invoke();
+                    }
 
-                    OnWreathReset?.Invoke();
+                    if (!nonDataReset) {
+                        SpecialAttackData.OnSpawn?.Invoke(Player);
 
-                    SpecialAttackData.OnSpawn?.Invoke(Player);
-
-                    if (SpecialAttackData.ShouldSpawn) {
-                        if (SpecialAttackData.SpawnProjectile != null) {
-                            SpecialAttackData.SpawnProjectile.Invoke(Player);
+                        if (SpecialAttackData.ShouldSpawn) {
+                            if (SpecialAttackData.SpawnProjectile != null) {
+                                SpecialAttackData.SpawnProjectile.Invoke(Player);
+                            }
+                            else {
+                                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
+                            }
+                            SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
                         }
-                        else {
-                            Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
-                        }
-                        SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
                     }
                 }
             }
         }
-        //else {
-
-        //}
-
         IncreaseResourceValue(natureProjectile.WreathPointsFine);
         MakeDustsOnHit();
     }

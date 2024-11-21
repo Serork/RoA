@@ -46,6 +46,7 @@ static class ResourceManager {
     public static string Sounds => RoA.ModName + $"/{SOUNDSPATH}/";
     public static string AmbientSounds => Sounds + "Ambient/";
     public static string Music => Sounds + "Music/";
+    public static string ItemSounds => Sounds + "Items/";
 
     public static IEnumerable<Asset<Texture2D>> GetAllTexturesInPath(string path, string? searchPattern = null) {
         string texturesPath = Path.Combine(RoA.ModSourcePath, RoA.ModName + path);
