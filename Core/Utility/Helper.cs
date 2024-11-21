@@ -20,6 +20,24 @@ static class Helper {
 
     public static readonly Color GlowMaskColor = new Color(255, 255, 255, 0) * 0.8f;
 
+    public static Color FromHexRgb(uint hexRgba) {
+        return new Color(
+            (byte)(hexRgba >> 16),
+            (byte)(hexRgba >> 8),
+            (byte)(hexRgba >> 0),
+            255
+        );
+    }
+
+    public static Color FromHexRgba(uint hexRgba) {
+        return new Color(
+            (byte)(hexRgba >> 24),
+            (byte)(hexRgba >> 16),
+            (byte)(hexRgba >> 8),
+            (byte)(hexRgba >> 0)
+        );
+    }
+
     public static Vector2 CircleOffset(this Entity entity, float elapsedTime, float circleRotation, float circleHeight) => ((((float)(MathHelper.TwoPi * (double)elapsedTime + MathHelper.PiOver2)).ToRotationVector2() + new Vector2(0.0f, -1f)) * new Vector2(6 * -entity.direction, circleHeight)).RotatedBy((double)circleRotation);
     public static void CircleMovement(this Entity entity, float counter, float speed = 0.4f, float radius = 14f) {
         Vector2 offset = CircleOffset(entity, counter / 65f, speed, radius);

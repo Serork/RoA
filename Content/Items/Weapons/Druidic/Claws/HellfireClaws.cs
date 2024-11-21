@@ -10,7 +10,10 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
+[WeaponOverlay(WeaponType.Claws, 0xffffff)]
 sealed class HellfireClaws : BaseClawsItem {
+    public override Color? GetAlpha(Color lightColor) => Color.White;
+
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(16, 4.2f);

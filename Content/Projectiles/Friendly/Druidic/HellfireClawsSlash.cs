@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ReLogic.Content;
-
 using RoA.Common.Druid.Claws;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
@@ -89,7 +87,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
             if (Projectile.localAI[1] == 0f) {
                 Projectile.localAI[1] = 1f;
                 if (_projectile == null && Projectile.owner == Main.myPlayer) {
-                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(), Vector2.Zero, ModContent.ProjectileType<HellfireFractureTestProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai2: Projectile.whoAmI);
+                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(MathHelper.PiOver4 * 0.35f), Vector2.Zero, ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai2: Projectile.identity);
                 }
             }
             _oldTimeleft = Projectile.timeLeft;
@@ -99,20 +97,23 @@ sealed class HellfireClawsSlash : ClawsSlash {
             //UpdateMainCycle();
         }
         if (_projectile != null) {
-            if (Projectile.localAI[0] < Projectile.ai[1] * 1.35f) {
+            /*if (Projectile.localAI[0] < Projectile.ai[1] * 1.35f)*/ {
+                //_projectile.ai[1] = 1f;
                 _projectile.ai[1] = 1f;
+                _projectile.ai[0] += 1.5f;
                 _projectile.netUpdate = true;
             }
         }
     }   
 
-    public Vector2 GetPos() {
+    public Vector2 GetPos(float extraRot = 0f) {
+        float rot = Projectile.rotation + (float)(Projectile.ai[0] * extraRot);
         float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float offset = Owner.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
-        float f = Projectile.rotation + (float)(Projectile.ai[0] * MathHelper.PiOver2 * 0f);
+        float f = rot + (float)(Projectile.ai[0] * MathHelper.PiOver2 * 0f);
         Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)(50.0 * Projectile.scale + 20.0 * Projectile.scale);
-        return position + (Projectile.rotation + Utils.Remap(num1, 0f, 1f, 0f, (float)Math.PI / 2f) * Projectile.ai[0]).ToRotationVector2() * num;
+        return position + (rot + Utils.Remap(num1, 0f, 1f, 0f, (float)Math.PI / 2f) * Projectile.ai[0]).ToRotationVector2() * num;
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -150,7 +151,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
     protected override void UpdateMainCycle() {
         if (!Hit) {
             Projectile.localAI[0] += 1f;
-            Update(MathHelper.PiOver2 * Projectile.ai[0]);
+            Update(MathHelper.PiOver2 / 2f * Projectile.ai[0]);
             UpdateOldInfo();
         }
 
@@ -186,7 +187,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
                                 offsetY = -5;
                             }
                             if (location.Distance(Owner.Center) > 37.5f + offsetY) {
-                                if (Main.GameUpdateCount % 5 == 0) {
+                                if (Main.GameUpdateCount % 10 == 0) {
                                     Dust dust = Dust.NewDustPerfect(location, 6, vector * 4.5f * Main.rand.NextFloat() /*- new Vector2?(rotationVector2 * Owner.gravDir) * 4f*/, 100, default(Color), 2.5f + Main.rand.NextFloatRange(0.25f));
                                     dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                                     dust.noGravity = true;

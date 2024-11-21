@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Content.Items.Weapons;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,7 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
               offsetY = (int)(drawInfo.Position.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4f);
         Vector2 offset = new Vector2(offsetX, offsetY) + drawInfo.drawPlayer.bodyFrame.Size() / 2f;
         Vector2 drawPosition = drawInfo.drawPlayer.bodyPosition + offset;
-        DrawData drawData = new(asset.Value, drawPosition - Main.screenPosition, player.bodyFrame, drawInfo.colorArmorBody, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect);
+        DrawData drawData = new(asset.Value, drawPosition - Main.screenPosition, player.bodyFrame, weaponAttribute.Hex != null ? Helper.FromHexRgb(weaponAttribute.Hex.Value) : drawInfo.colorArmorBody, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect);
         drawInfo.DrawDataCache.Add(drawData);
     }
 }
