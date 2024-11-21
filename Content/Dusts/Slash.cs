@@ -27,7 +27,7 @@ sealed class Slash : ModDust {
 			dust.scale *= 0.99f;
 			dust.velocity *= 0.9f;
 		}
-		Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.5f);
+		Lighting.AddLight(dust.position, dust.color.ToVector3());
 		return true;
 	}
 }
