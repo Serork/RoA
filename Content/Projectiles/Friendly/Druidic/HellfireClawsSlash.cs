@@ -90,9 +90,9 @@ sealed class HellfireClawsSlash : ClawsSlash {
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HellfireClaws") with { PitchVariance = 0.25f, Volume = Main.rand.NextFloat(0.75f, 0.85f) }, GetPos());
             for (int i = 0; i < 25; i++) {
                 if (Main.rand.NextBool(3)) {
-                    Vector2 pos = GetPos(-MathHelper.PiOver4 * 0.2f);
-                    Vector2 to = pos.DirectionTo(GetPos(-MathHelper.PiOver4 * 0.1f));
-                    Dust dust = Dust.NewDustPerfect(GetPos(-MathHelper.PiOver4 * 0.15f), 6, -to.RotatedBy(Main.rand.NextFloatRange(0.275f)) * Main.rand.NextFloat(3f, 6f) * Main.rand.NextFloat(0.75f, 1f), 0, default, 2.25f + Main.rand.NextFloatRange(0.25f));
+                    Vector2 pos = GetPos(MathHelper.PiOver4 * 0.5f);
+                    Vector2 to = pos.DirectionTo(GetPos(MathHelper.PiOver4 * 0.6f));
+                    Dust dust = Dust.NewDustPerfect(GetPos(MathHelper.PiOver4 * 0.5f), 6, -to.RotatedBy(Main.rand.NextFloatRange(0.275f)) * Main.rand.NextFloat(3f, 6f) * Main.rand.NextFloat(0.75f, 1f), 0, default, 2.25f + Main.rand.NextFloatRange(0.25f));
                     dust.customData = 0;
                     //dust.noGravity = true;
                 }
@@ -100,7 +100,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
             if (Projectile.localAI[1] == 0f) {
                 Projectile.localAI[1] = 1f;
                 if (_projectile == null && Projectile.owner == Main.myPlayer) {
-                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(), Vector2.Zero, ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai2: Projectile.identity);
+                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(MathHelper.PiOver4 * 0.5f), Vector2.Zero, ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai2: Projectile.identity);
                 }
             }
             _oldTimeleft = Projectile.timeLeft;
@@ -152,7 +152,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
         color2 *= num * 1.5f;
         SpriteEffects dir = Projectile.ai[0] >= 0.0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
         Vector2 drawpos = GetPos();
-        float rot = Projectile.rotation + num1 + Projectile.localAI[2];
+        float rot = Projectile.rotation + MathHelper.PiOver4 * Projectile.ai[0] + num1 + Projectile.localAI[2];
         Main.EntitySpriteDraw(value, drawpos - Main.screenPosition, null, color, (float)Math.PI / 2f + rot, origin, vector, dir);
         Main.EntitySpriteDraw(value, drawpos - Main.screenPosition, null, color, 0f + rot, origin, vector2, dir);
         Main.EntitySpriteDraw(value, drawpos - Main.screenPosition, null, color2, (float)Math.PI / 2f + rot, origin, vector * 0.6f, dir);
@@ -163,10 +163,12 @@ sealed class HellfireClawsSlash : ClawsSlash {
     protected override void UpdateMainCycle() {
         if (!Hit) {
             Projectile.localAI[0] += 1f;
-            Update(MathHelper.PiOver2 * Projectile.ai[0]);
+            Update((MathHelper.PiOver2 / 2f + MathHelper.PiOver4 * 0.5f) * Projectile.ai[0]);
             UpdateOldInfo();
         }
+    }
 
+    public override void PostAI() {
         if (Projectile.localAI[0] >= Projectile.ai[1] * 0.3f && Projectile.localAI[0] < Projectile.ai[1] * 1.35f) {
             for (int index = 0; index < MAX; index += 2) {
                 int index2 = Math.Max(0, index - 2);
@@ -175,7 +177,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
                         float spriteWidth = 15, spriteHeight = spriteWidth;
                         float num = (float)Math.Sqrt(spriteWidth * spriteWidth + spriteHeight * spriteHeight);
                         float normalizedPointOnPath = 0.2f + 0.8f * Main.rand.NextFloat();
-                        float rotation = oldRot[index2];
+                        float rotation = oldRot[index2] + MathHelper.PiOver4 * Projectile.ai[0];
                         if (Projectile.ai[0] == -1) {
                             rotation += MathHelper.PiOver4 / 2f;
                         }
@@ -199,7 +201,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
                                 offsetY = -5;
                             }
                             if (location.Distance(Owner.Center) > 37.5f + offsetY) {
-                                if (Main.GameUpdateCount % 11 == 0) {
+                                if (Projectile.localAI[0] % 11 == 0) {
                                     Dust dust = Dust.NewDustPerfect(location, 6, vector * 4.5f * Main.rand.NextFloat() /*- new Vector2?(rotationVector2 * Owner.gravDir) * 4f*/, 100, default(Color), 2.5f + Main.rand.NextFloatRange(0.25f));
                                     dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                                     dust.noGravity = true;
@@ -210,9 +212,6 @@ sealed class HellfireClawsSlash : ClawsSlash {
                 }
             }
         }
-    }
-
-    public override void PostAI() {
         Projectile.localAI[2] += 0.0125f * Projectile.ai[0];
         ClawsHandler clawsStats = Owner.GetModPlayer<ClawsHandler>();
         float fromValue = Helper.EaseInOut3(Projectile.localAI[0] / Projectile.ai[1]);
@@ -245,6 +244,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        modifiers.Knockback *= 0f;
         float fromValue = Ease.QuintIn(Projectile.localAI[0] / Projectile.ai[1]);
         Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), fromValue),
               color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), fromValue);
