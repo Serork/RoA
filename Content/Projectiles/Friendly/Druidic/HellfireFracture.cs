@@ -98,20 +98,20 @@ sealed class HellfireFracture : NatureProjectile {
             float fromValue = 1f/* - Ease.QuintIn(parent.localAI[0] / parent.ai[1])*/;
             Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), fromValue),
                   color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), fromValue);
-            _color = Color.Lerp(color1, color2, fromValue) * 0.9f;
+            _color = Color.Lerp(color1, color2, fromValue) * 0.85f;
         }
         //_color = Color.White;
         _timer++;
         _timer += Main.rand.NextFloatRange(0.5f);
         float count = _timer * 0.75f;
         float num13 = ((float)count / 75f * ((float)Math.PI * 2f)).ToRotationVector2().X * 1f + 0f;
-        num13 = Utils.Remap(num13, -1f, 1f, 1.5f, 2f);
+        num13 = Utils.Remap(num13, -1f, 1f, 1.25f, 2f);
         SpriteBatch spriteBatch = Main.spriteBatch;
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-        DrawSlash(_color * (num13 / 2f * 0.3f + 0.85f), lightColor);
+        DrawSlash(/*_color * */(num13 / 2f * 0.3f + 0.85f), lightColor);
         for (float num14 = -4f; num14 < 4f; num14 += 1f) {
-            DrawSlash(_color * (num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
+            DrawSlash(/*_color * */(num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
         }
         spriteBatch.EndBlendState();
 
@@ -163,7 +163,7 @@ sealed class HellfireFracture : NatureProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         foreach (Vector2 point in _collisionPoints) {
-            if (new Rectangle((int)point.X - 2, (int)point.Y - 2, 4, 4).Intersects(targetHitbox)) {
+            if (new Rectangle((int)point.X - 4, (int)point.Y - 4, 8, 8).Intersects(targetHitbox)) {
                 return true;
             }
         }
@@ -184,7 +184,7 @@ sealed class HellfireFracture : NatureProjectile {
         target.AddBuff(BuffID.OnFire, (int)(60f * num2));
     }
 
-    private void DrawSlash(Color color, Color lightColor, Vector2? posExtra = null) {
+    private void DrawSlash(float mult, Color lightColor, Vector2? posExtra = null) {
         uint seed = (uint)(Projectile.position.GetHashCode() + Projectile.velocity.GetHashCode());
         float rot = Helper.VelocityAngle(Projectile.velocity) + MathHelper.PiOver2;
         rot += MathHelper.Pi;
@@ -210,6 +210,9 @@ sealed class HellfireFracture : NatureProjectile {
         bool decrease = false;
         int dir = random.NextBool() ? 1 : -1;
         int count = 0;
+        Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), random.NextFloat(0.35f, 1f)),
+              color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), random.NextFloat(0.35f, 1f));
+        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.65f;
         do {
             bool flag4 = false;
             if (count > 2) {
@@ -280,7 +283,7 @@ sealed class HellfireFracture : NatureProjectile {
                 }
             }
             float drawSize = size * 1f;
-            int max = (int)(5 * Math.Min(2f, progress / gap2) * (progress <= gap1 ? 1f : (1f - (progress - gap1) / gap2)));
+            int max = (int)(4 * Math.Min(2f, progress / gap2) * (progress <= gap1 ? 1f : (1f - (progress - gap1) / gap2)));
             for (int i = 0; i < max; i++) {
                 int index = i;
                 if (i > max / 2) {
@@ -296,7 +299,7 @@ sealed class HellfireFracture : NatureProjectile {
             Vector2 vector = f.ToRotationVector2();
             int value5 = (int)Projectile.ai[0];
             bool flag6 = Projectile.ai[0] > value5 - 0.2f && Projectile.ai[0] < value5 + 0.2f;
-            if (progress > 0.25f && progress < 0.9f && flag4) {
+            if (progress > 0.15f && progress < 0.95f && flag4) {
                 float width = 0f;
                 float width2 = PseudoRandRange(ref seed, 25f, 40f);
                 float size2 = size + random.NextFloat(-size / 4f, size / 5f);
