@@ -71,6 +71,14 @@ sealed class HellfireClawsSlash : ClawsSlash {
         Projectile.localNPCHitCooldown = -2;
         Projectile.usesOwnerMeleeHitCD = false;
         _knockBack = Projectile.knockBack;
+
+        Update((MathHelper.PiOver2 / 2f + MathHelper.PiOver4 * 0.5f) * Projectile.ai[0]);
+        UpdateOldInfo();
+        for (int num28 = oldRot.Length - 1; num28 > 0; num28--) {
+            if (oldRot[num28] == 0f) {
+                oldRot[num28] = Projectile.rotation - 0.1f * num28;
+            }
+        }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -100,7 +108,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
             if (Projectile.localAI[1] == 0f) {
                 Projectile.localAI[1] = 1f;
                 if (_projectile == null && Projectile.owner == Main.myPlayer) {
-                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(MathHelper.PiOver4 * 0.5f), Vector2.Zero, ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai2: Projectile.identity);
+                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(MathHelper.PiOver4 * 0.5f), Vector2.Zero, ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, 0f, Projectile.owner, ai2: Projectile.identity);
                 }
             }
             _oldTimeleft = Projectile.timeLeft;
@@ -113,6 +121,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
             if (Projectile.localAI[0] < Projectile.ai[1] * 1.2f) {
                 _projectile.ai[1] = 1f;
                 _projectile.ai[0] += 1.5f;
+                _projectile.Opacity = 0f;
                 _projectile.netUpdate = true;
             }
         }
@@ -169,15 +178,15 @@ sealed class HellfireClawsSlash : ClawsSlash {
     }
 
     public override void PostAI() {
-        if (Projectile.localAI[0] >= Projectile.ai[1] * 0.3f && Projectile.localAI[0] < Projectile.ai[1] * 1.35f) {
-            for (int index = 0; index < MAX; index += 2) {
-                int index2 = Math.Max(0, index - 2);
-                if (oldRot[index2] != 0f) {
+        if (Projectile.localAI[0] >= Projectile.ai[1] * 0.3f && Projectile.localAI[0] < Projectile.ai[1] * 1.45f) {
+            //for (int index = 0; index < MAX; index += 2) {
+            //    int index2 = Math.Max(0, index - 2);
+                //if (oldRot[index2] != 0f) {
                     for (int i = 0; i < 2; i++) {
                         float spriteWidth = 15, spriteHeight = spriteWidth;
                         float num = (float)Math.Sqrt(spriteWidth * spriteWidth + spriteHeight * spriteHeight);
                         float normalizedPointOnPath = 0.2f + 0.8f * Main.rand.NextFloat();
-                        float rotation = oldRot[index2] + MathHelper.PiOver4 * Projectile.ai[0];
+                        float rotation = Projectile.rotation; /*+ MathHelper.PiOver4 * Projectile.ai[0];*/
                         if (Projectile.ai[0] == -1) {
                             rotation += MathHelper.PiOver4 / 2f;
                         }
@@ -201,16 +210,16 @@ sealed class HellfireClawsSlash : ClawsSlash {
                                 offsetY = -5;
                             }
                             if (location.Distance(Owner.Center) > 37.5f + offsetY) {
-                                if (Projectile.localAI[0] % 11 == 0) {
+                                //if (Projectile.localAI[0] % 11 == 0) {
                                     Dust dust = Dust.NewDustPerfect(location, 6, vector * 4.5f * Main.rand.NextFloat() /*- new Vector2?(rotationVector2 * Owner.gravDir) * 4f*/, 100, default(Color), 2.5f + Main.rand.NextFloatRange(0.25f));
                                     dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                                     dust.noGravity = true;
-                                }
+                                //}
                             }
                         }
-                    }
+                    //}
                 }
-            }
+            //}
         }
         Projectile.localAI[2] += 0.0125f * Projectile.ai[0];
         ClawsHandler clawsStats = Owner.GetModPlayer<ClawsHandler>();

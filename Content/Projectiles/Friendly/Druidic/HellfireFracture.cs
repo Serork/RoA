@@ -57,6 +57,9 @@ sealed class HellfireFracture : NatureProjectile {
         Vector2 baseValue = Projectile.position;
         _first = _last = baseValue;
         _last.Y = _first.Y + Projectile.ai[0] * 0.2f * height;
+        if (Projectile.Opacity < 1f) {
+            Projectile.Opacity += 0.1f;
+        }
         Projectile? proj = GetParent();
         if (flag && proj != null && Projectile.ai[1] == 1f) {
             var slash = proj.As<HellfireClawsSlash>();
@@ -93,13 +96,13 @@ sealed class HellfireFracture : NatureProjectile {
     private static float PseudoRandRange(ref uint seed, float min, float max) => min + (float)((double)(PseudoRand(ref seed) & 1023U) / 1024.0 * ((double)max - (double)min));
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile? parent = GetParent();
-        if (parent != null) {
-            float fromValue = 1f/* - Ease.QuintIn(parent.localAI[0] / parent.ai[1])*/;
-            Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), fromValue),
-                  color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), fromValue);
-            _color = Color.Lerp(color1, color2, fromValue) * 0.85f;
-        }
+        //Projectile? parent = GetParent();
+        //if (parent != null) {
+        //    float fromValue = 1f/* - Ease.QuintIn(parent.localAI[0] / parent.ai[1])*/;
+        //    Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), fromValue),
+        //          color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), fromValue);
+        //    _color = Color.Lerp(color1, color2, fromValue) * 0.85f;
+        //}
         //_color = Color.White;
         _timer++;
         _timer += Main.rand.NextFloatRange(0.5f);
@@ -210,9 +213,9 @@ sealed class HellfireFracture : NatureProjectile {
         bool decrease = false;
         int dir = random.NextBool() ? 1 : -1;
         int count = 0;
-        Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), random.NextFloat(0.25f, 1f)),
-              color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), random.NextFloat(0.25f, 1f));
-        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.5f;
+        Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), random.NextFloat(0.5f, 1f)),
+              color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), random.NextFloat(0.5f, 1f));
+        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.85f * Projectile.Opacity;
         do {
             bool flag4 = false;
             if (count > 2) {
@@ -312,7 +315,9 @@ sealed class HellfireFracture : NatureProjectile {
                     }
                     Vector2 vec2 = new Vector2(-vec.Y, vec.X).RotatedBy(rot2) * dir * (width / width2) * width2;
                     drawSize = size2 * 1.475f;
-                    Main.spriteBatch.Line(start - offset + offset2, vector2_4 + vec2 - offset + offset2, color, drawSize);
+                    if (progress > 0.2f && progress < 0.8f) {
+                        Main.spriteBatch.Line(start - offset + offset2, vector2_4 + vec2 - offset + offset2, color, drawSize);
+                    }
                     width += width2 * (0.04f + random.NextFloatRange(0.02f));
                     f = Helper.VelocityToPoint(start - offset + offset2, vector2_4 + vec2 - offset + offset2, 1f).SafeNormalize(Vector2.Zero).ToRotation();
                     vector = f.ToRotationVector2();
