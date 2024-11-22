@@ -163,7 +163,7 @@ sealed class HellfireFracture : NatureProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         foreach (Vector2 point in _collisionPoints) {
-            if (new Rectangle((int)point.X - 4, (int)point.Y - 4, 8, 8).Intersects(targetHitbox)) {
+            if (new Rectangle((int)point.X - 5, (int)point.Y - 5, 10, 10).Intersects(targetHitbox)) {
                 return true;
             }
         }
