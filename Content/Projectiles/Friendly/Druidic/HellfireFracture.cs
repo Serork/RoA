@@ -105,7 +105,7 @@ sealed class HellfireFracture : NatureProjectile {
         _timer += Main.rand.NextFloatRange(0.5f);
         float count = _timer * 0.75f;
         float num13 = ((float)count / 75f * ((float)Math.PI * 2f)).ToRotationVector2().X * 1f + 0f;
-        num13 = Utils.Remap(num13, -1f, 1f, 1.25f, 2f);
+        num13 = Utils.Remap(num13, -1f, 1f, 1.5f, 2f);
         SpriteBatch spriteBatch = Main.spriteBatch;
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
@@ -210,9 +210,9 @@ sealed class HellfireFracture : NatureProjectile {
         bool decrease = false;
         int dir = random.NextBool() ? 1 : -1;
         int count = 0;
-        Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), random.NextFloat(0.35f, 1f)),
-              color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), random.NextFloat(0.35f, 1f));
-        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.65f;
+        Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), random.NextFloat(0.25f, 1f)),
+              color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), random.NextFloat(0.25f, 1f));
+        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.5f;
         do {
             bool flag4 = false;
             if (count > 2) {
