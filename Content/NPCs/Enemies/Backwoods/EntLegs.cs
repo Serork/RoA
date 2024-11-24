@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
@@ -28,6 +29,8 @@ sealed class EntLegs : RoANPC {
 	private float _attackTimer;
 
 	public override string Texture => ResourceManager.EmptyTexture;
+
+	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => false;
 
     public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 18;

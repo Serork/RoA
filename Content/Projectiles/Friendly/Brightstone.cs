@@ -14,6 +14,8 @@ namespace RoA.Content.Projectiles.Friendly;
 sealed class Brightstone : ModProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
 
+	public override bool PreDraw(ref Color lightColor) => false;
+
     public override void SetDefaults() {
 		int width = 35; int height = width;
 		Projectile.Size = new Vector2(width, height);

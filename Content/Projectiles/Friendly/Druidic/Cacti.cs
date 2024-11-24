@@ -225,6 +225,8 @@ sealed class Cacti : NatureProjectile {
     private sealed class CactiExplosion : NatureProjectile {
         public override string Texture => ResourceManager.EmptyTexture;
 
+        public override bool PreDraw(ref Color lightColor) => false;
+
         protected override void SafeSetDefaults() {
             Projectile.Size = new Vector2(125, 75);
             Projectile.aiStyle = -1;

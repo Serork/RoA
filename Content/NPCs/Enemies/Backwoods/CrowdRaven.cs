@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.WorldEvents;
@@ -47,6 +48,9 @@ sealed class CrowdRaven : ModNPC {
     }
 
     public override void AI() {
+        Vector3 rgb3 = new Vector3(1f, 0f, 0.1f) * 0.2f;
+        Lighting.AddLight(NPC.Top + new Vector2(0f, 15f), rgb3);
+
         NPC.noGravity = true;
         if (NPC.localAI[0] == 0f) {
             NPC.localAI[0] = 1f;
@@ -221,6 +225,15 @@ sealed class CrowdRaven : ModNPC {
     }
 
     public override bool? CanFallThroughPlatforms() => true;
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(NPC.width, NPC.height) / 2, NPC.frame, drawColor * (1f - NPC.alpha / 255f), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.velocity.X > 0f ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+        texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+        spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(NPC.width, NPC.height) / 2, NPC.frame, new Color(200, 200, 200, 100) * (1f - NPC.alpha / 255f), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.velocity.X > 0f ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+
+        return false;
+    }
 
     public override void FindFrame(int frameHeight) {
         NPC.spriteDirection = -NPC.direction;

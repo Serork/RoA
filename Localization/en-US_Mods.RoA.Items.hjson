@@ -320,3 +320,8 @@ HellfireFractureTest: {
 	DisplayName: Hellfire Fracture Test
 	Tooltip: ""
 }
+
+SapStream: {
+	DisplayName: Sap Stream
+	Tooltip: ""
+}

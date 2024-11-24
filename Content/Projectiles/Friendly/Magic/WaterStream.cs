@@ -16,7 +16,9 @@ sealed class WaterStream : ModProjectile {
 
     public override string Texture => ResourceManager.EmptyTexture;
 
-	public override void SetDefaults() {
+    public override bool PreDraw(ref Color lightColor) => false;
+
+    public override void SetDefaults() {
         Projectile.localNPCHitCooldown = 500;
         Projectile.usesLocalNPCImmunity = true;
         

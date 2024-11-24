@@ -13,6 +13,8 @@ namespace RoA.Content.Projectiles.Enemies;
 sealed class ArchBranch : ModProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
 
+    public override bool PreDraw(ref Color lightColor) => false;
+
     private int vibechecker;
     private int reducer;
     private int gobacktimer;

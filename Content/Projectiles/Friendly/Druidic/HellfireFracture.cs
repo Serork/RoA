@@ -1,14 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 using Terraria;
 using Terraria.ID;
@@ -213,8 +211,8 @@ sealed class HellfireFracture : NatureProjectile {
         bool decrease = false;
         int dir = random.NextBool() ? 1 : -1;
         int count = 0;
-        Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), random.NextFloat(0.5f, 1f)),
-              color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), random.NextFloat(0.5f, 1f));
+        Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), random.NextFloat(0.6f, 1f)),
+              color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), random.NextFloat(0.6f, 1f));
         Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.85f * Projectile.Opacity;
         do {
             bool flag4 = false;
@@ -315,7 +313,7 @@ sealed class HellfireFracture : NatureProjectile {
                     }
                     Vector2 vec2 = new Vector2(-vec.Y, vec.X).RotatedBy(rot2) * dir * (width / width2) * width2;
                     drawSize = size2 * 1.475f;
-                    if (progress > 0.2f && progress < 0.8f) {
+                    if (progress > 0.2f && progress < 0.85f) {
                         Main.spriteBatch.Line(start - offset + offset2, vector2_4 + vec2 - offset + offset2, color, drawSize);
                     }
                     width += width2 * (0.04f + random.NextFloatRange(0.02f));

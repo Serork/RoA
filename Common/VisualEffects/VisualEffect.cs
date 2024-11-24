@@ -12,7 +12,7 @@ namespace RoA.Common.VisualEffects;
 abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffect<T>, new() {
     public Vector2 Position;
     public Vector2 Velocity;
-    public Color Color;
+    public Color DrawColor;
     public float Scale;
     public float Rotation;
     public Rectangle Frame;
@@ -20,6 +20,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     public bool DontEmitLight;
     public int TimeLeft;
     public int MaxTimeLeft;
+    public float AI0;
 
     public virtual int InitialPoolSize => 1;
 
@@ -44,7 +45,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     public T Setup(Vector2 position, Vector2 velocity, Color color = default, float scale = 1f, float rotation = 0f, int timeLeft = 0) {
         Position = position;
         Velocity = velocity;
-        Color = color;
+        DrawColor = color;
         Scale = scale;
         Rotation = rotation;
 
@@ -57,7 +58,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         TimeLeft = MaxTimeLeft = 60;
     }
 
-    public virtual Color GetParticleColor() => Color;
+    public virtual Color GetParticleColor() => DrawColor;
 
     public virtual void Update(ref ParticleRendererSettings settings) {
         Velocity *= 0.9f;
@@ -72,7 +73,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         }
 
         if (!DontEmitLight) {
-            Lighting.AddLight(Position, Color.ToVector3() * 0.5f);
+            Lighting.AddLight(Position, DrawColor.ToVector3() * 0.5f);
         }
         Position += Velocity;
     }

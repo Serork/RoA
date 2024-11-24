@@ -24,7 +24,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
 
         if (Main.rand.NextChance(0.1) && TimeLeft > 5 && TimeLeft < MaxTimeLeft - 5) {
             int type = ModContent.DustType<Slash>();
-            Dust dust = Dust.NewDustPerfect(Position, type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, Color * 1.5f, Main.rand.NextFloat(0.75f, 0.9f) * 1.2f);
+            Dust dust = Dust.NewDustPerfect(Position, type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.5f, Main.rand.NextFloat(0.75f, 0.9f) * 1.2f);
             dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
             dust.noLight = dust.noLightEmittence = true;
             dust.noGravity = true;
@@ -38,7 +38,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
     }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spriteBatch) {
-        Color color = Color;
+        Color color = DrawColor;
         Vector2 origin = Texture.Size() / 2f;
         Vector2 position = Position - Main.screenPosition;
         SpriteEffects effects = SpriteEffects.None;

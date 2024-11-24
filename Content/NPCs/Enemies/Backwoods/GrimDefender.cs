@@ -675,6 +675,8 @@ sealed class GrimDefender : ModNPC {
     private class GrimDefenderSpearAttack : ModProjectile {
         public override string Texture => ResourceManager.EmptyTexture;
 
+        public override bool PreDraw(ref Color lightColor) => false;
+
         public override void SetDefaults() {
             int width = 20; int height = 20;
             Projectile.Size = new Vector2(width, height);

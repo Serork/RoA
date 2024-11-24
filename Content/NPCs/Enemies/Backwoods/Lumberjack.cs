@@ -200,7 +200,9 @@ sealed class Lumberjack : RoANPC {
 	private class LumberjackAxeSlash : ModProjectile {
 		public override string Texture => ResourceManager.EmptyTexture;
 
-		public override void SetDefaults() {
+		public override bool PreDraw(ref Color lightColor) => false;
+
+        public override void SetDefaults() {
 			int width = 120; int height = 60;
 			Projectile.Size = new Vector2(width, height);
 

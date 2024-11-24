@@ -84,7 +84,7 @@ sealed class JudgementSlash : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
        
         Vector2 hitCenter = _startCenter + Vector2.Normalize(Projectile.velocity) * 120f;
         lightColor = Lighting.GetColor((int)(hitCenter.X / 16f), (int)(hitCenter.Y / 16f));
@@ -100,7 +100,7 @@ sealed class JudgementSlash : ModProjectile {
                                new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
                                new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
                                new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
-        Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+        //Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
         Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "JudgementSlashShadow").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 

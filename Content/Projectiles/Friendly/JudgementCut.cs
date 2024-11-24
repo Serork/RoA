@@ -10,6 +10,8 @@ namespace RoA.Content.Projectiles.Friendly;
 sealed class JudgementCut : ModProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
 
+    public override bool PreDraw(ref Color lightColor) => false;
+
     public override void SetDefaults() {
         Projectile.width = 8;
         Projectile.height = 8;

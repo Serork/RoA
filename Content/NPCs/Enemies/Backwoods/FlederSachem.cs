@@ -1,3 +1,6 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -10,7 +13,9 @@ namespace RoA.Content.NPCs.Enemies.Backwoods;
 sealed class FlederSachem : ModNPC {
 	public override string Texture => ResourceManager.EmptyTexture;
 
-	public override void SetDefaults() {
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => false;
+
+    public override void SetDefaults() {
 		NPC.lifeMax = 80;
 		NPC.width = NPC.height = 2;
 

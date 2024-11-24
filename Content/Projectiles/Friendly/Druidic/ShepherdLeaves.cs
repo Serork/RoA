@@ -14,6 +14,8 @@ namespace RoA.Content.Projectiles.Friendly.Druidic;
 sealed class ShepherdLeaves : NatureProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
 
+    public override bool PreDraw(ref Color lightColor) => false;
+
     public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
 
     protected override void SafeSetDefaults() {
