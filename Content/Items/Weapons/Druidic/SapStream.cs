@@ -54,7 +54,7 @@ sealed class SapStream : NatureItem {
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
-            Vector2 vector2 = (velocity + Utils.RotatedByRandom(velocity, 0.25f) * Main.rand.NextFloat(0.8f, 1.4f) * Main.rand.NextFloat(0.75f, 1.35f));
+            Vector2 vector2 = (velocity + Utils.RotatedByRandom(velocity, 0.25f) * Main.rand.NextFloat(0.8f, 1.4f) * Main.rand.NextFloat(0.75f, 1.35f)) * Main.rand.NextFloat(1.25f, 2f);
             Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI);
         }
 
@@ -110,24 +110,25 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
     private void DrawSelf(SpriteBatch spritebatch) {
         spritebatch.End();
         spritebatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        float opacity = _opacity/* * 1.5f*/;
         Vector2 toCorner = new Vector2(0f, Scale).RotatedBy(Rotation);
-        Color color1 = new Color(147, 40, 2).MultiplyRGB(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)) * _opacity * 0.75f;
-        Color color2 = new Color(201, 81, 0).MultiplyRGB(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)) * _opacity * 0.75f;
+        Color color2 = new Color(201, 85, 8) * opacity * 1f;
+        Color color1 = new Color(126, 33, 0) * opacity * 1f;
         List<Vertex2D> bars = [
-            new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, Color.Lerp(color1, color2, 0f), new Vector3(0f, 0f, 0f)),
-            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), Color.Lerp(color1, color2, 0.33f),  new Vector3(0f, 1f, 0f)),
-            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), Color.Lerp(color1, color2, 0.66f), new Vector3(1f, 0f, 0f)),
-            new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), Color.Lerp(color1, color2, 0.99f), new Vector3(1f, 1f, 0f))
+            new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, Color.Lerp(color1, color2, 0f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(0f, 0f, 0f)),
+            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), Color.Lerp(color1, color2, 0.33f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)),  new Vector3(0f, 1f, 0f)),
+            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), Color.Lerp(color1, color2, 0.66f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 0f, 0f)),
+            new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), Color.Lerp(color1, color2, 1f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 1f, 0f))
         ];
         Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.Textures + "Lightball3").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-        color1 = new Color(204, 128, 14).MultiplyRGB(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)) * _opacity * 0.625f;
-        color2 = new Color(255, 241, 44).MultiplyRGB(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)) * _opacity * 0.625f;
+        color1 = new Color(255, 241, 44) * opacity * 0.2385f;
+        color2 = Color.White * opacity * 0.2385f;
         bars = [
-            new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, Color.Lerp(color1, color2, 0f), new Vector3(0f, 0f, 0f)),
-            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), Color.Lerp(color1, color2, 0.33f),  new Vector3(0f, 1f, 0f)),
-            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), Color.Lerp(color1, color2, 0.66f), new Vector3(1f, 0f, 0f)),
-            new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), Color.Lerp(color1, color2, 0.99f), new Vector3(1f, 1f, 0f))
+            new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, Color.Lerp(color1, color2, 0f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(0f, 0f, 0f)),
+            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), Color.Lerp(color1, color2, 0.4f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)),  new Vector3(0f, 1f, 0f)),
+            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), Color.Lerp(color1, color2, 0.8f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 0f, 0f)),
+            new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), Color.Lerp(color1, color2, 1f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 1f, 0f))
         ];
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
@@ -175,24 +176,22 @@ sealed class GalipotStream : NatureProjectile {
 
     public override void AI() {
         Projectile.ai[2] *= 0.99f;
-        void dust() {
-            GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
-                Projectile.velocity);
-            drop.projectile = Projectile;
-            drop.Scale = Main.rand.NextFloat(8f, 9f) * 0.85f;
-            drop.Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
-            drop.AI0 = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+        void drop() {
+            if (Main.rand.NextBool(2)) {
+                GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
+                    Projectile.velocity);
+                drop.projectile = Projectile;
+                drop.Scale = Main.rand.NextFloat(8f, 10f);
+                drop.Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+                drop.AI0 = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+            }
         }
         if (IsActive) {
-            dust();
-            //if (Main.rand.NextBool(5)) {
-            //    for (int i = 0; i < 8; i++) {
-            //        Vector2 pos = Projectile.Center - new Vector2(4f) + Projectile.velocity * Main.rand.NextFloat(1f);
-            //        Dust dust = Dust.NewDustDirect(pos, 0, 0, ModContent.DustType<Galipot>(), 0, 0, 0, default, 0.75f + Main.rand.NextFloatRange(0.15f));
-            //        dust.velocity *= 0.785f;
-            //        dust.noGravity = true;
-            //    }
-            //}
+            drop();
+            Vector2 pos = Projectile.Center - new Vector2(4f) + Projectile.velocity * Main.rand.NextFloat(1f);
+            Dust dust = Dust.NewDustDirect(pos - Projectile.velocity.SafeNormalize(Vector2.Zero), 4, 4, ModContent.DustType<Galipot>(), 0, 0, 0, default, 0.575f + Main.rand.NextFloatRange(0.15f));
+            dust.velocity *= 0.285f;
+            dust.noGravity = true;
             Projectile.ai[2] = 0f;
             Projectile.velocity.Y += 0.15f;
             if (Collision.SolidCollision(Projectile.Center, 2, 2)) {
@@ -203,20 +202,11 @@ sealed class GalipotStream : NatureProjectile {
         }
         else {
             if (Main.rand.NextBool(3)) {
-                dust();
+                drop();
             }
             float value = 0.05f * Main.rand.NextFloat();
             Projectile.ai[2] += value;
             Projectile.position.Y += value;
-            //if (Main.rand.NextBool(5)) {
-            //    for (int i = 0; i < 8; i++) {
-            //        Vector2 pos = Projectile.Center - new Vector2(8f);
-            //        Dust dust = Dust.NewDustDirect(pos, 0, 0, ModContent.DustType<Galipot>(), 0, 0, 0, default, 0.75f + Main.rand.NextFloatRange(0.15f));
-            //        dust.velocity = -Vector2.UnitY * Main.rand.NextFloat(2f, 4f);
-            //        dust.velocity *= 0.785f;
-            //        dust.noGravity = true;
-            //    }
-            //}
             if (!Collision.SolidCollision(Projectile.Center, 0, 0)) {
                 Projectile.ai[1] = 0f;
             }
