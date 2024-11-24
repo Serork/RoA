@@ -35,7 +35,7 @@ sealed class SapStream : NatureItem {
 
         Item.damage = 2;
         NatureWeaponHandler.SetPotentialDamage(Item, 12);
-        NatureWeaponHandler.SetFillingRate(Item, 0.8f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.5f);
 
         Item.value = Item.sellPrice(silver: 15);
         Item.rare = ItemRarityID.Blue;
@@ -48,13 +48,13 @@ sealed class SapStream : NatureItem {
     }
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 velocity2 = new Vector2(velocity.X, velocity.Y).SafeNormalize(Vector2.Zero);
-        position += velocity2 * 50f;
+        position += velocity2 * 45f;
         position += new Vector2(-velocity2.Y, velocity2.X) * (5f * player.direction);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
-            Vector2 vector2 = Utils.RotatedByRandom(velocity, 0.25f) * Main.rand.NextFloat(0.75f, 1.35f);
+            Vector2 vector2 = (velocity + Utils.RotatedByRandom(velocity, 0.25f) * Main.rand.NextFloat(0.8f, 1.4f) * Main.rand.NextFloat(0.75f, 1.35f));
             Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI);
         }
 
@@ -169,13 +169,15 @@ sealed class GalipotStream : NatureProjectile {
         base.SafeOnSpawn(source);
 
         Projectile.velocity *= Main.rand.NextFloat(1.25f, 1.75f) * Main.rand.NextFloat(0.75f, 1f);
-        Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloatDirection() * MathHelper.PiOver2) * Projectile.velocity.Length() * 0.25f;
+        Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloatDirection() * MathHelper.PiOver2) * Projectile.velocity.Length() * 0.1f;
+        Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
     }
 
     public override void AI() {
         Projectile.ai[2] *= 0.99f;
         void dust() {
-            GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2], Projectile.velocity);
+            GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
+                Projectile.velocity);
             drop.projectile = Projectile;
             drop.Scale = Main.rand.NextFloat(8f, 9f) * 0.85f;
             drop.Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
@@ -193,7 +195,7 @@ sealed class GalipotStream : NatureProjectile {
             //}
             Projectile.ai[2] = 0f;
             Projectile.velocity.Y += 0.15f;
-            if (Collision.SolidCollision(Projectile.Center, 4, 4)) {
+            if (Collision.SolidCollision(Projectile.Center, 2, 2)) {
                 Projectile.velocity = Vector2.Zero;
 
                 Projectile.ai[1] = 1f;
