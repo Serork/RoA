@@ -122,8 +122,8 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
         ];
         Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.Textures + "Lightball3").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-        color1 = new Color(255, 241, 44) * opacity * 0.2385f;
-        color2 = Color.White * opacity * 0.2385f;
+        color1 = new Color(255, 241, 44) * opacity * 0.225f;
+        color2 = Color.White * opacity * 0.225f;
         bars = [
             new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, Color.Lerp(color1, color2, 0f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(0f, 0f, 0f)),
             new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), Color.Lerp(color1, color2, 0.4f).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)),  new Vector3(0f, 1f, 0f)),
