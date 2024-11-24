@@ -48,7 +48,7 @@ sealed class SapStream : NatureItem {
     }
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 velocity2 = new Vector2(velocity.X, velocity.Y).SafeNormalize(Vector2.Zero);
-        position += velocity2 * 45f;
+        position += velocity2 * 40f;
         position += new Vector2(-velocity2.Y, velocity2.X) * (5f * player.direction);
     }
 
