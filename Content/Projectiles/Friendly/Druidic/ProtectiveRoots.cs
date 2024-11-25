@@ -28,7 +28,7 @@ sealed class ProtectiveRoots : NatureProjectile {
 
         Projectile.penetrate = 4;
 
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
         Projectile.friendly = true;
 
         Projectile.ignoreWater = true;

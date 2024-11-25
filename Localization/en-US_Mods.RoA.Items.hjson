@@ -330,3 +330,23 @@ Woodbinder: {
 	DisplayName: Woodbinder
 	Tooltip: ""
 }
+
+SlipperyBomb: {
+	DisplayName: Slippery Bomb
+	Tooltip: ""
+}
+
+SlipperyDynamite: {
+	DisplayName: Slippery Dynamite
+	Tooltip: ""
+}
+
+SlipperyGlowstick: {
+	DisplayName: Slippery Glowstick
+	Tooltip: ""
+}
+
+SlipperyGrenade: {
+	DisplayName: Slippery Grenade
+	Tooltip: ""
+}

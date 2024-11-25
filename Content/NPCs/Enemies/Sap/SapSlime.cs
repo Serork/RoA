@@ -1,5 +1,9 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
+using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Materials;
 using RoA.Content.Tiles.Crafting;
 
@@ -7,8 +11,10 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace RoA.Content.NPCs.Enemies.Sap;
 
@@ -30,6 +36,100 @@ sealed class SapSlime : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.aiStyle = 1;
         NPC.alpha = 100;
+    }
+
+    private int GenerateItemInsideBody(bool isBallooned) {
+        if (Main.rand.NextBool(3)) {
+            WeightedRandom<int> weightedRandom = new();
+            weightedRandom.Add(ModContent.ItemType<SlipperyBomb>());
+            weightedRandom.Add(ModContent.ItemType<SlipperyDynamite>(), 0.5);
+            weightedRandom.Add(ModContent.ItemType<SlipperyGrenade>());
+            weightedRandom.Add(ModContent.ItemType<SlipperyGlowstick>());
+            return weightedRandom.Get();
+        }
+        else {
+            return ModContent.ItemType<Galipot>();
+        }
+        //switch (Main.rand.Next(1)) {
+        //    case 0:
+        //        return ModContent.ItemType<Galipot>();
+        //    //case 1:
+        //    //    return 72;
+        //    //default:
+        //    //    return 73;
+        //}
+    }
+    private static void DrawNPC_SlimeItem(NPC rCurrentNPC, int typeCache, Microsoft.Xna.Framework.Color npcColor, float addedRotation) {
+        int num = (int)rCurrentNPC.ai[1];
+        float num2 = 1f;
+        float num3 = 34 * rCurrentNPC.scale * 0.55f;
+        float num4 = 24 * rCurrentNPC.scale * 0.55f;
+        Main.GetItemDrawFrame(num, out var itemTexture, out var rectangle);
+        float num5 = rectangle.Width;
+        float num6 = rectangle.Height;
+        bool num7 = (int)rCurrentNPC.ai[0] == -999;
+        if (num7) {
+            num3 = 14f * rCurrentNPC.scale;
+            num4 = 14f * rCurrentNPC.scale;
+        }
+
+        if (num5 > num3) {
+            num2 *= num3 / num5;
+            num5 *= num2;
+            num6 *= num2;
+        }
+
+        if (num6 > num4) {
+            num2 *= num4 / num6;
+            num5 *= num2;
+            num6 *= num2;
+        }
+
+        float num8 = -1f;
+        float num9 = 1f;
+        int num10 = rCurrentNPC.frame.Y / (TextureAssets.Npc[typeCache].Height() / Main.npcFrameCount[typeCache]);
+        num9 -= (float)num10;
+        num8 += (float)(num10 * 2);
+        float num11 = 0.2f;
+        num11 -= 0.3f * (float)num10;
+        if (num7) {
+            num11 = 0f;
+            num9 -= 6f;
+            num8 -= num5 * addedRotation;
+        }
+
+        if (num == 75) {
+            npcColor = new Microsoft.Xna.Framework.Color(255, 255, 255, 0);
+            num11 *= 0.3f;
+            num9 -= 2f;
+        }
+
+        npcColor = rCurrentNPC.GetShimmerColor(npcColor);
+        Main.spriteBatch.Draw(itemTexture, new Vector2(rCurrentNPC.Center.X - Main.screenPosition.X + num8, rCurrentNPC.Center.Y - Main.screenPosition.Y + rCurrentNPC.gfxOffY + num9), rectangle, npcColor, num11, rectangle.Size() / 2f, num2, SpriteEffects.None, 0f);
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        if (NPC.ai[1] > 0f)
+            DrawNPC_SlimeItem(NPC, NPC.type, drawColor, 0f);
+        return true;
+    }
+
+    public override void AI() {
+        if (NPC.velocity.Y == 0f) {
+            NPC.ai[0] += 1f + (Main.expertMode ? 0.5f : 0f);
+        }
+        if (NPC.ai[1] == 0f && Main.netMode != 1) {
+            NPC.ai[1] = -1f;
+            if (Main.remixWorld && NPC.ai[0] != -999f && Main.rand.Next(3) == 0) {
+                NPC.ai[1] = 75f;
+                NPC.netUpdate = true;
+            }
+            else if (Main.rand.Next(3) == 0) {
+                int num2 = GenerateItemInsideBody(NPC.ai[0] == -999f);
+                NPC.ai[1] = num2;
+                NPC.netUpdate = true;
+            }
+        }
     }
 
     public override void FindFrame(int frameHeight) {
@@ -56,7 +156,7 @@ sealed class SapSlime : ModNPC {
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo) {
         int y = spawnInfo.SpawnTileY;
-        return ModContent.GetInstance<Sap>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<Sap>().tapperTilesCount / 10f, 0f, 1f) : 0f;
+        return ModContent.GetInstance<Sap>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<Sap>().tapperTilesCount / 5f, 0f, 2f) : 0f;
     }
 }
 
@@ -66,21 +166,21 @@ sealed class Sap : ModSystem {
     public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         => tapperTilesCount = tileCounts[ModContent.TileType<Tapper>()];
 
-		public override void PostUpdateWorld()
-        => isSapActive = tapperTilesCount >= 3;
-	}
+    public override void PostUpdateWorld()
+    => isSapActive = tapperTilesCount >= 2;
+}
 
 sealed class SapPlayer : ModPlayer {
     public bool useBottle;
 
-		public override void PreUpdate() {
+    public override void PreUpdate() {
         if (Player.inventory[Player.selectedItem].type == ItemID.Bottle && Player.itemAnimation >= Player.itemAnimationMax)
             useBottle = true;
         if (Player.itemAnimation <= 0)
             useBottle = false;
     }
 
-		public override void PostUpdateMiscEffects() {
+    public override void PostUpdateMiscEffects() {
         int itemID = ItemID.Bottle;
         if (Player.inventory[Player.selectedItem].type != itemID || Player.itemAnimation <= 0)
             return;
@@ -105,9 +205,9 @@ sealed class SapPlayer : ModPlayer {
             firstRectangle.Y -= (int)(((double)firstRectangle.Height * 1.4 - (double)firstRectangle.Height) * (double)Player.gravDir);
             firstRectangle.Height = (int)((double)firstRectangle.Height * 1.4);
         }
-        for (int i = 0; i < Main.maxNPCs; i++)  {
-				NPC npc = Main.npc[i];
-            if (npc.active && npc.type == (ushort)ModContent.NPCType<SapSlime>())  {
+        for (int i = 0; i < Main.maxNPCs; i++) {
+            NPC npc = Main.npc[i];
+            if (npc.active && npc.type == (ushort)ModContent.NPCType<SapSlime>()) {
                 Rectangle secondRectangle = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
                 if (useBottle && firstRectangle.Intersects(secondRectangle) && (npc.noTileCollide || Collision.CanHit(Player.position, Player.width, Player.height, npc.position, npc.width, npc.height))) {
                     if (Player.CountItem(itemID) >= 1) {
@@ -137,4 +237,4 @@ sealed class SapPlayer : ModPlayer {
             }
         }
     }
-	}
+}
