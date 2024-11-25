@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 
@@ -41,7 +42,7 @@ class LivingElderwood : ModTile {
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
         RegisterItemDrop(ModContent.ItemType<Elderwood>());
-        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+        DustType = (ushort)ModContent.DustType<WoodTrash>();
 		AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
 	}
 }

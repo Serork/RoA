@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
-using RoA.Common.WorldEvents;
+using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -25,7 +25,7 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
 
-        DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
+        DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
     }
 
@@ -33,10 +33,10 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         bool flag = (tile.TileFrameX >= 1116 && tile.TileFrameX <= 1188) && tile.TileFrameY > 0;
         if (flag) {
-            type = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+            type = ModContent.DustType<WoodTrash>();
         }
         else if (tile.TileFrameX <= 108) {
-            type = ModContent.DustType<Dusts.Backwoods.Stone>();
+            type = ModContent.DustType<Stone>();
         }
 
         return true;
@@ -47,10 +47,10 @@ class BackwoodsRocks0 : BackwoodsRocks1 {
     public override bool CreateDust(int i, int j, ref int type) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         if (tile.TileFrameX <= 108) {
-            type = ModContent.DustType<Dusts.Backwoods.Stone>();
+            type = ModContent.DustType<Stone>();
         }
         else {
-            type = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+            type = ModContent.DustType<WoodTrash>();
         }
 
         return true;
@@ -89,7 +89,7 @@ class BackwoodsRocks1 : ModTile {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
+        DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
     }
 

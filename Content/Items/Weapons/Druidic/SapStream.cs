@@ -5,7 +5,6 @@ using RoA.Common.Druid;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly;
-using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
@@ -16,7 +15,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
-using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic;
@@ -63,7 +61,7 @@ sealed class SapStream : NatureItem {
 }
 
 sealed class GalipotDrop : VisualEffect<GalipotDrop> {
-    internal Projectile projectile;
+    public Projectile Projectile;
 
     private float _opacity;
 
@@ -75,17 +73,17 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
-        if (!(projectile == null || !projectile.active)) {
-            TimeLeft = projectile.timeLeft;
+        if (!(Projectile == null || !Projectile.active)) {
+            TimeLeft = Projectile.timeLeft;
         }
-        if ((Scale < 1f || projectile.timeLeft < 100) && _opacity > 0f) {
+        if ((Scale < 1f || Projectile.timeLeft < 100) && _opacity > 0f) {
             _opacity -= 0.065f + Main.rand.NextFloatRange(0.025f);
         }
         if (--TimeLeft <= 0 || _opacity <= 0f) {
             RestInPool();
             return;
         }
-        if (Collision.SolidCollision(Position, 0, 0)) {
+        if (Collision.SolidCollision(Position, 0, 0) || Collision.WetCollision(Position, 0, 0)) {
             Velocity = Vector2.UnitY;
             Position.Y += 0.05f * Main.rand.NextFloat();
             if (Scale < 1f) {
@@ -155,7 +153,20 @@ sealed class GalipotStream : NatureProjectile {
         Projectile.ignoreWater = false;
         Projectile.tileCollide = false;
         Projectile.timeLeft = 500;
-        Projectile.penetrate = 1;
+        Projectile.penetrate = 2;
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        target.immune[Projectile.owner] = 20;
+        if (Projectile.ai[1] != 1f) {
+            Projectile.Kill();
+        }
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        if (Projectile.ai[1] != 1f) {
+            Projectile.Kill();
+        }
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
@@ -180,7 +191,7 @@ sealed class GalipotStream : NatureProjectile {
             if (Main.rand.NextBool(2)) {
                 GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
                     Projectile.velocity);
-                drop.projectile = Projectile;
+                drop.Projectile = Projectile;
                 drop.Scale = Main.rand.NextFloat(8f, 10f);
                 drop.Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 drop.AI0 = Main.rand.NextFloat(0f, MathHelper.TwoPi);
@@ -194,10 +205,11 @@ sealed class GalipotStream : NatureProjectile {
             dust.noGravity = true;
             Projectile.ai[2] = 0f;
             Projectile.velocity.Y += 0.15f;
-            if (Collision.SolidCollision(Projectile.Center, 2, 2)) {
+            if (Projectile.ai[1] != 1f && Collision.SolidCollision(Projectile.Center, 2, 2)) {
                 Projectile.velocity = Vector2.Zero;
 
                 Projectile.ai[1] = 1f;
+                Projectile.maxPenetrate = Projectile.penetrate = -1;
             }
         }
         else {
@@ -207,8 +219,9 @@ sealed class GalipotStream : NatureProjectile {
             float value = 0.05f * Main.rand.NextFloat();
             Projectile.ai[2] += value;
             Projectile.position.Y += value;
-            if (!Collision.SolidCollision(Projectile.Center, 0, 0)) {
+            if (Projectile.ai[1] != 0f && !Collision.SolidCollision(Projectile.Center, 0, 0)) {
                 Projectile.ai[1] = 0f;
+                Projectile.maxPenetrate = Projectile.penetrate = 2;
             }
         }
     }

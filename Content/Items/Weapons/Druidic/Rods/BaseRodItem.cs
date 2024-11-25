@@ -47,29 +47,29 @@ abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
 abstract class BaseRodItem : BaseRodItem<BaseRodProjectile> { }
 
 abstract class BaseRodProjectile : NatureProjectile {
-    private const float STARTROTATION = 1.4f;
-    private const float MINROTATION = -0.24f, MAXROTATION = 0.24f;
-    private const int TICKSTOREUSE = 30;
+    protected const float STARTROTATION = 1.4f;
+    protected const float MINROTATION = -0.24f, MAXROTATION = 0.24f;
+    protected const int TICKSTOREUSE = 30;
 
-    private short _leftTimeToReuse;
-    private float _maxUseTime, _maxUseTime2;
-    private bool _shot, _shot2;
-    private float _rotation;
+    protected short _leftTimeToReuse;
+    protected float _maxUseTime, _maxUseTime2;
+    protected bool _shot, _shot2;
+    protected float _rotation;
 
     protected Player Owner => Projectile.GetOwnerAsPlayer();
-    private bool FacedLeft => Owner.direction == -1;
+    protected bool FacedLeft => Owner.direction == -1;
 
-    private float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
+    protected float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
 
     protected virtual bool IsInUse => !Owner.CCed;
-    private float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
-    private float Step => Math.Clamp(1f - UseTime, 0f, 1f);
+    protected float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
+    protected float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
-    private Item HeldItem => Owner.HeldItem;
-    private Texture2D HeldItemTexture => HeldItem.IsEmpty() ? null : TextureAssets.Item[HeldItem.type].Value;
+    protected Item HeldItem => Owner.HeldItem;
+    protected Texture2D HeldItemTexture => HeldItem.IsEmpty() ? null : TextureAssets.Item[HeldItem.type].Value;
 
-    private Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
-    private Vector2 Offset => HeldItemTexture == null ? Vector2.Zero : (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
+    protected Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
+    protected Vector2 Offset => HeldItemTexture == null ? Vector2.Zero : (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
     public Vector2 CorePosition => Projectile.Center + Offset + GravityOffset;
 
     public bool PreparingAttack => !_shot;
@@ -80,7 +80,7 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     public override string Texture => ResourceManager.EmptyTexture;
 
-    protected abstract void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition);
+    protected virtual void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) { }
 
     protected virtual void SpawnCoreDustsWhileShotProjectileIsActive(float step, Player player, Vector2 corePosition) { }
 

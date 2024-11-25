@@ -61,7 +61,7 @@ abstract class Wave : NatureProjectile {
     }
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
-        modifiers.SourceDamage += 2f;
+        //modifiers.SourceDamage += 2f;
         modifiers.SetCrit();
     }
 

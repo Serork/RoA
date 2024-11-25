@@ -5,8 +5,7 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria;
 using Terraria.Enums;
-
-using RoA.Content.Dusts;
+using RoA.Content.Dusts.Backwoods;
 
 namespace RoA.Content.Tiles.Ambient;
 
@@ -35,7 +34,7 @@ sealed class FallenTree : ModTile {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        DustType = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+        DustType = ModContent.DustType<WoodTrash>();
         AddMapEntry(new Microsoft.Xna.Framework.Color(91, 74, 67), CreateMapEntryName());
     }
 

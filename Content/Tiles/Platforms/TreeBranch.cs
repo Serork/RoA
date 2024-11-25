@@ -12,6 +12,7 @@ using RoA.Core.Utility;
 
 using System;
 using RoA.Common.Tiles;
+using RoA.Content.Dusts.Backwoods;
 
 namespace RoA.Content.Tiles.Platforms;
 
@@ -44,7 +45,7 @@ class TreeBranch : ModTile {
         AdjTiles = [TileID.Platforms];
 
         RegisterItemDrop(ModContent.ItemType<Items.Materials.Elderwood>());
-        DustType = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+        DustType = ModContent.DustType<WoodTrash>();
 
         AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
     }

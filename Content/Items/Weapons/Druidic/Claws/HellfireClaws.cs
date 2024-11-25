@@ -36,18 +36,7 @@ sealed class HellfireClaws : BaseClawsItem {
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
         clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
             Owner = Item,
-            ShouldReset = false,
-            //OnlySpawn = true,
-            //OnSpawn = (Player player) => {
-            //    if (player.ownedProjectileCounts[ModContent.ProjectileType<HellfireClawsSlash>()] < 1) {
-            //        Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(player.direction, 0f), ModContent.ProjectileType<HellfireClawsSlash>(),
-            //            player.GetWeaponDamage(Item), player.GetWeaponKnockback(Item), player.whoAmI, player.direction/* * player.gravDir*/, NatureWeaponHandler.GetUseSpeed(Item, player));
-            //    }
-            //},
-            //SpawnProjectile = (Player player) => {
-            //    Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(player.direction, 0f), ModContent.ProjectileType<HellfireClawsSlash>(),
-            //        player.GetWeaponDamage(Item), player.GetWeaponKnockback(Item), player.whoAmI, player.direction/* * player.gravDir*/, NatureWeaponHandler.GetUseSpeed(Item, player));
-            //}
+            ShouldReset = false
         });
     }
 }

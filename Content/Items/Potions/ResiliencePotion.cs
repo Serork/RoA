@@ -2,13 +2,12 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
 
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Potions;
 
-sealed class ResiliencePotion : ModItem {
+sealed class ResiliencePotion : NatureItem {
 	public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Resilience Potion");
         //Tooltip.SetDefault("Decreases Wreath discharge speed");
@@ -21,7 +20,7 @@ sealed class ResiliencePotion : ModItem {
         };
     }
 
-	public override void SetDefaults() {
+	protected override void SafeSetDefaults() {
         int width = 18; int height = 30;
         Item.Size = new Vector2(width, height);
 

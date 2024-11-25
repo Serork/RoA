@@ -11,6 +11,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;

@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Tiles.Solid.Backwoods;
 using Terraria.GameContent.Metadata;
-using RoA.Content.Dusts;
 using RoA.Content.Tiles.Platforms;
 using RoA.Core.Utility;
+using RoA.Content.Dusts.Backwoods;
 
 namespace RoA.Content.Tiles.Trees;
 
@@ -47,7 +47,7 @@ sealed class PrimordialSapling : ModTile {
 
 		LocalizedText name = CreateMapEntryName();
 		AddMapEntry(new Color(200, 200, 200), name);
-		DustType = ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+		DustType = ModContent.DustType<WoodTrash>();
 		HitSound = SoundID.Dig;
 	}
 

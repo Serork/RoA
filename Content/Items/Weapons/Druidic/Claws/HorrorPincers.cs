@@ -16,9 +16,6 @@ sealed class HorrorPincers : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(8, 4f);
-
-        //NatureWeaponHandler.SetPotentialDamage(Item, 24);
-        //NatureWeaponHandler.SetPotentialUseSpeed(Item, (ushort)(UseTime - UseTime / 3));
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(132, 75, 140), new Color(160, 100, 200));

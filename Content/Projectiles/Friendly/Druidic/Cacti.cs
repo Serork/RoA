@@ -56,8 +56,8 @@ sealed class Cacti : NatureProjectile {
 
         Vector2 mousePoint = player.GetViableMousePosition();
         float y = player.MountedCenter.Y - player.height * (3f + UseTimeFactor * player.height * 0.75f);
-        float lastY = Math.Abs(y - Main.screenPosition.Y + Main.screenHeight);
         Vector2 pointPosition = new(mousePoint.X, y);
+        float lastY = Math.Abs(y - Main.screenPosition.Y + Main.screenHeight);
         Projectile.Center = pointPosition + Vector2.UnitY * lastY;
         Vector2 dif = pointPosition - Projectile.Center;
         Projectile.velocity.X = 0f;
@@ -126,24 +126,22 @@ sealed class Cacti : NatureProjectile {
 
         SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
-        if (Main.netMode != NetmodeID.Server) {
-            for (int num559 = 0; num559 < 10; num559++) {
-                int num560 = Dust.NewDust(Projectile.Center - Projectile.velocity, Projectile.width, Projectile.height, DustID.JunglePlants);
-                Dust dust2 = Main.dust[num560];
-                dust2.noLight = true;
-                if (Main.rand.NextBool(2)) {
-                    dust2.scale *= 1.2f;
-                }
+        for (int num559 = 0; num559 < 10; num559++) {
+            int num560 = Dust.NewDust(Projectile.Center - Projectile.velocity, Projectile.width, Projectile.height, DustID.JunglePlants);
+            Dust dust2 = Main.dust[num560];
+            dust2.noLight = true;
+            if (Main.rand.NextBool(2)) {
+                dust2.scale *= 1.2f;
             }
+        }
 
-            for (float num17 = 0f; num17 < 1f; num17 += 0.025f) {
-                Dust dust8 = Dust.NewDustPerfect(Projectile.Center + Vector2.UnitY * Projectile.Size.Y + Main.rand.NextVector2Circular(80, 40f) * Projectile.scale + Projectile.velocity.SafeNormalize(Vector2.UnitY) * num17, ModContent.DustType<CactiCasterDust>(), Main.rand.NextVector2Circular(3f, 3f), Scale: Main.rand.NextFloat(1.25f, 1.5f));
-                dust8.velocity.Y -= 4f;
-                dust8.noGravity = true;
-                Dust dust2 = dust8;
-                dust2.velocity += Projectile.velocity * 0.2f;
-                dust2.velocity *= 1.01f;
-            }
+        for (float num17 = 0f; num17 < 1f; num17 += 0.025f) {
+            Dust dust8 = Dust.NewDustPerfect(Projectile.Center + Vector2.UnitY * Projectile.Size.Y + Main.rand.NextVector2Circular(80, 40f) * Projectile.scale + Projectile.velocity.SafeNormalize(Vector2.UnitY) * num17, ModContent.DustType<CactiCasterDust>(), Main.rand.NextVector2Circular(3f, 3f), Scale: Main.rand.NextFloat(1.25f, 1.5f));
+            dust8.velocity.Y -= 4f;
+            dust8.noGravity = true;
+            Dust dust2 = dust8;
+            dust2.velocity += Projectile.velocity * 0.2f;
+            dust2.velocity *= 1.01f;
         }
     }
 

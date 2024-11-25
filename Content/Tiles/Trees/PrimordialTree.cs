@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common.Tiles;
 using RoA.Content.Dusts;
+using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
@@ -67,7 +68,7 @@ sealed class PrimordialTree : ModTree {
 
     public override int TreeLeaf() => ModContent.GoreType<BackwoodsLeaf>();
 
-    public override int CreateDust() => ModContent.DustType<Dusts.Backwoods.WoodTrash>();
+    public override int CreateDust() => ModContent.DustType<WoodTrash>();
 
     public override int DropWood() => ModContent.ItemType<Items.Materials.Elderwood>();
 

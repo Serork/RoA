@@ -2,13 +2,12 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
 
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Potions;
 
-sealed class WillpowerPotion : ModItem {
+sealed class WillpowerPotion : NatureItem {
 	public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Willpower Potion");
         //Tooltip.SetDefault("Increases Wreath charge speed");
@@ -20,7 +19,7 @@ sealed class WillpowerPotion : ModItem {
         };
     }
 
-	public override void SetDefaults() {
+    protected override void SafeSetDefaults() {
         int width = 18; int height = 30;
         Item.Size = new Vector2(width, height);
 

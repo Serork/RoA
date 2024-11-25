@@ -67,6 +67,7 @@ sealed class HellfireFracture : NatureProjectile {
                 Projectile.position += Vector2.UnitY * 10f * -player.direction;
                 Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 10f;
                 Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
+                Projectile.direction = player.direction;
             }
         }
         else if (Projectile.ai[0] < 1f) {
@@ -191,8 +192,10 @@ sealed class HellfireFracture : NatureProjectile {
         rot += MathHelper.Pi;
         if (Projectile.direction == 1) {
             rot += 0.2f;
+            rot -= MathHelper.TwoPi;
         }
         //color = color.MultiplyRGB(lightColor);
+        bool flag0 = Projectile.direction == -1;
         Vector2 pos1 = _first, pos2 = _last;
         Vector2 dif = pos2 - pos1;
         Vector2 vel = dif.SafeNormalize(Vector2.Zero) * dif.Length() / 2f;
@@ -243,6 +246,7 @@ sealed class HellfireFracture : NatureProjectile {
             bool flag2 = progress < gap2;
             bool flag3 = !flag && !flag2;
             float maxSize = 5f;
+            SpriteEffects effects = !flag0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             if (flag3) {
                 if (size >= maxSize) {
                     if (random.NextBool(3) && !decrease) {
@@ -291,7 +295,9 @@ sealed class HellfireFracture : NatureProjectile {
                     index = -(i - max / 2);
                 }
                 Vector2 posOffset = Projectile.velocity * index;
-                Main.spriteBatch.Line(start + posOffset - offset + offset2, vector2_4 + posOffset + vec - offset + offset2, color, drawSize);
+                Vector2 drawStart = start + posOffset - offset + offset2;
+                Vector2 drawEnd = vector2_4 + posOffset + vec - offset + offset2;
+                Main.spriteBatch.Line(!flag0 ? drawEnd : drawStart, !flag0 ? drawStart : drawEnd, color, drawSize, effects);
             }
             float num = 10f;
             Vector2 first = start - offset + offset2;
@@ -314,7 +320,9 @@ sealed class HellfireFracture : NatureProjectile {
                     Vector2 vec2 = new Vector2(-vec.Y, vec.X).RotatedBy(rot2) * dir * (width / width2) * width2;
                     drawSize = size2 * 1.475f;
                     if (progress > 0.2f && progress < 0.85f) {
-                        Main.spriteBatch.Line(start - offset + offset2, vector2_4 + vec2 - offset + offset2, color, drawSize);
+                        Vector2 drawStart = start - offset + offset2;
+                        Vector2 drawEnd = vector2_4 + vec2 - offset + offset2;
+                        Main.spriteBatch.Line(!flag0 ? drawEnd : drawStart, !flag0 ? drawStart : drawEnd, color, drawSize, effects);
                     }
                     width += width2 * (0.04f + random.NextFloatRange(0.02f));
                     f = Helper.VelocityToPoint(start - offset + offset2, vector2_4 + vec2 - offset + offset2, 1f).SafeNormalize(Vector2.Zero).ToRotation();

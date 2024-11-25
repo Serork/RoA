@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ID;
 using RoA.Common.Sets;
+using RoA.Content.Dusts;
 
 namespace RoA.Content.Buffs;
 
@@ -48,7 +49,7 @@ sealed class HemorrhagePlayer : ModPlayer {
 
 		if (hemorrhageEffect) {
 			if (Main.rand.Next(4) == 0 && drawInfo.shadow == 0.0) {
-				int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f, 2f), Player.width + 4, Player.height + 4, DustID.Blood, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 0, default, 1.1f);
+				int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f, 2f), Player.width + 4, Player.height + 4, ModContent.DustType<Hemorrhage2>(), Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 0, default, 1.1f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity *= 1.8f;
 				Main.dust[dust].velocity.Y = 0.5f;
@@ -75,7 +76,7 @@ sealed class HemorrhageNPC : GlobalNPC {
 	public override void DrawEffects(NPC npc, ref Color drawColor) {
 		if (hemorrhageEffect) {
 			if (Main.rand.Next(4) == 0) {
-				int dust = Dust.NewDust(npc.position - new Vector2(2f, 2f), npc.width + 4, npc.height + 4, DustID.Blood, npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 0, default, 1.1f);
+				int dust = Dust.NewDust(npc.position - new Vector2(2f, 2f), npc.width + 4, npc.height + 4, ModContent.DustType<Hemorrhage2>(), npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 0, default, 1.1f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity *= 1.8f;
 				Main.dust[dust].velocity.Y = 0.5f;

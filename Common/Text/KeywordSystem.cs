@@ -2,18 +2,15 @@
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.InterfaceElements;
-using RoA.Content.Items;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
-using System;
 using System.Collections.Concurrent;
 using System.Reflection;
 
 using Terraria;
 using Terraria.GameContent;
-using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 

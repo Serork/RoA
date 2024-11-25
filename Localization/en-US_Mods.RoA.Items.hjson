@@ -325,3 +325,8 @@ SapStream: {
 	DisplayName: Sap Stream
 	Tooltip: ""
 }
+
+Woodbinder: {
+	DisplayName: Woodbinder
+	Tooltip: ""
+}
