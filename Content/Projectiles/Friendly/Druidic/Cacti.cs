@@ -127,7 +127,7 @@ sealed class Cacti : NatureProjectile {
         SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
         for (int num559 = 0; num559 < 10; num559++) {
-            int num560 = Dust.NewDust(Projectile.Center - Projectile.velocity, Projectile.width, Projectile.height, DustID.JunglePlants);
+            int num560 = Dust.NewDust(Projectile.Center - Projectile.velocity, Projectile.width, Projectile.height, DustID.JunglePlants, Alpha: 120);
             Dust dust2 = Main.dust[num560];
             dust2.noLight = true;
             if (Main.rand.NextBool(2)) {

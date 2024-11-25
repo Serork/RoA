@@ -41,8 +41,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             int type = ModContent.ProjectileType<Cacti>();
             float opacity = 1f/*Utils.GetLerpValue(1f, 0.75f, UseTime, true) * Utils.GetLerpValue(0f, 0.1f, UseTime, true)*/;
             Vector2 mousePoint = player.GetViableMousePosition();
-            int useTime = NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player);
-            float useTimeFactor = 0.0275f * (float)(1f - useTime / (player.itemTimeMax + player.itemTimeMax / 6f));
+            float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = player.MountedCenter.Y - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
             if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {
                 _position = _pointPosition = new(mousePoint.X, y);
@@ -50,12 +49,13 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             }
             else if (CurrentUseTime <= 0f && _makeDust) {
                 _makeDust = false;
-                for (int num559 = 0; num559 < 8; num559++) {
-                    int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, DustID.JunglePlants);
+                for (int num559 = 0; num559 < 10; num559++) {
+                    int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, DustID.JunglePlants, Alpha: 120);
                     Dust dust2 = Main.dust[num560];
                     dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
                     dust2.noLight = true;
                     dust2.velocity *= Main.rand.NextFloat(1f, 1.25f);
+                    dust2.velocity *= 1.25f;
                     dust2.noGravity = true;
                     if (Main.rand.NextBool(2)) {
                         dust2.scale *= 1.2f;
@@ -72,7 +72,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             //_rotation2 = MathHelper.SmoothStep(_rotation2, _rotation3, 0.1f);
             //Texture2D texture = TextureAssets.Projectile[type].Value;
             if (Main.rand.NextBool(5)) {
-                int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, DustID.JunglePlants);
+                int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, DustID.JunglePlants, Alpha: 120);
                 Dust dust2 = Main.dust[num560];
                 dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
                 dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
