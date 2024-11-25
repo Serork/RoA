@@ -86,7 +86,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             //Main.EntitySpriteDraw(texture, _position - Main.screenPosition, null, Color.White * 0.5f * opacity, _rotation2, texture.Size() / 2f, 1f, default);
         }
 
-        protected override bool ShouldntUpdateRotationAndDirection() => _shot && _leftTimeToReuse < TimeAfterShootToExist(Owner) / 3f;
+        protected override bool ShouldntUpdateRotationAndDirection() => _shot && _leftTimeToReuse < TimeAfterShootToExist(Owner) / 5f;
 
         protected override float MinUseTimeToShootFactor() => 0.61f;
 
