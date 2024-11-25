@@ -105,6 +105,8 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected virtual byte ProjActiveCount() => 1;
 
+    protected virtual bool ShouldntUpdateRotationAndDirection() => _shot && _leftTimeToReuse > 0;
+
     protected bool ShouldShootInternal() => CurrentUseTime <= _maxUseTime * MinUseTimeToShootFactor();
     protected virtual bool ShouldShoot() => ShouldShootInternal() || !IsInUse;
 
@@ -291,7 +293,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
         //center += Vector2.UnitY * Owner.gfxOffY;
         Projectile.Center = center;
-        if (Projectile.IsOwnerMyPlayer(Owner)) {
+        if (Projectile.IsOwnerMyPlayer(Owner) && !ShouldntUpdateRotationAndDirection()) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
             Projectile.netUpdate = true;
@@ -300,8 +302,10 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetDirection() {
-        Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
-        Owner.direction = Projectile.spriteDirection;
+        if (!ShouldntUpdateRotationAndDirection()) {
+            Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
+            Owner.direction = Projectile.spriteDirection;
+        }
         float armRotation = Projectile.rotation - MathHelper.PiOver4 * Owner.direction;
         if (Owner.gravDir == -1) {
             armRotation = MathHelper.Pi - armRotation + MathHelper.PiOver2 * Owner.direction;
@@ -310,6 +314,9 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetRotation() {
+        if (ShouldntUpdateRotationAndDirection()) {
+            return;
+        }
         float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
         float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;
         float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);

@@ -94,6 +94,8 @@ abstract class TulipBase : BaseRodProjectile {
 
     protected override Vector2 CorePositionOffsetFactor() => new(0.08f, 0.13f);
 
+    protected override bool ShouldntUpdateRotationAndDirection() => false;
+
     protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
         spawnPosition = Main.MouseWorld;
         ai0 = DustFrameXUsed();

@@ -29,6 +29,8 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
     }
 
     public sealed class PastoralRodBase : BaseRodProjectile {
+        protected override bool ShouldntUpdateRotationAndDirection() => false;
+
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
             count = 3;
             Vector2 pointPosition = player.GetViableMousePosition();
