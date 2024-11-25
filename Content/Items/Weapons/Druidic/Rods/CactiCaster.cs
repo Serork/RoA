@@ -43,7 +43,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             Vector2 mousePoint = player.GetViableMousePosition();
             int useTime = NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player);
             float useTimeFactor = 0.0275f * (float)(1f - useTime / (player.itemTimeMax + player.itemTimeMax / 6f));
-            float y = player.MountedCenter.Y - player.height * (0.8f + useTimeFactor * player.height * 0.75f);
+            float y = player.MountedCenter.Y - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
             if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {
                 _position = _pointPosition = new(mousePoint.X, y);
                 //_rotation2 = _rotation3 = (_pointPosition - player.position).X * 0.1f;

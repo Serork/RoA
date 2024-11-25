@@ -199,10 +199,13 @@ sealed class GalipotStream : NatureProjectile {
         }
         if (IsActive) {
             drop();
-            Vector2 pos = Projectile.Center - new Vector2(4f) + Projectile.velocity * Main.rand.NextFloat(1f);
-            Dust dust = Dust.NewDustDirect(pos - Projectile.velocity.SafeNormalize(Vector2.Zero), 4, 4, ModContent.DustType<Galipot>(), 0, 0, 0, default, 0.575f + Main.rand.NextFloatRange(0.15f));
-            dust.velocity *= 0.285f;
-            dust.noGravity = true;
+            if (Main.rand.NextBool(2)) {
+                Vector2 pos = Projectile.Center - new Vector2(4f) + Projectile.velocity * Main.rand.NextFloat(1f);
+                Dust dust = Dust.NewDustDirect(pos - Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(1.25f, 3f), 6, 6, ModContent.DustType<Galipot>(), 0, 0, 0, default, 0.6f + Main.rand.NextFloatRange(0.2f));
+                dust.velocity *= 0.3f;
+                dust.noGravity = true;
+            }
+
             Projectile.ai[2] = 0f;
             Projectile.velocity.Y += 0.15f;
             if (Projectile.ai[1] != 1f && Collision.SolidCollision(Projectile.Center, 2, 2)) {
