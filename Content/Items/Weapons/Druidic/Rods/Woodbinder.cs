@@ -19,7 +19,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
         //NatureWeaponHandler.SetPotentialDamage(Item, 12);
         NatureWeaponHandler.SetFillingRate(Item, 0.45f);
-        NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
+        NatureWeaponHandler.SetPotentialUseSpeed(Item, 35);
     }
 
     public sealed class WoodbinderBase : BaseRodProjectile {
