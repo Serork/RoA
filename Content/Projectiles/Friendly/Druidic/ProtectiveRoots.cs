@@ -101,9 +101,12 @@ sealed class ProtectiveRoots : NatureProjectile {
         Vector2 radius = new(16f, 16f);
         for (float i = -MathHelper.Pi; i < MathHelper.Pi; i += MathHelper.PiOver4 / 3f) {
             Vector2 pos = Projectile.Center + new Vector2(0f, 16f).RotatedBy(i);
+            pos -= Vector2.One * 5f;
+            pos.Y -= 1f;
             int dust = Dust.NewDust(pos, 2, 2, ModContent.DustType<WoodTrash>(), 0f, 0f, 0, default(Color), 1f);
             Main.dust[dust].velocity = Helper.VelocityToPoint(pos, Projectile.Center, 1f) * Main.rand.NextFloat(0.75f, 1.25f);
             Main.dust[dust].noGravity = true;
+            Main.dust[dust].scale *= Main.rand.NextFloat(0.85f, 1.15f);
             Main.dust[dust].velocity *= 0.35f + Main.rand.NextFloatRange(0.1f);
             Main.dust[dust].velocity *= 1.15f + Main.rand.NextFloatRange(0.1f);
         }

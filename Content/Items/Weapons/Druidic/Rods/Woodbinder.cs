@@ -41,7 +41,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 2);
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 3);
 
         public override void SendExtraAI(BinaryWriter writer) {
             base.SendExtraAI(writer);
@@ -93,7 +93,6 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
             for (int i = 0; i < 16; i++) {
                 int type = Main.rand.NextBool(4) ? ModContent.DustType<Dusts.Woodbinder>() : ModContent.DustType<WoodTrash>();
                 Vector2 position = corePosition + new Vector2(0, -6) + new Vector2(20f, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
-                position -= Vector2.One * 4f;
                 int dust = Dust.NewDust(position, 0, 0, type, 0, 0, 0, default(Color), Scale: Main.rand.NextFloat(1.25f, 1.5f));
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].fadeIn = 1.25f;

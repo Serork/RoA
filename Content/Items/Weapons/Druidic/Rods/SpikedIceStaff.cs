@@ -55,7 +55,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool ShouldPlayShootSound() => false;
 
-        protected override bool ShouldntUpdateRotationAndDirection() => _shot && CurrentUseTime < TimeAfterShootToExist(Owner) / 5f;
+        protected override bool ShouldntUpdateRotationAndDirection() => false;
 
         protected override void SafestOnSpawn(IEntitySource source) {
             _attackTime = NatureWeaponHandler.GetUseSpeed(Owner.GetSelectedItem(), Owner);
@@ -83,6 +83,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         }
 
         public override void PostAI() {
+            Main.NewText(CurrentUseTime);
             if (_shouldShoot) {
                 if (_attackTimer >= Min - PerShoot && _shootCount > 0) {
                     if (_attackTimer % PerShoot == 0f) {

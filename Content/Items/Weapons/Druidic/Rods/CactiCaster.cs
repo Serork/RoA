@@ -50,10 +50,13 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             else if (CurrentUseTime <= 0f && _makeDust) {
                 _makeDust = false;
                 for (int num559 = 0; num559 < 10; num559++) {
-                    int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, DustID.JunglePlants, Alpha: 120);
+                    bool flag = Main.rand.NextBool(3);
+                    int dustType = flag ? ModContent.DustType<CactiCasterDust>() : DustID.JunglePlants;
+                    int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: flag ? 0 : 120);
                     Dust dust2 = Main.dust[num560];
                     dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
                     dust2.noLight = true;
+                    dust2.scale *= 1.2f;
                     dust2.velocity *= Main.rand.NextFloat(1f, 1.25f);
                     dust2.velocity *= 1.25f;
                     dust2.noGravity = true;
@@ -72,12 +75,14 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             //_rotation2 = MathHelper.SmoothStep(_rotation2, _rotation3, 0.1f);
             //Texture2D texture = TextureAssets.Projectile[type].Value;
             if (Main.rand.NextBool(5)) {
-                int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, DustID.JunglePlants, Alpha: 120);
+                bool flag = Main.rand.NextBool(3);
+                int dustType = flag ? ModContent.DustType<CactiCasterDust>() : DustID.JunglePlants;
+                int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: flag ? 0 : 120);
                 Dust dust2 = Main.dust[num560];
                 dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
                 dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
                 dust2.noGravity = true;
-                dust2.scale *= 0.8f;
+                dust2.scale *= 1f;
                 dust2.noLight = true;
                 if (Main.rand.NextBool(2)) {
                     dust2.scale *= 1.2f;
