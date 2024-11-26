@@ -61,7 +61,8 @@ sealed class Cacti : NatureProjectile {
         Projectile.Center = pointPosition + Vector2.UnitY * lastY;
         Vector2 dif = pointPosition - Projectile.Center;
         Projectile.velocity.X = 0f;
-        Projectile.velocity.Y = -dif.Length() * (0.05f + UseTimeFactor);
+        float value = UseTimeFactor;
+        Projectile.velocity.Y = -dif.Length() * (0.05f + value);
         Projectile.ai[0] = Main.player[Projectile.owner].direction;
 
         Projectile.netUpdate = true;
