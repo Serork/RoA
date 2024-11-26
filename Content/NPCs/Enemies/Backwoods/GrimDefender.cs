@@ -370,7 +370,7 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override bool PreAI() {
-        if (!_isAngry) {
+        if (Main.expertMode && !_isAngry) {
             foreach (Player player in Main.ActivePlayers) {
                 if (!(player.active && !player.dead)) {
                     continue;
