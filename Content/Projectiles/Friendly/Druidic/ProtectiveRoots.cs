@@ -59,6 +59,7 @@ sealed class ProtectiveRoots : NatureProjectile {
         }
         float distY = Projectile.ai[2];
         Projectile.ai[1] = distY;
+        Projectile.spriteDirection = player.direction;
         Vector2 pos = player.Center;
         Vector2 velocity = Helper.VelocityToPoint(pos, player.GetViableMousePosition(), 1f).SafeNormalize(Vector2.Zero);
         Vector2 muzzleOffset = Vector2.Normalize(new Vector2(velocity.X, velocity.Y)) * distY;
