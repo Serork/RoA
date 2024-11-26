@@ -86,7 +86,7 @@ sealed class ProtectiveRoots : NatureProjectile {
             Projectile.timeLeft = (int)Math.Min(timeLeft, timeLeft * value4);
             Projectile.penetrate = Projectile.maxPenetrate = maxFrame + 1;
             //Projectile.scale = Math.Min(1f, value2 * 2.5f);
-            Projectile.rotation = Main.rand.Next(360);
+            Projectile.rotation = Projectile.ai[2] / 100f * 2f * MathHelper.TwoPi * Main.player[Projectile.owner].direction;
         }
         Projectile.velocity *= 0;
         Projectile.localAI[1]++;
@@ -98,7 +98,7 @@ sealed class ProtectiveRoots : NatureProjectile {
                 if (Projectile.localAI[1] < time * 2) {
                     Projectile.frameCounter++;
                     if (Projectile.frameCounter % 6 == 0 && Projectile.frame < maxFrame) Projectile.frame++;
-                    Projectile.rotation += rotationSpeed / rotationTimer;
+                    Projectile.rotation += rotationSpeed / rotationTimer * Main.player[Projectile.owner].direction;
                     rotationTimer += 0.01f * value;
                     rotationSpeed *= 0.93f;
                 }
@@ -108,7 +108,7 @@ sealed class ProtectiveRoots : NatureProjectile {
                 if (Projectile.localAI[1] < time) {
                     Projectile.frameCounter++;
                     if (Projectile.frameCounter % 6 == 0 && Projectile.frame < maxFrame) Projectile.frame++;
-                    Projectile.rotation += rotationSpeed / rotationTimer;
+                    Projectile.rotation += rotationSpeed / rotationTimer * Main.player[Projectile.owner].direction;
                     rotationTimer += 0.01f * value;
                     rotationSpeed *= 0.93f;
                 }
@@ -126,7 +126,6 @@ sealed class ProtectiveRoots : NatureProjectile {
         for (float i = -MathHelper.Pi; i < MathHelper.Pi; i += MathHelper.PiOver4 / 3f) {
             Vector2 pos = Projectile.Center + new Vector2(0f, radius.X + 4f).RotatedBy(i);
             pos -= Vector2.One * 5f;
-            pos.Y -= 1f;
             int dust = Dust.NewDust(pos, 2, 2, ModContent.DustType<WoodTrash>(), 0f, 0f, 0, default(Color), 1f);
             Main.dust[dust].velocity = Helper.VelocityToPoint(pos, Projectile.Center, 1f) * Main.rand.NextFloat(0.75f, 1.25f);
             Main.dust[dust].noGravity = true;

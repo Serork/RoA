@@ -102,9 +102,9 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
                 float factor = (float)i - ((float)projectileCount - 1f) / 2f;
                 Vector2 newPos = vector2.RotatedBy(rejection * factor);
                 Vector2 position = pos + newPos;
-                position.Y += 192 / 2f - 24f;
+                //position.Y += 192 / 2f - 24f;
                 Color color = Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGB(Color.White);
-                Main.EntitySpriteDraw(texture, position - Main.screenPosition, new Rectangle(0, 0, 48, 192 / 4), color * 0.5f * opacity, 0f, texture.Size() / 2f, 1f, default);
+                Main.EntitySpriteDraw(texture, position - Main.screenPosition, new Rectangle(0, 0, 48, 192 / 4), color * 0.5f * opacity, _strength * 2f * MathHelper.TwoPi * player.direction, texture.Frame(1, 4, 0, 0).Size() / 2f, 1f, default);
             }
         }
 
