@@ -87,6 +87,11 @@ sealed class ProtectiveRoots : NatureProjectile {
 
     public override void AI() {
         float value3 = Ease.QuadIn(Math.Min(1f, Projectile.ai[1] * 0.012f));
+        int width = Math.Min(40, Math.Max(5, (int)(40 * value3))); int height = width;
+        Vector2 size = new(width, height);
+        if (Collision.SolidTiles(Projectile.position, width, height)) {
+            Projectile.Kill();
+        }
         float value4 = Ease.CubeIn(Math.Min(1f, Projectile.ai[1] * 0.02f));
         int maxFrame = (int)Math.Min(Main.projFrames[Type] - 1, value3 * (Main.projFrames[Type] - 1));
         if (Projectile.localAI[1] == 0) {
