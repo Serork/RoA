@@ -45,6 +45,10 @@ sealed class ProtectiveRoots : NatureProjectile {
         Projectile.timeLeft = 10;
     }
 
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        target.immune[Projectile.owner] = 15;
+    }
+
     protected override void SafeOnSpawn(IEntitySource source) {
         if (Projectile.ai[2] == -1f) {
             return;
@@ -61,7 +65,7 @@ sealed class ProtectiveRoots : NatureProjectile {
         pos += muzzleOffset;
         float rejection = (float)Math.PI / 10f;
         int projectileCount = 4;
-        float betweenProjs = distY * 1.5f;
+        float betweenProjs = distY * 1.75f;
         Vector2 vector2 = new(velocity.X, velocity.Y);
         vector2.Normalize();
         vector2 *= betweenProjs;
@@ -74,16 +78,16 @@ sealed class ProtectiveRoots : NatureProjectile {
     }
 
     public override void AI() {
-        float value2 = Math.Min(1f, Projectile.ai[1] * 0.01f);
-        float value3 = Ease.CubeIn(value2);
+        float value3 = Ease.QuadIn(Math.Min(1f, Projectile.ai[1] * 0.012f));
+        float value4 = Ease.CubeIn(Math.Min(1f, Projectile.ai[1] * 0.02f));
+        int maxFrame = (int)Math.Min(Main.projFrames[Type] - 1, value3 * (Main.projFrames[Type] - 1));
         if (Projectile.localAI[1] == 0) {
             int timeLeft = 225;
-            Projectile.penetrate = Projectile.maxPenetrate = (int)(4 * value3);
-            Projectile.timeLeft = (int)Math.Min(timeLeft, timeLeft * value3);
+            Projectile.timeLeft = (int)Math.Min(timeLeft, timeLeft * value4);
+            Projectile.penetrate = Projectile.maxPenetrate = maxFrame + 1;
             //Projectile.scale = Math.Min(1f, value2 * 2.5f);
             Projectile.rotation = Main.rand.Next(360);
         }
-        int maxFrame = (int)Math.Min(Main.projFrames[Type], value3 * Main.projFrames[Type]);
         Projectile.velocity *= 0;
         Projectile.localAI[1]++;
         float value = Math.Min(1f, Projectile.ai[2] * 0.025f);

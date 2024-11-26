@@ -36,7 +36,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
     public sealed class WoodbinderBase : BaseRodProjectile {
         private Vector2 _mousePosition;
-        private float _strength = 0.2f;
+        private float _strength = 0.15f;
 
         private float Strength => Ease.SineIn(Ease.CubeOut(_strength));
 
@@ -93,7 +93,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
             pos += muzzleOffset;
             float rejection = (float)Math.PI / 10f;
             int projectileCount = 4;
-            float betweenProjs = distY * 1.5f;
+            float betweenProjs = distY * 1.75f;
             Vector2 vector2 = new(velocity.X, velocity.Y);
             vector2.Normalize();
             vector2 *= betweenProjs;
@@ -104,7 +104,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
                 Vector2 position = pos + newPos;
                 position.Y += 192 / 2f - 24f;
                 Color color = Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGB(Color.White);
-                Main.EntitySpriteDraw(texture, position - Main.screenPosition, new Rectangle(0, 0, 48, 192 / 4), color * 0.4f * opacity, 0f, texture.Size() / 2f, 1f, default);
+                Main.EntitySpriteDraw(texture, position - Main.screenPosition, new Rectangle(0, 0, 48, 192 / 4), color * 0.5f * opacity, 0f, texture.Size() / 2f, 1f, default);
             }
         }
 
