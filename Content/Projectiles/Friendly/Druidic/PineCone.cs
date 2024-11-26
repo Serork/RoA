@@ -45,6 +45,10 @@ sealed class PineCone : NatureProjectile {
 
     public override bool ShouldUpdatePosition() => false;
 
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        modifiers.FinalDamage *= 1f + 0.5f * Math.Min(10f, Projectile.velocity.Y) * 0.2f;
+    }
+
     public override bool? CanDamage() => (Math.Abs(Projectile.rotation) < 0.1f && Math.Abs(Projectile.ai[0]) < 0.5f) || Projectile.ai[1] != 0f;
 
     public override void AI() {
