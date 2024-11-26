@@ -35,7 +35,7 @@ sealed class PrimordialTreeGlow : GlobalTile {
                 Vector2 position = new Vector2(i, j).ToWorldCoordinates();
                 if (bluePart) {
                     if (!Main.dedServ) {
-                        Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.7f);
+                        Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.5f);
                     }
                 }
                 else if (Main.rand.NextBool(1050)) {
