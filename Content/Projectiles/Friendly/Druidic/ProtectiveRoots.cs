@@ -1,10 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Content.Dusts.Backwoods;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
@@ -38,7 +42,7 @@ sealed class ProtectiveRoots : NatureProjectile {
         DrawOriginOffsetY = -4;
 
         Projectile.alpha = 0;
-        Projectile.timeLeft = 450;
+        Projectile.timeLeft = 10;
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
@@ -49,7 +53,8 @@ sealed class ProtectiveRoots : NatureProjectile {
         if (player.whoAmI != Main.myPlayer) {
             return;
         }
-        float distY = 100f;
+        float distY = Projectile.ai[2];
+        Projectile.ai[1] = distY;
         Vector2 pos = player.Center;
         Vector2 velocity = Helper.VelocityToPoint(pos, player.GetViableMousePosition(), 1f).SafeNormalize(Vector2.Zero);
         Vector2 muzzleOffset = Vector2.Normalize(new Vector2(velocity.X, velocity.Y)) * distY;
@@ -63,45 +68,61 @@ sealed class ProtectiveRoots : NatureProjectile {
         for (int i = 0; i < projectileCount; i++) {
             float factor = (float)i - ((float)projectileCount - 1f) / 2f;
             Vector2 newPos = vector2.RotatedBy(rejection * factor);
-            Projectile.NewProjectile(source, pos.X + newPos.X, pos.Y + newPos.Y, 0f, 0f, Type, Projectile.damage, Projectile.knockBack, player.whoAmI, (float)i, 0f, -1f);
+            Projectile.NewProjectile(source, pos.X + newPos.X, pos.Y + newPos.Y, 0f, 0f, Type, Projectile.damage, Projectile.knockBack, player.whoAmI, (float)i, Projectile.ai[2], -1f);
         }
         Projectile.Kill();
     }
 
     public override void AI() {
-        if (Projectile.ai[1] == 0) Projectile.rotation = Main.rand.Next(360);
+        float value2 = Math.Min(1f, Projectile.ai[1] * 0.01f);
+        float value3 = Ease.CubeIn(value2);
+        if (Projectile.localAI[1] == 0) {
+            int timeLeft = 225;
+            Projectile.penetrate = Projectile.maxPenetrate = (int)(4 * value3);
+            Projectile.timeLeft = (int)Math.Min(timeLeft, timeLeft * value3);
+            //Projectile.scale = Math.Min(1f, value2 * 2.5f);
+            Projectile.rotation = Main.rand.Next(360);
+        }
+        int maxFrame = (int)Math.Min(Main.projFrames[Type], value3 * Main.projFrames[Type]);
         Projectile.velocity *= 0;
-        Projectile.ai[1]++;
+        Projectile.localAI[1]++;
+        float value = Math.Min(1f, Projectile.ai[2] * 0.025f);
         float time = 30f;
         switch (Projectile.ai[0]) {
             case 0:
             case 3:
-                if (Projectile.ai[1] < time * 2) {
+                if (Projectile.localAI[1] < time * 2) {
                     Projectile.frameCounter++;
-                    if (Projectile.frameCounter % 6 == 0 && Projectile.frame < 3) Projectile.frame++;
+                    if (Projectile.frameCounter % 6 == 0 && Projectile.frame < maxFrame) Projectile.frame++;
                     Projectile.rotation += rotationSpeed / rotationTimer;
-                    rotationTimer += 0.01f;
+                    rotationTimer += 0.01f * value;
                     rotationSpeed *= 0.93f;
                 }
                 break;
             case 1:
             case 2:
-                if (Projectile.ai[1] < time) {
+                if (Projectile.localAI[1] < time) {
                     Projectile.frameCounter++;
-                    if (Projectile.frameCounter % 6 == 0 && Projectile.frame < 3) Projectile.frame++;
+                    if (Projectile.frameCounter % 6 == 0 && Projectile.frame < maxFrame) Projectile.frame++;
                     Projectile.rotation += rotationSpeed / rotationTimer;
-                    rotationTimer += 0.01f;
+                    rotationTimer += 0.01f * value;
                     rotationSpeed *= 0.93f;
                 }
                 break;
         }
     }
 
-    public override void Kill(int timeLeft) {
-        Vector2 radius = new(16f, 16f);
+    public override void OnKill(int timeLeft) {
+        Vector2 radius = Projectile.frame switch {
+            0 => new(4f, 4f),
+            1 => new(8f, 8f),
+            2 => new(12f, 12f),
+            _ => new(16f, 16f),
+        };
         for (float i = -MathHelper.Pi; i < MathHelper.Pi; i += MathHelper.PiOver4 / 3f) {
-            Vector2 pos = Projectile.Center + new Vector2(0f, 18f).RotatedBy(i);
+            Vector2 pos = Projectile.Center + new Vector2(0f, radius.X + 4f).RotatedBy(i);
             pos -= Vector2.One * 5f;
+            pos.Y -= 1f;
             int dust = Dust.NewDust(pos, 2, 2, ModContent.DustType<WoodTrash>(), 0f, 0f, 0, default(Color), 1f);
             Main.dust[dust].velocity = Helper.VelocityToPoint(pos, Projectile.Center, 1f) * Main.rand.NextFloat(0.75f, 1.25f);
             Main.dust[dust].noGravity = true;
