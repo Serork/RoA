@@ -109,7 +109,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
         }
 
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
-            int count = (int)(16 * (1f - UseTime));
+            int count = (int)(16 * Ease.QuadOut(1f - UseTime));
             for (int i = 0; i < count; i++) {
                 int type = Main.rand.NextBool(4) ? ModContent.DustType<Dusts.Woodbinder>() : ModContent.DustType<WoodTrash>();
                 Vector2 position = corePosition + new Vector2(0, -6) + new Vector2(20f, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
