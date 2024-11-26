@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Materials;
 using RoA.Content.Tiles.Crafting;
+using RoA.Core.Utility;
 
 using System;
 
@@ -124,7 +125,7 @@ sealed class SapSlime : ModNPC {
                 NPC.ai[1] = 75f;
                 NPC.netUpdate = true;
             }
-            else if (Main.rand.Next(3) == 0) {
+            else if (Main.rand.NextChance(0.75f)) {
                 int num2 = GenerateItemInsideBody(NPC.ai[0] == -999f);
                 NPC.ai[1] = num2;
                 NPC.netUpdate = true;
@@ -156,7 +157,7 @@ sealed class SapSlime : ModNPC {
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo) {
         int y = spawnInfo.SpawnTileY;
-        return ModContent.GetInstance<Sap>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<Sap>().tapperTilesCount / 5f, 0f, 2f) : 0f;
+        return ModContent.GetInstance<Sap>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<Sap>().tapperTilesCount / 3f, 0f, 3f) : 0f;
     }
 }
 
