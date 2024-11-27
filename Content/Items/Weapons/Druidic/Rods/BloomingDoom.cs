@@ -65,7 +65,7 @@ abstract class TulipBase : BaseRodProjectile {
 
     protected abstract byte DustFrameXUsed();
 
-    protected override Vector2 CorePositionOffsetFactor() => new(0.08f, 0.13f);
+    protected override Vector2 CorePositionOffsetFactor() => new(0.08f, 0.125f);
 
     protected override bool ShouldntUpdateRotationAndDirection() => false;
 
@@ -87,8 +87,8 @@ abstract class TulipBase : BaseRodProjectile {
         _random.Clear();
         _random.needsRefresh = true;
         _random.Add(0);
-        _random.Add(1, 0.3);
-        _random.Add(2, 0.3);
+        _random.Add(1, 0.25);
+        _random.Add(2, 0.25);
         dust.customData = _random.Get();
         dust.noGravity = true;
 
@@ -114,7 +114,7 @@ abstract class TulipBase : BaseRodProjectile {
             if (_mousePosition == Vector2.Zero) {
                 _mousePosition = to;
             }
-            _mousePosition = Vector2.SmoothStep(_mousePosition, to, 0.2f);
+            _mousePosition = Vector2.SmoothStep(_mousePosition, to, 0.1f);
         }
     }
 
