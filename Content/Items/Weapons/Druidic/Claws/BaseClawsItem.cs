@@ -58,7 +58,7 @@ abstract class BaseClawsItem : NatureItem {
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/, 
-            NatureWeaponHandler.GetUseSpeed(Item, player) * player.GetAttackSpeed(DamageClass.Melee));
+            NatureWeaponHandler.GetUseSpeed(Item, player) - (1f - player.GetAttackSpeed(DamageClass.Melee)) * NatureWeaponHandler.GetUseSpeed(Item, player));
         //NetMessage.SendData(MessageID.PlayerControls, number: player.whoAmI);
 
         return false;
