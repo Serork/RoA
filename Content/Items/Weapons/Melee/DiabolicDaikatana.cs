@@ -187,6 +187,8 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         return flag && Helper.DeathrayHitbox(center - AngleVector * 20f, center + AngleVector * (75 * Projectile.scale/* * baseSwordScale*/), targetHitbox, _swordWidth * Projectile.scale/* * baseSwordScale*/);
     }
 
+    public override bool? CanCutTiles() => Progress > 0.375f && Progress < 0.575f;
+
     public override void AI() {
         Projectile.extraUpdates = 5;
         Player player = Main.player[Projectile.owner];
