@@ -91,8 +91,14 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
         sourceRectangle2.Height = (int)(frameHeight * progress2);
         Vector2 offset = Vector2.Zero;
-        float value3 = progress3 * (1f - Utils.GetLerpValue(0.5f, 1f, progress2, true));
-        drawFilling(sourceRectangle, opacity: value3);
+        float value3 = progress3 * (1f - Utils.GetLerpValue(0.6f, 1f, progress2, true));
+        bool flag = true;
+        if (soulOfTheWoods && progress2 > 0.9f) {
+            flag = false;
+        }
+        if (flag) {
+            drawFilling(sourceRectangle, opacity: value3);
+        }
         if (soulOfTheWoods) {
             drawFilling(sourceRectangle2, offset);
         }
@@ -122,7 +128,9 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
             wreathSpriteData3.Color = color * opacity;
             wreathSpriteData3.DrawSelf(offset: offset);
         }
-        drawEffect(progress, sourceRectangle, opacity: progress3, frameX: (byte)(3 + Stats.IsPhoenixWreath.ToInt()), frameY: 1);
+        if (flag) {
+            drawEffect(progress, sourceRectangle, opacity: progress3, frameX: (byte)(3 + Stats.IsPhoenixWreath.ToInt()), frameY: 1);
+        }
         if (soulOfTheWoods) {
             drawEffect(progress2, sourceRectangle2, offset, frameY: 2);
         }
