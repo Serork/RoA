@@ -80,7 +80,7 @@ abstract class TulipBase : BaseRodProjectile {
         ushort dustType = CoreDustType();
         float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / offset, 0.25f, 1f) * 1.25f * Ease.ExpoInOut(Math.Max(step, 0.25f)) + 0.25f;
         Dust dust = Dust.NewDustPerfect(spawnPosition, dustType, 
-            Scale: MathHelper.Clamp(velocityFactor * 1.5f, 1.2f, 1.75f));
+            Scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f));
         dust.velocity = (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor;
         dust.velocity *= 0.9f;
         // hardcoded for now
