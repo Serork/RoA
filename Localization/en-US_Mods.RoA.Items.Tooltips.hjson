@@ -23,3 +23,6 @@ AttackSpeed62: Very fast [kw/n:potential] speed
 AttackSpeed72: Extremely fast [kw/n:potential] speed
 AttackSpeed82: Insanely fast [kw/n:potential] speed
 WhenCharged: while [kw/n:wreath] is [kw/n:charged]
+LivingWoodSetBonus: Increases [kw/n:wreath] [kw/n:filling rate] by 10%
+LivingBorealSetBonus: Increases [kw/n:wreath] [kw/n:filling rate] by 10%
+LivingMahoganySetBonus: Increases [kw/n:wreath] [kw/n:filling rate] by 10%

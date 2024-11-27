@@ -1,0 +1,48 @@
+using Microsoft.Xna.Framework;
+
+using RoA.Common.Druid;
+using RoA.Content.Items.Materials;
+
+using Terraria;
+using Terraria.GameContent.Creative;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Items.Equipables.Armor.Nature;
+
+[AutoloadEquip(EquipType.Head)]
+sealed class LivingMahoganyHelmet : NatureItem {
+	public override void SetStaticDefaults() {
+		//DisplayName.SetDefault("Living Mahogany Helmet");
+		//Tooltip.SetDefault("4% increased nature critical strike chance");
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+    protected override void SafeSetDefaults() {
+        int width = 26; int height = 20;
+        Item.Size = new Vector2(width, height);
+
+        Item.rare = ItemRarityID.Blue;
+        Item.value = Item.sellPrice(silver: 20);
+
+        Item.defense = 2;
+    }
+
+	public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
+
+    public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingMahoganyChestplate>() && legs.type == ModContent.ItemType<LivingMahoganyGreaves>();
+
+	public override void UpdateArmorSet(Player player) {
+        player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingMahoganySetBonus");
+        player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
+    }
+
+	//public override void AddRecipes() {
+	//	CreateRecipe()
+	//		.AddIngredient(ItemID.RichMahogany, 10)
+	//		.AddIngredient<Galipot>(5)
+	//		.AddTile(TileID.LivingLoom)
+	//		.Register();
+	//}
+}

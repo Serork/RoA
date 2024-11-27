@@ -31,7 +31,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static ushort GetPotentialDamage(Item item, Player player) => (ushort)(GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));
 
     public static ushort GetBasePotentialUseSpeed(Item item, Player player) {
-        return (ushort)(item.GetGlobalItem<NatureWeaponHandler>()._basePotentialUseSpeed/* * player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier*/);
+        return (ushort)(item.GetGlobalItem<NatureWeaponHandler>()._basePotentialUseSpeed * player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier);
     }
     public static ushort GetPotentialUseSpeed(Item item, Player player) => (ushort)(GetFinalUseTime(item, player) - GetBasePotentialUseSpeed(item, player));
 

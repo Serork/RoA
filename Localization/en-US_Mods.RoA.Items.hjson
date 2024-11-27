@@ -350,3 +350,52 @@ SlipperyGrenade: {
 	DisplayName: Slippery Grenade
 	Tooltip: ""
 }
+
+LivingBorealWoodChestplate: {
+	DisplayName: Living Boreal Wood Chestplate
+	Tooltip: 4% increased nature [kw/n:potential] damage
+}
+
+LivingBorealWoodGreaves: {
+	DisplayName: Living Boreal Wood Greaves
+	Tooltip: 4% increased nature [kw/n:potential] speed
+}
+
+LivingBorealWoodHelmet: {
+	DisplayName: Living Boreal Wood Helmet
+	Tooltip: 4% increased nature [kw/n:potential] damage
+}
+
+LivingWoodChestplate: {
+	DisplayName: Living Wood Chestplate
+	Tooltip: 4% increased nature [kw/n:potential] damage
+}
+
+LivingWoodGreaves: {
+	DisplayName: Living Wood Greaves
+	Tooltip: 4% increased nature [kw/n:potential] speed
+}
+
+LivingWoodHelmet: {
+	DisplayName: Living Wood Helmet
+	Tooltip: 4% increased nature [kw/n:potential] speed
+}
+
+LivingMahoganyChestplate: {
+	DisplayName: Living Mahogany Chestplate
+	Tooltip:
+		'''
+		6% increased nature [kw/n:potential] damage
+		6% increased nature [kw/n:potential] speed
+		'''
+}
+
+LivingMahoganyGreaves: {
+	DisplayName: Living Mahogany Greaves
+	Tooltip: 2% increased movement speed
+}
+
+LivingMahoganyHelmet: {
+	DisplayName: Living Mahogany Helmet
+	Tooltip: 4% increased nature critical strike chance
+}

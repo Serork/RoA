@@ -10,6 +10,7 @@ sealed class DruidStats : ModPlayer {
     private float _druidDamageExtraIncreaseValueMultiplier = 1f;
     private float _keepBonusesForTime = 0f;
     private float _dischargeTimeDecreaseMultiplier = 1f;
+    private float _druidPotentialUseTimeMultiplier = 1f;
 
     public float DruidBaseDamageMultiplier {
         get => _druidBaseDamageMultiplier;
@@ -46,6 +47,13 @@ sealed class DruidStats : ModPlayer {
         }
     }
 
+    public float DruidPotentialUseTimeMultiplier {
+        get => _druidPotentialUseTimeMultiplier;
+        set {
+            _druidPotentialUseTimeMultiplier = MathHelper.Clamp(value, 0f, 2f);
+        }
+    }
+
     public bool SoulOfTheWoods { get; set; }
 
     public override void ResetEffects() {
@@ -53,6 +61,7 @@ sealed class DruidStats : ModPlayer {
         DruidPotentialDamageMultiplier = 1f;
         DruidDamageExtraIncreaseValueMultiplier = 1f;
         DischargeTimeDecreaseMultiplier = 1f;
+        DruidPotentialUseTimeMultiplier = 1f;
 
         KeepBonusesForTime = 0f;
 

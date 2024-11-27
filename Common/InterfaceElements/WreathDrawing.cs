@@ -91,7 +91,8 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
         sourceRectangle2.Height = (int)(frameHeight * progress2);
         Vector2 offset = Vector2.Zero;
-        drawFilling(sourceRectangle, opacity: progress3 * (1f - Utils.GetLerpValue(0.7f, 1f, progress2, true)));
+        float value3 = progress3 * (1f - Utils.GetLerpValue(0.5f, 1f, progress2, true));
+        drawFilling(sourceRectangle, opacity: value3);
         if (soulOfTheWoods) {
             drawFilling(sourceRectangle2, offset);
         }
