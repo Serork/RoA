@@ -18,6 +18,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class TulipPetal : NatureProjectile {
+    internal const byte PETALCOUNT = 4;
+
     private static Vector2 _spawnPosition;
     private static Projectile _parent;
 
@@ -131,6 +133,7 @@ sealed class TulipPetal : NatureProjectile {
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        //Main.instance.DrawCacheProjsBehindNPCsAndTiles.Add(index);
         behindNPCsAndTiles.Add(index);
         behindProjectiles.Add(index);
     }
@@ -159,7 +162,7 @@ sealed class TulipPetal : NatureProjectile {
         float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
         Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true)) * Projectile.scale * 0.65f;
 
-        SpriteFrame frame = new(3, 1);
+        SpriteFrame frame = new(PETALCOUNT, 1);
         frame = frame.With(UsedFrameX, 0);
         Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
         Vector2 lightPosition = Projectile.position + Offset.RotatedBy(Projectile.rotation + MathHelper.Pi);
@@ -198,9 +201,9 @@ sealed class TulipPetal : NatureProjectile {
 
             Vector2 position = endPosition + Vector2.UnitY * 10f;
 
-            if (WorldGen.SolidTile(position.ToTileCoordinates())) {
-                continue;
-            }
+            //if (WorldGen.SolidTile(position.ToTileCoordinates())) {
+            //    continue;
+            //}
 
             float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
             Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * Projectile.scale * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true), 1f);
@@ -287,9 +290,9 @@ sealed class TulipFlower : NatureProjectile {
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "Flower").Value;
         Vector2 position = Projectile.Center - Main.screenPosition;
         float rotation = Projectile.rotation;
-        float scale = Projectile.scale;
+        float scale = Projectile.scale * 1.2f;
 
-        SpriteFrame frame = new(3, 1);
+        SpriteFrame frame = new(TulipPetal.PETALCOUNT, 1);
         frame = frame.With(UsedFrameX, 0);
         Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
 

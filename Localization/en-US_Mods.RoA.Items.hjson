@@ -399,3 +399,18 @@ LivingMahoganyHelmet: {
 	DisplayName: Living Mahogany Helmet
 	Tooltip: 4% increased nature critical strike chance
 }
+
+EbonwoodStaff: {
+	DisplayName: Ebonwood Staff
+	Tooltip: ""
+}
+
+ShadewoodStaff: {
+	DisplayName: Shadewood Staff
+	Tooltip: ""
+}
+
+BloomingDoom: {
+	DisplayName: Blooming Doom
+	Tooltip: ""
+}

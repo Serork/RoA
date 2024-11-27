@@ -1,12 +1,5 @@
-﻿using Basic.Reference.Assemblies;
-
-using Humanizer;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-
-using Newtonsoft.Json.Linq;
 
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
@@ -16,13 +9,11 @@ using RoA.Utilities;
 
 using System;
 using System.IO;
-using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
-using Terraria.Graphics.Renderers;
 using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;

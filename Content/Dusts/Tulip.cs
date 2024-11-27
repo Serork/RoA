@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Utilities;
 
@@ -9,14 +10,13 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class Tulip : ModDust {
-    private const int FRAMECOUNT = 3;
-
     private Vector2 _velocity;
 
     public override Color? GetAlpha(Dust dust, Color lightColor) => lightColor;
 
     public override void OnSpawn(Dust dust) {
-        dust.frame = (Texture2D?.Value?.Frame(FRAMECOUNT, FRAMECOUNT, frameX: dust.alpha, frameY: Main.rand.Next(FRAMECOUNT))).GetValueOrDefault();
+        int maxFramesY = 3;
+        dust.frame = (Texture2D?.Value?.Frame(TulipPetal.PETALCOUNT, maxFramesY, frameX: dust.alpha, frameY: Main.rand.Next(maxFramesY))).GetValueOrDefault();
 
         dust.noGravity = true;
         dust.noLight = false;

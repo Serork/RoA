@@ -1,9 +1,8 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Content.Projectiles.Friendly;
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Druidic;
-using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -14,57 +13,27 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
-sealed class ExoticTulip : TulipBaseItem<ExoticTulip.ExoticTulipBase> {
+sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
     protected override void SafeSetDefaults() {
         Item.SetWeaponValues(6, 1.5f);
-        Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65);
+        Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65); 
+        Item.SetSize(36, 38);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
         base.SafeSetDefaults();
     }
 
-    public sealed class ExoticTulipBase : TulipBase {
-        protected override ushort CoreDustType() => (ushort)DustID.PurpleTorch;
+    public sealed class BloomingDoomBase : TulipBase {
+        protected override Vector2 CorePositionOffsetFactor() => new(0.14f, 0.135f);
 
-        protected override byte DustFrameXUsed() => 0;
-    }
-}
+        protected override ushort CoreDustType() => (ushort)ModContent.DustType<BloomingDoomDust>();
 
-sealed class SweetTulip : TulipBaseItem<SweetTulip.SweepTulipBase> {
-    protected override void SafeSetDefaults() {
-        Item.SetWeaponValues(6, 1.5f);
-        Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65);
-
-        NatureWeaponHandler.SetPotentialDamage(Item, 20);
-
-        base.SafeSetDefaults();
-    }
-
-    public sealed class SweepTulipBase : TulipBase {
-        protected override ushort CoreDustType() => (ushort)DustID.YellowTorch;
-
-        protected override byte DustFrameXUsed() => 1;
-    }
-}
-
-sealed class WeepingTulip : TulipBaseItem<WeepingTulip.WeepingTulipBase> {
-    protected override void SafeSetDefaults() {
-        Item.SetWeaponValues(6, 1.5f);
-        Item.SetDefaultToUsable(-1, 45, useSound: SoundID.Item65);
-
-        NatureWeaponHandler.SetPotentialDamage(Item, 20);
-
-        base.SafeSetDefaults();
-    }
-
-    public sealed class WeepingTulipBase : TulipBase {
-        protected override ushort CoreDustType() => (ushort)DustID.BlueTorch;
-
-        protected override byte DustFrameXUsed() => 2;
+        protected override byte DustFrameXUsed() => 3;
     }
 }
 
@@ -72,13 +41,17 @@ abstract class TulipBaseItem<T> : BaseRodItem<T> where T : BaseRodProjectile {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TulipFlower>();
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(34);
-
         NatureWeaponHandler.SetFillingRate(Item, 0.4f);
     }
 }
 
 abstract class TulipBase : BaseRodProjectile {
+    private readonly WeightedRandom<int> _random = new();
+
+    private Vector2 _mousePosition = Vector2.Zero;
+
+    private bool IsWeepingTulip => DustFrameXUsed() == 2;
+
     public sealed class TulipBaseExtraData : ModPlayer {
         public Vector2 TempMousePosition { get; set; } = Vector2.Zero;
 
@@ -106,23 +79,44 @@ abstract class TulipBase : BaseRodProjectile {
         Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
         ushort dustType = CoreDustType();
         float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / offset, 0.25f, 1f) * 1.25f * Ease.ExpoInOut(Math.Max(step, 0.25f)) + 0.25f;
-        Dust dust = Dust.NewDustPerfect(spawnPosition, dustType, Scale: MathHelper.Clamp(velocityFactor * 1.25f, 1f, 1.75f));
+        Dust dust = Dust.NewDustPerfect(spawnPosition, dustType, 
+            Scale: MathHelper.Clamp(velocityFactor * 1.5f, 1.2f, 1.75f));
         dust.velocity = (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor;
         dust.velocity *= 0.9f;
+        // hardcoded for now
+        _random.Clear();
+        _random.needsRefresh = true;
+        _random.Add(0);
+        _random.Add(1, 0.3);
+        _random.Add(2, 0.3);
+        dust.customData = _random.Get();
         dust.noGravity = true;
 
         if (player.whoAmI == Main.myPlayer) {
             if (step <= 0.5f) {
-                bool isWeepingTulip = DustFrameXUsed() == 2;
-                TulipBaseData.TempMousePosition = isWeepingTulip ? player.GetViableMousePosition(480f, 300f) : player.GetViableMousePosition(240f, 150f);
+                TulipBaseData.TempMousePosition = GetCappedMousePosition(player);
             }
             Projectile.netUpdate = true;
         }
 
-        SpawnGroundDusts(dustType, TulipBaseData, velocityFactor);
+        SpawnGroundDusts(player, dustType, TulipBaseData, velocityFactor);
     }
 
-    protected override void SpawnCoreDustsWhileShotProjectileIsActive(float step, Player player, Vector2 corePosition) => SpawnGroundDusts(CoreDustType(), TulipBaseData, 1f);
+    private Vector2 GetCappedMousePosition(Player player) => IsWeepingTulip ? player.GetViableMousePosition(480f, 300f) : player.GetViableMousePosition(240f, 150f);
+
+    protected override void SpawnCoreDustsWhileShotProjectileIsActive(float step, Player player, Vector2 corePosition) {
+        SpawnGroundDusts(player, CoreDustType(), TulipBaseData, 1f);
+    }
+
+    public override void PostAI() {
+        if (Projectile.owner == Main.myPlayer) {
+            Vector2 to = GetCappedMousePosition(Main.player[Projectile.owner]);
+            if (_mousePosition == Vector2.Zero) {
+                _mousePosition = to;
+            }
+            _mousePosition = Vector2.SmoothStep(_mousePosition, to, 0.2f);
+        }
+    }
 
     protected override void SpawnDustsWhenReady(Player player, Vector2 corePosition) {
         for (int i = 0; i < 12; i++) {
@@ -130,7 +124,7 @@ abstract class TulipBase : BaseRodProjectile {
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset),
                     spawnPosition = corePosition + randomOffset;
 
-            ushort dustType = CoreDustType();
+            //ushort dustType = CoreDustType();
             byte frameX = DustFrameXUsed();
             Dust dust = Dust.NewDustPerfect(spawnPosition,
                                             ModContent.DustType<Dusts.Tulip>(),
@@ -145,20 +139,29 @@ abstract class TulipBase : BaseRodProjectile {
         base.SendExtraAI(writer);
 
         writer.WriteVector2(TulipBaseData.TempMousePosition);
+        writer.WriteVector2(_mousePosition);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         base.ReceiveExtraAI(reader);
 
         TulipBaseData.TempMousePosition = reader.ReadVector2();
+        _mousePosition = reader.ReadVector2();
     }
 
-    public static void SpawnGroundDusts(ushort dustType, TulipBaseExtraData tulipBaseExtraData, float velocityFactor) {
-        Vector2 position = tulipBaseExtraData.SpawnPositionRandomlySelected, velocity = (tulipBaseExtraData.TempMousePosition + Main.rand.NextVector2Circular(8f, 8f) - position).SafeNormalize(-Vector2.UnitY) * 3f * velocityFactor;
-        Dust dust = Dust.NewDustPerfect(position - Vector2.UnitY * 8f + Main.rand.NextVector2Circular(8f, 8f),
+    public void SpawnGroundDusts(Player player, ushort dustType, TulipBaseExtraData tulipBaseExtraData, float velocityFactor) {
+        Vector2 position = tulipBaseExtraData.SpawnPositionRandomlySelected,
+                velocity = (_mousePosition + Main.rand.NextVector2Circular(8f, 8f) - position).SafeNormalize(Vector2.Zero) * 3f * velocityFactor;
+        Vector2 dustPos = position - Vector2.UnitY * 8f + Main.rand.NextVector2Circular(8f, 8f);
+        //int x = (int)dustPos.X / 16, y = (int)dustPos.Y / 16;
+        //dustType = (ushort)TileHelper.GetKillTileDust(x, y, WorldGenHelper.GetTileSafely(x, y));
+        Dust dust = Dust.NewDustPerfect(dustPos,
                                         dustType,
                                         Scale: Main.rand.NextFloat(1.5f, 2f));
         dust.velocity = velocity;
+        // hardcoded for now
+        dust.customData = 0;
+        //dust.scale *= 0.75f;
         dust.velocity *= 0.9f;
         dust.noGravity = true;
     }
@@ -202,3 +205,37 @@ abstract class TulipBase : BaseRodProjectile {
         return randomlySelected ? list[index] : list[list.Count / 2];
     }
 }
+
+//sealed class SweetTulip : TulipBaseItem<SweetTulip.SweepTulipBase> {
+//    protected override void SafeSetDefaults() {
+//        Item.SetWeaponValues(6, 1.5f);
+//        Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65);
+
+//        NatureWeaponHandler.SetPotentialDamage(Item, 20);
+
+//        base.SafeSetDefaults();
+//    }
+
+//    public sealed class SweepTulipBase : TulipBase {
+//        protected override ushort CoreDustType() => (ushort)DustID.YellowTorch;
+
+//        protected override byte DustFrameXUsed() => 1;
+//    }
+//}
+
+//sealed class WeepingTulip : TulipBaseItem<WeepingTulip.WeepingTulipBase> {
+//    protected override void SafeSetDefaults() {
+//        Item.SetWeaponValues(6, 1.5f);
+//        Item.SetDefaultToUsable(-1, 45, useSound: SoundID.Item65);
+
+//        NatureWeaponHandler.SetPotentialDamage(Item, 20);
+
+//        base.SafeSetDefaults();
+//    }
+
+//    public sealed class WeepingTulipBase : TulipBase {
+//        protected override ushort CoreDustType() => (ushort)DustID.BlueTorch;
+
+//        protected override byte DustFrameXUsed() => 2;
+//    }
+//}

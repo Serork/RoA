@@ -14,6 +14,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,6 +24,8 @@ abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
     protected virtual ushort ShootType() => (ushort)ProjectileID.WoodenArrowFriendly;
 
     protected virtual ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
+
+    public override void SetStaticDefaults() => CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
     protected sealed override void SafeSetDefaults2() {
         Item.noMelee = true;
@@ -209,6 +212,8 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected virtual void SafestOnSpawn(IEntitySource source) { }
 
+    protected virtual void PlayAttackSound() => SoundEngine.PlaySound(SoundID.Item20, CorePosition);
+
     public sealed override void AI() {
         ActiveCheck();
         SetPosition();
@@ -226,7 +231,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         else if (!_shot2) {
             _shot2 = true;
             if (ShouldPlayShootSound()) {
-                SoundEngine.PlaySound(SoundID.Item20, CorePosition);
+                PlayAttackSound();
             }
             SpawnDustsWhenReady(Owner, CorePosition);
         }

@@ -14,7 +14,7 @@ sealed class ExoticTulip : TulipLikeTileBase {
 
     public override ushort ExtraChance => 300;
 
-    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.ExoticTulip>();
+    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.ExoticTulip>();
 
     public override Color MapColor => new(216, 78, 142);
 }
@@ -24,7 +24,7 @@ sealed class SweetTulip : TulipLikeTileBase {
 
     public override byte StyleX => 1;
 
-    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.SweetTulip>();
+    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.SweetTulip>();
 
     public override Color MapColor => new(255, 165, 0);
 }
@@ -39,7 +39,7 @@ sealed class WeepingTulip : TulipLikeTileBase {
 
     public override bool InUnderground => true;
 
-    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.Rods.WeepingTulip>();
+    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.WeepingTulip>();
 
     public override Color MapColor => new(0, 0, 255);
 
