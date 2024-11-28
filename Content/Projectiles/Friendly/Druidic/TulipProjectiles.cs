@@ -41,8 +41,8 @@ sealed class TulipPetal : NatureProjectile {
         Projectile.penetrate = -1;
         Projectile.friendly = true;
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 120;
-        Projectile.stopsDealingDamageAfterPenetrateHits = true;
+        Projectile.localNPCHitCooldown = 30;
+        //Projectile.stopsDealingDamageAfterPenetrateHits = true;
         Projectile.hide = true;
         Projectile.netImportant = true;
         Projectile.alpha = 255;
@@ -233,9 +233,12 @@ sealed class TulipFlower : NatureProjectile {
         Projectile.friendly = true;
         Projectile.tileCollide = false;
         Projectile.netImportant = true;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 30;
+        Projectile.penetrate = -1;
     }
 
-    public override bool? CanDamage() => false;
+    public override bool? CanDamage() => true;
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Projectile.timeLeft = (int)Max;

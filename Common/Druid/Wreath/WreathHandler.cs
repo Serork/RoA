@@ -157,6 +157,13 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
+        ClawsReset(natureProjectile, nonDataReset);
+
+        IncreaseResourceValue(natureProjectile.WreathPointsFine);
+        MakeDustsOnHit();
+    }
+
+    private void ClawsReset(NatureProjectile natureProjectile, bool nonDataReset) {
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && Player.ItemAnimationActive && natureProjectile.Item == selectedItem) {
@@ -184,8 +191,6 @@ sealed class WreathHandler : ModPlayer {
                 }
             }
         }
-        IncreaseResourceValue(natureProjectile.WreathPointsFine);
-        MakeDustsOnHit();
     }
 
     public override void PostUpdateEquips() {
