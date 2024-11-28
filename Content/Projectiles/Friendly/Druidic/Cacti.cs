@@ -28,7 +28,6 @@ sealed class Cacti : NatureProjectile {
     private State _state = State.Normal;
 
     private float UseTimeFactor => 0.0275f * (float)(1f - Projectile.localAI[0] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
-    private Vector2 CorePosition => Main.projectile[(int)Projectile.ai[1]].As<CactiCaster.CactiCasterBase>().CorePosition;
 
     public override void SetStaticDefaults() => Projectile.SetTrail(length: 6);
 
@@ -147,6 +146,11 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void AI() {
+        Projectile parent = Main.projectile[(int)Projectile.ai[1]];
+        if (parent == null || !parent.active) {
+            return;
+        }
+        Vector2 corePosition = parent.As<CactiCaster.CactiCasterBase>().CorePosition;
         Projectile.Opacity = Utils.GetLerpValue(180, 155, Projectile.timeLeft, true);
 
         Projectile.tileCollide = _state == State.Enchanted;
@@ -159,12 +163,12 @@ sealed class Cacti : NatureProjectile {
                 }
 
                 if (Projectile.velocity.Length() < 10f && Projectile.ai[2] == 0f) {
-                    SoundEngine.PlaySound(SoundID.Item20, CorePosition);
+                    SoundEngine.PlaySound(SoundID.Item20, corePosition);
 
                     Projectile.ai[2] = 1f;
 
                     for (int i = 0; i < 15; i++) {
-                        int dust = Dust.NewDust(CorePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
+                        int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
                         Main.dust[dust].noGravity = true;
                     }
                 }

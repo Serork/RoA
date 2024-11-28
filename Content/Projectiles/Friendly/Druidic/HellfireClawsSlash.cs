@@ -125,6 +125,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
                 _projectile.netUpdate = true;
             }
         }
+        Projectile.netUpdate = true;
     }   
 
     public Vector2 GetPos(float extraRot = 0f) {

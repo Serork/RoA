@@ -76,6 +76,7 @@ sealed class ProtectiveRoots : NatureProjectile {
             Projectile.NewProjectile(source, pos.X + newPos.X, pos.Y + newPos.Y, 0f, 0f, Type, Projectile.damage, Projectile.knockBack, player.whoAmI, (float)i, Projectile.ai[2], -1f);
         }
         Projectile.Kill();
+        Projectile.netUpdate = true;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
