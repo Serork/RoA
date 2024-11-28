@@ -85,7 +85,9 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                 dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
                 dust2.noGravity = true;
                 dust2.scale *= 1f;
-                dust2.noLight = true;
+                if (!flag) {
+                    dust2.noLight = true;
+                }
                 if (Main.rand.NextBool(2)) {
                     dust2.scale *= 1.2f;
                 }
