@@ -19,24 +19,23 @@ namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class TulipPetal : NatureProjectile {
     internal const byte PETALCOUNT = 4;
+    internal const int HEIGHT = 30;
 
-    private static Vector2 _spawnPosition;
-    private static Projectile _parent;
+    internal Vector2 SpawnPosition { get; private set; } = Vector2.Zero;
+    internal Projectile Parent { get; private set; } = null;
 
     private byte UsedFrameX => (byte)Projectile.ai[0];
-    private bool ParentFound => !(_parent == null || !_parent.active);
+    private bool ParentFound => !(Parent == null || !Parent.active);
     private bool IsWeepingTulip => UsedFrameX == 2;
     public float Max => IsWeepingTulip ? 180f : 120f;
-
     private int MeInQueue => (int)Projectile.ai[2];
     private bool IsFirst => MeInQueue < 1;
-
-    private Vector2 Offset => Vector2.UnitY * (146 * 0.55f - Projectile.Size.Y);
+    private Vector2 Offset => Vector2.UnitY * (146 * 0.55f - HEIGHT);
 
     public override string Texture => ResourceManager.EmptyTexture;
 
     protected override void SafeSetDefaults() {
-        Projectile.Size = new Vector2(35, 30);
+        Projectile.Size = new Vector2(35, HEIGHT);
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
@@ -55,7 +54,7 @@ sealed class TulipPetal : NatureProjectile {
         base.SendExtraAI(writer);
 
         if (IsFirst) {
-            writer.WriteVector2(_spawnPosition);
+            writer.WriteVector2(SpawnPosition);
         }
     }
 
@@ -63,14 +62,14 @@ sealed class TulipPetal : NatureProjectile {
         base.ReceiveExtraAI(reader);
 
         if (IsFirst) {
-            _spawnPosition = reader.ReadVector2();
+            SpawnPosition = reader.ReadVector2();
         }
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Player player = Main.player[Projectile.owner];
         if (IsFirst && player.whoAmI == Main.myPlayer) {
-            _spawnPosition = player.GetModPlayer<TulipBase.TulipBaseExtraData>().SpawnPositionMid;
+            SpawnPosition = player.GetModPlayer<TulipBase.TulipBaseExtraData>().SpawnPositionMid;
 
             Projectile.netUpdate = true;
         }
@@ -83,14 +82,14 @@ sealed class TulipPetal : NatureProjectile {
             Projectile.netUpdate = true;
         }
 
-        if (IsFirst) {
+        if (Parent == null/*IsFirst*/) {
             foreach (Projectile projectile in Main.ActiveProjectiles) {
                 if (projectile.owner != Projectile.owner) {
                     continue;
                 }
 
                 if (projectile.type == ModContent.ProjectileType<TulipFlower>()) {
-                    _parent = projectile;
+                    Parent = projectile;
                 }
             }
         }
@@ -106,9 +105,9 @@ sealed class TulipPetal : NatureProjectile {
             Projectile.alpha = 0;
         }
 
-        Vector2 parentPosition = _parent.Center + Vector2.UnitY * 2f;
+        Vector2 parentPosition = Parent.Center + Vector2.UnitY * 2f;
         Projectile.position = parentPosition;
-        Projectile.rotation = MeInQueue * (MathHelper.TwoPi / 6) + _parent.rotation;
+        Projectile.rotation = MeInQueue * (MathHelper.TwoPi / 6) + Parent.rotation;
 
         if (IsWeepingTulip) {
             Projectile.localAI[1] += Math.Abs(Projectile.rotation - Projectile.localAI[0]);
@@ -117,8 +116,8 @@ sealed class TulipPetal : NatureProjectile {
                 if (Projectile.localAI[1] > 1f) {
                     if (Projectile.localAI[0] != 0f) {
                         if (Main.rand.NextChance(0.5)) {
-                            Vector2 spawnPosition = Projectile.position + _parent.velocity * 8f + Offset.RotatedBy(Projectile.rotation);
-                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), spawnPosition, (Vector2.UnitX * -Math.Sign(_parent.velocity.X)).RotatedBy(Projectile.rotation) * Projectile.width * 0.1f, ModContent.ProjectileType<Bone>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                            Vector2 spawnPosition = Projectile.position + Parent.velocity * 8f + Offset.RotatedBy(Projectile.rotation);
+                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), spawnPosition, (Vector2.UnitX * -Math.Sign(Parent.velocity.X)).RotatedBy(Projectile.rotation) * Projectile.width * 0.1f, ModContent.ProjectileType<Bone>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         }
                     }
 
@@ -135,7 +134,7 @@ sealed class TulipPetal : NatureProjectile {
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
         //Main.instance.DrawCacheProjsBehindNPCsAndTiles.Add(index);
         behindNPCsAndTiles.Add(index);
-        behindProjectiles.Add(index);
+        //behindProjectiles.Add(index);
     }
 
     public override bool? CanCutTiles() => false;
@@ -152,28 +151,29 @@ sealed class TulipPetal : NatureProjectile {
         }
 
         if (IsFirst) {
-            DrawStem(ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerStem").Value, _parent.Center - Vector2.UnitY * 10f, _spawnPosition);
+            DrawStem(ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerStem").Value, Parent.Center - Vector2.UnitY * 10f, SpawnPosition);
         }
 
-        Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerPetal").Value;
+        //Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerPetal").Value;
 
-        Vector2 position = Projectile.position + Vector2.UnitY * -3f;
+        //Vector2 position = Projectile.position + Vector2.UnitY * -3f;
 
-        float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
-        Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true)) * Projectile.scale * 0.65f;
+        //float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
+        //Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true)) * Projectile.scale * 0.65f;
 
-        SpriteFrame frame = new(PETALCOUNT, 1);
-        frame = frame.With(UsedFrameX, 0);
-        Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
-        Vector2 lightPosition = Projectile.position + Offset.RotatedBy(Projectile.rotation + MathHelper.Pi);
-        Main.EntitySpriteDraw(texture,
-                              position - Main.screenPosition,
-                              sourceRectangle,
-                              Lighting.GetColor(lightPosition.ToTileCoordinates()) * _parent.Opacity,
-                              Projectile.rotation,
-                              new Vector2(sourceRectangle.Centered().X, texture.Height),
-                              scale,
-                              SpriteEffects.None);
+        //SpriteFrame frame = new(PETALCOUNT, 1);
+        //frame = frame.With(UsedFrameX, 0);
+        //Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
+        //Vector2 lightPosition = Projectile.position + Offset.RotatedBy(Projectile.rotation + MathHelper.Pi);
+        //Main.EntitySpriteDraw(texture,
+        //                      position - Main.screenPosition,
+        //                      sourceRectangle,
+        //                      Lighting.GetColor(lightPosition.ToTileCoordinates()) * _parent.Opacity,
+        //                      Projectile.rotation,
+        //                      new Vector2(sourceRectangle.Centered().X, texture.Height),
+        //                      scale,
+        //                      SpriteEffects.None);
+
         return false;
     }
 
@@ -205,13 +205,13 @@ sealed class TulipPetal : NatureProjectile {
             //    continue;
             //}
 
-            float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
-            Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * Projectile.scale * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true), 1f);
+            float lerpValue = Utils.GetLerpValue(0f, 10f, Parent.localAI[0], clamped: true);
+            Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * Projectile.scale * new Vector2(Utils.GetLerpValue(Max, Max - 15f, Parent.localAI[0], clamped: true), 1f);
             ulong seedForRandomness = (ulong)i;
             Main.EntitySpriteDraw(textureToDraw,
                                   position - Main.screenPosition,
                                   new Rectangle(20 * Utils.RandomInt(ref seedForRandomness, 5), 20 * Utils.RandomInt(ref seedForRandomness, 3) + 60 * UsedFrameX, 20, 20),
-                                  Lighting.GetColor(position.ToTileCoordinates()) * _parent.Opacity,
+                                  Lighting.GetColor(position.ToTileCoordinates()) * Parent.Opacity,
                                   velocityToAdd.ToRotation() + MathHelper.PiOver2,
                                   new Vector2(10, 10),
                                   scale,
@@ -286,7 +286,37 @@ sealed class TulipFlower : NatureProjectile {
         Projectile.rotation += Projectile.velocity.Length() * 0.01f * Projectile.direction;
     }
 
+    private void DrawPetals() {
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            if (projectile.owner == Projectile.owner && projectile.type == ModContent.ProjectileType<TulipPetal>() && projectile.As<TulipPetal>().Parent == Projectile) {
+                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerPetal").Value;
+
+                Vector2 position = projectile.position + Vector2.UnitY * -3f;
+
+                float lerpValue = Utils.GetLerpValue(0f, 10f, Projectile.localAI[0], clamped: true);
+                Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * new Vector2(Utils.GetLerpValue(Max, Max - 15f, Projectile.localAI[0], clamped: true)) * projectile.scale * 0.65f;
+
+                Vector2 offset = Vector2.UnitY * (146 * 0.55f - TulipPetal.HEIGHT);
+
+                SpriteFrame frame = new(TulipPetal.PETALCOUNT, 1);
+                frame = frame.With(UsedFrameX, 0);
+                Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
+                Vector2 lightPosition = projectile.position + offset.RotatedBy(projectile.rotation + MathHelper.Pi);
+                Main.EntitySpriteDraw(texture,
+                                      position - Main.screenPosition,
+                                      sourceRectangle,
+                                      Lighting.GetColor(lightPosition.ToTileCoordinates()) * Projectile.Opacity,
+                                      projectile.rotation,
+                                      new Vector2(sourceRectangle.Centered().X, texture.Height),
+                                      scale,
+                                      SpriteEffects.None);
+            }
+        }
+    }
+
     public override bool PreDraw(ref Color lightColor) {
+        DrawPetals();
+
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "Flower").Value;
         Vector2 position = Projectile.Center - Main.screenPosition;
         float rotation = Projectile.rotation;
