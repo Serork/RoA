@@ -28,10 +28,12 @@ abstract class NatureProjectile : ModProjectile {
     }
 
     private void SetItem(Item item) {
-        if (Item is not null) {
-            return;
+        if (Projectile.owner == Main.myPlayer) {
+            Player player = Projectile.GetOwnerAsPlayer();
+            Item = item;
+            float fillingRate = Item.GetGlobalItem<NatureWeaponHandler>().GetFillingRate(player);
+            WreathPointsFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
         }
-        Item = item;
     }
 
     public static void CreateNatureProjectile(IEntitySource spawnSource, Item item, Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f) {
@@ -44,12 +46,7 @@ abstract class NatureProjectile : ModProjectile {
     }
 
     public sealed override void OnSpawn(IEntitySource source) {
-        if (Projectile.owner == Main.myPlayer) {
-            Player player = Projectile.GetOwnerAsPlayer();
-            SetItem(Item);
-            float fillingRate = Item.GetGlobalItem<NatureWeaponHandler>().GetFillingRate(player);
-            WreathPointsFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
-        }
+        SetItem(Projectile.GetOwnerAsPlayer().GetSelectedItem());
         SafeOnSpawn(source);
     }
 

@@ -159,7 +159,7 @@ sealed class WreathHandler : ModPlayer {
 
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
-        if (playerUsingClaws) {
+        if (playerUsingClaws && Player.ItemAnimationActive) {
             selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
             if (IsFool(natureProjectile)) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
