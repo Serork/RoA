@@ -52,8 +52,8 @@ sealed class WeepingTulip : NatureItem {
             return false;
         }
 
-        Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 2);
         position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * 20f;
+        Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 2);
         for (int i = 0; i < 2; i++) {
             float offset2 = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
