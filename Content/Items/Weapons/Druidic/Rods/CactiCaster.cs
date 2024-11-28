@@ -55,7 +55,9 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                     int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: flag ? 0 : 120);
                     Dust dust2 = Main.dust[num560];
                     dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
-                    dust2.noLight = true;
+                    if (!flag) {
+                        dust2.noLight = true;
+                    }
                     dust2.scale *= 1.2f;
                     dust2.velocity *= Main.rand.NextFloat(1f, 1.25f);
                     dust2.velocity *= 1.25f;
