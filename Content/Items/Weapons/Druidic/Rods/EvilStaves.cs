@@ -1,12 +1,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -58,7 +60,9 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
 
 sealed class EvilLeaf : NatureProjectile {
     private Vector2 _twigPosition;
-    private float _extra;
+    private float _extraRotation, _maxExtraRotation;
+    private Vector2 _velocity2, _to;
+    private float _updateTime = -1f;
 
     internal bool Crimson;
 
@@ -68,17 +72,21 @@ sealed class EvilLeaf : NatureProjectile {
         Projectile.Size = Vector2.One;
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
-        Projectile.timeLeft = 200;
+        Projectile.timeLeft = 400;
         Projectile.penetrate = -1;
         Projectile.hide = true;
     }
 
     internal void SetUpPositionOnTwig(Vector2 position) => _twigPosition = position;
 
+    public override bool ShouldUpdatePosition() => false;
+
     public override void AI() {
         Projectile.direction = (int)Projectile.ai[0];
         Projectile parent = Main.projectile[(int)Projectile.ai[1]];
-        if (parent != null && parent.active) {
+        Player player = Main.player[Projectile.owner];
+        if (parent != null && parent.active && (_updateTime == -1f || _updateTime == 100f)) {
+            Projectile.velocity = Vector2.Zero;
             Vector2 parentScale = parent.As<EvilBranch>().Scale;
             Projectile.position = parent.position + _twigPosition * parentScale;
             Projectile.position -= Vector2.One * 2f;
@@ -86,13 +94,13 @@ sealed class EvilLeaf : NatureProjectile {
                 Projectile.ai[2] = 1f;
                 Projectile.localAI[2] = 1.25f;
                 Projectile.localAI[1] = Projectile.localAI[2];
+                _maxExtraRotation = -1f;
             }
             float scaleY = parentScale.Y * Projectile.ai[2];
             float rotation = MathHelper.Pi * Projectile.direction * (1f - scaleY);
             if (Projectile.localAI[0] == 0f) {
                 Projectile.localAI[0] = 1f;
                 Projectile.rotation = rotation;
-                _extra = 1f;
             }
             if (Projectile.ai[0] == 1f) {
                 Projectile.position -= new Vector2(10f, 0f);
@@ -103,14 +111,51 @@ sealed class EvilLeaf : NatureProjectile {
                 //Projectile.localAI[1] = Projectile.localAI[2];
             }
             else {
-                Projectile.localAI[2] = MathHelper.SmoothStep(Projectile.localAI[2], 1f + 0.1f * _extra, Projectile.localAI[1] * 0.25f);
-                Projectile.localAI[1] *= 0.999f;
-                if (scaleY >= 0.9f) {
-                    _extra = MathHelper.Lerp(_extra, 0f, Projectile.localAI[1] * 0.175f);
+                float angle = Math.Sign(_extraRotation) == Math.Sign(_maxExtraRotation) ? 4f : 3f;
+                if (Math.Abs(_extraRotation) < 0.5f) {
+                    angle *= 0.5f;
                 }
+                if (Math.Abs(_extraRotation) < 0.25f) {
+                    angle *= 0.25f;
+                }
+                _maxExtraRotation += (float)-Math.Sign(_extraRotation) * angle;
+                _maxExtraRotation *= 0.95f;
+                _extraRotation += _maxExtraRotation * TimeSystem.LogicDeltaTime;
+                Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], 1f + _extraRotation, Projectile.localAI[1] * 0.175f);
+                Projectile.localAI[1] *= 0.995f;
             }
-            Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], Projectile.localAI[2], Projectile.ai[2] * 0.25f);
+            Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], Projectile.localAI[2], Projectile.ai[2] * 0.215f);
+            _updateTime = 100f;
+            if (Projectile.owner == Main.myPlayer) {
+                _to = player.GetViableMousePosition();
+            }
             //Projectile.rotation += 0.1f;
+        }
+        else {
+            Vector2 vector = new(Vector2.UnitY.RotatedBy(Projectile.velocity.Y).X * 1f, Math.Abs(Vector2.UnitY.RotatedBy(Projectile.velocity.Y).Y) * 1f);
+            Vector2 to = _to;
+            Vector2 velocity = vector + _velocity2 * 0.5f;
+            bool flag = Projectile.position.Distance(to) < 100f;
+            if (_updateTime > 0f) {
+                _updateTime--;
+                if (_updateTime < 75f && _velocity2.Length() < 2f) {
+                    _updateTime = 0f;
+                }
+                if (Projectile.velocity.Length() < 1f) {
+                    Projectile.velocity = new Vector2((Main.rand.NextFloat() - 0.5f) * 1f, Main.rand.NextFloat() * ((float)Math.PI * 2f));
+                }
+                if (!flag) {
+                    Vector2 movement = to - Projectile.position;
+                    Vector2 movement2 = movement * (5f / movement.Length());
+                    _velocity2 += (movement2 - _velocity2) / 10f;
+                }
+                else {
+                    _updateTime = 0f;
+                }
+                //Projectile.velocity.Y += (float)Math.PI / 180f;
+            }
+            Projectile.position += velocity;
+            Projectile.rotation = MathHelper.Lerp(Projectile.rotation, vector.ToRotation() + (float)Math.PI / 2f, 0.01f);
         }
     }
 
