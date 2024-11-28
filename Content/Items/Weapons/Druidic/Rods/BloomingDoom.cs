@@ -29,7 +29,7 @@ sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
     }
 
     public sealed class BloomingDoomBase : TulipBase {
-        protected override Vector2 CorePositionOffsetFactor() => new(0.14f, 0.135f);
+        protected override Vector2 CorePositionOffsetFactor() => new(0.145f, 0.135f);
 
         protected override ushort CoreDustType() => (ushort)ModContent.DustType<BloomingDoomDust>();
 

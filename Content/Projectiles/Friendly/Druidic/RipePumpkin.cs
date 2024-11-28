@@ -110,7 +110,7 @@ sealed class RipePumpkin : NatureProjectile {
                             Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);
                             direction.Normalize();
                             direction *= 15 * Main.rand.NextFloat(0.9f, 1.1f);
-                            Projectile.NewProjectile(player.GetSource_ItemUse(player.GetSelectedItem()), new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
+                            CreateNatureProjectile(player.GetSource_ItemUse(player.GetSelectedItem()), Item, new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
                             //Main.projectile[projectile].CritChance = Projectile.CritChance;
                             //Main.newT
                         }

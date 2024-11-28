@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Audio;
@@ -65,8 +66,8 @@ sealed class TulipPetalOld : NatureProjectile {
         Projectile.ai[1]++;
         if (Projectile.ai[0] == 0 || Projectile.ai[0] == 3) {
             if (Projectile.ai[1] > 8 && Projectile.ai[1] % _flowerRarity == 0 && Projectile.ai[1] < 50) {
-                if (Projectile.owner == Main.myPlayer) 
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X + Main.rand.NextFloat(-2f, 2f), Projectile.Center.Y + Main.rand.NextFloat(-2f, 2f), 0, 0, ModContent.ProjectileType<TulipTrailOld>(), (int)(Projectile.damage * 0.3f), 0, Projectile.owner, Projectile.frame, Projectile.ai[1]);
+                if (Projectile.owner == Main.myPlayer)
+                    CreateNatureProjectile(Projectile.GetSource_FromThis(), Item, Projectile.Center.X + Main.rand.NextFloat(-2f, 2f), Projectile.Center.Y + Main.rand.NextFloat(-2f, 2f), 0, 0, ModContent.ProjectileType<TulipTrailOld>(), (int)(Projectile.damage * 0.3f), 0, Projectile.owner, Projectile.frame, Projectile.ai[1]);
             }
         }
         if (Projectile.ai[0] == 1 || Projectile.ai[0] == 3) {
@@ -171,7 +172,7 @@ sealed class TulipPetalOld : NatureProjectile {
                 Vector2 spawnOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
                 for (int k = 0; k < _beeCounter + _allBees; k++) {
                     Vector2 spawnPos = Projectile.oldPos[0] + spawnOrigin + new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation * Projectile.direction + k * 120));
-                    Projectile.NewProjectile(Projectile.GetSource_Death(), spawnPos, Vector2.Normalize(new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation + k * 120))), ModContent.ProjectileType<Bee>(), (int)(Projectile.damage * 0.3f), 0, player.whoAmI);
+                    CreateNatureProjectile(Projectile.GetSource_Death(), Item, spawnPos, Vector2.Normalize(new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation + k * 120))), ModContent.ProjectileType<Bee>(), (int)(Projectile.damage * 0.3f), 0, player.whoAmI);
                 }
             }
         }
@@ -184,7 +185,7 @@ sealed class TulipPetalOld : NatureProjectile {
             Projectile.position.X = Projectile.position.X - (Projectile.width / 2);
             Projectile.position.Y = Projectile.position.Y - (Projectile.height / 2);
             if (Projectile.owner == Main.myPlayer) {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ModContent.ProjectileType<WeepingTulipExplosion>(), (int)(Projectile.damage * 0.5f * _explosionMultiplier * 0.1f), 0, Projectile.owner, ai2: _explosionMultiplier);
+                CreateNatureProjectile(Projectile.GetSource_FromThis(), Item, Projectile.position.X, Projectile.position.Y, 0, 0, ModContent.ProjectileType<WeepingTulipExplosion>(), (int)(Projectile.damage * 0.5f * _explosionMultiplier * 0.1f), 0, Projectile.owner, ai2: _explosionMultiplier);
             }
             int dustCount = 8 + 8 * _explosionMultiplier;
             int currentDustCount = 0;

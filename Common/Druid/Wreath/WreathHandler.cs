@@ -141,7 +141,7 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
-        ClawsReset(proj);
+        OnHitNPC(proj);
         //else {
 
         //}
@@ -149,7 +149,7 @@ sealed class WreathHandler : ModPlayer {
 
     public bool IsFool(NatureProjectile natureProjectile) => GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2));
 
-    public void ClawsReset(Projectile proj, bool nonDataReset = false) {
+    public void OnHitNPC(Projectile proj, bool nonDataReset = false) {
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;
         }

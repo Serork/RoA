@@ -18,6 +18,8 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
     public float FillingRate => _fillingRate;
 
+    public override bool InstancePerEntity => true;
+
     public float GetFillingRate(Player player) => _fillingRate * player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier;
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
     public bool HasPotentialUseSpeed() => _basePotentialUseSpeed > 0;
@@ -61,8 +63,6 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         NatureWeaponHandler self = item.GetGlobalItem<NatureWeaponHandler>();
         self._fillingRate = Math.Clamp(fillingRate, 0f, 2f);
     }
-
-    public override bool InstancePerEntity => true;
 
     public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage) {
         if (!item.IsADruidicWeapon()) {
