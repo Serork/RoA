@@ -42,6 +42,10 @@ sealed class SapStream : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * Item.width / 2f, 0, 0)) {
+            return false;
+        }
+
         if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
             Vector2 vector2 = (velocity + Utils.RotatedByRandom(velocity, 0.25f) * Main.rand.NextFloat(0.8f, 1.4f) * Main.rand.NextFloat(0.75f, 1.35f)) * Main.rand.NextFloat(1.25f, 2f);
             Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI);

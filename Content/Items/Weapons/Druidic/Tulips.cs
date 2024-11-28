@@ -6,6 +6,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using RoA.Common.Druid;
+using RoA.Core.Utility;
 
 namespace RoA.Content.Items.Weapons.Druidic;
 
@@ -38,7 +39,7 @@ sealed class WeepingTulip : NatureItem {
         Item.shoot = ModContent.ProjectileType<TulipPetalOld>();
 
         NatureWeaponHandler.SetPotentialDamage(Item, 26);
-        NatureWeaponHandler.SetFillingRate(Item, 0.2f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
     }
 
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
@@ -47,7 +48,24 @@ sealed class WeepingTulip : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * Item.width / 2f, 0, 0)) {
+            return false;
+        }
+
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 2);
+        for (int i = 0; i < 2; i++) {
+            float offset2 = 10f;
+            Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
+                    spawnPosition = position - randomOffset / 2f + randomOffset;
+
+            //ushort dustType = CoreDustType();
+            Dust dust = Dust.NewDustPerfect(spawnPosition,
+                                            ModContent.DustType<Dusts.Tulip>(),
+                                            (spawnPosition - position).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f),
+                                            Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f),
+                                            Alpha: 2);
+            dust.customData = Main.rand.NextFloatRange(50f);
+        }
         return false;
     }
 }
@@ -81,7 +99,7 @@ sealed class SweetTulip : NatureItem {
         Item.shoot = ModContent.ProjectileType<TulipPetalOld>();
 
         NatureWeaponHandler.SetPotentialDamage(Item, 22);
-        NatureWeaponHandler.SetFillingRate(Item, 0.2f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
     }
 
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
@@ -90,7 +108,24 @@ sealed class SweetTulip : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * Item.width / 2f, 0, 0)) {
+            return false;
+        }
+
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 1);
+        for (int i = 0; i < 2; i++) {
+            float offset2 = 10f;
+            Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
+                    spawnPosition = position - randomOffset / 2f + randomOffset;
+
+            //ushort dustType = CoreDustType();
+            Dust dust = Dust.NewDustPerfect(spawnPosition,
+                                            ModContent.DustType<Dusts.Tulip>(),
+                                            (spawnPosition - position).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f),
+                                            Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f),
+                                            Alpha: 1);
+            dust.customData = Main.rand.NextFloatRange(50f);
+        }
         return false;
     }
 }
@@ -124,7 +159,7 @@ sealed class ExoticTulip : NatureItem {
         Item.shoot = ModContent.ProjectileType<TulipPetalOld>();
 
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
-        NatureWeaponHandler.SetFillingRate(Item, 0.2f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
     }
 
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
@@ -133,7 +168,24 @@ sealed class ExoticTulip : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * Item.width / 2f, 0, 0)) {
+            return false;
+        }
+
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 0);
+        for (int i = 0; i < 2; i++) {
+            float offset2 = 10f;
+            Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
+                    spawnPosition = position - randomOffset / 2f + randomOffset;
+
+            //ushort dustType = CoreDustType();
+            Dust dust = Dust.NewDustPerfect(spawnPosition,
+                                            ModContent.DustType<Dusts.Tulip>(),
+                                            (spawnPosition - position).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f),
+                                            Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f),
+                                            Alpha: 0);
+            dust.customData = Main.rand.NextFloatRange(50f);
+        }
         return false;
     }
 }

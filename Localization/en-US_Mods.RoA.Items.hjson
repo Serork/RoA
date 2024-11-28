@@ -414,3 +414,8 @@ BloomingDoom: {
 	DisplayName: Blooming Doom
 	Tooltip: ""
 }
+
+BrilliantBouquet: {
+	DisplayName: Brilliant Bouquet
+	Tooltip: ""
+}
