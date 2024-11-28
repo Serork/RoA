@@ -131,11 +131,7 @@ sealed class TulipPetal : NatureProjectile {
         }
     }
 
-    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
-        //Main.instance.DrawCacheProjsBehindNPCsAndTiles.Add(index);
-        behindNPCsAndTiles.Add(index);
-        //behindProjectiles.Add(index);
-    }
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
 
     public override bool? CanCutTiles() => false;
 

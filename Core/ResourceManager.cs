@@ -34,6 +34,7 @@ static class ResourceManager {
 
     public static string ProjectileTextures => Textures + "Projectiles/";
     public static string EnemyProjectileTextures => ProjectileTextures + "Enemies/";
+    public static string FriendlyProjectileTextures => ProjectileTextures + "Friendly/";
 
     public static string DustTextures => Textures + "Dusts/";
 
