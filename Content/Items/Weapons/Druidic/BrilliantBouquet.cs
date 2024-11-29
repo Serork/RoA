@@ -50,6 +50,11 @@ sealed class BrilliantBouquet : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        float offset3 = Item.width * 1.4f;
+        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * offset3, 0, 0)) {
+            return false;
+        }
+
         int petalType = Main.rand.Next(3);
         bool flag = player.GetModPlayer<WreathHandler>().IsFull;
         if (flag) {
@@ -68,7 +73,7 @@ sealed class BrilliantBouquet : NatureItem {
         Vector2 offset = new(size, -size);
         offset *= player.direction;
         position += (Item.Size * offset).RotatedBy(rot);
-        position += new Vector2(6f, 0f * player.direction).RotatedBy(rot);
+        position += new Vector2(6f * -player.direction, 0f * player.direction).RotatedBy(rot);
         int amount = 27;
         if (petalType == 1) {
             amount = 32;
@@ -77,9 +82,6 @@ sealed class BrilliantBouquet : NatureItem {
             amount = player.direction == 1 ? 30 : 37;
         }
         position += velocity2 * amount;
-        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * Item.width / 2f, 0, 0)) {
-            return false;
-        }
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, petalType);
 
         position += velocity2 * amount / 7f;

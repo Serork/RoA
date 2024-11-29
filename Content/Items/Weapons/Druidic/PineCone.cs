@@ -23,7 +23,7 @@ sealed class PineCone : NatureItem {
         NatureWeaponHandler.SetFillingRate(Item, 0.8f);
     }
 
-	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 2;
+    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 2;
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
 		if (player.IsLocal()) {

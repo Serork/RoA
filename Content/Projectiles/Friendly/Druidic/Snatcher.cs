@@ -27,6 +27,7 @@ sealed class Snatcher : NatureProjectile {
     private Vector2 _mousePos, _mousePos2;
     private float _lerpValue;
     private int _alpha = 255;
+    private int _startDirection;
 
     private Vector2[] _oldPositions = new Vector2[18];
 
@@ -85,6 +86,9 @@ sealed class Snatcher : NatureProjectile {
         Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset += OnReset;
         for (int j = 0; j < _oldPositions.Length; j++) {
             _oldPositions[j] = Vector2.Zero;
+        }
+        if (_startDirection == 0) {
+            _startDirection = Main.player[Projectile.owner].direction;
         }
     }
 
@@ -343,7 +347,8 @@ sealed class Snatcher : NatureProjectile {
             Projectile.ai[1] = 1f;
             Projectile.ai[2] = 0f;
             if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[Type] < 2) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f, -Projectile.ai[1], 0f);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f,
+                    -Projectile.ai[1], 0f);
                 Projectile.netUpdate = true;
             }
         }
@@ -403,7 +408,8 @@ sealed class Snatcher : NatureProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Vector2 drawPosition = GetPos();
-        int direction = (int)Projectile.ai[1] * (drawPosition - Main.player[Projectile.owner].Center).X.GetDirection();
+        int direction = (int)Projectile.ai[1];
+        direction *= (drawPosition - Main.player[Projectile.owner].Center).X.GetDirection() * _startDirection;
         SpriteEffects effects = direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
         Vector2 mountedCenter = Main.player[Projectile.owner].MountedCenter;

@@ -42,17 +42,18 @@ sealed class WeepingTulip : NatureItem {
         NatureWeaponHandler.SetFillingRate(Item, 0.3f);
     }
 
-    public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        Vector2 velocity2 = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
-        position += velocity2 * 25;
-    }
+    //public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+    //    Vector2 velocity2 = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
+    //    position += velocity2 * 25;
+    //}
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * Item.width / 2f, 0, 0)) {
+        float offset = Item.width * 1.4f;
+        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * offset * 1.1f, 0, 0)) {
             return false;
         }
 
-        position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * 20f;
+        position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 2);
         for (int i = 0; i < 2; i++) {
             float offset2 = 10f;
@@ -103,17 +104,18 @@ sealed class SweetTulip : NatureItem {
         NatureWeaponHandler.SetFillingRate(Item, 0.3f);
     }
 
-    public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        Vector2 velocity2 = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
-        position += velocity2 * 25;
-    }
+    //public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+    //    Vector2 velocity2 = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
+    //    position += velocity2 * 25;
+    //}
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * Item.width / 2f, 0, 0)) {
+        float offset = Item.width * 1.4f;
+        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * offset * 1.1f, 0, 0)) {
             return false;
         }
 
-        position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * 20f;
+        position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 1);
         for (int i = 0; i < 2; i++) {
             float offset2 = 10f;
@@ -164,17 +166,18 @@ sealed class ExoticTulip : NatureItem {
         NatureWeaponHandler.SetFillingRate(Item, 0.3f);
     }
 
-    public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        Vector2 velocity2 = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
-        position += velocity2 * 25;
-    }
+    //public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+    //    Vector2 velocity2 = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
+    //    position += velocity2 * 25;
+    //}
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * Item.width / 2f, 0, 0)) {
+        float offset = Item.width * 1.4f;
+        if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * offset * 1.1f, 0, 0)) {
             return false;
         }
 
-        position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * 20f;
+        position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 0);
         for (int i = 0; i < 2; i++) {
             float offset2 = 10f;
