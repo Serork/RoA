@@ -149,9 +149,9 @@ sealed class Cacti : NatureProjectile {
 
     public override void AI() {
         Projectile parent = Main.projectile[(int)Projectile.ai[1]];
-        if (parent == null || !parent.active) {
-            return;
-        }
+        //if (parent == null || !parent.active) {
+        //    return;
+        //}
         var parent2 = parent.As<CactiCaster.CactiCasterBase>();
         if (parent2 == null) {
             Projectile.Kill();

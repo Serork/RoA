@@ -269,7 +269,7 @@ sealed class EvilBranch : NatureProjectile {
             Main.gore[gore].velocity.Y *= 0.5f;
 
             for (int i2 = 0; i2 < Main.rand.Next(9, 16); i2++) {
-                if (Main.rand.NextBool(6)) {
+                if (Main.rand.NextBool(5)) {
                     Dust.NewDustPerfect(position, isCrimson ? DustID.Shadewood : DustID.Ebonwood);
                 }
             }
