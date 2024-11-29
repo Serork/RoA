@@ -15,7 +15,7 @@ sealed class PineCone : NatureItem {
     protected override void SafeSetDefaults() {
 		Item.SetSize(18, 28);
 		Item.SetWeaponValues(2, 0.25f);
-		Item.SetDefaultToUsable(ItemUseStyleID.Swing, 35, false, useSound: SoundID.Item1);
+		Item.SetDefaultToUsable(ItemUseStyleID.HoldUp, 35, false, useSound: SoundID.Item1);
 		Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Druidic.PineCone>());
 		Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.White);
 

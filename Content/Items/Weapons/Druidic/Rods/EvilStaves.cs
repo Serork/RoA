@@ -289,7 +289,7 @@ sealed class EvilBranch : NatureProjectile {
                 position.Y += 2;
                 position.Y += sourceRectangle.Height * (1f - _scale.Y);
             }
-            position.Y -= 6;
+            position.Y += 2;
             SpriteEffects spriteEffects = (SpriteEffects)(Projectile.direction == 1).ToInt();
             Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, sourceRectangle.BottomCenter(), _scale, spriteEffects);
         }
