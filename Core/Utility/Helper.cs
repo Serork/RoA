@@ -38,6 +38,8 @@ static class Helper {
         );
     }
 
+    public static float Approach(float val, float target, float maxMove) => (double)val <= (double)target ? Math.Min(val + maxMove, target) : Math.Max(val - maxMove, target);
+
     public static Vector2 CircleOffset(this Entity entity, float elapsedTime, float circleRotation, float circleHeight) => ((((float)(MathHelper.TwoPi * (double)elapsedTime + MathHelper.PiOver2)).ToRotationVector2() + new Vector2(0.0f, -1f)) * new Vector2(6 * -entity.direction, circleHeight)).RotatedBy((double)circleRotation);
     public static void CircleMovement(this Entity entity, float counter, float speed = 0.4f, float radius = 14f) {
         Vector2 offset = CircleOffset(entity, counter / 65f, speed, radius);

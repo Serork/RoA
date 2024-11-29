@@ -107,8 +107,6 @@ sealed class EvilLeaf : NatureProjectile {
             }
             Projectile.rotation = Utils.AngleLerp(Projectile.rotation, rotation, 0.2f);
             if (scaleY < 0.5f) {
-                //Projectile.localAI[2] = 1.25f;
-                //Projectile.localAI[1] = Projectile.localAI[2];
             }
             else {
                 float angle = Math.Sign(_extraRotation) == Math.Sign(_maxExtraRotation) ? 4f : 3f;
@@ -129,7 +127,6 @@ sealed class EvilLeaf : NatureProjectile {
             if (Projectile.owner == Main.myPlayer) {
                 _to = player.GetViableMousePosition();
             }
-            //Projectile.rotation += 0.1f;
         }
         else {
             Vector2 vector = new(Vector2.UnitY.RotatedBy(Projectile.velocity.Y).X * 1f, Math.Abs(Vector2.UnitY.RotatedBy(Projectile.velocity.Y).Y) * 1f);
@@ -152,8 +149,8 @@ sealed class EvilLeaf : NatureProjectile {
                 else {
                     _updateTime = 0f;
                 }
-                //Projectile.velocity.Y += (float)Math.PI / 180f;
             }
+            Projectile.velocity.Y += (float)Math.PI / 180f;
             Projectile.position += velocity;
             Projectile.rotation = MathHelper.Lerp(Projectile.rotation, vector.ToRotation() + (float)Math.PI / 2f, 0.01f);
         }
