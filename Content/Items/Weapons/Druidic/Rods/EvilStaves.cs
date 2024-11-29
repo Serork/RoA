@@ -81,6 +81,14 @@ sealed class EvilLeaf : NatureProjectile {
 
     public override bool ShouldUpdatePosition() => false;
 
+    private void SetPosition() {
+        Projectile parent = Main.projectile[(int)Projectile.ai[1]];
+        Vector2 parentScale = parent.As<EvilBranch>().Scale;
+        Vector2 position = parent.position;
+        Vector2 myPosition = _twigPosition * parentScale - Vector2.One * 2f - (Projectile.ai[0] == 1f ? new Vector2(10f, 0f) : Vector2.Zero);
+        Projectile.position = position + myPosition.RotatedBy(parent.rotation);
+    }
+
     public override void AI() {
         Projectile.direction = (int)Projectile.ai[0];
         Projectile parent = Main.projectile[(int)Projectile.ai[1]];
@@ -88,8 +96,7 @@ sealed class EvilLeaf : NatureProjectile {
         if (parent != null && parent.active && (_updateTime == -1f || _updateTime == 100f)) {
             Projectile.velocity = Vector2.Zero;
             Vector2 parentScale = parent.As<EvilBranch>().Scale;
-            Projectile.position = parent.position + _twigPosition * parentScale;
-            Projectile.position -= Vector2.One * 2f;
+            SetPosition();
             if (Projectile.localAI[0] == 0f) {
                 Projectile.ai[2] = 1f;
                 Projectile.localAI[2] = 1.25f;
@@ -97,13 +104,10 @@ sealed class EvilLeaf : NatureProjectile {
                 _maxExtraRotation = -1f;
             }
             float scaleY = parentScale.Y * Projectile.ai[2];
-            float rotation = MathHelper.Pi * Projectile.direction * (1f - scaleY);
+            float rotation = parent.rotation + MathHelper.Pi * Projectile.direction * (1f - scaleY);
             if (Projectile.localAI[0] == 0f) {
                 Projectile.localAI[0] = 1f;
                 Projectile.rotation = rotation;
-            }
-            if (Projectile.ai[0] == 1f) {
-                Projectile.position -= new Vector2(10f, 0f);
             }
             Projectile.rotation = Utils.AngleLerp(Projectile.rotation, rotation, 0.2f);
             if (scaleY < 0.5f) {
@@ -238,14 +242,21 @@ sealed class EvilBranch : NatureProjectile {
         _scale.Y = 0.4f;
 
         Point point = Main.player[Projectile.owner].GetViableMousePosition().ToTileCoordinates();
-        while (!WorldGen.SolidTile(point)) {
-            if (TileID.Sets.Platforms[WorldGenHelper.GetTileSafely(point.X, point.Y).TileType]) {
+        Point point2 = point;
+        if (Main.rand.NextChance(0.75f)) {
+            point2.X += Main.rand.Next(-2, 3);
+        }
+        while (!WorldGen.SolidTile(point2)) {
+            if (TileID.Sets.Platforms[WorldGenHelper.GetTileSafely(point2.X, point2.Y).TileType]) {
                 break;
             }
 
-            point.Y++;
+            point2.Y++;
         }
-        Projectile.Center = point.ToWorldCoordinates();
+        Projectile.Center = point2.ToWorldCoordinates();
+        Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
+        float maxRadians = 0.5f;
+        Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
 
         SetUpLeafPoints();
         foreach (LeafInfo leafInfo in _leavesInfo) {
@@ -256,10 +267,8 @@ sealed class EvilBranch : NatureProjectile {
             if (Projectile.direction == -1) {
                 direction *= -1;
             }
-            Vector2 position = Projectile.position;
             Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
-            position += leafTwigPosition;
-            int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, position, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), Projectile.damage, Projectile.knockBack, Projectile.owner, direction, Projectile.identity);
+            int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), Projectile.damage, Projectile.knockBack, Projectile.owner, direction, Projectile.identity);
             Main.projectile[projectile].As<EvilLeaf>().SetUpPositionOnTwig(leafTwigPosition);
             Main.projectile[projectile].As<EvilLeaf>().Crimson = Projectile.ai[2] == 1f;
         }
@@ -285,6 +294,9 @@ sealed class EvilBranch : NatureProjectile {
             sourceRectangle.Height += 2;
             Vector2 position = Projectile.Center - Main.screenPosition;
             if (top) {
+                float value = Math.Abs(Projectile.rotation) / MathHelper.TwoPi;
+                position.X += (sourceRectangle.Width - 4) * MathHelper.PiOver2 * Projectile.rotation;
+                position.Y += sourceRectangle.Height * value;
                 position.Y -= sourceRectangle.Height;
                 position.Y += 2;
                 position.Y += sourceRectangle.Height * (1f - _scale.Y);
