@@ -29,7 +29,7 @@ sealed class Cacti : NatureProjectile {
 
     private float UseTimeFactor => 0.0275f * (float)(1f - Projectile.localAI[0] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
 
-    public override void SetStaticDefaults() => Projectile.SetTrail(length: 6);
+    public override void SetStaticDefaults() => Projectile.SetTrail(2, 6);
 
     protected override void SafeSetDefaults() {
         Projectile.Size = 24 * Vector2.One;
@@ -75,14 +75,16 @@ sealed class Cacti : NatureProjectile {
             Color color = lightColor;
             int length = Projectile.oldPos.Length;
             float baseRotation = (Projectile.velocity.SafeNormalize(Vector2.One) * 2f).ToRotation() - MathHelper.PiOver2;
-            for (int i = 0; i < length - 1; i++) {
+            for (int i = length - 2; i > 0; i--) {
                 float progress = (length - i) / (float)length * 1.25f;
                 color *= Utils.Remap(progress, 0f, 1f, 0.5f, 1f);
+                color *= 1.125f;
                 float scale = Projectile.scale * Math.Clamp(progress, 0.5f, 1f);
-                float offsetYBetween = Projectile.Size.Y * 0.15f;
-                Vector2 dif = (Projectile.position - Projectile.oldPos[i]).SafeNormalize(Vector2.UnitY);
+                float offsetYBetween = Projectile.Size.Y * 0.2f * scale;
+                Vector2 last = Projectile.position;
+                Vector2 dif = (last - Projectile.oldPos[i]).SafeNormalize(Vector2.UnitY);
                 Main.EntitySpriteDraw(trailTexture,
-                                      Projectile.oldPos[i] + dif * offsetYBetween / 2f + origin - dif * offsetYBetween * i - Main.screenPosition,
+                                      Projectile.oldPos[i] + (dif * offsetYBetween / 2f + origin - dif * offsetYBetween * i) - Main.screenPosition,
                                       null,
                                       color,
                                       baseRotation,
@@ -148,6 +150,11 @@ sealed class Cacti : NatureProjectile {
     public override void AI() {
         Projectile parent = Main.projectile[(int)Projectile.ai[1]];
         if (parent == null || !parent.active) {
+            return;
+        }
+        var parent2 = parent.As<CactiCaster.CactiCasterBase>();
+        if (parent2 == null) {
+            Projectile.Kill();
             return;
         }
         Vector2 corePosition = parent.As<CactiCaster.CactiCasterBase>().CorePosition;
