@@ -82,7 +82,7 @@ sealed class EvilLeaf : NatureProjectile {
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
         Projectile.timeLeft = TIMELEFT;
-        Projectile.penetrate = -1;
+        Projectile.penetrate = 1;
         Projectile.hide = true;
         Projectile.tileCollide = false;
     }
@@ -221,7 +221,7 @@ sealed class EvilLeaf : NatureProjectile {
         SpriteEffects spriteEffects = (SpriteEffects)((int)Projectile.ai[0] != 1).ToInt();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Rectangle sourceRectangle = new(Crimson ? 14 : 0, 0, 14, 14);
-        Color color = lightColor * Projectile.Opacity;
+        Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity;
         Vector2 origin = Projectile.ai[0] == 1 ? new Vector2(2, 12) : new Vector2(12, 12);
         if (_to != Vector2.Zero) {
             int num149 = Projectile.oldPos.Length;
@@ -306,6 +306,15 @@ sealed class EvilBranch : NatureProjectile {
         Projectile.timeLeft = 300;
         Projectile.penetrate = -1;
         Projectile.hide = true;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = -1;
+
+        Projectile.netImportant = true;
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        return Collision.CheckAABBvLineCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.Center, Projectile.Center - (Vector2.UnitY * 130f).RotatedBy(Projectile.rotation));
     }
 
     private void SetUpLeafPoints() {
@@ -356,7 +365,7 @@ sealed class EvilBranch : NatureProjectile {
         }
         Projectile.Center = point2.ToWorldCoordinates();
         Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
-        float maxRadians = 0.5f;
+        float maxRadians = 0.45f;
         Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
 
         SetUpLeafPoints();

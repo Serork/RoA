@@ -212,21 +212,25 @@ sealed class Cacti : NatureProjectile {
             case State.Enchanted:
                 float baseRotation = (Projectile.velocity.SafeNormalize(Vector2.One) * 2f).ToRotation() - MathHelper.PiOver2;
                 Projectile.rotation = baseRotation + Projectile.localAI[2];
+                if (Main.rand.NextBool(5)) {
+                    Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, ModContent.DustType<CactiCasterDust>(), 0f, 0f, 0, default(Color), Main.rand.NextFloat(0.8f, 1f) * 1.4f * 0.95f);
+                    dust2.noGravity = true;
+                    dust2.velocity = Projectile.velocity * 0.5f;
+                    dust2.fadeIn = 1f;
+                }
                 //Projectile.localAI[2] += Projectile.velocity.X * 0.0075f;
-                if (Main.netMode != NetmodeID.Server) {
-                    for (int i = 0; i < 2; i++) {
-                        int direction = i != 0 ? 1 : -1;
-                        Vector2 vector32 = new(Projectile.Size.X * 0.4f * direction, Projectile.Size.Y * 0.15f);
-                        vector32 = vector32.RotatedBy(baseRotation);
-                        int type = Dust.NewDust(Projectile.Center - Vector2.One * 2f + Projectile.velocity + vector32, 4, 4, ModContent.DustType<CactiCasterDust>());
-                        Dust dust = Main.dust[type];
-                        dust.scale = Main.rand.NextFloat(0.8f, 1f) * 1.4f;
-                        dust.noGravity = true;
-                        dust.velocity = (dust.velocity * 0.25f + Vector2.Normalize(vector32)).SafeNormalize(new Vector2(10f * direction, -1f)) * Main.rand.NextFloat(1f, 1.5f) * 3f;
-                        dust.velocity -= new Vector2(3f * direction, 5f).RotatedBy(baseRotation);
-                        dust.fadeIn = 1f;
-                        dust.scale *= 0.95f;
-                    }
+                for (int i = 0; i < 2; i++) {
+                    int direction = i != 0 ? 1 : -1;
+                    Vector2 vector32 = new(Projectile.Size.X * 0.4f * direction, Projectile.Size.Y * 0.15f);
+                    vector32 = vector32.RotatedBy(baseRotation);
+                    int type = Dust.NewDust(Projectile.Center - Vector2.One * 2f + Projectile.velocity + vector32, 4, 4, ModContent.DustType<CactiCasterDust>());
+                    Dust dust = Main.dust[type];
+                    dust.scale = Main.rand.NextFloat(0.8f, 1f) * 1.4f;
+                    dust.noGravity = true;
+                    dust.velocity = (dust.velocity * 0.25f + Vector2.Normalize(vector32)).SafeNormalize(new Vector2(10f * direction, -1f)) * Main.rand.NextFloat(1f, 1.5f) * 3f;
+                    dust.velocity -= new Vector2(3f * direction, 5f).RotatedBy(baseRotation);
+                    dust.fadeIn = 1f;
+                    dust.scale *= 0.95f;
                 }
                 break;
         }
