@@ -490,6 +490,8 @@ sealed class LothorSummoningHandler : ModSystem {
         else if (_preArrivedLothorBossTimer >= 6f && !ActiveMessages.Item3) {
             ActiveMessages.Item3 = true;
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.5f }, AltarHandler.GetAltarPosition().ToWorldCoordinates());
+
+            PreArrivedLothorBoss.Item2 = true;
         }
         //else if (_preArrivedLothorBossTimer >= 9.5f && !flag2) {
         //    Player spawnPlayer = Main.LocalPlayer;
