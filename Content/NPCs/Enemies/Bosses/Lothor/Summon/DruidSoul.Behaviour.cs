@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using Newtonsoft.Json.Linq;
-
 using ReLogic.Utilities;
 
 using RoA.Common;
@@ -65,7 +63,7 @@ sealed partial class DruidSoul : RoANPC {
         else if (ShouldConsumeItsEnergy) {
             Vector2 altarPosition = GetAltarPosition();
             Player player = Main.player[NPC.target];
-            if (player.Distance(altarPosition) > 75f || NPC.Distance(altarPosition) > 100f) {
+            if (player.Distance(altarPosition) > 120f || NPC.Distance(altarPosition) > 120f) {
                 ShouldConsumeItsEnergy = false;
             }
         }
@@ -98,10 +96,10 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 altarPosition = GetAltarPosition();
         Vector2 npcCenter = NPC.Center;
         Player player = Main.player[NPC.target];
+        float altarStrength = AltarHandler.GetAltarStrength();
         bool playerCanReachAltar = player.Distance(altarPosition) < 75f && Collision.CanHit(player.Center, 0, 0, altarPosition, 0, 0);
         bool closeToAltar =  (/*playerCanReachAltar || */Math.Abs(altarPosition.X - npcCenter.X) < 40f) && altarPosition.Y - npcCenter.Y < 75f;
         bool flag = NPC.Distance(altarPosition) <= 70f && (playerCanReachAltar || Collision.CanHit(NPC.Center, 2, 2, altarPosition, 2, 2) || NPC.Top.Y + 4f > altarPosition.Y);
-        float altarStrength = AltarHandler.GetAltarStrength();
         bool flag3 = Helper.EaseInOut3(altarStrength) > 0.0025f;
         bool flag2 = flag3 ? player.Distance(altarPosition) < 75f : player.Distance(NPC.Center) < 70f;
         bool altarCondition = (Math.Abs(NPC.Center.X - altarPosition.X) < 70f && player.Distance(altarPosition) < 75f) || (flag && flag2);

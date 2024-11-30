@@ -9,6 +9,9 @@ using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
+using RoA.Utilities;
+
+using System;
 
 using Terraria;
 using Terraria.GameContent;
@@ -44,8 +47,12 @@ sealed class PrimordialTreeGlow : GlobalTile {
                     dust.scale *= 1.1f;
                 }
                 int height = tile.TileFrameY == 36 ? 18 : 16;
+                ulong speed = (((ulong)j << 32) | (ulong)i);
+                float posX = Utils.RandomInt(ref speed, -12, 13) * 0.075f;
+                float posY = Utils.RandomInt(ref speed, -12, 13) * 0.075f;
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>(PrimordialTree.TexturePath + "_Glow").Value,
-                                      new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
+                                      new Vector2(i * 16 - (int)Main.screenPosition.X - Helper.Wave(-1.5f, 1.5f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * posX, 
+                                      j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.5f, 1.5f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * posY) + zero,
                                       new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
                                       Color.Lerp(Color.White, Lighting.GetColor(i, j), bluePart ? 0.6f : 0.8f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }

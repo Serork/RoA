@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -41,7 +42,7 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
                 bool flag = !Main.rand.NextBool(3);
-                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, flag ? DustID.CorruptPlants : DustID.Ebonwood, 0f, 0f, 0, default);
+                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, flag ? ModContent.DustType<EvilStaff2>() : DustID.Ebonwood, 0f, 0f, 0, default);
                 Dust dust2 = Main.dust[num30];
                 if (Main.rand.NextChance(0.5) || flag) {
                     dust2.noLight = true;
@@ -67,10 +68,10 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
                 Vector2 randomPosition = Main.rand.NextVector2Unit();
                 float areaSize = step * 2f;
                 float speed = step;
-                float scale = Math.Clamp(step * 1.25f, 0.35f, 1f) * 1.15f;
+                float scale = Math.Clamp(step * 1.25f, 0.35f, 0.85f) * 1.15f;
                 bool flag = !Main.rand.NextBool(3);
                 Dust dust = Dust.NewDustPerfect(corePosition + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
-                                                flag ? DustID.CorruptPlants : DustID.Ebonwood,
+                                                flag ? ModContent.DustType<EvilStaff2>() : DustID.Ebonwood,
                                                 randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
                                                 Scale: scale);
                 if (Main.rand.NextChance(0.5) || flag) {
@@ -132,7 +133,7 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
                 bool flag = !Main.rand.NextBool(3);
-                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, flag ? DustID.CrimsonPlants : DustID.Shadewood, 0f, 0f, 0, default);
+                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, flag ? ModContent.DustType<EvilStaff1>() : DustID.Shadewood, 0f, 0f, 0, default);
                 Dust dust2 = Main.dust[num30];
                 if (Main.rand.NextChance(0.5) || flag) {
                     dust2.noLight = true;
@@ -158,10 +159,10 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
                 Vector2 randomPosition = Main.rand.NextVector2Unit();
                 float areaSize = step * 2f;
                 float speed = step;
-                float scale = Math.Clamp(step * 1.25f, 0.35f, 1f) * 1.15f;
+                float scale = Math.Clamp(step * 1.25f, 0.35f, 0.85f) * 1.15f;
                 bool flag = !Main.rand.NextBool(3);
                 Dust dust = Dust.NewDustPerfect(corePosition + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
-                                                flag ? DustID.CrimsonPlants : DustID.Shadewood,
+                                                flag ? ModContent.DustType<EvilStaff1>() : DustID.Shadewood,
                                                 randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
                                                 Scale: scale);
                 if (Main.rand.NextChance(0.5) || flag) {
