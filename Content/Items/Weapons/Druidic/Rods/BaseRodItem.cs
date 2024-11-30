@@ -88,7 +88,9 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected virtual void SpawnCoreDustsWhileShotProjectileIsActive(float step, Player player, Vector2 corePosition) { }
 
     protected virtual void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) { }
-    
+    protected virtual void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) { }
+
+
     protected virtual void SpawnDustsWhenReady(Player player, Vector2 corePosition) { }
     protected virtual void SpawnDustsOnShoot(Player player, Vector2 corePosition) { }
 
@@ -119,11 +121,14 @@ abstract class BaseRodProjectile : NatureProjectile {
         Vector2 spawnPosition = CorePosition;
         Vector2 velocity = Vector2.Zero;
         ushort count = 1;
+        int damage = Projectile.damage;
+        float knockBack = Projectile.knockBack;
         float ai0 = 0f, ai1 = 0f, ai2 = 0f;
         if (Projectile.IsOwnerMyPlayer(Owner)) {
             for (int i = 0; i < count; i++) {
                 SetSpawnProjectileSettings(Owner, ref spawnPosition, ref velocity, ref count, ref ai0, ref ai1, ref ai2);
-                Projectile.NewProjectileDirect(Owner.GetSource_ItemUse(Owner.GetSelectedItem()), spawnPosition, velocity, ShootType, Projectile.damage, Projectile.knockBack, Owner.whoAmI, ai0, ai1, ai2);
+                SetSpawnProjectileSettings2(Owner, ref damage, ref knockBack);
+                Projectile.NewProjectileDirect(Owner.GetSource_ItemUse(Owner.GetSelectedItem()), spawnPosition, velocity, ShootType, damage, knockBack, Owner.whoAmI, ai0, ai1, ai2);
             }
         }
     }

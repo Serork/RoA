@@ -35,7 +35,61 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
     }
 
     public sealed class EbonwoodStaffBase : BaseRodProjectile {
+        protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
+
         protected override bool ShouldWaitUntilProjDespawns() => false;
+
+        protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(Item, player);
+
+        protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
+            int num27 = Main.rand.Next(4, 10);
+            for (float num29 = 0f; num29 < (float)num27; num29++) {
+                Vector2 size = new(24f, 24f);
+                Rectangle r = Utils.CenteredRectangle(corePosition, size);
+                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, DustID.CorruptTorch, 0f, 0f, 0, default);
+                Dust dust2 = Main.dust[num30];
+                dust2.velocity *= Main.rand.NextFloat(0.75f, 1.5f);
+                Main.dust[num30].noGravity = true;
+                Main.dust[num30].scale = 0.9f + Main.rand.NextFloat() * 1.2f;
+                Main.dust[num30].fadeIn = Main.rand.NextFloat() * 1.2f * Main.rand.NextFloat(0.75f, 1f);
+                dust2 = Main.dust[num30];
+                dust2.scale *= Main.rand.NextFloat(0.75f, 1f) * 1.25f;
+                if (num30 != 6000) {
+                    Dust dust12 = Dust.CloneDust(num30);
+                    dust2 = dust12;
+                    dust2.scale /= 2f;
+                    dust2 = dust12;
+                    dust2.fadeIn *= 0.85f;
+                }
+            }
+        }
+
+        protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
+            for (int i = 0; i < 2; i++) {
+                Vector2 randomPosition = Main.rand.NextVector2Unit();
+                float areaSize = step * 2f;
+                float speed = step;
+                float scale = Math.Clamp(step * 1.25f, 0.35f, 1f) * 1.25f;
+                Dust dust = Dust.NewDustPerfect(corePosition + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
+                                                DustID.CorruptTorch,
+                                                randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
+                                                Scale: scale);
+                dust.noGravity = true;
+                dust.velocity *= 0.4f;
+            }
+
+            EvilBranch.GetPos(player, out Point point, out Point point2);
+            if (Main.rand.NextChance(0.5)) {
+                bool flag = Main.rand.NextBool(3);
+                Dust dust = Dust.NewDustPerfect(point2.ToWorldCoordinates() - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
+                    flag ? DustID.CorruptTorch : TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+                dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
+                dust.velocity.Y -= 1.5f * Main.rand.NextFloat();
+                if (!flag) {
+                    dust.scale *= 0.85f + Main.rand.NextFloatRange(0.1f);
+                }
+            }
+        }
     }
 }
 
@@ -53,10 +107,64 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
     }
 
     public sealed class ShadewoodStaffBase : BaseRodProjectile {
+        protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
+
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2)
             => ai2 = 1f;
+
+        protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(Item, player);
+
+        protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
+            int num27 = Main.rand.Next(4, 10);
+            for (float num29 = 0f; num29 < (float)num27; num29++) {
+                Vector2 size = new(24f, 24f);
+                Rectangle r = Utils.CenteredRectangle(corePosition, size);
+                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, DustID.CrimsonTorch, 0f, 0f, 0, default);
+                Dust dust2 = Main.dust[num30];
+                dust2.velocity *= Main.rand.NextFloat(0.75f, 1.5f);
+                Main.dust[num30].noGravity = true;
+                Main.dust[num30].scale = 0.9f + Main.rand.NextFloat() * 1.2f;
+                Main.dust[num30].fadeIn = Main.rand.NextFloat() * 1.2f * Main.rand.NextFloat(0.75f, 1f);
+                dust2 = Main.dust[num30];
+                dust2.scale *= Main.rand.NextFloat(0.75f, 1f) * 1.25f;
+                if (num30 != 6000) {
+                    Dust dust12 = Dust.CloneDust(num30);
+                    dust2 = dust12;
+                    dust2.scale /= 2f;
+                    dust2 = dust12;
+                    dust2.fadeIn *= 0.85f;
+                }
+            }
+        }
+
+        protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
+            for (int i = 0; i < 2; i++) {
+                Vector2 randomPosition = Main.rand.NextVector2Unit();
+                float areaSize = step * 2f;
+                float speed = step;
+                float scale = Math.Clamp(step * 1.25f, 0.35f, 1f) * 1.25f;
+                Dust dust = Dust.NewDustPerfect(corePosition + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
+                                                DustID.CrimsonTorch,
+                                                randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
+                                                Scale: scale);
+                dust.noGravity = true;
+                dust.velocity *= 0.4f;
+            }
+
+            EvilBranch.GetPos(player, out Point point, out Point point2);
+            if (Main.rand.NextChance(0.5)) {
+                bool flag = Main.rand.NextBool(3);
+                Dust dust = Dust.NewDustPerfect(point2.ToWorldCoordinates() - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
+                    flag ? DustID.CrimsonTorch : TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+                dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
+                dust.velocity.Y -= 1.5f * Main.rand.NextFloat();
+                if (!flag) {
+                    dust.scale *= 0.85f + Main.rand.NextFloatRange(0.1f);
+                }
+            }
+        }
     }
 }
 
@@ -343,19 +451,9 @@ sealed class EvilBranch : NatureProjectile {
         }
     }
 
-    protected override void SafeOnSpawn(IEntitySource source) {
-        if (Projectile.owner != Main.myPlayer) {
-            return;
-        }
-
-        Projectile.direction = Main.rand.NextBool().ToDirectionInt();
-
-        _scale.X = 1.6f;
-        _scale.Y = 0.4f;
-
-        Player player = Main.player[Projectile.owner];
+    internal static void GetPos(Player player, out Point point, out Point point2) {
         Vector2 targetSpot = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
-        Point point = targetSpot.ToTileCoordinates();
+        point = targetSpot.ToTileCoordinates();
         Vector2 center = player.Center;
         Vector2 endPoint = targetSpot;
         int samplesToTake = 3;
@@ -369,7 +467,7 @@ sealed class EvilBranch : NatureProjectile {
 
         targetSpot = center + vectorTowardsTarget.SafeNormalize(Vector2.Zero) * num;
         point = targetSpot.ToTileCoordinates();
-        Point point2 = point;
+        point2 = point;
         if (Main.rand.NextChance(0.75)) {
             point2.X += Main.rand.Next(-2, 3);
         }
@@ -380,10 +478,30 @@ sealed class EvilBranch : NatureProjectile {
 
             point2.Y++;
         }
+    }
+
+    protected override void SafeOnSpawn(IEntitySource source) {
+        if (Projectile.owner != Main.myPlayer) {
+            return;
+        }
+
+        Projectile.direction = Main.rand.NextBool().ToDirectionInt();
+
+        _scale.X = 1.6f;
+        _scale.Y = 0.4f;
+
+        GetPos(Main.player[Projectile.owner], out Point point, out Point point2);
         Projectile.Center = point2.ToWorldCoordinates();
         Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
         float maxRadians = 0.375f;
         Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
+
+        for (int i = 0; i < 4; i++) {
+            Dust dust = Dust.NewDustPerfect(Projectile.Center - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f), TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+            dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
+            dust.velocity.Y -= 3f * Main.rand.NextFloat(0.5f, 1f);
+            dust.scale *= 0.925f + Main.rand.NextFloatRange(0.1f);
+        }
 
         SetUpLeafPoints();
         int index = 0;
@@ -396,7 +514,7 @@ sealed class EvilBranch : NatureProjectile {
                 direction *= -1;
             }
             Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
-            int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), Projectile.damage, Projectile.knockBack, Projectile.owner, direction, Projectile.identity);
+            int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]), Projectile.knockBack, Projectile.owner, direction, Projectile.identity);
             Main.projectile[projectile].As<EvilLeaf>().SetUpPositionOnTwig(leafTwigPosition);
             Main.projectile[projectile].As<EvilLeaf>().Crimson = Projectile.ai[2] == 1f;
             Main.projectile[projectile].As<EvilLeaf>().Index = index;
