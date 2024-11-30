@@ -18,11 +18,11 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(44);
-        Item.SetDefaultToUsable(-1, 22, useSound: SoundID.Item7);
+        Item.SetDefaultToUsable(-1, 30, useSound: SoundID.Item7);
         Item.SetWeaponValues(5, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
-        NatureWeaponHandler.SetFillingRate(Item, 0.25f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.35f);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
@@ -102,11 +102,11 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(44);
-        Item.SetDefaultToUsable(-1, 22, useSound: SoundID.Item7);
+        Item.SetDefaultToUsable(-1, 30, useSound: SoundID.Item7);
         Item.SetWeaponValues(5, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
-        NatureWeaponHandler.SetFillingRate(Item, 0.25f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.35f);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
