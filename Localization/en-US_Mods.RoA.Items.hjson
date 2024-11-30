@@ -419,3 +419,13 @@ BrilliantBouquet: {
 	DisplayName: Brilliant Bouquet
 	Tooltip: ""
 }
+
+SacrificialSickleOfTheMoon: {
+	DisplayName: Sacrificial Sickle Of The Moon
+	Tooltip: ""
+}
+
+ElathaAmulet: {
+	DisplayName: Elatha Amulet
+	Tooltip: ""
+}

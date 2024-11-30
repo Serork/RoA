@@ -9,6 +9,7 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 

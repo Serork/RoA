@@ -152,11 +152,12 @@ sealed class EvilBranch : NatureProjectile {
         float maxRadians = 0.375f;
         Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
 
-        for (int i = 0; i < 4; i++) {
-            Dust dust = Dust.NewDustPerfect(Projectile.Center - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f), TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+        for (int i = 0; i < Main.rand.Next(4, 7); i++) {
+            Dust dust = Dust.NewDustPerfect(Projectile.Center - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f), 
+                TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
             dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
-            dust.velocity.Y -= 3f * Main.rand.NextFloat(0.5f, 1f);
-            dust.scale *= 0.925f + Main.rand.NextFloatRange(0.1f);
+            dust.velocity -= new Vector2(0f, 3f * Main.rand.NextFloat(0.5f, 1f)).RotatedBy(Projectile.rotation);
+            dust.scale *= 1f + Main.rand.NextFloatRange(0.1f);
         }
 
         SetUpLeafPoints();
