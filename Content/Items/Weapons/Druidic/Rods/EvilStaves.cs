@@ -27,6 +27,8 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
     }
 
     public sealed class EbonwoodStaffBase : BaseRodProjectile {
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(player.itemTimeMax * 2);
+        
         protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
@@ -38,9 +40,10 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
             for (float num29 = 0f; num29 < (float)num27; num29++) {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
-                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, DustID.CorruptTorch, 0f, 0f, 0, default);
+                bool flag = !Main.rand.NextBool(3);
+                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, flag ? DustID.CorruptPlants : DustID.Ebonwood, 0f, 0f, 0, default);
                 Dust dust2 = Main.dust[num30];
-                if (Main.rand.NextChance(0.5)) {
+                if (Main.rand.NextChance(0.5) || flag) {
                     dust2.noLight = true;
                 }
                 dust2.velocity *= Main.rand.NextFloat(0.75f, 1.5f);
@@ -64,12 +67,13 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
                 Vector2 randomPosition = Main.rand.NextVector2Unit();
                 float areaSize = step * 2f;
                 float speed = step;
-                float scale = Math.Clamp(step * 1.25f, 0.35f, 1f) * 1.25f;
+                float scale = Math.Clamp(step * 1.25f, 0.35f, 1f) * 1.15f;
+                bool flag = !Main.rand.NextBool(3);
                 Dust dust = Dust.NewDustPerfect(corePosition + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
-                                                DustID.CorruptTorch,
+                                                flag ? DustID.CorruptPlants : DustID.Ebonwood,
                                                 randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
                                                 Scale: scale);
-                if (Main.rand.NextChance(0.5)) {
+                if (Main.rand.NextChance(0.5) || flag) {
                     dust.noLight = true;
                 }
                 dust.noGravity = true;
@@ -77,20 +81,20 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
             }
 
             EvilBranch.GetPos(player, out Point point, out Point point2);
-            if (Main.rand.NextChance(0.5)) {
+            if (Main.rand.NextChance(Math.Min(0.5f, 0.5f * step * 1.5f))) {
                 bool flag = Main.rand.NextBool(3);
                 Dust dust = Dust.NewDustPerfect(point2.ToWorldCoordinates() - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
-                    flag ? DustID.CorruptTorch : TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+                    flag ? DustID.Ebonwood : TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
                 if (Main.rand.NextChance(0.5)) {
                     dust.noLight = true;
                 }
                 dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
                 dust.velocity.Y -= 1.5f * Main.rand.NextFloat();
                 if (!flag) {
-                    dust.scale *= 0.85f + Main.rand.NextFloatRange(0.1f);
+                    dust.scale *= 0.9f + Main.rand.NextFloatRange(0.1f);
                 }
                 else {
-                    dust.scale *= 1.25f + Main.rand.NextFloatRange(0.1f);
+                    dust.scale *= 1.2f + Main.rand.NextFloatRange(0.1f);
                 }
             }
         }
@@ -111,6 +115,8 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
     }
 
     public sealed class ShadewoodStaffBase : BaseRodProjectile {
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(player.itemTimeMax * 2);
+
         protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
@@ -125,9 +131,10 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
             for (float num29 = 0f; num29 < (float)num27; num29++) {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
-                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, DustID.CrimsonTorch, 0f, 0f, 0, default);
+                bool flag = !Main.rand.NextBool(3);
+                int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, flag ? DustID.CrimsonPlants : DustID.Shadewood, 0f, 0f, 0, default);
                 Dust dust2 = Main.dust[num30];
-                if (Main.rand.NextChance(0.5)) {
+                if (Main.rand.NextChance(0.5) || flag) {
                     dust2.noLight = true;
                 }
                 dust2.velocity *= Main.rand.NextFloat(0.75f, 1.5f);
@@ -151,12 +158,13 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
                 Vector2 randomPosition = Main.rand.NextVector2Unit();
                 float areaSize = step * 2f;
                 float speed = step;
-                float scale = Math.Clamp(step * 1.25f, 0.35f, 1f) * 1.25f;
+                float scale = Math.Clamp(step * 1.25f, 0.35f, 1f) * 1.15f;
+                bool flag = !Main.rand.NextBool(3);
                 Dust dust = Dust.NewDustPerfect(corePosition + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
-                                                DustID.CrimsonTorch,
+                                                flag ? DustID.CrimsonPlants : DustID.Shadewood,
                                                 randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
                                                 Scale: scale);
-                if (Main.rand.NextChance(0.5)) {
+                if (Main.rand.NextChance(0.5) || flag) {
                     dust.noLight = true;
                 }
                 dust.noGravity = true;
@@ -164,20 +172,20 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
             }
 
             EvilBranch.GetPos(player, out Point point, out Point point2);
-            if (Main.rand.NextChance(0.5)) {
+            if (Main.rand.NextChance(Math.Min(0.5f, 0.5f * step * 1.5f))) {
                 bool flag = Main.rand.NextBool(3);
                 Dust dust = Dust.NewDustPerfect(point2.ToWorldCoordinates() - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
-                    flag ? DustID.CrimsonTorch : TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+                    flag ? DustID.Shadewood : TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
                 if (Main.rand.NextChance(0.5)) {
                     dust.noLight = true;
                 }
                 dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
                 dust.velocity.Y -= 1.5f * Main.rand.NextFloat();
                 if (!flag) {
-                    dust.scale *= 0.85f + Main.rand.NextFloatRange(0.1f);
+                    dust.scale *= 0.9f + Main.rand.NextFloatRange(0.1f);
                 }
                 else {
-                    dust.scale *= 1.25f + Main.rand.NextFloatRange(0.1f);
+                    dust.scale *= 1.2f + Main.rand.NextFloatRange(0.1f);
                 }
             }
         }
