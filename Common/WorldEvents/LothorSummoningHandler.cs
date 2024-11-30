@@ -6,6 +6,7 @@ using RoA.Core;
 using RoA.Utilities;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -14,6 +15,7 @@ using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Common.WorldEvents;
 
@@ -27,6 +29,16 @@ sealed class LothorSummoningHandler : ModSystem {
     internal static (bool, bool, bool) ActiveMessages;
 
     internal static bool IsActive => _preArrivedLothorBossTimer >= 6f;
+
+    public override void OnWorldLoad() => Reset();
+    public override void OnWorldUnload() => Reset();
+
+    private static void Reset() {
+        _preArrivedLothorBossTimer = 0f;
+        _shake = _shake2 = false;
+        PreArrivedLothorBoss = (false, false);
+        ActiveMessages = (false, false, false);
+    }
 
     public override void Load() {
         On_Main.SetBackColor += On_Main_SetBackColor;
@@ -42,13 +54,13 @@ sealed class LothorSummoningHandler : ModSystem {
         if (!flag) {
             if (_alpha > 0f) {
                 _alpha -= TimeSystem.LogicDeltaTime * 0.7f;
-                _alpha *= 0.98f;
+                _alpha *= 0.99f;
             }
         }
         else {
             if (_alpha < 1f) {
                 _alpha += TimeSystem.LogicDeltaTime * 0.27f;
-                _alpha *= 1.02f;
+                _alpha *= 1.01f;
             }
         }
         bool isDayTime = true;
