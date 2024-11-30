@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core.Utility;
@@ -120,7 +121,7 @@ sealed class AltarHandler : ModSystem {
     public override void OnWorldUnload() => Reset();
     private static void Reset() {
         _altarPosition = Point.Zero;
-        _altarStrength = 0f;
+        _altarStrength = _altarFactor = 0f;
     }
 
     public override void SaveWorldData(TagCompound tag) {

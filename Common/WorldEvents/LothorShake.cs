@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Utilities;
 
@@ -19,7 +20,15 @@ sealed class LothorShake : ModSystem {
 	private float _shakeIntensity = 0f, _shakeIntensity2;
 	private float _timer;
 
-	public override void PostUpdateNPCs() {
+    public override void OnWorldLoad() => Reset();
+    public override void OnWorldUnload() => Reset();
+
+    private void Reset() {
+		shake = before = false;
+		_shakeIntensity = _shakeIntensity2 = _timer = 0f;
+    }
+
+    public override void PostUpdateNPCs() {
 		if (shake) {
             if ((before && _shakeIntensity < 0.035f) || (!before && _shakeIntensity < 1f)) {
 				_shakeIntensity += !before ? 0.325f : 0.2f;

@@ -6,16 +6,13 @@ using RoA.Core;
 using RoA.Utilities;
 
 using System;
-using System.IO;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace RoA.Common.WorldEvents;
 
@@ -34,6 +31,7 @@ sealed class LothorSummoningHandler : ModSystem {
     public override void OnWorldUnload() => Reset();
 
     private static void Reset() {
+        _alpha = 0f;
         _preArrivedLothorBossTimer = 0f;
         _shake = _shake2 = false;
         PreArrivedLothorBoss = (false, false);
@@ -491,7 +489,7 @@ sealed class LothorSummoningHandler : ModSystem {
             ActiveMessages.Item3 = true;
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.5f }, AltarHandler.GetAltarPosition().ToWorldCoordinates());
 
-            PreArrivedLothorBoss.Item2 = true;
+            //PreArrivedLothorBoss.Item2 = true;
         }
         //else if (_preArrivedLothorBossTimer >= 9.5f && !flag2) {
         //    Player spawnPlayer = Main.LocalPlayer;
