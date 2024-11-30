@@ -353,9 +353,10 @@ sealed class EvilBranch : NatureProjectile {
         _scale.X = 1.6f;
         _scale.Y = 0.4f;
 
-        Vector2 targetSpot = Main.player[Projectile.owner].GetViableMousePosition();
+        Player player = Main.player[Projectile.owner];
+        Vector2 targetSpot = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
         Point point = targetSpot.ToTileCoordinates();
-        Vector2 center = Projectile.Center;
+        Vector2 center = player.Center;
         Vector2 endPoint = targetSpot;
         int samplesToTake = 3;
         float samplingWidth = 4f;
