@@ -343,14 +343,24 @@ sealed class Snatcher : NatureProjectile {
         Projectile.direction = player.direction;
         Projectile.Center = playerCenter;
         if (Projectile.ai[0] == 0f) {
-            Projectile.ai[0] = 1f;
-            Projectile.ai[1] = 1f;
-            Projectile.ai[2] = 0f;
-            if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[Type] < 2) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f,
-                    -Projectile.ai[1], 0f);
-                Projectile.netUpdate = true;
+            bool flag = player.ownedProjectileCounts[Type] > 0;
+            if (flag) {
+                foreach (Projectile projectile in Main.ActiveProjectiles) {
+                    if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI) {
+                        Projectile.ai[0] = projectile.whoAmI + 1f;
+                    }
+                }
             }
+            else {
+                Projectile.ai[0] = 1f;
+            }
+            Projectile.ai[1] = flag ? 1f : -1f;
+            Projectile.ai[2] = 0f;
+            //if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[Type] < 2) {
+            //    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f,
+            //        -Projectile.ai[1], 0f);
+            //    Projectile.netUpdate = true;
+            //}
         }
         if (Projectile.owner == Main.myPlayer) {
             _mousePos = player.GetViableMousePosition();

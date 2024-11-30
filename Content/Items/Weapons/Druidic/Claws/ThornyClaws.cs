@@ -26,13 +26,19 @@ sealed class ThornyClaws : BaseClawsItem {
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
         ushort type = (ushort)ModContent.ProjectileType<Snatcher>();
         bool shouldReset = true;
+        int count = 0;
         foreach (Projectile projectile in  Main.ActiveProjectiles) {
-            if (projectile.type == type && projectile.owner == player.whoAmI) {
-                if (projectile.timeLeft < 30) {
-                    shouldReset = false;
-                }
+            if (count > 1) {
                 break;
             }
+            if (projectile.type == type && projectile.owner == player.whoAmI) {
+                if (projectile.timeLeft < 30) {
+                    count++;
+                }
+            }
+        }
+        if (count > 1) {
+            shouldReset = false;
         }
         clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
             Owner = Item,
@@ -40,7 +46,7 @@ sealed class ThornyClaws : BaseClawsItem {
             StartVelocity = Helper.VelocityToPoint(player.Center, player.GetViableMousePosition(), 1f).SafeNormalize(Vector2.Zero),
             ProjectileTypeToSpawn = type,
             ShouldReset = shouldReset,
-            ShouldSpawn = player.ownedProjectileCounts[type] < 1
+            ShouldSpawn = player.ownedProjectileCounts[type] < 2
         });
     }
 }

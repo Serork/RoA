@@ -152,12 +152,14 @@ sealed class EvilLeaf : NatureProjectile {
                 _ai4 = 0f;
                 Projectile.velocity = Helper.VelocityToPoint(Projectile.position, player.GetViableMousePosition(), 0.1f);
                 for (int i = 0; i < 3; i++) {
-                    Vector2 dustVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedBy(Main.rand.NextFloat() * ((float)Math.PI * 2f) * 0.25f) * (Main.rand.NextFloat() * 3f);
-                    Dust dust = Dust.NewDustPerfect(Projectile.Center, Crimson ? DustID.CrimsonPlants : DustID.CorruptPlants);
-                    dust.alpha = 150;
-                    dust.velocity += dustVelocity;
-                    dust.velocity *= 0.6f + Main.rand.NextFloatRange(0.1f);
-                    dust.noGravity = true;
+                    if (Main.rand.NextBool(2)) {
+                        Vector2 dustVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedBy(Main.rand.NextFloat() * ((float)Math.PI * 2f) * 0.25f) * (Main.rand.NextFloat() * 3f);
+                        Dust dust = Dust.NewDustPerfect(Projectile.Center, Crimson ? DustID.CrimsonPlants : DustID.CorruptPlants);
+                        dust.alpha = 150;
+                        dust.velocity += dustVelocity;
+                        dust.velocity *= 0.6f + Main.rand.NextFloatRange(0.1f);
+                        dust.noGravity = true;
+                    }
                 }
                 float num177 = _angle / (float)num176;
                 float num178 = 16f;
@@ -179,7 +181,7 @@ sealed class EvilLeaf : NatureProjectile {
                 }
             }
             else {
-                if (Main.rand.NextBool(8)) {
+                if (Main.rand.NextBool(11)) {
                     Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, Crimson ? DustID.CrimsonPlants : DustID.CorruptPlants, 0f, 0f, 150, default(Color), 1f);
                     dust2.noGravity = true;
                     dust2.velocity = Projectile.velocity * 0.5f;
@@ -351,7 +353,21 @@ sealed class EvilBranch : NatureProjectile {
         _scale.X = 1.6f;
         _scale.Y = 0.4f;
 
-        Point point = Main.player[Projectile.owner].GetViableMousePosition().ToTileCoordinates();
+        Vector2 targetSpot = Main.player[Projectile.owner].GetViableMousePosition();
+        Point point = targetSpot.ToTileCoordinates();
+        Vector2 center = Projectile.Center;
+        Vector2 endPoint = targetSpot;
+        int samplesToTake = 3;
+        float samplingWidth = 4f;
+        Collision.AimingLaserScan(center, endPoint, samplingWidth, samplesToTake, out var vectorTowardsTarget, out var samples);
+        float num = float.PositiveInfinity;
+        for (int i = 0; i < samples.Length; i++) {
+            if (samples[i] < num)
+                num = samples[i];
+        }
+
+        targetSpot = center + vectorTowardsTarget.SafeNormalize(Vector2.Zero) * num;
+        point = targetSpot.ToTileCoordinates();
         Point point2 = point;
         if (Main.rand.NextChance(0.75)) {
             point2.X += Main.rand.Next(-2, 3);
@@ -365,7 +381,7 @@ sealed class EvilBranch : NatureProjectile {
         }
         Projectile.Center = point2.ToWorldCoordinates();
         Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
-        float maxRadians = 0.45f;
+        float maxRadians = 0.375f;
         Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
 
         SetUpLeafPoints();

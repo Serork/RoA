@@ -83,7 +83,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         }
 
         public override void PostAI() {
-            Main.NewText(CurrentUseTime);
+            //Main.NewText(CurrentUseTime);
             if (_shouldShoot) {
                 if (_attackTimer >= Min - PerShoot && _shootCount > 0) {
                     if (_attackTimer % PerShoot == 0f) {
