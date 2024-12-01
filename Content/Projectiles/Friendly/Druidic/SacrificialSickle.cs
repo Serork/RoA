@@ -40,8 +40,6 @@ sealed class SacrificialSickle : NatureProjectile {
 
         Projectile.timeLeft = 200;
 
-        Projectile.tileCollide = false;
-
         Projectile.alpha = 255;
     }
 
@@ -154,18 +152,16 @@ sealed class SacrificialSickle : NatureProjectile {
 
         Projectile.oldPos[0] = Projectile.Center;
         Projectile.oldRot[0] = Projectile.rotation;
-
-        Main.player[Projectile.owner].ChangeDir(_direction);
     }
 
     public override void AI() {
         Projectile.timeLeft = 2;
         Player player = Main.player[Projectile.owner];
-        if (player.gravDir != -1f) {
-            player.heldProj = Projectile.whoAmI;
-        }
+        player.heldProj = Projectile.whoAmI;
         player.itemTime = 2;
         player.itemAnimation = 2;
+
+        player.ChangeDir(_direction);
 
         Projectile.localAI[0] += Projectile.velocity.Length() > 5f ? 1f : -1f;
         if (Projectile.ai[0] == 0f) {
@@ -349,6 +345,27 @@ sealed class SacrificialSickle : NatureProjectile {
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 10;
         return true;
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        if (Projectile.ai[0] == 0f) {
+            Projectile.ai[0] = 1f;
+            Projectile.ai[1] = 0f;
+            Projectile.netUpdate = true;
+
+            SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
+
+            for (int num615 = 0; num615 < 10; num615++) {
+                int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.AncientLight, Projectile.velocity.X, Projectile.velocity.Y, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
+                Main.dust[num616].noGravity = true;
+                Dust dust2 = Main.dust[num616];
+                dust2.scale *= 1.25f;
+                dust2 = Main.dust[num616];
+                dust2.velocity *= 0.5f + 0.5f * Main.rand.NextFloat();
+            }
+        }
+
+        return false;
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
