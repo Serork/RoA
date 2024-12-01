@@ -97,7 +97,6 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<MoonSigil>()] == 1) return false;
 		}
 		if (Main.moonPhase == 2 || Main.moonPhase == 3 || Main.moonPhase == 6 || Main.moonPhase == 7) {
-			if (Main.rand.NextChance(0.75))
 			Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + player.height / 2), new Vector2(velocity.X, velocity.Y), ModContent.ProjectileType<MoonSickle>(), damage, knockback, player.whoAmI);
 		}
 		if (Main.moonPhase == 4 || Main.moonPhase == 5)

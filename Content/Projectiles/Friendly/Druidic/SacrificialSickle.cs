@@ -41,6 +41,8 @@ sealed class SacrificialSickle : NatureProjectile {
         Projectile.timeLeft = 200;
 
         Projectile.alpha = 255;
+
+        Projectile.friendly = true;
     }
 
     public override bool PreDraw(ref Color lightColor) {
