@@ -49,7 +49,7 @@ sealed class GalipotStream : NatureProjectile {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        Projectile.position -= oldVelocity;
+        //Projectile.position -= oldVelocity;
         Projectile.velocity = Vector2.Zero;
 
         Projectile.ai[1] = 1f;
