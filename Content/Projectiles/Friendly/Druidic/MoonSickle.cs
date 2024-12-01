@@ -44,7 +44,7 @@ sealed class MoonSickle : NatureProjectile {
         for (int k = 0; k < Projectile.oldPos.Length; k++) {
             Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition;
             Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-            Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects);
+            Main.EntitySpriteDraw(texture, drawPos, null, color * 0.5f, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects);
         }
 
         Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), rotation - MathHelper.PiOver4 * Projectile.ai[2], drawOrigin, Projectile.scale, effects);
@@ -90,12 +90,14 @@ sealed class MoonSickle : NatureProjectile {
     }
 
     public override void AI() {
-        int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 30, 30, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
-        Main.dust[dust].noGravity = true;
-        Main.dust[dust].noLight = false;
-        Main.dust[dust].velocity.Y -= 1f;
-        Main.dust[dust].velocity.X *= 0.1f;
-        Main.dust[dust].alpha = Projectile.alpha;
+        if (Main.rand.NextBool(2)) {
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 30, 30, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].noLight = false;
+            Main.dust[dust].velocity.Y -= 1f;
+            Main.dust[dust].velocity.X *= 0.1f;
+            Main.dust[dust].alpha = Projectile.alpha;
+        }
 
         lightIntensity = 1f - (float)Projectile.alpha / 255;
         Lighting.AddLight(Projectile.Center, 0.4f * lightIntensity, 0.4f * lightIntensity, 0.2f * lightIntensity);

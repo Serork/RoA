@@ -71,7 +71,7 @@ sealed class SacrificialSickle : NatureProjectile {
             pos.X -= 2f;
         }
         pos += (player.itemRotation.ToRotationVector2() * 6f * player.direction).Floor();
-        _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, new Color(255, 255, 200, 200) * (1f - Projectile.alpha / 255f), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
+        _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, new Color(255, 255, 200, 255) * (1f - Projectile.alpha / 255f), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
 
         void draw(Texture2D texture, Color lightColor, float opacity = 1f) {
             Vector2 drawOrigin = new(texture.Width * 0.5f, texture.Height * 0.5f);
@@ -128,7 +128,7 @@ sealed class SacrificialSickle : NatureProjectile {
         Projectile.velocity = Helper.VelocityToPoint(player.Center, _to, 15f);
         Projectile.rotation = Helper.VelocityAngle(Projectile.velocity) + MathHelper.PiOver2 / 2f;
 
-        for (int num615 = 0; num615 < 15; num615++) {
+        for (int num615 = 0; num615 < 10; num615++) {
             int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.AncientLight, Projectile.velocity.X, Projectile.velocity.Y, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
             Main.dust[num616].noGravity = true;
             Dust dust2 = Main.dust[num616];
@@ -289,7 +289,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 Rectangle rectangle = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
                 Rectangle value = new Rectangle((int)Main.player[Projectile.owner].position.X, (int)Main.player[Projectile.owner].position.Y, Main.player[Projectile.owner].width, Main.player[Projectile.owner].height);
                 if (rectangle.Intersects(value)) {
-                    for (int num615 = 0; num615 < 15; num615++) {
+                    for (int num615 = 0; num615 < 10; num615++) {
                         int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y) - Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, Projectile.width, Projectile.height, DustID.AncientLight, Projectile.velocity.X, Projectile.velocity.Y, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                         Main.dust[num616].noGravity = true;
                         Dust dust2 = Main.dust[num616];
@@ -305,7 +305,7 @@ sealed class SacrificialSickle : NatureProjectile {
         Lighting.AddLight(Projectile.Center, 0.4f, 0.4f, 0.2f);
         Projectile.localAI[2]++;
         if (Projectile.localAI[2] >= 20 && Projectile.velocity.Length() > 3f) {
-            if (Main.rand.NextChance(0.75)) {
+            if (Main.rand.NextChance(0.5)) {
                 int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y - 10).RotatedBy(Projectile.rotation - MathHelper.PiOver2, Projectile.Center), 1, 1, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = false;
@@ -314,7 +314,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 Main.dust[dust].scale = 0.7f + Main.rand.NextFloat() * 1.2f;
                 Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * Main.rand.NextFloat(0.75f, 1f);
             }
-            if (Main.rand.NextChance(0.75)) {
+            if (Main.rand.NextChance(0.5)) {
                 int dust2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y + 10).RotatedBy(Projectile.rotation - MathHelper.PiOver2, Projectile.Center), 1, 1, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].noLight = false;
@@ -323,7 +323,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 Main.dust[dust2].scale = 0.7f + Main.rand.NextFloat() * 1.2f;
                 Main.dust[dust2].fadeIn = Main.rand.NextFloat() * 1.2f * Main.rand.NextFloat(0.75f, 1f);
             }
-            if (Main.rand.NextChance(0.75)) {
+            if (Main.rand.NextChance(0.5)) {
                 int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y - 10).RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2 * Main.rand.NextFloat(0.5f, 1f), Projectile.Center), 1, 1, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = false;
@@ -332,7 +332,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 Main.dust[dust].scale = 0.7f + Main.rand.NextFloat() * 1.2f;
                 Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * Main.rand.NextFloat(0.75f, 1f);
             }
-            if (Main.rand.NextChance(0.75)) {
+            if (Main.rand.NextChance(0.5)) {
                 int dust2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y + 10).RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2 * Main.rand.NextFloat(0.5f, 1f), Projectile.Center), 1, 1, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].noLight = false;

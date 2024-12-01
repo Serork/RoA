@@ -98,7 +98,7 @@ sealed class MoonSigil : NatureProjectile {
         direction.Normalize(); // â äèàïàçîí îò 0 äî 1
         direction *= 8; // ñêîðîñòü
         Player player = Main.player[Projectile.owner]; // èãðîê
-        if (Main.mouseLeft && Main.mouseLeftRelease && Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem].type == ModContent.ItemType<SacrificialSickleOfTheMoon>() && Projectile.timeLeft < 590) {
+        if (player.ItemAnimationJustStarted && Main.mouseLeft && player.inventory[player.selectedItem].type == ModContent.ItemType<SacrificialSickleOfTheMoon>() && Projectile.timeLeft < 590) {
             SoundEngine.PlaySound(SoundID.Item92, projectilePos);
             explosionCounter++;
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X + 3, Projectile.Center.Y + 3), direction, ModContent.ProjectileType<MoonlightBeam>(), 30, 0, player.whoAmI);

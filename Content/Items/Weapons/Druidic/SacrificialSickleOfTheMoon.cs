@@ -25,14 +25,16 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
-	public override Color? GetAlpha(Color lightColor) => base.GetAlpha(lightColor);
+	public override Color? GetAlpha(Color lightColor) {
+		return base.GetAlpha(lightColor);
+	}
 
     protected override void SafeSetDefaults() {
 		int width = 32; int height = width;
 		Item.Size = new Vector2(width, height);
 
 		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.useTime = Item.useAnimation = 16;
+		Item.useTime = Item.useAnimation = 20;
 		Item.autoReuse = false;
 
 		Item.useTurn = false;
@@ -56,7 +58,7 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 
     public override void MeleeEffects(Player player, Rectangle hitbox) {
 		if (Main.moonPhase == 2 || Main.moonPhase == 3 || Main.moonPhase == 6 || Main.moonPhase == 7)
-		if (Main.rand.NextBool(2)) {
+		if (Main.rand.NextBool(3)) {
 			int num7 = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.AncientLight, player.velocity.X * 0.2f + (float)(player.direction * 3), player.velocity.Y * 0.2f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
 			Main.dust[num7].noGravity = true;
 		}
