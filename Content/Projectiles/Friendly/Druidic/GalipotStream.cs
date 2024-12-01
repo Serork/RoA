@@ -37,18 +37,19 @@ sealed class GalipotStream : NatureProjectile {
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.immune[Projectile.owner] = 20;
-        if (Projectile.ai[1] != 1f) {
-            Projectile.Kill();
-        }
+        //if (Projectile.ai[1] != 1f) {
+        //    Projectile.Kill();
+        //}
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        if (Projectile.ai[1] != 1f) {
-            Projectile.Kill();
-        }
+        //if (Projectile.ai[1] != 1f) {
+        //    Projectile.Kill();
+        //}
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
+        Projectile.position -= oldVelocity;
         Projectile.velocity = Vector2.Zero;
 
         Projectile.ai[1] = 1f;

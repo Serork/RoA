@@ -41,7 +41,7 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 		Item.rare = ItemRarityID.Orange;
 		Item.UseSound = SoundID.Item71;
 
-		Item.shootSpeed = 12f;
+		Item.shootSpeed = 5f;
 		Item.shoot = ProjectileID.WoodenArrowFriendly;
 
 		Item.staff[Item.type] = true;
