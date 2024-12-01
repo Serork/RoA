@@ -118,7 +118,7 @@ sealed class MoonSickle : NatureProjectile {
 
         SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
 
-        for (int num615 = 0; num615 < 10; num615++) {
+        for (int num615 = 0; num615 < 5; num615++) {
             int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.AncientLight, Projectile.velocity.X, Projectile.velocity.Y, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
             Main.dust[num616].noGravity = true;
             Dust dust2 = Main.dust[num616];
@@ -131,7 +131,7 @@ sealed class MoonSickle : NatureProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             int dust3 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 24, 24, DustID.AncientLight, 0f, 0f, 0, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
             Main.dust[dust3].noGravity = true;
             Main.dust[dust3].noLight = false;

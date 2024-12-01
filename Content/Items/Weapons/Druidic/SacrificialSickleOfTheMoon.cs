@@ -71,7 +71,7 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 			else Item.UseSound = SoundID.Item71;
 		}
 		if (Main.moonPhase == 4 || Main.moonPhase == 5) {
-			Item.useStyle = ItemUseStyleID.Swing;
+			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.UseSound = SoundID.Item71;
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<SacrificialSickle>()] == 1) return false;
 		}

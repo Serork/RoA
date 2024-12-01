@@ -156,13 +156,22 @@ sealed class SacrificialSickle : NatureProjectile {
         Projectile.oldRot[0] = Projectile.rotation;
     }
 
+    public override void OnKill(int timeLeft) {
+        for (int i = 0; i < 5; i++) {
+            int dust3 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 24, 24, DustID.AncientLight, 0f, 0f, 0, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
+            Main.dust[dust3].noGravity = true;
+            Main.dust[dust3].noLight = false;
+            Main.dust[dust3].velocity.Y -= 1f;
+            Main.dust[dust3].velocity.X *= 0.1f;
+        }
+    }
+
     public override void AI() {
         Lighting.AddLight(Projectile.Center, 0.4f, 0.4f, 0.2f);
 
-        Projectile.timeLeft = 2;
         Player player = Main.player[Projectile.owner];
         player.heldProj = Projectile.whoAmI;
-        player.itemTime = 2;
+        player.itemTime = Projectile.timeLeft > 180 ? player.itemTimeMax : 2;
         player.itemAnimation = 2;
 
         player.ChangeDir(_direction);
@@ -291,7 +300,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 Rectangle rectangle = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
                 Rectangle value = new Rectangle((int)Main.player[Projectile.owner].position.X, (int)Main.player[Projectile.owner].position.Y, Main.player[Projectile.owner].width, Main.player[Projectile.owner].height);
                 if (rectangle.Intersects(value)) {
-                    for (int num615 = 0; num615 < 10; num615++) {
+                    for (int num615 = 0; num615 < 5; num615++) {
                         int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y) - Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, Projectile.width, Projectile.height, DustID.AncientLight, Projectile.velocity.X, Projectile.velocity.Y, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                         Main.dust[num616].noGravity = true;
                         Dust dust2 = Main.dust[num616];
