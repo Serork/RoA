@@ -47,6 +47,8 @@ sealed class MoonSigil : NatureProjectile {
         //base.SetDefaults();
     }
 
+    public override bool? CanDamage() => false;
+
     public override void AI() {
         if (cloneDrawRotation < 120) cloneDrawRotation += 1f;
         else cloneDrawRotation = 0;
