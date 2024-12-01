@@ -80,7 +80,8 @@ sealed class MoonSigil : NatureProjectile {
                 Main.dust[dust3].velocity.X *= 0.1f;
             }
         }
-        Lighting.AddLight(Projectile.Center, cloneDrawAlpha, cloneDrawAlpha, cloneDrawAlpha * 0.5f);
+        Lighting.AddLight(Projectile.Center, 0.4f, 0.4f, 0.2f);
+        //Lighting.AddLight(Projectile.Center, cloneDrawAlpha, cloneDrawAlpha, cloneDrawAlpha * 0.5f);
 
         if (++Projectile.frameCounter >= 12) {
             Projectile.frameCounter = 0;

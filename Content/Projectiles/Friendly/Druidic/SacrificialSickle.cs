@@ -71,7 +71,7 @@ sealed class SacrificialSickle : NatureProjectile {
             pos.X -= 2f;
         }
         pos += (player.itemRotation.ToRotationVector2() * 6f * player.direction).Floor();
-        _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, Projectile.GetAlpha(lightColor), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
+        _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, new Color(255, 255, 200, 200) * (1f - Projectile.alpha / 255f), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
 
         void draw(Texture2D texture, Color lightColor, float opacity = 1f) {
             Vector2 drawOrigin = new(texture.Width * 0.5f, texture.Height * 0.5f);
@@ -155,6 +155,8 @@ sealed class SacrificialSickle : NatureProjectile {
     }
 
     public override void AI() {
+        Lighting.AddLight(Projectile.Center, 0.4f, 0.4f, 0.2f);
+
         Projectile.timeLeft = 2;
         Player player = Main.player[Projectile.owner];
         player.heldProj = Projectile.whoAmI;
@@ -322,7 +324,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 Main.dust[dust2].fadeIn = Main.rand.NextFloat() * 1.2f * Main.rand.NextFloat(0.75f, 1f);
             }
             if (Main.rand.NextChance(0.75)) {
-                int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y - 10).RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2, Projectile.Center), 1, 1, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
+                int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y - 10).RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2 * Main.rand.NextFloat(0.5f, 1f), Projectile.Center), 1, 1, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = false;
                 Main.dust[dust].velocity.Y = -1f;
@@ -331,7 +333,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * Main.rand.NextFloat(0.75f, 1f);
             }
             if (Main.rand.NextChance(0.75)) {
-                int dust2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y + 10).RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2, Projectile.Center), 1, 1, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
+                int dust2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y + 10).RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2 * Main.rand.NextFloat(0.5f, 1f), Projectile.Center), 1, 1, DustID.AncientLight, 0f, 0f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].noLight = false;
                 Main.dust[dust2].velocity.Y = -1f;

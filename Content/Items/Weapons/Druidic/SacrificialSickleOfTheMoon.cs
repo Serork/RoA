@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
@@ -16,6 +17,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic;
 
+[AutoloadGlowMask]
 sealed class SacrificialSickleOfTheMoon : NatureItem {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Sacrificial Sickle Of The Moon");
@@ -23,7 +25,9 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
-	protected override void SafeSetDefaults() {
+	public override Color? GetAlpha(Color lightColor) => base.GetAlpha(lightColor);
+
+    protected override void SafeSetDefaults() {
 		int width = 32; int height = width;
 		Item.Size = new Vector2(width, height);
 
@@ -31,7 +35,7 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 		Item.useTime = Item.useAnimation = 16;
 		Item.autoReuse = false;
 
-		Item.useTurn = true;
+		Item.useTurn = false;
 		Item.noMelee = true;
 
 		Item.damage = 16;
@@ -50,7 +54,15 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 		NatureWeaponHandler.SetFillingRate(Item, 0.5f);
 	}
 
-	public override bool CanUseItem(Player player) {
+    public override void MeleeEffects(Player player, Rectangle hitbox) {
+		if (Main.moonPhase == 2 || Main.moonPhase == 3 || Main.moonPhase == 6 || Main.moonPhase == 7)
+		if (Main.rand.NextBool(2)) {
+			int num7 = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.AncientLight, player.velocity.X * 0.2f + (float)(player.direction * 3), player.velocity.Y * 0.2f, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
+			Main.dust[num7].noGravity = true;
+		}
+    }
+
+    public override bool CanUseItem(Player player) {
 		if (Main.moonPhase == 0 || Main.moonPhase == 1) {
 			Item.useStyle = ItemUseStyleID.Shoot;
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<MoonSigil>()] == 1) Item.UseSound = SoundID.Item1;
@@ -82,8 +94,10 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 				Projectile.NewProjectile(source, player.GetViableMousePosition(), Vector2.Zero, ModContent.ProjectileType<MoonSigil>(), damage, knockback, player.whoAmI);
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<MoonSigil>()] == 1) return false;
 		}
-		if (Main.moonPhase == 2 || Main.moonPhase == 3 || Main.moonPhase == 6 || Main.moonPhase == 7)
+		if (Main.moonPhase == 2 || Main.moonPhase == 3 || Main.moonPhase == 6 || Main.moonPhase == 7) {
+			if (Main.rand.NextChance(0.75))
 			Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + player.height / 2), new Vector2(velocity.X, velocity.Y), ModContent.ProjectileType<MoonSickle>(), damage, knockback, player.whoAmI);
+		}
 		if (Main.moonPhase == 4 || Main.moonPhase == 5)
 			Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + player.height / 2), new Vector2(velocity.X, velocity.Y), ModContent.ProjectileType<SacrificialSickle>(), damage, knockback, player.whoAmI);
 		return false;
