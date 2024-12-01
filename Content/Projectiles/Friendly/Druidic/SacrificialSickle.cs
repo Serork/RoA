@@ -73,7 +73,7 @@ sealed class SacrificialSickle : NatureProjectile {
             pos.X -= 2f;
         }
         pos += (player.itemRotation.ToRotationVector2() * 6f * player.direction).Floor();
-        _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, new Color(255, 255, 200, 255) * (1f - Projectile.alpha / 255f), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
+        _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, new Color(255, 255, 200, 255) * 0.9f * (1f - Projectile.alpha / 255f), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
 
         void draw(Texture2D texture, Color lightColor, float opacity = 1f) {
             Vector2 drawOrigin = new(texture.Width * 0.5f, texture.Height * 0.5f);
