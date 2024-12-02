@@ -31,7 +31,6 @@ sealed class FlederForm : BaseForm {
         }
     }
 
-
     public override void SetMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 24; i++) {
             Vector2 spawnPos = player.Center + new Vector2(30f, 0).RotatedBy(i * Math.PI * 2 / 24f) - new Vector2(-6f, 4f);

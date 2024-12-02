@@ -5,7 +5,6 @@ using RoA.Utilities;
 using System.Linq;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Druid.Forms;
