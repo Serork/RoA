@@ -38,6 +38,25 @@ static class Helper {
         );
     }
 
+    public static string NamespacePath(this object obj) {
+        return NamespacePath(obj.GetType());
+    }
+    public static string NamespacePath<T>() {
+        return NamespacePath(typeof(T));
+    }
+    public static string NamespacePath(Type t) {
+        return t.Namespace.Replace('.', '/');
+    }
+    public static string GetPath(this object obj) {
+        return GetPath(obj.GetType());
+    }
+    public static string GetPath<T>() {
+        return GetPath(typeof(T));
+    }
+    public static string GetPath(Type t) {
+        return $"{NamespacePath(t)}/{t.Name}";
+    }
+
     public static float Approach(float val, float target, float maxMove) => (double)val <= (double)target ? Math.Min(val + maxMove, target) : Math.Max(val - maxMove, target);
 
     public static Vector2 CircleOffset(this Entity entity, float elapsedTime, float circleRotation, float circleHeight) => ((((float)(MathHelper.TwoPi * (double)elapsedTime + MathHelper.PiOver2)).ToRotationVector2() + new Vector2(0.0f, -1f)) * new Vector2(6 * -entity.direction, circleHeight)).RotatedBy((double)circleRotation);

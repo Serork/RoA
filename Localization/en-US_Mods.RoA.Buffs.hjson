@@ -94,3 +94,13 @@ BeastPoison: {
 	DisplayName: Beast Poison
 	Description: Losing life, movement speed decreased
 }
+
+FlederFormBuff: {
+	DisplayName: Fleder Form Buff
+	Description: Mods.RoA.Buffs.FlederFormBuff.Description
+}
+
+FlederForm: {
+	DisplayName: Fleder Form
+	Description: Mods.RoA.Buffs.FlederForm.Description
+}

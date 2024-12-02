@@ -29,6 +29,8 @@
 	  <None Remove="Resources\Textures\Dusts\Slash.png" />
 	  <None Remove="Resources\Textures\Dusts\Tulip.png" />
 	  <None Remove="Resources\Textures\Empty.png" />
+	  <None Remove="Resources\Textures\Forms\FlederFormBuff.png" />
+	  <None Remove="Resources\Textures\Forms\FlederForm_Back.png" />
 	  <None Remove="Resources\Textures\Gores\BackwoodsLeaf.png" />
 	  <None Remove="Resources\Textures\Gores\DruidBiomeWaterDroplet.png" />
 	  <None Remove="Resources\Textures\Gores\VileSpikeGore.png" />
