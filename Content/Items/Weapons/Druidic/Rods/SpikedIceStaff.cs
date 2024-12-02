@@ -102,7 +102,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                                     Vector2 velocity = Helper.VelocityToPoint(CorePosition, _mousePos, 2.5f + Main.rand.NextFloatRange(1f));
                                     Vector2 vector2 = velocity.RotatedBy(num * (MathHelper.Pi + MathHelper.PiOver4) / 25f);
                                     Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, DustID.BubbleBurst_Blue, Scale: Main.rand.NextFloat(1.05f, 1.35f));
-                                    dust.velocity = vector2;
+                                    dust.velocity = vector2 * Main.rand.NextFloat(0.8f, 1.1f);
                                     dust.noGravity = true;
                                 }
                             }
@@ -168,7 +168,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
             for (int i = 0; i < MathHelper.Min(15, _attackTimer / 4); i++) {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
-                Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, 176, 0f, 0f, 0, default, Main.rand.NextFloat(1.05f, 1.35f));
+                Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, 176, 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f));
                 dust.noGravity = true;
                 dust.fadeIn = 0.9f;
                 dust.velocity = new Vector2(Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f);
