@@ -14,16 +14,10 @@ sealed class FlederForm : BaseForm {
         MountData.spawnDust = 59;
         MountData.heightBoost = -14;
         MountData.fallDamage = 0f;
-        MountData.dashSpeed = 2f;
-        MountData.runSpeed = 2f;
         MountData.flightTimeMax = 60;
         MountData.fatigueMax = 40;
         MountData.jumpHeight = 1;
-        MountData.acceleration = 1f;
         MountData.jumpSpeed = 4f;
-        MountData.blockExtraJumps = false;
-        MountData.constantJump = false;
-        MountData.usesHover = false;
 
         if (!Main.dedServ) {
             MountData.textureWidth = MountData.backTexture.Width();

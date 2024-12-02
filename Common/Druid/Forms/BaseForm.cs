@@ -28,13 +28,36 @@ sealed class BaseFormBuff(BaseForm parent) : ModBuff {
     }
 }
 
-abstract class BaseForm : ModMount { 
-    public readonly BaseFormBuff MountBuff;
+abstract class BaseForm : ModMount {
+    private struct MovementSpeedInfo(float maxRunSpeed, float accRunSpeed, float runAcceleration) {
+        public float MaxRunSpeed = maxRunSpeed;
+        public float AccRunSpeed = accRunSpeed;
+        public float RunAcceleration = runAcceleration;
+    }
+
+    private MovementSpeedInfo _playerMovementSpeedInfo;
+
+    public BaseFormBuff MountBuff { get; init; }
 
     public BaseForm() => MountBuff = new BaseFormBuff(this);
 
     public override void Load() {
         Mod.AddContent(MountBuff);
+
+        On_Player.HorizontalMovement += On_Player_HorizontalMovement;
+    }
+
+    private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
+        BaseFormHandler baseFormHandler = self.GetModPlayer<BaseFormHandler>();
+        if (!baseFormHandler.IsInDruidicForm) {
+            _playerMovementSpeedInfo = new MovementSpeedInfo(self.maxRunSpeed, self.accRunSpeed, self.runAcceleration);
+        }
+        else { 
+            self.maxRunSpeed = _playerMovementSpeedInfo.MaxRunSpeed;
+            self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed;
+            self.runAcceleration = _playerMovementSpeedInfo.RunAcceleration;
+        }
+        orig(self);
     }
 
     public sealed override void SetStaticDefaults() {
