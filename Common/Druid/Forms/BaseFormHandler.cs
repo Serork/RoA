@@ -27,7 +27,10 @@ sealed class BaseFormHandler : ModPlayer {
     private bool _shouldBeActive;
 
     public static IReadOnlyCollection<FormInfo> Forms => _formsByType.Values;
-    public bool IsInDruidicForm => _currentForm != null;
+    public FormInfo CurrentForm => _currentForm;
+    public bool IsInDruidicForm => CurrentForm != null;
+
+    public bool Is<T>() where T : BaseForm => IsInDruidicForm && CurrentForm.BaseForm.GetType().Equals(typeof(T));
 
     public bool ShouldFormBeActive<T>(T instance = null) where T : FormInfo {
         T formInstance = instance ?? GetForm<T>();

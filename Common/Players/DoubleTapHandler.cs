@@ -9,7 +9,15 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 interface IDoubleTap {
-    void OnDoubleTap(Player player);
+    public enum TapDirection {
+        None = -1,
+        Down,
+        Top,
+        Right,
+        Left
+    }
+
+    void OnDoubleTap(Player player, TapDirection direction);
 }
 
 sealed class DoubleTapHandler : ModPlayer, IPostSetupContent {
@@ -27,14 +35,12 @@ sealed class DoubleTapHandler : ModPlayer, IPostSetupContent {
     }
 
     private void KeyDoubleTap(int keyDir) {
-        int inputKey = 0;
-        if (Main.ReversedUpDownArmorSetBonuses) {
-            inputKey = 1;
+        int direction = keyDir;
+        if (direction == 0 && Main.ReversedUpDownArmorSetBonuses) {
+            direction = 1;
         }
-        if (keyDir == inputKey) {
-            foreach (IDoubleTap type in _doubleTapTypes) {
-                type.OnDoubleTap(Player);
-            }
+        foreach (IDoubleTap type in _doubleTapTypes) {
+            type.OnDoubleTap(Player, (IDoubleTap.TapDirection)direction);
         }
     }
 

@@ -47,8 +47,10 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
 		BaseFormHandler.KeepFormActive(player);
     }
 
-    void IDoubleTap.OnDoubleTap(Player player) {
-        BaseFormHandler.ToggleForm<FlederForm>(player);
+    void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
+		if (direction == IDoubleTap.TapDirection.Down) {
+			BaseFormHandler.ToggleForm<FlederForm>(player);
+		}
     }
 
     void IPostSetupContent.PostSetupContent() {
