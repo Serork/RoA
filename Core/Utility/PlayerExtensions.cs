@@ -8,6 +8,17 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static class PlayerExtensions {
+    public static void AddBuffInStart(this Player self, int type, int time) {
+        int[] newArray = new int[self.buffType.Length + 1];
+        newArray[0] = type;
+        Array.Copy(self.buffType, 0, newArray, 1, self.buffType.Length);
+        self.buffType = newArray;
+        newArray = new int[self.buffTime.Length + 1];
+        newArray[0] = time;
+        Array.Copy(self.buffTime, 0, newArray, 1, self.buffTime.Length);
+        self.buffTime = newArray;
+    }
+
     public static Vector2 PlayerMovementOffset(this Player player) {
         Vector2[] positions = [
             new Vector2(0f, 0f),

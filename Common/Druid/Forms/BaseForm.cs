@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 
 using RoA.Content.Biomes.Backwoods;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
@@ -99,6 +100,15 @@ abstract class BaseForm : ModMount {
     protected virtual void SafeSetDefaults() { }
     protected virtual void SafeUpdateEffects(Player player) { }
     protected virtual bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) => true;
+    protected virtual void SafeSetMount(Player player, ref bool skipDust) { }
+
+    public sealed override void SetMount(Player player, ref bool skipDust) {
+        int buffType = MountBuff.Type;
+        player.ClearBuff(buffType);
+        player.AddBuffInStart(buffType, 3600);
+
+        SafeSetMount(player, ref skipDust);
+    }
 
     public sealed override void UpdateEffects(Player player) {
         MountData.buff = MountBuff.Type;

@@ -235,14 +235,7 @@ sealed class WreathHandler : ModPlayer {
         int buff3 = ModContent.BuffType<WreathFullCharged2>();
         List<int> buffTypes = [buff, buff2, buff3];
         if (buffTypes.Contains(type)) {
-            int[] newArray = new int[self.buffType.Length + 1];
-            newArray[0] = type;
-            Array.Copy(self.buffType, 0, newArray, 1, self.buffType.Length);
-            self.buffType = newArray;
-            newArray = new int[self.buffTime.Length + 1];
-            newArray[0] = time;
-            Array.Copy(self.buffTime, 0, newArray, 1, self.buffTime.Length);
-            self.buffTime = newArray;
+            self.AddBuffInStart(type, time);
             return true;
         }
 

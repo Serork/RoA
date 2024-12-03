@@ -49,7 +49,6 @@ sealed class FlederForm : BaseForm {
             if (player.velocity.X < -maxFlightSpeedX) {
                 player.velocity.X += player.runAcceleration;
             }
-            player.velocity.X = MathHelper.Clamp(player.velocity.X, -maxFlightSpeedX, maxFlightSpeedX);
         }
         player.fullRotation = fullRotation;
         player.gravity *= 0.75f;
@@ -95,7 +94,7 @@ sealed class FlederForm : BaseForm {
         return false;
     }
 
-    public override void SetMount(Player player, ref bool skipDust) {
+    protected override void SafeSetMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 24; i++) {
             Vector2 spawnPos = player.Center + new Vector2(30f, 0).RotatedBy(i * Math.PI * 2 / 24f) - new Vector2(-6f, 4f);
             Vector2 direction = (player.Center - spawnPos) * 0.5f;
