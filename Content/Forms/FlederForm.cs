@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
+using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
@@ -36,18 +38,23 @@ sealed class FlederForm : BaseForm {
     }
 
     protected override void SafeUpdateEffects(Player player) {
+        player.npcTypeNoAggro[ModContent.NPCType<Fleder>()] = true;
+        player.npcTypeNoAggro[ModContent.NPCType<BabyFleder>()] = true;
+        player.statDefense -= 6;
+
         float rotation = player.velocity.X * (IsFlying(player) ? 0.2f : 0.15f);
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
-        float maxRotation = 0.3f;
-        fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         bool flag = IsFlying(player);
+        float maxRotation = flag ? 0.3f : 0.2f;
+        fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         if (flag) {
-            float maxFlightSpeedX = 3f;
+            float maxFlightSpeedX = Math.Min(3.5f, player.maxRunSpeed * 0.75f);
+            float acceleration = player.runAcceleration / 2f;
             if (player.velocity.X > maxFlightSpeedX) {
-                player.velocity.X -= player.runAcceleration;
+                player.velocity.X -= acceleration;
             }
             if (player.velocity.X < -maxFlightSpeedX) {
-                player.velocity.X += player.runAcceleration;
+                player.velocity.X += acceleration;
             }
         }
         player.fullRotation = fullRotation;

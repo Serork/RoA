@@ -356,7 +356,8 @@ sealed class BabyFleder : ModNPC {
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
                     Rectangle playerRect = new((int)player.position.X, (int)player.position.Y, player.width, player.height);
                     Rectangle npcRect = new((int)NPC.position.X - 200, (int)NPC.position.Y - 300, NPC.width + 400, NPC.height + 600);
-                    if (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax)) {
+                    bool flag5 = player.npcTypeNoAggro[Type];
+                    if (!flag5 && (flag4 || ((npcRect.Intersects(playerRect) && Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) || NPC.life < NPC.lifeMax))) {
                         _state = State.Normal;
                         AITimer = 0f;
                         NPC.ai[1] = 17f + Main.rand.NextFloatRange(2f);

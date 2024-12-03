@@ -53,6 +53,8 @@ sealed class MoonSickle : NatureProjectile {
     }
 
     public override void PostAI() {
+        Projectile.tileCollide = Projectile.alpha <= 0;
+
         if (Projectile.alpha > 0) {
             Projectile.alpha -= 35;
         }
