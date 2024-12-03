@@ -429,3 +429,18 @@ ElathaAmulet: {
 	DisplayName: Elatha Amulet
 	Tooltip: ""
 }
+
+LivingElderwoodBreastplate: {
+	DisplayName: Living Elderwood Breastplate
+	Tooltip: ""
+}
+
+LivingElderwoodCrown: {
+	DisplayName: Living Elderwood Crown
+	Tooltip: ""
+}
+
+LivingElderwoodGreaves: {
+	DisplayName: Living Elderwood Greaves
+	Tooltip: ""
+}

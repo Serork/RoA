@@ -60,6 +60,9 @@ sealed class RavencallersCloak : ModItem {
             public Rectangle HeadFrame, BodyFrame, LegFrame;
             public int WingFrame;
             public float GfxOffY;
+            public int Step;
+            public float StepSpeed;
+            public int MountFrame;
         }
 
         private bool _resetted = false;
@@ -159,6 +162,11 @@ sealed class RavencallersCloak : ModItem {
             float gfxOffY = drawPlayer.gfxOffY;
             Color skinColor = drawPlayer.skinColor;
             Vector2 velocity = drawPlayer.velocity;
+            int step = drawPlayer.step;
+            float stepSpeed = drawPlayer.stepSpeed;
+            float fullRotation = drawPlayer.fullRotation;
+            Vector2 fullRotationOrigin = drawPlayer.fullRotationOrigin;
+            int mountFrame = drawPlayer.mount._frame;
             if (!drawPlayer.ShouldNotDraw && !drawPlayer.dead) {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
@@ -176,13 +184,17 @@ sealed class RavencallersCloak : ModItem {
                     drawPlayer.stealth = 0.5f * data._opacity;
                     drawPlayer.gfxOffY = lastPositionInfo.GfxOffY;
                     drawPlayer.skinColor = Color.Transparent;
+                    drawPlayer.step = lastPositionInfo.Step;
+                    drawPlayer.stepSpeed = lastPositionInfo.StepSpeed;
+                    drawPlayer.fullRotation = lastPositionInfo.Rotation;
+                    drawPlayer.fullRotationOrigin = lastPositionInfo.RotationOrigin;
+                    drawPlayer.mount._frame = lastPositionInfo.MountFrame;
                     SamplerState samplerState = camera.Sampler;
                     if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f) {
                         samplerState = LegacyPlayerRenderer.MountedSamplerState;
                     }
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
                     _drawPlayerInternal.Invoke(self, [camera, drawPlayer, lastPositionInfo.Position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, -1f, 1f, 1f, false]);
-                    //self.DrawPlayer(camera, drawPlayer, lastPositionInfo.Position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, 0f);
                     Main.spriteBatch.End();
                 }
             }
@@ -200,6 +212,11 @@ sealed class RavencallersCloak : ModItem {
             drawPlayer.gfxOffY = gfxOffY;
             drawPlayer.skinColor = skinColor;
             drawPlayer.velocity = velocity;
+            drawPlayer.step = step;
+            drawPlayer.stepSpeed = stepSpeed;
+            drawPlayer.fullRotation = fullRotation;
+            drawPlayer.fullRotationOrigin = fullRotationOrigin;
+            drawPlayer.mount._frame = mountFrame;
             orig(self, camera, drawPlayer);
         }
 
@@ -227,6 +244,10 @@ sealed class RavencallersCloak : ModItem {
                 _oldPositionInfos[0].BodyFrame = Player.bodyFrame;
                 _oldPositionInfos[0].LegFrame = Player.legFrame;
                 _oldPositionInfos[0].WingFrame = Player.wingFrame;
+                _oldPositionInfos[0].GfxOffY = Player.gfxOffY;
+                _oldPositionInfos[0].Step = Player.step;
+                _oldPositionInfos[0].StepSpeed = Player.stepSpeed;
+                _oldPositionInfos[0].MountFrame = Player.mount._frame;
 
                 if (Player.velocity.Length() > 0.5f) {
                     if (_opacity < 1f) {

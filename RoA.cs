@@ -3,6 +3,7 @@ using MonoMod.RuntimeDetour;
 using ReLogic.Content.Sources;
 
 using RoA.Common.Networking;
+using RoA.Common.Players;
 using RoA.Core;
 
 using System.IO;
@@ -29,6 +30,12 @@ sealed class RoA : Mod {
     public override IContentSource CreateDefaultContentSource() => new CustomContentSource(base.CreateDefaultContentSource());
 
     public override void HandlePacket(BinaryReader reader, int sender) => MultiplayerSystem.HandlePacket(reader, sender);
+
+    public override void PostSetupContent() {
+        foreach (IPostSetupContent type in GetContent<IPostSetupContent>()) {
+            type.PostSetupContent();
+        }
+    }
 
     public static Hook Detour(MethodInfo source, MethodInfo target) {
         Hook hook = new(source, target);
