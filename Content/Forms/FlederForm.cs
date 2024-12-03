@@ -40,8 +40,15 @@ sealed class FlederForm : BaseForm {
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
         float maxRotation = 0.3f;
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
-        if (IsFlying(player)) {
+        bool flag = IsFlying(player);
+        if (flag) {
             float maxFlightSpeedX = 3f;
+            if (player.velocity.X > maxFlightSpeedX) {
+                player.velocity.X -= player.runAcceleration;
+            }
+            if (player.velocity.X < -maxFlightSpeedX) {
+                player.velocity.X += player.runAcceleration;
+            }
             player.velocity.X = MathHelper.Clamp(player.velocity.X, -maxFlightSpeedX, maxFlightSpeedX);
         }
         player.fullRotation = fullRotation;
