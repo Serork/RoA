@@ -4,6 +4,14 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Terraria.ID;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
+using Newtonsoft.Json;
+using Steamworks;
+using System.Text;
+using RoA.Utilities;
+using Microsoft.Xna.Framework;
 
 namespace RoA.Common.Druid.Forms;
 sealed class BaseFormHandler : ModPlayer {
@@ -29,6 +37,19 @@ sealed class BaseFormHandler : ModPlayer {
     public static IReadOnlyCollection<FormInfo> Forms => _formsByType.Values;
     public FormInfo CurrentForm => _currentForm;
     public bool IsInDruidicForm => CurrentForm != null;
+
+    public string Serialize() => CurrentForm.BaseForm.GetType().FullName;
+    public FormInfo Deserialize(string typeName) => _formsByType[Type.GetType(typeName)];
+
+    internal void InternalSetCurrentForm<T>(T formInstance) where T : FormInfo {
+        if (formInstance != null) {
+            _currentForm = formInstance;
+
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new SpawnFormPacket(Player, Serialize()));
+            }
+        }
+    }
 
     public bool Is<T>() where T : BaseForm => IsInDruidicForm && CurrentForm.BaseForm.GetType().Equals(typeof(T));
 
@@ -56,11 +77,7 @@ sealed class BaseFormHandler : ModPlayer {
         return default;
     }
 
-    public static void RegisterForm<T>(Predicate<Player> active = null) where T : BaseForm {
-        FormInfo formInfo = new(ModContent.GetInstance<T>(), active);
-        Type type = typeof(T);
-        _formsByType.TryAdd(type, formInfo);
-    }
+    public static void RegisterForm<T>(Predicate<Player> active = null) where T : BaseForm => _formsByType.TryAdd(typeof(T), new(ModContent.GetInstance<T>(), active));
 
     public static void ApplyForm<T>(Player player, T instance = null) where T : FormInfo {
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
@@ -69,8 +86,8 @@ sealed class BaseFormHandler : ModPlayer {
         }
 
         T formInstance = instance ?? GetForm<T>();
-        handler._currentForm = formInstance;
-        player.AddBuff(formInstance.MountBuff.Type, 2);
+        handler.InternalSetCurrentForm(formInstance);
+        player.AddBuff(formInstance.MountBuff.Type, 3600);
     }
 
     public static void ReleaseForm<T>(Player player, T instance = null) where T : FormInfo {
@@ -80,7 +97,7 @@ sealed class BaseFormHandler : ModPlayer {
         }
 
         T formInstance = instance ?? GetForm<T>();
-        handler._currentForm = null;
+        handler.HardResetActiveForm();
         player.ClearBuff(formInstance.MountBuff.Type);
     }
 
@@ -114,6 +131,7 @@ sealed class BaseFormHandler : ModPlayer {
     private void KeepFormActive() => _shouldBeActive = true;
 
     private void ResetActiveForm() => _shouldBeActive = false;
+    internal void HardResetActiveForm() => _currentForm = null;
 
     private void MakePlayerUnavailableToUseItems() {
         if (!IsInDruidicForm) {
@@ -126,6 +144,10 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void ClearForm() {
+        if (IsInDruidicForm && Player.mount.Active && Player.mount._type < MountID.Count) {
+            ReleaseForm(Player, _currentForm);
+        }
+
         if (Player.mount.Active && (!_shouldClear || !IsInDruidicForm || _shouldBeActive)) {
             return;
         }

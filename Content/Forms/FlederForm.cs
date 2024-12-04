@@ -6,7 +6,6 @@ using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Core.Utility;
 
 using System;
-using System.Collections.Generic;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -20,7 +19,7 @@ sealed class FlederForm : BaseForm {
 
         private IDoubleTap.TapDirection _dashDirection;
         private float _dashDelay, _dashTimer;
-        private int[] _localNPCImmunity = new int[200];
+        private int[] _localNPCImmunity = new int[Main.npc.Length];
 
         public bool ActiveDash => _dashDelay > 0;
 
@@ -35,8 +34,6 @@ sealed class FlederForm : BaseForm {
 
             player.GetModPlayer<FlederFormDashHandler>().UseFlederDash(direction);
         }
-
-
 
         public override void PreUpdateMovement() {
             if (_dashDirection != IDoubleTap.TapDirection.None && !ActiveDash) {
