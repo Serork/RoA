@@ -97,9 +97,10 @@ sealed class Fleder : ModNPC {
 
         Rectangle playerRect;
         Rectangle npcRect = new((int)NPC.position.X - 250, (int)NPC.position.Y - 350, NPC.width + 500, NPC.height + 700);
+        bool hasAggro = Main.player[NPC.target].npcTypeNoAggro[Type] && NPC.life >= NPC.lifeMax;
         bool isTriggeredBy(Player player) {
             playerRect = new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height);
-            if (player.npcTypeNoAggro[Type]) {
+            if (player.npcTypeNoAggro[Type] && NPC.life >= NPC.lifeMax) {
                 return false;
             }
             return (npcRect.Intersects(playerRect) || NPC.life < NPC.lifeMax) && !player.dead && player.active && player.InModBiome<BackwoodsBiome>();
@@ -207,7 +208,7 @@ sealed class Fleder : ModNPC {
 
                 return;
             }
-            else if (player.dead || player.npcTypeNoAggro[Type] || !player.active || !player.InModBiome<BackwoodsBiome>()) {
+            else if (player.dead || hasAggro || !player.active || !player.InModBiome<BackwoodsBiome>()) {
                 int y = (int)NPC.Center.Y / 16;
                 centerTile = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, y);
                 if (!centerTile.AnyWall() && y < BackwoodsVars.FirstTileYAtCenter + 10) {
@@ -220,9 +221,9 @@ sealed class Fleder : ModNPC {
         int y2 = (int)NPC.Center.Y / 16;
         Tile centerTile2 = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, y2);
         bool flag = !centerTile2.AnyWall() && y2 < BackwoodsVars.FirstTileYAtCenter + 10;
-        if (player.dead || player.npcTypeNoAggro[Type] || !player.active || !player.InModBiome<BackwoodsBiome>()) {
+        if (player.dead || hasAggro || !player.active || !player.InModBiome<BackwoodsBiome>()) {
             NPC.TargetClosest();
-            if (player.dead || player.npcTypeNoAggro[Type] || !player.active || !player.InModBiome<BackwoodsBiome>()) {
+            if (player.dead || hasAggro || !player.active || !player.InModBiome<BackwoodsBiome>()) {
                 if (flag && _state != State.Normal) {
                     _state = State.Normal;
 
@@ -233,7 +234,7 @@ sealed class Fleder : ModNPC {
 
         NPC.noTileCollide = false;
 
-        if (!flag || (!player.dead && !player.npcTypeNoAggro[Type] && player.InModBiome<BackwoodsBiome>())) {
+        if (!flag || (!player.dead && !hasAggro && player.InModBiome<BackwoodsBiome>())) {
             if (NPC.localAI[1] > 100f) {
                 _state = State.Attacking;
 
@@ -293,7 +294,7 @@ sealed class Fleder : ModNPC {
                     NPC.velocity.X = maxSpeedX;
                 }
             }
-            if (!player.dead && !player.npcTypeNoAggro[Type]) {
+            if (!player.dead && !hasAggro) {
                 float distX = Math.Abs((float)(NPC.position.X + (double)(NPC.width / 2) - ((player.position.X - player.oldVelocity.Y) + (double)(player.width / 2))));
                 float distY = player.position.Y - NPC.height / 2;
                 float minX = 50f;
