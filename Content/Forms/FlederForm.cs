@@ -92,6 +92,8 @@ sealed class FlederForm : BaseForm {
                             Main.dust[num6].velocity.X = Main.dust[num6].velocity.X * 0.2f;
                             Main.dust[num6].velocity.Y = -0.5f - Main.rand.NextFloat() * 1.5f;
                             Main.dust[num6].fadeIn = 0.5f;
+                            Main.dust[num6].scale *= Main.rand.NextFloat(1.1f, 1.25f);
+                            Main.dust[num6].scale *= 0.8f;
                             Main.dust[num6].noGravity = true;
                         }
                     }

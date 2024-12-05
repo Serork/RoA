@@ -119,8 +119,27 @@ sealed class BaseFormHandler : ModPlayer {
 
     public static void ToggleForm<T>(Player player) where T : BaseForm => ToggleForm(player, _formsByType[typeof(T)]);
 
+    public override void Load() {
+        On_TileObject.DrawPreview += On_TileObject_DrawPreview;
+    }
+
+    private void On_TileObject_DrawPreview(On_TileObject.orig_DrawPreview orig, Microsoft.Xna.Framework.Graphics.SpriteBatch sb, TileObjectPreviewData op, Vector2 position) {
+        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            return;
+        }
+
+        orig(sb, op, position);
+    }
+
     public override void ResetEffects() {
         ResetActiveForm();
+    }
+
+    public override void PostUpdate() {
+        if (IsInDruidicForm) {
+            Player.cursorItemIconEnabled = false;
+            Player.cursorItemIconID = 0;
+        }
     }
 
     public override void PostUpdateEquips() {

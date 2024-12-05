@@ -121,6 +121,9 @@ abstract class BaseForm : ModMount {
     }
 
     public sealed override void UpdateEffects(Player player) {
+        player.cursorItemIconEnabled = false;
+        player.cursorItemIconID = 0;
+
         MountData.buff = MountBuff.Type;
 
         SafeUpdateEffects(player);
