@@ -88,6 +88,7 @@ sealed class WreathHandler : ModPlayer {
     public float ActualProgress2 => (float)CurrentResource / MaxResource;
     public float GetActualProgress2(ushort currentResource) => (float)currentResource / MaxResource;
     public float ActualProgress3 => SoulOfTheWoods ? (ActualProgress2 - 1f) : ActualProgress2;
+    public float ActualProgress4 => MathHelper.Clamp(ActualProgress2, 0f, 1f);
     public float Progress => HasKeepTime ? Math.Max(1f, ActualProgress2) : ActualProgress2;
     public float GetProgress(ushort currentResource) => HasKeepTime ? Math.Max(1f, GetActualProgress2(currentResource)) : GetActualProgress2(currentResource);
     public float Progress2 => HasKeepTime ? Math.Max(1f, ActualProgress) : ActualProgress;

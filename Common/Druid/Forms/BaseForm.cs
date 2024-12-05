@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -95,12 +96,21 @@ abstract class BaseForm : ModMount {
         MountData.bodyFrame = 0;
         MountData.yOffset = -10;
         MountData.playerHeadOffset = -10;
+
+        MountData.frontTextureGlow = ModContent.Request<Texture2D>(Texture + "_Glow");
+
+        if (!Main.dedServ) {
+            MountData.textureWidth = MountData.backTexture.Width();
+            MountData.textureHeight = MountData.backTexture.Height();
+        }
     }
 
     protected virtual void SafeSetDefaults() { }
     protected virtual void SafeUpdateEffects(Player player) { }
     protected virtual bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) => true;
     protected virtual void SafeSetMount(Player player, ref bool skipDust) { }
+
+    protected virtual Color LightingColor { get; } = Color.White;
 
     public sealed override void SetMount(Player player, ref bool skipDust) {
         int buffType = MountBuff.Type;
@@ -116,6 +126,17 @@ abstract class BaseForm : ModMount {
         SafeUpdateEffects(player);
 
         SpawnRunDusts(player);
+
+        if (LightingColor == Color.White) {
+            return;
+        }
+
+        WreathHandler wreathHandler = player.GetModPlayer<WreathHandler>();
+        if (player.InModBiome<BackwoodsBiome>() || wreathHandler.IsFull) {
+            float value = player.InModBiome<BackwoodsBiome>() ? 1f : wreathHandler.ActualProgress4;
+            Main.NewText(value);
+            Lighting.AddLight(player.Center, LightingColor.ToVector3() * value);
+        }
     }
 
     private void SpawnRunDusts(Player player) {
@@ -193,6 +214,21 @@ abstract class BaseForm : ModMount {
         ref int frame = ref mountedPlayer.mount._frame;
 
         return SafeUpdateFrame(mountedPlayer, ref frameCounter, ref frame);
+    }
+
+    public override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
+        DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
+        playerDrawData.Add(item);
+        WreathHandler wreathHandler = drawPlayer.GetModPlayer<WreathHandler>();
+        if (drawPlayer.InModBiome<BackwoodsBiome>() || wreathHandler.IsFull) {
+            if (glowTexture != null) {
+                float value = drawPlayer.InModBiome<BackwoodsBiome>() ? 1f : wreathHandler.ActualProgress4;
+                item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+            }
+            playerDrawData.Add(item);
+        }
+
+        return false;
     }
 
     //public static void TestHook(Player player) => Main.NewText(123);

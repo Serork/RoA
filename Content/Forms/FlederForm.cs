@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
@@ -18,6 +19,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
+    protected override Color LightingColor => new(0.3f, 0.6f, 1.2f);
+
     private class FlederFormHandler : ModPlayer, IDoubleTap {
         public const int CD = 50, DURATION = 35;
         public const float SPEED = 10f;
@@ -183,7 +186,14 @@ sealed class FlederForm : BaseForm {
     }
 
     private static bool IsFlying(Player player) {
-        bool onTile = Math.Abs(player.velocity.Y) < 1.25f && WorldGenHelper.SolidTile((int)player.Center.X / 16, (int)(player.Bottom.Y + 10f) / 16);
+        bool flag = false;
+        for (int i = -1; i < 2; i++) {
+            if (WorldGenHelper.SolidTile((int)(player.Center.X + i * 16f) / 16, (int)(player.Bottom.Y + 10f) / 16)) {
+                flag = true;
+                break;
+            }
+        }
+        bool onTile = Math.Abs(player.velocity.Y) < 1.25f && flag;
         return !player.sliding && !onTile && player.gfxOffY == 0f;
     }
 
@@ -199,11 +209,6 @@ sealed class FlederForm : BaseForm {
         MountData.fatigueMax = 40;
         MountData.jumpHeight = 1;
         MountData.jumpSpeed = 4f;
-
-        if (!Main.dedServ) {
-            MountData.textureWidth = MountData.backTexture.Width();
-            MountData.textureHeight = MountData.backTexture.Height();
-        }
     }
 
     protected override void SafeUpdateEffects(Player player) {
