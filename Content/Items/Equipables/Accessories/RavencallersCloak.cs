@@ -65,7 +65,7 @@ sealed class RavencallersCloak : ModItem {
             public int MountFrame;
         }
 
-        private bool _resetted = false;
+        private bool _resetted = false, _resetted2 = false;
         private OldPositionInfo[] _oldPositionInfos = new OldPositionInfo[20];
         private float _resetTime;
         private float _opacity;
@@ -99,9 +99,11 @@ sealed class RavencallersCloak : ModItem {
             ResetPositions();
         }
 
-        public void ResetPositions() {
-            for (int j = 0; j < _oldPositionInfos.Length; j++) {
-                _oldPositionInfos[j].Position = Vector2.Zero;
+        public void ResetPositions(bool resetPositions = true) {
+            if (resetPositions) {
+                for (int j = 0; j < _oldPositionInfos.Length; j++) {
+                    _oldPositionInfos[j].Position = Vector2.Zero;
+                }
             }
             _opacity = 0f;
         }
@@ -109,13 +111,29 @@ sealed class RavencallersCloak : ModItem {
         public override void Load() {
             ResetPositions();
 
-            if (Main.netMode == NetmodeID.Server) {
-                return;
-            }
+            On_Mount.SetMount += On_Mount_SetMount;
+            On_Mount.Dismount += On_Mount_Dismount;
             On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
             On_PlayerHeadDrawRenderTargetContent.DrawTheContent += On_PlayerHeadDrawRenderTargetContent_DrawTheContent;
 
+            if (Main.netMode == NetmodeID.Server) {
+                return;
+            }
             _drawPlayerInternal = typeof(LegacyPlayerRenderer).GetMethod("DrawPlayerInternal", BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+
+        private void On_Mount_Dismount(On_Mount.orig_Dismount orig, Mount self, Player mountedPlayer) {
+            if (self._active) {
+                mountedPlayer.GetModPlayer<RavencallerPlayer>().ResetPositions(false);
+            }
+            orig(self, mountedPlayer);
+        }
+
+        private void On_Mount_SetMount(On_Mount.orig_SetMount orig, Mount self, int m, Player mountedPlayer, bool faceLeft) {
+            if (!self._active) {
+                mountedPlayer.GetModPlayer<RavencallerPlayer>().ResetPositions(false);
+            }
+            orig(self, m, mountedPlayer, faceLeft);
         }
 
         public override void Unload() {
@@ -161,6 +179,7 @@ sealed class RavencallersCloak : ModItem {
             bool shroomiteStealth = drawPlayer.shroomiteStealth;
             float gfxOffY = drawPlayer.gfxOffY;
             Color skinColor = drawPlayer.skinColor;
+            Vector2 position = drawPlayer.position;
             Vector2 velocity = drawPlayer.velocity;
             int step = drawPlayer.step;
             float stepSpeed = drawPlayer.stepSpeed;
@@ -171,6 +190,7 @@ sealed class RavencallersCloak : ModItem {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
                 if (lastPositionInfo.Position != Vector2.Zero) {
+                    drawPlayer.position = lastPositionInfo.Position;
                     drawPlayer.velocity = lastPositionInfo.Velocity;
                     drawPlayer.direction = lastPositionInfo.Direction;
                     drawPlayer.headFrame = lastPositionInfo.HeadFrame;
@@ -186,18 +206,38 @@ sealed class RavencallersCloak : ModItem {
                     drawPlayer.skinColor = Color.Transparent;
                     drawPlayer.step = lastPositionInfo.Step;
                     drawPlayer.stepSpeed = lastPositionInfo.StepSpeed;
-                    drawPlayer.fullRotation = lastPositionInfo.Rotation;
-                    drawPlayer.fullRotationOrigin = lastPositionInfo.RotationOrigin;
-                    drawPlayer.mount._frame = lastPositionInfo.MountFrame;
+                    if (!drawPlayer.mount.Active) {
+                        //drawPlayer.fullRotation = lastPositionInfo.Rotation;
+                        //drawPlayer.fullRotationOrigin = lastPositionInfo.RotationOrigin;
+                    }
+                    else {
+                        drawPlayer.mount._frame = lastPositionInfo.MountFrame;
+                    }
                     SamplerState samplerState = camera.Sampler;
                     if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f) {
                         samplerState = LegacyPlayerRenderer.MountedSamplerState;
                     }
+                    bool flag = drawPlayer.legFrame.Y == 336;
+                    float offsetY = -drawPlayer.HeightOffsetHitboxCenter;
+                    if (flag) {
+                        if (!drawPlayer.mount.Active) {
+                            offsetY -= drawPlayer.height / 2f;
+                            offsetY += 6f;
+                        }
+                        else {
+                            offsetY = 0f;
+                        }
+                    }
+                    else {
+  
+                    }
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
-                    _drawPlayerInternal.Invoke(self, [camera, drawPlayer, lastPositionInfo.Position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, -1f, 1f, 1f, false]);
+                    _drawPlayerInternal.Invoke(self, [camera, drawPlayer, drawPlayer.position + Vector2.UnitY * offsetY, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, -1f, 1f, 1f, false]);
                     Main.spriteBatch.End();
                 }
             }
+            drawPlayer.position = position;
+            drawPlayer.velocity = velocity;
             drawPlayer.direction = direction;
             drawPlayer.headFrame = headFrame;
             drawPlayer.bodyFrame = bodyFrame;
@@ -211,7 +251,6 @@ sealed class RavencallersCloak : ModItem {
             drawPlayer.shroomiteStealth = shroomiteStealth;
             drawPlayer.gfxOffY = gfxOffY;
             drawPlayer.skinColor = skinColor;
-            drawPlayer.velocity = velocity;
             drawPlayer.step = step;
             drawPlayer.stepSpeed = stepSpeed;
             drawPlayer.fullRotation = fullRotation;
@@ -232,22 +271,27 @@ sealed class RavencallersCloak : ModItem {
 
                 _resetted = false;
 
-                for (int num2 = _oldPositionInfos.Length - 1; num2 > 0; num2--) {
-                    _oldPositionInfos[num2] = _oldPositionInfos[num2 - 1];
+                if (!_resetted2) {
+                    for (int num2 = _oldPositionInfos.Length - 1; num2 > 0; num2--) {
+                        _oldPositionInfos[num2] = _oldPositionInfos[num2 - 1];
+                    }
+                    _oldPositionInfos[0].Position = Player.position;
+                    _oldPositionInfos[0].Velocity = Player.velocity;
+                    _oldPositionInfos[0].Rotation = Player.fullRotation;
+                    _oldPositionInfos[0].RotationOrigin = Player.fullRotationOrigin;
+                    _oldPositionInfos[0].Direction = Player.direction;
+                    _oldPositionInfos[0].HeadFrame = Player.headFrame;
+                    _oldPositionInfos[0].BodyFrame = Player.bodyFrame;
+                    _oldPositionInfos[0].LegFrame = Player.legFrame;
+                    _oldPositionInfos[0].WingFrame = Player.wingFrame;
+                    _oldPositionInfos[0].GfxOffY = Player.gfxOffY;
+                    _oldPositionInfos[0].Step = Player.step;
+                    _oldPositionInfos[0].StepSpeed = Player.stepSpeed;
+                    _oldPositionInfos[0].MountFrame = Player.mount._frame;
                 }
-                _oldPositionInfos[0].Position = Player.position;
-                _oldPositionInfos[0].Velocity = Player.velocity;
-                _oldPositionInfos[0].Rotation = Player.fullRotation;
-                _oldPositionInfos[0].RotationOrigin = Player.fullRotationOrigin;
-                _oldPositionInfos[0].Direction = Player.direction;
-                _oldPositionInfos[0].HeadFrame = Player.headFrame;
-                _oldPositionInfos[0].BodyFrame = Player.bodyFrame;
-                _oldPositionInfos[0].LegFrame = Player.legFrame;
-                _oldPositionInfos[0].WingFrame = Player.wingFrame;
-                _oldPositionInfos[0].GfxOffY = Player.gfxOffY;
-                _oldPositionInfos[0].Step = Player.step;
-                _oldPositionInfos[0].StepSpeed = Player.stepSpeed;
-                _oldPositionInfos[0].MountFrame = Player.mount._frame;
+                else {
+                    _resetted2 = false;
+                }
 
                 if (Player.velocity.Length() > 0.5f) {
                     if (_opacity < 1f) {
