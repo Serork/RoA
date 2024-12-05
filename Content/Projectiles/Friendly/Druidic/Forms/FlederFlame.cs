@@ -30,7 +30,7 @@ sealed class FlederFlame : FormProjectile {
             Main.dust[trail].fadeIn = 1.3f;
             Main.dust[trail].velocity *= 1.5f;
             Main.dust[trail].noGravity = true;
-            Main.dust[trail].scale *= 0.75f;
+            Main.dust[trail].scale *= 0.7f;
         }
 
         float num3 = Projectile.Center.X;

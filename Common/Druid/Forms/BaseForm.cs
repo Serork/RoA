@@ -135,11 +135,8 @@ abstract class BaseForm : ModMount {
         }
 
         WreathHandler wreathHandler = player.GetModPlayer<WreathHandler>();
-        if (player.InModBiome<BackwoodsBiome>() || wreathHandler.IsFull) {
-            float value = player.InModBiome<BackwoodsBiome>() ? 1f : wreathHandler.ActualProgress4;
-            Main.NewText(value);
-            Lighting.AddLight(player.Center, LightingColor.ToVector3() * value);
-        }
+        float value = player.InModBiome<BackwoodsBiome>() ? 1f : wreathHandler.ActualProgress4;
+        Lighting.AddLight(player.Center, LightingColor.ToVector3() * value);
     }
 
     private void SpawnRunDusts(Player player) {
@@ -223,13 +220,11 @@ abstract class BaseForm : ModMount {
         DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
         playerDrawData.Add(item);
         WreathHandler wreathHandler = drawPlayer.GetModPlayer<WreathHandler>();
-        if (drawPlayer.InModBiome<BackwoodsBiome>() || wreathHandler.IsFull) {
-            if (glowTexture != null) {
-                float value = drawPlayer.InModBiome<BackwoodsBiome>() ? 1f : wreathHandler.ActualProgress4;
-                item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
-            }
-            playerDrawData.Add(item);
+        if (glowTexture != null) {
+            float value = drawPlayer.InModBiome<BackwoodsBiome>() ? 1f : wreathHandler.ActualProgress4;
+            item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
         }
+        playerDrawData.Add(item);
 
         return false;
     }
