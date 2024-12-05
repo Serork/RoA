@@ -28,7 +28,7 @@ sealed class FlederForm : BaseForm {
             if (!flag) {
                 return;
             }
-            if (!player.GetModPlayer<BaseFormHandler>().Is<FlederForm>()) {
+            if (!player.GetModPlayer<BaseFormHandler>().IsConsideredAs<FlederForm>()) {
                 return;
             }
 
@@ -36,7 +36,15 @@ sealed class FlederForm : BaseForm {
         }
 
         public override void PreUpdateMovement() {
-            if (_dashDirection != IDoubleTap.TapDirection.None && !ActiveDash) {
+            bool flag = _dashDirection != IDoubleTap.TapDirection.None || ActiveDash;
+            if (flag || !Player.GetModPlayer<BaseFormHandler>().IsConsideredAs<FlederForm>()) {
+                _dashDirection = IDoubleTap.TapDirection.None;
+                _dashDelay = _dashTimer = 0;
+                return;
+            }
+
+            if (flag && !ActiveDash) {
+
                 Vector2 newVelocity = Player.velocity;
                 int dashDirection = (_dashDirection == IDoubleTap.TapDirection.Right).ToDirectionInt();
                 switch (_dashDirection) {

@@ -51,7 +51,7 @@ sealed class BaseFormHandler : ModPlayer {
         }
     }
 
-    public bool Is<T>() where T : BaseForm => IsInDruidicForm && CurrentForm.BaseForm.GetType().Equals(typeof(T));
+    public bool IsConsideredAs<T>() where T : BaseForm => IsInDruidicForm && CurrentForm.BaseForm.GetType().Equals(typeof(T));
 
     public bool ShouldFormBeActive<T>(T instance = null) where T : FormInfo {
         T formInstance = instance ?? GetForm<T>();

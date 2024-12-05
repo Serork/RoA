@@ -20,7 +20,7 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Face)]
 sealed class RavencallersCloak : ModItem {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Ravencaller's Cloak");
         //Tooltip.SetDefault("While at full health, enemies are less likely to target you");
         if (Main.netMode != NetmodeID.Server) {
@@ -123,14 +123,14 @@ sealed class RavencallersCloak : ModItem {
         }
 
         private void On_Mount_Dismount(On_Mount.orig_Dismount orig, Mount self, Player mountedPlayer) {
-            if (self._active) {
+            if (self != null && self._active) {
                 mountedPlayer.GetModPlayer<RavencallerPlayer>().ResetPositions(false);
             }
             orig(self, mountedPlayer);
         }
 
         private void On_Mount_SetMount(On_Mount.orig_SetMount orig, Mount self, int m, Player mountedPlayer, bool faceLeft) {
-            if (!self._active) {
+            if (self != null && !self._active) {
                 mountedPlayer.GetModPlayer<RavencallerPlayer>().ResetPositions(false);
             }
             orig(self, m, mountedPlayer, faceLeft);
@@ -190,7 +190,6 @@ sealed class RavencallersCloak : ModItem {
                 OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
                 if (lastPositionInfo.Position != Vector2.Zero) {
-                    drawPlayer.position = lastPositionInfo.Position;
                     drawPlayer.velocity = lastPositionInfo.Velocity;
                     drawPlayer.direction = lastPositionInfo.Direction;
                     drawPlayer.headFrame = lastPositionInfo.HeadFrame;
@@ -231,8 +230,9 @@ sealed class RavencallersCloak : ModItem {
                     else {
   
                     }
+                    drawPlayer.position = lastPositionInfo.Position + Vector2.UnitY * offsetY;
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
-                    _drawPlayerInternal.Invoke(self, [camera, drawPlayer, drawPlayer.position + Vector2.UnitY * offsetY, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, -1f, 1f, 1f, false]);
+                    _drawPlayerInternal.Invoke(self, [camera, drawPlayer, drawPlayer.position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, -1f, 1f, 1f, false]);
                     Main.spriteBatch.End();
                 }
             }
