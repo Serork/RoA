@@ -10,7 +10,7 @@ sealed class ExtraRegen : ModBuff {
 	}
 
 	public override void Update(Player player, ref int buffIndex) {
-		if (Main.GameUpdateCount % 60 == 0) {
+		if (player.miscCounter % 60 == 0) {
 			player.statLife += 1;
 			player.HealEffect(1);
 		}
