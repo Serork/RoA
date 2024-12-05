@@ -247,7 +247,7 @@ sealed class FlederForm : BaseForm {
     }
 
     private void SpecialAttackHandler(Player player) {
-        if (Main.mouseText)
+        if (player.whoAmI != Main.myPlayer || Main.mouseText)
             return;
 
         ref int shootCounter = ref player.GetModPlayer<FlederFormHandler>()._shootCounter;
