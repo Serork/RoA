@@ -207,7 +207,7 @@ sealed class Fleder : ModNPC {
 
                 return;
             }
-            else if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
+            else if (player.dead || player.npcTypeNoAggro[Type] || !player.active || !player.InModBiome<BackwoodsBiome>()) {
                 int y = (int)NPC.Center.Y / 16;
                 centerTile = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, y);
                 if (!centerTile.AnyWall() && y < BackwoodsVars.FirstTileYAtCenter + 10) {
@@ -220,9 +220,9 @@ sealed class Fleder : ModNPC {
         int y2 = (int)NPC.Center.Y / 16;
         Tile centerTile2 = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, y2);
         bool flag = !centerTile2.AnyWall() && y2 < BackwoodsVars.FirstTileYAtCenter + 10;
-        if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
+        if (player.dead || player.npcTypeNoAggro[Type] || !player.active || !player.InModBiome<BackwoodsBiome>()) {
             NPC.TargetClosest();
-            if (player.dead || !player.active || !player.InModBiome<BackwoodsBiome>()) {
+            if (player.dead || player.npcTypeNoAggro[Type] || !player.active || !player.InModBiome<BackwoodsBiome>()) {
                 if (flag && _state != State.Normal) {
                     _state = State.Normal;
 
@@ -233,7 +233,7 @@ sealed class Fleder : ModNPC {
 
         NPC.noTileCollide = false;
 
-        if (!flag || (!player.dead && player.InModBiome<BackwoodsBiome>())) {
+        if (!flag || (!player.dead && !player.npcTypeNoAggro[Type] && player.InModBiome<BackwoodsBiome>())) {
             if (NPC.localAI[1] > 100f) {
                 _state = State.Attacking;
 
@@ -293,7 +293,7 @@ sealed class Fleder : ModNPC {
                     NPC.velocity.X = maxSpeedX;
                 }
             }
-            if (!player.dead) {
+            if (!player.dead && !player.npcTypeNoAggro[Type]) {
                 float distX = Math.Abs((float)(NPC.position.X + (double)(NPC.width / 2) - ((player.position.X - player.oldVelocity.Y) + (double)(player.width / 2))));
                 float distY = player.position.Y - NPC.height / 2;
                 float minX = 50f;

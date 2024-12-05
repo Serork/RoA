@@ -19,7 +19,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
-    protected override Color LightingColor => new Color(0.3f, 0.6f, 1.2f);
+    protected override Color LightingColor => new Color(0.3f, 0.6f, 1.2f) * 0.85f;
 
     private class FlederFormHandler : ModPlayer, IDoubleTap {
         public const int CD = 50, DURATION = 35;

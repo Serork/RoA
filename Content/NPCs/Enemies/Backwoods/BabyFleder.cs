@@ -137,7 +137,7 @@ sealed class BabyFleder : ModNPC {
     public override void AI() {
         NPC.noGravity = true;
 
-        if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
+        if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || Main.player[NPC.target].npcTypeNoAggro[Type] || !Main.player[NPC.target].active) {
             NPC.TargetClosest();
         }
         int target = NPC.target;
@@ -161,7 +161,7 @@ sealed class BabyFleder : ModNPC {
         }
         void move(bool flag) {
             if (!HasParent) {
-                if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
+                if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || Main.player[NPC.target].npcTypeNoAggro[Type] || !Main.player[NPC.target].active) {
                     ApplyGravity();
 
                     SitIfTileBelow();
@@ -194,7 +194,7 @@ sealed class BabyFleder : ModNPC {
             NPC.noTileCollide = false;
             if (flag2) {
                 NPC.SlightlyMoveTo(center, 5f, 30f * (Utils.GetLerpValue(0f, 100f, NPC.Distance(center), true) + 1f));
-                if (NPC.target == 255 || player.dead || Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) {
+                if (NPC.target == 255 || player.dead || player.npcTypeNoAggro[Type] || Collision.CanHit(NPC.Center, 1, 1, center, 1, 1)) {
                     StateTimer -= 1f;
                     NPC.TargetClosest(false);
 
