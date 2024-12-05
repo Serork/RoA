@@ -232,7 +232,7 @@ sealed class RavencallersCloak : ModItem {
                     }
                     drawPlayer.position = lastPositionInfo.Position + Vector2.UnitY * offsetY;
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
-                    _drawPlayerInternal.Invoke(self, [camera, drawPlayer, drawPlayer.position, lastPositionInfo.Rotation, lastPositionInfo.RotationOrigin, -1f, 1f, 1f, false]);
+                    _drawPlayerInternal.Invoke(self, [camera, drawPlayer, drawPlayer.position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, -1f, 1f, 1f, false]);
                     Main.spriteBatch.End();
                 }
             }

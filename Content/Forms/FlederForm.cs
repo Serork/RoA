@@ -37,7 +37,7 @@ sealed class FlederForm : BaseForm {
 
         public override void PreUpdateMovement() {
             bool flag = _dashDirection != IDoubleTap.TapDirection.None || ActiveDash;
-            if (flag || !Player.GetModPlayer<BaseFormHandler>().IsConsideredAs<FlederForm>()) {
+            if (flag && !Player.GetModPlayer<BaseFormHandler>().IsConsideredAs<FlederForm>()) {
                 _dashDirection = IDoubleTap.TapDirection.None;
                 _dashDelay = _dashTimer = 0;
                 return;
