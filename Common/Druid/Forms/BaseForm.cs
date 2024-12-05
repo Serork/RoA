@@ -136,7 +136,7 @@ abstract class BaseForm : ModMount {
         }
     }
 
-    private void SpawnFastRunParticles(Player player) {
+    private static void SpawnFastRunParticles(Player player) {
         int num = 0;
         if (player.gravDir == -1f)
             num -= player.height;

@@ -1,25 +1,31 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Content.NPCs.Enemies.Backwoods;
+using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
-    private class FlederFormDashHandler : ModPlayer, IDoubleTap {
+    private class FlederFormHandler : ModPlayer, IDoubleTap {
         public const int CD = 50, DURATION = 35;
         public const float SPEED = 10f;
 
         private IDoubleTap.TapDirection _dashDirection;
         private float _dashDelay, _dashTimer;
         private int[] _localNPCImmunity = new int[Main.npc.Length];
+        internal int _shootCounter;
 
         public bool ActiveDash => _dashDelay > 0;
 
@@ -32,7 +38,7 @@ sealed class FlederForm : BaseForm {
                 return;
             }
 
-            player.GetModPlayer<FlederFormDashHandler>().UseFlederDash(direction);
+            player.GetModPlayer<FlederFormHandler>().UseFlederDash(direction);
         }
 
         public override void PreUpdateMovement() {
@@ -44,7 +50,6 @@ sealed class FlederForm : BaseForm {
             }
 
             if (flag && !ActiveDash) {
-
                 Vector2 newVelocity = Player.velocity;
                 int dashDirection = (_dashDirection == IDoubleTap.TapDirection.Right).ToDirectionInt();
                 switch (_dashDirection) {
@@ -57,6 +62,7 @@ sealed class FlederForm : BaseForm {
                 _dashDirection = IDoubleTap.TapDirection.None;
                 _dashDelay = CD;
                 _dashTimer = DURATION;
+                SpawnDusts();
                 Player.velocity = newVelocity;
                 if (Player.velocity.Y == Player.gravity) {
                     Player.velocity.Y -= 5f;
@@ -73,6 +79,21 @@ sealed class FlederForm : BaseForm {
             }
 
             if (_dashTimer > 0) {
+                if (!IsFlying(Player)) {
+                    for (int i = 0; i < 3; i++) {
+                        if (Main.rand.NextBool(3)) {
+                            int num = 0;
+                            if (Player.gravDir == -1f)
+                                num -= Player.height;
+                            int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height + (float)num), Player.width + 8, 4, 59, (0f - Player.velocity.X) * 0.5f, Player.velocity.Y * 0.5f, 59, default(Color), Main.rand.NextFloat(2f, 3f) * 0.95f);
+                            Main.dust[num6].velocity.X = Main.dust[num6].velocity.X * 0.2f;
+                            Main.dust[num6].velocity.Y = -0.5f - Main.rand.NextFloat() * 1.5f;
+                            Main.dust[num6].fadeIn = 0.5f;
+                            Main.dust[num6].noGravity = true;
+                        }
+                    }
+                }
+
                 for (int k = 0; k < 200; k++) {
                     if (_localNPCImmunity[k] > 0) {
                         _localNPCImmunity[k]--;
@@ -116,11 +137,12 @@ sealed class FlederForm : BaseForm {
                             //Player.velocity.X = -num3 * 9;
                             //Player.velocity.Y = -4f;
                             Player.velocity *= 0.9f;
-                            Player.GiveImmuneTimeForCollisionAttack(4);
+                            //Player.GiveImmuneTimeForCollisionAttack(20);
                             _localNPCImmunity[i] = 10;
-                            //Player.immune = true;
-                            //Player.immuneTime = 10;
-                            //Player.immuneNoBlink = true;
+                            Player.immune = true;
+                            Player.immuneTime = 10;
+                            Player.immuneNoBlink = true;
+                            Player.GetModPlayer<WreathHandler>().IncreaseResourceValue(0.1f);
                         }
                     }
                 }
@@ -128,6 +150,26 @@ sealed class FlederForm : BaseForm {
                 //    Player.velocity.X *= 0.95f;
                 //}
                 _dashTimer--;
+            }
+        }
+        
+        private void SpawnDusts() {
+            Vector2 vector11 = Player.Center;
+            for (int k = 0; k < 40; k++) {
+                if (Main.rand.NextChance(0.75f)) {
+                    int num23 = 59;
+                    float num24 = 0.4f;
+                    if (k % 2 == 1) {
+                        num24 = 0.65f;
+                    }
+                    num24 *= 3f;
+
+                    Vector2 vector12 = vector11 + ((float)Main.rand.NextDouble() * ((float)Math.PI * 2f)).ToRotationVector2() * (12f - (float)(3 * 2));
+                    int num25 = Dust.NewDust(vector12 - Vector2.One * 30f, 60, 60, num23, Player.velocity.X / 2f, Player.velocity.Y / 2f);
+                    Main.dust[num25].velocity = Vector2.Normalize(vector11 - vector12) * 1.5f * (10f - (float)3f * 2f) / 10f;
+                    Main.dust[num25].noGravity = true;
+                    Main.dust[num25].scale = num24;
+                }
             }
         }
 
@@ -184,7 +226,7 @@ sealed class FlederForm : BaseForm {
                 player.velocity.X += acceleration;
             }
         }
-        if (player.GetModPlayer<FlederFormDashHandler>().ActiveDash) {
+        if (player.GetModPlayer<FlederFormHandler>().ActiveDash) {
             player.fullRotation = Utils.AngleLerp(player.fullRotation, fullRotation, 0.25f);
         }
         else {
@@ -193,6 +235,75 @@ sealed class FlederForm : BaseForm {
         player.gravity *= 0.75f;
         player.velocity.Y = Math.Min(5f, player.velocity.Y);
         player.fullRotationOrigin = new Vector2(player.width / 2 + 4f * player.direction, player.height / 2 - 6f);
+
+        SpecialAttackHandler(player);
+    }
+
+    private void SpecialAttackHandler(Player player) {
+        if (Main.mouseText)
+            return;
+
+        ref int shootCounter = ref player.GetModPlayer<FlederFormHandler>()._shootCounter;
+        if (Main.mouseLeft) {
+            shootCounter++;
+
+            bool flag = shootCounter >= 100;
+            int num20 = 1;
+            if (shootCounter >= 40f)
+                num20++;
+            if (shootCounter >= 70f)
+                num20++;
+            if (flag)
+                num20++;
+
+            Vector2 vector11 = player.Center + Vector2.UnitY * (IsFlying(player) ? 7f : 12f);
+            for (int k = 0; k < num20; k++) {
+                if (Main.rand.NextChance(0.9f - 0.1f * (num20 - 1))) {
+                    int num23 = 59;
+                    float num24 = 0.4f;
+                    if (k % 2 == 1) {
+                        num24 = 0.65f;
+                    }
+                    num24 *= 2.25f;
+
+                    Vector2 vector12 = vector11 + ((float)Main.rand.NextDouble() * ((float)Math.PI * 2f)).ToRotationVector2() * (12f - (float)(num20 * 2));
+                    int num25 = Dust.NewDust(vector12 - Vector2.One * 20f, 40, 40, num23, player.velocity.X / 2f, player.velocity.Y / 2f);
+                    if (Vector2.Distance(Main.dust[num25].position, vector11) > 16f) {
+                        Main.dust[num25].active = false;
+                        continue;
+                    }
+                    Main.dust[num25].velocity = Vector2.Normalize(vector11 - vector12) * 1.5f * (10f - (float)num20 * 2f) / 10f;
+                    Main.dust[num25].noGravity = true;
+                    Main.dust[num25].scale = num24;
+                }
+            }
+        }
+        string context = "flederformattack";
+        int baseDamage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(10);
+        if (Main.mouseLeftRelease) {
+            if (shootCounter >= 40 && shootCounter < 70) {
+                Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);
+                Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 3, ModContent.ProjectileType<FlederBomb>(), baseDamage, 3f, player.whoAmI, 0f, 0f);
+                player.velocity.Y = 0f;
+                player.velocity.Y -= 5f;
+            }
+            if (shootCounter >= 70 && shootCounter < 100) {
+                Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);
+                Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 5, ModContent.ProjectileType<FlederBomb>(), baseDamage * 2, 3.6f, player.whoAmI, 1f, 0f);
+                player.velocity.Y = 0f;
+                player.velocity.Y -= 7.5f;
+            }
+            if (shootCounter >= 100) {
+                Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);
+                Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 8, ModContent.ProjectileType<FlederBomb>(), baseDamage * 3, 4.15f, player.whoAmI, 2f, 0f);
+                player.velocity.Y = 0f;
+                player.velocity.Y -= 10f;
+            }
+            shootCounter = 0;
+        }
+        if (shootCounter == 40 || shootCounter == 70 || shootCounter == 100) {
+            SoundEngine.PlaySound(SoundID.MaxMana, player.position);
+        }
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {

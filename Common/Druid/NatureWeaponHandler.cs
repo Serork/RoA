@@ -20,7 +20,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
     public override bool InstancePerEntity => true;
 
-    public float GetFillingRate(Player player) => _fillingRate * player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier;
+    public float GetFillingRate(Player player) => _fillingRate;
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
     public bool HasPotentialUseSpeed() => _basePotentialUseSpeed > 0;
 

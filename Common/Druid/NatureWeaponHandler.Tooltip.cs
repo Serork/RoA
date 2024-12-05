@@ -98,7 +98,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             }
             int knockbackIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Knockback"));
             tag = "FillingRate";
-            int fillingRate = (int)(GetFillingRate(Main.LocalPlayer) * 100);
+            int fillingRate = (int)(GetFillingRate(Main.LocalPlayer) * Main.LocalPlayer.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier * 100);
             byte tooltipValue = (byte)Math.Clamp(fillingRate / 20, 1, 7); 
             tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.FillingRate{tooltipValue}").Value;
             tooltips.Insert(knockbackIndex + 1, new(Mod, tag, tooltip));

@@ -13,6 +13,18 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly;
 
+abstract class FormProjectile : NatureProjectile {
+    protected virtual float FormWreathPointsFine { get; }
+
+    protected sealed override void SafeOnSpawn(IEntitySource source) {
+        WreathPointsFine = FormWreathPointsFine;
+
+        SafeOnSpawn2(source);
+    }
+
+    protected virtual void SafeOnSpawn2(IEntitySource source) { }
+}
+
 abstract class NatureProjectile : ModProjectile {
     private float _wreathPointsFine;
 
@@ -22,7 +34,7 @@ abstract class NatureProjectile : ModProjectile {
 
     public float WreathPointsFine {
         get => _wreathPointsFine;
-        private set {
+        protected set {
             _wreathPointsFine = Math.Clamp(value, -1f, 1f);
         }
     }
@@ -42,12 +54,16 @@ abstract class NatureProjectile : ModProjectile {
 
     public static int CreateNatureProjectile(IEntitySource spawnSource, Item item, float X, float Y, float SpeedX, float SpeedY, int Type, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f) {
         int projectile = Projectile.NewProjectile(spawnSource, X, Y, SpeedX, SpeedY, Type, Damage, KnockBack, Owner, ai0, ai1, ai2);
-        Main.projectile[projectile].As<NatureProjectile>().SetItem(item);
+        if (Main.projectile[projectile].ModProjectile is not FormProjectile) {
+            Main.projectile[projectile].As<NatureProjectile>().SetItem(item);
+        }
         return projectile;
     }
 
     public sealed override void OnSpawn(IEntitySource source) {
-        SetItem(Projectile.GetOwnerAsPlayer().GetSelectedItem());
+        if (this is not FormProjectile) {
+            SetItem(Projectile.GetOwnerAsPlayer().GetSelectedItem());
+        }
         SafeOnSpawn(source);
     }
 

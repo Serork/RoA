@@ -15,21 +15,21 @@ sealed class DruidStats : ModPlayer {
     public float DruidBaseDamageMultiplier {
         get => _druidBaseDamageMultiplier;
         set {
-            _druidBaseDamageMultiplier = MathHelper.Clamp(value, 0f, 2f);
+            _druidBaseDamageMultiplier = MathHelper.Clamp(value, 0f, 3f);
         }
     }
 
     public float DruidPotentialDamageMultiplier {
         get => _druidPotentialDamageMultiplier;
         set {
-            _druidPotentialDamageMultiplier = MathHelper.Clamp(value, 0f, 2f);
+            _druidPotentialDamageMultiplier = MathHelper.Clamp(value, 0f, 3f);
         }
     }
 
     public float DruidDamageExtraIncreaseValueMultiplier {
         get => _druidDamageExtraIncreaseValueMultiplier;
         set {
-            _druidDamageExtraIncreaseValueMultiplier = MathHelper.Clamp(value, 0f, 2f);
+            _druidDamageExtraIncreaseValueMultiplier = MathHelper.Clamp(value, 0f, 3f);
         }
     }
 

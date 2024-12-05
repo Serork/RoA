@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Claws;
+using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.Items;
@@ -106,7 +107,7 @@ sealed class WreathHandler : ModPlayer {
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
 
-    public bool ShouldDraw => !IsEmpty || Player.IsHoldingNatureWeapon();
+    public bool ShouldDrawItself => !IsEmpty || Player.IsHoldingNatureWeapon() || Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm;
     public float PulseIntensity { get; private set; }
 
     public bool HasKeepTime => _keepBonusesForTime > 0f;
@@ -298,7 +299,7 @@ sealed class WreathHandler : ModPlayer {
         ChangingHandler();
     }
 
-    private void IncreaseResourceValue(float fine = 0f) {
+    public void IncreaseResourceValue(float fine = 0f) {
         if (_shouldDecrease2) {
             _shouldDecrease = _shouldDecrease2 = false;
         }
@@ -316,7 +317,7 @@ sealed class WreathHandler : ModPlayer {
 
         _stayTime = STAYTIMEMAX;
         ChangeItsValue();
-        _increaseValue = GetIncreaseValue(fine);
+        _increaseValue = (ushort)(GetIncreaseValue(fine) * Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier);
     }
 
     private ushort GetIncreaseValue(float fine) => (ushort)(AddResourceValue() - AddResourceValue() * fine);

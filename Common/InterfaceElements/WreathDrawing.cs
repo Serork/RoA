@@ -42,14 +42,15 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
 
     protected override bool DrawSelf() {
         Vector2 playerPosition = Utils.Floor(Player.Top + Vector2.UnitY * Player.gfxOffY);
-        playerPosition.Y -= 15f;
+        playerPosition.Y -= Player.fullRotationOrigin.Y;
+        playerPosition.Y -= 12f;
         Vector2 position;
         bool breathUI = Player.breath < Player.breathMax || Player.lavaTime < Player.lavaMax;
         float offsetX = -_wreathSpriteData.FrameWidth / 2f + 2, offsetY = _wreathSpriteData.FrameHeight;
         playerPosition.X += offsetX;
         playerPosition.Y += breathUI ? (float)(-(float)offsetY * ((Player.breathMax - 1) / 200 + 1)) : -offsetY;
 
-        if (Player.dead || Player.ghost || Player.ShouldNotDraw || !Stats.ShouldDraw) {
+        if (Player.dead || Player.ghost || Player.ShouldNotDraw || !Stats.ShouldDrawItself) {
             _oldPosition = playerPosition;
 
             return true;
