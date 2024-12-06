@@ -1220,21 +1220,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
-            num1047 += _random.Next(-1, 2);
-            if (num1047 < 0)
-                num1047 = 0;
-            if (num1047 > 10)
-                num1047 = 10;
-            int min = (int)(y - EdgeY);
-            for (int num1049 = min + num1047; num1049 < y + 10; num1049++) {
-                if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15) {
-                    if (Main.tile[num1048, num1049].WallType == _grassWallType || Main.tile[num1048, num1049].WallType == _flowerGrassWallType) {
-                        Main.tile[num1048, num1049].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
-                    }
-                }
-            }
-        }
+        //for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
+        //    num1047 += _random.Next(-1, 2);
+        //    if (num1047 < 0)
+        //        num1047 = 0;
+        //    if (num1047 > 10)
+        //        num1047 = 10;
+        //    int min = (int)(y - EdgeY);
+        //    for (int num1049 = min + num1047; num1049 < y + num1047; num1049++) {
+        //        if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15) {
+        //            if (Main.tile[num1048, num1049].WallType == _grassWallType || Main.tile[num1048, num1049].WallType == _flowerGrassWallType) {
+        //                Main.tile[num1048, num1049].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     private void Step13_GrowBigTrees() {

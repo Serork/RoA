@@ -12,6 +12,7 @@ using Steamworks;
 using System.Text;
 using RoA.Utilities;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace RoA.Common.Druid.Forms;
 sealed class BaseFormHandler : ModPlayer {
@@ -136,7 +137,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public override void PostUpdate() {
-        if (IsInDruidicForm) {
+        if (IsInDruidicForm && Player.inventory.FirstOrDefault(x => x.type == Player.cursorItemIconID) != null) {
             Player.cursorItemIconEnabled = false;
             Player.cursorItemIconID = 0;
         }
