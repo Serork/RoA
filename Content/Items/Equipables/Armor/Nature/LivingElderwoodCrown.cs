@@ -4,6 +4,7 @@ using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
 using RoA.Content.Forms;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -48,7 +49,7 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-		if (direction == IDoubleTap.TapDirection.Down) {
+		if (player.HasSetBonusFrom<LivingElderwoodCrown>() && direction == IDoubleTap.TapDirection.Down) {
 			BaseFormHandler.ToggleForm<FlederForm>(player);
 		}
     }

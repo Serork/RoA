@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 using Terraria;
+using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
@@ -17,6 +18,16 @@ static class PlayerExtensions {
         newArray[0] = time;
         Array.Copy(self.buffTime, 0, newArray, 1, self.buffTime.Length);
         self.buffTime = newArray;
+    }
+
+    public static bool HasSetBonusFrom<T>(this Player player) where T : ModItem {
+        ModItem item = ItemLoader.GetItem(ModContent.ItemType<T>());
+        if (item == null) {
+            return false;
+        }
+
+        bool result = item.IsArmorSet(player.armor[0], player.armor[1], player.armor[2]);
+        return result;
     }
 
     public static Vector2 PlayerMovementOffset(this Player player) {

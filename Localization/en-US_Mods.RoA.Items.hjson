@@ -444,3 +444,33 @@ LivingElderwoodGreaves: {
 	DisplayName: Living Elderwood Greaves
 	Tooltip: ""
 }
+
+DreadheartCorruptionChestplate: {
+	DisplayName: Dreadheart Corruption Chestplate
+	Tooltip: ""
+}
+
+DreadheartCorruptionHelmet: {
+	DisplayName: Dreadheart Corruption Helmet
+	Tooltip: ""
+}
+
+DreadheartCorruptionLeggings: {
+	DisplayName: Dreadheart Corruption Leggings
+	Tooltip: ""
+}
+
+DreadheartCrimsonChestplate: {
+	DisplayName: Dreadheart Crimson Chestplate
+	Tooltip: ""
+}
+
+DreadheartCrimsonHelmet: {
+	DisplayName: Dreadheart Crimson Helmet
+	Tooltip: ""
+}
+
+DreadheartCrimsonLeggings: {
+	DisplayName: Dreadheart Crimson Leggings
+	Tooltip: ""
+}

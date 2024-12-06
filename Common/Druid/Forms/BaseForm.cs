@@ -74,7 +74,7 @@ abstract class BaseForm : ModMount {
     }
 
     private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (self.GetModPlayer<BaseFormHandler>().UsePlayerSpeed && self.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
             self.maxRunSpeed = _playerMovementSpeedInfo.MaxRunSpeed * GetMaxSpeedMultiplier(self);
             self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed * GetAccRunSpeedMultiplier(self);
             self.runAcceleration = _playerMovementSpeedInfo.RunAcceleration * GetRunAccelerationMultiplier(self);
@@ -86,16 +86,29 @@ abstract class BaseForm : ModMount {
     protected virtual float GetAccRunSpeedMultiplier(Player player) => 1f;
     protected virtual float GetRunAccelerationMultiplier(Player player) => 1f;
 
+    protected static bool IsFlying(Player player) {
+        bool flag = false;
+        for (int i = -1; i < 2; i++) {
+            if (WorldGenHelper.SolidTile((int)(player.Center.X + i * 16f) / 16, (int)(player.Bottom.Y + 10f) / 16)) {
+                flag = true;
+                break;
+            }
+        }
+        bool onTile = Math.Abs(player.velocity.Y) < 1.25f && flag;
+        return !player.sliding && !onTile && player.gfxOffY == 0f;
+    }
+
     public sealed override void SetStaticDefaults() {
         MountData.buff = MountBuff.Type;
 
-        SafeSetDefaults();
-
-        MountData.playerYOffsets = Enumerable.Repeat(0, MountData.totalFrames).ToArray();
         MountData.xOffset = 0;
         MountData.bodyFrame = 0;
         MountData.yOffset = -10;
         MountData.playerHeadOffset = -10;
+
+        SafeSetDefaults();
+
+        MountData.playerYOffsets = Enumerable.Repeat(0, MountData.totalFrames).ToArray();
 
         MountData.frontTextureGlow = ModContent.Request<Texture2D>(Texture + "_Glow");
 
@@ -110,6 +123,7 @@ abstract class BaseForm : ModMount {
     protected virtual bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) => true;
     protected virtual void SafeSetMount(Player player, ref bool skipDust) { }
 
+    protected virtual Vector2 GetLightingPos(Player player) => Vector2.Zero;
     protected virtual Color LightingColor { get; } = Color.White;
 
     public sealed override void SetMount(Player player, ref bool skipDust) {
@@ -121,9 +135,6 @@ abstract class BaseForm : ModMount {
     }
 
     public sealed override void UpdateEffects(Player player) {
-        player.cursorItemIconEnabled = false;
-        player.cursorItemIconID = 0;
-
         MountData.buff = MountBuff.Type;
 
         SafeUpdateEffects(player);
@@ -136,10 +147,10 @@ abstract class BaseForm : ModMount {
 
         WreathHandler wreathHandler = player.GetModPlayer<WreathHandler>();
         float value = player.InModBiome<BackwoodsBiome>() ? 1f : wreathHandler.ActualProgress4;
-        Lighting.AddLight(player.Center, LightingColor.ToVector3() * value);
+        Lighting.AddLight(GetLightingPos(player) == Vector2.Zero ? player.Center : GetLightingPos(player), LightingColor.ToVector3() * value);
     }
 
-    private void SpawnRunDusts(Player player) {
+    private static void SpawnRunDusts(Player player) {
         float num = (player.accRunSpeed + player.maxRunSpeed) / 2f;
         if (player.controlLeft && player.velocity.X > 0f - player.maxRunSpeed) {
         }

@@ -39,6 +39,8 @@ sealed class BaseFormHandler : ModPlayer {
     public FormInfo CurrentForm => _currentForm;
     public bool IsInDruidicForm => CurrentForm != null;
 
+    public bool UsePlayerSpeed { get; internal set; }
+
     public string Serialize() => CurrentForm.BaseForm.GetType().FullName;
     public FormInfo Deserialize(string typeName) => _formsByType[Type.GetType(typeName)];
 
@@ -133,6 +135,8 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public override void ResetEffects() {
+        UsePlayerSpeed = false;
+
         ResetActiveForm();
     }
 

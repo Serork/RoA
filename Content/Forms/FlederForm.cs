@@ -19,7 +19,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
-    protected override Color LightingColor => new Color(0.3f, 0.6f, 1.2f) * 0.85f;
+    protected override Vector2 GetLightingPos(Player player) => player.Center;
+    protected override Color LightingColor => new(79, 124, 211);
 
     private class FlederFormHandler : ModPlayer, IDoubleTap {
         public const int CD = 50, DURATION = 35;
@@ -187,18 +188,6 @@ sealed class FlederForm : BaseForm {
         }
     }
 
-    private static bool IsFlying(Player player) {
-        bool flag = false;
-        for (int i = -1; i < 2; i++) {
-            if (WorldGenHelper.SolidTile((int)(player.Center.X + i * 16f) / 16, (int)(player.Bottom.Y + 10f) / 16)) {
-                flag = true;
-                break;
-            }
-        }
-        bool onTile = Math.Abs(player.velocity.Y) < 1.25f && flag;
-        return !player.sliding && !onTile && player.gfxOffY == 0f;
-    }
-
     protected override float GetMaxSpeedMultiplier(Player player) => 1f;
     protected override float GetRunAccelerationMultiplier(Player player) => 1.5f;
 
@@ -214,6 +203,8 @@ sealed class FlederForm : BaseForm {
     }
 
     protected override void SafeUpdateEffects(Player player) {
+        player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed = true;
+
         player.npcTypeNoAggro[ModContent.NPCType<Fleder>()] = true;
         player.npcTypeNoAggro[ModContent.NPCType<BabyFleder>()] = true;
         player.statDefense -= 6;

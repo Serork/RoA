@@ -104,3 +104,13 @@ FlederForm: {
 	DisplayName: Fleder Form
 	Description: Mods.RoA.Buffs.FlederForm.Description
 }
+
+CorruptionInsectForm: {
+	DisplayName: Corruption Insect Form
+	Description: Mods.RoA.Buffs.CorruptionInsectForm.Description
+}
+
+CrimsonInsectForm: {
+	DisplayName: Crimson Insect Form
+	Description: Mods.RoA.Buffs.CrimsonInsectForm.Description
+}
