@@ -36,7 +36,7 @@ abstract class InsectForm : BaseForm {
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         player.fullRotation = fullRotation;
         if (!IsFlying(player)) {
-            player.velocity.X *= 0.9f;
+            player.velocity.X *= 0.925f;
         }
         player.velocity.Y = Math.Min(5f, player.velocity.Y);
         player.fullRotationOrigin = new Vector2(player.width / 2 + 4f * player.direction, player.height / 2 - 10f);
