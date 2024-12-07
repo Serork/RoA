@@ -47,14 +47,14 @@ sealed class RodOfTheStream : Rod {
 
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
-        position -= newVelocity * 2f;
+        position -= newVelocity * 4.25f;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
             int amount = 2;
             for (int i = 0; i < 20; i++) {
-                Vector2 dustPosition = player.Center + velocity.SafeNormalize(Vector2.Zero) * 50f;
+                Vector2 dustPosition = player.Center + velocity.SafeNormalize(Vector2.Zero) * 52.5f;
                  dustPosition += new Vector2(0f + (player.direction == -1 ? 6f : 0f), 2f * player.direction).RotatedBy(velocity.ToRotation());
                 Vector2 direction = velocity;
                 int dust = Dust.NewDust(dustPosition - Vector2.One * 10, 20, 20, DustID.DungeonWater, direction.X * Main.rand.NextFloat(), direction.Y * Main.rand.NextFloat(), 100, default(Color), Main.rand.NextFloat(0.8f, 1.2f));
