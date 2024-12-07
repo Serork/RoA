@@ -213,9 +213,7 @@ sealed class RodOfTheCondor : ModItem {
                 Player.maxRunSpeed = 0f;
                 Player.pulley = false;
                 Player.gfxOffY = 0f;
-                if (_mousePosition.Y < Player.Center.Y) {
-                    Player.controlJump = true;
-                }
+                Player.controlJump = true;
                 Player.fallStart = (int)(Player.position.Y / 16f);
                 Player.ChangeDir(-(Player.position - _mousePosition).X.GetDirection());
                 Player.velocity += Helper.VelocityToPoint(Player.Center, _mousePosition, 1f * Ease.CircOut(_opacity));
