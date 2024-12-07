@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Core;
+using RoA.Core.Utility;
+
+using System;
+
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
-using Microsoft.Xna.Framework;
-using RoA.Core.Utility;
-using RoA.Core;
-using Terraria.DataStructures;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic.Forms;
 
 sealed class FlederBomb : FormProjectile {
     private bool initialize = false;
     private int bounceDirection;
-
-    protected override float FormWreathPointsFine => 0.1f;
 
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Acorn Bomb");

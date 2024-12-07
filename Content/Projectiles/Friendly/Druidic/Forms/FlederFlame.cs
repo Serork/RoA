@@ -5,8 +5,6 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Druidic.Forms;
 
 sealed class FlederFlame : FormProjectile {
-    protected override float FormWreathPointsFine => 0.05f;
-
     protected override void SafeSetDefaults() {
         Projectile.width = 14;
         Projectile.height = 14;

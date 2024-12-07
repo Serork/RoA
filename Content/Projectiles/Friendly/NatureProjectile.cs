@@ -14,12 +14,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly;
 
 abstract class FormProjectile : NatureProjectile {
-    protected virtual float FormWreathPointsFine { get; }
-
     protected sealed override void SafeOnSpawn(IEntitySource source) {
-        WreathPointsFine = FormWreathPointsFine;
-
         SafeOnSpawn2(source);
+
+        ShouldIncreaseWreathPoints = false;
     }
 
     protected virtual void SafeOnSpawn2(IEntitySource source) { }

@@ -27,7 +27,7 @@ sealed class FlederForm : BaseForm {
         public const float SPEED = 10f;
 
         private IDoubleTap.TapDirection _dashDirection;
-        private float _dashDelay, _dashTimer;
+        internal float _dashDelay, _dashTimer;
         private int[] _localNPCImmunity = new int[Main.npc.Length];
         internal int _shootCounter;
 
@@ -66,7 +66,7 @@ sealed class FlederForm : BaseForm {
                 _dashDirection = IDoubleTap.TapDirection.None;
                 _dashDelay = CD;
                 _dashTimer = DURATION;
-                SpawnDusts();
+                SpawnDusts(Player);
                 Player.velocity = newVelocity;
                 if (Player.velocity.Y == Player.gravity) {
                     Player.velocity.Y -= 5f;
@@ -148,7 +148,7 @@ sealed class FlederForm : BaseForm {
                             Player.immune = true;
                             Player.immuneTime = 10;
                             Player.immuneNoBlink = true;
-                            Player.GetModPlayer<WreathHandler>().IncreaseResourceValue(0.1f);
+                            //Player.GetModPlayer<WreathHandler>().IncreaseResourceValue(0.1f);
                         }
                     }
                 }
@@ -159,9 +159,9 @@ sealed class FlederForm : BaseForm {
             }
         }
         
-        private void SpawnDusts() {
-            Vector2 vector11 = Player.Center;
-            for (int k = 0; k < 40; k++) {
+        internal static void SpawnDusts(Player player, int strength = 3) {
+            Vector2 vector11 = player.Center;
+            for (int k = 0; k < 40 - 10 * (3 - strength); k++) {
                 if (Main.rand.NextChance(0.75f)) {
                     int num23 = 59;
                     float num24 = 0.4f;
@@ -171,7 +171,7 @@ sealed class FlederForm : BaseForm {
                     num24 *= 3f;
 
                     Vector2 vector12 = vector11 + ((float)Main.rand.NextDouble() * ((float)Math.PI * 2f)).ToRotationVector2() * (12f - (float)(3 * 2));
-                    int num25 = Dust.NewDust(vector12 - Vector2.One * 30f, 60, 60, num23, Player.velocity.X / 2f, Player.velocity.Y / 2f);
+                    int num25 = Dust.NewDust(vector12 - Vector2.One * 30f, 60, 60, num23, player.velocity.X / 2f, player.velocity.Y / 2f);
                     Main.dust[num25].velocity = Vector2.Normalize(vector11 - vector12) * 1.5f * (10f - (float)3f * 2f) / 10f;
                     Main.dust[num25].noGravity = true;
                     Main.dust[num25].scale = num24;
@@ -241,6 +241,10 @@ sealed class FlederForm : BaseForm {
         if (player.whoAmI != Main.myPlayer || Main.mouseText)
             return;
 
+        if (player.GetModPlayer<FlederFormHandler>()._dashDelay > FlederFormHandler.CD - 5) {
+            AttackCharge = 1.5f;
+        }
+
         ref int shootCounter = ref player.GetModPlayer<FlederFormHandler>()._shootCounter;
         if (Main.mouseLeft) {
             shootCounter++;
@@ -280,18 +284,24 @@ sealed class FlederForm : BaseForm {
         int baseDamage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(10);
         if (Main.mouseLeftRelease) {
             if (shootCounter >= 40 && shootCounter < 70) {
+                AttackCharge = 1.5f;
+                FlederFormHandler.SpawnDusts(player, 1);
                 Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);
                 Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 3, ModContent.ProjectileType<FlederBomb>(), baseDamage, 3f, player.whoAmI, 0f, 0f);
                 player.velocity.Y = 0f;
                 player.velocity.Y -= 5f;
             }
             if (shootCounter >= 70 && shootCounter < 100) {
+                AttackCharge = 1.5f;
+                FlederFormHandler.SpawnDusts(player, 2);
                 Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);
                 Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 5, ModContent.ProjectileType<FlederBomb>(), baseDamage * 2, 3.6f, player.whoAmI, 1f, 0f);
                 player.velocity.Y = 0f;
                 player.velocity.Y -= 7.5f;
             }
             if (shootCounter >= 100) {
+                AttackCharge = 1.5f;
+                FlederFormHandler.SpawnDusts(player);
                 Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);
                 Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 8, ModContent.ProjectileType<FlederBomb>(), baseDamage * 3, 4.15f, player.whoAmI, 2f, 0f);
                 player.velocity.Y = 0f;
