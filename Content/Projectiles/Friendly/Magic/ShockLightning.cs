@@ -227,15 +227,16 @@ sealed class ShockLightning : ModProjectile {
             Vector2 dest = pos - offset;
             offset = pos - _a;
             Vector2 source = pos - offset;
+            float thicknessScale = _thickness / _segmentTexture.Height();
             if (Main.rand.NextChance(0.05)) {
                 Dust dust = Dust.NewDustPerfect(source, ModContent.DustType<Electric>(), Utils.SafeNormalize(source.DirectionTo(dest), Vector2.Zero) * 7.5f * Main.rand.NextFloat(0.25f, 1f), 0, Color.White);
                 dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 dust.scale *= 0.4f + Main.rand.NextFloatRange(0.15f);
+                dust.scale *= thicknessScale * 2f;
                 dust.fadeIn = dust.scale + 0.1f;
                 dust.noGravity = true;
             }
             float rotation = (dest - source).ToRotation();
-            float thicknessScale = _thickness / _segmentTexture.Height();
             Vector2 capOrigin = new(_endTexture.Width(), _endTexture.Height() / 2f);
             Vector2 middleOrigin = new(0, _segmentTexture.Height() / 2f);
             Vector2 middleScale = new((dest - source).Length(), thicknessScale);
