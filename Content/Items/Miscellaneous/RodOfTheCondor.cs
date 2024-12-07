@@ -17,6 +17,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Utilities;
+using Terraria.Audio;
 
 namespace RoA.Content.Items.Miscellaneous;
 
@@ -64,7 +66,7 @@ sealed class RodOfTheCondor : ModItem {
     public override void MeleeEffects(Player player, Rectangle hitbox) {
     }
 
-    private void GetPointOnSwungItemPath(Player player, float spriteWidth, float spriteHeight, float normalizedPointOnPath, float itemScale, out Vector2 location, out Vector2 outwardDirection) {
+    private static void GetPointOnSwungItemPath(Player player, float spriteWidth, float spriteHeight, float normalizedPointOnPath, float itemScale, out Vector2 location, out Vector2 outwardDirection) {
         float num = (float)Math.Sqrt(spriteWidth * spriteWidth + spriteHeight * spriteHeight);
         float num2 = (float)(player.direction == 1).ToInt() * ((float)Math.PI / 2f);
         if (player.gravDir == -1f)
@@ -87,42 +89,40 @@ sealed class RodOfTheCondor : ModItem {
             Dust dust = Dust.NewDustPerfect(location, ModContent.DustType<CondorDust>(), vector * 4f, 255, default(Color), 1.2f);
             dust.noGravity = true;
             dust.noLightEmittence = true;
-            Main.NewText(123);
         }
 
         return base.UseItem(player);
     }
 
     internal class CondorWingsHandler : ModPlayer {
-        private const float MAXWINGSTIME = 3f;
-
         private bool _active;
-        private float _wingsTime;
+        private float _opacity;
+        private Vector2 _mousePosition;
+        internal int _wingFrameCounter, _wingFrame;
 
         public float Opacity {
             get {
-                float value = Utils.GetLerpValue(MAXWINGSTIME, AnimationBound, _wingsTime, true);
-                if (_wingsTime < 0f) {
-                    float wingsTime2 = Math.Abs(_wingsTime);
-                    float value3 = -AnimationBound;
-                    float value2 = -(1f - Utils.GetLerpValue(0f, value3, value3 - wingsTime2)) * 10f;
-                    value *= value2;
-                }
+                float value = _opacity;
+                //if (_opacity < 0f) {
+                //    float wingsTime2 = Math.Abs(_opacity);
+                //    float value3 = -AnimationBound;
+                //    float value2 = -(1f - Utils.GetLerpValue(0f, value3, value3 - wingsTime2)) * 10f;
+                //    value *= value2;
+                //}
                 float opacity = (float)Math.Pow(value, 0.5f);
                 return opacity;
             }
         }
 
-        public bool IsInUse => _wingsTime != 0f;
-        public bool IsActive => IsInUse || _active;
+        public bool IsActive => _active;
 
         private static int _wingsSlot = -1;
 
         private static string WingsTextureName => ResourceManager.ItemsTextures + $"{nameof(RodOfTheCondor)}_Wings";
         private static string WingsLayerName => $"{nameof(RodOfTheCondor)}_Wings";
 
-        private static float AnimationBound => MAXWINGSTIME - 0.15f;
-        private static float AnimationBound2 => -0.15f;
+        //private static float AnimationBound => MAXWINGSTIME - 0.15f;
+        //private static float AnimationBound2 => -0.15f;
 
         public override void PostUpdate() {
             if (IsActive) {
@@ -167,34 +167,66 @@ sealed class RodOfTheCondor : ModItem {
         }
 
         public override void PostUpdateRunSpeeds() {
-            if (_active && WorldGenHelper.SolidTile((int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16 + 1) && Player.wingTime < (int)(Player.wingTimeMax * 0.975f)) {
-                _active = false;
-                _wingsTime = AnimationBound2;
-            }
+            //if (_active && WorldGenHelper.SolidTile((int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16 + 1) && Player.wingTime < (int)(Player.wingTimeMax * 0.975f)) {
+            //    _active = false;
+            //    _wingsTime = AnimationBound2;
+            //}
 
-            if (_wingsTime > 0f) {
-                if (!_active && Player.velocity.Y < 0f && Player.controlJump) {
-                    _active = true;
-                }
-            }
+            //if (_wingsTime > 0f) {
+            //    if (!_active && Player.velocity.Y < 0f && Player.controlJump) {
+            //        _active = true;
+            //    }
+            //}
         }
 
         public override void PostUpdateEquips() {
-            if ((IsInUse && _active) || _wingsTime > AnimationBound) {
-                if (_wingsTime < TimeSystem.LogicDeltaTime) {
-                    _wingsTime = 0f;
-                }
-                else {
-                    _wingsTime -= TimeSystem.LogicDeltaTime;
+            if (!IsActive) {
+                if (_opacity > 0f) {
+                    _opacity -= TimeSystem.LogicDeltaTime * 2.5f;
                 }
             }
-            if (_wingsTime < 0f) {
-                if (_wingsTime >= -TimeSystem.LogicDeltaTime) {
-                    _wingsTime = 0f;
+            else {
+                if (_opacity < 1f) {
+                    _opacity += TimeSystem.LogicDeltaTime * 2.5f;
                 }
-                else {
-                    _wingsTime += TimeSystem.LogicDeltaTime;
+            }
+
+            if (!IsActive) {
+                return;
+            }
+            if (Player.ItemAnimationActive) {
+                int num27 = 4;
+                int num28 = 4;
+                int num29 = 0;
+                _wingFrameCounter++;
+                if (_wingFrameCounter > num27) {
+                    _wingFrame++;
+                    _wingFrameCounter = 0;
+                    if (_wingFrame >= num28)
+                        _wingFrame = num29;
                 }
+                Player.suffocating = false;
+                Player.suffocateDelay = 0;
+                Player.jump = 0;
+                Player.runAcceleration = 0f;
+                Player.runSlowdown = 0f;
+                Player.maxRunSpeed = 0f;
+                Player.pulley = false;
+                Player.gfxOffY = 0f;
+                if (_mousePosition.Y < Player.Center.Y) {
+                    Player.controlJump = true;
+                }
+                Player.fallStart = (int)(Player.position.Y / 16f);
+                Player.ChangeDir(-(Player.position - _mousePosition).X.GetDirection());
+                Player.velocity += Helper.VelocityToPoint(Player.Center, _mousePosition, 1f * Ease.CircOut(_opacity));
+                float max = 7.5f;
+                Player.velocity.X = MathHelper.Clamp(Player.velocity.X, -max, max);
+                max = 10f;
+                Player.velocity.Y = MathHelper.Clamp(Player.velocity.Y, -max, max);
+            }
+            else {
+                _active = false;
+                _wingFrame = _wingFrameCounter = 0;
             }
 
             HandleCondorWings();
@@ -207,31 +239,35 @@ sealed class RodOfTheCondor : ModItem {
         public override void Load() => _wingsSlot = EquipLoader.AddEquipTexture(Mod, WingsTextureName, EquipType.Wings, name: WingsLayerName);
 
         public void ActivateCondor() {
-            _wingsTime = MAXWINGSTIME;
+             _active = true;
+            Player.velocity *= 0.8f;
+            //_wingsTime = MAXWINGSTIME;
             HandleCondorWings();
-            Player.wingTime = Player.wingTimeMax;
+            //Player.wingTime = Player.wingTimeMax;
+
+            if (Player.whoAmI == Main.myPlayer) {
+                _mousePosition = Player.GetViableMousePosition();
+            }
 
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new ItemAnimationPacket(Player, Player.GetSelectedItem().useAnimation));
-                MultiplayerSystem.SendPacket(new CondorPacket(Player, MAXWINGSTIME, true, -1, _wingsSlot, Player.GetWingStats(Player.wingsLogic).FlyTime));
+                MultiplayerSystem.SendPacket(new CondorPacket(Player, _active, _mousePosition));
             }
+
+            Player.velocity += Helper.VelocityToPoint(Player.Center, _mousePosition, 1f);
         }
 
-        internal void ReceivePacket(float wingsTime, bool noFallDmg, int wings, int wingsLogic, int wingTimeMax) {
-            _wingsTime = wingsTime;
-            Player.noFallDmg = noFallDmg;
-            Player.wings = wings;
-            Player.wingTimeMax = wingTimeMax;
-            Player.wingsLogic = wingsLogic;
-            Player.wingTime = Player.wingTimeMax;
+        internal void ReceivePacket(bool active, Vector2 mousePosition) {
+            _active = active;
+            _mousePosition = mousePosition;
         }
 
         private void HandleCondorWings() {
-            if (IsInUse || _active) {
+            if (_active) {
                 Player.noFallDmg = true;
                 Player.wings = -1;
                 Player.wingsLogic = _wingsSlot;
-                Player.wingTimeMax = Player.GetWingStats(Player.wingsLogic).FlyTime;
+                //Player.wingTimeMax = Player.GetWingStats(Player.wingsLogic).FlyTime;
             }
         }
 
@@ -283,7 +319,7 @@ sealed class RodOfTheCondor : ModItem {
                 Vector2 vector11 = new(-6f, -7f);
                 Texture2D value4 = _wingsTexture.Value;
                 Vector2 vec5 = vector + vector11 * directions;
-                Rectangle rectangle4 = value4.Frame(1, 4, 0, drawInfo.drawPlayer.velocity.Y == 0f ? 1 : drawInfo.drawPlayer.wingFrame);
+                Rectangle rectangle4 = value4.Frame(1, 4, 0, drawInfo.drawPlayer.GetModPlayer<CondorWingsHandler>()._wingFrame);
                 DrawData item = new(value4, vec5.Floor(), rectangle4, colorArmorBody3, drawInfo.drawPlayer.bodyRotation, rectangle4.Size() / 2f, 1f, drawInfo.playerEffect);
                 drawInfo.DrawDataCache.Add(item);
             }

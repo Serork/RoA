@@ -36,6 +36,7 @@ static class Ease {
 
     public static Easer QuintIn => value => value * value * value * value * value;
     public static Easer QuintOut => value => 1f - (float)Math.Pow(1.0 - (double)value, 5);
+    public static Easer QuintInOut => Follow(QuintIn, QuintOut);
 
     public static Easer TestIn => value => value * value * value * value * value * value * value;
 

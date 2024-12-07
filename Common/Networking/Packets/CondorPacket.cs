@@ -1,4 +1,6 @@
-﻿using RoA.Content.Buffs;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Content.Buffs;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
 
@@ -10,13 +12,10 @@ using Terraria.ID;
 namespace RoA.Common.Networking.Packets;
 
 sealed class CondorPacket : NetPacket {
-    public CondorPacket(Player player, float wingsTime, bool noFallDmg, int wings, int wingsLogic, int wingTimeMax) {
+    public CondorPacket(Player player, bool active, Vector2 mousePosition) {
         Writer.TryWriteSenderPlayer(player);
-        Writer.Write(wingsTime);
-        Writer.Write(noFallDmg);
-        Writer.Write(wings);
-        Writer.Write(wingsLogic);
-        Writer.Write(wingTimeMax);
+        Writer.Write(active);
+        Writer.WriteVector2(mousePosition);
     }
 
     public override void Read(BinaryReader reader, int sender) {
@@ -24,16 +23,13 @@ sealed class CondorPacket : NetPacket {
             return;
         }
 
-        float wingsTime = reader.ReadSingle();
-        bool noFallDmg = reader.ReadBoolean();
-        int wings = reader.ReadInt32();
-        int wingsLogic = reader.ReadInt32();
-        int wingTimeMax = reader.ReadInt32();
+        bool active = reader.ReadBoolean();
+        Vector2 mousePosition = reader.ReadVector2();
 
-        player.GetModPlayer<RodOfTheCondor.CondorWingsHandler>().ReceivePacket(wingsTime, noFallDmg, wings, wingsLogic, wingTimeMax);
+        player.GetModPlayer<RodOfTheCondor.CondorWingsHandler>().ReceivePacket(active, mousePosition);
 
         if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new CondorPacket(player, wingsTime, noFallDmg, wings, wingsLogic, wingTimeMax), ignoreClient: sender);
+            MultiplayerSystem.SendPacket(new CondorPacket(player, active, mousePosition), ignoreClient: sender);
         }
     }
 }

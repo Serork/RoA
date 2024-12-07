@@ -1,13 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Mono.Cecil;
-
 using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
 using RoA.Utilities;
+
 using System;
 
 using Terraria;
