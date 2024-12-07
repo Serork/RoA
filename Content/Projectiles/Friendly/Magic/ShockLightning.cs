@@ -140,6 +140,18 @@ sealed class ShockLightning : ModProjectile {
 
     public override bool ShouldUpdatePosition() => false;
 
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        Vector2 hitPoint = target.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * 2f;
+        Vector2 normal = (-Projectile.velocity).SafeNormalize(Vector2.UnitX);
+        Vector2 spinningpoint = Vector2.Reflect(Projectile.velocity, normal);
+        for (int i = 0; i < 4; i++) {
+            int num156 = ModContent.DustType<Electric>();
+            Dust dust = Dust.NewDustPerfect(hitPoint, num156, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 100, default, 0.5f + 0.3f * Main.rand.NextFloat());
+            Dust dust2 = Dust.CloneDust(dust);
+            dust2.color = Color.White;
+        }
+    }
+
     public override bool PreDraw(ref Color lightColor) {
         UpdateSegments();
 
