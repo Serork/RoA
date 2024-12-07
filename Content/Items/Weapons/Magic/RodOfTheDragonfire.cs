@@ -51,6 +51,26 @@ sealed class RodOfTheDragonfire : Rod {
             int amount = Main.rand.Next(2, 4);
             for (int i = -amount + 1; i < amount; i++) {
                 Vector2 vector2 = Utils.RotatedBy(velocity, (double)(i / 10f)) * Main.rand.NextFloat(0.75f, 1.35f);
+                Vector2 dustPosition = position;
+                dustPosition += new Vector2(12f + (player.direction == -1 ? 8f : 0f), -10f * player.direction).RotatedBy(velocity.ToRotation());
+                if (Main.rand.NextBool()) {
+                    Dust dust = Dust.NewDustDirect(dustPosition, 4, 4, 6, velocity.X, velocity.Y, 100);
+                    dust.scale = 0.2f;
+                    for (int i2 = 0; i2 < 3; i2++) {
+                        if (Main.rand.Next(4) == 0) {
+                            dust.noGravity = true;
+                            dust.scale *= 3f;
+                            dust.velocity.X *= 2f;
+                            dust.velocity.Y *= 2f;
+                        }
+                        else {
+                            dust.scale *= 1.5f;
+                        }
+                    }
+                    if (dust.scale < 1f) {
+                        dust.scale = 1f;
+                    }
+                }
                 Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI);
             }
         }
