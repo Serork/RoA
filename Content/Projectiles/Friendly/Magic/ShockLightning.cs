@@ -68,13 +68,14 @@ sealed class ShockLightning : ModProjectile {
         Player player = Main.player[Projectile.owner];
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
-            Vector2 pos = player.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * (player.direction == 1 ? 49f : 56f);
+            Vector2 source = Projectile.position + (new Vector2(player.direction == 1 ? 4f : 3f, 5f * player.direction)).RotatedBy(Projectile.velocity.ToRotation());
+            Vector2 pos = source;
             for (int num155 = 0; num155 < 8; num155++) {
                 int num156 = ModContent.DustType<Electric>();
                 Dust obj7 = Main.dust[Dust.NewDust(pos, 0, 0, num156, Projectile.velocity.X, Projectile.velocity.Y, 100)];
                 obj7.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f * Main.rand.NextFloat() + Projectile.velocity.SafeNormalize(Vector2.Zero) * (2f + Main.rand.NextFloat());
                 obj7.noGravity = true;
-                obj7.scale *= 0.85f;
+                obj7.scale *= 0.75f;
                 obj7.scale *= 0.4f + Main.rand.NextFloatRange(0.15f);
                 obj7.fadeIn = obj7.scale + 0.1f;
             }
