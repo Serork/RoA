@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Mono.Cecil;
 
+using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
@@ -26,6 +27,16 @@ abstract class InsectForm : BaseForm {
     private class InsectFormHandler : ModPlayer {
         internal bool? _facedRight;
         internal int _shootCounter, _insectTimer;
+        internal float _directionChangedFor;
+
+        public override void PostUpdate() {
+            if (_directionChangedFor > 0f) {
+                _directionChangedFor -= TimeSystem.LogicDeltaTime;
+                if (Player.controlLeft || Player.controlRight || Player.controlJump) {
+                    _directionChangedFor = 0f;
+                }
+            }
+        }
     }
 
     protected sealed override void SafeSetDefaults() {
@@ -87,6 +98,7 @@ abstract class InsectForm : BaseForm {
         if (player.velocity.Y == 0f && player.velocity.X == 0f) {
             insectTimer++;
             if (insectTimer >= 90) {
+                AttackCharge = 1f;
                 SoundEngine.PlaySound(SoundID.NPCHit32, player.position);
                 for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
                     int insectDamage = 15;
@@ -102,9 +114,12 @@ abstract class InsectForm : BaseForm {
         else
             insectTimer = 0;
         if (!Main.mouseLeft) {
-            facedRight = null;
+            if (player.GetModPlayer<InsectFormHandler>()._directionChangedFor <= 0f) {
+                facedRight = null;
+            }
             return;
         }
+        player.GetModPlayer<InsectFormHandler>()._directionChangedFor = 1f;
         facedRight = (Main.MouseWorld.X > player.position.X ? 1 : -1) == 1;
         ref int shootCounter = ref player.GetModPlayer<InsectFormHandler>()._shootCounter;
         if (!Main.mouseText) {
