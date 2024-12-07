@@ -61,11 +61,33 @@ sealed class RodOfTheCondor : ModItem {
         }
     }
 
+    public override void MeleeEffects(Player player, Rectangle hitbox) {
+    }
+
+    private void GetPointOnSwungItemPath(Player player, float spriteWidth, float spriteHeight, float normalizedPointOnPath, float itemScale, out Vector2 location, out Vector2 outwardDirection) {
+        float num = (float)Math.Sqrt(spriteWidth * spriteWidth + spriteHeight * spriteHeight);
+        float num2 = (float)(player.direction == 1).ToInt() * ((float)Math.PI / 2f);
+        if (player.gravDir == -1f)
+            num2 += (float)Math.PI / 2f * (float)player.direction;
+
+        outwardDirection = player.itemRotation.ToRotationVector2().RotatedBy(3.926991f + num2);
+        location = player.RotatedRelativePoint(player.itemLocation + outwardDirection * num * normalizedPointOnPath * itemScale);
+    }
+
     public override bool CanUseItem(Player player) => player.whoAmI == Main.myPlayer && !GetHandler(player).IsActive;
 
     public override bool? UseItem(Player player) {
         if (player.ItemAnimationJustStarted) {
             GetHandler(player).ActivateCondor();
+        }
+
+        for (int i = 0; i < 2; i++) {
+            GetPointOnSwungItemPath(player, 50f, 50f, 0.55f + 0.4f * Main.rand.NextFloat(), 1f, out var location, out var outwardDirection);
+            Vector2 vector = outwardDirection.RotatedBy((float)Math.PI / 2f * (float)player.direction * player.gravDir);
+            Dust dust = Dust.NewDustPerfect(location, ModContent.DustType<CondorDust>(), vector * 4f, 255, default(Color), 1.2f);
+            dust.noGravity = true;
+            dust.noLightEmittence = true;
+            Main.NewText(123);
         }
 
         return base.UseItem(player);
