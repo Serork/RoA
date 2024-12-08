@@ -107,8 +107,8 @@ sealed class EvilBranch : NatureProjectile {
         }
     }
 
-    internal static void GetPos(Player player, out Point point, out Point point2, bool random = true) {
-        Vector2 targetSpot = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
+    internal static void GetPos(Player player, out Point point, out Point point2, bool random = true, float maxDistance = 400f) {
+        Vector2 targetSpot = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), maxDistance);
         Vector2 center = player.Center;
         Vector2 endPoint = targetSpot;
         int samplesToTake = 3;

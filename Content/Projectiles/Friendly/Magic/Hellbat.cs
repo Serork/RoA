@@ -103,11 +103,11 @@ sealed class Hellbat : ModProjectile {
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
-		if (Projectile.wet || target.wet) {
-			modifiers.FinalDamage /= 2;
-		}
-		if (Main.player[Projectile.owner].position.Y > (Main.maxTilesY - 200) * 16) {
-			modifiers.FinalDamage *= 1.5f;
-		}
+		//if (Projectile.wet || target.wet) {
+		//	modifiers.FinalDamage /= 2;
+		//}
+		//if (Main.player[Projectile.owner].position.Y > (Main.maxTilesY - 200) * 16) {
+		//	modifiers.FinalDamage *= 1.5f;
+		//}
 	}
 }

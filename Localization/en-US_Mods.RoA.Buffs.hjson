@@ -114,3 +114,8 @@ CrimsonInsectForm: {
 	DisplayName: Crimson Insect Form
 	Description: Mods.RoA.Buffs.CrimsonInsectForm.Description
 }
+
+Burning: {
+	DisplayName: Burning
+	Description: Mods.RoA.Buffs.Burning.Description
+}
