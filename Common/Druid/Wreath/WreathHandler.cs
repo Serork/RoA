@@ -206,7 +206,10 @@ sealed class WreathHandler : ModPlayer {
         else {
             BaseRodProjectile? rodProjectile = null;
             foreach (Projectile projectile in Main.ActiveProjectiles) {
-                if (projectile.owner == Player.whoAmI && projectile.ModProjectile is BaseRodProjectile baseRodProjectile) {
+                if (projectile.owner != Player.whoAmI) {
+                    continue;
+                }
+                if (projectile.ModProjectile is BaseRodProjectile baseRodProjectile) {
                     rodProjectile = baseRodProjectile;
                     break;
                 }

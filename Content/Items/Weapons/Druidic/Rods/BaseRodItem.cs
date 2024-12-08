@@ -320,7 +320,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (Owner.gravDir == -1) {
             armRotation = MathHelper.Pi - armRotation + MathHelper.PiOver2 * Owner.direction;
         }
-        Owner.SetCompositeBothArms(armRotation);
+        Owner.SetCompositeBothArms(armRotation, Player.CompositeArmStretchAmount.Full);
     }
 
     private void SetRotation() {

@@ -474,3 +474,8 @@ DreadheartCrimsonLeggings: {
 	DisplayName: Dreadheart Crimson Leggings
 	Tooltip: ""
 }
+
+TectonicCane: {
+	DisplayName: Tectonic Cane
+	Tooltip: ""
+}
