@@ -206,52 +206,8 @@ sealed class SacrificialSickle : NatureProjectile {
                 Projectile.rotation += 0.3f * MathHelper.Clamp(Projectile.ai[1] / 20f, 0f, 1f) * -Projectile.ai[2];
                 Projectile.ai[0] = 2f;
             }
-            //tileCollide = false;
             float num63 = 7f;
             float num64 = 0.2f;
-            //if (type == 1000)
-            //    num63 = 9.5f;
-
-            //if (type == 19) {
-            //    num63 = 20f;
-            //    num64 = 1.5f;
-            //}
-            //else if (type == 33) {
-            //    num63 = 18f;
-            //    num64 = 1.2f;
-            //}
-            //else if (type == 182) {
-            //    num63 = 16f;
-            //    num64 = 1.2f;
-            //}
-            //else if (type == 866) {
-            //    num63 = 16f;
-            //    num64 = 1.2f;
-            //}
-            //else if (type == 106) {
-            //    num63 = 16f;
-            //    num64 = 1.2f;
-            //}
-            //else if (type == 272) {
-            //    num63 = 20f;
-            //    num64 = 1.5f;
-            //}
-            //else if (type == 333) {
-            //    num63 = 12f;
-            //    num64 = 0.6f;
-            //}
-            //else if (type == 301) {
-            //    num63 = 15f;
-            //    num64 = 3f;
-            //}
-            //else if (type == 320) {
-            //    num63 = 15f;
-            //    num64 = 3f;
-            //}
-            //else if (type == 383) {
-            //    num63 = 16f;
-            //    num64 = 4f;
-            //}
 
             Vector2 vector6 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
             float num65 = Main.player[Projectile.owner].position.X + (float)(Main.player[Projectile.owner].width / 2) - vector6.X;
@@ -381,17 +337,6 @@ sealed class SacrificialSickle : NatureProjectile {
         return false;
     }
 
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        base.OnHitNPC(target, hit, damageDone);
-
-        Player player = Main.player[Projectile.owner];
-        if (Projectile.localAI[2] >= 35) {
-            player.HealEffect(3);
-            player.statLife += 3;
-        }
-    }
-
-    public override Color? GetAlpha(Color lightColor)
-     => new Color(255, 255, 200, 200) * (1f - Projectile.alpha / 255f);
+    public override Color? GetAlpha(Color lightColor) => new Color(255, 255, 200, 200) * (1f - Projectile.alpha / 255f);
 }
 
