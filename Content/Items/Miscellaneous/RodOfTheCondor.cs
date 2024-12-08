@@ -195,15 +195,17 @@ sealed class RodOfTheCondor : ModItem {
                 return;
             }
             if (Player.ItemAnimationActive) {
-                int num27 = 4;
-                int num28 = 4;
-                int num29 = 0;
-                _wingFrameCounter++;
-                if (_wingFrameCounter > num27) {
-                    _wingFrame++;
-                    _wingFrameCounter = 0;
-                    if (_wingFrame >= num28)
-                        _wingFrame = num29;
+                if (Player.velocity.Length() > 1f) {
+                    int num27 = 4;
+                    int num28 = 4;
+                    int num29 = 0;
+                    _wingFrameCounter++;
+                    if (_wingFrameCounter > num27) {
+                        _wingFrame++;
+                        _wingFrameCounter = 0;
+                        if (_wingFrame >= num28)
+                            _wingFrame = num29;
+                    }
                 }
                 Player.suffocating = false;
                 Player.suffocateDelay = 0;

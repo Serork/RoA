@@ -71,13 +71,15 @@ sealed class ShockLightning : ModProjectile {
             Vector2 source = Projectile.position + (new Vector2(player.direction == 1 ? 4f : 3f, 5f * player.direction)).RotatedBy(Projectile.velocity.ToRotation());
             Vector2 pos = source;
             for (int num155 = 0; num155 < 8; num155++) {
-                int num156 = ModContent.DustType<Electric>();
-                Dust obj7 = Main.dust[Dust.NewDust(pos, 0, 0, num156, Projectile.velocity.X, Projectile.velocity.Y, 100)];
-                obj7.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f * Main.rand.NextFloat() + Projectile.velocity.SafeNormalize(Vector2.Zero) * (2f + Main.rand.NextFloat());
-                obj7.noGravity = true;
-                obj7.scale *= 0.8f;
-                obj7.scale *= 0.4f + Main.rand.NextFloatRange(0.15f);
-                obj7.fadeIn = obj7.scale + 0.1f;
+                if (Main.rand.NextBool()) {
+                    int num156 = ModContent.DustType<Electric>();
+                    Dust obj7 = Main.dust[Dust.NewDust(pos, 0, 0, num156, Projectile.velocity.X, Projectile.velocity.Y, 100)];
+                    obj7.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f * Main.rand.NextFloat() + Projectile.velocity.SafeNormalize(Vector2.Zero) * (2f + Main.rand.NextFloat());
+                    obj7.noGravity = true;
+                    obj7.scale *= 0.8f;
+                    obj7.scale *= 0.5f + Main.rand.NextFloatRange(0.15f);
+                    obj7.fadeIn = obj7.scale + 0.1f;
+                }
             }
         }
 
@@ -145,9 +147,12 @@ sealed class ShockLightning : ModProjectile {
         Vector2 hitPoint = target.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * 2f;
         Vector2 normal = (-Projectile.velocity).SafeNormalize(Vector2.UnitX);
         Vector2 spinningpoint = Vector2.Reflect(Projectile.velocity, normal);
+        float scale = 2.5f - Vector2.Distance(target.Center, Projectile.position) * 0.01f;
+        scale = MathHelper.Clamp(scale, 0.75f, 1.15f);
         for (int i = 0; i < 4; i++) {
             int num156 = ModContent.DustType<Electric>();
             Dust dust = Dust.NewDustPerfect(hitPoint, num156, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 100, default, 0.5f + 0.3f * Main.rand.NextFloat());
+            dust.scale *= scale;
             Dust dust2 = Dust.CloneDust(dust);
             dust2.color = Color.White;
         }
