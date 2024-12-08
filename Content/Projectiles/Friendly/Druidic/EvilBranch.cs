@@ -107,9 +107,8 @@ sealed class EvilBranch : NatureProjectile {
         }
     }
 
-    internal static void GetPos(Player player, out Point point, out Point point2) {
+    internal static void GetPos(Player player, out Point point, out Point point2, bool random = true) {
         Vector2 targetSpot = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
-        point = targetSpot.ToTileCoordinates();
         Vector2 center = player.Center;
         Vector2 endPoint = targetSpot;
         int samplesToTake = 3;
@@ -124,8 +123,10 @@ sealed class EvilBranch : NatureProjectile {
         targetSpot = center + vectorTowardsTarget.SafeNormalize(Vector2.Zero) * num;
         point = targetSpot.ToTileCoordinates();
         point2 = point;
-        if (Main.rand.NextChance(0.75)) {
-            point2.X += Main.rand.Next(-2, 3);
+        if (random) {
+            if (Main.rand.NextChance(0.75)) {
+                point2.X += Main.rand.Next(-2, 3);
+            }
         }
         while (!WorldGen.SolidTile(point2)) {
             if (TileID.Sets.Platforms[WorldGenHelper.GetTileSafely(point2.X, point2.Y).TileType]) {
@@ -141,7 +142,7 @@ sealed class EvilBranch : NatureProjectile {
             return;
         }
 
-        Projectile.direction = Main.rand.NextBool().ToDirectionInt();
+        Projectile.spriteDirection = Main.rand.NextBool().ToDirectionInt();
 
         _scale.X = 1.6f;
         _scale.Y = 0.4f;
@@ -165,11 +166,13 @@ sealed class EvilBranch : NatureProjectile {
         foreach (LeafInfo leafInfo in _leavesInfo) {
             Vector2 leafPosition = leafInfo.Position;
             int direction = leafInfo.FacedRight.ToDirectionInt();
-            leafPosition.X = 42f - leafPosition.X;
-            direction *= -Projectile.direction;
-            if (Projectile.direction == -1) {
-                direction *= -1;
+            if (Projectile.spriteDirection == 1) {
+                leafPosition.X = 42f - leafPosition.X;
             }
+            direction *= -Projectile.spriteDirection;
+            //if (Projectile.spriteDirection == -1) {
+            //    direction *= -1;
+            //}
             Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
             int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]), Projectile.knockBack, Projectile.owner, direction, Projectile.identity);
             Main.projectile[projectile].As<EvilLeaf>().SetUpPositionOnTwig(leafTwigPosition);
@@ -207,7 +210,7 @@ sealed class EvilBranch : NatureProjectile {
                 position.Y += sourceRectangle.Height * (1f - _scale.Y);
             }
             position.Y += 2;
-            SpriteEffects spriteEffects = (SpriteEffects)(Projectile.direction == 1).ToInt();
+            SpriteEffects spriteEffects = (SpriteEffects)(Projectile.spriteDirection == 1).ToInt();
             Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, sourceRectangle.BottomCenter(), _scale, spriteEffects);
         }
         Color drawColor = Lighting.GetColor((Projectile.Center - Vector2.UnitY * 20f).ToTileCoordinates());
