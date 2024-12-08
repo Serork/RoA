@@ -95,19 +95,21 @@ abstract class InsectForm : BaseForm {
         string context = "insectformattack";
         IEntitySource source = player.GetSource_Misc(context);
         if (player.velocity.Y == 0f && player.velocity.X == 0f) {
-            insectTimer++;
-            if (insectTimer >= 90) {
-                AttackCharge = 1f;
-                SoundEngine.PlaySound(SoundID.NPCHit32, player.position);
-                for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
-                    int insectDamage = 15;
-                    float insectKnockback = 3f;
-                    int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
-                    insectKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
-                    Vector2 spread = new Vector2(0, Main.rand.Next(-5, -2)).RotatedByRandom(MathHelper.ToRadians(90));
-                    Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + 4), new Vector2(spread.X, spread.Y), InsectProjectileType, damage, insectKnockback, player.whoAmI);
+            if (!player.wet) {
+                insectTimer++;
+                if (insectTimer >= 90) {
+                    AttackCharge = 1f;
+                    SoundEngine.PlaySound(SoundID.NPCHit32, player.position);
+                    for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
+                        int insectDamage = 15;
+                        float insectKnockback = 3f;
+                        int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
+                        insectKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
+                        Vector2 spread = new Vector2(0, Main.rand.Next(-5, -2)).RotatedByRandom(MathHelper.ToRadians(90));
+                        Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + 4), new Vector2(spread.X, spread.Y), InsectProjectileType, damage, insectKnockback, player.whoAmI);
+                    }
+                    insectTimer = 30;
                 }
-                insectTimer = 30;
             }
         }
         else
@@ -129,7 +131,6 @@ abstract class InsectForm : BaseForm {
             if (Main.mouseLeftRelease)
                 shootCounter = 0;
         }
-
         if (shootCounter % 15 == 5 && shootCounter > 0) {
             AttackCharge = 1.25f;
 
