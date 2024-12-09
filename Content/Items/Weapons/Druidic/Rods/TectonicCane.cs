@@ -277,6 +277,20 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], Main.rand.NextFloatRange(35f) * Main.rand.NextFloatDirection(), lerpAmount);
         Projectile.localAI[1] = MathHelper.SmoothStep(Projectile.localAI[1], Main.rand.NextFloatRange(50f) * Main.rand.NextFloatDirection(), lerpAmount);
 
+        Vector2 size = new(60f, 90f * Projectile.ai[0]);
+        Vector2 offset = new(0f, size.Y / 3f);
+        Vector2 startPosition = Projectile.position - new Vector2(size.X / 2f, size.Y) - offset;
+        Vector2 endPosition = startPosition + size;
+        Vector2 center = startPosition + size / 2f;
+        center += Vector2.UnitY * 10f;
+        center.X -= 4f;
+        Vector2 length = endPosition - startPosition;
+        float num56 = 0.45f;
+        if (num56 > 0.6f)
+            num56 = 0.6f;
+        DelegateMethods.v3_1 = new Vector3(num56, num56 * 0.65f, num56 * 0.4f);
+        Utils.PlotTileLine(center - size / 2f - Vector2.One * 4f, center + size / 2f - Vector2.One * 4f, (float)8f * Projectile.scale, DelegateMethods.CastLight);
+
         //if (Projectile.timeLeft < 180 && Projectile.Opacity > 0.05f) {
         //    Projectile.localAI[2] += 1f + 0.01f * Projectile.timeLeft;
         //    if (Projectile.localAI[2] >= 30f) {
@@ -291,12 +305,6 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         //}
         if (Projectile.timeLeft < 100) {
             Projectile.timeLeft = 100;
-            Vector2 size = new(60f, 90f);
-            Vector2 offset = new(0f, size.Y / 3f);
-            Vector2 startPosition = Projectile.position - new Vector2(size.X / 2f, size.Y) - offset;
-            Vector2 endPosition = startPosition + size;
-            Vector2 center = startPosition + size / 2f;
-            Vector2 length = endPosition - startPosition;
             float max = length.X / 20;
             float max2 = length.Y / 14;
             for (int index2 = 0; (double)index2 < max2; ++index2) {
@@ -370,7 +378,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         texture = TextureAssets.Projectile[Type].Value;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, drawColor * Projectile.Opacity, Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
         texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
-        Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.White * (drawColor.A / 255f) * Ease.QuartIn(Projectile.Opacity), Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
+        Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.Lerp(drawColor, Color.White, 0.5f) * (drawColor.A / 255f) * Ease.QuartIn(Projectile.Opacity), Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
 
         return false;
     }
@@ -405,7 +413,19 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        Projectile.velocity = Vector2.Zero;
+        if (Projectile.ai[1] != 1f) {
+            float max = Math.Max(oldVelocity.X, oldVelocity.Y);
+            if (oldVelocity.X == max) {
+                oldVelocity.X = 0f;
+            }
+            else {
+                oldVelocity.Y = 0f;
+            }
+            Projectile.ai[1] = 1f;
+        }
+        else {
+            Projectile.velocity *= 0.97f;
+        }
 
         return false;
     }
