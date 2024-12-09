@@ -210,7 +210,6 @@ sealed class TectonicCaneProjectile : NatureProjectile {
 
         EvilBranch.GetPos(Main.player[Projectile.owner], out Point point, out Point point2, maxDistance: 800f);
         Projectile.Center = point2.ToWorldCoordinates();
-        SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.15f, PitchVariance = Main.rand.NextFloat() * 0.5f, Volume = 1f }, Projectile.Center);
 
         Projectile.netUpdate = true;
     }
@@ -239,6 +238,12 @@ sealed class TectonicCaneProjectile : NatureProjectile {
     }
 
     public override void AI() {
+        if (Projectile.localAI[2] < 12f) {
+            Projectile.localAI[2]++;
+            if (Projectile.localAI[2] % 3 == 0) {
+                SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.15f, PitchVariance = Main.rand.NextFloat() * 0.5f, Volume = 1f }, Projectile.Center);
+            }
+        }
         if (Projectile.ai[0] < 1f) {
             Projectile.ai[0] += TimeSystem.LogicDeltaTime * 2.5f;
             int dustType = TileHelper.GetKillTileDust((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16]);

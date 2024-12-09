@@ -199,7 +199,7 @@ sealed class Snatcher : NatureProjectile {
             return false;
         }
 
-        return Collision.CheckAABBvAABBCollision(GetCenter(), Projectile.Size, targetHitbox.Location.ToVector2(), targetHitbox.Size());
+        return Collision.CheckAABBvAABBCollision(GetCenter() + (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2() * Projectile.height * 0.25f, Projectile.Size, targetHitbox.Location.ToVector2(), targetHitbox.Size());
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
