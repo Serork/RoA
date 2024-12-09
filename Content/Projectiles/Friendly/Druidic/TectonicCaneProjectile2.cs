@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
 
-namespace RoA.Content.Projectiles.Friendly;
+namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class TectonicCaneProjectile2 : NatureProjectile {
     public override void SetStaticDefaults() {
@@ -16,7 +16,7 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
         Projectile.Size = new Vector2(18f, 16f);
         Projectile.aiStyle = 0;
         Projectile.friendly = true;
-        Projectile.timeLeft = 300;
+        Projectile.timeLeft = 180;
         Projectile.penetrate = 1;
 
         Projectile.usesLocalNPCImmunity = true;
@@ -58,7 +58,7 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<TectonicDust>(),
                 Scale: Main.rand.NextFloat(0.95f, 1.05f) * 1.2f);
             dust.velocity *= Main.rand.NextFloat();
-            dust.velocity *= 0.7f;
+            dust.velocity *= 0.5f;
             dust.noGravity = true;
         }
     }
