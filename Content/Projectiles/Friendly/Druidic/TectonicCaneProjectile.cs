@@ -24,7 +24,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         On_Collision.TileCollision += On_Collision_TileCollision;
     }
 
-    private static Dictionary<Point, (Projectile, Vector2)> GeneratePosition() {
+    private static Dictionary<Point, (Projectile, Vector2)> GeneratePositions() {
         Dictionary<Point, (Projectile, Vector2)> tectonicPlatesPositions = [];
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (projectile.type == ModContent.ProjectileType<TectonicCaneProjectile>()) {
@@ -61,7 +61,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         value2 = Utils.Clamp(value2, 0, Main.maxTilesX - 1);
         value3 = Utils.Clamp(value3, 0, Main.maxTilesY - 1);
         value4 = Utils.Clamp(value4, 0, Main.maxTilesY - 1);
-        Dictionary<Point, (Projectile, Vector2)> tectonicPlatesPositions = GeneratePosition();
+        Dictionary<Point, (Projectile, Vector2)> tectonicPlatesPositions = GeneratePositions();
         float num6 = (value4 + 3) * 16;
         Vector2 vector4 = default(Vector2);
         bool flag12 = false;
