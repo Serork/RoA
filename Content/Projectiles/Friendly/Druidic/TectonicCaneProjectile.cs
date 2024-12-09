@@ -240,10 +240,10 @@ sealed class TectonicCaneProjectile : NatureProjectile {
     }
 
     public override void AI() {
-        if (Projectile.localAI[2] < 12f) {
+        if (Projectile.localAI[2] < 16f) {
             Projectile.localAI[2]++;
             if (Projectile.localAI[2] % 3f == 0f) {
-                SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.15f, Volume = 1f }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.35f, Volume = 1f }, Projectile.Center);
             }
         }
         if (Projectile.ai[0] < 1f) {
