@@ -16,7 +16,7 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
         Projectile.Size = new Vector2(14, 14);
         Projectile.aiStyle = 0;
         Projectile.friendly = true;
-        Projectile.timeLeft = 220;
+        Projectile.timeLeft = 220 + (int)(20 * Main.rand.NextFloat());
         Projectile.penetrate = 1;
 
         Projectile.usesLocalNPCImmunity = true;

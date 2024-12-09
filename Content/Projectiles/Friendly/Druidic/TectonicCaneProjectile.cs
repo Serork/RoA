@@ -202,6 +202,8 @@ sealed class TectonicCaneProjectile : NatureProjectile {
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
+        Projectile.localAI[2] = 0f;
+
         if (Projectile.owner != Main.myPlayer) {
             return;
         }
@@ -240,8 +242,8 @@ sealed class TectonicCaneProjectile : NatureProjectile {
     public override void AI() {
         if (Projectile.localAI[2] < 12f) {
             Projectile.localAI[2]++;
-            if (Projectile.localAI[2] % 3 == 0) {
-                SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.15f, PitchVariance = Main.rand.NextFloat() * 0.5f, Volume = 1f }, Projectile.Center);
+            if (Projectile.localAI[2] % 3f == 0f) {
+                SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.15f, Volume = 1f }, Projectile.Center);
             }
         }
         if (Projectile.ai[0] < 1f) {
