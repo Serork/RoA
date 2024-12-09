@@ -15,6 +15,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using RoA.Utilities;
+using Terraria.Audio;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -209,6 +210,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
 
         EvilBranch.GetPos(Main.player[Projectile.owner], out Point point, out Point point2, maxDistance: 800f);
         Projectile.Center = point2.ToWorldCoordinates();
+        //SoundEngine.PlaySound(SoundID.Roar with { Pitch = 0.2f, PitchVariance = Main.rand.NextFloat() * 0.5f, Volume = 0.75f }, Projectile.Center);
 
         Projectile.netUpdate = true;
     }
@@ -282,6 +284,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
                     }
                 }
             }
+            //SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Stonebreak") { PitchVariance = 0.5f, Volume = 0.5f }, center);
             Projectile.Kill();
         }
     }
@@ -305,11 +308,12 @@ sealed class TectonicCaneProjectile : NatureProjectile {
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        float sizeY = 140f;
         return Collision.CheckAABBvAABBCollision(
             targetHitbox.Location.ToVector2(),
             targetHitbox.Size(),
-            Projectile.position - new Vector2(30f, 120f),
-            new Vector2(60f, 120f));
+            Projectile.position - new Vector2(30f, sizeY),
+            new Vector2(60f, sizeY));
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
