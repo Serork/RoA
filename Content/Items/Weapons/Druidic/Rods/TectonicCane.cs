@@ -1,13 +1,17 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
@@ -216,6 +220,8 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 20;
 
+        Projectile.tileCollide = false;
+
         Projectile.netImportant = true;
     }
 
@@ -232,9 +238,36 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         Projectile.netUpdate = true;
     }
 
+    private void SpawnDebris(Vector2 position, Vector2 center, float endPositionY) {
+        if (Projectile.owner == Main.myPlayer) {
+            Vector2 velocity;
+            int type = ModContent.ProjectileType<TectonicCaneProjectile2>();
+            float length = Main.rand.NextFloat(30f, 60f) * 0.02f;
+            Vector2 speed = (position - center).SafeNormalize(Vector2.One) * length;
+            speed = speed.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver4 * 0.75f));
+            velocity = speed;
+            position = position + Main.rand.RandomPointInArea(8, 16);
+            if (position.Y > endPositionY) {
+                position.Y = endPositionY;
+            }
+            for (int i = 0; i < 4; i++) {
+                bool flag = !Main.rand.NextBool(3);
+                Dust dust = Dust.NewDustPerfect(position - Vector2.One * 2f + Main.rand.RandomPointInArea(4f, 4f),
+                    flag ? ModContent.DustType<TectonicDust>() : DustID.Torch,
+                    Scale: Main.rand.NextFloat(1.5f, 2f) * (flag ? Main.rand.NextFloat(0.5f, 0.75f) : 1f));
+                dust.customData = 1;
+            }
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), position, velocity, type, Projectile.damage, Projectile.knockBack, Projectile.owner, speed.X.GetDirection());
+        }
+    }
+
     public override void AI() {
         if (Projectile.ai[0] < 1f) {
             Projectile.ai[0] += TimeSystem.LogicDeltaTime * 2.5f;
+            int dustType = TileHelper.GetKillTileDust((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16]);
+            for (int k = 0; k < 9; k++) {
+                Dust.NewDust(Projectile.position - new Vector2(32f, 0f), 60, 2, dustType, 0, Main.rand.NextFloat(-5f, -1f), Main.rand.Next(255), default, Main.rand.NextFloat(1.5f));
+            }
         }
         else {
             Projectile.ai[0] = 1f;
@@ -243,6 +276,43 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         float lerpAmount = 1f - Projectile.ai[0] * 0.5f;
         Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], Main.rand.NextFloatRange(35f) * Main.rand.NextFloatDirection(), lerpAmount);
         Projectile.localAI[1] = MathHelper.SmoothStep(Projectile.localAI[1], Main.rand.NextFloatRange(50f) * Main.rand.NextFloatDirection(), lerpAmount);
+
+        //if (Projectile.timeLeft < 180 && Projectile.Opacity > 0.05f) {
+        //    Projectile.localAI[2] += 1f + 0.01f * Projectile.timeLeft;
+        //    if (Projectile.localAI[2] >= 30f) {
+        //        //Projectile.Opacity -= 0.1f;
+        //        if (Projectile.Opacity < 0f) {
+        //            Projectile.Opacity = 0f;
+        //        }
+        //        Projectile.localAI[2] = 0f;
+
+        //        SpawnDebris();
+        //    }
+        //}
+        if (Projectile.timeLeft < 100) {
+            Projectile.timeLeft = 100;
+            Vector2 size = new(60f, 90f);
+            Vector2 offset = new(0f, size.Y / 3f);
+            Vector2 startPosition = Projectile.position - new Vector2(size.X / 2f, size.Y) - offset;
+            Vector2 endPosition = startPosition + size;
+            Vector2 center = startPosition + size / 2f;
+            Vector2 length = endPosition - startPosition;
+            float max = length.X / 20;
+            float max2 = length.Y / 14;
+            for (int index2 = 0; (double)index2 < max2; ++index2) {
+                float value = index2 / (max2 * 1.5f);
+                value = MathHelper.Clamp(value, 0.2f, 0.35f);
+                for (int index1 = (int)(max * (value)); (double)index1 < max * (1f - value); ++index1) {
+                    Vector2 position = startPosition + new Vector2((float)(10 + index1 * 20), (float)(7 + index2 * 14));
+                    float length2 = Math.Abs(position.Length());
+                    float length3 = Math.Abs(center.Length());
+                    if (length2 > length3 || length2 < length3) {
+                        SpawnDebris(position, center, endPosition.Y);
+                    }
+                }
+            }
+            Projectile.Kill();
+        }
     }
 
     public override void PostAI() {
@@ -254,12 +324,12 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         }
     }
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
+        float num2 = (float)Main.rand.Next(75, 150) * 0.005f;
         target.AddBuff(ModContent.BuffType<Burning>(), (int)(60f * num2 * 2f));
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
+        float num2 = (float)Main.rand.Next(75, 150) * 0.005f;
         target.AddBuff(ModContent.BuffType<Burning>(), (int)(60f * num2 * 2f));
     }
 
@@ -274,9 +344,14 @@ sealed class TectonicCaneProjectile : NatureProjectile {
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
 
     public override bool PreDraw(ref Color lightColor) {
+        Vector2 size = new(60f, 90f);
+        Vector2 offset = new(0f, size.Y / 3f);
+        Vector2 startPosition = Projectile.position - new Vector2(size.X / 2f, size.Y) - offset;
+        Vector2 endPosition = startPosition + size;
+        Vector2 center = startPosition + size / 2f;
         SpriteFrame frame = new(1, 4);
         Texture2D texture = TextureAssets.Projectile[Type].Value;
-        Color drawColor = Lighting.GetColor((Projectile.Center - Vector2.UnitY * 20f).ToTileCoordinates());
+        Color drawColor = Lighting.GetColor(center.ToTileCoordinates());
         SpriteEffects spriteEffects = (SpriteEffects)(Projectile.spriteDirection == 1).ToInt();
         Vector2 position = Projectile.Center - Main.screenPosition;
         frame = frame.With(0, (byte)Projectile.frame);
@@ -290,9 +365,47 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         if (position.Y > Projectile.position.Y) {
             position.Y = Projectile.position.Y;
         }
-        Main.EntitySpriteDraw(texture, position, sourceRectangle, drawColor, Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
+        //texture = ModContent.Request<Texture2D>(Texture + "3").Value;
+        //Main.EntitySpriteDraw(texture, position + Vector2.One, null, drawColor, Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
+        texture = TextureAssets.Projectile[Type].Value;
+        Main.EntitySpriteDraw(texture, position, sourceRectangle, drawColor * Projectile.Opacity, Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
         texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
-        Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.White * (drawColor.A / 255f), Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
+        Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.White * (drawColor.A / 255f) * Ease.QuartIn(Projectile.Opacity), Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
+
+        return false;
+    }
+}
+
+sealed class TectonicCaneProjectile2 : NatureProjectile {
+    public override void SetStaticDefaults() {
+        Main.projFrames[Type] = 2;
+    }
+
+    protected override void SafeSetDefaults() {
+        Projectile.Size = new Vector2(18f, 16f);
+        Projectile.aiStyle = 0;
+        Projectile.friendly = true;
+        Projectile.timeLeft = 300;
+        Projectile.penetrate = 1;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 20;
+    }
+
+    protected override void SafeOnSpawn(IEntitySource source) {
+        Projectile.frame = Main.rand.NextBool().ToInt();
+    }
+
+    public override void AI() {
+        float value = Projectile.velocity.Length();
+        Projectile.direction = (int)Projectile.ai[0];
+        Projectile.rotation += value * 0.05f * Projectile.direction;
+        Projectile.velocity.Y += 0.1f;
+        Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        Projectile.velocity = Vector2.Zero;
 
         return false;
     }
