@@ -479,3 +479,18 @@ TectonicCane: {
 	DisplayName: Tectonic Cane
 	Tooltip: ""
 }
+
+AshwalkerHood: {
+	DisplayName: Ashwalker Hood
+	Tooltip: ""
+}
+
+AshwalkerLeggings: {
+	DisplayName: Ashwalker Leggings
+	Tooltip: ""
+}
+
+AshwalkerRobe: {
+	DisplayName: Ashwalker Robe
+	Tooltip: ""
+}

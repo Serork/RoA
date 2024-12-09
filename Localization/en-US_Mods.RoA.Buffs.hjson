@@ -119,3 +119,8 @@ Burning: {
 	DisplayName: Burning
 	Description: Mods.RoA.Buffs.Burning.Description
 }
+
+LilPhoenixForm: {
+	DisplayName: Lil Phoenix Form
+	Description: Mods.RoA.Buffs.LilPhoenixForm.Description
+}

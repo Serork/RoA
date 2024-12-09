@@ -315,7 +315,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        float sizeY = 140f;
+        float sizeY = 130f;
         return Collision.CheckAABBvAABBCollision(
             targetHitbox.Location.ToVector2(),
             targetHitbox.Size(),
