@@ -95,7 +95,7 @@ sealed class RavencallersCloak : ModItem {
                 Main.dust[dust].velocity = (Main.dust[dust].velocity + Player.velocity) / 2f;
             }
 
-            SoundEngine.PlaySound(SoundID.NPCDeath6 with { Volume = 0.5f, PitchVariance = 0.5f }, lastPositionInfo.Position);
+            SoundEngine.PlaySound(SoundID.NPCDeath6 with { Volume = 0.5f, Pitch = -0.35f, PitchVariance = Main.rand.NextFloat() * 0.5f, }, lastPositionInfo.Position);
             ResetPositions();
         }
 
@@ -260,6 +260,7 @@ sealed class RavencallersCloak : ModItem {
         }
 
         public override void UpdateEquips() {
+            Main.NewText(_opacity);
             int buffType = ModContent.BuffType<RavencallersCloakBuff>();
             if (RavencallersCloak || Main.mouseItem.type == ItemType) {
                 if (ReceivedDamage) {
