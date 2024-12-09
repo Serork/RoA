@@ -30,12 +30,12 @@ class GrimDruidDust : ModDust {
         if (dust.scale < 0.1f)
             dust.active = false;
 
-        float value = 1f - dust.alpha / 255f;
-        Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num86 * 1.2f * value, num86 * 0.5f * value, num86 * 0.4f * value);
-
         if (dust.alpha > 0) {
             dust.alpha -= 10;
         }
+
+        float value = 1f - dust.alpha / 255f;
+        Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num86 * 1.2f * value, num86 * 0.5f * value, num86 * 0.4f * value);
 
         return false;
     }

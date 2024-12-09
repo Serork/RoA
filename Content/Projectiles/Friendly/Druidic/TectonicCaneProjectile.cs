@@ -217,7 +217,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         if (Projectile.owner == Main.myPlayer) {
             Vector2 velocity;
             int type = ModContent.ProjectileType<TectonicCaneProjectile2>();
-            float length = Main.rand.NextFloat(30f, 60f) * 0.02f;
+            float length = Main.rand.NextFloat(30f, 60f) * 0.03f;
             Vector2 speed = (position - center).SafeNormalize(Vector2.One) * length;
             speed = speed.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver4 * 0.75f));
             velocity = speed;
@@ -266,22 +266,10 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         DelegateMethods.v3_1 = new Vector3(num56, num56 * 0.65f, num56 * 0.4f);
         Utils.PlotTileLine(center - size / 2f - Vector2.One * 4f, center + size / 2f - Vector2.One * 4f, (float)8f * Projectile.scale, DelegateMethods.CastLight);
 
-        //if (Projectile.timeLeft < 180 && Projectile.Opacity > 0.05f) {
-        //    Projectile.localAI[2] += 1f + 0.01f * Projectile.timeLeft;
-        //    if (Projectile.localAI[2] >= 30f) {
-        //        //Projectile.Opacity -= 0.1f;
-        //        if (Projectile.Opacity < 0f) {
-        //            Projectile.Opacity = 0f;
-        //        }
-        //        Projectile.localAI[2] = 0f;
-
-        //        SpawnDebris();
-        //    }
-        //}
         if (Projectile.timeLeft < 100) {
             Projectile.timeLeft = 100;
             float max = length.X / 20;
-            float max2 = length.Y / 14;
+            float max2 = length.Y / 17;
             for (int index2 = 0; (double)index2 < max2; ++index2) {
                 float value = index2 / (max2 * 1.5f);
                 value = MathHelper.Clamp(value, 0.2f, 0.35f);

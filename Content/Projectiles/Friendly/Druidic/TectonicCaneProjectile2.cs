@@ -13,10 +13,10 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
     }
 
     protected override void SafeSetDefaults() {
-        Projectile.Size = new Vector2(18f, 16f);
+        Projectile.Size = new Vector2(16, 15);
         Projectile.aiStyle = 0;
         Projectile.friendly = true;
-        Projectile.timeLeft = 180;
+        Projectile.timeLeft = 220;
         Projectile.penetrate = 1;
 
         Projectile.usesLocalNPCImmunity = true;
@@ -28,6 +28,9 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
     }
 
     public override void AI() {
+        if (Main.windPhysics) {
+            Projectile.velocity.X += Main.windSpeedCurrent * Main.windPhysicsStrength;
+        }
         float value = Projectile.velocity.Length();
         Projectile.direction = (int)Projectile.ai[0];
         Projectile.rotation += value * 0.05f * Projectile.direction;
@@ -55,11 +58,11 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
 
     public override void OnKill(int timeLeft) {
         for (int i = 0; i < 6; i++) {
-            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<TectonicDust>(),
+            Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.One * 2f, Projectile.width + 2, Projectile.height + 2, ModContent.DustType<TectonicDust>(),
                 Scale: Main.rand.NextFloat(0.95f, 1.05f) * 1.2f);
             dust.velocity *= Main.rand.NextFloat();
             dust.velocity *= 0.5f;
-            dust.noGravity = true;
+            dust.customData = 1;
         }
     }
 }
