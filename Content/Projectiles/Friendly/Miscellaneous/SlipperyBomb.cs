@@ -35,7 +35,7 @@ sealed class SlipperyBomb : ModProjectile {
 			if (effectCounter == effectCounterMax && effectCounterMax < 20) {
 				effectCounterMax += 3;
 				effectCounter = 0;
-				SoundEngine.PlaySound(SoundID.Roar, Projectile.position);
+				SoundEngine.PlaySound(SoundID.WormDig, Projectile.position);
 			}
 			if (effectCounter % 4 == 0 && effectCounterMax < 20) {
 				int dustDig = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 20, 20, 102, 0f, 0f, 0, default(Color), 1.5f);

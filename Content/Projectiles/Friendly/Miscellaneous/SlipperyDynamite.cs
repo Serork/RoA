@@ -36,8 +36,8 @@ sealed class SlipperyDynamite : ModProjectile {
 			if (effectCounter == effectCounterMax && effectCounterMax < 20) {
 				effectCounterMax += 3;
 				effectCounter = 0;
-				SoundEngine.PlaySound(SoundID.Roar, Projectile.position);
-			}
+                SoundEngine.PlaySound(SoundID.WormDig, Projectile.position);
+            }
 			if (effectCounter % 4 == 0 && effectCounterMax < 20) {
 				int dustDig = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 20, 20, 102, 0f, 0f, 0, default(Color), 1.5f);
 				Main.dust[dustDig].velocity *= 0.1f;
@@ -86,7 +86,7 @@ sealed class SlipperyDynamite : ModProjectile {
         }
     }
 
-	public override void Kill(int timeLeft) {
+	public override void OnKill(int timeLeft) {
 		SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
 		for (int i = 0; i < 50; i++) {
 			int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 31, 0f, 0f, 100, default(Color), 2f);

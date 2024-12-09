@@ -37,8 +37,8 @@ sealed class SlipperyGlowstick : ModProjectile {
 			if (effectCounter == effectCounterMax && effectCounterMax < 20) {
 				effectCounterMax += 3;
 				effectCounter = 0;
-				SoundEngine.PlaySound(SoundID.Roar, Projectile.position);
-			}
+                SoundEngine.PlaySound(SoundID.WormDig, Projectile.position);
+            }
 			if (effectCounter % 4 == 0 && effectCounterMax < 20) {
 				int dustDig = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 20, 20, DustID.AmberBolt, 0f, 0f, 100, default, 1.1f);
 				Main.dust[dustDig].velocity *= 0.1f;
@@ -60,8 +60,8 @@ sealed class SlipperyGlowstick : ModProjectile {
 	public override Color? GetAlpha(Color lightColor)	
 		=> new Color?(new Color(255, 225, 135, 120));
 		
-	public override void Kill(int timeLeft) {
+	public override void OnKill(int timeLeft) {
 		if (Main.rand.Next(3) == 0)
-			Item.NewItem(Projectile.GetSource_Death(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height,ModContent.ItemType<Items.Consumables.SlipperyGlowstick>(), 1, false, 0, false, false);
+			Item.NewItem(Projectile.GetSource_Death(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, ModContent.ItemType<Items.Consumables.SlipperyGlowstick>(), 1, false, 0, false, false);
 	}
 }
