@@ -260,7 +260,6 @@ sealed class RavencallersCloak : ModItem {
         }
 
         public override void UpdateEquips() {
-            Main.NewText(_opacity);
             int buffType = ModContent.BuffType<RavencallersCloakBuff>();
             if (RavencallersCloak || Main.mouseItem.type == ItemType) {
                 if (ReceivedDamage) {

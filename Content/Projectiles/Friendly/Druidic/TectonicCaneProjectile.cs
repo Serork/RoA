@@ -210,7 +210,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
 
         EvilBranch.GetPos(Main.player[Projectile.owner], out Point point, out Point point2, maxDistance: 800f);
         Projectile.Center = point2.ToWorldCoordinates();
-        SoundEngine.PlaySound(SoundID.WormDig with { Pitch = 0.1f, PitchVariance = Main.rand.NextFloat() * 0.5f, Volume = 1f }, Projectile.Center);
+        SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.15f, PitchVariance = Main.rand.NextFloat() * 0.5f, Volume = 1f }, Projectile.Center);
 
         Projectile.netUpdate = true;
     }
@@ -284,7 +284,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
                     }
                 }
             }
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Stonebreak") { PitchVariance = 0.5f, Volume = 0.5f }, center);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Stonebreak") { PitchVariance = 0.5f, Volume = 0.4f }, center);
             Projectile.Kill();
         }
     }
