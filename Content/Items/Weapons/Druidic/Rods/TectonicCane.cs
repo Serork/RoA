@@ -39,7 +39,21 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
     }
 
     public sealed class TectonicCaneBase : BaseRodProjectile {
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(player.itemTimeMax * 2);
+
         protected override bool ShouldWaitUntilProjDespawns() => false;
+
+        protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
+            EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
+            Vector2 position = point2.ToWorldCoordinates();
+            int dustType = TileHelper.GetKillTileDust((int)position.X / 16, (int)position.Y / 16, Main.tile[(int)position.X / 16, (int)position.Y / 16]);
+            float progress = 1.25f * Ease.ExpoInOut(Math.Max(step, 0.25f)) + 0.25f;
+            int count = (int)(4 * progress);
+            for (int k = 0; k < count; k++) {
+                Dust.NewDust(position - new Vector2(32f, 0f), 60, 2, dustType, 0, Main.rand.NextFloat(-2f, -1f) * progress, Main.rand.Next(255), default, 
+                    Main.rand.NextFloat(1.5f) * MathHelper.Clamp(progress, 0.25f, 0.85f));
+            }
+        }
     }
 }
 
@@ -428,5 +442,14 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
         }
 
         return false;
+    }
+
+    public override void OnKill(int timeLeft) {
+        for (int i = 0; i < 6; i++) {
+            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<TectonicDust>(), Scale: Main.rand.NextFloat(0.95f, 1.05f));
+            dust.velocity *= Main.rand.NextFloat();
+            dust.velocity *= 0.7f;
+            dust.noGravity = true;
+        }
     }
 }
