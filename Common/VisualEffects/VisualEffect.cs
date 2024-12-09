@@ -20,7 +20,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     public bool DontEmitLight;
     public int TimeLeft;
     public int MaxTimeLeft;
-    public float AI0;
+    public float AI0 = 0f;
 
     public virtual int InitialPoolSize => 1;
 
@@ -42,12 +42,13 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         Origin = Frame.Size() / 2f;
     }
 
-    public T Setup(Vector2 position, Vector2 velocity, Color color = default, float scale = 1f, float rotation = 0f, int timeLeft = 0) {
+    public T Setup(Vector2 position, Vector2 velocity, Color? color = null, float scale = 1f, float rotation = 0f, int timeLeft = 0) {
         Position = position;
         Velocity = velocity;
-        DrawColor = color;
+        DrawColor = color ?? Color.White;
         Scale = scale;
         Rotation = rotation;
+        AI0 = 0f;
 
         SetDefaults();
 

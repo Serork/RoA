@@ -5,10 +5,12 @@ using Newtonsoft.Json.Linq;
 
 using RoA.Common;
 using RoA.Common.Druid;
+using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Content.Projectiles.Friendly.Druidic;
+using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -20,17 +22,59 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Tile_Entities;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
+
+sealed class TectonicDebris : VisualEffect<TectonicDebris> {
+    protected override void SetDefaults() {
+        MaxTimeLeft = TimeLeft = 120;
+
+        SetFramedTexture(3);
+    }
+
+    public override void Update(ref ParticleRendererSettings settings) {
+        float length = Velocity.Length();
+        Rotation += length * 0.0314f;
+
+        DrawColor = Lighting.GetColor(Position.ToTileCoordinates());
+
+        if (TimeLeft <= 30) {
+            Scale = Utils.GetLerpValue(0, 30, TimeLeft, true);
+        }
+        else {
+            Scale = MathHelper.Lerp(Scale, 1f, 0.015f);
+        }
+
+        if (AI0 == 0f) {
+            Velocity *= 0.95f;
+            if (Velocity.Length() < 0.1f) {
+                AI0 = 1f;
+                Velocity *= 0.5f;
+            }
+        }
+        else {
+            Velocity.X *= 0.5f;
+            Velocity.Y += 0.1f;
+            Velocity.Y = Math.Min(10f, Velocity.Y);
+        }
+
+        Position += Velocity;
+
+        if (Scale <= 0.1f || float.IsNaN(Scale) || --TimeLeft <= 0) {
+            RestInPool();
+        }
+    }
+}
 
 sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TectonicCaneProjectile>();
 
     protected override void SafeSetDefaults() {
         Item.SetSize(36, 38);
-        Item.SetDefaultToUsable(-1, 30, useSound: SoundID.Item7);
+        Item.SetDefaultToUsable(-1, 40, useSound: SoundID.Item7);
         Item.SetWeaponValues(5, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
@@ -43,15 +87,39 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
+        protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
+            int count = 10;
+            for (int i = 0; i < count; i++) {
+                float progress = (float)i / count;
+                VisualEffectSystem.New<TectonicDebris>(VisualEffectLayer.BEHINDPROJS).
+                    Setup(
+                    corePosition - Vector2.One * 5f + Main.rand.RandomPointInArea(10f, 10f),
+                    Vector2.One.RotatedByRandom(MathHelper.TwoPi * progress).SafeNormalize(Vector2.One) * Main.rand.NextFloat(2f, 5f),
+                    scale: Main.rand.NextFloat(0.9f, 1.1f) * 1.5f);
+            }
+        }
+
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
+            step = Ease.CubeIn(step);
+            float offset = 40f * (1f - MathHelper.Clamp(step, 0.4f, 1f));
+            Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
+            bool flag = !Main.rand.NextBool(3);
+            int dustType = flag ? ModContent.DustType<TectonicDust>() : DustID.Torch;
+            float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / offset, 0.25f, 1f) * 2f * Math.Max(step, 0.25f) + 0.25f;
+            Dust dust = Dust.NewDustPerfect(spawnPosition, dustType,
+                Scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f));
+            dust.velocity = (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor;
+            dust.velocity *= 0.9f;
+            dust.noGravity = true;
+
             EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
             Vector2 position = point2.ToWorldCoordinates();
-            int dustType = TileHelper.GetKillTileDust((int)position.X / 16, (int)position.Y / 16, Main.tile[(int)position.X / 16, (int)position.Y / 16]);
+            dustType = TileHelper.GetKillTileDust((int)position.X / 16, (int)position.Y / 16, Main.tile[(int)position.X / 16, (int)position.Y / 16]);
             float progress = 1.25f * Ease.ExpoInOut(Math.Max(step, 0.25f)) + 0.25f;
-            int count = (int)(4 * progress);
+            int count = (int)(4 * Math.Max(1f, progress));
             for (int k = 0; k < count; k++) {
                 Dust.NewDust(position - new Vector2(32f, 0f), 60, 2, dustType, 0, Main.rand.NextFloat(-2f, -1f) * progress, Main.rand.Next(255), default, 
-                    Main.rand.NextFloat(1.5f) * MathHelper.Clamp(progress, 0.25f, 0.85f));
+                    Main.rand.NextFloat(1.5f) * MathHelper.Clamp(progress, 0.6f, 0.85f));
             }
         }
     }
@@ -446,7 +514,8 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
 
     public override void OnKill(int timeLeft) {
         for (int i = 0; i < 6; i++) {
-            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<TectonicDust>(), Scale: Main.rand.NextFloat(0.95f, 1.05f));
+            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<TectonicDust>(),
+                Scale: Main.rand.NextFloat(0.95f, 1.05f) * 1.2f);
             dust.velocity *= Main.rand.NextFloat();
             dust.velocity *= 0.7f;
             dust.noGravity = true;
