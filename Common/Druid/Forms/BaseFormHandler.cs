@@ -135,9 +135,10 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public override void ResetEffects() {
-        UsePlayerSpeed = false;
-
         ResetActiveForm();
+    }
+
+    public override void PostUpdateRunSpeeds() {
     }
 
     public override void PostUpdate() {
@@ -145,6 +146,8 @@ sealed class BaseFormHandler : ModPlayer {
             Player.cursorItemIconEnabled = false;
             Player.cursorItemIconID = 0;
         }
+
+        UsePlayerSpeed = false;
     }
 
     public override void PostUpdateEquips() {

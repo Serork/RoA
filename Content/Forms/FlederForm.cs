@@ -83,7 +83,7 @@ sealed class FlederForm : BaseForm {
             }
 
             if (_dashTimer > 0) {
-                if (!IsFlying(Player)) {
+                if (!IsInAir(Player)) {
                     for (int i = 0; i < 3; i++) {
                         if (Main.rand.NextBool(3)) {
                             int num = 0;
@@ -189,7 +189,7 @@ sealed class FlederForm : BaseForm {
     }
 
     protected override float GetMaxSpeedMultiplier(Player player) => 1f;
-    protected override float GetRunAccelerationMultiplier(Player player) => 1.5f;
+    protected override float GetRunAccelerationMultiplier(Player player) => 1.25f;
 
     protected override void SafeSetDefaults() {
         MountData.totalFrames = 8;
@@ -209,9 +209,9 @@ sealed class FlederForm : BaseForm {
         player.npcTypeNoAggro[ModContent.NPCType<BabyFleder>()] = true;
         player.statDefense -= 6;
 
-        float rotation = player.velocity.X * (IsFlying(player) ? 0.2f : 0.15f);
+        float rotation = player.velocity.X * (IsInAir(player) ? 0.2f : 0.15f);
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
-        bool flag = IsFlying(player);
+        bool flag = IsInAir(player);
         float maxRotation = flag ? 0.3f : 0.2f;
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         if (flag) {
@@ -258,7 +258,7 @@ sealed class FlederForm : BaseForm {
             if (flag)
                 num20++;
 
-            Vector2 vector11 = player.Center + Vector2.UnitY * (IsFlying(player) ? 7f : 12f);
+            Vector2 vector11 = player.Center + Vector2.UnitY * (IsInAir(player) ? 7f : 12f);
             for (int k = 0; k < num20; k++) {
                 if (Main.rand.NextChance(0.9f - 0.1f * (num20 - 1))) {
                     int num23 = 59;
@@ -317,7 +317,7 @@ sealed class FlederForm : BaseForm {
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
         int minFrame = 4, maxFrame = 7;
         float flightFrameFrequency = 14f, walkingFrameFrequiency = 16f;
-        if (IsFlying(player)) {
+        if (IsInAir(player)) {
             if (player.velocity.Y < 0f) {
                 frameCounter += Math.Abs(player.velocity.Y) * 0.5f;
                 float frequency = flightFrameFrequency;
@@ -340,7 +340,7 @@ sealed class FlederForm : BaseForm {
                 frameCounter -= frequency;
                 frame++;
             }
-            if (frame > 3) {
+            if (frame > minFrame - 1) {
                 frame = 0;
             }
         }

@@ -48,6 +48,7 @@ sealed class DecelerationPlayer : ModPlayer {
 					Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity.Y += 1f + 1f * Main.rand.NextFloat();
                     Main.dust[dust].velocity *= 0.25f;
+                    drawInfo.DustCache.Add(Main.dust[dust].dustIndex);
                 }
 			}
 		}

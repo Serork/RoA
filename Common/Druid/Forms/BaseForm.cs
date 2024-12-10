@@ -74,14 +74,17 @@ abstract class BaseForm : ModMount {
     private static void ExtraJumpLoader_UpdateHorizontalSpeeds(ExtraJumpLoader_UpdateHorizontalSpeeds_orig self, Player player) {
         self(player);
 
-        _playerMovementSpeedInfo = new MovementSpeedInfo(player.maxRunSpeed, player.accRunSpeed, player.runAcceleration);
+        if (player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed) {
+            _playerMovementSpeedInfo = new MovementSpeedInfo(player.maxRunSpeed, player.accRunSpeed, player.runAcceleration);
+        }
     }
 
     private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
         if (self.GetModPlayer<BaseFormHandler>().UsePlayerSpeed && self.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
-            self.maxRunSpeed = _playerMovementSpeedInfo.MaxRunSpeed * GetMaxSpeedMultiplier(self);
-            self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed * GetAccRunSpeedMultiplier(self);
-            self.runAcceleration = _playerMovementSpeedInfo.RunAcceleration * GetRunAccelerationMultiplier(self);
+            BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
+            self.maxRunSpeed = _playerMovementSpeedInfo.MaxRunSpeed * mountData.GetMaxSpeedMultiplier(self);
+            self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed * mountData.GetAccRunSpeedMultiplier(self);
+            self.runAcceleration = _playerMovementSpeedInfo.RunAcceleration * mountData.GetRunAccelerationMultiplier(self);
         }
         orig(self);
     }
@@ -90,7 +93,7 @@ abstract class BaseForm : ModMount {
     protected virtual float GetAccRunSpeedMultiplier(Player player) => 1f;
     protected virtual float GetRunAccelerationMultiplier(Player player) => 1f;
 
-    protected static bool IsFlying(Player player) {
+    protected static bool IsInAir(Player player) {
         bool flag = false;
         for (int i = -1; i < 2; i++) {
             if (WorldGenHelper.SolidTile((int)(player.Center.X + i * 16f) / 16, (int)(player.Bottom.Y + 10f) / 16)) {

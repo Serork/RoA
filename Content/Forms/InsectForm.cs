@@ -56,20 +56,20 @@ abstract class InsectForm : BaseForm {
     protected virtual void SafeSetDefaults2() { }
 
     protected override void SafeUpdateEffects(Player player) {
-        float rotation = player.velocity.X * (IsFlying(player) ? 0.2f : 0.15f);
+        float rotation = player.velocity.X * (IsInAir(player) ? 0.2f : 0.15f);
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
         float maxRotation = 0.2f;
         bool? variable = player.GetModPlayer<InsectFormHandler>()._facedRight;
         if (variable.HasValue) {
             maxRotation = 0.1f;
-            _maxRotation = MathHelper.Lerp(_maxRotation, maxRotation, 0.01f);
+            _maxRotation = MathHelper.Lerp(_maxRotation, maxRotation, 0.1f);
         }
         else {
             _maxRotation = maxRotation;
         }
         fullRotation = MathHelper.Clamp(fullRotation, -_maxRotation, _maxRotation);
         player.fullRotation = fullRotation;
-        if (!IsFlying(player)) {
+        if (!IsInAir(player)) {
             player.velocity.X *= 0.925f;
         }
         player.velocity.Y = Math.Min(5f, player.velocity.Y);
@@ -175,7 +175,7 @@ abstract class InsectForm : BaseForm {
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
         int maxFrame = 5;
         float flightFrameFrequency = 4f, walkingFrameFrequiency = 20f;
-        if (IsFlying(player)) {
+        if (IsInAir(player)) {
             frameCounter += Math.Abs(player.velocity.Y) * (player.velocity.Y < 0f ? 0.5f : 0.25f);
             while (frameCounter > flightFrameFrequency) {
                 frameCounter -= flightFrameFrequency;

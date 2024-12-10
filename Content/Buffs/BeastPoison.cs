@@ -81,6 +81,7 @@ sealed class BeastPoisonPlayer : ModPlayer {
             if (Main.rand.Next(15) >= 10) {
                 int rotDust = Dust.NewDust(Player.position - new Vector2(1f, 1f), Player.width + 1, Player.height + 1, 5, Player.velocity.X * 0.6f, Player.velocity.Y * 0.4f, 125, Color.YellowGreen, 1.1f);
                 Main.dust[rotDust].noGravity = true;
+                drawInfo.DustCache.Add(Main.dust[rotDust].dustIndex);
             }
         }
     }

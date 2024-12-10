@@ -1,20 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Forms;
-using RoA.Common.Druid.Wreath;
-using RoA.Common.Players;
-using RoA.Content.NPCs.Enemies.Backwoods;
-using RoA.Content.Projectiles.Friendly.Druidic.Forms;
-using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 
 using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
@@ -26,47 +16,53 @@ sealed class LilPhoenixForm : BaseForm {
         MountData.spawnDust = 6;
         MountData.spawnDustNoGravity = true;
         MountData.heightBoost = -18;
-        MountData.fallDamage = 0;
-        MountData.runSpeed = 2.5f;
-        MountData.dashSpeed = 1f;
+        //MountData.fallDamage = 0;
         MountData.flightTimeMax = 0;
         MountData.fatigueMax = 0;
         MountData.jumpHeight = 17;
-        MountData.acceleration = 0.2f;
-        MountData.jumpSpeed = 4f;
+        MountData.jumpSpeed = 6f;
         MountData.blockExtraJumps = false;
         MountData.totalFrames = 12;
         MountData.constantJump = false;
         MountData.usesHover = false;
+        MountData.yOffset = -7;
     }
 
     protected override void SafeUpdateEffects(Player player) {
         player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed = true;
+
+        float rotation = player.velocity.X * 0.1f;
+        float fullRotation = (float)Math.PI / 4f * rotation / 2f;
+        float maxRotation = 0.075f;
+        fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
+        player.fullRotation = IsInAir(player) ? 0f : fullRotation;
+        player.fullRotationOrigin = new Vector2(player.width / 2 + 4f * player.direction, player.height / 2);
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
         int maxFrame = 4;
         float walkingFrameFrequiency = 24f;
-        if (player.velocity.Y != 0f) {
+        if (IsInAir(player)) {
             frame = 5;
         }
-        else if (player.velocity.Y == 0f) {
-            if (player.velocity.X != 0f) {
-                frameCounter += Math.Abs(player.velocity.X) * 1.5f;
-                if (frameCounter >= walkingFrameFrequiency) {
-                    int maxMovingFrame = maxFrame;
-                    if (frame < maxMovingFrame) {
-                        frame++;
-                    }
-                    else {
-                        frame = 0;
-                    }
-                    frameCounter = 0f;
-                }
-            }
-            else {
+        else if (player.velocity.X != 0f) {
+            int maxMovingFrame = maxFrame;
+            if (frame >= maxMovingFrame) {
                 frame = 0;
             }
+            frameCounter += Math.Abs(player.velocity.X) * 1f;
+            if (frameCounter >= walkingFrameFrequiency) {
+                if (frame < maxMovingFrame) {
+                    frame++;
+                }
+                else {
+                    frame = 0;
+                }
+                frameCounter = 0f;
+            }
+        }
+        else {
+            frame = 0;
         }
 
         return false;

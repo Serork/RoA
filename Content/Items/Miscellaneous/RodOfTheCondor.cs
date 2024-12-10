@@ -301,6 +301,7 @@ sealed class RodOfTheCondor : ModItem {
                     int num59 = Dust.NewDust(new Vector2(drawInfo.drawPlayer.position.X + (float)(drawInfo.drawPlayer.width / 2) + (float)num58, drawInfo.drawPlayer.position.Y + 10), 26, drawInfo.drawPlayer.height / 2 + 4, ModContent.DustType<CondorDust>(), 0f, 0f, (int)(255 * handler.Opacity), default, 1.2f);
                     Main.dust[num59].velocity *= 0.15f;
                     Main.dust[num59].noLightEmittence = true;
+                    drawInfo.DustCache.Add(Main.dust[num59].dustIndex);
 
                     num58 = 34;
                     if (drawInfo.drawPlayer.direction == 1)
@@ -309,6 +310,7 @@ sealed class RodOfTheCondor : ModItem {
                     num59 = Dust.NewDust(new Vector2(drawInfo.drawPlayer.position.X + (float)(drawInfo.drawPlayer.width / 2) - (float)num58, drawInfo.drawPlayer.position.Y + 10), 17, drawInfo.drawPlayer.height / 2 + 4, ModContent.DustType<CondorDust>(), 0f, 0f, (int)(255 * handler.Opacity), default, 1.2f);
                     Main.dust[num59].velocity *= 0.15f;
                     Main.dust[num59].noLightEmittence = true;
+                    drawInfo.DustCache.Add(Main.dust[num59].dustIndex);
                 }
 
                 Vector2 directions = drawInfo.drawPlayer.Directions;

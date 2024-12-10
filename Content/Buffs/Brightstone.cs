@@ -1,8 +1,12 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
@@ -50,4 +54,17 @@ sealed class BrightstonePlayer : ModPlayer {
 				Projectile.NewProjectile(Player.GetSource_Misc("Brightstone"), pos.X, pos.Y, 0, 0, ModContent.ProjectileType<Projectiles.Friendly.Brightstone>(), 0, 0, Player.whoAmI);
 		}
 	}
+
+    public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
+        if (!brightstoneEffect)
+            return;
+
+        if (Player.velocity.Length() >= 1f && (Player.controlLeft || Player.controlRight || Player.controlJump || Player.velocity.Y >= 1f) && !Player.rocketFrame) {
+            int num114 = Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<BrightstoneDust>(), 0f, 0f, 200, default(Color), 0.7f);
+            Dust dust2 = Main.dust[num114];
+            dust2.velocity *= 0.3f + Main.rand.NextFloatRange(0.1f) * Main.rand.NextFloat();
+            dust2.noGravity = true;
+            drawInfo.DustCache.Add(dust2.dustIndex);
+        }
+    }
 }
