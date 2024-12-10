@@ -53,7 +53,7 @@ abstract class TulipBase : BaseRodProjectile {
     private bool IsWeepingTulip => DustFrameXUsed() == 2;
 
     public sealed class TulipBaseExtraData : ModPlayer {
-        public Vector2 TempMousePosition { get; set; } = Vector2.Zero;
+        public Vector2 TempMousePosition { get; internal set; } = Vector2.Zero;
 
         public Vector2 SpawnPositionRandomlySelected => GetTilePosition(Player, TempMousePosition).ToWorldCoordinates();
         public Vector2 SpawnPositionMid => GetTilePosition(Player, TempMousePosition, false).ToWorldCoordinates();
