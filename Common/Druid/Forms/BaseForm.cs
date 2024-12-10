@@ -241,14 +241,18 @@ abstract class BaseForm : ModMount {
         GetSpriteEffects(drawPlayer, ref spriteEffects);
         DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
         playerDrawData.Add(item);
+        DrawGlowMask(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
+
+        return false;
+    }
+
+    protected virtual void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         WreathHandler wreathHandler = drawPlayer.GetModPlayer<WreathHandler>();
         if (glowTexture != null) {
             float value = Math.Max(MathHelper.Clamp(_attackCharge, 0f, 1f), wreathHandler.ActualProgress4);
-            item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+            DrawData item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+            playerDrawData.Add(item);
         }
-        playerDrawData.Add(item);
-
-        return false;
     }
 
     protected virtual void GetSpriteEffects(Player player, ref SpriteEffects spriteEffects) { }

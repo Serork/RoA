@@ -1,14 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Forms;
+using RoA.Common.Druid.Wreath;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
 sealed class LilPhoenixForm : BaseForm {
+    protected override Color LightingColor {
+        get {
+            float num56 = 0.45f;
+            return new(num56, num56 * 0.65f, num56 * 0.4f);
+        }
+    }
+
     protected override float GetMaxSpeedMultiplier(Player player) => 1f;
     protected override float GetRunAccelerationMultiplier(Player player) => 1.5f;
 
@@ -16,7 +28,7 @@ sealed class LilPhoenixForm : BaseForm {
         MountData.spawnDust = 6;
         MountData.spawnDustNoGravity = true;
         MountData.heightBoost = -18;
-        //MountData.fallDamage = 0;
+        MountData.fallDamage = 0.25f;
         MountData.flightTimeMax = 0;
         MountData.fatigueMax = 0;
         MountData.jumpHeight = 17;
@@ -66,6 +78,19 @@ sealed class LilPhoenixForm : BaseForm {
         }
 
         return false;
+    }
+
+    protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
+        if (glowTexture != null) {
+            DrawData item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
+            playerDrawData.Add(item);
+        }
+        WreathHandler wreathHandler = drawPlayer.GetModPlayer<WreathHandler>();
+        if (glowTexture != null) {
+            float value = Math.Max(MathHelper.Clamp(AttackCharge, 0f, 1f), wreathHandler.ActualProgress4);
+            DrawData item = new(ModContent.Request<Texture2D>(Texture + "_Glow2").Value, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+            playerDrawData.Add(item);
+        }
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {

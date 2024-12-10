@@ -50,8 +50,9 @@ sealed class BrightstonePlayer : ModPlayer {
         Lighting.AddLight(Player.Center, new Color(238, 225, 111).ToVector3() * 0.6f);
         if (Player.velocity.Length() >= 1f && (Player.controlLeft || Player.controlRight || Player.controlJump || Player.velocity.Y >= 1f) && !Player.rocketFrame) {
             Vector2 pos = _oldPositions[1] + Player.velocity;
-            if (Vector2.Distance(_oldPositions[1], Player.Center) > Math.Sqrt(Player.width * Player.height) * 0.05f && Player.miscCounter % 2 == 0)
-				Projectile.NewProjectile(Player.GetSource_Misc("Brightstone"), pos.X, pos.Y, 0, 0, ModContent.ProjectileType<Projectiles.Friendly.Brightstone>(), 0, 0, Player.whoAmI);
+            if (Vector2.Distance(_oldPositions[1], Player.Center) > Math.Sqrt(Player.width * Player.height) * 0.05f && Player.miscCounter % 2 == 0) {
+                Projectile.NewProjectile(Player.GetSource_Misc("Brightstone"), pos.X, pos.Y, 0, 0, ModContent.ProjectileType<Projectiles.Friendly.Brightstone>(), 0, 0, Player.whoAmI);
+            }
 		}
 	}
 
