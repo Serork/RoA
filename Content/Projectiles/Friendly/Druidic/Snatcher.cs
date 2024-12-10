@@ -343,19 +343,22 @@ sealed class Snatcher : NatureProjectile {
         Projectile.direction = player.direction;
         Projectile.Center = playerCenter;
         if (Projectile.ai[0] == 0f) {
-            bool flag = player.ownedProjectileCounts[Type] > 0;
-            if (flag) {
+            bool flag = player.ownedProjectileCounts[Type] < 1;
+            float ai1 = 1f;
+            Projectile.ai[1] = ai1 * -player.direction;
+            if (!flag) {
                 foreach (Projectile projectile in Main.ActiveProjectiles) {
                     if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI) {
                         Projectile.ai[0] = projectile.whoAmI + 1f;
+                        Projectile.ai[1] = -projectile.ai[1];
                     }
                 }
             }
             else {
                 Projectile.ai[0] = 1f;
             }
-            Projectile.ai[1] = flag ? 1f : -1f;
             Projectile.ai[2] = 0f;
+            Projectile.netUpdate = true;
             //if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[Type] < 2) {
             //    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f,
             //        -Projectile.ai[1], 0f);
@@ -383,9 +386,9 @@ sealed class Snatcher : NatureProjectile {
         if (_targetVector.Length() > maxLength) {
             _targetVector = Vector2.Normalize(_targetVector) * maxLength;
         }
-        float lerp = Math.Min(0.015f + player.velocity.Length() * 0.001f, 0.1f) * 0.5f;
         Vector2 target = _targetVector;
         Vector2 target2 = Helper.VelocityToPoint(pos, _mousePos, 1f);
+        float lerp = Math.Min(0.015f + player.velocity.Length() * 0.001f, 0.1f) * 0.5f;
         if (target2.Length() > 1f && _attackVector.Length() < 1f) {
             Projectile.velocity = Helper.SmoothAngleLerp(Projectile.velocity.ToRotation(), target2.ToRotation(), lerp * 3.5f).ToRotationVector2().SafeNormalize(Vector2.Zero);
         }
