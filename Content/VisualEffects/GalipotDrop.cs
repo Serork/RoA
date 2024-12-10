@@ -30,16 +30,27 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
         if (!(Projectile == null || !Projectile.active)) {
             TimeLeft = Projectile.timeLeft;
         }
-        if ((Scale < 1f || Projectile.timeLeft < 100) && _opacity > 0f) {
-            _opacity -= 0.065f + Main.rand.NextFloatRange(0.025f);
-        }
-        if (--TimeLeft <= 0 || _opacity <= 0f) {
+        if (--TimeLeft <= 0 || _opacity <= 0f || Scale <= 0.01f) {
             RestInPool();
             return;
         }
-        if (Collision.SolidCollision(Position, 0, 0) || Collision.WetCollision(Position, 0, 0)) {
-            Velocity = Vector2.UnitY;
-            Position.Y += 0.05f * Main.rand.NextFloat();
+        bool flag = Collision.WetCollision(Position, 0, 0);
+        if (!flag) {
+            if ((Scale < 1f || Projectile.timeLeft < 100) && _opacity > 0f) {
+                _opacity -= 0.065f + Main.rand.NextFloatRange(0.025f);
+            }
+        }
+        else {
+            Scale -= 0.05f;
+        }
+        if (Collision.SolidCollision(Position, 0, 0) || flag) {
+            if (!flag) {
+                Velocity = Vector2.UnitY;
+                Position.Y += 0.05f * Main.rand.NextFloat();
+            }
+            else {
+                Velocity = Vector2.Zero;
+            }
             if (Scale < 1f) {
                 RestInPool();
             }

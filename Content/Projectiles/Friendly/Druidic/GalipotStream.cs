@@ -6,6 +6,8 @@ using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -66,13 +68,32 @@ sealed class GalipotStream : NatureProjectile {
     }
 
     public override void AI() {
+        bool flag = false;
+        if (Collision.WetCollision(Projectile.Center, 0, 0)) {
+            if (Projectile.velocity.Length() > 1f) {
+                Projectile.velocity.Y *= 0.7f;
+                if (Math.Abs(Projectile.velocity.X) > 0.2f) {
+                    Projectile.velocity.X *= 0.7f;
+                }
+            }
+            //Projectile.position.Y += 0.05f * Main.rand.NextFloat();
+            flag = true;
+        }
+
+        if (flag) {
+            Projectile.scale -= 0.02f;
+        }
+        if (Projectile.scale <= 0.1f) {
+            Projectile.Kill();
+        }
+
         Projectile.ai[2] *= 0.99f;
         void drop() {
             if (Main.rand.NextBool(2)) {
                 GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
                     Projectile.velocity);
                 drop.Projectile = Projectile;
-                drop.Scale = Main.rand.NextFloat(8f, 10f);
+                drop.Scale = Main.rand.NextFloat(8f, 10f) * Projectile.scale;
                 drop.Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 drop.AI0 = Main.rand.NextFloat(0f, MathHelper.TwoPi);
             }
