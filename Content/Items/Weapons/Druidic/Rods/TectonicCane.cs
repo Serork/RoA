@@ -45,7 +45,7 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
             int count = 10;
             for (int i = 0; i < count; i++) {
                 float progress = (float)i / count;
-                VisualEffectSystem.New<TectonicDebris>(VisualEffectLayer.BEHINDPROJS).
+                VisualEffectSystem.New<TectonicDebris>(VisualEffectLayer.BEHINDPROJS)?.
                     Setup(
                     corePosition - Vector2.One * 5f + Main.rand.RandomPointInArea(10f, 10f),
                     Vector2.One.RotatedByRandom(MathHelper.TwoPi * progress).SafeNormalize(Vector2.One) * Main.rand.NextFloat(2f, 5f),

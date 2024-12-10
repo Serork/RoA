@@ -44,7 +44,7 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         float rotation = reader.ReadSingle();
 
         void createVisualEffect<T>() where T : VisualEffect<T>, new() {
-            VisualEffectSystem.New<T>(layer).
+            VisualEffectSystem.New<T>(layer, onServer: true).
                         Setup(position,
                               velocity,
                               color,

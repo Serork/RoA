@@ -267,8 +267,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
         position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
         velocity = angle.ToRotationVector2() * velocity * 0.5f;
         int layer = VisualEffectLayer.ABOVENPCS;
-        VisualEffectSystem.New<ClawsSlashHit>(layer).
-            Setup(position,
+        VisualEffectSystem.New<ClawsSlashHit>(layer)?.Setup(position,
                   velocity,
                   color);
         if (Main.netMode == NetmodeID.MultiplayerClient) {

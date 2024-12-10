@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
@@ -17,7 +18,10 @@ sealed class VisualEffectSystem : ModSystem {
 
     public static ParticleRenderer GetLayer(int i) => _layers[i];
 
-    public static T New<T>(int layer, Action<T>? preInitializer = null) where T : VisualEffect<T>, new() {
+    public static T New<T>(int layer, Action<T>? preInitializer = null, bool onServer = false) where T : VisualEffect<T>, new() {
+        if (Main.dedServ && !onServer) {
+            return null;
+        }
         T value = Fetch<T>();
         preInitializer?.Invoke(value);
         _layers[layer].Add(value);

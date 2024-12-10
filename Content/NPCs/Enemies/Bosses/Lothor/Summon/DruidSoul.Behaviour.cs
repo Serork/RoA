@@ -549,7 +549,7 @@ sealed partial class DruidSoul : RoANPC {
                         //    SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "Test2") { PitchVariance = 0.5f, Volume = 2f }, position);
                         //}
                         //velocity *= MathHelper.Clamp(altarStrength + 0.5f, 0.5f, 1f);
-                        VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).
+                        VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDTILESBEHINDNPCS)?.
                                 SetupPart(1,
                                         Vector2.Zero,
                                         position,
@@ -582,7 +582,7 @@ sealed partial class DruidSoul : RoANPC {
                     Vector2 center = NPC.position + new Vector2(6f + Main.rand.Next(NPC.width - 6), NPC.height / 2f + 10f);
                     center.X += Main.rand.Next(-100, 100) * 0.05f;
                     center.Y += Main.rand.Next(-100, 100) * 0.05f;
-                    VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS).
+                    VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS)?.
                             SetupPart(0,
                                     _velocity2 + _velocity3 + _velocity,
                                     center - Vector2.UnitY * (2f + -8f * Ease.CircIn(altarStrength)),
