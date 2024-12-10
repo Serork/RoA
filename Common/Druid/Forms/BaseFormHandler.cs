@@ -124,6 +124,19 @@ sealed class BaseFormHandler : ModPlayer {
 
     public override void Load() {
         On_TileObject.DrawPreview += On_TileObject_DrawPreview;
+        On_Player.LookForTileInteractions += On_Player_LookForTileInteractions;
+        On_Main.ItemIconCacheUpdate += On_Main_ItemIconCacheUpdate;
+    }
+
+    private void On_Main_ItemIconCacheUpdate(On_Main.orig_ItemIconCacheUpdate orig, int selectedItemID) {
+        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            selectedItemID = 0;
+        }
+        orig(selectedItemID);
+    }
+
+    private void On_Player_LookForTileInteractions(On_Player.orig_LookForTileInteractions orig, Player self) {
+        orig(self);
     }
 
     private void On_TileObject_DrawPreview(On_TileObject.orig_DrawPreview orig, Microsoft.Xna.Framework.Graphics.SpriteBatch sb, TileObjectPreviewData op, Vector2 position) {
@@ -142,11 +155,6 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public override void PostUpdate() {
-        if (IsInDruidicForm && Player.inventory.FirstOrDefault(x => x.type == Player.cursorItemIconID) != null) {
-            Player.cursorItemIconEnabled = false;
-            Player.cursorItemIconID = 0;
-        }
-
         UsePlayerSpeed = false;
     }
 

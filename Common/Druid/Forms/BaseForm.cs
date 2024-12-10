@@ -50,11 +50,11 @@ abstract class BaseForm : ModMount {
 
     private static MovementSpeedInfo _playerMovementSpeedInfo;
 
-    private float _attackCharge;
+    protected float _attackCharge;
 
-    protected float AttackCharge {
+    public float AttackCharge {
         get => Ease.QuintOut(_attackCharge);
-        set => _attackCharge = value;
+        protected set => _attackCharge = value;
     }
 
     public BaseFormBuff MountBuff { get; init; }
