@@ -12,6 +12,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -35,6 +36,8 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
         private Vector2 _tempMousePosition;
 
         protected override byte TimeAfterShootToExist(Player player) => (byte)(player.itemTimeMax * 2);
+
+        protected override void SetAttackSound(ref SoundStyle attackSound) => attackSound = SoundID.Item69 with { Pitch = 0.25f, Volume = 0.625f };
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 

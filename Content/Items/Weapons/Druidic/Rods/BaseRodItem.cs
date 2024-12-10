@@ -217,7 +217,13 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected virtual void SafestOnSpawn(IEntitySource source) { }
 
-    protected virtual void PlayAttackSound() => SoundEngine.PlaySound(SoundID.Item20, CorePosition);
+    protected virtual void SetAttackSound(ref SoundStyle attackSound) { }
+
+    protected void PlayAttackSound() {
+        SoundStyle attackSound = SoundID.Item20;
+        SetAttackSound(ref attackSound);
+        SoundEngine.PlaySound(attackSound, CorePosition);
+    }
 
     public sealed override void AI() {
         ActiveCheck();
