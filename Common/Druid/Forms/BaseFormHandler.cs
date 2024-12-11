@@ -105,6 +105,10 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public static void ToggleForm<T>(Player player, T instance = null) where T : FormInfo {
+        if (player.ItemAnimationActive) {
+            return;
+        }
+
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
         T formInstance = instance ?? GetForm<T>();
         if (!handler.ShouldFormBeActive(formInstance)) {
