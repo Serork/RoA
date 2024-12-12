@@ -33,8 +33,10 @@ sealed class BaseFormBuff(BaseForm parent) : ModBuff {
     }
 
     public override void Update(Player player, ref int buffIndex) {
-        player.mount.SetMount(Parent.Type, player);
-        player.buffTime[buffIndex] = 10;
+        if (!player.GetModPlayer<WreathHandler>().IsEmpty2) {
+            player.mount.SetMount(Parent.Type, player);
+            player.buffTime[buffIndex] = 10;
+        }
     }
 }
 

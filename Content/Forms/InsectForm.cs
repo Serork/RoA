@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Druid.Forms;
+using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -27,6 +28,14 @@ abstract class InsectForm : BaseForm {
         internal bool? _facedRight;
         internal int _shootCounter, _insectTimer;
         internal float _directionChangedFor;
+
+        public override void ResetEffects() {
+            if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+                _facedRight = null;
+                _shootCounter = _insectTimer = 0;
+                _directionChangedFor = 0f;
+            }
+        }
 
         public override void PostUpdate() {
             if (_directionChangedFor > 0f) {
@@ -99,6 +108,7 @@ abstract class InsectForm : BaseForm {
                 insectTimer++;
                 if (insectTimer >= 90) {
                     AttackCharge = 1f;
+                    player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
                     SoundEngine.PlaySound(SoundID.NPCHit32, player.position);
                     for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
                         int insectDamage = 15;
@@ -133,6 +143,7 @@ abstract class InsectForm : BaseForm {
         }
         if (shootCounter % 15 == 5 && shootCounter > 0) {
             AttackCharge = 1.25f;
+            player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
 
             SoundEngine.PlaySound(SoundID.Item17, player.Center);
             Vector2 playerPos, velocity;

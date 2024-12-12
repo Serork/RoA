@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Core.Utility;
@@ -33,6 +34,7 @@ sealed class BaseFormHandler : ModPlayer {
     private static readonly Dictionary<Type, FormInfo> _formsByType = [];
     private FormInfo _currentForm;
     private bool _shouldBeActive;
+    private bool _startDecreasingWreath;
 
     public static IReadOnlyCollection<FormInfo> Forms => _formsByType.Values;
     public FormInfo CurrentForm => _currentForm;
@@ -84,6 +86,10 @@ sealed class BaseFormHandler : ModPlayer {
     public static void ApplyForm<T>(Player player, T instance = null) where T : FormInfo {
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
         T formInstance = instance ?? GetForm<T>();
+        if (!player.GetModPlayer<WreathHandler>().IsFull) {
+            player.GetModPlayer<WreathHandler>().SlowlyActivateForm(instance);
+            return;
+        }
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
     }
@@ -93,6 +99,7 @@ sealed class BaseFormHandler : ModPlayer {
         T formInstance = instance ?? GetForm<T>();
         if (formInstance != null) {
             player.ClearBuff(formInstance.MountBuff.Type);
+            player.GetModPlayer<WreathHandler>().Reset(true);
         }
         handler.HardResetActiveForm();
     }

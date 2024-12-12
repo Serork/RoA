@@ -21,6 +21,8 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
 
+using static RoA.Common.Druid.Forms.BaseFormHandler;
+
 namespace RoA.Common.Druid.Wreath;
 
 sealed class WreathHandler : ModPlayer {
@@ -39,8 +41,9 @@ sealed class WreathHandler : ModPlayer {
     private float _keepBonusesForTime;
     private byte _boost;
     private ushort _increaseValue;
-    private float _currentChangingTime, _currentChangingMult, _stayTime;
+    private float _currentChangingTime, _currentChangingMult, _stayTime, _extraChangingValueMultiplier;
     private bool _shouldDecrease, _shouldDecrease2;
+    private FormInfo _formInfo;
 
     private int[] _buffTypes = [ModContent.BuffType<WreathCharged>(), ModContent.BuffType<WreathFullCharged>(), ModContent.BuffType<WreathFullCharged2>()];
 
@@ -81,6 +84,8 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
+    public bool StartSlowlyIncreasingUntilFull { get; private set; }
+
     public ushort TotalResource => (ushort)(MaxResource + ExtraResource);
 
     public float Max => TotalResource / MaxResource;
@@ -95,10 +100,11 @@ sealed class WreathHandler : ModPlayer {
     public float ChangingProgress {
         get {
             float value = MathHelper.Clamp(ChangingTimeValue - _currentChangingTime, 0f, 1f);
-            return _shouldDecrease2 ? value : Ease.CircOut(value);
+            return _shouldDecrease2 ? value : StartSlowlyIncreasingUntilFull ? value : Ease.CircOut(value);
         }
     }
     public bool IsEmpty => ActualProgress2 <= 0.01f;
+    public bool IsEmpty2 => ActualProgress2 <= 0.05f;
     public bool IsFull => Progress >= 0.95f;
     public bool GetIsFull(ushort currentResource) => GetProgress(currentResource) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
@@ -173,6 +179,7 @@ sealed class WreathHandler : ModPlayer {
             if (IsFool(natureProjectile)) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     if (!SpecialAttackData.OnlySpawn || nonDataReset) {
+                        StartSlowlyIncreasingUntilFull = false;
                         Reset();
                         OnWreathReset?.Invoke();
                     }
@@ -195,15 +202,34 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
+    internal void SlowlyActivateForm(FormInfo formInfo) {
+        if (StartSlowlyIncreasingUntilFull) {
+            return;
+        }
+
+        StartSlowlyIncreasingUntilFull = true;
+        _formInfo = formInfo;
+        IncreaseResourceValue(increaseUntilFull: true);
+    }
+
     public override void PostUpdateEquips() {
         ApplyBuffs();
         GetWreathType();
         MakeDusts();
 
-        if (_stayTime <= 0f && !_shouldDecrease) {
+        if (StartSlowlyIncreasingUntilFull) {
+            Player.moveSpeed *= MathHelper.Max(0.2f, Ease.QuartIn(Progress));
+            if (!IsFull) {
+            }
+            else if (!Player.ItemAnimationActive) {
+                StartSlowlyIncreasingUntilFull = false;
+                BaseFormHandler.ApplyForm(Player, _formInfo);
+            }
+        }
+        else if (_stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
         }
-        else {
+        else if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
             BaseRodProjectile? rodProjectile = null;
             foreach (Projectile projectile in Main.ActiveProjectiles) {
                 if (projectile.owner != Player.whoAmI) {
@@ -303,7 +329,7 @@ sealed class WreathHandler : ModPlayer {
         ChangingHandler();
     }
 
-    public void IncreaseResourceValue(float fine = 0f) {
+    public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false) {
         if (_shouldDecrease2) {
             _shouldDecrease = _shouldDecrease2 = false;
         }
@@ -312,16 +338,21 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
-        if (IsChangingValue) {
-            if (_boost < MAXBOOSTINCREMENT) {
-                _boost++;
+        if (!increaseUntilFull) {
+            if (IsChangingValue) {
+                if (_boost < MAXBOOSTINCREMENT) {
+                    _boost++;
+                }
+                _addExtraValue += BASEADDVALUE / _boost * BASEADDVALUE;
             }
-            _addExtraValue += BASEADDVALUE / _boost * BASEADDVALUE;
+        }
+        else {
+            _addExtraValue = 0f;
         }
 
         _stayTime = STAYTIMEMAX;
         ChangeItsValue();
-        _increaseValue = (ushort)(GetIncreaseValue(fine) * Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier);
+        _increaseValue = StartSlowlyIncreasingUntilFull ? (ushort)(MaxResource - CurrentResource) : (ushort)(GetIncreaseValue(fine) * Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier);
     }
 
     private ushort GetIncreaseValue(float fine) => (ushort)(AddResourceValue() - AddResourceValue() * fine);
@@ -351,6 +382,7 @@ sealed class WreathHandler : ModPlayer {
                 }
             }
             mult = num2 * DruidPlayerStats.DischargeTimeDecreaseMultiplier;
+            mult *= _extraChangingValueMultiplier;
             if (_currentChangingMult < mult) {
                 _currentChangingMult += TimeSystem.LogicDeltaTime;
             }
@@ -358,8 +390,11 @@ sealed class WreathHandler : ModPlayer {
                 _currentChangingMult = mult;
             }
         }
-        _currentChangingTime -= TimeSystem.LogicDeltaTime * _currentChangingMult * Math.Max((byte)1, _boost);
-
+        float value2 = TimeSystem.LogicDeltaTime * _currentChangingMult * Math.Max((byte)1, _boost);
+        if (StartSlowlyIncreasingUntilFull) {
+            value2 *= 0.15f;
+        }
+        _currentChangingTime -= value2;
         if (_shouldDecrease) {
             CurrentResource = (ushort)(_tempResource - _tempResource * ChangingProgress);
             if (IsEmpty) {
@@ -372,22 +407,27 @@ sealed class WreathHandler : ModPlayer {
         CurrentResource = (ushort)(_tempResource + _increaseValue * ChangingProgress);
     }
 
-    private void Reset(bool resetAfterStaying = false) {
-        if (resetAfterStaying) {
+    internal void Reset(bool slowReset = false, float extraChangingValue = 1f) {
+        if (!_shouldDecrease2) {
+            if (IsFull && !HasKeepTime) {
+                _keepBonusesForTime = DruidPlayerStats.KeepBonusesForTime;
+            }
+
+            _shouldDecrease = true;
+
+            _boost = 0;
+
+            ChangeItsValue();
+        }
+
+        if (slowReset) {
             _shouldDecrease2 = true;
             _currentChangingMult = TimeSystem.LogicDeltaTime;
+            _extraChangingValueMultiplier = extraChangingValue;
         }
-
-        if (IsFull && !HasKeepTime) {
-            _keepBonusesForTime = DruidPlayerStats.KeepBonusesForTime;
-            //VisualCurrentResource = CurrentResource;
+        else {
+            _shouldDecrease2 = false;
         }
-
-        _shouldDecrease = true;
-
-        _boost = 0;
-
-        ChangeItsValue();
     }
 
     private void ChangeItsValue() {
