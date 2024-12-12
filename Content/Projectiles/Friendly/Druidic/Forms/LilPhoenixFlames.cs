@@ -13,8 +13,8 @@ sealed class LilPhoenixFlames : FormProjectile {
         Projectile.aiStyle = 14;
         Projectile.width = 4;
         Projectile.height = 4;
-        Projectile.timeLeft = 135;
-        Projectile.penetrate = 1;
+        Projectile.timeLeft = 260;
+        Projectile.penetrate = 6;
         Projectile.tileCollide = true;
         Projectile.friendly = true;
         Projectile.scale = 1.1f;
@@ -24,19 +24,24 @@ sealed class LilPhoenixFlames : FormProjectile {
     }
 
     public override void AI() {
+        if (Main.netMode != NetmodeID.Server) {
+            if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
+                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 2, 2, 6, 0f, -0.5f, 0, default, 2f);
+                Main.dust[dust].noGravity = true;
+            }
+        }
         Vector2 lastVelocity = Projectile.velocity;
         if (Projectile.velocity.X != lastVelocity.X)
             Projectile.velocity.X = lastVelocity.X * -0.5f;
         if (Projectile.velocity.Y != lastVelocity.Y && lastVelocity.Y > 1f)
             Projectile.velocity.Y = lastVelocity.Y * -0.5f;
-        if (Main.netMode != NetmodeID.Server) {
-            int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 2, 2, 6, 0f, -0.5f, 0, default, 2f);
-            Main.dust[dust].noGravity = true;
-        }
+
+        Projectile.localAI[2] = 0f;
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         Projectile.velocity = Vector2.Zero;
+        Projectile.localAI[2] = 10f;
         return false;
     }
 

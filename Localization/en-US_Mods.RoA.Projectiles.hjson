@@ -76,3 +76,6 @@ TectonicCaneBase.DisplayName: Tectonic Cane Base
 TectonicCaneProjectile.DisplayName: Tectonic Cane Projectile
 TectonicCaneProjectile2.DisplayName: Tectonic Cane Projectile2
 LilPhoenixFlames.DisplayName: Lil Phoenix Flames
+LilPhoenixFlames2.DisplayName: Lil Phoenix Flames2
+LilPhoenixTrailFlame.DisplayName: Lil Phoenix Trail Flame
+LilPhoenixExplosion.DisplayName: Lil Phoenix Explosion

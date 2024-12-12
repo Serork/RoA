@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
@@ -15,7 +13,6 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -29,20 +26,37 @@ sealed class LilPhoenixForm : BaseForm {
         }
     }
 
-    private class LilPhoenixFormHandler : ModPlayer {
+    internal class LilPhoenixFormHandler : ModPlayer {
         internal bool _phoenixJumped, _phoenixJumped2;
         internal bool _phoenixJustJumped, _phoenixJustJumpedForAnimation, _phoenixJustJumpedForAnimation2;
         internal int _phoenixJumpsCD;
         internal int _phoenixJump;
         internal Vector2 _tempPosition;
         internal bool _isPreparing, _wasPreparing, _prepared;
-        internal float _charge, _charge2;
-        internal bool _dashed;
+        internal float _charge, _charge2, _charge3;
+        internal bool _dashed, _dashed2;
 
         internal void ResetDash() {
+            if (_dashed) {
+                ClearProjectiles();
+            }
             _dashed = false;
             _wasPreparing = true;
             _prepared = true;
+            _charge = _charge2 = 0f;
+            Player.eocDash = 0;
+            Player.armorEffectDrawShadowEOCShield = true;
+        }
+
+        internal void ClearProjectiles() {
+            //foreach (Projectile projectile in Main.ActiveProjectiles) {
+            //    if (projectile.owner != Player.whoAmI) {
+            //        continue;
+            //    }
+            //    if (projectile.type == (ushort)ModContent.ProjectileType<LilPhoenixTrailFlame>()) {
+            //        projectile.Kill();
+            //    }
+            //}
         }
 
         public override void ResetEffects() {
@@ -83,9 +97,9 @@ sealed class LilPhoenixForm : BaseForm {
             player.fullRotation = (float)Math.Atan2((double)player.velocity.Y, (double)player.velocity.X) + (float)Math.PI / 2f;
         }
         else if (plr._isPreparing) {
-            float length = 8f - player.velocity.Length();
+            float length = 9f - player.velocity.Length();
             length *= 0.075f;
-            player.fullRotation += 0.5f * length * player.direction;
+            player.fullRotation += (0.4f + Utils.Remap(plr._charge * 2f, 0f, 3.5f, 0f, 0.2f)) * length * player.direction;
             player.fullRotationOrigin = new Vector2(9f, 5f);
         }
         else {
@@ -113,15 +127,27 @@ sealed class LilPhoenixForm : BaseForm {
         if (plr._isPreparing) {
             flag = true;
         }
-        if (!flag && !IsInAir(player)) {
+        bool flag4 = !flag || !IsInAir(player);
+        StrikeNPC(player, !IsInAir(player));
+        if (flag4) {
+            if (plr._dashed) {
+                plr.ClearProjectiles();
+            }
             plr._wasPreparing = false;
             plr._dashed = false;
+            if (player.eocDash > 0) {
+                player.eocDash -= 10;
+            }
+            else {
+                player.armorEffectDrawShadowEOCShield = false;
+            }
         }
         void dash() {
             SoundEngine.PlaySound(SoundID.Item74, player.position);
-            player.direction = player.position.X < Main.MouseWorld.X ? 1 : -1;
-            float speed = 5f * plr._charge;
             Vector2 vector_ = player.GetViableMousePosition();
+            player.controlLeft = player.controlRight = false;
+            player.direction = -(player.Center - vector_).X.GetDirection();
+            float speed = 5f * plr._charge;
             Vector2 vector = new(vector_.X - player.Center.X, vector_.Y - player.Center.Y);
             float acceleration = Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y);
             acceleration += 10f - acceleration;
@@ -131,7 +157,24 @@ sealed class LilPhoenixForm : BaseForm {
             sqrt = speed / sqrt;
             player.velocity.X = vector.X * sqrt;
             player.velocity.Y = vector.Y * sqrt;
-            plr._dashed = true;
+            plr._dashed2 = plr._dashed = true;
+            ushort type = (ushort)ModContent.ProjectileType<LilPhoenixTrailFlame>();
+            int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(40f);
+            float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(0f);
+            for (int i = 0; i < 2; i++) {
+                Projectile.NewProjectile(player.GetSource_Misc("phoenixdash"), player.Center, Vector2.Zero, type, damage, knockBack, player.whoAmI, (float)i);
+            }
+            int k = 36;
+            for (int i = 0; i < k; i++) {
+                int x = (int)((double)player.position.X - 3.0 + (double)player.width / 2.0);
+                int y = (int)((double)player.position.Y - 8.0 + (double)player.height / 2.0);
+                Vector2 vector3 = (new Vector2((float)player.width / 2f, player.height) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
+                Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
+                int dust = Dust.NewDust(vector3 + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].noLight = true;
+                Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
+            }
         }
         bool flag2 = Main.mouseLeft && !Main.mouseText && player.whoAmI == Main.myPlayer;
         if (plr._isPreparing) {
@@ -156,22 +199,21 @@ sealed class LilPhoenixForm : BaseForm {
             float max = 3.5f;
             if (plr._charge < max) {
                 plr._charge += 0.1f;
+                plr._charge3 = plr._charge;
                 plr._charge2 += 0.35f;
                 plr._charge2 = Math.Min(plr._charge2, max);
             }
             else if (!plr._prepared) {
-                if (Main.netMode != NetmodeID.Server) {
-                    int k = 36;
-                    for (int i = 0; i < k; i++) {
-                        int x = (int)((double)player.position.X - 3.0 + (double)player.width / 2.0);
-                        int y = (int)((double)player.position.Y - 8.0 + (double)player.height / 2.0);
-                        Vector2 vector = (new Vector2((float)player.width / 2f, player.height) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
-                        Vector2 vector2 = vector - new Vector2((float)x, (float)y);
-                        int dust = Dust.NewDust(vector + vector2 - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
-                        Main.dust[dust].noGravity = true;
-                        Main.dust[dust].noLight = true;
-                        Main.dust[dust].velocity = -Vector2.Normalize(vector2) * 2f;
-                    }
+                int k = 36;
+                for (int i = 0; i < k; i++) {
+                    int x = (int)((double)player.position.X - 3.0 + (double)player.width / 2.0);
+                    int y = (int)((double)player.position.Y - 8.0 + (double)player.height / 2.0);
+                    Vector2 vector = (new Vector2((float)player.width / 2f, player.height) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
+                    Vector2 vector2 = vector - new Vector2((float)x, (float)y);
+                    int dust = Dust.NewDust(vector + vector2 - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].noLight = true;
+                    Main.dust[dust].velocity = -Vector2.Normalize(vector2) * 2f;
                 }
                 plr._prepared = true;
             }
@@ -183,8 +225,72 @@ sealed class LilPhoenixForm : BaseForm {
                 plr._wasPreparing = true;
             }
             plr._tempPosition = player.position + player.velocity * 8f;
+            if (plr._charge > 0f) {
+                player.eocDash = (int)(plr._charge * 15f);
+                player.armorEffectDrawShadowEOCShield = true;
+            }
             plr._charge = plr._charge2 = 0f;
             plr._prepared = false;
+        }
+    }
+
+    private void StrikeNPC(Player player, bool flag4) {
+        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        void explosion(int i = -1) {
+            if (plr._dashed2 && Main.netMode != NetmodeID.Server) {
+                float value = plr._charge3 / 3.5f;
+                if (i != -1) {
+                    player.immune = true;
+                    player.immuneTime = 20;
+                    player.immuneNoBlink = true;
+                    int direction = Main.npc[i].direction;
+                    if (Main.npc[i].velocity.X < 0f)
+                        direction = -1;
+                    else if (Main.npc[i].velocity.X > 0f)
+                        direction = 1;
+                    bool crit = false;
+                    if (Main.rand.Next(100) < (4 + player.GetTotalCritChance(DruidClass.NatureDamage)))
+                        crit = true;
+                    int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(50f * value);
+                    float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(4f * value);
+                    if (player.whoAmI == Main.myPlayer)
+                        player.ApplyDamageToNPC(Main.npc[i], (int)damage, knockBack, direction, crit, DruidClass.NatureDamage, true);
+                }
+                if (plr._charge3 >= 3.5f) {
+                    player.immune = true;
+                    player.immuneTime = 30;
+                    player.immuneNoBlink = true;
+                    SoundEngine.PlaySound(SoundID.Item14, player.position);
+                    int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(50f * value);
+                    int knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(4f * value);
+                    ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixExplosion>();
+                    int proj = Projectile.NewProjectile(player.GetSource_Misc("phoenixexplosion"), player.Center.X, player.Center.Y, 0f, 0f, projType, damage, knockBack, player.whoAmI);
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+                    plr._charge3 = 0f;
+                }
+                plr._dashed2 = false;
+                //sMain.npc[i].StrikeNPC((int)(CurrentDamage * plr.dashChargeValue), 2f * plr.dashChargeValue, direction, Main.rand.Next(2) == 0 ? true : false, false, false);
+            }
+        }
+        for (int i = 0; i < Main.npc.Length; i++) {
+            NPC nPC = Main.npc[i];
+            Rectangle rectangle = new((int)((double)player.position.X + (double)player.velocity.X * 0.5 - 4.0), (int)((double)player.position.Y + (double)player.velocity.Y * 0.5 - 4.0), player.width + 8, player.height + 8);
+            bool flag3 = !(!nPC.active || nPC.dontTakeDamage || nPC.friendly || (nPC.aiStyle == 112 && !(nPC.ai[2] <= 1f)) || !player.CanNPCBeHitByPlayerOrPlayerProjectile(nPC));
+            Rectangle rect = nPC.getRect();
+            bool flag5 = false;
+            if (rectangle.Intersects(rect) && (nPC.noTileCollide || player.CanHit(nPC))) {
+                flag5 = true;
+            }
+            if (!flag5) {
+                flag3 = false;
+            }
+            if (flag3) {
+                explosion(i);
+            }
+        }
+        if (flag4) {
+            explosion();
         }
     }
 
@@ -212,6 +318,7 @@ sealed class LilPhoenixForm : BaseForm {
             if (plr._dashed) {
                 plr.ResetDash();
             }
+            plr._dashed2 = false;
         }
 
         if (player.controlJump && !plr._isPreparing) {

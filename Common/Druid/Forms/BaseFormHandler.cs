@@ -1,18 +1,17 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
+using RoA.Core.Utility;
+
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.ID;
-using RoA.Common.Networking.Packets;
-using RoA.Common.Networking;
-using Newtonsoft.Json;
-using Steamworks;
-using System.Text;
-using RoA.Utilities;
-using Microsoft.Xna.Framework;
-using System.Linq;
+using Terraria.ModLoader;
 
 namespace RoA.Common.Druid.Forms;
 sealed class BaseFormHandler : ModPlayer {
@@ -84,24 +83,18 @@ sealed class BaseFormHandler : ModPlayer {
 
     public static void ApplyForm<T>(Player player, T instance = null) where T : FormInfo {
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
-        if (handler.IsInDruidicForm) {
-            return;
-        }
-
         T formInstance = instance ?? GetForm<T>();
+        player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
-        player.AddBuff(formInstance.MountBuff.Type, 3600);
     }
 
     public static void ReleaseForm<T>(Player player, T instance = null) where T : FormInfo {
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
-        if (!handler.IsInDruidicForm) {
-            return;
-        }
-
         T formInstance = instance ?? GetForm<T>();
+        if (formInstance != null) {
+            player.ClearBuff(formInstance.MountBuff.Type);
+        }
         handler.HardResetActiveForm();
-        player.ClearBuff(formInstance.MountBuff.Type);
     }
 
     public static void ToggleForm<T>(Player player, T instance = null) where T : FormInfo {
@@ -128,18 +121,14 @@ sealed class BaseFormHandler : ModPlayer {
 
     public override void Load() {
         On_TileObject.DrawPreview += On_TileObject_DrawPreview;
-        On_Player.LookForTileInteractions += On_Player_LookForTileInteractions;
-        On_Main.ItemIconCacheUpdate += On_Main_ItemIconCacheUpdate;
+        On_Main.DrawInterface_40_InteractItemIcon += On_Main_DrawInterface_40_InteractItemIcon;
     }
 
-    private void On_Main_ItemIconCacheUpdate(On_Main.orig_ItemIconCacheUpdate orig, int selectedItemID) {
-        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
-            selectedItemID = 0;
+    private void On_Main_DrawInterface_40_InteractItemIcon(On_Main.orig_DrawInterface_40_InteractItemIcon orig, Main self) {
+        if (Main.player[Main.myPlayer].cursorItemIconID <= 0 && Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            return;
         }
-        orig(selectedItemID);
-    }
 
-    private void On_Player_LookForTileInteractions(On_Player.orig_LookForTileInteractions orig, Player self) {
         orig(self);
     }
 
@@ -155,8 +144,7 @@ sealed class BaseFormHandler : ModPlayer {
         ResetActiveForm();
     }
 
-    public override void PostUpdateRunSpeeds() {
-    }
+    public override void PostUpdateRunSpeeds() { }
 
     public override void PostUpdate() {
         UsePlayerSpeed = false;

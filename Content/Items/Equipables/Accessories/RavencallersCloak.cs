@@ -116,9 +116,6 @@ sealed class RavencallersCloak : ModItem {
             On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
             On_PlayerHeadDrawRenderTargetContent.DrawTheContent += On_PlayerHeadDrawRenderTargetContent_DrawTheContent;
 
-            if (Main.netMode == NetmodeID.Server) {
-                return;
-            }
             _drawPlayerInternal = typeof(LegacyPlayerRenderer).GetMethod("DrawPlayerInternal", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 

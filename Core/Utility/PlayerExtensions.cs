@@ -10,14 +10,14 @@ namespace RoA.Core.Utility;
 
 static class PlayerExtensions {
     public static void AddBuffInStart(this Player self, int type, int time) {
-        int[] newArray = new int[self.buffType.Length + 1];
-        newArray[0] = type;
-        Array.Copy(self.buffType, 0, newArray, 1, self.buffType.Length);
-        self.buffType = newArray;
-        newArray = new int[self.buffTime.Length + 1];
-        newArray[0] = time;
-        Array.Copy(self.buffTime, 0, newArray, 1, self.buffTime.Length);
-        self.buffTime = newArray;
+        int[] newBuffType = new int[self.buffType.Length + 1];
+        newBuffType[0] = type;
+        Array.Copy(self.buffType, 0, newBuffType, 1, self.buffType.Length);
+        self.buffType = newBuffType;
+        int[] newBuffTime = new int[self.buffTime.Length + 1];
+        newBuffTime[0] = time;
+        Array.Copy(self.buffTime, 0, newBuffTime, 1, self.buffTime.Length);
+        self.buffTime = newBuffTime;
     }
 
     public static bool HasSetBonusFrom<T>(this Player player) where T : ModItem {
