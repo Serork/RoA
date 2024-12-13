@@ -225,7 +225,7 @@ abstract class InsectForm : BaseForm {
         skipDust = true;
     }
 
-    public sealed override void Dismount(Player player, ref bool skipDust) {
+    protected sealed override void SafeDismountMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 16; i++) {
             Vector2 position = player.Center + new Vector2(2, -6) + new Vector2(20, 0).RotatedBy(i * Math.PI * 2f / 16f) - new Vector2(0f, -12f);
             Vector2 direction = (player.Center - position) * 0.8f;

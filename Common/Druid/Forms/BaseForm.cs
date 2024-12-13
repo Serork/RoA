@@ -131,6 +131,7 @@ abstract class BaseForm : ModMount {
     protected virtual void SafeUpdateEffects(Player player) { }
     protected virtual bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) => true;
     protected virtual void SafeSetMount(Player player, ref bool skipDust) { }
+    protected virtual void SafeDismountMount(Player player, ref bool skipDust) { }
 
     protected virtual Vector2 GetLightingPos(Player player) => Vector2.Zero;
     protected virtual Color LightingColor { get; } = Color.White;
@@ -143,6 +144,12 @@ abstract class BaseForm : ModMount {
         _attackCharge2 = 1.5f;
 
         SafeSetMount(player, ref skipDust);
+    }
+
+    public sealed override void Dismount(Player player, ref bool skipDust) {
+        player.GetModPlayer<WreathHandler>().Dusts_ResetStayTime();
+
+        SafeDismountMount(player, ref skipDust);
     }
 
     public sealed override void UpdateEffects(Player player) {

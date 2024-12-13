@@ -456,7 +456,7 @@ sealed class LilPhoenixForm : BaseForm {
         skipDust = true;
     }
 
-    public override void Dismount(Player player, ref bool skipDust) {
+    protected override void SafeDismountMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 56; i++) {
             int dust = Dust.NewDust(player.position + new Vector2(-12, -30), 40, 55, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
             Main.dust[dust].noGravity = true;

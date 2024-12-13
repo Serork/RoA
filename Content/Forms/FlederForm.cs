@@ -376,7 +376,7 @@ sealed class FlederForm : BaseForm {
         skipDust = true;
     }
 
-    public override void Dismount(Player player, ref bool skipDust) {
+    protected override void SafeDismountMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 24; i++) {
             Vector2 spawnPos = player.Center - new Vector2(30f, 0).RotatedBy(i * Math.PI * 2 / 24f) - new Vector2(-6f, 4f);
             Vector2 direction = (player.Center - spawnPos) * 0.5f;

@@ -106,7 +106,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsEmpty2 => ActualProgress2 <= 0.05f;
     public bool IsEmpty3 => ActualProgress2 <= 0.15f;
     public bool IsFull => Progress >= 0.95f;
-    public bool GetIsFull(ushort currentResource) => GetProgress(currentResource) > 0.95f;
+    public bool GetIsFull(ushort currentResource, bool clawsReset = false) => (clawsReset ? GetActualProgress2(currentResource) : GetProgress(currentResource)) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
     public bool IsFull3 => IsFull && Progress <= 1.1f;
     public bool IsFull4 => Progress >= 0.85f;
@@ -116,7 +116,7 @@ sealed class WreathHandler : ModPlayer {
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
 
-    public bool ShouldDrawItself => !IsEmpty || Player.IsHoldingNatureWeapon() || Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm;
+    public bool ShouldDrawItself => !IsEmpty || Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet || Player.IsHoldingNatureWeapon() || Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm;
     public float PulseIntensity { get; private set; }
 
     public bool HasKeepTime => _keepBonusesForTime > 0f;
@@ -157,8 +157,6 @@ sealed class WreathHandler : ModPlayer {
         //}
     }
 
-    public bool IsFull5(NatureProjectile natureProjectile) => GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2));
-
     public void OnHitNPC(Projectile proj, bool nonDataReset = false) {
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;
@@ -178,7 +176,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && Player.ItemAnimationActive && natureProjectile.Item == selectedItem) {
             selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
-            if (!_shouldDecrease && !_shouldDecrease2 && IsFull5(natureProjectile)) {
+            if (!_shouldDecrease && !_shouldDecrease2 && GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2), true)) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     if (!SpecialAttackData.OnlySpawn || nonDataReset) {
                         StartSlowlyIncreasingUntilFull = false;
@@ -219,6 +217,15 @@ sealed class WreathHandler : ModPlayer {
         IncreaseResourceValue(increaseUntilFull: true);
     }
 
+    public void Dusts_ResetStayTime() {
+        for (int i = 0; i < 3; i++) {
+            MakeDusts_ActualMaking();
+        }
+        for (int i = 0; i < 5; i++) {
+            MakeDustsOnHit();
+        }
+    }
+
     public override void PostUpdateEquips() {
         ApplyBuffs();
         GetWreathType();
@@ -241,14 +248,12 @@ sealed class WreathHandler : ModPlayer {
                 vector *= 100f;
                 Main.dust[num8].position = Player.Center - vector;
             }
-            Player.moveSpeed *= MathHelper.Max(0.2f, progress);
+            float value = MathHelper.Clamp(MathHelper.Max(0.2f, progress), 0f, 1f);
+            Player.accRunSpeed *= value;
+            Player.runAcceleration *= value;
+            Player.maxRunSpeed *= value;
             if (_stayTime != 0f) {
-                for (int i = 0; i < 3; i++) {
-                    MakeDusts_ActualMaking();
-                }
-                for (int i = 0; i < 5; i++) {
-                    MakeDustsOnHit();
-                }
+                Dusts_ResetStayTime();
                 _stayTime = 0f;
             }
             if (!IsFull6) {
@@ -281,12 +286,7 @@ sealed class WreathHandler : ModPlayer {
         }
         else {
             if (_stayTime != 0f) {
-                for (int i = 0; i < 3; i++) {
-                    MakeDusts_ActualMaking();
-                }
-                for (int i = 0; i < 5; i++) {
-                    MakeDustsOnHit();
-                }
+                Dusts_ResetStayTime();
                 _stayTime = 0f;
             }
         }

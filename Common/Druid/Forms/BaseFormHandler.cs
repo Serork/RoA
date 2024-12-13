@@ -39,6 +39,7 @@ sealed class BaseFormHandler : ModPlayer {
     public static IReadOnlyCollection<FormInfo> Forms => _formsByType.Values;
     public FormInfo CurrentForm => _currentForm;
     public bool IsInDruidicForm => CurrentForm != null;
+    public bool HasDruidArmorSet => _shouldBeActive == true;
 
     public bool UsePlayerSpeed { get; internal set; }
 
