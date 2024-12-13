@@ -93,6 +93,7 @@ sealed class WreathHandler : ModPlayer {
     public float GetActualProgress2(ushort currentResource) => (float)currentResource / MaxResource;
     public float ActualProgress3 => SoulOfTheWoods ? (ActualProgress2 - 1f) : ActualProgress2;
     public float ActualProgress4 => MathHelper.Clamp(ActualProgress2, 0f, 1f);
+    public float ActualProgress5 => MathHelper.Clamp(ActualProgress4 * 1.5f, 0f, 1f);
     public float Progress => HasKeepTime ? Math.Max(1f, ActualProgress2) : ActualProgress2;
     public float GetProgress(ushort currentResource) => HasKeepTime ? Math.Max(1f, GetActualProgress2(currentResource)) : GetActualProgress2(currentResource);
     public float Progress2 => HasKeepTime ? Math.Max(1f, ActualProgress) : ActualProgress;
@@ -232,6 +233,11 @@ sealed class WreathHandler : ModPlayer {
         MakeDusts();
 
         if (StartSlowlyIncreasingUntilFull) {
+            if (!Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet) {
+                StartSlowlyIncreasingUntilFull = false;
+                ResetChangingValue();
+                Reset();
+            }
             float progress = Ease.QuartIn(Progress);
             if (((float)Main.rand.Next(400) < Progress * 200f || Main.rand.Next(40) == 0)) {
                 int num8 = Dust.NewDust(Player.position, Player.width, Player.height, GetDustType(), 0f, 0f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
@@ -248,22 +254,20 @@ sealed class WreathHandler : ModPlayer {
                 vector *= 100f;
                 Main.dust[num8].position = Player.Center - vector;
             }
-            for (int i = 0; i < 1; i++) {
-                if (Main.rand.NextBool(7)) {
-                    int num = 0;
-                    if (Player.gravDir == -1f)
-                        num -= Player.height;
-                    int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height + (float)num - 2), Player.width + 8, 4, GetDustType2(), (0f - Player.velocity.X) * 0.5f, Player.velocity.Y * 0.5f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
-                    Main.dust[num6].velocity.X = Main.dust[num6].velocity.X * 0.2f;
-                    Main.dust[num6].velocity.Y = -0.5f - Main.rand.NextFloat() * 1.5f;
-                    Main.dust[num6].velocity.Y *= Main.rand.NextFloat();
-                    Main.dust[num6].fadeIn = 0.5f;
-                    Main.dust[num6].scale *= Main.rand.NextFloat(1.1f, 1.25f);
-                    Main.dust[num6].scale *= 1.5f;
-                    Main.dust[num6].noGravity = true;
-                    Main.dust[num6].noLight = true;
-                    Main.dust[num6].customData = DrawColorOpacity * PulseIntensity * 1.6f;
-                }
+            if (Main.rand.NextBool(7)) {
+                int num = 0;
+                if (Player.gravDir == -1f)
+                    num -= Player.height;
+                int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height + (float)num - 2), Player.width + 8, 4, GetDustType2(), (0f - Player.velocity.X) * 0.5f, Player.velocity.Y * 0.5f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
+                Main.dust[num6].velocity.X = Main.dust[num6].velocity.X * 0.2f;
+                Main.dust[num6].velocity.Y = -0.5f - Main.rand.NextFloat() * 1.5f;
+                Main.dust[num6].velocity.Y *= Main.rand.NextFloat();
+                Main.dust[num6].fadeIn = 0.1f;
+                Main.dust[num6].scale *= Main.rand.NextFloat(1.1f, 1.25f);
+                Main.dust[num6].scale *= 1.5f;
+                Main.dust[num6].noGravity = true;
+                Main.dust[num6].noLight = true;
+                Main.dust[num6].customData = DrawColorOpacity * PulseIntensity * 1.6f;
             }
             float value = MathHelper.Clamp(MathHelper.Max(0.2f, progress), 0f, 1f);
             Player.accRunSpeed *= value;
@@ -495,6 +499,11 @@ sealed class WreathHandler : ModPlayer {
         _tempResource = CurrentResource;
         ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
         _currentChangingTime = ChangingTimeValue;
+    }
+
+    private void ResetChangingValue() {
+        _tempResource = CurrentResource;
+        _currentChangingTime = ChangingTimeValue = 0f;
     }
 
     private void MakeDusts() {

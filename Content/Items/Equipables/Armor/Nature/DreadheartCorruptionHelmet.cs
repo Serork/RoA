@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
+using RoA.Common.Druid.Wreath;
+using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
@@ -15,6 +17,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Head)]
+[AutoloadGlowMask2("_Head_Glow")]
 sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupContent {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Dreadheart Helmet");
@@ -36,12 +39,10 @@ sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupCont
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<DreadheartCorruptionChestplate>() && legs.type == ModContent.ItemType<DreadheartCorruptionLeggings>();
 
-    //public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
-    //	if (drawPlayer.active && drawPlayer.GetModPlayer<WreathPlayer>().isCharged) {
-    //		glowMask = RoAGlowMask.Get(nameof(DreadheartCorruptionHelmet));
-    //		glowMaskColor = Color.White;
-    //	}
-    //}
+    public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
+        glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
+        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetModPlayer<WreathHandler>().ActualProgress4;
+    }
 
     public override void UpdateArmorSet(Player player) {
         string setBonus = Language.GetText("Mods.RoA.Items.Tooltips.DreadheartCrimsonSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;

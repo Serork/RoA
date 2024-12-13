@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
+using RoA.Common.Druid.Wreath;
+using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
@@ -15,6 +17,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Head)]
+[AutoloadGlowMask2("_Head_Glow")]
 sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Ashwalker Hood");
@@ -36,7 +39,12 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<AshwalkerRobe>() && legs.type == ModContent.ItemType<AshwalkerLeggings>();
 
-	public override void UpdateArmorSet(Player player) {
+    public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
+        glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
+        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetModPlayer<WreathHandler>().ActualProgress5;
+    }
+
+    public override void UpdateArmorSet(Player player) {
 		string tapDir = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
 		player.setBonus = "On Fire! debuff regenerates life instead of doing damage" + $"\nDouble tap {tapDir} to take Firebird form";
         //player.GetModPlayer<DruidArmorSetPlayer>().ashwalkerArmor = true;
