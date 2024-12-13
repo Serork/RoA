@@ -110,6 +110,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsFull2 => Progress >= 1.95f;
     public bool IsFull3 => IsFull && Progress <= 1.1f;
     public bool IsFull4 => Progress >= 0.85f;
+    public bool IsFull6 => Progress >= 0.975f;
     public bool IsMinCharged => ActualProgress2 > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
@@ -210,7 +211,9 @@ sealed class WreathHandler : ModPlayer {
         if (StartSlowlyIncreasingUntilFull) {
             return;
         }
-
+        if (Player.mount.Active) {
+            Player.mount._active = false;
+        }
         StartSlowlyIncreasingUntilFull = true;
         _formInfo = formInfo;
         IncreaseResourceValue(increaseUntilFull: true);
@@ -240,18 +243,18 @@ sealed class WreathHandler : ModPlayer {
             }
             Player.moveSpeed *= MathHelper.Max(0.2f, progress);
             if (_stayTime != 0f) {
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < 3; i++) {
                     MakeDusts_ActualMaking();
+                }
+                for (int i = 0; i < 5; i++) {
+                    MakeDustsOnHit();
                 }
                 _stayTime = 0f;
             }
-            if (Progress < 1f) {
+            if (!IsFull6) {
 
             }
             else if (!Player.ItemAnimationActive) {
-                if (Player.mount.Active) {
-                    Player.mount._active = false;
-                }
                 StartSlowlyIncreasingUntilFull = false;
                 BaseFormHandler.ApplyForm(Player, _formInfo);
             }
@@ -278,8 +281,11 @@ sealed class WreathHandler : ModPlayer {
         }
         else {
             if (_stayTime != 0f) {
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < 3; i++) {
                     MakeDusts_ActualMaking();
+                }
+                for (int i = 0; i < 5; i++) {
+                    MakeDustsOnHit();
                 }
                 _stayTime = 0f;
             }

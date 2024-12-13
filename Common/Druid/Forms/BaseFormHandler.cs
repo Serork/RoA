@@ -86,7 +86,7 @@ sealed class BaseFormHandler : ModPlayer {
     public static void ApplyForm<T>(Player player, T instance = null) where T : FormInfo {
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
         T formInstance = instance ?? GetForm<T>();
-        if (!player.GetModPlayer<WreathHandler>().IsFull) {
+        if (!player.GetModPlayer<WreathHandler>().IsFull6) {
             player.GetModPlayer<WreathHandler>().SlowlyActivateForm(instance);
             return;
         }
