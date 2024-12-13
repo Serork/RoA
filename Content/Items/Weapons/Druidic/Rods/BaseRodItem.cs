@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
+using RoA.Common.Druid.Forms;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -273,7 +274,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void ActiveCheck() {
-        if (!Owner.active) {
+        if (!Owner.active || Owner.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
             Projectile.Kill();
         }
         bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= ProjActiveCount();

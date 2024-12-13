@@ -437,9 +437,8 @@ sealed class LilPhoenixForm : BaseForm {
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
             playerDrawData.Add(item);
         }
-        WreathHandler wreathHandler = drawPlayer.GetModPlayer<WreathHandler>();
         if (glowTexture != null) {
-            float value = Math.Max(MathHelper.Clamp(_attackCharge, 0f, 1f), wreathHandler.ActualProgress4);
+            float value = MathHelper.Clamp(Math.Max(_attackCharge2, _attackCharge), 0f, 1f);
             DrawData item = new(ModContent.Request<Texture2D>(Texture + "_Glow2").Value, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             playerDrawData.Add(item);
         }

@@ -52,7 +52,7 @@ abstract class BaseForm : ModMount {
 
     private static MovementSpeedInfo _playerMovementSpeedInfo;
 
-    protected float _attackCharge;
+    protected float _attackCharge, _attackCharge2;
 
     public float AttackCharge {
         get => Ease.QuintOut(_attackCharge);
@@ -140,6 +140,8 @@ abstract class BaseForm : ModMount {
         player.ClearBuff(buffType);
         player.AddBuffInStart(buffType, 3600);
 
+        _attackCharge2 = 1.5f;
+
         SafeSetMount(player, ref skipDust);
     }
 
@@ -153,11 +155,13 @@ abstract class BaseForm : ModMount {
         if (_attackCharge > 0f) {
             _attackCharge -= TimeSystem.LogicDeltaTime;
         }
+        if (_attackCharge2 > 0f) {
+            _attackCharge2 -= TimeSystem.LogicDeltaTime;
+        }
 
         if (LightingColor == Color.White) {
             return;
         }
-        WreathHandler wreathHandler = player.GetModPlayer<WreathHandler>();
         float value = MathHelper.Clamp(_attackCharge, 0f, 1f);
         Lighting.AddLight(GetLightingPos(player) == Vector2.Zero ? player.Center : GetLightingPos(player), LightingColor.ToVector3() * value);
     }
@@ -249,9 +253,8 @@ abstract class BaseForm : ModMount {
     }
 
     protected virtual void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
-        WreathHandler wreathHandler = drawPlayer.GetModPlayer<WreathHandler>();
         if (glowTexture != null) {
-            float value = MathHelper.Clamp(_attackCharge, 0f, 1f);
+            float value = MathHelper.Clamp(Math.Max(_attackCharge2, _attackCharge), 0f, 1f);
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             playerDrawData.Add(item);
         }

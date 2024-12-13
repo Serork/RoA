@@ -94,6 +94,13 @@ sealed class BaseFormHandler : ModPlayer {
         player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
+
+        if (player.heldProj != -1) {
+            Main.projectile[player.heldProj].Kill();
+            player.heldProj = -1;
+        }
+        player.itemAnimation = player.itemTime = 0;
+        player.reuseDelay = 0;
     }
 
     public static void ReleaseForm<T>(Player player, T instance = null) where T : FormInfo {

@@ -15,14 +15,12 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Forms.BaseFormHandler;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Common.Druid.Wreath;
 
@@ -158,7 +156,7 @@ sealed class WreathHandler : ModPlayer {
         //}
     }
 
-    public bool IsFool(NatureProjectile natureProjectile) => GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2));
+    public bool IsFull5(NatureProjectile natureProjectile) => GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2));
 
     public void OnHitNPC(Projectile proj, bool nonDataReset = false) {
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
@@ -179,7 +177,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && Player.ItemAnimationActive && natureProjectile.Item == selectedItem) {
             selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
-            if (IsFool(natureProjectile)) {
+            if (!_shouldDecrease && !_shouldDecrease2 && IsFull5(natureProjectile)) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     if (!SpecialAttackData.OnlySpawn || nonDataReset) {
                         StartSlowlyIncreasingUntilFull = false;
@@ -206,6 +204,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void SlowlyActivateForm(FormInfo formInfo) {
+        if (Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            return;
+        }
         if (StartSlowlyIncreasingUntilFull) {
             return;
         }
@@ -238,20 +239,24 @@ sealed class WreathHandler : ModPlayer {
                 Main.dust[num8].position = Player.Center - vector;
             }
             Player.moveSpeed *= MathHelper.Max(0.2f, progress);
-            if (IsFull4) {
-                _stayTime -= TimeSystem.LogicDeltaTime * 0.75f;
+            if (_stayTime != 0f) {
+                for (int i = 0; i < 15; i++) {
+                    MakeDusts_ActualMaking();
+                }
+                _stayTime = 0f;
             }
-            else {
-                _stayTime = 1.35f;
-            }
-            if (!IsFull) {
+            if (Progress < 1f) {
+
             }
             else if (!Player.ItemAnimationActive) {
+                if (Player.mount.Active) {
+                    Player.mount._active = false;
+                }
                 StartSlowlyIncreasingUntilFull = false;
                 BaseFormHandler.ApplyForm(Player, _formInfo);
             }
         }
-        else if (_stayTime <= 0f && !_shouldDecrease) {
+        else if ( _stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
         }
         else if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
@@ -272,8 +277,12 @@ sealed class WreathHandler : ModPlayer {
             }
         }
         else {
-            _stayTime -= TimeSystem.LogicDeltaTime * 0.75f;
-            _stayTime = Math.Max(0f, _stayTime);
+            if (_stayTime != 0f) {
+                for (int i = 0; i < 15; i++) {
+                    MakeDusts_ActualMaking();
+                }
+                _stayTime = 0f;
+            }
         }
         if (HasKeepTime && ActualProgress2 <= 1f) {
             _keepBonusesForTime -= 1f;
@@ -466,18 +475,21 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts() {
-        ushort dustType = GetDustType();
         if (PulseIntensity > 0f && (IsFull2 || IsFull3)) {
             if (Player.miscCounter % 6 == 0 && Main.rand.NextChance(0.5)) {
-                Dust dust = Dust.NewDustPerfect(LightingPosition - new Vector2(0, 23) + Main.rand.NextVector2CircularEdge(26, 20) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, dustType, new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 0.4f), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
-                dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
-                dust.alpha = (int)(DrawColorOpacity * PulseIntensity * 255f);
-                dust.noGravity = true;
-                dust.noLight = true;
-                dust.noLightEmittence = true;
-                dust.customData = DrawColorOpacity * PulseIntensity * 2f;
+                MakeDusts_ActualMaking();
             }
         }
+    }
+
+    private void MakeDusts_ActualMaking() {
+        Dust dust = Dust.NewDustPerfect(LightingPosition - new Vector2(0, 23) + Main.rand.NextVector2CircularEdge(26, 20) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(), new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 0.4f), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
+        dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
+        dust.alpha = (int)(DrawColorOpacity * PulseIntensity * 255f);
+        dust.noGravity = true;
+        dust.noLight = true;
+        dust.noLightEmittence = true;
+        dust.customData = DrawColorOpacity * PulseIntensity * 2f;
     }
 
     private void MakeDustsOnHit() {
