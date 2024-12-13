@@ -17,24 +17,25 @@ sealed class DruidicPrefix(string name,
 						   float druidSpeedMult = 1f,
                            float potentialSpeedMult = 1f,
                            float druidKnockback = 0f, 
-						   float druidKnockbackMult = 1f) : ModPrefix {
+						   float druidKnockbackMult = 1f,
+						   float fillingRateMult = 1f) : ModPrefix {
 	private const string LOCALIZATION = "Mods.RoA.Prefixes.";
 
     sealed class PrefixLoader : ILoadable {
 		void ILoadable.Load(Mod mod) {
-			mod.AddContent(new DruidicPrefix("Ingrained", potentialDamageMult: 1.22f, potentialSpeedMult: 1.22f, druidSpeedMult: 0.9f, druidKnockbackMult: 1.12f));
-			mod.AddContent(new DruidicPrefix("Fragrant", druidDamageMult: 1.22f, potentialDamageMult: 0.86f, potentialSpeedMult: 0.86f, druidSpeedMult: 0.94f, druidCrit: 2));
+			mod.AddContent(new DruidicPrefix("Ingrained", potentialDamageMult: 1.22f, potentialSpeedMult: 1.22f, fillingRateMult: 1.22f, druidSpeedMult: 0.9f, druidKnockbackMult: 1.12f));
+			mod.AddContent(new DruidicPrefix("Fragrant", druidDamageMult: 1.22f, potentialDamageMult: 0.86f, potentialSpeedMult: 0.86f, fillingRateMult: 0.86f, druidSpeedMult: 0.94f, druidCrit: 2));
 			mod.AddContent(new DruidicPrefix("Bountiful", druidDamageMult: 1.12f, potentialDamageMult: 1.12f, druidSpeedMult: 1.06f, druidCrit: 4, druidKnockbackMult: 1.06f));
-			mod.AddContent(new DruidicPrefix("Vivid", druidDamageMult: 0.94f, potentialDamageMult: 1.12f, potentialSpeedMult: 1.12f, druidSpeedMult: 1.18f, druidKnockbackMult: 0.86f));
-			mod.AddContent(new DruidicPrefix("Withered", druidDamageMult: 0.9f, potentialDamageMult: 0.84f, druidSpeedMult: 1.1f));
-			mod.AddContent(new DruidicPrefix("Rotten", potentialDamageMult: 0.8f, potentialSpeedMult: 0.8f, druidSpeedMult: 0.86f, druidKnockbackMult: 2f));
-			mod.AddContent(new DruidicPrefix("Ragged", druidDamageMult: 0.92f, potentialDamageMult: 0.86f, potentialSpeedMult: 0.86f, druidSpeedMult: 1.1f, druidCrit: 10));
-			mod.AddContent(new DruidicPrefix("Blooming", druidDamageMult: 1.14f, potentialDamageMult: 1.18f, potentialSpeedMult: 1.18f, druidSpeedMult: 1.04f, druidCrit: 2, druidKnockbackMult: 1.1f));
+			mod.AddContent(new DruidicPrefix("Vivid", druidDamageMult: 0.94f, potentialDamageMult: 1.12f, potentialSpeedMult: 1.12f, fillingRateMult: 1.12f, druidSpeedMult: 1.18f, druidKnockbackMult: 0.86f));
+			mod.AddContent(new DruidicPrefix("Withered", druidDamageMult: 0.9f, potentialDamageMult: 0.84f, potentialSpeedMult: 0.84f, fillingRateMult: 0.84f, druidSpeedMult: 1.1f));
+			mod.AddContent(new DruidicPrefix("Rotten", potentialDamageMult: 0.8f, potentialSpeedMult: 0.8f, fillingRateMult: 0.8f, druidSpeedMult: 0.86f, druidKnockbackMult: 0.86f));
+			mod.AddContent(new DruidicPrefix("Ragged", druidDamageMult: 0.92f, potentialDamageMult: 0.86f, potentialSpeedMult: 0.86f, fillingRateMult: 0.86f, druidSpeedMult: 1.1f, druidCrit: 10));
+			mod.AddContent(new DruidicPrefix("Blooming", druidDamageMult: 1.14f, potentialDamageMult: 1.18f, potentialSpeedMult: 1.18f, fillingRateMult: 1.18f, druidSpeedMult: 1.04f, druidCrit: 2, druidKnockbackMult: 1.1f));
 			mod.AddContent(new DruidicPrefix("Fertile", druidDamageMult: 1.12f, druidSpeedMult: 1.08f));
-			mod.AddContent(new DruidicPrefix("Nourished", druidDamageMult: 1.08f, potentialDamageMult: 1.12f, potentialSpeedMult: 1.12f, druidCrit: 3));
+			mod.AddContent(new DruidicPrefix("Nourished", druidDamageMult: 1.08f, potentialDamageMult: 1.12f, potentialSpeedMult: 1.12f, fillingRateMult: 1.12f, druidCrit: 3));
 			mod.AddContent(new DruidicPrefix("Thorny", druidDamageMult: 1.1f, druidCrit: 6));
 			mod.AddContent(new DruidicPrefix("Stumpy", druidSpeedMult: 1.16f));
-			mod.AddContent(new DruidicPrefix("Irritated", druidDamageMult: 0.8f, potentialDamageMult: 0.95f, potentialSpeedMult: 0.95f));
+			mod.AddContent(new DruidicPrefix("Irritated", druidDamageMult: 0.8f, potentialDamageMult: 0.95f, potentialSpeedMult: 0.95f, fillingRateMult: 0.95f));
 		}
 
         void ILoadable.Unload() { }
@@ -61,8 +62,10 @@ sealed class DruidicPrefix(string name,
 	internal readonly float _potentialDamageMult = potentialDamageMult;
 	internal readonly float _druidSpeedMult = druidSpeedMult;
     internal readonly float _potentialDruidSpeedMult = potentialSpeedMult;
+	internal readonly float _fillingRateMult = fillingRateMult;
 
-	private static LocalizedText GetLocalizedText(string name) => Language.GetOrRegister(LOCALIZATION + name);
+
+    private static LocalizedText GetLocalizedText(string name) => Language.GetOrRegister(LOCALIZATION + name);
 
     public override LocalizedText DisplayName => GetLocalizedText(_name);
 
@@ -75,11 +78,12 @@ sealed class DruidicPrefix(string name,
 	}
 
 	public override void ModifyValue(ref float valueMult) {
-        valueMult *= 1f + 0.05f * _druidDamageMult;
-        valueMult *= 1f + 0.05f * _druidKnockbackMult;
-        valueMult *= 1f + 0.05f * _druidSpeedMult;
-        valueMult *= 1f + 0.05f * _potentialDamageMult;
-        valueMult *= 1f + 0.05f * _potentialDruidSpeedMult;
+        valueMult *= 1f + 0.1f * _druidDamageMult;
+        valueMult *= 1f + 0.1f * _druidKnockbackMult;
+        valueMult *= 1f + 0.1f * _druidSpeedMult;
+        valueMult *= 1f + 0.1f * _potentialDamageMult;
+        valueMult *= 1f + 0.1f * _potentialDruidSpeedMult;
+        valueMult *= 1f + 0.1f * _fillingRateMult;
     }
 
 	public override void Apply(Item item) {
@@ -104,8 +108,10 @@ sealed class DruidicPrefix(string name,
 				IsModifierBad = _druidDamageMult < 1f
 			};
 		}
+		bool flag = true;
 		if (handler.HasPotentialDamage()) {
-			if (_potentialDamage != 0) {
+			flag = false;
+            if (_potentialDamage != 0) {
 				yield return new TooltipLine(Mod, "ExtraDruidPotentialDamage", GetLocalizedText("DruidPotentialDamageModifier").Format(_potentialDamage)) {
 					IsModifier = true,
 					IsModifierBad = _potentialDamage < 0
@@ -124,8 +130,8 @@ sealed class DruidicPrefix(string name,
                 IsModifierBad = _druidSpeedMult < 1f
             };
         }
-		if (handler.HasPotentialUseSpeed()) {
-			if (_potentialDruidSpeedMult != 1f) {
+        if (handler.HasPotentialUseSpeed()) {
+            if (_potentialDruidSpeedMult != 1f) {
 				yield return new TooltipLine(Mod, "ExtraDruidPotentialSpeed", GetLocalizedText("DruidPotentialSpeedModifier").Format(_potentialDruidSpeedMult * 100f - 100f)) {
 					IsModifier = true,
 					IsModifierBad = _potentialDruidSpeedMult < 1f
@@ -149,6 +155,14 @@ sealed class DruidicPrefix(string name,
 				IsModifier = true,
 				IsModifierBad = _druidKnockbackMult < 1f
 			};
+		}
+		if (!handler.HasPotentialDamage() && !handler.HasPotentialUseSpeed()) {
+			if (_fillingRateMult != 1f) {
+				yield return new TooltipLine(Mod, "ExtraDruidFillingRateMult", GetLocalizedText("DruidFillingRateModifierMult").Format(_fillingRateMult * 100f - 100f)) {
+					IsModifier = true,
+					IsModifierBad = _fillingRateMult < 1f
+				};
+			}
 		}
     }
 }

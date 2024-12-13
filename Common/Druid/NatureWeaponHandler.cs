@@ -6,7 +6,6 @@ using RoA.Content.Prefixes;
 using RoA.Core.Utility;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
@@ -43,7 +42,15 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         return base.ChoosePrefix(item, rand);
     }
 
-    public float GetFillingRate() => _fillingRate;
+    public static float GetFillingRate(Item item) {
+        NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
+        DruidicPrefix activePrefix = handler.ActivePrefix;
+        float result = handler._fillingRate;
+        if (activePrefix != null) {
+            result *= activePrefix._fillingRateMult;
+        }
+        return result;
+    }
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
     public bool HasPotentialUseSpeed() => _basePotentialUseSpeed > 0;
 

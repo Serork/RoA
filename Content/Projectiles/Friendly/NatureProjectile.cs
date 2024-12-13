@@ -42,8 +42,7 @@ abstract class NatureProjectile : ModProjectile {
             return;
         }
         Item = item;
-        var item2 = Item.GetGlobalItem<NatureWeaponHandler>();
-        float fillingRate = item2.GetFillingRate();
+        float fillingRate = NatureWeaponHandler.GetFillingRate(Item);
         WreathPointsFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
     }
 

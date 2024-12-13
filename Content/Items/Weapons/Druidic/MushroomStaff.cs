@@ -24,7 +24,6 @@ sealed class MushroomStaff : NatureItem {
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
 		int count = 3;
-        Main.NewText(knockback);
 		for (int i = 0; i < count; i++) {
             Vector2 newVelocity = new Vector2(velocity.X, velocity.Y).RotatedByRandom(MathHelper.ToRadians(30)) * 1.6f;
 			Projectile.NewProjectile(source, position.X + Main.rand.NextFloatRange(0.05f), position.Y, newVelocity.X, newVelocity.Y, type, damage, knockback, player.whoAmI);

@@ -1,14 +1,5 @@
 Ingrained: Ingrained
 Fragrant: Fragrant
-DruidDamageModifier: "{0:+0;-#} base damage"
-DruidDamageModifierMult: "{0:+0;-#}% base damage"
-DruidKnockbackModifier: "{0:+0;-#} knockback"
-DruidKnockbackModifierMult: "{0:+0;-#}% knockback"
-DruidCritModifier: "{0:+0;-#} critical strike chance"
-DruidPotentialDamageModifier: "{0:+0;-#} potential damage"
-DruidPotentialDamageModifierMult: "{0:+0;-#}% potential damage"
-DruidSpeedModifier: "{0:+0;-#}% speed"
-DruidPotentialSpeedModifier: "{0:+0;-#}% potential speed"
 Bountiful: Bountiful
 Vivid: Vivid
 Withered: Withered
@@ -20,3 +11,13 @@ Nourished: Nourished
 Thorny: Thorny
 Stumpy: Stumpy
 Irritated: Irritated
+DruidDamageModifier: "{0:+0;-#} base damage"
+DruidDamageModifierMult: "{0:+0;-#}% base damage"
+DruidKnockbackModifier: "{0:+0;-#} knockback"
+DruidKnockbackModifierMult: "{0:+0;-#}% knockback"
+DruidCritModifier: "{0:+0;-#} critical strike chance"
+DruidPotentialDamageModifier: "{0:+0;-#} potential damage"
+DruidPotentialDamageModifierMult: "{0:+0;-#}% potential damage"
+DruidSpeedModifier: "{0:+0;-#}% speed"
+DruidPotentialSpeedModifier: "{0:+0;-#}% potential speed"
+DruidFillingRateModifierMult: "{0:+0;-#}% filling rate"
