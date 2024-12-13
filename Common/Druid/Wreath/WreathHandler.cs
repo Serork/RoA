@@ -22,6 +22,7 @@ using Terraria.Audio;
 using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Forms.BaseFormHandler;
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Common.Druid.Wreath;
 
@@ -105,10 +106,12 @@ sealed class WreathHandler : ModPlayer {
     }
     public bool IsEmpty => ActualProgress2 <= 0.01f;
     public bool IsEmpty2 => ActualProgress2 <= 0.05f;
+    public bool IsEmpty3 => ActualProgress2 <= 0.15f;
     public bool IsFull => Progress >= 0.95f;
     public bool GetIsFull(ushort currentResource) => GetProgress(currentResource) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
     public bool IsFull3 => IsFull && Progress <= 1.1f;
+    public bool IsFull4 => Progress >= 0.85f;
     public bool IsMinCharged => ActualProgress2 > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
@@ -218,7 +221,29 @@ sealed class WreathHandler : ModPlayer {
         MakeDusts();
 
         if (StartSlowlyIncreasingUntilFull) {
-            Player.moveSpeed *= MathHelper.Max(0.2f, Ease.QuartIn(Progress));
+            float progress = Ease.QuartIn(Progress);
+            if (((float)Main.rand.Next(400) < Progress * 200f || Main.rand.Next(40) == 0)) {
+                int num8 = Dust.NewDust(Player.position, Player.width, Player.height, GetDustType(), 0f, 0f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
+                Main.dust[num8].noGravity = true;
+                Main.dust[num8].velocity *= 0.75f;
+                Main.dust[num8].fadeIn = 1.3f;
+                Main.dust[num8].noLight = true;
+                Main.dust[num8].customData = DrawColorOpacity * PulseIntensity * 1.6f;
+                Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
+                vector.Normalize();
+                vector *= (float)Main.rand.Next(50, 100) * 0.075f;
+                Main.dust[num8].velocity = vector + Player.velocity;
+                vector.Normalize();
+                vector *= 100f;
+                Main.dust[num8].position = Player.Center - vector;
+            }
+            Player.moveSpeed *= MathHelper.Max(0.2f, progress);
+            if (IsFull4) {
+                _stayTime -= TimeSystem.LogicDeltaTime * 0.75f;
+            }
+            else {
+                _stayTime = 1.35f;
+            }
             if (!IsFull) {
             }
             else if (!Player.ItemAnimationActive) {
@@ -245,6 +270,10 @@ sealed class WreathHandler : ModPlayer {
             if (flag || flag2) {
                 _stayTime -= TimeSystem.LogicDeltaTime;
             }
+        }
+        else {
+            _stayTime -= TimeSystem.LogicDeltaTime * 0.75f;
+            _stayTime = Math.Max(0f, _stayTime);
         }
         if (HasKeepTime && ActualProgress2 <= 1f) {
             _keepBonusesForTime -= 1f;

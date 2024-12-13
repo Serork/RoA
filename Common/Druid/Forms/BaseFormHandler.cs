@@ -90,6 +90,8 @@ sealed class BaseFormHandler : ModPlayer {
             player.GetModPlayer<WreathHandler>().SlowlyActivateForm(instance);
             return;
         }
+
+        player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
     }

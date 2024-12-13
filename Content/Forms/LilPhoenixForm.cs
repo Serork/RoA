@@ -175,7 +175,7 @@ sealed class LilPhoenixForm : BaseForm {
                 Main.dust[dust].noLight = true;
                 Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
             }
-            player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
+            //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
         }
         bool flag2 = Main.mouseLeft && !Main.mouseText && player.whoAmI == Main.myPlayer;
         if (plr._isPreparing) {
@@ -320,7 +320,7 @@ sealed class LilPhoenixForm : BaseForm {
                 plr.ResetDash();
             }
             plr._dashed2 = false;
-            player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
+            //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
         }
 
         if (player.controlJump && !plr._isPreparing) {
