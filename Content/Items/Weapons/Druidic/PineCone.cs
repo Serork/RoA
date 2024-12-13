@@ -14,7 +14,7 @@ namespace RoA.Content.Items.Weapons.Druidic;
 sealed class PineCone : NatureItem {
     protected override void SafeSetDefaults() {
 		Item.SetSize(18, 28);
-		Item.SetWeaponValues(2, 0.25f);
+		Item.SetWeaponValues(2, 0.5f);
 		Item.SetDefaultToUsable(ItemUseStyleID.HoldUp, 35, false, useSound: SoundID.Item1);
 		Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Druidic.PineCone>());
 		Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.White);
@@ -28,6 +28,7 @@ sealed class PineCone : NatureItem {
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
 		if (player.IsLocal()) {
 			if (Collision.CanHitLine(player.Center, 2, 2, player.GetViableMousePosition(), 2, 2)) {
+				Main.NewText(knockback);
 				Projectile.NewProjectile(player.GetSource_ItemUse(Item), Vector2.Zero, Vector2.Zero, type, damage, knockback, player.whoAmI);
 			}
 		}

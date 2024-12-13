@@ -2,6 +2,7 @@
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
+using System.Drawing;
 
 using Terraria;
 using Terraria.Localization;
@@ -42,13 +43,19 @@ sealed class DruidicPrefix(string name,
 	}
 
 	public static Dictionary<int, DruidicPrefix> DruidicPrefixes { get; private set; }
+    public static Dictionary<int, string> DruidicPrefixesNames { get; private set; }
 
-	public override void Load() => DruidicPrefixes = [];
+	public override void Load() {
+		DruidicPrefixes = [];
+		DruidicPrefixesNames = [];
+    }
 
 	public override void Unload() {
 		DruidicPrefixes.Clear();
         DruidicPrefixes = null;
-	}
+		DruidicPrefixesNames.Clear();
+		DruidicPrefixesNames = null;
+    }
 
 	public override string Name => _name;
 
@@ -75,16 +82,52 @@ sealed class DruidicPrefix(string name,
 
 	public override void SetStaticDefaults() {
 		DruidicPrefixes.Add(Type, this);
-	}
+		DruidicPrefixesNames.Add(Type, Name);
+    }
 
 	public override void ModifyValue(ref float valueMult) {
-        valueMult *= 1f + 0.1f * _druidDamageMult;
-        valueMult *= 1f + 0.1f * _druidKnockbackMult;
-        valueMult *= 1f + 0.1f * _druidSpeedMult;
-        valueMult *= 1f + 0.1f * _potentialDamageMult;
-        valueMult *= 1f + 0.1f * _potentialDruidSpeedMult;
-        valueMult *= 1f + 0.1f * _fillingRateMult;
-    }
+		switch (DruidicPrefixesNames[Type]) {
+			case "Ingrained":
+                valueMult *= 1.1f;
+                break;
+			case "Fragrant":
+                valueMult *= 1.15f;
+                break;
+			case "Bountiful":
+                valueMult *= 1.35f;
+                break;
+			case "Vivid":
+                valueMult *= 1.05f;
+                break;
+			case "Withered":
+                valueMult *= 0.925f;
+                break;
+			case "Rotten":
+                valueMult *= 0.7f;
+                break;
+			case "Ragged":
+                valueMult *= 1f;
+                break;
+			case "Blooming":
+                valueMult *= 1.5f;
+                break;
+			case "Fertile":
+                valueMult *= 1.1f;
+                break;
+			case "Nourished":
+				valueMult *= 1.25f;
+                break;
+			case "Thorny":
+                valueMult *= 1.1f;
+                break;
+			case "Stumpy":
+                valueMult *= 1.075f;
+                break;
+			case "Irritated":
+                valueMult *= 0.825f;
+                break;
+		}
+	}
 
 	public override void Apply(Item item) {
 		if (!item.IsADruidicWeapon()) {
@@ -108,9 +151,7 @@ sealed class DruidicPrefix(string name,
 				IsModifierBad = _druidDamageMult < 1f
 			};
 		}
-		bool flag = true;
 		if (handler.HasPotentialDamage()) {
-			flag = false;
             if (_potentialDamage != 0) {
 				yield return new TooltipLine(Mod, "ExtraDruidPotentialDamage", GetLocalizedText("DruidPotentialDamageModifier").Format(_potentialDamage)) {
 					IsModifier = true,
