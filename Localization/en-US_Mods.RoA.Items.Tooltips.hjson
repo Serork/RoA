@@ -26,3 +26,13 @@ WhenCharged: while [kw/n:wreath] is [kw/n:charged]
 LivingWoodSetBonus: Increases [kw/n:wreath] [kw/n:filling rate] by 10%
 LivingBorealSetBonus: Increases [kw/n:wreath] [kw/n:filling rate] by 10%
 LivingMahoganySetBonus: Increases [kw/n:wreath] [kw/n:filling rate] by 10%
+DreadheartCrimsonSetBonus:
+	'''
+	Taking damage while [kw/n:wreath] is charged depletes it, releasing insect swarm
+	Double tap {0} to take Insect [kw/n:form]
+	'''
+LivingElderwoodCrownSetBonus:
+	'''
+	Increases [kw/n:wreath] filling rate by 10%
+	Double tap {0} to take Fleder [kw/n:form]
+	'''

@@ -19,6 +19,7 @@ static class Helper {
     public static readonly Color EventMessageColor = new(50, 255, 130);
 
     public static readonly Color GlowMaskColor = new Color(255, 255, 255, 0) * 0.8f;
+    public static string ArmorSetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
 
     public static Color FromHexRgb(uint hexRgba) {
         return new Color(
@@ -38,24 +39,12 @@ static class Helper {
         );
     }
 
-    public static string NamespacePath(this object obj) {
-        return NamespacePath(obj.GetType());
-    }
-    public static string NamespacePath<T>() {
-        return NamespacePath(typeof(T));
-    }
-    public static string NamespacePath(Type t) {
-        return t.Namespace.Replace('.', '/');
-    }
-    public static string GetPath(this object obj) {
-        return GetPath(obj.GetType());
-    }
-    public static string GetPath<T>() {
-        return GetPath(typeof(T));
-    }
-    public static string GetPath(Type t) {
-        return $"{NamespacePath(t)}/{t.Name}";
-    }
+    public static string NamespacePath(this object obj) => NamespacePath(obj.GetType());
+    public static string NamespacePath<T>() => NamespacePath(typeof(T));
+    public static string NamespacePath(Type t) => t.Namespace.Replace('.', '/');
+    public static string GetPath(this object obj) => GetPath(obj.GetType());
+    public static string GetPath<T>() => GetPath(typeof(T));
+    public static string GetPath(Type t) => $"{NamespacePath(t)}/{t.Name}";
 
     public static float Approach(float val, float target, float maxMove) => (double)val <= (double)target ? Math.Min(val + maxMove, target) : Math.Max(val - maxMove, target);
 

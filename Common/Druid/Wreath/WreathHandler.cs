@@ -248,6 +248,23 @@ sealed class WreathHandler : ModPlayer {
                 vector *= 100f;
                 Main.dust[num8].position = Player.Center - vector;
             }
+            for (int i = 0; i < 1; i++) {
+                if (Main.rand.NextBool(7)) {
+                    int num = 0;
+                    if (Player.gravDir == -1f)
+                        num -= Player.height;
+                    int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height + (float)num - 2), Player.width + 8, 4, GetDustType2(), (0f - Player.velocity.X) * 0.5f, Player.velocity.Y * 0.5f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
+                    Main.dust[num6].velocity.X = Main.dust[num6].velocity.X * 0.2f;
+                    Main.dust[num6].velocity.Y = -0.5f - Main.rand.NextFloat() * 1.5f;
+                    Main.dust[num6].velocity.Y *= Main.rand.NextFloat();
+                    Main.dust[num6].fadeIn = 0.5f;
+                    Main.dust[num6].scale *= Main.rand.NextFloat(1.1f, 1.25f);
+                    Main.dust[num6].scale *= 1.5f;
+                    Main.dust[num6].noGravity = true;
+                    Main.dust[num6].noLight = true;
+                    Main.dust[num6].customData = DrawColorOpacity * PulseIntensity * 1.6f;
+                }
+            }
             float value = MathHelper.Clamp(MathHelper.Max(0.2f, progress), 0f, 1f);
             Player.accRunSpeed *= value;
             Player.runAcceleration *= value;
@@ -529,6 +546,12 @@ sealed class WreathHandler : ModPlayer {
     private ushort GetDustType() {
         ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() : ModContent.DustType<Content.Dusts.WreathDust>());
         ushort dustType = (ushort)(IsFull && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
+        return dustType;
+    }
+
+    private ushort GetDustType2() {
+        ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3_2>() : ModContent.DustType<Content.Dusts.WreathDust_2>());
+        ushort dustType = (ushort)(IsFull && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2_2>() : basicDustType);
         return dustType;
     }
 

@@ -4,6 +4,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -35,16 +36,16 @@ sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupCont
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<DreadheartCorruptionChestplate>() && legs.type == ModContent.ItemType<DreadheartCorruptionLeggings>();
 
-	//public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
-	//	if (drawPlayer.active && drawPlayer.GetModPlayer<WreathPlayer>().isCharged) {
-	//		glowMask = RoAGlowMask.Get(nameof(DreadheartCorruptionHelmet));
-	//		glowMaskColor = Color.White;
-	//	}
-	//}
+    //public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
+    //	if (drawPlayer.active && drawPlayer.GetModPlayer<WreathPlayer>().isCharged) {
+    //		glowMask = RoAGlowMask.Get(nameof(DreadheartCorruptionHelmet));
+    //		glowMaskColor = Color.White;
+    //	}
+    //}
 
-	public override void UpdateArmorSet(Player player) {
-		string tapDir = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
-		player.setBonus = "Taking damage while Wreath is charged depletes it, releasing insect swarm" + $"\nDouble tap {tapDir} to take Insect form";
+    public override void UpdateArmorSet(Player player) {
+        string setBonus = Language.GetText("Mods.RoA.Items.Tooltips.DreadheartCrimsonSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
+        player.setBonus = setBonus;
 
         BaseFormHandler.KeepFormActive(player);
     }

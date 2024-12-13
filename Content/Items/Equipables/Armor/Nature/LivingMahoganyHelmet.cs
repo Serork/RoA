@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Content.Items.Materials;
+using RoA.Utilities;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -34,7 +34,7 @@ sealed class LivingMahoganyHelmet : NatureItem {
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingMahoganyChestplate>() && legs.type == ModContent.ItemType<LivingMahoganyGreaves>();
 
 	public override void UpdateArmorSet(Player player) {
-        player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingMahoganySetBonus");
+        player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.LivingMahoganySetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
     }
 

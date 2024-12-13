@@ -4,6 +4,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -15,7 +16,7 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Dreadheart Helmet");
 		//Tooltip.SetDefault("4% increased nature critical strike chance");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -43,8 +44,8 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
 	//}
 
 	public override void UpdateArmorSet(Player player) {
-		string tapDir = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
-		player.setBonus = "Taking damage while Wreath is charged depletes it, releasing insect swarm" + $"\nDouble tap {tapDir} to take Insect form";
+        string setBonus = Language.GetText("Mods.RoA.Items.Tooltips.DreadheartCrimsonSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
+        player.setBonus = setBonus;
 
         BaseFormHandler.KeepFormActive(player);
     }

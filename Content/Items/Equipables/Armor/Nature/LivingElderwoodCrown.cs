@@ -5,6 +5,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -40,9 +41,7 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
 	public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingElderwoodBreastplate>() && legs.type == ModContent.ItemType<LivingElderwoodGreaves>();
 
 	public override void UpdateArmorSet(Player player) {
-		string tapDir = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
-		player.setBonus = "Increases Wreath filling rate by 10%" + 
-			$"\nDouble tap {tapDir} to take Fleder form";
+        player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.LivingElderwoodCrownSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
 
 		BaseFormHandler.KeepFormActive(player);
