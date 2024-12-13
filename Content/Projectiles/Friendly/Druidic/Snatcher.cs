@@ -83,6 +83,7 @@ sealed class Snatcher : NatureProjectile {
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
+        Main.NewText(Projectile.knockBack);
         Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset += OnReset;
         for (int j = 0; j < _oldPositions.Length; j++) {
             _oldPositions[j] = Vector2.Zero;

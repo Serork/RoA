@@ -18,6 +18,8 @@ using Terraria.ModLoader;
 namespace RoA.Common.Druid;
 
 sealed partial class NatureWeaponHandler : GlobalItem {
+    private static string GetLocalizedText(string name) => Language.GetOrRegister("Mods.RoA.Items.Tooltips." + name).Value;
+
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
         if (!item.IsADruidicWeapon()) {
             return;
@@ -26,7 +28,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Damage"));
         if (index != -1) {
             string tag, tooltip;
-            string keyword = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.PotentialKeyWord").Value;
+            string keyword = GetLocalizedText("PotentialKeyWord");
             if (HasPotentialDamage()) {
                 int extraDamage = GetExtraDamage(item, Main.LocalPlayer);
                 if (extraDamage > 0) {
@@ -37,7 +39,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 }
                 tag = "PotentialDamage";
                 string potentialDamage = GetBasePotentialDamage(item, Main.LocalPlayer).ToString();
-                tooltip = potentialDamage.AddSpace() + Language.GetOrRegister("Mods.RoA.Items.Tooltips.PotentialDamage").Value;
+                tooltip = potentialDamage.AddSpace() + GetLocalizedText("PotentialDamage");
                 tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                 index++;
             }
