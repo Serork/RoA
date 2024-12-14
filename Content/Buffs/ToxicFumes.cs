@@ -4,6 +4,7 @@ using RoA.Core;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
@@ -60,7 +61,7 @@ sealed class ToxicFumesPlayer : ModPlayer {
             return;
         }
         if (toxicFumes) {
-			if (Main.rand.Next(4) == 0 && drawInfo.shadow == 0.0) {
+			if (Main.rand.Next(4) == 0) {
 				int dust = Dust.NewDust(drawInfo.Position - new Vector2(0f, -2f) - Player.Size / 2f, Player.width, Player.height, ModContent.DustType<Dusts.ToxicFumes>(), Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 150, new Color(), 1.5f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity *= 1.6f;
@@ -71,6 +72,14 @@ sealed class ToxicFumesPlayer : ModPlayer {
 			b *= 0.6f;
 		}
 	}
+
+    public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource) {
+		if (toxicFumes && (int)damage == 10) {
+            damageSource = PlayerDeathReason.ByCustomReason(Player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.ToxicFumesDeathMessage{Main.rand.Next(4)}").Value);
+        }
+
+        return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
+    }
 }
 
 sealed class ToxicFumesNPC : GlobalNPC {
