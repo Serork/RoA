@@ -34,7 +34,6 @@ sealed class PineCone : NatureProjectile {
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
-        Main.NewText(Projectile.knockBack);
         Player player = Projectile.GetOwnerAsPlayer();
         if (player.whoAmI != Main.myPlayer) {
             return;

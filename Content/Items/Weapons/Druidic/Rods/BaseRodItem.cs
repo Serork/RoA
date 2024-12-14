@@ -124,7 +124,6 @@ abstract class BaseRodProjectile : NatureProjectile {
         ushort count = 1;
         int damage = Projectile.damage;
         float knockBack = Projectile.knockBack;
-        Main.NewText(knockBack);
         float ai0 = 0f, ai1 = 0f, ai2 = 0f;
         if (Projectile.IsOwnerMyPlayer(Owner)) {
             for (int i = 0; i < count; i++) {
