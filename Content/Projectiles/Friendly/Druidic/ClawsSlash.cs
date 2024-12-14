@@ -207,7 +207,7 @@ class ClawsSlash : NatureProjectile {
             return;
         }
 
-        float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1] * 0.75f;
+        float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1] * 0.9f;
         player.itemAnimation = player.itemTime = (int)(Projectile.ai[1] * fromValue);
 
         Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity;
