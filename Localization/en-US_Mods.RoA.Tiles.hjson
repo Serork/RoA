@@ -27,4 +27,6 @@ Moss.MapEntry: '''"Moss"'''
 TheLegend.MapEntry: '''"The Legend"'''
 Cloudberry.MapEntry: Cloudberry
 LivingElderwood3.MapEntry: Living Elderwood
-ElderwoodChest2.MapEntry: Backstone Chest
+ElderwoodChest2.MapEntry: Grimstone Chest
+Elderwood.MapEntry: Elderwood
+MercuriumOre.MapEntry: Mercurium Ore

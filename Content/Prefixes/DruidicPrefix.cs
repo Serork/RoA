@@ -109,7 +109,7 @@ sealed class DruidicPrefix(string name,
                 valueMult *= 1f;
                 break;
 			case "Blooming":
-                valueMult *= 1.5f;
+                valueMult *= 1.75f;
                 break;
 			case "Fertile":
                 valueMult *= 1.1f;

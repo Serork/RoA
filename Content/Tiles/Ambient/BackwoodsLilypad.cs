@@ -22,6 +22,9 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;
 
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
         //TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.SwaysInWindBasic[Type] = true;
 

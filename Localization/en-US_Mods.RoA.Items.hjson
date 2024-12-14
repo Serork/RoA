@@ -494,3 +494,13 @@ AshwalkerRobe: {
 	DisplayName: Ashwalker Robe
 	Tooltip: ""
 }
+
+MercuriumOre: {
+	DisplayName: Mercurium Ore
+	Tooltip: ""
+}
+
+Grimstone: {
+	DisplayName: Grimstone
+	Tooltip: ""
+}

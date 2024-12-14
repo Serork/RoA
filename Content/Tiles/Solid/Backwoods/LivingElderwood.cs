@@ -41,7 +41,7 @@ class LivingElderwood : ModTile {
         TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-        RegisterItemDrop(ModContent.ItemType<Elderwood>());
+        RegisterItemDrop(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
         DustType = (ushort)ModContent.DustType<WoodTrash>();
 		AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
 	}

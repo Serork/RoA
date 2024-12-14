@@ -44,7 +44,7 @@ class TreeBranch : ModTile {
 
         AdjTiles = [TileID.Platforms];
 
-        RegisterItemDrop(ModContent.ItemType<Items.Materials.Elderwood>());
+        RegisterItemDrop(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
         DustType = ModContent.DustType<WoodTrash>();
 
         AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
