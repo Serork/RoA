@@ -45,6 +45,9 @@ sealed class BurningPlayer : ModPlayer {
     }
 
     public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
+        if (drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.active || drawInfo.shadow != 0f) {
+            return;
+        }
         if (!burningEffect) {
             return;
         }
@@ -82,6 +85,9 @@ sealed class BurningNPC : GlobalNPC {
     }
 
     public override void DrawEffects(NPC npc, ref Color drawColor) {
+        if (npc.active) {
+            return;
+        }
         if (!burningEffect) {
             return;
         }

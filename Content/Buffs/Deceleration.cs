@@ -38,7 +38,10 @@ sealed class DecelerationPlayer : ModPlayer {
 	}
 
 	public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
-		if (deceleration) {
+        if (drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.active || drawInfo.shadow != 0f) {
+            return;
+        }
+        if (deceleration) {
             r *= 0.25f;
             g *= 0.6f;
             b *= 1f;
@@ -65,7 +68,10 @@ sealed class DecelerationNPC : GlobalNPC {
 	}
 
 	public override void DrawEffects(NPC npc, ref Color drawColor) {
-		if (deceleration) {
+        if (npc.active) {
+            return;
+        }
+        if (deceleration) {
             drawColor = Color.Lerp(drawColor, Color.Blue, 0.25f);
 			if (Main.rand.NextBool(1, 3)) {
 				for (int k = 0; k < 2; k++)

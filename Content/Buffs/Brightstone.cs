@@ -57,6 +57,9 @@ sealed class BrightstonePlayer : ModPlayer {
 	}
 
     public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
+        if (drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.active || drawInfo.shadow != 0f) {
+            return;
+        }
         if (!brightstoneEffect)
             return;
 

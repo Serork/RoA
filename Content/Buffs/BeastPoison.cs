@@ -51,6 +51,10 @@ sealed class BeastPoisonNPC : GlobalNPC {
     }
 
     public override void DrawEffects(NPC npc, ref Color drawColor) {
+        if (npc.active) {
+            return;
+        }
+
         if (beastPoison) {
             drawColor = Color.Lerp(drawColor, Color.YellowGreen, 0.25f);
             if (Main.rand.Next(15) >= 10) {
@@ -73,6 +77,9 @@ sealed class BeastPoisonPlayer : ModPlayer {
     public override void ResetEffects() => beastPoison = false;
 
     public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
+        if (drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.active || drawInfo.shadow != 0f) {
+            return;
+        }
         if (beastPoison) {
             r *= 0.6f;
             g *= 0.9f;

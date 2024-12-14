@@ -1,0 +1,31 @@
+using Microsoft.Xna.Framework;
+
+using Terraria;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Dusts;
+
+sealed class ToxicFumes : ModDust {
+    public override void OnSpawn(Dust dust) {
+        int width = 24; int height = 24;
+        int frame = Main.rand.Next(0, 3);
+        dust.frame = new Rectangle(0, frame * height, width, height);
+
+        dust.noGravity = true;
+        dust.noLight = false;
+        dust.scale *= 1f;
+    }
+
+    public override Color? GetAlpha(Dust dust, Color lightColor)
+        => dust.color;
+
+    public override bool Update(Dust dust) {
+        dust.color = Lighting.GetColor((int)(dust.position.X / 16), (int)(dust.position.Y / 16)).MultiplyRGB(new Color(106, 140, 34, 100)) * 0.1f;
+        dust.position += dust.velocity * 0.12f;
+        dust.scale *= 0.99f;
+        dust.velocity *= 0.97f;
+        dust.alpha += 3;
+        if (dust.alpha >= 250) dust.active = false;
+        return false;
+    }
+}

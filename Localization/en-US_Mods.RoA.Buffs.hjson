@@ -124,3 +124,8 @@ LilPhoenixForm: {
 	DisplayName: Lil Phoenix Form
 	Description: Mods.RoA.Buffs.LilPhoenixForm.Description
 }
+
+ToxicFumes: {
+	DisplayName: Toxic Fumes
+	Description: Mods.RoA.Buffs.ToxicFumes.Description
+}

@@ -43,7 +43,7 @@ sealed class InfectedPlayer : ModPlayer {
 	}
 
 	public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
-        if (Player.dead) {
+        if (drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.active || drawInfo.shadow != 0f) {
             return;
         }
 
@@ -74,6 +74,9 @@ sealed class InfectedNPC : GlobalNPC {
     }
 
 	public override void DrawEffects(NPC npc, ref Color drawColor) {
+        if (npc.active) {
+            return;
+        }
         if (infectedEffect) {
             if (Main.rand.Next(4) == 0) {
                 int dust = Dust.NewDust(npc.position - new Vector2(2f, 2f), npc.width + 4, npc.height + 4, DustID.ScourgeOfTheCorruptor, npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 0, default, 1.1f);

@@ -3,6 +3,7 @@
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Content.Dusts.Backwoods;
 using RoA.Core.Utility;
 
 using System;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -139,6 +141,24 @@ sealed class BaseFormHandler : ModPlayer {
     public override void Load() {
         On_TileObject.DrawPreview += On_TileObject_DrawPreview;
         On_Main.DrawInterface_40_InteractItemIcon += On_Main_DrawInterface_40_InteractItemIcon;
+        On_Player.QuickMount += On_Player_QuickMount;
+        On_Player.QuickMount_GetItemToUse += On_Player_QuickMount_GetItemToUse;
+    }
+
+    private void On_Player_QuickMount(On_Player.orig_QuickMount orig, Player self) {
+        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            return;
+        }
+
+        orig(self);
+    }
+
+    private Item On_Player_QuickMount_GetItemToUse(On_Player.orig_QuickMount_GetItemToUse orig, Player self) {
+        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            return null;
+        }
+
+        return orig(self);
     }
 
     private void On_Main_DrawInterface_40_InteractItemIcon(On_Main.orig_DrawInterface_40_InteractItemIcon orig, Main self) {

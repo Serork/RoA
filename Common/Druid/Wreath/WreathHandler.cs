@@ -211,7 +211,7 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
         if (Player.mount.Active) {
-            Player.mount._active = false;
+            Player.mount.Dismount(Player);
         }
         StartSlowlyIncreasingUntilFull = true;
         _formInfo = formInfo;
