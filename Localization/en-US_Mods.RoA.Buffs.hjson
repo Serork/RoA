@@ -129,3 +129,8 @@ ToxicFumes: {
 	DisplayName: Toxic Fumes
 	Description: Mods.RoA.Buffs.ToxicFumes.Description
 }
+
+ToxicFumesNoTimeDisplay: {
+	DisplayName: Toxic Fumes No Time Display
+	Description: Mods.RoA.Buffs.ToxicFumesNoTimeDisplay.Description
+}

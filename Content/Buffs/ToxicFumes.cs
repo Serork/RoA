@@ -1,19 +1,32 @@
 using Microsoft.Xna.Framework;
+
+using RoA.Core;
+
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
 
-sealed class ToxicFumes : ModBuff {
+sealed class ToxicFumesNoTimeDisplay : ToxicFumes {
+    public override string Texture => ResourceManager.BuffTextures + nameof(ToxicFumes);
+
+    public override void SetStaticDefaults() {
+		base.SetStaticDefaults();
+        Main.buffNoTimeDisplay[Type] = true;
+    }
+}
+
+class ToxicFumes : ModBuff {
 	public override void SetStaticDefaults() {
 		// DisplayName.SetDefault("Toxic Fumes");
 		// Description.SetDefault("Loosing Life, movement speed decreased");
 
 		Main.buffNoSave[Type] = true;
 		Main.debuff[Type] = true;
-	}
+		Main.buffNoTimeDisplay[Type] = true;
+
+    }
 
 	public override void Update(Player player, ref int buffIndex) {
 		player.velocity.X *= 0.95f;
@@ -48,7 +61,7 @@ sealed class ToxicFumesPlayer : ModPlayer {
         }
         if (toxicFumes) {
 			if (Main.rand.Next(4) == 0 && drawInfo.shadow == 0.0) {
-				int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f, 2f), Player.width, Player.height, ModContent.DustType<Dusts.ToxicFumes>(), Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 150, new Color(), 1.5f);
+				int dust = Dust.NewDust(drawInfo.Position - new Vector2(0f, -2f) - Player.Size / 2f, Player.width, Player.height, ModContent.DustType<Dusts.ToxicFumes>(), Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 150, new Color(), 1.5f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity *= 1.6f;
 				Main.dust[dust].velocity.Y = 1.1f;
@@ -80,7 +93,7 @@ sealed class ToxicFumesNPC : GlobalNPC {
 		if (toxicFumes && npc.active) {
             drawColor = Color.Lerp(drawColor, new Color(130, 230, 130), 0.25f);
             if (Main.rand.Next(4) == 0) {
-				int dust = Dust.NewDust(npc.position - new Vector2(2f, 2f), npc.width, npc.height, ModContent.DustType<Dusts.ToxicFumes>(), npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 0, default, 1.5f);
+				int dust = Dust.NewDust(npc.position - new Vector2(0f, -2f) - npc.Size / 2f, npc.width, npc.height, ModContent.DustType<Dusts.ToxicFumes>(), npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 0, default, 1.5f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity *= 1.6f;
 				Main.dust[dust].velocity.Y = 1.1f;

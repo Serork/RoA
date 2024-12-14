@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
 
@@ -34,6 +35,20 @@ sealed class MercuriumOre : ModTile {
         MineResist = 2f;
 		MinPick = 55;
 	}
+
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (Main.rand.Next(2) == 0) {
+            Vector2 position = new Vector2(i, j).ToWorldCoordinates();
+            int dust = Dust.NewDust(position - Vector2.One * 16f, 16, 16, ModContent.DustType<Dusts.ToxicFumes>(), 0f, -4f, 100, new Color(), 1.5f);
+            Dust dust2 = Main.dust[dust];
+            dust2.scale *= 0.5f;
+            dust2 = Main.dust[dust];
+            dust2.velocity *= 1.5f;
+            dust2 = Main.dust[dust];
+            dust2.velocity.Y *= -0.5f;
+            dust2.noLight = false;
+        }
+    }
 
     public override bool CreateDust(int i, int j, ref int type) {
 		if (!Main.rand.NextBool(4)) {

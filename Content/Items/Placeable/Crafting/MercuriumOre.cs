@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -59,5 +60,30 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
                 Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
             }
         }
-	}
+
+        Check(10, 50);
+    }
+
+    private void Check(int fluff, int buffTime) {
+        if (Player.HasBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>())) {
+            return;
+        }
+        int tilesAway = fluff;
+        int x = (int)Player.Center.X / 16;
+        int y = (int)Player.Center.Y / 16;
+        for (int i = x - tilesAway; i < x + tilesAway + 1; i++) {
+            for (int j = y - tilesAway; j < y + tilesAway + 1; j++) {
+                if (WorldGen.InWorld(i, j)) {
+                    Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                    if (!tile.HasTile || !Main.tileSolid[tile.TileType]) {
+                        continue;
+                    }
+                    if (tile.TileType != ModContent.TileType<Tiles.Crafting.MercuriumOre>()) {
+                        continue;
+                    }
+                    Player.AddBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>(), buffTime);
+                }
+            }
+        }
+    }
 }
