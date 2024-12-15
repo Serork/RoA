@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
+using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Tiles.Crafting;
 using RoA.Core;
 
 using Terraria;
@@ -48,6 +50,8 @@ sealed partial class BackwoodsBiome : ModBiome {
     public static BackwoodsBiome Instance => ModContent.GetInstance<BackwoodsBiome>();
 
     public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
+
+    public override int BiomeTorchItemType => ModContent.ItemType<Items.Placeable.Crafting.Elderwood>();
 
     public override void SpecialVisuals(Player player, bool isActive) => player.ManageSpecialBiomeVisuals(ShaderLoader.BackwoodsSky, player.InModBiome<BackwoodsBiome>(), player.Center);
 

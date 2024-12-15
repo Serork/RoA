@@ -524,3 +524,8 @@ LuminousFlowerHat: {
 	DisplayName: Luminous Flower Hat
 	Tooltip: ""
 }
+
+ElderTorch: {
+	DisplayName: Elder Torch
+	Tooltip: ""
+}

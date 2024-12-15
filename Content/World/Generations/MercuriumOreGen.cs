@@ -21,6 +21,9 @@ sealed class MercuriumOreGen : ModSystem {
     private void On_WorldGen_TileRunner(On_WorldGen.orig_TileRunner orig, int i, int j, double strength, int steps, int type, bool addTile, double speedX, double speedY, bool noYChange, bool overRide, int ignoreTileType) {
         IReadOnlyList<int> oresType = [7, 166, 6, 167, 9, 168, 8, 169, 22, 204];
         orig(i, j, strength, steps, type, addTile, speedX, speedY, noYChange, overRide, ignoreTileType);
+        if (j < Main.worldSurface && Main.rand.NextBool(2)) {
+            return;
+        }
         if (oresType.Contains(type)) {
             for (int x = i - 10; x < i + 11; x++) {
                 for (int y = j - 10; y < j + 11; y++) {
@@ -31,11 +34,10 @@ sealed class MercuriumOreGen : ModSystem {
                 }
             }
             if (_tileCount > 50) {
-                _tileCount = 0;
-                return;
+                _tileCount = 50;
             }
-            else if (_tileCount < 15) {
-                _tileCount = 15;
+            else if (_tileCount < 10) {
+                _tileCount = 10;
             }
             double chance = 0.85;
             float sizeMult = 1f;
@@ -46,7 +48,6 @@ sealed class MercuriumOreGen : ModSystem {
                     break;
                 case 7 or 166:
                     chance = 0.85;
-                    sizeMult = WorldGen.genRand.NextFloat(1.5f, 2f) * 0.75f;
                     break;
                 case 8 or 169:
                     chance = 1.0;

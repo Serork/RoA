@@ -11,6 +11,10 @@ namespace RoA.Content.Items.Miscellaneous;
 
 [AutoloadGlowMask(shouldApplyItemAlpha: false)]
 sealed class LuminousFlower : ModItem {
+    public override void SetStaticDefaults() {
+        Item.ResearchUnlockCount = 1;
+    }
+
     public override void SetDefaults() {
 		Item.SetSize(34, 38);
 		Item.SetDefaultOthers(Item.sellPrice(gold: 3, silver: 50), ItemRarityID.Blue);
