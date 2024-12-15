@@ -95,11 +95,6 @@ BeastPoison: {
 	Description: Losing life, movement speed decreased
 }
 
-FlederFormBuff: {
-	DisplayName: Fleder Form Buff
-	Description: Mods.RoA.Buffs.FlederFormBuff.Description
-}
-
 FlederForm: {
 	DisplayName: Fleder Form
 	Description: Mods.RoA.Buffs.FlederForm.Description
@@ -115,22 +110,22 @@ CrimsonInsectForm: {
 	Description: Mods.RoA.Buffs.CrimsonInsectForm.Description
 }
 
-Burning: {
-	DisplayName: Burning
-	Description: Mods.RoA.Buffs.Burning.Description
-}
-
 LilPhoenixForm: {
 	DisplayName: Lil Phoenix Form
 	Description: Mods.RoA.Buffs.LilPhoenixForm.Description
 }
 
+Burning: {
+	DisplayName: Burning
+	Description: Losing life
+}
+
 ToxicFumes: {
 	DisplayName: Toxic Fumes
-	Description: Mods.RoA.Buffs.ToxicFumes.Description
+	Description: Losing life and slowed movement
 }
 
 ToxicFumesNoTimeDisplay: {
-	DisplayName: Toxic Fumes No Time Display
-	Description: Mods.RoA.Buffs.ToxicFumesNoTimeDisplay.Description
+	DisplayName: Toxic Fumes
+	Description: Losing life and slowed movement
 }
