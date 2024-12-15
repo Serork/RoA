@@ -140,7 +140,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void PlaceGateway(bool again = false) {
-        while (true) {
+        int attempts = 10000;
+        while (--attempts > 0) {
             int x = _random.Next(Left, Right);
             int y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 10, (int)Main.worldSurface - 5);
             int type = ModContent.TileType<NexusGateway>();
@@ -2238,16 +2239,77 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int k = num5; k < num6; k++) {
                 for (int l = num7; l < num8; l++) {
                     if (Math.Abs((double)k - vector2D.X) + Math.Abs((double)l - vector2D.Y) < num * 0.5 * (1.0 + (double)_random.Next(-10, 11) * 0.015)) {
-                        //if (Main.tile[k, l].TileType == 59 || Main.tile[k, l].TileType == _dirtWallType || ) {
-                        //    Main.tile[k, l].WallType = _grassWallType;
-                        //    if (_random.NextBool(10)) {
-                        //        FlowerGrassRunner(k, l);
-                        //    }
-                        //}
                         WorldGen.grassSpread = 0;
                         WorldGenHelper.CustomSpreadGrass(k, l, TileID.Dirt, _grassTileType, growUnderground: true);
                         WorldGenHelper.CustomSpreadGrass(k, l, _dirtTileType, _grassTileType, growUnderground: true);
                         Main.tile[k, l].WallType = 0;
+                        Main.tile[k, l].LiquidAmount = 0;
+
+                        if (Main.tile[k, l].TileType == _vinesTileType) {
+                            WorldGenHelper.PlaceVines(k, l, 5, _vinesTileType);
+                        }
+                        if (Main.tile[k, l].TileType == _vinesTileType2) {
+                            WorldGenHelper.PlaceVines(k, l, 5, _vinesTileType2);
+                        }
+                    }
+                }
+            }
+
+            vector2D += vector2D2;
+            vector2D2.X += (double)_random.Next(-10, 11) * 0.05;
+            if (vector2D2.X > 1.0)
+                vector2D2.X = 1.0;
+
+            if (vector2D2.X < -1.0)
+                vector2D2.X = -1.0;
+
+            vector2D2.Y += (double)_random.Next(-10, 11) * 0.05;
+            if (vector2D2.Y > 1.0)
+                vector2D2.Y = 1.0;
+
+            if (vector2D2.Y < -1.0)
+                vector2D2.Y = -1.0;
+        }
+        num = 30;
+        num2 = 30;
+        num3 = num2;
+        vector2D = default(Vector2D);
+        vector2D.X = _gatewayLocation.X;
+        vector2D.Y = _gatewayLocation.Y;
+        vector2D2 = default(Vector2D);
+        vector2D2.X = (double)_random.Next(-10, 11) * 0.1;
+        vector2D2.Y = (double)_random.Next(-10, 11) * 0.1;
+        while (num > 0.0 && num3 > 0.0) {
+            double num4 = num * (num3 / num2);
+            num3 -= 1.0;
+            int num5 = (int)(vector2D.X - num4 * 0.5);
+            int num6 = (int)(vector2D.X + num4 * 0.5);
+            int num7 = (int)(vector2D.Y - num4 * 0.5);
+            int num8 = (int)(vector2D.Y + num4 * 0.5);
+            if (num5 < 0)
+                num5 = 0;
+
+            if (num6 > Main.maxTilesX)
+                num6 = Main.maxTilesX;
+
+            if (num7 < 0)
+                num7 = 0;
+
+            if (num8 > Main.maxTilesY)
+                num8 = Main.maxTilesY;
+
+            for (int k = num5; k < num6; k++) {
+                for (int l = num7; l < num8; l++) {
+                    if (Math.Abs((double)k - vector2D.X) + Math.Abs((double)l - vector2D.Y) < num * 0.5 * (1.0 + (double)_random.Next(-10, 11) * 0.015)) {
+                        WorldGen.grassSpread = 0;
+                        WorldGenHelper.CustomSpreadGrass(k, l, TileID.Dirt, _grassTileType, growUnderground: true);
+                        WorldGenHelper.CustomSpreadGrass(k, l, _dirtTileType, _grassTileType, growUnderground: true);
+                        if (Main.tile[k, l].WallType == 59 || Main.tile[k, l].WallType == _dirtWallType) {
+                            Main.tile[k, l].WallType = _grassWallType;
+                            if (_random.NextBool(3)) {
+                                FlowerGrassRunner(k, l);
+                            }
+                        }
                         Main.tile[k, l].LiquidAmount = 0;
 
                         if (Main.tile[k, l].TileType == _vinesTileType) {

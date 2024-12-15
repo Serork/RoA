@@ -34,7 +34,7 @@ sealed class NexusGateway : ModTile {
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.addTile(Type);
 
-        AddMapEntry(Color.White, CreateMapEntryName());
+        AddMapEntry(new Color(0, 120, 154), CreateMapEntryName());
 
         DustType = ModContent.DustType<BackwoodsPotDust1>();
         HitSound = SoundID.Tink;
