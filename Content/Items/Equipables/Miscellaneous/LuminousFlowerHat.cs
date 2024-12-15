@@ -11,7 +11,20 @@ namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 [AutoloadEquip(EquipType.Head)]
 [AutoloadGlowMask2("_Head_Glow")]
-class LuminousFlowerHat : ModItem {
+sealed class LuminousFlowerHat : ModItem {
+    private class LuminousFlowerHatLightValueHandler : ModPlayer {
+        public float LightValue { get; private set; }
+
+        public override void PostUpdateEquips() {
+            if (Player.armor[0].type == ModContent.ItemType<LuminousFlowerHat>()) {
+                LightValue = MathHelper.Lerp(LightValue, MathHelper.Clamp(Utils.GetLerpValue(0f, Player.maxRunSpeed, Player.velocity.Length(), true), Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f), Player.accRunSpeed);
+            }
+            else {
+                LightValue = Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT;
+            }
+        }
+    }
+
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Luminous Flower Hat");
         //Tooltip.SetDefault("Provides light when moving\n'It no more smells... but still brights the area around you'");
@@ -27,7 +40,7 @@ class LuminousFlowerHat : ModItem {
         Item.value = Item.sellPrice(silver: 35);
     }
 
-    private static float GetLerpValue(Player player) => MathHelper.Clamp(Utils.GetLerpValue(0f, 3f, player.velocity.Length(), true), Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f);
+    private static float GetLerpValue(Player player) => player.GetModPlayer<LuminousFlowerHatLightValueHandler>().LightValue;
 
     public override void UpdateEquip(Player player) {
         void lightUp(float progress) {

@@ -519,3 +519,8 @@ TheLegend: {
 	DisplayName: The Legend
 	Tooltip: "'CKnight'"
 }
+
+LuminousFlowerHat: {
+	DisplayName: Luminous Flower Hat
+	Tooltip: ""
+}

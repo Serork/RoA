@@ -5,9 +5,10 @@ using System;
 namespace RoA.Common.GlowMasks;
 
 [AttributeUsage(AttributeTargets.Class)]
-sealed class AutoloadGlowMaskAttribute(byte r = 255, byte g = 255, byte b = 255, byte a = 255, string requirement = "_Glow") : Attribute {
+sealed class AutoloadGlowMaskAttribute(byte r = 255, byte g = 255, byte b = 255, byte a = 255, string requirement = "_Glow", bool shouldApplyItemAlpha = true) : Attribute {
     public readonly Color GlowColor = new(r, g, b, a);
     public readonly string Requirement = requirement;
+    public readonly bool ShouldApplyItemAlpha = shouldApplyItemAlpha;
 }
 
 [AttributeUsage(AttributeTargets.Class)]

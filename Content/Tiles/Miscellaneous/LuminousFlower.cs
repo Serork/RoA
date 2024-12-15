@@ -16,11 +16,11 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
-    public const float MINLIGHTMULT = 0.35f;
+    public const float MINLIGHTMULT = 0.5f;
 
     public override int[] AnchorValidTiles => [TileID.Grass, TileID.JungleGrass, TileID.CorruptGrass, TileID.CrimsonGrass, (ushort)ModContent.TileType<BackwoodsGrass>()];
 
-    public override ushort ExtraChance => 1;
+    public override ushort ExtraChance => 300;
 
     public override ushort DropItem => (ushort)ModContent.ItemType<Items.Miscellaneous.LuminousFlower>();
 
@@ -41,6 +41,9 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
         TileObjectData.newTile.Height = YSize;
         TileObjectData.newTile.DrawYOffset = 6;
         TileObjectData.addTile(Type);
+
+        DustType = DustID.Grass;
+        HitSound = SoundID.Grass;
 
         AnimationFrameHeight = 54;
     }
@@ -66,10 +69,6 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
             float g = 0.7f * progress;
             float b = 0.3f * progress;
             Lighting.AddLight(i, j, r, g, b);
-        }
-        if (dist < maxDist) {
-            float progress = MathHelper.Clamp(1f - dist / maxDist, MINLIGHTMULT, 1f);
-            lightUp(progress);
             Tile tile = Main.tile[i, j];
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
@@ -80,6 +79,10 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
                                   new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
                                   new Rectangle(tile.TileFrameX, tile.TileFrameY + Main.tileFrame[Type] * 18 * 3 - 2, 16, height),
                                   Color.White * progress, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        }
+        if (dist < maxDist) {
+            float progress = MathHelper.Clamp(1f - dist / maxDist, MINLIGHTMULT, 0.85f);
+            lightUp(progress);
         }
         else {
             lightUp(MINLIGHTMULT);

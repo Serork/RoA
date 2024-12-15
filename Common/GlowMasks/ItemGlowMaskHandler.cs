@@ -19,10 +19,11 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 		void SetDrawSettings(Player player, ref Texture2D texture, ref Color color);
 	}
 
-    public readonly struct GlowMaskInfo(Asset<Texture2D> glowMask, Color glowColor) {
+    public readonly struct GlowMaskInfo(Asset<Texture2D> glowMask, Color glowColor, bool shouldApplyItemAlpha) {
 		public readonly Asset<Texture2D> GlowMask = glowMask;
 		public readonly Color GlowColor = glowColor;
-	}
+        public readonly bool ShouldApplyItemAlpha = shouldApplyItemAlpha;
+    }
 
     internal static Dictionary<int, GlowMaskInfo> GlowMasks { get; private set; }
     internal static Dictionary<int, ModItem> ArmorGlowMasks { get; private set; }
@@ -33,7 +34,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 Texture2D glowMaskTexture = glowMaskInfo.GlowMask.Value;
 				Vector2 origin = glowMaskTexture.Size() / 2f;
                 Color color = Color.Lerp(glowMaskInfo.GlowColor, Lighting.GetColor((int)item.Center.X / 16, (int)item.Center.Y / 16), Lighting.Brightness((int)item.Center.X / 16, (int)item.Center.Y / 16));
-				spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, item.GetAlpha(color), rotation, origin, 1f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, glowMaskInfo.ShouldApplyItemAlpha ? item.GetAlpha(color) : glowMaskInfo.GlowColor, rotation, origin, 1f, SpriteEffects.None, 0f);
 			}
         }
     }
@@ -62,7 +63,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 string modItemTexture = item.Texture;
                 Asset<Texture2D> texture = ModContent.Request<Texture2D>(modItemTexture + attribute.Requirement, AssetRequestMode.ImmediateLoad);
                 texture.Value.Name = modItemTexture;
-                GlowMaskInfo glowMaskInfo = new(texture, attribute.GlowColor);
+                GlowMaskInfo glowMaskInfo = new(texture, attribute.GlowColor, attribute.ShouldApplyItemAlpha);
                 GlowMasks[item.Type] = glowMaskInfo;
             }
         }

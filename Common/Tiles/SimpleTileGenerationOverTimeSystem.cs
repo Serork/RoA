@@ -150,6 +150,10 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
         //    return false;
         //}
 
+        if (Helper.OnScreenWorld(i, j)) {
+            return false;
+        }
+
         UnifiedRandom genRand = WorldGen.genRand;
         i = genRand.Next(Math.Max(10, i - 10), Math.Min(Main.maxTilesX - 10, i + 10));
         bool onSurface = instance.OnSurface && !instance.InUnderground;
