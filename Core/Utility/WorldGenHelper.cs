@@ -1384,6 +1384,61 @@ static class WorldGenHelper {
         return false;
     }
 
+    // adapted vanilla
+    public static void ModifiedDirtyRockRunner(int i, int j, params ushort[] validWallTypes) {
+        double num = WorldGen.genRand.Next(2, 6);
+        double num2 = WorldGen.genRand.Next(5, 50);
+        double num3 = num2;
+        Vector2D vector2D = default(Vector2D);
+        vector2D.X = i;
+        vector2D.Y = j;
+        Vector2D vector2D2 = default(Vector2D);
+        vector2D2.X = (double)WorldGen.genRand.Next(-10, 11) * 0.1;
+        vector2D2.Y = (double)WorldGen.genRand.Next(-10, 11) * 0.1;
+        while (num > 0.0 && num3 > 0.0) {
+            double num4 = num * (num3 / num2);
+            num3 -= 1.0;
+            int num5 = (int)(vector2D.X - num4 * 0.5);
+            int num6 = (int)(vector2D.X + num4 * 0.5);
+            int num7 = (int)(vector2D.Y - num4 * 0.5);
+            int num8 = (int)(vector2D.Y + num4 * 0.5);
+            if (num5 < 0)
+                num5 = 0;
+
+            if (num6 > Main.maxTilesX)
+                num6 = Main.maxTilesX;
+
+            if (num7 < 0)
+                num7 = 0;
+
+            if (num8 > Main.maxTilesY)
+                num8 = Main.maxTilesY;
+
+            for (int k = num5; k < num6; k++) {
+                for (int l = num7; l < num8; l++) {
+                    if (Math.Abs((double)k - vector2D.X) + Math.Abs((double)l - vector2D.Y) < num * 0.5 * (1.0 + (double)WorldGen.genRand.Next(-10, 11) * 0.015) && (Main.tile[k, l].WallType == 2 || (validWallTypes != null && validWallTypes.Contains(Main.tile[k, l].WallType))))
+                        Main.tile[k, l].WallType = 59;
+                }
+            }
+
+            vector2D += vector2D2;
+            vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+            if (vector2D2.X > 1.0)
+                vector2D2.X = 1.0;
+
+            if (vector2D2.X < -1.0)
+                vector2D2.X = -1.0;
+
+            vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+            if (vector2D2.Y > 1.0)
+                vector2D2.Y = 1.0;
+
+            if (vector2D2.Y < -1.0)
+                vector2D2.Y = -1.0;
+        }
+    }
+
+    // adapted vanilla
     public static bool ModifiedCanHit(Vector2 Position1, int Width1, int Height1, Vector2 Position2, int Width2, int Height2, int ignoreTileType) {
         int num = (int)(Position1.X + Width1 / 2) / 16;
         int num2 = (int)(Position1.Y + Height1 / 2) / 16;

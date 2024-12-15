@@ -38,12 +38,15 @@ sealed class MercuriumOreGen : ModSystem {
                 _tileCount = 15;
             }
             double chance = 0.85;
+            float sizeMult = 1f;
             switch (type) {
                 case 6 or 167:
                     chance = 0.75;
+                    sizeMult = 1.1f;
                     break;
                 case 7 or 166:
                     chance = 0.85;
+                    sizeMult = WorldGen.genRand.NextFloat(1.5f, 2f) * 0.75f;
                     break;
                 case 8 or 169:
                     chance = 1.0;
@@ -58,7 +61,7 @@ sealed class MercuriumOreGen : ModSystem {
                 if (!WorldGen.genRand.NextBool(4)) {
                     velocity = Vector2.Zero;
                 }
-                WorldGenHelper.ModifiedTileRunner(i + (int)WorldGen.genRand.NextFloat(-velocity.X, velocity.X), j + (int)WorldGen.genRand.NextFloat(-velocity.Y, velocity.Y), _tileCount * 0.25f, (int)(_tileCount * 0.1f), ModContent.TileType<MercuriumOre>(), ignoreTileTypes: [.. oresType]);
+                WorldGenHelper.ModifiedTileRunner(i + (int)WorldGen.genRand.NextFloat(-velocity.X, velocity.X), j + (int)WorldGen.genRand.NextFloat(-velocity.Y, velocity.Y), _tileCount * 0.25f * sizeMult, (int)(_tileCount * 0.1f), ModContent.TileType<MercuriumOre>(), ignoreTileTypes: [.. oresType]);
             }
             _tileCount = 0;
         }
