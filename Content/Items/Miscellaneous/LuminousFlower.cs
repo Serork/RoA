@@ -1,14 +1,25 @@
-﻿using Terraria.ModLoader;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.GlowMasks;
+using RoA.Core;
+
 using Terraria;
 using Terraria.ID;
-
-using RoA.Core;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
 
+[AutoloadGlowMask]
 sealed class LuminousFlower : ModItem {
 	public override void SetDefaults() {
 		Item.SetSize(26, 30);
 		Item.SetDefaultOthers(Item.sellPrice(gold: 3, silver: 50), ItemRarityID.Blue);
 	}
+
+    public override void PostUpdate() {
+        float r = 0.9f;
+        float g = 0.7f;
+        float b = 0.3f;
+        Lighting.AddLight(Item.getRect().Center(), new Vector3(r, g, b));
+    }
 }

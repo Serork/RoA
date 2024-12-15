@@ -39,6 +39,22 @@ static class Helper {
         );
     }
 
+    public static bool OnScreenWorld(Vector2 position) {
+        return OnScreen(position - Main.screenPosition);
+    }
+    public static bool OnScreen(Vector2 position) {
+        return OnScreen(new Rectangle((int)position.X, (int)position.Y, 1, 1));
+    }
+    public static bool OnScreenWorld(Rectangle rectangle) {
+        return OnScreen(new Rectangle(rectangle.X - (int)Main.screenPosition.X, rectangle.Y - (int)Main.screenPosition.Y, rectangle.Width, rectangle.Height));
+    }
+    public static bool OnScreen(Rectangle rectangle) {
+        return new Rectangle(-20, -20, Main.screenWidth + 20 * 2, Main.screenHeight + 20 * 2).Intersects(rectangle);
+    }
+    public static bool OnScreenWorld(int x, int y, int width = 1, int height = 1) {
+        return OnScreenWorld(new Rectangle(x * 16, y * 16, width * 16, height * 16));
+    }
+
     public static string NamespacePath(this object obj) => NamespacePath(obj.GetType());
     public static string NamespacePath<T>() => NamespacePath(typeof(T));
     public static string NamespacePath(Type t) => t.Namespace.Replace('.', '/');

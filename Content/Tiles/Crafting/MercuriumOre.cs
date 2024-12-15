@@ -28,8 +28,6 @@ sealed class MercuriumOre : ModTile {
 		AddMapEntry(new Color(141, 163, 171), CreateMapEntryName());
 
         DustType = ModContent.DustType<ToxicFumes>();
-        //DustType = ModContent.DustType<ToxicFumes>();
-        //ItemDrop = ModContent.ItemType<Items.Placeable.Crafting.MercuriumOre>();
 
         TileHelper.MergeWith(Type, [7, 166, 6, 167, 9, 168, 8, 169, 22, 204]);
 

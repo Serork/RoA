@@ -1,0 +1,54 @@
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.GlowMasks;
+
+using Terraria;
+using Terraria.GameContent.Creative;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Items.Equipables.Miscellaneous;
+
+[AutoloadEquip(EquipType.Head)]
+[AutoloadGlowMask2("_Head_Glow")]
+class LuminousFlowerHat : ModItem {
+    public override void SetStaticDefaults() {
+        //DisplayName.SetDefault("Luminous Flower Hat");
+        //Tooltip.SetDefault("Provides light when moving\n'It no more smells... but still brights the area around you'");
+        ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true;
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
+
+    public override void SetDefaults() {
+        int width = 34; int height = 26;
+        Item.Size = new Vector2(width, height);
+
+        Item.rare = ItemRarityID.Blue;
+        Item.value = Item.sellPrice(silver: 35);
+    }
+
+    private static float GetLerpValue(Player player) => MathHelper.Clamp(Utils.GetLerpValue(0f, 3f, player.velocity.Length(), true), Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f);
+
+    public override void UpdateEquip(Player player) {
+        void lightUp(float progress) {
+            float r = 0.9f * progress;
+            float g = 0.7f * progress;
+            float b = 0.3f * progress;
+            Lighting.AddLight((int)player.Center.X / 16, (int)player.Center.Y / 16, r, g, b);
+        }
+        lightUp(GetLerpValue(player));
+    }
+
+    public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
+        glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
+        glowMaskColor = Color.White * GetLerpValue(drawPlayer) * (1f - shadow);
+    }
+
+    //public override void AddRecipes() {
+    //	CreateRecipe()
+    //				.AddIngredient<LuminousFlower>()
+    //				.AddIngredient(ItemID.Sunflower)
+    //				.AddTile(TileID.WorkBenches)
+    //				.Register();
+    //}
+}
