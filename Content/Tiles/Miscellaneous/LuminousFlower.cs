@@ -51,12 +51,16 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = 6;
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        LuminiousFlowerLightUp(i, j);
+    }
+
+    public static void LuminiousFlowerLightUp(int i, int j, ModTile modTile = null) {
         if (!Helper.OnScreenWorld(i, j)) {
             return;
         }
         float[] lengths = new float[Main.CurrentFrameFlags.ActivePlayersCount];
-        for (int k = 0; k < Main.CurrentFrameFlags.ActivePlayersCount; k++) { 
-            Player player = Main.player[k];  
+        for (int k = 0; k < Main.CurrentFrameFlags.ActivePlayersCount; k++) {
+            Player player = Main.player[k];
             if (!player.active || player.dead) {
                 continue;
             }
@@ -69,16 +73,18 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
             float g = 0.7f * progress;
             float b = 0.3f * progress;
             Lighting.AddLight(i, j, r, g, b);
-            Tile tile = Main.tile[i, j];
-            Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen) {
-                zero = Vector2.Zero;
+            if (modTile != null) {
+                Tile tile = Main.tile[i, j];
+                Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+                if (Main.drawToScreen) {
+                    zero = Vector2.Zero;
+                }
+                int height = tile.TileFrameY == 36 ? 18 : 16;
+                Main.spriteBatch.Draw(TileHelper.GetTileGlowTexture(modTile),
+                                      new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
+                                      new Rectangle(tile.TileFrameX, tile.TileFrameY + Main.tileFrame[modTile.Type] * 18 * 3 - 2, 16, height),
+                                      Color.White * progress, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
-            int height = tile.TileFrameY == 36 ? 18 : 16;
-            Main.spriteBatch.Draw(this.GetTileGlowTexture(),
-                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
-                                  new Rectangle(tile.TileFrameX, tile.TileFrameY + Main.tileFrame[Type] * 18 * 3 - 2, 16, height),
-                                  Color.White * progress, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
         if (dist < maxDist) {
             float progress = MathHelper.Clamp(1f - dist / maxDist, MINLIGHTMULT, 0.85f);

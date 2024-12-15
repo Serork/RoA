@@ -17,9 +17,9 @@ sealed class LuminousFlower : ModItem {
 	}
 
     public override void PostUpdate() {
-        float r = 0.9f;
-        float g = 0.7f;
-        float b = 0.3f;
-        Lighting.AddLight(Item.getRect().Center(), new Vector3(r, g, b) * 0.85f);
+        Vector2 pos = Item.getRect().Center();
+        int i = (int)(pos.X / 16f);
+        int j = (int)(pos.Y / 16f);
+        Tiles.Miscellaneous.LuminousFlower.LuminiousFlowerLightUp(i, j);
     }
 }

@@ -2,6 +2,8 @@
 
 using RoA.Common.GlowMasks;
 
+using System;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -17,7 +19,11 @@ sealed class LuminousFlowerHat : ModItem {
 
         public override void PostUpdateEquips() {
             if (Player.armor[0].type == ModContent.ItemType<LuminousFlowerHat>()) {
-                LightValue = MathHelper.Lerp(LightValue, MathHelper.Clamp(Utils.GetLerpValue(0f, Player.maxRunSpeed, Player.velocity.Length(), true), Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f), Player.accRunSpeed);
+                float length = Player.velocity.Length();
+                LightValue = MathHelper.Lerp(LightValue, 
+                    MathHelper.Clamp(Utils.GetLerpValue(0f, Math.Abs(Player.maxRunSpeed), length, true), 
+                    Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f), (float)Math.Round(length * 0.1f, 2));
+                Main.NewText(LightValue);
             }
             else {
                 LightValue = Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT;
