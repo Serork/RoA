@@ -504,3 +504,18 @@ Grimstone: {
 	DisplayName: Grimstone
 	Tooltip: ""
 }
+
+MercuriumNugget: {
+	DisplayName: Mercurium Nugget
+	Tooltip: ""
+}
+
+MillionDollarPainting: {
+	DisplayName: Million Dollar Painting
+	Tooltip: "'VFD'"
+}
+
+TheLegend: {
+	DisplayName: The Legend
+	Tooltip: "'CKnight'"
+}

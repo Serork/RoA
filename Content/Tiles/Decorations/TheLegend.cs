@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -28,10 +30,10 @@ sealed class TheLegend : ModTile {
 		// name.SetDefault("The Legend");
 		AddMapEntry(new Color(65, 98, 168), name);
 
-		DustType = DustID.PlatinumCoin;
+		DustType = ModContent.DustType<TheLegendDust>();
 	}
 
-	public override void PlaceInWorld(int i, int j, Item item) {
+    public override void PlaceInWorld(int i, int j, Item item) {
 		//if (Main.rand.NextBool(1000))
 		//	SoundEngine.PlaySound(new SoundStyle($"{nameof(RiseofAges)}/Assets/Sounds/SFX/Blessed"), new Vector2(i * 16, j * 16));
 	}

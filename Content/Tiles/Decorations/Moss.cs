@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts.Backwoods;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -25,6 +27,7 @@ sealed class Moss : ModTile {
         TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
+		DustType = ModContent.DustType<WoodTrash>();
 		// name.SetDefault("MOX");
 		AddMapEntry(new Color(72, 139, 77), name);
 	}
