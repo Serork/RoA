@@ -1384,6 +1384,363 @@ static class WorldGenHelper {
         return false;
     }
 
+    public static bool ModifiedCanHit(Vector2 Position1, int Width1, int Height1, Vector2 Position2, int Width2, int Height2, int ignoreTileType) {
+        int num = (int)(Position1.X + Width1 / 2) / 16;
+        int num2 = (int)(Position1.Y + Height1 / 2) / 16;
+        int num3 = (int)(Position2.X + Width2 / 2) / 16;
+        int num4 = (int)(Position2.Y + Height2 / 2) / 16;
+        if (num <= 1)
+            num = 1;
+
+        if (num >= Main.maxTilesX)
+            num = Main.maxTilesX - 1;
+
+        if (num3 <= 1)
+            num3 = 1;
+
+        if (num3 >= Main.maxTilesX)
+            num3 = Main.maxTilesX - 1;
+
+        if (num2 <= 1)
+            num2 = 1;
+
+        if (num2 >= Main.maxTilesY)
+            num2 = Main.maxTilesY - 1;
+
+        if (num4 <= 1)
+            num4 = 1;
+
+        if (num4 >= Main.maxTilesY)
+            num4 = Main.maxTilesY - 1;
+
+        try {
+            do {
+                int num5 = Math.Abs(num - num3);
+                int num6 = Math.Abs(num2 - num4);
+                if (num == num3 && num2 == num4)
+                    return true;
+
+                if (num5 > num6) {
+                    num = ((num >= num3) ? (num - 1) : (num + 1));
+                    if (Main.tile[num, num2 - 1] == null)
+                        return false;
+
+                    if (Main.tile[num, num2 + 1] == null)
+                        return false;
+
+                    if (!Main.tile[num, num2 - 1].IsActuated && Main.tile[num, num2 - 1].TileType != ignoreTileType && Main.tile[num, num2 - 1].HasTile && Main.tileSolid[Main.tile[num, num2 - 1].TileType] && !Main.tileSolidTop[Main.tile[num, num2 - 1].TileType] && Main.tile[num, num2 - 1].Slope == 0 && !Main.tile[num, num2 - 1].IsHalfBlock &&
+                        !Main.tile[num, num2 + 1].IsActuated && Main.tile[num, num2 + 1].TileType != ignoreTileType && Main.tile[num, num2 + 1].HasTile && Main.tileSolid[Main.tile[num, num2 + 1].TileType] && !Main.tileSolidTop[Main.tile[num, num2 + 1].TileType] && Main.tile[num, num2 + 1].Slope == 0 && !Main.tile[num, num2 + 1].IsHalfBlock)
+                        return false;
+                }
+                else {
+                    num2 = ((num2 >= num4) ? (num2 - 1) : (num2 + 1));
+                    if (Main.tile[num - 1, num2] == null)
+                        return false;
+
+                    if (Main.tile[num + 1, num2] == null)
+                        return false;
+
+                    if (!Main.tile[num - 1, num2].IsActuated && Main.tile[num - 1, num2].TileType != ignoreTileType && Main.tile[num - 1, num2].HasTile && Main.tileSolid[Main.tile[num - 1, num2].TileType] && !Main.tileSolidTop[Main.tile[num - 1, num2].TileType] && Main.tile[num - 1, num2].Slope == 0 && !Main.tile[num - 1, num2].IsHalfBlock && 
+                        !Main.tile[num + 1, num2].IsActuated && Main.tile[num + 1, num2].TileType != ignoreTileType && Main.tile[num + 1, num2].HasTile && Main.tileSolid[Main.tile[num + 1, num2].TileType] && !Main.tileSolidTop[Main.tile[num + 1, num2].TileType] && Main.tile[num + 1, num2].Slope == 0 && !Main.tile[num + 1, num2].IsHalfBlock)
+                        return false;
+                }
+
+                if (Main.tile[num, num2] == null)
+                    return false;
+            } while (Main.tile[num, num2].IsActuated || !Main.tile[num, num2].HasTile || Main.tile[num, num2].TileType == ignoreTileType || !Main.tileSolid[Main.tile[num, num2].TileType] || Main.tileSolidTop[Main.tile[num, num2].TileType]);
+
+            return false;
+        }
+        catch {
+            return false;
+        }
+    }
+
+    // adapted vanilla
+    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[] ignoreTileTypes = null) {
+        if (!GenVars.mudWall) {
+            if (WorldGen.drunkWorldGen) {
+                strength *= 1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.01;
+                steps = (int)((double)steps * (1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.01));
+            }
+            else if (WorldGen.remixWorldGen) {
+                strength *= 1.0 + (double)WorldGen.genRand.Next(-50, 51) * 0.01;
+            }
+            else if (WorldGen.getGoodWorldGen && type != 57) {
+                strength *= 1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.015;
+                steps += WorldGen.genRand.Next(3);
+            }
+        }
+
+        double num = strength;
+        double num2 = steps;
+        Vector2D vector2D = default(Vector2D);
+        vector2D.X = i;
+        vector2D.Y = j;
+        Vector2D vector2D2 = default(Vector2D);
+        vector2D2.X = (double)WorldGen.genRand.Next(-10, 11) * 0.1;
+        vector2D2.Y = (double)WorldGen.genRand.Next(-10, 11) * 0.1;
+        if (speedX != 0.0 || speedY != 0.0) {
+            vector2D2.X = speedX;
+            vector2D2.Y = speedY;
+        }
+
+        bool flag = type == 368;
+        bool flag2 = type == 367;
+        bool lava = false;
+        if (WorldGen.getGoodWorldGen && WorldGen.genRand.Next(4) == 0)
+            lava = true;
+
+        while (num > 0.0 && num2 > 0.0) {
+            if (WorldGen.drunkWorldGen && WorldGen.genRand.Next(30) == 0) {
+                vector2D.X += (double)WorldGen.genRand.Next(-100, 101) * 0.05;
+                vector2D.Y += (double)WorldGen.genRand.Next(-100, 101) * 0.05;
+            }
+
+            if (vector2D.Y < 0.0 && num2 > 0.0 && type == 59)
+                num2 = 0.0;
+
+            num = strength * (num2 / (double)steps);
+            num2 -= 1.0;
+            int num3 = (int)(vector2D.X - num * 0.5);
+            int num4 = (int)(vector2D.X + num * 0.5);
+            int num5 = (int)(vector2D.Y - num * 0.5);
+            int num6 = (int)(vector2D.Y + num * 0.5);
+            if (num3 < 1)
+                num3 = 1;
+
+            if (num4 > Main.maxTilesX - 1)
+                num4 = Main.maxTilesX - 1;
+
+            if (num5 < 1)
+                num5 = 1;
+
+            if (num6 > Main.maxTilesY - 1)
+                num6 = Main.maxTilesY - 1;
+
+            for (int k = num3; k < num4; k++) {
+                if (k < WorldGen.beachDistance + 50 || k >= Main.maxTilesX - WorldGen.beachDistance - 50)
+                    lava = false;
+
+                for (int l = num5; l < num6; l++) {
+                    bool shouldIgnoreTile = ignoreTileTypes != null && ignoreTileTypes.Contains(Main.tile[k, l].TileType);
+                    if ((WorldGen.drunkWorldGen && l < Main.maxTilesY - 300 && type == 57) || (Main.tile[k, l].HasTile && shouldIgnoreTile) || !(Math.Abs((double)k - vector2D.X) + Math.Abs((double)l - vector2D.Y) < strength * 0.5 * (1.0 + (double)WorldGen.genRand.Next(-10, 11) * 0.015)))
+                        continue;
+
+                    if (GenVars.mudWall && (double)l > Main.worldSurface && Main.tile[k, l - 1].WallType != 2 && l < Main.maxTilesY - 210 - WorldGen.genRand.Next(3) && Math.Abs((double)k - vector2D.X) + Math.Abs((double)l - vector2D.Y) < strength * 0.45 * (1.0 + (double)WorldGen.genRand.Next(-10, 11) * 0.01)) {
+                        if (l > GenVars.lavaLine - WorldGen.genRand.Next(0, 4) - 50) {
+                            if (Main.tile[k, l - 1].WallType != 64 && Main.tile[k, l + 1].WallType != 64 && Main.tile[k - 1, l].WallType != 64 && Main.tile[k + 1, l].WallType != 64)
+                                WorldGen.PlaceWall(k, l, 15, mute: true);
+                        }
+                        else if (Main.tile[k, l - 1].WallType != 15 && Main.tile[k, l + 1].WallType != 15 && Main.tile[k - 1, l].WallType != 15 && Main.tile[k + 1, l].WallType != 15) {
+                            WorldGen.PlaceWall(k, l, 64, mute: true);
+                        }
+                    }
+
+                    if (type < 0) {
+                        if (Main.tile[k, l].TileType == 53)
+                            continue;
+
+                        Tile tile = Main.tile[k, l];
+                        if (type == -2 && Main.tile[k, l].HasTile && (l < GenVars.waterLine || l > GenVars.lavaLine)) {
+                            tile.LiquidAmount = byte.MaxValue;
+                            if (lava) {
+                                tile.LiquidType = LiquidID.Lava;
+                            }
+                            if (WorldGen.remixWorldGen) {
+                                if (l > GenVars.lavaLine && ((double)l < Main.rockLayer - 80.0 || l > Main.maxTilesY - 350) && !WorldGen.oceanDepths(k, l))
+                                    tile.LiquidType = LiquidID.Lava;
+                            }
+                            else if (l > GenVars.lavaLine) {
+                                tile.LiquidType = LiquidID.Lava;
+                            }
+                        }
+
+                        tile.HasTile = false;
+                        continue;
+                    }
+
+                    if (flag && Math.Abs((double)k - vector2D.X) + Math.Abs((double)l - vector2D.Y) < strength * 0.3 * (1.0 + (double)WorldGen.genRand.Next(-10, 11) * 0.01))
+                        WorldGen.PlaceWall(k, l, 180, mute: true);
+
+                    if (flag2 && Math.Abs((double)k - vector2D.X) + Math.Abs((double)l - vector2D.Y) < strength * 0.3 * (1.0 + (double)WorldGen.genRand.Next(-10, 11) * 0.01))
+                        WorldGen.PlaceWall(k, l, 178, mute: true);
+
+                    if (overRide || !Main.tile[k, l].HasTile) {
+                        Tile tile = Main.tile[k, l];
+                        bool flag3 = false;
+                        flag3 = Main.tileStone[type] && tile.TileType != 1;
+                        if (!TileID.Sets.CanBeClearedDuringGeneration[tile.TileType])
+                            flag3 = true;
+
+                        switch (tile.TileType) {
+                            case 53:
+                                if (type == 59 && GenVars.UndergroundDesertLocation.Contains(k, l))
+                                    flag3 = true;
+                                if (type == 40)
+                                    flag3 = true;
+                                if ((double)l < Main.worldSurface && type != 59)
+                                    flag3 = true;
+                                break;
+                            case 45:
+                            case 147:
+                            case 189:
+                            case 190:
+                            case 196:
+                            case 460:
+                                flag3 = true;
+                                break;
+                            case 396:
+                            case 397:
+                                flag3 = !TileID.Sets.Ore[type];
+                                break;
+                            case 1:
+                                if (type == 59 && (double)l < Main.worldSurface + (double)WorldGen.genRand.Next(-50, 50))
+                                    flag3 = true;
+                                break;
+                            case 367:
+                            case 368:
+                                if (type == 59)
+                                    flag3 = true;
+                                break;
+                        }
+
+                        if (!flag3)
+                            tile.TileType = (ushort)type;
+                    }
+
+                    if (addTile) {
+                        Tile tile = Main.tile[k, l];
+                        tile.HasTile = true;
+                        tile.LiquidAmount = 0;
+                    }
+
+                    if (noYChange && (double)l < Main.worldSurface && type != 59)
+                        Main.tile[k, l].WallType = 2;
+
+                    if (type == 59 && l > GenVars.waterLine && Main.tile[k, l].LiquidAmount > 0) {
+                        Tile tile = Main.tile[k, l];
+                        tile.LiquidAmount = 0;
+                    }
+                }
+            }
+
+            vector2D += vector2D2;
+            if ((!WorldGen.drunkWorldGen || WorldGen.genRand.Next(3) != 0) && num > 50.0) {
+                vector2D += vector2D2;
+                num2 -= 1.0;
+                vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                if (num > 100.0) {
+                    vector2D += vector2D2;
+                    num2 -= 1.0;
+                    vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                    vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                    if (num > 150.0) {
+                        vector2D += vector2D2;
+                        num2 -= 1.0;
+                        vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                        vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                        if (num > 200.0) {
+                            vector2D += vector2D2;
+                            num2 -= 1.0;
+                            vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                            vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                            if (num > 250.0) {
+                                vector2D += vector2D2;
+                                num2 -= 1.0;
+                                vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                if (num > 300.0) {
+                                    vector2D += vector2D2;
+                                    num2 -= 1.0;
+                                    vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                    vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                    if (num > 400.0) {
+                                        vector2D += vector2D2;
+                                        num2 -= 1.0;
+                                        vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                        vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                        if (num > 500.0) {
+                                            vector2D += vector2D2;
+                                            num2 -= 1.0;
+                                            vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                            vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                            if (num > 600.0) {
+                                                vector2D += vector2D2;
+                                                num2 -= 1.0;
+                                                vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                                vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                                if (num > 700.0) {
+                                                    vector2D += vector2D2;
+                                                    num2 -= 1.0;
+                                                    vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                                    vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                                    if (num > 800.0) {
+                                                        vector2D += vector2D2;
+                                                        num2 -= 1.0;
+                                                        vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                                        vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                                        if (num > 900.0) {
+                                                            vector2D += vector2D2;
+                                                            num2 -= 1.0;
+                                                            vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                                            vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+            if (WorldGen.drunkWorldGen)
+                vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.25;
+
+            if (vector2D2.X > 1.0)
+                vector2D2.X = 1.0;
+
+            if (vector2D2.X < -1.0)
+                vector2D2.X = -1.0;
+
+            if (!noYChange) {
+                vector2D2.Y += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+                if (vector2D2.Y > 1.0)
+                    vector2D2.Y = 1.0;
+
+                if (vector2D2.Y < -1.0)
+                    vector2D2.Y = -1.0;
+            }
+            else if (type != 59 && num < 3.0) {
+                if (vector2D2.Y > 1.0)
+                    vector2D2.Y = 1.0;
+
+                if (vector2D2.Y < -1.0)
+                    vector2D2.Y = -1.0;
+            }
+
+            if (type == 59 && !noYChange) {
+                if (vector2D2.Y > 0.5)
+                    vector2D2.Y = 0.5;
+
+                if (vector2D2.Y < -0.5)
+                    vector2D2.Y = -0.5;
+
+                if (vector2D.Y < Main.rockLayer + 100.0)
+                    vector2D2.Y = 1.0;
+
+                if (vector2D.Y > (double)(Main.maxTilesY - 300))
+                    vector2D2.Y = -1.0;
+            }
+        }
+    }
+
     // adapted vanilla
     public static void ModifiedTileRunnerForBackwoods(int i, int j, double strength, int steps, int tileType,
                                                       int wallType, bool addTile = false,

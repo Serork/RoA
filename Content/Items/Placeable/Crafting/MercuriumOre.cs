@@ -49,7 +49,10 @@ sealed class MercuriumOre : ModItem {
 
 sealed class MercuriumOrePlayerHandler : ModPlayer {
 	public override void PostUpdateBuffs() {
-		int type = ModContent.ItemType<MercuriumOre>();
+        if (Player.HasBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>())) {
+            return;
+        }
+        int type = ModContent.ItemType<MercuriumOre>();
         if (Player.HasItem(type) || (Player.whoAmI == Main.myPlayer && Main.mouseItem.type == type)) Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
 
 		foreach (Item item in Main.ActiveItems) {
@@ -61,7 +64,7 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
             }
         }
 
-        Check(10, 50);
+        Check(7, 50);
     }
 
     private void Check(int fluff, int buffTime) {
@@ -75,13 +78,16 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
             for (int j = y - tilesAway; j < y + tilesAway + 1; j++) {
                 if (WorldGen.InWorld(i, j)) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                    int tileType = ModContent.TileType<Tiles.Crafting.MercuriumOre>();
                     if (!tile.HasTile || !Main.tileSolid[tile.TileType]) {
                         continue;
                     }
-                    if (tile.TileType != ModContent.TileType<Tiles.Crafting.MercuriumOre>()) {
+                    if (tile.TileType != tileType) {
                         continue;
                     }
-                    Player.AddBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>(), buffTime);
+                    if (WorldGenHelper.ModifiedCanHit(Player.position, 0, 0, new Point(i, j).ToWorldCoordinates(), 0, 0, tileType)) {
+                        Player.AddBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>(), buffTime);
+                    }
                 }
             }
         }

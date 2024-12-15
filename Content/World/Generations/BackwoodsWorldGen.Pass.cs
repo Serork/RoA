@@ -1216,13 +1216,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 else {
                     int min = (int)(y - (10 + num1047));
                     int num1052 = num1049 + num1047;
-                    if (num1049 > min) {
+                    if (num1049 > min + num1047) {
                         if (num1048 > Left + _random.NextFloat() * 15 && num1048 < Right - _random.NextFloat() * 15 && (Main.tile[num1048, num1052].WallType == _grassWallType || Main.tile[num1048, num1052].WallType == _flowerGrassWallType)) {
-                            Main.tile[num1048, num1052].WallType = 59;
+                            Main.tile[num1048, num1052].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
                         }
                     }
                     if (num1048 > Left && num1048 < Right && Main.tile[num1048, num1049].WallType == WallID.JungleUnsafe) {
-                        Main.tile[num1048, num1049].WallType = 59;
+                        Main.tile[num1048, num1049 + num1047].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
                     }
                 }
             }
