@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -29,6 +30,8 @@ sealed class MercuriumOre : ModTile {
         DustType = ModContent.DustType<ToxicFumes>();
         //DustType = ModContent.DustType<ToxicFumes>();
         //ItemDrop = ModContent.ItemType<Items.Placeable.Crafting.MercuriumOre>();
+
+        TileHelper.MergeWith(Type, [7, 166, 6, 167, 9, 168, 8, 169, 22, 204]);
 
         HitSound = SoundID.Tink;
 

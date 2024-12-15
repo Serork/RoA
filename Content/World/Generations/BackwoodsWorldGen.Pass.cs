@@ -1214,15 +1214,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 else {
-                    int min = (int)(y - (10 + num1047));
+                    int min = (int)(y - (15 + num1047));
                     int num1052 = num1049 + num1047;
-                    if (num1049 > min + num1047) {
+                    if (num1052 > min) {
                         if (num1048 > Left + _random.NextFloat() * 15 && num1048 < Right - _random.NextFloat() * 15 && (Main.tile[num1048, num1052].WallType == _grassWallType || Main.tile[num1048, num1052].WallType == _flowerGrassWallType)) {
                             Main.tile[num1048, num1052].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
                         }
-                    }
-                    if (num1048 > Left && num1048 < Right && Main.tile[num1048, num1049].WallType == WallID.JungleUnsafe) {
-                        Main.tile[num1048, num1049 + num1047].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
+                        if (num1048 > Left && num1048 < Right && Main.tile[num1048, num1052].WallType == WallID.JungleUnsafe) {
+                            Main.tile[num1048, num1052].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
+                        }
                     }
                 }
             }
@@ -2559,7 +2559,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int num686 = 0; num686 < _biomeWidth / 2; num686++) {
             int num687 = _random.Next(Left - 30, Right + 30);
             int y = Math.Min(CenterY - EdgeY, (int)Main.worldSurface);
-            int num688 = _random.Next((int)y - EdgeY - _random.Next(EdgeY), (int)y + 10);
+            int num688 = _random.Next((int)y - EdgeY - _random.Next(EdgeY), (int)Main.worldSurface + 10);
             if (Main.tile[num687, num688].WallType == 2 || Main.tile[num687, num688].WallType == _dirtWallType)
                 WorldGen.DirtyRockRunner(num687, num688);
         }

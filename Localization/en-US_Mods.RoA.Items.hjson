@@ -90,7 +90,7 @@ SpikedIceStaff: {
 
 LuminousFlower: {
 	DisplayName: Luminous Flower
-	Tooltip: ""
+	Tooltip: "'It smells and... shines'"
 }
 
 Bonerose: {
