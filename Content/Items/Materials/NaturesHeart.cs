@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -18,8 +20,8 @@ sealed class NaturesHeart : ModItem {
     public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Nature's Heart");
 		//Tooltip.SetDefault("'Seems like is was a source of life for higher beings...'");
-		Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 6));
-		ItemID.Sets.AnimatesAsSoul[Item.type] = true;
+		Main.RegisterItemAnimation(Type, new DrawAnimationVertical(10, 6));
+		ItemID.Sets.AnimatesAsSoul[Type] = true;
 
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
 	}
@@ -33,21 +35,20 @@ sealed class NaturesHeart : ModItem {
 		Item.rare = ItemRarityID.Green;
 	}
 
-	public override void PostUpdate() {
-		float value = 0.2f;
-		switch (Main.itemAnimations[Type].Frame) {
-			case 1 or 5:
-				value = 0.4f;
-				break;
+    public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
+        float value = 0.2f;
+        switch (Main.itemAnimations[Type].GetFrame(TextureAssets.Item[Type].Value, Main.itemFrameCounter[whoAmI]).Y / Item.height) {
+            case 1 or 5:
+                value = 0.4f;
+                break;
             case 2 or 4:
                 value = 0.6f;
                 break;
-			case 3:
+            case 3:
                 value = 0.8f;
                 break;
         }
-		_value = MathHelper.Lerp(_value, value, 0.3f);
-        Lighting.AddLight(Item.Center + Vector2.UnitX * 2f, 
-			(Color.Green * _value).ToVector3() * 0.65f);
-	}
+        Lighting.AddLight(Item.Center + Vector2.UnitX * 2f,
+            (Color.Green * value).ToVector3() * 0.6f);
+    }
 }

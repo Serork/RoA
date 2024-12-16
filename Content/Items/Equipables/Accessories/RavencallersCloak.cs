@@ -7,11 +7,14 @@ using RoA.Core.Utility;
 
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.Drawing;
+using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -50,7 +53,8 @@ sealed class RavencallersCloak : ModItem {
     private class RavencallerPlayer : ModPlayer {
         private const float RESETTIME = 300f;
 
-        private static MethodInfo? _drawPlayerInternal;
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawPlayerInternal")]
+        public extern static void LegacyPlayerRenderer_DrawPlayerInternal(LegacyPlayerRenderer playerRenderer, Camera camera, Player drawPlayer, Vector2 position, float rotation, Vector2 rotationOrigin, float shadow = 0f, float alpha = 1f, float scale = 1f, bool headOnly = false);
 
         private struct OldPositionInfo {
             public Vector2 Position, Velocity;
@@ -115,8 +119,6 @@ sealed class RavencallersCloak : ModItem {
             On_Mount.Dismount += On_Mount_Dismount;
             On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
             On_PlayerHeadDrawRenderTargetContent.DrawTheContent += On_PlayerHeadDrawRenderTargetContent_DrawTheContent;
-
-            _drawPlayerInternal = typeof(LegacyPlayerRenderer).GetMethod("DrawPlayerInternal", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
         private void On_Mount_Dismount(On_Mount.orig_Dismount orig, Mount self, Player mountedPlayer) {
@@ -131,10 +133,6 @@ sealed class RavencallersCloak : ModItem {
                 mountedPlayer.GetModPlayer<RavencallerPlayer>().ResetPositions(false);
             }
             orig(self, m, mountedPlayer, faceLeft);
-        }
-
-        public override void Unload() {
-            _drawPlayerInternal = null;
         }
 
         private void On_PlayerHeadDrawRenderTargetContent_DrawTheContent(On_PlayerHeadDrawRenderTargetContent.orig_DrawTheContent orig, PlayerHeadDrawRenderTargetContent self, SpriteBatch spriteBatch) {
@@ -229,7 +227,7 @@ sealed class RavencallersCloak : ModItem {
                     }
                     drawPlayer.position = lastPositionInfo.Position + Vector2.UnitY * offsetY;
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
-                    _drawPlayerInternal.Invoke(self, [camera, drawPlayer, drawPlayer.position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, -1f, 1f, 1f, false]);
+                    LegacyPlayerRenderer_DrawPlayerInternal(self, camera, drawPlayer, drawPlayer.position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, -1f, 1f, 1f, false);
                     Main.spriteBatch.End();
                 }
             }
