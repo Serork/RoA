@@ -522,7 +522,11 @@ TheLegend: {
 
 LuminousFlowerHat: {
 	DisplayName: Luminous Flower Hat
-	Tooltip: ""
+	Tooltip:
+		'''
+		Provides light when moving
+		'It no more smells... but still brights the area around you'
+		'''
 }
 
 ElderTorch: {
@@ -533,4 +537,9 @@ ElderTorch: {
 FlamingFabric: {
 	DisplayName: Flaming Fabric
 	Tooltip: ""
+}
+
+NaturesHeart: {
+	DisplayName: Natures Heart
+	Tooltip: "'Seems like is was a source of life for higher beings...'"
 }

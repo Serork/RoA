@@ -23,7 +23,6 @@ sealed class LuminousFlowerHat : ModItem {
                 LightValue = MathHelper.Lerp(LightValue, 
                     MathHelper.Clamp(Utils.GetLerpValue(0f, Math.Abs(Player.maxRunSpeed), length, true), 
                     Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f), (float)Math.Round(length * 0.1f, 2));
-                Main.NewText(LightValue);
             }
             else {
                 LightValue = Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT;
@@ -53,7 +52,7 @@ sealed class LuminousFlowerHat : ModItem {
             float r = 0.9f * progress;
             float g = 0.7f * progress;
             float b = 0.3f * progress;
-            Lighting.AddLight((int)player.Center.X / 16, (int)player.Center.Y / 16, r, g, b);
+            Lighting.AddLight((int)(player.Top.X + 2f * player.direction) / 16, (int)player.Top.Y / 16, r, g, b);
         }
         lightUp(GetLerpValue(player));
     }

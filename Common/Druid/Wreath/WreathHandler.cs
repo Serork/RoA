@@ -281,6 +281,7 @@ sealed class WreathHandler : ModPlayer {
 
             }
             else if (!Player.ItemAnimationActive) {
+                Dusts_ResetStayTime();
                 StartSlowlyIncreasingUntilFull = false;
                 BaseFormHandler.ApplyForm(Player, _formInfo);
             }
