@@ -35,8 +35,17 @@ sealed class BackwoodsPot : ModTile {
         HitSound = SoundID.Shatter;
 
         AddMapEntry(new Color(74, 75, 87), Language.GetText("MapObject.Pot"));
+        AddMapEntry(new Color(91, 74, 67), Language.GetText("MapObject.Pot"));
 
         TileObjectData.newTile.RandomStyleRange = 12;
+    }
+
+    public override ushort GetMapOption(int i, int j) {
+        var tileFrameY = Main.tile[i, j].TileFrameY;
+        if (tileFrameY < 72)
+            return 0;
+        else 
+            return 1;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {

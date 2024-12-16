@@ -553,3 +553,93 @@ OniMask: {
 	DisplayName: Oni Mask
 	Tooltip: Scares away Youkai
 }
+
+ElderwoodBathtub: {
+	DisplayName: Elderwood Bathtub
+	Tooltip: ""
+}
+
+ElderwoodBed: {
+	DisplayName: Elderwood Bed
+	Tooltip: ""
+}
+
+ElderwoodBookcase: {
+	DisplayName: Elderwood Bookcase
+	Tooltip: ""
+}
+
+ElderwoodCandelabra: {
+	DisplayName: Elderwood Candelabra
+	Tooltip: ""
+}
+
+ElderwoodCandle: {
+	DisplayName: Elderwood Candle
+	Tooltip: ""
+}
+
+ElderwoodChair: {
+	DisplayName: Elderwood Chair
+	Tooltip: ""
+}
+
+ElderwoodChandelier: {
+	DisplayName: Elderwood Chandelier
+	Tooltip: ""
+}
+
+ElderwoodClock: {
+	DisplayName: Elderwood Clock
+	Tooltip: ""
+}
+
+ElderwoodDoor: {
+	DisplayName: Elderwood Door
+	Tooltip: ""
+}
+
+ElderwoodDresser: {
+	DisplayName: Elderwood Dresser
+	Tooltip: ""
+}
+
+ElderwoodLamp: {
+	DisplayName: Elderwood Lamp
+	Tooltip: ""
+}
+
+ElderwoodLantern: {
+	DisplayName: Elderwood Lantern
+	Tooltip: ""
+}
+
+ElderwoodPiano: {
+	DisplayName: Elderwood Piano
+	Tooltip: ""
+}
+
+ElderwoodPlatform: {
+	DisplayName: Elderwood Platform
+	Tooltip: ""
+}
+
+ElderwoodSink: {
+	DisplayName: Elderwood Sink
+	Tooltip: ""
+}
+
+ElderwoodSofa: {
+	DisplayName: Elderwood Sofa
+	Tooltip: ""
+}
+
+ElderwoodTable: {
+	DisplayName: Elderwood Table
+	Tooltip: ""
+}
+
+ElderwoodWorkbench: {
+	DisplayName: Elderwood Workbench
+	Tooltip: ""
+}

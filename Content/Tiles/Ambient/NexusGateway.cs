@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.Dusts;
-
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -36,8 +34,8 @@ sealed class NexusGateway : ModTile {
 
         AddMapEntry(new Color(0, 120, 154), CreateMapEntryName());
 
-        DustType = ModContent.DustType<BackwoodsPotDust1>();
-        HitSound = SoundID.Tink;
+        //DustType = ModContent.DustType<BackwoodsPotDust1>();
+        //HitSound = SoundID.Tink;
 
         TileID.Sets.DisableSmartCursor[Type] = true;
     }
@@ -45,4 +43,8 @@ sealed class NexusGateway : ModTile {
     public override bool CanExplode(int i, int j) => false;
 
     public override bool CanKillTile(int i, int j, ref bool blockDamaged) => false;
+
+    public override bool CreateDust(int i, int j, ref int type) => false;
+
+    public override bool KillSound(int i, int j, bool fail) => false;
 }
