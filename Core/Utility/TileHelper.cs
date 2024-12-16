@@ -1,15 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
+using Terraria.Utilities;
+
+using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Core.Utility;
 
@@ -18,7 +25,187 @@ static class TileHelper {
     private static int[] _addSpecialPointSpecialsCount;
     private static List<Point> _addVineRootsPositions;
 
+    private static List<(ModTile, Point)> _fluentTiles = [];
+
+    private static MethodInfo? _getHighestWindGridPushComplex;
+    private static MethodInfo? _drawAnimatedTile_AdjustForVisionChangers;
+    private static MethodInfo? _drawTiles_GetLightOverride;
+
+    public static void Load() {
+        _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
+        _addSpecialPointSpecialsCount = (int[])typeof(TileDrawing).GetFieldValue("_specialsCount", Main.instance.TilesRenderer);
+        _addVineRootsPositions = (List<Point>)typeof(TileDrawing).GetFieldValue("_vineRootsPositions", Main.instance.TilesRenderer);
+
+        _getHighestWindGridPushComplex = typeof(TileDrawing).GetMethod("GetHighestWindGridPushComplex", BindingFlags.NonPublic | BindingFlags.Instance);
+        _drawAnimatedTile_AdjustForVisionChangers = typeof(TileDrawing).GetMethod("DrawAnimatedTile_AdjustForVisionChangers", BindingFlags.NonPublic | BindingFlags.Instance);
+        _drawTiles_GetLightOverride = typeof(TileDrawing).GetMethod("DrawTiles_GetLightOverride", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        On_TileDrawing.PreDrawTiles += (orig, self, solidLayer, forRenderTargets, intoRenderTargets) => {
+            orig.Invoke(self, solidLayer, forRenderTargets, intoRenderTargets);
+            bool flag = intoRenderTargets || Lighting.UpdateEveryFrame;
+            if (!solidLayer && flag) {
+                _fluentTiles.Clear();
+            }
+        };
+        On_TileDrawing.DrawReverseVines += (orig, self) => {
+            orig.Invoke(self);
+
+            Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
+            foreach ((ModTile modTile, Point position) in _fluentTiles) {
+                if (modTile is ITileFluentlyDrawn tileFluent && modTile is not null) {
+                    tileFluent.FluentDraw(unscaledPosition, position, Main.spriteBatch, self);
+                }
+            }
+        };
+    }
+
+    public static void Unload() {
+        _addSpecialPointSpecialPositions = null;
+        _addSpecialPointSpecialsCount = null;
+        _addVineRootsPositions = null;
+
+        _getHighestWindGridPushComplex = null;
+        _drawAnimatedTile_AdjustForVisionChangers = null;
+        _drawTiles_GetLightOverride = null;
+
+        _fluentTiles.Clear();
+        _fluentTiles = null;
+    }
+
+    public static void PrintTime() {
+        string text = "AM";
+        // Get current weird time
+        double time = Main.time;
+        if (!Main.dayTime) {
+            // if it's night add this number
+            time += 54000.0;
+        }
+
+        // Divide by seconds in a day * 24
+        time = (time / 86400.0) * 24.0;
+        // Dunno why we're taking 19.5. Something about hour formatting
+        time = time - 7.5 - 12.0;
+        // Format in readable time
+        if (time < 0.0) {
+            time += 24.0;
+        }
+
+        if (time >= 12.0) {
+            text = "PM";
+        }
+
+        int intTime = (int)time;
+        // Get the decimal points of time.
+        double deltaTime = time - intTime;
+        // multiply them by 60. Minutes, probably
+        deltaTime = (int)(deltaTime * 60.0);
+        // This could easily be replaced by deltaTime.ToString()
+        string text2 = string.Concat(deltaTime);
+        if (deltaTime < 10.0) {
+            // if deltaTime is eg "1" (which would cause time to display as HH:M instead of HH:MM)
+            text2 = "0" + text2;
+        }
+
+        if (intTime > 12) {
+            // This is for AM/PM time rather than 24hour time
+            intTime -= 12;
+        }
+
+        if (intTime == 0) {
+            // 0AM = 12AM
+            intTime = 12;
+        }
+
+        // Whack it all together to get a HH:MM format
+        Main.NewText($"Time: {intTime}:{text2} {text}", 255, 240, 20);
+    }
+
+    public static void AddFluentPoint(ModTile modTile, int i, int j) {
+        if (_fluentTiles.Contains((modTile, new Point(i, j)))) {
+            return;
+        }
+        _fluentTiles.Add((modTile, new Point(i, j)));
+    }
+
     public static Texture2D GetTileGlowTexture(this ModTile modTile) => ModContent.Request<Texture2D>(ResourceManager.GlowTilesTextures + modTile.Name).Value;
+
+    public static void Chandelier3x3FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+        int left = Main.tile[pos].TileFrameX / 18;
+        left %= 3;
+        left = pos.X - left;
+        int top = pos.Y - Main.tile[pos].TileFrameY / 18;
+        HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(left, top), 0, 0.11f);
+    }
+
+    public static void HangingObjectFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Point topLeft, float swayOffset = -4f, float swayStrength = 0.15f) {
+        var tile = Main.tile[pos];
+        var tileData = TileObjectData.GetTileData(tile.TileType, 0);
+
+        if (!TileDrawing.IsVisible(tile) || tileData is null)
+            return;
+
+        Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
+
+        short tileFrameX = tile.TileFrameX;
+        short tileFrameY = tile.TileFrameY;
+
+        int topTileX = topLeft.X + tileData.Origin.X;
+        int topTileY = topLeft.Y + tileData.Origin.Y;
+        int sizeX = tileData.Width;
+        int sizeY = tileData.Height;
+
+        int offsetY = tileData.DrawYOffset;
+        if (WorldGen.IsBelowANonHammeredPlatform(topTileX, topTileY)) {
+            offsetY -= 8;
+        }
+
+        float windCycle = 0;
+        double sunflowerWindCounter = typeof(TileDrawing).GetFieldValue<double>("_sunflowerWindCounter", tileDrawing);
+        if (WorldGen.InAPlaceWithWind(topLeft.X, topLeft.Y, sizeX, sizeY))
+            windCycle = tileDrawing.GetWindCycle(topTileX, topTileY, sunflowerWindCounter);
+
+        int totalPushTime = 60;
+        float pushForcePerFrame = 1.26f;
+        float highestWindGridPushComplex = (float)_getHighestWindGridPushComplex.Invoke(tileDrawing, [topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, true]);
+        windCycle += highestWindGridPushComplex;
+
+        UnifiedRandom rand = typeof(TileDrawing).GetFieldValue<UnifiedRandom>("_rand", tileDrawing);
+        Rectangle rectangle = new Rectangle(tileFrameX, tileFrameY, 16, 16);
+        Color tileLight = Lighting.GetColor(pos);
+        _drawAnimatedTile_AdjustForVisionChangers.Invoke(tileDrawing, [pos.X, pos.Y, tile, tile.TileType, tileFrameX, tileFrameY, tileLight, rand.NextBool(4)]);
+        tileLight = (Color)_drawTiles_GetLightOverride.Invoke(tileDrawing, [pos.Y, pos.X, tile, tile.TileType, tileFrameX, tileFrameY, tileLight]);
+
+        Vector2 center = new Vector2(topTileX, topTileY).ToWorldCoordinates(autoAddY: 0) - screenPosition;
+        Vector2 offset = new Vector2(0f, offsetY);
+        center += offset;
+
+        float heightStrength = (pos.Y - topLeft.Y + 1) / (float)sizeY;
+        if (heightStrength == 0f)
+            heightStrength = 0.1f;
+
+        Vector2 tileCoordPos = pos.ToWorldCoordinates(0, 0) - screenPosition;
+        tileCoordPos += offset;
+        float swayCorrection = Math.Abs(windCycle) * swayOffset * heightStrength;
+        Vector2 finalOrigin = center - tileCoordPos;
+        Vector2 finalDrawPos = center + new Vector2(0, swayCorrection);
+
+        if (swayOffset == 0f)
+            heightStrength = 1f;
+        float rotation = -windCycle * swayStrength * heightStrength;
+
+        spriteBatch.Draw(tex, finalDrawPos, rectangle, tileLight, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
+
+        if (TileLoader.GetTile(tile.TileType) is not TileHooks.ITileFlameData tileFlame)
+            return;
+
+        TileHooks.ITileFlameData.TileFlameData tileFlameData = tileFlame.GetTileFlameData(pos.X, pos.Y, tile.TileType, tileFrameY);
+        ulong seed = tileFlameData.flameSeed is 0 ? Main.TileFrameSeed ^ (ulong)(((long)pos.X << 32) | (uint)pos.Y) : tileFlameData.flameSeed;
+        for (int k = 0; k < tileFlameData.flameCount; k++) {
+            float x = Utils.RandomInt(ref seed, tileFlameData.flameRangeXMin, tileFlameData.flameRangeXMax) * tileFlameData.flameRangeMultX;
+            float y = Utils.RandomInt(ref seed, tileFlameData.flameRangeYMin, tileFlameData.flameRangeYMax) * tileFlameData.flameRangeMultY;
+            Main.spriteBatch.Draw(tileFlameData.flameTexture, finalDrawPos + new Vector2(x, y), rectangle, tileFlameData.flameColor, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
+        }
+    }
 
     public static T GetTE<T>(int i, int j) where T : ModTileEntity {
         if (TileEntity.ByPosition.TryGetValue(new Point16(i, j), out TileEntity entity) && entity is T) {
@@ -42,18 +229,6 @@ static class TileHelper {
         Main.tileMergeDirt[TileType] = mergeDirt;
         Main.tileBlendAll[TileType] = blendAll;
         Main.tileBlockLight[TileType] = blockLight;
-    }
-
-    public static void Load() {
-        _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
-        _addSpecialPointSpecialsCount = (int[])typeof(TileDrawing).GetFieldValue("_specialsCount", Main.instance.TilesRenderer);
-        _addVineRootsPositions = (List<Point>)typeof(TileDrawing).GetFieldValue("_vineRootsPositions", Main.instance.TilesRenderer);
-    }
-
-    public static void Unload() {
-        _addSpecialPointSpecialPositions = null;
-        _addSpecialPointSpecialsCount = null;
-        _addVineRootsPositions = null;
     }
 
     public static void AddSpecialPoint(int i, int j, ushort tileTileType) => _addSpecialPointSpecialPositions[tileTileType][_addSpecialPointSpecialsCount[tileTileType]++] = new Point(i, j);

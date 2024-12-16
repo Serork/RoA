@@ -27,10 +27,10 @@ sealed class ElderwoodBed : ModTile {
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
 
         DustType = ModContent.DustType<WoodTrash>();
-        AdjTiles = new int[] { TileID.Beds };
+        AdjTiles = [TileID.Beds];
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2);
-        TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
+        TileObjectData.newTile.CoordinateHeights = [16, 18];
         TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
         TileObjectData.addTile(Type);
 

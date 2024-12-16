@@ -17,7 +17,7 @@ sealed class ElderwoodChair : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = 150;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChair>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChair>();
     }
 
 	//public override void AddRecipes() {

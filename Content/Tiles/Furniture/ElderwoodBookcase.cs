@@ -18,7 +18,7 @@ sealed class ElderwoodBookcase : ModTile {
 		Main.tileTable[Type] = true;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
-		TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16, 16 };
+		TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 16];
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
         TileObjectData.addTile(Type);
 

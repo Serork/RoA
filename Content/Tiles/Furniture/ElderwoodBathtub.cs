@@ -30,7 +30,7 @@ sealed class ElderwoodBathtub : ModTile {
 
         DustType = ModContent.DustType<WoodTrash>();
         AdjTiles = [TileID.Bathtubs];
-        AddMapEntry(new Color(144, 148, 144), Language.GetText("ItemName.Bathroom"));
+        AddMapEntry(new Color(144, 148, 144), Language.GetText("MapObject.Bathroom"));
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
     }

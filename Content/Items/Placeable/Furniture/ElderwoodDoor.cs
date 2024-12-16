@@ -18,7 +18,7 @@ sealed class ElderwoodDoor : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = 200;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodDoorClosed>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodDoorClosed>();
     }
 
 	//public override void AddRecipes() {

@@ -14,4 +14,31 @@ sealed class TileHooks {
     public interface IGlobalRandomUpdate {
         public void OnGlobalRandomUpdate(int i, int j);
     }
+
+    public interface ITileFluentlyDrawn {
+        public struct BasicDrawInfo {
+            public Vector2 DrawCenterPos;
+            public SpriteBatch SpriteBatch;
+            public TileDrawing TileDrawing;
+        }
+
+        void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing);
+    }
+
+    public interface ITileFlameData {
+        public struct TileFlameData {
+            public Texture2D flameTexture;
+            public ulong flameSeed;
+            public int flameCount;
+            public Color flameColor;
+            public int flameRangeXMin;
+            public int flameRangeXMax;
+            public int flameRangeYMin;
+            public int flameRangeYMax;
+            public float flameRangeMultX;
+            public float flameRangeMultY;
+        }
+
+        TileFlameData GetTileFlameData(int tileX, int tileY, int type, int tileFrameY);
+    }
 }

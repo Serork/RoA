@@ -18,7 +18,7 @@ sealed class ElderwoodClock : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = 300;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodClock>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodClock>();
     }
 
 	//public override void AddRecipes() {

@@ -18,7 +18,7 @@ sealed class ElderwoodChandelier : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
 		Item.value = 3000;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChandelier>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChandelier>();
     }
 
 	//public override void AddRecipes() {
