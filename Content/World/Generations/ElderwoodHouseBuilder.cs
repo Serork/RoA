@@ -309,6 +309,7 @@ public class HouseBuilderCustom {
             new Point(BookcaseTileType, 0)
         };
 
+        bool hasPainting1 = false, hasPainting2 = false, hasPainting3 = false;
         foreach (Rectangle room in Rooms) {
             int num = room.Width / 8;
             int num2 = room.Width / (num + 1);
@@ -325,25 +326,28 @@ public class HouseBuilderCustom {
                             while (--attempts > 0) {
                                 int value = _random.Next(3);
                                 if (value == 0) {
-                                    if (!_painting1 || (_painting1 && flag2)) {
+                                    if (!_painting1 || (!hasPainting1 && _painting1 && flag2)) {
                                         if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
                                             _painting1 = true;
+                                            hasPainting1 = true;
                                             break;
                                         }
                                     }
                                 }
                                 else if (value == 1) {
-                                    if (!_painting2 || (_painting2 && flag2)) {
+                                    if (!_painting2 || (!hasPainting2 && _painting2 && flag2)) {
                                         if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
                                             _painting2 = true;
+                                            hasPainting2 = true;
                                             break;
                                         }
                                     }
                                 }
                                 else if (value == 2) {
-                                    if (!_painting3 || (_painting3 && flag2)) {
+                                    if (!_painting3 || (!hasPainting3 && _painting3 && flag2)) {
                                         if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
                                             _painting3 = true;
+                                            hasPainting3 = true;
                                             break;
                                         }
                                     }

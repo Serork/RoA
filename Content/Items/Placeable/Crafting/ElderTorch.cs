@@ -43,7 +43,7 @@ sealed class ElderTorch : ModItem {
 
     public override void PostUpdate() {
         if (!Item.wet) {
-            Lighting.AddLight(Item.Center, 1f, 1f, 1f);
+            Lighting.AddLight(Item.Center, 0.25f, 0.65f, 0.85f);
         }
     }
 }

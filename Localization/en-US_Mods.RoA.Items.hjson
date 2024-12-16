@@ -543,3 +543,13 @@ NaturesHeart: {
 	DisplayName: Natures Heart
 	Tooltip: "'Seems like is was a source of life for higher beings...'"
 }
+
+DeerSkull: {
+	DisplayName: Deer Skull
+	Tooltip: 4% increased nature critical strike chance
+}
+
+OniMask: {
+	DisplayName: Oni Mask
+	Tooltip: Scares away Youkai
+}

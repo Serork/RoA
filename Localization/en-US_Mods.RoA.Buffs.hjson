@@ -129,3 +129,8 @@ ToxicFumesNoTimeDisplay: {
 	DisplayName: Toxic Fumes
 	Description: Losing life and slowed movement
 }
+
+OniMask: {
+	DisplayName: Oni Mask
+	Description: Mods.RoA.Buffs.OniMask.Description
+}
