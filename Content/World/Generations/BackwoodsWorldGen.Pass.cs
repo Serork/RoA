@@ -957,7 +957,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 // pots
                 if (WorldGen.SolidTile(i, j + 1) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(3)) {
-                    WorldGen.PlacePot(i, j, _potTileType, _random.Next(3));
+                    WorldGen.PlacePot(i, j, _potTileType, _random.Next(4));
                 }
             }
         }
@@ -1542,7 +1542,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 int y2 = j + j2;
                 ushort tileType = WorldGenHelper.GetTileSafely(x2, y2 + 1).TileType;
                 if (WorldGen.SolidTile(x2, y2 + 1) && tileType == _elderwoodTileType && _random.NextBool(3)) {
-                    WorldGen.PlacePot(x2, y2, _potTileType, _random.Next(3));
+                    WorldGen.PlacePot(x2, y2, _potTileType, _random.Next(4));
                 }
             }
         }
@@ -2375,7 +2375,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 // place extra pots
                 ushort tileType = WorldGenHelper.GetTileSafely(i, j + 1).TileType;
                 if (WorldGen.SolidTile(i, j + 1) && !MidInvalidTileTypesToKill.Contains(tileType) && tileType != _leavesTileType && _random.NextBool(3)) {
-                    WorldGen.PlacePot(i, j, _potTileType, _random.Next(3));
+                    WorldGen.PlacePot(i, j, _potTileType, _random.Next(4));
                 }
             }
         }

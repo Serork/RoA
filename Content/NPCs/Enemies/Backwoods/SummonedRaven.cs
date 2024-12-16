@@ -63,10 +63,10 @@ sealed class SummonedRaven : ModNPC {
     public override bool? CanFallThroughPlatforms() => true;
 
     public override void AI() {
-        Vector3 rgb3 = new Vector3(1f, 0f, 0.1f) * 0.2f;
-        Lighting.AddLight(NPC.Top + new Vector2(0f, 15f), rgb3);
-        
-		if (NPC.NearestTheSame(out NPC npc)) {
+        Vector3 rgb3 = new Vector3(1f, 0f, 0.1f) * 0.35f;
+        Lighting.AddLight(NPC.Top + new Vector2(0f, 10f), rgb3);
+
+        if (NPC.NearestTheSame(out NPC npc)) {
             NPC.OffsetNPC(npc, 0.2f);
 		}
 

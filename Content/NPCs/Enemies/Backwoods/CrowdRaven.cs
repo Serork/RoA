@@ -42,14 +42,18 @@ sealed class CrowdRaven : ModNPC {
         NPC.defense = 0;
         NPC.lifeMax = 15;
 
+        NPC.HitSound = SoundID.NPCHit1;
+        NPC.knockBackResist = 0.85f;
+        NPC.DeathSound = SoundID.NPCDeath1;
+
         NPC.npcSlots = 0.4f;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void AI() {
-        Vector3 rgb3 = new Vector3(1f, 0f, 0.1f) * 0.2f;
-        Lighting.AddLight(NPC.Top + new Vector2(0f, 15f), rgb3);
+        Vector3 rgb3 = new Vector3(1f, 0f, 0.1f) * 0.35f;
+        Lighting.AddLight(NPC.Top + new Vector2(0f, 10f), rgb3);
 
         NPC.noGravity = true;
         if (NPC.localAI[0] == 0f) {

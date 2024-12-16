@@ -36,7 +36,7 @@ sealed class BackwoodsPot : ModTile {
 
         AddMapEntry(new Color(74, 75, 87), Language.GetText("MapObject.Pot"));
 
-        TileObjectData.newTile.RandomStyleRange = 9;
+        TileObjectData.newTile.RandomStyleRange = 12;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {
@@ -75,14 +75,11 @@ sealed class BackwoodsPot : ModTile {
         return $"{Name}_{frameY}_";
     }
 
-    public void DropGores(int i, int j) {
-        string path = GorePath(i, j, Main.tile[i, j].TileFrameX / 36, Main.tile[i, j].TileFrameY / 36);
-        try {
-            for (int k = 0; k < 3; k++) {
-                Gore.NewGore(new EntitySource_TileBreak(i, j), new Vector2(i * 16, j * 16), default(Vector2), ModContent.Find<ModGore>(nameof(path) + k).Type);
-            }
-        }
-        catch {
+    public void DropGores(int i, int j, int frameX, int frameY) {
+        string path = GorePath(i, j, frameX / 36, frameY / 36);
+        for (int k = 0; k < 3; k++) {
+            Gore.NewGore(new EntitySource_TileBreak(i, j), new Vector2(i * 16, j * 16), default(Vector2),
+                ModContent.Find<ModGore>(RoA.ModName + "/" + path + k).Type);
         }
     }
 
@@ -130,7 +127,7 @@ sealed class BackwoodsPot : ModTile {
             bool flag2 = false;
 
             if (Main.netMode != NetmodeID.Server)
-                DropGores(i, j);
+                DropGores(i, j, frameX, frameY);
 
             num18 = (num18 * 2f + 1f) / 3f;
             int range = (int)(500f / ((num18 + 1f) / 2f));
