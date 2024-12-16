@@ -18,7 +18,7 @@ sealed class ElderwoodBookcase : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = 300;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBookcase>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBookcase>();
     }
 
 	//public override void AddRecipes() {

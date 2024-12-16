@@ -17,7 +17,7 @@ sealed class ElderwoodBed : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = 2000;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBed>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBed>();
     }
 
 	//public override void AddRecipes() {

@@ -17,7 +17,7 @@ sealed class ElderwoodBathtub : ModItem {
         Item.useStyle = 1;
 		Item.consumable = true;
         Item.value = 300;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBathtub>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBathtub>();
     }
 
 	//public override void AddRecipes() {
