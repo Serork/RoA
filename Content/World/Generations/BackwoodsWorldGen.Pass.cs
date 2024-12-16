@@ -156,8 +156,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 10, (int)Main.worldSurface - 5);
                 }
             }
-            if (!TileObject.CanPlace(x, y, type, 0, 1, out var objectData))
+            if (!TileObject.CanPlace(x, y, type, 0, 1, out var objectData)) {
+                _gatewayLocation = Point.Zero;
                 continue;
+            }
 
             objectData.random = -1;
             if (TileObject.Place(objectData)) {
@@ -2186,9 +2188,31 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_SpreadGrass(true);
 
         GatewayExtra();
+
+        // place vines again
+        for (i = Left - 50; i <= Right + 50; i++) {
+            for (j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + EdgeY; j++) {
+                Tile tile = Main.tile[i, j];
+                if ((tile.TileType == _grassTileType || tile.TileType == _leavesTileType) && !Main.tile[i, j + 1].HasTile) {
+                    if (_random.NextBool(tile.TileType == _grassTileType ? 2 : 3)) {
+                        WorldGen.PlaceTile(i, j + 1, (tile.WallType == _grassWallType || Main.tile[i, j + 1].WallType == _grassWallType || tile.WallType == _leavesWallType || Main.tile[i, j + 1].WallType == _leavesWallType) ? _vinesTileType2 : _vinesTileType);
+                    }
+                }
+                if (tile.TileType == _vinesTileType) {
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(1, 5), _vinesTileType);
+                }
+                if (tile.TileType == _vinesTileType2) {
+                    WorldGenHelper.PlaceVines(i, j, _random.Next(3, 7), _vinesTileType2);
+                }
+            }
+        }
     }
 
     private void GatewayExtra() {
+        if (_gatewayLocation == Point.Zero) {
+            return;
+        }
+
         int xOffsetX = _gatewayLocation.X + 10;
         int xOffsetY = _gatewayLocation.Y + 10;
         for (int i = -xOffsetX; i < xOffsetX; i++) {

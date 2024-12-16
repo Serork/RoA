@@ -325,7 +325,7 @@ public class HouseBuilderCustom {
                             while (--attempts > 0) {
                                 int value = _random.Next(3);
                                 if (value == 0) {
-                                    if (!_painting1 || (_painting1 && flag2)) {
+                                    if (!_painting1) {
                                         if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
                                             _painting1 = true;
                                             break;
@@ -333,7 +333,7 @@ public class HouseBuilderCustom {
                                     }
                                 }
                                 else if (value == 1) {
-                                    if (!_painting2 || (_painting2 && flag2)) {
+                                    if (!_painting2) {
                                         if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
                                             _painting2 = true;
                                             break;
@@ -341,7 +341,7 @@ public class HouseBuilderCustom {
                                     }
                                 }
                                 else if (value == 2) {
-                                    if (!_painting3 || (_painting3 && flag2)) {
+                                    if (!_painting3) {
                                         if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
                                             _painting3 = true;
                                             break;

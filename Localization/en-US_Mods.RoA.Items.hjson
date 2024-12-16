@@ -529,3 +529,8 @@ ElderTorch: {
 	DisplayName: Elder Torch
 	Tooltip: ""
 }
+
+FlamingFabric: {
+	DisplayName: Flaming Fabric
+	Tooltip: ""
+}
