@@ -19,15 +19,16 @@ sealed class ElderwoodClock : ModTile {
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
-        //TileID.Sets.HasOutlines[Type] = true;
+        TileID.Sets.HasOutlines[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.Height = 5;
         TileObjectData.newTile.Origin = new Point16(0, 4);
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 16, 16];
+        TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(124, 93, 68), Language.GetText("ItemName.GrandfatherClock"));
+        AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.GrandfatherClock"));
 
         AdjTiles = [TileID.GrandfatherClocks];
     }
@@ -43,6 +44,6 @@ sealed class ElderwoodClock : ModTile {
         }
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 }
