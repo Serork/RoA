@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FullSerializer.Internal;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
@@ -26,7 +28,8 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
 		TileObjectData.newTile.Origin = new Point16(1, 0);
 		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 1, 1);
 		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
-		TileObjectData.newTile.Height = 3;
+        TileObjectData.newTile.DrawYOffset = -2;
+        TileObjectData.newTile.Height = 3;
 		TileObjectData.newTile.Width = 3;
 		TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16 };
 		TileObjectData.newTile.StyleHorizontal = true;
@@ -44,11 +47,11 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
 
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
 		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX < 18) {
-			r = 0.9f;
-			g = 0.8f;
-			b = 0.9f;
-		}
+		if (tile.TileFrameX < 54) {
+            r = 1f;
+            g = 0.95f;
+            b = 0.8f;
+        }
 	}
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
@@ -81,6 +84,25 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         TileHelper.AddFluentPoint(this, i, j);
+
+        Tile tile = Main.tile[i, j];
+        if (Main.rand.Next(40) == 0 && tile.TileFrameX < 54) {
+            int num25 = tile.TileFrameY / 54;
+            int num26 = tile.TileFrameX / 18 % 3;
+            if (tile.TileFrameY < 36 && tile.TileFrameX != 18 && num26 != 1) {
+                int num27 = 6;
+                if (num27 != -1) {
+                    int value = tile.TileFrameX != 0 ? 4 : 0;
+                    int num28 = Dust.NewDust(new Vector2(i * 16 + value, j * 16), 6, 6, num27, 0f, 0f, 100);
+                    if (Main.rand.Next(3) != 0)
+                        Main.dust[num28].noGravity = true;
+
+                    Main.dust[num28].velocity *= 0.3f;
+                    Main.dust[num28].velocity.Y -= 1.5f;
+                }
+            }
+        }
+
         return false;
     }
 

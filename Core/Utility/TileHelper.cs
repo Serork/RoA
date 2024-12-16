@@ -6,7 +6,7 @@ using RoA.Common.Utilities.Extensions;
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -27,18 +27,25 @@ static class TileHelper {
 
     private static List<(ModTile, Point)> _fluentTiles = [];
 
-    private static MethodInfo? _getHighestWindGridPushComplex;
-    private static MethodInfo? _drawAnimatedTile_AdjustForVisionChangers;
-    private static MethodInfo? _drawTiles_GetLightOverride;
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_sunflowerWindCounter")]
+    public extern static ref double TileDrawing_sunflowerWindCounter(TileDrawing tileDrawing);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_rand")]
+    public extern static ref UnifiedRandom TileDrawing_rand(TileDrawing tileDrawing);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawAnimatedTile_AdjustForVisionChangers")]
+    public extern static void TileDrawing_DrawAnimatedTile_AdjustForVisionChangers(TileDrawing tileDrawing, int i, int j, Tile tileCache, ushort typeCache, short tileFrameX, short tileFrameY, ref Color tileLight, bool canDoDust);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetHighestWindGridPushComplex")]
+    public extern static float TileDrawing_GetHighestWindGridPushComplex(TileDrawing tileDrawing, int topLeftX, int topLeftY, int sizeX, int sizeY, int totalPushTime, float pushForcePerFrame, int loops, bool swapLoopDir);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawTiles_GetLightOverride")]
+    public extern static Color TileDrawing_DrawTiles_GetLightOverride(TileDrawing tileDrawing, int j, int i, Tile tileCache, ushort typeCache, short tileFrameX, short tileFrameY, Color tileLight);
 
     public static void Load() {
         _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
         _addSpecialPointSpecialsCount = (int[])typeof(TileDrawing).GetFieldValue("_specialsCount", Main.instance.TilesRenderer);
         _addVineRootsPositions = (List<Point>)typeof(TileDrawing).GetFieldValue("_vineRootsPositions", Main.instance.TilesRenderer);
-
-        _getHighestWindGridPushComplex = typeof(TileDrawing).GetMethod("GetHighestWindGridPushComplex", BindingFlags.NonPublic | BindingFlags.Instance);
-        _drawAnimatedTile_AdjustForVisionChangers = typeof(TileDrawing).GetMethod("DrawAnimatedTile_AdjustForVisionChangers", BindingFlags.NonPublic | BindingFlags.Instance);
-        _drawTiles_GetLightOverride = typeof(TileDrawing).GetMethod("DrawTiles_GetLightOverride", BindingFlags.NonPublic | BindingFlags.Instance);
 
         On_TileDrawing.PreDrawTiles += (orig, self, solidLayer, forRenderTargets, intoRenderTargets) => {
             orig.Invoke(self, solidLayer, forRenderTargets, intoRenderTargets);
@@ -49,7 +56,6 @@ static class TileHelper {
         };
         On_TileDrawing.DrawReverseVines += (orig, self) => {
             orig.Invoke(self);
-
             Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
             foreach ((ModTile modTile, Point position) in _fluentTiles) {
                 if (modTile is ITileFluentlyDrawn tileFluent && modTile is not null) {
@@ -63,10 +69,6 @@ static class TileHelper {
         _addSpecialPointSpecialPositions = null;
         _addSpecialPointSpecialsCount = null;
         _addVineRootsPositions = null;
-
-        _getHighestWindGridPushComplex = null;
-        _drawAnimatedTile_AdjustForVisionChangers = null;
-        _drawTiles_GetLightOverride = null;
 
         _fluentTiles.Clear();
         _fluentTiles = null;
@@ -160,20 +162,20 @@ static class TileHelper {
         }
 
         float windCycle = 0;
-        double sunflowerWindCounter = typeof(TileDrawing).GetFieldValue<double>("_sunflowerWindCounter", tileDrawing);
+        double sunflowerWindCounter = TileDrawing_sunflowerWindCounter(tileDrawing);
         if (WorldGen.InAPlaceWithWind(topLeft.X, topLeft.Y, sizeX, sizeY))
             windCycle = tileDrawing.GetWindCycle(topTileX, topTileY, sunflowerWindCounter);
 
         int totalPushTime = 60;
         float pushForcePerFrame = 1.26f;
-        float highestWindGridPushComplex = (float)_getHighestWindGridPushComplex.Invoke(tileDrawing, [topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, true]);
+        float highestWindGridPushComplex = TileDrawing_GetHighestWindGridPushComplex(tileDrawing, topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, true);
         windCycle += highestWindGridPushComplex;
 
-        UnifiedRandom rand = typeof(TileDrawing).GetFieldValue<UnifiedRandom>("_rand", tileDrawing);
-        Rectangle rectangle = new Rectangle(tileFrameX, tileFrameY, 16, 16);
+        UnifiedRandom rand = TileDrawing_rand(tileDrawing);
+        Rectangle rectangle = new(tileFrameX, tileFrameY, 16, 16);
         Color tileLight = Lighting.GetColor(pos);
-        _drawAnimatedTile_AdjustForVisionChangers.Invoke(tileDrawing, [pos.X, pos.Y, tile, tile.TileType, tileFrameX, tileFrameY, tileLight, rand.NextBool(4)]);
-        tileLight = (Color)_drawTiles_GetLightOverride.Invoke(tileDrawing, [pos.Y, pos.X, tile, tile.TileType, tileFrameX, tileFrameY, tileLight]);
+        TileDrawing_DrawAnimatedTile_AdjustForVisionChangers(tileDrawing, pos.X, pos.Y, tile, tile.TileType, tileFrameX, tileFrameY, ref tileLight, rand.NextBool(4));
+        tileLight = TileDrawing_DrawTiles_GetLightOverride(tileDrawing, pos.Y, pos.X, tile, tile.TileType, tileFrameX, tileFrameY, tileLight);
 
         Vector2 center = new Vector2(topTileX, topTileY).ToWorldCoordinates(autoAddY: 0) - screenPosition;
         Vector2 offset = new Vector2(0f, offsetY);
