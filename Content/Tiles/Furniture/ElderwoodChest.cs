@@ -1,21 +1,31 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
-using Terraria.DataStructures;
-using Terraria.Localization;
-using Terraria.Enums;
-using Terraria.Audio;
-using Terraria.GameContent.ObjectInteractions;
-
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Utilities;
+
+using System;
+using System.Collections.Generic;
+
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent.ObjectInteractions;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodChest : ModTile {
+	private static List<Point> _drawPoints = [];
+	private static float _rotationOffset, _scaleOffset;
+	private static float _directionMax;
+
 	public override void SetStaticDefaults()  {
 		Main.tileSpelunker[Type] = true;
 		Main.tileContainer[Type] = true;
@@ -44,8 +54,8 @@ sealed class ElderwoodChest : ModTile {
 
         Color mapColor = new(110, 91, 74);
         AddMapEntry(mapColor, CreateMapEntryName());
-        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
-		HitSound = SoundID.Dig;
+		DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
+        HitSound = SoundID.Dig;
 	}
 
     //public override IEnumerable<Item> GetItemDrops(int i, int j) {
@@ -59,12 +69,68 @@ sealed class ElderwoodChest : ModTile {
     //    }
     //}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
-    public override bool IsLockedChest(int i, int j) => !NPC.downedBoss2;
+    public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+		Point position = new(i, j);
+        if (!_drawPoints.Contains(position)) {
+			_drawPoints.Add(position);
+		}
 
-	public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual) {
-		bool flag = false;
+        return true;
+    }
+
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+
+    }
+
+    public override void Load() {
+        On_Main.DrawTileEntities += On_Main_DrawTileEntities;
+    }
+
+    private void On_Main_DrawTileEntities(On_Main.orig_DrawTileEntities orig, Main self, bool solidLayer, bool overRenderTargets, bool intoRenderTargets) {
+        bool flag = intoRenderTargets || Lighting.UpdateEveryFrame;
+		if (solidLayer && flag) {
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+			_rotationOffset = MathHelper.SmoothStep(_rotationOffset, Main.rand.NextFloatRange(0.1f), 0.2f);
+            _scaleOffset = MathHelper.SmoothStep(_scaleOffset, Main.rand.NextFloatRange(0.1f), 0.15f);
+			float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
+            foreach (Point position in _drawPoints) {
+				int i = position.X, j = position.Y;
+                ulong speed = ((ulong)j << 32) | (ulong)i;
+                float posX = Utils.RandomInt(ref speed, -12, 13) * 0.1f;
+                float directionMax = posX;
+                Tile tile = Main.tile[i, j];
+				if (tile.TileFrameX == 36 && tile.TileFrameY == 0) {
+					Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+					if (Main.drawToScreen) {
+						zero = Vector2.Zero;
+					}
+					Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "WoodbinderRune").Value;
+					Vector2 origin = texture.Size() / 2f;
+					for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
+						Main.spriteBatch.Draw(texture,
+										  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
+										  new Vector2(-3.5f, 0.5f) +
+										  Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
+										  null,
+										  Color.White.MultiplyRGBA(Lighting.GetColor(i, j)) * 0.5f * colorValue, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.175f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
+					}
+				}
+			}
+			Main.spriteBatch.End();
+			_drawPoints.Clear();
+		}
+		orig(self, solidLayer, overRenderTargets, intoRenderTargets);
+    }
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => !IsLockedChest(i, j);
+
+    public override bool IsLockedChest(int i, int j) {
+        return Main.tile[i, j].TileFrameX / 36 == 1 && !NPC.downedBoss2;
+    }
+
+    public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual) {
+		bool flag = NPC.downedBoss2;
 		if (flag) {
 			return false;
 		}

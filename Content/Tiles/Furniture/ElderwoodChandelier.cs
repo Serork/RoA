@@ -39,7 +39,7 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
         DustType = ModContent.DustType<WoodTrash>();
         AdjTiles = [TileID.Chandeliers];
 
-		AddMapEntry(new Color(191, 142, 111), Language.GetText("MapObject.Chandelier"));
+		AddMapEntry(new Color(235, 166, 135), Language.GetText("MapObject.Chandelier"));
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 		TileID.Sets.DisableSmartCursor[Type] = true;

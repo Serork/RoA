@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -41,24 +43,24 @@ sealed class ElderwoodChest2 : ModTile {
 
         AdjTiles = [TileID.Containers];
 
-        Color mapColor = new(110, 91, 74);
+        Color mapColor = new(95, 98, 74);
         AddMapEntry(mapColor, CreateMapEntryName());
-        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
+        DustType = (ushort)ModContent.DustType<BackwoodsPotDust1>();
 		HitSound = SoundID.Dig;
 	}
 
-    //public override IEnumerable<Item> GetItemDrops(int i, int j) {
-    //    Tile tile = Main.tile[i, j];
-    //    int style = TileObjectData.GetTileStyle(tile);
-    //    if (style == 0) {
-    //        yield return new Item(ModContent.ItemType<CemeteryBiomeChestItem>());
-    //    }
-    //    if (style == 1) {
-    //        yield return new Item(ModContent.ItemType<CemeteryBiomeChestItem>());
-    //    }
-    //}
+	//public override IEnumerable<Item> GetItemDrops(int i, int j) {
+	//    Tile tile = Main.tile[i, j];
+	//    int style = TileObjectData.GetTileStyle(tile);
+	//    if (style == 0) {
+	//        yield return new Item(ModContent.ItemType<CemeteryBiomeChestItem>());
+	//    }
+	//    if (style == 1) {
+	//        yield return new Item(ModContent.ItemType<CemeteryBiomeChestItem>());
+	//    }
+	//}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
     public override bool IsLockedChest(int i, int j) => false;
 

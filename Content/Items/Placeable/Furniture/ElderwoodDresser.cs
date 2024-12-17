@@ -17,7 +17,7 @@ sealed class ElderwoodDresser : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = Item.sellPrice(copper: 60);
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodDresser>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodDresser>();
     }
 
 	//public override void AddRecipes() {

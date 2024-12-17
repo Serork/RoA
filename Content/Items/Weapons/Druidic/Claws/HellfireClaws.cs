@@ -24,7 +24,8 @@ sealed class HellfireClaws : BaseClawsItem {
     public override bool CanUseItem(Player player) => base.CanUseItem(player) && player.ownedProjectileCounts[ModContent.ProjectileType<HellfireClawsSlash>()] < 1;
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        bool flag = player.GetModPlayer<WreathHandler>().Progress >= 0.9f;
+        WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        bool flag = handler.GetIsFull((ushort)(handler.CurrentResource + handler.GetIncreaseValue(0f) / 2), true);
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), flag ? ModContent.ProjectileType<HellfireClawsSlash>() : type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/, NatureWeaponHandler.GetUseSpeed(Item, player));
         //NetMessage.SendData(MessageID.PlayerControls, number: player.whoAmI);
 

@@ -26,7 +26,6 @@ sealed class ElderwoodBed : ModTile {
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
 
-        DustType = ModContent.DustType<WoodTrash>();
         AdjTiles = [TileID.Beds];
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2);
@@ -39,7 +38,13 @@ sealed class ElderwoodBed : ModTile {
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
-    public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY) => (width, height) = (2, 2);
+    public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY) {
+        // Because beds have special smart interaction, this splits up the left and right side into the necessary 2x2 sections
+        width = 2; // Default to the Width defined for TileObjectData.newTile
+        height = 2; // Default to the Height defined for TileObjectData.newTile
+        //extraY = 0; // Depends on how you set up frameHeight and CoordinateHeights and CoordinatePaddingFix.Y
+    }
+    
     public override void ModifySleepingTargetInfo(int i, int j, ref TileRestingInfo info) => info.VisualOffset.Y += 4f;
 
     public override bool RightClick(int i, int j) {

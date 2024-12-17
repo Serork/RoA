@@ -1967,7 +1967,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             killTiles2.Add(killPos);
             Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
             if (tile.ActiveWall(placeholderWallType)) {
-                WorldGenHelper.PlaceChest(killPos.X, killPos.Y, _elderWoodChestTileType, onPlaced: (chest) => {
+                WorldGenHelper.PlaceChest(killPos.X, killPos.Y, _elderWoodChestTileType, style: 1, onPlaced: (chest) => {
                     chestPlaced = true;
                     int slotId = 0;
                     void addItemInChest(int itemType, int itemStack, double chance = 1.0) {

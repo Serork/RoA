@@ -42,6 +42,13 @@ static class TileHelper {
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawTiles_GetLightOverride")]
     public extern static Color TileDrawing_DrawTiles_GetLightOverride(TileDrawing tileDrawing, int j, int i, Tile tileCache, ushort typeCache, short tileFrameX, short tileFrameY, Color tileLight);
 
+    public static void AddFluentPoint(ModTile modTile, int i, int j) {
+        if (_fluentTiles.Contains((modTile, new Point(i, j)))) {
+            return;
+        }
+        _fluentTiles.Add((modTile, new Point(i, j)));
+    }
+
     public static void Load() {
         _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
         _addSpecialPointSpecialsCount = (int[])typeof(TileDrawing).GetFieldValue("_specialsCount", Main.instance.TilesRenderer);
@@ -120,13 +127,6 @@ static class TileHelper {
 
         // Whack it all together to get a HH:MM format
         Main.NewText($"Time: {intTime}:{text2} {text}", 255, 240, 20);
-    }
-
-    public static void AddFluentPoint(ModTile modTile, int i, int j) {
-        if (_fluentTiles.Contains((modTile, new Point(i, j)))) {
-            return;
-        }
-        _fluentTiles.Add((modTile, new Point(i, j)));
     }
 
     public static Texture2D GetTileGlowTexture(this ModTile modTile) => ModContent.Request<Texture2D>(ResourceManager.GlowTilesTextures + modTile.Name).Value;
