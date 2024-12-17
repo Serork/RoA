@@ -18,7 +18,7 @@ sealed class ElderwoodSink : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
 		Item.value = 300;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodSink>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodSink>();
 	}
 
 	//public override void AddRecipes() {

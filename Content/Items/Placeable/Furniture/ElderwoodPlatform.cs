@@ -19,7 +19,7 @@ sealed class ElderwoodPlatform : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
 		Item.value = 0;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodPlatform>();
+        Item.createTile = ModContent.TileType<Tiles.Platforms.ElderwoodPlatform>();
 	}
 
 	//	public override void AddRecipes() {

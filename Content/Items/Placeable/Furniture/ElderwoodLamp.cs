@@ -18,7 +18,7 @@ sealed class ElderwoodLamp : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = 500;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodLamp>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodLamp>();
     }
 
 	//public override void AddRecipes() {

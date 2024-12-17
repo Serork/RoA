@@ -640,6 +640,6 @@ ElderwoodTable: {
 }
 
 ElderwoodWorkbench: {
-	DisplayName: Elderwood Workbench
+	DisplayName: Elderwood Work Bench
 	Tooltip: ""
 }

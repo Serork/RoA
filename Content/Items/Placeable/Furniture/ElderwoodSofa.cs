@@ -18,7 +18,7 @@ sealed class ElderwoodSofa : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
 		Item.value = Item.sellPrice(copper: 60);
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodSofa>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodSofa>();
     }
 
 	//public override void AddRecipes() {

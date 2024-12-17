@@ -8,6 +8,7 @@ using RoA.Common.Sets;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
+using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
