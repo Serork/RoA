@@ -22,8 +22,6 @@ sealed class ElderwoodBookcase : ModTile {
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
         TileObjectData.addTile(Type);
 
-        TileID.Sets.DisableSmartCursor[Type] = true;
-
         DustType = ModContent.DustType<WoodTrash>();
         AdjTiles = [TileID.Bookcases];
 		AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.Bookcase"));

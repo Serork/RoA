@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Furniture;
@@ -19,7 +18,7 @@ sealed class ElderwoodPiano : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = Item.sellPrice(copper: 60);
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodPiano>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodPiano>();
     }
 
 	//public override void AddRecipes() {

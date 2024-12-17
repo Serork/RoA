@@ -182,7 +182,7 @@ sealed class ElderwoodDresser : ModTile {
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) {
-        num = fail ? 1 : 3;
+        num = 0;
     }
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
