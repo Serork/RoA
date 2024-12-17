@@ -648,3 +648,13 @@ WeaknessPotion: {
 	DisplayName: Weakness Potion
 	Tooltip: Throw to make someone weak
 }
+
+AlchemicalSkull: {
+	DisplayName: Alchemical Skull
+	Tooltip: Grants immunity to fire blocks, poison and toxic fumes
+}
+
+Coffin: {
+	DisplayName: Coffin
+	Tooltip: Shoot bones in random directions on taking damage
+}

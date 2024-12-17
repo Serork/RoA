@@ -6,6 +6,7 @@ using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 using RoA.Core.Utility;
 
+using System.Collections;
 using System.Collections.Generic;
 
 using Terraria;
@@ -168,7 +169,7 @@ sealed class BackwoodsPot : ModTile {
                     if (j < Main.worldSurface) {
                         int pot;
                         int stack = 1;
-                        if (WorldGen.genRand.NextBool(5)) {
+                        if (WorldGen.genRand.NextChance(0.5)) {
                             pot = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
                         }
                         else {
@@ -210,7 +211,7 @@ sealed class BackwoodsPot : ModTile {
                     else if (j < Main.rockLayer) {
                         int random = WorldGen.genRand.Next(11);
                         int potItem = 0;
-                        if (WorldGen.genRand.NextBool(3)) {
+                        if (WorldGen.genRand.NextChance(0.5)) {
                             potItem = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
                         }
                         else {
@@ -261,98 +262,110 @@ sealed class BackwoodsPot : ModTile {
                     }
                     else if (j < Main.UnderworldLayer) {
                         int num23 = WorldGen.genRand.Next(15);
-                        if (num23 == 0) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 296);
+                        if (WorldGen.genRand.NextChance(0.5)) {
+                            int pot = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
+                            Item.NewItem(source, i * 16, j * 16, 16, 16, pot, 1);
                         }
-                        if (num23 == 1) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 295);
-                        }
-                        if (num23 == 2) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 299);
-                        }
-                        if (num23 == 3) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 302);
-                        }
-                        if (num23 == 4) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 303);
-                        }
-                        if (num23 == 5) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 305);
-                        }
-                        if (num23 == 6) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 301);
-                        }
-                        if (num23 == 7) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 302);
-                        }
-                        if (num23 == 8) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 297);
-                        }
-                        if (num23 == 9) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 304);
-                        }
-                        if (num23 == 10) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 2322);
-                        }
-                        if (num23 == 11) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 2323);
-                        }
-                        if (num23 == 12) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 2327);
-                        }
-                        if (num23 == 13) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 2329);
-                        }
-                        if (num23 >= 7) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 2350, WorldGen.genRand.Next(1, 3));
+                        else {
+                            if (num23 == 0) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 296);
+                            }
+                            if (num23 == 1) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 295);
+                            }
+                            if (num23 == 2) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 299);
+                            }
+                            if (num23 == 3) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 302);
+                            }
+                            if (num23 == 4) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 303);
+                            }
+                            if (num23 == 5) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 305);
+                            }
+                            if (num23 == 6) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 301);
+                            }
+                            if (num23 == 7) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 302);
+                            }
+                            if (num23 == 8) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 297);
+                            }
+                            if (num23 == 9) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 304);
+                            }
+                            if (num23 == 10) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 2322);
+                            }
+                            if (num23 == 11) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 2323);
+                            }
+                            if (num23 == 12) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 2327);
+                            }
+                            if (num23 == 13) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 2329);
+                            }
+                            if (num23 >= 7) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 2350, WorldGen.genRand.Next(1, 3));
+                            }
                         }
                     }
                     else {
                         int num24 = WorldGen.genRand.Next(14);
-                        if (num24 == 0) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 296);
+                        if (WorldGen.genRand.NextChance(0.5)) {
+                            int pot = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
+                            Item.NewItem(source, i * 16, j * 16, 16, 16, pot, 1);
                         }
-                        if (num24 == 1) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 295);
-                        }
-                        if (num24 == 2) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 293);
-                        }
-                        if (num24 == 3) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 288);
-                        }
-                        if (num24 == 4) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 294);
-                        }
-                        if (num24 == 5) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 297);
-                        }
-                        if (num24 == 6) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 304);
-                        }
-                        if (num24 == 7) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 305);
-                        }
-                        if (num24 == 8) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 301);
-                        }
-                        if (num24 == 9) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 302);
-                        }
-                        if (num24 == 10) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 288);
-                        }
-                        if (num24 == 11) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 300);
-                        }
-                        if (num24 == 12) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 2323);
-                        }
-                        if (num24 == 13) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 2326);
-                        }
-                        if (WorldGen.genRand.NextBool(5)) {
-                            Item.NewItem(source, i * 16, j * 16, 16, 16, 4870);
+                        else {
+                            if (num24 == 0) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 296);
+                            }
+                            if (num24 == 1) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 295);
+                            }
+                            if (num24 == 2) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 293);
+                            }
+                            if (num24 == 3) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 288);
+                            }
+                            if (num24 == 4) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 294);
+                            }
+                            if (num24 == 5) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 297);
+                            }
+                            if (num24 == 6) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 304);
+                            }
+                            if (num24 == 7) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 305);
+                            }
+                            if (num24 == 8) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 301);
+                            }
+                            if (num24 == 9) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 302);
+                            }
+                            if (num24 == 10) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 288);
+                            }
+                            if (num24 == 11) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 300);
+                            }
+                            if (num24 == 12) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 2323);
+                            }
+                            if (num24 == 13) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 2326);
+                            }
+                            if (WorldGen.genRand.NextBool(5)) {
+                                Item.NewItem(source, i * 16, j * 16, 16, 16, 4870);
+                            }
                         }
                     }
                 }

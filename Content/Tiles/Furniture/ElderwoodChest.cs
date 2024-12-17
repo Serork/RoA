@@ -94,7 +94,7 @@ sealed class ElderwoodChest : ModTile {
 					for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
 						Main.spriteBatch.Draw(texture,
 										  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
-										  new Vector2(-4f, 0.5f) +
+										  new Vector2(-3.5f, 0.5f) +
 										  Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
 										  null,
 										  Color.White.MultiplyRGBA(Lighting.GetColor(i, j)) * 0.5f * colorValue, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
