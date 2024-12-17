@@ -83,7 +83,8 @@ sealed class ElderwoodChest : ModTile {
                 float posX = Utils.RandomInt(ref speed, -12, 13) * 0.1f;
                 float directionMax = posX;
                 Tile tile = Main.tile[i, j];
-				if (tile.TileFrameX == 36 && tile.TileFrameY == 0) {
+				bool flag2 = TileLoader.GetTile(tile.TileType).IsLockedChest(i, j);
+				if (flag2 && tile.TileFrameX == 36 && tile.TileFrameY == 0) {
 					Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
 					if (Main.drawToScreen) {
 						zero = Vector2.Zero;
