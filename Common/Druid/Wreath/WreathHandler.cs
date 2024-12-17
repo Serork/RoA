@@ -208,6 +208,9 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
         if (StartSlowlyIncreasingUntilFull) {
+            //StartSlowlyIncreasingUntilFull = false;
+            //_formInfo = null;
+            //ResetChangingValue();
             return;
         }
         if (Player.mount.Active) {

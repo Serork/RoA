@@ -21,7 +21,7 @@ sealed class SlipperyBomb : ModItem {
 		Item.damage = 0;
 
 		Item.rare = ItemRarityID.White;
-		Item.maxStack = 99;
+		Item.maxStack = Item.CommonMaxStack;
 
 		Item.noUseGraphic = true;
 		Item.UseSound = SoundID.Item1;

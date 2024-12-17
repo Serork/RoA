@@ -22,9 +22,9 @@ sealed class SlipperyGrenade : ModItem {
 		Item.damage = 60;
 
 		Item.rare = ItemRarityID.White;
-		Item.maxStack = 99;
+        Item.maxStack = Item.CommonMaxStack;
 
-		Item.noUseGraphic = true;
+        Item.noUseGraphic = true;
 		Item.UseSound = SoundID.Item1;
 
 		Item.value = Item.sellPrice(copper: 20);

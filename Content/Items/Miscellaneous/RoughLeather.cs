@@ -21,7 +21,7 @@ sealed class RoughLeather : ModItem {
 		Item.useAnimation = Item.useTime = 18;
 		Item.useStyle = ItemUseStyleID.Swing;
 
-		Item.maxStack = 99;
+		Item.maxStack = Item.CommonMaxStack;
 		Item.value = Item.sellPrice(copper: 25);
 	}
 

@@ -17,7 +17,7 @@ sealed class SpoiledRawhide : ModItem {
 		int width = 18; int height = 20;
 		Item.Size = new Vector2(width, height);
 
-		Item.maxStack = 999;
+		Item.maxStack = Item.CommonMaxStack;
 		Item.rare = ItemRarityID.Gray;
 	}
 }

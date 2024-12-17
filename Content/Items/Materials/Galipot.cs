@@ -18,6 +18,6 @@ sealed class Galipot : ModItem {
 
 		Item.value = Item.sellPrice(silver: 5);
 		Item.rare = ItemRarityID.White;
-		Item.maxStack = 999;
+		Item.maxStack = Item.CommonMaxStack;
 	}
 }

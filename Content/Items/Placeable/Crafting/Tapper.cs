@@ -18,7 +18,7 @@ partial class Tapper : ModItem {
         int width = 26; int height = 24;
         Item.Size = new Vector2(width, height);
 
-        Item.maxStack = 99;
+        Item.maxStack = Item.CommonMaxStack;
         Item.useTurn = true;
         Item.autoReuse = true;
 

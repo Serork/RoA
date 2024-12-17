@@ -33,7 +33,7 @@ sealed class Cloudberry : ModItem {
 
 		Item.value = Item.sellPrice(silver: 10);
 		Item.rare = ItemRarityID.White;
-		Item.maxStack = 999;
+		Item.maxStack = Item.CommonMaxStack;
 
 		Item.useTime = 10;
 		Item.useAnimation = 15;

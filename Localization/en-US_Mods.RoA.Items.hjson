@@ -646,5 +646,5 @@ ElderwoodWorkbench: {
 
 WeaknessPotion: {
 	DisplayName: Weakness Potion
-	Tooltip: "Throw to make someone weak"
+	Tooltip: Throw to make someone weak
 }

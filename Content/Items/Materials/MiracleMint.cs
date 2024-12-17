@@ -18,6 +18,6 @@ sealed class MiracleMint : ModItem {
 
         Item.SetDefaultOthers(Item.sellPrice(copper: 20));
 
-        Item.SetDefaultToStackable(999);
+        Item.SetDefaultToStackable(Item.CommonMaxStack);
     }
 }

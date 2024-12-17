@@ -21,8 +21,8 @@ sealed class SlipperyDynamite : ModItem {
 		Item.damage = 0;
 		Item.rare = ItemRarityID.White;
 
-		Item.maxStack = 99;
-		Item.noUseGraphic = true;
+        Item.maxStack = Item.CommonMaxStack;
+        Item.noUseGraphic = true;
 
 		Item.UseSound = SoundID.Item1;
 		Item.value = Item.sellPrice(silver: 4);

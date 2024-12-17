@@ -22,9 +22,9 @@ public class SlipperyGlowstick : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.White;
-		Item.maxStack = 99;
+        Item.maxStack = Item.CommonMaxStack;
 
-		Item.UseSound = SoundID.Item1;
+        Item.UseSound = SoundID.Item1;
 		Item.value = Item.sellPrice(copper: 2);
 
 		Item.useStyle = ItemUseStyleID.Swing;
