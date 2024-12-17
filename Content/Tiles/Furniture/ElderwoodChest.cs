@@ -24,7 +24,6 @@ namespace RoA.Content.Tiles.Furniture;
 sealed class ElderwoodChest : ModTile {
 	private static List<Point> _drawPoints = [];
 	private static float _rotationOffset, _scaleOffset;
-	private static float _directionMax;
 
 	public override void SetStaticDefaults()  {
 		Main.tileSpelunker[Type] = true;
@@ -58,18 +57,6 @@ sealed class ElderwoodChest : ModTile {
         HitSound = SoundID.Dig;
 	}
 
-    //public override IEnumerable<Item> GetItemDrops(int i, int j) {
-    //    Tile tile = Main.tile[i, j];
-    //    int style = TileObjectData.GetTileStyle(tile);
-    //    if (style == 0) {
-    //        yield return new Item(ModContent.ItemType<CemeteryBiomeChestItem>());
-    //    }
-    //    if (style == 1) {
-    //        yield return new Item(ModContent.ItemType<CemeteryBiomeChestItem>());
-    //    }
-    //}
-
-
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
 		Point position = new(i, j);
         if (!_drawPoints.Contains(position)) {
@@ -77,10 +64,6 @@ sealed class ElderwoodChest : ModTile {
 		}
 
         return true;
-    }
-
-    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
-
     }
 
     public override void Load() {

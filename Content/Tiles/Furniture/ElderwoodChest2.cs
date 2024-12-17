@@ -17,7 +17,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodChest2 : ModTile {
-	public override void SetStaticDefaults()  {
+	public override void SetStaticDefaults() {
 		Main.tileSpelunker[Type] = true;
 		Main.tileContainer[Type] = true;
 		Main.tileShine2[Type] = true;
@@ -41,24 +41,13 @@ sealed class ElderwoodChest2 : ModTile {
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
 
-        AdjTiles = [TileID.Containers];
+		AdjTiles = [TileID.Containers];
 
-        Color mapColor = new(95, 98, 74);
-        AddMapEntry(mapColor, CreateMapEntryName());
-        DustType = (ushort)ModContent.DustType<BackwoodsPotDust1>();
+		Color mapColor = new(95, 98, 74);
+		AddMapEntry(mapColor, CreateMapEntryName());
+		DustType = (ushort)ModContent.DustType<BackwoodsPotDust1>();
 		HitSound = SoundID.Dig;
 	}
-
-	//public override IEnumerable<Item> GetItemDrops(int i, int j) {
-	//    Tile tile = Main.tile[i, j];
-	//    int style = TileObjectData.GetTileStyle(tile);
-	//    if (style == 0) {
-	//        yield return new Item(ModContent.ItemType<CemeteryBiomeChestItem>());
-	//    }
-	//    if (style == 1) {
-	//        yield return new Item(ModContent.ItemType<CemeteryBiomeChestItem>());
-	//    }
-	//}
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
