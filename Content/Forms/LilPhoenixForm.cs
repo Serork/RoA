@@ -128,7 +128,7 @@ sealed class LilPhoenixForm : BaseForm {
             flag = true;
         }
         bool flag4 = !flag || !IsInAir(player);
-        StrikeNPC(player, !IsInAir(player));
+        StrikeNPC(player, !player.wet && Collision.SolidCollision(player.position - Vector2.One * 3, player.width + 6, player.height + 6));
         if (flag4) {
             if (plr._dashed) {
                 plr.ClearProjectiles();
