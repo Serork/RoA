@@ -153,7 +153,7 @@ sealed class ElderwoodChest2 : ModTile {
 						Main.recBigList = false;
 						player.chestX = left;
 						player.chestY = top;
-						SoundEngine.PlaySound(player.chest < 0 ? SoundID.MenuOpen : SoundID.MenuTick);
+						SoundEngine.PlaySound(SoundID.MenuOpen);
 					}
 
 					Recipe.FindRecipes();
