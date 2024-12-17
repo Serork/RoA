@@ -17,7 +17,7 @@ sealed class ElderTorchDust : ModDust {
     }
 
     public override bool Update(Dust dust) {
-        DustHelper.BasicDust(dust);
+        DustHelper.BasicDust(dust, false);
 
         if (!dust.noGravity)
             dust.velocity.Y += 0.05f;

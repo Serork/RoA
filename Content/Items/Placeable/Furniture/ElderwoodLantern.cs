@@ -21,7 +21,7 @@ sealed class ElderwoodLantern : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = 150;
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodLantern>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodLantern>();
     }
 
 	//public override void AddRecipes() {

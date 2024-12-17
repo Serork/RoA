@@ -18,7 +18,7 @@ sealed class ElderwoodCandle : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.value = Item.sellPrice(0, 0, 0, 60);
-        //Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodCandle>();
+        Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodCandle>();
     }
 
 	//public override void AddRecipes() {

@@ -134,3 +134,8 @@ OniMask: {
 	DisplayName: Oni Mask
 	Description: Mods.RoA.Buffs.OniMask.Description
 }
+
+Weak: {
+	DisplayName: Weak
+	Description: Mods.RoA.Buffs.Weak.Description
+}

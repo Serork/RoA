@@ -643,3 +643,8 @@ ElderwoodWorkbench: {
 	DisplayName: Elderwood Work Bench
 	Tooltip: ""
 }
+
+WeaknessPotion: {
+	DisplayName: Weakness Potion
+	Tooltip: "Throw to make someone weak"
+}

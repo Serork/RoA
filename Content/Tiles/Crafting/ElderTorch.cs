@@ -1,3 +1,5 @@
+using FullSerializer.Internal;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,6 +9,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
@@ -67,7 +70,32 @@ public class ElderTorch : ModTile {
         return inExampleUndergroundBiome ? 1f : -0.1f;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = Main.rand.Next(1, 3);
+    public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
+        Tile tile = Main.tile[i, j];
+        int tileFrameX = tile.TileFrameX;
+        if (Main.rand.Next(40) == 0 && tileFrameX < 66) {
+            int num14 = DustType;
+            int num15 = 0;
+            switch (tileFrameX) {
+                case 22:
+                    num15 = Dust.NewDust(new Vector2(i * 16 + 6, j * 16), 4, 4, num14, 0f, 0f, 100);
+                    break;
+                case 44:
+                    num15 = Dust.NewDust(new Vector2(i * 16 + 2, j * 16), 4, 4, num14, 0f, 0f, 100);
+                    break;
+                default:
+                    num15 = Dust.NewDust(new Vector2(i * 16 + 4, j * 16), 4, 4, num14, 0f, 0f, 100);
+                    break;
+            }
+            if (Main.rand.Next(3) != 0)
+                Main.dust[num15].noGravity = true;
+
+            Main.dust[num15].velocity *= 0.3f;
+            Main.dust[num15].velocity.Y -= 1.5f;
+        }
+    }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 10;
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
         Tile tile = Main.tile[i, j];
@@ -110,7 +138,7 @@ public class ElderTorch : ModTile {
         }
 
         ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i);
-        Color color = new Color(100, 100, 100, 0);
+        Color color = new(100, 100, 100, 0);
         int width = 20;
         int height = 20;
         int frameX = tile.TileFrameX;

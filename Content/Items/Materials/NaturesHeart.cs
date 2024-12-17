@@ -33,7 +33,7 @@ sealed class NaturesHeart : ModItem {
 		int width = 20; int height = 28;
 		Item.Size = new Vector2(width, height);
 
-		Item.maxStack = 999;
+		Item.maxStack = Item.CommonMaxStack;
 		Item.value = Item.sellPrice(silver: 10);
 		Item.rare = ItemRarityID.Green;
 	}

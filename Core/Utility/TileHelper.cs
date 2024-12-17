@@ -131,6 +131,11 @@ static class TileHelper {
 
     public static Texture2D GetTileGlowTexture(this ModTile modTile) => ModContent.Request<Texture2D>(ResourceManager.GlowTilesTextures + modTile.Name).Value;
 
+    public static void LanternFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+        int top = pos.Y - Main.tile[pos].TileFrameY / 18;
+        HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), 0);
+    }
+
     public static void Chandelier3x3FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
         int left = Main.tile[pos].TileFrameX / 18;
         left %= 3;

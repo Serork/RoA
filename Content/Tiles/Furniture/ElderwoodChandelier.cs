@@ -114,13 +114,13 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
         TileHooks.ITileFlameData.TileFlameData tileFlameData = default;
         tileFlameData.flameTexture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Flame");
         tileFlameData.flameColor = new Color(100, 100, 100, 0);
-        tileFlameData.flameCount = 5;
-        tileFlameData.flameRangeXMin = -12;
-        tileFlameData.flameRangeXMax = 13;
-        tileFlameData.flameRangeYMin = -12;
-        tileFlameData.flameRangeYMax = 13;
-        tileFlameData.flameRangeMultX = 0.075f;
-        tileFlameData.flameRangeMultY = 0.075f;
+        tileFlameData.flameCount = 7;
+        tileFlameData.flameRangeXMin = -10;
+        tileFlameData.flameRangeXMax = 11;
+        tileFlameData.flameRangeYMin = -10;
+        tileFlameData.flameRangeYMax = 1;
+        tileFlameData.flameRangeMultX = 0.15f;
+        tileFlameData.flameRangeMultY = 0.35f;
         return tileFlameData;
     }
 }

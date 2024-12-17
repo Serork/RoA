@@ -3,7 +3,10 @@
 using RoA.Content.Dusts;
 using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Items.Potions;
 using RoA.Core.Utility;
+
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -140,6 +143,14 @@ sealed class BackwoodsPot : ModTile {
 
             num18 = (num18 * 2f + 1f) / 3f;
             int range = (int)(500f / ((num18 + 1f) / 2f));
+            List<int> rockLayerRoAPotions = [];
+            rockLayerRoAPotions.Add(ModContent.ItemType<DeathWardPotion>());
+            rockLayerRoAPotions.Add(ModContent.ItemType<BloodlustPotion>());
+            rockLayerRoAPotions.Add(ModContent.ItemType<BrightstonePotion>());
+            rockLayerRoAPotions.Add(ModContent.ItemType<DryadBloodPotion>());
+            rockLayerRoAPotions.Add(ModContent.ItemType<ResiliencePotion>());
+            rockLayerRoAPotions.Add(ModContent.ItemType<WeightPotion>());
+            rockLayerRoAPotions.Add(ModContent.ItemType<WillpowerPotion>());
             if (!WorldGen.gen) {
                 var source = new EntitySource_TileBreak(i, j);
                 if (Player.GetClosestRollLuck(i, j, range) == 0f) {
@@ -157,35 +168,40 @@ sealed class BackwoodsPot : ModTile {
                     if (j < Main.worldSurface) {
                         int pot;
                         int stack = 1;
-                        switch (WorldGen.genRand.Next(10)) {
-                            case 0:
-                                pot = ItemID.IronskinPotion;
-                                break;
-                            case 1:
-                                pot = ItemID.ShinePotion;
-                                break;
-                            case 2:
-                                pot = ItemID.NightOwlPotion;
-                                break;
-                            case 3:
-                                pot = ItemID.BattlePotion;
-                                break;
-                            case 4:
-                                pot = ItemID.MiningPotion;
-                                break;
-                            case 5:
-                                pot = ItemID.MiningPotion;
-                                break;
-                            case 6:
-                                pot = ItemID.CalmingPotion;
-                                break;
-                            case 7:
-                                pot = ItemID.HeartreachPotion;
-                                break;
-                            default:
-                                pot = ItemID.RecallPotion;
-                                stack = WorldGen.genRand.Next(3) + 1;
-                                break;
+                        if (WorldGen.genRand.NextBool(5)) {
+                            pot = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
+                        }
+                        else {
+                            switch (WorldGen.genRand.Next(10)) {
+                                case 0:
+                                    pot = ItemID.IronskinPotion;
+                                    break;
+                                case 1:
+                                    pot = ItemID.ShinePotion;
+                                    break;
+                                case 2:
+                                    pot = ItemID.NightOwlPotion;
+                                    break;
+                                case 3:
+                                    pot = ItemID.BattlePotion;
+                                    break;
+                                case 4:
+                                    pot = ItemID.MiningPotion;
+                                    break;
+                                case 5:
+                                    pot = ItemID.MiningPotion;
+                                    break;
+                                case 6:
+                                    pot = ItemID.CalmingPotion;
+                                    break;
+                                case 7:
+                                    pot = ItemID.HeartreachPotion;
+                                    break;
+                                default:
+                                    pot = ItemID.RecallPotion;
+                                    stack = WorldGen.genRand.Next(3) + 1;
+                                    break;
+                            }
                         }
 
                         ModifyPotionDrop(ref pot, ref stack, WorldGen.genRand);
@@ -194,34 +210,39 @@ sealed class BackwoodsPot : ModTile {
                     else if (j < Main.rockLayer) {
                         int random = WorldGen.genRand.Next(11);
                         int potItem = 0;
-                        switch (random) {
-                            case 0:
-                                potItem = ItemID.RegenerationPotion;
-                                break;
-                            case 1:
-                                potItem = ItemID.ShinePotion;
-                                break;
-                            case 2:
-                                potItem = ItemID.NightOwlPotion;
-                                break;
-                            case 3:
-                                potItem = ItemID.SwiftnessPotion;
-                                break;
-                            case 4:
-                                potItem = ItemID.ArcheryPotion;
-                                break;
-                            case 5:
-                                potItem = ItemID.GillsPotion;
-                                break;
-                            case 6:
-                                potItem = ItemID.HunterPotion;
-                                break;
-                            case 7:
-                                potItem = ItemID.MiningPotion;
-                                break;
-                            case 8:
-                                potItem = ItemID.TrapsightPotion;
-                                break;
+                        if (WorldGen.genRand.NextBool(3)) {
+                            potItem = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
+                        }
+                        else {
+                            switch (random) {
+                                case 0:
+                                    potItem = ItemID.RegenerationPotion;
+                                    break;
+                                case 1:
+                                    potItem = ItemID.ShinePotion;
+                                    break;
+                                case 2:
+                                    potItem = ItemID.NightOwlPotion;
+                                    break;
+                                case 3:
+                                    potItem = ItemID.SwiftnessPotion;
+                                    break;
+                                case 4:
+                                    potItem = ItemID.ArcheryPotion;
+                                    break;
+                                case 5:
+                                    potItem = ItemID.GillsPotion;
+                                    break;
+                                case 6:
+                                    potItem = ItemID.HunterPotion;
+                                    break;
+                                case 7:
+                                    potItem = ItemID.MiningPotion;
+                                    break;
+                                case 8:
+                                    potItem = ItemID.TrapsightPotion;
+                                    break;
+                            }
                         }
 
                         if (potItem != 0) {
