@@ -169,7 +169,7 @@ sealed class BackwoodsPot : ModTile {
                     if (j < Main.worldSurface) {
                         int pot;
                         int stack = 1;
-                        if (WorldGen.genRand.NextChance(0.5)) {
+                        if (WorldGen.genRand.NextChance(0.75)) {
                             pot = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
                         }
                         else {
@@ -211,7 +211,7 @@ sealed class BackwoodsPot : ModTile {
                     else if (j < Main.rockLayer) {
                         int random = WorldGen.genRand.Next(11);
                         int potItem = 0;
-                        if (WorldGen.genRand.NextChance(0.5)) {
+                        if (WorldGen.genRand.NextChance(0.75)) {
                             potItem = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
                         }
                         else {
@@ -262,7 +262,7 @@ sealed class BackwoodsPot : ModTile {
                     }
                     else if (j < Main.UnderworldLayer) {
                         int num23 = WorldGen.genRand.Next(15);
-                        if (WorldGen.genRand.NextChance(0.5)) {
+                        if (WorldGen.genRand.NextChance(0.75)) {
                             int pot = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
                             Item.NewItem(source, i * 16, j * 16, 16, 16, pot, 1);
                         }
@@ -316,7 +316,7 @@ sealed class BackwoodsPot : ModTile {
                     }
                     else {
                         int num24 = WorldGen.genRand.Next(14);
-                        if (WorldGen.genRand.NextChance(0.5)) {
+                        if (WorldGen.genRand.NextChance(0.75)) {
                             int pot = WorldGen.genRand.NextFromCollection(rockLayerRoAPotions);
                             Item.NewItem(source, i * 16, j * 16, 16, 16, pot, 1);
                         }
@@ -461,7 +461,7 @@ sealed class BackwoodsPot : ModTile {
                         Item.NewItem(source, i * 16, j * 16, 16, 16, type5, num7);
                     }
                     else if (num2 == 4 && (flag2 || j > Main.rockLayer)) {
-                        int type6 = 166;
+                        int type6 = ModContent.ItemType<SlipperyBomb>();
                         if (flag2) {
                             type6 = 4423;
                         }
