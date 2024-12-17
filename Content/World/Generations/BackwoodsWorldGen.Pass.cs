@@ -2266,7 +2266,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         WorldGen.grassSpread = 0;
                         WorldGenHelper.CustomSpreadGrass(k, l, TileID.Dirt, _grassTileType, growUnderground: true);
                         WorldGenHelper.CustomSpreadGrass(k, l, _dirtTileType, _grassTileType, growUnderground: true);
-                        Main.tile[k, l].WallType = 0;
+                        if (WorldGen.SolidTile(k, l)) {
+                            Main.tile[k, l].WallType = 0;
+                        }
                         Main.tile[k, l].LiquidAmount = 0;
 
                         if (Main.tile[k, l].TileType == _vinesTileType) {

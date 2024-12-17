@@ -97,7 +97,7 @@ sealed class ElderwoodChest : ModTile {
 										  new Vector2(-3.5f, 0.5f) +
 										  Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
 										  null,
-										  Color.White.MultiplyRGBA(Lighting.GetColor(i, j)) * 0.5f * colorValue, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.175f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
+										  Color.White.MultiplyRGBA(Lighting.GetColor(i, j)) * 0.5f * colorValue, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
 					}
 				}
 			}

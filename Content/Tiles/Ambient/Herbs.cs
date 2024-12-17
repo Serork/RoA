@@ -24,8 +24,6 @@ sealed class Herbs : ModTile, TileHooks.IGetTileDrawData {
         Main.tileFrameImportant[Type] = true;
         Main.tileObsidianKill[Type] = true;
         Main.tileCut[Type] = true;
-        Main.tileNoFail[Type] = true;
-        Main.tileAlch[Type] = true;
         Main.tileSpelunker[Type] = true;
         Main.tileLighted[Type] = true;
 
@@ -40,7 +38,6 @@ sealed class Herbs : ModTile, TileHooks.IGetTileDrawData {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
         TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.addTile(Type);
 
         LocalizedText name = Lang.GetItemName(ItemID.Daybloom);
