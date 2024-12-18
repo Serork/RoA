@@ -18,5 +18,7 @@ sealed class BackwoodsStone : ModTile {
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
         HitSound = SoundID.Tink;
 		AddMapEntry(new Color(53, 55, 54));
+
+        MineResist = 1.25f;
 	}
 }

@@ -23,6 +23,43 @@ namespace RoA.Content.Tiles.Trees;
 sealed class PrimordialTreeGlow : GlobalTile {
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        if (PrimordialTree.IsPrimordialTree(i, j)) {
+            Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+            if (Main.drawToScreen) {
+                zero = Vector2.Zero;
+            }
+            bool bluePart = tile.TileFrameX == 88 && tile.TileFrameY == 22;
+            Vector2 position = new Vector2(i, j).ToWorldCoordinates();
+            if (bluePart) {
+                if (!Main.dedServ) {
+                    Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.5f);
+                }
+            }
+            else if (Main.rand.NextBool(1050)) {
+                Dust dust = Dust.NewDustPerfect(position + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
+                dust.velocity *= 0.5f + Main.rand.NextFloat() * 0.25f;
+                dust.scale *= 1.1f;
+            }
+            int height = tile.TileFrameY == 36 ? 18 : 16;
+            ulong speed = (((ulong)j << 32) | (ulong)i);
+            float posX = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
+            float posY = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
+            int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
+            int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>(PrimordialTree.TexturePath + "_Glow").Value,
+                                  new Vector2(i * 16 - (int)Main.screenPosition.X - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
+                                  j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY) + zero,
+                                  new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
+                                  Color.Lerp(Color.White, Lighting.GetColor(i, j), bluePart ? 0.6f : 0.8f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        }
+    }
+}
+
+sealed class PrimordialTree : ModTree {
+    public const int MINAXEREQUIRED = 60;
+
+    public static bool IsPrimordialTree(int i, int j) {
+        Tile tile = WorldGenHelper.GetTileSafely(i, j);
         if (tile.ActiveTile(TileID.Trees)) {
             int checkJ = j;
             while (!WorldGenHelper.GetTileSafely(i, checkJ).HasTile || WorldGenHelper.ActiveTile(i, checkJ, TileID.Trees)) {
@@ -30,39 +67,13 @@ sealed class PrimordialTreeGlow : GlobalTile {
             }
             Tile grassTile = WorldGenHelper.GetTileSafely(i, checkJ);
             if (grassTile.ActiveTile(ModContent.TileType<BackwoodsGrass>())) {
-                Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
-                if (Main.drawToScreen) {
-                    zero = Vector2.Zero;
-                }
-                bool bluePart = tile.TileFrameX == 88 && tile.TileFrameY == 22;
-                Vector2 position = new Vector2(i, j).ToWorldCoordinates();
-                if (bluePart) {
-                    if (!Main.dedServ) {
-                        Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.5f);
-                    }
-                }
-                else if (Main.rand.NextBool(1050)) {
-                    Dust dust = Dust.NewDustPerfect(position + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
-                    dust.velocity *= 0.5f + Main.rand.NextFloat() * 0.25f;
-                    dust.scale *= 1.1f;
-                }
-                int height = tile.TileFrameY == 36 ? 18 : 16;
-                ulong speed = (((ulong)j << 32) | (ulong)i);
-                float posX = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
-                float posY = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
-                int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
-                int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>(PrimordialTree.TexturePath + "_Glow").Value,
-                                      new Vector2(i * 16 - (int)Main.screenPosition.X - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX, 
-                                      j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY) + zero,
-                                      new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
-                                      Color.Lerp(Color.White, Lighting.GetColor(i, j), bluePart ? 0.6f : 0.8f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                return true;
             }
         }
-    }
-}
 
-sealed class PrimordialTree : ModTree {
+        return false;
+    }
+
     public static string TexturePath => $"{RoA.ModName}/Resources/Textures/Tiles/Trees/{nameof(PrimordialTree)}";
 
     public override TreePaintingSettings TreeShaderSettings => new() {

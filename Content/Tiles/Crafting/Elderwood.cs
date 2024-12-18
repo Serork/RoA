@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Tiles.Solid.Backwoods;
 
 using System.Collections.Generic;
 
@@ -23,7 +24,10 @@ sealed class Elderwood : ModTile {
 
         DustType = (ushort)ModContent.DustType<WoodTrash>();
         AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
-	}
+
+        MineResist = 1.5f;
+        MinPick = LivingElderwood.MINTILEREQUIRED;
+    }
 
 	public override IEnumerable<Item> GetItemDrops(int i, int j) {
 		yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());

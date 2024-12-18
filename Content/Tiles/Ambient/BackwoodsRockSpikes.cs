@@ -74,6 +74,8 @@ abstract class BackwoodsRockSpikes : ModTile, TileHooks.IGetTileDrawData {
 
         DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
         AddMapEntry(new Color(34, 37, 46));
+
+        MineResist = 1.25f;
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => BackwoodsGreenMoss.SetupLight(ref r, ref g, ref b);

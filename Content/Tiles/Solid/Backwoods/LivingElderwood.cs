@@ -28,7 +28,9 @@ sealed class LivingElderwood2 : LivingElderwood {
 }
 
 class LivingElderwood : ModTile {
-	public override void SetStaticDefaults() {
+    public const int MINTILEREQUIRED = 65;
+
+    public override void SetStaticDefaults() {
         TileHelper.Solid(Type, false, false);
         TileHelper.MergeWith(Type, (ushort)ModContent.TileType<BackwoodsGrass>());
         TileHelper.MergeWith(Type, (ushort)ModContent.TileType<BackwoodsStone>());
@@ -44,5 +46,8 @@ class LivingElderwood : ModTile {
         RegisterItemDrop(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
         DustType = (ushort)ModContent.DustType<WoodTrash>();
 		AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
-	}
+
+        MineResist = 1.5f;
+        MinPick = MINTILEREQUIRED;
+    }
 }

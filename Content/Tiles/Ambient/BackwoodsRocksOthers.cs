@@ -31,6 +31,8 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
 
         DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
+
+        MineResist = 1.25f;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {
@@ -98,6 +100,8 @@ class BackwoodsRocks1 : ModTile {
 
         DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
+
+        MineResist = 1.25f;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 3;

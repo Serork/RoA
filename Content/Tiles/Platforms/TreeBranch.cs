@@ -13,10 +13,13 @@ using RoA.Core.Utility;
 using System;
 using RoA.Common.Tiles;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Tiles.Trees;
 
 namespace RoA.Content.Tiles.Platforms;
 
-class TreeBranch : ModTile {
+class TreeBranch : ModTile, TileHooks.IRequestMinAxePower {
+    int TileHooks.IRequestMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
+
     protected virtual int FrameCount => 2;
 
     public override void SetStaticDefaults() {

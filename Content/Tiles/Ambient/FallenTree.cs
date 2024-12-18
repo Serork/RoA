@@ -1,15 +1,18 @@
-﻿using RoA.Content.Tiles.Solid.Backwoods;
+﻿using RoA.Common.Tiles;
+using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Tiles.Trees;
 
+using Terraria;
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Terraria;
-using Terraria.Enums;
-using RoA.Content.Dusts.Backwoods;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class FallenTree : ModTile {
+sealed class FallenTree : ModTile, TileHooks.IRequestMinAxePower {
+    int TileHooks.IRequestMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
+
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -38,5 +41,5 @@ sealed class FallenTree : ModTile {
         AddMapEntry(new Microsoft.Xna.Framework.Color(91, 74, 67), CreateMapEntryName());
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 5;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 8;
 }
