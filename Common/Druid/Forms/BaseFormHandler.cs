@@ -249,9 +249,6 @@ sealed class BaseFormHandler : ModPlayer {
                 orig(self, spriteBatch);
             }
         }
-        else {
-            orig(self, spriteBatch);
-        }
     }
 
     private void On_Player_MakeFloorDust(On_Player.orig_MakeFloorDust orig, Player self, bool Falling, int type, int paintColor) {
