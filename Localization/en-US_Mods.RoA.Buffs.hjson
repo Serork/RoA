@@ -111,7 +111,7 @@ CrimsonInsectForm: {
 }
 
 LilPhoenixForm: {
-	DisplayName: Lil Phoenix Form
+	DisplayName: Firebird Form
 	Description: Mods.RoA.Buffs.LilPhoenixForm.Description
 }
 

@@ -7,6 +7,7 @@ using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -46,7 +47,7 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
 
     public override void UpdateArmorSet(Player player) {
 		string tapDir = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
-		player.setBonus = "On Fire! debuff regenerates life instead of doing damage" + $"\nDouble tap {tapDir} to take Firebird form";
+		player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.AshwalkerHoodSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
         //player.GetModPlayer<DruidArmorSetPlayer>().ashwalkerArmor = true;
         //Lighting.AddLight(player.Center, new Vector3(0.2f, 0.1f, 0.1f));
 

@@ -32,7 +32,7 @@ ArchVileSpikeTip.DisplayName: Arch Vile Spike Tip
 TestSlash.DisplayName: Test Slash
 JudgementCut.DisplayName: Judgement Cut
 JudgementSlash.DisplayName: Judgement Slash
-DiabolicDaikatanaProj.DisplayName: Diabolic Daikatana Proj
+DiabolicDaikatanaProj.DisplayName: Diabolic Daikatana
 Hellbat.DisplayName: Hellbat
 WaterStream.DisplayName: Water Stream
 ShockLightning.DisplayName: Shock Lightning
@@ -42,10 +42,10 @@ RootRing.DisplayName: Root Ring
 GrimDefenderSpearAttack.DisplayName: Grim Defender Spear Attack
 Brightstone.DisplayName: Brightstone
 Snatcher.DisplayName: Snatcher
-ElderwoodWallProjectile.DisplayName: Elderwood Wall Projectile
+ElderwoodWallProjectile.DisplayName: Elderwood Wall
 HellfireClawsSlash.DisplayName: Hellfire Claws Slash
 HellfireFault.DisplayName: Hellfire Fault
-HellfireFractureTestProjectile.DisplayName: Hellfire Fracture Test Projectile
+HellfireFractureTestProjectile.DisplayName: Hellfire Fracture
 HellfireFracture.DisplayName: Hellfire Fracture
 GalipotStream.DisplayName: Galipot Stream
 WoodbinderBase.DisplayName: Woodbinder Base
@@ -57,8 +57,8 @@ SlipperyGrenade.DisplayName: Slippery Grenade
 EbonwoodStaffBase.DisplayName: Ebonwood Staff Base
 ShadewoodStaffBase.DisplayName: Shadewood Staff Base
 Bee.DisplayName: Bee
-TulipPetalOld.DisplayName: Tulip Petal Old
-TulipTrailOld.DisplayName: Tulip Trail Old
+TulipPetalOld.DisplayName: Tulip Petal
+TulipTrailOld.DisplayName: Tulip Petal
 WeepingTulipExplosion.DisplayName: Weeping Tulip Explosion
 BloomingDoomBase.DisplayName: Blooming Doom Base
 EvilBranch.DisplayName: Evil Branch
@@ -73,18 +73,18 @@ ToxicStream.DisplayName: Toxic Stream
 CorruptionInsect.DisplayName: Corruption Insect
 CrimsonInsect.DisplayName: Crimson Insect
 TectonicCaneBase.DisplayName: Tectonic Cane Base
-TectonicCaneProjectile.DisplayName: Tectonic Cane Projectile
-TectonicCaneProjectile2.DisplayName: Tectonic Cane Projectile2
-LilPhoenixFlames.DisplayName: Lil Phoenix Flames
-LilPhoenixFlames2.DisplayName: Lil Phoenix Flames2
-LilPhoenixTrailFlame.DisplayName: Lil Phoenix Trail Flame
-LilPhoenixExplosion.DisplayName: Lil Phoenix Explosion
+TectonicCaneProjectile.DisplayName: Tectonic Cane
+TectonicCaneProjectile2.DisplayName: Tectonic Cane
+LilPhoenixFlames.DisplayName: Firebird Flames
+LilPhoenixFlames2.DisplayName: Firebird Flames
+LilPhoenixTrailFlame.DisplayName: Firebird Trail Flame
+LilPhoenixExplosion.DisplayName: Firebird Explosion
 WeaknessPotion.DisplayName: Weakness Potion
 BoneArm.DisplayName: Bone Arm
-BoneArm_Back.DisplayName: Bone Arm_ Back
+BoneArm_Back.DisplayName: Bone Arm
 BoneBody.DisplayName: Bone Body
-BoneBody_Back.DisplayName: Bone Body_ Back
+BoneBody_Back.DisplayName: Bone Body
 BoneLeg.DisplayName: Bone Leg
-BoneLeg_Back.DisplayName: Bone Leg_ Back
+BoneLeg_Back.DisplayName: Bone Leg
 BoneSkull.DisplayName: Bone Skull
-BoneSkull_Back.DisplayName: Bone Skull_ Back
+BoneSkull_Back.DisplayName: Bone Skull

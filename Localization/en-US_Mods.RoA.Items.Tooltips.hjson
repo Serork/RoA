@@ -36,3 +36,9 @@ LivingElderwoodCrownSetBonus:
 	Increases [kw/n:wreath] filling rate by 10%
 	Double tap {0} to take Fleder [kw/n:form]
 	'''
+FlinxFurUshankaSetBonus: "Provides immunity to chill and freezing effects"
+AshwalkerHoodSetBonus: 
+	'''
+	On Fire! debuff regenerates life instead of doing damage
+	Double tap {0} to take Firebird [kw/n:form]
+	'''
