@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.Localization;
@@ -103,7 +104,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
         if (Main.netMode == NetmodeID.Server || !IsTylerSet()) {
             return;
         }
-
+        
         GiveIdleMessageCooldown();
         SpawnPopupText(source, _variation, position, velocity);
         SpawnEmoteBubble();
