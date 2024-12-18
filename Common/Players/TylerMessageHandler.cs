@@ -135,9 +135,12 @@ sealed partial class TylerMessageHandler : ModPlayer {
     }
 
     public bool IsTylerSet() {
-        if (Player.armor[10].type == ModContent.ItemType<Content.Items.Equipables.Vanity.SoapSellersShades>() &&
-            Player.armor[11].type == ModContent.ItemType<Content.Items.Equipables.Vanity.SoapSellersJacket>() &&
-            Player.armor[12].type == ModContent.ItemType<Content.Items.Equipables.Vanity.SoapSellersJeans>()) {
+        int top = ModContent.ItemType<Content.Items.Equipables.Vanity.SoapSellersShades>();
+        int mid = ModContent.ItemType<Content.Items.Equipables.Vanity.SoapSellersJacket>();
+        int last = ModContent.ItemType<Content.Items.Equipables.Vanity.SoapSellersJeans>();
+        if ((Player.armor[10].type == top || Player.armor[0].type == top) &&
+            (Player.armor[11].type == mid || Player.armor[1].type == mid) &&
+            (Player.armor[12].type == last || Player.armor[2].type == last)) {
             return true;
         }
 
