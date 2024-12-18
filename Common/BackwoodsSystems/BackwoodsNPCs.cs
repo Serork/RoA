@@ -1,6 +1,7 @@
 ﻿using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Enemies.Backwoods;
+using RoA.Content.NPCs.Friendly;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
@@ -49,7 +50,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     }
                 }
             }
-
+            pool.Add(ModContent.NPCType<Hedgehog>(), 0.1f);
             float chance = surface ? 1f : 0.5f;
             if (!surface/* && NPC.downedBoss2 */&& !NPC.AnyNPCs(ModContent.NPCType<GrimDefender>())) {
                 pool.Add(ModContent.NPCType<GrimDefender>(), 0.1f);

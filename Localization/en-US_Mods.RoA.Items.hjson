@@ -876,3 +876,8 @@ SoapSellersShades: {
 	DisplayName: Soap Sellers Shades
 	Tooltip: ""
 }
+
+Hedgehog: {
+	DisplayName: Hedgehog
+	Tooltip: ""
+}
