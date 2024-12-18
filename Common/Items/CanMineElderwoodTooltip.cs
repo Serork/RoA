@@ -18,7 +18,6 @@ sealed class CanMineElderwoodTooltip : GlobalItem {
                 tt.Text = Language.GetText("Mods.RoA.Vanilla.CanMineElderwood").Value;
             }
         }
-
         if (item.axe is 15 && item.rare < ItemRarityID.LightRed) {
             TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Tooltip0" && x.Mod == "Terraria");
             string text = Language.GetText("Mods.RoA.Vanilla.CanChopElderwood").Value;
@@ -26,7 +25,7 @@ sealed class CanMineElderwoodTooltip : GlobalItem {
                 tt.Text = text;
             }
             else {
-                tooltips.Add(new(Mod, "CanChopElderwood", text));
+                tooltips.Add(new(Mod, "CanChopElderwoodTooltipLine", text));
             }
         }
     }
