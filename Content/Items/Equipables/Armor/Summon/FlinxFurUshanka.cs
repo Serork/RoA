@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent.Creative;
 using Terraria.Localization;
 
-namespace RoA.Content.Items.Equipables.Armor.Summoner;
+namespace RoA.Content.Items.Equipables.Armor.Summon;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class FlinxFurUshanka : ModItem {
@@ -27,7 +27,7 @@ sealed class FlinxFurUshanka : ModItem {
 	public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ItemID.FlinxFurCoat;
 
 	public override void UpdateArmorSet(Player player) {
-		player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.FlinxFurUshankaSetBonus");
+		player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.FlinxFurUshankaSetBonus").Value;
 		player.buffImmune[BuffID.Chilled] = true;
 		player.buffImmune[BuffID.Frozen] = true;
 	}
