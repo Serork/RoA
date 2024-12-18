@@ -797,3 +797,8 @@ BunnyPants: {
 	DisplayName: Bunny Pants
 	Tooltip: ""
 }
+
+FlinxFurUshanka: {
+	DisplayName: Flinx Fur Ushanka
+	Tooltip: ""
+}
