@@ -154,6 +154,21 @@ sealed class BaseFormHandler : ModPlayer {
         MakePlayerUnavailableToUseItems();
     }
 
+    public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
+        if (!IsInDruidicForm) {
+            return;
+        }
+        if (Player.stoned) {
+            return;
+        }
+        SoundStyle? hurtSound = _currentForm.BaseForm.HurtSound;
+        if (!hurtSound.HasValue) {
+            return;
+        }
+        modifiers.DisableSound();
+        SoundEngine.PlaySound(_currentForm.BaseForm.HurtSound, Player.Center);
+    }
+
     private void KeepFormActive() => _shouldBeActive = true;
 
     private void ResetActiveForm() => _shouldBeActive = false;

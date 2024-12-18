@@ -19,6 +19,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
+    public override SoundStyle? HurtSound => SoundID.NPCHit27;
+
     protected override Vector2 GetLightingPos(Player player) => player.Center;
     protected override Color LightingColor => new(79, 124, 211);
 

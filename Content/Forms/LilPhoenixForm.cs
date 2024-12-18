@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Forms;
-using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -19,6 +18,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class LilPhoenixForm : BaseForm {
+    public override SoundStyle? HurtSound => SoundID.NPCHit31;
+
     protected override Color LightingColor {
         get {
             float num56 = 1f;
@@ -27,6 +28,8 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     internal class LilPhoenixFormHandler : ModPlayer {
+        public const float MAXCHARGE = 3.5f;
+
         internal bool _phoenixJumped, _phoenixJumped2;
         internal bool _phoenixJustJumped, _phoenixJustJumpedForAnimation, _phoenixJustJumpedForAnimation2;
         internal int _phoenixJumpsCD;
@@ -130,11 +133,13 @@ sealed class LilPhoenixForm : BaseForm {
         bool flag4 = !flag || !IsInAir(player);
         StrikeNPC(player, !player.wet && Collision.SolidCollision(player.position - Vector2.One * 3, player.width + 6, player.height + 6));
         if (flag4) {
-            if (plr._dashed) {
-                plr.ClearProjectiles();
+            if (plr._charge3 < LilPhoenixFormHandler.MAXCHARGE) {
+                if (plr._dashed) {
+                    plr.ClearProjectiles();
+                }
+                plr._dashed = false;
             }
             plr._wasPreparing = false;
-            plr._dashed = false;
             if (player.eocDash > 0) {
                 player.eocDash -= 10;
             }
@@ -197,7 +202,7 @@ sealed class LilPhoenixForm : BaseForm {
             plr._tempPosition = Vector2.Lerp(plr._tempPosition, player.position, 0.25f);
             plr._isPreparing = true;
             plr._wasPreparing = false;
-            float max = 3.5f;
+            float max = LilPhoenixFormHandler.MAXCHARGE;
             if (plr._charge < max) {
                 plr._charge += 0.1f;
                 plr._charge3 = plr._charge;
@@ -239,7 +244,7 @@ sealed class LilPhoenixForm : BaseForm {
         LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
         void explosion(int i = -1) {
             if (plr._dashed2 && Main.netMode != NetmodeID.Server) {
-                float value = plr._charge3 / 3.5f;
+                float value = plr._charge3 / LilPhoenixFormHandler.MAXCHARGE;
                 if (i != -1) {
                     player.immune = true;
                     player.immuneTime = 20;
@@ -257,7 +262,7 @@ sealed class LilPhoenixForm : BaseForm {
                     if (player.whoAmI == Main.myPlayer)
                         player.ApplyDamageToNPC(Main.npc[i], (int)damage, knockBack, direction, crit, DruidClass.NatureDamage, true);
                 }
-                if (plr._charge3 >= 3.5f) {
+                if (plr._charge3 >= LilPhoenixFormHandler.MAXCHARGE) {
                     player.immune = true;
                     player.immuneTime = 30;
                     player.immuneNoBlink = true;
@@ -269,6 +274,10 @@ sealed class LilPhoenixForm : BaseForm {
                     if (Main.netMode != NetmodeID.SinglePlayer)
                         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                     plr._charge3 = 0f;
+                    if (plr._dashed) {
+                        plr.ClearProjectiles();
+                    }
+                    plr._dashed = false;
                 }
                 plr._dashed2 = false;
                 //sMain.npc[i].StrikeNPC((int)(CurrentDamage * plr.dashChargeValue), 2f * plr.dashChargeValue, direction, Main.rand.Next(2) == 0 ? true : false, false, false);

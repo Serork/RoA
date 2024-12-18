@@ -21,6 +21,8 @@ namespace RoA.Content.Forms;
 abstract class InsectForm : BaseForm {
     private float _maxRotation;
 
+    public override SoundStyle? HurtSound => SoundID.NPCHit31;
+
     protected virtual float InsectDustScale { get; } = 1f;
     protected virtual ushort InsectProjectileType { get; } = (ushort)ModContent.ProjectileType<CorruptionInsect>();
 

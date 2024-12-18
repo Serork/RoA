@@ -135,6 +135,7 @@ abstract class BaseForm : ModMount {
 
     protected virtual Vector2 GetLightingPos(Player player) => Vector2.Zero;
     protected virtual Color LightingColor { get; } = Color.White;
+    public virtual SoundStyle? HurtSound { get; } = null;
 
     public sealed override void SetMount(Player player, ref bool skipDust) {
         int buffType = MountBuff.Type;
