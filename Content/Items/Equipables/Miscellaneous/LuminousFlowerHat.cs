@@ -18,7 +18,8 @@ sealed class LuminousFlowerHat : ModItem {
         public float LightValue { get; private set; }
 
         public override void PostUpdateEquips() {
-            if (Player.armor[0].type == ModContent.ItemType<LuminousFlowerHat>()) {
+            int type = ModContent.ItemType<LuminousFlowerHat>();
+            if (Player.armor[0].type == type || Player.armor[10].type == type) {
                 float length = Player.velocity.Length();
                 LightValue = MathHelper.Lerp(LightValue, 
                     MathHelper.Clamp(Utils.GetLerpValue(0f, Math.Abs(Player.maxRunSpeed), length, true), 
