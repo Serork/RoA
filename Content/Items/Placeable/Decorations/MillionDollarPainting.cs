@@ -15,7 +15,7 @@ sealed class MillionDollarPainting : ModItem {
     }
 
     public override void SetDefaults() {
-        int width = 18; int height = 28;
+        int width = 28; int height = 18;
         Item.Size = new Vector2(width, height);
 
         Item.maxStack = 99;

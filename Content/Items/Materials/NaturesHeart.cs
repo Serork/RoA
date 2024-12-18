@@ -30,7 +30,7 @@ sealed class NaturesHeart : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 20; int height = 28;
+		int width = 24; int height = 32;
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = Item.CommonMaxStack;

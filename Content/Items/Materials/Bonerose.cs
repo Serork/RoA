@@ -14,7 +14,7 @@ sealed class Bonerose : ModItem {
 	}
 
 	public override void SetDefaults() {
-        Item.SetSize(30, 22);
+        Item.SetSize(20, 24);
 
 		Item.SetDefaultOthers(Item.sellPrice(copper: 20));
 

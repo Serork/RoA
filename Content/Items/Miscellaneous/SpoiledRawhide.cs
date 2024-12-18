@@ -14,7 +14,7 @@ sealed class SpoiledRawhide : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 18; int height = 20;
+		int width = 26; int height = 22;
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = Item.CommonMaxStack;

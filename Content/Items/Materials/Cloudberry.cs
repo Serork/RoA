@@ -28,7 +28,7 @@ sealed class Cloudberry : ModItem {
     }
 
 	public override void SetDefaults() {
-		int width = 30; int height = 22;
+		int width = 24; int height = 26;
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(silver: 10);

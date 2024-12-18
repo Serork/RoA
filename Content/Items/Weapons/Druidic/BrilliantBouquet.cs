@@ -31,7 +31,7 @@ sealed class BrilliantBouquet : NatureItem {
         Item.crit = 6;
 
         Item.width = 32;
-        Item.height = 34;
+        Item.height = 36;
 
         Item.useTime = Item.useAnimation = 25;
 

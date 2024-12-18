@@ -15,7 +15,7 @@ sealed class AnimalLeather : ModItem {
     }
 
 	public override void SetDefaults() {
-		int width = 18; int height = 20;
+		int width = 26; int height = 24;
 		Item.Size = new Vector2(width, height);
 
 		Item.useAnimation = Item.useTime = 18;

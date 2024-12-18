@@ -14,7 +14,7 @@ sealed class FlamingFabric : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 26; int height = 24;
+		int width = 24; int height = 26;
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(silver: 35);

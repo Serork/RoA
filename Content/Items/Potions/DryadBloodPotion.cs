@@ -21,7 +21,7 @@ sealed class DryadBloodPotion : ModItem {
     }
 
 	public override void SetDefaults() {
-        int width = 18; int height = 30;
+        int width = 20; int height = 30;
         Item.Size = new Vector2(width, height);
 
         Item.maxStack = 9999;

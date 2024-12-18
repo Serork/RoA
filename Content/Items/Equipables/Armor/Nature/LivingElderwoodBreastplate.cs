@@ -18,7 +18,7 @@ sealed class LivingElderwoodBreastplate : NatureItem {
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 26; int height = 20;
+        int width = 30; int height = 26;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
