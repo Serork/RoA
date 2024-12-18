@@ -696,16 +696,16 @@ Herbarium: {
 }
 
 MagicHerb1: {
-	DisplayName: Magic Herb1
+	DisplayName: Magic Herb
 	Tooltip: ""
 }
 
 MagicHerb2: {
-	DisplayName: Magic Herb2
+	DisplayName: Magic Herb
 	Tooltip: ""
 }
 
 MagicHerb3: {
-	DisplayName: Magic Herb3
+	DisplayName: Magic Herb
 	Tooltip: ""
 }

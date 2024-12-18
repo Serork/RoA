@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
@@ -27,7 +28,11 @@ sealed class Herbarium : NatureItem {
         Item.value = Item.sellPrice(gold: 2);
     }
 
-    public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<HerbariumPlayer>().healingHerb = true;
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        if (player.GetModPlayer<WreathHandler>().IsFull) {
+            player.GetModPlayer<HerbariumPlayer>().healingHerb = true;
+        }
+    }
 
     //public override void AddRecipes() {
     //    CreateRecipe()

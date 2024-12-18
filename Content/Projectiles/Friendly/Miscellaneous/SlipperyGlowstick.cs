@@ -40,7 +40,7 @@ sealed class SlipperyGlowstick : ModProjectile {
                 SoundEngine.PlaySound(SoundID.WormDig, Projectile.position);
             }
 			if (effectCounter % 4 == 0 && effectCounterMax < 20) {
-				int dustDig = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 20, 20, DustID.AmberBolt, 0f, 0f, 100, default, 1.1f);
+				int dustDig = Dust.NewDust(Projectile.position - new Vector2(3f, 6f), 20, 20, DustID.AmberBolt, 0f, 0f, 100, default, 1.1f);
 				Main.dust[dustDig].velocity *= 0.1f;
 			}
 		}

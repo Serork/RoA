@@ -34,13 +34,10 @@ class MagicHerb1 : ModItem {
 	}
 
 	public override bool OnPickup(Player player) {
-		if (player.GetModPlayer<WreathHandler>().IsFull) {
-			player.statLife += 40;
-			if (Main.myPlayer == player.whoAmI) {
-				player.HealEffect(40);
-			}
+		player.statLife += 40;
+		if (Main.myPlayer == player.whoAmI) {
+			player.HealEffect(40);
 		}
-
 		SoundEngine.PlaySound(SoundID.Item60, player.position);
 		return false;
 	}
