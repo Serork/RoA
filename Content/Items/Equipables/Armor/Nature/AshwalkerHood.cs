@@ -5,6 +5,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
 using RoA.Common.Players;
+using RoA.Content.Buffs;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -27,7 +28,7 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 26; int height = 20;
+        int width = 24; int height = 22;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Orange;
@@ -46,8 +47,8 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
     }
 
     public override void UpdateArmorSet(Player player) {
-		string tapDir = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
 		player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.AshwalkerHoodSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
+        player.GetModPlayer<AshwalkerSetBonusHandler>().AshWalkerSet = true;
         //player.GetModPlayer<DruidArmorSetPlayer>().ashwalkerArmor = true;
         //Lighting.AddLight(player.Center, new Vector3(0.2f, 0.1f, 0.1f));
 
@@ -70,4 +71,18 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
     //		.AddTile(TileID.Loom)
     //		.Register();
     //}
+}
+
+sealed class AshwalkerSetBonusHandler : ModPlayer {
+    internal bool AshWalkerSet;
+
+    public override void ResetEffects() { }
+
+    public override void PostUpdateBuffs() {
+        if (AshWalkerSet && Player.FindBuff(BuffID.OnFire, out int buffIndex)) {
+            Player.AddBuff(ModContent.BuffType<Unburning>(), Player.buffTime[buffIndex]);
+            Player.ClearBuff(BuffID.OnFire);
+        }
+        AshWalkerSet = false;
+    }
 }

@@ -22,7 +22,7 @@ sealed class Coffin : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 24; int height = width;
+		int width = 32; int height = width;
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(silver: 60);

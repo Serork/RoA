@@ -36,7 +36,7 @@ sealed class RavencallersCloak : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 24; int height = width;
+		int width = 24; int height = 34;
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(silver: 80);

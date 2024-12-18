@@ -13,7 +13,7 @@ sealed class Galipot : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 20; int height = 18;
+		int width = 18; int height = 28;
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(silver: 5);

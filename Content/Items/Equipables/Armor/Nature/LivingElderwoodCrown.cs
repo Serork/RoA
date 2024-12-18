@@ -28,7 +28,7 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 26; int height = 20;
+        int width = 26; int height = 18;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;

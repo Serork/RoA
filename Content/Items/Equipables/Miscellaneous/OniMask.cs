@@ -18,7 +18,7 @@ sealed class OniMask : ModItem {
     }
 
     public override void SetDefaults() {
-        int width = 32; int height = 26;
+        int width = 26; int height = 32;
         Item.Size = new Vector2(width, height);
 
         Item.defense = 1;

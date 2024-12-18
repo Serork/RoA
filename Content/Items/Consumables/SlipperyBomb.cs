@@ -15,7 +15,7 @@ sealed class SlipperyBomb : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 20; int height = width;
+		int width = 20; int height = 30;
 		Item.Size = new Vector2(width, height);
 
 		Item.damage = 0;

@@ -15,7 +15,7 @@ sealed class SlipperyGrenade : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 20; int height = width;
+		int width = 16; int height = 20;
 		Item.Size = new Vector2(width, height);
 
 		Item.DamageType = DamageClass.Ranged;

@@ -63,8 +63,8 @@ sealed class SapSlime : ModNPC {
     private static void DrawNPC_SlimeItem(NPC rCurrentNPC, int typeCache, Microsoft.Xna.Framework.Color npcColor, float addedRotation) {
         int num = (int)rCurrentNPC.ai[1];
         float num2 = 1f;
-        float num3 = 34 * rCurrentNPC.scale * 0.55f;
-        float num4 = 24 * rCurrentNPC.scale * 0.55f;
+        float num3 = 34 * rCurrentNPC.scale * 0.6f;
+        float num4 = 24 * rCurrentNPC.scale * 0.6f;
         Main.GetItemDrawFrame(num, out var itemTexture, out var rectangle);
         float num5 = rectangle.Width;
         float num6 = rectangle.Height;
@@ -90,6 +90,7 @@ sealed class SapSlime : ModNPC {
         float num9 = 1f;
         int num10 = rCurrentNPC.frame.Y / (TextureAssets.Npc[typeCache].Height() / Main.npcFrameCount[typeCache]);
         num9 -= (float)num10;
+        num9 += 2f;
         num8 += (float)(num10 * 2);
         float num11 = 0.2f;
         num11 -= 0.3f * (float)num10;
@@ -113,6 +114,20 @@ sealed class SapSlime : ModNPC {
         if (NPC.ai[1] > 0f)
             DrawNPC_SlimeItem(NPC, NPC.type, drawColor, 0f);
         return true;
+    }
+
+    public override void OnKill() {
+        if (NPC.ai[1] > 0f) {
+            int type = (int)NPC.ai[1];
+            int stack = 1;
+            int bomb = ModContent.ItemType<SlipperyBomb>();
+            int stick = ModContent.ItemType<SlipperyGlowstick>();
+            int grenade = ModContent.ItemType<SlipperyGrenade>();
+            if (type == bomb || type == stick || type == grenade) {
+                stack = Main.rand.Next(2, 7);
+            }
+            Item.NewItem(NPC.GetSource_Loot(), NPC.getRect(), (int)NPC.ai[1], stack);
+        }
     }
 
     public override void AI() {

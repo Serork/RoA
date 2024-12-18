@@ -143,7 +143,7 @@ BandOfNature: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		Increases defense by 3 while [kw/n:wreath] is [kw/n:charged]
+		Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
@@ -152,7 +152,7 @@ BandOfPurity: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		Regenerates life while [kw/n:wreath] is [kw/n:charged]
+		Regenerates life when [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
@@ -161,7 +161,7 @@ GiantTreeSapling: {
 	Tooltip:
 		'''
 		10% increased [kw/n:wreath] [kw/n:filling] rate
-		Increases maximum life by 20 while [kw/n:wreath] is [kw/n:charged]
+		Increases maximum life by 20 when [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
@@ -319,7 +319,7 @@ SoulOfTheWoods: {
 	Tooltip:
 		'''
 		Allows to charge [kw/n:wreath] twice
-		Creates pulsing energy shield while [kw/n:wreath] is [kw/n:charged]
+		Creates pulsing energy shield when [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
@@ -364,22 +364,38 @@ Woodbinder: {
 
 SlipperyBomb: {
 	DisplayName: Slippery Bomb
-	Tooltip: ""
+	Tooltip:
+		'''
+		A small explosion that will destroy most tiles
+		Slips through solid tiles
+		'''
 }
 
 SlipperyDynamite: {
 	DisplayName: Slippery Dynamite
-	Tooltip: ""
+	Tooltip:
+		'''
+		A large explosion that will destroy most tiles
+		Slips through solid tiles
+		'''
 }
 
 SlipperyGlowstick: {
 	DisplayName: Slippery Glowstick
-	Tooltip: ""
+	Tooltip:
+		'''
+		Works when wet
+		Slips through solid tiles
+		'''
 }
 
 SlipperyGrenade: {
 	DisplayName: Slippery Grenade
-	Tooltip: ""
+	Tooltip:
+		'''
+		A small explosion that will not destroy tiles
+		Slips through solid tiles
+		'''
 }
 
 LivingBorealWoodChestplate: {
@@ -463,47 +479,55 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Living Elderwood Breastplate
-	Tooltip: ""
+	Tooltip: Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
 }
 
 LivingElderwoodCrown: {
 	DisplayName: Living Elderwood Crown
-	Tooltip: ""
+	Tooltip: 6% increased nature [kw/n:potential] damage
 }
 
 LivingElderwoodGreaves: {
 	DisplayName: Living Elderwood Greaves
-	Tooltip: ""
+	Tooltip: 4% increased nature [kw/n:potential] damage and critical strike chance
 }
 
 DreadheartCorruptionChestplate: {
 	DisplayName: Dreadheart Corruption Chestplate
-	Tooltip: ""
+	Tooltip:
+		'''
+		8% increased nature [kw/n:potential] damage
+		Increases nature knockback
+		'''
 }
 
 DreadheartCorruptionHelmet: {
 	DisplayName: Dreadheart Corruption Helmet
-	Tooltip: ""
+	Tooltip: 4% increased nature critical strike chance
 }
 
 DreadheartCorruptionLeggings: {
 	DisplayName: Dreadheart Corruption Leggings
-	Tooltip: ""
+	Tooltip: 4% increased nature critical strike chance
 }
 
 DreadheartCrimsonChestplate: {
 	DisplayName: Dreadheart Crimson Chestplate
-	Tooltip: ""
+	Tooltip:
+		'''
+		8% increased nature [kw/n:potential] damage
+		Increases nature knockback
+		'''
 }
 
 DreadheartCrimsonHelmet: {
 	DisplayName: Dreadheart Crimson Helmet
-	Tooltip: ""
+	Tooltip: 4% increased nature critical strike chance
 }
 
 DreadheartCrimsonLeggings: {
 	DisplayName: Dreadheart Crimson Leggings
-	Tooltip: ""
+	Tooltip: 4% increased nature critical strike chance
 }
 
 TectonicCane: {
@@ -513,17 +537,17 @@ TectonicCane: {
 
 AshwalkerHood: {
 	DisplayName: Ashwalker Hood
-	Tooltip: ""
+	Tooltip: 6% increased nature [kw/n:potential] damage
 }
 
 AshwalkerLeggings: {
 	DisplayName: Ashwalker Leggings
-	Tooltip: ""
+	Tooltip: 6% increased nature [kw/n:potential] damage
 }
 
 AshwalkerRobe: {
 	DisplayName: Ashwalker Robe
-	Tooltip: ""
+	Tooltip: 10% increased nature base damage
 }
 
 MercuriumOre: {

@@ -17,7 +17,7 @@ sealed class FireflyPin : NatureItem {
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 24; int height = 24;
+        int width = 24; int height = width;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;

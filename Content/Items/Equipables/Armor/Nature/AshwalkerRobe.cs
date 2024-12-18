@@ -23,7 +23,7 @@ sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.ISetGlowMask {
     }
 
     protected override void SafeSetDefaults() {
-        int width = 26; int height = 20;
+        int width = 30; int height = 24;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Orange;
@@ -32,7 +32,7 @@ sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.ISetGlowMask {
 		Item.defense = 6;
 	}
 
-	public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidBaseDamageMultiplier += 0.1f;
+	public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.NatureDamage) += 0.1f;
 
     public void SetDrawSettings(Player player, ref Texture2D texture, ref Color color) {
         color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5;

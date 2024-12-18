@@ -18,7 +18,7 @@ public class SlipperyGlowstick : ModItem {
     }
 
 	public override void SetDefaults() {
-		int width = 12; int height = width;
+		int width = 16; int height = width;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.White;

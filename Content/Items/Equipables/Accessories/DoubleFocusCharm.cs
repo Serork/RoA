@@ -12,7 +12,7 @@ sealed class DoubleFocusCharm : NatureItem {
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 28; int height = 20;
+        int width = 26; int height = 36;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
