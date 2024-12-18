@@ -689,3 +689,23 @@ Coffin: {
 	DisplayName: Coffin
 	Tooltip: Shoot bones in random directions on taking damage
 }
+
+Herbarium: {
+	DisplayName: Herbarium
+	Tooltip: Enemies can drop healing herbs when [kw/n:wreath] is charged
+}
+
+MagicHerb1: {
+	DisplayName: Magic Herb1
+	Tooltip: ""
+}
+
+MagicHerb2: {
+	DisplayName: Magic Herb2
+	Tooltip: ""
+}
+
+MagicHerb3: {
+	DisplayName: Magic Herb3
+	Tooltip: ""
+}
