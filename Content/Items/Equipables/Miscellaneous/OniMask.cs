@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Buffs;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -36,7 +38,7 @@ sealed class OniMask : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Decorations.OniMask>();
     }
 
-    public override void UpdateEquip(Player player) => player.GetModPlayer<CalmPlayer>().oniMask = true;
+    public override void UpdateEquip(Player player) => player.AddBuff(ModContent.BuffType<Buffs.OniMask>(), 2);
 }
 
 sealed class CalmPlayer : ModPlayer {

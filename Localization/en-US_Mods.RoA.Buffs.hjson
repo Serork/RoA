@@ -132,10 +132,10 @@ ToxicFumesNoTimeDisplay: {
 
 OniMask: {
 	DisplayName: Oni Mask
-	Description: Mods.RoA.Buffs.OniMask.Description
+	Description: Decreased enemy spawn rate
 }
 
 Weak: {
 	DisplayName: Weak
-	Description: Mods.RoA.Buffs.Weak.Description
+	Description: Physical abilities are decreased
 }

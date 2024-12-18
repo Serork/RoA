@@ -240,12 +240,20 @@ ResiliencePotion: {
 
 ForestWreath: {
 	DisplayName: Forest Wreath I
-	Tooltip: ""
+	Tooltip:
+		'''
+		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
+		Increased maximum life by 40 when [kw/n:wreath] is [kw/n:charged]
+		'''
 }
 
 TwigWreath: {
 	DisplayName: Twig Wreath
-	Tooltip: ""
+	Tooltip:
+		'''
+		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		'''
 }
 
 FenethsBlazingWreath: {
@@ -255,27 +263,50 @@ FenethsBlazingWreath: {
 
 ForestWreath2: {
 	DisplayName: Forest Wreath II
-	Tooltip: ""
+	Tooltip:
+		'''
+		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		Increased maximum life by 40 when [kw/n:wreath] is [kw/n:charged]
+		'''
 }
 
 JungleWreath: {
 	DisplayName: Jungle Wreath I
-	Tooltip: ""
+	Tooltip:
+		'''
+		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
+		Attackers are poisoned when [kw/n:wreath] is [kw/n:charged]
+		'''
 }
 
 JungleWreath2: {
 	DisplayName: Jungle Wreath II
-	Tooltip: ""
+	Tooltip:
+		'''
+		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		Attackers are poisoned when [kw/n:wreath] is [kw/n:charged]
+		'''
 }
 
 SnowWreath: {
 	DisplayName: Snow Wreath I
-	Tooltip: ""
+	Tooltip:
+		'''
+		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
+		Increased nature critical strike chance by 2
+		'''
 }
 
 SnowWreath2: {
 	DisplayName: Snow Wreath II
-	Tooltip: ""
+	Tooltip:
+		'''
+		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		Increased nature critical strike chance by 2
+		'''
 }
 
 Cloudberry: {

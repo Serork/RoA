@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
+
 using Terraria;
 using Terraria.ID;
 
@@ -14,4 +16,10 @@ sealed class TwigWreath : BaseWreathItem {
 		Item.value = Item.buyPrice(gold: 3);
 		Item.rare = ItemRarityID.Blue;
 	}
+
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        if (player.GetModPlayer<WreathHandler>().IsFull) {
+            player.endurance += 0.1f;
+        }
+    }
 }

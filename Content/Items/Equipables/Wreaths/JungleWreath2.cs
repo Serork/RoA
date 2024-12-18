@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
+
 using Terraria;
 using Terraria.ID;
 
@@ -7,7 +9,7 @@ namespace RoA.Content.Items.Equipables.Wreaths;
 
 sealed class JungleWreath2 : BaseWreathItem {
 	protected override void SafeSetDefaults() {
-		int width = 20; int height = width;
+		int width = 30; int height = 28;
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = 1;
@@ -15,12 +17,22 @@ sealed class JungleWreath2 : BaseWreathItem {
 		Item.rare = ItemRarityID.Green;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ModContent.ItemType<JungleWreath>())
-	//		.AddIngredient(ItemID.JungleRose)
-	//		.AddIngredient(ModContent.ItemType<NaturesHeart>())
-	//		.AddTile(ModContent.TileType<OvergrownAltar>())
-	//		.Register();
-	//}
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        if (!handler.IsEmpty2) {
+            player.endurance += 0.1f;
+        }
+        if (handler.IsFull) {
+            player.GetModPlayer<JungleWreathPlayer>().poisonedSkin = true;
+        }
+    }
+
+    //public override void AddRecipes() {
+    //	CreateRecipe()
+    //		.AddIngredient(ModContent.ItemType<JungleWreath>())
+    //		.AddIngredient(ItemID.JungleRose)
+    //		.AddIngredient(ModContent.ItemType<NaturesHeart>())
+    //		.AddTile(ModContent.TileType<OvergrownAltar>())
+    //		.Register();
+    //}
 }

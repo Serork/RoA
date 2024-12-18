@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
+
 using Terraria;
 using Terraria.ID;
 
@@ -7,7 +9,7 @@ namespace RoA.Content.Items.Equipables.Wreaths;
 
 sealed class SnowWreath : BaseWreathItem {
 	protected override void SafeSetDefaults() {
-		int width = 20; int height = width;
+		int width = 30; int height = 26;
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = 1;
@@ -15,10 +17,16 @@ sealed class SnowWreath : BaseWreathItem {
 		Item.rare = ItemRarityID.Blue;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ModContent.ItemType<TwigWreath>())
-	//		.AddIngredient(ItemID.Shiverthorn, 5)
-	//		.Register();
-	//}
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        if (player.GetModPlayer<WreathHandler>().IsFull) {
+            player.GetCritChance(DruidClass.NatureDamage) += 2;
+        }
+    }
+
+    //public override void AddRecipes() {
+    //	CreateRecipe()
+    //		.AddIngredient(ModContent.ItemType<TwigWreath>())
+    //		.AddIngredient(ItemID.Shiverthorn, 5)
+    //		.Register();
+    //}
 }

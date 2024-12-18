@@ -7,7 +7,7 @@ namespace RoA.Content.Items.Equipables.Wreaths;
 
 sealed class FenethsBlazingWreath : BaseWreathItem {
 	protected override void SafeSetDefaults() {
-		int width = 20; int height = width;
+		int width = 30; int height = 30;
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = 1;
