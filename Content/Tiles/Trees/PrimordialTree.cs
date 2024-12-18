@@ -56,7 +56,7 @@ sealed class PrimordialTreeGlow : GlobalTile {
 }
 
 sealed class PrimordialTree : ModTree {
-    public const int MINAXEREQUIRED = 60;
+    public const int MINAXEREQUIRED = 75;
 
     public static bool IsPrimordialTree(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);

@@ -104,7 +104,7 @@ sealed class MinAxeSystem : ILoadable {
                         num2 = 0;
                     }
                     else {
-                        num2 = (int)((double)num2 * 0.5);
+                        num2 = (int)((double)num2 * 0.75);
                     }
                 }
 

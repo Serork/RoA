@@ -7,6 +7,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items;
 
 abstract class NatureItem : ModItem {
+    protected override bool CloneNewInstances => true;
+
     public sealed override void SetDefaults() {
         SafeSetDefaults();
 
