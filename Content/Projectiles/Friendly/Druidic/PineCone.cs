@@ -17,7 +17,7 @@ namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class PineCone : NatureProjectile {
     protected override void SafeSetDefaults() {
-        Projectile.Size = 20 * Vector2.One;
+        Projectile.Size = new Vector2(18, 26);
 
         Projectile.ignoreWater = true;
         Projectile.friendly = true;
