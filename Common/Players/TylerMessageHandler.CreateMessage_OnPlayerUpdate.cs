@@ -26,6 +26,12 @@ sealed partial class TylerMessageHandler : ModPlayer {
         }
     }
 
+    public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo) {
+        if (Player.statLife > 0 && Player.statLife < Player.statLifeMax2 * 0.25f && Main.rand.NextBool(10)) {
+            Create(MessageSource.AlmostDeath, Player.Top, _messageVelocity);
+        }
+    }
+
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource) {
         if (Main.rand.NextBool(5)) {
             Create(MessageSource.Death, Player.Top, _messageVelocity);
@@ -33,14 +39,14 @@ sealed partial class TylerMessageHandler : ModPlayer {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (target.type == NPCID.Bunny && target.life <= 0 && Main.rand.NextBool(10)) {
+        if (target.friendly && target.life <= 0 && Main.rand.NextBool(10)) {
             Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
         }
     }
 
     public override void OnHitAnything(float x, float y, Entity victim) {
         if (victim is NPC npc) {
-            if (npc.type == NPCID.Bunny && npc.life <= 0 && Main.rand.NextBool(20)) {
+            if (npc.friendly && npc.life <= 0 && Main.rand.NextBool(20)) {
                 Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
             }
         }
