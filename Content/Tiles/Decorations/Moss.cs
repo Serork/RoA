@@ -27,7 +27,7 @@ sealed class Moss : ModTile {
         TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
-		DustType = ModContent.DustType<WoodTrash>();
+		DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
 		// name.SetDefault("MOX");
 		AddMapEntry(new Color(72, 139, 77), name);
 	}

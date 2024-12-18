@@ -826,3 +826,38 @@ FlinxFurUshanka: {
 	DisplayName: Flinx Fur Ushanka
 	Tooltip: ""
 }
+
+CopperAcolyteHat: {
+	DisplayName: Copper Acolyte Hat
+	Tooltip: 6% reduced mana costs
+}
+
+CopperAcolyteJacket: {
+	DisplayName: Copper Acolyte Jacket
+	Tooltip: Increases maximum mana by 40
+}
+
+CopperAcolyteLeggings: {
+	DisplayName: Copper Acolyte Leggings
+	Tooltip: 8% increased magic critical strike chance
+}
+
+TinAcolyteHat: {
+	DisplayName: Tin Acolyte Hat
+	Tooltip: 6% reduced mana costs
+}
+
+TinAcolyteJacket: {
+	DisplayName: Tin Acolyte Jacket
+	Tooltip: Increases maximum mana by 40
+}
+
+TinAcolyteLeggings: {
+	DisplayName: Tin Acolyte Leggings
+	Tooltip: 8% increased magic critical strike chance
+}
+
+Moss: {
+	DisplayName: Moss
+	Tooltip: "'CKnight'"
+}

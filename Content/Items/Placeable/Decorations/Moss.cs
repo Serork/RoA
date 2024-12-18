@@ -1,30 +1,30 @@
 using Microsoft.Xna.Framework;
 
 using Terraria;
-using Terraria.GameContent.Creative;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Decorations;
 
-public class TheLegend : ModItem {
+sealed class Moss : ModItem {
     public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("The Legend");
-        //Tooltip.SetDefault("'CKnight'");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1000000;
+        // DisplayName.SetDefault("MOX");
+        // Tooltip.SetDefault("'CKnight'");
+
+        Item.ResearchUnlockCount = 5;
     }
 
     public override void SetDefaults() {
         int width = 32; int height = width;
         Item.Size = new Vector2(width, height);
 
-        Item.maxStack = Terraria.Item.CommonMaxStack;
+        Item.maxStack = Item.CommonMaxStack;
         Item.useTurn = true;
         Item.autoReuse = true;
         Item.useAnimation = 15;
         Item.useTime = 10;
         Item.useStyle = 1;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<Tiles.Decorations.TheLegend>();
+
+        Item.createTile = ModContent.TileType<Tiles.Decorations.Moss>();
     }
 }

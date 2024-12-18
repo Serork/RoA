@@ -32,10 +32,10 @@ sealed class TulipPetalOld : NatureProjectile {
     }
 
     protected override void SafeSetDefaults() {
+        Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
+
         int width = 6; int height = width;
         Projectile.Size = new Vector2(width, height);
-
-        Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 
         DrawOffsetX = -4;
         DrawOriginOffsetY = -4;
@@ -45,6 +45,8 @@ sealed class TulipPetalOld : NatureProjectile {
 
         Projectile.timeLeft = 120;
     }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => Collision.CheckAABBvAABBCollision(Projectile.position - Vector2.One * 2f, Projectile.Size + Vector2.One * 4f, targetHitbox.Location.ToVector2(), targetHitbox.Size());
 
     public override void AI() {
         if (!_initialize) {

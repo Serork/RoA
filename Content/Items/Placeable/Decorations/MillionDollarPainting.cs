@@ -18,18 +18,13 @@ sealed class MillionDollarPainting : ModItem {
         int width = 28; int height = 18;
         Item.Size = new Vector2(width, height);
 
-        Item.maxStack = 99;
+        Item.maxStack = Terraria.Item.CommonMaxStack;
         Item.useTurn = true;
         Item.autoReuse = true;
-
         Item.useAnimation = 15;
         Item.useTime = 10;
-        Item.useStyle = ItemUseStyleID.Swing;
-
+        Item.useStyle = 1;
         Item.consumable = true;
-        Item.rare = ItemRarityID.White;
-        //Item.value = Item.buyPrice(platinum: 999);
-        //Item.value = Item.sellPrice(platinum: 666);
         Item.createTile = ModContent.TileType<Tiles.Decorations.MillionDollarPainting>();
     }
 }

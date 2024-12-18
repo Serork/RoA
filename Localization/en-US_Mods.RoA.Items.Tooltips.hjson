@@ -42,3 +42,4 @@ AshwalkerHoodSetBonus:
 	On Fire! debuff regenerates life instead of doing damage
 	Double tap {0} to take Firebird [kw/n:form]
 	'''
+AcolyteSetBonus: 40% increased magic damage when below 40 mana
