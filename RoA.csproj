@@ -17,6 +17,7 @@
 	  <None Remove="Localization\en-US_Mods.RoA.Prefixes.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Projectiles.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Tiles.hjson" />
+	  <None Remove="Localization\en-US_Mods.RoA.TylerMessages.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Vanilla.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.World.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.WorldGen.hjson" />
@@ -101,9 +102,6 @@
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Branches.png" />
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Tops.png" />
 	  <None Remove="Resources\Textures\Tiles\Walls\LivingBackwoodsLeavesWall.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Common\GenActions\" />
 	</ItemGroup>
 
 	<!-- References -->

@@ -861,3 +861,18 @@ Moss: {
 	DisplayName: Moss
 	Tooltip: "'CKnight'"
 }
+
+SoapSellersJacket: {
+	DisplayName: Soap Sellers Jacket
+	Tooltip: ""
+}
+
+SoapSellersJeans: {
+	DisplayName: Soap Sellers Jeans
+	Tooltip: ""
+}
+
+SoapSellersShades: {
+	DisplayName: Soap Sellers Shades
+	Tooltip: ""
+}
