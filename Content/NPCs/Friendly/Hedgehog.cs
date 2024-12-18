@@ -92,5 +92,12 @@ sealed class Hedgehog : ModNPC {
             alert = false;
             NPC.netUpdate = true;
         }
+
+        if (NPC.ai[3] != 0f) {
+            if (NPC.aiStyle == 0) {
+                NPC.rotation = NPC.ai[3];
+            }
+            NPC.ai[3] = 0f;
+        }
     }
 }
