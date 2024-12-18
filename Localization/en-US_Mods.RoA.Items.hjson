@@ -709,3 +709,91 @@ MagicHerb3: {
 	DisplayName: Magic Herb
 	Tooltip: ""
 }
+
+BizarreCowboyHat: {
+	DisplayName: Bizarre Cowboy Hat
+	Tooltip:
+		'''
+		'Eat shit, asshole! Fall of your horse!'
+		'Nyo ho ho ho'
+		'''
+}
+
+DinoHat: {
+	DisplayName: Dino Hat
+	Tooltip:
+		'''
+		'Scary monsters, super creeps
+		Keep me running, running scared'
+		'''
+}
+
+JockeyHat: {
+	DisplayName: Jockey Hat
+	Tooltip: "'-100% running speed'"
+}
+
+MentorsHat: {
+	DisplayName: Mentor's Hat
+	Tooltip: ""
+}
+
+PresidentJacket: {
+	DisplayName: President's Jacket
+	Tooltip: ""
+}
+
+PresidentPants: {
+	DisplayName: President's Pants
+	Tooltip: ""
+}
+
+PresidentWig: {
+	DisplayName: President's Wig
+	Tooltip: ""
+}
+
+SailorHat: {
+	DisplayName: Sailor Hat
+	Tooltip: "'Who the hell am I?'"
+}
+
+StoneMask: {
+	DisplayName: Stone Mask
+	Tooltip: "'Cursed'"
+}
+
+StrangerCoat: {
+	DisplayName: Stranger's Coat
+	Tooltip: ""
+}
+
+StrangerPants: {
+	DisplayName: Stranger's Pants
+	Tooltip: ""
+}
+
+DevilHunterCloak: {
+	DisplayName: Devil Hunter's Cloak
+	Tooltip: ""
+}
+
+DevilHunterPants: {
+	DisplayName: Devil Hunter's Pants
+	Tooltip: ""
+}
+
+BunnyHat: {
+	DisplayName: Bunny Hat
+	Tooltip: ""
+}
+
+BunnyJacket: {
+	DisplayName: Bunny Jacket
+	Tooltip: ""
+}
+
+BunnyPants: {
+	DisplayName: Bunny Pants
+	Tooltip: ""
+}
