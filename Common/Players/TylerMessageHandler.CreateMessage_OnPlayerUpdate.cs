@@ -7,6 +7,12 @@ namespace RoA.Common.Players;
 
 sealed partial class TylerMessageHandler : ModPlayer {
     public override void UpdateEquips() {
+        if (!IsTylerSet()) {
+            return;
+        }
+
+        UpdateMessageCooldowns();
+
         if (!Main.rand.NextBool(100)) {
             return;
         }
@@ -15,13 +21,13 @@ sealed partial class TylerMessageHandler : ModPlayer {
     }
 
     public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
-        if (Player.statLife <= hurtInfo.Damage && Main.rand.NextBool(4)) {
+        if (Player.statLife > 0 && Player.statLife < Player.statLifeMax2 * 0.25f && Main.rand.NextBool(10)) {
             Create(MessageSource.AlmostDeath, Player.Top, _messageVelocity);
         }
     }
 
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource) {
-        if (Main.rand.NextBool(4)) {
+        if (Main.rand.NextBool(5)) {
             Create(MessageSource.Death, Player.Top, _messageVelocity);
         }
     }
@@ -34,12 +40,12 @@ sealed partial class TylerMessageHandler : ModPlayer {
 
     public override void OnHitAnything(float x, float y, Entity victim) {
         if (victim is NPC npc) {
-            if (npc.type == NPCID.Bunny && npc.life <= 0 && Main.rand.NextBool(10)) {
+            if (npc.type == NPCID.Bunny && npc.life <= 0 && Main.rand.NextBool(20)) {
                 Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
             }
         }
         if (victim is Player player) {
-            if (player.statLife <= 0 && Main.rand.NextBool(4)) {
+            if (player.statLife <= 0 && Main.rand.NextBool(10)) {
                 Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
             }
         }
