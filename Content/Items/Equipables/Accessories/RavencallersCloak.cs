@@ -144,7 +144,7 @@ sealed class RavencallersCloak : ModItem {
                     int face = player.face;
                     player.head = 0;
                     player.face = 0;
-                    Main.PlayerRenderer.DrawPlayerHead(Main.Camera, player, new Vector2(84 * 0.5f, 84f * 0.5f));
+                    Main.PlayerRenderer.DrawPlayerHead(Main.Camera, player, new Vector2(84f * 0.5f, 84f * 0.5f));
                     player.head = head;
                     player.face = face;
                 }

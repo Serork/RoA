@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Common.Utilities.Extensions;
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
@@ -13,6 +15,7 @@ using System.Reflection;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -226,6 +229,29 @@ sealed class BaseFormHandler : ModPlayer {
         On_Player.QuickMount += On_Player_QuickMount;
         On_Player.QuickMount_GetItemToUse += On_Player_QuickMount_GetItemToUse;
         On_Player.MakeFloorDust += On_Player_MakeFloorDust;
+        On_PlayerHeadDrawRenderTargetContent.DrawTheContent += On_PlayerHeadDrawRenderTargetContent_DrawTheContent;
+    }
+
+    private void On_PlayerHeadDrawRenderTargetContent_DrawTheContent(On_PlayerHeadDrawRenderTargetContent.orig_DrawTheContent orig, PlayerHeadDrawRenderTargetContent self, SpriteBatch spriteBatch) {
+        Player player = typeof(PlayerHeadDrawRenderTargetContent).GetFieldValue<Player>("_player", self);
+        if (player != null && !player.ShouldNotDraw) {
+            BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
+            if (handler.IsInDruidicForm) {
+                Texture2D texture = ModContent.Request<Texture2D>(handler.CurrentForm.BaseForm.Texture + "_Head").Value;
+                Vector2 position = new(84f * 0.5f, 84f * 0.5f);
+                position.X -= 6f;
+                position.Y -= 4f;
+                position.Y -= player.HeightMapOffset;
+                Vector2 origin = texture.Size() / 2f;
+                spriteBatch.Draw(texture, position + origin - Vector2.UnitY * player.height / 2f, null, Color.White, 0f, origin, 1f, (SpriteEffects)(player.direction != 1).ToInt(), 0f);
+            }
+            else {
+                orig(self, spriteBatch);
+            }
+        }
+        else {
+            orig(self, spriteBatch);
+        }
     }
 
     private void On_Player_MakeFloorDust(On_Player.orig_MakeFloorDust orig, Player self, bool Falling, int type, int paintColor) {
