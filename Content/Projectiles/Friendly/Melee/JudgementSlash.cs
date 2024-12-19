@@ -13,7 +13,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Projectiles.Friendly;
+namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class JudgementSlash : ModProjectile {
     private Vector2 _startCenter;
@@ -85,13 +85,13 @@ sealed class JudgementSlash : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-       
+
         Vector2 hitCenter = _startCenter + Vector2.Normalize(Projectile.velocity) * 120f;
         lightColor = Lighting.GetColor((int)(hitCenter.X / 16f), (int)(hitCenter.Y / 16f));
         float value0 = (120 - Projectile.timeLeft) / 120f;
         float value1 = (float)Math.Pow(value0, 0.5f);
         float width = (float)(1f - Math.Cos(value1 * 2f * Math.PI)) * 9f;
-        Vector2 normalizedVelocity = Utils.SafeNormalize(Projectile.velocity, Vector2.Zero);
+        Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize(Vector2.Zero);
         Vector2 normalize = normalizedVelocity.RotatedBy(Math.PI / 2f) * width;
         Color color = _baseColor.MultiplyRGB(lightColor);
         color *= width / 9.5f;
@@ -114,7 +114,7 @@ sealed class JudgementSlash : ModProjectile {
         Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "JudgementSlash").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-        Main.spriteBatch.End();  
+        Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         return false;
     }

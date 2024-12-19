@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using RoA.Core;
 
-namespace RoA.Content.Projectiles.Friendly;
+namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class JudgementCut : ModProjectile {
     public override string Texture => ResourceManager.EmptyTexture;

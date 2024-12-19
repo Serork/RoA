@@ -886,3 +886,8 @@ WandCore: {
 	DisplayName: Wand Core
 	Tooltip: "'Filled with energy'"
 }
+
+OvergrownSpear: {
+	DisplayName: Overgrown Spear
+	Tooltip: ""
+}
