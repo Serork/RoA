@@ -34,6 +34,13 @@ sealed class BackwoodsPot : ModTile {
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.StyleWrapLimit = 3;
         TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.AnchorInvalidTiles = [
+            TileID.MagicalIceBlock,
+            TileID.Boulder,
+            TileID.BouncyBoulder,
+            TileID.LifeCrystalBoulder,
+            TileID.RollingCactus
+        ];
         TileObjectData.addTile(Type);
 
         HitSound = SoundID.Shatter;

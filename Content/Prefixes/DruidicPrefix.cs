@@ -51,7 +51,7 @@ sealed class DruidicPrefix(string name,
     }
 
 	public override void Unload() {
-		DruidicPrefixes.Clear();
+		DruidicPrefixes?.Clear();
         DruidicPrefixes = null;
 		DruidicPrefixesNames.Clear();
 		DruidicPrefixesNames = null;
