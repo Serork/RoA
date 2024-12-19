@@ -15,7 +15,7 @@ sealed class OvergrownBolt : ModProjectile {
 	private sbyte _dustAmount = 2;
 
 	public override void SetDefaults() {
-		int width = 20; int height = width;
+		int width = 16; int height = width;
 		Projectile.Size = new Vector2(width, height);
 
 		Projectile.DamageType = DamageClass.Melee;
@@ -30,7 +30,7 @@ sealed class OvergrownBolt : ModProjectile {
 		Projectile.timeLeft = 150;
 
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 15;
+        Projectile.localNPCHitCooldown = 30;
     }
 
 	public override void AI() {

@@ -35,6 +35,11 @@ sealed class OvergrownSpear : ModProjectile {
         Projectile.tileCollide = false;
     }
 
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        bool flag = Collision.CheckAABBvAABBCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.Center - Projectile.velocity.SafeNormalize(Vector2.Zero) * 10f - Vector2.One * 4f, Vector2.One * 8f);
+        return flag;
+    }
+
     public override void PostDraw(Color lightColor) {
         Projectile proj = Projectile;
         SpriteEffects dir = SpriteEffects.None;
