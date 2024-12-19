@@ -879,5 +879,10 @@ SoapSellersShades: {
 
 Hedgehog: {
 	DisplayName: Hedgehog
-	Tooltip: ""
+	Tooltip: "'Spiky, but cute'"
+}
+
+WandCore: {
+	DisplayName: Wand Core
+	Tooltip: "'Filled with energy'"
 }

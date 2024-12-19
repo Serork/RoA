@@ -1261,23 +1261,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        num1047 = 0;
-        for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
-            num1047 += _random.Next(-1, 2);
-            if (num1047 < 0)
-                num1047 = 0;
-            if (num1047 > 10)
-                num1047 = 10;
-            for (int num1049 = (int)(Main.worldSurface - 25 + num1047); num1049 < (int)(Main.worldSurface + 10); num1049++) {
-                int num1052 = num1049;
-                if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15 && (Main.tile[num1048, num1052].WallType == _grassWallType || Main.tile[num1048, num1052].WallType == _flowerGrassWallType)) {
-                    Main.tile[num1048, num1052].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
-                }
-                if (num1048 > maxLeft && num1048 < maxRight && Main.tile[num1048, num1052].WallType == WallID.JungleUnsafe) {
-                    Main.tile[num1048, num1052].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
-                }
-            }
-        }
         //for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
         //    num1047 += _random.Next(-1, 2);
         //    if (num1047 < 0)
@@ -2128,6 +2111,26 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 //}
             }
         }
+
+        int maxLeft = Left - 50;
+        int maxRight = Right + 50;
+        int num1047 = 0;
+        for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
+            num1047 += _random.Next(-1, 2);
+            if (num1047 < 0)
+                num1047 = 0;
+            if (num1047 > 10)
+                num1047 = 10;
+            for (int num1049 = (int)(Main.worldSurface - 25 + num1047); num1049 < (int)(Main.worldSurface + 10); num1049++) {
+                int num1052 = num1049;
+                if (num1048 > maxLeft + _random.NextFloat() * 15 && num1048 < maxRight - _random.NextFloat() * 15 && (Main.tile[num1048, num1052].WallType == _grassWallType || Main.tile[num1048, num1052].WallType == _flowerGrassWallType)) {
+                    Main.tile[num1048, num1052].WallType = (ushort)(_random.NextBool(5) ? 59 : _dirtWallType);
+                }
+                if (num1048 > maxLeft && num1048 < maxRight && Main.tile[num1048, num1052].WallType == WallID.JungleUnsafe) {
+                    Main.tile[num1048, num1052].WallType = (ushort)(_random.NextBool(5) ? _grassWallType : _flowerGrassWallType);
+                }
+            }
+        }
     }
 
     public void BackwoodsOnLast1(GenerationProgress progress, GameConfiguration config) {
@@ -2844,8 +2847,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddSpikes();
 
         Step10_SpreadMossGrass();
-
-        
+     
 
         for (int num686 = 0; num686 < _biomeWidth * 2; num686++) {
             int num687 = _random.Next(Left - 30, Right + 30);

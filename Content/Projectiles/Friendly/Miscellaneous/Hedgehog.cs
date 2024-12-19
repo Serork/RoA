@@ -21,6 +21,10 @@ sealed class Hedgehog : ModProjectile {
         Projectile.Size = new Vector2(width, height);
     }
 
+    public override bool? CanCutTiles() => false;
+
+    public override bool? CanDamage() => false;
+
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 origin = Projectile.Size / 2f;
