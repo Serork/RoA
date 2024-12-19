@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -52,7 +53,9 @@ sealed class EntLegs : RoANPC {
 		NPC.DeathSound = SoundID.NPCDeath27;
 
 		NPC.dontTakeDamage = true;
-	}
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+    }
 
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
 

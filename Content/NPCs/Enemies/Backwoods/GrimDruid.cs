@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
@@ -39,6 +40,8 @@ sealed class GrimDruid : DruidNPC {
         NPC.value = Item.buyPrice(0, 0, 3, 0);
 
         DrawOffsetY = -2;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     protected override float TimeToChangeState() => 2f;
