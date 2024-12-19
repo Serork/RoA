@@ -86,7 +86,7 @@ sealed class OvergrownSphere : ModProjectile {
     }
 
 	public override void AI() {
-		float num99 = Projectile.scale * 0.45f;
+		float num99 = Projectile.scale * 0.325f;
 		if (num99 > 1f)
 			num99 = 1f;
 
@@ -152,7 +152,9 @@ sealed class OvergrownSphere : ModProjectile {
 				}
 			}
 		}
-		if (Projectile.Opacity < 1f && !_changeAlpha) Projectile.Opacity += 0.025f;
+		if (Projectile.Opacity < 1f) {
+			if (!_changeAlpha) Projectile.Opacity += 0.025f;
+		}
 		else _changeAlpha = true;
 
 		int type = ModContent.ItemType<Items.Weapons.Melee.OvergrownSpear>();
@@ -171,7 +173,7 @@ sealed class OvergrownSphere : ModProjectile {
             ulong seed = (ulong)k;
             float shakeX = Utils.RandomInt(ref seed, -10, 11);
             float shakeY = Utils.RandomInt(ref seed, -10, 11);
-			float i = Helper.Wave(-1.75f, 1.75f, 2f, k);
+			float i = Helper.Wave(-1f, 1f, 2f, k);
             Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
 			Color color = Projectile.GetAlpha(lightColor) * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 			spriteBatch.Draw(texture, drawPos + new Vector2(shakeX * i, shakeY * i), frameRect, color * Projectile.Opacity * (0.25f + 0.1f * Utils.RandomInt(ref seed, 0, 5)), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);

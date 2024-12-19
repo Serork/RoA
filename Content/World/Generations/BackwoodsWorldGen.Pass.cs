@@ -970,7 +970,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGenHelper.ReplaceTile(i, j, _grassTileType);
                 }
                 // pots
-                if (WorldGen.SolidTile(i, j + 1) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(3)) {
+                if (WorldGen.SolidTile(i, j + 1) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(2)) {
                     WorldGen.PlacePot(i, j, _potTileType, _random.Next(4));
                 }
             }
@@ -2364,7 +2364,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         vector2D.Y = _gatewayLocation.Y;
         Vector2D vector2D2 = default(Vector2D);
         vector2D2.X = (double)_random.Next(-10, 15) * 0.1;
-        vector2D2.Y = (double)_random.Next(-10, 0) * 0.1;
+        vector2D2.Y = (double)_random.Next(-10, -5) * 0.1;
         _gatewayVelocity = vector2D2;
         while (num > 0.0 && num3 > 0.0) {
             double num4 = num * (num3 / num2);

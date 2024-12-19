@@ -10,6 +10,8 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static RoA.Common.GlowMasks.ItemGlowMaskHandler;
+
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class OvergrownSpear : ModProjectile {
@@ -71,6 +73,7 @@ sealed class OvergrownSpear : ModProjectile {
         Vector2.Lerp(vector, value.Center.ToVector2(), 0.25f);
         float num2 = 0f;
         Vector2 vector2 = proj.Center + new Vector2(0f, proj.gfxOffY);
-        Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture + "_Glow").Value, vector2 - Main.screenPosition, value, Color.White, num, vector, proj.scale, dir);
+        Color color = Color.Lerp(Color.White, Lighting.GetColor((int)proj.Center.X / 16, (int)proj.Center.Y / 16), Lighting.Brightness((int)proj.Center.X / 16, (int)proj.Center.Y / 16));
+        Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture + "_Glow").Value, vector2 - Main.screenPosition, value, color, num, vector, proj.scale, dir);
     }
 }
