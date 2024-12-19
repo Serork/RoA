@@ -2318,14 +2318,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + EdgeY; j++) {
                 Tile tile = Main.tile[i, j];
                 if ((tile.TileType == _grassTileType || tile.TileType == _leavesTileType) && !Main.tile[i, j + 1].HasTile) {
-                    if (_random.NextBool(tile.TileType == _grassTileType ? 2 : 3)) {
+                    if (_random.NextBool(tile.TileType == _grassTileType ? 2 : 3) && _random.NextBool(2)) {
                         WorldGen.PlaceTile(i, j + 1, (tile.WallType == _grassWallType || Main.tile[i, j + 1].WallType == _grassWallType || tile.WallType == _leavesWallType || Main.tile[i, j + 1].WallType == _leavesWallType) ? _vinesTileType2 : _vinesTileType);
                     }
                 }
-                if (tile.TileType == _vinesTileType) {
+                if (tile.TileType == _vinesTileType && _random.NextBool(2)) {
                     WorldGenHelper.PlaceVines(i, j, _random.Next(1, 5), _vinesTileType);
                 }
-                if (tile.TileType == _vinesTileType2) {
+                if (tile.TileType == _vinesTileType2 && _random.NextBool(2)) {
                     WorldGenHelper.PlaceVines(i, j, _random.Next(3, 7), _vinesTileType2);
                 }
             }
