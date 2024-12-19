@@ -1,6 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Content.Dusts;
+using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -9,6 +14,7 @@ namespace RoA.Content.Tiles.Ambient;
 
 sealed class NexusGateway : ModTile {
     public override void SetStaticDefaults() {
+        Main.tileLighted[Type] = true;
         Main.tileLavaDeath[Type] = false;
         Main.tileFrameImportant[Type] = true;
         Main.tileSolidTop[Type] = false;
@@ -47,4 +53,65 @@ sealed class NexusGateway : ModTile {
     public override bool CreateDust(int i, int j, ref int type) => false;
 
     public override bool KillSound(int i, int j, bool fail) => false;
+
+    public override void AnimateTile(ref int frame, ref int frameCounter) {
+        frameCounter++;
+        if (frameCounter > 4) {
+            frameCounter = 0;
+            frame++;
+            if (frame > 3) {
+                frame = 0;
+            }
+        }
+    }
+
+    private static bool GetCondition(Tile tile) {
+        return tile.TileFrameX != 0 && tile.TileFrameX != 120 && (tile.TileFrameX <= 32 || tile.TileFrameX > 90) && ((tile.TileFrameY > 0 && tile.TileFrameY < 32) || (tile.TileFrameY > 160 && tile.TileFrameY < 192) || (tile.TileFrameY > 320 && tile.TileFrameY < 356));
+    }
+
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
+        Tile tile = Main.tile[i, j];
+        if (GetCondition(tile)) {
+            r = 0.25f;
+            g = 0.65f;
+            b = 0.85f;
+        }
+    }
+
+    public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
+        if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
+            Tile tile = Main.tile[i, j];
+            if (Main.rand.NextChance(0.5f) && GetCondition(tile)) {
+                bool right = tile.TileFrameX > 90;
+                int dust = Dust.NewDust(new Vector2(i * 16 - (!right ? 2 : 14), j * 16 + 2), 12, 4, ModContent.DustType<ElderTorchDust>(), 0f, 0f, 100, default, 1f);
+                if (!Main.rand.NextBool(3)) {
+                    Main.dust[dust].noGravity = true;
+                }
+                Main.dust[dust].velocity *= 0.3f;
+                Main.dust[dust].velocity.Y = Main.dust[dust].velocity.Y - 1.5f;
+            }
+        }
+    }
+
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        Tile tile = Main.tile[i, j];
+        Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+        if (Main.drawToScreen) {
+            zero = Vector2.Zero;
+        }
+        int width = 32;
+        int offsetY = 0;
+        int height = 16;
+        TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref tile.TileFrameX, ref tile.TileFrameY);
+        var flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
+        var glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        Main.spriteBatch.Draw(glowMaskTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
+        ulong seed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i);
+        for (int c = 0; c < 7; c++) {
+            float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
+            float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
+            Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
+            Main.spriteBatch.Draw(flameTexture, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
+        }
+    }
 }

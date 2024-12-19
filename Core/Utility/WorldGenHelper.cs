@@ -34,6 +34,97 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
     }
 
+    public static void CustomWall2(int x, int y, int wallType, params ushort[] ignoreWallTypes) {
+        if (!WorldGen.InWorld(x, y))
+            return;
+
+        ushort num = (ushort)wallType;
+        int num2 = 0;
+        int maxWallOut = WorldGen.maxWallOut2;
+        List<Point> list = new List<Point>();
+        List<Point> list2 = new List<Point>();
+        HashSet<Point> hashSet = new HashSet<Point>();
+        list2.Add(new Point(x, y));
+        while (list2.Count > 0) {
+            list.Clear();
+            list.AddRange(list2);
+            list2.Clear();
+            while (list.Count > 0) {
+                Point item = list[0];
+                if (!WorldGen.InWorld(item.X, item.Y, 1)) {
+                    list.Remove(item);
+                    continue;
+                }
+
+                hashSet.Add(item);
+                list.Remove(item);
+                Tile tile = Main.tile[item.X, item.Y];
+                if (tile.WallType == num || ignoreWallTypes.Contains(num) || WallID.Sets.CannotBeReplacedByWallSpread[tile.WallType])
+                    continue;
+
+                if (!SolidTile(item.X, item.Y)) {
+                    bool flag = WallID.Sets.WallSpreadStopsAtAir[num];
+                    if (flag && tile.WallType == 0) {
+                        list.Remove(item);
+                        continue;
+                    }
+
+                    num2++;
+                    if (num2 >= maxWallOut) {
+                        list.Remove(item);
+                        continue;
+                    }
+
+                    tile.WallType = num;
+                    Point item2 = new Point(item.X - 1, item.Y);
+                    if (!hashSet.Contains(item2))
+                        list2.Add(item2);
+
+                    item2 = new Point(item.X + 1, item.Y);
+                    if (!hashSet.Contains(item2))
+                        list2.Add(item2);
+
+                    item2 = new Point(item.X, item.Y - 1);
+                    if (!hashSet.Contains(item2))
+                        list2.Add(item2);
+
+                    item2 = new Point(item.X, item.Y + 1);
+                    if (!hashSet.Contains(item2))
+                        list2.Add(item2);
+
+                    if (flag) {
+                        item2 = new Point(item.X - 1, item.Y - 1);
+                        if (!hashSet.Contains(item2))
+                            list2.Add(item2);
+
+                        item2 = new Point(item.X + 1, item.Y - 1);
+                        if (!hashSet.Contains(item2))
+                            list2.Add(item2);
+
+                        item2 = new Point(item.X - 1, item.Y + 1);
+                        if (!hashSet.Contains(item2))
+                            list2.Add(item2);
+
+                        item2 = new Point(item.X + 1, item.Y + 1);
+                        if (!hashSet.Contains(item2))
+                            list2.Add(item2);
+
+                        item2 = new Point(item.X - 2, item.Y);
+                        if (!hashSet.Contains(item2))
+                            list2.Add(item2);
+
+                        item2 = new Point(item.X + 2, item.Y);
+                        if (!hashSet.Contains(item2))
+                            list2.Add(item2);
+                    }
+                }
+                else if (tile.HasTile) {
+                    tile.WallType = num;
+                }
+            }
+        }
+    }
+
     public static bool CustomSolidCollision(Vector2 Position, int Width, int Height, bool[] conditions = null, params ushort[] extraTypes) {
         int value = (int)(Position.X / 16f) - 1;
         int value2 = (int)((Position.X + (float)Width) / 16f) + 2;
