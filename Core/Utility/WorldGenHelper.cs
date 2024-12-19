@@ -143,7 +143,7 @@ static class WorldGenHelper {
         Vector2 vector = default(Vector2);
         for (int i = num; i < value2; i++) {
             for (int j = value3; j < value4; j++) {
-                if (Main.tile[i, j] != null && !Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].HasTile && ((Main.tileSolid[Main.tile[i, j].TileType] && !Main.tileSolidTop[Main.tile[i, j].TileType]) || (conditions != null && conditions[Main.tile[i, j].TileType]) || extraTypes.Contains(Main.tile[i, j].TileType))) {
+                if (Main.tile[i, j] != null && !Main.tile[i, j].IsActuated && Main.tile[i, j].HasTile && ((Main.tileSolid[Main.tile[i, j].TileType] && !Main.tileSolidTop[Main.tile[i, j].TileType]) || (conditions != null && conditions[Main.tile[i, j].TileType]) || extraTypes.Contains(Main.tile[i, j].TileType))) {
                     vector.X = i * 16;
                     vector.Y = j * 16;
                     int num2 = 16;
