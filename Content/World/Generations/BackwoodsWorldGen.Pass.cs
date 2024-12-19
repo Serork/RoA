@@ -6,6 +6,7 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Common.Sets;
 using RoA.Common.WorldEvents;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Crafting;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
 using RoA.Content.Tiles.Plants;
@@ -1960,6 +1961,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int killTileCount = killTiles.Count;
         List<Point> killTiles2 = [];
         int attempts2 = 50;
+        bool placedTorch = false;
         while (killTileCount > 0 && !chestPlaced) {
             if (attempts2-- <= 0) {
                 break;
@@ -2042,6 +2044,34 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 });
             }
             if (chestPlaced) {
+                break;
+            }
+            killTileCount--;
+        }
+        killTileCount = killTiles.Count;
+        killTiles2 = [];
+        attempts2 = 100;
+        while (killTileCount > 0 && !placedTorch) {
+            if (attempts2-- <= 0) {
+                break;
+            }
+            Point killPos = killTiles[_random.Next(killTiles.Count)];
+            int attempts3 = 100;
+            while (killTiles2.Contains(killPos)) {
+                killPos = killTiles[_random.Next(killTiles.Count)];
+                if (attempts3-- <= 0) {
+                    break;
+                }
+            }
+            killTiles2.Add(killPos);
+            Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
+            if (tile.ActiveWall(placeholderWallType)) {
+                WorldGen.PlaceTile(killPos.X, killPos.Y, ModContent.TileType<ElderTorch>(), mute: true, forced: false, -1);
+                if (TileID.Sets.Torch[Main.tile[killPos.X, killPos.Y].TileType]) {
+                    placedTorch = true;
+                }
+            }
+            if (placedTorch) {
                 break;
             }
             killTileCount--;
