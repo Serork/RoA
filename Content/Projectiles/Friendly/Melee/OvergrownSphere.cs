@@ -94,7 +94,7 @@ sealed class OvergrownSphere : ModProjectile {
 
 		Player player = Main.player[Projectile.owner];
 
-		if (Main.rand.NextBool(20)) {
+		if (Projectile.alpha == 0 && Main.rand.NextBool(20)) {
 			Dust dust5 = Dust.NewDustDirect(Projectile.position + Vector2.One * 2f, 20, 20, ModContent.DustType<OvergrownSpearDust>(), newColor: default, Scale: MathHelper.Lerp(0.45f, 0.8f, Main.rand.NextFloat()));
 			dust5.velocity *= 1.25f;
 			dust5.fadeIn = Main.rand.Next(0, 17) * 0.1f;

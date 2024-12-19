@@ -83,7 +83,7 @@ sealed class NexusGateway : ModTile {
     public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
         if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
             Tile tile = Main.tile[i, j];
-            if (Main.rand.NextChance(1f) && GetCondition(tile)) {
+            if (Main.rand.NextChance(0.2f) && GetCondition(tile)) {
                 bool right = tile.TileFrameX > 90;
                 int dust = Dust.NewDust(new Vector2(i * 16 - (!right ? 2 : 16), j * 16 + 2), 16, 4, ModContent.DustType<ElderTorchDust>(), 0f, 0f, 100, default, 1f);
                 if (!Main.rand.NextBool(3)) {
@@ -115,7 +115,7 @@ sealed class NexusGateway : ModTile {
             Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
             Main.spriteBatch.Draw(flameTexture, pos + Vector2.UnitY * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
         }
-        for (int c = 0; c < 2; c++) {
+        for (int c = 0; c < 3; c++) {
             float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
             float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
             Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;

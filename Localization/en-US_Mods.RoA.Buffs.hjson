@@ -144,3 +144,8 @@ Unburning: {
 	DisplayName: Unburning
 	Description: Mods.RoA.Buffs.Unburning.Description
 }
+
+Moth: {
+	DisplayName: Moth
+	Description: Mods.RoA.Buffs.Moth.Description
+}
