@@ -18,7 +18,7 @@ sealed class VanillaGlowMaskHandler : GlobalItem {
     private static Dictionary<string, short> texturePathToGlowMaskID;
     private static Dictionary<int, short> itemIDToGlowMask;
 
-    public static void AddGlowmask(string texturePath) {
+    public static void AddGlowMask(string texturePath) {
         texturePathToGlowMaskID[texturePath] = -1;
     }
 

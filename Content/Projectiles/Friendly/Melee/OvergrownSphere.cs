@@ -2,6 +2,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Forms;
+using RoA.Content.Dusts;
+using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
@@ -11,6 +14,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static tModPorter.ProgressUpdate;
+
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class OvergrownSphere : ModProjectile {
@@ -18,10 +23,12 @@ sealed class OvergrownSphere : ModProjectile {
 	private int _collisionRegistered;
 
 	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Overgrown Sphere");
-		//ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
-		//ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-	}
+        //DisplayName.SetDefault("Overgrown Sphere");
+        //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
+        //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+        ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+    }
 
 	public override void SetDefaults() {
 		int width = 20; int height = width;
@@ -78,8 +85,26 @@ sealed class OvergrownSphere : ModProjectile {
         }
     }
 
-    public override void AI() {
+	public override void AI() {
+		float num99 = Projectile.scale * 0.45f;
+		if (num99 > 1f)
+			num99 = 1f;
+
+		Lighting.AddLight((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f), num99 * 0.1f, num99, num99 * 0.4f);
+
 		Player player = Main.player[Projectile.owner];
+
+		if (Main.rand.NextBool(20)) {
+			Dust dust5 = Dust.NewDustDirect(Projectile.position + Vector2.One * 2f, 20, 20, ModContent.DustType<OvergrownSpearDust>(), newColor: default, Scale: MathHelper.Lerp(0.45f, 0.8f, Main.rand.NextFloat()));
+			dust5.velocity *= 1.25f;
+			dust5.fadeIn = Main.rand.Next(0, 17) * 0.1f;
+			dust5.noGravity = true;
+			dust5.position += dust5.velocity * 0.75f;
+			dust5.noLight = true;
+			dust5.noLightEmittence = true;
+		}
+
+        Projectile.timeLeft = 2;
 
 		double deg = (double)(Projectile.ai[1] + Projectile.ai[0] * 240) / 2;
 		double rad = deg * (Math.PI / 180);
@@ -96,25 +121,34 @@ sealed class OvergrownSphere : ModProjectile {
 		for (var i = 0; i < 200; i++) {
 			var proj = Main.projectile[i];
 			if (proj.active && proj.type == spearType && proj.owner == player.whoAmI) {
-				var rect = proj.getRect();
+				var rect = new Rectangle((int)proj.Center.X - 15, (int)proj.Center.Y - 15, 30, 30);
 				var rec2 = Projectile.getRect();
 				if (rect.Intersects(rec2) && _collisionRegistered == 0) {
 					SoundEngine.PlaySound(SoundID.NPCDeath55, Projectile.Center);
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, proj.velocity, boltType, Projectile.damage, Projectile.knockBack, Projectile.owner);
-					float dustCount = 12f;
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, proj.velocity, boltType, (int)player.GetTotalDamage(DamageClass.Melee).ApplyTo(player.GetSelectedItem().damage), player.GetTotalKnockback(DamageClass.Melee).ApplyTo(player.GetSelectedItem().knockBack), Projectile.owner);
+					float dustCount = 8f;
 					int dustCount2 = 0;
 					while (dustCount2 < dustCount) {
 						Vector2 vector = Vector2.UnitX * 0f;
 						vector += -Vector2.UnitY.RotatedBy(dustCount2 * (7f / dustCount), default) * new Vector2(1.5f, 1.5f);
 						vector = vector.RotatedBy(Projectile.velocity.ToRotation(), default);
-						int dust = Dust.NewDust(Projectile.Center, 0, 0, 107, 0f, 0f, 40, default(Color), 1f);
+						int dust = Dust.NewDust(Projectile.Center, 0, 0, ModContent.DustType<OvergrownSpearDust>(), 0f, 0f, 120, default(Color), Main.rand.NextFloat(0.8f, 1.6f));
 						Main.dust[dust].noGravity = true;
 						Main.dust[dust].position = Projectile.Center + vector;
 						Main.dust[dust].velocity = Vector2.Normalize(Projectile.Center - Main.dust[dust].position) * 2f + Projectile.velocity * 2f;
 						int max = dustCount2;
 						dustCount2 = max + 1;
 					}
-					_collisionRegistered = 20;
+                    for (int num615 = 0; num615 < 6; num615++) {
+                        int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height,
+                             ModContent.DustType<OvergrownSpearDust>(), 0f, 0f, 120, default, Main.rand.NextFloat(0.8f, 1.6f));
+                        Main.dust[num616].noGravity = true;
+                        Dust dust2 = Main.dust[num616];
+                        dust2.scale *= 1.25f;
+                        dust2 = Main.dust[num616];
+                        dust2.velocity *= 0.5f;
+                    }
+                    _collisionRegistered = 20;
 				}
 			}
 		}
@@ -134,11 +168,15 @@ sealed class OvergrownSphere : ModProjectile {
 		Rectangle frameRect = new Rectangle(0, 0, texture.Width, texture.Height);
 		Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
 		for (int k = 0; k < Projectile.oldPos.Length; k++) {
-			Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+            ulong seed = (ulong)k;
+            float shakeX = Utils.RandomInt(ref seed, -10, 11);
+            float shakeY = Utils.RandomInt(ref seed, -10, 11);
+			float i = Helper.Wave(-1.75f, 1.75f, 2f, k);
+            Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
 			Color color = Projectile.GetAlpha(lightColor) * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-			spriteBatch.Draw(texture, drawPos, frameRect, color * Projectile.Opacity, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, drawPos + new Vector2(shakeX * i, shakeY * i), frameRect, color * Projectile.Opacity * (0.25f + 0.1f * Utils.RandomInt(ref seed, 0, 5)), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 		}
-		spriteBatch.Draw(texture, Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY), frameRect, Projectile.GetAlpha(lightColor) * Projectile.Opacity, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+		spriteBatch.Draw(texture, Projectile.position - Main.screenPosition + drawOrigin, frameRect, Projectile.GetAlpha(lightColor) * Projectile.Opacity, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 		return false;
 	}
 

@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
 using RoA.Core;
 
 using Terraria;
@@ -14,7 +15,7 @@ sealed class OvergrownBolt : ModProjectile {
 	private sbyte _dustAmount = 2;
 
 	public override void SetDefaults() {
-		int width = 15; int height = width;
+		int width = 20; int height = width;
 		Projectile.Size = new Vector2(width, height);
 
 		Projectile.DamageType = DamageClass.Melee;
@@ -27,9 +28,13 @@ sealed class OvergrownBolt : ModProjectile {
 
 		Projectile.alpha = 0;
 		Projectile.timeLeft = 150;
-	}
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 15;
+    }
 
 	public override void AI() {
+		Projectile.tileCollide = Projectile.timeLeft < 120;
 		Projectile.velocity *= 0.97f;
 		if (Projectile.timeLeft <= 125 && Projectile.timeLeft > 100) {
 			_dustAmount = 4;
@@ -41,7 +46,7 @@ sealed class OvergrownBolt : ModProjectile {
 		for (int i = 0; i < _dustAmount; i++) {
 			float velX = Projectile.velocity.X / 3f * i;
 			float velY = Projectile.velocity.Y / 3f * i;
-			int dust = Dust.NewDust(new Vector2(Projectile.position.X - _dustSpread / 2, Projectile.position.Y - _dustSpread / 2), 6 + _dustSpread, 6 + _dustSpread, 107, 0f, -6f, 100, default(Color), 1f);
+			int dust = Dust.NewDust(new Vector2(Projectile.Center.X - _dustSpread / 2, Projectile.Center.Y - _dustSpread / 2), 6 + _dustSpread, 6 + _dustSpread, ModContent.DustType<OvergrownSpearDust>(), 0f, -6f, 120, default(Color), Main.rand.NextFloat(0.8f, 1.6f));
 			Main.dust[dust].noGravity = true;
 			Main.dust[dust].velocity *= 0.1f;
 			Main.dust[dust].velocity += Projectile.velocity * 0.5f;
