@@ -34,7 +34,7 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
     }
 
-    public static void CustomWall2(int x, int y, int wallType, params ushort[] ignoreWallTypes) {
+    public static void CustomWall2(int x, int y, int wallType, Action onSpread, params ushort[] ignoreWallTypes) {
         if (!WorldGen.InWorld(x, y))
             return;
 
@@ -75,7 +75,10 @@ static class WorldGenHelper {
                         continue;
                     }
 
-                    tile.WallType = num;
+                    if (!ignoreWallTypes.Contains(num)) {
+                        tile.WallType = num;
+                        onSpread();
+                    }
                     Point item2 = new Point(item.X - 1, item.Y);
                     if (!hashSet.Contains(item2))
                         list2.Add(item2);
@@ -119,7 +122,10 @@ static class WorldGenHelper {
                     }
                 }
                 else if (tile.HasTile) {
-                    tile.WallType = num;
+                    if (!ignoreWallTypes.Contains(num)) {
+                        tile.WallType = num;
+                        onSpread();
+                    }
                 }
             }
         }

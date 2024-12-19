@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Dusts;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -7,7 +9,17 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class ElderTorchDust : ModDust {
+class ElderTorchDust2 : ElderTorchDust, IDrawDustPostPlayer {
+    public override string Texture => DustLoader.GetDust(ModContent.DustType<ElderTorchDust>()).Texture;
+
+    public void DrawPostPlayer(Dust dust) {
+        Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, dust.GetAlpha(dust.color), dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
+    }
+
+    public override bool PreDraw(Dust dust) => false;
+}
+
+class ElderTorchDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(lightColor.R, lightColor.G, lightColor.B, 25);
 
     public override void OnSpawn(Dust dust) {
