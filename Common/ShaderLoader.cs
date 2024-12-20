@@ -28,5 +28,7 @@ sealed class ShaderLoader : ModSystem {
         SkyManager.Instance[LothorSky] = new LothorShakeSky();
         Filters.Scene[LothorSky] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon"), EffectPriority.High);
         Filters.Scene[LothorSky].Load();
+
+        SkyManager.Instance["CustomAmbience"] = new CustomSkyAmbience.CustomAmbientSky();
     }
 }

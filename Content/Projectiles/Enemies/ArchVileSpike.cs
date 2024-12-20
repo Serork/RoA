@@ -102,20 +102,6 @@ sealed class ArchVileSpike : ModProjectile {
             NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
         }
     }
-
-    //public override void Kill(int timeLeft) {
-    //	if (Main.netMode == NetmodeID.Server) {
-    //		return;
-    //	}
-    //	SoundEngine.PlaySound(SoundID.Dig, new Vector2(Projectile.position.X, Projectile.position.Y));
-    //	for (int i = 0; i < 4; i++) {
-    //		int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), 10, 10, 1, 0, 0, 0, new Color(75, 60, 55), 0.4f + Main.rand.NextFloat(0, 1f));
-    //		Main.dust [dust].velocity *= 0.3f;
-    //	}
-    //	for (int i = Main.rand.Next(3); i < 2; i++) {
-    //		Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.Find<ModGore>(nameof(RiseofAges) + "/VileSpikeGore").Type, 1f);
-    //	}
-    //}
 }
 
 sealed class ArchVileSpikeTip : ModProjectile {
