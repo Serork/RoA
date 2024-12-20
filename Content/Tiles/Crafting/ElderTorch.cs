@@ -19,7 +19,13 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 
-public class ElderTorch : ModTile {
+class ElderTorch2 : ElderTorch {
+    public override float GetTorchLuck(Player player) => 0f;
+
+    public override string Texture => TileLoader.GetTile(ModContent.TileType<ElderTorch>()).Texture;
+}
+
+class ElderTorch : ModTile {
     private Asset<Texture2D> flameTexture;
 
     public override void SetStaticDefaults() {
@@ -29,6 +35,7 @@ public class ElderTorch : ModTile {
         Main.tileNoAttach[Type] = true;
         Main.tileNoFail[Type] = true;
         Main.tileWaterDeath[Type] = true;
+
         TileID.Sets.FramesOnKillWall[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
         TileID.Sets.DisableSmartInteract[Type] = true;
@@ -51,7 +58,7 @@ public class ElderTorch : ModTile {
 
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(200, 200, 200), Language.GetText("ItemName.Torch"));
+        AddMapEntry(new Color(253, 221, 3), Language.GetText("ItemName.Torch"));
 
         flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
     }

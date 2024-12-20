@@ -90,8 +90,8 @@ sealed class CustomAmbienceServer : ILoadable {
     }
 
     private bool IsPlayerAtRightHeightForType(CustomSkyEntityType type, Player plr) {
-        //if (type == CustomSkyEntityType.Hellbats)
-        //    return IsPlayerInAPlaceWhereTheyCanSeeAmbienceHell(plr);
+        if (type == CustomSkyEntityType.BackwoodsBirdsV)
+            return plr.InModBiome<BackwoodsBiome>();
 
         return IsPlayerInAPlaceWhereTheyCanSeeAmbienceSky(plr);
     }
