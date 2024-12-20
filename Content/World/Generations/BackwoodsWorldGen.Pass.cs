@@ -132,7 +132,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         PlaceGateway();
         Step_AddAltarMound();
         foreach (Point surface in _biomeSurface) {
-            if (!(surface.X > CenterX - 10 && surface.X < CenterX + 10) && Main.rand.NextBool(4)) {
+            if (!(surface.X > CenterX - 10 && surface.X < CenterX + 10) && _random.NextBool(4)) {
                 WorldUtils.Gen(surface, new Shapes.Mound(20, 5), Actions.Chain(new Modifiers.Blotches(2, 1, 0.8), new Modifiers.OnlyTiles(_dirtTileType), new Actions.SetTile(_dirtTileType), new Actions.SetFrames(frameNeighbors: true)));
             }
         }
@@ -1921,7 +1921,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     !Main.tile[x2 - 1, y2 - 1].ActiveTile2(placeholderTileType) || !Main.tile[x2 + 1, y2 - 1].ActiveTile2(placeholderTileType) || !Main.tile[x2 + 1, y2 + 1].ActiveTile2(placeholderTileType) || !Main.tile[x2 - 1, y2 + 1].ActiveTile2(placeholderTileType)) {
                     Tile tile = WorldGenHelper.GetTileSafely(x2, y2);
                     if (tile.ActiveWall(placeholderWallType)) {
-                        WorldGen.KillWall(x2, y2);
+                        if (y2 < Main.worldSurface) {
+
+                        }
+                        else {
+                            WorldGen.KillWall(x2, y2);
+                        }
                     }
                 }
 
@@ -2063,24 +2068,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             killTileCount--;
         }
-        killTileCount = killTiles.Count;
-        killTiles2 = [];
-        attempts2 = 100;
-        while (killTileCount > 0 && !placedTorch) {
+        attempts2 = 10000;
+        while (!placedTorch) {
             if (attempts2-- <= 0) {
                 break;
             }
             Point killPos = killTiles[_random.Next(killTiles.Count)];
-            int attempts3 = 100;
-            while (killTiles2.Contains(killPos)) {
-                killPos = killTiles[_random.Next(killTiles.Count)];
-                if (attempts3-- <= 0) {
-                    break;
-                }
-            }
-            killTiles2.Add(killPos);
             Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
-            if (tile.ActiveWall(placeholderWallType)) {
+            if (_random.NextBool(3) && tile.ActiveWall(placeholderWallType)) {
                 WorldGen.PlaceTile(killPos.X, killPos.Y, ModContent.TileType<Tiles.Crafting.ElderTorch>(), mute: true, forced: false, -1);
                 if (TileID.Sets.Torch[Main.tile[killPos.X, killPos.Y].TileType]) {
                     placedTorch = true;
@@ -2089,7 +2084,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (placedTorch) {
                 break;
             }
-            killTileCount--;
         }
 
         for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
