@@ -132,6 +132,17 @@ sealed class GrimDruid : DruidNPC {
         }
         int positionX = (int)PlayersOldPosition.X / 16;
         int positionY = (int)PlayersOldPosition.Y / 16;
+        Point point = new(positionX, positionY);
+        Point point2 = point;
+        while (!WorldGen.SolidTile(point2)) {
+            if (TileID.Sets.Platforms[WorldGenHelper.GetTileSafely(point2.X, point2.Y).TileType]) {
+                break;
+            }
+
+            point2.Y++;
+        }
+        positionX = point2.X;
+        positionY = point2.Y;
         while (!Framing.GetTileSafely(positionX, positionY - 1).HasTile || !WorldGen.SolidTile2(positionX, positionY - 1)) {
             positionY++;
         }

@@ -305,9 +305,17 @@ sealed class Archdruid : DruidNPC {
             }
             int positionX = (int)PlayersOldPosition.X / 16;
             int positionY = (int)PlayersOldPosition.Y / 16;
-            while (!Framing.GetTileSafely(positionX, positionY - 1).HasTile || !WorldGen.SolidTile2(positionX, positionY - 1)) {
-                positionY++;
+            Point point = new(positionX, positionY);
+            Point point2 = point;
+            while (!WorldGen.SolidTile(point2)) {
+                if (TileID.Sets.Platforms[WorldGenHelper.GetTileSafely(point2.X, point2.Y).TileType]) {
+                    break;
+                }
+
+                point2.Y++;
             }
+            positionX = point2.X;
+            positionY = point2.Y;
             float stateTimer = StateTimer - 0.25f;
             if (Main.rand.NextChance(Math.Min(1f, stateTimer))) {
                 int dust = Dust.NewDust(new Vector2(positionX * 16f + Main.rand.Next(-32, 32), positionY * 16f - 26 + 8f), 8, 8, dustType, 0f, Main.rand.NextFloat(-2.5f, -0.5f), 255, Scale: 0.9f + Main.rand.NextFloat(0f, 0.4f));
