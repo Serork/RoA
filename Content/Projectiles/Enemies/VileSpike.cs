@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
+using RoA.Content.Dusts.Backwoods;
 
 using System.IO;
 
@@ -84,7 +85,7 @@ sealed class VileSpike : ModProjectile {
             SoundEngine.PlaySound(SoundID.Dig, new Vector2(Projectile.position.X, Projectile.position.Y));
         }
         for (int i = 0; i < 4; i++) {
-            int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), 10, 10, 1, 0, 0, 0, new Color(75, 60, 55), 0.4f + Main.rand.NextFloat(0, 1f));
+            int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), 10, 10, ModContent.DustType<WoodTrash>(), 0, 0, 0, default, 0.4f + Main.rand.NextFloat(0, 1f));
             Main.dust[dust].velocity *= 0.3f;
         }
         for (int i = Main.rand.Next(3); i < 2; i++) {
@@ -131,7 +132,7 @@ sealed class VileSpikeTip : ModProjectile {
             SoundEngine.PlaySound(SoundID.Dig, new Vector2(Projectile.position.X, Projectile.position.Y));
         }
         for (int i = 0; i < 4; i++) {
-            int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), 10, 10, 1, 0, 0, 0, new Color(75, 60, 55), 0.4f + Main.rand.NextFloat(0, 1f));
+            int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), 10, 10, ModContent.DustType<WoodTrash>(), 0, 0, 0, default, 0.4f + Main.rand.NextFloat(0, 1f));
             Main.dust[dust].velocity *= 0.3f;
         }
         for (int i = Main.rand.Next(3); i < 2; i++) {
