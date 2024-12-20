@@ -282,7 +282,7 @@ sealed class Moth : ModProjectile {
                 Main.dust[dust2].noGravity = true;
             }
             else {
-                int dust2 = Dust.NewDust(new Vector2(Projectile.position.X - 13 + Projectile.width, Projectile.position.Y + 5), 6, 6, 6, 0f, 0f, 0, new Color(), Main.rand.NextFloat(0.85f, 1.1f)));
+                int dust2 = Dust.NewDust(new Vector2(Projectile.position.X - 13 + Projectile.width, Projectile.position.Y + 5), 6, 6, 6, 0f, 0f, 0, new Color(), Main.rand.NextFloat(0.85f, 1.1f));
                 Main.dust[dust2].velocity *= 0.25f;
                 Main.dust[dust2].noGravity = true;
             }

@@ -1,8 +1,5 @@
-﻿using Humanizer;
+﻿using Microsoft.Xna.Framework;
 
-using Microsoft.Xna.Framework;
-
-using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Summon;
 
 using System.Runtime.CompilerServices;
@@ -20,18 +17,10 @@ sealed class MothStaff : ModItem {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Moth Staff");
 		//Tooltip.SetDefault("Summöns a moth to fight for you");
-		//ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
-		//ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
+		ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
+		ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
-
-    //public override void ModifyTooltips(List<TooltipLine> tooltips) {
-    //	foreach (TooltipLine toolTipLine in tooltips) {
-    //		if (toolTipLine.Mod == "Terraria" && toolTipLine.Name == "Damage") {
-    //			_ = toolTipLine.Text.Replace("summon", "summön");
-    //		}
-    //	}
-    //}
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "FreeUpPetsAndMinions")]
     public extern static void Player_FreeUpPetsAndMinions(Player player, Item sItem);

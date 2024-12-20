@@ -5,6 +5,15 @@ using ReLogic.Utilities;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Sets;
 using RoA.Common.WorldEvents;
+using RoA.Content.Items.Consumables;
+using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Vanity;
+using RoA.Content.Items.Materials;
+using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Items.Potions;
+using RoA.Content.Items.Weapons.Melee;
+using RoA.Content.Items.Weapons.Ranged;
+using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Crafting;
 using RoA.Content.Tiles.Decorations;
@@ -68,6 +77,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private byte _nextHerb;
     private Point _gatewayLocation;
     private Vector2D _gatewayVelocity;
+    private int _nextItemIndex;
+    private bool _costumeAdded;
 
     private int CenterX {
         get => _positionToPlaceBiome.X;
@@ -1985,21 +1996,55 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             }
                         }
                     }
-                    Action[] secondTierAddings = [
-                        () => addItemInChest(WorldGen.SavedOreTiers.Gold == TileID.Gold ? ItemID.GoldBar : ItemID.PlatinumBar,
+                    int firstItemType = _nextItemIndex switch {
+                        0 => ModContent.ItemType<WandCore>(),
+                        1 => ModContent.ItemType<OvergrownSpear>(),
+                        2 => ModContent.ItemType<MothStaff>(),
+                        3 => ModContent.ItemType<DoubleFocusCharm>(),
+                        4 => ModContent.ItemType<BeastBow>(),
+                        5 => ModContent.ItemType<WandCore>()
+                    };
+                    Action[] addings = [
+                        () => {
+                            _nextItemIndex++;
+                            bool flag10 = false;
+                            if (_nextItemIndex >= 6) {
+                                _nextItemIndex = 0;
+                                addItemInChest(ModContent.ItemType<BunnyHat>(), 1, 1);
+                                addItemInChest(ModContent.ItemType<BunnyJacket>(), 1);
+                                addItemInChest(ModContent.ItemType<BunnyPants>(), 1);
+                                flag10 = true;
+                            }
+                            if (!flag10) {
+                                addItemInChest(firstItemType, 1);
+                            }
+                        },
+                        () => {
+                            bool flag = _random.NextBool(3);
+                            int itemToAddType = flag ? ModContent.ItemType<SlipperyBomb>() : ModContent.ItemType<SlipperyDynamite>();
+                            addItemInChest(itemToAddType,
+                                           flag ? _random.Next(15, 20) : 1,
+                                           0.5);
+                        },
+                        () => addItemInChest(_random.NextBool(2) ? ModContent.ItemType<MercuriumNugget>() : WorldGen.SavedOreTiers.Gold == TileID.Gold ? ItemID.GoldBar : ItemID.PlatinumBar,
                                              _random.Next(3, 11),
                                              0.75),
-                        () => addItemInChest(_random.Next([/*(ushort)ModContent.ItemType<DeathWardPotion>(),*/ ItemID.HealingPotion]),
-                                             _random.Next(3, 7),
-                                             0.75),
-                        () => addItemInChest(_random.Next([ItemID.SwiftnessPotion, ItemID.IronskinPotion, ItemID.ShinePotion, ItemID.NightOwlPotion, ItemID.ArcheryPotion, ItemID.HunterPotion]),
+                        () => addItemInChest(ModContent.ItemType<DeathWardPotion>(),
+                                             1),
+                        () => addItemInChest(_random.Next([ItemID.RestorationPotion, ItemID.HealingPotion]),
+                                             _random.Next(3, 9),
+                                             0.5),
+                        () => addItemInChest(_random.Next([ItemID.SpelunkerPotion, ItemID.ManaRegenerationPotion, ItemID.ObsidianSkinPotion, ItemID.MagicPowerPotion, ItemID.HeartreachPotion, ItemID.ThornsPotion, ItemID.InfernoPotion, ItemID.LifeforcePotion, ItemID.BattlePotion]),
                                              _random.Next(1, 3),
                                              0.75),
-                        () => addItemInChest(_random.Next([ItemID.RecallPotion, ItemID.TeleportationPotion]),
+                        () => addItemInChest(_random.Next([ModContent.ItemType<DryadBloodPotion>(), ModContent.ItemType<WillpowerPotion>(), ModContent.ItemType<BloodlustPotion>(), ModContent.ItemType<BrightstonePotion>(), ModContent.ItemType<ResiliencePotion>(), ModContent.ItemType<WeightPotion>()]),
                                              _random.Next(1, 3),
                                              0.75),
-                        () => addItemInChest(_random.Next([ItemID.Torch, ItemID.SpelunkerGlowstick]),
-                                             _random.Next(15, 31),
+                        () => addItemInChest(_random.Next([ItemID.RecallPotion, ItemID.TeleportationPotion, ItemID.PotionOfReturn]),
+                                             _random.Next(1, 3),
+                                             0.75),
+                        () => addItemInChest(_random.Next([ModContent.ItemType<Items.Placeable.Crafting.ElderTorch>(), ModContent.ItemType<SlipperyGlowstick>()]),
+                                             _random.Next(15, 30),
                                              0.75),
                         () => addItemInChest(_random.Next([ItemID.GoldCoin]),
                                              _random.Next(2, 6),
@@ -2008,21 +2053,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                              _random.Next(2, 6),
                                              0.25)
                     ];
-                    List<Action> cacheAddings = [];
-                    int length = secondTierAddings.Length;
-                    int count = length;
-                    while (count > 0) {
-                        Action add = secondTierAddings[_random.Next(length)];
-                        int attempts2 = length;
-                        while (cacheAddings.Contains(add)) {
-                            add = secondTierAddings[_random.Next(length)];
-                            if (attempts2-- <= 0) {
-                                break;
-                            }
-                        }
-                        cacheAddings.Add(add);
+                    foreach (Action add in addings) {
                         add();
-                        count--;
                     }
                 });
             }
@@ -2049,7 +2081,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             killTiles2.Add(killPos);
             Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
             if (tile.ActiveWall(placeholderWallType)) {
-                WorldGen.PlaceTile(killPos.X, killPos.Y, ModContent.TileType<ElderTorch>(), mute: true, forced: false, -1);
+                WorldGen.PlaceTile(killPos.X, killPos.Y, ModContent.TileType<Tiles.Crafting.ElderTorch>(), mute: true, forced: false, -1);
                 if (TileID.Sets.Torch[Main.tile[killPos.X, killPos.Y].TileType]) {
                     placedTorch = true;
                 }
@@ -3560,7 +3592,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _backwoodsPlants.Add(_fallenTreeTileType = (ushort)ModContent.TileType<FallenTree>());
         _backwoodsPlants.Add(_plantsTileType = (ushort)ModContent.TileType<BackwoodsPlants>());
         _backwoodsPlants.Add(_bushTileType = (ushort)ModContent.TileType<BackwoodsBush>());
-        _backwoodsPlants.Add(_mintTileType = (ushort)ModContent.TileType<MiracleMint>());
+        _backwoodsPlants.Add(_mintTileType = (ushort)ModContent.TileType<Tiles.Plants.MiracleMint>());
     }
 
     private void Step1_FindPosition() {
