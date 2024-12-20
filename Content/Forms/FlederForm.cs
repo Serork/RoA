@@ -257,7 +257,7 @@ sealed class FlederForm : BaseForm {
         }
 
         ref int shootCounter = ref player.GetModPlayer<FlederFormHandler>()._shootCounter;
-        if (Main.mouseLeft) {
+        if (player.controlUseItem && Main.mouseLeft) {
             shootCounter++;
 
             bool flag = shootCounter >= 100;
@@ -293,7 +293,7 @@ sealed class FlederForm : BaseForm {
         }
         string context = "flederformattack";
         int baseDamage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(10);
-        if (Main.mouseLeftRelease) {
+        if (player.releaseUseItem && Main.mouseLeftRelease) {
             if (shootCounter >= 40 && shootCounter < 70) {
                 //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
                 AttackCharge = 1.5f;

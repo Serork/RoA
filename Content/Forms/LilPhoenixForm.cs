@@ -182,9 +182,9 @@ sealed class LilPhoenixForm : BaseForm {
             }
             //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
         }
-        bool flag2 = Main.mouseLeft && !Main.mouseText && player.whoAmI == Main.myPlayer;
+        bool flag2 = player.controlUseItem && Main.mouseLeft && !Main.mouseText && player.whoAmI == Main.myPlayer;
         if (plr._isPreparing) {
-            flag2 = Main.mouseLeft && player.whoAmI == Main.myPlayer;
+            flag2 = player.controlUseItem && Main.mouseLeft && player.whoAmI == Main.myPlayer;
         }
         if (!flag2) {
             if (plr._charge > 0f) {

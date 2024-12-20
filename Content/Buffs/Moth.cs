@@ -12,6 +12,11 @@ sealed class Moth : ModBuff {
 	}
 
 	public override void Update(Player player, ref int buffIndex) {
-
-	}
+        if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Friendly.Summon.Moth>()] > 0)
+            player.buffTime[buffIndex] = 18000;
+        else {
+            player.DelBuff(buffIndex);
+            buffIndex--;
+        }
+    }
 }

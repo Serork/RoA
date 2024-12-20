@@ -126,7 +126,7 @@ abstract class InsectForm : BaseForm {
         }
         else
             insectTimer = 0;
-        if (!Main.mouseLeft) {
+        if (!Main.mouseLeft || !player.controlUseItem) {
             if (player.GetModPlayer<InsectFormHandler>()._directionChangedFor <= 0f) {
                 facedRight = null;
             }
@@ -136,11 +136,11 @@ abstract class InsectForm : BaseForm {
         facedRight = (Main.MouseWorld.X > player.position.X ? 1 : -1) == 1;
         ref int shootCounter = ref player.GetModPlayer<InsectFormHandler>()._shootCounter;
         if (!Main.mouseText) {
-            if (Main.mouseLeft) {
+            if (player.controlUseItem && Main.mouseLeft) {
                 shootCounter++;
                 insectTimer = 0;
             }
-            if (Main.mouseLeftRelease)
+            if (player.releaseUseItem && Main.mouseLeftRelease)
                 shootCounter = 0;
         }
         if (shootCounter % 15 == 5 && shootCounter > 0) {
