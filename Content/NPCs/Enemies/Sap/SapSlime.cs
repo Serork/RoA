@@ -63,8 +63,8 @@ sealed class SapSlime : ModNPC {
     private static void DrawNPC_SlimeItem(NPC rCurrentNPC, int typeCache, Microsoft.Xna.Framework.Color npcColor, float addedRotation) {
         int num = (int)rCurrentNPC.ai[1];
         float num2 = 1f;
-        float num3 = 34 * rCurrentNPC.scale * 0.55f;
-        float num4 = 24 * rCurrentNPC.scale * 0.55f;
+        float num3 = 34 * rCurrentNPC.scale * 0.575f;
+        float num4 = 24 * rCurrentNPC.scale * 0.575f;
         Main.GetItemDrawFrame(num, out var itemTexture, out var rectangle);
         float num5 = rectangle.Width;
         float num6 = rectangle.Height;
@@ -140,7 +140,7 @@ sealed class SapSlime : ModNPC {
                 NPC.ai[1] = 75f;
                 NPC.netUpdate = true;
             }
-            else if (Main.rand.NextChance(0.75f)) {
+            else if (Main.rand.NextChance(0.5f)) {
                 int num2 = GenerateItemInsideBody(NPC.ai[0] == -999f);
                 NPC.ai[1] = num2;
                 NPC.netUpdate = true;
@@ -172,7 +172,7 @@ sealed class SapSlime : ModNPC {
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo) {
         int y = spawnInfo.SpawnTileY;
-        return ModContent.GetInstance<Sap>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<Sap>().tapperTilesCount / 3f, 0f, 3f) : 0f;
+        return ModContent.GetInstance<Sap>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<Sap>().tapperTilesCount / 3f, 0f, 2f) / 4f : 0f;
     }
 }
 
