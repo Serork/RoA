@@ -63,8 +63,8 @@ sealed class SapSlime : ModNPC {
     private static void DrawNPC_SlimeItem(NPC rCurrentNPC, int typeCache, Microsoft.Xna.Framework.Color npcColor, float addedRotation) {
         int num = (int)rCurrentNPC.ai[1];
         float num2 = 1f;
-        float num3 = 34 * rCurrentNPC.scale * 0.6f;
-        float num4 = 24 * rCurrentNPC.scale * 0.6f;
+        float num3 = 34 * rCurrentNPC.scale * 0.55f;
+        float num4 = 24 * rCurrentNPC.scale * 0.55f;
         Main.GetItemDrawFrame(num, out var itemTexture, out var rectangle);
         float num5 = rectangle.Width;
         float num6 = rectangle.Height;
