@@ -931,3 +931,8 @@ StarFusion: {
 	DisplayName: Star Fusion
 	Tooltip: ""
 }
+
+RavensEye: {
+	DisplayName: Ravens Eye
+	Tooltip: ""
+}
