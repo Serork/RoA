@@ -31,6 +31,7 @@ sealed class BloodyFeather : ModProjectile {
 
         Projectile.extraUpdates = 1;
         Projectile.alpha = 255;
+
     }
 
     public override void AI() {
@@ -54,7 +55,7 @@ sealed class BloodyFeather : ModProjectile {
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 10;
-        if (Projectile.timeLeft > 10) return false;
+        if (Projectile.timeLeft > 60) return false;
         else return true;
     }
 
