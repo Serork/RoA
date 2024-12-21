@@ -53,6 +53,14 @@ class TreeBranch : ModTile, TileHooks.IRequestMinAxePower {
         AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
     }
 
+    public override bool CanExplode(int i, int j) {
+        if (!Main.hardMode) {
+            return false;
+        }
+
+        return base.CanExplode(i, j);
+    }
+
     public override void PostSetDefaults() => Main.tileNoSunLight[Type] = false;
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
