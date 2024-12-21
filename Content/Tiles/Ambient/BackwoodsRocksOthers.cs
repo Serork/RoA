@@ -71,6 +71,14 @@ sealed class BackwoodsRocks2 : BackwoodsRocks1, TileHooks.IGetTileDrawData {
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => BackwoodsGreenMoss.SetupLight(ref r, ref g, ref b);
+
+    public override bool CreateDust(int i, int j, ref int type) {
+        if (Main.rand.NextBool()) {
+            type = DustID.GreenMoss;
+        }
+
+        return base.CreateDust(i, j, ref type);
+    }
 }
 
 class BackwoodsRocks1 : ModTile {

@@ -38,14 +38,16 @@ sealed class TransformTileSystem : ILoadable {
         }
 
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem) {
-            if (OnKillNormal[type] || WorldGen.gen) {
-                return;
-            }
+            bool flag = !fail && !effectOnly && !noItem;
+            if (!flag) {
+                if (OnKillNormal[type] || WorldGen.gen) {
+                    return;
+                }
+                fail = true;
 
-            fail = true;
-
-            if (fail && !effectOnly) {
-                TileReplacementSystem.SetReplacementData(i, j, ReplaceToOnKill[type]);
+                if (fail && !effectOnly) {
+                    TileReplacementSystem.SetReplacementData(i, j, ReplaceToOnKill[type]);
+                }
             }
         }
 

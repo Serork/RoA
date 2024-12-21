@@ -39,6 +39,14 @@ abstract class BackwoodsRockSpikes : ModTile, TileHooks.IGetTileDrawData {
         glowSourceRect = new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight);
     }
 
+    public override bool CreateDust(int i, int j, ref int type) {
+        if (Main.rand.NextBool()) {
+            type = DustID.GreenMoss;
+        }
+
+        return base.CreateDust(i, j, ref type);
+    }
+
     protected virtual bool AnchorBottom { get; }
 
     protected virtual bool IsSmall { get; }
