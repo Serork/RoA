@@ -896,3 +896,38 @@ MothStaff: {
 	DisplayName: Moth Staff
 	Tooltip: ""
 }
+
+DynastyWoodBow: {
+	DisplayName: Dynasty Wood Bow
+	Tooltip: ""
+}
+
+ElderwoodBow: {
+	DisplayName: Elderwood Bow
+	Tooltip: ""
+}
+
+MercuriumBolter: {
+	DisplayName: Mercurium Bolter
+	Tooltip: ""
+}
+
+DynastyWoodSword: {
+	DisplayName: Dynasty Wood Sword
+	Tooltip: ""
+}
+
+ElderwoodSword: {
+	DisplayName: Elderwood Sword
+	Tooltip: ""
+}
+
+MercuriumSword: {
+	DisplayName: Mercurium Sword
+	Tooltip: ""
+}
+
+StarFusion: {
+	DisplayName: Star Fusion
+	Tooltip: ""
+}

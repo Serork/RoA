@@ -1,0 +1,44 @@
+using Microsoft.Xna.Framework;
+
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Items.Weapons.Melee;
+
+sealed class MercuriumSword : ModItem {
+    public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
+
+    public override void SetDefaults() {
+        int width = 42; int height = width;
+        Item.Size = new Vector2(width, height);
+
+        Item.useStyle = ItemUseStyleID.Swing;
+        Item.useTime = Item.useAnimation = 25;
+        Item.autoReuse = false;
+        Item.useTurn = false;
+
+        Item.DamageType = DamageClass.Melee;
+        Item.damage = 22;
+        Item.knockBack = 4f;
+
+        Item.value = Item.sellPrice(silver: 42);
+        Item.rare = ItemRarityID.Blue;
+
+        Item.UseSound = SoundID.Item1;
+    }
+
+    public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
+        Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 0.5f;
+        ushort type = (ushort)ModContent.ProjectileType<Projectiles.Friendly.Melee.MercuriumFumes>();
+        Projectile.NewProjectile(target.GetSource_FromAI(), target.Center.X, target.Center.Y, velocity.X, velocity.Y, type, Item.damage / 3, Item.knockBack / 3f, player.whoAmI);
+        Projectile.NewProjectile(target.GetSource_FromAI(), target.Center.X, target.Center.Y, -velocity.X, -velocity.Y, type, Item.damage / 3, Item.knockBack / 3f, player.whoAmI);
+    }
+
+    //public override void AddRecipes() {
+    //	CreateRecipe()
+    //		.AddIngredient(ModContent.ItemType<Materials.MercuriumNugget>(), 14)
+    //		.AddTile(TileID.Anvils)
+    //		.Register();
+    //}
+}
