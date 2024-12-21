@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Melee;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using Terraria;
@@ -39,10 +40,10 @@ sealed class StarFusion : ModItem {
     }
 
     public override void MeleeEffects(Player player, Rectangle hitbox) {
-        if (Main.rand.Next(5) == 0)
+        if (Main.rand.Next(5) == 0 && Main.rand.NextChance(0.75))
             Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, Main.rand.NextBool(3) ? DustID.YellowStarDust : DustID.Enchanted_Gold, 0f, 0f, 150, default(Color), 1.2f);
 
-        if (Main.rand.Next(10) == 0)
+        if (Main.rand.Next(10) == 0 && Main.rand.NextChance(0.75))
             Gore.NewGore(new EntitySource_ItemUse(player, Item), new Vector2(hitbox.X, hitbox.Y), default(Vector2), Main.rand.Next(16, 17));
     }
 

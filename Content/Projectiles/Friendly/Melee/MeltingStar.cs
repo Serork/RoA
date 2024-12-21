@@ -48,9 +48,11 @@ sealed class MeltingStar : ModProjectile {
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.Item9, Projectile.position);
         for (int index = 0; index < 4; ++index) {
-            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, Projectile.velocity.X * -0.2f, Projectile.velocity.Y * -0.2f, 150, default, Main.rand.NextFloat(1f, 1.25f));
-            dust.noGravity = true;
-            dust.velocity = Helper.VelocityToPoint(Projectile.Center, dust.position, Main.rand.NextFloat(8f, 12f) * 0.5f);
+            if (Main.rand.NextChance(0.75)) {
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, Projectile.velocity.X * -0.2f, Projectile.velocity.Y * -0.2f, 150, default, Main.rand.NextFloat(1f, 1.25f));
+                dust.noGravity = true;
+                dust.velocity = Helper.VelocityToPoint(Projectile.Center, dust.position, Main.rand.NextFloat(8f, 12f) * 0.5f);
+            }
         }
     }
 
@@ -61,18 +63,22 @@ sealed class MeltingStar : ModProjectile {
         float scale = 2.5f - Vector2.Distance(target.Center, Projectile.position) * 0.01f;
         scale = MathHelper.Clamp(scale, 0.75f, 1.15f);
         for (int i = 0; i < 4; i++) {
-            int num156 = DustID.Enchanted_Gold;
-            Dust dust = Dust.NewDustPerfect(hitPoint, num156, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 150, default, 0.5f + 0.3f * Main.rand.NextFloat());
-            dust.scale *= scale;
-            Dust dust2 = Dust.CloneDust(dust);
-            dust2.color = Color.White;
+            if (Main.rand.NextChance(0.75)) {
+                int num156 = DustID.Enchanted_Gold;
+                Dust dust = Dust.NewDustPerfect(hitPoint, num156, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 150, default, 0.5f + 0.3f * Main.rand.NextFloat());
+                dust.scale *= scale;
+                Dust dust2 = Dust.CloneDust(dust);
+                dust2.color = Color.White;
+            }
         }
         for (int i = 0; i < 2; i++) {
-            int num156 = DustID.Enchanted_Gold;
-            Dust dust = Dust.NewDustPerfect(hitPoint, num156, -spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat() * 1.5f, 150, default, 0.5f + 0.3f * Main.rand.NextFloat());
-            dust.scale *= scale;
-            Dust dust2 = Dust.CloneDust(dust);
-            dust2.color = Color.White;
+            if (Main.rand.NextChance(0.75)) {
+                int num156 = DustID.Enchanted_Gold;
+                Dust dust = Dust.NewDustPerfect(hitPoint, num156, -spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat() * 1.5f, 150, default, 0.5f + 0.3f * Main.rand.NextFloat());
+                dust.scale *= scale;
+                Dust dust2 = Dust.CloneDust(dust);
+                dust2.color = Color.White;
+            }
         }
     }
 
@@ -80,8 +86,10 @@ sealed class MeltingStar : ModProjectile {
         if (Main.rand.Next(20) == 0 || (Main.tenthAnniversaryWorld && Main.rand.Next(15) == 0))
             for (int index = 0; index < 2; ++index) {
             if (Main.rand.Next(100) <= 35) {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, Projectile.velocity.X * -0.2f, Projectile.velocity.Y * -0.2f, 150, default, Main.rand.NextFloat(1f, 1.25f));
-                dust.noGravity = true;
+                    if (Main.rand.NextChance(0.75)) {
+                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, Projectile.velocity.X * -0.2f, Projectile.velocity.Y * -0.2f, 150, default, Main.rand.NextFloat(1f, 1.25f));
+                        dust.noGravity = true;
+                    }
             }
         }
 
@@ -90,8 +98,9 @@ sealed class MeltingStar : ModProjectile {
         }
 
         if (Main.rand.Next(20) == 0 || (Main.tenthAnniversaryWorld && Main.rand.Next(15) == 0))
-            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Enchanted_Gold, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 150, default(Color), Main.rand.NextFloat(1f, 1.25f));
-
+            if (Main.rand.NextChance(0.75)) {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Enchanted_Gold, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 150, default(Color), Main.rand.NextFloat(1f, 1.25f));
+            }
         Projectile.ai[0]++;
         if (Projectile.ai[0] < 15f * Projectile.ai[1]) {
             Projectile.velocity *= 0.98f;
