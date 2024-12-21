@@ -51,11 +51,11 @@ sealed class MercuriumStaff : ModItem {
             return false;
 
         Vector2 dustPosition = position + new Vector2(player.direction == 1 ? 2f : 4f, 4f * player.direction).RotatedBy(velocity.ToRotation());
-        int k = Main.rand.Next(26, 31);
+        int k = Main.rand.Next(20, 26);
         for (int i = 0; i < k; i++) {
-            int x = (int)((double)dustPosition.X - 3.0 + (double)4 / 2.0);
-            int y = (int)((double)dustPosition.Y - 8.0 + (double)4 / 2.0);
-            Vector2 vector3 = (new Vector2((float)4 / 2f, 4) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
+            int x = (int)((double)dustPosition.X - 3.0 + (double)2 / 2.0);
+            int y = (int)((double)dustPosition.Y - 8.0 + (double)2 / 2.0);
+            Vector2 vector3 = (new Vector2((float)2 / 2f, 2) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
             Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
             int dust2 = Dust.NewDust(vector3 + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, DustID.Clentaminator_Green, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), Main.rand.NextFloat(2.5f, 3.3f));
             Main.dust[dust2].noGravity = true;
