@@ -22,8 +22,8 @@ namespace RoA.Content.Tiles.Trees;
 
 sealed class PrimordialTreeGlow : GlobalTile {
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
-        Tile tile = WorldGenHelper.GetTileSafely(i, j);
         if (PrimordialTree.IsPrimordialTree(i, j)) {
+            Tile tile = WorldGenHelper.GetTileSafely(i, j);
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;
@@ -52,6 +52,14 @@ sealed class PrimordialTreeGlow : GlobalTile {
                                   new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
                                   Color.Lerp(Color.White, Lighting.GetColor(i, j), bluePart ? 0.6f : 0.8f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
+    }
+
+    public override bool CanExplode(int i, int j, int type) {
+        if (PrimordialTree.IsPrimordialTree(i, j) && !Main.hardMode) {
+            return false;
+        }
+
+        return base.CanExplode(i, j, type);
     }
 }
 
