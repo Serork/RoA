@@ -21,7 +21,7 @@ sealed class MercuriumStaff : ModItem {
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.useTime = Item.useAnimation = 22;
         Item.autoReuse = true;
-        Item.useTurn = true;
+        Item.useTurn = false;
 
         Item.DamageType = DamageClass.Magic;
         Item.damage = 26;
