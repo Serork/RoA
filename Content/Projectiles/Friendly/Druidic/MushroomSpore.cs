@@ -36,6 +36,10 @@ sealed class MushroomSpore : NatureProjectile {
 
     public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
 
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        return Collision.CheckAABBvAABBCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.position + Projectile.Size / 2f, Projectile.Size);
+    }
+
     public override void AI() {
         if (Main.windPhysics) {
             Projectile.velocity.X += Main.windSpeedCurrent * Main.windPhysicsStrength;
