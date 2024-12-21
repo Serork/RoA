@@ -43,12 +43,12 @@ sealed class QuicksilverBolt : ModProjectile {
 
         if (Projectile.ai[0] == 0f)
             Projectile.ai[0] = Main.rand.Next(-2, 3);
-        if (Main.rand.Next(40) == 0 && Projectile.timeLeft < 120) {
+        if (Main.rand.Next(40) == 0 && Projectile.timeLeft < 130) {
             Projectile.damage += (int)(Projectile.damage / 3);
             Projectile.velocity.Y += Projectile.ai[0];
             Projectile.velocity.X += Projectile.ai[0] / 2;
             Projectile.ai[0] += Main.rand.Next(-2, 3);
-            int k = 36;
+            int k = Main.rand.Next(26, 31);
             for (int i = 0; i < k; i++) {
                 int x = (int)((double)Projectile.position.X - 3.0 + (double)Projectile.width / 2.0);
                 int y = (int)((double)Projectile.position.Y - 8.0 + (double)Projectile.height / 2.0);
@@ -57,8 +57,10 @@ sealed class QuicksilverBolt : ModProjectile {
                 int dust2 = Dust.NewDust(vector3 + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, DustID.Clentaminator_Green, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].noLight = true;
+                Main.dust[dust2].scale *= 0.25f;
                 Main.dust[dust2].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
             }
+            SoundEngine.PlaySound(SoundID.Item118, new Vector2(Projectile.position.X, Projectile.position.Y));
         }
     }
     public override void OnKill(int timeLeft) {
