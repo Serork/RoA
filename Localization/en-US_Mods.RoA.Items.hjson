@@ -936,3 +936,8 @@ RavensEye: {
 	DisplayName: Ravens Eye
 	Tooltip: ""
 }
+
+MercuriumStaff: {
+	DisplayName: Mercurium Staff
+	Tooltip: ""
+}

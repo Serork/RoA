@@ -54,7 +54,8 @@ sealed class RavensEye : ModItem {
         position += funnyOffset - new Vector2(player.direction == -1 ? 0f : 8f, -2f * player.direction).RotatedBy(funnyOffset.ToRotation());
         for (int i = 0; i < 5; i++) {
             if (Main.rand.NextBool()) {
-                int dust = Dust.NewDust(position, 0, 0, 60, 0, 0.5f, 0, default, 2.3f + 0.5f * Main.rand.NextFloat());
+                bool flag = Main.rand.NextBool();
+                int dust = Dust.NewDust(position, 0, 0, flag ? 60 : 96, 0, 0.5f, 0, default, (!flag ? 1.5f : 2.3f) + 0.5f * Main.rand.NextFloat());
                 Main.dust[dust].noGravity = true;
             }
         }
