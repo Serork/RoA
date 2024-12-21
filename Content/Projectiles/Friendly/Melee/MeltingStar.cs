@@ -48,11 +48,9 @@ sealed class MeltingStar : ModProjectile {
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.Item9, Projectile.position);
         for (int index = 0; index < 4; ++index) {
-            if (Main.rand.Next(100) <= 35) {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, Projectile.velocity.X * -0.2f, Projectile.velocity.Y * -0.2f, 150, default, Main.rand.NextFloat(1f, 1.25f));
-                dust.noGravity = true;
-                dust.velocity = Helper.VelocityToPoint(Projectile.Center, dust.position, Main.rand.NextFloat(8f, 12f));
-            }
+            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, Projectile.velocity.X * -0.2f, Projectile.velocity.Y * -0.2f, 150, default, Main.rand.NextFloat(1f, 1.25f));
+            dust.noGravity = true;
+            dust.velocity = Helper.VelocityToPoint(Projectile.Center, dust.position, Main.rand.NextFloat(8f, 12f) * 0.5f);
         }
     }
 
@@ -116,7 +114,7 @@ sealed class MeltingStar : ModProjectile {
                     // Additional check for this specific minion behavior, otherwise it will stop attacking once it dashed through an enemy while flying though tiles afterwards
                     // The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
                     bool closeThroughWall = between < 100f;
-                    if ((closest && inRange || !foundTarget) && (lineOfSight || closeThroughWall)) {
+                    if (inRange && (lineOfSight || closeThroughWall)) {
                         distanceFromTarget = between;
                         targetCenter = npc.Center;
                         foundTarget = true;
