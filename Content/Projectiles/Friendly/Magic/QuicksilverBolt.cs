@@ -54,10 +54,10 @@ sealed class QuicksilverBolt : ModProjectile {
                 int y = (int)((double)Projectile.position.Y - 8.0 + (double)Projectile.height / 2.0);
                 Vector2 vector3 = (new Vector2((float)Projectile.width / 2f, Projectile.height) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
                 Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
-                int dust2 = Dust.NewDust(vector3 + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, DustID.Clentaminator_Green, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
+                int dust2 = Dust.NewDust(vector3 + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, DustID.Clentaminator_Green, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), Main.rand.NextFloat(2.5f, 3.3f));
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].noLight = true;
-                Main.dust[dust2].scale *= 0.25f;
+                Main.dust[dust2].scale *= 0.3f;
                 Main.dust[dust2].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
             }
             SoundEngine.PlaySound(SoundID.Item118, new Vector2(Projectile.position.X, Projectile.position.Y));
