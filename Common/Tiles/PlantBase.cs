@@ -1,11 +1,16 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Players;
 using RoA.Core.Data;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.Metadata;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,6 +19,70 @@ using Terraria.ObjectData;
 namespace RoA.Common.Tiles;
 
 abstract class PlantBase : ModTile {
+    private class ReplaceCutTilesWithSeed : ILoadable {
+        public void Load(Mod mod) {
+            On_Player.PlaceThing_Tiles += On_Player_PlaceThing_Tiles;
+        }
+
+        private void On_Player_PlaceThing_Tiles(On_Player.orig_PlaceThing_Tiles orig, Player self) {
+            orig(self);
+            return;
+
+            //Item item = self.inventory[self.selectedItem];
+            //int tileToCreate = item.createTile;
+            //if (tileToCreate < 0 || !(self.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetX) || !((self.position.X + (float)self.width) / 16f + (float)Player.tileRangeX + (float)item.tileBoost - 1f + (float)self.blockRange >= (float)Player.tileTargetX) || !(self.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetY) || !((self.position.Y + (float)self.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)self.blockRange >= (float)Player.tileTargetY))
+            //    return;
+
+            //self.cursorItemIconEnabled = true;
+            //bool flag = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckLavaBlocking(self);
+            //bool canUse = true;
+            //canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckGamepadTorchUsability(self, canUse);
+            //canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckWandUsability(self, canUse);
+            //canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckRopeUsability(self, canUse);
+            //canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckFlexibleWand(self, canUse);
+            //if (self.TileReplacementEnabled)
+            //    canUse = PlaceCheckHooks.Player_PlaceThing_TryReplacingTiles(self, canUse);
+
+            //Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+            //if (tile.HasTile) {
+            //    if (tileToCreate == 23 && tile.TileType == 59)
+            //        tileToCreate = 661;
+
+            //    if (tileToCreate == 199 && tile.TileType == 59)
+            //        tileToCreate = 662;
+            //}
+
+            //if (canUse && ((!tile.HasTile && !flag) || (Main.tileCut[tile.TileType] && tile.TileType != 484) || (tile.TileType >= 373 && tile.TileType <= 375) || tile.TileType == 461 || tileToCreate == 199 || tileToCreate == 23 || tileToCreate == 662 || tileToCreate == 661 || tileToCreate == 2 || tileToCreate == 109 || tileToCreate == 60 || tileToCreate == 70 || tileToCreate == 633 || Main.tileMoss[tileToCreate] || TileID.Sets.BreakableWhenPlacing[tile.TileType]) && self.ItemTimeIsZero && self.itemAnimation > 0 && self.controlUseItem) {
+            //    bool canPlace = false;
+            //    bool newObjectType = false;
+            //    bool? overrideCanPlace = null;
+            //    int? forcedRandom = null;
+            //    TileObject objectData = default(TileObject);
+            //    PlaceCheckHooks.Player_FigureOutWhatToPlace(self, tile, item, out tileToCreate, out var previewPlaceStyle, out overrideCanPlace, out forcedRandom);
+            //    if (overrideCanPlace.HasValue) {
+            //        canPlace = overrideCanPlace.Value;
+            //    }
+            //    else if (TileObjectData.CustomPlace(tileToCreate, previewPlaceStyle) && TileLoader.GetTile(tileToCreate) is not PlantBase && tileToCreate != 82 && tileToCreate != 227) {
+            //        newObjectType = true;
+            //        canPlace = TileObject.CanPlace(Player.tileTargetX, Player.tileTargetY, (ushort)tileToCreate, previewPlaceStyle, self.direction, out objectData, onlyCheck: false, forcedRandom);
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementIfOverPlayers(self, ref canPlace, ref objectData);
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedPigronatas(self, ref canPlace, ref objectData);
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedPumpkins(self, ref canPlace, ref objectData);
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedCoralAndBeachPiless(self, ref canPlace, ref objectData);
+            //    }
+            //    else {
+            //        canPlace = PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(self, canPlace);
+            //    }
+
+            //    if (canPlace) {
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_PlaceIt(self, newObjectType, objectData, tileToCreate);
+            //    }
+            //}
+        }
+
+        public void Unload() { }
+    }
+
     private class StaffOfRegrowthHerbsHelper : ILoadable {
         public void Load(Mod mod) {
             On_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
@@ -48,8 +117,8 @@ abstract class PlantBase : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileObsidianKill[Type] = true;
         Main.tileCut[Type] = true;
-        Main.tileNoFail[Type] = true;
         Main.tileSpelunker[Type] = true;
+        Main.tileNoFail[Type] = true;
 
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.IgnoredInHouseScore[Type] = true;
@@ -63,32 +132,67 @@ abstract class PlantBase : ModTile {
         TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
         TileObjectData.newTile.AnchorAlternateTiles = [TileID.ClayPot, TileID.PlanterBox];
         TileObjectData.newTile.UsesCustomCanPlace = true;
+        PreAddNewTile();
         TileObjectData.addTile(Type);
 
         SafeSetStaticDefaults();
     }
 
+    protected virtual void PreAddNewTile() { }
+
+    public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!IsGrown(i, j)) {
+            Tile tile = WorldGenHelper.GetTileSafely(i, j);
+            spriteBatch.Draw(TextureAssets.Tile[Type].Value, new Vector2(i * 16f, j * 16f - 1f) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition, 
+                new Rectangle(tile.TileFrameX, tile.TileFrameY, FrameWidth, 20), Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, i % 2 == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+
+            return false;
+        }
+
+        return base.PreDraw(i, j, spriteBatch);
+    }
+
     protected virtual void SafeSetStaticDefaults() { }
 
-    protected virtual PlantStage GetStage(int i, int j) => (PlantStage)(WorldGenHelper.GetTileSafely(i, j).TileFrameX / FrameWidth);
-    protected virtual bool IsGrowing(int i, int j) => GetStage(i, j) == PlantStage.Growing;
-    protected virtual bool IsGrown(int i, int j) => GetStage(i, j) == PlantStage.Grown;
+    public virtual PlantStage GetStage(int i, int j) => (PlantStage)(WorldGenHelper.GetTileSafely(i, j).TileFrameX / FrameWidth);
+    public virtual bool IsGrowing(int i, int j) => GetStage(i, j) == PlantStage.Growing;
+    public virtual bool IsGrown(int i, int j) => GetStage(i, j) == PlantStage.Grown;
+
+    protected virtual int PlantDrop { get; }
+    protected virtual int SeedsDrop { get; }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
-        if (IsGrown(i, j)) {
-            yield return new Item(DropItem);
+        Vector2 worldPosition = new Vector2(i, j).ToWorldCoordinates();
+        Player nearestPlayer = Main.player[Player.FindClosest(worldPosition, 16, 16)];
+
+        int plantStack = 0;
+
+        int seedStack = 0;
+
+        if (nearestPlayer.active && (nearestPlayer.HeldItem.type == ItemID.StaffofRegrowth || nearestPlayer.HeldItem.type == ItemID.AcornAxe)) {
+            plantStack = Main.rand.Next(1, 3);
+            seedStack = Main.rand.Next(1, 6);
+        }
+        else if (IsGrown(i, j)) {
+            plantStack = 1;
+            seedStack = Main.rand.Next(1, 4);
+        }
+
+        if (plantStack > 0) {
+            yield return new Item(PlantDrop, plantStack);
+        }
+
+        if (seedStack > 0) {
+            yield return new Item(SeedsDrop, seedStack);
         }
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = IsGrown(i, j) ? Main.rand.Next(3, 6) : IsGrowing(i, j) ? Main.rand.Next(2, 5) : Main.rand.Next(1, 3);
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 9/*IsGrown(i, j) ? Main.rand.Next(3, 6) : IsGrowing(i, j) ? Main.rand.Next(2, 5) : Main.rand.Next(1, 3)*/;
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
-        if (i % 2 != 1) {
-            return;
-        }
-
-        spriteEffects = SpriteEffects.FlipHorizontally;
+        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
+
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) => offsetY = -4;
 
     public override bool IsTileSpelunkable(int i, int j) => IsGrown(i, j);
@@ -124,7 +228,7 @@ abstract class PlantBase : ModTile {
                 int num9 = Utils.Clamp(j + num3, 4, Main.maxTilesY - 4);
                 for (int i2 = num6; i2 <= num7; i2++) {
                     for (int j2 = num8; j2 <= num9; j2++) {
-                        if (Main.tileAlch[Main.tile[i2, j2].TileType])
+                        if (Main.tileAlch[Main.tile[i2, j2].TileType] || TileLoader.GetTile(tileTypeToGrow) is PlantBase)
                             num5++;
                     }
                 }

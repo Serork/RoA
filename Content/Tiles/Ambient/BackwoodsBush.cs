@@ -42,9 +42,7 @@ sealed class BackwoodsBush : ModTile {
     public override void NumDust(int i, int j, bool fail, ref int num) => num = Main.rand.Next(5, 10);
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
-        if (i % 2 == 1) {
-            spriteEffects = SpriteEffects.FlipHorizontally;
-        }
+        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => BackwoodsGrass.EmitDusts(i, j);

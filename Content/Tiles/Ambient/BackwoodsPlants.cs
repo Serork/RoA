@@ -38,9 +38,7 @@ sealed class BackwoodsPlants : ModTile {
     }
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
-        if (i % 2 == 1) {
-            spriteEffects = SpriteEffects.FlipHorizontally;
-        }
+        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => BackwoodsGrass.EmitDusts(i, j);

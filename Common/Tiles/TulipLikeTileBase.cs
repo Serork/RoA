@@ -32,10 +32,6 @@ abstract class TulipLikeTileBase : SimpleTileBaseToGenerateOverTime {
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 10;
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
-        if (i % 2 != 1) {
-            return;
-        }
-
-        spriteEffects = SpriteEffects.FlipHorizontally;
+        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 }

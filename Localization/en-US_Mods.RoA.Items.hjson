@@ -941,3 +941,13 @@ MercuriumStaff: {
 	DisplayName: Mercurium Staff
 	Tooltip: ""
 }
+
+MiracleMintSeeds: {
+	DisplayName: Miracle Mint Seeds
+	Tooltip: ""
+}
+
+MiracleMintPlanterBox: {
+	DisplayName: Miracle Mint Planter Box
+	Tooltip: ""
+}

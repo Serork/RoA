@@ -12,7 +12,7 @@ namespace RoA.Content.Tiles.Miscellaneous;
 sealed class ExoticTulip : TulipLikeTileBase {
     public override int[] AnchorValidTiles => [TileID.Sand];
 
-    public override ushort ExtraChance => 300;
+    public override ushort ExtraChance => 1000;
 
     public override ushort DropItem => (ushort)ModContent.ItemType<Items.Weapons.Druidic.ExoticTulip>();
 
@@ -21,6 +21,8 @@ sealed class ExoticTulip : TulipLikeTileBase {
 
 sealed class SweetTulip : TulipLikeTileBase {
     public override int[] AnchorValidTiles => [TileID.JungleGrass];
+
+    public override ushort ExtraChance => 1000;
 
     public override byte StyleX => 1;
 
@@ -32,6 +34,8 @@ sealed class SweetTulip : TulipLikeTileBase {
 sealed class WeepingTulip : TulipLikeTileBase {
     public override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
     public override Predicate<ushort> ConditionForWallToBeValid => (wallType) => { return Main.wallDungeon[wallType]; };
+
+    public override ushort ExtraChance => 1000;
 
     public override byte StyleX => 2;
 
