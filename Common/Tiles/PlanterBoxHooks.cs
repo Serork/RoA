@@ -4,7 +4,10 @@ using Mono.Cecil.Cil;
 
 using MonoMod.Cil;
 
+using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Crafting;
+
+using System;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -32,6 +35,161 @@ sealed class PlanterBoxHooks : ILoadable {
         IL_WorldGen.CanCutTile += IL_WorldGen_CanCutTile;
         IL_WorldGen.TryKillingReplaceableTile += IL_WorldGen_TryKillingReplaceableTile;
         On_TileObject.CanPlace += On_TileObject_CanPlace;
+        On_WorldGen.PlantCheck += On_WorldGen_PlantCheck;
+
+        On_WorldGen.PlaceTile += On_WorldGen_PlaceTile;
+    }
+
+    private void On_WorldGen_PlantCheck(On_WorldGen.orig_PlantCheck orig, int x, int y) {
+        x = Utils.Clamp(x, 1, Main.maxTilesX - 2);
+        y = Utils.Clamp(y, 1, Main.maxTilesY - 2);
+        for (int i = x - 1; i <= x + 1; i++) {
+            for (int j = y - 1; j <= y + 1; j++) {
+                if (Main.tile[i, j] == null)
+                    return;
+            }
+        }
+
+        int num = -1;
+        int num2 = Main.tile[x, y].TileType;
+        _ = x - 1;
+        _ = 0;
+        _ = x + 1;
+        _ = Main.maxTilesX;
+        _ = y - 1;
+        _ = 0;
+        if (y + 1 >= Main.maxTilesY)
+            num = num2;
+
+        if (x - 1 >= 0 && Main.tile[x - 1, y] != null && Main.tile[x - 1, y].HasUnactuatedTile)
+            _ = Main.tile[x - 1, y].TileType;
+
+        if (x + 1 < Main.maxTilesX && Main.tile[x + 1, y] != null && Main.tile[x + 1, y].HasUnactuatedTile)
+            _ = Main.tile[x + 1, y].TileType;
+
+        if (y - 1 >= 0 && Main.tile[x, y - 1] != null && Main.tile[x, y - 1].HasUnactuatedTile)
+            _ = Main.tile[x, y - 1].TileType;
+
+        if (y + 1 < Main.maxTilesY && Main.tile[x, y + 1] != null && Main.tile[x, y + 1].HasUnactuatedTile && !Main.tile[x, y + 1].IsHalfBlock && Main.tile[x, y + 1].Slope == 0)
+            num = Main.tile[x, y + 1].TileType;
+
+        if (x - 1 >= 0 && y - 1 >= 0 && Main.tile[x - 1, y - 1] != null && Main.tile[x - 1, y - 1].HasUnactuatedTile)
+            _ = Main.tile[x - 1, y - 1].TileType;
+
+        if (x + 1 < Main.maxTilesX && y - 1 >= 0 && Main.tile[x + 1, y - 1] != null && Main.tile[x + 1, y - 1].HasUnactuatedTile)
+            _ = Main.tile[x + 1, y - 1].TileType;
+
+        if (x - 1 >= 0 && y + 1 < Main.maxTilesY && Main.tile[x - 1, y + 1] != null && Main.tile[x - 1, y + 1].HasUnactuatedTile)
+            _ = Main.tile[x - 1, y + 1].TileType;
+
+        if (x + 1 < Main.maxTilesX && y + 1 < Main.maxTilesY && Main.tile[x + 1, y + 1] != null && Main.tile[x + 1, y + 1].HasUnactuatedTile)
+            _ = Main.tile[x + 1, y + 1].TileType;
+
+        if ((num2 != 3 || num == 2 || num == 477 || num == 78 || (num == 380 || num == ModContent.TileType<PlanterBoxes>()) || num == 579) && (num2 != 73 || num == 2 || num == 477 || num == 78 || (num == 380 || num == ModContent.TileType<PlanterBoxes>()) || num == 579) && (num2 != 24 || num == 23 || num == 661) && (num2 != 61 || num == 60) && (num2 != 74 || num == 60) && (num2 != 71 || num == 70) && (num2 != 110 || num == 109 || num == 492) && (num2 != 113 || num == 109 || num == 492) && (num2 != 201 || num == 199 || num == 662) && (num2 != 637 || num == 633))
+            return;
+
+        bool flag = false;
+        if (num2 == 3 || num2 == 110 || num2 == 24)
+            flag = Main.tile[x, y].TileFrameX == 144;
+
+        if (num2 == 201)
+            flag = Main.tile[x, y].TileFrameX == 270;
+
+        if ((num2 == 3 || num2 == 73) && num != 2 && num != 477 && Main.tile[x, y].TileFrameX >= 162)
+            Main.tile[x, y].TileFrameX = 126;
+
+        if (num2 == 74 && num != 60 && Main.tile[x, y].TileFrameX >= 162)
+            Main.tile[x, y].TileFrameX = 126;
+
+        switch (num) {
+            case 23:
+            case 661:
+                num2 = 24;
+                if (Main.tile[x, y].TileFrameX >= 162)
+                    Main.tile[x, y].TileFrameX = 126;
+                break;
+            case 2:
+            case 477:
+                num2 = ((num2 != 113) ? 3 : 73);
+                break;
+            case 109:
+            case 492:
+                num2 = ((num2 != 73) ? 110 : 113);
+                break;
+            case 199:
+            case 662:
+                num2 = 201;
+                break;
+            case 60:
+                num2 = 61;
+                while (Main.tile[x, y].TileFrameX > 126) {
+                    Main.tile[x, y].TileFrameX -= 126;
+                }
+                break;
+            case 70:
+                num2 = 71;
+                while (Main.tile[x, y].TileFrameX > 72) {
+                    Main.tile[x, y].TileFrameX -= 72;
+                }
+                break;
+        }
+
+        if (num2 != Main.tile[x, y].TileType) {
+            Main.tile[x, y].TileType = (ushort)num2;
+            if (flag) {
+                Main.tile[x, y].TileFrameX = 144;
+                if (num2 == 201)
+                    Main.tile[x, y].TileFrameX = 270;
+            }
+        }
+        else {
+            WorldGen.KillTile(x, y);
+        }
+    }
+
+    private bool On_WorldGen_PlaceTile(On_WorldGen.orig_PlaceTile orig, int i, int j, int Type, bool mute, bool forced, int plr, int style) {
+        int num = Type;
+        if (i >= 0 && j >= 0 && i < Main.maxTilesX && j < Main.maxTilesY) {
+            Tile tile = Main.tile[i, j];
+
+            if (forced || Collision.EmptyTile(i, j) || !Main.tileSolid[num] || (num == 23 && tile.TileType == 0 && tile.HasTile) || (num == 199 && tile.TileType == 0 && tile.HasTile) || (num == 2 && tile.TileType == 0 && tile.HasTile) || (num == 109 && tile.TileType == 0 && tile.HasTile) || (num == 60 && tile.TileType == 59 && tile.HasTile) || (num == 661 && tile.TileType == 59 && tile.HasTile) || (num == 662 && tile.TileType == 59 && tile.HasTile) || (num == 70 && tile.TileType == 59 && tile.HasTile) || (num == 633 && tile.TileType == 57 && tile.HasTile) || (Main.tileMoss[num] && (tile.TileType == 1 || tile.TileType == 38) && tile.HasTile)) {
+                if (num == 3 || num == 24 || num == 110 || num == 201 || num == 637) {
+                    Tile tile2 = Main.tile[i, j + 1];
+                    if (!(j < 1 || j > Main.maxTilesY - 1) && tile2.HasTile && tile2.Slope == 0 && !tile2.IsHalfBlock && num == 3) {
+                        if (tile2.TileType == ModContent.TileType<PlanterBoxes>()/*Main.tile[i, j + 1].TileType == 78 || Main.tile[i, j + 1].TileType == 380 || Main.tile[i, j + 1].TileType == 579*/) {
+                            tile.HasTile = true;
+                            if (WorldGen.genRand.NextBool()) {
+                                tile.TileFrameY = 0;
+                                tile.TileType = (ushort)ModContent.TileType<BackwoodsPlants>();
+                                tile.TileFrameX = (short)(18 * WorldGen.genRand.Next(6, 20));
+                            }
+                            else {
+                                tile.TileType = (ushort)num;
+                                int num2 = WorldGen.genRand.NextFromList<int>(6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 27, 30, 33, 36, 39, 42);
+                                switch (num2) {
+                                    case 21:
+                                    case 24:
+                                    case 27:
+                                    case 30:
+                                    case 33:
+                                    case 36:
+                                    case 39:
+                                    case 42:
+                                        num2 += WorldGen.genRand.Next(3);
+                                        break;
+                                }
+
+                                tile.TileFrameX = (short)(num2 * 18);
+                            }
+
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return orig(i, j, Type, mute, forced, plr, style);
     }
 
     public void Unload() { }
@@ -141,8 +299,22 @@ sealed class PlanterBoxHooks : ILoadable {
     }
 
     private bool IsFitToPlaceFlowerInPlanterBoxHack(On_WorldGen.orig_IsFitToPlaceFlowerIn orig, int x, int y, int typeAttemptedToPlace) {
-        return y < 1 || y > Main.maxTilesY - 1 || TileLoader.GetTile(Main.tile[x, y + 1].TileType) is not PlanterBoxes
-            ? orig(x, y, typeAttemptedToPlace) : true;
+        if (y < 1 || y > Main.maxTilesY - 1)
+            return false;
+
+        Tile tile = Main.tile[x, y + 1];
+        if (tile.HasTile && tile.Slope == 0 && !tile.IsHalfBlock) {
+            if (((tile.TileType != 2 && tile.TileType != 78 && tile.TileType != 380 && tile.TileType != ModContent.TileType<PlanterBoxes>() && tile.TileType != 477 && tile.TileType != 579) || typeAttemptedToPlace != 3) && ((tile.TileType != 23 && tile.TileType != 661) || typeAttemptedToPlace != 24) && ((tile.TileType != 109 && tile.TileType != 492) || typeAttemptedToPlace != 110) && ((tile.TileType != 199 && tile.TileType != 662) || typeAttemptedToPlace != 201)) {
+                if (tile.TileType == 633)
+                    return typeAttemptedToPlace == 637;
+
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private void CheckBannerPlanterBoxHack(On_WorldGen.orig_CheckBanner orig, int x, int j, byte type) {

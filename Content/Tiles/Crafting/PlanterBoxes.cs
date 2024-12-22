@@ -1,4 +1,5 @@
-﻿using RoA.Content.Dusts.Backwoods;
+﻿using RoA.Common.Tiles;
+using RoA.Content.Dusts.Backwoods;
 using RoA.Core.Utility;
 
 using System;
@@ -13,6 +14,62 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Crafting;
 
 sealed class PlanterBoxes : ModTile, IPostSetupContent {
+    private class TileFrameForVanillaPlanterBoxes : GlobalTile {
+        public override bool TileFrame(int i, int j, int type, ref bool resetFrame, ref bool noBreak) {
+            if ((TileLoader.GetTile(type) != null && TileLoader.GetTile(type).AdjTiles.Contains(TileID.PlanterBox) && type != ModContent.TileType<PlanterBoxes>()) || type == TileID.PlanterBox) {
+                Tile tile4 = Main.tile[i - 1, j];
+                Tile tile5 = Main.tile[i + 1, j];
+                Tile tile6 = Main.tile[i - 1, j + 1];
+                Tile tile7 = Main.tile[i + 1, j + 1];
+                Tile tile8 = Main.tile[i - 1, j - 1];
+                Tile tile9 = Main.tile[i + 1, j - 1];
+                int num2 = -1;
+                int num3 = -1;
+                int planterBoxType = ModContent.TileType<PlanterBoxes>();
+                if (tile4 != null && tile4.HasTile)
+                    num3 = (tile4.TileType == planterBoxType ? planterBoxType : tile4.TileType);
+
+                if (tile5 != null && tile5.HasTile)
+                    num2 = (tile5.TileType == planterBoxType ? planterBoxType : tile5.TileType);
+
+                if (num2 >= 0 && !Main.tileSolid[num2])
+                    num2 = -1;
+
+                if (num3 >= 0 && !Main.tileSolid[num3])
+                    num3 = -1;
+
+                int tileFrameX = 0;
+                bool flag = num3 == type || num3 == planterBoxType;
+                bool flag2 = num2 == type || num2 == planterBoxType;
+                if (flag && flag2)
+                    tileFrameX = 18;
+                else if (flag && !flag2)
+                    tileFrameX = 36;
+                else if (!flag && flag2)
+                    tileFrameX = 0;
+                else
+                    tileFrameX = 54;
+
+                Main.tile[i, j].TileFrameX = (short)tileFrameX;
+
+                return false;
+            }
+
+            return base.TileFrame(i, j, type, ref resetFrame, ref noBreak);
+        }
+
+        public override void RandomUpdate(int i, int j, int type) {
+            if (type == ModContent.TileType<PlanterBoxes>()) {
+                int num3 = j - 1;
+                if (!Main.tile[i, num3].HasTile && WorldGen.genRand.Next(2) == 0) {
+                    WorldGen.PlaceTile(i, num3, 3, mute: true);
+                    if (Main.netMode == 2 && Main.tile[i, num3].HasTile)
+                        NetMessage.SendTileSquare(-1, i, num3);
+                }
+            }
+        }
+    }
+
     public override void Load() {
         On_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += On_Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
         On_WorldGen.PlaceAlch += On_WorldGen_PlaceAlch;
@@ -216,7 +273,8 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
         Main.tileSolid[Type] = true;
         Main.tileSolidTop[Type] = true;
 
-        Main.tileMerge[Type][Type] = true;
+        Main.tileMerge[Type][TileID.PlanterBox] = true;
+        Main.tileMerge[TileID.PlanterBox][Type] = true;
 
         TileID.Sets.DisableSmartCursor[Type] = true;
         TileID.Sets.DoesntGetReplacedWithTileReplacement[Type] = true;
@@ -269,7 +327,6 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
     }
 
     private bool On_Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(On_Player.orig_PlaceThing_Tiles_BlockPlacementForAssortedThings orig, Player self, bool canPlace) {
-        TileObjectData objData = TileObjectData.GetTileData(self.GetSelectedItem().createTile, 0);
         bool flag = self.GetSelectedItem().type == 213 || self.GetSelectedItem().type == 5295;
         if (flag) {
             if (Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == 0 || Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == 1 || Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == 38)
@@ -442,6 +499,16 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
                 if (flag2) {
                     WorldGen.KillTile(Player.tileTargetX, Player.tileTargetY);
                     NetMessage.SendData(17, -1, -1, null, 0, Player.tileTargetX, Player.tileTargetY);
+                }
+            }
+            if (Main.tile[Player.tileTargetX, Player.tileTargetY].TileType >= TileID.Count && TileLoader.GetTile(Main.tile[Player.tileTargetX, Player.tileTargetY].TileType) is PlantBase plantTile) {
+                if (plantTile.IsGrown(Player.tileTargetX, Player.tileTargetY)) {
+                    WorldGen.KillTile(Player.tileTargetX, Player.tileTargetY);
+                    if (!Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, Player.tileTargetX, Player.tileTargetY);
+                    }
+
+                    canPlace = true;
                 }
             }
         }

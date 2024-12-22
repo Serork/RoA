@@ -44,8 +44,8 @@ sealed class MiracleMint : PlantBase, TileHooks.IGetTileDrawData {
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<MiracleMintTE>().Kill(i, j);
 
     public override bool CreateDust(int i, int j, ref int type) {
-        if (IsGrown(i, j)) {
-            type = DustID.BlueTorch;
+        if (IsGrown(i, j) && Main.rand.NextBool(3)) {
+            type = ModContent.DustType<MiracleMintDust>();
         }
         else {
             type = ModContent.DustType<Dusts.Backwoods.Grass>();
