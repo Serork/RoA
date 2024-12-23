@@ -23,7 +23,6 @@ sealed class MiracleMintHangingPot : ModTile {
         TileObjectData.newTile.Height = 3;
         TileObjectData.newTile.Width = 2;
         TileObjectData.newTile.Origin = new Point16(0, 0);
-        TileObjectData.newTile.DrawYOffset = -2;
         TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.SolidBottom | AnchorType.PlanterBox, TileObjectData.newTile.Width, 0);
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
         TileObjectData.newTile.StyleWrapLimit = 111;
@@ -37,7 +36,7 @@ sealed class MiracleMintHangingPot : ModTile {
             TileHelper.HangingTile[Type] = new(2, 3);
         }
 
-        AddMapEntry(new Microsoft.Xna.Framework.Color(102, 243, 205));
+        AddMapEntry(new Microsoft.Xna.Framework.Color(22, 94, 128));
         DustType = -1;
     }
 
