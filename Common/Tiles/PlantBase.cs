@@ -25,6 +25,9 @@ abstract class PlantBase : ModTile {
         }
 
         private void On_Player_PlaceThing_Tiles(On_Player.orig_PlaceThing_Tiles orig, Player self) {
+            orig(self);
+            return;
+
             Item item = self.inventory[self.selectedItem];
             int tileToCreate = item.createTile;
             if (tileToCreate < 0 || !(self.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetX) || !((self.position.X + (float)self.width) / 16f + (float)Player.tileRangeX + (float)item.tileBoost - 1f + (float)self.blockRange >= (float)Player.tileTargetX) || !(self.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetY) || !((self.position.Y + (float)self.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)self.blockRange >= (float)Player.tileTargetY))
@@ -109,6 +112,36 @@ abstract class PlantBase : ModTile {
         TileObjectData.addTile(Type);
 
         SafeSetStaticDefaults();
+    }
+
+    public override bool CanPlace(int i, int j) {
+        Tile tile = Framing.GetTileSafely(i, j);
+
+        if (tile.HasTile) {
+            int tileType = tile.TileType;
+            if (tileType == Type) {
+                return IsGrown(i, j);
+            }
+
+            if (Main.tileCut[tileType] || TileID.Sets.BreakableWhenPlacing[tileType] || tileType == TileID.WaterDrip || tileType == TileID.LavaDrip || tileType == TileID.HoneyDrip || tileType == TileID.SandDrip) {
+                bool foliageGrass = tileType == TileID.Plants || tileType == TileID.Plants2;
+                bool moddedFoliage = tileType >= TileID.Count && (Main.tileCut[tileType] || TileID.Sets.BreakableWhenPlacing[tileType]);
+                bool harvestableVanillaHerb = Main.tileAlch[tileType] && WorldGen.IsHarvestableHerbWithSeed(tileType, tile.TileFrameX / 18);
+
+                if (foliageGrass || moddedFoliage || harvestableVanillaHerb) {
+                    WorldGen.KillTile(i, j);
+                    if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     protected virtual void PreAddNewTile() { }

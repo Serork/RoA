@@ -72,8 +72,8 @@ sealed class MiracleMint : PlantBase, TileHooks.IGetTileDrawData {
 
     public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
         if (IsGrown(x, y) && !AnchorValidTiles.Contains(WorldGenHelper.GetTileSafely(x, y + 1).TileType)) {
-            tileHeight += 2;
-            addFrY -= 2;
+            //tileHeight += 2;
+            //addFrY -= 2;
         }
     }
 }

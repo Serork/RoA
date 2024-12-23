@@ -21,11 +21,19 @@ using static RoA.Common.Tiles.TileHooks;
 namespace RoA.Core.Utility;
 
 static class TileHelper {
+    public readonly record struct HangingTileInfo(int? X, int? Y) {
+        public static implicit operator HangingTileInfo(int value) {
+            return new(null, value);
+        }
+    }
+
     private static Point[][] _addSpecialPointSpecialPositions; 
     private static int[] _addSpecialPointSpecialsCount;
     private static List<Point> _addVineRootsPositions;
 
     private static List<(ModTile, Point)> _fluentTiles = [];
+
+    public static readonly Dictionary<int, HangingTileInfo> HangingTile = [];
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_sunflowerWindCounter")]
     public extern static ref double TileDrawing_sunflowerWindCounter(TileDrawing tileDrawing);
@@ -70,6 +78,8 @@ static class TileHelper {
                 }
             }
         };
+
+        On_TileDrawing.DrawMultiTileVinesInWind += On_TileDrawing_DrawMultiTileVinesInWind;
     }
 
     public static void Unload() {
@@ -80,6 +90,16 @@ static class TileHelper {
         _fluentTiles.Clear();
         _fluentTiles = null;
     }
+
+    private static void On_TileDrawing_DrawMultiTileVinesInWind(On_TileDrawing.orig_DrawMultiTileVinesInWind orig, TileDrawing self, Vector2 screenPosition, Vector2 offSet, int topLeftX, int topLeftY, int sizeX, int sizeY) {
+        if (HangingTile.TryGetValue(Main.tile[topLeftX, topLeftY].TileType, out var value)) {
+            sizeX = value.X ?? sizeX;
+            sizeY = value.Y ?? sizeY;
+        }
+
+        orig(self, screenPosition, offSet, topLeftX, topLeftY, sizeX, sizeY);
+    }
+
 
     public static void PrintTime() {
         string text = "AM";

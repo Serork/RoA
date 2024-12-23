@@ -951,3 +951,8 @@ MiracleMintPlanterBox: {
 	DisplayName: Miracle Mint Planter Box
 	Tooltip: ""
 }
+
+MiracleMintHangingPot: {
+	DisplayName: Miracle Mint Hanging Pot
+	Tooltip: ""
+}
