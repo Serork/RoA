@@ -33,7 +33,7 @@ static class TileHelper {
 
     private static List<(ModTile, Point)> _fluentTiles = [];
 
-    public static readonly Dictionary<int, HangingTileInfo> HangingTile = [];
+    public static Dictionary<int, HangingTileInfo> HangingTile = [];
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_sunflowerWindCounter")]
     public extern static ref double TileDrawing_sunflowerWindCounter(TileDrawing tileDrawing);
@@ -89,10 +89,13 @@ static class TileHelper {
 
         _fluentTiles.Clear();
         _fluentTiles = null;
+
+        HangingTile.Clear();
+        HangingTile = null;
     }
 
     private static void On_TileDrawing_DrawMultiTileVinesInWind(On_TileDrawing.orig_DrawMultiTileVinesInWind orig, TileDrawing self, Vector2 screenPosition, Vector2 offSet, int topLeftX, int topLeftY, int sizeX, int sizeY) {
-        if (HangingTile.TryGetValue(Main.tile[topLeftX, topLeftY].TileType, out var value)) {
+        if (HangingTile.TryGetValue(Main.tile[topLeftX, topLeftY].TileType, out HangingTileInfo value)) {
             sizeX = value.X ?? sizeX;
             sizeY = value.Y ?? sizeY;
         }

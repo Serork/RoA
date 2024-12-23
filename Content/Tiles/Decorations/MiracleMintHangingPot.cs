@@ -17,8 +17,6 @@ sealed class MiracleMintHangingPot : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
-        TileID.Sets.DisableSmartCursor[Type] = true;
-
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
         TileObjectData.newTile.Height = 3;
         TileObjectData.newTile.Width = 2;
