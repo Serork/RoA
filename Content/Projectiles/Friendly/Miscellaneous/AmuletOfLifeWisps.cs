@@ -58,7 +58,7 @@ sealed class AmuletOfLifeWisps : ModProjectile {
 	}
 
 	public override void OnKill(int timeLeft) {
-        SoundEngine.PlaySound(SoundID.Item4 with { Pitch = 0.75f, Volume = 0.625f }, Projectile.Center);
+        SoundEngine.PlaySound(SoundID.Item4 with { Pitch = 0.75f, Volume = 0.75f }, Projectile.Center);
         for (int i = 0; i < 8; i++)
 			Dust.NewDust(Projectile.position, 8, 8, DustID.CrystalPulse, Main.rand.Next(-4, 4) * 0.9f, Main.rand.Next(-4, 4) * 0.9f, 50, default(Color), 0.9f);	
 	}
