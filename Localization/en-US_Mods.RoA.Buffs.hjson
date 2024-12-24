@@ -159,3 +159,8 @@ SolidifyingSap: {
 	DisplayName: Solidifying Sap
 	Description: Mods.RoA.Buffs.SolidifyingSap.Description
 }
+
+Fireblossom: {
+	DisplayName: Fireblossom
+	Description: Mods.RoA.Buffs.Fireblossom.Description
+}

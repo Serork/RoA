@@ -29,8 +29,8 @@ sealed class DreadheartCrimsonChestplate : NatureItem {
 
 	public override void UpdateEquip(Player player) {
         player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.08f;
-		player.GetKnockback(DruidClass.NatureDamage) += 1f;
-	}
+        player.GetKnockback(DruidClass.NatureDamage) += 0.5f;
+    }
 
 	//public override void AddRecipes() {
 	//	CreateRecipe()

@@ -29,6 +29,7 @@
 	  <None Remove="Resources\Textures\Buffs\Unburning.png" />
 	  <None Remove="Resources\Textures\DruidBiomeWaterStyle.png" />
 	  <None Remove="Resources\Textures\Dusts\BackwoodsWoodTrash.png" />
+	  <None Remove="Resources\Textures\Dusts\Fireblossom.png" />
 	  <None Remove="Resources\Textures\Dusts\GhostLeaf.png" />
 	  <None Remove="Resources\Textures\Dusts\NatureLaser.png" />
 	  <None Remove="Resources\Textures\Dusts\Slash.png" />
