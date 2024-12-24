@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Players;
+using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -53,6 +55,9 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
         Player player = drawInfo.drawPlayer;
 
         WreathItemToShowHandler wreathItemToShowHandler = player.GetModPlayer<WreathItemToShowHandler>();
+        if (!player.active) {
+            wreathItemToShowHandler.ForcedUpdate();
+        }
         Item wreathItem = wreathItemToShowHandler.WreathToShow;
         if (wreathItem.IsEmpty() || wreathItemToShowHandler.HideVisuals) {
             return;
@@ -68,7 +73,8 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
                                         (int)(drawInfo.Position.Y - Main.screenPosition.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect;
         DrawData drawData = new(texture,
                                 position + drawInfo.drawPlayer.PlayerMovementOffset(),
-                                null, drawInfo.colorArmorLegs, drawInfo.drawPlayer.legRotation, drawInfo.legVect, 1f, drawInfo.playerEffect, 0) {
+                                null, 
+                                wreathItem.ModItem is FenethsBlazingWreath ? Color.White : drawInfo.colorArmorLegs, drawInfo.drawPlayer.legRotation, drawInfo.legVect, 1f, drawInfo.playerEffect, 0) {
             shader = wreathItemToShowHandler.DyeItem.dye
         };
         drawInfo.DrawDataCache.Add(drawData);

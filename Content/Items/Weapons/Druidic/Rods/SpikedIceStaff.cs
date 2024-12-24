@@ -165,10 +165,11 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
             if (ShouldShootInternal()) {
                 SoundEngine.PlaySound(SoundID.MaxMana, corePosition);
             }
-            for (int i = 0; i < MathHelper.Min(15, _attackTimer / 4); i++) {
+            int count = (int)MathHelper.Min(15, _attackTimer / 4);
+            for (int i = 0; i < count - count / 3; i++) {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
-                Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, 176, 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f));
+                Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, 176, 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f) * 0.9f);
                 dust.noGravity = true;
                 dust.fadeIn = 0.9f;
                 dust.velocity = new Vector2(Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f);

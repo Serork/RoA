@@ -2,6 +2,8 @@
 using RoA.Common.Networking.Packets;
 using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,6 +16,10 @@ sealed class WreathItemToShowHandler : ModPlayer {
     public Item DyeItem { get; private set; }
 
     public override void PostUpdateEquips() {
+        ForcedUpdate();
+    }
+
+    internal void ForcedUpdate() {
         Item wreathVanityItem = WreathSlot.GetVanityItem(Player);
         Item wreathItem = wreathVanityItem.IsEmpty() ? WreathSlot.GetFunctionalItem(Player) : wreathVanityItem;
 
