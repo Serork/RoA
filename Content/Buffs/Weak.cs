@@ -18,9 +18,7 @@ sealed class Weak : ModBuff {
 
 	public override void Update(NPC npc, ref int buffIndex) {
 		npc.GetGlobalNPC<WeakNPC>().weakness = true;
-		npc.damage -= (int)(npc.damage * 0.15f);
-		npc.defense -= 4;
-		npc.velocity *= 0.9f;
+		npc.damage = (int)(npc.defDamage * 0.8f);
 	}
 }
 

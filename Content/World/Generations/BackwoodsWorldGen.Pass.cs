@@ -177,7 +177,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             objectData.random = -1;
             if (TileObject.Place(objectData)) {
                 _gatewayLocation = new Point(x, y);
-                WorldGenHelper.ModifiedTileRunner(x + 3, y + 13, 20, 1, _dirtTileType, true, overRide: true, ignoreTileTypes: [type, _stoneTileType, _grassTileType, _mossTileType]);
+                WorldGenHelper.ModifiedTileRunner(x + 3, y + 13, 20, 1, _dirtTileType, true, overRide: true, ignoreTileTypes: [type, _stoneTileType, _grassTileType]);
                 break;
             }
         }
@@ -2229,7 +2229,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (vector2D2.X < -1.0)
                 vector2D2.X = -1.0;
 
-            vector2D2.Y += (double)_random.Next(-10, 11) * 0.05;
+            vector2D2.Y += (double)_random.Next(-10, 4) * 0.05;
             if (vector2D2.Y > 1.0)
                 vector2D2.Y = 1.0;
 
@@ -2391,7 +2391,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         vector2D.Y = _gatewayLocation.Y;
         Vector2D vector2D2 = default(Vector2D);
         vector2D2.X = (double)_random.Next(-10, 15) * 0.1;
-        vector2D2.Y = (double)_random.Next(-10, -5) * 0.1;
+        vector2D2.Y = (double)_random.Next(-10, -6) * 0.1;
         _gatewayVelocity = vector2D2;
         while (num > 0.0 && num3 > 0.0) {
             double num4 = num * (num3 / num2);
@@ -2441,7 +2441,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (vector2D2.X < -1.0)
                 vector2D2.X = -1.0;
 
-            vector2D2.Y += (double)_random.Next(-10, 11) * 0.05;
+            vector2D2.Y += (double)_random.Next(-10, 4) * 0.05;
             if (vector2D2.Y > 1.0)
                 vector2D2.Y = 1.0;
 
@@ -2492,8 +2492,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         Step_AddWebs();
-
-        PlaceGateway(true);
     }
 
     public void BackwoodsOtherPlacements(GenerationProgress progress, GameConfiguration config) {
@@ -2860,6 +2858,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         cleanUp();
 
         Step_WallVariety();
+
+        PlaceGateway(true);
 
         double count = WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055);
         for (int num555 = 0; num555 < count; num555++) {

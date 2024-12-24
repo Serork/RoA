@@ -1019,3 +1019,26 @@ MercuriumPickaxe: {
 	DisplayName: Mercurium Pickaxe
 	Tooltip: ""
 }
+
+WorshipperBonehelm: {
+	DisplayName: Worshipper Bonehelm
+	Tooltip:
+		'''
+		Increases your max number of minions by 1
+		8% increased minion damage
+		'''
+}
+
+WorshipperGarb: {
+	DisplayName: Worshipper Garb
+	Tooltip:
+		'''
+		8% increased minion damage
+		10% increased movement speed
+		'''
+}
+
+WorshipperMantle: {
+	DisplayName: Worshipper Mantle
+	Tooltip: 18% increased minion damage
+}
