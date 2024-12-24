@@ -44,3 +44,5 @@ AshwalkerHoodSetBonus:
 	'''
 AcolyteSetBonus: 40% increased magic damage when below 40 mana
 FlametrackerSetBonus: Magic weapons release an additional tracking bolt while at full mana to decrease target's defense
+SentinelSetBonus1: Shows the location of enemies while standing still
+SentinelSetBonus2: Greatly increases speed of arrows shot in direction of running

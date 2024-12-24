@@ -979,3 +979,23 @@ FlametrackerPants: {
 		5% increased magic damage
 		'''
 }
+
+SentinelBreastplate: {
+	DisplayName: Sentinel Breastplate
+	Tooltip: Increases arrow damage by 10%
+}
+
+SentinelHelmet: {
+	DisplayName: Sentinel Helmet
+	Tooltip: 10% chance to not consume arrows
+}
+
+SentinelLeggings: {
+	DisplayName: Sentinel Leggings
+	Tooltip: Increases arrow damage by 10%
+}
+
+SentinelTaurusMask: {
+	DisplayName: Sentinel Taurus Mask
+	Tooltip: Increases running acceleration speed
+}
