@@ -999,3 +999,23 @@ SentinelTaurusMask: {
 	DisplayName: Sentinel Taurus Mask
 	Tooltip: Increases running acceleration speed
 }
+
+AmuletOfLife: {
+	DisplayName: Amulet Of Life
+	Tooltip: "Casts a vortex of healing wisps that heal player upon impact"
+}
+
+MercuriumAxe: {
+	DisplayName: Mercurium Axe
+	Tooltip: ""
+}
+
+MercuriumHammer: {
+	DisplayName: Mercurium Hammer
+	Tooltip: ""
+}
+
+MercuriumPickaxe: {
+	DisplayName: Mercurium Pickaxe
+	Tooltip: ""
+}

@@ -39,12 +39,16 @@ sealed class GalipotStream : NatureProjectile {
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.immune[Projectile.owner] = 20;
+        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
+        target.AddBuff(20, (int)(60f * num2 * 2f));
         //if (Projectile.ai[1] != 1f) {
         //    Projectile.Kill();
         //}
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
+        target.AddBuff(20, (int)(60f * num2 * 2f));
         //if (Projectile.ai[1] != 1f) {
         //    Projectile.Kill();
         //}

@@ -1,0 +1,42 @@
+using Microsoft.Xna.Framework;
+
+using RoA.Content.Items.Materials;
+
+using Terraria;
+using Terraria.GameContent.Creative;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Items.Tools;
+
+sealed class MercuriumPickaxe : ModItem {
+	public override void SetStaticDefaults() {
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults() {
+		int width = 34; int height = width;
+		Item.Size = new Vector2(width, height);
+
+		Item.damage = 8;
+		Item.DamageType = DamageClass.Melee;
+
+		Item.useTime = Item.useAnimation = 22;
+		Item.useStyle = ItemUseStyleID.Swing;
+		Item.autoReuse = false;
+
+		Item.knockBack = 5f;
+		Item.pick = 65;
+
+		Item.value = Item.buyPrice(silver: 42);
+		Item.rare = ItemRarityID.Blue;
+		Item.UseSound = SoundID.Item1;
+	}
+
+	//public override void AddRecipes() {
+	//	CreateRecipe()
+	//		.AddIngredient(ModContent.ItemType<MercuriumNugget>(), 16)
+	//		.AddTile(TileID.Anvils)
+	//		.Register();
+	//}
+}

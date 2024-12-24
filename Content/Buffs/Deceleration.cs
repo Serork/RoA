@@ -1,4 +1,7 @@
 using Microsoft.Xna.Framework;
+
+using RoA.Common.Sets;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -14,7 +17,7 @@ sealed class Deceleration : ModBuff {
 		Main.debuff[Type] = true;
 		Main.pvpBuff[Type] = true;
 		Main.buffNoSave[Type] = true;
-	}
+    }
 
 	public override void Update(Player player, ref int buffIndex) {
 		player.GetModPlayer<DecelerationPlayer>().deceleration = true;
