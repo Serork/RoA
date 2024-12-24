@@ -43,3 +43,4 @@ AshwalkerHoodSetBonus:
 	Double tap {0} to take Firebird [kw/n:form]
 	'''
 AcolyteSetBonus: 40% increased magic damage when below 40 mana
+FlametrackerSetBonus: Magic weapons release an additional tracking bolt while at full mana to decrease target's defense

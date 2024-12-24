@@ -197,12 +197,14 @@ sealed class TrackingBolt : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int num38 = 0; num38 < 6; num38++) {
-            int num39 = Dust.NewDust(Projectile.position - Projectile.oldVelocity.SafeNormalize(Vector2.Zero) * 5f, Projectile.width, Projectile.height, 66, 0f, 0f, 100, Color.Lerp(Color.Red, Color.White, 0.5f + Main.rand.NextFloatRange(0.1f)), Main.rand.NextFloat(1.35f, 2f) * 0.75f);
-            Main.dust[num39].noGravity = true;
-            Dust dust2 = Main.dust[num39];
+        for (int num615 = 0; num615 < 12; num615++) {
+            int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y) - Projectile.oldVelocity.SafeNormalize(Vector2.Zero) * 15f, Projectile.width, Projectile.height, 66, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, Color.Lerp(Color.Red, Color.White, 0.5f + Main.rand.NextFloatRange(0.1f)), Main.rand.NextFloat(1.35f, 2f) * 0.75f);
+            Main.dust[num616].noGravity = true;
+            Dust dust2 = Main.dust[num616];
+            dust2.scale *= 0.65f;
+            dust2 = Main.dust[num616];
             dust2.velocity *= Main.rand.NextFloat(1.5f, 2.5f);
-            dust2.velocity *= 0.35f;
+            dust2.velocity *= 0.5f;
         }
         float distance = 30f;
         for (int findNPC = 0; findNPC < Main.maxNPCs; findNPC++) {
