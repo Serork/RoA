@@ -1002,7 +1002,7 @@ SentinelTaurusMask: {
 
 AmuletOfLife: {
 	DisplayName: Amulet Of Life
-	Tooltip: "Casts a vortex of healing wisps that heal player upon impact"
+	Tooltip: Casts a vortex of healing wisps that heal player upon impact
 }
 
 MercuriumAxe: {

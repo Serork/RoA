@@ -154,3 +154,8 @@ FlametrackerDebuff: {
 	DisplayName: Flametracker Debuff
 	Description: Mods.RoA.Buffs.FlametrackerDebuff.Description
 }
+
+SolidifyingSap: {
+	DisplayName: Solidifying Sap
+	Description: Mods.RoA.Buffs.SolidifyingSap.Description
+}

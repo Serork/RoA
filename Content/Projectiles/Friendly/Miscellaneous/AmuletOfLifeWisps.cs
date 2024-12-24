@@ -5,6 +5,7 @@ using RoA.Core;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -45,11 +46,11 @@ sealed class AmuletOfLifeWisps : ModProjectile {
 
 		float tick = Projectile.ai[0]++;
 		float degrees = MathHelper.ToDegrees(tick);
-		Vector2 playerPos = player.Center;
+		Vector2 playerPos = player.Center - new Vector2(player.width / 2f, 0f) + new Vector2(4f, -4f);
 		Projectile.position.X = playerPos.X + (float)Math.Cos(degrees / 3600) * radius;
 		Projectile.position.Y = playerPos.Y + (float)Math.Sin(degrees / 3600) * radius;
 		radius -= 0.5f;
-		if (radius <= 0) {
+		if (radius <= 0 || player.getRect().Intersects(Projectile.getRect())) {
 			player.statLife += 15;
 			player.HealEffect(15);
 			Projectile.Kill();
@@ -57,7 +58,8 @@ sealed class AmuletOfLifeWisps : ModProjectile {
 	}
 
 	public override void OnKill(int timeLeft) {
-		for (int i = 0; i < 8; i++)
+        SoundEngine.PlaySound(SoundID.Item4 with { Pitch = 0.75f, Volume = 0.625f }, Projectile.Center);
+        for (int i = 0; i < 8; i++)
 			Dust.NewDust(Projectile.position, 8, 8, DustID.CrystalPulse, Main.rand.Next(-4, 4) * 0.9f, Main.rand.Next(-4, 4) * 0.9f, 50, default(Color), 0.9f);	
 	}
 

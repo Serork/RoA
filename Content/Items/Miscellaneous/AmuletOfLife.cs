@@ -33,7 +33,7 @@ sealed class AmuletOfLife : ModItem {
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         for (int i = 0; i < 3; i++)
-            Projectile.NewProjectile(source, player.Center, Vector2.Zero, type, 0, 0, player.whoAmI, 120 * i);
+            Projectile.NewProjectile(source, player.Center - new Vector2(player.width / 2f, 0f) + new Vector2(4f, -4f), Vector2.Zero, type, 0, 0, player.whoAmI, 120 * i);
 
         return false;
     }
