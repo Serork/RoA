@@ -78,7 +78,7 @@ sealed class HemorrhageNPC : GlobalNPC {
 	}
 
 	public override void DrawEffects(NPC npc, ref Color drawColor) {
-        if (npc.active) {
+        if (!npc.active) {
             return;
         }
         if (hemorrhageEffect) {

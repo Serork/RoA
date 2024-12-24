@@ -149,3 +149,8 @@ Moth: {
 	DisplayName: Moth
 	Description: Mods.RoA.Buffs.Moth.Description
 }
+
+FlametrackerDebuff: {
+	DisplayName: Flametracker Debuff
+	Description: Mods.RoA.Buffs.FlametrackerDebuff.Description
+}

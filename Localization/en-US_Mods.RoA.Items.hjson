@@ -956,3 +956,26 @@ MiracleMintHangingPot: {
 	DisplayName: Miracle Mint Hanging Pot
 	Tooltip: ""
 }
+
+FlametrackerHat: {
+	DisplayName: Flametracker Hat
+	Tooltip: "Greatly increases mana regeneration rate"
+}
+
+FlametrackerJacket: {
+	DisplayName: Flametracker Jacket
+	Tooltip: 
+		'''
+		12% reduced mana usage
+		5% increased magic damage
+		'''
+}
+
+FlametrackerPants: {
+	DisplayName: Flametracker Pants
+	Tooltip: 
+		'''
+		8% reduced mana usage
+		5% increased magic damage
+		'''
+}

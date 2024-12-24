@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
@@ -121,4 +123,25 @@ static class PlayerExtensions {
         player.LimitPointToPlayerReachableArea(ref result, maxX, maxY);
         return result;
     }
+
+    public static bool CheckVanitySet(this Player player, int head, int body, int legs) {
+        if (player.armor[10].type == head &&
+            player.armor[11].type == body &&
+            player.armor[12].type == legs)
+            return true;
+        return false;
+    }
+
+    public static bool CheckArmorSlot(this Player player, int type, int slotID, int oppositeSlotID) {
+        if (player.armor[slotID].type == type && player.armor[oppositeSlotID].type == ItemID.None)
+            return true;
+        return false;
+    }
+
+    public static bool CheckVanitySlot(this Player player, int type, int slotID) {
+        if (player.armor[slotID].type == type)
+            return true;
+        return false;
+    }
+
 }
