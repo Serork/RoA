@@ -258,7 +258,7 @@ TwigWreath: {
 
 FenethsBlazingWreath: {
 	DisplayName: Feneths Blazing Wreath
-	Tooltip: 
+	Tooltip:
 		'''
 		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
 		Increases nature knockback
@@ -1047,4 +1047,49 @@ WorshipperGarb: {
 WorshipperMantle: {
 	DisplayName: Worshipper Mantle
 	Tooltip: 18% increased minion damage
+}
+
+SentinelShield: {
+	DisplayName: Sentinel Shield
+	Tooltip: Has a chance to unleash vengeful spirits instead of taking damage
+}
+
+DynastyWoodBreastplate: {
+	DisplayName: Dynasty Wood Breastplate
+	Tooltip: ""
+}
+
+DynastyWoodHelmet: {
+	DisplayName: Dynasty Wood Helmet
+	Tooltip: ""
+}
+
+DynastyWoodLeggings: {
+	DisplayName: Dynasty Wood Leggings
+	Tooltip: ""
+}
+
+ElderwoodChestplate: {
+	DisplayName: Elderwood Chestplate
+	Tooltip: ""
+}
+
+ElderwoodHelmet: {
+	DisplayName: Elderwood Helmet
+	Tooltip: ""
+}
+
+ElderwoodLeggings: {
+	DisplayName: Elderwood Leggings
+	Tooltip: ""
+}
+
+DynastyWoodHammer: {
+	DisplayName: Dynasty Wood Hammer
+	Tooltip: ""
+}
+
+ElderwoodHammer: {
+	DisplayName: Elderwood Hammer
+	Tooltip: ""
 }

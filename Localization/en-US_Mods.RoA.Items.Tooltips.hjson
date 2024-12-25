@@ -52,3 +52,5 @@ WorshipperSetBonus:
 	Double tap {0} to send it out to attack temporarily
 	While idle, {1} on Harpy to ride it
 	'''
+DynastySetBonus: 1 defense
+ElderwoodSetBonus: 1 defense

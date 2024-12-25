@@ -57,6 +57,8 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool ShouldntUpdateRotationAndDirection() => false;
 
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(player.itemTimeMax / 2 + player.itemTimeMax / 3);
+
         protected override void SafestOnSpawn(IEntitySource source) {
             _attackTime = NatureWeaponHandler.GetUseSpeed(Owner.GetSelectedItem(), Owner);
             Projectile.netUpdate = true;

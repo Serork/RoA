@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -60,6 +61,8 @@ public class SentinelSpirit : ModNPC {
             Main.dust[num352].noGravity = true;
             Main.dust[num352].scale = 1.4f;
         }
+
+        SoundEngine.PlaySound(SoundID.NPCDeath6, NPC.Center);
         //if (NPC.life <= 0) {
         //    for (int k = 0; k < 20; k++) {
         //        int _dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Clentaminator_Green, 2.5f * hit.HitDirection, -2.5f, 0, default(Color), 1.2f);

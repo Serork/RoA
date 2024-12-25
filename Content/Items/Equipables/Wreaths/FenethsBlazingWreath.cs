@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Content.Projectiles.Friendly;
+using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -25,17 +27,33 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
         player.GetModPlayer<FenethsBlazingWreathHandler>().IsEffectActive = true;
     }
 
-	private class FenethsBlazingWreathHandler : ModPlayer {
+	internal class FenethsBlazingWreathHandler : ModPlayer {
 		public bool IsEffectActive;
 
         public override void ResetEffects() {
 			IsEffectActive = false;
         }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-            if (IsEffectActive && /*Main.rand.NextChance(0.2) && */target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers) {
+            if (!proj.IsDruidic()) {
+                return;
+            }
+
+            if (proj.type != ModContent.ProjectileType<FireblossomExplosion>() && proj.type != ModContent.ProjectileType<Fireblossom>() &&
+                IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
                 int type = ModContent.ProjectileType<Projectiles.Friendly.Druidic.Fireblossom>();
-                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, damageDone, hit.Knockback, Player.whoAmI, target.whoAmI);
+                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, target.whoAmI);
+            }
+        }
+
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers) {
+            if (!item.IsADruidicWeapon()) {
+                return;
+            }
+
+            if (IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
+                int type = ModContent.ProjectileType<Projectiles.Friendly.Druidic.Fireblossom>();
+                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, item.damage * 2, item.knockBack, Player.whoAmI, target.whoAmI);
             }
         }
 

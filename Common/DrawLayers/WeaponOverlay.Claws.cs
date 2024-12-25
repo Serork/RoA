@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Build.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using ReLogic.Content;
 
+using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -53,7 +54,9 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
               offsetY = (int)(drawInfo.Position.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4f);
         Vector2 offset = new Vector2(offsetX, offsetY) + drawInfo.drawPlayer.bodyFrame.Size() / 2f;
         Vector2 drawPosition = drawInfo.drawPlayer.bodyPosition + offset;
-        DrawData drawData = new(asset.Value, drawPosition - Main.screenPosition, player.bodyFrame, weaponAttribute.Hex != null ? Helper.FromHexRgb(weaponAttribute.Hex.Value) : drawInfo.colorArmorBody, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect);
+        Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(weaponAttribute.Hex != null ? Helper.FromHexRgb(weaponAttribute.Hex.Value) : drawInfo.colorArmorBody, drawInfo.shadow);
+        immuneAlphaPure *= drawInfo.drawPlayer.stealth;
+        DrawData drawData = new(asset.Value, drawPosition - Main.screenPosition, player.bodyFrame, immuneAlphaPure, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect);
         drawInfo.DrawDataCache.Add(drawData);
     }
 }

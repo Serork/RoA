@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Common.Druid.Wreath;
+using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -18,6 +20,48 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
+sealed class FireblossomExplosion : NatureProjectile {
+    public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.Explosives}";
+
+    protected override void SafeSetDefaults() {
+        int width = 150; int height = 150;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.penetrate = -1;
+        Projectile.hostile = false;
+
+        Projectile.friendly = true;
+
+        Projectile.tileCollide = false;
+        Projectile.ignoreWater = true;
+
+        Projectile.timeLeft = 25;
+
+        Projectile.alpha = 255;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = -1;
+
+        ShouldIncreaseWreathPoints = false;
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        Player player = Main.player[Projectile.owner];
+        WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        if (handler.IsFull 
+            && player.GetModPlayer<FenethsBlazingWreath.FenethsBlazingWreathHandler>().IsEffectActive
+            && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
+            int type = ModContent.ProjectileType<Fireblossom>();
+            foreach (Projectile projectile in Main.ActiveProjectiles) {
+                if (projectile.owner == Projectile.owner && projectile.type == type && projectile.ai[0] == target.whoAmI) {
+                    return;
+                }
+            }
+            Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
+        }
+    }
+}
+
 sealed class Fireblossom : NatureProjectile {
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 3;
@@ -30,10 +74,17 @@ sealed class Fireblossom : NatureProjectile {
         Projectile.penetrate = -1;
         Projectile.hostile = false;
 
+        Projectile.friendly = true;
+
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
 
         Projectile.timeLeft = int.MaxValue;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = -1;
+
+        ShouldIncreaseWreathPoints = false;
     }
 
     private float Speed => MathHelper.Clamp(Projectile.localAI[2], 0f, 1.4f);
@@ -45,7 +96,7 @@ sealed class Fireblossom : NatureProjectile {
             Projectile.localAI[0] = 1f;
 
             Projectile.frame = Main.rand.Next(3);
-            Projectile.direction = 1 - Main.rand.Next(2) == 0 ? 2 : 0;
+            Projectile.spriteDirection = Projectile.direction = 1 - Main.rand.Next(2) == 0 ? 2 : 0;
         }
         if (Projectile.localAI[2] >= 2f) {
             Projectile.Kill();
@@ -54,7 +105,7 @@ sealed class Fireblossom : NatureProjectile {
             Projectile.localAI[2] += TimeSystem.LogicDeltaTime;
         }
         Projectile.Center = targetNPC.Center + new Vector2(0f, targetNPC.gfxOffY);
-        targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 2);
+        targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 200);
         float rate = (float)(Speed % 5.0);
         Color color = Color.Lerp(Color.Orange, Color.DarkOrange, Ease.QuartOut(MathHelper.Clamp(1f - (rate - 0.5f) / 0.5f, 0f, 1f))) * 0.75f;
         float value = Projectile.ai[1];
@@ -87,7 +138,9 @@ sealed class Fireblossom : NatureProjectile {
     public override void OnKill(int timeLeft) {
         Projectile.localAI[0] = 0f;
         Projectile.localAI[1] = 0f;
-        //Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FireblossomExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+        if (Projectile.owner == Main.myPlayer) {
+            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FireblossomExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+        }
         for (int i = 0; i < 2; i++)
             SoundEngine.PlaySound(i == 0 ? SoundID.Item14 : i == 1 ? SoundID.Item69 : i == 2 ? SoundID.Item74 : SoundID.Item2, Projectile.Center);
         for (int i = 0; i < 50; i++) {
@@ -110,7 +163,7 @@ sealed class Fireblossom : NatureProjectile {
         Texture2D texture = glowMaskTexture.Value;
         SpriteBatch sb = Main.spriteBatch;
         Vector2 offset = new((float)(Projectile.width * 0.5f), (float)(Projectile.height * 0.5f));
-        SpriteEffects effects = Projectile.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        SpriteEffects effects = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         SpriteFrame frame = new(1, 3);
         Rectangle rectangle = frame.GetSourceRectangle(texture);
         int height = texture.Height / 3;
