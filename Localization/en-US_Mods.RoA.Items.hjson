@@ -1093,3 +1093,12 @@ ElderwoodHammer: {
 	DisplayName: Elderwood Hammer
 	Tooltip: ""
 }
+
+CosmicHat: {
+	DisplayName: Cosmic Hat
+	Tooltip: 
+		'''
+		Mana stars fall, when your will is too low
+		'Great for a walk in a shadowy forest'
+		'''
+}
