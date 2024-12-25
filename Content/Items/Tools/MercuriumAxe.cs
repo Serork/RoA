@@ -22,9 +22,9 @@ sealed class MercuriumAxe : ModItem {
 
 		Item.useTime = Item.useAnimation = 24;
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.autoReuse = false;
+        Item.autoReuse = true;
 
-		Item.knockBack = 5f;
+        Item.knockBack = 5f;
 		Item.axe = 80 / 5;
 
 		Item.value = Item.sellPrice(silver: 26);

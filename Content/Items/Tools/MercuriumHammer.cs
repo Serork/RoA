@@ -24,7 +24,7 @@ public class MercuriumHammer : ModItem {
 
 		Item.useTime = Item.useAnimation = 40;
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.autoReuse = false;
+		Item.autoReuse = true;
 
 		Item.knockBack = 5f;
 		Item.hammer = 60;

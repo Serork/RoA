@@ -23,7 +23,7 @@ sealed class MercuriumPickaxe : ModItem {
 
 		Item.useTime = Item.useAnimation = 22;
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.autoReuse = false;
+		Item.autoReuse = true;
 
 		Item.knockBack = 5f;
 		Item.pick = 65;
