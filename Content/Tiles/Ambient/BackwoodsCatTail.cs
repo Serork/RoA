@@ -10,16 +10,25 @@ using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Ambient;
+
+sealed class DragonFliesSpawn : GlobalNPC {
+    public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
+        
+    }
+}
 
 sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
     public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
@@ -221,6 +230,50 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
         }
 
         return true;
+    }
+
+    private static int RollDragonflyType(int tileType = 2) {
+        return Main.rand.NextFromList(new short[3] {
+            596,
+            597,
+            599
+        });
+    }
+
+    public override void RandomUpdate(int i, int j) {
+        if (!Helper.OnScreenWorld(new Point(i, j).ToWorldCoordinates())) {
+            return;
+        }
+
+        if (NPC.TooWindyForButterflies) {
+            return;
+        }
+
+        for (int k = 0; k < 255; k++) {
+            if (!Main.player[k].active || Main.player[k].dead)
+                continue;
+
+            if (Main.player[k].isNearNPC(398, NPC.MoonLordFightingDistance))
+                continue;
+
+            if (!Main.player[k].ZoneGraveyard && Main.rand.Next(2) == 0 && !Main.raining && Main.dayTime && NPC.FindCattailTop(i, j, out int cattailX, out int cattailY)) {
+                if (WorldGen.SolidTile(cattailX, cattailY)) {
+                    continue;
+                }
+                IEntitySource entitySource = new EntitySource_SpawnNPC();
+                Main.NewText(123);
+                if (Main.player[k].RollLuck(NPC.goldCritterChance) == 0)
+                    NPC.NewNPC(entitySource, cattailX * 16 + 8, cattailY * 16, 601);
+                else
+                    NPC.NewNPC(entitySource, cattailX * 16 + 8, cattailY * 16, RollDragonflyType(Type));
+
+                if (Main.rand.Next(3) == 0)
+                    NPC.NewNPC(entitySource, cattailX * 16 + 8 - 16, cattailY * 16, RollDragonflyType(Type));
+
+                if (Main.rand.Next(3) == 0)
+                    NPC.NewNPC(entitySource, cattailX * 16 + 8 + 16, cattailY * 16, RollDragonflyType(Type));
+            }
+        }
     }
 
     private void CheckCatTail(int x, int j) {
