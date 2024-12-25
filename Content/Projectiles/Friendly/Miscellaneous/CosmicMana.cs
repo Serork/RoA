@@ -64,11 +64,11 @@ sealed class CosmicMana : ModProjectile {
         vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, p => Color.Lerp(Color.DarkBlue.MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)), Color.OrangeRed.MultiplyAlpha(0.5f), p), p => (float)(60.0 * Projectile.scale * (1.0 - p)), -Main.screenPosition + Projectile.Size / 2, true);
         vertexStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-        spriteBatch.BeginBlendState(BlendState.Additive);
-        Texture2D backTexture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Suslight");
-        spriteBatch.Draw(backTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), Color.FromNonPremultiplied(byte.MaxValue, 0, 0, 50), 0.0f, backTexture.Size() / 2f, (float)(0.8f + 0.2f * Math.Sin(Main.time / 10)), SpriteEffects.None, 0.0f);
+        //spriteBatch.End();
+        //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+        //spriteBatch.BeginBlendState(BlendState.Additive);
+        //Texture2D backTexture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Suslight");
+        //spriteBatch.Draw(backTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), Color.FromNonPremultiplied(byte.MaxValue, 0, 0, 50), 0.0f, backTexture.Size() / 2f, (float)(0.8f + 0.2f * Math.Sin(Main.time / 10)), SpriteEffects.None, 0.0f);
         spriteBatch.EndBlendState();
         Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f), Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0)), SpriteEffects.None, 0.0f);
@@ -79,8 +79,8 @@ sealed class CosmicMana : ModProjectile {
         => new Color?(Color.White);
 
     public override void OnKill(int timeLeft) {
-        for (int i = 0; i < 8; i++) {
-            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 62, Main.rand.Next(-4, 4), Main.rand.Next(-4, 4), 0, default, 1.2f);
+        for (int i = 0; i < 10; i++) {
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 62, Main.rand.Next(-4, 4), Main.rand.Next(-4, 4), 150, default, 1.2f);
             Main.dust[dust].noGravity = true;
             Main.dust[dust].velocity *= 3f * Main.rand.NextFloat();
         }
