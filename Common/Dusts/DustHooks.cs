@@ -1,6 +1,6 @@
 ﻿using Terraria;
 
 namespace RoA.Common.Dusts;
-interface IDrawDustPostPlayer {
+interface IDrawDustPrePlayer {
     void DrawPostPlayer(Dust dust);
 }

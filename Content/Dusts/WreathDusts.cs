@@ -15,7 +15,7 @@ sealed class WreathDust3 : WreathDust { }
 
 sealed class WreathDust2 : WreathDust { }
 
-class WreathDust : ModDust, IDrawDustPostPlayer {
+class WreathDust : ModDust, IDrawDustPrePlayer {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         Color color = new(255, 255, 200, 200);
         return color;
@@ -25,7 +25,7 @@ class WreathDust : ModDust, IDrawDustPostPlayer {
 
     public override bool PreDraw(Dust dust) => false;
 
-    void IDrawDustPostPlayer.DrawPostPlayer(Dust dust) {
+    void IDrawDustPrePlayer.DrawPostPlayer(Dust dust) {
         Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, dust.GetAlpha(dust.color), dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
         Color color = dust.GetAlpha(dust.color);
         color *= 1.4f;

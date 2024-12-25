@@ -44,9 +44,13 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
 
             if (proj.type != ModContent.ProjectileType<FireblossomExplosion>() && proj.type != ModContent.ProjectileType<Fireblossom>() &&
                 IsEffectActive && Main.rand.NextChance(1) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
+                Vector2 center = proj.Center;
+                if (center.Distance(Player.Center) < 100f || center.Distance(Player.RotatedRelativePoint(Player.MountedCenter, true)) < 100f) {
+                    center = target.Center + (Player.Center - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f;
+                }
                 int type = ModContent.ProjectileType<Fireblossom>();
                 int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, target.whoAmI);
-                Main.projectile[projectile].As<Fireblossom>().SetPosition(proj.Center, target);
+                Main.projectile[projectile].As<Fireblossom>().SetPosition(center, target);
                 
                 projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, Player.whoAmI);
                 Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width, Player);

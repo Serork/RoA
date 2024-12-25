@@ -335,10 +335,13 @@ sealed class Snatcher : NatureProjectile {
     }
 
     public override void AI() {
+        Player player = Main.player[Projectile.owner];
+        if (!player.active || player.dead) {
+            Projectile.Kill();
+        }
         if (Projectile.Opacity > 0f) {
             Projectile.Opacity -= 0.1f;
         }
-        Player player = Main.player[Projectile.owner];
         Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, true);
         Projectile.direction = player.direction;
         Projectile.Center = playerCenter;

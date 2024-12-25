@@ -119,6 +119,8 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected virtual bool IsActive() => true;
 
     protected virtual void ShootProjectile() {
+        Owner.ApplyItemAnimation(Owner.GetSelectedItem());
+
         Vector2 spawnPosition = CorePosition;
         Vector2 velocity = Vector2.Zero;
         ushort count = 1;
@@ -274,7 +276,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void ActiveCheck() {
-        if (!Owner.active || Owner.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (!Owner.active || Owner.dead || Owner.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
             Projectile.Kill();
         }
         bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= ProjActiveCount();
@@ -296,7 +298,9 @@ abstract class BaseRodProjectile : NatureProjectile {
             _leftTimeToReuse = TICKSTOREUSE;
         }
         if (_leftTimeToReuse > 2) {
-            Owner.itemTime = Owner.itemAnimation = 2;
+            if (Owner.itemTime < 2) {
+                Owner.itemTime = Owner.itemAnimation = 2;
+            }
             Owner.bodyFrame.Y = Owner.legFrame.Y;
             Projectile.timeLeft = 2;
             Owner.heldProj = Projectile.whoAmI;

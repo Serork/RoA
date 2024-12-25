@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-class ElderTorchDust2 : ElderTorchDust, IDrawDustPostPlayer {
+class ElderTorchDust2 : ElderTorchDust, IDrawDustPrePlayer {
     public override string Texture => DustLoader.GetDust(ModContent.DustType<ElderTorchDust>()).Texture;
 
     public void DrawPostPlayer(Dust dust) {

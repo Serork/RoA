@@ -135,10 +135,11 @@ sealed class Fireblossom : NatureProjectile {
     public void SetPosition(Vector2 position, Entity entity) {
         _position = position;
         Vector2 center = Main.player[Projectile.owner].Center;
-        Projectile.rotation = Helper.VelocityAngle((entity.Center - center).SafeNormalize(Vector2.Zero)) + MathHelper.PiOver2;
-        if ((_position - center).X.GetDirection() == 1) {
-            Projectile.rotation += MathHelper.Pi;
-        }
+        bool flag = (int)Projectile.ai[0] == Projectile.owner;
+        Projectile.rotation = Helper.VelocityAngle((entity.Center - center).SafeNormalize(Vector2.Zero)) + (flag ? MathHelper.PiOver2 : MathHelper.Pi);
+        //if ((_position - center).X.GetDirection() == 1) {
+        //    Projectile.rotation += MathHelper.PiOver2;
+        //}
         _position -= entity.Center;
         Projectile.netUpdate = true;
     }
@@ -147,6 +148,7 @@ sealed class Fireblossom : NatureProjectile {
         bool flag = (int)Projectile.ai[0] == Projectile.owner;
         NPC targetNPC = flag ? null : Main.npc[(int)Projectile.ai[0]];
         Player targetPlayer = !flag ? null : Main.player[(int)Projectile.ai[0]];
+        int onFireForEnemiesType = ModContent.BuffType<OnFire>();
         if (Main.player[Projectile.owner].GetModPlayer<WreathHandler>().IsFull) {
             if (Projectile.ai[2] == 0f) {
                 float num2 = (float)Main.rand.Next(75, 150) * 0.025f;
@@ -155,7 +157,7 @@ sealed class Fireblossom : NatureProjectile {
                     targetPlayer.AddBuff(BuffID.OnFire, time);
                 }
                 else {
-                    targetNPC.AddBuff(ModContent.BuffType<OnFire>(), time);
+                    targetNPC.AddBuff(onFireForEnemiesType, time);
                     //SetPosition(Main.player[Projectile.owner], targetNPC);
                 }
                 Projectile.ai[2] = 1f;
@@ -171,7 +173,7 @@ sealed class Fireblossom : NatureProjectile {
                     targetPlayer.AddBuff(BuffID.OnFire, time);
                 }
                 else {
-                    targetNPC.AddBuff(ModContent.BuffType<OnFire>(), time);
+                    targetNPC.AddBuff(onFireForEnemiesType, time);
                     //SetPosition(Main.player[Projectile.owner], targetNPC);
                 }
                 Projectile.ai[2] = time;
@@ -200,11 +202,20 @@ sealed class Fireblossom : NatureProjectile {
             Projectile.Opacity = Projectile.timeLeft > int.MaxValue - 40 ? (float)(int.MaxValue - Projectile.timeLeft) / 40f : 1f;
         }
         if (!flag) {
+            if (!targetNPC.HasBuff(onFireForEnemiesType)) {
+                targetNPC.AddBuff(onFireForEnemiesType, 10);
+            }
             targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 150);
             Vector2 center = targetNPC.Center + _position + new Vector2(0f, targetNPC.gfxOffY);
+            while (!targetNPC.getRect().Contains(center.ToPoint())) {
+                center += (targetNPC.Center - center).SafeNormalize(Vector2.Zero);
+            }
             Projectile.Center = new Vector2((int)center.X, (int)center.Y);
         }
         else {
+            if (!targetPlayer.HasBuff(BuffID.OnFire)) {
+                targetPlayer.AddBuff(BuffID.OnFire, 10);
+            }
             targetPlayer.onFire = false;
             //Vector2 center = targetPlayer.Center + _position + new Vector2(0f, targetPlayer.gfxOffY);
             Projectile.Center = new Vector2((int)targetPlayer.Center.X, (int)targetPlayer.Center.Y) + new Vector2(0f, targetPlayer.gfxOffY);
