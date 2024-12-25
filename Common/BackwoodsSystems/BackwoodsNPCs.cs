@@ -50,7 +50,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     }
                 }
             }
-            pool.Add(ModContent.NPCType<Hedgehog>(), 0.1f);
+            pool.Add(ModContent.NPCType<Hedgehog>(), 0.05f);
             float chance = surface ? 1f : 0.5f;
             if (!surface/* && NPC.downedBoss2 */&& !NPC.AnyNPCs(ModContent.NPCType<GrimDefender>())) {
                 pool.Add(ModContent.NPCType<GrimDefender>(), 0.1f);
