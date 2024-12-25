@@ -203,7 +203,7 @@ sealed class Fireblossom : NatureProjectile {
         }
         if (!flag) {
             if (!targetNPC.HasBuff(onFireForEnemiesType)) {
-                targetNPC.AddBuff(onFireForEnemiesType, 10);
+                Projectile.localAI[2] = !CanExplode ? Projectile.ai[2] * 0.015f : 2f;
             }
             targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 150);
             Vector2 center = targetNPC.Center + _position + new Vector2(0f, targetNPC.gfxOffY);
@@ -214,7 +214,7 @@ sealed class Fireblossom : NatureProjectile {
         }
         else {
             if (!targetPlayer.HasBuff(BuffID.OnFire)) {
-                targetPlayer.AddBuff(BuffID.OnFire, 10);
+                Projectile.localAI[2] = !CanExplode ? Projectile.ai[2] * 0.015f : 2f;
             }
             targetPlayer.onFire = false;
             //Vector2 center = targetPlayer.Center + _position + new Vector2(0f, targetPlayer.gfxOffY);
