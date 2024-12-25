@@ -10,9 +10,10 @@ namespace RoA.Content.Items.Equipables.Vanity;
 [AutoloadEquip(EquipType.Head)]
 sealed class SailorHat : ModItem {
 	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Sailor Hat");
-		//Tooltip.SetDefault("'Who the hell am I?'");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        //DisplayName.SetDefault("Sailor Hat");
+        //Tooltip.SetDefault("'Who the hell am I?'");
+        ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
 	public override void SetDefaults() {

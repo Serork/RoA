@@ -45,6 +45,8 @@ sealed class FlametrackerSetBonusHandler : ModPlayer {
 sealed class FlametrackerHat : ModItem {
     public override void SetStaticDefaults() {
         // Tooltip.SetDefault("Greatly increases mana regeneration rate");
+        ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
+
         Item.ResearchUnlockCount = 1;
     }
 

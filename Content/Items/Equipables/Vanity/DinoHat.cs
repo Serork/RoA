@@ -10,9 +10,11 @@ namespace RoA.Content.Items.Equipables.Vanity;
 [AutoloadEquip(EquipType.Head)]
 sealed class DinoHat : ModItem {
 	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Dino's Hat");
-		//Tooltip.SetDefault("'Scary monsters, super creeps\nKeep me running, running scared'");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        //DisplayName.SetDefault("Dino's Hat");
+        //Tooltip.SetDefault("'Scary monsters, super creeps\nKeep me running, running scared'");
+        ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
+
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
 	public override void SetDefaults() {
