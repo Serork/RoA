@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Projectiles.Friendly.Summon;
 using RoA.Utilities;
 
 using Terraria;
@@ -36,5 +37,17 @@ sealed class WorshipperBonehelm : ModItem {
 
     public override void UpdateArmorSet(Player player) {
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.WorshipperSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey, Language.GetTextValue("Controls.RightClick")).Value;
+
+        SummonHarpy(player);
+    }
+
+    private void SummonHarpy(Player player) {
+        int type = ModContent.ProjectileType<BoneHarpy>();
+        if (player.ownedProjectileCounts[type] < 1) {
+            Projectile.NewProjectile(player.GetSource_Misc("worshipperarmorset"), player.MountedCenter, Vector2.Zero, type,
+                (int)player.GetTotalDamage(DamageClass.Summon).ApplyTo(30),
+                player.GetTotalKnockback(DamageClass.Summon).ApplyTo(2.5f),
+                player.whoAmI);
+        }
     }
 }

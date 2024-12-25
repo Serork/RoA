@@ -1,11 +1,18 @@
-﻿using RoA.Common.Tiles;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Tiles;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Items.Materials;
+using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
@@ -74,6 +81,146 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
         On_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += On_Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
         On_WorldGen.PlaceAlch += On_WorldGen_PlaceAlch;
         On_WorldGen.CheckAlch += On_WorldGen_CheckAlch;
+        On_SmartCursorHelper.Step_PlanterBox += On_SmartCursorHelper_Step_PlanterBox;
+        On_SmartCursorHelper.Step_AlchemySeeds += On_SmartCursorHelper_Step_AlchemySeeds;
+    }
+
+    private void On_SmartCursorHelper_Step_AlchemySeeds(On_SmartCursorHelper.orig_Step_AlchemySeeds orig, object providedInfo, ref int focusedX, ref int focusedY) {
+        var SmartCursorUsageInfo = typeof(SmartCursorHelper).GetNestedType("SmartCursorUsageInfo", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+        Item item = (Item)SmartCursorUsageInfo.GetField("item", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        if ((item.createTile != 82 && item.createTile != ModContent.TileType<Plants.MiracleMint>()) || focusedX != -1 || focusedY != -1)
+            return;
+        int reachableStartX = (int)SmartCursorUsageInfo.GetField("reachableStartX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableEndX = (int)SmartCursorUsageInfo.GetField("reachableEndX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableStartY = (int)SmartCursorUsageInfo.GetField("reachableStartY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableEndY = (int)SmartCursorUsageInfo.GetField("reachableEndY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        Vector2 mouse = (Vector2)SmartCursorUsageInfo.GetField("mouse", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        List<Tuple<int, int>> _targets = (List<Tuple<int, int>>)typeof(SmartCursorHelper).GetField("_targets", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).GetValue(null);
+        int placeStyle = item.placeStyle;
+        _targets.Clear();
+        for (int i = reachableStartX; i <= reachableEndX; i++) {
+            for (int j = reachableStartY; j <= reachableEndY; j++) {
+                Tile tile = Main.tile[i, j];
+                Tile tile2 = Main.tile[i, j + 1];
+                bool num = !tile.HasTile || TileID.Sets.BreakableWhenPlacing[tile.TileType] || (Main.tileCut[tile.TileType] && tile.TileType != 82 && tile.TileType != 83) || WorldGen.IsHarvestableHerbWithSeed(tile.TileType, tile.TileFrameX / 18);
+                bool flag = tile2.HasUnactuatedTile && !tile2.IsHalfBlock && tile2.Slope == 0;
+                if (!num || !flag)
+                    continue;
+                int planterBox = ModContent.TileType<PlanterBoxes>();
+                if (item.createTile == 82) {
+                    switch (placeStyle) {
+                        case 0:
+                            if ((tile2.TileType != 78 && tile2.TileType != 380 && tile2.TileType != planterBox && tile2.TileType != 2 && tile2.TileType != 477 && tile2.TileType != 109 && tile2.TileType != 492) || tile.LiquidAmount > 0)
+                                continue;
+                            break;
+                        case 1:
+                            if ((tile2.TileType != 78 && tile2.TileType != 380 && tile2.TileType != planterBox && tile2.TileType != 60) || tile.LiquidAmount > 0)
+                                continue;
+                            break;
+                        case 2:
+                            if ((tile2.TileType != 78 && tile2.TileType != 380 && tile2.TileType != planterBox && tile2.TileType != 0 && tile2.TileType != 59) || tile.LiquidAmount > 0)
+                                continue;
+                            break;
+                        case 3:
+                            if ((tile2.TileType != 78 && tile2.TileType != 380 && tile2.TileType != planterBox && tile2.TileType != 203 && tile2.TileType != 199 && tile2.TileType != 23 && tile2.TileType != 25) || tile.LiquidAmount > 0)
+                                continue;
+                            break;
+                        case 4:
+                            if ((tile2.TileType != 78 && tile2.TileType != 380 && tile2.TileType != planterBox && tile2.TileType != 53 && tile2.TileType != 116) || (tile.LiquidAmount > 0 && tile.LiquidType == LiquidID.Lava))
+                                continue;
+                            break;
+                        case 5:
+                            if ((tile2.TileType != 78 && tile2.TileType != 380 && tile2.TileType != planterBox && tile2.TileType != 57 && tile2.TileType != 633) || (tile.LiquidAmount > 0 && tile.LiquidType != LiquidID.Lava))
+                                continue;
+                            break;
+                        case 6:
+                            if ((tile2.TileType != 78 && tile2.TileType != 380 && tile2.TileType != planterBox && tile2.TileType != 147 && tile2.TileType != 161 && tile2.TileType != 163 && tile2.TileType != 164 && tile2.TileType != 200) || (tile.LiquidAmount > 0 && tile.LiquidType == LiquidID.Lava))
+                                continue;
+                            break;
+                    }
+                }
+                else {
+                    if ((tile2.TileType != 78 && tile2.TileType != 380 && tile2.TileType != planterBox && tile2.TileType != ModContent.TileType<BackwoodsGrass>()) || tile.LiquidAmount > 0)
+                        continue;
+                }
+
+                _targets.Add(new Tuple<int, int>(i, j));
+            }
+        }
+
+        if (_targets.Count > 0) {
+            float num2 = -1f;
+            Tuple<int, int> tuple = _targets[0];
+            for (int k = 0; k < _targets.Count; k++) {
+                float num3 = Vector2.Distance(new Vector2(_targets[k].Item1, _targets[k].Item2) * 16f + Vector2.One * 8f, mouse);
+                if (num2 == -1f || num3 < num2) {
+                    num2 = num3;
+                    tuple = _targets[k];
+                }
+            }
+
+            if (Collision.InTileBounds(tuple.Item1, tuple.Item2, reachableStartX, reachableStartY, reachableEndX, reachableEndY)) {
+                focusedX = tuple.Item1;
+                focusedY = tuple.Item2;
+            }
+        }
+
+        _targets.Clear();
+    }
+
+    private void On_SmartCursorHelper_Step_PlanterBox(On_SmartCursorHelper.orig_Step_PlanterBox orig, object providedInfo, ref int focusedX, ref int focusedY) {
+        var SmartCursorUsageInfo = typeof(SmartCursorHelper).GetNestedType("SmartCursorUsageInfo", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+        Item item = (Item)SmartCursorUsageInfo.GetField("item", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int screenTargetX = (int)SmartCursorUsageInfo.GetField("screenTargetX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int screenTargetY = (int)SmartCursorUsageInfo.GetField("screenTargetY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableStartX = (int)SmartCursorUsageInfo.GetField("reachableStartX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableEndX = (int)SmartCursorUsageInfo.GetField("reachableEndX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableStartY = (int)SmartCursorUsageInfo.GetField("reachableStartY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableEndY = (int)SmartCursorUsageInfo.GetField("reachableEndY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        Vector2 mouse = (Vector2)SmartCursorUsageInfo.GetField("mouse", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        List<Tuple<int, int>> _targets = (List<Tuple<int, int>>)typeof(SmartCursorHelper).GetField("_targets", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).GetValue(null);
+        if (item.createTile == TileID.PlanterBox && item.createTile != Type) {
+            orig.Invoke(providedInfo, ref focusedX, ref focusedY);
+        }
+        if (item.createTile != Type || focusedX != -1 || focusedY != -1) {
+            return;
+        }
+        _targets.Clear();
+        bool flag = false;
+        if (Main.tile[screenTargetX, screenTargetY].HasTile && (Main.tile[screenTargetX, screenTargetY].TileType == Type || Main.tile[screenTargetX, screenTargetY].TileType == TileID.PlanterBox)) {
+            flag = true;
+        }
+        if (!flag) {
+            for (int i = reachableStartX; i <= reachableEndX; i++) {
+                for (int j = reachableStartY; j <= reachableEndY; j++) {
+                    Tile tile = Main.tile[i, j];
+                    if (tile.HasTile && tile.TileType == Type) {
+                        if (!Main.tile[i - 1, j].HasTile || Main.tileCut[Main.tile[i - 1, j].TileType] || TileID.Sets.BreakableWhenPlacing[Main.tile[i - 1, j].TileType]) {
+                            _targets.Add(new Tuple<int, int>(i - 1, j));
+                        }
+                        if (!Main.tile[i + 1, j].HasTile || Main.tileCut[Main.tile[i + 1, j].TileType] || TileID.Sets.BreakableWhenPlacing[Main.tile[i + 1, j].TileType]) {
+                            _targets.Add(new Tuple<int, int>(i + 1, j));
+                        }
+                    }
+                }
+            }
+        }
+        if (_targets.Count > 0) {
+            float num = -1f;
+            Tuple<int, int> tuple = _targets[0];
+            for (int k = 0; k < _targets.Count; k++) {
+                float num2 = Vector2.Distance(new Vector2((float)_targets[k].Item1, (float)_targets[k].Item2) * 16f + Vector2.One * 8f, mouse);
+                if (num == -1f || num2 < num) {
+                    num = num2;
+                    tuple = _targets[k];
+                }
+            }
+            if (Collision.InTileBounds(tuple.Item1, tuple.Item2, reachableStartX, reachableStartY, reachableEndX, reachableEndY) && num != -1f) {
+                focusedX = tuple.Item1;
+                focusedY = tuple.Item2;
+            }
+        }
+        _targets.Clear();
     }
 
     private void On_WorldGen_CheckAlch(On_WorldGen.orig_CheckAlch orig, int x, int y) {
@@ -276,7 +423,6 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
         Main.tileMerge[Type][TileID.PlanterBox] = true;
         Main.tileMerge[TileID.PlanterBox][Type] = true;
 
-        TileID.Sets.DisableSmartCursor[Type] = true;
         TileID.Sets.DoesntGetReplacedWithTileReplacement[Type] = true;
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 

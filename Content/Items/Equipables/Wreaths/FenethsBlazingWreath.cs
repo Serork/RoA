@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
-using RoA.Content.Projectiles.Friendly;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core.Utility;
 
@@ -44,10 +43,13 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
             }
 
             if (proj.type != ModContent.ProjectileType<FireblossomExplosion>() && proj.type != ModContent.ProjectileType<Fireblossom>() &&
-                IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
-                int type = ModContent.ProjectileType<Projectiles.Friendly.Druidic.Fireblossom>();
-                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, target.whoAmI);
-                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, Player.whoAmI);
+                IsEffectActive && Main.rand.NextChance(1) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
+                int type = ModContent.ProjectileType<Fireblossom>();
+                int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, target.whoAmI);
+                Main.projectile[projectile].As<Fireblossom>().SetPosition(proj.Center, target);
+                
+                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, Player.whoAmI);
+                Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width, Player);
             }
         }
 
@@ -61,9 +63,12 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
             }
 
             if (IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
-                int type = ModContent.ProjectileType<Projectiles.Friendly.Druidic.Fireblossom>();
-                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, item.damage * 2, item.knockBack, Player.whoAmI, target.whoAmI);
-                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, item.damage * 2, item.knockBack, Player.whoAmI, Player.whoAmI);
+                int type = ModContent.ProjectileType<Fireblossom>();
+                int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, item.damage * 2, item.knockBack, Player.whoAmI, target.whoAmI);
+                Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.itemLocation, target);
+
+                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, item.damage * 2, item.knockBack, Player.whoAmI, Player.whoAmI);
+                Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width, Player);
             }
         }
 

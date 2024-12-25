@@ -142,12 +142,12 @@ Weak: {
 
 Unburning: {
 	DisplayName: Unburning
-	Description: Mods.RoA.Buffs.Unburning.Description
+	Description: Provides extra life regeneration
 }
 
 Moth: {
 	DisplayName: Moth
-	Description: Mods.RoA.Buffs.Moth.Description
+	Description: The moth will fight for you
 }
 
 FlametrackerDebuff: {
@@ -163,4 +163,14 @@ SolidifyingSap: {
 Fireblossom: {
 	DisplayName: Fireblossom
 	Description: Mods.RoA.Buffs.Fireblossom.Description
+}
+
+BoneHarpyAttackDebuff: {
+	DisplayName: Bone Harpy Attack Debuff
+	Description: Mods.RoA.Buffs.BoneHarpyAttackDebuff.Description
+}
+
+OnFire: {
+	DisplayName: On Fire
+	Description: Mods.RoA.Buffs.OnFire.Description
 }

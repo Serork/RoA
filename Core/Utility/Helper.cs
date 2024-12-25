@@ -21,6 +21,13 @@ static class Helper {
     public static readonly Color GlowMaskColor = new Color(255, 255, 255, 0) * 0.8f;
     public static string ArmorSetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
 
+    public static Vector2 SafeDirectionTo(Entity entity, Vector2 destination, Vector2? fallback = null) {
+        if (fallback == null) {
+            fallback = new Vector2?(Vector2.Zero);
+        }
+        return Utils.SafeNormalize(destination - entity.Center, fallback.Value);
+    }
+
     public static Color FromHexRgb(uint hexRgba) {
         return new Color(
             (byte)(hexRgba >> 16),

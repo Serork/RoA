@@ -23,6 +23,18 @@ static class NPCExtensions {
 
     public static bool HasBuff(this NPC npc, int type) => npc.FindBuffIndex(type) != -1;
 
+    public static void ClearBuff(this NPC npc, int buffType) {
+        if (buffType == 0) {
+            return;
+        }
+
+        for (int i = 0; i < NPC.maxBuffs; i++) {
+            if (npc.buffType[i] == buffType) {
+                npc.DelBuff(i);
+            }
+        }
+    }
+
     public static T As<T>(this NPC npc) where T : ModNPC => npc.ModNPC as T;
 
     public static void PseudoGolemAI(this NPC npc, float maxSpeed = 1f, float speed = 0.035f) {
