@@ -35,25 +35,35 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
         }
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers) {
+            if (Player.whoAmI != Main.myPlayer) {
+                return;
+            }
+
             if (!proj.IsDruidic()) {
                 return;
             }
 
             if (proj.type != ModContent.ProjectileType<FireblossomExplosion>() && proj.type != ModContent.ProjectileType<Fireblossom>() &&
-                IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
+                IsEffectActive && Main.rand.NextChance(1) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
                 int type = ModContent.ProjectileType<Projectiles.Friendly.Druidic.Fireblossom>();
                 Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, target.whoAmI);
+                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, proj.damage * 2, proj.knockBack, Player.whoAmI, Player.whoAmI);
             }
         }
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers) {
+            if (Player.whoAmI != Main.myPlayer) {
+                return;
+            }
+
             if (!item.IsADruidicWeapon()) {
                 return;
             }
 
-            if (IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
+            if (IsEffectActive && Main.rand.NextChance(1) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
                 int type = ModContent.ProjectileType<Projectiles.Friendly.Druidic.Fireblossom>();
                 Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, item.damage * 2, item.knockBack, Player.whoAmI, target.whoAmI);
+                Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, item.damage * 2, item.knockBack, Player.whoAmI, Player.whoAmI);
             }
         }
 

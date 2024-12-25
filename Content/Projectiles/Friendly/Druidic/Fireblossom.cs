@@ -15,6 +15,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -65,6 +66,27 @@ sealed class FireblossomExplosion : NatureProjectile {
 sealed class Fireblossom : NatureProjectile {
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 3;
+
+        ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+    }
+
+    public override void Load() {
+        On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
+    }
+
+    private void On_LegacyPlayerRenderer_DrawPlayerFull(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
+        orig(self, camera, drawPlayer);
+
+        Player player = drawPlayer;
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            if (projectile.type != ModContent.ProjectileType<Fireblossom>()) {
+                continue;
+            }
+            if ((int)projectile.ai[0] == player.whoAmI) {
+                Main.instance.DrawProjDirect(projectile);
+                Main.spriteBatch.EndBlendState();
+            }
+        }
     }
 
     protected override void SafeSetDefaults() {
@@ -91,7 +113,9 @@ sealed class Fireblossom : NatureProjectile {
 
     public override void AI() {
         Projectile.Opacity = Projectile.timeLeft > int.MaxValue - 40 ? (float)(int.MaxValue - Projectile.timeLeft) / 40f : 1f;
-        NPC targetNPC = Main.npc[(int)Projectile.ai[0]];
+        bool flag = (int)Projectile.ai[0] == Projectile.owner;
+        NPC targetNPC = flag ? null : Main.npc[(int)Projectile.ai[0]];
+        Player targetPlayer = !flag ? null : Main.player[(int)Projectile.ai[0]];
         if (Projectile.localAI[0] <= 0f) {
             Projectile.localAI[0] = 1f;
 
@@ -104,8 +128,13 @@ sealed class Fireblossom : NatureProjectile {
         else {
             Projectile.localAI[2] += TimeSystem.LogicDeltaTime;
         }
-        Projectile.Center = targetNPC.Center + new Vector2(0f, targetNPC.gfxOffY);
-        targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 200);
+        if (!flag) {
+            Projectile.Center = targetNPC.Center + new Vector2(0f, targetNPC.gfxOffY);
+            targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 200);
+        }
+        else {
+            Projectile.Center = targetPlayer.Center;
+        }
         float rate = (float)(Speed % 5.0);
         Color color = Color.Lerp(Color.Orange, Color.DarkOrange, Ease.QuartOut(MathHelper.Clamp(1f - (rate - 0.5f) / 0.5f, 0f, 1f))) * 0.75f;
         float value = Projectile.ai[1];
@@ -114,9 +143,14 @@ sealed class Fireblossom : NatureProjectile {
         if (Projectile.localAI[0] >= 1f) {
             if (Projectile.localAI[1] <= 1f)
                 Projectile.localAI[1] += 0.01f;
-            if (targetNPC.life <= 0 || !targetNPC.active) Projectile.Kill();
+            if (!flag && (targetNPC.life <= 0 || !targetNPC.active)) Projectile.Kill();
+            if (flag && (targetPlayer.dead || !targetPlayer.active)) {
+                Projectile.Kill();
+            }
             Projectile.ai[1] = FireblossomWave(0f, 1f, speed: Speed) * Projectile.localAI[1];
-            Projectile.scale = targetNPC.scale;
+            if (!flag) {
+                Projectile.scale = targetNPC.scale;
+            }
             if (Main.rand.NextChance((double)Projectile.ai[1])) {
                 int dust1 = Dust.NewDust(new Vector2(Projectile.position.X + Main.rand.NextFloat(0f, (float)Projectile.width * Projectile.scale), Projectile.Center.Y - (float)(Projectile.height / 2)), 4, 4, Main.rand.Next(2) == 0 ? ModContent.DustType<Dusts.Fireblossom>() : DustID.Asphalt);
                 Dust dust2 = Main.dust[dust1];
