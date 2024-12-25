@@ -83,8 +83,14 @@ sealed class Fireblossom : NatureProjectile {
                 continue;
             }
             if ((int)projectile.ai[0] == player.whoAmI) {
+                SpriteBatch spriteBatch = camera.SpriteBatch;
+                SamplerState samplerState = camera.Sampler;
+                if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f) {
+                    samplerState = LegacyPlayerRenderer.MountedSamplerState;
+                }
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
                 Main.instance.DrawProjDirect(projectile);
-                Main.spriteBatch.EndBlendState();
+                spriteBatch.End();
             }
         }
     }
@@ -133,7 +139,7 @@ sealed class Fireblossom : NatureProjectile {
             targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 200);
         }
         else {
-            Projectile.Center = targetPlayer.Center;
+            Projectile.Center = new Vector2((int)targetPlayer.Center.X, (int)targetPlayer.Center.Y) + new Vector2(0f, targetPlayer.gfxOffY);
         }
         float rate = (float)(Speed % 5.0);
         Color color = Color.Lerp(Color.Orange, Color.DarkOrange, Ease.QuartOut(MathHelper.Clamp(1f - (rate - 0.5f) / 0.5f, 0f, 1f))) * 0.75f;
