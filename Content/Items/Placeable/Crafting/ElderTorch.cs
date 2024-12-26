@@ -21,6 +21,10 @@ sealed class ElderTorch : ModItem {
         Item.value = 50;
     }
 
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.Torches;
+    }
+
     public override void HoldItem(Player player) {
         if (player.wet) {
             return;

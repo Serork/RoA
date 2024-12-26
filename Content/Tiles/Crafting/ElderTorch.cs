@@ -26,7 +26,7 @@ class ElderTorch2 : ElderTorch {
 }
 
 class ElderTorch : ModTile {
-    private Asset<Texture2D> flameTexture;
+    private Asset<Texture2D> _flameTexture;
 
     public override void SetStaticDefaults() {
         Main.tileLighted[Type] = true;
@@ -38,29 +38,32 @@ class ElderTorch : ModTile {
 
         TileID.Sets.FramesOnKillWall[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
-        TileID.Sets.DisableSmartInteract[Type] = true;
         TileID.Sets.Torch[Type] = true;
 
         DustType = ModContent.DustType<ElderTorchDust>();
-        AdjTiles = new int[] { TileID.Torches };
+        AdjTiles = [TileID.Torches];
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
         // Placement
-        TileObjectData.newTile.CopyFrom(TileObjectData.GetTileData(TileID.Torches, 0));
-        TileObjectData.newSubTile.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newSubTile.LinkedAlternates = true;
-        TileObjectData.newSubTile.WaterDeath = false;
-        TileObjectData.newSubTile.LavaDeath = false;
-        TileObjectData.newSubTile.WaterPlacement = LiquidPlacement.Allowed;
-        TileObjectData.newSubTile.LavaPlacement = LiquidPlacement.Allowed;
-        TileObjectData.addSubTile(1);
-
+        TileObjectData.newTile.CopyFrom(TileObjectData.StyleTorch);
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
+        TileObjectData.newAlternate.CopyFrom(TileObjectData.StyleTorch);
+        TileObjectData.newAlternate.AnchorLeft = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
+        TileObjectData.newAlternate.AnchorAlternateTiles = [124];
+        TileObjectData.addAlternate(1);
+        TileObjectData.newAlternate.CopyFrom(TileObjectData.StyleTorch);
+        TileObjectData.newAlternate.AnchorRight = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
+        TileObjectData.newAlternate.AnchorAlternateTiles = [124];
+        TileObjectData.addAlternate(2);
+        TileObjectData.newAlternate.CopyFrom(TileObjectData.StyleTorch);
+        TileObjectData.newAlternate.AnchorWall = true;
+        TileObjectData.addAlternate(0);
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(253, 221, 3), Language.GetText("ItemName.Torch"));
 
-        flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
+        _flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
     }
 
     public override void MouseOver(int i, int j) {
@@ -73,8 +76,8 @@ class ElderTorch : ModTile {
     }
 
     public override float GetTorchLuck(Player player) {
-        bool inExampleUndergroundBiome = player.InModBiome<BackwoodsBiome>();
-        return inExampleUndergroundBiome ? 1f : -0.1f;
+        bool inBackwoods = player.InModBiome<BackwoodsBiome>();
+        return inBackwoods ? 1f : -0.1f;
     }
 
     public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
@@ -121,7 +124,11 @@ class ElderTorch : ModTile {
         offsetY = 0;
 
         if (WorldGen.SolidTile(i, j - 1)) {
-            offsetY = 4;
+            offsetY = 2;
+
+            if (WorldGen.SolidTile(i - 1, j + 1) || WorldGen.SolidTile(i + 1, j + 1)) {
+                offsetY = 4;
+            }
         }
     }
 
@@ -159,7 +166,7 @@ class ElderTorch : ModTile {
             float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
             float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
 
-            spriteBatch.Draw(flameTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_flameTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
         }
     }
 }

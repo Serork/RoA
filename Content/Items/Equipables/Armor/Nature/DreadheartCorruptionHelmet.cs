@@ -48,6 +48,8 @@ sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupCont
         string setBonus = Language.GetText("Mods.RoA.Items.Tooltips.DreadheartCrimsonSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
         player.setBonus = setBonus;
 
+        player.GetModPlayer<DreadheartCrimsonHelmet.DreadheartSetBonusHandler>().IsEffectActive = true;
+
         BaseFormHandler.KeepFormActive(player);
     }
 

@@ -172,6 +172,12 @@ sealed class WreathHandler : ModPlayer {
         MakeDustsOnHit();
     }
 
+    internal void ForcedHardReset() {
+        StartSlowlyIncreasingUntilFull = false;
+        Reset();
+        OnWreathReset?.Invoke();
+    }
+
     private void ClawsReset(NatureProjectile natureProjectile, bool nonDataReset) {
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
@@ -180,9 +186,7 @@ sealed class WreathHandler : ModPlayer {
             if (!_shouldDecrease && !_shouldDecrease2 && GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2), true)) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     if (!SpecialAttackData.OnlySpawn || nonDataReset) {
-                        StartSlowlyIncreasingUntilFull = false;
-                        Reset();
-                        OnWreathReset?.Invoke();
+                        ForcedHardReset();
                     }
 
                     if (!nonDataReset) {

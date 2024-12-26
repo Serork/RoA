@@ -1,14 +1,19 @@
 using Microsoft.Xna.Framework;
 
+using Mono.Cecil;
+
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
+using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.Localization;
@@ -48,6 +53,8 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
         string setBonus = Language.GetText("Mods.RoA.Items.Tooltips.DreadheartCrimsonSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
         player.setBonus = setBonus;
 
+        player.GetModPlayer<DreadheartSetBonusHandler>().IsEffectActive = true;
+
         BaseFormHandler.KeepFormActive(player);
     }
 
@@ -68,4 +75,40 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
     //		.AddTile<OvergrownAltar>()
     //		.Register();
     //}
+
+    internal class DreadheartSetBonusHandler : ModPlayer {
+        public bool IsEffectActive;
+
+        public override void ResetEffects() => IsEffectActive = false;
+
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
+            if (!IsEffectActive) {
+                return;
+            }
+
+            WreathHandler handler = Player.GetModPlayer<WreathHandler>();
+            if (!handler.IsFull) {
+                return;
+            }
+
+            handler.ForcedHardReset();
+
+            Player.SetImmuneTimeForAllTypes(15);
+
+            SoundEngine.PlaySound(SoundID.NPCHit32, Player.position);
+            if (Player.whoAmI == Main.myPlayer) {
+                for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
+                    int insectDamage = 15;
+                    float insectKnockback = 3f;
+                    int damage = (int)Player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
+                    insectKnockback = Player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
+                    Vector2 spread = new Vector2(0, Main.rand.Next(-5, -2)).RotatedByRandom(MathHelper.ToRadians(90));
+                    Projectile.NewProjectile(Player.GetSource_OnHurt(modifiers.DamageSource), new Vector2(Player.position.X, Player.position.Y + 4), new Vector2(spread.X, spread.Y), 
+                        Player.HasSetBonusFrom<DreadheartCorruptionHelmet>() ? (ushort)ModContent.ProjectileType<CrimsonInsect>() : (ushort)ModContent.ProjectileType<CorruptionInsect>(), damage, insectKnockback, Player.whoAmI);
+                }
+            }
+
+            modifiers.Cancel();
+        }
+    }
 }

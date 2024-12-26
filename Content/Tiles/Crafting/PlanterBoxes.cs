@@ -509,7 +509,7 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
             if (Main.tile[Player.tileTargetX, Player.tileTargetY].HasUnactuatedTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == 59)
                 canPlace = true;
         }
-        else if (self.GetSelectedItem().createTile == 4 || self.GetSelectedItem().createTile == 136) {
+        else if (self.GetSelectedItem().createTile == 4 || self.GetSelectedItem().createTile == 136 || TileID.Sets.Torch[self.GetSelectedItem().createTile] || ItemID.Sets.Torches[self.GetSelectedItem().type]) {
             if (Main.tile[Player.tileTargetX, Player.tileTargetY].WallType > 0) {
                 canPlace = true;
             }
@@ -590,7 +590,7 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
         else if (self.GetSelectedItem().createTile == 275 || self.GetSelectedItem().createTile == 276 || self.GetSelectedItem().createTile == 277) {
             canPlace = true;
         }
-        else if (self.GetSelectedItem().createTile == 51 || self.GetSelectedItem().createTile == 330 || self.GetSelectedItem().createTile == 331 || self.GetSelectedItem().createTile == 332 || self.GetSelectedItem().createTile == 333 || self.GetSelectedItem().createTile == 336 || self.GetSelectedItem().createTile == 340 || self.GetSelectedItem().createTile == 342 || self.GetSelectedItem().createTile == 341 || self.GetSelectedItem().createTile == 343 || self.GetSelectedItem().createTile == 344 || self.GetSelectedItem().createTile == 379 || self.GetSelectedItem().createTile == 351) {
+        else if (TileID.Sets.CanPlaceNextToNonSolidTile[self.GetSelectedItem().createTile]) {
             if (Main.tile[Player.tileTargetX + 1, Player.tileTargetY].HasTile || Main.tile[Player.tileTargetX + 1, Player.tileTargetY].WallType > 0 || Main.tile[Player.tileTargetX - 1, Player.tileTargetY].HasTile || Main.tile[Player.tileTargetX - 1, Player.tileTargetY].WallType > 0 || Main.tile[Player.tileTargetX, Player.tileTargetY + 1].HasTile || Main.tile[Player.tileTargetX, Player.tileTargetY + 1].WallType > 0 || Main.tile[Player.tileTargetX, Player.tileTargetY - 1].HasTile || Main.tile[Player.tileTargetX, Player.tileTargetY - 1].WallType > 0)
                 canPlace = true;
         }
