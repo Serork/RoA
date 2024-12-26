@@ -81,10 +81,10 @@ sealed class BackwoodsCrate : ModItem {
         ];
         IItemDropRule goldCoin = ItemDropRule.NotScalingWithLuck(ItemID.GoldCoin, 4, 5, 12);
         IItemDropRule[] slipperyItems = [
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyBomb>(), 1, 4, 7),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyDynamite>(), 3, 1, 3),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyGrenade>(), 1, 5, 13),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyGlowstick>(), 1, 5, 13)
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyBomb>(), 1, 4, 10),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyDynamite>(), 3, 1, 2),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyGrenade>(), 1, 10, 21),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyGlowstick>(), 1, 12, 25)
         ];
         IItemDropRule[] ores = [
             ItemDropRule.NotScalingWithLuck(ItemID.CopperOre, 1, 20, 35),
