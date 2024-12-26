@@ -228,7 +228,7 @@ WillpowerPotion: {
 	DisplayName: Willpower Potion
 	Tooltip:
 		'''
-		Increases [kw/n:wreath] [kw/n:filling] rate by 15%
+		Increases [kw/n:wreath] charging rate
 		'Fifteen percent concentrated power of will'
 		'''
 }
@@ -707,7 +707,7 @@ ElderwoodWorkbench: {
 
 WeaknessPotion: {
 	DisplayName: Weakness Potion
-	Tooltip: Throw to make someone weak
+	Tooltip: Throw this to make someone physically weak
 }
 
 AlchemicalSkull: {
@@ -1116,4 +1116,9 @@ ElderwoodFence: {
 ElderwoodWall: {
 	DisplayName: Elderwood Wall
 	Tooltip: ""
+}
+
+PrismaticPotion: {
+	DisplayName: Prismatic Potion
+	Tooltip: Applies specific class damage bonuses to all other damage types
 }

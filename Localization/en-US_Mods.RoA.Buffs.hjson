@@ -41,18 +41,18 @@ Bloodlust: {
 }
 
 DeathWard: {
-	DisplayName: Death Ward
+	DisplayName: Soul Ward
 	Description: Your next fatal hit will be prevented
 }
 
 Willpower: {
 	DisplayName: Willpower
-	Description: 15% increased [kw/n:wreath] [kw/n:filling] rate
+	Description: "[kw/n:Wreath] is charged 15% faster"
 }
 
 Resilience: {
-	DisplayName: Resilience
-	Description: 25% decreased [kw/n:wreath] discharge speed
+	DisplayName: Moon's Resilience
+	Description: "[kw/n:Wreath] takes longer to start discharging"
 }
 
 ExtraRegen: {
@@ -66,13 +66,13 @@ Hemorrhage: {
 }
 
 Brightstone: {
-	DisplayName: Brightstone Lights
+	DisplayName: Brightstone Halo
 	Description: You emit glowing lumps of light
 }
 
 DryadBlood: {
 	DisplayName: Dryad Blood
-	Description: Damaging debuffs deal 75% less damage
+	Description: Debuffs deal 75% less damage
 }
 
 Heavy: {
@@ -97,22 +97,38 @@ BeastPoison: {
 
 FlederForm: {
 	DisplayName: Fleder Form
-	Description: Mods.RoA.Buffs.FlederForm.Description
+	Description:
+		'''
+		Double tap a direction to dash
+		Hold {$Controls.LeftClick} to charge an acorn bomb
+		'''
 }
 
 CorruptionInsectForm: {
 	DisplayName: Corruption Insect Form
-	Description: Mods.RoA.Buffs.CorruptionInsectForm.Description
+	Description:
+		'''
+		Use {$Controls.LeftClick} to spit poison
+		Stand still to summon insect swarms
+		'''
 }
 
 CrimsonInsectForm: {
 	DisplayName: Crimson Insect Form
-	Description: Mods.RoA.Buffs.CrimsonInsectForm.Description
+	Description:
+		'''
+		Use {$Controls.LeftClick} to spit poison
+		Stand still to summon insect swarms
+		'''
 }
 
 LilPhoenixForm: {
 	DisplayName: Firebird Form
-	Description: Mods.RoA.Buffs.LilPhoenixForm.Description
+	Description:
+		'''
+		Hold {$Controls.LeftClick} in air to charge an explosive fire boost
+		Double jump to leave damaging embers
+		'''
 }
 
 Burning: {
@@ -157,7 +173,7 @@ FlametrackerDebuff: {
 
 SolidifyingSap: {
 	DisplayName: Solidifying Sap
-	Description: Mods.RoA.Buffs.SolidifyingSap.Description
+	Description: Restrains movement
 }
 
 Fireblossom: {
@@ -173,4 +189,9 @@ BoneHarpyAttackDebuff: {
 OnFire: {
 	DisplayName: On Fire
 	Description: Mods.RoA.Buffs.OnFire.Description
+}
+
+PrismaticFavor: {
+	DisplayName: Prismatic Favor
+	Description: All specific class damage boosts are applied to all damage types
 }
