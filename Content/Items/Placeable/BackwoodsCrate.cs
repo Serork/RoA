@@ -53,6 +53,232 @@ sealed class BackwoodsCrate : ModItem {
         bool flag3 = true;
         IEntitySource source = player.GetSource_OpenItem(Type);
         bool flag = ItemID.Sets.IsFishingCrateHardmode[Type];
+        if (Main.rand.NextBool()) {
+            bool flag4 = true;
+            while (flag4) {
+                if (flag && flag4 && Main.rand.Next(60) == 0) {
+                    int number24 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, 3064);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number24, 1f);
+
+                    flag4 = false;
+                }
+
+                if (flag4 && Main.rand.Next(25) == 0) {
+                    int type12 = 2501;
+                    int stack19 = 1;
+                    int number25 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type12, stack19);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number25, 1f);
+
+                    flag4 = false;
+                }
+
+                if (flag4 && Main.rand.Next(20) == 0) {
+                    int type13 = 2587;
+                    int stack20 = 1;
+                    int number26 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type13, stack20);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number26, 1f);
+
+                    flag4 = false;
+                }
+
+                if (flag4 && Main.rand.Next(15) == 0) {
+                    int type14 = 2608;
+                    int stack21 = 1;
+                    int number27 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type14, stack21, noBroadcast: false, -1);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number27, 1f);
+
+                    flag4 = false;
+                }
+
+                if (flag4 && Main.rand.Next(20) == 0) {
+                    int type15 = 3200;
+                    int stack22 = 1;
+                    int number28 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type15, stack22, noBroadcast: false, -1);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number28, 1f);
+
+                    flag4 = false;
+                }
+
+                if (flag4 && Main.rand.Next(20) == 0) {
+                    int type16 = 3201;
+                    int stack23 = 1;
+                    int number29 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type16, stack23, noBroadcast: false, -1);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number29, 1f);
+
+                    flag4 = false;
+                }
+
+                if (Main.rand.Next(4) == 0) {
+                    int type17 = 73;
+                    int stack24 = Main.rand.Next(5, 11);
+                    int number30 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type17, stack24);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number30, 1f);
+
+                    flag4 = false;
+                }
+
+                if (Main.rand.Next(6) == 0) {
+                    int num9 = Main.rand.Next(6);
+                    switch (num9) {
+                        case 0:
+                            num9 = 12;
+                            break;
+                        case 1:
+                            num9 = 699;
+                            break;
+                        case 2:
+                            num9 = 11;
+                            break;
+                        case 3:
+                            num9 = 700;
+                            break;
+                        case 4:
+                            num9 = 14;
+                            break;
+                        case 5:
+                            num9 = 701;
+                            break;
+                    }
+
+                    if (Main.rand.Next(2) == 0 && flag) {
+                        num9 = Main.rand.Next(4);
+                        switch (num9) {
+                            case 0:
+                                num9 = 364;
+                                break;
+                            case 1:
+                                num9 = 1104;
+                                break;
+                            case 2:
+                                num9 = 365;
+                                break;
+                            case 3:
+                                num9 = 1105;
+                                break;
+                        }
+                    }
+
+                    int stack25 = Main.rand.Next(12, 22);
+                    int number31 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, num9, stack25);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number31, 1f);
+
+                    flag4 = false;
+                }
+                else if (Main.rand.Next(4) == 0) {
+                    int num10 = Main.rand.Next(6);
+                    switch (num10) {
+                        case 0:
+                            num10 = 20;
+                            break;
+                        case 1:
+                            num10 = 703;
+                            break;
+                        case 2:
+                            num10 = 22;
+                            break;
+                        case 3:
+                            num10 = 704;
+                            break;
+                        case 4:
+                            num10 = 21;
+                            break;
+                        case 5:
+                            num10 = 705;
+                            break;
+                    }
+
+                    int num11 = Main.rand.Next(4, 8);
+                    if (Main.rand.Next(3) != 0 && flag) {
+                        num10 = Main.rand.Next(4);
+                        switch (num10) {
+                            case 0:
+                                num10 = 381;
+                                break;
+                            case 1:
+                                num10 = 1184;
+                                break;
+                            case 2:
+                                num10 = 382;
+                                break;
+                            case 3:
+                                num10 = 1191;
+                                break;
+                        }
+
+                        num11 -= Main.rand.Next(2);
+                    }
+
+                    int number32 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, num10, num11);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number32, 1f);
+
+                    flag4 = false;
+                }
+
+                if (Main.rand.Next(4) == 0) {
+                    int num12 = Main.rand.Next(8);
+                    switch (num12) {
+                        case 0:
+                            num12 = 288;
+                            break;
+                        case 1:
+                            num12 = 296;
+                            break;
+                        case 2:
+                            num12 = 304;
+                            break;
+                        case 3:
+                            num12 = 305;
+                            break;
+                        case 4:
+                            num12 = 2322;
+                            break;
+                        case 5:
+                            num12 = 2323;
+                            break;
+                        case 6:
+                            num12 = 2324;
+                            break;
+                        case 7:
+                            num12 = 2327;
+                            break;
+                    }
+
+                    int stack26 = Main.rand.Next(2, 5);
+                    int number33 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, num12, stack26);
+                    if (Main.netMode == 1)
+                        NetMessage.SendData(21, -1, -1, null, number33, 1f);
+
+                    flag4 = false;
+                }
+            }
+
+            if (Main.rand.Next(2) == 0) {
+                int type18 = Main.rand.Next(188, 190);
+                int stack27 = Main.rand.Next(5, 16);
+                int number34 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type18, stack27);
+                if (Main.netMode == 1)
+                    NetMessage.SendData(21, -1, -1, null, number34, 1f);
+            }
+
+            if (Main.rand.Next(2) == 0) {
+                int type19 = ((Main.rand.Next(3) != 0) ? 2675 : 2676);
+                int stack28 = Main.rand.Next(2, 5);
+                int number35 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type19, stack28);
+                if (Main.netMode == 1)
+                    NetMessage.SendData(21, -1, -1, null, number35, 1f);
+            }
+
+            return;
+        }
         while (flag3) {
             if (flag && flag3 && Main.rand.Next(20) == 0) {
                 int number13 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, 3064);
