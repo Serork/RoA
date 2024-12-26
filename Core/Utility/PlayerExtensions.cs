@@ -28,6 +28,10 @@ static class PlayerExtensions {
             return false;
         }
 
+        if (player.armor[0].type != item.Type) {
+            return false;
+        }
+
         bool result = item.IsArmorSet(player.armor[0], player.armor[1], player.armor[2]);
         return result;
     }

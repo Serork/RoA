@@ -16,6 +16,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Druid.Forms;
@@ -62,6 +63,9 @@ abstract class BaseForm : ModMount {
     public BaseFormBuff MountBuff { get; init; }
 
     public BaseForm() => MountBuff = new BaseFormBuff(this);
+
+    public virtual SoundStyle ApplySound { get; } = SoundID.Item25;
+    public virtual SoundStyle ReleaseSound { get; } = SoundID.Item25;
 
     public override void Load() {
         Mod.AddContent(MountBuff);

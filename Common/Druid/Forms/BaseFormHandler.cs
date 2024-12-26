@@ -98,6 +98,7 @@ sealed class BaseFormHandler : ModPlayer {
             return;
         }
 
+        SoundEngine.PlaySound(formInstance.BaseForm.ApplySound, player.Center);
         player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
@@ -116,6 +117,7 @@ sealed class BaseFormHandler : ModPlayer {
         if (formInstance != null) {
             player.ClearBuff(formInstance.MountBuff.Type);
             player.GetModPlayer<WreathHandler>().Reset(true);
+            SoundEngine.PlaySound(formInstance.BaseForm.ReleaseSound, player.Center);
         }
         handler.HardResetActiveForm();
     }
@@ -230,6 +232,17 @@ sealed class BaseFormHandler : ModPlayer {
         On_Player.QuickMount_GetItemToUse += On_Player_QuickMount_GetItemToUse;
         On_Player.MakeFloorDust += On_Player_MakeFloorDust;
         On_PlayerHeadDrawRenderTargetContent.DrawTheContent += On_PlayerHeadDrawRenderTargetContent_DrawTheContent;
+        On_Player.RotatedRelativePoint += On_Player_RotatedRelativePoint;
+    }
+
+    private Vector2 On_Player_RotatedRelativePoint(On_Player.orig_RotatedRelativePoint orig, Player self, Vector2 pos, bool reverseRotation, bool addGfxOffY) {
+        BaseFormHandler handler = self.GetModPlayer<BaseFormHandler>();
+        if (handler.IsInDruidicForm) {
+            Vector2 result = pos;
+            return result;
+        }
+
+        return orig(self, pos, reverseRotation, addGfxOffY);
     }
 
     private void On_PlayerHeadDrawRenderTargetContent_DrawTheContent(On_PlayerHeadDrawRenderTargetContent.orig_DrawTheContent orig, PlayerHeadDrawRenderTargetContent self, SpriteBatch spriteBatch) {

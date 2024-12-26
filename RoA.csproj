@@ -24,6 +24,7 @@
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Block.png" />
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Slope.png" />
 	  <None Remove="Resources\Textures\Buffs\BoneHarpyAttackDebuff.png" />
+	  <None Remove="Resources\Textures\Buffs\BoneHarpyMountBuff.png" />
 	  <None Remove="Resources\Textures\Buffs\Deceleration.png" />
 	  <None Remove="Resources\Textures\Buffs\ExtraRegen.png" />
 	  <None Remove="Resources\Textures\Buffs\Hemorrhage.png" />
@@ -84,6 +85,7 @@
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\PumpkinSeed.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Magic\TerraProj.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\RootRing.png" />
+	  <None Remove="Resources\Textures\Projectiles\Friendly\Summon\BoneHarpyFeather.png" />
 	  <None Remove="Resources\Textures\Projectiles\StabbingProjectile.png" />
 	  <None Remove="Resources\Textures\Projectiles\StabbingProjectileShade.png" />
 	  <None Remove="Resources\Textures\Tiles\Ambient\BackwoodsBush.png" />

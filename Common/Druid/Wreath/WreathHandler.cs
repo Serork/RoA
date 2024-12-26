@@ -18,6 +18,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Forms.BaseFormHandler;

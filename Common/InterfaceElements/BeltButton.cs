@@ -67,6 +67,7 @@ sealed class BeltButton() : InterfaceElement(RoA.ModName + ": Belt Button", Inte
             vector2.X -= Main.netMode == NetmodeID.MultiplayerClient ? 25f : 0f;
             vector2.Y += 4f;
             Rectangle sourceRectangle = beltButtonFrame.GetSourceRectangle(texture);
+            sourceRectangle.Width += 2;
             float scale = 0.9f;
             bool flag = Collision.CheckAABBvAABBCollision(vector2 - origin, origin, new Vector2(Main.mouseX, Main.mouseY), Vector2.One) && Main.mouseItem.IsEmpty();
             sourceRectangle.X += IsUsed ? width : 0;

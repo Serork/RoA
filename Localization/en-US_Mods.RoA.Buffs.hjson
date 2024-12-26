@@ -182,7 +182,7 @@ Fireblossom: {
 }
 
 BoneHarpyAttackDebuff: {
-	DisplayName: Bone Harpy Attack Debuff
+	DisplayName: Bone Harpy
 	Description: Mods.RoA.Buffs.BoneHarpyAttackDebuff.Description
 }
 
@@ -194,4 +194,9 @@ OnFire: {
 PrismaticFavor: {
 	DisplayName: Prismatic Favor
 	Description: All specific class damage boosts are applied to all damage types
+}
+
+BoneHarpyMountBuff: {
+	DisplayName: Bone Harpy Mount
+	Description: Mods.RoA.Buffs.BoneHarpyMountBuff.Description
 }

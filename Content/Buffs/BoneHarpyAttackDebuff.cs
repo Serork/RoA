@@ -8,7 +8,6 @@ sealed class BoneHarpyAttackDebuff : ModBuff {
         // DisplayName.SetDefault("Bone Harpy");
         // Description.SetDefault("Bone Harpy cannot attack anymore");
 
-        Main.buffNoTimeDisplay[Type] = true;
         Main.buffNoSave[Type] = true;
         Main.debuff[Type] = true;
     }

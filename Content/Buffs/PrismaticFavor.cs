@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+
 namespace RoA.Content.Buffs;
 
 sealed class PrismaticFavor : ModBuff {
@@ -21,6 +22,7 @@ sealed class PrismaticFavor : ModBuff {
             }
 
             float totalDamage = 0f;
+            int invalidDamageClassCount = 5;
             static bool isValid(DamageClass damageClass) {
                 return damageClass is not null && !(
                     damageClass == DamageClass.Default ||
@@ -45,6 +47,8 @@ sealed class PrismaticFavor : ModBuff {
                 float addDamage = totalDamage;
                 float value = Player.GetTotalDamage(damageClass).ApplyTo(1f);
                 addDamage -= value - 1f;
+                float genericBonus = (Player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f) - 1f) * (DamageClassLoader.DamageClassCount - invalidDamageClassCount - 1);
+                addDamage -= genericBonus;
                 Player.GetDamage(damageClass) += addDamage;
             }
         }
