@@ -2,9 +2,14 @@ using Humanizer;
 
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Items.ItemDropRules;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
+using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Summon;
@@ -12,6 +17,7 @@ using RoA.Content.Items.Weapons.Summon;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -54,32 +60,94 @@ sealed class BackwoodsCrate : ModItem {
         return true;
     }
 
-    public override void RightClick(Player player) {
-        IEntitySource source = player.GetSource_OpenItem(Type);
-        bool flag = ItemID.Sets.IsFishingCrateHardmode[Type];
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.Crates;
+    }
 
-        int type20;
-        switch (Main.rand.Next(5)) {
-            case 0:
-                type20 = ModContent.ItemType<WandCore>();
-                break;
-            case 1:
-                type20 = ModContent.ItemType<OvergrownSpear>();
-                break;
-            case 2:
-                type20 = ModContent.ItemType<MothStaff>();
-                break;
-            case 3:
-                type20 = ModContent.ItemType<DoubleFocusCharm>();
-                break;
-            default:
-                type20 = ModContent.ItemType<BeastBow>();
-                break;
-        }
+    public override void ModifyItemLoot(ItemLoot itemLoot) {
+        IItemDropRule[] mainItems = [
+            ItemDropRule.OneFromOptionsNotScalingWithLuck(1,
+            ModContent.ItemType<WandCore>(),
+            ModContent.ItemType<OvergrownSpear>(),
+            ModContent.ItemType<MothStaff>(),
+            ModContent.ItemType<DoubleFocusCharm>(),
+            ModContent.ItemType<BeastBow>())
+        ];
+        IItemDropRule[] costume = [
+            CustomDropRules.AllOptionsNotScaledWithLuck(1,
+            ModContent.ItemType<BunnyHat>(),
+            ModContent.ItemType<BunnyJacket>(),
+            ModContent.ItemType<BunnyPants>())
+        ];
+        IItemDropRule goldCoin = ItemDropRule.NotScalingWithLuck(ItemID.GoldCoin, 4, 5, 12);
+        IItemDropRule[] slipperyItems = [
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyBomb>(), 1, 4, 7),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyDynamite>(), 3, 1, 3),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyGrenade>(), 1, 5, 13),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SlipperyGlowstick>(), 1, 5, 13)
+        ];
+        IItemDropRule[] ores = [
+            ItemDropRule.NotScalingWithLuck(ItemID.CopperOre, 1, 20, 35),
+            ItemDropRule.NotScalingWithLuck(ItemID.TinOre, 1, 20, 35),
+            ItemDropRule.NotScalingWithLuck(ItemID.IronOre, 1, 20, 35),
+            ItemDropRule.NotScalingWithLuck(ItemID.LeadOre, 1, 20, 35),
+            ItemDropRule.NotScalingWithLuck(ItemID.SilverOre, 1, 20, 35),
+            ItemDropRule.NotScalingWithLuck(ItemID.TungstenOre, 1, 20, 35),
+            ItemDropRule.NotScalingWithLuck(ItemID.GoldOre, 1, 20, 35),
+            ItemDropRule.NotScalingWithLuck(ItemID.PlatinumOre, 1, 20, 35),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<MercuriumOre>(), 1, 20, 35),
+        ];
+        IItemDropRule[] bars = [
+            ItemDropRule.NotScalingWithLuck(ItemID.IronBar, 1, 6, 16),
+            ItemDropRule.NotScalingWithLuck(ItemID.LeadBar, 1, 6, 16),
+            ItemDropRule.NotScalingWithLuck(ItemID.SilverBar, 1, 6, 16),
+            ItemDropRule.NotScalingWithLuck(ItemID.TungstenBar, 1, 6, 16),
+            ItemDropRule.NotScalingWithLuck(ItemID.GoldBar, 1, 6, 16),
+            ItemDropRule.NotScalingWithLuck(ItemID.PlatinumBar, 1, 6, 16)
+        ];
+        IItemDropRule[] bars2 = [
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<MercuriumNugget>(), 1, 6, 16),
+        ];
+        IItemDropRule[] potions = [
+            ItemDropRule.NotScalingWithLuck(ItemID.ObsidianSkinPotion, 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ItemID.SpelunkerPotion, 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ItemID.HunterPotion, 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ItemID.GravitationPotion, 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ItemID.MiningPotion, 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ItemID.HeartreachPotion, 1, 2, 4)
+        ];
+        IItemDropRule[] potions2 = [
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DryadBloodPotion>(), 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<WillpowerPotion>(), 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<BloodlustPotion>(), 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<BrightstonePotion>(), 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ResiliencePotion>(), 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<WeightPotion>(), 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DeathWardPotion>(), 1)
+        ];
+        IItemDropRule[] extraPotions = [
+            ItemDropRule.NotScalingWithLuck(ItemID.HealingPotion, 1, 5, 17),
+            ItemDropRule.NotScalingWithLuck(ItemID.ManaPotion, 1, 5, 17)
+        ];
+        IItemDropRule[] extraBait = [
+            ItemDropRule.NotScalingWithLuck(ItemID.MasterBait, 2, 2, 6),
+            ItemDropRule.NotScalingWithLuck(ItemID.JourneymanBait, 1, 2, 6)
+        ];
+        IItemDropRule[] crateLoot = [
+            ItemDropRule.AlwaysAtleastOneSuccess(ItemDropRule.SequentialRulesNotScalingWithLuck(6, costume), ItemDropRule.SequentialRulesNotScalingWithLuck(1, mainItems)),
 
-        int number37 = Item.NewItem(source, (int)player.position.X, (int)player.position.Y, player.width, player.height, type20, 1, noBroadcast: false, -1);
-        if (Main.netMode == 1)
-            NetMessage.SendData(21, -1, -1, null, number37, 1f);
+            goldCoin,
+            new OneFromRulesRule(4, slipperyItems),
+            new OneFromRulesRule(3, bars2),
+            new OneFromRulesRule(7, ores),
+            new OneFromRulesRule(6, bars),
+            new OneFromRulesRule(6, potions),
+            new OneFromRulesRule(6, potions2),
 
+            new OneFromRulesRule(2, extraPotions),
+            new OneFromRulesRule(2, extraBait)
+        ];
+
+        itemLoot.Add(ItemDropRule.AlwaysAtleastOneSuccess(crateLoot));
     }
 }
