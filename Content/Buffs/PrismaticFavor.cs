@@ -23,7 +23,8 @@ sealed class PrismaticFavor : ModBuff {
 
             float totalDamage = 0f;
             bool isValid(DamageClass damageClass) {
-                return damageClass is not null && !(damageClass == DamageClass.Default ||
+                return damageClass is not null && !(
+                    damageClass == DamageClass.Default ||
                     damageClass == DamageClass.Generic ||
                     damageClass == DamageClass.MeleeNoSpeed ||
                     damageClass == DamageClass.SummonMeleeSpeed ||
