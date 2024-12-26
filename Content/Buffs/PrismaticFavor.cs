@@ -11,18 +11,17 @@ sealed class PrismaticFavor : ModBuff {
 	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<PrismaticFavorPlayer>().IsEffectActive = true;
 
     internal class PrismaticFavorPlayer : ModPlayer {
-        private float _totalDamage;
-
         public bool IsEffectActive;
 
         public override void ResetEffects() => IsEffectActive = false;
+
         public override void PostUpdate() {
             if (!IsEffectActive) {
                 return;
             }
 
             float totalDamage = 0f;
-            bool isValid(DamageClass damageClass) {
+            static bool isValid(DamageClass damageClass) {
                 return damageClass is not null && !(
                     damageClass == DamageClass.Default ||
                     damageClass == DamageClass.Generic ||
