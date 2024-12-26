@@ -1102,3 +1102,18 @@ CosmicHat: {
 		'Great for a walk in a shadowy forest'
 		'''
 }
+
+BackwoodsCrate: {
+	DisplayName: Backwoods Crate
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+ElderwoodFence: {
+	DisplayName: Elderwood Fence
+	Tooltip: ""
+}
+
+ElderwoodWall: {
+	DisplayName: Elderwood Wall
+	Tooltip: ""
+}

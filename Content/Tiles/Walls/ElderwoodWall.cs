@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts.Backwoods;
 
+using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Walls;
@@ -12,6 +13,7 @@ sealed class ElderwoodWall2 : ElderwoodWall {
 
 class ElderwoodWall : ModWall {
 	public override void SetStaticDefaults() {
+        Main.wallHouse[Type] = true;
         DustType = (ushort)ModContent.DustType<WoodTrash>();
 		AddMapEntry(new Color(112, 55, 31));
 	}
