@@ -201,6 +201,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (_nextHerb > 6) {
                 _nextHerb = 0;
             }
+            if (_nextHerb == 5) {
+                _nextHerb++;
+            }
             byte plant = (byte)_nextHerb;
             ushort[] validTiles = [TileID.Dirt, _grassTileType];
             if (validTiles.Contains(tile.TileType)) {
@@ -233,7 +236,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
             }
-            bool flag = _nextHerb == 5;
+            bool flag = _nextHerb == 4;
             if (flag || _nextHerb == 6) {
                 if (_random.NextBool()) {
                     _nextHerb++;
