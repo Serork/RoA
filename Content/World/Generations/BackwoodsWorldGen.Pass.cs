@@ -185,7 +185,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddHerbs() {
         for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0000125); i++) {
-            int x = _random.Next(Left - 30, Right + 30),
+            int x = _random.Next(Left, Right),
                 y = _random.Next(BackwoodsVars.FirstTileYAtCenter + EdgeY, Bottom);
 
             Tile tile = WorldGenHelper.GetTileSafely(x, y);
