@@ -13,6 +13,8 @@ sealed class Hedgehog : ModNPC {
     private bool chosen;
     private int choice;
 
+    private float _curlUpTimer;
+
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Hedgehog");
         Main.npcFrameCount[NPC.type] = 5;
@@ -69,9 +71,9 @@ sealed class Hedgehog : ModNPC {
         else Main.npcCatchable[NPC.type] = true;
         NPC.dontCountMe = true;
 
-        bool flag = NPC.localAI[3] >= 20f;
+        bool flag = _curlUpTimer >= 20f;
         if (!flag) {
-            NPC.localAI[3]++;
+            _curlUpTimer++;
         }
 
         bool flag2 = false;
@@ -84,6 +86,7 @@ sealed class Hedgehog : ModNPC {
         }
 
         if (flag && flag2) {
+            Main.NewText(123);
             if (!chosen) {
                 choice = Main.rand.Next(0, 2);
                 chosen = true;
