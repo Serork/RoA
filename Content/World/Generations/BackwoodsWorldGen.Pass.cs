@@ -184,7 +184,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step_AddHerbs() {
-        for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00002); i++) {
+        for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0000125); i++) {
             int x = _random.Next(Left - 30, Right + 30),
                 y = _random.Next(BackwoodsVars.FirstTileYAtCenter + EdgeY, Bottom);
 
@@ -295,7 +295,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddChests() {
         // adapted vanilla
-        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.0015); num536++) {
+        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.001); num536++) {
             double value8 = (double)num536 / ((double)Main.maxTilesX * 0.005);
             bool flag30 = false;
             int num537 = 0;
