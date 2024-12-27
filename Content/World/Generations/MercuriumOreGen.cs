@@ -21,7 +21,7 @@ sealed class MercuriumOreGen : ModSystem {
     private void On_WorldGen_TileRunner(On_WorldGen.orig_TileRunner orig, int i, int j, double strength, int steps, int type, bool addTile, double speedX, double speedY, bool noYChange, bool overRide, int ignoreTileType) {
         IReadOnlyList<int> oresType = [7, 166, 6, 167, 9, 168, 8, 169, 22, 204];
         orig(i, j, strength, steps, type, addTile, speedX, speedY, noYChange, overRide, ignoreTileType);
-        if (j < Main.worldSurface && Main.rand.NextBool(2)) {
+        if (j < Main.worldSurface && Main.rand.NextBool(4)) {
             return;
         }
         if (oresType.Contains(type)) {
