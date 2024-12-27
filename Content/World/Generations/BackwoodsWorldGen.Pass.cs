@@ -1802,9 +1802,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             baseX = posX;
         }
         WeightedRandom<float> weightedRandom = new WeightedRandom<float>();
-        weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.35f);
-        weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.35f);
-        weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.45f);
+        weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.25f);
+        weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.25f);
+        weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.6f);
         weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.6f);
@@ -2873,7 +2873,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         PlaceGateway(true);
 
-        double count = (WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055)) * 0.75f;
+        double count = (WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055)) * 0.5f;
         for (int num555 = 0; num555 < count; num555++) {
             //progress.Set((float)(i + 1) / roomCount);
             GenerateLootRoom1();
