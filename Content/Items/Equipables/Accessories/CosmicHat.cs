@@ -23,6 +23,10 @@ sealed class CosmicHat : ModItem {
         }
 
         public override void PostUpdateEquips() {
+			if (IsEffectActive) {
+				return;
+			}
+
             if (timer > 0f) timer -= 1f;
 			Player player = Player;
             if ((float)player.statMana < (float)player.statManaMax2 * 0.35f && timer <= 0.0 && player.whoAmI == Main.myPlayer) {

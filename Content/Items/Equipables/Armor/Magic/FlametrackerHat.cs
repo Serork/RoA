@@ -104,6 +104,10 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
         if (drawInfo.shadow != 0f || player.face != -1 || player.dead/* || player.GetModPlayer<MagicArmorSetPlayer>().flameTrackerArmorSet*/ && player.statMana != player.statManaMax2)
             return;
 
+        if (player.statMana == player.statManaMax2) {
+            return;
+        }
+
         Texture2D texture = _hatFlameTexture.Value;
         Rectangle bodyFrame = player.bodyFrame;
         Color color = new Color(255, 255, 255, 0) * 0.8f * 0.75f;
