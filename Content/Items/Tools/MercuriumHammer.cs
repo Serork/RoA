@@ -16,7 +16,7 @@ public class MercuriumHammer : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 38; int height = 32;
+		int width = 44; int height = 38;
 		Item.Size = new Vector2(width, height);
 
 		Item.damage = 20;

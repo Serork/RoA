@@ -14,7 +14,7 @@ sealed class MercuriumAxe : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 34; int height = width;
+		int width = 38; int height = width;
 		Item.Size = new Vector2(width, height);
 
 		Item.damage = 18;
