@@ -118,7 +118,7 @@ sealed class WreathHandler : ModPlayer {
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
 
-    public bool ShouldDrawItself => !IsEmpty || Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet || Player.IsHoldingNatureWeapon() || Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm;
+    public bool ShouldDrawItself => !IsEmpty/* || Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet*/ || Player.IsHoldingNatureWeapon() || Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm;
     public float PulseIntensity { get; private set; }
 
     public bool HasKeepTime => _keepBonusesForTime > 0f;
