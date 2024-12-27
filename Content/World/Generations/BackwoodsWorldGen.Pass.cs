@@ -2401,7 +2401,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         vector2D.Y = _gatewayLocation.Y;
         Vector2D vector2D2 = default(Vector2D);
         vector2D2.X = (double)_random.Next(-10, 15) * 0.1;
-        vector2D2.Y = (double)-8 * 0.1;
+        vector2D2.Y = (double)-1 * 0.1;
         _gatewayVelocity = vector2D2;
         while (num > 0.0 && num3 > 0.0) {
             double num4 = num * (num3 / num2);
@@ -2451,7 +2451,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (vector2D2.X < -1.0)
                 vector2D2.X = -1.0;
 
-            vector2D2.Y += (double)_random.Next(-2, 0) * 0.05;
+            if (WorldGen.genRand.NextBool(5)) {
+                vector2D2.Y += (double)_random.Next(-3, 0) * 0.05;
+            }
             if (vector2D2.Y > 1.0)
                 vector2D2.Y = 1.0;
 
