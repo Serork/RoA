@@ -86,7 +86,6 @@ sealed class Hedgehog : ModNPC {
         }
 
         if (flag && flag2) {
-            Main.NewText(123);
             if (!chosen) {
                 choice = Main.rand.Next(0, 2);
                 chosen = true;
