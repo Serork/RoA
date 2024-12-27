@@ -2795,9 +2795,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         tile.TileFrameX = (short)(34 * _random.Next(4));
                     }
                     else {
-                        if (_random.NextBool(18)) {
+                        if (_random.NextBool(19)) {
                             tile.TileType = _mintTileType;
-                            tile.TileFrameX = (short)(18 * (_random.Next(5) < 2 ? 2 : _random.NextBool() ? 0 : 1));
+                            tile.TileFrameX = (short)(18 * (_random.Next(7) < 2 ? 2 : _random.NextBool() ? 0 : 1));
                             ModContent.GetInstance<MiracleMintTE>().Place(i, j - 1);
                         }
                         else {
