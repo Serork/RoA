@@ -4,13 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Players;
 using RoA.Core.Data;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.Metadata;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -18,7 +19,191 @@ using Terraria.ObjectData;
 
 namespace RoA.Common.Tiles;
 
-abstract class PlantBase : ModTile {
+abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
+    public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
+        tileHeight += 4;
+        addFrY -= 1;
+    }
+
+    protected virtual short FrameWidth => 18;
+
+    protected virtual int[] AnchorValidTiles => [];
+
+    protected virtual ushort DropItem { get; set; }
+
+    public sealed override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileObsidianKill[Type] = true;
+        Main.tileCut[Type] = true;
+        Main.tileSpelunker[Type] = true;
+        Main.tileNoFail[Type] = true;
+
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.IgnoredInHouseScore[Type] = true;
+        TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
+        TileID.Sets.SwaysInWindBasic[Type] = true;
+
+        TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
+        TileObjectData.newTile.DrawYOffset -= 5;
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
+        TileObjectData.newTile.AnchorAlternateTiles = [TileID.ClayPot, TileID.PlanterBox];
+        TileObjectData.newTile.UsesCustomCanPlace = true;
+        PreAddNewTile();
+        TileObjectData.addTile(Type);
+
+        SafeSetStaticDefaults();
+    }
+
+    public override bool CanPlace(int i, int j) {
+        Tile tile = Framing.GetTileSafely(i, j);
+
+        if (tile.HasTile) {
+            int tileType = tile.TileType;
+            if (tileType == Type) {
+                return IsGrown(i, j);
+            }
+
+            if (Main.tileCut[tileType] || TileID.Sets.BreakableWhenPlacing[tileType] || tileType == TileID.WaterDrip || tileType == TileID.LavaDrip || tileType == TileID.HoneyDrip || tileType == TileID.SandDrip) {
+                bool foliageGrass = tileType == TileID.Plants || tileType == TileID.Plants2;
+                bool moddedFoliage = tileType >= TileID.Count && (Main.tileCut[tileType] || TileID.Sets.BreakableWhenPlacing[tileType]);
+                bool harvestableVanillaHerb = Main.tileAlch[tileType] && WorldGen.IsHarvestableHerbWithSeed(tileType, tile.TileFrameX / 18);
+
+                if (foliageGrass || moddedFoliage || harvestableVanillaHerb) {
+                    WorldGen.KillTile(i, j);
+                    if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    protected virtual void PreAddNewTile() { }
+
+    public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (GetStage(i, j) == PlantStage.Planted/* && !AnchorValidTiles.Contains(WorldGenHelper.GetTileSafely(i, j + 1).TileType)*/) {
+            Tile tile = WorldGenHelper.GetTileSafely(i, j);
+            Vector2 origin = new Vector2(FrameWidth, 21) / 2f;
+            bool flag = true;
+            spriteBatch.Draw(TextureAssets.Tile[Type].Value, new Vector2(i * 16f, j * 16f - 5f) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition
+                + origin + new Vector2(flag ? -4f : 0f, 0f), 
+                new Rectangle(tile.TileFrameX, tile.TileFrameY, FrameWidth, 21), Lighting.GetColor(i, j), 0f,
+                origin, 
+                1f,
+                flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+
+            return false;
+        }
+
+        return base.PreDraw(i, j, spriteBatch);
+    }
+
+    protected virtual void SafeSetStaticDefaults() { }
+
+    public virtual PlantStage GetStage(int i, int j) => (PlantStage)(WorldGenHelper.GetTileSafely(i, j).TileFrameX / FrameWidth);
+    public virtual bool IsGrowing(int i, int j) => GetStage(i, j) == PlantStage.Growing;
+    public virtual bool IsGrown(int i, int j) => GetStage(i, j) == PlantStage.Grown;
+
+    protected virtual int PlantDrop { get; }
+    protected virtual int SeedsDrop { get; }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        Vector2 worldPosition = new Vector2(i, j).ToWorldCoordinates();
+        Player nearestPlayer = Main.player[Player.FindClosest(worldPosition, 16, 16)];
+
+        int plantStack = 0;
+
+        int seedStack = 0;
+
+        if (nearestPlayer.active && (nearestPlayer.HeldItem.type == ItemID.StaffofRegrowth || nearestPlayer.HeldItem.type == ItemID.AcornAxe)) {
+            plantStack = Main.rand.Next(1, 3);
+            seedStack = Main.rand.Next(1, 6);
+        }
+        else if (IsGrown(i, j)) {
+            plantStack = 1;
+            seedStack = Main.rand.Next(1, 4);
+        }
+
+        if (plantStack > 0) {
+            yield return new Item(PlantDrop, plantStack);
+        }
+
+        if (seedStack > 0) {
+            yield return new Item(SeedsDrop, seedStack);
+        }
+    }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 9/*IsGrown(i, j) ? Main.rand.Next(3, 6) : IsGrowing(i, j) ? Main.rand.Next(2, 5) : Main.rand.Next(1, 3)*/;
+
+    public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
+        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
+    }
+
+    public override bool IsTileSpelunkable(int i, int j) => IsGrown(i, j);
+
+    public override void RandomUpdate(int i, int j) {
+        if (!IsGrown(i, j)) {
+            WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;
+            if (Main.netMode != NetmodeID.SinglePlayer) {
+                NetMessage.SendTileSquare(-1, i, j, 1);
+            }
+        }
+    }
+
+    protected bool TryPlacePlant(int i, int j, int style = 0, params int[] validTiles){
+        ushort tileTypeToGrow = Type;
+
+        int num3 = 15;
+        int num4 = 5;
+        int num5 = 0;
+        num3 = (int)((double)num3 * ((double)Main.maxTilesX / 4200.0));
+        int num6 = Utils.Clamp(i - num3, 4, Main.maxTilesX - 4);
+        int num7 = Utils.Clamp(i + num3, 4, Main.maxTilesX - 4);
+        int num8 = Utils.Clamp(j - num3, 4, Main.maxTilesY - 4);
+        int num9 = Utils.Clamp(j + num3, 4, Main.maxTilesY - 4);
+        for (int i2 = num6; i2 <= num7; i2++) {
+            for (int j2 = num8; j2 <= num9; j2++) {
+                int checkTileType = Main.tile[i2, j2].TileType;
+                if (Main.tileAlch[checkTileType] || (checkTileType >= TileID.Count && TileLoader.GetTile(checkTileType) is PlantBase)) {
+                    num5++;
+                }
+            }
+        }
+
+        if (num5 < num4) {
+            if (!Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j + 1].HasTile && !Main.tile[i, j + 1].IsHalfBlock && Main.tile[i, j + 1].Slope == 0) {
+                for (int k = 0; k < validTiles.Length; k++) {
+                    if (Main.tile[i, j + 1].TileType != validTiles[k]) {
+                        return false;
+                    }
+                }
+                Tile tile = Main.tile[i, j];
+                PlantBase plant = TileLoader.GetTile(tileTypeToGrow) as PlantBase;
+                tile.ClearTile();
+                tile.TileType = tileTypeToGrow;
+                tile.HasTile = true;
+                tile.TileFrameX = (short)(plant.FrameWidth * style);
+                tile.CopyPaintAndCoating(Main.tile[i, j + 1]);
+                if (Main.tile[i, j].HasTile && Main.netMode == NetmodeID.Server) {
+                    NetMessage.SendTileSquare(-1, i, j);
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     private class ReplaceCutTilesWithSeed : ILoadable {
         public void Load(Mod mod) {
             On_Player.PlaceThing_Tiles += On_Player_PlaceThing_Tiles;
@@ -81,180 +266,5 @@ abstract class PlantBase : ModTile {
         }
 
         public void Unload() { }
-    }
-
-    protected virtual short FrameWidth => 18;
-
-    protected virtual int[] AnchorValidTiles => [];
-
-    protected virtual ushort DropItem { get; set; }
-
-    public sealed override void SetStaticDefaults() {
-        Main.tileFrameImportant[Type] = true;
-        Main.tileObsidianKill[Type] = true;
-        Main.tileCut[Type] = true;
-        Main.tileSpelunker[Type] = true;
-        Main.tileNoFail[Type] = true;
-
-        TileID.Sets.ReplaceTileBreakUp[Type] = true;
-        TileID.Sets.IgnoredInHouseScore[Type] = true;
-        TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
-        TileID.Sets.SwaysInWindBasic[Type] = true;
-
-        TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
-
-        TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
-        TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
-        TileObjectData.newTile.AnchorAlternateTiles = [TileID.ClayPot, TileID.PlanterBox];
-        TileObjectData.newTile.UsesCustomCanPlace = true;
-        PreAddNewTile();
-        TileObjectData.addTile(Type);
-
-        SafeSetStaticDefaults();
-    }
-
-    public override bool CanPlace(int i, int j) {
-        Tile tile = Framing.GetTileSafely(i, j);
-
-        if (tile.HasTile) {
-            int tileType = tile.TileType;
-            if (tileType == Type) {
-                return IsGrown(i, j);
-            }
-
-            if (Main.tileCut[tileType] || TileID.Sets.BreakableWhenPlacing[tileType] || tileType == TileID.WaterDrip || tileType == TileID.LavaDrip || tileType == TileID.HoneyDrip || tileType == TileID.SandDrip) {
-                bool foliageGrass = tileType == TileID.Plants || tileType == TileID.Plants2;
-                bool moddedFoliage = tileType >= TileID.Count && (Main.tileCut[tileType] || TileID.Sets.BreakableWhenPlacing[tileType]);
-                bool harvestableVanillaHerb = Main.tileAlch[tileType] && WorldGen.IsHarvestableHerbWithSeed(tileType, tile.TileFrameX / 18);
-
-                if (foliageGrass || moddedFoliage || harvestableVanillaHerb) {
-                    WorldGen.KillTile(i, j);
-                    if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
-                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
-                    }
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return true;
-    }
-
-    protected virtual void PreAddNewTile() { }
-
-    public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
-        if (!IsGrown(i, j)) {
-            Tile tile = WorldGenHelper.GetTileSafely(i, j);
-            spriteBatch.Draw(TextureAssets.Tile[Type].Value, new Vector2(i * 16f, j * 16f - 1f) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition, 
-                new Rectangle(tile.TileFrameX, tile.TileFrameY, FrameWidth, 20), Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, i % 2 == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-
-            return false;
-        }
-
-        return base.PreDraw(i, j, spriteBatch);
-    }
-
-    protected virtual void SafeSetStaticDefaults() { }
-
-    public virtual PlantStage GetStage(int i, int j) => (PlantStage)(WorldGenHelper.GetTileSafely(i, j).TileFrameX / FrameWidth);
-    public virtual bool IsGrowing(int i, int j) => GetStage(i, j) == PlantStage.Growing;
-    public virtual bool IsGrown(int i, int j) => GetStage(i, j) == PlantStage.Grown;
-
-    protected virtual int PlantDrop { get; }
-    protected virtual int SeedsDrop { get; }
-
-    public override IEnumerable<Item> GetItemDrops(int i, int j) {
-        Vector2 worldPosition = new Vector2(i, j).ToWorldCoordinates();
-        Player nearestPlayer = Main.player[Player.FindClosest(worldPosition, 16, 16)];
-
-        int plantStack = 0;
-
-        int seedStack = 0;
-
-        if (nearestPlayer.active && (nearestPlayer.HeldItem.type == ItemID.StaffofRegrowth || nearestPlayer.HeldItem.type == ItemID.AcornAxe)) {
-            plantStack = Main.rand.Next(1, 3);
-            seedStack = Main.rand.Next(1, 6);
-        }
-        else if (IsGrown(i, j)) {
-            plantStack = 1;
-            seedStack = Main.rand.Next(1, 4);
-        }
-
-        if (plantStack > 0) {
-            yield return new Item(PlantDrop, plantStack);
-        }
-
-        if (seedStack > 0) {
-            yield return new Item(SeedsDrop, seedStack);
-        }
-    }
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 9/*IsGrown(i, j) ? Main.rand.Next(3, 6) : IsGrowing(i, j) ? Main.rand.Next(2, 5) : Main.rand.Next(1, 3)*/;
-
-    public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
-        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
-    }
-
-    public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) => offsetY = -4;
-
-    public override bool IsTileSpelunkable(int i, int j) => IsGrown(i, j);
-
-    public override void RandomUpdate(int i, int j) {
-        if (!IsGrown(i, j)) {
-            WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;
-            if (Main.netMode != NetmodeID.SinglePlayer) {
-                NetMessage.SendTileSquare(-1, i, j, 1);
-            }
-        }
-    }
-
-    protected bool TryPlacePlant(int i, int j, int style = 0, params int[] validTile){
-        ushort tileTypeToGrow = Type;
-        for (int y = j - 1; y > 20; y--) {
-            if (!WorldGen.InWorld(i, y, 30) || Main.tile[i, y].HasTile || !Main.tile[i, y + 1].HasUnactuatedTile || Main.tile[i, y + 1].Slope != SlopeType.Solid || Main.tile[i, y + 1].IsHalfBlock) {
-                continue;
-            }
-
-            for (int k = 0; k < validTile.Length; k++) {
-                if (Main.tile[i, y + 1].TileType != validTile[k]) {
-                    continue;
-                }
-
-                int num3 = 15;
-                int num4 = 5;
-                int num5 = 0;
-                num3 = (int)((double)num3 * ((double)Main.maxTilesX / 4200.0));
-                int num6 = Utils.Clamp(i - num3, 4, Main.maxTilesX - 4);
-                int num7 = Utils.Clamp(i + num3, 4, Main.maxTilesX - 4);
-                int num8 = Utils.Clamp(j - num3, 4, Main.maxTilesY - 4);
-                int num9 = Utils.Clamp(j + num3, 4, Main.maxTilesY - 4);
-                for (int i2 = num6; i2 <= num7; i2++) {
-                    for (int j2 = num8; j2 <= num9; j2++) {
-                        if (Main.tileAlch[Main.tile[i2, j2].TileType] || TileLoader.GetTile(tileTypeToGrow) is PlantBase)
-                            num5++;
-                    }
-                }
-
-                if (num5 < num4) {
-                    Tile tile = Main.tile[i, y];
-                    PlantBase plant = TileLoader.GetTile(tileTypeToGrow) as PlantBase;
-                    tile.ClearTile();
-                    tile.TileType = tileTypeToGrow;
-                    tile.HasTile = true;
-                    tile.TileFrameX = (short)(plant.FrameWidth * style);
-                    tile.CopyPaintAndCoating(Main.tile[i, y + 1]);
-                    if (Main.netMode != NetmodeID.SinglePlayer) {
-                        NetMessage.SendTileSquare(-1, i - 1, y - 1, 3, 3);
-                    }
-                }
-
-                return true;
-            }
-        }
-        return false;
     }
 }

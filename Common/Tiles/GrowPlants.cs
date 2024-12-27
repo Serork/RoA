@@ -24,7 +24,7 @@ sealed class GrowPlants : ILoadable {
         if (!(!Main.tile[i, j].HasUnactuatedTile || Main.tile[i, j - 1].HasTile || Main.tile[i, j - 1].AnyLiquid())) {
             for (int k = TileID.Count; k < TileLoader.TileCount; k++) {
                 if (TileLoader.GetTile(k) is TileHooks.IGlobalRandomUpdate growRandomlyTile) {
-                    growRandomlyTile.OnGlobalRandomUpdate(i, j);
+                    growRandomlyTile.OnGlobalRandomUpdate(i, j - 1);
                 }
             }
         }

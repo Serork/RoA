@@ -1747,6 +1747,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     return;
             }
         }
+        for (int i = origin.X - num; i <= origin.X + num; i++) {
+            for (int j = origin.Y - num; j <= origin.Y + num; j++) {
+                if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<NexusGateway>())
+                    return;
+            }
+        }
 
         HouseBuilderCustom houseBuilder = CustomHouseUtils.CreateBuilder(origin, GenVars.structures);
         if (!houseBuilder.IsValid) {
@@ -2171,6 +2177,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //    }
         //}
 
+        if (!WorldGen.InWorld(_gatewayLocation.X, _gatewayLocation.Y, 30)) {
+            return;
+        }
+
         int num = 30;
         int num2 = 30;
         double num3 = num2;
@@ -2391,7 +2401,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         vector2D.Y = _gatewayLocation.Y;
         Vector2D vector2D2 = default(Vector2D);
         vector2D2.X = (double)_random.Next(-10, 15) * 0.1;
-        vector2D2.Y = (double)-5 * 0.1;
+        vector2D2.Y = (double)-8 * 0.1;
         _gatewayVelocity = vector2D2;
         while (num > 0.0 && num3 > 0.0) {
             double num4 = num * (num3 / num2);
@@ -2441,7 +2451,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (vector2D2.X < -1.0)
                 vector2D2.X = -1.0;
 
-            vector2D2.Y += (double)_random.Next(-10, 4) * 0.05;
+            vector2D2.Y += (double)_random.Next(-2, 0) * 0.05;
             if (vector2D2.Y > 1.0)
                 vector2D2.Y = 1.0;
 
