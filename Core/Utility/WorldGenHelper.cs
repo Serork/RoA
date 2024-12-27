@@ -1104,7 +1104,7 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static bool GrowTreeWithBranches<T>(int i, int y, int minHeight = 20, int maxHeight = 30) where T : TreeBranch {
+    public static bool GrowTreeWithBranches<T>(int i, int y, int minHeight = 20, int maxHeight = 30, int branchChance = 5) where T : TreeBranch {
         int num;
         int num1 = y;
         {
@@ -1255,7 +1255,7 @@ static class WorldGenHelper {
                     if (num5 == 5 || num5 == 7) {
                         tile = Main.tile[i - 1, i1];
                         tile.HasTile = true;
-                        if (WorldGen.genRand.Next(5) < 3) {
+                        if (WorldGen.genRand.Next(branchChance) < 3) {
                             tile.TileType = (ushort)ModContent.TileType<T>();
                         }
                         else {
@@ -1294,7 +1294,7 @@ static class WorldGenHelper {
                     if (num5 == 6 || num5 == 7) {
                         tile = Main.tile[i + 1, i1];
                         tile.HasTile = true;
-                        if (WorldGen.genRand.Next(5) < 3) {
+                        if (WorldGen.genRand.Next(branchChance) < 3) {
                             tile.TileType = (ushort)ModContent.TileType<T>();
                         }
                         else {
