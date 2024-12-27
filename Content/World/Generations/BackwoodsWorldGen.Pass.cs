@@ -235,16 +235,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             bool flag = _nextHerb == 4;
             if (flag || _nextHerb == 6) {
-                if (_random.NextBool()) {
+                if (flag) {
+                    if (!_random.NextBool(y < CenterY + EdgeY ? 2 : 3)) {
+                        _nextHerb += 2;
+                    }
+                }
+                if (_random.NextBool() && !flag) {
                     _nextHerb++;
                 }
                 else {
-                    if (flag) {
-                        if (!_random.NextBool(y < CenterY + EdgeY ? 2 : 3)) {
-                            _nextHerb += 2;
-                        }
-                    }
-                    else {
+                    if (!flag) {
                         _nextHerb += (byte)(_random.NextBool() ? 2 : 1);
                     }
                 }
