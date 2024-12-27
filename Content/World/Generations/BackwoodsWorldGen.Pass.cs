@@ -233,7 +233,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
             }
-            bool flag = _nextHerb == 4;
+            bool flag = _nextHerb == 5;
             if (flag || _nextHerb == 6) {
                 if (_random.NextBool()) {
                     _nextHerb++;
@@ -295,7 +295,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddChests() {
         // adapted vanilla
-        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.001); num536++) {
+        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.00075); num536++) {
             double value8 = (double)num536 / ((double)Main.maxTilesX * 0.005);
             bool flag30 = false;
             int num537 = 0;
