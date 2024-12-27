@@ -76,7 +76,7 @@ sealed class Hedgehog : ModNPC {
 
         bool flag2 = false;
         foreach (Player player in Main.ActivePlayers) {
-            if (!player.dead && Vector2.Distance(Main.player[Main.myPlayer].position, NPC.position) <= 300) {
+            if (!player.dead && Vector2.Distance(player.position, NPC.position) <= 300) {
                 flag2 = true;
 
                 break;
