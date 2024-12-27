@@ -73,7 +73,17 @@ sealed class Hedgehog : ModNPC {
         if (!flag) {
             NPC.localAI[3]++;
         }
-        if (flag && Collision.CanHit(Main.player[Main.myPlayer], NPC) && NPC.HasPlayerTarget && Vector2.Distance(Main.player[Main.myPlayer].position, NPC.position) <= 300) {
+
+        bool flag2 = false;
+        foreach (Player player in Main.ActivePlayers) {
+            if (!player.dead && Vector2.Distance(Main.player[Main.myPlayer].position, NPC.position) <= 300) {
+                flag2 = true;
+
+                break;
+            }
+        }
+
+        if (flag && flag2) {
             if (!chosen) {
                 choice = Main.rand.Next(0, 2);
                 chosen = true;
