@@ -1805,7 +1805,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.25f);
         weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.25f);
         weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.5f);
-        weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.5f);
+        weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.75f);
         if (posY == 0) {
