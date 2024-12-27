@@ -156,7 +156,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int attempts = 100000;
         while (--attempts > 0) {
             int x = _random.Next(Left, Right);
-            int y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 20, (int)Main.worldSurface - 5);
+            int y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 10, (int)Main.worldSurface - 5);
             int type = ModContent.TileType<NexusGateway>();
             if (again) {
                 x = _gatewayLocation.X;
@@ -1681,7 +1681,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
             bool flag = false;
-            int check = 20;
+            int check = 35;
             attempts = 50;
             for (int x2 = baseX - check; x2 < baseX + check; x2++) {
                 for (int y2 = baseY - check; y2 < baseY + check; y2++) {
@@ -1707,7 +1707,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        int num = 25;
+        int num = 35;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                 if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == 21)
@@ -1720,7 +1720,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     return;
             }
         }
-        num = 25;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                 if (Main.tile[i, j].HasTile && TileSets.Paintings.Contains(Main.tile[i, j].TileType))
