@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -232,6 +233,11 @@ sealed class BoneHarpy : ModProjectile {
     }
 
     private void HandleHovering() {
+        Player player = Main.player[Projectile.owner];
+        if (player.HasBuff<BoneHarpyAttackDebuff>()) {
+            _isHover = false;
+            return;
+        }
         if (Projectile.owner != Main.myPlayer) {
             return;
         }
@@ -239,7 +245,6 @@ sealed class BoneHarpy : ModProjectile {
         if (Projectile.Center.Distance(Main.player[Projectile.owner].Center) > 100f) {
             return;
         }
-        Player player = Main.player[Projectile.owner];
         if (IsInAttackMode(player) && !Controlled(player)) {
             return;
         }

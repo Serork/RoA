@@ -172,18 +172,18 @@ sealed class SapSlime : ModNPC {
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo) {
         int y = spawnInfo.SpawnTileY;
-        return ModContent.GetInstance<Sap>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<Sap>().tapperTilesCount / 3f, 0f, 2f) / 4f : 0f;
+        return ModContent.GetInstance<SapTileCount>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<SapTileCount>().tapperTilesCount / 3f, 0f, 2f) / 4f : 0f;
     }
 }
 
-sealed class Sap : ModSystem {
+sealed class SapTileCount : ModSystem {
     public int tapperTilesCount;
     public bool isSapActive;
     public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         => tapperTilesCount = tileCounts[ModContent.TileType<Tapper>()];
 
     public override void PostUpdateWorld()
-    => isSapActive = tapperTilesCount >= 2;
+        => isSapActive = tapperTilesCount >= 2;
 }
 
 sealed class SapPlayer : ModPlayer {

@@ -88,7 +88,7 @@ sealed class MothStaff : ModItem {
             }
         }
         else {
-            if (player.controlUseItem && !Main.mouseText && Main.mouseLeft && player.ItemTimeIsZero) {
+            if (player.controlUseItem && Main.mouseLeft && player.ItemTimeIsZero) {
                 OnUse_Effects(player, Item);
 
                 Player_FreeUpPetsAndMinions(player, Item);

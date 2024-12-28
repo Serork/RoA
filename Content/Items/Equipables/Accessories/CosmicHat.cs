@@ -23,7 +23,7 @@ sealed class CosmicHat : ModItem {
         }
 
         public override void PostUpdateEquips() {
-			if (IsEffectActive) {
+			if (!IsEffectActive) {
 				return;
 			}
 

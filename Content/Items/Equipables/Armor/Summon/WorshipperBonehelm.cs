@@ -17,10 +17,12 @@ namespace RoA.Content.Items.Equipables.Armor.Summon;
 [AutoloadEquip(EquipType.Head)]
 sealed class WorshipperBonehelm : ModItem {
     internal class BoneHarpyOptions : ModPlayer, IDoubleTap {
+        private const int STATETIME = 600;
+
         internal bool IsInIdle = true;
         internal int HarpyThatRideWhoAmI = -1;
 
-        internal int AttackTime;
+        internal int StateTimer;
 
         public void OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
             if (player.HasBuff(ModContent.BuffType<BoneHarpyAttackDebuff>())) {
@@ -41,8 +43,8 @@ sealed class WorshipperBonehelm : ModItem {
             SoundEngine.PlaySound(SoundID.Item25, player.Center);
 
             handler.IsInIdle = !handler.IsInIdle;
-            if (handler.AttackTime <= 0) {
-                handler.AttackTime = 300;
+            if (handler.StateTimer <= 0) {
+                handler.StateTimer = STATETIME;
             }
         }
 
@@ -63,6 +65,9 @@ sealed class WorshipperBonehelm : ModItem {
             HarpyThatRideWhoAmI = harpyWhoAmI;
             IsInIdle = true;
             Player.velocity = Vector2.Zero;
+            if (StateTimer <= 0) {
+                StateTimer = STATETIME;
+            }
         }
 
         public void JumpOffHarpy() {
@@ -71,6 +76,7 @@ sealed class WorshipperBonehelm : ModItem {
             }
             Player.ClearBuff(ModContent.BuffType<BoneHarpyMountBuff>());
             HarpyThatRideWhoAmI = -1;
+            AddCD();
         }
 
         public void ToggleState(int harpyWhoAmI = -1) {
@@ -89,18 +95,20 @@ sealed class WorshipperBonehelm : ModItem {
             }
         }
 
+        private void AddCD() => Player.AddBuff(ModContent.BuffType<BoneHarpyAttackDebuff>(), 900);
+
         public bool RodeHarpy => !(HarpyThatRideWhoAmI == -1 || !Main.projectile[HarpyThatRideWhoAmI].active);
 
         public bool ShouldBeActive() => Player.HasSetBonusFrom<WorshipperBonehelm>();
 
         public override void PostUpdateBuffs() {
-            if (AttackTime > 0) {
-                AttackTime--;
+            if (StateTimer > 0) {
+                StateTimer--;
             }
             else if (!IsInIdle) {
                 IsInIdle = true;
 
-                Player.AddBuff(ModContent.BuffType<BoneHarpyAttackDebuff>(), 900);
+                AddCD();
             }
 
             if (!RodeHarpy) {

@@ -184,7 +184,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && Player.ItemAnimationActive && natureProjectile.Item == selectedItem) {
             selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
-            if (!_shouldDecrease && !_shouldDecrease2 && GetIsFull((ushort)(CurrentResource + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2), true)) {
+            if (!_shouldDecrease && !_shouldDecrease2 && GetIsFull((ushort)(CurrentResource/* + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2*/), true)) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     if (!SpecialAttackData.OnlySpawn || nonDataReset) {
                         ForcedHardReset();

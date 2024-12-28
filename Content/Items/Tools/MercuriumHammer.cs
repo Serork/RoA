@@ -1,7 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Items.Materials;
-
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
