@@ -46,7 +46,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
         protected override bool IsInUse => !Owner.CCed && Owner.controlUseItem;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 2);
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 3);
 
         public override void SendExtraAI(BinaryWriter writer) {
             base.SendExtraAI(writer);
