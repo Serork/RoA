@@ -15,7 +15,7 @@ sealed class ElderwoodSink : ModTile {
         Main.tileLavaDeath[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-        TileObjectData.newTile.CoordinateHeights = [18, 16];
+        TileObjectData.newTile.CoordinateHeights = [18, 18];
         TileObjectData.newTile.Direction = Terraria.Enums.TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);

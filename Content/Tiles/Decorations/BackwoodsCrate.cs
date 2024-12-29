@@ -13,7 +13,7 @@ sealed class BackwoodsCrate : ModTile {
         Main.tileTable[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-        TileObjectData.newTile.CoordinateWidth = 18;
+        TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
         TileObjectData.addTile(Type);
 

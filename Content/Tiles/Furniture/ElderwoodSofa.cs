@@ -25,7 +25,7 @@ sealed class ElderwoodSofa : ModTile {
         TileID.Sets.DisableSmartCursor[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-        TileObjectData.newTile.CoordinateHeights = [16, 16];
+        TileObjectData.newTile.CoordinateHeights = [16, 18];
         TileObjectData.addTile(Type);
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);

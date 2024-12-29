@@ -43,6 +43,9 @@ sealed class ElderwoodDresser : ModTile {
                 TileID.RollingCactus
             ];
         TileObjectData.newTile.LavaDeath = false;
+		
+		TileObjectData.newTile.CoordinateHeights = [16, 18];
+		
         TileObjectData.addTile(Type);
 
         LocalizedText name = CreateMapEntryName();

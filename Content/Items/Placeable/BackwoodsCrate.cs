@@ -43,7 +43,7 @@ sealed class BackwoodsCrate : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.width = 34;
+        Item.width = 32;
         Item.height = 34;
         Item.rare = 2;
         Item.maxStack = Item.CommonMaxStack;
