@@ -27,7 +27,7 @@ sealed class TulipPetal : NatureProjectile {
     private byte UsedFrameX => (byte)Projectile.ai[0];
     private bool ParentFound => !(Parent == null || !Parent.active);
     private bool IsWeepingTulip => UsedFrameX == 2;
-    public float Max => IsWeepingTulip ? 180f : 120f;
+    public float Max => IsWeepingTulip ? 360f : 240f;
     private int MeInQueue => (int)Projectile.ai[2];
     private bool IsFirst => MeInQueue < 1;
     private Vector2 Offset => Vector2.UnitY * (146 * 0.55f - HEIGHT);
@@ -219,7 +219,7 @@ sealed class TulipPetal : NatureProjectile {
 sealed class TulipFlower : NatureProjectile {
     private byte UsedFrameX => (byte)Projectile.ai[0];
     private bool IsWeepingTulip => UsedFrameX == 2;
-    public float Max => IsWeepingTulip ? 180f : 120f;
+    public float Max => IsWeepingTulip ? 360f : 240f;
 
     public override string Texture => ResourceManager.EmptyTexture;
 

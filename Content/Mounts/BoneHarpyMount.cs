@@ -55,14 +55,14 @@ sealed class BoneHarpyMount : ModMount {
     }
 
     public override void SetMount(Player player, ref bool skipDust) {
-        _flyTime = FLYTIME;
+        if (_flyTime <= 0f) {
+            _flyTime = FLYTIME;
+        }
 
         skipDust = true;
     }
     
     public override void Dismount(Player player, ref bool skipDust) {
-        _flyTime = 0f;
-
         player.GetModPlayer<WorshipperBonehelm.BoneHarpyOptions>().JumpOffHarpy();
 
         skipDust = true;

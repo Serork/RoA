@@ -115,6 +115,7 @@ abstract class TulipBase : BaseRodProjectile {
                 _mousePosition = to;
             }
             _mousePosition = Vector2.SmoothStep(_mousePosition, to, 0.1f);
+            Projectile.netUpdate = true;
         }
     }
 
