@@ -78,6 +78,13 @@ abstract class TulipBase : BaseRodProjectile {
         float offset = 10f;
         Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
         ushort dustType = CoreDustType();
+
+        bool flag = Main.rand.NextBool();
+        if (flag) {
+            Point tileCoords = spawnPosition.ToTileCoordinates();
+            dustType = (ushort)TileHelper.GetKillTileDust(tileCoords.X, tileCoords.Y, WorldGenHelper.GetTileSafely(tileCoords.X, tileCoords.Y));
+        }
+
         float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / offset, 0.25f, 1f) * 1.25f * Ease.ExpoInOut(Math.Max(step, 0.25f)) + 0.25f;
         Dust dust = Dust.NewDustPerfect(spawnPosition, dustType, 
             Scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f));
@@ -91,6 +98,10 @@ abstract class TulipBase : BaseRodProjectile {
         _random.Add(2, 0.25);
         dust.customData = _random.Get();
         dust.noGravity = true;
+
+        if (flag) {
+            dust.scale *= 0.65f;
+        }
 
         if (player.whoAmI == Main.myPlayer) {
             if (step <= 0.5f) {
@@ -155,7 +166,13 @@ abstract class TulipBase : BaseRodProjectile {
                 velocity = (_mousePosition + Main.rand.NextVector2Circular(8f, 8f) - position).SafeNormalize(Vector2.Zero) * 3f * velocityFactor;
         Vector2 dustPos = position - Vector2.UnitY * 8f + Main.rand.NextVector2Circular(8f, 8f);
         //int x = (int)dustPos.X / 16, y = (int)dustPos.Y / 16;
-        //dustType = (ushort)TileHelper.GetKillTileDust(x, y, WorldGenHelper.GetTileSafely(x, y));
+
+        bool flag = Main.rand.NextBool();
+        if (flag) {
+            Point tileCoords = position.ToTileCoordinates();
+            dustType = (ushort)TileHelper.GetKillTileDust(tileCoords.X, tileCoords.Y, WorldGenHelper.GetTileSafely(tileCoords.X, tileCoords.Y));
+        }
+
         Dust dust = Dust.NewDustPerfect(dustPos,
                                         dustType,
                                         Scale: Main.rand.NextFloat(1.5f, 2f));
@@ -165,6 +182,10 @@ abstract class TulipBase : BaseRodProjectile {
         //dust.scale *= 0.75f;
         dust.velocity *= 0.9f;
         dust.noGravity = true;
+
+        if (flag) {
+            dust.scale *= 0.65f;
+        }
     }
 
     // adapted vanilla
