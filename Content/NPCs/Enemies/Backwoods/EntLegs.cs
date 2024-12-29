@@ -35,7 +35,12 @@ sealed class EntLegs : RoANPC {
 
     public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 18;
-	}
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Hide = true
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
+    }
 
 	public override void SetDefaults() {
 		NPC.lifeMax = 500;
@@ -53,8 +58,6 @@ sealed class EntLegs : RoANPC {
 		NPC.DeathSound = SoundID.NPCDeath27;
 
 		NPC.dontTakeDamage = true;
-
-        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;

@@ -15,7 +15,7 @@ sealed class Ent : RoANPC {
 
 	public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 18;
-	}
+    }
 
 	public override void SetDefaults() {
         NPC.lifeMax = 500;
@@ -41,8 +41,13 @@ sealed class Ent : RoANPC {
     }
 
     public override void AI() {
+		if (ParentNPCIndex <= 0) {
+			NPC.KillNPC();
+			return;
+		}
+		
         NPC npc = Parent;
-        if (!npc.active) {
+        if (npc == null || !npc.active) {
             NPC.KillNPC();
 		}
 
@@ -61,14 +66,22 @@ sealed class Ent : RoANPC {
 	public override void OnKill() => Parent.KillNPC();
 
 	public override void FindFrame(int frameHeight) {
+		if (ParentNPCIndex <= 0) {
+			return;
+		}
+
 		NPC npc = Parent;
-		if (!npc.active) {
+		if (npc == null || !npc.active) {
 			return;
 		}
 
         NPC.direction = npc.direction;
 		NPC.spriteDirection = -NPC.direction;
-		ChangeFrame(((int)(npc.ModNPC as RoANPC).CurrentFrame, frameHeight));
+		
+		ModNPC modNPC = npc.ModNPC;
+        if (modNPC != null && modNPC is RoANPC roaNPC) {
+			ChangeFrame(((int)roaNPC.CurrentFrame, frameHeight));
+		}
 	}
 
 	//public override void ModifyNPCLoot(NPCLoot npcLoot)

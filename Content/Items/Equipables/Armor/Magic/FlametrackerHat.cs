@@ -89,9 +89,6 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
     public override void Load()
         => _hatFlameTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "FlametrackerHat_Flame");
 
-    public override void Unload()
-        => _hatFlameTexture = null;
-
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         => drawInfo.drawPlayer.CheckArmorSlot(ModContent.ItemType<FlametrackerHat>(), 0, 10) ||
            drawInfo.drawPlayer.CheckVanitySlot(ModContent.ItemType<FlametrackerHat>(), 10);
