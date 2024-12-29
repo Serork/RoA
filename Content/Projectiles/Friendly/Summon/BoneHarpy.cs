@@ -238,6 +238,10 @@ sealed class BoneHarpy : ModProjectile {
             _isHover = false;
             return;
         }
+        if (player.cursorItemIconEnabled) {
+            _isHover = false;
+            return;
+        }
         if (Projectile.owner != Main.myPlayer) {
             return;
         }
