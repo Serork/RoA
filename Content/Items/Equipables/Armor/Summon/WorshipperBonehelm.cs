@@ -76,7 +76,7 @@ sealed class WorshipperBonehelm : ModItem {
             }
             Player.ClearBuff(ModContent.BuffType<BoneHarpyMountBuff>());
             HarpyThatRideWhoAmI = -1;
-            AddCD();
+            //AddCD();
         }
 
         public void ToggleState(int harpyWhoAmI = -1) {
