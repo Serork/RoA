@@ -64,15 +64,24 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
             base.PostAI();
 
             if (_strength < 1f) {
+                if (_strength == 0.15f) {
+                    if (Owner.whoAmI == Main.myPlayer) {
+                        _mousePosition = Owner.GetViableMousePosition();
+                        Projectile.netUpdate = true;
+                    }
+                }
                 float value = 0.05f - NatureWeaponHandler.GetUseSpeed(Owner.GetSelectedItem(), Owner) / 1000f;
                 _strength += value * 0.425f;
-            }
-            if (Owner.whoAmI == Main.myPlayer) {
-                _mousePosition = Owner.GetViableMousePosition();
+                if (Owner.whoAmI == Main.myPlayer) {
+                    _mousePosition = Vector2.SmoothStep(_mousePosition, Owner.GetViableMousePosition(), 0.1f);
+                    Projectile.netUpdate = true;
+                }
             }
         }
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
+            ai0 = _mousePosition.X;
+            ai1 = _mousePosition.Y;
             ai2 = 100f * Strength;
         }
 
