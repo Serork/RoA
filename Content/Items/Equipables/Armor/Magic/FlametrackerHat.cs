@@ -104,7 +104,7 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
         if (drawInfo.shadow != 0f || player.face != -1 || player.dead/* || player.GetModPlayer<MagicArmorSetPlayer>().flameTrackerArmorSet*/ && player.statMana != player.statManaMax2)
             return;
 
-        if (player.statMana == player.statManaMax2) {
+        if (player.statMana != player.statManaMax2) {
             return;
         }
 

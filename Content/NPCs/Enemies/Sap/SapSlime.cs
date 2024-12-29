@@ -220,7 +220,6 @@ sealed class SapTileCount : ModSystem {
             }
         }
 
-        Main.NewText(num);
         ModContent.GetInstance<SapTileCount>().tapperTilesCount = num;
     }
 
