@@ -24,16 +24,20 @@ sealed class BackwoodsNPCs : GlobalNPC {
 
     public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
         if (spawnInfo.Player.InModBiome<BackwoodsBiome>()) {
-            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter + 25;
-            if (surface) {
-                pool.Clear();
+            bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter + 35;
+            IEnumerator<KeyValuePair<int, float>> enumerator = pool.GetEnumerator();
+            while (enumerator.MoveNext()) {
+                pool[enumerator.Current.Key] *= 0.5f;
             }
-            else {
-                IEnumerator<KeyValuePair<int, float>> enumerator = pool.GetEnumerator();
-                while (enumerator.MoveNext()) {
-                    pool[enumerator.Current.Key] *= 0.5f;
-                }
-            }
+            //if (surface) {
+            //    pool.Clear();
+            //}
+            //else {
+            //    IEnumerator<KeyValuePair<int, float>> enumerator = pool.GetEnumerator();
+            //    while (enumerator.MoveNext()) {
+            //        pool[enumerator.Current.Key] *= 0.5f;
+            //    }
+            //}
 
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
             Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);

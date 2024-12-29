@@ -261,7 +261,6 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
                     continue;
                 }
                 IEntitySource entitySource = new EntitySource_SpawnNPC();
-                Main.NewText(123);
                 if (Main.player[k].RollLuck(NPC.goldCritterChance) == 0)
                     NPC.NewNPC(entitySource, cattailX * 16 + 8, cattailY * 16, 601);
                 else

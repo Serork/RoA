@@ -35,7 +35,6 @@ sealed class CopperAcolyteHat : ModItem {
     public override void UpdateArmorSet(Player player) {
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.AcolyteSetBonus").Value;
         if (player.statMana <= 40) {
-            Main.NewText(123);
             player.GetDamage(DamageClass.Magic) += 0.4f;
         }
     }

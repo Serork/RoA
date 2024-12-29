@@ -370,21 +370,21 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override bool PreAI() {
-        if (Main.expertMode && !_isAngry) {
-            foreach (Player player in Main.ActivePlayers) {
-                if (!(player.active && !player.dead)) {
-                    continue;
-                }
-                if (NPC.Distance(player.Center) < 400f && player.active && !player.dead && player.GetSelectedItem().damage > 0 && player.ItemAnimationActive) {
-                    MakeAngry();
+        //if (Main.expertMode && !_isAngry) {
+        //    foreach (Player player in Main.ActivePlayers) {
+        //        if (!(player.active && !player.dead)) {
+        //            continue;
+        //        }
+        //        if (NPC.Distance(player.Center) < 400f && player.active && !player.dead && player.GetSelectedItem().damage > 0 && player.ItemAnimationActive) {
+        //            MakeAngry();
 
-                    if (Main.netMode == NetmodeID.MultiplayerClient) {
-                        MultiplayerSystem.SendPacket(new RecognizeHitPacket(player, NPC.whoAmI));
-                    }
-                    break;
-                }
-            }
-        }
+        //            if (Main.netMode == NetmodeID.MultiplayerClient) {
+        //                MultiplayerSystem.SendPacket(new RecognizeHitPacket(player, NPC.whoAmI));
+        //            }
+        //            break;
+        //        }
+        //    }
+        //}
 
         return base.PreAI();
     }
@@ -575,6 +575,10 @@ sealed class GrimDefender : ModNPC {
 
                     NormalMovement();
 
+                    _tempPosition = Main.player[NPC.target].Center;
+                }
+
+                if (_spearAttack) {
                     _tempPosition = Main.player[NPC.target].Center;
                 }
 
