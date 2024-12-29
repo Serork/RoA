@@ -16,6 +16,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using Terraria.WorldBuilding;
 
 namespace RoA.Content.NPCs.Enemies.Sap;
 
@@ -179,6 +180,50 @@ sealed class SapSlime : ModNPC {
 sealed class SapTileCount : ModSystem {
     public int tapperTilesCount;
     public bool isSapActive;
+
+    public override void Load() {
+        On_SceneMetrics.ScanAndExportToMain += On_SceneMetrics_ScanAndExportToMain;
+    }
+
+    private void On_SceneMetrics_ScanAndExportToMain(On_SceneMetrics.orig_ScanAndExportToMain orig, SceneMetrics self, SceneMetricsScanSettings settings) {
+        orig(self, settings);
+
+        int num = 0;
+        if (settings.BiomeScanCenterPositionInWorld.HasValue) {
+            Point point = settings.BiomeScanCenterPositionInWorld.Value.ToTileCoordinates();
+            Rectangle tileRectangle = new Rectangle(point.X - Main.buffScanAreaWidth / 2, point.Y - Main.buffScanAreaHeight / 2, Main.buffScanAreaWidth, Main.buffScanAreaHeight);
+            tileRectangle = WorldUtils.ClampToWorld(tileRectangle);
+            for (int i = tileRectangle.Left; i < tileRectangle.Right; i++) {
+                for (int j = tileRectangle.Top; j < tileRectangle.Bottom; j++) {
+                    if (!tileRectangle.Contains(i, j)) {
+                        continue;
+                    }
+
+                    Tile tile = Main.tile[i, j];
+                    if (!tile.HasTile) {
+                        continue;
+                    }
+
+                    if (tile.TileType != ModContent.TileType<Tapper>()) {
+                        continue;
+                    }
+
+                    tileRectangle.Contains(i, j);
+
+                    if (tile.TileType == ModContent.TileType<Tapper>()) {
+                        TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
+                        if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
+                            num++;
+                        }
+                    }
+                }
+            }
+        }
+
+        Main.NewText(num);
+        ModContent.GetInstance<SapTileCount>().tapperTilesCount = num;
+    }
+
     public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         => tapperTilesCount = tileCounts[ModContent.TileType<Tapper>()];
 
