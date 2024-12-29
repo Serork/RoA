@@ -79,7 +79,7 @@ abstract class TulipBase : BaseRodProjectile {
         Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
         ushort dustType = CoreDustType();
 
-        bool flag = Main.rand.NextBool();
+        bool flag = false/*Main.rand.NextBool()*/;
         if (flag) {
             Point tileCoords = spawnPosition.ToTileCoordinates();
             dustType = (ushort)TileHelper.GetKillTileDust(tileCoords.X, tileCoords.Y, WorldGenHelper.GetTileSafely(tileCoords.X, tileCoords.Y));
