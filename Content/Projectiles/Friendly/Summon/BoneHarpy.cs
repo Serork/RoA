@@ -11,6 +11,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Summon;
@@ -242,7 +243,7 @@ sealed class BoneHarpy : ModProjectile {
             _isHover = false;
             return;
         }
-        if (player.cursorItemIconEnabled) {
+        if (player.cursorItemIconEnabled && player.inventory[player.selectedItem].pick <= 0 && player.inventory[player.selectedItem].hammer <= 0 && player.inventory[player.selectedItem].axe <= 0) {
             _isHover = false;
             return;
         }
