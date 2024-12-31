@@ -57,6 +57,10 @@ sealed class BoneHarpy : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
+        
+        if (player.Distance(Projectile.Center) > 1000f) {
+            Projectile.Center = player.Center;
+        }
 
         HandleHovering();
 
