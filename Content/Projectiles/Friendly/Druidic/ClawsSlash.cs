@@ -59,7 +59,7 @@ class ClawsSlash : NatureProjectile {
         Vector2 offset = new(0.2f);
         Vector2 velocity = 1.5f * offset;
         Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
-        Color color = Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat())/*Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()))*/;
+        Color color = Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()));
         color.A = 50;
         position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
         velocity = angle.ToRotationVector2() * velocity * 0.5f;
@@ -116,30 +116,33 @@ class ClawsSlash : NatureProjectile {
         float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);
         if (CanFunction) {
             SpriteBatch spriteBatch = Main.spriteBatch;
+            spriteBatch.BeginBlendState(BlendState.NonPremultiplied);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), FirstSlashColor * num4 * num2 * 0.35f, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, rot + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
-            Color shineColor = new(255, 200, 150);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+            Color shineColor = new Color(255, 200, 150);
             Color color3 = lightColor * num2 * 0.5f;
-            //color3.A = (byte)(color3.A * (1.0 - (double)num4));
+            color3.A = (byte)(color3.A * (1.0 - (double)num4));
             Color color4 = color3 * num4 * 0.5f;
             color4.G = (byte)(color4.G * (double)num4);
             color4.B = (byte)(color4.R * (0.25 + (double)num4 * 0.75));
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, rot + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), shineColor * num4 * num2 * 0.3f, rot, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, rot, origin, scale * num3, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.6f * num2, rot + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.5f * num2, rot + Projectile.ai[0] * -0.05f, origin, scale * 0.8f, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.4f * num2, rot + Projectile.ai[0] * -0.1f, origin, scale * 0.6f, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, rot + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, rot, origin, scale * num3, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, rot + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), shineColor * num4 * num2 * 0.3f, Projectile.rotation, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.6f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.5f * num2, Projectile.rotation + Projectile.ai[0] * -0.05f, origin, scale * 0.8f, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), lightColor * 0.4f * num2, Projectile.rotation + Projectile.ai[0] * -0.1f, origin, scale * 0.6f, effects, 0.0f);
+            spriteBatch.BeginBlendState(BlendState.Additive);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             for (int i = 0; i < 5; i++) {
-                spriteBatch.Draw(asset.Value, position + Utils.ToRotationVector2((float)(Projectile.timeLeft * 0.1 + i * Math.PI / 5.0)) * num12, new Rectangle?(r), color1 * num4 * num2 * 0.25f, rot + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+                spriteBatch.Draw(asset.Value, position + Utils.ToRotationVector2((float)(Projectile.timeLeft * 0.1 + i * Math.PI / 5.0)) * num12, new Rectangle?(r), color1 * num4 * num2 * 0.25f, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             }
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f * 0.15f, rot + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, rot, origin, scale * num3, effects, 0.0f);
-            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, rot + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f * 0.15f, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
+            spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             spriteBatch.EndBlendState();
         }
     }

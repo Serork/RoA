@@ -293,7 +293,7 @@ sealed class BoneHarpy : ModProjectile {
     }
 
     public override void PostDraw(Color lightColor) {
-        if (!_isHover) {
+        if (Projectile.Center.Distance(Main.MouseWorld) > 75f) {
             return;
         }
         SpriteBatch spriteBatch = Main.spriteBatch;
@@ -302,7 +302,7 @@ sealed class BoneHarpy : ModProjectile {
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Hover");
         Vector2 position = Projectile.Center - Main.screenPosition;
         Rectangle rect = new Rectangle(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height);
-        spriteBatch.Draw(texture, position, rect, (!_isHover ? Color.White : Color.Yellow) * 0.8f, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+        spriteBatch.Draw(texture, position, rect, (!_isHover ? new Color(127, 127, 127) : new Color(255, 255, 85)).MultiplyRGB(lightColor), Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
         spriteBatch.EndBlendState();
     }
 
