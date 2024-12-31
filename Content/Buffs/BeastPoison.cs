@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Sets;
+using RoA.Content.Dusts;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -22,8 +23,7 @@ sealed class BeastPoison : ModBuff {
 
 	public override void Update(Player player, ref int buffIndex) {
 		player.GetModPlayer<BeastPoisonPlayer>().beastPoison = true;
-		player.bleed = true;
-		player.moveSpeed *= 0.25f;
+		//player.moveSpeed *= 0.25f;
 	}
 
 	public override void Update(NPC npc, ref int buffIndex) {
@@ -65,9 +65,9 @@ sealed class BeastPoisonNPC : GlobalNPC {
     }
 
     public override void PostAI(NPC npc) {
-        if (beastPoison) {
-            npc.velocity *= 0.8f;
-        }
+        //if (beastPoison) {
+        //    npc.velocity *= 0.8f;
+        //}
     }
 }
 
@@ -75,6 +75,18 @@ sealed class BeastPoisonPlayer : ModPlayer {
     public bool beastPoison;
 
     public override void ResetEffects() => beastPoison = false;
+
+    public override void UpdateBadLifeRegen() {
+        if (Player.dead) {
+            return;
+        }
+
+        if (beastPoison) {
+            if (Player.lifeRegen > 0) Player.lifeRegen = 0;
+            Player.lifeRegenTime = 0;
+            Player.lifeRegen -= 10;
+        }
+    }
 
     public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
         if (drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.active || drawInfo.shadow != 0f) {

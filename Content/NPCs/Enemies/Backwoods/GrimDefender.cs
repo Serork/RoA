@@ -485,9 +485,9 @@ sealed class GrimDefender : ModNPC {
                     float speed = 1.5f;
                     if (!flag3) {
                         NPC.ai[2]++;
-                        if (NPC.ai[2] <= num * 0.4f) {
+                        //if (NPC.ai[2] <= num * 0.4f) {
                             _tempPosition = Main.player[NPC.target].Center;
-                        }
+                        //}
                         progress = NPC.ai[2] / num;
                         _extraVelocity2 = diff * speed * progress;
                     }
@@ -544,7 +544,8 @@ sealed class GrimDefender : ModNPC {
             }
 
             NPC.knockBackResist = 0.9f;
-            if (((!Main.player[NPC.target].InModBiome<BackwoodsBiome>() || NPC.Center.Y / 16 <= BackwoodsVars.FirstTileYAtCenter + 25) && !_isAngry) || Main.player[NPC.target].dead || (!_isAngry && _angryTimer >= 20f)) {
+            bool flag3 = ((!Main.player[NPC.target].InModBiome<BackwoodsBiome>() || NPC.Center.Y / 16 <= BackwoodsVars.FirstTileYAtCenter + 35) && !_isAngry) || Main.player[NPC.target].dead || (!_isAngry && _angryTimer >= 20f);
+            if (flag3) {
                 float maxSpeed = 3.5f;
                 if (NPC.velocity.Y < -maxSpeed) {
                     NPC.velocity.Y = -maxSpeed;

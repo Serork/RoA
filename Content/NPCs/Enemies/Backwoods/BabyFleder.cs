@@ -62,7 +62,7 @@ sealed class BabyFleder : ModNPC {
         NPC.lifeMax = 80;
         NPC.damage = 22;
         NPC.defense = 3;
-        NPC.knockBackResist = 0.9f;
+        NPC.knockBackResist = 1.25f;
 
         int width = 25; int height = 25;
         NPC.Size = new Vector2(width, height);
@@ -529,6 +529,8 @@ sealed class BabyFleder : ModNPC {
                 NPC.velocity.Y -= 0.8f * (NPC.ai[1] / 25f);
             }
         }
+
+        NPC.velocity *= 0.9625f;
     }
 
     private void ApplyGravity() {
