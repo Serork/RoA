@@ -7,7 +7,7 @@ namespace RoA.Content.Items.Placeable.Furniture;
 
 sealed class ElderwoodChest2 : ModItem {
 	public override void SetDefaults() {
-		Item.SetSize(32, 32);
+		Item.SetSize(32, 28);
 
 		Item.SetDefaultToUsable(ItemUseStyleID.Swing, 10, 15, useTurn: true, autoReuse: true);
 
