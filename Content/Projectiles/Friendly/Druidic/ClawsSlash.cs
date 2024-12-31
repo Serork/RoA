@@ -111,8 +111,8 @@ class ClawsSlash : NatureProjectile {
         float num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float num3 = 0.975f;
         float num4 = Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
-        Color color1 = FirstSlashColor.MultiplyRGB(lightColor);
-        Color color2 = SecondSlashColor.MultiplyRGB(lightColor);
+        Color color1 = FirstSlashColor;
+        Color color2 = SecondSlashColor;
         float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);
         if (CanFunction) {
             SpriteBatch spriteBatch = Main.spriteBatch;
