@@ -53,7 +53,7 @@ sealed class Ent : RoANPC {
 
 		NPC.realLife = NPC.whoAmI;
 
-		NPC.lifeMax = 500 - (int)(50 * NPC.ai[3]);
+		NPC.lifeMax = npc.lifeMax - (int)(50 * NPC.ai[3]);
 
         npc.value = NPC.value;
         NPC.defense = npc.defense;
