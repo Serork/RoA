@@ -25,7 +25,7 @@ sealed class MercuriumAxe : ModItem {
         Item.autoReuse = true;
 
         Item.knockBack = 5f;
-		Item.axe = 80 / 5;
+		Item.axe = 75 / 5;
 
 		Item.value = Item.sellPrice(silver: 26);
 		Item.rare = ItemRarityID.Blue;
