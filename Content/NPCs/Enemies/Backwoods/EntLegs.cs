@@ -73,7 +73,6 @@ sealed class EntLegs : RoANPC {
     }
 
     public override void AI() {
-		Main.NewText(NPC.lifeMax);
 		if (NPC.localAI[3] == 0f) {
 			NPC.localAI[3] = 1f;
 
