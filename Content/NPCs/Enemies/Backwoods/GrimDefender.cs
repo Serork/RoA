@@ -43,10 +43,10 @@ sealed class GrimDefender : ModNPC {
     private byte _hitCount;
 
     public override void OnSpawn(IEntitySource source) {
-        if (NPC.downedBoss2) {
-            _isAngry = true;
-            NPC.netUpdate = true;
-        }
+        //if (NPC.downedBoss2) {
+        //    _isAngry = true;
+        //    NPC.netUpdate = true;
+        //}
     }
 
     public override void Load() {
