@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
@@ -43,9 +42,9 @@ sealed class ElderwoodChest2 : ModTile {
 
 		AdjTiles = [TileID.Containers];
 
-		Color mapColor = new(95, 98, 74);
+		Color mapColor = new(133, 111, 91);
 		AddMapEntry(mapColor, CreateMapEntryName());
-		DustType = (ushort)ModContent.DustType<BackwoodsPotDust1>();
+		DustType = (ushort)ModContent.DustType<BackwoodsPotDust2>();
 		HitSound = SoundID.Dig;
 	}
 
