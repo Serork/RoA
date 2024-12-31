@@ -16,7 +16,7 @@ sealed class ElderwoodSofa : ModTile {
         Main.tileSolidTop[Type] = false;
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
-        Main.tileTable[Type] = true;
+        //Main.tileTable[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.HasOutlines[Type] = true;
