@@ -25,9 +25,8 @@ sealed class ElderwoodLamp : ModTile {
         TileObjectData.newTile.WaterDeath = true;
         TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
         TileObjectData.newTile.LavaPlacement = LiquidPlacement.NotAllowed;
+        //TileObjectData.newTile.CoordinateHeights = [16, 18];
         TileObjectData.addTile(Type);
-		
-		TileObjectData.newTile.CoordinateHeights = [16, 18];
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
         AddMapEntry(new Color(253, 221, 3), Language.GetText("MapObject.FloorLamp"));

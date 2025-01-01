@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class RipePumpkin : NatureProjectile {
-    private static Wiggler _rotateWiggler = Wiggler.Create(1f, 5.5f);
+    //private static Wiggler _rotateWiggler = Wiggler.Create(1f, 5.5f);
 
     private float _pulseScale = 3;
     private float _pulseAlpha;
@@ -38,7 +38,7 @@ sealed class RipePumpkin : NatureProjectile {
 
     //public override bool? CanDamage() => false;
 
-    public override void Unload() => _rotateWiggler = null;
+    //public override void Unload() => _rotateWiggler = null;
 
     public override bool PreDraw(ref Color lightColor) {
         if (Projectile.owner == Main.myPlayer) {
@@ -81,13 +81,14 @@ sealed class RipePumpkin : NatureProjectile {
                         _pulseAlpha += value + getValue(value);
                     }
                 }
-                if (!_rotateWiggler.Active && _pulseScale <= 1.5f) {
+                /*if (!_rotateWiggler.Active && _pulseScale <= 1.5f) {
                     _rotateWiggler.Start();
                 }
-                _rotateWiggler.Update();
+                _rotateWiggler.Update();*/
                 float progress = Math.Min((Projectile.ai[0] - min2) / (max - min2), 1f);
-                Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
-                if (Projectile.ai[0] >= max * 0.9f) {
+                //Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
+				Projectile.rotation = Projectile.ai[1];
+                if (Projectile.ai[0] >= max * 0.75f) {
                     int type = ModContent.ItemType<Items.Weapons.Druidic.RipePumpkin>();
                     if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && (Main.player[Projectile.owner].GetSelectedItem().type == type || Main.mouseItem.type == type)) {
                         Player player = Main.player[Projectile.owner];
@@ -97,7 +98,7 @@ sealed class RipePumpkin : NatureProjectile {
                             MultiplayerSystem.SendPacket(new ItemAnimationPacket(player, player.itemAnimation));
                         }
 
-                        _rotateWiggler.Stop();
+                        //_rotateWiggler.Stop();
                         Projectile.Kill();
                         SoundEngine.PlaySound(SoundID.NPCDeath22, Projectile.position);
                         int count = Projectile.ai[2] <= 4.5f ? 2 : 3;

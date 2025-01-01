@@ -29,7 +29,7 @@ sealed class BloodyFeather : ModProjectile {
         Projectile.penetrate = 1;
         Projectile.timeLeft = 120;
 
-        Projectile.extraUpdates = 1;
+        //Projectile.extraUpdates = 1;
         Projectile.alpha = 255;
 
     }
