@@ -44,11 +44,11 @@ sealed class ElderwoodCandle : ModTile {
         if (Framing.GetTileSafely(i, j).TileFrameX == 0) {
             r = 0.25f;
             g = 0.65f;
-            b = 0.85f;
+            b = 0.95f;
         }
     }
 
-    public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
+    /*public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
         if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
             Tile tile = Main.tile[i, j];
             if (Main.rand.NextBool(40) && tile.TileFrameX == 0 && tile.TileFrameY / 18 % 3 == 0) {
@@ -60,7 +60,7 @@ sealed class ElderwoodCandle : ModTile {
                 Main.dust[dust].velocity.Y = Main.dust[dust].velocity.Y - 1.5f;
             }
         }
-    }
+    }*/
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         if (Framing.GetTileSafely(i, j).TileFrameX != 0 || Framing.GetTileSafely(i, j).TileFrameY != 0) {
@@ -76,13 +76,13 @@ sealed class ElderwoodCandle : ModTile {
         int offsetY = 0;
         int height = 16;
         TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref tile.TileFrameX, ref tile.TileFrameY);
-        var flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
+        /*var flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
         ulong seed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i);
         for (int c = 0; c < 7; c++) {
             float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
             float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
             Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
             Main.spriteBatch.Draw(flameTexture, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, effects, 0f);
-        }
+        }*/
     }
 }

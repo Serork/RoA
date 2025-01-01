@@ -16,7 +16,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Furniture;
 
-public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn, TileHooks.ITileFlameData {
+public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -60,12 +60,12 @@ public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn, TileHooks
         if (tile.TileFrameX == 0) {
             r = 0.25f;
             g = 0.65f;
-            b = 0.85f;
+            b = 0.95f;
         }
     }
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         TileHelper.AddFluentPoint(this, i, j);
-        if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
+        /*if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
             Tile tile = Main.tile[i, j];
             if (Main.rand.NextBool(40) && tile.TileFrameX == 0 && tile.TileFrameY != 0) {
                 int dust = Dust.NewDust(new Vector2(i * 16 + 4, j * 16), 4, 4, ModContent.DustType<ElderTorchDust>(), 0f, 0f, 100, default, 1f);
@@ -75,7 +75,7 @@ public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn, TileHooks
                 Main.dust[dust].velocity *= 0.3f;
                 Main.dust[dust].velocity.Y = Main.dust[dust].velocity.Y - 1.5f;
             }
-        }
+        }*/
         return false;
     }
 
@@ -83,7 +83,7 @@ public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn, TileHooks
         TileHelper.LanternFluentDraw(screenPosition, pos, spriteBatch, tileDrawing);
     }
 
-    TileHooks.ITileFlameData.TileFlameData TileHooks.ITileFlameData.GetTileFlameData(int tileX, int tileY, int type, int tileFrameY) {
+    /*TileHooks.ITileFlameData.TileFlameData TileHooks.ITileFlameData.GetTileFlameData(int tileX, int tileY, int type, int tileFrameY) {
         TileHooks.ITileFlameData.TileFlameData tileFlameData = default;
         tileFlameData.flameTexture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Flame");
         tileFlameData.flameColor = new Color(100, 100, 100, 0);
@@ -95,5 +95,5 @@ public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn, TileHooks
         tileFlameData.flameRangeMultX = 0.15f;
         tileFlameData.flameRangeMultY = 0.35f;
         return tileFlameData;
-    }
+    }*/
 }
