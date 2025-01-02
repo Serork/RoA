@@ -41,17 +41,17 @@ sealed class SapSlime : ModNPC {
     }
 
     private int GenerateItemInsideBody(bool isBallooned) {
-        if (Main.rand.NextBool(3)) {
+        //if (Main.rand.NextBool(3)) {
             WeightedRandom<int> weightedRandom = new();
             weightedRandom.Add(ModContent.ItemType<SlipperyBomb>());
-            weightedRandom.Add(ModContent.ItemType<SlipperyDynamite>(), 0.5);
+            //weightedRandom.Add(ModContent.ItemType<SlipperyDynamite>(), 0.5);
             weightedRandom.Add(ModContent.ItemType<SlipperyGrenade>());
             weightedRandom.Add(ModContent.ItemType<SlipperyGlowstick>());
             return weightedRandom.Get();
-        }
-        else {
-            return ModContent.ItemType<Galipot>();
-        }
+        //}
+        //else {
+        //    return ModContent.ItemType<Galipot>();
+        //}
         //switch (Main.rand.Next(1)) {
         //    case 0:
         //        return ModContent.ItemType<Galipot>();
@@ -141,7 +141,7 @@ sealed class SapSlime : ModNPC {
                 NPC.ai[1] = 75f;
                 NPC.netUpdate = true;
             }
-            else if (Main.rand.NextChance(0.5f)) {
+            else if (Main.rand.NextChance(0.1f)) {
                 int num2 = GenerateItemInsideBody(NPC.ai[0] == -999f);
                 NPC.ai[1] = num2;
                 NPC.netUpdate = true;

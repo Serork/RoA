@@ -141,6 +141,13 @@ sealed class TapperDrawing : GlobalTile {
                     flag4 = flag5 = true;
                     offsetX2 = -3;
                 }
+                if (flag) {
+                    Tile tile = WorldGenHelper.GetTileSafely(i, j);
+
+                    if (tile.TileFrameX == 0 && tile.TileFrameY == 88) {
+                        offsetX += 1;
+                    }
+                }
                 Asset<Texture2D>? tapperBracingAsset = ModContent.Request<Texture2D>((TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
                 spriteBatch.Draw(tapperBracingAsset.Value, new Vector2((float)((i + offset) * 16 - (int)position.X + offsetX - (flag4 ? flag5 ? offsetX2 : 2 : 0)), (float)(j * 16 - (int)position.Y) - 6), new Rectangle(0, flag4 ? num12 : 0, coordinateWidth + (flag4 ? 2 : 0), num12), color, 0f, Vector2.Zero, 1f, offset == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             }

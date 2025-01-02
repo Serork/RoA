@@ -7,6 +7,7 @@ using RoA.Common.Tiles;
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -33,6 +34,7 @@ partial class Tapper : ModTile {
 		Main.tileShine2[Type] = true;
 		Main.tileShine[Type] = 1500;
 		Main.tileNoFail[Type] = true;
+        Main.tileAxe[Type] = true;
 
         TileID.Sets.HasOutlines[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
@@ -103,6 +105,26 @@ partial class Tapper : ModTile {
         }
     }
 
+    private static Item GetBottleInTheInventory(Player player) {
+        for (int index = 0; index < Main.InventorySlotsTotal; index++) {
+            Item inventoryItem = player.inventory[index];
+            if (inventoryItem.stack > 0 && inventoryItem.type == ItemID.Bottle) {
+                return inventoryItem;
+            }
+        }
+
+        if (player.useVoidBag()) {
+            for (int index = 0; index < 40; index++) {
+                Item voidBagItem = player.bank4.item[index];
+                if (voidBagItem.stack > 0 && voidBagItem.type == ItemID.Bottle) {
+                    return voidBagItem;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 80)) {
@@ -115,8 +137,8 @@ partial class Tapper : ModTile {
                 }
             }
             if (tapperTE != null) {
-                Item item = player.GetSelectedItem();
-                bool hasBottle = item.type == ItemID.Bottle;
+                Item item = GetBottleInTheInventory(player);
+                bool hasBottle = item != null;
                 if (hasBottle && tapperTE.IsReadyToCollectGalipot) {
                     SoundEngine.PlaySound(SoundID.Item112.WithPitchOffset(-0.1f), position);
                     if (--item.stack <= 0) {
@@ -134,14 +156,14 @@ partial class Tapper : ModTile {
                     return true;
                 }
 
-                //dropItem((ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>());
-                Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                WorldGen.KillTile(i, j);
-                if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
-                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
-                }
+                ////dropItem((ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>());
+                //Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                //WorldGen.KillTile(i, j);
+                //if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                //    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+                //}
 
-                return true;
+                //return true;
             }
         }
 
