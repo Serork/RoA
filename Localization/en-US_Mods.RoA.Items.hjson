@@ -1122,3 +1122,8 @@ PrismaticPotion: {
 	DisplayName: Prismatic Potion
 	Tooltip: Applies specific class damage bonuses to all other damage types
 }
+
+ElderwoodToilet: {
+	DisplayName: Elderwood Toilet
+	Tooltip: ""
+}
