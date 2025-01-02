@@ -61,6 +61,9 @@ partial class Tapper : ModTile {
             if (tile.TileFrameX == 22 && tile.TileFrameY == 22) {
                 drawXOffset -= 1;
             }
+            if (tile.TileFrameX == 22 && tile.TileFrameY == 0) {
+                drawXOffset -= 1;
+            }
         }
         if (WorldGenHelper.ActiveTile(i + 1, j, TileID.Trees)) {
             Tile tile = WorldGenHelper.GetTileSafely(i + 1, j);
@@ -175,8 +178,17 @@ sealed class TapperDrawing : GlobalTile {
                         offsetX += 1;
                     }
                 }
+                offsetX2 = 0;
+                offsetX = 0;
+                if (!flag4) {
+                    offsetX = flag ? 2 : 0;
+                }
                 Asset<Texture2D>? tapperBracingAsset = ModContent.Request<Texture2D>((TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
-                spriteBatch.Draw(tapperBracingAsset.Value, new Vector2((float)((i + offset) * 16 - (int)position.X + offsetX - (flag4 ? flag5 ? offsetX2 : 2 : 0)), (float)(j * 16 - (int)position.Y) - 6), new Rectangle(0, flag4 ? num12 : 0, coordinateWidth + (flag4 ? 2 : 0), num12), color, 0f, Vector2.Zero, 1f, offset == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                spriteBatch.Draw(tapperBracingAsset.Value,
+                    new Vector2((float)((i + offset) * 16 - (int)position.X + offsetX + (flag4 ? -2 : 0)/* - (flag4 ? flag5 ? offsetX2 : 2 : 0)*/),
+                                (float)(j * 16 - (int)position.Y) - 6), 
+                    new Rectangle(0, flag4 ? num12 : 0, coordinateWidth + (flag4 ? 2 : 0),
+                    num12), color, 0f, Vector2.Zero, 1f, offset == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             }
         }
     }

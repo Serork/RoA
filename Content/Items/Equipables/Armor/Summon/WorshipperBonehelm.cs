@@ -17,12 +17,15 @@ namespace RoA.Content.Items.Equipables.Armor.Summon;
 [AutoloadEquip(EquipType.Head)]
 sealed class WorshipperBonehelm : ModItem {
     internal class BoneHarpyOptions : ModPlayer, IDoubleTap {
+        internal const float FLYTIME = 600f;
+
         private const int STATETIME = 600;
 
         internal bool IsInIdle = true;
         internal int HarpyThatRideWhoAmI = -1;
 
         internal int StateTimer;
+        internal float FlyTime;
 
         public void OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
             if (player.HasBuff(ModContent.BuffType<BoneHarpyAttackDebuff>())) {
@@ -112,6 +115,10 @@ sealed class WorshipperBonehelm : ModItem {
             }
 
             if (!RodeHarpy) {
+                if (FlyTime < FLYTIME) {
+                    FlyTime += 1f;
+                }
+
                 return;
             }
 

@@ -14,10 +14,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Mounts;
 
 sealed class BoneHarpyMount : ModMount {
-    private const float FLYTIME = 600f;
-
-    private float _flyTime;
-
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override void Load() {
@@ -55,9 +51,9 @@ sealed class BoneHarpyMount : ModMount {
     }
 
     public override void SetMount(Player player, ref bool skipDust) {
-        if (_flyTime <= 0f) {
-            _flyTime = FLYTIME;
-        }
+        //if (_flyTime <= 0f) {
+        //    _flyTime = FLYTIME;
+        //}
 
         skipDust = true;
     }
@@ -80,14 +76,18 @@ sealed class BoneHarpyMount : ModMount {
     public override void UpdateEffects(Player player) {
         float num = 3.5f;
         float num2 = 0.1f;
-        bool up = (player.controlUp || player.controlJump) && _flyTime > 0f;
+        WorshipperBonehelm.BoneHarpyOptions handler = player.GetModPlayer<WorshipperBonehelm.BoneHarpyOptions>();
+        bool up = (player.controlUp || player.controlJump) && handler.FlyTime > 0f;
         float value = up ? 0f : 0.3f;
-        if (_flyTime > 0f) {
-            _flyTime -= 1f;
+        if (handler.FlyTime > 0f) {
+            handler.FlyTime -= 1f;
         }
-        else if (((player.velocity.Y == 0f || player.sliding) && player.releaseJump) || (player.autoJump && player.justJumped)) {
-            _flyTime = FLYTIME;
+        else {
+            handler.JumpOffHarpy();
         }
+        //else if (((player.velocity.Y == 0f || player.sliding) && player.releaseJump) || (player.autoJump && player.justJumped)) {
+        //    _flyTime = FLYTIME;
+        //}
         if (player.gravity > value) {
             player.gravity = value;
         }
