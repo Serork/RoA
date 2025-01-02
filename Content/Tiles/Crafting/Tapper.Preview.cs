@@ -122,6 +122,7 @@ partial class Tapper : ModTile {
                                 drawXOffset += 16;
                             }
                         }
+                        drawXOffset += GetXOffset(num9, num10);
 
                         //if (tileData.DrawFlipHorizontal && num9 % 2 == 0)
                         //    spriteEffects |= SpriteEffects.FlipHorizontally;

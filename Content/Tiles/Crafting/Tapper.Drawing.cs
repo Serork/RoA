@@ -54,6 +54,29 @@ partial class Tapper : ModTile {
         }
     }
 
+    public static int GetXOffset(int i, int j) {
+        int drawXOffset = 0;
+        if (WorldGenHelper.ActiveTile(i - 1, j, TileID.Trees)) {
+            Tile tile = WorldGenHelper.GetTileSafely(i - 1, j);
+            if (tile.TileFrameX == 22 && tile.TileFrameY == 22) {
+                drawXOffset -= 1;
+            }
+        }
+        if (WorldGenHelper.ActiveTile(i + 1, j, TileID.Trees)) {
+            Tile tile = WorldGenHelper.GetTileSafely(i + 1, j);
+            if (tile.TileFrameX == 0 && tile.TileFrameY == 88) {
+                drawXOffset += 1;
+            }
+            if (tile.TileFrameX == 0 && tile.TileFrameY == 110) {
+                drawXOffset += 1;
+            }
+            if (tile.TileFrameX == 0 && tile.TileFrameY == 66) {
+                drawXOffset += 1;
+            }
+        }
+        return drawXOffset;
+    }
+
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         int tileType = WorldGenHelper.GetTileSafely(i, j).TileType;
         TileObjectData tileData = TileObjectData.GetTileData(tileType, 0);
@@ -74,6 +97,7 @@ partial class Tapper : ModTile {
         if (WorldGenHelper.ActiveTile(i + 1, j, TileID.Trees)) {
             drawXOffset += 16;
         }
+        drawXOffset += GetXOffset(i, j);
         Rectangle rect = new(0, 0, coordinateWidth, num12);
         Texture2D texture = TextureAssets.Tile[tileType].Value;
         Vector2 drawPosition = new Vector2(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
@@ -121,8 +145,9 @@ sealed class TapperDrawing : GlobalTile {
                 int num12 = 28;
                 Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
                 Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
-                if (Main.drawToScreen)
+                if (Main.drawToScreen) {
                     zero = Vector2.Zero;
+                }
                 Vector2 position = unscaledPosition - zero;
                 Color color = Lighting.GetColor(i, j);
                 int offset = WorldGenHelper.GetTileSafely(i + 1, j).TileType != (ushort)ModContent.TileType<Tapper>() ? -1 : 0;
@@ -143,8 +168,10 @@ sealed class TapperDrawing : GlobalTile {
                 }
                 if (flag) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j);
-
                     if (tile.TileFrameX == 0 && tile.TileFrameY == 88) {
+                        offsetX += 1;
+                    }
+                    if (tile.TileFrameX == 0 && tile.TileFrameY == 110) {
                         offsetX += 1;
                     }
                 }
