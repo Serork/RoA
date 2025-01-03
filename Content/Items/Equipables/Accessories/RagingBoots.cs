@@ -52,14 +52,6 @@ sealed class RagingBoots : NatureItem {
 
         public override void ResetEffects() => IsEffectActive = false;
 
-        public override void Load() {
-            On_Player.MakeFloorDust += On_Player_MakeFloorDust;
-        }
-
-        private void On_Player_MakeFloorDust(On_Player.orig_MakeFloorDust orig, Player self, bool Falling, int type, int paintColor) {
-            orig(self, Falling, type, paintColor);
-        }
-
         public override void PreUpdateMovement() {
             if (!IsEffectActive) {
                 return;
