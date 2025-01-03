@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Buffs;
+using RoA.Common.Projectiles;
 using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -12,92 +12,33 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
-using Terraria.Map;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
-sealed class BoneHarpy : ModProjectile {
+sealed class BoneHarpy : InteractableProjectile {
     private const float DIST = 500f;
 
     public static readonly Color TrailColor = new(153, 134, 128);
 
-    private bool _isHover;
-
     private static WorshipperBonehelm.BoneHarpyOptions GetHandler(Player player) => player.GetModPlayer<WorshipperBonehelm.BoneHarpyOptions>();
-    private bool IsInAttackMode(Player player) => !GetHandler(player).IsInIdle;
-    private bool Controlled(Player player) => GetHandler(player).RodeHarpy;
+    private static bool IsInAttackMode(Player player) => !GetHandler(player).IsInIdle;
+    private static bool Controlled(Player player) => GetHandler(player).RodeHarpy;
 
     private ref float TrailOpacity => ref Projectile.localAI[2];
 
-    public override void Load() {
-        On_Projectile.IsInteractible += On_Projectile_IsInteractible;
+    protected override void OnInteraction(Player player) {
+        GetHandler(player).ToggleState(Projectile.whoAmI);
+        Projectile.velocity = player.velocity;
+        Projectile.velocity *= 0.5f;
+        Projectile.ai[0] = Projectile.ai[1] = Projectile.ai[2] = 0f;
+        Projectile.netUpdate = true;
     }
 
-    private bool On_Projectile_IsInteractible(On_Projectile.orig_IsInteractible orig, Projectile self) {
-        if (self.type == ModContent.ProjectileType<BoneHarpy>()) {
-            return true;
-        }
-
-        return orig(self);
-    }
-
-    private static int TryInteractingWithBoneHarpy(Projectile proj) {
-        if (Main.gamePaused || Main.gameMenu)
-            return 0;
-
-        bool flag = !Main.SmartCursorIsUsed && !PlayerInput.UsingGamepad;
-        Player localPlayer = Main.player[proj.owner];
-        if (localPlayer.whoAmI != Main.myPlayer) {
-            return 0;
-        }
-        Microsoft.Xna.Framework.Point point = proj.Center.ToTileCoordinates();
-        Vector2 compareSpot = localPlayer.Center;
-        if (!localPlayer.IsProjectileInteractibleAndInInteractionRange(proj, ref compareSpot))
-            return 0;
-
-        Matrix matrix = Matrix.Invert(Main.GameViewMatrix.ZoomMatrix);
-        Vector2 position = Main.ReverseGravitySupport(Main.MouseScreen);
-        Vector2.Transform(Main.screenPosition, matrix);
-        Vector2 v = Vector2.Transform(position, matrix) + Main.screenPosition;
-        bool flag2 = proj.Hitbox.Contains(v.ToPoint());
-        if (!((flag2 || Main.SmartInteractProj == proj.whoAmI) & !localPlayer.lastMouseInterface)) {
-            if (!flag)
-                return 1;
-
-            return 0;
-        }
-
-        Main.HasInteractibleObjectThatIsNotATile = true;
-        if (flag2) {
-            localPlayer.noThrow = 2;
-            localPlayer.cursorItemIconEnabled = true;
-            localPlayer.cursorItemIconID = ModContent.ItemType<WorshipperBonehelm>();
-        }
-
-        if (PlayerInput.UsingGamepad)
-            localPlayer.GamepadEnableGrappleCooldown();
-
-        if (Main.mouseRight && Main.mouseRightRelease && Player.BlockInteractionWithProjectiles == 0) {
-            Main.mouseRightRelease = false;
-            localPlayer.tileInteractAttempted = true;
-            localPlayer.tileInteractionHappened = true;
-            localPlayer.releaseUseTile = false;
-            GetHandler(localPlayer).ToggleState(proj.whoAmI);
-            proj.velocity = localPlayer.velocity;
-            proj.velocity *= 0.5f;
-            proj.ai[0] = proj.ai[1] = proj.ai[2] = 0f;
-            proj.netUpdate = true;
-        }
-
-        if (!Main.SmartCursorIsUsed && !PlayerInput.UsingGamepad)
-            return 0;
-
-        if (!flag)
-            return 2;
-
-        return 0;
+    protected override void OnHover(Player player) {
+        player.noThrow = 2;
+        player.cursorItemIconEnabled = true;
+        player.cursorItemIconID = ModContent.ItemType<WorshipperBonehelm>();
     }
 
     public override void SetStaticDefaults() {
@@ -133,8 +74,6 @@ sealed class BoneHarpy : ModProjectile {
         if (player.Distance(Projectile.Center) > 1000f) {
             Projectile.Center = player.Center;
         }
-
-        HandleHovering();
 
         if (Controlled(player)) {
             Vector2 center = player.Center - Vector2.UnitY * (player.height - 15);
@@ -308,10 +247,6 @@ sealed class BoneHarpy : ModProjectile {
         Projectile.velocity.Y = MathHelper.Clamp(Projectile.velocity.Y, -maxSpeed - speedOffsetY, maxSpeed + speedOffsetY);
     }
 
-    private void HandleHovering() {
-
-    }
-
     public override bool PreDraw(ref Color lightColor) {
         if (TrailOpacity > 0f) {
             Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -325,25 +260,6 @@ sealed class BoneHarpy : ModProjectile {
             }
         }
         return true;
-    }
-
-    public override void PostDraw(Color lightColor) {
-        int num417 = TryInteractingWithBoneHarpy(Projectile);
-        if (num417 == 0)
-            return;
-
-        int num418 = (lightColor.R + lightColor.G + lightColor.B) / 3;
-        if (num418 > 10) {
-            Color selectionGlowColor = Colors.GetSelectionGlowColor(num417 == 2, num418);
-            SpriteBatch spriteBatch = Main.spriteBatch;
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Hover");
-            Vector2 position = Projectile.Center - Main.screenPosition;
-            Rectangle rect = new Rectangle(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height);
-            spriteBatch.Draw(texture, position, rect, selectionGlowColor, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-            spriteBatch.EndBlendState();
-        }
     }
 
     public override void PostAI() {

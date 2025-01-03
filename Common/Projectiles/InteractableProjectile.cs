@@ -1,0 +1,101 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Content.Items.Equipables.Armor.Summon;
+using RoA.Core.Utility;
+
+using Terraria;
+using Terraria.GameInput;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Common.Projectiles;
+
+abstract class InteractableProjectile : ModProjectile {
+    public override void Load() {
+        On_Projectile.IsInteractible += On_Projectile_IsInteractable;
+    }
+
+    private bool On_Projectile_IsInteractable(On_Projectile.orig_IsInteractible orig, Projectile self) {
+        if (self.type >= ProjectileID.Count && self.ModProjectile is InteractableProjectile) {
+            return true;
+        }
+
+        return orig(self);
+    }
+
+    protected virtual void OnInteraction(Player player) { }
+    
+    protected virtual void OnHover(Player player) { }
+
+    public sealed override void PostDraw(Color lightColor) {
+        int num417 = TryInteractingWithMe();
+        if (num417 == 0)
+            return;
+
+        int num418 = (lightColor.R + lightColor.G + lightColor.B) / 3;
+        if (num418 > 10) {
+            Color selectionGlowColor = Colors.GetSelectionGlowColor(num417 == 2, num418);
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Hover");
+            Vector2 position = Projectile.Center - Main.screenPosition;
+            Rectangle rect = new Rectangle(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height);
+            spriteBatch.Draw(texture, position, rect, selectionGlowColor, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            spriteBatch.EndBlendState();
+        }
+    }
+
+    protected int TryInteractingWithMe() {
+        if (Main.gamePaused || Main.gameMenu)
+            return 0;
+
+        bool flag = !Main.SmartCursorIsUsed && !PlayerInput.UsingGamepad;
+        Projectile proj = Projectile;
+        Player localPlayer = Main.player[proj.owner];
+        if (localPlayer.whoAmI != Main.myPlayer) {
+            return 0;
+        }
+        Microsoft.Xna.Framework.Point point = proj.Center.ToTileCoordinates();
+        Vector2 compareSpot = localPlayer.Center;
+        if (!localPlayer.IsProjectileInteractibleAndInInteractionRange(proj, ref compareSpot))
+            return 0;
+
+        Matrix matrix = Matrix.Invert(Main.GameViewMatrix.ZoomMatrix);
+        Vector2 position = Main.ReverseGravitySupport(Main.MouseScreen);
+        Vector2.Transform(Main.screenPosition, matrix);
+        Vector2 v = Vector2.Transform(position, matrix) + Main.screenPosition;
+        bool flag2 = proj.Hitbox.Contains(v.ToPoint());
+        if (!((flag2 || Main.SmartInteractProj == proj.whoAmI) & !localPlayer.lastMouseInterface)) {
+            if (!flag)
+                return 1;
+
+            return 0;
+        }
+
+        Main.HasInteractibleObjectThatIsNotATile = true;
+        if (flag2) {
+            OnHover(localPlayer);
+        }
+
+        if (PlayerInput.UsingGamepad)
+            localPlayer.GamepadEnableGrappleCooldown();
+
+        if (Main.mouseRight && Main.mouseRightRelease && Player.BlockInteractionWithProjectiles == 0) {
+            Main.mouseRightRelease = false;
+            localPlayer.tileInteractAttempted = true;
+            localPlayer.tileInteractionHappened = true;
+            localPlayer.releaseUseTile = false;
+            OnInteraction(localPlayer);
+        }
+
+        if (!Main.SmartCursorIsUsed && !PlayerInput.UsingGamepad)
+            return 0;
+
+        if (!flag)
+            return 2;
+
+        return 0;
+    }
+}
