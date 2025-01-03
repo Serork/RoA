@@ -23,7 +23,6 @@ sealed class RagingBootsWave : NatureProjectile {
         Projectile.friendly = true;
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
-        Projectile.timeLeft = 34;
         AIType = 14;
     }
 
@@ -31,6 +30,8 @@ sealed class RagingBootsWave : NatureProjectile {
         if (Projectile.localAI[2] == 0f) {
             Projectile.localAI[2] = 1f;
 
+            Projectile.timeLeft = (int)Projectile.ai[0];
+            Main.NewText(Projectile.timeLeft);
             Projectile.frameCounter = Projectile.frame = Main.rand.Next(Main.projFrames[Projectile.type]);
         }
 

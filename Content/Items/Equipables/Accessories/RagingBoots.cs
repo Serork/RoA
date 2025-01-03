@@ -100,7 +100,8 @@ sealed class RagingBoots : NatureItem {
                                 ModContent.ProjectileType<RagingBootsWave>(),
                                 NatureWeaponHandler.GetNatureDamage(item, Player),
                                 Player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(item.knockBack), 
-                                Player.whoAmI);
+                                Player.whoAmI,
+                                (int)(18 + _speedBeforeGround.Length() * 2f));
                         }
                     }
 
