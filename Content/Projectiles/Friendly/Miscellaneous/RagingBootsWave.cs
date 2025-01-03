@@ -41,6 +41,9 @@ sealed class RagingBootsWave : NatureProjectile {
 
         Projectile.Opacity = Utils.GetLerpValue(0, 12, Projectile.timeLeft, true);
     }
+
+    public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
+
     public override void PostAI() {
         ++Projectile.frameCounter;
         if (Projectile.frameCounter > 3) {
