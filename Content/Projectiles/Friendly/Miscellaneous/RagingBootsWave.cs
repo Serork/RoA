@@ -31,7 +31,6 @@ sealed class RagingBootsWave : NatureProjectile {
             Projectile.localAI[2] = 1f;
 
             Projectile.timeLeft = (int)Projectile.ai[0];
-            Main.NewText(Projectile.timeLeft);
             Projectile.frameCounter = Projectile.frame = Main.rand.Next(Main.projFrames[Projectile.type]);
         }
 
