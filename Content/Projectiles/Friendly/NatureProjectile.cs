@@ -51,11 +51,12 @@ abstract class NatureProjectile : ModProjectile {
     }
 
     public static int CreateNatureProjectile(IEntitySource spawnSource, Item item, float X, float Y, float SpeedX, float SpeedY, int Type, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f) {
-        int projectile = Projectile.NewProjectile(spawnSource, X, Y, SpeedX, SpeedY, Type, Damage, KnockBack, Owner, ai0, ai1, ai2);
-        if (Main.projectile[projectile].ModProjectile is not FormProjectile) {
-            Main.projectile[projectile].As<NatureProjectile>().SetItem(item);
+        int whoAmI = Projectile.NewProjectile(spawnSource, X, Y, SpeedX, SpeedY, Type, Damage, KnockBack, Owner, ai0, ai1, ai2);
+        Projectile projectile = Main.projectile[whoAmI];
+        if (projectile.ModProjectile is not FormProjectile) {
+            projectile.As<NatureProjectile>().SetItem(item);
         }
-        return projectile;
+        return whoAmI;
     }
 
     public sealed override void OnSpawn(IEntitySource source) {

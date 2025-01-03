@@ -1127,3 +1127,8 @@ ElderwoodToilet: {
 	DisplayName: Elderwood Toilet
 	Tooltip: ""
 }
+
+RagingBoots: {
+	DisplayName: Raging Boots
+	Tooltip: ""
+}

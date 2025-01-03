@@ -24,9 +24,9 @@ abstract class InteractableProjectile : ModProjectile {
         return orig(self);
     }
 
-    protected virtual void OnInteraction(Player player) { }
-    
-    protected virtual void OnHover(Player player) { }
+    protected abstract void OnInteraction(Player player);
+
+    protected abstract void OnHover(Player player);
 
     public sealed override void PostDraw(Color lightColor) {
         int num417 = TryInteractingWithMe();
