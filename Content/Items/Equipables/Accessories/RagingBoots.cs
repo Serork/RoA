@@ -26,8 +26,7 @@ sealed class RagingBoots : NatureItem {
         Item.SetSize(26, 30);
 
         Item.damage = 34;
-        Item.knockBack = 10f;
-        Item.crit = 4;
+        Item.knockBack = 5f;
         Item.value = Item.buyPrice(gold: 3);
         Item.defense = 2;
         Item.rare = ItemRarityID.Orange;
@@ -100,7 +99,7 @@ sealed class RagingBoots : NatureItem {
                             NatureProjectile.CreateNatureProjectile(Player.GetSource_Misc("ragingboots"), item, shootLocation, shootTo, 
                                 ModContent.ProjectileType<RagingBootsWave>(),
                                 NatureWeaponHandler.GetNatureDamage(item, Player),
-                                Player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(3f), 
+                                Player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(item.knockBack), 
                                 Player.whoAmI);
                         }
                     }
