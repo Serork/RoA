@@ -10,9 +10,11 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
@@ -23,11 +25,80 @@ sealed class BoneHarpy : ModProjectile {
 
     private bool _isHover;
 
-    private WorshipperBonehelm.BoneHarpyOptions GetHandler(Player player) => player.GetModPlayer<WorshipperBonehelm.BoneHarpyOptions>();
+    private static WorshipperBonehelm.BoneHarpyOptions GetHandler(Player player) => player.GetModPlayer<WorshipperBonehelm.BoneHarpyOptions>();
     private bool IsInAttackMode(Player player) => !GetHandler(player).IsInIdle;
     private bool Controlled(Player player) => GetHandler(player).RodeHarpy;
 
     private ref float TrailOpacity => ref Projectile.localAI[2];
+
+    public override void Load() {
+        On_Projectile.IsInteractible += On_Projectile_IsInteractible;
+    }
+
+    private bool On_Projectile_IsInteractible(On_Projectile.orig_IsInteractible orig, Projectile self) {
+        if (self.type == ModContent.ProjectileType<BoneHarpy>()) {
+            return true;
+        }
+
+        return orig(self);
+    }
+
+    private static int TryInteractingWithBoneHarpy(Projectile proj) {
+        if (Main.gamePaused || Main.gameMenu)
+            return 0;
+
+        bool flag = !Main.SmartCursorIsUsed && !PlayerInput.UsingGamepad;
+        Player localPlayer = Main.player[proj.owner];
+        if (localPlayer.whoAmI != Main.myPlayer) {
+            return 0;
+        }
+        Microsoft.Xna.Framework.Point point = proj.Center.ToTileCoordinates();
+        Vector2 compareSpot = localPlayer.Center;
+        if (!localPlayer.IsProjectileInteractibleAndInInteractionRange(proj, ref compareSpot))
+            return 0;
+
+        Matrix matrix = Matrix.Invert(Main.GameViewMatrix.ZoomMatrix);
+        Vector2 position = Main.ReverseGravitySupport(Main.MouseScreen);
+        Vector2.Transform(Main.screenPosition, matrix);
+        Vector2 v = Vector2.Transform(position, matrix) + Main.screenPosition;
+        bool flag2 = proj.Hitbox.Contains(v.ToPoint());
+        if (!((flag2 || Main.SmartInteractProj == proj.whoAmI) & !localPlayer.lastMouseInterface)) {
+            if (!flag)
+                return 1;
+
+            return 0;
+        }
+
+        Main.HasInteractibleObjectThatIsNotATile = true;
+        if (flag2) {
+            localPlayer.noThrow = 2;
+            localPlayer.cursorItemIconEnabled = true;
+            localPlayer.cursorItemIconID = ModContent.ItemType<WorshipperBonehelm>();
+        }
+
+        if (PlayerInput.UsingGamepad)
+            localPlayer.GamepadEnableGrappleCooldown();
+
+        if (Main.mouseRight && Main.mouseRightRelease && Player.BlockInteractionWithProjectiles == 0) {
+            Main.mouseRightRelease = false;
+            localPlayer.tileInteractAttempted = true;
+            localPlayer.tileInteractionHappened = true;
+            localPlayer.releaseUseTile = false;
+            GetHandler(localPlayer).ToggleState(proj.whoAmI);
+            proj.velocity = localPlayer.velocity;
+            proj.velocity *= 0.5f;
+            proj.ai[0] = proj.ai[1] = proj.ai[2] = 0f;
+            proj.netUpdate = true;
+        }
+
+        if (!Main.SmartCursorIsUsed && !PlayerInput.UsingGamepad)
+            return 0;
+
+        if (!flag)
+            return 2;
+
+        return 0;
+    }
 
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 6;
@@ -238,44 +309,7 @@ sealed class BoneHarpy : ModProjectile {
     }
 
     private void HandleHovering() {
-        Player player = Main.player[Projectile.owner];
-        if (player.HasBuff<BoneHarpyAttackDebuff>()) {
-            _isHover = false;
-            return;
-        }
-        if (player.cursorItemIconEnabled && player.inventory[player.selectedItem].pick <= 0 && player.inventory[player.selectedItem].hammer <= 0 && player.inventory[player.selectedItem].axe <= 0) {
-            _isHover = false;
-            return;
-        }
-        if (Projectile.owner != Main.myPlayer) {
-            return;
-        }
-        _isHover = false;
-        if (Projectile.Center.Distance(Main.player[Projectile.owner].Center) > 100f) {
-            return;
-        }
-        if (IsInAttackMode(player) && !Controlled(player)) {
-            return;
-        }
-        Microsoft.Xna.Framework.Rectangle mouseRectangle = new Microsoft.Xna.Framework.Rectangle((int)((float)Main.MouseWorld.X), (int)((float)Main.MouseWorld.Y), 1, 1);
-        if (player.gravDir == -1f)
-            mouseRectangle.Y = (int)Main.screenPosition.Y + Main.screenHeight - Main.mouseY;
-        Rectangle value2 = new Microsoft.Xna.Framework.Rectangle((int)((double)Projectile.position.X), (int)(Projectile.position.Y),
-            (int)(Projectile.width * Main.UIScale), (int)(Projectile.height * Main.UIScale));
-        if (!Main.mouseText && mouseRectangle.Intersects(value2)) {
-            player.cursorItemIconEnabled = false;
-            _isHover = true;
-            Main.mouseText = true;
-        }
-        if (_isHover) {
-            if (Main.mouseRight && Main.mouseRightRelease) {
-                GetHandler(player).ToggleState(Projectile.whoAmI);
-                Projectile.velocity = player.velocity;
-                Projectile.velocity *= 0.5f;
-                Projectile.ai[0] = Projectile.ai[1] = Projectile.ai[2] = 0f;
-                Projectile.netUpdate = true;
-            }
-        }
+
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -294,17 +328,22 @@ sealed class BoneHarpy : ModProjectile {
     }
 
     public override void PostDraw(Color lightColor) {
-        if (Projectile.Center.Distance(Main.MouseWorld) > 75f) {
+        int num417 = TryInteractingWithBoneHarpy(Projectile);
+        if (num417 == 0)
             return;
+
+        int num418 = (lightColor.R + lightColor.G + lightColor.B) / 3;
+        if (num418 > 10) {
+            Color selectionGlowColor = Colors.GetSelectionGlowColor(num417 == 2, num418);
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Hover");
+            Vector2 position = Projectile.Center - Main.screenPosition;
+            Rectangle rect = new Rectangle(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height);
+            spriteBatch.Draw(texture, position, rect, selectionGlowColor, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            spriteBatch.EndBlendState();
         }
-        SpriteBatch spriteBatch = Main.spriteBatch;
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Hover");
-        Vector2 position = Projectile.Center - Main.screenPosition;
-        Rectangle rect = new Rectangle(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height);
-        spriteBatch.Draw(texture, position, rect, (!_isHover ? new Color(127, 127, 127) : new Color(255, 255, 85)).MultiplyRGB(lightColor), Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-        spriteBatch.EndBlendState();
     }
 
     public override void PostAI() {
