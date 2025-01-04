@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.PopupTexts;
 using RoA.Common.Projectiles;
+using RoA.Content.Items.Miscellaneous;
 
 using System;
 using System.Collections.Generic;
@@ -150,6 +151,10 @@ sealed class PettyBag : InteractableProjectile {
                 continue;
 
             if (item.GetGlobalItem<PettyBagItemExtra>().WasCollectedByPettyBag) {
+                continue;
+            }
+
+            if (item.type == ModContent.ItemType<Items.Miscellaneous.PettyBag>()) {
                 continue;
             }
 
