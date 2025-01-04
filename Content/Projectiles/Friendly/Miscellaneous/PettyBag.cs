@@ -75,21 +75,16 @@ sealed class PettyBag : InteractableProjectile {
 
                 if (item.stack + bagItem.stack <= bagItem.maxStack) {
                     bagItem.stack += item.stack;
-                    //if (!settings.NoText)
-                       CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, item.stack, noStack: false, true);
 
-                    //AchievementsHelper.NotifyItemPickup(this, returnItem);
-                    //settings.HandlePostAction(inv[i]);
+                    CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, item.stack, noStack: false, true);
+
                     return true;
                 }
 
-                //AchievementsHelper.NotifyItemPickup(this, item, bagItem.maxStack - bagItem.stack);
                 item.stack -= bagItem.maxStack - bagItem.stack;
-                //if (!settings.NoText)
                 CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, bagItem.maxStack - bagItem.stack, noStack: false, true);
 
                 bagItem.stack = bagItem.maxStack;
-                //settings.HandlePostAction(inv[i]);
             }
 
             return false;
