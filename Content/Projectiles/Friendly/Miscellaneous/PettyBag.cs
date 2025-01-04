@@ -24,7 +24,7 @@ sealed class PettyBag : InteractableProjectile {
         public void AddItem(Item item) => BagItems.Add(item);
     }
 
-    protected override Vector2 DrawOffset => Vector2.UnitY * 2f;
+    protected override Vector2 DrawOffset => Vector2.UnitY * 4f;
 
     protected override SpriteEffects SetSpriteEffects() => base.SetSpriteEffects();
 
