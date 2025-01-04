@@ -28,6 +28,14 @@ abstract class InteractableProjectile : ModProjectile {
 
     protected abstract void OnHover(Player player);
 
+    public sealed override void AI() {
+        Main.CurrentFrameFlags.HadAnActiveInteractibleProjectile = true;
+
+        SafeAI();
+    }
+
+    public virtual void SafeAI() { }
+
     public sealed override void PostDraw(Color lightColor) {
         int num417 = TryInteractingWithMe();
         if (num417 == 0)

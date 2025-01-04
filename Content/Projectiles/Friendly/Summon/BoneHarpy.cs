@@ -24,7 +24,7 @@ sealed class BoneHarpy : InteractableProjectile {
 
     private static WorshipperBonehelm.BoneHarpyOptions GetHandler(Player player) => player.GetModPlayer<WorshipperBonehelm.BoneHarpyOptions>();
     private static bool IsInAttackMode(Player player) => !GetHandler(player).IsInIdle;
-    private static bool Controlled(Player player) => GetHandler(player).RodeHarpy;
+    private static bool IsBeingControlled(Player player) => GetHandler(player).RodeHarpy;
 
     private ref float TrailOpacity => ref Projectile.localAI[2];
 
@@ -69,16 +69,14 @@ sealed class BoneHarpy : InteractableProjectile {
 
     public override bool? CanCutTiles() => false;
 
-    public override void AI() {
+    public override void SafeAI() {
         Player player = Main.player[Projectile.owner];
-
-        Main.CurrentFrameFlags.HadAnActiveInteractibleProjectile = true;
 
         if (player.Distance(Projectile.Center) > 1000f) {
             Projectile.Center = player.Center;
         }
 
-        if (Controlled(player)) {
+        if (IsBeingControlled(player)) {
             Vector2 center = player.Center - Vector2.UnitY * (player.height - 15);
             Projectile.Center = new Vector2((int)center.X, (int)center.Y) + new Vector2(0f, player.gfxOffY);
 
@@ -99,7 +97,7 @@ sealed class BoneHarpy : InteractableProjectile {
         if (foundTarget) {
             return;
         }
-        Movement(player);
+        HandleMovement(player);
     }
 
     private void RemoveTrails() {
@@ -163,7 +161,7 @@ sealed class BoneHarpy : InteractableProjectile {
             foundTarget = false;
             return;
         }
-        Movement(target);
+        HandleMovement(target);
 
         if (target.Distance(Projectile.Center) > neededDistance / 2f) {
             return;
@@ -208,7 +206,7 @@ sealed class BoneHarpy : InteractableProjectile {
         }
     }
 
-    private void Movement(Entity target) {
+    private void HandleMovement(Entity target) {
         float baseSpeed = 2f;
         bool far = target.Distance(Projectile.Center) > baseSpeed * 100f;
         if (target.Distance(Projectile.Center) > baseSpeed * 100f) {
