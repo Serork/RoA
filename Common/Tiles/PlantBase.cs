@@ -23,6 +23,10 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
     public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
         tileHeight += 4;
         addFrY -= 1;
+
+        if (Main.tileSolidTop[WorldGenHelper.GetTileSafely(x, y + 1).TileType]) {
+            addFrY -= 1;
+        }
     }
 
     protected virtual short FrameWidth => 18;
@@ -94,12 +98,19 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
             Vector2 origin = new Vector2(FrameWidth, 21) / 2f;
             bool flag = true;
-            spriteBatch.Draw(TextureAssets.Tile[Type].Value, new Vector2(i * 16f, j * 16f - 5f) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition
+            bool flag2 = Main.tileSolidTop[WorldGenHelper.GetTileSafely(i, j + 1).TileType];
+            SpriteEffects spriteEffects = flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            if (flag2) {
+                flag = flag2;
+                spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            }
+            int offsetY = Main.tileSolidTop[WorldGenHelper.GetTileSafely(i, j + 1).TileType] ? 1 : 0;
+            spriteBatch.Draw(TextureAssets.Tile[Type].Value, new Vector2(i * 16f, j * 16f - 5f + offsetY) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition
                 + origin + new Vector2(flag ? -4f : 0f, 0f), 
                 new Rectangle(tile.TileFrameX, tile.TileFrameY, FrameWidth, 21), Lighting.GetColor(i, j), 0f,
                 origin, 
                 1f,
-                flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+                spriteEffects, 0f);
 
             return false;
         }
@@ -151,7 +162,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
     public override bool IsTileSpelunkable(int i, int j) => IsGrown(i, j);
 
     public override void RandomUpdate(int i, int j) {
-        if (!IsGrown(i, j)) {
+        if (!IsGrown(i, j) && WorldGen.genRand.Next(50) == 0) {
             WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;
             if (Main.netMode != NetmodeID.SinglePlayer) {
                 NetMessage.SendTileSquare(-1, i, j, 1);
