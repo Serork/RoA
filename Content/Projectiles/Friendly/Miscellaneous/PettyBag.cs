@@ -1,27 +1,297 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Extensions;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Projectiles;
-using RoA.Content.Items;
+using ReLogic.Graphics;
 
+using RoA.Common.Projectiles;
+
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 sealed class PettyBag : InteractableProjectile {
+    private sealed class PettyBagItemExtra : GlobalItem {
+        public bool WasCollectedByPettyBag;
+
+        public override bool InstancePerEntity => true;
+    }
+
     private sealed class PettyBagHandler : ModPlayer {
         public HashSet<Item> BagItems { get; private set; } = [];
+
+        public override void SaveData(TagCompound tag) {
+            tag["bagitems"] = BagItems.ToList();
+        }
+
+        public override void LoadData(TagCompound tag) {
+            var bagitems = tag.GetList<TagCompound>("bagitems").Select(ItemIO.Load).ToList();
+            BagItems = [.. bagitems];
+        }
 
         public override void Unload() {
             BagItems.Clear();
             BagItems = null;
         }
 
-        public void AddItem(Item item) => BagItems.Add(item);
+        public void AddItem(Item item, Projectile projectile) {
+            Player player = Main.player[projectile.owner];
+            bool flag = false;
+            for (int i = 0; i < BagItems.Count; i++) {
+                if (TryGetItem_FillIntoOccupiedSlot(player, item, i, projectile)) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                if (item.IsACoin)
+                    SoundEngine.PlaySound(SoundID.CoinPickup, projectile.Center);
+                else
+                    SoundEngine.PlaySound(SoundID.Grab, projectile.Center);
+
+                item.shimmered = false;
+                BagItems.Add(item);
+                PopupText.NewText(PopupTextContext.RegularItemPickup, item, item.stack, noStack: false, true);
+            }
+        }
+
+
+        private bool TryGetItem_FillIntoOccupiedSlot(Player player, Item item, int index, Projectile projectile) {
+            Item bagItem = BagItems.ElementAt(index);
+            if (bagItem.type > 0 && bagItem.stack < bagItem.maxStack && item.type == bagItem.type) {
+                if (item.IsACoin)
+                    SoundEngine.PlaySound(SoundID.CoinPickup, projectile.Center);
+                else
+                    SoundEngine.PlaySound(SoundID.Grab, projectile.Center);
+
+                if (item.stack + bagItem.stack <= bagItem.maxStack) {
+                    bagItem.stack += item.stack;
+                    //if (!settings.NoText)
+                        PopupText.NewText(PopupTextContext.RegularItemPickup, item, item.stack, noStack: false, true);
+
+                    //AchievementsHelper.NotifyItemPickup(this, returnItem);
+                    //settings.HandlePostAction(inv[i]);
+                    return true;
+                }
+
+                //AchievementsHelper.NotifyItemPickup(this, item, bagItem.maxStack - bagItem.stack);
+                item.stack -= bagItem.maxStack - bagItem.stack;
+                //if (!settings.NoText)
+                    PopupText.NewText(PopupTextContext.RegularItemPickup, item, bagItem.maxStack - bagItem.stack, noStack: false, true);
+
+                bagItem.stack = bagItem.maxStack;
+                //settings.HandlePostAction(inv[i]);
+            }
+
+            return false;
+        }
+
+        public void Collect(Projectile projectile) {
+            for (int i = 0; i < BagItems.Count; i++) {
+                Item item = BagItems.ElementAt(i);
+                int num = Item.NewItem(Player.GetSource_Misc("pettybaginteraction"), (int)projectile.position.X, (int)projectile.position.Y, projectile.width, projectile.height, item.type);
+                Main.item[num].netDefaults(item.netID);
+                Main.item[num].Prefix(item.prefix);
+                Main.item[num].stack = item.stack;
+                Main.item[num].velocity.Y = (float)Main.rand.Next(-20, 1) * 0.2f;
+                Main.item[num].velocity.X = (float)Main.rand.Next(-20, 21) * 0.2f;
+                Main.item[num].noGrabDelay = 100;
+                Main.item[num].favorited = false;
+                Main.item[num].newAndShiny = false;
+                Main.item[num].GetGlobalItem<PettyBagItemExtra>().WasCollectedByPettyBag = true;
+                if (Main.netMode == 1)
+                    NetMessage.SendData(21, -1, -1, null, num);
+            }
+
+            BagItems.Clear();
+        }
+    }
+
+    public override void Load() {
+        On_Player.ItemSpace += On_Player_ItemSpace;
+        On_Player.PickupItem += On_Player_PickupItem;
+
+        On_Main.DrawItemTextPopups += On_Main_DrawItemTextPopups;
+    }
+
+    private void On_Main_DrawItemTextPopups(On_Main.orig_DrawItemTextPopups orig, float scaleTarget) {
+        for (int i = 0; i < 20; i++) {
+            PopupText popupText = Main.popupText[i];
+            if (!popupText.active)
+                continue;
+
+            string text = popupText.name;
+            if (popupText.stack > 1)
+                text = text + " (" + popupText.stack + ")";
+
+            Vector2 vector = FontAssets.MouseText.Value.MeasureString(text);
+            Vector2 origin = new Vector2(vector.X * 0.5f, vector.Y * 0.5f);
+            float num = popupText.scale / scaleTarget;
+            int num2 = (int)(255f - 255f * num);
+            float num3 = (int)popupText.color.R;
+            float num4 = (int)popupText.color.G;
+            float num5 = (int)popupText.color.B;
+            float num6 = (int)popupText.color.A;
+            num3 *= num * popupText.alpha * 0.3f;
+            num5 *= num * popupText.alpha * 0.3f;
+            num4 *= num * popupText.alpha * 0.3f;
+            num6 *= num * popupText.alpha;
+            Microsoft.Xna.Framework.Color color = new Microsoft.Xna.Framework.Color((int)num3, (int)num4, (int)num5, (int)num6);
+            Microsoft.Xna.Framework.Color color2 = Microsoft.Xna.Framework.Color.Black;
+            float num7 = 1f;
+            Texture2D texture2D = null;
+            switch (popupText.context) {
+                case PopupTextContext.ItemPickupToVoidContainer:
+                    color2 = new Microsoft.Xna.Framework.Color(127, 20, 255) * 0.4f;
+                    num7 = 0.8f;
+                    break;
+                case PopupTextContext.SonarAlert:
+                    color2 = Microsoft.Xna.Framework.Color.Blue * 0.4f;
+                    if (popupText.npcNetID != 0)
+                        color2 = Microsoft.Xna.Framework.Color.Red * 0.4f;
+                    num7 = 1f;
+                    break;
+            }
+
+            float num8 = (float)num2 / 255f;
+            for (int j = 0; j < 5; j++) {
+                color = color2;
+                float num9 = 0f;
+                float num10 = 0f;
+                switch (j) {
+                    case 0:
+                        num9 -= scaleTarget * 2f;
+                        break;
+                    case 1:
+                        num9 += scaleTarget * 2f;
+                        break;
+                    case 2:
+                        num10 -= scaleTarget * 2f;
+                        break;
+                    case 3:
+                        num10 += scaleTarget * 2f;
+                        break;
+                    default:
+                        color = popupText.color * num * popupText.alpha * num7;
+                        break;
+                }
+
+                if (j < 4) {
+                    num6 = (float)(int)popupText.color.A * num * popupText.alpha;
+                    color = new Microsoft.Xna.Framework.Color(0, 0, 0, (int)num6);
+                }
+
+                if (color2 != Microsoft.Xna.Framework.Color.Black && j < 4) {
+                    num9 *= 1.3f + 1.3f * num8;
+                    num10 *= 1.3f + 1.3f * num8;
+                }
+
+                float num11 = popupText.position.Y - Main.screenPosition.Y + num10;
+                if (Main.player[Main.myPlayer].gravDir == -1f)
+                    num11 = (float)Main.screenHeight - num11;
+
+                if (color2 != Microsoft.Xna.Framework.Color.Black && j < 4) {
+                    Microsoft.Xna.Framework.Color color3 = color2;
+                    color3.A = (byte)MathHelper.Lerp(60f, 127f, Utils.GetLerpValue(0f, 255f, num6, clamped: true));
+                    Main.spriteBatch.DrawString(FontAssets.MouseText.Value, text, new Vector2(popupText.position.X - Main.screenPosition.X + num9 + origin.X, num11 + origin.Y), Microsoft.Xna.Framework.Color.Lerp(color, color3, 0.5f), popupText.rotation, origin, popupText.scale, SpriteEffects.None, 0f);
+                    Main.spriteBatch.DrawString(FontAssets.MouseText.Value, text, new Vector2(popupText.position.X - Main.screenPosition.X + num9 + origin.X, num11 + origin.Y), color3, popupText.rotation, origin, popupText.scale, SpriteEffects.None, 0f);
+                }
+                else {
+                    Main.spriteBatch.DrawString(FontAssets.MouseText.Value, text, new Vector2(popupText.position.X - Main.screenPosition.X + num9 + origin.X, num11 + origin.Y), color, popupText.rotation, origin, popupText.scale, SpriteEffects.None, 0f);
+                }
+
+                if (texture2D != null) {
+                    float scale = (1.3f - num8) * popupText.scale * 0.7f;
+                    Vector2 vector2 = new Vector2(popupText.position.X - Main.screenPosition.X + num9 + origin.X, num11 + origin.Y);
+                    Microsoft.Xna.Framework.Color color4 = color2 * 0.6f;
+                    if (j == 4)
+                        color4 = Microsoft.Xna.Framework.Color.White * 0.6f;
+
+                    color4.A = (byte)((float)(int)color4.A * 0.5f);
+                    int num12 = 25;
+                    Main.spriteBatch.Draw(texture2D, vector2 + new Vector2(origin.X * -0.5f - (float)num12 - texture2D.Size().X / 2f, 0f), null, color4 * popupText.scale, 0f, texture2D.Size() / 2f, scale, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(texture2D, vector2 + new Vector2(origin.X * 0.5f + (float)num12 + texture2D.Size().X / 2f, 0f), null, color4 * popupText.scale, 0f, texture2D.Size() / 2f, scale, SpriteEffects.None, 0f);
+                }
+            }
+        }
+    }
+
+    private Item On_Player_PickupItem(On_Player.orig_PickupItem orig, Player self, int playerIndex, int worldItemArrayIndex, Item itemToPickUp) {
+        ushort bagType = (ushort)ModContent.ProjectileType<PettyBag>();
+        if (self.ownedProjectileCounts[bagType] > 0) {
+            itemToPickUp.GetGlobalItem<PettyBagItemExtra>().WasCollectedByPettyBag = false;
+        }
+
+        return orig(self, playerIndex, worldItemArrayIndex, itemToPickUp);
+    }
+
+    private Player.ItemSpaceStatus On_Player_ItemSpace(On_Player.orig_ItemSpace orig, Player self, Item newItem) {
+        ushort bagType = (ushort)ModContent.ProjectileType<PettyBag>();
+        if (self.ownedProjectileCounts[bagType] > 0) {
+            foreach (Projectile projectile in Main.ActiveProjectiles) {
+                if (projectile.owner == self.whoAmI && projectile.type == bagType) {
+                    int itemGrabRange = self.GetItemGrabRange(newItem) * 2;
+                    Rectangle hitbox = newItem.Hitbox;
+                    if (new Rectangle((int)Projectile.position.X - itemGrabRange, (int)Projectile.position.Y - itemGrabRange, Projectile.width + itemGrabRange * 2, Projectile.height + itemGrabRange * 2).Intersects(hitbox)) {
+                        return new Player.ItemSpaceStatus(CanTakeItem: false);
+                    }
+                }
+            }
+        }
+
+        return orig(self, newItem);
+    }
+
+    private void GrabNearbyItems() {
+        for (int j = 0; j < 400; j++) {
+            Item item = Main.item[j];
+            Player player = Main.player[Projectile.owner];
+            if (!item.active || item.shimmerTime != 0f || item.noGrabDelay != 0 || item.playerIndexTheItemIsReservedFor != player.whoAmI || !player.CanAcceptItemIntoInventory(item) || (item.shimmered && !((double)item.velocity.Length() < 0.2)))
+                continue;
+
+            if (item.GetGlobalItem<PettyBagItemExtra>().WasCollectedByPettyBag) {
+                continue;
+            }
+
+            int itemGrabRange = player.GetItemGrabRange(item) * 2;
+            Rectangle hitbox = item.Hitbox;
+            if (Projectile.Hitbox.Intersects(hitbox)) {
+                player.GetModPlayer<PettyBagHandler>().AddItem(item, Projectile);
+                Main.item[j] = new Item();
+            }
+            else {
+                if (!new Rectangle((int)Projectile.position.X - itemGrabRange, (int)Projectile.position.Y - itemGrabRange, Projectile.width + itemGrabRange * 2, Projectile.height + itemGrabRange * 2).Intersects(hitbox))
+                    continue;
+
+                Player.ItemSpaceStatus status = player.ItemSpace(item);
+                if (player.CanPullItem(item, status)) {
+                    item.shimmered = false;
+                    item.beingGrabbed = true;
+
+                    Item itemToPickUp = item;
+                    float speed = 5f;
+                    int acc = 2;
+                    Vector2 vector = new Vector2(itemToPickUp.position.X + (float)(itemToPickUp.width / 2), itemToPickUp.position.Y + (float)(itemToPickUp.height / 2));
+                    float num = Projectile.Center.X - vector.X;
+                    float num2 = Projectile.Center.Y - vector.Y;
+                    float num3 = (float)Math.Sqrt(num * num + num2 * num2);
+                    num3 = speed / num3;
+                    num *= num3;
+                    num2 *= num3;
+                    itemToPickUp.velocity.X = (itemToPickUp.velocity.X * (float)(acc - 1) + num) / (float)acc;
+                    itemToPickUp.velocity.Y = (itemToPickUp.velocity.Y * (float)(acc - 1) + num2) / (float)acc;
+                }
+            }
+        }
     }
 
     protected override Vector2 DrawOffset => Vector2.UnitY * 4f;
@@ -50,7 +320,8 @@ sealed class PettyBag : InteractableProjectile {
     }
 
     protected override void OnInteraction(Player player) {
-
+        HashSet<Item> bagItems = player.GetModPlayer<PettyBagHandler>().BagItems;
+        player.GetModPlayer<PettyBagHandler>().Collect(Projectile);
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) => false;
@@ -114,6 +385,8 @@ sealed class PettyBag : InteractableProjectile {
             if (Projectile.velocity.Y != vector.Y)
                 wetVelocity.Y = Projectile.velocity.Y;
         }
+
+        GrabNearbyItems();
     }
 
     private void KillSame() {

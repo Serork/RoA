@@ -52,9 +52,11 @@ abstract class InteractableProjectile : ModProjectile {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Hover");
-            Vector2 position = Projectile.Center - Main.screenPosition;
-            Rectangle rect = new(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height);
-            spriteBatch.Draw(texture, position + DrawOffset, rect, selectionGlowColor, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SetSpriteEffects(), 0);
+            int height = texture.Height / Main.projFrames[Projectile.type];
+            Vector2 drawOrigin = new(texture.Width / 2f, height * 0.5f);
+            Vector2 position = Projectile.position + drawOrigin - Main.screenPosition;
+            Rectangle rect = new(0, height * Projectile.frame, texture.Width, height);
+            spriteBatch.Draw(texture, position + DrawOffset, rect, selectionGlowColor, Projectile.rotation, drawOrigin, Projectile.scale, SetSpriteEffects(), 0);
             spriteBatch.EndBlendState();
         }
     }
