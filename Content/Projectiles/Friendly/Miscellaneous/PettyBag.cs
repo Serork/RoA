@@ -127,7 +127,7 @@ sealed class PettyBag : InteractableProjectile {
         if (self.ownedProjectileCounts[bagType] > 0) {
             foreach (Projectile projectile in Main.ActiveProjectiles) {
                 if (projectile.owner == self.whoAmI && projectile.type == bagType) {
-                    int itemGrabRange = self.GetItemGrabRange(newItem) * 2;
+                    int itemGrabRange = GetGrabRange(self, newItem);
                     Rectangle hitbox = newItem.Hitbox;
                     if (new Rectangle((int)Projectile.position.X - itemGrabRange, (int)Projectile.position.Y - itemGrabRange, Projectile.width + itemGrabRange * 2, Projectile.height + itemGrabRange * 2).Intersects(hitbox)) {
                         return new Player.ItemSpaceStatus(CanTakeItem: false);
@@ -138,6 +138,8 @@ sealed class PettyBag : InteractableProjectile {
 
         return orig(self, newItem);
     }
+
+    private static int GetGrabRange(Player player, Item item) => player.GetItemGrabRange(item) * 3;
 
     private void GrabNearbyItems() {
         for (int j = 0; j < 400; j++) {
@@ -154,7 +156,7 @@ sealed class PettyBag : InteractableProjectile {
                 continue;
             }
 
-            int itemGrabRange = player.GetItemGrabRange(item) * 2;
+            int itemGrabRange = GetGrabRange(player, item);
             Rectangle hitbox = item.Hitbox;
             if (Projectile.Hitbox.Intersects(hitbox)) {
                 player.GetModPlayer<PettyBagHandler>().AddItem(item, Projectile);
