@@ -11,15 +11,15 @@ sealed class PettyBag : ModItem {
 	}
 
 	public override void SetDefaults() {
-        Item.useStyle = 1;
+        Item.useStyle = ItemUseStyleID.Swing;
         Item.shootSpeed = 4f;
-        //Item.shoot = 525;
+        Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.PettyBag>();
         Item.width = 22;
         Item.height = 24;
-        Item.UseSound = SoundID.Item59;
+        //Item.UseSound = SoundID.Item59;
         Item.useAnimation = 28;
         Item.useTime = 28;
-        Item.rare = 3;
+        Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(0, 2);
     }
 }

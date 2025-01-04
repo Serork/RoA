@@ -1143,6 +1143,6 @@ PettyBag: {
 	Tooltip:
 		'''
 		Summons a magic bag to gather nearby items
-		Right click to collect the items
+		{$Controls.RightClick} to collect the items
 		'''
 }

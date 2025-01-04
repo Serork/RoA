@@ -12,6 +12,10 @@ using Terraria.ModLoader;
 namespace RoA.Common.Projectiles;
 
 abstract class InteractableProjectile : ModProjectile {
+    protected virtual Vector2 DrawOffset { get; }
+
+    protected virtual SpriteEffects SetSpriteEffects() => Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
     public override void Load() {
         On_Projectile.IsInteractible += On_Projectile_IsInteractable;
     }
@@ -49,8 +53,8 @@ abstract class InteractableProjectile : ModProjectile {
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Hover");
             Vector2 position = Projectile.Center - Main.screenPosition;
-            Rectangle rect = new Rectangle(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height);
-            spriteBatch.Draw(texture, position, rect, selectionGlowColor, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            Rectangle rect = new(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height);
+            spriteBatch.Draw(texture, position + DrawOffset, rect, selectionGlowColor, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SetSpriteEffects(), 0);
             spriteBatch.EndBlendState();
         }
     }

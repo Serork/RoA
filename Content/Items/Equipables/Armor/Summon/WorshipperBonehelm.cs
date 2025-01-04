@@ -105,8 +105,15 @@ sealed class WorshipperBonehelm : ModItem {
         public bool ShouldBeActive() => Player.HasSetBonusFrom<WorshipperBonehelm>();
 
         public override void PostUpdateBuffs() {
+            Main.NewText(StateTimer);
+
             if (StateTimer > 0) {
-                StateTimer--;
+                if (!IsInIdle) {
+                    StateTimer--;
+                }
+                else if (StateTimer < STATETIME) {
+                    StateTimer++;
+                }
             }
             else if (!IsInIdle) {
                 IsInIdle = true;
