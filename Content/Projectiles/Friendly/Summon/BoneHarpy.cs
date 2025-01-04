@@ -70,7 +70,9 @@ sealed class BoneHarpy : InteractableProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        
+
+        Main.CurrentFrameFlags.HadAnActiveInteractibleProjectile = true;
+
         if (player.Distance(Projectile.Center) > 1000f) {
             Projectile.Center = player.Center;
         }
