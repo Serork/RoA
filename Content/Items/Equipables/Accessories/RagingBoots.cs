@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -43,7 +44,9 @@ sealed class RagingBoots : NatureItem {
         player.moveSpeed += 0.05f;
         player.runAcceleration += 0.05f;
 
-        player.gravity *= 1.5f;
+        if (player.velocity.Y > 0f) {
+            player.gravity *= 1.5f;
+        }
     }
 
     private sealed class RagingBootsAttackHandler : ModPlayer {
@@ -53,12 +56,6 @@ sealed class RagingBoots : NatureItem {
         public bool IsEffectActive;
 
         public override void ResetEffects() => IsEffectActive = false;
-
-        public override void PreUpdateMovement() {
-            if (!IsEffectActive) {
-                return;
-            }
-        }
 
         public override void PostUpdateEquips() {
             if (!IsEffectActive) {
@@ -72,6 +69,8 @@ sealed class RagingBoots : NatureItem {
 
             if (WorldGenHelper.CustomSolidCollision(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms)) {
                 if (((Player.velocity.Y == 0f || Player.sliding) && _speedBeforeGround.Length() > 7.5f) && !_onGround) {
+                    SoundEngine.PlaySound(SoundID.Item167 with { PitchVariance = 0.1f }, Player.Bottom);
+
                     Vector2 velocity = _speedBeforeGround * 0.35f;
                     List<Color> colors = [new Color(147, 177, 253), new Color(50, 107, 197), new Color(9, 61, 191)];
                     for (int i = 0; i < 30; i++) {
