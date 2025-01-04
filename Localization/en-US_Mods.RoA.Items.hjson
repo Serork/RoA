@@ -1132,3 +1132,8 @@ RagingBoots: {
 	DisplayName: Raging Boots
 	Tooltip: ""
 }
+
+WingIcon: {
+	DisplayName: Wing Icon
+	Tooltip: ""
+}

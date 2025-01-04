@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
+using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -38,7 +39,7 @@ sealed class BoneHarpy : InteractableProjectile {
     protected override void OnHover(Player player) {
         player.noThrow = 2;
         player.cursorItemIconEnabled = true;
-        player.cursorItemIconID = ModContent.ItemType<WorshipperBonehelm>();
+        player.cursorItemIconID = ModContent.ItemType<WingIcon>();
     }
 
     public override void SetStaticDefaults() {
