@@ -283,7 +283,7 @@ sealed class PettyBag : InteractableProjectile {
 
         GrabNearbyItems();
 		
-		SpawnDust(1);
+		SpawnDust(10);
     }
 
     private void SpawnDust(int chance) {
