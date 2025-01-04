@@ -63,7 +63,7 @@ sealed class RagingBoots : NatureItem {
             }
 
             Item item = Player.armor.FirstOrDefault(item => item.type == ModContent.ItemType<RagingBoots>());
-            if (item == null) {
+            if (item == null || item == default) {
                 return;
             }
 
