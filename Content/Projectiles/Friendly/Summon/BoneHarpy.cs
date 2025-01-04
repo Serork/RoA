@@ -82,6 +82,8 @@ sealed class BoneHarpy : InteractableProjectile {
             Vector2 center = player.Center - Vector2.UnitY * (player.height - 15);
             Projectile.Center = new Vector2((int)center.X, (int)center.Y) + new Vector2(0f, player.gfxOffY);
 
+            RemoveTrails();
+
             WhileBeingActive(false, true, false);
 
             if (Math.Abs(player.velocity.X) > 0.05f) {
@@ -100,17 +102,21 @@ sealed class BoneHarpy : InteractableProjectile {
         Movement(player);
     }
 
+    private void RemoveTrails() {
+        if (TrailOpacity > 0f) {
+            TrailOpacity -= 0.15f;
+        }
+        else {
+            TrailOpacity = 0f;
+        }
+    }
+
     private void AttackNearTarget(out bool foundTarget) {
         Player player = Main.player[Projectile.owner];
         bool flag = IsInAttackMode(player);
         if (!flag) {
             foundTarget = false;
-            if (TrailOpacity > 0f) {
-                TrailOpacity -= 0.15f;
-            }
-            else {
-                TrailOpacity = 0f;
-            }
+            RemoveTrails();
             return;
         }
         if (TrailOpacity < 1f) {
