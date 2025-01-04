@@ -285,19 +285,26 @@ sealed class PettyBag : InteractableProjectile {
 		
 		SpawnDust(10);
     }
-	
-	private void SpawnDust(int chance) {
-		if (Main.rand.NextBool(chance)) {
-			int dust = Dust.NewDust(Projectile.Center, 0, 0, DustID.Smoke, 0, 0, 40, Color.GhostWhite, Main.rand.NextFloat(0.3f, 0.7f));
-			Vector2 dustPos = new Vector2 (0, -25).RotatedBy((Projectile.frame + 1) % 3 * 0.5f) + new Vector2((Projectile.frame + 1) % 3 * 4, 0);
-			Vector2 centerPos = Projectile.Top + new Vector2 (0, 10);
-			if (Projectile.frame > 2) dustPos.X *= -1;
-			dustPos.X *= Projectile.spriteDirection;
-			Main.dust[dust].position = centerPos + dustPos + new Vector2 (Main.rand.NextFloat(-16f, 16f), Main.rand.NextFloat(-16f, 16f));
-			Main.dust[dust].velocity = (centerPos - Main.dust[dust].position) * 0.1f;
-			Main.dust[dust].noGravity = true;
-		}
-	}
+
+    private void SpawnDust(int chance) {
+        bool flag = Projectile.spriteDirection == 1;
+        Vector2 offset = Vector2.Zero;
+        int frame = (Projectile.frame + 1) % 3;
+        float angle = frame * 0.5f;
+        if (flag) {
+            offset = new Vector2(Projectile.width, 0f);
+        }
+        if (Main.rand.NextBool(chance)) {
+            int dust = Dust.NewDust(Projectile.Center, 0, 0, DustID.Smoke, 0, 0, 40, Color.GhostWhite, Main.rand.NextFloat(0.3f, 0.7f));
+            Vector2 dustPos = new Vector2(0, -25).RotatedBy(angle) + new Vector2((Projectile.frame + 1) % 3 * 4, 0);
+            Vector2 centerPos = Projectile.Top + new Vector2(0, 10);
+            if (Projectile.frame > 2) dustPos.X *= -1;
+            dustPos.X *= Projectile.spriteDirection;
+            Main.dust[dust].position = centerPos + offset + dustPos + new Vector2(Main.rand.NextFloat(-16f, 16f), Main.rand.NextFloat(-16f, 16f));
+            Main.dust[dust].velocity = (centerPos - Main.dust[dust].position) * 0.1f;
+            Main.dust[dust].noGravity = true;
+        }
+    }
 
     private void KillSame() {
         if (Projectile.owner == Main.myPlayer) {
