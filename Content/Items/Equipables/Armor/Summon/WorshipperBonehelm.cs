@@ -17,7 +17,7 @@ namespace RoA.Content.Items.Equipables.Armor.Summon;
 [AutoloadEquip(EquipType.Head)]
 sealed class WorshipperBonehelm : ModItem {
     internal class BoneHarpyOptions : ModPlayer, IDoubleTap {
-        internal const float FLYTIME = 600f;
+        internal const float FLYTIME = 350f;
 
         private const int STATETIME = 600;
 

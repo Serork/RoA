@@ -51,7 +51,8 @@ sealed class RagingBoots : NatureItem {
 
     private sealed class RagingBootsAttackHandler : ModPlayer {
         private bool _onGround;
-        private Vector2 _speedBeforeGround;
+        //private Vector2 _speedBeforeGround;
+		private int _fallLength;
 
         public bool IsEffectActive;
 
@@ -68,7 +69,7 @@ sealed class RagingBoots : NatureItem {
             }
 
             if (WorldGenHelper.CustomSolidCollision(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms)) {
-                if (((Player.velocity.Y == 0f || Player.sliding) && _speedBeforeGround.Length() > 7.5f) && !_onGround) {
+                if (((Player.velocity.Y == 0f || Player.sliding) && _fallLength > 2) && !_onGround) {
                     SoundEngine.PlaySound(SoundID.Item167 with { PitchVariance = 0.1f }, Player.Bottom);
 
                     Vector2 velocity = _speedBeforeGround * 0.35f;
@@ -118,7 +119,12 @@ sealed class RagingBoots : NatureItem {
                 return;
             }
 
-            _speedBeforeGround = Player.velocity;
+            //_speedBeforeGround = Player.velocity;
+			if (Player.velocity.Y > 9.5f) {
+				_fallLength++;
+				Main.NewText(_fallLength);
+			}
+			else _fallLength = 0;
             _onGround = false;
         }
     }
