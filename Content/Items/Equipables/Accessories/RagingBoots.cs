@@ -5,6 +5,7 @@ using RoA.Content.Projectiles.Friendly;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,8 @@ sealed class RagingBoots : NatureItem {
 
         player.moveSpeed += 0.05f;
         player.runAcceleration += 0.05f;
+
+        player.gravity *= 1.5f;
     }
 
     private sealed class RagingBootsAttackHandler : ModPlayer {
@@ -68,10 +71,10 @@ sealed class RagingBoots : NatureItem {
             }
 
             if (WorldGenHelper.CustomSolidCollision(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms)) {
-                if ((Player.velocity.Y == 0f || Player.sliding) && !_onGround) {
+                if (((Player.velocity.Y == 0f || Player.sliding) && _speedBeforeGround.Length() > 7.5f) && !_onGround) {
                     Vector2 velocity = _speedBeforeGround * 0.35f;
                     List<Color> colors = [new Color(147, 177, 253), new Color(50, 107, 197), new Color(9, 61, 191)];
-                    for (int i = 0; i < 40; i++) {
+                    for (int i = 0; i < 30; i++) {
                         if (Main.rand.Next(3) != 0) {
                             int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height - 2f), Player.width + 2, 6, DustID.Snow, 0f, 0f, 50, Main.rand.NextFromList([.. colors]));
                             if (Player.gravDir == -1f)
@@ -83,8 +86,14 @@ sealed class RagingBoots : NatureItem {
                             if (Player.gravDir == -1f)
                                 Main.dust[num6].velocity.Y *= -1f;
 
-                            Main.dust[num6].velocity -= _speedBeforeGround * 0.6f * Main.rand.NextFloat();
+                            Main.dust[num6].velocity -= velocity * 1.25f * Main.rand.NextFloat();
                         }
+                    }
+
+                    int count = (int)_speedBeforeGround.Length();
+                    int dustType = TileHelper.GetKillTileDust((int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16, Main.tile[(int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16]);
+                    for (int k = 0; k < count * 2; k++) {
+                        Dust.NewDust(new Vector2(Player.position.X, Player.Bottom.Y), Player.width, 2, dustType, SpeedX: -velocity.X * 0.4f, SpeedY: -velocity.Y * 0.4f, Alpha: Main.rand.Next(255), Scale: Main.rand.NextFloat(1.5f) * 0.85f);
                     }
 
                     var center = Player.Bottom;
@@ -92,7 +101,6 @@ sealed class RagingBoots : NatureItem {
                     if (Main.myPlayer == Player.whoAmI) {
                         var velo = velocity;
                         center += velocity;
-                        int count = (int)_speedBeforeGround.Length();
                         for (int i = 0; i < count; i++) {
                             var shootTo = velo.RotatedBy(MathHelper.PiOver2 * (i < count / 2).ToDirectionInt() + MathHelper.PiOver4 * 0.75f * Main.rand.NextFloatDirection());
                             var shootLocation = center + Vector2.Normalize(shootTo) * 10f;
