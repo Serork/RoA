@@ -125,6 +125,8 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
     public virtual bool IsGrowing(int i, int j) => GetStage(i, j) == PlantStage.Growing;
     public virtual bool IsGrown(int i, int j) => GetStage(i, j) == PlantStage.Grown;
 
+    protected virtual bool CanBloom() => true;
+
     protected virtual int PlantDrop { get; }
     protected virtual int SeedsDrop { get; }
 
@@ -163,7 +165,11 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
     public override bool IsTileSpelunkable(int i, int j) => IsGrown(i, j);
 
     public override void RandomUpdate(int i, int j) {
-        if (!IsGrown(i, j)/* && WorldGen.genRand.NextBool(50)*/) {
+        if (!CanBloom()) {
+            return;
+        }
+
+        if (!IsGrown(i, j) && WorldGen.genRand.NextBool(50)) {
             WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;
             if (Main.netMode != NetmodeID.SinglePlayer) {
                 NetMessage.SendTileSquare(-1, i, j, 1);
