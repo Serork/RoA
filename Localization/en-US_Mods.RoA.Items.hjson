@@ -1120,7 +1120,7 @@ ElderwoodWall: {
 
 PrismaticPotion: {
 	DisplayName: Prismatic Potion
-	Tooltip: Applies specific class damage bonuses to all other damage types
+	Tooltip: Makes damage enhancements affect all damage types simultaneously
 }
 
 ElderwoodToilet: {
@@ -1136,4 +1136,13 @@ RagingBoots: {
 WingIcon: {
 	DisplayName: ""
 	Tooltip: ""
+}
+
+PettyBag: {
+	DisplayName: Petty Bag
+	Tooltip:
+		'''
+		Summons a magic bag to gather nearby items
+		Right click to collect the items
+		'''
 }

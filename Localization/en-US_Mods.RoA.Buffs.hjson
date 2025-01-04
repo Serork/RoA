@@ -77,7 +77,7 @@ DryadBlood: {
 
 Heavy: {
 	DisplayName: Heavy
-	Description: Press Down to increase falling speed
+	Description: Your terminal velocity is enhanced
 }
 
 RavencallersCloakBuff: {
@@ -182,8 +182,8 @@ Fireblossom: {
 }
 
 BoneHarpyAttackDebuff: {
-	DisplayName: Bone Harpy
-	Description: Mods.RoA.Buffs.BoneHarpyAttackDebuff.Description
+	DisplayName: Bone Fatigue
+	Description: Undead Harpy's attack is recovering
 }
 
 OnFire: {
@@ -193,7 +193,7 @@ OnFire: {
 
 PrismaticFavor: {
 	DisplayName: Prismatic Favor
-	Description: All specific class damage boosts are applied to all damage types
+	Description: Class damage enhancements are applied to all damage types
 }
 
 BoneHarpyMountBuff: {
