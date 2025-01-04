@@ -80,7 +80,9 @@ sealed class BoneHarpyMount : ModMount {
         bool up = (player.controlUp || player.controlJump) && handler.FlyTime > 0f;
         float value = up ? 0f : 0.3f;
         if (handler.FlyTime > 0f) {
-            handler.FlyTime -= 1f;
+            if (up) {
+                handler.FlyTime -= 1f;
+            }
         }
         else {
             handler.JumpOffHarpy();
