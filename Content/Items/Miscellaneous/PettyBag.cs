@@ -17,8 +17,8 @@ sealed class PettyBag : ModItem {
         Item.width = 22;
         Item.height = 24;
         //Item.UseSound = SoundID.Item59;
-        Item.useAnimation = 28;
-        Item.useTime = 28;
+        Item.useAnimation = Item.useTime = 28;
+        Item.noUseGraphic = true;
         Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(0, 2);
     }

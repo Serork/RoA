@@ -33,7 +33,7 @@ sealed class PettyBag : InteractableProjectile {
     }
 
     public override void SetDefaults() {
-        Projectile.width = 40;
+        Projectile.width = 34;
         Projectile.height = 34;
 
         Projectile.aiStyle = -1;
