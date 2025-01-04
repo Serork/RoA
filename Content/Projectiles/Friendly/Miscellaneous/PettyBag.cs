@@ -18,17 +18,13 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 sealed class PettyBag : InteractableProjectile {
-    private sealed class PettyBagPopupText : CustomPopupText {
-
-    }
-
     private sealed class PettyBagItemExtra : GlobalItem {
         public bool WasCollectedByPettyBag;
 
         public override bool InstancePerEntity => true;
     }
 
-    private sealed class PettyBagHandler : ModPlayer {
+    internal sealed class PettyBagHandler : ModPlayer {
         public HashSet<Item> BagItems { get; private set; } = [];
 
         public override void SaveData(TagCompound tag) {

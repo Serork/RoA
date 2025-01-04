@@ -76,11 +76,7 @@ abstract class InteractableProjectile : ModProjectile {
         if (!localPlayer.IsProjectileInteractibleAndInInteractionRange(proj, ref compareSpot))
             return 0;
 
-        Matrix matrix = Matrix.Invert(Main.GameViewMatrix.ZoomMatrix);
-        Vector2 position = Main.ReverseGravitySupport(Main.MouseScreen);
-        Vector2.Transform(Main.screenPosition, matrix);
-        Vector2 v = Vector2.Transform(position, matrix) + Main.screenPosition;
-        bool flag2 = proj.Hitbox.Contains(v.ToPoint());
+        bool flag2 = proj.Hitbox.Contains(localPlayer.GetViableMousePosition().ToPoint());
         if (!((flag2 || Main.SmartInteractProj == proj.whoAmI) & !localPlayer.lastMouseInterface)) {
             if (!flag)
                 return 1;

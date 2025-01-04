@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using System.Linq;
+
+using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -21,5 +23,14 @@ sealed class PettyBag : ModItem {
         Item.noUseGraphic = true;
         Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(0, 2);
+    }
+
+    public override bool CanUseItem(Player player) {
+        if (player.ownedProjectileCounts[Item.shoot] > 0 &&
+            player.GetModPlayer<Projectiles.Friendly.Miscellaneous.PettyBag.PettyBagHandler>().BagItems.Count != 0) {
+            return false;
+        }
+
+        return base.CanUseItem(player);
     }
 }
