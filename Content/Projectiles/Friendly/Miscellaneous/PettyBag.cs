@@ -214,10 +214,7 @@ sealed class PettyBag : InteractableProjectile {
         player.cursorItemIconID = ModContent.ItemType<Items.Miscellaneous.PettyBag>();
     }
 
-    protected override void OnInteraction(Player player) {
-        HashSet<Item> bagItems = player.GetModPlayer<PettyBagHandler>().BagItems;
-        player.GetModPlayer<PettyBagHandler>().Collect(Projectile);
-    }
+    protected override void OnInteraction(Player player) => player.GetModPlayer<PettyBagHandler>().Collect(Projectile);
 
     public override bool OnTileCollide(Vector2 oldVelocity) => false;
 
@@ -279,6 +276,11 @@ sealed class PettyBag : InteractableProjectile {
 
             if (Projectile.velocity.Y != vector.Y)
                 wetVelocity.Y = Projectile.velocity.Y;
+        }
+
+        if (Projectile.lavaWet) {
+            Main.player[Projectile.owner].GetModPlayer<PettyBagHandler>().Collect(Projectile);
+            Projectile.Kill();
         }
 
         GrabNearbyItems();
