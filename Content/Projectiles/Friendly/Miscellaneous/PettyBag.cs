@@ -283,26 +283,25 @@ sealed class PettyBag : InteractableProjectile {
 
         GrabNearbyItems();
 		
-		SpawnDust(10);
+		SpawnDust(1);
     }
 
     private void SpawnDust(int chance) {
         bool flag = Projectile.spriteDirection == 1;
         Vector2 offset = Vector2.Zero;
-        int baseFrame = Main.projFrames[Type] - Projectile.frame + 1;
+        int baseFrame = Projectile.frame + 1;
         if (flag) {
-            offset.X = Projectile.width / 2f;
-            baseFrame = Projectile.frame + 1;
+            offset.X = Projectile.width / 4f;
         }
         int frame = baseFrame % 3;
         float angle = frame * 0.5f;
         if (Main.rand.NextBool(chance)) {
             int dust = Dust.NewDust(Projectile.Center, 0, 0, DustID.Smoke, 0, 0, 40, Color.GhostWhite, Main.rand.NextFloat(0.3f, 0.7f));
             Vector2 dustPos = new Vector2(0, -25).RotatedBy(angle) + new Vector2(baseFrame % 3 * 4, 0);
-            Vector2 centerPos = Projectile.Top + new Vector2(0, 10);
+            Vector2 centerPos = Projectile.Top + offset + new Vector2(0, 10);
             if (Projectile.frame > 2) dustPos.X *= -1;
             dustPos.X *= Projectile.spriteDirection;
-            Main.dust[dust].position = centerPos + offset + dustPos + new Vector2(Main.rand.NextFloat(-16f, 16f), Main.rand.NextFloat(-16f, 16f));
+            Main.dust[dust].position = centerPos + dustPos + new Vector2(Main.rand.NextFloat(-16f, 16f), Main.rand.NextFloat(-16f, 16f));
             Main.dust[dust].velocity = (centerPos - Main.dust[dust].position) * 0.1f;
             Main.dust[dust].noGravity = true;
         }
