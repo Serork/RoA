@@ -51,7 +51,7 @@ sealed class RagingBoots : NatureItem {
 
     private sealed class RagingBootsAttackHandler : ModPlayer {
         private bool _onGround;
-        //private Vector2 _speedBeforeGround;
+        private Vector2 _speedBeforeGround;
 		private int _fallLength;
 
         public bool IsEffectActive;
@@ -119,11 +119,8 @@ sealed class RagingBoots : NatureItem {
                 return;
             }
 
-            //_speedBeforeGround = Player.velocity;
-			if (Player.velocity.Y > 9.5f) {
-				_fallLength++;
-				Main.NewText(_fallLength);
-			}
+            _speedBeforeGround = Player.velocity;
+			if (Player.velocity.Y > 9.5f) _fallLength++;
 			else _fallLength = 0;
             _onGround = false;
         }
