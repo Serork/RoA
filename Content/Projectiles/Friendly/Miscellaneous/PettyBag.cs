@@ -283,7 +283,7 @@ sealed class PettyBag : InteractableProjectile {
 
         GrabNearbyItems();
 		
-		SpawnDust(1);
+		SpawnDust(10);
     }
 
     private void SpawnDust(int chance) {
@@ -291,7 +291,7 @@ sealed class PettyBag : InteractableProjectile {
         Vector2 offset = Vector2.Zero;
         int baseFrame = Projectile.frame + 1;
         if (flag) {
-            offset.X = Projectile.width / 4f;
+            offset.X = Projectile.width / 6f;
         }
         int frame = baseFrame % 3;
         float angle = frame * 0.5f;
