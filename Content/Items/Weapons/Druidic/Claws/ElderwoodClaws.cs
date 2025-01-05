@@ -40,46 +40,46 @@ sealed class ElderwoodClaws : BaseClawsItem {
     }
 
     public override void WhileBeingHold(Player player, float progress) {
-        if (progress >= 0.85f) {
-            if (player.itemTime == player.itemTimeMax - 2) {
-                ushort type = (ushort)ModContent.ProjectileType<ElderwoodWallProjectile>();
-                progress -= 0.3f;
-                for (int k = 0; k < 2; k++) {
-                    switch (k) {
-                        case 0:
-                            Vector2 position = GetPos(player, false);
-                            Projectile.NewProjectile(player.GetSource_ItemUse(Item),
-                                   position,
-                                   Vector2.Zero,
-                                   type,
-                                   player.GetWeaponDamage(Item),
-                                   player.GetWeaponKnockback(Item),
-                                   player.whoAmI,
-                                   MathHelper.Min(4f, progress * 5f),
-                                   1f);
-                            break;
-                        case 1:
-                            position = GetPos(player, true);
-                            Projectile.NewProjectile(player.GetSource_ItemUse(Item),
-                                   position,
-                                   Vector2.Zero,
-                                   type,
-                                   player.GetWeaponDamage(Item),
-                                   player.GetWeaponKnockback(Item),
-                                   player.whoAmI,
-                                   MathHelper.Min(4f, progress * 5f),
-                                   1f);
-                            break;
-                    }
-                }
-            }
-            if (player.itemTime > player.itemTimeMax - 4) {
-                GetPoints(player, 1, out Point point1, out Point point2);
-                SpawnGroundDusts(point1, point2, progress * 4f);
-                GetPoints(player, -1, out point1, out point2);
-                SpawnGroundDusts(point1, point2, progress * 4f);
-            }
-        }
+        //if (progress >= 0.85f) {
+        //    if (player.itemTime == player.itemTimeMax - 2) {
+        //        ushort type = (ushort)ModContent.ProjectileType<ElderwoodWallProjectile>();
+        //        progress -= 0.3f;
+        //        for (int k = 0; k < 2; k++) {
+        //            switch (k) {
+        //                case 0:
+        //                    Vector2 position = GetPos(player, false);
+        //                    Projectile.NewProjectile(player.GetSource_ItemUse(Item),
+        //                           position,
+        //                           Vector2.Zero,
+        //                           type,
+        //                           player.GetWeaponDamage(Item),
+        //                           player.GetWeaponKnockback(Item),
+        //                           player.whoAmI,
+        //                           MathHelper.Min(4f, progress * 5f),
+        //                           1f);
+        //                    break;
+        //                case 1:
+        //                    position = GetPos(player, true);
+        //                    Projectile.NewProjectile(player.GetSource_ItemUse(Item),
+        //                           position,
+        //                           Vector2.Zero,
+        //                           type,
+        //                           player.GetWeaponDamage(Item),
+        //                           player.GetWeaponKnockback(Item),
+        //                           player.whoAmI,
+        //                           MathHelper.Min(4f, progress * 5f),
+        //                           1f);
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    if (player.itemTime > player.itemTimeMax - 4) {
+        //        GetPoints(player, 1, out Point point1, out Point point2);
+        //        SpawnGroundDusts(point1, point2, progress * 4f);
+        //        GetPoints(player, -1, out point1, out point2);
+        //        SpawnGroundDusts(point1, point2, progress * 4f);
+        //    }
+        //}
     }
 
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
