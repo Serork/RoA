@@ -7,7 +7,7 @@ namespace RoA.Content.Dusts;
 sealed class Slash : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
 		Color color = dust.color.MultiplyRGB(lightColor);
-		color.A = 50;
+		color.A = 100;
 
 		return color;
     }
