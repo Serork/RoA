@@ -129,8 +129,9 @@ sealed class TapperDrawing : GlobalTile {
     }
 
     private void On_Main_DrawTileEntities(On_Main.orig_DrawTileEntities orig, Main self, bool solidLayer, bool overRenderTargets, bool intoRenderTargets) {
+        orig(self, solidLayer, overRenderTargets, intoRenderTargets);
         bool flag6 = intoRenderTargets || Lighting.UpdateEveryFrame;
-        if (!solidLayer && flag6) {
+        if (solidLayer && flag6 && !overRenderTargets) {
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
             foreach (Point drawPoint in DrawPoints) {
                 int i = drawPoint.X;
@@ -237,15 +238,14 @@ sealed class TapperDrawing : GlobalTile {
                         Main.spriteBatch.Draw(tapperBracingAsset.Value,
                             new Vector2((float)((i + offset) * 16 - (int)position.X),
                                         (float)(j * 16 - (int)position.Y) - 6),
-                            new Rectangle(0, 0, coordinateWidth,
-                            num12), color, 0f, Vector2.Zero, 1f, offset == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                            new Rectangle(0, flag ? 28 : 0, coordinateWidth,
+                            num12), color, 0f, Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 0);
                     }
                 }
             }
             Main.spriteBatch.End();
             DrawPoints.Clear();
         }
-        orig(self, solidLayer, overRenderTargets, intoRenderTargets);
     }
 
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
