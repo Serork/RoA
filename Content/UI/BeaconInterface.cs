@@ -131,7 +131,7 @@ sealed class BeaconInterface : UILayer {
                     item = Main.mouseItem;
                     player.mouseInterface = true;
                 }
-                if (!flag && hasGemInIt) {
+                if (!flag && hasGemInIt && !actuallySelected) {
                     if (Main.mouseRight && Main.mouseRightRelease) {
                         SoundEngine.PlaySound(SoundID.MenuTick, adjustedBeaconPosition);
                         beaconTE.DropGem(player, (int)adjustedBeaconPosition.X, (int)adjustedBeaconPosition.Y);
