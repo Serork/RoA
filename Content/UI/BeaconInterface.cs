@@ -102,10 +102,6 @@ sealed class BeaconInterface : UILayer {
             bool hasGemInIt = beaconTE.HasGemInIt;
             frame = frame.With(hasGemInIt ? (byte)(variant - 1) : variant, 0);
             Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
-            //if (!hasGemInIt) {
-            //    Point beaconTilePosition = beaconPosition.ToTileCoordinates();
-            //    gemType = Beacon.GetGemItemID(beaconTilePosition.X, beaconTilePosition.Y);
-            //}
             Vector2 origin = sourceRectangle.Size() / 2f;
             Vector2 position = beaconPosition + Vector2.UnitX - origin - Vector2.UnitY * sourceRectangle.Height;
             Color color = Color.White;

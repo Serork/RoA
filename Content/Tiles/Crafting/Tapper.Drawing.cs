@@ -60,58 +60,6 @@ partial class Tapper : ModTile {
             TapperDrawing.DrawPoints.Add(position);
         }
 
-        /* int tileType = WorldGenHelper.GetTileSafely(i, j).TileType;
-        TileObjectData tileData = TileObjectData.GetTileData(tileType, 0);
-        int coordinateWidth = 30;
-        int num12 = 28;
-        Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
-        Vector2 vector = new(Main.offScreenRange, Main.offScreenRange);
-        if (Main.drawToScreen)
-            vector = Vector2.Zero;
-        Vector2 position = unscaledPosition - vector;
-        int drawXOffset = tileData.DrawXOffset;
-        int num5 = tileData.DrawYOffset;
-        Color color = Lighting.GetColor(i, j);
-        SpriteEffects spriteEffects = SpriteEffects.None;
-        if (WorldGenHelper.ActiveTile(i - 1, j, TileID.Trees)) {
-            spriteEffects = SpriteEffects.FlipHorizontally;
-        }
-        if (WorldGenHelper.ActiveTile(i + 1, j, TileID.Trees)) {
-            drawXOffset += 18;
-        }
-        drawXOffset += GetXOffset(i, j);
-        Rectangle rect = new(0, 0, coordinateWidth, num12);
-        Texture2D texture = TextureAssets.Tile[tileType].Value;
-        Vector2 drawPosition = new Vector2(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
-        spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
-
-        if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
-            int num = (color.R + color.G + color.B) / 3;
-            if (num > 10) {
-                Texture2D highlightTexture = TextureAssets.HighlightMask[Type].Value;
-                Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
-                rect = new(0, 0, coordinateWidth, num12);
-                spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
-            }
-        }
-
-        TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
-        if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
-            texture = ModContent.Request<Texture2D>((TileLoader.GetTile(Type) as Tapper).GalipotTexture).Value;
-            int uniqueAnimationFrame = Main.tileFrame[Type] + (i + j) % 3;
-            if ((i + j) % 2 == 0)
-                uniqueAnimationFrame += 1;
-            if ((i + j) % 3 == 0)
-                uniqueAnimationFrame += 1;
-            if ((i + j) % 4 == 0)
-                uniqueAnimationFrame += 1;
-            uniqueAnimationFrame %= 3;
-
-            int frameXOffset = uniqueAnimationFrame * num12;
-            rect.Y = num12 * uniqueAnimationFrame;
-            spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
-        } */
-
         return false;
     }
 }
@@ -120,132 +68,97 @@ sealed class TapperDrawing : GlobalTile {
     public static List<Point> DrawPoints { get; private set; } = [];
 
     public override void Load() {
-        On_Main.DrawTileEntities += On_Main_DrawTileEntities;
+        On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
+        On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
+    }
+
+    private void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
+        DrawPoints.Clear();
+    }
+
+    private void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
+        orig(self);
+
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        foreach (Point drawPoint in DrawPoints) {
+            int i = drawPoint.X;
+            int j = drawPoint.Y;
+            int type = Main.tile[i, j].TileType;
+            if (type == ModContent.TileType<Tapper>()) {
+                int tileType = WorldGenHelper.GetTileSafely(i, j).TileType;
+                TileObjectData tileData = TileObjectData.GetTileData(tileType, 0);
+                int coordinateWidth = 30;
+                int num12 = 28;
+                Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
+                Vector2 vector = Vector2.Zero;
+                Vector2 position = unscaledPosition - vector;
+                int drawXOffset = tileData.DrawXOffset - 1;
+                int num5 = tileData.DrawYOffset;
+                Color color = Lighting.GetColor(i, j);
+                SpriteEffects spriteEffects = SpriteEffects.None;
+                if (WorldGenHelper.ActiveTile(i - 1, j, TileID.Trees)) {
+                    spriteEffects = SpriteEffects.FlipHorizontally;
+                }
+                if (WorldGenHelper.ActiveTile(i + 1, j, TileID.Trees)) {
+                    drawXOffset += 18;
+                }
+                Rectangle rect = new(0, 0, coordinateWidth, num12);
+                Texture2D texture = TextureAssets.Tile[tileType].Value;
+                Vector2 drawPosition = new Vector2(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
+                Main.spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+                if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
+                    int num = (color.R + color.G + color.B) / 3;
+                    if (num > 10) {
+                        Texture2D highlightTexture = TextureAssets.HighlightMask[type].Value;
+                        Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
+                        rect = new(0, 0, coordinateWidth, num12);
+                        Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+                    }
+                }
+
+                TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
+                if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
+                    texture = ModContent.Request<Texture2D>((TileLoader.GetTile(type) as Tapper).GalipotTexture).Value;
+                    int uniqueAnimationFrame = Main.tileFrame[type] + (i + j) % 3;
+                    if ((i + j) % 2 == 0)
+                        uniqueAnimationFrame += 1;
+                    if ((i + j) % 3 == 0)
+                        uniqueAnimationFrame += 1;
+                    if ((i + j) % 4 == 0)
+                        uniqueAnimationFrame += 1;
+                    uniqueAnimationFrame %= 3;
+
+                    int frameXOffset = uniqueAnimationFrame * num12;
+                    rect.Y = num12 * uniqueAnimationFrame;
+                    Main.spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+                }
+            }
+            if (type == TileID.Trees) {
+                ushort tapperTileType = (ushort)ModContent.TileType<Tapper>();
+                bool flag = WorldGenHelper.GetTileSafely(i - 1, j).TileType == tapperTileType;
+                bool flag2 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType;
+                if (flag2 || flag) {
+                    int coordinateWidth = 30;
+                    int num12 = 28;
+                    Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
+                    Vector2 zero = Vector2.Zero;
+                    Vector2 position = unscaledPosition - zero;
+                    Color color = Lighting.GetColor(i, j);
+                    Asset<Texture2D>? tapperBracingAsset = ModContent.Request<Texture2D>((TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
+                    Main.spriteBatch.Draw(tapperBracingAsset.Value,
+                        new Vector2((float)(i * 16 - (int)position.X),
+                                    (float)(j * 16 - (int)position.Y) - 6),
+                        new Rectangle(0, flag ? 28 : 0, coordinateWidth,
+                        num12), color, 0f, Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 0);
+                }
+            }
+        }
+        Main.spriteBatch.End();
     }
 
     public override void Unload() {
         DrawPoints.Clear();
         DrawPoints = null;
-    }
-
-    private void On_Main_DrawTileEntities(On_Main.orig_DrawTileEntities orig, Main self, bool solidLayer, bool overRenderTargets, bool intoRenderTargets) {
-        orig(self, solidLayer, overRenderTargets, intoRenderTargets);
-        bool flag6 = intoRenderTargets || Lighting.UpdateEveryFrame;
-        if (solidLayer && flag6 && !overRenderTargets) {
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-            foreach (Point drawPoint in DrawPoints) {
-                int i = drawPoint.X;
-                int j = drawPoint.Y;
-                int type = Main.tile[i, j].TileType;
-                if (type == ModContent.TileType<Tapper>()) {
-                    int tileType = WorldGenHelper.GetTileSafely(i, j).TileType;
-                    TileObjectData tileData = TileObjectData.GetTileData(tileType, 0);
-                    int coordinateWidth = 30;
-                    int num12 = 28;
-                    Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
-                    Vector2 vector = new(Main.offScreenRange, Main.offScreenRange);
-                    if (Main.drawToScreen)
-                        vector = Vector2.Zero;
-                    Vector2 position = unscaledPosition - vector;
-                    int drawXOffset = tileData.DrawXOffset - 1;
-                    int num5 = tileData.DrawYOffset;
-                    Color color = Lighting.GetColor(i, j);
-                    SpriteEffects spriteEffects = SpriteEffects.None;
-                    if (WorldGenHelper.ActiveTile(i - 1, j, TileID.Trees)) {
-                        spriteEffects = SpriteEffects.FlipHorizontally;
-                    }
-                    if (WorldGenHelper.ActiveTile(i + 1, j, TileID.Trees)) {
-                        drawXOffset += 18;
-                    }
-                    Rectangle rect = new(0, 0, coordinateWidth, num12);
-                    Texture2D texture = TextureAssets.Tile[tileType].Value;
-                    Vector2 drawPosition = new Vector2(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
-                    Main.spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
-
-                    if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
-                        int num = (color.R + color.G + color.B) / 3;
-                        if (num > 10) {
-                            Texture2D highlightTexture = TextureAssets.HighlightMask[type].Value;
-                            Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
-                            rect = new(0, 0, coordinateWidth, num12);
-                            Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
-                        }
-                    }
-
-                    TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
-                    if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
-                        texture = ModContent.Request<Texture2D>((TileLoader.GetTile(type) as Tapper).GalipotTexture).Value;
-                        int uniqueAnimationFrame = Main.tileFrame[type] + (i + j) % 3;
-                        if ((i + j) % 2 == 0)
-                            uniqueAnimationFrame += 1;
-                        if ((i + j) % 3 == 0)
-                            uniqueAnimationFrame += 1;
-                        if ((i + j) % 4 == 0)
-                            uniqueAnimationFrame += 1;
-                        uniqueAnimationFrame %= 3;
-
-                        int frameXOffset = uniqueAnimationFrame * num12;
-                        rect.Y = num12 * uniqueAnimationFrame;
-                        Main.spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
-                    }
-                }
-                if (type == TileID.Trees) {
-                    ushort tapperTileType = (ushort)ModContent.TileType<Tapper>();
-                    bool flag = WorldGenHelper.GetTileSafely(i - 1, j).TileType == tapperTileType;
-                    bool flag2 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType;
-                    if (flag2 || flag) {
-                        int coordinateWidth = 30;
-                        int num12 = 28;
-                        Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
-                        Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
-                        if (Main.drawToScreen) {
-                            zero = Vector2.Zero;
-                        }
-                        Vector2 position = unscaledPosition - zero;
-                        Color color = Lighting.GetColor(i, j);
-                        int offset = WorldGenHelper.GetTileSafely(i + 1, j).TileType != (ushort)ModContent.TileType<Tapper>() ? -1 : 0;
-                        int offsetX = flag ? 0 : 1;
-                        bool flag4 = flag && flag2;
-                        bool flag5 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == TileID.Trees;
-                        if (!flag4) {
-                            if (WorldGenHelper.GetTileSafely(i - 1, j).TileType == TileID.Trees || flag5) {
-                                flag4 = true;
-                            }
-                        }
-                        int tileFrameX = WorldGenHelper.GetTileSafely(i, j).TileFrameX;
-                        List<int> values = [22, 44];
-                        int offsetX2 = -2;
-                        if (values.Contains(tileFrameX) && flag && !flag4) {
-                            flag4 = flag5 = true;
-                            offsetX2 = -3;
-                        }
-                        if (flag) {
-                            Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                            if (tile.TileFrameX == 0 && tile.TileFrameY == 88) {
-                                offsetX += 1;
-                            }
-                            if (tile.TileFrameX == 0 && tile.TileFrameY == 110) {
-                                offsetX += 1;
-                            }
-                        }
-                        if (!flag4) {
-                            offsetX = flag ? 2 : 0;
-                        }
-                        offset = 0;
-                        offsetX2 = 0;
-                        offsetX = 0;
-                        Asset<Texture2D>? tapperBracingAsset = ModContent.Request<Texture2D>((TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
-                        Main.spriteBatch.Draw(tapperBracingAsset.Value,
-                            new Vector2((float)((i + offset) * 16 - (int)position.X),
-                                        (float)(j * 16 - (int)position.Y) - 6),
-                            new Rectangle(0, flag ? 28 : 0, coordinateWidth,
-                            num12), color, 0f, Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 0);
-                    }
-                }
-            }
-            Main.spriteBatch.End();
-            DrawPoints.Clear();
-        }
     }
 
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
