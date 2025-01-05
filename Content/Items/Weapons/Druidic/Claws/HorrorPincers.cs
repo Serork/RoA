@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;

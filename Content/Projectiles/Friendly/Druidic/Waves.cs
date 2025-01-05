@@ -5,6 +5,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
@@ -59,6 +60,11 @@ abstract class Wave : NatureProjectile {
         ShouldIncreaseWreathPoints = false;
     }
 
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        Vector2 lineEnd = Projectile.Center + Vector2.Normalize(Projectile.velocity) * Projectile.height * 2f;
+        return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 26f);
+    }
+
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         //modifiers.SourceDamage += 2f;
         modifiers.SetCrit();
@@ -66,11 +72,13 @@ abstract class Wave : NatureProjectile {
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Player player = Main.player[Projectile.owner];
-        Vector2 pointPosition = player.GetViableMousePosition();
-        Vector2 velocity = Vector2.Subtract(Main.MouseWorld, player.RotatedRelativePoint(player.MountedCenter, true));
-        velocity.Normalize();
-        Projectile.velocity = velocity;
-        Projectile.netUpdate = true;
+        if (player.whoAmI == Main.myPlayer) {
+            Vector2 pointPosition = player.GetViableMousePosition();
+            Vector2 velocity = Vector2.Subtract(pointPosition, player.RotatedRelativePoint(player.MountedCenter, true));
+            velocity.Normalize();
+            Projectile.velocity = velocity;
+            Projectile.netUpdate = true;
+        }
     }
 
     public override void AI() {

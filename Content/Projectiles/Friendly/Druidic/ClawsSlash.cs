@@ -55,6 +55,11 @@ class ClawsSlash : NatureProjectile {
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => Projectile.ApplyFlaskEffects(target);
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<InfectedWave>()] > 0 ||
+            Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<HemorrhageWave>()] > 0) {
+            modifiers.Knockback *= 0f;
+        }
+
         float angle = MathHelper.PiOver2;
         Vector2 offset = new(0.2f);
         Vector2 velocity = 1.5f * offset;
