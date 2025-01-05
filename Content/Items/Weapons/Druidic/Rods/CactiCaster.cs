@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
 using RoA.Content.Dusts;
@@ -8,7 +7,6 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
