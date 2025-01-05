@@ -1,5 +1,6 @@
-using RoA.Content.Tiles.Plants;
 using RoA.Core.Utility;
+
+using System;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -19,10 +20,11 @@ sealed class BeaconTE : ModTileEntity {
         Emerald,
         Ruby,
         Diamond,
-        Amber
+        Amber,
+        Length
     }
 
-    private BeaconVariant _variant = BeaconVariant.Topaz;
+    private BeaconVariant _variant = BeaconVariant.None;
 
     public BeaconVariant Variant => _variant;
 
@@ -51,6 +53,8 @@ sealed class BeaconTE : ModTileEntity {
 }
 
 sealed class Beacon : ModTile {
+    private static int _variantToShow;
+
     public override void SetStaticDefaults() {
         Main.tileTable[Type] = true;
         Main.tileFrameImportant[Type] = true;
@@ -69,22 +73,86 @@ sealed class Beacon : ModTile {
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
-    public static void PlaceBeacon(int i, int j) {
+    public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<BeaconTE>().Place(i, j);
+    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<BeaconTE>().Kill(i, j);
 
+    private static BeaconTE GetTE(int i, int j) {
+        BeaconTE foundTE = null;
+        int j2 = 0;
+        while (j2 < TileObjectData.GetTileData(WorldGenHelper.GetTileSafely(i, j)).CoordinateHeights.Length) {
+            BeaconTE desiredTE = TileHelper.GetTE<BeaconTE>(i, j + j2);
+            if (desiredTE is null) {
+                j2++;
+                continue;
+            }
+
+            foundTE = desiredTE;
+            break;
+        }
+
+        return foundTE;
+    }
+
+    private static bool IsTileValidToBeHovered(int i, int j) {
+        if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<Beacon>()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static int GetGemItemID(int i, int j) {
+        bool flag = WorldGenHelper.GetTileSafely(i, j).TileFrameY < 54;
+        if (flag) {
+            double time = 50.0;
+            if (Main.timeForVisualEffects % time == 0.0) {
+                _variantToShow++;
+                if (_variantToShow >= Enum.GetNames(typeof(BeaconTE.BeaconVariant)).Length - 2) {
+                    _variantToShow = 0;
+                }
+            }
+            return _variantToShow switch {
+                0 => ItemID.Amethyst,
+                1 => ItemID.Topaz,
+                2 => ItemID.Sapphire,
+                3 => ItemID.Emerald,
+                4 => ItemID.Ruby,
+                5 => ItemID.Diamond,
+                6 => ItemID.Amber,
+                _ => -1,
+            };
+        }
+        else {
+            return ModContent.ItemType<Items.Placeable.Crafting.Beacon>();
+        }
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
-        BeaconTE foundTE = null;
-        for (int j2 = 0; j2 < 2; j2++) {
-            BeaconTE desiredTE = TileHelper.GetTE<BeaconTE>(i, j2);
-            if (desiredTE != null) {
-                foundTE = desiredTE;
-                break;
-            }
+        BeaconTE te = GetTE(i, j);
+        if (te is null) {
+            return;
         }
-        if (foundTE != null) {
-            BeaconTE.BeaconVariant variant = foundTE.Variant;
-            tileFrameY *= (byte)variant;
+
+        BeaconTE.BeaconVariant variant = te.Variant;
+        tileFrameY += (short)(54 * (byte)variant);
+    }
+
+    public override void MouseOver(int i, int j) {
+        if (IsTileValidToBeHovered(i, j)) {
+            Player player = Main.LocalPlayer;
+            player.noThrow = 2;
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = GetGemItemID(i, j);
         }
+    }
+
+    public override bool RightClick(int i, int j) {
+        if (!IsTileValidToBeHovered(i, j)) {
+            return false;
+        }
+
+
+
+        return true;
     }
 }
