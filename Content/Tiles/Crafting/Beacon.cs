@@ -9,6 +9,7 @@ using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -107,7 +108,7 @@ sealed class Beacon : ModTile {
         Main.tileLighted[Type] = true;
         Main.tileNoAttach[Type] = true;
 
-        //TileID.Sets.HasOutlines[Type] = true;
+        TileID.Sets.HasOutlines[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1xX);
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
@@ -115,6 +116,13 @@ sealed class Beacon : ModTile {
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<BeaconTE>().Hook_AfterPlacement, -1, 0, false);
         TileObjectData.addTile(Type);
+    }
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
+
+    public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY) {
+        // Because beds have special smart interaction, this splits up the left and right side into the necessary 2x2 sections
+        height = 2; // Default to the Height defined for TileObjectData.newTile
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;

@@ -127,7 +127,7 @@ partial class Tapper : ModTile {
 
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
-        if (player.IsWithinSnappngRangeToTile(i, j, 80)) {
+        if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
             TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
             Vector2 position = new Vector2(i, j).ToWorldCoordinates();
             void dropItem(ushort itemType) {
