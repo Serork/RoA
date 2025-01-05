@@ -65,6 +65,7 @@ partial class Tapper : ModTile {
 }
 
 sealed class TapperDrawing : GlobalTile {
+    // separate
     public static List<Point> DrawPoints { get; private set; } = [];
 
     public override void Load() {
@@ -76,6 +77,7 @@ sealed class TapperDrawing : GlobalTile {
         DrawPoints.Clear();
     }
 
+    // separate
     private void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
         orig(self);
 
@@ -104,7 +106,7 @@ sealed class TapperDrawing : GlobalTile {
                 }
                 Rectangle rect = new(0, 0, coordinateWidth, num12);
                 Texture2D texture = TextureAssets.Tile[tileType].Value;
-                Vector2 drawPosition = new Vector2(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
+                Vector2 drawPosition = new(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
                 Main.spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
                 if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
                     int num = (color.R + color.G + color.B) / 3;

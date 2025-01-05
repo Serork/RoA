@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Content.Tiles.Crafting;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -13,6 +14,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
@@ -68,47 +70,55 @@ sealed class ElderwoodChest : ModTile {
 
     public override void Load() {
         On_Main.DrawTileEntities += On_Main_DrawTileEntities;
+        On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
+        On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
     }
 
-    private void On_Main_DrawTileEntities(On_Main.orig_DrawTileEntities orig, Main self, bool solidLayer, bool overRenderTargets, bool intoRenderTargets) {
-        bool flag = intoRenderTargets || Lighting.UpdateEveryFrame;
+	private void On_Main_DrawTileEntities(On_Main.orig_DrawTileEntities orig, Main self, bool solidLayer, bool overRenderTargets, bool intoRenderTargets) {
+		bool flag = intoRenderTargets || Lighting.UpdateEveryFrame;
 		if (solidLayer && flag) {
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 			_rotationOffset = MathHelper.SmoothStep(_rotationOffset, Main.rand.NextFloatRange(0.1f), 0.2f);
-            _scaleOffset = MathHelper.SmoothStep(_scaleOffset, Main.rand.NextFloatRange(0.1f), 0.15f);
-			float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
-            foreach (Point position in _drawPoints) {
-				int i = position.X, j = position.Y;
-                ulong speed = ((ulong)j << 32) | (ulong)i;
-                float posX = Utils.RandomInt(ref speed, -12, 13) * 0.1f;
-                float directionMax = posX;
-                Tile tile = Main.tile[i, j];
-				var modTile = TileLoader.GetTile(tile.TileType);
-				if (modTile == null) {
-					continue;
-				}
-                bool flag2 = modTile.IsLockedChest(i, j);
-				if (flag2 && tile.TileFrameX == 36 && tile.TileFrameY == 0) {
-					Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
-					if (Main.drawToScreen) {
-						zero = Vector2.Zero;
-					}
-					Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "WoodbinderRune").Value;
-					Vector2 origin = new Vector2(74, 74) / 2f;
-					for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
-						Main.spriteBatch.Draw(texture,
-										  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
-										  new Vector2(-3.5f, 0.5f) +
-										  Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
-										  null,
-										  Color.White.MultiplyRGBA(Lighting.GetColor(i, j)) * 0.5f * colorValue, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
-					}
+			_scaleOffset = MathHelper.SmoothStep(_scaleOffset, Main.rand.NextFloatRange(0.1f), 0.15f);
+		}
+
+		orig(self, solidLayer, overRenderTargets, intoRenderTargets);
+	}
+
+	private void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
+		_drawPoints.Clear();
+	}
+
+	private void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
+		orig(self);
+
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+		float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
+		foreach (Point position in _drawPoints) {
+			int i = position.X, j = position.Y;
+			ulong speed = ((ulong)j << 32) | (ulong)i;
+			float posX = Utils.RandomInt(ref speed, -12, 13) * 0.1f;
+			float directionMax = posX;
+			Tile tile = Main.tile[i, j];
+			var modTile = TileLoader.GetTile(tile.TileType);
+			if (modTile == null) {
+				continue;
+			}
+			bool flag2 = modTile.IsLockedChest(i, j);
+			if (flag2 && tile.TileFrameX == 36 && tile.TileFrameY == 0) {
+				Vector2 zero = Vector2.Zero;
+				Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "WoodbinderRune").Value;
+				Vector2 origin = new Vector2(74, 74) / 2f;
+				for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
+					Main.spriteBatch.Draw(texture,
+									  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
+									  new Vector2(-3.5f, 0.5f) +
+									  Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
+									  null,
+									  Color.White.MultiplyRGBA(Lighting.GetColor(i, j)) * 0.5f * colorValue, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
 				}
 			}
-			Main.spriteBatch.End();
-			_drawPoints.Clear();
 		}
-		orig(self, solidLayer, overRenderTargets, intoRenderTargets);
+        Main.spriteBatch.End();
     }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => !IsLockedChest(i, j);
