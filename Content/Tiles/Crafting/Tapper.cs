@@ -7,14 +7,11 @@ using RoA.Common.Tiles;
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -38,6 +35,7 @@ partial class Tapper : ModTile {
 
         TileID.Sets.HasOutlines[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
+        TileID.Sets.IgnoreSmartCursorPriorityAxe[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.StyleWrapLimit = 0;
