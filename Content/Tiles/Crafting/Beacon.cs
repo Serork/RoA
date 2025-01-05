@@ -120,7 +120,9 @@ sealed class Beacon : ModTile {
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
-    public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY) => height = 2;
+    public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY) {
+        height = 2;
+    }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
