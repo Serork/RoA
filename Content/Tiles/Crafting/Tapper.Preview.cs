@@ -119,10 +119,10 @@ partial class Tapper : ModTile {
                                 spriteEffects = flag2 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                             }
                             else if (!WorldGenHelper.ActiveTile(num9 + 1, num10, TileID.Trees)) {
-                                drawXOffset += 16;
+                                drawXOffset += 18;
                             }
                         }
-                        drawXOffset += GetXOffset(num9, num10);
+                        drawXOffset -= 1;
 
                         //if (tileData.DrawFlipHorizontal && num9 % 2 == 0)
                         //    spriteEffects |= SpriteEffects.FlipHorizontally;

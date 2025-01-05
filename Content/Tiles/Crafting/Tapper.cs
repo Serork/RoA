@@ -92,7 +92,7 @@ partial class Tapper : ModTile {
             if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
                 float progress = 0.5f;
                 Vector2 position = new((float)i, (float)j);
-                if (Main.rand.NextChance(progress - 0.2f)) {
+                if (Main.rand.NextChance(progress - 0.45f)) {
                     int dustId = Dust.NewDust(position.ToWorldCoordinates() - new Vector2(12f, 12f), 20, 6, ModContent.DustType<Dusts.Galipot>());
                     Dust dust = Main.dust[dustId];
                     progress = progress * 2.05f;
