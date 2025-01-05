@@ -48,6 +48,8 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
         protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 3);
 
+        protected override bool ShouldPlayShootSound() => false;
+
         public override void SendExtraAI(BinaryWriter writer) {
             base.SendExtraAI(writer);
 
@@ -127,6 +129,8 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
                 Main.dust[dust].fadeIn = 1.25f;
                 Main.dust[dust].velocity += Helper.VelocityToPoint(position, _mousePosition, 2f);
             }
+
+            PlayAttackSound();
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
