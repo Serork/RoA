@@ -11,7 +11,9 @@ using System.IO;
 using System.Reflection;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace RoA;
 
@@ -44,4 +46,5 @@ sealed class RoA : Mod {
 
         return hook;
     }
+
 }

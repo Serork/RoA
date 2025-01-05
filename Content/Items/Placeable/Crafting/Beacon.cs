@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Crafting;
 
-partial class Beacon : ModItem {
+sealed class Beacon : ModItem {
     public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
     }

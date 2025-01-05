@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -59,6 +61,10 @@ abstract class InteractableProjectile : ModProjectile {
             spriteBatch.Draw(texture, position + DrawOffset, rect, selectionGlowColor, Projectile.rotation, drawOrigin, Projectile.scale, SetSpriteEffects(), 0);
             spriteBatch.EndBlendState();
         }
+    }
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        behindProjectiles.Add(index);
     }
 
     protected int TryInteractingWithMe() {
