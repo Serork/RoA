@@ -263,7 +263,7 @@ FenethsBlazingWreath: {
 		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
 		Increases nature knockback
 		Up to 20% chance for attacks to grow burning fireblossom on enemies and holder
-		Fireblossom explodes over time, spreading to enemies nearby when charged
+		Fireblossom explodes over time, spreading to enemies nearby when [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
