@@ -1,11 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Dusts;
-
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
@@ -28,6 +24,8 @@ sealed class ElderwoodCandle : ModTile {
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
         AddMapEntry(new Color(253, 221, 3), Language.GetText("ItemName.Candle"));
     }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
     public override void HitWire(int i, int j) {
         Tile tile = Main.tile[i, j];
