@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
@@ -12,6 +13,8 @@ using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+
+using static Terraria.GameContent.Animations.Actions.NPCs;
 
 namespace RoA.Content.Tiles.Crafting;
 
@@ -100,6 +103,8 @@ namespace RoA.Content.Tiles.Crafting;
 sealed class Beacon : ModTile {
     private static int _variantToShow;
 
+    public static readonly short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
+
     public override void SetStaticDefaults() {
         Main.tileTable[Type] = true;
         Main.tileFrameImportant[Type] = true;
@@ -159,15 +164,15 @@ sealed class Beacon : ModTile {
 
     //public static int VariantToShow => _variantToShow;
 
-    //public static void UpdateVariants() {
-    //    double time = 50.0;
-    //    if (Main.timeForVisualEffects % time == 0.0) {
-    //        _variantToShow++;
-    //        if (_variantToShow >= Enum.GetNames(typeof(BeaconTE.BeaconVariant)).Length - 2) {
-    //            _variantToShow = 0;
-    //        }
-    //    }
-    //}
+    public static void UpdateVariants() {
+        double perTime = 50.0;
+        if (Main.timeForVisualEffects % perTime == 0.0) {
+            _variantToShow++;
+            if (_variantToShow >= Gems.Length) {
+                _variantToShow = 0;
+            }
+        }
+    }
 
     //public static int GetGemItemID(int i, int j) {
     //    BeaconTE te = GetTE(i, j);
@@ -195,6 +200,23 @@ sealed class Beacon : ModTile {
     //    tileFrameY += (short)(54 * te.GetVariant(false));
     //}
 
+    private int GetGemDropID(int i, int j) => Gems[WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
+
+    private int GetGemItemID(int i, int j) {
+        bool flag2 = HasGemInIt(i, j);
+        if (IsTileValidToBeHovered(i, j)) {
+            if (flag2) {
+                return GetGemDropID(i, j);
+            }
+
+            UpdateVariants();
+            return Gems[_variantToShow];
+        }
+        else {
+            return ModContent.ItemType<Items.Placeable.Crafting.Beacon>();
+        }
+    }
+
     public override void MouseOver(int i, int j) {
         //BeaconTE te = GetTE(i, j);
         //if (te is null) {
@@ -207,7 +229,24 @@ sealed class Beacon : ModTile {
         //    player.noThrow = 2;
         //    player.cursorItemIconEnabled = true;
         //}
+
+        Player player = Main.LocalPlayer;
+        player.cursorItemIconID = GetGemItemID(i, j);
+        if (player.cursorItemIconID != -1) {
+            player.noThrow = 2;
+            player.cursorItemIconEnabled = true;
+        }
     }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        if (HasGemInIt(i, j) && !WorldGenHelper.GetTileSafely(i, j - 1).ActiveTile(Type)) {
+            yield return new Item(GetGemDropID(i, j));
+        }
+
+        yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Beacon>());
+    }
+
+    private bool HasGemInIt(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameY >= 54;
 
     public override bool RightClick(int i, int j) {
         //BeaconTE te = GetTE(i, j);
@@ -217,18 +256,20 @@ sealed class Beacon : ModTile {
 
         if (IsTileValidToBeHovered(i, j)) {
             Player player = Main.LocalPlayer;
-            short[] gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
             Item item = player.GetSelectedItem();
-            if (gems.Contains((short)item.type)) {
+            void actionWithGem(bool remove = false) {
+                int num3 = 0;
                 int variant = 0;
-                for (int k = 0; k < gems.Length; k++) {
-                    if (gems[k] == (short)item.type) {
-                        variant = k + 1;
+                bool flag2 = HasGemInIt(i, j);
+                bool flag = false;
+                if (!remove) {
+                    for (int k = 0; k < Gems.Length; k++) {
+                        if (Gems[k] == (short)item.type) {
+                            variant = k + 1;
+                        }
                     }
                 }
-                int num3 = 0;
-                bool flag2 = WorldGenHelper.GetTileSafely(i, j).TileFrameY < 54;
-                bool flag = false;
+                int gemType = Gems[Math.Max(0, variant - 1)];
                 for (int l = j - 2; l < j + 2; l++) {
                     Tile tile2 = WorldGenHelper.GetTileSafely(i, l);
                     if (tile2.ActiveTile(Type)) {
@@ -249,20 +290,33 @@ sealed class Beacon : ModTile {
                         if (!flag) {
                             setFrame(variant);
                         }
-                        int gemType = gems[variant - 1];
                         bool flag3 = !WorldGenHelper.GetTileSafely(i, l - 1).ActiveTile(Type);
                         if (flag3) {
-                            if (!flag2) {
+                            if (flag2) {
                                 Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
                                     gemType);
                             }
-                            if (flag2) {
+                            else {
                                 player.ConsumeItem(gemType);
                             }
                             SoundEngine.PlaySound(SoundID.MenuTick, new Point(i, l).ToWorldCoordinates());
                         }
                     }
                 }
+            }
+            if (Gems.Contains((short)item.type)) {
+                actionWithGem();
+            }
+            else {
+                actionWithGem(true);
+            }
+        }
+        else {
+            Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
+                         GetGemDropID(i, j));
+            WorldGen.KillTile(i, j);
+            if (!Main.tile[i, j].HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
             }
         }
 

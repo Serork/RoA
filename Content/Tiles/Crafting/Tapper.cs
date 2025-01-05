@@ -137,31 +137,34 @@ partial class Tapper : ModTile {
             if (tapperTE != null) {
                 Item item = GetBottleInTheInventory(player);
                 bool hasBottle = item != null;
-                if (hasBottle && tapperTE.IsReadyToCollectGalipot) {
-                    SoundEngine.PlaySound(SoundID.Item112.WithPitchOffset(-0.1f), position);
-                    if (--item.stack <= 0) {
-                        item.TurnToAir();
-                    }
-                    dropItem((ushort)ModContent.ItemType<Galipot>());
-                    tapperTE.CollectGalipot(player);
+                if (tapperTE.IsReadyToCollectGalipot) {
+                    if (hasBottle) {
+                        SoundEngine.PlaySound(SoundID.Item112.WithPitchOffset(-0.1f), position);
+                        if (--item.stack <= 0) {
+                            item.TurnToAir();
+                        }
+                        dropItem((ushort)ModContent.ItemType<Galipot>());
+                        tapperTE.CollectGalipot(player);
 
-                    player.ApplyItemTime(item);
-                    player.SetItemAnimation(item.useAnimation);
-                    if (Main.netMode == NetmodeID.MultiplayerClient) {
-                        MultiplayerSystem.SendPacket(new ItemAnimationPacket(player, item.useAnimation));
+                        player.ApplyItemTime(item);
+                        player.SetItemAnimation(item.useAnimation);
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new ItemAnimationPacket(player, item.useAnimation));
+                        }
+
+                        return true;
+                    }
+                }
+                else {
+                    //dropItem((ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>());
+                    Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                    WorldGen.KillTile(i, j);
+                    if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
                     }
 
                     return true;
                 }
-
-                ////dropItem((ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>());
-                //Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                //WorldGen.KillTile(i, j);
-                //if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
-                //    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
-                //}
-
-                //return true;
             }
         }
 
