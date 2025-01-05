@@ -123,9 +123,9 @@ sealed class BeaconInterface : UILayer {
             adjustedBeaconPosition.X -= 8f;
             flag = mousePosition.Between(adjustedBeaconPosition, adjustedBeaconPosition + Vector2.One * 26f);
             bool flag4 = Main.InSmartCursorHighlightArea(tilePosition.X, tilePosition.Y, out bool actuallySelected);
-            if ((mousePosition.Between(position, position + sourceRectangle.Size()) ||
-                 flag || actuallySelected)
-            /*&& !PlayerInput.IgnoreMouseInterface*/) {
+            if (mousePosition.Between(position, position + sourceRectangle.Size()) ||
+                flag || 
+                actuallySelected) {
                 Item item = player.GetSelectedItem();
                 if (!Main.mouseItem.IsEmpty()) {
                     item = Main.mouseItem;
