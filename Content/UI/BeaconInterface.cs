@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.CodeAnalysis.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.UI;
@@ -12,7 +13,6 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -37,7 +37,10 @@ sealed class BeaconInterface : UILayer {
             beaconInterface.ActivateSelectively(i, j, beaconTE);
         }
         else {
-            beaconInterface.DeactivateSelectively(i, j, beaconTE);
+            bool flag = Main.InSmartCursorHighlightArea(i, j, out bool actuallySelected);
+            if ((flag && (!actuallySelected || !beaconTE.HasGemInIt)) || !flag) {
+                beaconInterface.DeactivateSelectively(i, j, beaconTE);
+            }
         }
     }
 
@@ -99,10 +102,10 @@ sealed class BeaconInterface : UILayer {
             bool hasGemInIt = beaconTE.HasGemInIt;
             frame = frame.With(hasGemInIt ? (byte)(variant - 1) : variant, 0);
             Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
-            if (!hasGemInIt) {
-                Point beaconTilePosition = beaconPosition.ToTileCoordinates();
-                gemType = Beacon.GetGemItemID(beaconTilePosition.X, beaconTilePosition.Y);
-            }
+            //if (!hasGemInIt) {
+            //    Point beaconTilePosition = beaconPosition.ToTileCoordinates();
+            //    gemType = Beacon.GetGemItemID(beaconTilePosition.X, beaconTilePosition.Y);
+            //}
             Vector2 origin = sourceRectangle.Size() / 2f;
             Vector2 position = beaconPosition + Vector2.UnitX - origin - Vector2.UnitY * sourceRectangle.Height;
             Color color = Color.White;
@@ -123,7 +126,8 @@ sealed class BeaconInterface : UILayer {
             adjustedBeaconPosition.X -= 8f;
             flag = mousePosition.Between(adjustedBeaconPosition, adjustedBeaconPosition + Vector2.One * 26f);
             bool flag4 = Main.InSmartCursorHighlightArea(tilePosition.X, tilePosition.Y, out bool actuallySelected);
-            if (mousePosition.Between(position, position + sourceRectangle.Size()) ||
+            bool flag5 = mousePosition.Between(position, position + sourceRectangle.Size());
+            if (flag5 ||
                 flag || 
                 actuallySelected) {
                 Item item = player.GetSelectedItem();
@@ -131,7 +135,7 @@ sealed class BeaconInterface : UILayer {
                     item = Main.mouseItem;
                     player.mouseInterface = true;
                 }
-                if (!flag && hasGemInIt && !actuallySelected) {
+                if (flag5 && hasGemInIt) {
                     if (Main.mouseRight && Main.mouseRightRelease) {
                         SoundEngine.PlaySound(SoundID.MenuTick, adjustedBeaconPosition);
                         beaconTE.DropGem(player, (int)adjustedBeaconPosition.X, (int)adjustedBeaconPosition.Y);
