@@ -110,7 +110,7 @@ sealed class HellfireFracture : NatureProjectile {
         num13 = Utils.Remap(num13, -1f, 1f, 1.5f, 2f);
         SpriteBatch spriteBatch = Main.spriteBatch;
         spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
         DrawSlash(/*_color * */(num13 / 2f * 0.3f + 0.85f), lightColor);
         for (float num14 = -4f; num14 < 4f; num14 += 1f) {
             DrawSlash(/*_color * */(num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);

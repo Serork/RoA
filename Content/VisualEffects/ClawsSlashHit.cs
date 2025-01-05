@@ -24,7 +24,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
 
         if (Main.rand.NextChance(0.1) && TimeLeft > 5 && TimeLeft < MaxTimeLeft - 5) {
             int type = ModContent.DustType<Slash>();
-            Dust dust = Dust.NewDustPerfect(Position, type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.5f, Main.rand.NextFloat(0.75f, 0.9f) * 1.2f);
+            Dust dust = Dust.NewDustPerfect(Position, type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.25f, Main.rand.NextFloat(0.75f, 0.9f) * 1.2f);
             dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
             dust.noLight = dust.noLightEmittence = true;
             dust.noGravity = true;
@@ -53,16 +53,14 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
         Color color4 = color3 * Scale * 0.5f;
         color4.G = (byte)(color4.G * (double)Scale);
         color4.B = (byte)(color4.R * (0.25 + (double)Scale * 0.75));
-        for (int i = 0; i < 2; i++) {
-            spriteBatch.Draw(Texture, position, null, color4, MathHelper.PiOver2 + Rotation, origin, Scale, effects, 0f);
-            spriteBatch.Draw(Texture, position, null, color3, Rotation, origin, Scale, effects, 0f);
-            spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f, effects, 0f);
-            spriteBatch.Draw(Texture, position, null, color4, Rotation, origin, Scale * 0.6f, effects, 0f);
-            spriteBatch.Draw(Texture, position, null, color * 0.2f, MathHelper.PiOver2 + Rotation, origin, Scale, effects, 0f);
-            spriteBatch.Draw(Texture, position, null, color * 0.2f, Rotation, origin, Scale, effects, 0f);
-            spriteBatch.Draw(Texture, position, null, color * 0.2f, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f, effects, 0f);
-            spriteBatch.Draw(Texture, position, null, color * 0.2f, Rotation, origin, Scale * 0.6f, effects, 0f);
-        }
+        spriteBatch.Draw(Texture, position, null, color4, MathHelper.PiOver2 + Rotation, origin, Scale, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color3, Rotation, origin, Scale, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color4, Rotation, origin, Scale * 0.6f, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color * 0.2f, MathHelper.PiOver2 + Rotation, origin, Scale, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color * 0.2f, Rotation, origin, Scale, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color * 0.2f, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color * 0.2f, Rotation, origin, Scale * 0.6f, effects, 0f);
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value;
         spriteBatch.Draw(texture, position, null, color, Rotation, texture.Size() / 2f, Scale * 0.6f, effects, 0f);
         spriteBatch.EndBlendState();
