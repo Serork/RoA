@@ -20,12 +20,12 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(38);
-        Item.SetDefaultToUsable(-1, 35, useSound: SoundID.Item7);
+        Item.SetDefaultToUsable(-1, 25, useSound: SoundID.Item7);
         Item.SetWeaponValues(14, 4f);
 
-        //NatureWeaponHandler.SetPotentialDamage(Item, 26);
+        NatureWeaponHandler.SetPotentialDamage(Item, 26);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
-        NatureWeaponHandler.SetPotentialUseSpeed(Item, 15);
+        //NatureWeaponHandler.SetPotentialUseSpeed(Item, 15);
     }
 
     public sealed class CactiCasterBase : BaseRodProjectile {

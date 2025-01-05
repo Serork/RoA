@@ -21,13 +21,13 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(36);
-        Item.SetDefaultToUsable(ItemUseStyleID.Shoot, 28, useSound: SoundID.Item17);
+        Item.SetDefaultToUsable(ItemUseStyleID.Shoot, 24, useSound: SoundID.Item17);
         Item.SetWeaponValues(12, 4f);
         Item.SetDefaultOthers(Item.sellPrice(silver: 15), ItemRarityID.Blue);
 
-        //NatureWeaponHandler.SetPotentialDamage(Item, 18);
+        NatureWeaponHandler.SetPotentialDamage(Item, 18);
         NatureWeaponHandler.SetFillingRate(Item, 0.65f);
-        NatureWeaponHandler.SetPotentialUseSpeed(Item, 22);
+        //NatureWeaponHandler.SetPotentialUseSpeed(Item, 22);
 
         Item.staff[Type] = true;
     }

@@ -26,12 +26,12 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(36, 42);
-        Item.SetDefaultToUsable(-1, 28, useSound: SoundID.Item80);
+        Item.SetDefaultToUsable(-1, 24, useSound: SoundID.Item80);
         Item.SetWeaponValues(10, 2f);
 
-        //NatureWeaponHandler.SetPotentialDamage(Item, 12);
+        NatureWeaponHandler.SetPotentialDamage(Item, 16);
         NatureWeaponHandler.SetFillingRate(Item, 0.25f);
-        NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
+        //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
     public sealed class WoodbinderBase : BaseRodProjectile {

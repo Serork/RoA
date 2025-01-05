@@ -20,12 +20,12 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(38);
-        Item.SetDefaultToUsable(-1, 35, useSound: SoundID.Item7);
+        Item.SetDefaultToUsable(-1, 27, useSound: SoundID.Item7);
         Item.SetWeaponValues(8, 1f);
 
-        //NatureWeaponHandler.SetPotentialDamage(Item, 12);
+        NatureWeaponHandler.SetPotentialDamage(Item, 15);
         NatureWeaponHandler.SetFillingRate(Item, 0.45f);
-        NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
+        //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
     public sealed class PastoralRodBase : BaseRodProjectile {
