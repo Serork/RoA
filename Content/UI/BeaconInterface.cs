@@ -108,12 +108,15 @@ sealed class BeaconInterface : UILayer {
             Vector2 drawPosition = position - Main.screenPosition;
             spriteBatch.Draw(texture, drawPosition, frame.GetSourceRectangle(texture), color);
             texture = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Beacon_Icons_Gems").Value;
+            Player player = Main.LocalPlayer;
             if (!hasGemInIt) {
+                if (player.noThrow != 2) {
+                    Beacon.UpdateVariants();
+                }
                 frame = frame.With((byte)Beacon.VariantToShow, 0);
                 spriteBatch.Draw(texture, drawPosition, frame.GetSourceRectangle(texture), color.MultiplyRGBA(Color.Black with { A = 100 }));
             }
             gemType = beaconTE.GetItemID();
-            Player player = Main.LocalPlayer;
             Vector2 mousePosition = Main.MouseWorld;
             bool flag;
             Vector2 adjustedBeaconPosition = beaconPosition;
@@ -142,7 +145,7 @@ sealed class BeaconInterface : UILayer {
                 if (!BeaconTE.Gems.Contains(gemTypeToInsert)) {
                 }
                 else {
-                    if (Main.mouseLeft && Main.mouseLeftRelease) {
+                    if (Main.mouseLeft && Main.mouseLeftRelease && !player.mouseInterface) {
                         bool flag2 = gemType != item.type;
                         if (flag2 || !hasGemInIt) {
                             if (hasGemInIt) {

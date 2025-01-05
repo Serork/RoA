@@ -24,7 +24,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodChest : ModTile {
-	private static List<Point> _drawPoints = [];
+    // separate
+    private static List<Point> _drawPoints = [];
 	private static float _rotationOffset, _scaleOffset;
 
 	public override void SetStaticDefaults()  {
@@ -68,6 +69,7 @@ sealed class ElderwoodChest : ModTile {
         return true;
     }
 
+	// separate
     public override void Load() {
         On_Main.DrawTileEntities += On_Main_DrawTileEntities;
         On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
