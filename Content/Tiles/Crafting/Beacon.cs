@@ -457,6 +457,9 @@ sealed class Beacon : ModTile {
     public static void ActionWithGem(int i, int j, bool remove = false, bool dropItem = true, bool makeDusts = false) {
         Player player = Main.LocalPlayer;
         Item item = player.GetSelectedItem();
+        if (!Main.mouseItem.IsEmpty()) {
+            item = Main.mouseItem;
+        }
         int Type = WorldGenHelper.GetTileSafely(i, j).TileType;
         int num3 = 0;
         int variant = 0;
@@ -498,7 +501,9 @@ sealed class Beacon : ModTile {
                                 gemType);
                         }
                         else {
-                            player.ConsumeItem(gemType);
+                            if (--item.stack <= 0) {
+                                item.TurnToAir();
+                            }
                         }
                     }
                     if (makeDusts) {
