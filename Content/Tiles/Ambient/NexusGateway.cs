@@ -83,7 +83,7 @@ sealed class NexusGateway : ModTile {
     public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
         if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
             Tile tile = Main.tile[i, j];
-            if (Main.rand.NextChance(0.2f) && GetCondition(tile)) {
+            if (Main.rand.NextChance(0.35f) && GetCondition(tile)) {
                 bool right = tile.TileFrameX > 90;
                 int dust = Dust.NewDust(new Vector2(i * 16 - (!right ? 2 : 16), j * 16 + 2), 16, 4, ModContent.DustType<ElderTorchDust>(), 0f, 0f, 100, default, 1f);
                 if (!Main.rand.NextBool(3)) {
