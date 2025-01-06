@@ -13,6 +13,7 @@
 	  <None Remove="Localization\en-US_Mods.RoA.DeathReasons.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Items.Tooltips.hjson" />
+	  <None Remove="Localization\en-US_Mods.RoA.Map.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.NPCs.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Prefixes.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Projectiles.hjson" />

@@ -60,6 +60,8 @@ partial class Tapper : ModTile {
         ImATapper[Type] = true;
         TileSmartInteractCandidateProviderExtended.AddMe[Type] = true;
 
+        AddMapEntry(new Color(169, 125, 93), CreateMapEntryName());
+
         TileID.Sets.InteractibleByNPCs[Type] = true;
     }
 

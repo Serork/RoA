@@ -8,97 +8,97 @@ using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-using static Terraria.GameContent.Animations.Actions.NPCs;
-
 namespace RoA.Content.Tiles.Crafting;
 
-//sealed class BeaconTE : ModTileEntity {
-//    public static readonly short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
+sealed class BeaconTE : ModTileEntity {
+    //public static readonly short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
 
-//    public enum BeaconVariant : byte {
-//        None,
-//        Amethyst,
-//        Topaz,
-//        Sapphire,
-//        Emerald,
-//        Ruby,
-//        Diamond,
-//        Amber,
-//        Length
-//    }
+    //public enum BeaconVariant : byte {
+    //    None,
+    //    Amethyst,
+    //    Topaz,
+    //    Sapphire,
+    //    Emerald,
+    //    Ruby,
+    //    Diamond,
+    //    Amber,
+    //    Length
+    //}
 
-//    private BeaconVariant _variant = BeaconVariant.None;
+    //private BeaconVariant _variant = BeaconVariant.None;
 
-//    public bool HasGemInIt => GetItemID(num3: 0) != -1;
+    //public bool HasGemInIt => GetItemID(num3: 0) != -1;
 
-//    public void RemoveGem() => _variant = BeaconVariant.None;
+    //public void RemoveGem() => _variant = BeaconVariant.None;
 
-//    public void DropGem(Player player, int x, int y) {
-//        if (!HasGemInIt) {
-//            return;
-//        }
+    //public void DropGem(Player player, int x, int y) {
+    //    if (!HasGemInIt) {
+    //        return;
+    //    }
 
-//        int num = Item.NewItem(player.GetSource_Misc("frombeacon"), x, y, 18, 18, GetItemID());
-//        if (Main.netMode == NetmodeID.MultiplayerClient) {
-//            NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num);
-//        }
-//    }
+    //    int num = Item.NewItem(player.GetSource_Misc("frombeacon"), x, y, 18, 18, GetItemID());
+    //    if (Main.netMode == NetmodeID.MultiplayerClient) {
+    //        NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num);
+    //    }
+    //}
 
-//    public void InsertGem(short gemType) {
-//        for (int i = 0; i < Gems.Length; i++) {
-//            if (Gems[i] == gemType) {
-//                _variant = (BeaconVariant)(i + 1);
-//            }
-//        }
-//    }
+    //public void InsertGem(short gemType) {
+    //    for (int i = 0; i < Gems.Length; i++) {
+    //        if (Gems[i] == gemType) {
+    //            _variant = (BeaconVariant)(i + 1);
+    //        }
+    //    }
+    //}
 
-//    public byte GetVariant(bool forDrawing = true, int num = 0) {
-//        bool flag = forDrawing && _variant == BeaconVariant.None;
-//        return Math.Max((byte)((byte)(flag ? BeaconVariant.Length : _variant) + (flag ? -1 : 0) + num), (byte)0);
-//    }
+    //public byte GetVariant(bool forDrawing = true, int num = 0) {
+    //    bool flag = forDrawing && _variant == BeaconVariant.None;
+    //    return Math.Max((byte)((byte)(flag ? BeaconVariant.Length : _variant) + (flag ? -1 : 0) + num), (byte)0);
+    //}
 
-//    public int GetItemID(bool forDrawing = true, int num2 = -1, int num3 = -1) {
-//        int num = num2 != -1 ? num2 : GetVariant(forDrawing, num3);
-//        if (_variant != BeaconVariant.None && num == 7) {
-//            num = 6;
-//        }
-//        return num switch {
-//            >= 0 and <= 6 => Gems[num],
-//            _ => -1,
-//        };
-//    }
+    //public int GetItemID(bool forDrawing = true, int num2 = -1, int num3 = -1) {
+    //    int num = num2 != -1 ? num2 : GetVariant(forDrawing, num3);
+    //    if (_variant != BeaconVariant.None && num == 7) {
+    //        num = 6;
+    //    }
+    //    return num switch {
+    //        >= 0 and <= 6 => Gems[num],
+    //        _ => -1,
+    //    };
+    //}
 
-//    public override void SaveData(TagCompound tag) {
-//        tag[nameof(BeaconTE)] = (byte)_variant;
-//    }
+    //public override void SaveData(TagCompound tag) {
+    //    tag[nameof(BeaconTE)] = (byte)_variant;
+    //}
 
-//    public override void LoadData(TagCompound tag) {
-//        _variant = (BeaconVariant)tag.Get<byte>(nameof(BeaconTE));
-//    }
+    //public override void LoadData(TagCompound tag) {
+    //    _variant = (BeaconVariant)tag.Get<byte>(nameof(BeaconTE));
+    //}
 
-//    public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
-//        if (Main.netMode == NetmodeID.MultiplayerClient) {
-//            NetMessage.SendTileSquare(Main.myPlayer, i, j);
-//            NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type);
+    public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            NetMessage.SendTileSquare(Main.myPlayer, i, j);
+            NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type);
 
-//            return -1;
-//        }
+            return -1;
+        }
 
-//        return Place(i, j);
-//    }
+        return Place(i, j);
+    }
 
-//    public override void OnKill() => DropGem(Main.LocalPlayer, (int)(Position.X * 16f), (int)((Position.Y - 2) * 16f + 8f));
+    //public override void OnKill() => DropGem(Main.LocalPlayer, (int)(Position.X * 16f), (int)((Position.Y - 2) * 16f + 8f));
 
-//    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
+    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
 
-//    public override bool IsTileValidForEntity(int i, int j) => WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>());
-//}
+    public override bool IsTileValidForEntity(int i, int j) => WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>());
+}
 
 sealed class Beacon : ModTile {
     private static int _variantToShow;
@@ -113,12 +113,202 @@ sealed class Beacon : ModTile {
 
         TileID.Sets.HasOutlines[Type] = true;
 
+        AddMapEntry(new Color(238, 51, 53), Lang.GetItemName(ItemID.Ruby));
+        AddMapEntry(new Color(13, 107, 216), Lang.GetItemName(ItemID.Sapphire));
+        AddMapEntry(new Color(33, 184, 115), Lang.GetItemName(ItemID.Emerald));
+        AddMapEntry(new Color(255, 221, 62), Lang.GetItemName(ItemID.Topaz));
+        AddMapEntry(new Color(165, 0, 236), Lang.GetItemName(ItemID.Amethyst));
+        AddMapEntry(new Color(223, 230, 238), Lang.GetItemName(ItemID.Diamond));
+        AddMapEntry(new Color(207, 101, 0), Lang.GetItemName(ItemID.Amber));
+        AddMapEntry(new Color(85, 84, 105), Language.GetOrRegister("Mods.RoA.Map.Beacon"));
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1xX);
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
         TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
         TileObjectData.newTile.DrawYOffset = 2;
-        //TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<BeaconTE>().Hook_AfterPlacement, -1, 0, false);
+        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<BeaconTE>().Hook_AfterPlacement, -1, 0, false);
         TileObjectData.addTile(Type);
+    }
+
+    public static void TeleportPlayerTo(int i, int j, Player player) {
+        if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<Beacon>()) {
+            return;
+        }
+        if (!player.HasItemInInventoryOrOpenVoidBag(GetLargeGemItem(i, j))) {
+            string key = "Mods.RoA.NoNeededLargeGem";
+            Color color = new(255, 240, 20);
+            if (Main.netMode == NetmodeID.SinglePlayer) {
+                Main.NewText(Language.GetTextValue(key), color);
+            }
+            else {
+                ChatHelper.SendChatMessageToClient(NetworkText.FromKey(key), color, player.whoAmI);
+            }
+            return;
+        }
+
+        Vector2 newPos = new Point(i - 1, j - 1).ToWorldCoordinates() - new Vector2(0f, player.HeightOffsetBoost);
+        int num2 = 12;
+        void dusts(Rectangle effectRect, int num4) {
+            for (int k = 0; k < 50; k++) {
+                Microsoft.Xna.Framework.Color color = Microsoft.Xna.Framework.Color.Green;
+                int num5 = Main.rand.Next(4);
+                switch (num5) {
+                    case 0:
+                    case 1:
+                        switch (num4) {
+                            case 1:
+                                color = Color.Purple;
+                                break;
+                            case 2:
+                                color = Color.Yellow;
+                                break;
+                            case 3:
+                                color = Color.Blue;
+                                break;
+                            case 4:
+                                color = Color.Green;
+                                break;
+                            case 5:
+                                color = Color.Red;
+                                break;
+                            case 6:
+                                color = Color.GhostWhite;
+                                break;
+                            case 7:
+                                color = Color.Orange;
+                                break;
+                        }
+                        break;
+                    case 2:
+                        color = Microsoft.Xna.Framework.Color.Yellow;
+                        break;
+                    case 3:
+                        color = Microsoft.Xna.Framework.Color.White;
+                        break;
+                }
+
+                Dust obj = Dust.NewDustPerfect(Main.rand.NextVector2FromRectangle(effectRect), 267);
+                obj.noGravity = true;
+                obj.color = color;
+                obj.velocity *= 2f;
+                obj.scale = 0.8f + Main.rand.NextFloat() * 0.6f;
+                obj.fadeIn = 0.5f;
+            }
+        }
+        int style = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
+        dusts(player.getRect(), style);
+        SoundEngine.PlaySound(SoundID.Item6, player.position);
+        player.Teleport(newPos, num2);
+        player.velocity = Vector2.Zero;
+        SoundEngine.PlaySound(SoundID.Item6, player.position);
+        dusts(player.getRect(), style);
+        int gemType = GetGemDropID(i, j);
+        bool flag =
+            gemType == ItemID.Diamond ? Main.rand.NextBool(3) :
+            (gemType == ItemID.Ruby || gemType == ItemID.Amber) ? Main.rand.NextChance(0.66) :
+            gemType == ItemID.Emerald ? Main.rand.NextChance(0.8) : 
+            gemType == ItemID.Sapphire ? Main.rand.NextChance(0.9) :
+            true;
+        if (flag) {
+            ActionWithGem(i, j, true, false, true);
+        }
+        if (Main.netMode == NetmodeID.Server) {
+            RemoteClient.CheckSection(player.whoAmI, player.position);
+        }
+    }
+
+    public static short GetLargeGemItem(int i, int j) {
+        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
+            case 1:
+                return ItemID.LargeAmethyst;
+            case 2:
+                return ItemID.LargeTopaz;
+            case 3:
+                return ItemID.LargeSapphire;
+            case 4:
+                return ItemID.LargeEmerald;
+            case 5:
+                return ItemID.LargeRuby;
+            case 6:
+                return ItemID.LargeDiamond;
+            case 7:
+                return ItemID.LargeAmber;
+        }
+
+        return -1;
+    }
+
+    public static short GetLargeGemDust(int i, int j) {
+        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
+            case 1:
+                return DustID.GemAmethyst;
+            case 2:
+                return DustID.GemTopaz;
+            case 3:
+                return DustID.GemSapphire;
+            case 4:
+                return DustID.GemEmerald;
+            case 5:
+                return DustID.GemRuby;
+            case 6:
+                return DustID.GemDiamond;
+            case 7:
+                return DustID.GemAmber;
+        }
+
+        return -1;
+    }
+
+    public static LocalizedText GetMapText(int i, int j, int option2 = -1) {
+        ModTile tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType);
+        ushort option = tile.GetMapOption(i, j);
+        switch (option) {
+            case 0:
+                return Lang.GetItemName(ItemID.Ruby);
+            case 1:
+                return Lang.GetItemName(ItemID.Sapphire);
+            case 2:
+                return Lang.GetItemName(ItemID.Emerald);
+            case 3:
+                return Lang.GetItemName(ItemID.Topaz);
+            case 4:
+                return Lang.GetItemName(ItemID.Amethyst);
+            case 5:
+                return Lang.GetItemName(ItemID.Diamond);
+            case 6:
+                return Lang.GetItemName(ItemID.Amber);
+        }
+
+        throw new InvalidOperationException();
+    }
+
+    public override ushort GetMapOption(int i, int j) {
+        if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != Type) {
+            return 7;
+        }
+
+        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
+            case 0:
+                return 7;
+            case 1:
+                return 4;
+            case 2:
+                return 3;
+            case 3:
+                return 1;
+            case 4:
+                return 2;
+            case 5:
+                return 0;
+            case 6:
+                return 5;
+            case 7:
+                return 6;
+            default:
+                break;
+        }
+
+        return base.GetMapOption(i, j);
     }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
@@ -129,9 +319,9 @@ sealed class Beacon : ModTile {
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
-    //public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<BeaconTE>().Place(i, j);
+    public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<BeaconTE>().Place(i, j);
 
-    //public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<BeaconTE>().Kill(i, j);
+    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<BeaconTE>().Kill(i, j);
 
     //private static BeaconTE GetTE(int i, int j) {
     //    BeaconTE foundTE = null;
@@ -154,8 +344,8 @@ sealed class Beacon : ModTile {
     //    return foundTE;
     //}
 
-    private bool IsTileValidToBeHovered(int i, int j) {
-        if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != Type) {
+    public static bool IsTileValidToBeHovered(int i, int j) {
+        if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<Beacon>()) {
             return false;
         }
 
@@ -200,17 +390,23 @@ sealed class Beacon : ModTile {
     //    tileFrameY += (short)(54 * te.GetVariant(false));
     //}
 
-    private int GetGemDropID(int i, int j) => Gems[WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
+    public static int GetGemDropID(int i, int j) => Gems[WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
 
-    private int GetGemItemID(int i, int j) {
+    public static int GetGemItemID(int i, int j, bool forVisuals = false) {
         bool flag2 = HasGemInIt(i, j);
         if (IsTileValidToBeHovered(i, j)) {
             if (flag2) {
                 return GetGemDropID(i, j);
             }
 
-            UpdateVariants();
-            return Gems[_variantToShow];
+            Item item = Main.LocalPlayer.GetSelectedItem();
+            if (forVisuals && Gems.Contains((short)item.type)) {
+                return item.type;
+            }
+            else {
+                UpdateVariants();
+                return Gems[_variantToShow];
+            }
         }
         else {
             return ModContent.ItemType<Items.Placeable.Crafting.Beacon>();
@@ -231,7 +427,7 @@ sealed class Beacon : ModTile {
         //}
 
         Player player = Main.LocalPlayer;
-        player.cursorItemIconID = GetGemItemID(i, j);
+        player.cursorItemIconID = GetGemItemID(i, j, true);
         if (player.cursorItemIconID != -1) {
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
@@ -246,7 +442,68 @@ sealed class Beacon : ModTile {
         yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Beacon>());
     }
 
-    private bool HasGemInIt(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameY >= 54;
+    public static bool HasGemInIt(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameY >= 54;
+
+    public static void ActionWithGem(int i, int j, bool remove = false, bool dropItem = true, bool makeDusts = false) {
+        Player player = Main.LocalPlayer;
+        Item item = player.GetSelectedItem();
+        int Type = WorldGenHelper.GetTileSafely(i, j).TileType;
+        int num3 = 0;
+        int variant = 0;
+        bool flag2 = HasGemInIt(i, j);
+        bool flag = false;
+        if (!remove) {
+            for (int k = 0; k < Gems.Length; k++) {
+                if (Gems[k] == (short)item.type) {
+                    variant = k + 1;
+                }
+            }
+        }
+        int gemType = remove || flag2 ? GetGemDropID(i, j) : Gems[Math.Max(0, variant - 1)];
+        for (int l = j - 2; l < j + 2; l++) {
+            Tile tile2 = WorldGenHelper.GetTileSafely(i, l);
+            if (tile2.ActiveTile(Type)) {
+                short getTileFrameY(int usedVariant) {
+                    return (short)(num3 * 18 + 54 * usedVariant);
+                }
+                void setFrame(int usedVariant) {
+                    tile2.TileFrameY = getTileFrameY(usedVariant);
+                    WorldGen.SquareTileFrame(i, l);
+                    NetMessage.SendTileSquare(-1, i, l, 1, 1);
+                    num3++;
+                }
+                if (flag || (tile2.TileFrameY >= getTileFrameY(variant) &&
+                    tile2.TileFrameY < getTileFrameY(variant + 1))) {
+                    flag = true;
+                    setFrame(0);
+                }
+                if (!flag) {
+                    setFrame(variant);
+                }
+                bool flag3 = !WorldGenHelper.GetTileSafely(i, l - 1).ActiveTile(Type);
+                if (flag3) {
+                    if (dropItem) {
+                        if (flag2) {
+                            Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
+                                gemType);
+                        }
+                        else {
+                            player.ConsumeItem(gemType);
+                        }
+                    }
+                    if (makeDusts) {
+                        Vector2 position = new Point(i, j).ToWorldCoordinates();
+                        SoundEngine.PlaySound(SoundID.Dig, position);
+                        for (int k = 0; k < 7; k++) {
+                            int dust = Dust.NewDust(position, 32, 32, GetLargeGemDust(i, j), Scale: Main.rand.NextFloat(1.5f) * 0.85f);
+                            Main.dust[dust].noGravity = true;
+                        }
+                    }
+                    SoundEngine.PlaySound(SoundID.MenuTick, new Point(i, l).ToWorldCoordinates());
+                }
+            }
+        }
+    }
 
     public override bool RightClick(int i, int j) {
         //BeaconTE te = GetTE(i, j);
@@ -257,63 +514,18 @@ sealed class Beacon : ModTile {
         if (IsTileValidToBeHovered(i, j)) {
             Player player = Main.LocalPlayer;
             Item item = player.GetSelectedItem();
-            void actionWithGem(bool remove = false) {
-                int num3 = 0;
-                int variant = 0;
-                bool flag2 = HasGemInIt(i, j);
-                bool flag = false;
-                if (!remove) {
-                    for (int k = 0; k < Gems.Length; k++) {
-                        if (Gems[k] == (short)item.type) {
-                            variant = k + 1;
-                        }
-                    }
-                }
-                int gemType = Gems[Math.Max(0, variant - 1)];
-                for (int l = j - 2; l < j + 2; l++) {
-                    Tile tile2 = WorldGenHelper.GetTileSafely(i, l);
-                    if (tile2.ActiveTile(Type)) {
-                        short getTileFrameY(int usedVariant) {
-                            return (short)(num3 * 18 + 54 * usedVariant);
-                        }
-                        void setFrame(int usedVariant) {
-                            tile2.TileFrameY = getTileFrameY(usedVariant);
-                            WorldGen.SquareTileFrame(i, l);
-                            NetMessage.SendTileSquare(-1, i, l, 1, 1);
-                            num3++;
-                        }
-                        if (flag || (tile2.TileFrameY >= getTileFrameY(variant) &&
-                            tile2.TileFrameY < getTileFrameY(variant + 1))) {
-                            flag = true;
-                            setFrame(0);
-                        }
-                        if (!flag) {
-                            setFrame(variant);
-                        }
-                        bool flag3 = !WorldGenHelper.GetTileSafely(i, l - 1).ActiveTile(Type);
-                        if (flag3) {
-                            if (flag2) {
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
-                                    gemType);
-                            }
-                            else {
-                                player.ConsumeItem(gemType);
-                            }
-                            SoundEngine.PlaySound(SoundID.MenuTick, new Point(i, l).ToWorldCoordinates());
-                        }
-                    }
-                }
-            }
             if (Gems.Contains((short)item.type)) {
-                actionWithGem();
+                ActionWithGem(i, j);
             }
-            else {
-                actionWithGem(true);
+            else if (HasGemInIt(i, j)) {
+                ActionWithGem(i, j, true);
             }
         }
         else {
-            Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
-                         GetGemDropID(i, j));
+            if (HasGemInIt(i, j)) {
+                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
+                             GetGemDropID(i, j));
+            }
             WorldGen.KillTile(i, j);
             if (!Main.tile[i, j].HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
                 NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
