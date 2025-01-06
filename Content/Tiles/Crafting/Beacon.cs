@@ -135,16 +135,16 @@ sealed class Beacon : ModTile {
             return;
         }
         Color color = new(255, 240, 20);
-        if (!player.IsTileTypeInInteractionRange(597, TileReachCheckSettings.Pylons)) {
-            string key = "Mods.RoA.TooFar";
-            if (Main.netMode == NetmodeID.SinglePlayer) {
-                Main.NewText(Language.GetTextValue(key), color);
-            }
-            else {
-                ChatHelper.SendChatMessageToClient(NetworkText.FromKey(key), color, player.whoAmI);
-            }
-            return;
-        }
+        //if (!player.IsTileTypeInInteractionRange(597, TileReachCheckSettings.Pylons)) {
+        //    string key = "Mods.RoA.TooFar";
+        //    if (Main.netMode == NetmodeID.SinglePlayer) {
+        //        Main.NewText(Language.GetTextValue(key), color);
+        //    }
+        //    else {
+        //        ChatHelper.SendChatMessageToClient(NetworkText.FromKey(key), color, player.whoAmI);
+        //    }
+        //    return;
+        //}
         if (!player.HasItemInInventoryOrOpenVoidBag(GetLargeGemItem(i, j))) {
             string key = "Mods.RoA.NoNeededLargeGem";
             if (Main.netMode == NetmodeID.SinglePlayer) {
