@@ -28,7 +28,7 @@ sealed class BeaconMapLayer : ModMapLayer {
             }
         }
         foreach (BeaconTE beaconTE in beacons) {
-            Point16 tilePosition = new(beaconTE.Position.X - 1, beaconTE.Position.Y - 5);
+            Point16 tilePosition = new(beaconTE.Position.X - 1, beaconTE.Position.Y - 4);
             float num = 1f;
             float scaleIfSelected = num;
             int i = beaconTE.Position.X;
