@@ -1,2 +1,3 @@
 DamageClasses.DruidClass.DisplayName: nature damage
 NoNeededLargeGem: You must have the large gem to teleport to the beacon
+TooFar: You are not close enough to the beacon to teleport

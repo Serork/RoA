@@ -37,7 +37,7 @@ sealed class BeaconMapLayer : ModMapLayer {
                 scaleIfSelected = num * 2f;
             }
             Texture2D value = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Beacon_Icons").Value;
-            bool num2 = Main.DroneCameraTracker == null || !Main.DroneCameraTracker.IsInUse();
+            bool num2 = Main.LocalPlayer.IsTileTypeInInteractionRange(597, TileReachCheckSettings.Pylons) && (Main.DroneCameraTracker == null || !Main.DroneCameraTracker.IsInUse());
             Color color = Color.White;
             if (!num2) {
                 color = Color.Gray * 0.5f;
