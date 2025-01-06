@@ -208,7 +208,7 @@ sealed class Beacon : ModTile {
             (gemType == ItemID.Ruby || gemType == ItemID.Amber) ? Main.rand.NextChance(0.66) :
             gemType == ItemID.Emerald ? Main.rand.NextChance(0.8) : 
             gemType == ItemID.Sapphire ? Main.rand.NextChance(0.9) :
-            true;
+            gemType == ItemID.Topaz ? Main.rand.NextChance(0.95) : true;
         if (flag) {
             ActionWithGem(i, j, true, false, true);
         }
