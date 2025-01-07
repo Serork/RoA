@@ -369,8 +369,14 @@ sealed class Beacon : ModTile {
                         float num28 = Main.rand.NextFloatDirection();
                         Vector2 vector14 = vector13 + Vector2.UnitX * 2f + (rotation + num28 * ((float)Math.PI / 4f) * 0.8f - (float)Math.PI / 2f).ToRotationVector2() * 6f;
                         int num29 = 12;
+                        int width = 16;
+                        float value = Main.rand.NextFloat();
+                        if (value > 0.5f) {
+                            num29 = 8;
+                            width = 13;
+                        }
                         int num30 = Dust.NewDust(vector14 - Vector2.One * (num29 / 2) - new Vector2(4f, -4f) -
-                            Vector2.UnitY * 50f * Main.rand.NextFloat(), 16, num29, num26, velocity.X / 2f, velocity.Y / 2f);
+                            Vector2.UnitY * 50f * Main.rand.NextFloat(), width, num29, num26, velocity.X / 2f, velocity.Y / 2f);
                         Main.dust[num30].velocity = (vector14 - vector13).SafeNormalize(Vector2.Zero) * MathHelper.Lerp(1.5f, 9f, Utils.GetLerpValue(1f, 0f, Math.Abs(num28), clamped: true)) * 0.15f;
                         Main.dust[num30].velocity.Y *= 5f * Main.rand.NextFloat();
                         Main.dust[num30].velocity *= 0.75f;
