@@ -420,6 +420,9 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
 
         Vector2 newPos = new Point(i - 1, j - 1).ToWorldCoordinates() - new Vector2(0f, player.HeightOffsetBoost);
         int num2 = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType).GetMapOption(i, j) + 12;
+        if (num2 == 13) {
+            num2 = 11;
+        }
         void dusts(Rectangle effectRect, int num4) {
             for (int k = 0; k < 50; k++) {
                 Microsoft.Xna.Framework.Color color = Microsoft.Xna.Framework.Color.Green;
@@ -474,6 +477,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         player.Teleport(newPos, num2);
         player.velocity = Vector2.Zero;
         SoundEngine.PlaySound(SoundID.Item6, player.position);
+        SoundEngine.PlaySound(SoundID.Item8, player.position);
         dusts(player.getRect(), style);
         //if (flag) {
         //    //ActionWithGem(i, j, true, false, true);
