@@ -45,7 +45,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                 _position = _pointPosition = new(mousePoint.X, y);
                 //_rotation2 = _rotation3 = (_pointPosition - player.position).X * 0.1f;
             }
-            else if (_leftTimeToReuse <= TimeAfterShootToExist(player) * 0.75f && _makeDust) {
+            else if (_leftTimeToReuse <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
                 _makeDust = false;
                 for (int num559 = 0; num559 < 10; num559++) {
                     bool flag = Main.rand.NextBool(4);
