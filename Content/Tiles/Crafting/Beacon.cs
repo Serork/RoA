@@ -1,11 +1,6 @@
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
-using RoA.Content.Dusts;
-using RoA.Content.Items.Placeable.Crafting;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -18,7 +13,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
