@@ -56,20 +56,20 @@ sealed class BeaconTE : ModTileEntity {
 
     public override void Update() {
         UpdateAnimation(() => {
-            //int i = Position.X;
-            //int j = Position.Y - 2;
-            //if (WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>())) {
-            //    int gemType = Beacon.GetGemDropID(i, j);
-            //    bool flag =
-            //        gemType == ItemID.Diamond ? Main.rand.NextBool(3) :
-            //        (gemType == ItemID.Ruby || gemType == ItemID.Amber) ? Main.rand.NextChance(0.66) :
-            //        gemType == ItemID.Emerald ? Main.rand.NextChance(0.8) :
-            //        gemType == ItemID.Sapphire ? Main.rand.NextChance(0.9) :
-            //        gemType == ItemID.Topaz ? Main.rand.NextChance(0.95) : true;
-            //    if (flag) {
-            //        Beacon.ActionWithGem(i, j, true, false, true);
-            //    }
-            //}
+            int i = Position.X;
+            int j = Position.Y - 2;
+            if (WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>())) {
+                int gemType = Beacon.GetGemDropID(i, j);
+                bool flag =
+                    gemType == ItemID.Diamond ? Main.rand.NextBool(33) :
+                    (gemType == ItemID.Ruby || gemType == ItemID.Amber) ? Main.rand.NextChance(0.66) :
+                    gemType == ItemID.Emerald ? Main.rand.NextChance(0.8) :
+                    gemType == ItemID.Sapphire ? Main.rand.NextChance(0.9) :
+                    gemType != ItemID.Topaz || Main.rand.NextChance(0.95);
+                if (flag) {
+                    Beacon.ActionWithGem(i, j, true, false, true);
+                }
+            }
         });
     }
 
@@ -120,7 +120,7 @@ sealed class BeaconTE : ModTileEntity {
                 }
                 else {
                     OffsetPosition = Vector2.Zero;
-                    float time2 = 50f;
+                    float time2 = 15f;
                     Scale = Vector2.Lerp(Scale, new Vector2(0.2f, 1f), (animationTimer - time) / time2);
                     if (animationTimer >= time + time2) {
                         ResetAnimation();
@@ -647,14 +647,6 @@ sealed class Beacon : ModTile {
                     NetMessage.SendTileSquare(-1, i, l, 1, 1);
                     num3++;
                 }
-                if (flag || (tile2.TileFrameY >= getTileFrameY(variant) &&
-                    tile2.TileFrameY < getTileFrameY(variant + 1))) {
-                    flag = true;
-                    setFrame(0);
-                }
-                if (!flag) {
-                    setFrame(variant);
-                }
                 bool flag3 = !WorldGenHelper.GetTileSafely(i, l - 1).ActiveTile(Type);
                 if (flag3) {
                     if (dropItem) {
@@ -671,8 +663,9 @@ sealed class Beacon : ModTile {
                     Vector2 position = new Point(i, j).ToWorldCoordinates();
                     if (makeDusts) {
                         SoundEngine.PlaySound(SoundID.Dig, position);
-                        for (int k = 0; k < 7; k++) {
-                            int dust = Dust.NewDust(position, 32, 32, GetLargeGemDust(i, j), Scale: Main.rand.NextFloat(1.5f) * 0.85f);
+                        for (int k = 0; k < 8; k++) {
+                            Color color = GetMapColor(i, j);
+                            int dust = Dust.NewDust(position, 4, 4, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color);
                             Main.dust[dust].noGravity = true;
                         }
                         Vector2 gorePosition = position - new Vector2(4f, 6f);
@@ -709,7 +702,17 @@ sealed class Beacon : ModTile {
                             }
                         }
                     }
-                    SoundEngine.PlaySound(SoundID.MenuTick, new Point(i, l).ToWorldCoordinates());
+                    else {
+                        SoundEngine.PlaySound(SoundID.MenuTick, new Point(i, l).ToWorldCoordinates());
+                    }
+                }
+                if (flag || (tile2.TileFrameY >= getTileFrameY(variant) &&
+                    tile2.TileFrameY < getTileFrameY(variant + 1))) {
+                    flag = true;
+                    setFrame(0);
+                }
+                if (!flag) {
+                    setFrame(variant);
                 }
             }
         }
