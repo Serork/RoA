@@ -27,7 +27,7 @@ sealed partial class Lothor : ModNPC {
     private ref float DashTimer => ref NPC.ai[0];
     private ref float DashDelay => ref NPC.ai[1];
     private ref float NoCollisionTimer => ref NPC.localAI[2];
-    private ref float InertiaTimer => ref NPC.ai[0];
+    private ref float StillInJumpBeforeFlightTimer => ref NPC.ai[0];
 
     private float PreparationProgress => Helper.EaseInOut3(DashTimer / DashDelay * 1.25f);
     private bool IsAboutToGoToFlightState => JumpCount > GetJumpCountToEncourageFlightState();
@@ -51,7 +51,13 @@ sealed partial class Lothor : ModNPC {
         else {
             float xVelocity = NPC.velocity.X * 0.085f;
             float maxRotation = 0.3f;
-            rotation = Math.Clamp(xVelocity, -maxRotation, maxRotation);
+            float to = Math.Clamp(xVelocity, -maxRotation, maxRotation);
+            if (StillInJumpBeforeFlightTimer > 0f) {
+                rotation = Utils.AngleLerp(rotation, to, to * 0.25f);
+            }
+            else {
+                rotation = Math.Clamp(xVelocity, -maxRotation, maxRotation);
+            }
         }
         NPC.rotation = rotation;
     }
@@ -93,18 +99,19 @@ sealed partial class Lothor : ModNPC {
                 CurrentFrame = 19;
                 break;
             case LothorAIState.Flight:
-                _drawOffset.Y = 16f;
-
-                _currentColumn = SpriteSheetColumn.Flight;
-                if (NPC.frameCounter <= 0.0) {
-                    CurrentFrame = 20;
-                    NPC.frameCounter++;
-                }
-                else {
-                    double flightFrameRate = 6.0;
-                    if (++NPC.frameCounter > 1.0 + flightFrameRate) {
-                        CurrentFrame++;
-                        NPC.frameCounter = 1.0;
+                if (StillInJumpBeforeFlightTimer <= 0f) {
+                    _drawOffset.Y = 16f;
+                    _currentColumn = SpriteSheetColumn.Flight;
+                    if (NPC.frameCounter <= 0.0) {
+                        CurrentFrame = 20;
+                        NPC.frameCounter++;
+                    }
+                    else {
+                        double flightFrameRate = 6.0;
+                        if (++NPC.frameCounter > 1.0 + flightFrameRate) {
+                            CurrentFrame++;
+                            NPC.frameCounter = 1.0;
+                        }
                     }
                 }
                 if (CurrentFrame > 25) {
@@ -135,7 +142,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     private void FlightState() {
-        if (--InertiaTimer > 0f) {
+        if (--StillInJumpBeforeFlightTimer > 0f) {
             NPC.direction = NPC.velocity.X.GetDirection();
             return;
         }
@@ -224,7 +231,7 @@ sealed partial class Lothor : ModNPC {
                 JumpCount = 0;
                 CurrentAIState = LothorAIState.Flight;
                 ResetDashVariables();
-                InertiaTimer = 10f;
+                StillInJumpBeforeFlightTimer = 10f;
                 return;
             }
             NPC.noTileCollide = NPC.velocity.Y < 0f && NPC.velocity.Length() > dashStrength && Math.Abs(NPC.velocity.X) > dashStrength / 2f;
