@@ -669,7 +669,7 @@ sealed class Beacon : ModTile {
                         SoundEngine.PlaySound(SoundID.Dig, position);
                         for (int k = 0; k < 8; k++) {
                             Color color = GetMapColor(i, j);
-                            int dust = Dust.NewDust(position, 4, 4, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
+                            int dust = Dust.NewDust(position + Vector2.UnitY * 2f, 4, 4, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
                             Main.dust[dust].noGravity = true;
                             Main.dust[dust].color = color;
                             Main.dust[dust].velocity *= 0.5f;
