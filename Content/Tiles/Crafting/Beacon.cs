@@ -59,7 +59,7 @@ sealed class BeaconTE : ModTileEntity {
             return;
         }
 
-        float num = 3.25f;
+        float num = 3f;
         _animationTimer += num;
 
         float time = num;
@@ -80,7 +80,7 @@ sealed class BeaconTE : ModTileEntity {
                 }
                 break;
             case AnimationState.Animation2:
-                time = 15f;
+                time = 10f;
                 if (animationTimer < time) {
                     Scale = Vector2.Lerp(Scale, new Vector2(0.85f, 1.25f) * 1.1f, animationTimer / time);
                 }
@@ -90,7 +90,7 @@ sealed class BeaconTE : ModTileEntity {
                 }
                 break;
             case AnimationState.Animation3:
-                time = 40f;
+                time = 30f;
                 if (animationTimer < time) {
                     if (animationTimer < time / 2f + time / 3f) {
                         OffsetPosition = Vector2.Lerp(OffsetPosition, Main.rand.NextVector2(-5f, 0f, 5f, 10f), 0.75f);
