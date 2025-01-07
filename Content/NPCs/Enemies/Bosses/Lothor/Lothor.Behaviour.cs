@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
@@ -14,21 +15,60 @@ sealed partial class Lothor : ModNPC {
     private enum LothorAIState : byte {
         Fall,
         Idle,
-        Jump
+        Jump,
+        Flight
     }
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
     private Player Target { get; set; }
 
-    private float PreparationProgress => Helper.EaseInOut3(NPC.ai[0] / NPC.ai[1]* 1.25f);
+    private ref float JumpCount => ref NPC.ai[2];
+    private ref float FallFallStrengthIfClose => ref NPC.ai[0];
+    private ref float DashTimer => ref NPC.ai[0];
+    private ref float DashDelay => ref NPC.ai[1];
+    private ref float NoCollisionTimer => ref NPC.localAI[2];
+    private ref float InertiaTimer => ref NPC.ai[0];
+
+    private float PreparationProgress => Helper.EaseInOut3(DashTimer / DashDelay * 1.25f);
+    private bool IsAboutToGoToFlightState => JumpCount > GetJumpCountToEncourageFlightState();
+    private bool IsFlying => CurrentAIState == LothorAIState.Flight;
+
+    private int GetJumpCountToEncourageFlightState() => 3;
 
     public override void AI() {
         HandleActiveState();
+
+        SetRotation();
+        SetOthers();
+    }
+
+    private void SetRotation() {
+        ref float rotation = ref NPC.localAI[3];
+        if (!IsFlying) {
+            rotation = 0f;
+        }
+        else {
+            float xVelocity = NPC.velocity.X * 0.085f;
+            float maxRotation = 0.4f;
+            rotation = Math.Clamp(xVelocity, -maxRotation, maxRotation);
+        }
+        NPC.rotation = rotation;
+    }
+
+    private void SetOthers() {
+        if (IsFlying) {
+            NPC.noTileCollide = true;
+            NPC.noGravity = true;
+
+            return;
+        }
+
+        NPC.noGravity = false;
     }
 
     public override void OnSpawn(IEntitySource source) {
         CurrentAIState = LothorAIState.Idle;
-        NPC.ai[1] = GetDashDelay();
+        DashDelay = GetDashDelay();
         NPC.TargetClosest();
     }
 
@@ -51,6 +91,24 @@ sealed partial class Lothor : ModNPC {
                 _currentColumn = SpriteSheetColumn.Stand;
                 CurrentFrame = 19;
                 break;
+            case LothorAIState.Flight:
+                DrawOffsetY = 16f;
+                _currentColumn = SpriteSheetColumn.Flight;
+                if (NPC.frameCounter <= 0.0) {
+                    CurrentFrame = 20;
+                    NPC.frameCounter++;
+                }
+                else {
+                    double flightFrameRate = 6.0;
+                    if (++NPC.frameCounter > 1.0 + flightFrameRate) {
+                        CurrentFrame++;
+                        NPC.frameCounter = 1.0;
+                    }
+                }
+                if (CurrentFrame > 25) {
+                    CurrentFrame = 20;
+                }
+                break;
         }
     }
 
@@ -67,39 +125,85 @@ sealed partial class Lothor : ModNPC {
                 case LothorAIState.Jump:
                     JumpState();
                     break;
+                case LothorAIState.Flight:
+                    FlightState();
+                    break;
             }
+        }
+    }
+
+    private void FlightState() {
+        if (NPC.velocity.Length() > 10f) {
+            NPC.direction = NPC.velocity.X.GetDirection();
+        }
+        else {
+            NPC.LookAtPlayer(Target);
+        }
+        NPC.directionY = Target.Center.Y < NPC.Center.Y ? -1 : 1;
+
+        if (--InertiaTimer > 0f) {
+            return;
+        }
+
+        Vector2 npcCenter = NPC.Center;
+        Vector2 playerCenter = Target.Center;
+        Vector2 dif = playerCenter - npcCenter;
+        Vector2 velocity = dif - dif.SafeNormalize(Vector2.One) * 200f;
+        float num1287 = 5f;
+        velocity = Vector2.Normalize(velocity) * num1287;
+        int inertia = 30;
+        if (velocity.Length() > 10f) {
+            NPC.velocity.X = (NPC.velocity.X * (float)(inertia - 1) + velocity.X) / (float)inertia;
+            NPC.velocity.Y = (NPC.velocity.Y * (float)(inertia - 1) + velocity.Y) / (float)inertia;
+        }
+        else {
+            NPC.velocity *= (float)Math.Pow(0.97, inertia * 2.0 / inertia);
         }
     }
 
     private void JumpState() {
         NPC.knockBackResist = 0f;
         NPC.noTileCollide = true;
-        void jump(bool extraY = false) {
+        void doJump() {
             float dashStrength = GetDashStrength();
-            float jumpHeightY = (extraY ? 1.1f : 1f) * (int)Math.Abs(NPC.Center.Y - Target.Center.Y) / 16;
-            float jump = jumpHeightY * -0.5f;
+            float yStrength = Math.Abs(NPC.Center.Y - Target.Center.Y) / 16f;
+            float maxSpeedY = dashStrength * 6.5f;
+            yStrength = MathHelper.Clamp(yStrength, -maxSpeedY, maxSpeedY); 
+            if (IsAboutToGoToFlightState) {
+                yStrength = maxSpeedY * 0.25f * Math.Sign(yStrength);
+            }
+            float jumpHeightY = yStrength;
+            float jumpY = jumpHeightY * -0.5f;
             if ((int)(NPC.Center.Y - Target.Center.Y) / 16 > -10) {
-                NPC.velocity.Y = -8f + jump;
+                NPC.velocity.Y = -8f + jumpY;
             }
             else {
-                if (Collision.CanHit(NPC.position, NPC.width, NPC.height, Target.position, Target.width, Target.height)) {
+                if (!Collision.CanHit(NPC.position, NPC.width, NPC.height, Target.position, Target.width, Target.height)) {
                     NPC.noTileCollide = true;
                     NPC.velocity.Y = -(jumpHeightY * -0.5f);
                 }
                 else {
-                    NPC.velocity.Y = -8f + jump;
+                    NPC.velocity.Y = -8f + jumpY;
                 }
             }
             float speed = 5f;
-            int jumpHeightX = (int)MathHelper.Clamp(Math.Abs(NPC.Center.X - Target.Center.X) / 16f, 0f, dashStrength * 6.5f);
+            float maxSpeedX = dashStrength * 6.5f;
+            float xStrength = Math.Abs(NPC.Center.X - Target.Center.X) / 16f;
+            float jumpHeightX = MathHelper.Clamp(xStrength, 0f, maxSpeedX);
+            if (IsAboutToGoToFlightState) {
+                jumpHeightX = maxSpeedX;
+            }
             if (jumpHeightX < 10f) {
                 NPC.velocity.X += speed * dashStrength * 0.5f * NPC.direction;
             }
             else {
                 NPC.velocity.X = jumpHeightX * -0.5f * -(float)NPC.direction;
             }
+
+            // noTileCollide timer
+            NoCollisionTimer = 10f;
         }
-        jump();
+        doJump();
         CurrentAIState = LothorAIState.Fall;
     }
 
@@ -110,6 +214,13 @@ sealed partial class Lothor : ModNPC {
         }
         float dashStrength = GetDashStrength();
         if (NPC.velocity.Y != 0f) {
+            float minLength = 10f;
+            if (NPC.velocity.Length() <= minLength && IsAboutToGoToFlightState) {
+                JumpCount = 0;
+                CurrentAIState = LothorAIState.Flight;
+                ResetDashVariables();
+                InertiaTimer = minLength;
+            }
             NPC.noTileCollide = NPC.velocity.Y < 0f && NPC.velocity.Length() > dashStrength && Math.Abs(NPC.velocity.X) > dashStrength / 2f;
             if (NPC.velocity.X > 3f && NPC.Center.X > Target.Center.X || NPC.velocity.X < -3f && NPC.Center.X < Target.Center.X) {
                 NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 0f, dashStrength / 100f);
@@ -126,10 +237,12 @@ sealed partial class Lothor : ModNPC {
             int maxTilesDistance = 15;
             bool closeRange = distance.Length() < 16 * maxTilesDistance;
             if (NPC.Center.Y < Target.Center.Y && closeRange) {
-                if (NPC.ai[0] < 0.9f) {
-                    NPC.ai[0] += 0.01f;
+                float fallAcceleration = 0.01f;
+                float fallVelocityY = 0.9f;
+                if (FallFallStrengthIfClose < fallVelocityY) {
+                    FallFallStrengthIfClose += fallAcceleration;
                 }
-                NPC.velocity.Y += NPC.ai[0];
+                NPC.velocity.Y += FallFallStrengthIfClose;
             }
         }
         else {
@@ -137,18 +250,24 @@ sealed partial class Lothor : ModNPC {
 
             NPC.velocity.X *= 0.85f + Math.Min(0.05f, Math.Abs(NPC.velocity.X) * 0.025f);
             if (Math.Abs(NPC.velocity.X) < 0.025f) {
-                NPC.ai[0] = 0f;
+                FallFallStrengthIfClose = 0f;
                 NPC.TargetClosest(true);
                 CurrentAIState = LothorAIState.Idle;
                 float dashDelay = GetDashDelay();
-                NPC.ai[1] = dashDelay + dashDelay * 0.333f;
-                NPC.ai[1] /= 2f;
+                DashDelay = dashDelay + dashDelay * 0.333f;
+                DashDelay /= 2f;
             }
+        }
+
+        if (--NoCollisionTimer > 0f) {
+            NPC.noTileCollide = true;
         }
     }
 
+    private float ResetDashVariables() => DashDelay = DashTimer = 0f;
+
     private float GetDashStrength() {
-        return 4f;
+        return 3f;
     }
 
     private float GetDashDelay() {
@@ -166,17 +285,23 @@ sealed partial class Lothor : ModNPC {
         NPC.LookAtPlayer(Target);
         NPC.velocity.X *= 0.875f;
 
-        NPC.ai[0] += 1f - 0.35f * MathHelper.Clamp(NPC.Distance(Target.Center) / 600f, 0f, 1f);
-        if (NPC.ai[0] >= NPC.ai[1]) {
-            NPC.ai[0] = NPC.ai[1] = 0f;
+        HandleBeforeMakingJump();
+    }
+
+    private void HandleBeforeMakingJump() {
+        DashTimer += 1f - 0.35f * MathHelper.Clamp(NPC.Distance(Target.Center) / 600f, 0f, 1f);
+        if (DashTimer >= DashDelay) {
+            ResetDashVariables();
             CurrentAIState = LothorAIState.Jump;
+
+            JumpCount++;
         }
     }
 
     private bool GetTargetPlayer(out Player player) {
-        //if (NPC.target < 0 || NPC.target == 255) {
-        //    NPC.TargetClosest();
-        //}
+        if (NPC.target < 0 || NPC.target == 255) {
+            NPC.TargetClosest();
+        }
         player = Main.player[NPC.target];
         if (player.dead || !player.active) {
             NPC.TargetClosest(false);

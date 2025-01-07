@@ -100,7 +100,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
                         if (Main.netMode != NetmodeID.Server) {
                             void spawnAttackDust(float num) {
-                                if (Main.rand.NextChance(0.435f)) {
+                                if (Main.rand.NextChance(0.4f)) {
                                     Vector2 velocity = Helper.VelocityToPoint(CorePosition, _mousePos, 2.5f + Main.rand.NextFloatRange(1f));
                                     Vector2 vector2 = velocity.RotatedBy(num * (MathHelper.Pi + MathHelper.PiOver4) / 25f);
                                     Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, DustID.BubbleBurst_Blue, Scale: Main.rand.NextFloat(1.05f, 1.35f));
@@ -110,12 +110,12 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                             }
                             float min = 7f, max = 5f;
                             if (Owner.direction == 1) {
-                                for (float num = -min; num < max; num += 1f) {
+                                for (float num = -min; num < max; num += 1.5f) {
                                     spawnAttackDust(num);
                                 }
                             }
                             else {
-                                for (float num = -max; num < min; num += 1f) {
+                                for (float num = -max; num < min; num += 1.5f) {
                                     spawnAttackDust(num);
                                 }
                             }
@@ -191,8 +191,8 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
             if (_shootCount < MAXSHOOTCOUNT || _shot) {
                 return;
             }
-            if (Main.rand.NextChance(step)) {
-                for (int i = 0; i < (int)(2 * step) + 1; i++) {
+            if (Main.rand.NextChance(MathHelper.Clamp(step * 2f, 0f, 0.75f))) {
+                for (int i = 0; i < (int)(2 * step); i++) {
                     Dust dust = Dust.NewDustPerfect(corePosition, 176, Scale: 1f);
                     dust.noGravity = true;
                     dust.fadeIn = 0.9f;
