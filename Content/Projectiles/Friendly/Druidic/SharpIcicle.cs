@@ -48,14 +48,10 @@ sealed class SharpIcicle : NatureProjectile {
             Projectile.velocity.Y += Projectile.ai[2] * 0.1f;
             Projectile.velocity.Y = Math.Min(15f, Projectile.velocity.Y);
             Projectile.velocity.X *= 0.95f;
-            if (Main.netMode != NetmodeID.Server) {
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 8, 8, 176, 0, 0, 0, new Color(Color.Azure.ToVector3()), 1.2f);
-                Main.dust[dust].velocity *= 0.5f;
-                Main.dust[dust].scale *= 0.6f;
-                Main.dust[dust].noLight = true;
-            }
-
-            return;
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 8, 8, 176, 0, 0, 0, new Color(Color.Azure.ToVector3()), 1.2f);
+            Main.dust[dust].velocity *= 0.5f;
+            Main.dust[dust].scale *= 0.6f;
+            Main.dust[dust].noLight = true;
         }
 
         if (player.whoAmI != Main.myPlayer) {
@@ -72,13 +68,11 @@ sealed class SharpIcicle : NatureProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        if (Main.netMode != NetmodeID.Server) {
-            for (int i = 0; i < 5; i++) {
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 8, 8, 176, Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), 0, new Color(Color.Azure.ToVector3()), 1.3f);
-                Main.dust[dust].velocity *= 0.5f;
-                Main.dust[dust].scale *= 0.6f;
-                Main.dust[dust].noLight = true;
-            }
+        for (int i = 0; i < 5; i++) {
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 8, 8, 176, Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), 0, new Color(Color.Azure.ToVector3()), 1.3f);
+            Main.dust[dust].velocity *= 0.5f;
+            Main.dust[dust].scale *= 0.6f;
+            Main.dust[dust].noLight = true;
         }
         SoundEngine.PlaySound(SoundID.Item27, new Vector2(Projectile.position.X, Projectile.position.Y));
     }
