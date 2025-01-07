@@ -7,6 +7,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class Lothor : ModNPC {
+    private Vector2 _drawOffset;
+
     private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet");
 
     public override void FindFrame(int frameHeight) {
@@ -19,7 +21,7 @@ sealed partial class Lothor : ModNPC {
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         Vector2 origin = NPC.frame.Size() / 2f;
-        Vector2 positionOffset = Vector2.UnitY * DrawOffsetY;
+        Vector2 positionOffset = Vector2.UnitY * _drawOffset;
         spriteBatch.Draw(ItsSpriteSheet, NPC.position + positionOffset - screenPos + origin / 2f, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, NPC.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
 
         return false;

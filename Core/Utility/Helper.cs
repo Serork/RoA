@@ -241,7 +241,7 @@ static class Helper {
         }
     }
 
-    public static void LookAtPlayer(this Entity entity, Player player) => entity.direction = -Math.Sign(entity.position.X - player.position.X);
+    public static void LookAtPlayer(this Entity entity, Player player) => entity.direction = -Math.Sign(entity.Center.X - player.Center.X);
 
     public static void LookAt(this Entity entity, Vector2 position) => entity.direction = -Math.Sign(entity.position.X - position.X);
 
