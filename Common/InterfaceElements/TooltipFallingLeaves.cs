@@ -74,11 +74,11 @@ sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip 
 
             Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
                 SpriteData spriteInfo = fallingLeafData.SpriteInfo;
-                spriteInfo.VisualPosition += Vector2.UnitY * maxY - velocity;
+                spriteInfo.VisualPosition += Vector2.UnitY * maxY - velocity + Vector2.UnitY;
                 spriteInfo.Color *= alpha;
                 spriteInfo.Rotation += velocityAffectedExtraRotation;
                 spriteInfo.DrawSelf();
-            }, samplerState: SamplerState.PointClamp);
+            }, samplerState: SamplerState.AnisotropicClamp);
         }
 
         return true;

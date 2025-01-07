@@ -78,14 +78,14 @@ sealed class ItemTooltipLeaves : GlobalItem {
                     _leavesSpriteData = _leavesSpriteData.Framed((byte)Utils.RandomInt(ref seedForRandomness, 3), 0);
                     _leavesSpriteData.Rotation = rotation;
 
-                    Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
-                        _leavesSpriteData.DrawSelf();
-                    }, samplerState: SamplerState.PointClamp);
-
                     TooltipFallingLeaves.FallingLeafData data;
                     data.Index = i;
                     data.SpriteInfo = _leavesSpriteData;
                     TooltipFallingLeaves.MatchData(data);
+
+                    Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
+                        _leavesSpriteData.DrawSelf();
+                    }, samplerState: SamplerState.AnisotropicClamp);
                 }
             }
 
