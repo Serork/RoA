@@ -451,8 +451,8 @@ sealed class Beacon : ModTile {
                         //}
                         break;
                     case 2:
-                        color = Microsoft.Xna.Framework.Color.Yellow;
-                        break;
+                        //color = Microsoft.Xna.Framework.Color.Yellow;
+                        //break;
                     case 3:
                         color = Microsoft.Xna.Framework.Color.White;
                         break;

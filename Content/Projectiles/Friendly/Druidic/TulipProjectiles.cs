@@ -234,6 +234,8 @@ sealed class TulipFlower : NatureProjectile {
         Projectile.penetrate = -1;
     }
 
+    public override bool? CanCutTiles() => false;
+
     public override bool? CanDamage() => true;
 
     protected override void SafeOnSpawn(IEntitySource source) {

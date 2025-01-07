@@ -54,6 +54,7 @@ sealed class BeaconMapLayer : ModMapLayer {
                     color,
                     frame, num, scaleIfSelected, Alignment.Center).IsMouseOver) {
                     Main.cancelWormHole = true;
+                    Main.LocalPlayer.mouseInterface = true;
                     text = /*Language.GetTextValue("Mods.RoA.Map.TeleportTo") + " " + */Beacon.GetMapText(i, j).Value + " " + Language.GetTextValue("Mods.RoA.Map.Beacon");
                     if (Main.mouseLeft && Main.mouseLeftRelease) {
                         Main.mouseLeftRelease = false;
