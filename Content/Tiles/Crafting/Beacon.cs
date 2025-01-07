@@ -676,7 +676,7 @@ sealed class Beacon : ModTile {
                             Main.dust[dust].scale = 0.8f + Main.rand.NextFloat() * 0.6f;
                             Main.dust[dust].fadeIn = 0.5f;
                         }
-                        Vector2 gorePosition = position - new Vector2(4f, 6f);
+                        Vector2 gorePosition = position - new Vector2(4f, 0f);
                         string name = string.Empty;
                         switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
                             case 1:
