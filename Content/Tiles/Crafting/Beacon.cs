@@ -343,7 +343,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                         Vector2 vector14 = vector13 + (rotation + num28 * ((float)Math.PI / 4f) * 0.8f - (float)Math.PI / 2f).ToRotationVector2() * 6f;
                         int num29 = 18;
                         int num30 = Dust.NewDust(vector14 - Vector2.One * (num29 / 2) - new Vector2(4f, -4f) -
-                            Vector2.UnitY * 20f * Main.rand.NextFloat(), 26, num29, num26, velocity.X / 2f, velocity.Y / 2f);
+                            Vector2.UnitY * 20f * Main.rand.NextFloat() + Vector2.UnitY * 5f, 26, num29, num26, velocity.X / 2f, velocity.Y / 2f);
                         Main.dust[num30].velocity = (vector14 - vector13).SafeNormalize(Vector2.Zero) * MathHelper.Lerp(1.5f, 9f, Utils.GetLerpValue(1f, 0f, Math.Abs(num28), clamped: true)) * 0.5f;
                         Main.dust[num30].noGravity = true;
                         Main.dust[num30].velocity.Y *= 1f * Main.rand.NextFloat(1f, 2.5f);
@@ -376,7 +376,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                             width = 13;
                         }
                         int num30 = Dust.NewDust(vector14 - Vector2.One * (num29 / 2) - new Vector2(4f, -4f) -
-                            Vector2.UnitY * 15f * value, width, num29, num26, velocity.X / 2f, velocity.Y / 2f);
+                            Vector2.UnitY * 5f * value + Vector2.UnitY * 2.5f, width, num29, num26, velocity.X / 2f, velocity.Y / 2f);
                         Main.dust[num30].velocity = (vector14 - vector13).SafeNormalize(Vector2.Zero) * MathHelper.Lerp(1.5f, 9f, Utils.GetLerpValue(1f, 0f, Math.Abs(num28), clamped: true)) * 0.15f;
                         Main.dust[num30].velocity.Y *= 5f * Main.rand.NextFloat();
                         Main.dust[num30].velocity *= 0.75f;
