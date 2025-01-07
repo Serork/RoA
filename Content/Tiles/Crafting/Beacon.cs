@@ -165,29 +165,30 @@ sealed class Beacon : ModTile {
                 switch (num5) {
                     case 0:
                     case 1:
-                        switch (num4) {
-                            case 1:
-                                color = Color.Purple;
-                                break;
-                            case 2:
-                                color = Color.Yellow;
-                                break;
-                            case 3:
-                                color = Color.Blue;
-                                break;
-                            case 4:
-                                color = Color.Green;
-                                break;
-                            case 5:
-                                color = Color.Red;
-                                break;
-                            case 6:
-                                color = Color.GhostWhite;
-                                break;
-                            case 7:
-                                color = Color.Orange;
-                                break;
-                        }
+                        color = GetMapColor(i, j);
+                        //switch (num4) {
+                        //    case 1:
+                        //        color = Color.Purple;
+                        //        break;
+                        //    case 2:
+                        //        color = Color.Yellow;
+                        //        break;
+                        //    case 3:
+                        //        color = Color.Blue;
+                        //        break;
+                        //    case 4:
+                        //        color = Color.Green;
+                        //        break;
+                        //    case 5:
+                        //        color = Color.Red;
+                        //        break;
+                        //    case 6:
+                        //        color = Color.GhostWhite;
+                        //        break;
+                        //    case 7:
+                        //        color = Color.Orange;
+                        //        break;
+                        //}
                         break;
                     case 2:
                         color = Microsoft.Xna.Framework.Color.Yellow;
@@ -269,7 +270,30 @@ sealed class Beacon : ModTile {
         return -1;
     }
 
-    public static LocalizedText GetMapText(int i, int j, int option2 = -1) {
+    public static Color GetMapColor(int i, int j) {
+        ModTile tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType);
+        ushort option = tile.GetMapOption(i, j);
+        switch (option) {
+            case 0:
+                return new Color(238, 51, 53);
+            case 1:
+                return new Color(13, 107, 216);
+            case 2:
+                return new Color(33, 184, 115);
+            case 3:
+                return new Color(255, 221, 62);
+            case 4:
+                return new Color(165, 0, 236);
+            case 5:
+                return new Color(223, 230, 238);
+            case 6:
+                return new Color(207, 101, 0);
+        }
+
+        throw new InvalidOperationException();
+    }
+
+    public static LocalizedText GetMapText(int i, int j) {
         ModTile tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType);
         ushort option = tile.GetMapOption(i, j);
         switch (option) {
