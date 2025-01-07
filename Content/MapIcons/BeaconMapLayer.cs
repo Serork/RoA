@@ -33,7 +33,7 @@ sealed class BeaconMapLayer : ModMapLayer {
             float scaleIfSelected = num;
             int i = beaconTE.Position.X;
             int j = beaconTE.Position.Y - 1;
-            if (Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(Beacon.GetLargeGemItem(i, j))) {
+            if (Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(Beacon.GetLargeGemItemID(i, j))) {
                 /*if (Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(Beacon.GetLargeGemItem(i, j))) */ {
                     scaleIfSelected = num * 2f;
                 }

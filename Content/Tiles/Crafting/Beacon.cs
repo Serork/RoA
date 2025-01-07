@@ -57,7 +57,7 @@ sealed class BeaconTE : ModTileEntity {
         int i = Position.X;
         int j = Position.Y - 2;
         if (Beacon.HasGemInIt(i, j)) {
-            Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Beacon.GetMapColor(i, j).ToVector3());
+            Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Beacon.GetEffectsColor(i, j).ToVector3());
         }
 
         UpdateAnimation(() => {
@@ -313,7 +313,7 @@ sealed class Beacon : ModTile {
             Vector2 drawPos = position - Main.screenPosition;
             drawPos.X += 1f;
             drawPos.Y -= 4f;
-            Color color = GetMapColor(i, j).MultiplyRGB(new Color(250, 250, 250));
+            Color color = GetEffectsColor(i, j).MultiplyRGB(new Color(250, 250, 250));
             Vector2 scale = beaconTE.IsUsed ? beaconTE.Scale : new(0.2f, 1f);
             //color *= MathHelper.Clamp(Lighting.Brightness(i, j), 0.25f, 1f);
             for (float k = -MathHelper.Pi; k <= MathHelper.Pi; k += MathHelper.PiOver2) {
@@ -405,7 +405,7 @@ sealed class Beacon : ModTile {
         //    }
         //    return;
         //}
-        if (!player.HasItemInInventoryOrOpenVoidBag(GetLargeGemItem(i, j))) {
+        if (!player.HasItemInInventoryOrOpenVoidBag(GetLargeGemItemID(i, j))) {
             string key = "Mods.RoA.NoNeededLargeGem";
             if (Main.netMode == NetmodeID.SinglePlayer) {
                 Main.NewText(Language.GetTextValue(key), color);
@@ -425,7 +425,7 @@ sealed class Beacon : ModTile {
                 switch (num5) {
                     case 0:
                     case 1:
-                        color = GetMapColor(i, j);
+                        color = GetEffectsColor(i, j);
                         //switch (num4) {
                         //    case 1:
                         //        color = Color.Purple;
@@ -487,7 +487,7 @@ sealed class Beacon : ModTile {
         }
     }
 
-    public static short GetLargeGemItem(int i, int j) {
+    public static short GetLargeGemItemID(int i, int j) {
         switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
             case 1:
                 return ItemID.LargeAmethyst;
@@ -508,7 +508,7 @@ sealed class Beacon : ModTile {
         return -1;
     }
 
-    public static short GetLargeGemDust(int i, int j) {
+    public static short GetLargeGemDustID(int i, int j) {
         switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
             case 1:
                 return DustID.GemAmethyst;
@@ -529,7 +529,7 @@ sealed class Beacon : ModTile {
         return -1;
     }
 
-    public static Color GetMapColor(int i, int j) {
+    public static Color GetEffectsColor(int i, int j) {
         ModTile tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType);
         ushort option = tile.GetMapOption(i, j);
         switch (option) {
@@ -785,7 +785,7 @@ sealed class Beacon : ModTile {
                     if (makeDusts) {
                         SoundEngine.PlaySound(SoundID.Dig, position);
                         for (int k = 0; k < 8; k++) {
-                            Color color = GetMapColor(i, j);
+                            Color color = GetEffectsColor(i, j);
                             int dust = Dust.NewDust(position + Vector2.UnitY * 2f, 4, 4, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
                             Main.dust[dust].noGravity = true;
                             Main.dust[dust].color = color;
