@@ -54,12 +54,31 @@ sealed class BeaconTE : ModTileEntity {
         _animationTimer = 0f;
     }
 
-    public void UpdateAnimation() {
+    public override void Update() {
+        UpdateAnimation(() => {
+            //int i = Position.X;
+            //int j = Position.Y - 2;
+            //if (WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>())) {
+            //    int gemType = Beacon.GetGemDropID(i, j);
+            //    bool flag =
+            //        gemType == ItemID.Diamond ? Main.rand.NextBool(3) :
+            //        (gemType == ItemID.Ruby || gemType == ItemID.Amber) ? Main.rand.NextChance(0.66) :
+            //        gemType == ItemID.Emerald ? Main.rand.NextChance(0.8) :
+            //        gemType == ItemID.Sapphire ? Main.rand.NextChance(0.9) :
+            //        gemType == ItemID.Topaz ? Main.rand.NextChance(0.95) : true;
+            //    if (flag) {
+            //        Beacon.ActionWithGem(i, j, true, false, true);
+            //    }
+            //}
+        });
+    }
+
+    public void UpdateAnimation(Action onEnd) {
         if (!IsUsed) {
             return;
         }
 
-        float num = 3f;
+        float num = 1f;
         _animationTimer += num;
 
         float time = num;
@@ -101,10 +120,11 @@ sealed class BeaconTE : ModTileEntity {
                 }
                 else {
                     OffsetPosition = Vector2.Zero;
-                    float time2 = 20f;
+                    float time2 = 50f;
                     Scale = Vector2.Lerp(Scale, new Vector2(0.2f, 1f), (animationTimer - time) / time2);
                     if (animationTimer >= time + time2) {
                         ResetAnimation();
+                        onEnd();
                     }
                 }
                 break;
@@ -230,8 +250,6 @@ sealed class Beacon : ModTile {
         }
         BeaconTE beaconTE = GetTE(i, j);
         if (HasGemInIt(i, j) && beaconTE != null) {
-            beaconTE.UpdateAnimation();
-
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;
@@ -334,13 +352,6 @@ sealed class Beacon : ModTile {
         player.velocity = Vector2.Zero;
         SoundEngine.PlaySound(SoundID.Item6, player.position);
         dusts(player.getRect(), style);
-        int gemType = GetGemDropID(i, j);
-        bool flag =
-            gemType == ItemID.Diamond ? Main.rand.NextBool(3) :
-            (gemType == ItemID.Ruby || gemType == ItemID.Amber) ? Main.rand.NextChance(0.66) :
-            gemType == ItemID.Emerald ? Main.rand.NextChance(0.8) : 
-            gemType == ItemID.Sapphire ? Main.rand.NextChance(0.9) :
-            gemType == ItemID.Topaz ? Main.rand.NextChance(0.95) : true;
         //if (flag) {
         //    //ActionWithGem(i, j, true, false, true);
         //}
