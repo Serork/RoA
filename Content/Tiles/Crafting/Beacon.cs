@@ -455,9 +455,9 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                         //        break;
                         //}
                         break;
-                    case 2:
-                        color = Microsoft.Xna.Framework.Color.Yellow;
-                        break;
+                    //case 2:
+                    //    color = Microsoft.Xna.Framework.Color.Yellow;
+                    //    break;
                     case 3:
                         color = Microsoft.Xna.Framework.Color.White;
                         break;
