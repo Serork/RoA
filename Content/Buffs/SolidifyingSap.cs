@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Sets;
+using RoA.Content.Dusts;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -18,14 +19,15 @@ sealed class SolidifyingSap : ModBuff {
     }
 
 	public override void Update(Player player, ref int buffIndex) {
-		player.velocity.X *= 0.7f;
+		player.velocity.X *= 0.85f;
 		player.GetModPlayer<SolidifyingSapPlayer>().solidifyingSap = true;
 	}
 
 	public override void Update(NPC npc, ref int buffIndex) {
 		npc.GetGlobalNPC<SolidifyingSapNPC>().solidifyingSap = true;
-		float value = 0.7f * (1f - MathHelper.Clamp(npc.knockBackResist, 0f, 1f));
-		npc.velocity *= value;
+		float value = MathHelper.Clamp(npc.knockBackResist, 0f, 1f);
+		float value2 = MathHelper.Lerp(value, 1f, (1f - value) * 0.75f);
+        npc.velocity *= value2;
 	}
 }
 
@@ -42,10 +44,10 @@ sealed class SolidifyingSapPlayer : ModPlayer {
 
         if (solidifyingSap) {
 			if (Main.rand.Next(4) == 0 && drawInfo.shadow == 0.0) {
-				int _dust = Dust.NewDust(drawInfo.Position - new Vector2(2f, 2f), Player.width, Player.height, DustID.AmberBolt, Player.velocity.X * 0.4f, 3f, 100, default, 0.8f);
-				Main.dust[_dust].noGravity = false;
-				Main.dust[_dust].velocity *= 1.1f;
-				Main.dust[_dust].velocity.Y = Main.dust[_dust].velocity.Y * -0.5f;
+				int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f, 2f), Player.width, Player.height, ModContent.DustType<Galipot>(), Player.velocity.X * 0.4f, 3f, 50, default, 0.8f);
+				Main.dust[dust].noGravity = false;
+				Main.dust[dust].velocity *= 1.1f;
+				Main.dust[dust].velocity.Y = Main.dust[dust].velocity.Y * -0.5f;
 			}
 			r *= 1f;
 			g *= 0.5f;
@@ -71,10 +73,10 @@ sealed class SolidifyingSapNPC : GlobalNPC {
 			if (Main.rand.NextBool(1, 3)) {
 				for (int k = 0; k < 2; k++) {
 					if (Main.rand.NextBool(1, 2)) {
-						var _dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.AmberBolt, npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 100, default, 0.8f);
-						Main.dust[_dust].noGravity = true;
-						Main.dust[_dust].noLight = true;
-						Main.dust[_dust].velocity.Y += 2f;
+						var dust = Dust.NewDust(npc.position, npc.width, npc.height, ModContent.DustType<Galipot>(), npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 50, default, 0.8f);
+						Main.dust[dust].noGravity = true;
+						Main.dust[dust].noLight = true;
+						Main.dust[dust].velocity.Y += 2f;
 					}
 				}
 			}

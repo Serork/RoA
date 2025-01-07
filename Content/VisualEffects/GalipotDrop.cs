@@ -16,6 +16,7 @@ namespace RoA.Content.VisualEffects;
 
 sealed class GalipotDrop : VisualEffect<GalipotDrop> {
     public Projectile Projectile;
+    public bool ShouldDrop;
 
     private float _opacity;
 
@@ -46,7 +47,9 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
         if (Collision.SolidCollision(Position, 0, 0) || flag) {
             if (!flag) {
                 Velocity = Vector2.UnitY;
-                Position.Y += 0.05f * Main.rand.NextFloat();
+                if (!ShouldDrop) {
+                    Position.Y += 0.05f * Main.rand.NextFloat();
+                }
             }
             else {
                 Velocity = Vector2.Zero;
@@ -57,7 +60,12 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
         }
         else {
             Velocity *= 0.98f;
-            Velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.21f * Scale * 0.1f);
+            if (ShouldDrop) {
+                Velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.21f * Scale * 0.1f);
+            }
+            else {
+                Velocity = Vector2.Zero;
+            }
             Position += Velocity;
             Scale *= 0.98f;
         }
@@ -73,26 +81,19 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
     private void DrawSelf(SpriteBatch spritebatch) {
         spritebatch.End();
         spritebatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-        float opacity = _opacity/* * 1.5f*/;
+        float opacity = _opacity;
         Vector2 toCorner = new Vector2(0f, Scale).RotatedBy(Rotation);
-        Color color2 = new Color(201, 85, 8) * opacity * 1f;
+        Color color2 = new Color(204, 128, 14) * opacity * 1f;
         Color color1 = new Color(126, 33, 0) * opacity * 1f;
+
+        color1 = Color.Lerp(color1, color2, 0.65f);
         List<Vertex2D> bars = [
-            new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, Color.Lerp(color1, color2, Scale).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(0f, 0f, 0f)),
-        new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), Color.Lerp(color1, color2, Scale).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)),  new Vector3(0f, 1f, 0f)),
-        new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), Color.Lerp(color1, color2, Scale).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 0f, 0f)),
-        new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), Color.Lerp(color1, color2, Scale).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 1f, 0f))
+            new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(0f, 0f, 0f)),
+            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)),  new Vector3(0f, 1f, 0f)),
+            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 0f, 0f)),
+            new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 1f, 0f))
         ];
         Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.Textures + "Lightball3").Value;
-        Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-        color1 = new Color(255, 241, 44) * opacity * 0.15f;
-        color2 = Color.White * opacity * 0.15f;
-        bars = [
-            new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, Color.Lerp(color1, color2, Scale).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(0f, 0f, 0f)),
-        new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), Color.Lerp(color1, color2, Scale).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)),  new Vector3(0f, 1f, 0f)),
-        new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), Color.Lerp(color1, color2, Scale).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 0f, 0f)),
-        new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), Color.Lerp(color1, color2, Scale).MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 1f, 0f))
-        ];
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         spritebatch.EndBlendState();

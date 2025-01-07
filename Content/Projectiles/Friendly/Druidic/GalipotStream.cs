@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.VisualEffects;
+using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.VisualEffects;
 using RoA.Core;
@@ -40,7 +41,7 @@ sealed class GalipotStream : NatureProjectile {
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.immune[Projectile.owner] = 20;
         float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(20, (int)(60f * num2 * 2f));
+        target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f));
         //if (Projectile.ai[1] != 1f) {
         //    Projectile.Kill();
         //}
@@ -48,7 +49,7 @@ sealed class GalipotStream : NatureProjectile {
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
         float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(20, (int)(60f * num2 * 2f));
+        target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f));
         //if (Projectile.ai[1] != 1f) {
         //    Projectile.Kill();
         //}
@@ -100,13 +101,26 @@ sealed class GalipotStream : NatureProjectile {
                 drop.Scale = Main.rand.NextFloat(8f, 10f) * Projectile.scale;
                 drop.Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 drop.AI0 = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+                drop.ShouldDrop = Projectile.velocity.Length() < 1f || Projectile.ai[1] != 1f;
             }
         }
         if (IsActive) {
+            for (int num164 = 0; num164 < 2; num164++) {
+                if (Main.rand.NextBool(4)) {
+                    Dust obj14 = Main.dust[Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, ModContent.DustType<Galipot>(), Projectile.velocity.X, Projectile.velocity.Y, 150)];
+                    obj14.noGravity = true;
+                    obj14.color = default;
+                    obj14.velocity = obj14.velocity / 4f + Projectile.velocity / 2f;
+                    obj14.scale = 1.2f;
+                    obj14.position = Projectile.Center + Main.rand.NextFloat() * Projectile.velocity * 2f;
+                    obj14.velocity *= 0.5f;
+                }
+            }
+
             drop();
             if (Main.rand.NextBool(2)) {
                 Vector2 pos = Projectile.Center - new Vector2(4f) + Projectile.velocity * Main.rand.NextFloat(1f);
-                Dust dust = Dust.NewDustDirect(pos - Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(1.25f, 3f), 6, 6, ModContent.DustType<Galipot>(), 0, 0, 0, default, 0.6f + Main.rand.NextFloatRange(0.2f));
+                Dust dust = Dust.NewDustDirect(pos - Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(1.25f, 3f), 6, 6, ModContent.DustType<Galipot>(), 0, 0, 50, default, 0.6f + Main.rand.NextFloatRange(0.2f));
                 dust.velocity *= 0.3f;
                 dust.noGravity = true;
             }
