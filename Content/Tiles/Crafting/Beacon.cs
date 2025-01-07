@@ -267,7 +267,7 @@ sealed class Beacon : ModTile {
         Main.dust[dust].noGravity = true;
         Main.dust[dust].color = color;
         Main.dust[dust].velocity *= 0.1f;
-        Main.dust[dust].velocity.Y -= 0.1f;
+        Main.dust[dust].velocity.Y -= 0.25f;
         Main.dust[dust].scale = 0.8f + Main.rand.NextFloat() * 0.6f;
         Main.dust[dust].fadeIn = 0.5f;
     }
@@ -373,6 +373,7 @@ sealed class Beacon : ModTile {
                             Vector2.UnitY * 50f * Main.rand.NextFloat(), 16, num29, num26, velocity.X / 2f, velocity.Y / 2f);
                         Main.dust[num30].velocity = (vector14 - vector13).SafeNormalize(Vector2.Zero) * MathHelper.Lerp(1.5f, 9f, Utils.GetLerpValue(1f, 0f, Math.Abs(num28), clamped: true)) * 0.15f;
                         Main.dust[num30].velocity.Y *= 5f * Main.rand.NextFloat();
+                        Main.dust[num30].velocity *= 0.75f;
                         Main.dust[num30].noGravity = true;
                         Main.dust[num30].scale = num27;
                         Main.dust[num30].fadeIn = 0.5f;
