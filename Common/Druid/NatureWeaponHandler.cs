@@ -22,6 +22,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     internal DruidicPrefix ActivePrefix { get; set; }
 
     public float FillingRate => _fillingRate;
+    public ushort PotentialDamage => _basePotentialDamage;
 
     public override bool InstancePerEntity => true;
 

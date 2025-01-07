@@ -1,4 +1,5 @@
-﻿using RoA.Core;
+﻿using RoA.Common.Druid;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -17,6 +18,16 @@ abstract class NatureItem : ModItem {
         }
 
         SafeSetDefaults2();
+
+        if (Item.IsAWeapon()) {
+            NatureWeaponHandler handler = Item.GetGlobalItem<NatureWeaponHandler>();
+            if (handler.HasPotentialDamage()) {
+                int damageGap = handler.PotentialDamage - 2;
+                if (Item.damage > damageGap) {
+                    Item.damage = damageGap;
+                }
+            }
+        }
     }
 
     protected virtual void SafeSetDefaults() { }
