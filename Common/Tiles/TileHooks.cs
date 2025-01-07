@@ -29,6 +29,10 @@ sealed class TileHooks {
         void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing);
     }
 
+    public interface ITileHaveExtraDraws {
+        void PostDrawExtra(SpriteBatch spriteBatch, Point pos);
+    }
+
     public interface ITileFlameData {
         public struct TileFlameData {
             public Texture2D flameTexture;

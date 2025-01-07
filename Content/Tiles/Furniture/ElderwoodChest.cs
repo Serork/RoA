@@ -1,8 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Dusts;
-using RoA.Content.Tiles.Crafting;
+using RoA.Common.Tiles;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -14,7 +13,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
@@ -23,7 +21,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Furniture;
 
-sealed class ElderwoodChest : ModTile {
+sealed class ElderwoodChest : ModTile, TileHooks.ITileHaveExtraDraws {
     // separate
     private static List<Point> _drawPoints = [];
 	private static float _rotationOffset, _scaleOffset;
@@ -61,19 +59,38 @@ sealed class ElderwoodChest : ModTile {
 	}
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
-		Point position = new(i, j);
-        if (!_drawPoints.Contains(position)) {
-			_drawPoints.Add(position);
-		}
+        TileHelper.AddPostDrawPoint(this, i, j);
 
         return true;
     }
 
-	// separate
+	void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+        int i = pos.X;
+        int j = pos.Y;
+        ulong speed = ((ulong)j << 32) | (ulong)i;
+        float posX = Utils.RandomInt(ref speed, -12, 13) * 0.1f;
+        float directionMax = posX;
+        Tile tile = Main.tile[i, j];
+        float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
+        bool flag2 = TileLoader.GetTile(tile.TileType).IsLockedChest(i, j);
+        if (flag2 && tile.TileFrameX == 36 && tile.TileFrameY == 0) {
+            Vector2 zero = Vector2.Zero;
+            Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "WoodbinderRune").Value;
+            Vector2 origin = new Vector2(74, 74) / 2f;
+            for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
+                Main.spriteBatch.Draw(texture,
+                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
+                                  new Vector2(-3.5f, 0.5f) +
+                                  Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
+                                  null,
+                                  Color.White.MultiplyRGBA(Lighting.GetColor(i, j)) * 0.5f * colorValue, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
+            }
+        }
+    }
+
+    // separate
     public override void Load() {
         On_Main.DrawTileEntities += On_Main_DrawTileEntities;
-        On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
-        On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
     }
 
 	private void On_Main_DrawTileEntities(On_Main.orig_DrawTileEntities orig, Main self, bool solidLayer, bool overRenderTargets, bool intoRenderTargets) {
@@ -85,43 +102,6 @@ sealed class ElderwoodChest : ModTile {
 
 		orig(self, solidLayer, overRenderTargets, intoRenderTargets);
 	}
-
-	private void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
-		_drawPoints.Clear();
-	}
-
-	private void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
-		orig(self);
-
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-		float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
-		foreach (Point position in _drawPoints) {
-			int i = position.X, j = position.Y;
-			ulong speed = ((ulong)j << 32) | (ulong)i;
-			float posX = Utils.RandomInt(ref speed, -12, 13) * 0.1f;
-			float directionMax = posX;
-			Tile tile = Main.tile[i, j];
-			var modTile = TileLoader.GetTile(tile.TileType);
-			if (modTile == null) {
-				continue;
-			}
-			bool flag2 = modTile.IsLockedChest(i, j);
-			if (flag2 && tile.TileFrameX == 36 && tile.TileFrameY == 0) {
-				Vector2 zero = Vector2.Zero;
-				Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "WoodbinderRune").Value;
-				Vector2 origin = new Vector2(74, 74) / 2f;
-				for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
-					Main.spriteBatch.Draw(texture,
-									  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
-									  new Vector2(-3.5f, 0.5f) +
-									  Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
-									  null,
-									  Color.White.MultiplyRGBA(Lighting.GetColor(i, j)) * 0.5f * colorValue, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
-				}
-			}
-		}
-        Main.spriteBatch.End();
-    }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => !IsLockedChest(i, j);
 

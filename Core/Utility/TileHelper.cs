@@ -33,7 +33,8 @@ static class TileHelper {
 
     private static List<(ModTile, Point)> _fluentTiles = [];
 
-    public static Dictionary<int, HangingTileInfo> HangingTile = [];
+    public static Dictionary<int, HangingTileInfo> HangingTile { get; private set; } = [];
+    public static List<(ModTile, Point)> PostDrawPoints { get; private set; } = [];
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_sunflowerWindCounter")]
     public extern static ref double TileDrawing_sunflowerWindCounter(TileDrawing tileDrawing);
@@ -55,6 +56,13 @@ static class TileHelper {
             return;
         }
         _fluentTiles.Add((modTile, new Point(i, j)));
+    }
+
+    public static void AddPostDrawPoint(ModTile modTile, int i, int j) {
+        if (PostDrawPoints.Contains((modTile, new Point(i, j)))) {
+            return;
+        }
+        PostDrawPoints.Add((modTile, new Point(i, j)));
     }
 
     public static void Load() {
@@ -80,6 +88,27 @@ static class TileHelper {
         };
 
         On_TileDrawing.DrawMultiTileVinesInWind += On_TileDrawing_DrawMultiTileVinesInWind;
+
+        On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
+        On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
+    }
+
+    private static void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
+        orig(self);
+
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        foreach ((ModTile modTile, Point position) in PostDrawPoints) {
+            if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null) {
+                tileHaveExtras.PostDrawExtra(Main.spriteBatch, position);
+            }
+        }
+        Main.spriteBatch.End();
+    }
+
+    private static void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
+        orig(self);
+
+        PostDrawPoints.Clear();
     }
 
     public static void Unload() {
@@ -92,6 +121,9 @@ static class TileHelper {
 
         HangingTile.Clear();
         HangingTile = null;
+
+        PostDrawPoints.Clear();
+        PostDrawPoints = null;
     }
 
     private static void On_TileDrawing_DrawMultiTileVinesInWind(On_TileDrawing.orig_DrawMultiTileVinesInWind orig, TileDrawing self, Vector2 screenPosition, Vector2 offSet, int topLeftX, int topLeftY, int sizeX, int sizeY) {

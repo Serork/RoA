@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Tiles;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -216,7 +217,7 @@ sealed class BeaconTE : ModTileEntity {
     //}
 }
 
-sealed class Beacon : ModTile {
+sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     private static int _variantToShow;
 
     public static readonly short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
@@ -297,17 +298,16 @@ sealed class Beacon : ModTile {
         TileObjectData.addTile(Type);
     }
 
-    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+        int i = pos.X;
+        int j = pos.Y;
         if (!(WorldGenHelper.GetTileSafely(i, j + 1).TileType == Type &&
-            WorldGenHelper.GetTileSafely(i, j - 1).TileType == Type)) {
+              WorldGenHelper.GetTileSafely(i, j - 1).TileType == Type)) {
             return;
         }
         BeaconTE beaconTE = GetTE(i, j);
         if (HasGemInIt(i, j) && beaconTE != null) {
-            Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen) {
-                zero = Vector2.Zero;
-            }
+            Vector2 zero = Vector2.Zero;
             Vector2 position = new Point(i, j).ToWorldCoordinates();
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Beacon_Light");
             Vector2 drawPos = position - Main.screenPosition;
@@ -390,6 +390,8 @@ sealed class Beacon : ModTile {
         }
     }
 
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => TileHelper.AddPostDrawPoint(this, i, j);
+
     public static void TeleportPlayerTo(int i, int j, Player player) {
         if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<Beacon>()) {
             return;
@@ -451,8 +453,8 @@ sealed class Beacon : ModTile {
                         //}
                         break;
                     case 2:
-                        //color = Microsoft.Xna.Framework.Color.Yellow;
-                        //break;
+                        color = Microsoft.Xna.Framework.Color.Yellow;
+                        break;
                     case 3:
                         color = Microsoft.Xna.Framework.Color.White;
                         break;
