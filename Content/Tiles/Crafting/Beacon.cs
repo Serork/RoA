@@ -425,7 +425,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
         void dusts(Rectangle effectRect, int num4) {
             for (int k = 0; k < 50; k++) {
-                Microsoft.Xna.Framework.Color color = Microsoft.Xna.Framework.Color.Green;
+                Microsoft.Xna.Framework.Color color = new Color(136, 219, 227);
                 int num5 = Main.rand.Next(4);
                 switch (num5) {
                     case 0:
