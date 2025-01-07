@@ -29,7 +29,7 @@ sealed class GalipotStream : NatureProjectile {
     }
 
     protected override void SafeSetDefaults() {
-        Projectile.width = Projectile.height = 10;
+        Projectile.width = Projectile.height = 20;
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
         Projectile.ignoreWater = false;
@@ -41,7 +41,7 @@ sealed class GalipotStream : NatureProjectile {
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.immune[Projectile.owner] = 20;
         float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f));
+        target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f) / 2);
         //if (Projectile.ai[1] != 1f) {
         //    Projectile.Kill();
         //}
@@ -49,7 +49,7 @@ sealed class GalipotStream : NatureProjectile {
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
         float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f));
+        target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f) / 2);
         //if (Projectile.ai[1] != 1f) {
         //    Projectile.Kill();
         //}
