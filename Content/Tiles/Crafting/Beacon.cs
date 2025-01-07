@@ -55,9 +55,13 @@ sealed class BeaconTE : ModTileEntity {
     }
 
     public override void Update() {
+        int i = Position.X;
+        int j = Position.Y - 2;
+        if (Beacon.HasGemInIt(i, j)) {
+            Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Beacon.GetMapColor(i, j).ToVector3());
+        }
+
         UpdateAnimation(() => {
-            int i = Position.X;
-            int j = Position.Y - 2;
             if (WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>())) {
                 int gemType = Beacon.GetGemDropID(i, j);
                 bool flag =
@@ -261,7 +265,7 @@ sealed class Beacon : ModTile {
             drawPos.Y -= 4f;
             Color color = GetMapColor(i, j).MultiplyRGB(new Color(250, 250, 250));
             Vector2 scale = beaconTE.IsUsed ? beaconTE.Scale : new(0.2f, 1f);
-            color *= MathHelper.Clamp(Lighting.Brightness(i, j), 0.25f, 1f);
+            //color *= MathHelper.Clamp(Lighting.Brightness(i, j), 0.25f, 1f);
             for (float k = -MathHelper.Pi; k <= MathHelper.Pi; k += MathHelper.PiOver2) {
                 spriteBatch.Draw(texture, drawPos + zero + beaconTE.OffsetPosition,
                     null, color.MultiplyAlpha(Helper.Wave(0.3f, 0.9f, 4f, k)) * 0.3f, 0f, new(texture.Width / 2f, texture.Height), scale * Helper.Wave(0.85f, 1.15f, speed: 2f), SpriteEffects.None, 0f);
