@@ -1,6 +1,10 @@
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
+using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -14,6 +18,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
@@ -222,6 +227,57 @@ sealed class Beacon : ModTile {
 
     public static readonly short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
 
+    public override void Load() {
+        On_Player.UpdateTeleportVisuals += On_Player_UpdateTeleportVisuals;
+    }
+
+    private void On_Player_UpdateTeleportVisuals(On_Player.orig_UpdateTeleportVisuals orig, Player self) {
+        orig(self);
+
+        if (self.teleportStyle >= 12 && self.teleportStyle <= 20) {
+            Rectangle hitbox = self.Hitbox;
+            hitbox.Inflate(5, 5);
+            if ((float)Main.rand.Next(100) <= 75f * self.teleportTime) {
+                SpawnInWorldDust(self.teleportStyle - 12, hitbox);
+            }
+        }
+    }
+
+    private static void SpawnInWorldDust(int tileStyle, Rectangle dustBox) {
+        Color color = Color.White;
+        switch (tileStyle) {
+            case 0:
+                color = new Color(238, 51, 53);
+                break;
+            case 1:
+                color = new Color(13, 107, 216);
+                break;
+            case 2:
+                color = new Color(33, 184, 115);
+                break;
+            case 3:
+                color = new Color(255, 221, 62);
+                break;
+            case 4:
+                color = new Color(165, 0, 236);
+                break;
+            case 5:
+                color = new Color(223, 230, 238);
+                break;
+            case 6:
+                color = new Color(207, 101, 0);
+                break;
+        }
+
+        int dust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
+        Main.dust[dust].noGravity = true;
+        Main.dust[dust].color = color;
+        Main.dust[dust].velocity *= 0.1f;
+        Main.dust[dust].velocity.Y -= 0.1f;
+        Main.dust[dust].scale = 0.8f + Main.rand.NextFloat() * 0.6f;
+        Main.dust[dust].fadeIn = 0.5f;
+    }
+
     public override void SetStaticDefaults() {
         Main.tileTable[Type] = true;
         Main.tileFrameImportant[Type] = true;
@@ -270,6 +326,66 @@ sealed class Beacon : ModTile {
                 spriteBatch.Draw(texture, drawPos + zero + beaconTE.OffsetPosition,
                     null, color.MultiplyAlpha(Helper.Wave(0.3f, 0.9f, 4f, k)) * 0.3f, 0f, new(texture.Width / 2f, texture.Height), scale * Helper.Wave(0.85f, 1.15f, speed: 2f), SpriteEffects.None, 0f);
             }
+
+            Vector2 spinningpoint4 = Vector2.UnitX * 14f;
+            Vector2 velocity = -Vector2.UnitY;
+            float rotation = velocity.ToRotation() + MathHelper.PiOver2;
+            spinningpoint4 = spinningpoint4.RotatedBy(rotation - (float)Math.PI / 2f);
+            Vector2 vector13 = position - Vector2.UnitY * 10f + spinningpoint4;
+            if (beaconTE.IsUsed) {
+                for (int l = 0; l < 2; l++) {
+                    if (Main.rand.NextBool()) {
+                        int num26 = 267;
+                        float num27 = 0.35f;
+                        if (l % 2 == 1) {
+                            num27 = 0.45f;
+                        }
+                        num27 *= 1.5f;
+                        num27 *= 1.25f * Main.rand.NextFloat(0.75f, 1f);
+                        num27 *= 1.25f * Main.rand.NextFloat(0.75f, 1f);
+                        num27 *= 1.01f;
+
+                        float num28 = Main.rand.NextFloatDirection();
+                        Vector2 vector14 = vector13 + (rotation + num28 * ((float)Math.PI / 4f) * 0.8f - (float)Math.PI / 2f).ToRotationVector2() * 6f;
+                        int num29 = 18;
+                        int num30 = Dust.NewDust(vector14 - Vector2.One * (num29 / 2) - new Vector2(4f, -4f) -
+                            Vector2.UnitY * 50f * Main.rand.NextFloat(), 26, num29, num26, velocity.X / 2f, velocity.Y / 2f);
+                        Main.dust[num30].velocity = (vector14 - vector13).SafeNormalize(Vector2.Zero) * MathHelper.Lerp(1.5f, 9f, Utils.GetLerpValue(1f, 0f, Math.Abs(num28), clamped: true)) * 0.5f;
+                        Main.dust[num30].noGravity = true;
+                        Main.dust[num30].velocity.Y *= 1f * Main.rand.NextFloat(1f, 2.5f);
+                        Main.dust[num30].scale = num27;
+                        Main.dust[num30].fadeIn = 0.5f;
+                        Main.dust[num30].color = color;
+                    }
+                }
+            }
+            else {
+                for (int l = 0; l < 2; l++) {
+                    if (Main.rand.NextBool(8)) {
+                        int num26 = 267;
+                        float num27 = 0.35f;
+                        if (l % 2 == 1) {
+                            num27 = 0.45f;
+                        }
+                        num27 *= 1.5f;
+                        num27 *= 1.25f * Main.rand.NextFloat(0.75f, 1f);
+                        num27 *= 1.25f * Main.rand.NextFloat(0.75f, 1f);
+                        num27 *= 1.01f;
+
+                        float num28 = Main.rand.NextFloatDirection();
+                        Vector2 vector14 = vector13 + Vector2.UnitX * 2f + (rotation + num28 * ((float)Math.PI / 4f) * 0.8f - (float)Math.PI / 2f).ToRotationVector2() * 6f;
+                        int num29 = 12;
+                        int num30 = Dust.NewDust(vector14 - Vector2.One * (num29 / 2) - new Vector2(4f, -4f) -
+                            Vector2.UnitY * 50f * Main.rand.NextFloat(), 16, num29, num26, velocity.X / 2f, velocity.Y / 2f);
+                        Main.dust[num30].velocity = (vector14 - vector13).SafeNormalize(Vector2.Zero) * MathHelper.Lerp(1.5f, 9f, Utils.GetLerpValue(1f, 0f, Math.Abs(num28), clamped: true)) * 0.15f;
+                        Main.dust[num30].velocity.Y *= 5f * Main.rand.NextFloat();
+                        Main.dust[num30].noGravity = true;
+                        Main.dust[num30].scale = num27;
+                        Main.dust[num30].fadeIn = 0.5f;
+                        Main.dust[num30].color = color;
+                    }
+                }
+            }
         }
     }
 
@@ -300,7 +416,7 @@ sealed class Beacon : ModTile {
         }
 
         Vector2 newPos = new Point(i - 1, j - 1).ToWorldCoordinates() - new Vector2(0f, player.HeightOffsetBoost);
-        int num2 = 12;
+        int num2 = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType).GetMapOption(i, j) + 12;
         void dusts(Rectangle effectRect, int num4) {
             for (int k = 0; k < 50; k++) {
                 Microsoft.Xna.Framework.Color color = Microsoft.Xna.Framework.Color.Green;
