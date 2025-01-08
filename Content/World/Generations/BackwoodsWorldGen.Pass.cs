@@ -292,7 +292,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddChests() {
         // adapted vanilla
-        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.00075); num536++) {
+        for (int num536 = 0; num536 < (int)((double)Main.maxTilesX * 0.00085); num536++) {
             double value8 = (double)num536 / ((double)Main.maxTilesX * 0.005);
             bool flag30 = false;
             int num537 = 0;
@@ -308,7 +308,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag32 = false;
                 if (!Main.tile[num538, num539].HasTile) {
                     bool flag = Main.tile[num538, num539].WallType == _elderwoodWallType;
-                    if (((Main.tile[num538, num539].WallType == _dirtWallType || (Main.tile[num538, num539].WallType == _leavesWallType && num539 > BackwoodsVars.FirstTileYAtCenter + 5) || Main.tile[num538, num539].WallType == _grassWallType || Main.tile[num538, num539].WallType == _flowerGrassWallType || Main.tile[num538, num539].WallType == WallID.GrassUnsafe || Main.tile[num538, num539].WallType == WallID.FlowerUnsafe) && _random.NextBool(10)) || flag)
+                    if (((/*Main.tile[num538, num539].WallType == _dirtWallType ||*/ (Main.tile[num538, num539].WallType == _leavesWallType && num539 > BackwoodsVars.FirstTileYAtCenter + 5) || Main.tile[num538, num539].WallType == _grassWallType || Main.tile[num538, num539].WallType == _flowerGrassWallType || Main.tile[num538, num539].WallType == WallID.GrassUnsafe || Main.tile[num538, num539].WallType == WallID.FlowerUnsafe) && _random.NextBool(10)) || flag)
                         flag31 = true;
                     if (flag) {
                         flag32 = true;
