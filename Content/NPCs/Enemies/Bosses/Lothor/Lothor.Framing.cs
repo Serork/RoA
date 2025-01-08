@@ -17,14 +17,15 @@ sealed partial class Lothor : ModNPC {
 
     private SpriteSheetColumn _currentColumn = SpriteSheetColumn.Stand;
     private List<SpriteSheetLineInfo> _spriteSheet = [new(19, 146, 106), new(6, 146, 88), new(7, 146, 58)];
+    private byte _currentFrame;
 
     private byte CurrentFrame {
-        get => (byte)NPC.localAI[0];
+        get => _currentFrame;
         set {
             if (value - PreviousColumnsFrameCount() < 0) {
                 _currentColumn--;
             }
-            NPC.localAI[0] = value;
+            _currentFrame = value;
         }
     }
 
