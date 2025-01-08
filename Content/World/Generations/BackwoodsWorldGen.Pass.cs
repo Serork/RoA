@@ -1704,7 +1704,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        int num = 42;
+        int num = 40;
         for (int i = origin.X - num; i <= origin.X + num; i++) {
             for (int j = origin.Y - num; j <= origin.Y + num; j++) {
                 if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == 21)
@@ -1781,7 +1781,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (!painting3) {
             HouseBuilderCustom._painting3 = false;
         }
-        houseBuilder.ChestChance = origin.Y < Main.worldSurface ? 0.75 : 0.9;
+        houseBuilder.ChestChance = origin.Y < Main.worldSurface ? 0.75 : 0.95;
         houseBuilder.Place(new HouseBuilderContext(), GenVars.structures);
     }
 
