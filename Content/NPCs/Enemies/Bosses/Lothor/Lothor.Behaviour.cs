@@ -11,6 +11,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class Lothor : ModNPC {
+    private const float AIRDASHLENGTH = 200f;
+
     private enum LothorAIState : byte {
         Fall,
         Idle,
@@ -151,15 +153,19 @@ sealed partial class Lothor : ModNPC {
 
     private void AirDashState() {
         NPC.knockBackResist = 0f;
-        float dashStrength = 13f;
-        _dashStrength = Helper.Approach(_dashStrength, 1f, 0.015f);
+        float dashStrength = 10f;
+        _dashStrength = Helper.Approach(_dashStrength, 1f, 0.0075f);
+        if (_dashStrength < 0.15f && NPC.Distance(Target.Center) > 50f) {
+            _playerTempPosition = GetPositionBehindTarget();
+        }
         if (NPC.velocity.Length() < dashStrength) {
             NPC.velocity = Vector2.SmoothStep(NPC.velocity, NPC.DirectionTo(_playerTempPosition) * dashStrength, _dashStrength);
-            NPC.velocity += NPC.DirectionTo(Target.Center) * _dashStrength * dashStrength * 0.35f;
+            NPC.velocity += NPC.DirectionTo(_playerTempPosition) * _dashStrength * dashStrength * 0.35f;
         }
+        NPC.velocity += NPC.DirectionTo(_playerTempPosition) * _dashStrength * dashStrength * 0.25f;
         float distance = Vector2.Distance(NPC.Center, _playerTempPosition);
         float minDistance = 200f;
-        if (distance < minDistance || (Vector2.Distance(NPC.Center, Target.Center) > minDistance * 2f && NPC.velocity.Length() > dashStrength / 2f) || NPC.velocity.Length() > dashStrength * 1.25f) {
+        if (distance < minDistance || (Vector2.Distance(NPC.Center, Target.Center) > minDistance * 2f && NPC.velocity.Length() > dashStrength * 0.75f) || NPC.velocity.Length() > dashStrength * 1.25f) {
             GoToFlightState(false);
             _dashStrength = 0f;
         }
@@ -177,6 +183,24 @@ sealed partial class Lothor : ModNPC {
         }
     }
 
+    private Vector2 GetPositionBehindTarget() {
+        Vector2 playerCenter = Target.Center;
+        return playerCenter + GetVelocityDirection();
+    }
+
+    private Vector2 GetBetween() {
+        Vector2 npcCenter = NPC.Center;
+        Vector2 playerCenter = Target.Center;
+        Vector2 dif = playerCenter - npcCenter;
+        return dif;
+    }
+
+    private Vector2 GetVelocityDirection() {;
+        Vector2 dif = GetBetween();
+        Vector2 dif2 = dif.SafeNormalize(Vector2.One) * AIRDASHLENGTH;
+        return dif2;
+    }
+
     private void FlightState() {
         if (--StillInJumpBeforeFlightTimer > 0f) {
             NPC.direction = NPC.velocity.X.GetDirection();
@@ -185,11 +209,8 @@ sealed partial class Lothor : ModNPC {
 
         PrepareAirDash();
 
-        Vector2 npcCenter = NPC.Center;
-        Vector2 playerCenter = Target.Center;
-        Vector2 dif = playerCenter - npcCenter;
-        float distance = 200f;
-        Vector2 dif2 = dif.SafeNormalize(Vector2.One) * distance;
+        Vector2 dif = GetBetween();
+        Vector2 dif2 = GetVelocityDirection();
         Vector2 velocity = dif - dif2;
         float speed = 6.225f;
         velocity = Vector2.Normalize(velocity) * speed;
@@ -197,13 +218,11 @@ sealed partial class Lothor : ModNPC {
         float absDistance = Math.Abs(dif.Length());
         float edge = 15f * Utils.Remap(NPC.velocity.Length(), 0f, 10f, 1f, 2f);
 
-        _playerTempPosition = playerCenter + dif2;
-
         bool flag = _previousState == LothorAIState.AirDash;
         if (flag) {
             NPC.LookAtPlayer(Target);
         }
-        if (absDistance > distance - edge && absDistance < distance + edge && absDistance != distance) {
+        if (absDistance > AIRDASHLENGTH - edge && absDistance < AIRDASHLENGTH + edge && absDistance != AIRDASHLENGTH) {
             NPC.velocity *= (float)Math.Pow(0.97, inertia * 2.0 / inertia);
             if (!flag) {
                 NPC.LookAtPlayer(Target);
@@ -351,7 +370,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     private float GetDashDelay() {
-        return BeforeDoingLastJump ? 150f : 100f;
+        return BeforeDoingLastJump ? 150f : 10f;
     }
 
     private void SpawnStomp() {
