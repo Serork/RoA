@@ -153,9 +153,9 @@ sealed partial class Lothor : ModNPC {
 
     private void AirDashState() {
         NPC.knockBackResist = 0f;
-        float dashStrength = 10f;
-        _dashStrength = Helper.Approach(_dashStrength, 1f, 0.005f);
-        if (_dashStrength < 0.15f && NPC.Distance(Target.Center) > 50f) {
+        float dashStrength = 12.5f;
+        _dashStrength = Helper.Approach(_dashStrength, 1f, 0.0075f);
+        if (_dashStrength < 0.05f && NPC.Distance(Target.Center) > 50f) {
             _playerTempPosition = GetPositionBehindTarget();
         }
         if (NPC.velocity.Length() < dashStrength) {
@@ -212,7 +212,7 @@ sealed partial class Lothor : ModNPC {
         Vector2 dif = GetBetween();
         Vector2 dif2 = GetVelocityDirection();
         Vector2 velocity = dif - dif2;
-        float speed = 6.225f;
+        float speed = 10f;
         velocity = Vector2.Normalize(velocity) * speed;
         float inertia = 30f;
         float absDistance = Math.Abs(dif.Length());
@@ -221,6 +221,9 @@ sealed partial class Lothor : ModNPC {
         bool flag = _previousState == LothorAIState.AirDash;
         if (flag) {
             NPC.LookAtPlayer(Target);
+        }
+        if (NPC.Bottom.Y > Target.Top.Y) {
+            NPC.velocity.Y -= 0.1f;
         }
         if (absDistance > AIRDASHLENGTH - edge && absDistance < AIRDASHLENGTH + edge && absDistance != AIRDASHLENGTH) {
             NPC.velocity *= (float)Math.Pow(0.97, inertia * 2.0 / inertia);
@@ -366,11 +369,11 @@ sealed partial class Lothor : ModNPC {
     private float ResetDashVariables() => DashDelay = DashTimer = 0f;
 
     private float GetDashStrength() {
-        return 3f;
+        return 4f;
     }
 
     private float GetDashDelay() {
-        return BeforeDoingLastJump ? 150f : 100f;
+        return IsFlying ? 100f : BeforeDoingLastJump ? 100f : 75f;
     }
 
     private void SpawnStomp() {
