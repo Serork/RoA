@@ -370,7 +370,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     private float GetDashDelay() {
-        return BeforeDoingLastJump ? 150f : 10f;
+        return BeforeDoingLastJump ? 150f : 100f;
     }
 
     private void SpawnStomp() {
