@@ -23,7 +23,7 @@ sealed partial class Lothor : ModNPC {
     private Player Target { get; set; }
 
     private ref float JumpCount => ref NPC.ai[2];
-    private ref float FallFallStrengthIfClose => ref NPC.ai[0];
+    private ref float FallStrengthIfClose => ref NPC.ai[0];
     private ref float DashTimer => ref NPC.ai[0];
     private ref float DashDelay => ref NPC.ai[1];
     private ref float NoCollisionTimer => ref NPC.localAI[2];
@@ -31,7 +31,7 @@ sealed partial class Lothor : ModNPC {
 
     private float PreparationProgress => Helper.EaseInOut3(DashTimer / DashDelay * 1.25f);
     private bool IsAboutToGoToFlightState => JumpCount > GetJumpCountToEncourageFlightState();
-    private bool IsAboutToGoToFlightState2 => JumpCount > GetJumpCountToEncourageFlightState() - 1;
+    private bool BeforeDoingLastJump => JumpCount > GetJumpCountToEncourageFlightState() - 1;
     private bool IsFlying => CurrentAIState == LothorAIState.Flight;
 
     private int GetJumpCountToEncourageFlightState() => 3;
@@ -53,7 +53,7 @@ sealed partial class Lothor : ModNPC {
             float maxRotation = 0.3f;
             float to = Math.Clamp(xVelocity, -maxRotation, maxRotation);
             if (StillInJumpBeforeFlightTimer > 0f) {
-                rotation = Utils.AngleLerp(rotation, to, to * 0.25f);
+                rotation = Utils.AngleLerp(rotation, to, Math.Abs(to) * 0.25f);
             }
             else {
                 rotation = Math.Clamp(xVelocity, -maxRotation, maxRotation);
@@ -252,10 +252,10 @@ sealed partial class Lothor : ModNPC {
             if (NPC.Center.Y < Target.Center.Y && closeRange) {
                 float fallAcceleration = 0.01f;
                 float fallVelocityY = 0.9f;
-                if (FallFallStrengthIfClose < fallVelocityY) {
-                    FallFallStrengthIfClose += fallAcceleration;
+                if (FallStrengthIfClose < fallVelocityY) {
+                    FallStrengthIfClose += fallAcceleration;
                 }
-                NPC.velocity.Y += FallFallStrengthIfClose;
+                NPC.velocity.Y += FallStrengthIfClose;
             }
         }
         else {
@@ -263,7 +263,7 @@ sealed partial class Lothor : ModNPC {
 
             NPC.velocity.X *= 0.85f + Math.Min(0.05f, Math.Abs(NPC.velocity.X) * 0.025f);
             if (Math.Abs(NPC.velocity.X) < 0.025f) {
-                FallFallStrengthIfClose = 0f;
+                FallStrengthIfClose = 0f;
                 NPC.TargetClosest(true);
                 CurrentAIState = LothorAIState.Idle;
                 float dashDelay = GetDashDelay();
@@ -284,7 +284,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     private float GetDashDelay() {
-        return IsAboutToGoToFlightState2 ? 150f : 100f;
+        return BeforeDoingLastJump ? 150f : 100f;
     }
 
     private void SpawnStomp() {
