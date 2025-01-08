@@ -154,7 +154,7 @@ sealed partial class Lothor : ModNPC {
     private void AirDashState() {
         NPC.knockBackResist = 0f;
         float dashStrength = 10f;
-        _dashStrength = Helper.Approach(_dashStrength, 1f, 0.0075f);
+        _dashStrength = Helper.Approach(_dashStrength, 1f, 0.005f);
         if (_dashStrength < 0.15f && NPC.Distance(Target.Center) > 50f) {
             _playerTempPosition = GetPositionBehindTarget();
         }
