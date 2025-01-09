@@ -18,6 +18,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -332,6 +333,17 @@ sealed class WreathHandler : ModPlayer {
 
     public override void Load() {
         On_Player.AddBuff_ActuallyTryToAddTheBuff += On_Player_AddBuff_ActuallyTryToAddTheBuff;
+        On_PlayerDrawLayers.DrawPlayer_36_CTG += On_PlayerDrawLayers_DrawPlayer_36_CTG;
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_36_CTG(On_PlayerDrawLayers.orig_DrawPlayer_36_CTG orig, ref PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        float positionY = drawinfo.Position.Y;
+        if (player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
+            drawinfo.Position.Y -= 35f;
+        }
+        orig(ref drawinfo);
+        drawinfo.Position.Y = positionY;
     }
 
     private bool On_Player_AddBuff_ActuallyTryToAddTheBuff(On_Player.orig_AddBuff_ActuallyTryToAddTheBuff orig, Player self, int type, int time) {

@@ -418,7 +418,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
             return;
         }
 
-        Vector2 newPos = new Point(i - 1, j - 1).ToWorldCoordinates() - new Vector2(0f, player.HeightOffsetBoost);
+        Vector2 newPos = new Point(i - 1, j - 1).ToWorldCoordinates() + new Vector2(4f, 0f) - new Vector2(0f, player.HeightOffsetBoost);
         int num2 = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType).GetMapOption(i, j) + 12;
         if (num2 == 13) {
             num2 = 11;
