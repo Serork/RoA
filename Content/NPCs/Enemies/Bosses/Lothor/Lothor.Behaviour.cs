@@ -201,9 +201,22 @@ sealed partial class Lothor : ModNPC {
         return dif2;
     }
 
+    private void GoToIdleState() {
+        DashCount = 0;
+        CurrentAIState = LothorAIState.Fall;
+        ResetDashVariables();
+        NPC.TargetClosest();
+        SetDashDelay();
+    }
+
     private void FlightState() {
         if (--StillInJumpBeforeFlightTimer > 0f) {
             NPC.direction = NPC.velocity.X.GetDirection();
+            return;
+        }
+
+        if (NPC.velocity.Y > 1f && IsAboutToGoToFlightState) {
+            GoToIdleState();
             return;
         }
 
@@ -382,6 +395,8 @@ sealed partial class Lothor : ModNPC {
 
     private void IdleState() {
         NPC.noTileCollide = false;
+
+        FallStrengthIfClose = 0f;
 
         NPC.LookAtPlayer(Target);
         NPC.velocity.X *= 0.875f;
