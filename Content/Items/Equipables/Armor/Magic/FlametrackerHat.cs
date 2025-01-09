@@ -98,7 +98,7 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
-        if (drawInfo.shadow != 0f || player.face != -1 || player.dead/* || player.GetModPlayer<MagicArmorSetPlayer>().flameTrackerArmorSet*/ && player.statMana != player.statManaMax2)
+        if (drawInfo.shadow != 0f || player.face != -1 || player.dead/* || player.GetModPlayer<MagicArmorSetPlayer>().flameTrackerArmorSet*/ || player.statMana != player.statManaMax2)
             return;
 
         if (player.statMana != player.statManaMax2) {
