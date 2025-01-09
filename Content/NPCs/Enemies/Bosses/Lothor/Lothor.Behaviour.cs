@@ -181,7 +181,6 @@ sealed partial class Lothor : ModNPC {
         if (DashTimer >= DashDelay && shouldReset) {
             ResetDashVariables();
             CurrentAIState = LothorAIState.AirDash;
-
             DashCount++;
         }
     }
@@ -259,7 +258,6 @@ sealed partial class Lothor : ModNPC {
                     NPC.LookAtPlayer(Target);
                 }
             }
-
             NPC.velocity.X = (NPC.velocity.X * (inertia - 1f) + velocity.X) / (float)inertia;
             NPC.velocity.Y = (NPC.velocity.Y * (inertia - 1f) + velocity.Y) / (float)inertia;
         }
@@ -303,8 +301,6 @@ sealed partial class Lothor : ModNPC {
             else {
                 NPC.velocity.X = jumpHeightX * -0.5f * -(float)NPC.direction;
             }
-
-            // noTileCollide timer
             NoCollisionTimer = 10f;
         }
         doJump();
@@ -369,7 +365,6 @@ sealed partial class Lothor : ModNPC {
         }
         else {
             SpawnStomp();
-
             NPC.velocity.X *= 0.85f + Math.Min(0.05f, Math.Abs(NPC.velocity.X) * 0.025f);
             if (Math.Abs(NPC.velocity.X) < 0.025f) {
                 FallStrengthIfClose = 0f;
