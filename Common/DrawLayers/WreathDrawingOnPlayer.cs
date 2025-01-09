@@ -14,6 +14,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.DrawLayers;
@@ -30,7 +31,9 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
 
     public override bool IsHeadLayer => false;
 
-    public override void Load() {
+    public override void SetStaticDefaults() => LoadOutfitTextures();
+
+    private static void LoadOutfitTextures() {
         if (Main.dedServ) {
             return;
         }
@@ -43,12 +46,19 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
     }
 
     private static void LoadWreathsOutfitTextures() {
-        foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(WREATHSTEXTURESPATH, REQUIREMENT)) {
-            string getName() {
-                return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
+        for (int i = ItemID.Count; i < ItemLoader.ItemCount; i++) {
+            ModItem item = ItemLoader.GetItem(i);
+            if (item is BaseWreathItem) {
+                _wreathsOutfitTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT));
             }
-            _wreathsOutfitTextures.Add(getName(), texture);
         }
+
+        //foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(WREATHSTEXTURESPATH, REQUIREMENT)) {
+        //    string getName() {
+        //        return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
+        //    }
+        //    _wreathsOutfitTextures.Add(getName(), texture);
+        //}
     }
 
     private static void DrawWreathsOnPlayer(PlayerDrawSet drawInfo) {

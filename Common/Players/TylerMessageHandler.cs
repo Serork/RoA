@@ -87,7 +87,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
         Create(source, Player.Top, _messageVelocity);
     }
 
-    private void GiveIdleMessageCooldown() => PutMessageTypeOnCooldown(MessageSource.Idle, Main.rand.Next(3600, 7200));
+    private void GiveIdleMessageCooldown() => PutMessageTypeOnCooldown(MessageSource.Idle, Main.rand.Next(5800, 7200));
 
     public void PutMessageTypeOnCooldown(MessageSource source, int timeInFrames)  => _messageCooldownsByType[(int)source] = timeInFrames;
 

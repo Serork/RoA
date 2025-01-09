@@ -8,7 +8,7 @@ namespace RoA.Common.DrawLayers;
 sealed partial class WeaponOverlay : PlayerDrawLayer {
     private const string REQUIREMENT = "_Outfit";
 
-    public override void Load() => LoadOutfitTextures();
+    public override void SetStaticDefaults() => LoadOutfitTextures();
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.shadow == 0f && drawInfo.drawPlayer.active;
 
@@ -20,7 +20,7 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
         DrawClawsOnPlayer(drawInfo);
     }
 
-    private void LoadOutfitTextures() {
+    private static void LoadOutfitTextures() {
         if (Main.dedServ) {
             return;
         }

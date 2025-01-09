@@ -5,31 +5,41 @@ using ReLogic.Content;
 
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.DrawLayers;
 
 sealed partial class WeaponOverlay : PlayerDrawLayer {
-    private const string CLAWSTEXTURESPATH = $"/{ResourceManager.TEXTURESPATH}/Items/Weapons/Druidic/Claws";
+    //private const string CLAWSTEXTURESPATH = $"/{ResourceManager.TEXTURESPATH}/Items/Weapons/Druidic/Claws";
 
     private static readonly Dictionary<string, Asset<Texture2D>?> _clawsOutfitTextures = [];
 
     private static void LoadClawsOutfitTextures() {
-        foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(CLAWSTEXTURESPATH, REQUIREMENT)) {
-            string getName() {
-                return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
+        for (int i = ItemID.Count; i < ItemLoader.ItemCount; i++) {
+            ModItem item = ItemLoader.GetItem(i);
+            if (item is BaseClawsItem) {
+                _clawsOutfitTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT));
             }
-            _clawsOutfitTextures.Add(getName(), texture);
         }
+
+        //foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(CLAWSTEXTURESPATH, REQUIREMENT)) {
+        //    string getName() {
+        //        return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
+        //    }
+        //    _clawsOutfitTextures.Add(getName(), texture);
+        //}
     }
 
     private static void DrawClawsOnPlayer(PlayerDrawSet drawInfo) {
