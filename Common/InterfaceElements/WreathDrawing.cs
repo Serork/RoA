@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Content.Items.Equipables.Wreaths;
@@ -42,7 +43,9 @@ sealed class WreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath", Interf
 
     protected override bool DrawSelf() {
         Vector2 playerPosition = Utils.Floor(Player.Top + Vector2.UnitY * Player.gfxOffY);
-        playerPosition.Y -= Player.fullRotationOrigin.Y;
+        if (Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            playerPosition.Y -= Player.fullRotationOrigin.Y;
+        }
         playerPosition.Y -= 12f;
         Vector2 position;
         bool breathUI = Player.breath < Player.breathMax || Player.lavaTime < Player.lavaMax;
