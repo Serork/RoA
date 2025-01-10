@@ -6,10 +6,14 @@ namespace RoA.Content.Dusts;
 
 sealed class Slash : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-		Color color = dust.color.MultiplyRGB(lightColor);
+		Color color = dust.color;
 		color.A = 100;
 
-		return color;
+        Point pos = dust.position.ToTileCoordinates();
+        float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.25f, 1f);
+        color *= brightness;
+
+        return color;
     }
 
     public override bool Update(Dust dust) {

@@ -118,6 +118,10 @@ class ClawsSlash : NatureProjectile {
         float num4 = Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
         Color color1 = FirstSlashColor;
         Color color2 = SecondSlashColor;
+        //Point pos = Projectile.Center.ToTileCoordinates();
+        //float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.5f, 1f);
+        //color1 *= brightness;
+        //color2 *= brightness;
         float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);
         if (CanFunction) {
             SpriteBatch spriteBatch = Main.spriteBatch;
@@ -184,6 +188,18 @@ class ClawsSlash : NatureProjectile {
 
         Projectile.scale = num3 + fromValue * num2;
 
+        Color color1 = FirstSlashColor;
+        Color color2 = SecondSlashColor;
+        //Point pos = Projectile.Center.ToTileCoordinates();
+        //float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.5f, 1f);
+        //color1 *= brightness;
+        //color2 *= brightness;
+        float num12 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
+        float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
+        float num42 = Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
+        color1 *= num42 * num22;
+        color2 *= num42 * num22;
+
         float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
         float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
         Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
@@ -191,7 +207,7 @@ class ClawsSlash : NatureProjectile {
             Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
             if (position.Distance(player.Center) > 45f) {
                 int type = ModContent.DustType<Slash>();
-                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat() * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(color1, color2, Main.rand.NextFloat() * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                 dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                 dust.noLight = dust.noLightEmittence = true;
                 dust.noGravity = true;
