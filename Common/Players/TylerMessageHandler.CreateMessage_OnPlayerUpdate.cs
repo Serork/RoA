@@ -39,17 +39,17 @@ sealed partial class TylerMessageHandler : ModPlayer {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (target.friendly && target.life <= 0 && Main.rand.NextBool(10)) {
+        if (target.lifeMax <= 5 && Main.rand.NextBool(20)) {
             Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
         }
     }
 
     public override void OnHitAnything(float x, float y, Entity victim) {
-        if (victim is NPC npc) {
-            if (npc.friendly && npc.life <= 0 && Main.rand.NextBool(20)) {
-                Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
-            }
-        }
+        //if (victim is NPC npc) {
+        //    if (npc.friendly && npc.life <= 0 && Main.rand.NextBool(20)) {
+        //        Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
+        //    }
+        //}
         if (victim is Player player) {
             if (player.statLife <= 0 && Main.rand.NextBool(10)) {
                 Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);

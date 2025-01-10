@@ -1,8 +1,11 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Core;
+
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI;
 using Terraria.ID;
@@ -101,6 +104,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
     }
 
     public void Create(MessageSource source, Vector2 position, Vector2 velocity) {
+        Main.NewText(IsTylerSet());
         if (Main.netMode == NetmodeID.Server || !IsTylerSet()) {
             return;
         }
@@ -108,6 +112,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
         GiveIdleMessageCooldown();
         SpawnPopupText(source, _variation, position, velocity);
         SpawnEmoteBubble();
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.MiscSounds + "hahahahahaha"), position);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             NetMessage.SendData(MessageID.RequestLucyPopup, number: (int)source, number2: _variation, number3: velocity.X, number4: velocity.Y, number5: (int)position.X, number6: (int)position.Y);
         }
