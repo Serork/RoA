@@ -89,6 +89,10 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
             if (_shouldShoot) {
                 if (_attackTimer >= Min - PerShoot && _shootCount > 0) {
                     if (_attackTimer % PerShoot == 0f) {
+                        if (_shootCount == MAXSHOOTCOUNT) {
+                            SoundEngine.PlaySound(SoundID.Item28, Projectile.Center);
+                        }
+
                         ShootProjectile();
                         _shootCount--;
                         if (Owner.whoAmI == Main.myPlayer && _mousePos != Owner.GetViableMousePosition()) {
