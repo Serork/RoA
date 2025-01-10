@@ -41,7 +41,7 @@ sealed class LothorClawsSlash : ModProjectile {
             Projectile.localAI[1] = 1f;
 
             float dist = Vector2.Distance(npc.Center, Main.player[npc.target].Center);
-            float value = Utils.Remap(dist, 0f, 300f, 1f, 2f);
+            float value = Utils.Remap(dist, 0f, 300f, 1f, 2.5f);
             Projectile.localAI[2] = Math.Max(value, 1f);
         }
 
