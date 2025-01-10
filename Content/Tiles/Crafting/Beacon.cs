@@ -850,10 +850,14 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     }
 
     public override bool RightClick(int i, int j) {
-        //BeaconTE te = GetTE(i, j);
-        //if (te is null) {
-        //    return false;
-        //}
+        BeaconTE te = GetTE(i, j);
+        if (te is null) {
+            return false;
+        }
+
+        if (te.IsUsed) {
+            return false;
+        }
 
         if (IsTileValidToBeHovered(i, j)) {
             Player player = Main.LocalPlayer;
