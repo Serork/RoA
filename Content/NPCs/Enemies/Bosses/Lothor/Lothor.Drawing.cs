@@ -62,23 +62,25 @@ sealed partial class Lothor : ModNPC {
                 frame7, color39, NPC.rotation, origin, NPC.scale, effects, 0f);
         }
 
-        Microsoft.Xna.Framework.Color color46 = Microsoft.Xna.Framework.Color.White;
-        int num275 = 6;
-        float num278 = 0f;
-        float maxOffset = 15f;
-        for (int num293 = 0; num293 < num275; num293++) {
-            Microsoft.Xna.Framework.Color value80 = drawColor;
-            value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
-            value80 = NPC.GetAlpha(value80);
-            value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
-            float opacity = 1f - _pulseStrength;
-            value80 *= opacity;
-            value80 *= 0.7f;
-            value80 *= (1f - _trailOpacity);
-            Vector2 position33 = NPC.position + offset + ((float)num293 / (float)num275 * ((float)Math.PI * 2f) + NPC.rotation + num278).ToRotationVector2() * maxOffset * _pulseStrength;
-            position33 -= new Vector2(NPC.frame.Width, NPC.frame.Height / Main.npcFrameCount[Type]) * NPC.scale / 2f;
-            position33 += origin * NPC.scale + new Vector2(0f, NPC.gfxOffY);
-            spriteBatch.Draw(ItsSpriteSheet, position33, NPC.frame, value80, NPC.rotation, origin, NPC.scale, effects, 0f);
+        if (ShouldDrawPulseEffect) {
+            Microsoft.Xna.Framework.Color color46 = Microsoft.Xna.Framework.Color.White;
+            int num275 = 6;
+            float num278 = 0f;
+            float maxOffset = 15f;
+            for (int num293 = 0; num293 < num275; num293++) {
+                Microsoft.Xna.Framework.Color value80 = drawColor;
+                value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
+                value80 = NPC.GetAlpha(value80);
+                value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
+                float opacity = 1f - _pulseStrength;
+                value80 *= opacity;
+                value80 *= 0.7f;
+                //value80 *= (1f - _trailOpacity);
+                Vector2 position33 = NPC.position + offset + ((float)num293 / (float)num275 * ((float)Math.PI * 2f) + NPC.rotation + num278).ToRotationVector2() * maxOffset * _pulseStrength;
+                position33 -= new Vector2(NPC.frame.Width, NPC.frame.Height / Main.npcFrameCount[Type]) * NPC.scale / 2f;
+                position33 += origin * NPC.scale + new Vector2(0f, NPC.gfxOffY);
+                spriteBatch.Draw(ItsSpriteSheet, position33, NPC.frame, value80, NPC.rotation, origin, NPC.scale, effects, 0f);
+            }
         }
 
         spriteBatch.Draw(ItsSpriteSheet, NPC.position + offset, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
