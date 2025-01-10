@@ -46,6 +46,7 @@ sealed partial class Lothor : ModNPC {
     private bool _spawned;
     private bool _stompSpawned;
     private float _canChangeDirectionTimer;
+    private float _pulseStrength;
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
     private Player Target { get; set; }
@@ -61,10 +62,12 @@ sealed partial class Lothor : ModNPC {
     private float PreparationProgress => Helper.EaseInOut3(DashTimer / DashDelay * 1.25f);
 
     private bool DoingFirstDash => DashCount == 0;
-    private bool IsAboutToGoToFlightState => DashCount > GetJumpCountToEncourageFlightState();
+    private bool IsAboutToGoToChangeMainState => DashCount > GetJumpCountToEncourageFlightState();
     private bool BeforeDoingLastJump => DashCount > GetJumpCountToEncourageFlightState() - 1;
 
     private bool IsFlying => CurrentAIState == LothorAIState.Flight || CurrentAIState == LothorAIState.AirDash;
+
+    private bool IsAboutToLand => IsFlying && BeforeDoingLastJump;
 
     private bool JustDidAirDash => NPC.velocity.Length() > 4.5f && DashTimer < DashDelay * 0.25f;
     private bool IsDashing => StillInJumpBeforeFlightTimer <= 0f && ((CurrentAIState == LothorAIState.Fall && _previousState != LothorAIState.Flight && Math.Abs(NPC.velocity.X) > 5f) || 
@@ -82,6 +85,14 @@ sealed partial class Lothor : ModNPC {
         SetOthers();
 
         UpdateTrailInfo();
+        UpdatePulseVisuals();
+    }
+
+    private void UpdatePulseVisuals() {
+        int pulseCount = 3;
+        float num282 = DashDelay / (float)pulseCount;
+        float num283 = DashTimer % num282 / num282;
+        _pulseStrength = num283;
     }
 
     private void ChangeDirectionTo(int direction) {
@@ -252,6 +263,7 @@ sealed partial class Lothor : ModNPC {
                 AirDashTimer = 0f;
             }
         }
+
         LookAtPlayer();
     }
 
@@ -283,13 +295,19 @@ sealed partial class Lothor : ModNPC {
     private Vector2 GetBetween() {
         Vector2 npcCenter = NPC.Center;
         Vector2 playerCenter = Target.Center;
+        if (IsAboutToLand) {
+            playerCenter = Target.Center - Vector2.UnitY * (AIRDASHLENGTH - AIRDASHLENGTH * 0.75f * (1f - DashTimer / DashDelay));
+        }
         Vector2 dif = playerCenter - npcCenter;
         return dif;
     }
 
-    private Vector2 GetVelocityDirection() {;
+    private Vector2 GetVelocityDirection() {
         Vector2 dif = GetBetween();
         Vector2 dif2 = dif.SafeNormalize(Vector2.One) * AIRDASHLENGTH;
+        if (IsAboutToLand) {
+            dif2 = Vector2.Zero;
+        }
         return dif2;
     }
 
@@ -311,9 +329,10 @@ sealed partial class Lothor : ModNPC {
         Vector2 dif2 = GetVelocityDirection();
         Vector2 velocity = dif - dif2;
         float speed = 10f;
+        bool flag5 = IsAboutToLand;
         velocity = Vector2.Normalize(velocity) * speed;
         float inertia = 30f;
-        float absDistance = Math.Abs(dif.Length());
+        float absDistance = dif.Length();
         float edge = 15f * Utils.Remap(NPC.velocity.Length(), 0f, 10f, 1f, 2f);
         bool flag = _previousState == LothorAIState.AirDash && !JustDidAirDash;
         if (flag) {
@@ -323,15 +342,21 @@ sealed partial class Lothor : ModNPC {
             NPC.velocity.Y -= 0.1f;
         }
         bool flag2 = NPC.velocity.Length() < 5f && BeforeDoingLastJump;
-        PrepareAirDash(!flag2);
         bool flag3 = Collision.SolidCollision(NPC.position - Vector2.One * 4, NPC.width + 2, NPC.height + 2);
+        if (Collision.CanHit(NPC, Target)) {
+            PrepareAirDash(!flag2);
+        }
         bool flag4 = DashTimer > DashDelay;
         if (flag4 && !flag2 && BeforeDoingLastJump && !flag3) {
             if (flag2) {
                 GoToIdleState();
             }
         }
-        if (absDistance > AIRDASHLENGTH - edge && absDistance < AIRDASHLENGTH + edge && absDistance != AIRDASHLENGTH) {
+        bool flag6 = flag5 && absDistance < AIRDASHLENGTH / 6f;
+        if (flag5 && flag4 && absDistance < AIRDASHLENGTH / 2f) {
+            GoToIdleState();
+        }
+        if (flag6 || (!flag5 && absDistance > AIRDASHLENGTH - edge && absDistance < AIRDASHLENGTH + edge && absDistance != AIRDASHLENGTH)) {
             NPC.velocity *= (float)Math.Pow(0.97, inertia * 2.0 / inertia);
             if (!flag) {
                 LookAtPlayer();
@@ -362,7 +387,7 @@ sealed partial class Lothor : ModNPC {
             float yStrength = Math.Abs(NPC.Center.Y - Target.Center.Y) / 16f;
             float maxSpeedY = dashStrength * 6.5f;
             yStrength = MathHelper.Clamp(yStrength, -maxSpeedY, maxSpeedY); 
-            if (IsAboutToGoToFlightState) {
+            if (IsAboutToGoToChangeMainState) {
                 yStrength = maxSpeedY * 0.25f * Math.Sign(yStrength);
             }
             float jumpHeightY = yStrength;
@@ -370,7 +395,7 @@ sealed partial class Lothor : ModNPC {
             float jumpY2 = 8f;
             float dist = Vector2.Distance(NPC.Center, Target.Center);
             float minDist = 800f;
-            if (!IsAboutToGoToFlightState && dist < minDist) {
+            if (!IsAboutToGoToChangeMainState && dist < minDist) {
                 float value = MathHelper.Clamp(dist / minDist, 0.4f, 1f);
                 jumpY2 *= value;
                 NPC.noTileCollide = false;
@@ -391,7 +416,7 @@ sealed partial class Lothor : ModNPC {
             float maxSpeedX = dashStrength * 6.5f;
             float xStrength = Math.Abs(NPC.Center.X - Target.Center.X) / 16f;
             float jumpHeightX = MathHelper.Clamp(xStrength, 0f, maxSpeedX);
-            if (IsAboutToGoToFlightState) {
+            if (IsAboutToGoToChangeMainState) {
                 jumpHeightX = maxSpeedX * 1f;
             }
             if (jumpHeightX < 10f) {
@@ -424,7 +449,7 @@ sealed partial class Lothor : ModNPC {
 
     private void FallState() {
         NPC.knockBackResist = 0f;
-        if (IsAboutToGoToFlightState) {
+        if (IsAboutToGoToChangeMainState) {
             LookAtPlayer();
         }
         else {
@@ -434,7 +459,7 @@ sealed partial class Lothor : ModNPC {
         }
         float dashStrength = GetDashStrength();
         if (NPC.velocity.Y != 0f) {
-            if (NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToFlightState) {
+            if (NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
                 GoToFlightState();
                 return;
             }
@@ -482,9 +507,10 @@ sealed partial class Lothor : ModNPC {
     private void SetDashDelay() {
         float dashDelay = GetDashDelay();
         DashDelay = dashDelay + dashDelay * 0.333f;
-        if (!IsFlying) {
-            DashDelay /= 2f;
-        }
+        DashDelay *= 0.75f;
+        //if (!IsFlying) {
+        //    DashDelay /= 2f;
+        //}
     }
 
     private float ResetDashVariables() => DashDelay = DashTimer = 0f;
@@ -495,9 +521,9 @@ sealed partial class Lothor : ModNPC {
 
     private float GetDashDelay() {
         float delay = /* IsFlying ? */BeforeDoingLastJump ? 125f : 100f/* : BeforeDoingLastJump ? 100f : 75f*/;
-        if (IsFlying && DoingFirstDash) {
-            delay -= delay / 4;
-        }
+        //if (IsFlying && DoingFirstDash) {
+        //    delay -= delay / 4;
+        //}
         return delay;
     }
 
@@ -563,7 +589,7 @@ sealed partial class Lothor : ModNPC {
 
     private void PrepareJump() {
         NPC.knockBackResist = MathHelper.Lerp(0.5f, 0f, PreparationProgress);
-        DashTimer += 1f - 0.35f * MathHelper.Clamp(NPC.Distance(Target.Center) / 600f, 0f, 1f);
+        DashTimer += 1f /*- 0.35f * MathHelper.Clamp(NPC.Distance(Target.Center) / 600f, 0f, 1f)*/;
         if (DashTimer >= DashDelay) {
             ResetDashVariables();
             CurrentAIState = LothorAIState.Jump;
