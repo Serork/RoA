@@ -224,7 +224,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
             Vector2 speed = (position - center).SafeNormalize(Vector2.One) * length;
             speed = speed.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver4 * 0.75f));
             velocity = speed;
-            position = position + Main.rand.RandomPointInArea(8, 16);
+            position += Main.rand.RandomPointInArea(8, 16);
             if (position.Y > endPositionY) {
                 position.Y = endPositionY;
             }
@@ -235,11 +235,28 @@ sealed class TectonicCaneProjectile : NatureProjectile {
                     Scale: Main.rand.NextFloat(1.5f, 2f) * (flag ? Main.rand.NextFloat(0.5f, 0.75f) : 1f));
                 dust.customData = 1;
             }
-            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), position, velocity, type, Projectile.damage, Projectile.knockBack, Projectile.owner, speed.X.GetDirection());
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), position, velocity, type, 0, 0f, Projectile.owner, speed.X.GetDirection());
         }
     }
 
     public override void AI() {
+        Vector2 size = new(60f, 90f * Projectile.ai[0]);
+        Vector2 offset = new(0f, size.Y / 3f);
+        Vector2 startPosition = Projectile.position - new Vector2(size.X / 2f, size.Y) - offset;
+        Vector2 endPosition = startPosition + size;
+
+        if (++Projectile.ai[2] > 60f) {
+            Projectile.ai[2] = 0f;
+
+            if (Projectile.owner == Main.myPlayer) {
+                for (int i = 0; i < 6; i++) {
+                    Vector2 velocity = new Vector2(0f, 7.5f + Main.rand.NextFloatRange(2.5f)).RotatedBy(MathHelper.Pi / i + Main.rand.NextFloatRange(MathHelper.PiOver4) + MathHelper.PiOver2);
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), startPosition + Main.rand.Random2(0f, size.X - 4f, 0f, size.X / 2f), velocity, ModContent.ProjectileType<TectonicCaneFlames>(),
+                        Projectile.damage, Projectile.knockBack, Projectile.owner);
+                }
+            }
+        }
+
         if (Projectile.localAI[2] < 16f) {
             Projectile.localAI[2]++;
             if (Projectile.localAI[2] % 3f == 0f) {
@@ -261,10 +278,6 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], Main.rand.NextFloatRange(35f) * Main.rand.NextFloatDirection(), lerpAmount);
         Projectile.localAI[1] = MathHelper.SmoothStep(Projectile.localAI[1], Main.rand.NextFloatRange(50f) * Main.rand.NextFloatDirection(), lerpAmount);
 
-        Vector2 size = new(60f, 90f * Projectile.ai[0]);
-        Vector2 offset = new(0f, size.Y / 3f);
-        Vector2 startPosition = Projectile.position - new Vector2(size.X / 2f, size.Y) - offset;
-        Vector2 endPosition = startPosition + size;
         Vector2 center = startPosition + size / 2f;
         center += Vector2.UnitY * 10f;
         center.X -= 4f;

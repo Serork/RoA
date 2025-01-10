@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Forms;
+using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
 using RoA.Utilities;

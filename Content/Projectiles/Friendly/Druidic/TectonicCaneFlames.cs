@@ -3,9 +3,9 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using RoA.Core;
 
-namespace RoA.Content.Projectiles.Friendly.Druidic.Forms;
+namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class LilPhoenixFlames : FormProjectile {
+sealed class TectonicCaneFlames : FormProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
     public override bool PreDraw(ref Color lightColor) => false;
 
@@ -13,9 +13,9 @@ sealed class LilPhoenixFlames : FormProjectile {
         Projectile.aiStyle = 14;
         Projectile.width = 4;
         Projectile.height = 4;
-        Projectile.timeLeft = 260;
+        Projectile.timeLeft = 100;
         Projectile.penetrate = 6;
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
         Projectile.friendly = true;
         Projectile.scale = 1.1f;
 
@@ -24,6 +24,9 @@ sealed class LilPhoenixFlames : FormProjectile {
     }
 
     public override void AI() {
+        if (Projectile.timeLeft < 90) {
+            Projectile.tileCollide = true;
+        }
         if (Main.netMode != NetmodeID.Server) {
             if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
                 int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 2, 2, 6, 0f, -0.5f, 0, default, 2f);
