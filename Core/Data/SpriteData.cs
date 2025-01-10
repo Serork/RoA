@@ -38,6 +38,7 @@ struct SpriteData(Asset<Texture2D> textureAsset, SpriteFrame frame) {
     }
 
     public void DrawSelf(Rectangle? rectangle = null, Vector2? offset = null) {
+
         if (Texture == null) {
             return;
         }
