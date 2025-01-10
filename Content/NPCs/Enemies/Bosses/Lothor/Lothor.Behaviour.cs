@@ -523,10 +523,11 @@ sealed partial class Lothor : ModNPC {
             SoundEngine.PlaySound(SoundID.DD2_OgreGroundPound, NPC.Center);
         }
 
-        float strength = Main.expertMode ? 7.5f : 5f;
+        float strength = 7.5f/*Main.expertMode ? 7.5f : 5f*/;
+        int distInTiles = 20/*Main.expertMode ? 20 : 15*/;
         foreach (Player target in Main.player) {
             bool targetStands = target.velocity.Y == 0f || target.sliding;
-            if (Vector2.Distance(target.Center, NPC.Center) < (Main.expertMode ? 20 : 15) * 16f && targetStands) {
+            if (Vector2.Distance(target.Center, NPC.Center) < distInTiles * 16f && targetStands) {
                 TossAPlayer(target, strength);
             }
         }
@@ -541,7 +542,7 @@ sealed partial class Lothor : ModNPC {
 
         float size = strength * 5f;
         int type = ModContent.ProjectileType<LothorStomp>();
-        int damage = NPC.damage / 3;
+        int damage = NPC.damage / 2;
         float knockback = 2f;
         int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.velocity, Vector2.Zero, type, damage, knockback, Main.myPlayer, 0f, size);
         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
