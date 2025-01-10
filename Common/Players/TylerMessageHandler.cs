@@ -112,7 +112,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
         GiveIdleMessageCooldown();
         SpawnPopupText(source, _variation, position, velocity);
         SpawnEmoteBubble();
-        SoundEngine.PlaySound(new SoundStyle(ResourceManager.MiscSounds + "hahahahahaha"), position);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.MiscSounds + "hahahahahaha") with { Volume = 0.6f }, position);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             NetMessage.SendData(MessageID.RequestLucyPopup, number: (int)source, number2: _variation, number3: velocity.X, number4: velocity.Y, number5: (int)position.X, number6: (int)position.Y);
         }
