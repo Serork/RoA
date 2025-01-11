@@ -108,7 +108,7 @@ sealed class MinAxeSystem : ILoadable {
                     }
                 }
 
-                if (TileLoader.GetTile(tile.TileType) is TileHooks.IRequestMinAxePower tileMinAxePower) {
+                if (TileLoader.GetTile(tile.TileType) is TileHooks.IRequireMinAxePower tileMinAxePower) {
                     if (sItem.axe * 5 < tileMinAxePower.MinAxe) {
                         num2 = 0;
                     }

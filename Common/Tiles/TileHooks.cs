@@ -7,7 +7,7 @@ using Terraria.GameContent.Drawing;
 namespace RoA.Common.Tiles;
 
 sealed class TileHooks {
-    public interface IRequestMinAxePower {
+    public interface IRequireMinAxePower {
         int MinAxe { get; } 
     }
 

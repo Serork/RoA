@@ -10,8 +10,8 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class FallenTree : ModTile, TileHooks.IRequestMinAxePower {
-    int TileHooks.IRequestMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
+sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower {
+    int TileHooks.IRequireMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
 
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;

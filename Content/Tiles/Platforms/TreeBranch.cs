@@ -17,8 +17,8 @@ using RoA.Content.Tiles.Trees;
 
 namespace RoA.Content.Tiles.Platforms;
 
-class TreeBranch : ModTile, TileHooks.IRequestMinAxePower {
-    int TileHooks.IRequestMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
+class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
+    int TileHooks.IRequireMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
 
     protected virtual int FrameCount => 2;
 
