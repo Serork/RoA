@@ -706,6 +706,8 @@ sealed partial class Lothor : ModNPC {
         PrepareJump();
     }
 
+    private int GetDoneAttackCount(LothorAIState attackState) => _previousAttacks.Count(x => x == attackState);
+
     private void SetKnockBackResist() => NPC.knockBackResist = MathHelper.Lerp(0.5f, 0f, PreparationProgress * (IsFlying ? 2f : 1f));
 
     private float GetClawsAttackDelay() => GetAttackDelay(true) * 0.6f;
@@ -724,7 +726,7 @@ sealed partial class Lothor : ModNPC {
                 ClawsTimer = 0f;
             }
             else if (_previousState != LothorAIState.SpittingAttack && distance > 250f && distance < 550f &&
-                     flag && _previousAttacks.Count(x => x == LothorAIState.SpittingAttack) < 2) {
+                     flag && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2) {
                 SpittingAttackTime = GetSpittingAttackDelay();
                 CurrentAIState = LothorAIState.SpittingAttack;
                 SpittingTimer = 0f;
