@@ -102,12 +102,12 @@ sealed partial class Lothor : ModNPC {
     private float MinDelayBeforeAttack => DashDelay * 0.2f;
     private float MinToChargeFlightAttack => FlightAttackTimeMax * 0.35f;
 
-    private bool JustDidAirDash => NPC.velocity.Length() > 4.5f && DashTimer < DashDelay * 0.25f;
+    private bool JustDidAirDash => NPC.velocity.Length() > 4.5f && DashTimer < DashDelay * 0.15f;
     private bool IsDashing => StillInJumpBeforeFlightTimer <= 0f && ((CurrentAIState == LothorAIState.Fall && _previousState != LothorAIState.Flight && Math.Abs(NPC.velocity.X) > 5f) || 
         (CurrentAIState == LothorAIState.AirDash && NPC.velocity.Length() > 3.5f) || 
         (CurrentAIState == LothorAIState.Flight && JustDidAirDash));
 
-    private bool ShouldDrawWreath => CurrentAIState == LothorAIState.WreathAttack && FlightAttackTimer != 0f;
+    private bool ShouldDrawWreath => CurrentAIState == LothorAIState.WreathAttack && FlightAttackTimer != 0f && BeforeAttackTimer <= 0f;
 
     private int GetJumpCountToEncourageFlightState() => 3;
 
@@ -316,7 +316,7 @@ sealed partial class Lothor : ModNPC {
                 _currentColumn = SpriteSheetColumn.Flight;
 
                 if (FlightAttackTimer != 0f && BeforeAttackTimer > 0f) {
-                    byte neededFrame = 22;
+                    byte neededFrame = 23;
                     if (_frameChosen) {
                         CurrentFrame = neededFrame;
                     }
@@ -398,6 +398,7 @@ sealed partial class Lothor : ModNPC {
             if (FlightAttackTimer >= MinToChargeFlightAttack) {
                 // spawn the wreath once
                 // move above the target and attack
+                NPC.velocity *= 0.975f;
             }
             else {
                 NPC.velocity *= 0.975f;
@@ -882,7 +883,7 @@ sealed partial class Lothor : ModNPC {
 
     private float GetClawsAttackDelay() => GetAttackDelay(true) * 0.6f;
     private float GetSpittingAttackDelay() => GetAttackDelay(true) * 0.8f;
-    private float GetWreathAttackDelay() => GetAttackDelay(true) * 0.8f;
+    private float GetWreathAttackDelay() => GetAttackDelay(true) * 0.3f;
 
     private void SetTimeBeforeAttack(float time, bool flag = false) {
         _beforeAttackDelay = time;

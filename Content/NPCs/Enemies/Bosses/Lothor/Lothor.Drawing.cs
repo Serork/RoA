@@ -106,6 +106,6 @@ sealed partial class Lothor : ModNPC {
         SpriteFrame frame = new(2, 1);
         Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
         Vector2 position = NPC.Center - Main.screenPosition + new Vector2(75f * (Target.Center.X - NPC.Center.X).GetDirection(), -15f);
-        spriteBatch.Draw(texture, position, sourceRectangle, Color.White * (1f - BeforeAttackTimer / _beforeAttackDelay), 0f, sourceRectangle.Size() / 2f, 1f, default, 0);
+        spriteBatch.Draw(texture, position, sourceRectangle, Color.White, 0f, sourceRectangle.Size() / 2f, 1f, default, 0);
     }
 }
