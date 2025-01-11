@@ -143,12 +143,11 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         }
 
         protected override void ShootProjectile() {
-            if (!Collision.CanHit(Owner.Center, 0, 0, CorePosition, 0, 0)) {
-                return;
-            }
-
+            bool flag = Collision.CanHit(Owner.Center, 0, 0, CorePosition, 0, 0);
             if (MinPassed && _attackTimer < Min + PerShoot) {
-                base.ShootProjectile();
+                if (flag) {
+                    base.ShootProjectile();
+                }
 
                 SoundEngine.PlaySound(SoundID.Item20, CorePosition);
 
@@ -160,8 +159,9 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
                 return;
             }
 
-
-            base.ShootProjectile();
+            if (flag) {
+                base.ShootProjectile();
+            }
         }
 
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
