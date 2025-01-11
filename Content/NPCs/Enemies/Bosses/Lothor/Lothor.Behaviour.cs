@@ -6,6 +6,8 @@ using RoA.Core;
 using RoA.Utilities;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -38,7 +40,8 @@ sealed partial class Lothor : ModNPC {
         Jump,
         Flight,
         AirDash,
-        ClawsAttack
+        ClawsAttack,
+        SpittingAttack
     }
 
     private Vector2 _playerTempPosition;
@@ -48,6 +51,7 @@ sealed partial class Lothor : ModNPC {
     private bool _stompSpawned;
     private float _canChangeDirectionTimer;
     private float _pulseStrength;
+    private List<LothorAIState> _previousAttacks;
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
     private Player Target { get; set; }
@@ -63,6 +67,9 @@ sealed partial class Lothor : ModNPC {
     private ref float ClawsTimer => ref NPC.ai[0];
     private ref float ClawsAttackTime => ref NPC.ai[1];
 
+    private ref float SpittingTimer => ref NPC.ai[0];
+    private ref float SpittingAttackTime => ref NPC.ai[1];
+
     private float PreparationProgress => Helper.EaseInOut3(DashTimer / DashDelay * 1.25f);
 
     private bool DoingFirstDash => DashCount == 0;
@@ -73,7 +80,7 @@ sealed partial class Lothor : ModNPC {
 
     private bool IsAboutToLand => IsFlying && BeforeDoingLastJump;
 
-    private bool ShouldDrawPulseEffect => CurrentAIState != LothorAIState.ClawsAttack;
+    private bool ShouldDrawPulseEffect => CurrentAIState != LothorAIState.ClawsAttack && CurrentAIState != LothorAIState.SpittingAttack;
 
     private bool JustDidAirDash => NPC.velocity.Length() > 4.5f && DashTimer < DashDelay * 0.25f;
     private bool IsDashing => StillInJumpBeforeFlightTimer <= 0f && ((CurrentAIState == LothorAIState.Fall && _previousState != LothorAIState.Flight && Math.Abs(NPC.velocity.X) > 5f) || 
@@ -122,6 +129,8 @@ sealed partial class Lothor : ModNPC {
         if (_spawned) {
             return;
         }
+
+        _previousAttacks = [];
 
         int trailLength = 10;
         if (trailLength != NPC.oldPos.Length) {
@@ -230,11 +239,27 @@ sealed partial class Lothor : ModNPC {
                 byte maxFrames = 8;
                 float min = ClawsAttackTime * 0.15f;
                 bool flag = ClawsTimer < min;
-                if (CurrentFrame < 2 || CurrentFrame >= maxFrames || flag) {
-                    CurrentFrame = 2;
+                if (CurrentFrame < minFrame || CurrentFrame >= maxFrames || flag) {
+                    CurrentFrame = minFrame;
                 }
                 if (!flag) {
                     CurrentFrame = (byte)MathHelper.Lerp(minFrame, maxFrames, (ClawsTimer - min) / (ClawsAttackTime - min));
+                    if (CurrentFrame > maxFrames) {
+                        CurrentFrame = maxFrames;
+                    }
+                }
+                break;
+            case LothorAIState.SpittingAttack:
+                _currentColumn = SpriteSheetColumn.Stand;
+                minFrame = 9;
+                maxFrames = 16;
+                min = SpittingAttackTime * 0.15f;
+                flag = SpittingTimer < min;
+                if (CurrentFrame < minFrame || CurrentFrame >= maxFrames || flag) {
+                    CurrentFrame = minFrame;
+                }
+                if (!flag) {
+                    CurrentFrame = (byte)MathHelper.Lerp(minFrame, maxFrames, (SpittingTimer - min) / (SpittingAttackTime - min));
                     if (CurrentFrame > maxFrames) {
                         CurrentFrame = maxFrames;
                     }
@@ -265,7 +290,37 @@ sealed partial class Lothor : ModNPC {
                 case LothorAIState.ClawsAttack:
                     ClawsAttack();
                     break;
+                case LothorAIState.SpittingAttack:
+                    SpittingAttack();
+                    break;
             }
+        }
+    }
+
+    private void SpittingAttack() {
+        WhenIdle();
+
+        NPC.knockBackResist = 0f;
+
+        SpittingTimer += 1f;
+
+        int count = 5;
+        float rate = SpittingAttackTime / count;
+        if (SpittingTimer > 11f && (int)SpittingTimer % (int)rate == 0) {
+            SoundEngine.PlaySound(SoundID.Item111, NPC.Center);
+
+            // attack
+        }
+
+        if (SpittingTimer >= SpittingAttackTime) {
+            SpittingTimer = 0f;
+            _previousState = CurrentAIState;
+            //SpittingAttackTime = GetClawsAttackDelay();
+
+            DashDelay = GetAttackDelay();
+            CurrentAIState = LothorAIState.Idle;
+
+            _previousAttacks.Add(_previousState);
         }
     }
 
@@ -288,7 +343,7 @@ sealed partial class Lothor : ModNPC {
                 int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType, NPC.damage / 3, 2f, Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
             }
-            SoundStyle swipeSound = new SoundStyle(ResourceManager.NPCSounds + "LothorSwipe") { PitchVariance = 0.1f };
+            SoundStyle swipeSound = new(ResourceManager.NPCSounds + "LothorSwipe") { PitchVariance = 0.1f };
             SoundEngine.PlaySound(swipeSound, NPC.Center);
         }
         ClawsTimer += 1f;
@@ -299,6 +354,8 @@ sealed partial class Lothor : ModNPC {
 
             DashDelay = GetAttackDelay();
             CurrentAIState = LothorAIState.Idle;
+
+            _previousAttacks.Add(_previousState);
         }
     }
 
@@ -532,6 +589,7 @@ sealed partial class Lothor : ModNPC {
         if (NPC.velocity.Y != 0f) {
             if (NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
                 GoToFlightState();
+                _previousAttacks.Clear();
                 return;
             }
             NPC.noTileCollide = NPC.velocity.Y < 0f && NPC.velocity.Length() > dashStrength && Math.Abs(NPC.velocity.X) > dashStrength / 2f;
@@ -651,16 +709,25 @@ sealed partial class Lothor : ModNPC {
     private void SetKnockBackResist() => NPC.knockBackResist = MathHelper.Lerp(0.5f, 0f, PreparationProgress * (IsFlying ? 2f : 1f));
 
     private float GetClawsAttackDelay() => GetAttackDelay(true) * 0.6f;
+    private float GetSpittingAttackDelay() => GetAttackDelay(true) * 0.8f;
 
     private void PrepareJump() {
         SetKnockBackResist();
         if (NPC.velocity.Y == 0f) {
             DashTimer += 1f;
-            if (_previousState != LothorAIState.ClawsAttack && Vector2.Distance(Target.Center, NPC.Center) < 200f &&
-                Collision.CanHit(Target, NPC)) {
+            bool flag = Collision.CanHit(Target, NPC);
+            float distance = Vector2.Distance(Target.Center, NPC.Center);
+            if (_previousState != LothorAIState.ClawsAttack && _previousState != LothorAIState.SpittingAttack && distance < 200f &&
+                flag) {
                 ClawsAttackTime = GetClawsAttackDelay();
                 CurrentAIState = LothorAIState.ClawsAttack;
                 ClawsTimer = 0f;
+            }
+            else if (_previousState != LothorAIState.SpittingAttack && distance > 250f && distance < 550f &&
+                     flag && _previousAttacks.Count(x => x == LothorAIState.SpittingAttack) < 2) {
+                SpittingAttackTime = GetSpittingAttackDelay();
+                CurrentAIState = LothorAIState.SpittingAttack;
+                SpittingTimer = 0f;
             }
             else if (DashTimer >= DashDelay) {
                 ResetDashVariables();
