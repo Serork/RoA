@@ -1,5 +1,6 @@
 ﻿using Humanizer;
 
+using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 
 using RoA.Common.WorldEvents;
@@ -44,7 +45,8 @@ sealed partial class Lothor : ModNPC {
         Flight,
         AirDash,
         ClawsAttack,
-        SpittingAttack
+        SpittingAttack,
+        WreathAttack
     }
 
     private Vector2 _playerTempPosition;
@@ -56,10 +58,15 @@ sealed partial class Lothor : ModNPC {
     private float _pulseStrength;
     private List<LothorAIState> _previousAttacks;
     private float _beforeAttackDelay, _beforeAttackTimerVisual, _beforeAttackTimerVisualMax;
+    private bool _frameChosen;
+    private int _tempDirection;
+    private Vector2 _positionToMove;
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
     private Player Target { get; set; }
-    private List<LothorAIState> Attacks => [LothorAIState.ClawsAttack, LothorAIState.SpittingAttack];
+    private List<LothorAIState> Attacks => [LothorAIState.ClawsAttack, LothorAIState.SpittingAttack, LothorAIState.WreathAttack];
+    private List<LothorAIState> FlightStates => [LothorAIState.Flight, LothorAIState.AirDash, LothorAIState.WreathAttack];
+    private List<LothorAIState> AirAttacks => [LothorAIState.AirDash, LothorAIState.WreathAttack];
 
     private ref float DashCount => ref NPC.ai[2];
     private ref float FallStrengthIfClose => ref NPC.localAI[0];
@@ -77,19 +84,23 @@ sealed partial class Lothor : ModNPC {
     private ref float SpittingTimer => ref NPC.ai[0];
     private ref float SpittingAttackTime => ref NPC.ai[1];
 
+    private ref float FlightAttackTimer => ref NPC.ai[0];
+    private ref float FlightAttackTimeMax => ref NPC.ai[1];
+
     private float PreparationProgress => Helper.EaseInOut3(DashTimer / DashDelay * 1.25f);
 
     private bool DoingFirstDash => DashCount == 0;
     private bool IsAboutToGoToChangeMainState => DashCount > GetJumpCountToEncourageFlightState();
     private bool BeforeDoingLastJump => DashCount > GetJumpCountToEncourageFlightState() - 1;
 
-    private bool IsFlying => CurrentAIState == LothorAIState.Flight || CurrentAIState == LothorAIState.AirDash;
+    private bool IsFlying => FlightStates.Contains(CurrentAIState);
 
     private bool IsAboutToLand => IsFlying && BeforeDoingLastJump;
 
     private bool ShouldDrawPulseEffect => !Attacks.Contains(CurrentAIState) || (Attacks.Contains(CurrentAIState) && _beforeAttackTimerVisual > 0f);
 
     private float MinDelayBeforeAttack => DashDelay * 0.2f;
+    private float MinToChargeFlightAttack => FlightAttackTimeMax * 0.35f;
 
     private bool JustDidAirDash => NPC.velocity.Length() > 4.5f && DashTimer < DashDelay * 0.25f;
     private bool IsDashing => StillInJumpBeforeFlightTimer <= 0f && ((CurrentAIState == LothorAIState.Fall && _previousState != LothorAIState.Flight && Math.Abs(NPC.velocity.X) > 5f) || 
@@ -152,6 +163,8 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
+        CurrentAIState = LothorAIState.Flight;
+
         _previousAttacks = [];
 
         int trailLength = 10;
@@ -187,7 +200,7 @@ sealed partial class Lothor : ModNPC {
             float xVelocity = NPC.velocity.X * 0.085f;
             float maxRotation = 0.3f;
             float to = Math.Clamp(xVelocity, -maxRotation, maxRotation);
-            if (StillInJumpBeforeFlightTimer > 0f || CurrentAIState == LothorAIState.AirDash) {
+            if (StillInJumpBeforeFlightTimer > 0f || AirAttacks.Contains(CurrentAIState)) {
                 rotation = Utils.AngleLerp(rotation, to, Math.Abs(to) * 0.4f);
             }
             else {
@@ -214,6 +227,25 @@ sealed partial class Lothor : ModNPC {
         NPC.TargetClosest();
     }
 
+    private void ApplyFlyingAnimation() {
+        _currentColumn = SpriteSheetColumn.Flight;
+        if (NPC.frameCounter <= 0.0) {
+            CurrentFrame = 20;
+            NPC.frameCounter += NPC.velocity.Length() / 4f;
+            NPC.frameCounter += 1.0;
+        }
+        else {
+            double flightFrameRate = 6.0;
+            if (++NPC.frameCounter > 1.0 + flightFrameRate) {
+                CurrentFrame++;
+                NPC.frameCounter = 1.0;
+            }
+        }
+        if (CurrentFrame > 25) {
+            CurrentFrame = 20;
+        }
+    }
+
     partial void HandleAnimations() {
         NPC.spriteDirection = -NPC.direction;
         _drawOffset.Y = -6f;
@@ -237,22 +269,7 @@ sealed partial class Lothor : ModNPC {
             case LothorAIState.AirDash:
                 if (StillInJumpBeforeFlightTimer <= 0f) {
                     _drawOffset.Y = 16f;
-                    _currentColumn = SpriteSheetColumn.Flight;
-                    if (NPC.frameCounter <= 0.0) {
-                        CurrentFrame = 20;
-                        NPC.frameCounter += NPC.velocity.Length() / 4f;
-                        NPC.frameCounter += 1.0;
-                    }
-                    else {
-                        double flightFrameRate = 6.0;
-                        if (++NPC.frameCounter > 1.0 + flightFrameRate) {
-                            CurrentFrame++;
-                            NPC.frameCounter = 1.0;
-                        }
-                    }
-                }
-                if (CurrentFrame > 25) {
-                    CurrentFrame = 20;
+                    ApplyFlyingAnimation();
                 }
                 break;
             case LothorAIState.ClawsAttack:
@@ -291,6 +308,28 @@ sealed partial class Lothor : ModNPC {
                     }
                 }
                 break;
+            case LothorAIState.WreathAttack:
+                _drawOffset.Y = 16f;
+
+                _currentColumn = SpriteSheetColumn.Flight;
+
+                if (FlightAttackTimer != 0f && BeforeAttackTimer > 0f) {
+                    byte neededFrame = 22;
+                    if (_frameChosen) {
+                        CurrentFrame = neededFrame;
+                    }
+                    else {
+                        ApplyFlyingAnimation();
+                        if (CurrentFrame == neededFrame) {
+                            _frameChosen = true;
+                        }
+                    }
+                }
+                else {
+                    ApplyFlyingAnimation();
+                }
+
+                break;
         }
     }
 
@@ -319,6 +358,46 @@ sealed partial class Lothor : ModNPC {
                 case LothorAIState.SpittingAttack:
                     SpittingAttack();
                     break;
+                case LothorAIState.WreathAttack:
+                    WreathAttack();
+                    break;
+            }
+        }
+    }
+
+    private void WreathAttack() {
+        LookAtPlayer();
+
+        void updatePositionToMove(float x = 150f, float y = -150f) => _positionToMove = Target.Center + new Vector2(_tempDirection * x, y);
+        if (_tempDirection == 0) {
+            _tempDirection = (NPC.Center - Target.Center).X.GetDirection();
+            updatePositionToMove();
+        }
+        float speed = 7.5f;
+        Vector2 desiredVelocity = NPC.DirectionTo(_positionToMove) * speed;
+        if (FlightAttackTimer == 0f) {
+            float acceleration = 0.25f;
+            NPC.SimpleFlyMovement(desiredVelocity, acceleration);
+            float min = 100f;
+            if (Vector2.Distance(_positionToMove, NPC.Center) < min) {
+                FlightAttackTimer = 1f;
+                SetTimeBeforeAttack(MinToChargeFlightAttack, true);
+            }
+        }
+        else {
+            bool flag = BeforeAttackTimer > 0f;
+            if (flag) {
+                BeforeAttackTimer--;
+            }
+            if (FlightAttackTimer >= MinToChargeFlightAttack + 1f) {
+                // spawn the wreath once
+                // move above the target and attack
+            }
+            else {
+                NPC.velocity *= 0.975f;
+                if (!flag) {
+                    FlightAttackTimer++;
+                }
             }
         }
     }
@@ -455,8 +534,14 @@ sealed partial class Lothor : ModNPC {
         float minDistance = AIRDASHLENGTH;
         if (AirDashTimer > 10f) {
             if (distance < minDistance || (Vector2.Distance(NPC.Center, Target.Center) > minDistance * 2f && NPC.velocity.Length() > dashStrength * 0.75f) || NPC.velocity.Length() > dashStrength * 1.25f) {
-                GoToFlightState(false, false);
                 _dashStrength = 0f;
+                if (Main.rand.NextBool()) {
+                    ChooseAttack(LothorAIState.WreathAttack);
+
+                    return;
+                }
+                
+                GoToFlightState(false, false);
             }
         }
 
@@ -485,23 +570,23 @@ sealed partial class Lothor : ModNPC {
 
     private Vector2 GetPositionBehindTarget() {
         Vector2 playerCenter = Target.Center;
-        return playerCenter + GetVelocityDirection();
+        return playerCenter + GetVelocityDirectionForFlightState();
     }
 
-    private Vector2 GetBetween() {
+    private Vector2 GetBetweenForFlightState() {
         Vector2 npcCenter = NPC.Center;
         Vector2 playerCenter = Target.Center;
-        if (IsAboutToLand) {
+        if (IsAboutToLand && CurrentAIState == LothorAIState.Flight) {
             playerCenter = Target.Center - Vector2.UnitY * (AIRDASHLENGTH - AIRDASHLENGTH * 0.75f * (1f - DashTimer / DashDelay));
         }
         Vector2 dif = playerCenter - npcCenter;
         return dif;
     }
 
-    private Vector2 GetVelocityDirection() {
-        Vector2 dif = GetBetween();
+    private Vector2 GetVelocityDirectionForFlightState() {
+        Vector2 dif = GetBetweenForFlightState();
         Vector2 dif2 = dif.SafeNormalize(Vector2.One) * AIRDASHLENGTH;
-        if (IsAboutToLand) {
+        if (IsAboutToLand && CurrentAIState == LothorAIState.Flight) {
             dif2 = Vector2.Zero;
         }
         return dif2;
@@ -524,8 +609,8 @@ sealed partial class Lothor : ModNPC {
             LookAtPlayer();
             return;
         }
-        Vector2 dif = GetBetween();
-        Vector2 dif2 = GetVelocityDirection();
+        Vector2 dif = GetBetweenForFlightState();
+        Vector2 dif2 = GetVelocityDirectionForFlightState();
         Vector2 velocity = dif - dif2;
         float speed = 10f;
         bool flag5 = IsAboutToLand;
@@ -791,13 +876,21 @@ sealed partial class Lothor : ModNPC {
 
     private float GetClawsAttackDelay() => GetAttackDelay(true) * 0.6f;
     private float GetSpittingAttackDelay() => GetAttackDelay(true) * 0.8f;
+    private float GetWreathAttackDelay() => GetAttackDelay(true) * 0.8f;
 
-    private void SetTimeBeforeAttack(float time) {
-        _beforeAttackDelay = BeforeAttackTimer = time;
+    private void SetTimeBeforeAttack(float time, bool flag = false) {
+        _beforeAttackDelay = time;
         _beforeAttackTimerVisual = _beforeAttackTimerVisualMax = _beforeAttackDelay * 5f;
+        if (!flag) {
+            BeforeAttackTimer = _beforeAttackDelay;
+        }
+        else {
+            BeforeAttackTimer = _beforeAttackTimerVisualMax;
+        }
     }
 
     private void ChooseAttack(LothorAIState lothorAIState) {
+        NPC.TargetClosest(false);
         switch (lothorAIState) {
             case LothorAIState.ClawsAttack:
                 ClawsAttackTime = GetClawsAttackDelay();
@@ -811,37 +904,41 @@ sealed partial class Lothor : ModNPC {
                 SetTimeBeforeAttack(SpittingAttackTime * 0.1f);
                 SpittingTimer = 0f;
                 break;
+            case LothorAIState.WreathAttack:
+                ResetDashVariables();
+                _previousState = CurrentAIState;
+                CurrentAIState = LothorAIState.WreathAttack;
+                FlightAttackTimeMax = GetWreathAttackDelay();
+                break;
         }
     }
 
     private void PrepareJump() {
         SetKnockBackResist();
-        if (NPC.velocity.Y == 0f) {
-            DashTimer += 1f;
-            bool flag = Collision.CanHit(Target, NPC);
-            float distance = Vector2.Distance(Target.Center, NPC.Center);
-            bool flag2 = distance < 200f;
-            bool flag4 = DashTimer < MinDelayBeforeAttack;
-            if (_previousState != LothorAIState.ClawsAttack && _previousState != LothorAIState.SpittingAttack && flag2 &&
-                flag && flag4) {
-                ChooseAttack(LothorAIState.ClawsAttack);
-                return;
-            }
-            bool flag3 = !flag2 && distance < 800f;
-            if (_previousState != LothorAIState.SpittingAttack && flag3 &&
-                flag/* && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 */&& flag4) {
-                ChooseAttack(LothorAIState.SpittingAttack);
-                return;
-            }
-            if (DashTimer >= DashDelay) {
-                ResetDashVariables();
-                CurrentAIState = LothorAIState.Jump;
-                _previousState = CurrentAIState;
+        DashTimer += 1f;
+        bool flag = Collision.CanHit(Target, NPC);
+        float distance = Vector2.Distance(Target.Center, NPC.Center);
+        bool flag2 = distance < 200f;
+        bool flag4 = DashTimer > MinDelayBeforeAttack && DashTimer < MinDelayBeforeAttack * 2f;
+        if (_previousState != LothorAIState.ClawsAttack && _previousState != LothorAIState.SpittingAttack && flag2 &&
+            flag && flag4) {
+            ChooseAttack(LothorAIState.ClawsAttack);
+            return;
+        }
+        bool flag3 = !flag2 && distance < 800f;
+        if (_previousState != LothorAIState.SpittingAttack && flag3 &&
+            flag/* && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 */&& flag4) {
+            ChooseAttack(LothorAIState.SpittingAttack);
+            return;
+        }
+        if (DashTimer >= DashDelay) {
+            ResetDashVariables();
+            CurrentAIState = LothorAIState.Jump;
+            _previousState = CurrentAIState;
 
-                PlayRoarSound();
+            PlayRoarSound();
 
-                DashCount++;
-            }
+            DashCount++;
         }
     }
 
