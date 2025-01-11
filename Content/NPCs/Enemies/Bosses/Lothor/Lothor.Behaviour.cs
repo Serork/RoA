@@ -107,6 +107,8 @@ sealed partial class Lothor : ModNPC {
         (CurrentAIState == LothorAIState.AirDash && NPC.velocity.Length() > 3.5f) || 
         (CurrentAIState == LothorAIState.Flight && JustDidAirDash));
 
+    private bool ShouldDrawWreath => CurrentAIState == LothorAIState.WreathAttack && FlightAttackTimer != 0f;
+
     private int GetJumpCountToEncourageFlightState() => 3;
 
     public override void AI() {
@@ -370,13 +372,17 @@ sealed partial class Lothor : ModNPC {
 
         void updatePositionToMove(float x = 150f, float y = -150f) => _positionToMove = Target.Center + new Vector2(_tempDirection * x, y);
         if (_tempDirection == 0) {
-            _tempDirection = (NPC.Center - Target.Center).X.GetDirection();
+            _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
             updatePositionToMove();
         }
-        float speed = 7.5f;
+        float speed = 5f;
+        if (NPC.velocity.Length() > speed) {
+            float inertia = speed * 2f;
+            NPC.velocity *= (float)Math.Pow(0.99, inertia * 2.0 / inertia);
+        }
         Vector2 desiredVelocity = NPC.DirectionTo(_positionToMove) * speed;
         if (FlightAttackTimer == 0f) {
-            float acceleration = 0.25f;
+            float acceleration = 0.2f;
             NPC.SimpleFlyMovement(desiredVelocity, acceleration);
             float min = 100f;
             if (Vector2.Distance(_positionToMove, NPC.Center) < min) {
@@ -389,7 +395,7 @@ sealed partial class Lothor : ModNPC {
             if (flag) {
                 BeforeAttackTimer--;
             }
-            if (FlightAttackTimer >= MinToChargeFlightAttack + 1f) {
+            if (FlightAttackTimer >= MinToChargeFlightAttack) {
                 // spawn the wreath once
                 // move above the target and attack
             }

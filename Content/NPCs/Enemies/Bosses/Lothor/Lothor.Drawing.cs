@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Utilities;
+
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
@@ -85,6 +88,24 @@ sealed partial class Lothor : ModNPC {
 
         spriteBatch.Draw(ItsSpriteSheet, NPC.position + offset, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
 
+        DrawWreath(spriteBatch);
+
         return false;
+    }
+
+    private void DrawWreath(SpriteBatch spriteBatch) {
+        bool flag = false;
+        if (ShouldDrawWreath) {
+            flag = true;
+        }
+        if (!flag) {
+            return;
+        }
+
+        Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Wreath").Value;
+        SpriteFrame frame = new(2, 1);
+        Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
+        Vector2 position = NPC.Center - Main.screenPosition + new Vector2(75f * (Target.Center.X - NPC.Center.X).GetDirection(), -15f);
+        spriteBatch.Draw(texture, position, sourceRectangle, Color.White * (1f - BeforeAttackTimer / _beforeAttackDelay), 0f, sourceRectangle.Size() / 2f, 1f, default, 0);
     }
 }
