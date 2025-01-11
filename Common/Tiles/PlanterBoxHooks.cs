@@ -18,12 +18,8 @@ using Terraria.ObjectData;
 
 namespace RoA.Common.Tiles;
 
-// aequus
 sealed class PlanterBoxHooks : ILoadable {
     public void Load(Mod mod) {
-        // Planter boxes are so shoe-horned into the game that it's stupid to
-        // fix every single difference between our modded planter box and vanilla ones
-
         //On_WorldGen.CheckAlch += CheckAlchPlanterBoxHack;
         On_WorldGen.CheckBanner += CheckBannerPlanterBoxHack;
         //IL_WorldGen.PlantCheck += IL_WorldGen_PlantCheck;

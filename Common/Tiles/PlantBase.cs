@@ -51,7 +51,8 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
 
         TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
-        TileObjectData.newTile.DrawYOffset -= 5;
+        TileObjectData.newTile.DrawXOffset -= 4;
+        TileObjectData.newTile.DrawYOffset -= 2;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
         TileObjectData.newTile.AnchorAlternateTiles = [TileID.ClayPot, TileID.PlanterBox];
@@ -93,6 +94,10 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
     }
 
     protected virtual void PreAddNewTile() { }
+
+    public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
+
+    }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         if (GetStage(i, j) == PlantStage.Planted/* && !AnchorValidTiles.Contains(WorldGenHelper.GetTileSafely(i, j + 1).TileType)*/) {
