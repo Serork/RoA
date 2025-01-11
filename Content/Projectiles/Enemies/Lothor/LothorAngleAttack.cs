@@ -26,6 +26,8 @@ sealed class LothorAngleAttack : ModProjectile {
         Projectile.penetrate = 2;
         Projectile.extraUpdates = 1;
         Projectile.ignoreWater = true;
+        Projectile.friendly = false;
+        Projectile.hostile = true;
         Projectile.aiStyle = -1;
         Projectile.netImportant = true;
     }
