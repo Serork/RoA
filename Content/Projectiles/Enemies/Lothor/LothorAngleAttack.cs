@@ -3,6 +3,7 @@
 using Newtonsoft.Json.Linq;
 
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -93,7 +94,8 @@ sealed class LothorAngleAttack : ModProjectile {
                 break;
         }
 
-        if (npc.direction == 1) {
+        bool flag = npc.direction == 1;
+        if (flag) {
             startPos.X += 20f;
         }
         else {
@@ -114,6 +116,20 @@ sealed class LothorAngleAttack : ModProjectile {
             Vector2 start = Vector2.Lerp(startPos, dev, counting);
             Vector2 end = Vector2.Lerp(dev, destination, counting);
             Projectile.position = Vector2.Lerp(start, end, counting);
+        }
+
+        if (Projectile.localAI[2] == 0f) {
+            Projectile.localAI[2] = 1f;
+
+            Vector2 offset = new Vector2(10f, 10f);
+            for (int num58 = 0; num58 < 2; num58++) {
+                int num59 = Dust.NewDust(Projectile.position + offset, 0, 0, DustID.PoisonStaff, 0f, 0f, 0, default(Color), 1f + Main.rand.NextFloatRange(0.1f));
+                Main.dust[num59].velocity = Main.dust[num59].velocity.RotatedByRandom(MathHelper.PiOver4);
+                Main.dust[num59].velocity *= 0.2f;
+                //Main.dust[num59].velocity += Projectile.velocity / 5f;
+                Main.dust[num59].noGravity = true;
+                Main.dust[num59].fadeIn = 1.25f;
+            }
         }
 
         for (int i = 0; i < 3; i++) {
