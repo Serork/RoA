@@ -86,6 +86,7 @@ sealed class LothorClawsSlash : ModProjectile {
                 dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                 dust.noLight = dust.noLightEmittence = true;
                 dust.noGravity = true;
+                dust.customData = 1f;
             }
         }
         if (Projectile.localAI[0] < (double)(Projectile.ai[1] + Projectile.ai[1] * 0.3f)) {
