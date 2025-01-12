@@ -641,7 +641,7 @@ sealed partial class Lothor : ModNPC {
         if (flag) {
             LookAtPlayer();
         }
-        NPC.velocity.X *= 0.875f;
+        NPC.velocity.X *= 0.85f + Math.Min(0.05f, Math.Abs(NPC.velocity.X) * 0.025f);
     }
 
     private void ClawsAttack() {
@@ -998,8 +998,7 @@ sealed partial class Lothor : ModNPC {
         }
         else {
             SpawnStomp();
-            NPC.velocity.X *= 0.85f + Math.Min(0.05f, Math.Abs(NPC.velocity.X) * 0.025f);
-            if (Math.Abs(NPC.velocity.X) < 0.025f) {
+            if (NPC.velocity.Y == 0f) {
                 FallStrengthIfClose = 0f;
                 NPC.TargetClosest();
                 CurrentAIState = LothorAIState.Idle;
