@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Projectiles.Enemies.Lothor;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

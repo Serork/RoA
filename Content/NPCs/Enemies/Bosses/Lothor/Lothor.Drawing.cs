@@ -2,13 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
-using RoA.Utilities;
 
 using System;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
@@ -16,6 +14,7 @@ namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 sealed partial class Lothor : ModNPC {
     private Vector2 _drawOffset;
     private float _trailOpacity;
+    private Color? _drawColor = null;
 
     private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet");
 
@@ -29,7 +28,7 @@ sealed partial class Lothor : ModNPC {
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         Vector2 origin = NPC.frame.Size() / 2f;
-        Vector2 positionOffset = Vector2.UnitY * _drawOffset;
+        Vector2 positionOffset = Vector2.UnitY * _drawOffset + new Vector2(0f, 2f);
         SpriteEffects effects = NPC.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         Vector2 offset = positionOffset - screenPos + origin / 2f;
         if (IsDashing) {
@@ -43,9 +42,14 @@ sealed partial class Lothor : ModNPC {
             }
         }
         int length = NPC.oldPos.Length - 2;
+        Color color = drawColor;
+        if (_drawColor == null) {
+            _drawColor = color;
+        }
+        _drawColor = Color.Lerp(_drawColor.Value, color, 0.1f);
         for (int num173 = 1; num173 < length; num173 += 2) {
             _ = ref NPC.oldPos[num173];
-            Color color39 = drawColor;
+            Color color39 = color;
             color39.R = (byte)(1f * (double)(int)color39.R * (double)(length - num173) / length);
             color39.G = (byte)(1f * (double)(int)color39.G * (double)(length - num173) / length);
             color39.B = (byte)(1f * (double)(int)color39.B * (double)(length - num173) / length);
@@ -72,7 +76,7 @@ sealed partial class Lothor : ModNPC {
             float num278 = 0f;
             float maxOffset = 15f;
             for (int num293 = 0; num293 < num275; num293++) {
-                Microsoft.Xna.Framework.Color value80 = drawColor;
+                Microsoft.Xna.Framework.Color value80 = color;
                 value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
                 value80 = NPC.GetAlpha(value80);
                 value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
@@ -94,6 +98,11 @@ sealed partial class Lothor : ModNPC {
         return false;
     }
 
+    private Vector2 WreathOffset() {
+        float offset = 50f + 20f * Ease.QuintOut(_wreathProgress);
+        return (_wreathLookingPosition - NPC.Center).SafeNormalize(Vector2.One) * offset;
+    }
+
     private void DrawWreath(SpriteBatch spriteBatch) {
         bool flag = false;
         if (ShouldDrawWreath) {
@@ -106,8 +115,17 @@ sealed partial class Lothor : ModNPC {
         Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Wreath").Value;
         SpriteFrame frame = new(2, 1);
         Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
-        float offset = 50f + 20f * Ease.QuintOut(_wreathProgress);
-        Vector2 position = NPC.Center - Main.screenPosition + (_wreathLookingPosition - NPC.Center).SafeNormalize(Vector2.One) * offset;
-        spriteBatch.Draw(texture, position, sourceRectangle, Color.White, 0f, sourceRectangle.Size() / 2f, 1f, default, 0);
+        sourceRectangle.X = texture.Width / 2;
+        Vector2 position = NPC.Center - Main.screenPosition + WreathOffset();
+        SpriteEffects spriteEffects = SpriteEffects.FlipHorizontally;
+        float rotation = MathHelper.Pi;
+        spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
+        sourceRectangle = frame.GetSourceRectangle(texture);
+        float progress = _distanceProgress / _distanceProgress2;
+        int height = (int)(texture.Height * progress);
+        sourceRectangle.Height = height;
+        height = (int)(texture.Height * (1f - progress));
+        position.Y += height / 2f;
+        spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
     }
 }

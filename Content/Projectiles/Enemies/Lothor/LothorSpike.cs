@@ -1,0 +1,112 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Core;
+
+using System.Collections.Generic;
+
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Projectiles.Enemies.Lothor;
+
+sealed class LothorSpike : ModProjectile {
+    private const int LENGTH = 20;
+
+    private struct PartInfo {
+        public int Direction;
+        public int Variant;
+        public float Progress;
+    }
+
+    private PartInfo[] _partInfo;
+
+    private int Length => Projectile.ai[2] != 0f ? (int)Projectile.ai[2] : LENGTH;
+
+    public override string Texture => ResourceManager.EnemyProjectileTextures + "Lothor/LothorSpike";
+    public static string TipTexture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<LothorSpike>()).Texture + "Tip";
+    public static string StartTexture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<LothorSpike>()).Texture + "Start";
+
+    public override void SetDefaults() {
+        int width = 30; int height = 32;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.aiStyle = AIType = -1;
+
+        Projectile.penetrate = -1;
+        Projectile.timeLeft = 400;
+
+        Projectile.friendly = true;
+        Projectile.hostile = false;
+        Projectile.tileCollide = false;
+    }
+
+    public override void OnSpawn(IEntitySource source) {
+        _partInfo = new PartInfo[LENGTH];
+        for (int i = 0; i < _partInfo.Length; i++) {
+            _partInfo[i].Direction = 0;
+            _partInfo[i].Variant = (i % 2 == 0).ToInt();
+        }
+
+        Projectile.timeLeft = (int)(Length * 20f); 
+    }
+
+    public override void AI() {
+        Projectile.Opacity = Utils.GetLerpValue(0, 40, Projectile.timeLeft, true);
+
+        for (int i = 0; i < _partInfo.Length; i++) {
+            if (_partInfo[i].Progress < 1f) {
+                _partInfo[i].Progress += 0.325f;
+                break;
+            }
+        }
+    }
+
+    public override bool ShouldUpdatePosition() => false;
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Texture2D texture;
+        Vector2 start = Projectile.Center;
+        int index = 0;
+        int length = Length;
+        Vector2 velocity = Projectile.velocity.SafeNormalize(Vector2.One);
+        int width;
+        int height;
+        Vector2 origin;
+        Rectangle sourceRectangle;
+        SpriteEffects effects;
+        while (index < length) {
+            if (index == length - 1) {
+                texture = ModContent.Request<Texture2D>(TipTexture).Value;
+                width = texture.Width;
+                height = texture.Height;
+                sourceRectangle = new(0, 0, width, 0);
+            }
+            else if (index == 0) {
+                texture = ModContent.Request<Texture2D>(StartTexture).Value;
+                width = texture.Width;
+                height = texture.Height;
+                sourceRectangle = new(0, 0, width, 0);
+            }
+            else {
+                texture = ModContent.Request<Texture2D>(Texture).Value;
+                width = texture.Width;
+                height = texture.Height / 2;
+                sourceRectangle = new(0, _partInfo[index].Variant * height, width, 0);
+            }
+            sourceRectangle.Height = (int)(height * _partInfo[index].Progress);
+            effects = (SpriteEffects)_partInfo[index].Direction;
+            origin = new Vector2(width, height) / 2f;
+            height -= 4;
+            Vector2 drawPosition = start;
+            Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, sourceRectangle, Color.White * Projectile.Opacity, velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi, origin, Projectile.scale, effects);
+            start += height * velocity;
+            index++;
+        }
+        return false;
+    }
+}

@@ -57,6 +57,6 @@ sealed partial class Lothor : ModNPC {
         width = CurrentSpriteSheetLine.FrameWidth;
         height = CurrentSpriteSheetLine.FrameHeight;
         x = (ushort)(currentColumn * width);
-        y = (ushort)(CurrentFrameInSpriteSheetLine * height);
+        y = (ushort)(CurrentFrameInSpriteSheetLine * height + 2);
     }
 }

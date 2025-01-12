@@ -19,7 +19,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     private const int MAX_TIMELEFT = 180;
     private const float EXTRA = 2f;
 
-    private bool _offseted;
+    private bool _offset;
     private int _direction;
 
     public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpike>()).Texture;
@@ -74,7 +74,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     public override void AI() {
         float value = 1f + Projectile.localAI[1] / 10f;
         float min = MathHelper.Min(10f, Projectile.localAI[2] / 3f);
-        if (Projectile.timeLeft > Projectile.localAI[2] - 6f && _offseted) {
+        if (Projectile.timeLeft > Projectile.localAI[2] - 6f && _offset) {
             Point point = new Vector2(Projectile.Center.X - Projectile.width * 2f, Projectile.Center.Y - 20f).ToTileCoordinates();
             Point point2 = new Vector2(Projectile.Center.X + Projectile.width * 2f, Projectile.Center.Y + 20f).ToTileCoordinates();
             ElderwoodClaws.SpawnGroundDusts(point, point2, Projectile.ai[0] * 5f);
@@ -100,7 +100,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             while (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI &&
                    Projectile.position.X < projectile.position.X + texture.Width && Projectile.position.X > projectile.position.X - texture.Width) {
                 Projectile.position.X -= (texture.Width + 2) * (Projectile.position - Projectile.GetOwnerAsPlayer().position).X.GetDirection();
-                _offseted = true;
+                _offset = true;
                 if (--attempts <= 0) {
                     break;
                 }

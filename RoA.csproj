@@ -35,6 +35,7 @@
 	  <None Remove="Resources\Textures\Dusts\Fireblossom.png" />
 	  <None Remove="Resources\Textures\Dusts\GhostLeaf.png" />
 	  <None Remove="Resources\Textures\Dusts\NatureLaser.png" />
+	  <None Remove="Resources\Textures\Dusts\RedLineDust.png" />
 	  <None Remove="Resources\Textures\Dusts\Slash.png" />
 	  <None Remove="Resources\Textures\Dusts\Tulip.png" />
 	  <None Remove="Resources\Textures\Empty.png" />
