@@ -541,7 +541,7 @@ sealed partial class Lothor : ModNPC {
                     else {
                         _previousState = LothorAIState.WreathAttack;
                         GoToFlightState(false, false);
-                        StillInJumpBeforeFlightTimer = 10f;
+                        StillInJumpBeforeFlightTimer = 0f;
                         _shouldSpawnPipistrelles = false;
                     }
                 }
