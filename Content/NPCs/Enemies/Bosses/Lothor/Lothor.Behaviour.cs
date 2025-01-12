@@ -1018,6 +1018,15 @@ sealed partial class Lothor : ModNPC {
         return 4f;
     }
 
+    public override bool? CanFallThroughPlatforms() {
+        if (Target.dead) {
+            return true;
+        }
+        else {
+            return Target.position.Y > NPC.position.Y + NPC.height;
+        }
+    }
+
     private float GetAttackDelay(bool flag = false) {
         bool flag2 = BeforeDoingLastJump && (CurrentAIState == LothorAIState.Flight || CurrentAIState == LothorAIState.Idle);
         float delay = /* IsFlying ? */flag2 && !flag ? 125f : 100f/* : BeforeDoingLastJump ? 100f : 75f*/;

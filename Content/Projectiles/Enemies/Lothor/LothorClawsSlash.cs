@@ -71,7 +71,7 @@ sealed class LothorClawsSlash : ModProjectile {
         Color color1 = new Color(241, 100, 100);
         float num12 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
-        float num42 = Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
+        float num42 = 1f/*Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f)*/ * Projectile.Opacity;
         color1 *= num42 * num22;
         color2 *= num42 * num22;
 
@@ -129,7 +129,7 @@ sealed class LothorClawsSlash : ModProjectile {
         float num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float num3 = 0.975f;
         Point pos = Projectile.Center.ToTileCoordinates();
-        float num4 = Utils.Remap((Lighting.GetColor(pos) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
+        float num4 = 1f /* Utils.Remap((Lighting.GetColor(pos) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f)*/ * Projectile.Opacity;
         Color color2 = new Color(150, 20, 20);
         Color color1 = new Color(241, 100, 100);
         float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);

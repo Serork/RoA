@@ -41,7 +41,7 @@ sealed class BackwoodsLighting : ModSystem {
 				Brightness2 += BackwoodsBiome.TransitionSpeed;
 			}
 			float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1500f;
-            strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2 + Helper.EaseInOut3(Math.Min(1f, AltarHandler.GetAltarStrength()))/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;
+            strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2 + Helper.EaseInOut3(Math.Min(1f, AltarHandler.GetAltarStrength())) * 0.5f/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;
             int sunR = backgroundColor.R;
 			int sunG = backgroundColor.G;
 			int sunB = backgroundColor.B;
