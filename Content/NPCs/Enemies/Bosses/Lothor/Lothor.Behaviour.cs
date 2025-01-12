@@ -473,7 +473,7 @@ sealed partial class Lothor : ModNPC {
             if (Vector2.Distance(_tempPosition, NPC.Center) < min) {
                 _previousState = CurrentAIState;
                 GoToFlightState(false, false);
-                StillInJumpBeforeFlightTimer = 20f;
+                StillInJumpBeforeFlightTimer = GetAttackDelay() * 0.2f;
                 _tempDirection = 0;
                 _tempPosition = Vector2.Zero;
                 _dashStrength = 0f;
@@ -540,7 +540,7 @@ sealed partial class Lothor : ModNPC {
                     else {
                         _previousState = LothorAIState.WreathAttack;
                         GoToFlightState(false, false);
-                        StillInJumpBeforeFlightTimer = 10f;
+                        StillInJumpBeforeFlightTimer = GetAttackDelay() * 0.1f;
                         _shouldSpawnPipistrelles = false;
                         AirDashTimer = GetExtraAirDashDelay(false);
                     }
