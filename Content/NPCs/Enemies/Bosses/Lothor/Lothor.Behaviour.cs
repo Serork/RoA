@@ -251,7 +251,7 @@ sealed partial class Lothor : ModNPC {
         _currentColumn = SpriteSheetColumn.Flight;
         if (NPC.frameCounter <= 0.0) {
             CurrentFrame = 20;
-            NPC.frameCounter += NPC.velocity.Length() / 4f;
+            //NPC.frameCounter += NPC.velocity.Length() / 4f;
             NPC.frameCounter += 1.0;
         }
         else {
