@@ -1162,7 +1162,9 @@ sealed partial class Lothor : ModNPC {
 
     private void PrepareJump() {
         SetKnockBackResist();
-        DashTimer += 1f;
+        if (NPC.velocity.Y == 0f) {
+            DashTimer += 1f;
+        }
         bool flag = Collision.CanHit(Target, NPC);
         float distance = Vector2.Distance(Target.Center, NPC.Center);
         bool flag2 = distance < 200f;
