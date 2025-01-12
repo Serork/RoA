@@ -230,8 +230,7 @@ sealed partial class Lothor : ModNPC {
             float xVelocity = NPC.velocity.X * 0.085f;
             float maxRotation = 0.3f;
             float to = Math.Clamp(xVelocity, -maxRotation, maxRotation);
-            bool flag = CurrentAIState == LothorAIState.Flight;
-            if (flag) {
+            if (CurrentAIState == LothorAIState.Flight && StillInJumpBeforeFlightTimer <= 0f) {
                 rotation = to;
             }
             else if (StillInJumpBeforeFlightTimer > 0f || AirAttacks.Contains(CurrentAIState)) {
