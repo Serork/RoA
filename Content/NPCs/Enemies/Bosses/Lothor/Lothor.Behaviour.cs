@@ -226,7 +226,7 @@ sealed partial class Lothor : ModNPC {
             float to = Math.Clamp(xVelocity, -maxRotation, maxRotation);
             bool flag = CurrentAIState == LothorAIState.Flight;
             if (flag) {
-                rotation = to;
+                rotation = Utils.AngleLerp(rotation, to, Math.Max(0.1f, Math.Abs(to) * 0.4f));
             }
             else if (StillInJumpBeforeFlightTimer > 0f || AirAttacks.Contains(CurrentAIState)) {
                 rotation = Utils.AngleLerp(rotation, to, CurrentAIState == LothorAIState.WreathAttack ? 0.3f : Math.Max(0.1f, Math.Abs(to) * 0.4f));
@@ -662,6 +662,7 @@ sealed partial class Lothor : ModNPC {
                 }
                 
                 GoToFlightState(false, false);
+                _yOffsetProgressBeforeLanding = 0f;
             }
         }
 
@@ -697,10 +698,8 @@ sealed partial class Lothor : ModNPC {
     private Vector2 GetBetweenForFlightState() {
         Vector2 npcCenter = NPC.Center;
         Vector2 playerCenter = Target.Center;
-        if (Math.Abs(npcCenter.X - playerCenter.X) < 200f) {
-            if (_yOffsetProgressBeforeLanding < 1f) {
-                _yOffsetProgressBeforeLanding += 0.05f;
-            }
+        if (_yOffsetProgressBeforeLanding < 1f) {
+            _yOffsetProgressBeforeLanding += 0.01f;
         }
         if (IsAboutToLand && CurrentAIState == LothorAIState.Flight) {
             playerCenter = Target.Center - Vector2.UnitY * (AIRDASHLENGTH - AIRDASHLENGTH * 0.5f * _yOffsetProgressBeforeLanding);
@@ -810,7 +809,7 @@ sealed partial class Lothor : ModNPC {
             GoToIdleState();
         }
         if (flag6 || (!flag5 && absDistance > AIRDASHLENGTH - edge && absDistance < AIRDASHLENGTH + edge && absDistance != AIRDASHLENGTH)) {
-            NPC.velocity *= (float)Math.Pow(0.99, inertia * 2.0 / inertia);
+            NPC.velocity *= (float)Math.Pow(0.98, inertia * 2.0 / inertia);
             if (!flag) {
                 LookAtPlayer();
             }
