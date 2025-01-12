@@ -924,7 +924,7 @@ sealed partial class Lothor : ModNPC {
             else {
                 NPC.velocity.X = jumpHeightX * -0.5f * -(float)NPC.direction;
             }
-            NoCollisionTimer = 10f;
+            NoCollisionTimer = 20f;
         }
         doJump();
         CurrentAIState = LothorAIState.Fall;
