@@ -71,7 +71,7 @@ sealed partial class Lothor : ModNPC {
     private Player Target { get; set; }
     private List<LothorAIState> Attacks => [LothorAIState.ClawsAttack, LothorAIState.SpittingAttack, LothorAIState.WreathAttack];
     private List<LothorAIState> FlightStates => [LothorAIState.Flight, LothorAIState.AirDash, LothorAIState.WreathAttack, LothorAIState.WreathAttack2];
-    private List<LothorAIState> AirAttacks => [LothorAIState.AirDash, LothorAIState.WreathAttack, LothorAIState.WreathAttack2];
+    private List<LothorAIState> AirAttacks => [LothorAIState.AirDash, LothorAIState.WreathAttack];
 
     private ref float DashCount => ref NPC.ai[2];
     private ref float FallStrengthIfClose => ref NPC.localAI[0];
@@ -414,10 +414,10 @@ sealed partial class Lothor : ModNPC {
     private void WreathAttack() {
         LookAtPlayer();
 
-        void updatePositionToMove(float x = 250f, float y = -100f) => _tempPosition = Target.Center + new Vector2(_tempDirection * x, y);
-        float speed = 6f;
+        void updatePositionToMove(float x = 100f, float y = -125f) => _tempPosition = Target.Center + new Vector2(_tempDirection * x, y);
+        float speed = 7f;
         if (_tempDirection == 0) {
-            _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
+            _tempDirection = -(Target.Center - NPC.Center).X.GetDirection();
             updatePositionToMove();
         }
         if (NPC.velocity.Length() > speed) {
