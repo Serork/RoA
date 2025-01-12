@@ -526,7 +526,7 @@ sealed partial class Lothor : ModNPC {
             }
         }
         else {
-            NPC.velocity *= !_shouldWreathAttack ? 0.95f : 0.925f;
+            NPC.velocity *= 0.925f;
             if (_frameChosen) {
                 bool flag = BeforeAttackTimer > 0f;
                 if (flag) {
@@ -1166,14 +1166,14 @@ sealed partial class Lothor : ModNPC {
         }
         bool flag = Collision.CanHit(Target, NPC);
         float distance = Vector2.Distance(Target.Center, NPC.Center);
-        bool flag2 = distance < 200f;
+        bool flag2 = distance < 250f;
         bool flag4 = DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.5f;
         if (_previousState != LothorAIState.ClawsAttack && _previousState != LothorAIState.SpittingAttack && flag2 &&
             flag && flag4) {
             ChooseAttack(LothorAIState.ClawsAttack);
             return;
         }
-        bool flag3 = !flag2 && distance < 800f;
+        bool flag3 = distance > 400f && distance < 900f;
         if (_previousState != LothorAIState.SpittingAttack && flag3 &&
             flag/* && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 */&& flag4) {
             ChooseAttack(LothorAIState.SpittingAttack);
