@@ -38,7 +38,7 @@ sealed partial class Lothor : ModNPC {
         }
     }
 
-    private const float AIRDASHLENGTH = 250f;
+    private const float AIRDASHLENGTH = 200f;
 
     private enum LothorAIState : byte {
         Fall,
