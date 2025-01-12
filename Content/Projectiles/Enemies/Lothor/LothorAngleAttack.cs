@@ -30,6 +30,7 @@ sealed class LothorAngleAttack : ModProjectile {
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.aiStyle = -1;
+        Projectile.timeLeft = 180;
         Projectile.netImportant = true;
     }
 
@@ -66,31 +67,25 @@ sealed class LothorAngleAttack : ModProjectile {
         switch (bossCurrentFrame) {
             case 0:
                 startPos += new Vector2(-26 * npc.direction + value, -32);
-                //10
                 break;
             case 1:
                 startPos += new Vector2(-24 * npc.direction + value, -32);
-                //10
                 break;
             case 2:
                 startPos += new Vector2(-10 * npc.direction + value, -26);
                 _distY = 150f;
-                //11
                 break;
             case 3:
                 startPos += new Vector2(0 * npc.direction + value, -15);
                 _distY = 100f;
-                //12
                 break;
             case 4:
                 startPos += new Vector2(5 * npc.direction + value, -6);
                 _distY = 50f;
-                //13
                 break;
             case 5:
                 startPos += new Vector2(8 * npc.direction + value, 2);
                 _distY = 50f;
-                //13
                 break;
         }
 
@@ -121,7 +116,7 @@ sealed class LothorAngleAttack : ModProjectile {
         if (Projectile.localAI[2] == 0f) {
             Projectile.localAI[2] = 1f;
 
-            Vector2 offset = new Vector2(10f, 10f);
+            Vector2 offset = new(8f, 10f);
             for (int num58 = 0; num58 < 2; num58++) {
                 int num59 = Dust.NewDust(Projectile.position + offset, 0, 0, DustID.PoisonStaff, 0f, 0f, 0, default(Color), 1f + Main.rand.NextFloatRange(0.1f));
                 Main.dust[num59].velocity = Main.dust[num59].velocity.RotatedByRandom(MathHelper.PiOver4);
