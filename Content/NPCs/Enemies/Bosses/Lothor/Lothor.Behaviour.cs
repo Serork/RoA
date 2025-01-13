@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
@@ -186,6 +187,7 @@ sealed partial class Lothor : ModNPC {
         UpdateTrailInfo();
         UpdatePulseVisuals();
         UpdateWreath();
+        UpdateGlowing();
     }
 
     private void UpdateWreath() {
@@ -473,6 +475,19 @@ sealed partial class Lothor : ModNPC {
         }
     }
 
+    private void Glow() {
+        _glowMaskOpacity = 1.5f;
+    }
+
+    private void UpdateGlowing() {
+        if (_glowMaskOpacity > 0f) {
+            _glowMaskOpacity -= TimeSystem.LogicDeltaTime;
+        }
+
+        float value = MathHelper.Clamp(_glowMaskOpacity, 0f, 1f);
+        Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * value * 0.75f);
+    }
+
     private void HandleActiveState() {
         if (GetTargetPlayer(out Player target)) {
             Target = target;
@@ -534,6 +549,8 @@ sealed partial class Lothor : ModNPC {
                     NPC.DelBuff(i);
                 }
             }
+
+            Glow();
 
             _attackTime = 0;
             bool firstTime = _previousState != CurrentAIState;
@@ -629,6 +646,8 @@ sealed partial class Lothor : ModNPC {
                 _distanceProgress2 = _distanceProgress;
             }
             void spawnSpike() {
+                Glow();
+
                 SoundEngine.PlaySound(SoundID.Item65 with { PitchVariance = 0.1f }, NPC.Center);
                 int dustType = ModContent.DustType<RedLineDust>();
                 Vector2 spawnPosition = NPC.Center + WreathOffset();
@@ -721,6 +740,8 @@ sealed partial class Lothor : ModNPC {
             }
         }
         else {
+            Glow();
+
             NPC.velocity *= 0.925f;
             if (!_shouldWreathAttack) {
                 CreateCircleDusts();
@@ -734,8 +755,10 @@ sealed partial class Lothor : ModNPC {
                 if (FlightAttackTimer >= MinToChargeFlightAttack && _flightAttackAnimationDone) {
                     if (_shouldWreathAttack) {
                         ChooseAttack(LothorAIState.WreathAttack);
+                        Glow();
                     }
                     else {
+                        Glow();
                         _previousState = LothorAIState.WreathAttack;
                         GoToFlightState(false, false);
                         StillInJumpBeforeFlightTimer = GetAttackDelay() * 0.1f;
@@ -761,7 +784,7 @@ sealed partial class Lothor : ModNPC {
         for (int i = 0; i < 4; i++) {
             if (Main.rand.NextBool(2)) {
                 Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
-                Vector2 center = NPC.Center + new Vector2(NPC.direction == -1 ? 6f : 0f, 0f) + NPC.velocity + spinningpoint * (NPC.width * NPC.scale);
+                Vector2 center = NPC.Center + new Vector2(NPC.direction == 1 ? 3f : -3f, 0f) + NPC.velocity + spinningpoint * (NPC.width * NPC.scale);
                 Vector2 rotationPoint = spinningpoint.RotatedBy(0.785) * NPC.direction;
                 Vector2 position = center + rotationPoint * 5f;
                 int dust = Dust.NewDust(position, 0, 0, type);
@@ -811,6 +834,8 @@ sealed partial class Lothor : ModNPC {
         }
         if (!flag) {
             if (current > 1f & (int)current % (int)rate == 0 && flag2) {
+                Glow();
+
                 _spitCount--;
                 SoundEngine.PlaySound(SoundID.Item111, NPC.Center);
 
@@ -880,6 +905,7 @@ sealed partial class Lothor : ModNPC {
         }
         if (BeforeAttackTimer <= 0f) {
             ClawsTimer += 1f;
+            Glow();
         }
         else {
             BeforeAttackTimer--;
@@ -945,6 +971,8 @@ sealed partial class Lothor : ModNPC {
             ResetDashVariables();
             CurrentAIState = LothorAIState.AirDash;
 
+            Glow();
+
             AirDashTimer = 0f;
 
             PlayRoarSound();
@@ -1002,6 +1030,7 @@ sealed partial class Lothor : ModNPC {
         Vector2 dif = GetBetweenForFlightState();
         if (WreathTimer >= WreathAttackTime) {
             ChooseAttack(LothorAIState.WreathAttack);
+            Glow();
             return;
         }
         else {
@@ -1430,6 +1459,8 @@ sealed partial class Lothor : ModNPC {
             ResetDashVariables();
             CurrentAIState = LothorAIState.Jump;
             _previousState = CurrentAIState;
+
+            Glow();
 
             PlayRoarSound();
 

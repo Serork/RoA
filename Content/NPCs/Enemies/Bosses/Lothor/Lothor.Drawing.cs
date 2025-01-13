@@ -15,8 +15,10 @@ sealed partial class Lothor : ModNPC {
     private Vector2 _drawOffset;
     private float _trailOpacity;
     private Color? _drawColor = null;
+    private float _glowMaskOpacity;
 
     private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet");
+    private Texture2D GlowMask => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet_Glow");
 
     public override void FindFrame(int frameHeight) {
         HandleAnimations();
@@ -47,6 +49,7 @@ sealed partial class Lothor : ModNPC {
             _drawColor = color;
         }
         _drawColor = Color.Lerp(_drawColor.Value, color, 0.1f);
+        Color glowMaskColor = Color.White * _glowMaskOpacity;
         for (int num173 = 1; num173 < length; num173 += 2) {
             _ = ref NPC.oldPos[num173];
             Color color39 = color;
@@ -68,6 +71,9 @@ sealed partial class Lothor : ModNPC {
             spriteBatch.Draw(ItsSpriteSheet,
                 pos + offset, 
                 frame7, color39, NPC.rotation, origin, NPC.scale, effects, 0f);
+            spriteBatch.Draw(GlowMask,
+                pos + offset,
+                frame7, color39, NPC.rotation, origin, NPC.scale, effects, 0f);
         }
 
         if (ShouldDrawPulseEffect) {
@@ -88,10 +94,19 @@ sealed partial class Lothor : ModNPC {
                 position33 -= new Vector2(NPC.frame.Width, NPC.frame.Height / Main.npcFrameCount[Type]) * NPC.scale / 2f;
                 position33 += origin * NPC.scale + new Vector2(0f, NPC.gfxOffY);
                 spriteBatch.Draw(ItsSpriteSheet, position33, NPC.frame, value80, NPC.rotation, origin, NPC.scale, effects, 0f);
+                value80 = glowMaskColor;
+                value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
+                value80 = NPC.GetAlpha(value80);
+                value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
+                opacity = 1f - _pulseStrength;
+                value80 *= opacity;
+                value80 *= 0.7f;
+                spriteBatch.Draw(GlowMask, position33, NPC.frame, value80, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
         }
 
         spriteBatch.Draw(ItsSpriteSheet, NPC.position + offset, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(GlowMask, NPC.position + offset, NPC.frame, glowMaskColor, NPC.rotation, origin, NPC.scale, effects, 0f);
 
         DrawWreath(spriteBatch);
 
