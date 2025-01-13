@@ -946,11 +946,10 @@ sealed partial class Lothor : ModNPC {
         if (ClawsTimer >= ClawsAttackTime) {
             ClawsTimer = 0f;
             _previousState = CurrentAIState;
+            //ClawsAttackTime = GetClawsAttackDelay();
 
-            ClawsAttackTime = GetClawsAttackDelay();
-
-            //DashDelay = GetAttackDelay();
-            //CurrentAIState = LothorAIState.Idle;
+            DashDelay = GetAttackDelay();
+            CurrentAIState = LothorAIState.Idle;
 
             BeforeAttackTimer = 0f;
 
