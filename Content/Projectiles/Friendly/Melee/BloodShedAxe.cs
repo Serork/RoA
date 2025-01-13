@@ -159,8 +159,8 @@ sealed class BloodshedAxe : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.PiOver2);
         player.heldProj = Projectile.whoAmI;
+        player.bodyFrame.Y = 56;
         int itemAnimationMax = player.itemAnimationMax;
         int itemAnimation = player.itemAnimation;
         int min = itemAnimationMax / 2 - itemAnimationMax / 4;
@@ -238,6 +238,9 @@ sealed class BloodshedAxe : ModProjectile {
             }
         }
         if (_powerUp) Lighting.AddLight(Projectile.Center, 0.4f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255);
+        
+        float armRotation = Projectile.rotation - MathHelper.PiOver2;
+        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
     }
 
     public override bool ShouldUpdatePosition()

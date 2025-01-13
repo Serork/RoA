@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Weapons.Druidic.Rods;
+using RoA.Content.Projectiles.Friendly.Melee;
 
 using Terraria;
 using Terraria.DataStructures;

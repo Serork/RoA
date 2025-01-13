@@ -18,7 +18,7 @@ sealed class BloodshedAxe : ModItem {
         int width = 54; int height = 50;
         Item.Size = new Vector2(width, height);
 
-        Item.useStyle = ItemUseStyleID.Swing;
+        Item.useStyle = ItemUseStyleID.HiddenAnimation;
         Item.useTurn = false;
 
         Item.DamageType = DamageClass.Melee;

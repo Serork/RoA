@@ -33,6 +33,7 @@ abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
         Item.autoReuse = false;
         Item.channel = true;
         Item.noUseGraphic = true;
+        Item.useStyle = ItemUseStyleID.HiddenAnimation;
         Item.shoot = ProjectileID.WoodenArrowFriendly;
     }
 
@@ -233,6 +234,8 @@ abstract class BaseRodProjectile : NatureProjectile {
         SetPosition();
         SetDirection();
         SetRotation();
+
+        Owner.bodyFrame.Y = 56;
 
         if (!IsInUse) {
             ShouldBeActive = false;
