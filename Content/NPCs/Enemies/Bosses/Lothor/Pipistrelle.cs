@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles.Enemies.Lothor;
@@ -16,6 +17,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed class Pipistrelle : ModNPC {
+    private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture);
+    private Texture2D GlowMask => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 4;
     }
@@ -38,7 +42,18 @@ sealed class Pipistrelle : ModNPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        Vector2 origin = NPC.frame.Size() / 2f;
+        SpriteEffects effects = NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        spriteBatch.Draw(ItsSpriteSheet, NPC.position - screenPos, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(GlowMask, NPC.position - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
+
+        return false;
+    }
+
     public override void AI() {
+        Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
+
         NPC owner = Main.npc[(int)NPC.ai[0]];
         void playScreamSound() => SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
         if (NPC.localAI[2] == 0f) {
@@ -61,7 +76,7 @@ sealed class Pipistrelle : ModNPC {
         }
         NPC.TargetClosest();
         Player player = Main.player[NPC.target];
-        Vector2 destination = player.position - new Vector2(10f, 50f);
+        Vector2 destination = player.Center - new Vector2(10f, 50f);
         if (NPC.ai[2] == 0f) {
             NPC.LookAtPlayer(player);
             NPC.SlightlyMoveTo(destination, 5f, 12.5f);
