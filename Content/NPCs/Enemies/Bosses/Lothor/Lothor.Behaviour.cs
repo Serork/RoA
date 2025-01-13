@@ -444,7 +444,7 @@ sealed partial class Lothor : ModNPC {
                                     dust.velocity = (NPC.rotation + MathHelper.Pi).ToRotationVector2().RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI / 12f)) * (0.5f + Main.rand.NextFloat() * 2.5f) * 15f;
                                     dust.velocity += new Vector2((1f + Main.rand.NextFloat()) * NPC.direction, 0f);
                                     dust.velocity.X *= -NPC.direction;
-                                    dust.velocity *= 0.3f;
+                                    dust.velocity *= 0.2f;
                                     dust.noLight = true;
                                     dust.noGravity = true;
                                 }
