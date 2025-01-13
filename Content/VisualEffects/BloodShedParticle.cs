@@ -32,7 +32,7 @@ sealed class BloodShedParticle : VisualEffect<BloodShedParticle> {
     }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
-        Color value = DrawColor * _opacity * 0.9f;
+        Color value = DrawColor * _opacity * 1f;
         value.A /= 2;
         float num = Utils.GetLerpValue(0f, 15f, TimeLeft, clamped: true) * Utils.GetLerpValue(60, 45f, TimeLeft, clamped: true);
         Vector2 vector = new Vector2(0.3f, 2f) * num * Scale;
