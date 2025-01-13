@@ -122,7 +122,7 @@ sealed partial class Lothor : ModNPC {
     private float _distanceProgress, _distanceProgress2;
     private bool _shouldSpawnPipistrelles;
 
-    private float LifeProgress => 1f - NPC.life / (float)NPC.lifeMax;
+    public float LifeProgress => 1f - NPC.life / (float)NPC.lifeMax;
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
     private Player Target { get; set; }
@@ -246,7 +246,7 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
-        //CurrentAIState = LothorAIState.Flight;
+        CurrentAIState = LothorAIState.Flight;
 
         _previousAttacks = [];
 
@@ -437,13 +437,30 @@ sealed partial class Lothor : ModNPC {
                         }
                         else if (NPC.frameCounter < secondFrameRate + 12.0) {
                             CurrentFrame = 20;
+                            void createDusts() {
+                                for (int k = 0; k < 20; k++) {
+                                    Dust dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<RedLineDust>());
+                                    dust.scale = 1.4f + Main.rand.NextFloatRange(0.3f);
+                                    dust.velocity = (NPC.rotation + MathHelper.Pi).ToRotationVector2().RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI / 12f)) * (0.5f + Main.rand.NextFloat() * 2.5f) * 15f;
+                                    dust.velocity += new Vector2((1f + Main.rand.NextFloat()) * NPC.direction, 0f);
+                                    dust.velocity.X *= -NPC.direction;
+                                    dust.velocity *= 0.3f;
+                                    dust.noLight = true;
+                                    dust.noGravity = true;
+                                }
+                            }
                             if (_shouldWreathAttack) {
                                 if (!_drawWreath) {
                                     SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "WreathSpawn"), NPC.Center);
+                                    createDusts();
                                 }
                                 _drawWreath = true;
                             }
                             else {
+                                if (!_shouldSpawnPipistrelles) {
+                                    SoundEngine.PlaySound(new(ResourceManager.NPCSounds + "LothorScream2"), NPC.Center);
+                                    createDusts();
+                                }
                                 _shouldSpawnPipistrelles = true;
                             }
                         }
@@ -656,7 +673,7 @@ sealed partial class Lothor : ModNPC {
                 for (int i = 0; i < 32; i++) {
                     int dust = Dust.NewDust(spawnPosition, 2, 2, dustType,
                                             (float)Math.Cos(MathHelper.Pi / 16f * i) * 24f,
-                                            (float)Math.Sin(MathHelper.Pi / 16f * i) * 24f, 0, default, 1f);
+                                            (float)Math.Sin(MathHelper.Pi / 16f * i) * 24f, 0, default, 1.25f + Main.rand.NextFloatRange(0.15f));
                     Main.dust[dust].noGravity = true;
                 }
 
@@ -713,7 +730,6 @@ sealed partial class Lothor : ModNPC {
             Vector2 positionToSpawn = NPC.Center + Vector2.UnitY * NPC.height / 2f;
             NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: -1f);
             NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 1f);
-            SoundEngine.PlaySound(new(ResourceManager.NPCSounds + "LothorScream2"), NPC.Center);
         }
     }
 

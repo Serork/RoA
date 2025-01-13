@@ -28,7 +28,6 @@ sealed class Pipistrelle : ModNPC {
         NPC.lifeMax = 150;
         NPC.damage = 12;
         NPC.defense = 6;
-        NPC.knockBackResist = 0.05f;
         NPC.Size = new Vector2(32, 32);
         NPC.aiStyle = -1;
         AnimationType = 82;
@@ -43,10 +42,30 @@ sealed class Pipistrelle : ModNPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        SpriteEffects effects = SpriteEffects.None;
+        Texture2D texture2 = ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value;
+        Vector2 position = NPC.Center - screenPos;
+        if (NPC.ai[2] != 0f) {
+            spriteBatch.Draw(texture2, position + new Vector2(12f, 20f), null, Color.White, NPC.rotation * 0.5f, new Vector2(NPC.width / 2, NPC.height / 2), NPC.scale * 1.2f, effects, 0);
+        }
+
         Vector2 origin = NPC.frame.Size() / 2f;
-        SpriteEffects effects = NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        effects = NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         spriteBatch.Draw(ItsSpriteSheet, NPC.position - screenPos, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
         spriteBatch.Draw(GlowMask, NPC.position - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
+
+        NPC npc = Main.npc[(int)NPC.ai[0]];
+        if (npc.active) {
+            spriteBatch.BeginBlendState(BlendState.Additive);
+            float lifeProgress = npc.As<Lothor>().LifeProgress;
+            for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
+                spriteBatch.Draw(GlowMask, NPC.position - screenPos +
+                    Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                    * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
+                    NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, NPC.rotation + Main.rand.NextFloatRange(0.05f), origin, NPC.scale, effects, 0f);
+            }
+            spriteBatch.EndBlendState();
+        }
 
         return false;
     }
@@ -55,6 +74,8 @@ sealed class Pipistrelle : ModNPC {
         Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
 
         NPC owner = Main.npc[(int)NPC.ai[0]];
+        float lifeProgress = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor ? 0f : owner.As<Lothor>().LifeProgress;
+        NPC.knockBackResist = 0.1f - 0.1f * lifeProgress;
         void playScreamSound() => SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
         if (NPC.localAI[2] == 0f) {
             NPC.localAI[2] = 1f;
@@ -75,16 +96,17 @@ sealed class Pipistrelle : ModNPC {
             return;
         }
         NPC.TargetClosest();
+        float speed = 5f + 2f * lifeProgress;
         Player player = Main.player[NPC.target];
         Vector2 destination = player.Center - new Vector2(10f, 50f);
         if (NPC.ai[2] == 0f) {
             NPC.LookAtPlayer(player);
-            NPC.SlightlyMoveTo(destination, 5f, 12.5f);
-            if (NPC.Distance(destination) < 35f) {
+            NPC.SlightlyMoveTo(destination, speed, 12.5f);
+            if (NPC.Distance(destination) < 35f || NPC.localAI[2] > 300f) {
                 NPC.localAI[3]++;
                 if (NPC.localAI[3] > 20f) {
                     NPC.ai[2] = 1f;
-                    float speed2 = 6.5f;
+                    float speed2 = 6.5f + 1.25f * lifeProgress;
                     float x = NPC.Center.X - player.Center.X;
                     float y = NPC.Center.Y - player.Center.Y;
                     float acceleration = Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) / 4f;
@@ -121,8 +143,8 @@ sealed class Pipistrelle : ModNPC {
                 NPC.velocity.X -= 0.5f;
             NPC.velocity.Y -= 0.1f;
 
-            NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -5f, 5f);
-            NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -5f, 5f);
+            NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -speed, speed);
+            NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -speed, speed);
         }
         NPC.rotation = NPC.velocity.X * 0.085f;
         NPC.rotation = MathHelper.Clamp(NPC.rotation, -0.2f, 0.2f);
