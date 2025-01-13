@@ -6,6 +6,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -51,45 +52,51 @@ sealed class LothorAngleAttack : ModProjectile {
     public override void AI() {
         Projectile.tileCollide = true;
 
+        NPC npc = Main.npc[(int)Projectile.ai[0]];
+        if (Projectile.localAI[1] == 0f) {
+            Projectile.localAI[1] = npc.direction;
+
+        }
+        int npcDirection = (int)Projectile.localAI[1];
+
         if (Collision.SolidCollision(Projectile.position - Vector2.One * 2f, Projectile.width + 4, Projectile.height + 4)) {
             Projectile.Kill();
         }
 
-        NPC npc = Main.npc[(int)Projectile.ai[0]];
         if (!npc.active) {
             return;
         }
 
-        Vector2 startPos = new(npc.position.X + npc.width / 2 * npc.direction, npc.position.Y + npc.height / 4);
-        float value = npc.direction == -1 ? npc.width / 2.5f + 4 : 0;
+        Vector2 startPos = new(npc.position.X + npc.width / 2 * npcDirection, npc.position.Y + npc.height / 4);
+        float value = npcDirection == -1 ? npc.width / 2.5f + 4 : 0;
 
         int bossCurrentFrame = (int)UsedBossFrame;
         switch (bossCurrentFrame) {
             case 0:
-                startPos += new Vector2(-26 * npc.direction + value, -32);
+                startPos += new Vector2(-26 * npcDirection + value, -32);
                 break;
             case 1:
-                startPos += new Vector2(-24 * npc.direction + value, -32);
+                startPos += new Vector2(-24 * npcDirection + value, -32);
                 break;
             case 2:
-                startPos += new Vector2(-10 * npc.direction + value, -26);
+                startPos += new Vector2(-10 * npcDirection + value, -26);
                 _distY = 150f;
                 break;
             case 3:
-                startPos += new Vector2(0 * npc.direction + value, -15);
+                startPos += new Vector2(0 * npcDirection + value, -15);
                 _distY = 100f;
                 break;
             case 4:
-                startPos += new Vector2(5 * npc.direction + value, -6);
+                startPos += new Vector2(5 * npcDirection + value, -6);
                 _distY = 50f;
                 break;
             case 5:
-                startPos += new Vector2(8 * npc.direction + value, 2);
+                startPos += new Vector2(8 * npcDirection + value, 2);
                 _distY = 50f;
                 break;
         }
 
-        bool flag = npc.direction == 1;
+        bool flag = npcDirection == 1;
         if (flag) {
             startPos.X += 20f;
         }
@@ -98,7 +105,7 @@ sealed class LothorAngleAttack : ModProjectile {
         }
 
         Vector2 destination = new(Projectile.ai[1], Projectile.ai[2]);
-        destination.X -= npc.direction == -1 ? value : 0;
+        destination.X -= npcDirection == -1 ? value : 0;
         Vector2 mid = startPos + (destination - startPos) / 2;
         Vector2 dev = mid - new Vector2(0, _distY - _distX);
 
@@ -114,7 +121,7 @@ sealed class LothorAngleAttack : ModProjectile {
         }
 
         if (Projectile.localAI[2] == 0f) {
-            Projectile.localAI[2] = 1f;
+            Projectile.localAI[2] = npc.direction;
 
             Vector2 offset = new(8f, 10f);
             for (int num58 = 0; num58 < 2; num58++) {
@@ -127,21 +134,33 @@ sealed class LothorAngleAttack : ModProjectile {
             }
         }
 
-        for (int i = 0; i < 3; i++) {
-            float x = Projectile.velocity.X / 3f * i;
-            float y = Projectile.velocity.Y / 3f * i;
-            int deviation = 14;
-            int dust = Dust.NewDust(new Vector2(Projectile.position.X - Projectile.width / 2 + deviation, Projectile.position.Y - Projectile.width / 2 + deviation),
-                Projectile.width - deviation * 2,
-                Projectile.height - deviation * 2,
-                DustID.PoisonStaff, 0f, 0f, 100, default, 1.1f);
-            Main.dust[dust].noGravity = true;
-            Main.dust[dust].velocity *= 0.1f;
-            Main.dust[dust].velocity += Projectile.velocity * 0.5f;
-            Dust dust2 = Main.dust[dust];
-            dust2.position.X -= x;
-            Dust dust3 = Main.dust[dust];
-            dust3.position.Y -= y;
+        if (flag) {
+            Projectile.position.Y += 6f;
+        }
+        else {
+            Projectile.position.Y += 3f;
+        }
+
+        if (Projectile.timeLeft > 180 - 1) {
+            return;
+        }
+
+        float num3 = 0f;
+        float y = 0f;
+        Vector2 vector6 = Projectile.position;
+        Vector2 vector7 = Projectile.oldPosition;
+        vector7.Y -= num3 / 2f;
+        vector6.Y -= num3 / 2f;
+        int num5 = (int)Vector2.Distance(vector6, vector7) / 3 + 1;
+        if (Vector2.Distance(vector6, vector7) % 3f != 0f)
+            num5++;
+
+        for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
+            Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, DustID.PoisonStaff, Alpha: 100, Scale: 1.1f)];
+            obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
+            obj.noGravity = true;
+            obj.velocity *= 0.1f;
+            obj.velocity += Projectile.velocity * 0.5f;
         }
     }
 }
