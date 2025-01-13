@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -25,7 +24,7 @@ sealed class LothorAngleAttack : ModProjectile {
 
     public override void SetDefaults() {
         Projectile.Size = Vector2.One * 16f;
-        Projectile.penetrate = 2;
+        Projectile.penetrate = -1;
         Projectile.extraUpdates = 1;
         Projectile.ignoreWater = true;
         Projectile.friendly = false;
@@ -47,6 +46,19 @@ sealed class LothorAngleAttack : ModProjectile {
             targetHitbox.Inflate(-targetHitbox.Width / 8, -targetHitbox.Height / 8);
         }
         return projHitbox.Intersects(targetHitbox);
+    }
+
+    public override void OnKill(int timeLeft) {
+        for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
+            int dust = Dust.NewDust(Projectile.position, 2, 2, DustID.PoisonStaff, 0f, -0.5f, 0, default, 1f);
+            Main.dust[dust].noGravity = true;
+            dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
+              Projectile.height, DustID.PoisonStaff, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
+            Main.dust[dust].noGravity = true;
+        }
+
+        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y + 2f, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, 0f, 0f);
+        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
     }
 
     public override void AI() {
@@ -162,5 +174,15 @@ sealed class LothorAngleAttack : ModProjectile {
             obj.velocity *= 0.1f;
             obj.velocity += Projectile.velocity * 0.5f;
         }
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        int time = 90;
+        target.AddBuff(BuffID.Poisoned, time, true);
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        int time = 90;
+        target.AddBuff(BuffID.Poisoned, time, true);
     }
 }
