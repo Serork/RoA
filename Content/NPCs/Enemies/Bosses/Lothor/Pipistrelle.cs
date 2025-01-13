@@ -36,7 +36,7 @@ sealed class Pipistrelle : ModNPC {
         NPC.noGravity = true;
         NPC.netAlways = true;
         NPC.noTileCollide = true;
-        NPC.value = Item.buyPrice();
+        NPC.value = 0;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
