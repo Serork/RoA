@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
+using RoA.Utilities;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -37,9 +39,18 @@ sealed class LothorSpike : ModProjectile {
         Projectile.penetrate = -1;
         Projectile.timeLeft = 400;
 
-        Projectile.friendly = true;
-        Projectile.hostile = false;
+        Projectile.friendly = false;
+        Projectile.hostile = true;
         Projectile.tileCollide = false;
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        float length = 0f;
+        for (int i = 0; i < _partInfo.Length; i++) {
+            length += _partInfo[i].Progress;
+        }
+        Vector2 lineEnd = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * length * 11f;
+        return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 30f);
     }
 
     public override void OnSpawn(IEntitySource source) {
@@ -61,6 +72,9 @@ sealed class LothorSpike : ModProjectile {
                 break;
             }
         }
+    }
+
+    public override void PostAI() {
     }
 
     public override bool ShouldUpdatePosition() => false;
