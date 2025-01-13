@@ -42,15 +42,15 @@ sealed class Pipistrelle : ModNPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        SpriteEffects effects = SpriteEffects.None;
-        Texture2D texture2 = ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value;
+        SpriteEffects effects = NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         Vector2 position = NPC.Center - screenPos;
-        if (NPC.ai[2] != 0f) {
-            spriteBatch.Draw(texture2, position + new Vector2(12f, 20f), null, Color.White, NPC.rotation * 0.5f, new Vector2(NPC.width / 2, NPC.height / 2), NPC.scale * 1.2f, effects, 0);
+        Vector2 origin = NPC.frame.Size() / 2f;
+        if (NPC.ai[2] != 1f) {
+            float progress = (Math.Abs(NPC.rotation) / MathHelper.PiOver2) * NPC.spriteDirection;
+            spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value, 
+                position + new Vector2(-4f, 8f - (NPC.spriteDirection != 1 ? progress * -20f : 0f)) + Vector2.UnitX * -14f * progress, null, Color.White, NPC.rotation * 0.5f, origin / 2f, NPC.scale, effects, 0);
         }
 
-        Vector2 origin = NPC.frame.Size() / 2f;
-        effects = NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         spriteBatch.Draw(ItsSpriteSheet, NPC.position - screenPos, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
         spriteBatch.Draw(GlowMask, NPC.position - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
 
