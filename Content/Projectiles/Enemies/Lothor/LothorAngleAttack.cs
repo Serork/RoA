@@ -177,12 +177,12 @@ sealed class LothorAngleAttack : ModProjectile {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        int time = Main.expertMode ? 180 : 120;
+        int time = 120;
         target.AddBuff(BuffID.Poisoned, time, true);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        int time = Main.expertMode ? 180 : 120;
+        int time = 120;
         target.AddBuff(BuffID.Poisoned, time, true);
     }
 }
