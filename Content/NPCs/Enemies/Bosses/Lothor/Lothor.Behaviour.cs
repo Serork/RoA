@@ -628,7 +628,7 @@ sealed partial class Lothor : ModNPC {
                 _distanceProgress2 = _distanceProgress;
             }
             void spawnSpike() {
-                SoundEngine.PlaySound(SoundID.Item65, NPC.Center);
+                SoundEngine.PlaySound(SoundID.Item65 with { PitchVariance = 0.1f }, NPC.Center);
                 int dustType = ModContent.DustType<RedLineDust>();
                 Vector2 spawnPosition = NPC.Center + WreathOffset();
                 for (int i = 0; i < 32; i++) {
@@ -690,6 +690,7 @@ sealed partial class Lothor : ModNPC {
             Vector2 positionToSpawn = NPC.Center + Vector2.UnitY * NPC.height / 2f;
             NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: -1f);
             NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 1f);
+            SoundEngine.PlaySound(new(ResourceManager.NPCSounds + "LothorScream2"), NPC.Center);
         }
     }
 

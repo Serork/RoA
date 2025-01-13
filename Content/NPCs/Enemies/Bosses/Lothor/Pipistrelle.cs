@@ -2,12 +2,14 @@
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles.Enemies.Lothor;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -44,6 +46,11 @@ sealed class Pipistrelle : ModNPC {
             NPC.localAI[1] = owner.Center.Y + 10f;
             Vector2 positionToMove = new(NPC.localAI[0], NPC.localAI[1]);
             NPC.velocity = NPC.DirectionTo(positionToMove) * 5f;
+        }
+        NPC.ai[1] += Main.rand.NextFloat();
+        if (NPC.ai[1] > Main.rand.NextFloat(90f, 130f)) {
+            NPC.ai[1] = 0f;
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
         }
         NPC.localAI[2]++;
         if (NPC.localAI[2] < 15f) {
