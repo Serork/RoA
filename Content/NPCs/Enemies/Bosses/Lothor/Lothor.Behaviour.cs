@@ -498,13 +498,19 @@ sealed partial class Lothor : ModNPC {
         _glowMaskOpacity = 1.5f;
     }
 
+    private void Glow2() {
+        if (_glowMaskOpacity < 1.5f) {
+            _glowMaskOpacity += 0.1f;
+        }
+    }
+
     private void UpdateGlowing() {
         if (_glowMaskOpacity > 0f) {
             _glowMaskOpacity -= TimeSystem.LogicDeltaTime;
         }
 
         float value = MathHelper.Clamp(Math.Max(_glowMaskOpacity, LifeProgress), 0f, 1f);
-        Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * value * 0.625f);
+        Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * value * 0.75f);
     }
 
     private void HandleActiveState() {
@@ -759,7 +765,7 @@ sealed partial class Lothor : ModNPC {
             }
         }
         else {
-            Glow();
+            Glow2();
 
             NPC.velocity *= 0.925f;
             if (!_shouldWreathAttack) {

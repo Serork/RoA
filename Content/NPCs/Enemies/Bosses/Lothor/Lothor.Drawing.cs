@@ -46,7 +46,7 @@ sealed partial class Lothor : ModNPC {
             }
         }
         int length = NPC.oldPos.Length - 2;
-        Color color = drawColor;
+        Color color = Lighting.GetColor(NPC.Bottom.ToTileCoordinates());
         if (_drawColor == null) {
             _drawColor = color;
         }
