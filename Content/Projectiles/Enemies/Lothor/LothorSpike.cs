@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Utilities;
 
@@ -8,7 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Enemies.Lothor;
@@ -64,6 +67,31 @@ sealed class LothorSpike : ModProjectile {
     }
 
     public override void AI() {
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+            SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
+        }
+
+        float length = 0f;
+        for (int i = 0; i < _partInfo.Length; i++) {
+            length += _partInfo[i].Progress;
+        }
+        if (Projectile.Opacity > 0f && length < (Length + 5) && Main.rand.NextBool(4)) {
+            Vector2 position = Projectile.position + Projectile.velocity.SafeNormalize(Vector2.Zero) * length * 11f -
+                Vector2.One * 2f;
+            for (int k = 0; k < 3; k++) {
+                Dust.NewDust(position, Projectile.width, Projectile.height, ModContent.DustType<RedLineDust>(), Projectile.velocity.X * 0.025f, Projectile.velocity.Y * 0.025f, Projectile.alpha, default, 1.2f);
+            }
+            Dust.NewDust(position, Projectile.width, Projectile.height, ModContent.DustType<RedLineDust>(), 0f, 0f, Projectile.alpha, default, 1.1f);
+            if (length >= (Length + 4)) {
+                for (int i = 0; i < 3; i++) {
+                    int dust = Dust.NewDust(position, Projectile.width, Projectile.height, ModContent.DustType<RedLineDust>(), Projectile.velocity.X * 0.025f, Projectile.velocity.Y * 0.025f, Projectile.alpha, default, Scale: 1.2f);
+                    Main.dust[dust].velocity += Projectile.velocity * Main.rand.NextFloat(0.6f, 0.8f);
+                    Main.dust[dust].noGravity = true;
+                }
+            }
+        }
+
         Projectile.Opacity = Utils.GetLerpValue(0, 40, Projectile.timeLeft, true);
 
         for (int i = 0; i < _partInfo.Length; i++) {

@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
-
-using Stubble.Core.Classes;
 
 using System;
 using System.Collections.Generic;
@@ -321,6 +320,9 @@ sealed partial class Lothor : ModNPC {
             double flightFrameRate = FLIGHTFRAMERATE;
             if (++NPC.frameCounter > 1.0 + flightFrameRate) {
                 CurrentFrame++;
+                if (CurrentFrame == 22) {
+                    SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "Wingslap") { Volume = 1.5f }, NPC.Center);
+                }
                 NPC.frameCounter = 1.0;
             }
         }
@@ -432,6 +434,9 @@ sealed partial class Lothor : ModNPC {
                         else if (NPC.frameCounter < secondFrameRate + 12.0) {
                             CurrentFrame = 20;
                             if (_shouldWreathAttack) {
+                                if (!_drawWreath) {
+                                    SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "WreathSpawn"), NPC.Center);
+                                }
                                 _drawWreath = true;
                             }
                             else {
@@ -524,6 +529,12 @@ sealed partial class Lothor : ModNPC {
         }
 
         if (ScreamTimer >= MinDelayToStartScreaming && ++_attackTime > 8) {
+            for (int i = 0; i < NPC.maxBuffs; i++) {
+                if (NPC.buffType[i] != 0) {
+                    NPC.DelBuff(i);
+                }
+            }
+
             _attackTime = 0;
             bool firstTime = _previousState != CurrentAIState;
 
@@ -617,13 +628,34 @@ sealed partial class Lothor : ModNPC {
                 _distanceProgress2 = _distanceProgress;
             }
             void spawnSpike() {
+                SoundEngine.PlaySound(SoundID.Item65, NPC.Center);
+                int dustType = ModContent.DustType<RedLineDust>();
+                Vector2 spawnPosition = NPC.Center + WreathOffset();
+                for (int i = 0; i < 32; i++) {
+                    int dust = Dust.NewDust(spawnPosition, 2, 2, dustType,
+                                            (float)Math.Cos(MathHelper.Pi / 16f * i) * 24f,
+                                            (float)Math.Sin(MathHelper.Pi / 16f * i) * 24f, 0, default, 1f);
+                    Main.dust[dust].noGravity = true;
+                }
+
+                for (int i = 0; i < 10; i++) {
+                    int dust = Dust.NewDust(spawnPosition, 20, 20, dustType, (float)(NPC.velocity.X * 0.25), (float)(NPC.velocity.Y * 0.25));
+                    if (Main.rand.NextBool(3)) {
+                        Main.dust[dust].fadeIn = (float)(0.75 + (double)Main.rand.Next(-10, 11) * 0.01f);
+                        Main.dust[dust].scale = (float)(0.25 + (double)Main.rand.Next(-10, 11) * 0.05f) * 3.5f;
+                    }
+                    else {
+                        Main.dust[dust].scale = (float)(1.0 + (double)Main.rand.Next(-10, 11) * 0.05f) * 3.5f;
+                    }
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].velocity *= 1.25f;
+                }
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
                     Vector2 velocity = Helper.VelocityToPoint(NPC.Center, Target.Center, 2f);
                     int type = ModContent.ProjectileType<LothorSpike>();
                     int damage = NPC.damage;
                     float knockBack = 0f;
-                    Vector2 position = NPC.Center + WreathOffset();
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), position.X, position.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer);
                 }
             }
             float speed = 8f;
@@ -688,6 +720,9 @@ sealed partial class Lothor : ModNPC {
         }
         else {
             NPC.velocity *= 0.925f;
+            if (!_shouldWreathAttack) {
+                CreateCircleDusts();
+            }
             if (_frameChosen) {
                 bool flag = BeforeAttackTimer > 0f;
                 if (flag) {
@@ -715,6 +750,27 @@ sealed partial class Lothor : ModNPC {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void CreateCircleDusts() {
+        int type = ModContent.DustType<RedLineDust>();
+        for (int i = 0; i < 3; i++) {
+            if (Main.rand.NextBool(2)) {
+                Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
+                Vector2 center = NPC.Center + new Vector2(2f, 0f) + NPC.velocity + spinningpoint * (NPC.width * NPC.scale);
+                Vector2 rotationPoint = spinningpoint.RotatedBy(0.785) * NPC.direction;
+                Vector2 position = center + rotationPoint * 5f;
+                int dust = Dust.NewDust(position, 0, 0, type);
+                Main.dust[dust].position = position;
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * NPC.scale;
+                Main.dust[dust].velocity = rotationPoint * NPC.scale * -2f;
+                Main.dust[dust].scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f) * 2f;
+                Main.dust[dust].scale *= NPC.scale;
+                Main.dust[dust].velocity += NPC.velocity * 1.25f;
+                Main.dust[dust].position += Main.dust[dust].velocity * -5f;
             }
         }
     }
@@ -1332,6 +1388,9 @@ sealed partial class Lothor : ModNPC {
         _applyFlightAttackAnimation = false;
         _flightAttackAnimationDone = false;
         _frameChosen = false;
+        if (_drawWreath) {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "WreathKill"), NPC.Center);
+        }
         _drawWreath = false;
         _wreathLookingPosition = NPC.Center;
         _distanceProgress = _distanceProgress2 = -1f;
