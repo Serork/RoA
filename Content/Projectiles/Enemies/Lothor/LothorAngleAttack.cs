@@ -57,7 +57,7 @@ sealed class LothorAngleAttack : ModProjectile {
             Main.dust[dust].noGravity = true;
         }
 
-        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y + 2f, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, 0f, 0f);
+        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, 0f, 0f);
         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
     }
 
