@@ -26,14 +26,22 @@ sealed class CursedAcorn : ModProjectile {
     }
 
     public override void AI() {
-        //int vecX = (int)Projectile.position.X / 16;
-        //int vecY = (int)Projectile.position.Y / 16 + 1;
-        //Tile tile = Main.tile[vecX, vecY];
-        //if (tile != null && tile.HasTile) {
-        //    if (TileID.Sets.Platforms[tile.TileType]) {
-        //        Projectile.Kill();
-        //    }
-        //}
+        Player player = Main.player[(int)Projectile.ai[2]];
+        if (player.dead || !player.active) {
+            return;
+        }
+        bool flag = player.position.Y > Projectile.position.Y + Projectile.height;
+        if (flag) {
+            return;
+        }
+        int vecX = (int)Projectile.position.X / 16;
+        int vecY = (int)Projectile.position.Y / 16 + 1;
+        Tile tile = Main.tile[vecX, vecY];
+        if (tile != null && tile.HasTile) {
+            if (TileID.Sets.Platforms[tile.TileType]) {
+                Projectile.Kill();
+            }
+        }
     }
 
     public override void OnKill(int timeLeft) {

@@ -124,7 +124,7 @@ sealed class Pipistrelle : ModNPC {
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
                         int projectile = 
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-x * sqrt, -y * sqrt), ModContent.ProjectileType<CursedAcorn>(),
-                            NPC.damage, 0, Main.myPlayer);
+                            NPC.damage, 0, Main.myPlayer, ai2: player.whoAmI);
                         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                     }
                 }
