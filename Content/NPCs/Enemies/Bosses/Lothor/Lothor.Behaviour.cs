@@ -504,7 +504,7 @@ sealed partial class Lothor : ModNPC {
         }
 
         float value = MathHelper.Clamp(Math.Max(_glowMaskOpacity, LifeProgress), 0f, 1f);
-        Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * value * 0.75f);
+        Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * value * 0.625f);
     }
 
     private void HandleActiveState() {
