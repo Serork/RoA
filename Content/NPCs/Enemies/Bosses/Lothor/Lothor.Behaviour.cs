@@ -580,7 +580,7 @@ sealed partial class Lothor : ModNPC {
             _attackTime = 0;
             bool firstTime = _previousState != CurrentAIState;
 
-            float maxDist = 600f;
+            float maxDist = 800f;
             foreach (Player player in Main.ActivePlayers) {
                 if (player.dead) {
                     continue;
@@ -590,10 +590,8 @@ sealed partial class Lothor : ModNPC {
                     Vector2 velocity = player.Center - NPC.Center;
                     velocity.Normalize();
                     float maxSpeed = 10f;
-                    player.velocity += velocity * Math.Max((maxDist - dist) / 100f, maxSpeed);
-                    if (player.velocity.Length() > maxSpeed) {
-                        player.velocity = player.velocity.SafeNormalize(Vector2.Zero) * maxSpeed;
-                    }
+                    player.velocity += velocity * Math.Max((maxDist - dist) / 100f, maxSpeed) * 0.15f;
+                    player.velocity *= 1f - Math.Abs(dist) * 0.0035f;
                 }
             }
 
@@ -639,10 +637,10 @@ sealed partial class Lothor : ModNPC {
 
             BeforeAttackTimer = 0f;
 
-            //ChooseAttack(LothorAIState.Scream);
+            ChooseAttack(LothorAIState.Scream);
 
-            DashDelay = GetAttackDelay();
-            CurrentAIState = LothorAIState.Idle;
+            //DashDelay = GetAttackDelay();
+            //CurrentAIState = LothorAIState.Idle;
 
             _previousAttacks.Add(_previousState);
         }
