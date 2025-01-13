@@ -71,6 +71,8 @@ sealed class Pipistrelle : ModNPC {
     }
 
     public override void AI() {
+        NPC.OffsetTheSameNPC(0.1f);
+
         Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
 
         NPC owner = Main.npc[(int)NPC.ai[0]];
