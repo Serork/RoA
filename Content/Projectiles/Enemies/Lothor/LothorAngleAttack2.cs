@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using RoA.Core;
 using Microsoft.Xna.Framework;
+using RoA.Content.Dusts;
 
 namespace RoA.Content.Projectiles.Enemies.Lothor;
 
@@ -25,7 +26,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
     public override void AI() {
         if (Main.netMode != NetmodeID.Server) {
             if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
-                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 2, 2, DustID.PoisonStaff, 0f, -0.5f, 0, default, 1.35f);
+                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 2, 2, ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1.35f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 0.5f;
             }
@@ -49,7 +50,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
         if (Main.netMode != NetmodeID.Server)
             for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
                 int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
-                                        Projectile.height, DustID.PoisonStaff, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
+                                        Projectile.height, ModContent.DustType<LothorPoison>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
                 Main.dust[dust].noGravity = true;
             }
     }
