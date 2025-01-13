@@ -643,10 +643,10 @@ sealed partial class Lothor : ModNPC {
                     int dust = Dust.NewDust(spawnPosition, 20, 20, dustType, (float)(NPC.velocity.X * 0.25), (float)(NPC.velocity.Y * 0.25));
                     if (Main.rand.NextBool(3)) {
                         Main.dust[dust].fadeIn = (float)(0.75 + (double)Main.rand.Next(-10, 11) * 0.01f);
-                        Main.dust[dust].scale = (float)(0.25 + (double)Main.rand.Next(-10, 11) * 0.05f) * 3.5f;
+                        Main.dust[dust].scale = (float)(0.25 + (double)Main.rand.Next(-10, 11) * 0.05f);
                     }
                     else {
-                        Main.dust[dust].scale = (float)(1.0 + (double)Main.rand.Next(-10, 11) * 0.05f) * 3.5f;
+                        Main.dust[dust].scale = (float)(1.0 + (double)Main.rand.Next(-10, 11) * 0.05f);
                     }
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity *= 1.25f;
@@ -758,10 +758,10 @@ sealed partial class Lothor : ModNPC {
 
     private void CreateCircleDusts() {
         int type = ModContent.DustType<RedLineDust>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             if (Main.rand.NextBool(2)) {
                 Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
-                Vector2 center = NPC.Center + new Vector2(2f, 0f) + NPC.velocity + spinningpoint * (NPC.width * NPC.scale);
+                Vector2 center = NPC.Center + new Vector2(NPC.direction == -1 ? 6f : 0f, 0f) + NPC.velocity + spinningpoint * (NPC.width * NPC.scale);
                 Vector2 rotationPoint = spinningpoint.RotatedBy(0.785) * NPC.direction;
                 Vector2 position = center + rotationPoint * 5f;
                 int dust = Dust.NewDust(position, 0, 0, type);
@@ -1408,7 +1408,7 @@ sealed partial class Lothor : ModNPC {
         bool flag2 = distance < 250f;
         bool flag4 = DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
         if (flag4) {
-            if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && !flag2 && DashTimer % 5f == 0f && Main.rand.NextBool(7)) {
+            if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && !flag2 && DashTimer % 5f == 0f && Main.rand.NextBool(5)) {
                 ChooseAttack(LothorAIState.Scream);
                 return;
             }

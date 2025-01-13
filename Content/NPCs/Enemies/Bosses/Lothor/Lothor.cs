@@ -1,10 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core;
+
 using Terraria;
+using Terraria.Audio;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
+[AutoloadBossHead]
 sealed partial class Lothor : ModNPC {
     public sealed override void SetStaticDefaults() => Main.npcFrameCount[Type] = 1;
 
@@ -15,7 +19,18 @@ sealed partial class Lothor : ModNPC {
 
         NPC.Size = Vector2.One * 72f;
 
-        NPC.aiStyle = NPC.ModNPC.AIType = -1;
+        NPC.aiStyle = AIType = -1;
+
+        NPC.boss = true;
+
+        NPC.HitSound = new SoundStyle(ResourceManager.NPCSounds + "LothorHit") { Volume = 0.8f };
+        NPC.DeathSound = new SoundStyle(ResourceManager.NPCSounds + "LothorDeath");
+
+        NPC.value = Item.buyPrice(gold: 5);
+
+        if (!Main.dedServ) {
+            Music = MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor");
+        }
     }
 
     public override void Unload() => UnloadAnimations();

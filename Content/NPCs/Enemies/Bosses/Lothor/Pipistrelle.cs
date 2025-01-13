@@ -40,17 +40,19 @@ sealed class Pipistrelle : ModNPC {
 
     public override void AI() {
         NPC owner = Main.npc[(int)NPC.ai[0]];
+        void playScreamSound() => SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
         if (NPC.localAI[2] == 0f) {
             NPC.localAI[2] = 1f;
             NPC.localAI[0] = owner.Center.X + (int)NPC.ai[3] * 100f;
             NPC.localAI[1] = owner.Center.Y + 10f;
             Vector2 positionToMove = new(NPC.localAI[0], NPC.localAI[1]);
             NPC.velocity = NPC.DirectionTo(positionToMove) * 5f;
+            playScreamSound();
         }
         NPC.ai[1] += Main.rand.NextFloat();
         if (NPC.ai[1] > Main.rand.NextFloat(90f, 130f)) {
             NPC.ai[1] = 0f;
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
+            playScreamSound();
         }
         NPC.localAI[2]++;
         if (NPC.localAI[2] < 15f) {
