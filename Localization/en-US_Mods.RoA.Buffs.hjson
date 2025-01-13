@@ -200,3 +200,8 @@ BoneHarpyMountBuff: {
 	DisplayName: Bone Harpy Mount
 	Description: Mods.RoA.Buffs.BoneHarpyMountBuff.Description
 }
+
+BloodShedAxesDebuff: {
+	DisplayName: Bloodshed Axe
+	Description: 
+}

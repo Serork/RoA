@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+
 using RoA.Common.VisualEffects;
+
 using System;
-using Terraria.Graphics.Renderers;
+
 using Terraria;
+using Terraria.Graphics.Renderers;
 
 namespace RoA.Content.VisualEffects;
 

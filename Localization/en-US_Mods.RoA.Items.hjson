@@ -1151,3 +1151,8 @@ Beacon: {
 	DisplayName: Beacon
 	Tooltip: ""
 }
+
+BloodshedAxe: {
+	DisplayName: Bloodshed Axe
+	Tooltip: "'There will be blood'"
+}

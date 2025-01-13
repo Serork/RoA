@@ -1,0 +1,286 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Common.VisualEffects;
+using RoA.Content.Buffs;
+using RoA.Content.Dusts;
+using RoA.Content.VisualEffects;
+using RoA.Core;
+using RoA.Core.Utility;
+using RoA.Utilities;
+
+using System;
+
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Projectiles.Friendly.Melee;
+
+sealed class BloodshedAxe : ModProjectile {
+    public override bool? CanDamage() => Projectile.ai[1] >= 2f;
+
+    private bool _powerUp;
+
+    public override void SetDefaults() {
+        int width = 78; int height = 62;
+        Projectile.Size = new Vector2(width, height);
+        Projectile.aiStyle = -1;
+        Projectile.tileCollide = false;
+        Projectile.friendly = true;
+        Projectile.DamageType = DamageClass.Melee;
+        Projectile.penetrate = -1;
+        Projectile.ignoreWater = true;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = -1;
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        int type = ModContent.ProjectileType<BloodshedAxeEnergy>();
+        Player player = Main.player[Projectile.owner];
+        if (player.ownedProjectileCounts[type] != 0) {
+            modifiers.SetCrit();
+        }
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        Player player = Main.player[Projectile.owner];
+        int itemAnimationMax = player.itemAnimationMax;
+        int itemAnimation = player.itemAnimation;
+        float value = 1f - itemAnimation / (float)itemAnimationMax;
+        float coneLength = 80f * Projectile.scale;
+        float num1 = 0.5105088f * value;
+        float maximumAngle = 0.3926991f;
+        float coneRotation = Projectile.rotation + num1;
+        return targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, coneLength, coneRotation, maximumAngle) && Collision.CanHit(Projectile.Center, 2, 2, targetHitbox.Center.ToVector2(), 2, 2);
+    }
+
+    private void Dusts(NPC npc) {
+        for (int i = 0; i < 15; i++) {
+            Color newColor = Main.hslToRgb((0.92f + Main.rand.NextFloat() * 0.02f) % 1f, 1f, 0.4f + Main.rand.NextFloat() * 0.25f);
+            int num4 = Dust.NewDust(npc.Center - new Vector2(0f, npc.height / 4f), 0, 0, ModContent.DustType<VampParticle>(), 0f, 0f, 0, newColor);
+            Main.dust[num4].velocity = Main.rand.NextVector2Circular(2f, 2f);
+            Main.dust[num4].velocity -= -Projectile.velocity * (0.5f + 0.5f * Main.rand.NextFloat()) * 1.4f;
+            Main.dust[num4].noGravity = true;
+            Main.dust[num4].scale = 1f;
+            Main.dust[num4].position -= Main.rand.NextVector2Circular(16f, 16f);
+            Main.dust[num4].velocity = Projectile.velocity;
+            if (num4 != 6000) {
+                Dust dust = Dust.CloneDust(num4);
+                dust.scale /= 2f;
+                dust.fadeIn *= 0.75f;
+                dust.color = new Color(255, 255, 255, 255);
+            }
+        }
+
+        for (int num251 = 0; num251 < 3; num251++) {
+            int num252 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Blood, Projectile.velocity.X, Projectile.velocity.Y, 50, default, 1.2f);
+            Main.dust[num252].position = (Main.dust[num252].position + Projectile.Center) / 2f;
+            Main.dust[num252].noGravity = true;
+            Dust dust2 = Main.dust[num252];
+            dust2.velocity *= 0.5f;
+        }
+
+        for (int num253 = 0; num253 < 2; num253++) {
+            int num252 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Blood, Projectile.velocity.X, Projectile.velocity.Y, 50, default, 0.4f);
+            switch (num253) {
+                case 0:
+                    Main.dust[num252].position = (Main.dust[num252].position + Projectile.Center * 5f) / 6f;
+                    break;
+                case 1:
+                    Main.dust[num252].position = (Main.dust[num252].position + (Projectile.Center + Projectile.velocity / 2f) * 5f) / 6f;
+                    break;
+            }
+
+            Dust dust2 = Main.dust[num252];
+            dust2.velocity *= 0.1f;
+            Main.dust[num252].noGravity = true;
+            Main.dust[num252].fadeIn = 1f;
+        }
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        target.AddBuff(BuffID.Bleeding, 100);
+        Player player = Main.player[Projectile.owner];
+        /*if (player.ownedProjectileCounts[type] != 0) {
+			return;
+		}*/
+        if (Projectile.ai[1] == 2f && Projectile.ai[1] != 100f) {
+            Projectile.ai[1] = 100f;
+            for (int num251 = 0; num251 < 3; num251++) {
+                int num252 = Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, DustID.Blood, target.velocity.X, target.velocity.Y, 50, default, 1.2f);
+                Main.dust[num252].position = (Main.dust[num252].position + Projectile.Center) / 2f;
+                Main.dust[num252].noGravity = true;
+                Dust dust2 = Main.dust[num252];
+                dust2.velocity *= 0.5f;
+            }
+
+            for (int num253 = 0; num253 < 2; num253++) {
+                int num252 = Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, DustID.Blood, target.velocity.X, target.velocity.Y, 50, default, 0.4f);
+                switch (num253) {
+                    case 0:
+                        Main.dust[num252].position = (Main.dust[num252].position + target.Center * 5f) / 6f;
+                        break;
+                    case 1:
+                        Main.dust[num252].position = (Main.dust[num252].position + (target.Center + target.velocity / 2f) * 5f) / 6f;
+                        break;
+                }
+
+                Dust dust2 = Main.dust[num252];
+                dust2.velocity *= 0.1f;
+                Main.dust[num252].noGravity = true;
+                Main.dust[num252].fadeIn = 1f;
+            }
+
+            for (int i = 0; i < 15; i++) {
+                Vector2 position = target.Center + new Vector2(Main.rand.Next(-Projectile.width + 20, Projectile.width - 10) - 5f, 10f) + Main.rand.NextVector2Circular(target.width, target.height) + Projectile.velocity * (0.5f + 0.5f * Main.rand.NextFloat()) * 1.4f; ;
+                Vector2 velocity = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(0.5f, 2f);
+                VisualEffectSystem.New<BloodShedParticle>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity - new Vector2(0f, 0.5f),
+                    new Color(82, 15, 15), rotation: Main.rand.NextFloat(MathHelper.TwoPi));
+            }
+
+            if (_powerUp) {
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "BloodShed") { Volume = 0.25f, Pitch = -0.25f, MaxInstances = 3 }, Projectile.Center);
+                if (!target.HasBuff<BloodShedAxesDebuff>()) {
+                    if (Main.myPlayer == Projectile.owner) {
+                        Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), target.Center, Vector2.Zero, ModContent.ProjectileType<BloodShedAxesTarget>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
+                    }
+                }
+                else {
+                    if (target.FindBuff(ModContent.BuffType<BloodShedAxesDebuff>(), out int buffIndex)) {
+                        target.DelBuff(buffIndex);
+                    }
+                }
+            }
+        }
+    }
+
+    public override void AI() {
+        Player player = Main.player[Projectile.owner];
+        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.PiOver2);
+        player.heldProj = Projectile.whoAmI;
+        int itemAnimationMax = player.itemAnimationMax;
+        int itemAnimation = player.itemAnimation;
+        int min = itemAnimationMax / 2 - itemAnimationMax / 4;
+        if (Projectile.ai[1] == 0f) {
+            Projectile.ai[0] += 0.02f;
+            if (Projectile.ai[0] > 0.2f) {
+                Projectile.ai[1] = 1f;
+            }
+        }
+        else if (Projectile.ai[1] == 1f) {
+            Projectile.ai[0] -= 0.02f;
+            if (Projectile.ai[0] < -0.2f) {
+                Projectile.ai[1] = 0f;
+            }
+        }
+        if (player.dead || !player.active) {
+            Projectile.Kill();
+        }
+        else if (Projectile.localAI[0] != 0f) {
+            float f = 1f - player.itemAnimation / (float)player.itemAnimationMax + 0.5f - (player.itemAnimation < player.itemAnimationMax * 0.45f ? 1f - player.itemAnimation / (float)player.itemAnimationMax + 0.5f : 0f);
+            Projectile.Center = player.Center;
+            if (Projectile.timeLeft > min) {
+                //float value2 = f * 1.25f;
+                float value2 = f * 1.15f;
+                if (value2 != 0f) {
+                    Projectile.scale = value2;
+                }
+                Projectile.Center += Projectile.velocity * 2.5f * (0.5f + Projectile.ai[0]) * (f > 0.5f ? f : 1f - f - 0.5f);
+                Projectile.rotation = Projectile.rotation.AngleLerp(-MathHelper.PiOver2 - Projectile.spriteDirection * 0.4f, 0.2f);
+            }
+            if (Projectile.timeLeft == min) {
+                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item71 with { Pitch = -0.15f, Volume = 0.55f }, Projectile.Center);
+                Projectile.ai[0] = 0f;
+                Projectile.ai[1] = 2f;
+            }
+            if (Projectile.timeLeft <= min + 5) {
+                Projectile.scale -= 0.01f;
+                Projectile.ai[0] += 0.01f;
+                Projectile.rotation += (0.225f + Projectile.ai[0] * 1.0125f) * Projectile.spriteDirection;
+            }
+        }
+        Projectile.Opacity = Utils.GetLerpValue(itemAnimationMax, itemAnimationMax - 7, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 7f, Projectile.timeLeft, clamped: true);
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+            Projectile.spriteDirection = player.direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
+            Projectile.Center = player.Center + new Vector2(10f * player.direction, 0);
+            Projectile.timeLeft = itemAnimationMax;
+        }
+        float f2 = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
+        float value = 1f - itemAnimation / (float)itemAnimationMax;
+        Vector2 rotationVector2 = (f2 + value * 1.25f * MathHelper.PiOver2).ToRotationVector2();
+        Vector2 position = Projectile.Center + f2.ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 10.0 * Projectile.scale);
+        if (position.Distance(player.Center) > 40f && Projectile.timeLeft <= min + itemAnimationMax / 7) {
+            Dust dust = Dust.NewDustPerfect(position, DustID.Blood, new Vector2?(rotationVector2 * 1f), (int)(255f - (1f - Projectile.timeLeft / min) * 1.5f * 255f), default, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+            dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
+            dust.noLight = dust.noLightEmittence = true;
+            dust.noGravity = true;
+        }
+        if (Projectile.ai[1] == 2 && Projectile.localAI[1] == 0f && player.statLife > player.statLifeMax2 / 5) {
+            _powerUp = true;
+            Projectile.damage = Projectile.damage - Projectile.damage / 3;
+            int damage = Main.rand.Next(Projectile.damage - Projectile.damage / 3, Projectile.damage);
+            player.statLife -= damage;
+            CombatText.NewText(player.Hitbox, CombatText.DamagedFriendly, damage, false, false);
+
+            for (int i = 0; i < 10; i++) {
+                int dust = Dust.NewDust(Projectile.Center + new Vector2(0, -60).RotatedBy((Projectile.rotation + 90) * Projectile.spriteDirection), 0, 0, DustID.RainbowMk2, 0f, 0f, 0, new Color(255, 100, 100, 0), Main.rand.NextFloat(1f, 1.5f));
+                Main.dust[dust].velocity = Main.rand.NextVector2Circular(2f, 2f);
+                Main.dust[dust].position += Main.dust[dust].velocity * Main.rand.NextFloat(20f, 25f);
+                Main.dust[dust].velocity = rotationVector2 * Projectile.spriteDirection;
+                Main.dust[dust].fadeIn = 1f;
+                Main.dust[dust].noLightEmittence = true;
+                Main.dust[dust].noGravity = true;
+            }
+        }
+        if (_powerUp) Lighting.AddLight(Projectile.Center, 0.4f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255);
+    }
+
+    public override bool ShouldUpdatePosition()
+        => false;
+
+    public override bool PreDraw(ref Color lightColor) {
+        Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        float extraRotation = Projectile.ai[1] != 2f ? Projectile.ai[0] * -(float)Projectile.spriteDirection : 0f;
+        Player player = Main.player[Projectile.owner];
+        Rectangle? rectangle = new Rectangle?(new Rectangle(66 * (Projectile.spriteDirection != 1 ? 1 : 0), 0, 66, 66));
+        if (Projectile.ai[1] == 2 && Projectile.localAI[1] < 1f) Projectile.localAI[1] += 0.1f;
+
+        if (_powerUp && Projectile.ai[1] != 100f) {
+            for (int i = 0; i < 3; i++) {
+                float circleCompletion = (float)Math.Sin((double)(Main.GlobalTimeWrappedHourly * 5f + i * MathHelper.PiOver2)) * -Projectile.spriteDirection;
+                float drawRotation = 0.78f - 0.2f * i * Projectile.spriteDirection + circleCompletion * MathHelper.Pi / 10f - circleCompletion * 0.44f;
+                Vector2 drawOffsetStraight = Projectile.Center - Main.screenPosition + -Projectile.spriteDirection * Vector2.One * (float)Math.Sin((double)(Main.GlobalTimeWrappedHourly * 20f)) * 0.01f;
+                Vector2 drawDisplacementAngle = -Projectile.spriteDirection * Vector2.One.RotatedBy(MathHelper.PiOver2, default) * circleCompletion.ToRotationVector2().Y;
+                int itemAnimationMax = player.itemAnimationMax;
+                int itemAnimation = player.itemAnimation;
+                float value = 1f - itemAnimation / (float)itemAnimationMax;
+                Main.spriteBatch.Draw(texture2D, drawOffsetStraight + drawDisplacementAngle + Projectile.spriteDirection * Utils.ToRotationVector2(i).RotatedBy(Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: 1f - value) + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                                      rectangle,
+                                      new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0) * Projectile.Opacity * ((4f - i) / 4f) * Projectile.localAI[1],
+                                      Projectile.rotation + drawRotation,
+                                      new Vector2(0f, texture2D.Height),
+                                      Projectile.scale, SpriteEffects.None, 0f);
+            }
+        }
+        /*for (int i = 0; i < 5; i++) {
+			Main.spriteBatch.Draw(texture2D, Projectile.Center + Utils.ToRotationVector2((float)(Main.GlobalTimeWrappedHourly + i * MathHelper.Pi * 2f / 5.0)) - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+								  rectangle,
+								  Projectile.GetAlpha(lightColor) * 0.025f * MathUtils.Osc(0f, 1.5f, 0.5f, 0.5f) * Projectile.Opacity,
+								  Projectile.rotation + extraRotation + 0.78f,
+								  new Vector2(0f, texture2D.Height),
+								  Projectile.scale, SpriteEffects.None, 0f);
+		}*/
+        Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                              rectangle,
+                              Projectile.GetAlpha(lightColor) * Projectile.Opacity,
+                              Projectile.rotation + extraRotation + 0.78f,
+                              new Vector2(0f, texture2D.Height),
+                              Projectile.scale, SpriteEffects.None, 0f);
+        return false;
+    }
+}
