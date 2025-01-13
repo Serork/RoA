@@ -440,11 +440,11 @@ sealed partial class Lothor : ModNPC {
                             void createDusts() {
                                 for (int k = 0; k < 20; k++) {
                                     Dust dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<RedLineDust>());
-                                    dust.scale = 1.4f + Main.rand.NextFloatRange(0.3f);
+                                    dust.scale = 1.4f + Main.rand.NextFloatRange(0.2f);
                                     dust.velocity = (NPC.rotation + MathHelper.Pi).ToRotationVector2().RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI / 12f)) * (0.5f + Main.rand.NextFloat() * 2.5f) * 15f;
                                     dust.velocity += new Vector2((1f + Main.rand.NextFloat()) * NPC.direction, 0f);
                                     dust.velocity.X *= -NPC.direction;
-                                    dust.velocity *= 0.2f;
+                                    dust.velocity *= 0.25f;
                                     dust.noLight = true;
                                     dust.noGravity = true;
                                 }
@@ -678,8 +678,8 @@ sealed partial class Lothor : ModNPC {
                 Vector2 spawnPosition = NPC.Center + WreathOffset();
                 for (int i = 0; i < 32; i++) {
                     int dust = Dust.NewDust(spawnPosition, 2, 2, dustType,
-                                            (float)Math.Cos(MathHelper.Pi / 16f * i) * 24f,
-                                            (float)Math.Sin(MathHelper.Pi / 16f * i) * 24f, 0, default, 1.25f + Main.rand.NextFloatRange(0.15f));
+                                            (float)Math.Cos(MathHelper.Pi / 16f * i) * 20f,
+                                            (float)Math.Sin(MathHelper.Pi / 16f * i) * 20f, 0, default, 1.3f + Main.rand.NextFloatRange(0.2f));
                     Main.dust[dust].noGravity = true;
                 }
 
@@ -690,10 +690,10 @@ sealed partial class Lothor : ModNPC {
                         Main.dust[dust].scale = (float)(0.25 + (double)Main.rand.Next(-10, 11) * 0.05f);
                     }
                     else {
-                        Main.dust[dust].scale = (float)(1.0 + (double)Main.rand.Next(-10, 11) * 0.05f);
+                        Main.dust[dust].scale = (float)(1.2 + (double)Main.rand.Next(-10, 11) * 0.05f);
                     }
                     Main.dust[dust].noGravity = true;
-                    Main.dust[dust].velocity *= 1.25f;
+                    Main.dust[dust].velocity *= 1.125f;
                 }
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
                     Vector2 velocity = Helper.VelocityToPoint(NPC.Center, Target.Center, 2f);
@@ -935,9 +935,11 @@ sealed partial class Lothor : ModNPC {
             SoundStyle swipeSound = new(ResourceManager.NPCSounds + name) { PitchVariance = 0.1f };
             SoundEngine.PlaySound(swipeSound, NPC.Center);
         }
+        if (ClawsTimer < ClawsAttackTime / 2f) {
+            Glow2();
+        }
         if (BeforeAttackTimer <= 0f) {
             ClawsTimer += 1f;
-            Glow();
         }
         else {
             BeforeAttackTimer--;
