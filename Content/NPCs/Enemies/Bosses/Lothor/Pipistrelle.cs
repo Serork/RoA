@@ -55,7 +55,7 @@ sealed class Pipistrelle : ModNPC {
         spriteBatch.Draw(GlowMask, NPC.position - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
 
         NPC npc = Main.npc[(int)NPC.ai[0]];
-        if (npc.active) {
+        if (!(!npc.active || npc.ModNPC is null || npc.ModNPC is not Lothor)) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             float lifeProgress = npc.As<Lothor>().LifeProgress;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
