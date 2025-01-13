@@ -122,6 +122,8 @@ sealed partial class Lothor : ModNPC {
     private float _distanceProgress, _distanceProgress2;
     private bool _shouldSpawnPipistrelles;
 
+    private float LifeProgress => 1f - NPC.life / (float)NPC.lifeMax;
+
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
     private Player Target { get; set; }
     private List<LothorAIState> Attacks => [LothorAIState.ClawsAttack, LothorAIState.SpittingAttack, LothorAIState.Scream, LothorAIState.FlightAttackPreparation, LothorAIState.WreathAttack];
@@ -484,7 +486,7 @@ sealed partial class Lothor : ModNPC {
             _glowMaskOpacity -= TimeSystem.LogicDeltaTime;
         }
 
-        float value = MathHelper.Clamp(_glowMaskOpacity, 0f, 1f);
+        float value = MathHelper.Clamp(Math.Max(_glowMaskOpacity, LifeProgress), 0f, 1f);
         Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * value * 0.75f);
     }
 
@@ -633,7 +635,7 @@ sealed partial class Lothor : ModNPC {
                 NPC.velocity += NPC.DirectionTo(_tempPosition) * _dashStrength * dashStrength * 0.35f;
             }
             NPC.velocity += NPC.DirectionTo(_tempPosition) * _dashStrength * dashStrength * 0.25f;
-            WreathTimer += WreathAttackTime * 0.075f;
+            WreathTimer += WreathAttackTime * (0.075f - 0.035f * LifeProgress);
         }
         else {
             void updatePositionToMove(float x = 300f, float y = -100f) => _tempPosition = new Vector2(Target.Center.X + _tempDirection * x, Target.Center.Y + y);
@@ -678,9 +680,9 @@ sealed partial class Lothor : ModNPC {
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer);
                 }
             }
-            float speed = 8f;
+            float speed = 8f + 2f * LifeProgress;
             Vector2 desiredVelocity = NPC.DirectionTo(_tempPosition) * speed;
-            float acceleration = 0.2f;
+            float acceleration = 0.2f + 0.5f * LifeProgress;
             NPC.SimpleFlyMovement(desiredVelocity, acceleration);
             float min = 10f;
             if (Vector2.Distance(_tempPosition, NPC.Center) < min) {
@@ -693,7 +695,8 @@ sealed partial class Lothor : ModNPC {
                 ResetExtraDrawInfo();
             }
 
-            if (++_attackTime > 20) {
+            int attackRate = (int)(20 - 5 * LifeProgress);
+            if (++_attackTime > attackRate) {
                 _attackTime = 0;
                 spawnSpike();
             }
@@ -1189,7 +1192,7 @@ sealed partial class Lothor : ModNPC {
         CurrentAIState = LothorAIState.Flight;
         ResetDashVariables();
         if (flag) {
-            StillInJumpBeforeFlightTimer = 10f;
+            StillInJumpBeforeFlightTimer = GetAttackDelay() * 0.1f;
         }
         else if (_previousState != LothorAIState.WreathAttack && _shouldWreathAttack) {
             _previousState = LothorAIState.AirDash;
@@ -1246,7 +1249,7 @@ sealed partial class Lothor : ModNPC {
         }
         else {
             SpawnStomp();
-            if (NPC.velocity.Y == 0f) {
+            if (Math.Abs(NPC.velocity.Y) <= 0.25f) {
                 FallStrengthIfClose = 0f;
                 NPC.TargetClosest();
                 CurrentAIState = LothorAIState.Idle;
@@ -1282,7 +1285,8 @@ sealed partial class Lothor : ModNPC {
         //    delay -= delay / 4;
         //}
         delay += delay * 0.333f;
-        delay *= 0.75f;
+        float scalableValue = MathHelper.Lerp(0.75f, 0.5f, LifeProgress);
+        delay *= scalableValue;
         return delay;
     }
 
@@ -1429,7 +1433,7 @@ sealed partial class Lothor : ModNPC {
 
     private void PrepareJump() {
         SetKnockBackResist();
-        if (NPC.velocity.Y == 0f) {
+        if (Math.Abs(NPC.velocity.Y) <= 0.25f) {
             DashTimer += 1f;
         }
         bool flag = Collision.CanHit(Target, NPC);
