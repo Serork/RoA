@@ -637,10 +637,10 @@ sealed partial class Lothor : ModNPC {
 
             BeforeAttackTimer = 0f;
 
-            ChooseAttack(LothorAIState.Scream);
+            //ChooseAttack(LothorAIState.Scream);
 
-            //DashDelay = GetAttackDelay();
-            //CurrentAIState = LothorAIState.Idle;
+            DashDelay = GetAttackDelay();
+            CurrentAIState = LothorAIState.Idle;
 
             _previousAttacks.Add(_previousState);
         }
