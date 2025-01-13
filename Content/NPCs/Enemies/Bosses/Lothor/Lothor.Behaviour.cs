@@ -246,7 +246,7 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
-        CurrentAIState = LothorAIState.Flight;
+        //CurrentAIState = LothorAIState.Flight;
 
         _previousAttacks = [];
 
