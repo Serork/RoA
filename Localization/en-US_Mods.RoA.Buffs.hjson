@@ -203,5 +203,5 @@ BoneHarpyMountBuff: {
 
 BloodShedAxesDebuff: {
 	DisplayName: Bloodshed Axe
-	Description: 
+	Description: ""
 }
