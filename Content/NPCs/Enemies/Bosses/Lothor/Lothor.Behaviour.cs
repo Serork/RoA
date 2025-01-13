@@ -1347,7 +1347,7 @@ sealed partial class Lothor : ModNPC {
         bool flag2 = distance < 250f;
         bool flag4 = DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
         if (flag4) {
-            if (_previousState != LothorAIState.Scream && DashTimer % 5f == 0f && Main.rand.NextBool(5)) {
+            if (_previousState != LothorAIState.Scream && !flag2 && DashTimer % 5f == 0f && Main.rand.NextBool(5)) {
                 ChooseAttack(LothorAIState.Scream);
                 return;
             }
