@@ -919,7 +919,14 @@ sealed partial class Lothor : ModNPC {
                 int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType, NPC.damage / 3, 2f, Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
             }
-            SoundStyle swipeSound = new(ResourceManager.NPCSounds + "LothorSwipe") { PitchVariance = 0.1f };
+            string name = "LothorSwipe";
+            if (LifeProgress > 0.66f) {
+                name = "LothorSwipe3";
+            }
+            else if (LifeProgress > 0.33f) {
+                name = "LothorSwipe2";
+            }
+            SoundStyle swipeSound = new(ResourceManager.NPCSounds + name) { PitchVariance = 0.1f };
             SoundEngine.PlaySound(swipeSound, NPC.Center);
         }
         if (BeforeAttackTimer <= 0f) {
