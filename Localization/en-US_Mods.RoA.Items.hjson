@@ -1158,8 +1158,8 @@ BloodshedAxe: {
 }
 
 LothorBag: {
-	DisplayName: Lothor Bag
-	Tooltip: ""
+	DisplayName: Treasure Bag (Lothor)
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}
 }
 
 LothorMask: {
@@ -1168,7 +1168,7 @@ LothorMask: {
 }
 
 LothorMusicBox: {
-	DisplayName: Lothor Music Box
+	DisplayName: Music Box (Lothor)
 	Tooltip: ""
 }
 

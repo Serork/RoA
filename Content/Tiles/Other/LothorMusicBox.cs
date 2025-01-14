@@ -22,7 +22,7 @@ sealed class LothorMusicBox : ModTile {
         TileObjectData.newTile.StyleLineSkip = 2;
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(191, 142, 111), Language.GetText("MapObject.MusicBox"));
+        AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.MusicBox"));
 
         DustType = -1;
         HitSound = SoundID.Dig;
