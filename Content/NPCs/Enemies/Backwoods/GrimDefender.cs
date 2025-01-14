@@ -49,6 +49,7 @@ sealed class GrimDefender : ModNPC {
         //}
     }
 
+    // separate
     public override void Load() {
         On_Main.HoverOverNPCs += On_Main_HoverOverNPCs;
     }
