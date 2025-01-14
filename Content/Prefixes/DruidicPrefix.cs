@@ -26,7 +26,7 @@ sealed class DruidicPrefix(string name,
 		void ILoadable.Load(Mod mod) {
 			mod.AddContent(new DruidicPrefix("Ingrained", potentialDamageMult: 1.22f, potentialSpeedMult: 1.22f, fillingRateMult: 1.22f, druidSpeedMult: 0.9f, druidKnockbackMult: 1.12f));
 			mod.AddContent(new DruidicPrefix("Fragrant", druidDamageMult: 1.22f, potentialDamageMult: 0.86f, potentialSpeedMult: 0.86f, fillingRateMult: 0.86f, druidSpeedMult: 0.94f, druidCrit: 2));
-			mod.AddContent(new DruidicPrefix("Bountiful", druidDamageMult: 1.02f, potentialDamageMult: 1.08f, druidSpeedMult: 1.22f, druidCrit: 4, druidKnockbackMult: 1.06f));
+			mod.AddContent(new DruidicPrefix("Bountiful", druidDamageMult: 1.04f, potentialDamageMult: 1.08f, druidSpeedMult: 1.22f, druidCrit: 4, druidKnockbackMult: 1.06f));
 			mod.AddContent(new DruidicPrefix("Vivid", druidDamageMult: 0.94f, potentialDamageMult: 1.12f, potentialSpeedMult: 1.12f, fillingRateMult: 1.12f, druidSpeedMult: 1.18f, druidKnockbackMult: 0.86f));
 			mod.AddContent(new DruidicPrefix("Withered", druidDamageMult: 0.9f, potentialDamageMult: 0.84f, potentialSpeedMult: 0.84f, fillingRateMult: 0.84f, druidSpeedMult: 1.14f));
 			mod.AddContent(new DruidicPrefix("Rotten", potentialDamageMult: 0.8f, potentialSpeedMult: 0.8f, fillingRateMult: 0.8f, druidSpeedMult: 0.86f, druidKnockbackMult: 0.86f));
