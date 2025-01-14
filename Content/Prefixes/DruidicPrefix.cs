@@ -94,7 +94,7 @@ sealed class DruidicPrefix(string name,
                 valueMult *= 1.15f;
                 break;
 			case "Bountiful":
-                valueMult *= 1.615f;
+                valueMult *= 1.65f;
                 break;
 			case "Vivid":
                 valueMult *= 1.1f;
