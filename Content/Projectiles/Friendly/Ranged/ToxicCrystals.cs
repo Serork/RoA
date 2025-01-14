@@ -31,6 +31,11 @@ class ToxicCrystal1 : ModProjectile {
         return true;
     }
 
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        Projectile.velocity = Vector2.Zero;
+        return false;
+    }
+
     public override void AI() {
         if (Projectile.velocity.Y < 0.25 && Projectile.velocity.Y > 0.15) {
             Projectile.velocity.X = Projectile.velocity.X * 0.8f;
