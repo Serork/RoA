@@ -23,6 +23,7 @@ sealed class CursedAcorn : ModProjectile {
         Projectile.scale = 1.2f;
         Projectile.friendly = false;
         Projectile.hostile = true;
+        Projectile.light = 0f;
     }
 
     public override void AI() {
