@@ -84,16 +84,6 @@ sealed class LothorSoul : RoANPC {
             NPC.oldPos[i] += randomness;
         }
 
-        bool flag = State == (float)States.Disappeared;
-        if (!flag) {
-            if (StateTimer < 30f && StateTimer != -1f) {
-                StateTimer += 1f;
-
-                NPC.Opacity = 0f;
-                return;
-            }
-        }
-
         NPC.TargetClosest();
 
         switch (State) {
@@ -107,25 +97,22 @@ sealed class LothorSoul : RoANPC {
     }
 
     private void Appearance() {
-        StateTimer += 30f / 250f;
-        if (StateTimer > 33f) {
+        StateTimer += 40f / 250f;
+        if (StateTimer > 3f) {
             ChangeState((int)States.Disappeared);
             StateTimer = 0f;
         }
         else {
             NPC.velocity.Y -= 0.005f;
-            NPC.velocity.Y *= 1.005f;
+            NPC.velocity.Y *= 1.025f;
         }
-
-        NPC.velocity.Y -= 0.005f;
-        NPC.velocity.Y *= 1.005f;
 
         NPC.Opacity = 0.35f;
     }
 
     private void Disappear() {
         if (++StateTimer > 20f) {
-            NPC.velocity.Y -= 0.00525f;
+            NPC.velocity.Y -= 0.01f;
             NPC.velocity.Y *= 1.09f;
 
             NPC.Opacity -= 0.007f;

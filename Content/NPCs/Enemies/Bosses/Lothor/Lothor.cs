@@ -21,6 +21,8 @@ sealed partial class Lothor : ModNPC {
 
         NPC.aiStyle = AIType = -1;
 
+        NPC.npcSlots = 10f;
+
         NPC.boss = true;
 
         NPC.HitSound = new SoundStyle(ResourceManager.NPCSounds + "LothorHit") { Volume = 0.8f };
