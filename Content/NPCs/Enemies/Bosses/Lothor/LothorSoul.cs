@@ -64,8 +64,8 @@ sealed class LothorSoul : RoANPC {
             int currentFrame = (int)(NPC.frameCounter / maxCounter);
             NPC.frame.Y = currentFrame * frameHeight;
         }
-        else if (StateTimer > 30f) {
-            int currentFrame = (int)(StateTimer - 30f);
+        else if (StateTimer > 3f) {
+            int currentFrame = (int)(StateTimer - 3f);
             NPC.frame.Y = currentFrame * frameHeight;
 
             NPC.frameCounter = 0.0;
@@ -73,10 +73,6 @@ sealed class LothorSoul : RoANPC {
     }
 
     public override void AI() {
-        if (NPC.velocity.Y > -10f) {
-            NPC.velocity.Y = Helper.Approach(NPC.velocity.Y, NPC.velocity.Y - 0.07f, 0.035f);
-        }
-
         Vector2 velocity = NPC.velocity;
         float rotation = velocity.X * 0.05f;
         NPC.rotation = rotation;
@@ -100,8 +96,8 @@ sealed class LothorSoul : RoANPC {
     }
 
     private void Appearance() {
-        StateTimer += 40f / 250f;
-        if (StateTimer > 3f) {
+        StateTimer += 30f / 250f;
+        if (StateTimer > 6f) {
             ChangeState((int)States.Disappeared);
             StateTimer = 0f;
         }
@@ -114,6 +110,10 @@ sealed class LothorSoul : RoANPC {
     }
 
     private void Disappear() {
+        if (NPC.velocity.Y > -10f) {
+            NPC.velocity.Y = Helper.Approach(NPC.velocity.Y, NPC.velocity.Y - 0.07f, 0.035f);
+        }
+
         if (++StateTimer > 35f) {
             NPC.Opacity -= 0.005f;
 

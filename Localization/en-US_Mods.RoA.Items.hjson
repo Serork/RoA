@@ -1156,3 +1156,23 @@ BloodshedAxe: {
 	DisplayName: Bloodshed Axe
 	Tooltip: "'There will be blood'"
 }
+
+LothorBag: {
+	DisplayName: Lothor Bag
+	Tooltip: ""
+}
+
+LothorMask: {
+	DisplayName: Lothor Mask
+	Tooltip: ""
+}
+
+LothorMusicBox: {
+	DisplayName: Lothor Music Box
+	Tooltip: ""
+}
+
+LothorTrophy: {
+	DisplayName: Lothor Trophy
+	Tooltip: ""
+}

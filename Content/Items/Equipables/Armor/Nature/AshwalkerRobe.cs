@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Body)]
-sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.ISetGlowMask {
+sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Ashwalker Robe");
 		//Tooltip.SetDefault("10% increased nature base damage");
