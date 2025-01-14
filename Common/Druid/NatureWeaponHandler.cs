@@ -90,6 +90,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         if (flag) {
             result = (ushort)(result * activePrefix._potentialDamageMult);
         }
+        result = (ushort)(result * player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f));
         return (ushort)result;
     }
     public static ushort GetPotentialDamage(Item item, Player player) => (ushort)Math.Max(0, GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));

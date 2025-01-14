@@ -51,10 +51,10 @@ sealed class LothorAngleAttack : ModProjectile {
 
     public override void OnKill(int timeLeft) {
         for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
-            int dust = Dust.NewDust(Projectile.position, 2, 2, ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1f);
+            int dust = Dust.NewDust(Projectile.position, 2, 2, DustID.JungleSpore, 0f, -0.5f, 0, default, 1f);
             Main.dust[dust].noGravity = true;
             dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
-              Projectile.height, ModContent.DustType<LothorPoison>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
+              Projectile.height, DustID.JungleSpore, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
             Main.dust[dust].noGravity = true;
             Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
         }
@@ -144,7 +144,7 @@ sealed class LothorAngleAttack : ModProjectile {
 
             Vector2 offset = new(8f, 10f);
             for (int num58 = 0; num58 < 2; num58++) {
-                int num59 = Dust.NewDust(Projectile.position + offset, 0, 0, ModContent.DustType<LothorPoison>(), 0f, 0f, 0, default(Color), 1f + Main.rand.NextFloatRange(0.1f));
+                int num59 = Dust.NewDust(Projectile.position + offset, 0, 0, DustID.JungleSpore, 0f, 0f, 0, default(Color), 1f + Main.rand.NextFloatRange(0.1f));
                 Main.dust[num59].velocity = Main.dust[num59].velocity.RotatedByRandom(MathHelper.PiOver4);
                 Main.dust[num59].velocity *= 0.2f;
                 //Main.dust[num59].velocity += Projectile.velocity / 5f;
@@ -176,7 +176,7 @@ sealed class LothorAngleAttack : ModProjectile {
             num5++;
 
         for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
-            Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, ModContent.DustType<LothorPoison>(), Alpha: 100, Scale: 1.1f)];
+            Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, DustID.JungleSpore, Alpha: 100, Scale: 1.1f)];
             obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
             obj.noGravity = true;
             obj.velocity *= 0.1f;

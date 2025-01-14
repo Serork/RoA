@@ -26,9 +26,9 @@ sealed class DruidicPrefix(string name,
 		void ILoadable.Load(Mod mod) {
 			mod.AddContent(new DruidicPrefix("Ingrained", potentialDamageMult: 1.22f, potentialSpeedMult: 1.22f, fillingRateMult: 1.22f, druidSpeedMult: 0.9f, druidKnockbackMult: 1.12f));
 			mod.AddContent(new DruidicPrefix("Fragrant", druidDamageMult: 1.22f, potentialDamageMult: 0.86f, potentialSpeedMult: 0.86f, fillingRateMult: 0.86f, druidSpeedMult: 0.94f, druidCrit: 2));
-			mod.AddContent(new DruidicPrefix("Bountiful", druidDamageMult: 1.12f, potentialDamageMult: 1.12f, druidSpeedMult: 1.06f, druidCrit: 4, druidKnockbackMult: 1.06f));
+			mod.AddContent(new DruidicPrefix("Bountiful", druidDamageMult: 1.04f, potentialDamageMult: 1.08f, druidSpeedMult: 1.22f, druidCrit: 4, druidKnockbackMult: 1.06f));
 			mod.AddContent(new DruidicPrefix("Vivid", druidDamageMult: 0.94f, potentialDamageMult: 1.12f, potentialSpeedMult: 1.12f, fillingRateMult: 1.12f, druidSpeedMult: 1.18f, druidKnockbackMult: 0.86f));
-			mod.AddContent(new DruidicPrefix("Withered", druidDamageMult: 0.9f, potentialDamageMult: 0.84f, potentialSpeedMult: 0.84f, fillingRateMult: 0.84f, druidSpeedMult: 1.1f));
+			mod.AddContent(new DruidicPrefix("Withered", druidDamageMult: 0.9f, potentialDamageMult: 0.84f, potentialSpeedMult: 0.84f, fillingRateMult: 0.84f, druidSpeedMult: 1.14f));
 			mod.AddContent(new DruidicPrefix("Rotten", potentialDamageMult: 0.8f, potentialSpeedMult: 0.8f, fillingRateMult: 0.8f, druidSpeedMult: 0.86f, druidKnockbackMult: 0.86f));
 			mod.AddContent(new DruidicPrefix("Ragged", druidDamageMult: 0.92f, potentialDamageMult: 0.86f, potentialSpeedMult: 0.86f, fillingRateMult: 0.86f, druidSpeedMult: 1.1f, druidCrit: 10));
 			mod.AddContent(new DruidicPrefix("Blooming", druidDamageMult: 1.14f, potentialDamageMult: 1.18f, potentialSpeedMult: 1.18f, fillingRateMult: 1.18f, druidSpeedMult: 1.04f, druidCrit: 2, druidKnockbackMult: 1.1f));
@@ -88,19 +88,19 @@ sealed class DruidicPrefix(string name,
 	public override void ModifyValue(ref float valueMult) {
 		switch (DruidicPrefixesNames[Type]) {
 			case "Ingrained":
-                valueMult *= 1.1f;
+                valueMult *= 1.15f;
                 break;
 			case "Fragrant":
                 valueMult *= 1.15f;
                 break;
 			case "Bountiful":
-                valueMult *= 1.35f;
+                valueMult *= 1.615f;
                 break;
 			case "Vivid":
-                valueMult *= 1.05f;
+                valueMult *= 1.1f;
                 break;
 			case "Withered":
-                valueMult *= 0.925f;
+                valueMult *= 1f;
                 break;
 			case "Rotten":
                 valueMult *= 0.7f;
@@ -109,7 +109,7 @@ sealed class DruidicPrefix(string name,
                 valueMult *= 1f;
                 break;
 			case "Blooming":
-                valueMult *= 1.75f;
+                valueMult *= 1.7f;
                 break;
 			case "Fertile":
                 valueMult *= 1.1f;
