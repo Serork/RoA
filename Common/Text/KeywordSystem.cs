@@ -67,7 +67,7 @@ sealed class KeywordSystem : ILoadable {
                     }
                 }
             }
-            if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || WreathDrawingLayer.DrawingAmount) {
+            if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || WreathDrawing.JustDrawn) {
                 if (_keywordColorOpacity > 0f) {
                     _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
                 }

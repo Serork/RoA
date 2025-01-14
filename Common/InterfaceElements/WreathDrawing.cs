@@ -6,16 +6,19 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Forms;
 using RoA.Core;
 using RoA.Core.Data;
+using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace RoA.Common.InterfaceElements;
 
-sealed class WreathDrawingLayer : PlayerDrawLayer {
+sealed class WreathDrawing : PlayerDrawLayer {
     private const byte HORIZONTALFRAMECOUNT = 6;
 
     private static SpriteData _wreathSpriteData;
@@ -23,7 +26,7 @@ sealed class WreathDrawingLayer : PlayerDrawLayer {
 
     private Vector2 _oldPosition;
 
-    public static bool DrawingAmount { get; private set; }
+    public static bool JustDrawn { get; private set; }
 
     public override void Load() {
         if (Main.dedServ) {
@@ -42,6 +45,9 @@ sealed class WreathDrawingLayer : PlayerDrawLayer {
         if (drawInfo.shadow != 0f) {
             return;
         }
+
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
 
         Player player = drawInfo.drawPlayer;
         WreathHandler stats = player.GetModPlayer<WreathHandler>();
@@ -174,11 +180,13 @@ sealed class WreathDrawingLayer : PlayerDrawLayer {
 
             Main.instance.MouseTextHackZoom(text2);
             Main.mouseText = true;
-            DrawingAmount = true;
+            JustDrawn = true;
         }
         else {
-            DrawingAmount = false;
+            JustDrawn = false;
         }
+
+        Main.spriteBatch.EndBlendState();
     }
 }
 
@@ -193,7 +201,7 @@ sealed class WreathDrawingLayer : PlayerDrawLayer {
 //    private static Player Player => Main.LocalPlayer;
 //    private static WreathHandler Stats => Player.GetModPlayer<WreathHandler>();
 
-//    public static bool DrawingAmount { get; private set; }
+//    public static bool JustDrawn { get; private set; }
 
 //    public override int GetInsertIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Ingame Options"));
 
@@ -213,7 +221,7 @@ sealed class WreathDrawingLayer : PlayerDrawLayer {
 //        playerPosition.Y -= 12f;
 //        Vector2 position;
 //        bool breathUI = Player.breath < Player.breathMax || Player.lavaTime < Player.lavaMax;
-//        float offsetX = -_wreathSpriteData.FrameWidth / 2f + 2, 
+//        float offsetX = -_wreathSpriteData.FrameWidth / 2f + 2,
 //              offsetY = _wreathSpriteData.FrameHeight;
 //        playerPosition.Y -= Player.gfxOffY;
 //        playerPosition.X += offsetX;
@@ -232,7 +240,7 @@ sealed class WreathDrawingLayer : PlayerDrawLayer {
 //            position = playerPosition;
 //        }
 //        position -= Main.screenPosition;
-//        position -= new Vector2(4f, 0f);
+//        position -= new Vector2(/*4f*/0f, 0f);
 //        float rotation = Player.fullRotation + MathHelper.Pi;
 //        _oldPosition = playerPosition;
 
@@ -257,7 +265,7 @@ sealed class WreathDrawingLayer : PlayerDrawLayer {
 //        wreathSpriteData.VisualPosition = position;
 //        wreathSpriteData.Rotation = rotation;
 //        wreathSpriteData.DrawSelf();
-        
+
 //        // filling
 //        SpriteData wreathSpriteData2 = wreathSpriteData.Framed((byte)(0 + Stats.IsPhoenixWreath.ToInt()), 1);
 //        int frameOffsetY = 0;
@@ -333,10 +341,10 @@ sealed class WreathDrawingLayer : PlayerDrawLayer {
 
 //            Main.instance.MouseTextHackZoom(text2);
 //            Main.mouseText = true;
-//            DrawingAmount = true;
+//            JustDrawn = true;
 //        }
 //        else {
-//            DrawingAmount = false;
+//            JustDrawn = false;
 //        }
 
 //        return true;

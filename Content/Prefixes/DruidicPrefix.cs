@@ -139,14 +139,15 @@ sealed class DruidicPrefix(string name,
 
     public override IEnumerable<TooltipLine> GetTooltipLines(Item item) {
 		NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
+		string baseExtra = !handler.HasPotentialDamage() ? "1" : string.Empty;
         if (_druidDamage != 0) {
-			yield return new TooltipLine(Mod, "ExtraDruidDamage", GetLocalizedText("DruidDamageModifier").Format(_druidDamage)) {
+			yield return new TooltipLine(Mod, "ExtraDruidDamage", GetLocalizedText("DruidDamageModifier" + baseExtra).Format(_druidDamage)) {
 				IsModifier = true,
 				IsModifierBad = _druidDamage < 0
 			};
 		}
 		if (_druidDamageMult != 1f) {
-			yield return new TooltipLine(Mod, "ExtraDruidDamageMult", GetLocalizedText("DruidDamageModifierMult").Format(_druidDamageMult * 100f - 100f)) {
+			yield return new TooltipLine(Mod, "ExtraDruidDamageMult", GetLocalizedText("DruidDamageModifierMult" + baseExtra).Format(_druidDamageMult * 100f - 100f)) {
 				IsModifier = true,
 				IsModifierBad = _druidDamageMult < 1f
 			};
