@@ -237,7 +237,7 @@ sealed class DruidicPrefix(string name,
 		if (_shouldApplyTipsy) {
             yield return new TooltipLine(Mod, "ApplyTipsyEffect", GetLocalizedText("TipsyEffect").Value) {
                 IsModifier = true,
-                IsModifierBad = false
+                IsModifierBad = true
             };
         }
     }
