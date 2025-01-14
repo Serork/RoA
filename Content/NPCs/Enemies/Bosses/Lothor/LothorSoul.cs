@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -14,6 +13,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed class LothorSoul : RoANPC {
+    private static float FirstFrameTime => 4f;
+    private static float AnimationSpeed => 27.5f;
+
     private readonly Color _color = new(241, 53, 84, 200), _color2 = new(114, 216, 102, 200);
 
     public enum States {
@@ -64,8 +66,8 @@ sealed class LothorSoul : RoANPC {
             int currentFrame = (int)(NPC.frameCounter / maxCounter);
             NPC.frame.Y = currentFrame * frameHeight;
         }
-        else if (StateTimer > 3f) {
-            int currentFrame = (int)(StateTimer - 3f);
+        else if (StateTimer > FirstFrameTime) {
+            int currentFrame = (int)(StateTimer - FirstFrameTime);
             NPC.frame.Y = currentFrame * frameHeight;
 
             NPC.frameCounter = 0.0;
@@ -96,8 +98,8 @@ sealed class LothorSoul : RoANPC {
     }
 
     private void Appearance() {
-        StateTimer += 30f / 250f;
-        if (StateTimer > 6f) {
+        StateTimer += AnimationSpeed / 250f;
+        if (StateTimer > 3f + FirstFrameTime) {
             ChangeState((int)States.Disappeared);
             StateTimer = 0f;
         }
