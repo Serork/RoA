@@ -1159,7 +1159,7 @@ BloodshedAxe: {
 
 LothorBag: {
 	DisplayName: Treasure Bag (Lothor)
-	Tooltip: "{$CommonItemTooltip.RightClickToOpen}
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 }
 
 LothorMask: {
