@@ -21,5 +21,7 @@ sealed partial class DruidSoul : RoANPC {
         NPC.immortal = NPC.dontTakeDamage = true;
 
         NPC.aiStyle = AIType = -1;
+
+        NPC.npcSlots = 5f;
     }
 }

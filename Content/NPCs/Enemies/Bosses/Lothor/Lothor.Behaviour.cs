@@ -190,6 +190,13 @@ sealed partial class Lothor : ModNPC {
         UpdatePulseVisuals();
         UpdateWreath();
         UpdateGlowing();
+
+        if (NPC.Opacity < 1f) {
+            NPC.Opacity += 0.025f;
+        }
+        else {
+            NPC.Opacity = 1f;
+        }
     }
 
     private void UpdateWreath() {
@@ -246,7 +253,12 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
-        //CurrentAIState = LothorAIState.Flight;
+        PlayRoarSound();
+
+        CurrentAIState = LothorAIState.Jump;
+        _previousState = default;
+
+        NPC.Opacity = 0f;
 
         _previousAttacks = [];
 
@@ -453,15 +465,15 @@ sealed partial class Lothor : ModNPC {
                                 if (!_drawWreath) {
                                     SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "WreathSpawn"), NPC.Center);
                                     createDusts();
+                                    _drawWreath = true;
                                 }
-                                _drawWreath = true;
                             }
                             else {
                                 if (!_shouldSpawnPipistrelles) {
                                     SoundEngine.PlaySound(new(ResourceManager.NPCSounds + "LothorScream2"), NPC.Center);
                                     createDusts();
+                                    _shouldSpawnPipistrelles = true;
                                 }
-                                _shouldSpawnPipistrelles = true;
                             }
                         }
                         else {
@@ -1177,7 +1189,11 @@ sealed partial class Lothor : ModNPC {
             if (!IsAboutToGoToChangeMainState && dist < minDist) {
                 float value = MathHelper.Clamp(dist / minDist, 0.8f, 1f);
                 jumpY2 *= value;
-                NPC.noTileCollide = false;
+            }
+            if (_previousState == default) {
+                jumpY2 = 0f;
+                jumpY = 0f;
+                jumpHeightY = 0f;
             }
             if ((int)(NPC.Center.Y - Target.Center.Y) / 16 > -10) {
                 NPC.velocity.Y = -jumpY2 + jumpY;
@@ -1204,10 +1220,11 @@ sealed partial class Lothor : ModNPC {
             else {
                 NPC.velocity.X = jumpHeightX * -0.5f * -(float)NPC.direction;
             }
-            NoCollisionTimer = 20f;
+            NoCollisionTimer = 10f;
         }
         doJump();
         CurrentAIState = LothorAIState.Fall;
+        _previousState = CurrentAIState;
     }
 
     private float GetExtraAirDashDelay(bool flag = false) {
@@ -1232,6 +1249,10 @@ sealed partial class Lothor : ModNPC {
     }
 
     private void FallState() {
+        if (NoCollisionTimer > 0f) {
+            NoCollisionTimer--;
+            NPC.noTileCollide = true;
+        }
         NPC.knockBackResist = 0f;
         if (IsAboutToGoToChangeMainState) {
             LookAtPlayer();
@@ -1252,7 +1273,9 @@ sealed partial class Lothor : ModNPC {
                 _previousAttacks.Clear();
                 return;
             }
-            NPC.noTileCollide = NPC.velocity.Y < 0f && NPC.velocity.Length() > dashStrength && Math.Abs(NPC.velocity.X) > dashStrength / 2f;
+            if (NoCollisionTimer <= 0f) {
+                NPC.noTileCollide = NPC.velocity.Y < 0f && NPC.velocity.Length() > dashStrength && Math.Abs(NPC.velocity.X) > dashStrength / 2f;
+            }
             if (NPC.velocity.X > 3f && NPC.Center.X > Target.Center.X || NPC.velocity.X < -3f && NPC.Center.X < Target.Center.X) {
                 NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 0f, dashStrength / 100f);
             }
@@ -1285,10 +1308,6 @@ sealed partial class Lothor : ModNPC {
                 _stompSpawned = false;
                 DashDelay = GetAttackDelay();
             }
-        }
-
-        if (--NoCollisionTimer > 0f) {
-            NPC.noTileCollide = true;
         }
     }
 

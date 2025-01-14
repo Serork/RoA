@@ -63,7 +63,12 @@ sealed class LothorAngleAttack : ModProjectile {
     }
 
     public override void AI() {
-        Projectile.tileCollide = true;
+        if (Projectile.timeLeft > 100) {
+            Projectile.tileCollide = false;
+        }
+        else {
+            Projectile.tileCollide = true;
+        }
 
         NPC npc = Main.npc[(int)Projectile.ai[0]];
         if (Projectile.localAI[1] == 0f) {

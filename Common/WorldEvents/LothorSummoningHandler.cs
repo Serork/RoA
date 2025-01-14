@@ -9,9 +9,12 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.Chat;
 using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Common.WorldEvents;
@@ -19,6 +22,8 @@ namespace RoA.Common.WorldEvents;
 sealed class LothorSummoningHandler : ModSystem {
     private static float _preArrivedLothorBossTimer;
     private static bool _shake, _shake2;
+
+    internal static bool _summonedNaturally;
 
     internal static float _alpha;
 
@@ -29,14 +34,6 @@ sealed class LothorSummoningHandler : ModSystem {
 
     public override void OnWorldLoad() => Reset();
     public override void OnWorldUnload() => Reset();
-
-    private static void Reset() {
-        _alpha = 0f;
-        _preArrivedLothorBossTimer = 0f;
-        _shake = _shake2 = false;
-        PreArrivedLothorBoss = (false, false);
-        ActiveMessages = (false, false, false);
-    }
 
     public override void Load() {
         On_Main.SetBackColor += On_Main_SetBackColor;
@@ -452,14 +449,47 @@ sealed class LothorSummoningHandler : ModSystem {
         Main.ColorOfTheSkies = bgColorToSet;
     }
 
+    private static void Reset() {
+        _alpha = 0f;
+        _preArrivedLothorBossTimer = 0f;
+        _shake = _shake2 = false;
+        PreArrivedLothorBoss = (false, false);
+        ActiveMessages = (false, false, false);
+        LothorShake.shake = LothorShake.before = false;
+    }
+
     public override void PostUpdateEverything() {
-        if (!PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2 || NPC.AnyNPCs(ModContent.NPCType<Lothor>())) {
+        int type = ModContent.NPCType<Lothor>();
+        bool flag = NPC.AnyNPCs(type);
+        if (!PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2 || flag) {
+            if (PreArrivedLothorBoss.Item2 && !flag) {
+                Reset();
+                return;
+            }
+            if (!PreArrivedLothorBoss.Item1 && !PreArrivedLothorBoss.Item2 && flag) {
+                _summonedNaturally = true;
+                PreArrivedLothorBoss.Item1 = true;
+                ActiveMessages.Item1 = true;
+                ActiveMessages.Item2 = true;
+                ActiveMessages.Item3 = true;
+                _preArrivedLothorBossTimer = 0f;
+            }
+
             return;
         }
-
-        _preArrivedLothorBossTimer += TimeSystem.LogicDeltaTime * 1f;
+        bool flag2 = _preArrivedLothorBossTimer >= 9.5f;
+        bool flag3 = _preArrivedLothorBossTimer < 7f;
+        if (PreArrivedLothorBoss.Item1 && !flag && flag3) {
+            if (Main.netMode != NetmodeID.Server) {
+                Main.musicFade[Main.curMusic] = -0.25f;
+            }
+        }
+        if (!flag) {
+            _preArrivedLothorBossTimer += TimeSystem.LogicDeltaTime * 1f;
+        }
         Color color = new (160, 68, 234);
         if (_preArrivedLothorBossTimer >= 2.465f && !_shake) {
+            _summonedNaturally = false;
             _shake = true;
             NPC.SetEventFlagCleared(ref LothorShake.shake, -1);
             if (Main.netMode == NetmodeID.Server) {
@@ -468,8 +498,8 @@ sealed class LothorSummoningHandler : ModSystem {
         }
         else if (_preArrivedLothorBossTimer >= 3f && !ActiveMessages.Item1) {
             ActiveMessages.Item1 = true;
-            string text = "You noticed the smell of blood...";
-            Helper.NewMessage(text, color);
+            string message = Language.GetText("Mods.RoA.World.LothorArrival1").ToString();
+            Helper.NewMessage($"{message}...", color);
             Shake(10f, 5f);
         }
         else if (_preArrivedLothorBossTimer >= 4.262f && !_shake2) {
@@ -481,37 +511,45 @@ sealed class LothorSummoningHandler : ModSystem {
         }
         else if (_preArrivedLothorBossTimer >= 5f && !ActiveMessages.Item2) {
             ActiveMessages.Item2 = true;
-            string text = "Something is coming...";
-            Helper.NewMessage(text, color);
+            string message = Language.GetText("Mods.RoA.World.LothorArrival2").ToString();
+            Helper.NewMessage($"{message}...", color);
             Shake(20f, 10f);
         }
         else if (_preArrivedLothorBossTimer >= 6f && !ActiveMessages.Item3) {
             ActiveMessages.Item3 = true;
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.5f }, AltarHandler.GetAltarPosition().ToWorldCoordinates());
-
-            //PreArrivedLothorBoss.Item2 = true;
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.75f }, 
+                AltarHandler.GetAltarPosition().ToWorldCoordinates());
         }
-        //else if (_preArrivedLothorBossTimer >= 9.5f && !flag2) {
-        //    Player spawnPlayer = Main.LocalPlayer;
-        //    int type = ModContent.NPCType<Lothor>();
-        //    float distance = -1f;
-        //    foreach (Player player in Main.player) {
-        //        if (player.active && player.InModBiome<BackwoodsBiome>()) {
-        //            if (distance < player.Distance(tileCoords)) {
-        //                distance = player.Distance(tileCoords);
-        //                spawnPlayer = player;
-        //            }
-        //        }
-        //    }
-        //    NPC.SpawnOnPlayer(spawnPlayer.whoAmI, type);
-        //    if (Main.netMode == NetmodeID.Server) {
-        //        NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, spawnPlayer.whoAmI, type);
-        //    }
-        //    NPC.SetEventFlagCleared(ref preArrivedLothorBoss.Item2, -1);
-        //    if (Main.netMode == NetmodeID.Server) {
-        //        NetMessage.SendData(MessageID.WorldData);
-        //    }
-        //}
+        else if (flag2) {
+            Player spawnPlayer = Main.LocalPlayer;
+            float distance = -1f;
+            Vector2 tileCoords = AltarHandler.GetAltarPosition().ToWorldCoordinates();
+            foreach (Player player in Main.player) {
+                if (player.active && player.InModBiome<BackwoodsBiome>()) {
+                    if (distance < player.Distance(tileCoords)) {
+                        distance = player.Distance(tileCoords);
+                        spawnPlayer = player;
+                    }
+                }
+            }
+            if (Main.netMode != 1) {
+                if (!NPC.AnyNPCs(type)) {
+                    Player player = spawnPlayer;
+                    NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)tileCoords.X + -(tileCoords.X - player.Center.X).GetDirection() * 1000, (int)tileCoords.Y - 500, type);
+                    if (Main.netMode == 0)
+                        Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Language.GetTextValue("Enemies.MoonLord")), 175, 75);
+                    else if (Main.netMode == 2)
+                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", NetworkText.FromKey("Enemies.MoonLord")), new Color(175, 75, 255));
+                }
+            }
+            NPC.SetEventFlagCleared(ref PreArrivedLothorBoss.Item2, -1);
+            if (Main.netMode == NetmodeID.Server) {
+                NetMessage.SendData(MessageID.WorldData);
+            }
+        }
+        if (!flag && _summonedNaturally) {
+            Reset();
+        }
     }
 
     private static void Shake(float strength = 7.5f, float vibeStrength = 4.15f) {

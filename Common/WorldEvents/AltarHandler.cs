@@ -81,6 +81,9 @@ sealed class AltarHandler : ModSystem {
         if (druidSoul is null) {
             return;
         }
+        if (Main.netMode != NetmodeID.Server) {
+            Main.musicFade[Main.curMusic] = MathHelper.Clamp(1f - _altarStrength * 2f, -0.25f, 1f);
+        }
         Vector2 npcCenter = druidSoul.Center;
         float radius = 100f;
         float x = npcCenter.X - altarCoords.X;

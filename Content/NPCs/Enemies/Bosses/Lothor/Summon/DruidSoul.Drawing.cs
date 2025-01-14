@@ -47,7 +47,7 @@ sealed partial class DruidSoul : RoANPC {
         Vector2 origin = (sourceRectangle.HasValue ? (sourceRectangle.Value.Size() / 2f) : (texture.Size() / 2f));
         Vector2 altarPos = AltarHandler.GetAltarPosition().ToWorldCoordinates();
         Vector2 altarCoords = altarPos + Vector2.UnitY * 5f;
-        Vector2 from = NPC.Center/* + Vector2.UnitX * 4f * NPC.direction*/;
+        Vector2 from = NPC.Center + new Vector2(0f, 4f);
         Vector2 npcCenter = (from + Vector2.UnitY * 8f).MoveTowards(altarCoords, 10f);
         Player player = Main.player[NPC.target];
         Vector2 playerCenter = (player.Center + Vector2.UnitY * 10f).MoveTowards(altarCoords, 10f);
@@ -98,9 +98,9 @@ sealed partial class DruidSoul : RoANPC {
                 float progress2 = 1f - (k - max2) / (float)(amount - max2);
                 color *= progress2;
             }
-            int amount2 = 3;
+            int amount2 = 1;
             if (k < amount2) {
-                float progress2 = k / (float)amount2 * 2f;
+                float progress2 = k / (float)amount2;
                 color *= progress2;
             }
             max2 = amount - 4;
@@ -114,12 +114,12 @@ sealed partial class DruidSoul : RoANPC {
             color *= 1.5f;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
                 color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
-                spriteBatch.Draw(texture, start + Vector2.UnitY * _y * 0.5f + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
             }
             spriteBatch.BeginBlendState(BlendState.NonPremultiplied, SamplerState.PointClamp);
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
                 color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
-                spriteBatch.Draw(texture, start + Vector2.UnitY * _y * 0.5f + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
             }
             spriteBatch.EndBlendState();
             start += v * texture.Width;
@@ -141,7 +141,7 @@ sealed partial class DruidSoul : RoANPC {
                 Vector2 position = NPC.oldPos[index] + NPC.Size / 2 + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
                 Color color2 = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i / NPC.oldPos.Length) * factor;
                 SpriteEffects effect = NPC.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                spriteBatch.Draw(texture, position + Vector2.UnitY * _y * 0.5f, NPC.frame, color2 * (NPC.Opacity + 0.5f), NPC.rotation, NPC.Size / 2, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f * factor, effect, 0f);
+                spriteBatch.Draw(texture, position, NPC.frame, color2 * (NPC.Opacity + 0.5f), NPC.rotation, NPC.Size / 2, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f * factor, effect, 0f);
             }
         }
     }

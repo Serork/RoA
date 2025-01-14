@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Utilities;
 
 using System;
@@ -29,7 +30,18 @@ sealed class LothorShake : ModSystem {
     }
 
     public override void PostUpdateNPCs() {
-		if (shake) {
+        string shader = ShaderLoader.LothorSky;
+		bool flag = NPC.AnyNPCs(ModContent.NPCType<Lothor>());
+		if (flag && !shake) {
+			shake = true;
+        }
+        if (!shake && !before && !NPC.AnyNPCs(ModContent.NPCType<Lothor>())) {
+			Reset();
+            if (Filters.Scene[shader].IsActive()) {
+                Filters.Scene[shader].Deactivate();
+            }
+        }
+        if (shake) {
             if ((before && _shakeIntensity < 0.035f) || (!before && _shakeIntensity < 1f)) {
 				_shakeIntensity += !before ? 0.325f : 0.2f;
 				if (before) {
@@ -40,7 +52,6 @@ sealed class LothorShake : ModSystem {
 					_shakeIntensity *= 1.25f;
                 }
 			}
-			string shader = ShaderLoader.LothorSky;
 			if (!Filters.Scene[shader].IsActive()) {
 				Filters.Scene.Activate(shader);
 			}
