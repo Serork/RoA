@@ -478,7 +478,7 @@ sealed class LothorSummoningHandler : ModSystem {
             return;
         }
         bool flag2 = _preArrivedLothorBossTimer >= 9.5f;
-        bool flag3 = _preArrivedLothorBossTimer < 7f;
+        bool flag3 = _preArrivedLothorBossTimer < 7.5f;
         if (PreArrivedLothorBoss.Item1 && !flag && flag3) {
             if (Main.netMode != NetmodeID.Server) {
                 Main.musicFade[Main.curMusic] = -0.25f;
@@ -537,9 +537,9 @@ sealed class LothorSummoningHandler : ModSystem {
                     Player player = spawnPlayer;
                     NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)tileCoords.X + -(tileCoords.X - player.Center.X).GetDirection() * 1000, (int)tileCoords.Y - 500, type);
                     if (Main.netMode == 0)
-                        Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Language.GetTextValue("Enemies.MoonLord")), 175, 75);
+                        Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Language.GetTextValue("Mods.RoA.NPCs.Lothor.DisplayName")), 175, 75);
                     else if (Main.netMode == 2)
-                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", NetworkText.FromKey("Enemies.MoonLord")), new Color(175, 75, 255));
+                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", Language.GetTextValue("Mods.RoA.NPCs.Lothor.DisplayName")), new Color(175, 75, 255));
                 }
             }
             NPC.SetEventFlagCleared(ref PreArrivedLothorBoss.Item2, -1);
