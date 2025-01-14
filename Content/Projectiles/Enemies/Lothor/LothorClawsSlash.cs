@@ -34,6 +34,7 @@ sealed class LothorClawsSlash : ModProjectile {
         NPC npc = Main.npc[(int)Projectile.ai[0]];
 
         if (!npc.active) {
+            Projectile.Kill();
             return;
         }
 

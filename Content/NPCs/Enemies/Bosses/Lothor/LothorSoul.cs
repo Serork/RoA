@@ -65,8 +65,8 @@ sealed class LothorSoul : RoANPC {
             int currentFrame = (int)(NPC.frameCounter / maxCounter);
             NPC.frame.Y = currentFrame * frameHeight;
         }
-        else if (StateTimer > 20f) {
-            int currentFrame = (int)(StateTimer - 20f);
+        else if (StateTimer > 30f) {
+            int currentFrame = (int)(StateTimer - 30f);
             NPC.frame.Y = currentFrame * frameHeight;
 
             NPC.frameCounter = 0.0;
@@ -86,7 +86,7 @@ sealed class LothorSoul : RoANPC {
 
         bool flag = State == (float)States.Disappeared;
         if (!flag) {
-            if (StateTimer < 20f && StateTimer != -1f) {
+            if (StateTimer < 30f && StateTimer != -1f) {
                 StateTimer += 1f;
 
                 NPC.Opacity = 0f;
@@ -108,7 +108,7 @@ sealed class LothorSoul : RoANPC {
 
     private void Appearance() {
         StateTimer += 30f / 250f;
-        if (StateTimer > 23f) {
+        if (StateTimer > 33f) {
             ChangeState((int)States.Disappeared);
             StateTimer = 0f;
         }
