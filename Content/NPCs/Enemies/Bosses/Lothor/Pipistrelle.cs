@@ -73,7 +73,7 @@ sealed class Pipistrelle : ModNPC {
     public override void AI() {
         NPC.OffsetTheSameNPC(0.2f);
 
-        Lighting.AddLight(NPC.Center, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
+        Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
 
         NPC owner = Main.npc[(int)NPC.ai[0]];
         float lifeProgress = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor ? 0f : owner.As<Lothor>().LifeProgress;
