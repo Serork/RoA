@@ -121,6 +121,7 @@ sealed partial class Lothor : ModNPC {
     private int _attackTime;
     private float _distanceProgress, _distanceProgress2;
     private bool _shouldSpawnPipistrelles;
+    private bool _isDead;
 
     public float LifeProgress => 1f - NPC.life / (float)NPC.lifeMax;
 
@@ -177,6 +178,19 @@ sealed partial class Lothor : ModNPC {
     private bool ShouldDrawWreath => _drawWreath;
 
     private int GetJumpCountToEncourageFlightState() => 3;
+
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            return;
+        }
+
+        if (!_isDead) {
+            NPC.life = 10;
+            NPC.dontTakeDamage = NPC.immortal = true;
+
+            _isDead = true;
+        }
+    }
 
     public override void AI() {
         Init();
@@ -1489,7 +1503,7 @@ sealed partial class Lothor : ModNPC {
         bool flag2 = distance < 250f;
         bool flag4 = DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
         if (flag4) {
-            if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && !flag2 && DashTimer % 5f == 0f && Main.rand.NextBool(5)) {
+            if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && DashTimer % 5f == 0f && Main.rand.NextBool(5)) {
                 ChooseAttack(LothorAIState.Scream);
                 return;
             }
