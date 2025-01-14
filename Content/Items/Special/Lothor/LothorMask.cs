@@ -34,7 +34,7 @@ sealed class LothorMask : ModItem, ItemGlowMaskHandler.IAdvancedGlowMaskDraw {
     }
 
     void ItemGlowMaskHandler.IAdvancedGlowMaskDraw.Draw(ref PlayerDrawSet drawInfo, ref Texture2D texture, ref Color color) {
-        float lifeProgress = 1f - drawInfo.drawPlayer.statLife / drawInfo.drawPlayer.statLifeMax2;
+        float lifeProgress = 1f;
         for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
             Rectangle bodyFrame = drawInfo.drawPlayer.bodyFrame;
             bodyFrame.Width += 2;
