@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
@@ -173,8 +174,23 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         }
 
         if (ActivePrefix != null) {
-            damage *= ActivePrefix._druidDamageMult;
+            if (HasPotentialDamage()) {
+                damage *= ActivePrefix._druidDamageMult;
+            }
+            else {
+                damage *= (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult) / 2f;
+            }
         }
+    }
+
+    public override bool? UseItem(Item item, Player player) {
+        if (item.IsADruidicWeapon() && ActivePrefix != null && ActivePrefix._shouldApplyTipsy && player.ItemAnimationJustStarted) {
+            player.AddBuff(BuffID.Tipsy, 300);
+
+            return base.UseItem(item, player);
+        }
+
+        return base.UseItem(item, player);
     }
 
     public override float UseSpeedMultiplier(Item item, Player player) {
@@ -195,6 +211,4 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public static float GetUseSpeedMultiplier(Item item, Player player) => item.ModItem.UseSpeedMultiplier(player);
-
-
 }
