@@ -230,6 +230,8 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     public sealed override void AI() {
+        //Main.NewText(NatureWeaponHandler.GetUseSpeed(Item, Owner));
+
         ActiveCheck();
         SetPosition();
         SetDirection();
