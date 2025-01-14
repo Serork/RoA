@@ -177,19 +177,22 @@ sealed class DruidicPrefix(string name,
 				IsModifierBad = value < 1f
 			};
 		}
-		if (handler.HasPotentialDamage()) {
-            if (_potentialDamage != 0) {
-				yield return new TooltipLine(Mod, "ExtraDruidPotentialDamage", GetLocalizedText("DruidPotentialDamageModifier").Format(_potentialDamage)) {
-					IsModifier = true,
-					IsModifierBad = _potentialDamage < 0
-				};
-			}
-			if (_potentialDamageMult != 1f) {
-				yield return new TooltipLine(Mod, "ExtraDruidPotentialDamageMult", GetLocalizedText("DruidPotentialDamageModifierMult").Format(_potentialDamageMult * 100f - 100f)) {
-					IsModifier = true,
-					IsModifierBad = _potentialDamageMult < 1f
-				};
-			}
+        if (_potentialDamage != 0) {
+			yield return new TooltipLine(Mod, "ExtraDruidPotentialDamage", GetLocalizedText("DruidPotentialDamageModifier").Format(_potentialDamage)) {
+				IsModifier = true,
+				IsModifierBad = _potentialDamage < 0
+			};
+		}
+		if (_potentialDamageMult != 1f) {
+            float value = _potentialDamageMult;
+            if (!handler.HasPotentialDamage()) {
+                value += _druidDamageMult;
+                value /= 2f;
+            }
+            yield return new TooltipLine(Mod, "ExtraDruidPotentialDamageMult", GetLocalizedText("DruidPotentialDamageModifierMult").Format(value * 100f - 100f)) {
+				IsModifier = true,
+				IsModifierBad = value < 1f
+			};
 		}
         if (_druidSpeedMult != 1f) {
             yield return new TooltipLine(Mod, "ExtraDruidSpeed", GetLocalizedText("DruidSpeedModifier").Format(_druidSpeedMult * 100f - 100f)) {
