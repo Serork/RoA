@@ -48,7 +48,6 @@ sealed class LothorSoul : RoANPC {
         NPC.aiStyle = AIType = -1;
 
         NPC.Opacity = 0f;
-        NPC.alpha = 255;
     }
 
     public override void FindFrame(int frameHeight) {
@@ -74,6 +73,10 @@ sealed class LothorSoul : RoANPC {
     }
 
     public override void AI() {
+        if (NPC.velocity.Y > -10f) {
+            NPC.velocity.Y = Helper.Approach(NPC.velocity.Y, NPC.velocity.Y - 0.07f, 0.035f);
+        }
+
         Vector2 velocity = NPC.velocity;
         float rotation = velocity.X * 0.05f;
         NPC.rotation = rotation;
@@ -103,19 +106,16 @@ sealed class LothorSoul : RoANPC {
             StateTimer = 0f;
         }
         else {
-            NPC.velocity.Y -= 0.005f;
-            NPC.velocity.Y *= 1.025f;
+            //NPC.velocity.Y -= 0.0075f;
+            //NPC.velocity.Y *= 1f + 0.02f * (1f - MathHelper.Clamp(StateTimer * 2f / 3f, 0f, 1f));
         }
 
         NPC.Opacity = 0.35f;
     }
 
     private void Disappear() {
-        if (++StateTimer > 20f) {
-            NPC.velocity.Y -= 0.01f;
-            NPC.velocity.Y *= 1.09f;
-
-            NPC.Opacity -= 0.007f;
+        if (++StateTimer > 35f) {
+            NPC.Opacity -= 0.005f;
 
             if (NPC.Opacity <= 0f) {
                 NPC.KillNPC();
@@ -123,9 +123,8 @@ sealed class LothorSoul : RoANPC {
         }
         else {
             NPC.Opacity = 0.35f;
-            NPC.velocity *= 0.95f;
+            NPC.velocity *= 0.925f;
         }
-        NPC.velocity *= 0.95f;
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {

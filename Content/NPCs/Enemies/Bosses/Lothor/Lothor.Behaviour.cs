@@ -206,7 +206,7 @@ sealed partial class Lothor : ModNPC {
         }
 
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            Vector2 origin = new(6f, 30f);
+            Vector2 origin = new(0f, 40f);
             int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)(NPC.Center.X + origin.X), (int)(NPC.Center.Y + origin.Y), ModContent.NPCType<LothorSoul>());
             if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
                 NetMessage.SendData(MessageID.SyncNPC, number: npc);
@@ -223,6 +223,7 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
+        ThatThingMakeHimScream();
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorDeath"), NPC.Center);
         ActualDeath();
 
@@ -702,56 +703,7 @@ sealed partial class Lothor : ModNPC {
             Glow();
 
             _attackTime = 0;
-            bool firstTime = _previousState != CurrentAIState;
-
-            float maxDist = 800f;
-            foreach (Player player in Main.ActivePlayers) {
-                if (player.dead) {
-                    continue;
-                }
-                float dist = NPC.Distance(player.Center);
-                if (dist <= maxDist) {
-                    Vector2 velocity = player.Center - NPC.Center;
-                    velocity.Normalize();
-                    float maxSpeed = 10f;
-                    player.velocity += velocity * Math.Max((maxDist - dist) / 100f, maxSpeed) * 0.15f;
-                    player.velocity *= 1f - Math.Abs(dist) * 0.0035f;
-                }
-            }
-
-            foreach (NPC npc in Main.ActiveNPCs) {
-                if (npc.whoAmI == NPC.whoAmI) {
-                    continue;
-                }
-
-                float dist = NPC.Distance(npc.Center);
-                if (dist <= maxDist) {
-                    Vector2 velocity = npc.Center - NPC.Center;
-                    velocity.Normalize();
-                    npc.velocity += velocity * Math.Max((maxDist - dist) / 100f, 10f);
-                }
-            }
-
-            foreach (Projectile projectile in Main.ActiveProjectiles) {
-                if (projectile.friendly && NPC.Distance(projectile.Center) <= maxDist) {
-                    projectile.GetGlobalProjectile<ScreamProjectileHandler>().ApplyEffect();
-                    projectile.damage -= projectile.damage / 5;
-                }
-            }
-
-            if (firstTime) {
-                PlayRoarSound();
-            }
-            string tag = "Lothor Scream";
-            float strength = firstTime ? 20f : 5f;
-            PunchCameraModifier punchCameraModifier = new PunchCameraModifier(NPC.Center, MathHelper.TwoPi.ToRotationVector2(), strength, firstTime ? 10f : 12.5f, 25, 1000f, tag);
-            Main.instance.CameraModifiers.Add(punchCameraModifier);
-            if (Main.netMode != NetmodeID.MultiplayerClient) {
-                Vector2 center = new Vector2(NPC.Center.X + NPC.width / 2 * NPC.direction, NPC.position.Y + NPC.height / 4);
-                ushort projType = (ushort)ModContent.ProjectileType<LothorScream>();
-                int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), center + new Vector2(-6f * NPC.direction, -6f), Vector2.Zero, projType, 0, 0f, Main.myPlayer, firstTime ? 1f : 0f, NPC.target);
-                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
-            }
+            ThatThingMakeHimScream();
             _previousState = CurrentAIState;
         }
 
@@ -767,6 +719,59 @@ sealed partial class Lothor : ModNPC {
             CurrentAIState = LothorAIState.Idle;
 
             _previousAttacks.Add(_previousState);
+        }
+    }
+
+    private void ThatThingMakeHimScream() {
+        bool firstTime = _previousState != CurrentAIState;
+
+        float maxDist = 800f;
+        foreach (Player player in Main.ActivePlayers) {
+            if (player.dead) {
+                continue;
+            }
+            float dist = NPC.Distance(player.Center);
+            if (dist <= maxDist) {
+                Vector2 velocity = player.Center - NPC.Center;
+                velocity.Normalize();
+                float maxSpeed = 10f;
+                player.velocity += velocity * Math.Max((maxDist - dist) / 100f, maxSpeed) * 0.15f;
+                player.velocity *= 1f - Math.Abs(dist) * 0.0035f;
+            }
+        }
+
+        foreach (NPC npc in Main.ActiveNPCs) {
+            if (npc.whoAmI == NPC.whoAmI) {
+                continue;
+            }
+
+            float dist = NPC.Distance(npc.Center);
+            if (dist <= maxDist) {
+                Vector2 velocity = npc.Center - NPC.Center;
+                velocity.Normalize();
+                npc.velocity += velocity * Math.Max((maxDist - dist) / 100f, 10f);
+            }
+        }
+
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            if (projectile.friendly && NPC.Distance(projectile.Center) <= maxDist) {
+                projectile.GetGlobalProjectile<ScreamProjectileHandler>().ApplyEffect();
+                projectile.damage -= projectile.damage / 5;
+            }
+        }
+
+        if (firstTime) {
+            PlayRoarSound();
+        }
+        string tag = "Lothor Scream";
+        float strength = firstTime ? 20f : 5f;
+        PunchCameraModifier punchCameraModifier = new PunchCameraModifier(NPC.Center, MathHelper.TwoPi.ToRotationVector2(), strength, firstTime ? 10f : 12.5f, 25, 1000f, tag);
+        Main.instance.CameraModifiers.Add(punchCameraModifier);
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            Vector2 center = new Vector2(NPC.Center.X + NPC.width / 2 * NPC.direction, NPC.position.Y + NPC.height / 4);
+            ushort projType = (ushort)ModContent.ProjectileType<LothorScream>();
+            int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), center + new Vector2(-6f * NPC.direction, -6f), Vector2.Zero, projType, 0, 0f, Main.myPlayer, firstTime ? 1f : 0f, NPC.target);
+            NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
         }
     }
 
