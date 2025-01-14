@@ -206,7 +206,7 @@ sealed partial class Lothor : ModNPC {
         }
 
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            Vector2 origin = new Vector2(30f, 10f);
+            Vector2 origin = new(0f, 30f);
             int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)(NPC.Center.X + origin.X), (int)(NPC.Center.Y + origin.Y), ModContent.NPCType<LothorSoul>());
             if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
                 NetMessage.SendData(MessageID.SyncNPC, number: npc);
@@ -223,16 +223,19 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
-        if (!_isDead) {
-            NPC.life = 10;
-            NPC.dontTakeDamage = NPC.immortal = true;
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorDeath"), NPC.Center);
+        ActualDeath();
 
-            Death();
+        //if (!_isDead) {
+        //    NPC.life = 10;
+        //    NPC.dontTakeDamage = NPC.immortal = true;
 
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorDeath"), NPC.Center);
+        //    Death();
 
-            return;
-        }
+        //    SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorDeath"), NPC.Center);
+
+        //    return;
+        //}
     }
 
     private void Death() {

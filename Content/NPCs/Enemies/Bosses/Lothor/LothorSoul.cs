@@ -114,7 +114,7 @@ sealed class LothorSoul : RoANPC {
         }
         else {
             NPC.velocity.Y -= 0.005f;
-            NPC.velocity.Y *= 1.025f;
+            NPC.velocity.Y *= 1.005f;
         }
 
         NPC.Opacity = 0.35f;
@@ -139,9 +139,11 @@ sealed class LothorSoul : RoANPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        spriteBatch.Draw(texture, NPC.position + NPC.Size / 2 - screenPos - Vector2.UnitY * 6f, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, NPC.Size / 2, 1f, NPC.direction != 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
         Color color = drawColor.MultiplyRGB(_color);
-        DrawTextureUnderCustomSoulEffect(spriteBatch, (Texture2D)ModContent.Request<Texture2D>(Texture), color);
-        return true;
+        DrawTextureUnderCustomSoulEffect(spriteBatch, texture, color);
+        return false;
     }
 
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
@@ -153,10 +155,9 @@ sealed class LothorSoul : RoANPC {
         for (int index = 0; index < NPC.oldPos.Length; index++) {
             float factor = (NPC.oldPos.Length - (float)index) / NPC.oldPos.Length;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
-                Vector2 position = NPC.oldPos[index] + NPC.Size / 2 + Utils.RotatedBy(Utils.ToRotationVector2((float)i), Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
+                Vector2 position = NPC.oldPos[index] - Vector2.UnitY * 6f + NPC.Size / 2 + Utils.RotatedBy(Utils.ToRotationVector2((float)i), Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
                 Color color2 = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i / NPC.oldPos.Length) * factor;
-                Vector2 origin = new Vector2(26f, -4f);
-                spriteBatch.Draw(texture, position - origin + Utils.RotatedBy(Utils.ToRotationVector2((float)i), Main.GlobalTimeWrappedHourly * 5.0, new Vector2()) * Helper.Wave(0f, 2f, speed: 20f), NPC.frame, color2 * (NPC.Opacity + 0.25f) * 0.75f, NPC.rotation + Main.rand.NextFloat(0.075f), NPC.Size / 2, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f * factor, NPC.direction != 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2((float)i), Main.GlobalTimeWrappedHourly * 5.0, new Vector2()) * Helper.Wave(0f, 2f, speed: 20f), NPC.frame, color2 * (NPC.Opacity + 0.25f) * 0.75f, NPC.rotation + Main.rand.NextFloat(0.075f), NPC.Size / 2, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f * factor, NPC.direction != 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             }
         }
     }
