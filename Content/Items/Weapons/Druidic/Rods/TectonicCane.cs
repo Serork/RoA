@@ -67,7 +67,7 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
             dust.noGravity = true;
 
             EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
-            Vector2 position = point2.ToWorldCoordinates();
+            Vector2 position = point2.ToWorldCoordinates() + Vector2.UnitX * 4f;
             if (player.whoAmI == Main.myPlayer) {
                 _tempMousePosition = position;
                 Projectile.netUpdate = true;
@@ -78,7 +78,7 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
             int count = (int)(4 * Math.Max(0.25f, progress));
             for (int k = 0; k < count; k++) {
                 Dust.NewDust(position - new Vector2(32f, 0f), 60, 2, dustType, 0, Main.rand.NextFloat(-(2f + 1.5f * Main.rand.NextFloat() * progress), -1f) * progress, count < 2 ? 0 : Main.rand.Next(255), default, 
-                    Main.rand.NextFloat(1.5f) * MathHelper.Clamp(progress, 0.7f, 0.925f));
+                    Main.rand.NextFloat(0.4f, 1.5f) * MathHelper.Clamp(progress, 0.7f, 0.925f));
             }
         }
 
