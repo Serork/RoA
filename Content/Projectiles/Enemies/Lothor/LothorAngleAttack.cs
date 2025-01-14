@@ -56,6 +56,7 @@ sealed class LothorAngleAttack : ModProjectile {
             dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
               Projectile.height, ModContent.DustType<LothorPoison>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
             Main.dust[dust].noGravity = true;
+            Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
         }
 
         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y + 1f, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, 0f, 0f);
@@ -149,6 +150,7 @@ sealed class LothorAngleAttack : ModProjectile {
                 //Main.dust[num59].velocity += Projectile.velocity / 5f;
                 Main.dust[num59].noGravity = true;
                 Main.dust[num59].fadeIn = 1.25f;
+                Main.dust[num59].noLight = Main.dust[num59].noLightEmittence = true;
             }
         }
 
@@ -179,6 +181,7 @@ sealed class LothorAngleAttack : ModProjectile {
             obj.noGravity = true;
             obj.velocity *= 0.1f;
             obj.velocity += Projectile.velocity * 0.5f;
+            obj.noLight = obj.noLightEmittence = true;
         }
     }
 

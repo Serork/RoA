@@ -21,6 +21,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.scale = 1.1f;
+        Projectile.light = 0f;
     }
 
     public override void AI() {
@@ -29,6 +30,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
                 int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 2, 2, ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1.35f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 0.5f;
+                Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
             }
         }
         Vector2 lastVelocity = Projectile.velocity;
@@ -52,6 +54,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
                 int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
                                         Projectile.height, ModContent.DustType<LothorPoison>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
                 Main.dust[dust].noGravity = true;
+                Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
             }
     }
 
