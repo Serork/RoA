@@ -1,8 +1,14 @@
-﻿using RoA.Common.WorldEvents;
+﻿using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
+
+using RoA.Common.WorldEvents;
 using RoA.Content.Backgrounds;
+using RoA.Core;
 
 using Terraria;
 using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,6 +23,10 @@ sealed class ShaderLoader : ModSystem {
         if (Main.netMode == NetmodeID.Server) {
             return;
         }
+
+        string name = "Tint";
+        Asset<Effect> tintShader = ModContent.Request<Effect>(ResourceManager.Effects + name);
+        GameShaders.Misc[$"{RoA.ModName}{name}"] = new MiscShaderData(tintShader, name);
 
         Filters.Scene[BackwoodsSky] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon").UseColor(0.2f, 0.2f, 0.2f).UseOpacity(0.05f), EffectPriority.High);
         SkyManager.Instance[BackwoodsSky] = new BackwoodsSky();

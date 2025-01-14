@@ -80,6 +80,7 @@
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Hog.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\Lumberjack.png" />
 	  <None Remove="Resources\Textures\NPCs\Enemies\Backwoods\SummonedRaven.png" />
+	  <None Remove="Resources\Textures\NPCs\Enemies\Bosses\Lothor\LothorSoul.png" />
 	  <None Remove="Resources\Textures\Projectiles\Enemies\PrimordialLeaf.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\ClawsSlash.png" />
 	  <None Remove="Resources\Textures\Projectiles\Friendly\Druidic\MushroomSpore.png" />

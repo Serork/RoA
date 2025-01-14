@@ -122,8 +122,9 @@ sealed partial class Lothor : ModNPC {
     private float _distanceProgress, _distanceProgress2;
     private bool _shouldSpawnPipistrelles;
     private bool _isDead;
+    private float _deadStateProgress;
 
-    public float LifeProgress => 1f - NPC.life / (float)NPC.lifeMax;
+    public float LifeProgress => _isDead ? 0f : (1f - NPC.life / (float)NPC.lifeMax);
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
     private Player Target { get; set; }
@@ -179,8 +180,46 @@ sealed partial class Lothor : ModNPC {
 
     private int GetJumpCountToEncourageFlightState() => 3;
 
+    private void ActualDeath(bool flag = false) {
+        for (int i = 0; i < 30; i++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Wraith, Main.rand.Next(-3, 3), Main.rand.Next(-3, 3), 100, default, 1.15f);
+        }
+        for (int i = 0; i < 50; i++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, Main.rand.Next(-2, 2), Main.rand.Next(-2, 2), 150, default, 1.2f);
+        }
+        int[] gores = new int[] { 3, 4, 6, 7 };
+        double pi = Math.PI * 2.0;
+        float scale = 1f;
+        for (int i = 0; i < 2; i++) {
+            foreach (int gore in gores) {
+                Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + gore).Type, scale);
+            }
+        }
+        for (int i = 1; i < 7; i++) {
+            if (!gores.Equals(i)) {
+                Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + i).Type, scale);
+            }
+        }
+
+        if (flag) {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorHit"), NPC.Center);
+        }
+
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            Vector2 origin = new Vector2(30f, 10f);
+            int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)(NPC.Center.X + origin.X), (int)(NPC.Center.Y + origin.Y), ModContent.NPCType<LothorSoul>());
+            if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                NetMessage.SendData(MessageID.SyncNPC, number: npc);
+            }
+        }
+    }
+
     public override void HitEffect(NPC.HitInfo hit) {
-        if (NPC.life > 0) {
+        bool flag = NPC.lifeMax == 100;
+        if (NPC.life > 0 || flag) {
+            if (flag && NPC.life <= 0) {
+                ActualDeath();
+            }
             return;
         }
 
@@ -188,11 +227,60 @@ sealed partial class Lothor : ModNPC {
             NPC.life = 10;
             NPC.dontTakeDamage = NPC.immortal = true;
 
-            _isDead = true;
+            Death();
+
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorDeath"), NPC.Center);
+
+            return;
         }
     }
 
+    private void Death() {
+        if (_isDead) {
+            return;
+        }
+
+        _deadStateProgress = 0f;
+        _isDead = true;
+    }
+
     public override void AI() {
+        if (_isDead && NPC.velocity.Length() < 1f) {
+            float chance = MathHelper.Clamp(_deadStateProgress, 0f, 1f);
+            if (Main.rand.NextChance(chance) && Main.rand.NextBool()) {
+                Dust.NewDust(NPC.Center + new Vector2((NPC.width / 2 - (NPC.direction == 1 ? 30 : 22)) * NPC.direction, -NPC.height / 4 - 8), 2, 2, DustID.Blood,
+                    0f, 0f, 0, default, 1f);
+            }
+            if (Main.rand.NextChance(chance) && Main.rand.NextBool()) {
+                Dust.NewDust(NPC.Center + new Vector2((NPC.width / 2 - (NPC.direction == 1 ? 34 : 26)) * NPC.direction, -8), 2, 2, DustID.Blood,
+                    0f, 0f, 0, default, 1.2f);
+            }
+            NPC.knockBackResist = 0f;
+            if (_deadStateProgress < 1f) {
+                _deadStateProgress += 0.01f;
+            }
+            else if (NPC.lifeMax != 100) {
+                _deadStateProgress = 1f;
+
+                NPC.lifeMax = NPC.life = 100;
+
+                NPC.dontTakeDamage = NPC.immortal = false;
+
+                NPC.netUpdate = true;
+            }
+            else {
+                _deadStateProgress += 0.01f;
+                if (_deadStateProgress > 1.035f) {
+                    _deadStateProgress = 1f;
+                    if (--NPC.life <= 0) {
+                        NPC.life = 0;
+                        NPC.checkDead();
+                        ActualDeath(true);
+                    }
+                }
+            }
+        }
+
         Init();
 
         HandleActiveState();
@@ -226,6 +314,10 @@ sealed partial class Lothor : ModNPC {
     }
 
     private void UpdatePulseVisuals() {
+        if (_isDead) {
+            _pulseStrength = _beforeAttackTimerVisual = 0f;
+        }
+
         if (Attacks.Contains(CurrentAIState)) {
             float delay = _beforeAttackTimerVisual;
             float num282 = _beforeAttackTimerVisualMax;
@@ -535,6 +627,9 @@ sealed partial class Lothor : ModNPC {
             _glowMaskOpacity -= TimeSystem.LogicDeltaTime;
         }
 
+        if (_isDead) {
+            return;
+        }
         float value = MathHelper.Clamp(Math.Max(_glowMaskOpacity, LifeProgress), 0f, 1f);
         Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * value * 0.75f);
     }
@@ -758,8 +853,16 @@ sealed partial class Lothor : ModNPC {
         int type = ModContent.NPCType<Pipistrelle>();
         if (_shouldSpawnPipistrelles && NPC.CountNPCS(type) < 1) {
             Vector2 positionToSpawn = NPC.Center + Vector2.UnitY * NPC.height / 2f;
-            NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: -1f);
-            NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 1f);
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                NPC npc = NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: -1f);
+                if (Main.netMode == NetmodeID.Server && npc.whoAmI < Main.maxNPCs) {
+                    NetMessage.SendData(MessageID.SyncNPC, number: npc.whoAmI);
+                }
+                npc = NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 1f);
+                if (Main.netMode == NetmodeID.Server && npc.whoAmI < Main.maxNPCs) {
+                    NetMessage.SendData(MessageID.SyncNPC, number: npc.whoAmI);
+                }
+            }
         }
     }
 
@@ -931,7 +1034,7 @@ sealed partial class Lothor : ModNPC {
 
         FallStrengthIfClose = 0f;
 
-        if (flag) {
+        if (flag && !_isDead) {
             LookAtPlayer();
         }
         NPC.velocity.X *= 0.85f + Math.Min(0.05f, Math.Abs(NPC.velocity.X) * 0.025f);
@@ -1145,6 +1248,14 @@ sealed partial class Lothor : ModNPC {
         }
         bool flag2 = NPC.velocity.Length() < 5f && BeforeDoingLastJump;
         bool flag3 = Collision.SolidCollision(NPC.position - Vector2.One * 4, NPC.width + 2, NPC.height + 2);
+        if (!flag3) {
+            if (_isDead) {
+                GoToIdleState();
+            }
+        }
+        if (_isDead) {
+            DashTimer = 0f;
+        }
         bool flag4 = DashTimer > DashDelay;
         if (StillInJumpBeforeFlightTimer <= 0f && ++AirDashTimer >= 0f) {
             if (flag5) {
@@ -1497,6 +1608,9 @@ sealed partial class Lothor : ModNPC {
         SetKnockBackResist();
         if (Math.Abs(NPC.velocity.Y) <= 0.25f) {
             DashTimer += 1f;
+        }
+        if (_isDead) {
+            DashTimer = 0f;
         }
         bool flag = Collision.CanHit(Target, NPC);
         float distance = Vector2.Distance(Target.Center, NPC.Center);

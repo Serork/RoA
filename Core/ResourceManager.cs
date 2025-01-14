@@ -16,10 +16,13 @@ static class ResourceManager {
     public const string RESOURCESPATH = "Resources";
     public const string TEXTURESPATH = RESOURCESPATH + "/Textures";
     public const string SOUNDSPATH = RESOURCESPATH + "/Sounds";
+    public const string EFFECTSPATH = RESOURCESPATH + "/Effects";
 
     public static string Textures => RoA.ModName + $"/{TEXTURESPATH}/";
     public static string EmptyTexture => Textures + "Empty";
     public static string PixelTexture => Textures + "Pixel";
+
+    public static string Effects => RoA.ModName + $"/{EFFECTSPATH}/";
 
     public static Texture2D Pixel => ModContent.Request<Texture2D>(PixelTexture, AssetRequestMode.ImmediateLoad).Value;
 

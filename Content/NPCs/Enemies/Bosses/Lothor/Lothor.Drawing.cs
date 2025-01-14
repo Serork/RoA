@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -9,6 +10,7 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
@@ -21,6 +23,7 @@ sealed partial class Lothor : ModNPC {
 
     private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet");
     private Texture2D GlowMask => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet_Glow");
+    private Texture2D WhiteTint => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet_WhiteTint");
 
     public override void FindFrame(int frameHeight) {
         HandleAnimations();
@@ -51,31 +54,36 @@ sealed partial class Lothor : ModNPC {
             _drawColor = color;
         }
         _drawColor = Color.Lerp(_drawColor.Value, color, 0.1f);
-        Color glowMaskColor = Color.White * _glowMaskOpacity;
-        for (int num173 = 1; num173 < length; num173 += 2) {
-            _ = ref NPC.oldPos[num173];
-            Color color39 = color;
-            color39.R = (byte)(1f * (double)(int)color39.R * (double)(length - num173) / length);
-            color39.G = (byte)(1f * (double)(int)color39.G * (double)(length - num173) / length);
-            color39.B = (byte)(1f * (double)(int)color39.B * (double)(length - num173) / length);
-            color39.A = (byte)(1f * (double)(int)color39.A * (double)(length - num173) / length);
-            color39 *= MathHelper.Clamp(NPC.velocity.Length(), 0f, 9f) / 9f;
-            color39 *= 1f - num173 / length;
-            color39 *= _trailOpacity;
-            color39 *= 0.8f;
-            Rectangle frame7 = NPC.frame;
-            int num174 = ItsSpriteSheet.Height / Main.npcFrameCount[Type];
-            frame7.Y -= num174 * num173;
-            while (frame7.Y < 0) {
-                frame7.Y += num174 * Main.npcFrameCount[Type];
+        if (_isDead) {
+            _glowMaskOpacity = 1f;
+        }
+        Color glowMaskColor = (_isDead ? Color.Lerp(Color.White, Color.Black.MultiplyRGB(drawColor), MathHelper.Clamp(_deadStateProgress, 0f, 1f)) : Color.White) * _glowMaskOpacity;
+        if (!_isDead) {
+            for (int num173 = 1; num173 < length; num173 += 2) {
+                _ = ref NPC.oldPos[num173];
+                Color color39 = color;
+                color39.R = (byte)(1f * (double)(int)color39.R * (double)(length - num173) / length);
+                color39.G = (byte)(1f * (double)(int)color39.G * (double)(length - num173) / length);
+                color39.B = (byte)(1f * (double)(int)color39.B * (double)(length - num173) / length);
+                color39.A = (byte)(1f * (double)(int)color39.A * (double)(length - num173) / length);
+                color39 *= MathHelper.Clamp(NPC.velocity.Length(), 0f, 9f) / 9f;
+                color39 *= 1f - num173 / length;
+                color39 *= _trailOpacity;
+                color39 *= 0.8f;
+                Rectangle frame7 = NPC.frame;
+                int num174 = ItsSpriteSheet.Height / Main.npcFrameCount[Type];
+                frame7.Y -= num174 * num173;
+                while (frame7.Y < 0) {
+                    frame7.Y += num174 * Main.npcFrameCount[Type];
+                }
+                Vector2 pos = NPC.oldPos[num173];
+                spriteBatch.Draw(ItsSpriteSheet,
+                    pos + offset,
+                    frame7, color39 * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(GlowMask,
+                    pos + offset,
+                    frame7, color39 * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
-            Vector2 pos = NPC.oldPos[num173];
-            spriteBatch.Draw(ItsSpriteSheet,
-                pos + offset, 
-                frame7, color39 * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
-            spriteBatch.Draw(GlowMask,
-                pos + offset,
-                frame7, color39 * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
         }
 
         if (ShouldDrawPulseEffect) {
