@@ -285,7 +285,7 @@ sealed class Snatcher : NatureProjectile {
         if (CantAttack()) {
             flag = true;
         }
-        if (Projectile.owner == Main.myPlayer && player.ItemAnimationJustStarted && !flag && !IsAttacking && !IsAttacking2) {
+        if (Projectile.owner == Main.myPlayer && player.itemAnimation > player.itemAnimationMax - 2 && !flag && !IsAttacking && !IsAttacking2) {
             Projectile.ai[2] = 5f;
             Vector2 mousePos = Helper.GetLimitedPosition(player.Center, _mousePos, 200f, DIST * 0.75f);
             Projectile.localAI[1] = mousePos.X;
