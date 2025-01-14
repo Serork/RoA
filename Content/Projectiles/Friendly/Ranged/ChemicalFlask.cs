@@ -1,3 +1,5 @@
+using Humanizer;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -5,6 +7,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -33,34 +36,46 @@ sealed class ChemicalFlask : ModProjectile {
         Projectile.timeLeft = 1200;
     }
 
-    public override void AI() {
-        Player player = Main.player[Projectile.owner];
-        Lighting.AddLight(Projectile.Center, 0.1f, 0.3f, 0.1f);
-        if (Projectile.timeLeft <= 1175) {
-            int _dust = Dust.NewDust(new Vector2(Projectile.position.X + 7, Projectile.position.Y + 10) + new Vector2(0, -8).RotatedBy(Projectile.rotation), 2, 2, 44, 0f, 0f, 100, default, 1.1f);
-            Main.dust[_dust].scale += Main.rand.Next(40) * 0.01f;
-            Main.dust[_dust].noGravity = true;
-            Main.dust[_dust].velocity *= 0.8f;
-        }
-
-        float distance = 10f;
-        for (int findProjectile = 0; findProjectile < Main.maxProjectiles; findProjectile++) {
-            Projectile projectile = Main.projectile[findProjectile];
-            if (projectile.active && projectile.aiStyle == 1 && Vector2.Distance(Projectile.Center, projectile.Center) < distance)
-                Projectile.Kill();
-        }
-    }
-
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
         for (int k = 0; k < Projectile.oldPos.Length; k++) {
             Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-            Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-            spriteBatch.Draw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            Color color2 = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+            spriteBatch.Draw(texture, drawPos, null, color2, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            //spriteBatch.Draw(ModContent.Request<Texture2D>(Texture + "_Glow").Value, drawPos, null, Color.White * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         }
-        return true;
+        SpriteEffects spriteEffects = (SpriteEffects)(Projectile.velocity.X > 0f).ToInt();
+        Vector2 position = Projectile.Center - Main.screenPosition;
+        Rectangle sourceRectangle = new(0, 0, texture.Width, texture.Height);
+        Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity;
+        Vector2 origin = sourceRectangle.Size() / 2f;
+        Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, Projectile.scale, spriteEffects);
+        texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.White, Projectile.rotation, origin, Projectile.scale, spriteEffects);
+
+        return false;
+    }
+
+    public override void AI() {
+        float num104 = Projectile.scale;
+        Lighting.AddLight((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f), num104 * 0.7f, num104, num104 * 0.8f);
+
+        Player player = Main.player[Projectile.owner];
+        if (Projectile.timeLeft <= 1125) {
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X + 7, Projectile.position.Y + 10) + new Vector2(0, -8).RotatedBy(Projectile.rotation), 2, 2, 44, 0f, 0f, 100, default, 1.1f);
+            Main.dust[dust].scale += Main.rand.Next(40) * 0.01f;
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity *= 0.8f;
+        }
+
+        float distance = 50f;
+        for (int findProjectile = 0; findProjectile < Main.maxProjectiles; findProjectile++) {
+            Projectile projectile = Main.projectile[findProjectile];
+            if (projectile.active && projectile.aiStyle == 1 && Vector2.Distance(Projectile.Center, projectile.Center) < distance)
+                Projectile.Kill();
+        }
     }
 
     public override void OnKill(int timeLeft) {

@@ -130,7 +130,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     if (leftDirection) {
                         origin.X = texture.Width + offset.X;
                     }
-                    offset = new Vector2(texture.Width / 2f, offset.Y);
+                    offset = new Vector2(0f, offset.Y);
                 }
             }
             else {
@@ -140,7 +140,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             Vector2 position = (player.itemLocation + offset + new Vector2(0f, player.gfxOffY)).Floor();
             Color color = Color.Lerp(glowMaskInfo.GlowColor, drawInfo.itemColor, Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
             drawInfo.DrawDataCache.Add(new DrawData(texture, position - Main.screenPosition, texture.Bounds,
-                                                    item.GetAlpha(color), player.itemRotation + rotOffset, origin, item.scale, drawInfo.itemEffect, 0));
+                                                     glowMaskInfo.ShouldApplyItemAlpha ? item.GetAlpha(color) : glowMaskInfo.GlowColor, player.itemRotation + rotOffset, origin, item.scale, drawInfo.itemEffect, 0));
         }
     }
 

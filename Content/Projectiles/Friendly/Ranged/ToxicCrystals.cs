@@ -11,6 +11,8 @@ class ToxicCrystal2 : ToxicCrystal1 { }
 class ToxicCrystal3 : ToxicCrystal1 { }
 
 class ToxicCrystal1 : ModProjectile {
+    public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
+
     public override void SetDefaults() {
         int width = 12; int height = width;
         Projectile.Size = new Vector2(width, height);
@@ -37,6 +39,7 @@ class ToxicCrystal1 : ModProjectile {
     }
 
     public override void AI() {
+        Projectile.Opacity = 0.7f;
         if (Projectile.velocity.Y < 0.25 && Projectile.velocity.Y > 0.15) {
             Projectile.velocity.X = Projectile.velocity.X * 0.8f;
         }
@@ -48,8 +51,39 @@ class ToxicCrystal1 : ModProjectile {
         dust2.position.X -= 2f;
         Dust dust3 = Main.dust[dust];
         dust3.position.Y += 2f;
-        Dust _dust4 = Main.dust[dust];
-        _dust4.velocity.Y -= 2f;
+        Dust dust4 = Main.dust[dust];
+        dust4.velocity.Y -= 2f;
+
+
+        if (Projectile.timeLeft > 360 - 1) {
+            return;
+        }
+
+        if (Main.rand.NextBool()) {
+            float num3 = 0f;
+            float y = 0f;
+            Vector2 vector6 = Projectile.position;
+            Vector2 vector7 = Projectile.oldPosition;
+            vector7.Y -= num3 / 2f;
+            vector6.Y -= num3 / 2f;
+            int num5 = (int)Vector2.Distance(vector6, vector7) / 3 + 1;
+            if (Vector2.Distance(vector6, vector7) % 3f != 0f)
+                num5++;
+
+            for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
+                Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, DustID.JungleSpore, Alpha: 100, Scale: 1f)];
+                obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
+                obj.noGravity = true;
+                obj.velocity *= 0.1f;
+                obj.velocity += Projectile.velocity * 0.5f;
+                Dust obj2 = obj;
+                obj2.position.X -= 2f;
+                Dust obj3 = obj;
+                obj3.position.Y += 2f;
+                Dust obj4 = obj;
+                obj4.velocity.Y -= 2f;
+            }
+        }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
