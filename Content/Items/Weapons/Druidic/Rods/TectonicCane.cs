@@ -67,7 +67,7 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
             dust.noGravity = true;
 
             EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
-            Vector2 position = point2.ToWorldCoordinates() + Vector2.UnitX * 4f;
+            Vector2 position = point2.ToWorldCoordinates() + Vector2.UnitX * 5f;
             if (player.whoAmI == Main.myPlayer) {
                 _tempMousePosition = position;
                 Projectile.netUpdate = true;
