@@ -75,27 +75,28 @@ sealed class GalipotStream : NatureProjectile {
     }
 
     public override void AI() {
-        Projectile.rotation = Helper.VelocityAngle(Projectile.velocity) + MathHelper.Pi;
+        bool flag2 = IsActive && Projectile.velocity.Length() > 0.5f;
+        //Projectile.hide = flag2;
+        //Projectile.rotation = Helper.VelocityAngle(Projectile.velocity) + MathHelper.Pi;
 
-        if (Projectile.timeLeft < 500 - 1 && IsActive && Projectile.velocity.Length() > 0.5f) {
-            float num3 = 0f;
-            float y = 0f;
-            Vector2 vector6 = Projectile.position;
-            Vector2 vector7 = Projectile.oldPosition;
-            vector7.Y -= num3 / 2f;
-            vector6.Y -= num3 / 2f;
-            int num5 = (int)Vector2.Distance(vector6, vector7) / 3 + 1;
-            if (Vector2.Distance(vector6, vector7) % 3f != 0f)
-                num5++;
+        //if (Projectile.timeLeft < 500 - 1 && flag2) {
+        //    float num3 = 0f;
+        //    float y = 0f;
+        //    Vector2 vector6 = Projectile.position;
+        //    Vector2 vector7 = Projectile.oldPosition;
+        //    vector7.Y -= num3 / 2f;
+        //    vector6.Y -= num3 / 2f;
+        //    int num5 = (int)Vector2.Distance(vector6, vector7) / 3 + 1;
+        //    if (Vector2.Distance(vector6, vector7) % 3f != 0f)
+        //        num5++;
 
-            for (float num6 = 1f; num6 <= (float)num5; num6 += 2f) {
-                Dust obj = Main.dust[Dust.NewDust(Projectile.Center, 0, 0, ModContent.DustType<Galipot>(), Alpha: 0, Scale: 1f)];
-                obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
-                obj.noGravity = true;
-                obj.velocity *= 0.1f;
-                obj.noLight = true;
-            }
-        }
+        //    for (float num6 = 1f; num6 <= (float)num5; num6 += 2f) {
+        //        Dust obj = Main.dust[Dust.NewDust(Projectile.Center, 0, 0, ModContent.DustType<Galipot>(), Alpha: 0, Scale: 1f)];
+        //        obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
+        //        obj.velocity *= 0.1f;
+        //        obj.noLight = true;
+        //    }
+        //}
 
         //Lighting.AddLight(Projectile.Top, Color.Lerp(new Color(255, 241, 44), new Color(204, 128, 14), 0.75f).ToVector3() * 0.5f);
         bool flag = false;
