@@ -1186,3 +1186,8 @@ ChemicalPrisoner: {
 	DisplayName: Chemical Prisoner
 	Tooltip: ""
 }
+
+FlederStaff: {
+	DisplayName: Fleder Staff
+	Tooltip: ""
+}

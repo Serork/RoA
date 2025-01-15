@@ -44,7 +44,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 index++;
             }
             int speedIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Speed"));
-            /*if (HasPotentialUseSpeed())*/ {
+            if (speedIndex != -1) {
                 tooltips.RemoveAt(speedIndex);
                 speedIndex -= 1;
                 tag = "BaseSpeed";

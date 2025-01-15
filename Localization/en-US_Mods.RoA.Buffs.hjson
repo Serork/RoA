@@ -205,3 +205,8 @@ BloodShedAxesDebuff: {
 	DisplayName: Bloodshed Axe
 	Description: ""
 }
+
+LittleFleder: {
+	DisplayName: Little Fleder
+	Description: Mods.RoA.Buffs.LittleFleder.Description
+}
