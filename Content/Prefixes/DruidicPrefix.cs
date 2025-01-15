@@ -30,7 +30,7 @@ sealed class DruidicPrefix(string name,
 			mod.AddContent(new DruidicPrefix("Fragrant", 
 				druidDamageMult: 1.2f, potentialDamageMult: 0.85f, druidSpeedMult: 0.95f, druidKnockbackMult: 1f, druidCrit: 2));
             mod.AddContent(new DruidicPrefix("Bountiful",
-                druidDamageMult: 1.05f, potentialDamageMult: 1.12f, druidSpeedMult: 2f, druidKnockbackMult: 1.05f, druidCrit: 4));
+                druidDamageMult: 1.05f, potentialDamageMult: 1.12f, druidSpeedMult: 1.1f, druidKnockbackMult: 1.05f, druidCrit: 4));
             mod.AddContent(new DruidicPrefix("Vivid",
                 druidDamageMult: 0.95f, potentialDamageMult: 1.12f, druidSpeedMult: 1.15f, druidKnockbackMult: 0.85f, druidCrit: 0));
             mod.AddContent(new DruidicPrefix("Overripe",

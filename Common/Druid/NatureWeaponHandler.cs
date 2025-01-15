@@ -207,7 +207,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         if (ActivePrefix != null) {
             mult *= ActivePrefix._druidSpeedMult;
         }
-        return base.UseSpeedMultiplier(item, player) / mult;
+        return base.UseSpeedMultiplier(item, player) * mult;
     }
 
     public static float GetUseSpeedMultiplier(Item item, Player player) => item.ModItem.UseSpeedMultiplier(player);
