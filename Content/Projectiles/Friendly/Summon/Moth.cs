@@ -82,12 +82,14 @@ sealed class Moth : ModProjectile {
         else mothRotation = 0;
 
         if (Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem].type == ModContent.ItemType<MothStaff>()) {
-            idlePosition += new Vector2(30f * player.direction, 0f);
+            idlePosition += new Vector2(32.5f * player.direction, -12.5f);
             Vector2 minionPositionOffset = new Vector2(0f, 18f + mothCount * 4f);
             float deg = mothRotation * 2f * player.direction + 360 / mothCount * Projectile.minionPos;
             idlePosition += minionPositionOffset.RotatedBy(MathHelper.ToRadians(deg));
         }
         else {
+            idlePosition.X -= 2f;
+            idlePosition.Y += 4f;
             Vector2 minionPositionOffset = new Vector2(0f, 50f + mothCount * 4f);
             float deg = mothRotation * player.direction + 360 / mothCount * Projectile.minionPos;
             idlePosition += minionPositionOffset.RotatedBy(MathHelper.ToRadians(deg));
