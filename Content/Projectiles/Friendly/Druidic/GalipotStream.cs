@@ -73,6 +73,7 @@ sealed class GalipotStream : NatureProjectile {
     }
 
     public override void AI() {
+        Lighting.AddLight(Projectile.Top, Color.Lerp(new Color(255, 241, 44), new Color(204, 128, 14), 0.75f).ToVector3() * 0.5f);
         bool flag = false;
         if (Collision.WetCollision(Projectile.Center, 0, 0)) {
             if (Projectile.velocity.Length() > 1f) {
