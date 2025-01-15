@@ -47,7 +47,7 @@ sealed class EvilLeaf : NatureProjectile {
 
     public override bool ShouldUpdatePosition() => false;
 
-    public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
+    public override bool? CanDamage() => Projectile.Opacity >= 0.35f;
 
     private void SetPosition() {
         Projectile parent = Main.projectile[(int)Projectile.ai[1]];

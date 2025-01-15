@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Legs)]
-sealed class AshwalkerLeggings : NatureItem, ItemGlowMaskHandler.ISetGlowMask {
+sealed class AshwalkerLeggings : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Ashwalker Leggings");
 		//Tooltip.SetDefault("6% increased nature potential damage");
@@ -34,7 +34,7 @@ sealed class AshwalkerLeggings : NatureItem, ItemGlowMaskHandler.ISetGlowMask {
 
 	public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
 
-    void ItemGlowMaskHandler.ISetGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color) {
+    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color) {
         color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5;
     }
 

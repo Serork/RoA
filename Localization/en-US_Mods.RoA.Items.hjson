@@ -1156,3 +1156,38 @@ BloodshedAxe: {
 	DisplayName: Bloodshed Axe
 	Tooltip: "'There will be blood'"
 }
+
+LothorBag: {
+	DisplayName: Treasure Bag (Lothor)
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+LothorMask: {
+	DisplayName: Lothor Mask
+	Tooltip: ""
+}
+
+LothorMusicBox: {
+	DisplayName: Music Box (Lothor)
+	Tooltip: ""
+}
+
+LothorTrophy: {
+	DisplayName: Lothor Trophy
+	Tooltip: ""
+}
+
+BloodbathLocket: {
+	DisplayName: Bloodbath Locket
+	Tooltip: Increases damage by 1% for each enemy and 5% for each boss nearby, up to 25%
+}
+
+ChemicalPrisoner: {
+	DisplayName: Chemical Prisoner
+	Tooltip: ""
+}
+
+FlederStaff: {
+	DisplayName: Fleder Staff
+	Tooltip: ""
+}

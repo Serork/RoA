@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
@@ -90,6 +91,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         if (flag) {
             result = (ushort)(result * activePrefix._potentialDamageMult);
         }
+        result = (ushort)(result * player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f));
         return (ushort)result;
     }
     public static ushort GetPotentialDamage(Item item, Player player) => (ushort)Math.Max(0, GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));
@@ -172,8 +174,23 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         }
 
         if (ActivePrefix != null) {
-            damage *= ActivePrefix._druidDamageMult;
+            if (HasPotentialDamage()) {
+                damage *= ActivePrefix._druidDamageMult;
+            }
+            else {
+                damage *= (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult) / 2f;
+            }
         }
+    }
+
+    public override bool? UseItem(Item item, Player player) {
+        if (item.IsADruidicWeapon() && ActivePrefix != null && ActivePrefix._shouldApplyTipsy && player.ItemAnimationJustStarted) {
+            player.AddBuff(BuffID.Tipsy, 300);
+
+            return base.UseItem(item, player);
+        }
+
+        return base.UseItem(item, player);
     }
 
     public override float UseSpeedMultiplier(Item item, Player player) {
@@ -190,10 +207,8 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         if (ActivePrefix != null) {
             mult *= ActivePrefix._druidSpeedMult;
         }
-        return base.UseSpeedMultiplier(item, player) / mult;
+        return base.UseSpeedMultiplier(item, player) * mult;
     }
 
     public static float GetUseSpeedMultiplier(Item item, Player player) => item.ModItem.UseSpeedMultiplier(player);
-
-
 }

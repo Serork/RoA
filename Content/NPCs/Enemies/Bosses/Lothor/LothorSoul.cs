@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -14,6 +13,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed class LothorSoul : RoANPC {
+    private static float FirstFrameTime => 4f;
+    private static float AnimationSpeed => 27.5f;
+
     private readonly Color _color = new(241, 53, 84, 200), _color2 = new(114, 216, 102, 200);
 
     public enum States {
@@ -48,7 +50,6 @@ sealed class LothorSoul : RoANPC {
         NPC.aiStyle = AIType = -1;
 
         NPC.Opacity = 0f;
-        NPC.alpha = 255;
     }
 
     public override void FindFrame(int frameHeight) {
@@ -65,8 +66,8 @@ sealed class LothorSoul : RoANPC {
             int currentFrame = (int)(NPC.frameCounter / maxCounter);
             NPC.frame.Y = currentFrame * frameHeight;
         }
-        else if (StateTimer > 30f) {
-            int currentFrame = (int)(StateTimer - 30f);
+        else if (StateTimer > FirstFrameTime) {
+            int currentFrame = (int)(StateTimer - FirstFrameTime);
             NPC.frame.Y = currentFrame * frameHeight;
 
             NPC.frameCounter = 0.0;
@@ -97,25 +98,26 @@ sealed class LothorSoul : RoANPC {
     }
 
     private void Appearance() {
-        StateTimer += 40f / 250f;
-        if (StateTimer > 3f) {
+        StateTimer += AnimationSpeed / 250f;
+        if (StateTimer > 3f + FirstFrameTime) {
             ChangeState((int)States.Disappeared);
             StateTimer = 0f;
         }
         else {
-            NPC.velocity.Y -= 0.005f;
-            NPC.velocity.Y *= 1.025f;
+            //NPC.velocity.Y -= 0.0075f;
+            //NPC.velocity.Y *= 1f + 0.02f * (1f - MathHelper.Clamp(StateTimer * 2f / 3f, 0f, 1f));
         }
 
         NPC.Opacity = 0.35f;
     }
 
     private void Disappear() {
-        if (++StateTimer > 20f) {
-            NPC.velocity.Y -= 0.01f;
-            NPC.velocity.Y *= 1.09f;
+        if (NPC.velocity.Y > -10f) {
+            NPC.velocity.Y = Helper.Approach(NPC.velocity.Y, NPC.velocity.Y - 0.07f, 0.035f);
+        }
 
-            NPC.Opacity -= 0.007f;
+        if (++StateTimer > 35f) {
+            NPC.Opacity -= 0.005f;
 
             if (NPC.Opacity <= 0f) {
                 NPC.KillNPC();
@@ -123,9 +125,8 @@ sealed class LothorSoul : RoANPC {
         }
         else {
             NPC.Opacity = 0.35f;
-            NPC.velocity *= 0.95f;
+            NPC.velocity *= 0.925f;
         }
-        NPC.velocity *= 0.95f;
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {

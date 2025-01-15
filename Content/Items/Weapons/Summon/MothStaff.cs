@@ -19,6 +19,7 @@ sealed class MothStaff : ModItem {
 		//Tooltip.SetDefault("Summöns a moth to fight for you");
 		ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
 		ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
+
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 

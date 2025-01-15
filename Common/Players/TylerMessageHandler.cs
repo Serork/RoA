@@ -104,7 +104,6 @@ sealed partial class TylerMessageHandler : ModPlayer {
     }
 
     public void Create(MessageSource source, Vector2 position, Vector2 velocity) {
-        Main.NewText(IsTylerSet());
         if (Main.netMode == NetmodeID.Server || !IsTylerSet()) {
             return;
         }

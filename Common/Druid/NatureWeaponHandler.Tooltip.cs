@@ -44,7 +44,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 index++;
             }
             int speedIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Speed"));
-            if (HasPotentialUseSpeed()) {
+            if (speedIndex != -1) {
                 tooltips.RemoveAt(speedIndex);
                 speedIndex -= 1;
                 tag = "BaseSpeed";
@@ -68,35 +68,39 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                     tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{1}").Value;
                 int extraUseSpeed = GetExtraUseSpeed(item, Main.LocalPlayer) * 2;
                 extraUseSpeed -= (ushort)(extraUseSpeed / 3);
-                if (extraUseSpeed > 0) {
-                    int maxUseSpeed = (GetFinalUseTime(item, Main.LocalPlayer) * 2);
-                    maxUseSpeed -= maxUseSpeed / 3;
-                    int procent = (int)(extraUseSpeed / (float)maxUseSpeed * 100f); 
-                    tooltip += $" (+{procent}%)";
+                if (HasPotentialUseSpeed()) {
+                    if (extraUseSpeed > 0) {
+                        int maxUseSpeed = (GetFinalUseTime(item, Main.LocalPlayer) * 2);
+                        maxUseSpeed -= maxUseSpeed / 3;
+                        int procent = (int)(extraUseSpeed / (float)maxUseSpeed * 100f);
+                        tooltip += $" (+{procent}%)";
+                    }
                 }
                 tooltips.Insert(speedIndex + 1, new(Mod, tag, tooltip));
 
-                tag = "PotentialSpeed";
-                useSpeed = (ushort)(GetBasePotentialUseSpeed(item, Main.LocalPlayer) * 2);
-                useSpeed -= (ushort)(useSpeed / 3);
-                if (useSpeed <= 8)
-                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{8}2").Value;
-                else if (useSpeed <= 20)
-                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{7}2").Value;
-                else if (useSpeed <= 25)
-                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{6}2").Value;
-                else if (useSpeed <= 30)
-                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{5}2").Value;
-                else if (useSpeed <= 35)
-                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{4}2").Value;
-                else if (useSpeed <= 45)
-                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{3}2").Value;
-                else if (useSpeed <= 55)
-                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{2}2").Value;
-                else
-                    tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{1}2").Value;
-                
-                tooltips.Insert(speedIndex + 2, new(Mod, tag, tooltip));
+                if (HasPotentialUseSpeed()) {
+                    tag = "PotentialSpeed";
+                    useSpeed = (ushort)(GetBasePotentialUseSpeed(item, Main.LocalPlayer) * 2);
+                    useSpeed -= (ushort)(useSpeed / 3);
+                    if (useSpeed <= 8)
+                        tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{8}2").Value;
+                    else if (useSpeed <= 20)
+                        tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{7}2").Value;
+                    else if (useSpeed <= 25)
+                        tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{6}2").Value;
+                    else if (useSpeed <= 30)
+                        tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{5}2").Value;
+                    else if (useSpeed <= 35)
+                        tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{4}2").Value;
+                    else if (useSpeed <= 45)
+                        tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{3}2").Value;
+                    else if (useSpeed <= 55)
+                        tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{2}2").Value;
+                    else
+                        tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.AttackSpeed{1}2").Value;
+
+                    tooltips.Insert(speedIndex + 2, new(Mod, tag, tooltip));
+                }
             }
             int knockbackIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Knockback"));
             tag = "FillingRate";
