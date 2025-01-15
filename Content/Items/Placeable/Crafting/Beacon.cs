@@ -26,4 +26,11 @@ sealed class Beacon : ModItem {
 
         Item.createTile = ModContent.TileType<Tiles.Crafting.Beacon>();
     }
+	
+	public override void AddRecipes() {
+    	CreateRecipe()
+			.AddIngredient<Materials.MercuriumNugget>(10)
+    		.AddTile(TileID.Anvils)
+    		.Register();
+    }
 }

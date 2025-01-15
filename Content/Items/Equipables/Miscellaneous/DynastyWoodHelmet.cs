@@ -35,10 +35,10 @@ sealed class DynastyWoodHelmet : ModItem {
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.DynastySetBonus").Value;
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient(ItemID.DynastyWood, 20)
-    //        .AddTile(TileID.WorkBenches)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.DynastyWood, 20)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

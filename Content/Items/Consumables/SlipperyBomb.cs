@@ -39,10 +39,10 @@ sealed class SlipperyBomb : ModItem {
 		Item.shootSpeed = 5f;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.Bomb)
-	//		.AddIngredient<Galipot>()
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.Bomb)
+			.AddIngredient<Materials.Galipot>()
+			.Register();
+	}
 }

@@ -23,11 +23,11 @@ sealed class DevilHunterCloak : ModItem {
 		Item.vanity = true;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<FlamingFabric>(18)
-	//		.AddIngredient(ItemID.BlackThread)
-	//		.AddTile(TileID.DemonAltar)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Materials.FlamingFabric>(18)
+			.AddIngredient(ItemID.BlackThread)
+			.AddTile(TileID.DemonAltar)
+			.Register();
+	}
 }

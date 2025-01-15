@@ -32,11 +32,11 @@ partial class Tapper : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Crafting.Tapper>();
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddRecipeGroup(RecipeGroupID.Wood, 10)
-    //        .AddRecipeGroup(RecipeGroupID.IronBar, 2)
-    //        .AddTile(TileID.WorkBenches)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddRecipeGroup(RecipeGroupID.Wood, 10)
+            .AddRecipeGroup(RecipeGroupID.IronBar, 2)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

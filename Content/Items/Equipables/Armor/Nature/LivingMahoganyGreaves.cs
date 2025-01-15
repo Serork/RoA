@@ -26,11 +26,11 @@ sealed class LivingMahoganyGreaves : NatureItem {
 
     public override void UpdateEquip(Player player) => player.maxRunSpeed += 0.02f;
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ItemID.BorealWood, 15)
-    //		.AddIngredient<Galipot>(2)
-    //		.AddTile(TileID.LivingLoom)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    		.AddIngredient(ItemID.BorealWood, 15)
+    		.AddIngredient<Materials.Galipot>(2)
+    		.AddTile(TileID.LivingLoom)
+    		.Register();
+    }
 }

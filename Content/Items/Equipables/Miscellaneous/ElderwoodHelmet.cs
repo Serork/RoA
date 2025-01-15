@@ -32,10 +32,10 @@ sealed class ElderwoodHelmet : ModItem {
         player.statDefense += 1;
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient<Elderwood>(20)
-    //        .AddTile(TileID.WorkBenches)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<Placeable.Crafting.Elderwood>(20)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

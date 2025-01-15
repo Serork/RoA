@@ -24,11 +24,11 @@ sealed class ElderwoodLantern : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodLantern>();
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<Elderwood>(6)
-	//		.AddIngredient(ItemID.Torch)
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Crafting.Elderwood>(6)
+			.AddIngredient(ItemID.Torch)
+			.AddTile(TileID.WorkBenches)
+			.Register();
+	}
 }

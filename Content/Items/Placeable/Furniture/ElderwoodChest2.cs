@@ -17,12 +17,4 @@ sealed class ElderwoodChest2 : ModItem {
 
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChest2>();
 	}
-
-	public override void AddRecipes() {
-		//CreateRecipe()
-		//	.AddIngredient<Materials.Elderwood>(8)
-		//	.AddRecipeGroup(RecipeGroupID.IronBar, 2)
-		//	.AddTile(TileID.WorkBenches)
-		//	.Register();
-	}
 }

@@ -37,12 +37,12 @@ sealed class WeightPotion : ModItem {
 		Item.buffTime = 3600 * 6;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient<Cloudberry>()
-	//		.AddIngredient(ItemID.Deathweed)
-	//		.AddTile(TileID.Bottles)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.BottledWater)
+			.AddIngredient<Materials.Cloudberry>()
+			.AddIngredient(ItemID.Deathweed)
+			.AddTile(TileID.Bottles)
+			.Register();
+	}
 }

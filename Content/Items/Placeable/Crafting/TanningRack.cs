@@ -40,11 +40,11 @@ sealed class TanningRack : ModItem {
     //    return base.UseItem(player);
     //}
 
-    /*public override void AddRecipes () {
-        CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 15)
-            .AddRecipeGroup(ItemID.Bunny)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }*/
+    //public override void AddRecipes () {
+    //    CreateRecipe()
+    //        .AddRecipeGroup(RecipeGroupID.Wood, 15)
+    //        .AddRecipeGroup(ItemID.Bunny)
+    //        .AddTile(TileID.WorkBenches)
+    //       .Register();
+    //}
 }

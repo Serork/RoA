@@ -23,10 +23,10 @@ sealed class MercuriumNugget : ModItem {
 		Item.maxStack = Item.CommonMaxStack;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<MercuriumOre>(4)
-	//		.AddTile(TileID.Furnaces)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Placeable.Crafting.MercuriumOre>(4)
+			.AddTile(TileID.Furnaces)
+			.Register();
+	}
 }

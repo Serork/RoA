@@ -38,11 +38,11 @@ sealed class LivingMahoganyHelmet : NatureItem {
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.RichMahogany, 10)
-	//		.AddIngredient<Galipot>(5)
-	//		.AddTile(TileID.LivingLoom)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.RichMahogany, 10)
+			.AddIngredient<Materials.Galipot>(5)
+			.AddTile(TileID.LivingLoom)
+			.Register();
+	}
 }

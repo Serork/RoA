@@ -44,7 +44,7 @@ sealed class SlipperyGrenade : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe(2)
 			.AddIngredient(ItemID.Grenade, 2)
-			.AddIngredient<Galipot>(1)
+			.AddIngredient<Materials.Galipot>(1)
 			.Register();
 	}
 }

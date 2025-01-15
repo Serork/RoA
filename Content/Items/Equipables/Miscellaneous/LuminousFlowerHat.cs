@@ -63,11 +63,11 @@ sealed class LuminousFlowerHat : ModItem {
         glowMaskColor = Color.White * GetLerpValue(drawPlayer) * (1f - shadow);
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //				.AddIngredient<LuminousFlower>()
-    //				.AddIngredient(ItemID.Sunflower)
-    //				.AddTile(TileID.WorkBenches)
-    //				.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    				.AddIngredient<Items.Miscellaneous.LuminousFlower>()
+    				.AddIngredient(ItemID.Sunflower)
+    				.AddTile(TileID.WorkBenches)
+    				.Register();
+    }
 }

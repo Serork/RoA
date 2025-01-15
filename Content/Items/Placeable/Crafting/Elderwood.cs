@@ -27,14 +27,14 @@ sealed class Elderwood : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Crafting.Elderwood>();
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<ElderwoodPlatform>(2)
-	//		.Register();
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Furniture.ElderwoodPlatform>(2)
+			.Register();
 
-	//	CreateRecipe()
-	//		.AddIngredient<ElderwoodWall>(4)
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
+		CreateRecipe()
+			.AddIngredient<Walls.ElderwoodWall>(4)
+			.AddTile(TileID.WorkBenches)
+			.Register();
+	}
 }

@@ -31,10 +31,10 @@ sealed class MercuriumPickaxe : ModItem {
 		Item.UseSound = SoundID.Item1;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ModContent.ItemType<MercuriumNugget>(), 16)
-	//		.AddTile(TileID.Anvils)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Materials.MercuriumNugget>(16)
+			.AddTile(TileID.Anvils)
+			.Register();
+	}
 }

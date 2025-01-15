@@ -38,10 +38,10 @@ sealed class SlipperyDynamite : ModItem {
 		Item.shootSpeed = 4f;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.Dynamite)
-	//		.AddIngredient<Galipot>()
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.Dynamite)
+			.AddIngredient<Materials.Galipot>()
+			.Register();
+	}
 }

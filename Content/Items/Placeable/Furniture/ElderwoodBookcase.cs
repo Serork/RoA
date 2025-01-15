@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Furniture;
@@ -21,11 +22,11 @@ sealed class ElderwoodBookcase : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBookcase>();
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<Elderwood>(20)
-	//		.AddIngredient(ItemID.Book, 10)
-	//		.AddTile(TileID.Sawmill)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Crafting.Elderwood>(20)
+			.AddIngredient(ItemID.Book, 10)
+			.AddTile(TileID.Sawmill)
+			.Register();
+	}
 }

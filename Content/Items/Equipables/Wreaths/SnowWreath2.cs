@@ -27,12 +27,12 @@ sealed class SnowWreath2 : BaseWreathItem {
         }
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ModContent.ItemType<SnowWreath>())
-    //		.AddIngredient(ModContent.ItemType<Cloudberry>())
-    //		.AddIngredient(ModContent.ItemType<NaturesHeart>())
-    //		.AddTile(ModContent.TileType<OvergrownAltar>())
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+			.AddIngredient<SnowWreath>(1)
+			.AddIngredient<Materials.Cloudberry>(1)
+			.AddIngredient<Materials.NaturesHeart>(1)
+			.AddTile<Tiles.Ambient.OvergrownAltar>()
+    		.Register();
+    }
 }

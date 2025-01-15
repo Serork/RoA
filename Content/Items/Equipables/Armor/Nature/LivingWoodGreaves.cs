@@ -29,11 +29,11 @@ sealed class LivingWoodGreaves : NatureItem {
 
     public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier -= 0.04f;
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ItemID.Wood, 15)
-    //		.AddIngredient<Galipot>(2)
-    //		.AddTile(TileID.LivingLoom)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    		.AddIngredient(ItemID.Wood, 15)
+    		.AddIngredient<Materials.Galipot>(2)
+    		.AddTile(TileID.LivingLoom)
+    		.Register();
+    }
 }

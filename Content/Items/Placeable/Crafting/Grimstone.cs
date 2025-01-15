@@ -26,15 +26,4 @@ sealed class Grimstone : ModItem {
 
         Item.createTile = ModContent.TileType<Tiles.Solid.Backwoods.BackwoodsStone>();
 	}
-
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<ElderwoodPlatform>(2)
-	//		.Register();
-
-	//	CreateRecipe()
-	//		.AddIngredient<ElderwoodWall>(4)
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
 }

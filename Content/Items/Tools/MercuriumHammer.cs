@@ -32,10 +32,10 @@ public class MercuriumHammer : ModItem {
 		Item.UseSound = SoundID.Item1;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ModContent.ItemType<MercuriumNugget>(), 14)
-	//		.AddTile(TileID.Anvils)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Materials.MercuriumNugget>(14)
+			.AddTile(TileID.Anvils)
+			.Register();
+	}
 }

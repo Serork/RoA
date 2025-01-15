@@ -36,13 +36,13 @@ sealed class BrightstonePotion : ModItem {
 		Item.buffTime = 3600 * 10;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient(ItemID.Sunflower)
-	//		.AddIngredient(ItemID.Moonglow)
-	//		.AddIngredient<Galipot>()
-	//		.AddTile(TileID.Bottles)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.BottledWater)
+			.AddIngredient(ItemID.Sunflower)
+			.AddIngredient(ItemID.Moonglow)
+			.AddIngredient<Materials.Galipot>()
+			.AddTile(TileID.Bottles)
+			.Register();
+	}
 }

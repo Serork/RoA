@@ -21,10 +21,10 @@ sealed class ElderwoodChest : ModItem {
 	}
 
 	public override void AddRecipes() {
-		//CreateRecipe()
-		//	.AddIngredient<Materials.Elderwood>(8)
-		//	.AddRecipeGroup(RecipeGroupID.IronBar, 2)
-		//	.AddTile(TileID.WorkBenches)
-		//	.Register();
+		CreateRecipe()
+			.AddIngredient<Crafting.Elderwood>(8)
+			.AddRecipeGroup(RecipeGroupID.IronBar, 2)
+			.AddTile(TileID.WorkBenches)
+			.Register();
 	}
 }

@@ -37,13 +37,13 @@ sealed class DryadBloodPotion : ModItem {
 		Item.buffTime = 3600 * 8;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient<Bonerose>()
-	//		.AddIngredient(ItemID.Waterleaf)
-	//		.AddIngredient<Galipot>()
-	//		.AddTile(TileID.Bottles)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.BottledWater)
+			.AddIngredient<Materials.Bonerose>()
+			.AddIngredient(ItemID.Waterleaf)
+			.AddIngredient<Materials.Galipot>()
+			.AddTile(TileID.Bottles)
+			.Register();
+	}
 }

@@ -38,10 +38,10 @@ sealed class AshwalkerLeggings : NatureItem, ItemGlowMaskHandler.ISetGlowMask {
         color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5;
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient<FlamingFabric>(20)
-    //		.AddTile(TileID.Loom)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    		.AddIngredient<Materials.FlamingFabric>(20)
+    		.AddTile(TileID.Loom)
+    		.Register();
+    }
 }

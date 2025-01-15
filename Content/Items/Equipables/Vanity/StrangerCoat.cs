@@ -25,11 +25,11 @@ sealed class StrangerCoat : ModItem {
 		Item.vanity = true;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<FlamingFabric>(18)
-	//		.AddIngredient(ItemID.BlackInk)
-	//		.AddTile(TileID.DemonAltar)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Materials.FlamingFabric>(18)
+			.AddIngredient(ItemID.BlackInk)
+			.AddTile(TileID.DemonAltar)
+			.Register();
+	}
 }

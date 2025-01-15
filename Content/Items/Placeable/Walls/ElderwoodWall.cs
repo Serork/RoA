@@ -20,10 +20,10 @@ sealed class ElderwoodWall : ModItem {
         Item.createWall = ModContent.WallType<Tiles.Walls.ElderwoodWall>();
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe(4)
-	//		.AddIngredient<Elderwood>()
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe(4)
+			.AddIngredient<Crafting.Elderwood>()
+			.AddTile(TileID.WorkBenches)
+			.Register();
+	}
 }

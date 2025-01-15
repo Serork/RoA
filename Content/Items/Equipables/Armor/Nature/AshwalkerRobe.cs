@@ -38,10 +38,10 @@ sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.ISetGlowMask {
         color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5;
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient<FlamingFabric>(25)
-    //		.AddTile(TileID.Loom)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    		.AddIngredient<Materials.FlamingFabric>(25)
+    		.AddTile(TileID.Loom)
+    		.Register();
+    }
 }

@@ -37,13 +37,13 @@ sealed class ResiliencePotion : NatureItem {
 		Item.buffTime = 3600 * 6;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient<MiracleMint>()
-	//		.AddIngredient(ItemID.Moonglow)
-	//		.AddIngredient<Galipot>()
-	//		.AddTile(TileID.Bottles)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.BottledWater)
+			.AddIngredient<Materials.MiracleMint>()
+			.AddIngredient(ItemID.Moonglow)
+			.AddIngredient<Materials.Galipot>()
+			.AddTile(TileID.Bottles)
+			.Register();
+	}
 }

@@ -37,13 +37,13 @@ sealed class BloodlustPotion : ModItem {
 		Item.buffTime = 3600 / 2;
 	}
 
-	//public override void AddRecipes () {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient(ItemID.Deathweed)
-	//		.AddIngredient<Bonerose>()
-	//		.AddIngredient(ItemID.Fireblossom)
-	//		.AddTile(TileID.Bottles)
-	//		.Register();
-	//}
+	public override void AddRecipes () {
+		CreateRecipe()
+			.AddIngredient(ItemID.BottledWater)
+			.AddIngredient(ItemID.Deathweed)
+			.AddIngredient<Materials.Bonerose>()
+			.AddIngredient(ItemID.Fireblossom)
+			.AddTile(TileID.Bottles)
+			.Register();
+	}
 }

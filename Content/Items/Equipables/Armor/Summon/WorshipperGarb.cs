@@ -29,4 +29,12 @@ sealed class WorshipperGarb : ModItem {
         player.GetDamage(DamageClass.Summon) += 0.1f;
         player.moveSpeed += 0.1f;
     }
+	
+	 public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.Leather, 5)
+			.AddIngredient(ItemID.Bone, 40)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

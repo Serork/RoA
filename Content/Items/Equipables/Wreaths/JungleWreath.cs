@@ -24,12 +24,12 @@ sealed class JungleWreath : BaseWreathItem {
         }
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ModContent.ItemType<TwigWreath>())
-    //		.AddIngredient(ItemID.Moonglow, 5)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+			.AddIngredient<TwigWreath>(1)
+    		.AddIngredient(ItemID.Moonglow, 5)
+    		.Register();
+    }
 }
 
 sealed class JungleWreathPlayer : ModPlayer {

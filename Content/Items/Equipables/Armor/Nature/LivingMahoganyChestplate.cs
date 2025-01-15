@@ -32,11 +32,11 @@ sealed class LivingMahoganyChestplate : NatureItem {
         player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier -= 0.06f;
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ItemID.RichMahogany, 20)
-    //		.AddIngredient<Galipot>(3)
-    //		.AddTile(TileID.LivingLoom)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    		.AddIngredient(ItemID.RichMahogany, 20)
+    		.AddIngredient<Materials.Galipot>(3)
+    		.AddTile(TileID.LivingLoom)
+    		.Register();
+    }
 }

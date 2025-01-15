@@ -36,13 +36,13 @@ sealed class FlametrackerJacket : ModItem {
         Lighting.AddLight(player.Center - new Vector2(6f * player.direction, 4f), new Vector3(194, 44, 44) * 0.0035f);
     }
 
-    //public override void AddRecipes () {
-    //	CreateRecipe()
-    //		.AddIngredient<Materials.FlamingFabric>(12)
-    //		.AddIngredient(ItemID.Leather, 8)
-    //		.AddTile(TileID.Loom)
-    //		.Register();
-    //}
+    public override void AddRecipes () {
+    	CreateRecipe()
+    		.AddIngredient<Materials.FlamingFabric>(12)
+    		.AddIngredient(ItemID.Leather, 8)
+    		.AddTile(TileID.Loom)
+    		.Register();
+    }
 }
 
 sealed class FlametrackerJacketFlame : PlayerDrawLayer {

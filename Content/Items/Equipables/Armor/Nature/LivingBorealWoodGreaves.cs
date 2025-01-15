@@ -31,11 +31,11 @@ sealed class LivingBorealWoodGreaves : NatureItem {
         player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier -= 0.04f;
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ItemID.BorealWood, 15)
-    //		.AddIngredient<Galipot>(2)
-    //		.AddTile(TileID.LivingLoom)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    		.AddIngredient(ItemID.BorealWood, 15)
+    		.AddIngredient<Materials.Galipot>(2)
+    		.AddTile(TileID.LivingLoom)
+    		.Register();
+    }
 }

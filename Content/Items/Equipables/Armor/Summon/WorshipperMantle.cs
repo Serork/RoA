@@ -26,4 +26,12 @@ sealed class WorshipperMantle : ModItem {
     }
 
     public override void UpdateEquip(Player player) => player.GetDamage(DamageClass.Summon) += 0.18f;
+	
+	 public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.Leather, 5)
+			.AddIngredient(ItemID.Bone, 50)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

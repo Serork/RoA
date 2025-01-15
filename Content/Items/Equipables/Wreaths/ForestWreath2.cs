@@ -27,12 +27,12 @@ sealed class ForestWreath2 : BaseWreathItem {
         }
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ModContent.ItemType<ForestWreath>())
-    //		.AddIngredient(ItemID.Sunflower)
-    //		.AddIngredient(ModContent.ItemType<NaturesHeart>())
-    //		.AddTile(ModContent.TileType<OvergrownAltar>())
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+			.AddIngredient<ForestWreath>(1)
+    		.AddIngredient(ItemID.Sunflower)
+			.AddIngredient<Materials.NaturesHeart>(1)
+			.AddTile<Tiles.Ambient.OvergrownAltar>()
+    		.Register();
+    }
 }

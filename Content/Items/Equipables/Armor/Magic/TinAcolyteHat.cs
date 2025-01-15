@@ -37,11 +37,11 @@ public class TinAcolyteHat : ModItem {
         }
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient(ItemID.TinBar, 5)
-    //        .AddIngredient(ItemID.Leather, 5)
-    //        .AddTile(TileID.Anvils)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.TinBar, 5)
+            .AddIngredient(ItemID.Leather, 5)
+            .AddTile(TileID.Anvils)
+            .Register();
+    }
 }

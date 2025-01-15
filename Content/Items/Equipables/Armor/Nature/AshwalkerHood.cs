@@ -65,12 +65,12 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
         BaseFormHandler.RegisterForm<LilPhoenixForm>();
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient<FlamingFabric>(15)
-    //		.AddTile(TileID.Loom)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    		.AddIngredient<Materials.FlamingFabric>(15)
+    		.AddTile(TileID.Loom)
+    		.Register();
+    }
 }
 
 sealed class AshwalkerSetBonusHandler : ModPlayer {

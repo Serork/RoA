@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Furniture;
@@ -21,12 +22,12 @@ sealed class ElderwoodPiano : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodPiano>();
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<Elderwood>(15)
-	//		.AddIngredient(ItemID.Bone, 4)
-	//		.AddIngredient(ItemID.Book)
-	//		.AddTile(TileID.Sawmill)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Crafting.Elderwood>(15)
+			.AddIngredient(ItemID.Bone, 4)
+			.AddIngredient(ItemID.Book)
+			.AddTile(TileID.Sawmill)
+			.Register();
+	}
 }

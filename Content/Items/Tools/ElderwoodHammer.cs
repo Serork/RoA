@@ -30,10 +30,10 @@ sealed class ElderwoodHammer : ModItem {
         Item.UseSound = SoundID.Item1;
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient(ModContent.ItemType<Elderwood>(), 8)
-    //        .AddTile(TileID.WorkBenches)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+			.AddIngredient<Placeable.Crafting.Elderwood>(8)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

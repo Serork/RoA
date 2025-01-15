@@ -23,10 +23,10 @@ sealed class SnowWreath : BaseWreathItem {
         }
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ModContent.ItemType<TwigWreath>())
-    //		.AddIngredient(ItemID.Shiverthorn, 5)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+			.AddIngredient<TwigWreath>(1)
+    		.AddIngredient(ItemID.Shiverthorn, 5)
+    		.Register();
+    }
 }

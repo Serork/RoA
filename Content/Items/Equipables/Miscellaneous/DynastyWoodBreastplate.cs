@@ -23,10 +23,10 @@ sealed class DynastyWoodBreastplate : ModItem {
         Item.defense = 3;
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient(ItemID.DynastyWood, 30)
-    //        .AddTile(TileID.WorkBenches)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.DynastyWood, 30)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

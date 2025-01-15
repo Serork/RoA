@@ -40,11 +40,11 @@ sealed class SentinelHelmet : ModItem {
 		if (Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) < 1f) player.detectCreature = true;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<MercuriumNugget>(10)
-	//		.AddIngredient(ItemID.Leather, 4)
-	//		.AddTile(TileID.Anvils)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Materials.MercuriumNugget>(10)
+			.AddIngredient(ItemID.Leather, 4)
+			.AddTile(TileID.Anvils)
+			.Register();
+	}
 }

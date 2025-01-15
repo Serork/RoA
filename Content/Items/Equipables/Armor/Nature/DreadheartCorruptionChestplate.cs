@@ -32,11 +32,11 @@ sealed class DreadheartCorruptionChestplate : NatureItem {
 		player.GetKnockback(DruidClass.NatureDamage) += 1f;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.ShadowScale, 20)
-	//		.AddIngredient<NaturesHeart>()
-	//		.AddTile<OvergrownAltar>()
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.ShadowScale, 20)
+			.AddIngredient<Materials.NaturesHeart>()
+			.AddTile<Tiles.Ambient.OvergrownAltar>()
+			.Register();
+	}
 }

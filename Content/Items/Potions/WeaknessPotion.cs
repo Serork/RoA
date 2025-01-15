@@ -30,13 +30,13 @@ sealed class WeaknessPotion : ModItem {
 		Item.shootSpeed = 10f;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient(ItemID.Deathweed)
-	//		.AddIngredient(ItemID.Shiverthorn)
-	//		.AddIngredient<Bonerose>()
-	//		.AddTile(TileID.Bottles)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.BottledWater)
+			.AddIngredient(ItemID.Deathweed)
+			.AddIngredient(ItemID.Shiverthorn)
+			.AddIngredient<Materials.Bonerose>()
+			.AddTile(TileID.Bottles)
+			.Register();
+	}
 }

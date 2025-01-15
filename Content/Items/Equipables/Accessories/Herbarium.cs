@@ -34,21 +34,21 @@ sealed class Herbarium : NatureItem {
         }
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient(ItemID.Book)
-    //        .AddIngredient(ItemID.Daybloom)
-    //        .AddIngredient(ItemID.Shiverthorn)
-    //        .AddIngredient(ItemID.Blinkroot)
-    //        .AddIngredient(ItemID.Waterleaf)
-    //        .AddIngredient(ItemID.Deathweed)
-    //        .AddIngredient(ItemID.Moonglow)
-    //        .AddIngredient(ModContent.ItemType<MiracleMint>())
-    //        .AddIngredient(ModContent.ItemType<Bonerose>())
-    //        .AddIngredient(ItemID.Fireblossom)
-    //        .AddTile(TileID.Bookcases)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.Book)
+            .AddIngredient(ItemID.Daybloom)
+            .AddIngredient(ItemID.Shiverthorn)
+            .AddIngredient(ItemID.Blinkroot)
+            .AddIngredient(ItemID.Waterleaf)
+            .AddIngredient(ItemID.Deathweed)
+            .AddIngredient(ItemID.Moonglow)
+            .AddIngredient(ModContent.ItemType<MiracleMint>())
+            .AddIngredient(ModContent.ItemType<Bonerose>())
+            .AddIngredient(ItemID.Fireblossom)
+            .AddTile(TileID.Bookcases)
+            .Register();
+    }
 }
 
 internal class HerbariumPlayer : ModPlayer {

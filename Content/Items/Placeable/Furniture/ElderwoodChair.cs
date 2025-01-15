@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace RoA.Content.Items.Placeable.Furniture;
 
@@ -20,10 +21,10 @@ sealed class ElderwoodChair : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChair>();
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<Elderwood>(4)
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Crafting.Elderwood>(4)
+			.AddTile(TileID.WorkBenches)
+			.Register();
+	}
 }

@@ -28,11 +28,11 @@ sealed class FlametrackerPants : ModItem {
         player.GetDamage(DamageClass.Magic) += 0.05f;
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient<FlamingFabric>(10)
-    //        .AddIngredient(ItemID.Leather, 5)
-    //        .AddTile(TileID.Loom)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<Materials.FlamingFabric>(10)
+            .AddIngredient(ItemID.Leather, 5)
+            .AddTile(TileID.Loom)
+            .Register();
+    }
 }

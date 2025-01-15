@@ -35,15 +35,4 @@ sealed class PrismaticPotion : ModItem {
 		Item.buffType = ModContent.BuffType<PrismaticFavor>();
 		Item.buffTime = 3600 * 4;
 	}
-
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient<Bonerose>()
-	//		.AddIngredient(ItemID.Daybloom)
-	//		.AddIngredient(ItemID.Deathweed)
-	//		.AddIngredient(ItemID.Worm)
-	//		.AddTile(TileID.Bottles)
-	//		.Register();
-	//}
 }

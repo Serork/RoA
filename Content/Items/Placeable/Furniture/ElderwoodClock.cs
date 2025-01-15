@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Furniture;
@@ -21,12 +22,12 @@ sealed class ElderwoodClock : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodClock>();
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<Elderwood>(10)
-	//		.AddRecipeGroup(RecipeGroupID.IronBar, 3)
-	//		.AddIngredient(ItemID.Glass, 6)
-	//		.AddTile(TileID.Sawmill)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Crafting.Elderwood>(10)
+			.AddRecipeGroup(RecipeGroupID.IronBar, 3)
+			.AddIngredient(ItemID.Glass, 6)
+			.AddTile(TileID.Sawmill)
+			.Register();
+	}
 }

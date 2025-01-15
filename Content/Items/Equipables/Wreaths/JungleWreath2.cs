@@ -27,12 +27,12 @@ sealed class JungleWreath2 : BaseWreathItem {
         }
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ModContent.ItemType<JungleWreath>())
-    //		.AddIngredient(ItemID.JungleRose)
-    //		.AddIngredient(ModContent.ItemType<NaturesHeart>())
-    //		.AddTile(ModContent.TileType<OvergrownAltar>())
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+			.AddIngredient<JungleWreath>(1)
+    		.AddIngredient(ItemID.JungleRose)
+			.AddIngredient<Materials.NaturesHeart>(1)
+			.AddTile<Tiles.Ambient.OvergrownAltar>()
+    		.Register();
+    }
 }

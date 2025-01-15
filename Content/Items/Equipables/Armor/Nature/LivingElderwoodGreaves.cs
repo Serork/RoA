@@ -32,11 +32,11 @@ sealed class LivingElderwoodGreaves : NatureItem {
         player.GetCritChance(DruidClass.NatureDamage) += 4;
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<Elderwood>(15)
-	//		.AddIngredient<Galipot>(2)
-	//		.AddTile(TileID.LivingLoom)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Placeable.Crafting.Elderwood>(15)
+			.AddIngredient<Materials.Galipot>(2)
+			.AddTile(TileID.LivingLoom)
+			.Register();
+	}
 }

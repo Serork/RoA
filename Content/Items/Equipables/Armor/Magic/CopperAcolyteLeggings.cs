@@ -26,11 +26,11 @@ sealed class CopperAcolyteLeggings : ModItem {
 
     public override void UpdateEquip(Player player) => player.GetCritChance(DamageClass.Magic) += 8;
 
-    //public override void AddRecipes () {
-    //	CreateRecipe()
-    //		.AddIngredient(ItemID.CopperBar, 10)
-    //		.AddIngredient(ItemID.Leather, 5)
-    //		.AddTile(TileID.Anvils)
-    //		.Register();
-    //}
+    public override void AddRecipes () {
+    	CreateRecipe()
+    		.AddIngredient(ItemID.CopperBar, 10)
+    		.AddIngredient(ItemID.Leather, 5)
+    		.AddTile(TileID.Anvils)
+    		.Register();
+    }
 }

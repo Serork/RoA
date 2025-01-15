@@ -48,14 +48,14 @@ sealed class DeathWardPotion : ModItem {
 		return true;
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.BottledWater)
-	//		.AddIngredient<Bonerose>()
-	//		.AddIngredient(ItemID.Daybloom)
-	//		.AddIngredient(ItemID.Deathweed)
-	//		.AddIngredient(ItemID.Worm)
-	//		.AddTile(TileID.Bottles)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ItemID.BottledWater)
+			.AddIngredient<Materials.Bonerose>()
+			.AddIngredient(ItemID.Daybloom)
+			.AddIngredient(ItemID.Deathweed)
+			.AddIngredient(ItemID.Worm)
+			.AddTile(TileID.Bottles)
+			.Register();
+	}
 }

@@ -74,13 +74,14 @@ sealed class FlametrackerHat : ModItem {
         player.GetModPlayer<FlametrackerSetBonusHandler>().IsActive = true;
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient<Materials.FlamingFabric>(8)
-    //        .AddIngredient(ItemID.Candle)
-    //        .AddTile(TileID.Loom)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<Materials.FlamingFabric>(8)
+			.AddIngredient(ItemID.Leather, 3)
+            .AddIngredient(ItemID.Candle)
+            .AddTile(TileID.Loom)
+            .Register();
+    }
 }
 
 sealed class FlametrackerHatFlame : PlayerDrawLayer {

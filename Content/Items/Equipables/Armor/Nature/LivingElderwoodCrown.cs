@@ -65,11 +65,11 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
         BaseFormHandler.RegisterForm<FlederForm>();
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient<Elderwood>(10)
-    //		.AddIngredient<Galipot>(5)
-    //		.AddTile(TileID.LivingLoom)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+    	CreateRecipe()
+    		.AddIngredient<Placeable.Crafting.Elderwood>(10)
+    		.AddIngredient<Materials.Galipot>(5)
+    		.AddTile(TileID.LivingLoom)
+    		.Register();
+    }
 }

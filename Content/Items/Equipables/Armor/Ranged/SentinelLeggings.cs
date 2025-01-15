@@ -29,11 +29,11 @@ sealed class SentinelLeggings : ModItem {
 	public override void UpdateEquip(Player player)
 		=> player.arrowDamage += 0.1f;
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<MercuriumNugget>(8)
-	//		.AddIngredient(ItemID.Leather, 4)
-	//		.AddTile(TileID.Anvils)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Materials.MercuriumNugget>(8)
+			.AddIngredient(ItemID.Leather, 4)
+			.AddTile(TileID.Anvils)
+			.Register();
+	}
 }

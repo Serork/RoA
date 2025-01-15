@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Walls;
@@ -17,10 +18,10 @@ sealed class ElderwoodFence : ModItem {
         Item.createWall = ModContent.WallType<Tiles.Walls.ElderwoodFence>();
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe(4)
-	//		.AddIngredient<Elderwood>()
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe(4)
+			.AddIngredient<Crafting.Elderwood>()
+			.AddTile(TileID.WorkBenches)
+			.Register();
+	}
 }

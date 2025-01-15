@@ -34,11 +34,11 @@ sealed class BandOfPurity : NatureItem {
         }
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ModContent.ItemType<BandOfNature>())
-	//		.AddIngredient(ItemID.BandofRegeneration)
-	//		.AddTile(TileID.TinkerersWorkbench)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient(ModContent.ItemType<BandOfNature>())
+			.AddIngredient(ItemID.BandofRegeneration)
+			.AddTile(TileID.TinkerersWorkbench)
+			.Register();
+	}
 }

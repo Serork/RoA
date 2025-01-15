@@ -27,12 +27,12 @@ sealed class SentinelBreastplate : ModItem {
 	public override void UpdateEquip(Player player)	
 		=> player.arrowDamage += 0.1f;
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient<MercuriumNugget>(10)
-	//		.AddIngredient(ItemID.Leather, 5)
-	//		.AddTile(TileID.Anvils)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe()
+			.AddIngredient<Materials.MercuriumNugget>(10)
+			.AddIngredient(ItemID.Leather, 5)
+			.AddTile(TileID.Anvils)
+			.Register();
+	}
 }
 
