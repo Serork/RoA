@@ -70,7 +70,7 @@ sealed class LittleFleder : ModProjectile {
         Projectile.rotation = Projectile.velocity.X * 0.085f;
         Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -0.2f, 0.2f);
         Projectile.direction = -(Projectile.Center.X - player.Center.X).GetDirection();
-        Projectile.spriteDirection = Projectile.direction;
+        Projectile.spriteDirection = -Projectile.direction;
 
         Projectile.ai[0] += 1f;
 
