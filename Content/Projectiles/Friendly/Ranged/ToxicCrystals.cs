@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Utilities;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -39,11 +41,13 @@ class ToxicCrystal1 : ModProjectile {
     }
 
     public override void AI() {
+        Projectile.rotation = Helper.VelocityAngle(Projectile.velocity) + MathHelper.Pi;
+
         Projectile.Opacity = 0.7f;
         if (Projectile.velocity.Y < 0.25 && Projectile.velocity.Y > 0.15) {
             Projectile.velocity.X = Projectile.velocity.X * 0.8f;
         }
-        Projectile.rotation = -Projectile.velocity.X * 0.05f;
+        //Projectile.rotation = -Projectile.velocity.X * 0.05f;
         int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.JungleSpore, 0f, 0f, 100, default, 1f);
         Main.dust[dust].scale += Main.rand.Next(40) * 0.01f;
         Main.dust[dust].noGravity = true;
