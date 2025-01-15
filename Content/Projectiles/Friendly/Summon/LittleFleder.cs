@@ -74,7 +74,7 @@ sealed class LittleFleder : ModProjectile {
 
         Projectile.ai[0] += 1f;
 
-        Vector2 offset = new Vector2(-MathHelper.Lerp(5f, 15f, Utils.Clamp((float)Math.Sin(Projectile.ai[0] * 0.025f), 0, 1)) * Projectile.direction).RotatedBy(MathHelper.ToRadians(Projectile.ai[0] * Projectile.direction));
+        Vector2 offset = new Vector2(-MathHelper.Lerp(5f, 15f, Utils.Clamp((float)Math.Sin(Projectile.ai[0] * 0.25f), 0, 1)) * Projectile.direction).RotatedBy(MathHelper.ToRadians(Projectile.ai[0] * Projectile.direction));
         Vector2 positionTo = player.Center + new Vector2(-(35f + 50f * Projectile.minionPos) * player.direction, -25f) + Vector2.UnitY * offset.Y + Vector2.UnitX * offset.X * 0.25f;
         float distance = Vector2.Distance(Projectile.Center, positionTo);
         Vector2 dif = positionTo - Projectile.Center;
