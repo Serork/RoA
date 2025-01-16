@@ -48,18 +48,21 @@ sealed class Pipistrelle : ModNPC {
         if (NPC.ai[2] != 1f) {
             float progress = (Math.Abs(NPC.rotation) / MathHelper.PiOver2) * NPC.spriteDirection;
             spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value, 
-                position + new Vector2(-4f, 8f - (NPC.spriteDirection != 1 ? progress * -20f : 0f)) + Vector2.UnitX * -14f * progress, null, Color.White, NPC.rotation * 0.5f, origin / 2f, NPC.scale, effects, 0);
+                position + origin +
+                new Vector2(-27f, 4f - (NPC.spriteDirection != 1 ? progress * -20f : 0f)) + Vector2.UnitX * -40f * progress -
+                Vector2.UnitY * 12f,
+                null, Color.White, NPC.rotation * 0.5f, origin / 2f, 1f, effects, 0);
         }
 
-        spriteBatch.Draw(ItsSpriteSheet, NPC.position - screenPos, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
-        spriteBatch.Draw(GlowMask, NPC.position - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(ItsSpriteSheet, position, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(GlowMask, position, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
 
         NPC npc = Main.npc[(int)NPC.ai[0]];
         if (!(!npc.active || npc.ModNPC is null || npc.ModNPC is not Lothor)) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             float lifeProgress = npc.As<Lothor>().LifeProgress;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
-                spriteBatch.Draw(GlowMask, NPC.position - screenPos +
+                spriteBatch.Draw(GlowMask, position +
                     Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
                     NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, NPC.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
@@ -70,8 +73,37 @@ sealed class Pipistrelle : ModNPC {
         return false;
     }
 
+    private void AI_GetMyGroupIndexAndFillBlackList(out int index, out int totalIndexesInGroup) {
+        index = 0;
+        totalIndexesInGroup = 0;
+        for (int i = 0; i < Main.maxNPCs; i++) {
+            NPC npc = Main.npc[i];
+            if (npc.active && npc.type == Type) {
+                if (NPC.whoAmI > i)
+                    index++;
+
+                totalIndexesInGroup++;
+            }
+        }
+    }
+
     public override void AI() {
         NPC.OffsetTheSameNPC(0.2f);
+
+        AI_GetMyGroupIndexAndFillBlackList(out int index, out int totalIndexesInGroup);
+
+        float overlapVelocity = 0.04f;
+        for (int i = 0; i < Main.maxNPCs; i++) {
+            // Fix overlap with other minions
+            Projectile other = Main.projectile[i];
+            if (i != NPC.whoAmI && other.active && Math.Abs(NPC.position.X - other.position.X) + Math.Abs(NPC.position.Y - other.position.Y) < NPC.width / 1.5f) {
+                if (NPC.position.X < other.position.X) NPC.velocity.X -= overlapVelocity;
+                else NPC.velocity.X += overlapVelocity;
+
+                if (NPC.position.Y < other.position.Y) NPC.velocity.Y -= overlapVelocity;
+                else NPC.velocity.Y += overlapVelocity;
+            }
+        }
 
         Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
 
@@ -92,7 +124,7 @@ sealed class Pipistrelle : ModNPC {
             NPC.ai[1] = 0f;
             playScreamSound();
         }
-        NPC.localAI[2]++;
+        NPC.localAI[2] += 1f / index;
         if (NPC.localAI[2] < 15f) {
             NPC.spriteDirection = NPC.direction = NPC.velocity.X.GetDirection();
             return;
@@ -100,11 +132,11 @@ sealed class Pipistrelle : ModNPC {
         NPC.TargetClosest();
         float speed = 5f + 2f * lifeProgress;
         Player player = Main.player[NPC.target];
-        Vector2 destination = player.Center - new Vector2(10f, 50f);
+        Vector2 destination = player.Center - new Vector2(15f, 100f);
         if (NPC.ai[2] == 0f) {
             NPC.LookAtPlayer(player);
             NPC.SlightlyMoveTo(destination, speed, 12.5f);
-            if (NPC.Distance(destination) < 35f || NPC.localAI[2] > 300f) {
+            if (NPC.Distance(destination) < 100f || NPC.localAI[2] > 300f) {
                 NPC.localAI[3]++;
                 if (NPC.localAI[3] > 20f) {
                     NPC.ai[2] = 1f;
@@ -115,15 +147,15 @@ sealed class Pipistrelle : ModNPC {
                     acceleration += 10f - acceleration;
                     x -= player.velocity.X * acceleration;
                     y -= player.velocity.Y * acceleration / 4f;
-                    x *= 0f;
-                    y *= 1f + Main.rand.NextFloat(-10f, 11f) * 0.01f;
+                    x *= 1f;
+                    y *= 1f;
                     float sqrt = (float)Math.Sqrt(x * x + y * y);
                     sqrt = speed2 / sqrt;
                     NPC.velocity.X = x * sqrt;
                     NPC.velocity.Y = y * sqrt;
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
                         int projectile = 
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-x * sqrt, -y * sqrt), ModContent.ProjectileType<CursedAcorn>(),
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-x * sqrt, -y * sqrt) * 0.75f, ModContent.ProjectileType<CursedAcorn>(),
                             NPC.damage, 0, Main.myPlayer, ai2: player.whoAmI);
                         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                     }
