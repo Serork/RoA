@@ -62,7 +62,7 @@ sealed class Pipistrelle : ModNPC {
                 spriteBatch.Draw(GlowMask, NPC.position - screenPos +
                     Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
-                    NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, NPC.rotation + Main.rand.NextFloatRange(0.05f), origin, NPC.scale, effects, 0f);
+                    NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, NPC.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
             }
             spriteBatch.EndBlendState();
         }

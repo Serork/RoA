@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Items.Weapons.Summon;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -34,6 +35,14 @@ sealed class Moth : ModProjectile {
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(mothRotation);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        mothRotation = reader.ReadSingle();
+    }
+
     public override void SetDefaults() {
         int width = 36; int height = 24;
         Projectile.Size = new Vector2(width, height);
@@ -46,6 +55,10 @@ sealed class Moth : ModProjectile {
         Projectile.friendly = true;
         Projectile.tileCollide = false;
         Projectile.minionSlots = 1;
+
+        Projectile.netImportant = true;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
 
     public override bool PreAI() {
@@ -75,14 +88,19 @@ sealed class Moth : ModProjectile {
         Vector2 idlePosition = player.Center;
         mothCount = player.ownedProjectileCounts[ModContent.ProjectileType<Moth>()];
         if (mothCount == 0) mothCount++;
-        if (Main.mouseLeft && Main.mouseLeftRelease && player.inventory[Main.LocalPlayer.selectedItem].type == ModContent.ItemType<MothStaff>())
+        if (player.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && player.inventory[player.selectedItem].type == ModContent.ItemType<MothStaff>()) {
             mothRotation = 0;
+            Projectile.netUpdate = true;
+        }
 
         if (mothRotation < 360) mothRotation += 1f;
         else mothRotation = 0;
 
-        if (Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem].type == ModContent.ItemType<MothStaff>()) {
+        if (player.inventory[player.selectedItem].type == ModContent.ItemType<MothStaff>()) {
             idlePosition += new Vector2(32.5f * player.direction, -12.5f);
+            if (player.direction == -1) {
+                idlePosition.X -= 8f;
+            }
             Vector2 minionPositionOffset = new Vector2(0f, 18f + mothCount * 4f);
             float deg = mothRotation * 2f * player.direction + 360 / mothCount * Projectile.minionPos;
             idlePosition += minionPositionOffset.RotatedBy(MathHelper.ToRadians(deg));
@@ -182,9 +200,11 @@ sealed class Moth : ModProjectile {
                 Projectile.velocity *= 0.9f;
                 summonTimer++;
                 if (summonTimer == 40) {
-                    for (int k = 0; k < Main.rand.Next(3, 5); k++) {
-                        Vector2 summonPos = Projectile.Center + new Vector2(0f, -16f);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), summonPos, Vector2.Normalize(new Vector2(0, 16f).RotatedByRandom(MathHelper.ToRadians(360))), ModContent.ProjectileType<SmallMoth>(), (int)(Projectile.damage * 0.5f), 0, player.whoAmI);
+                    if (Main.myPlayer == Projectile.owner) {
+                        for (int k = 0; k < Main.rand.Next(3, 5); k++) {
+                            Vector2 summonPos = Projectile.Center + new Vector2(0f, -16f);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), summonPos, Vector2.Normalize(new Vector2(0, 16f).RotatedByRandom(MathHelper.ToRadians(360))), ModContent.ProjectileType<SmallMoth>(), (int)(Projectile.damage * 0.5f), 0, player.whoAmI);
+                        }
                     }
                     SoundEngine.PlaySound(SoundID.NPCHit32, Projectile.Center);
                     summonTimer = 0;

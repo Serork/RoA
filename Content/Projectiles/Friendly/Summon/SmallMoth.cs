@@ -24,6 +24,8 @@ sealed class SmallMoth : ModProjectile {
         Projectile.penetrate = 1;
 
         Projectile.minion = true;
+
+        Projectile.minionSlots = 0f;
         Projectile.tileCollide = false;
 
         Projectile.timeLeft = 300;

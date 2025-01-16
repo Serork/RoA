@@ -128,6 +128,10 @@ static class Helper {
     }
 
     public static int GetDirection(this float value) {
+        if (float.IsNaN(value)) {
+            return 1;
+        }
+
         int result = Math.Sign(value);
         if (result != 0) {
             return result;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
@@ -12,6 +13,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class LittleFleder : ModProjectile {
+    private const float ATTACKRATE = 40f;
+
+    private ref float AttackTimer => ref Projectile.ai[2];
+
+    private float AcornOpacity => Utils.GetLerpValue(ATTACKRATE / 4f, ATTACKRATE / 2f, AttackTimer, true);
+
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 4;
         Main.projPet[Projectile.type] = true;
@@ -22,7 +29,7 @@ sealed class LittleFleder : ModProjectile {
     }
 
     public override void SetDefaults() {
-        int width = 10; int height = width;
+        int width = 30; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.penetrate = -1;
@@ -32,6 +39,10 @@ sealed class LittleFleder : ModProjectile {
         Projectile.friendly = true;
         Projectile.tileCollide = false;
         Projectile.minionSlots = 1;
+
+        Projectile.netImportant = true;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
 
     public override bool PreAI() {
@@ -48,14 +59,36 @@ sealed class LittleFleder : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
         SpriteEffects spriteEffects = (SpriteEffects)(Projectile.spriteDirection != 1).ToInt();
-        Vector2 position = Projectile.Center - Main.screenPosition;
         int height = texture.Height / Main.projFrames[Projectile.type];
         Rectangle sourceRectangle = new(0, height * Projectile.frame, texture.Width, height);
-        Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity;
         Vector2 origin = sourceRectangle.Size() / 2f;
+        Vector2 position = Projectile.Center - Main.screenPosition;
+        texture = ModContent.Request<Texture2D>(Texture + "_Acorn").Value;
+        float progress = Math.Abs(Projectile.rotation) / MathHelper.PiOver2 * Projectile.spriteDirection;
+        sourceRectangle = new(0, 0, texture.Width, texture.Height);
+        spriteBatch.Draw(texture,
+            position +
+            new Vector2(-8f - (Projectile.spriteDirection == -1 ? 4f : 0f), 10f + (Projectile.spriteDirection == 1 ? 16f * progress : 0f)), sourceRectangle,
+            lightColor * AcornOpacity, Projectile.rotation * 0.5f + MathHelper.Pi, origin / 2f, Projectile.scale, spriteEffects, 0);
+        texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        position = Projectile.Center - Main.screenPosition;
+        sourceRectangle = new(0, height * Projectile.frame, texture.Width, height);
+        Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, Projectile.scale, spriteEffects);
+
+        if (Projectile.ai[1] == 1f) {
+            texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+            spriteBatch.BeginBlendState(BlendState.Additive);
+            float lifeProgress = 1f;
+            for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
+                spriteBatch.Draw(texture, position +
+                    Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                    * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
+                   sourceRectangle, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, Projectile.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, Projectile.scale, spriteEffects, 0f);
+            }
+            spriteBatch.EndBlendState();
+        }
 
         return false;
     }
@@ -69,37 +102,141 @@ sealed class LittleFleder : ModProjectile {
 
         Projectile.rotation = Projectile.velocity.X * 0.085f;
         Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -0.2f, 0.2f);
+
+        if (AttackTimer < ATTACKRATE) {
+            AttackTimer += 1f;
+        }
+
+        float overlapVelocity = 0.04f;
+        for (int i = 0; i < Main.maxProjectiles; i++) {
+            // Fix overlap with other minions
+            Projectile other = Main.projectile[i];
+            if (i != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width / 1.5f) {
+                if (Projectile.position.X < other.position.X) Projectile.velocity.X -= overlapVelocity;
+                else Projectile.velocity.X += overlapVelocity;
+
+                if (Projectile.position.Y < other.position.Y) Projectile.velocity.Y -= overlapVelocity;
+                else Projectile.velocity.Y += overlapVelocity;
+            }
+        }
+
+        float distanceFromTarget = 600f;
+        NPC target = null;
+        Vector2 targetCenter = Projectile.position;
+        bool foundTarget = false;
+
+        // This code is required if your minion weapon has the targeting feature
+        if (player.HasMinionAttackTargetNPC) {
+            NPC npc = Main.npc[player.MinionAttackTargetNPC];
+            float between = Vector2.Distance(npc.Center, Projectile.Center);
+            // Reasonable distance away so it doesn't target across multiple screens
+            if (between < 2000f) {
+                distanceFromTarget = between;
+                targetCenter = npc.Center;
+                target = npc;
+                foundTarget = true;
+            }
+        }
+        if (!foundTarget) {
+            // This code is required either way, used for finding a target
+            for (int i = 0; i < Main.maxNPCs; i++) {
+                NPC npc = Main.npc[i];
+                if (npc.CanBeChasedBy()) {
+                    float between = Vector2.Distance(npc.Center, Projectile.Center);
+                    bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;
+                    bool inRange = between < distanceFromTarget;
+                    bool lineOfSight = Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height);
+                    // Additional check for this specific minion behavior, otherwise it will stop attacking once it dashed through an enemy while flying though tiles afterwards
+                    // The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
+                    bool closeThroughWall = between < 100f;
+                    if ((closest && inRange || !foundTarget) && (lineOfSight || closeThroughWall)) {
+                        distanceFromTarget = between;
+                        targetCenter = npc.Center;
+                        target = npc;
+                        foundTarget = true;
+                    }
+                }
+            }
+        }
+
+        // friendly needs to be set to true so the minion can deal contact damage
+        // friendly needs to be set to false so it doesn't damage things like target dummies while idling
+        // Both things depend on if it has a target or not, so it's just one assignment here
+        // You don't need this assignment if your minion is shooting things instead of dealing contact damage
+        Projectile.friendly = foundTarget;
+
         Projectile.direction = -(Projectile.Center.X - player.Center.X).GetDirection();
         Projectile.spriteDirection = -Projectile.direction;
 
-        Projectile.ai[0] += 1f;
+        float distance = Vector2.Distance(Projectile.Center, player.Center);
+        void flyTo(Entity to) {
+            Projectile.ai[0] += 1f;
 
-        Vector2 offset = new Vector2(-MathHelper.Lerp(5f, 15f, Utils.Clamp((float)Math.Sin(Projectile.ai[0] * 0.25f), 0, 1)) * Projectile.direction).RotatedBy(MathHelper.ToRadians(Projectile.ai[0] * Projectile.direction));
-        Vector2 positionTo = player.Center + new Vector2(-(35f + 50f * Projectile.minionPos) * player.direction, -25f) + Vector2.UnitY * offset.Y + Vector2.UnitX * offset.X * 0.25f;
-        float distance = Vector2.Distance(Projectile.Center, positionTo);
-        Vector2 dif = positionTo - Projectile.Center;
-        if (dif.Length() < 0.0001f) {
-            dif = Vector2.Zero;
+            Vector2 destination = to.Center;
+            int direction = to.direction;
+            if (foundTarget) {
+                Projectile.direction = -(Projectile.Center.X - destination.X).GetDirection();
+                Projectile.spriteDirection = -Projectile.direction;
+            }
+            Vector2 offset = new Vector2(-MathHelper.Lerp(5f, 15f, Utils.Clamp((float)Math.Sin(Projectile.ai[0] * 0.25f), 0, 1)) * Projectile.direction).RotatedBy(MathHelper.ToRadians(Projectile.ai[0] * Projectile.direction));
+            Vector2 levitation = Vector2.UnitY * offset.Y + Vector2.UnitX * offset.X * 0.25f;
+            Vector2 positionTo = destination + new Vector2(-(35f + 50f * Projectile.minionPos) * direction, -25f) + levitation;
+            if (foundTarget) {
+                AI_GetMyGroupIndexAndFillBlackList(out var index, out var totalIndexesInGroup);
+                AI_156_GetIdlePosition(destination, index, totalIndexesInGroup, out var idleSpot, out var idleRotation);
+                positionTo = idleSpot + levitation;
+            }
+
+            distance = Vector2.Distance(Projectile.Center, positionTo);
+            Vector2 dif = positionTo - Projectile.Center;
+            if (dif.Length() < 0.0001f) {
+                dif = Vector2.Zero;
+            }
+            else {
+                float speed = 35f;
+                if (distance < 1000f) {
+                    speed = MathHelper.Lerp(5f, 10f, distance / 1000f);
+                }
+                if (distance < 100f) {
+                    speed = MathHelper.Lerp(0.1f, 5f, distance / 100f);
+                }
+                dif.Normalize();
+                dif *= speed;
+            }
+            float inertia = 15f;
+            Projectile.velocity = (Projectile.velocity * (inertia - 1) + dif) / inertia;
+            if (Projectile.velocity.Length() > 5f) {
+            }
+            else {
+                Projectile.velocity *= (float)Math.Pow(0.99, inertia * 2.0 / inertia);
+                if (distance > 50f) {
+                    Projectile.velocity += Projectile.DirectionTo(destination) * distance / 100f * 0.1f;
+                }
+            }
+        }
+        if (!foundTarget) {
+            flyTo(player);
+            Projectile.ai[1] = 0f;
         }
         else {
-            float speed = 35f;
-            if (distance < 1000f) {
-                speed = MathHelper.Lerp(5f, 10f, distance / 1000f);
-            }
-            if (distance < 100f) {
-                speed = MathHelper.Lerp(0.1f, 5f, distance / 100f);
-            }
-            dif.Normalize();
-            dif *= speed;
-        }
-        float inertia = 15f;
-        Projectile.velocity = (Projectile.velocity * (inertia - 1) + dif) / inertia;
-        if (Projectile.velocity.Length() > 5f) {
-        }
-        else {
-            Projectile.velocity *= (float)Math.Pow(0.99, inertia * 2.0 / inertia);
-            if (distance > 50f) {
-                Projectile.velocity += Projectile.DirectionTo(player.Center) * distance / 100f * 0.1f;
+            Projectile.ai[1] = 1f;
+
+            Lighting.AddLight(Projectile.Top + Vector2.UnitY * Projectile.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
+
+            flyTo(target);
+            if (AttackTimer >= ATTACKRATE) {
+                AttackTimer = 0f;
+
+                if (Projectile.owner == Main.myPlayer) {
+                    Vector2 spawnPosition = Projectile.Center + Vector2.UnitY * 15f;
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), spawnPosition,
+                        Helper.VelocityToPoint(spawnPosition, target.Center, 10f),
+                        ModContent.ProjectileType<Acorn>(),
+                        Projectile.damage,
+                        Projectile.knockBack,
+                        Projectile.owner,
+                        ai2: target.whoAmI);
+                }
             }
         }
 
@@ -110,7 +247,32 @@ sealed class LittleFleder : ModProjectile {
         }
     }
 
-    public override bool? CanDamage() => Projectile.velocity.Length() > 5f && Projectile.ai[1] > 0f;
+    private void AI_GetMyGroupIndexAndFillBlackList(out int index, out int totalIndexesInGroup) {
+        index = 0;
+        totalIndexesInGroup = 0;
+        for (int i = 0; i < 1000; i++) {
+            Projectile projectile = Main.projectile[i];
+            if (projectile.active && projectile.owner == Projectile.owner && projectile.type == Projectile.type) {
+                if (Projectile.whoAmI > i)
+                    index++;
+
+                totalIndexesInGroup++;
+            }
+        }
+    }
+
+    private void AI_156_GetIdlePosition(Vector2 destination, int stackedIndex, int totalIndexes, out Vector2 idleSpot, out float idleRotation) {
+        bool num = true;
+        idleRotation = 0f;
+        idleSpot = Vector2.Zero;
+        if (num) {
+            float num2 = ((float)totalIndexes - 1f) / 2f;
+            idleSpot = destination + -Vector2.UnitY.RotatedBy(4.3982296f / (float)totalIndexes * ((float)stackedIndex - num2)) * 100f;
+            idleRotation = 0f;
+        }
+    }
+
+    public override bool? CanDamage() => false;
 
     public override bool? CanCutTiles() => false;
 

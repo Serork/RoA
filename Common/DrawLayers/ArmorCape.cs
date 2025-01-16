@@ -33,7 +33,7 @@ sealed class ArmorCape : PlayerDrawLayer {
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
-        if (player.dead || player.invis || player.front != -1) return;
+        if (player.dead || player.invis || player.front != -1 || player.ShouldNotDraw) return;
 
         Texture2D texture = _acolyteCapeTexture.Value;
         Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(player.width / 2 - player.bodyFrame.Width / 2, player.height - player.bodyFrame.Height + 4f) + player.bodyPosition;
