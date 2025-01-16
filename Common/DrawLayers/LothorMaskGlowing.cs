@@ -25,8 +25,11 @@ sealed class LothorMaskGlowing : ModSystem {
     private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo) {
         orig(ref drawinfo);
 
-        int lothorMask = ModContent.ItemType<LothorMask>();
         Player player = drawinfo.drawPlayer;
+        if (!player.active) {
+            return;
+        }
+        int lothorMask = ModContent.ItemType<LothorMask>();
         bool flag = false;
         if (player.CheckArmorSlot(lothorMask, 0, 10) || player.CheckVanitySlot(lothorMask, 10)) {
             flag = true;

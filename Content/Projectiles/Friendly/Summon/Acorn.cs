@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.NPCs.Enemies.Bosses.Lothor;
-using RoA.Core.Utility;
 using RoA.Utilities;
 
 using Terraria;
