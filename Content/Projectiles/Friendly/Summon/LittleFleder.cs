@@ -17,6 +17,8 @@ namespace RoA.Content.Projectiles.Friendly.Summon;
 sealed class LittleFleder : ModProjectile {
     private const float ATTACKRATE = 40f;
 
+    private float _canChangeDirectionAgainTimer;
+
     public Item PickUpIHave { get; private set; }
     public Item ItemIFound { get; private set; }
 
@@ -31,6 +33,16 @@ sealed class LittleFleder : ModProjectile {
         ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
         ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
+    }
+
+    private void ChangeDirection(int dir) {
+        if (--_canChangeDirectionAgainTimer > 0f) {
+            return;
+        }
+
+        Projectile.direction = dir;
+
+        _canChangeDirectionAgainTimer = 0f;
     }
 
     public override void SetDefaults() {
@@ -107,9 +119,6 @@ sealed class LittleFleder : ModProjectile {
         if (player.HasBuff(ModContent.BuffType<Buffs.LittleFleder>()))
             Projectile.timeLeft = 2;
 
-        Projectile.rotation = Projectile.velocity.X * 0.085f;
-        Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -0.2f, 0.2f);
-
         //float overlapVelocity = 0.04f;
         //for (int i = 0; i < Main.maxProjectiles; i++) {
         //    // Fix overlap with other minions
@@ -167,9 +176,6 @@ sealed class LittleFleder : ModProjectile {
         // Both things depend on if it has a target or not, so it's just one assignment here
         // You don't need this assignment if your minion is shooting things instead of dealing contact damage
         Projectile.friendly = foundTarget;
-
-        Projectile.direction = -(Projectile.Center.X - player.Center.X).GetDirection();
-        Projectile.spriteDirection = -Projectile.direction;
 
         Vector2 spawnPosition = Projectile.Center + Vector2.UnitY * 15f;
         float distance = Vector2.Distance(Projectile.Center, player.Center);
@@ -295,6 +301,25 @@ sealed class LittleFleder : ModProjectile {
             ItemIFound = null;
         }
 
+        Projectile.rotation = Projectile.velocity.X * 0.085f;
+        Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -0.2f, 0.2f);
+
+        if (flag3) {
+            ChangeDirection(-(Projectile.Center.X - player.Center.X).GetDirection());
+        }
+
+        if (Math.Abs(Projectile.velocity.X) > 0.1f) {
+            if (foundPickUp) {
+                ChangeDirection(Projectile.velocity.X.GetDirection());
+            }
+        }
+
+        if (foundTarget && flag3) {
+            ChangeDirection(-(Projectile.Center.X - target.Center.X).GetDirection());
+        }
+
+        Projectile.spriteDirection = -Projectile.direction;
+
         void flyTo(Entity to = null, Vector2? destination2 = null) {
             Projectile.ai[0] += 1f;
 
@@ -312,12 +337,13 @@ sealed class LittleFleder : ModProjectile {
                 direction = to.direction;
             }
             if (foundTarget || flag2) {
-                Projectile.direction = -(Projectile.Center.X - destination.X).GetDirection();
-                Projectile.spriteDirection = -Projectile.direction;
+                //Projectile.direction = -(Projectile.Center.X - destination.X).GetDirection();
+                //Projectile.spriteDirection = -Projectile.direction;
             }
             Vector2 offset = new Vector2(-MathHelper.Lerp(5f, 15f, Utils.Clamp((float)Math.Sin(Projectile.ai[0] * 0.25f), 0, 1)) * Projectile.direction).RotatedBy(MathHelper.ToRadians(Projectile.ai[0] * Projectile.direction));
             Vector2 levitation = Vector2.UnitY * offset.Y + Vector2.UnitX * offset.X * 0.25f;
-            Vector2 positionTo = destination + new Vector2(-(35f + 50f * Projectile.minionPos) * direction, -25f) + levitation;
+            Vector2 offset2 = new Vector2(25f * (Projectile.Center.X - player.Center.X).GetDirection(), -25f);
+            Vector2 positionTo = destination + (!flag3 ? offset2 : new Vector2(-(35f + 50f * Projectile.minionPos) * direction, -25f)) + levitation;
             if (foundTarget && flag3) {
                 AI_156_GetIdlePosition(destination, index, totalIndexesInGroup, out var idleSpot, out var idleRotation);
                 positionTo = idleSpot + levitation;
