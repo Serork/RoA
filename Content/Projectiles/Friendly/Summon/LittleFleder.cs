@@ -230,7 +230,7 @@ sealed class LittleFleder : ModProjectile {
                 if (Projectile.owner == Main.myPlayer) {
                     Vector2 spawnPosition = Projectile.Center + Vector2.UnitY * 15f;
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), spawnPosition,
-                        Helper.VelocityToPoint(spawnPosition, target.Center, 10f),
+                        Helper.VelocityToPoint(spawnPosition, target.Center, 7.5f),
                         ModContent.ProjectileType<Acorn>(),
                         Projectile.damage,
                         Projectile.knockBack,

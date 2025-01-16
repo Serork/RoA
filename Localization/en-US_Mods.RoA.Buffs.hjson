@@ -208,5 +208,5 @@ BloodShedAxesDebuff: {
 
 LittleFleder: {
 	DisplayName: Little Fleder
-	Description: Mods.RoA.Buffs.LittleFleder.Description
+	Description: "=The little fleder will fight for you"=
 }
