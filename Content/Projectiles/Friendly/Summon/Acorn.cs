@@ -63,7 +63,7 @@ sealed class Acorn : ModProjectile {
     }
 
     public override void AI() {
-        Projectile.tileCollide = Projectile.timeLeft <= 500;
+        Projectile.tileCollide = Projectile.timeLeft <= 570;
 
         Projectile.rotation = Helper.VelocityAngle(Projectile.velocity) + MathHelper.Pi;
     }
