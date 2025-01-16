@@ -342,7 +342,7 @@ sealed class LittleFleder : ModProjectile {
             }
             Vector2 offset = new Vector2(-MathHelper.Lerp(5f, 15f, Utils.Clamp((float)Math.Sin(Projectile.ai[0] * 0.25f), 0, 1)) * Projectile.direction).RotatedBy(MathHelper.ToRadians(Projectile.ai[0] * Projectile.direction));
             Vector2 levitation = Vector2.UnitY * offset.Y + Vector2.UnitX * offset.X * 0.25f;
-            Vector2 offset2 = new Vector2(25f * (Projectile.Center.X - player.Center.X).GetDirection(), -25f);
+            Vector2 offset2 = new Vector2(30f * (Projectile.Center.X - player.Center.X).GetDirection(), -15f);
             Vector2 positionTo = destination + (!flag3 ? offset2 : new Vector2(-(35f + 50f * Projectile.minionPos) * direction, -25f)) + levitation;
             if (foundTarget && flag3) {
                 AI_156_GetIdlePosition(destination, index, totalIndexesInGroup, out var idleSpot, out var idleRotation);
