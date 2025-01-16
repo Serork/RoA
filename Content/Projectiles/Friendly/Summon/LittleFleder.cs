@@ -404,7 +404,7 @@ sealed class LittleFleder : ModProjectile {
         idleSpot = Vector2.Zero;
         if (num) {
             float num2 = ((float)totalIndexes - 1f) / 2f;
-            idleSpot = destination + -Vector2.UnitY.RotatedBy(4.3982296f / (float)totalIndexes * ((float)stackedIndex - num2)) * 100f;
+            idleSpot = destination + -Vector2.UnitY.RotatedBy(2f / (float)totalIndexes * ((float)stackedIndex - num2)) * 100f;
             idleRotation = 0f;
         }
     }
