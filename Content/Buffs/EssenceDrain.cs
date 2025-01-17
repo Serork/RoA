@@ -60,6 +60,7 @@ internal class EssenceDrainNPC : GlobalNPC {
     public override bool InstancePerEntity => true;
 
     public bool essenceDrain;
+    public int Source;
 
     private float _essenceDrainTimer = 0;
 

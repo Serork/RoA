@@ -75,8 +75,20 @@ sealed class BaneSpell : ModProjectile {
         }
     }
 
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        => target.AddBuff(ModContent.BuffType<EssenceDrain>(), 180);
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        bool flag = false;
+        foreach (NPC npc in Main.ActiveNPCs) {
+            if (npc.HasBuff<EssenceDrain>() && npc.GetGlobalNPC<EssenceDrainNPC>().Source == Projectile.owner) {
+                flag = true;
+                break;
+            }
+        }
+
+        if (!flag) {
+            target.AddBuff(ModContent.BuffType<EssenceDrain>(), 180);
+            target.GetGlobalNPC<EssenceDrainNPC>().Source = Projectile.owner;
+        }
+    }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info)
         => target.AddBuff(ModContent.BuffType<EssenceDrain>(), 180);
