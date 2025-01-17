@@ -16,7 +16,13 @@ namespace RoA.Common.DrawLayers;
 sealed class LothorMaskGlowing : ModSystem {
     private Asset<Texture2D> _lothorGlowMaskTexture;
 
-    public override void SetStaticDefaults() => _lothorGlowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<LothorMask>()).Texture + "_Head_Glow");
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _lothorGlowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<LothorMask>()).Texture + "_Head_Glow");
+    }
 
     public override void Load() {
         On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += On_PlayerDrawLayers_DrawPlayer_RenderAllLayers;

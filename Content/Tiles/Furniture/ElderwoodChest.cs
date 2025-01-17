@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
 using Terraria;
