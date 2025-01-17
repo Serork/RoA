@@ -20,9 +20,6 @@ sealed class LittleFleder : ModProjectile {
     private float _canChangeDirectionAgainTimer;
     private float _speed;
 
-    public Item PickUpIHave { get; private set; }
-    public Item ItemIFound { get; private set; }
-
     private ref float AttackTimer => ref Projectile.ai[2];
 
     private float AcornOpacity => Utils.GetLerpValue(ATTACKRATE / 4f, ATTACKRATE / 2f, AttackTimer, true);
@@ -187,143 +184,12 @@ sealed class LittleFleder : ModProjectile {
 
         int[] validItems = [ItemID.Heart, ItemID.Star, ModContent.ItemType<MagicHerb1>(), ModContent.ItemType<MagicHerb2>(), ModContent.ItemType<MagicHerb3>()];
 
-        void searchForPickUps() {
-            if (index == 0) {
-                for (int j = 0; j < 400; j++) {
-                    Item item = Main.item[j];
-                    Player player = Main.player[Projectile.owner];
-                    if (!item.active || item.shimmerTime != 0f || item.noGrabDelay != 0 || item.playerIndexTheItemIsReservedFor != player.whoAmI || !player.CanAcceptItemIntoInventory(item) || (item.shimmered && !((double)item.velocity.Length() < 0.2)))
-                        continue;
-
-                    if (item.Distance(player.Center) > 600f) {
-                        continue;
-                    }
-
-                    if (!validItems.Contains(item.type)) {
-                        continue;
-                    }
-
-                    Rectangle hitbox = item.Hitbox;
-                    if (!Projectile.Hitbox.Intersects(hitbox)) {
-                        pickUpPosition = item.Center;
-                        foundPickUp = true;
-                    }
-                    else {
-                        PickUpIHave = item;
-                    }
-                    ItemIFound = item;
-                    break;
-                }
-            }
-        }
-        void pickUp() {
-            if (index == 0) {
-                for (int j = 0; j < 400; j++) {
-                    Item item = Main.item[j];
-                    Player player = Main.player[Projectile.owner];
-                    if (!item.active || item.shimmerTime != 0f || item.noGrabDelay != 0 || item.playerIndexTheItemIsReservedFor != player.whoAmI || !player.CanAcceptItemIntoInventory(item) || (item.shimmered && !((double)item.velocity.Length() < 0.2)))
-                        continue;
-
-                    if (item.Distance(Projectile.Center) > 1000f) {
-                        continue;
-                    }
-
-                    if (!validItems.Contains(item.type) || item.beingGrabbed) {
-                        continue;
-                    }
-
-                    int itemGrabRange = GetGrabRange(player, item);
-                    Rectangle hitbox = item.Hitbox;
-                    //if (Projectile.Hitbox.Intersects(hitbox)) {
-
-                    //}
-                    //else
-                    //{
-                    if (!new Rectangle((int)Projectile.position.X - itemGrabRange, (int)Projectile.position.Y - itemGrabRange, Projectile.width + itemGrabRange * 2, Projectile.height + itemGrabRange * 2).Intersects(hitbox))
-                        continue;
-
-                    if (ItemIFound == item) {
-                        Player.ItemSpaceStatus status = player.ItemSpace(item);
-                        if (player.CanPullItem(item, status)) {
-                            item.shimmered = false;
-                            item.beingGrabbed = true;
-
-                            Item itemToPickUp = item;
-                            if (itemToPickUp.Distance(spawnPosition) < 15f) {
-                                itemToPickUp.Center = spawnPosition;
-                                itemToPickUp.velocity = Vector2.Zero;
-                            }
-                            else {
-                                float speed = 2.5f;
-                                int acc = 2;
-                                Vector2 vector = new Vector2(itemToPickUp.position.X + (float)(itemToPickUp.width / 2), itemToPickUp.position.Y + (float)(itemToPickUp.height / 2));
-                                float num = spawnPosition.X - vector.X;
-                                float num2 = spawnPosition.Y - vector.Y;
-                                float num3 = (float)Math.Sqrt(num * num + num2 * num2);
-                                num3 = speed / num3;
-                                num *= num3;
-                                num2 *= num3;
-                                itemToPickUp.velocity.X = (itemToPickUp.velocity.X * (float)(acc - 1) + num) / (float)acc;
-                                itemToPickUp.velocity.Y = (itemToPickUp.velocity.Y * (float)(acc - 1) + num2) / (float)acc;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        bool flag1 = ItemIFound != null;
-        bool flag2 = PickUpIHave != null;
-        bool flag3 = !foundPickUp && !flag2 && !flag1;
-        searchForPickUps();
-        if (foundPickUp) {
-            flyTo(destination2: pickUpPosition);
-            Projectile.ai[1] = -1f;
-        }
-        pickUp();
-
-        if (PickUpIHave != null && PickUpIHave.Distance(player.Center) < 35f) {
-            PickUpIHave = null;
-            ItemIFound = null;
-        }
-        if (flag2 && AttackTimer > 0f) {
-            AttackTimer = 0f;
-        }
-        if (flag1 || foundPickUp) {
-            if (AttackTimer > 0f) {
-                AttackTimer -= 5f;
-            }
-        }
-        else {
-            if (AttackTimer < ATTACKRATE) {
-                AttackTimer += 1f;
-            }
+        if (AttackTimer < ATTACKRATE) {
+            AttackTimer += 1f;
         }
 
         Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.X * 0.085f, 0.1f);
         Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -0.2f, 0.2f);
-
-        bool flag5 = flag2 || foundPickUp;
-        float time = flag5 ? 10f : 0f;
-        bool flag4 = false;
-        if (Math.Abs(Projectile.velocity.X) > 1f || flag5) {
-            if (foundPickUp) {
-                ChangeDirection(Projectile.velocity.X.GetDirection(), time);
-                flag4 = true;
-            }
-            else if (flag5) {
-                ChangeDirection(-(Projectile.Center.X - player.Center.X).GetDirection(), time);
-            }
-        }
-        if (flag3 && !flag4) {
-            ChangeDirection(-(Projectile.Center.X - player.Center.X).GetDirection(), time);
-        }
-        if (foundTarget && !flag5) {
-            ChangeDirection(-(Projectile.Center.X - target.Center.X).GetDirection(), time);
-        }
-
-        if (!flag2) {
-            ItemIFound = null;
-        }
 
         Projectile.spriteDirection = -Projectile.direction;
 
@@ -343,15 +209,13 @@ sealed class LittleFleder : ModProjectile {
             if (flag) {
                 direction = to.direction;
             }
-            if (foundTarget || flag2) {
-                //Projectile.direction = -(Projectile.Center.X - destination.X).GetDirection();
-                //Projectile.spriteDirection = -Projectile.direction;
-            }
+            Projectile.direction = -(Projectile.Center.X - destination.X).GetDirection();
+            Projectile.spriteDirection = -Projectile.direction;
             Vector2 offset = new Vector2(-MathHelper.Lerp(5f, 15f, Utils.Clamp((float)Math.Sin(Projectile.ai[0] * 0.25f), 0, 1)) * Projectile.direction).RotatedBy(MathHelper.ToRadians(Projectile.ai[0] * Projectile.direction));
             Vector2 levitation = Vector2.UnitY * offset.Y + Vector2.UnitX * offset.X * 0.25f;
             Vector2 offset2 = new(50f * (Projectile.Center.X - player.Center.X).GetDirection(), -15f);
-            Vector2 positionTo = destination + (!flag3 ? offset2 : new Vector2(-(35f + 50f * Projectile.minionPos) * direction, -25f)) + levitation;
-            if (foundTarget && flag3) {
+            Vector2 positionTo = destination + new Vector2(-(35f + 50f * Projectile.minionPos) * direction, -25f) + levitation;
+            if (foundTarget) {
                 AI_156_GetIdlePosition(destination, index, totalIndexesInGroup, out var idleSpot, out var idleRotation);
                 positionTo = idleSpot + levitation;
             }
@@ -371,7 +235,7 @@ sealed class LittleFleder : ModProjectile {
                     speed = MathHelper.Lerp(0.1f, 5f, distance / 100f);
                 }
                 dif.Normalize();
-                _speed = MathHelper.Lerp(_speed, speed, !flag3 ? 0.01f : 0.1f);
+                _speed = MathHelper.Lerp(_speed, speed, 0.1f);
                 dif *= _speed;
             }
             Projectile.velocity = (Projectile.velocity * (inertia - 1) + dif) / inertia;
@@ -384,8 +248,8 @@ sealed class LittleFleder : ModProjectile {
                 }
             }
         }
-        if (!foundPickUp || flag2) {
-            if (!foundTarget || flag2) {
+        if (!foundPickUp) {
+            if (!foundTarget) {
                 flyTo(player);
                 Projectile.ai[1] = 0f;
             }
