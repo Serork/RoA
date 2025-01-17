@@ -39,17 +39,15 @@ sealed class WreathDrawing : ModSystem {
     }
 
     private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo) {
-        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
         var drawInfo = drawinfo;
+        float rotation = 0f;
+        Vector2 position = Vector2.Zero;
         if (drawInfo.shadow == 0f) {
             Player player = drawInfo.drawPlayer;
             WreathHandler stats = player.GetModPlayer<WreathHandler>();
-            Vector2 playerPosition = Utils.Floor(new Vector2((int)(drawInfo.Position.X + (float)(drawInfo.drawPlayer.width / 2)),
-                (int)(drawInfo.Position.Y + (float)drawInfo.drawPlayer.height - 40f)));
+            Vector2 playerPosition = Utils.Floor(new Vector2((int)(drawinfo.Position.X + (float)(drawInfo.drawPlayer.width / 2)),
+                (int)(drawinfo.Position.Y + (float)drawInfo.drawPlayer.height - 40f)));
             playerPosition.Y -= 12f;
-            Vector2 position;
             bool breathUI = player.breath < player.breathMax || player.lavaTime < player.lavaMax;
             float offsetX = -_wreathSpriteData.FrameWidth / 2f + 2,
                   offsetY = _wreathSpriteData.FrameHeight;
@@ -58,35 +56,44 @@ sealed class WreathDrawing : ModSystem {
 
             if (player.dead || player.ghost || player.ShouldNotDraw || !stats.ShouldDrawItself) {
                 _oldPosition = playerPosition;
-
-                return;
             }
+            else {
+                position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f);
 
-            position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f);
+                position -= Main.screenPosition;
+                position += new Vector2(Main.screenWidth, Main.screenHeight) / 3f;
+                position.Y -= 25f;
+                //position -= new Vector2(2f, 0f);
+                var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
+                rotation = drawInfo.rotation + MathHelper.Pi;
+                bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing;
+                if (flag2) {
+                    rotation = MathHelper.Pi;
+                }
+                _oldPosition = playerPosition;
+                if (!flag2) {
+                    Vector2 vector = drawInfo.Position + drawInfo.rotationOrigin;
+                    Matrix matrix = Matrix.CreateRotationZ(drawInfo.rotation);
+                    Vector2 newPosition = _oldPosition - vector;
+                    newPosition = Vector2.Transform(newPosition, matrix);
+                    _oldPosition.X = (newPosition + vector).X;
+                    float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
+                    float offsetY2 = progress4 * (player.height / 2f + 10f);
+                    _oldPosition.Y += offsetY2;
+                }
+            }
+        }
 
-            position -= Main.screenPosition;
-            position += new Vector2(Main.screenWidth, Main.screenHeight) / 3f;
-            position.Y -= 25f;
-            position += player.PlayerMovementOffset();
+        orig(ref drawinfo);
+
+        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
+        if (drawInfo.shadow == 0f) {
+            Player player = drawInfo.drawPlayer;
+            WreathHandler stats = player.GetModPlayer<WreathHandler>();
             //position -= new Vector2(2f, 0f);
             var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
-            float rotation = drawInfo.rotation + MathHelper.Pi;
-            bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing;
-            if (flag2) {
-                rotation = MathHelper.Pi;
-            }
-            _oldPosition = playerPosition;
-
-            if (!flag2) {
-                Vector2 vector = drawInfo.Position + drawInfo.rotationOrigin;
-                Matrix matrix = Matrix.CreateRotationZ(drawInfo.rotation);
-                Vector2 newPosition = _oldPosition - vector;
-                newPosition = Vector2.Transform(newPosition, matrix);
-                _oldPosition.X = (newPosition + vector).X;
-                float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
-                float offsetY2 = progress4 * (player.height / 2f + 10f);
-                _oldPosition.Y += offsetY2;
-            }
 
             float progress = MathHelper.Clamp(stats.ActualProgress2, 0f, 1f);
             //float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
@@ -187,8 +194,6 @@ sealed class WreathDrawing : ModSystem {
 
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(in snapshot);
-
-        orig(ref drawinfo);
     }
 }
 
