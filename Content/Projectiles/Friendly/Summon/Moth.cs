@@ -143,7 +143,7 @@ sealed class Moth : ModProjectile {
 
         #region Find target
         // Starting search distance
-        float distanceFromTarget = 600f;
+        float distanceFromTarget = 1000f;
         Vector2 targetCenter = Projectile.position;
         bool foundTarget = false;
 
@@ -152,7 +152,7 @@ sealed class Moth : ModProjectile {
             NPC npc = Main.npc[player.MinionAttackTargetNPC];
             float between = Vector2.Distance(npc.Center, Projectile.Center);
             // Reasonable distance away so it doesn't target across multiple screens
-            if (between < 2000f) {
+            if (between < 1000f) {
                 distanceFromTarget = between;
                 targetCenter = npc.Center;
                 foundTarget = true;
@@ -170,10 +170,12 @@ sealed class Moth : ModProjectile {
                     // Additional check for this specific minion behavior, otherwise it will stop attacking once it dashed through an enemy while flying though tiles afterwards
                     // The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
                     bool closeThroughWall = between < 100f;
-                    if ((closest && inRange || !foundTarget) && (lineOfSight || closeThroughWall)) {
-                        distanceFromTarget = between;
-                        targetCenter = npc.Center;
-                        foundTarget = true;
+                    if (inRange) {
+                        if ((closest && inRange || !foundTarget) && (lineOfSight || closeThroughWall)) {
+                            distanceFromTarget = between;
+                            targetCenter = npc.Center;
+                            foundTarget = true;
+                        }
                     }
                 }
             }

@@ -18,6 +18,7 @@ sealed class LittleFleder : ModProjectile {
     private const float ATTACKRATE = 40f;
 
     private float _canChangeDirectionAgainTimer;
+    private float _speed;
 
     public Item PickUpIHave { get; private set; }
     public Item ItemIFound { get; private set; }
@@ -35,14 +36,14 @@ sealed class LittleFleder : ModProjectile {
         ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
     }
 
-    private void ChangeDirection(int dir) {
+    private void ChangeDirection(int dir, float time) {
         if (--_canChangeDirectionAgainTimer > 0f) {
             return;
         }
 
         Projectile.direction = dir;
 
-        _canChangeDirectionAgainTimer = 0f;
+        _canChangeDirectionAgainTimer = time;
     }
 
     public override void SetDefaults() {
@@ -132,7 +133,7 @@ sealed class LittleFleder : ModProjectile {
         //    }
         //}
 
-        float distanceFromTarget = 600f;
+        float distanceFromTarget = 1000f;
         NPC target = null;
         Vector2 targetCenter = Projectile.position;
         bool foundTarget = false;
@@ -142,7 +143,7 @@ sealed class LittleFleder : ModProjectile {
             NPC npc = Main.npc[player.MinionAttackTargetNPC];
             float between = Vector2.Distance(npc.Center, Projectile.Center);
             // Reasonable distance away so it doesn't target across multiple screens
-            if (between < 2000f) {
+            if (between < distanceFromTarget) {
                 distanceFromTarget = between;
                 targetCenter = npc.Center;
                 target = npc;
@@ -280,14 +281,14 @@ sealed class LittleFleder : ModProjectile {
         }
         pickUp();
 
-        if (PickUpIHave != null && PickUpIHave.Distance(player.Center) < 50f) {
+        if (PickUpIHave != null && PickUpIHave.Distance(player.Center) < 35f) {
             PickUpIHave = null;
             ItemIFound = null;
         }
         if (flag2 && AttackTimer > 0f) {
             AttackTimer = 0f;
         }
-        if (flag1) {
+        if (flag1 || foundPickUp) {
             if (AttackTimer > 0f) {
                 AttackTimer -= 5f;
             }
@@ -297,25 +298,31 @@ sealed class LittleFleder : ModProjectile {
                 AttackTimer += 1f;
             }
         }
-        if (!flag2) {
-            ItemIFound = null;
-        }
 
-        Projectile.rotation = Projectile.velocity.X * 0.085f;
+        Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.X * 0.085f, 0.1f);
         Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -0.2f, 0.2f);
 
-        if (flag3) {
-            ChangeDirection(-(Projectile.Center.X - player.Center.X).GetDirection());
-        }
-
-        if (Math.Abs(Projectile.velocity.X) > 0.1f) {
+        bool flag5 = flag2 || foundPickUp;
+        float time = flag5 ? 10f : 0f;
+        bool flag4 = false;
+        if (Math.Abs(Projectile.velocity.X) > 1f || flag5) {
             if (foundPickUp) {
-                ChangeDirection(Projectile.velocity.X.GetDirection());
+                ChangeDirection(Projectile.velocity.X.GetDirection(), time);
+                flag4 = true;
+            }
+            else if (flag5) {
+                ChangeDirection(-(Projectile.Center.X - player.Center.X).GetDirection(), time);
             }
         }
+        if (flag3 && !flag4) {
+            ChangeDirection(-(Projectile.Center.X - player.Center.X).GetDirection(), time);
+        }
+        if (foundTarget && !flag5) {
+            ChangeDirection(-(Projectile.Center.X - target.Center.X).GetDirection(), time);
+        }
 
-        if (foundTarget && flag3) {
-            ChangeDirection(-(Projectile.Center.X - target.Center.X).GetDirection());
+        if (!flag2) {
+            ItemIFound = null;
         }
 
         Projectile.spriteDirection = -Projectile.direction;
@@ -342,7 +349,7 @@ sealed class LittleFleder : ModProjectile {
             }
             Vector2 offset = new Vector2(-MathHelper.Lerp(5f, 15f, Utils.Clamp((float)Math.Sin(Projectile.ai[0] * 0.25f), 0, 1)) * Projectile.direction).RotatedBy(MathHelper.ToRadians(Projectile.ai[0] * Projectile.direction));
             Vector2 levitation = Vector2.UnitY * offset.Y + Vector2.UnitX * offset.X * 0.25f;
-            Vector2 offset2 = new Vector2(30f * (Projectile.Center.X - player.Center.X).GetDirection(), -15f);
+            Vector2 offset2 = new(50f * (Projectile.Center.X - player.Center.X).GetDirection(), -15f);
             Vector2 positionTo = destination + (!flag3 ? offset2 : new Vector2(-(35f + 50f * Projectile.minionPos) * direction, -25f)) + levitation;
             if (foundTarget && flag3) {
                 AI_156_GetIdlePosition(destination, index, totalIndexesInGroup, out var idleSpot, out var idleRotation);
@@ -364,7 +371,8 @@ sealed class LittleFleder : ModProjectile {
                     speed = MathHelper.Lerp(0.1f, 5f, distance / 100f);
                 }
                 dif.Normalize();
-                dif *= speed;
+                _speed = MathHelper.Lerp(_speed, speed, !flag3 ? 0.01f : 0.1f);
+                dif *= _speed;
             }
             Projectile.velocity = (Projectile.velocity * (inertia - 1) + dif) / inertia;
             if (Projectile.velocity.Length() > 5f) {
