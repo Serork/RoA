@@ -316,7 +316,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetPosition() {
-        Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
+        Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter);
         //center += Vector2.UnitY * Owner.gfxOffY;
         Projectile.Center = center;
         if (Projectile.IsOwnerMyPlayer(Owner) && !ShouldntUpdateRotationAndDirection()) {

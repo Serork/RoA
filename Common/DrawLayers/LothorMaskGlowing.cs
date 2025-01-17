@@ -9,6 +9,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -34,8 +35,13 @@ sealed class LothorMaskGlowing : ModSystem {
     private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo) {
         orig(ref drawinfo);
 
+        var layer = PlayerDrawLayerLoader.GetDrawLayers(drawinfo).First(x => x != null && x.IsHeadLayer);
+        if (!layer.Visible) {
+            return;
+        }
+
         Player player = drawinfo.drawPlayer;
-        if (player.active) {
+        if (player.active || player.head > 0) {
             int lothorMask = ModContent.ItemType<LothorMask>();
             bool flag = false;
             if (player.CheckArmorSlot(lothorMask, 0, 10) || player.CheckVanitySlot(lothorMask, 10)) {
