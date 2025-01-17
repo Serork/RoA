@@ -25,27 +25,42 @@ sealed class ElderwoodChest2 : ModTile {
 		Main.tileNoAttach[Type] = true;
 		Main.tileOreFinderPriority[Type] = 500;
 
-		TileID.Sets.HasOutlines[Type] = true;
-		TileID.Sets.BasicChest[Type] = true;
-		TileID.Sets.DisableSmartCursor[Type] = true;
+        TileID.Sets.HasOutlines[Type] = true;
+        TileID.Sets.BasicChest[Type] = true;
+        TileID.Sets.DisableSmartCursor[Type] = true;
+        TileID.Sets.AvoidedByNPCs[Type] = true;
+        TileID.Sets.InteractibleByNPCs[Type] = true;
+        TileID.Sets.IsAContainer[Type] = true;
+        TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-		TileObjectData.newTile.Origin = new Point16(0, 1);
-		TileObjectData.newTile.CoordinateHeights = [16, 18];
-		TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
-		TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
-		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
-		TileObjectData.newTile.AnchorInvalidTiles = [TileID.MagicalIceBlock];
-		TileObjectData.newTile.StyleHorizontal = true;
-		TileObjectData.newTile.LavaDeath = false;
-		TileObjectData.addTile(Type);
+        AdjTiles = [TileID.Containers];
 
-		AdjTiles = [TileID.Containers];
+        Color mapColor = new(133, 111, 91);
+        AddMapEntry(mapColor, CreateMapEntryName());
+        DustType = (ushort)ModContent.DustType<BackwoodsPotDust2>();
+        HitSound = SoundID.Dig;
 
-		Color mapColor = new(133, 111, 91);
-		AddMapEntry(mapColor, CreateMapEntryName());
-		DustType = (ushort)ModContent.DustType<BackwoodsPotDust2>();
-		HitSound = SoundID.Dig;
+        RegisterItemDrop(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest2>(), 1);
+        RegisterItemDrop(ItemID.Chest);
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+        TileObjectData.newTile.Origin = new Point16(0, 1);
+        TileObjectData.newTile.CoordinateHeights = [16, 18];
+        TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
+        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
+        TileObjectData.newTile.AnchorInvalidTiles = [TileID.MagicalIceBlock];
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = false;
+        TileObjectData.newTile.AnchorInvalidTiles = [
+                TileID.MagicalIceBlock,
+                TileID.Boulder,
+                TileID.BouncyBoulder,
+                TileID.LifeCrystalBoulder,
+                TileID.RollingCactus
+            ];
+        TileObjectData.addTile(Type);
 	}
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
@@ -85,9 +100,9 @@ sealed class ElderwoodChest2 : ModTile {
 		return name + ": " + Main.chest[chest].name;
 	}
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = 3;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 9;
 
-	public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
+    public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
 
 	public override bool RightClick(int i, int j)  {
 		Player player = Main.LocalPlayer;
@@ -163,7 +178,11 @@ sealed class ElderwoodChest2 : ModTile {
 		return true;
 	}
 
-	public override void MouseOver(int i, int j) {
+    public override LocalizedText DefaultContainerName(int frameX, int frameY) {
+        return this.GetLocalization("MapEntry");
+    }
+
+    public override void MouseOver(int i, int j) {
 		Player player = Main.LocalPlayer;
 		Tile tile = Main.tile[i, j];
 		int left = i;
@@ -181,10 +200,11 @@ sealed class ElderwoodChest2 : ModTile {
 			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
 		}
 		else  {
+            string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
             bool isLocked = IsLockedChest(left, top);
-            player.cursorItemIconText = Main.chest[chest].name;
+            player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
             player.cursorItemIconID = !isLocked ? (ushort)ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest2>() : player.GetSelectedItem().type;
-            //player.cursorItemIconText = "";
+            player.cursorItemIconText = "";
         }
 
 		player.noThrow = 2;
