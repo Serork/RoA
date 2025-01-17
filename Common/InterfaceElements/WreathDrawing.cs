@@ -46,8 +46,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
             return;
         }
 
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
+        Main.spriteBatch.BeginBlendState(BlendState.AlphaBlend);
 
         Player player = drawInfo.drawPlayer;
         WreathHandler stats = player.GetModPlayer<WreathHandler>();
