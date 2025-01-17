@@ -6,39 +6,39 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Melee;
 
-sealed class BloodshedAxe : ModItem {
+sealed class FlederSlayer : ModItem {
     public override void SetStaticDefaults() {
-        // DisplayName.SetDefault("Bloodshed Axe");
-        // Tooltip.SetDefault("'There will be blood'");
-
+        // Tooltip.SetDefault("'It's too big to be called a sword'\nSends vulnerable enemies back with a crushing blow");
         Item.ResearchUnlockCount = 1;
     }
 
     public override void SetDefaults() {
-        int width = 54; int height = 50;
+        int width = 62; int height = width;
         Item.Size = new Vector2(width, height);
 
-        Item.useStyle = ItemUseStyleID.HiddenAnimation;
+        Item.useStyle = ItemUseStyleID.Swing;
+        Item.useTime = Item.useAnimation = 50;
+        Item.noMelee = true;
+
+        Item.channel = true;
+
+        Item.noUseGraphic = true;
         Item.useTurn = false;
 
-        Item.autoReuse = false;
-
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 14;
-        Item.knockBack = 4f;
+        Item.damage = 35;
+        Item.knockBack = 8f;
 
-        Item.noMelee = true;
-        Item.noUseGraphic = true;
-
-        Item.useTime = Item.useAnimation = 50;
-
-        Item.value = Item.sellPrice(gold: 1, silver: 10);
+        Item.value = Item.sellPrice(gold: 1, silver: 40);
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item1;
+
+        Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Melee.FlederSlayer>();
+        Item.shootSpeed = 4f;
     }
 
     public override bool CanUseItem(Player player) {
-        int type = ModContent.ProjectileType<Projectiles.Friendly.Melee.BloodshedAxe>();
+        int type = Item.shoot;
         if (player.ownedProjectileCounts[type] != 0) {
             return false;
         }

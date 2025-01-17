@@ -1191,3 +1191,12 @@ FlederStaff: {
 	DisplayName: Fleder Staff
 	Tooltip: ""
 }
+
+FlederSlayer: {
+	DisplayName: Fleder Slayer
+	Tooltip:
+		'''
+		'It's too big to be called a sword'
+		Sends vulnerable enemies back with a crushing blow
+		'''
+}

@@ -81,6 +81,25 @@ static class Helper {
         return CircleOffset(entity, counter / 65f + 1f / 65f, speed, radius) - offset;
     }
 
+    public static float EaseInOut(float value) {
+        float value2 = (float)Math.Pow((double)value, 2.0);
+        return value2 / (2.0f * (value2 - value) + 1.0f);
+    }
+
+    public static float CappedMeleeScale(this Player player) {
+        var item = player.HeldItem;
+        return Math.Clamp(player.GetAdjustedItemScale(item), 0.5f * item.scale, 2f * item.scale);
+    }
+
+    public static void ScaleUp(Projectile proj) {
+        float scale = Main.player[proj.owner].CappedMeleeScale();
+        if (scale != 1f) {
+            proj.scale *= scale;
+            proj.width = (int)(proj.width * proj.scale);
+            proj.height = (int)(proj.height * proj.scale);
+        }
+    }
+
     public static float EaseInOut2(float value) => (float)Math.Pow((double)value, 2.0) * (3.0f - 2.0f * value);
 
     public static float EaseInOut3(float value) {

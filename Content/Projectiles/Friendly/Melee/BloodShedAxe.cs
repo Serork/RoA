@@ -160,8 +160,17 @@ sealed class BloodshedAxe : ModProjectile {
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         //player.heldProj = Projectile.whoAmI;
+        if (Projectile.localAI[2] == 0f) {
+            Projectile.localAI[2] = 1f;
+            float scale = Main.player[Projectile.owner].CappedMeleeScale();
+            if (scale != 1f) {
+                Projectile.localAI[2] *= scale;
+            }
+        }
         player.bodyFrame.Y = 56;
-        int itemAnimationMax = player.itemAnimationMax;
+        int baseAnimationMax = ItemLoader.GetItem(ModContent.ItemType<Items.Weapons.Melee.BloodshedAxe>()).Item.useAnimation;
+        int itemAnimationMax = 50;
+        float mult = 1f + 1f - (float)itemAnimationMax / baseAnimationMax;
         int itemAnimation = player.itemAnimation;
         int min = itemAnimationMax / 2 - itemAnimationMax / 4;
         if (Projectile.ai[1] == 0f) {
@@ -186,7 +195,7 @@ sealed class BloodshedAxe : ModProjectile {
                 //float value2 = f * 1.25f;
                 float value2 = f * 1.15f;
                 if (value2 != 0f) {
-                    Projectile.scale = value2;
+                    Projectile.scale = value2 * Projectile.localAI[2];
                 }
                 Projectile.Center += Projectile.velocity * 2.5f * (0.5f + Projectile.ai[0]) * (f > 0.5f ? f : 1f - f - 0.5f);
                 Projectile.rotation = Projectile.rotation.AngleLerp(-MathHelper.PiOver2 - Projectile.spriteDirection * 0.4f, 0.2f);
@@ -200,7 +209,7 @@ sealed class BloodshedAxe : ModProjectile {
             if (Projectile.timeLeft <= min + 5) {
                 Projectile.scale -= 0.01f;
                 Projectile.ai[0] += 0.01f;
-                Projectile.rotation += (0.225f + Projectile.ai[0] * 1.0125f) * Projectile.spriteDirection;
+                Projectile.rotation += (0.225f + Projectile.ai[0] * 1.0125f) * Projectile.spriteDirection * mult;
             }
         }
         Projectile.Opacity = Utils.GetLerpValue(itemAnimationMax, itemAnimationMax - 7, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 7f, Projectile.timeLeft, clamped: true);
