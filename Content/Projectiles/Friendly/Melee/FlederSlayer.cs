@@ -17,6 +17,7 @@ using Terraria.Enums;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
@@ -70,12 +71,14 @@ sealed class FlederSlayer : ModProjectile {
         _extraRotationDir = reader.ReadInt32();
     }
 
-    public override bool? CanCutTiles() {
+    public override void CutTiles() {
         DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
         Utils.TileActionAttempt plot = new Utils.TileActionAttempt(DelegateMethods.CutTiles);
         Vector2 center = Projectile.Center;
-        return Utils.PlotTileLine(center, center + Projectile.rotation.ToRotationVector2() * 150f, Projectile.width * Projectile.scale, plot);
+        Utils.PlotTileLine(center + Projectile.rotation.ToRotationVector2() * 30f, center + Projectile.rotation.ToRotationVector2() * 150f, Projectile.width * Projectile.scale, plot);
     }
+
+    public override bool? CanCutTiles() => Projectile.ai[1] >= 1f;
 
     private void CalculateExtraRotation() {
         float speed = Main.rand.NextFloat(0.0075f, 0.025f) * Main.rand.NextFloat() * Main.rand.NextFloat() * Math.Clamp(Math.Abs(Main.player[Projectile.owner].velocity.X), 1f, 1.35f);
@@ -148,7 +151,7 @@ sealed class FlederSlayer : ModProjectile {
                     if (_charge <= 0f) {
                         _slot = SoundEngine.PlaySound(style, Projectile.Center);
                     }
-                    _charge += 0.01f;
+                    _charge += 0.015f;
                     _charge = Math.Clamp(_charge, 0f, 1f);
                 }
                 if (flag || ++Projectile.ai[0] < 10f) {
@@ -203,6 +206,13 @@ sealed class FlederSlayer : ModProjectile {
                         Projectile.timeLeft = 10;
                     }
                     if (Projectile.ai[1] < 2f) {
+                        if (player.controlLeft) {
+                            Projectile.spriteDirection = player.direction = -1;
+                        }
+                        if (player.controlRight) {
+                            Projectile.spriteDirection = player.direction = 1;
+                        }
+
                         Projectile.spriteDirection = player.direction;
 
                         Projectile.velocity = Vector2.Lerp(Projectile.velocity, (MathHelper.PiOver2 - offset).ToRotationVector2() * 100f, 0.45f);
@@ -233,8 +243,8 @@ sealed class FlederSlayer : ModProjectile {
 
                         player.direction = Projectile.spriteDirection;
 
-                        if (SoundEngine.TryGetActiveSound(_slot, out sound)) {
-                            sound.Stop();
+                        if (SoundEngine.TryGetActiveSound(_slot, out var sound2)) {
+                            sound2.Volume -= 0.01f;
                         }
 
                         _offset = Vector2.SmoothStep(_offset, Vector2.Zero, 0.25f);
@@ -257,8 +267,8 @@ sealed class FlederSlayer : ModProjectile {
                         Projectile.velocity = Vector2.Lerp(Projectile.velocity, (progress * MathHelper.Pi - MathHelper.PiOver2 + offset * 1.35f).ToRotationVector2() * 130f, 0.075f);
                     }
                     else {
-                        if (SoundEngine.TryGetActiveSound(_slot, out sound)) {
-                            sound.Stop();
+                        if (SoundEngine.TryGetActiveSound(_slot, out var sound2)) {
+                            sound2.Volume -= 0.01f;
                         }
 
                         SlashDusts();
@@ -282,7 +292,7 @@ sealed class FlederSlayer : ModProjectile {
                                     for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
                                         Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
                                                                        projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
-                                                                       Helper.VelocityToPoint(player.Center, projectileCenter, 35f * _charge),
+                                                                       Helper.VelocityToPoint(player.Center, projectileCenter, 35f * _charge * player.GetTotalAttackSpeed(DamageClass.Melee)),
                                                                        ModContent.ProjectileType<WaveSlash>(),
                                                                        (int)((Projectile.damage + Projectile.damage / 2) * (_charge * 1.15f + 0.15f)),
                                                                        Projectile.knockBack,
@@ -387,19 +397,29 @@ sealed class FlederSlayer : ModProjectile {
         return ((float)Math.Sin(Math.Pow(progress, 2f) * MathHelper.TwoPi - MathHelper.PiOver2) + 1f) / 2f;
     }
 
-    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        => modifiers.FinalDamage *=
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        if (Main.player[Projectile.owner].channel) {
+            Projectile.localNPCImmunity[target.whoAmI] = 100;
+        }
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (Main.player[Projectile.owner].channel) {
+            modifiers.Knockback *= 0f;
+        }
+        modifiers.FinalDamage *=
                             Projectile.ai[1] >= 3f
                           ? Projectile.scale * 3f * (1f + _charge)
                           : 1f;
+    }
 
     public override bool ShouldUpdatePosition()
         => false;
 
     public override bool? CanDamage() {
-        if (Main.player[Projectile.owner].channel) {
-            return false;
-        }
+        //if (Main.player[Projectile.owner].channel) {
+        //    return false;
+        //}
         if (_released) {
             return false;
         }
@@ -598,8 +618,8 @@ sealed class FlederSlayer : ModProjectile {
             }
             Projectile.position += Vector2.Normalize(Projectile.velocity) * 2f;
             Projectile.direction = Projectile.velocity.X > 0f ? 1 : -1;
-            Projectile.velocity *= 0.9f;
             Player player = Main.player[Projectile.owner];
+            Projectile.velocity *= 0.9f + Math.Clamp((player.GetTotalAttackSpeed(DamageClass.Melee) - 1f) * 0.1f, 0f, 1f);
             float y = player.Center.Y - 10f;
             while (!WorldGen.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction) / 16, (int)y / 16)) {
                 y++;
