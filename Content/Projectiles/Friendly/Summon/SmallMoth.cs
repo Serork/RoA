@@ -92,35 +92,16 @@ sealed class SmallMoth : ModProjectile {
         Projectile.ai[0] += 1f;
         if (Projectile.ai[0] > 30f) {
             Projectile.ai[0] = 30f;
-            float num12 = 600f;
-            bool flag = false;
-            int num13 = -1;
-            Vector2 vector = Projectile.position;
-            NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
-            if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
-                float num17 = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
-                float num18 = num12 * 3f;
-                if (num17 < num18 && !flag) {
-                    if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
-                        num12 = num17;
-                        vector = ownerMinionAttackTargetNPC2.Center;
-                        flag = true;
-                        num13 = ownerMinionAttackTargetNPC2.whoAmI;
-                    }
-                }
-            }
-            if (!flag) {
-                for (int num306 = 0; num306 < 200; num306++) {
-                    if (Main.npc[num306].CanBeChasedBy(this)) {
-                        float num307 = Main.npc[num306].position.X + (float)(Main.npc[num306].width / 2);
-                        float num308 = Main.npc[num306].position.Y + (float)(Main.npc[num306].height / 2);
-                        float num309 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num307) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num308);
-                        if (num309 < 800f && num309 < num305 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[num306].position, Main.npc[num306].width, Main.npc[num306].height)) {
-                            num305 = num309;
-                            num303 = num307;
-                            num304 = num308;
-                            flag15 = true;
-                        }
+            for (int num306 = 0; num306 < 200; num306++) {
+                if (Main.npc[num306].CanBeChasedBy(this)) {
+                    float num307 = Main.npc[num306].position.X + (float)(Main.npc[num306].width / 2);
+                    float num308 = Main.npc[num306].position.Y + (float)(Main.npc[num306].height / 2);
+                    float num309 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num307) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num308);
+                    if (num309 < 800f && num309 < num305 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[num306].position, Main.npc[num306].width, Main.npc[num306].height)) {
+                        num305 = num309;
+                        num303 = num307;
+                        num304 = num308;
+                        flag15 = true;
                     }
                 }
             }
