@@ -210,3 +210,8 @@ LittleFleder: {
 	DisplayName: Little Fleder
 	Description: The little fleder will fight for you
 }
+
+EssenceDrain: {
+	DisplayName: Essence Drain
+	Description: Mods.RoA.Buffs.EssenceDrain.Description
+}

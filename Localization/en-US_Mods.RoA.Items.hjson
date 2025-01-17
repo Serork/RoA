@@ -1200,3 +1200,8 @@ FlederSlayer: {
 		Sends vulnerable enemies back with a crushing blow
 		'''
 }
+
+Bane: {
+	DisplayName: Bane
+	Tooltip: ""
+}

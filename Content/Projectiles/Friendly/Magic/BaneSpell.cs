@@ -1,0 +1,93 @@
+using Microsoft.Xna.Framework;
+
+using RoA.Content.Buffs;
+using RoA.Core;
+
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Projectiles.Friendly.Magic;
+
+sealed class BaneSpell : ModProjectile {
+    public override string Texture => ResourceManager.EmptyTexture;
+
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+    }
+
+    public override void SetDefaults() {
+        int width = 4; int height = width;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.aiStyle = 1;
+        AIType = ProjectileID.Bullet;
+
+        Projectile.friendly = true;
+        Projectile.tileCollide = true;
+        Projectile.DamageType = DamageClass.Magic;
+
+        Projectile.penetrate = 1;
+        Projectile.timeLeft = 180;
+
+        Projectile.extraUpdates = 1;
+        Projectile.alpha = 200;
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 4;
+        return true;
+    }
+
+    public override void AI() {
+        //if (Projectile.timeLeft == 180) {
+        //    float radius = 30f;
+        //    int dustCount = 0;
+        //    while (dustCount < radius) {
+        //        Vector2 vector = Vector2.UnitX * 0f;
+        //        vector += -Vector2.UnitY.RotatedBy(dustCount * (7f / radius), default) * new Vector2(3.2f, 3f);
+        //        vector = vector.RotatedBy(Projectile.velocity.ToRotation(), default);
+        //        int dust = Dust.NewDust(Projectile.Center, 0, 0, DustID.Shadowflame, 0f, 0f, 0, Color.DarkViolet);
+        //        Main.dust[dust].noGravity = true;
+        //        Main.dust[dust].position = Projectile.Center + vector - Projectile.velocity.SafeNormalize(Vector2.Zero) * 10f;
+        //        Main.dust[dust].velocity = Projectile.velocity * 0f + vector.SafeNormalize(Vector2.UnitY) * 1f * Main.rand.NextFloat();
+        //        Main.dust[dust].velocity += Projectile.velocity.SafeNormalize(Vector2.Zero) * 2.5f;
+        //        int dustCountMax = dustCount;
+        //        dustCount = dustCountMax + 1;
+        //    }
+        //}
+        if (Projectile.timeLeft <= 178) {
+            Projectile.alpha -= 4;
+            if (Main.netMode != NetmodeID.Server) {
+                for (var i = 0; i < 10; i++) {
+                    var x = Projectile.Center.X - Projectile.velocity.X / 10f * i;
+                    var y = Projectile.Center.Y - Projectile.velocity.Y / 10f * i;
+                    var dust2 = Dust.NewDust(new Vector2(x, y), 1, 1, DustID.Shadowflame, 0f, 0f, 0, Color.DarkViolet, 1.5f);
+                    Main.dust[dust2].alpha = Projectile.alpha;
+                    Main.dust[dust2].position.X = x;
+                    Main.dust[dust2].position.Y = y;
+                    Main.dust[dust2].velocity *= 0f;
+                    Main.dust[dust2].noGravity = true;
+                }
+            }
+        }
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        => target.AddBuff(ModContent.BuffType<EssenceDrain>(), 180);
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        => target.AddBuff(ModContent.BuffType<EssenceDrain>(), 180);
+
+    public override void OnKill(int timeLeft) {
+        for (int k = 0; k < 15; ++k) {
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + 2f), Projectile.width + 5, Projectile.height + 5,
+                DustID.Shadowflame, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, Color.DarkViolet, 1.4f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].alpha = 0;
+        }
+        SoundEngine.PlaySound(SoundID.NPCDeath55, Projectile.Center);
+    }
+}
