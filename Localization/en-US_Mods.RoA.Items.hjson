@@ -722,7 +722,7 @@ Coffin: {
 
 Herbarium: {
 	DisplayName: Herbarium
-	Tooltip: Enemies can drop healing herbs when [kw/n:wreath] is charged
+	Tooltip: Enemies can drop healing herbs when [kw/n:wreath] is [kw/n:charged]
 }
 
 MagicHerb1: {
