@@ -16,7 +16,6 @@ sealed class PrimordialLeaf : ModProjectile {
 	public override Color? GetAlpha(Color lightColor) => Color.White;
 
 	public override void SetDefaults() {
-		Projectile.damage = 40;
 		Projectile.hostile = true;
 		Projectile.width = Projectile.height = 12;
 		Projectile.aiStyle = 0;

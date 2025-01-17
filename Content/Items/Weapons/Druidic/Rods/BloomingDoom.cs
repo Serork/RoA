@@ -119,7 +119,7 @@ abstract class TulipBase : BaseRodProjectile {
         SpawnGroundDusts(player, CoreDustType(), TulipBaseData, 1f);
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         if (Projectile.owner == Main.myPlayer) {
             Vector2 to = GetCappedMousePosition(Main.player[Projectile.owner]);
             if (_mousePosition == Vector2.Zero) {

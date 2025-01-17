@@ -140,7 +140,7 @@ sealed class SacrificialSickle : NatureProjectile {
         }
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         if (Projectile.alpha > 0) {
             Projectile.alpha -= 35;
         }

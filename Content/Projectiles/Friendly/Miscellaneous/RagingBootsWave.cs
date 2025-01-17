@@ -45,7 +45,7 @@ sealed class RagingBootsWave : NatureProjectile {
 
     public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         ++Projectile.frameCounter;
         if (Projectile.frameCounter > 3) {
             ++Projectile.frame;

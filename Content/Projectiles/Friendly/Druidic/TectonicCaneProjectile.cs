@@ -309,7 +309,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         }
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         if (++Projectile.frameCounter > 8) {
             Projectile.frameCounter = 0;
             if (++Projectile.frame > 3) {

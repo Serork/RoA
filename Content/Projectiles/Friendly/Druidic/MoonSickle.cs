@@ -52,7 +52,7 @@ sealed class MoonSickle : NatureProjectile {
         return false;
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         Projectile.tileCollide = Projectile.alpha <= 0;
 
         if (Projectile.alpha > 0) {

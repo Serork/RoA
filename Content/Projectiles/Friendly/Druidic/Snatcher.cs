@@ -224,7 +224,7 @@ sealed class Snatcher : NatureProjectile {
         return GetPos().Distance(mousePos) < 40f;
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         for (int num2 = _oldPositions.Length - 1; num2 > 0; num2--) {
             _oldPositions[num2] = _oldPositions[num2 - 1];
         }

@@ -48,7 +48,7 @@ sealed class ShepherdLeaves : NatureProjectile {
         Projectile.position += Projectile.velocity;
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         if (Main.netMode != NetmodeID.Server) {
             Dust dust = Main.dust[Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(3f, 3f), 0, 0, DustID.AmberBolt, Scale: Main.rand.NextFloat(1f, 1.3f))];
             dust.velocity *= 0.4f;

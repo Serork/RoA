@@ -84,7 +84,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
             _mousePos = reader.ReadVector2();
         }
 
-        public override void PostAI() {
+        public override void SafePostAI() {
             //Main.NewText(CurrentUseTime);
             if (_shouldShoot) {
                 if (_attackTimer >= Min - PerShoot && _shootCount > 0) {

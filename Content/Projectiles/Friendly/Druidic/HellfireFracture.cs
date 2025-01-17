@@ -120,7 +120,7 @@ sealed class HellfireFracture : NatureProjectile {
         return base.PreDraw(ref lightColor);
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         uint seed = (uint)(Projectile.position.GetHashCode() + Projectile.velocity.GetHashCode());
         float rot = Helper.VelocityAngle(Projectile.velocity) + MathHelper.PiOver2;
         rot += MathHelper.Pi;

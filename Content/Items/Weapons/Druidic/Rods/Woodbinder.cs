@@ -62,9 +62,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
             _mousePosition = reader.ReadVector2();
         }
 
-        public override void PostAI() {
-            base.PostAI();
-
+        public override void SafePostAI() {
             if (_strength < 1f) {
                 if (_strength == 0.15f) {
                     if (Owner.whoAmI == Main.myPlayer) {

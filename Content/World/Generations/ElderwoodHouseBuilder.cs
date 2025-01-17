@@ -781,7 +781,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         base.PianoTileType = (ushort)ModContent.TileType<ElderwoodPiano>();
         base.BookcaseTileType = (ushort)ModContent.TileType<ElderwoodBookcase>();
         base.ChairTileType = (ushort)ModContent.TileType<ElderwoodChair>();
-        base.ChestTileType = (ushort)ModContent.TileType<ElderwoodChest2>();
+        base.ChestTileType = (ushort)ModContent.TileType<ElderwoodChest>();
         base.ChandelierTileType = (ushort)ModContent.TileType<ElderwoodChandelier>();
     }
 

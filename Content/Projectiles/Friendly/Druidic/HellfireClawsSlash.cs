@@ -178,7 +178,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
         }
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         if (Projectile.localAI[0] >= Projectile.ai[1] * 0.3f && Projectile.localAI[0] < Projectile.ai[1] * 1.45f) {
             //for (int index = 0; index < MAX; index += 2) {
             //    int index2 = Math.Max(0, index - 2);

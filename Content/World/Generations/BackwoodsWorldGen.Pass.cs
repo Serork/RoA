@@ -3584,7 +3584,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _elderwoodWallType = (ushort)ModContent.WallType<ElderwoodWall>();
         _elderwoodWallType2 = (ushort)ModContent.WallType<ElderwoodWall2>();
         _leavesWallType = (ushort)ModContent.WallType<LivingBackwoodsLeavesWall>();
-        _elderWoodChestTileType = (ushort)ModContent.TileType<ElderwoodChest>();
+        _elderWoodChestTileType = (ushort)ModContent.TileType<ElderwoodChest2>();
         _altarTileType = (ushort)ModContent.TileType<OvergrownAltar>();
         _vinesTileType = (ushort)ModContent.TileType<BackwoodsVines>();
         _vinesTileType2 = (ushort)ModContent.TileType<BackwoodsVinesFlower>();

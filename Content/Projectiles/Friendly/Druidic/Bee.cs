@@ -18,7 +18,7 @@ sealed class Bee : NatureProjectile {
         Projectile.hostile = false;
     }
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         Projectile.frameCounter++;
         if (Projectile.frameCounter >= 3) {
             Projectile.frame++;

@@ -34,7 +34,7 @@ sealed class MushroomSpore : NatureProjectile {
         Projectile.friendly = true;
     }
 
-    public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
+    public override void SafePostAI() => ProjectileHelper.Animate(Projectile, 4);
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         return Collision.CheckAABBvAABBCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.position + Projectile.Size / 2f, Projectile.Size);

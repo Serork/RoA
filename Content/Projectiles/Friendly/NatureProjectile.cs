@@ -66,6 +66,13 @@ abstract class NatureProjectile : ModProjectile {
         SafeOnSpawn(source);
     }
 
+    public sealed override void PostAI() {
+        SafePostAI();
+        Projectile.damage = NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]);
+    }
+
+    public virtual void SafePostAI() { }
+
     protected virtual void SafeOnSpawn(IEntitySource source) { }
 
     public sealed override void SetDefaults() {

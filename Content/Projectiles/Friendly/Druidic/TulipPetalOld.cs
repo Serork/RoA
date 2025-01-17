@@ -137,7 +137,7 @@ sealed class TulipPetalOld : NatureProjectile {
 
     private int beeFrameCounter, beeFrame;
 
-    public override void PostAI() {
+    public override void SafePostAI() {
         if (Projectile.ai[0] == 1 || Projectile.ai[0] == 3) {
             beeFrameCounter++;
             if (beeFrameCounter >= 3) {
