@@ -41,11 +41,14 @@ sealed class LothorMaskGlowing : ModSystem {
         }
 
         Player player = drawinfo.drawPlayer;
-        if (player.active || player.head > 0) {
+        if (player.head > 0) {
             int lothorMask = ModContent.ItemType<LothorMask>();
             bool flag = false;
             if (player.CheckArmorSlot(lothorMask, 0, 10) || player.CheckVanitySlot(lothorMask, 10)) {
                 flag = true;
+            }
+            if (!player.active) {
+                flag = false;
             }
             if (flag) {
                 var drawInfo = drawinfo;
