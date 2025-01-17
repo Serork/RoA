@@ -85,67 +85,89 @@ sealed class SmallMoth : ModProjectile {
 
         Projectile.rotation = Projectile.velocity.X * 0.1f;
 
-        float num303 = Projectile.position.X;
-        float num304 = Projectile.position.Y;
-        float num305 = 100000f;
-        bool flag15 = false;
+        float targetPositionX = Projectile.position.X;
+        float targetPositionY = Projectile.position.Y;
+        float targetDistance = 100000f;
+        bool targetFoundManually = false;
+        bool targetFoundByOwner = false;
+        Vector2 targetPosition = Projectile.position;
         Projectile.ai[0] += 1f;
         if (Projectile.ai[0] > 30f) {
             Projectile.ai[0] = 30f;
-            for (int num306 = 0; num306 < 200; num306++) {
-                if (Main.npc[num306].CanBeChasedBy(this)) {
-                    float num307 = Main.npc[num306].position.X + (float)(Main.npc[num306].width / 2);
-                    float num308 = Main.npc[num306].position.Y + (float)(Main.npc[num306].height / 2);
-                    float num309 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num307) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num308);
-                    if (num309 < 800f && num309 < num305 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[num306].position, Main.npc[num306].width, Main.npc[num306].height)) {
-                        num305 = num309;
-                        num303 = num307;
-                        num304 = num308;
-                        flag15 = true;
+
+            NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
+            if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
+                float distanceBetween = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
+                float neededDistance = targetDistance;
+                if (distanceBetween < neededDistance && !targetFoundByOwner) {
+                    if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
+                        targetDistance = distanceBetween;
+                        targetPosition = ownerMinionAttackTargetNPC2.Center;
+                        targetFoundByOwner = true;
+                    }
+                }
+            }
+
+            if (!targetFoundByOwner) {
+                for (int num306 = 0; num306 < 200; num306++) {
+                    if (Main.npc[num306].CanBeChasedBy(this)) {
+                        float num307 = Main.npc[num306].position.X + (float)(Main.npc[num306].width / 2);
+                        float num308 = Main.npc[num306].position.Y + (float)(Main.npc[num306].height / 2);
+                        float num309 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num307) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num308);
+                        if (num309 < 800f && num309 < targetDistance) {
+                            targetDistance = num309;
+                            targetPositionX = num307;
+                            targetPositionY = num308;
+                            targetFoundManually = true;
+                        }
                     }
                 }
             }
         }
 
-        if (!flag15) {
-            num303 = Projectile.position.X + (float)(Projectile.width / 2) + Projectile.velocity.X * 100f;
-            num304 = Projectile.position.Y + (float)(Projectile.height / 2) + Projectile.velocity.Y * 100f;
+        if (targetFoundByOwner) {
+            targetPositionX = targetPosition.X;
+            targetPositionY = targetPosition.Y;
+        }
+        if (!targetFoundManually) {
+            targetPositionX = Projectile.position.X + (float)(Projectile.width / 2) + Projectile.velocity.X * 100f;
+            targetPositionY = Projectile.position.Y + (float)(Projectile.height / 2) + Projectile.velocity.Y * 100f;
         }
 
-        float num310 = 6f;
-        float num311 = 0.1f;
+        float speed = 6f;
+        float acceleration = 0.1f;
 
-        num310 = 9f;
-        num311 = 0.2f;
+        speed = 9f;
+        acceleration = 0.2f;
 
         Vector2 vector26 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
-        float num312 = num303 - vector26.X;
-        float num313 = num304 - vector26.Y;
+        float num312 = targetPositionX - vector26.X;
+        float num313 = targetPositionY - vector26.Y;
         float num314 = (float)Math.Sqrt(num312 * num312 + num313 * num313);
         float num315 = num314;
-        num314 = num310 / num314;
+        num314 = speed / num314;
         num312 *= num314;
         num313 *= num314;
         if (Projectile.velocity.X < num312) {
-            Projectile.velocity.X += num311;
+            Projectile.velocity.X += acceleration;
             if (Projectile.velocity.X < 0f && num312 > 0f)
-                Projectile.velocity.X += num311 * 2f;
+                Projectile.velocity.X += acceleration * 2f;
         }
         else if (Projectile.velocity.X > num312) {
-            Projectile.velocity.X -= num311;
+            Projectile.velocity.X -= acceleration;
             if (Projectile.velocity.X > 0f && num312 < 0f)
-                Projectile.velocity.X -= num311 * 2f;
+                Projectile.velocity.X -= acceleration * 2f;
         }
 
         if (Projectile.velocity.Y < num313) {
-            Projectile.velocity.Y += num311;
+            Projectile.velocity.Y += acceleration;
             if (Projectile.velocity.Y < 0f && num313 > 0f)
-                Projectile.velocity.Y += num311 * 2f;
+                Projectile.velocity.Y += acceleration * 2f;
         }
         else if (Projectile.velocity.Y > num313) {
-            Projectile.velocity.Y -= num311;
+            Projectile.velocity.Y -= acceleration;
             if (Projectile.velocity.Y > 0f && num313 < 0f)
-                Projectile.velocity.Y -= num311 * 2f;
+                Projectile.velocity.Y -= acceleration * 2f;
         }
     }
 }

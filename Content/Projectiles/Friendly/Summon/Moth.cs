@@ -144,38 +144,42 @@ sealed class Moth : ModProjectile {
         #region Find target
         // Starting search distance
 
-        float num12 = 600f;
-        bool flag = false;
-        int num13 = -1;
-        Vector2 vector = Projectile.position;
+        float targetDistance = 600f;
+        bool targetFound = false;
+        int targetId = -1;
+        Vector2 targetPosition = Projectile.position;
 
         NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
         if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
-            float num17 = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
-            float num18 = num12 * 3f;
-            if (num17 < num18 && !flag) {
+            float distanceBetween = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
+            float neededDistance = targetDistance * 3f;
+            if (distanceBetween < neededDistance && !targetFound) {
                 if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
-                    num12 = num17;
-                    vector = ownerMinionAttackTargetNPC2.Center;
-                    flag = true;
-                    num13 = ownerMinionAttackTargetNPC2.whoAmI;
+                    targetDistance = distanceBetween;
+                    targetPosition = ownerMinionAttackTargetNPC2.Center;
+                    targetFound = true;
+                    targetId = ownerMinionAttackTargetNPC2.whoAmI;
                 }
             }
         }
 
-        if (!flag) {
-            for (int num19 = 0; num19 < 200; num19++) {
-                NPC nPC2 = Main.npc[num19];
-                if (!nPC2.CanBeChasedBy(this))
+        if (!targetFound) {
+            for (int npcId = 0; npcId < 200; npcId++) {
+                NPC targetNPC = Main.npc[npcId];
+                if (!targetNPC.CanBeChasedBy(this))
                     continue;
 
-                float num20 = Vector2.Distance(nPC2.Center, Projectile.Center);
-                if (!(num20 >= num12)) {
-                    if (Collision.CanHit(Projectile.Center, 1, 1, nPC2.Center, 1, 1)) {
-                        num12 = num20;
-                        vector = nPC2.Center;
-                        flag = true;
-                        num13 = num19;
+                float distanceBetween = Vector2.Distance(targetNPC.Center, Projectile.Center);
+                bool closest = Vector2.Distance(Projectile.Center, targetPosition) > distanceBetween;
+                bool inRange = distanceBetween < targetDistance;
+                bool lineOfSight = Collision.CanHit(Projectile.Center, 1, 1, targetNPC.Center, 1, 1);
+                bool closeThroughWall = distanceBetween < targetDistance / 2f;
+                if (inRange) {
+                    if ((closest && inRange || !targetFound) && (lineOfSight || closeThroughWall)) {
+                        targetDistance = distanceBetween;
+                        targetPosition = targetNPC.Center;
+                        targetFound = true;
+                        targetId = npcId;
                     }
                 }
             }
@@ -185,7 +189,7 @@ sealed class Moth : ModProjectile {
         // friendly needs to be set to false so it doesn't damage things like target dummies while idling
         // Both things depend on if it has a target or not, so it's just one assignment here
         // You don't need this assignment if your minion is shooting things instead of dealing contact damage
-        Projectile.friendly = flag;
+        Projectile.friendly = targetFound;
         #endregion
 
         #region Movement
@@ -193,7 +197,7 @@ sealed class Moth : ModProjectile {
         float speed = 10f;
         float inertia = 40f;
 
-        if (flag) {
+        if (targetFound) {
             if (Projectile.ai[1] > 0f) {
                 Projectile.ai[1]--;
             }
@@ -215,15 +219,15 @@ sealed class Moth : ModProjectile {
             }
             // otherwise attack normally with dashes
             else {
-                Vector2 direction = vector - Projectile.Center;
+                Vector2 direction = targetPosition - Projectile.Center;
                 direction.Normalize();
                 direction *= speed;
-                if (num12 >= 40f && dashTimer < 40)
+                if (targetDistance >= 40f && dashTimer < 40)
                     Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
                 else
                     Projectile.velocity = Projectile.velocity * (inertia - 1) / inertia;
 
-                if (num12 < 600f) {
+                if (targetDistance < 600f) {
                     dashTimer++;
                     if (dashTimer == 40) {
                         Projectile.velocity += direction * 0.9f;
