@@ -159,7 +159,7 @@ sealed class BloodshedAxe : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        player.heldProj = Projectile.whoAmI;
+        //player.heldProj = Projectile.whoAmI;
         player.bodyFrame.Y = 56;
         int itemAnimationMax = player.itemAnimationMax;
         int itemAnimation = player.itemAnimation;

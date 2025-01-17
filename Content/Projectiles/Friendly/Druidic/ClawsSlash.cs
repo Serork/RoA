@@ -207,7 +207,7 @@ class ClawsSlash : NatureProjectile {
             Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
             if (position.Distance(player.Center) > 45f) {
                 int type = ModContent.DustType<Slash>();
-                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(color1, color2, Main.rand.NextFloat() * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(color1, color2, Main.rand.NextFloat(0.5f, 1f) * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                 dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                 dust.noLight = dust.noLightEmittence = true;
                 dust.noGravity = true;
