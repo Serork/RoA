@@ -149,7 +149,7 @@ sealed class DiabolicDaikatana : ModItem {
                                         player.HeldItem.GetAlpha(color) * drawInfo.stealth * (1f - drawInfo.shadow),
                                         player.direction > 0 ? -rotation : rotation,
                                         texture.Size() / 2f,
-                                        player.GetAdjustedItemScale(player.HeldItem) * scale,
+                                        scale,
                                         effects);
                 drawInfo.DrawDataCache.Add(drawData);
             }
@@ -200,7 +200,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     public override void AI() {
         Projectile.extraUpdates = 5;
         Player player = Main.player[Projectile.owner];
-        Projectile.scale = player.GetAdjustedItemScale(player.GetSelectedItem()) * Projectile.localAI[2];
+        Projectile.scale = Projectile.localAI[2];
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
             _swingTimeMax = player.itemAnimationMax;

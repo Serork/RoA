@@ -102,6 +102,7 @@ sealed class FlederSlayer : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
+        player.itemAnimation = player.itemTime = 2;
         player.heldProj = player.itemAnimationMax;
         float playerDirection = player.direction;
         if (player.HeldItem.type != ModContent.ItemType<Items.Weapons.Melee.FlederSlayer>()) {

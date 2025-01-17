@@ -19,7 +19,7 @@ abstract class BaseClawsItem : NatureItem {
     protected virtual ushort UseTime => 18;
 
     protected sealed override void SafeSetDefaults2() {
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, UseTime, UseTime, false, autoReuse: false, useSound: SoundID.Item1);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, UseTime, UseTime, false, autoReuse: true, useSound: SoundID.Item1);
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }
 

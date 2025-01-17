@@ -11,6 +11,7 @@ using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.VisualEffects;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
@@ -23,6 +24,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 class ClawsSlash : NatureProjectile {
+    private float _scale;
+
     protected Player Owner => Main.player[Projectile.owner];
 
     protected (Color, Color) SlashColors => Owner.GetModPlayer<ClawsHandler>().SlashColors;
@@ -187,6 +190,7 @@ class ClawsSlash : NatureProjectile {
         Projectile.rotation = (float)(MathHelper.Pi * (double)num1 * (double)fromValue + (double)rotation + (double)num1 * MathHelper.Pi) + player.fullRotation;
 
         Projectile.scale = num3 + fromValue * num2;
+        Projectile.scale *= _scale;
 
         Color color1 = FirstSlashColor;
         Color color2 = SecondSlashColor;
@@ -210,10 +214,10 @@ class ClawsSlash : NatureProjectile {
                 Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(color1, color2, Main.rand.NextFloat(0.5f, 1f) * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                 dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                 dust.noLight = dust.noLightEmittence = true;
+                dust.scale *= Projectile.scale;
                 dust.noGravity = true;
             }
         }
-        Projectile.scale *= player.GetAdjustedItemScale(player.inventory[player.selectedItem]);
         if (CanFunction) {
             for (float i = -MathHelper.PiOver4; i <= MathHelper.PiOver4; i += MathHelper.PiOver2) {
                 Rectangle rectangle = Utils.CenteredRectangle(Projectile.Center + (Projectile.rotation * player.gravDir + i).ToRotationVector2() * 60f * Projectile.scale, new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
@@ -229,6 +233,15 @@ class ClawsSlash : NatureProjectile {
             Projectile.Kill();
 
             return;
+        }
+
+        if (_scale == 0f) {
+            _scale = 1f;
+            float scale = Main.player[Projectile.owner].CappedMeleeScale();
+            if (scale != 1f) {
+                _scale *= scale;
+                Projectile.scale *= scale;
+            }
         }
 
         float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1] * 0.9f;
