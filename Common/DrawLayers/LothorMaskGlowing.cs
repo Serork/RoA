@@ -8,6 +8,8 @@ using RoA.Content.Items.Special.Lothor;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -51,15 +53,25 @@ sealed class LothorMaskGlowing : ModSystem {
                         immuneAlphaPure *= drawInfo.drawPlayer.stealth;
                         SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
                         Main.spriteBatch.BeginBlendState(BlendState.Additive);
+                        Vector2 position = drawInfo.Position + new Vector2(-1f, 5f);
+                        Vector2 vector = drawInfo.Position + drawInfo.rotationOrigin;
+                        Matrix matrix = Matrix.CreateRotationZ(drawInfo.rotation);
+                        Vector2 newPosition = position - vector;
+                        newPosition = Vector2.Transform(newPosition, matrix);
+                        position.X = (newPosition + vector).X;
+                        float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
+                        float offsetY2 = progress4 * (player.height / 2f + 8f);
+                        position.Y += offsetY2;
                         Main.spriteBatch.Draw(_lothorGlowMaskTexture.Value,
-                            helmetOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
+                            helmetOffset + new Vector2((int)(position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
                             (float)(drawInfo.drawPlayer.width / 2)),
-                            (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height -
+                            (int)(position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height -
                             (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect +
                             Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                             * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
-                             bodyFrame, immuneAlphaPure.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, drawInfo.drawPlayer.headRotation + Main.rand.NextFloatRange(0.05f) * lifeProgress,
-                             drawInfo.headVect, 1f, drawInfo.playerEffect, 0f);
+                             bodyFrame, immuneAlphaPure.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress,
+                             player.fullRotation + drawInfo.drawPlayer.headRotation + Main.rand.NextFloatRange(0.05f) * lifeProgress,
+                             new Vector2(40f, 56f) / 2f, 1f, drawInfo.playerEffect, 0f);
 
                         Main.spriteBatch.End();
                         Main.spriteBatch.Begin(in snapshot);

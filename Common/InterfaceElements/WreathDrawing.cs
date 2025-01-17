@@ -63,7 +63,6 @@ sealed class WreathDrawing : ModSystem {
                 position -= Main.screenPosition;
                 position += new Vector2(Main.screenWidth, Main.screenHeight) / 3f;
                 position.Y -= 25f;
-                //position -= new Vector2(2f, 0f);
                 var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
                 rotation = drawInfo.rotation + MathHelper.Pi;
                 bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing;
