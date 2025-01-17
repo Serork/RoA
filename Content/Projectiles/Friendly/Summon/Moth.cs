@@ -143,39 +143,39 @@ sealed class Moth : ModProjectile {
 
         #region Find target
         // Starting search distance
-        float distanceFromTarget = 1000f;
-        Vector2 targetCenter = Projectile.position;
-        bool foundTarget = false;
 
-        // This code is required if your minion weapon has the targeting feature
-        if (player.HasMinionAttackTargetNPC) {
-            NPC npc = Main.npc[player.MinionAttackTargetNPC];
-            float between = Vector2.Distance(npc.Center, Projectile.Center);
-            // Reasonable distance away so it doesn't target across multiple screens
-            if (between < 1000f) {
-                distanceFromTarget = between;
-                targetCenter = npc.Center;
-                foundTarget = true;
+        float num12 = 600f;
+        bool flag = false;
+        int num13 = -1;
+        Vector2 vector = Projectile.position;
+
+        NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
+        if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
+            float num17 = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
+            float num18 = num12 * 3f;
+            if (num17 < num18 && !flag) {
+                if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
+                    num12 = num17;
+                    vector = ownerMinionAttackTargetNPC2.Center;
+                    flag = true;
+                    num13 = ownerMinionAttackTargetNPC2.whoAmI;
+                }
             }
         }
-        if (!foundTarget) {
-            // This code is required either way, used for finding a target
-            for (int i = 0; i < Main.maxNPCs; i++) {
-                NPC npc = Main.npc[i];
-                if (npc.CanBeChasedBy()) {
-                    float between = Vector2.Distance(npc.Center, Projectile.Center);
-                    bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;
-                    bool inRange = between < distanceFromTarget;
-                    bool lineOfSight = Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height);
-                    // Additional check for this specific minion behavior, otherwise it will stop attacking once it dashed through an enemy while flying though tiles afterwards
-                    // The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
-                    bool closeThroughWall = between < 100f;
-                    if (inRange) {
-                        if ((closest && inRange || !foundTarget) && (lineOfSight || closeThroughWall)) {
-                            distanceFromTarget = between;
-                            targetCenter = npc.Center;
-                            foundTarget = true;
-                        }
+
+        if (!flag) {
+            for (int num19 = 0; num19 < 200; num19++) {
+                NPC nPC2 = Main.npc[num19];
+                if (!nPC2.CanBeChasedBy(this))
+                    continue;
+
+                float num20 = Vector2.Distance(nPC2.Center, Projectile.Center);
+                if (!(num20 >= num12)) {
+                    if (Collision.CanHit(Projectile.Center, 1, 1, nPC2.Center, 1, 1)) {
+                        num12 = num20;
+                        vector = nPC2.Center;
+                        flag = true;
+                        num13 = num19;
                     }
                 }
             }
@@ -185,7 +185,7 @@ sealed class Moth : ModProjectile {
         // friendly needs to be set to false so it doesn't damage things like target dummies while idling
         // Both things depend on if it has a target or not, so it's just one assignment here
         // You don't need this assignment if your minion is shooting things instead of dealing contact damage
-        Projectile.friendly = foundTarget;
+        Projectile.friendly = flag;
         #endregion
 
         #region Movement
@@ -193,7 +193,7 @@ sealed class Moth : ModProjectile {
         float speed = 10f;
         float inertia = 40f;
 
-        if (foundTarget) {
+        if (flag) {
             if (Projectile.ai[1] > 0f) {
                 Projectile.ai[1]--;
             }
@@ -215,15 +215,15 @@ sealed class Moth : ModProjectile {
             }
             // otherwise attack normally with dashes
             else {
-                Vector2 direction = targetCenter - Projectile.Center;
+                Vector2 direction = vector - Projectile.Center;
                 direction.Normalize();
                 direction *= speed;
-                if (distanceFromTarget >= 40f && dashTimer < 40)
+                if (num12 >= 40f && dashTimer < 40)
                     Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
                 else
                     Projectile.velocity = Projectile.velocity * (inertia - 1) / inertia;
 
-                if (distanceFromTarget < 600f) {
+                if (num12 < 600f) {
                     dashTimer++;
                     if (dashTimer == 40) {
                         Projectile.velocity += direction * 0.9f;
@@ -237,9 +237,11 @@ sealed class Moth : ModProjectile {
                 }
                 // chance to activate summoning attack, increases over time and resets upon activation
                 if (Main.rand.Next(500 - summonSwitchTimer) == 0 && dashTimer < 40) {
-                    summonAttack = true;
-                    summonSwitchTimer = 0;
-                    dashTimer = 0;
+                    if (!Collision.SolidTiles(Projectile.position, Projectile.width, Projectile.height)) {
+                        summonAttack = true;
+                        summonSwitchTimer = 0;
+                        dashTimer = 0;
+                    }
                 }
                 else summonSwitchTimer++;
             }
