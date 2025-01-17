@@ -20,7 +20,7 @@ sealed class Bane : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useTime = Item.useAnimation = 26;
+        Item.useTime = Item.useAnimation = 48;
         Item.autoReuse = true;
         Item.useTurn = false;
 
@@ -36,14 +36,14 @@ sealed class Bane : ModItem {
         Item.UseSound = SoundID.Item45;
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Magic.BaneSpell>();
-        Item.shootSpeed = 8f;
+        Item.shootSpeed = 6f;
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(2f, 0f);
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelo = new Vector2(velocity.X, velocity.Y).SafeNormalize(Vector2.Zero);
-        position += newVelo * 20;
+        position += newVelo * 10;
         position += new Vector2(-newVelo.Y, newVelo.X) * (-5f * player.direction);
     }
 

@@ -19,6 +19,9 @@ sealed class BaneExtra : PlayerDrawLayer {
     public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FirstVanillaLayer);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+
+        return;
+
         Player player = drawInfo.drawPlayer;
         if (player.dead || !player.active || drawInfo.shadow != 0f) {
             return;
