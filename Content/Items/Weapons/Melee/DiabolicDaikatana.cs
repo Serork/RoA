@@ -94,12 +94,18 @@ sealed class DiabolicDaikatana : ModItem {
                 return;
             }
 
-            if (player.ItemAnimationActive) {
+            Vector2 drawPosition = drawInfo.Position + new Vector2(0f, -2f);
+            drawPosition.X += 12f;
+            if (player.direction == 1) {
+                drawPosition.X -= 4f;
+            }
+            if (player.itemAnimation < player.itemAnimationMax - 1 && player.itemAnimation != 0) {
                 return;
             }
 
+            float scale = player.CappedMeleeScale();
             Texture2D texture = _daikatanaTexture.Value;
-            Vector2 position = new((int)(drawInfo.ItemLocation.X), (int)(drawInfo.ItemLocation.Y));
+            Vector2 position = new((int)(drawPosition.X), (int)(drawPosition.Y));
             Vector2 offset = new(texture.Width / 2f * player.direction, 0f);
             if (player.direction < 0) {
                 offset.Y += (int)(texture.Height * 0.8f - 2f);
@@ -121,9 +127,11 @@ sealed class DiabolicDaikatana : ModItem {
                 offset.Y -= 13;
             }
             if (player.gravDir == -1f) {
-                position.Y -= 1;
+                //position.Y -= 1;
             }
-            position += offset;
+            position += offset * scale;
+            position.Y -= (texture.Height / 2f + 8f) * (scale - 1f);
+            position.X -= texture.Width / 6f * (scale - 1f) * player.direction;
             //position += Vector2.UnitY * player.gfxOffY;
             SpriteEffects effects = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             float rotation = 2.3f + (player.gravDir == -1 ? 0.1f : 0f);
@@ -141,7 +149,7 @@ sealed class DiabolicDaikatana : ModItem {
                                         player.HeldItem.GetAlpha(color) * drawInfo.stealth * (1f - drawInfo.shadow),
                                         player.direction > 0 ? -rotation : rotation,
                                         texture.Size() / 2f,
-                                        player.GetAdjustedItemScale(player.HeldItem),
+                                        player.GetAdjustedItemScale(player.HeldItem) * scale,
                                         effects);
                 drawInfo.DrawDataCache.Add(drawData);
             }
@@ -192,7 +200,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     public override void AI() {
         Projectile.extraUpdates = 5;
         Player player = Main.player[Projectile.owner];
-        Projectile.scale = player.GetAdjustedItemScale(player.GetSelectedItem());
+        Projectile.scale = player.GetAdjustedItemScale(player.GetSelectedItem()) * Projectile.localAI[2];
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
             _swingTimeMax = player.itemAnimationMax;
@@ -205,6 +213,15 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             _swingTimeMax *= Projectile.extraUpdates + 1;
             _swingTime = _swingTimeMax;
             Projectile.timeLeft = _swingTimeMax + 2;
+
+            if (Projectile.localAI[2] == 0f) {
+                Projectile.localAI[2] = 1f;
+                float scale = Main.player[Projectile.owner].CappedMeleeScale();
+                if (scale != 1f) {
+                    Projectile.localAI[2] *= scale;
+                    Projectile.scale *= scale;
+                }
+            }
         }
         player.heldProj = Projectile.whoAmI;
         if (!player.frozen && !player.stoned) {
