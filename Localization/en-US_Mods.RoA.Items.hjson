@@ -1217,6 +1217,6 @@ BackwoodsNightMusicBox: {
 }
 
 BackwoodsFogMusicBox: {
-	DisplayName: Backwoods Fog Music Box
+	DisplayName: Music Box (Backwoods Fog)
 	Tooltip: ""
 }
