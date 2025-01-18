@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.GlowMasks;
+using RoA.Content.Items.Miscellaneous;
 
 using System;
 
@@ -29,6 +31,10 @@ sealed class LuminousFlowerHat : ModItem {
                 LightValue = Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT;
             }
         }
+    }
+
+    public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
+        LuminousFlower.LightUp(Item, spriteBatch, Texture, rotation);
     }
 
     public override void SetStaticDefaults() {

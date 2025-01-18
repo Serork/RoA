@@ -4,17 +4,16 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Special.Lothor;
+namespace RoA.Content.Items.Placeable;
 
-sealed class LothorMusicBox : ModItem {
+sealed class BackwoodsFogMusicBox : ModItem {
     public override void SetStaticDefaults() {
-        // DisplayName.SetDefault("Music Box (Lothor)");
         ItemID.Sets.CanGetPrefixes[Type] = false;
         ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.MusicBox;
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor"), ModContent.ItemType<LothorMusicBox>(), ModContent.TileType<Tiles.Other.LothorMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "Fog"), ModContent.ItemType<BackwoodsFogMusicBox>(), ModContent.TileType<Tiles.Other.BackwoodsFogMusicBox>());
     }
 
     public override void SetDefaults() {
@@ -24,9 +23,9 @@ sealed class LothorMusicBox : ModItem {
         Item.useTime = 10;
         Item.autoReuse = true;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<Tiles.Other.LothorMusicBox>();
-        Item.width = 32;
-        Item.height = 28;
+        Item.createTile = ModContent.TileType<Tiles.Other.BackwoodsFogMusicBox>();
+        Item.width = 30;
+        Item.height = 20;
         Item.rare = 4;
         Item.value = 100000;
         Item.accessory = true;

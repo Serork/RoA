@@ -16,9 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Materials;
 
 sealed class NaturesHeart : ModItem {
-	private float _value;
-
-	public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.5f);
+	public override Color? GetAlpha(Color lightColor) => lightColor;
 
     public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Nature's Heart");
@@ -52,6 +50,8 @@ sealed class NaturesHeart : ModItem {
                 value = 0.8f;
                 break;
         }
+        Lighting.AddLight(Item.Center + Vector2.UnitX * 2f,
+            (Color.Green * value).ToVector3() * 0.75f);
         int type = ModContent.DustType<NaturesHeartDust>();
         if (Main.rand.NextBool(20)) {
             for (int num740 = 0; num740 < 1; num740++) {
@@ -77,7 +77,11 @@ sealed class NaturesHeart : ModItem {
                 }
             }
         }
-        Lighting.AddLight(Item.Center + Vector2.UnitX * 2f,
-            (Color.Green * value).ToVector3() * 0.75f);
+
+        Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        Vector2 origin = glowMaskTexture.Size() / 2f;
+        Color color = Color.Lerp(lightColor, Color.White, 0.5f);
+        spriteBatch.Draw(glowMaskTexture, Item.Center - Main.screenPosition + Vector2.UnitY * (glowMaskTexture.Height / 2f - 14f),
+            new Rectangle(0, frame * 32, 22, 32), color, rotation, origin, 1f, SpriteEffects.None, 0f);
     }
 }

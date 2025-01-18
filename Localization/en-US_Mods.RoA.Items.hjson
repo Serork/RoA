@@ -1205,3 +1205,18 @@ Bane: {
 	DisplayName: Bane
 	Tooltip: ""
 }
+
+BackwoodsDayMusicBox: {
+	DisplayName: Music Box (Backwoods Day)
+	Tooltip: ""
+}
+
+BackwoodsNightMusicBox: {
+	DisplayName: Music Box (Backwoods Night)
+	Tooltip: ""
+}
+
+BackwoodsFogMusicBox: {
+	DisplayName: Backwoods Fog Music Box
+	Tooltip: ""
+}

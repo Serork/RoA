@@ -51,11 +51,12 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = 6;
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
-        LuminiousFlowerLightUp(i, j);
+        LuminiousFlowerLightUp(i, j, out float _, modTile: TileLoader.GetTile(Type));
     }
 
-    public static void LuminiousFlowerLightUp(int i, int j, ModTile modTile = null) {
+    public static void LuminiousFlowerLightUp(int i, int j, out float progress, ModTile modTile = null) {
         if (!Helper.OnScreenWorld(i, j)) {
+            progress = 0f;
             return;
         }
         float[] lengths = new float[Main.CurrentFrameFlags.ActivePlayersCount];
@@ -87,10 +88,11 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
             }
         }
         if (dist < maxDist) {
-            float progress = MathHelper.Clamp(1f - dist / maxDist, MINLIGHTMULT, 0.85f);
+            progress = MathHelper.Clamp(1f - dist / maxDist, MINLIGHTMULT, 0.85f);
             lightUp(progress);
         }
         else {
+            progress = MINLIGHTMULT;
             lightUp(MINLIGHTMULT);
         }
     }
