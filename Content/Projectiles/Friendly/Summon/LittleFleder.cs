@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.ID;
@@ -17,6 +20,10 @@ sealed class LittleFleder : ModProjectile {
 
     private bool _hasTarget;
     private float _canChangeDirectionAgain;
+    private bool _foundPickUp;
+    private Vector2 _pickUpPosition;
+    internal Item _pickUpIFound;
+    private bool _nowGoToPlayer;
 
     private ref float AttackTimer => ref Projectile.ai[1];
 
@@ -59,7 +66,7 @@ sealed class LittleFleder : ModProjectile {
         return true;
     }
 
-    private static int GetGrabRange(Player player, Item item) => player.GetItemGrabRange(item);
+    private static int GetGrabRange(Player player, Item item) => player.GetItemGrabRange(item) * 2;
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
@@ -110,7 +117,6 @@ sealed class LittleFleder : ModProjectile {
 
         float overlapVelocity = 0.04f;
         for (int i = 0; i < Main.maxProjectiles; i++) {
-            // Fix overlap with other minions
             Projectile other = Main.projectile[i];
             if (i != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width / 1.5f) {
                 if (Projectile.position.X < other.position.X) Projectile.velocity.X -= overlapVelocity;
@@ -121,11 +127,173 @@ sealed class LittleFleder : ModProjectile {
             }
         }
 
+        List<int> validItems = [];
+        validItems.Add(ItemID.Heart);
+        validItems.Add(ModContent.ItemType<MagicHerb1>());
+        validItems.Add(ModContent.ItemType<MagicHerb2>());
+        validItems.Add(ModContent.ItemType<MagicHerb3>());
+        validItems.Add(ItemID.Star);
+        bool validPickUp(Item item) {
+            if ((item.type == validItems[0] ||
+                item.type == validItems[1] ||
+                item.type == validItems[2] ||
+                item.type == validItems[3]) && player.statLife >= player.statLifeMax2) {
+                return false;
+            }
+
+            if (item.type == validItems[4] && player.statMana >= player.statManaMax2) {
+                return false;
+            }
+
+            return true;
+        }
+
+        void searchForPickUps() {
+            float minDistance = float.MaxValue;
+            Vector2 to = Projectile.Center;
+            for (int j = 0; j < 400; j++) {
+                Item item = Main.item[j];
+                Player player = Main.player[Projectile.owner];
+                if (!item.active || item.shimmerTime != 0f || item.noGrabDelay != 0 || item.playerIndexTheItemIsReservedFor != player.whoAmI || !player.CanAcceptItemIntoInventory(item) || (item.shimmered && !((double)item.velocity.Length() < 0.2)))
+                    continue;
+
+                if (item.Distance(Projectile.Center) > 600f) {
+                    continue;
+                }
+
+                if (!validItems.Contains(item.type)) {
+                    continue;
+                }
+
+                if (!validPickUp(item)) {
+                    continue;
+                }
+
+                bool flag = false;
+                foreach (Projectile projectile in Main.ActiveProjectiles) {
+                    if (projectile.owner != Projectile.owner) {
+                        continue;
+                    }
+                    if (projectile.type != Projectile.type) {
+                        continue;
+                    }
+                    if (projectile.whoAmI != Projectile.whoAmI && projectile.As<LittleFleder>()._pickUpIFound == item) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    continue;
+                }
+
+                float distance = Vector2.Distance(item.Center, Projectile.Center);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    to = item.Center - Vector2.UnitY * item.height * 3f;
+                }
+
+                _pickUpIFound = item;
+            }
+
+            if (_pickUpIFound != null) {
+                _pickUpPosition = to;
+                _foundPickUp = true;
+            }
+        }
+
+        searchForPickUps();
+
         float num = 0f;
         float num2 = 0f;
         float num3 = 20f;
         float num4 = 40f;
         float num5 = 0.69f;
+
+        Vector2 spawnPosition = Projectile.Bottom;
+        if (_foundPickUp && _pickUpIFound != null && !_nowGoToPlayer) {
+            Vector2 v2 = _pickUpPosition - Projectile.Center;
+            float distanceBetweenTargetAndMe2 = v2.Length();
+            v2 = v2.SafeNormalize(Vector2.Zero);
+            if (distanceBetweenTargetAndMe2 > 25f) {
+                float acceleration = 7.5f + num2 * num;
+                v2 *= acceleration;
+                float speed = num3;
+                Projectile.velocity.X = (Projectile.velocity.X * speed + v2.X) / (speed + 1f);
+                Projectile.velocity.Y = (Projectile.velocity.Y * speed + v2.Y) / (speed + 1f);
+
+                if (++_canChangeDirectionAgain > 20f) {
+                    if ((_pickUpIFound.Center - Projectile.Center).X > 0f)
+                        Projectile.spriteDirection = (Projectile.direction = -1);
+                    else if ((_pickUpIFound.Center - Projectile.Center).X < 0f)
+                        Projectile.spriteDirection = (Projectile.direction = 1);
+                    _canChangeDirectionAgain = 0f;
+                }
+            }
+            else {
+                Projectile.velocity *= 0.9f;
+                pickUp();
+                if (_pickUpIFound != null && _pickUpIFound.Distance(spawnPosition) < 15f) {
+                    _nowGoToPlayer = true;
+                }
+            }
+
+            bool flag5 = false;
+            foreach (Item item in Main.ActiveItems) {
+                if (_pickUpIFound == item) {
+                    flag5 = true;
+                }
+            }
+            if (!flag5 || !validPickUp(_pickUpIFound)) {
+                _pickUpIFound = null;
+                _foundPickUp = false;
+            }
+
+            return;
+        }
+
+        void pickUp() {
+            Item item = _pickUpIFound;
+            if (item != null) {
+                int itemGrabRange = GetGrabRange(player, item);
+                Rectangle hitbox = _pickUpIFound.Hitbox;
+                if (new Rectangle((int)Projectile.position.X - itemGrabRange, (int)Projectile.position.Y - itemGrabRange, Projectile.width + itemGrabRange * 2, Projectile.height + itemGrabRange * 2).Intersects(hitbox)) {
+                    Player.ItemSpaceStatus status = player.ItemSpace(item);
+                    if (player.CanPullItem(item, status)) {
+                        item.shimmered = false;
+                        item.beingGrabbed = true;
+
+                        Item itemToPickUp = item;
+                        if (itemToPickUp.Distance(spawnPosition) < 15f) {
+                            itemToPickUp.Center = spawnPosition;
+                            itemToPickUp.velocity = Vector2.Zero;
+                        }
+                        else {
+                            float speed = 2.5f;
+                            int acc = 2;
+                            Vector2 vector = new Vector2(itemToPickUp.position.X + (float)(itemToPickUp.width / 2), itemToPickUp.position.Y + (float)(itemToPickUp.height / 2));
+                            float numm = spawnPosition.X - vector.X;
+                            float numm2 = spawnPosition.Y - vector.Y;
+                            float numm3 = (float)Math.Sqrt(numm * numm + numm2 * numm2);
+                            numm3 = speed / numm3;
+                            numm *= numm3;
+                            numm2 *= numm3;
+                            itemToPickUp.velocity.X = (itemToPickUp.velocity.X * (float)(acc - 1) + numm) / (float)acc;
+                            itemToPickUp.velocity.Y = (itemToPickUp.velocity.Y * (float)(acc - 1) + numm2) / (float)acc;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (_nowGoToPlayer) {
+            pickUp();
+            if (_pickUpIFound == null || !_pickUpIFound.active || _pickUpIFound.Distance(player.Center) < 50f || _pickUpIFound.Distance(Projectile.Center) > 25f) {
+                _pickUpIFound = null;
+                _nowGoToPlayer = false;
+                _foundPickUp = false;
+                _pickUpPosition = Projectile.Center;
+            }
+        }
 
         Vector2 targetCenter = Projectile.position;
         float distanceToTarget = 400f;
@@ -172,6 +340,10 @@ sealed class LittleFleder : ModProjectile {
         else {
             AI_156_GetIdlePosition(targetCenter, index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 20f);
             targetCenter = idleSpot;
+        }
+
+        if (_nowGoToPlayer) {
+            hasTarget = false;
         }
 
         _hasTarget = hasTarget;
@@ -342,21 +514,6 @@ sealed class LittleFleder : ModProjectile {
                     , ai2: targetWhoAmI);
                 Projectile.netUpdate = true;
             }
-        }
-    }
-
-    private void MoveTo(Vector2 positionTo) {
-        float speed = 5f;
-        float inertia = 15f;
-        float distance = Vector2.Distance(Projectile.Center, positionTo);
-        Vector2 dif = positionTo - Projectile.Center;
-        Vector2 direction = positionTo - Projectile.Center;
-        if (direction.Length() > 10f) {
-            direction.Normalize();
-            Projectile.velocity = (Projectile.velocity * inertia + direction * speed) / (inertia + 1f);
-        }
-        else {
-            Projectile.velocity *= (float)Math.Pow(0.98, inertia * 2.0 / inertia);
         }
     }
 

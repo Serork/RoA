@@ -31,7 +31,7 @@ sealed class LothorAngleAttack : ModProjectile {
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.aiStyle = -1;
-        Projectile.timeLeft = 180;
+        Projectile.timeLeft = 300;
         Projectile.netImportant = true;
     }
 

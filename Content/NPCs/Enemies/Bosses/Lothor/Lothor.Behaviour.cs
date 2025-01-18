@@ -749,14 +749,25 @@ sealed partial class Lothor : ModNPC {
             if (dist <= maxDist) {
                 Vector2 velocity = npc.Center - NPC.Center;
                 velocity.Normalize();
-                npc.velocity += velocity * Math.Max((maxDist - dist) / 100f, 10f);
+                npc.velocity += velocity * (maxDist - dist) / 150f;
             }
         }
 
         foreach (Projectile projectile in Main.ActiveProjectiles) {
-            if (projectile.friendly && NPC.Distance(projectile.Center) <= maxDist) {
+            if (projectile.friendly && !projectile.minion && NPC.Distance(projectile.Center) <= maxDist) {
                 projectile.GetGlobalProjectile<ScreamProjectileHandler>().ApplyEffect();
                 projectile.damage -= projectile.damage / 5;
+            }
+        }
+
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            if (projectile.friendly && projectile.minion && NPC.Distance(projectile.Center) <= maxDist) {
+                float dist = NPC.Distance(projectile.Center);
+                if (dist <= maxDist) {
+                    Vector2 velocity = projectile.Center - NPC.Center;
+                    velocity.Normalize();
+                    projectile.velocity += velocity * (maxDist - dist) / 150f;
+                }
             }
         }
 
