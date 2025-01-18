@@ -383,7 +383,7 @@ sealed class LittleFleder : ModProjectile {
             distanceBetweenTargetAndMe = v.Length();
             v = v.SafeNormalize(Vector2.Zero);
 
-            bool flag5 = Math.Abs(Projectile.Center.Y - targetCenter.Y) < 10f;
+            bool flag5 = Math.Abs(Projectile.Center.Y - targetCenter.Y) < 100f;
             if (flag5 || targetCenter.Y > Projectile.Center.Y) {
                 if ((targetCenter - Projectile.Center).Length() < 100f) {
                     Projectile.velocity.Y -= 0.075f;
