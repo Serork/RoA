@@ -38,26 +38,30 @@ abstract class Wand : ModItem {
     protected abstract ushort ItemToConsume { get; }
     protected abstract ushort TileToPlace { get; }
 
-    public override void SetStaticDefaults() {
-        On_Player.PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate += On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate;
-    }
+    private sealed class ExtraLoader : ILoadable {
+        public void Load(Mod mod) {
+            On_Player.PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate += On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate;
+        }
 
-    private void On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate(On_Player.orig_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate orig, Player self, int[,] typeCaches, int tileToCreate) {
-        int selectedItemType = self.GetSelectedItem().type;
-        ModItem modItem = ItemLoader.GetItem(selectedItemType);
-        if (modItem != null && modItem is Wand wand) {
-            int tileWand = wand.ItemToConsume;
-            for (int num15 = 0; num15 < 58; num15++) {
-                if (tileWand == self.inventory[num15].type && self.inventory[num15].stack > 0) {
-                    self.inventory[num15].stack--;
-                    if (self.inventory[num15].stack <= 0)
-                        self.inventory[num15] = new Item();
+        private void On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate(On_Player.orig_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate orig, Player self, int[,] typeCaches, int tileToCreate) {
+            orig(self, typeCaches, tileToCreate);
+            int selectedItemType = self.GetSelectedItem().type;
+            ModItem modItem = ItemLoader.GetItem(selectedItemType);
+            if (modItem != null && modItem is Wand wand) {
+                int tileWand = wand.ItemToConsume;
+                for (int num15 = 0; num15 < 58; num15++) {
+                    if (tileWand == self.inventory[num15].type && self.inventory[num15].stack > 0) {
+                        self.inventory[num15].stack--;
+                        if (self.inventory[num15].stack <= 0)
+                            self.inventory[num15] = new Item();
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
-        orig(self, typeCaches, tileToCreate);
+
+        public void Unload() { }
     }
 
     public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
