@@ -1220,3 +1220,12 @@ BackwoodsFogMusicBox: {
 	DisplayName: Music Box (Backwoods Fog)
 	Tooltip: ""
 }
+
+LivingPrimordialWand: {
+	DisplayName: Living Primordial Wand
+	Tooltip: 
+		'''
+		Consumes Elderwood
+		Places elderwood
+		'''
+}

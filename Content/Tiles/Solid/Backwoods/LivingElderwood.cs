@@ -4,6 +4,9 @@ using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -43,11 +46,14 @@ class LivingElderwood : ModTile {
         TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-        RegisterItemDrop(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
         DustType = (ushort)ModContent.DustType<WoodTrash>();
 		AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
 
         MineResist = 1.5f;
         MinPick = MINTILEREQUIRED;
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
     }
 }

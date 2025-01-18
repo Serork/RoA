@@ -109,7 +109,7 @@ sealed class BloodbathLocket : ModItem {
                     if (eyes.TimeLeft > 0) {
                         continue;
                     }
-                    eyes.MaxTimeLeft = eyes.TimeLeft = 120 + Main.rand.Next(60) + eyesCount * 60;
+                    eyes.MaxTimeLeft = eyes.TimeLeft = 210 + Main.rand.Next(60) + eyesCount * 60;
                     eyes.Position = player.Center + Main.rand.RandomPointInArea(100f);
                     eyes.Rotation = Main.rand.NextFloatRange(MathHelper.PiOver4 / 2f);
                     eyes.Extra = Main.rand.NextBool();
@@ -131,13 +131,13 @@ sealed class BloodbathLocket : ModItem {
                     eyes.TimeLeft--;
                 }
                 Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.Textures + $"FlederEyes" + (eyes.Extra ? 2 : string.Empty)).Value;
-                float edge = 15f;
+                float edge = 30f;
                 float opacity = Utils.GetLerpValue(0f, edge, eyes.TimeLeft, true) * Utils.GetLerpValue(eyes.MaxTimeLeft, eyes.MaxTimeLeft - edge, eyes.TimeLeft, true);
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
                     Main.spriteBatch.Draw(texture, eyes.Position - Main.screenPosition +
                             Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                             * Helper.Wave(0f, 3f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f), null, 
-                            Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f)) * opacity,
+                            Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f)) * opacity * 0.75f,
                             eyes.Rotation + Main.rand.NextFloatRange(0.05f),
                             Vector2.Zero, 1f, default, 0f);
                 }
