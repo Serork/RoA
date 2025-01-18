@@ -7,6 +7,8 @@ using RoA.Common.Utilities.Extensions;
 using RoA.Content.Gores;
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
@@ -28,6 +30,10 @@ sealed class LivingElderwoodlLeaves : ModTile {
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
 		AddMapEntry(new Color(0, 128, 0));
 	}
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ItemID.None);
+    }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         // adapted vanilla
