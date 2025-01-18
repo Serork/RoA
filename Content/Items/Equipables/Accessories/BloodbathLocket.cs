@@ -1,10 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Content.Dusts;
+using RoA.Core;
+using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -33,9 +39,90 @@ sealed class BloodbathLocket : ModItem {
         if (!hideVisual) player.GetModPlayer<BloodbathLocketPlayer>().theWildEye = true;
     }
 
+    private sealed class BloodbathLocketEyes : ILoadable {
+        private class EyesData {
+            public Vector2 Position;
+            public int TimeLeft, MaxTimeLeft;
+            public float Rotation;
+            public bool Extra;
+        }
+
+        private float _eyesTimer;
+        private readonly EyesData[] _eyes = new EyesData[5];
+
+        void ILoadable.Load(Mod mod) {
+            for (int i = 0; i < _eyes.Length; i++) {
+                _eyes[i] = new EyesData();
+            }
+
+            On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += On_PlayerDrawLayers_DrawPlayer_RenderAllLayers;
+        }
+
+        void ILoadable.Unload() { }
+
+        private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawInfo) {
+            orig(ref drawInfo);
+
+            Player player = drawInfo.drawPlayer;
+
+            if (drawInfo.shadow != 0f || !player.active) {
+                return;
+            }
+
+            BloodbathLocketPlayer handler = player.GetModPlayer<BloodbathLocketPlayer>();
+            if (!handler.theWildEye) {
+                return;
+            }
+
+            bool gameActive = !(Main.gamePaused || !Main.instance.IsActive);
+            int eyesCount = (int)(handler.bloodbathDamage / 0.05f) + 1;
+            if (gameActive && eyesCount > 0 && ++_eyesTimer > 120f) {
+                for (int i = 0; i < eyesCount; i++) {
+                    EyesData eyes = _eyes[i];
+                    if (eyes.TimeLeft > 0) {
+                        continue;
+                    }
+                    eyes.MaxTimeLeft = eyes.TimeLeft = 120 + Main.rand.Next(60) + eyesCount * 60;
+                    eyes.Position = player.Center + Main.rand.RandomPointInArea(100f);
+                    eyes.Rotation = Main.rand.NextFloatRange(MathHelper.PiOver4 / 2f);
+                    eyes.Extra = Main.rand.NextBool();
+                    _eyesTimer = 0f;
+                    break;
+                }
+            }
+            SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+            Main.spriteBatch.BeginBlendState(BlendState.Additive);
+            for (int i = 0; i < eyesCount; i++) {
+                EyesData eyes = _eyes[i];
+                if (eyes is null) {
+                    continue;
+                }
+                if (eyes.TimeLeft <= 0) {
+                    continue;
+                }
+                if (gameActive) {
+                    eyes.TimeLeft--;
+                }
+                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.Textures + $"FlederEyes" + (eyes.Extra ? 2 : string.Empty)).Value;
+                float edge = 15f;
+                float opacity = Utils.GetLerpValue(0f, edge, eyes.TimeLeft, true) * Utils.GetLerpValue(eyes.MaxTimeLeft, eyes.MaxTimeLeft - edge, eyes.TimeLeft, true);
+                for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
+                    Main.spriteBatch.Draw(texture, eyes.Position - Main.screenPosition +
+                            Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                            * Helper.Wave(0f, 3f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f), null, 
+                            Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f)) * opacity,
+                            eyes.Rotation + Main.rand.NextFloatRange(0.05f),
+                            Vector2.Zero, 1f, default, 0f);
+                }
+            }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(in snapshot);
+        }
+    }
+
     private sealed class BloodbathLocketPlayer : ModPlayer {
         public bool bloodbathLocket, theWildEye;
-        private float bloodbathDamage;
+        internal float bloodbathDamage { get; private set; }
         private const float bloodbathDamageMax = 0.25f;
 
         public override void ResetEffects() {

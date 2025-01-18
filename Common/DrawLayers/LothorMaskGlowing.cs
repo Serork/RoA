@@ -54,14 +54,14 @@ sealed class LothorMaskGlowing : ModSystem {
                 var drawInfo = drawinfo;
                 if (!(player.dead || player.invis || player.ShouldNotDraw)) { 
                     float lifeProgress = 1f;
+                    SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+                    Main.spriteBatch.BeginBlendState(BlendState.Additive);
                     for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                         Rectangle bodyFrame = drawInfo.drawPlayer.bodyFrame;
                         bodyFrame.Width += 2;
                         Vector2 helmetOffset = drawInfo.helmetOffset;
                         Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(Color.White, drawInfo.shadow);
                         immuneAlphaPure *= drawInfo.drawPlayer.stealth;
-                        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-                        Main.spriteBatch.BeginBlendState(BlendState.Additive);
                         Vector2 position = drawInfo.Position + new Vector2(-1f, 5f);
                         Vector2 vector = drawInfo.Position + drawInfo.rotationOrigin;
                         Matrix matrix = Matrix.CreateRotationZ(drawInfo.rotation);
@@ -82,10 +82,9 @@ sealed class LothorMaskGlowing : ModSystem {
                              bodyFrame, immuneAlphaPure.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress,
                              player.fullRotation + drawInfo.drawPlayer.headRotation + Main.rand.NextFloatRange(0.05f) * lifeProgress,
                              new Vector2(40f, 56f) / 2f, 1f, drawInfo.playerEffect, 0f);
-
-                        Main.spriteBatch.End();
-                        Main.spriteBatch.Begin(in snapshot);
                     }
+                    Main.spriteBatch.End();
+                    Main.spriteBatch.Begin(in snapshot);
                 }
             }
         }
