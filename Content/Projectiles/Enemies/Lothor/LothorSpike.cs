@@ -63,7 +63,11 @@ sealed class LothorSpike : ModProjectile {
             _partInfo[i].Variant = (i % 2 == 0).ToInt();
         }
 
-        Projectile.timeLeft = (int)(Length * 20f); 
+        float num = 20f;
+        if (Projectile.velocity == -Vector2.UnitY) {
+            num = 30f;
+        }
+        Projectile.timeLeft = (int)(Length * num);
     }
 
     public override void AI() {
