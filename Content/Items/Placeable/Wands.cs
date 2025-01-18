@@ -35,24 +35,18 @@ sealed class LivingPrimordialWand2 : Wand {
 }
 
 abstract class Wand : ModItem {
-    public static bool[] Wands = ItemID.Sets.Factory.CreateBoolSet();
-
     protected abstract ushort ItemToConsume { get; }
     protected abstract ushort TileToPlace { get; }
 
     public override void SetStaticDefaults() {
-        Wands[Type] = true;
-    }
-
-    public override void Load() {
         On_Player.PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate += On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate;
     }
 
     private void On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate(On_Player.orig_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate orig, Player self, int[,] typeCaches, int tileToCreate) {
         int selectedItemType = self.GetSelectedItem().type;
-        if (Wands[selectedItemType]) {
-            Wand modItem = ItemLoader.GetItem(selectedItemType) as Wand;
-            int tileWand = modItem.ItemToConsume;
+        ModItem modItem = ItemLoader.GetItem(selectedItemType);
+        if (modItem != null && modItem is Wand wand) {
+            int tileWand = wand.ItemToConsume;
             for (int num15 = 0; num15 < 58; num15++) {
                 if (tileWand == self.inventory[num15].type && self.inventory[num15].stack > 0) {
                     self.inventory[num15].stack--;

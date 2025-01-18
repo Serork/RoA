@@ -1232,7 +1232,7 @@ LivingPrimordialWand: {
 
 LivingPrimordialWand2: {
 	DisplayName: Living Elderwood Leaf Wand
-	Tooltip: 
+	Tooltip:
 		'''
 		Consumes Elderwood
 		Places elderwood leaves
