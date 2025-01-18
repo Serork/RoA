@@ -79,9 +79,9 @@ sealed class NaturesHeart : ModItem {
         }
 
         Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
-        Vector2 origin = glowMaskTexture.Size() / 2f;
+        Vector2 origin = new Vector2(22, 32) / 2f;
         Color color = Color.Lerp(lightColor, Color.White, 0.5f);
-        spriteBatch.Draw(glowMaskTexture, Item.Center - Main.screenPosition + Vector2.UnitY * (glowMaskTexture.Height / 2f - 14f),
+        spriteBatch.Draw(glowMaskTexture, Item.Center - Main.screenPosition + Vector2.UnitY * 2f,
             new Rectangle(0, frame * 32, 22, 32), color, rotation, origin, 1f, SpriteEffects.None, 0f);
     }
 }
