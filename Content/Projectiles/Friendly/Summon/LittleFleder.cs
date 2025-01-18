@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class LittleFleder : ModProjectile {
-    private const float ATTACKRATE = 70f;
+    private const float ATTACKRATE = 50f;
 
     private bool _hasTarget;
     private float _canChangeDirectionAgain;
