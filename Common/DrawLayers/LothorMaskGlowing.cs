@@ -70,6 +70,7 @@ sealed class LothorMaskGlowing : ModSystem {
                         position.X = (newPosition + vector).X;
                         float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
                         float offsetY2 = progress4 * (player.height / 2f + 8f);
+                        float drawDistance = MathHelper.Lerp(5f, 0f, (float)player.statLife / (float)player.statLifeMax2);
                         position.Y += offsetY2;
                         Main.spriteBatch.Draw(_lothorGlowMaskTexture.Value,
                             helmetOffset + new Vector2((int)(position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
@@ -77,7 +78,7 @@ sealed class LothorMaskGlowing : ModSystem {
                             (int)(position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height -
                             (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect +
                             Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
-                            * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
+                            * Helper.Wave(0f, drawDistance, 12f, 0.5f) * lifeProgress,
                              bodyFrame, immuneAlphaPure.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress,
                              player.fullRotation + drawInfo.drawPlayer.headRotation + Main.rand.NextFloatRange(0.05f) * lifeProgress,
                              new Vector2(40f, 56f) / 2f, 1f, drawInfo.playerEffect, 0f);

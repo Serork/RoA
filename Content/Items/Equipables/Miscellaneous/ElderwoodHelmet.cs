@@ -15,7 +15,7 @@ sealed class ElderwoodHelmet : ModItem {
     }
 
     public override void SetDefaults() {
-        int width = 26; int height = 20;
+        int width = 22; int height = 22;
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.White;
