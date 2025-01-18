@@ -69,7 +69,7 @@ sealed class LothorMaskGlowing : ModSystem {
                         newPosition = Vector2.Transform(newPosition, matrix);
                         position.X = (newPosition + vector).X;
                         float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
-                        float drawDistance = MathHelper.Lerp(5f, 0f, (float)player.statLife / (float)player.statLifeMax2);
+                        float drawDistance = 3f/*MathHelper.Lerp(5f, 0f, (float)player.statLife / (float)player.statLifeMax2)*/;
                         position.X -= progress4 * (player.width / 2f + 12f) * player.direction;
                         position.Y += progress4 * (player.height / 2f + 8f);
                         Main.spriteBatch.Draw(_lothorGlowMaskTexture.Value,
