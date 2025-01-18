@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class LittleFleder : ModProjectile {
-    private const float ATTACKRATE = 40f;
+    private const float ATTACKRATE = 70f;
 
     private bool _hasTarget;
     private float _canChangeDirectionAgain;
@@ -425,7 +425,7 @@ sealed class LittleFleder : ModProjectile {
             AI_156_GetIdlePosition(player.Center, index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 50f);
             Vector2 v2 = idleSpot - center2;
 
-            Projectile.ai[1] = 80f;
+            Projectile.ai[1] = ATTACKRATE;
 
             Projectile.netUpdate = true;
             v2 = idleSpot - center2;
@@ -473,11 +473,9 @@ sealed class LittleFleder : ModProjectile {
             }
         }
 
-        bool canAttack = AttackTimer > 70f;
+        bool canAttack = AttackTimer > ATTACKRATE;
         if (AttackTimer > 0f && !canAttack) {
             AttackTimer += 1f;
-            if (Main.rand.Next(3) == 0)
-                AttackTimer += 1f;
         }
         if (distanceBetweenTargetAndMe < 200f) {
             if (canAttack) {
