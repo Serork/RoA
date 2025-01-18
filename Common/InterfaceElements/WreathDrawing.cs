@@ -39,11 +39,11 @@ sealed class WreathDrawing : PlayerDrawLayer {
     public override Position GetDefaultPosition() => PlayerDrawLayers.AfterLastVanillaLayer;
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
-        if (drawInfo.shadow != 0f) {
+        Player player = drawInfo.drawPlayer;
+        if (drawInfo.shadow != 0f || !player.active) {
             return;
         }
 
-        Player player = drawInfo.drawPlayer;
         WreathHandler stats = player.GetModPlayer<WreathHandler>();
         Vector2 playerPosition = Utils.Floor(new Vector2((int)(drawInfo.Position.X + (float)(drawInfo.drawPlayer.width / 2)),
             (int)(drawInfo.Position.Y + (float)drawInfo.drawPlayer.height - 40f)));
