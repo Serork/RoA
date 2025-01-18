@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Sets;
 
 sealed class BuffSets : ModSystem {
-    public static bool[] Debuffs = TileID.Sets.Factory.CreateBoolSet();
+    public static bool[] Debuffs = BuffID.Sets.Factory.CreateBoolSet();
 
     public override void Load() {
         On_Player.AddBuff_DetermineBuffTimeToAdd += On_Player_AddBuff_DetermineBuffTimeToAdd;

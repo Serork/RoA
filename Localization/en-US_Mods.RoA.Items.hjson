@@ -1223,9 +1223,18 @@ BackwoodsFogMusicBox: {
 
 LivingPrimordialWand: {
 	DisplayName: Living Primordial Wand
+	Tooltip:
+		'''
+		Consumes Elderwood
+		Places living elderwood
+		'''
+}
+
+LivingPrimordialWand2: {
+	DisplayName: Living Elderwood Leaf Wand
 	Tooltip: 
 		'''
 		Consumes Elderwood
-		Places elderwood
+		Places elderwood leaves
 		'''
 }

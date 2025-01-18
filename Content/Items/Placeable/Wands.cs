@@ -35,7 +35,7 @@ sealed class LivingPrimordialWand2 : Wand {
 }
 
 abstract class Wand : ModItem {
-    public static bool[] Wands = TileID.Sets.Factory.CreateBoolSet();
+    public static bool[] Wands = ItemID.Sets.Factory.CreateBoolSet();
 
     protected abstract ushort ItemToConsume { get; }
     protected abstract ushort TileToPlace { get; }
