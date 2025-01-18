@@ -65,7 +65,8 @@ sealed class LothorSpike : ModProjectile {
 
         float num = 20f;
         if (Projectile.velocity == -Vector2.UnitY) {
-            num = 30f;
+            num *= 2f;
+            Main.NewText(123);
         }
         Projectile.timeLeft = (int)(Length * num);
     }
