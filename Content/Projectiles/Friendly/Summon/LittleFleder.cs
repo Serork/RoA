@@ -7,7 +7,6 @@ using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.ID;
@@ -24,7 +23,6 @@ sealed class LittleFleder : ModProjectile {
     private Vector2 _pickUpPosition;
     private Item _pickUpIFound;
     private bool _nowGoToPlayer;
-    private float _foundTargetTimer;
 
     private ref float AttackTimer => ref Projectile.ai[1];
 
@@ -305,43 +303,44 @@ sealed class LittleFleder : ModProjectile {
         int targetWhoAmI = -1;
         Projectile.tileCollide = true;
 
-        NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
-        if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
-            float num17 = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
-            float num18 = distanceToTarget * 3f;
-            if (num17 < num18 && !hasTarget) {
-                if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, ownerMinionAttackTargetNPC2.position, ownerMinionAttackTargetNPC2.width, ownerMinionAttackTargetNPC2.height)) {
-                    distanceToTarget = num17;
-                    targetCenter = ownerMinionAttackTargetNPC2.Center;
-                    hasTarget = true;
-                    targetWhoAmI = ownerMinionAttackTargetNPC2.whoAmI;
-                }
+        Vector2 center = Main.player[Projectile.owner].Center;
+        Vector2 vector2 = new Vector2(0.5f);
+        vector2.Y = 0f;
+
+        NPC ownerMinionAttackTargetNPC = Projectile.OwnerMinionAttackTargetNPC;
+        if (ownerMinionAttackTargetNPC != null && ownerMinionAttackTargetNPC.CanBeChasedBy(this)) {
+            Vector2 vector3 = ownerMinionAttackTargetNPC.position + ownerMinionAttackTargetNPC.Size * vector2;
+            float num14 = distanceToTarget * 3f;
+            float num15 = Vector2.Distance(vector3, center);
+            if (num15 < num14 && !hasTarget && Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC.Center, 1, 1)) {
+                distanceToTarget = num15;
+                targetCenter = vector3;
+                hasTarget = true;
+                targetWhoAmI = ownerMinionAttackTargetNPC.whoAmI;
             }
         }
 
         AI_GetMyGroupIndexAndFillBlackList(out var index, out var totalIndexesInGroup);
 
         if (!hasTarget) {
-            for (int num19 = 0; num19 < 200; num19++) {
-                NPC nPC2 = Main.npc[num19];
-                if (!nPC2.CanBeChasedBy(this))
-                    continue;
-
-                float num20 = Vector2.Distance(nPC2.Center, Projectile.Center);
-                if (!(num20 >= distanceToTarget)) {
-                    if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, nPC2.position, nPC2.width, nPC2.height)) {
-                        distanceToTarget = num20;
-                        targetCenter = nPC2.Center;
+            for (int n = 0; n < 200; n++) {
+                NPC nPC = Main.npc[n];
+                if (nPC.CanBeChasedBy(this)) {
+                    Vector2 vector4 = nPC.position + nPC.Size * vector2;
+                    float num16 = Vector2.Distance(vector4, center);
+                    if (!(num16 >= distanceToTarget) && Collision.CanHit(Projectile.Center, 1, 1, nPC.Center, 1, 1)) {
+                        distanceToTarget = num16;
+                        targetCenter = vector4;
                         hasTarget = true;
-                        targetWhoAmI = num19;
+                        targetWhoAmI = n;
                     }
                 }
             }
         }
-        else {
-            AI_156_GetIdlePosition(targetCenter, index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 20f);
-            targetCenter = idleSpot;
-        }
+        //else {
+        //    AI_156_GetIdlePosition(targetCenter, index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 20f);
+        //    targetCenter = idleSpot;
+        //}
 
         if (_nowGoToPlayer) {
             hasTarget = false;
@@ -475,7 +474,7 @@ sealed class LittleFleder : ModProjectile {
         if (AttackTimer > 0f && !canAttack) {
             AttackTimer += 1f;
         }
-        if (distanceBetweenTargetAndMe < 200f) {
+        if (distanceBetweenTargetAndMe < num21 / 2f) {
             if (canAttack) {
                 AttackTimer = 0f;
                 Projectile.netUpdate = true;
