@@ -1,17 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Cache;
-using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
-using System;
-
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -32,6 +30,35 @@ sealed class BloodbathLocket : ModItem {
         Item.rare = ItemRarityID.Green;
         Item.accessory = true;
         Item.expert = true;
+    }
+
+    public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
+        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+        Main.spriteBatch.BeginBlendState(BlendState.Additive);
+        for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
+            Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+            Vector2 origin = glowMaskTexture.Size() / 2f;
+            Color color = Color.White;
+            spriteBatch.Draw(glowMaskTexture, Item.Center - Main.screenPosition +
+                    Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                    * Helper.Wave(0f, 3f, 12f, 0.5f + whoAmI), null, color * 0.5f, rotation + Main.rand.NextFloatRange(0.05f), origin, 1f, SpriteEffects.None, 0f);
+        }
+        Lighting.AddLight(Item.Center, new Vector3(1f, 0.2f, 0.2f) * 0.35f * Helper.Wave(1f, 1.25f, 12f, 0.5f + whoAmI));
+        if (Item.timeSinceItemSpawned % 12 == 0) {
+            Vector2 center = Item.Center + new Vector2(0f, Item.height * -0.1f);
+            Vector2 direction = Main.rand.NextVector2CircularEdge(Item.width * 0.6f, Item.height * 0.6f);
+            float distance = 0.3f + Main.rand.NextFloat() * 0.5f;
+            Vector2 velocity = new(0f, -Main.rand.NextFloat() * 0.3f - 1.5f);
+
+            Dust dust = Dust.NewDustPerfect(center + direction * distance, DustID.RedTorch, velocity);
+            dust.scale = 0.5f;
+            dust.fadeIn = 1.1f;
+            dust.noGravity = true;
+            dust.noLight = true;
+            dust.alpha = 0;
+        }
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(in snapshot);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
