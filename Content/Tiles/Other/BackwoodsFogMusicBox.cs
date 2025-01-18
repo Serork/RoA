@@ -43,7 +43,7 @@ sealed class BackwoodsFogMusicBox : MusicBox {
 
             bool flag = tile.TileFrameX == 36;
             if (flag) {
-                Vector2 position = new Vector2(i * 16 + 16, j * 16 - 8);
+                Vector2 position = new Vector2(i * 16 + 16, j * 16 - 4);
                 float value = 0.2f;
                 int frame = Main.tileFrame[modTile.Type];
                 switch (frame) {
