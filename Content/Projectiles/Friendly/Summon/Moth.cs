@@ -149,11 +149,12 @@ sealed class Moth : ModProjectile {
         int targetId = -1;
         Vector2 targetPosition = Projectile.position;
 
+        bool closeToPlayer = Vector2.Distance(player.Center, Projectile.Center) < 1000f;
         NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
         if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
             float distanceBetween = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
-            float neededDistance = targetDistance * 3f;
-            if (distanceBetween < neededDistance && !targetFound) {
+            float neededDistance = targetDistance;
+            if (distanceBetween < neededDistance && closeToPlayer && !targetFound) {
                 if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
                     targetDistance = distanceBetween;
                     targetPosition = ownerMinionAttackTargetNPC2.Center;
@@ -163,7 +164,7 @@ sealed class Moth : ModProjectile {
             }
         }
 
-        if (!targetFound) {
+        if (!targetFound && closeToPlayer) {
             for (int npcId = 0; npcId < 200; npcId++) {
                 NPC targetNPC = Main.npc[npcId];
                 if (!targetNPC.CanBeChasedBy(this))

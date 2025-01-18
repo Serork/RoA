@@ -38,6 +38,9 @@ sealed class SmallMoth : ModProjectile {
         Projectile.DamageType = DamageClass.Summon;
 
         Projectile.friendly = true;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
 
     public override void AI() {

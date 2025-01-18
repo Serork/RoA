@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
-using System.Linq;
 
 using Terraria;
 using Terraria.ID;
@@ -17,9 +15,10 @@ namespace RoA.Content.Projectiles.Friendly.Summon;
 sealed class LittleFleder : ModProjectile {
     private const float ATTACKRATE = 40f;
 
-    private float _canChangeDirectionAgainTimer;
+    private bool _hasTarget;
+    private float _canChangeDirectionAgain;
 
-    private ref float AttackTimer => ref Projectile.ai[2];
+    private ref float AttackTimer => ref Projectile.ai[1];
 
     private float AcornOpacity => Utils.GetLerpValue(ATTACKRATE / 4f, ATTACKRATE / 2f, AttackTimer, true);
 
@@ -30,16 +29,6 @@ sealed class LittleFleder : ModProjectile {
         ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
         ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
-    }
-
-    private void ChangeDirection(int dir, float time) {
-        if (--_canChangeDirectionAgainTimer > 0f) {
-            return;
-        }
-
-        Projectile.direction = dir;
-
-        _canChangeDirectionAgainTimer = time;
     }
 
     public override void SetDefaults() {
@@ -93,7 +82,7 @@ sealed class LittleFleder : ModProjectile {
         Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, Projectile.scale, spriteEffects);
 
-        if (Projectile.ai[1] == 1f) {
+        if (_hasTarget) {
             texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
             spriteBatch.BeginBlendState(BlendState.Additive);
             float lifeProgress = 1f;
@@ -116,8 +105,258 @@ sealed class LittleFleder : ModProjectile {
         if (player.HasBuff(ModContent.BuffType<Buffs.LittleFleder>()))
             Projectile.timeLeft = 2;
 
-        if (AttackTimer < ATTACKRATE) {
+        Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.X * 0.085f, 0.1f);
+        Projectile.rotation = MathHelper.Clamp(Projectile.rotation, -0.2f, 0.2f);
+
+        float overlapVelocity = 0.04f;
+        for (int i = 0; i < Main.maxProjectiles; i++) {
+            // Fix overlap with other minions
+            Projectile other = Main.projectile[i];
+            if (i != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width / 1.5f) {
+                if (Projectile.position.X < other.position.X) Projectile.velocity.X -= overlapVelocity;
+                else Projectile.velocity.X += overlapVelocity;
+
+                if (Projectile.position.Y < other.position.Y) Projectile.velocity.Y -= overlapVelocity;
+                else Projectile.velocity.Y += overlapVelocity;
+            }
+        }
+
+        float num = 0f;
+        float num2 = 0f;
+        float num3 = 20f;
+        float num4 = 40f;
+        float num5 = 0.69f;
+
+        Vector2 targetCenter = Projectile.position;
+        float distanceToTarget = 400f;
+
+        distanceToTarget = 2000f;
+
+        bool hasTarget = false;
+        int targetWhoAmI = -1;
+        Projectile.tileCollide = true;
+
+        NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
+        if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
+            float num17 = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
+            float num18 = distanceToTarget * 3f;
+            if (num17 < num18 && !hasTarget) {
+                if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, ownerMinionAttackTargetNPC2.position, ownerMinionAttackTargetNPC2.width, ownerMinionAttackTargetNPC2.height)) {
+                    distanceToTarget = num17;
+                    targetCenter = ownerMinionAttackTargetNPC2.Center;
+                    hasTarget = true;
+                    targetWhoAmI = ownerMinionAttackTargetNPC2.whoAmI;
+                }
+            }
+        }
+
+        AI_GetMyGroupIndexAndFillBlackList(out var index, out var totalIndexesInGroup);
+
+        if (!hasTarget) {
+            for (int num19 = 0; num19 < 200; num19++) {
+                NPC nPC2 = Main.npc[num19];
+                if (!nPC2.CanBeChasedBy(this))
+                    continue;
+
+                float num20 = Vector2.Distance(nPC2.Center, Projectile.Center);
+                if (!(num20 >= distanceToTarget)) {
+                    if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, nPC2.position, nPC2.width, nPC2.height)) {
+                        distanceToTarget = num20;
+                        targetCenter = nPC2.Center;
+                        hasTarget = true;
+                        targetWhoAmI = num19;
+                    }
+                }
+            }
+        }
+        else {
+            AI_156_GetIdlePosition(targetCenter, index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 20f);
+            targetCenter = idleSpot;
+        }
+
+        _hasTarget = hasTarget;
+
+        int num21 = 500;
+        if (hasTarget)
+            num21 = 1000;
+
+        Vector2 v = targetCenter - Projectile.Center;
+        float distanceBetweenTargetAndMe = v.Length();
+
+        if (Vector2.Distance(player.Center, Projectile.Center) > (float)num21) {
+            Projectile.ai[0] = 1f;
+            Projectile.netUpdate = true;
+        }
+
+        if (Projectile.ai[0] == 1f)
+            Projectile.tileCollide = false;
+
+        if (Projectile.ai[0] >= 2f) {
+            Projectile.ai[0] += 1f;
+
+            if (!hasTarget)
+                Projectile.ai[0] += 1f;
+
+            if (Projectile.ai[0] > num4) {
+                Projectile.ai[0] = 0f;
+                Projectile.netUpdate = true;
+            }
+
+            Projectile.velocity *= num5;
+        }
+        else if (hasTarget && Projectile.ai[0] == 0f) {
+            AI_156_GetIdlePosition(targetCenter, index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 75f);
+            idleSpot.Y += 160f;
+            v = idleSpot - Projectile.Center;
+            distanceBetweenTargetAndMe = v.Length();
+            v = v.SafeNormalize(Vector2.Zero);
+
+            bool flag5 = Math.Abs(Projectile.Center.Y - targetCenter.Y) < 10f;
+            if (flag5 || targetCenter.Y > Projectile.Center.Y) {
+                if ((targetCenter - Projectile.Center).Length() < 50f) {
+                    Projectile.velocity.Y -= 0.075f;
+                }
+                else {
+                    Projectile.velocity.Y *= 0.95f;
+                }
+            }
+
+            if (distanceBetweenTargetAndMe > 200f) {
+                float acceleration = 7.5f + num2 * num;
+                v *= acceleration;
+                float speed = num3;
+                Projectile.velocity.X = (Projectile.velocity.X * speed + v.X) / (speed + 1f);
+                Projectile.velocity.Y = (Projectile.velocity.Y * speed + v.Y) / (speed + 1f);
+            }
+            else {
+                if (distanceBetweenTargetAndMe < 150f) {
+                    float acceleration = 5f;
+                    v *= 0f - acceleration;
+                    float speed = 40f;
+                    Projectile.velocity.X = (Projectile.velocity.X * speed + v.X) / (speed + 1f);
+                    Projectile.velocity.Y = (Projectile.velocity.Y * speed + v.Y) / (speed + 1f);
+                }
+                else {
+                    Projectile.velocity *= 0.97f;
+                }
+            }
+        }
+        else {
+            if (!Collision.CanHitLine(Projectile.Center, 1, 1, Main.player[Projectile.owner].Center, 1, 1))
+                Projectile.ai[0] = 1f;
+
+            float num31 = 6f;
+            if (Projectile.ai[0] == 1f)
+                num31 = 15f;
+
+            Vector2 center2 = Projectile.Center;
+            AI_156_GetIdlePosition(player.Center, index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 50f);
+            Vector2 v2 = idleSpot - center2;
+
+            Projectile.ai[1] = 80f;
+
+            Projectile.netUpdate = true;
+            v2 = idleSpot - center2;
+            int num32 = 1;
+            for (int num33 = 0; num33 < Projectile.whoAmI; num33++) {
+                if (Main.projectile[num33].active && Main.projectile[num33].owner == Projectile.owner && Main.projectile[num33].type == Projectile.type)
+                    num32++;
+            }
+
+            if (++_canChangeDirectionAgain > 20f) {
+                if ((player.Center - Projectile.Center).X > 0f)
+                    Projectile.spriteDirection = (Projectile.direction = -1);
+                else if ((player.Center - Projectile.Center).X < 0f)
+                    Projectile.spriteDirection = (Projectile.direction = 1);
+                _canChangeDirectionAgain = 0f;
+            }
+
+            float num34 = v2.Length();
+            if (num34 > 200f && num31 < 9f)
+                num31 = 9f;
+
+            num31 = (int)((double)num31 * 0.85);
+
+            if (num34 < 100f && Projectile.ai[0] == 1f && !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
+                Projectile.ai[0] = 0f;
+                Projectile.netUpdate = true;
+            }
+
+            if (num34 > 2000f) {
+                Projectile.position.X = Main.player[Projectile.owner].Center.X - (float)(Projectile.width / 2);
+                Projectile.position.Y = Main.player[Projectile.owner].Center.Y - (float)(Projectile.width / 2);
+            }
+
+            if (num34 > 10f) {
+                v2 = v2.SafeNormalize(Vector2.Zero);
+                if (num34 < 50f)
+                    num31 /= 2f;
+
+                v2 *= num31;
+                Projectile.velocity = (Projectile.velocity * 20f + v2) / 21f;
+            }
+            else {
+                Projectile.direction = Main.player[Projectile.owner].direction;
+                Projectile.velocity *= 0.9f;
+            }
+        }
+
+        bool canAttack = AttackTimer > 70f;
+        if (AttackTimer > 0f && !canAttack) {
             AttackTimer += 1f;
+            if (Main.rand.Next(3) == 0)
+                AttackTimer += 1f;
+        }
+        if (distanceBetweenTargetAndMe < 200f) {
+            if (canAttack) {
+                AttackTimer = 0f;
+                Projectile.netUpdate = true;
+            }
+        }
+
+        if (Projectile.ai[0] != 0f)
+            return;
+
+        float num45 = 0f;
+        int num46 = 0;
+
+        num45 = 8f;
+        num46 = ModContent.ProjectileType<Acorn>();
+
+        if (!hasTarget)
+            return;
+
+        if ((targetCenter - Projectile.Center).X > 0f)
+            Projectile.spriteDirection = (Projectile.direction = -1);
+        else if ((targetCenter - Projectile.Center).X < 0f)
+            Projectile.spriteDirection = (Projectile.direction = 1);
+
+        if (AttackTimer == 0f) {
+            Vector2 v5 = targetCenter - Projectile.Center;
+            AttackTimer += 1f;
+            Vector2 position2 = Projectile.Bottom;
+            if (Main.myPlayer == Projectile.owner) {
+                v5 = v5.SafeNormalize(Vector2.Zero);
+                v5 *= num45;
+                int num51 = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position2.X, position2.Y, v5.X, v5.Y, num46, Projectile.damage, Projectile.knockBack, Main.myPlayer
+                    , ai2: targetWhoAmI);
+                Projectile.netUpdate = true;
+            }
+        }
+    }
+
+    private void MoveTo(Vector2 positionTo) {
+        float speed = 5f;
+        float inertia = 15f;
+        float distance = Vector2.Distance(Projectile.Center, positionTo);
+        Vector2 dif = positionTo - Projectile.Center;
+        Vector2 direction = positionTo - Projectile.Center;
+        if (direction.Length() > 10f) {
+            direction.Normalize();
+            Projectile.velocity = (Projectile.velocity * inertia + direction * speed) / (inertia + 1f);
+        }
+        else {
+            Projectile.velocity *= (float)Math.Pow(0.98, inertia * 2.0 / inertia);
         }
     }
 
@@ -135,13 +374,13 @@ sealed class LittleFleder : ModProjectile {
         }
     }
 
-    private void AI_156_GetIdlePosition(Vector2 destination, int stackedIndex, int totalIndexes, out Vector2 idleSpot, out float idleRotation) {
+    private void AI_156_GetIdlePosition(Vector2 destination, int stackedIndex, int totalIndexes, out Vector2 idleSpot, out float idleRotation, float offset = 20f) {
         bool num = true;
         idleRotation = 0f;
         idleSpot = Vector2.Zero;
         if (num) {
             float num2 = ((float)totalIndexes - 1f) / 2f;
-            idleSpot = destination + -Vector2.UnitY.RotatedBy(2f / (float)totalIndexes * ((float)stackedIndex - num2)) * 100f;
+            idleSpot = destination + -Vector2.UnitY.RotatedBy(2f / (float)totalIndexes * ((float)stackedIndex - num2)) * offset;
             idleRotation = 0f;
         }
     }
