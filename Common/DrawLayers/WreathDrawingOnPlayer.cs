@@ -65,10 +65,10 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
         Player player = drawInfo.drawPlayer;
 
         WreathItemToShowHandler wreathItemToShowHandler = player.GetModPlayer<WreathItemToShowHandler>();
-        if (!player.active) {
+        Item wreathItem = wreathItemToShowHandler.WreathToShow;
+        if (!player.active && Main.gameMenu) {
             wreathItemToShowHandler.ForcedUpdate();
         }
-        Item wreathItem = wreathItemToShowHandler.WreathToShow;
         if (wreathItem.IsEmpty() || wreathItemToShowHandler.HideVisuals) {
             return;
         }
