@@ -136,11 +136,11 @@ sealed class LittleFleder : ModProjectile {
             if ((item.type == validItems[0] ||
                 item.type == validItems[1] ||
                 item.type == validItems[2] ||
-                item.type == validItems[3]) && player.statLife >= player.statLifeMax2 * 0.85f) {
+                item.type == validItems[3]) && player.statLife >= player.statLifeMax2 * 0.9f) {
                 return false;
             }
 
-            if (item.type == validItems[4] && player.statMana >= player.statManaMax2 * 0.85f) {
+            if (item.type == validItems[4] && player.statMana >= player.statManaMax2 * 0.9f) {
                 return false;
             }
 
