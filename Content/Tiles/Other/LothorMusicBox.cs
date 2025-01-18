@@ -9,6 +9,8 @@ namespace RoA.Content.Tiles.Other;
 sealed class LothorMusicBox : MusicBox {
     protected override int CursorItemType => ModContent.ItemType<Items.Special.Lothor.LothorMusicBox>();
 
+    protected override int GoreOffsetX => 4;
+
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         Tile tile = Main.tile[i, j];
         if (tile.TileFrameX > 18) {

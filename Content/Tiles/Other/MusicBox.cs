@@ -11,6 +11,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Other;
 
 abstract class MusicBox : ModTile {
+    protected virtual int GoreOffsetX { get; }
+
     protected abstract int CursorItemType { get; }
 
     public override void SetStaticDefaults() {
@@ -46,7 +48,7 @@ abstract class MusicBox : ModTile {
 
         if (tile.TileFrameX == 36 && tile.TileFrameY % 36 == 0 && (int)Main.timeForVisualEffects % 7 == 0 && Main.rand.NextBool(3)) {
             int goreType = Main.rand.Next(570, 573);
-            Vector2 position = new Vector2(i * 16 + 8, j * 16 - 8);
+            Vector2 position = new Vector2(i * 16 + 8 + GoreOffsetX, j * 16 - 8);
             Vector2 velocity = new Vector2(Main.WindForVisuals * 2f, -0.5f);
             velocity.X *= 1f + Main.rand.NextFloat(-0.5f, 0.5f);
             velocity.Y *= 1f + Main.rand.NextFloat(-0.5f, 0.5f);
