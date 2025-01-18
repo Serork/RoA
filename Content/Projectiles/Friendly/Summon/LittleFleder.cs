@@ -474,7 +474,7 @@ sealed class LittleFleder : ModProjectile {
         if (AttackTimer > 0f && !canAttack) {
             AttackTimer += 1f;
         }
-        if (distanceBetweenTargetAndMe < 200f) {
+        if (distanceBetweenTargetAndMe < num21 / 2f) {
             if (canAttack) {
                 AttackTimer = 0f;
                 Projectile.netUpdate = true;
