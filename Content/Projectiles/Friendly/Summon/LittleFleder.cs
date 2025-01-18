@@ -309,7 +309,7 @@ sealed class LittleFleder : ModProjectile {
             float num17 = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
             float num18 = distanceToTarget * 3f;
             if (num17 < num18 && !hasTarget) {
-                if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, ownerMinionAttackTargetNPC2.position, ownerMinionAttackTargetNPC2.width, ownerMinionAttackTargetNPC2.height)) {
+                if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
                     distanceToTarget = num17;
                     targetCenter = ownerMinionAttackTargetNPC2.Center;
                     hasTarget = true;
@@ -328,7 +328,7 @@ sealed class LittleFleder : ModProjectile {
 
                 float num20 = Vector2.Distance(nPC2.Center, Projectile.Center);
                 if (!(num20 >= distanceToTarget)) {
-                    if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, nPC2.position, nPC2.width, nPC2.height)) {
+                    if (Collision.CanHit(Projectile.Center, 1, 1, nPC2.Center, 1, 1)) {
                         distanceToTarget = num20;
                         targetCenter = nPC2.Center;
                         hasTarget = true;
