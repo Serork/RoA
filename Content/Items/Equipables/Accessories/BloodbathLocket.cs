@@ -8,6 +8,8 @@ using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -102,7 +104,7 @@ sealed class BloodbathLocket : ModItem {
             }
 
             bool gameActive = !(Main.gamePaused || !Main.instance.IsActive);
-            int eyesCount = (int)(handler.bloodbathDamage / 0.05f) + 1;
+            int eyesCount = Math.Min(_eyes.Length, (int)(handler.bloodbathDamage / 0.05f) + 1);
             if (gameActive && eyesCount > 0 && ++_eyesTimer > 120f) {
                 for (int i = 0; i < eyesCount; i++) {
                     EyesData eyes = _eyes[i];

@@ -41,6 +41,7 @@ sealed class RodOfTheShock : Rod {
     }
 
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-
+        position += velocity.SafeNormalize(Vector2.Zero) * 10f;
+        position += new Vector2(player.direction == 1 ? 2f : -2f, 4f * player.direction).RotatedBy(velocity.ToRotation());
     }
 }
