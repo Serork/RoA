@@ -48,7 +48,7 @@ sealed class RodOfTheStream : Rod {
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
         position += newVelocity * 10f;
-        position += new Vector2(player.direction == -1 ? 4f : -2f, 4f * player.direction).RotatedBy(newVelocity.ToRotation());
+        position += new Vector2(player.direction == -1 ? 4f : -4f, 4f * player.direction).RotatedBy(newVelocity.ToRotation());
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
