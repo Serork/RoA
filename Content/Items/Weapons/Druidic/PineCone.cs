@@ -34,6 +34,9 @@ sealed class PineCone : NatureItem {
         }
     }
 
+    private sealed class ExtraMapOptionForTrees : GlobalTile {
+    }
+
     protected override void SafeSetDefaults() {
 		Item.SetSize(18, 28);
 		Item.SetWeaponValues(2, 0.5f);
@@ -326,9 +329,8 @@ sealed class PineCone : NatureItem {
                         num4 = genRand.Next(3);
                         if (genRand.Next(3) < 2 && !flag2) {
                             if (Main.tile[i, j].TileType == 147 && (GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(8))) {
-                                if (genRand.NextChance(1.0)) {
-                                    num4 = 3;
-                                }
+                                GeneratedStorage.PineConeAddedToWorld = true;
+                                num4 = 3;
                                 if (num4 == 3) {
                                     Main.tile[i - 1, k].TileFrameX = 44;
                                     Main.tile[i - 1, k].TileFrameY = 264;
@@ -378,9 +380,8 @@ sealed class PineCone : NatureItem {
                     num4 = genRand.Next(3);
                     if (genRand.Next(3) < 2 && !flag2) {
                         if (Main.tile[i, j].TileType == 147 && (GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(8))) {
-                            if (genRand.NextChance(1.0)) {
-                                num4 = 3;
-                            }
+                            GeneratedStorage.PineConeAddedToWorld = true;
+                            num4 = 3;
                             if (num4 == 3) {
                                 Main.tile[i + 1, k].TileFrameX = 66;
                                 Main.tile[i + 1, k].TileFrameY = 264;
