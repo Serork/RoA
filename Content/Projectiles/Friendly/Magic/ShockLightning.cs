@@ -105,7 +105,8 @@ sealed class ShockLightning : ModProjectile {
 
     private void UpdateSegments() {
         Player player = Main.player[Projectile.owner];
-        Vector2 source = player.itemLocation + (new Vector2(0f, 3f) * player.direction).RotatedBy(Projectile.velocity.ToRotation()) + Utils.SafeNormalize(Projectile.velocity, Vector2.One) * (player.HeldItem.width + player.HeldItem.width / 4);
+        Vector2 source = player.itemLocation + (new Vector2(0f, 8f) * player.direction).RotatedBy(Projectile.velocity.ToRotation()) + Utils.SafeNormalize(Projectile.velocity, Vector2.One) * (player.HeldItem.width + player.HeldItem.width / 4);
+        source -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
         float thickness = 3.25f;
         Vector2 dest = source + Vector2.Normalize(Projectile.velocity) * _lightningLength;
         Vector2 dif = dest - source;
