@@ -87,7 +87,7 @@ sealed class Sentinel : ModNPC {
         }
 
         for (int num758 = 0; num758 < 20; num758++) {
-            int num759 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 54, 0f, 0f, 50, Color.Gray, 1.5f);
+            int num759 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, 0f, 0f, 50, default, 1.5f);
             Dust dust = Main.dust[num759];
             dust.velocity *= 2f;
             Main.dust[num759].noGravity = true;
