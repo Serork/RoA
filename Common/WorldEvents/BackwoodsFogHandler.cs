@@ -26,6 +26,17 @@ sealed class BackwoodsFogHandler : ModSystem {
         public override void Action(CommandCaller caller, string input, string[] args) => ToggleBackwoodsFog(false);
     }
 
+    public override void Load() {
+        On_Main.StopRain += On_Main_StopRain;
+    }
+
+    private void On_Main_StopRain(On_Main.orig_StopRain orig) {
+        orig();
+        if (Main.rand.NextBool()) {
+            ToggleBackwoodsFog();
+        }
+    }
+
     public static bool IsFogActive { get; private set; } = false;
     public static float Opacity { get; private set; } = 0f;
 
@@ -72,7 +83,7 @@ sealed class BackwoodsFogHandler : ModSystem {
     }
 
     public override void PostUpdateNPCs() {
-        if (Main.dayTime) {
+        if (Main.dayTime && IsFogActive) {
             if (Main.time < 1 || (Main.IsFastForwardingTime() && Main.time < 61)) {
                 ToggleBackwoodsFog();
             }
