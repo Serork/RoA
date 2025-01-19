@@ -47,7 +47,7 @@ sealed class RodOfTheStream : Rod {
 
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
-        position += newVelocity * 5f;
+        position += newVelocity * -2f;
         position += new Vector2(player.direction == -1 ? 4f : 0f, 2f * player.direction).RotatedBy(newVelocity.ToRotation());
     }
 
