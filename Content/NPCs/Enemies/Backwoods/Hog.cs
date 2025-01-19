@@ -68,6 +68,23 @@ sealed class Hog : RoANPC {
     public override void HitEffect(NPC.HitInfo hit) {
         _currentAI = 2;
         NPC.netUpdate = true;
+
+        if (NPC.life > 0) {
+            for (int num493 = 0; (double)num493 < hit.Damage / (double)NPC.lifeMax * 50.0; num493++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num494 = 0; num494 < 20; num494++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2 * hit.HitDirection, -2f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore2".GetGoreType());
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore1".GetGoreType());
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore3".GetGoreType());
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore3".GetGoreType());
     }
 
     private void AdaptedUnicornAI() {

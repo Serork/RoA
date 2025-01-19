@@ -48,31 +48,27 @@ sealed class Lumberjack : RoANPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
-	//public override void HitEffect(NPC.HitInfo hit) {
-	//	if (Main.netMode == NetmodeID.Server) {
-	//		return;
-	//	}
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+            }
 
-	//	if (NPC.life <= 0) {
-	//		string[] goresNames = new string[] { "Head", "Leg", "Arm", "Axe" };
-	//		foreach (string goreName in goresNames) {
-	//			Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, ModContent.Find<ModGore>(nameof(RiseofAges) + "/Lumber" + goreName).Type, 1f);
-	//		}
-	//		for (int i = 0; i < 20; i++) {
-	//			Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 2.5f * hitDirection, -2.5f, 0, default(Color), 0.7f);
-	//		}
-	//		for (int i = 0; i < 4; i++) {
-	//			Dust.NewDust(NPC.Center, 0, 0, DustID.Bone, 0f, 0.5f);
-	//		}
-	//	}
-	//	else {
-	//		for (int i = 0; i < damage / NPC.lifeMax * 50.0; i++) {
-	//			Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hitDirection, -1f, 0, new Color(), 1f);
-	//		}
-	//	}
-	//}
+            return;
+        }
 
-	public override void OnKill() {
+        for (int num829 = 0; num829 < 50; num829++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "LumberHead".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberAxe".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberArm".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
+    }
+
+    public override void OnKill() {
 		if (Main.netMode == NetmodeID.MultiplayerClient) {
 			return;
 		}

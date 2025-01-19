@@ -44,6 +44,26 @@ sealed class GrimDruid : DruidNPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num829 = 0; num829 < 50; num829++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "VilestDruidGore2".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "VilestDruidGore1".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "VilestDruidGore3".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "VilestDruidGore4".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "VilestDruidGore4".GetGoreType(), Scale: NPC.scale);
+    }
+
     protected override float TimeToChangeState() => 2f;
     protected override float TimeToRecoveryAfterGettingHit() => 1f;
     protected override (Func<bool>, float) ShouldBeAttacking() => (() => true, 450f);

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Utilities;
+
 using System.IO;
 
 using Terraria;
@@ -44,6 +46,23 @@ sealed class Hedgehog : ModNPC {
 
     public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         => alert;
+
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num493 = 0; (double)num493 < hit.Damage / (double)NPC.lifeMax * 20.0; num493++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num494 = 0; num494 < 10; num494++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2 * hit.HitDirection, -2f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HedgehogGore1".GetGoreType());
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HedgehogGore2".GetGoreType());
+    }
 
     public override void FindFrame(int frameHeight) {
         NPC.spriteDirection = NPC.direction;
