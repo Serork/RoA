@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Core.Utility;
 
 using System;
 
@@ -18,8 +19,9 @@ sealed class FireflyMimic : ModNPC {
         public override bool InstancePerEntity => true;
 
         public override void OnSpawn(NPC npc, IEntitySource source) {
-            if (npc.type == NPCID.Firefly) {
-                npc.type = ModContent.NPCType<FireflyMimic>();
+            if (npc.type == NPCID.Firefly && Main.rand.NextChance(0.025f)) {
+                NPC.NewNPCDirect(source, npc.position, ModContent.NPCType<FireflyMimic>());
+                npc.KillNPC();
             }
         }
     }
@@ -63,7 +65,7 @@ sealed class FireflyMimic : ModNPC {
     public override void AI() {
         float num1008 = NPC.ai[0];
         float num1009 = NPC.ai[1];
-        if (Main.netMode != 1) {
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
             NPC.localAI[0] -= 1f;
             if (NPC.ai[3] == 0f)
                 NPC.ai[3] = (float)Main.rand.Next(75, 111) * 0.01f;
@@ -116,9 +118,9 @@ sealed class FireflyMimic : ModNPC {
             NPC.localAI[1] -= 1f;
         }
         else {
-            NPC.localAI[1] = Main.rand.Next(30, 180);
+            NPC.localAI[1] = Main.rand.Next(30, 180) * 2;
             if (!Main.dayTime || (double)(NPC.position.Y / 16f) > Main.worldSurface + 10.0)
-                NPC.localAI[2] = Main.rand.Next(10, 30);
+                NPC.localAI[2] = Main.rand.Next(10, 30) * 2;
         }
 
         int num1024 = 80;
