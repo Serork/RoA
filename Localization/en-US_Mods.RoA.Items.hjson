@@ -104,28 +104,28 @@ DiabolicDaikatana: {
 }
 
 RodOfTheDragonfire: {
-	DisplayName: Rod Of The Dragonfire
-	Tooltip: ""
+	DisplayName: Rod of the Pyre
+	Tooltip: "Channel a swarm of flaming bats"
 }
 
 RodOfTheStream: {
-	DisplayName: Rod Of The Stream
-	Tooltip: ""
+	DisplayName: Rod of the Stream
+	Tooltip: "Launch a trifecta of fresh dew"
 }
 
 RodOfTheShock: {
-	DisplayName: Rod Of The Shock
-	Tooltip: ""
+	DisplayName: Rod of the Shock
+	Tooltip: "Channel a disruptive bolt"
 }
 
 RodOfTheTerra: {
-	DisplayName: Rod Of The Terra
-	Tooltip: ""
+	DisplayName: Rod of the Quake
+	Tooltip: "Charge up, then emit a beam of magic"
 }
 
 RodOfTheCondor: {
-	DisplayName: Rod Of The Condor
-	Tooltip: ""
+	DisplayName: Rod of the Condor
+	Tooltip: "Propel yourself with a gust of wind"
 }
 
 BeastBow: {
@@ -139,7 +139,7 @@ DoubleFocusCharm: {
 }
 
 BandOfNature: {
-	DisplayName: Band Of Nature
+	DisplayName: Band of Nature
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
@@ -148,7 +148,7 @@ BandOfNature: {
 }
 
 BandOfPurity: {
-	DisplayName: Band Of Purity
+	DisplayName: Band of Purity
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
@@ -474,7 +474,7 @@ BrilliantBouquet: {
 }
 
 SacrificialSickleOfTheMoon: {
-	DisplayName: Sacrificial Sickle Of The Moon
+	DisplayName: Sacrificial Sickle of the Moon
 	Tooltip: ""
 }
 
@@ -1007,7 +1007,7 @@ SentinelTaurusMask: {
 }
 
 AmuletOfLife: {
-	DisplayName: Amulet Of Life
+	DisplayName: Amulet of Life
 	Tooltip: Casts a vortex of healing wisps that heal player upon impact
 }
 

@@ -14,7 +14,7 @@ sealed class WandCore : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 28; int height = 28;
+		int width = 32; int height = 32;
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(0, 1, 15, 35);

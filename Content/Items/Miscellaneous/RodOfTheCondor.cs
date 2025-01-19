@@ -33,7 +33,7 @@ sealed class RodOfTheCondor : ModItem {
     }
 
     public override void SetDefaults() {
-        int width = 42; int height = width;
+        int width = 56; int height = 48;
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Swing;

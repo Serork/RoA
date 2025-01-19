@@ -24,7 +24,7 @@ sealed class RodOfTheTerra : Rod {
     public override void SetDefaults() {
         base.SetDefaults();
 
-        int width = 42; int height = width;
+        int width = 52; int height = 48;
         Item.Size = new Vector2(width, height);
 
         Item.useTime = Item.useAnimation = 8;
