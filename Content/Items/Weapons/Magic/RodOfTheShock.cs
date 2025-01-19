@@ -20,7 +20,7 @@ sealed class RodOfTheShock : Rod {
     public override void SetDefaults() {
         base.SetDefaults();
 
-        int width = 56; int height = 48;
+        int width = 42; int height = 42;
         Item.Size = new Vector2(width, height);
 
         Item.useTime = Item.useAnimation = 8;
@@ -41,7 +41,7 @@ sealed class RodOfTheShock : Rod {
     }
 
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        position += velocity.SafeNormalize(Vector2.Zero) * 10f;
-        position += new Vector2(player.direction == 1 ? 2f : -2f, 4f * player.direction).RotatedBy(velocity.ToRotation());
+        position += velocity.SafeNormalize(Vector2.Zero) * -2f;
+        position += new Vector2(player.direction == 1 ? 2f : -2f, 2f * player.direction).RotatedBy(velocity.ToRotation());
     }
 }

@@ -21,7 +21,7 @@ sealed class RodOfTheDragonfire : Rod {
     public override void SetDefaults() {
         base.SetDefaults();
 
-        int width = 56; int height = 48;
+        int width = 42; int height = 42;
         Item.Size = new Vector2(width, height);
 
         Item.useTime = Item.useAnimation = 6;
@@ -42,8 +42,8 @@ sealed class RodOfTheDragonfire : Rod {
 
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
-        position += newVelocity * 10f;
-        position += new Vector2(player.direction == -1 ? 4f : -4f, -2f * player.direction).RotatedBy(newVelocity.ToRotation());
+        position += newVelocity * -2f;
+        position += new Vector2(player.direction == -1 ? 4f : -4f, -6f * player.direction).RotatedBy(newVelocity.ToRotation());
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
