@@ -594,8 +594,22 @@ sealed class FlederSlayer : ModProjectile {
             Projectile.localNPCHitCooldown = 30;
         }
 
-        public override void ModifyDamageHitbox(ref Rectangle hitbox)
-            => hitbox = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y - (int)(75f * Projectile.scale), (int)(20 * Projectile.scale), (int)(100f * Projectile.scale));
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+            if (new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y - (int)(75f * Projectile.scale), (int)(20 * Projectile.scale), (int)(100f * Projectile.scale)).
+                Intersects(targetHitbox)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        public override bool? CanCutTiles() => true;
+
+        public override void CutTiles() {
+            Utils.PlotTileLine(Projectile.position,
+                Projectile.position - Vector2.UnitY * (100f * Projectile.scale),
+                20f * Projectile.scale, new Utils.TileActionAttempt(DelegateMethods.CutTiles));
+        }
 
         private float _Opacity = Main.rand.NextFloat(0.7f, 1f);
 
