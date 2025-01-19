@@ -2,9 +2,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
@@ -42,7 +44,7 @@ sealed class EntLegs : RoANPC {
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
     }
 
-	public override void SetDefaults() {
+    public override void SetDefaults() {
 		NPC.lifeMax = 500;
 		NPC.damage = 36;
 		NPC.defense = 6;

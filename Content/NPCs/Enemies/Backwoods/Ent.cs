@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Dusts.Backwoods;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using Terraria;
 using Terraria.ID;
@@ -38,6 +40,26 @@ sealed class Ent : RoANPC {
         NPC.DeathSound = SoundID.NPCDeath27;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+    }
+
+    public override void HitEffect(NPC.HitInfo hit) {
+        int dustType = ModContent.DustType<WoodTrash>();
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 50.0; num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num510 = 0; num510 < 30; num510++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType, 2.5f * hit.HitDirection, -2.5f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, "EntGore2".GetGoreType());
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 10f), NPC.velocity, "EntGore1".GetGoreType());
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, (Main.rand.NextBool() ? "EntGore1" : "EntGore3").GetGoreType());
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 30f), NPC.velocity, "EntGore3".GetGoreType());
     }
 
     public override void AI() {
