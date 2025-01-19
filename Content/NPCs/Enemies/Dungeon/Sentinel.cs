@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Utilities;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -83,6 +85,18 @@ sealed class Sentinel : ModNPC {
             if (Main.netMode == NetmodeID.Server)
                 NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
         }
+
+        for (int num758 = 0; num758 < 20; num758++) {
+            int num759 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 54, 0f, 0f, 50, Color.Gray, 1.5f);
+            Dust dust = Main.dust[num759];
+            dust.velocity *= 2f;
+            Main.dust[num759].noGravity = true;
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "UndeadGore1".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "UndeadGore2".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "UndeadGore2".GetGoreType(), Scale: NPC.scale);
+
         //if (NPC.life <= 0) {
         //    Gore.NewGore(NPC.GetSource_Death(), NPC.position, new Vector2(Main.rand.Next(-6, 7), Main.rand.Next(-6, 7)), ModContent.Find<ModGore>(nameof(RiseofAges) + "/UndeadGore1").Type);
         //    Gore.NewGore(NPC.GetSource_Death(), NPC.position, new Vector2(Main.rand.Next(-6, 7), Main.rand.Next(-6, 7)), ModContent.Find<ModGore>(nameof(RiseofAges) + "/UndeadGore2").Type);
