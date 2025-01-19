@@ -39,6 +39,8 @@ sealed class WreathDrawing : PlayerDrawLayer {
     public override Position GetDefaultPosition() => PlayerDrawLayers.AfterLastVanillaLayer;
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        Main.NewText(Main.GetMoonPhase() == Terraria.Enums.MoonPhase.Full);
+
         Player player = drawInfo.drawPlayer;
         if (drawInfo.shadow != 0f || !player.active) {
             return;

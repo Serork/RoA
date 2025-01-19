@@ -13,6 +13,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace RoA.Common.DrawLayers;
@@ -47,7 +48,7 @@ sealed class LothorMaskGlowing : ModSystem {
             if (player.CheckArmorSlot(lothorMask, 0, 10) || player.CheckVanitySlot(lothorMask, 10)) {
                 flag = true;
             }
-            if (!player.active) {
+            if (!player.active || player.isLockedToATile) {
                 flag = false;
             }
             if (flag) {
