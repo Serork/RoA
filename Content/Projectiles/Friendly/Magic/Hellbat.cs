@@ -89,7 +89,16 @@ sealed class Hellbat : ModProjectile {
 		return true;
 	}
 
-	public override void OnKill(int timeLeft) => SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+	public override void OnKill(int timeLeft) {
+		SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+
+        for (int num303 = 0; num303 < 2; num303++) {
+            int num304 = Dust.NewDust(Projectile.position + Vector2.One * 4f, Projectile.width - 8, Projectile.height - 8, 6, Scale: 1.5f);
+            Main.dust[num304].noGravity = true;
+            Dust dust2 = Main.dust[num304];
+            dust2.velocity -= Projectile.oldVelocity * Main.rand.Next(20, 60) * 0.01f;
+        }
+    }
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
 		target.immune[Projectile.owner] = 8;
