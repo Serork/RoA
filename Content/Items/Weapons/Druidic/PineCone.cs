@@ -22,6 +22,13 @@ sealed class PineCone : NatureItem {
     private sealed class GeneratedStorage : ModSystem {
         public static bool PineConeAddedToWorld;
 
+        private static void Reset() {
+            PineConeAddedToWorld = false;
+        }
+
+        public override void OnWorldLoad() => Reset();
+        public override void OnWorldUnload() => Reset();
+
         public override void PostWorldGen() {
             PineConeAddedToWorld = false;
         }
@@ -673,7 +680,6 @@ sealed class PineCone : NatureItem {
 
                 if (flag2 && frameY >= 198 && frameX >= 22) {
                     int treeFrame = WorldGen.GetTreeFrame(tile);
-                    Main.NewText(frameY);
                     switch (frameX) {
                         case 22: {
                             // top
