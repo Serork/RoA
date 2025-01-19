@@ -29,7 +29,24 @@ sealed class SummonedRaven : ModNPC {
 	private ref float State => ref NPC.ai[2];
     private ref float Acceleration => ref NPC.ai[3];
 
-	public override void SetStaticDefaults() {
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num510 = 0; num510 < 50; num510++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2 * hit.HitDirection, -2f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "SummonedRavenGore1".GetGoreType());
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X + 14f, NPC.position.Y), NPC.velocity, "SummonedRavenGore2".GetGoreType());
+    }
+
+    public override void SetStaticDefaults() {
 		//base.SetStaticDefaults();
 
 		// DisplayName.SetDefault("Summoned Raven");

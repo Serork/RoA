@@ -28,6 +28,8 @@ static class Helper {
         return Utils.SafeNormalize(destination - entity.Center, fallback.Value);
     }
 
+    public static int GetGoreType(this string name) => ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type;
+
     public static Color FromHexRgb(uint hexRgba) {
         return new Color(
             (byte)(hexRgba >> 16),

@@ -27,6 +27,26 @@ sealed class Archdruid : DruidNPC {
 
     protected override byte MaxFrame => (byte)(_entAttack ? Main.npcFrameCount[Type] : (19 - 1));
 
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num829 = 0; num829 < 50; num829++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "ArchdruidGore2".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "ArchdruidGore1".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "ArchdruidGore3".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "ArchdruidGore4".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "ArchdruidGore4".GetGoreType(), Scale: NPC.scale);
+    }
+
     public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 30;
 	}

@@ -18,6 +18,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using Terraria.Utilities;
+using RoA.Utilities;
 
 namespace RoA.Content.NPCs.Enemies.Miscellaneous;
 
@@ -472,25 +473,22 @@ sealed class PettyGoblin : ModNPC {
     //public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PettyBag>(), 10));
 
     public override void HitEffect(NPC.HitInfo hit) {
-        //if (Main.netMode == NetmodeID.Server) {
-        //    return;
-        //}
-        //if (NPC.life <= 0) {
-        //    Gore.NewGore(NPC.GetSource_Death(), NPC.position, new Vector2(Main.rand.Next(-3, 4), Main.rand.Next(-3, 4)), ModContent.Find<ModGore>(nameof(RiseofAges) + "/PettyGoblinGore1").Type);
-        //    for (int i = 1; i < 4; i++) {
-        //        for (int i2 = 0; i2 < 2; i2++) {
-        //            Gore.NewGore(NPC.GetSource_Death(), NPC.position, new Vector2(Main.rand.Next(-3, 4), Main.rand.Next(-3, 4)), ModContent.Find<ModGore>(nameof(RiseofAges) + "/PettyGoblinGore" + (i + 1)).Type);
-        //        }
-        //    }
-        //    for (int i = 0; i < 20; i++) {
-        //        Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 2f * hitDirection, -2f, 0, default, 1.1f);
-        //    }
-        //}
-        //int life = 0;
-        //while (life < damage / NPC.lifeMax * 15) {
-        //    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hitDirection, -1f, 0, default, 0.75f);
-        //    life++;
-        //}
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num829 = 0; num829 < 50; num829++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PettyGoblinGore1".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "PettyGoblinGore2".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "PettyGoblinGore3".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "PettyGoblinGore4".GetGoreType(), Scale: NPC.scale);
     }
 
     private class CoinGenerator {

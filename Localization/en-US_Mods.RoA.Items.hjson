@@ -1212,7 +1212,7 @@ BackwoodsDayMusicBox: {
 }
 
 BackwoodsNightMusicBox: {
-	DisplayName: Music Box (Backwoods Night)
+	DisplayName: Music Box (Backwoods)
 	Tooltip: ""
 }
 
