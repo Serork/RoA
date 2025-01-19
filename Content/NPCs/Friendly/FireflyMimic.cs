@@ -6,6 +6,7 @@ using RoA.Content.Items.Equipables.Accessories;
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,6 +14,16 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Friendly;
 
 sealed class FireflyMimic : ModNPC {
+    private sealed class FireflyMimicActuallyMimic : GlobalNPC {
+        public override bool InstancePerEntity => true;
+
+        public override void OnSpawn(NPC npc, IEntitySource source) {
+            if (npc.type == NPCID.Firefly) {
+                npc.type = ModContent.NPCType<FireflyMimic>();
+            }
+        }
+    }
+
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 4;
 
