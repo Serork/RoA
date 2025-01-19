@@ -16,8 +16,6 @@ namespace RoA.Content.NPCs.Friendly;
 
 sealed class FireflyMimic : ModNPC {
     private sealed class FireflyMimicActuallyMimic : GlobalNPC {
-        public override bool InstancePerEntity => true;
-
         public override void OnSpawn(NPC npc, IEntitySource source) {
             if (npc.type == NPCID.Firefly && Main.rand.NextChance(0.025f)) {
                 NPC.NewNPCDirect(source, npc.position, ModContent.NPCType<FireflyMimic>());
