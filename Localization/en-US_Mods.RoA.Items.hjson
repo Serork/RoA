@@ -1,31 +1,31 @@
 ElderwoodClaws: {
 	DisplayName: Elderwood Claws
-	Tooltip: ""
+	Tooltip: "'A pair of claws fashioned after a Fleeder!'"
 }
 
 Elderwood: {
 	DisplayName: Elderwood
-	Tooltip: ""
+	Tooltip: "'Arboreal culture native to the Backwoods.'"
 }
 
 GutwrenchingHooks: {
 	DisplayName: Gutwrenching Hooks
-	Tooltip: ""
+	Tooltip: "'A pair of claws fashioned after a Crimera!'"
 }
 
 HellfireClaws: {
 	DisplayName: Hellfire Claws
-	Tooltip: ""
+	Tooltip: "'Claws so fire, they set everyone on fire!'"
 }
 
 HorrorPincers: {
 	DisplayName: Horror Pincers
-	Tooltip: ""
+	Tooltip: "'A pair of claws fashioned after an Eater of Souls!'"
 }
 
 ThornyClaws: {
 	DisplayName: Thorny Claws
-	Tooltip: ""
+	Tooltip: "'Sting like a Hornet, bite like Man Eater!'"
 }
 
 ElderwoodChest: {
@@ -35,7 +35,7 @@ ElderwoodChest: {
 
 DryadStatue: {
 	DisplayName: Dryad Statue
-	Tooltip: "'Lost and forsaken'"
+	Tooltip: "'Lost and forsaken...'"
 }
 
 MiracleMint: {
@@ -45,47 +45,63 @@ MiracleMint: {
 
 MushroomStaff: {
 	DisplayName: Mushroom Staff
-	Tooltip: ""
+	Tooltip:
+		'''
+		Spread a whiff of orange spores,
+		that float down before disappearing
+		'''
 }
 
 PastoralRod: {
 	DisplayName: Pastoral Rod
-	Tooltip: ""
+	Tooltip: "Launch mind-controlled sparks"
 }
 
 RipePumpkin: {
 	DisplayName: Ripe Pumpkin
-	Tooltip: ""
+	Tooltip:
+		'''
+		Launch a ripe pumpkin,
+		then act again to explode it into seeds
+		'''
 }
 
 ExoticTulip: {
 	DisplayName: Exotic Tulip
-	Tooltip: ""
+	Tooltip: "Shoot a purple petal"
 }
 
 SweetTulip: {
 	DisplayName: Sweet Tulip
-	Tooltip: ""
+	Tooltip: "Shoot an orange petal"
 }
 
 WeepingTulip: {
 	DisplayName: Weeping Tulip
-	Tooltip: ""
+	Tooltip: "Shoot a powerful blue petal"
 }
 
 PineCone: {
 	DisplayName: Pine Cone
-	Tooltip: ""
+	Tooltip:
+		'''
+		Conjure a pine cone,
+		that falls down onto your foes
+		'''
 }
 
 CactiCaster: {
 	DisplayName: Cacti Caster
-	Tooltip: ""
+	Tooltip:
+		'''
+		Rise a cactus ball from the ground,
+		then act again to launch it towards foes
+		'''
 }
 
 SpikedIceStaff: {
 	DisplayName: Spiked Ice Staff
-	Tooltip: ""
+	Tooltip: "Shoot three icicles"
 }
 
 LuminousFlower: {
@@ -130,7 +146,11 @@ RodOfTheCondor: {
 
 BeastBow: {
 	DisplayName: Weeping
-	Tooltip: ""
+	Tooltip:
+		'''
+		'Is it the master weeping for its bow,
+		or is the bow weeping for its master?'
+		'''
 }
 
 DoubleFocusCharm: {
@@ -360,12 +380,20 @@ HellfireFractureTest: {
 
 SapStream: {
 	DisplayName: Sap Stream
-	Tooltip: ""
+	Tooltip:
+		'''
+		Lob sticky sap,
+		that clings to the ground
+		'''
 }
 
 Woodbinder: {
 	DisplayName: Woodbinder
-	Tooltip: ""
+	Tooltip:
+		'''
+		Hold to conjure a wooden barrier forward,
+		then let go to let it bloom
+		'''
 }
 
 SlipperyBomb: {
@@ -455,22 +483,34 @@ LivingMahoganyHelmet: {
 
 EbonwoodStaff: {
 	DisplayName: Ebonwood Staff
-	Tooltip: ""
+	Tooltip:
+		'''
+		Grow a corrupted tree,
+		whose leaves fall and wither
+		'''
 }
 
 ShadewoodStaff: {
 	DisplayName: Shadewood Staff
-	Tooltip: ""
+	Tooltip:
+		'''
+		Grow a bleeding tree,
+		whose leaves fall and decay
+		'''
 }
 
 BloomingDoom: {
 	DisplayName: Blooming Doom
-	Tooltip: ""
+	Tooltip:
+		'''
+		Grow a magical flower,
+		that follows after your mind
+		'''
 }
 
 BrilliantBouquet: {
 	DisplayName: Brilliant Bouquet
-	Tooltip: ""
+	Tooltip: "Shoot a bouquet of vibrant petals"
 }
 
 SacrificialSickleOfTheMoon: {
@@ -538,7 +578,11 @@ DreadheartCrimsonLeggings: {
 
 TectonicCane: {
 	DisplayName: Tectonic Cane
-	Tooltip: ""
+	Tooltip:
+		'''
+		Rise a column from below,
+		that launches, singes and shatters
+		'''
 }
 
 AshwalkerHood: {
@@ -889,13 +933,13 @@ Hedgehog: {
 }
 
 WandCore: {
-	DisplayName: Wand Core
-	Tooltip: "'Filled with energy'"
+	DisplayName: Arcane Twig
+	Tooltip: "'The magics have not faded yet...'"
 }
 
 OvergrownSpear: {
 	DisplayName: Overgrown Spear
-	Tooltip: ""
+	Tooltip: "Aim for the balls for a burst of energy"
 }
 
 MothStaff: {
@@ -1203,7 +1247,7 @@ FlederSlayer: {
 
 Bane: {
 	DisplayName: Bane
-	Tooltip: ""
+	Tooltip: "Watch your enemies wither away"
 }
 
 BackwoodsDayMusicBox: {
