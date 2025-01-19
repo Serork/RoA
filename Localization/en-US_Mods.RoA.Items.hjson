@@ -54,7 +54,7 @@ MushroomStaff: {
 
 PastoralRod: {
 	DisplayName: Pastoral Rod
-	Tooltip: "Launch mind-controlled sparks"
+	Tooltip: Launch mind-controlled sparks
 }
 
 RipePumpkin: {
@@ -68,17 +68,17 @@ RipePumpkin: {
 
 ExoticTulip: {
 	DisplayName: Exotic Tulip
-	Tooltip: "Shoot a purple petal"
+	Tooltip: Shoot a purple petal
 }
 
 SweetTulip: {
 	DisplayName: Sweet Tulip
-	Tooltip: "Shoot an orange petal"
+	Tooltip: Shoot an orange petal
 }
 
 WeepingTulip: {
 	DisplayName: Weeping Tulip
-	Tooltip: "Shoot a powerful blue petal"
+	Tooltip: Shoot a powerful blue petal
 }
 
 PineCone: {
@@ -101,7 +101,7 @@ CactiCaster: {
 
 SpikedIceStaff: {
 	DisplayName: Spiked Ice Staff
-	Tooltip: "Shoot three icicles"
+	Tooltip: Shoot up to three icicles
 }
 
 LuminousFlower: {
@@ -121,27 +121,27 @@ DiabolicDaikatana: {
 
 RodOfTheDragonfire: {
 	DisplayName: Rod of the Pyre
-	Tooltip: "Channel a swarm of flaming bats"
+	Tooltip: Channel a swarm of flaming bats
 }
 
 RodOfTheStream: {
 	DisplayName: Rod of the Stream
-	Tooltip: "Launch a trifecta of fresh dew"
+	Tooltip: Launch a trifecta of fresh dew
 }
 
 RodOfTheShock: {
 	DisplayName: Rod of the Shock
-	Tooltip: "Channel a disruptive bolt"
+	Tooltip: Channel a disruptive bolt
 }
 
 RodOfTheTerra: {
 	DisplayName: Rod of the Quake
-	Tooltip: "Charge up, then emit a beam of magic"
+	Tooltip: Charge up, then emit a beam of magic
 }
 
 RodOfTheCondor: {
 	DisplayName: Rod of the Condor
-	Tooltip: "Propel yourself with a gust of wind"
+	Tooltip: Propel yourself with a gust of wind
 }
 
 BeastBow: {
@@ -510,7 +510,7 @@ BloomingDoom: {
 
 BrilliantBouquet: {
 	DisplayName: Brilliant Bouquet
-	Tooltip: "Shoot a bouquet of vibrant petals"
+	Tooltip: Shoot a bouquet of vibrant petals
 }
 
 SacrificialSickleOfTheMoon: {
@@ -939,7 +939,7 @@ WandCore: {
 
 OvergrownSpear: {
 	DisplayName: Overgrown Spear
-	Tooltip: "Aim for the balls for a burst of energy"
+	Tooltip: Aim for the balls for a burst of energy
 }
 
 MothStaff: {
@@ -1247,7 +1247,7 @@ FlederSlayer: {
 
 Bane: {
 	DisplayName: Bane
-	Tooltip: "Watch your enemies wither away"
+	Tooltip: Watch your enemies wither away
 }
 
 BackwoodsDayMusicBox: {

@@ -42,19 +42,18 @@ sealed class RodOfTheDragonfire : Rod {
 
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
-        position -= newVelocity * 10f;
-        position += new Vector2(-newVelocity.Y, newVelocity.X) * (10f * player.direction);
+        position += newVelocity * 10f;
+        position += new Vector2(player.direction == -1 ? 4f : -2f, -2f * player.direction).RotatedBy(newVelocity.ToRotation());
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
             int amount = Main.rand.Next(2, 4);
+            Vector2 dustPosition = position;
             for (int i = -amount + 1; i < amount; i++) {
                 Vector2 vector2 = Utils.RotatedBy(velocity, (double)(i / 10f)) * Main.rand.NextFloat(0.75f, 1.35f);
-                Vector2 dustPosition = position;
-                dustPosition += new Vector2(12f + (player.direction == -1 ? 8f : 0f), -10f * player.direction).RotatedBy(velocity.ToRotation());
                 if (Main.rand.NextBool()) {
-                    Dust dust = Dust.NewDustDirect(dustPosition, 4, 4, 6, velocity.X, velocity.Y, 100);
+                    Dust dust = Dust.NewDustDirect(dustPosition, 0, 0, 6, velocity.X, velocity.Y, 100);
                     dust.scale = 0.2f;
                     for (int i2 = 0; i2 < 3; i2++) {
                         if (Main.rand.Next(4) == 0) {
@@ -70,8 +69,10 @@ sealed class RodOfTheDragonfire : Rod {
                     if (dust.scale < 1f) {
                         dust.scale = 1f;
                     }
+                    dust.noGravity = true;
                 }
-                Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI);
+                Vector2 spawnPosition = position + vector2.SafeNormalize(Vector2.Zero) * -4f + vector2 + vector2 + new Vector2(0f, 12f * player.direction).RotatedBy(velocity.ToRotation());
+                Projectile.NewProjectileDirect(source, spawnPosition, vector2, type, damage, knockback, player.whoAmI);
             }
         }
 

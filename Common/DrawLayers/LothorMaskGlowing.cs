@@ -54,7 +54,7 @@ sealed class LothorMaskGlowing : ModSystem {
             if (flag) {
                 var drawInfo = drawinfo;
                 if (!(player.dead || player.invis || player.ShouldNotDraw)) { 
-                    float lifeProgress = 1f;
+                    float lifeProgress = 1f - MathHelper.Clamp((float)player.statLife / player.statLifeMax2 * 0.5f, 0f, 1f);
                     SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
                     Main.spriteBatch.BeginBlendState(BlendState.Additive);
                     for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {

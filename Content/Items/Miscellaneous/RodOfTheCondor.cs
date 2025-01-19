@@ -84,7 +84,7 @@ sealed class RodOfTheCondor : ModItem {
         }
 
         for (int i = 0; i < 2; i++) {
-            GetPointOnSwungItemPath(player, 40f, 40f, 0.6f + 0.4f * Main.rand.NextFloat(), 1f, out var location, out var outwardDirection);
+            GetPointOnSwungItemPath(player, 40f, 40f, 0.825f + 0.4f * Main.rand.NextFloat(), 1f, out var location, out var outwardDirection);
             Vector2 vector = outwardDirection.RotatedBy((float)Math.PI / 2f * (float)player.direction * player.gravDir);
             Dust dust = Dust.NewDustPerfect(location, ModContent.DustType<CondorDust>(), vector * 4f, 255, default(Color), 1.2f);
             dust.noGravity = true;
