@@ -27,6 +27,8 @@ sealed class MiracleMint : PlantBase {
         DropItem = (ushort)ModContent.ItemType<Items.Materials.MiracleMint>();
     }
 
+    protected override bool CanBloom() => Main.GetMoonPhase() == Terraria.Enums.MoonPhase.Full;
+
     protected override int PlantDrop => DropItem;
 
     protected override int SeedsDrop => (ushort)ModContent.ItemType<MiracleMintSeeds>();
