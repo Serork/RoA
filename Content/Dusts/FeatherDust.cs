@@ -27,6 +27,15 @@ sealed class FeatherDust : ModDust {
             randomness = (float)dust.customData;
         }
 
+        Color color = new(170, 252, 134);
+        if (dust.alpha == 2) {
+            color = new(251, 234, 94);
+        }
+        if (dust.alpha == 1) {
+            color = new(248, 119, 119);
+        }
+        Lighting.AddLight(dust.position, color.ToVector3() * dust.scale * 0.5f);
+
         _velocity = Vector2.SmoothStep(_velocity, dust.velocity *= 0.9f, 1f);
         dust.position += _velocity *= 0.99f;
 

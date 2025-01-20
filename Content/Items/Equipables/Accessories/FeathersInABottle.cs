@@ -38,7 +38,7 @@ sealed class FeathersInABottle : NatureItem {
         public override float GetDurationMultiplier(Player player) => 1f;
 
         public override void UpdateHorizontalSpeeds(Player player) {
-            player.runAcceleration *= 1.75f;
+            player.runAcceleration *= 2.25f;
             player.maxRunSpeed *= 2f;
         }
 
