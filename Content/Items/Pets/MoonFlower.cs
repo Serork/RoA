@@ -34,6 +34,7 @@ sealed class MoonFlower : ModItem {
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Pets.SmallMoon>();
 
         Item.shootSpeed = 3.5f;
+        Item.master = true;
         //Item.glowMask = RoAGlowMask.Get(nameof(MoonFlower));
     }
 

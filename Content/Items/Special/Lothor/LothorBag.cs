@@ -40,7 +40,7 @@ sealed class LothorBag : ModItem {
                                              ItemDropRule.Common(ModContent.ItemType<Weapons.Summon.FlederStaff>()),
                                              ItemDropRule.Common(ModContent.ItemType<Weapons.Melee.BloodshedAxe>()),
                                              ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.SoulOfTheWoods>())));
-        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Pets.MoonFlower>(), 10));
+        //itemLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<Pets.MoonFlower>(), 4));
         itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<LothorMask>(), 7));
         itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.BloodbathLocket>()));
 
