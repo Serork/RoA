@@ -24,6 +24,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
     private bool _mushroomStaffAdded;
     private bool _hellfireClawsAdded;
     private bool _giantTreeSaplingAdded;
+    private bool _feathersBottleAdded;
 
     [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Lights")]
     public extern static void WorldGen_MakeDungeon_Lights(WorldGen worldGen, ushort tileType, ref int failCount, int failMax, ref int numAdd, int[] roomWall);
@@ -160,8 +161,16 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
         int contain = 0;
         int num13 = GenVars.skyIslandHouseCount;
-        if (num13 > 3)
+        bool shouldAdd = false;
+        if (num13 > 3) {
             num13 = WorldGen.genRand.Next(5);
+            shouldAdd = true;
+        }
+
+        if (shouldAdd && !_feathersBottleAdded) {
+            num13 = 4;
+            _feathersBottleAdded = true;
+        }
 
         switch (num13) {
             case 0:
@@ -1439,6 +1448,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
         _mushroomStaffAdded = false;
         _hellfireClawsAdded = false;
         _giantTreeSaplingAdded = false;
+        _feathersBottleAdded = false;
     }
 
     private static bool IsUndergroundDesert(int x, int y) {
