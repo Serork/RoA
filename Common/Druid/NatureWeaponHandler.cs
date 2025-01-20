@@ -36,7 +36,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public override int ChoosePrefix(Item item, UnifiedRandom rand) {
-        if (item.IsADruidicWeapon()) {
+        if (item.IsADruidicWeapon() && !item.accessory) {
             int result = DruidicPrefix.DruidicPrefixes.ElementAt(rand.Next(0, DruidicPrefix.DruidicPrefixes.Count)).Key;
             return result;
         }

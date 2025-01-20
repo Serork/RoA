@@ -1,12 +1,13 @@
-﻿using Ionic.Zlib;
-
+﻿using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 
 using System;
+using System.Runtime.CompilerServices;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -20,8 +21,992 @@ sealed class ExtraChestItems : ModSystem {
     private bool _mushroomStaffAdded;
     private bool _hellfireClawsAdded;
 
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Lights")]
+    public extern static void WorldGen_MakeDungeon_Lights(WorldGen worldGen, ushort tileType, ref int failCount, int failMax, ref int numAdd, int[] roomWall);
+
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Traps")]
+    public extern static void WorldGen_MakeDungeon_Traps(WorldGen worldGen, ref int failCount, int failMax, ref int numAdd);
+
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_GroundFurniture")]
+    public extern static double WorldGen_MakeDungeon_GroundFurniture(WorldGen worldGen, int wallType);
+
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Pictures")]
+    public extern static double WorldGen_MakeDungeon_Pictures(WorldGen worldGen, int[] roomWall, double count);
+
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Banners")]
+    public extern static double WorldGen_MakeDungeon_Banners(WorldGen worldGen, int[] roomWall, double count);
+
     public override void Load() {
         On_WorldGen.AddBuriedChest_int_int_int_bool_int_bool_ushort += On_WorldGen_AddBuriedChest_int_int_int_bool_int_bool_ushort;
+        On_WorldGen.MakeDungeon += On_WorldGen_MakeDungeon;
+    }
+
+    private void On_WorldGen_MakeDungeon(On_WorldGen.orig_MakeDungeon orig, int x, int y) {
+        GenVars.dEnteranceX = 0;
+        GenVars.numDRooms = 0;
+        GenVars.numDDoors = 0;
+        GenVars.numDungeonPlatforms = 0;
+        UnifiedRandom genRand = WorldGen.genRand;
+        int num = genRand.Next(3);
+        genRand.Next(3);
+        if (WorldGen.remixWorldGen)
+            num = (WorldGen.crimson ? 2 : 0);
+
+        ushort num2;
+        int num3;
+        switch (num) {
+            case 0:
+                num2 = 41;
+                num3 = 7;
+                GenVars.crackedType = 481;
+                break;
+            case 1:
+                num2 = 43;
+                num3 = 8;
+                GenVars.crackedType = 482;
+                break;
+            default:
+                num2 = 44;
+                num3 = 9;
+                GenVars.crackedType = 483;
+                break;
+        }
+
+        Main.tileSolid[GenVars.crackedType] = false;
+        GenVars.dungeonLake = true;
+        GenVars.numDDoors = 0;
+        GenVars.numDungeonPlatforms = 0;
+        GenVars.numDRooms = 0;
+        GenVars.dungeonX = x;
+        GenVars.dungeonY = y;
+        GenVars.dMinX = x;
+        GenVars.dMaxX = x;
+        GenVars.dMinY = y;
+        GenVars.dMaxY = y;
+        GenVars.dxStrength1 = genRand.Next(25, 30);
+        GenVars.dyStrength1 = genRand.Next(20, 25);
+        GenVars.dxStrength2 = genRand.Next(35, 50);
+        GenVars.dyStrength2 = genRand.Next(10, 15);
+        double num4 = Main.maxTilesX / 60;
+        num4 += (double)genRand.Next(0, (int)(num4 / 3.0));
+        double num5 = num4;
+        int num6 = 5;
+        WorldGen.DungeonRoom(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+        while (num4 > 0.0) {
+            if (GenVars.dungeonX < GenVars.dMinX)
+                GenVars.dMinX = GenVars.dungeonX;
+
+            if (GenVars.dungeonX > GenVars.dMaxX)
+                GenVars.dMaxX = GenVars.dungeonX;
+
+            if (GenVars.dungeonY > GenVars.dMaxY)
+                GenVars.dMaxY = GenVars.dungeonY;
+
+            num4 -= 1.0;
+            Main.statusText = Lang.gen[58].Value + " " + (int)((num5 - num4) / num5 * 60.0) + "%";
+            if (num6 > 0)
+                num6--;
+
+            if ((num6 == 0) & (genRand.Next(3) == 0)) {
+                num6 = 5;
+                if (genRand.Next(2) == 0) {
+                    int dungeonX = GenVars.dungeonX;
+                    int dungeonY = GenVars.dungeonY;
+                    WorldGen.DungeonHalls(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+                    if (genRand.Next(2) == 0)
+                        WorldGen.DungeonHalls(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+
+                    WorldGen.DungeonRoom(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+                    GenVars.dungeonX = dungeonX;
+                    GenVars.dungeonY = dungeonY;
+                }
+                else {
+                    WorldGen.DungeonRoom(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+                }
+            }
+            else {
+                WorldGen.DungeonHalls(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+            }
+        }
+
+        WorldGen.DungeonRoom(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+        int num7 = GenVars.dRoomX[0];
+        int num8 = GenVars.dRoomY[0];
+        for (int i = 0; i < GenVars.numDRooms; i++) {
+            if (GenVars.dRoomY[i] < num8) {
+                num7 = GenVars.dRoomX[i];
+                num8 = GenVars.dRoomY[i];
+            }
+        }
+
+        GenVars.dungeonX = num7;
+        GenVars.dungeonY = num8;
+        GenVars.dEnteranceX = num7;
+        GenVars.dSurface = false;
+        num6 = 5;
+        if (WorldGen.drunkWorldGen)
+            GenVars.dSurface = true;
+
+        while (!GenVars.dSurface) {
+            if (num6 > 0)
+                num6--;
+
+            if (num6 == 0 && genRand.Next(5) == 0 && (double)GenVars.dungeonY > Main.worldSurface + 100.0) {
+                num6 = 10;
+                int dungeonX2 = GenVars.dungeonX;
+                int dungeonY2 = GenVars.dungeonY;
+                WorldGen.DungeonHalls(GenVars.dungeonX, GenVars.dungeonY, num2, num3, forceX: true);
+                WorldGen.DungeonRoom(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+                GenVars.dungeonX = dungeonX2;
+                GenVars.dungeonY = dungeonY2;
+            }
+
+            WorldGen.DungeonStairs(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+        }
+
+        WorldGen.DungeonEnt(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
+        Main.statusText = Lang.gen[58].Value + " 65%";
+        int num9 = Main.maxTilesX * 2;
+        int num10;
+        for (num10 = 0; num10 < num9; num10++) {
+            int i2 = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
+            int num11 = GenVars.dMinY;
+            if ((double)num11 < Main.worldSurface)
+                num11 = (int)Main.worldSurface;
+
+            int j = genRand.Next(num11, GenVars.dMaxY);
+            num10 = ((!WorldGen.DungeonPitTrap(i2, j, num2, num3)) ? (num10 + 1) : (num10 + 1500));
+        }
+
+        for (int k = 0; k < GenVars.numDRooms; k++) {
+            for (int l = GenVars.dRoomL[k]; l <= GenVars.dRoomR[k]; l++) {
+                if (!Main.tile[l, GenVars.dRoomT[k] - 1].HasTile) {
+                    GenVars.dungeonPlatformX[GenVars.numDungeonPlatforms] = l;
+                    GenVars.dungeonPlatformY[GenVars.numDungeonPlatforms] = GenVars.dRoomT[k] - 1;
+                    GenVars.numDungeonPlatforms++;
+                    break;
+                }
+            }
+
+            for (int m = GenVars.dRoomL[k]; m <= GenVars.dRoomR[k]; m++) {
+                if (!Main.tile[m, GenVars.dRoomB[k] + 1].HasTile) {
+                    GenVars.dungeonPlatformX[GenVars.numDungeonPlatforms] = m;
+                    GenVars.dungeonPlatformY[GenVars.numDungeonPlatforms] = GenVars.dRoomB[k] + 1;
+                    GenVars.numDungeonPlatforms++;
+                    break;
+                }
+            }
+
+            for (int n = GenVars.dRoomT[k]; n <= GenVars.dRoomB[k]; n++) {
+                if (!Main.tile[GenVars.dRoomL[k] - 1, n].HasTile) {
+                    GenVars.DDoorX[GenVars.numDDoors] = GenVars.dRoomL[k] - 1;
+                    GenVars.DDoorY[GenVars.numDDoors] = n;
+                    GenVars.DDoorPos[GenVars.numDDoors] = -1;
+                    GenVars.numDDoors++;
+                    break;
+                }
+            }
+
+            for (int num12 = GenVars.dRoomT[k]; num12 <= GenVars.dRoomB[k]; num12++) {
+                if (!Main.tile[GenVars.dRoomR[k] + 1, num12].HasTile) {
+                    GenVars.DDoorX[GenVars.numDDoors] = GenVars.dRoomR[k] + 1;
+                    GenVars.DDoorY[GenVars.numDDoors] = num12;
+                    GenVars.DDoorPos[GenVars.numDDoors] = 1;
+                    GenVars.numDDoors++;
+                    break;
+                }
+            }
+        }
+
+        Main.statusText = Lang.gen[58].Value + " 70%";
+        int num13 = 0;
+        int num14 = 1000;
+        int num15 = 0;
+        int num16 = Main.maxTilesX / 100;
+        if (WorldGen.getGoodWorldGen)
+            num16 *= 3;
+
+        while (num15 < num16) {
+            num13++;
+            int num17 = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
+            int num18 = genRand.Next((int)Main.worldSurface + 25, GenVars.dMaxY);
+            if (WorldGen.drunkWorldGen)
+                num18 = genRand.Next(GenVars.dungeonY + 25, GenVars.dMaxY);
+
+            int num19 = num17;
+            if (Main.tile[num17, num18].WallType == num3 && !Main.tile[num17, num18].HasTile) {
+                int num20 = 1;
+                if (genRand.Next(2) == 0)
+                    num20 = -1;
+
+                for (; !Main.tile[num17, num18].HasTile; num18 += num20) {
+                }
+
+                if (Main.tile[num17 - 1, num18].HasTile && Main.tile[num17 + 1, num18].HasTile && Main.tile[num17 - 1, num18].TileType != GenVars.crackedType && !Main.tile[num17 - 1, num18 - num20].HasTile && !Main.tile[num17 + 1, num18 - num20].HasTile) {
+                    num15++;
+                    int num21 = genRand.Next(5, 13);
+                    while (Main.tile[num17 - 1, num18].HasTile && Main.tile[num17 - 1, num18].TileType != GenVars.crackedType && Main.tile[num17, num18 + num20].HasTile && Main.tile[num17, num18].HasTile && !Main.tile[num17, num18 - num20].HasTile && num21 > 0) {
+                        Main.tile[num17, num18].TileType = 48;
+                        if (!Main.tile[num17 - 1, num18 - num20].HasTile && !Main.tile[num17 + 1, num18 - num20].HasTile) {
+                            Main.tile[num17, num18 - num20].Clear(TileDataType.Slope);
+                            Main.tile[num17, num18 - num20].TileType = 48;
+                            Tile tile3 = Main.tile[num17, num18 - num20];
+                            tile3.HasTile = true;
+                            Main.tile[num17, num18 - num20 * 2].Clear(TileDataType.Slope);
+                            Main.tile[num17, num18 - num20 * 2].TileType = 48;
+                            tile3 = Main.tile[num17, num18 - num20 * 2];
+                            tile3.HasTile = true;
+                        }
+
+                        num17--;
+                        num21--;
+                    }
+
+                    num21 = genRand.Next(5, 13);
+                    num17 = num19 + 1;
+                    while (Main.tile[num17 + 1, num18].HasTile && Main.tile[num17 + 1, num18].TileType != GenVars.crackedType && Main.tile[num17, num18 + num20].HasTile && Main.tile[num17, num18].HasTile && !Main.tile[num17, num18 - num20].HasTile && num21 > 0) {
+                        Main.tile[num17, num18].TileType = 48;
+                        if (!Main.tile[num17 - 1, num18 - num20].HasTile && !Main.tile[num17 + 1, num18 - num20].HasTile) {
+                            Main.tile[num17, num18 - num20].Clear(TileDataType.Slope);
+                            Main.tile[num17, num18 - num20].TileType = 48;
+                            Tile tile3 = Main.tile[num17, num18 - num20];
+                            tile3.HasTile = true;
+                            Main.tile[num17, num18 - num20 * 2].Clear(TileDataType.Slope);
+                            Main.tile[num17, num18 - num20 * 2].TileType = 48;
+                            tile3 = Main.tile[num17, num18 - num20 * 2];
+                            tile3.HasTile = true;
+                        }
+
+                        num17++;
+                        num21--;
+                    }
+                }
+            }
+
+            if (num13 > num14) {
+                num13 = 0;
+                num15++;
+            }
+        }
+
+        num13 = 0;
+        num14 = 1000;
+        num15 = 0;
+        Main.statusText = Lang.gen[58].Value + " 75%";
+        while (num15 < num16) {
+            num13++;
+            int num22 = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
+            int num23 = genRand.Next((int)Main.worldSurface + 25, GenVars.dMaxY);
+            int num24 = num23;
+            if (Main.tile[num22, num23].WallType == num3 && !Main.tile[num22, num23].HasTile) {
+                int num25 = 1;
+                if (genRand.Next(2) == 0)
+                    num25 = -1;
+
+                for (; num22 > 5 && num22 < Main.maxTilesX - 5 && !Main.tile[num22, num23].HasTile; num22 += num25) {
+                }
+
+                if (Main.tile[num22, num23 - 1].HasTile && Main.tile[num22, num23 + 1].HasTile && Main.tile[num22, num23 - 1].TileType != GenVars.crackedType && !Main.tile[num22 - num25, num23 - 1].HasTile && !Main.tile[num22 - num25, num23 + 1].HasTile) {
+                    num15++;
+                    int num26 = genRand.Next(5, 13);
+                    while (Main.tile[num22, num23 - 1].HasTile && Main.tile[num22, num23 - 1].TileType != GenVars.crackedType && Main.tile[num22 + num25, num23].HasTile && Main.tile[num22, num23].HasTile && !Main.tile[num22 - num25, num23].HasTile && num26 > 0) {
+                        Main.tile[num22, num23].TileType = 48;
+                        if (!Main.tile[num22 - num25, num23 - 1].HasTile && !Main.tile[num22 - num25, num23 + 1].HasTile) {
+                            Main.tile[num22 - num25, num23].TileType = 48;
+                            Tile tile3 = Main.tile[num22 - num25, num23];
+                            tile3.HasTile = true;
+                            Main.tile[num22 - num25, num23].Clear(TileDataType.Slope);
+                            Main.tile[num22 - num25 * 2, num23].TileType = 48;
+                            tile3 = Main.tile[num22 - num25 * 2, num23];
+                            tile3.HasTile = true;
+                            Main.tile[num22 - num25 * 2, num23].Clear(TileDataType.Slope);
+                        }
+
+                        num23--;
+                        num26--;
+                    }
+
+                    num26 = genRand.Next(5, 13);
+                    num23 = num24 + 1;
+                    while (Main.tile[num22, num23 + 1].HasTile && Main.tile[num22, num23 + 1].TileType != GenVars.crackedType && Main.tile[num22 + num25, num23].HasTile && Main.tile[num22, num23].HasTile && !Main.tile[num22 - num25, num23].HasTile && num26 > 0) {
+                        Main.tile[num22, num23].TileType = 48;
+                        if (!Main.tile[num22 - num25, num23 - 1].HasTile && !Main.tile[num22 - num25, num23 + 1].HasTile) {
+                            Main.tile[num22 - num25, num23].TileType = 48;
+                            Tile tile3 = Main.tile[num22 - num25, num23];
+                            tile3.HasTile = true;
+                            Main.tile[num22 - num25, num23].Clear(TileDataType.Slope);
+                            Main.tile[num22 - num25 * 2, num23].TileType = 48;
+                            tile3 = Main.tile[num22 - num25 * 2, num23];
+                            tile3.HasTile = true;
+                            Main.tile[num22 - num25 * 2, num23].Clear(TileDataType.Slope);
+                        }
+
+                        num23++;
+                        num26--;
+                    }
+                }
+            }
+
+            if (num13 > num14) {
+                num13 = 0;
+                num15++;
+            }
+        }
+
+        Main.statusText = Lang.gen[58].Value + " 80%";
+        for (int num27 = 0; num27 < GenVars.numDDoors; num27++) {
+            int num28 = GenVars.DDoorX[num27] - 10;
+            int num29 = GenVars.DDoorX[num27] + 10;
+            int num30 = 100;
+            int num31 = 0;
+            int num32 = 0;
+            int num33 = 0;
+            for (int num34 = num28; num34 < num29; num34++) {
+                bool flag = true;
+                int num35 = GenVars.DDoorY[num27];
+                while (num35 > 10 && !Main.tile[num34, num35].HasTile) {
+                    num35--;
+                }
+
+                if (!Main.tileDungeon[Main.tile[num34, num35].TileType])
+                    flag = false;
+
+                num32 = num35;
+                for (num35 = GenVars.DDoorY[num27]; !Main.tile[num34, num35].HasTile; num35++) {
+                }
+
+                if (!Main.tileDungeon[Main.tile[num34, num35].TileType])
+                    flag = false;
+
+                num33 = num35;
+                if (num33 - num32 < 3)
+                    continue;
+
+                int num36 = num34 - 20;
+                int num37 = num34 + 20;
+                int num38 = num33 - 10;
+                int num39 = num33 + 10;
+                for (int num40 = num36; num40 < num37; num40++) {
+                    for (int num41 = num38; num41 < num39; num41++) {
+                        if (Main.tile[num40, num41].HasTile && Main.tile[num40, num41].TileType == 10) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (flag) {
+                    for (int num42 = num33 - 3; num42 < num33; num42++) {
+                        for (int num43 = num34 - 3; num43 <= num34 + 3; num43++) {
+                            if (Main.tile[num43, num42].HasTile) {
+                                flag = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (flag && num33 - num32 < 20) {
+                    bool flag2 = false;
+                    if (GenVars.DDoorPos[num27] == 0 && num33 - num32 < num30)
+                        flag2 = true;
+
+                    if (GenVars.DDoorPos[num27] == -1 && num34 > num31)
+                        flag2 = true;
+
+                    if (GenVars.DDoorPos[num27] == 1 && (num34 < num31 || num31 == 0))
+                        flag2 = true;
+
+                    if (flag2) {
+                        num31 = num34;
+                        num30 = num33 - num32;
+                    }
+                }
+            }
+
+            if (num30 >= 20)
+                continue;
+
+            int num44 = num31;
+            int num45 = GenVars.DDoorY[num27];
+            int num46 = num45;
+            for (; !Main.tile[num44, num45].HasTile; num45++) {
+                Tile tile3 = Main.tile[num44, num45];
+                tile3.HasTile = false;
+            }
+
+            while (!Main.tile[num44, num46].HasTile) {
+                num46--;
+            }
+
+            num45--;
+            num46++;
+            for (int num47 = num46; num47 < num45 - 2; num47++) {
+                Main.tile[num44, num47].Clear(TileDataType.Slope);
+                Tile tile3 = Main.tile[num44, num47];
+                tile3.HasTile = true;
+                Main.tile[num44, num47].TileType = num2;
+                if (Main.tile[num44 - 1, num47].TileType == num2) {
+                    tile3 = Main.tile[num44 - 1, num47];
+                    tile3.HasTile = false;
+                    Main.tile[num44 - 1, num47].ClearEverything();
+                    Main.tile[num44 - 1, num47].WallType = (ushort)num3;
+                }
+
+                if (Main.tile[num44 - 2, num47].TileType == num2) {
+                    tile3 = Main.tile[num44 - 2, num47];
+                    tile3.HasTile = false;
+                    Main.tile[num44 - 2, num47].ClearEverything();
+                    Main.tile[num44 - 2, num47].WallType = (ushort)num3;
+                }
+
+                if (Main.tile[num44 + 1, num47].TileType == num2) {
+                    tile3 = Main.tile[num44 + 1, num47];
+                    tile3.HasTile = false;
+                    Main.tile[num44 + 1, num47].ClearEverything();
+                    Main.tile[num44 + 1, num47].WallType = (ushort)num3;
+                }
+
+                if (Main.tile[num44 + 2, num47].TileType == num2) {
+                    tile3 = Main.tile[num44 + 2, num47];
+                    tile3.HasTile = false;
+                    Main.tile[num44 + 2, num47].ClearEverything();
+                    Main.tile[num44 + 2, num47].WallType = (ushort)num3;
+                }
+            }
+
+            int style = 13;
+            if (genRand.Next(3) == 0) {
+                switch (num3) {
+                    case 7:
+                        style = 16;
+                        break;
+                    case 8:
+                        style = 17;
+                        break;
+                    case 9:
+                        style = 18;
+                        break;
+                }
+            }
+
+            WorldGen.PlaceTile(num44, num45, 10, mute: true, forced: false, -1, style);
+            num44--;
+            int num48 = num45 - 3;
+            while (!Main.tile[num44, num48].HasTile) {
+                num48--;
+            }
+
+            if (num45 - num48 < num45 - num46 + 5 && Main.tileDungeon[Main.tile[num44, num48].TileType]) {
+                for (int num49 = num45 - 4 - genRand.Next(3); num49 > num48; num49--) {
+                    Main.tile[num44, num49].Clear(TileDataType.Slope);
+                    Tile tile3 = Main.tile[num44, num49];
+                    tile3.HasTile = true;
+                    Main.tile[num44, num49].TileType = num2;
+                    if (Main.tile[num44 - 1, num49].TileType == num2) {
+                        tile3 = Main.tile[num44 - 1, num49];
+                        tile3.HasTile = false;
+                        Main.tile[num44 - 1, num49].ClearEverything();
+                        Main.tile[num44 - 1, num49].WallType = (ushort)num3;
+                    }
+
+                    if (Main.tile[num44 - 2, num49].TileType == num2) {
+                        tile3 = Main.tile[num44 - 2, num49];
+                        tile3.HasTile = false;
+                        Main.tile[num44 - 2, num49].ClearEverything();
+                        Main.tile[num44 - 2, num49].WallType = (ushort)num3;
+                    }
+                }
+            }
+
+            num44 += 2;
+            num48 = num45 - 3;
+            while (!Main.tile[num44, num48].HasTile) {
+                num48--;
+            }
+
+            if (num45 - num48 < num45 - num46 + 5 && Main.tileDungeon[Main.tile[num44, num48].TileType]) {
+                for (int num50 = num45 - 4 - genRand.Next(3); num50 > num48; num50--) {
+                    Tile tile3 = Main.tile[num44, num50];
+                    tile3.HasTile = true;
+                    Main.tile[num44, num50].Clear(TileDataType.Slope);
+                    Main.tile[num44, num50].TileType = num2;
+                    if (Main.tile[num44 + 1, num50].TileType == num2) {
+                        tile3 = Main.tile[num44 + 1, num50];
+                        tile3.HasTile = false;
+                        Main.tile[num44 + 1, num50].ClearEverything();
+                        Main.tile[num44 + 1, num50].WallType = (ushort)num3;
+                    }
+
+                    if (Main.tile[num44 + 2, num50].TileType == num2) {
+                        tile3 = Main.tile[num44 + 2, num50];
+                        tile3.HasTile = false;
+                        Main.tile[num44 + 2, num50].ClearEverything();
+                        Main.tile[num44 + 2, num50].WallType = (ushort)num3;
+                    }
+                }
+            }
+
+            num45++;
+            num44--;
+            for (int num51 = num45 - 8; num51 < num45; num51++) {
+                if (Main.tile[num44 + 2, num51].TileType == num2) {
+                    Tile tile3 = Main.tile[num44 + 2, num51];
+                    tile3.HasTile = false;
+                    Main.tile[num44 + 2, num51].ClearEverything();
+                    Main.tile[num44 + 2, num51].WallType = (ushort)num3;
+                }
+
+                if (Main.tile[num44 + 3, num51].TileType == num2) {
+                    Tile tile3 = Main.tile[num44 + 3, num51];
+                    tile3.HasTile = false;
+                    Main.tile[num44 + 3, num51].ClearEverything();
+                    Main.tile[num44 + 3, num51].WallType = (ushort)num3;
+                }
+
+                if (Main.tile[num44 - 2, num51].TileType == num2) {
+                    Tile tile3 = Main.tile[num44 - 2, num51];
+                    tile3.HasTile = false;
+                    Main.tile[num44 - 2, num51].ClearEverything();
+                    Main.tile[num44 - 2, num51].WallType = (ushort)num3;
+                }
+
+                if (Main.tile[num44 - 3, num51].TileType == num2) {
+                    Tile tile3 = Main.tile[num44 - 3, num51];
+                    tile3.HasTile = false;
+                    Main.tile[num44 - 3, num51].ClearEverything();
+                    Main.tile[num44 - 3, num51].WallType = (ushort)num3;
+                }
+            }
+
+            Tile tile2 = Main.tile[num44 - 1, num45];
+            tile2.HasTile = true;
+            Main.tile[num44 - 1, num45].TileType = num2;
+            Main.tile[num44 - 1, num45].Clear(TileDataType.Slope);
+            Tile tile = Main.tile[num44 + 1, num45];
+            tile.HasTile = true;
+            Main.tile[num44 + 1, num45].TileType = num2;
+            Main.tile[num44 + 1, num45].Clear(TileDataType.Slope);
+        }
+
+        int[] array = new int[3];
+        switch (num3) {
+            case 7:
+                array[0] = 7;
+                array[1] = 94;
+                array[2] = 95;
+                break;
+            case 9:
+                array[0] = 9;
+                array[1] = 96;
+                array[2] = 97;
+                break;
+            default:
+                array[0] = 8;
+                array[1] = 98;
+                array[2] = 99;
+                break;
+        }
+
+        for (int num52 = 0; num52 < 5; num52++) {
+            for (int num53 = 0; num53 < 3; num53++) {
+                int num54 = genRand.Next(40, 240);
+                int num55 = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
+                int num56 = genRand.Next(GenVars.dMinY, GenVars.dMaxY);
+                for (int num57 = num55 - num54; num57 < num55 + num54; num57++) {
+                    for (int num58 = num56 - num54; num58 < num56 + num54; num58++) {
+                        if ((double)num58 > Main.worldSurface) {
+                            double num59 = Math.Abs(num55 - num57);
+                            double num60 = Math.Abs(num56 - num58);
+                            if (Math.Sqrt(num59 * num59 + num60 * num60) < (double)num54 * 0.4 && Main.wallDungeon[Main.tile[num57, num58].WallType])
+                                WorldGen.Spread.WallDungeon(num57, num58, array[num53]);
+                        }
+                    }
+                }
+            }
+        }
+
+        Main.statusText = Lang.gen[58].Value + " 85%";
+        for (int num61 = 0; num61 < GenVars.numDungeonPlatforms; num61++) {
+            int num62 = GenVars.dungeonPlatformX[num61];
+            int num63 = GenVars.dungeonPlatformY[num61];
+            int num64 = Main.maxTilesX;
+            int num65 = 10;
+            if ((double)num63 < Main.worldSurface + 50.0)
+                num65 = 20;
+
+            for (int num66 = num63 - 5; num66 <= num63 + 5; num66++) {
+                int num67 = num62;
+                int num68 = num62;
+                bool flag3 = false;
+                if (Main.tile[num67, num66].HasTile) {
+                    flag3 = true;
+                }
+                else {
+                    while (!Main.tile[num67, num66].HasTile) {
+                        num67--;
+                        if (!Main.tileDungeon[Main.tile[num67, num66].TileType] || num67 == 0) {
+                            flag3 = true;
+                            break;
+                        }
+                    }
+
+                    while (!Main.tile[num68, num66].HasTile) {
+                        num68++;
+                        if (!Main.tileDungeon[Main.tile[num68, num66].TileType] || num68 == Main.maxTilesX - 1) {
+                            flag3 = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (flag3 || num68 - num67 > num65)
+                    continue;
+
+                bool flag4 = true;
+                int num69 = num62 - num65 / 2 - 2;
+                int num70 = num62 + num65 / 2 + 2;
+                int num71 = num66 - 5;
+                int num72 = num66 + 5;
+                for (int num73 = num69; num73 <= num70; num73++) {
+                    for (int num74 = num71; num74 <= num72; num74++) {
+                        if (Main.tile[num73, num74].HasTile && Main.tile[num73, num74].TileType == 19) {
+                            flag4 = false;
+                            break;
+                        }
+                    }
+                }
+
+                for (int num75 = num66 + 3; num75 >= num66 - 5; num75--) {
+                    if (Main.tile[num62, num75].HasTile) {
+                        flag4 = false;
+                        break;
+                    }
+                }
+
+                if (flag4) {
+                    num64 = num66;
+                    break;
+                }
+            }
+
+            if (num64 <= num63 - 10 || num64 >= num63 + 10)
+                continue;
+
+            int num76 = num62;
+            int num77 = num64;
+            int num78 = num62 + 1;
+            while (!Main.tile[num76, num77].HasTile) {
+                Tile tile = Main.tile[num76, num77];
+                tile.HasTile = true;
+                Main.tile[num76, num77].TileType = 19;
+                Main.tile[num76, num77].Clear(TileDataType.Slope);
+                switch (num3) {
+                    case 7:
+                        Main.tile[num76, num77].TileFrameY = 108;
+                        break;
+                    case 8:
+                        Main.tile[num76, num77].TileFrameY = 144;
+                        break;
+                    default:
+                        Main.tile[num76, num77].TileFrameY = 126;
+                        break;
+                }
+
+                WorldGen.TileFrame(num76, num77);
+                num76--;
+            }
+
+            for (; !Main.tile[num78, num77].HasTile; num78++) {
+                Tile tile = Main.tile[num78, num77];
+                tile.HasTile = true;
+                Main.tile[num78, num77].TileType = 19;
+                Main.tile[num78, num77].Clear(TileDataType.Slope);
+                switch (num3) {
+                    case 7:
+                        Main.tile[num78, num77].TileFrameY = 108;
+                        break;
+                    case 8:
+                        Main.tile[num78, num77].TileFrameY = 144;
+                        break;
+                    default:
+                        Main.tile[num78, num77].TileFrameY = 126;
+                        break;
+                }
+
+                WorldGen.TileFrame(num78, num77);
+            }
+        }
+
+        int num79 = 5;
+        if (WorldGen.drunkWorldGen)
+            num79 = 6;
+
+        for (int num80 = 0; num80 < num79; num80++) {
+            bool flag5 = false;
+            while (!flag5) {
+                int num81 = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
+                int num82 = genRand.Next((int)Main.worldSurface, GenVars.dMaxY);
+                if (!Main.wallDungeon[Main.tile[num81, num82].WallType] || Main.tile[num81, num82].HasTile)
+                    continue;
+
+                ushort chestTileType = 21;
+                int contain = 0;
+                int style2 = 0;
+                switch (num80) {
+                    case 0:
+                        style2 = 23;
+                        contain = 1156;
+                        break;
+                    case 1:
+                        if (!WorldGen.crimson) {
+                            style2 = 24;
+                            contain = 1571;
+                        }
+                        else {
+                            style2 = 25;
+                            contain = 1569;
+                        }
+                        break;
+                    case 5:
+                        if (WorldGen.crimson) {
+                            style2 = 24;
+                            contain = 1571;
+                        }
+                        else {
+                            style2 = 25;
+                            contain = 1569;
+                        }
+                        break;
+                    case 2:
+                        style2 = 26;
+                        contain = 1260;
+                        break;
+                    case 3:
+                        style2 = 27;
+                        contain = 1572;
+                        break;
+                    case 4:
+                        chestTileType = 467;
+                        style2 = 13;
+                        contain = 4607;
+                        break;
+                }
+
+                flag5 = WorldGen.AddBuriedChest(num81, num82, contain, notNearOtherChests: false, style2, trySlope: false, chestTileType);
+            }
+        }
+
+        int[] array2 = new int[3] {
+            genRand.Next(9, 13),
+            genRand.Next(9, 13),
+            0
+        };
+
+        while (array2[1] == array2[0]) {
+            array2[1] = genRand.Next(9, 13);
+        }
+
+        array2[2] = genRand.Next(9, 13);
+        while (array2[2] == array2[0] || array2[2] == array2[1]) {
+            array2[2] = genRand.Next(9, 13);
+        }
+
+        Main.statusText = Lang.gen[58].Value + " 90%";
+        num13 = 0;
+        num14 = 1000;
+        num15 = 0;
+        while (num15 < Main.maxTilesX / 20) {
+            num13++;
+            int num83 = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
+            int num84 = genRand.Next(GenVars.dMinY, GenVars.dMaxY);
+            bool flag6 = true;
+            if (Main.wallDungeon[Main.tile[num83, num84].WallType] && !Main.tile[num83, num84].HasTile) {
+                int num85 = 1;
+                if (genRand.Next(2) == 0)
+                    num85 = -1;
+
+                while (flag6 && !Main.tile[num83, num84].HasTile) {
+                    num83 -= num85;
+                    if (num83 < 5 || num83 > Main.maxTilesX - 5)
+                        flag6 = false;
+                    else if (Main.tile[num83, num84].HasTile && !Main.tileDungeon[Main.tile[num83, num84].TileType])
+                        flag6 = false;
+                }
+
+                if (flag6 && Main.tile[num83, num84].HasTile && Main.tileDungeon[Main.tile[num83, num84].TileType] && Main.tile[num83, num84 - 1].HasTile && Main.tileDungeon[Main.tile[num83, num84 - 1].TileType] && Main.tile[num83, num84 + 1].HasTile && Main.tileDungeon[Main.tile[num83, num84 + 1].TileType]) {
+                    num83 += num85;
+                    for (int num86 = num83 - 3; num86 <= num83 + 3; num86++) {
+                        for (int num87 = num84 - 3; num87 <= num84 + 3; num87++) {
+                            if (Main.tile[num86, num87].HasTile && Main.tile[num86, num87].TileType == 19) {
+                                flag6 = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (flag6 && (!Main.tile[num83, num84 - 1].HasTile & !Main.tile[num83, num84 - 2].HasTile & !Main.tile[num83, num84 - 3].HasTile)) {
+                        int num88 = num83;
+                        int num89 = num83;
+                        for (; num88 > GenVars.dMinX && num88 < GenVars.dMaxX && !Main.tile[num88, num84].HasTile && !Main.tile[num88, num84 - 1].HasTile && !Main.tile[num88, num84 + 1].HasTile; num88 += num85) {
+                        }
+
+                        num88 = Math.Abs(num83 - num88);
+                        bool flag7 = false;
+                        if (genRand.Next(2) == 0)
+                            flag7 = true;
+
+                        if (num88 > 5) {
+                            for (int num90 = genRand.Next(1, 4); num90 > 0; num90--) {
+                                Tile tile = Main.tile[num83, num84];
+                                tile.HasTile = true;
+                                Main.tile[num83, num84].Clear(TileDataType.Slope);
+                                Main.tile[num83, num84].TileType = 19;
+                                if (Main.tile[num83, num84].WallType == array[0])
+                                    Main.tile[num83, num84].TileFrameY = (short)(18 * array2[0]);
+                                else if (Main.tile[num83, num84].WallType == array[1])
+                                    Main.tile[num83, num84].TileFrameY = (short)(18 * array2[1]);
+                                else
+                                    Main.tile[num83, num84].TileFrameY = (short)(18 * array2[2]);
+
+                                WorldGen.TileFrame(num83, num84);
+                                if (flag7) {
+                                    WorldGen.PlaceTile(num83, num84 - 1, 50, mute: true);
+                                    if (genRand.Next(50) == 0 && (double)num84 > (Main.worldSurface + Main.rockLayer) / 2.0 && Main.tile[num83, num84 - 1].TileType == 50)
+                                        Main.tile[num83, num84 - 1].TileFrameX = 90;
+                                }
+
+                                num83 += num85;
+                            }
+
+                            num13 = 0;
+                            num15++;
+                            if (!flag7 && genRand.Next(2) == 0) {
+                                num83 = num89;
+                                num84--;
+                                int num91 = 0;
+                                if (genRand.Next(4) == 0)
+                                    num91 = 1;
+
+                                switch (num91) {
+                                    case 0:
+                                        num91 = 13;
+                                        break;
+                                    case 1:
+                                        num91 = 49;
+                                        break;
+                                }
+
+                                WorldGen.PlaceTile(num83, num84, num91, mute: true);
+                                if (Main.tile[num83, num84].TileType == 13) {
+                                    if (genRand.Next(2) == 0)
+                                        Main.tile[num83, num84].TileFrameX = 18;
+                                    else
+                                        Main.tile[num83, num84].TileFrameX = 36;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (num13 > num14) {
+                num13 = 0;
+                num15++;
+            }
+        }
+
+        Main.statusText = Lang.gen[58].Value + " 95%";
+        int num92 = 1;
+        for (int num93 = 0; num93 < GenVars.numDRooms; num93++) {
+            int num94 = 0;
+            while (num94 < 1000) {
+                int num95 = (int)((double)GenVars.dRoomSize[num93] * 0.4);
+                int i3 = GenVars.dRoomX[num93] + genRand.Next(-num95, num95 + 1);
+                int num96 = GenVars.dRoomY[num93] + genRand.Next(-num95, num95 + 1);
+                int num97 = 0;
+                int style3 = 2;
+                if (num92 == 1)
+                    num92++;
+
+                switch (num92) {
+                    case 2:
+                        num97 = 155;
+                        break;
+                    case 3:
+                        num97 = 156;
+                        break;
+                    case 4:
+                        num97 = ((!WorldGen.remixWorldGen) ? 157 : 2623);
+                        break;
+                    case 5:
+                        num97 = 163;
+                        break;
+                    case 6:
+                        num97 = 113;
+                        break;
+                    case 7:
+                        num97 = 3317;
+                        break;
+                    case 8:
+                        num97 = 327;
+                        style3 = 0;
+                        break;
+                    case 9:
+                        num97 = ModContent.ItemType<RagingBoots>();
+                        break;
+                    default:
+                        num97 = 164;
+                        num92 = 0;
+                        break;
+                }
+
+                if ((double)num96 < Main.worldSurface + 50.0) {
+                    num97 = 327;
+                    style3 = 0;
+                }
+
+                if (num97 == 0 && genRand.Next(2) == 0) {
+                    num94 = 1000;
+                    continue;
+                }
+
+                if (WorldGen.AddBuriedChest(i3, num96, num97, notNearOtherChests: false, style3, trySlope: false, 0)) {
+                    num94 += 1000;
+                    num92++;
+                }
+
+                num94++;
+            }
+        }
+
+        GenVars.dMinX -= 25;
+        GenVars.dMaxX += 25;
+        GenVars.dMinY -= 25;
+        GenVars.dMaxY += 25;
+        if (GenVars.dMinX < 0)
+            GenVars.dMinX = 0;
+
+        if (GenVars.dMaxX > Main.maxTilesX)
+            GenVars.dMaxX = Main.maxTilesX;
+
+        if (GenVars.dMinY < 0)
+            GenVars.dMinY = 0;
+
+        if (GenVars.dMaxY > Main.maxTilesY)
+            GenVars.dMaxY = Main.maxTilesY;
+
+        num13 = 0;
+        num14 = 1000;
+        num15 = 0;
+        WorldGen_MakeDungeon_Lights(null, num2, ref num13, num14, ref num15, array);
+        num13 = 0;
+        num14 = 1000;
+        num15 = 0;
+        WorldGen_MakeDungeon_Traps(null, ref num13, num14, ref num15);
+        double count = WorldGen_MakeDungeon_GroundFurniture(null, num3);
+        count = WorldGen_MakeDungeon_Pictures(null, array, count);
+        count = WorldGen_MakeDungeon_Banners(null, array, count);
     }
 
     public override void PostWorldGen() {
