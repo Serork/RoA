@@ -1,6 +1,7 @@
 ﻿using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Seeds;
+using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 
 using Terraria.GameContent.ItemDropRules;
@@ -202,7 +203,8 @@ sealed class ExtraVanillaCrateItems : ModSystem {
             ItemDropRule.NotScalingWithLuck(ItemID.MiningPotion, 1, 2, 4),
             ItemDropRule.NotScalingWithLuck(ItemID.HeartreachPotion, 1, 2, 4),
             ItemDropRule.NotScalingWithLuck(ItemID.CalmingPotion, 1, 2, 4),
-            ItemDropRule.NotScalingWithLuck(ItemID.FlipperPotion, 1, 2, 4)
+            ItemDropRule.NotScalingWithLuck(ItemID.FlipperPotion, 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DryadBloodPotion>(), 1, 2, 4)
         };
         extraPotions = new IItemDropRule[]
         {
@@ -291,7 +293,8 @@ sealed class ExtraVanillaCrateItems : ModSystem {
             ItemDropRule.NotScalingWithLuck(ItemID.SpelunkerPotion, 1, 2, 5),
             ItemDropRule.NotScalingWithLuck(ItemID.GravitationPotion, 1, 2, 5),
             ItemDropRule.NotScalingWithLuck(ItemID.MiningPotion, 1, 2, 5),
-            ItemDropRule.NotScalingWithLuck(ItemID.HeartreachPotion, 1, 2, 5)
+            ItemDropRule.NotScalingWithLuck(ItemID.HeartreachPotion, 1, 2, 5),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DeathWardPotion>(), 1, 2, 5)
         };
         extraPotions = new IItemDropRule[]
         {
@@ -452,7 +455,8 @@ sealed class ExtraVanillaCrateItems : ModSystem {
             ItemDropRule.NotScalingWithLuck(ItemID.HunterPotion, 1, 2, 4),
             ItemDropRule.NotScalingWithLuck(ItemID.GravitationPotion, 1, 2, 4),
             ItemDropRule.NotScalingWithLuck(ItemID.MiningPotion, 1, 2, 4),
-            ItemDropRule.NotScalingWithLuck(ItemID.HeartreachPotion, 1, 2, 4)
+            ItemDropRule.NotScalingWithLuck(ItemID.HeartreachPotion, 1, 2, 4),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<BloodlustPotion>(), 1, 2, 4)
         };
         extraPotions = new IItemDropRule[]
         {
