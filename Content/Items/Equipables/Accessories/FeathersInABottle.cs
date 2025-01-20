@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Content.Dusts;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using Terraria;
@@ -50,9 +52,10 @@ sealed class FeathersInABottle : NatureItem {
             offsetY -= 16;
 
             for (int i = 0; i < 10; i++) {
-                Dust dust = Dust.NewDustDirect(player.position + new Vector2(-34f, offsetY), 102, 32, DustID.Cloud, -player.velocity.X * 0.5f, player.velocity.Y * 0.5f, 100, 
-                    new Color(83, 153, 193), 1f);
+                Dust dust = Dust.NewDustDirect(player.position + new Vector2(-34f, offsetY), 102, 32, ModContent.DustType<FeatherDust>(), -player.velocity.X * 0.5f, player.velocity.Y * 0.5f, 100, 
+                    default, 1f);
                 dust.velocity = dust.velocity * 0.5f - player.velocity * new Vector2(0.1f, 0.3f);
+                dust.customData = Main.rand.NextFloatRange(50f);
             }
 
             SpawnCloudPoof(player, player.Top + new Vector2(-16f, offsetY));
