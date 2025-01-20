@@ -150,10 +150,10 @@ sealed class SmallMoon : ModProjectile {
         color2.A = (byte)(60 + 100 * globalTimeWrappedHourly2);
         spriteBatch.Draw(glowTexture, glowDrawPos, glowframeRect, color2, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 
+        spriteBatch.Draw(texture, Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY), frameRect, color2, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+
         spriteBatch.EndBlendState();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-
-        spriteBatch.Draw(texture, Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY), frameRect, color2, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 
         return false;
     }
