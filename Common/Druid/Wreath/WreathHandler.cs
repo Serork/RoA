@@ -145,6 +145,8 @@ sealed class WreathHandler : ModPlayer {
 
     public ushort AddResourceValue() => (ushort)(AddValue * MaxResource);
 
+    public bool HasEnough(float percentOfMax) => CurrentResource >= (ushort)(TotalResource * percentOfMax);
+
     public override void Unload() {
         OnWreathReset = null;
     }
@@ -206,6 +208,21 @@ sealed class WreathHandler : ModPlayer {
                     }
                 }
             }
+        }
+    }
+
+    internal void Consume(float procentOfMax) {
+        CurrentResource -= (ushort)(TotalResource * 0.25f);
+        _stayTime = STAYTIMEMAX;
+
+        _shouldDecrease = _shouldDecrease2 = false;
+        _increaseValue = 0;
+        ResetChangingValue();
+
+        StartSlowlyIncreasingUntilFull = false;
+
+        for (int i = 0; i < 5; i++) {
+            MakeDustsOnHit(1f);
         }
     }
 
@@ -545,11 +562,13 @@ sealed class WreathHandler : ModPlayer {
         dust.customData = DrawColorOpacity * PulseIntensity * 2f;
     }
 
-    private void MakeDustsOnHit() {
+    private void MakeDustsOnHit(float progress = -1f) {
         float actualProgress = ActualProgress3;
         ushort dustType = GetDustType();
         if (actualProgress >= 0.1f && actualProgress <= 0.95f) {
-            float progress = actualProgress * 1.25f + 0.1f;
+            if (progress == -1f) {
+                progress = actualProgress * 1.25f + 0.1f;
+            }
             int count = Math.Min((int)(15 * progress), 10);
             for (int i = 0; i < count; i++) {
                 if (Main.rand.NextChance(0.5)) {
