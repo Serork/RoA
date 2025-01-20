@@ -28,6 +28,8 @@ class ClawsSlash : NatureProjectile {
 
     protected Player Owner => Main.player[Projectile.owner];
 
+    protected bool ShouldFullBright => Item != null && Item.type == ModContent.ItemType<HellfireClaws>();
+
     protected (Color, Color) SlashColors => Owner.GetModPlayer<ClawsHandler>().SlashColors;
     protected Color FirstSlashColor => SlashColors.Item1;
     protected Color SecondSlashColor => SlashColors.Item2;
@@ -68,6 +70,9 @@ class ClawsSlash : NatureProjectile {
         Vector2 velocity = 1.5f * offset;
         Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
         Color color = Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()));
+        if (ShouldFullBright) {
+            color = Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat());
+        }
         color.A = 50;
         position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
         velocity = angle.ToRotationVector2() * velocity * 0.5f;
@@ -121,6 +126,9 @@ class ClawsSlash : NatureProjectile {
         float num4 = Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
         Color color1 = FirstSlashColor;
         Color color2 = SecondSlashColor;
+        if (ShouldFullBright) {
+            num4 = 1f;
+        }
         //Point pos = Projectile.Center.ToTileCoordinates();
         //float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.5f, 1f);
         //color1 *= brightness;
@@ -201,6 +209,9 @@ class ClawsSlash : NatureProjectile {
         float num12 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
         float num42 = Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
+        if (ShouldFullBright) {
+            num42 = 1f;
+        }
         color1 *= num42 * num22;
         color2 *= num42 * num22;
 
@@ -216,6 +227,9 @@ class ClawsSlash : NatureProjectile {
                 dust.noLight = dust.noLightEmittence = true;
                 dust.scale *= Projectile.scale;
                 dust.noGravity = true;
+                if (ShouldFullBright) {
+                    dust.customData = 1f;
+                }
             }
         }
         if (CanFunction) {

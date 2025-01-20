@@ -201,6 +201,7 @@ sealed class HellfireFracture : NatureProjectile {
         Vector2 vel = dif.SafeNormalize(Vector2.Zero) * dif.Length() / 2f;
         Vector2 center = Projectile.position + vel;
         Vector2 a = pos1.RotatedBy(rot, center);
+        Vector2 a2 = a;
         Vector2 b = pos2.RotatedBy(rot, center);
         float num1 = (b - a).Length();
         Vector2 vec = (b - a) / num1;
