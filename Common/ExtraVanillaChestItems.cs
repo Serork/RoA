@@ -15,7 +15,7 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Common;
 
-sealed class ExtraChestItems : ModSystem {
+sealed class ExtraVanillaChestItems : ModSystem {
     private bool _cactiCactusRodAdded;
     private bool _iceRodAdded;
     private bool _mushroomStaffAdded;
