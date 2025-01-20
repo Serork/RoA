@@ -1,4 +1,6 @@
 ﻿using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Materials;
+using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 
 using Terraria;
@@ -12,6 +14,14 @@ sealed class ExtraVanillaCrateItems : ModSystem {
     public override void Load() {
         On_ItemDropDatabase.RegisterCrateDrops += On_ItemDropDatabase_RegisterCrateDrops;
         On_ItemDropDatabase.RegisterLockbox += On_ItemDropDatabase_RegisterLockbox;
+        On_ItemDropDatabase.RegisterHerbBag += On_ItemDropDatabase_RegisterHerbBag;
+    }
+
+    private void On_ItemDropDatabase_RegisterHerbBag(On_ItemDropDatabase.orig_RegisterHerbBag orig, ItemDropDatabase self) {
+        self.RegisterToItem(ItemID.HerbBag, 
+            new HerbBagDropsItemDropRule(
+                ModContent.ItemType<MiracleMint>(), ItemID.Daybloom, ItemID.Moonglow, ItemID.Blinkroot, ItemID.Waterleaf, ItemID.Deathweed, ItemID.Fireblossom, ItemID.Shiverthorn,
+                ModContent.ItemType<MiracleMintSeeds>(), ItemID.DaybloomSeeds, ItemID.MoonglowSeeds, ItemID.BlinkrootSeeds, ItemID.WaterleafSeeds, ItemID.DeathweedSeeds, ItemID.FireblossomSeeds, ItemID.ShiverthornSeeds));
     }
 
     private void On_ItemDropDatabase_RegisterLockbox(On_ItemDropDatabase.orig_RegisterLockbox orig, ItemDropDatabase self) {
