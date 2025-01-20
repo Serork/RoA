@@ -54,7 +54,13 @@ sealed class MoonFlower : ModItem {
         Player player = Main.player[Main.myPlayer];
         ushort type = (ushort)ModContent.ItemType<MoonFlower>();
         Color color = player.GetModPlayer<SmallMoonPlayer>().smallMoonColor;
-        color.A = 80;
+
+        float globalTimeWrappedHourly2 = Main.GlobalTimeWrappedHourly;
+        globalTimeWrappedHourly2 %= 5f;
+        globalTimeWrappedHourly2 /= 2.5f;
+        if (globalTimeWrappedHourly2 >= 1f)
+            globalTimeWrappedHourly2 = 2f - globalTimeWrappedHourly2;
+        color.A = (byte)(60 + 100 * globalTimeWrappedHourly2);
         Vector2 drawPosition = position;
         float scale_ = Main.inventoryScale;
         spriteBatch.Draw(glowmask, position, null,
