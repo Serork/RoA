@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Buffs;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
@@ -79,7 +80,7 @@ sealed class SmallMoon : ModProjectile {
                 Main.dust[num54].noGravity = true;
                 Main.dust[num54].scale = 1.25f;
                 Main.dust[num54].color = smallMoonPlayer.smallMoonColor;
-                //Main.dust[num54].shader = GameShaders.Armor.GetSecondaryShader(player.cLight, player);
+                Main.dust[num54].shader = GameShaders.Armor.GetSecondaryShader(player.cLight, player);
             }
         }
 
@@ -99,7 +100,24 @@ sealed class SmallMoon : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
+        Player player = Main.player[Projectile.owner];
+        var shader = GameShaders.Armor.GetSecondaryShader(player.cLight, player);
+        ArmorShaderData armorShaderData = null;
         SpriteBatch spriteBatch = Main.spriteBatch;
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+        if (shader != armorShaderData) {
+            spriteBatch.End();
+            armorShaderData = shader;
+            if (armorShaderData == null) {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+            }
+            else {
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+                shader.Apply(null);
+            }
+        }
+
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Texture2D glowTexture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "SmallMoon_Light");
         int frameHeight = texture.Height / Main.projFrames[Projectile.type];
@@ -124,6 +142,10 @@ sealed class SmallMoon : ModProjectile {
         else glowAlphaIncrease = true;
         Vector2 glowDrawPos = Projectile.oldPos[0] - Main.screenPosition + drawOrigin - new Vector2(20f, 18f);
         spriteBatch.Draw(glowTexture, glowDrawPos, glowframeRect, Projectile.GetAlpha(lightColor) * glowAlpha, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
-        return true;
+
+        spriteBatch.EndBlendState();
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+        return false;
     }
 }

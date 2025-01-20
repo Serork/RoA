@@ -2,9 +2,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Buffs;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -91,6 +93,23 @@ sealed class MoonFlower : ModItem {
             SpriteEffects.None,
             0f
         );
+
+        var shader = GameShaders.Armor.GetSecondaryShader(player.cLight, player);
+        ArmorShaderData armorShaderData = null;
+        if (shader != armorShaderData) {
+            spriteBatch.End();
+            armorShaderData = shader;
+            if (armorShaderData == null) {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+            }
+            else {
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+                shader.Apply(null);
+            }
+        }
+
+        spriteBatch.EndBlendState();
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
 }
 sealed class MoonFlowerUseGlow : PlayerDrawLayer {
