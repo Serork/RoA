@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -15,7 +17,9 @@ sealed class FeatherinABottleGore11 : FeatherinABottleGore1 { }
 sealed class FeatherinABottleGore3 : FeatherinABottleGore1 { }
 sealed class FeatherinABottleGore2 : FeatherinABottleGore1 { }
 class FeatherinABottleGore1 : ModGore {
-	public override void OnSpawn(Gore gore, IEntitySource source) {
+    public override Color? GetAlpha(Gore gore, Color lightColor) => Color.White;
+
+    public override void OnSpawn(Gore gore, IEntitySource source) {
 		UpdateType = 11;
 	}
 }
