@@ -114,7 +114,7 @@ sealed class RodOfTheCondor : ModItem {
             }
         }
 
-        public bool IsActive => true;
+        public bool IsActive => _active;
 
         private static int _wingsSlot = -1;
 
