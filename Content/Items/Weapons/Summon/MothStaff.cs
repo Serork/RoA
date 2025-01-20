@@ -99,11 +99,11 @@ sealed class MothStaff : ModItem {
 		UpdatePositionInPlayersHand(player);
     }
 
-	private static Vector2 GetDustsPosition(Player player) => new Vector2(player.MountedCenter.X + 36f * player.direction - (player.direction != 1 ? 8f : 0f), player.itemLocation.Y + (16f - 32f) * player.gravDir);
+	private static Vector2 GetDustsPosition(Player player) => new Vector2(player.MountedCenter.X + 30f * player.direction - (player.direction != 1 ? 8f : 0f), player.itemLocation.Y + (16f - 32f - 2f) * player.gravDir);
 
 	private static void UpdatePositionInPlayersHand(Player player) {
-        player.itemLocation.X = player.MountedCenter.X + 10f * player.direction;
-        player.itemLocation.Y = player.MountedCenter.Y;
+        player.itemLocation.X = player.MountedCenter.X + 4f * player.direction;
+        player.itemLocation.Y = player.MountedCenter.Y + 9f;
         player.itemRotation = 0f;
     }
 
