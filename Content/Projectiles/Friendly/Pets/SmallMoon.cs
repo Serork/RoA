@@ -141,10 +141,19 @@ sealed class SmallMoon : ModProjectile {
         }
         else glowAlphaIncrease = true;
         Vector2 glowDrawPos = Projectile.oldPos[0] - Main.screenPosition + drawOrigin - new Vector2(20f, 18f);
-        spriteBatch.Draw(glowTexture, glowDrawPos, glowframeRect, Projectile.GetAlpha(lightColor) * glowAlpha, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+        Color color2 = Projectile.GetAlpha(lightColor) * glowAlpha;
+        float globalTimeWrappedHourly2 = Main.GlobalTimeWrappedHourly;
+        globalTimeWrappedHourly2 %= 5f;
+        globalTimeWrappedHourly2 /= 2.5f;
+        if (globalTimeWrappedHourly2 >= 1f)
+            globalTimeWrappedHourly2 = 2f - globalTimeWrappedHourly2;
+        color2.A = (byte)(60 + 100 * globalTimeWrappedHourly2);
+        spriteBatch.Draw(glowTexture, glowDrawPos, glowframeRect, color2, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 
         spriteBatch.EndBlendState();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+        spriteBatch.Draw(texture, Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY), frameRect, color2, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 
         return false;
     }
