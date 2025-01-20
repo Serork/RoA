@@ -11,12 +11,19 @@ sealed class FeatherDust : ModDust {
     private Vector2 _velocity;
 
     public override void OnSpawn(Dust dust) {
+        int maxFramesY = 3;
+        dust.frame = (Texture2D?.Value?.Frame(3, maxFramesY, frameX: dust.alpha, frameY: Main.rand.Next(maxFramesY))).GetValueOrDefault();
+
         dust.noGravity = true;
         dust.noLight = false;
     }
 
     public override bool Update(Dust dust) {
-        float randomness = (float)dust.customData;
+        bool flag = dust.customData is null || dust.customData is not float v;
+        float randomness = 0f;
+        if (!flag) {
+            randomness = (float)dust.customData;
+        }
 
         _velocity = Vector2.SmoothStep(_velocity, dust.velocity *= 0.9f, 1f);
         dust.position += _velocity *= 0.99f;

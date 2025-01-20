@@ -43,7 +43,8 @@ sealed class FeathersInABottle : NatureItem {
         }
 
         public override void OnStarted(Player player, ref bool playSound) {
-            player.GetModPlayer<WreathHandler>().Consume(0.25f);
+            var handler = player.GetModPlayer<WreathHandler>();
+            handler.Consume(0.25f);
 
             int offsetY = player.height;
             if (player.gravDir == -1f)
@@ -51,11 +52,19 @@ sealed class FeathersInABottle : NatureItem {
 
             offsetY -= 16;
 
+            int variant = 0;
+            if (handler.IsPhoenixWreath) {
+                variant = 2;
+            }
+            if (handler.SoulOfTheWoods) {
+                variant = 1;
+            }
             for (int i = 0; i < 10; i++) {
                 Dust dust = Dust.NewDustDirect(player.position + new Vector2(-34f, offsetY), 102, 32, ModContent.DustType<FeatherDust>(), -player.velocity.X * 0.5f, player.velocity.Y * 0.5f, 100, 
                     default, 1f);
                 dust.velocity = dust.velocity * 0.5f - player.velocity * new Vector2(0.1f, 0.3f);
                 dust.customData = Main.rand.NextFloatRange(50f);
+                dust.alpha = variant;
             }
 
             SpawnCloudPoof(player, player.Top + new Vector2(-16f, offsetY));
