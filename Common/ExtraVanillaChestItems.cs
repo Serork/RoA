@@ -161,13 +161,11 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
         int contain = 0;
         int num13 = GenVars.skyIslandHouseCount;
-        bool shouldAdd = false;
         if (num13 > 3) {
             num13 = WorldGen.genRand.Next(5);
-            shouldAdd = true;
         }
 
-        if (shouldAdd && !_feathersBottleAdded) {
+        if (!_feathersBottleAdded) {
             num13 = 4;
             _feathersBottleAdded = true;
         }
