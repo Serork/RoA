@@ -37,6 +37,8 @@ sealed class QuicksilverBolt : ModProjectile {
     }
 
     public override void AI() {
+        Lighting.AddLight(Projectile.Center, new Color(79, 211, 123).ToVector3() * 0.5f);
+
         var dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, DustID.Clentaminator_Green, Projectile.velocity.X, Projectile.velocity.Y, 0, new Color(), Main.rand.NextFloat(0.9f, 1.1f));
         Main.dust[dust].velocity *= 0.1f;
         Main.dust[dust].scale *= 0.75f;
