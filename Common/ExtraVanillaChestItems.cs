@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
@@ -1882,7 +1883,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         }
 
                         if (genRand.Next(3) > 0) {
-                            int num20 = genRand.Next(9);
+                            int num20 = genRand.Next(10);
                             int stack13 = genRand.Next(1, 3);
                             if (num20 == 0)
                                 chest.item[num10].SetDefaults(289);
@@ -1910,6 +1911,9 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
                             if (num20 == 8)
                                 chest.item[num10].SetDefaults(2329);
+
+                            if (num20 == 9)
+                                chest.item[num10].SetDefaults(ModContent.ItemType<WillpowerPotion>());
 
                             chest.item[num10].stack = stack13;
                             num10++;
@@ -2108,7 +2112,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         }
 
                         if (genRand.Next(3) > 0) {
-                            int num24 = genRand.Next(6);
+                            int num24 = genRand.Next(7);
                             int stack19 = genRand.Next(1, 3);
                             if (num24 == 0)
                                 chest.item[num10].SetDefaults(296);
@@ -2128,12 +2132,15 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             if (num24 == 5)
                                 chest.item[num10].SetDefaults(305);
 
+                            if (num24 == 6)
+                                chest.item[num10].SetDefaults(ModContent.ItemType<ResiliencePotion>());
+
                             chest.item[num10].stack = stack19;
                             num10++;
                         }
 
                         if (genRand.Next(3) > 1) {
-                            int num25 = genRand.Next(6);
+                            int num25 = genRand.Next(8);
                             int stack20 = genRand.Next(1, 3);
                             if (num25 == 0)
                                 chest.item[num10].SetDefaults(301);
@@ -2152,6 +2159,12 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
                             if (num25 == 5)
                                 chest.item[num10].SetDefaults(2326);
+
+                            if (num25 == 6)
+                                chest.item[num10].SetDefaults(ModContent.ItemType<DryadBloodPotion>());
+
+                            if (num25 == 7)
+                                chest.item[num10].SetDefaults(ModContent.ItemType<WeightPotion>());
 
                             chest.item[num10].stack = stack20;
                             num10++;
@@ -2280,7 +2293,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         }
 
                         if (genRand.Next(4) > 0) {
-                            int num30 = genRand.Next(8);
+                            int num30 = genRand.Next(9);
                             int stack26 = genRand.Next(1, 3);
                             if (num30 == 0)
                                 chest.item[num10].SetDefaults(296);
@@ -2306,12 +2319,15 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             if (num30 == 7)
                                 chest.item[num10].SetDefaults(2323);
 
+                            if (num30 == 8)
+                                chest.item[num10].SetDefaults(ModContent.ItemType<BloodlustPotion>());
+
                             chest.item[num10].stack = stack26;
                             num10++;
                         }
 
                         if (genRand.Next(3) > 0) {
-                            int num31 = genRand.Next(8);
+                            int num31 = genRand.Next(9);
                             int stack27 = genRand.Next(1, 3);
                             if (num31 == 0)
                                 chest.item[num10].SetDefaults(305);
@@ -2336,6 +2352,9 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
                             if (num31 == 7)
                                 chest.item[num10].SetDefaults(2345);
+
+                            if (num31 == 8)
+                                chest.item[num10].SetDefaults(ModContent.ItemType<DeathWardPotion>());
 
                             chest.item[num10].stack = stack27;
                             num10++;
