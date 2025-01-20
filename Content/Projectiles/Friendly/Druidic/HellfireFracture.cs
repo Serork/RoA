@@ -241,8 +241,8 @@ sealed class HellfireFracture : NatureProjectile {
             if (random.NextBool()) {
                 num2 = -num2;
             }
-            float gap1 = 0.75f;
-            float gap2 = 0.25f;
+            float gap1 = 0.9f;
+            float gap2 = 0.1f;
             bool flag = progress > gap1;
             bool flag2 = progress < gap2;
             bool flag3 = !flag && !flag2;
