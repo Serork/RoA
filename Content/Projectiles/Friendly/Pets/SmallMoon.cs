@@ -7,6 +7,7 @@ using RoA.Core;
 using System;
 
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -69,6 +70,17 @@ sealed class SmallMoon : ModProjectile {
 
         if (!player.HasBuff(ModContent.BuffType<Buffs.SmallMoon>())) {
             Projectile.Kill();
+        }
+
+        for (int l = 0; l < 2; l++) {
+            if (Main.rand.NextBool(3)) {
+                int num54 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 20, 20, DustID.RainbowMk2);
+                Main.dust[num54].velocity *= 0.2f;
+                Main.dust[num54].noGravity = true;
+                Main.dust[num54].scale = 1.25f;
+                Main.dust[num54].color = smallMoonPlayer.smallMoonColor;
+                //Main.dust[num54].shader = GameShaders.Armor.GetSecondaryShader(player.cLight, player);
+            }
         }
 
         if (player.dead)
