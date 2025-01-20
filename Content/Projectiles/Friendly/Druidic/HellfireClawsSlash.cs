@@ -108,7 +108,10 @@ sealed class HellfireClawsSlash : ClawsSlash {
             if (Projectile.localAI[1] == 0f) {
                 Projectile.localAI[1] = 1f;
                 if (_projectile == null && Projectile.owner == Main.myPlayer) {
-                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), GetPos(MathHelper.PiOver4 * 0.5f), Vector2.Zero, ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, 0f, Projectile.owner, ai2: Projectile.identity);
+                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target),
+                        GetPos(MathHelper.PiOver4 * 0.5f),
+                        Helper.VelocityToPoint(Main.player[Projectile.owner].Center, Main.MouseWorld, 1f),
+                        ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, 0f, Projectile.owner, ai2: Projectile.identity);
                 }
             }
             _oldTimeleft = Projectile.timeLeft;
