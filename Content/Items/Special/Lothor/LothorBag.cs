@@ -7,6 +7,7 @@ using System;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -34,16 +35,16 @@ sealed class LothorBag : ModItem {
     public override bool CanRightClick() => true;
 
     public override void ModifyItemLoot(ItemLoot itemLoot) {
-        //itemLoot.Add(new OneFromRulesRule(1, ItemDropRule.Common(ModContent.ItemType<Weapons.Magic.Bane>()),
-        //									 ItemDropRule.Common(ModContent.ItemType<Weapons.Ranged.ChemicalPrisoner>()),
-        //									 ItemDropRule.Common(ModContent.ItemType<Weapons.Summon.FlederStaff>()),
-        //									 ItemDropRule.Common(ModContent.ItemType<Weapons.Melee.BloodshedAxe>()),
-        //									 ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.SoulOfTheWoods>())));
-        //itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Pets.MoonFlower>(), 10));
-        //itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<LothorMask>(), 8));
-        //itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.Expert.BloodbathLocket>()));
+        itemLoot.Add(new OneFromRulesRule(1, ItemDropRule.Common(ModContent.ItemType<Weapons.Magic.Bane>()),
+                                             ItemDropRule.Common(ModContent.ItemType<Weapons.Ranged.ChemicalPrisoner>()),
+                                             ItemDropRule.Common(ModContent.ItemType<Weapons.Summon.FlederStaff>()),
+                                             ItemDropRule.Common(ModContent.ItemType<Weapons.Melee.BloodshedAxe>()),
+                                             ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.SoulOfTheWoods>())));
+        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Pets.MoonFlower>(), 10));
+        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<LothorMask>(), 7));
+        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.BloodbathLocket>()));
 
-        //itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Lothor>()));
+        itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Lothor>()));
     }
 
     public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.4f);

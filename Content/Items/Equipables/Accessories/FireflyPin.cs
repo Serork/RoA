@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Content.NPCs.Friendly;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -24,8 +25,16 @@ sealed class FireflyPin : NatureItem {
 		Item.accessory = true;
 
 		Item.value = Item.buyPrice(gold: 3);
-		Item.value = Item.sellPrice(silver: 75);
-	}
+
+        Item.useStyle = 1;
+        Item.autoReuse = true;
+        Item.useTurn = true;
+        Item.useAnimation = 15;
+        Item.useTime = 10;
+        Item.consumable = true;
+        Item.makeNPC = ModContent.NPCType<FireflyMimic>();
+        Item.noUseGraphic = true;
+    }
 
 	public override void UpdateAccessory(Player player, bool hideVisual)  => player.GetModPlayer<DruidStats>().KeepBonusesForTime += 120f;
 }

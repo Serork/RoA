@@ -215,3 +215,8 @@ EssenceDrain: {
 	DisplayName: Essence Drain
 	Description: Mods.RoA.Buffs.EssenceDrain.Description
 }
+
+SmallMoon: {
+	DisplayName: Small Moon
+	Description: Mods.RoA.Buffs.SmallMoon.Description
+}

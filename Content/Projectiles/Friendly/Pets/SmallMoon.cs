@@ -1,0 +1,117 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Content.Buffs;
+using RoA.Core;
+
+using System;
+
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Projectiles.Friendly.Pets;
+
+sealed class SmallMoon : ModProjectile {
+    private float glowAlpha;
+    private bool glowAlphaIncrease;
+
+    public override void SetStaticDefaults() {
+        Main.projPet[Projectile.type] = true;
+        ProjectileID.Sets.LightPet[Projectile.type] = true;
+        Main.projFrames[Projectile.type] = 4;
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+    }
+
+    public override void SetDefaults() {
+        int width = 24; int height = width;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.friendly = true;
+        Projectile.netImportant = true;
+
+        Projectile.timeLeft *= 5;
+
+        Projectile.ignoreWater = true;
+        Projectile.tileCollide = false;
+
+        Projectile.scale = 1.0f;
+        Projectile.alpha = 100;
+        Projectile.light = 0.3f;
+    }
+
+    public override void AI() {
+        Player player = Main.player[Projectile.owner];
+        var smallMoonPlayer = player.GetModPlayer<SmallMoonPlayer>();
+
+        if (Main.moonPhase == 0 || Main.moonPhase == 1) Projectile.frame = 0;
+        if (Main.moonPhase == 2 || Main.moonPhase == 3) Projectile.frame = 1;
+        if (Main.moonPhase == 4 || Main.moonPhase == 5) Projectile.frame = 2;
+        if (Main.moonPhase == 6 || Main.moonPhase == 7) Projectile.frame = 3;
+
+        if (!Main.dedServ)
+            Lighting.AddLight(Projectile.Center, smallMoonPlayer.smallMoonColor.ToVector3());
+
+        double deg = (double)Projectile.ai[1] / 2;
+        double rad = deg * (Math.PI / 180);
+        double dist = 60;
+        Projectile.position.X = player.Center.X - (int)(Math.Cos(rad) * dist) - player.width / 2;
+        Projectile.position.Y = player.Center.Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + player.gfxOffY;
+
+        if (player.name == "has2r") Projectile.ai[1] -= 3f;
+        else Projectile.ai[1] += 3f;
+
+        ++Projectile.ai[0];
+        if (Projectile.ai[0] > 120.0) Projectile.ai[0] = 0.0f;
+
+        Projectile.netUpdate = true;
+
+        if (!player.HasBuff(ModContent.BuffType<Buffs.SmallMoon>())) {
+            Projectile.Kill();
+        }
+
+        if (player.dead)
+            player.GetModPlayer<SmallMoonPlayer>().smallMoon = false;
+        if (!player.GetModPlayer<SmallMoonPlayer>().smallMoon)
+            return;
+        Projectile.timeLeft = 2;
+    }
+
+    public override Color? GetAlpha(Color lightColor) {
+        Player player = Main.player[Projectile.owner];
+        var smallMoonPlayer = player.GetModPlayer<SmallMoonPlayer>();
+        Color SmallMoonColorAdditive = smallMoonPlayer.smallMoonColor;
+        SmallMoonColorAdditive.A = 0;
+        return SmallMoonColorAdditive;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D glowTexture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "SmallMoon_Light");
+        int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+        Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+        Rectangle glowframeRect = new Rectangle(0, 0, glowTexture.Width, glowTexture.Height);
+        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
+        for (int k = 0; k < Projectile.oldPos.Length; k++) {
+            Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+            Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+            spriteBatch.Draw(texture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale - k * 0.1f, SpriteEffects.None, 0f);
+        }
+
+        if (glowAlpha < 1f) {
+            if (glowAlphaIncrease)
+                glowAlpha += 0.02f;
+        }
+        else glowAlphaIncrease = false;
+        if (glowAlpha > 0.6f) {
+            if (!glowAlphaIncrease)
+                glowAlpha -= 0.01f;
+        }
+        else glowAlphaIncrease = true;
+        Vector2 glowDrawPos = Projectile.oldPos[0] - Main.screenPosition + drawOrigin - new Vector2(20f, 18f);
+        spriteBatch.Draw(glowTexture, glowDrawPos, glowframeRect, Projectile.GetAlpha(lightColor) * glowAlpha, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+        return true;
+    }
+}
