@@ -9,6 +9,7 @@ using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
+using RoA.Content.Items.Placeable;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Melee;
@@ -79,6 +80,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private Vector2D _gatewayVelocity;
     private int _nextItemIndex;
     private bool _costumeAdded;
+    private bool _wandsAdded;
 
     private int CenterX {
         get => _positionToPlaceBiome.X;
@@ -2027,6 +2029,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             }
                         },
                         () => {
+                            if (!_wandsAdded || _random.NextBool(5)) {
+                                _wandsAdded = true;
+                                addItemInChest(ModContent.ItemType<LivingPrimordialWand>(), 1, 1);
+                                addItemInChest(ModContent.ItemType<LivingPrimordialWand2>(), 1, 1);
+                            }
+                        },
+                        () => {
                             bool flag = _random.NextBool(3);
                             int itemToAddType = flag ? ModContent.ItemType<SlipperyBomb>() : ModContent.ItemType<SlipperyDynamite>();
                             addItemInChest(itemToAddType,
@@ -3556,6 +3565,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step0_Setup() {
+        _wandsAdded = false;
+
         _backwoodsPlants.Clear();
         _biomeSurface.Clear();
         _altarTiles.Clear();
