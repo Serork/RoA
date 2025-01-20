@@ -3,7 +3,6 @@ using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 
-using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;

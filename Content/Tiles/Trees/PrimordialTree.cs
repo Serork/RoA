@@ -121,7 +121,7 @@ sealed class PrimordialTree : ModTree {
     }
 
     public override bool Shake(int x, int y, ref bool createLeaves) {
-        //NPC.NewNPCDirect(WorldGen.GetItemSource_FromTreeShake(x, y), new Vector2(x, y) * 16, ModContent.NPCType<Content.NPCs.Backwoods.BabyFleder>());
+        //NPC.NewNPCDirect(WorldGen.WorldGen.GetItemSource_FromTreeShake(x, y), new Vector2(x, y) * 16, ModContent.NPCType<Content.NPCs.Backwoods.BabyFleder>());
         return false;
     }
 }
