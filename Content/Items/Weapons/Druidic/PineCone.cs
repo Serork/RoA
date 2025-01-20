@@ -122,7 +122,7 @@ sealed class PineCone : NatureItem {
                     break;
                 case 147:
                     dropItem = 2503;
-                    if (IsValidForPineConeDrop(i, j)) {
+                    if (Main.tile[i, j].TileFrameY == 264) {
                         dropItem = ModContent.ItemType<PineCone>();
                         flag = true;
                     }
