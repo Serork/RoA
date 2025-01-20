@@ -198,7 +198,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
             contain = 4281;
             summonStaffAdded = true;
         }
-        if (!summonStaffAdded && genRand.Next(3) == 0) {
+        if (!summonStaffAdded && genRand.Next(5) == 0) {
             contain = ModContent.ItemType<GiantTreeSapling>();
         }
         if (!summonStaffAdded && !_giantTreeSaplingAdded) {
