@@ -62,6 +62,9 @@ sealed class SmallMoonPlayer : ModPlayer {
         if (Player.name == "HalfbornFan") {
             smallMoonColor = Main.DiscoColor;
         }
+        if (Player.name == "BRIPE") {
+            smallMoonColor = GetLerpColor([new Color(71, 98, 255), Color.Blue]);
+        }
         if (Main.bloodMoon) smallMoonColor = Color.Red;
         if (Main.pumpkinMoon) smallMoonColor = Color.Orange;
         if (Main.snowMoon) smallMoonColor = Color.DeepSkyBlue;
