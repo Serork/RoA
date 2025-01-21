@@ -8,12 +8,12 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.GlowMasks;
 
+[Autoload(Side = ModSide.Client)]
 sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 	public interface IDrawArmorGlowMask {
 		void SetDrawSettings(Player player, ref Texture2D texture, ref Color color);
@@ -30,8 +30,8 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         public readonly bool ShouldApplyItemAlpha = shouldApplyItemAlpha;
     }
 
-    internal static Dictionary<int, GlowMaskInfo> GlowMasks { get; private set; }
-    internal static Dictionary<int, ModItem> ArmorGlowMasks { get; private set; }
+    internal static Dictionary<int, GlowMaskInfo> GlowMasks { get; private set; } = [];
+    internal static Dictionary<int, ModItem> ArmorGlowMasks { get; private set; } = [];
 
     private class ItemGlowMaskWorld : GlobalItem {
         public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
@@ -44,20 +44,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         }
     }
 
-    public override void Load() {
-        if (Main.dedServ) {
-            return;
-        }
-
-        GlowMasks = [];
-        ArmorGlowMasks = [];
-    }
-
     public override void SetStaticDefaults() {
-        if (Main.dedServ) {
-            return;
-        }
-
 		LoadGlowMasks();
     }
 

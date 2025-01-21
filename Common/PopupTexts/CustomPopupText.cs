@@ -13,6 +13,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.PopupTexts;
 
+[Autoload(Side = ModSide.Client)]
 sealed class CustomPopupTextLoader : ILoadable {
     public static CustomPopupText[] popupText = new CustomPopupText[20];
 
@@ -28,7 +29,7 @@ sealed class CustomPopupTextLoader : ILoadable {
     private void On_Main_DoUpdateInWorld(On_Main.orig_DoUpdateInWorld orig, Main self, System.Diagnostics.Stopwatch sw) {
         orig(self, sw);
 
-        if (Main.netMode != 2) {
+        if (Main.netMode != NetmodeID.Server) {
             CustomPopupText.UpdateItemText();
         }
     }
