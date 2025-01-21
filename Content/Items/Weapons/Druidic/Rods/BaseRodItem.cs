@@ -148,7 +148,9 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     protected sealed override void SafeSetDefaults2() { }
 
-    public override void SendExtraAI(BinaryWriter writer) {
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
         writer.Write(_leftTimeToReuse);
         writer.Write(_maxUseTime);
         writer.Write(_shot);
@@ -156,7 +158,9 @@ abstract class BaseRodProjectile : NatureProjectile {
         writer.Write(_rotation);
     }
 
-    public override void ReceiveExtraAI(BinaryReader reader) {
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
         _leftTimeToReuse = reader.ReadInt16();
         _maxUseTime = reader.ReadSingle();
         _shot = reader.ReadBoolean();

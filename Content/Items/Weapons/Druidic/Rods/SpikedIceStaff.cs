@@ -64,8 +64,8 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
             Projectile.netUpdate = true;
         }
 
-        public override void SendExtraAI(BinaryWriter writer) {
-            base.SendExtraAI(writer);
+        protected override void SafeSendExtraAI(BinaryWriter writer) {
+            base.SafeSendExtraAI(writer);
 
             writer.Write(_shootCount);
             writer.Write(_stopCounting);
@@ -74,8 +74,8 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
             writer.WriteVector2(_mousePos);
         }
 
-        public override void ReceiveExtraAI(BinaryReader reader) {
-            base.ReceiveExtraAI(reader);
+        protected override void SafeReceiveExtraAI(BinaryReader reader) {
+            base.SafeReceiveExtraAI(reader);
 
             _shootCount = reader.ReadByte();
             _stopCounting = reader.ReadBoolean();

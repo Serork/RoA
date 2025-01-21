@@ -147,15 +147,15 @@ abstract class TulipBase : BaseRodProjectile {
         }
     }
 
-    public override void SendExtraAI(BinaryWriter writer) {
-        base.SendExtraAI(writer);
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
 
         writer.WriteVector2(TulipBaseData.TempMousePosition);
         writer.WriteVector2(_mousePosition);
     }
 
-    public override void ReceiveExtraAI(BinaryReader reader) {
-        base.ReceiveExtraAI(reader);
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
 
         TulipBaseData.TempMousePosition = reader.ReadVector2();
         _mousePosition = reader.ReadVector2();

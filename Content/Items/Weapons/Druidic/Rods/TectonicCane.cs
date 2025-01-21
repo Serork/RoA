@@ -82,14 +82,14 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
             }
         }
 
-        public override void SendExtraAI(BinaryWriter writer) {
-            base.SendExtraAI(writer);
+        protected override void SafeSendExtraAI(BinaryWriter writer) {
+            base.SafeSendExtraAI(writer);
 
             writer.WriteVector2(_tempMousePosition);
         }
 
-        public override void ReceiveExtraAI(BinaryReader reader) {
-            base.ReceiveExtraAI(reader);
+        protected override void SafeReceiveExtraAI(BinaryReader reader) {
+            base.SafeReceiveExtraAI(reader);
 
             _tempMousePosition = reader.ReadVector2();
         }

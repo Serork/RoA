@@ -124,11 +124,15 @@ sealed class Fireblossom : NatureProjectile {
 
     private bool CanExplode => Projectile.ai[2] == 1f;
 
-    public override void SendExtraAI(BinaryWriter writer) {
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
         writer.WriteVector2(_position);
     }
 
-    public override void ReceiveExtraAI(BinaryReader reader) {
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
         _position = reader.ReadVector2();
     }
 

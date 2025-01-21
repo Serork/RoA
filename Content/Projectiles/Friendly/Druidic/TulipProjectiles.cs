@@ -50,16 +50,16 @@ sealed class TulipPetal : NatureProjectile {
 
     public override bool ShouldUpdatePosition() => false;
 
-    public override void SendExtraAI(BinaryWriter writer) {
-        base.SendExtraAI(writer);
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
 
         if (IsFirst) {
             writer.WriteVector2(SpawnPosition);
         }
     }
 
-    public override void ReceiveExtraAI(BinaryReader reader) {
-        base.ReceiveExtraAI(reader);
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
 
         if (IsFirst) {
             SpawnPosition = reader.ReadVector2();

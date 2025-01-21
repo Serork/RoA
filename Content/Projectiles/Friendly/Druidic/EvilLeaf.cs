@@ -9,10 +9,12 @@ using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -32,6 +34,22 @@ sealed class EvilLeaf : NatureProjectile {
     public override string Texture => ResourceManager.FriendlyProjectileTextures + $"Druidic/{nameof(EvilLeaf)}";
 
     public override void SetStaticDefaults() => Projectile.SetTrail(2, 18);
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
+        writer.WriteVector2(_twigPosition);
+        writer.Write(Crimson);
+        writer.Write(Index);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
+        _twigPosition = reader.ReadVector2();
+        Crimson = reader.ReadBoolean();
+        Index = reader.ReadInt32();
+    }
 
     protected override void SafeSetDefaults() {
         Projectile.Size = Vector2.One;

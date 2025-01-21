@@ -41,11 +41,15 @@ sealed class RootRing : NatureProjectile {
         Projectile.localNPCHitCooldown = 10;
     }
 
-    public override void SendExtraAI(BinaryWriter writer) {
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
         writer.Write(_alpha);
     }
 
-    public override void ReceiveExtraAI(BinaryReader reader) {
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
         _alpha = reader.ReadInt32();
     }
 

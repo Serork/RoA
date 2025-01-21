@@ -16,27 +16,29 @@ namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class EvilBranch : NatureProjectile {
     public override void OnKill(int timeLeft) {
-        int max = 60;
-        int y = -max;
-        int count = 6;
-        bool isCrimson = Projectile.ai[2] == 1f;
-        for (int i = 0; i < count; i++) {
-            y += max / count * 2;
-            y = Math.Min(max / 2, y);
-            int maxX = 15;
-            if (y < max / 2) {
-                maxX = 8;
-            }
-            int x = Main.rand.Next(-maxX, maxX);
-            Vector2 position = Projectile.Center - Vector2.UnitY * max - Vector2.UnitY * max / 3f + new Vector2(x, y).RotatedBy(Projectile.rotation);
-            int gore = Gore.NewGore(Projectile.GetSource_Death(),
-                position,
-                Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/EvilBranchGore{(isCrimson ? 2 : 1)}{Main.rand.Next(3) + 1}").Type, 1f);
-            Main.gore[gore].velocity.Y *= 0.5f;
+        if (Main.netMode != NetmodeID.Server) {
+            int max = 60;
+            int y = -max;
+            int count = 6;
+            bool isCrimson = Projectile.ai[2] == 1f;
+            for (int i = 0; i < count; i++) {
+                y += max / count * 2;
+                y = Math.Min(max / 2, y);
+                int maxX = 15;
+                if (y < max / 2) {
+                    maxX = 8;
+                }
+                int x = Main.rand.Next(-maxX, maxX);
+                Vector2 position = Projectile.Center - Vector2.UnitY * max - Vector2.UnitY * max / 3f + new Vector2(x, y).RotatedBy(Projectile.rotation);
+                int gore = Gore.NewGore(Projectile.GetSource_Death(),
+                    position,
+                    Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/EvilBranchGore{(isCrimson ? 2 : 1)}{Main.rand.Next(3) + 1}").Type, 1f);
+                Main.gore[gore].velocity.Y *= 0.5f;
 
-            for (int i2 = 0; i2 < Main.rand.Next(9, 16); i2++) {
-                if (Main.rand.NextBool(4)) {
-                    Dust.NewDustPerfect(position, isCrimson ? DustID.Shadewood : DustID.Ebonwood);
+                for (int i2 = 0; i2 < Main.rand.Next(9, 16); i2++) {
+                    if (Main.rand.NextBool(4)) {
+                        Dust.NewDustPerfect(position, isCrimson ? DustID.Shadewood : DustID.Ebonwood);
+                    }
                 }
             }
         }
@@ -178,6 +180,7 @@ sealed class EvilBranch : NatureProjectile {
             Main.projectile[projectile].As<EvilLeaf>().SetUpPositionOnTwig(leafTwigPosition);
             Main.projectile[projectile].As<EvilLeaf>().Crimson = Projectile.ai[2] == 1f;
             Main.projectile[projectile].As<EvilLeaf>().Index = index;
+            Main.projectile[projectile].netUpdate = true;
             index++;
         }
 

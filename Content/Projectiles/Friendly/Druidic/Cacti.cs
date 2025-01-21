@@ -41,8 +41,17 @@ sealed class Cacti : NatureProjectile {
         Projectile.localNPCHitCooldown = 30;
     }
 
-    public override void SendExtraAI(BinaryWriter writer) => writer.Write((int)_state);
-    public override void ReceiveExtraAI(BinaryReader reader) => _state = (State)reader.ReadInt32();
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
+        writer.Write((int)_state);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
+        _state = (State)reader.ReadInt32();
+    }
 
     protected override void SafeOnSpawn(IEntitySource source) {
         if (Projectile.owner != Main.myPlayer) {

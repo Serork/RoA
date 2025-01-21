@@ -37,7 +37,9 @@ sealed class Snatcher : NatureProjectile {
     private bool IsAttacking2 => _attackVector.Length() > 25f;
     private bool IsAttacking3 => _attackVector.Length() > 10f;
 
-    public override void SendExtraAI(BinaryWriter writer) {
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
         writer.WriteVector2(_mousePos);
         writer.WriteVector2(_mousePos2);
         writer.Write(Projectile.localAI[1]);
@@ -45,7 +47,9 @@ sealed class Snatcher : NatureProjectile {
         writer.Write(_rotation);
     }
 
-    public override void ReceiveExtraAI(BinaryReader reader) {
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
         _mousePos = reader.ReadVector2();
         _mousePos2 = reader.ReadVector2();
         Projectile.localAI[1] = reader.ReadSingle();

@@ -1,15 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Items;
 using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly;
 
@@ -25,6 +30,7 @@ abstract class FormProjectile : NatureProjectile {
 
 abstract class NatureProjectile : ModProjectile {
     private float _wreathPointsFine;
+    private bool _syncItem;
 
     internal Item Item { get; private set; } = null;
 
@@ -37,6 +43,33 @@ abstract class NatureProjectile : ModProjectile {
         }
     }
 
+    public sealed override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_syncItem);
+        if (_syncItem) {
+            writer.Write(WreathPointsFine);
+            if (Item != null) {
+                ItemIO.Send(Item, writer, true);
+            }
+        }
+
+        SafeSendExtraAI(writer);
+    }
+
+    protected virtual void SafeSendExtraAI(BinaryWriter writer) { }
+
+    public sealed override void ReceiveExtraAI(BinaryReader reader) {
+        _syncItem = reader.ReadBoolean();
+        if (_syncItem) {
+            WreathPointsFine = reader.ReadSingle();
+            Item = ItemIO.Receive(reader, true);
+            _syncItem = false;
+        }
+
+        SafeReceiveExtraAI(reader);
+    }
+
+    protected virtual void SafeReceiveExtraAI(BinaryReader reader) { }
+
     private void SetItem(Item item) {
         if (item.IsEmpty() || !item.IsADruidicWeapon()) {
             return;
@@ -44,6 +77,8 @@ abstract class NatureProjectile : ModProjectile {
         Item = item;
         float fillingRate = NatureWeaponHandler.GetFillingRate(Item);
         WreathPointsFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
+        _syncItem = true;
+        Projectile.netUpdate = true;
     }
 
     public static int CreateNatureProjectile(IEntitySource spawnSource, Item item, Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f) {
