@@ -30,6 +30,8 @@ sealed class FireflyMimic : ModNPC {
         NPCID.Sets.TakesDamageFromHostilesWithoutBeingFriendly[Type] = true;
         NPCID.Sets.CountsAsCritter[Type] = true;
         NPCID.Sets.ShimmerTransformToNPC[Type] = 677;
+
+        NPCID.Sets.SpecificDebuffImmunity[Type][31] = true;
     }
 
     public override void SetDefaults() {
@@ -44,6 +46,8 @@ sealed class FireflyMimic : ModNPC {
         NPC.npcSlots = 0.2f;
         NPC.noGravity = true;
         NPC.catchItem = ModContent.ItemType<FireflyPin>();
+
+        NPC.rarity = 4;
     }
 
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {

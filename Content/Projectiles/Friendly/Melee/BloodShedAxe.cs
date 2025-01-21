@@ -37,6 +37,14 @@ sealed class BloodshedAxe : ModProjectile {
         Projectile.localNPCHitCooldown = -1;
     }
 
+    public override bool? CanCutTiles() => true;
+
+    public override void CutTiles() {
+        Utils.PlotTileLine(Projectile.Center + (Projectile.rotation - 0.7853982f).ToRotationVector2() * 55f * Projectile.scale,
+            Projectile.Center + (Projectile.rotation + 0.7853982f).ToRotationVector2() * 55f * Projectile.scale, 55f * Projectile.scale, 
+            new Utils.TileActionAttempt(DelegateMethods.CutTiles));
+    }
+
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         int type = ModContent.ProjectileType<BloodshedAxeEnergy>();
         Player player = Main.player[Projectile.owner];

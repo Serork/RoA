@@ -94,6 +94,8 @@ sealed class PettyGoblin : ModNPC {
         DrawOffsetY = -2f;
 
         Coins = new CoinGenerator(NPC);
+
+        NPC.rarity = 3;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {

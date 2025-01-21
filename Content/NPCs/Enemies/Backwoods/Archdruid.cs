@@ -68,6 +68,8 @@ sealed class Archdruid : DruidNPC {
         NPC.value = Item.buyPrice(0, 4, 10, 0);
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        NPC.rarity = 2;
     }
 
     protected override float TimeToChangeState() => 2f;
