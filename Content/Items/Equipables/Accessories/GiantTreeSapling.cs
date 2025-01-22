@@ -18,7 +18,7 @@ sealed class GiantTreeSapling : NatureItem {
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 20; int height = 34;
+        int width = 28; int height = 32;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;

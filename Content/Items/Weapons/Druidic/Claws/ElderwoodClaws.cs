@@ -20,7 +20,9 @@ sealed class ElderwoodClaws : BaseClawsItem {
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (new(72, 86, 214), new(114, 126, 255));
+    //protected override (Color, Color) SlashColors(Player player) => (new(72, 86, 214), new(114, 126, 255));
+	
+	protected override (Color, Color) SlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));
 
     private Vector2 GetPos(Player player, bool leftSided) {
         int direction = leftSided ? -1 : 1;
