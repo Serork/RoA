@@ -34,10 +34,14 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
         private bool _makeDust = true;
 
         protected override void SafeSendExtraAI(BinaryWriter writer) {
+            base.SafeSendExtraAI(writer);
+
             writer.WriteVector2(_position);
         }
 
         protected override void SafeReceiveExtraAI(BinaryReader reader) {
+            base.SafeReceiveExtraAI(reader);
+
             _position = reader.ReadVector2();
         }
 

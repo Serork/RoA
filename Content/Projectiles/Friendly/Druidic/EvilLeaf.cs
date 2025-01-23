@@ -139,6 +139,7 @@ sealed class EvilLeaf : NatureProjectile {
             Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, Helper.VelocityAngle(velocity) - MathHelper.PiOver2 * Projectile.ai[0], MathHelper.Min(1f, 1f * _ai4));
             Projectile.position += velocity;
             Projectile.position += Helper.VelocityToPoint(Projectile.position, _to, 1f);
+
             return;
         }
         _parent ??= Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);

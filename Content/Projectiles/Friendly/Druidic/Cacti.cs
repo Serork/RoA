@@ -28,8 +28,7 @@ sealed class Cacti : NatureProjectile {
 
     private State _state = State.Normal;
     private Projectile _parent = null;
-
-    private float UseTimeFactor => 0.0275f * (float)(1f - Projectile.ai[2] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
+    private float _useTimeFactor;
 
     public override void SetStaticDefaults() => Projectile.SetTrail(2, 6);
 
@@ -44,15 +43,13 @@ sealed class Cacti : NatureProjectile {
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
-        base.SafeSendExtraAI(writer);
-
         writer.Write((int)_state);
+        writer.Write(_useTimeFactor);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
-        base.SafeReceiveExtraAI(reader);
-
         _state = (State)reader.ReadInt32();
+        _useTimeFactor = reader.ReadSingle();
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
@@ -63,15 +60,16 @@ sealed class Cacti : NatureProjectile {
         Player player = Main.player[Projectile.owner];
 
         Projectile.ai[2] = NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player);
+        _useTimeFactor = 0.0275f * (float)(1f - Projectile.ai[2] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
 
         Vector2 mousePoint = player.GetViableMousePosition();
-        float y = player.MountedCenter.Y - player.height * (3f + UseTimeFactor * player.height * 0.75f);
+        float y = player.MountedCenter.Y - player.height * (3f + _useTimeFactor * player.height * 0.75f);
         Vector2 pointPosition = new(mousePoint.X, y);
         float lastY = Math.Abs(y - Main.screenPosition.Y + Main.screenHeight);
         Projectile.Center = pointPosition + Vector2.UnitY * lastY;
         Vector2 dif = pointPosition - Projectile.Center;
         Projectile.velocity.X = 0f;
-        float value = UseTimeFactor;
+        float value = _useTimeFactor;
         Projectile.velocity.Y = -dif.Length() * (0.05f + value);
         Projectile.ai[0] = Main.player[Projectile.owner].direction;
 
@@ -165,7 +163,6 @@ sealed class Cacti : NatureProjectile {
         //}
         var parent2 = _parent.As<CactiCaster.CactiCasterBase>();
         if (parent2 == null) {
-            Projectile.Kill();
             return;
         }
         Vector2 corePosition = _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
@@ -191,7 +188,7 @@ sealed class Cacti : NatureProjectile {
                     }
                 }
 
-                Projectile.velocity.Y *= 0.95f - UseTimeFactor;
+                Projectile.velocity.Y *= 0.95f - _useTimeFactor;
                 Projectile.rotation = Projectile.velocity.Y * Projectile.ai[0];
                 if (Math.Abs(Projectile.velocity.Y) <= 0.5f) {
                     Player player = Main.player[Projectile.owner];
@@ -205,7 +202,6 @@ sealed class Cacti : NatureProjectile {
                         Projectile.velocity = Helper.VelocityToPoint(Projectile.Center, mousePoint, speed);
                         Projectile.netUpdate = true;
                     }
-
 
                     if (Main.netMode != NetmodeID.Server) {
                         for (int i = 0; i < 30; i++) {
