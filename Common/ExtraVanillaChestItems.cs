@@ -162,13 +162,13 @@ sealed class ExtraVanillaChestItems : ModSystem {
         int contain = 0;
         int num13 = GenVars.skyIslandHouseCount;
         if (num13 > 3) {
-            num13 = WorldGen.genRand.Next(5);
+            num13 = WorldGen.genRand.Next(4/*5*/);
         }
 
-        if (!_feathersBottleAdded) {
-            num13 = 4;
-            _feathersBottleAdded = true;
-        }
+        //if (!_feathersBottleAdded) {
+        //    num13 = 4;
+        //    _feathersBottleAdded = true;
+        //}
 
         switch (num13) {
             case 0:
@@ -183,9 +183,9 @@ sealed class ExtraVanillaChestItems : ModSystem {
             case 3:
                 contain = 2219;
                 break;
-            case 4:
-                contain = ModContent.ItemType<FeathersInABottle>();
-                break;
+            //case 4:
+            //    contain = ModContent.ItemType<FeathersInABottle>();
+            //    break;
         }
 
         if (WorldGen.getGoodWorldGen)

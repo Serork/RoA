@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
@@ -14,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Waist)]
-sealed class FeathersInABottle : NatureItem {
+sealed class FeathersInABalloon : NatureItem {
 	public override void SetStaticDefaults() {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
@@ -24,13 +26,16 @@ sealed class FeathersInABottle : NatureItem {
         Item.Size = new Vector2(width, height);
 
         Item.accessory = true;
-        Item.rare = ItemRarityID.Green;
-        Item.value = 50000;
+        Item.rare = ItemRarityID.LightRed;
+        Item.value = 150000;
     }
 
-    public override void UpdateAccessory(Player player, bool hideVisual) => player.GetJumpState<FeathersInABottleExtraJump>().Enable();
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetJumpState<FeathersInABalloonExtraJump>().Enable();
+        player.jumpBoost = true;
+    }
 
-    private sealed class FeathersInABottleExtraJump : ExtraJump {
+    private sealed class FeathersInABalloonExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;
 
         public override bool CanStart(Player player) => player.GetModPlayer<WreathHandler>().HasEnough(0.25f);

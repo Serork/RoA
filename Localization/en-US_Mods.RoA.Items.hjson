@@ -1289,6 +1289,11 @@ MoonFlower: {
 }
 
 FeathersInABottle: {
-	DisplayName: Feathers In A Bottle
+	DisplayName: Feathers in a Bottle
 	Tooltip: Allows holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
+}
+
+FeathersInABalloon: {
+	DisplayName: Feathers In A Balloon
+	Tooltip: ""
 }
