@@ -1,19 +1,20 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 using RoA.Common.Druid;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
+using System.IO;
+
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
-using RoA.Core;
-using System.IO;
-using RoA.Content.Items.Weapons.Magic;
-using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -49,6 +50,10 @@ sealed class EvilBranch : NatureProjectile {
 
     private readonly struct TwigPartInfo {
         public readonly int Variant1, Variant2;
+        public TwigPartInfo(int variant1, int variant2) {
+            Variant1 = variant1;
+            Variant2 = variant2;
+        }
 
         public TwigPartInfo() {
             Variant1 = Main.rand.NextBool().ToInt();
@@ -61,7 +66,8 @@ sealed class EvilBranch : NatureProjectile {
         public readonly bool FacedRight = facedRight;
     }
 
-    private readonly TwigPartInfo _part1Info = new(), _part2Info = new();
+    private TwigPartInfo _part1Info, _part2Info;
+    private int _direction;
 
     private List<LeafInfo> _leavesInfo = [];
 
@@ -72,10 +78,18 @@ sealed class EvilBranch : NatureProjectile {
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         writer.Write(Projectile.rotation);
+        writer.Write(_part1Info.Variant1);
+        writer.Write(_part1Info.Variant2);
+        writer.Write(_part2Info.Variant1);
+        writer.Write(_part2Info.Variant2);
+        writer.Write(_direction);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
-        Projectile.rotation = reader.ReadSingle();  
+        Projectile.rotation = reader.ReadSingle();
+        _part1Info = new(reader.ReadInt32(), reader.ReadInt32());
+        _part2Info = new(reader.ReadInt32(), reader.ReadInt32());
+        _direction = reader.ReadInt32();
     }
 
     protected override void SafeSetDefaults() {
@@ -88,8 +102,6 @@ sealed class EvilBranch : NatureProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
-
-        Projectile.netImportant = true;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -151,12 +163,12 @@ sealed class EvilBranch : NatureProjectile {
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
-        Projectile.spriteDirection = Main.rand.NextBool().ToDirectionInt();
-
         ScaleX = 1.6f;
         ScaleY = 0.4f;
 
         if (Projectile.owner == Main.myPlayer) {
+            _direction = Main.rand.NextBool().ToDirectionInt();
+
             GetPos(Main.player[Projectile.owner], out Point point, out Point point2);
             Projectile.Center = point2.ToWorldCoordinates();
             Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
@@ -170,38 +182,45 @@ sealed class EvilBranch : NatureProjectile {
                 dust.velocity -= new Vector2(0f, 3f * Main.rand.NextFloat(0.5f, 1f)).RotatedBy(Projectile.rotation);
                 dust.scale *= 1f + Main.rand.NextFloatRange(0.1f);
             }
-        }
 
-        SetUpLeafPoints();
-        byte index = 0;
-        foreach (LeafInfo leafInfo in _leavesInfo) {
-            Vector2 leafPosition = leafInfo.Position;
-            int direction = leafInfo.FacedRight.ToDirectionInt();
-            if (Projectile.spriteDirection == 1) {
-                leafPosition.X = 42f - leafPosition.X;
-            }
-            direction *= -Projectile.spriteDirection;
-            //if (Projectile.spriteDirection == -1) {
-            //    direction *= -1;
-            //}
-            Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
-            int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]), Projectile.knockBack, Projectile.owner, direction, Projectile.identity);
-            Main.projectile[projectile].As<EvilLeaf>().SetUpInfo(leafTwigPosition, index);
-            if (Main.netMode == NetmodeID.Server) {
-                ModPacket netMessage = Mod.GetPacket();
-                netMessage.Write((byte)RoA.NetMessagePacket.EvilLeafPacket);
-                netMessage.Write(Main.projectile[projectile].identity);
-                netMessage.WriteVector2(leafTwigPosition);
-                netMessage.Write(index);
-                netMessage.Send();
-            }
-            index++;
-        }
+            _part1Info = new();
+            _part2Info = new();
+            SetUpLeafPoints();
 
-        Projectile.netUpdate = true;
+            Projectile.netUpdate = true;
+        }
     }
 
     public override void AI() {
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+
+            byte index = 0;
+            foreach (LeafInfo leafInfo in _leavesInfo) {
+                Vector2 leafPosition = leafInfo.Position;
+                int direction = leafInfo.FacedRight.ToDirectionInt();
+                if (_direction == 1) {
+                    leafPosition.X = 42f - leafPosition.X;
+                }
+                direction *= -_direction;
+                //if (Projectile.spriteDirection == -1) {
+                //    direction *= -1;
+                //}
+                Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
+                int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]), Projectile.knockBack, Projectile.owner, direction, Projectile.identity);
+                Main.projectile[projectile].As<EvilLeaf>().SetUpInfo(leafTwigPosition, index);
+                if (Main.netMode == NetmodeID.Server) {
+                    ModPacket netMessage = Mod.GetPacket();
+                    netMessage.Write((byte)RoA.NetMessagePacket.EvilLeafPacket);
+                    netMessage.Write(Main.projectile[projectile].identity);
+                    netMessage.WriteVector2(leafTwigPosition);
+                    netMessage.Write(index);
+                    netMessage.Send();
+                }
+                index++;
+            }
+        }
+
         if (Projectile.owner == Main.myPlayer) {
             ScaleX = MathHelper.SmoothStep(ScaleX, 1f, 0.5f);
             ScaleY = MathHelper.SmoothStep(ScaleY, 1f, 0.5f);
@@ -230,7 +249,7 @@ sealed class EvilBranch : NatureProjectile {
                 position.Y += sourceRectangle.Height * (1f - ScaleY);
             }
             position.Y += 2;
-            SpriteEffects spriteEffects = (SpriteEffects)(Projectile.spriteDirection == 1).ToInt();
+            SpriteEffects spriteEffects = (SpriteEffects)(_direction == 1).ToInt();
             Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, sourceRectangle.BottomCenter(), new Vector2(ScaleX, ScaleY), spriteEffects);
         }
         Color drawColor = Lighting.GetColor((Projectile.Center - Vector2.UnitY * 20f).ToTileCoordinates());

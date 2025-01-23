@@ -63,8 +63,8 @@ sealed class EvilLeaf : NatureProjectile {
 
     public override bool? CanDamage() => Projectile.Opacity >= 0.35f;
 
-    private void SetPosition(Projectile parent) {
-        Vector2 parentScale = new(parent.ai[0], parent.ai[1]);
+    private void SetPosition(Projectile parent, Vector2? scale = null) {
+        Vector2 parentScale = scale != null ? Vector2.One : new(parent.ai[0], parent.ai[1]);
         Vector2 position = parent.position;
         Vector2 myPosition = _twigPosition * parentScale - Vector2.One * 2f - (Projectile.ai[0] == 1f ? new Vector2(10f, 0f) : Vector2.Zero);
         Projectile.position = position + myPosition.RotatedBy(parent.rotation);
