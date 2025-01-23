@@ -27,7 +27,7 @@ sealed class Cacti : NatureProjectile {
 
     private State _state = State.Normal;
 
-    private float UseTimeFactor => 0.0275f * (float)(1f - Projectile.localAI[0] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
+    private float UseTimeFactor => 0.0275f * (float)(1f - Projectile.ai[2] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
 
     public override void SetStaticDefaults() => Projectile.SetTrail(2, 6);
 
@@ -60,7 +60,7 @@ sealed class Cacti : NatureProjectile {
 
         Player player = Main.player[Projectile.owner];
 
-        Projectile.localAI[0] = NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player);
+        Projectile.ai[2] = NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player);
 
         Vector2 mousePoint = player.GetViableMousePosition();
         float y = player.MountedCenter.Y - player.height * (3f + UseTimeFactor * player.height * 0.75f);
@@ -178,10 +178,10 @@ sealed class Cacti : NatureProjectile {
                     Main.dust[dust].noGravity = true;
                 }
 
-                if (Projectile.velocity.Length() < 10f && Projectile.ai[2] == 0f) {
+                if (Projectile.velocity.Length() < 10f && Projectile.localAI[0] == 0f) {
                     SoundEngine.PlaySound(SoundID.Item20, corePosition);
 
-                    Projectile.ai[2] = 1f;
+                    Projectile.localAI[0] = 1f;
 
                     for (int i = 0; i < 15; i++) {
                         int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);

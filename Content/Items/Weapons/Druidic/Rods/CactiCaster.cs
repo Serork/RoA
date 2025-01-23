@@ -6,6 +6,8 @@ using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System.IO;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -27,12 +29,20 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
     }
 
     public sealed class CactiCasterBase : BaseRodProjectile {
-        private Vector2 _position = Vector2.Zero, _pointPosition;
+        private Vector2 _position = Vector2.Zero;
         private float _rotation2 = float.MaxValue, _rotation3;
         private bool _makeDust = true;
 
+        protected override void SafeSendExtraAI(BinaryWriter writer) {
+            writer.WriteVector2(_position);
+        }
+
+        protected override void SafeReceiveExtraAI(BinaryReader reader) {
+            _position = reader.ReadVector2();
+        }
+
         public override void PostDraw(Color lightColor) {
-            if (Projectile.owner != Main.myPlayer || !_makeDust) {
+            if (!_makeDust) {
                 return;
             }
             Player player = Owner;
@@ -42,7 +52,10 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = player.MountedCenter.Y - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
             if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {
-                _position = _pointPosition = new(mousePoint.X, y);
+                if (Projectile.owner == Main.myPlayer) {
+                    _position = new(mousePoint.X, y);
+                    Projectile.netUpdate = true;
+                }
                 //_rotation2 = _rotation3 = (_pointPosition - player.position).X * 0.1f;
             }
             else if (_leftTimeToReuse <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {

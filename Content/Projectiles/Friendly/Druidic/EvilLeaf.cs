@@ -53,10 +53,14 @@ sealed class EvilLeaf : NatureProjectile {
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         writer.WriteVector2(_to);
+        writer.Write(_crimson);
+        writer.Write(_angle);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
         _to = reader.ReadVector2();
+        _crimson = reader.ReadBoolean();
+        _angle = reader.ReadSingle();
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -71,64 +75,14 @@ sealed class EvilLeaf : NatureProjectile {
     }
 
     public override void AI() {
-        _parent ??= Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);
-        Projectile.direction = (int)Projectile.ai[0];
-        Projectile parent = _parent;
         Player player = Main.player[Projectile.owner];
         int num176 = (int)(MathHelper.Pi * 20f);
-        if (Projectile.timeLeft > TIMELEFT - 30 * (_index + 1) - 10) {
-            Vector2 parentScale = new(parent.ai[0], parent.ai[1]);
-            if (Projectile.localAI[0] == 0f) {
-                Projectile.ai[2] = 1f;
-                Projectile.localAI[2] = 1.25f;
-                Projectile.localAI[1] = Projectile.localAI[2];
-                _ai4 = -1f;
-                float num175 = ((float)Math.PI + (float)Math.PI * 2f * Main.rand.NextFloat() * 1.5f) * ((float)(-(int)Projectile.ai[0]));
-                float num177 = num175 / (float)num176;
-                if (Math.Abs(num177) >= 0.17f)
-                    num177 *= 0.7f;
-                _angle = num177;
-            }
-            if (Projectile.owner == Main.myPlayer) {
-                SetPosition(parent);
-                Projectile.netUpdate = true;
-            }
-            float scaleY = parentScale.Y * Projectile.ai[2];
-            float rotation = parent.rotation + MathHelper.Pi * Projectile.direction * (1f - scaleY);
-            if (!_init) {
-                _init = true;
-                Projectile.localAI[0] = 1f;
-                Projectile.rotation = rotation;
-                for (int j = 0; j < _oldRotations.Length; j++) {
-                    _oldRotations[j] = Projectile.rotation;
-                }
-                Projectile.velocity = Vector2.Zero;
-                _crimson = parent.ai[2] == 1f;
-            }
-            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, rotation, 0.2f);
-            if (scaleY < 0.5f) {
-            }
-            else {
-                float angle = Math.Sign(_ai5) == Math.Sign(_ai4) ? 4f : 3f;
-                if (Math.Abs(_ai5) < 0.5f) {
-                    angle *= 0.5f;
-                }
-                if (Math.Abs(_ai5) < 0.25f) {
-                    angle *= 0.25f;
-                }
-                _ai4 += (float)-Math.Sign(_ai5) * angle;
-                _ai4 *= 0.95f;
-                _ai5 += _ai4 * TimeSystem.LogicDeltaTime;
-                Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], 1f + _ai5, Projectile.localAI[1] * 0.175f);
-                Projectile.localAI[1] *= 0.995f;
-            }
-            Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], Projectile.localAI[2], Projectile.ai[2] * 0.215f);
-        }
-        else {
+        if (Projectile.ai[1] == -20f) {
             if (Projectile.velocity == Vector2.Zero) {
-                _ai4 = 0f;
                 if (Projectile.owner == Main.myPlayer) {
+                    _ai4 = 0f;
                     _to = player.GetViableMousePosition();
+                    Projectile.ai[1] = Projectile.timeLeft;
                     Projectile.netUpdate = true;
                 }
                 Projectile.velocity = Helper.VelocityToPoint(Projectile.position, _to, 0.1f);
@@ -165,12 +119,13 @@ sealed class EvilLeaf : NatureProjectile {
                     dust2.velocity = Projectile.velocity * 0.5f;
                 }
             }
+            Projectile.ai[2]--;
             _ai4 = MathHelper.SmoothStep(_ai4, 1f, 0.1f);
             num176 = (int)(MathHelper.Pi * 20f * _ai4);
             float angle = _angle;
             float angle2 = _angle2;
             Projectile.velocity = Projectile.velocity.RotatedBy(angle);
-            float fromValue = num176 - Projectile.timeLeft;
+            float fromValue = num176 - Projectile.ai[2];
             float fromMax = angle2 + num176 / 3;
             float num4 = Utils.Remap(fromValue, angle2, fromMax, 0f, 1f) * Utils.Remap(fromValue, angle2, angle2 + num176, 1f, 0f);
             Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY) * (4f + 12f * (1f - num4) * 0.1f);
@@ -184,6 +139,67 @@ sealed class EvilLeaf : NatureProjectile {
             Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, Helper.VelocityAngle(velocity) - MathHelper.PiOver2 * Projectile.ai[0], MathHelper.Min(1f, 1f * _ai4));
             Projectile.position += velocity;
             Projectile.position += Helper.VelocityToPoint(Projectile.position, _to, 1f);
+            return;
+        }
+        _parent ??= Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);
+        Projectile.direction = (int)Projectile.ai[0];
+        Projectile parent = _parent;
+        if (Projectile.timeLeft > TIMELEFT - 30 * (_index + 1) - 10) {
+            Vector2 parentScale = new(parent.ai[0], parent.ai[1]);
+            if (Projectile.localAI[0] == 0f) {
+                Projectile.ai[2] = 1f;
+                Projectile.localAI[2] = 1.25f;
+                Projectile.localAI[1] = Projectile.localAI[2];
+                _ai4 = -1f;
+            }
+            if (Projectile.owner == Main.myPlayer) {
+                SetPosition(parent);
+                Projectile.netUpdate = true;
+            }
+            float scaleY = parentScale.Y * Projectile.ai[2];
+            float rotation = parent.rotation + MathHelper.Pi * Projectile.direction * (1f - scaleY);
+            if (Projectile.owner == Main.myPlayer) {
+                if (!_init) {
+                    _init = true;
+                    Projectile.localAI[0] = 1f;
+                    Projectile.rotation = rotation;
+                    for (int j = 0; j < _oldRotations.Length; j++) {
+                        _oldRotations[j] = Projectile.rotation;
+                    }
+                    Projectile.velocity = Vector2.Zero;
+                    _crimson = parent.ai[2] == 1f;
+                    float num175 = ((float)Math.PI + (float)Math.PI * 2f * Main.rand.NextFloat() * 1.5f) * ((float)(-(int)Projectile.ai[0]));
+                    float num177 = num175 / (float)num176;
+                    if (Math.Abs(num177) >= 0.17f)
+                        num177 *= 0.7f;
+                    _angle = num177;
+                    Projectile.netUpdate = true;
+                }
+            }
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, rotation, 0.2f);
+            if (scaleY < 0.5f) {
+            }
+            else {
+                float angle = Math.Sign(_ai5) == Math.Sign(_ai4) ? 4f : 3f;
+                if (Math.Abs(_ai5) < 0.5f) {
+                    angle *= 0.5f;
+                }
+                if (Math.Abs(_ai5) < 0.25f) {
+                    angle *= 0.25f;
+                }
+                _ai4 += (float)-Math.Sign(_ai5) * angle;
+                _ai4 *= 0.95f;
+                _ai5 += _ai4 * TimeSystem.LogicDeltaTime;
+                Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], 1f + _ai5, Projectile.localAI[1] * 0.175f);
+                Projectile.localAI[1] *= 0.995f;
+            }
+            Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], Projectile.localAI[2], Projectile.ai[2] * 0.215f);
+        }
+        else if (Projectile.owner == Main.myPlayer) {
+            Projectile.netSpam = 0;
+            Projectile.ai[1] = -20f;
+            Projectile.ai[2] = Projectile.timeLeft;
+            Projectile.netUpdate = true;
         }
     }
 
