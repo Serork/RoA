@@ -129,10 +129,7 @@ sealed class EvilLeaf : NatureProjectile {
             float fromMax = angle2 + num176 / 3;
             float num4 = Utils.Remap(fromValue, angle2, fromMax, 0f, 1f) * Utils.Remap(fromValue, angle2, angle2 + num176, 1f, 0f);
             Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY) * (4f + 12f * (1f - num4) * 0.1f);
-            for (int num2 = _oldRotations.Length - 1; num2 > 0; num2--) {
-                _oldRotations[num2] = _oldRotations[num2 - 1];
-            }
-            _oldRotations[0] = Projectile.rotation;
+            updateOldPos();
             Projectile.Opacity = Utils.GetLerpValue(Projectile.timeLeft, 0f, 10f, true);
             Projectile.velocity *= Math.Min(1f, Utils.Remap(_ai4, 0f, 1f, 0.1f, 1f) * 2f);
             Vector2 velocity = Projectile.velocity/* * (int)Projectile.ai[0]*/;
