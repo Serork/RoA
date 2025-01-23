@@ -30,7 +30,7 @@ sealed class FeathersInABottle : NatureItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) => player.GetJumpState<FeathersInABottleExtraJump>().Enable();
 
-    private sealed class FeathersInABottleExtraJump : ExtraJump {
+    internal sealed class FeathersInABottleExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;
 
         public override bool CanStart(Player player) => player.GetModPlayer<WreathHandler>().HasEnough(0.25f);
