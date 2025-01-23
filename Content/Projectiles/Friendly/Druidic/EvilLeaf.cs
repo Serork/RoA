@@ -53,14 +53,10 @@ sealed class EvilLeaf : NatureProjectile {
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         writer.WriteVector2(_to);
-        writer.Write(_init);
-        writer.Write(_crimson);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
         _to = reader.ReadVector2();
-        _init = reader.ReadBoolean();
-        _crimson = reader.ReadBoolean();
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -75,16 +71,13 @@ sealed class EvilLeaf : NatureProjectile {
     }
 
     public override void AI() {
-        if (_parent == null) {
-            _parent = Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);
-        }
+        _parent ??= Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);
         Projectile.direction = (int)Projectile.ai[0];
         Projectile parent = _parent;
         Player player = Main.player[Projectile.owner];
         int num176 = (int)(MathHelper.Pi * 20f);
         if (Projectile.timeLeft > TIMELEFT - 30 * (_index + 1) - 10) {
             Vector2 parentScale = new(parent.ai[0], parent.ai[1]);
-            SetPosition(parent);
             if (Projectile.localAI[0] == 0f) {
                 Projectile.ai[2] = 1f;
                 Projectile.localAI[2] = 1.25f;
@@ -95,6 +88,10 @@ sealed class EvilLeaf : NatureProjectile {
                 if (Math.Abs(num177) >= 0.17f)
                     num177 *= 0.7f;
                 _angle = num177;
+            }
+            if (Projectile.owner == Main.myPlayer) {
+                SetPosition(parent);
+                Projectile.netUpdate = true;
             }
             float scaleY = parentScale.Y * Projectile.ai[2];
             float rotation = parent.rotation + MathHelper.Pi * Projectile.direction * (1f - scaleY);

@@ -202,10 +202,9 @@ sealed class EvilBranch : NatureProjectile {
     }
 
     public override void AI() {
-        ScaleX = MathHelper.SmoothStep(ScaleX, 1f, 0.5f);
-        ScaleY = MathHelper.SmoothStep(ScaleY, 1f, 0.5f);
-
-        if (ScaleX != 1f || ScaleY != 1f) {
+        if (Projectile.owner == Main.myPlayer) {
+            ScaleX = MathHelper.SmoothStep(ScaleX, 1f, 0.5f);
+            ScaleY = MathHelper.SmoothStep(ScaleY, 1f, 0.5f);
             Projectile.netUpdate = true;
         }
     }
