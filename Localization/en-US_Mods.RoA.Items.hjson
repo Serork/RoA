@@ -1295,5 +1295,9 @@ FeathersInABottle: {
 
 FeathersInABalloon: {
 	DisplayName: Feathers In A Balloon
-	Tooltip: ""
+	Tooltip: 
+		'''
+		Allows holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
+		Increases jump height
+		'''
 }
