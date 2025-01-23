@@ -30,7 +30,7 @@ sealed class BloodshedAxe : ModItem {
         Item.noMelee = true;
         Item.noUseGraphic = true;
 
-        Item.useTime = Item.useAnimation = 50;
+        Item.useTime = Item.useAnimation = 50; // DO NOT CHANGE AT ANY COST
 
         Item.value = Item.sellPrice(gold: 1, silver: 10);
         Item.rare = ItemRarityID.Orange;

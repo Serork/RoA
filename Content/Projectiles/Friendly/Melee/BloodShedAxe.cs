@@ -10,6 +10,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -22,6 +23,10 @@ sealed class BloodshedAxe : ModProjectile {
     public override bool? CanDamage() => Projectile.ai[1] >= 2f;
 
     private bool _powerUp;
+    private int _direction;
+    private bool _init;
+    private float _f;
+    private int _time = -1;
 
     public override void SetDefaults() {
         int width = 78; int height = 62;
@@ -35,6 +40,11 @@ sealed class BloodshedAxe : ModProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
+
+        Projectile.ownerHitCheck = true;
+        Projectile.ownerHitCheckDistance = 300f;
+        Projectile.usesOwnerMeleeHitCD = true;
+        Projectile.stopsDealingDamageAfterPenetrateHits = true;
     }
 
     public override bool? CanCutTiles() => true;
@@ -165,10 +175,26 @@ sealed class BloodshedAxe : ModProjectile {
         }
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_direction);
+        writer.Write(_init);
+        writer.Write(_f);
+        writer.Write(_time);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _direction = reader.ReadInt32();
+        _init = reader.ReadBoolean();
+        _f = reader.ReadSingle();
+        _time = reader.ReadInt32();
+    }
+
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         //player.heldProj = Projectile.whoAmI;
+        int itemAnimationMax = 50;
         if (Projectile.localAI[2] == 0f) {
+            Projectile.timeLeft = itemAnimationMax;
             Projectile.localAI[2] = 1f;
             float scale = Main.player[Projectile.owner].CappedMeleeScale();
             if (scale != 1f) {
@@ -177,7 +203,6 @@ sealed class BloodshedAxe : ModProjectile {
         }
         player.bodyFrame.Y = 56;
         int baseAnimationMax = ItemLoader.GetItem(ModContent.ItemType<Items.Weapons.Melee.BloodshedAxe>()).Item.useAnimation;
-        int itemAnimationMax = 50;
         float mult = 1f + 1f - (float)itemAnimationMax / baseAnimationMax;
         int itemAnimation = player.itemAnimation;
         int min = itemAnimationMax / 2 - itemAnimationMax / 4;
@@ -196,16 +221,17 @@ sealed class BloodshedAxe : ModProjectile {
         if (player.dead || !player.active) {
             Projectile.Kill();
         }
-        else if (Projectile.localAI[0] != 0f) {
-            float f = 1f - player.itemAnimation / (float)player.itemAnimationMax + 0.5f - (player.itemAnimation < player.itemAnimationMax * 0.45f ? 1f - player.itemAnimation / (float)player.itemAnimationMax + 0.5f : 0f);
+        else if (_init) {
+            _f = 1f - _time / (float)itemAnimationMax + 0.5f - (_time < itemAnimationMax * 0.45f ? 1f - _time / (float)itemAnimationMax + 0.5f : 0f);
+            Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
             Projectile.Center = player.Center;
             if (Projectile.timeLeft > min) {
                 //float value2 = f * 1.25f;
-                float value2 = f * 1.15f;
+                float value2 = _f * 1.15f;
                 if (value2 != 0f) {
                     Projectile.scale = value2 * Projectile.localAI[2];
                 }
-                Projectile.Center += Projectile.velocity * 2.5f * (0.5f + Projectile.ai[0]) * (f > 0.5f ? f : 1f - f - 0.5f);
+                Projectile.Center += Projectile.velocity * 2.5f * (0.5f + Projectile.ai[0]) * (_f > 0.5f ? _f : 1f - _f - 0.5f);
                 Projectile.rotation = Projectile.rotation.AngleLerp(-MathHelper.PiOver2 - Projectile.spriteDirection * 0.4f, 0.2f);
             }
             if (Projectile.timeLeft == min) {
@@ -221,11 +247,15 @@ sealed class BloodshedAxe : ModProjectile {
             }
         }
         Projectile.Opacity = Utils.GetLerpValue(itemAnimationMax, itemAnimationMax - 7, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 7f, Projectile.timeLeft, clamped: true);
-        if (Projectile.localAI[0] == 0f) {
-            Projectile.localAI[0] = 1f;
-            Projectile.spriteDirection = player.direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
-            Projectile.Center = player.Center + new Vector2(10f * player.direction, 0);
-            Projectile.timeLeft = itemAnimationMax;
+        if (Projectile.owner == Main.myPlayer) {
+            if (!_init) {
+                _time = itemAnimationMax;
+                _direction = player.GetViableMousePosition().X > player.Center.X ? 1 : -1;
+                Projectile.Center = player.Center;
+                Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
+                _init = true;
+                Projectile.netUpdate = true;
+            }
         }
         float f2 = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
         float value = 1f - itemAnimation / (float)itemAnimationMax;
@@ -258,6 +288,9 @@ sealed class BloodshedAxe : ModProjectile {
         
         float armRotation = Projectile.rotation - MathHelper.PiOver2;
         player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
+        if (_time > 0) {
+            _time--;
+        }
     }
 
     public override bool ShouldUpdatePosition()
