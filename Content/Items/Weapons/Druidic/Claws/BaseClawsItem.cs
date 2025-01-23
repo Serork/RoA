@@ -34,7 +34,7 @@ abstract class BaseClawsItem : NatureItem {
     protected virtual bool ShouldModifyShootStats => true;
 
     public override bool? UseItem(Player player) {
-        if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
+        if (player.ItemAnimationJustStarted) {
             (Color, Color) slashColors = SlashColors(player);
             ClawsHandler clawsStats = player.GetModPlayer<ClawsHandler>();
             clawsStats.SetColors(slashColors.Item1, slashColors.Item2);
