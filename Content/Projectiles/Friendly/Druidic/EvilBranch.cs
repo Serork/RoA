@@ -166,22 +166,15 @@ sealed class EvilBranch : NatureProjectile {
         ScaleX = 1.6f;
         ScaleY = 0.4f;
 
-        if (Projectile.owner == Main.myPlayer) {
+        Player player = Main.player[Projectile.owner];
+        if (player.whoAmI == Main.myPlayer) {
             _direction = Main.rand.NextBool().ToDirectionInt();
 
-            GetPos(Main.player[Projectile.owner], out Point point, out Point point2);
+            GetPos(player, out Point point, out Point point2);
             Projectile.Center = point2.ToWorldCoordinates();
             Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
             float maxRadians = 0.375f;
             Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
-
-            for (int i = 0; i < Main.rand.Next(5, 8); i++) {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
-                    TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
-                dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
-                dust.velocity -= new Vector2(0f, 3f * Main.rand.NextFloat(0.5f, 1f)).RotatedBy(Projectile.rotation);
-                dust.scale *= 1f + Main.rand.NextFloatRange(0.1f);
-            }
 
             _part1Info = new();
             _part2Info = new();
@@ -218,6 +211,15 @@ sealed class EvilBranch : NatureProjectile {
                     netMessage.Send();
                 }
                 index++;
+            }
+
+            Point tileCoords = Projectile.Center.ToTileCoordinates();
+            for (int i = 0; i < Main.rand.Next(5, 8); i++) {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
+                    TileHelper.GetKillTileDust(tileCoords.X, tileCoords.Y, WorldGenHelper.GetTileSafely(tileCoords)));
+                dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
+                dust.velocity -= new Vector2(0f, 3f * Main.rand.NextFloat(0.5f, 1f)).RotatedBy(Projectile.rotation);
+                dust.scale *= 1f + Main.rand.NextFloatRange(0.1f);
             }
         }
 

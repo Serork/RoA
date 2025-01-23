@@ -243,6 +243,8 @@ class ClawsSlash : NatureProjectile {
     public override void AI() {
         Player player = Owner;
 
+        player.direction = (int)Projectile.ai[0];
+
         if (player.inventory[player.selectedItem].ModItem is not BaseClawsItem) {
             Projectile.Kill();
 

@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.GameContent.Drawing;
@@ -29,13 +30,27 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
     }
 
     public sealed class EbonwoodStaffBase : BaseRodProjectile {
+        private Vector2 _mousePosition;
+
         //protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
-        
+
         protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
         protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(Item, player);
+
+        protected override void SafeSendExtraAI(BinaryWriter writer) {
+            base.SafeSendExtraAI(writer);
+
+            writer.WriteVector2(_mousePosition);
+        }
+
+        protected override void SafeReceiveExtraAI(BinaryReader reader) {
+            base.SafeReceiveExtraAI(reader);
+
+            _mousePosition = reader.ReadVector2();
+        }
 
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
             int num27 = Main.rand.Next(4, 10);
@@ -82,11 +97,16 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
                 dust.velocity *= 0.4f;
             }
 
-            EvilBranch.GetPos(player, out Point point, out Point point2);
+            if (player.whoAmI == Main.myPlayer) {
+                EvilBranch.GetPos(player, out Point point, out Point point2);
+                _mousePosition = point2.ToWorldCoordinates();
+                Projectile.netUpdate = true;
+            }
             if (Main.rand.NextChance(Math.Min(0.5f, 0.5f * step * 1.5f))) {
                 bool flag = Main.rand.NextBool(3);
-                Dust dust = Dust.NewDustPerfect(point2.ToWorldCoordinates() - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
-                    flag ? DustID.Ebonwood : TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+                Point mousePositionInTiles = _mousePosition.ToTileCoordinates();
+                Dust dust = Dust.NewDustPerfect(_mousePosition - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
+                    flag ? DustID.Ebonwood : TileHelper.GetKillTileDust(mousePositionInTiles.X, mousePositionInTiles.Y, WorldGenHelper.GetTileSafely(mousePositionInTiles)));
                 if (Main.rand.NextChance(0.5)) {
                     dust.noLight = true;
                 }
@@ -117,6 +137,8 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
     }
 
     public sealed class ShadewoodStaffBase : BaseRodProjectile {
+        private Vector2 _mousePosition;
+
         //protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
@@ -127,6 +149,18 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
             => ai2 = 1f;
 
         protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(Item, player);
+
+        protected override void SafeSendExtraAI(BinaryWriter writer) {
+            base.SafeSendExtraAI(writer);
+
+            writer.WriteVector2(_mousePosition);
+        }
+
+        protected override void SafeReceiveExtraAI(BinaryReader reader) {
+            base.SafeReceiveExtraAI(reader);
+
+            _mousePosition = reader.ReadVector2();
+        }
 
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
             int num27 = Main.rand.Next(4, 10);
@@ -173,11 +207,16 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
                 dust.velocity *= 0.4f;
             }
 
-            EvilBranch.GetPos(player, out Point point, out Point point2);
+            if (player.whoAmI == Main.myPlayer) {
+                EvilBranch.GetPos(player, out Point point, out Point point2);
+                _mousePosition = point2.ToWorldCoordinates();
+                Projectile.netUpdate = true;
+            }
             if (Main.rand.NextChance(Math.Min(0.5f, 0.5f * step * 1.5f))) {
                 bool flag = Main.rand.NextBool(3);
-                Dust dust = Dust.NewDustPerfect(point2.ToWorldCoordinates() - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
-                    flag ? DustID.Shadewood : TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+                Point mousePositionInTiles = _mousePosition.ToTileCoordinates();
+                Dust dust = Dust.NewDustPerfect(_mousePosition - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
+                    flag ? DustID.Shadewood : TileHelper.GetKillTileDust(mousePositionInTiles.X, mousePositionInTiles.Y, WorldGenHelper.GetTileSafely(mousePositionInTiles)));
                 if (Main.rand.NextChance(0.5)) {
                     dust.noLight = true;
                 }

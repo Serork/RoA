@@ -210,7 +210,8 @@ sealed class TectonicCaneProjectile : NatureProjectile {
 
         Projectile.spriteDirection = Main.rand.NextBool().ToDirectionInt();
 
-        EvilBranch.GetPos(Main.player[Projectile.owner], out Point point, out Point point2, maxDistance: 800f);
+        Player player = Main.player[Projectile.owner];
+        EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
         Projectile.Center = point2.ToWorldCoordinates();
 
         Projectile.netUpdate = true;

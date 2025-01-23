@@ -66,12 +66,12 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
             dust.velocity *= 0.9f;
             dust.noGravity = true;
 
-            EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
-            Vector2 position = point2.ToWorldCoordinates() + Vector2.UnitX * 5f;
             if (player.whoAmI == Main.myPlayer) {
-                _tempMousePosition = position;
+                EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
+                _tempMousePosition = point2.ToWorldCoordinates();
                 Projectile.netUpdate = true;
             }
+            Vector2 position;
             position = _tempMousePosition;
             dustType = TileHelper.GetKillTileDust((int)position.X / 16, (int)position.Y / 16, Main.tile[(int)position.X / 16, (int)position.Y / 16]);
             float progress = 1.25f * Ease.ExpoInOut(Math.Max(step, 0.25f)) + 0.25f;

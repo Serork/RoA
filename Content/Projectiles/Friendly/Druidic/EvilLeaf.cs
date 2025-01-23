@@ -138,6 +138,7 @@ sealed class EvilLeaf : NatureProjectile {
             Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], Projectile.localAI[2], Projectile.ai[2] * 0.215f);
         }
         else {
+            _index = 0;
             updateOldPos();
             if (Projectile.velocity == Vector2.Zero) {
                 if (Projectile.owner == Main.myPlayer) {
