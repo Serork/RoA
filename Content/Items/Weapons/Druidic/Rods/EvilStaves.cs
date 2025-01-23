@@ -29,7 +29,7 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
     }
 
     public sealed class EbonwoodStaffBase : BaseRodProjectile {
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
+        //protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
         
         protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
 
@@ -117,7 +117,7 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
     }
 
     public sealed class ShadewoodStaffBase : BaseRodProjectile {
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
+        //protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
 

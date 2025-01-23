@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
-using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -10,11 +9,12 @@ using RoA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Security.Principal;
 
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
-using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -25,31 +25,16 @@ sealed class EvilLeaf : NatureProjectile {
     private float _ai5, _ai4;
     private float _angle, _angle2;
     private Vector2 _to;
+    private bool _crimson;
+    private byte _index;
+    private bool _init;
+    private Projectile _parent = null;
 
     private float[] _oldRotations = new float[18];
-
-    internal bool Crimson;
-    internal int Index;
 
     public override string Texture => ResourceManager.FriendlyProjectileTextures + $"Druidic/{nameof(EvilLeaf)}";
 
     public override void SetStaticDefaults() => Projectile.SetTrail(2, 18);
-
-    protected override void SafeSendExtraAI(BinaryWriter writer) {
-        base.SafeSendExtraAI(writer);
-
-        writer.WriteVector2(_twigPosition);
-        writer.Write(Crimson);
-        writer.Write(Index);
-    }
-
-    protected override void SafeReceiveExtraAI(BinaryReader reader) {
-        base.SafeReceiveExtraAI(reader);
-
-        _twigPosition = reader.ReadVector2();
-        Crimson = reader.ReadBoolean();
-        Index = reader.ReadInt32();
-    }
 
     protected override void SafeSetDefaults() {
         Projectile.Size = Vector2.One;
@@ -61,29 +46,45 @@ sealed class EvilLeaf : NatureProjectile {
         Projectile.tileCollide = false;
     }
 
-    internal void SetUpPositionOnTwig(Vector2 position) => _twigPosition = position;
+    internal void SetUpInfo(Vector2 position, byte index) {
+        _twigPosition = position;
+        _index = index;
+    }
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        writer.WriteVector2(_to);
+        writer.Write(_init);
+        writer.Write(_crimson);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        _to = reader.ReadVector2();
+        _init = reader.ReadBoolean();
+        _crimson = reader.ReadBoolean();
+    }
 
     public override bool ShouldUpdatePosition() => false;
 
     public override bool? CanDamage() => Projectile.Opacity >= 0.35f;
 
-    private void SetPosition() {
-        Projectile parent = Main.projectile[(int)Projectile.ai[1]];
-        Vector2 parentScale = parent.As<EvilBranch>().Scale;
+    private void SetPosition(Projectile parent) {
+        Vector2 parentScale = new(parent.ai[0], parent.ai[1]);
         Vector2 position = parent.position;
         Vector2 myPosition = _twigPosition * parentScale - Vector2.One * 2f - (Projectile.ai[0] == 1f ? new Vector2(10f, 0f) : Vector2.Zero);
         Projectile.position = position + myPosition.RotatedBy(parent.rotation);
     }
 
     public override void AI() {
+        if (_parent == null) {
+            _parent = Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);
+        }
         Projectile.direction = (int)Projectile.ai[0];
-        Projectile parent = Main.projectile[(int)Projectile.ai[1]];
+        Projectile parent = _parent;
         Player player = Main.player[Projectile.owner];
         int num176 = (int)(MathHelper.Pi * 20f);
-        if (parent != null && parent.active && Projectile.timeLeft > TIMELEFT - 30 * (Index + 1) - 10) {
-            Projectile.velocity = Vector2.Zero;
-            Vector2 parentScale = parent.As<EvilBranch>().Scale;
-            SetPosition();
+        if (Projectile.timeLeft > TIMELEFT - 30 * (_index + 1) - 10) {
+            Vector2 parentScale = new(parent.ai[0], parent.ai[1]);
+            SetPosition(parent);
             if (Projectile.localAI[0] == 0f) {
                 Projectile.ai[2] = 1f;
                 Projectile.localAI[2] = 1.25f;
@@ -97,12 +98,15 @@ sealed class EvilLeaf : NatureProjectile {
             }
             float scaleY = parentScale.Y * Projectile.ai[2];
             float rotation = parent.rotation + MathHelper.Pi * Projectile.direction * (1f - scaleY);
-            if (Projectile.localAI[0] == 0f) {
+            if (!_init) {
+                _init = true;
                 Projectile.localAI[0] = 1f;
                 Projectile.rotation = rotation;
                 for (int j = 0; j < _oldRotations.Length; j++) {
                     _oldRotations[j] = Projectile.rotation;
                 }
+                Projectile.velocity = Vector2.Zero;
+                _crimson = parent.ai[2] == 1f;
             }
             Projectile.rotation = Utils.AngleLerp(Projectile.rotation, rotation, 0.2f);
             if (scaleY < 0.5f) {
@@ -126,11 +130,15 @@ sealed class EvilLeaf : NatureProjectile {
         else {
             if (Projectile.velocity == Vector2.Zero) {
                 _ai4 = 0f;
-                Projectile.velocity = Helper.VelocityToPoint(Projectile.position, player.GetViableMousePosition(), 0.1f);
+                if (Projectile.owner == Main.myPlayer) {
+                    _to = player.GetViableMousePosition();
+                    Projectile.netUpdate = true;
+                }
+                Projectile.velocity = Helper.VelocityToPoint(Projectile.position, _to, 0.1f);
                 for (int i = 0; i < 3; i++) {
                     if (Main.rand.NextBool(2)) {
                         Vector2 dustVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedBy(Main.rand.NextFloat() * ((float)Math.PI * 2f) * 0.25f) * (Main.rand.NextFloat() * 3f);
-                        Dust dust = Dust.NewDustPerfect(Projectile.Center, Crimson ? DustID.CrimsonPlants : DustID.CorruptPlants);
+                        Dust dust = Dust.NewDustPerfect(Projectile.Center, _crimson ? DustID.CrimsonPlants : DustID.CorruptPlants);
                         dust.alpha = 150;
                         dust.velocity += dustVelocity;
                         dust.velocity *= 0.6f + Main.rand.NextFloatRange(0.1f);
@@ -141,7 +149,7 @@ sealed class EvilLeaf : NatureProjectile {
                 float num178 = 16f;
                 Vector2 vector57 = Vector2.UnitX * num178;
                 Vector2 v7 = vector57;
-                Vector2 vector55 = player.GetViableMousePosition();
+                Vector2 vector55 = _to;
                 Vector2 vector56 = Projectile.Center + new Vector2(Main.rand.NextFloatDirection() * (float)Projectile.width / 2f, Projectile.height / 2);
                 Vector2 v6 = vector55 - vector56;
                 float num179 = v6.Length();
@@ -152,13 +160,10 @@ sealed class EvilLeaf : NatureProjectile {
                     vector57 = vector57.RotatedBy(num177);
                 }
                 _angle2 = num180;
-                if (Projectile.owner == Main.myPlayer) {
-                    _to = player.GetViableMousePosition();
-                }
             }
             else {
                 if (Main.rand.NextBool(11)) {
-                    Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, Crimson ? DustID.CrimsonPlants : DustID.CorruptPlants, 0f, 0f, 150, default(Color), 1f);
+                    Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, _crimson ? DustID.CrimsonPlants : DustID.CorruptPlants, 0f, 0f, 150, default(Color), 1f);
                     dust2.noGravity = true;
                     dust2.velocity = Projectile.velocity * 0.5f;
                 }
@@ -198,7 +203,7 @@ sealed class EvilLeaf : NatureProjectile {
         Texture2D texture = TextureAssets.Projectile[Type].Value;
         SpriteEffects spriteEffects = (SpriteEffects)((int)Projectile.ai[0] != 1).ToInt();
         Vector2 position = Projectile.Center - Main.screenPosition;
-        Rectangle sourceRectangle = new(Crimson ? 14 : 0, 0, 14, 14);
+        Rectangle sourceRectangle = new(_crimson ? 14 : 0, 0, 14, 14);
         Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity;
         Vector2 origin = Projectile.ai[0] == 1 ? new Vector2(2, 12) : new Vector2(12, 12);
         if (_to != Vector2.Zero) {

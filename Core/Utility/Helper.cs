@@ -278,12 +278,12 @@ static class Helper {
         entity.velocity += (movement2 - entity.velocity) / inertia;
     }
 
-    public static void NewMessage(string text, Color color) {
+    public static void NewMessage(object text, Color? color = null) {
         if (Main.netMode == NetmodeID.SinglePlayer) {
             Main.NewText(text, color);
         }
         else {
-            ChatHelper.BroadcastChatMessage(NetworkText.FromKey(text), color);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromKey(text.ToString()), color ?? Color.White);
         }
     }
 

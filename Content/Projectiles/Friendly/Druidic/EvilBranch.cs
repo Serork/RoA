@@ -11,6 +11,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using RoA.Core;
+using System.IO;
+using RoA.Content.Items.Weapons.Magic;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -60,12 +63,20 @@ sealed class EvilBranch : NatureProjectile {
 
     private readonly TwigPartInfo _part1Info = new(), _part2Info = new();
 
-    private Vector2 _scale = Vector2.One;
     private List<LeafInfo> _leavesInfo = [];
 
-    public Vector2 Scale => _scale;
+    public ref float ScaleX => ref Projectile.ai[0];
+    public ref float ScaleY => ref Projectile.ai[1];
 
     public override string Texture => ResourceManager.FriendlyProjectileTextures + $"Druidic/{nameof(EvilBranch)}";
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        writer.Write(Projectile.rotation);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        Projectile.rotation = reader.ReadSingle();  
+    }
 
     protected override void SafeSetDefaults() {
         Projectile.Size = Vector2.One;
@@ -140,31 +151,29 @@ sealed class EvilBranch : NatureProjectile {
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
-        if (Projectile.owner != Main.myPlayer) {
-            return;
-        }
-
         Projectile.spriteDirection = Main.rand.NextBool().ToDirectionInt();
 
-        _scale.X = 1.6f;
-        _scale.Y = 0.4f;
+        ScaleX = 1.6f;
+        ScaleY = 0.4f;
 
-        GetPos(Main.player[Projectile.owner], out Point point, out Point point2);
-        Projectile.Center = point2.ToWorldCoordinates();
-        Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
-        float maxRadians = 0.375f;
-        Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
+        if (Projectile.owner == Main.myPlayer) {
+            GetPos(Main.player[Projectile.owner], out Point point, out Point point2);
+            Projectile.Center = point2.ToWorldCoordinates();
+            Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
+            float maxRadians = 0.375f;
+            Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
 
-        for (int i = 0; i < Main.rand.Next(5, 8); i++) {
-            Dust dust = Dust.NewDustPerfect(Projectile.Center - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f), 
-                TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
-            dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
-            dust.velocity -= new Vector2(0f, 3f * Main.rand.NextFloat(0.5f, 1f)).RotatedBy(Projectile.rotation);
-            dust.scale *= 1f + Main.rand.NextFloatRange(0.1f);
+            for (int i = 0; i < Main.rand.Next(5, 8); i++) {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
+                    TileHelper.GetKillTileDust(point2.X, point2.Y, WorldGenHelper.GetTileSafely(point2)));
+                dust.velocity *= 0.5f + Main.rand.NextFloatRange(0.1f);
+                dust.velocity -= new Vector2(0f, 3f * Main.rand.NextFloat(0.5f, 1f)).RotatedBy(Projectile.rotation);
+                dust.scale *= 1f + Main.rand.NextFloatRange(0.1f);
+            }
         }
 
         SetUpLeafPoints();
-        int index = 0;
+        byte index = 0;
         foreach (LeafInfo leafInfo in _leavesInfo) {
             Vector2 leafPosition = leafInfo.Position;
             int direction = leafInfo.FacedRight.ToDirectionInt();
@@ -177,10 +186,15 @@ sealed class EvilBranch : NatureProjectile {
             //}
             Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
             int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]), Projectile.knockBack, Projectile.owner, direction, Projectile.identity);
-            Main.projectile[projectile].As<EvilLeaf>().SetUpPositionOnTwig(leafTwigPosition);
-            Main.projectile[projectile].As<EvilLeaf>().Crimson = Projectile.ai[2] == 1f;
-            Main.projectile[projectile].As<EvilLeaf>().Index = index;
-            Main.projectile[projectile].netUpdate = true;
+            Main.projectile[projectile].As<EvilLeaf>().SetUpInfo(leafTwigPosition, index);
+            if (Main.netMode == NetmodeID.Server) {
+                ModPacket netMessage = Mod.GetPacket();
+                netMessage.Write((byte)RoA.NetMessagePacket.EvilLeafPacket);
+                netMessage.Write(Main.projectile[projectile].identity);
+                netMessage.WriteVector2(leafTwigPosition);
+                netMessage.Write(index);
+                netMessage.Send();
+            }
             index++;
         }
 
@@ -188,8 +202,12 @@ sealed class EvilBranch : NatureProjectile {
     }
 
     public override void AI() {
-        _scale.X = MathHelper.SmoothStep(_scale.X, 1f, 0.5f);
-        _scale.Y = MathHelper.SmoothStep(_scale.Y, 1f, 0.5f);
+        ScaleX = MathHelper.SmoothStep(ScaleX, 1f, 0.5f);
+        ScaleY = MathHelper.SmoothStep(ScaleY, 1f, 0.5f);
+
+        if (ScaleX != 1f || ScaleY != 1f) {
+            Projectile.netUpdate = true;
+        }
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
@@ -210,11 +228,11 @@ sealed class EvilBranch : NatureProjectile {
                 position.Y += sourceRectangle.Height * value;
                 position.Y -= sourceRectangle.Height;
                 position.Y += 2;
-                position.Y += sourceRectangle.Height * (1f - _scale.Y);
+                position.Y += sourceRectangle.Height * (1f - ScaleY);
             }
             position.Y += 2;
             SpriteEffects spriteEffects = (SpriteEffects)(Projectile.spriteDirection == 1).ToInt();
-            Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, sourceRectangle.BottomCenter(), _scale, spriteEffects);
+            Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, sourceRectangle.BottomCenter(), new Vector2(ScaleX, ScaleY), spriteEffects);
         }
         Color drawColor = Lighting.GetColor((Projectile.Center - Vector2.UnitY * 20f).ToTileCoordinates());
         draw(drawColor, true);
