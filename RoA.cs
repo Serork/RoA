@@ -47,11 +47,9 @@ sealed class RoA : Mod {
             case NetMessagePacket.EvilLeafPacket:
                 int identity = reader.ReadInt32();
                 Vector2 twigPosition = reader.ReadVector2();
-                byte index = reader.ReadByte();
                 Projectile projectile = Main.projectile.FirstOrDefault(x => x.identity == identity);
                 projectile.As<EvilLeaf>().
-                    SetUpInfo(twigPosition,
-                    index);
+                    SetUpTwigPosition(twigPosition);
                 break;
         }
     }

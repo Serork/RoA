@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Principal;
 
 using Terraria;
@@ -25,8 +26,8 @@ sealed class EvilLeaf : NatureProjectile {
     private float _ai5, _ai4;
     private float _angle, _angle2;
     private Vector2 _to;
+    private int _index;
     private bool _crimson;
-    private byte _index;
     private bool _init;
     private Projectile _parent = null;
 
@@ -46,21 +47,22 @@ sealed class EvilLeaf : NatureProjectile {
         Projectile.tileCollide = false;
     }
 
-    internal void SetUpInfo(Vector2 position, byte index) {
+    internal void SetUpTwigPosition(Vector2 position) {
         _twigPosition = position;
-        _index = index;
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         writer.WriteVector2(_to);
         writer.Write(_crimson);
         writer.Write(_angle);
+        writer.Write(_index);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
         _to = reader.ReadVector2();
         _crimson = reader.ReadBoolean();
         _angle = reader.ReadSingle();
+        _index = reader.ReadInt32();
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -77,74 +79,16 @@ sealed class EvilLeaf : NatureProjectile {
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         int num176 = (int)(MathHelper.Pi * 20f);
-        if (Projectile.ai[1] == -20f) {
-            if (Projectile.velocity == Vector2.Zero) {
-                if (Projectile.owner == Main.myPlayer) {
-                    _ai4 = 0f;
-                    _to = player.GetViableMousePosition();
-                    Projectile.ai[1] = Projectile.timeLeft;
-                    Projectile.netUpdate = true;
-                }
-                Projectile.velocity = Helper.VelocityToPoint(Projectile.position, _to, 0.1f);
-                for (int i = 0; i < 3; i++) {
-                    if (Main.rand.NextBool(2)) {
-                        Vector2 dustVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedBy(Main.rand.NextFloat() * ((float)Math.PI * 2f) * 0.25f) * (Main.rand.NextFloat() * 3f);
-                        Dust dust = Dust.NewDustPerfect(Projectile.Center, _crimson ? DustID.CrimsonPlants : DustID.CorruptPlants);
-                        dust.alpha = 150;
-                        dust.velocity += dustVelocity;
-                        dust.velocity *= 0.6f + Main.rand.NextFloatRange(0.1f);
-                        dust.noGravity = true;
-                    }
-                }
-                float num177 = _angle / (float)num176;
-                float num178 = 16f;
-                Vector2 vector57 = Vector2.UnitX * num178;
-                Vector2 v7 = vector57;
-                Vector2 vector55 = _to;
-                Vector2 vector56 = Projectile.Center + new Vector2(Main.rand.NextFloatDirection() * (float)Projectile.width / 2f, Projectile.height / 2);
-                Vector2 v6 = vector55 - vector56;
-                float num179 = v6.Length();
-                int num180 = 0;
-                while (v7.Length() < num179 && num180 < num176) {
-                    num180++;
-                    v7 += vector57;
-                    vector57 = vector57.RotatedBy(num177);
-                }
-                _angle2 = num180;
-            }
-            else {
-                if (Main.rand.NextBool(11)) {
-                    Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, _crimson ? DustID.CrimsonPlants : DustID.CorruptPlants, 0f, 0f, 150, default(Color), 1f);
-                    dust2.noGravity = true;
-                    dust2.velocity = Projectile.velocity * 0.5f;
-                }
-            }
-            Projectile.ai[2]--;
-            _ai4 = MathHelper.SmoothStep(_ai4, 1f, 0.1f);
-            num176 = (int)(MathHelper.Pi * 20f * _ai4);
-            float angle = _angle;
-            float angle2 = _angle2;
-            Projectile.velocity = Projectile.velocity.RotatedBy(angle);
-            float fromValue = num176 - Projectile.ai[2];
-            float fromMax = angle2 + num176 / 3;
-            float num4 = Utils.Remap(fromValue, angle2, fromMax, 0f, 1f) * Utils.Remap(fromValue, angle2, angle2 + num176, 1f, 0f);
-            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY) * (4f + 12f * (1f - num4) * 0.1f);
-            updateOldPos();
-            Projectile.Opacity = Utils.GetLerpValue(Projectile.timeLeft, 0f, 10f, true);
-            Projectile.velocity *= Math.Min(1f, Utils.Remap(_ai4, 0f, 1f, 0.1f, 1f) * 2f);
-            Vector2 velocity = Projectile.velocity/* * (int)Projectile.ai[0]*/;
-            Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, Helper.VelocityAngle(velocity) - MathHelper.PiOver2 * Projectile.ai[0], MathHelper.Min(1f, 1f * _ai4));
-            Projectile.position += velocity;
-            Projectile.position += Helper.VelocityToPoint(Projectile.position, _to, 1f);
-
-            return;
-        }
         _parent ??= Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);
         Projectile.direction = (int)Projectile.ai[0];
         Projectile parent = _parent;
         if (Projectile.timeLeft > TIMELEFT - 30 * (_index + 1) - 10) {
             Vector2 parentScale = new(parent.ai[0], parent.ai[1]);
             if (Projectile.localAI[0] == 0f) {
+                if (Projectile.owner == Main.myPlayer && Projectile.ai[2] != 0f) {
+                    _index = (int)Projectile.ai[2];
+                    Projectile.netUpdate = true;
+                }
                 Projectile.ai[2] = 1f;
                 Projectile.localAI[2] = 1.25f;
                 Projectile.localAI[1] = Projectile.localAI[2];
@@ -193,15 +137,76 @@ sealed class EvilLeaf : NatureProjectile {
             }
             Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], Projectile.localAI[2], Projectile.ai[2] * 0.215f);
         }
-        else if (Projectile.owner != Main.myPlayer) {
-            updateOldPos();
-        }
         else {
             updateOldPos();
-            Projectile.ai[1] = -20f;
-            Projectile.ai[2] = Projectile.timeLeft;
-            Projectile.netUpdate = true;
+            if (Projectile.velocity == Vector2.Zero) {
+                if (Projectile.owner == Main.myPlayer) {
+                    _ai4 = 0f;
+                    _to = player.GetViableMousePosition();
+                    Projectile.ai[1] = Projectile.timeLeft;
+                    Projectile.netUpdate = true;
+                }
+                Projectile.velocity = Helper.VelocityToPoint(Projectile.position, _to, 0.1f);
+                for (int i = 0; i < 3; i++) {
+                    if (Main.rand.NextBool(2)) {
+                        Vector2 dustVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedBy(Main.rand.NextFloat() * ((float)Math.PI * 2f) * 0.25f) * (Main.rand.NextFloat() * 3f);
+                        Dust dust = Dust.NewDustPerfect(Projectile.Center, _crimson ? DustID.CrimsonPlants : DustID.CorruptPlants);
+                        dust.alpha = 150;
+                        dust.velocity += dustVelocity;
+                        dust.velocity *= 0.6f + Main.rand.NextFloatRange(0.1f);
+                        dust.noGravity = true;
+                    }
+                }
+                float num177 = _angle / (float)num176;
+                float num178 = 16f;
+                Vector2 vector57 = Vector2.UnitX * num178;
+                Vector2 v7 = vector57;
+                Vector2 vector55 = _to;
+                Vector2 vector56 = Projectile.Center + new Vector2(Main.rand.NextFloatDirection() * (float)Projectile.width / 2f, Projectile.height / 2);
+                Vector2 v6 = vector55 - vector56;
+                float num179 = v6.Length();
+                int num180 = 0;
+                while (v7.Length() < num179 && num180 < num176) {
+                    num180++;
+                    v7 += vector57;
+                    vector57 = vector57.RotatedBy(num177);
+                }
+                _angle2 = num180;
+            }
+            else {
+                if (Main.rand.NextBool(11)) {
+                    Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, _crimson ? DustID.CrimsonPlants : DustID.CorruptPlants, 0f, 0f, 150, default(Color), 1f);
+                    dust2.noGravity = true;
+                    dust2.velocity = Projectile.velocity * 0.5f;
+                }
+            }
+            _ai4 = MathHelper.SmoothStep(_ai4, 1f, 0.1f);
+            num176 = (int)(MathHelper.Pi * 20f * _ai4);
+            float angle = _angle;
+            float angle2 = _angle2;
+            Projectile.velocity = Projectile.velocity.RotatedBy(angle);
+            float fromValue = num176 - Projectile.timeLeft;
+            float fromMax = angle2 + num176 / 3;
+            float num4 = Utils.Remap(fromValue, angle2, fromMax, 0f, 1f) * Utils.Remap(fromValue, angle2, angle2 + num176, 1f, 0f);
+            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY) * (4f + 12f * (1f - num4) * 0.1f);
+            updateOldPos();
+            Projectile.Opacity = Utils.GetLerpValue(Projectile.timeLeft, 0f, 10f, true);
+            Projectile.velocity *= Math.Min(1f, Utils.Remap(_ai4, 0f, 1f, 0.1f, 1f) * 2f);
+            Vector2 velocity = Projectile.velocity/* * (int)Projectile.ai[0]*/;
+            Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, Helper.VelocityAngle(velocity) - MathHelper.PiOver2 * Projectile.ai[0], MathHelper.Min(1f, 1f * _ai4));
+            Projectile.position += velocity;
+            Projectile.position += Helper.VelocityToPoint(Projectile.position, _to, 1f);
+
         }
+        //else if (Projectile.owner != Main.myPlayer) {
+        //    updateOldPos();
+        //}
+        //else {
+        //    updateOldPos();
+        //    Projectile.ai[1] = -20f;
+        //    Projectile.ai[2] = Projectile.timeLeft;
+        //    Projectile.netUpdate = true;
+        //}
         void updateOldPos() {
             for (int num2 = _oldRotations.Length - 1; num2 > 0; num2--) {
                 _oldRotations[num2] = _oldRotations[num2 - 1];
