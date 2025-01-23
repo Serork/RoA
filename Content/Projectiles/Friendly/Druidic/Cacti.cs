@@ -10,6 +10,7 @@ using RoA.Utilities;
 
 using System;
 using System.IO;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -26,6 +27,7 @@ sealed class Cacti : NatureProjectile {
     }
 
     private State _state = State.Normal;
+    private Projectile _parent = null;
 
     private float UseTimeFactor => 0.0275f * (float)(1f - Projectile.ai[2] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
 
@@ -157,16 +159,16 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void AI() {
-        Projectile parent = Main.projectile[(int)Projectile.ai[1]];
+        _parent ??= Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);
         //if (parent == null || !parent.active) {
         //    return;
         //}
-        var parent2 = parent.As<CactiCaster.CactiCasterBase>();
+        var parent2 = _parent.As<CactiCaster.CactiCasterBase>();
         if (parent2 == null) {
             Projectile.Kill();
             return;
         }
-        Vector2 corePosition = parent.As<CactiCaster.CactiCasterBase>().CorePosition;
+        Vector2 corePosition = _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
         Projectile.Opacity = Utils.GetLerpValue(180, 155, Projectile.timeLeft, true);
 
         Projectile.tileCollide = _state == State.Enchanted;
