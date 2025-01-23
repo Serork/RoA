@@ -196,10 +196,20 @@ sealed class EvilLeaf : NatureProjectile {
             }
             Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], Projectile.localAI[2], Projectile.ai[2] * 0.215f);
         }
-        else if (Projectile.owner == Main.myPlayer) {
+        else if (Projectile.owner != Main.myPlayer) {
+            updateOldPos();
+        }
+        else {
+            updateOldPos();
             Projectile.ai[1] = -20f;
             Projectile.ai[2] = Projectile.timeLeft;
             Projectile.netUpdate = true;
+        }
+        void updateOldPos() {
+            for (int num2 = _oldRotations.Length - 1; num2 > 0; num2--) {
+                _oldRotations[num2] = _oldRotations[num2 - 1];
+            }
+            _oldRotations[0] = Projectile.rotation;
         }
     }
 

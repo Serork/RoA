@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
-[AutoloadEquip(EquipType.Waist)]
+[AutoloadEquip(EquipType.Balloon)]
 sealed class FeathersInABalloon : NatureItem {
 	public override void SetStaticDefaults() {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
