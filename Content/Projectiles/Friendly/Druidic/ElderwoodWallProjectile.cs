@@ -64,7 +64,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             Projectile.ai[2] = Projectile.position.Y;
             if (Temporary) {
                 Projectile.localAI[0] = Length * 10;
-                Projectile.localAI[0] *= (1f + Projectile.ai[1] - 1f);
+                Projectile.localAI[0] *= 1f + Projectile.ai[1] - 1f;
             }
             _currentLength = _offsetY = 22 * Length;
             Main.rand.NextDouble();
@@ -72,17 +72,16 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             _direction = Main.rand.NextBool() ? -1 : 1;
             Projectile.localAI[1] = Projectile.timeLeft = (int)Projectile.localAI[0];
 
-            //Point point = new Vector2(Projectile.Center.X - Projectile.width * 2f, Projectile.Center.Y - 20f).ToTileCoordinates();
-            //Point point2 = new Vector2(Projectile.Center.X + Projectile.width * 2f, Projectile.Center.Y + 20f).ToTileCoordinates();
-            //ElderwoodClaws.SpawnGroundDusts(point, point2, Projectile.ai[0] * 5f);
-
             _init = true;
         }
 
-        if (Projectile.localAI[1] > Projectile.localAI[0] - 6f) {
-            Point point = new Vector2(Projectile.Center.X - Projectile.width * 2f, Projectile.Center.Y - 20f).ToTileCoordinates();
-            Point point2 = new Vector2(Projectile.Center.X + Projectile.width * 2f, Projectile.Center.Y + 20f).ToTileCoordinates();
-            ElderwoodClaws.SpawnGroundDusts(point, point2, Projectile.ai[0] * 5f);
+        bool flag = Projectile.owner == Main.myPlayer;
+        if (flag) {
+            if (Projectile.localAI[1] > Projectile.localAI[0] - 6f) {
+                Point point = new Vector2(Projectile.Center.X - Projectile.width * 2f, Projectile.Center.Y - 20f).ToTileCoordinates();
+                Point point2 = new Vector2(Projectile.Center.X + Projectile.width * 2f, Projectile.Center.Y + 20f).ToTileCoordinates();
+                ElderwoodClaws.SpawnGroundDusts(point, point2, Projectile.ai[0] * 5f);
+            }
         }
 
         float value = 1f + _offsetY / 10f;
@@ -101,6 +100,14 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
         Projectile.position.Y = Projectile.ai[2] + _currentLength;
         if (Projectile.localAI[1] > 0f) {
             Projectile.localAI[1]--;
+        }
+
+        if (!flag) {
+            if (Projectile.localAI[1] > Projectile.localAI[0] - 9f) {
+                Point point = new Vector2(Projectile.Center.X - Projectile.width * 2f, Projectile.Center.Y - 20f).ToTileCoordinates();
+                Point point2 = new Vector2(Projectile.Center.X + Projectile.width * 2f, Projectile.Center.Y + 20f).ToTileCoordinates();
+                ElderwoodClaws.SpawnGroundDusts(point, point2, Projectile.ai[0] * 5f);
+            }
         }
     }
 
