@@ -70,7 +70,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
     protected float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
-    protected Item HeldItem => Owner.HeldItem;
+    protected Item HeldItem => Item;
     protected Texture2D HeldItemTexture => HeldItem.IsEmpty() ? null : TextureAssets.Item[HeldItem.type].Value;
 
     protected Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
@@ -319,18 +319,18 @@ abstract class BaseRodProjectile : NatureProjectile {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter);
         //center += Vector2.UnitY * Owner.gfxOffY;
         Projectile.Center = center;
-        bool flag = Item.IsEmpty() || ShouldntUpdateRotationAndDirection();
-        if (Projectile.IsOwnerMyPlayer(Owner) && !flag) {
+        bool flag = !Item.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        if (Projectile.IsOwnerMyPlayer(Owner) && flag) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
+            Projectile.Center += Projectile.velocity;
             Projectile.netUpdate = true;
         }
-        Projectile.Center += Projectile.velocity;
     }
 
     private void SetDirection() {
-        bool flag = Item.IsEmpty() || ShouldntUpdateRotationAndDirection();
-        if (!flag) {
+        bool flag = !Item.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        if (flag) {
             Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
             Owner.direction = Projectile.spriteDirection;
         }
@@ -342,8 +342,8 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetRotation() {
-        bool flag = Item.IsEmpty() || ShouldntUpdateRotationAndDirection();
-        if (!flag) {
+        bool flag = !Item.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        if (flag) {
             float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
             float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;
             float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);

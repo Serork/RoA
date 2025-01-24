@@ -34,11 +34,13 @@ abstract class BaseClawsItem : NatureItem {
     protected virtual bool ShouldModifyShootStats => true;
 
     public override bool? UseItem(Player player) {
-        (Color, Color) slashColors = SlashColors(player);
-        ClawsHandler clawsStats = player.GetModPlayer<ClawsHandler>();
-        clawsStats.SetColors(slashColors.Item1, slashColors.Item2);
+        if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) {
+            (Color, Color) slashColors = SlashColors(player);
+            ClawsHandler clawsStats = player.GetModPlayer<ClawsHandler>();
+            clawsStats.SetColors(slashColors.Item1, slashColors.Item2);
 
-        SafeOnUse(player, clawsStats);
+            SafeOnUse(player, clawsStats);
+        }
 
         return base.UseItem(player);
     }

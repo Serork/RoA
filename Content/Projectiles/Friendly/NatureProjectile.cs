@@ -106,6 +106,9 @@ abstract class NatureProjectile : ModProjectile {
             _syncItem = false;
             Projectile.netUpdate = true;
         }
+        else {
+            _syncItem = true;
+        }
     }
 
     public virtual void SafePostAI() { }
