@@ -319,7 +319,8 @@ abstract class BaseRodProjectile : NatureProjectile {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter);
         //center += Vector2.UnitY * Owner.gfxOffY;
         Projectile.Center = center;
-        if (Projectile.IsOwnerMyPlayer(Owner) && !ShouldntUpdateRotationAndDirection()) {
+        bool flag = Item.IsEmpty() || ShouldntUpdateRotationAndDirection();
+        if (Projectile.IsOwnerMyPlayer(Owner) && !flag) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
             Projectile.netUpdate = true;
@@ -328,7 +329,8 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetDirection() {
-        if (!ShouldntUpdateRotationAndDirection()) {
+        bool flag = Item.IsEmpty() || ShouldntUpdateRotationAndDirection();
+        if (!flag) {
             Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
             Owner.direction = Projectile.spriteDirection;
         }
@@ -340,13 +342,13 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetRotation() {
-        if (ShouldntUpdateRotationAndDirection()) {
-            return;
+        bool flag = Item.IsEmpty() || ShouldntUpdateRotationAndDirection();
+        if (!flag) {
+            float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
+            float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;
+            float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);
+            Helper.SmoothClamp(ref mouseRotation, FacedLeft ? MINROTATION : -MAXROTATION, FacedLeft ? MAXROTATION : -MINROTATION, rotationLerp);
+            _rotation = mouseRotation;
         }
-        float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
-        float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;
-        float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);
-        Helper.SmoothClamp(ref mouseRotation, FacedLeft ? MINROTATION : -MAXROTATION, FacedLeft ? MAXROTATION : -MINROTATION, rotationLerp);
-        _rotation = mouseRotation;
     }
 }
