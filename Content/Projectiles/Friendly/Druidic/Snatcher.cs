@@ -45,6 +45,7 @@ sealed class Snatcher : NatureProjectile {
         writer.Write(Projectile.localAI[1]);
         writer.Write(Projectile.localAI[2]);
         writer.Write(_rotation);
+        writer.Write(_startDirection);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
@@ -55,6 +56,7 @@ sealed class Snatcher : NatureProjectile {
         Projectile.localAI[1] = reader.ReadSingle();
         Projectile.localAI[2] = reader.ReadSingle();
         _rotation = reader.ReadSingle();
+        _startDirection = reader.ReadInt32();
     }
 
     public override void SetStaticDefaults() {
@@ -90,9 +92,6 @@ sealed class Snatcher : NatureProjectile {
         Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset += OnReset;
         for (int j = 0; j < _oldPositions.Length; j++) {
             _oldPositions[j] = Vector2.Zero;
-        }
-        if (_startDirection == 0) {
-            _startDirection = Main.player[Projectile.owner].direction;
         }
     }
 
@@ -150,7 +149,7 @@ sealed class Snatcher : NatureProjectile {
         }
         if (Projectile.timeLeft > 20) {
             Projectile.timeLeft += TIMELEFT;
-            Projectile.netUpdate = true;
+            //Projectile.netUpdate = true;
         }
     }
 
@@ -219,7 +218,7 @@ sealed class Snatcher : NatureProjectile {
     private void ResetAttackState() {
         Projectile.ai[2] = 1f;
         Projectile.localAI[1] = Projectile.localAI[2] = 0f;
-        Projectile.netUpdate = true;
+        //Projectile.netUpdate = true;
     }
 
     private bool CantAttack() {
@@ -289,7 +288,7 @@ sealed class Snatcher : NatureProjectile {
         if (CantAttack()) {
             flag = true;
         }
-        if (Projectile.owner == Main.myPlayer && player.itemAnimation > player.itemAnimationMax - 2 && !flag && !IsAttacking && !IsAttacking2) {
+        if (Projectile.owner == Main.myPlayer && player.itemAnimation > player.itemAnimationMax - 10 && !flag && !IsAttacking && !IsAttacking2) {
             Projectile.ai[2] = 5f;
             Vector2 mousePos = Helper.GetLimitedPosition(player.Center, _mousePos, 200f, DIST * 0.75f);
             Projectile.localAI[1] = mousePos.X;
@@ -339,6 +338,11 @@ sealed class Snatcher : NatureProjectile {
     }
 
     public override void AI() {
+        if (Projectile.owner == Main.myPlayer && _startDirection == 0) {
+            _startDirection = Main.player[Projectile.owner].direction;
+            Projectile.netUpdate = true;
+        }
+
         Player player = Main.player[Projectile.owner];
         if (!player.active || player.dead) {
             Projectile.Kill();
@@ -354,10 +358,13 @@ sealed class Snatcher : NatureProjectile {
             float ai1 = 1f;
             Projectile.ai[1] = ai1 * -player.direction;
             if (!flag) {
-                foreach (Projectile projectile in Main.ActiveProjectiles) {
-                    if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI) {
-                        Projectile.ai[0] = projectile.whoAmI + 1f;
-                        Projectile.ai[1] = -projectile.ai[1];
+                if (Projectile.owner == Main.myPlayer) {
+                    foreach (Projectile projectile in Main.ActiveProjectiles) {
+                        if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI) {
+                            Projectile.ai[0] = projectile.whoAmI + 1f;
+                            Projectile.ai[1] = -projectile.ai[1];
+                            Projectile.netUpdate = true;
+                        }
                     }
                 }
             }
@@ -365,7 +372,6 @@ sealed class Snatcher : NatureProjectile {
                 Projectile.ai[0] = 1f;
             }
             Projectile.ai[2] = 0f;
-            Projectile.netUpdate = true;
             //if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[Type] < 2) {
             //    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f,
             //        -Projectile.ai[1], 0f);
@@ -385,7 +391,6 @@ sealed class Snatcher : NatureProjectile {
             Projectile.ai[2] = 1f;
             _targetVector = _targetVector2 = _attackVector = Vector2.Zero;
             _rotation = rotation;
-            Projectile.netUpdate = true;
         }
         _targetVector.X = _mousePos2.X;
         _targetVector.Y = _mousePos2.Y;
@@ -506,6 +511,8 @@ sealed class Snatcher : NatureProjectile {
             }
         }
 
+        pos = GetPos();
+        color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16) * opacity;
         Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, color, Projectile.rotation, origin, Projectile.scale, effects, 0);
 
         return false;
