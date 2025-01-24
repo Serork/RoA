@@ -196,20 +196,10 @@ sealed class EvilBranch : NatureProjectile {
                     leafPosition.X = 42f - leafPosition.X;
                 }
                 direction *= -_direction;
-                //if (Projectile.spriteDirection == -1) {
-                //    direction *= -1;
-                //}
                 Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
                 int projectile = CreateNatureProjectile(Projectile.GetSource_NaturalSpawn(), Item, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]), Projectile.knockBack,
                     Projectile.owner, direction, Projectile.identity, index);
                 Main.projectile[projectile].As<EvilLeaf>().SetUpTwigPosition(leafTwigPosition);
-                if (Main.netMode == NetmodeID.Server) {
-                    ModPacket netMessage = Mod.GetPacket();
-                    netMessage.Write((byte)RoA.NetMessagePacket.EvilLeafPacket);
-                    netMessage.Write(Main.projectile[projectile].identity);
-                    netMessage.WriteVector2(leafTwigPosition);
-                    netMessage.Send();
-                }
                 index++;
             }
 

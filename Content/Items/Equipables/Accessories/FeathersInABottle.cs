@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -72,27 +74,24 @@ sealed class FeathersInABottle : NatureItem {
         }
 
         public override void OnEnded(Player player) {
-            player.controlJump = false;
             ref ExtraJumpState state = ref player.GetJumpState(this);
-            if (state.Enabled) {
-                OnRefreshed(player);
-                PlayerLoader.OnExtraJumpRefreshed(this, player);
-                state.Available = true;
-            }
+            state.Available = true;
         }
 
         private static void SpawnCloudPoof(Player player, Vector2 position) {
-            string variant = string.Empty;
-            var handler = player.GetModPlayer<WreathHandler>();
-            if (handler.IsPhoenixWreath) {
-                variant = "1";
+            if (Main.netMode != NetmodeID.Server) {
+                string variant = string.Empty;
+                var handler = player.GetModPlayer<WreathHandler>();
+                if (handler.IsPhoenixWreath) {
+                    variant = "1";
+                }
+                if (handler.SoulOfTheWoods) {
+                    variant = "2";
+                }
+                Gore gore = Gore.NewGoreDirect(player.GetSource_FromThis(), position, -player.velocity, ($"FeatherinABottleGore{1 + Main.rand.Next(3)}" + variant).GetGoreType());
+                gore.velocity.X = gore.velocity.X * 0.1f - player.velocity.X * 0.1f;
+                gore.velocity.Y = gore.velocity.Y * 0.1f - player.velocity.Y * 0.05f;
             }
-            if (handler.SoulOfTheWoods) {
-                variant = "2";
-            }
-            Gore gore = Gore.NewGoreDirect(player.GetSource_FromThis(), position, -player.velocity, ($"FeatherinABottleGore{1 + Main.rand.Next(3)}" + variant).GetGoreType());
-            gore.velocity.X = gore.velocity.X * 0.1f - player.velocity.X * 0.1f;
-            gore.velocity.Y = gore.velocity.Y * 0.1f - player.velocity.Y * 0.05f;
         }
 
         public override void ShowVisuals(Player player) {

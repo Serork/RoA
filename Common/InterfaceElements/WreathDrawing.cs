@@ -21,8 +21,10 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
     private static SpriteData _wreathSpriteData;
 
-    private static float _factor;
-    private Vector2 _oldPosition;
+    private sealed class ValuesStorage : ModPlayer {
+        public float MainFactor;
+        public Vector2 OldPosition;
+    }
 
     public static bool JustDrawn { get; private set; }
 
@@ -53,9 +55,11 @@ sealed class WreathDrawing : PlayerDrawLayer {
         float offsetX = -_wreathSpriteData.FrameWidth / 2f + 2,
               offsetY = _wreathSpriteData.FrameHeight;
         playerPosition.X += offsetX;
+        var storage = player.GetModPlayer<ValuesStorage>();
+        ref Vector2 oldPosition = ref storage.OldPosition;
         playerPosition.Y += breathUI ? (float)(-(float)offsetY * ((player.breathMax - 1) / 200 + 1)) : -offsetY;
         if (player.dead || player.ghost || player.ShouldNotDraw || !stats.ShouldDrawItself) {
-            _oldPosition = playerPosition;
+            oldPosition = playerPosition;
 
             return;
         }
@@ -64,7 +68,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
 
-        position = Vector2.Lerp(_oldPosition, playerPosition, 0.3f);
+        position = oldPosition/*Vector2.Lerp(_oldPosition, playerPosition, 0.3f)*/;
         position -= Main.screenPosition;
         //position -= new Vector2(2f, 0f);
         var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
@@ -73,18 +77,17 @@ sealed class WreathDrawing : PlayerDrawLayer {
         if (flag2) {
             rotation = MathHelper.Pi;
         }
-        _oldPosition = playerPosition;
+        oldPosition = playerPosition;
         if (!flag2) {
             Vector2 vector = drawInfo.Position + drawInfo.rotationOrigin;
             Matrix matrix = Matrix.CreateRotationZ(drawInfo.rotation);
-            Vector2 newPosition = _oldPosition - vector;
+            Vector2 newPosition = oldPosition - vector;
             newPosition = Vector2.Transform(newPosition, matrix);
-            _oldPosition.X = (newPosition + vector).X;
+            oldPosition.X = (newPosition + vector).X;
             float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
             float offsetY2 = progress4 * (player.height / 2f + 10f);
-            _oldPosition.Y += offsetY2;
+            oldPosition.Y += offsetY2;
         }
-
 
         float progress = MathHelper.Clamp(stats.ActualProgress2, 0f, 1f);
         //float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
@@ -142,8 +145,9 @@ sealed class WreathDrawing : PlayerDrawLayer {
             if (progress > 0f && progress < 0.5f) {
                 factor *= 0.1f;
             }
-            _factor = MathHelper.Lerp(_factor, factor, _factor < factor ? 0.1f : 0.025f);
-            factor = _factor * stats.PulseIntensity;
+            ref float mainFactor = ref storage.MainFactor;
+            mainFactor = MathHelper.Lerp(mainFactor, factor, mainFactor < factor ? 0.1f : 0.025f);
+            factor = mainFactor * stats.PulseIntensity;
             wreathSpriteData2.Color = color * factor * opacity * 2f;
             wreathSpriteData2.Scale = factor + 0.475f;
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);

@@ -4,6 +4,7 @@ using MonoMod.RuntimeDetour;
 
 using ReLogic.Content.Sources;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
@@ -16,13 +17,15 @@ using System.Linq;
 using System.Reflection;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA;
 
 sealed class RoA : Mod {
-    public enum NetMessagePacket : byte {
-        EvilLeafPacket = 100,
+    public enum NetMessagePacket : sbyte {
+        EvilLeafPacket = -1,
+        WreathResourceSync = -2
     }
 
     public static readonly string ModSourcePath = Path.Combine(Program.SavePathShared, "ModSources");
@@ -42,16 +45,25 @@ sealed class RoA : Mod {
     public override void HandlePacket(BinaryReader reader, int sender) {
         MultiplayerSystem.HandlePacket(reader, sender);
 
-        NetMessagePacket msgType = (NetMessagePacket)reader.ReadByte();
-        switch (msgType) {
-            case NetMessagePacket.EvilLeafPacket:
-                int identity = reader.ReadInt32();
-                Vector2 twigPosition = reader.ReadVector2();
-                Projectile projectile = Main.projectile.FirstOrDefault(x => x.identity == identity);
-                projectile.As<EvilLeaf>().
-                    SetUpTwigPosition(twigPosition);
-                break;
-        }
+        //NetMessagePacket msgType = (NetMessagePacket)reader.ReadSByte();
+        //switch (msgType) {
+        //    case NetMessagePacket.EvilLeafPacket:
+        //        int identity = reader.ReadInt32();
+        //        Vector2 twigPosition = reader.ReadVector2();
+        //        Projectile projectile = Main.projectile.FirstOrDefault(x => x.identity == identity);
+        //        projectile.As<EvilLeaf>().
+        //            SetUpTwigPosition(twigPosition);
+        //        break;
+        //    case NetMessagePacket.WreathResourceSync:
+        //        byte playerNumber = reader.ReadByte();
+        //        ushort currentResource = reader.ReadUInt16();
+        //        WreathHandler handler = Main.player[playerNumber].GetModPlayer<WreathHandler>();
+        //        handler.ReceivePlayerSync(currentResource);
+        //        if (Main.netMode == NetmodeID.Server) {
+        //            handler.SyncPlayer(-1, sender, false);
+        //        }
+        //        break;
+        //}
     }
 
     public override void PostSetupContent() {

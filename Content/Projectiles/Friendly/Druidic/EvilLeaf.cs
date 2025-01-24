@@ -56,6 +56,7 @@ sealed class EvilLeaf : NatureProjectile {
         writer.Write(_crimson);
         writer.Write(_angle);
         writer.Write(_index);
+        writer.Write(Projectile.rotation);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
@@ -63,6 +64,7 @@ sealed class EvilLeaf : NatureProjectile {
         _crimson = reader.ReadBoolean();
         _angle = reader.ReadSingle();
         _index = reader.ReadInt32();
+        Projectile.rotation = reader.ReadSingle();
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -82,7 +84,7 @@ sealed class EvilLeaf : NatureProjectile {
         _parent ??= Main.projectile.FirstOrDefault(x => x.identity == (int)Projectile.ai[1]);
         Projectile.direction = (int)Projectile.ai[0];
         Projectile parent = _parent;
-        if (Projectile.timeLeft > TIMELEFT - 30 * (_index + 1) - 10) {
+        if (Projectile.timeLeft > TIMELEFT - 30 * (_index + 1) - 10 && Projectile.ai[2] != -100f) {
             Vector2 parentScale = new(parent.ai[0], parent.ai[1]);
             if (Projectile.localAI[0] == 0f) {
                 if (Projectile.owner == Main.myPlayer && Projectile.ai[2] != 0f) {
@@ -138,16 +140,16 @@ sealed class EvilLeaf : NatureProjectile {
             Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], Projectile.localAI[2], Projectile.ai[2] * 0.215f);
         }
         else {
-            _index = 0;
             updateOldPos();
-            if (Projectile.velocity == Vector2.Zero) {
+            if (Projectile.ai[2] != -100f && Projectile.velocity == Vector2.Zero) {
                 if (Projectile.owner == Main.myPlayer) {
                     _ai4 = 0f;
+                    _index = 0;
                     _to = player.GetViableMousePosition();
                     Projectile.ai[1] = Projectile.timeLeft;
+                    Projectile.velocity = Helper.VelocityToPoint(Projectile.position, _to, 0.1f);
                     Projectile.netUpdate = true;
                 }
-                Projectile.velocity = Helper.VelocityToPoint(Projectile.position, _to, 0.1f);
                 for (int i = 0; i < 3; i++) {
                     if (Main.rand.NextBool(2)) {
                         Vector2 dustVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedBy(Main.rand.NextFloat() * ((float)Math.PI * 2f) * 0.25f) * (Main.rand.NextFloat() * 3f);
@@ -172,6 +174,7 @@ sealed class EvilLeaf : NatureProjectile {
                     v7 += vector57;
                     vector57 = vector57.RotatedBy(num177);
                 }
+                Projectile.ai[2] = -100f;
                 _angle2 = num180;
             }
             else {
@@ -197,7 +200,6 @@ sealed class EvilLeaf : NatureProjectile {
             Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, Helper.VelocityAngle(velocity) - MathHelper.PiOver2 * Projectile.ai[0], MathHelper.Min(1f, 1f * _ai4));
             Projectile.position += velocity;
             Projectile.position += Helper.VelocityToPoint(Projectile.position, _to, 1f);
-
         }
         //else if (Projectile.owner != Main.myPlayer) {
         //    updateOldPos();

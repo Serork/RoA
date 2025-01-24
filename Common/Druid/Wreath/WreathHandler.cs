@@ -2,6 +2,8 @@
 
 using RoA.Common.Druid.Claws;
 using RoA.Common.Druid.Forms;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.Items;
@@ -15,6 +17,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -45,6 +48,9 @@ sealed class WreathHandler : ModPlayer {
     private float _currentChangingTime, _currentChangingMult, _stayTime, _extraChangingValueMultiplier;
     private bool _shouldDecrease, _shouldDecrease2;
     private FormInfo _formInfo;
+    private bool _shouldSync;
+
+    public bool HasEnougthToJump;
 
     private int[] _buffTypes = [ModContent.BuffType<WreathCharged>(), ModContent.BuffType<WreathFullCharged>(), ModContent.BuffType<WreathFullCharged2>()];
 
@@ -151,11 +157,26 @@ sealed class WreathHandler : ModPlayer {
         OnWreathReset = null;
     }
 
-    public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
-        if (!Player.IsLocal()) {
-            return;
-        }
+    internal void ReceivePlayerSync(ushort resource) {
+        CurrentResource = resource;
+    }
 
+    public override void CopyClientState(ModPlayer targetCopy) {
+        WreathHandler clone = (WreathHandler)targetCopy;
+        clone.CurrentResource = CurrentResource;
+    }
+
+    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        => MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)Player.whoAmI, CurrentResource), toWho, fromWho);
+
+    public override void SendClientChanges(ModPlayer clientPlayer) {
+        WreathHandler clone = (WreathHandler)clientPlayer;
+        if (CurrentResource != clone.CurrentResource) {
+            SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+        }
+    }
+
+    public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
         OnHitNPC(proj);
         //else {
 
@@ -168,6 +189,10 @@ sealed class WreathHandler : ModPlayer {
         }
         if (!natureProjectile.ShouldIncreaseWreathPoints && !nonDataReset) {
             return;
+        }
+
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new WreathPointsSyncPacket2(Player, Player.GetModPlayer<WreathHandler>().CurrentResource));
         }
 
         ClawsReset(natureProjectile, nonDataReset);
@@ -200,7 +225,7 @@ sealed class WreathHandler : ModPlayer {
                             if (SpecialAttackData.SpawnProjectile != null) {
                                 SpecialAttackData.SpawnProjectile.Invoke(Player);
                             }
-                            else {
+                            else if (Player.whoAmI == Main.myPlayer) {
                                 Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
                             }
                             SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
@@ -414,10 +439,6 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PreUpdate() {
-        if (!Player.IsLocal()) {
-            return;
-        }
-
         AddLight();
 
         MaxResource = 100;
@@ -605,6 +626,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void AddLight() {
+        if (Player.whoAmI != Main.myPlayer) {
+            return;
+        }
+
         float value0 = ActualProgress2;
         float progress = value0;
         float progress2 = MathHelper.Clamp(progress, 0f, 1f);
