@@ -8,7 +8,7 @@ using Terraria.ID;
 namespace RoA.Common.Networking.Packets;
 
 sealed class WreathPointsSyncPacket : NetPacket {
-    public WreathPointsSyncPacket(byte who, ushort resource, ushort tempResource, float changingTimeValue, float currentChangingTime, bool shouldDecrease1, bool shouldDecrease2, float currentChangingMult, ushort increaseValue, float stayTime) {
+    public WreathPointsSyncPacket(byte who, ushort resource, ushort tempResource, float changingTimeValue, float currentChangingTime, bool shouldDecrease1, bool shouldDecrease2, float currentChangingMult, ushort increaseValue, float stayTime, bool startSlowlyIncreasingUntilFull) {
         Writer.Write(who);
         Writer.Write(resource);
         Writer.Write(tempResource);
@@ -19,6 +19,7 @@ sealed class WreathPointsSyncPacket : NetPacket {
         Writer.Write(currentChangingMult);
         Writer.Write(increaseValue);
         Writer.Write(stayTime);
+        Writer.Write(startSlowlyIncreasingUntilFull);
     }
 
     public override void Read(BinaryReader reader, int sender) {
@@ -32,8 +33,9 @@ sealed class WreathPointsSyncPacket : NetPacket {
         float currentChangingMult = reader.ReadSingle();
         ushort increaseValue = reader.ReadUInt16();
         float stayTime = reader.ReadSingle();
+        bool startSlowlyIncreasingUntilFull = reader.ReadBoolean();
         WreathHandler handler = Main.player[who].GetModPlayer<WreathHandler>();
-        handler.ReceivePlayerSync(resource, tempResource, changingTimeValue, currentChangingTime, shouldDecrease1, shouldDecrease2, currentChangingMult, increaseValue, stayTime);
+        handler.ReceivePlayerSync(resource, tempResource, changingTimeValue, currentChangingTime, shouldDecrease1, shouldDecrease2, currentChangingMult, increaseValue, stayTime, startSlowlyIncreasingUntilFull);
         if (Main.netMode == NetmodeID.Server) {
             handler.SyncPlayer(-1, sender, false);
         }

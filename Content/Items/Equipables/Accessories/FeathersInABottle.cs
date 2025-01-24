@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
-using RoA.Common.Networking.Packets;
-using RoA.Common.Networking;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -32,6 +30,14 @@ sealed class FeathersInABottle : NatureItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) => player.GetJumpState<FeathersInABottleExtraJump>().Enable();
 
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.CloudinaBottle)
+            .AddIngredient(ItemID.Feather, 10)
+            .AddTile(TileID.TinkerersWorkbench)
+            .Register();
+    }
+
     internal sealed class FeathersInABottleExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;
 
@@ -42,6 +48,25 @@ sealed class FeathersInABottle : NatureItem {
         public override void UpdateHorizontalSpeeds(Player player) {
             player.runAcceleration *= 2.25f;
             player.maxRunSpeed *= 2f;
+        }
+
+        public override void ShowVisuals(Player player) {
+            int num = player.height;
+            if (player.gravDir == -1f)
+                num = -6;
+
+            var handler = player.GetModPlayer<WreathHandler>();
+            int variant = 0;
+            if (handler.IsPhoenixWreath) {
+                variant = 2;
+            }
+            if (handler.SoulOfTheWoods) {
+                variant = 1;
+            }
+
+            int num2 = Dust.NewDust(new Vector2(player.position.X - 4f, player.position.Y + (float)num), player.width + 8, 4, ModContent.DustType<FeatherDust>(), (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, variant, default(Color), 1f);
+            Main.dust[num2].velocity.X = Main.dust[num2].velocity.X * 0.5f - player.velocity.X * 0.1f;
+            Main.dust[num2].velocity.Y = Main.dust[num2].velocity.Y * 0.5f - player.velocity.Y * 0.3f;
         }
 
         public override void OnStarted(Player player, ref bool playSound) {
@@ -92,9 +117,6 @@ sealed class FeathersInABottle : NatureItem {
                 gore.velocity.X = gore.velocity.X * 0.1f - player.velocity.X * 0.1f;
                 gore.velocity.Y = gore.velocity.Y * 0.1f - player.velocity.Y * 0.05f;
             }
-        }
-
-        public override void ShowVisuals(Player player) {
         }
     }
 }

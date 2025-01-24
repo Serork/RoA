@@ -157,7 +157,7 @@ sealed class WreathHandler : ModPlayer {
         OnWreathReset = null;
     }
 
-    internal void ReceivePlayerSync(ushort resource, ushort tempResource, float changingTimeValue, float currentChangingTime, bool shouldDecrease1, bool shouldDecrease2, float currentChangingMult, ushort increaseValue, float stayTime) {
+    internal void ReceivePlayerSync(ushort resource, ushort tempResource, float changingTimeValue, float currentChangingTime, bool shouldDecrease1, bool shouldDecrease2, float currentChangingMult, ushort increaseValue, float stayTime, bool startSlowlyIncreasingUntilFull) {
         CurrentResource = resource;
         _tempResource = tempResource;
         ChangingTimeValue = changingTimeValue;
@@ -167,6 +167,7 @@ sealed class WreathHandler : ModPlayer {
         _currentChangingMult = currentChangingMult;
         _increaseValue = increaseValue;
         _stayTime = stayTime;
+        StartSlowlyIncreasingUntilFull = startSlowlyIncreasingUntilFull;
     }
 
     public override void CopyClientState(ModPlayer targetCopy) {
@@ -175,7 +176,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-        => MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)Player.whoAmI, CurrentResource, _tempResource, ChangingTimeValue, _currentChangingTime, _shouldDecrease, _shouldDecrease2, _currentChangingMult, _increaseValue, _stayTime), toWho, fromWho);
+        => MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)Player.whoAmI, CurrentResource, _tempResource, ChangingTimeValue, _currentChangingTime, _shouldDecrease, _shouldDecrease2, _currentChangingMult, _increaseValue, _stayTime, StartSlowlyIncreasingUntilFull), toWho, fromWho);
 
     public override void SendClientChanges(ModPlayer clientPlayer) {
         WreathHandler clone = (WreathHandler)clientPlayer;

@@ -42,7 +42,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
-        if (drawInfo.shadow != 0f || !player.active) {
+        if (drawInfo.shadow != 0f || !player.active || player.whoAmI != Main.myPlayer) {
             return;
         }
 
@@ -145,7 +145,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
             if (progress > 0f && progress < 0.5f) {
                 factor *= 0.1f;
             }
-                    ref float mainFactor = ref storage.MainFactor;
+            ref float mainFactor = ref storage.MainFactor;
             mainFactor = MathHelper.Lerp(mainFactor, factor, mainFactor < factor ? 0.1f : 0.025f);
             factor = mainFactor * stats.PulseIntensity;
             wreathSpriteData2.Color = color * factor * opacity * 2f;
