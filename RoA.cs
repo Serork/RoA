@@ -22,7 +22,7 @@ namespace RoA;
 
 sealed class RoA : Mod {
     public enum NetMessagePacket : byte {
-        EvilLeafPacket,
+        EvilLeafPacket = 100,
     }
 
     public static readonly string ModSourcePath = Path.Combine(Program.SavePathShared, "ModSources");

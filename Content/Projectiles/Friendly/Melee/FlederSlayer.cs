@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Utilities;
 
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -13,6 +15,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
@@ -29,6 +32,9 @@ sealed class FlederSlayer : ModProjectile {
     private int _extraRotationDir;
     private bool _released;
     private SlotId _slot;
+    private int _direction;
+    private bool _init, _init2;
+    private int _timeLeft;
 
     public override void SetDefaults() {
         int width = 88; int height = width;
@@ -53,6 +59,8 @@ sealed class FlederSlayer : ModProjectile {
         for (int i = 0; i < count; i++) {
             _trails[i] = new TrailInfo();
         }
+
+        Projectile.netImportant = true;
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
@@ -61,6 +69,9 @@ sealed class FlederSlayer : ModProjectile {
         writer.Write(_charge);
         writer.Write(_extraRotation);
         writer.Write(_extraRotationDir);
+        writer.Write(_direction);
+        writer.Write(_init);
+        writer.Write(_timeLeft);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -69,6 +80,9 @@ sealed class FlederSlayer : ModProjectile {
         _charge = reader.ReadSingle();
         _extraRotation = reader.ReadSingle();
         _extraRotationDir = reader.ReadInt32();
+        _direction = reader.ReadInt32();
+        _init = reader.ReadBoolean();
+        _timeLeft = reader.ReadInt32();
     }
 
     public override void CutTiles() {
@@ -103,6 +117,20 @@ sealed class FlederSlayer : ModProjectile {
         }
     }
 
+    public override void OnSpawn(IEntitySource source) {
+        Player player = Main.player[Projectile.owner];
+        if (Projectile.owner == Main.myPlayer) {
+            if (!_init) {
+                _direction = player.GetViableMousePosition().X > player.Center.X ? 1 : -1;
+                Projectile.Center = player.Center;
+                Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
+                _timeLeft = Projectile.timeLeft;
+                _init = true;
+                Projectile.netUpdate = true;
+            }
+        }
+    }
+
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         player.itemAnimation = player.itemTime = 2;
@@ -124,15 +152,11 @@ sealed class FlederSlayer : ModProjectile {
         int itemAnimationMax = 40;
         int min = itemAnimationMax / 2 - itemAnimationMax / 4;
         Projectile.Opacity = Utils.GetLerpValue(itemAnimationMax, itemAnimationMax - 7, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 7f, Projectile.timeLeft, clamped: true);
-        if (Projectile.localAI[0] == 0f) {
-            Projectile.localAI[0] = 1f;
-            Projectile.spriteDirection = player.direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
-            Projectile.Center = player.Center + new Vector2(10f * player.direction, 0);
-            Projectile.timeLeft = itemAnimationMax;
-        }
+        Projectile.timeLeft = _timeLeft;
         bool lastSlash = Projectile.ai[1] < 3f;
         bool lastSlash2 = Projectile.ai[1] < 13f;
         bool turnOnAvailable = false;
+        bool flag3 = _timeLeft > min;
         if (player.dead || !player.active) {
             Projectile.Kill();
         }
@@ -141,23 +165,26 @@ sealed class FlederSlayer : ModProjectile {
             float dir = (float)(Math.PI / 2.0 + (double)playerDirection * 1.0);
             float offset = MathHelper.Pi / 1.15f * playerDirection;
             SoundStyle style = new SoundStyle(ResourceManager.ItemSounds + "Whisper") { Volume = 1.15f };
-            if (Projectile.timeLeft > min) {
+            if (flag3) {
                 CalculateExtraRotation();
 
                 Projectile.scale = MathHelper.Lerp(Projectile.scale, Projectile.localAI[2] * 1.15f, 0.1f);
 
-                bool flag = player.channel && Projectile.Opacity == 1f;
-                if (flag) {
-                    if (_charge <= 0f) {
-                        _slot = SoundEngine.PlaySound(style, Projectile.Center);
+                if (Projectile.owner == Main.myPlayer) {
+                    bool flag = player.channel && Projectile.Opacity == 1f;
+                    if (flag) {
+                        if (_charge <= 0f) {
+                            _slot = SoundEngine.PlaySound(style, Projectile.Center);
+                        }
+                        _charge += 0.015f;
+                        _charge = Math.Clamp(_charge, 0f, 1f);
                     }
-                    _charge += 0.015f;
-                    _charge = Math.Clamp(_charge, 0f, 1f);
-                }
-                if (flag || ++Projectile.ai[0] < 10f) {
-                    Projectile.timeLeft = min + 5;
+                    if (flag || ++Projectile.ai[0] < 10f) {
+                        _timeLeft = min + 5;
 
-                    player.velocity.X *= 0.975f;
+                        //player.velocity.X *= 0.975f;
+                    }
+                    Projectile.netUpdate = true;
                 }
 
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, (dir - offset).ToRotationVector2() * 50f, 0.1f);
@@ -167,7 +194,7 @@ sealed class FlederSlayer : ModProjectile {
 
                 player.bodyFrame.Y = player.bodyFrame.Height * 4;
             }
-            else if (Projectile.timeLeft == min) {
+            else if (_timeLeft == min) {
                 SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 
                 Projectile.ai[0] = itemAnimationMax;
@@ -180,7 +207,7 @@ sealed class FlederSlayer : ModProjectile {
                 }
 
                 if (Projectile.ai[0] > 30f) {
-                    Projectile.timeLeft = 10;
+                    _timeLeft = Projectile.timeLeft = 10;
 
                     Projectile.ai[0] -= 0.5f;
 
@@ -203,7 +230,7 @@ sealed class FlederSlayer : ModProjectile {
                         Projectile.rotation -= 0.0375f * Helper.EaseInOut3(1f - Projectile.ai[1] / 40f) * playerDirection;
                     }
                     if (lastSlash2 || flag) {
-                        Projectile.timeLeft = 10;
+                        _timeLeft = Projectile.timeLeft = 10;
                     }
                     if (Projectile.ai[1] < 2f) {
                         if (player.controlLeft) {
@@ -289,15 +316,17 @@ sealed class FlederSlayer : ModProjectile {
                                 _released = true;
 
                                 if (_charge > 0.35f) {
-                                    for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
-                                        Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
-                                                                       projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
-                                                                       Helper.VelocityToPoint(player.Center, projectileCenter, 35f * _charge * player.GetTotalAttackSpeed(DamageClass.Melee)),
-                                                                       ModContent.ProjectileType<WaveSlash>(),
-                                                                       (int)((Projectile.damage + Projectile.damage / 2) * (_charge * 1.15f + 0.15f)),
-                                                                       Projectile.knockBack,
-                                                                       Projectile.owner,
-                                                                       Main.rand.NextFloat(1f, 1.75f) * Main.rand.NextFloat(1.1f, 1.8f) * (_charge * 1.15f + 0.15f));
+                                    if (Projectile.owner == Main.myPlayer) {
+                                        for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
+                                            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
+                                                                           projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
+                                                                           Helper.VelocityToPoint(player.Center, projectileCenter, 35f * _charge * player.GetTotalAttackSpeed(DamageClass.Melee)),
+                                                                           ModContent.ProjectileType<WaveSlash>(),
+                                                                           (int)((Projectile.damage + Projectile.damage / 2) * (_charge * 1.15f + 0.15f)),
+                                                                           Projectile.knockBack,
+                                                                           Projectile.owner,
+                                                                           Main.rand.NextFloat(1f, 1.75f) * Main.rand.NextFloat(1.1f, 1.8f) * (_charge * 1.15f + 0.15f));
+                                        }
                                     }
                                     if (Main.netMode != NetmodeID.Server && Main.myPlayer == Projectile.owner) {
                                         string tag = "Fleder Slayer Stomp";
@@ -321,7 +350,17 @@ sealed class FlederSlayer : ModProjectile {
                 Projectile.rotation = Projectile.velocity.ToRotation() + Helper.EaseInOut2(Math.Abs(_extraRotation)) * (_extraRotation != 0f ? Math.Sign(_extraRotation) : 1f);
             }
         }
-        if (!turnOnAvailable) {
+        if (Projectile.owner == Main.myPlayer && flag3 && _timeLeft > 0) {
+            _timeLeft--;
+            Projectile.netUpdate = true;
+        }
+        if (flag3) {
+            player.velocity.X *= 0.975f;
+        }
+        if (!flag3 && _timeLeft > 0) {
+            _timeLeft--;
+        }
+        if (!turnOnAvailable && Projectile.owner == Main.myPlayer) {
             player.direction = Projectile.spriteDirection;
         }
         Projectile.Center += _offset;
@@ -338,6 +377,11 @@ sealed class FlederSlayer : ModProjectile {
         for (int i = Projectile.oldPos.Length - 1; i > 0; i--) {
             Projectile.oldPos[i] = Projectile.oldPos[i - 1];
             Projectile.oldRot[i] = Projectile.oldRot[i - 1];
+        }
+
+        if (_init && !_init2) {
+            player.direction = _direction;
+            _init2 = true;
         }
     }
 
@@ -424,10 +468,10 @@ sealed class FlederSlayer : ModProjectile {
             return false;
         }
         int min = Main.player[Projectile.owner].itemAnimationMax / 2 - Main.player[Projectile.owner].itemAnimationMax / 4;
-        if (Projectile.timeLeft == min + 5 || Projectile.ai[1] == 1f) {
+        if (_timeLeft == min + 5 || Projectile.ai[1] == 1f) {
             return false;
         }
-        return Projectile.timeLeft <= min + 4 || Projectile.ai[1] >= 3f;
+        return _timeLeft <= min + 4 || Projectile.ai[1] >= 3f;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -611,24 +655,33 @@ sealed class FlederSlayer : ModProjectile {
                 20f * Projectile.scale, new Utils.TileActionAttempt(DelegateMethods.CutTiles));
         }
 
-        private float _Opacity = Main.rand.NextFloat(0.7f, 1f);
-
         public override void AI() {
-            if (Main.rand.NextBool(5)) {
-                Projectile.timeLeft--;
-                if (Main.rand.NextBool(10)) {
-                    Projectile.timeLeft--;
+            if (Projectile.owner == Main.myPlayer) {
+                if (Main.rand.NextBool(5)) {
+                    Projectile.ai[2]--;
+                    if (Main.rand.NextBool(10)) {
+                        Projectile.ai[2]--;
+                    }
+                    Projectile.netUpdate = true;
                 }
             }
-            if (Projectile.localAI[0] == 0f) {
-                Projectile.scale = Projectile.ai[0];
-                Projectile.localAI[0] = 1f;
+            Projectile.scale = Projectile.ai[0];
+            if (Projectile.owner == Main.myPlayer && Projectile.ai[1] == 0f) {
+                Projectile.ai[1] = Main.rand.NextFloat(0.7f, 1f);
+                Projectile.ai[2] = Projectile.timeLeft;
+                Projectile.netUpdate = true;
             }
-            Projectile.Opacity = Utils.GetLerpValue(70f, 65f, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 40f, Projectile.timeLeft, clamped: true) * _Opacity;
+            if (Projectile.ai[2] > 0f) {
+                Projectile.ai[2]--;
+            }
+            else if (Projectile.ai[1] != 0f) {
+                Projectile.Kill();
+            }
+            Projectile.Opacity = Utils.GetLerpValue(70f, 65f, Projectile.ai[2], clamped: true) * Utils.GetLerpValue(0f, 40f, Projectile.ai[2], clamped: true) * Projectile.ai[1];
             Projectile.scale -= Main.rand.NextFloat(0.001f, 0.0035f);
             Projectile.scale *= Main.rand.NextFloat(0.985f, 0.995f);
-            if (Projectile.timeLeft <= 55) {
-                Projectile.timeLeft--;
+            if (Projectile.ai[2] <= 55) {
+                Projectile.ai[2]--;
             }
             Projectile.position += Vector2.Normalize(Projectile.velocity) * 2f;
             Projectile.direction = Projectile.velocity.X > 0f ? 1 : -1;

@@ -261,7 +261,7 @@ abstract class BaseRodProjectile : NatureProjectile {
             if (!ShouldBeActiveAfterShoot()) {
                 ShouldBeActive = false;
             }
-            byte timeAfterShootToExist = TimeAfterShootToExist(Owner);
+            byte timeAfterShootToExist = (byte)(Item.IsEmpty() ? 0 : TimeAfterShootToExist(Owner));
             if (ShouldWaitUntilProjDespawns()) {
                 if (timeAfterShootToExist != 0) {
                     _leftTimeToReuse = timeAfterShootToExist;
