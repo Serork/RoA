@@ -183,12 +183,10 @@ sealed class DruidicPrefix(string name,
 				IsModifierBad = _potentialDamage < 0
 			};
 		}
-		if (_potentialDamageMult != 1f) {
+		if (_potentialDamageMult != 1f && handler.HasPotentialDamage()) {
             float value = _potentialDamageMult;
-            if (!handler.HasPotentialDamage()) {
-                value += _druidDamageMult;
-                value /= 2f;
-            }
+            //value += _druidDamageMult;
+            //value /= 2f;
             yield return new TooltipLine(Mod, "ExtraDruidPotentialDamageMult", GetLocalizedText("DruidPotentialDamageModifierMult").Format(value * 100f - 100f)) {
 				IsModifier = true,
 				IsModifierBad = value < 1f

@@ -64,9 +64,12 @@ sealed class FeathersInABottle : NatureItem {
                 variant = 1;
             }
 
-            int num2 = Dust.NewDust(new Vector2(player.position.X - 4f, player.position.Y + (float)num), player.width + 8, 4, ModContent.DustType<FeatherDust>(), (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, variant, default(Color), 1f);
-            Main.dust[num2].velocity.X = Main.dust[num2].velocity.X * 0.5f - player.velocity.X * 0.1f;
-            Main.dust[num2].velocity.Y = Main.dust[num2].velocity.Y * 0.5f - player.velocity.Y * 0.3f;
+            if (Main.rand.NextBool()) {
+                int num2 = Dust.NewDust(new Vector2(player.position.X - 4f, player.position.Y + (float)num), player.width + 8, 4, ModContent.DustType<FeatherDust>(), (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, variant, default(Color), 0.8f + Main.rand.NextFloat(0.2f));
+                Main.dust[num2].velocity.X = Main.dust[num2].velocity.X * 0.5f - player.velocity.X * 0.1f;
+                Main.dust[num2].velocity.Y = Main.dust[num2].velocity.Y * 0.5f - player.velocity.Y * 0.3f;
+                Main.dust[num2].customData = Main.rand.NextFloatRange(50f);
+            }
         }
 
         public override void OnStarted(Player player, ref bool playSound) {
@@ -86,7 +89,7 @@ sealed class FeathersInABottle : NatureItem {
             if (handler.SoulOfTheWoods) {
                 variant = 1;
             }
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 5; i++) {
                 Dust dust = Dust.NewDustDirect(player.position + new Vector2(-34f, offsetY), 102, 32, ModContent.DustType<FeatherDust>(), -player.velocity.X * 0.5f, player.velocity.Y * 0.5f, variant, 
                     default, 1f);
                 dust.velocity = dust.velocity * 0.5f - player.velocity * new Vector2(0.1f, 0.3f);
