@@ -8,6 +8,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -19,8 +20,10 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     private const int MAX_TIMELEFT = 180;
     private const float EXTRA = 2f;
 
-    private bool _offset;
     private int _direction;
+    private float _offsetY;
+    private float _currentLength;
+    private bool _init;
 
     public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpike>()).Texture;
     public static string TipTexture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpikeTip>()).Texture;
@@ -52,55 +55,62 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-        return Collision.CheckAABBvAABBCollision(new Vector2(Projectile.position.X, Projectile.ai[2] - Projectile.localAI[0]), new Vector2(texture.Width, Projectile.localAI[0] + texture.Height * EXTRA), targetHitbox.Location.ToVector2(), targetHitbox.Size());
-    }
-
-    protected override void SafeOnSpawn(IEntitySource source) {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-        Offset();
-        Projectile.localAI[0] = Projectile.localAI[1] = texture.Height * Length;
-        Projectile.ai[2] = Projectile.position.Y;
-        if (Temporary) {
-            Projectile.localAI[2] = Length * 10;
-            Projectile.localAI[2] = Projectile.localAI[2] * (1f + Projectile.ai[1] - 1f);
-            Projectile.timeLeft = (int)Projectile.localAI[2];
-        }
-        Main.rand.NextDouble();
-        Main.rand.NextBool();
-        _direction = Main.rand.NextBool() ? -1 : 1;
-        Projectile.netUpdate = true;
+        return Collision.CheckAABBvAABBCollision(new Vector2(Projectile.position.X, Projectile.ai[2] - _currentLength), new Vector2(texture.Width, _currentLength + texture.Height * EXTRA), targetHitbox.Location.ToVector2(), targetHitbox.Size());
     }
 
     public override void AI() {
-        float value = 1f + Projectile.localAI[1] / 10f;
-        float min = MathHelper.Min(10f, Projectile.localAI[2] / 3f);
-        if (Projectile.timeLeft > Projectile.localAI[2] - 6f && _offset) {
+        if (!_init) {
+            Offset();
+            Projectile.ai[2] = Projectile.position.Y;
+            if (Temporary) {
+                Projectile.localAI[0] = Length * 10;
+                Projectile.localAI[0] *= (1f + Projectile.ai[1] - 1f);
+            }
+            _currentLength = _offsetY = 22 * Length;
+            Main.rand.NextDouble();
+            Main.rand.NextBool();
+            _direction = Main.rand.NextBool() ? -1 : 1;
+            Projectile.localAI[1] = Projectile.timeLeft = (int)Projectile.localAI[0];
+
+            //Point point = new Vector2(Projectile.Center.X - Projectile.width * 2f, Projectile.Center.Y - 20f).ToTileCoordinates();
+            //Point point2 = new Vector2(Projectile.Center.X + Projectile.width * 2f, Projectile.Center.Y + 20f).ToTileCoordinates();
+            //ElderwoodClaws.SpawnGroundDusts(point, point2, Projectile.ai[0] * 5f);
+
+            _init = true;
+        }
+
+        if (Projectile.localAI[1] > Projectile.localAI[0] - 6f) {
             Point point = new Vector2(Projectile.Center.X - Projectile.width * 2f, Projectile.Center.Y - 20f).ToTileCoordinates();
             Point point2 = new Vector2(Projectile.Center.X + Projectile.width * 2f, Projectile.Center.Y + 20f).ToTileCoordinates();
             ElderwoodClaws.SpawnGroundDusts(point, point2, Projectile.ai[0] * 5f);
         }
-        if (Projectile.timeLeft > (Projectile.localAI[2] - min)) {
-            if (Projectile.localAI[0] > 0f) {
-                Projectile.localAI[0] -= value;
+
+        float value = 1f + _offsetY / 10f;
+        float min = MathHelper.Min(10f, Projectile.localAI[0] / 3f);
+        if (Projectile.localAI[1] > (Projectile.localAI[0] - min)) {
+            if (_currentLength > 0f) {
+                _currentLength -= value;
             }
             Offset();
         }
-        else if (Projectile.timeLeft < min) {
-            if (Projectile.localAI[0] < Projectile.localAI[1]) {
-                Projectile.localAI[0] += value;
+        else if (Projectile.localAI[1] < min) {
+            if (_currentLength < _offsetY) {
+                _currentLength += value;
             }
         }
-        Projectile.position.Y = Projectile.ai[2] + Projectile.localAI[0];
+        Projectile.position.Y = Projectile.ai[2] + _currentLength;
+        if (Projectile.localAI[1] > 0f) {
+            Projectile.localAI[1]--;
+        }
     }
 
     private void Offset() {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+        int width = 30;
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             int attempts = 10;
-            while (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI &&
-                   Projectile.position.X < projectile.position.X + texture.Width && Projectile.position.X > projectile.position.X - texture.Width) {
-                Projectile.position.X -= (texture.Width + 2) * (Projectile.position - Projectile.GetOwnerAsPlayer().position).X.GetDirection();
-                _offset = true;
+            while (projectile.owner == Projectile.owner && projectile.type == Type && projectile.identity != Projectile.identity &&
+                    Projectile.position.X < projectile.position.X + width && Projectile.position.X > projectile.position.X - width) {
+                Projectile.position.X -= (width + 2) * (Projectile.position - Projectile.GetOwnerAsPlayer().position).X.GetDirection();
                 if (--attempts <= 0) {
                     break;
                 }

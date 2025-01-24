@@ -166,6 +166,10 @@ abstract class BaseRodProjectile : NatureProjectile {
 
     public sealed override bool PreDraw(ref Color lightColor) {
         Texture2D texture = HeldItemTexture;
+        if (texture == null) {
+            return false;
+        }
+
         Rectangle sourceRectangle = texture.Bounds;
         Vector2 position = Projectile.Center - Main.screenPosition /*+ new Vector2(0f, Projectile.gfxOffY - Owner.gfxOffY)*//* + GravityOffset*/;
         float offsetY = 5f * Owner.gravDir;

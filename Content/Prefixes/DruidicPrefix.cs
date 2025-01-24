@@ -88,7 +88,6 @@ sealed class DruidicPrefix(string name,
 	internal readonly float _fillingRateMult = fillingRateMult;
 	internal readonly bool _shouldApplyTipsy = shouldApplyTipsy;
 
-
     private static LocalizedText GetLocalizedText(string name) => Language.GetOrRegister(LOCALIZATION + name);
 
     public override LocalizedText DisplayName => GetLocalizedText(_name);
