@@ -157,8 +157,16 @@ sealed class WreathHandler : ModPlayer {
         OnWreathReset = null;
     }
 
-    internal void ReceivePlayerSync(ushort resource) {
+    internal void ReceivePlayerSync(ushort resource, ushort tempResource, float changingTimeValue, float currentChangingTime, bool shouldDecrease1, bool shouldDecrease2, float currentChangingMult, ushort increaseValue, float stayTime) {
         CurrentResource = resource;
+        _tempResource = tempResource;
+        ChangingTimeValue = changingTimeValue;
+        _currentChangingTime = currentChangingTime;
+        _shouldDecrease = shouldDecrease1;
+        _shouldDecrease2 = shouldDecrease2;
+        _currentChangingMult = currentChangingMult;
+        _increaseValue = increaseValue;
+        _stayTime = stayTime;
     }
 
     public override void CopyClientState(ModPlayer targetCopy) {
@@ -167,12 +175,13 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-        => MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)Player.whoAmI, CurrentResource), toWho, fromWho);
+        => MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)Player.whoAmI, CurrentResource, _tempResource, ChangingTimeValue, _currentChangingTime, _shouldDecrease, _shouldDecrease2, _currentChangingMult, _increaseValue, _stayTime), toWho, fromWho);
 
     public override void SendClientChanges(ModPlayer clientPlayer) {
         WreathHandler clone = (WreathHandler)clientPlayer;
-        if (CurrentResource != clone.CurrentResource) {
+        if (CurrentResource != clone.CurrentResource || _shouldSync) {
             SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+            _shouldSync = false;
         }
     }
 
@@ -188,10 +197,6 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
-        if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new WreathPointsSyncPacket2(Player, Player.GetModPlayer<WreathHandler>().CurrentResource));
-        }
-
         IncreaseResourceValue(0f);
         MakeDustsOnHit();
     }
@@ -202,10 +207,6 @@ sealed class WreathHandler : ModPlayer {
         }
         if (!natureProjectile.ShouldIncreaseWreathPoints && !nonDataReset) {
             return;
-        }
-
-        if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new WreathPointsSyncPacket2(Player, Player.GetModPlayer<WreathHandler>().CurrentResource));
         }
 
         ClawsReset(natureProjectile, nonDataReset);
@@ -256,6 +257,8 @@ sealed class WreathHandler : ModPlayer {
         _shouldDecrease = _shouldDecrease2 = false;
         _increaseValue = 0;
         ResetChangingValue();
+
+        _shouldSync = true;
 
         StartSlowlyIncreasingUntilFull = false;
 
@@ -467,6 +470,8 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false) {
+        _shouldSync = true;
+
         if (_shouldDecrease2) {
             _shouldDecrease = _shouldDecrease2 = false;
         }
@@ -531,6 +536,7 @@ sealed class WreathHandler : ModPlayer {
         if (StartSlowlyIncreasingUntilFull) {
             value2 *= 0.15f;
         }
+        _shouldSync = true;
         _currentChangingTime -= value2;
         if (_shouldDecrease) {
             CurrentResource = (ushort)(_tempResource - _tempResource * ChangingProgress);
