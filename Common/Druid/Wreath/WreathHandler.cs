@@ -183,6 +183,19 @@ sealed class WreathHandler : ModPlayer {
         //}
     }
 
+    public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
+        if (!item.IsADruidicWeapon()) {
+            return;
+        }
+
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new WreathPointsSyncPacket2(Player, Player.GetModPlayer<WreathHandler>().CurrentResource));
+        }
+
+        IncreaseResourceValue(0f);
+        MakeDustsOnHit();
+    }
+
     public void OnHitNPC(Projectile proj, bool nonDataReset = false) {
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;

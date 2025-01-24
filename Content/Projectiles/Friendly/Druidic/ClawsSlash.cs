@@ -97,7 +97,12 @@ class ClawsSlash : NatureProjectile {
             if (ShouldFullBright) {
                 color = Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat());
             }
-            color.A = 50;
+            color.A = 25;
+            if (!ShouldFullBright) {
+                Point pos = target.Center.ToTileCoordinates();
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.25f, 1f);
+                color *= brightness;
+            }
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
             velocity = angle.ToRotationVector2() * velocity * 0.5f;
             int layer = VisualEffectLayer.ABOVENPCS;

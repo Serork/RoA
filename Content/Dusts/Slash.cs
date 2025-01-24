@@ -7,7 +7,7 @@ namespace RoA.Content.Dusts;
 sealed class Slash : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
 		Color color = dust.color;
-		color.A = 100;
+		color.A = 50;
 
 		bool flag = dust.customData is float v && v == 1f;
 		if (!flag) {
