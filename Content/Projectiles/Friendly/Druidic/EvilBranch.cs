@@ -68,6 +68,7 @@ sealed class EvilBranch : NatureProjectile {
 
     private TwigPartInfo _part1Info, _part2Info;
     private int _direction;
+    private bool _init;
 
     private List<LeafInfo> _leavesInfo = [];
 
@@ -162,29 +163,31 @@ sealed class EvilBranch : NatureProjectile {
         }
     }
 
-    protected override void SafeOnSpawn(IEntitySource source) {
-        ScaleX = 1.6f;
-        ScaleY = 0.4f;
-
-        Player player = Main.player[Projectile.owner];
-        if (player.whoAmI == Main.myPlayer) {
-            _direction = Main.rand.NextBool().ToDirectionInt();
-
-            GetPos(player, out Point point, out Point point2);
-            Projectile.Center = point2.ToWorldCoordinates();
-            Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
-            float maxRadians = 0.375f;
-            Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
-
-            _part1Info = new();
-            _part2Info = new();
-            SetUpLeafPoints();
-
-            Projectile.netUpdate = true;
-        }
-    }
-
     public override void AI() {
+        if (!_init) {
+            ScaleX = 1.6f;
+            ScaleY = 0.4f;
+
+            Player player = Main.player[Projectile.owner];
+            if (player.whoAmI == Main.myPlayer) {
+                _direction = Main.rand.NextBool().ToDirectionInt();
+
+                GetPos(player, out Point point, out Point point2);
+                Projectile.Center = point2.ToWorldCoordinates();
+                Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
+                float maxRadians = 0.375f;
+                Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
+
+                _part1Info = new();
+                _part2Info = new();
+                SetUpLeafPoints();
+
+                Projectile.netUpdate = true;
+            }
+
+            _init = true;
+        }
+
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
@@ -213,11 +216,8 @@ sealed class EvilBranch : NatureProjectile {
             }
         }
 
-        if (Projectile.owner == Main.myPlayer) {
-            ScaleX = MathHelper.SmoothStep(ScaleX, 1f, 0.5f);
-            ScaleY = MathHelper.SmoothStep(ScaleY, 1f, 0.5f);
-            Projectile.netUpdate = true;
-        }
+        ScaleX = MathHelper.SmoothStep(ScaleX, 1f, 0.5f);
+        ScaleY = MathHelper.SmoothStep(ScaleY, 1f, 0.5f);
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);

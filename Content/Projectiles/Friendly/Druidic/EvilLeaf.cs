@@ -143,13 +143,13 @@ sealed class EvilLeaf : NatureProjectile {
             updateOldPos();
             if (Projectile.ai[2] != -100f && Projectile.velocity == Vector2.Zero) {
                 if (Projectile.owner == Main.myPlayer) {
-                    _ai4 = 0f;
-                    _index = 0;
                     _to = player.GetViableMousePosition();
-                    Projectile.ai[1] = Projectile.timeLeft;
-                    Projectile.velocity = Helper.VelocityToPoint(Projectile.position, _to, 0.1f);
                     Projectile.netUpdate = true;
                 }
+                _ai4 = 0f;
+                _index = 0;
+                Projectile.ai[1] = Projectile.timeLeft;
+                Projectile.velocity = Helper.VelocityToPoint(Projectile.position, _to, 0.1f);
                 for (int i = 0; i < 3; i++) {
                     if (Main.rand.NextBool(2)) {
                         Vector2 dustVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedBy(Main.rand.NextFloat() * ((float)Math.PI * 2f) * 0.25f) * (Main.rand.NextFloat() * 3f);
