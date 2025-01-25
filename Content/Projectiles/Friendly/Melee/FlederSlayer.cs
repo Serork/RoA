@@ -512,9 +512,7 @@ sealed class FlederSlayer : ModProjectile {
         float charge = Math.Clamp(_charge - 0.5f + _charge * 1.5f, 0f, 1f);
         float osc = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10f);
         Vector2 offset = -new Vector2(15f * (Projectile.localAI[2] - 0.5f), 0f).RotatedBy(Projectile.rotation);
-        Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) +
-            offset
-            ;
+        Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) + offset;
         if (flag) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(glowBladeTexture2D,
