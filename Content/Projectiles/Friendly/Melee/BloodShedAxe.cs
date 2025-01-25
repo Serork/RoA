@@ -237,10 +237,12 @@ sealed class BloodshedAxe : ModProjectile {
             }
         }
 
-        Rectangle rectangle = Utils.CenteredRectangle(
-            Projectile.Center + (Projectile.rotation * player.gravDir ).ToRotationVector2() * 60f * Projectile.scale, 
+        for (float i = 0f; i <= MathHelper.PiOver4; i += MathHelper.PiOver2) {
+            Rectangle rectangle = Utils.CenteredRectangle(
+            Projectile.Center + (Projectile.rotation * player.gravDir + i + MathHelper.PiOver4 * player.direction / 4f).ToRotationVector2() * 60f * Projectile.scale,
             new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
-        Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+            Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+        }
 
         if (player.dead || !player.active) {
             Projectile.Kill();

@@ -136,10 +136,16 @@ sealed class FlederSlayer : ModProjectile {
     public override void AI() {
         Player player = Main.player[Projectile.owner];
 
-        Rectangle rectangle = Utils.CenteredRectangle(
-            Projectile.Center + (Projectile.rotation * player.gravDir).ToRotationVector2() * 100f * Projectile.scale,
-            new Vector2(30f * Projectile.scale, 30f * Projectile.scale));
-        Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+        if (CanDamageInternal()) {
+            int count = 3;
+            for (int i = 0; i < count; i++) {
+                Rectangle rectangle = Utils.CenteredRectangle(Projectile.Center + (Projectile.rotation * player.gravDir).ToRotationVector2() * (i + 1) * (100f / count) * Projectile.scale,
+                new Vector2(40f * Projectile.scale, 40f * Projectile.scale));
+                if (Main.rand.NextBool()) {
+                    Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+                }
+            }
+        }
 
         player.itemAnimation = player.itemTime = 2;
         player.heldProj = player.itemAnimationMax;
@@ -468,10 +474,7 @@ sealed class FlederSlayer : ModProjectile {
     public override bool ShouldUpdatePosition()
         => false;
 
-    public override bool? CanDamage() {
-        //if (Main.player[Projectile.owner].channel) {
-        //    return false;
-        //}
+    private bool CanDamageInternal() {
         if (_released) {
             return false;
         }
@@ -480,6 +483,10 @@ sealed class FlederSlayer : ModProjectile {
             return false;
         }
         return _timeLeft <= min + 4 || Projectile.ai[1] >= 3f;
+    }
+
+    public override bool? CanDamage() {
+        return CanDamageInternal();
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -667,9 +674,9 @@ sealed class FlederSlayer : ModProjectile {
 
         public override void AI() {
             Rectangle rectangle = Utils.CenteredRectangle(
-           Projectile.position - Vector2.UnitY * (30f * Projectile.scale),
-            new Vector2(30f * Projectile.scale, 100f * Projectile.scale));
-                    Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+            Projectile.position - Vector2.UnitY * (20f * Projectile.scale),
+            new Vector2(30f * Projectile.scale, 90f * Projectile.scale));
+            Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
 
             if (Projectile.owner == Main.myPlayer) {
                 if (Main.rand.NextBool(5)) {
