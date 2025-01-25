@@ -22,201 +22,6 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 
-sealed class BeaconTE : ModTileEntity {
-    private enum AnimationState : byte {
-        Animation1,
-        Animation2,
-        Animation3
-    }
-
-    private AnimationState _state = AnimationState.Animation1;
-    private float _animationTimer;
-
-    public bool IsUsed { get; private set; }
-    public Vector2 Scale { get; private set; }
-    public Vector2 OffsetPosition { get; private set; }
-
-    public void UseAnimation() {
-        if (IsUsed) {
-            return;
-        }
-
-        ResetAnimation();
-
-        IsUsed = true;
-    }
-
-    public void ResetAnimation() {
-        IsUsed = false;
-        Scale = new Vector2(0.2f, 1f);
-        OffsetPosition = Vector2.Zero;
-        _state = AnimationState.Animation1;
-        _animationTimer = 0f;
-    }
-
-    public override void Update() {
-        int i = Position.X;
-        int j = Position.Y - 2;
-        if (Beacon.HasGemInIt(i, j)) {
-            Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Beacon.GetEffectsColor(i, j).ToVector3());
-        }
-
-        UpdateAnimation(() => {
-            if (WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>())) {
-                int gemType = Beacon.GetGemDropID(i, j);
-                bool flag =
-                    gemType == ItemID.Diamond ? Main.rand.NextBool(33) :
-                    (gemType == ItemID.Ruby || gemType == ItemID.Amber) ? Main.rand.NextChance(0.66) :
-                    gemType == ItemID.Emerald ? Main.rand.NextChance(0.8) :
-                    gemType == ItemID.Sapphire ? Main.rand.NextChance(0.9) :
-                    gemType != ItemID.Topaz || Main.rand.NextChance(0.95);
-                if (flag) {
-                    Beacon.ActionWithGem(i, j, true, false, true);
-                }
-            }
-        });
-    }
-
-    public void UpdateAnimation(Action onEnd) {
-        if (!IsUsed) {
-            return;
-        }
-
-        float num = 1f;
-        _animationTimer += num;
-
-        float time = num;
-        if (_animationTimer < time) {
-            return;
-        }
-
-        float animationTimer = _animationTimer - time;
-        switch (_state) {
-            case AnimationState.Animation1:
-                time = 20f;
-                if (animationTimer < time) {
-                    Scale = Vector2.Lerp(Scale, new Vector2(1.25f, 0.5f), animationTimer / time);
-                }
-                else {
-                    _state = AnimationState.Animation2;
-                    _animationTimer -= time;
-                }
-                break;
-            case AnimationState.Animation2:
-                time = 10f;
-                if (animationTimer < time) {
-                    Scale = Vector2.Lerp(Scale, new Vector2(0.85f, 1.25f) * 1.1f, animationTimer / time);
-                }
-                else {
-                    _state = AnimationState.Animation3;
-                    _animationTimer -= time;
-                }
-                break;
-            case AnimationState.Animation3:
-                time = 30f;
-                if (animationTimer < time) {
-                    if (animationTimer < time / 2f + time / 3f) {
-                        OffsetPosition = Vector2.Lerp(OffsetPosition, Main.rand.NextVector2(-5f, 0f, 5f, 10f), 0.75f);
-                    }
-                    else {
-                        OffsetPosition = Vector2.Lerp(OffsetPosition, Vector2.Zero, 0.25f);
-                    }
-                }
-                else {
-                    OffsetPosition = Vector2.Zero;
-                    float time2 = 15f;
-                    Scale = Vector2.Lerp(Scale, new Vector2(0.2f, 1f), (animationTimer - time) / time2);
-                    if (animationTimer >= time + time2) {
-                        ResetAnimation();
-                        onEnd();
-                    }
-                }
-                break;
-        }
-    }
-
-    public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
-        if (Main.netMode == NetmodeID.MultiplayerClient) {
-            NetMessage.SendTileSquare(Main.myPlayer, i, j);
-            NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type);
-
-            return -1;
-        }
-
-        return Place(i, j);
-    }
-
-    //public override void OnKill() => DropGem(Main.LocalPlayer, (int)(Position.X * 16f), (int)((Position.Y - 2) * 16f + 8f));
-
-    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
-
-    public override bool IsTileValidForEntity(int i, int j) => WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>());
-
-
-    //public static readonly short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
-
-    //public enum BeaconVariant : byte {
-    //    None,
-    //    Amethyst,
-    //    Topaz,
-    //    Sapphire,
-    //    Emerald,
-    //    Ruby,
-    //    Diamond,
-    //    Amber,
-    //    Length
-    //}
-
-    //private BeaconVariant _variant = BeaconVariant.None;
-
-    //public bool HasGemInIt => GetItemID(num3: 0) != -1;
-
-    //public void RemoveGem() => _variant = BeaconVariant.None;
-
-    //public void DropGem(Player player, int x, int y) {
-    //    if (!HasGemInIt) {
-    //        return;
-    //    }
-
-    //    int num = Item.NewItem(player.GetSource_Misc("frombeacon"), x, y, 18, 18, GetItemID());
-    //    if (Main.netMode == NetmodeID.MultiplayerClient) {
-    //        NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num);
-    //    }
-    //}
-
-    //public void InsertGem(short gemType) {
-    //    for (int i = 0; i < Gems.Length; i++) {
-    //        if (Gems[i] == gemType) {
-    //            _variant = (BeaconVariant)(i + 1);
-    //        }
-    //    }
-    //}
-
-    //public byte GetVariant(bool forDrawing = true, int num = 0) {
-    //    bool flag = forDrawing && _variant == BeaconVariant.None;
-    //    return Math.Max((byte)((byte)(flag ? BeaconVariant.Length : _variant) + (flag ? -1 : 0) + num), (byte)0);
-    //}
-
-    //public int GetItemID(bool forDrawing = true, int num2 = -1, int num3 = -1) {
-    //    int num = num2 != -1 ? num2 : GetVariant(forDrawing, num3);
-    //    if (_variant != BeaconVariant.None && num == 7) {
-    //        num = 6;
-    //    }
-    //    return num switch {
-    //        >= 0 and <= 6 => Gems[num],
-    //        _ => -1,
-    //    };
-    //}
-
-    //public override void SaveData(TagCompound tag) {
-    //    tag[nameof(BeaconTE)] = (byte)_variant;
-    //}
-
-    //public override void LoadData(TagCompound tag) {
-    //    _variant = (BeaconVariant)tag.Get<byte>(nameof(BeaconTE));
-    //}
-}
-
 sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     private static int _variantToShow;
 
@@ -298,6 +103,14 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         TileObjectData.addTile(Type);
     }
 
+    public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<BeaconTE>().Place(i, j);
+
+    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
+        if (!fail) {
+            ModContent.GetInstance<BeaconTE>().Kill(i, j);
+        }
+    }
+
     void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
         int i = pos.X;
         int j = pos.Y;
@@ -315,7 +128,6 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
             drawPos.Y -= 4f;
             Color color = GetEffectsColor(i, j).MultiplyRGB(new Color(250, 250, 250));
             Vector2 scale = beaconTE.IsUsed ? beaconTE.Scale : new(0.2f, 1f);
-            //color *= MathHelper.Clamp(Lighting.Brightness(i, j), 0.25f, 1f);
             for (float k = -MathHelper.Pi; k <= MathHelper.Pi; k += MathHelper.PiOver2) {
                 spriteBatch.Draw(texture, drawPos + zero + beaconTE.OffsetPosition,
                     null, color.MultiplyAlpha(Helper.Wave(0.3f, 0.9f, 4f, k)) * 0.3f, 0f, new(texture.Width / 2f, texture.Height), scale * Helper.Wave(0.85f, 1.15f, speed: 2f), SpriteEffects.None, 0f);
@@ -397,16 +209,6 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
             return;
         }
         Color color = new(255, 240, 20);
-        //if (!player.IsTileTypeInInteractionRange(597, TileReachCheckSettings.Pylons)) {
-        //    string key = "Mods.RoA.TooFar";
-        //    if (Main.netMode == NetmodeID.SinglePlayer) {
-        //        Main.NewText(Language.GetTextValue(key), color);
-        //    }
-        //    else {
-        //        ChatHelper.SendChatMessageToClient(NetworkText.FromKey(key), color, player.whoAmI);
-        //    }
-        //    return;
-        //}
         if (!player.HasItemInInventoryOrOpenVoidBag(GetLargeGemItemID(i, j))) {
             string key = "Mods.RoA.NoNeededLargeGem";
             if (Main.netMode == NetmodeID.SinglePlayer) {
@@ -425,41 +227,15 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
         void dusts(Rectangle effectRect, int num4) {
             for (int k = 0; k < 50; k++) {
-                Microsoft.Xna.Framework.Color color = new Color(136, 219, 227);
+                Color color = new Color(136, 219, 227);
                 int num5 = Main.rand.Next(4);
                 switch (num5) {
                     case 0:
                     case 1:
                         color = GetEffectsColor(i, j);
-                        //switch (num4) {
-                        //    case 1:
-                        //        color = Color.Purple;
-                        //        break;
-                        //    case 2:
-                        //        color = Color.Yellow;
-                        //        break;
-                        //    case 3:
-                        //        color = Color.Blue;
-                        //        break;
-                        //    case 4:
-                        //        color = Color.Green;
-                        //        break;
-                        //    case 5:
-                        //        color = Color.Red;
-                        //        break;
-                        //    case 6:
-                        //        color = Color.GhostWhite;
-                        //        break;
-                        //    case 7:
-                        //        color = Color.Orange;
-                        //        break;
-                        //}
                         break;
-                    //case 2:
-                    //    color = Microsoft.Xna.Framework.Color.Yellow;
-                    //    break;
                     case 3:
-                        color = Microsoft.Xna.Framework.Color.White;
+                        color = Color.White;
                         break;
                 }
 
@@ -479,15 +255,9 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         SoundEngine.PlaySound(SoundID.Item6, player.position);
         SoundEngine.PlaySound(SoundID.Item8, player.position);
         dusts(player.getRect(), style);
-        //if (flag) {
-        //    //ActionWithGem(i, j, true, false, true);
-        //}
-        //else {
-        //    BeaconTE beaconTE = GetTE(i, j);
-        //    beaconTE?.UseAnimation();
-        //}
         BeaconTE beaconTE = GetTE(i, j);
         beaconTE?.UseAnimation();
+
         if (Main.netMode == NetmodeID.Server) {
             RemoteClient.CheckSection(player.whoAmI, player.position);
         }
@@ -553,9 +323,9 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                 return new Color(223, 230, 238);
             case 6:
                 return new Color(207, 101, 0);
+            default:
+                return new Color(238, 51, 53);
         }
-
-        throw new InvalidOperationException();
     }
 
     public static LocalizedText GetMapText(int i, int j) {
@@ -576,9 +346,9 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                 return Lang.GetItemName(ItemID.Diamond);
             case 6:
                 return Lang.GetItemName(ItemID.Amber);
+            default:
+                return Lang.GetItemName(ItemID.Ruby);
         }
-
-        throw new InvalidOperationException();
     }
 
     public override ushort GetMapOption(int i, int j) {
@@ -618,10 +388,6 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
-    public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<BeaconTE>().Place(i, j);
-
-    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<BeaconTE>().Kill(i, j);
-
     private static BeaconTE GetTE(int i, int j) {
         BeaconTE foundTE = null;
         int j2 = 0;
@@ -651,8 +417,6 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         return true;
     }
 
-    //public static int VariantToShow => _variantToShow;
-
     public static void UpdateVariants() {
         double perTime = 50.0;
         if (Main.timeForVisualEffects % perTime == 0.0) {
@@ -662,33 +426,6 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
             }
         }
     }
-
-    //public static int GetGemItemID(int i, int j) {
-    //    BeaconTE te = GetTE(i, j);
-    //    if (te is null) {
-    //        return -1;
-    //    }
-
-    //    bool flag2 = te.HasGemInIt;
-    //    bool flag = !flag2 && ModContent.GetInstance<BeaconInterface>().Active;
-    //    if (flag) {
-    //        UpdateVariants();
-    //        return te.GetItemID(false, VariantToShow);
-    //    }
-    //    else {
-    //        return flag2 ? te.GetItemID() : ModContent.ItemType<Items.Placeable.Crafting.Beacon>();
-    //    }
-    //}
-
-    //public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
-    //    BeaconTE te = GetTE(i, j);
-    //    if (te is null) {
-    //        return;
-    //    }
-
-    //    tileFrameY += (short)(54 * te.GetVariant(false));
-    //}
-
     public static int GetGemDropID(int i, int j) => Gems[WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
 
     public static int GetGemItemID(int i, int j, bool forVisuals = false) {
@@ -713,18 +450,6 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     }
 
     public override void MouseOver(int i, int j) {
-        //BeaconTE te = GetTE(i, j);
-        //if (te is null) {
-        //    return;
-        //}
-
-        //Player player = Main.LocalPlayer;
-        //player.cursorItemIconID = !BeaconInterface.HasOpened(te) ? ModContent.ItemType<Items.Placeable.Crafting.Beacon>() : GetGemItemID(i, j);
-        //if (player.cursorItemIconID != -1) {
-        //    player.noThrow = 2;
-        //    player.cursorItemIconEnabled = true;
-        //}
-
         Player player = Main.LocalPlayer;
         player.cursorItemIconID = GetGemItemID(i, j, true);
         if (player.cursorItemIconID != -1) {
@@ -762,7 +487,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
             }
         }
         int gemType = remove || flag2 ? GetGemDropID(i, j) : Gems[Math.Max(0, variant - 1)];
-        for (int l = j - 2; l < j + 2; l++) {
+        for (int l = j - 2; l < j + 3; l++) {
             Tile tile2 = WorldGenHelper.GetTileSafely(i, l);
             if (tile2.ActiveTile(Type)) {
                 short getTileFrameY(int usedVariant) {
@@ -778,8 +503,11 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                 if (flag3) {
                     if (dropItem) {
                         if (flag2) {
-                            Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
+                            int itemWhoAmI = Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
                                 gemType);
+                            if (Main.netMode == NetmodeID.MultiplayerClient && itemWhoAmI >= 0) {
+                                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, itemWhoAmI, 1f, 0f, 0f, 0, 0, 0);
+                            }
                         }
                         else {
                             if (--item.stack <= 0) {
@@ -850,14 +578,14 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     }
 
     public override bool RightClick(int i, int j) {
-        BeaconTE te = GetTE(i, j);
-        if (te is null) {
-            return false;
-        }
+        //BeaconTE te = GetTE(i, j);
+        //if (te is null) {
+        //    return false;
+        //}
 
-        if (te.IsUsed) {
-            return false;
-        }
+        //if (te.IsUsed) {
+        //    return false;
+        //}
 
         if (IsTileValidToBeHovered(i, j)) {
             Player player = Main.LocalPlayer;
@@ -871,19 +599,16 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
         else {
             if (HasGemInIt(i, j)) {
-                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
+                int item = Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
                              GetGemDropID(i, j));
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                    NetMessage.SendData(MessageID.SyncItem, number: item);
             }
             WorldGen.KillTile(i, j);
             if (!Main.tile[i, j].HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
                 NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
             }
         }
-
-        //while (WorldGenHelper.ActiveTile(i, j, Type)) {
-        //    j--;
-        //}
-        //BeaconInterface.ToggleUI(i, j + 1, te);
 
         return true;
     }

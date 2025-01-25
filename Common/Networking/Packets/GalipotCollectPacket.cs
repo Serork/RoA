@@ -23,9 +23,7 @@ sealed class GalipotCollectPacket : NetPacket {
         int i = reader.ReadInt32();
         int j = reader.ReadInt32();
         TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
-        if (tapperTE != null) {
-            tapperTE.Reset();
-        }
+        tapperTE?.Reset();
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new GalipotCollectPacket(player, i, j), ignoreClient: sender);

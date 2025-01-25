@@ -56,7 +56,6 @@ sealed class EvilLeaf : NatureProjectile {
         writer.Write(_crimson);
         writer.Write(_angle);
         writer.Write(_index);
-        writer.Write(Projectile.rotation);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
@@ -64,7 +63,6 @@ sealed class EvilLeaf : NatureProjectile {
         _crimson = reader.ReadBoolean();
         _angle = reader.ReadSingle();
         _index = reader.ReadInt32();
-        Projectile.rotation = reader.ReadSingle();
     }
 
     public override bool ShouldUpdatePosition() => false;
