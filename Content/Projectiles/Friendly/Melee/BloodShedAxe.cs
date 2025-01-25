@@ -48,6 +48,8 @@ sealed class BloodshedAxe : ModProjectile {
         Projectile.ownerHitCheckDistance = 300f;
         Projectile.usesOwnerMeleeHitCD = true;
         Projectile.stopsDealingDamageAfterPenetrateHits = true;
+
+        Projectile.noEnchantmentVisuals = true;
     }
 
     public override bool? CanCutTiles() => true;
@@ -216,6 +218,7 @@ sealed class BloodshedAxe : ModProjectile {
                 Projectile.localAI[2] *= scale;
             }
         }
+
         player.bodyFrame.Y = 56;
         int baseAnimationMax = ItemLoader.GetItem(ModContent.ItemType<Items.Weapons.Melee.BloodshedAxe>()).Item.useAnimation;
         float mult = 1f + 1f - (float)itemAnimationMax / baseAnimationMax;
@@ -233,6 +236,12 @@ sealed class BloodshedAxe : ModProjectile {
                 Projectile.ai[1] = 0f;
             }
         }
+
+        Rectangle rectangle = Utils.CenteredRectangle(
+            Projectile.Center + (Projectile.rotation * player.gravDir ).ToRotationVector2() * 60f * Projectile.scale, 
+            new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
+        Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+
         if (player.dead || !player.active) {
             Projectile.Kill();
         }

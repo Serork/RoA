@@ -61,6 +61,8 @@ sealed class FlederSlayer : ModProjectile {
         }
 
         Projectile.netImportant = true;
+
+        Projectile.noEnchantmentVisuals = true;
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
@@ -133,6 +135,12 @@ sealed class FlederSlayer : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
+
+        Rectangle rectangle = Utils.CenteredRectangle(
+            Projectile.Center + (Projectile.rotation * player.gravDir).ToRotationVector2() * 100f * Projectile.scale,
+            new Vector2(30f * Projectile.scale, 30f * Projectile.scale));
+        Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+
         player.itemAnimation = player.itemTime = 2;
         player.heldProj = player.itemAnimationMax;
         float playerDirection = player.direction;
@@ -636,6 +644,8 @@ sealed class FlederSlayer : ModProjectile {
 
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 30;
+
+            Projectile.noEnchantmentVisuals = true;
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -656,6 +666,11 @@ sealed class FlederSlayer : ModProjectile {
         }
 
         public override void AI() {
+            Rectangle rectangle = Utils.CenteredRectangle(
+           Projectile.position - Vector2.UnitY * (30f * Projectile.scale),
+            new Vector2(30f * Projectile.scale, 100f * Projectile.scale));
+                    Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+
             if (Projectile.owner == Main.myPlayer) {
                 if (Main.rand.NextBool(5)) {
                     Projectile.ai[2]--;

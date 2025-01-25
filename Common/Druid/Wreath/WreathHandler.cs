@@ -243,6 +243,7 @@ sealed class WreathHandler : ModPlayer {
                             else if (Player.whoAmI == Main.myPlayer) {
                                 Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
                             }
+
                             SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
                             int result = 0;
                             if (SpecialAttackData.PlaySoundStyle == SoundID.Item95) {
@@ -405,7 +406,7 @@ sealed class WreathHandler : ModPlayer {
     private void On_PlayerDrawLayers_DrawPlayer_36_CTG(On_PlayerDrawLayers.orig_DrawPlayer_36_CTG orig, ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         float positionY = drawinfo.Position.Y;
-        if (player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
+        if (player.whoAmI == Main.myPlayer && player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
             drawinfo.Position.Y -= 35f;
         }
         orig(ref drawinfo);
@@ -593,9 +594,11 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts() {
-        if (PulseIntensity > 0f && (IsFull2 || IsFull3)) {
-            if (Player.miscCounter % 6 == 0 && Main.rand.NextChance(0.5)) {
-                MakeDusts_ActualMaking();
+        if (Player.whoAmI == Main.myPlayer) {
+            if (PulseIntensity > 0f && (IsFull2 || IsFull3)) {
+                if (Player.miscCounter % 6 == 0 && Main.rand.NextChance(0.5)) {
+                    MakeDusts_ActualMaking();
+                }
             }
         }
     }
