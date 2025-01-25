@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -106,8 +108,13 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<BeaconTE>().Place(i, j);
 
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
-        if (!fail) {
-            ModContent.GetInstance<BeaconTE>().Kill(i, j);
+        if (Main.netMode != NetmodeID.Server) {
+            if (!fail) {
+                ModContent.GetInstance<BeaconTE>().Kill(i, j);
+                if (Main.netMode != NetmodeID.SinglePlayer) {
+                    MultiplayerSystem.SendPacket(new RemoveBeaconTileEntityOnServerPacket(i, j));
+                }
+            }
         }
     }
 
@@ -220,6 +227,21 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
             return;
         }
 
+        HandleTeleport(player, i, j);
+
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new BeaconTeleportPacket(player, i, j));
+        }
+
+        BeaconTE beaconTE = GetTE(i, j);
+        beaconTE?.UseAnimation();
+
+        if (Main.netMode == NetmodeID.Server) {
+            RemoteClient.CheckSection(player.whoAmI, player.position);
+        }
+    }
+
+    public static void HandleTeleport(Player player, int i, int j) {
         Vector2 newPos = new Point(i - 1, j - 1).ToWorldCoordinates() + new Vector2(4f, 0f) - new Vector2(0f, player.HeightOffsetBoost);
         int num2 = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType).GetMapOption(i, j) + 12;
         if (num2 == 13) {
@@ -255,12 +277,6 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         SoundEngine.PlaySound(SoundID.Item6, player.position);
         SoundEngine.PlaySound(SoundID.Item8, player.position);
         dusts(player.getRect(), style);
-        BeaconTE beaconTE = GetTE(i, j);
-        beaconTE?.UseAnimation();
-
-        if (Main.netMode == NetmodeID.Server) {
-            RemoteClient.CheckSection(player.whoAmI, player.position);
-        }
     }
 
     public static short GetLargeGemItemID(int i, int j) {
@@ -515,50 +531,12 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                             }
                         }
                     }
-                    Vector2 position = new Point(i, j).ToWorldCoordinates();
                     if (makeDusts) {
-                        SoundEngine.PlaySound(SoundID.Dig, position);
-                        for (int k = 0; k < 8; k++) {
-                            Color color = GetEffectsColor(i, j);
-                            int dust = Dust.NewDust(position + Vector2.UnitY * 2f, 4, 4, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
-                            Main.dust[dust].noGravity = true;
-                            Main.dust[dust].color = color;
-                            Main.dust[dust].velocity *= 0.5f;
-                            Main.dust[dust].scale = 0.8f + Main.rand.NextFloat() * 0.6f;
-                            Main.dust[dust].fadeIn = 0.5f;
+                        if (Main.netMode == NetmodeID.SinglePlayer) {
+                            RemoveGemEffects(i, j);
                         }
-                        Vector2 gorePosition = position - new Vector2(4f, 0f);
-                        string name = string.Empty;
-                        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
-                            case 1:
-                                name = "Amethyst";
-                                break;
-                            case 2:
-                                name = "Topaz";
-                                break;
-                            case 3:
-                                name = "Sapphire";
-                                break;
-                            case 4:
-                                name = "Emerald";
-                                break;
-                            case 5:
-                                name = "Ruby";
-                                break;
-                            case 6:
-                                name = "Diamond";
-                                break;
-                            case 7:
-                                name = "Amber";
-                                break;
-                        }
-                        if (name != string.Empty) {
-                            for (int k = 0; k < 3; k++) {
-                                int gore = Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(i, j),
-                                    gorePosition,
-                                    Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type, 1f);
-                                Main.gore[gore].velocity *= 0.5f;
-                            }
+                        else {
+                            MultiplayerSystem.SendPacket(new BeaconRemoveGemEffectsPacket(i, j));
                         }
                     }
                     else {
@@ -577,15 +555,62 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
     }
 
-    public override bool RightClick(int i, int j) {
-        //BeaconTE te = GetTE(i, j);
-        //if (te is null) {
-        //    return false;
-        //}
+    public static void RemoveGemEffects(int i, int j) {
+        Vector2 position = new Point(i, j).ToWorldCoordinates();
+        SoundEngine.PlaySound(SoundID.Dig, position);
+        for (int k = 0; k < 8; k++) {
+            Color color = GetEffectsColor(i, j);
+            int dust = Dust.NewDust(position + Vector2.UnitY * 2f, 4, 4, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].color = color;
+            Main.dust[dust].velocity *= 0.5f;
+            Main.dust[dust].scale = 0.8f + Main.rand.NextFloat() * 0.6f;
+            Main.dust[dust].fadeIn = 0.5f;
+        }
+        Vector2 gorePosition = position - new Vector2(4f, 0f);
+        string name = string.Empty;
+        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
+            case 1:
+                name = "Amethyst";
+                break;
+            case 2:
+                name = "Topaz";
+                break;
+            case 3:
+                name = "Sapphire";
+                break;
+            case 4:
+                name = "Emerald";
+                break;
+            case 5:
+                name = "Ruby";
+                break;
+            case 6:
+                name = "Diamond";
+                break;
+            case 7:
+                name = "Amber";
+                break;
+        }
+        if (name != string.Empty) {
+            for (int k = 0; k < 3; k++) {
+                int gore = Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(i, j),
+                    gorePosition,
+                    Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type, 1f);
+                Main.gore[gore].velocity *= 0.5f;
+            }
+        }
+    }
 
-        //if (te.IsUsed) {
-        //    return false;
-        //}
+    public override bool RightClick(int i, int j) {
+        BeaconTE te = GetTE(i, j);
+        if (te is null) {
+            return false;
+        }
+
+        if (te.IsUsed) {
+            return false;
+        }
 
         if (IsTileValidToBeHovered(i, j)) {
             Player player = Main.LocalPlayer;

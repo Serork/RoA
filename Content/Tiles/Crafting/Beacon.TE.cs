@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -39,6 +41,11 @@ sealed class BeaconTE : ModTileEntity {
     public Vector2 OffsetPosition { get; private set; }
 
     public void UseAnimation() {
+        NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new BeaconUsePacket(Position.X, Position.Y));
+        }
+
         if (IsUsed) {
             return;
         }
@@ -61,11 +68,6 @@ sealed class BeaconTE : ModTileEntity {
     }
 
     public override void Update() {
-        if (_sync) {
-            NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
-            _sync = false;
-        }
-
         int i = Position.X;
         int j = Position.Y - 2;
         if (Beacon.HasGemInIt(i, j)) {
@@ -86,6 +88,13 @@ sealed class BeaconTE : ModTileEntity {
                 }
             }
         });
+
+        if (Main.netMode == NetmodeID.Server) {
+            if (_sync || IsUsed) {
+                NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
+                _sync = false;
+            }
+        }
     }
 
     public void UpdateAnimation(Action onEnd) {
@@ -139,6 +148,10 @@ sealed class BeaconTE : ModTileEntity {
                     Scale = Vector2.Lerp(Scale, new Vector2(0.2f, 1f), (animationTimer - time) / time2);
                     if (animationTimer >= time + time2) {
                         ResetAnimation();
+                        NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new BeaconResetPacket(Position.X, Position.Y));
+                        }
                         onEnd();
                     }
                 }
