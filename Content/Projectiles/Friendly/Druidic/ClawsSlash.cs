@@ -17,6 +17,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
@@ -27,6 +28,7 @@ namespace RoA.Content.Projectiles.Friendly.Druidic;
 class ClawsSlash : NatureProjectile {
     private float _scale;
     private Color? _firstSlashColor = null, _secondSlashColor = null;
+    private bool _soundPlayed;
 
     protected Player Owner => Main.player[Projectile.owner];
 
@@ -278,6 +280,10 @@ class ClawsSlash : NatureProjectile {
 
     public override void AI() {
         Player player = Owner;
+        if (!_soundPlayed) {
+            _soundPlayed = true;
+            SoundEngine.PlaySound(SoundID.Item1 with { PitchVariance = 0.1f }, player.Center);
+        }
 
         player.direction = (int)Projectile.ai[0];
 

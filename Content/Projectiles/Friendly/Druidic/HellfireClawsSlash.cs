@@ -13,6 +13,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -83,6 +84,24 @@ sealed class HellfireClawsSlash : ClawsSlash {
         }
     }
 
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
+        writer.Write(_hitTimer);
+        writer.Write(_oldTimeleft);
+        writer.Write(_oldItemUse);
+        writer.Write(_oldItemAnimation);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
+        _hitTimer = reader.ReadInt32();
+        _oldTimeleft = reader.ReadInt32();
+        _oldItemUse = reader.ReadInt32();
+        _oldItemAnimation = reader.ReadInt32();
+    }
+
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         base.OnHitNPC(target, hit, damageDone);
 
@@ -98,6 +117,9 @@ sealed class HellfireClawsSlash : ClawsSlash {
         if (!Hit) {
             Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnHitNPC(Projectile, true);
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HellfireClaws") with { PitchVariance = 0.25f, Volume = Main.rand.NextFloat(0.75f, 0.85f) }, GetPos());
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayHellfireSoundPacket(Main.player[Projectile.owner], GetPos()));
+            }
             for (int i = 0; i < 25; i++) {
                 if (Main.rand.NextBool(3)) {
                     Vector2 pos = GetPos(MathHelper.PiOver4 * 0.5f);
@@ -116,10 +138,13 @@ sealed class HellfireClawsSlash : ClawsSlash {
                         ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, 0f, Projectile.owner, ai2: Projectile.identity);
                 }
             }
-            _oldTimeleft = Projectile.timeLeft;
-            _hitTimer = 10;
-            _oldItemUse = Owner.itemTime;
-            _oldItemAnimation = Owner.itemAnimation;
+            if (Projectile.owner == Main.myPlayer) {
+                _oldTimeleft = Projectile.timeLeft;
+                _hitTimer = 10;
+                _oldItemUse = Owner.itemTime;
+                _oldItemAnimation = Owner.itemAnimation;
+                Projectile.netUpdate = true;
+            }
             //UpdateMainCycle();
         }
         if (_projectile != null && _projectile.ai[0] < 5f) {
@@ -130,7 +155,6 @@ sealed class HellfireClawsSlash : ClawsSlash {
                 _projectile.netUpdate = true;
             }
         }
-        Projectile.netUpdate = true;
     }   
 
     public Vector2 GetPos(float extraRot = 0f) {

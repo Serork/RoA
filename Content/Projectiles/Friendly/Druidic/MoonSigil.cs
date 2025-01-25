@@ -15,12 +15,16 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using Terraria;
+using System.IO;
+using RoA.Core.Utility;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 sealed class MoonSigil : NatureProjectile {
     private int explosionCounter;
     private float cloneDrawRotation, cloneDrawAlpha, cloneDrawReturn;
     private float cloneDrawOffset = 200;
+
+    private Vector2 _mousePosition;
 
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Moon Sigil");
@@ -48,6 +52,18 @@ sealed class MoonSigil : NatureProjectile {
     }
 
     public override bool? CanDamage() => false;
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
+        writer.WriteVector2(_mousePosition);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
+        _mousePosition = reader.ReadVector2();  
+    }
 
     public override void AI() {
         if (cloneDrawRotation < 120) cloneDrawRotation += 1f;
@@ -92,13 +108,17 @@ sealed class MoonSigil : NatureProjectile {
             }
         }
 
-        Vector2 mousePos = new Vector2(Main.MouseWorld.X, Main.MouseWorld.Y); // êîîðäû êóðñîðà íà ýêðàíå
+        if (Projectile.owner == Main.myPlayer) {
+            _mousePosition = Main.player[Projectile.owner].GetViableMousePosition();
+            Projectile.netUpdate = true;
+        }
+        Vector2 mousePos = _mousePosition; // êîîðäû êóðñîðà íà ýêðàíå
         Vector2 projectilePos = new Vector2(Projectile.position.X, Projectile.position.Y); // êîîðäû ëóíû
         Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y); // íàïðàâëåíèå 
         direction.Normalize(); // â äèàïàçîí îò 0 äî 1
         direction *= 8; // ñêîðîñòü
         Player player = Main.player[Projectile.owner]; // èãðîê
-        if (player.ItemAnimationJustStarted && Main.mouseLeft && player.inventory[player.selectedItem].type == ModContent.ItemType<SacrificialSickleOfTheMoon>() && Projectile.timeLeft < 590) {
+        if (player.ItemAnimationJustStarted && player.inventory[player.selectedItem].type == ModContent.ItemType<SacrificialSickleOfTheMoon>() && Projectile.timeLeft < 590) {
             for (int num615 = 0; num615 < 10; num615++) {
                 int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.AncientLight, direction.X, direction.Y, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                 Main.dust[num616].noGravity = true;
