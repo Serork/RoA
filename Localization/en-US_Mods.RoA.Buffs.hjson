@@ -47,12 +47,12 @@ DeathWard: {
 
 Willpower: {
 	DisplayName: Willpower
-	Description: "15% increased [kw/n:wreath] charge rate"
+	Description: 15% increased [kw/n:wreath] charge rate
 }
 
 Resilience: {
 	DisplayName: Moon's Resilience
-	Description: "Slightly delays the [kw/n:Wreath] from depleting"
+	Description: Slightly delays the [kw/n:Wreath] from depleting
 }
 
 ExtraRegen: {
@@ -213,10 +213,10 @@ LittleFleder: {
 
 EssenceDrain: {
 	DisplayName: Essence Drain
-	Description: 'Your life seeps through your fingers'
+	Description: Your life seeps through your fingers
 }
 
 SmallMoon: {
 	DisplayName: Small Moon
-	Description: 'What person do you want to be?'
+	Description: What person do you want to be?
 }
