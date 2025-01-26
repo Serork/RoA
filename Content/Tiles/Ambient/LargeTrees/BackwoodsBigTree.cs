@@ -245,10 +245,10 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
                         WorldGen.KillTile(i - 2, checkJ, false, false, false);
                     }
                 }
-                SetFramingForCutTrees(i, j + 1, placeRandom);
-                SetFramingForCutTrees(i + 1, j + 1, placeRandom);
-                SetFramingForCutTrees(i - 1, j + 1, placeRandom);
             }
+            SetFramingForCutTrees(i, j + 1, placeRandom);
+            SetFramingForCutTrees(i + 1, j + 1, placeRandom);
+            SetFramingForCutTrees(i - 1, j + 1, placeRandom);
         }
     }
 
