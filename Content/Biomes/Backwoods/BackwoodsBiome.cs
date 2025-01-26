@@ -47,6 +47,8 @@ sealed partial class BackwoodsBiome : ModBiome {
 
     public static bool IsActiveForFogEffect => ModContent.GetInstance<TileCount>().BackwoodsTiles > 650;
 
+    public static bool BiomeShouldBeActive => ModContent.GetInstance<TileCount>().BackwoodsTiles >= 1000;
+
     public static BackwoodsBiome Instance => ModContent.GetInstance<BackwoodsBiome>();
 
     public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
@@ -56,7 +58,7 @@ sealed partial class BackwoodsBiome : ModBiome {
     public override void SpecialVisuals(Player player, bool isActive) => player.ManageSpecialBiomeVisuals(ShaderLoader.BackwoodsSky, player.InModBiome<BackwoodsBiome>(), player.Center);
 
     public override bool IsBiomeActive(Player player) {
-        bool isInBiome = ModContent.GetInstance<TileCount>().BackwoodsTiles >= 1000;
+        bool isInBiome = BiomeShouldBeActive;
         return isInBiome;
     }
 

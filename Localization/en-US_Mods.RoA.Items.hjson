@@ -1321,3 +1321,8 @@ CrimsonRod: {
 	DisplayName: Crimson Rod
 	Tooltip: "{$ItemTooltip.CrimsonRod}"
 }
+
+BackwoodsPylon: {
+	DisplayName: Backwoods Pylon
+	Tooltip: ""
+}
