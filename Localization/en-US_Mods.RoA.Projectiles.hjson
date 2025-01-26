@@ -130,10 +130,10 @@ Acorn.DisplayName: Acorn
 FlederSlayer.DisplayName: Fleder Slayer
 WaveSlash.DisplayName: Wave Slash
 BaneSpell.DisplayName: Bane Spell
-GoblinsDagger.DisplayName: Goblins Dagger
+GoblinsDagger.DisplayName: Goblin Dagger
 SmallMoon.DisplayName: Small Moon
-Vilethorn.DisplayName: Vilethorn
-VilethornTip.DisplayName: Vilethorn Tip
-BloodCloudMoving.DisplayName: Blood Cloud Moving
-BloodCloudRaining.DisplayName: Blood Cloud Raining
-BloodRain.DisplayName: Blood Rain
+Vilethorn.DisplayName: "{$ProjectileName.VilethornBase}"
+VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
+BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
+BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
+BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
