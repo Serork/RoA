@@ -45,7 +45,7 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         Main.tileFrameImportant[Type] = true;
         Main.tileAxe[Type] = true;
 
-        AddMapEntry(new Color(110, 91, 74), name);
+        AddMapEntry(new Color(114, 81, 57), name);
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {

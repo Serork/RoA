@@ -433,18 +433,7 @@ sealed class FlederSlayer : ModProjectile {
     private void RotateArm() {
         Player player = Main.player[Projectile.owner];
         float armRotation = Projectile.rotation - MathHelper.PiOver2;
-        if (armRotation > 1.1f) {
-            player.bodyFrame.Y = player.bodyFrame.Height;
-        }
-        else if (armRotation > 0.5f) {
-            player.bodyFrame.Y = player.bodyFrame.Height * 2;
-        }
-        else if (armRotation < -0.5f) {
-            player.bodyFrame.Y = player.bodyFrame.Height * 4;
-        }
-        else {
-            player.bodyFrame.Y = player.bodyFrame.Height * 3;
-        }
+        player.bodyFrame.Y = 56;
         player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
     }
 
