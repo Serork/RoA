@@ -436,16 +436,16 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             if (!flag)
                 num8 = TileDrawing_GetWindCycle(Main.instance.TilesRenderer, i, j, TileDrawing_treeWindCounter(Main.instance.TilesRenderer));
             if (num8 < 0f)
-                drawPosition.X += num8;
+                drawPosition.X += num8 / 2f;
 
-            drawPosition.X -= Math.Abs(num8) * 2f;
+            drawPosition.X -= Math.Abs(num8 / 2f) * 2f;
             Vector2 origin = new(!left ? 0f : textureSize.X, textureSize.Y / 2f);
             float num = Main.WindForVisuals;
             if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
                 num = Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f);
                 drawPosition.X -= 3f;
             }
-            spriteBatch.Draw(bigBranchTexture, drawPosition - Vector2.UnitX * (10f - Math.Abs(num * 2.25f) * 2.25f) + origin, sourceRectangle, color, num8 * num4, origin, 1f, effects, 0f);
+            spriteBatch.Draw(bigBranchTexture, drawPosition - Vector2.UnitX * (10f - Math.Abs(num * 2.5f) * 2.5f) + origin, sourceRectangle, color, num8 * num4, origin, 1f, effects, 0f);
         }
         if (shouldDrawBranch) {
             Texture2D branchTexture = ModContent.Request<Texture2D>(texture + "_Branches").Value;
