@@ -137,7 +137,7 @@ sealed class NexusGateway : ModTile {
             frame = 0;
         }
         Main.spriteBatch.Draw(glowMaskTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero,
-            new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16 + (144 * frame)), new Color(100, 100, 100, 0) * progress, 0f, default, 1f, SpriteEffects.None, 0f);
+            new Rectangle(tile.TileFrameX, tile.TileFrameY + (144 * frame), 16, 16), new Color(100, 100, 100, 0) * progress, 0f, default, 1f, SpriteEffects.None, 0f);
         //ulong seed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i);
         //for (int c = 0; c < 2; c++) {
         //    float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
