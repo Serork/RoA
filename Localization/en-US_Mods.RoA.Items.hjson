@@ -1306,3 +1306,18 @@ BigTreeSpawner: {
 	DisplayName: Big Tree Spawner
 	Tooltip: ""
 }
+
+GrimstoneWall: {
+	DisplayName: Grimstone Wall
+	Tooltip: ""
+}
+
+Vilethorn: {
+	DisplayName: Vilethorn
+	Tooltip: "{$ItemTooltip.Vilethorn}"
+}
+
+CrimsonRod: {
+	DisplayName: Crimson Rod
+	Tooltip: "{$ItemTooltip.CrimsonRod}"
+}
