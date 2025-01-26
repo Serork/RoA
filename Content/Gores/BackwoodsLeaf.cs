@@ -16,6 +16,6 @@ sealed class BackwoodsLeaf : ModGore {
 		gore.frame = (byte)Main.rand.Next(8);
 		gore.frameCounter = (byte)Main.rand.Next(8);
 
-		UpdateType = GoreID.TreeLeaf_Normal;
+		UpdateType = 912;
 	}
 }

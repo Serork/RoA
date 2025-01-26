@@ -1301,3 +1301,8 @@ FeathersInABalloon: {
 		Increases jump height
 		'''
 }
+
+BigTreeSpawner: {
+	DisplayName: Big Tree Spawner
+	Tooltip: ""
+}

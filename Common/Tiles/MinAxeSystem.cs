@@ -113,7 +113,12 @@ sealed class MinAxeSystem : ILoadable {
                         num2 = 0;
                     }
                     else {
-                        num2 = (int)((double)num2 * 0.75);
+                        if (TileLoader.GetTile(tile.TileType) is TileHooks.IResistToAxe resistToAxe && resistToAxe.CanBeApplied(x, y)) {
+                            num2 = (int)((double)num2 * resistToAxe.ResistToPick);
+                        }
+                        else {
+                            num2 = (int)((double)num2 * 0.75);
+                        }
                     }
                 }
 
