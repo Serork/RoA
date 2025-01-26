@@ -28,7 +28,7 @@ LivingBorealSetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
 LivingMahoganySetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
 DreadheartCrimsonSetBonus:
 	'''
-	Taking damage while [kw/n:wreath] is [kw/n:full], depletes it and releases swarms of insects
+	Taking damage while [kw/n:wreath] is [kw/n:full] depletes it, releasing a swarm of insects
 	Double tap {0} to turn into a [kw/n:Beetle]
 	'''
 LivingElderwoodCrownSetBonus:
@@ -44,7 +44,7 @@ AshwalkerHoodSetBonus:
 	'''
 AcolyteSetBonus: 40% increased magic damage when below 40 mana
 FlametrackerSetBonus: Magic weapons release an additional tracking bolt while at full mana that decreases target's defense
-SentinelSetBonus1: Shows locations of enemies while standing still
+SentinelSetBonus1: Shows the location of enemies while standing still
 SentinelSetBonus2: Greatly increased speed of arrows shot in the direction of running
 WorshipperSetBonus:
 	'''

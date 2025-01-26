@@ -13,7 +13,7 @@ WreathCharged: {
 	Description:
 		'''
 		Nature damage is improved
-		Provides [kw/n:partial] bonuses of the equipped [kw/n:wreath]
+		Provides partial bonuses of the equipped [kw/n:wreath]
 		'''
 }
 
@@ -31,7 +31,7 @@ WreathFullCharged2: {
 	Description:
 		'''
 		Nature damage is at full [kw/n:potential]
-		Provides bonuses of the equipped [kw/n:wreath] amplified by the [kw/n:Soul of the Woods]
+		Provides [kw/n:full charge] bonuses of equipped [kw/n:wreath] and Soul of the Woods
 		'''
 }
 
@@ -77,7 +77,7 @@ DryadBlood: {
 
 Heavy: {
 	DisplayName: Heavy
-	Description: Your vertical acceleration is enhanced
+	Description: Your terminal velocity is enhanced
 }
 
 RavencallersCloakBuff: {
@@ -96,7 +96,7 @@ BeastPoison: {
 }
 
 FlederForm: {
-	DisplayName: Shape of a Fleder
+	DisplayName: Fleder Form
 	Description:
 		'''
 		Double tap a direction to dash
@@ -105,7 +105,7 @@ FlederForm: {
 }
 
 CorruptionInsectForm: {
-	DisplayName: Shape of a Corrupted Beetle
+	DisplayName: Beetle Form
 	Description:
 		'''
 		Use {$Controls.LeftClick} to spit poison
@@ -114,7 +114,7 @@ CorruptionInsectForm: {
 }
 
 CrimsonInsectForm: {
-	DisplayName: Shape of a Crimson Beetle
+	DisplayName: Beetle Form
 	Description:
 		'''
 		Use {$Controls.LeftClick} to spit poison
@@ -123,7 +123,7 @@ CrimsonInsectForm: {
 }
 
 LilPhoenixForm: {
-	DisplayName: Shape of a Firebird
+	DisplayName: Firebird Form
 	Description:
 		'''
 		Hold {$Controls.LeftClick} in air to charge an explosive fire boost
@@ -138,17 +138,17 @@ Burning: {
 
 ToxicFumes: {
 	DisplayName: Toxic Fumes
-	Description: Deals periodic damage and slows movement down
+	Description: Losing life, movement speed is reduced
 }
 
 ToxicFumesNoTimeDisplay: {
 	DisplayName: Toxic Fumes
-	Description: Deals periodic damage and slows movement down
+	Description: Losing life, movement speed is reduced
 }
 
 OniMask: {
 	DisplayName: Oni Mask
-	Description: Reduced enemy spawn rates
+	Description: Reduced enemy spawn rate
 }
 
 Weak: {
