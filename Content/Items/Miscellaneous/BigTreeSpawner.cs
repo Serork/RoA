@@ -24,7 +24,7 @@ sealed class BigTreeSpawner : ModItem {
 
     public override bool? UseItem(Player player) {
         if (player.ItemAnimationJustStarted) {
-            BackwoodsBigTree.Place((int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f), Main.rand.Next(14, 20));
+            BackwoodsBigTree.Place((int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f));
         }
 
         return true;
