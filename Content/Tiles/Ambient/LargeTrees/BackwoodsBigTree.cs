@@ -83,7 +83,7 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             return;
         }
 
-        if (IsStart(i, j + 1) && !WorldGenHelper.ActiveTile(i, j - 1, GetSelfType())) {
+        if (IsStart(i, j + 1)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j + 1);
             tile.TileFrameX += 54;
         }
@@ -257,9 +257,6 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         if (IsTrunk(i, j)) {
             tile.TileFrameX = (short)(18 + (placeRandom.NextBool() ? 18 : 0));
             tile.TileFrameY = (short)(placeRandom.NextBool() ? 18 : 0);
-        }
-        else if (IsStart(i ,j) && WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(GetSelfType()) && WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(GetSelfType())) {
-            tile.TileFrameX += 54;
         }
     }
 
