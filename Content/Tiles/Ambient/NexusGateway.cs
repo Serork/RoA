@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -27,7 +29,7 @@ sealed class NexusGateway : ModTile {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
         TileObjectData.newTile.LavaDeath = false;
-        int width = 7, height = 9;
+        int width = 7, height = 8;
         TileObjectData.newTile.Width = width;
         TileObjectData.newTile.Height = height;
         TileObjectData.newTile.CoordinateHeights = new int[height];
@@ -45,7 +47,7 @@ sealed class NexusGateway : ModTile {
 
         TileID.Sets.DisableSmartCursor[Type] = true;
 
-        AnimationFrameHeight = 162;
+        AnimationFrameHeight = 144;
     }
 
     public override bool CanExplode(int i, int j) => false;
@@ -68,7 +70,26 @@ sealed class NexusGateway : ModTile {
     }
 
     private static bool GetCondition(Tile tile) {
-        return tile.TileFrameX != 0 && tile.TileFrameX != 120 && (tile.TileFrameX <= 32 || tile.TileFrameX > 90) && ((tile.TileFrameY > 0 && tile.TileFrameY < 32) || (tile.TileFrameY > 160 && tile.TileFrameY < 192) || (tile.TileFrameY > 320 && tile.TileFrameY < 356));
+        List<(short, short)> properFramingXY = [
+            (18, 18),
+            (36, 0),
+            (54, 0),
+            (72, 0),
+            (90, 0),
+            (36, 18),
+            (54, 18),
+            (72, 18),
+            (90, 18),
+            (18, 36),
+            (18, 54),
+            (18, 108),
+            (90, 54),
+            (90, 90),
+            (108, 54),
+            (36, 54),
+            (90, 72)
+            ];
+        return properFramingXY.Contains(((short)(tile.TileFrameX + Main.tileFrame[ModContent.TileType<NexusGateway>()] * 18), tile.TileFrameY));
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
@@ -81,18 +102,18 @@ sealed class NexusGateway : ModTile {
     }
 
     public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
-        if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
-            Tile tile = Main.tile[i, j];
-            if (Main.rand.NextChance(0.35f) && GetCondition(tile)) {
-                bool right = tile.TileFrameX > 90;
-                int dust = Dust.NewDust(new Vector2(i * 16 - (!right ? 2 : 16), j * 16 + 2), 16, 4, ModContent.DustType<ElderTorchDust>(), 0f, 0f, 100, default, 1f);
-                if (!Main.rand.NextBool(3)) {
-                    Main.dust[dust].noGravity = true;
-                }
-                Main.dust[dust].velocity *= 0.3f;
-                Main.dust[dust].velocity.Y = Main.dust[dust].velocity.Y - 1.5f;
-            }
-        }
+        //if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
+        //    Tile tile = Main.tile[i, j];
+        //    if (Main.rand.NextChance(0.35f) && GetCondition(tile)) {
+        //        bool right = tile.TileFrameX > 90;
+        //        int dust = Dust.NewDust(new Vector2(i * 16 - (!right ? 2 : 16), j * 16 + 2), 16, 4, ModContent.DustType<ElderTorchDust>(), 0f, 0f, 100, default, 1f);
+        //        if (!Main.rand.NextBool(3)) {
+        //            Main.dust[dust].noGravity = true;
+        //        }
+        //        Main.dust[dust].velocity *= 0.3f;
+        //        Main.dust[dust].velocity.Y = Main.dust[dust].velocity.Y - 1.5f;
+        //    }
+        //}
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
@@ -105,21 +126,21 @@ sealed class NexusGateway : ModTile {
         int offsetY = 0;
         int height = 16;
         TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref tile.TileFrameX, ref tile.TileFrameY);
-        var flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
+        //var flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
         var glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
         Main.spriteBatch.Draw(glowMaskTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
-        ulong seed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i);
-        for (int c = 0; c < 2; c++) {
-            float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
-            float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
-            Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
-            Main.spriteBatch.Draw(flameTexture, pos + Vector2.UnitY * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
-        }
-        for (int c = 0; c < 3; c++) {
-            float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
-            float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
-            Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
-            Main.spriteBatch.Draw(flameTexture, pos - Vector2.UnitY * 2f * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
-        }
+        //ulong seed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i);
+        //for (int c = 0; c < 2; c++) {
+        //    float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
+        //    float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
+        //    Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
+        //    Main.spriteBatch.Draw(flameTexture, pos + Vector2.UnitY * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
+        //}
+        //for (int c = 0; c < 3; c++) {
+        //    float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
+        //    float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
+        //    Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
+        //    Main.spriteBatch.Draw(flameTexture, pos - Vector2.UnitY * 2f * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
+        //}
     }
 }
