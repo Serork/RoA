@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 using RoA.Content.Biomes.Backwoods;
@@ -8,6 +9,7 @@ using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Tiles.Trees;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -21,6 +23,8 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+
+using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Content.Tiles.Ambient.LargeTrees;
 
@@ -349,20 +353,34 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
     }
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         //DrawTop(i, j, spriteBatch);
-        DrawItselfParts(i, j, spriteBatch, Texture, Type);
+        //DrawItselfParts(i, j, spriteBatch, Texture, Type);
     }
 
     private void DrawTop(int i, int j, SpriteBatch spriteBatch) {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
-        //if (IsNormalBranch(i, j) || IsBigBranch(i, j) || IsTop(i, j)) {
-        //    TileHelper.AddPostDrawPoint(this, i, j);
+        if (IsNormalBranch(i, j) || IsBigBranch(i, j) || IsTop(i, j)) {
+            TileHelper.AddPostDrawPoint(this, i, j);
 
-        //    return false;
-        //}
+            return false;
+        }
 
         return true;
+    }
+
+    public override void Load() {
+        On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
+    }
+
+    private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
+        orig(self);
+        foreach ((ModTile modTile, Point position) in TileHelper.PostDrawPoints) {
+            if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null && modTile is BackwoodsBigTree) {
+                int i = position.X, j = position.Y;
+                DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
+            }
+        }
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_treeWindCounter")]
@@ -383,11 +401,6 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         bool shouldDrawBranch = IsNormalBranch(i, j);
         Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
                                    j * 16 - (int)Main.screenPosition.Y);
-        Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
-        if (Main.drawToScreen) {
-            zero = Vector2.Zero;
-        }
-        drawPosition += zero;
         bool shouldDrawBigBranch = IsBigBranch(i, j);
         bool left = !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(GetSelfType());
         SpriteFrame spriteFrame;
@@ -423,9 +436,9 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             if (!flag)
                 num8 = TileDrawing_GetWindCycle(Main.instance.TilesRenderer, i, j, TileDrawing_treeWindCounter(Main.instance.TilesRenderer));
             if (num8 < 0f)
-                drawPosition.X += num8 / 3f;
+                drawPosition.X += num8 / 4f;
 
-            drawPosition.X -= Math.Abs(num8 / 3f) * 2f;
+            drawPosition.X -= Math.Abs(num8 / 4f) * 2f;
             Vector2 origin = new(!left ? 0f : textureSize.X, textureSize.Y / 2f);
             float num = Main.WindForVisuals;
             if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
