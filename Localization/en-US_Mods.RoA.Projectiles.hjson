@@ -121,14 +121,19 @@ BloodshedAxe.DisplayName: Bloodshed Axe
 BloodshedAxeEnergy.DisplayName: Bloodshed Axe
 BloodShedAxesTarget.DisplayName: Bloodshed Axe
 ChemicalFlask.DisplayName: Chemical Flask
-ToxicCrystal1.DisplayName: Toxic Crystal1
-ToxicCrystal2.DisplayName: Toxic Crystal2
-ToxicCrystal3.DisplayName: Toxic Crystal3
-ChemicalFlask2.DisplayName: Chemical Flask2
+ToxicCrystal1.DisplayName: Toxic Crystal
+ToxicCrystal2.DisplayName: Toxic Crystal
+ToxicCrystal3.DisplayName: Toxic Crystal
+ChemicalFlask2.DisplayName: Chemical Flask
 LittleFleder.DisplayName: Little Fleder
 Acorn.DisplayName: Acorn
 FlederSlayer.DisplayName: Fleder Slayer
 WaveSlash.DisplayName: Wave Slash
 BaneSpell.DisplayName: Bane Spell
-GoblinsDagger.DisplayName: Goblins Dagger
+GoblinsDagger.DisplayName: Goblin Dagger
 SmallMoon.DisplayName: Small Moon
+Vilethorn.DisplayName: "{$ProjectileName.VilethornBase}"
+VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
+BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
+BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
+BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
