@@ -15,6 +15,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class NexusGateway : ModTile {
+    private const byte FRAMERATE = 12;
+
     public override void SetStaticDefaults() {
         Main.tileLighted[Type] = true;
         Main.tileLavaDeath[Type] = false;
@@ -60,7 +62,7 @@ sealed class NexusGateway : ModTile {
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
         frameCounter++;
-        if (frameCounter > 12) {
+        if (frameCounter > FRAMERATE) {
             frameCounter = 0;
             frame++;
             if (frame > 3) {
@@ -129,6 +131,13 @@ sealed class NexusGateway : ModTile {
         //var flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
         var glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
         Main.spriteBatch.Draw(glowMaskTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
+        float progress = Main.tileFrameCounter[Type] / (float)FRAMERATE;
+        int frame = Main.tileFrame[Type] + 1;
+        if (frame > 3) {
+            frame = 0;
+        }
+        Main.spriteBatch.Draw(glowMaskTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero,
+            new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16 + (144 * frame)), new Color(100, 100, 100, 0) * progress, 0f, default, 1f, SpriteEffects.None, 0f);
         //ulong seed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i);
         //for (int c = 0; c < 2; c++) {
         //    float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
