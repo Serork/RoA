@@ -414,19 +414,27 @@ sealed class FlederSlayer : ModProjectile {
         }
     }
 
-    private struct TrailInfo(int timeLeft, float opacity, float scale, Vector2 position, float rotation) {
-        public int TimeLeft = timeLeft;
-        public float Opacity = opacity;
-        public float Scale = scale;
-        public Vector2 Position = position;
-        public float Rotation = rotation;
+    private struct TrailInfo {
+        public int TimeLeft { get; set; }
+        public float Opacity { get; set; }
+        public float Scale { get; set; }
+        public Vector2 Position { get; set; }
+        public float Rotation { get; set; }
+
+        public TrailInfo(int timeLeft, float opacity, float scale, Vector2 position, float rotation) {
+            TimeLeft = timeLeft;
+            Opacity = opacity;
+            Scale = scale;
+            Position = position;
+            Rotation = rotation;
+        }
     }
 
     private void RotateArm() {
         Player player = Main.player[Projectile.owner];
         float armRotation = Projectile.rotation - MathHelper.PiOver2;
         player.bodyFrame.Y = 56;
-        player.SetCompositeBothArms(armRotation, Player.CompositeArmStretchAmount.Full);
+        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
     }
 
     private static float Swing(float progress) {
