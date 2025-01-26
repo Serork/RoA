@@ -54,28 +54,28 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
 
     private static bool IsStart(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsBranch(i, j) && !WorldGenHelper.ActiveTile(i, j + 1, GetSelfType());
 
-    private static bool IsTrunk(int i, int j) => !IsStart(i, j) && !IsNormalBranch(i, j) && !IsBigBranch(i, j);
+    private static bool IsTrunk(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsStart(i, j) && !IsNormalBranch(i, j) && !IsBigBranch(i, j);
 
     private static bool IsBranch(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return tile.TileFrameY >= 108 && tile.TileFrameY < 180;
+        return tile.ActiveTile(GetSelfType()) && tile.TileFrameY >= 108 && tile.TileFrameY < 180;
     }
 
     private static bool IsBranch2(int i, int j) => IsNormalBranch(i, j) || IsBigBranch(i, j);
 
     private static bool IsBigBranch(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return IsBranch(i, j) && tile.TileFrameX == 144;
+        return tile.ActiveTile(GetSelfType()) && IsBranch(i, j) && tile.TileFrameX == 144;
     }
 
     private static bool IsNormalBranch(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return IsBranch(i, j) && tile.TileFrameX == 108;
+        return tile.ActiveTile(GetSelfType()) && IsBranch(i, j) && tile.TileFrameX == 108;
     }
 
     private static bool IsTop(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return tile.TileFrameX == 54 && tile.TileFrameY == 0;
+        return tile.ActiveTile(GetSelfType()) && tile.TileFrameX == 54 && tile.TileFrameY == 0;
     }
 
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
