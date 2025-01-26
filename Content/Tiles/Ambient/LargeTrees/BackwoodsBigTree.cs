@@ -420,7 +420,7 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
                 num = Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f);
                 drawPosition.X -= 3f;
             }
-            spriteBatch.Draw(bigBranchTexture, drawPosition - Vector2.UnitX * (10f - Math.Abs(num * 2.5f) * 2.5f) + origin, sourceRectangle, color, num8 * num4, origin, 1f, effects, 0f);
+            spriteBatch.Draw(bigBranchTexture, drawPosition - Vector2.UnitX * (10f - Math.Abs(num * 2.25f) * 2.25f) + origin, sourceRectangle, color, num8 * num4, origin, 1f, effects, 0f);
         }
         if (shouldDrawBranch) {
             Texture2D branchTexture = ModContent.Request<Texture2D>(Texture + "_Branches").Value;
