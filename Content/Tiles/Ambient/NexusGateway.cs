@@ -60,7 +60,7 @@ sealed class NexusGateway : ModTile {
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
         frameCounter++;
-        if (frameCounter > 6) {
+        if (frameCounter > 12) {
             frameCounter = 0;
             frame++;
             if (frame > 3) {

@@ -13,7 +13,7 @@ WreathCharged: {
 	Description:
 		'''
 		Nature damage is improved
-		Provides charge bonuses of equipped [kw/n:wreath]
+		Provides [kw/n:partial] bonuses of the equipped [kw/n:wreath]
 		'''
 }
 
@@ -22,7 +22,7 @@ WreathFullCharged: {
 	Description:
 		'''
 		Nature damage is at full [kw/n:potential]
-		Provides [kw/n:full charge] bonuses of equipped [kw/n:wreath]
+		Provides [kw/n:full] bonuses of the equipped [kw/n:wreath]
 		'''
 }
 
@@ -31,28 +31,28 @@ WreathFullCharged2: {
 	Description:
 		'''
 		Nature damage is at full [kw/n:potential]
-		Provides [kw/n:full charge] bonuses of equipped [kw/n:wreath] and soul of the woods
+		Provides bonuses of the equipped [kw/n:wreath] amplified by the [kw/n:Soul of the Woods]
 		'''
 }
 
 Bloodlust: {
 	DisplayName: Bloodlust
-	Description: You restore some health on deadly hits
+	Description: Deadly hits restore life
 }
 
 DeathWard: {
 	DisplayName: Soul Ward
-	Description: Your next fatal hit will be prevented
+	Description: Prevents fatal damage once
 }
 
 Willpower: {
 	DisplayName: Willpower
-	Description: "[kw/n:Wreath] is charged 15% faster"
+	Description: "15% increased [kw/n:wreath] charge rate"
 }
 
 Resilience: {
 	DisplayName: Moon's Resilience
-	Description: "[kw/n:Wreath] takes longer to start discharging"
+	Description: "Slightly delays the [kw/n:Wreath] from depleting"
 }
 
 ExtraRegen: {
@@ -67,7 +67,7 @@ Hemorrhage: {
 
 Brightstone: {
 	DisplayName: Brightstone Halo
-	Description: You emit glowing lumps of light
+	Description: Emit glowing lumps of light
 }
 
 DryadBlood: {
@@ -77,11 +77,11 @@ DryadBlood: {
 
 Heavy: {
 	DisplayName: Heavy
-	Description: Your terminal velocity is enhanced
+	Description: Your vertical acceleration is enhanced
 }
 
 RavencallersCloakBuff: {
-	DisplayName: Cloak Stealth
+	DisplayName: Raven's Veil
 	Description: Enemies have lost true sight of you
 }
 
@@ -96,7 +96,7 @@ BeastPoison: {
 }
 
 FlederForm: {
-	DisplayName: Fleder Form
+	DisplayName: Shape of a Fleder
 	Description:
 		'''
 		Double tap a direction to dash
@@ -105,25 +105,25 @@ FlederForm: {
 }
 
 CorruptionInsectForm: {
-	DisplayName: Corruption Insect Form
+	DisplayName: Shape of a Corrupted Beetle
 	Description:
 		'''
 		Use {$Controls.LeftClick} to spit poison
-		Stand still to summon insect swarms
+		Stand still to summon swarms of insects
 		'''
 }
 
 CrimsonInsectForm: {
-	DisplayName: Crimson Insect Form
+	DisplayName: Shape of a Crimson Beetle
 	Description:
 		'''
 		Use {$Controls.LeftClick} to spit poison
-		Stand still to summon insect swarms
+		Stand still to summon swarms of insects
 		'''
 }
 
 LilPhoenixForm: {
-	DisplayName: Firebird Form
+	DisplayName: Shape of a Firebird
 	Description:
 		'''
 		Hold {$Controls.LeftClick} in air to charge an explosive fire boost
@@ -138,17 +138,17 @@ Burning: {
 
 ToxicFumes: {
 	DisplayName: Toxic Fumes
-	Description: Losing life and slowed movement
+	Description: Deals periodic damage and slows movement down
 }
 
 ToxicFumesNoTimeDisplay: {
 	DisplayName: Toxic Fumes
-	Description: Losing life and slowed movement
+	Description: Deals periodic damage and slows movement down
 }
 
 OniMask: {
 	DisplayName: Oni Mask
-	Description: Decreased enemy spawn rate
+	Description: Reduced enemy spawn rates
 }
 
 Weak: {
@@ -157,8 +157,8 @@ Weak: {
 }
 
 Unburning: {
-	DisplayName: Unburning
-	Description: Provides extra life regeneration
+	DisplayName: Un-burning
+	Description: Flames reinvigorate you
 }
 
 Moth: {
@@ -178,7 +178,7 @@ SolidifyingSap: {
 
 Fireblossom: {
 	DisplayName: Fireblossom
-	Description: Mods.RoA.Buffs.Fireblossom.Description
+	Description: A fireblossom is set to explode
 }
 
 BoneHarpyAttackDebuff: {
@@ -213,10 +213,10 @@ LittleFleder: {
 
 EssenceDrain: {
 	DisplayName: Essence Drain
-	Description: Mods.RoA.Buffs.EssenceDrain.Description
+	Description: 'Your life seeps through your fingers'
 }
 
 SmallMoon: {
 	DisplayName: Small Moon
-	Description: Mods.RoA.Buffs.SmallMoon.Description
+	Description: 'What person do you want to be?'
 }

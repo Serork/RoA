@@ -163,7 +163,7 @@ BandOfNature: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
+		On full [kw/n:wreath], increases defense by 3
 		'''
 }
 
@@ -172,7 +172,7 @@ BandOfPurity: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		Regenerates life when [kw/n:wreath] is [kw/n:charged]
+		On full [kw/n:wreath], regenerates life
 		'''
 }
 
@@ -180,14 +180,14 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		10% increased [kw/n:wreath] [kw/n:filling] rate
-		Increases maximum life by 20 when [kw/n:wreath] is [kw/n:charged]
+		10% increased [kw/n:wreath] [kw/n:charge rate]
+		On full [kw/n:wreath], increases maximum life by 20
 		'''
 }
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: Keeps [kw/n:wreath] full charge bonuses for 2 seconds after discharging
+	Tooltip: Once depleted, provides full charge bonuses of the [kw/n:wreath] for 2 more seconds
 }
 
 RavencallersCloak: {
@@ -238,7 +238,7 @@ DeathWardPotion: {
 	DisplayName: Death Ward Potion
 	Tooltip:
 		'''
-		Prevents death
+		Prevents fatal damage once
 		Makes you potion sick for 60 seconds 
 		'Rests in the hands of its master who sent it'
 		'''
@@ -248,22 +248,22 @@ WillpowerPotion: {
 	DisplayName: Willpower Potion
 	Tooltip:
 		'''
-		Increases [kw/n:wreath] charging rate
+		Increases [kw/n:wreath] charge rate by 15%
 		'Fifteen percent concentrated power of will'
 		'''
 }
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases [kw/n:wreath] discharge speed by 25%
+	Tooltip: Decreases [kw/n:wreath] depletion speed by 25%
 }
 
 ForestWreath: {
 	DisplayName: Forest Wreath I
 	Tooltip:
 		'''
-		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
-		Increased maximum life by 40 when [kw/n:wreath] is [kw/n:charged]
+		[kw/n:Wreath] is charged by dealing nature damage
+		On full [kw/n:wreath], increases maximum life by 40
 		'''
 }
 
@@ -271,8 +271,8 @@ TwigWreath: {
 	DisplayName: Twig Wreath
 	Tooltip:
 		'''
-		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
-		Up to 10% reduced damage taken
+		[kw/n:Wreath] is charged by dealing nature damage
+		On full [kw/n:wreath], reduces damage taken by up to 10%
 		'''
 }
 
@@ -280,10 +280,10 @@ FenethsBlazingWreath: {
 	DisplayName: Feneths Blazing Wreath
 	Tooltip:
 		'''
-		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
-		Increases nature knockback
-		Up to 20% chance for attacks to grow burning fireblossom on enemies and holder
-		Fireblossom explodes over time, spreading to enemies nearby when [kw/n:wreath] is [kw/n:charged]
+		[kw/n:Wreath] is charged by dealing nature damage
+		On full [kw/n:wreath], increases nature knockback
+		and provides up to 20% chance for attacks to bloom fireblossom on foes and the wearer
+		Fireblossoms explode shortly after, spreading to enemies nearby
 		'''
 }
 
@@ -291,9 +291,9 @@ ForestWreath2: {
 	DisplayName: Forest Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		Increased maximum life by 40 when [kw/n:wreath] is [kw/n:charged]
+		[kw/n:Wreath] is charged by dealing nature damage
+		On full [kw/n:wreath], reduces damage taken by up to 10%
+		and increases maximum life by 40
 		'''
 }
 
@@ -301,8 +301,8 @@ JungleWreath: {
 	DisplayName: Jungle Wreath I
 	Tooltip:
 		'''
-		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
-		Attackers are poisoned when [kw/n:wreath] is [kw/n:charged]
+		[kw/n:Wreath] is charged by dealing nature damage
+		On full [kw/n:wreath], attacks poison enemies
 		'''
 }
 
@@ -310,9 +310,9 @@ JungleWreath2: {
 	DisplayName: Jungle Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		Attackers are poisoned when [kw/n:wreath] is [kw/n:charged]
+		[kw/n:Wreath] is charged by dealing nature damage
+		On full [kw/n:wreath], reduces damage taken by up to 10%
+		and attacks poison enemies
 		'''
 }
 
@@ -320,8 +320,8 @@ SnowWreath: {
 	DisplayName: Snow Wreath I
 	Tooltip:
 		'''
-		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
-		Increased nature critical strike chance by 2
+		[kw/n:Wreath] is charged by dealing nature damage
+		On full [kw/n:wreath], increases nature critical strike chance by 2%
 		'''
 }
 
@@ -329,9 +329,9 @@ SnowWreath2: {
 	DisplayName: Snow Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] scale gets filled over dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		Increased nature critical strike chance by 2
+		[kw/n:Wreath] is charged by dealing nature damage
+		On full [kw/n:wreath], reduces damage taken by up to 10%
+		and increases nature critical strike chance by 2%
 		'''
 }
 
@@ -341,11 +341,11 @@ Cloudberry: {
 }
 
 SoulOfTheWoods: {
-	DisplayName: Soul Of The Woods
+	DisplayName: Soul of the Woods
 	Tooltip:
 		'''
-		Allows to charge [kw/n:wreath] twice
-		Creates pulsing energy shield when [kw/n:wreath] is [kw/n:charged]
+		Allows to charge the equipped [kw/n:wreath] twice
+		On full [kw/n:wreath], conjures a pulsing energy shield
 		'''
 }
 
@@ -356,7 +356,7 @@ BrightstonePotion: {
 
 DryadBloodPotion: {
 	DisplayName: Dryad Blood Potion
-	Tooltip: Increases resistance to damaging debuffs
+	Tooltip: Reduces damage taken from harmful debuffs
 }
 
 WeightPotion: {
@@ -392,7 +392,7 @@ Woodbinder: {
 	Tooltip:
 		'''
 		Hold to conjure a wooden barrier forward,
-		then let go to let it bloom
+		then let go to make it bloom
 		'''
 }
 
@@ -630,7 +630,7 @@ LuminousFlowerHat: {
 	Tooltip:
 		'''
 		Provides light when moving
-		'It no more smells... but still brights the area around you'
+		'It smells no more... but still brightens the vicinity'
 		'''
 }
 
@@ -646,7 +646,7 @@ FlamingFabric: {
 
 NaturesHeart: {
 	DisplayName: Nature's Heart
-	Tooltip: "'Seems like is was a source of life for higher beings...'"
+	Tooltip: "'Perhaps this was a source of life for higher beings...'"
 }
 
 DeerSkull: {
@@ -656,7 +656,7 @@ DeerSkull: {
 
 OniMask: {
 	DisplayName: Oni Mask
-	Tooltip: Scares away Youkai
+	Tooltip: Scares away the Yōkai
 }
 
 ElderwoodBathtub: {
@@ -1285,26 +1285,26 @@ LivingPrimordialWand2: {
 
 MoonFlower: {
 	DisplayName: Moon Flower
-	Tooltip: ""
+	Tooltip: "'What name will you be remembered as?'"
 }
 
 FeathersInABottle: {
 	DisplayName: Feathers in a Bottle
-	Tooltip: Allows the holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
+	Tooltip: Allows the holder to double jump, but costs 25% of the [kw/n:wreath] [kw/n:charge]
 }
 
 FeathersInABalloon: {
 	DisplayName: Feathers in a Balloon
 	Tooltip:
 		'''
-		Allows the holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
+		Allows the holder to double jump, but costs 25% of the [kw/n:wreath] [kw/n:charge]
 		Increases jump height
 		'''
 }
 
 BigTreeSpawner: {
 	DisplayName: Big Tree Spawner
-	Tooltip: ""
+	Tooltip: "#TEST: GENERATES A BIG BACKWOODS TREE"
 }
 
 GrimstoneWall: {
