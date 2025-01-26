@@ -52,35 +52,40 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         yield return new Item(ModContent.ItemType<Elderwood>(), Main.rand.Next(2, 6));
     }
 
-    private static bool IsStart(int i, int j) => !IsBranch(i, j) && !WorldGenHelper.ActiveTile(i, j + 1, GetSelfType());
+    private static bool IsStart(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsBranch(i, j) && !WorldGenHelper.ActiveTile(i, j + 1, GetSelfType());
 
-    private static bool IsTrunk(int i, int j) => !IsStart(i, j) && !IsNormalBranch(i, j) && !IsBigBranch(i, j);
+    private static bool IsTrunk(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsStart(i, j) && !IsNormalBranch(i, j) && !IsBigBranch(i, j);
 
     private static bool IsBranch(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return tile.TileFrameY >= 108 && tile.TileFrameY < 180;
+        return tile.ActiveTile(GetSelfType()) && tile.TileFrameY >= 108 && tile.TileFrameY < 180;
     }
 
     private static bool IsBranch2(int i, int j) => IsNormalBranch(i, j) || IsBigBranch(i, j);
 
     private static bool IsBigBranch(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return IsBranch(i, j) && tile.TileFrameX == 144;
+        return tile.ActiveTile(GetSelfType()) && IsBranch(i, j) && tile.TileFrameX == 144;
     }
 
     private static bool IsNormalBranch(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return IsBranch(i, j) && tile.TileFrameX == 108;
+        return tile.ActiveTile(GetSelfType()) && IsBranch(i, j) && tile.TileFrameX == 108;
     }
 
     private static bool IsTop(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        return tile.TileFrameX == 54 && tile.TileFrameY == 0;
+        return tile.ActiveTile(GetSelfType()) && tile.TileFrameX == 54 && tile.TileFrameY == 0;
     }
 
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
         if (fail) {
             return;
+        }
+
+        if (IsStart(i, j + 1)) {
+            Tile tile = WorldGenHelper.GetTileSafely(i, j + 1);
+            tile.TileFrameX += 54;
         }
 
         UnifiedRandom placeRandom = WorldGen.genRand;
@@ -139,6 +144,13 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
                 }
                 if (IsStart(checkX, j)) {
                     WorldGenHelper.GetTileSafely(checkX, j).HasTile = false;
+                    for (int k = 0; k < 5; k++) {
+                        Dust.NewDustDirect(new Vector2(checkX, j).ToWorldCoordinates(), 16, 16, DustType);
+                    }
+                    int itemWhoAmI = Item.NewItem(WorldGen.GetItemSource_FromTileBreak(checkX, j), checkX * 16, j * 16, 16, 16, ModContent.ItemType<Elderwood>(), Main.rand.Next(2, 6));
+                    if (Main.netMode == NetmodeID.MultiplayerClient && itemWhoAmI >= 0) {
+                        NetMessage.SendData(MessageID.SyncItem, -1, -1, null, itemWhoAmI, 1f, 0f, 0f, 0, 0, 0);
+                    }
                 }
             }
             for (int checkX = i; checkX > i - 4; checkX--) {
@@ -147,6 +159,13 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
                 }
                 if (IsStart(checkX, j)) {
                     WorldGenHelper.GetTileSafely(checkX, j).HasTile = false;
+                    for (int k = 0; k < 5; k++) {
+                        Dust.NewDustDirect(new Vector2(checkX, j).ToWorldCoordinates(), 16, 16, DustType);
+                    }
+                    int itemWhoAmI = Item.NewItem(WorldGen.GetItemSource_FromTileBreak(checkX, j), checkX * 16, j * 16, 16, 16, ModContent.ItemType<Elderwood>(), Main.rand.Next(2, 6));
+                    if (Main.netMode == NetmodeID.MultiplayerClient && itemWhoAmI >= 0) {
+                        NetMessage.SendData(MessageID.SyncItem, -1, -1, null, itemWhoAmI, 1f, 0f, 0f, 0, 0, 0);
+                    }
                 }
             }
 
@@ -226,10 +245,10 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
                         WorldGen.KillTile(i - 2, checkJ, false, false, false);
                     }
                 }
-                SetFramingForCutTrees(i, j + 1, placeRandom);
-                SetFramingForCutTrees(i + 1, j + 1, placeRandom);
-                SetFramingForCutTrees(i - 1, j + 1, placeRandom);
             }
+            SetFramingForCutTrees(i, j + 1, placeRandom);
+            SetFramingForCutTrees(i + 1, j + 1, placeRandom);
+            SetFramingForCutTrees(i - 1, j + 1, placeRandom);
         }
     }
 
@@ -238,9 +257,6 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         if (IsTrunk(i, j)) {
             tile.TileFrameX = (short)(18 + (placeRandom.NextBool() ? 18 : 0));
             tile.TileFrameY = (short)(placeRandom.NextBool() ? 18 : 0);
-        }
-        else if (IsStart(i ,j) && WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(GetSelfType()) && WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(GetSelfType())) {
-            tile.TileFrameX += 54;
         }
     }
 
