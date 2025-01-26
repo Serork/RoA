@@ -71,7 +71,8 @@ sealed class PineCone : NatureItem {
 
                     if (Main.tile[i, k] != null) {
                         Tile tile = Main.tile[i, k];
-                        if (tile.TileType == 2 || tile.TileType == 109 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 147 || tile.TileType == 199 || tile.TileType == 23 || tile.TileType == 633) {
+                        if ((tile.TileType == 2 || tile.TileType == 109 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 147 || tile.TileType == 199 || tile.TileType == 23 || tile.TileType == 633)
+                             || TileLoader.CanDropAcorn(tile.TileType)) {
                             dropItem = 9;
                             secondaryItem = 27;
                         }
@@ -128,6 +129,8 @@ sealed class PineCone : NatureItem {
                     }
                     break;
             }
+
+            TileLoader.DropTreeWood(Main.tile[x, y].TileType, ref dropItem);
         }
 
         int num = Player.FindClosest(new Vector2(x * 16, y * 16), 16, 16);
