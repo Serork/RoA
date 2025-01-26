@@ -124,7 +124,7 @@ sealed class BabyFleder : ModNPC {
             NPC.frame.Y = 2 * frameHeight;
             return;
         }
-        if (++NPC.frameCounter >= (double)Math.Max(10f - Math.Abs(NPC.velocity.Y) * 3.5f, 6f)) {
+        if (++NPC.frameCounter >= (double)Math.Max(10f - Math.Abs(NPC.velocity.Y) * 3.5f, 6f) * 0.75) {
             NPC.frameCounter = 0;
             NPC.localAI[0]++;
             if (NPC.localAI[0] >= 4) {

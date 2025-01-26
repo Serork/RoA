@@ -1306,3 +1306,8 @@ BigTreeSpawner: {
 	DisplayName: Big Tree Spawner
 	Tooltip: ""
 }
+
+GrimstoneWall: {
+	DisplayName: Grimstone Wall
+	Tooltip: ""
+}
