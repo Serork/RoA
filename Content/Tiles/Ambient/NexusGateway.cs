@@ -89,15 +89,15 @@ sealed class NexusGateway : ModTile {
             (36, 54),
             (90, 72)
             ];
-        return properFramingXY.Contains(((short)(tile.TileFrameX + Main.tileFrame[ModContent.TileType<NexusGateway>()] * 18), tile.TileFrameY));
+        return properFramingXY.Contains((tile.TileFrameX, (short)(tile.TileFrameY % 144)));
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
         Tile tile = Main.tile[i, j];
         if (GetCondition(tile)) {
-            r = 0.25f;
-            g = 0.65f;
-            b = 0.85f;
+            r = 0.25f * 0.75f;
+            g = 0.65f * 0.75f;
+            b = 0.85f * 0.75f;
         }
     }
 
