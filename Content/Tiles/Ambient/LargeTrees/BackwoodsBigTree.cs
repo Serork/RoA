@@ -262,8 +262,11 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) => offsetY += 2;
 
-    public static void Place(int i, int j, int height = 20, UnifiedRandom placeRand = null) {
+    public static void Place(int i, int j, int height = -1, UnifiedRandom placeRand = null) {
         placeRand ??= Main.rand;
+        if (height == -1) {
+            height = placeRand.Next(17, 24);
+        }
 
         PlaceBegin(i, j, placeRand, out Point pointToStartPlacingTrunk);
         PlaceTrunk(pointToStartPlacingTrunk, height, placeRand);
@@ -345,18 +348,19 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         tile.TileFrameY = tileFrameY;
     }
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
-        DrawTop(i, j, spriteBatch);
+        //DrawTop(i, j, spriteBatch);
+        DrawItselfParts(i, j, spriteBatch, Texture, Type);
     }
 
     private void DrawTop(int i, int j, SpriteBatch spriteBatch) {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
-        if (IsNormalBranch(i, j) || IsBigBranch(i, j) || IsTop(i, j)) {
-            TileHelper.AddPostDrawPoint(this, i, j);
+        //if (IsNormalBranch(i, j) || IsBigBranch(i, j) || IsTop(i, j)) {
+        //    TileHelper.AddPostDrawPoint(this, i, j);
 
-            return false;
-        }
+        //    return false;
+        //}
 
         return true;
     }
@@ -371,11 +375,19 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
     public extern static ref UnifiedRandom TileDrawing_rand(TileDrawing self);
 
     void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
-        int i = pos.X, j = pos.Y;
+       
+    }
+
+    private static void DrawItselfParts(int i, int j, SpriteBatch spriteBatch, string texture, int type) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         bool shouldDrawBranch = IsNormalBranch(i, j);
         Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
                                    j * 16 - (int)Main.screenPosition.Y);
+        Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+        if (Main.drawToScreen) {
+            zero = Vector2.Zero;
+        }
+        drawPosition += zero;
         bool shouldDrawBigBranch = IsBigBranch(i, j);
         bool left = !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(GetSelfType());
         SpriteFrame spriteFrame;
@@ -389,7 +401,7 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         }
         bool flag = tile.WallType > 0;
         if (shouldDrawBigBranch) {
-            Texture2D bigBranchTexture = ModContent.Request<Texture2D>(Texture + "_BigBranches").Value;
+            Texture2D bigBranchTexture = ModContent.Request<Texture2D>(texture + "_BigBranches").Value;
             Vector2 textureSize = bigBranchTexture.Size();
             spriteFrame = new(1, 3);
             ulong seed = (ulong)(i * j % 192372);
@@ -423,7 +435,7 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             spriteBatch.Draw(bigBranchTexture, drawPosition - Vector2.UnitX * (10f - Math.Abs(num * 2.25f) * 2.25f) + origin, sourceRectangle, color, num8 * num4, origin, 1f, effects, 0f);
         }
         if (shouldDrawBranch) {
-            Texture2D branchTexture = ModContent.Request<Texture2D>(Texture + "_Branches").Value;
+            Texture2D branchTexture = ModContent.Request<Texture2D>(texture + "_Branches").Value;
             offsetY = 0;
             if (left) {
                 offsetX = 10;
@@ -440,10 +452,10 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         }
         bool shouldDrawTop = IsTop(i, j);
         if (shouldDrawTop) {
-            if (WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(Type)) {
+            if (WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(type)) {
                 return;
             }
-            Texture2D topTexture = ModContent.Request<Texture2D>(Texture + "_Top").Value;
+            Texture2D topTexture = ModContent.Request<Texture2D>(texture + "_Top").Value;
             Vector2 textureSize = topTexture.Size();
             Vector2 offset = -textureSize;
             offset.X += textureSize.X / 2f;
