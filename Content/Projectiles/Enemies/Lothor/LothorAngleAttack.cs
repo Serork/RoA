@@ -161,7 +161,7 @@ sealed class LothorAngleAttack : ModProjectile {
             Projectile.position.Y += 3f;
         }
 
-        if (Projectile.timeLeft > 180 - 1) {
+        if (Projectile.timeLeft > 300 - 1) {
             return;
         }
 
