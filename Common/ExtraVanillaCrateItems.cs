@@ -2,6 +2,7 @@
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Items.Potions;
+using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 
 using Terraria.GameContent.ItemDropRules;
@@ -350,8 +351,11 @@ sealed class ExtraVanillaCrateItems : ModSystem {
             ItemID.SeeTheWorldForWhatItIs, ItemID.LoveisintheTrashSlot, ItemID.SunOrnament); // Sun Ornament == Eye of The Sun
 
         IItemDropRule bc_son = ItemDropRule.NotScalingWithLuck(ItemID.SoulofNight, 2, 2, 5);
-        IItemDropRule bc_corrupt = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.BallOHurt, ItemID.BandofStarpower, ItemID.Musket, ItemID.ShadowOrb, ItemID.Vilethorn);
-        IItemDropRule bc_crimson = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.TheUndertaker, ItemID.TheRottedFork, ItemID.CrimsonRod, ItemID.PanicNecklace, ItemID.CrimsonHeart);
+        IItemDropRule bc_corrupt = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.BallOHurt, ItemID.BandofStarpower, ItemID.Musket, ItemID.ShadowOrb,
+            /*ItemID.Vilethorn*/ModContent.ItemType<Vilethorn>());
+        IItemDropRule bc_crimson = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.TheUndertaker, ItemID.TheRottedFork, 
+            /*ItemID.CrimsonRod*/ModContent.ItemType<CrimsonRod>(),
+            ItemID.PanicNecklace, ItemID.CrimsonHeart);
         IItemDropRule bc_cursed = ItemDropRule.NotScalingWithLuck(ItemID.CursedFlame, 2, 2, 5);
         IItemDropRule bc_ichor = ItemDropRule.NotScalingWithLuck(ItemID.Ichor, 2, 2, 5);
 
