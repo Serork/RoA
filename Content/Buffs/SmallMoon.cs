@@ -42,7 +42,7 @@ sealed class SmallMoonPlayer : ModPlayer {
         smallMoon = false;
     }
 
-    public override void OnEnterWorld() => SetInfo();;
+    public override void OnEnterWorld() => SetInfo();
 
     public override void PostUpdate() {
         int type = ModContent.ItemType<MoonFlower>();
@@ -58,7 +58,7 @@ sealed class SmallMoonPlayer : ModPlayer {
         else if (Main.pumpkinMoon) smallMoonColor = Color.Orange;
         else if (Main.snowMoon) smallMoonColor = Color.DeepSkyBlue;
         else {
-            smallMoonColor = new Color(230, 230, 180);
+            smallMoonColor = new Color(190, 190, 140);
         }
 
         if (Player.name == "peege.on") smallMoonColor = Player.underShirtColor;
