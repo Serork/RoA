@@ -14,6 +14,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.GameContent;
@@ -38,8 +39,11 @@ sealed class PrimordialTreeGlow : GlobalTile {
         SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
-        foreach (Point position in PrimordialTreeDrawPoints) {
+        foreach (Point position in PrimordialTreeDrawPoints.ToList()) {
             int i = position.X, j = position.Y;
+            if (!PrimordialTree.IsPrimordialTree(i, j)) {
+                PrimordialTreeDrawPoints.Remove(position);
+            }
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
             bool bluePart = tile.TileFrameX == 88 && tile.TileFrameY == 22;
             Vector2 drawPosition = new Vector2(i, j).ToWorldCoordinates();
@@ -81,7 +85,7 @@ sealed class PrimordialTreeGlow : GlobalTile {
 
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
         Point position = new(i, j);
-        if (PrimordialTree.IsPrimordialTree(i, j) && !PrimordialTreeDrawPoints.Contains(position)) {
+        if (WorldGenHelper.GetTileSafely(i, j).HasTile && PrimordialTree.IsPrimordialTree(i, j) && !PrimordialTreeDrawPoints.Contains(position)) {
             PrimordialTreeDrawPoints.Add(position);
         }
     }
@@ -124,7 +128,7 @@ sealed class PrimordialTree : ModTree {
         SpecialGroupMaximumSaturationValue = 1f
     };
 
-    public override void SetStaticDefaults() => GrowsOnTileId = [ModContent.TileType<Solid.Backwoods.BackwoodsGrass>()];
+    public override void SetStaticDefaults() => GrowsOnTileId = [ModContent.TileType<BackwoodsGrass>()];
 
     public override int TreeLeaf() => ModContent.GoreType<BackwoodsLeaf>();
 

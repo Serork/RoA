@@ -1401,3 +1401,8 @@ SummonedRavenBanner: {
 	DisplayName: Summoned Raven Banner
 	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
 }
+
+BackwoodsGrassSeeds: {
+	DisplayName: Backwoods Seeds
+	Tooltip: ""
+}

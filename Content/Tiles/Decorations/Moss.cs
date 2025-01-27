@@ -18,6 +18,9 @@ sealed class Moss : ModTile {
 
         TileID.Sets.FramesOnKillWall[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
+        TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
 		TileObjectData.newTile.Height = 4;

@@ -10,6 +10,7 @@ using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Trees;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -36,6 +37,73 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
 
     bool TileHooks.IResistToAxe.CanBeApplied(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && (IsTrunk(i, j) || IsStart(i, j));
     float TileHooks.IResistToAxe.ResistToPick => 0.25f;
+
+    public override void Load() {
+        On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
+        On_WorldGen.AttemptToGrowTreeFromSapling += On_WorldGen_AttemptToGrowTreeFromSapling;
+    }
+
+    private bool On_WorldGen_AttemptToGrowTreeFromSapling(On_WorldGen.orig_AttemptToGrowTreeFromSapling orig, int x, int y, bool underground) {
+        if (!underground && Main.tile[x, y].TileType == TileID.Saplings) {
+            if (TryGrowBigTree(x, y, placeRand: WorldGen.genRand)) {
+                return true;
+            }
+        }
+
+        return orig(x, y, underground);
+    }
+
+    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null) {
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            return false;
+        }
+
+        if (!WorldGen.InWorld(i, j, 2)) {
+            return false;
+        }
+
+        placeRand ??= Main.rand;
+        if (height == -1) {
+            height = placeRand.Next(17, 24);
+        }
+
+        for (; TileID.Sets.TreeSapling[Main.tile[i, j].TileType]; j++) {
+        }
+
+        if (!TileID.Sets.TreeSapling[Main.tile[i + 1, j - 1].TileType]) {
+            return false;
+        }
+
+        if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees) {
+            return false;
+        }
+
+        int i2 = i;
+        int grassTileType = ModContent.TileType<BackwoodsGrass>();
+        if (!(Main.tile[i2, j].HasUnactuatedTile && !Main.tile[i2, j].IsHalfBlock && Main.tile[i2, j].Slope == 0 &&
+            Main.tile[i2 - 1, j].TileType == grassTileType && Main.tile[i2, j].TileType == grassTileType && Main.tile[i2 + 1, j].TileType == grassTileType && Main.tile[i2 + 2, j].TileType == grassTileType &&
+            ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i2, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i2, j - 1].WallType)))) {
+            return false;
+        }
+
+        int num = 2;
+        int num2 = height;
+        int num3 = num2 + 4;
+        bool flag = false;
+        if (WorldGen.EmptyTileCheck(i - num, i + num + 1, j - num3, j - 1, 20) && WorldGen.EmptyTileCheck(i - 1, i + 2, j - 2, j - 1, 20))
+            flag = true;
+
+        if (!flag) {
+            return false;
+        }
+
+        j -= 1;
+
+        PlaceBegin(i, j, placeRand, out Point pointToStartPlacingTrunk);
+        PlaceTrunk(pointToStartPlacingTrunk, height, placeRand);
+
+        return true;
+    }
 
     public override void SetStaticDefaults() {
         LocalizedText name = CreateMapEntryName();
@@ -269,16 +337,6 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) => offsetY += 2;
 
-    public static void Place(int i, int j, int height = -1, UnifiedRandom placeRand = null) {
-        placeRand ??= Main.rand;
-        if (height == -1) {
-            height = placeRand.Next(17, 24);
-        }
-
-        PlaceBegin(i, j, placeRand, out Point pointToStartPlacingTrunk);
-        PlaceTrunk(pointToStartPlacingTrunk, height, placeRand);
-    }
-
     private static ushort GetSelfType() => (ushort)ModContent.TileType<BackwoodsBigTree>();
 
     private static void PlaceTrunk(Point pointToPlaceTrunk, int height, UnifiedRandom placeRand) {
@@ -370,10 +428,6 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         }
 
         return true;
-    }
-
-    public override void Load() {
-        On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
     }
 
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {

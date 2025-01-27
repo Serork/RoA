@@ -2,6 +2,7 @@
 
 using ReLogic.Utilities;
 
+using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.World.Generations;
@@ -16,6 +17,7 @@ using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
 namespace RoA.Core.Utility;
@@ -1105,377 +1107,388 @@ static class WorldGenHelper {
 
     // adapted vanilla
     public static bool GrowTreeWithBranches<T>(int i, int y, int minHeight = 20, int maxHeight = 30, int branchChance = 5) where T : TreeBranch {
-        int num;
-        int num1 = y;
-        {
-            int num2 = 2;
-            int num3 = maxHeight;
-            if (Terraria.WorldGen.EmptyTileCheck(i - num2, i + num2, num1 - num3, num1 - 1, 20)) {
-                bool flag = false;
-                bool flag1 = false;
-                int num4 = Terraria.WorldGen.genRand.Next(minHeight, maxHeight);
-                for (int i1 = num1 - num4; i1 < num1; i1++) {
-                    Tile tile = Main.tile[i, i1];
-                    tile.TileFrameNumber = (byte)Terraria.WorldGen.genRand.Next(3);
-                    tile.HasTile = true;
-                    tile.TileType = 5;
-                    num = Terraria.WorldGen.genRand.Next(3);
-                    int num5 = Terraria.WorldGen.genRand.Next(10);
-                    if (i1 == num1 - 1 || i1 == num1 - num4) {
-                        num5 = 0;
-                    }
-                    while (true) {
-                        if ((num5 == 5 ? false : num5 != 7) | !flag) {
-                            if ((num5 == 6 ? false : num5 != 7) | !flag1) {
-                                break;
+        UnifiedRandom genRand = WorldGen.genRand;
+
+        int j;
+        for (j = y; TileID.Sets.TreeSapling[Main.tile[i, j].TileType]; j++) {
+        }
+
+        if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees)
+            return false;
+
+        if (Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i, j].TileType) && ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i, j - 1].WallType)) && ((Main.tile[i - 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType)) || (Main.tile[i + 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType)))) {
+            int num;
+            int num1 = y;
+            {
+                int num2 = 2;
+                int num3 = maxHeight;
+                if (Terraria.WorldGen.EmptyTileCheck(i - num2, i + num2, num1 - num3, num1 - 1, 20)) {
+                    bool flag = false;
+                    bool flag1 = false;
+                    int num4 = Terraria.WorldGen.genRand.Next(minHeight, maxHeight);
+                    for (int i1 = num1 - num4; i1 < num1; i1++) {
+                        Tile tile = Main.tile[i, i1];
+                        tile.TileFrameNumber = (byte)Terraria.WorldGen.genRand.Next(3);
+                        tile.HasTile = true;
+                        tile.TileType = 5;
+                        num = Terraria.WorldGen.genRand.Next(3);
+                        int num5 = Terraria.WorldGen.genRand.Next(10);
+                        if (i1 == num1 - 1 || i1 == num1 - num4) {
+                            num5 = 0;
+                        }
+                        while (true) {
+                            if ((num5 == 5 ? false : num5 != 7) | !flag) {
+                                if ((num5 == 6 ? false : num5 != 7) | !flag1) {
+                                    break;
+                                }
+                            }
+                            num5 = Terraria.WorldGen.genRand.Next(10);
+                        }
+                        flag = false;
+                        flag1 = false;
+                        if (num5 == 5 || num5 == 7) {
+                            flag = true;
+                        }
+                        if (num5 == 6 || num5 == 7) {
+                            flag1 = true;
+                        }
+                        if (num5 == 1) {
+                            if (num == 0) {
+                                Main.tile[i, i1].TileFrameX = 0;
+                                Main.tile[i, i1].TileFrameY = 66;
+                            }
+                            if (num == 1) {
+                                Main.tile[i, i1].TileFrameX = 0;
+                                Main.tile[i, i1].TileFrameY = 88;
+                            }
+                            if (num == 2) {
+                                Main.tile[i, i1].TileFrameX = 0;
+                                Main.tile[i, i1].TileFrameY = 110;
                             }
                         }
-                        num5 = Terraria.WorldGen.genRand.Next(10);
+                        else if (num5 == 2) {
+                            if (num == 0) {
+                                Main.tile[i, i1].TileFrameX = 22;
+                                Main.tile[i, i1].TileFrameY = 0;
+                            }
+                            if (num == 1) {
+                                Main.tile[i, i1].TileFrameX = 22;
+                                Main.tile[i, i1].TileFrameY = 22;
+                            }
+                            if (num == 2) {
+                                Main.tile[i, i1].TileFrameX = 22;
+                                Main.tile[i, i1].TileFrameY = 44;
+                            }
+                        }
+                        else if (num5 == 3) {
+                            if (num == 0) {
+                                Main.tile[i, i1].TileFrameX = 44;
+                                Main.tile[i, i1].TileFrameY = 66;
+                            }
+                            if (num == 1) {
+                                Main.tile[i, i1].TileFrameX = 44;
+                                Main.tile[i, i1].TileFrameY = 88;
+                            }
+                            if (num == 2) {
+                                Main.tile[i, i1].TileFrameX = 44;
+                                Main.tile[i, i1].TileFrameY = 110;
+                            }
+                        }
+                        else if (num5 == 4) {
+                            if (num == 0) {
+                                Main.tile[i, i1].TileFrameX = 22;
+                                Main.tile[i, i1].TileFrameY = 66;
+                            }
+                            if (num == 1) {
+                                Main.tile[i, i1].TileFrameX = 22;
+                                Main.tile[i, i1].TileFrameY = 88;
+                            }
+                            if (num == 2) {
+                                Main.tile[i, i1].TileFrameX = 22;
+                                Main.tile[i, i1].TileFrameY = 110;
+                            }
+                        }
+                        else if (num5 == 5) {
+                            if (num == 0) {
+                                Main.tile[i, i1].TileFrameX = 88;
+                                Main.tile[i, i1].TileFrameY = 0;
+                            }
+                            if (num == 1) {
+                                Main.tile[i, i1].TileFrameX = 88;
+                                Main.tile[i, i1].TileFrameY = 22;
+                            }
+                            if (num == 2) {
+                                Main.tile[i, i1].TileFrameX = 88;
+                                Main.tile[i, i1].TileFrameY = 44;
+                            }
+                        }
+                        else if (num5 == 6) {
+                            if (num == 0) {
+                                Main.tile[i, i1].TileFrameX = 66;
+                                Main.tile[i, i1].TileFrameY = 66;
+                            }
+                            if (num == 1) {
+                                Main.tile[i, i1].TileFrameX = 66;
+                                Main.tile[i, i1].TileFrameY = 88;
+                            }
+                            if (num == 2) {
+                                Main.tile[i, i1].TileFrameX = 66;
+                                Main.tile[i, i1].TileFrameY = 110;
+                            }
+                        }
+                        else if (num5 != 7) {
+                            if (num == 0) {
+                                Main.tile[i, i1].TileFrameX = 0;
+                                Main.tile[i, i1].TileFrameY = 0;
+                            }
+                            if (num == 1) {
+                                Main.tile[i, i1].TileFrameX = 0;
+                                Main.tile[i, i1].TileFrameY = 22;
+                            }
+                            if (num == 2) {
+                                Main.tile[i, i1].TileFrameX = 0;
+                                Main.tile[i, i1].TileFrameY = 44;
+                            }
+                        }
+                        else {
+                            if (num == 0) {
+                                Main.tile[i, i1].TileFrameX = 110;
+                                Main.tile[i, i1].TileFrameY = 66;
+                            }
+                            if (num == 1) {
+                                Main.tile[i, i1].TileFrameX = 110;
+                                Main.tile[i, i1].TileFrameY = 88;
+                            }
+                            if (num == 2) {
+                                Main.tile[i, i1].TileFrameX = 110;
+                                Main.tile[i, i1].TileFrameY = 110;
+                            }
+                        }
+                        if (num5 == 5 || num5 == 7) {
+                            tile = Main.tile[i - 1, i1];
+                            tile.HasTile = true;
+                            if (WorldGen.genRand.Next(branchChance) < 3) {
+                                tile.TileType = (ushort)ModContent.TileType<T>();
+                            }
+                            else {
+                                tile.TileType = 5;
+                                num = Terraria.WorldGen.genRand.Next(3);
+                                if (Terraria.WorldGen.genRand.Next(3) >= 2) {
+                                    if (num == 0) {
+                                        Main.tile[i - 1, i1].TileFrameX = 66;
+                                        Main.tile[i - 1, i1].TileFrameY = 0;
+                                    }
+                                    if (num == 1) {
+                                        Main.tile[i - 1, i1].TileFrameX = 66;
+                                        Main.tile[i - 1, i1].TileFrameY = 22;
+                                    }
+                                    if (num == 2) {
+                                        Main.tile[i - 1, i1].TileFrameX = 66;
+                                        Main.tile[i - 1, i1].TileFrameY = 44;
+                                    }
+                                }
+                                else {
+                                    if (num == 0) {
+                                        Main.tile[i - 1, i1].TileFrameX = 44;
+                                        Main.tile[i - 1, i1].TileFrameY = 198;
+                                    }
+                                    if (num == 1) {
+                                        Main.tile[i - 1, i1].TileFrameX = 44;
+                                        Main.tile[i - 1, i1].TileFrameY = 220;
+                                    }
+                                    if (num == 2) {
+                                        Main.tile[i - 1, i1].TileFrameX = 44;
+                                        Main.tile[i - 1, i1].TileFrameY = 242;
+                                    }
+                                }
+                            }
+                        }
+                        if (num5 == 6 || num5 == 7) {
+                            tile = Main.tile[i + 1, i1];
+                            tile.HasTile = true;
+                            if (WorldGen.genRand.Next(branchChance) < 3) {
+                                tile.TileType = (ushort)ModContent.TileType<T>();
+                            }
+                            else {
+                                tile.TileType = 5;
+                                num = Terraria.WorldGen.genRand.Next(3);
+                                if (Terraria.WorldGen.genRand.Next(3) >= 2) {
+                                    if (num == 0) {
+                                        Main.tile[i + 1, i1].TileFrameX = 88;
+                                        Main.tile[i + 1, i1].TileFrameY = 66;
+                                    }
+                                    if (num == 1) {
+                                        Main.tile[i + 1, i1].TileFrameX = 88;
+                                        Main.tile[i + 1, i1].TileFrameY = 88;
+                                    }
+                                    if (num == 2) {
+                                        Main.tile[i + 1, i1].TileFrameX = 88;
+                                        Main.tile[i + 1, i1].TileFrameY = 110;
+                                    }
+                                }
+                                else {
+                                    if (num == 0) {
+                                        Main.tile[i + 1, i1].TileFrameX = 66;
+                                        Main.tile[i + 1, i1].TileFrameY = 198;
+                                    }
+                                    if (num == 1) {
+                                        Main.tile[i + 1, i1].TileFrameX = 66;
+                                        Main.tile[i + 1, i1].TileFrameY = 220;
+                                    }
+                                    if (num == 2) {
+                                        Main.tile[i + 1, i1].TileFrameX = 66;
+                                        Main.tile[i + 1, i1].TileFrameY = 242;
+                                    }
+                                }
+                            }
+                        }
                     }
-                    flag = false;
-                    flag1 = false;
-                    if (num5 == 5 || num5 == 7) {
-                        flag = true;
+                    int num6 = Terraria.WorldGen.genRand.Next(3);
+                    bool flag2 = false;
+                    bool flag3 = false;
+                    if (Main.tile[i - 1, num1].HasUnactuatedTile && !Main.tile[i - 1, num1].IsHalfBlock && Main.tile[i - 1, num1].Slope == 0 && (Main.tile[i - 1, num1].TileType == (ushort)ModContent.TileType<BackwoodsGrass>() || Main.tile[i - 1, num1].TileType == 23 || Main.tile[i - 1, num1].TileType == 60 || Main.tile[i - 1, num1].TileType == 109 || Main.tile[i - 1, num1].TileType == 147 || Main.tile[i - 1, num1].TileType == 199 || TileLoader.CanGrowModTree(Main.tile[i - 1, num1].TileType))) {
+                        flag2 = true;
                     }
-                    if (num5 == 6 || num5 == 7) {
-                        flag1 = true;
+                    if (Main.tile[i + 1, num1].HasUnactuatedTile && !Main.tile[i + 1, num1].IsHalfBlock && Main.tile[i + 1, num1].Slope == 0 && (Main.tile[i + 1, num1].TileType == (ushort)ModContent.TileType<BackwoodsGrass>() || Main.tile[i + 1, num1].TileType == 23 || Main.tile[i + 1, num1].TileType == 60 || Main.tile[i + 1, num1].TileType == 109 || Main.tile[i + 1, num1].TileType == 147 || Main.tile[i + 1, num1].TileType == 199 || TileLoader.CanGrowModTree(Main.tile[i + 1, num1].TileType))) {
+                        flag3 = true;
                     }
-                    if (num5 == 1) {
+                    if (!flag2) {
+                        if (num6 == 0) {
+                            num6 = 2;
+                        }
+                        if (num6 == 1) {
+                            num6 = 3;
+                        }
+                    }
+                    if (!flag3) {
+                        if (num6 == 0) {
+                            num6 = 1;
+                        }
+                        if (num6 == 2) {
+                            num6 = 3;
+                        }
+                    }
+                    if (flag2 && !flag3) {
+                        num6 = 2;
+                    }
+                    if (flag3 && !flag2) {
+                        num6 = 1;
+                    }
+                    if (num6 == 0 || num6 == 1) {
+                        Tile tile = Main.tile[i + 1, num1 - 1];
+                        tile.HasTile = true;
+                        tile.TileType = 5;
+                        num = Terraria.WorldGen.genRand.Next(3);
                         if (num == 0) {
-                            Main.tile[i, i1].TileFrameX = 0;
-                            Main.tile[i, i1].TileFrameY = 66;
+                            Main.tile[i + 1, num1 - 1].TileFrameX = 22;
+                            Main.tile[i + 1, num1 - 1].TileFrameY = 132;
                         }
                         if (num == 1) {
-                            Main.tile[i, i1].TileFrameX = 0;
-                            Main.tile[i, i1].TileFrameY = 88;
+                            Main.tile[i + 1, num1 - 1].TileFrameX = 22;
+                            Main.tile[i + 1, num1 - 1].TileFrameY = 154;
                         }
                         if (num == 2) {
-                            Main.tile[i, i1].TileFrameX = 0;
-                            Main.tile[i, i1].TileFrameY = 110;
+                            Main.tile[i + 1, num1 - 1].TileFrameX = 22;
+                            Main.tile[i + 1, num1 - 1].TileFrameY = 176;
                         }
                     }
-                    else if (num5 == 2) {
+                    if (num6 == 0 || num6 == 2) {
+                        Tile tile = Main.tile[i - 1, num1 - 1];
+                        tile.HasTile = true;
+                        tile.TileType = 5;
+                        num = Terraria.WorldGen.genRand.Next(3);
                         if (num == 0) {
-                            Main.tile[i, i1].TileFrameX = 22;
-                            Main.tile[i, i1].TileFrameY = 0;
+                            Main.tile[i - 1, num1 - 1].TileFrameX = 44;
+                            Main.tile[i - 1, num1 - 1].TileFrameY = 132;
                         }
                         if (num == 1) {
-                            Main.tile[i, i1].TileFrameX = 22;
-                            Main.tile[i, i1].TileFrameY = 22;
+                            Main.tile[i - 1, num1 - 1].TileFrameX = 44;
+                            Main.tile[i - 1, num1 - 1].TileFrameY = 154;
                         }
                         if (num == 2) {
-                            Main.tile[i, i1].TileFrameX = 22;
-                            Main.tile[i, i1].TileFrameY = 44;
+                            Main.tile[i - 1, num1 - 1].TileFrameX = 44;
+                            Main.tile[i - 1, num1 - 1].TileFrameY = 176;
                         }
                     }
-                    else if (num5 == 3) {
+                    num = Terraria.WorldGen.genRand.Next(3);
+                    if (num6 == 0) {
                         if (num == 0) {
-                            Main.tile[i, i1].TileFrameX = 44;
-                            Main.tile[i, i1].TileFrameY = 66;
+                            Main.tile[i, num1 - 1].TileFrameX = 88;
+                            Main.tile[i, num1 - 1].TileFrameY = 132;
                         }
                         if (num == 1) {
-                            Main.tile[i, i1].TileFrameX = 44;
-                            Main.tile[i, i1].TileFrameY = 88;
+                            Main.tile[i, num1 - 1].TileFrameX = 88;
+                            Main.tile[i, num1 - 1].TileFrameY = 154;
                         }
                         if (num == 2) {
-                            Main.tile[i, i1].TileFrameX = 44;
-                            Main.tile[i, i1].TileFrameY = 110;
+                            Main.tile[i, num1 - 1].TileFrameX = 88;
+                            Main.tile[i, num1 - 1].TileFrameY = 176;
                         }
                     }
-                    else if (num5 == 4) {
+                    else if (num6 == 1) {
                         if (num == 0) {
-                            Main.tile[i, i1].TileFrameX = 22;
-                            Main.tile[i, i1].TileFrameY = 66;
+                            Main.tile[i, num1 - 1].TileFrameX = 0;
+                            Main.tile[i, num1 - 1].TileFrameY = 132;
                         }
                         if (num == 1) {
-                            Main.tile[i, i1].TileFrameX = 22;
-                            Main.tile[i, i1].TileFrameY = 88;
+                            Main.tile[i, num1 - 1].TileFrameX = 0;
+                            Main.tile[i, num1 - 1].TileFrameY = 154;
                         }
                         if (num == 2) {
-                            Main.tile[i, i1].TileFrameX = 22;
-                            Main.tile[i, i1].TileFrameY = 110;
+                            Main.tile[i, num1 - 1].TileFrameX = 0;
+                            Main.tile[i, num1 - 1].TileFrameY = 176;
                         }
                     }
-                    else if (num5 == 5) {
+                    else if (num6 == 2) {
                         if (num == 0) {
-                            Main.tile[i, i1].TileFrameX = 88;
-                            Main.tile[i, i1].TileFrameY = 0;
+                            Main.tile[i, num1 - 1].TileFrameX = 66;
+                            Main.tile[i, num1 - 1].TileFrameY = 132;
                         }
                         if (num == 1) {
-                            Main.tile[i, i1].TileFrameX = 88;
-                            Main.tile[i, i1].TileFrameY = 22;
+                            Main.tile[i, num1 - 1].TileFrameX = 66;
+                            Main.tile[i, num1 - 1].TileFrameY = 154;
                         }
                         if (num == 2) {
-                            Main.tile[i, i1].TileFrameX = 88;
-                            Main.tile[i, i1].TileFrameY = 44;
+                            Main.tile[i, num1 - 1].TileFrameX = 66;
+                            Main.tile[i, num1 - 1].TileFrameY = 176;
                         }
                     }
-                    else if (num5 == 6) {
+                    if (Terraria.WorldGen.genRand.Next(8) == 0) {
+                        num = Terraria.WorldGen.genRand.Next(3);
                         if (num == 0) {
-                            Main.tile[i, i1].TileFrameX = 66;
-                            Main.tile[i, i1].TileFrameY = 66;
+                            Main.tile[i, num1 - num4].TileFrameX = 0;
+                            Main.tile[i, num1 - num4].TileFrameY = 198;
                         }
                         if (num == 1) {
-                            Main.tile[i, i1].TileFrameX = 66;
-                            Main.tile[i, i1].TileFrameY = 88;
+                            Main.tile[i, num1 - num4].TileFrameX = 0;
+                            Main.tile[i, num1 - num4].TileFrameY = 220;
                         }
                         if (num == 2) {
-                            Main.tile[i, i1].TileFrameX = 66;
-                            Main.tile[i, i1].TileFrameY = 110;
-                        }
-                    }
-                    else if (num5 != 7) {
-                        if (num == 0) {
-                            Main.tile[i, i1].TileFrameX = 0;
-                            Main.tile[i, i1].TileFrameY = 0;
-                        }
-                        if (num == 1) {
-                            Main.tile[i, i1].TileFrameX = 0;
-                            Main.tile[i, i1].TileFrameY = 22;
-                        }
-                        if (num == 2) {
-                            Main.tile[i, i1].TileFrameX = 0;
-                            Main.tile[i, i1].TileFrameY = 44;
+                            Main.tile[i, num1 - num4].TileFrameX = 0;
+                            Main.tile[i, num1 - num4].TileFrameY = 242;
                         }
                     }
                     else {
+                        num = Terraria.WorldGen.genRand.Next(3);
                         if (num == 0) {
-                            Main.tile[i, i1].TileFrameX = 110;
-                            Main.tile[i, i1].TileFrameY = 66;
+                            Main.tile[i, num1 - num4].TileFrameX = 22;
+                            Main.tile[i, num1 - num4].TileFrameY = 198;
                         }
                         if (num == 1) {
-                            Main.tile[i, i1].TileFrameX = 110;
-                            Main.tile[i, i1].TileFrameY = 88;
+                            Main.tile[i, num1 - num4].TileFrameX = 22;
+                            Main.tile[i, num1 - num4].TileFrameY = 220;
                         }
                         if (num == 2) {
-                            Main.tile[i, i1].TileFrameX = 110;
-                            Main.tile[i, i1].TileFrameY = 110;
+                            Main.tile[i, num1 - num4].TileFrameX = 22;
+                            Main.tile[i, num1 - num4].TileFrameY = 242;
                         }
                     }
-                    if (num5 == 5 || num5 == 7) {
-                        tile = Main.tile[i - 1, i1];
-                        tile.HasTile = true;
-                        if (WorldGen.genRand.Next(branchChance) < 3) {
-                            tile.TileType = (ushort)ModContent.TileType<T>();
-                        }
-                        else {
-                            tile.TileType = 5;
-                            num = Terraria.WorldGen.genRand.Next(3);
-                            if (Terraria.WorldGen.genRand.Next(3) >= 2) {
-                                if (num == 0) {
-                                    Main.tile[i - 1, i1].TileFrameX = 66;
-                                    Main.tile[i - 1, i1].TileFrameY = 0;
-                                }
-                                if (num == 1) {
-                                    Main.tile[i - 1, i1].TileFrameX = 66;
-                                    Main.tile[i - 1, i1].TileFrameY = 22;
-                                }
-                                if (num == 2) {
-                                    Main.tile[i - 1, i1].TileFrameX = 66;
-                                    Main.tile[i - 1, i1].TileFrameY = 44;
-                                }
-                            }
-                            else {
-                                if (num == 0) {
-                                    Main.tile[i - 1, i1].TileFrameX = 44;
-                                    Main.tile[i - 1, i1].TileFrameY = 198;
-                                }
-                                if (num == 1) {
-                                    Main.tile[i - 1, i1].TileFrameX = 44;
-                                    Main.tile[i - 1, i1].TileFrameY = 220;
-                                }
-                                if (num == 2) {
-                                    Main.tile[i - 1, i1].TileFrameX = 44;
-                                    Main.tile[i - 1, i1].TileFrameY = 242;
-                                }
-                            }
-                        }
+                    Terraria.WorldGen.RangeFrame(i - 2, num1 - num4 - 1, i + 2, num1 + 1);
+                    if (Main.netMode == NetmodeID.Server) {
+                        NetMessage.SendTileSquare(-1, i, (int)(num1 - num4 * 0.5), num4 + 1, TileChangeType.None);
                     }
-                    if (num5 == 6 || num5 == 7) {
-                        tile = Main.tile[i + 1, i1];
-                        tile.HasTile = true;
-                        if (WorldGen.genRand.Next(branchChance) < 3) {
-                            tile.TileType = (ushort)ModContent.TileType<T>();
-                        }
-                        else {
-                            tile.TileType = 5;
-                            num = Terraria.WorldGen.genRand.Next(3);
-                            if (Terraria.WorldGen.genRand.Next(3) >= 2) {
-                                if (num == 0) {
-                                    Main.tile[i + 1, i1].TileFrameX = 88;
-                                    Main.tile[i + 1, i1].TileFrameY = 66;
-                                }
-                                if (num == 1) {
-                                    Main.tile[i + 1, i1].TileFrameX = 88;
-                                    Main.tile[i + 1, i1].TileFrameY = 88;
-                                }
-                                if (num == 2) {
-                                    Main.tile[i + 1, i1].TileFrameX = 88;
-                                    Main.tile[i + 1, i1].TileFrameY = 110;
-                                }
-                            }
-                            else {
-                                if (num == 0) {
-                                    Main.tile[i + 1, i1].TileFrameX = 66;
-                                    Main.tile[i + 1, i1].TileFrameY = 198;
-                                }
-                                if (num == 1) {
-                                    Main.tile[i + 1, i1].TileFrameX = 66;
-                                    Main.tile[i + 1, i1].TileFrameY = 220;
-                                }
-                                if (num == 2) {
-                                    Main.tile[i + 1, i1].TileFrameX = 66;
-                                    Main.tile[i + 1, i1].TileFrameY = 242;
-                                }
-                            }
-                        }
-                    }
+                    return true;
                 }
-                int num6 = Terraria.WorldGen.genRand.Next(3);
-                bool flag2 = false;
-                bool flag3 = false;
-                if (Main.tile[i - 1, num1].HasUnactuatedTile && !Main.tile[i - 1, num1].IsHalfBlock && Main.tile[i - 1, num1].Slope == 0 && (Main.tile[i - 1, num1].TileType == (ushort)ModContent.TileType<BackwoodsGrass>() || Main.tile[i - 1, num1].TileType == 23 || Main.tile[i - 1, num1].TileType == 60 || Main.tile[i - 1, num1].TileType == 109 || Main.tile[i - 1, num1].TileType == 147 || Main.tile[i - 1, num1].TileType == 199 || TileLoader.CanGrowModTree(Main.tile[i - 1, num1].TileType))) {
-                    flag2 = true;
-                }
-                if (Main.tile[i + 1, num1].HasUnactuatedTile && !Main.tile[i + 1, num1].IsHalfBlock && Main.tile[i + 1, num1].Slope == 0 && (Main.tile[i + 1, num1].TileType == (ushort)ModContent.TileType<BackwoodsGrass>() || Main.tile[i + 1, num1].TileType == 23 || Main.tile[i + 1, num1].TileType == 60 || Main.tile[i + 1, num1].TileType == 109 || Main.tile[i + 1, num1].TileType == 147 || Main.tile[i + 1, num1].TileType == 199 || TileLoader.CanGrowModTree(Main.tile[i + 1, num1].TileType))) {
-                    flag3 = true;
-                }
-                if (!flag2) {
-                    if (num6 == 0) {
-                        num6 = 2;
-                    }
-                    if (num6 == 1) {
-                        num6 = 3;
-                    }
-                }
-                if (!flag3) {
-                    if (num6 == 0) {
-                        num6 = 1;
-                    }
-                    if (num6 == 2) {
-                        num6 = 3;
-                    }
-                }
-                if (flag2 && !flag3) {
-                    num6 = 2;
-                }
-                if (flag3 && !flag2) {
-                    num6 = 1;
-                }
-                if (num6 == 0 || num6 == 1) {
-                    Tile tile = Main.tile[i + 1, num1 - 1];
-                    tile.HasTile = true;
-                    tile.TileType = 5;
-                    num = Terraria.WorldGen.genRand.Next(3);
-                    if (num == 0) {
-                        Main.tile[i + 1, num1 - 1].TileFrameX = 22;
-                        Main.tile[i + 1, num1 - 1].TileFrameY = 132;
-                    }
-                    if (num == 1) {
-                        Main.tile[i + 1, num1 - 1].TileFrameX = 22;
-                        Main.tile[i + 1, num1 - 1].TileFrameY = 154;
-                    }
-                    if (num == 2) {
-                        Main.tile[i + 1, num1 - 1].TileFrameX = 22;
-                        Main.tile[i + 1, num1 - 1].TileFrameY = 176;
-                    }
-                }
-                if (num6 == 0 || num6 == 2) {
-                    Tile tile = Main.tile[i - 1, num1 - 1];
-                    tile.HasTile = true;
-                    tile.TileType = 5;
-                    num = Terraria.WorldGen.genRand.Next(3);
-                    if (num == 0) {
-                        Main.tile[i - 1, num1 - 1].TileFrameX = 44;
-                        Main.tile[i - 1, num1 - 1].TileFrameY = 132;
-                    }
-                    if (num == 1) {
-                        Main.tile[i - 1, num1 - 1].TileFrameX = 44;
-                        Main.tile[i - 1, num1 - 1].TileFrameY = 154;
-                    }
-                    if (num == 2) {
-                        Main.tile[i - 1, num1 - 1].TileFrameX = 44;
-                        Main.tile[i - 1, num1 - 1].TileFrameY = 176;
-                    }
-                }
-                num = Terraria.WorldGen.genRand.Next(3);
-                if (num6 == 0) {
-                    if (num == 0) {
-                        Main.tile[i, num1 - 1].TileFrameX = 88;
-                        Main.tile[i, num1 - 1].TileFrameY = 132;
-                    }
-                    if (num == 1) {
-                        Main.tile[i, num1 - 1].TileFrameX = 88;
-                        Main.tile[i, num1 - 1].TileFrameY = 154;
-                    }
-                    if (num == 2) {
-                        Main.tile[i, num1 - 1].TileFrameX = 88;
-                        Main.tile[i, num1 - 1].TileFrameY = 176;
-                    }
-                }
-                else if (num6 == 1) {
-                    if (num == 0) {
-                        Main.tile[i, num1 - 1].TileFrameX = 0;
-                        Main.tile[i, num1 - 1].TileFrameY = 132;
-                    }
-                    if (num == 1) {
-                        Main.tile[i, num1 - 1].TileFrameX = 0;
-                        Main.tile[i, num1 - 1].TileFrameY = 154;
-                    }
-                    if (num == 2) {
-                        Main.tile[i, num1 - 1].TileFrameX = 0;
-                        Main.tile[i, num1 - 1].TileFrameY = 176;
-                    }
-                }
-                else if (num6 == 2) {
-                    if (num == 0) {
-                        Main.tile[i, num1 - 1].TileFrameX = 66;
-                        Main.tile[i, num1 - 1].TileFrameY = 132;
-                    }
-                    if (num == 1) {
-                        Main.tile[i, num1 - 1].TileFrameX = 66;
-                        Main.tile[i, num1 - 1].TileFrameY = 154;
-                    }
-                    if (num == 2) {
-                        Main.tile[i, num1 - 1].TileFrameX = 66;
-                        Main.tile[i, num1 - 1].TileFrameY = 176;
-                    }
-                }
-                if (Terraria.WorldGen.genRand.Next(8) == 0) {
-                    num = Terraria.WorldGen.genRand.Next(3);
-                    if (num == 0) {
-                        Main.tile[i, num1 - num4].TileFrameX = 0;
-                        Main.tile[i, num1 - num4].TileFrameY = 198;
-                    }
-                    if (num == 1) {
-                        Main.tile[i, num1 - num4].TileFrameX = 0;
-                        Main.tile[i, num1 - num4].TileFrameY = 220;
-                    }
-                    if (num == 2) {
-                        Main.tile[i, num1 - num4].TileFrameX = 0;
-                        Main.tile[i, num1 - num4].TileFrameY = 242;
-                    }
-                }
-                else {
-                    num = Terraria.WorldGen.genRand.Next(3);
-                    if (num == 0) {
-                        Main.tile[i, num1 - num4].TileFrameX = 22;
-                        Main.tile[i, num1 - num4].TileFrameY = 198;
-                    }
-                    if (num == 1) {
-                        Main.tile[i, num1 - num4].TileFrameX = 22;
-                        Main.tile[i, num1 - num4].TileFrameY = 220;
-                    }
-                    if (num == 2) {
-                        Main.tile[i, num1 - num4].TileFrameX = 22;
-                        Main.tile[i, num1 - num4].TileFrameY = 242;
-                    }
-                }
-                Terraria.WorldGen.RangeFrame(i - 2, num1 - num4 - 1, i + 2, num1 + 1);
-                if (Main.netMode == NetmodeID.Server) {
-                    NetMessage.SendTileSquare(-1, i, (int)(num1 - num4 * 0.5), num4 + 1, TileChangeType.None);
-                }
-                return true;
             }
         }
         return false;

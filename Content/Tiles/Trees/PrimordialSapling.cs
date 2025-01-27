@@ -12,6 +12,7 @@ using Terraria.GameContent.Metadata;
 using RoA.Content.Tiles.Platforms;
 using RoA.Core.Utility;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Tiles.Ambient.LargeTrees;
 
 namespace RoA.Content.Tiles.Trees;
 
@@ -35,7 +36,7 @@ sealed class PrimordialSapling : ModTile {
 		TileObjectData.newTile.CoordinateHeights = [16, 18];
 		TileObjectData.newTile.CoordinateWidth = 16;
 		TileObjectData.newTile.CoordinatePadding = 2;
-		TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<Solid.Backwoods.BackwoodsGrass>()];
+		TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<BackwoodsGrass>()];
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.DrawFlipHorizontal = true;
 		TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
@@ -55,12 +56,18 @@ sealed class PrimordialSapling : ModTile {
 
 	public override void RandomUpdate(int i, int j) {
 		if (WorldGen.genRand.NextBool(15)) {
-			bool isPlayerNear = WorldGen.PlayerLOS(i, j);
-			bool success = WorldGenHelper.GrowTreeWithBranches<TreeBranch>(i, j);
-			if (success && isPlayerNear) {
-				WorldGen.TreeGrowFXCheck(i, j);
+			bool success = false;
+			if (Main.hardMode) {
+				success = BackwoodsBigTree.TryGrowBigTree(i, j + 2, placeRand: WorldGen.genRand);
+            }
+			if (!success && !TileID.Sets.TreeSapling[WorldGenHelper.GetTileSafely(i + 1, j).TileType] && !TileID.Sets.TreeSapling[WorldGenHelper.GetTileSafely(i - 1, j).TileType]) {
+				success = WorldGenHelper.GrowTreeWithBranches<TreeBranch>(i, j + 2, branchChance: 10);
 			}
-		}
+			bool isPlayerNear = WorldGen.PlayerLOS(i, j);
+            if (success && isPlayerNear) {
+                WorldGen.TreeGrowFXCheck(i, j);
+            }
+        }
 	}
 
 	public override void SetSpriteEffects(int i, int j, ref SpriteEffects effects) {

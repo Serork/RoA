@@ -62,7 +62,7 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
             return;
 
         bool createLeaves = true;
-        if (!PlantLoader.ShakeTree(x, y, Main.tile[x, num].TileType, ref createLeaves)) {
+        if (!PlantLoader.ShakeTree(x, y, Main.tile[x, num].TileType, ref createLeaves) && !flag) {
         
         }
         else if (Main.getGoodWorld && genRand.Next(17) == 0) {

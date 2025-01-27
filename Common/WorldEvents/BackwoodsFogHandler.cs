@@ -2,6 +2,7 @@
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Items.Placeable;
 using RoA.Content.Tiles.Ambient;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -37,6 +38,8 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
     }
 
+    private static float _fogTime;
+
     public static bool IsFogActive { get; private set; } = false;
     public static float Opacity { get; private set; } = 0f;
 
@@ -46,11 +49,13 @@ sealed class BackwoodsFogHandler : ModSystem {
     public override void SaveWorldData(TagCompound tag) {
         tag["backwoods" + nameof(IsFogActive)] = IsFogActive;
         tag["backwoods" + nameof(Opacity)] = Opacity;
+        tag["backwoods" + nameof(_fogTime)] = _fogTime;
     }
 
     public override void LoadWorldData(TagCompound tag) {
         IsFogActive = tag.GetBool("backwoods" + nameof(IsFogActive));
         Opacity = tag.GetFloat("backwoods" + nameof(Opacity));
+        _fogTime = tag.GetFloat("backwoods" + nameof(_fogTime));
     }
 
     private static void Reset() {
@@ -69,6 +74,43 @@ sealed class BackwoodsFogHandler : ModSystem {
     private static void ToggleBackwoodsFog(bool naturally = true) {
         if (!IsFogActive) {
             if ((naturally && Main.rand.NextChance(0.33)) || !naturally) {
+                var rand = Main.rand;
+                int num = 86400;
+                int num2 = num / 24;
+                int num3 = rand.Next(num2 * 8, num);
+                if (rand.Next(3) == 0)
+                    num3 += rand.Next(0, num2);
+
+                if (rand.Next(4) == 0)
+                    num3 += rand.Next(0, num2 * 2);
+
+                if (rand.Next(5) == 0)
+                    num3 += rand.Next(0, num2 * 2);
+
+                if (rand.Next(6) == 0)
+                    num3 += rand.Next(0, num2 * 3);
+
+                if (rand.Next(7) == 0)
+                    num3 += rand.Next(0, num2 * 4);
+
+                if (rand.Next(8) == 0)
+                    num3 += rand.Next(0, num2 * 5);
+
+                float num4 = 1f;
+                if (rand.Next(2) == 0)
+                    num4 += 0.05f;
+
+                if (rand.Next(3) == 0)
+                    num4 += 0.1f;
+
+                if (rand.Next(4) == 0)
+                    num4 += 0.15f;
+
+                if (rand.Next(5) == 0)
+                    num4 += 0.2f;
+
+                _fogTime = (int)((float)num3 * num4);
+
                 string message = Language.GetText("Mods.RoA.World.BackwoodsFog").ToString();
                 Helper.NewMessage($"{message}...", Helper.EventMessageColor);
                 IsFogActive = true;
@@ -76,6 +118,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
         else {
             IsFogActive = false;
+            _fogTime = 0f;
         }
         if (Main.netMode == NetmodeID.Server) {
             NetMessage.SendData(MessageID.WorldData);
@@ -83,11 +126,17 @@ sealed class BackwoodsFogHandler : ModSystem {
     }
 
     public override void PostUpdateNPCs() {
-        if (Main.dayTime && IsFogActive) {
-            if (Main.time < 1 || (Main.IsFastForwardingTime() && Main.time < 61)) {
+        if (IsFogActive) {
+            _fogTime -= (float)Main.desiredWorldEventsUpdateRate;
+            if (_fogTime <= 0f) {
                 ToggleBackwoodsFog();
             }
         }
+        //if (Main.dayTime && IsFogActive) {
+        //    //if (Main.time < 1 || (Main.IsFastForwardingTime() && Main.time < 61)) {
+        //    //    ToggleBackwoodsFog();
+        //    //}
+        //}
     }
 
     public override void PostUpdatePlayers() {
