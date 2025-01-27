@@ -58,7 +58,16 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             }
         }
         foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
-            TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true);
+            bool flag = false;
+            for (int checkX = -10; checkX < 11; checkX++) {
+                if (WorldGenHelper.GetTileSafely(position.X + checkX, position.Y).TileType == GetSelfType()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true);
+            }
         }
         foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
             if (WorldGenHelper.GetTileSafely(position.X, position.Y + 1).TileType == ModContent.TileType<BackwoodsGrass>()) {
