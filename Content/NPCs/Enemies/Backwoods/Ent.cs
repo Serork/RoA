@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -40,6 +41,9 @@ sealed class Ent : RoANPC {
         NPC.DeathSound = SoundID.NPCDeath27;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<EntBanner>();
     }
 
     public override void HitEffect(NPC.HitInfo hit) {

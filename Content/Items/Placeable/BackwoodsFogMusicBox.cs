@@ -13,7 +13,7 @@ sealed class BackwoodsFogMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "Fog"), ModContent.ItemType<BackwoodsFogMusicBox>(), ModContent.TileType<Tiles.Other.BackwoodsFogMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "Fog"), ModContent.ItemType<BackwoodsFogMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsFogMusicBox>());
     }
 
     public override void SetDefaults() {
@@ -23,7 +23,7 @@ sealed class BackwoodsFogMusicBox : ModItem {
         Item.useTime = 10;
         Item.autoReuse = true;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<Tiles.Other.BackwoodsFogMusicBox>();
+        Item.createTile = ModContent.TileType<Tiles.Miscellaneous.BackwoodsFogMusicBox>();
         Item.width = 30;
         Item.height = 20;
         Item.rare = 4;

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -46,6 +47,9 @@ sealed class Lumberjack : RoANPC {
 		NPC.DeathSound = SoundID.NPCDeath1;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<LumberjackBanner>();
     }
 
     public override void HitEffect(NPC.HitInfo hit) {

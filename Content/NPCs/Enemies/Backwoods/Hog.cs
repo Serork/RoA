@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -40,6 +41,9 @@ sealed class Hog : RoANPC {
 		NPC.value = Item.buyPrice(0, 0, 0, 80);
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<HogBanner>();
     }
 
     public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers) => RageMode();

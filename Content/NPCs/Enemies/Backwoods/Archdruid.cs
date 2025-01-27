@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -70,6 +71,9 @@ sealed class Archdruid : DruidNPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
         NPC.rarity = 2;
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<ArchdruidBanner>();
     }
 
     protected override float TimeToChangeState() => 2f;

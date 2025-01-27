@@ -19,6 +19,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using Terraria.Utilities;
 using RoA.Utilities;
+using RoA.Content.Items.Placeable.Banners;
 
 namespace RoA.Content.NPCs.Enemies.Miscellaneous;
 
@@ -96,6 +97,9 @@ sealed class PettyGoblin : ModNPC {
         Coins = new CoinGenerator(NPC);
 
         NPC.rarity = 3;
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<PettyGoblinBanner>();
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {

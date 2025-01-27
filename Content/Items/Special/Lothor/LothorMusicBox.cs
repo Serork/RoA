@@ -14,7 +14,7 @@ sealed class LothorMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor"), ModContent.ItemType<LothorMusicBox>(), ModContent.TileType<Tiles.Other.LothorMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor"), ModContent.ItemType<LothorMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.LothorMusicBox>());
     }
 
     public override void SetDefaults() {
@@ -24,7 +24,7 @@ sealed class LothorMusicBox : ModItem {
         Item.useTime = 10;
         Item.autoReuse = true;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<Tiles.Other.LothorMusicBox>();
+        Item.createTile = ModContent.TileType<Tiles.Miscellaneous.LothorMusicBox>();
         Item.width = 32;
         Item.height = 28;
         Item.rare = 4;

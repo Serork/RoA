@@ -72,7 +72,7 @@ abstract class SimplePylonTile<T> : ModPylon where T : ModItem {
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) => ModContent.GetInstance<SimplePylonEntity>().Kill(i, j); //Kill pylon tile entity
 
-    public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch) 
+    public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
         => DefaultDrawPylonCrystal(spriteBatch, i, j, crystalTexture, highlightTexture, new Vector2(0f, -12f),
     Color.White * 0.1f, Color.White, 4, CrystalVerticalFrameCount);
 

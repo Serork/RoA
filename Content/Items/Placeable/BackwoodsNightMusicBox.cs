@@ -13,7 +13,7 @@ sealed class BackwoodsNightMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight"), ModContent.ItemType<BackwoodsNightMusicBox>(), ModContent.TileType<Tiles.Other.BackwoodsNightMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight"), ModContent.ItemType<BackwoodsNightMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsNightMusicBox>());
     }
 
     public override void SetDefaults() {
@@ -23,7 +23,7 @@ sealed class BackwoodsNightMusicBox : ModItem {
         Item.useTime = 10;
         Item.autoReuse = true;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<Tiles.Other.BackwoodsNightMusicBox>();
+        Item.createTile = ModContent.TileType<Tiles.Miscellaneous.BackwoodsNightMusicBox>();
         Item.width = 30;
         Item.height = 20;
         Item.rare = 4;

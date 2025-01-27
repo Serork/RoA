@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Tiles.Other;
+namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class BackwoodsFogMusicBox : MusicBox {
     protected override int CursorItemType => ModContent.ItemType<Items.Placeable.BackwoodsFogMusicBox>();
@@ -126,6 +126,6 @@ sealed class BackwoodsFogMusicBox : MusicBox {
     }
 
     public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
-        
+
     }
 }

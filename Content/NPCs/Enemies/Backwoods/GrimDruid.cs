@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -42,6 +43,9 @@ sealed class GrimDruid : DruidNPC {
         DrawOffsetY = -2;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<GrimdruidBanner>();
     }
 
     public override void HitEffect(NPC.HitInfo hit) {

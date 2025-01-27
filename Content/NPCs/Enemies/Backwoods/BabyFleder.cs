@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -93,6 +94,9 @@ sealed class BabyFleder : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath1;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<BabyFlederBanner>();
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) {

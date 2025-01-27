@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 
 using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Materials;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core.Utility;
 
@@ -38,6 +39,9 @@ sealed class SapSlime : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.aiStyle = 1;
         NPC.alpha = 100;
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<SapSlimeBanner>();
     }
 
     private int GenerateItemInsideBody(bool isBallooned) {

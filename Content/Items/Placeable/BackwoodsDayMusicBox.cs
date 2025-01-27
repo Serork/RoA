@@ -13,7 +13,7 @@ sealed class BackwoodsDayMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay"), ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Other.BackwoodsDayMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay"), ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>());
     }
 
     public override void SetDefaults() {
@@ -23,7 +23,7 @@ sealed class BackwoodsDayMusicBox : ModItem {
         Item.useTime = 10;
         Item.autoReuse = true;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<Tiles.Other.BackwoodsDayMusicBox>();
+        Item.createTile = ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>();
         Item.width = 30;
         Item.height = 20;
         Item.rare = 4;

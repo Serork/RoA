@@ -2,6 +2,7 @@
 
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -61,6 +62,9 @@ sealed class Ravencaller : ModNPC {
         NPC.alpha = 175;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<RavencallerBanner>();
     }
 
     public override void SendExtraAI(BinaryWriter writer) {

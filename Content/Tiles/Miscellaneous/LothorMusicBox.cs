@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Tiles.Other;
+namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class LothorMusicBox : MusicBox {
     protected override int CursorItemType => ModContent.ItemType<Items.Special.Lothor.LothorMusicBox>();

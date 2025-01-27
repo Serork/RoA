@@ -13,6 +13,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -226,6 +227,9 @@ sealed class GrimDefender : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath6;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<GrimDefenderBanner>();
     }
 
     private class RecognizeHit : ModPlayer {

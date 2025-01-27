@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Utilities;
 
 using System.IO;
@@ -30,6 +31,9 @@ sealed class Hedgehog : ModNPC {
         NPC.npcSlots = 0;
         NPC.aiStyle = 7;
         AIType = NPCID.Bunny;
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<HedgehogBanner>();
     }
 
     public override void SendExtraAI(BinaryWriter writer) {

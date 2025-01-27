@@ -113,14 +113,14 @@ sealed class BackwoodsPylonTile : ModPylon {
         // We want to draw the pylon crystal the exact same way vanilla does, so we can use this built in method in ModPylon for default crystal drawing:
         // For the sake of example, lets make our pylon create a bit more dust by decreasing the dustConsequent value down to 1. If you want your dust spawning to be identical to vanilla, set dustConsequent to 4.
         // We also multiply the pylonShadowColor in order to decrease its opacity, so it actually looks like a "shadow"
-        NewDefaultDrawPylonCrystal(spriteBatch, 
-            i, 
-            j, 
-            crystalTexture, 
-            crystalHighlightTexture, 
+        NewDefaultDrawPylonCrystal(spriteBatch,
+            i,
+            j,
+            crystalTexture,
+            crystalHighlightTexture,
             new Vector2(0f, -12f),
             new Color(255, 255, 255, 0) * 0.1f,
-            new Color(79, 172, 211), 
+            new Color(79, 172, 211),
             7,
             CrystalVerticalFrameCount);
     }

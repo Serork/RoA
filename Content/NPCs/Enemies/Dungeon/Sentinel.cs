@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Utilities;
 
 using Terraria;
@@ -42,6 +43,9 @@ sealed class Sentinel : ModNPC {
         //bannerItem = mod.ItemType("Banner");
         AIType = NPCID.AngryBones;
         AnimationType = NPCID.Skeleton;
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<SentinelBanner>();
     }
 
     public override void PostAI() {

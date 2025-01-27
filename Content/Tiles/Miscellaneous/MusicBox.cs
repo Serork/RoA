@@ -8,7 +8,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace RoA.Content.Tiles.Other;
+namespace RoA.Content.Tiles.Miscellaneous;
 
 abstract class MusicBox : ModTile {
     protected virtual int GoreOffsetX { get; }

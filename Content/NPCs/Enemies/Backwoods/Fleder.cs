@@ -16,6 +16,7 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Content.Biomes.Backwoods;
 using Terraria.DataStructures;
 using RoA.Content.Buffs;
+using RoA.Content.Items.Placeable.Banners;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -85,6 +86,9 @@ sealed class Fleder : ModNPC {
         NPC.noGravity = true;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<FlederBanner>();
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) => target.AddBuff(ModContent.BuffType<BeastPoison>(), 85);

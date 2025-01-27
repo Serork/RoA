@@ -35,7 +35,7 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
         Main.tileWaterDeath[Type] = false;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
-		TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
+        TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
         TileObjectData.newTile.Width = XSize;
         TileObjectData.newTile.Height = YSize;
@@ -48,7 +48,7 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
         AnimationFrameHeight = 54;
     }
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = 6;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 6;
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         LuminiousFlowerLightUp(i, j, out float _, modTile: TileLoader.GetTile(Type));
@@ -81,7 +81,7 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
                     zero = Vector2.Zero;
                 }
                 int height = tile.TileFrameY == 36 ? 18 : 16;
-                Main.spriteBatch.Draw(TileHelper.GetTileGlowTexture(modTile),
+                Main.spriteBatch.Draw(modTile.GetTileGlowTexture(),
                                       new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
                                       new Rectangle(tile.TileFrameX, tile.TileFrameY + Main.tileFrame[modTile.Type] * 18 * 3 - 2, 16, height),
                                       Color.White * progress, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
@@ -98,14 +98,14 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
     }
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
-		frameCounter++;
-		if (frameCounter > 5) {
-			frameCounter = 0;
+        frameCounter++;
+        if (frameCounter > 5) {
+            frameCounter = 0;
 
-			frame++;
-			if (frame > 14) {
-				frame = 0;
-			}
-		}
-	}
+            frame++;
+            if (frame > 14) {
+                frame = 0;
+            }
+        }
+    }
 }

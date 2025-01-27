@@ -1326,3 +1326,8 @@ BackwoodsPylon: {
 	DisplayName: Backwoods Pylon
 	Tooltip: ""
 }
+
+ArchdruidBanner: {
+	DisplayName: Archdruid Banner
+	Tooltip: ""
+}

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -75,6 +76,9 @@ sealed class SummonedRaven : ModNPC {
         //};
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<SummonedRavenBanner>();
     }
 
     public override bool? CanFallThroughPlatforms() => true;
