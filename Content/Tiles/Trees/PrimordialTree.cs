@@ -3,41 +3,55 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using RoA.Common.Tiles;
+using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
+using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
-using System;
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Content.Tiles.Trees;
 
 sealed class PrimordialTreeGlow : GlobalTile {
-    public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
-        if (PrimordialTree.IsPrimordialTree(i, j)) {
+    public static List<Point> PrimordialTreeDrawPoints { get; private set; } = [];
+
+    public override void Load() {
+        On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
+        On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
+    }
+
+    private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
+        orig(self);
+
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
+        foreach (Point position in PrimordialTreeDrawPoints) {
+            int i = position.X, j = position.Y;
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
-            Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen) {
-                zero = Vector2.Zero;
-            }
             bool bluePart = tile.TileFrameX == 88 && tile.TileFrameY == 22;
-            Vector2 position = new Vector2(i, j).ToWorldCoordinates();
+            Vector2 drawPosition = new Vector2(i, j).ToWorldCoordinates();
             if (bluePart) {
                 if (!Main.dedServ) {
-                    Lighting.AddLight(position, new Color(95, 110, 255).ToVector3() * 0.5f);
+                    Lighting.AddLight(drawPosition, new Color(95, 110, 255).ToVector3() * 0.5f);
                 }
             }
             else if (Main.rand.NextBool(1050)) {
-                Dust dust = Dust.NewDustPerfect(position + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
+                Dust dust = Dust.NewDustPerfect(drawPosition + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
                 dust.velocity *= 0.5f + Main.rand.NextFloat() * 0.25f;
                 dust.scale *= 1.1f;
             }
@@ -50,10 +64,25 @@ sealed class PrimordialTreeGlow : GlobalTile {
                 int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>(PrimordialTree.TexturePath + "_Glow").Value,
                                       new Vector2(i * 16 - (int)Main.screenPosition.X - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
-                                      j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY) + zero,
+                                      j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY),
                                       new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
                                       Color.Lerp(Color.White, Lighting.GetColor(i, j), bluePart ? 0.6f : 0.8f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
+        }
+        spriteBatch.End();
+        spriteBatch.Begin(in snapshot);
+    }
+
+    private static void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
+        orig(self);
+
+        PrimordialTreeDrawPoints.Clear();
+    }
+
+    public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
+        Point position = new(i, j);
+        if (PrimordialTree.IsPrimordialTree(i, j) && !PrimordialTreeDrawPoints.Contains(position)) {
+            PrimordialTreeDrawPoints.Add(position);
         }
     }
 
