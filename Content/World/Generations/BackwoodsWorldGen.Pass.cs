@@ -262,7 +262,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step_AddWebs() {
-        for (int num874 = 0; num874 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00005); num874++) {
+        for (int num874 = 0; num874 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00004); num874++) {
             int num875 = _random.Next(Left - 20, Right + 20);
             int num876 = _random.Next(BackwoodsVars.FirstTileYAtCenter + EdgeY, Bottom);
 
