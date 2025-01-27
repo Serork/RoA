@@ -116,7 +116,7 @@ sealed partial class Lothor : ModNPC {
         }
 
         spriteBatch.Draw(ItsSpriteSheet, NPC.position + offset, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
-        spriteBatch.Draw(GlowMask, NPC.position + offset, NPC.frame, glowMaskColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(GlowMask, NPC.position + offset, NPC.frame, glowMaskColor * Utils.GetLerpValue(0f, 0.25f, NPC.Opacity, true), NPC.rotation, origin, NPC.scale, effects, 0f);
 
         spriteBatch.BeginBlendState(BlendState.Additive);
         for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {

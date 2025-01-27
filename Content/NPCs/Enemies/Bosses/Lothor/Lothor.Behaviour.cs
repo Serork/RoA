@@ -123,11 +123,14 @@ sealed partial class Lothor : ModNPC {
     private bool _shouldSpawnPipistrelles;
     private bool _isDead;
     private float _deadStateProgress;
+    private Player _target;
+    private bool _targetIsDeadOrNoTarget;
 
     public float LifeProgress => _isDead ? 0f : (1f - NPC.life / (float)NPC.lifeMax);
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
-    private Player Target { get; set; }
+
+    private Player Target => _target;
     private List<LothorAIState> Attacks => [LothorAIState.ClawsAttack, LothorAIState.SpittingAttack, LothorAIState.Scream, LothorAIState.FlightAttackPreparation, LothorAIState.WreathAttack];
     private List<LothorAIState> FlightStates => [LothorAIState.Flight, LothorAIState.AirDash, LothorAIState.FlightAttackPreparation, LothorAIState.ChargingWreath, LothorAIState.WreathAttack];
     private List<LothorAIState> AirAttacks => [LothorAIState.AirDash, LothorAIState.FlightAttackPreparation];
@@ -156,8 +159,8 @@ sealed partial class Lothor : ModNPC {
     private float PreparationProgress => Helper.EaseInOut3(DashTimer / DashDelay * 1.25f);
 
     private bool DoingFirstDash => DashCount == 0;
-    private bool IsAboutToGoToChangeMainState => DashCount > GetJumpCountToEncourageFlightState();
-    private bool BeforeDoingLastJump => DashCount > GetJumpCountToEncourageFlightState() - 1;
+    private bool IsAboutToGoToChangeMainState => DashCount > GetJumpCountToEncourageFlightState() || _targetIsDeadOrNoTarget;
+    private bool BeforeDoingLastJump => DashCount > GetJumpCountToEncourageFlightState() - 1 || _targetIsDeadOrNoTarget;
 
     private bool IsFlying => FlightStates.Contains(CurrentAIState);
 
@@ -297,11 +300,13 @@ sealed partial class Lothor : ModNPC {
         UpdateWreath();
         UpdateGlowing();
 
-        if (NPC.Opacity < 1f) {
-            NPC.Opacity += 0.025f;
-        }
-        else {
-            NPC.Opacity = 1f;
+        if (_targetIsDeadOrNoTarget) {
+            if (NPC.Opacity < 1f) {
+                NPC.Opacity += 0.025f;
+            }
+            else {
+                NPC.Opacity = 1f;
+            }
         }
     }
 
@@ -639,43 +644,52 @@ sealed partial class Lothor : ModNPC {
     }
 
     private void HandleActiveState() {
+        _target ??= Main.LocalPlayer;
+        _targetIsDeadOrNoTarget = true;
         if (GetTargetPlayer(out Player target)) {
-            Target = target;
-            switch (CurrentAIState) {
-                case LothorAIState.Fall:
-                    FallState();
-                    break;
-                case LothorAIState.Idle:
-                    IdleState();
-                    break;
-                case LothorAIState.Jump:
-                    JumpState();
-                    break;
-                case LothorAIState.Flight:
-                    FlightState();
-                    break;
-                case LothorAIState.AirDash:
-                    AirDashState();
-                    break;
-                case LothorAIState.ClawsAttack:
-                    ClawsAttack();
-                    break;
-                case LothorAIState.SpittingAttack:
-                    SpittingAttack();
-                    break;
-                case LothorAIState.Scream:
-                    HandleScream();
-                    break;
-                case LothorAIState.FlightAttackPreparation:
-                    FlightAttackPreparation();
-                    break;
-                case LothorAIState.ChargingWreath:
-                    ChargingWreath();
-                    break;
-                case LothorAIState.WreathAttack:
-                    WreathAttack();
-                    break;
+            _target = target;
+            _targetIsDeadOrNoTarget = false;
+        }
+        if (!_targetIsDeadOrNoTarget && NPC.Opacity < 1f) {
+            NPC.Opacity += 0.025f;
+            if (NPC.Opacity > 1f) {
+                NPC.Opacity = 1f;
             }
+        }
+        switch (CurrentAIState) {
+            case LothorAIState.Fall:
+                FallState();
+                break;
+            case LothorAIState.Idle:
+                IdleState();
+                break;
+            case LothorAIState.Jump:
+                JumpState();
+                break;
+            case LothorAIState.Flight:
+                FlightState();
+                break;
+            case LothorAIState.AirDash:
+                AirDashState();
+                break;
+            case LothorAIState.ClawsAttack:
+                ClawsAttack();
+                break;
+            case LothorAIState.SpittingAttack:
+                SpittingAttack();
+                break;
+            case LothorAIState.Scream:
+                HandleScream();
+                break;
+            case LothorAIState.FlightAttackPreparation:
+                FlightAttackPreparation();
+                break;
+            case LothorAIState.ChargingWreath:
+                ChargingWreath();
+                break;
+            case LothorAIState.WreathAttack:
+                WreathAttack();
+                break;
         }
     }
 
@@ -1068,7 +1082,7 @@ sealed partial class Lothor : ModNPC {
         if (ClawsTimer == 1f) {
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 ushort projType = (ushort)ModContent.ProjectileType<LothorClawsSlash>();
-                int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType, NPC.damage / 3, 2f, Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
+                int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType, NPC.damage / 2, 2f, Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
             }
             string name = "LothorSwipe";
@@ -1239,6 +1253,24 @@ sealed partial class Lothor : ModNPC {
         }
     }
 
+    private bool OnPlayersDead() {
+        if (_targetIsDeadOrNoTarget && !_isDead) {
+            if (NPC.Opacity > 0f) {
+                NPC.Opacity -= 0.05f;
+            }
+            if (NPC.Opacity < 0.025f) {
+                NPC.KillNPC();
+                NPC.Opacity = 0f;
+            }
+            NPC.velocity *= 0.95f;
+            NPC.EncourageDespawn(10);
+
+            return true;
+        }
+
+        return false;
+    }
+
     private void FlightState() {
         if (StillInJumpBeforeFlightTimer > 0f) {
             StillInJumpBeforeFlightTimer--;
@@ -1247,6 +1279,9 @@ sealed partial class Lothor : ModNPC {
             }
             AirDashTimer++;
             LookAtPlayer();
+            return;
+        } 
+        if (OnPlayersDead()) {
             return;
         }
         Vector2 dif = GetBetweenForFlightState();
@@ -1408,7 +1443,7 @@ sealed partial class Lothor : ModNPC {
         }
         float dashStrength = GetDashStrength();
         if (NPC.velocity.Y != 0f) {
-            if (NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
+            if (!OnPlayersDead() && NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
                 GoToFlightState();
                 _shouldWreathAttack = !_shouldWreathAttack;
                 if (Main.rand.NextBool()) {
@@ -1443,7 +1478,7 @@ sealed partial class Lothor : ModNPC {
                 NPC.velocity.Y += FallStrengthIfClose;
             }
         }
-        else {
+        else if (!OnPlayersDead()) {
             SpawnStomp();
             if (Math.Abs(NPC.velocity.Y) <= 0.25f) {
                 FallStrengthIfClose = 0f;
@@ -1634,7 +1669,7 @@ sealed partial class Lothor : ModNPC {
         bool flag = Collision.CanHit(Target, NPC);
         float distance = Vector2.Distance(Target.Center, NPC.Center);
         bool flag2 = distance < 250f;
-        bool flag4 = DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
+        bool flag4 = !_targetIsDeadOrNoTarget && DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
         if (flag4) {
             if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && DashTimer % 5f == 0f && Main.rand.NextBool(5)) {
                 ChooseAttack(LothorAIState.Scream);
