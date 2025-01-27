@@ -10,8 +10,6 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static RoA.Common.GlowMasks.ItemGlowMaskHandler;
-
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class OvergrownSpear : ModProjectile {

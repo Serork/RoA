@@ -164,6 +164,9 @@ sealed class OvergrownSphere : ModProjectile {
             if (Projectile.Opacity > 0f) Projectile.Opacity -= 0.025f;
 			else Projectile.Kill();
 		}
+		else if (Projectile.Opacity < 1f) {
+			_changeAlpha = false;
+        }
 	}
 
 	public override bool PreDraw(ref Color lightColor) {
