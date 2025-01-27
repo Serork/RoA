@@ -47,6 +47,14 @@ sealed class SmallMoonPlayer : ModPlayer {
         if (!Player.HasItem(type) && Player.whoAmI == Main.myPlayer && Main.mouseItem.type != type && !Player.miscEquips.Any(x => x.type == type)) {
             return;
         }
+
+        if (Main.bloodMoon) smallMoonColor = Color.Red;
+        else if (Main.pumpkinMoon) smallMoonColor = Color.Orange;
+        else if (Main.snowMoon) smallMoonColor = Color.DeepSkyBlue;
+        else {
+            smallMoonColor = Color.White;
+        }
+
         if (Player.name == "peege.on") smallMoonColor = Player.underShirtColor;
         if (Player.name == "has2r") smallMoonColor = Color.Indigo;
         if (Player.name == "Serork") smallMoonColor = Color.Yellow;
@@ -65,11 +73,8 @@ sealed class SmallMoonPlayer : ModPlayer {
         if (Player.name == "BRIPE") {
             smallMoonColor = GetLerpColor([new Color(71, 98, 255), Color.Blue]);
         }
-        if (Main.bloodMoon) smallMoonColor = Color.Red;
-        if (Main.pumpkinMoon) smallMoonColor = Color.Orange;
-        if (Main.snowMoon) smallMoonColor = Color.DeepSkyBlue;
 
-        if (Player.name == string.Empty) smallMoonColor = Color.Yellow;
+        if (Player.name == string.Empty) smallMoonColor = Color.Transparent;
     }
 
     private Color GetLerpColor(List<Color> from) {
