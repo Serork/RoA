@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.BackwoodsSystems;
 using RoA.Common.Cache;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
@@ -10,6 +11,7 @@ using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Trees;
 using RoA.Core;
@@ -18,6 +20,7 @@ using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -42,6 +45,19 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
         On_WorldGen.AttemptToGrowTreeFromSapling += On_WorldGen_AttemptToGrowTreeFromSapling;
         On_WorldGen.CanKillTile_int_int_refBoolean += On_WorldGen_CanKillTile_int_int_refBoolean;
+        On_WorldGen.smCallBack += On_WorldGen_smCallBack;
+    }
+
+    private void On_WorldGen_smCallBack(On_WorldGen.orig_smCallBack orig, object threadContext) {
+        orig(threadContext);
+
+        for (int i = 0; i < 2; i++) {
+            foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
+                if (!(!WorldGenHelper.ActiveTile(position.X, position.Y, TileID.Trees) && !WorldGenHelper.ActiveTile(position.X, position.Y, ModContent.TileType<TreeBranch>()))) {
+                    WorldGen.KillTile(position.X, position.Y, false, false, true);
+                }
+            }
+        }
     }
 
     private bool On_WorldGen_CanKillTile_int_int_refBoolean(On_WorldGen.orig_CanKillTile_int_int_refBoolean orig, int i, int j, out bool blockDamaged) {
@@ -161,6 +177,10 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        if (Main.rand.NextBool(7)) {
+            yield return new Item(ItemID.Acorn, Main.rand.Next(1, 3));
+        }
+
         yield return new Item(ModContent.ItemType<Elderwood>(), Main.rand.Next(2, 6));
     }
 

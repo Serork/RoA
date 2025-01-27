@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.BackwoodsSystems;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
@@ -10,6 +11,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -56,6 +58,8 @@ sealed class FlederForm : BaseForm {
         }
 
         public override void PreUpdateMovement() {
+            Main.NewText(BackwoodsVars.AllTreesWorldPositions.Count);
+
             bool flag = _dashDirection != IDoubleTap.TapDirection.None || ActiveDash;
             if (flag && !Player.GetModPlayer<BaseFormHandler>().IsConsideredAs<FlederForm>()) {
                 _dashDirection = IDoubleTap.TapDirection.None;

@@ -10,13 +10,11 @@ using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable;
-using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Tiles.Ambient;
-using RoA.Content.Tiles.Crafting;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
 using RoA.Content.Tiles.Plants;
@@ -28,10 +26,8 @@ using RoA.Core.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Biomes.CaveHouse;
 using Terraria.GameContent.Generation;
@@ -106,9 +102,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     internal int EdgeY => _biomeHeight / 4;
     
     private void SetUpMessage(LocalizedText message, float? value = null, GenerationProgress progress = null) {
-        if (_progress == null) {
-            _progress = progress;
-        }
+        _progress ??= progress;
         _progress.Message = message.Value;
         if (value.HasValue) {
             _progress.Value = value.Value;
@@ -437,7 +431,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 //    wallType = _dirtWallType;
                                 //}
 
-                                WorldGenHelper.CustomWall2(num300, num301, wallType, () => {
+                                WorldGenHelper.CustomWall2(num300, num301, wallType, (point) => {
+                                    return point.X > Left - 10 && point.X < Right + 10;
+                                }, () => {
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
                                 }, WallID.MudUnsafe, WallID.MudWallEcho, WallID.JungleUnsafe, WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4,
@@ -541,7 +537,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 //    wallType = _dirtWallType;
                                 //}
 
-                                WorldGenHelper.CustomWall2(num300, num301, wallType, () => {
+                                WorldGenHelper.CustomWall2(num300, num301, wallType, (point) => {
+                                    return point.X > Left - 10 && point.X < Right + 10;
+                                }, () => {
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
                                 }, WallID.MudUnsafe, WallID.MudWallEcho, WallID.JungleUnsafe, WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4,
@@ -3615,9 +3613,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         SkipTilesByTileType(TileID.Mud, tileCountToCheck: tileCountToCheck);
         SkipTilesByTileType(TileID.Sand, tileCountToCheck: tileCountToCheck * 2, offsetPositionDirectionOnCheck: -1);
 
+        BackwoodsVars.BackwoodsStartX = CenterX;
         BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX) + 15;
         CenterY = BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX);
         CenterY += _biomeHeight / 2;
+        BackwoodsVars.BackwoodsHalfSizeX = _biomeWidth / 2;
     }
 
     private void Step2_ClearZone() {

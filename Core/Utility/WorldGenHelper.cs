@@ -2,6 +2,7 @@
 
 using ReLogic.Utilities;
 
+using RoA.Common.BackwoodsSystems;
 using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -36,7 +37,7 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
     }
 
-    public static void CustomWall2(int x, int y, int wallType, Action onSpread, params ushort[] ignoreWallTypes) {
+    public static void CustomWall2(int x, int y, int wallType, Predicate<Point> shouldSpread, Action onSpread, params ushort[] ignoreWallTypes) {
         if (!WorldGen.InWorld(x, y))
             return;
 
@@ -124,7 +125,7 @@ static class WorldGenHelper {
                     }
                 }
                 else if (tile.HasTile) {
-                    if (!ignoreWallTypes.Contains(num)) {
+                    if (!ignoreWallTypes.Contains(num) && shouldSpread(new Point(item.X, item.Y))) {
                         tile.WallType = num;
                         onSpread();
                     }
@@ -1113,8 +1114,8 @@ static class WorldGenHelper {
         for (j = y; TileID.Sets.TreeSapling[Main.tile[i, j].TileType]; j++) {
         }
 
-        if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees)
-            return false;
+        //if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees)
+        //    return false;
 
         if (Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i, j].TileType) && ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i, j - 1].WallType)) && ((Main.tile[i - 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType)) || (Main.tile[i + 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType)))) {
             int num;
@@ -1131,6 +1132,7 @@ static class WorldGenHelper {
                         tile.TileFrameNumber = (byte)Terraria.WorldGen.genRand.Next(3);
                         tile.HasTile = true;
                         tile.TileType = 5;
+                        BackwoodsVars.AddBackwoodsTree(i, i1);
                         num = Terraria.WorldGen.genRand.Next(3);
                         int num5 = Terraria.WorldGen.genRand.Next(10);
                         if (i1 == num1 - 1 || i1 == num1 - num4) {
@@ -1302,6 +1304,7 @@ static class WorldGenHelper {
                                     }
                                 }
                             }
+                            BackwoodsVars.AddBackwoodsTree(i - 1, i1);
                         }
                         if (num5 == 6 || num5 == 7) {
                             tile = Main.tile[i + 1, i1];
@@ -1341,6 +1344,7 @@ static class WorldGenHelper {
                                     }
                                 }
                             }
+                            BackwoodsVars.AddBackwoodsTree(i + 1, i1);
                         }
                     }
                     int num6 = Terraria.WorldGen.genRand.Next(3);
@@ -1391,6 +1395,7 @@ static class WorldGenHelper {
                             Main.tile[i + 1, num1 - 1].TileFrameX = 22;
                             Main.tile[i + 1, num1 - 1].TileFrameY = 176;
                         }
+                        BackwoodsVars.AddBackwoodsTree(i + 1, num1 - 1);
                     }
                     if (num6 == 0 || num6 == 2) {
                         Tile tile = Main.tile[i - 1, num1 - 1];
@@ -1409,6 +1414,7 @@ static class WorldGenHelper {
                             Main.tile[i - 1, num1 - 1].TileFrameX = 44;
                             Main.tile[i - 1, num1 - 1].TileFrameY = 176;
                         }
+                        BackwoodsVars.AddBackwoodsTree(i - 1, num1 - 1);
                     }
                     num = Terraria.WorldGen.genRand.Next(3);
                     if (num6 == 0) {
