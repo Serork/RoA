@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.PopupTexts;
 using RoA.Common.Projectiles;
 using RoA.Content.Items.Miscellaneous;
@@ -57,7 +59,8 @@ sealed class PettyBag : InteractableProjectile {
 
                 item.shimmered = false;
                 BagItems.Add(item);
-                CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, item.stack, noStack: false, true);
+                if (projectile.owner == Main.myPlayer)
+                    CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, item.stack, noStack: false, true);
             }
         }
 
@@ -73,13 +76,15 @@ sealed class PettyBag : InteractableProjectile {
                 if (item.stack + bagItem.stack <= bagItem.maxStack) {
                     bagItem.stack += item.stack;
 
-                    CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, item.stack, noStack: false, true);
+                    if (projectile.owner == Main.myPlayer) 
+                        CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, item.stack, noStack: false, true);
 
                     return true;
                 }
 
                 item.stack -= bagItem.maxStack - bagItem.stack;
-                CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, bagItem.maxStack - bagItem.stack, noStack: false, true);
+                if (projectile.owner == Main.myPlayer)
+                    CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, bagItem.maxStack - bagItem.stack, noStack: false, true);
 
                 bagItem.stack = bagItem.maxStack;
             }
@@ -100,8 +105,8 @@ sealed class PettyBag : InteractableProjectile {
                 Main.item[num].favorited = false;
                 Main.item[num].newAndShiny = false;
                 Main.item[num].GetGlobalItem<PettyBagItemExtra>().WasCollectedByPettyBag = true;
-                if (Main.netMode == 1)
-                    NetMessage.SendData(21, -1, -1, null, num);
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num);
             }
 
             BagItems.Clear();
@@ -148,7 +153,7 @@ sealed class PettyBag : InteractableProjectile {
             if (!item.active || item.shimmerTime != 0f || item.noGrabDelay != 0 || item.playerIndexTheItemIsReservedFor != player.whoAmI || !player.CanAcceptItemIntoInventory(item) || (item.shimmered && !((double)item.velocity.Length() < 0.2)))
                 continue;
 
-            if (item.GetGlobalItem<PettyBagItemExtra>().WasCollectedByPettyBag) {
+            if (item.GetGlobalItem<PettyBagItemExtra>() != null && item.GetGlobalItem<PettyBagItemExtra>().WasCollectedByPettyBag) {
                 continue;
             }
 
@@ -159,8 +164,13 @@ sealed class PettyBag : InteractableProjectile {
             int itemGrabRange = GetGrabRange(player, item);
             Rectangle hitbox = item.Hitbox;
             if (Projectile.Hitbox.Intersects(hitbox)) {
-                player.GetModPlayer<PettyBagHandler>().AddItem(item, Projectile);
-                Main.item[j] = new Item();
+                if (Projectile.owner == Main.myPlayer) {
+                    player.GetModPlayer<PettyBagHandler>().AddItem(item, Projectile);
+                    Main.item[j] = new Item();
+
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                        NetMessage.SendData(MessageID.SyncItem, -1, -1, null, j);
+                }
             }
             else {
                 if (!new Rectangle((int)Projectile.position.X - itemGrabRange, (int)Projectile.position.Y - itemGrabRange, Projectile.width + itemGrabRange * 2, Projectile.height + itemGrabRange * 2).Intersects(hitbox))
@@ -168,21 +178,27 @@ sealed class PettyBag : InteractableProjectile {
 
                 Player.ItemSpaceStatus status = player.ItemSpace(item);
                 if (player.CanPullItem(item, status)) {
-                    item.shimmered = false;
-                    item.beingGrabbed = true;
+                    if (Projectile.owner == Main.myPlayer) {
+                        item.shimmered = false;
+                        item.beingGrabbed = true;
 
-                    Item itemToPickUp = item;
-                    float speed = 5f;
-                    int acc = 2;
-                    Vector2 vector = new Vector2(itemToPickUp.position.X + (float)(itemToPickUp.width / 2), itemToPickUp.position.Y + (float)(itemToPickUp.height / 2));
-                    float num = Projectile.Center.X - vector.X;
-                    float num2 = Projectile.Center.Y - vector.Y;
-                    float num3 = (float)Math.Sqrt(num * num + num2 * num2);
-                    num3 = speed / num3;
-                    num *= num3;
-                    num2 *= num3;
-                    itemToPickUp.velocity.X = (itemToPickUp.velocity.X * (float)(acc - 1) + num) / (float)acc;
-                    itemToPickUp.velocity.Y = (itemToPickUp.velocity.Y * (float)(acc - 1) + num2) / (float)acc;
+                        Item itemToPickUp = item;
+                        float speed = 5f;
+                        int acc = 2;
+                        Vector2 vector = new Vector2(itemToPickUp.position.X + (float)(itemToPickUp.width / 2), itemToPickUp.position.Y + (float)(itemToPickUp.height / 2));
+                        float num = Projectile.Center.X - vector.X;
+                        float num2 = Projectile.Center.Y - vector.Y;
+                        float num3 = (float)Math.Sqrt(num * num + num2 * num2);
+                        num3 = speed / num3;
+                        num *= num3;
+                        num2 *= num3;
+                        itemToPickUp.velocity.X = (itemToPickUp.velocity.X * (float)(acc - 1) + num) / (float)acc;
+                        itemToPickUp.velocity.Y = (itemToPickUp.velocity.Y * (float)(acc - 1) + num2) / (float)acc;
+
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new ItemPositionPacket(player, j, itemToPickUp.velocity, item.shimmered, item.beingGrabbed));
+                        }
+                    }
 					SpawnDust(1);
                 }
             }

@@ -33,7 +33,8 @@ sealed class CosmicMana : ModProjectile {
         Projectile.aiStyle = 1;
         Projectile.timeLeft = 145;
         Projectile.alpha = 255;
-        Projectile.hostile = true;
+        Projectile.friendly = true;
+        Projectile.hostile = false;
         AIType = 14;
     }
 
