@@ -42,12 +42,18 @@ sealed class SmallMoonPlayer : ModPlayer {
         smallMoon = false;
     }
 
+    public override void OnEnterWorld() => SetInfo();;
+
     public override void PostUpdate() {
         int type = ModContent.ItemType<MoonFlower>();
         if (!Player.HasItem(type) && Player.whoAmI == Main.myPlayer && Main.mouseItem.type != type && !Player.miscEquips.Any(x => x.type == type)) {
             return;
         }
 
+        SetInfo();
+    }
+
+    private void SetInfo() {
         if (Main.bloodMoon) smallMoonColor = Color.Red;
         else if (Main.pumpkinMoon) smallMoonColor = Color.Orange;
         else if (Main.snowMoon) smallMoonColor = Color.DeepSkyBlue;
