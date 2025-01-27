@@ -58,16 +58,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             }
         }
         foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
-            bool flag = false;
-            for (int checkX = -10; checkX < 11; checkX++) {
-                if (WorldGenHelper.GetTileSafely(position.X + checkX, position.Y).TileType == GetSelfType()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true);
-            }
+            TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true);
         }
         foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
             if (WorldGenHelper.GetTileSafely(position.X, position.Y + 1).TileType == ModContent.TileType<BackwoodsGrass>()) {
@@ -118,7 +109,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         return orig(x, y, underground);
     }
 
-    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null, bool shouldCheckExtraOneTile = true, bool ignoreAcorns = false) {
+    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null, bool shouldCheckExtraOneTile = true, bool ignoreAcorns = false, bool ignoreTrees = false, bool shouldMainCheck = true) {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             return false;
         }
@@ -145,17 +136,25 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
 
         int i2 = i;
         int grassTileType = ModContent.TileType<BackwoodsGrass>();
-        if (!(Main.tile[i2, j].HasUnactuatedTile && !Main.tile[i2, j].IsHalfBlock && Main.tile[i2, j].Slope == 0 &&
-            Main.tile[i2 - 1, j].TileType == grassTileType && Main.tile[i2, j].TileType == grassTileType && Main.tile[i2 + 1, j].TileType == grassTileType && Main.tile[i2 + 2, j].TileType == grassTileType &&
-            ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i2, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i2, j - 1].WallType)))) {
-            return false;
+        if (shouldMainCheck) {
+            if (!(Main.tile[i2, j].HasUnactuatedTile && !Main.tile[i2, j].IsHalfBlock && Main.tile[i2, j].Slope == 0 &&
+                Main.tile[i2 - 1, j].TileType == grassTileType && Main.tile[i2, j].TileType == grassTileType && Main.tile[i2 + 1, j].TileType == grassTileType && Main.tile[i2 + 2, j].TileType == grassTileType &&
+                ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i2, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i2, j - 1].WallType)))) {
+                return false;
+            }
         }
 
         int num = !shouldCheckExtraOneTile ? 1 : 2;
         int num2 = height;
         int num3 = num2 + 4;
         bool flag = false;
-        if (WorldGen.EmptyTileCheck(i - num, i + num + 1, j - num3, j - 1, 20) && WorldGen.EmptyTileCheck(i - 1, i + 2, j - 2, j - 1, 20))
+        List<int> ignore = [];
+        ignore.Add(20);
+        if (ignoreTrees) {
+            ignore.Add(TileID.Trees);
+            ignore.Add(ModContent.TileType<TreeBranch>());
+        }
+        if (WorldGenHelper.CustomEmptyTileCheck(i - num, i + num + 1, j - num3, j - 1, ignore.ToArray()) && WorldGenHelper.CustomEmptyTileCheck(i - 1, i + 2, j - 2, j - 1, ignore.ToArray()))
             flag = true;
 
         if (flag && !shouldCheckExtraOneTile) {
@@ -169,7 +168,6 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         }
 
         j -= 1;
-
         PlaceBegin(i, j, placeRand, out Point pointToStartPlacingTrunk);
         PlaceTrunk(pointToStartPlacingTrunk, height, placeRand);
 
@@ -464,8 +462,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     }
 
     private static void GetFramingForTrunk(bool canPlaceBranch, bool canPlaceBigBranch, UnifiedRandom placeRand, out short tileFrameX, out short tileFrameY, out bool shouldPlaceBranch, out bool shouldPlaceBigBranch, bool second = false) {
-        shouldPlaceBranch = canPlaceBranch && placeRand.NextBool(5);
-        shouldPlaceBigBranch = canPlaceBigBranch && canPlaceBranch && !shouldPlaceBranch && placeRand.NextBool(5);
+        shouldPlaceBranch = canPlaceBranch && placeRand.NextBool(7);
+        shouldPlaceBigBranch = canPlaceBigBranch && canPlaceBranch && !shouldPlaceBranch && placeRand.NextBool(7);
         if (shouldPlaceBigBranch) {
             shouldPlaceBranch = true;
         }

@@ -37,6 +37,100 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
     }
 
+    public static bool CustomEmptyTileCheck(int startX, int endX, int startY, int endY, params int[] ignoreIDs) {
+        if (startX < 0)
+            return false;
+
+        if (endX >= Main.maxTilesX)
+            return false;
+
+        if (startY < 0)
+            return false;
+
+        if (endY >= Main.maxTilesY)
+            return false;
+
+        bool flag = false;
+        for (int i = 0; i < ignoreIDs.Length; i++) {
+            if (TileID.Sets.CommonSapling[i])
+                flag = true;
+        }
+
+        for (int i = startX; i < endX + 1; i++) {
+            for (int j = startY; j < endY + 1; j++) {
+                if (!Main.tile[i, j].HasTile)
+                    continue;
+
+                if (ignoreIDs.Contains(-1)) {
+                    return false;
+                }
+
+                if (ignoreIDs.Contains(11)) {
+                    ushort type = Main.tile[i, j].TileType;
+                    if (type == 11)
+                        continue;
+
+                    return false;
+                }
+
+                if (ignoreIDs.Contains(71)) {
+                    ushort type = Main.tile[i, j].TileType;
+                    if (type == 71)
+                        continue;
+
+                    return false;
+                }
+
+                if (!flag && ignoreIDs.Contains(Main.tile[i, j].TileType)) {
+                    continue;
+                }
+
+                if (flag) {
+                    // Extra patch context.
+                    if (TileID.Sets.CommonSapling[Main.tile[i, j].TileType])
+                        break;
+
+                    /*
+					switch (Main.tile[i, j].type) {
+						case 3:
+						case 24:
+						case 32:
+						case 61:
+						case 62:
+						case 69:
+						case 71:
+						case 73:
+						case 74:
+						case 82:
+						case 83:
+						case 84:
+						case 110:
+						case 113:
+						case 184:
+						case 201:
+						case 233:
+						case 352:
+						case 485:
+						case 529:
+						case 530:
+						case 637:
+						case 655:
+							continue;
+					}
+					*/
+
+                    // Be sure to keep this set updated with IDs from the above.
+                    if (TileID.Sets.IgnoredByGrowingSaplings[Main.tile[i, j].TileType])
+                        continue;
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public static void CustomWall2(int x, int y, int wallType, Predicate<Point> shouldSpread, Action onSpread, params ushort[] ignoreWallTypes) {
         if (!WorldGen.InWorld(x, y))
             return;
