@@ -9,17 +9,29 @@ using Terraria.ModLoader;
 namespace RoA.Common.Tiles;
 
 sealed class TransformTileSystem : ILoadable {
-    public static bool[] OnKillNormal = TileID.Sets.Factory.CreateBoolSet(true);
-    public static ushort[] ReplaceToOnKill = TileID.Sets.Factory.CreateUshortSet(0);
+    public static bool[] OnKillActNormal = TileID.Sets.Factory.CreateBoolSet(true);
+    public static ushort[] ReplaceToTypeOnKill = TileID.Sets.Factory.CreateUshortSet(0);
 
     public void Load(Mod mod) {
         On_Player.DoesPickTargetTransformOnKill += DoesPickTargetTransformOnKill;
+        On_Player.PlaceThing_ValidTileForReplacement += On_Player_PlaceThing_ValidTileForReplacement;
+    }
+
+    private bool On_Player_PlaceThing_ValidTileForReplacement(On_Player.orig_PlaceThing_ValidTileForReplacement orig, Player self) {
+        bool result = orig(self);
+        int createTile = self.HeldItem.createTile;
+        Tile tile = WorldGenHelper.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+        if (!OnKillActNormal[tile.TileType] && createTile == ReplaceToTypeOnKill[tile.TileType]) {
+            return false;
+        }
+
+        return result;
     }
 
     public void Unload() { }
 
     private bool DoesPickTargetTransformOnKill(On_Player.orig_DoesPickTargetTransformOnKill original, Player self, HitTile hitCounter, int damage, int x, int y, int pickPower, int bufferIndex, Tile tileTarget) {
-        if (!OnKillNormal[tileTarget.TileType]) {
+        if (!OnKillActNormal[tileTarget.TileType]) {
             return true;
         }
         
@@ -28,7 +40,7 @@ sealed class TransformTileSystem : ILoadable {
 
     private sealed class TileReplacement : GlobalTile {
         public override bool CanExplode(int i, int j, int type) {
-            if (!OnKillNormal[type] || WorldGen.gen) {
+            if (!OnKillActNormal[type] || WorldGen.gen) {
                 WorldGen.KillTile(i, j);
 
                 return true;
@@ -40,13 +52,13 @@ sealed class TransformTileSystem : ILoadable {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem) {
             bool flag = !fail && !effectOnly && !noItem;
             if (!flag) {
-                if (OnKillNormal[type] || WorldGen.gen) {
+                if (OnKillActNormal[type] || WorldGen.gen) {
                     return;
                 }
                 fail = true;
 
                 if (fail && !effectOnly) {
-                    TileReplacementSystem.SetReplacementData(i, j, ReplaceToOnKill[type]);
+                    TileReplacementSystem.SetReplacementData(i, j, ReplaceToTypeOnKill[type]);
                 }
             }
         }

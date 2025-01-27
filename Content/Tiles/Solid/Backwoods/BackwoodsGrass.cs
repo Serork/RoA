@@ -32,8 +32,9 @@ sealed class BackwoodsGrass : ModTile {
                 tile.TileFrameX = (short)(18 * Main.rand.Next(20));
                 tile.TileFrameY = 0;
                 tile.CopyPaintAndCoating(Main.tile[X, Y + 1]);
-                if (Main.netMode == 1)
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
                     NetMessage.SendTileSquare(-1, X, Y);
+                }
 
                 return true;
             }
@@ -54,10 +55,10 @@ sealed class BackwoodsGrass : ModTile {
         TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 
-        //TileID.Sets.Conversion.Grass[Type] = true;
+        TileID.Sets.Conversion.Grass[Type] = true;
 
-        TransformTileSystem.OnKillNormal[Type] = false;
-        TransformTileSystem.ReplaceToOnKill[Type] = TileID.Dirt;
+        TransformTileSystem.OnKillActNormal[Type] = false;
+        TransformTileSystem.ReplaceToTypeOnKill[Type] = TileID.Dirt;
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         AddMapEntry(new Color(38, 107, 57));

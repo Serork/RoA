@@ -24,8 +24,8 @@ sealed class BackwoodsGreenMoss : ModTile {
         TileID.Sets.NeedsGrassFramingDirt[Type] = stoneType;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-        TransformTileSystem.OnKillNormal[Type] = false;
-        TransformTileSystem.ReplaceToOnKill[Type] = stoneType;
+        TransformTileSystem.OnKillActNormal[Type] = false;
+        TransformTileSystem.ReplaceToTypeOnKill[Type] = stoneType;
 
         DustType = DustID.GreenMoss;
         HitSound = SoundID.Dig;

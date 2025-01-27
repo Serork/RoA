@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Players;
+using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Data;
 using RoA.Core.Utility;
 
@@ -260,7 +261,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
                     tileToCreate = 662;
             }
 
-            if (canUse && ((!tile.HasTile && !flag) || (Main.tileCut[tile.TileType] && tile.TileType != 484) || (tile.TileType >= 373 && tile.TileType <= 375) || tile.TileType == 461 || tileToCreate == 199 || tileToCreate == 23 || tileToCreate == 662 || tileToCreate == 661 || tileToCreate == 2 || tileToCreate == 109 || tileToCreate == 60 || tileToCreate == 70 || tileToCreate == 633 || Main.tileMoss[tileToCreate] || TileID.Sets.BreakableWhenPlacing[tile.TileType]) && self.ItemTimeIsZero && self.itemAnimation > 0 && self.controlUseItem) {
+            if (canUse && ((!tile.HasTile && !flag) || (Main.tileCut[tile.TileType] && tile.TileType != 484) || (tile.TileType >= 373 && tile.TileType <= 375) || tile.TileType == 461 || tileToCreate == 199 || tileToCreate == 23 || tileToCreate == 662 || tileToCreate == 661 || tileToCreate == 2 || tileToCreate == 109 || tileToCreate == 60 || tileToCreate == 70 || tileToCreate == 633 || tileToCreate == ModContent.TileType<BackwoodsGrass>() || Main.tileMoss[tileToCreate] || TileID.Sets.BreakableWhenPlacing[tile.TileType]) && self.ItemTimeIsZero && self.itemAnimation > 0 && self.controlUseItem) {
                 bool canPlace = false;
                 bool newObjectType = false;
                 bool? overrideCanPlace = null;

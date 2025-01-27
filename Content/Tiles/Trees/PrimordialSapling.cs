@@ -47,7 +47,7 @@ sealed class PrimordialSapling : ModTile {
 		AdjTiles = [TileID.Saplings];
 
 		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(200, 200, 200), name);
+		AddMapEntry(new Color(163, 116, 81), name);
 		DustType = ModContent.DustType<WoodTrash>();
 		HitSound = SoundID.Dig;
 	}

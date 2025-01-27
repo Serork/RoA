@@ -493,8 +493,8 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             if (!flag)
                 num8 = TileDrawing_GetWindCycle(Main.instance.TilesRenderer, i, j, TileDrawing_treeWindCounter(Main.instance.TilesRenderer));
             if (num8 < 0f)
-                drawPosition.X += num8 / 2f;
-            drawPosition.X -= Math.Abs(num8 / 2f) * 2f;
+                drawPosition.X += num8 / 4f;
+            drawPosition.X -= Math.Abs(num8 / 4f) * 2f;
             //float num = Main.WindForVisuals;
             //if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
             //    num = Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f);
