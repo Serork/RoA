@@ -1107,7 +1107,7 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static bool GrowTreeWithBranches<T>(int i, int y, int minHeight = 20, int maxHeight = 30, int branchChance = 5) where T : TreeBranch {
+    public static bool GrowTreeWithBranches<T>(int i, int y, int minHeight = 20, int maxHeight = 30, int branchChance = 5, bool skipMainCheck = false) where T : TreeBranch {
         UnifiedRandom genRand = WorldGen.genRand;
 
         int j;
@@ -1117,7 +1117,7 @@ static class WorldGenHelper {
         //if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees)
         //    return false;
 
-        if (Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i, j].TileType) && ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i, j - 1].WallType)) && ((Main.tile[i - 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType)) || (Main.tile[i + 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType)))) {
+        if (skipMainCheck || (!skipMainCheck && Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i, j].TileType) && ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i, j - 1].WallType)) && ((Main.tile[i - 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType)) || (Main.tile[i + 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType))))) {
             int num;
             int num1 = y;
             {

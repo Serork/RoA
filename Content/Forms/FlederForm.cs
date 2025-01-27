@@ -58,8 +58,6 @@ sealed class FlederForm : BaseForm {
         }
 
         public override void PreUpdateMovement() {
-            Main.NewText(BackwoodsVars.AllTreesWorldPositions.Count);
-
             bool flag = _dashDirection != IDoubleTap.TapDirection.None || ActiveDash;
             if (flag && !Player.GetModPlayer<BaseFormHandler>().IsConsideredAs<FlederForm>()) {
                 _dashDirection = IDoubleTap.TapDirection.None;

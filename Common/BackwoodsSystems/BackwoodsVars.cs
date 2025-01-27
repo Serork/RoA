@@ -39,7 +39,7 @@ sealed class BackwoodsVars : ModSystem {
 
     private sealed class RemoveUnusedTreeCords2 : GlobalTile {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem) {
-            if (!fail) {
+            if (!fail && !effectOnly && !noItem) {
                 Point position = new(i, j);
                 if (Main.tile[i, j].TileType == TileID.Trees && AllTreesWorldPositions.Contains(position)) {
                     AllTreesWorldPositions.Remove(position);
@@ -81,6 +81,7 @@ sealed class BackwoodsVars : ModSystem {
         tag[nameof(_backwoodsAwake)] = _backwoodsAwake;
         tag[nameof(BackwoodsStartX)] = BackwoodsStartX;
         tag[nameof(BackwoodsHalfSizeX)] = BackwoodsHalfSizeX;
+
         tag[nameof(BackwoodsTreeCountInWorld)] = BackwoodsTreeCountInWorld;
 
         for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {

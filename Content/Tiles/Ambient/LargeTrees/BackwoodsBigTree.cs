@@ -51,12 +51,32 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private void On_WorldGen_smCallBack(On_WorldGen.orig_smCallBack orig, object threadContext) {
         orig(threadContext);
 
-        for (int i = 0; i < 2; i++) {
-            foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
-                if (!(!WorldGenHelper.ActiveTile(position.X, position.Y, TileID.Trees) && !WorldGenHelper.ActiveTile(position.X, position.Y, ModContent.TileType<TreeBranch>()))) {
-                    WorldGen.KillTile(position.X, position.Y, false, false, true);
+        foreach (Point position in BackwoodsVars.AllTreesWorldPositions) {
+            Tile tile = Main.tile[position.X, position.Y];
+            if (tile.TileType == TileID.Trees || tile.TileType == ModContent.TileType<TreeBranch>()) {
+                tile.HasTile = false;
+            }
+        }
+        foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
+            bool flag = false;
+            for (int checkX = -10; checkX < 11; checkX++) {
+                if (WorldGenHelper.GetTileSafely(position.X + checkX, position.Y).TileType == GetSelfType()) {
+                    flag = true;
+                    break;
                 }
             }
+            if (!flag) {
+                TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true);
+            }
+        }
+        foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
+            if (WorldGenHelper.GetTileSafely(position.X, position.Y + 1).TileType == ModContent.TileType<BackwoodsGrass>()) {
+                WorldGenHelper.GrowTreeWithBranches<TreeBranch>(position.X, position.Y + 1, branchChance: 10, skipMainCheck: true);
+            }
+        }
+        foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
+            BackwoodsVars.AllTreesWorldPositions.Remove(new Point(position.X, position.Y));
+            BackwoodsVars.BackwoodsTreeCountInWorld--;
         }
     }
 
@@ -98,7 +118,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         return orig(x, y, underground);
     }
 
-    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null, bool shouldCheckExtraOneTile = true) {
+    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null, bool shouldCheckExtraOneTile = true, bool ignoreAcorns = false) {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             return false;
         }
@@ -115,13 +135,13 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         for (; TileID.Sets.TreeSapling[Main.tile[i, j].TileType]; j++) {
         }
 
-        if (!TileID.Sets.TreeSapling[Main.tile[i + 1, j - 1].TileType]) {
+        if (!TileID.Sets.TreeSapling[Main.tile[i + 1, j - 1].TileType] && !ignoreAcorns) {
             return false;
         }
 
-        if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees) {
-            return false;
-        }
+        //if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees) {
+        //    return false;
+        //}
 
         int i2 = i;
         int grassTileType = ModContent.TileType<BackwoodsGrass>();

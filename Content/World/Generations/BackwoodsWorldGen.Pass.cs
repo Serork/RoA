@@ -914,7 +914,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = tileY - 40; j < tileY + 40; j++) {
                 ushort treeBranch = (ushort)ModContent.TileType<TreeBranch>();
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                if (tile.ActiveTile(ModContent.TileType<TreeBranch>()) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
+                if (tile.ActiveTile(treeBranch) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
                     WorldGen.KillTile(i, j);
                     if (_random.NextChance(0.5)) {
                         if (_random.NextChance(0.5)) {
