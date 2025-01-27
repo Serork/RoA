@@ -34,8 +34,6 @@ sealed class PrimordialTreeGlow : GlobalTile {
     }
 
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
-        orig(self);
-
         SpriteBatch spriteBatch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
         spriteBatch.End();
@@ -71,6 +69,8 @@ sealed class PrimordialTreeGlow : GlobalTile {
         }
         spriteBatch.End();
         spriteBatch.Begin(in snapshot);
+
+        orig(self);
     }
 
     private static void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
