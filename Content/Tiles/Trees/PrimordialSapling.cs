@@ -1,18 +1,20 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Tiles.Ambient.LargeTrees;
+using RoA.Content.Tiles.Platforms;
+using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Core.Utility;
+
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent.Metadata;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Terraria.DataStructures;
-using Terraria.Enums;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using RoA.Content.Tiles.Solid.Backwoods;
-using Terraria.GameContent.Metadata;
-using RoA.Content.Tiles.Platforms;
-using RoA.Core.Utility;
-using RoA.Content.Dusts.Backwoods;
-using RoA.Content.Tiles.Ambient.LargeTrees;
 
 namespace RoA.Content.Tiles.Trees;
 

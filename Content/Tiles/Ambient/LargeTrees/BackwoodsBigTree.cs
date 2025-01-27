@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
+using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 using RoA.Common.WorldEvents;
@@ -31,15 +32,44 @@ using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Content.Tiles.Ambient.LargeTrees;
 
-sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHooks.IRequireMinAxePower, TileHooks.IResistToAxe {
-    int TileHooks.IRequireMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
+sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePower, IResistToAxe {
+    int IRequireMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
 
-    bool TileHooks.IResistToAxe.CanBeApplied(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && (IsTrunk(i, j) || IsStart(i, j));
-    float TileHooks.IResistToAxe.ResistToPick => 0.25f;
+    bool IResistToAxe.CanBeApplied(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && (IsTrunk(i, j) || IsStart(i, j));
+    float IResistToAxe.ResistToPick => 0.25f;
 
     public override void Load() {
         On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
         On_WorldGen.AttemptToGrowTreeFromSapling += On_WorldGen_AttemptToGrowTreeFromSapling;
+        On_WorldGen.CanKillTile_int_int_refBoolean += On_WorldGen_CanKillTile_int_int_refBoolean;
+    }
+
+    private bool On_WorldGen_CanKillTile_int_int_refBoolean(On_WorldGen.orig_CanKillTile_int_int_refBoolean orig, int i, int j, out bool blockDamaged) {
+        blockDamaged = false;
+        if (i < 0 || j < 0 || i >= Main.maxTilesX || j >= Main.maxTilesY)
+            return false;
+
+        Tile tile = Main.tile[i, j];
+        Tile tile2 = default;
+
+        if (!tile.HasTile)
+            return false;
+
+        if (!TileLoader.CanKillTile(i, j, tile.TileType, ref blockDamaged))
+            return false;
+
+        if (j >= 1)
+            tile2 = Main.tile[i, j - 1];
+
+        if (tile2.HasTile) {
+            int type = tile2.TileType;
+            if (type == GetSelfType() && tile.TileType != type) {
+                return false;
+            }
+
+        }
+
+        return orig(i, j, out blockDamaged);
     }
 
     private bool On_WorldGen_AttemptToGrowTreeFromSapling(On_WorldGen.orig_AttemptToGrowTreeFromSapling orig, int x, int y, bool underground) {
@@ -125,6 +155,8 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         Main.tileFrameImportant[Type] = true;
         Main.tileAxe[Type] = true;
 
+        TileSets.ShouldKillTileBelow[Type] = false;
+
         AddMapEntry(new Color(114, 81, 57), name);
     }
 
@@ -132,7 +164,7 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         yield return new Item(ModContent.ItemType<Elderwood>(), Main.rand.Next(2, 6));
     }
 
-    private static bool IsStart(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsBranch(i, j) && !WorldGenHelper.ActiveTile(i, j + 1, GetSelfType());
+    public static bool IsStart(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsBranch(i, j) && !WorldGenHelper.ActiveTile(i, j + 1, GetSelfType());
 
     private static bool IsTrunk(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsStart(i, j) && !IsNormalBranch(i, j) && !IsBigBranch(i, j);
 

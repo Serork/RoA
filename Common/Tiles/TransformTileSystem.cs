@@ -55,6 +55,9 @@ sealed class TransformTileSystem : ILoadable {
                 if (OnKillActNormal[type] || WorldGen.gen) {
                     return;
                 }
+                if (!WorldGen.CanKillTile(i, j)) {
+                    return;
+                }
                 fail = true;
 
                 if (fail && !effectOnly) {

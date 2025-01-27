@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
+
+using RoA.Common.Sets;
+using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -36,6 +39,9 @@ sealed class OvergrownAltar : ModTile {
 
         TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         TileID.Sets.PreventsSandfall[Type] = true;
+
+        TileSets.ShouldKillTileBelow[Type] = false;
+        TileSets.CanPlayerMineMe[Type] = false;
 
         AddMapEntry(new Color(197, 254, 143), CreateMapEntryName());
 
