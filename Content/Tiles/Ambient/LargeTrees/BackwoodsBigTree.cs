@@ -5,7 +5,6 @@ using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 using RoA.Common.WorldEvents;
-using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
@@ -53,7 +52,7 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
         return orig(x, y, underground);
     }
 
-    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null) {
+    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null, bool shouldCheckExtraOneTile = true) {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             return false;
         }
@@ -86,12 +85,18 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             return false;
         }
 
-        int num = 2;
+        int num = !shouldCheckExtraOneTile ? 1 : 2;
         int num2 = height;
         int num3 = num2 + 4;
         bool flag = false;
         if (WorldGen.EmptyTileCheck(i - num, i + num + 1, j - num3, j - 1, 20) && WorldGen.EmptyTileCheck(i - 1, i + 2, j - 2, j - 1, 20))
             flag = true;
+
+        if (flag && !shouldCheckExtraOneTile) {
+            if (WorldGenHelper.GetTileSafely(i - 2, j).TileType == GetSelfType() || WorldGenHelper.GetTileSafely(i + 3, j).TileType == GetSelfType()) {
+                flag = false;
+            }
+        }
 
         if (!flag) {
             return false;
@@ -359,26 +364,26 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             GetFramingForTrunk(canPlaceBranch, canPlaceBigBranch, placeRand, out tileFrameX, out tileFrameY, out bool shouldPlaceBranch, out bool shouldPlaceBigBranch);
             short frameXForBranch = (short)(shouldPlaceBigBranch ? 144 : 108);
             if (shouldPlaceBranch || shouldPlaceBigBranch) {
-                PlaceTileInternal(i, placeY, tileFrameX, tileFrameY);
-                PlaceTileInternal(i - 1, placeY, frameXForBranch, tileFrameY);
+                PlaceTileInternal(i, placeY, tileFrameX, tileFrameY, placeRand);
+                PlaceTileInternal(i - 1, placeY, frameXForBranch, tileFrameY, placeRand);
             }
             else {
-                PlaceTileInternal(i, placeY, tileFrameX, tileFrameY);
+                PlaceTileInternal(i, placeY, tileFrameX, tileFrameY, placeRand);
             }
             GetFramingForTrunk(canPlaceBranch, canPlaceBigBranch, placeRand, out tileFrameX, out tileFrameY, out shouldPlaceBranch, out shouldPlaceBigBranch, true);
             frameXForBranch = (short)(shouldPlaceBigBranch ? 144 : 108);
             if (shouldPlaceBranch || shouldPlaceBigBranch) {
-                PlaceTileInternal(i + 1, placeY, tileFrameX, tileFrameY);
-                PlaceTileInternal(i + 2, placeY, frameXForBranch, tileFrameY);
+                PlaceTileInternal(i + 1, placeY, tileFrameX, tileFrameY, placeRand);
+                PlaceTileInternal(i + 2, placeY, frameXForBranch, tileFrameY, placeRand);
             }
             else {
-                PlaceTileInternal(i + 1, placeY, tileFrameX, tileFrameY);
+                PlaceTileInternal(i + 1, placeY, tileFrameX, tileFrameY, placeRand);
             }
         }
         int topPlaceY = j - height;
         GetFramingForTop(placeRand, out tileFrameX, out tileFrameY);
-        PlaceTileInternal(i, topPlaceY, tileFrameX, tileFrameY);
-        PlaceTileInternal(i + 1, topPlaceY, tileFrameX, tileFrameY);
+        PlaceTileInternal(i, topPlaceY, tileFrameX, tileFrameY, placeRand);
+        PlaceTileInternal(i + 1, topPlaceY, tileFrameX, tileFrameY, placeRand);
     }
 
     private static void GetFramingForTop(UnifiedRandom placeRand, out short tileFrameX, out short tileFrameY) {
@@ -399,19 +404,47 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
 
     private static void PlaceBegin(int i, int j, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk) {
         short getFrameYForStart() => (short)(180 + (placeRand.NextBool() ? 18 : 0));
-        PlaceTileInternal(i - 1, j, 0, getFrameYForStart());
-        PlaceTileInternal(i, j, 18, getFrameYForStart());
-        PlaceTileInternal(i + 1, j, 36, getFrameYForStart());
-        PlaceTileInternal(i + 2, j, 54, getFrameYForStart());
+        PlaceTileInternal(i - 1, j, 0, getFrameYForStart(), placeRand);
+        PlaceTileInternal(i, j, 18, getFrameYForStart(), placeRand);
+        PlaceTileInternal(i + 1, j, 36, getFrameYForStart(), placeRand);
+        PlaceTileInternal(i + 2, j, 54, getFrameYForStart(), placeRand);
         pointToStartPlacingTrunk = new Point(i, j - 1);
     }
 
-    private static void PlaceTileInternal(int i, int j, short tileFrameX, short tileFrameY) {
+    private static void PlaceTileInternal(int i, int j, short tileFrameX, short tileFrameY, UnifiedRandom placeRand = null) {
         WorldGen.PlaceTile(i, j, GetSelfType(), true, false, -1, 0);
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         tile.TileFrameX = tileFrameX;
         tile.TileFrameY = tileFrameY;
+
+        placeRand ??= Main.rand;
+
+        float num2 = 10f;
+        Gore.NewGore(null, new Vector2(i - 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+        Gore.NewGore(null, new Vector2(i, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+        Gore.NewGore(null, new Vector2(i + 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+
+        if (IsTop(i, j)) {
+            for (int k = 0; k < 5; k++) {
+                Gore.NewGore(null, new Vector2(i - 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                Gore.NewGore(null, new Vector2(i, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                Gore.NewGore(null, new Vector2(i + 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+            }
+
+            ushort leafGoreType = (ushort)ModContent.GoreType<BackwoodsLeaf>();
+            int count = placeRand.Next(3, 6) * 10;
+            for (int k = 0; k < count; k++) {
+                Vector2 offset = new Vector2(placeRand.NextFloat(-150f, 150f), placeRand.NextFloat(0f, 200f)).RotatedBy(MathHelper.TwoPi);
+                Vector2 position = (new Vector2(i + 5, j - 15) * 16) + offset;
+                Gore.NewGore(null,
+                    position,
+                    Utils.RandomVector2(Main.rand, 0f - num2, num2),
+                    leafGoreType,
+                    0.7f + placeRand.NextFloat() * 0.6f);
+            }
+        }
     }
+
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         //DrawTop(i, j, spriteBatch);
         //DrawItselfParts(i, j, spriteBatch, Texture, Type);
@@ -493,15 +526,15 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             if (!flag)
                 num8 = TileDrawing_GetWindCycle(Main.instance.TilesRenderer, i, j, TileDrawing_treeWindCounter(Main.instance.TilesRenderer));
             if (num8 < 0f)
-                drawPosition.X += num8 / 4f;
-            drawPosition.X -= Math.Abs(num8 / 4f) * 2f;
+                drawPosition.X += num8 / 10f;
+            drawPosition.X -= Math.Abs(num8 / 10f) * 2f;
             //float num = Main.WindForVisuals;
             //if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
             //    num = Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f);
             //    drawPosition.X -= 3f;
             //}
 
-            Vector2 origin = new(!left ? 0f : textureSize.X, textureSize.Y / 2f);
+            Vector2 origin = new(!left ? 0f : textureSize.X, textureSize.Y / 3f);
             spriteBatch.Draw(bigBranchTexture, drawPosition - Vector2.UnitX * 10f + origin, sourceRectangle, color, num8 * num4, origin, 1f, effects, 0f);
         }
         if (shouldDrawBranch) {

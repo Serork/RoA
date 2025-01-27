@@ -62,7 +62,7 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
             return;
 
         bool createLeaves = true;
-        if (!PlantLoader.ShakeTree(x, y, Main.tile[x, num].TileType, ref createLeaves) && !flag) {
+        if (!PlantLoader.ShakeTree(x, y, Main.tile[x, num].TileType, ref createLeaves)) {
         
         }
         else if (Main.getGoodWorld && genRand.Next(17) == 0) {
@@ -251,7 +251,7 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
         else if (Main.remixWorld && genRand.Next(20) == 0 && treeType == TreeTypes.Ash && y > Main.maxTilesY - 250) {
             Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), x * 16, y * 16, 16, 16, 965, genRand.Next(20, 41));
         }
-        else if (genRand.Next(12) == 0 && treeType == TreeTypes.Forest) {
+        else if (genRand.Next(12) == 0 && treeType == TreeTypes.Forest && !flag) {
             int type7;
             switch (genRand.Next(5)) {
                 case 0:
