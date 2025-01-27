@@ -487,7 +487,7 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static bool Place2x3(int x, int y, ushort type, int style = 0) {
+    public static bool Place2x3(int x, int y, ushort type, int style = 0, bool countCut = true) {
         int num = style * 36;
         int num2 = 0;
         int num3 = 3;
@@ -496,11 +496,11 @@ static class WorldGenHelper {
         Tile tile2;
         for (int i = y - num3 + 1; i < y + 1; i++) {
             tile2 = Main.tile[x, i];
-            if (tile2.HasTile) {
+            if (tile2.HasTile && ((!Main.tileCut[tile2.TileType] && !countCut) || countCut)) {
                 flag = false;
             }
             tile2 = Main.tile[x + 1, i];
-            if (tile2.HasTile) {
+            if (tile2.HasTile && ((!Main.tileCut[tile2.TileType] && !countCut) || countCut)) {
                 flag = false;
             }
         }
@@ -817,14 +817,14 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static bool Place2x2(int x, int y, ushort type, int style = 0, Action? onPlaced = null) {
+    public static bool Place2x2(int x, int y, ushort type, int style = 0, Action? onPlaced = null, bool countCut = true) {
         if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
             return false;
 
         for (int i = x - 1; i < x + 1; i++) {
             for (int j = y - 1; j < y + 1; j++) {
                 Tile tileSafely = Framing.GetTileSafely(i, j);
-                if (tileSafely.HasTile || (type == 98 && tileSafely.LiquidAmount > 0))
+                if (((!Main.tileCut[tileSafely.TileType] && !countCut) || countCut) && (tileSafely.HasTile || (type == 98 && tileSafely.LiquidAmount > 0)))
                     return false;
             }
 
