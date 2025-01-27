@@ -697,7 +697,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         if (IsTrunk(i, j) && !IsTop(i, j)) {
             Texture2D extraTexture = ModContent.Request<Texture2D>(texture + "_Extra").Value;
             ulong seed = (ulong)(i * j % 192372);
-            if (Utils.RandomInt(ref seed, 10) < 4) {
+            if (Utils.RandomInt(ref seed, 10) < 3) {
                 int height = 18;
                 flag = Utils.RandomInt(ref seed, 2) == 0;
                 int usedFrame;
