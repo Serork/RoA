@@ -1329,5 +1329,75 @@ BackwoodsPylon: {
 
 ArchdruidBanner: {
 	DisplayName: Archdruid Banner
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Archdruid.DisplayName}"
+}
+
+BabyFlederBanner: {
+	DisplayName: Baby Fleder Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.BabyFleder.DisplayName}"
+}
+
+EntBanner: {
+	DisplayName: Ent Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ent.DisplayName}"
+}
+
+FlederBanner: {
+	DisplayName: Fleder Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Fleder.DisplayName}"
+}
+
+GrimDefenderBanner: {
+	DisplayName: Grim Defender Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDefender.DisplayName}"
+}
+
+GrimdruidBanner: {
+	DisplayName: Grimdruid Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDruid.DisplayName}"
+}
+
+HedgehogBanner: {
+	DisplayName: Hedgehog Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hedgehog.DisplayName}"
+}
+
+HogBanner: {
+	DisplayName: Hog Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hog.DisplayName}"
+}
+
+LumberjackBanner: {
+	DisplayName: Lumberjack Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Lumberjack.DisplayName}"
+}
+
+PettyGoblinBanner: {
+	DisplayName: Petty Goblin Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PettyGoblin.DisplayName}"
+}
+
+RavencallerBanner: {
+	DisplayName: Ravencaller Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ravencaller.DisplayName}"
+}
+
+SapSlimeBanner: {
+	DisplayName: Sap Slime Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SapSlime.DisplayName}"
+}
+
+SentinelBanner: {
+	DisplayName: Sentinel Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Sentinel.DisplayName}"
+}
+
+SentinelWarriorBanner: {
+	DisplayName: Sentinel Warrior Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SentinelWarrior.DisplayName}"
+}
+
+SummonedRavenBanner: {
+	DisplayName: Summoned Raven Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
 }
