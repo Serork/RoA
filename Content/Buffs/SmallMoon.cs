@@ -52,7 +52,7 @@ sealed class SmallMoonPlayer : ModPlayer {
         else if (Main.pumpkinMoon) smallMoonColor = Color.Orange;
         else if (Main.snowMoon) smallMoonColor = Color.DeepSkyBlue;
         else {
-            smallMoonColor = Color.White;
+            smallMoonColor = new Color(230, 230, 180);
         }
 
         if (Player.name == "peege.on") smallMoonColor = Player.underShirtColor;
