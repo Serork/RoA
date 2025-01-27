@@ -497,7 +497,14 @@ sealed class BackwoodsBigTree : ModTile, TileHooks.ITileHaveExtraDraws, TileHook
             IEntitySource entitySource = new EntitySource_TileUpdate(i, j);
             ushort leafGoreType = (ushort)ModContent.GoreType<BackwoodsLeaf>();
             int x = i, y = j;
-            if (Main.rand.Next(typeof(TileDrawing).GetFieldValue<int>("_leafFrequency", Main.instance.TilesRenderer) / (increasedSpawnRate ? 10 : 1)) == 0) {
+            int chance = typeof(TileDrawing).GetFieldValue<int>("_leafFrequency", Main.instance.TilesRenderer);
+            if (increasedSpawnRate) {
+                chance /= 40;
+            }
+            else {
+                chance *= 4;
+            }
+            if (Main.rand.Next(chance) == 0) {
                 tile = Main.tile[x, y + 1];
                 if (!WorldGen.SolidTile(tile) && !tile.AnyLiquid()) {
                     float windForVisuals = Main.WindForVisuals;
