@@ -146,9 +146,9 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
     private static bool TryToPlace(int i, int j, TileGenerationData tileGenerationData) {
         var instance = tileGenerationData.Instance;
-        //if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
-        //    return false;
-        //}
+        if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
+            return false;
+        }
 
         if (Helper.OnScreenWorld(i, j)) {
             return false;
@@ -171,7 +171,7 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
                 //Helper.NewMessage(new Vector2(i, j).ToString(), Color.White);
 
-                //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
+                Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
 
                 if (Main.netMode == NetmodeID.Server && Main.tile[i, j].HasTile)
                     NetMessage.SendTileSquare(-1, i, j);
