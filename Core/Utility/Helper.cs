@@ -28,6 +28,14 @@ static class Helper {
         return Utils.SafeNormalize(destination - entity.Center, fallback.Value);
     }
 
+    public static Color BuffColor(Color newColor, float R, float G, float B, float A) {
+        newColor.R = (byte)(newColor.R * R);
+        newColor.G = (byte)(newColor.G * G);
+        newColor.B = (byte)(newColor.B * B);
+        newColor.A = (byte)(newColor.A * A);
+        return newColor;
+    }
+
     public static int GetGoreType(this string name) => ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type;
 
     public static Color FromHexRgb(uint hexRgba) {

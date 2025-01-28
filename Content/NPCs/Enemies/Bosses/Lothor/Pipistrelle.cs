@@ -17,6 +17,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed class Pipistrelle : ModNPC {
+    private bool _shouldEnrage;
+
     private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture);
     private Texture2D GlowMask => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
 
@@ -45,27 +47,38 @@ sealed class Pipistrelle : ModNPC {
         SpriteEffects effects = NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         Vector2 position = NPC.Center - screenPos;
         Vector2 origin = NPC.frame.Size() / 2f;
+        float rotation = NPC.velocity.X * 0.085f;
+        float max = 0.5f;
+        rotation = MathHelper.Clamp(rotation, -max, max);
         if (NPC.ai[2] != 1f) {
-            float progress = (Math.Abs(NPC.rotation) / MathHelper.PiOver2) * NPC.spriteDirection;
+            float progress = (Math.Abs(rotation) / MathHelper.PiOver2) * NPC.spriteDirection;
             spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value, 
                 position + origin +
                 new Vector2(-27f, 4f - (NPC.spriteDirection != 1 ? progress * -20f : 0f)) + Vector2.UnitX * -40f * progress -
                 Vector2.UnitY * 12f,
-                null, Color.White, NPC.rotation * 0.5f, origin / 2f, 1f, effects, 0);
+                null, Color.White, rotation * 0.5f, origin / 2f, 1f, effects, 0);
         }
 
-        spriteBatch.Draw(ItsSpriteSheet, position, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects, 0f);
-        spriteBatch.Draw(GlowMask, position, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
+        void enrage(ref Color color) {
+            if (_shouldEnrage) {
+                color = Color.Lerp(Helper.BuffColor(color, 0.3f, 0.3f, 0.3f, 1f), color, 0.5f);
+            }
+        }
+        enrage(ref drawColor);
+
+        spriteBatch.Draw(ItsSpriteSheet, position, NPC.frame, drawColor, rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(GlowMask, position, NPC.frame, Color.White, rotation, origin, NPC.scale, effects, 0f);
+
 
         NPC npc = Main.npc[(int)NPC.ai[0]];
         if (!(!npc.active || npc.ModNPC is null || npc.ModNPC is not Lothor)) {
             spriteBatch.BeginBlendState(BlendState.Additive);
-            float lifeProgress = npc.As<Lothor>().LifeProgress;
+            float lifeProgress = _shouldEnrage ? 1f : npc.As<Lothor>().LifeProgress;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                 spriteBatch.Draw(GlowMask, position +
                     Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
-                    NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, NPC.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
+                    NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
             }
             spriteBatch.EndBlendState();
         }
@@ -106,6 +119,8 @@ sealed class Pipistrelle : ModNPC {
     }
 
     public override void AI() {
+        _shouldEnrage = !Main.player[NPC.target].InModBiome<BackwoodsBiome>();
+
         NPC.OffsetTheSameNPC(0.2f);
 
         AI_GetMyGroupIndexAndFillBlackList(out int index, out int totalIndexesInGroup);
@@ -126,7 +141,7 @@ sealed class Pipistrelle : ModNPC {
         Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
 
         NPC owner = Main.npc[(int)NPC.ai[0]];
-        float lifeProgress = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor ? 0f : owner.As<Lothor>().LifeProgress;
+        float lifeProgress = _shouldEnrage ? 1f : !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor ? 0f : owner.As<Lothor>().LifeProgress;
         NPC.knockBackResist = 0.1f - 0.1f * lifeProgress;
         void playScreamSound() => SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
         if (NPC.localAI[2] == 0f) {
@@ -142,7 +157,7 @@ sealed class Pipistrelle : ModNPC {
             NPC.ai[1] = 0f;
             playScreamSound();
         }
-        NPC.localAI[2] += 1f / index;
+        NPC.localAI[2] += 1f / (index + 1);
         if (NPC.localAI[2] < 15f) {
             NPC.spriteDirection = NPC.direction = NPC.velocity.X.GetDirection();
             return;
@@ -173,7 +188,7 @@ sealed class Pipistrelle : ModNPC {
                     NPC.velocity.Y = y * sqrt;
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
                         int projectile = 
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-x * sqrt, -y * sqrt) * 0.75f, ModContent.ProjectileType<CursedAcorn>(),
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-x * sqrt, -y * sqrt) * 1.5f, ModContent.ProjectileType<CursedAcorn>(),
                             NPC.damage, 0, Main.myPlayer, ai2: player.whoAmI);
                         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                     }
@@ -198,7 +213,5 @@ sealed class Pipistrelle : ModNPC {
             NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -speed, speed);
             NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -speed, speed);
         }
-        NPC.rotation = NPC.velocity.X * 0.085f;
-        NPC.rotation = MathHelper.Clamp(NPC.rotation, -0.2f, 0.2f);
     }
 }

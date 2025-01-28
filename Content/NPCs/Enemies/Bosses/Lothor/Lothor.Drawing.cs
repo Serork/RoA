@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -50,6 +52,12 @@ sealed partial class Lothor : ModNPC {
         }
         int length = NPC.oldPos.Length - 2;
         Color color = Lighting.GetColor(NPC.Center.ToTileCoordinates());
+        void enrage(ref Color color) {
+            if (_shouldEnrage) {
+                color = Color.Lerp(Helper.BuffColor(color, 0.3f, 0.3f, 0.3f, 1f), color, 0.5f);
+            }
+        }
+        enrage(ref drawColor);
         if (_drawColor == null) {
             _drawColor = color;
         }
@@ -57,6 +65,7 @@ sealed partial class Lothor : ModNPC {
         if (_isDead) {
             _glowMaskOpacity = 1f;
         }
+        enrage(ref color);
         Color glowMaskColor = (_isDead ? Color.Lerp(Color.White, Color.Black.MultiplyRGB(drawColor), MathHelper.Clamp(_deadStateProgress, 0f, 1f)) : Color.White) * _glowMaskOpacity;
         if (!_isDead) {
             for (int num173 = 1; num173 < length; num173 += 2) {
@@ -161,5 +170,8 @@ sealed partial class Lothor : ModNPC {
         height = (int)(texture.Height * (1f - progress));
         position.Y += height / 2f;
         spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
+
+        Main.NewText((1f - progress));
+        Lighting.AddLight(NPC.Center + WreathOffset(), new Vector3(1f, 0.2f, 0.2f) * (1f - progress));
     }
 }

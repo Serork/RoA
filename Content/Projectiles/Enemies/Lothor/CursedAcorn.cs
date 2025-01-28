@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Utilities;
 
 using System;
 
@@ -21,7 +22,7 @@ sealed class CursedAcorn : ModProjectile {
     }
 
     public override void SetDefaults() {
-        Projectile.CloneDefaults(ProjectileID.Bullet);
+        Projectile.aiStyle = -1;
         Projectile.width = 10;
         Projectile.height = 18;
         Projectile.penetrate = 2;
@@ -51,6 +52,8 @@ sealed class CursedAcorn : ModProjectile {
     }
 
     public override void AI() {
+        Projectile.rotation = Helper.VelocityAngle(Projectile.velocity);
+
         Player player = Main.player[(int)Projectile.ai[2]];
         if (player.dead || !player.active) {
             return;

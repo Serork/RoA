@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
+using ReLogic.Content;
+
 using RoA.Common;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
@@ -125,8 +128,9 @@ sealed partial class Lothor : ModNPC {
     private float _deadStateProgress;
     private Player _target;
     private bool _targetIsDeadOrNoTarget;
+    private bool _shouldEnrage;
 
-    public float LifeProgress => _isDead ? 0f : (1f - NPC.life / (float)NPC.lifeMax);
+    public float LifeProgress => _shouldEnrage ? 1f : _isDead ? 0f : (1f - NPC.life / (float)NPC.lifeMax);
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
 
@@ -307,6 +311,10 @@ sealed partial class Lothor : ModNPC {
             else {
                 NPC.Opacity = 1f;
             }
+        }
+
+        if (!_isDead) {
+            _shouldEnrage = !Target.InModBiome<BackwoodsBiome>();
         }
     }
 
