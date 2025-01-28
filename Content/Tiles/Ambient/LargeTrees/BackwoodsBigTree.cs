@@ -567,12 +567,14 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
         orig(self);
 
-        //foreach ((ModTile modTile, Point position) in TileHelper.PostDrawPoints) {
-        //    if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null && modTile is BackwoodsBigTree) {
-        //        int i = position.X, j = position.Y;
-        //        DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
-        //    }
-        //}
+        foreach ((ModTile modTile, Point position) in TileHelper.PostDrawPoints.OrderBy(x => x.Item2.X + x.Item2.Y)) {
+            if (modTile is ITileHaveExtraDraws && modTile is not null && modTile is BackwoodsBigTree) {
+                int i = position.X, j = position.Y;
+                if (!IsTop(i, j)) {
+                    DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
+                }
+            }
+        }
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_treeWindCounter")]
@@ -586,7 +588,9 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
 
     void ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
         int i = pos.X, j = pos.Y;
-        DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
+        if (IsTop(i, j)) {
+            DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
+        }
 
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,

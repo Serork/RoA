@@ -117,6 +117,15 @@ sealed class BackwoodsVars : ModSystem {
         writer.Write(_backwoodsAwake);
         writer.Write(BackwoodsStartX);
         writer.Write(BackwoodsHalfSizeX);
+
+        if (!Main.hardMode) {
+            writer.Write(BackwoodsTreeCountInWorld);
+            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+                writer.Write(BackwoodsStartX);
+                writer.Write(AllTreesWorldPositions[i].X);
+                writer.Write(AllTreesWorldPositions[i].Y);
+            }
+        }
     }
 
     public override void NetReceive(BinaryReader reader) {
@@ -126,6 +135,14 @@ sealed class BackwoodsVars : ModSystem {
         _backwoodsAwake = reader.ReadBoolean();
         BackwoodsStartX = reader.ReadInt32();
         BackwoodsHalfSizeX = reader.ReadInt32();
+
+        if (!Main.hardMode) {
+            BackwoodsStartX = reader.ReadInt16();
+            AllTreesWorldPositions.Clear();
+            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+                AllTreesWorldPositions.Add(new Point(reader.ReadInt16(), reader.ReadInt16()));
+            }
+        }
     }
 
     public override void Load() {
