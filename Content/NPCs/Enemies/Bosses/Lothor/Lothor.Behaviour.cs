@@ -269,7 +269,15 @@ sealed partial class Lothor : ModNPC {
         internal float _opacity;
         internal bool _isActive;
 
+        public override void UpdateDead() {
+            UpdateVisuals();
+        }
+
         public override void PostUpdate() {
+            UpdateVisuals();
+        }
+
+        private void UpdateVisuals() {
             string shader = ShaderLoader.EnragedLothorSky;
             int type = ModContent.NPCType<Lothor>();
             if (!_isActive) {
@@ -277,7 +285,10 @@ sealed partial class Lothor : ModNPC {
             }
             _isActive = false;
             Filters.Scene[shader].GetShader().UseOpacity(_opacity).UseColor(Color.Red);
-            NPC npc = Main.npc.FirstOrDefault(x => x.active && x.type == type);
+            NPC npc = null;
+            if (NPC.AnyNPCs(type)) {
+                npc = Main.npc.FirstOrDefault(x => x.active && x.type == type);
+            }
             void deactivate() {
                 if (Filters.Scene[shader].IsActive()) {
                     Filters.Scene[shader].Deactivate();

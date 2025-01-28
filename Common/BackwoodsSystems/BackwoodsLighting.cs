@@ -40,7 +40,7 @@ sealed class BackwoodsLighting : ModSystem {
 
 	public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor) {
 		int type = ModContent.NPCType<Lothor>();
-        bool flag = NPC.AnyNPCs(type);
+        bool flag = Main.LocalPlayer.GetModPlayer<Lothor.EnragedVisuals>()._opacity > 0f;
         if (ModContent.GetInstance<TileCount>().BackwoodsTiles > 0 || flag) {
             NPC npc = null;
 			if (flag) {
@@ -50,7 +50,7 @@ sealed class BackwoodsLighting : ModSystem {
 				Brightness2 += BackwoodsBiome.TransitionSpeed;
 			}
 			float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1500f;
-			if (flag && npc.As<Lothor>().LifeProgress == 1f) {
+			if (flag && npc != null && npc.active && npc.As<Lothor>() != null && npc.As<Lothor>().LifeProgress == 1f) {
 				strength = Math.Max(strength, 1.5f * Main.LocalPlayer.GetModPlayer<Lothor.EnragedVisuals>()._opacity);
 			}
             strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2 + Helper.EaseInOut3(Math.Min(1f, AltarHandler.GetAltarStrength())) * 0.5f/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;

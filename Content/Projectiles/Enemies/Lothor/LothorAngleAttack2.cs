@@ -33,7 +33,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
     public override void AI() {
         if (Main.netMode != NetmodeID.Server) {
             if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
-                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 2, 2, ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1.35f);
+                int dust = Dust.NewDust(Projectile.position + Projectile.velocity + Vector2.UnitY * 4f, 2, 2, ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1.35f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 0.5f;
                 Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
