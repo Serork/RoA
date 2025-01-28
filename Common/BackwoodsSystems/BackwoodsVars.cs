@@ -24,26 +24,15 @@ sealed class BackwoodsVars : ModSystem {
     private static float _preDownedBossTimer;
     private static bool _backwoodsAwake;
 
-    private sealed class RemoveUnusedTreeCords : ModPlayer {
-        public override void OnEnterWorld() {
-            //for (int i = 0; i < 2; i++) {
-            //    foreach (Point position in AllTreesWorldPositions.ToList()) {
-            //        if (!WorldGenHelper.ActiveTile(position.X, position.Y, TileID.Trees) && !WorldGenHelper.ActiveTile(position.X, position.Y, ModContent.TileType<TreeBranch>())) {
-            //            AllTreesWorldPositions.Remove(position);
-            //            BackwoodsTreeCountInWorld--;
-            //        }
-            //    }
-            //}
-        }
-    }
-
     private sealed class RemoveUnusedTreeCords2 : GlobalTile {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem) {
-            if (!fail && !effectOnly && !noItem) {
-                Point position = new(i, j);
-                if (Main.tile[i, j].TileType == TileID.Trees && AllTreesWorldPositions.Contains(position)) {
-                    AllTreesWorldPositions.Remove(position);
-                    BackwoodsTreeCountInWorld--;
+            if (!Main.hardMode) {
+                if (!fail && !effectOnly && !noItem) {
+                    Point position = new(i, j);
+                    if (Main.tile[i, j].TileType == TileID.Trees && AllTreesWorldPositions.Contains(position)) {
+                        AllTreesWorldPositions.Remove(position);
+                        BackwoodsTreeCountInWorld--;
+                    }
                 }
             }
         }
@@ -82,11 +71,12 @@ sealed class BackwoodsVars : ModSystem {
         tag[nameof(BackwoodsStartX)] = BackwoodsStartX;
         tag[nameof(BackwoodsHalfSizeX)] = BackwoodsHalfSizeX;
 
-        tag[nameof(BackwoodsTreeCountInWorld)] = BackwoodsTreeCountInWorld;
-
-        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-            tag[$"backwoodstreepositionX{i}"] = AllTreesWorldPositions[i].X;
-            tag[$"backwoodstreepositionY{i}"] = AllTreesWorldPositions[i].Y;
+        if (!Main.hardMode) {
+            tag[nameof(BackwoodsTreeCountInWorld)] = BackwoodsTreeCountInWorld;
+            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+                tag[$"backwoodstreepositionX{i}"] = AllTreesWorldPositions[i].X;
+                tag[$"backwoodstreepositionY{i}"] = AllTreesWorldPositions[i].Y;
+            }
         }
     }
 
@@ -97,22 +87,27 @@ sealed class BackwoodsVars : ModSystem {
         _backwoodsAwake = tag.GetBool(nameof(_backwoodsAwake));
         BackwoodsStartX = tag.GetInt(nameof(BackwoodsStartX));
         BackwoodsHalfSizeX = tag.GetInt(nameof(BackwoodsHalfSizeX));
-        BackwoodsTreeCountInWorld = tag.GetInt(nameof(BackwoodsTreeCountInWorld));
 
-        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-            int x = tag.GetInt($"backwoodstreepositionX{i}");
-            int y = tag.GetInt($"backwoodstreepositionY{i}");
-            AllTreesWorldPositions.Add(new Point(x, y));
+        if (!Main.hardMode) {
+            BackwoodsTreeCountInWorld = tag.GetInt(nameof(BackwoodsTreeCountInWorld));
+            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+                int x = tag.GetInt($"backwoodstreepositionX{i}");
+                int y = tag.GetInt($"backwoodstreepositionY{i}");
+                AllTreesWorldPositions.Add(new Point(x, y));
+            }
         }
     }
 
     private static void ResetAllFlags() {
-        BackwoodsTreeCountInWorld = BackwoodsHalfSizeX = BackwoodsStartX = FirstTileYAtCenter = BackwoodsTileForBackground = 0;
+        BackwoodsHalfSizeX = BackwoodsStartX = FirstTileYAtCenter = BackwoodsTileForBackground = 0;
         _preDownedBossTimer = 0f;
         _backwoodsAwake = false;
 
-        AllTreesWorldPositions.Clear();
-        AllTreesWorldPositions = [];
+        if (!Main.hardMode) {
+            BackwoodsTreeCountInWorld = 0;
+            AllTreesWorldPositions.Clear();
+            AllTreesWorldPositions = [];
+        }
     }
 
     public override void NetSend(BinaryWriter writer) {

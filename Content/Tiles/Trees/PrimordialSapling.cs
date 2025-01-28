@@ -57,7 +57,7 @@ sealed class PrimordialSapling : ModTile {
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
 	public override void RandomUpdate(int i, int j) {
-		if (WorldGen.genRand.NextBool(1)) {
+		if (WorldGen.genRand.NextBool(15)) {
 			bool success = false;
 			if (Main.hardMode) {
 				success = BackwoodsBigTree.TryGrowBigTree(i, j + 2, placeRand: WorldGen.genRand);

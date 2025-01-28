@@ -51,12 +51,6 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private void On_WorldGen_smCallBack(On_WorldGen.orig_smCallBack orig, object threadContext) {
         orig(threadContext);
 
-        foreach (Point position in BackwoodsVars.AllTreesWorldPositions) {
-            Tile tile = Main.tile[position.X, position.Y];
-            if (tile.TileType == TileID.Trees || tile.TileType == ModContent.TileType<TreeBranch>()) {
-                tile.HasTile = false;
-            }
-        }
         foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
             bool flag = false;
             for (int checkX = -10; checkX < 11; checkX++) {
@@ -66,12 +60,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                 }
             }
             if (!flag) {
-                TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true);
-            }
-        }
-        foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
-            if (WorldGenHelper.GetTileSafely(position.X, position.Y + 1).TileType == ModContent.TileType<BackwoodsGrass>()) {
-                WorldGenHelper.GrowTreeWithBranches<TreeBranch>(position.X, position.Y + 1, branchChance: 10, skipMainCheck: true);
+                TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true, ignoreTrees: true);
             }
         }
         foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
@@ -177,8 +166,30 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         }
 
         j -= 1;
-        PlaceBegin(i, j, placeRand, out Point pointToStartPlacingTrunk);
+        PlaceBegin(i, j, height, placeRand, out Point pointToStartPlacingTrunk);
         PlaceTrunk(pointToStartPlacingTrunk, height, placeRand);
+
+        for (int checkY = j - (int)(height * 2f); checkY < j; checkY++) {
+            for (int checkX = i - 2; checkX < i + 3; checkX++) {
+                Tile tile2 = WorldGenHelper.GetTileSafely(checkX, checkY);
+                if (tile2.TileType == TileID.Trees || tile2.TileType == ModContent.TileType<TreeBranch>()) {
+                    bool flag3 = true;
+                    for (int x = -1; x < 2; x++) {
+                        for (int y = -1; y < 2; y++) {
+                            if (x != 0 && y != 0 && Math.Abs(x) != Math.Abs(y)) {
+                                Tile tile3 = WorldGenHelper.GetTileSafely(checkX + x, checkY + y);
+                                if (!tile3.HasTile || tile3.TileType != TileID.Trees) {
+                                    flag3 = false;
+                                }
+                            }
+                        }
+                    }
+                    if (flag3) {
+                        tile2.ClearEverything();
+                    }
+                }
+            }
+        }
 
         return true;
     }
@@ -481,12 +492,23 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         tileFrameX = (short)((shouldPlaceBigBranch ? 72 : 18) + (second ? 18 : 0));
     }
 
-    private static void PlaceBegin(int i, int j, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk) {
+    private static void PlaceBegin(int i, int j, int height, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk) {
         short getFrameYForStart() => (short)(180 + (placeRand.NextBool() ? 18 : 0));
+        for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
+            for (int checkX = i - 1; checkX < i + (checkY == j ? 3 : 2); checkX++) {
+                Tile tile = WorldGenHelper.GetTileSafely(checkX, checkY);
+                tile.ClearTile();
+            }
+        }
         PlaceTileInternal(i - 1, j, 0, getFrameYForStart(), placeRand);
         PlaceTileInternal(i, j, 18, getFrameYForStart(), placeRand);
         PlaceTileInternal(i + 1, j, 36, getFrameYForStart(), placeRand);
         PlaceTileInternal(i + 2, j, 54, getFrameYForStart(), placeRand);
+        for (int checkX = i - 1; checkX < i + 3; checkX++) {
+            Tile tile2 = WorldGenHelper.GetTileSafely(checkX, j + 1);
+            tile2.IsHalfBlock = false;
+            tile2.Slope = 0;
+        }
         pointToStartPlacingTrunk = new Point(i, j - 1);
     }
 
@@ -544,6 +566,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
 
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
         orig(self);
+
         foreach ((ModTile modTile, Point position) in TileHelper.PostDrawPoints) {
             if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null && modTile is BackwoodsBigTree) {
                 int i = position.X, j = position.Y;
@@ -561,8 +584,55 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_rand")]
     public extern static ref UnifiedRandom TileDrawing_rand(TileDrawing self);
 
-    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
-       
+    void ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+        int i = pos.X, j = pos.Y;
+        Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
+                                   j * 16 - (int)Main.screenPosition.Y);
+        Color color = Lighting.GetColor(i, j);
+        bool left = !IsTrunk(i - 1, j);
+        SpriteEffects effects = SpriteEffects.FlipHorizontally;
+        if (IsTrunk(i, j) && !IsTop(i, j)) {
+            Texture2D extraTexture = ModContent.Request<Texture2D>(TileLoader.GetTile(GetSelfType()).Texture + "_Extra").Value;
+            ulong seed = (ulong)(i * j % 192372);
+            if (Utils.RandomInt(ref seed, 10) < 3) {
+                int height = 18;
+                bool flag = Utils.RandomInt(ref seed, 2) == 0;
+                int usedFrame;
+                if (flag) {
+                    usedFrame = 2 + Utils.RandomInt(ref seed, 3);
+                }
+                else {
+                    usedFrame = Utils.RandomInt(ref seed, 2);
+                }
+                spriteBatch.Draw(extraTexture, drawPosition + Vector2.UnitX * 14f + new Vector2(left ? 0f : 3f, 3f),
+                    new Rectangle(left ? 21 : 0, usedFrame * height, 21, height), color, 0f, Vector2.Zero, 1f, effects, 0);
+
+                SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
+                if (flag && BackwoodsFogHandler.IsFogActive) {
+                    ulong speed = (((ulong)j << 32) | (ulong)i);
+                    float posX = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
+                    float posY = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
+                    int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
+                    int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
+                    spriteBatch.Draw(extraTexture, drawPosition + Vector2.UnitX * 14f + new Vector2(left ? 0f : 3f, 3f) -
+                        new Vector2(Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
+                        Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY),
+                        new Rectangle(left ? 21 : 0, usedFrame * height, 21, height), Color.Lerp(Color.White, color, 0.8f), 0f, Vector2.Zero, 1f, effects, 0);
+                }
+                spriteBatch.End();
+                spriteBatch.Begin(in snapshot);
+                if (flag) {
+                    if (Main.rand.NextBool(1050)) {
+                        Dust dust = Dust.NewDustPerfect(drawPosition + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
+                        dust.velocity *= 0.5f + Main.rand.NextFloat() * 0.25f;
+                        dust.scale *= 1.1f;
+                    }
+                }
+            }
+        }
     }
 
     private static void DrawItselfParts(int i, int j, SpriteBatch spriteBatch, string texture, int type) {
@@ -696,51 +766,5 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             }
         }
         spawnLeafs();
-
-        drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
-                           j * 16 - (int)Main.screenPosition.Y);
-        left = !IsTrunk(i - 1, j);
-        effects = SpriteEffects.FlipHorizontally;
-        if (IsTrunk(i, j) && !IsTop(i, j)) {
-            Texture2D extraTexture = ModContent.Request<Texture2D>(texture + "_Extra").Value;
-            ulong seed = (ulong)(i * j % 192372);
-            if (Utils.RandomInt(ref seed, 10) < 3) {
-                int height = 18;
-                flag = Utils.RandomInt(ref seed, 2) == 0;
-                int usedFrame;
-                if (flag) {
-                    usedFrame = 2 + Utils.RandomInt(ref seed, 3);
-                }
-                else {
-                    usedFrame = Utils.RandomInt(ref seed, 2);
-                }
-                spriteBatch.Draw(extraTexture, drawPosition + Vector2.UnitX * 14f + new Vector2(left ? 0f : 3f, 3f),
-                    new Rectangle(left ? 21 : 0, usedFrame * height, 21, height), color, 0f, Vector2.Zero, 1f, effects, 0);
-
-                SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
-                if (flag && BackwoodsFogHandler.IsFogActive) {
-                    ulong speed = (((ulong)j << 32) | (ulong)i);
-                    float posX = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
-                    float posY = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
-                    int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
-                    int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
-                    spriteBatch.Draw(extraTexture, drawPosition + Vector2.UnitX * 14f + new Vector2(left ? 0f : 3f, 3f) - 
-                        new Vector2(Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
-                        Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY),
-                        new Rectangle(left ? 21 : 0, usedFrame * height, 21, height), Color.Lerp(Color.White, color, 0.8f), 0f, Vector2.Zero, 1f, effects, 0);
-                }
-                spriteBatch.End();
-                spriteBatch.Begin(in snapshot);
-                if (flag) {
-                    if (Main.rand.NextBool(1050)) {
-                        Dust dust = Dust.NewDustPerfect(drawPosition + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
-                        dust.velocity *= 0.5f + Main.rand.NextFloat() * 0.25f;
-                        dust.scale *= 1.1f;
-                    }
-                }
-            }
-        }
     }
 }
