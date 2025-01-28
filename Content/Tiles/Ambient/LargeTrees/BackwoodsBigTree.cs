@@ -60,7 +60,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                 }
             }
             if (!flag) {
-                TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true, ignoreTrees: true);
+                TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true, ignoreTrees: true, gen: true);
             }
         }
         foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
@@ -107,7 +107,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         return orig(x, y, underground);
     }
 
-    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null, bool shouldCheckExtraOneTile = true, bool ignoreAcorns = false, bool ignoreTrees = false, bool shouldMainCheck = true) {
+    public static bool TryGrowBigTree(int i, int j, int height = -1, UnifiedRandom placeRand = null, bool shouldCheckExtraOneTile = true, bool ignoreAcorns = false, bool ignoreTrees = false, bool shouldMainCheck = true, bool gen = false) {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             return false;
         }
@@ -166,8 +166,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         }
 
         j -= 1;
-        PlaceBegin(i, j, height, placeRand, out Point pointToStartPlacingTrunk);
-        PlaceTrunk(pointToStartPlacingTrunk, height, placeRand);
+        PlaceBegin(i, j, height, placeRand, out Point pointToStartPlacingTrunk, gen);
+        PlaceTrunk(pointToStartPlacingTrunk, height, placeRand, gen);
 
         for (int checkY = j - (int)(height * 2f); checkY < j; checkY++) {
             for (int checkX = i - 2; checkX < i + 3; checkX++) {
@@ -434,7 +434,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
 
     private static ushort GetSelfType() => (ushort)ModContent.TileType<BackwoodsBigTree>();
 
-    private static void PlaceTrunk(Point pointToPlaceTrunk, int height, UnifiedRandom placeRand) {
+    private static void PlaceTrunk(Point pointToPlaceTrunk, int height, UnifiedRandom placeRand, bool gen = false) {
         int i = pointToPlaceTrunk.X, j = pointToPlaceTrunk.Y;
         bool hasProperStart() {
             for (int checkX = i - 1; checkX < i + 3; checkX++) {
@@ -454,26 +454,26 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             GetFramingForTrunk(canPlaceBranch, canPlaceBigBranch, placeRand, out tileFrameX, out tileFrameY, out bool shouldPlaceBranch, out bool shouldPlaceBigBranch);
             short frameXForBranch = (short)(shouldPlaceBigBranch ? 144 : 108);
             if (shouldPlaceBranch || shouldPlaceBigBranch) {
-                PlaceTileInternal(i, placeY, tileFrameX, tileFrameY, placeRand);
-                PlaceTileInternal(i - 1, placeY, frameXForBranch, tileFrameY, placeRand);
+                PlaceTileInternal(i, placeY, tileFrameX, tileFrameY, placeRand, gen);
+                PlaceTileInternal(i - 1, placeY, frameXForBranch, tileFrameY, placeRand, gen);
             }
             else {
-                PlaceTileInternal(i, placeY, tileFrameX, tileFrameY, placeRand);
+                PlaceTileInternal(i, placeY, tileFrameX, tileFrameY, placeRand, gen);
             }
             GetFramingForTrunk(canPlaceBranch, canPlaceBigBranch, placeRand, out tileFrameX, out tileFrameY, out shouldPlaceBranch, out shouldPlaceBigBranch, true);
             frameXForBranch = (short)(shouldPlaceBigBranch ? 144 : 108);
             if (shouldPlaceBranch || shouldPlaceBigBranch) {
-                PlaceTileInternal(i + 1, placeY, tileFrameX, tileFrameY, placeRand);
-                PlaceTileInternal(i + 2, placeY, frameXForBranch, tileFrameY, placeRand);
+                PlaceTileInternal(i + 1, placeY, tileFrameX, tileFrameY, placeRand, gen);
+                PlaceTileInternal(i + 2, placeY, frameXForBranch, tileFrameY, placeRand, gen);
             }
             else {
-                PlaceTileInternal(i + 1, placeY, tileFrameX, tileFrameY, placeRand);
+                PlaceTileInternal(i + 1, placeY, tileFrameX, tileFrameY, placeRand, gen);
             }
         }
         int topPlaceY = j - height;
         GetFramingForTop(placeRand, out tileFrameX, out tileFrameY);
-        PlaceTileInternal(i, topPlaceY, tileFrameX, tileFrameY, placeRand);
-        PlaceTileInternal(i + 1, topPlaceY, tileFrameX, tileFrameY, placeRand);
+        PlaceTileInternal(i, topPlaceY, tileFrameX, tileFrameY, placeRand, gen);
+        PlaceTileInternal(i + 1, topPlaceY, tileFrameX, tileFrameY, placeRand, gen);
     }
 
     private static void GetFramingForTop(UnifiedRandom placeRand, out short tileFrameX, out short tileFrameY) {
@@ -492,7 +492,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         tileFrameX = (short)((shouldPlaceBigBranch ? 72 : 18) + (second ? 18 : 0));
     }
 
-    private static void PlaceBegin(int i, int j, int height, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk) {
+    private static void PlaceBegin(int i, int j, int height, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk, bool gen = false) {
         short getFrameYForStart() => (short)(180 + (placeRand.NextBool() ? 18 : 0));
         for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
             for (int checkX = i - 1; checkX < i + 3; checkX++) {
@@ -500,10 +500,10 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                 tile.ClearTile();
             }
         }
-        PlaceTileInternal(i - 1, j, 0, getFrameYForStart(), placeRand);
-        PlaceTileInternal(i, j, 18, getFrameYForStart(), placeRand);
-        PlaceTileInternal(i + 1, j, 36, getFrameYForStart(), placeRand);
-        PlaceTileInternal(i + 2, j, 54, getFrameYForStart(), placeRand);
+        PlaceTileInternal(i - 1, j, 0, getFrameYForStart(), placeRand, gen);
+        PlaceTileInternal(i, j, 18, getFrameYForStart(), placeRand, gen);
+        PlaceTileInternal(i + 1, j, 36, getFrameYForStart(), placeRand, gen);
+        PlaceTileInternal(i + 2, j, 54, getFrameYForStart(), placeRand, gen);
         for (int checkX = i - 1; checkX < i + 3; checkX++) {
             Tile tile2 = WorldGenHelper.GetTileSafely(checkX, j + 1);
             tile2.IsHalfBlock = false;
@@ -512,7 +512,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         pointToStartPlacingTrunk = new Point(i, j - 1);
     }
 
-    private static void PlaceTileInternal(int i, int j, short tileFrameX, short tileFrameY, UnifiedRandom placeRand = null) {
+    private static void PlaceTileInternal(int i, int j, short tileFrameX, short tileFrameY, UnifiedRandom placeRand = null, bool gen = false) {
         WorldGen.PlaceTile(i, j, GetSelfType(), true, false, -1, 0);
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         tile.TileFrameX = tileFrameX;
@@ -521,15 +521,22 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         placeRand ??= Main.rand;
 
         float num2 = 10f;
-        Gore.NewGore(null, new Vector2(i - 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-        Gore.NewGore(null, new Vector2(i, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-        Gore.NewGore(null, new Vector2(i + 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+
+        if ((gen && placeRand.NextBool(10)) || !gen)
+            Gore.NewGore(null, new Vector2(i - 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+        if ((gen && placeRand.NextBool(10)) || !gen)
+            Gore.NewGore(null, new Vector2(i, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+        if ((gen && placeRand.NextBool(10)) || !gen)
+            Gore.NewGore(null, new Vector2(i + 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
 
         if (IsTop(i, j)) {
             for (int k = 0; k < 5; k++) {
-                Gore.NewGore(null, new Vector2(i - 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-                Gore.NewGore(null, new Vector2(i, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-                Gore.NewGore(null, new Vector2(i + 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                if ((gen && placeRand.NextBool(10)) || !gen)
+                    Gore.NewGore(null, new Vector2(i - 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                if ((gen && placeRand.NextBool(10)) || !gen)
+                    Gore.NewGore(null, new Vector2(i, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                if ((gen && placeRand.NextBool(10)) || !gen)
+                    Gore.NewGore(null, new Vector2(i + 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
             }
 
             ushort leafGoreType = (ushort)ModContent.GoreType<BackwoodsLeaf>();
@@ -537,9 +544,10 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             for (int k = 0; k < count; k++) {
                 Vector2 offset = new Vector2(placeRand.NextFloat(-150f, 150f), placeRand.NextFloat(0f, 200f)).RotatedBy(MathHelper.TwoPi);
                 Vector2 position = (new Vector2(i + 5, j - 15) * 16) + offset;
-                Gore.NewGore(null,
+                if ((gen && placeRand.NextBool(10)) || !gen)
+                    Gore.NewGore(null,
                     position,
-                    Utils.RandomVector2(Main.rand, 0f - num2, num2),
+                    Utils.RandomVector2(placeRand, 0f - num2, num2),
                     leafGoreType,
                     0.7f + placeRand.NextFloat() * 0.6f);
             }
