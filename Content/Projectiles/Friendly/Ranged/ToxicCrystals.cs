@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
 using RoA.Utilities;
 
 using Terraria;
@@ -48,7 +49,7 @@ class ToxicCrystal1 : ModProjectile {
             Projectile.velocity.X = Projectile.velocity.X * 0.8f;
         }
         //Projectile.rotation = -Projectile.velocity.X * 0.05f;
-        int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.JungleSpore, 0f, 0f, 100, default, 1f);
+        int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<LothorPoison>(), 0f, 0f, 100, default, 1f);
         Main.dust[dust].scale += Main.rand.Next(40) * 0.01f;
         Main.dust[dust].noGravity = true;
         Dust dust2 = Main.dust[dust];
@@ -75,7 +76,7 @@ class ToxicCrystal1 : ModProjectile {
                 num5++;
 
             for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
-                Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, DustID.JungleSpore, Alpha: 100, Scale: 1f)];
+                Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, ModContent.DustType<LothorPoison>(), Alpha: 100, Scale: 1f)];
                 obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
                 obj.noGravity = true;
                 obj.velocity *= 0.1f;
