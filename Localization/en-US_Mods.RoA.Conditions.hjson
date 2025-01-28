@@ -4,3 +4,5 @@ BackwoodsBiome: {
 }
 
 InBackwoods: Mods.RoA.Conditions.InBackwoods
+
+TanningRack: Mods.RoA.Conditions.TanningRack

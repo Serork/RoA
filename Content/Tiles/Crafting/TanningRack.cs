@@ -63,7 +63,8 @@ sealed class TanningRack : ModTile {
 		Player player = Main.player[Main.myPlayer];
 		player.AddBuff(SkinningBuffType, 18000);
         SoundStyle leatherSound = new(ResourceManager.Sounds + "Leather") {
-            PitchVariance = 0.5f
+            PitchVariance = 0.1f,
+			Volume = 1.5f
         };
         SoundEngine.PlaySound(leatherSound, player.GetViableMousePosition());
         return true;

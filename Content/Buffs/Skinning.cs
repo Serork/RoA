@@ -14,6 +14,7 @@ using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
@@ -163,7 +164,7 @@ sealed class SkinningDropCondition : IItemDropRuleCondition {
 		=> true;
 
 	public string GetConditionDescription()
-		=> "Drops if the player has the buff \"Skinning\"";
+		=> Language.GetOrRegister("Mods.RoA.Conditions.TanningRack").Value;
 }
 
 sealed class SkinningNPC : GlobalNPC {
