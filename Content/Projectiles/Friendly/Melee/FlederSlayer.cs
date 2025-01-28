@@ -645,6 +645,8 @@ sealed class FlederSlayer : ModProjectile {
 
         public override bool? CanCutTiles() => true;
 
+        public override bool? CanDamage() => Projectile.Opacity >= 0.25f;
+
         public override void CutTiles() {
             Utils.PlotTileLine(Projectile.position,
                 Projectile.position - Vector2.UnitY * (100f * Projectile.scale),

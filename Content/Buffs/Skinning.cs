@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-
+using RoA.Common.CustomConditions;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Items.Miscellaneous;
@@ -153,23 +153,9 @@ sealed class SkinningPlayer : ModPlayer {
 	}
 }
 
-sealed class SkinningDropCondition : IItemDropRuleCondition {
-	public bool CanDrop(DropAttemptInfo info) {
-		if (!info.IsInSimulation)
-			return info.player.FindBuffIndex((ushort)ModContent.BuffType<Skinning>()) != -1;
-		return false;
-	}
-
-	public bool CanShowItemDropInUI()
-		=> true;
-
-	public string GetConditionDescription()
-		=> Language.GetOrRegister("Mods.RoA.Conditions.TanningRack").Value;
-}
-
 sealed class SkinningNPC : GlobalNPC {
 	public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
-		SkinningDropCondition dropCondition = new SkinningDropCondition();
+		SkinningDropCondition dropCondition = new();
 		IItemDropRule conditionalRule = new LeadingConditionRule(dropCondition);
 		int npcType = npc.type;
 		bool critters = NPCID.Sets.CountsAsCritter[npcType] && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&

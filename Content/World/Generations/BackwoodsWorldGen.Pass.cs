@@ -2448,14 +2448,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
 
             vector2D += vector2D2;
-            vector2D2.X += (double)_random.Next(-10, 11) * 0.05;
+            vector2D2.X += (double)_random.Next(-10, 11) * 0.035;
             if (vector2D2.X > 1.0)
                 vector2D2.X = 1.0;
 
             if (vector2D2.X < -1.0)
                 vector2D2.X = -1.0;
 
-            vector2D2.Y += (double)_random.Next(-10, 4) * 0.05;
+            vector2D2.Y += (double)_random.Next(-10, 1) * 0.035;
             if (vector2D2.Y > 1.0)
                 vector2D2.Y = 1.0;
 

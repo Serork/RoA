@@ -16,6 +16,7 @@ sealed class ShaderLoader : ModSystem {
     public static readonly string BackwoodsSky = "Backwoods Sky";
     public static readonly string BackwoodsFog = "Backwoods Fog";
     public static readonly string LothorSky = "Lothor Sky";
+    public static readonly string EnragedLothorSky = "Enraged Lothor Sky";
 
     public override void OnModLoad() {
         string name = "Tint";
@@ -32,6 +33,10 @@ sealed class ShaderLoader : ModSystem {
         SkyManager.Instance[LothorSky] = new LothorShakeSky();
         Filters.Scene[LothorSky] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon"), EffectPriority.High);
         Filters.Scene[LothorSky].Load();
+
+        Filters.Scene[EnragedLothorSky] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon"), EffectPriority.Medium);
+        SkyManager.Instance[EnragedLothorSky] = new EnragedLothorSky();
+        Filters.Scene[EnragedLothorSky].Load();
 
         SkyManager.Instance["CustomAmbience"] = new CustomSkyAmbience.CustomAmbientSky();
     }

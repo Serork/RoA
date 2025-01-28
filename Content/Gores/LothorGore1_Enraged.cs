@@ -15,7 +15,7 @@ class LothorGore2_Enraged : LothorGore1_Enraged { }
 class LothorGore1_Enraged : ModGore {
     public override Color? GetAlpha(Gore gore, Color lightColor) {
         void enrage(ref Color color) {
-            color = Color.Lerp(Helper.BuffColor(color, 0.3f, 0.3f, 0.3f, 1f), color, 0.5f);
+            color = Color.Lerp(Helper.BuffColor(color, 0.3f, 0.3f, 0.3f, 1f), color, 0.6f);
         }
         enrage(ref lightColor);
 

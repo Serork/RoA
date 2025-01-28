@@ -54,7 +54,7 @@ sealed partial class Lothor : ModNPC {
         Color color = Lighting.GetColor(NPC.Center.ToTileCoordinates());
         void enrage(ref Color color) {
             if (_shouldEnrage) {
-                color = Color.Lerp(Helper.BuffColor(color, 0.3f, 0.3f, 0.3f, 1f), color, 0.5f);
+                color = Color.Lerp(Helper.BuffColor(color, 0.3f, 0.3f, 0.3f, 1f), color, 0.6f);
             }
         }
         enrage(ref drawColor);

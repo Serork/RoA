@@ -3,9 +3,12 @@
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
+using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -36,11 +39,20 @@ sealed class BackwoodsLighting : ModSystem {
     }
 
 	public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor) {
-		if (ModContent.GetInstance<TileCount>().BackwoodsTiles > 0) {
+		int type = ModContent.NPCType<Lothor>();
+        bool flag = NPC.AnyNPCs(type);
+        if (ModContent.GetInstance<TileCount>().BackwoodsTiles > 0 || flag) {
+            NPC npc = null;
+			if (flag) {
+				npc = Main.npc.FirstOrDefault(x => x.active && x.type == type);
+            }
             if (Brightness2 < 1f) {
 				Brightness2 += BackwoodsBiome.TransitionSpeed;
 			}
 			float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1500f;
+			if (flag && npc.As<Lothor>().LifeProgress == 1f) {
+				strength = Math.Max(strength, 1.5f * Main.LocalPlayer.GetModPlayer<Lothor.EnragedVisuals>()._opacity);
+			}
             strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2 + Helper.EaseInOut3(Math.Min(1f, AltarHandler.GetAltarStrength())) * 0.5f/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;
             int sunR = backgroundColor.R;
 			int sunG = backgroundColor.G;

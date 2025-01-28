@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common;
+using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
@@ -16,6 +19,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -131,7 +135,7 @@ sealed partial class Lothor : ModNPC {
 
     public float LifeProgress => _shouldEnrage ? 1f : _isDead ? 0f : (1f - NPC.life / (float)NPC.lifeMax);
 
-    private bool CanDropFlederSlayer => _hpLoseInEnrage >= (float)NPC.lifeMax * 0.9f;
+    public bool CanDropFlederSlayer => _hpLoseInEnrage >= (float)NPC.lifeMax * 0.9f;
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
 
@@ -259,6 +263,57 @@ sealed partial class Lothor : ModNPC {
 
         _deadStateProgress = 0f;
         _isDead = true;
+    }
+
+    public sealed class EnragedVisuals : ModPlayer {
+        internal float _opacity;
+        internal bool _isActive;
+
+        public override void PostUpdate() {
+            string shader = ShaderLoader.EnragedLothorSky;
+            int type = ModContent.NPCType<Lothor>();
+            if (!_isActive) {
+                Player.ManageSpecialBiomeVisuals(shader, false);
+            }
+            _isActive = false;
+            Filters.Scene[shader].GetShader().UseOpacity(_opacity).UseColor(Color.Red);
+            NPC npc = Main.npc.FirstOrDefault(x => x.active && x.type == type);
+            void deactivate() {
+                if (Filters.Scene[shader].IsActive()) {
+                    Filters.Scene[shader].Deactivate();
+                }
+                if (_opacity > 0f) {
+                    _opacity -= 0.05f;
+                }
+                else {
+                    _opacity = 0f;
+                }
+            }
+            if (npc == null) {
+                deactivate();
+                return;
+            }
+            bool enragedLothor = npc.As<Lothor>()._shouldEnrage;
+            if (enragedLothor) {
+                _isActive = true;
+                if (_opacity < 1f) {
+                    _opacity += 0.05f;
+                }
+                else {
+                    _opacity = 1f;
+                }
+                Player.ManageSpecialBiomeVisuals(shader, _isActive);
+                if (!Filters.Scene[shader].IsActive()) {
+                    Filters.Scene.Activate(shader);
+                }
+                else {
+                    Filters.Scene[shader].GetShader().UseOpacity(_opacity);
+                }
+            }
+            else {
+                deactivate();
+            }
+        }
     }
 
     public override void AI() {
@@ -1005,6 +1060,10 @@ sealed partial class Lothor : ModNPC {
         NPC.knockBackResist = 0f;
 
         CurrentAIState = LothorAIState.SpittingAttack;
+
+        if (NPC.velocity.Y != 0f) {
+            return;
+        }
 
         int count = 6;
         int minFrame = 9;
