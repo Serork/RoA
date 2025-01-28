@@ -13,8 +13,8 @@ sealed class LothorAngleAttack2 : ModProjectile {
 
     public override void SetDefaults() {
         Projectile.aiStyle = 14;
-        Projectile.width = 4;
-        Projectile.height = 4;
+        Projectile.width = 12;
+        Projectile.height = 12;
         Projectile.timeLeft = 180;
         Projectile.penetrate = -1;
         Projectile.tileCollide = true;
@@ -22,6 +22,12 @@ sealed class LothorAngleAttack2 : ModProjectile {
         Projectile.hostile = true;
         Projectile.scale = 1.1f;
         Projectile.light = 0f;
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 4;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
     public override void AI() {
