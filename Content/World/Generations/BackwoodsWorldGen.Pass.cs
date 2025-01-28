@@ -2455,9 +2455,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (vector2D2.X < -1.0)
                 vector2D2.X = -1.0;
 
-            if (WorldGen.genRand.NextBool(5)) {
-                vector2D2.Y += (double)_random.Next(-3, 0) * 0.05;
-            }
+            vector2D2.Y += (double)_random.Next(-10, 4) * 0.05;
             if (vector2D2.Y > 1.0)
                 vector2D2.Y = 1.0;
 

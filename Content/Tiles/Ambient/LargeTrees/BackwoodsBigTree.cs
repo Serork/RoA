@@ -495,7 +495,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private static void PlaceBegin(int i, int j, int height, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk) {
         short getFrameYForStart() => (short)(180 + (placeRand.NextBool() ? 18 : 0));
         for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
-            for (int checkX = i - 1; checkX < i + (checkY == j ? 3 : 2); checkX++) {
+            for (int checkX = i - 1; checkX < i + 3; checkX++) {
                 Tile tile = WorldGenHelper.GetTileSafely(checkX, checkY);
                 tile.ClearTile();
             }
@@ -567,12 +567,12 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
         orig(self);
 
-        foreach ((ModTile modTile, Point position) in TileHelper.PostDrawPoints) {
-            if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null && modTile is BackwoodsBigTree) {
-                int i = position.X, j = position.Y;
-                DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
-            }
-        }
+        //foreach ((ModTile modTile, Point position) in TileHelper.PostDrawPoints) {
+        //    if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null && modTile is BackwoodsBigTree) {
+        //        int i = position.X, j = position.Y;
+        //        DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
+        //    }
+        //}
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_treeWindCounter")]
@@ -586,6 +586,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
 
     void ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
         int i = pos.X, j = pos.Y;
+        DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
+
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
                                    j * 16 - (int)Main.screenPosition.Y);
