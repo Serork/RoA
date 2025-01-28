@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using ReLogic.Content;
-
 using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
@@ -129,8 +127,11 @@ sealed partial class Lothor : ModNPC {
     private Player _target;
     private bool _targetIsDeadOrNoTarget;
     private bool _shouldEnrage;
+    private int _hpLoseInEnrage;
 
     public float LifeProgress => _shouldEnrage ? 1f : _isDead ? 0f : (1f - NPC.life / (float)NPC.lifeMax);
+
+    private bool CanDropFlederSlayer => _hpLoseInEnrage >= (float)NPC.lifeMax * 0.9f;
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
 
@@ -197,14 +198,15 @@ sealed partial class Lothor : ModNPC {
         int[] gores = new int[] { 3, 4, 6, 7 };
         double pi = Math.PI * 2.0;
         float scale = 1f;
+        string enraged = _shouldEnrage ? "_Enraged" : string.Empty;
         for (int i = 0; i < 2; i++) {
             foreach (int gore in gores) {
-                Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + gore).Type, scale);
+                Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + gore + enraged).Type, scale);
             }
         }
         for (int i = 1; i < 7; i++) {
             if (!gores.Equals(i)) {
-                Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + i).Type, scale);
+                Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + i + (i != 5 ? enraged : string.Empty)).Type, scale);
             }
         }
 
@@ -222,6 +224,10 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
+        if (_shouldEnrage) {
+            _hpLoseInEnrage += hit.Damage;
+        }
+
         bool flag = NPC.lifeMax == 100;
         if (NPC.life > 0 || flag) {
             if (flag && NPC.life <= 0) {

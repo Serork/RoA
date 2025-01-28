@@ -70,7 +70,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
         position = oldPosition/*Vector2.Lerp(_oldPosition, playerPosition, 0.3f)*/;
         position -= Main.screenPosition;
-        //position -= new Vector2(2f, 0f);
+        position -= new Vector2(1f, 0f);
         var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
         float rotation = drawInfo.rotation + MathHelper.Pi;
         bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing;

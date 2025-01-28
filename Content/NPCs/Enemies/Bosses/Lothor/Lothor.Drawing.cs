@@ -171,7 +171,6 @@ sealed partial class Lothor : ModNPC {
         position.Y += height / 2f;
         spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
 
-        Main.NewText((1f - progress));
-        Lighting.AddLight(NPC.Center + WreathOffset(), new Vector3(1f, 0.2f, 0.2f) * (1f - progress));
+        Lighting.AddLight(NPC.Center + WreathOffset(), new Vector3(1f, 0.2f, 0.2f) * 1.25f * progress);
     }
 }
