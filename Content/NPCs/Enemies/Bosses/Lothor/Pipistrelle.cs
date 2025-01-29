@@ -55,7 +55,6 @@ sealed class Pipistrelle : ModNPC {
         NPC.noTileCollide = true;
         NPC.value = 0;
 
-
         NPC.rarity = 1;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
