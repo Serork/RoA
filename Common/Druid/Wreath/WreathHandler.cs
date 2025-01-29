@@ -378,9 +378,7 @@ sealed class WreathHandler : ModPlayer {
             }
             bool flag = rodProjectile == null;
             bool flag2 = !flag && !rodProjectile.PreparingAttack;
-            if (flag || flag2) {
-                _stayTime -= TimeSystem.LogicDeltaTime;
-            }
+            _stayTime -= TimeSystem.LogicDeltaTime * (flag2 ? 0.5f : 1f);
         }
         else {
             if (_stayTime != 0f) {
