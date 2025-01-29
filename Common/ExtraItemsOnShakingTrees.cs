@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Placeable;
+using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Trees;
 
@@ -215,6 +216,9 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
         }
         else if (genRand.Next(30) == 0 && (treeType == TreeTypes.Crimson || treeType == TreeTypes.PalmCrimson)) {
             NPC.NewNPC(new EntitySource_ShakeTree(x, y), x * 16 + 8, (y - 1) * 16, -22);
+        }
+        else if (genRand.Next(1) == 0 && flag) {
+            NPC.NewNPC(new EntitySource_ShakeTree(x, y), x * 16 + 8, (y + 1) * 16, !NPC.downedBoss2 ? ModContent.NPCType<BabyFleder>() : ModContent.NPCType<Fleder>());
         }
         else if (genRand.Next(30) == 0 && (treeType == TreeTypes.Corrupt || treeType == TreeTypes.PalmCorrupt)) {
             NPC.NewNPC(new EntitySource_ShakeTree(x, y), x * 16 + 8, (y - 1) * 16, -11);

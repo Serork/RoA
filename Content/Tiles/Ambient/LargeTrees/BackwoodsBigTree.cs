@@ -492,6 +492,14 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         tileFrameX = (short)((shouldPlaceBigBranch ? 72 : 18) + (second ? 18 : 0));
     }
 
+    public override bool CanExplode(int i, int j) {
+        if (!Main.hardMode) {
+            return false;
+        }
+
+        return base.CanExplode(i, j);
+    }
+
     private static void PlaceBegin(int i, int j, int height, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk, bool gen = false) {
         short getFrameYForStart() => (short)(180 + (placeRand.NextBool() ? 18 : 0));
         for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
