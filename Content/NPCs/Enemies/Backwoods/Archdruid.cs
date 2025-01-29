@@ -14,6 +14,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -74,6 +75,12 @@ sealed class Archdruid : DruidNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<ArchdruidBanner>();
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Archdruid")
+        ]);
     }
 
     protected override float TimeToChangeState() => 2f;

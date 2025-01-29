@@ -7,7 +7,7 @@ DruidSoul: DruidSoulText
 Ent: EntText
 Ravencaller: RavencallerText
 Lumberjack: LumberjackText
-GrimDruid: GrimDruidText
+Grimdruid: GrimdruidText
 GrimDefender: GrimDefenderText
 Hedgehog: HedgehogText
 Sentinel: SentinelText
@@ -18,3 +18,5 @@ CrowdRaven: CrowdRavenText
 SummonedRaven: SummonedRavenText
 SentinelSpirit: SentinelSpiritText
 Lothor2: Lothor2Text
+Hog: HogText
+Archdruid: ArchdruidText

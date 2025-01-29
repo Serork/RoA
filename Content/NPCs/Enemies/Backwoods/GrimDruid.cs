@@ -51,7 +51,7 @@ sealed class GrimDruid : DruidNPC {
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([
-            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.GrimDruid")
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Grimdruid")
         ]);
     }
 
