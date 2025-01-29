@@ -3,6 +3,7 @@
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,9 +18,14 @@ public class SentinelSpirit : ModNPC {
 
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
-        //NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) {
-        //    Hide = true
-        //};
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Position = new Vector2(0f, -15f),
+            PortraitPositionXOverride = 2f,
+            PortraitPositionYOverride = -36f,
+            Velocity = 1f,
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
 
     public override void SetDefaults() {
@@ -36,6 +42,11 @@ public class SentinelSpirit : ModNPC {
         NPC.HitSound = SoundID.NPCHit5;
         NPC.DeathSound = SoundID.NPCDeath6;
         NPC.noTileCollide = true;
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheDungeon,
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.SentinelSpirit"));
     }
 
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */

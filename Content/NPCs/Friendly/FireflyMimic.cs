@@ -9,6 +9,7 @@ using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -32,6 +33,16 @@ sealed class FireflyMimic : ModNPC {
         NPCID.Sets.ShimmerTransformToNPC[Type] = 677;
 
         NPCID.Sets.SpecificDebuffImmunity[Type][31] = true;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Position = new Vector2(0f, 2f),
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.FireflyMimic"));
     }
 
     public override void SetDefaults() {

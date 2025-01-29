@@ -26,6 +26,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Map;
@@ -206,6 +207,13 @@ sealed class GrimDefender : ModNPC {
 
         NPCID.Sets.TrailingMode[NPC.type] = 7;
         NPCID.Sets.TrailCacheLength[NPC.type] = 7;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Position = new Vector2(0f, 20f),
+            PortraitPositionXOverride = 0f,
+            PortraitPositionYOverride = 0f,
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
 
     public override void SetDefaults() {
@@ -273,12 +281,29 @@ sealed class GrimDefender : ModNPC {
         return true;
     }
 
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.GrimDefender")
+        ]);
+    }
+
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Body").Value;
         Vector2 offset = new Vector2(22, 28) / 2f;
-        Vector2 position = NPC.position - Main.screenPosition + offset;
+        Vector2 position = NPC.position - screenPos + offset;
         Vector2 origin = NPC.frame.Size() / 2f;
         SpriteEffects effects = NPC.spriteDirection != -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        if (NPC.IsABestiaryIconDummy) {
+            Vector2 drawPosition = position + new Vector2(36f, -32f);
+            Main.EntitySpriteDraw(texture, drawPosition, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects);
+
+            texture = TextureAssets.Npc[Type].Value;
+            Rectangle sourceRectangle2 = NPC.frame;
+            sourceRectangle2.Width = 72;
+            sourceRectangle2.X = 0;
+            Main.EntitySpriteDraw(texture, drawPosition, sourceRectangle2, new Color(255, 255, 255, 0) * 0.8f, NPC.rotation, origin, NPC.scale, effects);
+            return false;
+        }
         float attackCd = ATTACKTIME;
         float num = attackCd * 0.6f;
         float progress = NPC.ai[1] > num ? Ease.CubeInOut(1f - (NPC.ai[1] - num) / (attackCd - num)) : 1f;
@@ -324,6 +349,23 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override void FindFrame(int frameHeight) {
+        if (NPC.IsABestiaryIconDummy) {
+            ++NPC.frameCounter;
+
+            if (NPC.frameCounter < 40.0) {
+                NPC.frame.Y = frameHeight * 3;
+            }
+            else {
+                NPC.frame.Y = frameHeight * 7;
+            }
+
+            if (NPC.frameCounter > 80.0) {
+                NPC.frameCounter = 0;
+            }
+
+            return;
+        }
+
         NPC.frame.Width = 72;
 
         if (NPC.ai[0] == 0f) {

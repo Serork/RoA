@@ -14,6 +14,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -42,6 +43,11 @@ sealed class SapSlime : ModNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<SapSlimeBanner>();
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.SapSlime"));
     }
 
     private int GenerateItemInsideBody(bool isBallooned) {

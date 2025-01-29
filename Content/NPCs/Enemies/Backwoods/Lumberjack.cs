@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
@@ -11,6 +12,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -27,7 +29,7 @@ sealed class Lumberjack : RoANPC {
 
     public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 21;
-	}
+    }
 
 	public override void SetDefaults() {
 		NPC.lifeMax = 200;
@@ -52,6 +54,12 @@ sealed class Lumberjack : RoANPC {
         BannerItem = ModContent.ItemType<LumberjackBanner>();
     }
 
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Lumberjack")
+        ]);
+    }
+
     public override void HitEffect(NPC.HitInfo hit) {
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
@@ -72,6 +80,10 @@ sealed class Lumberjack : RoANPC {
         Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
     }
 
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        return base.PreDraw(spriteBatch, screenPos, drawColor);
+    }
+
     public override void OnKill() {
 		if (Main.netMode == NetmodeID.MultiplayerClient) {
 			return;
@@ -84,8 +96,23 @@ sealed class Lumberjack : RoANPC {
 	}
 
 	public override void FindFrame(int frameHeight) {
+        double walkingCounter = 4.0;
+        int currentFrame = Math.Min((int)CurrentFrame, Main.npcFrameCount[Type] - 1);
+        if (NPC.IsABestiaryIconDummy) {
+            NPC.frameCounter += 0.75f;
+            if (NPC.frameCounter > walkingCounter) {
+                int lastWalkingFrame = 7;
+                if (++CurrentFrame >= lastWalkingFrame) {
+                    CurrentFrame = 0;
+                }
+                NPC.frameCounter = 0.0;
+                ChangeFrame((currentFrame, frameHeight));
+            }
+
+			return;
+        }
+        
 		NPC.spriteDirection = NPC.direction;
-		double walkingCounter = 4.0;
 		double attackCounter = walkingCounter + 50.0;
 		switch (State) {
 			case (float)States.Walking:
@@ -113,7 +140,6 @@ sealed class Lumberjack : RoANPC {
 				CurrentFrame = 13 + (int)(8.0 * progress);
 				break;
 		}
-		int currentFrame = Math.Min((int)CurrentFrame, Main.npcFrameCount[Type] - 1);
 		ChangeFrame((currentFrame, frameHeight));
 	}
 

@@ -106,8 +106,27 @@ abstract class DruidNPC : RoANPC {
     }
 
     public override void FindFrame(int frameHeight) {
-        NPC.spriteDirection = NPC.direction;
         double walkingCounter = 4.0;
+        int currentFrame = Math.Min((int)CurrentFrame, MaxFrame);
+        if (NPC.IsABestiaryIconDummy) {
+            if (++NPC.frameCounter > walkingCounter) {
+                int firstWalkingFrame = 2;
+                int lastWalkingFrame = 16;
+                CurrentFrame++;
+                if (CurrentFrame <= 1) {
+                    CurrentFrame = firstWalkingFrame;
+                }
+                else if (CurrentFrame >= lastWalkingFrame) {
+                    CurrentFrame = firstWalkingFrame;
+                }
+                NPC.frameCounter = 0.0;
+                ChangeFrame((currentFrame, frameHeight));
+            }
+
+            return;
+        }
+
+        NPC.spriteDirection = NPC.direction;
         switch (State) {
             case (float)States.Walking:
                 bool dead = Main.player[NPC.target].dead;
@@ -136,7 +155,6 @@ abstract class DruidNPC : RoANPC {
         if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
             CurrentFrame = 1;
         }
-        int currentFrame = Math.Min((int)CurrentFrame, MaxFrame);
         ChangeFrame((currentFrame, frameHeight));
     }
 

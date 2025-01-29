@@ -13,6 +13,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -68,9 +69,18 @@ sealed class Ravencaller : ModNPC {
         BannerItem = ModContent.ItemType<RavencallerBanner>();
     }
 
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Ravencaller")
+        ]);
+    }
+
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (NPC.IsABestiaryIconDummy) {
             NPC.Opacity = 1f;
+            if (NPC.frame.Y < 48) {
+                NPC.frame.Y = 48;
+            }
         }
 
         return base.PreDraw(spriteBatch, screenPos, drawColor);
@@ -205,6 +215,9 @@ sealed class Ravencaller : ModNPC {
         NPC.frame.Y = curFrame * frameHeight;
 
         if (NPC.IsABestiaryIconDummy) {
+            if (curFrame == 0) {
+                curFrame = 1;
+            }
             if (NPC.frameCounter >= frameTime) {
                 ++curFrame;
                 NPC.frameCounter = 0;

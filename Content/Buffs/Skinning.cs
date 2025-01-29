@@ -164,7 +164,7 @@ sealed class SkinningNPC : GlobalNPC {
 			npc.aiStyle != 22;
 		NPCsType type;
 		type = critters ? NPCsType.Critters : enemies ? NPCsType.Enemies : NPCsType.None;
-		if (type == NPCsType.None)
+		if (type == NPCsType.None || NPCID.Sets.ShimmerTransformToNPC[npcType] == 677)
 			return;
 		int itemType = type switch {
 			NPCsType.Critters => (ushort)ModContent.ItemType<AnimalLeather>(),

@@ -1411,3 +1411,8 @@ BloodCursor: {
 	DisplayName: Blood Cursor
 	Tooltip: ""
 }
+
+CrowdRavenBanner: {
+	DisplayName: Crowd Raven Banner
+	Tooltip: ""
+}

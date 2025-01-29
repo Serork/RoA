@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Utilities;
 
 using System.IO;
 
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -21,6 +23,11 @@ sealed class Hedgehog : ModNPC {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Hedgehog");
         Main.npcFrameCount[NPC.type] = 5;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Velocity = 1f
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
 
     public override void SetDefaults() {
@@ -34,6 +41,14 @@ sealed class Hedgehog : ModNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<HedgehogBanner>();
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Hedgehog")
+        ]);
     }
 
     public override void SendExtraAI(BinaryWriter writer) {

@@ -4,12 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
 
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -22,14 +24,55 @@ sealed class CrowdRaven : ModNPC {
 		// DisplayName.SetDefault("Summoned Raven");
 		Main.npcFrameCount[Type] = 5;
 
-		//NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0) {
-		//	CustomTexturePath = nameof(RiseofAges) + "/Assets/Textures/Bestiary/SummonedRaven",
-		//	Position = new Vector2(0f, -16f),
-		//	Velocity = 0f,
-		//	Frame = 1
-		//};
-		//NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
-	}
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Position = new Vector2(2f, -10f),
+            PortraitPositionXOverride = 0f,
+            PortraitPositionYOverride = -31f
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.CrowdRaven")
+        ]);
+    }
+
+    public override void FindFrame(int frameHeight) {
+        int num83 = Main.npcFrameCount[NPC.type] - 1;
+        if (NPC.IsABestiaryIconDummy) {
+            if (NPC.frame.Y < frameHeight) {
+                NPC.frame.Y = frameHeight;
+            }
+            NPC.frameCounter += 1.0;
+            if (NPC.frameCounter >= 6.0) {
+                NPC.frame.Y += frameHeight;
+                NPC.frameCounter = 0.0;
+            }
+
+            if (NPC.frame.Y >= frameHeight * num83)
+                NPC.frame.Y = frameHeight;
+
+            return;
+        }
+
+        NPC.spriteDirection = -NPC.direction;
+        NPC.rotation = NPC.velocity.X * 0.1f;
+        if (NPC.velocity.X == 0f && NPC.velocity.Y == 0f) {
+            NPC.frame.Y = 0;
+            NPC.frameCounter = 0.0;
+            return;
+        }
+
+        NPC.frameCounter += 1.0;
+        if (NPC.frameCounter >= 6.0) {
+            NPC.frame.Y += frameHeight;
+            NPC.frameCounter = 0.0;
+        }
+
+        if (NPC.frame.Y >= frameHeight * num83)
+            NPC.frame.Y = frameHeight;
+    }
 
     public override void HitEffect(NPC.HitInfo hit) {
         if (NPC.life > 0) {
@@ -67,6 +110,9 @@ sealed class CrowdRaven : ModNPC {
         NPC.npcSlots = 0.4f;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<CrowdRavenBanner>();
     }
 
     public override void AI() {
@@ -255,25 +301,5 @@ sealed class CrowdRaven : ModNPC {
         spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(NPC.width, NPC.height) / 2, NPC.frame, new Color(200, 200, 200, 100) * (1f - NPC.alpha / 255f), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.velocity.X > 0f ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 
         return false;
-    }
-
-    public override void FindFrame(int frameHeight) {
-        NPC.spriteDirection = -NPC.direction;
-        NPC.rotation = NPC.velocity.X * 0.1f;
-        if (NPC.velocity.X == 0f && NPC.velocity.Y == 0f) {
-            NPC.frame.Y = 0;
-            NPC.frameCounter = 0.0;
-            return;
-        }
-
-        int num83 = Main.npcFrameCount[NPC.type] - 1;
-        NPC.frameCounter += 1.0;
-        if (NPC.frameCounter >= 4.0) {
-            NPC.frame.Y += frameHeight;
-            NPC.frameCounter = 0.0;
-        }
-
-        if (NPC.frame.Y >= frameHeight * num83)
-            NPC.frame.Y = frameHeight;
     }
 }

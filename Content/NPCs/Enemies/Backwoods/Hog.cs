@@ -11,6 +11,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -23,9 +24,19 @@ sealed class Hog : RoANPC {
 
 	public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 16;
-	}
 
-	public override void SetDefaults() {
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Hog")
+        ]);
+    }
+
+    public override void SetDefaults() {
 		NPC.CloneDefaults(NPCID.Bunny);
 
 		NPC.lifeMax = 100;
@@ -478,6 +489,21 @@ sealed class Hog : RoANPC {
 	}
 
 	public override void FindFrame(int frameHeight) {
+        int currentFrame = Math.Min((int)CurrentFrame, Main.npcFrameCount[Type] - 1);
+        if (NPC.IsABestiaryIconDummy) {
+            if (++NPC.frameCounter >= 7.0) {
+                NPC.frameCounter = 0.0;
+                CurrentFrame++;
+                if (CurrentFrame > 8) {
+                    CurrentFrame = 1;
+                }
+            }
+
+            ChangeFrame((currentFrame, frameHeight));
+
+            return;
+        }
+
 		void slowMovementAnimation() {
             if (Math.Abs(NPC.velocity.X) > 0.1f) {
                 if (++NPC.frameCounter >= 7.0) {
@@ -525,7 +551,6 @@ sealed class Hog : RoANPC {
             }
 		}
 
-		int currentFrame = Math.Min((int)CurrentFrame, Main.npcFrameCount[Type] - 1);
 		ChangeFrame((currentFrame, frameHeight));
 	}
 }

@@ -22,7 +22,7 @@ sealed class DruidSoul2 : ModNPC {
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             Position = new Vector2(0f, -2f),
             PortraitPositionXOverride = 0f,
-            PortraitPositionYOverride = -2f,
+            PortraitPositionYOverride = -20f,
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }

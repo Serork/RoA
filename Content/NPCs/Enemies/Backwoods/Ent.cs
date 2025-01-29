@@ -24,8 +24,8 @@ sealed class Ent : RoANPC {
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             SpriteDirection = -1,
             Position = new Vector2(10f, 36f),
-            PortraitPositionXOverride = 4f,
-            PortraitPositionYOverride = 6f
+            PortraitPositionXOverride = 12f,
+            PortraitPositionYOverride = -1f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
     }

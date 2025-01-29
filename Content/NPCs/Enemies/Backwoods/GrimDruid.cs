@@ -12,6 +12,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -22,7 +23,7 @@ sealed class GrimDruid : DruidNPC {
 
     public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 19;
-	}
+    }
 
 	public override void SetDefaults() {
         base.SetDefaults();
@@ -46,6 +47,12 @@ sealed class GrimDruid : DruidNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<GrimdruidBanner>();
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.GrimDruid")
+        ]);
     }
 
     public override void HitEffect(NPC.HitInfo hit) {

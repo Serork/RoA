@@ -75,6 +75,13 @@ sealed class BabyFleder : ModNPC {
         Main.npcFrameCount[Type] = 4;
 
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Position = new Vector2(0f, -12f),
+            PortraitPositionXOverride = 1f,
+            PortraitPositionYOverride = -33f,
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -130,6 +137,20 @@ sealed class BabyFleder : ModNPC {
     public override bool? CanFallThroughPlatforms() => !IsSitting;
 
     public override void FindFrame(int frameHeight) {
+        int currentFrame = (int)NPC.localAI[0];
+        if (NPC.IsABestiaryIconDummy) {
+            if (++NPC.frameCounter >= 6.0) {
+                NPC.frameCounter = 0.0;
+                NPC.localAI[0]++;
+                if (NPC.localAI[0] >= 4) {
+                    NPC.localAI[0] = 0;
+                }
+                NPC.frame.Y = currentFrame * frameHeight;
+            }
+
+            return;
+        }
+
         NPC.spriteDirection = NPC.direction;
         if (IsSitting && Math.Abs(NPC.velocity.Y) < 0.1f) {
             NPC.frame.Y = 2 * frameHeight;
@@ -142,7 +163,6 @@ sealed class BabyFleder : ModNPC {
                 NPC.localAI[0] = 0;
             }
         }
-        int currentFrame = (int)NPC.localAI[0];
         NPC.frame.Y = currentFrame * frameHeight;
     }
 

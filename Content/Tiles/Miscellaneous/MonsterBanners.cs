@@ -21,7 +21,8 @@ sealed class MonsterBanners : ModBannerTile {
 		Sentinel,
 		SentinelWarrior,
 		GrimDefender,
-		SummonedRaven
+		SummonedRaven,
+        CrowdRaven
     }
 }
 
