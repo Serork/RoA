@@ -74,7 +74,7 @@ sealed partial class BackwoodsBiome : ModBiome {
 
     public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Normal;
 
-    public override string BestiaryIcon => ResourceManager.Textures + "BackwoodsBestiaryIcon";
+    public override string BestiaryIcon => ResourceManager.Textures + "Backwoods_Bestiary";
 
     public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>(RoA.ModName + "/DruidBiomeWaterStyle");
 }

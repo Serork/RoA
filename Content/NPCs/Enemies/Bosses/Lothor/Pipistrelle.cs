@@ -11,6 +11,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -24,6 +25,19 @@ sealed class Pipistrelle : ModNPC {
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 4;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Position = new Vector2(0f, 24f),
+            PortraitPositionXOverride = 0f,
+            PortraitPositionYOverride = 12f,
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Pipistrelle")
+        ]);
     }
 
     public override void SetDefaults() {

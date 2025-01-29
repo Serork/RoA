@@ -8,6 +8,7 @@
 	  <LangVersion>preview</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Localization\en-US_Mods.RoA.Bestiary.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Biomes.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Buffs.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Conditions.hjson" />

@@ -22,6 +22,8 @@ static class ResourceManager {
     public static string EmptyTexture => Textures + "Empty";
     public static string PixelTexture => Textures + "Pixel";
 
+
+
     public static string Effects => RoA.ModName + $"/{EFFECTSPATH}/";
 
     public static Texture2D Pixel => ModContent.Request<Texture2D>(PixelTexture, AssetRequestMode.ImmediateLoad).Value;
@@ -29,6 +31,8 @@ static class ResourceManager {
     public static string GUITextures => Textures + "GUI/";
 
     public static string BackgroundTextures => Textures + "Backgrounds/";
+
+    public static string BestiaryTextures => Textures + "Bestiary/";
 
     public static string ItemsTextures => Textures + "Items/";
     public static string ItemsWeaponsTextures => ItemsTextures + "Weapons/";

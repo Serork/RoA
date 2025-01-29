@@ -1,16 +1,35 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 [AutoloadBossHead]
 sealed partial class Lothor : ModNPC {
-    public sealed override void SetStaticDefaults() => Main.npcFrameCount[Type] = 1;
+    public sealed override void SetStaticDefaults() {
+        Main.npcFrameCount[Type] = 1;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            CustomTexturePath = ResourceManager.BestiaryTextures + "Lothor",
+            Position = new Vector2(0f, 24f),
+            PortraitPositionXOverride = 0f,
+            PortraitPositionYOverride = 12f,
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+			new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Lothor")
+        ]);
+    }
 
     public override void SetDefaults() {
         NPC.damage = 46;
@@ -32,6 +51,8 @@ sealed partial class Lothor : ModNPC {
         if (!Main.dedServ) {
             Music = MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor");
         }
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void Unload() => UnloadAnimations();
