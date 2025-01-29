@@ -22,7 +22,7 @@ public class SentinelSpirit : ModNPC {
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             Position = new Vector2(0f, -15f),
             PortraitPositionXOverride = 2f,
-            PortraitPositionYOverride = -36f,
+            PortraitPositionYOverride = -37f,
             Velocity = 1f,
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
