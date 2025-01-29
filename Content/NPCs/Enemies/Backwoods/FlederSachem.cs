@@ -15,6 +15,13 @@ sealed class FlederSachem : ModNPC {
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => false;
 
+    public override void SetStaticDefaults() {
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Hide = true
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
+    }
+
     public override void SetDefaults() {
 		NPC.lifeMax = 80;
 		NPC.width = NPC.height = 2;
