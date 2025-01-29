@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
@@ -7,6 +8,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,9 +20,23 @@ sealed class Ent : RoANPC {
 
 	public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 18;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            SpriteDirection = -1,
+            Position = new Vector2(10f, 36f),
+            PortraitPositionXOverride = 4f,
+            PortraitPositionYOverride = 6f
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
     }
 
-	public override void SetDefaults() {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Ent")
+        ]);
+    }
+
+    public override void SetDefaults() {
         NPC.lifeMax = 500;
         NPC.damage = 36;
         NPC.defense = 6;
@@ -44,6 +60,14 @@ sealed class Ent : RoANPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<EntBanner>();
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        if (NPC.IsABestiaryIconDummy) {
+            NPC.spriteDirection = NPC.direction = 1;
+        }
+
+        return base.PreDraw(spriteBatch, screenPos, drawColor);
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
@@ -92,7 +116,18 @@ sealed class Ent : RoANPC {
 	public override void OnKill() => Parent.KillNPC();
 
 	public override void FindFrame(int frameHeight) {
-		if (ParentNPCIndex <= 0) {
+        if (NPC.IsABestiaryIconDummy) {
+            if (++NPC.frameCounter >= 6.0) {
+                NPC.frameCounter = 0.0;
+                CurrentFrame++;
+                if (CurrentFrame >= 13 || CurrentFrame < 3) {
+                    CurrentFrame = 3;
+                }
+                ChangeFrame(((int)CurrentFrame, frameHeight));
+            }
+        }
+
+        if (ParentNPCIndex <= 0) {
 			return;
 		}
 
@@ -108,28 +143,28 @@ sealed class Ent : RoANPC {
         if (modNPC != null && modNPC is RoANPC roaNPC) {
 			ChangeFrame(((int)roaNPC.CurrentFrame, frameHeight));
 		}
-	}
+    }
 
-	//public override void ModifyNPCLoot(NPCLoot npcLoot)
-	//	=> npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<NaturesHeart>(), 2));
+    //public override void ModifyNPCLoot(NPCLoot npcLoot)
+    //	=> npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<NaturesHeart>(), 2));
 
-	//public override void HitEffect (NPC.HitInfo hit) {
-	//	if (Main.netMode == NetmodeID.Server) {
-	//		return;
-	//	}
-	//	if (NPC.life <= 0) {
-	//		for (int i = 0; i < Main.rand.Next(3); i++) {
-	//			Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, ModContent.Find<ModGore>(nameof(RiseofAges) + "/EntGore1").Type, 1f);
-	//		}
-	//		for (int i = 0; i < 3; i++) {
-	//			Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, ModContent.Find<ModGore>(nameof(RiseofAges) + "/EntGore" + (i + 1).ToString()).Type, 1f);
-	//		}
-	//		for (int i = 0; i < Main.rand.Next(5, 16); i++) {
-	//			Item.NewItem(NPC.GetSource_Loot(), (int) NPC.position.X, (int) NPC.position.Y, NPC.width, NPC.height, ModContent.ItemType<Elderwood>());
-	//		}
-	//	} else {
-	//		if (Main.rand.NextBool(4))
-	//			Item.NewItem(NPC.GetSource_Loot(), (int) NPC.position.X, (int) NPC.position.Y, NPC.width, NPC.height, ModContent.ItemType<Elderwood>());
-	//	}
-	//}
+    //public override void HitEffect (NPC.HitInfo hit) {
+    //	if (Main.netMode == NetmodeID.Server) {
+    //		return;
+    //	}
+    //	if (NPC.life <= 0) {
+    //		for (int i = 0; i < Main.rand.Next(3); i++) {
+    //			Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, ModContent.Find<ModGore>(nameof(RiseofAges) + "/EntGore1").Type, 1f);
+    //		}
+    //		for (int i = 0; i < 3; i++) {
+    //			Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, ModContent.Find<ModGore>(nameof(RiseofAges) + "/EntGore" + (i + 1).ToString()).Type, 1f);
+    //		}
+    //		for (int i = 0; i < Main.rand.Next(5, 16); i++) {
+    //			Item.NewItem(NPC.GetSource_Loot(), (int) NPC.position.X, (int) NPC.position.Y, NPC.width, NPC.height, ModContent.ItemType<Elderwood>());
+    //		}
+    //	} else {
+    //		if (Main.rand.NextBool(4))
+    //			Item.NewItem(NPC.GetSource_Loot(), (int) NPC.position.X, (int) NPC.position.Y, NPC.width, NPC.height, ModContent.ItemType<Elderwood>());
+    //	}
+    //}
 }

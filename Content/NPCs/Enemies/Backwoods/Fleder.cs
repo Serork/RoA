@@ -17,6 +17,7 @@ using RoA.Content.Biomes.Backwoods;
 using Terraria.DataStructures;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Placeable.Banners;
+using Terraria.GameContent.Bestiary;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -47,6 +48,11 @@ sealed class Fleder : ModNPC {
         Main.npcFrameCount[Type] = 4;
 
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Position = new Vector2(0f, 17f)
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
@@ -89,6 +95,12 @@ sealed class Fleder : ModNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<FlederBanner>();
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Fleder")
+        ]);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) => target.AddBuff(ModContent.BuffType<BeastPoison>(), 85);
@@ -370,6 +382,21 @@ sealed class Fleder : ModNPC {
     }
 
     public override void FindFrame(int frameHeight) {
+        NPC.spriteDirection = NPC.direction;
+        if (NPC.IsABestiaryIconDummy) {
+            if (++NPC.frameCounter >= 6.0) {
+                NPC.frameCounter = 0.0;
+                NPC.localAI[0]++;
+                if (NPC.localAI[0] >= 4) {
+                    NPC.localAI[0] = 0;
+                }
+                int currentFrame = (int)NPC.localAI[0];
+                NPC.frame.Y = currentFrame * frameHeight;
+            }
+
+            return;
+        }
+
         if (_state == State.Sitting) {
             if (NPC.WithinRange(_sittingPosition, 2f)) {
                 NPC.frame.Y = 2 * frameHeight;
@@ -378,7 +405,6 @@ sealed class Fleder : ModNPC {
             }
         }
 
-        NPC.spriteDirection = NPC.direction;
         if (++NPC.frameCounter >= (double)Math.Max(10f - Math.Abs(NPC.velocity.Y) * 2f, 4f)) {
             NPC.frameCounter = 0.0;
             NPC.localAI[0]++;

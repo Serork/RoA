@@ -12,6 +12,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -74,6 +75,12 @@ sealed class BabyFleder : ModNPC {
         Main.npcFrameCount[Type] = 4;
 
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.BabyFleder")
+        ]);
     }
 
     public override void SetDefaults() {

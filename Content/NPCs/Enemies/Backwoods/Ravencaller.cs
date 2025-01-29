@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
@@ -65,6 +66,14 @@ sealed class Ravencaller : ModNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<RavencallerBanner>();
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        if (NPC.IsABestiaryIconDummy) {
+            NPC.Opacity = 1f;
+        }
+
+        return base.PreDraw(spriteBatch, screenPos, drawColor);
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
@@ -193,8 +202,22 @@ sealed class Ravencaller : ModNPC {
     }
 
     public override void FindFrame(int frameHeight) {
-        NPC npc = NPC;
         NPC.frame.Y = curFrame * frameHeight;
+
+        if (NPC.IsABestiaryIconDummy) {
+            if (NPC.frameCounter >= frameTime) {
+                ++curFrame;
+                NPC.frameCounter = 0;
+            }
+            else {
+                NPC.frameCounter++;
+            }
+            if (curFrame >= 15) {
+                curFrame = 1;
+            }
+
+            return;
+        }
         if (whenYouWalking) {
             if (NPC.velocity.Y != 0) {
                 curFrame = 0;

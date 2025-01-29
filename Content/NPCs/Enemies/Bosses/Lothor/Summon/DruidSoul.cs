@@ -1,11 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+
+using RoA.Common.NPCs;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Enemies.Backwoods;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,13 +19,19 @@ namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 sealed partial class DruidSoul : RoANPC {
     private const float MAXDISTANCETOALTAR = 300f;
 
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.DruidSoul")
+        ]);
+    }
+
     public override void SetDefaults() {
         NPC.lifeMax = 10;
 
         int width = 28; int height = 50;
         NPC.Size = new Vector2(width, height);
 
-        NPC.noTileCollide = NPC.friendly = true;
+        NPC.noTileCollide = true;
 
         NPC.friendly = true;
         NPC.noGravity = true;
@@ -31,6 +41,8 @@ sealed partial class DruidSoul : RoANPC {
         NPC.aiStyle = AIType = -1;
 
         NPC.npcSlots = 5f;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     // separate

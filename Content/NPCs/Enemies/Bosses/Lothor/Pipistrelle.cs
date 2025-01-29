@@ -27,9 +27,10 @@ sealed class Pipistrelle : ModNPC {
         Main.npcFrameCount[Type] = 4;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            Position = new Vector2(0f, 12f),
+            Position = new Vector2(0f, 6f),
+
             PortraitPositionXOverride = 0f,
-            PortraitPositionYOverride = 12f,
+            PortraitPositionYOverride = 8f,
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
@@ -65,9 +66,13 @@ sealed class Pipistrelle : ModNPC {
         float max = 0.5f;
         rotation = MathHelper.Clamp(rotation, -max, max);
         if (NPC.ai[2] != 1f) {
+            Vector2 bestiaryOffset = Vector2.Zero;
+            if (NPC.IsABestiaryIconDummy) {
+                bestiaryOffset = Vector2.UnitX * 5f;
+            }
             float progress = (Math.Abs(rotation) / MathHelper.PiOver2) * NPC.spriteDirection;
             spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value, 
-                position + origin +
+                position + origin + bestiaryOffset +
                 new Vector2(-27f, 4f - (NPC.spriteDirection != 1 ? progress * -20f : 0f)) + Vector2.UnitX * -40f * progress -
                 Vector2.UnitY * 12f,
                 null, Color.White, rotation * 0.5f, origin / 2f, 1f, effects, 0);

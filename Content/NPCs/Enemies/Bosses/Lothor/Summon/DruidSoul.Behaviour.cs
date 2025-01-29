@@ -20,6 +20,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 
@@ -154,6 +155,12 @@ sealed partial class DruidSoul : RoANPC {
             LothorSummoningHandler._summonedNaturally = false;
             if (Main.netMode == NetmodeID.Server) {
                 NetMessage.SendData(MessageID.WorldData);
+            }
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul2>());
+                if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                    NetMessage.SendData(MessageID.SyncNPC, number: npc);
+                }
             }
             NPC.KillNPC();
             return;

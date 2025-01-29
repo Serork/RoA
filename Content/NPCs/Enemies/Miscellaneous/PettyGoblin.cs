@@ -75,6 +75,16 @@ sealed class PettyGoblin : ModNPC {
         // DisplayName.SetDefault("Petty Goblin");
 
         Main.npcFrameCount[Type] = FRAMES_COUNT;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Position = new Vector2(0f, 5f),
+
+            PortraitPositionXOverride = 0f,
+            PortraitPositionYOverride = 24f,
+
+            Velocity = 1.5f
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
 
     public override void SetDefaults() {
@@ -105,7 +115,7 @@ sealed class PettyGoblin : ModNPC {
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
             BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-            new FlavorTextBestiaryInfoElement("This little weasel will not miss a chance to steal your money.")
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.PettyGoblin")
         });
     }
 

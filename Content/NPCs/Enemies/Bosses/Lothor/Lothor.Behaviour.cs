@@ -226,6 +226,14 @@ sealed partial class Lothor : ModNPC {
                 NetMessage.SendData(MessageID.SyncNPC, number: npc);
             }
         }
+
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            Vector2 origin = new(0f, 35f);
+            int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)(NPC.Center.X + origin.X), (int)(NPC.Center.Y + origin.Y), ModContent.NPCType<Lothor2>());
+            if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                NetMessage.SendData(MessageID.SyncNPC, number: npc);
+            }
+        }
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
