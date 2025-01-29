@@ -21,6 +21,7 @@ using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.Graphics.Effects;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
@@ -386,7 +387,12 @@ sealed partial class Lothor : ModNPC {
         }
 
         if (!_isDead) {
-            _shouldEnrage = !Target.InModBiome<BackwoodsBiome>();
+            bool flag = !Target.InModBiome<BackwoodsBiome>();
+            if (!_shouldEnrage && flag) {
+                string message = Language.GetText("Mods.RoA.World.LothorArrival1").ToString();
+                Helper.NewMessage($"{message}", new(160, 68, 234));
+            }
+            _shouldEnrage = flag;
         }
     }
 

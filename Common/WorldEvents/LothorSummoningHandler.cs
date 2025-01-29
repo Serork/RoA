@@ -487,7 +487,7 @@ sealed class LothorSummoningHandler : ModSystem {
         if (!flag) {
             _preArrivedLothorBossTimer += TimeSystem.LogicDeltaTime * 1f;
         }
-        Color color = new (160, 68, 234);
+        Color color = new(160, 68, 234);
         if (_preArrivedLothorBossTimer >= 2.465f && !_shake) {
             _summonedNaturally = false;
             _shake = true;
