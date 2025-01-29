@@ -42,6 +42,8 @@ sealed partial class DruidSoul : RoANPC {
 
         NPC.npcSlots = 5f;
 
+        NPC.rarity = 1;
+
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 

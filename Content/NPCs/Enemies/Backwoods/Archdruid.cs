@@ -71,7 +71,7 @@ sealed class Archdruid : DruidNPC {
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
-        NPC.rarity = 2;
+        NPC.rarity = 1;
 
         Banner = Type;
         BannerItem = ModContent.ItemType<ArchdruidBanner>();

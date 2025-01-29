@@ -53,6 +53,8 @@ sealed class Ent : RoANPC {
 
         NPC.aiStyle = -1;
 
+        NPC.rarity = 1;
+
         NPC.HitSound = SoundID.NPCHit52;
         NPC.DeathSound = SoundID.NPCDeath27;
 

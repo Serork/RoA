@@ -35,6 +35,8 @@ sealed class Lothor2 : ModNPC {
         NPC.aiStyle = AIType = -1;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        NPC.rarity = 5;
     }
 
     public override void AI() {

@@ -67,6 +67,8 @@ sealed class Ravencaller : ModNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<RavencallerBanner>();
+
+        NPC.rarity = 3;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
