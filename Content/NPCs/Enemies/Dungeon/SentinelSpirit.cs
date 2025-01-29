@@ -20,9 +20,9 @@ public class SentinelSpirit : ModNPC {
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            Position = new Vector2(0f, -15f),
+            Position = new Vector2(2f, -16f),
             PortraitPositionXOverride = 2f,
-            PortraitPositionYOverride = -35f,
+            PortraitPositionYOverride = -34f,
             Velocity = 1f,
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
