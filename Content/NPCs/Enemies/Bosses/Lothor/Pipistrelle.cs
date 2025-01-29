@@ -27,7 +27,7 @@ sealed class Pipistrelle : ModNPC {
         Main.npcFrameCount[Type] = 4;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            Position = new Vector2(0f, 24f),
+            Position = new Vector2(0f, 12f),
             PortraitPositionXOverride = 0f,
             PortraitPositionYOverride = 12f,
         };

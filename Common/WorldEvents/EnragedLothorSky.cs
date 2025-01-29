@@ -1,27 +1,40 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Items.Placeable;
-using RoA.Core;
-using RoA.Core.Utility;
 using RoA.Utilities;
-using SteelSeries.GameSense;
 
 using System;
 
 using Terraria;
-using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Graphics.Effects;
+using Terraria.ID;
 
 namespace RoA.Common.WorldEvents;
 
 sealed class EnragedLothorSky : CustomSky {
 	private bool _hasTile;
-	private float _intensity, _intensity2;
 	private float _alpha = 0;
 
-	private void DrawSunAndMoon(Main.SceneArea sceneArea, Microsoft.Xna.Framework.Color moonColor, Microsoft.Xna.Framework.Color sunColor, float tempMushroomInfluence) {
+    private static float _intensity, _intensity2;
+    private static bool _shouldSunDraw;
+    private static Color _moonColor;
+    private static Color _sunColor;
+    private static Main.SceneArea _sceneArea;
+
+    public override void OnLoad() {
+        On_Main.DrawSunAndMoon += On_Main_DrawSunAndMoon;
+    }
+
+    private void On_Main_DrawSunAndMoon(On_Main.orig_DrawSunAndMoon orig, Main self, Main.SceneArea sceneArea, Color moonColor, Color sunColor, float tempMushroomInfluence) {
+        orig(self, sceneArea, moonColor, sunColor, tempMushroomInfluence);
+
+        _moonColor = moonColor;
+        _sunColor = sunColor;
+        _sceneArea = sceneArea;
+    }
+
+    private void DrawSunAndMoon(Main.SceneArea sceneArea, Microsoft.Xna.Framework.Color moonColor, Microsoft.Xna.Framework.Color sunColor, float tempMushroomInfluence) {
         Texture2D value = TextureAssets.Sun.Value;
         int num = Main.moonType;
         if (!TextureAssets.Moon.IndexInRange(num))
@@ -115,7 +128,7 @@ sealed class EnragedLothorSky : CustomSky {
                 color2 = new Microsoft.Xna.Framework.Color((byte)((float)(int)sunColor.R * num12), (byte)((float)(int)sunColor.G * num12), (byte)((float)(int)sunColor.B * num12), (byte)((float)(sunColor.B - 60) * num12));
 
             Vector2 origin = value.Size() / 2f;
-            Vector2 position = new Vector2(num3, num4 - 150 + Main.sunModY) + sceneArea.SceneLocalScreenPositionOffset;
+            Vector2 position = new Vector2(num3, num4 + Main.sunModY) + sceneArea.SceneLocalScreenPositionOffset;
             Main.spriteBatch.Draw(value, position, null, color, rotation, origin, num5, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(value, position, null, Color.Black * 0.75f * _intensity2, rotation, origin, num5 * 0.7f, SpriteEffects.None, 0f);
         }
@@ -176,26 +189,28 @@ sealed class EnragedLothorSky : CustomSky {
     }
 
     public override void Update(GameTime gameTime) {
-		if (!_hasTile) {
-			if (_intensity > 0f) {
-				_intensity -= 0.05f;
-                _intensity2 -= 0.1f;
-                _intensity2 = Math.Max(0f, _intensity2);
-            }
-			else {
-				_intensity = 0f;
-			}
+        if (Main.netMode != NetmodeID.Server) {
+            if (!_hasTile) {
+                if (_intensity > 0f) {
+                    _intensity -= 0.05f;
+                    _intensity2 -= 0.1f;
+                    _intensity2 = Math.Max(0f, _intensity2);
+                }
+                else {
+                    _intensity = 0f;
+                }
 
-			return;
+                return;
+            }
+            if (_intensity < 1f) {
+                _intensity += 0.05f;
+                _intensity2 += 0.1f;
+                _intensity2 = Math.Min(1f, _intensity2);
+            }
+            else {
+                _intensity = 1f;
+            }
         }
-		if (_intensity < 1f) {
-			_intensity += 0.05f;
-            _intensity2 += 0.1f;
-            _intensity2 = Math.Min(1f, _intensity2);
-        }
-        else {
-			_intensity = 1f;
-		}
     }
 
 	public override Color OnTileColor(Color inColor) {
@@ -204,40 +219,18 @@ sealed class EnragedLothorSky : CustomSky {
 	}
 
 	public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
-		if (!Main.gameMenu) {
+        _shouldSunDraw = false;
+
+        if (!Main.gameMenu) {
 			if ((double)maxDepth >= 3.00000000549776E+38 && (double)minDepth < 3.00000000549776E+38) {
 				Color color = Color.Lerp(Color.Red, Color.Black, 0.75f) * 0.75f;
 				spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color * Math.Min(1f, (float)((Main.screenPosition.Y - 800.0) / 1000.0)) * _intensity);
 			}
 
-            if (Main.dayTime) {
-                int num13 = Main.screenWidth;
-                int num14 = Main.screenHeight;
-                Vector2 zero = Vector2.Zero;
-                if (num13 < 800) {
-                    int num15 = 800 - num13;
-                    zero.X -= (float)num15 * 0.5f;
-                    num13 = 800;
-                }
+            _shouldSunDraw = true;
 
-                if (num14 < 600) {
-                    int num16 = 600 - num14;
-                    zero.Y -= (float)num16 * 0.5f;
-                    num14 = 600;
-                }
-
-                Main.SceneArea sceneArea2 = default(Main.SceneArea);
-                sceneArea2.bgTopY = 0;
-                sceneArea2.totalWidth = num13;
-                sceneArea2.totalHeight = num14;
-                sceneArea2.SceneLocalScreenPositionOffset = zero;
-                Main.SceneArea sceneArea3 = sceneArea2;
-                Main.SceneArea sceneArea = sceneArea3;
-
-                Color sunColor = Microsoft.Xna.Framework.Color.Red;
-                Color moonColor = Microsoft.Xna.Framework.Color.Red;
-                if ((double)(Main.screenPosition.Y / 16f) < Main.worldSurface + 2.0)
-                    DrawSunAndMoon(sceneArea3, moonColor * _intensity2, sunColor * _intensity2, 0.95f);
+            if (_shouldSunDraw && Main.dayTime) {
+                DrawSunAndMoon(_sceneArea, Color.Red * _intensity2, Color.Red * _intensity2, 0.95f);
             }
         }
 	}
