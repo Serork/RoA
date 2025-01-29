@@ -1,12 +1,4 @@
-﻿using RoA.Content.Tiles.Trees;
-using RoA.Core.Utility;
-
-using Terraria.DataStructures;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using RoA.Content.NPCs.Enemies.Backwoods;
-using RoA.Content.Tiles.Platforms;
+﻿using Terraria.ModLoader;
 
 namespace RoA.Common.BackwoodsSystems;
 
