@@ -55,9 +55,9 @@ sealed partial class DruidSoul : RoANPC {
     public override void AI() {
         KillNPCIfIsntInBackwoods();
 
-        if (Appearance()) {
-            return;
-        }
+        Appearance();
+        NPC.velocity *= 1f - StateTimer;
+
         if (ConsumesItself()) {
             ShouldConsumeItsEnergy = true;
         }

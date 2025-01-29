@@ -4,6 +4,7 @@ using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -62,6 +63,15 @@ sealed class GrimDruid : DruidNPC {
             }
 
             return;
+        }
+
+        if (NPC.downedBoss2 && Main.rand.NextBool(5)) {
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul>());
+                if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                    NetMessage.SendData(MessageID.SyncNPC, number: npc);
+                }
+            }
         }
 
         for (int num829 = 0; num829 < 50; num829++) {
