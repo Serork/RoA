@@ -23,10 +23,12 @@ sealed class LittleFleder : ModProjectile {
     private Vector2 _pickUpPosition;
     private Item _pickUpIFound;
     private bool _nowGoToPlayer;
+    private bool _havePickUp;
+    private float _havePickUpTimer;
 
     private ref float AttackTimer => ref Projectile.ai[1];
 
-    private float AcornOpacity => Utils.GetLerpValue(ATTACKRATE / 4f, ATTACKRATE / 2f, AttackTimer, true);
+    private float AcornOpacity => _havePickUp ? 0f : Utils.GetLerpValue(ATTACKRATE / 4f, ATTACKRATE / 2f, AttackTimer, true);
 
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 4;
@@ -105,6 +107,11 @@ sealed class LittleFleder : ModProjectile {
     }
 
     public override void AI() {
+        if (--_havePickUpTimer <= 0f) {
+            _havePickUp = _foundPickUp || _nowGoToPlayer;
+            _havePickUpTimer = 10f;
+        }
+
         Player player = Main.player[Projectile.owner];
         if (player.dead || !player.active)
             player.ClearBuff(ModContent.BuffType<Buffs.LittleFleder>());
@@ -342,7 +349,7 @@ sealed class LittleFleder : ModProjectile {
         //    targetCenter = idleSpot;
         //}
 
-        if (_nowGoToPlayer) {
+        if (_nowGoToPlayer || _havePickUp) {
             hasTarget = false;
         }
 
