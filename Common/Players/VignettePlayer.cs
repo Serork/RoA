@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
@@ -49,6 +50,10 @@ sealed class VignettePlayer : ModPlayer {
     }
 
     private void UpdateVisuals() {
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         var vignetteShader = ShaderLoader.VignetteShaderData;
         vignetteShader.UseOpacity(1f);
         vignetteShader.Apply();

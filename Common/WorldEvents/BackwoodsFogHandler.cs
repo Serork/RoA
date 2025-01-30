@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Common.Players;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
@@ -51,7 +53,7 @@ sealed class BackwoodsFogHandler : ModSystem {
     private static float _fogTime;
 
     public static bool IsFogActive { get; private set; } = false;
-    public static float Opacity { get; private set; } = 0f;
+    public static float Opacity { get; internal set; } = 0f;
 
     public override void OnWorldLoad() => Reset();
     public override void OnWorldUnload() => Reset();
@@ -71,14 +73,19 @@ sealed class BackwoodsFogHandler : ModSystem {
     private static void Reset() {
         IsFogActive = false;
         Opacity = 0f;
+        _fogTime = 0f;
     }
 
     public override void NetSend(BinaryWriter writer) {
         writer.Write(IsFogActive);
+        writer.Write(Opacity);
+        writer.Write(_fogTime);
     }
 
     public override void NetReceive(BinaryReader reader) {
         IsFogActive = reader.ReadBoolean();
+        Opacity = reader.ReadSingle();
+        _fogTime = reader.ReadSingle();
     }
 
     private static void ToggleBackwoodsFog(bool naturally = true) {
@@ -150,14 +157,10 @@ sealed class BackwoodsFogHandler : ModSystem {
     }
 
     public override void PostUpdatePlayers() {
-        if (Main.gameMenu && Main.netMode != NetmodeID.Server) {
-            return;
-        }
-
         if (Opacity > 0f) {
-            //Player player = Main.LocalPlayer;
-            //VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
-            //localVignettePlayer.SetVignette(0, 2000 * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
+            Player player = Main.LocalPlayer;
+            VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
+            localVignettePlayer.SetVignette(0, 2000 * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
 
             Rectangle tileWorkSpace = GetTileWorkSpace();
             int num = tileWorkSpace.X + tileWorkSpace.Width;
@@ -176,6 +179,11 @@ sealed class BackwoodsFogHandler : ModSystem {
             else {
                 Opacity = 0f;
             }
+            if (Opacity != 0f) {
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new FogOpacityPacket(Opacity));
+                }
+            }
 
             return;
         }
@@ -185,6 +193,11 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
         else {
             Opacity = 0.75f;
+        }
+        if (Opacity != 0.75f) {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new FogOpacityPacket(Opacity));
+            }
         }
     }
 
@@ -200,16 +213,16 @@ sealed class BackwoodsFogHandler : ModSystem {
         //if (y >= Main.worldSurface) {
         //    return;
         //}
-        if (!tile.HasTile || tile.Slope > 0 || tile.IsHalfBlock || !Main.tileSolid[tile.TileType]) {
+        if (!tile.HasTile/* || tile.Slope > 0 || tile.IsHalfBlock*/ || !Main.tileSolid[tile.TileType]) {
             return;
         }
-        if (TileID.Sets.Platforms[tile.TileType]) {
-            return;
-        }
+        //if (TileID.Sets.Platforms[tile.TileType]) {
+        //    return;
+        //}
         tile = WorldGenHelper.GetTileSafely(x, y + 1);
-        if (!tile.AnyWall() && !WorldGenHelper.GetTileSafely(x, y).AnyWall()) {
-            return;
-        }
+        //if (!tile.AnyWall() && !WorldGenHelper.GetTileSafely(x, y).AnyWall()) {
+        //    return;
+        //}
         tile = WorldGenHelper.GetTileSafely(x, y - 1);
         int type = ModContent.TileType<OvergrownAltar>();
 
@@ -236,7 +249,6 @@ sealed class BackwoodsFogHandler : ModSystem {
         Color lightColor = Lighting.GetColor(x, y);
         float brightness = (lightColor.R / 255f + lightColor.G / 255f + lightColor.B / 255f) / 3f;
         float brightness2 = MathHelper.Clamp((brightness - 0.6f) * 5f, 0f, 1f);
-        Main.NewText(1f - brightness2);
         if (Main.rand.NextChance(1f - brightness2)) {
             Vector2 position = new Point(x, y - 1).ToWorldCoordinates();
             float num = 16f * Main.rand.NextFloat();
