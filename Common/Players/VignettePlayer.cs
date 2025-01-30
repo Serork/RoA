@@ -54,6 +54,10 @@ sealed class VignettePlayer : ModPlayer {
             return;
         }
 
+        if (Player.whoAmI != Main.myPlayer) {
+            return;
+        }
+
         var vignetteShader = ShaderLoader.VignetteShaderData;
         vignetteShader.UseOpacity(1f);
         vignetteShader.Apply();

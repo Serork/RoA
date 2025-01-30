@@ -158,9 +158,11 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     public override void PostUpdatePlayers() {
         if (Opacity > 0f) {
-            Player player = Main.LocalPlayer;
-            VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
-            localVignettePlayer.SetVignette(0, 2000 * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
+            if (Main.netMode != NetmodeID.Server) {
+                Player player = Main.LocalPlayer;
+                VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
+                localVignettePlayer.SetVignette(0, 2000 * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
+            }
 
             Rectangle tileWorkSpace = GetTileWorkSpace();
             int num = tileWorkSpace.X + tileWorkSpace.Width;
@@ -179,11 +181,6 @@ sealed class BackwoodsFogHandler : ModSystem {
             else {
                 Opacity = 0f;
             }
-            if (Opacity != 0f) {
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new FogOpacityPacket(Opacity));
-                }
-            }
 
             return;
         }
@@ -193,11 +190,6 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
         else {
             Opacity = 0.75f;
-        }
-        if (Opacity != 0.75f) {
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
-                MultiplayerSystem.SendPacket(new FogOpacityPacket(Opacity));
-            }
         }
     }
 
