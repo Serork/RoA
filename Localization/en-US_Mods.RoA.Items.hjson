@@ -1,6 +1,6 @@
 ElderwoodClaws: {
 	DisplayName: Elderwood Claws
-	Tooltip: "'A pair of claws fashioned after a Fleeder!'"
+	Tooltip: "'A pair of claws fashioned after a Fleeder.'"
 }
 
 Elderwood: {
@@ -192,7 +192,7 @@ FireflyPin: {
 
 RavencallersCloak: {
 	DisplayName: Ravencallers Cloak
-	Tooltip: ""
+	Tooltip: Your shadow attracts the attention of enemies instead of you
 }
 
 Tapper: {
@@ -202,7 +202,7 @@ Tapper: {
 
 Galipot: {
 	DisplayName: Galipot
-	Tooltip: ""
+	Tooltip: "'If not for the bottle, it'd slip away already!'"
 }
 
 AnimalLeather: {
@@ -212,12 +212,16 @@ AnimalLeather: {
 
 RoughLeather: {
 	DisplayName: Rough Leather
-	Tooltip: ""
+	Tooltip: 
+	    '''
+		Can be processed into fine leather
+		'Make haste!'
+		'''
 }
 
 SpoiledRawhide: {
 	DisplayName: Spoiled Rawhide
-	Tooltip: ""
+	Tooltip: "'In a fit of bloodlust you've lost track of time...'"
 }
 
 TanningRack: {
@@ -602,7 +606,7 @@ AshwalkerRobe: {
 
 MercuriumOre: {
 	DisplayName: Mercurium Ore
-	Tooltip: ""
+	Tooltip: "'Shouldn't be holding that...'"
 }
 
 Grimstone: {
@@ -612,7 +616,7 @@ Grimstone: {
 
 MercuriumNugget: {
 	DisplayName: Mercurium Nugget
-	Tooltip: ""
+	Tooltip: "'Shouldn't be holding that either...'"
 }
 
 MillionDollarPainting: {
@@ -630,7 +634,7 @@ LuminousFlowerHat: {
 	Tooltip:
 		'''
 		Provides light when moving
-		'It smells no more... but still brightens the vicinity'
+		'It smells no more... but still brightens the vicinity!'
 		'''
 }
 
@@ -944,7 +948,7 @@ OvergrownSpear: {
 
 MothStaff: {
 	DisplayName: Moth Staff
-	Tooltip: ""
+	Tooltip: "Summons a little moth to fight for you"
 }
 
 DynastyWoodBow: {
@@ -1052,7 +1056,7 @@ SentinelTaurusMask: {
 
 AmuletOfLife: {
 	DisplayName: Amulet of Life
-	Tooltip: Casts a vortex of healing wisps that heal player upon impact
+	Tooltip: Creates a vortex of wisps that heal on touch
 }
 
 MercuriumAxe: {
@@ -1240,8 +1244,8 @@ FlederSlayer: {
 	DisplayName: Fleder Slayer
 	Tooltip:
 		'''
-		'It's too big to be called a sword'
 		Sends vulnerable enemies back with a crushing blow
+		'It's too big to be called a sword'
 		'''
 }
 
