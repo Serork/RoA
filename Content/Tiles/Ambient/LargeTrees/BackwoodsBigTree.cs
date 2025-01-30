@@ -157,6 +157,10 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             if (WorldGenHelper.CustomEmptyTileCheck(i - num, i + num + 1, j - num3, j - 1, ignore.ToArray()) && WorldGenHelper.CustomEmptyTileCheck(i - 1, i + 2, j - 2, j - 1, ignore.ToArray()))
                 flag = true;
         }
+        else {
+            if (WorldGenHelper.CustomEmptyTileCheck2(i - num, i + num + 1, j - num3, j - 1, ignore.ToArray()) && WorldGenHelper.CustomEmptyTileCheck2(i - 1, i + 2, j - 2, j - 1, ignore.ToArray()))
+                flag = true;
+        }
 
         if (flag && !shouldCheckExtraOneTile) {
             if (WorldGenHelper.GetTileSafely(i - 2, j).TileType == GetSelfType() || WorldGenHelper.GetTileSafely(i + 3, j).TileType == GetSelfType()) {
