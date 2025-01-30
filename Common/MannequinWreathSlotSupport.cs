@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.InterfaceElements;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core.Utility;
@@ -9,6 +10,7 @@ using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -17,7 +19,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Tile_Entities;
-using Terraria.GameContent.UI.Chat;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
@@ -26,8 +27,6 @@ using Terraria.ModLoader.IO;
 using Terraria.UI;
 using Terraria.UI.Chat;
 using Terraria.UI.Gamepad;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RoA.Common;
 
@@ -50,7 +49,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "TryFitting")]
     public extern static bool TEDisplayDoll_TryFitting(TEDisplayDoll self, Item[] inv, int context = 0, int slot = 0, bool justCheck = false);
 
-    private sealed class MannequinsInWorldSystem : ModSystem {
+    internal sealed class MannequinsInWorldSystem : ModSystem {
         private const string DATA = "MANNEQUINEXTRADATA";
 
         private static int _count;
@@ -64,6 +63,14 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         public override void ClearWorld() {
             _count = 0;
             MannequinsInWorld.Clear();
+        }
+
+        public override void NetSend(BinaryWriter writer) {
+            
+        }
+
+        public override void NetReceive(BinaryReader reader) {
+            base.NetReceive(reader);
         }
 
         public override void SaveWorldData(TagCompound tag) {
@@ -193,13 +200,45 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 }
                 SoundEngine.PlaySound(SoundID.Grab);
                 Utils.Swap(ref data.Wreath, ref inv[slot]);
-                //if (Main.netMode == 1)
-                //    NetMessage.SendData(121, -1, -1, null, Main.myPlayer, ID, num);
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new ExtraMannequinInfoItemsPacket(Main.LocalPlayer, MannequinsInWorld.FindIndex(a => a == data), false));
+                }
 
                 return true;
             }
 
             return orig(self, inv, context, slot, justCheck);   
+        }
+
+        internal static void WriteItem(int mannequinIndex, bool dye, BinaryWriter writer) {
+            var data = MannequinsInWorld[mannequinIndex];
+            if (data == null) {
+                return;
+            }
+            Item item = data.Wreath;
+            if (dye)
+                item = data.Dye;
+
+            writer.Write((ushort)item.netID);
+            writer.Write((ushort)item.stack);
+            writer.Write(item.prefix);
+        }
+
+        internal static void ReadItem(int mannequinIndex, bool dye, BinaryReader reader) {
+            var data = MannequinsInWorld[mannequinIndex];
+            if (data == null) {
+                return;
+            }
+            int defaults = reader.ReadUInt16();
+            int stack = reader.ReadUInt16();
+            int prefixWeWant = reader.ReadByte();
+            Item item = data.Wreath;
+            if (dye)
+                item = data.Dye;
+
+            item.SetDefaults(defaults);
+            item.stack = stack;
+            item.Prefix(prefixWeWant);
         }
 
         public override void PostUpdatePlayers() {
@@ -214,9 +253,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             _count = MannequinsInWorld.Count;
         }
 
-        private int On_TEDisplayDoll_Place(On_TEDisplayDoll.orig_Place orig, int x, int y) {
-            int result = orig(x, y);
-
+        internal static void AddExtraMannequinInfo(int x, int y, bool fromServer = false) {
             Point16 position = new(x, y);
             ExtraMannequinData data = new() {
                 Position = position,
@@ -226,7 +263,17 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             if (!MannequinsInWorld.Contains(data)) {
                 MannequinsInWorld.Add(data);
                 _count = MannequinsInWorld.Count;
+
+                if (fromServer && Main.netMode != NetmodeID.SinglePlayer) {
+                    MultiplayerSystem.SendPacket(new ExtraMannequinInfoPlacementPacket(x, y));
+                }
             }
+        }
+
+        private int On_TEDisplayDoll_Place(On_TEDisplayDoll.orig_Place orig, int x, int y) {
+            int result = orig(x, y);
+
+            AddExtraMannequinInfo(x, y, true);
 
             return result;
         }
@@ -273,13 +320,17 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
                 bool flag = Main.mouseLeftRelease && Main.mouseLeft;
                 if (flag) {
+                    bool needSync = false;
                     if (ItemSlot.ShiftInUse && !data.Wreath.IsEmpty()) {
                         data.Wreath = Main.player[Main.myPlayer].GetItem(Main.myPlayer, data.Wreath, GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                        SoundEngine.PlaySound(SoundID.Grab);
+                        needSync = true;
                     }
                     else if (!data.Wreath.IsEmpty() && !Main.mouseItem.IsAir && data.Wreath.stack == Main.mouseItem.stack) {
                         if (data.Wreath.type != Main.mouseItem.type) {
                             (data.Wreath, Main.mouseItem) = (Main.mouseItem, data.Wreath);
                             SoundEngine.PlaySound(SoundID.Grab);
+                            needSync = true;
                         }
                     }
                     else {
@@ -287,18 +338,24 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                             if (Main.mouseItem.stack == 1) {
                                 data.Wreath = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
                                 SoundEngine.PlaySound(SoundID.Grab);
+                                needSync = true;
                             }
                             else if (data.Wreath.IsEmpty()) {
                                 data.Wreath.type = Main.mouseItem.type;
                                 data.Wreath.stack = 1;
                                 Main.mouseItem.stack -= 1;
                                 SoundEngine.PlaySound(SoundID.Grab);
+                                needSync = true;
                             }
                         }
                         else if (!data.Wreath.IsEmpty()) {
                             Main.mouseItem = ItemLoader.TransferWithLimit(data.Wreath, 1);
                             SoundEngine.PlaySound(SoundID.Grab);
+                            needSync = true;
                         }
+                    }
+                    if (needSync && Main.netMode == NetmodeID.MultiplayerClient) {
+                        MultiplayerSystem.SendPacket(new ExtraMannequinInfoItemsPacket(Main.LocalPlayer, MannequinsInWorldSystem.MannequinsInWorld.FindIndex(a => a.Position == data.Position), false));
                     }
                 }
 
@@ -342,13 +399,17 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 int context = 25;
                 bool flag = Main.mouseLeftRelease && Main.mouseLeft;
                 if (flag) {
+                    bool needSync = false;
                     if (ItemSlot.ShiftInUse && !data.Dye.IsEmpty()) {
                         data.Dye = Main.player[Main.myPlayer].GetItem(Main.myPlayer, data.Dye, GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                        SoundEngine.PlaySound(SoundID.Grab);
+                        needSync = true;
                     }
                     else if (!data.Dye.IsEmpty() && !Main.mouseItem.IsAir && data.Dye.stack == Main.mouseItem.stack) {
                         if (data.Dye.type != Main.mouseItem.type) {
                             (data.Dye, Main.mouseItem) = (Main.mouseItem, data.Dye);
                             SoundEngine.PlaySound(SoundID.Grab);
+                            needSync = true;
                         }
                     }
                     else {
@@ -356,18 +417,24 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                             if (Main.mouseItem.stack == 1) {
                                 data.Dye = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
                                 SoundEngine.PlaySound(SoundID.Grab);
+                                needSync = true;
                             }
                             else if (data.Dye.IsEmpty()) {
                                 data.Dye.type = Main.mouseItem.type;
                                 data.Dye.stack = 1;
                                 Main.mouseItem.stack -= 1;
                                 SoundEngine.PlaySound(SoundID.Grab);
+                                needSync = true;
                             }
                         }
                         else if (!data.Dye.IsEmpty()) {
                             Main.mouseItem = ItemLoader.TransferWithLimit(data.Dye, 1);
                             SoundEngine.PlaySound(SoundID.Grab);
+                            needSync = true;
                         }
+                    }
+                    if (needSync && Main.netMode == NetmodeID.MultiplayerClient) {
+                        MultiplayerSystem.SendPacket(new ExtraMannequinInfoItemsPacket(Main.LocalPlayer, MannequinsInWorldSystem.MannequinsInWorld.FindIndex(a => a == data), true));
                     }
                 }
 

@@ -42,10 +42,12 @@ sealed class BackwoodsVars : ModSystem {
     public static List<Point> AllTreesWorldPositions { get; internal set; } = [];
 
     public static void AddBackwoodsTree(int i, int j) {
-        Point position = new(i, j);
-        if (!AllTreesWorldPositions.Contains(position)) {
-            AllTreesWorldPositions.Add(position);
-            BackwoodsTreeCountInWorld++;
+        if (!Main.hardMode) {
+            Point position = new(i, j);
+            if (!AllTreesWorldPositions.Contains(position)) {
+                AllTreesWorldPositions.Add(position);
+                BackwoodsTreeCountInWorld++;
+            }
         }
     }
 
@@ -71,12 +73,10 @@ sealed class BackwoodsVars : ModSystem {
         tag[nameof(BackwoodsStartX)] = BackwoodsStartX;
         tag[nameof(BackwoodsHalfSizeX)] = BackwoodsHalfSizeX;
 
-        if (!Main.hardMode) {
-            tag[nameof(BackwoodsTreeCountInWorld)] = BackwoodsTreeCountInWorld;
-            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-                tag[$"backwoodstreepositionX{i}"] = AllTreesWorldPositions[i].X;
-                tag[$"backwoodstreepositionY{i}"] = AllTreesWorldPositions[i].Y;
-            }
+        tag[nameof(BackwoodsTreeCountInWorld)] = BackwoodsTreeCountInWorld;
+        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+            tag[$"backwoodstreepositionX{i}"] = AllTreesWorldPositions[i].X;
+            tag[$"backwoodstreepositionY{i}"] = AllTreesWorldPositions[i].Y;
         }
     }
 
@@ -88,13 +88,11 @@ sealed class BackwoodsVars : ModSystem {
         BackwoodsStartX = tag.GetInt(nameof(BackwoodsStartX));
         BackwoodsHalfSizeX = tag.GetInt(nameof(BackwoodsHalfSizeX));
 
-        if (!Main.hardMode) {
-            BackwoodsTreeCountInWorld = tag.GetInt(nameof(BackwoodsTreeCountInWorld));
-            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-                int x = tag.GetInt($"backwoodstreepositionX{i}");
-                int y = tag.GetInt($"backwoodstreepositionY{i}");
-                AllTreesWorldPositions.Add(new Point(x, y));
-            }
+        BackwoodsTreeCountInWorld = tag.GetInt(nameof(BackwoodsTreeCountInWorld));
+        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+            int x = tag.GetInt($"backwoodstreepositionX{i}");
+            int y = tag.GetInt($"backwoodstreepositionY{i}");
+            AllTreesWorldPositions.Add(new Point(x, y));
         }
     }
 
@@ -103,11 +101,9 @@ sealed class BackwoodsVars : ModSystem {
         _preDownedBossTimer = 0f;
         _backwoodsAwake = false;
 
-        if (!Main.hardMode) {
-            BackwoodsTreeCountInWorld = 0;
-            AllTreesWorldPositions.Clear();
-            AllTreesWorldPositions = [];
-        }
+        BackwoodsTreeCountInWorld = 0;
+        AllTreesWorldPositions.Clear();
+        AllTreesWorldPositions = [];
     }
 
     public override void NetSend(BinaryWriter writer) {
@@ -118,13 +114,11 @@ sealed class BackwoodsVars : ModSystem {
         writer.Write(BackwoodsStartX);
         writer.Write(BackwoodsHalfSizeX);
 
-        if (!Main.hardMode) {
-            writer.Write(BackwoodsTreeCountInWorld);
-            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-                writer.Write(BackwoodsStartX);
-                writer.Write(AllTreesWorldPositions[i].X);
-                writer.Write(AllTreesWorldPositions[i].Y);
-            }
+        writer.Write(BackwoodsTreeCountInWorld);
+        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+            writer.Write(BackwoodsStartX);
+            writer.Write(AllTreesWorldPositions[i].X);
+            writer.Write(AllTreesWorldPositions[i].Y);
         }
     }
 
@@ -136,12 +130,10 @@ sealed class BackwoodsVars : ModSystem {
         BackwoodsStartX = reader.ReadInt32();
         BackwoodsHalfSizeX = reader.ReadInt32();
 
-        if (!Main.hardMode) {
-            BackwoodsStartX = reader.ReadInt16();
-            AllTreesWorldPositions.Clear();
-            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-                AllTreesWorldPositions.Add(new Point(reader.ReadInt16(), reader.ReadInt16()));
-            }
+        BackwoodsStartX = reader.ReadInt16();
+        AllTreesWorldPositions.Clear();
+        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+            AllTreesWorldPositions.Add(new Point(reader.ReadInt16(), reader.ReadInt16()));
         }
     }
 
