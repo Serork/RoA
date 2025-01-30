@@ -22,6 +22,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using RoA.Common.VisualEffects;
 
 namespace RoA.Common.WorldEvents;
 
@@ -247,8 +248,9 @@ sealed class BackwoodsFogHandler : ModSystem {
             position.Y -= num;
             float num2 = 0.4f;
             float scale = 0.8f + Main.rand.NextFloat() * 0.2f;
-            int dust = Dust.NewDust(position, 5, 5, ModContent.DustType<Fog>(), Scale: scale);
-            Main.dust[dust].velocity.X = num2 * Main.WindForVisuals;
+
+            VisualEffectSystem.New<Content.VisualEffects.Fog>(VisualEffectLayer.ABOVEPLAYERS)?.
+                Setup(position + Main.rand.RandomPointInArea(5f, 5f), new Vector2(num2 * Main.WindForVisuals, 0f), scale: scale);
         }
     }
 }
