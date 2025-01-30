@@ -79,13 +79,11 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     public override void NetSend(BinaryWriter writer) {
         writer.Write(IsFogActive);
-        writer.Write(Opacity);
         writer.Write(_fogTime);
     }
 
     public override void NetReceive(BinaryReader reader) {
         IsFogActive = reader.ReadBoolean();
-        Opacity = reader.ReadSingle();
         _fogTime = reader.ReadSingle();
     }
 
