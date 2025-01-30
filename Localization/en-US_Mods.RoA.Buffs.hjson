@@ -87,12 +87,12 @@ RavencallersCloakBuff: {
 
 Infected: {
 	DisplayName: Infected
-	Description: Losing life [Placeholder?]
+	Description: Losing life
 }
 
 BeastPoison: {
 	DisplayName: Pheromones
-	Description: Losing life [Placeholder?]
+	Description: Losing life and attracting vicious beasts
 }
 
 FlederForm: {
@@ -188,7 +188,7 @@ BoneHarpyAttackDebuff: {
 
 OnFire: {
 	DisplayName: On Fire
-	Description: Slowly losing life [Placeholder?]
+	Description: Slowly losing life
 }
 
 PrismaticFavor: {
@@ -198,12 +198,12 @@ PrismaticFavor: {
 
 BoneHarpyMountBuff: {
 	DisplayName: Bone Harpy Mount
-	Description: [Placeholder]
+	Description: ""
 }
 
 BloodShedAxesDebuff: {
 	DisplayName: Bloodshed Axe
-	Description: [Placeholder]
+	Description: ""
 }
 
 LittleFleder: {
