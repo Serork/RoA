@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.InterfaceElements;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
@@ -344,7 +345,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         DrawSlotPairSet(self, player, spriteBatch, 5, 3, 3f, 0.5f, 24);
 
         var data = MannequinsInWorldSystem.MannequinsInWorld.FirstOrDefault(x => x.Position == self.Position);
-        if (/*!BeltButton.IsUsed || */data == null) {
+        if (!BeltButton.IsUsed || data == null) {
             return;
         }
         int x = (int)(73f + 0 * 56f * Main.inventoryScale);
@@ -361,6 +362,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 bool flag = Main.mouseLeftRelease && Main.mouseLeft;
                 if (flag) {
                     bool needSync = false;
+                    BeltButton.ToggleTo(true);
                     if (ItemSlot.ShiftInUse && !data.Wreath.IsEmpty()) {
                         data.Wreath = Main.player[Main.myPlayer].GetItem(Main.myPlayer, data.Wreath, GetItemSettings.InventoryEntityToPlayerInventorySettings);
                         SoundEngine.PlaySound(SoundID.Grab);
@@ -440,6 +442,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 bool flag = Main.mouseLeftRelease && Main.mouseLeft;
                 if (flag) {
                     bool needSync = false;
+                    BeltButton.ToggleTo(true);
                     if (ItemSlot.ShiftInUse && !data.Dye.IsEmpty()) {
                         data.Dye = Main.player[Main.myPlayer].GetItem(Main.myPlayer, data.Dye, GetItemSettings.InventoryEntityToPlayerInventorySettings);
                         SoundEngine.PlaySound(SoundID.Grab);
