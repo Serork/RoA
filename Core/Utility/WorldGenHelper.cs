@@ -51,9 +51,8 @@ static class WorldGenHelper {
             return false;
 
         bool flag = false;
-        for (int i = 0; i < ignoreIDs.Length; i++) {
-            if (TileID.Sets.CommonSapling[i])
-                flag = true;
+        if (ignoreIDs.Any(x => TileID.Sets.CommonSapling[x])) {
+            flag = true;
         }
 
         for (int i = startX; i < endX + 1; i++) {
