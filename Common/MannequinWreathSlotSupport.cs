@@ -8,6 +8,8 @@ using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
+using Stubble.Core.Classes;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,14 +67,6 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             MannequinsInWorld.Clear();
         }
 
-        public override void NetSend(BinaryWriter writer) {
-            
-        }
-
-        public override void NetReceive(BinaryReader reader) {
-            base.NetReceive(reader);
-        }
-
         public override void SaveWorldData(TagCompound tag) {
             tag[$"{DATA}COUNT"] = _count;
             for (int i = 0; i < _count; i++) {
@@ -93,6 +87,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         public override void LoadWorldData(TagCompound tag) {
             _count = tag.GetInt($"{DATA}COUNT");
             int i = 0;
+            MannequinsInWorld.Clear();
             while (i < _count) {
                 int x = tag.GetShort($"{DATA}pos{i}X");
                 int y = tag.GetShort($"{DATA}pos{i}Y");
@@ -118,6 +113,16 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             On_ItemSlot.Handle_ItemArray_int_int += On_ItemSlot_Handle_ItemArray_int_int;
             On_TEDisplayDoll.OverrideItemSlotLeftClick += On_TEDisplayDoll_OverrideItemSlotLeftClick;
             On_TEDisplayDoll.Draw += On_TEDisplayDoll_Draw;
+            On_TEDisplayDoll.ContainsItems += On_TEDisplayDoll_ContainsItems;
+        }
+
+        private bool On_TEDisplayDoll_ContainsItems(On_TEDisplayDoll.orig_ContainsItems orig, TEDisplayDoll self) {
+            var data = MannequinsInWorld.FirstOrDefault(x => x.Position == self.Position);
+            if (data == null) {
+                return orig(self);
+            }
+
+            return !data.Wreath.IsEmpty() || !data.Dye.IsEmpty();
         }
 
         private void On_TEDisplayDoll_Draw(On_TEDisplayDoll.orig_Draw orig, TEDisplayDoll self, int tileLeftX, int tileTopY) {
@@ -212,23 +217,17 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
         internal static void WriteItem(int mannequinIndex, bool dye, BinaryWriter writer) {
             var data = MannequinsInWorld[mannequinIndex];
-            if (data == null) {
-                return;
-            }
             Item item = data.Wreath;
             if (dye)
                 item = data.Dye;
 
             writer.Write((ushort)item.netID);
             writer.Write((ushort)item.stack);
-            writer.Write(item.prefix);
+            writer.Write((byte)item.prefix);
         }
 
         internal static void ReadItem(int mannequinIndex, bool dye, BinaryReader reader) {
             var data = MannequinsInWorld[mannequinIndex];
-            if (data == null) {
-                return;
-            }
             int defaults = reader.ReadUInt16();
             int stack = reader.ReadUInt16();
             int prefixWeWant = reader.ReadByte();
@@ -241,8 +240,49 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             item.Prefix(prefixWeWant);
         }
 
-        public override void PostUpdatePlayers() {
+        internal sealed class SyncOnJoining : ModPlayer {
+            public override void SyncPlayer(int toWho, int fromWho, bool newPlayer) {
+                if (newPlayer) {
+                    MultiplayerSystem.SendPacket(new ExtraMannequinInfoPacket((byte)Player.whoAmI), toWho, fromWho);
+                }
+            }
+        }
 
+        internal static void SendAllMannequinExtraInfo(BinaryWriter writer) {
+            writer.Write(_count);
+            for (int i = 0; i < _count; i++) {
+                ExtraMannequinData data = MannequinsInWorld[i];
+                writer.Write(data.Position.X);
+                writer.Write(data.Position.Y);
+                WriteItem(i, false, writer);
+                WriteItem(i, true, writer);
+            }
+        }
+
+        internal static void ReceiveAllMannequinExtraInfo(BinaryReader reader) {
+            _count = reader.ReadInt32();
+            MannequinsInWorld.Clear();
+            for (int i = 0; i < _count; i++) {
+                ExtraMannequinData data = new();
+                short x = reader.ReadInt16();
+                short y = reader.ReadInt16();
+                data.Position = new Point16(x, y);
+                int defaults = reader.ReadUInt16();
+                int stack = reader.ReadUInt16();
+                int prefixWeWant = reader.ReadByte();
+                data.Wreath = new Item();
+                data.Wreath.SetDefaults(defaults);
+                data.Wreath.stack = stack;
+                data.Wreath.Prefix(prefixWeWant);
+                defaults = reader.ReadUInt16();
+                stack = reader.ReadUInt16();
+                prefixWeWant = reader.ReadByte();
+                data.Dye = new Item();
+                data.Dye.SetDefaults(defaults);
+                data.Dye.stack = stack;
+                data.Dye.Prefix(prefixWeWant);
+                MannequinsInWorld.Add(data);
+            }
         }
 
         private void On_TEDisplayDoll_Kill(On_TEDisplayDoll.orig_Kill orig, int x, int y) {
