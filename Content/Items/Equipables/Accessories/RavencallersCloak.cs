@@ -156,7 +156,7 @@ sealed class RavencallersCloak : ModItem {
 
         private void On_LegacyPlayerRenderer_DrawPlayerFull(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
             RavencallerPlayer data = drawPlayer.GetModPlayer<RavencallerPlayer>();
-            if (!data.Available || !drawPlayer.active || Main.gameMenu) {
+            if (!data.Available || !drawPlayer.active || Main.gameMenu || drawPlayer.isDisplayDollOrInanimate) {
                 orig(self, camera, drawPlayer);
                 return;
             }

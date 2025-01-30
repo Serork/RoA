@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.InterfaceElements;
 using RoA.Common.Players;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core.Utility;
@@ -16,13 +17,17 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Tile_Entities;
+using Terraria.GameContent.UI.Chat;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI;
 using Terraria.UI.Chat;
 using Terraria.UI.Gamepad;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RoA.Common;
 
@@ -39,11 +44,62 @@ sealed class MannequinWreathSlotSupport : ILoadable {
     [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowHueChest")]
     public extern static ref float[] ItemSlot_inventoryGlowHueChest(ItemSlot self);
 
+    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "canFavoriteAt")]
+    public extern static ref bool[] ItemSlot_canFavoriteAt(ItemSlot self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "TryFitting")]
+    public extern static bool TEDisplayDoll_TryFitting(TEDisplayDoll self, Item[] inv, int context = 0, int slot = 0, bool justCheck = false);
+
     private sealed class MannequinsInWorldSystem : ModSystem {
+        private const string DATA = "MANNEQUINEXTRADATA";
+
+        private static int _count;
+
         public class ExtraMannequinData {
             public Point16 Position;
             public Item Wreath;
             public Item Dye;
+        }
+
+        public override void ClearWorld() {
+            _count = 0;
+            MannequinsInWorld.Clear();
+        }
+
+        public override void SaveWorldData(TagCompound tag) {
+            tag[$"{DATA}COUNT"] = _count;
+            for (int i = 0; i < _count; i++) {
+                ExtraMannequinData data = MannequinsInWorld[i];
+                tag[$"{DATA}pos{i}X"] = data.Position.X;
+                tag[$"{DATA}pos{i}Y"] = data.Position.Y;
+
+                if (!data.Wreath.IsEmpty()) {
+                    tag[$"{DATA}itemType{i}"] = data.Wreath.type;
+                    tag[$"{DATA}itemPrefix{i}"] = data.Wreath.prefix;
+                }
+                if (!data.Dye.IsEmpty()) {
+                    tag[$"{DATA}itemType2{i}"] = data.Dye.type;
+                }
+            }
+        }
+
+        public override void LoadWorldData(TagCompound tag) {
+            _count = tag.GetInt($"{DATA}COUNT");
+            int i = 0;
+            while (i < _count) {
+                int x = tag.GetShort($"{DATA}pos{i}X");
+                int y = tag.GetShort($"{DATA}pos{i}Y");
+                ExtraMannequinData data = new();
+                data.Position = new Point16(x, y);
+                data.Wreath = new Item();
+                data.Wreath.SetDefaults(tag.GetInt($"{DATA}itemType{i}"));
+                data.Wreath.Prefix(tag.GetInt($"{DATA}itemPrefix{i}"));
+                data.Dye = new Item();
+                data.Dye.SetDefaults(tag.GetInt($"{DATA}itemType2{i}"));
+                MannequinsInWorld.Add(data);
+
+                i++;
+            }
         }
 
         public static List<ExtraMannequinData> MannequinsInWorld { get; private set; } = [];
@@ -52,6 +108,80 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             On_TEDisplayDoll.Place += On_TEDisplayDoll_Place;
             On_TEDisplayDoll.Kill += On_TEDisplayDoll_Kill;
             On_TEDisplayDoll.TryFitting += On_TEDisplayDoll_TryFitting;
+            On_ItemSlot.Handle_ItemArray_int_int += On_ItemSlot_Handle_ItemArray_int_int;
+            On_TEDisplayDoll.OverrideItemSlotLeftClick += On_TEDisplayDoll_OverrideItemSlotLeftClick;
+            On_TEDisplayDoll.Draw += On_TEDisplayDoll_Draw;
+        }
+
+        private void On_TEDisplayDoll_Draw(On_TEDisplayDoll.orig_Draw orig, TEDisplayDoll self, int tileLeftX, int tileTopY) {
+            var data = MannequinsInWorld.FirstOrDefault(x => x.Position == self.Position);
+            if (data == null) {
+                orig(self, tileLeftX, tileTopY);
+                return;
+            }
+            Player dollPlayer = TEDisplayDoll__dollPlayer(self);
+            Item[] _items = TEDisplayDoll__items(self);
+            Item[] _dyes = TEDisplayDoll__dyes(self);
+            for (int i = 0; i < 8; i++) {
+                dollPlayer.armor[i] = _items[i];
+                dollPlayer.dye[i] = _dyes[i];
+            }
+
+            dollPlayer.direction = -1;
+            dollPlayer.Male = true;
+            Tile tileSafely = Framing.GetTileSafely(tileLeftX, tileTopY);
+            if (tileSafely.TileFrameX % 72 == 36)
+                dollPlayer.direction = 1;
+
+            if (tileSafely.TileFrameX / 72 == 1)
+                dollPlayer.Male = false;
+
+            dollPlayer.isDisplayDollOrInanimate = true;
+            dollPlayer.GetModPlayer<WreathItemToShowHandler>().ForcedUpdate2(data.Wreath, data.Dye);
+            dollPlayer.ResetEffects();
+            dollPlayer.ResetVisibleAccessories();
+            dollPlayer.UpdateDyes();
+            dollPlayer.DisplayDollUpdate();
+            dollPlayer.UpdateSocialShadow();
+            dollPlayer.PlayerFrame();
+            Vector2 position = new Vector2(tileLeftX + 1, tileTopY + 3) * 16f + new Vector2(-dollPlayer.width / 2, -dollPlayer.height - 6);
+            dollPlayer.position = position;
+            dollPlayer.isFullbright = tileSafely.IsTileFullbright;
+            dollPlayer.skinDyePacked = PlayerDrawHelper.PackShader(tileSafely.TileColor, PlayerDrawHelper.ShaderConfiguration.TilePaintID);
+            Main.PlayerRenderer.DrawPlayer(Main.Camera, dollPlayer, dollPlayer.position, 0f, dollPlayer.fullRotationOrigin);
+        }
+
+        private bool On_TEDisplayDoll_OverrideItemSlotLeftClick(On_TEDisplayDoll.orig_OverrideItemSlotLeftClick orig, TEDisplayDoll self, Item[] inv, int context, int slot) {
+            if (!ItemSlot.ShiftInUse)
+                return false;
+
+            if (Main.cursorOverride == 9 && context == 0) {
+                Item item = inv[slot];
+                if (!item.IsAir && !item.favorited && TEDisplayDoll.FitsDisplayDoll(item))
+                    return TEDisplayDoll_TryFitting(self, inv, context, slot);
+            }
+
+            if ((Main.cursorOverride == 8 && context == 23) || context == 24 || context == 25) {
+                inv[slot] = Main.player[Main.myPlayer].GetItem(Main.myPlayer, inv[slot], GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                if (Main.netMode == 1) {
+                    if (context == 25)
+                        NetMessage.SendData(121, -1, -1, null, Main.myPlayer, self.ID, slot, 1f);
+                    else
+                        NetMessage.SendData(121, -1, -1, null, Main.myPlayer, self.ID, slot);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private void On_ItemSlot_Handle_ItemArray_int_int(On_ItemSlot.orig_Handle_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+            Item item = inv[slot];
+            if (context == 24 && ((item.ModItem != null && item.ModItem is BaseWreathItem) || (Main.mouseItem.ModItem != null && Main.mouseItem.ModItem is BaseWreathItem))) {
+                return;
+            }
+            orig(inv, context, slot);
         }
 
         private bool On_TEDisplayDoll_TryFitting(On_TEDisplayDoll.orig_TryFitting orig, TEDisplayDoll self, Item[] inv, int context, int slot, bool justCheck) {
@@ -73,9 +203,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         }
 
         public override void PostUpdatePlayers() {
-            foreach (ExtraMannequinData data in MannequinsInWorld) {
-                Dust.NewDustPerfect(data.Position.ToWorldCoordinates(), DustID.Adamantite);
-            }
+
         }
 
         private void On_TEDisplayDoll_Kill(On_TEDisplayDoll.orig_Kill orig, int x, int y) {
@@ -83,6 +211,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
             Point16 position = new(x, y);
             MannequinsInWorld.Remove(MannequinsInWorld.FirstOrDefault(x => x.Position == position));
+            _count = MannequinsInWorld.Count;
         }
 
         private int On_TEDisplayDoll_Place(On_TEDisplayDoll.orig_Place orig, int x, int y) {
@@ -96,6 +225,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             };
             if (!MannequinsInWorld.Contains(data)) {
                 MannequinsInWorld.Add(data);
+                _count = MannequinsInWorld.Count;
             }
 
             return result;
@@ -114,6 +244,9 @@ sealed class MannequinWreathSlotSupport : ILoadable {
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_dyes")]
     public extern static ref Item[] TEDisplayDoll__dyes(TEDisplayDoll self);
 
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_dollPlayer")]
+    public extern static ref Player TEDisplayDoll__dollPlayer(TEDisplayDoll self);
+
     public void Load(Mod mod) {
         On_TEDisplayDoll.DrawInner += On_TEDisplayDoll_DrawInner;
     }
@@ -124,7 +257,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         DrawSlotPairSet(self, player, spriteBatch, 5, 3, 3f, 0.5f, 24);
 
         var data = MannequinsInWorldSystem.MannequinsInWorld.FirstOrDefault(x => x.Position == self.Position);
-        if (data == null) {
+        if (/*!BeltButton.IsUsed || */data == null) {
             return;
         }
         int x = (int)(73f + 0 * 56f * Main.inventoryScale);
@@ -140,13 +273,32 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
                 bool flag = Main.mouseLeftRelease && Main.mouseLeft;
                 if (flag) {
-                    if (!Main.mouseItem.IsAir && Main.mouseItem.ModItem is BaseWreathItem && Main.mouseItem.stack == 1) {
-                        data.Wreath = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
-                        SoundEngine.PlaySound(SoundID.Grab);
+                    if (ItemSlot.ShiftInUse && !data.Wreath.IsEmpty()) {
+                        data.Wreath = Main.player[Main.myPlayer].GetItem(Main.myPlayer, data.Wreath, GetItemSettings.InventoryEntityToPlayerInventorySettings);
                     }
-                    else if (!data.Wreath.IsEmpty()) {
-                        Main.mouseItem = ItemLoader.TransferWithLimit(data.Wreath, 1);
-                        SoundEngine.PlaySound(SoundID.Grab);
+                    else if (!data.Wreath.IsEmpty() && !Main.mouseItem.IsAir && data.Wreath.stack == Main.mouseItem.stack) {
+                        if (data.Wreath.type != Main.mouseItem.type) {
+                            (data.Wreath, Main.mouseItem) = (Main.mouseItem, data.Wreath);
+                            SoundEngine.PlaySound(SoundID.Grab);
+                        }
+                    }
+                    else {
+                        if (!Main.mouseItem.IsAir && Main.mouseItem.ModItem is BaseWreathItem) {
+                            if (Main.mouseItem.stack == 1) {
+                                data.Wreath = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
+                                SoundEngine.PlaySound(SoundID.Grab);
+                            }
+                            else if (data.Wreath.IsEmpty()) {
+                                data.Wreath.type = Main.mouseItem.type;
+                                data.Wreath.stack = 1;
+                                Main.mouseItem.stack -= 1;
+                                SoundEngine.PlaySound(SoundID.Grab);
+                            }
+                        }
+                        else if (!data.Wreath.IsEmpty()) {
+                            Main.mouseItem = ItemLoader.TransferWithLimit(data.Wreath, 1);
+                            SoundEngine.PlaySound(SoundID.Grab);
+                        }
                     }
                 }
 
@@ -190,7 +342,10 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 int context = 25;
                 bool flag = Main.mouseLeftRelease && Main.mouseLeft;
                 if (flag) {
-                    if (!data.Dye.IsEmpty() && !Main.mouseItem.IsAir && data.Dye.stack == Main.mouseItem.stack) {
+                    if (ItemSlot.ShiftInUse && !data.Dye.IsEmpty()) {
+                        data.Dye = Main.player[Main.myPlayer].GetItem(Main.myPlayer, data.Dye, GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                    }
+                    else if (!data.Dye.IsEmpty() && !Main.mouseItem.IsAir && data.Dye.stack == Main.mouseItem.stack) {
                         if (data.Dye.type != Main.mouseItem.type) {
                             (data.Dye, Main.mouseItem) = (Main.mouseItem, data.Dye);
                             SoundEngine.PlaySound(SoundID.Grab);
@@ -214,6 +369,10 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                             SoundEngine.PlaySound(SoundID.Grab);
                         }
                     }
+                }
+
+                if (ItemSlot.ShiftInUse && !data.Dye.IsEmpty() && Main.player[Main.myPlayer].ItemSpace(data.Dye).CanTakeItemToPersonalInventory) {
+                    Main.cursorOverride = 8;
                 }
 
                 var inv = items;
