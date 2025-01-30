@@ -106,7 +106,7 @@ sealed class PettyGoblin : ModNPC {
 
         Coins = new CoinGenerator(NPC);
 
-        NPC.rarity = 3;
+        NPC.rarity = 2;
 
         Banner = Type;
         BannerItem = ModContent.ItemType<PettyGoblinBanner>();

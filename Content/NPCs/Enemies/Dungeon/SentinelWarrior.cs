@@ -55,6 +55,8 @@ sealed class SentinelWarrior : ModNPC {
         AIType = NPCID.AngryBones;
         AnimationType = NPCID.Skeleton;
 
+        NPC.rarity = 1;
+
         Banner = Type;
         BannerItem = ModContent.ItemType<SentinelWarriorBanner>();
     }
