@@ -249,8 +249,10 @@ sealed class BackwoodsFogHandler : ModSystem {
             float num2 = 0.4f;
             float scale = 0.8f + Main.rand.NextFloat() * 0.2f;
 
-            VisualEffectSystem.New<Content.VisualEffects.Fog>(VisualEffectLayer.ABOVEPLAYERS)?.
-                Setup(position + Main.rand.RandomPointInArea(5f, 5f), new Vector2(num2 * Main.WindForVisuals, 0f), scale: scale);
+            if (Main.netMode != NetmodeID.Server) {
+                VisualEffectSystem.New<Content.VisualEffects.Fog>(VisualEffectLayer.ABOVEPLAYERS)?.
+                    Setup(position + Main.rand.RandomPointInArea(5f, 5f), new Vector2(num2 * Main.WindForVisuals, 0f), scale: scale);
+            }
         }
     }
 }
