@@ -155,9 +155,9 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
 
         if (Opacity > 0f) {
-            Player player = Main.LocalPlayer;
-            VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
-            localVignettePlayer.SetVignette(0, 2000 * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
+            //Player player = Main.LocalPlayer;
+            //VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
+            //localVignettePlayer.SetVignette(0, 2000 * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
 
             Rectangle tileWorkSpace = GetTileWorkSpace();
             int num = tileWorkSpace.X + tileWorkSpace.Width;
@@ -233,12 +233,18 @@ sealed class BackwoodsFogHandler : ModSystem {
     }
 
     private void SpawnFloorCloud(int x, int y) {
-        Vector2 position = new Point(x, y - 1).ToWorldCoordinates();
-        float num = 16f * Main.rand.NextFloat();
-        position.Y -= num;
-        float num2 = 0.4f;
-        float scale = 0.8f + Main.rand.NextFloat() * 0.2f;
-        int dust = Dust.NewDust(position, 5, 5, ModContent.DustType<Fog>(), Scale: scale);
-        Main.dust[dust].velocity.X = num2 * Main.WindForVisuals;
+        Color lightColor = Lighting.GetColor(x, y);
+        float brightness = (lightColor.R / 255f + lightColor.G / 255f + lightColor.B / 255f) / 3f;
+        float brightness2 = MathHelper.Clamp((brightness - 0.6f) * 5f, 0f, 1f);
+        Main.NewText(1f - brightness2);
+        if (Main.rand.NextChance(1f - brightness2)) {
+            Vector2 position = new Point(x, y - 1).ToWorldCoordinates();
+            float num = 16f * Main.rand.NextFloat();
+            position.Y -= num;
+            float num2 = 0.4f;
+            float scale = 0.8f + Main.rand.NextFloat() * 0.2f;
+            int dust = Dust.NewDust(position, 5, 5, ModContent.DustType<Fog>(), Scale: scale);
+            Main.dust[dust].velocity.X = num2 * Main.WindForVisuals;
+        }
     }
 }
