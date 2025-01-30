@@ -9,8 +9,6 @@ using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
-using Stubble.Core.Classes;
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -241,12 +239,12 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             item.Prefix(prefixWeWant);
         }
 
-        internal sealed class SyncOnJoining : ModPlayer {
-            public override void SyncPlayer(int toWho, int fromWho, bool newPlayer) {
-                if (newPlayer) {
-                    MultiplayerSystem.SendPacket(new ExtraMannequinInfoPacket((byte)Player.whoAmI), toWho, fromWho);
-                }
-            }
+        public override void NetSend(BinaryWriter writer) {
+            SendAllMannequinExtraInfo(writer);
+        }
+
+        public override void NetReceive(BinaryReader reader) {
+            ReceiveAllMannequinExtraInfo(reader);
         }
 
         internal static void SendAllMannequinExtraInfo(BinaryWriter writer) {
@@ -305,7 +303,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 MannequinsInWorld.Add(data);
                 _count = MannequinsInWorld.Count;
 
-                if (fromServer && Main.netMode != NetmodeID.SinglePlayer) {
+                if (fromServer) {
                     MultiplayerSystem.SendPacket(new ExtraMannequinInfoPlacementPacket(x, y));
                 }
             }
