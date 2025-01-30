@@ -4,16 +4,38 @@ using RoA.Common.InterfaceElements;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Utilities;
+
+using System.Runtime.CompilerServices;
 
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.UI;
+using Terraria.UI.Gamepad;
 
 namespace RoA.Common.Players;
 
 sealed class WreathSlot : ModAccessorySlot {
     private static bool _equipped, _equipped2;
+
+    private sealed class ShiftUseFix : ILoadable {
+        public void Load(Mod mod) {
+            On_ItemSlot.Handle_ItemArray_int_int += On_ItemSlot_Handle_ItemArray_int_int;
+        }
+
+        private void On_ItemSlot_Handle_ItemArray_int_int(On_ItemSlot.orig_Handle_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+            Item item = inv[slot];
+            if (context == 24 && ((item.ModItem != null && item.ModItem is BaseWreathItem) || (Main.mouseItem.ModItem != null && Main.mouseItem.ModItem is BaseWreathItem))) {
+                return;
+            }
+            orig(inv, context, slot);
+        }
+
+        public void Unload() { }
+    }
 
     public static WreathSlot GetSlot(Player player) => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot;
     public static Item GetFunctionalItem(Player player) => GetSlot(player).FunctionalItem;

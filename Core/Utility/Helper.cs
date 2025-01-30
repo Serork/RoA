@@ -11,6 +11,7 @@ using Terraria.Chat;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.UI.Gamepad;
 
 namespace RoA.Utilities;
 
@@ -34,6 +35,126 @@ static class Helper {
         newColor.B = (byte)(newColor.B * B);
         newColor.A = (byte)(newColor.A * A);
         return newColor;
+    }
+
+    public static int GetGamepadPointForSlot(Item[] inv, int context, int slot) {
+        Player localPlayer = Main.LocalPlayer;
+        int result = -1;
+        switch (context) {
+            case 0:
+            case 1:
+            case 2:
+                result = slot;
+                break;
+            case 8:
+            case 9:
+            case 10:
+            case 11: {
+                int num2 = slot;
+                if (num2 % 10 == 9 && !localPlayer.CanDemonHeartAccessoryBeShown())
+                    num2--;
+
+                result = 100 + num2;
+                break;
+            }
+            case 12:
+                if (inv == localPlayer.dye) {
+                    int num = slot;
+                    if (num % 10 == 9 && !localPlayer.CanDemonHeartAccessoryBeShown())
+                        num--;
+
+                    result = 120 + num;
+                }
+                break;
+            case 33:
+                if (inv == localPlayer.miscDyes)
+                    result = 185 + slot;
+                break;
+            //TML Context: GamePad number magic aligned to match DemonHeart Accessory.
+            //TML Note: There is no Master Mode Accessory slot code here for Gamepads.
+            //TML-added [[
+            /*TODO: Fix later because gamepads are trashing all
+			case -10:
+			case -11:
+				int num3M = slot;
+				if (!LoaderManager.Get<AccessorySlotLoader>().ModdedIsAValidEquipmentSlotForIteration(slot, localPlayer))
+					num3M--;
+
+				result = 100 + num3M;
+				break;
+			case -12:
+				int num4M = slot;
+				if (!LoaderManager.Get<AccessorySlotLoader>().ModdedIsAValidEquipmentSlotForIteration(slot, localPlayer))
+					num4M--;
+
+				result = 120 + num4M;
+				break;
+			// ]]
+			*/
+            case 19:
+                result = 180;
+                break;
+            case 20:
+                result = 181;
+                break;
+            case 18:
+                result = 182;
+                break;
+            case 17:
+                result = 183;
+                break;
+            case 16:
+                result = 184;
+                break;
+            case 3:
+            case 4:
+            case 32:
+                result = 400 + slot;
+                break;
+            case 15:
+                result = 2700 + slot;
+                break;
+            case 6:
+                result = 300;
+                break;
+            case 22:
+                if (UILinkPointNavigator.Shortcuts.CRAFT_CurrentRecipeBig != -1)
+                    result = 700 + UILinkPointNavigator.Shortcuts.CRAFT_CurrentRecipeBig;
+                if (UILinkPointNavigator.Shortcuts.CRAFT_CurrentRecipeSmall != -1)
+                    result = 1500 + UILinkPointNavigator.Shortcuts.CRAFT_CurrentRecipeSmall + 1;
+                break;
+            case 7:
+                result = 1500;
+                break;
+            case 5:
+                result = 303;
+                break;
+            case 23:
+                result = 5100 + slot;
+                break;
+            case 24:
+                result = 5100 + slot;
+                break;
+            case 25:
+                result = 5108 + slot;
+                break;
+            case 26:
+                result = 5000 + slot;
+                break;
+            case 27:
+                result = 5002 + slot;
+                break;
+            case 29:
+                result = 3000 + slot;
+                if (UILinkPointNavigator.Shortcuts.CREATIVE_ItemSlotShouldHighlightAsSelected)
+                    result = UILinkPointNavigator.CurrentPoint;
+                break;
+            case 30:
+                result = 15000 + slot;
+                break;
+        }
+
+        return result;
     }
 
     public static int GetGoreType(this string name) => ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type;
