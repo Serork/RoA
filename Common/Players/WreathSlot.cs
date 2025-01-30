@@ -7,6 +7,7 @@ using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
@@ -26,6 +27,7 @@ sealed class WreathSlot : ModAccessorySlot {
         int offsetX = 47 * 2;
         int x = (Main.netMode == NetmodeID.MultiplayerClient) ? Main.screenWidth - 135 - offsetX - 47 : Main.screenWidth - 94 - offsetX + 2 - 64;
         int y = mapH + 174;
+
         return new Vector2(x, y);
     }
 
@@ -54,8 +56,8 @@ sealed class WreathSlot : ModAccessorySlot {
     }
 
     public override void OnMouseHover(AccessorySlotType context) {
-        string slotName = "Wreath";
-        string vanitySlotName = "Social Wreath";
+        string slotName = Language.GetTextValue("Mods.RoA.WreathSlot");
+        string vanitySlotName = Language.GetTextValue("Mods.RoA.SocialWreathSlot");
         switch (context) {
             case AccessorySlotType.FunctionalSlot:
                 Main.hoverItemName = slotName;
