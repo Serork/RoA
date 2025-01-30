@@ -21,6 +21,7 @@ using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
+using Humanizer;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
@@ -88,13 +89,13 @@ sealed class FlederSlayer : ModProjectile {
     }
 
     public override void CutTiles() {
-        DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-        Utils.TileActionAttempt plot = new Utils.TileActionAttempt(DelegateMethods.CutTiles);
-        Vector2 center = Projectile.Center;
-        Utils.PlotTileLine(center + Projectile.rotation.ToRotationVector2() * 30f, center + Projectile.rotation.ToRotationVector2() * 150f, Projectile.width * Projectile.scale, plot);
+        //DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
+        //Utils.TileActionAttempt plot = new Utils.TileActionAttempt(DelegateMethods.CutTiles);
+        //Vector2 center = Projectile.Center;
+        //Utils.PlotTileLine(center + Projectile.rotation.ToRotationVector2() * 30f, center + Projectile.rotation.ToRotationVector2() * 150f, Projectile.width * Projectile.scale, plot);
     }
 
-    public override bool? CanCutTiles() => Projectile.ai[1] >= 1f;
+    public override bool? CanCutTiles() => false;
 
     private void CalculateExtraRotation() {
         float speed = Main.rand.NextFloat(0.0075f, 0.025f) * Main.rand.NextFloat() * Main.rand.NextFloat() * Math.Clamp(Math.Abs(Main.player[Projectile.owner].velocity.X), 1f, 1.35f);
@@ -133,8 +134,49 @@ sealed class FlederSlayer : ModProjectile {
         }
     }
 
+    private void FlederSlayerCutTiles() {
+        if (Projectile.owner != Main.myPlayer) {
+            return;
+        }
+        Player player = Main.player[Projectile.owner];
+        for (int i2 = 1; i2 < 6; i2++) {
+            Vector2 boxPosition = Projectile.position + new Vector2(-30f * player.direction, 0f) + ((Projectile.rotation + _extraRotation)).ToRotationVector2() * 20f * i2 + 
+                new Vector2(-20f + (player.direction == 1 ? 100f : 0f), 20f);
+            int boxWidth = 20;
+            int boxHeight = 20;
+            int num = (int)(boxPosition.X / 16f);
+            int num2 = (int)((boxPosition.X + (float)boxWidth) / 16f) + 1;
+            int num3 = (int)(boxPosition.Y / 16f);
+            int num4 = (int)((boxPosition.Y + (float)boxHeight) / 16f) + 1;
+            if (num < 0)
+                num = 0;
+
+            if (num2 > Main.maxTilesX)
+                num2 = Main.maxTilesX;
+
+            if (num3 < 0)
+                num3 = 0;
+
+            if (num4 > Main.maxTilesY)
+                num4 = Main.maxTilesY;
+
+            bool[] tileCutIgnorance = Main.player[Projectile.owner].GetTileCutIgnorance(allowRegrowth: false, Projectile.trap);
+            for (int i = num; i < num2; i++) {
+                for (int j = num3; j < num4; j++) {
+                    if (Main.tile[i, j] != null && Main.tileCut[Main.tile[i, j].TileType] && !tileCutIgnorance[Main.tile[i, j].TileType] && WorldGen.CanCutTile(i, j, TileCuttingContext.AttackProjectile)) {
+                        WorldGen.KillTile(i, j);
+                        if (Main.netMode != 0)
+                            NetMessage.SendData(17, -1, -1, null, 0, i, j);
+                    }
+                }
+            }
+        }
+    }
+
     public override void AI() {
         Player player = Main.player[Projectile.owner];
+
+        FlederSlayerCutTiles();
 
         if (CanDamageInternal()) {
             int count = 3;
