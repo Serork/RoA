@@ -60,8 +60,9 @@ sealed class Fog : VisualEffect<Fog> {
         Velocity.X = 0.2f * Main.WindForVisuals;
         Velocity.Y = 0f;
         if (!flag) {
-            if (Alpha > 200)
+            if (Alpha > 200) {
                 Alpha--;
+            }
         }
         else {
             Alpha++;

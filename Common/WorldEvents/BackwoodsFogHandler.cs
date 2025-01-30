@@ -209,28 +209,28 @@ sealed class BackwoodsFogHandler : ModSystem {
         if (!tile.HasTile/* || tile.Slope > 0 || tile.IsHalfBlock*/ || !Main.tileSolid[tile.TileType]) {
             return;
         }
-        //if (TileID.Sets.Platforms[tile.TileType]) {
-        //    return;
-        //}
-        tile = WorldGenHelper.GetTileSafely(x, y + 1);
-        //if (!tile.AnyWall() && !WorldGenHelper.GetTileSafely(x, y).AnyWall()) {
-        //    return;
-        //}
+        ////if (TileID.Sets.Platforms[tile.TileType]) {
+        ////    return;
+        ////}
+        //tile = WorldGenHelper.GetTileSafely(x, y + 1);
+        ////if (!tile.AnyWall() && !WorldGenHelper.GetTileSafely(x, y).AnyWall()) {
+        ////    return;
+        ////}
         tile = WorldGenHelper.GetTileSafely(x, y - 1);
-        int type = ModContent.TileType<OvergrownAltar>();
+        //int type = ModContent.TileType<OvergrownAltar>();
 
-        bool flag = true;
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                if (i != 0 || j != 0) {
-                    if (WorldGenHelper.GetTileSafely(x + i, y + j).TileType == type) {
-                        flag = false;
-                        break;
-                    }
-                }
-            }
-        }
-        if (flag && !WorldGen.SolidTile(tile) && tile.TileType != type && Main.rand.NextBool((int)(20 + 40 * (1f - Math.Clamp(Opacity / 0.75f, 0f, 1f))))) {
+        //bool flag = true;
+        ////for (int i = -1; i < 2; i++) {
+        ////    for (int j = -1; j < 2; j++) {
+        ////        if (i != 0 || j != 0) {
+        ////            if (WorldGenHelper.GetTileSafely(x + i, y + j).TileType == type) {
+        ////                flag = false;
+        ////                break;
+        ////            }
+        ////        }
+        ////    }
+        ////}
+        if (!WorldGen.SolidTile(tile) && Main.rand.NextBool((int)(20 + 40 * (1f - Math.Clamp(Opacity / 0.75f, 0f, 1f))))) {
             SpawnFloorCloud(x, y);
             if (Main.rand.NextBool(3)) {
                 SpawnFloorCloud(x, y - 1);
