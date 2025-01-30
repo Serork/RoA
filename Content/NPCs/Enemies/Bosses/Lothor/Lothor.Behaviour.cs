@@ -279,7 +279,7 @@ sealed partial class Lothor : ModNPC {
         internal bool _isActive;
 
         public override void UpdateDead() {
-               UpdateVisuals();
+            UpdateVisuals();
         }
 
         public override void PostUpdate() {

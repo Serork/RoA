@@ -1,9 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
+using RoA.Common.Players;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Items.Placeable;
 using RoA.Content.Tiles.Ambient;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -11,6 +15,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -29,6 +34,11 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     public override void Load() {
         On_Main.StopRain += On_Main_StopRain;
+        On_Main.DrawInterface += On_Main_DrawInterface;
+    }
+
+    private void On_Main_DrawInterface(On_Main.orig_DrawInterface orig, Main self, GameTime gameTime) {
+        orig(self, gameTime);
     }
 
     private void On_Main_StopRain(On_Main.orig_StopRain orig) {
@@ -144,9 +154,27 @@ sealed class BackwoodsFogHandler : ModSystem {
             return;
         }
 
+        if (Opacity > 0f) {
+            Player player = Main.LocalPlayer;
+            VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
+            localVignettePlayer.SetVignette(0, 2000 * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
+
+            Rectangle tileWorkSpace = GetTileWorkSpace();
+            int num = tileWorkSpace.X + tileWorkSpace.Width;
+            int num2 = tileWorkSpace.Y + tileWorkSpace.Height;
+            for (int i = tileWorkSpace.X; i < num; i++) {
+                for (int j = tileWorkSpace.Y; j < num2; j++) {
+                    TrySpawnFog(i, j);
+                }
+            }
+        }
+
         if (!BackwoodsBiome.IsActiveForFogEffect || !IsFogActive) {
             if (Opacity > 0f) {
                 Opacity -= 0.005f * 0.25f;
+            }
+            else {
+                Opacity = 0f;
             }
 
             return;
@@ -155,14 +183,8 @@ sealed class BackwoodsFogHandler : ModSystem {
         if (Opacity < 0.75f) {
             Opacity += 0.0175f * 0.15f;
         }
-
-        Rectangle tileWorkSpace = GetTileWorkSpace();
-        int num = tileWorkSpace.X + tileWorkSpace.Width;
-        int num2 = tileWorkSpace.Y + tileWorkSpace.Height;
-        for (int i = tileWorkSpace.X; i < num; i++) {
-            for (int j = tileWorkSpace.Y; j < num2; j++) {
-                TrySpawnFog(i, j);
-            }
+        else {
+            Opacity = 0.75f;
         }
     }
 
@@ -202,7 +224,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                 }
             }
         }
-        if (flag && !WorldGen.SolidTile(tile) && tile.TileType != type && Main.rand.NextBool(20)) {
+        if (flag && !WorldGen.SolidTile(tile) && tile.TileType != type && Main.rand.NextBool((int)(20 + 40 * (1f - Math.Clamp(Opacity / 0.75f, 0f, 1f))))) {
             SpawnFloorCloud(x, y);
             if (Main.rand.NextBool(3)) {
                 SpawnFloorCloud(x, y - 1);

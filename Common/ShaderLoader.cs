@@ -17,11 +17,17 @@ sealed class ShaderLoader : ModSystem {
     public static readonly string BackwoodsFog = "Backwoods Fog";
     public static readonly string LothorSky = "Lothor Sky";
     public static readonly string EnragedLothorSky = "Enraged Lothor Sky";
+    public static readonly string Vignette = "RoA Vignette";
+
+    public static VignetteScreenShaderData VignetteShaderData { get; private set; }
+    public static Effect VignetteEffectData { get; private set; }
 
     public override void OnModLoad() {
-        string name = "Tint";
-        Asset<Effect> tintShader = ModContent.Request<Effect>(ResourceManager.Effects + name);
-        GameShaders.Misc[$"{RoA.ModName}{name}"] = new MiscShaderData(tintShader, name);
+        Asset<Effect> vignetteShader = ModContent.Request<Effect>(ResourceManager.Effects + "Vignette", AssetRequestMode.ImmediateLoad);
+        GameShaders.Misc[Vignette] = new MiscShaderData(vignetteShader, Vignette);
+        VignetteEffectData = vignetteShader.Value;
+        VignetteShaderData = new VignetteScreenShaderData(vignetteShader.Value, "MainPS");
+        Filters.Scene[Vignette] = new Filter(VignetteShaderData, (EffectPriority)100);
 
         Filters.Scene[BackwoodsSky] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon").UseColor(0.2f, 0.2f, 0.2f).UseOpacity(0.05f), EffectPriority.High);
         SkyManager.Instance[BackwoodsSky] = new BackwoodsSky();
