@@ -84,6 +84,8 @@ sealed class MercuriumOre : ModTile {
         //        break;
         //    }
         //}
+        //for (int i2 = x - tilesAway; i2 < x + tilesAway + 1; i2++) {
+        //    for (int j2 = y - tilesAway; j2 < y + tilesAway + 1; j2++) {
         for (int i2 = x - tilesAway; i2 < x + tilesAway + 1; i2++) {
             for (int j2 = y - tilesAway; j2 < y + tilesAway + 1; j2++) {
                 if (WorldGen.InWorld(i2, j)) {
