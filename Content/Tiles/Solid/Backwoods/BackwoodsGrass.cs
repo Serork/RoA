@@ -197,31 +197,37 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
 
     public override void RandomUpdate(int i, int j) {
         int x = i, y = j;
-        if (!Framing.GetTileSafely(x, y - 1).HasTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && Main.rand.NextBool(2)) {
-            if (Main.rand.NextChance(0.045)) {
+        if (!Framing.GetTileSafely(x, y - 1).HasTile && Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && WorldGen.genRand.NextBool(2)) {
+            if (WorldGen.genRand.NextChance(0.045)) {
                 int mintType = ModContent.TileType<MiracleMint>();
-                int style = Main.rand.Next(2);
-                WorldGen.PlaceObject(x, y - 1, mintType, true, style, 0, -1, -1);
+                int style = WorldGen.genRand.Next(2);
+                if (WorldGen.PlaceTile(x, y - 1, mintType, true, style: style)) {
+                    Main.tile[x, y - 1].CopyPaintAndCoating(Main.tile[i, j]);
+                }
+                if (Main.netMode == NetmodeID.Server && Main.tile[i, y - 1].HasTile) {
+                    NetMessage.SendTileSquare(-1, i, y - 1);
+                }
                 ModContent.GetInstance<MiracleMintTE>().Place(x, y - 1);
                 if (Main.netMode != NetmodeID.SinglePlayer) {
                     MultiplayerSystem.SendPacket(new PlaceMiracleMintPacket(x, y - 1));
                 }
-                if (Main.netMode == NetmodeID.Server) {
-                    NetMessage.SendObjectPlacement(-1, x, y - 1, mintType, style, 0, -1, -1);
-                }
             }
             else {
-                if (Main.rand.NextChance(0.15)) {
-                    WorldGen.PlaceObject(x, y - 1, (ushort)ModContent.TileType<BackwoodsBush>(), true, Main.rand.Next(4), 0, -1, -1);
-                    if (Main.netMode == NetmodeID.Server) {
-                        NetMessage.SendObjectPlacement(-1, x, y - 1, (ushort)ModContent.TileType<BackwoodsBush>(), Main.rand.Next(4), 0, -1, -1);
+                if (WorldGen.genRand.NextChance(0.15)) {
+                    if (WorldGen.PlaceTile(x, y - 1, (ushort)ModContent.TileType<BackwoodsBush>(), true, style: WorldGen.genRand.Next(4))) {
+                        Main.tile[x, y - 1].CopyPaintAndCoating(Main.tile[i, j]);
+                    }
+                    if (Main.netMode == NetmodeID.Server && Main.tile[i, y - 1].HasTile) {
+                        NetMessage.SendTileSquare(-1, i, y - 1);
                     }
 
                     return;
                 }
-                WorldGen.PlaceObject(x, y - 1, (ushort)ModContent.TileType<BackwoodsPlants>(), true, Main.rand.Next(20), 0, -1, -1);
-                if (Main.netMode == NetmodeID.Server) {
-                    NetMessage.SendObjectPlacement(-1, x, y - 1, (ushort)ModContent.TileType<BackwoodsPlants>(), Main.rand.Next(20), 0, -1, -1);
+                if (WorldGen.PlaceTile(x, y - 1, (ushort)ModContent.TileType<BackwoodsPlants>(), true, style: WorldGen.genRand.Next(20))) {
+                    Main.tile[x, y - 1].CopyPaintAndCoating(Main.tile[i, j]);
+                }
+                if (Main.netMode == NetmodeID.Server && Main.tile[i, y - 1].HasTile) {
+                    NetMessage.SendTileSquare(-1, i, y - 1);
                 }
             }
         }

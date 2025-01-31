@@ -3,12 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
+using RoA.Content.Tiles.Ambient;
 using RoA.Core.Utility;
 
 using System;
 using System.Linq;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -34,12 +36,43 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         }
     }
 
+    public override void Load() {
+        On_Player.PlaceThing_PaintScrapper_LongMoss += On_Player_PlaceThing_PaintScrapper_LongMoss;
+    }
+
+    private void On_Player_PlaceThing_PaintScrapper_LongMoss(On_Player.orig_PlaceThing_PaintScrapper_LongMoss orig, Player self, int x, int y) {
+        orig(self, x, y);
+
+        if (Main.tile[x, y].TileType != ModContent.TileType<MossGrowth>())
+            return;
+
+        self.cursorItemIconEnabled = true;
+        if (!self.ItemTimeIsZero || self.itemAnimation <= 0 || !self.controlUseItem)
+            return;
+
+        _ = Main.tile[x, y].TileType;
+        WorldGen.KillTile(x, y);
+        if (Main.tile[x, y].HasTile)
+            return;
+
+        self.ApplyItemTime(self.inventory[self.selectedItem]);
+        if (Main.netMode == 1)
+            NetMessage.SendData(17, -1, -1, null, 0, x, y);
+
+        if (Main.rand.Next(9) == 0) {
+            int type = 4349;
+            int number = Item.NewItem(new EntitySource_ItemUse(self, self.HeldItem), x * 16, y * 16, 16, 16, type);
+            NetMessage.SendData(21, -1, -1, null, number, 1f);
+        }
+    }
+
     public override void SetStaticDefaults() {
         ushort stoneType = (ushort)ModContent.TileType<BackwoodsStone>();
         TileHelper.Solid(Type, false, false);
         TileHelper.MergeWith(Type, stoneType);
 
         Main.tileLighted[Type] = true;
+        Main.tileMoss[Type] = true;
 
         TileID.Sets.Grass[Type] = true;
         TileID.Sets.NeedsGrassFraming[Type] = true;
@@ -74,5 +107,36 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
                               new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
                               TileDrawingExtra.BackwoodsMossGlowColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+    }
+
+    public override void RandomUpdate(int i, int j) {
+        if (Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && WorldGen.genRand.NextBool(2)) {
+            if (WorldGen.genRand.Next(6) == 0) {
+                int num20 = i;
+                int num21 = j;
+                switch (WorldGen.genRand.Next(4)) {
+                    case 0:
+                        num20--;
+                        break;
+                    case 1:
+                        num20++;
+                        break;
+                    case 2:
+                        num21--;
+                        break;
+                    default:
+                        num21++;
+                        break;
+                }
+
+                if (!Main.tile[num20, num21].HasTile) {
+                    if (WorldGen.PlaceTile(num20, num21, ModContent.TileType<MossGrowth>(), mute: true))
+                        Main.tile[num20, num21].CopyPaintAndCoating(Main.tile[i, j]);
+
+                    if (Main.netMode == NetmodeID.Server && Main.tile[num20, num21].HasTile)
+                        NetMessage.SendTileSquare(-1, num20, num21);
+                }
+            }
+        }
     }
 }
