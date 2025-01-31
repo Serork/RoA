@@ -1,4 +1,5 @@
-﻿using RoA.Core.Utility;
+﻿using RoA.Common.InterfaceElements;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -12,6 +13,13 @@ sealed class WreathItemToShowHandler : ModPlayer {
 
     public override void PostUpdateEquips() {
         ForcedUpdate();
+    }
+
+    public override void OnEnterWorld() {
+        if (Player.whoAmI == Main.myPlayer && !BeltButton.IsUsed && 
+            (!WreathSlot.GetFunctionalItem(Player).IsAir || !WreathSlot.GetVanityItem(Player).IsAir || !WreathSlot.GetDyeItem(Player).IsAir)) {
+            BeltButton.ToggleTo(true);
+        }
     }
 
     internal void ForcedUpdate() {
