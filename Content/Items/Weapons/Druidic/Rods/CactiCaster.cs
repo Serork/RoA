@@ -51,7 +51,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             }
             Player player = Owner;
             int type = ModContent.ProjectileType<Cacti>();
-            float opacity = 1f/*Utils.GetLerpValue(1f, 0.75f, UseTime, true) * Utils.GetLerpValue(0f, 0.1f, UseTime, true)*/;
+            float opacity = 1f;
             Vector2 mousePoint = player.GetViableMousePosition();
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = player.MountedCenter.Y - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
@@ -60,7 +60,6 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                     _position = new(mousePoint.X, y);
                     Projectile.netUpdate = true;
                 }
-                //_rotation2 = _rotation3 = (_pointPosition - player.position).X * 0.1f;
             }
             else if (_leftTimeToReuse <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
                 _makeDust = false;
@@ -82,15 +81,6 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                     }
                 }
             }
-            //if (_position == Vector2.Zero) {
-            //    _position = _pointPosition;
-            //}
-            //_position = Vector2.SmoothStep(_position, _pointPosition, 0.1f);
-            //if (_rotation2 == float.MaxValue) {
-            //    _rotation2 = _rotation3;
-            //}
-            //_rotation2 = MathHelper.SmoothStep(_rotation2, _rotation3, 0.1f);
-            //Texture2D texture = TextureAssets.Projectile[type].Value;
             if (Main.rand.NextBool(5)) {
                 bool flag = Main.rand.NextBool(4);
                 int dustType = flag ? ModContent.DustType<CactiCasterDust>() : DustID.JunglePlants;
@@ -107,7 +97,6 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                     dust2.scale *= 1.2f;
                 }
             }
-            //Main.EntitySpriteDraw(texture, _position - Main.screenPosition, null, Color.White * 0.5f * opacity, _rotation2, texture.Size() / 2f, 1f, default);
         }
 
         protected override bool ShouldntUpdateRotationAndDirection() => _shot && _leftTimeToReuse < TimeAfterShootToExist(Owner) / 5f;

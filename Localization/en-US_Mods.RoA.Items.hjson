@@ -134,11 +134,7 @@ RodOfTheCondor: {
 
 BeastBow: {
 	DisplayName: Weeping
-	Tooltip:
-		'''
-		'Is it the master weeping for its bow,
-		or is the bow weeping for its master?'
-		'''
+	Tooltip: "'Is it the master weeping for its bow, or is the bow weeping for its master?'"
 }
 
 DoubleFocusCharm: {
@@ -1175,10 +1171,9 @@ BloodshedAxe: {
 	DisplayName: Bloodshed Axe
 	Tooltip:
 		'''
-				'There will be blood'
-				Consumes life to attack, marking hit enemies
-				Steals life from marked enemies
-				
+		Consumes life to attack, marking hit enemies
+		Steals life from marked enemies
+		'There will be blood'
 		'''
 }
 
