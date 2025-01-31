@@ -82,7 +82,7 @@ Heavy: {
 
 RavencallersCloakBuff: {
 	DisplayName: Raven's Veil
-	Description: Enemies have lost true sight of you
+	Description: Enemies prefer to chase after your shadow
 }
 
 Infected: {
@@ -92,7 +92,7 @@ Infected: {
 
 BeastPoison: {
 	DisplayName: Pheromones
-	Description: Losing life
+	Description: Losing life and attracting vicious beasts
 }
 
 FlederForm: {
@@ -188,7 +188,7 @@ BoneHarpyAttackDebuff: {
 
 OnFire: {
 	DisplayName: On Fire
-	Description: Mods.RoA.Buffs.OnFire.Description
+	Description: Slowly losing life
 }
 
 PrismaticFavor: {
@@ -198,7 +198,7 @@ PrismaticFavor: {
 
 BoneHarpyMountBuff: {
 	DisplayName: Bone Harpy Mount
-	Description: Mods.RoA.Buffs.BoneHarpyMountBuff.Description
+	Description: ""
 }
 
 BloodShedAxesDebuff: {

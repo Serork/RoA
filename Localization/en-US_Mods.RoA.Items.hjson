@@ -1,31 +1,31 @@
 ElderwoodClaws: {
 	DisplayName: Elderwood Claws
-	Tooltip: "'A pair of claws fashioned after a Fleeder!'"
+	Tooltip: "'Fashioned after a Fleder'"
 }
 
 Elderwood: {
 	DisplayName: Elderwood
-	Tooltip: "'Arboreal culture native to the Backwoods.'"
+	Tooltip: "'Arboreal culture native to the Backwoods'"
 }
 
 GutwrenchingHooks: {
 	DisplayName: Gutwrenching Hooks
-	Tooltip: "'A pair of claws fashioned after a Crimera!'"
+	Tooltip: "'Fashioned after a Crimera'"
 }
 
 HellfireClaws: {
 	DisplayName: Hellfire Claws
-	Tooltip: "'Claws so fire, they set everyone on fire!'"
+	Tooltip: "'Claws so fire, they set everything on fire'"
 }
 
 HorrorPincers: {
 	DisplayName: Horror Pincers
-	Tooltip: "'A pair of claws fashioned after an Eater of Souls!'"
+	Tooltip: "'Fashioned after an Eater of Souls'"
 }
 
 ThornyClaws: {
 	DisplayName: Thorny Claws
-	Tooltip: "'Sting like a Hornet, bite like Man Eater!'"
+	Tooltip: "'Sting like a Hornet, bite like a Man Eater'"
 }
 
 ElderwoodChest: {
@@ -35,7 +35,7 @@ ElderwoodChest: {
 
 DryadStatue: {
 	DisplayName: Dryad Statue
-	Tooltip: "'Lost and forsaken...'"
+	Tooltip: ""
 }
 
 MiracleMint: {
@@ -45,68 +45,56 @@ MiracleMint: {
 
 MushroomStaff: {
 	DisplayName: Mushroom Staff
-	Tooltip:
-		'''
-		Spread a whiff of orange spores,
-		that float down before disappearing
-		'''
+	Tooltip: Releases a bunch of floating spores
 }
 
 PastoralRod: {
-	DisplayName: Pastoral Rod
-	Tooltip: Launch mind-controlled sparks
+	DisplayName: Pastoral Cane
+	Tooltip: Launches mind-controlled sparks
 }
 
 RipePumpkin: {
 	DisplayName: Ripe Pumpkin
 	Tooltip:
-		'''
-		Launch a ripe pumpkin,
-		then act again to explode it into seeds
-		'''
+		''
+		Launches a pumpkin
+		Attack again to explode it into seeds
+		''
 }
 
 ExoticTulip: {
 	DisplayName: Exotic Tulip
-	Tooltip: Shoot a purple petal
+	Tooltip: Shoots a fragrant petal
 }
 
 SweetTulip: {
 	DisplayName: Sweet Tulip
-	Tooltip: Shoot an orange petal
+	Tooltip: Shoots a honey petal
 }
 
 WeepingTulip: {
 	DisplayName: Weeping Tulip
-	Tooltip: Shoot a powerful blue petal
+	Tooltip: Shoots a magic petal
 }
 
 PineCone: {
 	DisplayName: Pine Cone
-	Tooltip:
-		'''
-		Conjure a pine cone,
-		that falls down onto your foes
-		'''
+	Tooltip: Conjures a falling pine cone
 }
 
 CactiCaster: {
-	DisplayName: Cacti Caster
-	Tooltip:
-		'''
-		Rise a cactus ball from the ground,
-		then act again to launch it towards foes
-		'''
+	DisplayName: Cacti Cane
+	Tooltip: Launches a cactus ball from the ground
 }
 
 SpikedIceStaff: {
-	DisplayName: Spiked Ice Staff
-	Tooltip: Shoot up to three icicles
+	DisplayName: Spiked Ice Cane
+	Tooltip: Shoots up to three icicles
 }
 
 LuminousFlower: {
 	DisplayName: Luminous Flower
-	Tooltip: "'It smells and... shines'"
+	Tooltip: "'It smells… and shines'"
 }
 
 Bonerose: {
@@ -121,27 +109,27 @@ DiabolicDaikatana: {
 
 RodOfTheDragonfire: {
 	DisplayName: Rod of the Pyre
-	Tooltip: Channel a swarm of flaming bats
+	Tooltip: Channels a swarm of flaming bats
 }
 
 RodOfTheStream: {
 	DisplayName: Rod of the Stream
-	Tooltip: Launch a trifecta of fresh dew
+	Tooltip: Launches a trifecta of fresh dew
 }
 
 RodOfTheShock: {
 	DisplayName: Rod of the Shock
-	Tooltip: Channel a disruptive bolt
+	Tooltip: Channels a lightning bolt
 }
 
 RodOfTheTerra: {
 	DisplayName: Rod of the Quake
-	Tooltip: Charge up, then emit a beam of magic
+	Tooltip: Charges up a tremor beam
 }
 
 RodOfTheCondor: {
 	DisplayName: Rod of the Condor
-	Tooltip: Propel yourself with a gust of wind
+	Tooltip: Launches the wielder forward with the power of ethereal wings
 }
 
 BeastBow: {
@@ -163,7 +151,7 @@ BandOfNature: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		On full [kw/n:wreath], increases defense by 3
+		Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
 		'''
 }
 
@@ -172,7 +160,7 @@ BandOfPurity: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		On full [kw/n:wreath], regenerates life
+		While [kw/n:wreath] is full, increases defense by 3
 		'''
 }
 
@@ -181,50 +169,50 @@ GiantTreeSapling: {
 	Tooltip:
 		'''
 		10% increased [kw/n:wreath] [kw/n:charge rate]
-		On full [kw/n:wreath], increases maximum life by 20
+		While [kw/n:wreath] is full, increases maximum life by 20
 		'''
 }
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: Once depleted, provides full charge bonuses of the [kw/n:wreath] for 2 more seconds
+	Tooltip: When [kw/n:wreath] is depleted, provides its full charge bonuses for 2 extra seconds 
 }
 
 RavencallersCloak: {
 	DisplayName: Ravencallers Cloak
-	Tooltip: ""
+	Tooltip: Casts a shadow that captures the attention of enemies
 }
 
 Tapper: {
 	DisplayName: Tapper
-	Tooltip: ""
+	Tooltip: Collects Galipot from a tree
 }
 
 Galipot: {
 	DisplayName: Galipot
-	Tooltip: ""
+	Tooltip: "'If not for the bottle, it'd slip away already!'"
 }
 
 AnimalLeather: {
 	DisplayName: Animal Leather
-	Tooltip: ""
+	Tooltip: "Can be processed at the Tanning Rack"
 }
 
 RoughLeather: {
 	DisplayName: Rough Leather
-	Tooltip: ""
+	Tooltip: "Can be processed at the Tanning Rack"
 }
 
 SpoiledRawhide: {
 	DisplayName: Spoiled Rawhide
-	Tooltip: ""
+	Tooltip: "Rotten remains of leather that was not refined quickly enough"
 }
 
 TanningRack: {
 	DisplayName: Tanning Rack
 	Tooltip:
 		'''
-		Allows leather to be obtained from enemies
+		Allows raw leather to be obtained from enemies
 		It must be processed at the rack before spoiling
 		'''
 }
@@ -238,7 +226,7 @@ DeathWardPotion: {
 	DisplayName: Death Ward Potion
 	Tooltip:
 		'''
-		Prevents fatal damage once
+		Prevents death once
 		Makes you potion sick for 60 seconds 
 		'Rests in the hands of its master who sent it'
 		'''
@@ -248,14 +236,14 @@ WillpowerPotion: {
 	DisplayName: Willpower Potion
 	Tooltip:
 		'''
-		Increases [kw/n:wreath] charge rate by 15%
+		Increases [kw/n:wreath] charging rate
 		'Fifteen percent concentrated power of will'
 		'''
 }
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases [kw/n:wreath] depletion speed by 25%
+	Tooltip: Decreases [kw/n:wreath] discharge speed by 25%
 }
 
 ForestWreath: {
@@ -263,7 +251,8 @@ ForestWreath: {
 	Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage
-		On full [kw/n:wreath], increases maximum life by 40
+		While [kw/n:wreath] is full:
+		Increases maximum life by 40
 		'''
 }
 
@@ -271,19 +260,20 @@ TwigWreath: {
 	DisplayName: Twig Wreath
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage
-		On full [kw/n:wreath], reduces damage taken by up to 10%
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
 		'''
 }
 
 FenethsBlazingWreath: {
-	DisplayName: Feneths Blazing Wreath
+	DisplayName: Feneth's Blazing Wreath
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage
-		On full [kw/n:wreath], increases nature knockback
-		and provides up to 20% chance for attacks to bloom fireblossom on foes and the wearer
-		Fireblossoms explode shortly after, spreading to enemies nearby
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 20% chance for attacks to grow burning fireblossom on enemies and the holder
+		While [kw/n:wreath] is full:
+		Increases nature knockback
+		Fireblossom explodes over time, spreading to enemies nearby
 		'''
 }
 
@@ -291,9 +281,10 @@ ForestWreath2: {
 	DisplayName: Forest Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage
-		On full [kw/n:wreath], reduces damage taken by up to 10%
-		and increases maximum life by 40
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		While [kw/n:wreath] is full:
+		Increases maximum life by 40
 		'''
 }
 
@@ -302,7 +293,8 @@ JungleWreath: {
 	Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage
-		On full [kw/n:wreath], attacks poison enemies
+		While [kw/n:wreath] is full:
+		Attackers are poisoned
 		'''
 }
 
@@ -310,9 +302,10 @@ JungleWreath2: {
 	DisplayName: Jungle Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage
-		On full [kw/n:wreath], reduces damage taken by up to 10%
-		and attacks poison enemies
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		While [kw/n:wreath] is full:
+		Attackers are poisoned
 		'''
 }
 
@@ -321,7 +314,8 @@ SnowWreath: {
 	Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage
-		On full [kw/n:wreath], increases nature critical strike chance by 2%
+		While [kw/n:wreath] is full:
+		Increases nature critical strike chance by 2
 		'''
 }
 
@@ -329,9 +323,10 @@ SnowWreath2: {
 	DisplayName: Snow Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage
-		On full [kw/n:wreath], reduces damage taken by up to 10%
-		and increases nature critical strike chance by 2%
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		While [kw/n:wreath] is full:
+		Increases nature critical strike chance by 2
 		'''
 }
 
@@ -344,8 +339,8 @@ SoulOfTheWoods: {
 	DisplayName: Soul of the Woods
 	Tooltip:
 		'''
-		Allows to charge the equipped [kw/n:wreath] twice
-		On full [kw/n:wreath], conjures a pulsing energy shield
+		Allows charging the [kw/n:wreath] twice
+		While second [kw/n:wreath] is full, creates a pulsating aura
 		'''
 }
 
@@ -356,7 +351,7 @@ BrightstonePotion: {
 
 DryadBloodPotion: {
 	DisplayName: Dryad Blood Potion
-	Tooltip: Reduces damage taken from harmful debuffs
+	Tooltip: Increases resistance to damaging debuffs
 }
 
 WeightPotion: {
@@ -380,20 +375,12 @@ HellfireFractureTest: {
 
 SapStream: {
 	DisplayName: Sap Stream
-	Tooltip:
-		'''
-		Lob sticky sap,
-		that clings to the ground
-		'''
+	Tooltip: Lobs sticky sap that clings to the ground
 }
 
 Woodbinder: {
-	DisplayName: Woodbinder
-	Tooltip:
-		'''
-		Hold to conjure a wooden barrier forward,
-		then let go to make it bloom
-		'''
+	DisplayName: Woodbinder Cane
+	Tooltip: Conjures a wooden barrier in the chosen spot
 }
 
 SlipperyBomb: {
@@ -482,45 +469,33 @@ LivingMahoganyHelmet: {
 }
 
 EbonwoodStaff: {
-	DisplayName: Ebonwood Staff
-	Tooltip:
-		'''
-		Grow a corrupted tree,
-		whose leaves fall and wither
-		'''
+	DisplayName: Ebonwood Cane
+	Tooltip: Grows a corrupted branch with leaves that fall and wither
 }
 
 ShadewoodStaff: {
-	DisplayName: Shadewood Staff
-	Tooltip:
-		'''
-		Grow a bleeding tree,
-		whose leaves fall and decay
-		'''
+	DisplayName: Shadewood Cane
+	Tooltip: Grows a crimson branch with leaves that fall and decay
 }
 
 BloomingDoom: {
-	DisplayName: Blooming Doom
-	Tooltip:
-		'''
-		Grow a magical flower,
-		that follows after your mind
-		'''
+	DisplayName: Blooming Cane
+	Tooltip: Grows a massive flower
 }
 
 BrilliantBouquet: {
 	DisplayName: Brilliant Bouquet
-	Tooltip: Shoot a bouquet of vibrant petals
+	Tooltip: Shoots a bouquet of vibrant petals
 }
 
 SacrificialSickleOfTheMoon: {
 	DisplayName: Sacrificial Sickle of the Moon
-	Tooltip: ""
+	Tooltip: Channels a power of the Moon according to its phase
 }
 
 ElathaAmulet: {
 	DisplayName: Elatha Amulet
-	Tooltip: ""
+	Tooltip: Advances the Moon phase
 }
 
 LivingElderwoodBreastplate: {
@@ -539,7 +514,7 @@ LivingElderwoodGreaves: {
 }
 
 DreadheartCorruptionChestplate: {
-	DisplayName: Dreadheart Corruption Chestplate
+	DisplayName: Dreadheart Chestplate
 	Tooltip:
 		'''
 		8% increased nature [kw/n:potential] damage
@@ -548,17 +523,17 @@ DreadheartCorruptionChestplate: {
 }
 
 DreadheartCorruptionHelmet: {
-	DisplayName: Dreadheart Corruption Helmet
+	DisplayName: Dreadheart Helmet
 	Tooltip: 4% increased nature critical strike chance
 }
 
 DreadheartCorruptionLeggings: {
-	DisplayName: Dreadheart Corruption Leggings
+	DisplayName: Dreadheart Leggings
 	Tooltip: 4% increased nature critical strike chance
 }
 
 DreadheartCrimsonChestplate: {
-	DisplayName: Dreadheart Crimson Chestplate
+	DisplayName: Dreadheart Chestplate
 	Tooltip:
 		'''
 		8% increased nature [kw/n:potential] damage
@@ -567,22 +542,18 @@ DreadheartCrimsonChestplate: {
 }
 
 DreadheartCrimsonHelmet: {
-	DisplayName: Dreadheart Crimson Helmet
+	DisplayName: Dreadheart Helmet
 	Tooltip: 4% increased nature critical strike chance
 }
 
 DreadheartCrimsonLeggings: {
-	DisplayName: Dreadheart Crimson Leggings
+	DisplayName: Dreadheart Leggings
 	Tooltip: 4% increased nature critical strike chance
 }
 
 TectonicCane: {
 	DisplayName: Tectonic Cane
-	Tooltip:
-		'''
-		Rise a column from below,
-		that launches, singes and shatters
-		'''
+	Tooltip: Summons a column from below, which launches, singes and shatters
 }
 
 AshwalkerHood: {
@@ -602,7 +573,7 @@ AshwalkerRobe: {
 
 MercuriumOre: {
 	DisplayName: Mercurium Ore
-	Tooltip: ""
+	Tooltip: "'Shouldn't be holding that...'"
 }
 
 Grimstone: {
@@ -612,17 +583,17 @@ Grimstone: {
 
 MercuriumNugget: {
 	DisplayName: Mercurium Nugget
-	Tooltip: ""
+	Tooltip: "'Shouldn't be holding that either...'"
 }
 
 MillionDollarPainting: {
 	DisplayName: Million Dollar Painting
-	Tooltip: "'VFD'"
+	Tooltip: "'V. F. D.'"
 }
 
 TheLegend: {
 	DisplayName: The Legend
-	Tooltip: "'CKnight'"
+	Tooltip: "'C. Knight'"
 }
 
 LuminousFlowerHat: {
@@ -630,12 +601,12 @@ LuminousFlowerHat: {
 	Tooltip:
 		'''
 		Provides light when moving
-		'It smells no more... but still brightens the vicinity'
+		'It no longer smells... but still brightens the vicinity'
 		'''
 }
 
 ElderTorch: {
-	DisplayName: Elder Torch
+	DisplayName: Elderwood Torch
 	Tooltip: ""
 }
 
@@ -646,7 +617,7 @@ FlamingFabric: {
 
 NaturesHeart: {
 	DisplayName: Nature's Heart
-	Tooltip: "'Perhaps this was a source of life for higher beings...'"
+	Tooltip: A grafted remnant of higher beings
 }
 
 DeerSkull: {
@@ -656,7 +627,7 @@ DeerSkull: {
 
 OniMask: {
 	DisplayName: Oni Mask
-	Tooltip: Scares away the Yōkai
+	Tooltip: Scares away Youkai
 }
 
 ElderwoodBathtub: {
@@ -761,12 +732,16 @@ AlchemicalSkull: {
 
 Coffin: {
 	DisplayName: Coffin
-	Tooltip: Shoot bones in random directions on taking damage
+	Tooltip: Releases bones upon taking damage, then returns them to the coffin
 }
 
 Herbarium: {
 	DisplayName: Herbarium
-	Tooltip: Enemies can drop healing herbs when [kw/n:wreath] is [kw/n:charged]
+	Tooltip: 
+		'''
+		Enemies occasionally drop healing herbs
+		If [kw/n:wreath] is [kw/n:charged], consumes it to restore additional life
+		'''
 }
 
 MagicHerb1: {
@@ -788,7 +763,6 @@ BizarreCowboyHat: {
 	DisplayName: Bizarre Cowboy Hat
 	Tooltip:
 		'''
-		'Eat shit, asshole! Fall of your horse!'
 		'Nyo ho ho ho'
 		'''
 }
@@ -833,7 +807,7 @@ SailorHat: {
 }
 
 StoneMask: {
-	DisplayName: Stone Mask
+	DisplayName: Normal Mask
 	Tooltip: "'Cursed'"
 }
 
@@ -878,38 +852,38 @@ FlinxFurUshanka: {
 }
 
 CopperAcolyteHat: {
-	DisplayName: Copper Acolyte Hat
+	DisplayName: Acolyte Hat
 	Tooltip: 6% reduced mana costs
 }
 
 CopperAcolyteJacket: {
-	DisplayName: Copper Acolyte Jacket
+	DisplayName: Acolyte Jacket
 	Tooltip: Increases maximum mana by 40
 }
 
 CopperAcolyteLeggings: {
-	DisplayName: Copper Acolyte Leggings
+	DisplayName: Acolyte Leggings
 	Tooltip: 8% increased magic critical strike chance
 }
 
 TinAcolyteHat: {
-	DisplayName: Tin Acolyte Hat
+	DisplayName: Acolyte Hat
 	Tooltip: 6% reduced mana costs
 }
 
 TinAcolyteJacket: {
-	DisplayName: Tin Acolyte Jacket
+	DisplayName: Acolyte Jacket
 	Tooltip: Increases maximum mana by 40
 }
 
 TinAcolyteLeggings: {
-	DisplayName: Tin Acolyte Leggings
+	DisplayName: Acolyte Leggings
 	Tooltip: 8% increased magic critical strike chance
 }
 
 Moss: {
 	DisplayName: Moss
-	Tooltip: "'CKnight'"
+	Tooltip: "'C. Knight'"
 }
 
 SoapSellersJacket: {
@@ -939,12 +913,12 @@ WandCore: {
 
 OvergrownSpear: {
 	DisplayName: Overgrown Spear
-	Tooltip: Aim for the balls for a burst of energy
+	Tooltip: '"Aim for the balls for a burst of energy'"
 }
 
 MothStaff: {
 	DisplayName: Moth Staff
-	Tooltip: ""
+	Tooltip: Summons a moth to fight for you
 }
 
 DynastyWoodBow: {
@@ -959,7 +933,7 @@ ElderwoodBow: {
 
 MercuriumBolter: {
 	DisplayName: Mercurium Bolter
-	Tooltip: ""
+	Tooltip: Splits arrows into lightweight bolts
 }
 
 DynastyWoodSword: {
@@ -979,7 +953,7 @@ MercuriumSword: {
 
 StarFusion: {
 	DisplayName: Star Fusion
-	Tooltip: ""
+	Tooltip: Summons a constellation upon hitting an enemy
 }
 
 RavensEye: {
@@ -1052,7 +1026,7 @@ SentinelTaurusMask: {
 
 AmuletOfLife: {
 	DisplayName: Amulet of Life
-	Tooltip: Casts a vortex of healing wisps that heal player upon impact
+	Tooltip: Creates a vortex of wisps that heal on touch
 }
 
 MercuriumAxe: {
@@ -1142,7 +1116,7 @@ CosmicHat: {
 	DisplayName: Cosmic Hat
 	Tooltip:
 		'''
-		Mana stars fall, when your will is too low
+		Mana stars fall when your will is too low
 		'Great for a walk in a shadowy forest'
 		'''
 }
@@ -1174,7 +1148,7 @@ ElderwoodToilet: {
 
 RagingBoots: {
 	DisplayName: Raging Boots
-	Tooltip: ""
+	Tooltip: Sends a powerful wave upon landing
 }
 
 WingIcon: {
@@ -1193,12 +1167,21 @@ PettyBag: {
 
 Beacon: {
 	DisplayName: Beacon
-	Tooltip: ""
+	Tooltip: 
+		'''
+		Creates a teleportation waypoint when charged with a gem
+		Corresponding Large Gem must be held to access it
+		'''
 }
 
 BloodshedAxe: {
 	DisplayName: Bloodshed Axe
-	Tooltip: "'There will be blood'"
+	Tooltip: 
+'''
+		'There will be blood'
+		Consumes life to attack, marking hit enemies
+		Steals life from marked enemies
+		'''
 }
 
 LothorBag: {
@@ -1233,21 +1216,21 @@ ChemicalPrisoner: {
 
 FlederStaff: {
 	DisplayName: Fleder Staff
-	Tooltip: ""
+	Tooltip: "Summons a fleder to fight for you"
 }
 
 FlederSlayer: {
 	DisplayName: Fleder Slayer
 	Tooltip:
 		'''
-		'It's too big to be called a sword'
 		Sends vulnerable enemies back with a crushing blow
+		'It's too big to be called a sword'
 		'''
 }
 
 Bane: {
 	DisplayName: Bane
-	Tooltip: Watch your enemies wither away
+	Tooltip: Makes your enemies wither away
 }
 
 BackwoodsDayMusicBox: {
@@ -1266,7 +1249,7 @@ BackwoodsFogMusicBox: {
 }
 
 LivingPrimordialWand: {
-	DisplayName: Living Primordial Wand
+	DisplayName: Living Elderwood Wand
 	Tooltip:
 		'''
 		Consumes Elderwood
@@ -1290,14 +1273,14 @@ MoonFlower: {
 
 FeathersInABottle: {
 	DisplayName: Feathers in a Bottle
-	Tooltip: Allows the holder to double jump, but costs 25% of the [kw/n:wreath] [kw/n:charge]
+	Tooltip: Allows the holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
 }
 
 FeathersInABalloon: {
 	DisplayName: Feathers in a Balloon
 	Tooltip:
 		'''
-		Allows the holder to double jump, but costs 25% of the [kw/n:wreath] [kw/n:charge]
+		Allows the holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
 		Increases jump height
 		'''
 }
