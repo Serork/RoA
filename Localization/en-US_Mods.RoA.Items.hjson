@@ -906,7 +906,7 @@ WandCore: {
 
 OvergrownSpear: {
 	DisplayName: Overgrown Spear
-	Tooltip: Aim for the balls for a burst of energy
+	Tooltip: "'Aim for the balls for a burst of energy'"
 }
 
 MothStaff: {

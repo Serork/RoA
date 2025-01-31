@@ -152,5 +152,4 @@ static class PlayerExtensions {
             return true;
         return false;
     }
-
 }

@@ -18,7 +18,8 @@ namespace RoA.Content.NPCs.Friendly;
 sealed class FireflyMimic : ModNPC {
     private sealed class FireflyMimicActuallyMimic : GlobalNPC {
         public override void OnSpawn(NPC npc, IEntitySource source) {
-            if (npc.type == NPCID.Firefly && Main.rand.NextChance(0.025f)) {
+            Player closestPlayer = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
+            if (npc.type == NPCID.Firefly && closestPlayer.RollLuck(40) == 0) {
                 NPC.NewNPCDirect(source, npc.position, ModContent.NPCType<FireflyMimic>());
                 npc.KillNPC();
             }
