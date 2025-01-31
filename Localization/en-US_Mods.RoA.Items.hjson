@@ -175,7 +175,7 @@ GiantTreeSapling: {
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: When [kw/n:wreath] is depleted, provides its full charge bonuses for 2 extra seconds 
+	Tooltip: When [kw/n:wreath] is depleted, provides its full charge bonuses for 2 extra seconds
 }
 
 RavencallersCloak: {
@@ -195,17 +195,17 @@ Galipot: {
 
 AnimalLeather: {
 	DisplayName: Animal Leather
-	Tooltip: "Can be processed at the Tanning Rack"
+	Tooltip: Can be processed at the Tanning Rack
 }
 
 RoughLeather: {
 	DisplayName: Rough Leather
-	Tooltip: "Can be processed at the Tanning Rack"
+	Tooltip: Can be processed at the Tanning Rack
 }
 
 SpoiledRawhide: {
 	DisplayName: Spoiled Rawhide
-	Tooltip: "Rotten remains of leather that was not refined quickly enough"
+	Tooltip: Rotten remains of leather that was not refined quickly enough
 }
 
 TanningRack: {
@@ -737,7 +737,7 @@ Coffin: {
 
 Herbarium: {
 	DisplayName: Herbarium
-	Tooltip: 
+	Tooltip:
 		'''
 		Enemies occasionally drop healing herbs
 		If [kw/n:wreath] is [kw/n:charged], consumes it to restore additional life
@@ -761,10 +761,7 @@ MagicHerb3: {
 
 BizarreCowboyHat: {
 	DisplayName: Bizarre Cowboy Hat
-	Tooltip:
-		'''
-		'Nyo ho ho ho'
-		'''
+	Tooltip: "'Nyo ho ho ho'"
 }
 
 DinoHat: {
@@ -1167,7 +1164,7 @@ PettyBag: {
 
 Beacon: {
 	DisplayName: Beacon
-	Tooltip: 
+	Tooltip:
 		'''
 		Creates a teleportation waypoint when charged with a gem
 		Corresponding Large Gem must be held to access it
@@ -1176,11 +1173,12 @@ Beacon: {
 
 BloodshedAxe: {
 	DisplayName: Bloodshed Axe
-	Tooltip: 
-'''
-		'There will be blood'
-		Consumes life to attack, marking hit enemies
-		Steals life from marked enemies
+	Tooltip:
+		'''
+				'There will be blood'
+				Consumes life to attack, marking hit enemies
+				Steals life from marked enemies
+				
 		'''
 }
 
@@ -1216,7 +1214,7 @@ ChemicalPrisoner: {
 
 FlederStaff: {
 	DisplayName: Fleder Staff
-	Tooltip: "Summons a fleder to fight for you"
+	Tooltip: Summons a fleder to fight for you
 }
 
 FlederSlayer: {
