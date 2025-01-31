@@ -56,10 +56,10 @@ PastoralRod: {
 RipePumpkin: {
 	DisplayName: Ripe Pumpkin
 	Tooltip:
-		''
+		'''
 		Launches a pumpkin
 		Attack again to explode it into seeds
-		''
+		'''
 }
 
 ExoticTulip: {

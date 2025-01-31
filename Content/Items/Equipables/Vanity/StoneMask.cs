@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,4 +23,12 @@ sealed class StoneMask : ModItem {
 		Item.value = Item.sellPrice(gold: 1);
 		Item.vanity = true;
 	}
+
+    internal sealed class StoneMaskHandler : PlayerDrawLayer {
+		public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
+
+        protected override void Draw(ref PlayerDrawSet drawInfo) {
+
+        }
+    }
 }
