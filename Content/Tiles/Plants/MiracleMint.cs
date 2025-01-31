@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Common.Tiles;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable.Seeds;
+using RoA.Content.Tiles.Crafting;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -40,7 +43,16 @@ sealed class MiracleMint : PlantBase {
     protected override int[] AnchorValidTiles => [ModContent.TileType<BackwoodsGrass>()];
 
     public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<MiracleMintTE>().Place(i, j);
-    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<MiracleMintTE>().Kill(i, j);
+    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
+        if (Main.netMode != NetmodeID.Server) {
+            if (!fail) {
+                ModContent.GetInstance<MiracleMintTE>().Kill(i, j);
+                if (Main.netMode != NetmodeID.SinglePlayer) {
+                    MultiplayerSystem.SendPacket(new RemoveMiracleTileEntityOnServerPacket(i, j));
+                }
+            }
+        }
+    }
 
     public override bool CreateDust(int i, int j, ref int type) {
         if (IsGrown(i, j) && Main.rand.NextBool(3)) {
@@ -54,7 +66,11 @@ sealed class MiracleMint : PlantBase {
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
-        float counting = TileHelper.GetTE<MiracleMintTE>(i, j).Counting;
+        MiracleMintTE tileEntity = TileHelper.GetTE<MiracleMintTE>(i, j);
+        if (tileEntity == null) {
+            return;
+        }
+        float counting = tileEntity.Counting;
         float factor = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
         float lightValue = (factor > 0.5f ? 1f - factor : factor) + 0.5f;
         lightValue *= 0.85f;

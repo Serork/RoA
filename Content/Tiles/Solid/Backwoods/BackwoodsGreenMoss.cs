@@ -5,13 +5,35 @@ using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
 using RoA.Core.Utility;
 
+using System;
+using System.Linq;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
-sealed class BackwoodsGreenMoss : ModTile {
+sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
+    void IPostSetupContent.PostSetupContent() {
+        for (int i = 0; i < TileLoader.TileCount; i++) {
+            TileObjectData objData = TileObjectData.GetTileData(i, 0);
+            if (objData == null || objData.AnchorValidTiles == null || objData.AnchorValidTiles.Length == 0) {
+                continue;
+            }
+
+            if (objData.AnchorValidTiles.Any(tileId => tileId == TileID.RainbowMoss)) {
+                lock (objData) {
+                    int[] anchorAlternates = objData.AnchorValidTiles;
+                    Array.Resize(ref anchorAlternates, anchorAlternates.Length + 1);
+                    anchorAlternates[^1] = ModContent.TileType<BackwoodsGreenMoss>();
+                    objData.AnchorValidTiles = anchorAlternates;
+                }
+            }
+        }
+    }
+
     public override void SetStaticDefaults() {
         ushort stoneType = (ushort)ModContent.TileType<BackwoodsStone>();
         TileHelper.Solid(Type, false, false);

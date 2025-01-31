@@ -4,6 +4,7 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -11,7 +12,28 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class BackwoodsBush : ModTile {
-	public override void SetStaticDefaults () {
+    public override void Load() {
+        On_WorldGen.PlaceObject += On_WorldGen_PlaceObject;
+    }
+
+    private bool On_WorldGen_PlaceObject(On_WorldGen.orig_PlaceObject orig, int x, int y, int type, bool mute, int style, int alternate, int random, int direction) {
+        if (!TileObject.CanPlace(x, y, type, style, direction, out var objectData))
+            return false;
+
+        objectData.random = random;
+        if (TileObject.Place(objectData)) {
+            WorldGen.SquareTileFrame(x, y);
+            if (type == ModContent.TileType<BackwoodsBush>()) {
+                Main.tile[x, y].TileFrameX = (short)(style * 34);
+            }
+            if (!mute)
+                SoundEngine.PlaySound(SoundID.Dig, new Microsoft.Xna.Framework.Vector2(x * 16, y * 16));
+        }
+
+        return true;
+    }
+
+    public override void SetStaticDefaults () {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileNoAttach[Type] = true;

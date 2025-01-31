@@ -1,22 +1,145 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Common.Tiles;
 using RoA.Content.Dusts;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Crafting;
+using RoA.Content.Tiles.Plants;
 using RoA.Core.Utility;
 
 using System;
+using System.Linq;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
-sealed class BackwoodsGrass : ModTile {
+sealed class BackwoodsGrass : ModTile, IPostSetupContent {
+    void IPostSetupContent.PostSetupContent() {
+        for (int i = 0; i < TileLoader.TileCount; i++) {
+            TileObjectData objData = TileObjectData.GetTileData(i, 0);
+            if (objData == null || objData.AnchorValidTiles == null || objData.AnchorValidTiles.Length == 0) {
+                continue;
+            }
+
+            if (i != TileID.AshPlants && i != TileID.AshVines && i != TileID.TreeAsh) {
+                if (objData.AnchorValidTiles.Any(tileId => tileId == TileID.AshGrass)) {
+                    lock (objData) {
+                        int[] anchorAlternates = objData.AnchorValidTiles;
+                        Array.Resize(ref anchorAlternates, anchorAlternates.Length + 1);
+                        anchorAlternates[^1] = ModContent.TileType<BackwoodsGrass>();
+                        objData.AnchorValidTiles = anchorAlternates;
+                    }
+                }
+            }
+        }
+    }
+
     public override void Load() {
         On_Player.DoBootsEffect_PlaceFlowersOnTile += On_Player_DoBootsEffect_PlaceFlowersOnTile;
+        On_WorldGen.CheckSunflower += On_WorldGen_CheckSunflower;
+        On_WorldGen.PlaceSunflower += On_WorldGen_PlaceSunflower;
+    }
+
+    private void On_WorldGen_PlaceSunflower(On_WorldGen.orig_PlaceSunflower orig, int x, int y, ushort type) {
+        if ((double)y > Main.worldSurface - 1.0 && !Main.remixWorld)
+            return;
+
+        bool flag = true;
+        for (int i = x; i < x + 2; i++) {
+            for (int j = y - 3; j < y + 1; j++) {
+                //if (Main.tile[i, j] == null)
+                //    Main.tile[i, j] = new Tile();
+
+                if (Main.tile[i, j].HasTile || Main.tile[i, j].WallType > 0)
+                    flag = false;
+            }
+
+            //if (Main.tile[i, y + 1] == null)
+            //    Main.tile[i, y + 1] = new Tile();
+
+            if (!Main.tile[i, y + 1].HasUnactuatedTile || Main.tile[i, y + 1].IsHalfBlock || Main.tile[i, y + 1].Slope != 0 || (Main.tile[i, y + 1].TileType != ModContent.TileType<BackwoodsGrass>() && Main.tile[i, y + 1].TileType != 2 && Main.tile[i, y + 1].TileType != 109))
+                flag = false;
+        }
+
+        if (!flag)
+            return;
+
+        int num = WorldGen.genRand.Next(3);
+        for (int k = 0; k < 2; k++) {
+            for (int l = -3; l < 1; l++) {
+                int num2 = k * 18 + WorldGen.genRand.Next(3) * 36;
+                if (l <= -2)
+                    num2 = k * 18 + num * 36;
+
+                int num3 = (l + 3) * 18;
+                Tile tile = Main.tile[x + k, y + l];
+                tile.HasTile = true;
+                tile.TileFrameX = (short)num2;
+                tile.TileFrameY = (short)num3;
+                tile.TileType = type;
+            }
+        }
+    }
+
+    private void On_WorldGen_CheckSunflower(On_WorldGen.orig_CheckSunflower orig, int i, int j, int type) {
+        if (WorldGen.destroyObject)
+            return;
+
+        bool flag = false;
+        int num = 0;
+        int num2 = j;
+        num += Main.tile[i, j].TileFrameX / 18;
+        num2 += Main.tile[i, j].TileFrameY / 18 * -1;
+        while (num > 1) {
+            num -= 2;
+        }
+
+        num *= -1;
+        num += i;
+        for (int k = num; k < num + 2; k++) {
+            for (int l = num2; l < num2 + 4; l++) {
+                //if (Main.tile[k, l] == null)
+                //    Main.tile[k, l] = new Tile();
+
+                int num3;
+                for (num3 = Main.tile[k, l].TileFrameX / 18; num3 > 1; num3 -= 2) {
+                }
+
+                if (!Main.tile[k, l].HasUnactuatedTile || Main.tile[k, l].TileType != type || num3 != k - num || Main.tile[k, l].TileFrameY != (l - num2) * 18)
+                    flag = true;
+            }
+
+            //if (Main.tile[k, num2 + 4] == null)
+            //    Main.tile[k, num2 + 4] = new Tile();
+
+            if (!Main.tile[k, num2 + 4].HasUnactuatedTile || (Main.tile[k, num2 + 4].TileType != ModContent.TileType<BackwoodsGrass>() && Main.tile[k, num2 + 4].TileType != 2 && Main.tile[k, num2 + 4].TileType != 477 && Main.tile[k, num2 + 4].TileType != 492 && Main.tile[k, num2 + 4].TileType != 109 && Main.tile[k, num2 + 4].TileType != 60 && Main.tile[k, num2 + 4].TileType != 633))
+                flag = true;
+
+            if (!WorldGen.SolidTile(k, num2 + 4))
+                flag = true;
+        }
+
+        if (!flag)
+            return;
+
+        WorldGen.destroyObject = true;
+        for (int m = num; m < num + 2; m++) {
+            for (int n = num2; n < num2 + 4; n++) {
+                if (Main.tile[m, n].TileType == type && Main.tile[m, n].HasTile)
+                    WorldGen.KillTile(m, n);
+            }
+        }
+
+        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32, 63);
+        WorldGen.destroyObject = false;
     }
 
     private bool On_Player_DoBootsEffect_PlaceFlowersOnTile(On_Player.orig_DoBootsEffect_PlaceFlowersOnTile orig, Player self, int X, int Y) {
@@ -69,6 +192,38 @@ sealed class BackwoodsGrass : ModTile {
     public static void EmitDusts(int i, int j) {
         if (Main.rand.NextBool(300)) {
             Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, ModContent.DustType<BackwoodsDust>());
+        }
+    }
+
+    public override void RandomUpdate(int i, int j) {
+        int x = i, y = j;
+        if (!Framing.GetTileSafely(x, y - 1).HasTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && Main.rand.NextBool(2)) {
+            if (Main.rand.NextChance(0.045)) {
+                int mintType = ModContent.TileType<MiracleMint>();
+                int style = Main.rand.Next(2);
+                WorldGen.PlaceObject(x, y - 1, mintType, true, style, 0, -1, -1);
+                ModContent.GetInstance<MiracleMintTE>().Place(x, y - 1);
+                if (Main.netMode != NetmodeID.SinglePlayer) {
+                    MultiplayerSystem.SendPacket(new PlaceMiracleMintPacket(x, y - 1));
+                }
+                if (Main.netMode == NetmodeID.Server) {
+                    NetMessage.SendObjectPlacement(-1, x, y - 1, mintType, style, 0, -1, -1);
+                }
+            }
+            else {
+                if (Main.rand.NextChance(0.15)) {
+                    WorldGen.PlaceObject(x, y - 1, (ushort)ModContent.TileType<BackwoodsBush>(), true, Main.rand.Next(4), 0, -1, -1);
+                    if (Main.netMode == NetmodeID.Server) {
+                        NetMessage.SendObjectPlacement(-1, x, y - 1, (ushort)ModContent.TileType<BackwoodsBush>(), Main.rand.Next(4), 0, -1, -1);
+                    }
+
+                    return;
+                }
+                WorldGen.PlaceObject(x, y - 1, (ushort)ModContent.TileType<BackwoodsPlants>(), true, Main.rand.Next(20), 0, -1, -1);
+                if (Main.netMode == NetmodeID.Server) {
+                    NetMessage.SendObjectPlacement(-1, x, y - 1, (ushort)ModContent.TileType<BackwoodsPlants>(), Main.rand.Next(20), 0, -1, -1);
+                }
+            }
         }
     }
 }
