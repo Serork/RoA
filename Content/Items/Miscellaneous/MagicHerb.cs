@@ -106,7 +106,7 @@ class MagicHerb1 : ModItem {
 
 	public override bool ItemSpace(Player player) => true;
 
-	public override bool CanPickup(Player player) => true;
+	public override bool CanPickup(Player player) => player.GetModPlayer<WreathHandler>().IsFull;
 
 	public override void PostUpdate() {
 		_ = Main.rand.Next(90, 111) * 0.01f * (Main.essScale * 0.5f);

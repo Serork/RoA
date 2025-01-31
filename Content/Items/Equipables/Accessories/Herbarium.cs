@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid.Wreath;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -29,9 +27,7 @@ sealed class Herbarium : NatureItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        if (player.GetModPlayer<WreathHandler>().IsFull) {
-            player.GetModPlayer<HerbariumPlayer>().healingHerb = true;
-        }
+        player.GetModPlayer<HerbariumPlayer>().healingHerb = true;
     }
 
     public override void AddRecipes() {
@@ -57,17 +53,35 @@ internal class HerbariumPlayer : ModPlayer {
     public override void ResetEffects()
         => healingHerb = false;
 
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (healingHerb && target.life <= damageDone && Player.GetSelectedItem().IsADruidicWeapon() && Main.rand.Next(2) == 0) {
-            int getHerb() {
-                int rand = Main.rand.Next(3);
-                return rand switch {
-                    0 => ModContent.ItemType<MagicHerb1>(),
-                    1 => ModContent.ItemType<MagicHerb2>(),
-                    _ => ModContent.ItemType<MagicHerb3>(),
-                };
-            }
-            Item.NewItem(Player.GetSource_OnHit(target), (int)target.position.X, (int)target.position.Y, target.width, target.height, getHerb());
+    public override void Load() {
+        On_NPC.NPCLoot_DropCommonLifeAndMana += On_NPC_NPCLoot_DropCommonLifeAndMana;
+    }
+
+    private void On_NPC_NPCLoot_DropCommonLifeAndMana(On_NPC.orig_NPCLoot_DropCommonLifeAndMana orig, NPC self, Player closestPlayer) {
+        if (self.type != NPCID.MotherSlime && self.type != NPCID.CorruptSlime && self.type != NPCID.Slimer &&
+            closestPlayer.RollLuck(6) == 0 && self.lifeMax > 1 && self.damage > 0) {
+            if (Main.rand.NextBool(2) && closestPlayer.statMana < closestPlayer.statManaMax2)
+                Item.NewItem(self.GetSource_Loot(), (int)self.position.X, (int)self.position.Y, self.width, self.height, 184);
+            else if (Main.rand.NextBool(2) && closestPlayer.statLife < closestPlayer.statLifeMax2)
+                Item.NewItem(self.GetSource_Loot(), (int)self.position.X, (int)self.position.Y, self.width, self.height, 58);
         }
+
+        if (self.type != NPCID.MotherSlime && self.type != NPCID.CorruptSlime && self.type != NPCID.Slimer && 
+            closestPlayer.RollLuck(2) == 0 && self.lifeMax > 1 && self.damage > 0 &&
+            closestPlayer.statMana < closestPlayer.statManaMax2)
+            Item.NewItem(self.GetSource_Loot(), (int)self.position.X, (int)self.position.Y, self.width, self.height, 184);
+
+        int getHerb() {
+            int rand = Main.rand.Next(3);
+            return rand switch {
+                0 => ModContent.ItemType<MagicHerb1>(),
+                1 => ModContent.ItemType<MagicHerb2>(),
+                _ => ModContent.ItemType<MagicHerb3>(),
+            };
+        }
+        if (closestPlayer.GetModPlayer<HerbariumPlayer>().healingHerb &&
+            self.type != NPCID.MotherSlime && self.type != NPCID.CorruptSlime && self.type != NPCID.Slimer &&
+            closestPlayer.RollLuck(2) == 0 && self.lifeMax > 1 && self.damage > 0)
+            Item.NewItem(self.GetSource_Loot(), (int)self.position.X, (int)self.position.Y, self.width, self.height, getHerb());
     }
 }
