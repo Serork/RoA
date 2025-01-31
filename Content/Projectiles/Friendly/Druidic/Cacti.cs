@@ -53,6 +53,8 @@ sealed class Cacti : NatureProjectile {
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
+        _parent = Main.projectile.FirstOrDefault(x => x.owner == Projectile.owner && (x.type == ModContent.ProjectileType<CactiCaster.CactiCasterBase>() || x.identity == (int)Projectile.ai[1]));
+
         if (Projectile.owner != Main.myPlayer) {
             return;
         }
@@ -157,19 +159,17 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void AI() {
-        _parent ??= Main.projectile.FirstOrDefault(x => x.owner == Projectile.owner && (x.type == ModContent.ProjectileType<CactiCaster.CactiCasterBase>() || x.identity == (int)Projectile.ai[1]));
-        //if (parent == null || !parent.active) {
-        //    return;
-        //}
-        var parent2 = _parent.As<CactiCaster.CactiCasterBase>();
-        Vector2 corePosition = _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
+        bool flag = _parent == null || (!_parent.active && _parent.As<CactiCaster.CactiCasterBase>() != null);
+        var cactiCasterBase = _parent.As<CactiCaster.CactiCasterBase>();
+        bool flag2 = cactiCasterBase == null;
+        Vector2 corePosition = flag || flag2 ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
         Projectile.Opacity = Utils.GetLerpValue(180, 155, Projectile.timeLeft, true);
 
         Projectile.tileCollide = _state == State.Enchanted;
 
         switch (_state) { 
             case State.Normal:
-                if (Main.netMode != NetmodeID.Server && Main.rand.NextBool(2)) {
+                if (Main.rand.NextBool(2)) {
                     int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.JunglePlants, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 120, default, 1.4f + Main.rand.NextFloat(0f, 0.075f));
                     Main.dust[dust].noGravity = true;
                 }
@@ -179,9 +179,11 @@ sealed class Cacti : NatureProjectile {
 
                     Projectile.localAI[0] = 1f;
 
-                    for (int i = 0; i < 15; i++) {
-                        int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
-                        Main.dust[dust].noGravity = true;
+                    if (!flag) {
+                        for (int i = 0; i < 15; i++) {
+                            int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
+                            Main.dust[dust].noGravity = true;
+                        }
                     }
                 }
 

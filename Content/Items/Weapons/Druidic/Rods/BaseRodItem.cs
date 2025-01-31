@@ -327,9 +327,9 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (Projectile.IsOwnerMyPlayer(Owner) && flag) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
-            Projectile.Center += Projectile.velocity;
             Projectile.netUpdate = true;
         }
+        Projectile.Center += Projectile.velocity;
     }
 
     private void SetDirection() {
