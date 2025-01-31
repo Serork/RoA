@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using Terraria;
 using Terraria.ID;
@@ -48,6 +49,63 @@ sealed class MercuriumOre : ModTile {
             dust2 = Main.dust[dust];
             dust2.velocity.Y *= -0.5f;
             dust2.noLight = false;
+        }
+
+        int tilesAway = 7;
+        int x = i;
+        int y = j;
+        //int tilesMinX = 0;
+        //while (!WorldGen.SolidTile(i - tilesMinX, j) || WorldGenHelper.GetTileSafely(i - tilesMinX, j).TileType == Type) {
+        //    tilesMinX--;
+        //    if (tilesMinX <= -tilesAway) {
+        //        break;
+        //    }
+        //}
+        //tilesMinX = Math.Abs(tilesMinX);
+        //int tileMaxX = 0;
+        //while (!WorldGen.SolidTile(i + tileMaxX, j) || WorldGenHelper.GetTileSafely(i + tileMaxX, j).TileType == Type) {
+        //    tileMaxX++;
+        //    if (tileMaxX >= tilesAway) {
+        //        break;
+        //    }
+        //}
+        //int tilesMinY = 0;
+        //while (!WorldGen.SolidTile(i, j - tilesMinY) || WorldGenHelper.GetTileSafely(i, j - tilesMinY).TileType == Type) {
+        //    tilesMinY--;
+        //    if (tilesMinY <= -tilesAway) {
+        //        break;
+        //    }
+        //}
+        //tilesMinY = Math.Abs(tilesMinY);
+        //int tileMaxY = 0;
+        //while (!WorldGen.SolidTile(i, j + tileMaxY) || WorldGenHelper.GetTileSafely(i, j + tileMaxY).TileType == Type) {
+        //    tileMaxY++;
+        //    if (tileMaxY >= tilesAway) {
+        //        break;
+        //    }
+        //}
+        for (int i2 = x - tilesAway; i2 < x + tilesAway + 1; i2++) {
+            for (int j2 = y - tilesAway; j2 < y + tilesAway + 1; j2++) {
+                if (WorldGen.InWorld(i2, j)) {
+                    if (WorldGen.SolidTile(i2, j2)) {
+                        continue;
+                    }
+                    if (Main.rand.Next(100) == 0) {
+                        Vector2 position = new((i2 - 1) * 16, (j2 - 1) * 16);
+                        Vector2 start = new Vector2(x - 1, y - 1) * 16f;
+                        Vector2 start2 = Vector2.Lerp(start, position, Main.rand.NextFloat());
+                        Vector2 velocity = Helper.VelocityToPoint(start2, position, (position - start2).Length() * 0.4f);
+                        start2 += velocity.SafeNormalize(Vector2.Zero) * 32f;
+                        velocity = Helper.VelocityToPoint(start2, position, (position - start2).Length() * 0.6f);
+                        int dust = Dust.NewDust(start2, 16, 16, ModContent.DustType<Dusts.ToxicFumes>(), 0f, 0f, 0, default, 1.5f);
+                        if (WorldGen.SolidTile((int)(start2.X / 16), (int)(start2.Y / 16))) {
+                            Main.dust[dust].active = false;
+                        }
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].velocity = velocity * 0.5f;
+                    }
+                }
+            }
         }
     }
 

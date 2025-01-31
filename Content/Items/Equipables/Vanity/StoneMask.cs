@@ -39,7 +39,7 @@ sealed class StoneMask : ModItem {
 	    private sealed class DisableHeadDrawing : ModPlayer {
             public override void HideDrawLayers(PlayerDrawSet drawInfo) {
 				if (IsActive(drawInfo.drawPlayer)) {
-					PlayerDrawLayers.Head.Hide();
+					//PlayerDrawLayers.Head.Hide();
                     PlayerDrawLayers.HeadBack.Hide();
                 }
             }
