@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -24,7 +25,10 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
                 if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
                     Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
                     if (tile.HasTile && tile.TileType == ModContent.TileType<BackwoodsStone>() && player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY)) {
-                        WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGreenMoss>(), forced: true);
+                        tile.TileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
+                        WorldGen.TileFrame(Player.tileTargetX, Player.tileTargetY);
+                        SoundEngine.PlaySound(SoundID.Dig, new Point(Player.tileTargetX, Player.tileTargetY).ToWorldCoordinates());
+                        //WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGreenMoss>(), forced: true);
                         return true;
                     }
                 }
@@ -88,6 +92,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         TileHelper.MergeWith(Type, stoneType);
 
         Main.tileLighted[Type] = true;
+        Main.tileMoss[Type] = true;
 
         TileID.Sets.Conversion.Moss[Type] = true;
 
