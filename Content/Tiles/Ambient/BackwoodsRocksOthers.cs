@@ -33,6 +33,8 @@ sealed class BackwoodsRocks02 : BackwoodsRocks0 {
         MineResist = 1.25f;
     }
 
+    public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) { }
+
     public override bool CreateDust(int i, int j, ref int type) {
         type = ModContent.DustType<Stone>();
 
@@ -60,6 +62,8 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
 
         MineResist = 1.25f;
     }
+
+    public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) { }
 
     public override bool CreateDust(int i, int j, ref int type) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
