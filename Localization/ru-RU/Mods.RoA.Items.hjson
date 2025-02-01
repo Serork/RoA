@@ -1,0 +1,1414 @@
+ElderwoodClaws: {
+	// DisplayName: Elderwood Claws
+	// Tooltip: "'Fashioned after a Fleder'"
+}
+
+Elderwood: {
+	// DisplayName: Elderwood
+	// Tooltip: "'Arboreal culture native to the Backwoods'"
+}
+
+GutwrenchingHooks: {
+	// DisplayName: Gutwrenching Hooks
+	// Tooltip: "'Fashioned after a Crimera'"
+}
+
+HellfireClaws: {
+	// DisplayName: Hellfire Claws
+	// Tooltip: "'Claws so fire, they set everything on fire'"
+}
+
+HorrorPincers: {
+	// DisplayName: Horror Pincers
+	// Tooltip: "'Fashioned after an Eater of Souls'"
+}
+
+ThornyClaws: {
+	// DisplayName: Thorny Claws
+	// Tooltip: "'Sting like a Hornet, bite like a Man Eater'"
+}
+
+ElderwoodChest: {
+	// DisplayName: Elderwood Chest
+	// Tooltip: ""
+}
+
+DryadStatue: {
+	// DisplayName: Dryad Statue
+	// Tooltip: ""
+}
+
+MiracleMint: {
+	// DisplayName: Miracle Mint
+	// Tooltip: ""
+}
+
+MushroomStaff: {
+	// DisplayName: Mushroom Staff
+	// Tooltip: Releases a bunch of floating spores
+}
+
+PastoralRod: {
+	// DisplayName: Pastoral Cane
+	// Tooltip: Launches mind-controlled sparks
+}
+
+RipePumpkin: {
+	// DisplayName: Ripe Pumpkin
+	/* Tooltip:
+		'''
+		Launches a pumpkin
+		Attack again to explode it into seeds
+		''' */
+}
+
+ExoticTulip: {
+	// DisplayName: Exotic Tulip
+	// Tooltip: Shoots a fragrant petal
+}
+
+SweetTulip: {
+	// DisplayName: Sweet Tulip
+	// Tooltip: Shoots a honey petal
+}
+
+WeepingTulip: {
+	// DisplayName: Weeping Tulip
+	// Tooltip: Shoots a magic petal
+}
+
+PineCone: {
+	// DisplayName: Pine Cone
+	// Tooltip: Conjures a falling pine cone
+}
+
+CactiCaster: {
+	// DisplayName: Cacti Cane
+	// Tooltip: Launches a cactus ball from the ground
+}
+
+SpikedIceStaff: {
+	// DisplayName: Spiked Ice Cane
+	// Tooltip: Shoots up to three icicles
+}
+
+LuminousFlower: {
+	// DisplayName: Luminous Flower
+	// Tooltip: "'It smells… and shines'"
+}
+
+Bonerose: {
+	// DisplayName: Bonerose
+	// Tooltip: ""
+}
+
+DiabolicDaikatana: {
+	// DisplayName: Diabolic Daikatana
+	// Tooltip: "'Where's your motivation?'"
+}
+
+RodOfTheDragonfire: {
+	// DisplayName: Rod of the Pyre
+	// Tooltip: Channels a swarm of flaming bats
+}
+
+RodOfTheStream: {
+	// DisplayName: Rod of the Stream
+	// Tooltip: Launches a trifecta of fresh dew
+}
+
+RodOfTheShock: {
+	// DisplayName: Rod of the Shock
+	// Tooltip: Channels a lightning bolt
+}
+
+RodOfTheTerra: {
+	// DisplayName: Rod of the Quake
+	// Tooltip: Charges up a tremor beam
+}
+
+RodOfTheCondor: {
+	// DisplayName: Rod of the Condor
+	// Tooltip: Launches the wielder forward with the power of ethereal wings
+}
+
+BeastBow: {
+	// DisplayName: Weeping
+	// Tooltip: "'Is it the master weeping for its bow, or is the bow weeping for its master?'"
+}
+
+DoubleFocusCharm: {
+	// DisplayName: Double Focus Charm
+	// Tooltip: 12% increased nature base damage
+}
+
+BandOfNature: {
+	// DisplayName: Band of Nature
+	/* Tooltip:
+		'''
+		5% increased nature [kw/n:potential] damage
+		Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
+		''' */
+}
+
+BandOfPurity: {
+	// DisplayName: Band of Purity
+	/* Tooltip:
+		'''
+		5% increased nature [kw/n:potential] damage
+		While [kw/n:wreath] is full, increases defense by 3
+		''' */
+}
+
+GiantTreeSapling: {
+	// DisplayName: Giant Tree Sapling
+	/* Tooltip:
+		'''
+		10% increased [kw/n:wreath] [kw/n:charge rate]
+		While [kw/n:wreath] is full, increases maximum life by 20
+		''' */
+}
+
+FireflyPin: {
+	// DisplayName: Firefly Pin
+	// Tooltip: When [kw/n:wreath] is depleted, provides its full charge bonuses for 2 extra seconds
+}
+
+RavencallersCloak: {
+	// DisplayName: Ravencallers Cloak
+	// Tooltip: Casts a shadow that captures the attention of enemies
+}
+
+Tapper: {
+	// DisplayName: Tapper
+	// Tooltip: Collects Galipot from a tree
+}
+
+Galipot: {
+	// DisplayName: Galipot
+	// Tooltip: "'If not for the bottle, it'd slip away already!'"
+}
+
+AnimalLeather: {
+	// DisplayName: Animal Leather
+	// Tooltip: Can be processed at the Tanning Rack
+}
+
+RoughLeather: {
+	// DisplayName: Rough Leather
+	// Tooltip: Can be processed at the Tanning Rack
+}
+
+SpoiledRawhide: {
+	// DisplayName: Spoiled Rawhide
+	// Tooltip: Rotten remains of leather that was not refined quickly enough
+}
+
+TanningRack: {
+	// DisplayName: Tanning Rack
+	/* Tooltip:
+		'''
+		Allows raw leather to be obtained from enemies
+		It must be processed at the rack before spoiling
+		''' */
+}
+
+BloodlustPotion: {
+	// DisplayName: Bloodlust Potion
+	// Tooltip: Restores life on deadly hits
+}
+
+DeathWardPotion: {
+	// DisplayName: Death Ward Potion
+	/* Tooltip:
+		'''
+		Prevents death once
+		Makes you potion sick for 60 seconds 
+		'Rests in the hands of its master who sent it'
+		''' */
+}
+
+WillpowerPotion: {
+	// DisplayName: Willpower Potion
+	/* Tooltip:
+		'''
+		Increases [kw/n:wreath] charging rate
+		'Fifteen percent concentrated power of will'
+		''' */
+}
+
+ResiliencePotion: {
+	// DisplayName: Resilience Potion
+	// Tooltip: Decreases [kw/n:wreath] discharge speed by 25%
+}
+
+ForestWreath: {
+	// DisplayName: Forest Wreath I
+	/* Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage
+		While [kw/n:wreath] is full:
+		Increases maximum life by 40
+		''' */
+}
+
+TwigWreath: {
+	// DisplayName: Twig Wreath
+	/* Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		''' */
+}
+
+FenethsBlazingWreath: {
+	// DisplayName: Feneth's Blazing Wreath
+	/* Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 20% chance for attacks to grow burning fireblossom on enemies and the holder
+		While [kw/n:wreath] is full:
+		Increases nature knockback
+		Fireblossom explodes over time, spreading to enemies nearby
+		''' */
+}
+
+ForestWreath2: {
+	// DisplayName: Forest Wreath II
+	/* Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		While [kw/n:wreath] is full:
+		Increases maximum life by 40
+		''' */
+}
+
+JungleWreath: {
+	// DisplayName: Jungle Wreath I
+	/* Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage
+		While [kw/n:wreath] is full:
+		Attackers are poisoned
+		''' */
+}
+
+JungleWreath2: {
+	// DisplayName: Jungle Wreath II
+	/* Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		While [kw/n:wreath] is full:
+		Attackers are poisoned
+		''' */
+}
+
+SnowWreath: {
+	// DisplayName: Snow Wreath I
+	/* Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage
+		While [kw/n:wreath] is full:
+		Increases nature critical strike chance by 2
+		''' */
+}
+
+SnowWreath2: {
+	// DisplayName: Snow Wreath II
+	/* Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		While [kw/n:wreath] is full:
+		Increases nature critical strike chance by 2
+		''' */
+}
+
+Cloudberry: {
+	// DisplayName: Cloudberry
+	// Tooltip: Recovers 1 life per second
+}
+
+SoulOfTheWoods: {
+	// DisplayName: Soul of the Woods
+	/* Tooltip:
+		'''
+		Allows charging the [kw/n:wreath] twice
+		While second [kw/n:wreath] is full, creates a pulsating aura
+		''' */
+}
+
+BrightstonePotion: {
+	// DisplayName: Brightstone Potion
+	// Tooltip: Causes you to emit lumps of light
+}
+
+DryadBloodPotion: {
+	// DisplayName: Dryad Blood Potion
+	// Tooltip: Increases resistance to damaging debuffs
+}
+
+WeightPotion: {
+	// DisplayName: Weight Potion
+	/* Tooltip:
+		'''
+		Negates fall damage
+		Accelerates falling speed
+		''' */
+}
+
+ElderwoodChest2: {
+	// DisplayName: Rootbound Chest
+	// Tooltip: ""
+}
+
+HellfireFractureTest: {
+	// DisplayName: Hellfire Fracture Test
+	// Tooltip: ""
+}
+
+SapStream: {
+	// DisplayName: Sap Stream
+	// Tooltip: Lobs sticky sap that clings to the ground
+}
+
+Woodbinder: {
+	// DisplayName: Woodbinder Cane
+	// Tooltip: Conjures a wooden barrier in the chosen spot
+}
+
+SlipperyBomb: {
+	// DisplayName: Slippery Bomb
+	/* Tooltip:
+		'''
+		A small explosion that will destroy most tiles
+		Slips through solid tiles
+		''' */
+}
+
+SlipperyDynamite: {
+	// DisplayName: Slippery Dynamite
+	/* Tooltip:
+		'''
+		A large explosion that will destroy most tiles
+		Slips through solid tiles
+		''' */
+}
+
+SlipperyGlowstick: {
+	// DisplayName: Slippery Glowstick
+	/* Tooltip:
+		'''
+		Works when wet
+		Slips through solid tiles
+		''' */
+}
+
+SlipperyGrenade: {
+	// DisplayName: Slippery Grenade
+	/* Tooltip:
+		'''
+		A small explosion that will not destroy tiles
+		Slips through solid tiles
+		''' */
+}
+
+LivingBorealWoodChestplate: {
+	// DisplayName: Living Boreal Wood Chestplate
+	// Tooltip: 4% increased nature [kw/n:potential] damage
+}
+
+LivingBorealWoodGreaves: {
+	// DisplayName: Living Boreal Wood Greaves
+	// Tooltip: 4% increased nature [kw/n:potential] speed
+}
+
+LivingBorealWoodHelmet: {
+	// DisplayName: Living Boreal Wood Helmet
+	// Tooltip: 4% increased nature [kw/n:potential] damage
+}
+
+LivingWoodChestplate: {
+	// DisplayName: Living Wood Chestplate
+	// Tooltip: 4% increased nature [kw/n:potential] damage
+}
+
+LivingWoodGreaves: {
+	// DisplayName: Living Wood Greaves
+	// Tooltip: 4% increased nature [kw/n:potential] speed
+}
+
+LivingWoodHelmet: {
+	// DisplayName: Living Wood Helmet
+	// Tooltip: 4% increased nature [kw/n:potential] speed
+}
+
+LivingMahoganyChestplate: {
+	// DisplayName: Living Mahogany Chestplate
+	/* Tooltip:
+		'''
+		6% increased nature [kw/n:potential] damage
+		6% increased nature [kw/n:potential] speed
+		''' */
+}
+
+LivingMahoganyGreaves: {
+	// DisplayName: Living Mahogany Greaves
+	// Tooltip: 2% increased movement speed
+}
+
+LivingMahoganyHelmet: {
+	// DisplayName: Living Mahogany Helmet
+	// Tooltip: 4% increased nature critical strike chance
+}
+
+EbonwoodStaff: {
+	// DisplayName: Ebonwood Cane
+	// Tooltip: Grows a corrupted branch with leaves that fall and wither
+}
+
+ShadewoodStaff: {
+	// DisplayName: Shadewood Cane
+	// Tooltip: Grows a crimson branch with leaves that fall and decay
+}
+
+BloomingDoom: {
+	// DisplayName: Blooming Cane
+	// Tooltip: Grows a massive flower
+}
+
+BrilliantBouquet: {
+	// DisplayName: Brilliant Bouquet
+	// Tooltip: Shoots a bouquet of vibrant petals
+}
+
+SacrificialSickleOfTheMoon: {
+	// DisplayName: Sacrificial Sickle of the Moon
+	// Tooltip: Channels a power of the Moon according to its phase
+}
+
+ElathaAmulet: {
+	// DisplayName: Elatha Amulet
+	// Tooltip: Advances the Moon phase
+}
+
+LivingElderwoodBreastplate: {
+	// DisplayName: Living Elderwood Breastplate
+	// Tooltip: Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
+}
+
+LivingElderwoodCrown: {
+	// DisplayName: Living Elderwood Crown
+	// Tooltip: 6% increased nature [kw/n:potential] damage
+}
+
+LivingElderwoodGreaves: {
+	// DisplayName: Living Elderwood Greaves
+	// Tooltip: 4% increased nature [kw/n:potential] damage and critical strike chance
+}
+
+DreadheartCorruptionChestplate: {
+	// DisplayName: Dreadheart Chestplate
+	/* Tooltip:
+		'''
+		8% increased nature [kw/n:potential] damage
+		Increases nature knockback
+		''' */
+}
+
+DreadheartCorruptionHelmet: {
+	// DisplayName: Dreadheart Helmet
+	// Tooltip: 4% increased nature critical strike chance
+}
+
+DreadheartCorruptionLeggings: {
+	// DisplayName: Dreadheart Leggings
+	// Tooltip: 4% increased nature critical strike chance
+}
+
+DreadheartCrimsonChestplate: {
+	// DisplayName: Dreadheart Chestplate
+	/* Tooltip:
+		'''
+		8% increased nature [kw/n:potential] damage
+		Increases nature knockback
+		''' */
+}
+
+DreadheartCrimsonHelmet: {
+	// DisplayName: Dreadheart Helmet
+	// Tooltip: 4% increased nature critical strike chance
+}
+
+DreadheartCrimsonLeggings: {
+	// DisplayName: Dreadheart Leggings
+	// Tooltip: 4% increased nature critical strike chance
+}
+
+TectonicCane: {
+	// DisplayName: Tectonic Cane
+	// Tooltip: Summons a column from below, which launches, singes and shatters
+}
+
+AshwalkerHood: {
+	// DisplayName: Ashwalker Hood
+	// Tooltip: 6% increased nature [kw/n:potential] damage
+}
+
+AshwalkerLeggings: {
+	// DisplayName: Ashwalker Leggings
+	// Tooltip: 6% increased nature [kw/n:potential] damage
+}
+
+AshwalkerRobe: {
+	// DisplayName: Ashwalker Robe
+	// Tooltip: 10% increased nature base damage
+}
+
+MercuriumOre: {
+	// DisplayName: Mercurium Ore
+	// Tooltip: "'Shouldn't be holding that...'"
+}
+
+Grimstone: {
+	// DisplayName: Grimstone
+	// Tooltip: ""
+}
+
+MercuriumNugget: {
+	// DisplayName: Mercurium Nugget
+	// Tooltip: "'Shouldn't be holding that either...'"
+}
+
+MillionDollarPainting: {
+	// DisplayName: Million Dollar Painting
+	// Tooltip: "'V. F. D.'"
+}
+
+TheLegend: {
+	// DisplayName: The Legend
+	// Tooltip: "'C. Knight'"
+}
+
+LuminousFlowerHat: {
+	// DisplayName: Luminous Flower Hat
+	/* Tooltip:
+		'''
+		Provides light when moving
+		'It no longer smells... but still brightens the vicinity'
+		''' */
+}
+
+ElderTorch: {
+	// DisplayName: Elderwood Torch
+	// Tooltip: ""
+}
+
+FlamingFabric: {
+	// DisplayName: Flaming Fabric
+	// Tooltip: ""
+}
+
+NaturesHeart: {
+	// DisplayName: Nature's Heart
+	// Tooltip: A grafted remnant of higher beings
+}
+
+DeerSkull: {
+	// DisplayName: Deer Skull
+	// Tooltip: 4% increased nature critical strike chance
+}
+
+OniMask: {
+	// DisplayName: Oni Mask
+	// Tooltip: Scares away Youkai
+}
+
+ElderwoodBathtub: {
+	// DisplayName: Elderwood Bathtub
+	// Tooltip: ""
+}
+
+ElderwoodBed: {
+	// DisplayName: Elderwood Bed
+	// Tooltip: ""
+}
+
+ElderwoodBookcase: {
+	// DisplayName: Elderwood Bookcase
+	// Tooltip: ""
+}
+
+ElderwoodCandelabra: {
+	// DisplayName: Elderwood Candelabra
+	// Tooltip: ""
+}
+
+ElderwoodCandle: {
+	// DisplayName: Elderwood Candle
+	// Tooltip: ""
+}
+
+ElderwoodChair: {
+	// DisplayName: Elderwood Chair
+	// Tooltip: ""
+}
+
+ElderwoodChandelier: {
+	// DisplayName: Elderwood Chandelier
+	// Tooltip: ""
+}
+
+ElderwoodClock: {
+	// DisplayName: Elderwood Clock
+	// Tooltip: ""
+}
+
+ElderwoodDoor: {
+	// DisplayName: Elderwood Door
+	// Tooltip: ""
+}
+
+ElderwoodDresser: {
+	// DisplayName: Elderwood Dresser
+	// Tooltip: ""
+}
+
+ElderwoodLamp: {
+	// DisplayName: Elderwood Lamp
+	// Tooltip: ""
+}
+
+ElderwoodLantern: {
+	// DisplayName: Elderwood Lantern
+	// Tooltip: ""
+}
+
+ElderwoodPiano: {
+	// DisplayName: Elderwood Piano
+	// Tooltip: ""
+}
+
+ElderwoodPlatform: {
+	// DisplayName: Elderwood Platform
+	// Tooltip: ""
+}
+
+ElderwoodSink: {
+	// DisplayName: Elderwood Sink
+	// Tooltip: ""
+}
+
+ElderwoodSofa: {
+	// DisplayName: Elderwood Sofa
+	// Tooltip: ""
+}
+
+ElderwoodTable: {
+	// DisplayName: Elderwood Table
+	// Tooltip: ""
+}
+
+ElderwoodWorkbench: {
+	// DisplayName: Elderwood Work Bench
+	// Tooltip: ""
+}
+
+WeaknessPotion: {
+	// DisplayName: Weakness Potion
+	// Tooltip: Throw this to make someone physically weak
+}
+
+AlchemicalSkull: {
+	// DisplayName: Alchemical Skull
+	// Tooltip: Grants immunity to fire blocks, poison and toxic fumes
+}
+
+Coffin: {
+	// DisplayName: Coffin
+	// Tooltip: Releases bones upon taking damage, then returns them to the coffin
+}
+
+Herbarium: {
+	// DisplayName: Herbarium
+	/* Tooltip:
+		'''
+		Enemies occasionally drop healing herbs
+		If [kw/n:wreath] is [kw/n:charged], consumes it to restore additional life
+		''' */
+}
+
+MagicHerb1: {
+	// DisplayName: Magic Herb
+	// Tooltip: ""
+}
+
+MagicHerb2: {
+	// DisplayName: Magic Herb
+	// Tooltip: ""
+}
+
+MagicHerb3: {
+	// DisplayName: Magic Herb
+	// Tooltip: ""
+}
+
+BizarreCowboyHat: {
+	// DisplayName: Bizarre Cowboy Hat
+	// Tooltip: "'Nyo ho ho ho'"
+}
+
+DinoHat: {
+	// DisplayName: Dino Hat
+	/* Tooltip:
+		'''
+		'Scary monsters, super creeps
+		Keep me running, running scared'
+		''' */
+}
+
+JockeyHat: {
+	// DisplayName: Jockey Hat
+	// Tooltip: "'-100% running speed'"
+}
+
+MentorsHat: {
+	// DisplayName: Mentor's Hat
+	// Tooltip: ""
+}
+
+PresidentJacket: {
+	// DisplayName: President's Jacket
+	// Tooltip: ""
+}
+
+PresidentPants: {
+	// DisplayName: President's Pants
+	// Tooltip: ""
+}
+
+PresidentWig: {
+	// DisplayName: President's Wig
+	// Tooltip: ""
+}
+
+SailorHat: {
+	// DisplayName: Sailor Hat
+	// Tooltip: "'Who the hell am I?'"
+}
+
+StoneMask: {
+	// DisplayName: Normal Mask
+	// Tooltip: "'Cursed'"
+}
+
+StrangerCoat: {
+	// DisplayName: Stranger's Coat
+	// Tooltip: ""
+}
+
+StrangerPants: {
+	// DisplayName: Stranger's Pants
+	// Tooltip: ""
+}
+
+DevilHunterCloak: {
+	// DisplayName: Devil Hunter's Cloak
+	// Tooltip: ""
+}
+
+DevilHunterPants: {
+	// DisplayName: Devil Hunter's Pants
+	// Tooltip: ""
+}
+
+BunnyHat: {
+	// DisplayName: Bunny Hat
+	// Tooltip: ""
+}
+
+BunnyJacket: {
+	// DisplayName: Bunny Jacket
+	// Tooltip: ""
+}
+
+BunnyPants: {
+	// DisplayName: Bunny Pants
+	// Tooltip: ""
+}
+
+FlinxFurUshanka: {
+	// DisplayName: Flinx Fur Ushanka
+	// Tooltip: ""
+}
+
+CopperAcolyteHat: {
+	// DisplayName: Acolyte Hat
+	// Tooltip: 6% reduced mana costs
+}
+
+CopperAcolyteJacket: {
+	// DisplayName: Acolyte Jacket
+	// Tooltip: Increases maximum mana by 40
+}
+
+CopperAcolyteLeggings: {
+	// DisplayName: Acolyte Leggings
+	// Tooltip: 8% increased magic critical strike chance
+}
+
+TinAcolyteHat: {
+	// DisplayName: Acolyte Hat
+	// Tooltip: 6% reduced mana costs
+}
+
+TinAcolyteJacket: {
+	// DisplayName: Acolyte Jacket
+	// Tooltip: Increases maximum mana by 40
+}
+
+TinAcolyteLeggings: {
+	// DisplayName: Acolyte Leggings
+	// Tooltip: 8% increased magic critical strike chance
+}
+
+Moss: {
+	// DisplayName: Moss
+	// Tooltip: "'C. Knight'"
+}
+
+SoapSellersJacket: {
+	// DisplayName: Soap Sellers Jacket
+	// Tooltip: ""
+}
+
+SoapSellersJeans: {
+	// DisplayName: Soap Sellers Jeans
+	// Tooltip: ""
+}
+
+SoapSellersShades: {
+	// DisplayName: Soap Sellers Shades
+	// Tooltip: ""
+}
+
+Hedgehog: {
+	// DisplayName: Hedgehog
+	// Tooltip: "'Spiky, but cute'"
+}
+
+WandCore: {
+	// DisplayName: Arcane Twig
+	// Tooltip: "'The magics have not faded yet...'"
+}
+
+OvergrownSpear: {
+	// DisplayName: Overgrown Spear
+	// Tooltip: "'Aim for the balls for a burst of energy'"
+}
+
+MothStaff: {
+	// DisplayName: Moth Staff
+	// Tooltip: Summons a moth to fight for you
+}
+
+DynastyWoodBow: {
+	// DisplayName: Dynasty Wood Bow
+	// Tooltip: ""
+}
+
+ElderwoodBow: {
+	// DisplayName: Elderwood Bow
+	// Tooltip: ""
+}
+
+MercuriumBolter: {
+	// DisplayName: Mercurium Bolter
+	// Tooltip: Splits arrows into lightweight bolts
+}
+
+DynastyWoodSword: {
+	// DisplayName: Dynasty Wood Sword
+	// Tooltip: ""
+}
+
+ElderwoodSword: {
+	// DisplayName: Elderwood Sword
+	// Tooltip: ""
+}
+
+MercuriumSword: {
+	// DisplayName: Mercurium Sword
+	// Tooltip: ""
+}
+
+StarFusion: {
+	// DisplayName: Star Fusion
+	// Tooltip: Summons a constellation upon hitting an enemy
+}
+
+RavensEye: {
+	// DisplayName: Ravens Eye
+	// Tooltip: ""
+}
+
+MercuriumStaff: {
+	// DisplayName: Mercurium Staff
+	// Tooltip: ""
+}
+
+MiracleMintSeeds: {
+	// DisplayName: Miracle Mint Seeds
+	// Tooltip: ""
+}
+
+MiracleMintPlanterBox: {
+	// DisplayName: Miracle Mint Planter Box
+	// Tooltip: ""
+}
+
+MiracleMintHangingPot: {
+	// DisplayName: Miracle Mint Hanging Pot
+	// Tooltip: ""
+}
+
+FlametrackerHat: {
+	// DisplayName: Flametracker Hat
+	// Tooltip: Greatly increases mana regeneration rate
+}
+
+FlametrackerJacket: {
+	// DisplayName: Flametracker Jacket
+	/* Tooltip:
+		'''
+		12% reduced mana usage
+		5% increased magic damage
+		''' */
+}
+
+FlametrackerPants: {
+	// DisplayName: Flametracker Pants
+	/* Tooltip:
+		'''
+		8% reduced mana usage
+		5% increased magic damage
+		''' */
+}
+
+SentinelBreastplate: {
+	// DisplayName: Sentinel Breastplate
+	// Tooltip: Increases arrow damage by 10%
+}
+
+SentinelHelmet: {
+	// DisplayName: Sentinel Helmet
+	// Tooltip: 10% chance to not consume arrows
+}
+
+SentinelLeggings: {
+	// DisplayName: Sentinel Leggings
+	// Tooltip: Increases arrow damage by 10%
+}
+
+SentinelTaurusMask: {
+	// DisplayName: Sentinel Taurus Mask
+	// Tooltip: Increases running acceleration speed
+}
+
+AmuletOfLife: {
+	// DisplayName: Amulet of Life
+	// Tooltip: Creates a vortex of wisps that heal on touch
+}
+
+MercuriumAxe: {
+	// DisplayName: Mercurium Axe
+	// Tooltip: ""
+}
+
+MercuriumHammer: {
+	// DisplayName: Mercurium Hammer
+	// Tooltip: ""
+}
+
+MercuriumPickaxe: {
+	// DisplayName: Mercurium Pickaxe
+	// Tooltip: ""
+}
+
+WorshipperBonehelm: {
+	// DisplayName: Worshipper Bonehelm
+	/* Tooltip:
+		'''
+		Increases your max number of minions by 1
+		8% increased minion damage
+		''' */
+}
+
+WorshipperGarb: {
+	// DisplayName: Worshipper Garb
+	/* Tooltip:
+		'''
+		8% increased minion damage
+		10% increased movement speed
+		''' */
+}
+
+WorshipperMantle: {
+	// DisplayName: Worshipper Mantle
+	// Tooltip: 18% increased minion damage
+}
+
+SentinelShield: {
+	// DisplayName: Sentinel Shield
+	// Tooltip: Has a chance to unleash vengeful spirits instead of taking damage
+}
+
+DynastyWoodBreastplate: {
+	// DisplayName: Dynasty Wood Breastplate
+	// Tooltip: ""
+}
+
+DynastyWoodHelmet: {
+	// DisplayName: Dynasty Wood Helmet
+	// Tooltip: ""
+}
+
+DynastyWoodLeggings: {
+	// DisplayName: Dynasty Wood Leggings
+	// Tooltip: ""
+}
+
+ElderwoodChestplate: {
+	// DisplayName: Elderwood Chestplate
+	// Tooltip: ""
+}
+
+ElderwoodHelmet: {
+	// DisplayName: Elderwood Helmet
+	// Tooltip: ""
+}
+
+ElderwoodLeggings: {
+	// DisplayName: Elderwood Leggings
+	// Tooltip: ""
+}
+
+DynastyWoodHammer: {
+	// DisplayName: Dynasty Wood Hammer
+	// Tooltip: ""
+}
+
+ElderwoodHammer: {
+	// DisplayName: Elderwood Hammer
+	// Tooltip: ""
+}
+
+CosmicHat: {
+	// DisplayName: Cosmic Hat
+	/* Tooltip:
+		'''
+		Mana stars fall when your will is too low
+		'Great for a walk in a shadowy forest'
+		''' */
+}
+
+BackwoodsCrate: {
+	// DisplayName: Backwoods Crate
+	// Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+ElderwoodFence: {
+	// DisplayName: Elderwood Fence
+	// Tooltip: ""
+}
+
+ElderwoodWall: {
+	// DisplayName: Elderwood Wall
+	// Tooltip: ""
+}
+
+PrismaticPotion: {
+	// DisplayName: Prismatic Potion
+	// Tooltip: Makes damage enhancements affect all damage types simultaneously
+}
+
+ElderwoodToilet: {
+	// DisplayName: Elderwood Toilet
+	// Tooltip: ""
+}
+
+RagingBoots: {
+	// DisplayName: Raging Boots
+	// Tooltip: Sends a powerful wave upon landing
+}
+
+WingIcon: {
+	// DisplayName: ""
+	// Tooltip: ""
+}
+
+PettyBag: {
+	// DisplayName: Petty Bag
+	/* Tooltip:
+		'''
+		Summons a magic bag to gather nearby items
+		{$Controls.RightClick} to collect the items
+		''' */
+}
+
+Beacon: {
+	// DisplayName: Beacon
+	/* Tooltip:
+		'''
+		Creates a teleportation waypoint when charged with a gem
+		Corresponding Large Gem must be held to access it
+		''' */
+}
+
+BloodshedAxe: {
+	// DisplayName: Bloodshed Axe
+	/* Tooltip:
+		'''
+		Consumes life to attack, marking hit enemies
+		Steals life from marked enemies
+		'There will be blood'
+		''' */
+}
+
+LothorBag: {
+	// DisplayName: Treasure Bag (Lothor)
+	// Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+LothorMask: {
+	// DisplayName: Lothor Mask
+	// Tooltip: ""
+}
+
+LothorMusicBox: {
+	// DisplayName: Music Box (Lothor)
+	// Tooltip: ""
+}
+
+LothorTrophy: {
+	// DisplayName: Lothor Trophy
+	// Tooltip: ""
+}
+
+BloodbathLocket: {
+	// DisplayName: Bloodbath Locket
+	// Tooltip: Increases damage by 1% for each enemy and 5% for each boss nearby, up to 25%
+}
+
+ChemicalPrisoner: {
+	// DisplayName: Chemical Prisoner
+	// Tooltip: ""
+}
+
+FlederStaff: {
+	// DisplayName: Fleder Staff
+	// Tooltip: Summons a fleder to fight for you
+}
+
+FlederSlayer: {
+	// DisplayName: Fleder Slayer
+	/* Tooltip:
+		'''
+		Sends vulnerable enemies back with a crushing blow
+		'It's too big to be called a sword'
+		''' */
+}
+
+Bane: {
+	// DisplayName: Bane
+	// Tooltip: Makes your enemies wither away
+}
+
+BackwoodsDayMusicBox: {
+	// DisplayName: Music Box (Backwoods Day)
+	// Tooltip: ""
+}
+
+BackwoodsNightMusicBox: {
+	// DisplayName: Music Box (Backwoods)
+	// Tooltip: ""
+}
+
+BackwoodsFogMusicBox: {
+	// DisplayName: Music Box (Backwoods Fog)
+	// Tooltip: ""
+}
+
+LivingPrimordialWand: {
+	// DisplayName: Living Elderwood Wand
+	/* Tooltip:
+		'''
+		Consumes Elderwood
+		Places living elderwood
+		''' */
+}
+
+LivingPrimordialWand2: {
+	// DisplayName: Living Elderwood Leaf Wand
+	/* Tooltip:
+		'''
+		Consumes Elderwood
+		Places elderwood leaves
+		''' */
+}
+
+MoonFlower: {
+	// DisplayName: Moon Flower
+	// Tooltip: "'What name will you be remembered as?'"
+}
+
+FeathersInABottle: {
+	// DisplayName: Feathers in a Bottle
+	// Tooltip: Allows the holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
+}
+
+FeathersInABalloon: {
+	// DisplayName: Feathers in a Balloon
+	/* Tooltip:
+		'''
+		Allows the holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
+		Increases jump height
+		''' */
+}
+
+BigTreeSpawner: {
+	// DisplayName: Big Tree Spawner
+	// Tooltip: "#TEST: GENERATES A BIG BACKWOODS TREE"
+}
+
+GrimstoneWall: {
+	// DisplayName: Grimstone Wall
+	// Tooltip: ""
+}
+
+Vilethorn: {
+	// DisplayName: Vilethorn
+	// Tooltip: "{$ItemTooltip.Vilethorn}"
+}
+
+CrimsonRod: {
+	// DisplayName: Crimson Rod
+	// Tooltip: "{$ItemTooltip.CrimsonRod}"
+}
+
+BackwoodsPylon: {
+	// DisplayName: Backwoods Pylon
+	// Tooltip: ""
+}
+
+ArchdruidBanner: {
+	// DisplayName: Archdruid Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Archdruid.DisplayName}"
+}
+
+BabyFlederBanner: {
+	// DisplayName: Baby Fleder Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.BabyFleder.DisplayName}"
+}
+
+EntBanner: {
+	// DisplayName: Ent Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ent.DisplayName}"
+}
+
+FlederBanner: {
+	// DisplayName: Fleder Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Fleder.DisplayName}"
+}
+
+GrimDefenderBanner: {
+	// DisplayName: Grim Defender Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDefender.DisplayName}"
+}
+
+GrimdruidBanner: {
+	// DisplayName: Grimdruid Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDruid.DisplayName}"
+}
+
+HedgehogBanner: {
+	// DisplayName: Hedgehog Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hedgehog.DisplayName}"
+}
+
+HogBanner: {
+	// DisplayName: Hog Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hog.DisplayName}"
+}
+
+LumberjackBanner: {
+	// DisplayName: Lumberjack Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Lumberjack.DisplayName}"
+}
+
+PettyGoblinBanner: {
+	// DisplayName: Petty Goblin Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PettyGoblin.DisplayName}"
+}
+
+RavencallerBanner: {
+	// DisplayName: Ravencaller Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ravencaller.DisplayName}"
+}
+
+SapSlimeBanner: {
+	// DisplayName: Sap Slime Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SapSlime.DisplayName}"
+}
+
+SentinelBanner: {
+	// DisplayName: Sentinel Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Sentinel.DisplayName}"
+}
+
+SentinelWarriorBanner: {
+	// DisplayName: Sentinel Warrior Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SentinelWarrior.DisplayName}"
+}
+
+SummonedRavenBanner: {
+	// DisplayName: Summoned Raven Banner
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
+}
+
+BackwoodsGrassSeeds: {
+	// DisplayName: Backwoods Seeds
+	// Tooltip: ""
+}
+
+BloodCursor: {
+	// DisplayName: Blood Cursor
+	// Tooltip: ""
+}
+
+CrowdRavenBanner: {
+	// DisplayName: Crowd Raven Banner
+	// Tooltip: ""
+}
+
+Almond: {
+	// DisplayName: Almond
+	// Tooltip: "{$CommonItemTooltip.MinorStats}"
+}
+
+Pistachio: {
+	// DisplayName: Pistachio
+	// Tooltip: "{$CommonItemTooltip.MinorStats}"
+}
+
+AlmondMilk: {
+	// DisplayName: Almond Milk
+	// Tooltip: "{$CommonItemTooltip.MinorStats}"
+}
+
+SherwoodShake: {
+	// DisplayName: Sherwood Shake
+	// Tooltip: "{$CommonItemTooltip.MinorStats}"
+}

@@ -1,0 +1,56 @@
+// PotentialDamage: "[kw/n:potential] damage"
+// FillingRate1: Extremely slow [kw/n:wreath charge] rate
+// FillingRate2: Very slow [kw/n:wreath charge] rate
+// FillingRate3: Slow [kw/n:wreath charge] rate
+// FillingRate4: Average [kw/n:wreath charge] rate
+// FillingRate5: Fast [kw/n:wreath charge] rate
+// FillingRate6: Very fast [kw/n:wreath charge] rate
+// FillingRate7: Insanely fast [kw/n:wreath charge] rate
+// AttackSpeed1: Extremely slow speed
+// AttackSpeed2: Very slow speed
+// AttackSpeed3: Slow speed
+// AttackSpeed4: Average speed
+// AttackSpeed5: Fast speed
+// AttackSpeed6: Very fast speed
+// AttackSpeed7: Extremely fast speed
+// AttackSpeed8: Insanely fast speed
+// AttackSpeed12: Extremely slow [kw/n:potential] speed
+// AttackSpeed22: Very slow [kw/n:potential] speed
+// AttackSpeed32: Slow [kw/n:potential] speed
+// AttackSpeed42: Average [kw/n:potential] speed
+// AttackSpeed52: Fast [kw/n:potential] speed
+// AttackSpeed62: Very fast [kw/n:potential] speed
+// AttackSpeed72: Extremely fast [kw/n:potential] speed
+// AttackSpeed82: Insanely fast [kw/n:potential] speed
+// WhenCharged: while [kw/n:wreath] is [kw/n:charged]
+// LivingWoodSetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
+// LivingBorealSetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
+// LivingMahoganySetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
+/* DreadheartCrimsonSetBonus:
+	'''
+	Taking damage while [kw/n:wreath] is [kw/n:full] depletes it, releasing a swarm of insects
+	Double tap {0} to turn into a [kw/n:Beetle]
+	''' */
+/* LivingElderwoodCrownSetBonus:
+	'''
+	Increases [kw/n:wreath] charge rate by 10%
+	Double tap {0} to turn into a [kw/n:Fleder]
+	''' */
+// FlinxFurUshankaSetBonus: Provides immunity to chill and freezing effects
+/* AshwalkerHoodSetBonus:
+	'''
+	On Fire! debuff restores life instead
+	Double tap {0} to turn into [kw/n:Firebird]
+	''' */
+// AcolyteSetBonus: 40% increased magic damage when below 40 mana
+// FlametrackerSetBonus: Magic weapons release an additional tracking bolt while at full mana that decreases target's defense
+// SentinelSetBonus1: Shows the location of enemies while standing still
+// SentinelSetBonus2: Greatly increased speed of arrows shot in the direction of running
+/* WorshipperSetBonus:
+	'''
+	Summons an Undead Harpy to aid you
+	Double tap {0} to send it out to attack temporarily
+	While idle, {1} on Harpy to ride it
+	''' */
+// DynastySetBonus: 1 defense
+// ElderwoodSetBonus: 1 defense

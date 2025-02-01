@@ -1,0 +1,8 @@
+BackwoodsBiome: {
+	// DisplayName: Backwoods Biome
+	// TownNPCDialogueName: the Backwoods Biome
+}
+
+// InBackwoods: Mods.RoA.Conditions.InBackwoods
+// TanningRack: Mods.RoA.Conditions.TanningRack
+// FlederSlayer: Mods.RoA.Conditions.FlederSlayer
