@@ -94,7 +94,6 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         Main.tileLighted[Type] = true;
         Main.tileMoss[Type] = true;
 
-        //TileID.Sets.Conversion.Stone[Type] = true;
         TileID.Sets.Conversion.Moss[Type] = true;
 
         TileID.Sets.Grass[Type] = true;
@@ -119,7 +118,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 if (x != 0 && y != 0) {
-                    if (!WorldGenHelper.GetTileSafely(i + x, j + y).HasTile) {
+                    if (!WorldGen.SolidTile(i + x, j + y)) {
                         flag = false;
                     }
                 }

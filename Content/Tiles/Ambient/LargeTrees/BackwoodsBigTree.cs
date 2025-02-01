@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.BackwoodsSystems;
@@ -29,6 +31,7 @@ using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 using Terraria.Utilities;
 
 using static RoA.Common.Tiles.TileHooks;
@@ -46,6 +49,64 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         On_WorldGen.AttemptToGrowTreeFromSapling += On_WorldGen_AttemptToGrowTreeFromSapling;
         On_WorldGen.CanKillTile_int_int_refBoolean += On_WorldGen_CanKillTile_int_int_refBoolean;
         On_WorldGen.smCallBack += On_WorldGen_smCallBack;
+        On_Player.TryReplantingTree += On_Player_TryReplantingTree;
+        On_Player.IsBottomOfTreeTrunkNoRoots += On_Player_IsBottomOfTreeTrunkNoRoots;
+    }
+
+    private bool On_Player_IsBottomOfTreeTrunkNoRoots(On_Player.orig_IsBottomOfTreeTrunkNoRoots orig, Player self, int x, int y) {
+        Tile tile = Main.tile[x, y];
+        if (!tile.HasTile)
+            return false;
+
+        int type = ModContent.TileType<BackwoodsBigTree>();
+        if (tile.TileType == type && IsStart(x, y) && Main.tile[x + 1, y].TileType == type && Main.tile[x - 1, y].TileType == type) {
+            return true;
+        }
+
+        return orig(self, x, y);
+    }
+
+    private void On_Player_TryReplantingTree(On_Player.orig_TryReplantingTree orig, Player self, int x, int y) {
+        int type = 20;
+        int style = 0;
+
+        PlantLoader.CheckAndInjectModSapling(x, y, ref type, ref style);
+
+        if (TileObject.CanPlace(Player.tileTargetX, Player.tileTargetY, type, style, self.direction, out var objectData)) {
+            bool num = TileObject.Place(objectData);
+            WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY);
+            if (num) {
+                TileObjectData.CallPostPlacementPlayerHook(Player.tileTargetX, Player.tileTargetY, type, style, self.direction, objectData.alternate, objectData);
+                if (Main.netMode == 1)
+                    NetMessage.SendObjectPlacement(-1, Player.tileTargetX, Player.tileTargetY, objectData.type, objectData.style, objectData.alternate, objectData.random, self.direction);
+            }
+        }
+        type = 20;
+        if (WorldGenHelper.GetTileSafely(Player.tileTargetX + 1, Player.tileTargetY).TileType == ModContent.TileType<BackwoodsBigTree>() && WorldGenHelper.GetTileSafely(Player.tileTargetX + 2, Player.tileTargetY).TileType == ModContent.TileType<BackwoodsBigTree>()) {
+            PlantLoader.CheckAndInjectModSapling(x + 1, y, ref type, ref style);
+            if (TileObject.CanPlace(Player.tileTargetX + 1, Player.tileTargetY, type, style, self.direction, out objectData)) {
+                bool num = TileObject.Place(objectData);
+                WorldGen.SquareTileFrame(Player.tileTargetX + 1, Player.tileTargetY);
+                if (num) {
+                    TileObjectData.CallPostPlacementPlayerHook(Player.tileTargetX + 1, Player.tileTargetY, type, style, self.direction, objectData.alternate, objectData);
+                    if (Main.netMode == 1)
+                        NetMessage.SendObjectPlacement(-1, Player.tileTargetX + 1, Player.tileTargetY, objectData.type, objectData.style, objectData.alternate, objectData.random, self.direction);
+                }
+            }
+        }
+        type = 20;
+        if (WorldGenHelper.GetTileSafely(Player.tileTargetX - 1, Player.tileTargetY).TileType == ModContent.TileType<BackwoodsBigTree>() && WorldGenHelper.GetTileSafely(Player.tileTargetX - 2, Player.tileTargetY).TileType == ModContent.TileType<BackwoodsBigTree>()) {
+            PlantLoader.CheckAndInjectModSapling(x - 1, y, ref type, ref style);
+            if (TileObject.CanPlace(Player.tileTargetX - 1, Player.tileTargetY, type, style, self.direction, out objectData)) {
+                bool num = TileObject.Place(objectData);
+                WorldGen.SquareTileFrame(Player.tileTargetX - 1, Player.tileTargetY);
+                if (num) {
+                    TileObjectData.CallPostPlacementPlayerHook(Player.tileTargetX - 1, Player.tileTargetY, type, style, self.direction, objectData.alternate, objectData);
+                    if (Main.netMode == 1)
+                        NetMessage.SendObjectPlacement(-1, Player.tileTargetX - 1, Player.tileTargetY, objectData.type, objectData.style, objectData.alternate, objectData.random, self.direction);
+                }
+            }
+        }
     }
 
     private void On_WorldGen_smCallBack(On_WorldGen.orig_smCallBack orig, object threadContext) {

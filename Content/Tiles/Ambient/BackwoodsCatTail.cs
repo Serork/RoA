@@ -9,6 +9,7 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.World.Generations;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -24,12 +25,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class DragonFliesSpawn : GlobalNPC {
-    public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
-        
-    }
-}
-
 sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
     public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
         tileTop = 2;
@@ -40,7 +35,51 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
     public override void Load() {
         On_TileDrawing.DrawMultiTileGrass += On_TileDrawing_DrawMultiTileGrass;
         On_NPC.FindCattailTop += On_NPC_FindCattailTop;
+        On_WorldGen.UpdateWorld_OvergroundTile += On_WorldGen_UpdateWorld_OvergroundTile;
+        On_WorldGen.UpdateWorld_UndergroundTile += On_WorldGen_UpdateWorld_UndergroundTile; ;
         //IL_NPC.SpawnNPC += IL_NPC_SpawnNPC;
+    }
+
+    private void On_WorldGen_UpdateWorld_UndergroundTile(On_WorldGen.orig_UpdateWorld_UndergroundTile orig, int i, int j, bool checkNPCSpawns, int wallDist) {
+        orig(i, j, checkNPCSpawns, wallDist);
+
+        if (Main.tile[i, j].LiquidAmount > 32) {
+            if (Main.tile[i, j].HasTile) {
+            }
+            else if (WorldGen.genRand.Next(600) == 0) {
+                int right = BackwoodsVars.BackwoodsStartX + BackwoodsVars.BackwoodsHalfSizeX;
+                int left = BackwoodsVars.BackwoodsStartX - BackwoodsVars.BackwoodsHalfSizeX;
+                BackwoodsBiomePass.PlaceBackwoodsLilypad(i, j, right, left);
+                if (Main.netMode == 2)
+                    NetMessage.SendTileSquare(-1, i, j);
+            }
+            else if (WorldGen.genRand.Next(600) == 0) {
+                BackwoodsBiomePass.PlaceBackwoodsCattail(i, j);
+                if (Main.netMode == 2)
+                    NetMessage.SendTileSquare(-1, i, j);
+            }
+        }
+    }
+
+    private void On_WorldGen_UpdateWorld_OvergroundTile(On_WorldGen.orig_UpdateWorld_OvergroundTile orig, int i, int j, bool checkNPCSpawns, int wallDist) {
+        orig(i, j, checkNPCSpawns, wallDist);
+
+        if (Main.tile[i, j].LiquidAmount > 32) {
+            if (Main.tile[i, j].HasTile) {
+            }
+            else if (WorldGen.genRand.Next(600) == 0) {
+                int right = BackwoodsVars.BackwoodsStartX + BackwoodsVars.BackwoodsHalfSizeX;
+                int left = BackwoodsVars.BackwoodsStartX - BackwoodsVars.BackwoodsHalfSizeX;
+                BackwoodsBiomePass.PlaceBackwoodsLilypad(i, j, right, left);
+                if (Main.netMode == 2)
+                    NetMessage.SendTileSquare(-1, i, j);
+            }
+            else if (WorldGen.genRand.Next(600) == 0) {
+                BackwoodsBiomePass.PlaceBackwoodsCattail(i, j);
+                if (Main.netMode == 2)
+                    NetMessage.SendTileSquare(-1, i, j);
+            }
+        }
     }
 
     private bool On_NPC_FindCattailTop(On_NPC.orig_FindCattailTop orig, int landX, int landY, out int cattailX, out int cattailY) {

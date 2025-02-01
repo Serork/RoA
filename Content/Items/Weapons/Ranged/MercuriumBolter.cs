@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
 
 using Terraria;
@@ -44,6 +45,7 @@ sealed class MercuriumBolter : ModItem {
             Main.projectile[bolt].extraUpdates = 1;
             Main.projectile[bolt].noDropItem = true;
             Main.projectile[bolt].netUpdate = true;
+            Dust.NewDust(player.Center - Vector2.UnitX * 13f - Vector2.UnitY * 8f + velocity.SafeNormalize(Vector2.Zero) * 30f, 0, 0, ModContent.DustType<ToxicFumes>(), velocity.X * 0.5f, velocity.Y * 0.5f, 0, default(Color), 1.3f);
         }
         return false;
     }

@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using RoA.Content.Items.Materials;
+using RoA.Content.Dusts;
 
 namespace RoA.Content.Items.Tools;
 
@@ -32,7 +33,12 @@ sealed class MercuriumAxe : ModItem {
 		Item.UseSound = SoundID.Item1;
 	}
 
-	public override void AddRecipes() {
+    public override void MeleeEffects(Player player, Rectangle hitbox) {
+        if (Main.rand.Next(5) == 0)
+            Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, ModContent.DustType<ToxicFumes>(), player.direction * 2, 0f, 0, default(Color), 1.3f);
+    }
+
+    public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient<Materials.MercuriumNugget>(14)
 			.AddTile(TileID.Anvils)

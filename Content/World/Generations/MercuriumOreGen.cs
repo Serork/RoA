@@ -14,17 +14,22 @@ namespace RoA.Content.World.Generations;
 sealed class MercuriumOreGen : ModSystem {
     private static int _tileCount;
 
+    private static IReadOnlyList<int> OresType = [7, 166, 6, 167, 9, 168, 8, 169, 22, 204];
+
     public override void Load() {
         On_WorldGen.TileRunner += On_WorldGen_TileRunner;
     }
 
+    public override void Unload() {
+        OresType = null;
+    }
+
     private void On_WorldGen_TileRunner(On_WorldGen.orig_TileRunner orig, int i, int j, double strength, int steps, int type, bool addTile, double speedX, double speedY, bool noYChange, bool overRide, int ignoreTileType) {
-        IReadOnlyList<int> oresType = [7, 166, 6, 167, 9, 168, 8, 169, 22, 204];
         orig(i, j, strength, steps, type, addTile, speedX, speedY, noYChange, overRide, ignoreTileType);
         if (j < Main.worldSurface && Main.rand.NextBool(4)) {
             return;
         }
-        if (oresType.Contains(type)) {
+        if (OresType.Contains(type)) {
             for (int x = i - 10; x < i + 11; x++) {
                 for (int y = j - 10; y < j + 11; y++) {
                     Tile tile = WorldGenHelper.GetTileSafely(x, y);
@@ -62,7 +67,7 @@ sealed class MercuriumOreGen : ModSystem {
                 if (!WorldGen.genRand.NextBool(4)) {
                     velocity = Vector2.Zero;
                 }
-                WorldGenHelper.ModifiedTileRunner(i + (int)WorldGen.genRand.NextFloat(-velocity.X, velocity.X), j + (int)WorldGen.genRand.NextFloat(-velocity.Y, velocity.Y), _tileCount * 0.25f * sizeMult, (int)(_tileCount * 0.1f), ModContent.TileType<MercuriumOre>(), ignoreTileTypes: [.. oresType]);
+                WorldGenHelper.ModifiedTileRunner(i + (int)WorldGen.genRand.NextFloat(-velocity.X, velocity.X), j + (int)WorldGen.genRand.NextFloat(-velocity.Y, velocity.Y), _tileCount * 0.25f * sizeMult, (int)(_tileCount * 0.1f), ModContent.TileType<MercuriumOre>(), ignoreTileTypes: [.. OresType]);
             }
             _tileCount = 0;
         }

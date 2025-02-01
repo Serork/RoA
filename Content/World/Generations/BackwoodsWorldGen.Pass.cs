@@ -3284,7 +3284,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = Left - 35; i <= Right + 35; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY; j++) {
                 if (Main.tile[i, j].LiquidAmount > 0 && !(Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].TileType == ModContent.TileType<BackwoodsLilypad>())) {
-                    PlaceBackwoodsLilypad(i, j);
+                    PlaceBackwoodsLilypad(i, j, Right, Left);
                 }
                 //if (Main.netMode == 2)
                 //    NetMessage.SendTileSquare(-1, i, j);
@@ -3297,7 +3297,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
     }
 
-    private bool PlaceBackwoodsLilypad(int x, int j) {
+    public static bool PlaceBackwoodsLilypad(int x, int j, int right, int left) {
         int num = j;
         int tileType = ModContent.TileType<BackwoodsLilypad>();
         if (x < 50 || x > Main.maxTilesX - 50 || num < 50 || num > Main.maxTilesY - 50)
@@ -3370,14 +3370,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Main.tile[x, num].TileFrameX = (short)(18 * _random.Next(18));
         }
         else {
-            int num6 = (Right - Left) / 5;
-            if (x < Left + num6)
+            int num6 = (right - left) / 5;
+            if (x < left + num6)
                 Main.tile[x, num].TileFrameX = (short)(18 * _random.Next(6, 9));
-            else if (x < Left + num6 * 2)
+            else if (x < left + num6 * 2)
                 Main.tile[x, num].TileFrameX = (short)(18 * _random.Next(9, 12));
-            else if (x < Left + num6 * 3)
+            else if (x < left + num6 * 3)
                 Main.tile[x, num].TileFrameX = (short)(18 * _random.Next(3, 6));
-            else if (x < Left + num6 * 4)
+            else if (x < left + num6 * 4)
                 Main.tile[x, num].TileFrameX = (short)(18 * _random.Next(15, 18));
             else
                 Main.tile[x, num].TileFrameX = (short)(18 * _random.Next(12, 15));

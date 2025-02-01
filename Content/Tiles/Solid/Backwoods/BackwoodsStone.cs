@@ -13,8 +13,6 @@ sealed class BackwoodsStone : ModTile {
         TileHelper.Solid(Type, blendAll: false);
         TileHelper.MergeWith(Type, (ushort)ModContent.TileType<BackwoodsGrass>());
 
-        Main.tileStone[Type] = true;
-
         TileID.Sets.Conversion.Stone[Type] = true;
 
         TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;

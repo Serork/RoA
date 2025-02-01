@@ -19,6 +19,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using RoA.Content.Tiles.Walls;
+using Terraria.GameContent.Metadata;
 
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
@@ -168,20 +169,23 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
     }
 
     public override void SetStaticDefaults() {
-        TileHelper.Solid(Type, blendAll: false);
+        Main.tileSolid[Type] = true;
+        Main.tileBlockLight[Type] = true;
+        Main.tileBrick[Type] = true;
 
         TileID.Sets.Grass[Type] = true;
-        TileID.Sets.CanBeDugByShovel[Type] = true;
         TileID.Sets.NeedsGrassFraming[Type] = true;
-        //TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
-        //TileID.Sets.NeedsGrassFramingDirt[Type] = TileID.Dirt;
-        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeDugByShovel[Type] = true;
         TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
+        TileID.Sets.ChecksForMerge[Type] = true;
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 
-        TileID.Sets.GrassSpecial[Type] = true;
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
 
+        TileID.Sets.Conversion.MergesWithDirtInASpecialWay[Type] = true;
         TileID.Sets.Conversion.Grass[Type] = true;
+
+        TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Grass"]);
 
         TransformTileSystem.OnKillActNormal[Type] = false;
         TransformTileSystem.ReplaceToTypeOnKill[Type] = TileID.Dirt;

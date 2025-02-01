@@ -20,7 +20,8 @@ sealed class ToxicFumes : ModDust {
         => dust.color;
 
     public override bool Update(Dust dust) {
-        dust.color = Lighting.GetColor((int)(dust.position.X / 16), (int)(dust.position.Y / 16)).MultiplyRGB(new Color(106, 140, 34, 100)) * 0.1f;
+        float opacity = Utils.GetLerpValue(0f, 0.2f, 1f - (float)dust.alpha / 255, true);
+        dust.color = Lighting.GetColor((int)(dust.position.X / 16), (int)(dust.position.Y / 16)).MultiplyRGB(new Color(106, 140, 34, 100)) * 0.1f * opacity;
         dust.position += dust.velocity * 0.12f;
         dust.scale *= 0.99f;
         dust.velocity *= 0.97f;
