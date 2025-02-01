@@ -15,7 +15,7 @@ sealed class AlmondMilk : ModItem {
         //ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
-        ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
+        ItemID.Sets.DrinkParticleColors[Item.type] = new Color[3] {
             new(221, 223, 227),
             new(214, 205, 197),
             new(206, 192, 180)

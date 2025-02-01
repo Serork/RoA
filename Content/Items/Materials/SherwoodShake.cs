@@ -15,7 +15,7 @@ sealed class SherwoodShake : ModItem {
         //ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
-        ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
+        ItemID.Sets.DrinkParticleColors[Item.type] = new Color[3] {
             new(185, 27, 69),
             new(217, 232, 171),
             new(144, 222, 159)
