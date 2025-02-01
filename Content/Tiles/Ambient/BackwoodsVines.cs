@@ -5,6 +5,7 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using RoA.Content.Tiles.Walls;
 
 namespace RoA.Content.Tiles.Ambient;
 
@@ -76,45 +77,40 @@ class BackwoodsVines : ModTile {
     }
 
     public override void RandomUpdate(int i, int j) {
-        Tile tileBelow = WorldGenHelper.GetTileSafely(i, j + 1);
-        if (WorldGen.genRand.NextBool(12) && !tileBelow.HasTile && tileBelow.LiquidType != LiquidID.Lava) {
-            bool placed = false;
-            int j2 = j;
-            while (j2 > j - 12) {
-                Tile tile = WorldGenHelper.GetTileSafely(i, j2);
-                if (tile.BottomSlope) {
-                    break;
-                }
-                else {
-                    bool flag = false;
-                    foreach (ushort validType in ValidTilesToGrowFrom) {
-                        if (tile.TileType != validType) {
-                            j2--;
+        if (Main.tile[i, j].HasUnactuatedTile) {
+            int num34 = 20;
+            if (WorldGen.genRand.Next(num34) == 0 && WorldGen.GrowMoreVines(i, j) && !Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].LiquidType != LiquidID.Lava) {
+                bool flag5 = false;
+                ushort type7 = (ushort)ModContent.TileType<BackwoodsVines>();
+                if (Main.tile[i, j].WallType == 68 || Main.tile[i, j].WallType == ModContent.WallType<BackwoodsGrassWall>() || Main.tile[i, j].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>() || Main.tile[i, j].WallType == 65 || Main.tile[i, j].WallType == 66 || Main.tile[i, j].WallType == 63)
+                    type7 = (ushort)ModContent.TileType<BackwoodsVinesFlower>();
+                else if (Main.tile[i, j + 1].WallType == 68 || Main.tile[i, j + 1].WallType == ModContent.WallType<BackwoodsGrassWall>() || Main.tile[i, j + 1].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>() || Main.tile[i, j + 1].WallType == 65 || Main.tile[i, j + 1].WallType == 66 || Main.tile[i, j + 1].WallType == 63)
+                    type7 = (ushort)ModContent.TileType<BackwoodsVinesFlower>();
 
-                            flag = true; ;
-                            break;
-                        }
-                    }
-                    if (flag) {
-                        continue;
-                    }
-                    if (!tile.HasTile) {
-                        j2--;
+                //if (Main.remixWorld && genRand.Next(5) == 0)
+                //    type7 = 382;
 
-                        continue;
+                for (int num35 = j; num35 > j - 10; num35--) {
+                    if (Main.tile[i, num35].BottomSlope) {
+                        flag5 = false;
+                        break;
+                    }
+
+                    if (Main.tile[i, num35].HasTile && Main.tile[i, num35].TileType == Type && !Main.tile[i, num35].BottomSlope) {
+                        flag5 = true;
+                        break;
                     }
                 }
 
-                placed = true;
-                break;
-            }
-
-            if (placed) {
-                tileBelow.TileType = Type;
-                tileBelow.HasTile = true;
-                WorldGen.SquareTileFrame(i, j + 1, true);
-                if (Main.netMode == NetmodeID.Server) {
-                    NetMessage.SendTileSquare(-1, i, j + 1, 3, TileChangeType.None);
+                if (flag5) {
+                    int num36 = j + 1;
+                    Tile tile = Main.tile[i, num36];
+                    Main.tile[i, num36].TileType = type7;
+                    tile.HasTile = true;
+                    Main.tile[i, num36].CopyPaintAndCoating(Main.tile[i, j]);
+                    WorldGen.SquareTileFrame(i, num36);
+                    if (Main.netMode == 2)
+                        NetMessage.SendTileSquare(-1, i, num36);
                 }
             }
         }

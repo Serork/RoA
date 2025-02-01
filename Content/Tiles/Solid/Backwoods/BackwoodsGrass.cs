@@ -18,6 +18,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using RoA.Content.Tiles.Walls;
 
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
@@ -170,10 +171,10 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
         TileHelper.Solid(Type);
 
         TileID.Sets.Grass[Type] = true;
-		TileID.Sets.CanBeDugByShovel[Type] = true;
-		TileID.Sets.NeedsGrassFraming[Type] = true;
-		TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
-		TileID.Sets.NeedsGrassFramingDirt[Type] = ModContent.TileType<BackwoodsDirt>();
+        TileID.Sets.CanBeDugByShovel[Type] = true;
+        TileID.Sets.NeedsGrassFraming[Type] = true;
+        TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
+        TileID.Sets.NeedsGrassFramingDirt[Type] = ModContent.TileType<BackwoodsDirt>();
         TileID.Sets.GeneralPlacementTiles[Type] = false;
         TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
@@ -185,7 +186,7 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         AddMapEntry(new Color(38, 107, 57));
-	}
+    }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => EmitDusts(i, j);
 
@@ -229,6 +230,44 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
                 }
                 if (Main.netMode == NetmodeID.Server && Main.tile[i, y - 1].HasTile) {
                     NetMessage.SendTileSquare(-1, i, y - 1);
+                }
+            }
+        }
+
+        if (Main.tile[i, j].HasUnactuatedTile) {
+            int num34 = 1;
+            if (WorldGen.genRand.Next(num34) == 0 && WorldGen.GrowMoreVines(i, j) && !Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].LiquidType != LiquidID.Lava) {
+                bool flag5 = false;
+                ushort type7 = (ushort)ModContent.TileType<BackwoodsVines>();
+                if (Main.tile[i, j].WallType == 68 || Main.tile[i, j].WallType == ModContent.WallType<BackwoodsGrassWall>() || Main.tile[i, j].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>() || Main.tile[i, j].WallType == 65 || Main.tile[i, j].WallType == 66 || Main.tile[i, j].WallType == 63)
+                    type7 = (ushort)ModContent.TileType<BackwoodsVinesFlower>();
+                else if (Main.tile[i, j + 1].WallType == 68 || Main.tile[i, j + 1].WallType == ModContent.WallType<BackwoodsGrassWall>() || Main.tile[i, j + 1].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>() || Main.tile[i, j + 1].WallType == 65 || Main.tile[i, j + 1].WallType == 66 || Main.tile[i, j + 1].WallType == 63)
+                    type7 = (ushort)ModContent.TileType<BackwoodsVinesFlower>();
+
+                //if (Main.remixWorld && genRand.Next(5) == 0)
+                //    type7 = 382;
+
+                for (int num35 = j; num35 > j - 10; num35--) {
+                    if (Main.tile[i, num35].BottomSlope) {
+                        flag5 = false;
+                        break;
+                    }
+
+                    if (Main.tile[i, num35].HasTile && Main.tile[i, num35].TileType == Type && !Main.tile[i, num35].BottomSlope) {
+                        flag5 = true;
+                        break;
+                    }
+                }
+
+                if (flag5) {
+                    int num36 = j + 1;
+                    Tile tile = Main.tile[i, num36];
+                    Main.tile[i, num36].TileType = type7;
+                    tile.HasTile = true;
+                    Main.tile[i, num36].CopyPaintAndCoating(Main.tile[i, j]);
+                    WorldGen.SquareTileFrame(i, num36);
+                    if (Main.netMode == 2)
+                        NetMessage.SendTileSquare(-1, i, num36);
                 }
             }
         }
