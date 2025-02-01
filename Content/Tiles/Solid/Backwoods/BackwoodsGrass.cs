@@ -197,7 +197,8 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
 
     public override void RandomUpdate(int i, int j) {
         int x = i, y = j;
-        if (Main.tile[i, j].LiquidAmount <= 32 && !Framing.GetTileSafely(x, y - 1).HasTile && Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && WorldGen.genRand.NextBool(2)) {
+        if (Main.tile[i, j].LiquidAmount <= 32 && !Framing.GetTileSafely(x, y - 1).HasTile && Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock &&
+            (j > Main.worldSurface - 1 || WorldGen.genRand.NextBool(2))) {
             if (WorldGen.genRand.NextChance(0.045)) {
                 int mintType = ModContent.TileType<MiracleMint>();
                 int style = WorldGen.genRand.Next(2);

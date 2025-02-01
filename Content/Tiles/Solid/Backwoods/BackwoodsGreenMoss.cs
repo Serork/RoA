@@ -92,7 +92,8 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         TileHelper.MergeWith(Type, stoneType);
 
         Main.tileLighted[Type] = true;
-        Main.tileMoss[Type] = true;
+
+        TileID.Sets.Conversion.Stone[Type] = true;
 
         TileID.Sets.Conversion.Moss[Type] = true;
 
@@ -155,7 +156,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
     }
 
     public override void RandomUpdate(int i, int j) {
-        if (Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && WorldGen.genRand.NextBool(2)) {
+        if (Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && (j > Main.worldSurface - 1 || WorldGen.genRand.NextBool(2))) {
             if (WorldGen.genRand.Next(6) == 0) {
                 int num20 = i;
                 int num21 = j;
@@ -180,6 +181,66 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
 
                     if (Main.netMode == NetmodeID.Server && Main.tile[num20, num21].HasTile)
                         NetMessage.SendTileSquare(-1, num20, num21);
+                }
+            }
+        }
+
+        if (Main.tile[i, j].HasUnactuatedTile && (j > Main.worldSurface - 1 || WorldGen.genRand.NextBool(2))) {
+            int num = i - 1;
+            int num2 = i + 2;
+            int num3 = j - 1;
+            int num4 = j + 2;
+            int type2 = Main.tile[i, j].TileType;
+            bool flag9 = false;
+            TileColorCache color = Main.tile[i, j].BlockColorAndCoating();
+            for (int num28 = num; num28 < num2; num28++) {
+                for (int num29 = num3; num29 < num4; num29++) {
+                    if ((i != num28 || j != num29) && Main.tile[num28, num29].HasTile && (Main.tile[num28, num29].TileType == 1 ||
+                        Main.tile[num28, num29].TileType == ModContent.TileType<BackwoodsStone>() ||
+                        Main.tile[num28, num29].TileType == 38)) {
+                        int type3 = Main.tile[num28, num29].TileType;
+                        int num30 = TileHelper.MossConversion(type2, type3);
+                        WorldGen.SpreadGrass(num28, num29, Main.tile[num28, num29].TileType, num30, repeat: false, color);
+                        if (Main.tile[num28, num29].TileType == num30) {
+                            WorldGen.SquareTileFrame(num28, num29);
+                            flag9 = true;
+                        }
+                    }
+                }
+            }
+
+            if (Main.netMode == 2 && flag9)
+                NetMessage.SendTileSquare(-1, i, j, 3);
+        }
+    }
+
+    private sealed class SpreadFromGreenMossToGrimstoneSystem : GlobalTile {
+        public override void RandomUpdate(int i, int j, int type) {
+            if (type == TileID.GreenMoss || type == TileID.GreenMossBrick) {
+                if (Main.tile[i, j].HasUnactuatedTile && (j > Main.worldSurface - 1 || WorldGen.genRand.NextBool(2))) {
+                    int num = i - 1;
+                    int num2 = i + 2;
+                    int num3 = j - 1;
+                    int num4 = j + 2;
+                    int type2 = Main.tile[i, j].TileType;
+                    bool flag9 = false;
+                    TileColorCache color = Main.tile[i, j].BlockColorAndCoating();
+                    for (int num28 = num; num28 < num2; num28++) {
+                        for (int num29 = num3; num29 < num4; num29++) {
+                            if ((i != num28 || j != num29) && Main.tile[num28, num29].HasTile && Main.tile[num28, num29].TileType == ModContent.TileType<BackwoodsStone>()) {
+                                int type3 = Main.tile[num28, num29].TileType;
+                                int num30 = TileHelper.MossConversion(type2, type3);
+                                WorldGen.SpreadGrass(num28, num29, Main.tile[num28, num29].TileType, num30, repeat: false, color);
+                                if (Main.tile[num28, num29].TileType == num30) {
+                                    WorldGen.SquareTileFrame(num28, num29);
+                                    flag9 = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (Main.netMode == 2 && flag9)
+                        NetMessage.SendTileSquare(-1, i, j, 3);
                 }
             }
         }

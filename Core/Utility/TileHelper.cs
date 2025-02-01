@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
+using RoA.Content.Tiles.Solid.Backwoods;
 
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,75 @@ static class TileHelper {
     public readonly record struct HangingTileInfo(int? X, int? Y) {
         public static implicit operator HangingTileInfo(int value) {
             return new(null, value);
+        }
+    }
+
+    public static int MossConversion(int thisType, int otherType) {
+        if ((thisType == TileID.GreenMoss || thisType == TileID.GreenMossBrick) && otherType == ModContent.TileType<BackwoodsStone>())
+            return ModContent.TileType<BackwoodsGreenMoss>();
+
+        if (thisType == ModContent.TileType<BackwoodsGreenMoss>() && otherType == 38)
+            return TileID.GreenMossBrick;
+
+        if (thisType == ModContent.TileType<BackwoodsGreenMoss>() && otherType == 1)
+            return TileID.GreenMoss;
+
+        if (thisType == ModContent.TileType<BackwoodsGreenMoss>() && otherType == ModContent.TileType<BackwoodsStone>())
+            return thisType;
+
+        if (TileID.Sets.tileMossBrick[thisType] && otherType == 38)
+            return thisType;
+
+        if (Main.tileMoss[thisType] && otherType == 1)
+            return thisType;
+
+        switch (thisType) {
+            case 182:
+                return 515;
+            case 515:
+                return 182;
+            case 180:
+                return 513;
+            case 513:
+                return 180;
+            case 179:
+                return 512;
+            case 512:
+                return 179;
+            case 381:
+                return 517;
+            case 517:
+                return 381;
+            case 534:
+                return 535;
+            case 535:
+                return 534;
+            case 536:
+                return 537;
+            case 537:
+                return 536;
+            case 539:
+                return 540;
+            case 540:
+                return 539;
+            case 625:
+                return 626;
+            case 626:
+                return 625;
+            case 627:
+                return 628;
+            case 628:
+                return 627;
+            case 183:
+                return 516;
+            case 516:
+                return 183;
+            case 181:
+                return 514;
+            case 514:
+                return 181;
+            default:
+                return 0;
         }
     }
 

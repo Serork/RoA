@@ -15,6 +15,8 @@ sealed class BackwoodsStone : ModTile {
 
         Main.tileStone[Type] = true;
 
+        TileID.Sets.Conversion.Stone[Type] = true;
+
         TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
