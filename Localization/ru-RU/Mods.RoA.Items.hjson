@@ -582,7 +582,7 @@ MillionDollarPainting: {
 }
 
 TheLegend: {
-	DisplayName: '"Легенда"'
+	DisplayName: '''"Легенда"'''
 	Tooltip: "'П. Рыцарь'"
 }
 
@@ -691,7 +691,7 @@ ElderwoodPlatform: {
 }
 
 ElderwoodSink: {
-    DisplayName: Раковина из древнего дерева
+	DisplayName: Раковина из древнего дерева
 	// Tooltip: ""
 }
 
@@ -869,7 +869,7 @@ TinAcolyteLeggings: {
 }
 
 Moss: {
-	DisplayName: '"Мох"'
+	DisplayName: '''"Мох"'''
 	Tooltip: "'П. Рыцарь'"
 }
 

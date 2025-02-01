@@ -5,4 +5,7 @@ BackwoodsBiome: {
 	TownNPCDialogueName: Чаща
 }
 
-BackwoodsPylon: Пилон Чащи
+BackwoodsPylon: {
+	// DisplayName: Backwoods Pylon
+	// TownNPCDialogueName: the Backwoods Biome
+}
