@@ -18,6 +18,22 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
 sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
+    private sealed class GreenMossPlacementOnGrimstone : GlobalItem {
+        public override bool? UseItem(Item item, Player player) {
+            if (item.type == ItemID.GreenMoss) {
+                if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
+                    Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+                    if (tile.HasTile && tile.TileType == ModContent.TileType<BackwoodsStone>() && player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY)) {
+                        WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGreenMoss>(), forced: true);
+                        return true;
+                    }
+                }
+            }
+
+            return base.UseItem(item, player);
+        }
+    }
+
     void IPostSetupContent.PostSetupContent() {
         for (int i = 0; i < TileLoader.TileCount; i++) {
             TileObjectData objData = TileObjectData.GetTileData(i, 0);
@@ -72,7 +88,6 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         TileHelper.MergeWith(Type, stoneType);
 
         Main.tileLighted[Type] = true;
-        Main.tileMoss[Type] = true;
 
         TileID.Sets.Conversion.Moss[Type] = true;
 

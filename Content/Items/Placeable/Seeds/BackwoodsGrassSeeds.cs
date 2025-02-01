@@ -27,16 +27,15 @@ sealed class BackwoodsGrassSeeds : ModItem {
     }
 
     public override bool? UseItem(Player player) {
-        if (Main.netMode == NetmodeID.Server) {
-            return false;
+        if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
+            Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+            if (tile.HasTile && tile.TileType == TileID.Dirt && player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY)) {
+                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGrass>(), forced: true);
+
+                return true;
+            }
         }
 
-        Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-        if (tile.HasTile && tile.TileType == TileID.Dirt && player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY)) {
-            WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGrass>(), forced: true);
-            player.inventory[player.selectedItem].stack--;
-        }
-
-        return true;
+        return base.UseItem(player);
     }
 }
