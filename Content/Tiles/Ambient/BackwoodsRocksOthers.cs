@@ -38,6 +38,10 @@ sealed class BackwoodsRocks02 : BackwoodsRocks0 {
 
         return true;
     }
+
+    public override void DropCritterChance(int i, int j, ref int wormChance, ref int grassHopperChance, ref int jungleGrubChance) {
+        wormChance = 6;
+    }
 }
 
 sealed class BackwoodsRocks01 : BackwoodsRocks0 {
@@ -68,6 +72,10 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
         }
 
         return true;
+    }
+
+    public override void DropCritterChance(int i, int j, ref int wormChance, ref int grassHopperChance, ref int jungleGrubChance) {
+        wormChance = 6;
     }
 }
 
