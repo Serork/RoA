@@ -22,9 +22,6 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
 
-        TileID.Sets.ReplaceTileBreakUp[Type] = true;
-        TileID.Sets.BreakableWhenPlacing[Type] = true;
-
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.LavaDeath = false;
@@ -87,9 +84,6 @@ class BackwoodsRocks1 : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
-
-        TileID.Sets.ReplaceTileBreakUp[Type] = true;
-        TileID.Sets.BreakableWhenPlacing[Type] = true;
 
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 1;

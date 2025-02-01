@@ -30,13 +30,10 @@ sealed class BackwoodsRocks3x2Rubble : ModTile, TileHooks.IGetTileDrawData {
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
 
-        TileID.Sets.ReplaceTileBreakUp[Type] = true;
-        TileID.Sets.BreakableWhenPlacing[Type] = true;
-
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 3;
         TileObjectData.newTile.Height = 2;
-        TileObjectData.newTile.Origin = new Point16(0, 1);
+        TileObjectData.newTile.Origin = new Point16(1, 1);
         TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.CoordinateHeights = [16, 16];
