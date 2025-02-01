@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Core.Utility;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,6 +12,8 @@ sealed class BackwoodsStone : ModTile {
 	public override void SetStaticDefaults() {
         TileHelper.Solid(Type, blendAll: false);
         TileHelper.MergeWith(Type, (ushort)ModContent.TileType<BackwoodsGrass>());
+
+        Main.tileStone[Type] = true;
 
         TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;

@@ -101,6 +101,8 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         TileID.Sets.NeedsGrassFramingDirt[Type] = stoneType;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
+        TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
+
         TransformTileSystem.OnKillActNormal[Type] = false;
         TransformTileSystem.ReplaceToTypeOnKill[Type] = stoneType;
 
@@ -110,6 +112,27 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => SetupLight(ref r, ref g, ref b);
+
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        bool flag = true;
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                if (x != 0 && y != 0) {
+                    if (!WorldGenHelper.GetTileSafely(i + x, j + y).HasTile) {
+                        flag = false;
+                    }
+                }
+            }
+        }
+        if (flag) {
+            Tile tile = WorldGenHelper.GetTileSafely(i, j);
+            tile.TileFrameX = 144;
+            tile.TileFrameY = 198;
+            return false;
+        }
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+    }
 
     public static void SetupLight(ref float r, ref float g, ref float b) {
         float value = BackwoodsFogHandler.Opacity;
