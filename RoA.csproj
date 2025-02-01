@@ -24,6 +24,7 @@
 	  <None Remove="Localization\en-US_Mods.RoA.Vanilla.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.World.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.WorldGen.hjson" />
+	  <None Remove="Localization\ru-RU\Mods.RoA.Bestiary.hjson" />
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Block.png" />
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Slope.png" />
 	  <None Remove="Resources\Textures\Buffs\BoneHarpyAttackDebuff.png" />
