@@ -23,5 +23,5 @@ DruidPotentialDamageModifier: "{0:+0;-#} potential damage"
 DruidPotentialDamageModifierMult: "{0:+0;-#}% potential damage"
 DruidSpeedModifier: "{0:+0;-#}% speed"
 DruidPotentialSpeedModifier: "{0:+0;-#}% potential speed"
-DruidFillingRateModifierMult: "{0:+0;-#}% filling rate"
+DruidFillingRateModifierMult: "{0:+0;-#}% charge rate"
 TipsyEffect: Makes you tipsy when used

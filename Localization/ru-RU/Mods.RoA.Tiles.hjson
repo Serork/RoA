@@ -1,40 +1,40 @@
-// PrimordialSapling.MapEntry: Sapling
-// FallenTree.MapEntry: Fallen Tree
-// MiracleMint.MapEntry: Miracle Mint
-// ElderwoodChest.MapEntry: Elderwood Chest
-// DryadStatue.MapEntry: Dryad Statue
-// TreeBranch.MapEntry: Tree Branch
-// SweepTulip.MapEntry: Sweep Tulip
-// ExoticTulip.MapEntry: Exotic Tulip
-// WeepingTulip.MapEntry: Weeping Tulip
-// SweetTulip.MapEntry: Sweet Tulip
-// LuminousFlower.MapEntry: Luminous Flower
-// Bonerose.MapEntry: Bonerose
-// OvergrownAltar.MapEntry: Overgrown Altar
-// LivingElderwood.MapEntry: Living Elderwood
-// LivingElderwood2.MapEntry: Living Elderwood
-// ElderwoodChair.MapEntry: Elderwood Chair
-// ElderwoodChandelier.MapEntry: Elderwood Chandelier
-// ElderwoodDoorClosed.MapEntry: Elderwood Door Closed
-// ElderwoodDoorOpened.MapEntry: Elderwood Door Opened
-// ElderwoodPiano.MapEntry: Elderwood Piano
-// ElderwoodPlatform.MapEntry: Elderwood Platform
-// ElderwoodTable.MapEntry: Elderwood Table
-// ElderwoodWorkbench.MapEntry: Elderwood Workbench
-// ElderwoodBookcase.MapEntry: Elderwood Bookcase
-// MillionDollarPainting.MapEntry: Million Dollar Painting
-// Moss.MapEntry: '''"Moss"'''
-// TheLegend.MapEntry: '''"The Legend"'''
-// Cloudberry.MapEntry: Cloudberry
-// LivingElderwood3.MapEntry: Living Elderwood
-// ElderwoodChest2.MapEntry: Rootbound Chest
-// Elderwood.MapEntry: Elderwood
-// MercuriumOre.MapEntry: Mercurium Ore
-// NexusGateway.MapEntry: Peculiar Ingress
-// OniMask.MapEntry: Oni Mask
-// ElderwoodDresser.MapEntry: Elderwood Dresser
-// Coffin.MapEntry: Coffin
-// Tapper.MapEntry: Tapper
-// LothorMusicBox.MapEntry: Lothor Music Box
-// BackwoodsBigTree.MapEntry: Giant Tree
-// BackwoodsPylonTile.MapEntry: Backwoods Pylon
+// PrimordialSapling.MapEntry: Саженец
+// FallenTree.MapEntry: Упавшее дерево
+// MiracleMint.MapEntry: Чудомята
+// ElderwoodChest.MapEntry: Сундук из древнедрева
+// DryadStatue.MapEntry: Статуя дриады
+// TreeBranch.MapEntry: Ветка
+// SweepTulip.MapEntry: Сладкий тюльпан
+// ExoticTulip.MapEntry: Экзотичный тюльпан
+// WeepingTulip.MapEntry: Стенающий тюльпан
+// SweetTulip.MapEntry: Сладкий тюльпан
+// LuminousFlower.MapEntry: Ясный цветок
+// Bonerose.MapEntry: Костероза
+// OvergrownAltar.MapEntry: Заросщий алтарь
+// LivingElderwood.MapEntry: Живое древнедрево
+// LivingElderwood2.MapEntry: Живое древнедрево
+// ElderwoodChair.MapEntry: Стул из древнедрева
+// ElderwoodChandelier.MapEntry: Люстра из древнедрева
+// ElderwoodDoorClosed.MapEntry: Закрытая дверь из древнедрева
+// ElderwoodDoorOpened.MapEntry: Открытая дверь из древнедрева
+// ElderwoodPiano.MapEntry: Пианино из древнедрева
+// ElderwoodPlatform.MapEntry: Платформа из древнедрева
+// ElderwoodTable.MapEntry: Стол из древнедрева
+// ElderwoodWorkbench.MapEntry: Верстак из древнедрева
+// ElderwoodBookcase.MapEntry: Книжный шкаф из древнедрева
+// MillionDollarPainting.MapEntry: Картина на миллион долларов
+// Moss.MapEntry: '''"Мох"'''
+// TheLegend.MapEntry: '''"Легенда"'''
+// Cloudberry.MapEntry: Морошка
+// LivingElderwood3.MapEntry: Живое древнедрево
+// ElderwoodChest2.MapEntry: Опутанный корнями сундук
+// Elderwood.MapEntry: Древнедрево
+// MercuriumOre.MapEntry: Ртутная руда
+// NexusGateway.MapEntry: Подозрительная арка
+// OniMask.MapEntry: Маска Они
+// ElderwoodDresser.MapEntry: Комод из древнедрева
+// Coffin.MapEntry: Гроб
+// Tapper.MapEntry: Подсочник
+// LothorMusicBox.MapEntry: Музыкальная шкатулка (Лотор)
+// BackwoodsBigTree.MapEntry: Гигантское дерево
+// BackwoodsPylonTile.MapEntry: Столб Чащи
