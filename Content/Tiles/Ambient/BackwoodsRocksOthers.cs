@@ -16,6 +16,30 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
+sealed class BackwoodsRocks02 : BackwoodsRocks0 {
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.LavaDeath = false;
+        TileObjectData.addTile(Type);
+
+        DustType = ModContent.DustType<Stone>();
+        AddMapEntry(new Color(34, 37, 46));
+
+        MineResist = 1.25f;
+    }
+
+    public override bool CreateDust(int i, int j, ref int type) {
+        type = ModContent.DustType<Stone>();
+
+        return true;
+    }
+}
+
 sealed class BackwoodsRocks01 : BackwoodsRocks0 {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
