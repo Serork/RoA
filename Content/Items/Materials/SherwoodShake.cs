@@ -25,7 +25,7 @@ sealed class SherwoodShake : ModItem {
 
 	public override void SetDefaults() {
         Item.DefaultToFood(14, 34, 26, 72000, useGulpSound: true);
-        Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(0, 2));
+        Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(0, 2));
     }
 
     public override void AddRecipes() {
