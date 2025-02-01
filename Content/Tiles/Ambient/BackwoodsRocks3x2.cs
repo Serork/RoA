@@ -42,6 +42,7 @@ sealed class BackwoodsRocks3x2 : ModTile, TileHooks.IGetTileDrawData {
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = false;
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
         TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
         TileObjectData.addAlternate(1);
