@@ -84,7 +84,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
 
     public override void SetStaticDefaults() {
         ushort stoneType = (ushort)ModContent.TileType<BackwoodsStone>();
-        TileHelper.Solid(Type, false, false);
+        TileHelper.Solid(Type, blendAll: false);
         TileHelper.MergeWith(Type, stoneType);
 
         Main.tileLighted[Type] = true;
