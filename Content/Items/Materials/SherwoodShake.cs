@@ -16,9 +16,9 @@ sealed class SherwoodShake : ModItem {
 
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
         ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
-            new(191, 115, 63),
-            new(227, 146, 90),
-            new(171, 86, 43)
+            new(185, 27, 69),
+            new(217, 232, 171),
+            new(144, 222, 159)
         };
 		ItemID.Sets.IsFood[Type] = true;
     }

@@ -1402,3 +1402,13 @@ Pistachio: {
 	DisplayName: Pistachio
 	Tooltip: ""
 }
+
+AlmondMilk: {
+	DisplayName: Almond Milk
+	Tooltip: ""
+}
+
+SherwoodShake: {
+	DisplayName: Sherwood Shake
+	Tooltip: ""
+}
