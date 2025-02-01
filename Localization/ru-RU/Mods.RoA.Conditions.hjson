@@ -3,6 +3,6 @@ BackwoodsBiome: {
 	TownNPCDialogueName: биом Чащи
 }
 
-//InBackwoods: В биоме Чащи
-//TanningRack: Mods.RoA.Conditions.TanningRack
-//FlederSlayer: Mods.RoA.Conditions.FlederSlayer
+// InBackwoods: Mods.RoA.Conditions.InBackwoods
+// TanningRack: Mods.RoA.Conditions.TanningRack
+// FlederSlayer: Mods.RoA.Conditions.FlederSlayer

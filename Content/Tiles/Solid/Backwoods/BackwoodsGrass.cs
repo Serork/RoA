@@ -271,5 +271,29 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
                 }
             }
         }
+
+        int minI = i - 1;
+        int maxI = i + 2;
+        int minJ = j - 1;
+        int maxJ = j + 2;
+        if (WorldGen.InWorld(i, j, 10)) {
+            int num2 = Main.tile[i, j].TileType;
+            TileColorCache color2 = Main.tile[i, j].BlockColorAndCoating();
+            bool flag6 = false;
+            for (int num3 = minI; num3 < maxI; num3++) {
+                for (int num4 = minJ; num4 < maxJ; num4++) {
+                    if ((i != num3 || j != num4) && Main.tile[num3, num4].HasTile && Main.tile[num3, num4].TileType == TileID.Dirt) {
+                        WorldGen.SpreadGrass(num3, num4, TileID.Dirt, num2, repeat: false, color2);
+                        if (Main.tile[num3, num4].TileType == num2) {
+                            WorldGen.SquareTileFrame(num3, num4);
+                            flag6 = true;
+                        }
+                    }
+                }
+            }
+            if (Main.netMode == NetmodeID.Server && flag6) {
+                NetMessage.SendTileSquare(-1, i, j, 3);
+            }
+        }
     }
 }
