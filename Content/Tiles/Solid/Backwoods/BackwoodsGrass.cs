@@ -179,10 +179,6 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
         TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 
-        TileID.Sets.ChecksForMerge[Type] = true;
-        TileID.Sets.ForcedDirtMerging[Type] = true;
-        TileID.Sets.Conversion.MergesWithDirtInASpecialWay[Type] = true;
-
         TileID.Sets.GrassSpecial[Type] = true;
 
         TileID.Sets.Conversion.Grass[Type] = true;
