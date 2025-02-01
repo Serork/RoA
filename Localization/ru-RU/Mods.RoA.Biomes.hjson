@@ -1,6 +1,11 @@
 InBackwoods: В биоме Чащи
 
 BackwoodsBiome: {
+	DisplayName: Чаща
+	TownNPCDialogueName: Чаща
+}
+
+BackwoodsPylon: {
 	DisplayName: Столб Чащи
 	TownNPCDialogueName: Чаща
 }

@@ -1,6 +1,11 @@
 InBackwoods: In the Backwoods biome
 
 BackwoodsBiome: {
-	DisplayName: Backwoods Biome
+	DisplayName: Backwoods
+	TownNPCDialogueName: the Backwoods Biome
+}
+
+BackwoodsPylon: {
+	DisplayName: Backwoods Pylon
 	TownNPCDialogueName: the Backwoods Biome
 }
