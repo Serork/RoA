@@ -119,6 +119,8 @@ sealed class BackwoodsPylonTile : ModPylon {
             CrystalVerticalFrameCount);
     }
 
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
+
     private void NewDefaultDrawPylonCrystal(SpriteBatch spriteBatch, int i, int j, Asset<Texture2D> crystalTexture, Asset<Texture2D> crystalHighlightTexture, Vector2 crystalOffset, Color pylonShadowColor, Color dustColor, int dustChanceDenominator, int crystalVerticalFrameCount) {
         // Gets offscreen vector for different lighting modes
         Vector2 offscreenVector = new Vector2(Main.offScreenRange);
