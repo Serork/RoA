@@ -1390,7 +1390,7 @@ BloodCursor: {
 
 CrowdRavenBanner: {
 	DisplayName: Crowd Raven Banner
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRavem.DisplayName}"
 }
 
 Almond: {
