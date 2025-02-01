@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.BackwoodsSystems;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
@@ -111,6 +112,10 @@ sealed class Ravencaller : ModNPC {
 
     public static void SummonItself(IEntitySource source, int x, int y) {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
+            return;
+        }
+
+        if (y / 16 >= BackwoodsVars.FirstTileYAtCenter + 35) {
             return;
         }
 
