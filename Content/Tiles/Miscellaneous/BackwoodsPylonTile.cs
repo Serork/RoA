@@ -86,12 +86,6 @@ sealed class BackwoodsPylonTile : ModPylon {
         ModContent.GetInstance<SimplePylonEntity>().Kill(i, j);
     }
 
-    public override bool ValidTeleportCheck_NPCCount(TeleportPylonInfo pylonInfo, int defaultNecessaryNPCCount) {
-        // Let's say for fun sake that no NPCs need to be nearby in order for this pylon to function. If you want your pylon to function just like vanilla,
-        // you don't need to override this method at all.
-        return true;
-    }
-
     public override bool ValidTeleportCheck_BiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData) {
         // Right before this hook is called, the sceneData parameter exports its information based on wherever the destination pylon is,
         // and by extension, it will call ALL ModSystems that use the TileCountsAvailable method. This means, that if you determine biomes

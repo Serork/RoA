@@ -129,6 +129,8 @@ sealed class BloodCursor : ModItem {
 
     public override void UpdateEquip(Player player) => player.GetModPlayer<BloodCursorHandler>().IsEffectActive = true;
 
+    public override void UpdateVanity(Player player) => player.GetModPlayer<BloodCursorHandler>().IsEffectActive = true;
+
     //public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
     //	if (drawPlayer.active) {
     //		glowMask = RoAGlowMask.Get("DeerSkull_Head");
