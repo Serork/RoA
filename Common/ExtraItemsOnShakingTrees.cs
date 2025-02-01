@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -217,7 +218,7 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
         else if (genRand.Next(30) == 0 && (treeType == TreeTypes.Crimson || treeType == TreeTypes.PalmCrimson)) {
             NPC.NewNPC(new EntitySource_ShakeTree(x, y), x * 16 + 8, (y - 1) * 16, -22);
         }
-        else if (genRand.Next(1) == 0 && flag) {
+        else if (genRand.Next(15) == 0 && flag) {
             NPC.NewNPC(new EntitySource_ShakeTree(x, y), x * 16 + 8, (y + 1) * 16, !NPC.downedBoss2 ? ModContent.NPCType<BabyFleder>() : ModContent.NPCType<Fleder>());
         }
         else if (genRand.Next(30) == 0 && (treeType == TreeTypes.Corrupt || treeType == TreeTypes.PalmCorrupt)) {
@@ -276,6 +277,9 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
             }
 
             Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), x * 16, y * 16, 16, 16, type7);
+        }
+        else if (genRand.Next(6) == 0 && flag) {
+            Item.NewItem(Type: (genRand.Next(2) != 0) ? ModContent.ItemType<Pistachio>() : ModContent.ItemType<Almond>(), source: WorldGen.GetItemSource_FromTreeShake(x, y), X: x * 16, Y: y * 16, Width: 16, Height: 16);
         }
         else if (genRand.Next(12) == 0 && treeType == TreeTypes.Snow) {
             Item.NewItem(Type: (genRand.Next(2) != 0) ? 4295 : 4286, source: WorldGen.GetItemSource_FromTreeShake(x, y), X: x * 16, Y: y * 16, Width: 16, Height: 16);
