@@ -1300,7 +1300,7 @@ CrimsonRod: {
 
 BackwoodsPylon: {
 	// DisplayName: Backwoods Pylon
-	// Tooltip: ""
+	// Tooltip: "{$CommonItemTooltip.TeleportationPylon}"
 }
 
 ArchdruidBanner: {
@@ -1390,7 +1390,7 @@ BloodCursor: {
 
 CrowdRavenBanner: {
 	// DisplayName: Crowd Raven Banner
-	// Tooltip: ""
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}"
 }
 
 Almond: {
