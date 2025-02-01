@@ -1,85 +1,85 @@
 ElderwoodClaws: {
-	// DisplayName: Elderwood Claws
-	// Tooltip: "'Fashioned after a Fleder'"
+	DisplayName: Когти из древнедрева
+	Tooltip: "'Изготовлены наподобие когтей нетопыря'"
 }
 
 Elderwood: {
-	// DisplayName: Elderwood
-	// Tooltip: "'Arboreal culture native to the Backwoods'"
+	DisplayName: Древнедрево
+	Tooltip: "'Древесная культура, естественная для Чащи'"
 }
 
 GutwrenchingHooks: {
-	// DisplayName: Gutwrenching Hooks
-	// Tooltip: "'Fashioned after a Crimera'"
+	DisplayName: Кишко-выворачивающие крюки
+	Tooltip: "'Изготовлены наподобие хелицер кримеры'"
 }
 
 HellfireClaws: {
-	// DisplayName: Hellfire Claws
-	// Tooltip: "'Claws so fire, they set everything on fire'"
+	DisplayName: Когти адского пламени
+	Tooltip: "'Когти настолько огонь, что зажигают все вокруг'"
 }
 
 HorrorPincers: {
-	// DisplayName: Horror Pincers
-	// Tooltip: "'Fashioned after an Eater of Souls'"
+	DisplayName: Клещи ужаса
+	Tooltip: "'Изготовлены наподобие хилецер пожирателя душ'"
 }
 
 ThornyClaws: {
-	// DisplayName: Thorny Claws
-	// Tooltip: "'Sting like a Hornet, bite like a Man Eater'"
+	DisplayName: Шипастые когти
+	Tooltip: "'Жаль как шершень, кусай как людоед'"
 }
 
 ElderwoodChest: {
-	// DisplayName: Elderwood Chest
-	// Tooltip: ""
+	DisplayName: Сундук из Древнедрева
+	Tooltip: ""
 }
 
 DryadStatue: {
-	// DisplayName: Dryad Statue
-	// Tooltip: ""
+	DisplayName: Статуя Дриады
+	Tooltip: ""
 }
 
 MiracleMint: {
-	// DisplayName: Miracle Mint
-	// Tooltip: ""
+	DisplayName: Чудо-мята
+	Tooltip: ""
 }
 
 MushroomStaff: {
-	// DisplayName: Mushroom Staff
-	// Tooltip: Releases a bunch of floating spores
+	DisplayName: Грибной посох
+	Tooltip: Выпускает горсть нисходящих спор
 }
 
 PastoralRod: {
-	// DisplayName: Pastoral Cane
-	// Tooltip: Launches mind-controlled sparks
+	DisplayName: Пастушья трость
+	Tooltip: Выпускает искры, управляемые разумом
 }
 
 RipePumpkin: {
-	// DisplayName: Ripe Pumpkin
-	/* Tooltip:
+	DisplayName: Сочная тыква
+	Tooltip:
 		'''
-		Launches a pumpkin
-		Attack again to explode it into seeds
-		''' */
+		Запускает тыкву
+		Атакуйте вновь, чтобы распространить семена
+		'''
 }
 
 ExoticTulip: {
-	// DisplayName: Exotic Tulip
-	// Tooltip: Shoots a fragrant petal
+	DisplayName: Экзотический тюльпан
+	Tooltip: Стреляет душистым лепестком
 }
 
 SweetTulip: {
-	// DisplayName: Sweet Tulip
-	// Tooltip: Shoots a honey petal
+	DisplayName: Сладкий тюльпан
+	Tooltip: Стреляет медовым лепестком
 }
 
 WeepingTulip: {
-	// DisplayName: Weeping Tulip
-	// Tooltip: Shoots a magic petal
+	DisplayName: Стенающий тюльпан
+	Tooltip: Стреляет волшебным лепестком
 }
 
 PineCone: {
-	// DisplayName: Pine Cone
-	// Tooltip: Conjures a falling pine cone
+	DisplayName: Сосновая шишка
+	Tooltip: Сотворяет падающую шишку
 }
 
 CactiCaster: {

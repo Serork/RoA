@@ -1,4 +1,4 @@
-// ToxicFumesDeathMessage0: " forgot not to play with a thermometer."
-// ToxicFumesDeathMessage1: "'s end was quick... silver."
-// ToxicFumesDeathMessage2: " forgot a respirator."
-// ToxicFumesDeathMessage3: " couldn't handle the toxicity"
+ToxicFumesDeathMessage0: " заигрался с градусником."
+ToxicFumesDeathMessage1: " утек из жизни, как ртуть."
+ToxicFumesDeathMessage2: " не надел респиратор."
+ToxicFumesDeathMessage3: " не справился с токсичностью."

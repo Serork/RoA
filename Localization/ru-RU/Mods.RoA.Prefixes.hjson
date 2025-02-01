@@ -12,16 +12,16 @@ Thorny: Колючий
 Stumpy: Коренастый
 Irritated: Раздраженный
 Overripe: Переспелый
-DruidDamageModifier: "{0:+0;-#} к базовому урону"
-DruidDamageModifierMult: "{0:+0;-#}% к базовому урон"
+DruidDamageModifier: "{0:+0;-#} к начальному урону"
+DruidDamageModifierMult: "{0:+0;-#}% к начальному урону"
 DruidDamageModifier1: "{0:+0;-#} к урону"
 DruidDamageModifierMult1: "{0:+0;-#}% к урону"
 DruidKnockbackModifier: "{0:+0;-#} к отбрасыванию"
 DruidKnockbackModifierMult: "{0:+0;-#}% к отбрасыванию"
 DruidCritModifier: "{0:+0;-#}% к шансу критического удара"
-DruidPotentialDamageModifier: "{0:+0;-#} к потенциальному урону"
-DruidPotentialDamageModifierMult: "{0:+0;-#}% к потенциальному урону"
+DruidPotentialDamageModifier: "{0:+0;-#} к возможному урону"
+DruidPotentialDamageModifierMult: "{0:+0;-#}% к возможному урону"
 DruidSpeedModifier: "{0:+0;-#}% к скорости"
-DruidPotentialSpeedModifier: "{0:+0;-#}% к потенциальной скорости"
+DruidPotentialSpeedModifier: "{0:+0;-#}% к возможной скорости"
 DruidFillingRateModifierMult: "{0:+0;-#}% к скорости заполнения"
 TipsyEffect: Опьяняет при использовании

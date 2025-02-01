@@ -1,5 +1,5 @@
-// DamageClasses.DruidClass.DisplayName: nature damage
-// NoNeededLargeGem: You must have a large gem to teleport to the Beacon
-// TooFar: You are not close enough to the Beacon to teleport
-// WreathSlot: Wreath
-// SocialWreathSlot: Social Wreath
+DamageClasses.DruidClass.DisplayName: природный урон
+NoNeededLargeGem: Вам нужен большой самоцвет, чтобы воспользоваться маяком
+TooFar: Вы недостаточно близки к маяку, чтобы переместится
+WreathSlot: Венок
+SocialWreathSlot: Социальный венок
