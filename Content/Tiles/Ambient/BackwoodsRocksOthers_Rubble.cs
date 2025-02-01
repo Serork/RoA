@@ -31,6 +31,10 @@ sealed class BackwoodsRocks01Rubble : BackwoodsRocks1Rubble {
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
 
+        FlexibleTileWand.RubblePlacementMedium.AddVariations(ModContent.ItemType<Grimstone>(), Type, 0, 1, 2, 3, 4, 5);
+
+        RegisterItemDrop(ModContent.ItemType<Grimstone>());
+
         DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
 
@@ -52,6 +56,42 @@ sealed class BackwoodsRocks01Rubble : BackwoodsRocks1Rubble {
 }
 
 class BackwoodsRocks0Rubble : BackwoodsRocks1Rubble {
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
+
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.Width = 1;
+        TileObjectData.newTile.Height = 1;
+        TileObjectData.newTile.Origin = new Point16(0, 0);
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
+        TileObjectData.newTile.UsesCustomCanPlace = true;
+        TileObjectData.newTile.CoordinateHeights = [16];
+        TileObjectData.newTile.CoordinateWidth = 16;
+        TileObjectData.newTile.CoordinatePadding = 2;
+        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = true;
+        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
+        TileObjectData.addAlternate(1);
+        TileObjectData.addTile(Type);
+
+        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<Grimstone>(), Type, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+
+        // Tiles placed by Rubblemaker drop the item used to place them.
+        RegisterItemDrop(ModContent.ItemType<Grimstone>());
+
+        DustType = ModContent.DustType<Stone>();
+        AddMapEntry(new Color(34, 37, 46));
+
+        MineResist = 1.25f;
+    }
+
     public override bool CreateDust(int i, int j, ref int type) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         if (tile.TileFrameX <= 108) {
