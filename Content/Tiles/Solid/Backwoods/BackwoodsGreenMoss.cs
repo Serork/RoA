@@ -129,6 +129,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
             tile.TileFrameX = 144;
             tile.TileFrameY = 198;
+            return false;
         }
 
         return base.TileFrame(i, j, ref resetFrame, ref noBreak);
