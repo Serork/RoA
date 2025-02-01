@@ -45,7 +45,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
                 continue;
             }
 
-            if (objData.AnchorValidTiles.Any(tileId => tileId == TileID.RainbowMoss)) {
+            if (objData.AnchorValidTiles.Any(tileId => tileId == TileID.RainbowMoss || tileId == TileID.GreenMoss || tileId == TileID.GreenMossBrick)) {
                 lock (objData) {
                     int[] anchorAlternates = objData.AnchorValidTiles;
                     Array.Resize(ref anchorAlternates, anchorAlternates.Length + 1);
@@ -91,10 +91,12 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         TileHelper.Solid(Type, blendAll: false);
         TileHelper.MergeWith(Type, stoneType);
 
+        Main.tileFrameImportant[Type] = true;
+
         Main.tileLighted[Type] = true;
+        Main.tileMoss[Type] = true;
 
-        TileID.Sets.Conversion.Stone[Type] = true;
-
+        //TileID.Sets.Conversion.Stone[Type] = true;
         TileID.Sets.Conversion.Moss[Type] = true;
 
         TileID.Sets.Grass[Type] = true;
