@@ -168,16 +168,22 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
     }
 
     public override void SetStaticDefaults() {
-        TileHelper.Solid(Type);
+        TileHelper.Solid(Type, blendAll: false);
 
         TileID.Sets.Grass[Type] = true;
         TileID.Sets.CanBeDugByShovel[Type] = true;
         TileID.Sets.NeedsGrassFraming[Type] = true;
-        TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
-        TileID.Sets.NeedsGrassFramingDirt[Type] = ModContent.TileType<BackwoodsDirt>();
+        //TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
+        //TileID.Sets.NeedsGrassFramingDirt[Type] = TileID.Dirt;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
         TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
+
+        TileID.Sets.ChecksForMerge[Type] = true;
+        TileID.Sets.ForcedDirtMerging[Type] = true;
+        TileID.Sets.Conversion.MergesWithDirtInASpecialWay[Type] = true;
+
+        TileID.Sets.GrassSpecial[Type] = true;
 
         TileID.Sets.Conversion.Grass[Type] = true;
 
