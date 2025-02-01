@@ -3,12 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,7 +18,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class BackwoodsRocks01 : BackwoodsRocks0 {
+sealed class BackwoodsRocks01Rubble : BackwoodsRocks1Rubble {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -27,7 +29,6 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;
-        TileObjectData.newTile.LavaDeath = false;
         TileObjectData.addTile(Type);
 
         DustType = ModContent.DustType<Stone>();
@@ -50,7 +51,7 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
     }
 }
 
-class BackwoodsRocks0 : BackwoodsRocks1 {
+class BackwoodsRocks0Rubble : BackwoodsRocks1Rubble {
     public override bool CreateDust(int i, int j, ref int type) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         if (tile.TileFrameX <= 108) {
@@ -64,7 +65,7 @@ class BackwoodsRocks0 : BackwoodsRocks1 {
     }
 }
 
-sealed class BackwoodsRocks2 : BackwoodsRocks1, TileHooks.IGetTileDrawData {
+sealed class BackwoodsRocks2Rubble : BackwoodsRocks1Rubble, TileHooks.IGetTileDrawData {
     public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
         glowTexture = this.GetTileGlowTexture();
         glowColor = TileDrawingExtra.BackwoodsMossGlowColor;
@@ -82,7 +83,7 @@ sealed class BackwoodsRocks2 : BackwoodsRocks1, TileHooks.IGetTileDrawData {
     }
 }
 
-class BackwoodsRocks1 : ModTile {
+class BackwoodsRocks1Rubble : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -94,7 +95,7 @@ class BackwoodsRocks1 : ModTile {
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 1;
         TileObjectData.newTile.Height = 1;
-        TileObjectData.newTile.Origin = new Point16(0, 1);
+        TileObjectData.newTile.Origin = new Point16(0, 0);
         TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.CoordinateHeights = [16];
@@ -102,11 +103,16 @@ class BackwoodsRocks1 : ModTile {
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newTile.LavaDeath = false;
+        TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
         TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
+
+        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<Grimstone>(), Type, 0, 1, 2, 3, 4, 5);
+
+        // Tiles placed by Rubblemaker drop the item used to place them.
+        RegisterItemDrop(ModContent.ItemType<Grimstone>());
 
         DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
@@ -122,9 +128,5 @@ class BackwoodsRocks1 : ModTile {
         }
 
         spriteEffects = SpriteEffects.FlipHorizontally;
-    }
-
-    public override void DropCritterChance(int i, int j, ref int wormChance, ref int grassHopperChance, ref int jungleGrubChance) {
-        wormChance = 8;
     }
 }

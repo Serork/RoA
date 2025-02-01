@@ -187,13 +187,16 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
-        OnHitNPC(proj);
+        OnHitNPC(proj, target: target);
         //else {
 
         //}
     }
 
     public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
+        if (target.immortal) {
+            return;
+        }
         if (!item.IsADruidicWeapon()) {
             return;
         }
@@ -202,7 +205,10 @@ sealed class WreathHandler : ModPlayer {
         MakeDustsOnHit();
     }
 
-    public void OnHitNPC(Projectile proj, bool nonDataReset = false) {
+    public void OnHitNPC(Projectile proj, bool nonDataReset = false, NPC target = null) {
+        if (target != null && target.immortal) {
+            return;
+        }
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;
         }
