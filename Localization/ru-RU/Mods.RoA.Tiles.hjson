@@ -1,40 +1,40 @@
 PrimordialSapling.MapEntry: Саженец
 FallenTree.MapEntry: Упавшее дерево
 MiracleMint.MapEntry: Чудомята
-ElderwoodChest.MapEntry: Сундук из древнедрева
+ElderwoodChest.MapEntry: Сундук из древнего дерева
 DryadStatue.MapEntry: Статуя дриады
 TreeBranch.MapEntry: Ветка
-SweepTulip.MapEntry: Сладкий тюльпан
+// SweepTulip.MapEntry: Сладкий тюльпан
 ExoticTulip.MapEntry: Экзотичный тюльпан
 WeepingTulip.MapEntry: Стенающий тюльпан
 SweetTulip.MapEntry: Сладкий тюльпан
 LuminousFlower.MapEntry: Ясный цветок
 Bonerose.MapEntry: Костероза
 OvergrownAltar.MapEntry: Заросщий алтарь
-LivingElderwood.MapEntry: Живое древнедрево
-LivingElderwood2.MapEntry: Живое древнедрево
-ElderwoodChair.MapEntry: Стул из древнедрева
-ElderwoodChandelier.MapEntry: Люстра из древнедрева
-ElderwoodDoorClosed.MapEntry: Закрытая дверь из древнедрева
-ElderwoodDoorOpened.MapEntry: Открытая дверь из древнедрева
-ElderwoodPiano.MapEntry: Пианино из древнедрева
-ElderwoodPlatform.MapEntry: Платформа из древнедрева
-ElderwoodTable.MapEntry: Стол из древнедрева
-ElderwoodWorkbench.MapEntry: Верстак из древнедрева
-ElderwoodBookcase.MapEntry: Книжный шкаф из древнедрева
+LivingElderwood.MapEntry: Живое древнее дерево
+LivingElderwood2.MapEntry: Живое древнее дерево
+ElderwoodChair.MapEntry: Стул из древнего дерева
+ElderwoodChandelier.MapEntry: Люстра из древнего дерева
+ElderwoodDoorClosed.MapEntry: Закрытая дверь из древнего дерева
+ElderwoodDoorOpened.MapEntry: Открытая дверь из древнего дерева
+ElderwoodPiano.MapEntry: Пианино из древнего дерева
+ElderwoodPlatform.MapEntry: Платформа из древнего дерева
+ElderwoodTable.MapEntry: Стол из древнего дерева
+ElderwoodWorkbench.MapEntry: Верстак из древнего дерева
+ElderwoodBookcase.MapEntry: Книжный шкаф из древнего дерева
 MillionDollarPainting.MapEntry: Картина на миллион долларов
 Moss.MapEntry: '''"Мох"'''
 TheLegend.MapEntry: '''"Легенда"'''
 Cloudberry.MapEntry: Морошка
-LivingElderwood3.MapEntry: Живое древнедрево
+LivingElderwood3.MapEntry: Живое древнее дерево
 ElderwoodChest2.MapEntry: Опутанный корнями сундук
-Elderwood.MapEntry: Древнедрево
+Elderwood.MapEntry: Древнее дерево
 MercuriumOre.MapEntry: Ртуть
 NexusGateway.MapEntry: Подозрительная арка
 OniMask.MapEntry: Маска Они
-ElderwoodDresser.MapEntry: Комод из древнедрева
+ElderwoodDresser.MapEntry: Комод из древнего дерева
 Coffin.MapEntry: Гроб
 Tapper.MapEntry: Подсочник
 LothorMusicBox.MapEntry: Музыкальная шкатулка (Лотор)
 BackwoodsBigTree.MapEntry: Гигантское дерево
-BackwoodsPylonTile.MapEntry: Столб Чащи
+BackwoodsPylonTile.MapEntry: Пилон Чащи

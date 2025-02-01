@@ -1,11 +1,11 @@
 ElderwoodClaws: {
-	DisplayName: Когти из древнедрева
+	DisplayName: Когти из древней древесины
 	Tooltip: "'Изготовлены наподобие когтей нетопыря'"
 }
 
 Elderwood: {
-	DisplayName: Древнедрево
-	Tooltip: "'Древесная культура, естественная для Чащи'"
+	DisplayName: Древняя древесина
+	Tooltip: "'Древесная культура, встречающаяся в Чаще'"
 }
 
 GutwrenchingHooks: {
@@ -29,12 +29,12 @@ ThornyClaws: {
 }
 
 ElderwoodChest: {
-	DisplayName: Сундук из древнедрева
+	DisplayName: Сундук из древней древесины
 	Tooltip: ""
 }
 
 DryadStatue: {
-	DisplayName: Статуя Дриады
+	DisplayName: Статуя дриады
 	Tooltip: ""
 }
 
@@ -134,7 +134,7 @@ RodOfTheCondor: {
 
 BeastBow: {
 	DisplayName: Стеннания
-	Tooltip: "'Так это ди мессер стенает по своему луку, или же лук стенает по мессеру?'"
+	Tooltip: "'Так это ли мессер стенает по своему луку, или же лук стенает по мессеру?'"
 }
 
 DoubleFocusCharm: {
@@ -176,7 +176,7 @@ FireflyPin: {
 
 RavencallersCloak: {
 	DisplayName: Плащь вороноря
-	Tooltip: Отбрасывает тень, которая привлекает внимание врагов
+	Tooltip: Отбрасывает тень, привлекающую внимание врагов
 }
 
 Tapper: {
@@ -191,21 +191,21 @@ Galipot: {
 
 AnimalLeather: {
 	DisplayName: Животная шкура
-	Tooltip: Может быть обработана на Дубильной стойке
+	Tooltip: Может быть обработана на Дубильном станке
 }
 
 RoughLeather: {
-	DisplayName: Грубая шкура
-	Tooltip: Может быть обработана на Дубильной стойке
+	DisplayName: Грубая кожа
+	Tooltip: Может быть обработана на Дубильном станке
 }
 
 SpoiledRawhide: {
-	DisplayName: Испорченная шкура
-	Tooltip: Гнилые остатки кожи, которую не успели обработать
+	DisplayName: Испорченная кожа
+	Tooltip: Гнилые остатки плоти, которые не успели обработать
 }
 
 TanningRack: {
-	DisplayName: Дубильная стойка
+	DisplayName: Дубильный станок
 	Tooltip:
 		'''
 		Позволяет добывать сыромятную кожу с врагов
@@ -377,8 +377,8 @@ SlipperyBomb: {
 	DisplayName: Скользкая бомба
 	Tooltip:
 		'''
-		Небольшой взрыв, уничтожающий большинство плиток
-		Скользит сквозь плитки
+		Небольшой взрыв, уничтожающий большинство блоков
+		Скользит сквозь блоки
 		'''
 }
 
@@ -386,8 +386,8 @@ SlipperyDynamite: {
 	DisplayName: Скользкий динамит
 	Tooltip:
 		'''
-		Сильный взрыв, уничтожающий большинство плиток
-		Скользит сквозь плитки
+		Сильный взрыв, уничтожающий большинство блоков
+		Скользит сквозь блоки
 		'''
 }
 
@@ -395,8 +395,8 @@ SlipperyGlowstick: {
 	DisplayName: Скользкая светящаяся палочка
 	Tooltip:
 		'''
-		Работает при намокании
-		Скользит сквозь плитки
+		Светится в жидкостях
+		Скользит сквозь блоки
 		'''
 }
 
@@ -404,39 +404,39 @@ SlipperyGrenade: {
 	DisplayName: Скользкая граната
 	Tooltip:
 		'''
-		Небольшой взрыв, не уничтожающий плитки
-		Скользит сквозь плитки
+		Небольшой взрыв, не уничтожающий блоки
+		Скользит сквозь блоки
 		'''
 }
 
 LivingBorealWoodChestplate: {
-	// DisplayName: Living Boreal Wood Chestplate
-	// Tooltip: 4% increased nature [kw/n:potential] damage
+	DisplayName: Живой таежный нагрудник
+	Tooltip: Увеличивает [kw/n:возможный] природный урона на 4%
 }
 
 LivingBorealWoodGreaves: {
-	// DisplayName: Living Boreal Wood Greaves
-	// Tooltip: 4% increased nature [kw/n:potential] speed
+	DisplayName: Живые таежные поножи
+	Tooltip: Увеличивает [kw/n:возможную] скорость на 4%
 }
 
 LivingBorealWoodHelmet: {
-	// DisplayName: Living Boreal Wood Helmet
-	// Tooltip: 4% increased nature [kw/n:potential] damage
+	DisplayName: Живой таежный шлем
+	Tooltip: Увеличивает [kw/n:возможный] природный урона на 4%
 }
 
 LivingWoodChestplate: {
-	// DisplayName: Living Wood Chestplate
-	// Tooltip: 4% increased nature [kw/n:potential] damage
+	DisplayName: Нагрудник из живого дерева
+	Tooltip: Увеличивает [kw/n:возможный] природный урона на 4%
 }
 
 LivingWoodGreaves: {
-	// DisplayName: Living Wood Greaves
-	// Tooltip: 4% increased nature [kw/n:potential] speed
+	DisplayName: Поножи из живого дерева
+	Tooltip: Увеличивает [kw/n:возможную] скорость на 4%
 }
 
 LivingWoodHelmet: {
-	// DisplayName: Living Wood Helmet
-	// Tooltip: 4% increased nature [kw/n:potential] speed
+	DisplayName: Шлем из живого дерева
+	Tooltip: Увеличивает [kw/n:возможную] скорость на 4%
 }
 
 LivingMahoganyChestplate: {
@@ -484,8 +484,8 @@ SacrificialSickleOfTheMoon: {
 }
 
 ElathaAmulet: {
-	// DisplayName: Elatha Amulet
-	// Tooltip: Advances the Moon phase
+	DisplayName: Амулет Элаты
+	Tooltip: Двигает фазу луны вперед
 }
 
 LivingElderwoodBreastplate: {
@@ -562,151 +562,151 @@ AshwalkerRobe: {
 }
 
 MercuriumOre: {
-	// DisplayName: Mercurium Ore
-	// Tooltip: "'Shouldn't be holding that...'"
+	DisplayName: Ртутная руда
+	Tooltip: "'Это не стоит держать в руках...'"
 }
 
 Grimstone: {
-	// DisplayName: Grimstone
+	DisplayName: Мрачный камень
 	// Tooltip: ""
 }
 
 MercuriumNugget: {
-	// DisplayName: Mercurium Nugget
-	// Tooltip: "'Shouldn't be holding that either...'"
+	DisplayName: Ртутный самородок
+	Tooltip: "'Это тоже не стоит держать в руках...'"
 }
 
 MillionDollarPainting: {
-	// DisplayName: Million Dollar Painting
-	// Tooltip: "'V. F. D.'"
+	DisplayName: Картина на миллион долларов
+	Tooltip: "'В. Ф. Д.'"
 }
 
 TheLegend: {
-	// DisplayName: The Legend
-	// Tooltip: "'C. Knight'"
+	DisplayName: '"Легенда"'
+	Tooltip: "'П. Рыцарь'"
 }
 
 LuminousFlowerHat: {
-	// DisplayName: Luminous Flower Hat
-	/* Tooltip:
+	DisplayName: Шляпа из ясного цветка
+	Tooltip:
 		'''
-		Provides light when moving
-		'It no longer smells... but still brightens the vicinity'
-		''' */
+		Создает свет в движении
+		'Уже не пахнет... но все еще освещаяет окрестности'
+		'''
 }
 
 ElderTorch: {
-	// DisplayName: Elderwood Torch
+	DisplayName: Факел из древнего дерева
 	// Tooltip: ""
 }
 
 FlamingFabric: {
-	// DisplayName: Flaming Fabric
+	DisplayName: Пылающая ткань
 	// Tooltip: ""
 }
 
 NaturesHeart: {
-	// DisplayName: Nature's Heart
-	// Tooltip: A grafted remnant of higher beings
+	DisplayName: Сердце природы
+	Tooltip: "'Прирощенные останки высших существ'"
 }
 
 DeerSkull: {
-	// DisplayName: Deer Skull
-	// Tooltip: 4% increased nature critical strike chance
+	DisplayName: Олений череп
+	Tooltip: Увеличивает шанс критического удар природным уроном на 4%
 }
 
 OniMask: {
-	// DisplayName: Oni Mask
-	// Tooltip: Scares away Youkai
+	DisplayName: Маска Они
+	Tooltip: Изгоняет Ёки
 }
 
 ElderwoodBathtub: {
-	// DisplayName: Elderwood Bathtub
+	DisplayName: Ванна из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodBed: {
-	// DisplayName: Elderwood Bed
+	DisplayName: Кровать из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodBookcase: {
-	// DisplayName: Elderwood Bookcase
+	DisplayName: Книжный шкаф из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodCandelabra: {
-	// DisplayName: Elderwood Candelabra
+	DisplayName: Подсвечник из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodCandle: {
-	// DisplayName: Elderwood Candle
+	DisplayName: Свеча из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodChair: {
-	// DisplayName: Elderwood Chair
+	DisplayName: Стул из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodChandelier: {
-	// DisplayName: Elderwood Chandelier
+	DisplayName: Люстра из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodClock: {
-	// DisplayName: Elderwood Clock
+	DisplayName: Часы из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodDoor: {
-	// DisplayName: Elderwood Door
+	DisplayName: Дверь из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodDresser: {
-	// DisplayName: Elderwood Dresser
+	DisplayName: Комод из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodLamp: {
-	// DisplayName: Elderwood Lamp
+	DisplayName: Лампа из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodLantern: {
-	// DisplayName: Elderwood Lantern
+	DisplayName: Фонарь из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodPiano: {
-	// DisplayName: Elderwood Piano
+	DisplayName: Пианино из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodPlatform: {
-	// DisplayName: Elderwood Platform
+	DisplayName: Платформа из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodSink: {
-	// DisplayName: Elderwood Sink
+    DisplayName: Раковина из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodSofa: {
-	// DisplayName: Elderwood Sofa
+	DisplayName: Диван из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodTable: {
-	// DisplayName: Elderwood Table
+	DisplayName: Стол из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodWorkbench: {
-	// DisplayName: Elderwood Work Bench
+	DisplayName: Верстка из древнего дерева
 	// Tooltip: ""
 }
 
@@ -726,26 +726,26 @@ Coffin: {
 }
 
 Herbarium: {
-	// DisplayName: Herbarium
-	/* Tooltip:
+	DisplayName: Гербарий
+	Tooltip:
 		'''
-		Enemies occasionally drop healing herbs
-		If [kw/n:wreath] is [kw/n:charged], consumes it to restore additional life
-		''' */
+		Враги иногда оставляют лечебные травы при смерти
+		Когда [kw/n:венок заполнен], поглащает его, чтобы восстановить здоровье
+		'''
 }
 
 MagicHerb1: {
-	// DisplayName: Magic Herb
+	DisplayName: Волшебная трава
 	// Tooltip: ""
 }
 
 MagicHerb2: {
-	// DisplayName: Magic Herb
+	DisplayName: Волшебная трава
 	// Tooltip: ""
 }
 
 MagicHerb3: {
-	// DisplayName: Magic Herb
+	DisplayName: Волшебная трава
 	// Tooltip: ""
 }
 
@@ -755,12 +755,12 @@ BizarreCowboyHat: {
 }
 
 DinoHat: {
-	// DisplayName: Dino Hat
-	/* Tooltip:
+	DisplayName: Шляпа динозавра
+	Tooltip:
 		'''
 		'Scary monsters, super creeps
 		Keep me running, running scared'
-		''' */
+		'''
 }
 
 JockeyHat: {
@@ -794,42 +794,42 @@ SailorHat: {
 }
 
 StoneMask: {
-	// DisplayName: Normal Mask
-	// Tooltip: "'Cursed'"
+	DisplayName: Обычная маска
+	Tooltip: "'Проклято'"
 }
 
 StrangerCoat: {
-	// DisplayName: Stranger's Coat
+	DisplayName: Пальто странника
 	// Tooltip: ""
 }
 
 StrangerPants: {
-	// DisplayName: Stranger's Pants
+	DisplayName: Штаны странника
 	// Tooltip: ""
 }
 
 DevilHunterCloak: {
-	// DisplayName: Devil Hunter's Cloak
+	DisplayName: Плащ охотника на демонов
 	// Tooltip: ""
 }
 
 DevilHunterPants: {
-	// DisplayName: Devil Hunter's Pants
+	DisplayName: Штаны охотника на демонов
 	// Tooltip: ""
 }
 
 BunnyHat: {
-	// DisplayName: Bunny Hat
+	DisplayName: Шляпа кролика
 	// Tooltip: ""
 }
 
 BunnyJacket: {
-	// DisplayName: Bunny Jacket
+	DisplayName: Рубашка кролика
 	// Tooltip: ""
 }
 
 BunnyPants: {
-	// DisplayName: Bunny Pants
+	DisplayName: Штаны кролика
 	// Tooltip: ""
 }
 
@@ -839,263 +839,263 @@ FlinxFurUshanka: {
 }
 
 CopperAcolyteHat: {
-	// DisplayName: Acolyte Hat
-	// Tooltip: 6% reduced mana costs
+	DisplayName: Шляпа прислужника
+	Tooltip: Снижает затраты маны на 6%
 }
 
 CopperAcolyteJacket: {
-	// DisplayName: Acolyte Jacket
-	// Tooltip: Increases maximum mana by 40
+	DisplayName: Роба прислужника
+	Tooltip: Увеличивает максимальную ману на 40
 }
 
 CopperAcolyteLeggings: {
-	// DisplayName: Acolyte Leggings
-	// Tooltip: 8% increased magic critical strike chance
+	DisplayName: Штаны прислужника
+	Tooltip: Увеличивает шанс критического удара магией на 8%
 }
 
 TinAcolyteHat: {
-	// DisplayName: Acolyte Hat
-	// Tooltip: 6% reduced mana costs
+	DisplayName: Шляпа прислужника
+	Tooltip: Снижает затраты маны на 6%
 }
 
 TinAcolyteJacket: {
-	// DisplayName: Acolyte Jacket
-	// Tooltip: Increases maximum mana by 40
+	DisplayName: Роба прислужника
+	Tooltip: Увеличивает максимальную ману на 40
 }
 
 TinAcolyteLeggings: {
-	// DisplayName: Acolyte Leggings
-	// Tooltip: 8% increased magic critical strike chance
+	DisplayName: Штаны прислужника
+	Tooltip: Увеличивает шанс критического удара магией на 8%
 }
 
 Moss: {
-	// DisplayName: Moss
-	// Tooltip: "'C. Knight'"
+	DisplayName: '"Мох"'
+	Tooltip: "'П. Рыцарь'"
 }
 
 SoapSellersJacket: {
-	// DisplayName: Soap Sellers Jacket
+	DisplayName: Куртка торговца мылом
 	// Tooltip: ""
 }
 
 SoapSellersJeans: {
-	// DisplayName: Soap Sellers Jeans
+	DisplayName: Джинсы торговца мылом
 	// Tooltip: ""
 }
 
 SoapSellersShades: {
-	// DisplayName: Soap Sellers Shades
+	DisplayName: Солнцезащитные очки торговца мылом
 	// Tooltip: ""
 }
 
 Hedgehog: {
-	// DisplayName: Hedgehog
-	// Tooltip: "'Spiky, but cute'"
+	DisplayName: Ежик
+	Tooltip: "'Колючий, но милый'"
 }
 
 WandCore: {
-	// DisplayName: Arcane Twig
-	// Tooltip: "'The magics have not faded yet...'"
+	DisplayName: Зачарованная ветка
+	Tooltip: "'Не вся магия еще увяла...'"
 }
 
 OvergrownSpear: {
-	// DisplayName: Overgrown Spear
-	// Tooltip: "'Aim for the balls for a burst of energy'"
+	DisplayName: Поросшее копье
+	Tooltip: "'Цельтесь в шары, чтобы выпустить залп энергии'"
 }
 
 MothStaff: {
-	// DisplayName: Moth Staff
-	// Tooltip: Summons a moth to fight for you
+	DisplayName: Посох моли
+	Tooltip: Призывает моль, сражающуюся за вас
 }
 
 DynastyWoodBow: {
-	// DisplayName: Dynasty Wood Bow
+	DisplayName: Лук из восточного дерева
 	// Tooltip: ""
 }
 
 ElderwoodBow: {
-	// DisplayName: Elderwood Bow
+	DisplayName: Лук из древнего дерева
 	// Tooltip: ""
 }
 
 MercuriumBolter: {
-	// DisplayName: Mercurium Bolter
-	// Tooltip: Splits arrows into lightweight bolts
+	DisplayName: Ртутный болтомёт
+	Tooltip: Разделяте стрелы в легкие ртутные болты
 }
 
 DynastyWoodSword: {
-	// DisplayName: Dynasty Wood Sword
+	DisplayName: Меч из восточного дерева
 	// Tooltip: ""
 }
 
 ElderwoodSword: {
-	// DisplayName: Elderwood Sword
+	DisplayName: Меч из древнего дерева
 	// Tooltip: ""
 }
 
 MercuriumSword: {
-	// DisplayName: Mercurium Sword
+	DisplayName: Ртутный меч
 	// Tooltip: ""
 }
 
 StarFusion: {
-	// DisplayName: Star Fusion
-	// Tooltip: Summons a constellation upon hitting an enemy
+	DisplayName: Слияние звезд
+	Tooltip: Создает созвездие при атаке по врагу
 }
 
 RavensEye: {
-	// DisplayName: Ravens Eye
+	DisplayName: Глаз ворона
 	// Tooltip: ""
 }
 
 MercuriumStaff: {
-	// DisplayName: Mercurium Staff
+	DisplayName: Ртутный жезл
 	// Tooltip: ""
 }
 
 MiracleMintSeeds: {
-	// DisplayName: Miracle Mint Seeds
+	DisplayName: Семена чудомяты
 	// Tooltip: ""
 }
 
 MiracleMintPlanterBox: {
-	// DisplayName: Miracle Mint Planter Box
+	DisplayName: Горшок для чудомяты
 	// Tooltip: ""
 }
 
 MiracleMintHangingPot: {
-	// DisplayName: Miracle Mint Hanging Pot
+	DisplayName: Подвесная чудомята
 	// Tooltip: ""
 }
 
 FlametrackerHat: {
-	// DisplayName: Flametracker Hat
-	// Tooltip: Greatly increases mana regeneration rate
+	DisplayName: Шляпа ищущего пламя
+	Tooltip: Значительно увеличивает восстановление маны
 }
 
 FlametrackerJacket: {
-	// DisplayName: Flametracker Jacket
-	/* Tooltip:
+	DisplayName: Куртка ищущего пламя
+	Tooltip:
 		'''
-		12% reduced mana usage
-		5% increased magic damage
-		''' */
+		Снижает затраты маны на 12%
+		Увеличивает магический урон на 5%
+		'''
 }
 
 FlametrackerPants: {
-	// DisplayName: Flametracker Pants
-	/* Tooltip:
+	DisplayName: Штаны ищущего пламя
+	Tooltip:
 		'''
-		8% reduced mana usage
-		5% increased magic damage
-		''' */
+		Снижает затраты маны на 8%
+		Увеличивает магический урон на 5%
+		'''
 }
 
 SentinelBreastplate: {
-	// DisplayName: Sentinel Breastplate
-	// Tooltip: Increases arrow damage by 10%
+	DisplayName: Нагрудник дозорного
+	Tooltip: Увеличивает урон стрел на 10%
 }
 
 SentinelHelmet: {
-	// DisplayName: Sentinel Helmet
-	// Tooltip: 10% chance to not consume arrows
+	DisplayName: Шлем дозорного
+	Tooltip: Дает 10% шанс не потратить стрелы
 }
 
 SentinelLeggings: {
-	// DisplayName: Sentinel Leggings
-	// Tooltip: Increases arrow damage by 10%
+	DisplayName: Поножи дозорного
+	Tooltip: Увеличивает урон стрел на 10%
 }
 
 SentinelTaurusMask: {
-	// DisplayName: Sentinel Taurus Mask
-	// Tooltip: Increases running acceleration speed
+	DisplayName: Маска дозорного-тельца
+	Tooltip: Придает ускорение во время бега
 }
 
 AmuletOfLife: {
-	// DisplayName: Amulet of Life
-	// Tooltip: Creates a vortex of wisps that heal on touch
+	DisplayName: Амулет жизни
+	Tooltip: Создает воронку огоньков, лечащих прикосновением
 }
 
 MercuriumAxe: {
-	// DisplayName: Mercurium Axe
+	DisplayName: Ртутный топор
 	// Tooltip: ""
 }
 
 MercuriumHammer: {
-	// DisplayName: Mercurium Hammer
+	DisplayName: Ртутный молот
 	// Tooltip: ""
 }
 
 MercuriumPickaxe: {
-	// DisplayName: Mercurium Pickaxe
+	DisplayName: Ртутная кирка
 	// Tooltip: ""
 }
 
 WorshipperBonehelm: {
-	// DisplayName: Worshipper Bonehelm
-	/* Tooltip:
+	DisplayName: Шлем-череп поклоняющегося
+	Tooltip:
 		'''
-		Increases your max number of minions by 1
-		8% increased minion damage
-		''' */
+		Увеличивает максимальное количество прислужников на 1
+		Увеличивает урон прислужников на 8%
+		'''
 }
 
 WorshipperGarb: {
-	// DisplayName: Worshipper Garb
-	/* Tooltip:
+	DisplayName: Обмотки поклоняющегося
+	Tooltip:
 		'''
-		8% increased minion damage
-		10% increased movement speed
-		''' */
+		Увеличивает урон прислужников на 8%
+		Увеличивает скорость передвижения на 10%
+		'''
 }
 
 WorshipperMantle: {
-	// DisplayName: Worshipper Mantle
-	// Tooltip: 18% increased minion damage
+	DisplayName: Мантия поклоняющегося
+	Tooltip: Увеличивает урон прислужников на 18%
 }
 
 SentinelShield: {
-	// DisplayName: Sentinel Shield
-	// Tooltip: Has a chance to unleash vengeful spirits instead of taking damage
+	DisplayName: Щит дозорного
+	Tooltip: Дает шанс выпустить мстительных духов вместо того, чтобы получить урон
 }
 
 DynastyWoodBreastplate: {
-	// DisplayName: Dynasty Wood Breastplate
+	DisplayName: Нагрудник из восточного дерева
 	// Tooltip: ""
 }
 
 DynastyWoodHelmet: {
-	// DisplayName: Dynasty Wood Helmet
+	DisplayName: Шлем из восточного дерева
 	// Tooltip: ""
 }
 
 DynastyWoodLeggings: {
-	// DisplayName: Dynasty Wood Leggings
+	DisplayName: Поножи из восточного дерева
 	// Tooltip: ""
 }
 
 ElderwoodChestplate: {
-	// DisplayName: Elderwood Chestplate
+	DisplayName: Нагрудник из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodHelmet: {
-	// DisplayName: Elderwood Helmet
+	DisplayName: Шлем  из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodLeggings: {
-	// DisplayName: Elderwood Leggings
+	DisplayName: Ботинки из древнего дерева
 	// Tooltip: ""
 }
 
 DynastyWoodHammer: {
-	// DisplayName: Dynasty Wood Hammer
+	DisplayName: Молот из восточного дерева
 	// Tooltip: ""
 }
 
 ElderwoodHammer: {
-	// DisplayName: Elderwood Hammer
+	DisplayName: Молот из древнего дерева
 	// Tooltip: ""
 }
 
@@ -1113,19 +1113,14 @@ BackwoodsCrate: {
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 }
 
-CovertCrate: {
-	DisplayName: Ящик из рощи
-	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
-}
-
 ElderwoodFence: {
-	DisplayName: Забор из древнедрева
-	Tooltip: ""
+	DisplayName: Забор из древнего дерева
+	// Tooltip: ""
 }
 
 ElderwoodWall: {
-	DisplayName: Стена из древнедрева
-	Tooltip: ""
+	DisplayName: Стена из древнего дерева
+	// Tooltip: ""
 }
 
 PrismaticPotion: {
@@ -1134,13 +1129,13 @@ PrismaticPotion: {
 }
 
 ElderwoodToilet: {
-	DisplayName: Унитаз из древнедрева
-	Tooltip: ""
+	DisplayName: Унитаз из древнего дерева
+	// Tooltip: ""
 }
 
 RagingBoots: {
 	DisplayName: Яростные сапоги
-	Tooltip: Сотрясает землю при приземлении
+	Tooltip: Сотрясают землю при приземлении
 }
 
 WingIcon: {
@@ -1183,17 +1178,17 @@ LothorBag: {
 
 LothorMask: {
 	DisplayName: Маска Лотора
-	Tooltip: ""
+	// Tooltip: ""
 }
 
 LothorMusicBox: {
 	DisplayName: Музыкальная шкатулка (Лотор)
-	Tooltip: ""
+	// Tooltip: ""
 }
 
 LothorTrophy: {
 	DisplayName: Трофей Лотора
-	Tooltip: ""
+	// Tooltip: ""
 }
 
 BloodbathLocket: {
@@ -1203,12 +1198,12 @@ BloodbathLocket: {
 
 ChemicalPrisoner: {
 	DisplayName: Химический узник
-	Tooltip: ""
+	// Tooltip: ""
 }
 
 FlederStaff: {
 	DisplayName: Посох нетопыря
-	Tooltip: Призывает нетопыря, который сражается за вас
+	Tooltip: Призывает нетопыря, сражающегося за вас
 }
 
 FlederSlayer: {
@@ -1222,39 +1217,39 @@ FlederSlayer: {
 
 Bane: {
 	DisplayName: Кара
-	Tooltip: Заставляет ваших врагов увядать
+	Tooltip: Заставляет врагов увядать
 }
 
 BackwoodsDayMusicBox: {
-	DisplayName: Музыкальная шкатулка (Чаща день)
-	Tooltip: ""
+	DisplayName: Музыкальная шкатулка (Чаща)
+	// Tooltip: ""
 }
 
 BackwoodsNightMusicBox: {
-	DisplayName: Музыкальная шкатулка (Чаща ночь)
-	Tooltip: ""
+	DisplayName: Музыкальная шкатулка (Ночная Чаща)
+	// Tooltip: ""
 }
 
 BackwoodsFogMusicBox: {
-	DisplayName: Музыкальная шкатулка (Чаща туман)
-	Tooltip: ""
+	DisplayName: Музыкальная шкатулка (Туман в Чаще)
+	// Tooltip: ""
 }
 
 LivingPrimordialWand: {
-	DisplayName: Жезл из живого древнедрева
+	DisplayName: Ветвь древнего дерева
 	Tooltip:
 		'''
-		Использует Древнедрево
-		Помещает живое древнедрево
+		Используется: Древняя древесина
+		Размещает живое древнюю древесину
 		'''
 }
 
 LivingPrimordialWand2: {
-	DisplayName: Жезл листьев из древнедрева
+	DisplayName: Ветвь с листьями древнего дерева
 	Tooltip:
 		'''
-		Использует Древнедрево
-		Помещает литься древнедрева
+		Используется: Древняя древесина
+		Размещает листья живой древней древесины
 		'''
 }
 
@@ -1278,17 +1273,17 @@ FeathersInABalloon: {
 }
 
 BigTreeSpawner: {
-	DisplayName: Сотворитель большого дерева
+	DisplayName: Генератор большого дерева
 	Tooltip: "#ТЕСТ: СОЗДАЕТ БОЛЬШОЕ ДЕРЕВО ЧАЩИ"
 }
 
 GrimstoneWall: {
-	DisplayName: Мрачнокаменная стена
-	Tooltip: ""
+	DisplayName: Стена из мрачного камня
+	// Tooltip: ""
 }
 
 Vilethorn: {
-	DisplayName: Злая колючка
+	DisplayName: Мерзкая колючка
 	Tooltip: "{$ItemTooltip.Vilethorn}"
 }
 
@@ -1298,7 +1293,7 @@ CrimsonRod: {
 }
 
 BackwoodsPylon: {
-	DisplayName: Столб Чащи
+	DisplayName: Пилон Чащи
 	Tooltip: "{$CommonItemTooltip.TeleportationPylon}"
 }
 
@@ -1379,7 +1374,7 @@ SummonedRavenBanner: {
 
 BackwoodsGrassSeeds: {
 	DisplayName: Семена Чащи
-	Tooltip: ""
+	// Tooltip: ""
 }
 
 BloodCursor: {
@@ -1407,7 +1402,7 @@ AlmondMilk: {
 	Tooltip:
 		'''
 		{$CommonItemTooltip.MinorStats}
-		'чокнутый на вкус'
+		'Чокнутый на вкус'
 		'''
 }
 
