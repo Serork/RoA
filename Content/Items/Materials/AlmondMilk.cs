@@ -25,7 +25,7 @@ sealed class AlmondMilk : ModItem {
 
 	public override void SetDefaults() {
         Item.DefaultToFood(24, 42, 26, 36000, useGulpSound: true);
-        Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(0, 2));
+        Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(0, 1));
     }
 
     public override void AddRecipes() {
