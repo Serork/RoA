@@ -28,7 +28,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
                         tile.TileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
                         WorldGen.TileFrame(Player.tileTargetX, Player.tileTargetY);
                         SoundEngine.PlaySound(SoundID.Dig, new Point(Player.tileTargetX, Player.tileTargetY).ToWorldCoordinates());
-                        //WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGreenMoss>(), forced: true);
+                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGreenMoss>(), 0);
                         return true;
                     }
                 }

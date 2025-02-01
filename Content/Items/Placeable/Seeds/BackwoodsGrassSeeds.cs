@@ -31,6 +31,7 @@ sealed class BackwoodsGrassSeeds : ModItem {
             Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
             if (tile.HasTile && tile.TileType == TileID.Dirt && player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY)) {
                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGrass>(), forced: true);
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, ModContent.TileType<BackwoodsGrass>(), 0);
 
                 return true;
             }
