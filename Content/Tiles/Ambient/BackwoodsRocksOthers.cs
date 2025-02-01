@@ -35,6 +35,8 @@ sealed class BackwoodsRocks02 : BackwoodsRocks0 {
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) { }
 
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 4;
+
     public override bool CreateDust(int i, int j, ref int type) {
         type = ModContent.DustType<Stone>();
 
