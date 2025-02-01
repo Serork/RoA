@@ -1,6 +1,6 @@
 InBackwoods: В биоме Чащи
 
 BackwoodsBiome: {
-	DisplayName: Биом Чащи
-	TownNPCDialogueName: биом Чащи
+	DisplayName: Столб Чащи
+	TownNPCDialogueName: Чаща
 }
