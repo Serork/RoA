@@ -1395,20 +1395,20 @@ CrowdRavenBanner: {
 
 Almond: {
 	DisplayName: Almond
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.MinorStats}"
 }
 
 Pistachio: {
 	DisplayName: Pistachio
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.MinorStats}"
 }
 
 AlmondMilk: {
 	DisplayName: Almond Milk
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.MinorStats}"
 }
 
 SherwoodShake: {
 	DisplayName: Sherwood Shake
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.MinorStats}"
 }
