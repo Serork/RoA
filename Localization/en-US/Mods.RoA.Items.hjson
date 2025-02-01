@@ -156,7 +156,7 @@ BandOfPurity: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		While [kw/n:wreath] is full, increases defense by 3
+		While [kw/n:wreath] is full, increases regeneration
 		'''
 }
 
@@ -195,7 +195,7 @@ AnimalLeather: {
 }
 
 RoughLeather: {
-	DisplayName: Rough Leather
+	DisplayName: Crude Leather
 	Tooltip: Can be processed at the Tanning Rack
 }
 
@@ -311,7 +311,7 @@ SnowWreath: {
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage
 		While [kw/n:wreath] is full:
-		Increases nature critical strike chance by 2
+		Increases nature critical strike chance by 2%
 		'''
 }
 
@@ -322,7 +322,7 @@ SnowWreath2: {
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
 		While [kw/n:wreath] is full:
-		Increases nature critical strike chance by 2
+		Increases nature critical strike chance by 2%
 		'''
 }
 
@@ -1150,10 +1150,10 @@ WingIcon: {
 }
 
 PettyBag: {
-	DisplayName: Petty Bag
+	DisplayName: Petty Sack
 	Tooltip:
 		'''
-		Summons a magic bag to gather nearby items
+		Summons a magic sack to gather nearby items
 		{$Controls.RightClick} to collect the items
 		'''
 }
@@ -1405,10 +1405,18 @@ Pistachio: {
 
 AlmondMilk: {
 	DisplayName: Almond Milk
-	Tooltip: "{$CommonItemTooltip.MinorStats}"
+	Tooltip:
+		'''
+		{$CommonItemTooltip.MinorStats}
+		'You feel nutty'		
+		'''
 }
 
 SherwoodShake: {
 	DisplayName: Sherwood Shake
-	Tooltip: "{$CommonItemTooltip.MinorStats}"
+	Tooltip:
+		'''
+		{$CommonItemTooltip.MinorStats}
+		'A damn fine glass of milkshake'
+		'''
 }
