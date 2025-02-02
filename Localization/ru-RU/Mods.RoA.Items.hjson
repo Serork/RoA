@@ -1303,17 +1303,17 @@ BackwoodsPylon: {
 
 ArchdruidBanner: {
 	DisplayName: Знамя архидруида
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Archdruid.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Archdruid.DisplayName}"
 }
 
 BabyFlederBanner: {
 	DisplayName: Знамя малыша-нетопыря
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.BabyFleder.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.BabyFleder.DisplayName}"
 }
 
 EntBanner: {
 	DisplayName: Знамя древня
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ent.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ent.DisplayName}"
 }
 
 FlederBanner: {
@@ -1323,57 +1323,57 @@ FlederBanner: {
 
 GrimDefenderBanner: {
 	DisplayName: Знамя мрачного стражника
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDefender.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDefender.DisplayName}"
 }
 
 GrimdruidBanner: {
 	DisplayName: Знамя мрачного друида
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDruid.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDruid.DisplayName}"
 }
 
 HedgehogBanner: {
 	DisplayName: Знамя ежика
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hedgehog.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hedgehog.DisplayName}"
 }
 
 HogBanner: {
 	DisplayName: Знамя кабана
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hog.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hog.DisplayName}"
 }
 
 LumberjackBanner: {
 	DisplayName: Знамя дровосека
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Lumberjack.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Lumberjack.DisplayName}"
 }
 
 PettyGoblinBanner: {
 	DisplayName: Знамя мелочного гоблина
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PettyGoblin.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PettyGoblin.DisplayName}"
 }
 
 RavencallerBanner: {
 	DisplayName: Знамя вороноря
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ravencaller.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ravencaller.DisplayName}"
 }
 
 SapSlimeBanner: {
 	DisplayName: Знамя живичного слизня
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SapSlime.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SapSlime.DisplayName}"
 }
 
 SentinelBanner: {
 	DisplayName: Знамя дозорного
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Sentinel.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Sentinel.DisplayName}"
 }
 
 SentinelWarriorBanner: {
 	DisplayName: Знамя дозорного-воина
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SentinelWarrior.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SentinelWarrior.DisplayName}"
 }
 
 SummonedRavenBanner: {
 	DisplayName: Знамя призваного ворона
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
 }
 
 BackwoodsGrassSeeds: {
@@ -1388,7 +1388,7 @@ BloodCursor: {
 
 CrowdRavenBanner: {
 	DisplayName: Знамя недоброго ворона
-	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}"
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}"
 }
 
 Almond: {
@@ -1447,4 +1447,9 @@ SphereOfShock: {
 SphereOfStream: {
 	DisplayName: Сфера потока
 	Tooltip: "'Брось её, сожги её, упокой её, перекуй её, техномагия'"
+}
+
+DeerSkullBanner: {
+	DisplayName: Deer Skull Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.DeerSkullHead.DisplayName}"
 }
