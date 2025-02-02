@@ -390,11 +390,11 @@ sealed class PettyGoblin : ModNPC {
                     }
                 }
 
-                if (flag22) {
-                    NPC.direction *= -1;
-                    NPC.velocity.X *= -1f;
-                    NPC.netUpdate = true;
-                }
+                //if (flag22) {
+                //    NPC.direction *= -1;
+                //    NPC.velocity.X *= -1f;
+                //    NPC.netUpdate = true;
+                //}
 
                 //if (NPC.velocity.Y < 0f) {
                 //    NPC.velocity.Y *= 1.2f;

@@ -2026,7 +2026,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         () => {
                             _nextItemIndex++;
                             bool flag10 = false;
-                            if (_nextItemIndex >= 6) {
+                            if (_nextItemIndex >= 5) {
                                 _nextItemIndex = 0;
                                 addItemInChest(ModContent.ItemType<BunnyHat>(), 1, 1);
                                 addItemInChest(ModContent.ItemType<BunnyJacket>(), 1);
