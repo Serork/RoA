@@ -6,6 +6,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Utilities;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -56,7 +57,17 @@ sealed class DeerSkullHead : BaseHead {
         MaxSegmentLength = 10;
     }
 
-    private float _aiTimer1, _aiTimer2; 
+    private float _aiTimer1, _aiTimer2;
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_aiTimer1);
+        writer.Write(_aiTimer2);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _aiTimer1 = reader.ReadSingle();
+        _aiTimer2 = reader.ReadSingle();
+    }
 
     public override void PostAI() {
         if (NPC.alpha > 0) {
@@ -67,6 +78,11 @@ sealed class DeerSkullHead : BaseHead {
         NPC.noGravity = true;
         NPC.noTileCollide = true;
         NPC.knockBackResist = 0f;
+
+
+        float dist = Math.Abs(Main.player[NPC.target].Center.X - NPC.Center.X);
+        float value = Utils.Remap(dist, 250f, 1000f, 1f, 0.85f, true);
+        NPC.velocity.X *= value;
 
         float num1376 = 120f;
         if (NPC.localAI[0] < num1376) {
@@ -104,7 +120,7 @@ sealed class DeerSkullHead : BaseHead {
 
             float num1385 = Main.player[NPC.target].Center.Y - NPC.Center.Y;
             if (Math.Abs(num1385) > num1382)
-                num1384 = 15f;
+                num1384 = 25f;
 
             if (num1385 > num1382)
                 num1385 = num1382;
@@ -124,7 +140,7 @@ sealed class DeerSkullHead : BaseHead {
         else if (_aiTimer1 == 2f) {
             float num1386 = 0.2f;
             float num1387 = 0.9f;
-            float num1388 = 3.5f;
+            float num1388 = 5f;
 
             NPC.velocity.Y += _aiTimer2 * num1386;
             NPC.velocity.X *= 0.95f;
@@ -138,9 +154,9 @@ sealed class DeerSkullHead : BaseHead {
             }
         }
         else if (_aiTimer1 == 3f) {
-            float num1389 = 0.4f;
-            float num1390 = 0.2f;
-            float num1391 = 5f;
+            float num1389 = 0.3f;
+            float num1390 = 0.1f;
+            float num1391 = 4f;
             float num1392 = 0.95f;
 
             NPC.velocity.X += _aiTimer2 * num1389;
@@ -160,7 +176,7 @@ sealed class DeerSkullHead : BaseHead {
         }
 
         NPC.direction = NPC.velocity.X.GetDirection();
-        NPC.rotation = Helper.VelocityAngle(NPC.velocity);
+        NPC.rotation = Utils.AngleLerp(NPC.rotation, Helper.VelocityAngle(NPC.velocity), 0.1f);
     }
 }
 
