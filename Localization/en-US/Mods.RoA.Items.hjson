@@ -1454,3 +1454,8 @@ SphereOfStream: {
 	DisplayName: Sphere of the Stream
 	Tooltip: "'Drop it, burn it, bless it, forge it, technomagic'"
 }
+
+DeerSkullBanner: {
+	DisplayName: Deer Skull Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.DeerSkullHead.DisplayName}"
+}
