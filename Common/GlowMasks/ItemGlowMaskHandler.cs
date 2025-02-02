@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -38,14 +39,28 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             if (item.type >= ItemID.Count && GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
                 Texture2D glowMaskTexture = glowMaskInfo.GlowMask.Value;
 				Vector2 origin = glowMaskTexture.Size() / 2f;
-                Color color = Color.Lerp(glowMaskInfo.GlowColor, Lighting.GetColor((int)item.Center.X / 16, (int)item.Center.Y / 16), Lighting.Brightness((int)item.Center.X / 16, (int)item.Center.Y / 16));
-				spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, glowMaskInfo.ShouldApplyItemAlpha ? item.GetAlpha(color) : glowMaskInfo.GlowColor, rotation, origin, 1f, SpriteEffects.None, 0f);
-			}
+                Color color = Color.Lerp(glowMaskInfo.GlowColor, lightColor, Lighting.Brightness((int)item.Center.X / 16, (int)item.Center.Y / 16));
+                if (item.shimmered) {
+                    color.R = (byte)(255f * (1f - item.shimmerTime));
+                    color.G = (byte)(255f * (1f - item.shimmerTime));
+                    color.B = (byte)(255f * (1f - item.shimmerTime));
+                    color.A = (byte)(255f * (1f - item.shimmerTime));
+                }
+                else if (item.shimmerTime > 0f) {
+                    color.R = (byte)((float)(int)color.R * (1f - item.shimmerTime));
+                    color.G = (byte)((float)(int)color.G * (1f - item.shimmerTime));
+                    color.B = (byte)((float)(int)color.B * (1f - item.shimmerTime));
+                    color.A = (byte)((float)(int)color.A * (1f - item.shimmerTime));
+                }
+
+                spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.GlowColor, rotation, origin, 1f, SpriteEffects.None, 0f);
+                if (item.shimmered)
+                    spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, 1f, SpriteEffects.None, 0f);
+            }
         }
     }
-
     public override void SetStaticDefaults() {
-		LoadGlowMasks();
+        LoadGlowMasks();
     }
 
     private static void LoadGlowMasks() {

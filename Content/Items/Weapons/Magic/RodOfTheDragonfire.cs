@@ -25,7 +25,9 @@ sealed class RodOfTheDragonfire : Rod {
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfPyre>();
+        ItemID.Sets.ShimmerTransformToItem[Type] = (ushort)ModContent.ItemType<SphereOfPyre>();
+
+        //ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfPyre>();
     }
 
     public override void SetDefaults() {

@@ -24,7 +24,9 @@ sealed class RodOfTheShock : Rod {
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfShock>();
+        ItemID.Sets.ShimmerTransformToItem[Type] = (ushort)ModContent.ItemType<SphereOfShock>();
+
+        //ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfShock>();
     }
 
     public override void SetDefaults() {

@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Utilities;
@@ -7,6 +8,8 @@ using RoA.Utilities;
 using System;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -14,39 +17,32 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
-sealed class DeerSkull : RoANPC {
-	public override void SetDefaults() {
-		NPC.lifeMax = 200;
-		NPC.damage = 44;
-		NPC.defense = 8;
-		NPC.knockBackResist = 0.1f;
+sealed class DeerSkullHead : BaseHead {
+    public override int BodyType => ModContent.NPCType<DeerSkullBody>();
 
-		int width = 50; int height = 50;
-		NPC.Size = new Vector2(width, height);
+    public override int TailType => ModContent.NPCType<DeerSkullTail>();
 
-		NPC.aiStyle = -1;
+    public override void SetDefaults() {
+        NPC.lifeMax = 200;
+        NPC.damage = 44;
+        NPC.defense = 8;
+        NPC.knockBackResist = 0.1f;
 
-		NPC.npcSlots = 1.25f;
-		NPC.value = Item.buyPrice(0, 0, 25, 5);
+        int width = 50; int height = 50;
+        NPC.Size = new Vector2(width, height);
 
-		NPC.HitSound = SoundID.NPCHit1;
-		NPC.DeathSound = SoundID.NPCDeath1;
+        NPC.aiStyle = -1;
 
-		NPC.noTileCollide = true;
-		NPC.noGravity = true;
+        NPC.npcSlots = 1.25f;
+        NPC.value = Item.buyPrice(0, 0, 25, 5);
+
+        NPC.HitSound = SoundID.NPCHit1;
+        NPC.DeathSound = SoundID.NPCDeath1;
+
+        NPC.noTileCollide = true;
+        NPC.noGravity = true;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
-    }
-
-    public override void AI() {
-		if (NPC.ai[0] == 0f) {
-			NPC.ai[0] = Main.rand.Next(5, 11);
-			NPC.netUpdate = true;
-		}
-		NPC.direction = NPC.velocity.X.GetDirection();
-		NPC.velocity = Helper.VelocityToPoint(NPC.Center, Main.MouseWorld, 1f);
-		NPC.rotation = Helper.VelocityAngle(NPC.velocity) - MathHelper.PiOver2 * NPC.direction;
-		NPC.position -= NPC.velocity;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -55,55 +51,365 @@ sealed class DeerSkull : RoANPC {
         ]);
     }
 
-    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-		Vector2 drawPosition = NPC.Center - screenPos;
-		Texture2D texture = TextureAssets.Npc[Type].Value;
-		Rectangle sourceRectangle = new(56, 0, 26, 60);
-		SpriteEffects effects = (SpriteEffects)(NPC.velocity.X < 0f).ToInt();
-		Vector2 moveDirection = NPC.rotation.ToRotationVector2() * NPC.direction;
-		int index = 0;
-		int length = (int)NPC.ai[0];
-		int bodyHeight = 16;
-		float startOriginX = 10f;
-		Vector2 origin = new(NPC.direction == -1 ? sourceRectangle.Width - startOriginX : startOriginX, sourceRectangle.Height / 2f + 4f);
-        Vector2 start = drawPosition + Vector2.UnitY * bodyHeight / 2f;
-		Vector2 bodyOrigin = new Vector2(16, 38) / 2f;
-		Vector2 offsetY = Vector2.UnitY * origin.Y / 4f;
-        while (index < length) {
-			int bodyWidth = 16;
-			float value = (float)(index + 1) / length;
-			float max = 10f * value;
-			float sin = Helper.Wave(-max, max, 5f, index / 2f);
-            Vector2 wave = moveDirection * sin;
-            wave = new(-wave.Y, wave.X);
-            Vector2 offset2 = moveDirection * 10f + new Vector2(0f, 10f).RotatedBy(NPC.rotation);
-            if (index == length - 1) {
-				Vector2 move = moveDirection * (bodyWidth - 1);
-                start -= move;
-				float rotation = Helper.VelocityAngle(move) - MathHelper.PiOver2 * NPC.direction;
-                Rectangle bodySourceRectangle = new(0, 24, bodyWidth, bodyHeight);
-                Main.EntitySpriteDraw(texture, start - offsetY + wave + offset2, bodySourceRectangle, drawColor, rotation, bodyOrigin, NPC.scale, effects);
+    internal override void Init() {
+        MinSegmentLength = 10;
+        MaxSegmentLength = 10;
+    }
+
+    private float _aiTimer1, _aiTimer2; 
+
+    public override void PostAI() {
+        if (NPC.alpha > 0) {
+            NPC.alpha -= 30;
+            if (NPC.alpha < 0)
+                NPC.alpha = 0;
+        }
+        NPC.noGravity = true;
+        NPC.noTileCollide = true;
+        NPC.knockBackResist = 0f;
+
+        float num1376 = 120f;
+        if (NPC.localAI[0] < num1376) {
+            if (NPC.localAI[0] == 0f) {
+                SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
+                NPC.TargetClosest();
+                if (NPC.direction > 0)
+                    NPC.velocity.X += 2f;
+                else
+                    NPC.velocity.X -= 2f;
             }
-			else if (index == 0) {
-				bodyWidth = 16;
-				bodyHeight = 38;
-                Vector2 move = moveDirection * bodyWidth * 1.5f;
-                start -= move;
-				float rotation = Helper.VelocityAngle(move) - MathHelper.PiOver2 * NPC.direction;
-                Rectangle bodySourceRectangle = new(38, 22, bodyWidth, bodyHeight);
-                Main.EntitySpriteDraw(texture, start - offsetY + wave * 0.75f + offset2, bodySourceRectangle, drawColor, rotation, bodyOrigin, NPC.scale, effects);
-                Main.EntitySpriteDraw(texture, drawPosition + wave, sourceRectangle, drawColor, rotation, origin, NPC.scale, effects);
-            }
-			else {
-                Vector2 move = moveDirection * (bodyWidth - 2);
-                start -= move;
-				float rotation = Helper.VelocityAngle(move) - MathHelper.PiOver2 * NPC.direction;
-                Rectangle bodySourceRectangle = new(20, 22, bodyWidth, bodyHeight);
-                Main.EntitySpriteDraw(texture, start - offsetY + wave + offset2, bodySourceRectangle, drawColor, rotation, bodyOrigin, NPC.scale, effects);
-			}
-            index += 1;
+
+            NPC.localAI[0] += 1f;
         }
 
-		return false;
+        if (_aiTimer1 == 0f) {
+            NPC.TargetClosest();
+            _aiTimer1 = 1f;
+            _aiTimer2 = NPC.direction;
+        }
+        else if (_aiTimer1 == 1f) {
+            NPC.TargetClosest();
+            float num1380 = 0.2f;
+            float num1381 = 5f;
+            float num1382 = 4f;
+            float num1383 = 300f;
+            float num1384 = 30f;
+
+            NPC.velocity.X += _aiTimer2 * num1380;
+            if (NPC.velocity.X > num1381)
+                NPC.velocity.X = num1381;
+
+            if (NPC.velocity.X < 0f - num1381)
+                NPC.velocity.X = 0f - num1381;
+
+            float num1385 = Main.player[NPC.target].Center.Y - NPC.Center.Y;
+            if (Math.Abs(num1385) > num1382)
+                num1384 = 15f;
+
+            if (num1385 > num1382)
+                num1385 = num1382;
+            else if (num1385 < 0f - num1382)
+                num1385 = 0f - num1382;
+
+            NPC.velocity.Y = (NPC.velocity.Y * (num1384 - 1f) + num1385) / num1384;
+            if ((_aiTimer2 > 0f && Main.player[NPC.target].Center.X - NPC.Center.X < 0f - num1383) || (_aiTimer2 < 0f && Main.player[NPC.target].Center.X - NPC.Center.X > num1383)) {
+                _aiTimer1 = 2f;
+                _aiTimer2 = 0f;
+                if (NPC.Center.Y + 20f > Main.player[NPC.target].Center.Y)
+                    _aiTimer2 = -1f;
+                else
+                    _aiTimer2 = 1f;
+            }
+        }
+        else if (_aiTimer1 == 2f) {
+            float num1386 = 0.2f;
+            float num1387 = 0.9f;
+            float num1388 = 3.5f;
+
+            NPC.velocity.Y += _aiTimer2 * num1386;
+            NPC.velocity.X *= 0.95f;
+            if (NPC.velocity.Length() > num1388)
+                NPC.velocity *= num1387;
+
+            if (NPC.velocity.X > -1f && NPC.velocity.X < 1f) {
+                NPC.TargetClosest();
+                _aiTimer1 = 3f;
+                _aiTimer2 = NPC.direction;
+            }
+        }
+        else if (_aiTimer1 == 3f) {
+            float num1389 = 0.4f;
+            float num1390 = 0.2f;
+            float num1391 = 5f;
+            float num1392 = 0.95f;
+
+            NPC.velocity.X += _aiTimer2 * num1389;
+            if (NPC.Center.Y > Main.player[NPC.target].Center.Y)
+                NPC.velocity.Y -= num1390;
+            else
+                NPC.velocity.Y += num1390;
+
+            if (NPC.velocity.Length() > num1391)
+                NPC.velocity *= num1392;
+
+            if (NPC.velocity.Y > -1f && NPC.velocity.Y < 1f) {
+                NPC.TargetClosest();
+                _aiTimer1 = 0f;
+                _aiTimer2 = NPC.direction;
+            }
+        }
+
+        NPC.direction = NPC.velocity.X.GetDirection();
+        NPC.rotation = Helper.VelocityAngle(NPC.velocity);
     }
 }
+
+sealed class DeerSkullBody : BaseBody {
+    public override void SetStaticDefaults() {
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() { 
+            Hide = true
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override void SetDefaults() {
+        NPC.CloneDefaults(NPCID.DiggerBody);
+        NPC.aiStyle = -1;
+        NPC.behindTiles = false;
+    }
+}
+
+sealed class DeerSkullTail : BaseTail {
+    public override void SetStaticDefaults() {
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Hide = true
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override void SetDefaults() {
+        NPC.CloneDefaults(NPCID.DiggerTail);
+        NPC.aiStyle = -1;
+        NPC.behindTiles = false;
+    }
+}
+
+#region BASE
+
+public enum WormSegmentType {
+    Head,
+    Body,
+    Tail
+}
+
+public abstract class Worm : ModNPC {
+    public abstract WormSegmentType SegmentType { get; }
+
+    public NPC HeadSegment => Main.npc[NPC.realLife];
+    public NPC FollowingNPC => SegmentType == WormSegmentType.Head ? null : Main.npc[(int)NPC.ai[1]];
+    public NPC FollowerNPC => SegmentType == WormSegmentType.Tail ? null : Main.npc[(int)NPC.ai[0]];
+
+    public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => SegmentType == WormSegmentType.Head ? null : false;
+
+    private bool _startDespawning;
+
+    public sealed override bool PreAI() {
+        if (NPC.localAI[1] == 0) {
+            NPC.localAI[1] = 1f;
+            Init();
+        }
+
+        if (SegmentType == WormSegmentType.Head) {
+            HeadAI();
+
+            if (!NPC.HasValidTarget) {
+                NPC.TargetClosest(true);
+            }
+        }
+        else {
+            BodyTailAI();
+        }
+
+        return true;
+    }
+
+    internal virtual void HeadAI() { }
+
+    internal virtual void BodyTailAI() { }
+
+    internal virtual void Init() { }
+}
+
+public abstract class BaseHead : Worm {
+    public sealed override WormSegmentType SegmentType => WormSegmentType.Head;
+
+    public abstract int BodyType { get; }
+
+    public abstract int TailType { get; }
+
+    public int MinSegmentLength { get; set; }
+
+    public int MaxSegmentLength { get; set; }
+
+    public Vector2? ForcedTargetPosition { get; set; }
+
+    public virtual int SpawnBodySegments(int segmentCount) => NPC.whoAmI;
+
+    protected int SpawnSegment(IEntitySource source, int type, int latestNPC, int distance) {
+        int oldLatest = latestNPC;
+        latestNPC = NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, type, NPC.whoAmI, 0, latestNPC, distance);
+
+        Main.npc[oldLatest].ai[0] = latestNPC;
+
+        NPC latest = Main.npc[latestNPC];
+        latest.realLife = NPC.whoAmI;
+
+        return latestNPC;
+    }
+
+    internal sealed override void HeadAI() {
+        HeadAI_SpawnSegments();
+
+        HeadAI_Movement(false);
+    }
+
+    private void HeadAI_SpawnSegments() {
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            bool hasFollower = NPC.ai[0] > 0;
+            if (!hasFollower) {
+                NPC.realLife = NPC.whoAmI;
+                int latestNPC = NPC.whoAmI;
+
+                int randomWormLength = Main.rand.Next(MinSegmentLength, MaxSegmentLength + 1);
+
+                int distance = randomWormLength - 2;
+
+                IEntitySource source = NPC.GetSource_FromAI();
+
+                // Spawn the body segments like usual
+                while (distance > 0) {
+                    latestNPC = SpawnSegment(source, BodyType, latestNPC, distance);
+                    distance--;
+                }
+
+                SpawnSegment(source, TailType, latestNPC, distance);
+
+                NPC.netUpdate = true;
+
+                int count = 0;
+                foreach (var n in Main.ActiveNPCs) {
+                    if ((n.type == Type || n.type == BodyType || n.type == TailType) && n.realLife == NPC.whoAmI)
+                        count++;
+                }
+
+                if (count != randomWormLength) {
+                    // Unable to spawn all of the segments... kill the worm
+                    foreach (var n in Main.ActiveNPCs) {
+                        if ((n.type == Type || n.type == BodyType || n.type == TailType) && n.realLife == NPC.whoAmI) {
+                            n.active = false;
+                            n.netUpdate = true;
+                        }
+                    }
+                }
+
+                NPC.TargetClosest(true);
+            }
+        }
+    }
+
+    private void HeadAI_Movement(bool collision) {
+
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        Vector2 drawPosition = NPC.Center - screenPos;
+        Texture2D texture = TextureAssets.Npc[Type].Value;
+        Rectangle sourceRectangle = new(0, 0, 54, 30);
+        SpriteEffects effects = (SpriteEffects)(NPC.velocity.X < 0f).ToInt();
+        Vector2 origin = new Vector2(NPC.direction != 1 ? 20 : 34, 22);
+        Main.EntitySpriteDraw(texture, drawPosition, sourceRectangle, drawColor, NPC.rotation, origin, NPC.scale, effects);
+
+        return false;
+    }
+}
+
+public abstract class BaseBody : Worm {
+    public sealed override WormSegmentType SegmentType => WormSegmentType.Body;
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        Vector2 drawPosition = NPC.Center - screenPos;
+        Texture2D texture = TextureAssets.Npc[Type].Value;
+        SpriteEffects effects = (SpriteEffects)(NPC.direction == -1).ToInt();
+        Vector2 origin = new Vector2(54, 48) / 2f;
+        int num = (int)NPC.ai[2];
+        bool rib = num >= 5 && num <= 7;
+        Rectangle sourceRectangle = new(rib ? 54 : 0, 0, 54, 48);
+        if (rib && NPC.direction == -1) {
+            effects = SpriteEffects.FlipVertically;
+        }
+        Main.EntitySpriteDraw(texture, drawPosition, sourceRectangle, drawColor, NPC.rotation - MathHelper.PiOver2 * NPC.direction + (rib ? MathHelper.PiOver2 : 0f),
+            origin, NPC.scale * (num <= 5 ? 0.85f : 1f),
+            effects);
+
+        return false;
+    }
+
+    internal override void BodyTailAI() {
+        CommonAI_BodyTail(this);
+    }
+
+    internal static void CommonAI_BodyTail(Worm worm) {
+        if (!worm.NPC.HasValidTarget)
+            worm.NPC.TargetClosest(true);
+
+        if (Main.player[worm.NPC.target].dead && worm.NPC.timeLeft > 30000)
+            worm.NPC.timeLeft = 10;
+
+        NPC following = worm.NPC.ai[1] >= Main.maxNPCs ? null : worm.FollowingNPC;
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (following is null || !following.active || following.friendly || following.townNPC || following.lifeMax <= 5) {
+                worm.NPC.life = 0;
+                worm.NPC.HitEffect(0, 10);
+                worm.NPC.active = false;
+            }
+        }
+
+        if (following is not null) {
+            float dirX = following.Center.X - worm.NPC.Center.X;
+            float dirY = following.Center.Y - worm.NPC.Center.Y;
+            worm.NPC.rotation = (float)Math.Atan2(dirY, dirX) + MathHelper.PiOver2;
+            float length = (float)Math.Sqrt(dirX * dirX + dirY * dirY);
+            int num = (int)worm.NPC.ai[2];
+            bool rib = num >= 5 && num <= 7;
+            float dist = (length - worm.NPC.width * (worm is DeerSkullTail ? 0.95f : rib ? 0.85f : (num == 8 ? 0.6f : 0.75f))) / length;
+            float posX = dirX * dist;
+            float posY = dirY * dist;
+
+            worm.NPC.direction = dirX.GetDirection();
+
+            worm.NPC.velocity = Vector2.Zero;
+            worm.NPC.position.X += posX;
+            worm.NPC.position.Y += posY;
+        }
+    }
+}
+
+public abstract class BaseTail : Worm {
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        Vector2 drawPosition = NPC.Center - screenPos;
+        Texture2D texture = TextureAssets.Npc[Type].Value;
+        Rectangle sourceRectangle = new(0, 0, 54, 48);
+        SpriteEffects effects = (SpriteEffects)(NPC.direction == -1).ToInt();
+        Vector2 origin = texture.Size() / 2f;
+        Main.EntitySpriteDraw(texture, drawPosition, sourceRectangle, drawColor, NPC.rotation, origin, NPC.scale, effects);
+
+        return false;
+    }
+
+    public sealed override WormSegmentType SegmentType => WormSegmentType.Tail;
+
+    internal override void BodyTailAI() {
+        BaseBody.CommonAI_BodyTail(this);
+    }
+}
+#endregion

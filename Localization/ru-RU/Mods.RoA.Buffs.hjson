@@ -218,5 +218,5 @@ EssenceDrain: {
 
 SmallMoon: {
 	DisplayName: Маленькая луна
-	Description: 'Каким человеком ты бы хотел быть?'
+	Description: Каким человеком ты бы хотел быть?
 }

@@ -28,7 +28,9 @@ sealed class RodOfTheTerra : Rod {
 
         Item.ResearchUnlockCount = 1;
 
-        ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfQuake>();
+        ItemID.Sets.ShimmerTransformToItem[Type] = (ushort)ModContent.ItemType<SphereOfQuake>();
+
+        //ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfQuake>();
     }
 
     public override void SetDefaults() {

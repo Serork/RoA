@@ -176,13 +176,11 @@ sealed class SphereHandler : GlobalItem {
                     num5 -= 260;
                     num6 += 26;
                 }
-                ulong seed = (ulong)i;
-                int variant = Utils.RandomInt(ref seed, 3);
-                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Leaves").Value;
+                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "TerraLeaf").Value;
                 int height = texture.Height;
                 int width = texture.Width / 3;
                 spriteBatch.Draw(texture, item.Center - Main.screenPosition + new Vector2((float)(26 * (i - 1) + num5) - 50f,
-                    -50f + ((float)height - (float)height * num3) / 2f + (float)num6), new Microsoft.Xna.Framework.Rectangle(variant * width, 0, width, height), new Microsoft.Xna.Framework.Color(num2, num2, num2, num2), 0f, default(Vector2), num3, SpriteEffects.None, 0f);
+                    -50f + ((float)height - (float)height * num3) / 2f + (float)num6), new Microsoft.Xna.Framework.Rectangle(0, 0, width, height), new Microsoft.Xna.Framework.Color(num2, num2, num2, num2), 0f, default(Vector2), num3, SpriteEffects.None, 0f);
             }
         }
     }
@@ -279,7 +277,7 @@ sealed class SphereHandler : GlobalItem {
                 spriteBatch.Draw(texture, item.Center - Main.screenPosition + 
                     new Vector2((float)(26 * (i - 1) + num5) - 45f,
                     -50f + ((float)height - (float)height * num3) / 2f + (float)num6), new Microsoft.Xna.Framework.Rectangle(0, 0, width, height), new Microsoft.Xna.Framework.Color(num2, num2, num2, num2), 0f, default(Vector2), 
-                    num3 * 0.75f, SpriteEffects.None, 0f);
+                    num3, SpriteEffects.None, 0f);
             }
         }
     }

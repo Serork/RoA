@@ -1420,31 +1420,31 @@ SherwoodShake: {
 }
 
 SphereOfAspiration: {
-	// DisplayName: Sphere Of Aspiration
-	// Tooltip: ""
+	// DisplayName: Sphere of Aspiration
+	// Tooltip: "'Drop it, burn it, bless it, forge it, drown it, technomagic'"
 }
 
 SphereOfCondor: {
-	// DisplayName: Sphere Of Condor
-	// Tooltip: ""
+	// DisplayName: Sphere of the Condor
+	// Tooltip: "'Burn it, bless it, forge it, drown it, technomagic'"
 }
 
 SphereOfPyre: {
-	// DisplayName: Sphere Of Pyre
-	// Tooltip: ""
+	// DisplayName: Sphere of the Pyre
+	// Tooltip: "'Drop it, bless it, forge it, drown it, technomagic'"
 }
 
 SphereOfQuake: {
-	// DisplayName: Sphere Of Quake
-	// Tooltip: ""
+	// DisplayName: Sphere of the Quake
+	// Tooltip: "'Drop it, burn it, forge it, drown it, technomagic'"
 }
 
 SphereOfShock: {
-	// DisplayName: Sphere Of Shock
-	// Tooltip: ""
+	// DisplayName: Sphere of the Shock
+	// Tooltip: "'Drop it, burn it, bless it, drown it, technomagic'"
 }
 
 SphereOfStream: {
-	// DisplayName: Sphere Of Stream
-	// Tooltip: ""
+	// DisplayName: Sphere of the Stream
+	// Tooltip: "'Drop it, burn it, bless it, forge it, technomagic'"
 }
