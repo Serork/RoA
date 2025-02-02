@@ -86,6 +86,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     }
                     if (BackwoodsFogHandler.IsFogActive && surface) {
                         pool.Add(ModContent.NPCType<Ravencaller>(), 0.2f);
+                        pool.Add(ModContent.NPCType<DeerSkullHead>(), 0.2f);
                     }
                 }
             }
