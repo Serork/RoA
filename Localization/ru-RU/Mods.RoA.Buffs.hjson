@@ -1,11 +1,11 @@
 Deceleration: {
-	// DisplayName: Deceleration
-	// Description: The power of Aqua has corrupted your moving abilities and slowed down your speed
+	DisplayName: Замедление
+	Description: Сила Аквы ослабила ваши способности к передвижению
 }
 
 Skinning: {
-	// DisplayName: Skinning
-	// Description: Enemies have a chance to drop rawhides, which will spoil when the effect ends
+	DisplayName: Сбор скальпов
+	Description: Враги имеют шанс оставить сыромятную шкуру после смерти, но она сгниет, когда эффект закончится
 }
 
 WreathCharged: {
@@ -36,18 +36,18 @@ WreathFullCharged2: {
 }
 
 Bloodlust: {
-	// DisplayName: Bloodlust
-	// Description: Deadly hits restore life
+	DisplayName: Жажда крови
+	Description: Критические удары восстанавливают здоровье
 }
 
 DeathWard: {
-	// DisplayName: Soul Ward
-	// Description: Prevents fatal damage once
+	DisplayName: Оберег для души
+	Description: Единоразово защищает от смерти
 }
 
 Willpower: {
-	// DisplayName: Willpower
-	// Description: 15% increased [kw/n:wreath] charge rate
+	DisplayName: Сила воли
+	Description: Скорость [kw/n:заполнения венка] увеличена на 15%
 }
 
 Resilience: {
@@ -56,47 +56,47 @@ Resilience: {
 }
 
 ExtraRegen: {
-	// DisplayName: Regeneration
+	DisplayName: Регенерация
 	// Description: Slowly recovering from injuries
 }
 
 Hemorrhage: {
-	// DisplayName: Hemorrhage
-	// Description: Losing life
+	DisplayName: Кровотечение
+	Description: Потеря здоровья
 }
 
 Brightstone: {
-	// DisplayName: Brightstone Halo
+	DisplayName: Гало из светлокамня
 	// Description: Emit glowing lumps of light
 }
 
 DryadBlood: {
-	// DisplayName: Dryad Blood
+	DisplayName: Кровь дриады
 	// Description: Debuffs deal 75% less damage
 }
 
 Heavy: {
-	// DisplayName: Heavy
-	// Description: Your terminal velocity is enhanced
+	DisplayName: Тяжесть
+	Description: Ваша скорость витания увеличена
 }
 
 RavencallersCloakBuff: {
-	// DisplayName: Raven's Veil
-	// Description: Enemies prefer to chase after your shadow
+	DisplayName: Воронья вуаль
+	Description: Враги предпочитают гоняться за вашей тенью
 }
 
 Infected: {
-	// DisplayName: Infected
-	// Description: Losing life
+	DisplayName: Заражение
+	Description: Потеря здоровья
 }
 
 BeastPoison: {
-	// DisplayName: Pheromones
-	// Description: Losing life and attracting vicious beasts
+	DisplayName: Феромоны
+	Description: Потеря здоровья, алчные звери вас учуяли
 }
 
 FlederForm: {
-	// DisplayName: Fleder Form
+	DisplayName: Форма нетопыря
 	/* Description:
 		'''
 		Double tap a direction to dash
@@ -105,7 +105,7 @@ FlederForm: {
 }
 
 CorruptionInsectForm: {
-	// DisplayName: Beetle Form
+	DisplayName: Форма жука
 	/* Description:
 		'''
 		Use {$Controls.LeftClick} to spit poison
@@ -114,7 +114,7 @@ CorruptionInsectForm: {
 }
 
 CrimsonInsectForm: {
-	// DisplayName: Beetle Form
+	DisplayName: Форма жука
 	/* Description:
 		'''
 		Use {$Controls.LeftClick} to spit poison
@@ -123,7 +123,7 @@ CrimsonInsectForm: {
 }
 
 LilPhoenixForm: {
-	// DisplayName: Firebird Form
+	DisplayName: Форма жар-птицы
 	/* Description:
 		'''
 		Hold {$Controls.LeftClick} in air to charge an explosive fire boost
@@ -132,53 +132,53 @@ LilPhoenixForm: {
 }
 
 Burning: {
-	// DisplayName: Burning
-	// Description: Losing life
+	DisplayName: Горение
+	Description: Потеря здоровья
 }
 
 ToxicFumes: {
-	// DisplayName: Toxic Fumes
-	// Description: Losing life, movement speed is reduced
+	DisplayName: Токсичные газы
+	Description: Потеря здоровья, скорость передвижения снижена
 }
 
 ToxicFumesNoTimeDisplay: {
-	// DisplayName: Toxic Fumes
-	// Description: Losing life, movement speed is reduced
+	DisplayName: Токсичные газы
+	Description: Потеря здоровья, скорость передвижения снижена
 }
 
 OniMask: {
-	// DisplayName: Oni Mask
-	// Description: Reduced enemy spawn rate
+	DisplayName: Маска Они
+	Description: Снижение скорости появления противников
 }
 
 Weak: {
-	// DisplayName: Weak
-	// Description: Physical abilities are decreased
+	DisplayName: Слабость
+	Description: Физические способности снижены
 }
 
 Unburning: {
-	// DisplayName: Un-burning
-	// Description: Flames reinvigorate you
+	DisplayName: Не-горение
+	Description: Пламя оживляет вас
 }
 
 Moth: {
-	// DisplayName: Moth
-	// Description: The moth will fight for you
+	DisplayName: Моль
+	Description: Моль сражается за вас
 }
 
 FlametrackerDebuff: {
-	// DisplayName: Flametracker Debuff
+	DisplayName: Метка ищущего пламя
 	// Description: Mods.RoA.Buffs.FlametrackerDebuff.Description
 }
 
 SolidifyingSap: {
-	// DisplayName: Solidifying Sap
-	// Description: Restrains movement
+	DisplayName: Затвердевающая живица
+	Description: Передвижение ограничено
 }
 
 Fireblossom: {
-	// DisplayName: Fireblossom
-	// Description: A fireblossom is set to explode
+	DisplayName: Огнецвет
+	Description: Огнецвет вот-вот взорвется
 }
 
 BoneHarpyAttackDebuff: {
@@ -187,36 +187,36 @@ BoneHarpyAttackDebuff: {
 }
 
 OnFire: {
-	// DisplayName: On Fire
-	// Description: Slowly losing life
+	DisplayName: В огне!
+	Description: Медленная потеря здоровья
 }
 
 PrismaticFavor: {
-	// DisplayName: Prismatic Favor
-	// Description: Class damage enhancements are applied to all damage types
+	DisplayName: Переливчатое благо
+	Description: Увеличения урона распространаются на все виды урона
 }
 
 BoneHarpyMountBuff: {
-	// DisplayName: Bone Harpy Mount
+	DisplayName: Ездовая гарпия-нежить
 	// Description: ""
 }
 
 BloodShedAxesDebuff: {
-	// DisplayName: Bloodshed Axe
+	DisplayName: Топор кровопролития
 	// Description: ""
 }
 
 LittleFleder: {
-	// DisplayName: Little Fleder
-	// Description: The little fleder will fight for you
+	DisplayName: Малыш-нетопырь
+	Description: Малыш-нетопырь сражается за вас
 }
 
 EssenceDrain: {
-	// DisplayName: Essence Drain
-	// Description: Your life seeps through your fingers
+	DisplayName: Похищение сущности
+	Description: Ваша жизнь утекает сквозь пальцы
 }
 
 SmallMoon: {
-	// DisplayName: Small Moon
-	// Description: What person do you want to be?
+	DisplayName: Маленькая луна
+	Description: 'Каким человеком ты бы хотел быть?'
 }

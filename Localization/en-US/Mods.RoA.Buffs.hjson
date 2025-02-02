@@ -1,6 +1,6 @@
 Deceleration: {
 	DisplayName: Deceleration
-	Description: The power of Aqua has corrupted your moving abilities and slowed down your speed
+	Description: The power of Aqua has corrupted your moving capabilities
 }
 
 Skinning: {
@@ -37,7 +37,7 @@ WreathFullCharged2: {
 
 Bloodlust: {
 	DisplayName: Bloodlust
-	Description: Deadly hits restore life
+	Description: Critical hits restore life
 }
 
 DeathWard: {
@@ -167,7 +167,7 @@ Moth: {
 }
 
 FlametrackerDebuff: {
-	DisplayName: Flametracker Debuff
+	DisplayName: Flametracker's Mark
 	Description: Mods.RoA.Buffs.FlametrackerDebuff.Description
 }
 
@@ -218,5 +218,5 @@ EssenceDrain: {
 
 SmallMoon: {
 	DisplayName: Small Moon
-	Description: What person do you want to be?
+	Description: 'What person do you want to be?'
 }
