@@ -1,11 +1,11 @@
 ElderwoodClaws: {
-	DisplayName: Когти из древней древесины
+	DisplayName: Когти из древнего дерева
 	Tooltip: "'Изготовлены наподобие когтей нетопыря'"
 }
 
 Elderwood: {
 	DisplayName: Древняя древесина
-	Tooltip: "'Древесная культура, встречающаяся в Чаще'"
+	// Tooltip: ""
 }
 
 GutwrenchingHooks: {
@@ -29,7 +29,7 @@ ThornyClaws: {
 }
 
 ElderwoodChest: {
-	DisplayName: Сундук из древней древесины
+	DisplayName: Сундук из древнего дерева
 	Tooltip: ""
 }
 
@@ -306,7 +306,7 @@ SnowWreath: {
 	Tooltip:
 		'''
 		[kw/n:Венок] заполняется при нанесении природного урона
-		Когда [kw/n:венок заполнен], увеличивает шанс критического удара на 2%
+		Когда [kw/n:венок заполнен], увеличивает шанс на критический удар природным уроном на 2%
 		'''
 }
 
@@ -316,7 +316,7 @@ SnowWreath2: {
 		'''
 		[kw/n:Венок] заполняется при нанесении природного урона и дает:
 		Снижение получаемого урона вплоть до 10%
-		Когда [kw/n:венок заполнен], увеличивает шанс критического удара на 2%
+		Когда [kw/n:венок заполнен], увеличивает шанс на критический удар природным уроном на 2%
 		'''
 }
 
@@ -335,7 +335,7 @@ SoulOfTheWoods: {
 }
 
 BrightstonePotion: {
-	DisplayName: Зелье светлокамня
+	DisplayName: Зелье из светлокамня
 	Tooltip: Испускает сгустки света
 }
 
@@ -411,7 +411,7 @@ SlipperyGrenade: {
 
 LivingBorealWoodChestplate: {
 	DisplayName: Живой таежный нагрудник
-	Tooltip: Увеличивает [kw/n:возможный] природный урона на 4%
+	Tooltip: Увеличивает [kw/n:возможный] природный урон на 4%
 }
 
 LivingBorealWoodGreaves: {
@@ -421,12 +421,12 @@ LivingBorealWoodGreaves: {
 
 LivingBorealWoodHelmet: {
 	DisplayName: Живой таежный шлем
-	Tooltip: Увеличивает [kw/n:возможный] природный урона на 4%
+	Tooltip: Увеличивает [kw/n:возможный] природный урон на 4%
 }
 
 LivingWoodChestplate: {
 	DisplayName: Нагрудник из живого дерева
-	Tooltip: Увеличивает [kw/n:возможный] природный урона на 4%
+	Tooltip: Увеличивает [kw/n:возможный] природный урон на 4%
 }
 
 LivingWoodGreaves: {
@@ -440,47 +440,51 @@ LivingWoodHelmet: {
 }
 
 LivingMahoganyChestplate: {
-	// DisplayName: Living Mahogany Chestplate
-	/* Tooltip:
+	DisplayName: Живой джунглевый нагрудник
+	Tooltip:
 		'''
-		6% increased nature [kw/n:potential] damage
-		6% increased nature [kw/n:potential] speed
-		''' */
+		Увеличивает [kw/n:возможный] природный урона на 6%
+		Увеличивает [kw/n:возможную] скорость на 6%
+		'''
 }
 
 LivingMahoganyGreaves: {
-	// DisplayName: Living Mahogany Greaves
-	// Tooltip: 2% increased movement speed
+	DisplayName: Живые джунглевые поножи
+	Tooltip: Увеличивает скорость передвижения на 2%
 }
 
 LivingMahoganyHelmet: {
-	// DisplayName: Living Mahogany Helmet
-	// Tooltip: 4% increased nature critical strike chance
+	DisplayName: Живой джунглевый шлем
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
 }
 
 EbonwoodStaff: {
-	// DisplayName: Ebonwood Cane
-	// Tooltip: Grows a corrupted branch with leaves that fall and wither
+	DisplayName: Трость из эбенового дерева
+	Tooltip: Выращивает порченую ветвь, листья которой иссыхают и осыпаются
 }
 
 ShadewoodStaff: {
-	// DisplayName: Shadewood Cane
-	// Tooltip: Grows a crimson branch with leaves that fall and decay
+	DisplayName: Трость из мрачного дерева
+	Tooltip: Выращивает багряную ветвь, листья которой гниют и осыпаются
 }
 
 BloomingDoom: {
-	// DisplayName: Blooming Cane
-	// Tooltip: Grows a massive flower
+	DisplayName: Цветущая трость
+	Tooltip: Выращивает гигантский цветок
 }
 
 BrilliantBouquet: {
-	// DisplayName: Brilliant Bouquet
-	// Tooltip: Shoots a bouquet of vibrant petals
+	DisplayName: Чудесный букет
+	Tooltip:
+		'''
+		Выстреливает букетом ярких лепестков
+		Когда [kw/n:венок заполнен], они перекрестно опыляются
+		'''
 }
 
 SacrificialSickleOfTheMoon: {
-	// DisplayName: Sacrificial Sickle of the Moon
-	// Tooltip: Channels a power of the Moon according to its phase
+	DisplayName: Жертвенный серп луны
+	Tooltip: Транслирует силы луны в зависимости от её фазы
 }
 
 ElathaAmulet: {
@@ -489,76 +493,76 @@ ElathaAmulet: {
 }
 
 LivingElderwoodBreastplate: {
-	// DisplayName: Living Elderwood Breastplate
-	// Tooltip: Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
+	DisplayName: Живой чащобный нагрудник
+	Tooltip: Когда [kw/n:венок заполнен], увеличивает защиту на 3
 }
 
 LivingElderwoodCrown: {
-	// DisplayName: Living Elderwood Crown
-	// Tooltip: 6% increased nature [kw/n:potential] damage
+	DisplayName: Живая чащобня корона
+	Tooltip: Увеличивает [kw/n:возможныый] природный урон на 6%
 }
 
 LivingElderwoodGreaves: {
-	// DisplayName: Living Elderwood Greaves
-	// Tooltip: 4% increased nature [kw/n:potential] damage and critical strike chance
+	DisplayName: Живые чащобные поножи
+	Tooltip: Увеличивает [kw/n:возможный] природный урон и шанс на критический удар природным уроном на 4%
 }
 
 DreadheartCorruptionChestplate: {
-	// DisplayName: Dreadheart Chestplate
-	/* Tooltip:
+	DisplayName: Нагрудник с ужасным сердцем
+	Tooltip:
 		'''
-		8% increased nature [kw/n:potential] damage
-		Increases nature knockback
-		''' */
+		Увеличивает [kw/n:возможный] природный урон на 8%
+		Увеличивает отбрасывание природного оружия
+		'''
 }
 
 DreadheartCorruptionHelmet: {
-	// DisplayName: Dreadheart Helmet
-	// Tooltip: 4% increased nature critical strike chance
+	DisplayName: Шлем с ужасным сердцем
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
 }
 
 DreadheartCorruptionLeggings: {
-	// DisplayName: Dreadheart Leggings
-	// Tooltip: 4% increased nature critical strike chance
+	DisplayName: Поножи с ужасным сердцем
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
 }
 
 DreadheartCrimsonChestplate: {
-	// DisplayName: Dreadheart Chestplate
-	/* Tooltip:
+	DisplayName: Нагрудник с ужасным сердцем
+	Tooltip:
 		'''
-		8% increased nature [kw/n:potential] damage
-		Increases nature knockback
-		''' */
+		Увеличивает [kw/n:возможный] природный урон на 8%
+		Увеличивает отбрасывание природного оружия
+		'''
 }
 
 DreadheartCrimsonHelmet: {
-	// DisplayName: Dreadheart Helmet
-	// Tooltip: 4% increased nature critical strike chance
+	DisplayName: Шлем с ужасным сердцем
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
 }
 
 DreadheartCrimsonLeggings: {
-	// DisplayName: Dreadheart Leggings
-	// Tooltip: 4% increased nature critical strike chance
+	DisplayName: Поножи с ужасным сердцем
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
 }
 
 TectonicCane: {
-	// DisplayName: Tectonic Cane
-	// Tooltip: Summons a column from below, which launches, singes and shatters
+	DisplayName: Тектоническая трость
+	Tooltip: Создает колонну из-под земли, которая подбрасывает, обжигает и крошится
 }
 
 AshwalkerHood: {
-	// DisplayName: Ashwalker Hood
-	// Tooltip: 6% increased nature [kw/n:potential] damage
+	DisplayName: Копющон ходящего по пеплу
+	Tooltip: Увеличивает [kw/n:возможный] природный урон на 6%
 }
 
 AshwalkerLeggings: {
-	// DisplayName: Ashwalker Leggings
-	// Tooltip: 6% increased nature [kw/n:potential] damage
+	DisplayName: Одеяние ходящего по пеплу
+	Tooltip: Увеличивает [kw/n:возможный] природный урон на 6%
 }
 
 AshwalkerRobe: {
-	// DisplayName: Ashwalker Robe
-	// Tooltip: 10% increased nature base damage
+	DisplayName: Роба ходящего по пеплу
+	Tooltip: Увеличивает начальный природный урон на 10%
 }
 
 MercuriumOre: {
@@ -590,8 +594,8 @@ LuminousFlowerHat: {
 	DisplayName: Шляпа из ясного цветка
 	Tooltip:
 		'''
-		Создает свет в движении
-		'Уже не пахнет... но все еще освещаяет окрестности'
+		Создает свет при передвижении
+		'Уже не пахнет... но все еще освещает окрестности'
 		'''
 }
 
@@ -612,7 +616,7 @@ NaturesHeart: {
 
 DeerSkull: {
 	DisplayName: Олений череп
-	Tooltip: Увеличивает шанс критического удар природным уроном на 4%
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
 }
 
 OniMask: {
@@ -711,18 +715,18 @@ ElderwoodWorkbench: {
 }
 
 WeaknessPotion: {
-	// DisplayName: Weakness Potion
-	// Tooltip: Throw this to make someone physically weak
+	DisplayName: Зелье слабости
+	Tooltip: Бросьте это зелье, чтобы сделать кого-то физически слабым
 }
 
 AlchemicalSkull: {
-	// DisplayName: Alchemical Skull
-	// Tooltip: Grants immunity to fire blocks, poison and toxic fumes
+	DisplayName: Алхимический череп
+	Tooltip: Дает иммунитет к огненным блокам, яду и токсичным газам
 }
 
 Coffin: {
-	// DisplayName: Coffin
-	// Tooltip: Releases bones upon taking damage, then returns them to the coffin
+	DisplayName: Гроб
+	Tooltip: Разбрасывает кости при получении урона, затем притягивает их обратно
 }
 
 Herbarium: {
@@ -730,7 +734,7 @@ Herbarium: {
 	Tooltip:
 		'''
 		Враги иногда оставляют лечебные травы при смерти
-		Когда [kw/n:венок заполнен], поглащает его, чтобы восстановить здоровье
+		Когда [kw/n:венок заполнен], поглощает его, чтобы восстановить больше здоровья
 		'''
 }
 
@@ -750,8 +754,8 @@ MagicHerb3: {
 }
 
 BizarreCowboyHat: {
-	// DisplayName: Bizarre Cowboy Hat
-	// Tooltip: "'Nyo ho ho ho'"
+	DisplayName: Шляпа удивительного ковбоя
+	Tooltip: "'Ньо-хо-хо-хо'"
 }
 
 DinoHat: {
@@ -764,33 +768,33 @@ DinoHat: {
 }
 
 JockeyHat: {
-	// DisplayName: Jockey Hat
-	// Tooltip: "'-100% running speed'"
+	DisplayName: Шапка жокея
+	Tooltip: "'-100% к скорости бега'"
 }
 
 MentorsHat: {
-	// DisplayName: Mentor's Hat
+	DisplayName: Котелок наставника
 	// Tooltip: ""
 }
 
 PresidentJacket: {
-	// DisplayName: President's Jacket
+	DisplayName: Плащ президента
 	// Tooltip: ""
 }
 
 PresidentPants: {
-	// DisplayName: President's Pants
+	DisplayName: Брюки президента
 	// Tooltip: ""
 }
 
 PresidentWig: {
-	// DisplayName: President's Wig
+	DisplayName: Парик президента
 	// Tooltip: ""
 }
 
 SailorHat: {
-	// DisplayName: Sailor Hat
-	// Tooltip: "'Who the hell am I?'"
+	DisplayName: Шапка моряка
+	Tooltip: "'Кто я, черт возьми, такой?'"
 }
 
 StoneMask: {
@@ -819,7 +823,7 @@ DevilHunterPants: {
 }
 
 BunnyHat: {
-	DisplayName: Шляпа кролика
+	DisplayName: Шапка кролика
 	// Tooltip: ""
 }
 
@@ -834,7 +838,7 @@ BunnyPants: {
 }
 
 FlinxFurUshanka: {
-	// DisplayName: Flinx Fur Ushanka
+	DisplayName: Ушанка из меха флинкса
 	// Tooltip: ""
 }
 
@@ -899,8 +903,8 @@ WandCore: {
 }
 
 OvergrownSpear: {
-	DisplayName: Поросшее копье
-	Tooltip: "'Цельтесь в шары, чтобы выпустить залп энергии'"
+	DisplayName: Заросшее копье
+	Tooltip: "'Бейте по шарам, чтобы выпустить энергию'"
 }
 
 MothStaff: {
@@ -920,7 +924,7 @@ ElderwoodBow: {
 
 MercuriumBolter: {
 	DisplayName: Ртутный болтомёт
-	Tooltip: Разделяте стрелы в легкие ртутные болты
+	Tooltip: Рассекает стрелы в легкие болты
 }
 
 DynastyWoodSword: {
@@ -1013,7 +1017,7 @@ SentinelTaurusMask: {
 
 AmuletOfLife: {
 	DisplayName: Амулет жизни
-	Tooltip: Создает воронку огоньков, лечащих прикосновением
+	Tooltip: Создает воронку огоньков, лечащих при касании
 }
 
 MercuriumAxe: {
@@ -1056,7 +1060,7 @@ WorshipperMantle: {
 
 SentinelShield: {
 	DisplayName: Щит дозорного
-	Tooltip: Дает шанс выпустить мстительных духов вместо того, чтобы получить урон
+	Tooltip: Дает шанс выпустить мстительных духов вместо получения урона
 }
 
 DynastyWoodBreastplate: {
@@ -1125,7 +1129,7 @@ ElderwoodWall: {
 
 PrismaticPotion: {
 	DisplayName: Переливчатое зелье
-	Tooltip: Заставляет увеличения урона влиять на все виды урона одновременно
+	Tooltip: Заставляет усиления урона влиять на все виды урона одновременно
 }
 
 ElderwoodToilet: {
@@ -1193,7 +1197,7 @@ LothorTrophy: {
 
 BloodbathLocket: {
 	DisplayName: Подвеска жажды крови
-	Tooltip: Увеличивает урон на 1% за каждого врага и на 5% за каждого босса поблизости
+	Tooltip: Увеличивает урон на 1% за каждого врага и на 5% за каждого босса поблизости, вплоть до 25%
 }
 
 ChemicalPrisoner: {
@@ -1216,7 +1220,7 @@ FlederSlayer: {
 }
 
 Bane: {
-	DisplayName: Кара
+	DisplayName: Бич
 	Tooltip: Заставляет врагов увядать
 }
 
@@ -1298,17 +1302,17 @@ BackwoodsPylon: {
 }
 
 ArchdruidBanner: {
-	// DisplayName: Archdruid Banner
+	DisplayName: Знамя архидруида
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Archdruid.DisplayName}"
 }
 
 BabyFlederBanner: {
-	// DisplayName: Baby Fleder Banner
+	DisplayName: Знамя малыша-нетопыря
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.BabyFleder.DisplayName}"
 }
 
 EntBanner: {
-	// DisplayName: Ent Banner
+	DisplayName: Знамя древня
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ent.DisplayName}"
 }
 
@@ -1318,57 +1322,57 @@ FlederBanner: {
 }
 
 GrimDefenderBanner: {
-	// DisplayName: Grim Defender Banner
+	DisplayName: Знамя мрачного стражника
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDefender.DisplayName}"
 }
 
 GrimdruidBanner: {
-	// DisplayName: Grimdruid Banner
+	DisplayName: Знамя мрачного друида
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.GrimDruid.DisplayName}"
 }
 
 HedgehogBanner: {
-	// DisplayName: Hedgehog Banner
+	DisplayName: Знамя ежика
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hedgehog.DisplayName}"
 }
 
 HogBanner: {
-	// DisplayName: Hog Banner
+	DisplayName: Знамя кабана
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Hog.DisplayName}"
 }
 
 LumberjackBanner: {
-	// DisplayName: Lumberjack Banner
+	DisplayName: Знамя дровосека
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Lumberjack.DisplayName}"
 }
 
 PettyGoblinBanner: {
-	// DisplayName: Petty Goblin Banner
+	DisplayName: Знамя мелочного гоблина
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PettyGoblin.DisplayName}"
 }
 
 RavencallerBanner: {
-	// DisplayName: Ravencaller Banner
+	DisplayName: Знамя вороноря
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ravencaller.DisplayName}"
 }
 
 SapSlimeBanner: {
-	// DisplayName: Sap Slime Banner
+	DisplayName: Знамя живичного слизня
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SapSlime.DisplayName}"
 }
 
 SentinelBanner: {
-	// DisplayName: Sentinel Banner
+	DisplayName: Знамя дозорного
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Sentinel.DisplayName}"
 }
 
 SentinelWarriorBanner: {
-	// DisplayName: Sentinel Warrior Banner
+	DisplayName: Знамя дозорного-воина
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SentinelWarrior.DisplayName}"
 }
 
 SummonedRavenBanner: {
-	// DisplayName: Summoned Raven Banner
+	DisplayName: Знамя призваного ворона
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
 }
 
@@ -1383,7 +1387,7 @@ BloodCursor: {
 }
 
 CrowdRavenBanner: {
-	// DisplayName: Crowd Raven Banner
+	DisplayName: Знамя недоброго ворона
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}"
 }
 

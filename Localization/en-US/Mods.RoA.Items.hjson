@@ -5,7 +5,7 @@ ElderwoodClaws: {
 
 Elderwood: {
 	DisplayName: Elderwood
-	Tooltip: "'Arboreal culture native to the Backwoods'"
+	Tooltip: ""
 }
 
 GutwrenchingHooks: {
@@ -481,7 +481,11 @@ BloomingDoom: {
 
 BrilliantBouquet: {
 	DisplayName: Brilliant Bouquet
-	Tooltip: Shoots a bouquet of vibrant petals
+	Tooltip:
+		'''
+		Shoots a bouquet of vibrant petals
+		While [kw/n:wreath] is full, they cross-pollinate
+		'''
 }
 
 SacrificialSickleOfTheMoon: {
@@ -573,7 +577,7 @@ MercuriumOre: {
 }
 
 Grimstone: {
-	DisplayName: Grimstone
+	DisplayName: Grimrock
 	Tooltip: ""
 }
 
@@ -780,7 +784,7 @@ MentorsHat: {
 }
 
 PresidentJacket: {
-	DisplayName: President's Jacket
+	DisplayName: President's Coat
 	Tooltip: ""
 }
 
@@ -1284,7 +1288,7 @@ BigTreeSpawner: {
 }
 
 GrimstoneWall: {
-	DisplayName: Grimstone Wall
+	DisplayName: Grimrock Wall
 	Tooltip: ""
 }
 
@@ -1389,7 +1393,7 @@ BloodCursor: {
 }
 
 CrowdRavenBanner: {
-	DisplayName: Crowd Raven Banner
+	DisplayName: Unkind Raven Banner
 	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}"
 }
 
@@ -1408,7 +1412,7 @@ AlmondMilk: {
 	Tooltip:
 		'''
 		{$CommonItemTooltip.MinorStats}
-		'You feel nutty'		
+		'You feel nutty'
 		'''
 }
 

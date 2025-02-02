@@ -10,10 +10,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class BigTreeSpawner : ModItem {
-    public override string Texture => ResourceManager.EmptyTexture;
+    // public override string Texture => ResourceManager.EmptyTexture;
 
     public override void SetDefaults() {
-        int width = 20; int height = width;
+        int width = 32; int height = 50;
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Swing;
