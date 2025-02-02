@@ -10,6 +10,7 @@ using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
+using RoA.Content.Items.Special;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Summon;
@@ -67,7 +68,7 @@ sealed class BackwoodsCrate : ModItem {
     public override void ModifyItemLoot(ItemLoot itemLoot) {
         IItemDropRule[] mainItems = [
             ItemDropRule.OneFromOptionsNotScalingWithLuck(1,
-            ModContent.ItemType<WandCore>(),
+            ModContent.ItemType<SphereOfAspiration>(),
             ModContent.ItemType<OvergrownSpear>(),
             ModContent.ItemType<MothStaff>(),
             ModContent.ItemType<DoubleFocusCharm>(),

@@ -11,6 +11,7 @@ using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable;
 using RoA.Content.Items.Potions;
+using RoA.Content.Items.Special;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Summon;
@@ -2015,12 +2016,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
                     int firstItemType = _nextItemIndex switch {
-                        0 => ModContent.ItemType<WandCore>(),
+                        0 => ModContent.ItemType<SphereOfAspiration>(),
                         1 => ModContent.ItemType<OvergrownSpear>(),
                         2 => ModContent.ItemType<MothStaff>(),
                         3 => ModContent.ItemType<DoubleFocusCharm>(),
-                        4 => ModContent.ItemType<BeastBow>(),
-                        5 => ModContent.ItemType<WandCore>()
+                        4 => ModContent.ItemType<BeastBow>()
                     };
                     Action[] addings = [
                         () => {
