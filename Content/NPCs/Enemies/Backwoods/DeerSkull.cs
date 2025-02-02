@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core;
 using RoA.Utilities;
 
@@ -55,6 +56,9 @@ sealed class DeerSkullHead : BaseHead {
         NPC.noGravity = true;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<DeerSkullBanner>();
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -462,7 +466,7 @@ public abstract class BaseBody : Worm {
             float length = (float)Math.Sqrt(dirX * dirX + dirY * dirY);
             int num = (int)worm.NPC.ai[2];
             bool rib = num >= 5 && num <= 7;
-            float dist = (length - worm.NPC.width * (worm is DeerSkullTail ? 0.875f : rib ? 0.85f : (num == 8 ? 0.6f : num > 5 ? 0.75f : 0.7f))) / length;
+            float dist = (length - worm.NPC.width * (worm is DeerSkullTail ? 0.875f : rib ? 0.85f : (num == 8 ? 0.6f : num > 5 ? 0.75f : 0.715f))) / length;
             float posX = dirX * dist;
             float posY = dirY * dist;
 
