@@ -462,7 +462,7 @@ public abstract class BaseBody : Worm {
             float length = (float)Math.Sqrt(dirX * dirX + dirY * dirY);
             int num = (int)worm.NPC.ai[2];
             bool rib = num >= 5 && num <= 7;
-            float dist = (length - worm.NPC.width * (worm is DeerSkullTail ? 0.95f : rib ? 0.85f : (num == 8 ? 0.6f : 0.75f))) / length;
+            float dist = (length - worm.NPC.width * (worm is DeerSkullTail ? 0.95f : rib ? 0.85f : (num == 8 ? 0.6f : num > 5 ? 0.75f : 0.7f))) / length;
             float posX = dirX * dist;
             float posY = dirY * dist;
 
