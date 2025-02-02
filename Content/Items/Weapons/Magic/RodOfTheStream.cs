@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Common.Items;
+using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 
 using System;
@@ -16,11 +18,19 @@ namespace RoA.Content.Items.Weapons.Magic;
 sealed class RodOfTheStream : Rod {
     protected override Color? LightingColor => new(57, 136, 232);
 
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<SphereOfStream>()
+            .Register();
+    }
+
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Rod of the Stream");
         // Tooltip.SetDefault("Casts a water spit which splits into two when hits enemies\n'Forged with Aqua'");
 
         Item.ResearchUnlockCount = 1;
+
+        ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfStream>();
     }
 
     public override void SetDefaults() {

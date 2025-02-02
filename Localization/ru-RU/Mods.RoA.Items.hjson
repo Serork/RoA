@@ -1414,3 +1414,33 @@ SherwoodShake: {
 		'Чертовски хороший стакан молочного коктейля'
 		'''
 }
+
+SphereOfAspiration: {
+	// DisplayName: Sphere Of Aspiration
+	// Tooltip: ""
+}
+
+SphereOfCondor: {
+	// DisplayName: Sphere Of Condor
+	// Tooltip: ""
+}
+
+SphereOfPyre: {
+	// DisplayName: Sphere Of Pyre
+	// Tooltip: ""
+}
+
+SphereOfQuake: {
+	// DisplayName: Sphere Of Quake
+	// Tooltip: ""
+}
+
+SphereOfShock: {
+	// DisplayName: Sphere Of Shock
+	// Tooltip: ""
+}
+
+SphereOfStream: {
+	// DisplayName: Sphere Of Stream
+	// Tooltip: ""
+}

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Common.Items;
+using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 
 using Terraria;
@@ -14,11 +16,19 @@ namespace RoA.Content.Items.Weapons.Magic;
 sealed class RodOfTheTerra : Rod {
     protected override Color? LightingColor => new(73, 170, 104);
 
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<SphereOfQuake>()
+            .Register();
+    }
+
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Rod of the Terra");
         // Tooltip.SetDefault("Casts a damaging beam of earth energy\n'Forged with Terra'");
 
         Item.ResearchUnlockCount = 1;
+
+        ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfQuake>();
     }
 
     public override void SetDefaults() {

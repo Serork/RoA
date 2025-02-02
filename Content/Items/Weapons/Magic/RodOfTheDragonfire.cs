@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Common.Items;
+using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 
 using Terraria;
@@ -14,8 +16,16 @@ namespace RoA.Content.Items.Weapons.Magic;
 sealed class RodOfTheDragonfire : Rod {
     protected override Color? LightingColor => new(255, 154, 116);
 
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<SphereOfPyre>()
+            .Register();
+    }
+
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
+
+        ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfPyre>();
     }
 
     public override void SetDefaults() {

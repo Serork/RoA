@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Common.Items;
+using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 
 using Terraria;
@@ -13,8 +15,16 @@ namespace RoA.Content.Items.Weapons.Magic;
 sealed class RodOfTheShock : Rod {
     protected override Color? LightingColor => new(86, 173, 177);
 
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<SphereOfShock>()
+            .Register();
+    }
+
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
+
+        ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfShock>();
     }
 
     public override void SetDefaults() {
