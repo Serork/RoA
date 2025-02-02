@@ -25,7 +25,7 @@ PettyGoblin.DisplayName: Мелочный гоблин
 FireflyMimic.DisplayName: Светлячок-подражатель
 Lothor2.DisplayName: Лотор Мудрый
 DruidSoul2.DisplayName: Душа друида
-// DeerSkull.DisplayName: Deer Skull
-// DeerSkullBody.DisplayName: Deer Skull
-// DeerSkullHead.DisplayName: Deer Skull
-// DeerSkullTail.DisplayName: Deer Skull
+DeerSkull.DisplayName: Олений череп
+DeerSkullBody.DisplayName: Олений череп
+DeerSkullHead.DisplayName: Олений череп
+DeerSkullTail.DisplayName: Олений череп

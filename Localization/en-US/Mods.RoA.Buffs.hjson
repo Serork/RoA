@@ -52,7 +52,7 @@ Willpower: {
 
 Resilience: {
 	DisplayName: Moon's Resilience
-	Description: Slightly delays the [kw/n:Wreath] from depleting
+	Description: Slightly delays the [kw/n:wreath] from depleting
 }
 
 ExtraRegen: {

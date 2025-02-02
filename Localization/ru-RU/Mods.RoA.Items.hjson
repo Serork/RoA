@@ -1420,31 +1420,31 @@ SherwoodShake: {
 }
 
 SphereOfAspiration: {
-	// DisplayName: Sphere of Aspiration
-	// Tooltip: "'Drop it, burn it, bless it, forge it, drown it, technomagic'"
+	DisplayName: Сфера стремлений
+	Tooltip: "'Брось её, сожги её, упокой её, перекуй её, утопи её, техномагия'"
 }
 
 SphereOfCondor: {
-	// DisplayName: Sphere of the Condor
-	// Tooltip: "'Burn it, bless it, forge it, drown it, technomagic'"
+	DisplayName: Сфера кондора
+	Tooltip: "'Сожги её, упокой её, перекуй её, утопи её, техномагия'"
 }
 
 SphereOfPyre: {
-	// DisplayName: Sphere of the Pyre
-	// Tooltip: "'Drop it, bless it, forge it, drown it, technomagic'"
+	DisplayName: Сфера костра
+	Tooltip: "'Брось её, упокой её, перекуй её, утопи её, техномагия'"
 }
 
 SphereOfQuake: {
-	// DisplayName: Sphere of the Quake
-	// Tooltip: "'Drop it, burn it, forge it, drown it, technomagic'"
+	DisplayName: Сфера дрожи
+	Tooltip: "'Брось её, сожги её, перекуй её, утопи её, техномагия'"
 }
 
 SphereOfShock: {
-	// DisplayName: Sphere of the Shock
-	// Tooltip: "'Drop it, burn it, bless it, drown it, technomagic'"
+	DisplayName: Сфера шока
+	Tooltip: "'Брось её, сожги её, упокой её, утопи её, техномагия'"
 }
 
 SphereOfStream: {
-	// DisplayName: Sphere of the Stream
-	// Tooltip: "'Drop it, burn it, bless it, forge it, technomagic'"
+	DisplayName: Сфера потока
+	Tooltip: "'Брось её, сожги её, упокой её, перекуй её, техномагия'"
 }

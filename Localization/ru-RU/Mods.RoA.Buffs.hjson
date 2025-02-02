@@ -9,30 +9,30 @@ Skinning: {
 }
 
 WreathCharged: {
-	// DisplayName: Wreath Charge I
-	/* Description:
+	DisplayName: Сила венка I
+	Description:
 		'''
-		Nature damage is improved
-		Provides partial bonuses of the equipped [kw/n:wreath]
-		''' */
+		Природный урон увеличен
+		В силе часть бонусов надетого [kw/n:венка]
+		'''
 }
 
 WreathFullCharged: {
-	// DisplayName: Wreath Charge II
-	/* Description:
+	DisplayName: Сила венка II
+	Description:
 		'''
-		Nature damage is at full [kw/n:potential]
-		Provides [kw/n:full] bonuses of the equipped [kw/n:wreath]
-		''' */
+		Природный урон в вершине [kw/n:силы]
+		В силе [kw/n:все] бонусы надетого [kw/n:венка]
+		'''
 }
 
 WreathFullCharged2: {
-	// DisplayName: Wreath Charge III
-	/* Description:
+	DisplayName: Сила венка III
+	Description:
 		'''
-		Nature damage is at full [kw/n:potential]
-		Provides [kw/n:full charge] bonuses of equipped [kw/n:wreath] and Soul of the Woods
-		''' */
+		Природный урон в вершине [kw/n:силы]
+		В силе [kw/n:все] бонусы надетого [kw/n:венка] и Души леса
+		'''
 }
 
 Bloodlust: {
@@ -51,13 +51,13 @@ Willpower: {
 }
 
 Resilience: {
-	// DisplayName: Moon's Resilience
-	// Description: Slightly delays the [kw/n:Wreath] from depleting
+	DisplayName: Стойкость луны
+	Description: Слегка отсрочивает [kw/n:венок] от опустошения
 }
 
 ExtraRegen: {
 	DisplayName: Регенерация
-	// Description: Slowly recovering from injuries
+	Description: Медленное восстановление от ран
 }
 
 Hemorrhage: {
@@ -67,12 +67,12 @@ Hemorrhage: {
 
 Brightstone: {
 	DisplayName: Гало из светлокамня
-	// Description: Emit glowing lumps of light
+	Description: Разбрасывает сгустки света
 }
 
 DryadBlood: {
 	DisplayName: Кровь дриады
-	// Description: Debuffs deal 75% less damage
+	Description: Debuffs deal 75% less damage Дебаффы наносят на 75% меньше урона
 }
 
 Heavy: {
@@ -97,38 +97,38 @@ BeastPoison: {
 
 FlederForm: {
 	DisplayName: Форма нетопыря
-	/* Description:
+	Description:
 		'''
-		Double tap a direction to dash
-		Hold {$Controls.LeftClick} to charge an acorn bomb
-		''' */
+		Дважды нажмите в сторону, чтобы совершить рывок
+		Удерживайте {$Controls.LeftClick}, чтобы зарядить жёлудь-бомбу
+		'''
 }
 
 CorruptionInsectForm: {
 	DisplayName: Форма жука
-	/* Description:
+	Description:
 		'''
-		Use {$Controls.LeftClick} to spit poison
-		Stand still to summon swarms of insects
-		''' */
+		Нажмите {$Controls.LeftClick}, чтобы плеваться ядом
+		Стойте смирно, чтобы  высвободить рой насекомых
+		'''
 }
 
 CrimsonInsectForm: {
 	DisplayName: Форма жука
-	/* Description:
+	Description:
 		'''
-		Use {$Controls.LeftClick} to spit poison
-		Stand still to summon swarms of insects
-		''' */
+		Нажмите {$Controls.LeftClick}, чтобы плеваться ядом
+		Стойте смирно, чтобы  высвободить рой насекомых
+		'''
 }
 
 LilPhoenixForm: {
 	DisplayName: Форма жар-птицы
-	/* Description:
+	Description:
 		'''
-		Hold {$Controls.LeftClick} in air to charge an explosive fire boost
-		Double jump to leave damaging embers
-		''' */
+		Удерживайте {$Controls.LeftClick} в воздухе, чтобы зарядить взрывоопасное пике
+		Дважды подпрыгните, чтобы оставить след из раскаленных углей
+		'''
 }
 
 Burning: {
@@ -182,8 +182,8 @@ Fireblossom: {
 }
 
 BoneHarpyAttackDebuff: {
-	// DisplayName: Bone Fatigue
-	// Description: Undead Harpy's attack is recovering
+	DisplayName: Ломит в костях
+	Description: Гарпия-нежить взяла передышку после её атаки
 }
 
 OnFire: {

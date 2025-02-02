@@ -1,6 +1,6 @@
-InBackwoods: В Чаще
+InBackwoods: В чаще
 
 BackwoodsBiome: {
 	DisplayName: Чаща
-	TownNPCDialogueName: биом Чащи
+	TownNPCDialogueName: чаща
 }
