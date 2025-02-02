@@ -38,18 +38,18 @@ sealed class DeerSkullHead : BaseHead {
         NPC.lifeMax = 200;
         NPC.damage = 44;
         NPC.defense = 8;
-        NPC.knockBackResist = 0.1f;
+        NPC.knockBackResist = 0f;
 
         int width = 50; int height = 50;
         NPC.Size = new Vector2(width, height);
 
         NPC.aiStyle = -1;
 
-        NPC.npcSlots = 1.25f;
+        NPC.npcSlots = 0.3f;
         NPC.value = Item.buyPrice(0, 0, 25, 5);
 
-        NPC.HitSound = SoundID.NPCHit1;
-        NPC.DeathSound = SoundID.NPCDeath1;
+        NPC.HitSound = SoundID.NPCHit2;
+        NPC.DeathSound = SoundID.NPCDeath2;
 
         NPC.noTileCollide = true;
         NPC.noGravity = true;
@@ -78,6 +78,23 @@ sealed class DeerSkullHead : BaseHead {
     public override void ReceiveExtraAI(BinaryReader reader) {
         _aiTimer1 = reader.ReadSingle();
         _aiTimer2 = reader.ReadSingle();
+    }
+
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num682 = 0; num682 < 20; num682++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore1".GetGoreType(), Scale: NPC.scale);
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore2".GetGoreType(), Scale: NPC.scale);
     }
 
     public override void PostAI() {
@@ -205,6 +222,25 @@ sealed class DeerSkullBody : BaseBody {
         NPC.behindTiles = false;
         NPC.dontTakeDamage = true;
     }
+
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num682 = 0; num682 < 5; num682++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        int num = (int)NPC.ai[2];
+        bool rib = num >= 5 && num <= 7;
+        string gore = rib ? "DeerSkullGore32" : "DeerSkullGore3";
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, gore.GetGoreType(), Scale: NPC.scale);
+    }
 }
 
 sealed class DeerSkullTail : BaseTail {
@@ -220,6 +256,22 @@ sealed class DeerSkullTail : BaseTail {
         NPC.aiStyle = -1;
         NPC.behindTiles = false;
         NPC.dontTakeDamage = true;
+    }
+
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num682 = 0; num682 < 5; num682++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore4".GetGoreType(), Scale: NPC.scale);
     }
 }
 
