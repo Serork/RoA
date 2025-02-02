@@ -465,12 +465,12 @@ LivingMahoganyHelmet: {
 }
 
 EbonwoodStaff: {
-	DisplayName: Cane out of Ebonwood's Branch
+	DisplayName: Ebonwood Cane
 	Tooltip: Grows a corrupted branch with leaves that fall and wither
 }
 
 ShadewoodStaff: {
-	DisplayName: Cane out of Shadewood's Branch
+	DisplayName: Shadewood Cane
 	Tooltip: Grows a crimson branch with leaves that fall and decay
 }
 
@@ -481,7 +481,11 @@ BloomingDoom: {
 
 BrilliantBouquet: {
 	DisplayName: Brilliant Bouquet
-	Tooltip: Shoots a bouquet of vibrant petals
+	Tooltip: 
+		'''
+		Shoots a bouquet of vibrant petals
+		While [kw/n:wreath] is full, they cross-pollinate
+		'''
 }
 
 SacrificialSickleOfTheMoon: {
