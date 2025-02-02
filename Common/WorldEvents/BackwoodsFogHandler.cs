@@ -125,7 +125,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                 if (rand.Next(5) == 0)
                     num4 += 0.2f;
 
-                _fogTime = (int)((float)num3 * num4);
+                _fogTime = (int)((float)num3 * num4) * 0.5f;
 
                 string message = Language.GetText("Mods.RoA.World.BackwoodsFog").ToString();
                 Helper.NewMessage($"{message}...", Helper.EventMessageColor);
