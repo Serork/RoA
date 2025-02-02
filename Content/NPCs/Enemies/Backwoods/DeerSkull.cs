@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.Biomes.Backwoods;
+using RoA.Core;
 using RoA.Utilities;
 
 using System;
@@ -22,6 +23,16 @@ sealed class DeerSkullHead : BaseHead {
     public override int BodyType => ModContent.NPCType<DeerSkullBody>();
 
     public override int TailType => ModContent.NPCType<DeerSkullTail>();
+
+    public override void SetStaticDefaults() {
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            CustomTexturePath = ResourceManager.BestiaryTextures + "DeerSkull_Bestiary",
+            Position = new Vector2(70f, 10f),
+            PortraitPositionXOverride = 0f,
+            PortraitPositionYOverride = 0f
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
 
     public override void SetDefaults() {
         NPC.lifeMax = 200;
@@ -87,7 +98,7 @@ sealed class DeerSkullHead : BaseHead {
         float num1376 = 120f;
         if (NPC.localAI[0] < num1376) {
             if (NPC.localAI[0] == 0f) {
-                SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
+                //SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
                 NPC.TargetClosest();
                 if (NPC.direction > 0)
                     NPC.velocity.X += 2f;
@@ -192,6 +203,7 @@ sealed class DeerSkullBody : BaseBody {
         NPC.CloneDefaults(NPCID.DiggerBody);
         NPC.aiStyle = -1;
         NPC.behindTiles = false;
+        NPC.dontTakeDamage = true;
     }
 }
 
@@ -207,6 +219,7 @@ sealed class DeerSkullTail : BaseTail {
         NPC.CloneDefaults(NPCID.DiggerTail);
         NPC.aiStyle = -1;
         NPC.behindTiles = false;
+        NPC.dontTakeDamage = true;
     }
 }
 
