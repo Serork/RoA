@@ -475,7 +475,7 @@ BloomingDoom: {
 
 BrilliantBouquet: {
 	DisplayName: Чудесный букет
-	Tooltip: 
+	Tooltip:
 		'''
 		Выстреливает букетом ярких лепестков
 		Когда [kw/n:венок заполнен], они перекрестно опыляются

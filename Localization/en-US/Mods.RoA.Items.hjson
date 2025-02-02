@@ -481,7 +481,7 @@ BloomingDoom: {
 
 BrilliantBouquet: {
 	DisplayName: Brilliant Bouquet
-	Tooltip: 
+	Tooltip:
 		'''
 		Shoots a bouquet of vibrant petals
 		While [kw/n:wreath] is full, they cross-pollinate
@@ -1412,7 +1412,7 @@ AlmondMilk: {
 	Tooltip:
 		'''
 		{$CommonItemTooltip.MinorStats}
-		'You feel nutty'		
+		'You feel nutty'
 		'''
 }
 
