@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Common.BackwoodsSystems;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable.Banners;
@@ -66,10 +67,12 @@ sealed class GrimDruid : DruidNPC {
         }
 
         if (NPC.downedBoss2 && Main.rand.NextBool(5)) {
-            if (Main.netMode != NetmodeID.MultiplayerClient) {
-                int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul>());
-                if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-                    NetMessage.SendData(MessageID.SyncNPC, number: npc);
+            if (NPC.Center.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 35) {
+                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                    int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul>());
+                    if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                        NetMessage.SendData(MessageID.SyncNPC, number: npc);
+                    }
                 }
             }
         }
