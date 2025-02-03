@@ -30,37 +30,23 @@ sealed class BackwoodsCampfire : ModTile {
         TileID.Sets.InteractibleByNPCs[Type] = true;
         TileID.Sets.Campfire[Type] = true;
 
-        DustType = -1; // No dust when mined.
+        DustType = -1;
         AdjTiles = new int[] { TileID.Campfire };
 
-        // Placement
         TileObjectData.newTile.CopyFrom(TileObjectData.GetTileData(TileID.Campfire, 0));
-        /*  This is what is copied from the Campfire tile
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-		TileObjectData.newTile.StyleWrapLimit = 16;
-		TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
-		TileObjectData.newTile.LavaPlacement = LiquidPlacement.NotAllowed;
-		TileObjectData.newTile.WaterDeath = true;
-		TileObjectData.newTile.LavaDeath = true;
-		TileObjectData.newTile.DrawYOffset = 2;
-		*/
-        TileObjectData.newTile.StyleLineSkip = 9; // This needs to be added to work for modded tiles.
+        TileObjectData.newTile.StyleLineSkip = 9;
         TileObjectData.addTile(Type);
 
-        // Etc
         AddMapEntry(new Color(254, 121, 2), Language.GetText("ItemName.Campfire"));
 
-        // Assets
-        flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
+        if (!Main.dedServ) {
+            flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
+        }
     }
 
     public override void NearbyEffects(int i, int j, bool closer) {
-        // HasCampfire is a gameplay effect, so we don't run the code if closer is true.
-        if (closer) {
-            return;
-        }
-
-        if (Main.tile[i, j].TileFrameY < 36) {
+        var tile = Main.tile[i, j];
+        if (tile.TileFrameY < 36) {
             Main.SceneMetrics.HasCampfire = true;
         }
     }
@@ -88,8 +74,6 @@ sealed class BackwoodsCampfire : ModTile {
         ToggleTile(i, j);
     }
 
-    // ToggleTile is a method that contains code shared by HitWire and RightClick, since they both toggle the state of the tile.
-    // Note that TileFrameY doesn't necessarily match up with the image that is drawn, AnimateTile and AnimateIndividualTile contribute to the drawing decisions.
     public void ToggleTile(int i, int j) {
         Tile tile = Main.tile[i, j];
         int topX = i - tile.TileFrameX % 54 / 18;
@@ -115,7 +99,6 @@ sealed class BackwoodsCampfire : ModTile {
     public override void AnimateTile(ref int frame, ref int frameCounter) {
         if (++frameCounter >= 4) {
             frameCounter = 0;
-            // We animate through the 1st 8 frames. The 9th frame is manually drawn if in the "off" state so it is not included in the animation logic here.
             frame = ++frame % 8;
         }
     }
@@ -125,8 +108,6 @@ sealed class BackwoodsCampfire : ModTile {
             frameYOffset = Main.tileFrame[type] * 36;
         }
         else {
-            // When in the "off" state, TileFrameY of the top tile is 36.
-            // Since we want to draw the 9th animation frame when "off", we need to offset the TileFrameY value by 252. (Because 8 * 36 == 288 and 36 + 252 == 288)
             frameYOffset = 252;
         }
     }
@@ -137,8 +118,7 @@ sealed class BackwoodsCampfire : ModTile {
         }
         if (!Lighting.UpdateEveryFrame || new FastRandom(Main.TileFrameSeed).WithModifier(i, j).Next(4) == 0) {
             Tile tile = Main.tile[i, j];
-            // Only emit dust from the top tiles, and only if toggled on. This logic limits dust spawning under different conditions.
-            if (tile.TileFrameY == 0 && Main.rand.NextBool(3) && (Main.drawToScreen && Main.rand.NextBool(4) || !Main.drawToScreen)) {
+            if (tile.TileFrameY == 0 && Main.rand.NextBool(3) && ((Main.drawToScreen && Main.rand.NextBool(4)) || !Main.drawToScreen)) {
                 Dust dust = Dust.NewDustDirect(new Vector2(i * 16 + 2, j * 16 - 4), 4, 8, DustID.Smoke, 0f, 0f, 100);
                 if (tile.TileFrameX == 0)
                     dust.position.X += Main.rand.Next(8);
@@ -159,19 +139,14 @@ sealed class BackwoodsCampfire : ModTile {
         if (tile.TileFrameY < 36) {
             float pulse = Main.rand.Next(28, 42) * 0.005f;
             pulse += (270 - Main.mouseTextColor) / 700f;
-            r = 0.1f + pulse;
-            g = 0.9f + pulse;
-            b = 0.3f + pulse;
+            r = 0.25f + pulse;
+            g = 0.65f + pulse;
+            b = 0.85f + pulse;
         }
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         var tile = Main.tile[i, j];
-
-        if (!TileDrawing.IsVisible(tile)) {
-            return;
-        }
-
         if (tile.TileFrameY < 36) {
             Color color = new Color(255, 255, 255, 0);
 
@@ -188,12 +163,11 @@ sealed class BackwoodsCampfire : ModTile {
             int addFrX = 0;
             int addFrY = 0;
 
-            TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX, ref frameY); // calculates the draw offsets
-            TileLoader.SetAnimationFrame(Type, i, j, ref addFrX, ref addFrY); // calculates the animation offsets
+            TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX, ref frameY);
+            TileLoader.SetAnimationFrame(Type, i, j, ref addFrX, ref addFrY);
 
             Rectangle drawRectangle = new Rectangle(tile.TileFrameX, tile.TileFrameY + addFrY, 16, 16);
 
-            // The flame is manually drawn separate from the tile texture so that it can be drawn at full brightness.
             spriteBatch.Draw(flameTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, drawRectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
     }

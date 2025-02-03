@@ -1464,3 +1464,8 @@ BackwoodsCampfire: {
 	DisplayName: Backwoods Campfire
 	Tooltip: ""
 }
+
+FogStarter: {
+	DisplayName: Fog Starter
+	Tooltip: ""
+}
