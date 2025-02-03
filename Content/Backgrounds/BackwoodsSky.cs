@@ -38,10 +38,10 @@ sealed class BackwoodsSky : CustomSky {
         if (maxDepth >= 3E+38f && minDepth < 3E+38f && !Main.gameMenu) {
             Texture2D skyTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsSky").Value;
             spriteBatch.Draw(skyTexture,
-				new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
+				new Rectangle(-(int)(Main.screenWidth * 0.1f), -(int)(Main.screenHeight * 0.1f), (int)(Main.screenWidth * 1.2f), (int)(Main.screenHeight * 1.2f)),
 				Main.ColorOfTheSkies * 0.95f * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _opacity));
             spriteBatch.Draw(skyTexture,
-                new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
+                new Rectangle(-(int)(Main.screenWidth * 0.1f), -(int)(Main.screenHeight * 0.1f), (int)(Main.screenWidth * 1.2f), (int)(Main.screenHeight * 1.2f)),
                 Color.Black.MultiplyRGB(Main.ColorOfTheSkies) * 0.15f * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _opacity));
         }
     }
