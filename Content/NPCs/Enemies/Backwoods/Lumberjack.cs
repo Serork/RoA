@@ -61,6 +61,10 @@ sealed class Lumberjack : RoANPC {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);

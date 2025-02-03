@@ -84,6 +84,10 @@ sealed class Hog : RoANPC {
         _currentAI = 2;
         NPC.netUpdate = true;
 
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         if (NPC.life > 0) {
             for (int num493 = 0; (double)num493 < hit.Damage / (double)NPC.lifeMax * 50.0; num493++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, hit.HitDirection, -1f);

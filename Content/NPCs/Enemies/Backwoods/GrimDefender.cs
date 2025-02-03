@@ -675,6 +675,10 @@ sealed class GrimDefender : ModNPC {
     }
 
     private void SpawnHitGores() {
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         for (int i = 0; i < 10; i++) {
             int dust = Dust.NewDust(new Vector2(NPC.Center.X, NPC.Center.Y), 10, 10, ModContent.DustType<WoodTrash>(), 0, 0, 0, default, 0.4f + Main.rand.NextFloat(0, 1f));
             Main.dust[dust].velocity *= 0.3f;

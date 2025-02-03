@@ -85,6 +85,10 @@ sealed class DeerSkullHead : BaseHead {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         if (NPC.life > 0) {
             for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
@@ -228,6 +232,10 @@ sealed class DeerSkullBody : BaseBody {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         if (NPC.life > 0) {
             for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
@@ -263,6 +271,10 @@ sealed class DeerSkullTail : BaseTail {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         if (NPC.life > 0) {
             for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
@@ -451,11 +463,12 @@ public abstract class BaseBody : Worm {
             worm.NPC.timeLeft = 10;
 
         NPC following = worm.NPC.ai[1] >= Main.maxNPCs ? null : worm.FollowingNPC;
-        if (Main.netMode != NetmodeID.MultiplayerClient) {
-            if (following is null || !following.active || following.friendly || following.townNPC || following.lifeMax <= 5) {
-                worm.NPC.life = 0;
-                worm.NPC.HitEffect(0, 10);
-                worm.NPC.active = false;
+        if (following is null || !following.active || following.friendly || following.townNPC || following.lifeMax <= 5) {
+            worm.NPC.life = 0;
+            worm.NPC.HitEffect(0, 10);
+            worm.NPC.active = false;
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, worm.NPC.whoAmI, 0f, 0f, 0f, 0, 0, 0);
             }
         }
 

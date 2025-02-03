@@ -58,15 +58,7 @@ sealed class GrimDruid : DruidNPC {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (NPC.life > 0) {
-            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
-            }
-
-            return;
-        }
-
-        if (NPC.downedBoss2 && Main.rand.NextBool(5)) {
+        if (NPC.life <= 0 && NPC.downedBoss2 && Main.rand.NextBool(5)) {
             if (NPC.Center.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 35) {
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
                     int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul>());
@@ -75,6 +67,18 @@ sealed class GrimDruid : DruidNPC {
                     }
                 }
             }
+        }
+
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+            }
+
+            return;
         }
 
         for (int num829 = 0; num829 < 50; num829++) {

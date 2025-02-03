@@ -73,6 +73,10 @@ sealed class Ent : RoANPC {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         int dustType = ModContent.DustType<WoodTrash>();
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 50.0; num828++) {
