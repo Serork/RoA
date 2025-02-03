@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.Items.Miscellaneous;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,10 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.Graphics.Renderers;
-using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using Terraria.Utilities;
-using RoA.Utilities;
-using RoA.Content.Items.Placeable.Banners;
 
 namespace RoA.Content.NPCs.Enemies.Miscellaneous;
 
@@ -148,18 +144,6 @@ sealed class PettyGoblin : ModNPC {
         => Coins.SpawnCoins();
 
     public override void AI() {
-        if (NPC.justHit) {
-            if (NPC.life < NPC.lifeMax * 0.4) {
-                CurrentState = AWAY;
-                MakeALittleJump();
-            }
-            else {
-                Offensive();
-            }
-            if (CurrentState == AWAY) {
-                Coins.SpawnCoins(true);
-            }
-        }
         NPC.TargetClosest();
         Player player = Main.player[NPC.target];
         bool targetFound = !(NPC.target < 0 || NPC.target == 255 || player.dead || !player.active);
@@ -259,9 +243,7 @@ sealed class PettyGoblin : ModNPC {
 
     private void Attack() {
         if (!Attacking) {
-            if (Main.netMode != NetmodeID.Server) {
-                SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
-            }
+            SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
             Attacking = true;
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GoblinsDagger>(), NPC.damage * 2, 2f, Main.myPlayer, NPC.whoAmI);
@@ -489,6 +471,23 @@ sealed class PettyGoblin : ModNPC {
     //public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PettyBag>(), 10));
 
     public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life < NPC.lifeMax * 0.4) {
+            CurrentState = AWAY;
+            MakeALittleJump();
+            NPC.netUpdate = true;
+        }
+        else {
+            Offensive();
+            NPC.netUpdate = true;
+        }
+        if (CurrentState == AWAY) {
+            Coins.SpawnCoins(true);
+        }
+
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
@@ -539,6 +538,9 @@ sealed class PettyGoblin : ModNPC {
         }
 
         public void SpawnCoins(bool justHit = false, bool deathPlayers = false) {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                return;
+            }
             for (int i = 0; i < coins.Count; i++) {
                 Coin coin = coins[i];
                 if (coin.Amount == 0) {
