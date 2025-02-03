@@ -178,8 +178,8 @@ sealed class SphereHandler : GlobalItem {
                 }
                 Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "TerraLeaf").Value;
                 int height = texture.Height;
-                int width = texture.Width / 3;
-                spriteBatch.Draw(texture, item.Center - Main.screenPosition + new Vector2((float)(26 * (i - 1) + num5) - 50f,
+                int width = texture.Width;
+                spriteBatch.Draw(texture, item.Center - Main.screenPosition + new Vector2((float)(26 * (i - 1) + num5) - 48,
                     -50f + ((float)height - (float)height * num3) / 2f + (float)num6), new Microsoft.Xna.Framework.Rectangle(0, 0, width, height), new Microsoft.Xna.Framework.Color(num2, num2, num2, num2), 0f, default(Vector2), num3, SpriteEffects.None, 0f);
             }
         }
