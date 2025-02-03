@@ -10,7 +10,7 @@ namespace RoA.Content.Items.Placeable.Seeds;
 
 sealed class BackwoodsGrassSeeds : ModItem {
     public override void SetStaticDefaults() {
-        ItemTrader.ChlorophyteExtractinator.AddOption_OneWay(Type, 1, ItemID.DirtBlock, 1);
+        //ItemTrader.ChlorophyteExtractinator.AddOption_OneWay(Type, 1, ItemID.DirtBlock, 1);
 
         ItemID.Sets.GrassSeeds[Type] = true;
     }
