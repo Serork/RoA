@@ -7,7 +7,7 @@ GrimDruid.DisplayName: Мрачный друид
 Ent.DisplayName: Древень
 EntLegs.DisplayName: Ноги древня
 Archdruid.DisplayName: Архидруид
-EntLegs2.DisplayName: Ноги древня #2
+EntLegs2.DisplayName: Ноги древня
 Ravencaller.DisplayName: Воронарь
 SummonedRaven.DisplayName: Призванный ворон
 GrimDefender.DisplayName: Мрачный стражник
@@ -25,7 +25,6 @@ PettyGoblin.DisplayName: Мелочный гоблин
 FireflyMimic.DisplayName: Светлячок-подражатель
 Lothor2.DisplayName: Лотор Мудрый
 DruidSoul2.DisplayName: Душа друида
-DeerSkull.DisplayName: Олений череп
 DeerSkullBody.DisplayName: Олений череп
 DeerSkullHead.DisplayName: Олений череп
 DeerSkullTail.DisplayName: Олений череп
