@@ -32,17 +32,6 @@ sealed class SummonedRaven : ModNPC {
 	private ref float State => ref NPC.ai[2];
     private ref float Acceleration => ref NPC.ai[3];
 
-    public override bool SpecialOnKill() {
-        if (Main.netMode != NetmodeID.MultiplayerClient) {
-            int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<BackwoodsRaven>());
-            if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-                NetMessage.SendData(MessageID.SyncNPC, number: npc);
-            }
-        }
-
-        return base.SpecialOnKill();
-    }
-
     public override void HitEffect(NPC.HitInfo hit) {
         if (NPC.life <= 0 && Main.netMode != NetmodeID.MultiplayerClient) {
             int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<BackwoodsRaven>());
