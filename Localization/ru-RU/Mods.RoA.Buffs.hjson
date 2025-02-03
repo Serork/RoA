@@ -72,7 +72,7 @@ Brightstone: {
 
 DryadBlood: {
 	DisplayName: Кровь дриады
-	Description: Debuffs deal 75% less damage Дебаффы наносят на 75% меньше урона
+	Description: Дебаффы наносят на 75% меньше урона
 }
 
 Heavy: {
@@ -137,12 +137,12 @@ Burning: {
 }
 
 ToxicFumes: {
-	DisplayName: Токсичные газы
+	DisplayName: Пары ртути
 	Description: Потеря здоровья, скорость передвижения снижена
 }
 
 ToxicFumesNoTimeDisplay: {
-	DisplayName: Токсичные газы
+	DisplayName: Пары ртути
 	Description: Потеря здоровья, скорость передвижения снижена
 }
 
