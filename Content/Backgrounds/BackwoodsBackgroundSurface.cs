@@ -57,6 +57,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                   mid = TextureAssets.Background[slotAArray[1]].Value,
                   mid2 = TextureAssets.Background[slotAArray[3]].Value,
                   far = TextureAssets.Background[slotAArray[0]].Value;
+        Texture2D close2 = TextureAssets.Background[BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsMidMenu")].Value;
         int length = slotAArray.Length;
         float screenOff = typeof(Main).GetFieldValue<float>("screenOff", Main.instance);
         float scAdj = typeof(Main).GetFieldValue<float>("scAdj", Main.instance);
@@ -126,6 +127,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                     Main.spriteBatch.Draw(far, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + FarOffset), new Rectangle(0, 0, far.Width, far.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
                 }
             }
+
             bgScale = 1.31f;
             bgParallax = 0.43;
             bgTopY = (int)(backgroundTopMagicNumber * 1950.0 + 700.0) + (int)scAdj + pushBGTopHack;
@@ -141,6 +143,44 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
                     Main.spriteBatch.Draw(mid, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + MidOffset), new Rectangle(0, 0, mid.Width, mid.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
+                }
+            }
+
+            bgScale = 1.31f;
+            bgParallax = 0.43;
+            bgTopY = (int)(backgroundTopMagicNumber * 1950.0 + 700.0) + (int)scAdj + pushBGTopHack;
+            bgScale *= bgGlobalScaleMultiplier * 0.9f;
+            bgWidthScaled = (int)(mid.Width * bgScale);
+            bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled) - bgWidthScaled / 2) - 150;
+            if (Main.gameMenu) {
+                bgTopY = 400 + pushBGTopHack;
+                bgStartX -= 80;
+            }
+            bgLoops = Main.screenWidth / bgWidthScaled + 2;
+            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
+            if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
+                for (int i = 0; i < bgLoops; i++) {
+                    Main.spriteBatch.Draw(mid, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + MidOffset), new Rectangle(0, 0, mid.Width, mid.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
+                }
+            }
+
+            bgScale = 1.34f;
+            bgParallax = 0.46;
+            bgTopY = (int)(backgroundTopMagicNumber * 2100.0 + 1100.0) + (int)scAdj + pushBGTopHack;
+            bgScale *= bgGlobalScaleMultiplier;
+            bgWidthScaled = (int)(close2.Width * bgScale);
+            bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled) - bgWidthScaled / 2);
+            if (Main.gameMenu) {
+                bgTopY = 480 + pushBGTopHack;
+                bgStartX -= 120;
+            }
+            bgLoops = Main.screenWidth / bgWidthScaled + 2;
+            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
+            int close2Offset = 600;
+            if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
+                for (int i = 0; i < bgLoops; i++) {
+                    //Main.EntitySpriteDraw(ModContent.Request<Texture2D>(ResourceManager.Textures + "BackwoodsBackground").Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset + close.Height * 3 - 186), new Rectangle(0, 0, close.Width, 300), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None);
+                    Main.spriteBatch.Draw(close2, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + close2Offset), new Rectangle(0, 0, close2.Width, close2.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
                 }
             }
             bgScale = 1.34f;
