@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -30,6 +31,17 @@ sealed class SummonedRaven : ModNPC {
 
 	private ref float State => ref NPC.ai[2];
     private ref float Acceleration => ref NPC.ai[3];
+
+    public override bool SpecialOnKill() {
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<BackwoodsRaven>());
+            if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                NetMessage.SendData(MessageID.SyncNPC, number: npc);
+            }
+        }
+
+        return base.SpecialOnKill();
+    }
 
     public override void HitEffect(NPC.HitInfo hit) {
         if (Main.netMode == NetmodeID.Server) {
@@ -59,9 +71,10 @@ sealed class SummonedRaven : ModNPC {
 		Main.npcFrameCount[Type] = 5;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            Position = new Vector2(2f, -10f),
-            PortraitPositionXOverride = 0f,
-            PortraitPositionYOverride = -31f
+            //Position = new Vector2(2f, -10f),
+            //PortraitPositionXOverride = 0f,
+            //PortraitPositionYOverride = -31f
+            Hide = true
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
@@ -85,10 +98,12 @@ sealed class SummonedRaven : ModNPC {
         //	ModContent.GetInstance<BackwoodsBiome>().Type
         //};
 
+        NPC.value = 0;
+
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
         Banner = Type;
-        BannerItem = ModContent.ItemType<SummonedRavenBanner>();
+        BannerItem = ModContent.ItemType<BackwoodsRavenBanner>();
     }
 
     public override bool? CanFallThroughPlatforms() => true;

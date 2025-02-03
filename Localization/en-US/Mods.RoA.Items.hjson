@@ -1377,11 +1377,6 @@ SentinelWarriorBanner: {
 	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SentinelWarrior.DisplayName}"
 }
 
-SummonedRavenBanner: {
-	DisplayName: Summoned Raven Banner
-	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
-}
-
 BackwoodsGrassSeeds: {
 	DisplayName: Backwoods Seeds
 	Tooltip: ""
@@ -1392,9 +1387,9 @@ BloodCursor: {
 	Tooltip: ""
 }
 
-CrowdRavenBanner: {
-	DisplayName: Unkind Raven Banner
-	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}"
+BackwoodsRavenBanner: {
+	DisplayName: Backwoods Raven Banner
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}, {$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
 }
 
 Almond: {

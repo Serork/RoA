@@ -1,7 +1,12 @@
+using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.NPCs.Enemies.Backwoods;
+
 using System;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
@@ -21,9 +26,35 @@ sealed class MonsterBanners : ModBannerTile {
 		Sentinel,
 		SentinelWarrior,
 		GrimDefender,
-		SummonedRaven,
-        CrowdRaven,
+        BackwoodsRaven,
         DeerSkullBanner
+    }
+
+    public override void NearbyEffects(int i, int j, bool closer) {
+        base.NearbyEffects(i, j, closer);
+
+        if (closer) {
+            return;
+        }
+
+        // Calculate the tile place style, then map that place style to an ItemID and BannerID.
+        int tileStyle = TileObjectData.GetTileStyle(Main.tile[i, j]);
+        int itemType = TileLoader.GetItemDropFromTypeAndStyle(Type, tileStyle);
+        int bannerID = NPCLoader.BannerItemToNPC(itemType);
+
+        if (itemType != ModContent.ItemType<BackwoodsRavenBanner>()) {
+            return;
+        }
+
+        //if (bannerID != ModContent.NPCType<SummonedRaven>()) {
+        //    return;
+        //}
+
+        // Once the BannerID and Item type have been calculated, we apply the banner buff
+        if (ItemID.Sets.BannerStrength[itemType].Enabled) {
+            Main.SceneMetrics.NPCBannerBuff[ModContent.NPCType<CrowdRaven>()] = true;
+            Main.SceneMetrics.hasBanner = true;
+        }
     }
 }
 

@@ -1,11 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
-using RoA.Utilities;
-
-using System;
 
 using Terraria;
 using Terraria.GameContent.Bestiary;

@@ -25,11 +25,23 @@ sealed class CrowdRaven : ModNPC {
 		Main.npcFrameCount[Type] = 5;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            Position = new Vector2(2f, -10f),
-            PortraitPositionXOverride = 0f,
-            PortraitPositionYOverride = -31f
+            //Position = new Vector2(2f, -10f),
+            //PortraitPositionXOverride = 0f,
+            //PortraitPositionYOverride = -31f
+            Hide = true
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override bool SpecialOnKill() {
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<BackwoodsRaven>());
+            if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                NetMessage.SendData(MessageID.SyncNPC, number: npc);
+            }
+        }
+
+        return base.SpecialOnKill();
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -116,7 +128,7 @@ sealed class CrowdRaven : ModNPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
         Banner = Type;
-        BannerItem = ModContent.ItemType<CrowdRavenBanner>();
+        BannerItem = ModContent.ItemType<BackwoodsRavenBanner>();
     }
 
     public override void AI() {

@@ -1371,11 +1371,6 @@ SentinelWarriorBanner: {
 	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SentinelWarrior.DisplayName}"
 }
 
-SummonedRavenBanner: {
-	DisplayName: Знамя призваного ворона
-	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
-}
-
 BackwoodsGrassSeeds: {
 	DisplayName: Семена Чащи
 	// Tooltip: ""
@@ -1386,9 +1381,9 @@ BloodCursor: {
 	// Tooltip: ""
 }
 
-CrowdRavenBanner: {
-	DisplayName: Знамя недоброго ворона
-	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}"
+BackwoodsRavenBanner: {
+	DisplayName: Знамя ворона Чащи
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}, {$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
 }
 
 Almond: {
