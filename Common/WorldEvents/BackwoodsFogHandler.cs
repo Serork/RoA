@@ -87,7 +87,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         _fogTime = reader.ReadSingle();
     }
 
-    private static void ToggleBackwoodsFog(bool naturally = true) {
+    internal static void ToggleBackwoodsFog(bool naturally = true) {
         if (!IsFogActive) {
             if ((naturally && Main.rand.NextChance(0.33)) || !naturally) {
                 var rand = Main.rand;

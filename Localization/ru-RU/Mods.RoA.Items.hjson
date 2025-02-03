@@ -1453,3 +1453,8 @@ DeerSkullBanner: {
 	DisplayName: Знамя оленьего черепа
 	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.DeerSkullHead.DisplayName}"
 }
+
+BackwoodsCampfire: {
+	// DisplayName: Backwoods Campfire
+	// Tooltip: ""
+}
