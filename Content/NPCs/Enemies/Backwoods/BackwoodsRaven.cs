@@ -58,6 +58,8 @@ sealed class BackwoodsRaven : ModNPC {
         NPC.width = 36;
         NPC.height = 26;
 
+        NPC.value = 0;
+
         NPC.aiStyle = AIType = -1;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
