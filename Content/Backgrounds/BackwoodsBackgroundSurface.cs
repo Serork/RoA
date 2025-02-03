@@ -206,7 +206,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             float value2 = Main.GraveyardVisualIntensity * 0.92f;
             bool flag = false;
             if (/*Main.cloudAlpha > 0f || value2 > 0f || */BackwoodsFogHandler.Opacity > 0f && Main.cloudAlpha <= 0f && value2 <= 0f) {
-                backgroundColor *= Math.Max(BackwoodsFogHandler.Opacity * 0.15f, Math.Max(Main.cloudAlpha, value2) * 0.15f);
+                backgroundColor *= Math.Max(BackwoodsFogHandler.Opacity * 0.15f, Math.Max(Main.cloudAlpha, value2) * 0.1f);
                 flag = true;
             }
             if (flag) {
