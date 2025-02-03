@@ -600,7 +600,7 @@ LuminousFlowerHat: {
 }
 
 ElderTorch: {
-	DisplayName: Факел из древнего дерева
+	DisplayName: Чащобный факел
 	// Tooltip: ""
 }
 

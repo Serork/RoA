@@ -606,7 +606,7 @@ LuminousFlowerHat: {
 }
 
 ElderTorch: {
-	DisplayName: Elderwood Torch
+	DisplayName: Backwoods Torch
 	Tooltip: ""
 }
 
