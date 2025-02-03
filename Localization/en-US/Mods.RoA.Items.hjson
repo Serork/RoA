@@ -1284,7 +1284,7 @@ FeathersInABalloon: {
 
 BigTreeSpawner: {
 	DisplayName: Big Tree Spawner
-	Tooltip: "#TEST: GENERATES A BIG BACKWOODS TREE"
+	Tooltip: "#TEST: SPAWNS A BIG BACKWOODS TREE"
 }
 
 GrimstoneWall: {
@@ -1467,5 +1467,5 @@ BackwoodsCampfire: {
 
 FogStarter: {
 	DisplayName: Fog Starter
-	Tooltip: ""
+	Tooltip: "#TEST: STARTS FOG IN BACKWOODS"
 }

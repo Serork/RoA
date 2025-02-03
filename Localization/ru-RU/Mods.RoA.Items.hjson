@@ -103,7 +103,7 @@ Bonerose: {
 }
 
 DiabolicDaikatana: {
-	DisplayName: Демоническая дай-катана
+	DisplayName: Дьявольская дай-катана
 	Tooltip: "'Покажи свою мотивацию!'"
 }
 
@@ -721,7 +721,7 @@ WeaknessPotion: {
 
 AlchemicalSkull: {
 	DisplayName: Алхимический череп
-	Tooltip: Дает иммунитет к огненным блокам, яду и токсичным газам
+	Tooltip: Дает иммунитет к огненным блокам, отравлению и парам ртути
 }
 
 Coffin: {
@@ -1455,11 +1455,11 @@ DeerSkullBanner: {
 }
 
 BackwoodsCampfire: {
-	// DisplayName: Backwoods Campfire
+	DisplayName: Чащобный костёр
 	// Tooltip: ""
 }
 
 FogStarter: {
-	// DisplayName: Fog Starter
-	// Tooltip: ""
+	DisplayName: Fog Starter
+	Tooltip: "#ТЕСТ: НАЧИНАЕТ ТУМАН В ЧАЩЕ"
 }
