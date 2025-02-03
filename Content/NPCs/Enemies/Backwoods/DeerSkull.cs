@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
+using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core;
@@ -115,7 +116,6 @@ sealed class DeerSkullHead : BaseHead {
         NPC.noTileCollide = true;
         NPC.knockBackResist = 0f;
 
-
         float dist = Math.Abs(Main.player[NPC.target].Center.X - NPC.Center.X);
         float value = Utils.Remap(dist, 250f, 1000f, 1f, 0.85f, true);
         NPC.velocity.X *= value;
@@ -209,6 +209,15 @@ sealed class DeerSkullHead : BaseHead {
                 _aiTimer1 = 0f;
                 _aiTimer2 = NPC.direction;
             }
+        }
+
+        Player player = Main.player[NPC.target];
+        if (!player.InModBiome<BackwoodsBiome>() || !BackwoodsFogHandler.IsFogActive) {
+            _aiTimer1 = 0f;
+            NPC.velocity.Y += 0.1f;
+            NPC.velocity.Y = Math.Min(10f, NPC.velocity.Y);
+            NPC.velocity.X -= (player.Center - NPC.Center).X.GetDirection() * 0.1f;
+            NPC.velocity.X = Math.Clamp(NPC.velocity.X, -5f, -5f);
         }
 
         NPC.direction = NPC.velocity.X.GetDirection();
