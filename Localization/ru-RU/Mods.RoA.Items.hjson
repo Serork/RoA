@@ -175,7 +175,7 @@ FireflyPin: {
 }
 
 RavencallersCloak: {
-	DisplayName: Плащь вороноря
+	DisplayName: Плащ воронаря
 	Tooltip: Отбрасывает тень, привлекающую внимание врагов
 }
 
@@ -1352,7 +1352,7 @@ PettyGoblinBanner: {
 }
 
 RavencallerBanner: {
-	DisplayName: Знамя вороноря
+	DisplayName: Знамя воронаря
 	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Ravencaller.DisplayName}"
 }
 
@@ -1450,6 +1450,6 @@ SphereOfStream: {
 }
 
 DeerSkullBanner: {
-	DisplayName: Deer Skull Banner
+	DisplayName: Знамя оленьего черепа
 	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.DeerSkullHead.DisplayName}"
 }
