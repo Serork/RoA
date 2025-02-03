@@ -1,6 +1,6 @@
-// ClawsSlash.DisplayName: Claws Slash
-// HemorrhageWave.DisplayName: Hemorrhage Wave
-// InfectedWave.DisplayName: Infected Wave
+ClawsSlash.DisplayName: Разрез когтями
+HemorrhageWave.DisplayName: Кровоточащая волна
+InfectedWave.DisplayName: Инфицирующая волна
 // MushroomSpore.DisplayName: Mushroom Spore
 // BaseRodProjectileType.DisplayName: Base Rod Projectile Type
 // BaseRodProjectile.DisplayName: Base Rod Projectile
@@ -30,24 +30,24 @@
 // ArchVileSpike.DisplayName: Arch Vile Spike
 // ArchVileSpikeTip.DisplayName: Arch Vile Spike Tip
 // TestSlash.DisplayName: Test Slash
-// JudgementCut.DisplayName: Judgement Cut
-// JudgementSlash.DisplayName: Judgement Slash
-// DiabolicDaikatanaProj.DisplayName: Diabolic Daikatana
-// Hellbat.DisplayName: Hellbat
-// WaterStream.DisplayName: Water Stream
-// ShockLightning.DisplayName: Shock Lightning
-// TerraProj.DisplayName: Terra Proj
+JudgementCut.DisplayName: Решение
+JudgementSlash.DisplayName: Резкая критика
+DiabolicDaikatanaProj.DisplayName: Дьявольская дай-катана
+Hellbat.DisplayName: Адская летучая мышь
+WaterStream.DisplayName: Поток воды
+ShockLightning.DisplayName: Разряд молнии
+TerraProj.DisplayName: Луч дрожи
 // BeastProj.DisplayName: Beast Proj
-// RootRing.DisplayName: Root Ring
+RootRing.DisplayName: Кольцо корней
 // GrimDefenderSpearAttack.DisplayName: Grim Defender Spear Attack
-// Brightstone.DisplayName: Brightstone
+Brightstone.DisplayName: Светлокамень
 // Snatcher.DisplayName: Snatcher
 // ElderwoodWallProjectile.DisplayName: Elderwood Wall
 // HellfireClawsSlash.DisplayName: Hellfire Claws Slash
 // HellfireFault.DisplayName: Hellfire Fault
 // HellfireFractureTestProjectile.DisplayName: Hellfire Fracture
 // HellfireFracture.DisplayName: Hellfire Fracture
-// GalipotStream.DisplayName: Galipot Stream
+GalipotStream.DisplayName: Поток живицы
 // WoodbinderBase.DisplayName: Woodbinder Base
 // ProtectiveRoots.DisplayName: Protective Roots
 // SlipperyBomb.DisplayName: Slippery Bomb
@@ -79,59 +79,59 @@
 // LilPhoenixFlames2.DisplayName: Firebird Flames
 // LilPhoenixTrailFlame.DisplayName: Firebird Trail Flame
 // LilPhoenixExplosion.DisplayName: Firebird Explosion
-// WeaknessPotion.DisplayName: Weakness Potion
-// BoneArm.DisplayName: Bone Arm
-// BoneArm_Back.DisplayName: Bone Arm
-// BoneBody.DisplayName: Bone Body
-// BoneBody_Back.DisplayName: Bone Body
-// BoneLeg.DisplayName: Bone Leg
-// BoneLeg_Back.DisplayName: Bone Leg
-// BoneSkull.DisplayName: Bone Skull
-// BoneSkull_Back.DisplayName: Bone Skull
-// Hedgehog.DisplayName: Hedgehog
-// OvergrownBolt.DisplayName: Overgrown Bolt
-// OvergrownSpear.DisplayName: Overgrown Spear
-// OvergrownSphere.DisplayName: Overgrown Sphere
-// Moth.DisplayName: Moth
-// SmallMoth.DisplayName: Small Moth
-// MercuriumFumes.DisplayName: Mercurium Fumes
-// MeltingStar.DisplayName: Melting Star
-// BloodyFeather.DisplayName: Bloody Feather
-// QuicksilverBolt.DisplayName: Quicksilver Bolt
+WeaknessPotion.DisplayName: Зелье слабости
+BoneArm.DisplayName: Костяная рука
+BoneArm_Back.DisplayName: Костяная рука
+BoneBody.DisplayName: Костяное тело
+BoneBody_Back.DisplayName: Костяное тело
+BoneLeg.DisplayName: Костяная нога
+BoneLeg_Back.DisplayName: Костяная нога
+BoneSkull.DisplayName: Костяной череп
+BoneSkull_Back.DisplayName: Костяной череп
+Hedgehog.DisplayName: Ёжик
+OvergrownBolt.DisplayName: Поросщий залп
+OvergrownSpear.DisplayName: Поросщее копье
+OvergrownSphere.DisplayName: Поросщая сфера
+Moth.DisplayName: Моль
+SmallMoth.DisplayName: Маленькая моль
+MercuriumFumes.DisplayName: Пары ртути
+MeltingStar.DisplayName: Плавящаяся звезда
+BloodyFeather.DisplayName: Кровавое перо
+QuicksilverBolt.DisplayName: Ртутный болт
 // TrackingBolt.DisplayName: Tracking Bolt
-// AmuletOfLifeWisps.DisplayName: Healing Wisps
-// Fireblossom.DisplayName: Fireblossom
-// FireblossomExplosion.DisplayName: Fireblossom Explosion
-// VengefulSpirit.DisplayName: Vengeful Spirit
-// CosmicMana.DisplayName: Cosmic Mana
-// BoneHarpy.DisplayName: Bone Harpy
+AmuletOfLifeWisps.DisplayName: Лечащие огоньки
+Fireblossom.DisplayName: Огнецвет
+FireblossomExplosion.DisplayName: Взрыв огнецвета
+VengefulSpirit.DisplayName: Мстительный дух
+CosmicMana.DisplayName: Небесная мана
+BoneHarpy.DisplayName: Гарпия-нежить
 // BoneHarpyFeather.DisplayName: Bone Harpy Feather
 // RagingBootsWave.DisplayName: Raging Boots Wave
-// PettyBag.DisplayName: Petty Bag
+PettyBag.DisplayName: Мелочный мешок
 // TectonicCaneFlames.DisplayName: Tectonic Cane Flames
-// LothorStomp.DisplayName: Lothor's Stomp
-// LothorClawsSlash.DisplayName: Lothor's Claws
-// LothorAngleAttack.DisplayName: Lothor's Poison
-// LothorSpike.DisplayName: Lothor's Spike
-// CursedAcorn.DisplayName: Cursed Acorn
-// LothorScream.DisplayName: Lothor's Scream
-// LothorAngleAttack2.DisplayName: Lothor's Poison
-// BloodshedAxeHeal.DisplayName: Bloodshed Axe
-// BloodshedAxe.DisplayName: Bloodshed Axe
-// BloodshedAxeEnergy.DisplayName: Bloodshed Axe
-// BloodShedAxesTarget.DisplayName: Bloodshed Axe
+LothorStomp.DisplayName: Топот Лотора
+LothorClawsSlash.DisplayName: Когти Лотора
+LothorAngleAttack.DisplayName: Отрава Лотора
+LothorSpike.DisplayName: Шип Лотора
+CursedAcorn.DisplayName: Проклятый жёлудь
+LothorScream.DisplayName: Рык Лотора
+LothorAngleAttack2.DisplayName: Отрава Лотора
+BloodshedAxeHeal.DisplayName: Топор кровопролития
+BloodshedAxe.DisplayName: Топор кровопролития
+BloodshedAxeEnergy.DisplayName: Топор кровопролития
+BloodShedAxesTarget.DisplayName: Топор кровопролития
 // ChemicalFlask.DisplayName: Chemical Flask
 // ToxicCrystal1.DisplayName: Toxic Crystal
 // ToxicCrystal2.DisplayName: Toxic Crystal
 // ToxicCrystal3.DisplayName: Toxic Crystal
 // ChemicalFlask2.DisplayName: Chemical Flask
 // LittleFleder.DisplayName: Little Fleder
-// Acorn.DisplayName: Acorn
-// FlederSlayer.DisplayName: Fleder Slayer
+Acorn.DisplayName: Жёлудь
+FlederSlayer.DisplayName: Бич нетопырей
 // WaveSlash.DisplayName: Wave Slash
-// BaneSpell.DisplayName: Bane Spell
+BaneSpell.DisplayName: Похищение сущности
 // GoblinsDagger.DisplayName: Goblin Dagger
-// SmallMoon.DisplayName: Small Moon
+SmallMoon.DisplayName: Маленькая луна
 // Vilethorn.DisplayName: "{$ProjectileName.VilethornBase}"
 // VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
 // BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"

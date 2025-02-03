@@ -1,6 +1,6 @@
-InBackwoods: In the Backwoods biome
+InBackwoods: In the Backwoods
 
 BackwoodsBiome: {
 	DisplayName: The Backwoods
-	TownNPCDialogueName: the Backwoods Biome
+	TownNPCDialogueName: the backwoods 
 }
