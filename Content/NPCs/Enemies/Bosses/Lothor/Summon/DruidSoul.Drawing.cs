@@ -22,6 +22,11 @@ sealed partial class DruidSoul : RoANPC {
 
         NPCID.Sets.TrailCacheLength[Type] = 6;
         NPCID.Sets.TrailingMode[Type] = 1;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Hide = true
+        };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }
 
     public override void FindFrame(int frameHeight) {
