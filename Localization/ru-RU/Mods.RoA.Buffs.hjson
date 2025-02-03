@@ -193,7 +193,7 @@ OnFire: {
 
 PrismaticFavor: {
 	DisplayName: Переливчатое благо
-	Description: Увеличения урона распространаются на все виды урона
+	Description: Увеличения урона распространяются на все виды урона
 }
 
 BoneHarpyMountBuff: {
