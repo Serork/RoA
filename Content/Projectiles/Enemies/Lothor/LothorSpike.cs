@@ -56,23 +56,20 @@ sealed class LothorSpike : ModProjectile {
         return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 30f);
     }
 
-    public override void OnSpawn(IEntitySource source) {
-        _partInfo = new PartInfo[LENGTH];
-        for (int i = 0; i < _partInfo.Length; i++) {
-            _partInfo[i].Direction = 0;
-            _partInfo[i].Variant = (i % 2 == 0).ToInt();
-        }
-
-        float num = 20f;
-        if (Projectile.velocity == -Vector2.UnitY) {
-            num *= 2f;
-        }
-        Projectile.timeLeft = (int)(Length * num);
-    }
-
     public override void AI() {
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
+            _partInfo = new PartInfo[LENGTH];
+            for (int i = 0; i < _partInfo.Length; i++) {
+                _partInfo[i].Direction = 0;
+                _partInfo[i].Variant = (i % 2 == 0).ToInt();
+            }
+
+            float num = 20f;
+            if (Projectile.velocity == -Vector2.UnitY) {
+                num *= 2f;
+            }
+            Projectile.timeLeft = (int)(Length * num);
             SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
         }
 
@@ -106,13 +103,7 @@ sealed class LothorSpike : ModProjectile {
         }
     }
 
-    public override void PostAI() {
-    }
-
     public override bool ShouldUpdatePosition() => false;
-
-    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
-    }
 
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture;
