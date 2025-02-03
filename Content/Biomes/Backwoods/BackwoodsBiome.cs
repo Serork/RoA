@@ -53,7 +53,7 @@ sealed partial class BackwoodsBiome : ModBiome {
 
     public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 
-    public override int BiomeTorchItemType => ModContent.ItemType<Items.Placeable.Crafting.Elderwood>();
+    public override int BiomeTorchItemType => ModContent.ItemType<Items.Placeable.Crafting.ElderTorch>();
     public override int BiomeCampfireItemType => ModContent.ItemType<Items.Placeable.Crafting.BackwoodsCampfire>();
 
     public override void SpecialVisuals(Player player, bool isActive) => player.ManageSpecialBiomeVisuals(ShaderLoader.BackwoodsSky, player.InModBiome<BackwoodsBiome>(), player.Center);
