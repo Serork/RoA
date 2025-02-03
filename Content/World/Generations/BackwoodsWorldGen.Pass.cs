@@ -876,10 +876,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Spike(posX - 6, y, MathHelper.Pi + 1.3f + Main._rand.NextFloat(-0.15f, 0.15f), 4, 3);
 
         y = WorldGenHelper.GetFirstTileY2(posX, true, true) - 2 - extraY;
-        Spike(posX, y, MathHelper.Pi + 1.2f + Main._rand.NextFloat(-0.15f, 0.15f), unkillableTile: true);
+        Spike(posX, y, MathHelper.Pi + 1.2f + Main._rand.NextFloat(-0.15f, 0.15f));
 
         y = WorldGenHelper.GetFirstTileY2(posX + 14, true, true) - 2 - extraY;
-        Spike(posX + 14, y, MathHelper.Pi + 0.5f + Main._rand.NextFloat(-0.15f, 0.15f), 6, unkillableTile: true);
+        Spike(posX + 14, y, MathHelper.Pi + 0.5f + Main._rand.NextFloat(-0.15f, 0.15f), 6);
 
         y = WorldGenHelper.GetFirstTileY2(posX + 21, true, true) - 1 - extraY;
         Spike(posX + 21, y, MathHelper.Pi + 0.9f, 4, 3);

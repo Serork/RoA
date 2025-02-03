@@ -2,6 +2,7 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,6 +10,8 @@ namespace RoA.Content.Items.Placeable.Seeds;
 
 sealed class BackwoodsGrassSeeds : ModItem {
     public override void SetStaticDefaults() {
+        ItemTrader.ChlorophyteExtractinator.AddOption_OneWay(Type, 1, ItemID.DirtBlock, 1);
+
         ItemID.Sets.GrassSeeds[Type] = true;
     }
 
