@@ -116,17 +116,26 @@ sealed class WaterStream : ModProjectile {
 	public override bool? CanDamage() => Projectile.ai[1] != -5f;
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-		int type = BuffID.OnFire;
-		target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(100, 300), false);
-		//target.AddBuff(BuffID.Wet, Main.rand.Next(100, 300), false);
-		if (target.FindBuff(type, out int buffIndex)) {
-			target.DelBuff(buffIndex);
-		}
-        //int damage = Projectile.damage * (Projectile.wet || target.wet ? 2 : 1) / (Main.player[Projectile.owner].position.Y > (Main.maxTilesY - 200) * 16 ? 2 : 1) + Main.rand.Next(-damageDone / 10, damageDone / 10 - 1);
-        //target.StrikeNPC(hit);
-        //target.StrikeNPC(hit);
-        //Projectile.damage /= 3;
+        int buff = BuffID.OnFire3;
+        //int buff = BuffID.Wet;
+        if (target.FindBuff(buff, out int buffIndex)) {
+            target.DelBuff(buffIndex);
+        }
+        if (!Projectile.lavaWet && !target.lavaWet) {
+            target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(40, 100), false);
+        }
     }
 
-	public override void OnKill(int timeLeft) => SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        int buff = BuffID.OnFire3;
+        //int buff = BuffID.Wet;
+        if (target.FindBuff(buff, out int buffIndex)) {
+            target.DelBuff(buffIndex);
+        }
+        if (!Projectile.lavaWet && !target.lavaWet) {
+            target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(40, 100), false);
+        }
+    }
+
+    public override void OnKill(int timeLeft) => SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
 }
