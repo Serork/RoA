@@ -8,7 +8,11 @@ using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core;
 
+using System.Runtime.CompilerServices;
+
 using Terraria;
+using Terraria.GameContent;
+using Terraria.GameContent.Personalities;
 using Terraria.Graphics.Capture;
 using Terraria.ModLoader;
 
@@ -43,6 +47,37 @@ sealed class LightColorFix : ILoadable {
 }
 
 sealed partial class BackwoodsBiome : ModBiome {
+    private sealed class Shop_ForestFix : ILoadable {
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "ApplyPreference")]
+        public extern static void BiomePreferenceListTrait_ApplyPreference(BiomePreferenceListTrait self, BiomePreferenceListTrait.BiomePreference preference, HelperInfo info, ShopHelper shopHelperInstance);
+
+
+        public void Load(Mod mod) {
+            On_BiomePreferenceListTrait.ModifyShopPrice += On_BiomePreferenceListTrait_ModifyShopPrice;
+        }
+
+        private void On_BiomePreferenceListTrait_ModifyShopPrice(On_BiomePreferenceListTrait.orig_ModifyShopPrice orig, BiomePreferenceListTrait self, HelperInfo info, Terraria.GameContent.ShopHelper shopHelperInstance) {
+            BiomePreferenceListTrait.BiomePreference biomePreference = null;
+            for (int i = 0; i < self.Preferences.Count; i++) {
+                BiomePreferenceListTrait.BiomePreference biomePreference2 = self.Preferences[i];
+                bool flag = biomePreference2.Biome.IsInBiome(info.player);
+                if (biomePreference2.Biome is ForestBiome && info.player.InModBiome<BackwoodsBiome>()) {
+                    flag = false;
+                    Main.NewText(123);
+                }
+                if (flag && (biomePreference == null || biomePreference.Affection < biomePreference2.Affection)) {
+                    biomePreference = biomePreference2;
+                }
+            }
+
+            if (biomePreference != null) {
+                BiomePreferenceListTrait_ApplyPreference(self, biomePreference, info, shopHelperInstance);
+            }
+        }
+
+        public void Unload() { }
+    }
+
     public static float TransitionSpeed => 0.05f;
 
     public static bool IsActiveForFogEffect => ModContent.GetInstance<TileCount>().BackwoodsTiles > 650;
