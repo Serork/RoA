@@ -190,7 +190,7 @@ sealed class FlederSlayer : ModProjectile {
         }
 
         player.itemAnimation = player.itemTime = 2;
-        player.heldProj = player.itemAnimationMax;
+        player.heldProj = Projectile.whoAmI;
         float playerDirection = player.direction;
         if (player.HeldItem.type != ModContent.ItemType<Items.Weapons.Melee.FlederSlayer>()) {
             Projectile.Kill();

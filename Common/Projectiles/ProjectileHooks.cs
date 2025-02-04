@@ -8,15 +8,15 @@ namespace RoA.Common.Projectiles;
 
 static class ProjectileHooks {
     public interface IDrawLikeHeldItem {
-        DrawData Draw(ref Color lightColor);
+        void Draw(ref Color lightColor, PlayerDrawSet drawinfo);
     }
 
     private sealed class DrawProjectile : ILoadable {
         public void Load(Mod mod) {
-            On_PlayerDrawLayers.DrawPlayer_28_ArmOverItem += On_PlayerDrawLayers_DrawPlayer_28_ArmOverItem; ;
+            On_PlayerDrawLayers.DrawPlayer_11_Balloons += On_PlayerDrawLayers_DrawPlayer_11_Balloons;
         }
 
-        private void On_PlayerDrawLayers_DrawPlayer_28_ArmOverItem(On_PlayerDrawLayers.orig_DrawPlayer_28_ArmOverItem orig, ref PlayerDrawSet drawinfo) {
+        private void On_PlayerDrawLayers_DrawPlayer_11_Balloons(On_PlayerDrawLayers.orig_DrawPlayer_11_Balloons orig, ref PlayerDrawSet drawinfo) {
             orig(ref drawinfo);
 
             foreach (Projectile projectile in Main.ActiveProjectiles) {
@@ -25,7 +25,7 @@ static class ProjectileHooks {
                 }
                 if (projectile.ModProjectile is IDrawLikeHeldItem draw) {
                     Color color = Lighting.GetColor(projectile.Center.ToTileCoordinates());
-                    drawinfo.DrawDataCache.Add(draw.Draw(ref color));
+                    draw.Draw(ref color, drawinfo);
                 }
             }
         }

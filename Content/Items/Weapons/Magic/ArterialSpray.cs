@@ -1,12 +1,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Projectiles;
 using RoA.Core;
-using RoA.Utilities;
 
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,7 +29,7 @@ sealed class ArterialSpray : ModItem {
     }
 }
 
-sealed class ArterialSprayProjectile3 : ModProjectile {
+sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
     public override string Texture => ItemLoader.GetItem(ModContent.ItemType<ArterialSpray>()).Texture;
 
     public override void SetDefaults() {
@@ -46,7 +47,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile {
         Projectile.ignoreWater = true;
     }
 
-    public override bool PreDraw(ref Color lightColor) {
+    void ProjectileHooks.IDrawLikeHeldItem.Draw(ref Color lightColor, PlayerDrawSet drawinfo) {
         Player player = Main.player[Projectile.owner];
         Item heldItem = player.HeldItem;
         bool flag = player.direction != 1;
@@ -80,17 +81,17 @@ sealed class ArterialSprayProjectile3 : ModProjectile {
             obj13.velocity *= 0.25f;
             obj13.position = Projectile.position - offset2 + Vector2.UnitX * player.direction * 50f * f;
         }
-        spriteBatch.Draw(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0);
-
-        return false;
+        drawinfo.DrawDataCache.Add(new DrawData(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0));
     }
+
+    public override bool PreDraw(ref Color lightColor) => false;
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true);
         if (Projectile.ai[0] == 0f) {
             Projectile.ai[0] = 1f;
-            Projectile.ai[1] = MathHelper.PiOver2 * player.direction;
+            Projectile.ai[1] = player.fullRotation + MathHelper.PiOver2 * player.direction;
             Projectile.timeLeft = player.itemTime;
         }
         //player.heldProj = Projectile.identity;

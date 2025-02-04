@@ -19,10 +19,11 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Common.Projectiles;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
-sealed class BloodshedAxe : ModProjectile {
+sealed class BloodshedAxe : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
     public override bool? CanDamage() => Projectile.ai[1] >= 2f;
 
     private bool _powerUp;
@@ -198,7 +199,7 @@ sealed class BloodshedAxe : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        //player.heldProj = Projectile.whoAmI;
+        player.heldProj = Projectile.whoAmI;
         int itemAnimationMax = 50;
         if (Projectile.owner == Main.myPlayer) {
             if (!_init) {
