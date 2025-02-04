@@ -157,7 +157,7 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
             }
         }
 
-        if (flag22 || Projectile.ai[1] == 1f) {
+        /*if (flag22 || Projectile.ai[1] == 1f) */{
             Projectile.ai[0] -= 1f;
             if (Projectile.ai[0] <= 0f) {
                 Projectile.ai[0] = 0f;
@@ -173,11 +173,11 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
                         int count = Main.rand.Next(4, 7);
                         for (int i = -count / 2 - 1; i < count / 2 + 2; i++) {
                             Vector2 velocity = new Vector2(0f, 4f + 1f * Main.rand.NextFloat()).RotatedBy(MathHelper.Pi - MathHelper.PiOver4 / 2f / i + Main.rand.NextFloatRange(0.25f));
-                            if (flag22) {
-                                velocity.X += Projectile.DirectionTo(Main.npc[num442].Center).SafeNormalize(Vector2.Zero).X * Vector2.Distance(Main.npc[num442].Center, Projectile.Center) * 0.01f;
-                            }
+                            //if (flag22) {
+                            //    velocity.X += Projectile.DirectionTo(Main.npc[num442].Center).SafeNormalize(Vector2.Zero).X * Vector2.Distance(Main.npc[num442].Center, Projectile.Center) * 0.01f;
+                            //}
                             Projectile.NewProjectile(Projectile.GetSource_FromThis(), 
-                                Projectile.Center - new Vector2(_direction == 1 ? 4f : -2f, 4f), velocity,
+                                Projectile.Center - new Vector2(_direction == 1 ? 4f : -4f, 4f), velocity,
                                 ModContent.ProjectileType<GastroIntestinalMalletProjectile2>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         }
                     }
