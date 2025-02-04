@@ -105,21 +105,17 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         num36 = f;
         float num37 = -MathHelper.PiOver2 * player.direction;
         CompositeArmStretchAmount compositeArmStretchAmount3 = CompositeArmStretchAmount.Full;
-        if (num36 < 0.166)
+        //if (num36 < 0.16f)
+        //    compositeArmStretchAmount3 = CompositeArmStretchAmount.None;
+        //else if (num36 <= 0.32f)
+        //    compositeArmStretchAmount3 = CompositeArmStretchAmount.Quarter;
+        //else if (num36 <= 0.5f)
+        //    compositeArmStretchAmount3 = CompositeArmStretchAmount.ThreeQuarters;
+
+        if (num36 < 0.25f)
             compositeArmStretchAmount3 = CompositeArmStretchAmount.None;
-        else if (num36 <= 0.32)
+        else 
             compositeArmStretchAmount3 = CompositeArmStretchAmount.Quarter;
-        else if (num36 <= 0.5f)
-            compositeArmStretchAmount3 = CompositeArmStretchAmount.ThreeQuarters;
-
-        if (num36 > 1.25f && num36 <= 1.5f)
-            compositeArmStretchAmount3 = CompositeArmStretchAmount.Quarter;
-
-        if (num36 > 1.5f && num36 <= 1.75f)
-            compositeArmStretchAmount3 = CompositeArmStretchAmount.ThreeQuarters;
-
-        if (num36 > 1.75f && num36 <= 2f)
-            compositeArmStretchAmount3 = CompositeArmStretchAmount.Full;
 
         player.SetCompositeArmFront(enabled: true, compositeArmStretchAmount3, num37);
 
