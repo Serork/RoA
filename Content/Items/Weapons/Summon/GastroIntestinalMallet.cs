@@ -107,7 +107,7 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
         bool flag22 = false;
         float num439 = Projectile.Center.X;
         float num440 = Projectile.Center.Y;
-        float num441 = 1000f;
+        float num441 = 400f;
         int num442 = -1;
         NPC ownerMinionAttackTargetNPC = Projectile.OwnerMinionAttackTargetNPC;
         if (ownerMinionAttackTargetNPC != null && ownerMinionAttackTargetNPC.CanBeChasedBy(this)) {
@@ -140,7 +140,7 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
             }
         }
 
-        if (flag22) {
+        if (flag22 || Projectile.ai[1] == 1f) {
             Projectile.ai[0] -= 1f;
             if (Projectile.ai[0] <= 0f) {
                 Projectile.ai[0] = 0f;
@@ -155,7 +155,12 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
                     if (Projectile.owner == Main.myPlayer) {
                         int count = Main.rand.Next(4, 7);
                         for (int i = -count / 2 - 1; i < count / 2 + 2; i++) {
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(4f, 4f), new Vector2(0f, 4f + 1f * Main.rand.NextFloat()).RotatedBy(MathHelper.Pi - MathHelper.PiOver4 / 2f / i + Main.rand.NextFloatRange(0.25f)),
+                            Vector2 velocity = new Vector2(0f, 4f + 1f * Main.rand.NextFloat()).RotatedBy(MathHelper.Pi - MathHelper.PiOver4 / 2f / i + Main.rand.NextFloatRange(0.25f));
+                            if (flag22) {
+                                velocity.X += Projectile.DirectionTo(Main.npc[num442].Center).SafeNormalize(Vector2.Zero).X * Vector2.Distance(Main.npc[num442].Center, Projectile.Center) * 0.01f;
+                            }
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), 
+                                Projectile.Center - new Vector2(4f, 4f), velocity,
                                 ModContent.ProjectileType<GastroIntestinalMalletProjectile2>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         }
                     }

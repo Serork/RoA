@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Weapons.Druidic;
+using RoA.Content.Items.Weapons.Magic;
+using RoA.Content.Items.Weapons.Summon;
 
 using System;
 
@@ -77,7 +79,7 @@ sealed class ExtraVanillaOrbItems : ILoadable {
                     break;
                 case 31:
                     if (flag) {
-                        int num3 = Main.rand.Next(5);
+                        int num3 = Main.rand.Next(7);
                         if (!WorldGen.shadowOrbSmashed)
                             num3 = 0;
 
@@ -99,6 +101,12 @@ sealed class ExtraVanillaOrbItems : ILoadable {
                                 break;
                             case 4:
                                 Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 1290, 1, noBroadcast: false, -1);
+                                break;
+                            case 5:
+                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<ArterialSpray>(), 1, noBroadcast: false, -1);
+                                break;
+                            case 6:
+                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<GastroIntestinalMallet>(), 1, noBroadcast: false, -1);
                                 break;
                         }
                     }

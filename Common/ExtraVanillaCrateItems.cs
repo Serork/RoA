@@ -4,6 +4,8 @@ using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Druidic.Rods;
+using RoA.Content.Items.Weapons.Magic;
+using RoA.Content.Items.Weapons.Summon;
 
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -355,7 +357,8 @@ sealed class ExtraVanillaCrateItems : ModSystem {
             /*ItemID.Vilethorn*/ModContent.ItemType<Vilethorn>());
         IItemDropRule bc_crimson = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.TheUndertaker, ItemID.TheRottedFork, 
             /*ItemID.CrimsonRod*/ModContent.ItemType<CrimsonRod>(),
-            ItemID.PanicNecklace, ItemID.CrimsonHeart);
+            ItemID.PanicNecklace, ItemID.CrimsonHeart,
+            ModContent.ItemType<ArterialSpray>(), ModContent.ItemType<GastroIntestinalMallet>());
         IItemDropRule bc_cursed = ItemDropRule.NotScalingWithLuck(ItemID.CursedFlame, 2, 2, 5);
         IItemDropRule bc_ichor = ItemDropRule.NotScalingWithLuck(ItemID.Ichor, 2, 2, 5);
 
