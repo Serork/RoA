@@ -58,7 +58,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         Vector2 offset = new(origin.X + x, 0);
         float rotOffset = 0.785f * player.direction;
         if (player.gravDir == -1f) {
-            rotOffset -= 1.57f * player.direction;
+            rotOffset += 1.57f * player.direction;
         }
         SpriteEffects effects = flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         if (player.gravDir == -1f) {

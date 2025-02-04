@@ -1474,3 +1474,8 @@ ArterialSpray: {
 	DisplayName: Arterial Spray
 	Tooltip: ""
 }
+
+GastroIntestinalMallet: {
+	DisplayName: Gastro Intestinal Mallet
+	Tooltip: ""
+}
