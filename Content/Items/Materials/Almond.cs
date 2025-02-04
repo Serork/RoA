@@ -12,7 +12,7 @@ namespace RoA.Content.Items.Materials;
 
 sealed class Almond : ModItem {
 	public override void SetStaticDefaults() {
-        //Item.ResearchUnlockCount = 25;
+        Item.ResearchUnlockCount = 5;
 
         //ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 

@@ -12,6 +12,7 @@ sealed class MercuriumNugget : ModItem {
 		//Tooltip.SetDefault("'Shiny, but dangerous'");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
 		ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
+		Item.ResearchUnlockCount = 25;
 	}
 
 	public override void SetDefaults() {

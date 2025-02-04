@@ -39,8 +39,7 @@ sealed class BackwoodsCrate : ModItem {
 
     public override void SetStaticDefaults() {
         ItemID.Sets.IsFishingCrate[Type] = true;
-
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
     }
 
     public override void SetDefaults() {

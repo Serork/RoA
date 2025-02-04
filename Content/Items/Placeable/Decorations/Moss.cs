@@ -10,7 +10,7 @@ sealed class Moss : ModItem {
         // DisplayName.SetDefault("MOX");
         // Tooltip.SetDefault("'CKnight'");
 
-        Item.ResearchUnlockCount = 5;
+        Item.ResearchUnlockCount = 1000000;
     }
 
     public override void SetDefaults() {

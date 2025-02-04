@@ -1451,10 +1451,10 @@ DeerSkullBanner: {
 
 BackwoodsCampfire: {
 	DisplayName: Чащобный костёр
-	// Tooltip: ""
+	Tooltip: "Восстановление жизни увеличено радом с костром"
 }
 
 FogStarter: {
-	DisplayName: Fog Starter
+	DisplayName: Инициатор тумана
 	Tooltip: "#ТЕСТ: НАЧИНАЕТ ТУМАН В ЧАЩЕ"
 }

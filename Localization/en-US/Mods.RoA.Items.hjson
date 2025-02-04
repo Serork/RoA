@@ -1457,7 +1457,7 @@ DeerSkullBanner: {
 
 BackwoodsCampfire: {
 	DisplayName: Backwoods Campfire
-	Tooltip: ""
+	Tooltip: "Life regen is increased when near a campfire"
 }
 
 FogStarter: {
