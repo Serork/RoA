@@ -23,7 +23,7 @@ using RoA.Common.Projectiles;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
-sealed class BloodshedAxe : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
+sealed class BloodshedAxe : ModProjectile {
     public override bool? CanDamage() => Projectile.ai[1] >= 2f;
 
     private bool _powerUp;
