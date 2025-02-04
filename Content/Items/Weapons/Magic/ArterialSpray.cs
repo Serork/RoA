@@ -32,7 +32,7 @@ sealed class ArterialSpray : ModItem {
 }
 
 sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
-    public override string Texture => ResourceManager.ProjectileTextures + "ArterialSpray0";
+    public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray0";
 
     public override void SetDefaults() {
         int width = 2; int height = width;
@@ -176,7 +176,7 @@ sealed class ArterialSprayProjectile : ModProjectile {
 }
 
 sealed class ArterialSprayProjectile2 : ModProjectile {
-    public override string Texture => ResourceManager.ProjectileTextures + "ArterialSpray2";
+    public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray2";
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 18;
@@ -218,7 +218,7 @@ sealed class ArterialSprayProjectile2 : ModProjectile {
             num149 = ProjectileID.Sets.TrailCacheLength[Projectile.type];
             num147 = 0;
             num148 = -2;
-            Texture2D texture2 = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "ArterialSpray2_").Value;
+            Texture2D texture2 = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray4").Value;
             for (int num152 = num149; (num148 > 0 && num152 < num147) || (num148 < 0 && num152 > num147); num152 += num148) {
                 if (num152 >= Projectile.oldPos.Length) {
                     continue;
@@ -233,7 +233,7 @@ sealed class ArterialSprayProjectile2 : ModProjectile {
             }
             Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
             Main.EntitySpriteDraw(texture, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
-            texture2 = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "ArterialSpray3").Value;
+            texture2 = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray3").Value;
             //Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
         }
 
