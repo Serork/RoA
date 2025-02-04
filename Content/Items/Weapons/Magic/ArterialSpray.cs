@@ -32,7 +32,7 @@ sealed class ArterialSpray : ModItem {
 }
 
 sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
-    public override string Texture => ItemLoader.GetItem(ModContent.ItemType<ArterialSpray>()).Texture;
+    public override string Texture => ResourceManager.ProjectileTextures + "ArterialSpray0";
 
     public override void SetDefaults() {
         int width = 2; int height = width;
