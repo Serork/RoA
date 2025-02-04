@@ -63,7 +63,7 @@ sealed class GastroIntestinalMallet : ModItem {
 }
 
 sealed class GastroIntestinalMalletProjectile : ModProjectile {
-    public override string Texture => ResourceManager.ProjectileTextures + "GastroIntestinalMallet";
+    public override string Texture => ResourceManager.FriendlyProjectileTextures + "Summon/GastroIntestinalMallet";
 
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 4;
@@ -175,7 +175,7 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
 }
 
 sealed class GastroIntestinalMalletProjectile2 : ModProjectile {
-    public override string Texture => ResourceManager.ProjectileTextures + nameof(GastroIntestinalMalletProjectile2);
+    public override string Texture => ResourceManager.FriendlyProjectileTextures + "Summon/" + nameof(GastroIntestinalMalletProjectile2);
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.TrailCacheLength[Type] = 18;
