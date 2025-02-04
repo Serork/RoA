@@ -77,6 +77,25 @@ sealed partial class BackwoodsBiome : ModBiome {
         public void Unload() { }
     }
 
+    private sealed class TownNPCsStayHomeWhenBackwoodsFogIsActive : GlobalNPC {
+        private static bool _dayTime;
+
+        public override bool PreAI(NPC npc) {
+            _dayTime = Main.dayTime;
+            if (npc.townNPC && BackwoodsFogHandler.IsFogActive && Main.player[npc.FindClosestPlayer()].InModBiome<BackwoodsBiome>()) {
+                Main.dayTime = false;
+            }
+
+            return base.PreAI(npc);
+        }
+
+        public override void PostAI(NPC npc) {
+            if (npc.townNPC && BackwoodsFogHandler.IsFogActive && Main.player[npc.FindClosestPlayer()].InModBiome<BackwoodsBiome>()) {
+                Main.dayTime = _dayTime;
+            }
+        }
+    }
+
     public static float TransitionSpeed => 0.05f;
 
     public static bool IsActiveForFogEffect => ModContent.GetInstance<TileCount>().BackwoodsTiles > 650;
