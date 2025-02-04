@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -63,6 +63,8 @@ sealed class GastroIntestinalMallet : ModItem {
 }
 
 sealed class GastroIntestinalMalletProjectile : ModProjectile {
+    private int _direction;
+
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Summon/GastroIntestinalMallet";
 
     public override void SetStaticDefaults() {
@@ -88,18 +90,31 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
 
     public override bool OnTileCollide(Vector2 oldVelocity) => false;
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_direction);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _direction = reader.ReadInt32();
+    }
+
     public override void AI() {
         float attackRate = 120f;
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[1] = 1f;
             Projectile.localAI[0] = 1f;
 
-            Projectile.direction = Projectile.spriteDirection = Main.rand.NextBool().ToDirectionInt();
+            if (Projectile.owner == Main.myPlayer) {
+                _direction = (int)Main.rand.NextBool().ToDirectionInt();
+                Projectile.netUpdate = true;
+            }
 
             Projectile.ai[0] = 0f;
             int num430 = 80;
             SoundEngine.PlaySound(SoundID.Item46, Projectile.position);
         }
+
+        Projectile.direction = Projectile.spriteDirection = _direction;
 
         Projectile.velocity.X = 0f;
         Projectile.velocity.Y += 0.2f;
@@ -162,7 +177,7 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
                                 velocity.X += Projectile.DirectionTo(Main.npc[num442].Center).SafeNormalize(Vector2.Zero).X * Vector2.Distance(Main.npc[num442].Center, Projectile.Center) * 0.01f;
                             }
                             Projectile.NewProjectile(Projectile.GetSource_FromThis(), 
-                                Projectile.Center - new Vector2(4f, 4f), velocity,
+                                Projectile.Center - new Vector2(_direction == 1 ? 4f : -2f, 4f), velocity,
                                 ModContent.ProjectileType<GastroIntestinalMalletProjectile2>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         }
                     }
