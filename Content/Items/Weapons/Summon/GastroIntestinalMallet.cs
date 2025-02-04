@@ -226,7 +226,7 @@ sealed class GastroIntestinalMalletProjectile2 : ModProjectile {
             for (int num163 = 0; num163 < 4; num163++) {
                 Dust obj13 = Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
                 obj13.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
-                obj13.scale = 0.9f;
+                obj13.scale = 1.1f;
                 obj13.fadeIn = 1.1f;
                 obj13.position = Projectile.Center - Vector2.UnitY * 6f;
                 obj13.velocity *= Main.rand.NextFloat(0.5f, 1f);
