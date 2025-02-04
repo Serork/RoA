@@ -12,6 +12,8 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static Terraria.Player;
+
 namespace RoA.Content.Items.Weapons.Magic;
 
 sealed class ArterialSpray : ModItem {
@@ -97,7 +99,29 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         //player.heldProj = Projectile.identity;
         float armRotation = Projectile.ai[1] - MathHelper.Pi;
         player.bodyFrame.Y = 56;
-        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
+        //player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
+        float num36 = (float)Projectile.timeLeft / player.itemTimeMax;
+        float f = num36 < 0.5f ? num36 : (1f - num36);
+        num36 = f;
+        float num37 = -MathHelper.PiOver2 * player.direction;
+        CompositeArmStretchAmount compositeArmStretchAmount3 = CompositeArmStretchAmount.Full;
+        if (num36 < 0.166)
+            compositeArmStretchAmount3 = CompositeArmStretchAmount.None;
+        else if (num36 <= 0.32)
+            compositeArmStretchAmount3 = CompositeArmStretchAmount.Quarter;
+        else if (num36 <= 0.5f)
+            compositeArmStretchAmount3 = CompositeArmStretchAmount.ThreeQuarters;
+
+        if (num36 > 1.25f && num36 <= 1.5f)
+            compositeArmStretchAmount3 = CompositeArmStretchAmount.Quarter;
+
+        if (num36 > 1.5f && num36 <= 1.75f)
+            compositeArmStretchAmount3 = CompositeArmStretchAmount.ThreeQuarters;
+
+        if (num36 > 1.75f && num36 <= 2f)
+            compositeArmStretchAmount3 = CompositeArmStretchAmount.Full;
+
+        player.SetCompositeArmFront(enabled: true, compositeArmStretchAmount3, num37);
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
