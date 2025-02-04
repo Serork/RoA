@@ -49,6 +49,7 @@ static class ResourceManager {
 
     public static string TilesTextures => Textures + "Tiles/";
     public static string GlowTilesTextures => TilesTextures + "Glow/";
+    public static string DecorationsTileTextures => TilesTextures + "Decorations/";
 
     public static string BiomesTextures => Textures + "Biomes/";
     public static string BackwoodsTextures => BiomesTextures + "Backwoods/";

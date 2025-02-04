@@ -1458,3 +1458,8 @@ FogStarter: {
 	DisplayName: Инициатор тумана
 	Tooltip: "#ТЕСТ: НАЧИНАЕТ/ЗАКАНЧИВАЕТ ТУМАН В ЧАЩЕ"
 }
+
+LothorRelic: {
+	// DisplayName: Lothor Relic
+	// Tooltip: ""
+}

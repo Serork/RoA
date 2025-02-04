@@ -1464,3 +1464,8 @@ FogStarter: {
 	DisplayName: Fog Starter
 	Tooltip: "#TEST: STARTS/ENDS FOG IN BACKWOODS"
 }
+
+LothorRelic: {
+	DisplayName: Lothor Relic
+	Tooltip: ""
+}
