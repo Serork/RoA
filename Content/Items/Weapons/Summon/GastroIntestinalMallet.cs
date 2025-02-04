@@ -197,13 +197,14 @@ sealed class GastroIntestinalMalletProjectile2 : ModProjectile {
         if (Projectile.localAI[0] == 0f) {
             SoundEngine.PlaySound(SoundID.Item171, Projectile.Center);
             Projectile.localAI[0] = 1f;
-            for (int num163 = 0; num163 < 8; num163++) {
+            for (int num163 = 0; num163 < 4; num163++) {
                 Dust obj13 = Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
                 obj13.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
                 obj13.scale = 0.9f;
                 obj13.fadeIn = 1.1f;
-                obj13.position = Projectile.Center;
+                obj13.position = Projectile.Center - Vector2.UnitY * 6f;
                 obj13.velocity *= Main.rand.NextFloat(0.5f, 1f);
+                obj13.velocity *= 0.75f;
             }
         }
 
@@ -212,7 +213,7 @@ sealed class GastroIntestinalMalletProjectile2 : ModProjectile {
             Projectile.alpha = 0;
 
         for (int num164 = 0; num164 < 2; num164++) {
-            if (Main.rand.Next(1) == 0) {
+            if (Main.rand.Next(3) == 0) {
                 Dust obj14 = Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
                 obj14.velocity = obj14.velocity / 4f + Projectile.velocity / 2f;
                 obj14.scale = 1.2f;
@@ -231,7 +232,7 @@ sealed class GastroIntestinalMalletProjectile2 : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int num237 = 0; num237 < 20; num237++) {
+        for (int num237 = 0; num237 < 12; num237++) {
             Dust dust35 = Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 5, Alpha: 100)];
             dust35.scale = 1.15f + 0.2f * Main.rand.NextFloat();
             dust35.velocity *= 0.5f + 0.5f * Main.rand.NextFloat();
