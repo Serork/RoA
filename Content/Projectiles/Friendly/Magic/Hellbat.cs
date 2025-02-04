@@ -44,6 +44,10 @@ sealed class Hellbat : ModProjectile {
     }
 
     public override void AI() {
+        if (Collision.WetCollision(Projectile.position, Projectile.width, Projectile.height)) {
+            Projectile.Kill();
+        }
+
         if (Projectile.alpha < 65 && Main.rand.NextBool(6)) {
             int num179 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, Projectile.velocity.X, Projectile.velocity.Y, 100, default, 1.2f + Main.rand.NextFloat() * 0.5f);
             //Main.dust[num179].noLightEmittence = true;
@@ -102,8 +106,8 @@ sealed class Hellbat : ModProjectile {
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
 		target.immune[Projectile.owner] = 8;
-		// int buff = ModContent.BuffType<Deceleration>();
-		int buff = BuffID.Wet;
+		int buff = ModContent.BuffType<Deceleration>();
+		//int buff = BuffID.Wet;
 		if (target.FindBuff(buff, out int buffIndex)) {
 			target.DelBuff(buffIndex);
 		}
@@ -114,8 +118,8 @@ sealed class Hellbat : ModProjectile {
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info) {
 		//target.immune[Projectile.owner] = 8;
-		// int buff = ModContent.BuffType<Deceleration>();
-		int buff = BuffID.Wet;
+		int buff = ModContent.BuffType<Deceleration>();
+		//int buff = BuffID.Wet;
 		if (target.FindBuff(buff, out int buffIndex)) {
 			target.DelBuff(buffIndex);
 		}

@@ -12,6 +12,7 @@ sealed class OnFire : ModBuff {
 
     public override void Update(NPC npc, ref int buffIndex) => npc.GetGlobalNPC<OnFireNPC>().onFire = true;
 }
+
 sealed class OnFireNPC : GlobalNPC {
     public override bool InstancePerEntity => true;
 

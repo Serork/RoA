@@ -21,16 +21,15 @@ sealed class Deceleration : ModBuff {
 
 	public override void Update(Player player, ref int buffIndex) {
 		player.GetModPlayer<DecelerationPlayer>().deceleration = true;
-		player.velocity = Vector2.Clamp(player.velocity, -Vector2.One * 0.25f, Vector2.One * 0.25f);
+		//player.velocity *= 0.995f;
 	}
 
 	public override void Update(NPC npc, ref int buffIndex) {
 		npc.GetGlobalNPC<DecelerationNPC>().deceleration = true;
-		if (npc.boss) {
-			return;
-		}
-		npc.velocity = Vector2.Clamp(npc.velocity, -Vector2.One * 0.25f, Vector2.One * 0.25f);
-	}
+        //float value = MathHelper.Clamp(npc.knockBackResist, 0f, 1f);
+        //float value2 = MathHelper.Lerp(value, 1f, (1f - value) * 0.995f);
+        //npc.velocity *= value2;
+    }
 }
 
 sealed class DecelerationPlayer : ModPlayer {
@@ -40,13 +39,25 @@ sealed class DecelerationPlayer : ModPlayer {
 		deceleration = false;
 	}
 
-	public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
+    public override void UpdateBadLifeRegen() {
+        if (Player.dead) {
+            return;
+        }
+
+        if (deceleration) {
+            if (Player.lifeRegen > 0) Player.lifeRegen = 0;
+            Player.lifeRegenTime = 0;
+            Player.lifeRegen -= 8;
+        }
+    }
+
+    public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
         if (drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.active || drawInfo.shadow != 0f) {
             return;
         }
         if (deceleration) {
-            r *= 0.25f;
-            g *= 0.6f;
+            r *= 0.8f;
+            g *= 0.8f;
             b *= 1f;
             for (int k = 0; k < 2; k++) {
 				if (drawInfo.shadow == 0f && Main.rand.NextBool(1, 3)) {
@@ -66,7 +77,16 @@ sealed class DecelerationNPC : GlobalNPC {
 
 	public bool deceleration;
 
-	public override void ResetEffects(NPC npc) {
+    public override void UpdateLifeRegen(NPC npc, ref int damage) {
+        if (deceleration) {
+            if (npc.lifeRegen > 0)
+                npc.lifeRegen = 0;
+
+            npc.lifeRegen -= 8;
+        }
+    }
+
+    public override void ResetEffects(NPC npc) {
 		deceleration = false;
 	}
 

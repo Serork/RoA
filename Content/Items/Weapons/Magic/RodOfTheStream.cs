@@ -2,6 +2,7 @@
 
 using RoA.Common.GlowMasks;
 using RoA.Common.Items;
+using RoA.Content.Buffs;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 
