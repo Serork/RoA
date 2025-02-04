@@ -63,7 +63,6 @@ sealed partial class BackwoodsBiome : ModBiome {
                 bool flag = biomePreference2.Biome.IsInBiome(info.player);
                 if (biomePreference2.Biome is ForestBiome && info.player.InModBiome<BackwoodsBiome>()) {
                     flag = false;
-                    Main.NewText(123);
                 }
                 if (flag && (biomePreference == null || biomePreference.Affection < biomePreference2.Affection)) {
                     biomePreference = biomePreference2;
