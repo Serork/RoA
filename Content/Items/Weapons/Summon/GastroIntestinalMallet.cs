@@ -94,6 +94,8 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
             Projectile.localAI[1] = 1f;
             Projectile.localAI[0] = 1f;
 
+            Projectile.direction = Projectile.spriteDirection = Main.rand.NextBool().ToDirectionInt();
+
             Projectile.ai[0] = 0f;
             int num430 = 80;
             SoundEngine.PlaySound(SoundID.Item46, Projectile.position);
