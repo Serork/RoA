@@ -18,7 +18,7 @@ namespace RoA.Common;
 
 sealed class ExtraVanillaOrbItems : ILoadable {
     public void Load(Mod mod) {
-        //On_WorldGen.CheckOrb += On_WorldGen_CheckOrb;
+        On_WorldGen.CheckOrb += On_WorldGen_CheckOrb;
     }
 
     private void On_WorldGen_CheckOrb(On_WorldGen.orig_CheckOrb orig, int i, int j, int type) {
@@ -82,7 +82,6 @@ sealed class ExtraVanillaOrbItems : ILoadable {
                         int num3 = Main.rand.Next(7);
                         if (!WorldGen.shadowOrbSmashed)
                             num3 = 0;
-
                         switch (num3) {
                             case 0: {
                                 Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 800, 1, noBroadcast: false, -1);
