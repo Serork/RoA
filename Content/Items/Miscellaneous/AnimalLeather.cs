@@ -11,7 +11,7 @@ namespace RoA.Content.Items.Miscellaneous;
 sealed class AnimalLeather : ModItem {
 	public override void SetStaticDefaults() {
 		// DisplayName.SetDefault("Animal Leather");
-            Item.ResearchUnlockCount = 50;
+        Item.ResearchUnlockCount = 50;
     }
 
 	public override void SetDefaults() {

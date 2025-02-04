@@ -8,7 +8,7 @@ namespace RoA.Content.Items.Materials;
 
 sealed class Galipot : ModItem {
 	public override void SetStaticDefaults() {
-		Item.ResearchUnlockCount = 100;
+		Item.ResearchUnlockCount = 50;
 		ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 	}
 

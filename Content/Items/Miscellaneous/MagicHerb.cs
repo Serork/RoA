@@ -28,6 +28,7 @@ class MagicHerb1 : ModItem {
 		ItemID.Sets.ItemIconPulse[Item.type] = true;
         ItemID.Sets.ItemsThatShouldNotBeInInventory[Type] = true;
         ItemID.Sets.IsAPickup[Type] = true;
+		Item.ResearchUnlockCount = 1000000;
     }
 
     public override void Load() {

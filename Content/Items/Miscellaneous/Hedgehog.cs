@@ -11,7 +11,7 @@ sealed class Hedgehog : ModItem {
         // DisplayName.SetDefault("Hedgehog");
         // Tooltip.SetDefault("'Spiky, but cute'");
 
-        Item.ResearchUnlockCount = 1;
+        Item.ResearchUnlockCount = 5;
     }
 
     public override void SetDefaults() {

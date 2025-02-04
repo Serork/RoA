@@ -9,6 +9,7 @@ sealed class WeaknessPotion : ModItem {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Weakness Potion");
 		//Tooltip.SetDefault("Throw this to make someone weak");
+		Item.ResearchUnlockCount = 20;
 	}
 
 	public override void SetDefaults() {
