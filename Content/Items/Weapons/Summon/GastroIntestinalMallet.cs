@@ -104,13 +104,22 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
             Projectile.localAI[1] = 1f;
             Projectile.localAI[0] = 1f;
 
+            int num430 = 80;
+            for (int num433 = 0; num433 < num430; num433++) {
+                int num434 = Dust.NewDust(Projectile.position + Vector2.UnitY * 10f, Projectile.width, Projectile.height - 10, 5, 0f, 0f, 100);
+                Main.dust[num434].scale = (float)Main.rand.Next(1, 10) * 0.25f;
+                Main.dust[num434].noGravity = true;
+                Main.dust[num434].fadeIn = 0.5f;
+                Dust dust2 = Main.dust[num434];
+                dust2.velocity *= 0.75f;
+            }
+
             if (Projectile.owner == Main.myPlayer) {
                 _direction = (int)Main.rand.NextBool().ToDirectionInt();
                 Projectile.netUpdate = true;
             }
 
-            Projectile.ai[0] = 0f;
-            int num430 = 80;
+            Projectile.ai[0] = 0f;;
             SoundEngine.PlaySound(SoundID.Item46, Projectile.position);
         }
 
