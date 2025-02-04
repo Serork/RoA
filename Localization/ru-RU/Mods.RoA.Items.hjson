@@ -1229,10 +1229,10 @@ BackwoodsDayMusicBox: {
 	// Tooltip: ""
 }
 
-BackwoodsNightMusicBox: {
-	DisplayName: Музыкальная шкатулка (Ночная Чаща)
-	// Tooltip: ""
-}
+// BackwoodsNightMusicBox: {
+// DisplayName: Music Box (Backwoods)
+// Tooltip: ""
+// }
 
 BackwoodsFogMusicBox: {
 	DisplayName: Музыкальная шкатулка (Туман в Чаще)
@@ -1451,10 +1451,10 @@ DeerSkullBanner: {
 
 BackwoodsCampfire: {
 	DisplayName: Чащобный костёр
-	Tooltip: "Восстановление жизни увеличено радом с костром"
+	Tooltip: "{$ItemTooltip.Campfire}"
 }
 
 FogStarter: {
 	DisplayName: Инициатор тумана
-	Tooltip: "#ТЕСТ: НАЧИНАЕТ ТУМАН В ЧАЩЕ"
+	Tooltip: "#ТЕСТ: НАЧИНАЕТ/ЗАКАНЧИВАЕТ ТУМАН В ЧАЩЕ"
 }

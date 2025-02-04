@@ -1231,14 +1231,14 @@ Bane: {
 }
 
 BackwoodsDayMusicBox: {
-	DisplayName: Music Box (Backwoods Day)
-	Tooltip: ""
-}
-
-BackwoodsNightMusicBox: {
 	DisplayName: Music Box (Backwoods)
 	Tooltip: ""
 }
+
+// BackwoodsNightMusicBox: {
+// DisplayName: Music Box (Backwoods)
+// Tooltip: ""
+// }
 
 BackwoodsFogMusicBox: {
 	DisplayName: Music Box (Backwoods Fog)
@@ -1457,10 +1457,10 @@ DeerSkullBanner: {
 
 BackwoodsCampfire: {
 	DisplayName: Backwoods Campfire
-	Tooltip: "Life regen is increased when near a campfire"
+	Tooltip: "{$ItemTooltip.Campfire}"
 }
 
 FogStarter: {
 	DisplayName: Fog Starter
-	Tooltip: "#TEST: STARTS FOG IN BACKWOODS"
+	Tooltip: "#TEST: STARTS/ENDS FOG IN BACKWOODS"
 }

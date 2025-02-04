@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable;
 
+// backwoods music box
 sealed class BackwoodsDayMusicBox : ModItem {
     public override void SetStaticDefaults() {
         ItemID.Sets.CanGetPrefixes[Type] = false;
@@ -13,7 +14,7 @@ sealed class BackwoodsDayMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay"), ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight"), ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>());
     }
 
     public override void SetDefaults() {
