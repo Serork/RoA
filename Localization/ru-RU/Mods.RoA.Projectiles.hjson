@@ -137,3 +137,6 @@ SmallMoon.DisplayName: Маленькая луна
 // BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
 // BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
 // BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
+// ArterialSprayProjectile.DisplayName: Arterial Spray Projectile
+// ArterialSprayProjectile2.DisplayName: Arterial Spray Projectile2
+// ArterialSprayProjectile3.DisplayName: Arterial Spray Projectile3

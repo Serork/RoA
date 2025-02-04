@@ -1,0 +1,274 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Core;
+using RoA.Utilities;
+
+using System;
+
+using Terraria;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Items.Weapons.Magic;
+
+sealed class ArterialSpray : ModItem {
+    public override void SetStaticDefaults() {
+        Item.ResearchUnlockCount = 1;
+    }
+
+    public override void SetDefaults() {
+        Item.SetSize(42);
+        Item.DefaultToMagicWeapon(ModContent.ProjectileType<ArterialSprayProjectile3>(), 0, 1f);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 20);
+        Item.SetWeaponValues(8, 1f);
+
+        Item.noUseGraphic = true;
+    }
+}
+
+sealed class ArterialSprayProjectile3 : ModProjectile {
+    public override string Texture => ItemLoader.GetItem(ModContent.ItemType<ArterialSpray>()).Texture;
+
+    public override void SetDefaults() {
+        int width = 2; int height = width;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.friendly = true;
+
+        Projectile.penetrate = -1;
+
+        Projectile.tileCollide = false;
+
+        Projectile.aiStyle = -1;
+
+        Projectile.ignoreWater = true;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Player player = Main.player[Projectile.owner];
+        Item heldItem = player.HeldItem;
+        bool flag = player.direction != 1;
+        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Vector2 origin = new(texture.Width * 0.5f * (1 - player.direction), (player.gravDir == -1f) ? 0 : texture.Height);
+        int x = -(int)origin.X;
+        ItemLoader.HoldoutOrigin(player, ref origin);
+        Vector2 offset = new(origin.X + x, 0);
+        float rotOffset = 0.785f * player.direction;
+        if (player.gravDir == -1f) {
+            rotOffset -= 1.57f * player.direction;
+        }
+        SpriteEffects effects = flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        if (player.gravDir == -1f) {
+            if (player.direction == 1) {
+                effects = SpriteEffects.FlipVertically;
+            }
+            else {
+                effects = SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically;
+            }
+        }
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        float progress = (float)Projectile.timeLeft / player.itemTimeMax;
+        float f = progress < 0.5f ? progress : (1f - progress);
+        Vector2 offset2 = new Vector2(0f, 5f - 5f * f).RotatedBy(Projectile.ai[1]);
+        if (progress > 0.5f) {
+            Dust obj13 = Main.dust[Dust.NewDust(Projectile.position, 2, 2, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
+            obj13.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f;
+            obj13.scale = 0.9f;
+            obj13.fadeIn = 1.1f;
+            obj13.velocity *= 0.25f;
+            obj13.position = Projectile.position - offset2 + Vector2.UnitX * player.direction * 50f * f;
+        }
+        spriteBatch.Draw(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0);
+
+        return false;
+    }
+
+    public override void AI() {
+        Player player = Main.player[Projectile.owner];
+        Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true);
+        if (Projectile.ai[0] == 0f) {
+            Projectile.ai[0] = 1f;
+            Projectile.ai[1] = MathHelper.PiOver2 * player.direction;
+            Projectile.timeLeft = player.itemTime;
+        }
+        //player.heldProj = Projectile.identity;
+        float armRotation = Projectile.ai[1] - MathHelper.Pi;
+        player.bodyFrame.Y = 56;
+        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
+
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+
+            if (player.whoAmI == Main.myPlayer) {
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Projectile.velocity, ModContent.ProjectileType<ArterialSprayProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+            }
+        }
+    }
+}
+
+sealed class ArterialSprayProjectile : ModProjectile {
+    public override string Texture => ResourceManager.EmptyTexture;
+
+    public override void SetDefaults() {
+        Projectile.width = 8;
+        Projectile.height = 8;
+        Projectile.friendly = true;
+        Projectile.aiStyle = 1;
+        Projectile.penetrate = -1;
+        Projectile.timeLeft = 25;
+
+        Projectile.DamageType = DamageClass.Magic;
+
+        AIType = ProjectileID.Bullet;
+    }
+
+    public override bool? CanDamage() => false;
+
+    private void SummonSlash(Vector2 target) {
+        Vector2 vec = Projectile.velocity;
+        int direction = Main.player[Projectile.owner].direction;
+        Vector2 v = new Vector2(-vec.Y * 1.5f, vec.X * 1.5f) * direction;
+        Vector2 v2 = v.SafeNormalize(Vector2.Zero) * 6f;
+        float offset = 15f;
+        Projectile.NewProjectile(Projectile.GetSource_FromThis(), target - v2 * offset, v2.RotatedByRandom(MathHelper.PiOver4 * -direction), ModContent.ProjectileType<ArterialSprayProjectile2>(), Projectile.damage, 0f, Projectile.owner, 0f, target.Y);
+    }
+
+    public override void AI() {
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 10f;
+        }
+        Projectile.localAI[0] += 1f;
+        bool flag = Projectile.localAI[0] >= 16f;
+        Projectile.tileCollide = false;
+        if (flag) {
+            Projectile.Kill();
+        }
+        if (Projectile.localAI[0] > 4f && Projectile.localAI[0] % 4f == 0f) {
+            if (Projectile.owner == Main.myPlayer) {
+                SummonSlash(Projectile.Center);
+            }
+        }
+    }
+}
+
+sealed class ArterialSprayProjectile2 : ModProjectile {
+    public override string Texture => ResourceManager.ProjectileTextures + "ArterialSpray2";
+
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 18;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+    }
+
+    public override void SetDefaults() {
+        Projectile.width = 30;
+        Projectile.height = 30;
+        Projectile.aiStyle = -1;
+        Projectile.friendly = true;
+        Projectile.tileCollide = false;
+        Projectile.ignoreWater = true;
+
+        Projectile.DamageType = DamageClass.Magic;
+
+        Projectile.penetrate = -1;
+        Projectile.scale = 1f + (float)Main.rand.Next(30) * 0.01f;
+        Projectile.extraUpdates = 1;
+        Projectile.timeLeft = 15 * Projectile.MaxUpdates;
+
+        Projectile.usesIDStaticNPCImmunity = true;
+        Projectile.idStaticNPCHitCooldown = 10;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        if (Projectile.ai[0] > 1f) {
+            Color baseColor = Color.Red;
+            lightColor = new Color(baseColor.R, baseColor.G, baseColor.B, 0).MultiplyRGB(lightColor) * Projectile.Opacity * Utils.GetLerpValue(0f, 15f, Projectile.timeLeft, true);
+
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Vector2 drawPosition = Projectile.position - Main.screenPosition;
+            Vector2 origin = texture.Size() / 2f;
+            SpriteEffects effects = SpriteEffects.None;
+
+            int num147 = 8;
+            int num148 = 2;
+            int num149 = 1;
+            num149 = ProjectileID.Sets.TrailCacheLength[Projectile.type];
+            num147 = 0;
+            num148 = -2;
+            Texture2D texture2 = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "ArterialSpray2_").Value;
+            for (int num152 = num149; (num148 > 0 && num152 < num147) || (num148 < 0 && num152 > num147); num152 += num148) {
+                if (num152 >= Projectile.oldPos.Length) {
+                    continue;
+                }
+
+                Vector2 vector29 = Projectile.oldPos[num152] - Main.screenPosition;
+                if (vector29 == Vector2.Zero) {
+                    continue;
+                }
+                Main.EntitySpriteDraw(texture, vector29 + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
+                Main.EntitySpriteDraw(texture2, vector29 + Projectile.Size / 2f, null, lightColor * 0.25f, Projectile.rotation, origin, Projectile.scale, effects);
+            }
+            Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
+            Main.EntitySpriteDraw(texture, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
+            texture2 = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "ArterialSpray3").Value;
+            //Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
+        }
+
+        return false;
+    }
+
+    public override void AI() {
+        if (Projectile.localAI[0] == 0f) {
+            //SoundEngine.PlaySound(SoundID.Item171, Projectile.Center);
+            Projectile.localAI[0] = 1f;
+            for (int num163 = 0; num163 < 10; num163++) {
+                Dust obj13 = Main.dust[Dust.NewDust(Projectile.position, 2, 2, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
+                obj13.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
+                obj13.scale = 0.9f;
+                obj13.fadeIn = 1.1f;
+                obj13.position = Projectile.Center - Projectile.velocity * 2.5f;
+                obj13.velocity *= 0.75f;
+                obj13.velocity += Projectile.velocity / 2f;
+            }
+        }
+
+
+        for (int num164 = 0; num164 < 3; num164++) {
+            if (Main.rand.Next(5) == 0) {
+                Dust obj14 = Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
+                obj14.velocity = obj14.velocity / 4f + Projectile.velocity / 2f;
+                obj14.scale = 1.2f;
+                obj14.position = Projectile.Center + Main.rand.NextFloat() * Projectile.velocity * 2f;
+            }
+        }
+
+        for (int num165 = 1; num165 < Projectile.oldPos.Length && !(Projectile.oldPos[num165] == Vector2.Zero); num165++) {
+            if (Main.rand.Next(7) == 0) {
+                Dust obj15 = Main.dust[Dust.NewDust(Projectile.oldPos[num165], Projectile.width, Projectile.height, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
+                obj15.velocity = obj15.velocity / 4f + Projectile.velocity / 2f;
+                obj15.scale = 1.2f;
+                obj15.position = Projectile.oldPos[num165] + Projectile.Size / 2f + Main.rand.NextFloat() * Projectile.velocity * 2f;
+            }
+        }
+
+        Projectile.ai[0] += 1f;
+        float num = (float)Math.PI / 2f;
+        bool flag = Projectile.ai[0] > 1f;
+
+        if (flag) {
+            Projectile.alpha -= 10;
+            int num2 = 100;
+            if (Projectile.alpha < num2)
+                Projectile.alpha = num2;
+        }
+
+        //int num3 = 10 * Projectile.MaxUpdates;
+        //Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[0] / (float)num3);
+
+        Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(0.1f * Main.rand.NextFloatDirection()) * 0.1f;
+
+        Projectile.rotation = Projectile.velocity.ToRotation() + num;
+        Projectile.tileCollide = false;
+    }
+}

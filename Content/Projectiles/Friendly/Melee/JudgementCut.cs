@@ -36,9 +36,11 @@ sealed class JudgementCut : ModProjectile {
         Projectile.localAI[0] += 1f;
         Projectile.tileCollide = Projectile.localAI[0] >= 10f;
         if (Projectile.localAI[0] % 3f == 0f) {
-            Vector2 velocity = new Vector2(0, 14 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
-            float duration = 0.01f;
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center/* - Vector2.UnitX * 1080f*/ + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - velocity * 8, velocity, ModContent.ProjectileType<JudgementSlash>(), Projectile.damage, Projectile.knockBack);
+            if (Projectile.owner == Main.myPlayer) {
+                Vector2 velocity = new Vector2(0, 14 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
+                float duration = 0.01f;
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center/* - Vector2.UnitX * 1080f*/ + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - velocity * 8, velocity, ModContent.ProjectileType<JudgementSlash>(), Projectile.damage, Projectile.knockBack);
+            }
         }
     }
 }

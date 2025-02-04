@@ -1463,3 +1463,8 @@ LothorRelic: {
 	// DisplayName: Lothor Relic
 	// Tooltip: ""
 }
+
+ArterialSpray: {
+	// DisplayName: Arterial Spray
+	// Tooltip: ""
+}

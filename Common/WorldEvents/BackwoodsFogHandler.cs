@@ -46,8 +46,8 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     private void On_Main_StopRain(On_Main.orig_StopRain orig) {
         orig();
-        if (Main.rand.NextBool()) {
-            ToggleBackwoodsFog();
+        if (Main.rand.NextBool() && !IsFogActive) {
+            ToggleBackwoodsFog(false);
         }
     }
 
