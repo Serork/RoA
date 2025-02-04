@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
@@ -32,7 +33,7 @@ sealed class ArterialSpray : ModItem {
 }
 
 sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
-    public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray0";
+    public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray_Small";
 
     public override void SetDefaults() {
         int width = 2; int height = width;
@@ -76,14 +77,14 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         SpriteBatch spriteBatch = Main.spriteBatch;
         float progress = (float)Projectile.timeLeft / player.itemTimeMax;
         float f = progress < 0.5f ? progress : (1f - progress);
-        Vector2 offset2 = new Vector2(0f, 10f - 5f * f).RotatedBy(Projectile.ai[1]);
-        if (progress > 0.5f) {
+        Vector2 offset2 = new Vector2(0f, 5f - 3f * f).RotatedBy(Projectile.ai[1]);
+        if (progress > 0.5f && Main.rand.NextChance(0.75f)) {
             Dust obj13 = Main.dust[Dust.NewDust(Projectile.position, 2, 2, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
             obj13.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f;
             obj13.scale = 0.9f;
             obj13.fadeIn = 1.1f;
             obj13.velocity *= 0.25f;
-            obj13.position = Projectile.position - offset2 - Vector2.UnitX * player.direction * 10f + Vector2.UnitX * player.direction * 50f * f;
+            obj13.position = Projectile.position - offset2 - Vector2.UnitX * player.direction * 5f + Vector2.UnitX * player.direction * 50f * f;
         }
         Main.spriteBatch.Draw(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0);
 
