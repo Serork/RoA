@@ -28,12 +28,12 @@ sealed class RavensEye : ModItem {
         Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Magic;
-        Item.damage = 20;
+        Item.damage = 31;
         Item.knockBack = 1;
 
         Item.noMelee = true;
         Item.channel = true;
-        Item.mana = 10;
+        Item.mana = 15;
 
         Item.value = Item.sellPrice(silver: 45);
         Item.rare = ItemRarityID.Green;

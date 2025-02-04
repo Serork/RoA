@@ -42,9 +42,9 @@ sealed class RodOfTheTerra : Rod {
         Item.useTime = Item.useAnimation = 8;
         Item.autoReuse = false;
 
-        Item.damage = 30;
+        Item.damage = 29;
 
-        Item.mana = 4;
+        Item.mana = 7;
 
         Item.value = Item.buyPrice(gold: 1, silver: 10);
         Item.rare = ItemRarityID.Orange;

@@ -29,7 +29,7 @@ sealed class Hellbat : ModProjectile {
 		Projectile.aiStyle = 1;
 		AIType = ProjectileID.Bullet;
 
-		Projectile.ignoreWater = true;
+		Projectile.ignoreWater = false;
 
 		Projectile.extraUpdates = 1;
 
@@ -102,7 +102,8 @@ sealed class Hellbat : ModProjectile {
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
 		target.immune[Projectile.owner] = 8;
-		int buff = ModContent.BuffType<Deceleration>();
+		// int buff = ModContent.BuffType<Deceleration>();
+		int buff = BuffID.Wet;
 		if (target.FindBuff(buff, out int buffIndex)) {
 			target.DelBuff(buffIndex);
 		}
@@ -111,6 +112,18 @@ sealed class Hellbat : ModProjectile {
 		}
 	}
 
+	public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+		//target.immune[Projectile.owner] = 8;
+		// int buff = ModContent.BuffType<Deceleration>();
+		int buff = BuffID.Wet;
+		if (target.FindBuff(buff, out int buffIndex)) {
+			target.DelBuff(buffIndex);
+		}
+		if (!Projectile.wet && !target.wet) {
+			target.AddBuff(BuffID.OnFire3, Main.rand.Next(20, 50), false);
+		}
+	}
+	
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
 		//if (Projectile.wet || target.wet) {
 		//	modifiers.FinalDamage /= 2;

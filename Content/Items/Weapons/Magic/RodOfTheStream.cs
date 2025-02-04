@@ -44,10 +44,10 @@ sealed class RodOfTheStream : Rod {
         Item.useTime = Item.useAnimation = 40;
         Item.autoReuse = false;
 
-        Item.damage = 28;
+        Item.damage = 5;
         Item.knockBack = 6f;
 
-        Item.mana = 11;
+        Item.mana = 30;
 
         Item.value = Item.buyPrice(gold: 1, silver: 10);
         Item.rare = ItemRarityID.Orange;

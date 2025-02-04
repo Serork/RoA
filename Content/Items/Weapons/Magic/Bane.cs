@@ -21,15 +21,15 @@ sealed class Bane : ModItem {
 
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.useTime = Item.useAnimation = 48;
-        Item.autoReuse = true;
+        Item.autoReuse = false;
         Item.useTurn = false;
 
         Item.DamageType = DamageClass.Magic;
-        Item.damage = 1;
+        Item.damage = 30;
         Item.knockBack = 2;
 
         Item.noMelee = true;
-        Item.mana = 20;
+        Item.mana = 200;
 
         Item.value = Item.sellPrice(silver: 60);
         Item.rare = ItemRarityID.Orange;

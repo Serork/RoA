@@ -38,9 +38,9 @@ sealed class RodOfTheShock : Rod {
         Item.useTime = Item.useAnimation = 8;
         Item.autoReuse = true;
 
-        Item.damage = 20;
+        Item.damage = 3;
 
-        Item.mana = 10;
+        Item.mana = 11;
 
         Item.value = Item.buyPrice(gold: 1, silver: 10);
         Item.rare = ItemRarityID.Orange;

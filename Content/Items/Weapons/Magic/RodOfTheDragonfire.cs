@@ -39,10 +39,10 @@ sealed class RodOfTheDragonfire : Rod {
         Item.useTime = Item.useAnimation = 6;
         Item.autoReuse = true;
 
-        Item.damage = 11;
+        Item.damage = 6;
         Item.knockBack = 2f;
 
-        Item.mana = 14;
+        Item.mana = 19;
 
         Item.value = Item.buyPrice(gold: 1, silver: 10);
         Item.rare = ItemRarityID.Orange;

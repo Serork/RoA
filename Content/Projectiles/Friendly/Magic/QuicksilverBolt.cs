@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Core;
+using RoA.Content.Buffs;
 
 using System;
 
@@ -72,4 +73,12 @@ sealed class QuicksilverBolt : ModProjectile {
         }
         SoundEngine.PlaySound(SoundID.Item118, new Vector2(Projectile.position.X, Projectile.position.Y));
     }
+	
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+		target.AddBuff(ModContent.BuffType<ToxicFumes>(), Main.rand.Next(40, 120), false);
+	}
+	
+	public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+		target.AddBuff(ModContent.BuffType<ToxicFumes>(), Main.rand.Next(40, 120), false);
+	}
 }

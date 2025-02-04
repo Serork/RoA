@@ -117,7 +117,8 @@ sealed class WaterStream : ModProjectile {
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
 		int type = BuffID.OnFire;
-		target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(20, 50), false);
+		// target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(20, 50), false);
+		target.AddBuff(BuffID.Wet, Main.rand.Next(100, 300), false);
 		if (target.FindBuff(type, out int buffIndex)) {
 			target.DelBuff(buffIndex);
 		}

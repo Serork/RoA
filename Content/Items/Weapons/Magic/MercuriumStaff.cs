@@ -28,7 +28,7 @@ sealed class MercuriumStaff : ModItem {
         Item.knockBack = 2.5f;
 
         Item.noMelee = true;
-        Item.mana = 9;
+        Item.mana = 17;
 
         Item.value = Item.sellPrice(silver: 42);
         Item.rare = ItemRarityID.Blue;
