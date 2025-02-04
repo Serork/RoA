@@ -49,7 +49,9 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         Projectile.ignoreWater = true;
     }
 
-    void ProjectileHooks.IDrawLikeHeldItem.Draw(ref Color lightColor, PlayerDrawSet drawinfo) {
+    void ProjectileHooks.IDrawLikeHeldItem.Draw(ref Color lightColor, PlayerDrawSet drawinfo) { }
+
+    public override bool PreDraw(ref Color lightColor) {
         Player player = Main.player[Projectile.owner];
         Item heldItem = player.HeldItem;
         bool flag = player.direction != 1;
@@ -74,19 +76,19 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         SpriteBatch spriteBatch = Main.spriteBatch;
         float progress = (float)Projectile.timeLeft / player.itemTimeMax;
         float f = progress < 0.5f ? progress : (1f - progress);
-        Vector2 offset2 = new Vector2(0f, 5f - 5f * f).RotatedBy(Projectile.ai[1]);
+        Vector2 offset2 = new Vector2(0f, 10f - 5f * f).RotatedBy(Projectile.ai[1]);
         if (progress > 0.5f) {
             Dust obj13 = Main.dust[Dust.NewDust(Projectile.position, 2, 2, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
             obj13.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f;
             obj13.scale = 0.9f;
             obj13.fadeIn = 1.1f;
             obj13.velocity *= 0.25f;
-            obj13.position = Projectile.position - offset2 + Vector2.UnitX * player.direction * 50f * f;
+            obj13.position = Projectile.position - offset2 - Vector2.UnitX * player.direction * 10f + Vector2.UnitX * player.direction * 50f * f;
         }
-        drawinfo.DrawDataCache.Add(new DrawData(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0));
-    }
+        Main.spriteBatch.Draw(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0);
 
-    public override bool PreDraw(ref Color lightColor) => false;
+        return false;
+    }
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
@@ -96,8 +98,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
             Projectile.ai[1] = player.fullRotation + MathHelper.PiOver2 * player.direction;
             Projectile.timeLeft = player.itemTime;
         }
-        //player.heldProj = Projectile.identity;
-        float armRotation = Projectile.ai[1] - MathHelper.Pi;
+        player.heldProj = Projectile.whoAmI;
         player.bodyFrame.Y = 56;
         //player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
         float num36 = (float)Projectile.timeLeft / player.itemTimeMax;
