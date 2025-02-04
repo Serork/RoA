@@ -34,6 +34,14 @@ public class MercuriumHammer : ModItem {
 		Item.UseSound = SoundID.Item1;
 	}
 
+    public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), Main.rand.Next(40, 120));
+    }
+
+    public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo) {
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), Main.rand.Next(40, 120));
+    }
+
     public override void MeleeEffects(Player player, Rectangle hitbox) {
         if (Main.rand.Next(5) == 0)
             Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, ModContent.DustType<ToxicFumes>(), player.direction * 2, 0f, 0, default(Color), 1.3f);

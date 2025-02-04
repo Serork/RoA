@@ -53,7 +53,7 @@ sealed class MercuriumFumes : ModProjectile {
             for (int findNPC = 0; findNPC < Main.npc.Length; findNPC++) {
                 NPC npc = Main.npc[findNPC];
                 if (npc.active && npc.life > 0 && !npc.friendly && Vector2.Distance(Projectile.Center, npc.Center) < distance)
-                    npc.AddBuff(ModContent.BuffType<ToxicFumes>(), 180);
+                    npc.AddBuff(ModContent.BuffType<ToxicFumes>(), Main.rand.Next(40, 120));
             }
         }
 
