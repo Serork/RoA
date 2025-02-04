@@ -163,7 +163,7 @@ sealed class ArterialSprayProjectile : ModProjectile {
         }
         Projectile.localAI[0] += 1f;
         bool flag = Projectile.localAI[0] >= 16f;
-        Projectile.tileCollide = false;
+        Projectile.tileCollide = Projectile.localAI[0] > 8f;
         if (flag) {
             Projectile.Kill();
         }
