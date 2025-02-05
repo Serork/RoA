@@ -10,8 +10,10 @@ namespace RoA.Content.Items.Placeable.Crafting;
 sealed class Elderwood : ModItem {
 	public override void SetStaticDefaults() {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
-		ItemID.Sets.SortingPriorityMaterials[Item.type] = ItemID.Wood;
-	}
+		ItemID.Sets.SortingPriorityMaterials[Type] = ItemID.Wood;
+
+		ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.Wood;
+    }
 
 	public override void SetDefaults() {
         Item.useStyle = 1;

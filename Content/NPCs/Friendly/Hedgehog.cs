@@ -28,6 +28,8 @@ sealed class Hedgehog : ModNPC {
             Velocity = 1f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        NPCID.Sets.ShimmerTransformToNPC[Type] = NPCID.Shimmerfly;
     }
 
     public override void SetDefaults() {

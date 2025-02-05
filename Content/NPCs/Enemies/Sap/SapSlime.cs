@@ -26,6 +26,8 @@ sealed class SapSlime : ModNPC {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Sap Slime");
         Main.npcFrameCount[NPC.type] = 3;
+
+        NPCID.Sets.ShimmerTransformToNPC[Type] = NPCID.ShimmerSlime;
     }
 
     public override void SetDefaults() {
