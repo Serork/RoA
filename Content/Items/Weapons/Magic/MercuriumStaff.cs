@@ -24,11 +24,11 @@ sealed class MercuriumStaff : ModItem {
         Item.useTurn = false;
 
         Item.DamageType = DamageClass.Magic;
-        Item.damage = 26;
+        Item.damage = 10;
         Item.knockBack = 2.5f;
 
         Item.noMelee = true;
-        Item.mana = 17;
+        Item.mana = 11;
 
         Item.value = Item.sellPrice(silver: 42);
         Item.rare = ItemRarityID.Blue;
