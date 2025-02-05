@@ -110,8 +110,16 @@ sealed class BookwormsProjectile : ModProjectile {
         for (int i = 0; i < 6; i++) {
             Vector2 vector39 = Projectile.position;
             Point size = new(20, 26);
-            Dust obj2 = Main.dust[Dust.NewDust(vector39, size.X, size.Y, DustID.CorruptGibs, Projectile.oldVelocity.X, -2f, 0, default, 1.15f + 0.15f * Main.rand.NextFloat())];
+            Dust obj2 = Main.dust[Dust.NewDust(vector39, size.X, size.Y, DustID.CorruptGibs, Projectile.oldVelocity.X, -2f, 0, default, 1.1f + 0.15f * Main.rand.NextFloat())];
             obj2.noGravity = true;
+        }
+        if (Projectile.ai[0] == 0f) {
+            for (int i = 0; i < 6; i++) {
+                Vector2 vector39 = Projectile.position;
+                Point size = new(20, 26);
+                Dust obj2 = Main.dust[Dust.NewDust(vector39, size.X, size.Y, DustID.CorruptGibs, 0f, -2f, 0, default, 1.1f + 0.15f * Main.rand.NextFloat())];
+                obj2.noGravity = true;
+            }
         }
     }
 
