@@ -26,6 +26,8 @@ sealed class ElderwoodSink : ModTile {
         AddMapEntry(new Color(191, 142, 111), Terraria.Localization.Language.GetText("MapObject.Sink"));
 
         AdjTiles = [TileID.Sinks];
+
+        RegisterItemDrop(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodSink>());
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
