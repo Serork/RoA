@@ -21,7 +21,7 @@ sealed class MercuriumSword : ModItem {
         Item.useTurn = false;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 13;
+        Item.damage = 8;
         Item.knockBack = 4f;
 
         Item.value = Item.sellPrice(silver: 42);

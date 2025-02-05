@@ -24,7 +24,7 @@ sealed class BloodshedAxe : ModItem {
         Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 24;
+        Item.damage = 34;
         Item.knockBack = 4f;
 
         Item.noMelee = true;
