@@ -47,7 +47,10 @@ sealed class MercuriumStaff : ModItem {
     public override Vector2? HoldoutOffset() => new Vector2(1f, -7f);
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        if (!Collision.CanHit(position, 0, 0, position + Vector2.Normalize(velocity) * Item.width, 0, 0))
+        if (!Collision.CanHit(position, 0, 0, position + Vector2.Normalize(velocity) * 10f, 0, 0))
+            return false;
+
+        if (!Collision.CanHit(player.Center, 0, 0, position, 0, 0))
             return false;
 
         Vector2 dustPosition = position + new Vector2(player.direction == 1 ? 2f : 4f, 4f * player.direction).RotatedBy(velocity.ToRotation());
