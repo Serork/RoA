@@ -29,7 +29,7 @@ sealed class Bane : ModItem {
         Item.knockBack = 1;
 
         Item.noMelee = true;
-        Item.mana = 15;
+        Item.mana = 150;
 
         Item.value = Item.sellPrice(silver: 60);
         Item.rare = ItemRarityID.Orange;

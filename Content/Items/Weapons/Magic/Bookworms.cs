@@ -80,7 +80,7 @@ sealed class BookwormsProjectile : ModProjectile {
 
         Projectile.tileCollide = true;
 
-        Projectile.timeLeft = 180;
+        Projectile.timeLeft = 90;
 
         Projectile.penetrate = 2;
     }
