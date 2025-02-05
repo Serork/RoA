@@ -354,7 +354,8 @@ sealed class ExtraVanillaCrateItems : ModSystem {
 
         IItemDropRule bc_son = ItemDropRule.NotScalingWithLuck(ItemID.SoulofNight, 2, 2, 5);
         IItemDropRule bc_corrupt = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.BallOHurt, ItemID.BandofStarpower, ItemID.Musket, ItemID.ShadowOrb,
-            /*ItemID.Vilethorn*/ModContent.ItemType<Vilethorn>());
+            /*ItemID.Vilethorn*/ModContent.ItemType<Vilethorn>(),
+            ModContent.ItemType<Bookworms>(), ModContent.ItemType<PlanetomaStaff>());
         IItemDropRule bc_crimson = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.TheUndertaker, ItemID.TheRottedFork, 
             /*ItemID.CrimsonRod*/ModContent.ItemType<CrimsonRod>(),
             ItemID.PanicNecklace, ItemID.CrimsonHeart,

@@ -1484,3 +1484,8 @@ Bookworms: {
 	DisplayName: Bookworms
 	Tooltip: ""
 }
+
+PlanetomaStaff: {
+	DisplayName: Planetoma Staff
+	Tooltip: ""
+}

@@ -73,7 +73,7 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
 
     public override void SetDefaults() {
         Projectile.width = 46;
-        Projectile.height = 39;
+        Projectile.height = 40;
         //Projectile.aiStyle = 53;
         Projectile.aiStyle = -1;
         Projectile.timeLeft = 36000;
@@ -119,7 +119,7 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
                 Projectile.netUpdate = true;
             }
 
-            Projectile.ai[0] = 0f;;
+            Projectile.ai[0] = 0f;
             SoundEngine.PlaySound(SoundID.Item46, Projectile.position);
         }
 

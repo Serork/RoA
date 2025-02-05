@@ -110,7 +110,7 @@ sealed class ExtraVanillaOrbItems : ILoadable {
                         }
                     }
                     else {
-                        int num4 = Main.rand.Next(5);
+                        int num4 = Main.rand.Next(7);
                         if (!WorldGen.shadowOrbSmashed)
                             num4 = 0;
 
@@ -132,6 +132,12 @@ sealed class ExtraVanillaOrbItems : ILoadable {
                                 break;
                             case 4:
                                 Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 111, 1, noBroadcast: false, -1);
+                                break;
+                            case 5:
+                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<Bookworms>(), 1, noBroadcast: false, -1);
+                                break;
+                            case 6:
+                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<PlanetomaStaff>(), 1, noBroadcast: false, -1);
                                 break;
                         }
                     }
