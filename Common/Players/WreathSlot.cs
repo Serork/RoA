@@ -27,14 +27,11 @@ class WreathSlot : ModAccessorySlot {
     public static int ActiveSlot => ModContent.GetInstance<WreathSlot>().Type;
 
     public static WreathSlot GetSlot(Player player) {
-        switch (Main.LocalPlayer.CurrentLoadoutIndex) {
-            case 1:
-                return LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot2>().Type, player) as WreathSlot2;
-            case 2:
-                return LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot3>().Type, player) as WreathSlot3;
-            default:
-                return LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot;
-        }
+        return player.CurrentLoadoutIndex switch {
+            1 => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot2>().Type, player) as WreathSlot2,
+            2 => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot3>().Type, player) as WreathSlot3,
+            _ => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot,
+        };
     }
     public static Item GetFunctionalItem(Player player) => GetSlot(player).FunctionalItem;
     public static Item GetVanityItem(Player player) => GetSlot(player).VanityItem;
