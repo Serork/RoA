@@ -1,15 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Cache;
-using RoA.Common.Networking.Packets;
-using RoA.Common.Networking;
 using RoA.Common.Players;
+using RoA.Common.VisualEffects;
 using RoA.Content.Biomes.Backwoods;
-using RoA.Content.Dusts.Backwoods;
-using RoA.Content.Items.Placeable;
-using RoA.Content.Tiles.Ambient;
-using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Utilities;
 
@@ -17,12 +10,10 @@ using System;
 using System.IO;
 
 using Terraria;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using RoA.Common.VisualEffects;
 
 namespace RoA.Common.WorldEvents;
 
