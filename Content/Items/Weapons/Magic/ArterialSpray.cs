@@ -28,6 +28,8 @@ sealed class ArterialSpray : ModItem {
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 20);
         Item.SetWeaponValues(8, 1f);
 
+        Item.mana = 10;
+
         Item.noUseGraphic = true;
     }
 }
