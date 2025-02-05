@@ -39,7 +39,7 @@ internal class EssenceDrainPlayer : ModPlayer {
         if (essenceDrain) {
             if (Player.lifeRegen > 0) Player.lifeRegen = 0;
             Player.lifeRegenTime = 0;
-            Player.lifeRegen -= 80;
+            Player.lifeRegen -= 40;
         }
     }
 
@@ -71,10 +71,10 @@ internal class EssenceDrainNPC : GlobalNPC {
 
 
     public override void UpdateLifeRegen(NPC npc, ref int damage) {
-        int bonusDamage = 8;
+        int bonusDamage = 4;
         if (essenceDrain) {
             if (npc.lifeRegen > 0) npc.lifeRegen = 0;
-            npc.lifeRegen -= 80;
+            npc.lifeRegen -= 40;
             if (damage < bonusDamage) damage = bonusDamage;
         }
     }

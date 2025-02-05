@@ -24,12 +24,12 @@ sealed class StarFusion : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.useTime = Item.useAnimation = 34;
+        Item.useTime = Item.useAnimation = 44;
         Item.autoReuse = false;
         Item.useTurn = true;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 32;
+        Item.damage = 29;
         Item.knockBack = 4f;
 
         Item.value = Item.sellPrice(silver: 75);

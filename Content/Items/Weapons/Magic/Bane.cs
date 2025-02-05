@@ -25,13 +25,13 @@ sealed class Bane : ModItem {
         Item.useTurn = false;
 
         Item.DamageType = DamageClass.Magic;
-        Item.damage = 50;
+        Item.damage = 1;
         Item.knockBack = 1;
 
         Item.noMelee = true;
-        Item.mana = 150;
+        Item.mana = 50;
 
-        Item.value = Item.sellPrice(silver: 60);
+        Item.value = Item.sellPrice(gold: 1, silver: 10);
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item45;
 
