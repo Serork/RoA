@@ -132,11 +132,11 @@ FlederSlayer.DisplayName: Бич нетопырей
 BaneSpell.DisplayName: Похищение сущности
 // GoblinsDagger.DisplayName: Goblin Dagger
 SmallMoon.DisplayName: Маленькая луна
-// Vilethorn.DisplayName: "{$ProjectileName.VilethornBase}"
-// VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
-// BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
-// BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
-// BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
+Vilethorn.DisplayName: "{$ProjectileName.VilethornBase}"
+VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
+BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
+BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
+BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
 // ArterialSprayProjectile.DisplayName: Arterial Spray Projectile
 // ArterialSprayProjectile2.DisplayName: Arterial Spray Projectile2
 // ArterialSprayProjectile3.DisplayName: Arterial Spray Projectile3
