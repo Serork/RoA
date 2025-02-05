@@ -15,7 +15,7 @@ class ToxicCrystal2 : ToxicCrystal1 { }
 class ToxicCrystal3 : ToxicCrystal1 { }
 
 class ToxicCrystal1 : ModProjectile {
-    public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
+    public override Color? GetAlpha(Color lightColor) => lightColor * Projectile.Opacity;
 
     public override void SetDefaults() {
         int width = 12; int height = width;
@@ -53,6 +53,7 @@ class ToxicCrystal1 : ModProjectile {
         int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<LothorPoison>(), 0f, 0f, 100, default, 1f);
         Main.dust[dust].scale += Main.rand.Next(40) * 0.01f;
         Main.dust[dust].noGravity = true;
+        Main.dust[dust].velocity.X *= 0.5f;
         Dust dust2 = Main.dust[dust];
         dust2.position.X -= 2f;
         Dust dust3 = Main.dust[dust];

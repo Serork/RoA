@@ -3,6 +3,8 @@ using Humanizer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
+
 using System;
 
 using Terraria;
@@ -60,7 +62,7 @@ sealed class ChemicalFlask : ModProjectile {
 
     public override void AI() {
         float num104 = Projectile.scale;
-        Lighting.AddLight((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f), num104 * 0.7f, num104, num104 * 0.8f);
+        //Lighting.AddLight((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f), num104 * 0.7f, num104, num104 * 0.8f);
 
         Player player = Main.player[Projectile.owner];
         if (Projectile.timeLeft <= 1125) {
@@ -84,7 +86,8 @@ sealed class ChemicalFlask : ModProjectile {
             int dust = Dust.NewDust(Projectile.Center - _position / 2f, (int)_position.X, (int)_position.Y, 44, 0f, 0f, 100, default, 2f);
             Main.dust[dust].noGravity = true;
             Main.dust[dust].velocity *= 5f;
-            dust = Dust.NewDust(Projectile.Center - _position / 2f, (int)_position.X, (int)_position.Y, 75, 0f, 0f, 100, default, 1.5f);
+            Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
+            dust = Dust.NewDust(Projectile.Center - _position / 2f, (int)_position.X, (int)_position.Y, ModContent.DustType<LothorPoison>(), 0f, 0f, 100, default, 1.5f);
             Main.dust[dust].velocity *= 3f;
         }
         SoundEngine.PlaySound(SoundID.Shatter, Projectile.position);
