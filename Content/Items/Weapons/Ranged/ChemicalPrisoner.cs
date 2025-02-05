@@ -32,8 +32,8 @@ sealed class ChemicalPrisoner : ModItem {
 
         Item.DamageType = DamageClass.Ranged;
         Item.noMelee = true;
-        Item.damage = 22;
-        Item.knockBack = 4;
+        Item.damage = 25;
+        Item.knockBack = 3;
 
         Item.value = Item.sellPrice(gold: 1, silver: 65);
         Item.rare = ItemRarityID.Orange;

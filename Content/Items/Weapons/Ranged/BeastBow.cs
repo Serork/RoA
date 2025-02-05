@@ -30,12 +30,12 @@ sealed class BeastBow : ModItem {
 		Item.noUseGraphic = true;
 
 		Item.DamageType = DamageClass.Ranged; 
-		Item.damage = 7; 
+		Item.damage = 11; 
 		Item.knockBack = 2.15f;
 
 		Item.value = Item.sellPrice(gold: 1, silver: 20);
 		Item.rare = ItemRarityID.Green; 
-		//Item.UseSound = SoundID.Item5;
+		Item.UseSound = SoundID.Item5;
 
 		Item.shoot = ProjectileID.WoodenArrowFriendly;
 		Item.useAmmo = AmmoID.Arrow;
