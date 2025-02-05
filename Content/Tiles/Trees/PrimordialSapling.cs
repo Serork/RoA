@@ -58,19 +58,23 @@ sealed class PrimordialSapling : ModTile {
 
 	public override void RandomUpdate(int i, int j) {
 		if (WorldGen.genRand.NextBool(15)) {
-			bool success = false;
-			if (Main.hardMode) {
-				success = BackwoodsBigTree.TryGrowBigTree(i, j + 2, placeRand: WorldGen.genRand);
-            }
-			if (!success && !TileID.Sets.TreeSapling[WorldGenHelper.GetTileSafely(i + 1, j).TileType] && !TileID.Sets.TreeSapling[WorldGenHelper.GetTileSafely(i - 1, j).TileType]) {
-				success = WorldGenHelper.GrowTreeWithBranches<TreeBranch>(i, j + 2, branchChance: 10);
-			}
-			bool isPlayerNear = WorldGen.PlayerLOS(i, j);
-            if (success && isPlayerNear) {
-                WorldGen.TreeGrowFXCheck(i, j);
-            }
+			GrowTree(i, j);
         }
 	}
+
+	internal static void GrowTree(int i, int j) {
+        bool success = false;
+        if (Main.hardMode) {
+            success = BackwoodsBigTree.TryGrowBigTree(i, j + 2, placeRand: WorldGen.genRand);
+        }
+        if (!success && !TileID.Sets.TreeSapling[WorldGenHelper.GetTileSafely(i + 1, j).TileType] && !TileID.Sets.TreeSapling[WorldGenHelper.GetTileSafely(i - 1, j).TileType]) {
+            success = WorldGenHelper.GrowTreeWithBranches<TreeBranch>(i, j + 2, branchChance: 10);
+        }
+        bool isPlayerNear = WorldGen.PlayerLOS(i, j);
+        if (success && isPlayerNear) {
+            WorldGen.TreeGrowFXCheck(i, j);
+        }
+    }
 
 	public override void SetSpriteEffects(int i, int j, ref SpriteEffects effects) {
 		if (i % 2 == 1) {
