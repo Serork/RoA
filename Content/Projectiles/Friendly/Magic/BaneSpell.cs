@@ -84,14 +84,14 @@ sealed class BaneSpell : ModProjectile {
                 break;
             }
         }
-        target.AddBuff(ModContent.BuffType<EssenceDrain>(), 180);
+        target.AddBuff(ModContent.BuffType<EssenceDrain>(), 900);
         target.GetGlobalNPC<EssenceDrainNPC>().Source = Projectile.owner;
 
         SoundEngine.PlaySound(SoundID.NPCDeath55, Projectile.Center);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        target.AddBuff(ModContent.BuffType<EssenceDrain>(), 180);
+        target.AddBuff(ModContent.BuffType<EssenceDrain>(), 900);
         SoundEngine.PlaySound(SoundID.NPCDeath55, Projectile.Center);
     }
 

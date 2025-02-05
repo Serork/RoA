@@ -112,7 +112,7 @@ sealed class Hellbat : ModProjectile {
 			target.DelBuff(buffIndex);
 		}
 		if (!Projectile.wet && !target.wet) {
-			target.AddBuff(BuffID.OnFire3, Main.rand.Next(20, 50), false);
+			target.AddBuff(BuffID.OnFire3, Main.rand.Next(30, 90), false);
 		}
 	}
 
@@ -124,7 +124,7 @@ sealed class Hellbat : ModProjectile {
 			target.DelBuff(buffIndex);
 		}
 		if (!Projectile.wet && !target.wet) {
-			target.AddBuff(BuffID.OnFire3, Main.rand.Next(20, 50), false);
+			target.AddBuff(BuffID.OnFire3, Main.rand.Next(30, 90), false);
 		}
 	}
 	

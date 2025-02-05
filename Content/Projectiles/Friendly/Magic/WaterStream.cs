@@ -122,7 +122,7 @@ sealed class WaterStream : ModProjectile {
             target.DelBuff(buffIndex);
         }
         if (!Projectile.lavaWet && !target.lavaWet) {
-            target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(40, 100), false);
+            target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(30, 90), false);
         }
     }
 
@@ -133,7 +133,7 @@ sealed class WaterStream : ModProjectile {
             target.DelBuff(buffIndex);
         }
         if (!Projectile.lavaWet && !target.lavaWet) {
-            target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(40, 100), false);
+            target.AddBuff(ModContent.BuffType<Deceleration>(), Main.rand.Next(30, 90), false);
         }
     }
 

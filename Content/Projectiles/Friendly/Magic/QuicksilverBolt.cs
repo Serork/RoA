@@ -75,10 +75,10 @@ sealed class QuicksilverBolt : ModProjectile {
     }
 	
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-		target.AddBuff(ModContent.BuffType<ToxicFumes>(), Main.rand.Next(40, 120), false);
+		target.AddBuff(ModContent.BuffType<ToxicFumes>(), Main.rand.Next(90, 180), false);
 	}
 	
 	public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-		target.AddBuff(ModContent.BuffType<ToxicFumes>(), Main.rand.Next(40, 120), false);
+		target.AddBuff(ModContent.BuffType<ToxicFumes>(), Main.rand.Next(90, 180), false);
 	}
 }
