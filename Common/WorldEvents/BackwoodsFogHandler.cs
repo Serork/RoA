@@ -27,13 +27,13 @@ using RoA.Common.VisualEffects;
 namespace RoA.Common.WorldEvents;
 
 sealed class BackwoodsFogHandler : ModSystem {
-    private sealed class ActivateFog : ModCommand {
-        public override CommandType Type => CommandType.World;
-        public override string Command => "togglebackwoodsfog";
-        public override string Usage => "/togglebackwoodsfog";
+    //private sealed class ActivateFog : ModCommand {
+    //    public override CommandType Type => CommandType.World;
+    //    public override string Command => "togglebackwoodsfog";
+    //    public override string Usage => "/togglebackwoodsfog";
 
-        public override void Action(CommandCaller caller, string input, string[] args) => ToggleBackwoodsFog(false);
-    }
+    //    public override void Action(CommandCaller caller, string input, string[] args) => ToggleBackwoodsFog(false);
+    //}
 
     public override void Load() {
         On_Main.StopRain += On_Main_StopRain;
