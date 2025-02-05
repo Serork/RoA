@@ -125,7 +125,7 @@ sealed class BookwormsProjectile : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        Projectile.Opacity = Utils.GetLerpValue(175, 165, Projectile.timeLeft, true);
+        Projectile.Opacity = Utils.GetLerpValue(90, 80, Projectile.timeLeft, true);
         if (Projectile.localAI[2] == 0f) {
             Projectile.localAI[2] = 1f;
             if (Projectile.owner == Main.myPlayer) {
