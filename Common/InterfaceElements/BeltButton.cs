@@ -63,7 +63,7 @@ sealed class BeltButton() : InterfaceElement(RoA.ModName + ": Belt Button", Inte
             //Vector2 vector2 = new Vector2(Main.screenWidth - 162 - 6f - 12f, (float)yPos + 14f + (!Main.mapFullscreen && Main.mapStyle == 1 && Main.mapEnabled ? extraY : 0f)) + origin / 2f;
             Vector2 vector2 = new Vector2(Main.screenWidth - 162 - 6f - 12f, WreathSlot.GetCustomLocation().Y);
             vector2.Y -= texture.Height / 2;
-            vector2.X -= 32f;
+            vector2.X -= 33f;
             vector2.X -= Main.netMode == NetmodeID.MultiplayerClient ? 25f : 0f;
             vector2.Y += 4f;
             Rectangle sourceRectangle = beltButtonFrame.GetSourceRectangle(texture);

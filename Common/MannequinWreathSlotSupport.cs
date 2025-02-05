@@ -515,7 +515,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         }
     }
 
-    internal static void DrawSlotTexture(Texture2D value6, Vector2 position, Rectangle rectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth, int slot, int context) {
+    internal static void DrawSlotTexture(Texture2D value6, Vector2 position, Rectangle rectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth, int slot, int context, Texture2D mainTexture = null) {
         var thisSlot = LoaderManager.Get<AccessorySlotLoader>().Get(slot);
         Texture2D texture = null;
         switch (context) {
@@ -533,8 +533,15 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 break;
         }
 
-        if (texture == null) {
-            texture = value6;
+        if (texture == null || mainTexture != null) {
+            if (mainTexture != null) {
+                texture = mainTexture;
+                rectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+                origin = rectangle.Size() / 2;
+            }
+            else {
+                texture = value6;
+            }
         }
         else {
             rectangle = new Rectangle(0, 0, texture.Width, texture.Height);
@@ -565,7 +572,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         return TextureAssets.InventoryBack3.Value;
     }
 
-    public static void Draw(SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor = default(Color), Texture2D inventoryBack = null) {
+    public static void Draw(SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor = default(Color), Texture2D inventoryBack = null, Texture2D mainTexture = null) {
         Player player = Main.player[Main.myPlayer];
         Item item = inv[slot];
         float inventoryScale = Main.inventoryScale;
@@ -815,8 +822,8 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             rectangle.Width -= 2;
             rectangle.Height -= 2;
 
-            if (context is ItemSlot.Context.ModdedAccessorySlot or ItemSlot.Context.ModdedVanityAccessorySlot or ItemSlot.Context.ModdedDyeSlot) {
-                DrawSlotTexture(value6, position + value.Size() / 2f * inventoryScale, rectangle, Color.White * 0.35f, 0f, rectangle.Size() / 2f, inventoryScale, SpriteEffects.None, 0f, slot, context);
+            if ((context is ItemSlot.Context.ModdedAccessorySlot or ItemSlot.Context.ModdedVanityAccessorySlot or ItemSlot.Context.ModdedDyeSlot) || mainTexture != null) {
+                DrawSlotTexture(value6, position + value.Size() / 2f * inventoryScale, rectangle, Color.White * 0.35f, 0f, rectangle.Size() / 2f, inventoryScale, SpriteEffects.None, 0f, slot, context, mainTexture);
                 goto SkipVanillaDraw;
             }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.InterfaceElements;
 using RoA.Content.Items.Equipables.Wreaths;
@@ -12,10 +13,29 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
 
-sealed class WreathSlot : ModAccessorySlot {
+class WreathSlot3 : WreathSlot {
+    public override bool IsHidden() => IsHiddenBase() || Main.LocalPlayer.CurrentLoadoutIndex != 2;
+}
+
+class WreathSlot2 : WreathSlot {
+    public override bool IsHidden() => IsHiddenBase() || Main.LocalPlayer.CurrentLoadoutIndex != 1;
+}
+
+class WreathSlot : ModAccessorySlot {
     private static bool _equipped, _equipped2;
 
-    public static WreathSlot GetSlot(Player player) => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot;
+    public static int ActiveSlot => ModContent.GetInstance<WreathSlot>().Type;
+
+    public static WreathSlot GetSlot(Player player) {
+        switch (Main.LocalPlayer.CurrentLoadoutIndex) {
+            case 1:
+                return LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot2>().Type, player) as WreathSlot2;
+            case 2:
+                return LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot3>().Type, player) as WreathSlot3;
+            default:
+                return LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot;
+        }
+    }
     public static Item GetFunctionalItem(Player player) => GetSlot(player).FunctionalItem;
     public static Item GetVanityItem(Player player) => GetSlot(player).VanityItem;
     public static Item GetDyeItem(Player player) => GetSlot(player).DyeItem;
@@ -31,9 +51,17 @@ sealed class WreathSlot : ModAccessorySlot {
         return new Vector2(x, y);
     }
 
+    public override void ApplyEquipEffects() {
+        if (!IsHidden()) {
+            base.ApplyEquipEffects();
+        }
+    }
+
     public override Vector2? CustomLocation => GetCustomLocation();
 
-    public override bool IsHidden() => (!IsItemValidForSlot(Main.mouseItem) && !BeltButton.IsUsed) || Main.EquipPage == 2;
+    protected bool IsHiddenBase() => (!IsItemValidForSlot(Main.mouseItem) && !BeltButton.IsUsed) || Main.EquipPage == 2;
+
+    public override bool IsHidden() => IsHiddenBase() || Main.LocalPlayer.CurrentLoadoutIndex != 0;
 
     public override string FunctionalTexture => ResourceManager.GUITextures + "Wreath_SlotBackground";
 
@@ -45,7 +73,28 @@ sealed class WreathSlot : ModAccessorySlot {
             }
         }
 
-        return base.PreDraw(context, item, position, isHovered);
+        if (context == AccessorySlotType.FunctionalSlot) {
+            Item[] items = [FunctionalItem];
+            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 8, 0, position, mainTexture: ModContent.Request<Texture2D>(FunctionalTexture).Value);
+
+            return false;
+        }
+
+        if (context == AccessorySlotType.VanitySlot) {
+            Item[] items = [VanityItem];
+            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 11, 0, position);
+
+            return false;
+        }
+
+        if (context == AccessorySlotType.DyeSlot) {
+            Item[] items = [DyeItem];
+            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 12, 0, position);
+
+            return false;
+        }
+
+        return true;
     }
 
     public override void PostDraw(AccessorySlotType context, Item item, Vector2 position, bool isHovered) {
