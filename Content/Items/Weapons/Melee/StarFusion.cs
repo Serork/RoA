@@ -20,7 +20,7 @@ sealed class StarFusion : ModItem {
     }
 
     public override void SetDefaults() {
-        int width = 46; int height = width;
+        int width = 58; int height = width;
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Swing;
