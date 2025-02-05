@@ -1479,3 +1479,8 @@ GastroIntestinalMallet: {
 	DisplayName: Gastrointestinal Mallet
 	Tooltip: ""
 }
+
+Bookworms: {
+	DisplayName: Bookworms
+	Tooltip: ""
+}
