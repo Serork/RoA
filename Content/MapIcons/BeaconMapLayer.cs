@@ -6,6 +6,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -22,7 +23,7 @@ namespace RoA.Content.MapIcons;
 sealed class BeaconMapLayer : ModMapLayer {
     public override void Draw(ref MapOverlayDrawContext context, ref string text) {
         List<BeaconTE> beacons = [];
-        foreach (TileEntity value in TileEntity.ByPosition.Values) {
+        foreach (TileEntity value in TileEntity.ByPosition.Values.ToList()) {
             if (value is BeaconTE beaconTE) {
                 beacons.Add(beaconTE);
             }
