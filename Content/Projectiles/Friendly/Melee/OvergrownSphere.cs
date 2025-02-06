@@ -44,6 +44,8 @@ sealed class OvergrownSphere : ModProjectile {
 
 		Projectile.penetrate = 1;
 		Projectile.alpha = 255;
+
+		Projectile.netImportant = true;
 	}
 
     public override void OnSpawn(IEntitySource source) {

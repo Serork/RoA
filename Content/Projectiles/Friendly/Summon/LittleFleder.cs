@@ -18,7 +18,7 @@ sealed class LittleFleder : ModProjectile {
     private const float ATTACKRATE = 50f;
 
     private bool _hasTarget;
-    private float _canChangeDirectionAgain;
+    private float _canChangeDirectionAgain = 20f;
     private bool _foundPickUp;
     private Vector2 _pickUpPosition;
     private Item _pickUpIFound;
