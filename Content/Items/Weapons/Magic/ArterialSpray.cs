@@ -36,7 +36,7 @@ sealed class ArterialSpray : ModItem {
 }
 
 sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
-    private int _direction;
+    private int _direction, _useTimeMax;
 
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray_Small";
 
@@ -72,7 +72,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         }
         SpriteEffects effects = flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         if (player.gravDir == -1f) {
-            if (player.direction == 1) {
+            if (_direction == 1) {
                 effects = SpriteEffects.FlipVertically;
             }
             else {
@@ -80,7 +80,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
             }
         }
         SpriteBatch spriteBatch = Main.spriteBatch;
-        float progress = (float)Projectile.timeLeft / player.itemTimeMax;
+        float progress = (float)Projectile.timeLeft / _useTimeMax;
         float f = progress < 0.5f ? progress : (1f - progress);
         Vector2 offset2 = new Vector2(0f, 5f - 3f * f).RotatedBy(Projectile.ai[1]);
         if (progress > 0.5f && Main.rand.NextChance(0.75f)) {
@@ -98,21 +98,26 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
 
     public override void SendExtraAI(BinaryWriter writer) {
         writer.Write(_direction);
+        writer.Write(Projectile.timeLeft);
+        writer.Write(_useTimeMax);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         _direction = reader.ReadInt32();
+        Projectile.timeLeft = reader.ReadInt32();
+        _useTimeMax = reader.ReadInt32();
     }
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true);
-        if (Projectile.ai[0] == 0f) {
-            Projectile.ai[0] = 1f;
-            Projectile.ai[1] = player.fullRotation + MathHelper.PiOver2 * player.direction;
-            Projectile.timeLeft = player.itemTime;
-            if (Projectile.owner == Main.myPlayer) {
+        if (Projectile.owner == Main.myPlayer) {
+            if (Projectile.ai[0] == 0f) {
+                Projectile.ai[0] = 1f;
+                Projectile.timeLeft = player.itemTime;
                 _direction = player.GetViableMousePosition().X > player.Center.X ? 1 : -1;
+                Projectile.ai[1] = player.fullRotation + MathHelper.PiOver2 * _direction;
+                _useTimeMax = player.itemTimeMax;
                 Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
                 Projectile.netUpdate = true;
             }
@@ -121,10 +126,10 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         player.heldProj = Projectile.whoAmI;
         player.bodyFrame.Y = 56;
         //player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
-        float num36 = (float)Projectile.timeLeft / player.itemTimeMax;
+        float num36 = (float)Projectile.timeLeft / _useTimeMax;
         float f = num36 < 0.5f ? num36 : (1f - num36);
         num36 = f;
-        float num37 = -MathHelper.PiOver2 * player.direction;
+        float num37 = -MathHelper.PiOver2 * _direction;
         CompositeArmStretchAmount compositeArmStretchAmount3 = CompositeArmStretchAmount.Full;
         //if (num36 < 0.16f)
         //    compositeArmStretchAmount3 = CompositeArmStretchAmount.None;

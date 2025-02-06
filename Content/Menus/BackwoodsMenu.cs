@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Core;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -29,7 +30,7 @@ sealed class BackwoodsMenu : ModMenu {
         => GlobalOpacity = 1f;
 
     public override void Update(bool isOnTitleScreen) {
-        if (isOnTitleScreen) {
+        if (Main.netMode == NetmodeID.SinglePlayer) {
             Main.time = 5000;
             Main.dayTime = true;
         }
