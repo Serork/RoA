@@ -185,6 +185,12 @@ sealed class BookwormsProjectile : ModProjectile {
             Vector2 dif = following.Center - Projectile.Center;
             if (dif.LengthSquared() < 200f) {
                 Projectile.Opacity = 0f;
+                if (Main.rand.NextBool(3)) {
+                    Vector2 vector39 = Projectile.position;
+                    Point size = new(20, 26);
+                    Dust obj2 = Main.dust[Dust.NewDust(vector39 - Vector2.UnitY * size.Y / 3f, size.X, size.Y, DustID.CorruptGibs, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 1.1f + 0.15f * Main.rand.NextFloat())];
+                    obj2.noGravity = true;
+                }
             }
             float length = 20f * (Projectile.ai[2] <= 1 ? 0.95f : 0.5f);
             Projectile.rotation = dif.ToRotation() + (float)Math.PI / 2f;

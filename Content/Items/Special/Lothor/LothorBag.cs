@@ -35,7 +35,7 @@ sealed class LothorBag : ModItem {
     public override bool CanRightClick() => true;
 
     public override void ModifyItemLoot(ItemLoot itemLoot) {
-        itemLoot.Add(new OneFromRulesRule(1, ItemDropRule.Common(ModContent.ItemType<Weapons.Magic.Bane>()),
+        itemLoot.Add(new OneFromRulesRule(1, ItemDropRule.Common(ModContent.ItemType<SphereOfAspiration>()),
                                              ItemDropRule.Common(ModContent.ItemType<Weapons.Ranged.ChemicalPrisoner>()),
                                              ItemDropRule.Common(ModContent.ItemType<Weapons.Summon.FlederStaff>()),
                                              ItemDropRule.Common(ModContent.ItemType<Weapons.Melee.BloodshedAxe>()),
