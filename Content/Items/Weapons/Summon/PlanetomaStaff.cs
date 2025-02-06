@@ -236,10 +236,10 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
         }
         if (Main.projectile.IndexInRange(byUUID)) {
             Projectile following = Main.projectile[byUUID];
-            if (!Collision.CanHit(following, Main.player[Projectile.owner])) {
-                Projectile.Kill();
-                return;
-            }
+            //if (!Collision.CanHit(following, Main.player[Projectile.owner])) {
+            //    Projectile.Kill();
+            //    return;
+            //}
             Vector2 previousCenter = Projectile.Center;
             Projectile.Center = following.Center + (counter * ((float)Math.PI * 2f) + angle * (float)meInQueue).ToRotationVector2() * offset;
             Projectile.rotation = (Projectile.Center - previousCenter).ToRotation();

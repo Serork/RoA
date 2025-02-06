@@ -6,6 +6,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -35,6 +36,8 @@ sealed class ArterialSpray : ModItem {
 }
 
 sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
+    private int _direction;
+
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray_Small";
 
     public override void SetDefaults() {
@@ -93,6 +96,14 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         return false;
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_direction);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _direction = reader.ReadInt32();
+    }
+
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true);
@@ -100,7 +111,13 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
             Projectile.ai[0] = 1f;
             Projectile.ai[1] = player.fullRotation + MathHelper.PiOver2 * player.direction;
             Projectile.timeLeft = player.itemTime;
+            if (Projectile.owner == Main.myPlayer) {
+                _direction = player.GetViableMousePosition().X > player.Center.X ? 1 : -1;
+                Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
+                Projectile.netUpdate = true;
+            }
         }
+        Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
         player.heldProj = Projectile.whoAmI;
         player.bodyFrame.Y = 56;
         //player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);

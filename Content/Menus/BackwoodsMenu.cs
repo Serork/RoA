@@ -30,8 +30,10 @@ sealed class BackwoodsMenu : ModMenu {
         => GlobalOpacity = 1f;
 
     public override void Update(bool isOnTitleScreen) {
-        Main.time = 5000;
-        Main.dayTime = true;
+        if (!Main.dedServ) {
+            Main.time = 5000;
+            Main.dayTime = true;
+        }
     }
 
     public override bool PreDrawLogo(SpriteBatch spriteBatch, ref Vector2 logoDrawCenter, ref float logoRotation, ref float logoScale, ref Color drawColor) {
