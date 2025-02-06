@@ -11,7 +11,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Menus;
 
-[Autoload(Side = ModSide.Client)]
 sealed class BackwoodsMenu : ModMenu {
     public override string DisplayName => Language.GetTextValue("Mods.RoA.Biomes.BackwoodsBiome.DisplayName");
 
@@ -30,7 +29,7 @@ sealed class BackwoodsMenu : ModMenu {
         => GlobalOpacity = 1f;
 
     public override void Update(bool isOnTitleScreen) {
-        if (!Main.dedServ) {
+        if (isOnTitleScreen) {
             Main.time = 5000;
             Main.dayTime = true;
         }

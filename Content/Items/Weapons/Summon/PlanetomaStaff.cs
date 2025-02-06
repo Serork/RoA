@@ -152,7 +152,44 @@ sealed class PlanetomaStaffProjectile : ModProjectile {
 
             return false;
         }
-        if (Collision.CanHit(Projectile, Main.player[Projectile.owner])) {
+
+        bool flag22 = false;
+        float num439 = Projectile.Center.X;
+        float num440 = Projectile.Center.Y;
+        float num441 = 400f;
+        int num442 = -1;
+        NPC ownerMinionAttackTargetNPC = Projectile.OwnerMinionAttackTargetNPC;
+        if (ownerMinionAttackTargetNPC != null && ownerMinionAttackTargetNPC.CanBeChasedBy(this)) {
+            float num443 = ownerMinionAttackTargetNPC.position.X + (float)(ownerMinionAttackTargetNPC.width / 2);
+            float num444 = ownerMinionAttackTargetNPC.position.Y + (float)(ownerMinionAttackTargetNPC.height / 2);
+            float num445 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num443) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num444);
+            if (num445 < num441 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, ownerMinionAttackTargetNPC.position, ownerMinionAttackTargetNPC.width, ownerMinionAttackTargetNPC.height)) {
+                num441 = num445;
+                num439 = num443;
+                num440 = num444;
+                flag22 = true;
+                num442 = ownerMinionAttackTargetNPC.whoAmI;
+            }
+        }
+
+        if (!flag22) {
+            for (int num446 = 0; num446 < 200; num446++) {
+                if (Main.npc[num446].CanBeChasedBy(this)) {
+                    float num447 = Main.npc[num446].position.X + (float)(Main.npc[num446].width / 2);
+                    float num448 = Main.npc[num446].position.Y + (float)(Main.npc[num446].height / 2);
+                    float num449 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num447) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num448);
+                    if (num449 < num441 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[num446].position, Main.npc[num446].width, Main.npc[num446].height)) {
+                        num441 = num449;
+                        num439 = num447;
+                        num440 = num448;
+                        flag22 = true;
+                        num442 = Main.npc[num446].whoAmI;
+                    }
+                }
+            }
+        }
+
+        if (Collision.CanHit(Projectile, Main.player[Projectile.owner]) || flag22) {
             float[] attackRates = [20f, 40f, 60f];
             for (int i = 0; i < attackRates.Length; i++) {
                 if (Projectile.ai[i] < attackRates[i]) {
