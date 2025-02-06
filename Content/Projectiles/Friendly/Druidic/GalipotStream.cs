@@ -106,14 +106,16 @@ sealed class GalipotStream : NatureProjectile {
 
         Projectile.ai[2] *= 0.99f;
         void drop() {
-            if (Main.rand.NextBool(2)) {
-                GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
-                    Projectile.velocity);
-                drop.Projectile = Projectile;
-                drop.Scale = Main.rand.NextFloat(8f, 10f) * Projectile.scale;
-                drop.Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
-                drop.AI0 = Main.rand.NextFloat(0f, MathHelper.TwoPi);
-                drop.ShouldDrop = Projectile.velocity.Length() < 1f || Projectile.ai[1] != 1f;
+            if (Projectile.timeLeft < 500 - 1) {
+                if (Main.rand.NextBool(2)) {
+                    GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
+                        Projectile.velocity);
+                    drop.Projectile = Projectile;
+                    drop.Scale = Main.rand.NextFloat(8f, 10f) * Projectile.scale;
+                    drop.Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+                    drop.AI0 = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+                    drop.ShouldDrop = Projectile.velocity.Length() < 1f || Projectile.ai[1] != 1f;
+                }
             }
         }
         if (IsActive) {
