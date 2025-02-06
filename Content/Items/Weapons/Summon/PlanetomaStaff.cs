@@ -152,18 +152,20 @@ sealed class PlanetomaStaffProjectile : ModProjectile {
 
             return false;
         }
-        float[] attackRates = [20f, 40f, 60f];
-        for (int i = 0; i < attackRates.Length; i++) {
-            if (Projectile.ai[i] < attackRates[i]) {
-                if (!activeSelfWith(i + 1)) {
-                    Projectile.ai[i]++;
+        if (Collision.CanHit(Projectile, Main.player[Projectile.owner])) {
+            float[] attackRates = [20f, 40f, 60f];
+            for (int i = 0; i < attackRates.Length; i++) {
+                if (Projectile.ai[i] < attackRates[i]) {
+                    if (!activeSelfWith(i + 1)) {
+                        Projectile.ai[i]++;
+                    }
                 }
-            }
-            else if (Projectile.owner == Main.myPlayer) {
-                int whoAmI = Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI);
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, type, Projectile.damage, Projectile.knockBack, Projectile.owner, whoAmI, 0f, i + 1);
-                Projectile.ai[i] = 0f;
-                Projectile.netUpdate = true;
+                else if (Projectile.owner == Main.myPlayer) {
+                    int whoAmI = Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, type, Projectile.damage, Projectile.knockBack, Projectile.owner, whoAmI, 0f, i + 1);
+                    Projectile.ai[i] = 0f;
+                    Projectile.netUpdate = true;
+                }
             }
         }
     }
@@ -234,6 +236,10 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
         }
         if (Main.projectile.IndexInRange(byUUID)) {
             Projectile following = Main.projectile[byUUID];
+            if (!Collision.CanHit(following, Main.player[Projectile.owner])) {
+                Projectile.Kill();
+                return;
+            }
             Vector2 previousCenter = Projectile.Center;
             Projectile.Center = following.Center + (counter * ((float)Math.PI * 2f) + angle * (float)meInQueue).ToRotationVector2() * offset;
             Projectile.rotation = (Projectile.Center - previousCenter).ToRotation();
