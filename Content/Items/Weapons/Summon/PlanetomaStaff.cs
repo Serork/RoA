@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 using System.IO;
@@ -67,7 +68,7 @@ sealed class PlanetomaStaffProjectile : ModProjectile {
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Summon/PlanetomaSentry";
 
     public override void SetStaticDefaults() {
-        Main.projFrames[Type] = 1;
+        Main.projFrames[Type] = 4;
 
         ProjectileID.Sets.NeedsUUID[Type] = true;
     }
@@ -98,6 +99,8 @@ sealed class PlanetomaStaffProjectile : ModProjectile {
     public override void ReceiveExtraAI(BinaryReader reader) {
         _direction = reader.ReadInt32();
     }
+
+    public override void PostAI() => ProjectileHelper.Animate(Projectile, 6);
 
     public override void AI() {
         if (Projectile.localAI[0] == 0f) {
@@ -214,7 +217,7 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Summon/PlanetomaSentryProjectile";
 
     public override void SetStaticDefaults() {
-        Main.projFrames[Type] = 1;
+        Main.projFrames[Type] = 4;
 
         ProjectileID.Sets.NeedsUUID[Type] = true;
     }
@@ -244,6 +247,8 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
     }
 
     public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
+
+    public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
 
     public override void AI() {
         Projectile.Opacity = Utils.GetLerpValue(36000, 36000 - 10, Projectile.timeLeft, true);
