@@ -26,11 +26,13 @@ sealed class MercuriumBoltProjectile : ModProjectile {
 
         Projectile.velocity.Y += 0.2f;
 
-        int num67 = Dust.NewDust(Projectile.position - Vector2.One * 18f - Projectile.velocity * 5f, 24, 24, ModContent.DustType<Dusts.ToxicFumes>(), 0f, 0f);
-        Main.dust[num67].noGravity = true;
-        Main.dust[num67].fadeIn = 1.5f;
-        Main.dust[num67].velocity *= 0.25f;
-        Main.dust[num67].velocity += Projectile.velocity * 0.25f;
+        if (Main.rand.NextBool()) {
+            int num67 = Dust.NewDust(Projectile.position - Vector2.One * 18f - Projectile.velocity * 5f, 24, 24, ModContent.DustType<Dusts.ToxicFumes>(), 0f, 0f);
+            Main.dust[num67].noGravity = true;
+            Main.dust[num67].fadeIn = 1.5f;
+            Main.dust[num67].velocity *= 0.25f;
+            Main.dust[num67].velocity += Projectile.velocity * 0.25f;
+        }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -43,7 +45,7 @@ sealed class MercuriumBoltProjectile : ModProjectile {
 
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-        for (int num671 = 0; num671 < 10; num671++) {
+        for (int num671 = 0; num671 < 5; num671++) {
             int num672 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Poisoned, 0f, 0f, Alpha: 200);
             Main.dust[num672].noGravity = true;
             Main.dust[num672].fadeIn = 1.5f;
