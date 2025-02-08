@@ -22,7 +22,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
-    private sealed class JawTrapTE : ModTileEntity{
+    private sealed class JawTrapTE : ModTileEntity {
         private const int RELOAD = 480;
 
         public int ActivatedTimer { get; private set; }
@@ -44,6 +44,8 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
             if (ActivatedTimer > 0) {
                 ActivatedTimer--;
                 ActivatedTimer = Math.Max(0, ActivatedTimer);
+            }
+            if (ActivatedTimer > 0) {
                 return;
             }
             int sizeX = 30;
@@ -57,9 +59,13 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").Value),
                         40, 0, cooldownCounter: 4);
                     player.AddBuff(BuffID.Bleeding, 120);
-                    return;
+                    break;
                 }
             }
+        }
+
+        public override void OnKill() {
+            ActivatedTimer = 0;
         }
 
         public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
@@ -70,8 +76,6 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileObsidianKill[Type] = true;
-
-        TileID.Sets.IgnoresNearbyHalfbricksWhenDrawn[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.LavaDeath = false;

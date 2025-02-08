@@ -154,7 +154,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddJawTraps() {
         for (int i = Left - 10; i <= Right + 10; i++) {
-            for (int j = BackwoodsVars.FirstTileYAtCenter; j < Bottom + EdgeY / 2; j++) {
+            for (int j = BackwoodsVars.FirstTileYAtCenter + 20; j < Bottom + EdgeY / 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag = true;
                 int num = 10;
@@ -2918,6 +2918,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step9_SpreadMoss();
         //Step10_SpreadMossGrass();
+
+        Step_AddJawTraps();
 
         Step_AddPills();
         Step_AddSpikes();
