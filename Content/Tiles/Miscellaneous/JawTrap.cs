@@ -133,6 +133,8 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
     }
 
+    public override bool IsTileDangerous(int i, int j, Player player) => true;
+
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         TileHelper.AddPostPlayerDrawPoint(this, i, j);
 
