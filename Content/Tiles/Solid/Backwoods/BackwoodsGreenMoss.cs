@@ -155,6 +155,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
     }
 
     public override void RandomUpdate(int i, int j) {
+        return;
         if (Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && (j > Main.worldSurface - 1 || WorldGen.genRand.NextBool(2))) {
             if (WorldGen.genRand.Next(6) == 0) {
                 int num20 = i;

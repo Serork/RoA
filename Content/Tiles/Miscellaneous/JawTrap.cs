@@ -82,6 +82,8 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
 
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.LavaDeath = false;
         TileObjectData.newTile.CoordinatePadding = 0;

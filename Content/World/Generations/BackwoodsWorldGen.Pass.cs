@@ -142,7 +142,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_2_SpreadGrass();
         Step13_GrowBigTrees();
         Step9_SpreadMoss();
-        Step_AddJawTraps();
+        //Step_AddJawTraps();
         Step_AddGems();
         Step_AddSpikes();
         Step_AddPills();
@@ -166,9 +166,26 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
                 }
-                if ((!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && _random.NextBool(4) && flag && WorldGen.SolidTile2(tile)) {
-                    WorldGen.Place2x1(i, j - 1, type);
-                    ModContent.GetInstance<Tiles.Miscellaneous.JawTrap.JawTrapTE>().Place(i, j - 1);
+                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(4) && flag) {
+                    int x = i, y = j;
+                    bool flag2 = false;
+                    if (WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1) && (!Main.tile[x, y - 1].HasTile && !Main.tile[x + 1, y - 1].HasTile) && ((!Main.tile[x, y].HasTile && !Main.tile[x + 1, y].HasTile) || (Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && Main.tileCut[WorldGenHelper.GetTileSafely(i + 1, j).TileType])))
+                        flag2 = true;
+
+                    if (flag2) {
+                        Tile tile2 = Main.tile[x, y];
+                        tile2.HasTile = true;
+                        Main.tile[x, y].TileFrameY = 0;
+                        Main.tile[x, y].TileFrameX = 0;
+                        Main.tile[x, y].TileType = type;
+                        tile2 = Main.tile[x + 1, y];
+                        tile2.HasTile = true;
+                        Main.tile[x + 1, y].TileFrameY = 0;
+                        Main.tile[x + 1, y].TileFrameX = 20;
+                        Main.tile[x + 1, y].TileType = type;
+
+                        ModContent.GetInstance<Tiles.Miscellaneous.JawTrap.JawTrapTE>().Place(x, y);
+                    }
                 }
             }
         }
@@ -2218,7 +2235,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //    }
         //}
 
-        //Step_AddJawTraps();
+        Step_AddJawTraps();
 
         if (!WorldGen.InWorld(_gatewayLocation.X, _gatewayLocation.Y, 30)) {
             return;
@@ -2925,7 +2942,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step9_SpreadMoss();
         //Step10_SpreadMossGrass();
 
-        Step_AddJawTraps();
+        //Step_AddJawTraps();
 
         Step_AddPills();
         Step_AddSpikes();
