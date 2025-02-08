@@ -51,7 +51,7 @@ sealed class LightColorFix : ILoadable {
 sealed partial class BackwoodsBiomeFog : ModBiome {
     public static BackwoodsBiomeFog Instance => ModContent.GetInstance<BackwoodsBiomeFog>();
 
-    public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG";
+    public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG2";
 
     public override string BackgroundPath => MapBackground;
 
