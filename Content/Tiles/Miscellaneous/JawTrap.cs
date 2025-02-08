@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.Networking;
 using RoA.Common.Tiles;
+using RoA.Content.Buffs;
 using RoA.Content.Tiles.Plants;
 using RoA.Core.Utility;
 using RoA.Utilities;
@@ -22,7 +23,11 @@ namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
     private sealed class JawTrapTE : ModTileEntity{
-        public bool Activated { get; private set; }
+        private const int RELOAD = 480;
+
+        public int ActivatedTimer { get; private set; }
+
+        public bool Activated => ActivatedTimer > RELOAD / 2;
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
             if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -36,17 +41,25 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         }
 
         public override void Update() {
-            float x = Position.X * 16f - 4f;
+            if (ActivatedTimer > 0) {
+                ActivatedTimer--;
+                ActivatedTimer = Math.Max(0, ActivatedTimer);
+                return;
+            }
+            int sizeX = 30;
+            float x = Position.X * 16f + 2f;
             float y = Position.Y * 16f;
-            Rectangle hitbox = new((int)x, (int)y, 36, 20);
+            Rectangle hitbox = new((int)x, (int)y, sizeX, 20);
             foreach (Player player in Main.ActivePlayers) {
-                if (player.Hitbox.Intersects(hitbox)) {
-                    Activated = true;
+                if (player.Hitbox.Intersects(hitbox) && !player.HasBuff<Root>()) {
+                    ActivatedTimer = RELOAD;
+                    player.AddBuff(ModContent.BuffType<Root>(), ActivatedTimer / 2);
+                    player.Hurt(PlayerDeathReason.ByCustomReason(player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").Value),
+                        40, 0, cooldownCounter: 4);
+                    player.AddBuff(BuffID.Bleeding, 120);
                     return;
                 }
             }
-
-            Activated = false;
         }
 
         public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
@@ -68,7 +81,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<JawTrapTE>().Hook_AfterPlacement, -1, 0, false);
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.MusicBox"));
+        AddMapEntry(new Color(179, 165, 159));
 
         DustType = -1;
         HitSound = SoundID.Dig;

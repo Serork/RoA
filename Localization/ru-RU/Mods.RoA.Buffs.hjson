@@ -220,3 +220,8 @@ SmallMoon: {
 	DisplayName: Маленькая луна
 	Description: Каким человеком ты бы хотел быть?
 }
+
+Root: {
+	// DisplayName: Root
+	// Description: Mods.RoA.Buffs.Root.Description
+}
