@@ -702,13 +702,13 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                 SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
-                if (flag && BackwoodsFogHandler.IsFogActive) {
+                if (flag && BackwoodsFogHandler.Opacity > 0f) {
                     ulong speed = (((ulong)j << 32) | (ulong)i);
                     float posX = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
                     float posY = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
                     int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
                     int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
-                    float opacity = BackwoodsFogHandler.IsFogActive ? BackwoodsFogHandler.Opacity : 1f;
+                    float opacity = BackwoodsFogHandler.Opacity > 0f ? BackwoodsFogHandler.Opacity : 1f;
                     spriteBatch.Draw(extraTexture, drawPosition + Vector2.UnitX * 14f + new Vector2(left ? 0f : 3f, 3f) -
                         new Vector2(Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
                         Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY),

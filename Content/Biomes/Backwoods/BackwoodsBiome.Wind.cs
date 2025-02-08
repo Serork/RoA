@@ -19,34 +19,42 @@ sealed partial class BackwoodsBiome : ModBiome {
     }
 
     private float On_TileDrawing_GetWindCycle(On_TileDrawing.orig_GetWindCycle orig, TileDrawing self, int x, int y, double windCounter) {
+        float num = (float)x * 0.5f + (float)(y / 100) * 0.5f;
+        float num2 = (float)Math.Cos(windCounter * 6.2831854820251465 + (double)num) * 0.5f;
+        float windForVisuals = Math.Max(1f, Main.WindForVisuals);
+        if (Main.remixWorld) {
+            //if (!((double)y > Main.worldSurface))
+            //    return 0f;
+
+            num2 += windForVisuals;
+        }
+        else {
+            //if (!((double)y < Main.worldSurface))
+            //    return 0f;
+
+            num2 += windForVisuals;
+        }
+
+        float lerpValue = Utils.GetLerpValue(0.08f, 0.18f, Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f), clamped: true);
+
         if (IsValid()) {
             if (!Main.SettingsEnabled_TilesSwayInWind)
                 return 0f;
 
-            float num = (float)x * 0.5f + (float)(y / 100) * 0.5f;
-            float num2 = (float)Math.Cos(windCounter * 6.2831854820251465 + (double)num) * 0.5f;
-            float windForVisuals = Math.Max(1f, Main.WindForVisuals);
-            if (Main.remixWorld) {
-                //if (!((double)y > Main.worldSurface))
-                //    return 0f;
-
-                num2 += windForVisuals;
-            }
-            else {
-                //if (!((double)y < Main.worldSurface))
-                //    return 0f;
-
-                num2 += windForVisuals;
-            }
-
-            float lerpValue = Utils.GetLerpValue(0.08f, 0.18f, Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f), clamped: true);
-            return num2 * lerpValue;
+            return MathHelper.Lerp(orig(self, x, y, windCounter), num2 * lerpValue, _num);
         }
 
-        return orig(self, x, y, windCounter);
+        if (_num <= 0f) {
+            return orig(self, x, y, windCounter);
+        }
+        else {
+            return MathHelper.Lerp(orig(self, x, y, windCounter), num2 * lerpValue, _num);
+        }
     }
 
     private static bool IsValid() => /*!BackwoodsFogHandler.IsFogActive && */Main.LocalPlayer.InModBiome<BackwoodsBiome>();
+
+    private static float _num;
 
     private void On_TileDrawing_Update(On_TileDrawing.orig_Update orig, TileDrawing self) {
         if (Main.dedServ) {
@@ -58,23 +66,28 @@ sealed partial class BackwoodsBiome : ModBiome {
         double sunflowerWindCounter = typeof(TileDrawing).GetFieldValue<double>("_sunflowerWindCounter", Main.instance.TilesRenderer);
         double vineWindCounter = typeof(TileDrawing).GetFieldValue<double>("_vineWindCounter", Main.instance.TilesRenderer);
         orig(self);
-        if (IsValid()) {
+        if (IsValid() || _num > 0f) {
+            if (IsValid() && _num < 1f) {
+                _num += 0.01f;
+            }
             typeof(TileDrawing).SetFieldValue<double>("_treeWindCounter", treeWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_grassWindCounter", grassWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_sunflowerWindCounter", sunflowerWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_vineWindCounter", vineWindCounter, Main.instance.TilesRenderer);
-            double num = /*BackwoodsFogHandler.IsFogActive ? 0 : */Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f) * Math.Sign(Main.WindForVisuals);
+            double num = Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f) * Math.Sign(Main.WindForVisuals);
             num = Utils.GetLerpValue(0.08f, 1.2f, (float)num, clamped: true);
-            float opacity = BackwoodsFogHandler.IsFogActive ? BackwoodsFogHandler.Opacity : 1f;
-            num *= opacity;
-            treeWindCounter += 1.0 / 240.0 + 1.0 / 240.0 * num;
-            grassWindCounter += 1.0 / 180.0 + 1.0 / 180.0 * num * 2.0;
-            sunflowerWindCounter += 1.0 / 420.0 + 1.0 / 420.0 * num * 2.5;
-            vineWindCounter += 1.0 / 120.0 + 1.0 / 120.0 * num * 0.2000000059604645;
+            float opacity = BackwoodsFogHandler.Opacity > 0f ? (1f - BackwoodsFogHandler.Opacity) : 1f;
+            treeWindCounter += (1.0 / 240.0 + 1.0 / 240.0 * num) * opacity;
+            grassWindCounter += (1.0 / 180.0 + 1.0 / 180.0 * num * 2.0) * opacity;
+            sunflowerWindCounter += (1.0 / 420.0 + 1.0 / 420.0 * num * 2.5) * opacity;
+            vineWindCounter += (1.0 / 120.0 + 1.0 / 120.0 * num * 0.2000000059604645) * opacity;
             typeof(TileDrawing).SetFieldValue<double>("_treeWindCounter", treeWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_grassWindCounter", grassWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_sunflowerWindCounter", sunflowerWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_vineWindCounter", vineWindCounter, Main.instance.TilesRenderer);
+        }
+        if (!IsValid() && _num > 0f) {
+            _num -= 0.01f;
         }
     }
 
@@ -107,6 +120,11 @@ sealed partial class BackwoodsBiome : ModBiome {
                 leafFrequency = 20;
             else
                 leafFrequency = 10;
+
+            if (BackwoodsFogHandler.Opacity > 0f) {
+                float opacity = BackwoodsFogHandler.Opacity > 0f ? BackwoodsFogHandler.Opacity : 1f;
+                leafFrequency = (int)MathHelper.Lerp(leafFrequency, 100, opacity);
+            }
 
             leafFrequency *= 5;
 

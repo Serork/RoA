@@ -57,14 +57,14 @@ sealed class PrimordialTreeGlow : GlobalTile {
                 dust.velocity *= 0.5f + Main.rand.NextFloat() * 0.25f;
                 dust.scale *= 1.1f;
             }
-            if (bluePart || BackwoodsFogHandler.IsFogActive) {
+            if (bluePart || BackwoodsFogHandler.Opacity > 0f) {
                 int height = tile.TileFrameY == 36 ? 18 : 16;
                 ulong speed = (((ulong)j << 32) | (ulong)i);
                 float posX = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
                 float posY = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
                 int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
                 int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
-                float opacity = BackwoodsFogHandler.IsFogActive ? BackwoodsFogHandler.Opacity : 1f;
+                float opacity = BackwoodsFogHandler.Opacity > 0f ? BackwoodsFogHandler.Opacity : 1f;
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>(PrimordialTree.TexturePath + "_Glow").Value,
                                       new Vector2(i * 16 - (int)Main.screenPosition.X - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
                                       j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY),
