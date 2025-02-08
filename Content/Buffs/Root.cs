@@ -12,5 +12,6 @@ sealed class Root : ModBuff {
     public override void Update(Player player, ref int buffIndex) {
 		player.velocity.X *= 0.5f;
 		player.controlLeft = player.controlRight = false;
+		player.controlJump = false;
     }
 }

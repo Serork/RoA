@@ -51,7 +51,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
             float y = Position.Y * 16f;
             Rectangle hitbox = new((int)x, (int)y, sizeX, 20);
             foreach (Player player in Main.ActivePlayers) {
-                if (player.Hitbox.Intersects(hitbox) && !player.HasBuff<Root>()) {
+                if (player.Hitbox.Intersects(hitbox) && !(player.dead || !player.active) && !player.HasBuff<Root>()) {
                     ActivatedTimer = RELOAD;
                     player.AddBuff(ModContent.BuffType<Root>(), ActivatedTimer / 2);
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").Value),
