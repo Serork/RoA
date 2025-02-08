@@ -22,6 +22,9 @@ namespace RoA.Content.MapIcons;
 
 sealed class BeaconMapLayer : ModMapLayer {
     public override void Draw(ref MapOverlayDrawContext context, ref string text) {
+        if (!Main.LocalPlayer.active) {
+            return;
+        }
         List<BeaconTE> beacons = [];
         foreach (TileEntity value in TileEntity.ByPosition.Values.ToList()) {
             if (value is BeaconTE beaconTE) {

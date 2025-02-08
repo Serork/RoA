@@ -19,6 +19,7 @@ using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
+using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -141,6 +142,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_2_SpreadGrass();
         Step13_GrowBigTrees();
         Step9_SpreadMoss();
+        Step_AddJawTraps();
         Step_AddGems();
         Step_AddSpikes();
         Step_AddPills();
@@ -148,6 +150,27 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_SpreadGrass();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
+    }
+
+    private void Step_AddJawTraps() {
+        for (int i = Left - 10; i <= Right + 10; i++) {
+            for (int j = BackwoodsVars.FirstTileYAtCenter; j < Bottom + EdgeY / 2; j++) {
+                Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                bool flag = true;
+                int num = 10;
+                ushort type = (ushort)ModContent.TileType<Tiles.Miscellaneous.JawTrap>();
+                for (int i2 = i- num; i2 <= i + num; i2++) {
+                    for (int j2 = j - num; j2 <= j + num; j2++) {
+                        if (Main.tile[i2, j2].HasTile && Main.tile[i2, j2].TileType == type) {
+                            flag = false;
+                        }
+                    }
+                }
+                if (!tile.AnyWall() && _random.NextBool(10) && flag && WorldGen.SolidTile2(tile)) {
+                    WorldGen.Place2x1(i, j - 1, type);
+                }
+            }
+        }
     }
 
     private void PlaceGateway(bool again = false) {
