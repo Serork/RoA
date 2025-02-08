@@ -930,7 +930,7 @@ ElderwoodBow: {
 
 MercuriumBolter: {
 	DisplayName: Mercurium Bolter
-	Tooltip: Splits arrows into lightweight bolts
+	Tooltip: Shoots three arrows at once
 }
 
 DynastyWoodSword: {
@@ -945,7 +945,7 @@ ElderwoodSword: {
 
 MercuriumSword: {
 	DisplayName: Mercurium Sword
-	Tooltip: ""
+	Tooltip: Creates clouds of noxious fumes on hit
 }
 
 StarFusion: {
@@ -960,7 +960,7 @@ RavensEye: {
 
 MercuriumStaff: {
 	DisplayName: Mercurium Staff
-	Tooltip: ""
+	Tooltip: Shoots mercury shards that split endlessly
 }
 
 MiracleMintSeeds: {
@@ -1471,8 +1471,8 @@ LothorRelic: {
 }
 
 ArterialSpray: {
-	DisplayName: Arterial Spray
-	Tooltip: Slashes with deep blood cuts
+	DisplayName: Wrist Cutter
+	Tooltip: Slashes enemies with deep cuts
 }
 
 GastroIntestinalMallet: {

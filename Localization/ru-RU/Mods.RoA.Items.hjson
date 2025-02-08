@@ -924,7 +924,7 @@ ElderwoodBow: {
 
 MercuriumBolter: {
 	DisplayName: Ртутный болтомёт
-	Tooltip: Рассекает стрелы в легкие болты
+	Tooltip: Стреляет тремя стрелами за раз
 }
 
 DynastyWoodSword: {
@@ -939,7 +939,7 @@ ElderwoodSword: {
 
 MercuriumSword: {
 	DisplayName: Ртутный меч
-	// Tooltip: ""
+	Tooltip: Создает облака паров ртути при ударе
 }
 
 StarFusion: {
@@ -954,7 +954,7 @@ RavensEye: {
 
 MercuriumStaff: {
 	DisplayName: Ртутный жезл
-	// Tooltip: ""
+	Tooltip: Стреляет ртутными осколками, что бесконечно распадаются
 }
 
 MiracleMintSeeds: {
@@ -1465,8 +1465,8 @@ LothorRelic: {
 }
 
 ArterialSpray: {
-	DisplayName: Артериальные брызги
-	// Tooltip: Slashes with deep blood cuts
+	DisplayName: Резак запястий
+	Tooltip: Кромсает противников глубокими порезами
 }
 
 GastroIntestinalMallet: {
@@ -1476,7 +1476,7 @@ GastroIntestinalMallet: {
 
 Bookworms: {
 	DisplayName: Книжные черви
-	Tooltip: Запускает волноющихся червей
+	Tooltip: Запускает волнующихся червей
 }
 
 PlanetomaStaff: {
