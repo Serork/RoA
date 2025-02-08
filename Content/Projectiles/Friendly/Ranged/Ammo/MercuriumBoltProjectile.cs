@@ -8,8 +8,8 @@ namespace RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 sealed class MercuriumBoltProjectile : ModProjectile {
     public override void SetDefaults() {
         Projectile.arrow = true;
-        Projectile.width = 14;
-        Projectile.height = 32;
+        Projectile.width = 10;
+        Projectile.height = 10;
         Projectile.aiStyle = 1;
         Projectile.friendly = true;
         Projectile.DamageType = DamageClass.Ranged;
