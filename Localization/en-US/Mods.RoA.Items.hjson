@@ -1472,25 +1472,25 @@ LothorRelic: {
 
 ArterialSpray: {
 	DisplayName: Arterial Spray
-	Tooltip: ""
+	Tooltip: Slashes with deep blood cuts
 }
 
 GastroIntestinalMallet: {
 	DisplayName: Gastrointestinal Mallet
-	Tooltip: ""
+	Tooltip: Summons stationary guts to fight for you
 }
 
 Bookworms: {
 	DisplayName: Bookworms
-	Tooltip: ""
+	Tooltip: Sends out wavy worms
 }
 
 PlanetomaStaff: {
 	DisplayName: Planetoma Staff
-	Tooltip: ""
+	Tooltip: Summons a corrupted hive to fight for you
 }
 
 JawTrap: {
 	DisplayName: Jaw Trap
-	Tooltip: ""
+	Tooltip: Clenches its teeth when someone steps inside
 }

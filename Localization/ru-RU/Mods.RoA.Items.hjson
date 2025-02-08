@@ -1460,31 +1460,31 @@ FogStarter: {
 }
 
 LothorRelic: {
-	// DisplayName: Lothor Relic
+	DisplayName: Реликвия Лотора
 	// Tooltip: ""
 }
 
 ArterialSpray: {
-	// DisplayName: Arterial Spray
-	// Tooltip: ""
+	DisplayName: Артериальные брызги
+	// Tooltip: Slashes with deep blood cuts
 }
 
 GastroIntestinalMallet: {
-	// DisplayName: Gastrointestinal Mallet
-	// Tooltip: ""
+	DisplayName: Желудочно-кишечная колотушка
+	Tooltip: Призывает неподвижные кишки, сражающиеся за вас
 }
 
 Bookworms: {
-	// DisplayName: Bookworms
-	// Tooltip: ""
+	DisplayName: Книжные черви
+	Tooltip: Запускает волноющихся червей
 }
 
 PlanetomaStaff: {
-	// DisplayName: Planetoma Staff
-	// Tooltip: ""
+	DisplayName: Посох планетомы
+	Tooltip: Призывает улей порчи, сражающийся за вас
 }
 
 JawTrap: {
-	// DisplayName: Jaw Trap
-	// Tooltip: ""
+	DisplayName: Капкан-ловушка
+	Tooltip: Стискивает зубы, когда кто-то в него наступает
 }

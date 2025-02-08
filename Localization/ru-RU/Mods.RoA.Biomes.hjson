@@ -6,6 +6,6 @@ BackwoodsBiome: {
 }
 
 BackwoodsBiomeFog: {
-	DisplayName: Туман чащи
-	TownNPCDialogueName: туман чащи
+	DisplayName: Туман
+	TownNPCDialogueName: туман
 }

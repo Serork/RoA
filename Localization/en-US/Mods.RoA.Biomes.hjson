@@ -6,6 +6,6 @@ BackwoodsBiome: {
 }
 
 BackwoodsBiomeFog: {
-	DisplayName: The Backwoods Fog
-	TownNPCDialogueName: the backwoods fog
+	DisplayName: The Fog
+	TownNPCDialogueName: the fog
 }
