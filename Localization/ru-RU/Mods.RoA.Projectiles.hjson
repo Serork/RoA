@@ -137,12 +137,12 @@ VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
 BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
 BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
 BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
-// ArterialSprayProjectile.DisplayName: Arterial Spray Projectile
-// ArterialSprayProjectile2.DisplayName: Arterial Spray Projectile2
-// ArterialSprayProjectile3.DisplayName: Arterial Spray Projectile3
-// GastroIntestinalMalletProjectile.DisplayName: Gastro Intestinal Mallet Projectile
-// GastroIntestinalMalletProjectile2.DisplayName: Gastro Intestinal Mallet Projectile2
-// BookwormsProjectile.DisplayName: Bookworms Projectile
-// PlanetomaStaffProjectile.DisplayName: Planetoma Staff Projectile
-// PlanetomaStaffProjectile2.DisplayName: Planetoma Staff Projectile2
-// MercuriumBoltProjectile.DisplayName: Mercurium Bolt Projectile
+// ArterialSprayProjectile.DisplayName: Arterial Spray
+// ArterialSprayProjectile2.DisplayName: Arterial Spray
+// ArterialSprayProjectile3.DisplayName: Arterial Spray
+// GastroIntestinalMalletProjectile.DisplayName: Gastrointestinal Mallet
+// GastroIntestinalMalletProjectile2.DisplayName: Gastrointestinal Mallet
+// BookwormsProjectile.DisplayName: Bookworms
+// PlanetomaStaffProjectile.DisplayName: Planetoma Staff
+// PlanetomaStaffProjectile2.DisplayName: Planetoma Staff
+// MercuriumBoltProjectile.DisplayName: Mercurium Bolt
