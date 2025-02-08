@@ -56,7 +56,7 @@ sealed class DeerSkullHead : BaseHead {
         NPC.noTileCollide = true;
         NPC.noGravity = true;
 
-        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiomeFog>().Type];
 
         Banner = Type;
         BannerItem = ModContent.ItemType<DeerSkullBanner>();

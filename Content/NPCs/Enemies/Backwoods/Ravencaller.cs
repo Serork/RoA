@@ -68,7 +68,7 @@ sealed class Ravencaller : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.alpha = 175;
 
-        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiomeFog>().Type];
 
         Banner = Type;
         BannerItem = ModContent.ItemType<RavencallerBanner>();

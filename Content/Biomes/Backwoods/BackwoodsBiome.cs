@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.Graphics.Capture;
 using Terraria.ModLoader;
@@ -44,6 +45,18 @@ sealed class LightColorFix : ILoadable {
     }
 
     void ILoadable.Unload() { }
+}
+
+// only used for bestiary
+sealed partial class BackwoodsBiomeFog : ModBiome {
+    public static BackwoodsBiomeFog Instance => ModContent.GetInstance<BackwoodsBiomeFog>();
+
+    public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG";
+
+    public override string BackgroundPath => MapBackground;
+
+
+    public override string BestiaryIcon => ResourceManager.Textures + "Backwoods_Bestiary2";
 }
 
 sealed partial class BackwoodsBiome : ModBiome {

@@ -4,3 +4,8 @@ BackwoodsBiome: {
 	DisplayName: Чаща
 	TownNPCDialogueName: чаща
 }
+
+BackwoodsBiomeFog: {
+	DisplayName: Туман чащи
+	TownNPCDialogueName: туман чащи
+}

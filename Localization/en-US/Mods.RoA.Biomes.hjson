@@ -4,3 +4,8 @@ BackwoodsBiome: {
 	DisplayName: The Backwoods
 	TownNPCDialogueName: the backwoods
 }
+
+BackwoodsBiomeFog: {
+	DisplayName: The Backwoods Fog
+	TownNPCDialogueName: the backwoods fog
+}

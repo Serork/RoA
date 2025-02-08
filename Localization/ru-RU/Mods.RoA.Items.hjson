@@ -1483,3 +1483,8 @@ PlanetomaStaff: {
 	// DisplayName: Planetoma Staff
 	// Tooltip: ""
 }
+
+JawTrap: {
+	// DisplayName: Jaw Trap
+	// Tooltip: ""
+}
