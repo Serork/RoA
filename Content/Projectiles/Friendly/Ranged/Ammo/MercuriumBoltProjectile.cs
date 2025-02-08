@@ -45,8 +45,8 @@ sealed class MercuriumBoltProjectile : ModProjectile {
 
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-        for (int num671 = 0; num671 < 5; num671++) {
-            int num672 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Poisoned, 0f, 0f, Alpha: 200);
+        for (int num671 = 0; num671 < 3; num671++) {
+            int num672 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Poisoned, 0f, 0f, Alpha: 150);
             Main.dust[num672].noGravity = true;
             Main.dust[num672].fadeIn = 1.5f;
             Dust dust2 = Main.dust[num672];
