@@ -1,0 +1,27 @@
+using RoA.Content.Projectiles.Friendly.Ranged.Ammo;
+
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Items.Weapons.Ranged.Ammo;
+
+sealed class MercuriumBolt : ModItem {
+	public override void SetStaticDefaults() {
+    }
+
+	public override void SetDefaults() {
+        Item.shootSpeed = 4.3f;
+        Item.shoot = ModContent.ProjectileType<MercuriumBoltProjectile>();
+        Item.damage = 19;
+        Item.width = 14;
+        Item.height = 32;
+        Item.maxStack = Item.CommonMaxStack;
+        Item.consumable = true;
+        Item.ammo = AmmoID.Arrow;
+        Item.knockBack = 4.2f;
+        Item.value = 90;
+        Item.DamageType = DamageClass.Ranged;
+        Item.rare = 3;
+    }
+}

@@ -927,6 +927,11 @@ MercuriumBolter: {
 	Tooltip: Стреляет тремя стрелами за раз
 }
 
+MercuriumBolt: {
+	// DisplayName: Mercurium Bolt
+	// Tooltip: ""
+}
+
 DynastyWoodSword: {
 	DisplayName: Меч из восточного дерева
 	// Tooltip: ""

@@ -933,6 +933,11 @@ MercuriumBolter: {
 	Tooltip: Shoots three arrows at once
 }
 
+MercuriumBolt: {
+	DisplayName: Mercurium Bolt
+	Tooltip: ""
+}
+
 DynastyWoodSword: {
 	DisplayName: Dynasty Wood Sword
 	Tooltip: ""
