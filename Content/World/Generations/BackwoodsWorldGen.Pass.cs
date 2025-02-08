@@ -142,7 +142,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_2_SpreadGrass();
         Step13_GrowBigTrees();
         Step9_SpreadMoss();
-        //Step_AddJawTraps();
+        Step_AddJawTraps();
         Step_AddGems();
         Step_AddSpikes();
         Step_AddPills();
@@ -166,8 +166,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
                 }
-                if (_random.NextBool(10) && flag && WorldGen.SolidTile2(tile)) {
+                if ((!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && _random.NextBool(4) && flag && WorldGen.SolidTile2(tile)) {
                     WorldGen.Place2x1(i, j - 1, type);
+                    ModContent.GetInstance<Tiles.Miscellaneous.JawTrap.JawTrapTE>().Place(i, j - 1);
                 }
             }
         }
@@ -2113,23 +2114,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             killTileCount--;
         }
-        attempts2 = 10000;
-        while (!placedTorch) {
-            if (attempts2-- <= 0) {
-                break;
-            }
-            Point killPos = killTiles[_random.Next(killTiles.Count)];
-            Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
-            if ((tile.ActiveWall(placeholderWallType) || tile.ActiveWall(_elderwoodWallType)) && !tile.HasTile) {
-                WorldGen.PlaceTile(killPos.X, killPos.Y, ModContent.TileType<Tiles.Crafting.ElderTorch2>());
-                if (TileID.Sets.Torch[Main.tile[killPos.X, killPos.Y].TileType]) {
-                    placedTorch = true;
-                }
-            }
-            if (placedTorch) {
-                break;
-            }
-        }
 
         for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
             for (int y2 = baseY - distance; y2 < baseY + distance; y2++) {
@@ -2144,6 +2128,26 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (WorldGenHelper.ActiveWall(x2, y2, placeholderWallType)) {
                     WorldGenHelper.ReplaceWall(x2, y2, _elderwoodWallType);
                 }
+            }
+        }
+
+        attempts2 = 20;
+        while (!placedTorch) {
+            if (attempts2-- <= 0) {
+                break;
+            }
+            Point killPos = killTiles[_random.Next(killTiles.Count)];
+            Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
+            if ((tile.ActiveWall(placeholderWallType) || tile.ActiveWall(_elderwoodWallType)) && !tile.HasTile) {
+                if (_random.NextBool(10)) {
+                    WorldGen.PlaceTile(killPos.X, killPos.Y, ModContent.TileType<Tiles.Crafting.ElderTorch2>());
+                    if (TileID.Sets.Torch[Main.tile[killPos.X, killPos.Y].TileType]) {
+                        placedTorch = true;
+                    }
+                }
+            }
+            if (placedTorch) {
+                break;
             }
         }
 
@@ -2213,6 +2217,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //        }
         //    }
         //}
+
+        //Step_AddJawTraps();
 
         if (!WorldGen.InWorld(_gatewayLocation.X, _gatewayLocation.Y, 30)) {
             return;
@@ -2921,10 +2927,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step_AddJawTraps();
 
-        //Step_AddPills();
-        //Step_AddSpikes();
+        Step_AddPills();
+        Step_AddSpikes();
 
-        //Step10_SpreadMossGrass();
+        Step10_SpreadMossGrass();
 
         for (int num686 = 0; num686 < _biomeWidth * 2; num686++) {
             int num687 = _random.Next(Left - 30, Right + 30);

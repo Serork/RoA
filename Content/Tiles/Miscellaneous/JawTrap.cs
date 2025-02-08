@@ -23,7 +23,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
-    private sealed class JawTrapTE : ModTileEntity {
+    internal sealed class JawTrapTE : ModTileEntity {
         private const int RELOAD = 480;
 
         public int ActivatedTimer { get; private set; }
