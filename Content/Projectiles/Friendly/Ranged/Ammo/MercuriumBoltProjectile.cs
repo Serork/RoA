@@ -8,8 +8,8 @@ namespace RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 sealed class MercuriumBoltProjectile : ModProjectile {
     public override void SetDefaults() {
         Projectile.arrow = true;
-        Projectile.width = 10;
-        Projectile.height = 10;
+        Projectile.width = 14;
+        Projectile.height = 32;
         Projectile.aiStyle = 1;
         Projectile.friendly = true;
         Projectile.DamageType = DamageClass.Ranged;
@@ -42,7 +42,7 @@ sealed class MercuriumBoltProjectile : ModProjectile {
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
         for (int num671 = 0; num671 < 10; num671++) {
-            int num672 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.ToxicFumes>(), 0f, 0f);
+            int num672 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Poisoned, 0f, 0f);
             Main.dust[num672].noGravity = true;
             Main.dust[num672].fadeIn = 1.5f;
             Dust dust2 = Main.dust[num672];
