@@ -46,7 +46,7 @@ sealed partial class BackwoodsBiome : ModBiome {
         return orig(self, x, y, windCounter);
     }
 
-    private static bool IsValid() => !BackwoodsFogHandler.IsFogActive && Main.LocalPlayer.InModBiome<BackwoodsBiome>();
+    private static bool IsValid() => /*!BackwoodsFogHandler.IsFogActive && */Main.LocalPlayer.InModBiome<BackwoodsBiome>();
 
     private void On_TileDrawing_Update(On_TileDrawing.orig_Update orig, TileDrawing self) {
         if (Main.dedServ) {
@@ -63,8 +63,10 @@ sealed partial class BackwoodsBiome : ModBiome {
             typeof(TileDrawing).SetFieldValue<double>("_grassWindCounter", grassWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_sunflowerWindCounter", sunflowerWindCounter, Main.instance.TilesRenderer);
             typeof(TileDrawing).SetFieldValue<double>("_vineWindCounter", vineWindCounter, Main.instance.TilesRenderer);
-            double num = BackwoodsFogHandler.IsFogActive ? 0 : Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f) * Math.Sign(Main.WindForVisuals);
+            double num = /*BackwoodsFogHandler.IsFogActive ? 0 : */Math.Max(Math.Abs(Main.WindForVisuals), 401 * 0.001f) * Math.Sign(Main.WindForVisuals);
             num = Utils.GetLerpValue(0.08f, 1.2f, (float)num, clamped: true);
+            float opacity = BackwoodsFogHandler.IsFogActive ? BackwoodsFogHandler.Opacity : 1f;
+            num *= opacity;
             treeWindCounter += 1.0 / 240.0 + 1.0 / 240.0 * num;
             grassWindCounter += 1.0 / 180.0 + 1.0 / 180.0 * num * 2.0;
             sunflowerWindCounter += 1.0 / 420.0 + 1.0 / 420.0 * num * 2.5;
