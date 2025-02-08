@@ -172,6 +172,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1) && (!Main.tile[x, y - 1].HasTile && !Main.tile[x + 1, y - 1].HasTile) && ((!Main.tile[x, y].HasTile && !Main.tile[x + 1, y].HasTile) || (Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && Main.tileCut[WorldGenHelper.GetTileSafely(i + 1, j).TileType])))
                         flag2 = true;
 
+                    if (tile.WallType == WallID.LihzahrdBrickUnsafe || tile.WallType == WallID.LihzahrdBrick) {
+                        flag = false;
+                    }
+
                     if (flag2) {
                         Tile tile2 = Main.tile[x, y];
                         tile2.HasTile = true;
