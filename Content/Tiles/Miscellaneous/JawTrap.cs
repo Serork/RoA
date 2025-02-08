@@ -1,14 +1,18 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Networking;
+using RoA.Common.Tiles;
 using RoA.Content.Tiles.Plants;
 using RoA.Core.Utility;
+using RoA.Utilities;
 
 using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -16,9 +20,9 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
-sealed class JawTrap : ModTile {
-    private sealed class JawTrapTE : ModTileEntity {
-        public bool IsOnCooldown { get; private set; }
+sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
+    private sealed class JawTrapTE : ModTileEntity{
+        public bool Activated { get; private set; }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
             if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -35,12 +39,14 @@ sealed class JawTrap : ModTile {
             float x = Position.X * 16f - 4f;
             float y = Position.Y * 16f;
             Rectangle hitbox = new((int)x, (int)y, 36, 20);
-            if (Main.LocalPlayer.Hitbox.Intersects(hitbox)) {
-                IsOnCooldown = true;
-                return;
+            foreach (Player player in Main.ActivePlayers) {
+                if (player.Hitbox.Intersects(hitbox)) {
+                    Activated = true;
+                    return;
+                }
             }
 
-            IsOnCooldown = false;
+            Activated = false;
         }
 
         public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
@@ -70,6 +76,8 @@ sealed class JawTrap : ModTile {
 
     public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<JawTrapTE>().Place(i, j);
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
+        TileHelper.RemovePostPlayerDrawPoint(i, j);
+
         if (Main.netMode != NetmodeID.Server) {
             if (!fail) {
                 ModContent.GetInstance<JawTrapTE>().Kill(i, j);
@@ -78,6 +86,28 @@ sealed class JawTrap : ModTile {
                 //}
             }
         }
+    }
+
+    void TileHooks.ITileAfterPlayerDraw.PostPlayerDraw(SpriteBatch spriteBatch, Point pos) {
+        int i = pos.X; int j = pos.Y;
+        Tile tile = Main.tile[i, j];
+        Vector2 zero = Vector2.Zero;
+        int width = 20;
+        int offsetY = 0;
+        int height = 20;
+        short frameX = tile.TileFrameX;
+        short frameY = tile.TileFrameY;
+        TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX, ref frameY);
+        Main.spriteBatch.Draw(TextureAssets.Tile[TileLoader.GetTile(ModContent.TileType<JawTrap>()).Type].Value,
+                              new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                              new Rectangle(frameX, frameY, width, height),
+                              Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+    }
+
+    public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        TileHelper.AddPostPlayerDrawPoint(this, i, j);
+
+        return false;
     }
 
     public override bool RightClick(int i, int j) {
@@ -92,7 +122,7 @@ sealed class JawTrap : ModTile {
         if (tileEntity == null) {
             return;
         }
-        if (tileEntity.IsOnCooldown) {
+        if (tileEntity.Activated) {
             return;
         }
         tileFrameY = 20;

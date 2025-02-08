@@ -38,6 +38,10 @@ sealed class TileHooks {
         void PostDrawExtra(SpriteBatch spriteBatch, Point pos);
     }
 
+    public interface ITileAfterPlayerDraw {
+        void PostPlayerDraw(SpriteBatch spriteBatch, Point pos);
+    }
+
     public interface ITileFlameData {
         public struct TileFlameData {
             public Texture2D flameTexture;

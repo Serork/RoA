@@ -640,9 +640,9 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
-        TileHelper.AddPostDrawPoint(this, i, j);
-
         if (IsNormalBranch(i, j) || IsBigBranch(i, j) || IsTop(i, j)) {
+            TileHelper.AddPostSolidTileDrawPoint(this, i, j);
+
             return false;
         }
 
@@ -652,7 +652,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
         orig(self);
 
-        foreach ((ModTile modTile, Point position) in TileHelper.PostDrawPoints.OrderBy(x => x.Item2.X + x.Item2.Y)) {
+        foreach ((ModTile modTile, Point position) in TileHelper.PostSolidTileDrawPoints.OrderBy(x => x.Item2.X + x.Item2.Y)) {
             if (modTile is ITileHaveExtraDraws && modTile is not null && modTile is BackwoodsBigTree) {
                 int i = position.X, j = position.Y;
                 if (!IsTop(i, j)) {

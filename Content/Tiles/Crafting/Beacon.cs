@@ -209,7 +209,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
     }
 
-    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => TileHelper.AddPostDrawPoint(this, i, j);
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => TileHelper.AddPostSolidTileDrawPoint(this, i, j);
 
     public static void TeleportPlayerTo(int i, int j, Player player) {
         if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<Beacon>()) {

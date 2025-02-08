@@ -56,7 +56,7 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
-        TileHelper.AddPostDrawPoint(this, i, j);
+        TileHelper.AddPostSolidTileDrawPoint(this, i, j);
 
         return false;
     }

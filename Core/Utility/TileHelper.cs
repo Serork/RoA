@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -104,7 +105,8 @@ static class TileHelper {
     private static List<(ModTile, Point)> _fluentTiles = [];
 
     public static Dictionary<int, HangingTileInfo> HangingTile { get; private set; } = [];
-    public static List<(ModTile, Point)> PostDrawPoints { get; private set; } = [];
+    public static List<(ModTile, Point)> PostSolidTileDrawPoints { get; private set; } = [];
+    public static List<(ModTile, Point)> PostPlayerDrawPoints { get; private set; } = [];
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_sunflowerWindCounter")]
     public extern static ref double TileDrawing_sunflowerWindCounter(TileDrawing tileDrawing);
@@ -128,12 +130,21 @@ static class TileHelper {
         _fluentTiles.Add((modTile, new Point(i, j)));
     }
 
-    public static void AddPostDrawPoint(ModTile modTile, int i, int j) {
-        if (PostDrawPoints.Contains((modTile, new Point(i, j)))) {
+    public static void AddPostSolidTileDrawPoint(ModTile modTile, int i, int j) {
+        if (PostSolidTileDrawPoints.Contains((modTile, new Point(i, j)))) {
             return;
         }
-        PostDrawPoints.Add((modTile, new Point(i, j)));
+        PostSolidTileDrawPoints.Add((modTile, new Point(i, j)));
     }
+
+    public static void AddPostPlayerDrawPoint(ModTile modTile, int i, int j) {
+        if (PostPlayerDrawPoints.Contains((modTile, new Point(i, j)))) {
+            return;
+        }
+        PostPlayerDrawPoints.Add((modTile, new Point(i, j)));
+    }
+
+    public static void RemovePostPlayerDrawPoint(int i, int j) => PostPlayerDrawPoints.RemoveAll(x => x.Item2.X == i && x.Item2.Y == j);
 
     public static void Load() {
         _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
@@ -161,13 +172,27 @@ static class TileHelper {
 
         On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
         On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
+
+        On_Main.DrawPlayers_AfterProjectiles += On_Main_DrawPlayers_AfterProjectiles;
+    }
+
+    private static void On_Main_DrawPlayers_AfterProjectiles(On_Main.orig_DrawPlayers_AfterProjectiles orig, Main self) {
+        orig(self);
+
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        foreach ((ModTile modTile, Point tilePosition) in PostPlayerDrawPoints) {
+            if (modTile is ITileAfterPlayerDraw tileHaveExtras && modTile is not null) {
+                tileHaveExtras.PostPlayerDraw(Main.spriteBatch, tilePosition);
+            }
+        }
+        Main.spriteBatch.End();
     }
 
     private static void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
         orig(self);
 
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        foreach ((ModTile modTile, Point position) in PostDrawPoints) {
+        foreach ((ModTile modTile, Point position) in PostSolidTileDrawPoints) {
             if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null) {
                 tileHaveExtras.PostDrawExtra(Main.spriteBatch, position);
             }
@@ -178,7 +203,8 @@ static class TileHelper {
     private static void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
         orig(self);
 
-        PostDrawPoints.Clear();
+        PostSolidTileDrawPoints.Clear();
+        PostPlayerDrawPoints.Clear();
     }
 
     public static void Unload() {
@@ -192,8 +218,11 @@ static class TileHelper {
         HangingTile.Clear();
         HangingTile = null;
 
-        PostDrawPoints.Clear();
-        PostDrawPoints = null;
+        PostSolidTileDrawPoints.Clear();
+        PostSolidTileDrawPoints = null;
+
+        PostPlayerDrawPoints.Clear();
+        PostPlayerDrawPoints = null;
     }
 
     private static void On_TileDrawing_DrawMultiTileVinesInWind(On_TileDrawing.orig_DrawMultiTileVinesInWind orig, TileDrawing self, Vector2 screenPosition, Vector2 offSet, int topLeftX, int topLeftY, int sizeX, int sizeY) {
