@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,8 +10,8 @@ namespace RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 sealed class MercuriumBoltProjectile : ModProjectile {
     public override void SetDefaults() {
         Projectile.arrow = true;
-        Projectile.width = 14;
-        Projectile.height = 32;
+        Projectile.width = 10;
+        Projectile.height = 10;
         Projectile.aiStyle = 1;
         Projectile.friendly = true;
         Projectile.DamageType = DamageClass.Ranged;
@@ -24,7 +26,7 @@ sealed class MercuriumBoltProjectile : ModProjectile {
 
         Projectile.velocity.Y += 0.2f;
 
-        int num67 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.ToxicFumes>(), 0f, 0f);
+        int num67 = Dust.NewDust(Projectile.position - Vector2.One * 18f - Projectile.velocity * 5f, 24, 24, ModContent.DustType<Dusts.ToxicFumes>(), 0f, 0f);
         Main.dust[num67].noGravity = true;
         Main.dust[num67].fadeIn = 1.5f;
         Main.dust[num67].velocity *= 0.25f;
