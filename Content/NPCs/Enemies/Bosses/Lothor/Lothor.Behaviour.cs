@@ -387,10 +387,10 @@ sealed partial class Lothor : ModNPC {
 
         if (!_isDead && !_firstTimeEnrage) {
             bool flag = !Target.InModBiome<BackwoodsBiome>();
-            if (!_shouldEnrage && flag) {
-                string message = Language.GetText("Mods.RoA.World.LothorArrival1").ToString();
-                Helper.NewMessage($"{message}", new(160, 68, 234));
-            }
+            //if (!_shouldEnrage && flag) {
+            //    string message = Language.GetText("Mods.RoA.World.LothorArrival1").ToString();
+            //    Helper.NewMessage($"{message}", new(160, 68, 234));
+            //}
             _shouldEnrage = flag;
             _firstTimeEnrage = true;
         }
