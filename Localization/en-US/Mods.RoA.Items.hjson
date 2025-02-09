@@ -1514,6 +1514,6 @@ TealMoss: {
 }
 
 GrimstoneBrick: {
-	DisplayName: Grimstone Brick
+	DisplayName: Grimrock Brick
 	Tooltip: ""
 }

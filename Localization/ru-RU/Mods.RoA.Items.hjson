@@ -1503,11 +1503,11 @@ JawTrap: {
 }
 
 TealMoss: {
-	// DisplayName: Teal Moss
-	// Tooltip: ""
+	DisplayName: Бирюзовый мох
+	Tooltip: ""
 }
 
 GrimstoneBrick: {
-	// DisplayName: Grimstone Brick
-	// Tooltip: ""
+	DisplayName: Кирпич из мрачного камня
+	Tooltip: ""
 }
