@@ -75,7 +75,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
                 float value = 0.05f - NatureWeaponHandler.GetUseSpeed(Owner.GetSelectedItem(), Owner) / 1000f;
                 _strength += value * 0.425f;
                 if (Owner.whoAmI == Main.myPlayer) {
-                    _mousePosition = Vector2.SmoothStep(_mousePosition, Owner.GetViableMousePosition(), 0.1f);
+                    _mousePosition = Vector2.SmoothStep(_mousePosition, Owner.GetViableMousePosition(), 0.1f + Owner.velocity.LengthSquared() * 0.02f);
                     Projectile.netUpdate = true;
                 }
             }
