@@ -1351,16 +1351,18 @@ sealed partial class Lothor : ModNPC {
         }
     }
 
-    private bool OnPlayersDead() {
+    private bool OnPlayersDead(bool applyEffect = true) {
         if (_targetIsDeadOrNoTarget && !_isDead) {
-            if (NPC.Opacity > 0f) {
-                NPC.Opacity -= 0.05f;
+            if (applyEffect) {
+                if (NPC.Opacity > 0f) {
+                    NPC.Opacity -= 0.05f;
+                }
+                if (NPC.Opacity < 0.025f) {
+                    NPC.KillNPC();
+                    NPC.Opacity = 0f;
+                }
+                NPC.velocity *= 0.95f;
             }
-            if (NPC.Opacity < 0.025f) {
-                NPC.KillNPC();
-                NPC.Opacity = 0f;
-            }
-            NPC.velocity *= 0.95f;
             NPC.EncourageDespawn(10);
 
             return true;
@@ -1541,7 +1543,7 @@ sealed partial class Lothor : ModNPC {
         }
         float dashStrength = GetDashStrength();
         if (NPC.velocity.Y != 0f) {
-            if (!OnPlayersDead() && NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
+            if (!OnPlayersDead(false) && NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
                 GoToFlightState();
                 _shouldWreathAttack = !_shouldWreathAttack;
                 if (Main.rand.NextBool()) {
@@ -1553,27 +1555,29 @@ sealed partial class Lothor : ModNPC {
             if (NoCollisionTimer <= 0f) {
                 NPC.noTileCollide = NPC.velocity.Y < 0f && NPC.velocity.Length() > dashStrength && Math.Abs(NPC.velocity.X) > dashStrength / 2f;
             }
-            if (NPC.velocity.X > 3f && NPC.Center.X > Target.Center.X || NPC.velocity.X < -3f && NPC.Center.X < Target.Center.X) {
-                NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 0f, dashStrength / 100f);
-            }
-            if (NPC.direction == 1 && NPC.velocity.X < 3f || NPC.direction == -1 && NPC.velocity.X > -3f) {
-                if (NPC.direction == -1 && NPC.velocity.X < 0.1f || NPC.direction == 1 && NPC.velocity.X > -0.1f) {
-                    NPC.velocity.X += 0.2f * NPC.direction;
+            if (!OnPlayersDead()) {
+                if (NPC.velocity.X > 3f && NPC.Center.X > Target.Center.X || NPC.velocity.X < -3f && NPC.Center.X < Target.Center.X) {
+                    NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 0f, dashStrength / 100f);
                 }
-                else {
-                    NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 0f, dashStrength / 75f);
+                if (NPC.direction == 1 && NPC.velocity.X < 3f || NPC.direction == -1 && NPC.velocity.X > -3f) {
+                    if (NPC.direction == -1 && NPC.velocity.X < 0.1f || NPC.direction == 1 && NPC.velocity.X > -0.1f) {
+                        NPC.velocity.X += 0.2f * NPC.direction;
+                    }
+                    else {
+                        NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 0f, dashStrength / 75f);
+                    }
                 }
-            }
-            Vector2 distance = Target.Center - NPC.Center;
-            int maxTilesDistance = 15;
-            bool closeRange = distance.Length() < 16 * maxTilesDistance;
-            if (NPC.Center.Y < Target.Center.Y && closeRange) {
-                float fallAcceleration = 0.01f;
-                float fallVelocityY = 0.9f;
-                if (FallStrengthIfClose < fallVelocityY) {
-                    FallStrengthIfClose += fallAcceleration;
+                Vector2 distance = Target.Center - NPC.Center;
+                int maxTilesDistance = 15;
+                bool closeRange = distance.Length() < 16 * maxTilesDistance;
+                if (NPC.Center.Y < Target.Center.Y && closeRange) {
+                    float fallAcceleration = 0.01f;
+                    float fallVelocityY = 0.9f;
+                    if (FallStrengthIfClose < fallVelocityY) {
+                        FallStrengthIfClose += fallAcceleration;
+                    }
+                    NPC.velocity.Y += FallStrengthIfClose;
                 }
-                NPC.velocity.Y += FallStrengthIfClose;
             }
         }
         else if (!OnPlayersDead()) {
