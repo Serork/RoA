@@ -10,6 +10,7 @@ using RoA.Core.Utility;
 using RoA.Utilities;
 
 using System;
+using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -24,6 +25,10 @@ namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
     internal sealed class JawTrapTE : ModTileEntity {
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetRespawnTime")]
+        public extern static int Player_GetRespawnTime(Player self, bool pvp);
+
+
         private const int RELOAD = 480;
 
         public int ActivatedTimer { get; private set; }
@@ -58,7 +63,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
             float y = Position.Y * 16f + 2f;
             Rectangle hitbox = new((int)x, (int)y, sizeX, 20);
             foreach (Player player in Main.ActivePlayers) {
-                if (player.dead && ActivatedTimer > RELOAD / 2) {
+                if (player.dead && player.respawnTimer < Player_GetRespawnTime(player, false) - 100) {
                     continue;
                 }
                 if (player.immune) {
