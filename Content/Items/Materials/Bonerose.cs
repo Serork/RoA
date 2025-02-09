@@ -10,7 +10,7 @@ sealed class Bonerose : ModItem {
 	public override void SetStaticDefaults() {
 		Item.ResearchUnlockCount = 25;
 
-		ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
+		//ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 	}
 
 	public override void SetDefaults() {

@@ -15,7 +15,7 @@ sealed class Cloudberry : ModItem {
         //Tooltip.SetDefault("Recovers 1 life per second");
         Item.ResearchUnlockCount = 25;
 
-        ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
+        //ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
         ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {

@@ -9,9 +9,11 @@ namespace RoA.Content.Items.Materials;
 
 sealed class MercuriumNugget : ModItem {
 	public override void SetStaticDefaults() {
-		//Tooltip.SetDefault("'Shiny, but dangerous'");
-		ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
-		Item.ResearchUnlockCount = 25;
+        //Tooltip.SetDefault("'Shiny, but dangerous'");
+
+        ItemID.Sets.SortingPriorityMaterials[Item.type] = 59;
+
+        Item.ResearchUnlockCount = 25;
 	}
 
 	public override void SetDefaults() {

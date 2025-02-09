@@ -10,7 +10,8 @@ namespace RoA.Content.Items.Materials;
 sealed class FlamingFabric : ModItem {
 	public override void SetStaticDefaults() {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
-		ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
+
+		//ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 	}
 
 	public override void SetDefaults() {

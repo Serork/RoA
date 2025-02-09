@@ -1506,3 +1506,8 @@ TealMoss: {
 	// DisplayName: Teal Moss
 	// Tooltip: ""
 }
+
+GrimstoneBrick: {
+	// DisplayName: Grimstone Brick
+	// Tooltip: ""
+}

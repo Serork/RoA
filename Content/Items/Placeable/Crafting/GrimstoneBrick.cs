@@ -7,13 +7,11 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Crafting;
 
-sealed class Elderwood : ModItem {
+sealed class GrimstoneBrick : ModItem {
 	public override void SetStaticDefaults() {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
-		//ItemID.Sets.SortingPriorityMaterials[Type] = ItemID.Wood;
-
-		ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.Wood;
-    }
+		//ItemID.Sets.SortingPriorityMaterials[Item.type] = ItemID.GrayBrick;
+	}
 
 	public override void SetDefaults() {
         Item.useStyle = 1;
@@ -23,20 +21,9 @@ sealed class Elderwood : ModItem {
         Item.autoReuse = true;
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
-        Item.width = 24;
-        Item.height = 22;
+        Item.width = 16;
+        Item.height = 16;
 
-        Item.createTile = ModContent.TileType<Tiles.Crafting.Elderwood>();
-	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Furniture.ElderwoodPlatform>(2)
-			.Register();
-
-		CreateRecipe()
-			.AddIngredient<Walls.ElderwoodWall>(4)
-			.AddTile(TileID.WorkBenches)
-			.Register();
+        Item.createTile = ModContent.TileType<Tiles.Solid.BackwoodsStoneBrick>();
 	}
 }

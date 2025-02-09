@@ -10,7 +10,7 @@ namespace RoA.Content.Items.Placeable.Crafting;
 sealed class Grimstone : ModItem {
 	public override void SetStaticDefaults() {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
-		ItemID.Sets.SortingPriorityMaterials[Item.type] = ItemID.StoneBlock;
+		//ItemID.Sets.SortingPriorityMaterials[Item.type] = ItemID.StoneBlock;
 	}
 
 	public override void SetDefaults() {
