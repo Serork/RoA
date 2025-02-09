@@ -38,7 +38,7 @@ sealed class BackwoodsMenu : ModMenu {
 
     public override bool PreDrawLogo(SpriteBatch spriteBatch, ref Vector2 logoDrawCenter, ref float logoRotation, ref float logoScale, ref Color drawColor) {
         logoDrawCenter += new Vector2(0f, 15f);
-        logoScale *= 2f;
+        logoScale *= 1f;
         drawColor = Color.White * 0.85f;
         return true;
     }
