@@ -58,7 +58,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
             float y = Position.Y * 16f + 2f;
             Rectangle hitbox = new((int)x, (int)y, sizeX, 20);
             foreach (Player player in Main.ActivePlayers) {
-                if (player.dead) {
+                if (player.dead && ActivatedTimer > RELOAD / 2) {
                     continue;
                 }
                 if (player.immune) {
