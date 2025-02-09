@@ -123,7 +123,7 @@ sealed partial class BackwoodsBiome : ModBiome {
 
             if (BackwoodsFogHandler.Opacity > 0f) {
                 float opacity = BackwoodsFogHandler.Opacity > 0f ? BackwoodsFogHandler.Opacity : 1f;
-                leafFrequency = (int)MathHelper.Lerp(leafFrequency, 100, opacity);
+                leafFrequency = (int)MathHelper.Lerp(leafFrequency, 125, opacity);
             }
 
             leafFrequency *= 5;
