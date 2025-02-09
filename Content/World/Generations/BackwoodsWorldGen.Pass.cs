@@ -1557,19 +1557,19 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        bool flag5 = false;
-        for (int i2 = -2; i2 <= 2; i2++) {
-            if (flag5) {
-                break;
-            }
-            for (int j2 = -3; j2 <= 0; j2++) {
-                if (i2 > -2 && i2 < 2 && _random.NextBool(2)) {
-                    WorldGen.AddBuriedChest(startX + i2 + _random.Next(1, 3), startY + j2, 0, notNearOtherChests: true, -1, trySlope: false, 0);
-                    flag5 = true;
-                    break;
-                }
-            }
-        }
+        //bool flag5 = false;
+        //for (int i2 = -2; i2 <= 2; i2++) {
+        //    if (flag5) {
+        //        break;
+        //    }
+        //    for (int j2 = -3; j2 <= 0; j2++) {
+        //        if (i2 > -2 && i2 < 2) {
+        //            WorldGen.AddBuriedChest(startX + i2 + _random.Next(1, 3), startY + j2, 0, notNearOtherChests: true, -1, trySlope: false, 0);
+        //            flag5 = true;
+        //            break;
+        //        }
+        //    }
+        //}
 
         // fallen trees
         for (int k = 0; k < 1; k++) {
