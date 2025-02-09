@@ -2160,7 +2160,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Point killPos = killTiles[_random.Next(killTiles.Count)];
             Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
             if ((tile.ActiveWall(placeholderWallType) || tile.ActiveWall(_elderwoodWallType)) && !tile.HasTile) {
-                if (_random.NextBool(15)) {
+                if (_random.NextBool(20)) {
                     WorldGen.PlaceTile(killPos.X, killPos.Y, ModContent.TileType<Tiles.Crafting.ElderTorch2>());
                     if (TileID.Sets.Torch[Main.tile[killPos.X, killPos.Y].TileType]) {
                         placedTorch = true;
