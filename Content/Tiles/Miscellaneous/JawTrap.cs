@@ -42,6 +42,10 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         }
 
         public override void Update() {
+            if (Find(Position.X, Position.Y) == -1) {
+                return;
+            }
+
             if (ActivatedTimer > 0) {
                 ActivatedTimer--;
                 ActivatedTimer = Math.Max(0, ActivatedTimer);
@@ -49,8 +53,8 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
             if (ActivatedTimer > 0) {
                 return;
             }
-            int sizeX = 13;
-            float x = Position.X * 16f + 8f;
+            int sizeX = 10;
+            float x = Position.X * 16f + 10f;
             float y = Position.Y * 16f + 2f;
             Rectangle hitbox = new((int)x, (int)y, sizeX, 20);
             foreach (Player player in Main.ActivePlayers) {
@@ -64,16 +68,14 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                 if (playerHitbox.Intersects(hitbox)) {
                     ActivatedTimer = RELOAD;
                     player.AddBuff(ModContent.BuffType<Root>(), ActivatedTimer / 2);
+                    int num = 40;
+                    num = Main.DamageVar(num, 0f - player.luck);
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").Value),
-                        40, 0, cooldownCounter: 4);
-                    player.AddBuff(BuffID.Bleeding, 120);
+                        num, 0, cooldownCounter: 4);
+                    player.AddBuff(BuffID.Bleeding, 600);
                     break;
                 }
             }
-        }
-
-        public override void OnKill() {
-            ActivatedTimer = 0;
         }
 
         public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
