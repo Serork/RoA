@@ -53,12 +53,6 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
             float x = Position.X * 16f + 8f;
             float y = Position.Y * 16f + 2f;
             Rectangle hitbox = new((int)x, (int)y, sizeX, 20);
-            Dust dust = Dust.NewDustPerfect(new Vector2(x, y), DustID.Adamantite);
-            dust.noGravity = true;
-            dust.velocity = Vector2.Zero;
-            dust = Dust.NewDustPerfect(new Vector2(x + sizeX, y + 20), DustID.Adamantite);
-            dust.noGravity = true;
-            dust.velocity = Vector2.Zero;
             foreach (Player player in Main.ActivePlayers) {
                 if (player.dead) {
                     continue;
