@@ -1501,3 +1501,8 @@ JawTrap: {
 	DisplayName: Капкан-ловушка
 	Tooltip: Стискивает зубы, когда кто-то в него наступает
 }
+
+TealMoss: {
+	// DisplayName: Teal Moss
+	// Tooltip: ""
+}
