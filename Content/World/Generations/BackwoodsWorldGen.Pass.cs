@@ -1606,6 +1606,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+
+        for (int sizeX = -_random.Next(2, 4) - 2; sizeX <= _random.Next(2, 4) + 3; sizeX++) {
+            if (sizeX < -1) {
+                continue;
+            }
+
+            int y2 = j - height + height / 3 + 1;
+            WorldUtils.Gen(new Point(i + 1, y2 + 1), new ShapeRoot(sizeX / 3f * 2f + 0.57075f, (int)(_random.Next(12, 18) * 0.65), 3, 1), new SetTileAndWall(_elderwoodTileType, _elderwoodWallType));
+        }
+
     }
 
     private void Step12_AddRoots() {
