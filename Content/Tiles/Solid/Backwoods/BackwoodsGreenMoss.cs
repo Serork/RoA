@@ -8,6 +8,7 @@ using RoA.Content.Tiles.Ambient;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
@@ -134,6 +135,8 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         HitSound = SoundID.Dig;
         AddMapEntry(new Color(49, 134, 114));
     }
+
+    public override bool CanDrop(int i, int j) => false;
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => SetupLight(ref r, ref g, ref b);
 
