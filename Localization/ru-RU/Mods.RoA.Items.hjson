@@ -924,12 +924,12 @@ ElderwoodBow: {
 
 MercuriumBolter: {
 	DisplayName: Ртутный болтомёт
-	Tooltip: Стреляет тремя стрелами за раз
+	Tooltip: Рассекает стрелы в легкие болты
 }
 
 MercuriumBolt: {
-	// DisplayName: Mercurium Bolt
-	// Tooltip: ""
+	DisplayName: Ртутная стрела
+	Tooltip: "'Тяжелый случай токсичности'"
 }
 
 DynastyWoodSword: {
@@ -1470,13 +1470,17 @@ LothorRelic: {
 }
 
 ArterialSpray: {
-	DisplayName: Резак запястий
+	DisplayName: Артериальные брызги
 	Tooltip: Кромсает противников глубокими порезами
 }
 
 GastroIntestinalMallet: {
 	DisplayName: Желудочно-кишечная колотушка
-	Tooltip: Призывает неподвижные кишки, сражающиеся за вас
+	Tooltip: 
+		'''
+		Призывает стража
+		Призывает кучу кишок, раскидывающую кровавые сгустки
+		'''
 }
 
 Bookworms: {
@@ -1486,7 +1490,11 @@ Bookworms: {
 
 PlanetomaStaff: {
 	DisplayName: Посох планетомы
-	Tooltip: Призывает улей порчи, сражающийся за вас
+	Tooltip: 
+		'''
+		Призывает стража
+		Призывает улей порчи, окруженный мелкими пожирателями
+		'''
 }
 
 JawTrap: {

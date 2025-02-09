@@ -930,12 +930,12 @@ ElderwoodBow: {
 
 MercuriumBolter: {
 	DisplayName: Mercurium Bolter
-	Tooltip: Shoots three arrows at once
+	Tooltip: Splits arrows into lightweight bolts
 }
 
 MercuriumBolt: {
-	DisplayName: Mercurium Bolt
-	Tooltip: ""
+	DisplayName: Mercurium Arrow
+	Tooltip: "'Heavily toxic'"
 }
 
 DynastyWoodSword: {
@@ -959,7 +959,7 @@ StarFusion: {
 }
 
 RavensEye: {
-	DisplayName: Ravens Eye
+	DisplayName: Raven's Eye
 	Tooltip: ""
 }
 
@@ -1476,13 +1476,17 @@ LothorRelic: {
 }
 
 ArterialSpray: {
-	DisplayName: Wrist Cutter
+	DisplayName: Arterial Spray
 	Tooltip: Slashes enemies with deep cuts
 }
 
 GastroIntestinalMallet: {
 	DisplayName: Gastrointestinal Mallet
-	Tooltip: Summons stationary guts to fight for you
+	Tooltip: 
+		'''
+		Summons a sentry
+		Summons a pile of guts to spray blood clots at your enemies
+		'''
 }
 
 Bookworms: {
@@ -1492,7 +1496,11 @@ Bookworms: {
 
 PlanetomaStaff: {
 	DisplayName: Planetoma Staff
-	Tooltip: Summons a corrupted hive to fight for you
+	Tooltip: 
+		'''
+		Summons a sentry
+		Summons a corrupted hive orbited by tiny eaters
+		'''
 }
 
 JawTrap: {
