@@ -1557,19 +1557,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        //bool flag5 = false;
-        //for (int i2 = -2; i2 <= 2; i2++) {
-        //    if (flag5) {
-        //        break;
-        //    }
-        //    for (int j2 = -3; j2 <= 0; j2++) {
-        //        if (i2 > -2 && i2 < 2) {
-        //            WorldGen.AddBuriedChest(startX + i2 + _random.Next(1, 3), startY + j2, 0, notNearOtherChests: true, -1, trySlope: false, 0);
-        //            flag5 = true;
-        //            break;
-        //        }
-        //    }
-        //}
+        bool flag5 = false;
+        if (_random.NextBool(2)) {
+            for (int i2 = -2; i2 <= 2; i2++) {
+                if (flag5) {
+                    break;
+                }
+                for (int j2 = -3; j2 <= 0; j2++) {
+                    if (i2 > -2 && i2 < 2) {
+                        WorldGen.AddBuriedChest(startX + i2 + _random.Next(1, 3), startY + j2, 0, notNearOtherChests: true, -1, trySlope: false, 0);
+                        flag5 = true;
+                        break;
+                    }
+                }
+            }
+        }
 
         // fallen trees
         for (int k = 0; k < 1; k++) {
@@ -1613,7 +1615,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
 
             int y2 = j - height + height / 3 + 1;
-            WorldUtils.Gen(new Point(i + 1, y2 + 1), new ShapeRoot(sizeX / 3f * 2f + 0.57075f, (int)(_random.Next(12, 18) * 0.65), 3, 1), new SetTileAndWall(_elderwoodTileType, _elderwoodWallType));
+            WorldUtils.Gen(new Point(i + 1, y2 + 1), new ShapeRoot(sizeX / 3f * 2f + 0.57075f, (int)(_random.Next(12, 18) * 0.6), 2, 1), new SetTileAndWall(_elderwoodTileType, _elderwoodWallType));
         }
 
     }
