@@ -1383,7 +1383,7 @@ SentinelWarriorBanner: {
 }
 
 BackwoodsGrassSeeds: {
-	DisplayName: Backwoods Seeds
+	DisplayName: Backwoods Grass Seeds
 	Tooltip: ""
 }
 
@@ -1482,7 +1482,7 @@ ArterialSpray: {
 
 GastroIntestinalMallet: {
 	DisplayName: Gastrointestinal Mallet
-	Tooltip: 
+	Tooltip:
 		'''
 		Summons a sentry
 		Summons a pile of guts to spray blood clots at your enemies
@@ -1496,7 +1496,7 @@ Bookworms: {
 
 PlanetomaStaff: {
 	DisplayName: Planetoma Staff
-	Tooltip: 
+	Tooltip:
 		'''
 		Summons a sentry
 		Summons a corrupted hive orbited by tiny eaters
