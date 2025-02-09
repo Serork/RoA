@@ -79,7 +79,6 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
                 effects = SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically;
             }
         }
-        SpriteBatch spriteBatch = Main.spriteBatch;
         float progress = (float)Projectile.timeLeft / _useTimeMax;
         float f = progress < 0.5f ? progress : (1f - progress);
         Vector2 offset2 = new Vector2(0f, 5f - 3f * f).RotatedBy(Projectile.ai[1]);
@@ -91,7 +90,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
             obj13.velocity *= 0.25f;
             obj13.position = Projectile.position - offset2 - Vector2.UnitX * _direction * 5f + Vector2.UnitX * _direction * 50f * f;
         }
-        Main.spriteBatch.Draw(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0);
+        Main.spriteBatch.Draw(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, player.fullRotation + Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0);
 
         return false;
     }
@@ -116,7 +115,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
                 Projectile.ai[0] = 1f;
                 Projectile.timeLeft = player.itemTime;
                 _direction = player.GetViableMousePosition().X > player.Center.X ? 1 : -1;
-                Projectile.ai[1] = player.fullRotation + MathHelper.PiOver2 * _direction;
+                Projectile.ai[1] = MathHelper.PiOver2 * _direction;
                 _useTimeMax = player.itemTimeMax;
                 Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
                 Projectile.netUpdate = true;
