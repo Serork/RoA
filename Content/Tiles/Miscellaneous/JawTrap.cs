@@ -54,7 +54,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                 return;
             }
             int sizeX = 10;
-            float x = Position.X * 16f + 10f;
+            float x = Position.X * 16f + 11f;
             float y = Position.Y * 16f + 2f;
             Rectangle hitbox = new((int)x, (int)y, sizeX, 20);
             foreach (Player player in Main.ActivePlayers) {
