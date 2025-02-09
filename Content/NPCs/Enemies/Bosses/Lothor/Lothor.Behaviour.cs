@@ -134,6 +134,8 @@ sealed partial class Lothor : ModNPC {
     private bool _shouldEnrage;
     private int _hpLoseInEnrage;
 
+    private static bool _firstTimeEnrage;
+
     public float LifeProgress => _shouldEnrage ? 1f : _isDead ? 0f : (1f - NPC.life / (float)NPC.lifeMax);
 
     public bool CanDropFlederSlayer => _hpLoseInEnrage >= (float)NPC.lifeMax * 0.9f;
@@ -252,17 +254,6 @@ sealed partial class Lothor : ModNPC {
         ThatThingMakeHimScream();
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorDeath"), NPC.Center);
         ActualDeath();
-
-        //if (!_isDead) {
-        //    NPC.life = 10;
-        //    NPC.dontTakeDamage = NPC.immortal = true;
-
-        //    Death();
-
-        //    SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorDeath"), NPC.Center);
-
-        //    return;
-        //}
     }
 
     private void Death() {
@@ -394,13 +385,14 @@ sealed partial class Lothor : ModNPC {
             }
         }
 
-        if (!_isDead) {
+        if (!_isDead && !_firstTimeEnrage) {
             bool flag = !Target.InModBiome<BackwoodsBiome>();
             if (!_shouldEnrage && flag) {
                 string message = Language.GetText("Mods.RoA.World.LothorArrival1").ToString();
                 Helper.NewMessage($"{message}", new(160, 68, 234));
             }
             _shouldEnrage = flag;
+            _firstTimeEnrage = true;
         }
     }
 
@@ -461,6 +453,8 @@ sealed partial class Lothor : ModNPC {
         if (_spawned) {
             return;
         }
+
+        _firstTimeEnrage = false;
 
         PlayRoarSound();
 
