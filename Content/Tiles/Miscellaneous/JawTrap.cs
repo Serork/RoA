@@ -49,15 +49,25 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
             if (ActivatedTimer > 0) {
                 return;
             }
-            int sizeX = 30;
-            float x = Position.X * 16f + 2f;
-            float y = Position.Y * 16f;
+            int sizeX = 13;
+            float x = Position.X * 16f + 8f;
+            float y = Position.Y * 16f + 2f;
             Rectangle hitbox = new((int)x, (int)y, sizeX, 20);
+            Dust dust = Dust.NewDustPerfect(new Vector2(x, y), DustID.Adamantite);
+            dust.noGravity = true;
+            dust.velocity = Vector2.Zero;
+            dust = Dust.NewDustPerfect(new Vector2(x + sizeX, y + 20), DustID.Adamantite);
+            dust.noGravity = true;
+            dust.velocity = Vector2.Zero;
             foreach (Player player in Main.ActivePlayers) {
                 if (player.dead) {
                     continue;
                 }
-                if (player.Hitbox.Intersects(hitbox)) {
+                if (player.immune) {
+                    continue;
+                }
+                Rectangle playerHitbox = new((int)player.position.X, (int)player.Bottom.Y - 10, player.width, 10);
+                if (playerHitbox.Intersects(hitbox)) {
                     ActivatedTimer = RELOAD;
                     player.AddBuff(ModContent.BuffType<Root>(), ActivatedTimer / 2);
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").Value),
