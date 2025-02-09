@@ -98,7 +98,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         float captureOffset = CaptureManager.Instance.IsCapturing ? 600f : 0f;
         if (canBGDraw) {
             var bgScale = 1.25f;
-            var bgParallax = 0.4;
+            var bgParallax = 0.3;
             var bgTopY = (int)(backgroundTopMagicNumber * 1800.0 + 500.0) + (int)scAdj + pushBGTopHack;
             bgScale *= bgGlobalScaleMultiplier * 0.8f;
             var bgWidthScaled = (int)(mid2.Width * bgScale);
@@ -185,6 +185,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                     Main.spriteBatch.Draw(close2, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + close2Offset + captureOffset), new Rectangle(0, 0, close2.Width, close2.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
                 }
             }
+
             bgScale = 1.34f;
             bgParallax = 0.49;
             bgTopY = (int)(backgroundTopMagicNumber * 2100.0 + 1100.0) + (int)scAdj + pushBGTopHack;

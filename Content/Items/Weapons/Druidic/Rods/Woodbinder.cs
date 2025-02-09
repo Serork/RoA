@@ -40,6 +40,8 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
         private float Strength => Ease.SineIn(Ease.CubeOut(_strength));
 
+        protected override float OffsetPositionMult => -2.5f;
+
         protected override Vector2 CorePositionOffsetFactor() => new(0.275f, 0f);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;

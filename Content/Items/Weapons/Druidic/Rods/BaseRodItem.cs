@@ -18,6 +18,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
@@ -60,6 +61,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected float _maxUseTime, _maxUseTime2;
     protected bool _shot, _shot2;
     protected float _rotation;
+    protected Vector2 _positionOffset;
 
     protected Player Owner => Projectile.GetOwnerAsPlayer();
     protected bool FacedLeft => Owner.direction == -1;
@@ -84,6 +86,8 @@ abstract class BaseRodProjectile : NatureProjectile {
     public bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = 1 - value.ToInt(); }
 
     public override string Texture => ResourceManager.EmptyTexture;
+
+    protected virtual float OffsetPositionMult { get; } = 0f;
 
     protected virtual void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) { }
 
@@ -154,6 +158,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         writer.Write(_shot);
         writer.Write(_shot2);
         writer.Write(_rotation);
+        writer.WriteVector2(_positionOffset);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
@@ -162,6 +167,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         _shot = reader.ReadBoolean();
         _shot2 = reader.ReadBoolean();
         _rotation = reader.ReadSingle();
+        _positionOffset = reader.ReadVector2();
     }
 
     public sealed override bool PreDraw(ref Color lightColor) {
@@ -171,15 +177,11 @@ abstract class BaseRodProjectile : NatureProjectile {
         }
 
         Rectangle sourceRectangle = texture.Bounds;
-        Vector2 position = Projectile.Center - Main.screenPosition /*+ new Vector2(0f, Projectile.gfxOffY - Owner.gfxOffY)*//* + GravityOffset*/;
+        Vector2 position = Projectile.Center - Main.screenPosition;
         float offsetY = 5f * Owner.gravDir;
         Vector2 origin = new(texture.Width * 0.5f * (1f - Owner.direction), Owner.gravDir == -1f ? 0 : texture.Height);
         Color color = lightColor;
-        float extraRotation = MathHelper.PiOver4 * Owner.direction;
-        //if (Owner.gravDir == -1) {
-        //    extraRotation -= MathHelper.PiOver2 * Owner.direction;
-        //}
-        float rotation = Projectile.rotation /*+ extraRotation*/;
+        float rotation = Projectile.rotation;
         float scale = 1f;
         float rotationOffset = MathHelper.PiOver4 * Owner.direction;
         if (Owner.gravDir == -1f) {
@@ -195,16 +197,7 @@ abstract class BaseRodProjectile : NatureProjectile {
             }
         }
         rotation += rotationOffset;
-        //SpriteEffects effects = (SpriteEffects)(Owner.direction /** Owner.gravDir*/ != 1).ToInt();
-        //if (Owner.gravDir == -1f) {
-        //    if (Owner.direction == 1) {
-        //        effects = SpriteEffects.None;
-        //    }
-        //    else {
-        //        effects = SpriteEffects.FlipHorizontally;
-        //    }
-        //}
-        Main.EntitySpriteDraw(texture, (position + Vector2.UnitY * offsetY/* + Owner.PlayerMovementOffset()*/)/*.Floor()*/, sourceRectangle, color, rotation, origin, scale, effects);
+        Main.EntitySpriteDraw(texture, position + Vector2.UnitY * offsetY, sourceRectangle, color, rotation, origin, scale, effects);
 
         return false;
     }
@@ -281,7 +274,7 @@ abstract class BaseRodProjectile : NatureProjectile {
             }
         }
 
-        Projectile.rotation = _rotation;
+        Projectile.rotation = Owner.fullRotation + _rotation;
     }
 
     private void ActiveCheck() {
@@ -320,16 +313,16 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetPosition() {
-        Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter);
-        //center += Vector2.UnitY * Owner.gfxOffY;
+        Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
         Projectile.Center = center;
         bool flag = !Item.IsEmpty() && !ShouldntUpdateRotationAndDirection();
         if (Projectile.IsOwnerMyPlayer(Owner) && flag) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
+            _positionOffset = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One) * OffsetPositionMult;
             Projectile.netUpdate = true;
         }
-        Projectile.Center += Projectile.velocity;
+        Projectile.Center += Projectile.velocity + _positionOffset;
     }
 
     private void SetDirection() {
