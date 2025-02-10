@@ -122,7 +122,10 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
             //if (Main.tile[k, num2 + 4] == null)
             //    Main.tile[k, num2 + 4] = new Tile();
 
-            if (!Main.tile[k, num2 + 4].HasUnactuatedTile || (Main.tile[k, num2 + 4].TileType != ModContent.TileType<BackwoodsGrass>() && Main.tile[k, num2 + 4].TileType != 2 && Main.tile[k, num2 + 4].TileType != 477 && Main.tile[k, num2 + 4].TileType != 492 && Main.tile[k, num2 + 4].TileType != 109 && Main.tile[k, num2 + 4].TileType != 60 && Main.tile[k, num2 + 4].TileType != 633))
+            if (!Main.tile[k, num2 + 4].HasUnactuatedTile || !TileObjectData.GetTileData(type, 0).AnchorValidTiles.Contains(Main.tile[k, num2 + 4].TileType))
+                flag = true;
+
+            if (!Main.tile[k, num2 + 4].HasUnactuatedTile || Main.tile[k, num2 + 4].TileType != ModContent.TileType<BackwoodsGrass>())
                 flag = true;
 
             if (!WorldGen.SolidTile(k, num2 + 4))

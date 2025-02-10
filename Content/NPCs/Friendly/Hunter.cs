@@ -1,10 +1,8 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.Localization;
-using Terraria.Utilities;
-using System.Collections.Generic;
+﻿using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace RoA.Content.NPCs.Friendly;
 
