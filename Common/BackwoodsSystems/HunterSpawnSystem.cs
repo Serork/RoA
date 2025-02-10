@@ -75,7 +75,9 @@ sealed class HunterSpawnSystem : ModSystem {
     }
 
     public override void PostUpdatePlayers() {
-        //Main.NewText(ShouldSpawnHunter + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
+        //Main.NewText(Main.dayTime + " " + Main.time);
+
+        Main.NewText(HunterWasKilled + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
 
         if (HunterWasKilled) {
             return;
@@ -91,14 +93,23 @@ sealed class HunterSpawnSystem : ModSystem {
 
         if (Main.dayTime && !ShouldSpawnHunter) {
             if (Main.time < 1 || (Main.IsFastForwardingTime() && Main.time < 61)) {
-                if (flag) {
-                    ShouldDespawnHunter = true;
+                if (ShouldSpawnHunterAttack) {
+                    ShouldSpawnHunterAttack = false;
                 }
-                else if (!ShouldDespawnHunter) {
+                if (!flag && !ShouldDespawnHunter) {
                     if (/*Main.rand.NextBool(7) && */NPC.downedBoss2) {
                         ShouldSpawnHunter = true;
                         ShouldSpawnHunterAttack = false;
                     }
+                }
+            }
+        }
+
+
+        if (Main.dayTime) {
+            if (Main.time > 42000) {
+                if (flag) {
+                    ShouldDespawnHunter = true;
                 }
             }
         }
