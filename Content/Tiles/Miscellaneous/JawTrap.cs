@@ -108,7 +108,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(179, 165, 159));
+        AddMapEntry(new Color(179, 165, 159), CreateMapEntryName());
 
         DustType = -1;
         HitSound = SoundID.Dig;

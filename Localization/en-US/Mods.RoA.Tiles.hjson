@@ -35,6 +35,7 @@ OniMask.MapEntry: Oni Mask
 ElderwoodDresser.MapEntry: Elderwood Dresser
 Coffin.MapEntry: Coffin
 Tapper.MapEntry: Tapper
-LothorMusicBox.MapEntry: Lothor Music Box
+// LothorMusicBox.MapEntry: Lothor Music Box
 BackwoodsBigTree.MapEntry: Giant Tree
 BackwoodsPylonTile.MapEntry: Backwoods Pylon
+JawTrap.MapEntry: Jaw Trap

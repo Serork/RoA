@@ -35,6 +35,7 @@ OniMask.MapEntry: Маска Они
 ElderwoodDresser.MapEntry: Комод из древнего дерева
 Coffin.MapEntry: Гроб
 Tapper.MapEntry: Подсочник
-LothorMusicBox.MapEntry: Музыкальная шкатулка (Лотор)
+// LothorMusicBox.MapEntry: Музыкальная шкатулка (Лотор)
 BackwoodsBigTree.MapEntry: Гигантское дерево
 BackwoodsPylonTile.MapEntry: Пилон Чащи
+JawTrap.MapEntry: Капкан-ловушка
