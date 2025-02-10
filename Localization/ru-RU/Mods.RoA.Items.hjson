@@ -1514,5 +1514,5 @@ GrimstoneBrick: {
 
 FireLighter: {
 	// DisplayName: Fire Lighter
-	// Tooltip: ""
+	// Tooltip: "'Lights the fire deep in your heart...'"
 }

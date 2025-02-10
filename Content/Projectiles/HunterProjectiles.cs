@@ -15,6 +15,8 @@ using RoA.Content.Projectiles.Friendly.Melee;
 namespace RoA.Content.Projectiles;
 
 sealed class HunterProjectile1 : ModProjectile {
+    private float _extraScale;
+
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override void SetDefaults() {
@@ -39,17 +41,25 @@ sealed class HunterProjectile1 : ModProjectile {
             Projectile.Opacity += 0.1f;
         }
         Player player = Main.LocalPlayer;
+        bool flag = Projectile.ai[2] == -1f;
+        NPC target = null;
+        if (flag) {
+            player = Main.player[Projectile.owner];
+        }
+        else {
+            target = Main.npc[(int)Projectile.ai[2]];
+        }
         int direction = (player.Center - Projectile.Center).X.GetDirection();
         Projectile.rotation += (0.25f - Projectile.ai[1] / 10f) * direction;
 
-        Projectile.ai[2] = Utils.GetLerpValue(0f, edge, Projectile.ai[1], true) * Utils.GetLerpValue(max, max - edge, Projectile.ai[1], true);
+        _extraScale = Utils.GetLerpValue(0f, edge, Projectile.ai[1], true) * Utils.GetLerpValue(max, max - edge, Projectile.ai[1], true);
         if (Projectile.ai[1] < max) {
             Projectile.ai[1] += speed;
         }
         else {
-            if (Projectile.owner == Main.myPlayer) {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Helper.VelocityToPoint(Projectile.Center, player.Center, 10f),
-                    ModContent.ProjectileType<HunterProjectile2>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+            if ((Projectile.owner == Main.myPlayer && flag) || (!flag && Main.netMode != NetmodeID.MultiplayerClient)) {
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Helper.VelocityToPoint(Projectile.Center, flag ? player.Center : target.Center, 10f),
+                    ModContent.ProjectileType<HunterProjectile2>(), Projectile.damage, Projectile.knockBack, flag ? Projectile.owner : Main.myPlayer);
             }
             Projectile.Kill();
         }
@@ -74,9 +84,9 @@ sealed class HunterProjectile1 : ModProjectile {
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         float scale = Projectile.ai[0] / 3f;
-        Main.EntitySpriteDraw(blood, drawPosition, null, color.MultiplyAlpha(Helper.Wave(0.5f, 1f, speed: 2f)) * 0.15f, Projectile.rotation, blood.Size() / 2f, (Projectile.scale * 0.5f + Helper.Wave(-0.25f, 0.25f, speed: 1f)) * Projectile.ai[2], 0, 0);
-        Main.EntitySpriteDraw(sparkle, drawPosition, null, color, Projectile.rotation, sparkle.Size() / 2f, (Projectile.scale + scale) * Projectile.ai[2], 0, 0);
-        Main.EntitySpriteDraw(sparkle, drawPosition, null, color, Projectile.rotation + MathHelper.PiOver2, sparkle.Size() / 2f, (Projectile.scale + scale) * Projectile.ai[2], 0, 0);
+        Main.EntitySpriteDraw(blood, drawPosition, null, color.MultiplyAlpha(Helper.Wave(0.5f, 1f, speed: 2f)) * 0.15f, Projectile.rotation, blood.Size() / 2f, (Projectile.scale * 0.5f + Helper.Wave(-0.25f, 0.25f, speed: 1f)) * _extraScale, 0, 0);
+        Main.EntitySpriteDraw(sparkle, drawPosition, null, color, Projectile.rotation, sparkle.Size() / 2f, (Projectile.scale + scale) * _extraScale, 0, 0);
+        Main.EntitySpriteDraw(sparkle, drawPosition, null, color, Projectile.rotation + MathHelper.PiOver2, sparkle.Size() / 2f, (Projectile.scale + scale) * _extraScale, 0, 0);
 
         float Opacity = Projectile.Opacity;
         float AdditiveAmount = 0f;
@@ -91,10 +101,10 @@ sealed class HunterProjectile1 : ModProjectile {
         Vector2 vector2 = new Vector2(0.35f + scale, 0.8f + scale) * Opacity;
         Vector2 position = Projectile.Center - Main.screenPosition;
         SpriteEffects effects = SpriteEffects.None;
-        Main.spriteBatch.Draw(value, position, null, color2, (float)Math.PI / 2f + Projectile.rotation, origin, vector * Projectile.ai[2], effects, 0f);
-        Main.spriteBatch.Draw(value, position, null, color2, 0f + Projectile.rotation, origin, vector2 * Projectile.ai[2], effects, 0f);
-        Main.spriteBatch.Draw(value, position, null, color3, (float)Math.PI / 2f + Projectile.rotation, origin, vector * 0.6f * Projectile.ai[2], effects, 0f);
-        Main.spriteBatch.Draw(value, position, null, color3, 0f + Projectile.rotation, origin, vector2 * 0.6f * Projectile.ai[2], effects, 0f);
+        Main.spriteBatch.Draw(value, position, null, color2, (float)Math.PI / 2f + Projectile.rotation, origin, vector * _extraScale, effects, 0f);
+        Main.spriteBatch.Draw(value, position, null, color2, 0f + Projectile.rotation, origin, vector2 * _extraScale, effects, 0f);
+        Main.spriteBatch.Draw(value, position, null, color3, (float)Math.PI / 2f + Projectile.rotation, origin, vector * 0.6f * _extraScale, effects, 0f);
+        Main.spriteBatch.Draw(value, position, null, color3, 0f + Projectile.rotation, origin, vector2 * 0.6f * _extraScale, effects, 0f);
 
         return false;
     }
@@ -118,6 +128,13 @@ sealed class HunterProjectile2 : ModProjectile {
         Projectile.tileCollide = false;
 
         Projectile.extraUpdates = 2;
+
+        bool flag = Projectile.owner != 255;
+        if (!flag) {
+            Projectile.friendly = true;
+            Projectile.hostile = false;
+            return;
+        }
         Projectile.friendly = false;
         Projectile.hostile = true;
     }

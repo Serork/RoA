@@ -75,6 +75,8 @@ sealed class HunterSpawnSystem : ModSystem {
     }
 
     public override void PostUpdatePlayers() {
+        //Main.NewText(ShouldSpawnHunter + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
+
         if (HunterWasKilled) {
             return;
         }
@@ -101,29 +103,59 @@ sealed class HunterSpawnSystem : ModSystem {
             }
         }
 
-        if (ShouldSpawnHunterAttack) {
-            foreach (Player player in Main.ActivePlayers) {
-                if (player.whoAmI == Main.myPlayer && Main.rand.NextBool(2)) {
+        if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(150)) {
+            if (Main.rand.NextChance(0.75)) {
+                foreach (Player player in Main.ActivePlayers) {
+                    if (player.whoAmI == Main.myPlayer) {
+                        int num = 40;
+                        num = Main.DamageVar(num, 0f - player.luck);
+                        float knockBack = 2f;
+                        Vector2 position = player.Center;
+                        position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
+                        int attempts = 1000;
+                        while (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, (int)position.Y / 16).TileType] ||
+                            Lighting.GetColor((int)position.X / 16, (int)position.Y / 16).ToVector3().Length() >= 0.5f ||
+                            Vector2.Distance(player.Center, position) < 200f) {
+                            position = player.Center;
+                            position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
+                            if (--attempts <= 0) {
+                                break;
+                            }
+                        }
+                        if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
+                            Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
+                                position.X, position.Y,
+                                num, knockBack,
+                                ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
+                        }
+                    }
+                }
+            }
+            else {
+                foreach (NPC npc in Main.ActiveNPCs) {
+                    if (!(!npc.dontTakeDamage && npc.lifeMax > 5 && !npc.friendly && !npc.townNPC)) {
+                        continue;
+                    }
+
                     int num = 40;
-                    num = Main.DamageVar(num, 0f - player.luck);
                     float knockBack = 2f;
-                    Vector2 position = player.Center;
+                    Vector2 position = npc.Center;
                     position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
                     int attempts = 1000;
                     while (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, (int)position.Y / 16).TileType] ||
                         Lighting.GetColor((int)position.X / 16, (int)position.Y / 16).ToVector3().Length() >= 0.5f ||
-                        Vector2.Distance(player.Center, position) < 200f) {
-                        position = player.Center;
+                        Vector2.Distance(npc.Center, position) < 200f) {
+                        position = npc.Center;
                         position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
                         if (--attempts <= 0) {
                             break;
                         }
                     }
-                    if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
+                    if (Collision.CanHit(npc.position, npc.width, npc.height, position, 0, 0)) {
                         Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
                             position.X, position.Y,
                             num, knockBack,
-                            ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI);
+                            ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Main.myPlayer, ai2: npc.whoAmI);
                     }
                 }
             }
