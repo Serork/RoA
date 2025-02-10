@@ -1511,3 +1511,8 @@ GrimstoneBrick: {
 	DisplayName: Кирпич из мрачного камня
 	Tooltip: ""
 }
+
+FireLighter: {
+	// DisplayName: Fire Lighter
+	// Tooltip: ""
+}

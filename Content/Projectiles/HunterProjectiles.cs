@@ -126,7 +126,7 @@ sealed class HunterProjectile2 : ModProjectile {
         Projectile.ai[0] -= 1f;
 
         if (Main.rand.Next(6) == 0) {
-            int num179 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 279, Projectile.velocity.X, Projectile.velocity.Y, 100, default(Color), 1.2f);
+            int num179 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.SilverFlame, Projectile.velocity.X, Projectile.velocity.Y, 100, default(Color), 1.2f);
             Main.dust[num179].noLightEmittence = true;
             Main.dust[num179].noGravity = true;
             Main.dust[num179].velocity *= 0.2f;

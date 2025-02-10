@@ -7,19 +7,78 @@ using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
+using System.IO;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Common.BackwoodsSystems;
 
 sealed class HunterSpawnSystem : ModSystem {
+    internal static bool HunterWasKilled;
+
     public static bool ShouldSpawnHunter { get; private set; } = false;
     public static bool ShouldDespawnHunter { get; private set; } = false;
     public static bool ShouldSpawnHunterAttack { get; private set; } = false;
 
+    public override void ClearWorld() {
+        HunterWasKilled = false;
+        ShouldSpawnHunter = false;
+        ShouldDespawnHunter = false;
+        ShouldSpawnHunterAttack = false;
+    }
+
+    public override void SaveWorldData(TagCompound tag) {
+        if (HunterWasKilled) {
+            tag[nameof(HunterWasKilled)] = true;
+        }
+
+        if (ShouldSpawnHunter) {
+            tag[nameof(ShouldSpawnHunter)] = true;
+        }
+        if (ShouldDespawnHunter) {
+            tag[nameof(ShouldDespawnHunter)] = true;
+        }
+        if (ShouldSpawnHunterAttack) {
+            tag[nameof(ShouldSpawnHunterAttack)] = true;
+        }
+    }
+
+    public override void LoadWorldData(TagCompound tag) {
+        HunterWasKilled = tag.ContainsKey(nameof(HunterWasKilled));
+
+        ShouldSpawnHunter = tag.ContainsKey(nameof(ShouldSpawnHunter));
+        ShouldDespawnHunter = tag.ContainsKey(nameof(ShouldDespawnHunter));
+        ShouldSpawnHunterAttack = tag.ContainsKey(nameof(ShouldSpawnHunterAttack));
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        var flags = new BitsByte();
+        flags[0] = HunterWasKilled;
+
+        flags[1] = ShouldSpawnHunter;
+        flags[2] = ShouldDespawnHunter;
+        flags[3] = ShouldSpawnHunterAttack;
+        writer.Write(flags);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        BitsByte flags = reader.ReadByte();
+        HunterWasKilled = flags[0];
+
+        ShouldSpawnHunter = flags[1];
+        ShouldDespawnHunter = flags[2];
+        ShouldSpawnHunterAttack = flags[3];
+    }
+
     public override void PostUpdatePlayers() {
+        if (HunterWasKilled) {
+            return;
+        }
+
         SpawnHunter();
 
         bool flag = NPC.CountNPCS(ModContent.NPCType<Hunter>()) > 0;

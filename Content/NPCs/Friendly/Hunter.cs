@@ -13,6 +13,7 @@ using System.IO;
 using Terraria;
 using Terraria.Chat;
 using Terraria.GameContent;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -63,6 +64,17 @@ sealed class Hunter : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0.5f;
         NPC.homeless = true;
+    }
+
+    public override void OnKill() {
+        HunterSpawnSystem.HunterWasKilled = true;
+        if (Main.netMode == NetmodeID.Server) {
+            NetMessage.SendData(MessageID.WorldData);
+        }
+    }
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot) {
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Weapons.Magic.FireLighter>()));
     }
 
     public override bool PreAI() {
