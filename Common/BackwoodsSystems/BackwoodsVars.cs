@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.CustomSkyAmbience;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Trees;
@@ -12,10 +13,14 @@ using System.IO;
 using System.Linq;
 
 using Terraria;
+using Terraria.GameContent;
+using Terraria.GameContent.NetModules;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.Net;
 using Terraria.Utilities;
 
 namespace RoA.Common.BackwoodsSystems;
@@ -114,12 +119,12 @@ sealed class BackwoodsVars : ModSystem {
         writer.Write(BackwoodsStartX);
         writer.Write(BackwoodsHalfSizeX);
 
-        writer.Write(BackwoodsTreeCountInWorld);
-        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-            writer.Write(BackwoodsStartX);
-            writer.Write(AllTreesWorldPositions[i].X);
-            writer.Write(AllTreesWorldPositions[i].Y);
-        }
+        //writer.Write(BackwoodsTreeCountInWorld);
+        //for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+        //    writer.Write(BackwoodsStartX);
+        //    writer.Write(AllTreesWorldPositions[i].X);
+        //    writer.Write(AllTreesWorldPositions[i].Y);
+        //}
     }
 
     public override void NetReceive(BinaryReader reader) {
@@ -130,15 +135,48 @@ sealed class BackwoodsVars : ModSystem {
         BackwoodsStartX = reader.ReadInt32();
         BackwoodsHalfSizeX = reader.ReadInt32();
 
-        BackwoodsStartX = reader.ReadInt16();
-        AllTreesWorldPositions.Clear();
-        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-            AllTreesWorldPositions.Add(new Point(reader.ReadInt16(), reader.ReadInt16()));
-        }
+        //BackwoodsTreeCountInWorld = reader.ReadInt16();
+        //AllTreesWorldPositions.Clear();
+        //for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+        //    AllTreesWorldPositions.Add(new Point(reader.ReadInt16(), reader.ReadInt16()));
+        //}
     }
 
     public override void Load() {
         On_WorldGen.GrowTree += On_WorldGen_GrowTree;
+        On_TeleportPylonsSystem.OnPlayerJoining += On_TeleportPylonsSystem_OnPlayerJoining;
+    }
+
+    private void On_TeleportPylonsSystem_OnPlayerJoining(On_TeleportPylonsSystem.orig_OnPlayerJoining orig, TeleportPylonsSystem self, int playerIndex) {
+        orig(self, playerIndex);
+
+        NetManager.Instance.SendToClient(TreePositionsModule.SerializePositions(), playerIndex);
+    }
+
+    sealed class TreePositionsModule : NetModule {
+        public static NetPacket SerializePositions() {
+            NetPacket result = CreatePacket<TreePositionsModule>(BackwoodsTreeCountInWorld * 2 + 1);
+            result.Writer.Write(BackwoodsTreeCountInWorld);
+            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+                result.Writer.Write(AllTreesWorldPositions[i].X);
+                result.Writer.Write(AllTreesWorldPositions[i].Y);
+            }
+
+            return result;
+        }
+
+        public override bool Deserialize(BinaryReader reader, int userId) {
+            if (Main.dedServ)
+                return false;
+
+            BackwoodsTreeCountInWorld = reader.ReadInt16();
+            AllTreesWorldPositions.Clear();
+            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+                AllTreesWorldPositions.Add(new Point(reader.ReadInt16(), reader.ReadInt16()));
+            }
+
+            return true;
+        }
     }
 
     private bool On_WorldGen_GrowTree(On_WorldGen.orig_GrowTree orig, int i, int y) {

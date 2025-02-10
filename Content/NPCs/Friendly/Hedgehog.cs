@@ -69,6 +69,10 @@ sealed class Hedgehog : ModNPC {
         => alert;
 
     public override void HitEffect(NPC.HitInfo hit) {
+        if (Main.netMode == NetmodeID.Server) {
+            return;
+        }
+
         if (NPC.life > 0) {
             for (int num493 = 0; (double)num493 < hit.Damage / (double)NPC.lifeMax * 20.0; num493++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, hit.HitDirection, -1f);

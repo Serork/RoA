@@ -66,8 +66,8 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
     public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
-        if (Main.netMode == NetmodeID.MultiplayerClient)
-            return false;
+        //if (Main.netMode == NetmodeID.MultiplayerClient)
+        //    return false;
 
         Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j), rightTile = WorldGenHelper.GetTileSafely(i + 1, j);
         if ((!rightTile.HasTile && !leftTile.HasTile) ||
