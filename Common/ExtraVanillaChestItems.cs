@@ -1760,7 +1760,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         else {
                             int num12 = genRand.Next(11);
                             int mushroomStaffRodType = ModContent.ItemType<MushroomStaff>();
-                            if (!_mushroomStaffAdded) {
+                            if (!_mushroomStaffAdded && genRand.NextBool(2)) {
                                 num12 = 10;
                                 _mushroomStaffAdded = true;
                             }
