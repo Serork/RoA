@@ -1522,3 +1522,8 @@ FireLighter: {
 	DisplayName: Fire Lighter
 	Tooltip: "'Lights the fire deep in your heart...'"
 }
+
+LivingBackwoodsLeavesWall: {
+	DisplayName: Living Backwoods Leaves Wall
+	Tooltip: ""
+}
