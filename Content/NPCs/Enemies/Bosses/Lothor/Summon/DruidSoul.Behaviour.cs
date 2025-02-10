@@ -53,6 +53,8 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     public override void AI() {
+        NPC.ShowNameOnHover = NPC.Opacity > 0.38f;
+
         KillNPCIfIsntInBackwoods();
 
         Appearance();

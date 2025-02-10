@@ -44,164 +44,6 @@ sealed class GrimDefender : ModNPC {
     private float _angryTimer;
     private byte _hitCount;
 
-    public override void OnSpawn(IEntitySource source) {
-        //if (NPC.downedBoss2) {
-        //    _isAngry = true;
-        //    NPC.netUpdate = true;
-        //}
-    }
-
-    // separate
-    public override void Load() {
-        On_Main.HoverOverNPCs += On_Main_HoverOverNPCs;
-    }
-
-    private static bool TryFreeingElderSlime(int npcIndex) {
-        Player player = Main.player[Main.myPlayer];
-        short type = 327;
-        bool inVoidBag = false;
-        int num = player.FindItemInInventoryOrOpenVoidBag(type, out inVoidBag);
-        if (num == -1)
-            return false;
-
-        Item item = null;
-        item = ((!inVoidBag) ? player.inventory[num] : player.bank4.item[num]);
-        if (--item.stack <= 0)
-            item.TurnToAir();
-
-        Recipe.FindRecipes();
-        return true;
-    }
-
-    private void On_Main_HoverOverNPCs(On_Main.orig_HoverOverNPCs orig, Main self, Rectangle mouseRectangle) {
-        Player player = Main.player[Main.myPlayer];
-        for (int i = 0; i < 200; i++) {
-            NPC nPC = Main.npc[i];
-            if (!(nPC.active & (nPC.shimmerTransparency == 0f || nPC.CanApplyHunterPotionEffects())))
-                continue;
-
-            int type = nPC.type;
-            if (TextureAssets.Npc[type].State == AssetState.NotLoaded)
-                Main.Assets.Request<Texture2D>(TextureAssets.Npc[type].Name);
-            nPC.position += nPC.netOffset;
-            if (type == ModContent.NPCType<GrimDefender>() && !(nPC.ModNPC as GrimDefender)._isAngry) {
-                continue;
-            }
-            //if (type == Type && _isAngry) {
-            //    continue;
-            //}
-            Microsoft.Xna.Framework.Rectangle value = new Microsoft.Xna.Framework.Rectangle((int)nPC.Bottom.X - nPC.frame.Width / 2, (int)nPC.Bottom.Y - nPC.frame.Height, nPC.frame.Width, nPC.frame.Height);
-            if (nPC.type >= 87 && nPC.type <= 92)
-                value = new Microsoft.Xna.Framework.Rectangle((int)((double)nPC.position.X + (double)nPC.width * 0.5 - 32.0), (int)((double)nPC.position.Y + (double)nPC.height * 0.5 - 32.0), 64, 64);
-
-            bool flag = mouseRectangle.Intersects(value);
-            bool flag2 = flag || (Main.SmartInteractShowingGenuine && Main.SmartInteractNPC == i);
-            if (flag2 && ((nPC.type != 85 && nPC.type != 341 && nPC.type != 629 && nPC.aiStyle != 87) || nPC.ai[0] != 0f) && nPC.type != 488) {
-                if (nPC.type == 685) {
-                    player.cursorItemIconEnabled = true;
-                    player.cursorItemIconID = 327;
-                    player.cursorItemIconText = "";
-                    player.noThrow = 2;
-                    if (!player.dead) {
-                        PlayerInput.SetZoom_MouseInWorld();
-                        if (Main.mouseRight && Main.npcChatRelease) {
-                            Main.npcChatRelease = false;
-                            if (PlayerInput.UsingGamepad)
-                                player.releaseInventory = false;
-
-                            if (player.talkNPC != i && !player.tileInteractionHappened && TryFreeingElderSlime(i)) {
-                                NPC.TransformElderSlime(i);
-                                SoundEngine.PlaySound(SoundID.Unlock);
-                            }
-                        }
-                    }
-                }
-                else {
-                    bool flag3 = Main.SmartInteractShowingGenuine && Main.SmartInteractNPC == i;
-                    if (nPC.townNPC || nPC.type == 105 || nPC.type == 106 || nPC.type == 123 || nPC.type == 354 || nPC.type == 376 || nPC.type == 579 || nPC.type == 453 || nPC.type == 589) {
-                        Microsoft.Xna.Framework.Rectangle rectangle = new Microsoft.Xna.Framework.Rectangle((int)(player.position.X + (float)(player.width / 2) - (float)(Player.tileRangeX * 16)), (int)(player.position.Y + (float)(player.height / 2) - (float)(Player.tileRangeY * 16)), Player.tileRangeX * 16 * 2, Player.tileRangeY * 16 * 2);
-                        Microsoft.Xna.Framework.Rectangle value2 = new Microsoft.Xna.Framework.Rectangle((int)nPC.position.X, (int)nPC.position.Y, nPC.width, nPC.height);
-                        if (rectangle.Intersects(value2))
-                            flag3 = true;
-                    }
-
-                    if (player.ownedProjectileCounts[651] > 0)
-                        flag3 = false;
-
-                    if (flag3 && !player.dead) {
-                        PlayerInput.SetZoom_MouseInWorld();
-                        Main.HoveringOverAnNPC = true;
-                        Main.instance.currentNPCShowingChatBubble = i;
-                        if (Main.mouseRight && Main.npcChatRelease) {
-                            Main.npcChatRelease = false;
-                            if (PlayerInput.UsingGamepad)
-                                player.releaseInventory = false;
-
-                            if (player.talkNPC != i && !player.tileInteractionHappened) {
-                                Main.CancelHairWindow();
-                                Main.SetNPCShopIndex(0);
-                                Main.InGuideCraftMenu = false;
-                                player.dropItemCheck();
-                                Main.npcChatCornerItem = 0;
-                                player.sign = -1;
-                                Main.editSign = false;
-                                player.SetTalkNPC(i);
-                                Main.playerInventory = false;
-                                player.chest = -1;
-                                Recipe.FindRecipes();
-                                Main.npcChatText = nPC.GetChat();
-                                SoundEngine.PlaySound(SoundID.Chat);
-                            }
-                        }
-                    }
-
-                    if (flag && !player.mouseInterface) {
-                        player.cursorItemIconEnabled = false;
-                        string text = nPC.GivenOrTypeName;
-                        int num = i;
-                        if (nPC.realLife >= 0)
-                            num = nPC.realLife;
-
-                        if (Main.npc[num].lifeMax > 1 && !Main.npc[num].dontTakeDamage)
-                            text = text + ": " + Main.npc[num].life + "/" + Main.npc[num].lifeMax;
-
-                        Main.instance.MouseTextHackZoom(text);
-                        Main.mouseText = true;
-                        nPC.position -= nPC.netOffset;
-                        break;
-                    }
-
-                    if (flag2) {
-                        nPC.position -= nPC.netOffset;
-                        break;
-                    }
-                }
-            }
-
-            nPC.position -= nPC.netOffset;
-        }
-    }
-
-    public override void SendExtraAI(BinaryWriter writer) {
-        writer.WriteVector2(_tempPosition);
-        writer.WriteVector2(_extraVelocity);
-        writer.WriteVector2(_extraVelocity2);
-        writer.Write(_spearAttack);
-        writer.Write(_isAngry);
-        writer.Write(_angryTimer);
-        writer.Write(_hitCount);
-    }
-
-    public override void ReceiveExtraAI(BinaryReader reader) {
-        _tempPosition = reader.ReadVector2();
-        _extraVelocity = reader.ReadVector2();
-        _extraVelocity2 = reader.ReadVector2();
-        _spearAttack = reader.ReadBoolean();
-        _isAngry = reader.ReadBoolean();
-        _angryTimer = reader.ReadSingle();
-        _hitCount = reader.ReadByte();
-    }
-
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 8;
 
@@ -416,27 +258,9 @@ sealed class GrimDefender : ModNPC {
         reset();
     }
 
-    public override bool PreAI() {
-        //if (Main.expertMode && !_isAngry) {
-        //    foreach (Player player in Main.ActivePlayers) {
-        //        if (!(player.active && !player.dead)) {
-        //            continue;
-        //        }
-        //        if (NPC.Distance(player.Center) < 400f && player.active && !player.dead && player.GetSelectedItem().damage > 0 && player.ItemAnimationActive) {
-        //            MakeAngry();
-
-        //            if (Main.netMode == NetmodeID.MultiplayerClient) {
-        //                MultiplayerSystem.SendPacket(new RecognizeHitPacket(player, NPC.whoAmI));
-        //            }
-        //            break;
-        //        }
-        //    }
-        //}
-
-        return base.PreAI();
-    }
-
     public override void AI() {
+        NPC.ShowNameOnHover = _isAngry;
+
         NPC.wet = false;
         NPC.noTileCollide = NPC.noGravity = true;
 
@@ -768,5 +592,26 @@ sealed class GrimDefender : ModNPC {
             target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
             Projectile.Kill();
         }
+    }
+
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.WriteVector2(_tempPosition);
+        writer.WriteVector2(_extraVelocity);
+        writer.WriteVector2(_extraVelocity2);
+        writer.Write(_spearAttack);
+        writer.Write(_isAngry);
+        writer.Write(_angryTimer);
+        writer.Write(_hitCount);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _tempPosition = reader.ReadVector2();
+        _extraVelocity = reader.ReadVector2();
+        _extraVelocity2 = reader.ReadVector2();
+        _spearAttack = reader.ReadBoolean();
+        _isAngry = reader.ReadBoolean();
+        _angryTimer = reader.ReadSingle();
+        _hitCount = reader.ReadByte();
     }
 }
