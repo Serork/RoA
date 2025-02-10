@@ -125,8 +125,6 @@ sealed class HunterProjectile2 : ModProjectile {
         Projectile.alpha = 255;
         Projectile.timeLeft = 240;
 
-        Projectile.tileCollide = false;
-
         Projectile.extraUpdates = 2;
 
         bool flag = Projectile.owner != 255;
@@ -140,6 +138,8 @@ sealed class HunterProjectile2 : ModProjectile {
     }
 
     public override void AI() {
+        Projectile.tileCollide = Projectile.timeLeft < 220;
+
         Projectile.ai[0] -= 1f;
 
         if (Main.rand.Next(6) == 0) {
@@ -151,7 +151,7 @@ sealed class HunterProjectile2 : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        if (Projectile.timeLeft > 600 - 1) {
+        if (Projectile.timeLeft > 240 - 1) {
             return false;
         }
 
