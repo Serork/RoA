@@ -1499,7 +1499,7 @@ PlanetomaStaff: {
 
 JawTrap: {
 	DisplayName: Капкан-ловушка
-	Tooltip: Стискивает зубы, когда кто-то в него наступает
+	Tooltip: Стискивает зубы, когда в него наступают
 }
 
 TealMoss: {
