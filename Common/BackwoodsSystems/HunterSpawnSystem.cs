@@ -77,7 +77,7 @@ sealed class HunterSpawnSystem : ModSystem {
     public override void PostUpdatePlayers() {
         //Main.NewText(Main.dayTime + " " + Main.time);
 
-        Main.NewText(HunterWasKilled + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
+        //Main.NewText(HunterWasKilled + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
 
         if (HunterWasKilled) {
             return;
