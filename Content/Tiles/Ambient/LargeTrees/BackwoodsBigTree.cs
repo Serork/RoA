@@ -253,7 +253,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                         }
                     }
                     if (flag3) {
-                        tile2.ClearEverything();
+                        tile2.HasTile = false;
                     }
                 }
             }
@@ -573,7 +573,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
             for (int checkX = i - 1; checkX < i + 3; checkX++) {
                 Tile tile = WorldGenHelper.GetTileSafely(checkX, checkY);
-                tile.ClearTile();
+                tile.HasTile = false;
             }
         }
         PlaceTileInternal(i - 1, j, 0, getFrameYForStart(), placeRand, gen);
