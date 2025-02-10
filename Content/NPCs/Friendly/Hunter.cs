@@ -3,10 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.BackwoodsSystems;
+using RoA.Content.Biomes.Backwoods;
+
 using System;
+using System.Diagnostics;
 using System.IO;
 
 using Terraria;
+using Terraria.Chat;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
@@ -18,7 +23,7 @@ namespace RoA.Content.NPCs.Friendly;
 sealed class Hunter : ModNPC {
     private static Profiles.StackedNPCProfile NPCProfile;
 
-    private Vector2 _velocity;
+    private Vector2 _extraVelocity;
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 26;
@@ -60,6 +65,29 @@ sealed class Hunter : ModNPC {
         NPC.homeless = true;
     }
 
+    public override bool PreAI() {
+        if (HunterSpawnSystem.ShouldDespawnHunter && !IsNpcOnscreen(NPC.Center)) {
+            NPC.active = false;
+            NPC.netSkip = -1;
+            NPC.life = 0;
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool IsNpcOnscreen(Vector2 center) {
+        int w = NPC.sWidth + NPC.safeRangeX * 2;
+        int h = NPC.sHeight + NPC.safeRangeY * 2;
+        Rectangle npcScreenRect = new Rectangle((int)center.X - w / 2, (int)center.Y - h / 2, w, h);
+        foreach (Player player in Main.ActivePlayers) {
+            if (player.getRect().Intersects(npcScreenRect)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public override void FindFrame(int frameHeight) {
         int num236 = 10;
         if (TownNPCProfiles.Instance.GetProfile(NPC, out var profile)) {
@@ -95,7 +123,7 @@ sealed class Hunter : ModNPC {
                 else {
                     int num287 = 6;
 
-                    NPC.frameCounter += Math.Abs(NPC.velocity.X) * 2f;
+                    NPC.frameCounter += Math.Abs(NPC.velocity.X + _extraVelocity.X) * 1f;
                     NPC.frameCounter += 1.0;
 
                     int num288 = num * 2;
@@ -126,7 +154,7 @@ sealed class Hunter : ModNPC {
         if (NPC.ai[0] == 0f) {
             NPC.ai[1] -= 4f;
             NPC.ai[1] = Math.Max(0f, NPC.ai[1]);
-            _velocity.X = 0f;
+            _extraVelocity.X = 0f;
         }
         else if (NPC.ai[0] == 1f) {
             NPC.ai[1] += 0.5f;
@@ -187,7 +215,7 @@ sealed class Hunter : ModNPC {
             }
 
             float num17 = 0.5f;
-            float num18 = 0.025f;
+            float num18 = 0.02f;
 
             bool flag17 = Collision.DrownCollision(NPC.position, NPC.width, NPC.height, 1f, includeSlopes: true);
 
@@ -195,34 +223,34 @@ sealed class Hunter : ModNPC {
                 num17 = 1f;
                 float num19 = 1f - (float)NPC.life / (float)NPC.lifeMax;
                 num17 += num19 * 0.9f;
-                num18 = 0.05f;
+                num18 = 0.04f;
             }
 
-            if (_velocity.X < 0f - num17 || _velocity.X > num17) {
+            if (_extraVelocity.X < 0f - num17 || _extraVelocity.X > num17) {
                 if (NPC.velocity.Y == 0f)
-                    _velocity *= 0.8f;
+                    _extraVelocity *= 0.8f;
             }
-            else if (_velocity.X < num17 && NPC.direction == 1) {
-                _velocity.X += num18;
-                if (_velocity.X > num17)
-                    _velocity.X = num17;
+            else if (_extraVelocity.X < num17 && NPC.direction == 1) {
+                _extraVelocity.X += num18;
+                if (_extraVelocity.X > num17)
+                    _extraVelocity.X = num17;
             }
-            else if (_velocity.X > 0f - num17 && NPC.direction == -1) {
-                _velocity.X -= num18;
-                if (_velocity.X < -num17)
-                    _velocity.X = -num17;
+            else if (_extraVelocity.X > 0f - num17 && NPC.direction == -1) {
+                _extraVelocity.X -= num18;
+                if (_extraVelocity.X < -num17)
+                    _extraVelocity.X = -num17;
             }
 
-            NPC.position += _velocity;
+            NPC.position += _extraVelocity;
         }
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
-        writer.WriteVector2(_velocity);
+        writer.WriteVector2(_extraVelocity);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
-        _velocity = reader.ReadVector2();
+        _extraVelocity = reader.ReadVector2();
     }
 
     public override bool NeedSaving() => true;
