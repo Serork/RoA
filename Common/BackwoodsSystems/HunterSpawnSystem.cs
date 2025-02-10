@@ -85,36 +85,12 @@ sealed class HunterSpawnSystem : ModSystem {
 
         SpawnHunter();
 
-        bool flag = NPC.CountNPCS(ModContent.NPCType<Hunter>()) > 0;
+        SetHunterSpawnVariables();
 
-        if (ShouldDespawnHunter && !flag) {
-            ShouldDespawnHunter = false;
-            ShouldSpawnHunterAttack = true;
-        }
+        SpawnHunterAttacks();
+    }
 
-        if (Main.dayTime && !ShouldSpawnHunter) {
-            if (Main.time < 1 || (Main.IsFastForwardingTime() && Main.time < 61)) {
-                if (ShouldSpawnHunterAttack) {
-                    ShouldSpawnHunterAttack = false;
-                }
-                if (!flag && !ShouldDespawnHunter) {
-                    if (/*Main.rand.NextBool(7) && */NPC.downedBoss2) {
-                        ShouldSpawnHunter = true;
-                        ShouldSpawnHunterAttack = false;
-                    }
-                }
-            }
-        }
-
-
-        if (Main.dayTime) {
-            if (Main.time > 42000) {
-                if (flag) {
-                    ShouldDespawnHunter = true;
-                }
-            }
-        }
-
+    private void SpawnHunterAttacks() {
         if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(150)) {
             if (Main.rand.NextChance(0.75)) {
                 foreach (Player player in Main.ActivePlayers) {
@@ -169,6 +145,34 @@ sealed class HunterSpawnSystem : ModSystem {
                             num, knockBack,
                             ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Main.myPlayer, ai2: npc.whoAmI);
                     }
+                }
+            }
+        }
+    }
+
+    private void SetHunterSpawnVariables() {
+        bool hunterAlive = NPC.CountNPCS(ModContent.NPCType<Hunter>()) > 0;
+        if (ShouldDespawnHunter && !hunterAlive) {
+            ShouldDespawnHunter = false;
+            ShouldSpawnHunterAttack = true;
+        }
+        if (Main.dayTime && !ShouldSpawnHunter) {
+            if (Main.time < 1 || (Main.IsFastForwardingTime() && Main.time < 61)) {
+                if (ShouldSpawnHunterAttack) {
+                    ShouldSpawnHunterAttack = false;
+                }
+                if (!hunterAlive && !ShouldDespawnHunter) {
+                    if (/*Main.rand.NextBool(7) && */NPC.downedBoss2) {
+                        ShouldSpawnHunter = true;
+                        ShouldSpawnHunterAttack = false;
+                    }
+                }
+            }
+        }
+        if (Main.dayTime) {
+            if (Main.time > 42000) {
+                if (hunterAlive) {
+                    ShouldDespawnHunter = true;
                 }
             }
         }
