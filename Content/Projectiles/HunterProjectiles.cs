@@ -123,7 +123,7 @@ sealed class HunterProjectile2 : ModProjectile {
         Projectile.penetrate = -1;
         Projectile.light = 0.5f;
         Projectile.alpha = 255;
-        Projectile.timeLeft = 600;
+        Projectile.timeLeft = 240;
 
         Projectile.tileCollide = false;
 
