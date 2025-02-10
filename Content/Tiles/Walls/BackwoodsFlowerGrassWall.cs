@@ -11,7 +11,6 @@ sealed class BackwoodsFlowerGrassWall : ModWall {
 		AddMapEntry(new Color(0, 67, 17));
 
 		WallID.Sets.WallSpreadStopsAtAir[Type] = true;
-
     }
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;

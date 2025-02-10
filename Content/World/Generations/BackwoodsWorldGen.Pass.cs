@@ -166,7 +166,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
                 }
-                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(4) && flag) {
+                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(3) && flag) {
                     int x = i, y = j;
                     bool flag2 = false;
                     if (WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1) && (!Main.tile[x, y - 1].HasTile && !Main.tile[x + 1, y - 1].HasTile) && ((!Main.tile[x, y].HasTile && !Main.tile[x + 1, y].HasTile) || (Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && Main.tileCut[WorldGenHelper.GetTileSafely(i + 1, j).TileType])))
