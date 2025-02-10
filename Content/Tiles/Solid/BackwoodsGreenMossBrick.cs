@@ -43,7 +43,7 @@ sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
         TileHelper.MergeWith(Type, (ushort)ModContent.TileType<BackwoodsStoneBrick>());
 
         Main.tileLighted[Type] = true;
-        Main.tileMoss[Type] = true;
+        Main.tileMoss[Type] = false;
 
         TileID.Sets.tileMossBrick[Type] = true;
 
