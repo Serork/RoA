@@ -46,7 +46,6 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
 
     public override void Load() {
         On_Player.DoBootsEffect_PlaceFlowersOnTile += On_Player_DoBootsEffect_PlaceFlowersOnTile;
-        On_WorldGen.CheckSunflower += On_WorldGen_CheckSunflower;
         On_WorldGen.PlaceSunflower += On_WorldGen_PlaceSunflower;
     }
 
@@ -89,62 +88,6 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
                 tile.TileType = type;
             }
         }
-    }
-
-    private void On_WorldGen_CheckSunflower(On_WorldGen.orig_CheckSunflower orig, int i, int j, int type) {
-        if (WorldGen.destroyObject)
-            return;
-
-        bool flag = false;
-        int num = 0;
-        int num2 = j;
-        num += Main.tile[i, j].TileFrameX / 18;
-        num2 += Main.tile[i, j].TileFrameY / 18 * -1;
-        while (num > 1) {
-            num -= 2;
-        }
-
-        num *= -1;
-        num += i;
-        for (int k = num; k < num + 2; k++) {
-            for (int l = num2; l < num2 + 4; l++) {
-                //if (Main.tile[k, l] == null)
-                //    Main.tile[k, l] = new Tile();
-
-                int num3;
-                for (num3 = Main.tile[k, l].TileFrameX / 18; num3 > 1; num3 -= 2) {
-                }
-
-                if (!Main.tile[k, l].HasUnactuatedTile || Main.tile[k, l].TileType != type || num3 != k - num || Main.tile[k, l].TileFrameY != (l - num2) * 18)
-                    flag = true;
-            }
-
-            //if (Main.tile[k, num2 + 4] == null)
-            //    Main.tile[k, num2 + 4] = new Tile();
-
-            if (!Main.tile[k, num2 + 4].HasUnactuatedTile || !TileObjectData.GetTileData(type, 0).AnchorValidTiles.Contains(Main.tile[k, num2 + 4].TileType))
-                flag = true;
-
-            if (!Main.tile[k, num2 + 4].HasUnactuatedTile || Main.tile[k, num2 + 4].TileType != ModContent.TileType<BackwoodsGrass>())
-                flag = true;
-
-            if (!WorldGen.SolidTile(k, num2 + 4))
-                flag = true;
-        }
-
-        if (!flag)
-            return;
-
-        WorldGen.destroyObject = true;
-        for (int m = num; m < num + 2; m++) {
-            for (int n = num2; n < num2 + 4; n++) {
-                if (Main.tile[m, n].TileType == type && Main.tile[m, n].HasTile)
-                    WorldGen.KillTile(m, n);
-            }
-        }
-
-        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32, 63);
-        WorldGen.destroyObject = false;
     }
 
     private bool On_Player_DoBootsEffect_PlaceFlowersOnTile(On_Player.orig_DoBootsEffect_PlaceFlowersOnTile orig, Player self, int X, int Y) {
