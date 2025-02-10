@@ -86,6 +86,7 @@ sealed class HunterSpawnSystem : ModSystem {
         SpawnHunter();
 
         bool flag = NPC.CountNPCS(ModContent.NPCType<Hunter>()) > 0;
+
         if (ShouldDespawnHunter && !flag) {
             ShouldDespawnHunter = false;
             ShouldSpawnHunterAttack = true;
