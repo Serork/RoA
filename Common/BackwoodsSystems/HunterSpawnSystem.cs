@@ -28,9 +28,10 @@ sealed class HunterSpawnSystem : ModSystem {
                     if (ShouldDespawnHunter) {
                         ShouldDespawnHunter = false;
                     }
-                    ShouldSpawnHunter = true;
+                    if (Main.rand.NextBool(7)) {
+                        ShouldSpawnHunter = true;
+                    }
                 }
-                Main.NewText(ShouldDespawnHunter + " " + ShouldSpawnHunter);
             }
         }
     }
