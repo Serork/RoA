@@ -28,7 +28,7 @@ sealed class HunterSpawnSystem : ModSystem {
                     if (ShouldDespawnHunter) {
                         ShouldDespawnHunter = false;
                     }
-                    /*if (Main.rand.NextBool(7)) */{
+                    if (/*Main.rand.NextBool(7) && */NPC.downedBoss2) {
                         ShouldSpawnHunter = true;
                     }
                 }
