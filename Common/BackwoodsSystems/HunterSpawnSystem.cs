@@ -2,8 +2,10 @@
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Friendly;
+using RoA.Content.Projectiles;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -15,21 +17,54 @@ namespace RoA.Common.BackwoodsSystems;
 sealed class HunterSpawnSystem : ModSystem {
     public static bool ShouldSpawnHunter { get; private set; } = false;
     public static bool ShouldDespawnHunter { get; private set; } = false;
+    public static bool ShouldSpawnHunterAttack { get; private set; } = false;
 
     public override void PostUpdatePlayers() {
         SpawnHunter();
 
+        bool flag = NPC.CountNPCS(ModContent.NPCType<Hunter>()) > 0;
+        if (ShouldDespawnHunter && !flag) {
+            ShouldDespawnHunter = false;
+            ShouldSpawnHunterAttack = true;
+        }
+
         if (Main.dayTime && !ShouldSpawnHunter) {
             if (Main.time < 1 || (Main.IsFastForwardingTime() && Main.time < 61)) {
-                if (NPC.CountNPCS(ModContent.NPCType<Hunter>()) > 0) {
+                if (flag) {
                     ShouldDespawnHunter = true;
                 }
-                else {
-                    if (ShouldDespawnHunter) {
-                        ShouldDespawnHunter = false;
-                    }
+                else if (!ShouldDespawnHunter) {
                     if (/*Main.rand.NextBool(7) && */NPC.downedBoss2) {
                         ShouldSpawnHunter = true;
+                        ShouldSpawnHunterAttack = false;
+                    }
+                }
+            }
+        }
+
+        if (ShouldSpawnHunterAttack) {
+            foreach (Player player in Main.ActivePlayers) {
+                if (player.whoAmI == Main.myPlayer && Main.rand.NextBool(2)) {
+                    int num = 40;
+                    num = Main.DamageVar(num, 0f - player.luck);
+                    float knockBack = 2f;
+                    Vector2 position = player.Center;
+                    position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
+                    int attempts = 1000;
+                    while (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, (int)position.Y / 16).TileType] ||
+                        Lighting.GetColor((int)position.X / 16, (int)position.Y / 16).ToVector3().Length() >= 0.5f ||
+                        Vector2.Distance(player.Center, position) < 200f) {
+                        position = player.Center;
+                        position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
+                        if (--attempts <= 0) {
+                            break;
+                        }
+                    }
+                    if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
+                        Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
+                            position.X, position.Y,
+                            num, knockBack,
+                            ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI);
                     }
                 }
             }

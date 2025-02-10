@@ -1,10 +1,22 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.Dusts;
+using RoA.Content.Projectiles;
 using RoA.Content.Projectiles.Enemies.Lothor;
+using RoA.Content.Projectiles.Friendly.Melee;
+using RoA.Core;
+using RoA.Core.Utility;
+using RoA.Utilities;
+
+using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -47,6 +59,7 @@ sealed class MercuriumBolter : ModItem {
             Main.projectile[bolt].netUpdate = true;
             Dust.NewDust(player.Center - Vector2.UnitX * 13f - Vector2.UnitY * 8f + velocity.SafeNormalize(Vector2.Zero) * 30f, 0, 0, ModContent.DustType<ToxicFumes>(), velocity.X * 0.5f, velocity.Y * 0.5f, 0, default(Color), 1.3f);
         }
+
         return false;
     }
 
