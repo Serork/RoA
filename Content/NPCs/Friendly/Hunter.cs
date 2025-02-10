@@ -1,6 +1,10 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 using ReLogic.Content;
+
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.GameContent;
@@ -13,6 +17,8 @@ namespace RoA.Content.NPCs.Friendly;
 
 sealed class Hunter : ModNPC {
     private static Profiles.StackedNPCProfile NPCProfile;
+
+    private Vector2 _velocity;
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 26;
@@ -51,6 +57,7 @@ sealed class Hunter : ModNPC {
         NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0.5f;
+        NPC.homeless = true;
     }
 
     public override void FindFrame(int frameHeight) {
@@ -111,6 +118,111 @@ sealed class Hunter : ModNPC {
             NPC.frameCounter = 0.0;
             NPC.frame.Y = num;
         }
+    }
+
+    public override void AI() {
+        NPC.homeTileX = NPC.homeTileY = -1;
+
+        if (NPC.ai[0] == 0f) {
+            NPC.ai[1] -= 4f;
+            NPC.ai[1] = Math.Max(0f, NPC.ai[1]);
+            _velocity.X = 0f;
+        }
+        else if (NPC.ai[0] == 1f) {
+            NPC.ai[1] += 0.5f;
+            NPC.ai[1] = Math.Max(0f, NPC.ai[1]);
+
+            bool flag3 = false;
+            if (NPC.ai[0] != 24f) {
+                for (int j = 0; j < 255; j++) {
+                    if (Main.player[j].active && Main.player[j].talkNPC == NPC.whoAmI) {
+                        flag3 = true;
+                    }
+                }
+            }
+            bool flag13 = false;
+            float num8 = 200f;
+            if (NPCID.Sets.DangerDetectRange[Type] != -1)
+                num8 = NPCID.Sets.DangerDetectRange[Type];
+            float num9 = -1f;
+            float num10 = -1f;
+            int num11 = 0;
+            if (Main.netMode != 1 && !flag3) {
+                for (int m = 0; m < 200; m++) {
+                    if (!Main.npc[m].active || Main.npc[m].friendly || Main.npc[m].damage <= 0 || !(Main.npc[m].Distance(NPC.Center) < num8) || (!Main.npc[m].noTileCollide && !Collision.CanHit(NPC.Center, 0, 0, Main.npc[m].Center, 0, 0)))
+                        continue;
+
+                    if (!NPCLoader.CanHitNPC(Main.npc[m], NPC))
+                        continue;
+
+                    flag13 = true;
+                    float num14 = Main.npc[m].Center.X - NPC.Center.X;
+                    if (num14 < 0f && (num9 == -1f || num14 > num9)) {
+                        num9 = num14;
+                    }
+
+                    if (num14 > 0f && (num10 == -1f || num14 < num10)) {
+                        num10 = num14;
+                    }
+                }
+
+                if (flag13) {
+                    num11 = ((num9 == -1f) ? 1 : ((num10 != -1f) ? (num10 < 0f - num9).ToDirectionInt() : (-1)));
+                    float num15 = 0f;
+                    if (num9 != -1f)
+                        num15 = 0f - num9;
+
+                    if (num15 == 0f || (num10 < num15 && num10 > 0f))
+                        num15 = num10;
+
+                    if (NPC.ai[0] == 8f) {
+
+                    }
+                    else if (NPC.ai[0] != 10f && NPC.ai[0] != 12f && NPC.ai[0] != 13f && NPC.ai[0] != 14f && NPC.ai[0] != 15f) {
+                        if (NPCID.Sets.PrettySafe[Type] != -1 && (float)NPCID.Sets.PrettySafe[Type] < num15) {
+                            flag13 = false;
+                        }
+                    }
+                }
+            }
+
+            float num17 = 0.5f;
+            float num18 = 0.025f;
+
+            bool flag17 = Collision.DrownCollision(NPC.position, NPC.width, NPC.height, 1f, includeSlopes: true);
+
+            if (NPC.friendly && (flag13 || flag17)) {
+                num17 = 1f;
+                float num19 = 1f - (float)NPC.life / (float)NPC.lifeMax;
+                num17 += num19 * 0.9f;
+                num18 = 0.05f;
+            }
+
+            if (_velocity.X < 0f - num17 || _velocity.X > num17) {
+                if (NPC.velocity.Y == 0f)
+                    _velocity *= 0.8f;
+            }
+            else if (_velocity.X < num17 && NPC.direction == 1) {
+                _velocity.X += num18;
+                if (_velocity.X > num17)
+                    _velocity.X = num17;
+            }
+            else if (_velocity.X > 0f - num17 && NPC.direction == -1) {
+                _velocity.X -= num18;
+                if (_velocity.X < -num17)
+                    _velocity.X = -num17;
+            }
+
+            NPC.position += _velocity;
+        }
+    }
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.WriteVector2(_velocity);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _velocity = reader.ReadVector2();
     }
 
     public override bool NeedSaving() => true;
