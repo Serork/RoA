@@ -1518,12 +1518,12 @@ FireLighter: {
 }
 
 LivingBackwoodsLeavesWall: {
-	// DisplayName: Living Backwoods Leaves Wall
+	// DisplayName: Living Elderwood Wall
 	// Tooltip: ""
 }
 
 BackwoodsFlowerGrassWall: {
-	// DisplayName: Backwoods Flower Grass Wall
+	// DisplayName: Backwoods Flower Wall
 	// Tooltip: ""
 }
 
