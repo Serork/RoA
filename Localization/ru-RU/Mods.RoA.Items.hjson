@@ -1521,3 +1521,13 @@ LivingBackwoodsLeavesWall: {
 	// DisplayName: Living Backwoods Leaves Wall
 	// Tooltip: ""
 }
+
+BackwoodsFlowerGrassWall: {
+	// DisplayName: Backwoods Flower Grass Wall
+	// Tooltip: ""
+}
+
+BackwoodsGrassWall: {
+	// DisplayName: Backwoods Grass Wall
+	// Tooltip: ""
+}
