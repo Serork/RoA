@@ -2,13 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
-using RoA.Common.WorldEvents;
+using RoA.Content.Tiles.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -34,10 +32,10 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-        TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, 0, 0);
-        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, 0, 0);
-        TileObjectData.newTile.AnchorRight = new AnchorData(AnchorType.SolidTile, 0, 0);
-        TileObjectData.newTile.AnchorLeft = new AnchorData(AnchorType.SolidTile, 0, 0);
+        //TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, 0, 0);
+        //TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, 0, 0);
+        //TileObjectData.newTile.AnchorRight = new AnchorData(AnchorType.SolidTile, 0, 0);
+        //TileObjectData.newTile.AnchorLeft = new AnchorData(AnchorType.SolidTile, 0, 0);
         TileObjectData.newTile.CoordinateWidth = 20;
         TileObjectData.addTile(Type);
 
@@ -49,35 +47,52 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => BackwoodsGreenMoss.SetupLight(ref r, ref g, ref b);
 
     public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
-        //if (Main.netMode == NetmodeID.MultiplayerClient)
-        //    return false;
-
+        Tile tile = Main.tile[i, j];
+        Tile tile9 = Main.tile[i, j - 1];
+        Tile tile17 = Main.tile[i, j + 1];
+        Tile tile24 = Main.tile[i - 1, j];
+        Tile tile31 = Main.tile[i + 1, j];
+        int num2 = -1;
+        int num3 = -1;
+        int num4 = -1;
+        int num5 = -1;
         ushort moss = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
-        Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
-        Tile belowTile = WorldGenHelper.GetTileSafely(i, j + 1);
-        Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j);
-        Tile rightTile = WorldGenHelper.GetTileSafely(i + 1, j);
-        bool hasTile = false;
-        if (aboveTile.ActiveTile(moss) && aboveTile.Slope == 0 && !aboveTile.IsHalfBlock) {
-            hasTile = true;
+        ushort moss2 = (ushort)ModContent.TileType<BackwoodsGreenMossBrick>();
+        if (tile9 != null && tile9.HasTile && Main.tileSolid[tile9.TileType] && !tile9.BottomSlope) {
+            num3 = tile9.TileType;
         }
-        else if (belowTile.ActiveTile(moss) && belowTile.Slope == 0 && !belowTile.IsHalfBlock) {
-            hasTile = true;
+        if (tile17 != null && tile17.HasTile && Main.tileSolid[tile17.TileType] && !tile17.IsHalfBlock && !tile17.TopSlope) {
+            num2 = tile17.TileType;
+        }
+        if (tile24 != null && tile24.HasTile && Main.tileSolid[tile24.TileType]) {
+            num4 = tile24.TileType;
+        }
+        if (tile31 != null && tile31.HasTile && Main.tileSolid[tile31.TileType]) {
+            num5 = tile31.TileType;
+        }
+        short num6 = (short)(WorldGen.genRand.Next(3) * 18);
+        if (num2 >= 0) {
+            if (tile.TileFrameY < 0 || tile.TileFrameY > 36) {
+                tile.TileFrameY = num6;
+            }
+        }
+        else if (num3 >= 0) {
+            if (tile.TileFrameY < 54 || tile.TileFrameY > 90) {
+                tile.TileFrameY = (short)(54 + num6);
+            }
+        }
+        else if (num4 >= 0) {
+            if (tile.TileFrameY < 108 || tile.TileFrameY > 144) {
+                tile.TileFrameY = (short)(108 + num6);
+            }
+        }
+        else if (num5 >= 0) {
+            if (tile.TileFrameY < 162 || tile.TileFrameY > 198) {
+                tile.TileFrameY = (short)(162 + num6);
+            }
         }
         else {
-            if (leftTile.ActiveTile(moss) && leftTile.Slope == 0 && !leftTile.IsHalfBlock) {
-                hasTile = true;
-            }
-            if (rightTile.ActiveTile(moss) && rightTile.Slope == 0 && !rightTile.IsHalfBlock) {
-                hasTile = true;
-            }
-        }
-        if (hasTile) {
-            return false;
-        }
-        WorldGenHelper.GetTileSafely(i, j).HasTile = false;
-        if (Main.netMode == NetmodeID.MultiplayerClient) {
-            NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j, 1f);
+            WorldGen.KillTile(i, j);
         }
 
         return false;
@@ -87,24 +102,25 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
         width = 22;
         short framesHeight = 54;
         ushort moss = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
+        ushort moss2 = (ushort)ModContent.TileType<BackwoodsGreenMossBrick>();
         Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
         Tile belowTile = WorldGenHelper.GetTileSafely(i, j + 1);
         Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j);
         Tile rightTile = WorldGenHelper.GetTileSafely(i + 1, j);
         offsetY = 0;
-        if (aboveTile.ActiveTile(moss)) {
-            tileFrameY += framesHeight;
+        if (aboveTile.ActiveTile(moss) || aboveTile.ActiveTile(moss2)) {
+            tileFrameY = framesHeight;
             offsetY = -2;
         }
-        else if (belowTile.ActiveTile(moss)) {
+        else if (belowTile.ActiveTile(moss) || belowTile.ActiveTile(moss2)) {
             offsetY = 2;
         }
         else {
-            if (leftTile.ActiveTile(moss)) {
-                tileFrameY += (short)(framesHeight * 2);
+            if (leftTile.ActiveTile(moss) || leftTile.ActiveTile(moss2)) {
+                tileFrameY = (short)(framesHeight * 2);
             }
-            if (rightTile.ActiveTile(moss)) {
-                tileFrameY += (short)(framesHeight * 3);
+            if (rightTile.ActiveTile(moss) || rightTile.ActiveTile(moss2)) {
+                tileFrameY = (short)(framesHeight * 3);
             }
         }
     }
