@@ -4,10 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core.Utility;
 
 using System;
 using System.IO;
+using System.Linq;
 
 using Terraria;
 using Terraria.GameContent;
@@ -39,8 +41,9 @@ sealed class Hunter : ModNPC {
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
 
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            Velocity = 1f,
-            Direction = 1
+            //Velocity = 1f,
+            //Direction = 1
+            Hide = true
         };
 
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
@@ -78,6 +81,20 @@ sealed class Hunter : ModNPC {
     }
 
     public override bool PreAI() {
+        int type = ModContent.NPCType<Hunter2>();
+        var bestiaryEntry = Main.BestiaryDB.FindEntryByNPCID(type);
+        if (!(bestiaryEntry == null || bestiaryEntry.Info == null)) {
+            if (IsNpcOnscreen(NPC.Center) &&
+                bestiaryEntry.UIInfoProvider.GetEntryUICollectionInfo().UnlockState != Terraria.GameContent.Bestiary.BestiaryEntryUnlockState.CanShowDropsWithDropRates_4) {
+                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                    int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, type);
+                    if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                        NetMessage.SendData(MessageID.SyncNPC, number: npc);
+                    }
+                }
+            }
+        }
+
         if (HunterSpawnSystem.ShouldDespawnHunter && !IsNpcOnscreen(NPC.Center)) {
             NPC.active = false;
             NPC.netSkip = -1;
@@ -277,7 +294,7 @@ sealed class Hunter : ModNPC {
 
     public override bool CanGoToStatue(bool toKingStatue) => false;
 
-    public override void Load() =>  On_NPC.GetChat += On_NPC_GetChat;
+    public override void Load() => On_NPC.GetChat += On_NPC_GetChat;
 
     private string On_NPC_GetChat(On_NPC.orig_GetChat orig, NPC self) {
         if (self.type == ModContent.NPCType<Hunter>()) {
