@@ -114,6 +114,9 @@ sealed class HunterSpawnSystem : ModSystem {
         if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(100)) {
             if (Main.rand.NextChance(0.75)) {
                 foreach (Player player in Main.ActivePlayers) {
+                    if (!player.InModBiome<BackwoodsBiome>()) {
+                        continue;
+                    }
                     if (player.whoAmI == Main.myPlayer) {
                         int num = 40;
                         num = Main.DamageVar(num, 0f - player.luck);
@@ -135,6 +138,10 @@ sealed class HunterSpawnSystem : ModSystem {
             else {
                 foreach (NPC npc in Main.ActiveNPCs) {
                     if (!(!npc.dontTakeDamage && npc.lifeMax > 5 && !npc.friendly && !npc.townNPC)) {
+                        continue;
+                    }
+
+                    if (!Main.player[npc.target].InModBiome<BackwoodsBiome>()) {
                         continue;
                     }
 
