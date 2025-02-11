@@ -40,62 +40,51 @@ sealed class Hunter2 : ModNPC {
 
     public override void FindFrame(int frameHeight) {
         int num236 = 10;
-        if (TownNPCProfiles.Instance.GetProfile(NPC, out var profile)) {
-            Asset<Texture2D> textureNPCShouldUse = profile.GetTextureNPCShouldUse(NPC);
-            int num = 0;
-            if (textureNPCShouldUse.IsLoaded) {
-                num = textureNPCShouldUse.Height() / Main.npcFrameCount[Type];
-                NPC.frame.Width = textureNPCShouldUse.Width();
-                NPC.frame.Height = num;
+        if (NPC.velocity.Y == 0f) {
+            if (NPC.direction == 1)
+                NPC.spriteDirection = 1;
+
+            if (NPC.direction == -1)
+                NPC.spriteDirection = -1;
+
+            int num237 = Main.npcFrameCount[Type] - NPCID.Sets.AttackFrameCount[Type];
+            if (NPC.ai[0] == 23f) {
+
             }
+            else if (NPC.ai[0] >= 20f && NPC.ai[0] <= 22f) {
 
-            if (NPC.velocity.Y == 0f) {
-                if (NPC.direction == 1)
-                    NPC.spriteDirection = 1;
+            }
+            else if (NPC.ai[0] == 2f) {
 
-                if (NPC.direction == -1)
-                    NPC.spriteDirection = -1;
+            }
+            else if (NPC.velocity.X == 0f) {
+                NPC.frame.Y = 0;
+                NPC.frameCounter = 0.0;
+            }
+            else {
+                int num287 = 6;
 
-                int num237 = Main.npcFrameCount[Type] - NPCID.Sets.AttackFrameCount[Type];
-                if (NPC.ai[0] == 23f) {
+                NPC.frameCounter += 2.0;
 
-                }
-                else if (NPC.ai[0] >= 20f && NPC.ai[0] <= 22f) {
+                int num288 = frameHeight * 2;
 
-                }
-                else if (NPC.ai[0] == 2f) {
+                if (NPC.frame.Y < num288)
+                    NPC.frame.Y = num288;
 
-                }
-                else if (NPC.velocity.X == 0f) {
-                    NPC.frame.Y = 0;
+                if (NPC.frameCounter > (double)num287) {
+                    NPC.frame.Y += frameHeight;
                     NPC.frameCounter = 0.0;
                 }
-                else {
-                    int num287 = 6;
 
-                    NPC.frameCounter += Math.Abs(NPC.velocity.X) * 2f;
-                    NPC.frameCounter += 1.0;
-
-                    int num288 = num * 2;
-
-                    if (NPC.frame.Y < num288)
-                        NPC.frame.Y = num288;
-
-                    if (NPC.frameCounter > (double)num287) {
-                        NPC.frame.Y += num;
-                        NPC.frameCounter = 0.0;
-                    }
-
-                    if (NPC.frame.Y / num >= Main.npcFrameCount[Type] - num236)
-                        NPC.frame.Y = num288;
-                }
-
-                return;
+                if (NPC.frame.Y / frameHeight >= Main.npcFrameCount[Type] - num236)
+                    NPC.frame.Y = num288;
             }
 
-            NPC.frameCounter = 0.0;
-            NPC.frame.Y = num;
+            return;
         }
+
+        NPC.frameCounter = 0.0;
+        NPC.frame.Y = frameHeight;
     }
 
     public override void SetDefaults() {
