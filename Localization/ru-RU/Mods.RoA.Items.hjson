@@ -1514,7 +1514,7 @@ GrimstoneBrick: {
 
 FireLighter: {
 	DisplayName: Зажигалка
-	Tooltip: "'Зажги огонь в своем сердце...'"
+	Tooltip: Подходит для того, чтобы начать пожар
 }
 
 LivingBackwoodsLeavesWall: {

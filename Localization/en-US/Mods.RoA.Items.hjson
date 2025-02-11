@@ -1520,7 +1520,7 @@ GrimstoneBrick: {
 
 FireLighter: {
 	DisplayName: Fire Lighter
-	Tooltip: "'Lights the fire deep in your heart...'"
+	Tooltip: Good for starting a fire
 }
 
 LivingBackwoodsLeavesWall: {
