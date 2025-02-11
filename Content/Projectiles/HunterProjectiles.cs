@@ -31,7 +31,7 @@ sealed class HunterProjectile1 : ModProjectile {
     }
 
     public override void AI() {
-        Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.5f);
+        //Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.5f);
 
         float edge = 0.25f;
         float max = 1.5f;

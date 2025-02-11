@@ -91,7 +91,27 @@ sealed class HunterSpawnSystem : ModSystem {
     }
 
     private void SpawnHunterAttacks() {
-        if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(150)) {
+        void setUpPosition(Vector2 basePosition, ref Vector2 position) {
+            position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
+            int attempts = 1000;
+            bool flag = false;
+            for (int j2 = (int)position.Y / 16; j2 < (int)position.Y / 16 + 2; j2++) {
+                if (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, j2).TileType]) {
+                    flag = true;
+                    break;
+                }
+            }
+            while (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, (int)position.Y / 16).TileType] ||
+                Lighting.GetColor((int)position.X / 16, (int)position.Y / 16).ToVector3().Length() >= 0.5f ||
+                Vector2.Distance(basePosition, position) < 200f || !flag) {
+                position = basePosition;
+                position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
+                if (--attempts <= 0) {
+                    break;
+                }
+            }
+        }
+        if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(100)) {
             if (Main.rand.NextChance(0.75)) {
                 foreach (Player player in Main.ActivePlayers) {
                     if (player.whoAmI == Main.myPlayer) {
@@ -99,17 +119,7 @@ sealed class HunterSpawnSystem : ModSystem {
                         num = Main.DamageVar(num, 0f - player.luck);
                         float knockBack = 2f;
                         Vector2 position = player.Center;
-                        position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
-                        int attempts = 1000;
-                        while (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, (int)position.Y / 16).TileType] ||
-                            Lighting.GetColor((int)position.X / 16, (int)position.Y / 16).ToVector3().Length() >= 0.5f ||
-                            Vector2.Distance(player.Center, position) < 200f) {
-                            position = player.Center;
-                            position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
-                            if (--attempts <= 0) {
-                                break;
-                            }
-                        }
+                        setUpPosition(player.Center, ref position);
                         if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
                             Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
                                 position.X, position.Y,
@@ -128,17 +138,7 @@ sealed class HunterSpawnSystem : ModSystem {
                     int num = 40;
                     float knockBack = 2f;
                     Vector2 position = npc.Center;
-                    position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
-                    int attempts = 1000;
-                    while (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, (int)position.Y / 16).TileType] ||
-                        Lighting.GetColor((int)position.X / 16, (int)position.Y / 16).ToVector3().Length() >= 0.5f ||
-                        Vector2.Distance(npc.Center, position) < 200f) {
-                        position = npc.Center;
-                        position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
-                        if (--attempts <= 0) {
-                            break;
-                        }
-                    }
+                    setUpPosition(npc.Center, ref position);
                     if (Collision.CanHit(npc.position, npc.width, npc.height, position, 0, 0)) {
                         Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
                             position.X, position.Y,
