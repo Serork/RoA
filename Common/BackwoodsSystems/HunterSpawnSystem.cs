@@ -120,11 +120,14 @@ sealed class HunterSpawnSystem : ModSystem {
                         float knockBack = 2f;
                         Vector2 position = player.Center;
                         setUpPosition(player.Center, ref position);
-                        if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
-                            Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
-                                position.X, position.Y,
-                                num, knockBack,
-                                ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
+                        bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
+                        if ((flag2 && Main.rand.NextBool(10)) || !flag2) {
+                            if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
+                                Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
+                                    position.X, position.Y,
+                                    num, knockBack,
+                                    ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
+                            }
                         }
                     }
                 }
@@ -139,11 +142,14 @@ sealed class HunterSpawnSystem : ModSystem {
                     float knockBack = 2f;
                     Vector2 position = npc.Center;
                     setUpPosition(npc.Center, ref position);
-                    if (Collision.CanHit(npc.position, npc.width, npc.height, position, 0, 0)) {
-                        Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
-                            position.X, position.Y,
-                            num, knockBack,
-                            ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Main.myPlayer, ai2: npc.whoAmI);
+                    bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
+                    if ((flag2 && Main.rand.NextBool(10)) || !flag2) {
+                        if (Collision.CanHit(npc.position, npc.width, npc.height, position, 0, 0)) {
+                            Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
+                                position.X, position.Y,
+                                num, knockBack,
+                                ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Main.myPlayer, ai2: npc.whoAmI);
+                        }
                     }
                 }
             }
