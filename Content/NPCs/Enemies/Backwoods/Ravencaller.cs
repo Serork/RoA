@@ -68,7 +68,7 @@ sealed class Ravencaller : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.alpha = 175;
 
-        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiomeFog>().Type];
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type, ModContent.GetInstance<BackwoodsBiomeFog>().Type];
 
         Banner = Type;
         BannerItem = ModContent.ItemType<RavencallerBanner>();
@@ -78,7 +78,8 @@ sealed class Ravencaller : ModNPC {
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([
-            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Ravencaller")
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Ravencaller"),
+            new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<BackwoodsBiomeFog>().ModBiomeBestiaryInfoElement)
         ]);
     }
 

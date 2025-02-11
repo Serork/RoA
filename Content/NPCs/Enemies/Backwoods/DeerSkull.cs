@@ -56,7 +56,7 @@ sealed class DeerSkullHead : BaseHead {
         NPC.noTileCollide = true;
         NPC.noGravity = true;
 
-        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiomeFog>().Type];
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type, ModContent.GetInstance<BackwoodsBiomeFog>().Type];
 
         Banner = Type;
         BannerItem = ModContent.ItemType<DeerSkullBanner>();
@@ -65,7 +65,7 @@ sealed class DeerSkullHead : BaseHead {
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([
             new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.DeerSkull"),
-            new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<BackwoodsBiome>().ModBiomeBestiaryInfoElement)
+            new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<BackwoodsBiomeFog>().ModBiomeBestiaryInfoElement)
         ]);
     }
 
