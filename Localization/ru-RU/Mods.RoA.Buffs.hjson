@@ -222,6 +222,6 @@ SmallMoon: {
 }
 
 Root: {
-	// DisplayName: Root
+	DisplayName: Капкан
 	// Description: Mods.RoA.Buffs.Root.Description
 }

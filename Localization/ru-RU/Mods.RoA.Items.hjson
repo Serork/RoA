@@ -1513,21 +1513,21 @@ GrimstoneBrick: {
 }
 
 FireLighter: {
-	// DisplayName: Fire Lighter
-	// Tooltip: "'Lights the fire deep in your heart...'"
+	DisplayName: Зажигалка
+	Tooltip: "'Зажги огонь в своем сердце...'"
 }
 
 LivingBackwoodsLeavesWall: {
-	// DisplayName: Living Elderwood Wall
+	DisplayName: Стена из живого древнего дерева
 	// Tooltip: ""
 }
 
 BackwoodsFlowerGrassWall: {
-	// DisplayName: Backwoods Flower Wall
+	DisplayName: Стена с цветами чащи
 	// Tooltip: ""
 }
 
 BackwoodsGrassWall: {
-	// DisplayName: Backwoods Grass Wall
+	DisplayName: Стена с травой чащи
 	// Tooltip: ""
 }
