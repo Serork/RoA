@@ -56,7 +56,9 @@ sealed class Lumberjack : RoANPC {
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([
-            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Lumberjack")
+            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Lumberjack"),
+			new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<BackwoodsBiome>().ModBiomeBestiaryInfoElement)
         ]);
     }
 

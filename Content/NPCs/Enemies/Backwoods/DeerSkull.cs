@@ -64,7 +64,8 @@ sealed class DeerSkullHead : BaseHead {
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([
-            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.DeerSkull")
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.DeerSkull"),
+            new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<BackwoodsBiome>().ModBiomeBestiaryInfoElement)
         ]);
     }
 
