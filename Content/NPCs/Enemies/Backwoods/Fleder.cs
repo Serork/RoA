@@ -249,7 +249,7 @@ sealed class Fleder : ModNPC {
             else if (player.dead || hasAggro || !player.active || !player.InModBiome<BackwoodsBiome>()) {
                 int y = (int)NPC.Center.Y / 16;
                 centerTile = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, y);
-                if (!centerTile.AnyWall() && y < BackwoodsVars.FirstTileYAtCenter + 10) {
+                if (!centerTile.AnyWall() && y < BackwoodsVars.FirstTileYAtCenter + 15) {
                     flyAway();
                 }
             }
@@ -258,7 +258,7 @@ sealed class Fleder : ModNPC {
         NPC.localAI[1] += 1f;
         int y2 = (int)NPC.Center.Y / 16;
         Tile centerTile2 = WorldGenHelper.GetTileSafely((int)NPC.Center.X / 16, y2);
-        bool flag = !centerTile2.AnyWall() && y2 < BackwoodsVars.FirstTileYAtCenter + 10;
+        bool flag = !centerTile2.AnyWall() && y2 < BackwoodsVars.FirstTileYAtCenter + 15;
         if (player.dead || hasAggro || !player.active || !player.InModBiome<BackwoodsBiome>()) {
             NPC.TargetClosest();
             if (player.dead || hasAggro || !player.active || !player.InModBiome<BackwoodsBiome>()) {
