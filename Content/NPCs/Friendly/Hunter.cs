@@ -4,24 +4,24 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
-using RoA.Content.Biomes.Backwoods;
+using RoA.Core.Utility;
 
 using System;
-using System.Diagnostics;
 using System.IO;
 
 using Terraria;
-using Terraria.Chat;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.Utilities;
 
 namespace RoA.Content.NPCs.Friendly;
 
 sealed class Hunter : ModNPC {
+    private const int MAXQUOTES = 5;
+    private int _currentQuote;
+
     private static Profiles.StackedNPCProfile NPCProfile;
 
     private Vector2 _extraVelocity;
@@ -271,16 +271,33 @@ sealed class Hunter : ModNPC {
 
     public override bool CanChat() => true;
 
-    public override ITownNPCProfile TownNPCProfile() {
-        return NPCProfile;
+    public override ITownNPCProfile TownNPCProfile() => NPCProfile;
+
+    public override void SetChatButtons(ref string button, ref string button2) => button = Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Button1");
+
+    public override bool CanGoToStatue(bool toKingStatue) => false;
+
+    public override void Load() =>  On_NPC.GetChat += On_NPC_GetChat;
+
+    private string On_NPC_GetChat(On_NPC.orig_GetChat orig, NPC self) {
+        if (self.type == ModContent.NPCType<Hunter>()) {
+            return self.As<Hunter>().GetQuote();
+        }
+
+        return orig(self);
     }
 
-    public override string GetChat() {
-        WeightedRandom<string> chat = new();
-        string key = $"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Quote";
-        for (int i = 1; i < 4; i++) {
-            chat.Add(Language.GetTextValue(key + i.ToString()));
+    private string GetQuote() {
+        _currentQuote++;
+        if (_currentQuote > MAXQUOTES - 1) {
+            _currentQuote = 0;
         }
-        return chat; 
+        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Quote{_currentQuote + 1}");
+    }
+
+    public override void OnChatButtonClicked(bool firstButton, ref string shopName) {
+        if (firstButton) {
+            Main.npcChatText = GetQuote();
+        }
     }
 }
