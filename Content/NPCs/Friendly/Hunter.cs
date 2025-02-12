@@ -4,14 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
-using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core.Utility;
 
 using System;
 using System.IO;
-using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -21,8 +21,15 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Friendly;
 
 sealed class Hunter : ModNPC {
+    // dont forget hjson
     private const int MAXQUOTES = 5;
-    private int _currentQuote;
+    private const int MAXNOTENOUGHTRADEQUOTES = 3;
+    private const int MAXTRADEQUOTES = 3;
+
+    private const int LEATHERAMOOUNTNEEDED = 15;
+    private const int GOLDAMOUNTTODROP = 3;
+
+    private int _currentQuote, _currentNotEnoughTradeQuote, _currentTradeQuote;
 
     private static Profiles.StackedNPCProfile NPCProfile;
 
@@ -290,7 +297,14 @@ sealed class Hunter : ModNPC {
 
     public override ITownNPCProfile TownNPCProfile() => NPCProfile;
 
-    public override void SetChatButtons(ref string button, ref string button2) => button = Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Button1");
+    public override void SetChatButtons(ref string button, ref string button2) {
+        button = Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Button1");
+        int variant = 1;
+        if (HasPlayerEnoughLeatherInInventory()) {
+            variant = 2;
+        }
+        button2 = Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Button2_{variant}");
+    }
 
     public override bool CanGoToStatue(bool toKingStatue) => false;
 
@@ -298,10 +312,18 @@ sealed class Hunter : ModNPC {
 
     private string On_NPC_GetChat(On_NPC.orig_GetChat orig, NPC self) {
         if (self.type == ModContent.NPCType<Hunter>()) {
-            return self.As<Hunter>().GetQuote();
+            return self.As<Hunter>().GetRandomQuote();
         }
 
         return orig(self);
+    }
+
+    private string GetRandomQuote() {
+        int currentTradeQuoteIndex = _currentQuote;
+        while (_currentQuote == currentTradeQuoteIndex) {
+            _currentQuote = Main.rand.Next(MAXQUOTES);
+        }
+        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Quote{_currentQuote + 1}");
     }
 
     private string GetQuote() {
@@ -312,9 +334,78 @@ sealed class Hunter : ModNPC {
         return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Quote{_currentQuote + 1}");
     }
 
+    private string GetNotEnoughTradeQuote() {
+        int currentTradeQuoteIndex = _currentNotEnoughTradeQuote;
+        while (_currentNotEnoughTradeQuote == currentTradeQuoteIndex) {
+            _currentNotEnoughTradeQuote = Main.rand.Next(MAXNOTENOUGHTRADEQUOTES);
+        }
+        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.NotEnoughTradeQuote{_currentNotEnoughTradeQuote + 1}");
+    }
+
+    private string GetTradeQuote() {
+        int currentTradeQuoteIndex = _currentTradeQuote;
+        while (_currentTradeQuote == currentTradeQuoteIndex) {
+            _currentTradeQuote = Main.rand.Next(MAXTRADEQUOTES);
+        }
+        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.TradeQuote{_currentTradeQuote + 1}");
+    }
+
     public override void OnChatButtonClicked(bool firstButton, ref string shopName) {
         if (firstButton) {
             Main.npcChatText = GetQuote();
         }
+        else {
+            if (ConsumePlayerLeatherAndDropCoins()) {
+                return;
+            }
+            Main.npcChatText = GetNotEnoughTradeQuote();
+        }
+    }
+
+    private sealed class DropHunterRewardHandler : ModPlayer {
+        public void GetHunterReward(NPC hunter) {
+            int num = ItemID.GoldCoin;
+            Item item = new Item();
+            item.SetDefaults(num);
+            item.stack = GOLDAMOUNTTODROP;
+            item.position = Player.Center;
+            Item item2 = Player.GetItem(Player.whoAmI, item, GetItemSettings.NPCEntityToPlayerInventorySettings);
+            if (item2.stack > 0) {
+                int number = Item.NewItem(new EntitySource_Gift(hunter), (int)Player.position.X, (int)Player.position.Y, Player.width, Player.height, item2.type, item2.stack, noBroadcast: false, 0, noGrabDelay: true);
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
+                }
+            }
+        }
+    }
+
+    private bool HasPlayerEnoughLeatherInInventory() => Main.LocalPlayer.CountItem(ItemID.Leather) >= LEATHERAMOOUNTNEEDED;
+
+    private bool ConsumePlayerLeatherAndDropCoins() {
+        if (!HasPlayerEnoughLeatherInInventory()) {
+            return false;
+        }
+
+        Main.npcChatText = GetTradeQuote();
+        Main.npcChatCornerItem = 0;
+
+        Player player = Main.LocalPlayer;
+        int num = 0;
+        int num2 = 58;
+        int num3 = 1;
+        int type = ItemID.Leather;
+        for (int i = num; i != num2; i += num3) {
+            if (player.inventory[i].stack > 0 && player.inventory[i].type == type) {
+                player.inventory[i].stack -= LEATHERAMOOUNTNEEDED;
+                if (player.inventory[i].stack <= 0) {
+                    player.inventory[i].SetDefaults();
+                }
+            }
+        }
+
+        SoundEngine.PlaySound(SoundID.Chat);
+        player.GetModPlayer<DropHunterRewardHandler>().GetHunterReward(Main.npc[player.talkNPC]);
+
+        return true;
     }
 }

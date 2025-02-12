@@ -1,8 +1,16 @@
 Hunter: {
 	Button1: Talk
-	Quote1: "1"
-	Quote2: "2"
-	Quote3: "3"
-	Quote4: "4"
-	Quote5: "5"
+	Button2_1: Trade
+	Button2_2: "{$Mods.RoA.NPC.Quotes.Hunter.Button2_1} (15 {$ItemName.Leather})"
+	Quote1: HunterQuote1
+	Quote2: HunterQuote2
+	Quote3: HunterQuote3
+	Quote4: HunterQuote4
+	Quote5: HunterQuote5
+	NotEnoughTradeQuote1: NotEnoughLeatherQuote1
+	NotEnoughTradeQuote2: NotEnoughLeatherQuote2
+	NotEnoughTradeQuote3: NotEnoughLeatherQuote3
+	TradeQuote1: TradeQuote1
+	TradeQuote2: TradeQuote2
+	TradeQuote3: TradeQuote3
 }
