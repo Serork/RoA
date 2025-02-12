@@ -25,7 +25,7 @@ sealed class Hunter2 : ModNPC {
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             Velocity = 1f,
-            Direction = 1
+            Direction = -1
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
     }

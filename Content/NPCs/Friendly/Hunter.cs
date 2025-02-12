@@ -91,11 +91,11 @@ sealed class Hunter : ModNPC {
         npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Weapons.Magic.FireLighter>()));
     }
 
-    public override bool PreAI() {
+    private void UnlockBestiaryEntry() {
         int type = ModContent.NPCType<Hunter2>();
         var bestiaryEntry = Main.BestiaryDB.FindEntryByNPCID(type);
         if (!(bestiaryEntry == null || bestiaryEntry.Info == null)) {
-            if (IsNpcOnscreen(NPC.Center) &&
+            if (/*IsNpcOnscreen(NPC.Center) &&*/
                 bestiaryEntry.UIInfoProvider.GetEntryUICollectionInfo().UnlockState != Terraria.GameContent.Bestiary.BestiaryEntryUnlockState.CanShowDropsWithDropRates_4) {
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
                     int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, type);
@@ -105,6 +105,10 @@ sealed class Hunter : ModNPC {
                 }
             }
         }
+    }
+
+    public override bool PreAI() {
+        //UnlockBestiaryEntry();
 
         if (HunterSpawnSystem.ShouldDespawnHunter && !IsNpcOnscreen(NPC.Center)) {
             NPC.active = false;
@@ -316,6 +320,8 @@ sealed class Hunter : ModNPC {
 
     private string On_NPC_GetChat(On_NPC.orig_GetChat orig, NPC self) {
         if (self.type == ModContent.NPCType<Hunter>()) {
+            UnlockBestiaryEntry();
+
             return self.As<Hunter>().GetRandomQuote();
         }
 
