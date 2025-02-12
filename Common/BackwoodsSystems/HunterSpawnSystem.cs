@@ -111,8 +111,8 @@ sealed class HunterSpawnSystem : ModSystem {
                 }
             }
         }
-        if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(100)) {
-            if (Main.rand.NextChance(0.75)) {
+        if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(150)) {
+            if (Main.rand.NextChance(0.85)) {
                 foreach (Player player in Main.ActivePlayers) {
                     if (!player.InModBiome<BackwoodsBiome>()) {
                         continue;
