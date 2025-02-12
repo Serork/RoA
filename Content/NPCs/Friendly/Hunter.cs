@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Content.Items.Weapons.Magic;
 using RoA.Core.Utility;
 
 using System;
@@ -17,6 +18,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.NPCs.Friendly;
 
@@ -25,11 +27,13 @@ sealed class Hunter : ModNPC {
     private const int MAXQUOTES = 5;
     private const int MAXNOTENOUGHTRADEQUOTES = 3;
     private const int MAXTRADEQUOTES = 3;
+    private const int MAXFIRELIGHTERQUOTES = 1;
+    private const int TRADEAMOUNTTODROPFIRELIGHTER = 10;
 
     private const int LEATHERAMOOUNTNEEDED = 15;
     private const int GOLDAMOUNTTODROP = 3;
 
-    private int _currentQuote, _currentNotEnoughTradeQuote, _currentTradeQuote;
+    private int _currentQuote, _currentNotEnoughTradeQuote, _currentTradeQuote, _currentFireLighterQuote;
 
     private static Profiles.StackedNPCProfile NPCProfile;
 
@@ -336,18 +340,32 @@ sealed class Hunter : ModNPC {
 
     private string GetNotEnoughTradeQuote() {
         int currentTradeQuoteIndex = _currentNotEnoughTradeQuote;
-        while (_currentNotEnoughTradeQuote == currentTradeQuoteIndex) {
-            _currentNotEnoughTradeQuote = Main.rand.Next(MAXNOTENOUGHTRADEQUOTES);
+        if (MAXNOTENOUGHTRADEQUOTES > 1) {
+            while (_currentNotEnoughTradeQuote == currentTradeQuoteIndex) {
+                _currentNotEnoughTradeQuote = Main.rand.Next(MAXNOTENOUGHTRADEQUOTES);
+            }
         }
         return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.NotEnoughTradeQuote{_currentNotEnoughTradeQuote + 1}");
     }
 
     private string GetTradeQuote() {
         int currentTradeQuoteIndex = _currentTradeQuote;
-        while (_currentTradeQuote == currentTradeQuoteIndex) {
-            _currentTradeQuote = Main.rand.Next(MAXTRADEQUOTES);
+        if (MAXTRADEQUOTES > 1) {
+            while (_currentTradeQuote == currentTradeQuoteIndex) {
+                _currentTradeQuote = Main.rand.Next(MAXTRADEQUOTES);
+            }
         }
         return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.TradeQuote{_currentTradeQuote + 1}");
+    }
+
+    private string GetDropFireLighterQuote() {
+        int currentFireLighterQuote = _currentFireLighterQuote;
+        if (MAXFIRELIGHTERQUOTES > 1) {
+            while (_currentFireLighterQuote == currentFireLighterQuote) {
+                _currentFireLighterQuote = Main.rand.Next(MAXFIRELIGHTERQUOTES);
+            }
+        }
+        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.DropFireLighterQuote{_currentFireLighterQuote + 1}");
     }
 
     public override void OnChatButtonClicked(bool firstButton, ref string shopName) {
@@ -363,11 +381,24 @@ sealed class Hunter : ModNPC {
     }
 
     private sealed class DropHunterRewardHandler : ModPlayer {
-        public void GetHunterReward(NPC hunter) {
+        public int TradeCount { get; private set; }
+
+        public override void SaveData(TagCompound tag) {
+            tag[nameof(TradeCount)] = TradeCount;
+        }
+
+        public override void LoadData(TagCompound tag) {
+            TradeCount = tag.GetInt(nameof(TradeCount));
+        }
+
+        public void GetHunterReward(NPC hunter, bool shouldGiveFireLighter) {
             int num = ItemID.GoldCoin;
+            if (shouldGiveFireLighter) {
+                num = ModContent.ItemType<FireLighter>();
+            }
             Item item = new Item();
             item.SetDefaults(num);
-            item.stack = GOLDAMOUNTTODROP;
+            item.stack = shouldGiveFireLighter ? 1 : GOLDAMOUNTTODROP;
             item.position = Player.Center;
             Item item2 = Player.GetItem(Player.whoAmI, item, GetItemSettings.NPCEntityToPlayerInventorySettings);
             if (item2.stack > 0) {
@@ -376,20 +407,27 @@ sealed class Hunter : ModNPC {
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
                 }
             }
+            TradeCount++;
         }
     }
 
     private bool HasPlayerEnoughLeatherInInventory() => Main.LocalPlayer.CountItem(ItemID.Leather) >= LEATHERAMOOUNTNEEDED;
+    private bool ShouldGiveFireLighter() => Main.LocalPlayer.GetModPlayer<DropHunterRewardHandler>().TradeCount == TRADEAMOUNTTODROPFIRELIGHTER;
 
     private bool ConsumePlayerLeatherAndDropCoins() {
         if (!HasPlayerEnoughLeatherInInventory()) {
             return false;
         }
 
-        Main.npcChatText = GetTradeQuote();
+        Player player = Main.LocalPlayer;
+        if (ShouldGiveFireLighter()) {
+            Main.npcChatText = GetDropFireLighterQuote();
+        }
+        else {
+            Main.npcChatText = GetTradeQuote();
+        }
         Main.npcChatCornerItem = 0;
 
-        Player player = Main.LocalPlayer;
         int num = 0;
         int num2 = 58;
         int num3 = 1;
@@ -404,7 +442,7 @@ sealed class Hunter : ModNPC {
         }
 
         SoundEngine.PlaySound(SoundID.Chat);
-        player.GetModPlayer<DropHunterRewardHandler>().GetHunterReward(Main.npc[player.talkNPC]);
+        player.GetModPlayer<DropHunterRewardHandler>().GetHunterReward(Main.npc[player.talkNPC], ShouldGiveFireLighter());
 
         return true;
     }
