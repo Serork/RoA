@@ -25,6 +25,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
     public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo) {
         if (spawnInfo.Player.InModBiome<BackwoodsBiome>()) {
             bool surface = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter + 35;
+            bool surface2 = spawnInfo.SpawnTileY < BackwoodsVars.FirstTileYAtCenter + 45;
             IEnumerator<KeyValuePair<int, float>> enumerator = pool.GetEnumerator();
             while (enumerator.MoveNext()) {
                 pool[enumerator.Current.Key] *= 0.5f;
@@ -56,7 +57,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
             }
             pool.Add(ModContent.NPCType<Hedgehog>(), 0.05f);
             float chance = surface ? 1f : 0.5f;
-            if (!surface/* && NPC.downedBoss2 */&& !NPC.AnyNPCs(ModContent.NPCType<GrimDefender>())) {
+            if (!surface2/* && NPC.downedBoss2 */&& !NPC.AnyNPCs(ModContent.NPCType<GrimDefender>())) {
                 pool.Add(ModContent.NPCType<GrimDefender>(), 0.1f);
             }
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
