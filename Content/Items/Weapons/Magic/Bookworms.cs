@@ -49,10 +49,10 @@ sealed class Bookworms : ModItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        Vector2 funnyOffset = Vector2.Normalize(new Vector2(velocity.X, velocity.Y)) * 35f;
-        if (!Collision.CanHit(position, 0, 0, position + funnyOffset, 0, 0)) {
-            return false;
-        }
+        //Vector2 funnyOffset = Vector2.Normalize(new Vector2(velocity.X, velocity.Y)) * 35f;
+        //if (!Collision.CanHit(position, 0, 0, position + funnyOffset, 0, 0)) {
+        //    return false;
+        //}
         return true;
     }
 }
@@ -77,7 +77,7 @@ sealed class BookwormsProjectile : ModProjectile {
 
         Projectile.netImportant = true;
 
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
 
         Projectile.timeLeft = 90;
 
@@ -125,7 +125,10 @@ sealed class BookwormsProjectile : ModProjectile {
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         Projectile.Opacity = Utils.GetLerpValue(90, 80, Projectile.timeLeft, true);
-        Projectile.tileCollide = Projectile.Opacity >= 0.5f;
+        //Projectile.tileCollide = Projectile.Opacity >= 0.5f;
+        if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
+            Projectile.timeLeft -= 1;
+        }
         if (Projectile.localAI[2] == 0f) {
             Projectile.localAI[2] = 1f;
             if (Projectile.owner == Main.myPlayer) {
