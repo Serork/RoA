@@ -1537,3 +1537,13 @@ BackwoodsGrassWall: {
 	DisplayName: Backwoods Grass Wall
 	Tooltip: ""
 }
+
+BackwoodsKey: {
+	DisplayName: Backwoods Key
+	Tooltip: ""
+}
+
+BackwoodsStoneChest: {
+	DisplayName: Backwoods Chest
+	Tooltip: ""
+}

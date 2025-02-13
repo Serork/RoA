@@ -5,6 +5,8 @@ using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
+using RoA.Content.Tiles.Furniture;
+using RoA.Core.Utility;
 
 using System;
 using System.Runtime.CompilerServices;
@@ -13,6 +15,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
@@ -1173,6 +1176,8 @@ sealed class ExtraVanillaChestItems : ModSystem {
         if (WorldGen.drunkWorldGen)
             num79 = 6;
 
+        num79 += 1;
+
         for (int num80 = 0; num80 < num79; num80++) {
             bool flag5 = false;
             while (!flag5) {
@@ -1224,7 +1229,21 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         break;
                 }
 
-                flag5 = WorldGen.AddBuriedChest(num81, num82, contain, notNearOtherChests: false, style2, trySlope: false, chestTileType);
+                bool flag0 = false;
+                if (num80 == (WorldGen.drunkWorldGen ? 6 : 5)) {
+                    chestTileType = (ushort)ModContent.TileType<BackwoodsDungeonChest>();
+                    flag0 = true;
+                }
+
+                if (flag0) {
+                    WorldGenHelper.PlaceChest(num81, num82, chestTileType, notNearOtherChests: false, onPlaced: (chest) => {
+                        flag5 = true;
+                        Console.WriteLine(num81 + " " + num82);
+                    });
+                }
+                else {
+                    flag5 = WorldGen.AddBuriedChest(num81, num82, contain, notNearOtherChests: false, style2, trySlope: false, chestTileType);
+                }
             }
         }
 

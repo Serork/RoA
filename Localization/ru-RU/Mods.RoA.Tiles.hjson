@@ -39,3 +39,5 @@ Tapper.MapEntry: Подсочник
 BackwoodsBigTree.MapEntry: Гигантское дерево
 BackwoodsPylonTile.MapEntry: Пилон Чащи
 JawTrap.MapEntry: Капкан-ловушка
+// BackwoodsDungeonChest.MapEntry: Locked Backwoods Chest
+// BackwoodsDungeonChest2.MapEntry: Backwoods Chest

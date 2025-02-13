@@ -1531,3 +1531,13 @@ BackwoodsGrassWall: {
 	DisplayName: Стена с травой чащи
 	// Tooltip: ""
 }
+
+BackwoodsKey: {
+	// DisplayName: Backwoods Key
+	// Tooltip: ""
+}
+
+BackwoodsStoneChest: {
+	// DisplayName: Backwoods Chest
+	// Tooltip: ""
+}
