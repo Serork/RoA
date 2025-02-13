@@ -165,7 +165,8 @@ sealed class BackwoodsDungeonChest : ModTile {
     }
 
     public override LocalizedText DefaultContainerName(int frameX, int frameY) {
-        return this.GetLocalization("MapEntry");
+        int option = frameX / 36 + 1;
+        return Language.GetText("Mods.RoA.Tiles.BackwoodsDungeonChest2.MapEntry");
     }
 
     public override void MouseOver(int i, int j) {
