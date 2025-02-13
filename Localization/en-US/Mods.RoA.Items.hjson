@@ -1540,7 +1540,7 @@ BackwoodsGrassWall: {
 
 BackwoodsKey: {
 	DisplayName: Backwoods Key
-	Tooltip: ""
+	Tooltip: "Unlocks a Backwoods chest in the dungeon"
 }
 
 BackwoodsStoneChest: {
