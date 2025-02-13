@@ -1,10 +1,7 @@
 ﻿using RoA.Content.Items.Placeable.Furniture;
 
-using System.Collections.Generic;
-
 using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
