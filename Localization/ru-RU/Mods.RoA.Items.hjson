@@ -1538,6 +1538,6 @@ BackwoodsDungeonKey: {
 }
 
 BackwoodsDungeonChest: {
-	// DisplayName: Backwoods Dungeon Chest
+	// DisplayName: Backwoods Chest
 	// Tooltip: ""
 }
