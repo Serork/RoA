@@ -1532,12 +1532,12 @@ BackwoodsGrassWall: {
 	// Tooltip: ""
 }
 
-BackwoodsKey: {
+BackwoodsDungeonKey: {
 	// DisplayName: Backwoods Key
-	// Tooltip: ""
+	// Tooltip: Unlocks a Backwoods Chest in the dungeon
 }
 
-BackwoodsStoneChest: {
-	// DisplayName: Backwoods Chest
+BackwoodsDungeonChest: {
+	// DisplayName: Backwoods Dungeon Chest
 	// Tooltip: ""
 }

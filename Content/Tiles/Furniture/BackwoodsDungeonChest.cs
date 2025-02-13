@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Miscellaneous;
-using RoA.Content.Items.Placeable.Furniture;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Audio;
@@ -127,7 +125,7 @@ sealed class BackwoodsDungeonChest : ModTile {
             }
         }
         else if (flag) {
-            int num3 = ModContent.ItemType<BackwoodsKey>();
+            int num3 = ModContent.ItemType<BackwoodsDungeonKey>();
             for (int index = 0; index < 58; ++index) {
                 if (localPlayer.inventory[index].type == num3 && localPlayer.inventory[index].stack > 0 && Chest.Unlock(num1, num2)) {
                     --localPlayer.inventory[index].stack;
@@ -188,7 +186,7 @@ sealed class BackwoodsDungeonChest : ModTile {
             string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
             localPlayer.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
             if (localPlayer.cursorItemIconText == defaultName) {
-                localPlayer.cursorItemIconID = this.IsLockedChest(num1, num2) ? ModContent.ItemType<BackwoodsKey>() : ModContent.ItemType<BackwoodsStoneChest>();
+                localPlayer.cursorItemIconID = this.IsLockedChest(num1, num2) ? ModContent.ItemType<BackwoodsDungeonKey>() : ModContent.ItemType<Items.Placeable.Furniture.BackwoodsDungeonChest>();
                 localPlayer.cursorItemIconText = "";
             }
         }

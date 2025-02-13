@@ -6,9 +6,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
 
-sealed class BackwoodsKey : ModItem {
+sealed class BackwoodsDungeonKey : ModItem {
 	public override void SetStaticDefaults() {
-        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BackwoodsStoneChest>();
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BackwoodsDungeonChest>();
         ItemID.Sets.UsesCursedByPlanteraTooltip[Type] = true;
     }
 
