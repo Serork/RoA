@@ -223,5 +223,5 @@ SmallMoon: {
 
 Root: {
 	DisplayName: Root
-	Description: Mods.RoA.Buffs.Root.Description
+	Description: Movement temporarily prohibited
 }

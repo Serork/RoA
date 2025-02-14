@@ -1,6 +1,6 @@
 Hunter: {
 	Button1: Talk
-	Button2_1: Trade
+	Button2_1: Barter
 	Button2_2: "{$Mods.RoA.NPC.Quotes.Hunter.Button2_1} (15 {$ItemName.Leather})"
 	Quote1: There, behind you! Ah, that must have been the wind.
 	Quote2: An awfully unpleasant druid has told me this part of the forest is off limits. I think I am starting to understand why.
@@ -9,9 +9,10 @@ Hunter: {
 	Quote5: Be careful, there is a giant beast following in my footsteps… I must be ready for an attack any moment now.
 	Quote6: I had to make a run for it, so my clothes need mending. I’m willing to spare some coin for any leather you have in your possession.
 	Quote7: Argh!!! Startle me like that again and I’ll start blasting!
-	NotEnoughTradeQuote1: I am interested in refined leather only! If I had a use for dirty scraps, I would have already cut them from the carcasses of my prey.
+	Quote8: Harpoon? Sorry, kid, but this gun shoots real bullets.
+	NotEnoughTradeQuote1: I am interested in refined leather only! If I had a use for dirty scraps, I would have already skinned the carcasses of my prey.
 	NotEnoughTradeQuote2: Are you trying to swindle me? If you don’t have any leather you better get out of my way!
-	NotEnoughTradeQuote3: NotEnoughLeatherQuote3
+	NotEnoughTradeQuote3: The last thing you want to do is to taunt a desperate man like me, kid.
 	TradeQuote1: Thank you. With this leather, I may live to fight another day.
 	TradeQuote2: Much obliged. These supplies will serve me well.
 	TradeQuote3: TradeQuote3

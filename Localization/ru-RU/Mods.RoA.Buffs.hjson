@@ -223,5 +223,4 @@ SmallMoon: {
 
 Root: {
 	DisplayName: Капкан
-	// Description: Mods.RoA.Buffs.Root.Description
-}
+	Description: Передвижение временно ограниченно
