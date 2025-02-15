@@ -1552,3 +1552,8 @@ WreathCharger: {
 	DisplayName: Wreath Charger
 	Tooltip: "#TEST: CHARGES DRUID WREATH"
 }
+
+HedgehogTerrarium: {
+	DisplayName: Hedgehog Cage
+	Tooltip: ""
+}

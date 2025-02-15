@@ -1546,3 +1546,8 @@ WreathCharger: {
 	DisplayName: Заряжатель венка
 	Tooltip: "#ТЕСТ: ЗАРЯЖАЕТ ВЕНОК"
 }
+
+HedgehogTerrarium: {
+	// DisplayName: Hedgehog Cage
+	// Tooltip: ""
+}

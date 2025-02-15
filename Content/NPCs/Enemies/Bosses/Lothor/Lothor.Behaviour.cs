@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using RoA.Common;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
@@ -796,7 +797,14 @@ sealed partial class Lothor : ModNPC {
         }
 
         if (ScreamTimer >= MinDelayToStartScreaming && ++_attackTime > 8) {
+            List<ushort> invalidBuffTypeToRemove = [];
+            // examples
+            //invalidBuffTypeToRemove.Add(BuffID.Confused);
+            //invalidBuffTypeToRemove.Add((ushort)ModContent.BuffType<Deceleration>());
             for (int i = 0; i < NPC.maxBuffs; i++) {
+                if (NPC.buffType[i] >= 0 && invalidBuffTypeToRemove.Contains((ushort)NPC.buffType[i])) {
+                    continue;
+                }
                 if (NPC.buffType[i] != 0) {
                     NPC.DelBuff(i);
                 }
