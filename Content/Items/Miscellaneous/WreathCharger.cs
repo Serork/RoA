@@ -22,7 +22,7 @@ sealed class WreathCharger : ModItem {
 
     public override bool? UseItem(Player player) {
         if (player.ItemAnimationJustStarted) {
-            var handler = player.GetModPlayer<WreathHandler>();
+            WreathHandler handler = player.GetModPlayer<WreathHandler>();
             handler.IncreaseResourceValue();
             handler.MakeDustsOnHit();
         }
