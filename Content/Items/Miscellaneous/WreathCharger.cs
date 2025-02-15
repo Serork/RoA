@@ -9,8 +9,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
 
-sealed class WreathCharger : ModItem {
-    public override void SetDefaults() {
+sealed class WreathCharger : NatureItem {
+    protected override void SafeSetDefaults() {
         int width = 30; int height = 28;
         Item.Size = new Vector2(width, height);
 
