@@ -26,11 +26,9 @@ public class TrappedChests : ModTile {
         if (type == ModContent.TileType<TrappedChests>()) {
             bool result = frameX >= 36;
             if (result) {
-                Main.tileShine2[type] = true;
                 Main.tileShine[Type] = 1200;
             }
             else {
-                Main.tileShine2[type] = false;
                 Main.tileShine[Type] = 0;
             }
             return result;

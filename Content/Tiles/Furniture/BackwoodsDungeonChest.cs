@@ -20,7 +20,7 @@ sealed class BackwoodsDungeonChest : ModTile {
 	public override void SetStaticDefaults() {
 		Main.tileSpelunker[Type] = true;
 		Main.tileContainer[Type] = true;
-		Main.tileShine2[Type] = false;
+		Main.tileShine2[Type] = true;
 		//Main.tileShine[Type] = 1200;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;

@@ -44,16 +44,18 @@ sealed class ElderwoodCandelabra : ModTile {
 
     public override void HitWire(int i, int j) {
         Tile tile = Main.tile[i, j];
-        int leftX = i - tile.TileFrameX / 18 % 2;
+        int topX = i - tile.TileFrameX / 18 % 2;
         int topY = j - tile.TileFrameY / 18 % 2;
-        short frameAdjustment = (short)(tile.TileFrameX < 36 ? 36 : -36);
-        for (int k = 0; k < 2; ++k) {
-            for (int b = 0; b < 2; ++b) {
-                Main.tile[leftX + k, topY + b].TileFrameX += frameAdjustment;
-                Wiring.SkipWire(leftX + k, topY + b);
-            }
-        }
-        NetMessage.SendTileSquare(-1, leftX, topY + 1, 1, TileChangeType.None);
+        short frameAdjustment = (short)(tile.TileFrameX >= 36 ? -36 : 36);
+        Main.tile[topX, topY].TileFrameX += frameAdjustment;
+        Main.tile[topX, topY + 1].TileFrameX += frameAdjustment;
+        Main.tile[topX + 1, topY].TileFrameX += frameAdjustment;
+        Main.tile[topX + 1, topY + 1].TileFrameX += frameAdjustment;
+        Wiring.SkipWire(topX, topY);
+        Wiring.SkipWire(topX, topY + 1);
+        Wiring.SkipWire(topX + 1, topY);
+        Wiring.SkipWire(topX + 1, topY + 1);
+        NetMessage.SendTileSquare(-1, i, topY + 1, 3, TileChangeType.None);
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {

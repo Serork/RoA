@@ -35,11 +35,12 @@ sealed class ElderwoodCandle : ModTile {
 
     public override void HitWire(int i, int j) {
         Tile tile = Main.tile[i, j];
-        int topY = j - tile.TileFrameY / 18 % 3;
-        short frameAdjustment = (short)(tile.TileFrameX > 0 ? -18 : 18);
-        Main.tile[i, topY].TileFrameX += frameAdjustment;
-        Wiring.SkipWire(i, topY);
-        NetMessage.SendTileSquare(-1, i, topY + 1, 1, TileChangeType.None);
+        int topX = i - tile.TileFrameX / 18 % 1;
+        int topY = j - tile.TileFrameY / 18 % 1;
+        short frameAdjustment = (short)(tile.TileFrameX >= 18 ? -18 : 18);
+        Main.tile[topX, topY].TileFrameX += frameAdjustment;
+        Wiring.SkipWire(topX, topY);
+        NetMessage.SendTileSquare(-1, i, topY + 1, 3, TileChangeType.None);
     }
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) => spriteEffects = SpriteEffects.None;
