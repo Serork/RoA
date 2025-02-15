@@ -1541,3 +1541,8 @@ BackwoodsDungeonChest: {
 	// DisplayName: Backwoods Chest
 	// Tooltip: ""
 }
+
+WreathCharger: {
+	// DisplayName: Wreath Charger
+	// Tooltip: ""
+}

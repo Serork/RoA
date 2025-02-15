@@ -8,6 +8,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -159,13 +160,23 @@ sealed class SkinningNPC : GlobalNPC {
 		IItemDropRule conditionalRule = new LeadingConditionRule(dropCondition);
 		int npcType = npc.type;
 		bool critters = NPCID.Sets.CountsAsCritter[npcType] && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
-			!NPCID.Sets.IsDragonfly[npcType]/* && !NPCID.Sets.TownCritter[npcType]*/ && !npc.FullName.Contains("utterfly");
+			!NPCID.Sets.IsDragonfly[npcType]/* && !NPCID.Sets.TownCritter[npcType]*/ && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
 		bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType] &&
 			npc.aiStyle != 22;
 		NPCsType type;
 		type = critters ? NPCsType.Critters : enemies ? NPCsType.Enemies : NPCsType.None;
-		if (type == NPCsType.None || NPCID.Sets.ShimmerTransformToNPC[npcType] == 677)
+		if (type == NPCsType.None)
 			return;
+		int[] invalidTypes = [677 /*faeling*/, NPCID.SandElemental, NPCID.DungeonSpirit,
+		                      NPCID.Worm, NPCID.TruffleWorm, NPCID.TruffleWormDigger, NPCID.Grasshopper,
+		                      NPCID.Firefly, NPCID.EnchantedNightcrawler, NPCID.FairyCritterBlue, NPCID.FairyCritterGreen, NPCID.FairyCritterPink,
+		                      NPCID.Grubby, NPCID.LadyBug, NPCID.Lavafly, NPCID.LightningBug, NPCID.Maggot, NPCID.Snail, NPCID.GlowingSnail, NPCID.MagmaSnail, NPCID.SeaSnail,
+		                      NPCID.Sluggy, NPCID.Stinkbug,
+					          NPCID.HellButterfly, 661,
+		                      ];
+		if (invalidTypes.Contains(npcType)) {
+			return;
+		}
 		int itemType = type switch {
 			NPCsType.Critters => (ushort)ModContent.ItemType<AnimalLeather>(),
 			NPCsType.Enemies => (ushort)ModContent.ItemType<RoughLeather>()

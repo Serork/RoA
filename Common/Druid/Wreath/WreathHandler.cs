@@ -9,6 +9,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Wreaths;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Projectiles.Friendly;
@@ -206,9 +207,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void OnHitNPC(Projectile proj, bool nonDataReset = false, NPC target = null) {
-        //if (target != null && target.immortal) {
-        //    return;
-        //}
+        if (target != null && target.immortal) {
+            return;
+        }
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;
         }
@@ -617,7 +618,7 @@ sealed class WreathHandler : ModPlayer {
         dust.customData = DrawColorOpacity * PulseIntensity * 2f;
     }
 
-    private void MakeDustsOnHit(float progress = -1f) {
+    public void MakeDustsOnHit(float progress = -1f) {
         float actualProgress = ActualProgress3;
         ushort dustType = GetDustType();
         if (actualProgress >= 0.1f && actualProgress <= 0.95f) {
