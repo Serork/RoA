@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Content.Emotes;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Core.Utility;
 
@@ -56,6 +57,8 @@ sealed class Hunter : ModNPC {
             //Direction = 1
             Hide = true
         };
+
+        NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<HunterEmote>();
 
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
 

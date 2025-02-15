@@ -8,6 +8,7 @@
 	  <LangVersion>preview</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Localization\en-US\Mods.RoA.Emotes.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Bestiary.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Biomes.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Buffs.hjson" />
@@ -25,6 +26,7 @@
 	  <None Remove="Localization\en-US_Mods.RoA.World.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.WorldGen.hjson" />
 	  <None Remove="Localization\ru-RU\Mods.RoA.Bestiary.hjson" />
+	  <None Remove="Localization\ru-RU\Mods.RoA.Emotes.hjson" />
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Block.png" />
 	  <None Remove="Resources\Textures\Biomes\Backwoods\DruidBiomeWaterStyle_Slope.png" />
 	  <None Remove="Resources\Textures\Buffs\BoneHarpyAttackDebuff.png" />
