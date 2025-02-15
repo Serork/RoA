@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -22,6 +24,10 @@ sealed class ElderwoodPiano : ModTile {
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
         AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.Piano"));
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodPiano>());
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;

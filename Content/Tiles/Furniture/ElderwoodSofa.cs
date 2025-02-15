@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -30,6 +32,10 @@ sealed class ElderwoodSofa : ModTile {
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
         AddMapEntry(new Color(191, 142, 111), Language.GetText("MapObject.Sofa"));
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodSofa>());
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;

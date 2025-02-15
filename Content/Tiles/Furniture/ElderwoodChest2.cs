@@ -74,6 +74,10 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
         TileObjectData.addTile(Type);
 	}
 
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest2>());
+    }
+
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         TileHelper.AddPostSolidTileDrawPoint(this, i, j);
 

@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -48,6 +50,10 @@ sealed class ElderwoodToilet : ModTile {
         TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
         TileObjectData.addAlternate(1); // Facing right will use the second texture style
         TileObjectData.addTile(Type);
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodToilet>());
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) {

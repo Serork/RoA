@@ -5,6 +5,8 @@ using RoA.Common.Tiles;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -39,6 +41,11 @@ public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn {
 
         AddMapEntry(new Color(251, 235, 127), Language.GetText("MapObject.Lantern"));
     }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodLantern>());
+    }
+
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
     public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {

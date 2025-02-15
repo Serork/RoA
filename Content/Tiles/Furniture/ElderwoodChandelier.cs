@@ -7,6 +7,8 @@ using RoA.Common.Tiles;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -54,7 +56,11 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
         }
 	}
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChandelier>());
+    }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
 	public override void HitWire(int i, int j) {
         Tile tile = Main.tile[i, j];

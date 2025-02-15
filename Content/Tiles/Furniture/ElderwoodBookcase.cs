@@ -2,6 +2,8 @@
 
 using RoA.Content.Dusts.Backwoods;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -28,4 +30,8 @@ sealed class ElderwoodBookcase : ModTile {
 	}
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodBookcase>());
+    }
 }

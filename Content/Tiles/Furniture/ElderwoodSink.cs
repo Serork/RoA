@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,6 +30,10 @@ sealed class ElderwoodSink : ModTile {
         AdjTiles = [TileID.Sinks];
 
         RegisterItemDrop(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodSink>());
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodSink>());
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;

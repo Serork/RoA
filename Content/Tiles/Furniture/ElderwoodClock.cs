@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
@@ -31,6 +33,10 @@ sealed class ElderwoodClock : ModTile {
         AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.GrandfatherClock"));
 
         AdjTiles = [TileID.GrandfatherClocks];
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodClock>());
     }
 
     public override bool RightClick(int x, int y) {

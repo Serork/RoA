@@ -2,6 +2,8 @@
 
 using RoA.Content.Dusts.Backwoods;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -34,6 +36,10 @@ sealed class ElderwoodBed : ModTile {
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.Bed"));
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodBed>());
     }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;

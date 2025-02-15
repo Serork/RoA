@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Placeable.Furniture;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -52,6 +54,10 @@ sealed class ElderwoodDresser : ModTile {
         AddMapEntry(new Color(191, 142, 111), name);
 
         AdjTiles = [TileID.Dressers];
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodDresser>());
     }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {

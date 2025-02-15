@@ -1,4 +1,7 @@
 using Microsoft.Xna.Framework;
+
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -53,7 +56,11 @@ sealed class ElderwoodDoorClosed : ModTile {
 		//OpenDoorID/* tModPorter Note: Removed. Use TileID.Sets.OpenDoorID instead */ = ModContent.TileType<ElderwoodDoorOpened>();
 	}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodDoor>());
+    }
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = 1;
 

@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -61,6 +63,10 @@ sealed class ElderwoodChest : ModTile {
             ];
         TileObjectData.addTile(Type);
 	}
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest>());
+    }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 

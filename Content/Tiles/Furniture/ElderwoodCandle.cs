@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
@@ -23,6 +25,10 @@ sealed class ElderwoodCandle : ModTile {
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
         AddMapEntry(new Color(253, 221, 3), Language.GetText("ItemName.Candle"));
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodCandle>());
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;

@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -75,7 +77,11 @@ sealed class ElderwoodDoorOpened : ModTile {
 		TileID.Sets.CloseDoorID[Type] = ModContent.TileType<ElderwoodDoorClosed>();
 	}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodDoor>());
+    }
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = 1;
 
