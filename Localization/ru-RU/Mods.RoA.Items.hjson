@@ -1551,3 +1551,18 @@ HedgehogTerrarium: {
 	// DisplayName: Hedgehog Cage
 	// Tooltip: ""
 }
+
+BackwoodsDungeonChest_Trapped: {
+	// DisplayName: Trapped Backwoods Chest
+	// Tooltip: ""
+}
+
+ElderwoodChest_Trapped: {
+	// DisplayName: Trapped Elderwood Chest
+	// Tooltip: ""
+}
+
+ElderwoodChest2_Trapped: {
+	// DisplayName: Trapped Rootbound Chest
+	// Tooltip: ""
+}
