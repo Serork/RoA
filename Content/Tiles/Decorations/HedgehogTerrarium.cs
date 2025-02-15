@@ -44,4 +44,8 @@ sealed class HedgehogTerrarium : ModTile {
         int tileCageFrameIndex = TileDrawing.GetSmallAnimalCageFrame(i, j, tile.TileFrameX, tile.TileFrameY);
         frameYOffset = Main.bunnyCageFrame[tileCageFrameIndex] * AnimationFrameHeight;
     }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) {
+        num = 3;
+    }
 }
