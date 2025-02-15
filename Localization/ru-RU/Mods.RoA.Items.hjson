@@ -1544,5 +1544,5 @@ BackwoodsDungeonChest: {
 
 WreathCharger: {
 	DisplayName: Заряжатель венка
-	Tooltip: "#ТЕСТ: НАКАПЛИВАЕТ ВЕНОК"
+	Tooltip: "#ТЕСТ: ЗАРЯЖАЕТ ВЕНОК"
 }
