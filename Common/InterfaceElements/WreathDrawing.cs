@@ -115,7 +115,8 @@ sealed class WreathDrawing : PlayerDrawLayer {
         bool soulOfTheWoods = stats.SoulOfTheWoods;
         float progress2 = stats.ActualProgress2 - 1f;
         float value = progress2;
-        float progress3 = 1f - MathHelper.Clamp(progress2 * 0.7f, 0f, 0.7f);
+        float mult = 0.5f; // second transition mult
+        float progress3 = 1f - MathHelper.Clamp(progress2 * mult, 0f, mult);
         Rectangle sourceRectangle2 = sourceRectangle;
         sourceRectangle2.X = 0;
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
@@ -132,7 +133,8 @@ sealed class WreathDrawing : PlayerDrawLayer {
         if (soulOfTheWoods) {
             drawFilling(sourceRectangle2, offset);
         }
-        progress3 = 1f - MathHelper.Clamp(progress2 * 2.25f, 0f, 1f);
+        float mult2 = 2.25f; // first transition mult
+        progress3 = 1f - MathHelper.Clamp(progress2 * mult2, 0f, 1f);
         // effect
         void drawEffect(float progress, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
             //color = Color.Multiply(Stats.DrawColor, alpha);
