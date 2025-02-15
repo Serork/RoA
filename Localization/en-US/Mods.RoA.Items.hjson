@@ -1550,5 +1550,5 @@ BackwoodsDungeonChest: {
 
 WreathCharger: {
 	DisplayName: Wreath Charger
-	Tooltip: ""
+	Tooltip: "#TEST: CHARGES DRUID WREATH"
 }
