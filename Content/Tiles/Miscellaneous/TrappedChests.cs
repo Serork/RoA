@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
@@ -17,6 +18,27 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 public class TrappedChests : ModTile {
+    public override void Load() {
+        On_TileDrawing.ShouldTileShine += On_TileDrawing_ShouldTileShine;
+    }
+
+    private bool On_TileDrawing_ShouldTileShine(On_TileDrawing.orig_ShouldTileShine orig, ushort type, short frameX) {
+        if (type == ModContent.TileType<TrappedChests>()) {
+            bool result = frameX >= 36;
+            if (result) {
+                Main.tileShine2[type] = true;
+                Main.tileShine[Type] = 1200;
+            }
+            else {
+                Main.tileShine2[type] = false;
+                Main.tileShine[Type] = 0;
+            }
+            return result;
+        }
+
+        return orig(type, frameX);
+    }
+
     public override void SetStaticDefaults() {
         Main.tileSpelunker[Type] = true;
         Main.tileShine2[Type] = true;
@@ -67,8 +89,6 @@ public class TrappedChests : ModTile {
             --num1;
         if (tile.TileFrameY != 0)
             --num2;
-        if (num1 != i || num2 != j)
-            return false;
         int chestItem = GetChestItem(tile.TileFrameX / 36);
         if (chestItem > 0)
             Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), num1 * 16, num2 * 16, 32, 34, chestItem);
@@ -127,7 +147,7 @@ public class TrappedChests : ModTile {
         NetMessage.SendTemporaryAnimation(-1, 2, tile.TileType, num1, num2);
         Trigger(i, j);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new TrappedChestActionPacket(Main.LocalPlayer, num1, num2));
+            MultiplayerSystem.SendPacket(new TrappedChestActionPacket(num1, num2));
         }
         return true;
     }

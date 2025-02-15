@@ -3,9 +3,6 @@ using RoA.Core.Utility;
 
 using System.IO;
 
-using Terraria.ID;
-using Terraria;
-
 namespace RoA.Common.Networking.Packets;
 
 sealed class BeaconResetPacket : NetPacket {
