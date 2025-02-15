@@ -3,6 +3,7 @@
 using Newtonsoft.Json.Linq;
 
 using RoA.Common;
+using RoA.Common.NPCs;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
@@ -780,6 +781,10 @@ sealed partial class Lothor : ModNPC {
                 WreathAttack();
                 break;
         }
+    }
+
+    public override void OnKill() {
+        NPC.SetEventFlagCleared(ref DownedBossSystem.downedLothorBoss, -1);
     }
 
     private void HandleScream() {
