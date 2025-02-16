@@ -43,7 +43,7 @@ sealed class Bookworms : ModItem {
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        position = player.Center + velocity.SafeNormalize(Vector2.Zero) * 10f;
+        position = player.Center + velocity.SafeNormalize(Vector2.Zero) * 0f;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
@@ -168,12 +168,12 @@ sealed class BookwormsProjectile : ModProjectile {
         if (Projectile.ai[0] == 0f && Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
-            if (Projectile.owner == Main.myPlayer) {
-                int count = Main.rand.Next(6, 9);
-                int latest = Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI);
-                for (int i = 0; i < count; i++) {
-                    int oldLatest = latest;
-                    Vector2 position = Projectile.Center;
+            int count = Main.rand.Next(6, 9);
+            int latest = Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI);
+            for (int i = 0; i < count; i++) {
+                int oldLatest = latest;
+                Vector2 position = Projectile.Center;
+                if (Projectile.owner == Main.myPlayer) {
                     latest = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, Vector2.Zero, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
                     Main.projectile[latest].ai[0] = i == count - 1 ? 3f : 2f;
                     Main.projectile[latest].ai[1] = oldLatest;
