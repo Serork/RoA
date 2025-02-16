@@ -220,7 +220,7 @@ sealed class BookwormsProjectile : ModProjectile {
                 }
             }
             dif = dif.SafeNormalize(Vector2.Zero);
-            float length2 = 20f * (Projectile.ai[2] <= 1 ? 1f : 0.5f);
+            float length2 = 20f * (Projectile.ai[0] == 3f ? 0.6f : Projectile.ai[2] <= 1 ? 1f : 0.5f);
             Projectile.rotation = dif.ToRotation() + (float)Math.PI / 2f;
             Projectile.Center = following.Center - dif * length2;
         }
