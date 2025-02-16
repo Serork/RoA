@@ -83,6 +83,10 @@ sealed class SphereHandler : GlobalItem {
             return;
         }
 
+        if (item.beingGrabbed) {
+            _terraTime = _breath = _breath2 = _flyTime = 0;
+        }
+
         UpdateStream(item);
         UpdatePyre(item);
         if (UpdateCondor(item)) {

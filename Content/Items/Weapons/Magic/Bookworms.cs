@@ -124,13 +124,15 @@ sealed class BookwormsProjectile : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        Projectile.Opacity = Utils.GetLerpValue(90, 80, Projectile.timeLeft, true);
+        int timeLeftExtra = (int)Projectile.ai[2] * 2;
+        Projectile.Opacity = Utils.GetLerpValue(90 - timeLeftExtra, 80 - timeLeftExtra, Projectile.timeLeft, true);
         //Projectile.tileCollide = Projectile.Opacity >= 0.5f;
         if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
             Projectile.timeLeft -= 1;
         }
         if (Projectile.localAI[2] == 0f) {
             Projectile.localAI[2] = 1f;
+            Projectile.timeLeft = 90 - timeLeftExtra;
             if (Projectile.owner == Main.myPlayer) {
                 _direction = (player.Center - player.GetViableMousePosition()).X.GetDirection();
                 _length = Main.rand.NextFloat(0.25f, 0.3f);
