@@ -175,9 +175,12 @@ sealed class BookwormsProjectile : ModProjectile {
                     int oldLatest = latest;
                     Vector2 position = Projectile.Center;
                     latest = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position - Projectile.velocity.SafeNormalize(Vector2.Zero) * 3.5f * i, Vector2.Zero, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
-                    Main.projectile[latest].ai[0] = i == count ? 3f : 2f;
-                    Main.projectile[latest].ai[1] = oldLatest;
-                    Main.projectile[latest].ai[2] = i;
+                    int me = Projectile.GetByUUID(Projectile.owner, latest);
+                    Main.projectile[me].ai[0] = i == count ? 3f : 2f;
+                    Main.projectile[me].ai[1] = oldLatest;
+                    Main.projectile[me].ai[2] = i;
+                    Projectile.netUpdate = true;
+                    Main.projectile[me].netUpdate = true;
                 }
             }
         }
