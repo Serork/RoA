@@ -73,6 +73,12 @@ sealed class SphereHandler : GlobalItem {
         _lerpColors = null;
     }
 
+    public override void PostUpdate(Item item) {
+        if (item.beingGrabbed) {
+            _terraTime = _breath = _breath2 = _flyTime = 0;
+        }
+    }
+
     public override void Update(Item item, ref float gravity, ref float maxFallSpeed) {
         if (_cdToTransformation > 0) {
             if (item.beingGrabbed || item.shimmered) {
@@ -81,10 +87,6 @@ sealed class SphereHandler : GlobalItem {
             _cdToTransformation--;
             _cdToTransformation = Math.Max(0, _cdToTransformation);
             return;
-        }
-
-        if (item.beingGrabbed) {
-            _terraTime = _breath = _breath2 = _flyTime = 0;
         }
 
         UpdateStream(item);
