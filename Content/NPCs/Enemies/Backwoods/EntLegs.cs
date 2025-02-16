@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Gores;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -236,6 +237,12 @@ sealed class EntLegs : RoANPC {
         Main.instance.CameraModifiers.Add(punchCameraModifier);
 		if (!empowered) {
 			SoundEngine.PlaySound(SoundID.Item73, NPC.Bottom);
+			float num2 = 10f;
+			if (Main.netMode != NetmodeID.Server) {
+				for (int i = 0; i < Main.rand.Next(1, 4); i++) {
+					Gore.NewGore(null, NPC.Top - Vector2.UnitY * 20f + Main.rand.RandomPointInArea(40f), Utils.RandomVector2(Main.rand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + Main.rand.NextFloat() * 0.6f);
+				}
+			}
 		}
     }
 }
