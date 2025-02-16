@@ -171,13 +171,13 @@ sealed class BookwormsProjectile : ModProjectile {
             int latest = Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI);
             if (Projectile.owner == Main.myPlayer) {
                 int count = Main.rand.Next(6, 9);
-                for (int i = 0; i < count; i++) {
+                for (int i = 1; i < count + 1; i++) {
                     int oldLatest = latest;
                     Vector2 position = Projectile.Center;
-                    latest = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position - Projectile.velocity.SafeNormalize(Vector2.Zero) * 5f * (i + 1), Vector2.Zero, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
-                    Main.projectile[latest].ai[0] = i == count - 1 ? 3f : 2f;
+                    latest = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position - Projectile.velocity.SafeNormalize(Vector2.Zero) * 3.5f * i, Vector2.Zero, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    Main.projectile[latest].ai[0] = i == count ? 3f : 2f;
                     Main.projectile[latest].ai[1] = oldLatest;
-                    Main.projectile[latest].ai[2] = i + 1;
+                    Main.projectile[latest].ai[2] = i;
                 }
             }
         }
@@ -220,10 +220,6 @@ sealed class BookwormsProjectile : ModProjectile {
             float length2 = 20f * (Projectile.ai[2] <= 1 ? 1f : 0.5f);
             Projectile.rotation = dif.ToRotation() + (float)Math.PI / 2f;
             Projectile.Center = following.Center - dif * length2;
-
-            //Dust dust = Dust.NewDustPerfect(following.Center, DustID.Adamantite);
-            //dust.noGravity = true;
-            //dust.velocity = Vector2.Zero;
         }
     }
 
