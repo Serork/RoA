@@ -99,7 +99,7 @@ sealed class BookwormsProjectile : ModProjectile {
             if (Main.projectile.IndexInRange(byUUID)) {
                 Projectile following = Main.projectile[byUUID];
                 if (flag2) {
-                    if (!following.active) {
+                    if (Projectile.ai[2] > 2 && following.timeLeft < 7) {
                         flag = true;
                     }
                 }
@@ -206,7 +206,7 @@ sealed class BookwormsProjectile : ModProjectile {
 
             return;
         }
-        int byUUID = (int)Projectile.ai[1];
+        int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
         if (Main.projectile.IndexInRange(byUUID)) {
             Projectile following = Main.projectile[byUUID];
             Vector2 dif = following.Center - Projectile.Center;
