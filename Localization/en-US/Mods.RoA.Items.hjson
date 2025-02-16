@@ -156,7 +156,7 @@ BandOfPurity: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		While [kw/n:wreath] is full, increases regeneration
+		While [kw/n:wreath] is charged, increases regeneration
 		'''
 }
 
@@ -165,7 +165,7 @@ GiantTreeSapling: {
 	Tooltip:
 		'''
 		10% increased [kw/n:wreath] [kw/n:charge rate]
-		While [kw/n:wreath] is full, increases maximum life by 20
+		While [kw/n:wreath] is charged, increases maximum life by 20
 		'''
 }
 
@@ -247,7 +247,7 @@ ForestWreath: {
 	Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage
-		While [kw/n:wreath] is full:
+		While [kw/n:wreath] is charged:
 		Increases maximum life by 40
 		'''
 }
@@ -267,7 +267,7 @@ FenethsBlazingWreath: {
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		Up to 20% chance for attacks to grow burning fireblossom on enemies and the holder
-		While [kw/n:wreath] is full:
+		While [kw/n:wreath] is charged:
 		Increases nature knockback
 		Fireblossom explodes over time, spreading to enemies nearby
 		'''
@@ -279,7 +279,7 @@ ForestWreath2: {
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
-		While [kw/n:wreath] is full:
+		While [kw/n:wreath] is charged:
 		Increases maximum life by 40
 		'''
 }
@@ -289,7 +289,7 @@ JungleWreath: {
 	Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage
-		While [kw/n:wreath] is full:
+		While [kw/n:wreath] is charged:
 		Attackers are poisoned
 		'''
 }
@@ -300,7 +300,7 @@ JungleWreath2: {
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
-		While [kw/n:wreath] is full:
+		While [kw/n:wreath] is charged:
 		Attackers are poisoned
 		'''
 }
@@ -310,7 +310,7 @@ SnowWreath: {
 	Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage
-		While [kw/n:wreath] is full:
+		While [kw/n:wreath] is charged:
 		Increases nature critical strike chance by 2%
 		'''
 }
@@ -321,7 +321,7 @@ SnowWreath2: {
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
-		While [kw/n:wreath] is full:
+		While [kw/n:wreath] is charged:
 		Increases nature critical strike chance by 2%
 		'''
 }
@@ -336,7 +336,7 @@ SoulOfTheWoods: {
 	Tooltip:
 		'''
 		Allows charging the [kw/n:wreath] twice
-		While second [kw/n:wreath] is full, creates a pulsating aura
+		While second [kw/n:wreath] is charged, creates a pulsating aura
 		'''
 }
 
@@ -484,7 +484,7 @@ BrilliantBouquet: {
 	Tooltip:
 		'''
 		Shoots a bouquet of vibrant petals
-		While [kw/n:wreath] is full, they cross-pollinate
+		While [kw/n:wreath] is charged, they cross-pollinate
 		'''
 }
 
