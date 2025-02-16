@@ -106,6 +106,9 @@ sealed class LothorSpike : ModProjectile {
     public override bool ShouldUpdatePosition() => false;
 
     public override bool PreDraw(ref Color lightColor) {
+        if (_partInfo == null) {
+            return false;
+        }
         Texture2D texture;
         Vector2 start = Projectile.Center;
         int index = 0;
