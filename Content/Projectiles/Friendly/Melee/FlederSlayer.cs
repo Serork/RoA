@@ -124,8 +124,8 @@ sealed class FlederSlayer : ModProjectile {
         Player player = Main.player[Projectile.owner];
         if (Projectile.owner == Main.myPlayer) {
             if (!_init) {
-                _direction = player.GetViableMousePosition().X > player.Center.X ? 1 : -1;
-                Projectile.Center = player.Center;
+                _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
+                Projectile.Center = player.MountedCenter;
                 Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
                 _timeLeft = Projectile.timeLeft;
                 _init = true;
@@ -217,7 +217,7 @@ sealed class FlederSlayer : ModProjectile {
             Projectile.Kill();
         }
         else {
-            Projectile.Center = player.Center + Vector2.Normalize(Projectile.velocity);
+            Projectile.Center = player.MountedCenter + Vector2.Normalize(Projectile.velocity);
             float dir = (float)(Math.PI / 2.0 + (double)playerDirection * 1.0);
             float offset = MathHelper.Pi / 1.15f * playerDirection;
             SoundStyle style = new SoundStyle(ResourceManager.ItemSounds + "Whisper") { Volume = 1.15f };
@@ -244,7 +244,7 @@ sealed class FlederSlayer : ModProjectile {
                 }
 
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, (dir - offset).ToRotationVector2() * 50f, 0.1f);
-                Projectile.velocity += Projectile.DirectionFrom(player.Center) * 3f;
+                Projectile.velocity += Projectile.DirectionFrom(player.MountedCenter) * 3f;
 
                 _offset = Vector2.SmoothStep(_offset, new Vector2(-10f * playerDirection, 12f), 3f);
 
@@ -376,7 +376,7 @@ sealed class FlederSlayer : ModProjectile {
                                         for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
                                             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
                                                                            projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
-                                                                           Helper.VelocityToPoint(player.Center, projectileCenter, 35f * _charge * player.GetTotalAttackSpeed(DamageClass.Melee)),
+                                                                           Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * _charge * player.GetTotalAttackSpeed(DamageClass.Melee)),
                                                                            ModContent.ProjectileType<WaveSlash>(),
                                                                            (int)((Projectile.damage + Projectile.damage / 2) * (_charge * 1.15f + 0.15f)),
                                                                            Projectile.knockBack,
@@ -732,7 +732,7 @@ sealed class FlederSlayer : ModProjectile {
             Projectile.direction = Projectile.velocity.X > 0f ? 1 : -1;
             Player player = Main.player[Projectile.owner];
             Projectile.velocity *= 0.9f + Math.Clamp((player.GetTotalAttackSpeed(DamageClass.Melee) - 1f) * 0.1f, 0f, 1f);
-            float y = player.Center.Y - 10f;
+            float y = player.MountedCenter.Y - 10f;
             while (!WorldGen.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction) / 16, (int)y / 16)) {
                 y++;
             }

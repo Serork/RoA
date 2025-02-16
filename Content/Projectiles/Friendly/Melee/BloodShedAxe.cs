@@ -204,8 +204,8 @@ sealed class BloodshedAxe : ModProjectile {
         if (Projectile.owner == Main.myPlayer) {
             if (!_init) {
                 _time = itemAnimationMax;
-                _direction = player.GetViableMousePosition().X > player.Center.X ? 1 : -1;
-                Projectile.Center = player.Center;
+                _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
+                Projectile.Center = player.MountedCenter;
                 Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
                 _init = true;
                 Projectile.netUpdate = true;
@@ -251,7 +251,7 @@ sealed class BloodshedAxe : ModProjectile {
         else if (_init2) {
             _f = 1f - _time / (float)itemAnimationMax + 0.5f - (_time < itemAnimationMax * 0.45f ? 1f - _time / (float)itemAnimationMax + 0.5f : 0f);
             Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
-            Projectile.Center = player.Center;
+            Projectile.Center = player.MountedCenter;
             if (Projectile.timeLeft > min) {
                 //float value2 = f * 1.25f;
                 float value2 = _f * 1.15f;
@@ -284,7 +284,7 @@ sealed class BloodshedAxe : ModProjectile {
         float value = 1f - itemAnimation / (float)itemAnimationMax;
         Vector2 rotationVector2 = (f2 + value * 1.25f * MathHelper.PiOver2).ToRotationVector2();
         Vector2 position = Projectile.Center + f2.ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 10.0 * Projectile.scale);
-        if (position.Distance(player.Center) > 40f && Projectile.timeLeft <= min + itemAnimationMax / 7) {
+        if (position.Distance(player.MountedCenter) > 40f && Projectile.timeLeft <= min + itemAnimationMax / 7) {
             Dust dust = Dust.NewDustPerfect(position, DustID.Blood, new Vector2?(rotationVector2 * 1f), (int)(255f - (1f - Projectile.timeLeft / min) * 1.5f * 255f), default, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
             dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
             dust.noLight = dust.noLightEmittence = true;
