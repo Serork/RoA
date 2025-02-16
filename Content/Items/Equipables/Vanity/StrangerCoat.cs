@@ -17,7 +17,7 @@ sealed class StrangerCoat : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 26; int height = 26;
+		int width = 30; int height = 26;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Orange;

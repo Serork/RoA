@@ -884,17 +884,17 @@ Moss: {
 }
 
 SoapSellersJacket: {
-	DisplayName: Soap Sellers Jacket
+	DisplayName: Soap Seller's Jacket
 	Tooltip: ""
 }
 
 SoapSellersJeans: {
-	DisplayName: Soap Sellers Jeans
+	DisplayName: Soap Seller's Jeans
 	Tooltip: ""
 }
 
 SoapSellersShades: {
-	DisplayName: Soap Sellers Shades
+	DisplayName: Soap Seller's Shades
 	Tooltip: ""
 }
 
