@@ -43,7 +43,7 @@ sealed class Bookworms : ModItem {
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        position = player.Center + velocity.SafeNormalize(Vector2.Zero) * 0f;
+        position = player.Center + velocity.SafeNormalize(Vector2.Zero) * 5f;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
@@ -168,13 +168,13 @@ sealed class BookwormsProjectile : ModProjectile {
         if (Projectile.ai[0] == 0f && Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
-            int count = Main.rand.Next(6, 9);
             int latest = Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI);
-            for (int i = 0; i < count; i++) {
-                int oldLatest = latest;
-                Vector2 position = Projectile.Center;
-                if (Projectile.owner == Main.myPlayer) {
-                    latest = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, Vector2.Zero, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
+            if (Projectile.owner == Main.myPlayer) {
+                int count = Main.rand.Next(6, 9);
+                for (int i = 0; i < count; i++) {
+                    int oldLatest = latest;
+                    Vector2 position = Projectile.Center;
+                    latest = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position - Projectile.velocity.SafeNormalize(Vector2.Zero) * 5f * (i + 1), Vector2.Zero, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
                     Main.projectile[latest].ai[0] = i == count - 1 ? 3f : 2f;
                     Main.projectile[latest].ai[1] = oldLatest;
                     Main.projectile[latest].ai[2] = i + 1;
@@ -203,15 +203,9 @@ sealed class BookwormsProjectile : ModProjectile {
 
             return;
         }
-        int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
-        if (byUUID == -1) {
-            return;
-        }
+        int byUUID = (int)Projectile.ai[1];
         if (Main.projectile.IndexInRange(byUUID)) {
             Projectile following = Main.projectile[byUUID];
-            if (!following.active) {
-                return;
-            }
             Vector2 dif = following.Center - Projectile.Center;
             if (dif.LengthSquared() < 250f) {
                 Projectile.Opacity = 0f;
@@ -226,6 +220,10 @@ sealed class BookwormsProjectile : ModProjectile {
             float length2 = 20f * (Projectile.ai[2] <= 1 ? 1f : 0.5f);
             Projectile.rotation = dif.ToRotation() + (float)Math.PI / 2f;
             Projectile.Center = following.Center - dif * length2;
+
+            //Dust dust = Dust.NewDustPerfect(following.Center, DustID.Adamantite);
+            //dust.noGravity = true;
+            //dust.velocity = Vector2.Zero;
         }
     }
 
