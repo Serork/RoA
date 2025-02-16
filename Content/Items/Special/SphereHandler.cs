@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -50,6 +51,9 @@ sealed class SphereHandler : GlobalItem {
     private void On_Main_DrawInterface_Resources_Breath(On_Main.orig_DrawInterface_Resources_Breath orig) {
         orig();
 
+        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+        Main.spriteBatch.End();
+        Main.spriteBatch.BeginWorld();
         List<Item> items = Main.item.Where(x => x.active && _spheresToHandle.Contains(x.type)).ToList();
         foreach (Item item in items) {
             DrawStream(item, Main.spriteBatch);
@@ -57,6 +61,8 @@ sealed class SphereHandler : GlobalItem {
             DrawTerra(item, Main.spriteBatch);
             DrawCondor(item, Main.spriteBatch);
         }
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(in snapshot);
     }
 
     public override void Unload() {
