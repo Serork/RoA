@@ -195,9 +195,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
-        //if (target.immortal) {
-        //    return;
-        //}
+        if (target.immortal) {
+            return;
+        }
         if (!item.IsADruidicWeapon()) {
             return;
         }
@@ -496,9 +496,10 @@ sealed class WreathHandler : ModPlayer {
 
         if (!increaseUntilFull) {
             if (IsChangingValue) {
-                if (_boost < MAXBOOSTINCREMENT) {
-                    _boost++;
-                }
+                //if (_boost < MAXBOOSTINCREMENT) {
+                //    _boost++;
+                //}
+                _boost = 1;
                 _addExtraValue += BASEADDVALUE / _boost * BASEADDVALUE;
             }
         }
