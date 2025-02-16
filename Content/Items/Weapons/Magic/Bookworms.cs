@@ -207,6 +207,9 @@ sealed class BookwormsProjectile : ModProjectile {
             return;
         }
         int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
+        if (byUUID == -1) {
+            return;
+        }
         if (Main.projectile.IndexInRange(byUUID)) {
             Projectile following = Main.projectile[byUUID];
             Vector2 dif = following.Center - Projectile.Center;
