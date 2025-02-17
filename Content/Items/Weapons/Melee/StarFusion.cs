@@ -29,7 +29,7 @@ sealed class StarFusion : ModItem {
         Item.useTurn = true;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 29;
+        Item.damage = 22;
         Item.knockBack = 4f;
 
         Item.value = Item.sellPrice(silver: 75);

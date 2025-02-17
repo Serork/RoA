@@ -35,12 +35,12 @@ sealed class DiabolicDaikatana : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.useTime = Item.useAnimation = 30;
+        Item.useTime = Item.useAnimation = 38;
 
         Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 18;
+        Item.damage = 14;
         Item.knockBack = 3f;
 
         Item.value = Item.buyPrice(gold: 1, silver: 60);

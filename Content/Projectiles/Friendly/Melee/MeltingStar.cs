@@ -46,7 +46,7 @@ sealed class MeltingStar : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        SoundEngine.PlaySound(SoundID.Item9, Projectile.position);
+        SoundEngine.PlaySound(SoundID.Item9 with { Volume = 0.25f, PitchVariance = 0.5f }, Projectile.Center);
         for (int index = 0; index < 4; ++index) {
             if (Main.rand.NextChance(0.75)) {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, Projectile.velocity.X * -0.2f, Projectile.velocity.Y * -0.2f, 150, default, Main.rand.NextFloat(1f, 1.25f));
@@ -163,6 +163,7 @@ sealed class MeltingStar : ModProjectile {
         //spriteBatch.EndBlendState();
         Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f) * Projectile.Opacity, Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0)), SpriteEffects.None, 0.0f);
+        spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.4f, 0.1f, 0f, 0.1f), Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, 2.2f - Projectile.ai[0] / 20f, SpriteEffects.None, 0.0f);
         return false;
     }
 
