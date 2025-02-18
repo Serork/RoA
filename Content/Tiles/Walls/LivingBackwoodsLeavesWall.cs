@@ -25,7 +25,7 @@ class LivingBackwoodsLeavesWall : ModWall {
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
 		AddMapEntry(new Color(0, 75, 38));
 
-        HitSound = SoundID.Grass;
+        HitSound = SoundID.Dig;
     }
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;

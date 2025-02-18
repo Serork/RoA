@@ -11,7 +11,6 @@ using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable;
 using RoA.Content.Items.Potions;
-using RoA.Content.Items.Special;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
@@ -19,7 +18,6 @@ using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
-using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -919,13 +917,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Platform(posX + 6, y);
 
         y = WorldGenHelper.GetFirstTileY2(posX - 6, true, true) - 1 - extraY;
-        Spike(posX - 6, y, MathHelper.Pi + 1.3f + Main._rand.NextFloat(-0.15f, 0.15f), 4, 3);
+        Spike(posX - 6, y, MathHelper.Pi + 1.3f + _random.NextFloat(-0.15f, 0.15f), 4, 3);
 
         y = WorldGenHelper.GetFirstTileY2(posX, true, true) - 2 - extraY;
-        Spike(posX, y, MathHelper.Pi + 1.2f + Main._rand.NextFloat(-0.15f, 0.15f));
+        Spike(posX, y, MathHelper.Pi + 1.2f + _random.NextFloat(-0.15f, 0.15f));
 
         y = WorldGenHelper.GetFirstTileY2(posX + 14, true, true) - 2 - extraY;
-        Spike(posX + 14, y, MathHelper.Pi + 0.5f + Main._rand.NextFloat(-0.15f, 0.15f), 6);
+        Spike(posX + 14, y, MathHelper.Pi + 0.5f + _random.NextFloat(-0.15f, 0.15f), 6);
 
         y = WorldGenHelper.GetFirstTileY2(posX + 21, true, true) - 1 - extraY;
         Spike(posX + 21, y, MathHelper.Pi + 0.9f, 4, 3);
