@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,7 +12,9 @@ sealed class Grimstone : ModItem {
 	public override void SetStaticDefaults() {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
 		//ItemID.Sets.SortingPriorityMaterials[Item.type] = ItemID.StoneBlock;
-	}
+
+        ItemTrader.ChlorophyteExtractinator.AddOption_OneWay(Type, 1, ItemID.StoneBlock, 1);
+    }
 
 	public override void SetDefaults() {
         Item.useStyle = 1;
