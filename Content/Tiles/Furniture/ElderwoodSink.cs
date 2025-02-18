@@ -11,6 +11,8 @@ namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodSink : ModTile {
     public override void SetStaticDefaults() {
+        TileID.Sets.CountsAsWaterSource[Type] = true;
+
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileTable[Type] = true;

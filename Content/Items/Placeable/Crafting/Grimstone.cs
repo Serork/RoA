@@ -26,4 +26,11 @@ sealed class Grimstone : ModItem {
 
         Item.createTile = ModContent.TileType<Tiles.Solid.Backwoods.BackwoodsStone>();
 	}
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.StoneBlock)
+            .AddCondition(Condition.NearWater)
+            .Register();
+    }
 }
