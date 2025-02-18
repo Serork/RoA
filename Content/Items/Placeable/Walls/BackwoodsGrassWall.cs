@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using Newtonsoft.Json.Linq;
+
+using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Walls;
@@ -19,7 +21,8 @@ sealed class BackwoodsGrassWall : ModItem {
         Item.width = 24;
         Item.height = 24;
         Item.createWall = ModContent.WallType<Tiles.Walls.BackwoodsGrassWall2>();
-	}
+        Item.value = 75;
+    }
 
 	//public override void AddRecipes() {
 	//	CreateRecipe(4)
