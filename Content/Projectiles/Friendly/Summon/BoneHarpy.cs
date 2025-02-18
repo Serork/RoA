@@ -5,7 +5,6 @@ using RoA.Common.Projectiles;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 

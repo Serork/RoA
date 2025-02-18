@@ -1,13 +1,11 @@
-﻿using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using RoA.Core.Utility;
-using RoA.Utilities;
-using System;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader;
+
+using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 

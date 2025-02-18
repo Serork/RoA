@@ -7,7 +7,6 @@ using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;

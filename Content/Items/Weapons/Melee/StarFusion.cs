@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using Terraria;
 using Terraria.DataStructures;

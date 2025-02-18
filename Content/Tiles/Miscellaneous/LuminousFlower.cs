@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Tiles;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System.Linq;
 

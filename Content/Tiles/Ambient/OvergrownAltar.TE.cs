@@ -1,19 +1,19 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Microsoft.Xna.Framework;
 
-using RoA.Core.Utility;
 using RoA.Common;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
+using RoA.Common.WorldEvents;
+using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
-using Terraria.Audio;
-using RoA.Core;
-using Microsoft.Xna.Framework;
-using RoA.Common.WorldEvents;
 using System.IO;
-using RoA.Common.Networking.Packets;
-using RoA.Common.Networking;
-using RoA.Utilities;
+
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Ambient;
 

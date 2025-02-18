@@ -6,7 +6,6 @@ using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
 using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;

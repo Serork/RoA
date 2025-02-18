@@ -5,7 +5,6 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;

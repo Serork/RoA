@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;

@@ -4,7 +4,6 @@ using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Summon;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using Terraria;
 using Terraria.Audio;

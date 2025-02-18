@@ -4,7 +4,6 @@ using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.IO;

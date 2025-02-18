@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.GameContent.Creative;

@@ -1,13 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common;
-using RoA.Common.Networking;
 using RoA.Common.Tiles;
 using RoA.Content.Buffs;
-using RoA.Content.Tiles.Plants;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Runtime.CompilerServices;

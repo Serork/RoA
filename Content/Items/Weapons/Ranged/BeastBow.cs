@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using System;
 using System.IO;

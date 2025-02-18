@@ -8,7 +8,6 @@ using RoA.Common.Players;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Linq;

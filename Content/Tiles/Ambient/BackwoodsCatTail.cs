@@ -11,7 +11,6 @@ using RoA.Common.Utilities.Extensions;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.World.Generations;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;

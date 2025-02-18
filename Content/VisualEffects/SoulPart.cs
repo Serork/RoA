@@ -6,7 +6,6 @@ using RoA.Common.WorldEvents;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 

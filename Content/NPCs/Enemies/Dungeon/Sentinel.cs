@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Placeable.Banners;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;

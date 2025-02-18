@@ -5,7 +5,6 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using Terraria;
 using Terraria.GameContent.Bestiary;

@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 // using RoA.Content.Buffs;
 using RoA.Content.Dusts;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;

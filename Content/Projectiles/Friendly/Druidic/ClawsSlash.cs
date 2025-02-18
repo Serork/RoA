@@ -11,7 +11,6 @@ using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.VisualEffects;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.IO;

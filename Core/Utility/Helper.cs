@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common;
-using RoA.Content.Tiles.Platforms;
-using RoA.Core.Utility;
 
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.Chat;
@@ -13,7 +12,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Gamepad;
 
-namespace RoA.Utilities;
+namespace RoA.Core.Utility;
 
 static class Helper {
     public static readonly Color AwakenMessageColor = new(175, 75, 255);
@@ -22,11 +21,45 @@ static class Helper {
     public static readonly Color GlowMaskColor = new Color(255, 255, 255, 0) * 0.8f;
     public static string ArmorSetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
 
+    public static void InsertAt(Item[] array, short insert, short at) {
+        MoveAllFrom(array, at);
+        array[at].SetDefaults(insert);
+    }
+
+    public static void ExcludeFrom(Item[] array, out short position, params short[] remove) {
+        int length = remove.Length;
+        position = 0;
+        while (length > 0) {
+            int i2 = 0;
+            for (int i = 0; i < array.Length; i++) {
+                Item elem = array[i];
+                if (elem != null && remove.Contains((short)elem.type)) {
+                    i2 = i;
+                    position = (short)i2;
+                    break;
+                }
+            }
+            MoveAllFrom(array, (short)i2);
+            length--;
+        }
+    }
+
+    public static void MoveAllFrom(Item[] array, short from) {
+        if (from <= 0) {
+            return;
+        }
+        for (int i = from; i < array.Length; i++) {
+            if (i + 1 < array.Length - 1) {
+                array[i] = array[i + 1];
+            }
+        }
+    }
+
     public static Vector2 SafeDirectionTo(Entity entity, Vector2 destination, Vector2? fallback = null) {
         if (fallback == null) {
             fallback = new Vector2?(Vector2.Zero);
         }
-        return Utils.SafeNormalize(destination - entity.Center, fallback.Value);
+        return (destination - entity.Center).SafeNormalize(fallback.Value);
     }
 
     public static Color BuffColor(Color newColor, float R, float G, float B, float A) {
@@ -204,12 +237,12 @@ static class Helper {
 
     public static Vector2 CircleOffset(this Entity entity, float elapsedTime, float circleRotation, float circleHeight) => ((((float)(MathHelper.TwoPi * (double)elapsedTime + MathHelper.PiOver2)).ToRotationVector2() + new Vector2(0.0f, -1f)) * new Vector2(6 * -entity.direction, circleHeight)).RotatedBy((double)circleRotation);
     public static void CircleMovement(this Entity entity, float counter, float speed = 0.4f, float radius = 14f) {
-        Vector2 offset = CircleOffset(entity, counter / 65f, speed, radius);
-        entity.velocity = CircleOffset(entity, counter / 65f + 1f / 65f, speed, radius) - offset;
+        Vector2 offset = entity.CircleOffset(counter / 65f, speed, radius);
+        entity.velocity = entity.CircleOffset(counter / 65f + 1f / 65f, speed, radius) - offset;
     }
     public static Vector2 CircleMovementVector2(this Entity entity, float counter, float speed = 0.4f, float radius = 14f) {
-        Vector2 offset = CircleOffset(entity, counter / 65f, speed, radius);
-        return CircleOffset(entity, counter / 65f + 1f / 65f, speed, radius) - offset;
+        Vector2 offset = entity.CircleOffset(counter / 65f, speed, radius);
+        return entity.CircleOffset(counter / 65f + 1f / 65f, speed, radius) - offset;
     }
 
     public static float EaseInOut(float value) {
@@ -258,7 +291,7 @@ static class Helper {
 
     public static void InertiaMoveTowards(ref Vector2 velocity, Vector2 position, Vector2 destination, float inertia = 15f, float speed = 5f, float minDistance = 10f, bool max = false) {
         Vector2 direction = destination - position;
-        bool flag = (max && velocity.Length() >= 1f) || !max;
+        bool flag = max && velocity.Length() >= 1f || !max;
         if (direction.Length() > minDistance) {
             direction.Normalize();
             velocity = (velocity * inertia + direction * speed) / (inertia + 1f);
@@ -296,7 +329,7 @@ static class Helper {
         return result;
     }
 
-    public static float SearchForNearestTile<T>(this Entity entity, out Point tile, out Point? searchTile, Predicate<Point>? condition = null, int maxDist = 2) where T : ModTile {
+    public static float SearchForNearestTile<T>(this Entity entity, out Point tile, out Point? searchTile, Predicate<Point> condition = null, int maxDist = 2) where T : ModTile {
         searchTile = null;
         tile = Point.Zero;
         Point center = entity.Center.ToTileCoordinates();
@@ -440,14 +473,14 @@ static class Helper {
         float angle;
         if (targetAngle < curAngle) {
             float num = targetAngle + (float)Math.PI * 2f;
-            angle = ((num - curAngle > curAngle - targetAngle) ? MathHelper.SmoothStep(curAngle, targetAngle, amount) : MathHelper.SmoothStep(curAngle, num, amount));
+            angle = num - curAngle > curAngle - targetAngle ? MathHelper.SmoothStep(curAngle, targetAngle, amount) : MathHelper.SmoothStep(curAngle, num, amount);
         }
         else {
             if (!(targetAngle > curAngle))
                 return curAngle;
 
             float num = targetAngle - (float)Math.PI * 2f;
-            angle = ((targetAngle - curAngle > curAngle - num) ? MathHelper.SmoothStep(curAngle, num, amount) : MathHelper.SmoothStep(curAngle, targetAngle, amount));
+            angle = targetAngle - curAngle > curAngle - num ? MathHelper.SmoothStep(curAngle, num, amount) : MathHelper.SmoothStep(curAngle, targetAngle, amount);
         }
 
         return MathHelper.WrapAngle(angle);

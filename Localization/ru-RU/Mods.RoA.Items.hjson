@@ -1566,3 +1566,8 @@ ElderwoodChest2_Trapped: {
 	// DisplayName: Trapped Rootbound Chest
 	// Tooltip: ""
 }
+
+EmptyPlanterBox: {
+	// DisplayName: Empty Planter Box
+	// Tooltip: ""
+}

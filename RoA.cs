@@ -1,23 +1,14 @@
-using Microsoft.Xna.Framework;
-
 using MonoMod.RuntimeDetour;
 
 using ReLogic.Content.Sources;
 
-using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
-using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
-using RoA.Core.Utility;
-using RoA.Utilities;
 
-using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA;

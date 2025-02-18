@@ -14,7 +14,6 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using RoA.Utilities;
 using Terraria.Audio;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;

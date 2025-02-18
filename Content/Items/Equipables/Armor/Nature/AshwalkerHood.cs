@@ -8,7 +8,6 @@ using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using Terraria;
 using Terraria.GameContent.Creative;

@@ -10,7 +10,6 @@ using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 

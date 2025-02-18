@@ -1,13 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Biomes.Backwoods;
-using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.VisualEffects;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using System;
 

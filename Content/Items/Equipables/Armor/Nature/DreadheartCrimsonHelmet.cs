@@ -10,7 +10,6 @@ using RoA.Content.Forms;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using Terraria;
 using Terraria.Audio;

@@ -3,7 +3,7 @@
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using System;
 

@@ -11,7 +11,6 @@ using RoA.Content.Gores;
 using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System.Collections.Generic;
 using System.Linq;

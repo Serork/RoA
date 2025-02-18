@@ -6,7 +6,6 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.IO;

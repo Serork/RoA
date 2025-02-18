@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 

@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;

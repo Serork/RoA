@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using RoA.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent.Drawing;

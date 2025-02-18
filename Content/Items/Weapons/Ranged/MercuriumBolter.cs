@@ -1,22 +1,9 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.Dusts;
-using RoA.Content.Projectiles;
-using RoA.Content.Projectiles.Enemies.Lothor;
-using RoA.Content.Projectiles.Friendly.Melee;
-using RoA.Core;
-using RoA.Core.Utility;
-using RoA.Utilities;
-
-using System;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 

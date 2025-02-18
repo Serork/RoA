@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Common.Networking.Packets;
-using RoA.Common.Networking;
-using RoA.Content.Items;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -12,10 +9,8 @@ using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using RoA.Utilities;
 
 namespace RoA.Content.Projectiles.Friendly;
 

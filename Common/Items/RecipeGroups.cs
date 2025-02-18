@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using RoA.Content.Items.Placeable.Crafting;
-using RoA.Content.Items.Materials;
+using RoA.Content.Items.Food;
 
 namespace RoA.Common.Items;
 

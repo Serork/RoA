@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Security.Policy;

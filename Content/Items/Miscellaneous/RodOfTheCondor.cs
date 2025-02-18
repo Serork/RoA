@@ -17,7 +17,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using RoA.Utilities;
 using Terraria.Audio;
 using RoA.Content.Items.Special;
 using RoA.Common.Items;

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Core;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Audio;

@@ -1,7 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Utilities;
-
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;

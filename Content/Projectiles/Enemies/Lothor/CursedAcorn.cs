@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using System;
 

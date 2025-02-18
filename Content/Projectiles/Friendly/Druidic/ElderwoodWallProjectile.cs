@@ -5,7 +5,6 @@ using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System.Collections.Generic;
 using System.IO;

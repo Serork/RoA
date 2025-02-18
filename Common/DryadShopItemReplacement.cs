@@ -1,6 +1,10 @@
 ﻿using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Items.Placeable.Walls;
+using RoA.Core.Utility;
+
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.ID;
@@ -13,10 +17,26 @@ sealed class DryadShopItemReplacement : GlobalNPC {
         if (npc.type != NPCID.Dryad) {
             return;
         }
-        if (!Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
+        if (items == null) {
             return;
         }
-        if (items == null) {
+
+        short[] planterBoxes = [ItemID.BlinkrootPlanterBox, ItemID.CorruptPlanterBox, ItemID.CrimsonPlanterBox, ItemID.DayBloomPlanterBox, 
+                                ItemID.FireBlossomPlanterBox, ItemID.MoonglowPlanterBox, ItemID.ShiverthornPlanterBox, ItemID.WaterleafPlanterBox];
+        Helper.ExcludeFrom(items, out short position, planterBoxes);
+        List<short> moddedPlanterBoxes = [];
+        for (int i = ItemID.Count; i < ItemLoader.ItemCount; i++) {
+            ModItem item = ItemLoader.GetItem(i);
+            if (item.Item.GetType().ToString().Contains("PlanterBox")) {
+                moddedPlanterBoxes.Add((short)item.Type);
+            }
+        }
+        if (moddedPlanterBoxes.Count > 0) {
+            Helper.ExcludeFrom(items, out position, [.. moddedPlanterBoxes]);
+        }
+        Helper.InsertAt(items, (short)ModContent.ItemType<EmptyPlanterBox>(), (short)(position != 0 ? position : 8));
+
+        if (!Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
             return;
         }
         for (int i = 0; i < items.Length; i++) {

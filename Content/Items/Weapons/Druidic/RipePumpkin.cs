@@ -7,7 +7,6 @@ using Terraria.DataStructures;
 using RoA.Core;
 using RoA.Common.Druid;
 using Terraria.ModLoader;
-using RoA.Utilities;
 using RoA.Core.Utility;
 using System;
 

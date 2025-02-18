@@ -5,7 +5,6 @@ using RoA.Common;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.IO;

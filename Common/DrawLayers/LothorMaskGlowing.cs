@@ -6,7 +6,6 @@ using ReLogic.Content;
 using RoA.Common.Cache;
 using RoA.Content.Items.Special.Lothor;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Linq;

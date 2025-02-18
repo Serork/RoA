@@ -1,14 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid;
 using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
-using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.VisualEffects;
-using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 

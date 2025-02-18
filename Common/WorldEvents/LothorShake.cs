@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
-using RoA.Utilities;
+using RoA.Core.Utility;
 
 using System;
 using System.IO;

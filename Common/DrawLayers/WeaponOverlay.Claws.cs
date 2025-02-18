@@ -1,6 +1,7 @@
 ﻿using Microsoft.Build.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using ReLogic.Content;
 
 using RoA.Content.Items.Equipables.Wreaths;
@@ -8,7 +9,6 @@ using RoA.Content.Items.Weapons;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Collections.Generic;

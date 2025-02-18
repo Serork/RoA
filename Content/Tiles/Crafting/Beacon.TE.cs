@@ -1,27 +1,15 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
-using RoA.Common.Tiles;
-using RoA.Core;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 using Terraria;
-using Terraria.Audio;
-using Terraria.Chat;
-using Terraria.DataStructures;
-using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 

@@ -5,7 +5,6 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core.Utility;
-using RoA.Utilities;
 
 using System;
 using System.Linq;
