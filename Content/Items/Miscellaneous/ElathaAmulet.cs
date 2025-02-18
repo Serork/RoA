@@ -78,10 +78,10 @@ sealed class ElathaAmulet : ModItem {
             return;
         }
 
-        ElathaAmuletCooldownHandler.ElathaAmuletCooldown = 8;
+        ElathaAmuletCooldownHandler.ElathaAmuletCooldown = 6;
 
         Main.moonPhase++;
-        if (Main.moonPhase > 6) {
+        if (Main.moonPhase > 7) {
             Main.moonPhase = 0;
         }
 
