@@ -1571,3 +1571,8 @@ EmptyPlanterBox: {
 	// DisplayName: Empty Planter Box
 	// Tooltip: ""
 }
+
+BackwoodsStoneChest: {
+	// DisplayName: Grimrock Brick Chest
+	// Tooltip: ""
+}
