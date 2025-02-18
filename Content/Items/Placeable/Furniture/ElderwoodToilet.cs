@@ -18,7 +18,8 @@ sealed class ElderwoodToilet : ModItem {
 
 	public override void AddRecipes() {
 		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(10)
-			.Register();
+			.AddIngredient<Crafting.Elderwood>(6)
+            .AddTile(TileID.Sawmill)
+            .Register();
 	}
 }
