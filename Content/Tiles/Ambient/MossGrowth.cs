@@ -58,16 +58,16 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
         int num5 = -1;
         ushort moss = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         ushort moss2 = (ushort)ModContent.TileType<BackwoodsGreenMossBrick>();
-        if (tile9 != null && tile9.HasTile && Main.tileSolid[tile9.TileType] && !tile9.BottomSlope) {
+        if (tile9 != null && tile9.HasTile && (tile9.TileType == moss || tile9.TileType == moss2) && !tile9.BottomSlope) {
             num3 = tile9.TileType;
         }
-        if (tile17 != null && tile17.HasTile && Main.tileSolid[tile17.TileType] && !tile17.IsHalfBlock && !tile17.TopSlope) {
+        if (tile17 != null && tile17.HasTile && (tile17.TileType == moss || tile17.TileType == moss2) && !tile17.IsHalfBlock && !tile17.TopSlope) {
             num2 = tile17.TileType;
         }
-        if (tile24 != null && tile24.HasTile && Main.tileSolid[tile24.TileType]) {
+        if (tile24 != null && tile24.HasTile && (tile24.TileType == moss || tile24.TileType == moss2)) {
             num4 = tile24.TileType;
         }
-        if (tile31 != null && tile31.HasTile && Main.tileSolid[tile31.TileType]) {
+        if (tile31 != null && tile31.HasTile && (tile31.TileType == moss || tile31.TileType == moss2)) {
             num5 = tile31.TileType;
         }
         short num6 = (short)(WorldGen.genRand.Next(3) * 18);
