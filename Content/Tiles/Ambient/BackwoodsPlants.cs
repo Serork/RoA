@@ -1,6 +1,9 @@
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Tiles.Solid.Backwoods;
+
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.ID;
@@ -35,6 +38,12 @@ sealed class BackwoodsPlants : ModTile {
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
         offsetY = -14;
         height = 32;
+    }
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        if (Main.rand.NextBool(100)) {
+            yield return new Item(ModContent.ItemType<BackwoodsGrassSeeds>());
+        }
     }
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
