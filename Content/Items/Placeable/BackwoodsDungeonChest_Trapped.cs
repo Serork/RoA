@@ -28,4 +28,12 @@ public class BackwoodsDungeonChest_Trapped : ModItem {
         Item.width = 32;
         Item.height = 32;
     }
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<BackwoodsDungeonChest>()
+            .AddRecipeGroup(ItemID.Wire, 10)
+            .AddTile(TileID.HeavyWorkBench)
+            .Register();
+    }
 }

@@ -284,10 +284,9 @@ sealed class ElderTorch : ModItem {
     }
 
     public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.Gel)
-            .AddIngredient<Elderwood>()
-            .AddTile(TileID.WorkBenches)
+        CreateRecipe(3)
+            .AddIngredient(ItemID.Torch, 3)
+            .AddIngredient<Grimstone>()
             .Register();
     }
 }
