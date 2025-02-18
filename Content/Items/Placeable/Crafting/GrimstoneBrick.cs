@@ -26,4 +26,11 @@ sealed class GrimstoneBrick : ModItem {
 
         Item.createTile = ModContent.TileType<Tiles.Solid.BackwoodsStoneBrick>();
 	}
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<Grimstone>(2)
+            .AddTile(TileID.Furnaces)
+            .Register();
+    }
 }

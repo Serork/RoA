@@ -57,7 +57,7 @@ public class SlipperyGlowstick : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe(5)
 			.AddIngredient(ItemID.Glowstick, 5)
-			.AddIngredient<Materials.Galipot>(1)
+			.AddIngredient<Materials.Galipot>()
 			.Register();
 	}
 }

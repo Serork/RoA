@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using RoA.Content.Items.Placeable.Crafting;
+
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -22,10 +24,10 @@ sealed class LivingBackwoodsLeavesWall : ModItem {
         Item.createWall = ModContent.WallType<Tiles.Walls.LivingBackwoodsLeavesWall>();
 	}
 
-	//public override void AddRecipes() {
-	//	CreateRecipe(4)
-	//		.AddIngredient<Crafting.Grimstone>()
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
+	public override void AddRecipes() {
+		CreateRecipe(4)
+			.AddIngredient<Elderwood>()
+			.AddTile(TileID.LivingLoom)
+			.Register();
+	}
 }

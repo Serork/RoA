@@ -282,4 +282,12 @@ sealed class ElderTorch : ModItem {
             Lighting.AddLight(Item.Center, 0.25f, 0.65f, 0.85f);
         }
     }
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.Gel)
+            .AddIngredient<Elderwood>()
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }
