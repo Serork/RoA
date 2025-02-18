@@ -1,3 +1,5 @@
+using Newtonsoft.Json.Linq;
+
 using RoA.Content.Tiles.Plants;
 
 using Terraria;
@@ -22,6 +24,6 @@ sealed class MiracleMintSeeds : ModItem {
         Item.placeStyle = 0;
         Item.width = 22;
         Item.height = 18;
-        Item.value = 150;
+        Item.value = 80;
     }
 }

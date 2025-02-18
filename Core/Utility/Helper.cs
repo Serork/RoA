@@ -3,6 +3,7 @@
 using RoA.Common;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
@@ -22,8 +23,9 @@ static class Helper {
     public static string ArmorSetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
 
     public static void InsertAt(Item[] array, short insert, short at) {
-        MoveAllFrom(array, at);
-        array[at].SetDefaults(insert);
+        Array.Copy(array, at, array, at + 1, array.Length - at - 1);
+        array[at + 1] = new Item();
+        array[at + 1].SetDefaults(insert);
     }
 
     public static void ExcludeFrom(Item[] array, out short position, params short[] remove) {
@@ -39,12 +41,12 @@ static class Helper {
                     break;
                 }
             }
-            MoveAllFrom(array, (short)i2);
+            RemoveAtAndShiftOther(array, (short)i2);
             length--;
         }
     }
 
-    public static void MoveAllFrom(Item[] array, short from) {
+    public static void RemoveAtAndShiftOther(Item[] array, short from) {
         if (from <= 0) {
             return;
         }

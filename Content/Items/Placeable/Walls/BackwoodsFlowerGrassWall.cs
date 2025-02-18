@@ -20,7 +20,7 @@ sealed class BackwoodsFlowerGrassWall : ModItem {
         Item.width = 24;
         Item.height = 24;
         Item.createWall = ModContent.WallType<Tiles.Walls.BackwoodsFlowerGrassWall2>();
-        Item.value = 75;
+        Item.value = 20;
     }
 
 	//public override void AddRecipes() {

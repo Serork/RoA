@@ -25,7 +25,7 @@ sealed class BackwoodsGrassSeeds : ModItem {
         Item.consumable = true;
         Item.width = 14;
         Item.height = 14;
-        Item.value = 150;
+        Item.value = 40;
         //Item.createTile = ModContent.TileType<BackwoodsGrass>();
     }
 
