@@ -37,7 +37,7 @@ sealed class ElathaAmulet : ModItem {
                     ChangeMoonPhase(player);
                 }
                 else { 
-                    MultiplayerSystem.SendPacket(new ElathaAmuletUsage(player));
+                    MultiplayerSystem.SendPacket(new ElathaAmuletUsagePacket(player));
                 }
             }
         }

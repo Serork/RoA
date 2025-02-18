@@ -7,8 +7,8 @@ using Terraria;
 
 namespace RoA.Common.Networking.Packets;
 
-sealed class ElathaAmuletUsage : NetPacket {
-    public ElathaAmuletUsage(Player player) {
+sealed class ElathaAmuletUsagePacket : NetPacket {
+    public ElathaAmuletUsagePacket(Player player) {
         Writer.TryWriteSenderPlayer(player);
     }
 
