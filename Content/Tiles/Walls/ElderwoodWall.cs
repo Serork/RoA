@@ -7,6 +7,16 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Walls;
 
+sealed class ElderwoodWall3 : ElderwoodWall {
+    public override void SetStaticDefaults() {
+        base.SetStaticDefaults();
+
+        Main.wallHouse[Type] = false;
+    }
+
+    public override string Texture => base.Texture[..^1];
+}
+
 sealed class ElderwoodWall2 : ElderwoodWall {
     public override string Texture => base.Texture[..^1];
 }
