@@ -8,6 +8,7 @@ using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Special;
@@ -135,6 +136,8 @@ sealed class BackwoodsCrate : ModItem {
             ItemDropRule.NotScalingWithLuck(ItemID.JourneymanBait, 1, 2, 6)
         ];
         IItemDropRule[] crateLoot = [
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ElathaAmulet>(), 20),
+
             ItemDropRule.AlwaysAtleastOneSuccess(ItemDropRule.SequentialRulesNotScalingWithLuck(6, costume), ItemDropRule.SequentialRulesNotScalingWithLuck(1, mainItems)),
 
             goldCoin,
@@ -146,7 +149,7 @@ sealed class BackwoodsCrate : ModItem {
             new OneFromRulesRule(6, potions2),
 
             new OneFromRulesRule(2, extraPotions),
-            new OneFromRulesRule(2, extraBait)
+            new OneFromRulesRule(2, extraBait),
         ];
 
         itemLoot.Add(ItemDropRule.AlwaysAtleastOneSuccess(crateLoot));
