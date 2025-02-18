@@ -32,7 +32,7 @@ public class BackwoodsDungeonChest_Trapped : ModItem {
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient<BackwoodsDungeonChest>()
-            .AddRecipeGroup(ItemID.Wire, 10)
+            .AddIngredient(ItemID.Wire, 10)
             .AddTile(TileID.HeavyWorkBench)
             .Register();
     }

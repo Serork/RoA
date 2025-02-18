@@ -26,7 +26,7 @@ public class ElderwoodChest2_Trapped : ModItem {
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient<ElderwoodChest2>()
-            .AddRecipeGroup(ItemID.Wire, 10)
+            .AddIngredient(ItemID.Wire, 10)
             .AddTile(TileID.HeavyWorkBench)
             .Register();
     }
