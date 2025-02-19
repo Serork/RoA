@@ -1514,7 +1514,7 @@ TealMoss: {
 }
 
 GrimstoneBrick: {
-	DisplayName: Grimrock Brick
+	DisplayName: Polished Grimrock
 	Tooltip: ""
 }
 
@@ -1575,10 +1575,10 @@ ElderwoodChest2_Trapped: {
 
 EmptyPlanterBox: {
 	DisplayName: Empty Planter Box
-	Tooltip: ""
+	Tooltip: "Can be crafted into any other Planter Box"
 }
 
 BackwoodsStoneChest: {
-	DisplayName: Grimrock Brick Chest
+	DisplayName: Polished Grimrock Chest
 	Tooltip: ""
 }

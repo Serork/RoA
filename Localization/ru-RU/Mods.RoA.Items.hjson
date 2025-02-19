@@ -1302,7 +1302,7 @@ CrimsonRod: {
 }
 
 BackwoodsPylon: {
-	DisplayName: Пилон Чащи
+	DisplayName: Пилон чащи
 	Tooltip: "{$CommonItemTooltip.TeleportationPylon}"
 }
 
@@ -1508,7 +1508,7 @@ TealMoss: {
 }
 
 GrimstoneBrick: {
-	DisplayName: Кирпич из мрачного камня
+	DisplayName: Полированный мрачный камень
 	Tooltip: ""
 }
 
@@ -1533,12 +1533,12 @@ BackwoodsGrassWall: {
 }
 
 BackwoodsDungeonKey: {
-	// DisplayName: Backwoods Key
+	DisplayName: Ключ чащи
 	// Tooltip: Unlocks a Backwoods Chest in the dungeon
 }
 
 BackwoodsDungeonChest: {
-	// DisplayName: Backwoods Chest
+	DisplayName: Сундук чащи
 	// Tooltip: ""
 }
 
@@ -1548,31 +1548,31 @@ WreathCharger: {
 }
 
 HedgehogTerrarium: {
-	// DisplayName: Hedgehog Cage
+	DisplayName: Террариум с ёжиком
 	// Tooltip: ""
 }
 
 BackwoodsDungeonChest_Trapped: {
-	// DisplayName: Trapped Backwoods Chest
+	DisplayName: Сундук-ловушка чащи
 	// Tooltip: ""
 }
 
 ElderwoodChest_Trapped: {
-	// DisplayName: Trapped Elderwood Chest
+	DisplayName: Сундук-ловушка из древнего дерева
 	// Tooltip: ""
 }
 
 ElderwoodChest2_Trapped: {
-	// DisplayName: Trapped Rootbound Chest
+	DisplayName: Опутанный корнями сундук-ловушка
 	// Tooltip: ""
 }
 
 EmptyPlanterBox: {
-	// DisplayName: Empty Planter Box
-	// Tooltip: ""
+	DisplayName: Пустой горшок
+	Tooltip: "Можно превратить в любой другой горшок"
 }
 
 BackwoodsStoneChest: {
-	// DisplayName: Grimrock Brick Chest
+	DisplayName: Сундук из полированного мрачного камня
 	// Tooltip: ""
 }
