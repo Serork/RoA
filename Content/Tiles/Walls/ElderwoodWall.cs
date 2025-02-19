@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Content.Dusts.Backwoods;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Walls;
@@ -12,6 +13,9 @@ sealed class ElderwoodWall3 : ElderwoodWall {
         base.SetStaticDefaults();
 
         Main.wallHouse[Type] = false;
+
+        WallID.Sets.WallSpreadStopsAtAir[Type] = true;
+        WallID.Sets.CannotBeReplacedByWallSpread[Type] = true;
     }
 
     public override string Texture => base.Texture[..^1];

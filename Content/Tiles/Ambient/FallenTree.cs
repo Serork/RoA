@@ -1,6 +1,14 @@
-﻿using RoA.Common.Tiles;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Common.Cache;
+using RoA.Common.Tiles;
+using RoA.Common.WorldEvents;
+using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Trees;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -10,7 +18,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower {
+sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.ITileHaveExtraDraws {
     int TileHooks.IRequireMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
 
     public override void SetStaticDefaults() {
@@ -49,5 +57,44 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower {
         }
 
         return base.CanExplode(i, j);
+    }
+
+    public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        TileHelper.AddPostSolidTileDrawPoint(this, i, j);
+
+        return true;
+    }
+
+    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+        int i = pos.X, j = pos.Y;
+        Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
+                                   j * 16 - (int)Main.screenPosition.Y);
+        Color color = Lighting.GetColor(i, j);
+        if (BackwoodsFogHandler.Opacity > 0f) {
+            SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
+            int height = tile.TileFrameY == 36 ? 18 : 16;
+            ulong speed = (((ulong)j << 32) | (ulong)i);
+            float posX = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
+            float posY = Utils.RandomInt(ref speed, -12, 13) * 0.0875f;
+            int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
+            int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
+            float opacity = BackwoodsFogHandler.Opacity > 0f ? BackwoodsFogHandler.Opacity : 1f;
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>(TileLoader.GetTile(ModContent.TileType<FallenTree>()).Texture + "_Glow").Value,
+                                  new Vector2(i * 16 - (int)Main.screenPosition.X - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
+                                  j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY),
+                                  new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
+                                  Color.Lerp(Color.White, Lighting.GetColor(i, j), 0.8f) * opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.End();
+            spriteBatch.Begin(in snapshot);
+        }
+
+        if (Main.rand.NextBool(1050)) {
+            Dust dust = Dust.NewDustPerfect(drawPosition + Main.rand.Random2(0, tile.TileFrameX, 0, tile.TileFrameY), ModContent.DustType<TreeDust>());
+            dust.velocity *= 0.5f + Main.rand.NextFloat() * 0.25f;
+            dust.scale *= 1.1f;
+        }
     }
 }

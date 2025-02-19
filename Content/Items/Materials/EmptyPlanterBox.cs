@@ -41,7 +41,6 @@ sealed class EmptyPlanterBox : ModItem {
                 if (item.Type == ModContent.ItemType<EmptyPlanterBox>()) {
                     continue;
                 }
-                Console.WriteLine(item.GetType().ToString());
                 if (item.GetType().ToString().Contains("PlanterBox")) {
                     addRecipe((short)item.Type);
                 }

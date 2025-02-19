@@ -3773,9 +3773,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int leftY = WorldGenHelper.GetFirstTileY(topLeftTileX), rightY = WorldGenHelper.GetFirstTileY(topRightTileX);
         int max = Math.Min(leftY, rightY) == leftY ? topLeftTileX : topRightTileX;
         _toLeft = max == topLeftTileX;
-        //for (int k = 0; k < 30; k++) {
-        //    WorldGenHelper.ReplaceTile(toLeft ? topLeftTileX - 1 : (topRightTileX + 1), (toLeft ? topLeftTileY : (topRightTileY)) - k, CliffPlaceholderTileType);
-        //}
         void setSurfaceY() {
             int getSurfaceOffset() {
                 int offset = 0;
@@ -3828,39 +3825,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             else {
                                 killTile = false;
                             }
-                            //if (j > y2 + 20 + waterYRandomness) {
-                            //    killWater = false;
-                            //    killTile = false;
-                            //}
-                            //else {
-                            //    killWater = true;
-                            //}
                         }
                         if (SandTileTypes.Contains(tile.TileType)) {
                             if (j > y2 + 5) {
                                 killTile = false;
                             }
-                            //else if (edgeX && _random.NextBool(3) && (tile.WallType == _dirtWallType || tile.WallType == WallID.None)) {
-                            //    killTile = false;
-                            //}
                         }
                         if (killTile || (mid && MidMustKillTileTypes.Contains(tile.TileType))) {
                             void replaceTile(int? tileType = null, ushort? wallType = null) {
                                 WorldGenHelper.ReplaceTile(i, j + (killWater ? waterYRandomness : 0), tileType ?? _dirtTileType);
-                                //if (tile.AnyWall()) {
-                                    tile.WallType = wallType ?? _dirtWallType;
-                                //}
+                                tile.WallType = wallType ?? _dirtWallType;
                             }
-                            //bool spread = _random.NextBool(3);
-                            //if (jungleEdge && spread) {
-                            //    replaceTile(TileID.Mud, WallID.MudUnsafe);
-                            //}
-                            //else {
-                                replaceTile();
-                                if ((tile.WallType == WallID.MudUnsafe || tile.WallType == WallID.MudWallEcho)) {
-                                    tile.WallType = _dirtWallType;
-                                }
-                            //}
+                            replaceTile();
+                            if ((tile.WallType == WallID.MudUnsafe || tile.WallType == WallID.MudWallEcho)) {
+                                tile.WallType = _dirtWallType;
+                            }
                         }
                     }
                 }
@@ -3886,21 +3865,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         AddCliffIfNeeded(topLeftTileX, topRightTileX);
-
-        //int yRandomness = 0;
-        //foreach (Point surface in _biomeSurface) {
-        //    yRandomness += _random.Next(-1, 2);
-        //    for (int j = EdgeY / 4 + yRandomness; j > -50; j--) {
-        //        if (surface.Y + j < WorldGenHelper.SafeFloatingIslandY) {
-        //            continue;
-        //        }
-
-        //        Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
-        //        if (tile.AnyLiquid()) {
-        //            tile.LiquidAmount = 0;
-        //        }
-        //    }
-        //}
     }
 
     private void AddCliffIfNeeded(int topLeftTileX, int topRightTileX) {
@@ -3932,12 +3896,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 testJ++;
                 if (first) {
                     randomness += _random.Next(-1, 2);
-                    //if (randomness < 1 && !_toLeft) {
-                    //    randomness = 1;
-                    //}
-                    //if (randomness > -1 && _toLeft) {
-                    //    randomness = -1;
-                    //}
                     randomnessPoints[max - testJ] = randomness;
                 }
                 if (SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, testJ].TileType) ||
@@ -3948,7 +3906,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     first = false;
                 }
             }
-            while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
+            while (_random.Next(0, 5) <= _random.Next(1, !flag ? 2 : 4)) {
                 startY++;
             }
             if ((_random.NextChance(0.75) && flag) || !flag) {
@@ -3956,38 +3914,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         _lastCliffX = x;
-
-        //lastSurfaceY = BackwoodsVars.FirstTileYAtCenter;
-        //cliffX = cliffTileCoords.X;
-        //startY = cliffTileCoords.Y;
-        //while (startY < lastSurfaceY) {
-        //    bool flag = Math.Abs(cliffX - cliffTileCoords.X) > 20;
-        //    while (_random.Next(0, 6) <= _random.Next(1, !flag ? 2 : 4)) {
-        //        startY++;
-        //    }
-        //    if ((_random.NextChance(0.75) && flag) || !flag) {
-        //        cliffX += _toLeft ? -1 : 1;
-        //    }
-        //    bool flag2 = Math.Abs(cliffX - cliffTileCoords.X) > 10;
-        //    int testJ = startY;
-        //    while (testJ <= startY + _biomeHeight / 2 - _biomeHeight / 5) {
-        //        bool flag3 = !flag2 && Main.tile[cliffX, testJ].HasTile;
-        //        if (flag3 || flag2) {
-        //            //if (flag3) {
-        //            //    WorldGenHelper.ReplaceTile(cliffX, testJ, _random.NextChance(0.75f) ? CliffPlaceholderTileType : TileID.Mud);
-        //            //}
-        //            //else {
-        //            if (!SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[cliffX, testJ].TileType) && !SkipBiomeInvalidWallTypeToKill.Contains(Main.tile[cliffX, testJ].WallType)) {
-        //                WorldGenHelper.ReplaceTile(cliffX, testJ, CliffPlaceholderTileType);
-        //            }
-        //            //}
-        //        }
-        //        if (Main.tile[cliffX, testJ].TileType != CliffPlaceholderTileType) {
-        //            break;
-        //        }
-        //        testJ++;
-        //    }
-        //}
     }
 
     private void Step4_CleanUp() {

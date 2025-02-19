@@ -8,7 +8,6 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
-using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -20,8 +19,6 @@ using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Content.Tiles.Trees;
 
