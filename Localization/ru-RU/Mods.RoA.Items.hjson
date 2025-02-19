@@ -1569,7 +1569,7 @@ ElderwoodChest2_Trapped: {
 
 EmptyPlanterBox: {
 	DisplayName: Пустой горшок
-	Tooltip: "Можно превратить в любой другой горшок"
+	Tooltip: Можно превратить в любой другой горшок
 }
 
 BackwoodsStoneChest: {

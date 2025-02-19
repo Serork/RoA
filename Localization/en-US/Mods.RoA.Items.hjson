@@ -1575,7 +1575,7 @@ ElderwoodChest2_Trapped: {
 
 EmptyPlanterBox: {
 	DisplayName: Empty Planter Box
-	Tooltip: "Can be crafted into any other Planter Box"
+	Tooltip: Can be crafted into any other Planter Box
 }
 
 BackwoodsStoneChest: {

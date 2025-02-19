@@ -1,10 +1,8 @@
-using Microsoft.Xna.Framework;
+using RoA.Core;
 
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
-
-using RoA.Core;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Decorations;
 

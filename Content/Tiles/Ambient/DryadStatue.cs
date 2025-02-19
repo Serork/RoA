@@ -20,6 +20,7 @@ sealed class DryadStatue : ModTile {
 		Main.tileNoAttach[Type] = true;
 		Main.tileLavaDeath[Type] = false;
 		Main.tileLighted[Type] = true;
+		Main.tileHammer[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.DrawYOffset = 2;
