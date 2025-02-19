@@ -1,20 +1,20 @@
 Hunter: {
-	// Button1: Talk
+	Button1: Говорить
 	Button2_1: Обмен
 	// Button2_2: "{$Mods.RoA.NPC.Quotes.Hunter.Button2_1} (15 {$ItemName.Leather})"
 	Quote1: Эй, позади! Ах, это наверное был ветер.
 	Quote2: Ужасно неприятный друид сказал мне, что в этих местах мне не место. Кажется, но я теперь понимаю почему.
 	Quote3: Не то что бы я помню дорогу сюда. Мне пришлось прорубится сквозь кусты, но они словно зарастают прямо позади меня.
 	Quote4: Я раньше не боялся монстров, но в таком месте это делать трудно. Ты же тоже их видишь, дитя?
-	// Quote5: Be careful, there is a giant beast following in my footsteps… I must be ready for an attack any moment now.
-	// Quote6: I had to make a run for it, so my clothes need mending. I’m willing to spare some coin for any leather you have in your possession.
-	// Quote7: Argh!!! Startle me like that again and I’ll start blasting!
+	Quote5: Будь осторожен, по моим следам идет гигантский зверь... Он должно быть готов напасть в любой момент.
+	Quote6: Мне пришлось делать ноги, так что моим вещам нужна починка. Я готов расщедриться монетами за любую кожу, что у тебя есть.
+	Quote7: Ааах!!! Напугай меня так еще раз и я начну стрелять!
 	Quote8: Гарпун? Прости, дитя, но это ружьё стреляет настоящими пулями.
-	// NotEnoughTradeQuote1: I am interested in refined leather only! If I had a use for dirty scraps, I would have already skinned the carcasses of my prey.
-	// NotEnoughTradeQuote2: Are you trying to swindle me? If you don’t have any leather you better get out of my way!
-	// NotEnoughTradeQuote3: The last thing you want to do is to taunt a desperate man like me, kid.
-	// TradeQuote1: Thank you. With this leather, I may live to fight another day.
-	// TradeQuote2: Much obliged. These supplies will serve me well.
+	NotEnoughTradeQuote1: Меня интересует только обработанная кожа! Если бы мне нужны были рваная плоть, я бы давно уже освежевал туши своих жертв.
+	NotEnoughTradeQuote2: Ты, что, пытаешься меня обмануть? Если у тебя нет кожи, то проваливай с пути.
+	NotEnoughTradeQuote3: Последнее, что тебе следует делать, это потешаться над отчаянными. Например, мной, дитя.
+	TradeQuote1: Спасибо. С этой кожей я смогу прожить ещё хоть день.
+	TradeQuote2: Премного благодарен. Эти припасы мне пригодятся.
 	// TradeQuote3: TradeQuote3
 	// DropFireLighterQuote1: DropFireLighterQuote1
 }
