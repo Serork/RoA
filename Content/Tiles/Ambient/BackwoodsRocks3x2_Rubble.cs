@@ -43,9 +43,6 @@ sealed class BackwoodsRocks3x2Rubble : ModTile, TileHooks.IGetTileDrawData {
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = true;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
         DustType = ModContent.DustType<Dusts.Backwoods.Stone>();

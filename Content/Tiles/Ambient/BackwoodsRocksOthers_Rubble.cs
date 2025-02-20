@@ -33,9 +33,6 @@ sealed class BackwoodsRocks01Rubble : BackwoodsRocks1Rubble {
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = true;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
         FlexibleTileWand.RubblePlacementMedium.AddVariations(ModContent.ItemType<Grimstone>(), Type, 0, 1, 2, 3, 4, 5);
@@ -84,9 +81,6 @@ class BackwoodsRocks0Rubble : BackwoodsRocks1Rubble {
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = true;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
         FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<Grimstone>(), Type, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
@@ -153,9 +147,6 @@ class BackwoodsRocks1Rubble : ModTile {
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = true;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
         FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<Grimstone>(), Type, 0, 1, 2, 3, 4, 5);

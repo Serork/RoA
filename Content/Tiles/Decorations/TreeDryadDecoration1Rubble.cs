@@ -33,9 +33,6 @@ sealed class TreeDryadDecoration1Rubble : ModTile {
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = true;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
         FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<NaturesHeart>(), Type, 0, 1);

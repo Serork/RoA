@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Materials;
-using RoA.Content.Items.Placeable.Crafting;
 
 using Terraria;
 using Terraria.Enums;
@@ -24,10 +23,6 @@ sealed class TreeDryadDecoration2Rubble : ModTile {
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newTile.LavaDeath = true;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
         FlexibleTileWand.RubblePlacementMedium.AddVariations(ModContent.ItemType<NaturesHeart>(), Type, 0, 1);
