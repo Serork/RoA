@@ -163,7 +163,7 @@ sealed class FenethStatue : ModTile {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(211, 146, 121), CreateMapEntryName());
+        AddMapEntry(new Color(191, 107, 87), CreateMapEntryName());
 
         DustType = DustID.MeteorHead;
         MinPick = 150;
