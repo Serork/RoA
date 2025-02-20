@@ -30,7 +30,6 @@ sealed class TreeDryadDecoration1Rubble : ModTile {
         TileObjectData.newTile.CoordinateHeights = [16];
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinatePadding = 2;
-        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = true;
         TileObjectData.addTile(Type);

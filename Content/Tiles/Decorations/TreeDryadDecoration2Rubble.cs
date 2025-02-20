@@ -21,7 +21,6 @@ sealed class TreeDryadDecoration2Rubble : ModTile {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;
-        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.addTile(Type);
 
