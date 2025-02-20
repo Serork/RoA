@@ -200,7 +200,7 @@ sealed class FenethStatue : ModTile {
                 if (genRand.NextBool(20)) {
                     if (Main.tile[i, j].HasTile && TileID.Sets.Grass[Main.tile[i, j].TileType] &&
                         !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && !Main.tile[i, j - 1].HasTile) {
-                        WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4));
+                        WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4), mute: true);
                     }
                 }
             }
