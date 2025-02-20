@@ -12,6 +12,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using Terraria.Utilities;
@@ -19,6 +20,19 @@ using Terraria.Utilities;
 namespace RoA.Content.NPCs.Enemies.Miscellaneous;
 
 sealed class PettyGoblin : ModNPC {
+    private sealed class ExtraGoblinTinkererQuote : GlobalNPC {
+        public override void GetChat(NPC npc, ref string chat) {
+            if (npc.type != NPCID.GoblinTinkerer) {
+                return;
+            }
+            if (!Main.rand.NextBool(10)) {
+                return;
+            }
+
+            chat = Language.GetTextValue($"Mods.RoA.NPC.Quotes.GoblinTinkerer.PettyGoblinQuote{/*Main.rand.NextBool().ToInt() + */1}");
+        }
+    }
+
     private const int FRAMES_COUNT = 16;
     private const int RUNNING_FRAMESCOUNT = 14;
     private const int STARTRUNNING_FRAME = 2;

@@ -23,3 +23,7 @@ Dryad: {
 	AwakeQuote1: AwakeQuote1
 	AwakeQuote2: AwakeQuote2
 }
+
+GoblinTinkerer: {
+	PettyGoblinQuote1: PettyGoblinQuote1
+}
