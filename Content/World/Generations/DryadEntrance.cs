@@ -228,7 +228,7 @@ sealed class DryadEntrance : ModSystem {
         }
     }
 
-    private static void Mountinater3(int i, int j, int denom = 4, int ignoreWall = -1, int ignoreWall2 = -1) {
+    private static void Mountinater3(int i, int j, int denom = 4, int[] ignoreWalls = null) {
         double num = WorldGen.genRand.Next(100, 120) / denom;
         double num2 = num;
         double num3 = 55 / denom;
@@ -264,7 +264,7 @@ sealed class DryadEntrance : ModSystem {
                     double num8 = Math.Abs((double)k - vector2D.X);
                     double num9 = Math.Abs((double)l - vector2D.Y);
                     if (Math.Sqrt(num8 * num8 + num9 * num9) < num2 * 0.4 && !Main.tile[k, l].HasTile &&
-                        Main.tile[k, l].WallType != ignoreWall && Main.tile[k, l].WallType != ignoreWall2) {
+                        (ignoreWalls == null || ignoreWalls.Contains(Main.tile[k, l].WallType))) {
                         Tile tile = Main.tile[k, l];
                         tile.HasTile = true;
                         Main.tile[k, l].TileType = 0;
@@ -547,7 +547,7 @@ sealed class DryadEntrance : ModSystem {
             }
         }
         Point origin = new(entranceX, entranceY);
-        Mountinater3((int)(entranceX + extraX / 3f), entranceY - 2, 4, wallType, WallID.DirtUnsafe);
+        Mountinater3((int)(entranceX + extraX / 3f), entranceY - 2, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
         ShapeData data = new();
         int num_ = 5;
         int num2_ = 3;
