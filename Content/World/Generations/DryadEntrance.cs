@@ -42,11 +42,6 @@ sealed class DryadEntrance : ModSystem {
         tasks.Add(new PassLegacy("Dryad Entrance Clean Up", DryadEntranceCleanUp));
     }
 
-    private sealed class Test : ModPlayer {
-        public override void PreUpdateMovement() {
-        }
-    }
-
     private void DryadEntranceCleanUp(GenerationProgress progress, GameConfiguration configuration) {
         int distance = 100;
         for (int x2 = _dryadEntranceX - distance / 2; x2 < _dryadEntranceX + distance / 2; x2++) {
