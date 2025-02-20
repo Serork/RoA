@@ -195,12 +195,11 @@ sealed class FenethStatue : ModTile {
         int num868 = x;
         int num869 = y;
         var genRand = WorldGen.genRand;
-        Main.NewText(123);
         for (int i = num868 - 10; i < num868 + 11; i++) {
             for (int j = num869 - 10; j < num869 + 11; j++) {
-                if (genRand.NextBool(1)) {
+                if (genRand.NextBool(20)) {
                     if (Main.tile[i, j].HasTile && TileID.Sets.Grass[Main.tile[i, j].TileType] &&
-                        !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
+                        !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && !Main.tile[i, j - 1].HasTile) {
                         WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4));
                     }
                 }
