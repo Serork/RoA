@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Items.Materials;
 
 using Terraria;
-using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -20,7 +19,7 @@ sealed class TreeDryadDecoration2Rubble : ModTile {
         Main.tileLavaDeath[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
-        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.DrawYOffset = 0;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.addTile(Type);
 
