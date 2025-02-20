@@ -3,6 +3,8 @@
 using ReLogic.Utilities;
 
 using RoA.Content.Tiles.Miscellaneous;
+using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
 using System;
@@ -21,7 +23,10 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.World.Generations;
 
 sealed class DryadEntrance : ModSystem {
-    private int _dryadEntranceX, _dryadEntranceY;
+    private static int _dryadEntranceX, _dryadEntranceY;
+
+    private static ushort PlaceholderTileType => (ushort)ModContent.TileType<LivingElderwood>();
+    private static ushort PlaceholderWallType => (ushort)ModContent.WallType<ElderwoodWall3>();
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mount Caves"));
@@ -33,6 +38,22 @@ sealed class DryadEntrance : ModSystem {
         tasks.RemoveAt(genIndex);
 
         tasks.Insert(genIndex, new PassLegacy("Dryad Entrance", DryadEntranceGenerator, 200f));
+
+        tasks.Add(new PassLegacy("Dryad Entrance Clean Up", DryadEntranceCleanUp));
+    }
+
+    private void DryadEntranceCleanUp(GenerationProgress progress, GameConfiguration configuration) {
+        int distance = 100;
+        for (int x2 = _dryadEntranceX - distance / 2; x2 < _dryadEntranceX + distance / 2; x2++) {
+            for (int y2 = _dryadEntranceY - distance / 2; y2 < _dryadEntranceY + distance / 2; y2++) {
+                if (Main.tile[x2, y2].TileType == PlaceholderTileType) {
+                    Main.tile[x2, y2].TileType = TileID.LivingWood;
+                }
+                if (Main.tile[x2, y2].WallType == PlaceholderWallType) {
+                    Main.tile[x2, y2].WallType = WallID.LivingWoodUnsafe;
+                } 
+            }
+        }
     }
 
     private void ExtraMountCavesGenerator(GenerationProgress progress, GameConfiguration configuration) {
@@ -44,10 +65,12 @@ sealed class DryadEntrance : ModSystem {
             int num1052 = 0;
             bool flag59 = false;
             bool flag60 = false;
-            int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - 150), (int)((double)Main.maxTilesX / 2 + 150));
+            int fluff = 150 * WorldGenHelper.WorldSize;
+            int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
             while (!flag60) {
                 flag60 = true;
-                while (num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) {
+                while ((num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) ||
+                    Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width * 0.75f) {
                     num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - 150), (int)((double)Main.maxTilesX / 2 + 150));
                 }
 
@@ -283,7 +306,7 @@ sealed class DryadEntrance : ModSystem {
         double num2 = num;
         UnifiedRandom genRand = WorldGen.genRand;
         Vector2D vector2D2 = default(Vector2D);
-        int size = 50;
+        int size = 30;
         result = 0;
         result2 = default(Vector2D);
         int directions = 3;
@@ -369,8 +392,8 @@ sealed class DryadEntrance : ModSystem {
         Vector2D vector2D3 = default(Vector2D);
         vector2D3.X = i;
         vector2D3.Y = j;
-        ushort tileType = TileID.LivingWood;
-        ushort wallType = WallID.LivingWoodUnsafe;
+        ushort tileType = PlaceholderTileType;
+        ushort wallType = PlaceholderWallType;
         List<Point> killTiles2 = [];
         while (num4 > 0) {
             num4--;
@@ -495,7 +518,7 @@ sealed class DryadEntrance : ModSystem {
                 Point killPos = killTiles[k];
                 i = killPos.X;
                 j = killPos.Y;
-                if (Vector2.Distance(new Vector2(i, j), new Vector2((int)vector2D3.X, (int)vector2D3.Y)) > size * 1.5f) {
+                if (Vector2.Distance(new Vector2(i, j), new Vector2((int)vector2D3.X, (int)vector2D3.Y)) > size * 1.55f) {
                     if (!Main.tile[i, j].HasTile && !Main.tile[i + 1, j].HasTile) {
                         bool flag6 = Main.tile[i - 1, j].TileType == tileType;
                         bool flag7 = Main.tile[i + 2, j].TileType == tileType;
@@ -537,7 +560,7 @@ sealed class DryadEntrance : ModSystem {
         int num7_ = (int)(origin.Y + distance * 0.5);
         for (int x2 = num4; x2 < num5_; x2++) {
             for (int y2 = num6_; y2 < num7_; y2++) {
-                if (Main.tile[x2, y2].WallType == 2) {
+                if (Main.tile[x2, y2].WallType != wallType) {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y2 - origin.Y);
                     if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.8) {
@@ -554,7 +577,8 @@ sealed class DryadEntrance : ModSystem {
             j = origin.Y - point.Y;
             if (!Main.tile[i - 1, j].HasTile && !Main.tile[i - 2, j].HasTile &&
                 !Main.tile[i + 1, j].HasTile && !Main.tile[i + 2, j].HasTile) {
-                WorldGen.Place2xX(i, j, treeDryad);
+                int altered = genRand.NextBool() ? 2 : 0;
+                WorldGen.Place2xX(i, j, treeDryad, altered);
                 if (Main.tile[i, j].TileType == treeDryad) {
                     flag4 = true;
                 }
