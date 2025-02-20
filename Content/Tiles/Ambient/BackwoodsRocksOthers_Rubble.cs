@@ -81,7 +81,8 @@ class BackwoodsRocks0Rubble : BackwoodsRocks1Rubble {
         TileObjectData.newTile.LavaDeath = true;
         TileObjectData.addTile(Type);
 
-        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<Grimstone>(), Type, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<Grimstone>(), Type, 0, 1, 2, 3, 4, 5);
+        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<Elderwood>(), Type, 6, 7, 8, 9, 10, 11);
 
         // Tiles placed by Rubblemaker drop the item used to place them.
         RegisterItemDrop(ModContent.ItemType<Grimstone>());
@@ -160,10 +161,6 @@ class BackwoodsRocks1Rubble : ModTile {
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 9;
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
-        if (i % 2 != 1) {
-            return;
-        }
 
-        spriteEffects = SpriteEffects.FlipHorizontally;
     }
 }
