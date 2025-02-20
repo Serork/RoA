@@ -564,7 +564,7 @@ sealed class DryadEntrance : ModSystem {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y2 - origin.Y);
                     if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.8) {
-                        WorldGenHelper.ReplaceWall (x2, y2, wallType);
+                        WorldGenHelper.ReplaceWall(x2, y2, wallType);
                         WorldGenHelper.ReplaceTile(x2, y2, tileType);
                     }
                 }
