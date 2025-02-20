@@ -1576,3 +1576,8 @@ BackwoodsStoneChest: {
 	DisplayName: Сундук из полированного мрачного камня
 	// Tooltip: ""
 }
+
+GrimstoneBrickWall: {
+	// DisplayName: Polished Grimrock Wall
+	// Tooltip: ""
+}

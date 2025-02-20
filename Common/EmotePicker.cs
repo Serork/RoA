@@ -54,7 +54,7 @@ sealed class EmotePicker : ILoadable {
     private void On_EmoteBubble_ProbeBosses(On_EmoteBubble.orig_ProbeBosses orig, EmoteBubble self, System.Collections.Generic.List<int> list) {
         orig(self, list);
 
-        if (DownedBossSystem.downedLothorBoss) {
+        if (DownedBossSystem.DownedLothorBoss) {
             list.Add(ModContent.EmoteBubbleType<LothorEmote>());
         }
     }

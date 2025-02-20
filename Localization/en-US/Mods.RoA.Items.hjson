@@ -1582,3 +1582,8 @@ BackwoodsStoneChest: {
 	DisplayName: Polished Grimrock Chest
 	Tooltip: ""
 }
+
+GrimstoneBrickWall: {
+	DisplayName: Polished Grimrock Wall
+	Tooltip: ""
+}

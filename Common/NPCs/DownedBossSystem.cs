@@ -7,18 +7,18 @@ using Terraria.ModLoader.IO;
 namespace RoA.Common.NPCs;
 
 sealed class DownedBossSystem : ModSystem {
-    public static bool downedLothorBoss = false;
+    public static bool DownedLothorBoss = false;
     // public static bool downedOtherBoss = false;
 
     public override void ClearWorld() {
-        downedLothorBoss = false;
+        DownedLothorBoss = false;
         // downedOtherBoss = false;
     }
 
     // We save our data sets using TagCompounds.
     // NOTE: The tag instance provided here is always empty by default.
     public override void SaveWorldData(TagCompound tag) {
-        if (downedLothorBoss) {
+        if (DownedLothorBoss) {
             tag["downedLothorBoss"] = true;
         }
 
@@ -28,14 +28,14 @@ sealed class DownedBossSystem : ModSystem {
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        downedLothorBoss = tag.ContainsKey("downedLothorBoss");
+        DownedLothorBoss = tag.ContainsKey("downedLothorBoss");
         // downedOtherBoss = tag.ContainsKey("downedOtherBoss");
     }
 
     public override void NetSend(BinaryWriter writer) {
         // Order of operations is important and has to match that of NetReceive
         var flags = new BitsByte();
-        flags[0] = downedLothorBoss;
+        flags[0] = DownedLothorBoss;
         // flags[1] = downedOtherBoss;
         writer.Write(flags);
 
@@ -87,7 +87,7 @@ sealed class DownedBossSystem : ModSystem {
     public override void NetReceive(BinaryReader reader) {
         // Order of operations is important and has to match that of NetSend
         BitsByte flags = reader.ReadByte();
-        downedLothorBoss = flags[0];
+        DownedLothorBoss = flags[0];
         // downedOtherBoss = flags[1];
 
         // As mentioned in NetSend, BitBytes can contain up to 8 values. If you have more, be sure to read the additional data:

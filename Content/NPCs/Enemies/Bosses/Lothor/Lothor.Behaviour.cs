@@ -783,7 +783,10 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void OnKill() {
-        NPC.SetEventFlagCleared(ref DownedBossSystem.downedLothorBoss, -1);
+        NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);
+        if (Main.netMode == NetmodeID.Server) {
+            NetMessage.SendData(MessageID.WorldData);
+        }
     }
 
     private void HandleScream() {

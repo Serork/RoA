@@ -3,19 +3,66 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
+using RoA.Content.NPCs.Friendly;
 using RoA.Core.Utility;
+using System.IO;
 
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class TreeDryad : ModTile {
     private static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
+
+    private sealed class DryadAwakeHandler : ModSystem {
+        public static bool DryadAwake;
+
+        public override void ClearWorld() {
+            DryadAwake = false;
+        }
+
+        public override void SaveWorldData(TagCompound tag) {
+            if (DryadAwake) {
+                tag["DryadAwake"] = true;
+            }
+        }
+
+        public override void LoadWorldData(TagCompound tag) {
+            DryadAwake = tag.ContainsKey("DryadAwake");
+        }
+
+        public override void NetSend(BinaryWriter writer) {
+            var flags = new BitsByte();
+            flags[0] = DryadAwake;
+            writer.Write(flags);
+        }
+
+        public override void NetReceive(BinaryReader reader) {
+            BitsByte flags = reader.ReadByte();
+            DryadAwake = flags[0];
+        }
+    }
+
+    private sealed class ExtraDruidQuote : GlobalNPC {
+        public override void GetChat(NPC npc, ref string chat) {
+            if (npc.type != NPCID.Dryad) {
+                return;
+            }
+            if (!DryadAwakeHandler.DryadAwake) {
+                return;
+            }
+
+            chat = Language.GetTextValue($"Mods.RoA.NPC.Quotes.Dryad.AwakeQuote{Main.rand.NextBool().ToInt() + 1}");
+            DryadAwakeHandler.DryadAwake = false;
+        }
+    }
 
     public override void Load() {
         On_Main.UpdateTime_SpawnTownNPCs += On_Main_UpdateTime_SpawnTownNPCs;
@@ -90,6 +137,12 @@ sealed class TreeDryad : ModTile {
         int whoAmI = NPC.NewNPC(NPC.GetSource_TownSpawn(), (int)position.X + 10, (int)position.Y + 40, NPCID.Dryad);
         Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? -1 : 1;
         Main.npc[whoAmI].netUpdate = true;
+
+        DryadAwakeHandler.DryadAwake = true;
+
+        if (Main.netMode == NetmodeID.Server) {
+            NetMessage.SendData(MessageID.WorldData);
+        }
     }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => false;

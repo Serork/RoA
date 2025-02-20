@@ -12,6 +12,6 @@ sealed class LothorEmote : ModEmoteBubble {
 
     public override bool IsUnlocked() {
         // This emote only shows when minion boss is downed, just as vanilla do.
-        return DownedBossSystem.downedLothorBoss;
+        return DownedBossSystem.DownedLothorBoss;
     }
 }
