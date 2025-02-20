@@ -24,6 +24,4 @@ Dryad: {
 	// AwakeQuote2: AwakeQuote2
 }
 
-GoblinTinkerer: {
-	// PettyGoblinQuote1: PettyGoblinQuote1
-}
+// GoblinTinkerer.PettyGoblinQuote1: PettyGoblinQuote1
