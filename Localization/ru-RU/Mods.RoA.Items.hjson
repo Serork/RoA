@@ -1581,3 +1581,8 @@ GrimstoneBrickWall: {
 	// DisplayName: Polished Grimrock Wall
 	// Tooltip: ""
 }
+
+BackwoodsStoneChest_Trapped: {
+	// DisplayName: Сундук-ловушка из полированного мрачного камня
+	// Tooltip: ""
+}

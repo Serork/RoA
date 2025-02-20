@@ -67,7 +67,7 @@ public class TrappedChests : ModTile {
         AddMapEntry(mapColor, Language.GetText("Mods.RoA.Tiles.ElderwoodChest.MapEntry"));
         mapColor = new(133, 111, 91);
         AddMapEntry(mapColor, Language.GetText("Mods.RoA.Tiles.ElderwoodChest2.MapEntry"));
-        mapColor = new(133, 111, 91);
+        mapColor = new(95, 98, 113);
         AddMapEntry(mapColor, Language.GetText("Mods.RoA.Tiles.BackwoodsStoneChest.MapEntry"));
 
         DustType = -1;

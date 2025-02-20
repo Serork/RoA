@@ -1587,3 +1587,8 @@ GrimstoneBrickWall: {
 	DisplayName: Polished Grimrock Wall
 	Tooltip: ""
 }
+
+BackwoodsStoneChest_Trapped: {
+	DisplayName: Trapped Polished Grimrock Chest
+	Tooltip: ""
+}
