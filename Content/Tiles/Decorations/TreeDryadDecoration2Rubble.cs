@@ -20,6 +20,7 @@ sealed class TreeDryadDecoration2Rubble : ModTile {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 0;
+        TileObjectData.newTile.CoordinateHeights = [18];
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.addTile(Type);
 
@@ -32,7 +33,6 @@ sealed class TreeDryadDecoration2Rubble : ModTile {
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
-        offsetY -= 2;
         height = 20;
     }
 
