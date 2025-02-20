@@ -264,7 +264,7 @@ sealed class DryadEntrance : ModSystem {
                     double num8 = Math.Abs((double)k - vector2D.X);
                     double num9 = Math.Abs((double)l - vector2D.Y);
                     if (Math.Sqrt(num8 * num8 + num9 * num9) < num2 * 0.4 && !Main.tile[k, l].HasTile &&
-                        (ignoreWalls == null || ignoreWalls.Contains(Main.tile[k, l].WallType))) {
+                        (ignoreWalls == null || !ignoreWalls.Contains(Main.tile[k, l].WallType))) {
                         Tile tile = Main.tile[k, l];
                         tile.HasTile = true;
                         Main.tile[k, l].TileType = 0;
