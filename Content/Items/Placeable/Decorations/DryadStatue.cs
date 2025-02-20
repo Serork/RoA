@@ -16,12 +16,11 @@ sealed class DryadStatue : ModItem {
     public override void SetDefaults() {
         Item.SetSize(28, 42);
 
-        Item.SetDefaultToStackable(99);
+        Item.SetDefaultToStackable(Item.CommonMaxStack);
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 10, 15, true, true, true);
+        Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Ambient.DryadStatue>());
 
         Item.rare = ItemRarityID.White;
         Item.value = Item.sellPrice(gold: 3);
-        Item.createTile = ModContent.TileType<Tiles.Ambient.DryadStatue>();
     }
 }

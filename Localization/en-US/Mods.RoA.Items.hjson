@@ -1592,3 +1592,8 @@ BackwoodsStoneChest_Trapped: {
 	DisplayName: Trapped Polished Grimrock Chest
 	Tooltip: ""
 }
+
+FenethStatue: {
+	DisplayName: Feneth Statue
+	Tooltip: ""
+}
