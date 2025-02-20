@@ -42,6 +42,12 @@ sealed class DryadEntrance : ModSystem {
         tasks.Add(new PassLegacy("Dryad Entrance Clean Up", DryadEntranceCleanUp));
     }
 
+    private sealed class Test : ModPlayer {
+        public override void PreUpdateMovement() {
+            Main.LocalPlayer.position = new Vector2(GenVars.jungleMaxX, 200).ToWorldCoordinates();
+        }
+    }
+
     private void DryadEntranceCleanUp(GenerationProgress progress, GameConfiguration configuration) {
         int distance = 100;
         for (int x2 = _dryadEntranceX - distance / 2; x2 < _dryadEntranceX + distance / 2; x2++) {
@@ -65,13 +71,14 @@ sealed class DryadEntrance : ModSystem {
             int num1052 = 0;
             bool flag59 = false;
             bool flag60 = false;
-            int fluff = 150 * WorldGenHelper.WorldSize;
+            int fluff = 130 * WorldGenHelper.WorldSize;
             int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
             while (!flag60) {
                 flag60 = true;
                 while ((num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) ||
-                    Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width) {
-                    num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - 150), (int)((double)Main.maxTilesX / 2 + 150));
+                    Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width ||
+                    (num1053 < GenVars.jungleMaxX + 20 && num1053 > GenVars.jungleMinX - 20)) {
+                    num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
                 }
 
                 for (int num1054 = 0; num1054 < GenVars.numMCaves; num1054++) {
@@ -311,7 +318,7 @@ sealed class DryadEntrance : ModSystem {
         result2 = default(Vector2D);
         int directions = 3;
         for (int k2 = 0; k2 < 3; k2++) {
-            for (int x = -directions; x < directions + 1; x++) {
+            for (int x = -directions; x < directions + 2; x++) {
                 Vector2D vector2D = default(Vector2D);
                 vector2D.X = i;
                 vector2D.Y = j;
@@ -388,7 +395,7 @@ sealed class DryadEntrance : ModSystem {
         Samples(i, j, out int result, out Vector2D result2);
         int x = (int)vector2D.X, y = (int)vector2D.Y;
         y -= 3;
-        float sizeValue = 0.5f;
+        float sizeValue = 0.4f;
         Vector2D vector2D3 = default(Vector2D);
         vector2D3.X = i;
         vector2D3.Y = j;
@@ -461,7 +468,7 @@ sealed class DryadEntrance : ModSystem {
             if (vector2D2.Y < -2.0)
                 vector2D2.Y = -2.0;
         }
-        Mountinater3((int)vector2D.X, (int)vector2D.Y, 4);
+        Mountinater3((int)vector2D.X, (int)vector2D.Y, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
         ushort placeholderTileType = tileType, placeholderWallType = wallType;
         size = 20;
         WorldGenHelper.TileWallRunner((int)vector2D.X, (int)vector2D.Y, size / 2, size, placeholderTileType, placeholderWallType, overRide: true);
@@ -533,7 +540,7 @@ sealed class DryadEntrance : ModSystem {
                                 }
                             }
                             if (flag) {
-                                extraX = flag6 ? genRand.Next(4) : -(8 + genRand.Next(4));
+                                extraX = result2.X < 0f ? genRand.Next(4) : -(8 + genRand.Next(4));
                                 entranceX = i + 4 + extraX;
                                 entranceY = j - 1;
                                 flag4 = true;
