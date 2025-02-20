@@ -44,7 +44,6 @@ sealed class DryadEntrance : ModSystem {
 
     private sealed class Test : ModPlayer {
         public override void PreUpdateMovement() {
-            Main.LocalPlayer.position = new Vector2(GenVars.jungleMaxX, 200).ToWorldCoordinates();
         }
     }
 
@@ -71,7 +70,7 @@ sealed class DryadEntrance : ModSystem {
             int num1052 = 0;
             bool flag59 = false;
             bool flag60 = false;
-            int fluff = 130 * WorldGenHelper.WorldSize;
+            int fluff = 120 * WorldGenHelper.WorldSize;
             int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
             while (!flag60) {
                 flag60 = true;
