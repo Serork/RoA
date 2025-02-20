@@ -133,7 +133,7 @@ sealed class TreeDryadRubble : ModTile {
 
         FlexibleTileWand.RubblePlacementLarge.AddVariations(ModContent.ItemType<NaturesHeart>(), Type, 0, 1, 2, 3);
 
-        AddMapEntry(new Color(191, 143, 111), CreateMapEntryName());
+        AddMapEntry(new Color(191, 143, 111));
 
         DustType = DustID.WoodFurniture;
 
