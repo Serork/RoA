@@ -1,7 +1,6 @@
 ﻿using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -11,8 +10,22 @@ using Terraria.ModLoader;
 namespace RoA.Common.Sets;
 
 sealed class TileSets : ModSystem {
+    private sealed class PreventsSlopesBelowSystem : GlobalTile {
+        public override bool Slope(int i, int j, int type) {
+            Tile aboveTile = Framing.GetTileSafely(i, j - 1);
+            if (!aboveTile.HasTile) {
+                return true;
+            }
+            if (PreventsSlopesBelow[aboveTile.TileType]) {
+                return false;
+            }
+            return true;
+        }
+    }
+
     public static bool[] ShouldKillTileBelow = TileID.Sets.Factory.CreateBoolSet(true);
     public static bool[] CanPlayerMineMe = TileID.Sets.Factory.CreateBoolSet(true);
+    public static bool[] PreventsSlopesBelow = TileID.Sets.Factory.CreateBoolSet(false);
 
     public static HashSet<ushort> Paintings = [];
 

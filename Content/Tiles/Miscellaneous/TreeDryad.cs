@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Sets;
+using RoA.Common.Tiles;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -38,6 +40,8 @@ sealed class TreeDryad : ModTile {
 
         TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         TileID.Sets.PreventsSandfall[Type] = true;
+
+        TileSets.PreventsSlopesBelow[Type] = true;
 
         AddMapEntry(new Color(191, 143, 111), CreateMapEntryName());
 

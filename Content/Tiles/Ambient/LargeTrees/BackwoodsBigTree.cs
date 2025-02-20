@@ -277,6 +277,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         Main.tileAxe[Type] = true;
 
         TileSets.ShouldKillTileBelow[Type] = false;
+        TileSets.PreventsSlopesBelow[Type] = true;
+        CanBeSlopedTileSystem.Included[Type] = true;
 
         AddMapEntry(new Color(114, 81, 57), name);
     }
