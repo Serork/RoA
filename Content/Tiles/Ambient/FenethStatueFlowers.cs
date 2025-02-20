@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 
 using RoA.Common.Tiles;
+using RoA.Content.Items.Placeable.Crafting;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -38,6 +40,8 @@ sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
         DustType = (ushort)ModContent.DustType<Dusts.Fireblossom2>();
         HitSound = SoundID.Grass;
         AddMapEntry(new Microsoft.Xna.Framework.Color(243, 138, 3));
+
+        FlexibleTileWand.RubblePlacementSmall.AddVariations(ItemID.Fireblossom, Type, 0, 1, 2, 3);
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {

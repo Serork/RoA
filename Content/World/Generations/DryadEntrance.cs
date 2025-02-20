@@ -2,6 +2,7 @@
 
 using ReLogic.Utilities;
 
+using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
@@ -462,7 +463,7 @@ sealed class DryadEntrance : ModSystem {
             if (vector2D2.Y < -2.0)
                 vector2D2.Y = -2.0;
         }
-        Mountinater3((int)vector2D.X, (int)vector2D.Y, 3, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
+        Mountinater3((int)vector2D.X, (int)vector2D.Y, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
         ushort placeholderTileType = tileType, placeholderWallType = wallType;
         size = 20;
         WorldGenHelper.TileWallRunner((int)vector2D.X, (int)vector2D.Y, size / 2, size, placeholderTileType, placeholderWallType, overRide: true);
@@ -526,13 +527,6 @@ sealed class DryadEntrance : ModSystem {
                         bool flag5 = flag6 || flag7;
                         if (flag5) {
                             bool flag = true;
-                            for (int i2 = 0; i2 < 2; i2++) {
-                                for (int j2 = 0; j2 < 3; j2++) {
-                                    if (Main.tile[i + i2, j - j2].HasTile) {
-                                        flag = false;
-                                    }
-                                }
-                            }
                             if (flag) {
                                 extraX = result2.X < 0f ? genRand.Next(4) : -(8 + genRand.Next(4));
                                 entranceX = i + 4 + extraX;
@@ -565,7 +559,7 @@ sealed class DryadEntrance : ModSystem {
                 if (Main.tile[x2, y3].WallType != wallType) {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y3 - origin.Y);
-                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.9) {
+                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2) {
                         WorldGenHelper.ReplaceWall(x2, y3, WallID.DirtUnsafe);
                         WorldGenHelper.ReplaceTile(x2, y3, TileID.Dirt);
                     }
@@ -578,7 +572,7 @@ sealed class DryadEntrance : ModSystem {
                 if (Main.tile[x2, y3].WallType != wallType) {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y3 - origin.Y);
-                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.75) {
+                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.8) {
                         WorldGenHelper.ReplaceWall(x2, y3, wallType);
                         WorldGenHelper.ReplaceTile(x2, y3, tileType);
                     }
@@ -594,11 +588,11 @@ sealed class DryadEntrance : ModSystem {
             if (!Main.tile[i - 1, j].HasTile && !Main.tile[i - 2, j].HasTile &&
                 !Main.tile[i + 1, j].HasTile && !Main.tile[i + 2, j].HasTile) {
                 bool flag5 = true;
-                for (int k = -1; k < 3; k++) {
-                    if (!Main.tile[i + k, j + 1].HasTile) {
-                        flag5 = false;
-                    }
-                }
+                //for (int k = -1; k < 3; k++) {
+                //    if (!Main.tile[i + k, j + 1].HasTile) {
+                //        flag5 = false;
+                //    }
+                //}
                 if (flag5) {
                     int altered = genRand.NextBool() ? 2 : 0;
                     WorldGen.Place2xX(i, j, treeDryad, altered);
@@ -607,6 +601,240 @@ sealed class DryadEntrance : ModSystem {
                     }
                 }
             }
+        }
+        ushort tileType2 = 192;
+        ushort wallType2 = WallID.LivingLeaf;
+        num_ = 6;
+        num2_ = 4;
+        for (int k = 0; k < 2; k++) {
+            WorldUtils.Gen(origin, new Shapes.Slime(num_), Actions.Chain(
+                new Modifiers.Blotches(num2_, num2_, num2_, 1, 1.0).Output(data),
+                new Modifiers.OnlyTiles(tileType),
+                new LeafModifier(tileType),
+                new Actions.SetTile(tileType2, setSelfFrames: true), new LeafPlaceWall(wallType2)));
+        }
+        for (int x2 = num4; x2 < num5_; x2++) {
+            for (int y2 = num6_; y2 < num7_; y2++) {
+                if (y2 > origin.Y + distance * 0.25) {
+                    continue;
+                }
+                int y3 = y2 - 16;
+                double num9 = Math.Abs((double)x2 - origin.X);
+                double num10 = Math.Abs((double)y3 - origin.Y);
+                if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.75) {
+                    if (Main.tile[x2, y3].HasTile && Main.tile[x2, y3].TileType == tileType && Main.tile[x2, y3 - 1].HasTile && Main.tile[x2, y3 - 1].TileType == tileType2) {
+                        WorldGenHelper.ReplaceTile(x2, y3, tileType2);
+                    }
+                }
+            }
+        }
+        for (int x2 = num4; x2 < num5_; x2++) {
+            for (int y2 = num6_; y2 < num7_; y2++) {
+                int y3 = y2;
+                if (WorldGenHelper.ActiveTile(x2, y3, tileType) &&
+                    (Main.tile[x2, y3 - 1].TileType != tileType || !Main.tile[x2, y3 - 1].HasTile) &&
+                    (Main.tile[x2, y3 + 1].TileType != tileType || !Main.tile[x2, y3 + 1].HasTile) &&
+                    (Main.tile[x2 - 1, y3].TileType != tileType || !Main.tile[x2 - 1, y3].HasTile) &&
+                    (Main.tile[x2 + 1, y3].TileType != tileType || !Main.tile[x2 + 1, y3].HasTile)) {
+                    WorldGenHelper.ReplaceTile(x2, y3, tileType2);
+                }
+            }
+        }
+        foreach (Point killPos in killTiles) { 
+            i = killPos.X;
+            j = killPos.Y;
+            if (Vector2.Distance(new Vector2(i, j), new Vector2((int)vector2D3.X, (int)vector2D3.Y)) > size * 1.25f) {
+                if (genRand.NextChance(0.75)) {
+                    for (int i2 = -1; i2 < 2; i2++) {
+                        for (int j2 = -1; j2 < 2; j2++) {
+                            if (Math.Abs(i2) != Math.Abs(j2)) {
+                                if (Main.tile[i2 + i, j2 + j].TileType == tileType) {
+                                    Main.tile[i2 + i, j2 + j].TileType = tileType2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (int k = 0; k < 2; k++) {
+            for (int x2 = num4; x2 < num5_; x2++) {
+                for (int y2 = num6_; y2 < num7_; y2++) {
+                    if (Main.tile[x2, y2].HasTile && Main.tile[x2, y2].TileType == tileType2 && WorldGen.GrowMoreVines(x2, y2) &&
+                        !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(4)) {
+                        bool flag5 = true;
+                        ushort type7 = TileID.Vines;
+                        for (int num35 = y2; num35 > y2 - 10; num35--) {
+                            if (Main.tile[x2, num35].BottomSlope) {
+                                flag5 = false;
+                                break;
+                            }
+
+                            if (Main.tile[x2, num35].HasTile && Main.tile[x2, num35].TileType == tileType2 && !Main.tile[x2, num35].BottomSlope) {
+                                flag5 = true;
+                                break;
+                            }
+                        }
+                        if (flag5) {
+                            int height = genRand.NextBool() ? genRand.Next(2) : genRand.NextBool() ? genRand.Next(2) : genRand.Next(6);
+                            for (int num35 = y2; num35 < y2 + 5; num35++) {
+                                int num36 = num35 + 1;
+                                Tile tile = Main.tile[x2, num36];
+                                if (!tile.HasTile) {
+                                    tile.TileType = type7;
+                                    tile.HasTile = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        bool bigPlaced = false;
+        for (int x2 = num4; x2 < num5_; x2++) {
+            if (bigPlaced) {
+                break;
+            }
+            for (int y2 = num6_; y2 < num7_; y2++) {
+                if (bigPlaced) {
+                    break;
+                }
+                int y3 = y2;
+                if (WorldGen.SolidTile2(x2, y3) && Main.tile[x2, y3].TileType != TileID.Dirt && genRand.NextBool(4) && !Main.tile[x2, y3 - 1].HasTile) {
+                    WorldGen.PlaceTile(x2, y3 - 1, 187, mute: true, forced: false, -1, genRand.Next(50, 53) - 3);
+                    bigPlaced = true;
+                }
+            }
+        }
+        bool mediumPlaced1 = false;
+        for (int x2 = num4; x2 < num5_; x2++) {
+            for (int y2 = num6_; y2 < num7_; y2++) {
+                int y3 = y2;
+                if (WorldGen.SolidTile2(x2, y3) && Main.tile[x2, y3].TileType != TileID.Dirt && WorldGen.SolidTile2(x2 + 1, y3) && Main.tile[x2 + 1, y3].TileType != TileID.Dirt && !Main.tile[x2, y3 - 1].HasTile && !Main.tile[x2 + 1, y3 - 1].HasTile) {
+                    if (genRand.NextBool() && !mediumPlaced1) {
+                        ushort type = (ushort)ModContent.TileType<TreeDryadDecoration2>();
+                        Tile tile = Main.tile[x2, y3 - 1];
+                        short frameX = (short)((0 + 2 * genRand.Next(0, 2)) * 18);
+                        tile.HasTile = true;
+                        tile.TileFrameY = 0;
+                        tile.TileFrameX = frameX;
+                        tile.TileType = type;
+                        tile = Main.tile[x2 + 1, y3 - 1];
+                        tile.HasTile = true;
+                        tile.TileFrameY = 0;
+                        tile.TileFrameX = (short)(frameX + 18);
+                        tile.TileType = type;
+                        mediumPlaced1 = true;
+                    }
+                    else {
+                        ushort type = 185;
+                        Tile tile = Main.tile[x2, y3 - 1];
+                        short frameX = (short)((12 + 2 * genRand.Next(0, 3)) * 18);
+                        tile.HasTile = true;
+                        tile.TileFrameY = 36;
+                        tile.TileFrameX = frameX;
+                        tile.TileType = type;
+                        tile = Main.tile[x2 + 1, y3 - 1];
+                        tile.HasTile = true;
+                        tile.TileFrameY = 36;
+                        tile.TileFrameX = (short)(frameX + 18);
+                        tile.TileType = type;
+                    }
+                }
+            }
+        }
+        for (int x2 = num4; x2 < num5_; x2++) {
+            for (int y2 = num6_; y2 < num7_; y2++) {
+                int y3 = y2;
+                if (WorldGen.SolidTile2(x2, y3) && Main.tile[x2, y3].TileType != TileID.Dirt && genRand.NextBool(4) && !Main.tile[x2, y3 - 1].HasTile) {
+                    if (genRand.NextBool()) {
+                        WorldGen.PlaceSmallPile(x2, y3 - 1, 72, 0);
+                    }
+                    else {
+                        WorldGen.PlaceSmallPile(x2, y3 - 1, genRand.Next(2), 0, (ushort)ModContent.TileType<TreeDryadDecoration1>());
+                    }
+                }
+            }
+        }
+        num4 = (int)(origin.X - distance * 1);
+        num5_ = (int)(origin.X + distance * 1);
+        num6_ = (int)(origin.Y - distance * 1);
+        num7_ = (int)(origin.Y + distance * 1);
+        for (int x2 = num4; x2 < num5_; x2++) {
+            for (int y2 = num6_; y2 < num7_; y2++) {
+                int y3 = y2 - 16;
+                double num9 = Math.Abs((double)x2 - origin.X);
+                double num10 = Math.Abs((double)y3 - origin.Y);
+                if (Math.Sqrt(num9 * num9 + num10 * num10) < num2) {
+                    if (!Main.tile[x2, y3].HasTile && Main.tile[x2, y3].WallType == wallType && genRand.NextChance(0.65)) {
+                        bool flag5 = false;
+                        for (int i2 = -1; i2 < 2; i2++) {
+                            for (int j2 = -1; j2 < 2; j2++) {
+                                if (Math.Abs(i2) != Math.Abs(j2)) {
+                                    if (Main.tile[i2 + x2, j2 + y2].TileType == tileType || Main.tile[i2 + x2, j2 + y2].TileType == tileType2) {
+                                        flag5 = true;
+                                    }
+                                }
+                            }
+                        }
+                        if (!flag5) {
+                            int num877 = 1;
+                            if (genRand.Next(2) == 0)
+                                num877 = -1;
+                            WorldGenHelper.TileWallRunner(x2 - num877, y3, genRand.Next(1, 4), genRand.Next(1, 3), TileID.Cobweb, wallType, addTile: true, num877, -1.0, noYChange: false, overRide: false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public class LeafPlaceWall : GenAction {
+        private ushort _type;
+        private bool _neighbors;
+
+        public LeafPlaceWall(ushort type, bool neighbors = true) {
+            _type = type;
+            _neighbors = neighbors;
+        }
+
+        public override bool Apply(Point origin, int x, int y, params object[] args) {
+            if (y < origin.Y && _random.NextChance(0.8f)) {
+                float strengh = _random.NextFloat(4f, 6f);
+                WorldGenHelper.TileWallRunner(x, y, strengh, (int)(strengh / 3), 0, _type, onlyWall: true, overRide: true, addTile: true);
+                if (_random.NextBool(3)) {
+                    Vector2 direction = new Vector2(0f, 1f).RotatedByRandom(MathHelper.PiOver4);
+                    for (int i = 1; i < 4; i++) {
+                        strengh = 3f;
+                        Vector2 velocity = direction * i * 2f;
+                        WorldGenHelper.TileWallRunner(x + (int)velocity.X, y - 2 + (int)velocity.Y, strengh, (int)(strengh / 3), 0, _type, onlyWall: true, overRide: true, addTile: true);
+                    }
+                }
+            }
+
+            return UnitApply(origin, x, y, args);
+        }
+    }
+
+
+    public class LeafModifier : GenAction {
+        private ushort[] _types;
+
+        public LeafModifier(params ushort[] types) {
+            _types = types;
+        }
+
+        public override bool Apply(Point origin, int x, int y, params object[] args) {
+            for (int i = 0; i < _types.Length; i++) {
+                if (GenBase._tiles[x, y - 1].TileType != _types[i] || !GenBase._tiles[x, y - 1].HasTile) {
+                    return Fail();
+                }
+                if (GenBase._tiles[x, y - 1].TileType == _types[i] && _random.NextChance(0.3)) {
+                    return Fail();
+                }
+            }
+
+            return UnitApply(origin, x, y, args);
         }
     }
 

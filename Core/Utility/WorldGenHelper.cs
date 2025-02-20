@@ -1080,7 +1080,7 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static void TileWallRunner(int i, int j, double strength, int steps, ushort tileType, ushort wallType, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int ignoreTileType = -1) {
+    public static void TileWallRunner(int i, int j, double strength, int steps, ushort tileType, ushort wallType, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int ignoreTileType = -1, bool onlyWall = false) {
         var drunkWorldGen = WorldGen.drunkWorldGen;
         var remixWorldGen = WorldGen.remixWorldGen;
         var genRand = WorldGen.genRand;
@@ -1168,10 +1168,15 @@ static class WorldGenHelper {
                             flag3 = true;
 
                         if (addTile) {
-                            tile.TileType = tileType;
-                            tile.WallType = wallType;
-                            tile.HasTile = true;
-                            tile.LiquidAmount = 0;
+                            if (!onlyWall) {
+                                tile.TileType = tileType;
+                                tile.WallType = wallType;
+                                tile.HasTile = true;
+                                tile.LiquidAmount = 0;
+                            }
+                            else {
+                                tile.WallType = wallType;
+                            }
                         }
                     }
                 }
