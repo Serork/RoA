@@ -38,7 +38,6 @@ sealed class OvergrownAltar : ModTile {
 
         TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         TileID.Sets.PreventsSandfall[Type] = true;
-
         TileSets.ShouldKillTileBelow[Type] = false;
         TileSets.CanPlayerMineMe[Type] = false;
         TileSets.PreventsSlopesBelow[Type] = true;

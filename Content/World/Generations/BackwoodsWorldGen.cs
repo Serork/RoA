@@ -12,6 +12,8 @@ sealed class BackwoodsWorldGen : ModSystem {
     public static BackwoodsBiomePass BackwoodsWorldGenPass { get; private set; }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
+        return;
+
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         genIndex += 6;
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new("Backwoods", LAYERWEIGHT));

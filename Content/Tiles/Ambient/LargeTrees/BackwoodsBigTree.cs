@@ -276,6 +276,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         Main.tileFrameImportant[Type] = true;
         Main.tileAxe[Type] = true;
 
+        TileID.Sets.PreventsTileReplaceIfOnTopOfIt[Type] = true;
+
         TileSets.ShouldKillTileBelow[Type] = false;
         TileSets.PreventsSlopesBelow[Type] = true;
         CanBeSlopedTileSystem.Included[Type] = true;

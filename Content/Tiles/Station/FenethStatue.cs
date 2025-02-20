@@ -1,6 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Sets;
+using RoA.Common.Tiles;
+
+using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -163,12 +167,20 @@ sealed class FenethStatue : ModTile {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
+        TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
+        TileID.Sets.PreventsSandfall[Type] = true;
+        TileSets.ShouldKillTileBelow[Type] = false;
+        TileSets.PreventsSlopesBelow[Type] = true;
+        CanBeSlopedTileSystem.Included[Type] = true;
+
         AddMapEntry(new Color(191, 107, 87), CreateMapEntryName());
 
         DustType = DustID.MeteorHead;
         MinPick = 150;
         MineResist = 4f;
     }
+
+    public override bool CanExplode(int i, int j) => false;
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         // not cool 

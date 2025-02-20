@@ -1,22 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.BackwoodsSystems;
 using RoA.Common.Druid.Forms;
-using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
 
 using System;
-using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.WorldBuilding;
 
 namespace RoA.Content.Forms;
 
@@ -58,6 +53,8 @@ sealed class FlederForm : BaseForm {
         }
 
         public override void PreUpdateMovement() {
+            //Main.LocalPlayer.position = new Point(3727, 1047 - 5).ToWorldCoordinates();
+
             bool flag = _dashDirection != IDoubleTap.TapDirection.None || ActiveDash;
             if (flag && !Player.GetModPlayer<BaseFormHandler>().IsConsideredAs<FlederForm>()) {
                 _dashDirection = IDoubleTap.TapDirection.None;

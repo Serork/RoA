@@ -32,12 +32,12 @@ sealed class DryadEntrance : ModSystem {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mount Caves"));
         tasks.RemoveAt(genIndex);
 
-        tasks.Insert(genIndex, new PassLegacy("Extra Mount Caves", ExtraMountCavesGenerator, 200f));
+        tasks.Insert(genIndex, new PassLegacy("Extra Mount Caves", ExtraMountCavesGenerator, 49.9993f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mountain Caves"));
         tasks.RemoveAt(genIndex);
 
-        tasks.Insert(genIndex, new PassLegacy("Dryad Entrance", DryadEntranceGenerator, 200f));
+        tasks.Insert(genIndex, new PassLegacy("Dryad Entrance", DryadEntranceGenerator, 14.2958f));
 
         tasks.Add(new PassLegacy("Dryad Entrance Clean Up", DryadEntranceCleanUp));
     }
@@ -462,7 +462,7 @@ sealed class DryadEntrance : ModSystem {
             if (vector2D2.Y < -2.0)
                 vector2D2.Y = -2.0;
         }
-        Mountinater3((int)vector2D.X, (int)vector2D.Y, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
+        Mountinater3((int)vector2D.X, (int)vector2D.Y, 3, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
         ushort placeholderTileType = tileType, placeholderWallType = wallType;
         size = 20;
         WorldGenHelper.TileWallRunner((int)vector2D.X, (int)vector2D.Y, size / 2, size, placeholderTileType, placeholderWallType, overRide: true);
@@ -565,6 +565,19 @@ sealed class DryadEntrance : ModSystem {
                 if (Main.tile[x2, y3].WallType != wallType) {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y3 - origin.Y);
+                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.9) {
+                        WorldGenHelper.ReplaceWall(x2, y3, WallID.DirtUnsafe);
+                        WorldGenHelper.ReplaceTile(x2, y3, TileID.Dirt);
+                    }
+                }
+            }
+        }
+        for (int x2 = num4; x2 < num5_; x2++) {
+            for (int y2 = num6_; y2 < num7_; y2++) {
+                int y3 = y2 - 16;
+                if (Main.tile[x2, y3].WallType != wallType) {
+                    double num9 = Math.Abs((double)x2 - origin.X);
+                    double num10 = Math.Abs((double)y3 - origin.Y);
                     if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.75) {
                         WorldGenHelper.ReplaceWall(x2, y3, wallType);
                         WorldGenHelper.ReplaceTile(x2, y3, tileType);
@@ -580,10 +593,18 @@ sealed class DryadEntrance : ModSystem {
             j = origin.Y - point.Y;
             if (!Main.tile[i - 1, j].HasTile && !Main.tile[i - 2, j].HasTile &&
                 !Main.tile[i + 1, j].HasTile && !Main.tile[i + 2, j].HasTile) {
-                int altered = genRand.NextBool() ? 2 : 0;
-                WorldGen.Place2xX(i, j, treeDryad, altered);
-                if (Main.tile[i, j].TileType == treeDryad) {
-                    flag4 = true;
+                bool flag5 = true;
+                for (int k = -2; k < 5; k++) {
+                    if (!Main.tile[i + k, j + 1].HasTile) {
+                        flag5 = false;
+                    }
+                }
+                if (flag5) {
+                    int altered = genRand.NextBool() ? 2 : 0;
+                    WorldGen.Place2xX(i, j, treeDryad, altered);
+                    if (Main.tile[i, j].TileType == treeDryad) {
+                        flag4 = true;
+                    }
                 }
             }
         }

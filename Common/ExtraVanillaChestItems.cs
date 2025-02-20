@@ -1238,7 +1238,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                 if (flag0) {
                     WorldGenHelper.PlaceChest(num81, num82, chestTileType, notNearOtherChests: false, onPlaced: (chest) => {
                         flag5 = true;
-                        Console.WriteLine(num81 + " " + num82);
+                        //Console.WriteLine(num81 + " " + num82);
                     });
                 }
                 else {
