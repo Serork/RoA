@@ -197,9 +197,11 @@ sealed class FenethStatue : ModTile {
         var genRand = WorldGen.genRand;
         for (int i = num868 - 10; i < num868 + 11; i++) {
             for (int j = num869 - 10; j < num869 + 11; j++) {
-                if (Main.tile[i, j].HasTile && TileID.Sets.Grass[Main.tile[i, j].TileType] &&
-                    !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].TopSlope) {
-                    WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4));
+                if (genRand.NextBool(20)) {
+                    if (Main.tile[i, j].HasTile && TileID.Sets.Grass[Main.tile[i, j].TileType] &&
+                        !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].TopSlope) {
+                        WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4));
+                    }
                 }
             }
         }
