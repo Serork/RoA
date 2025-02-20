@@ -18,3 +18,8 @@ Hunter: {
 	TradeQuote3: TradeQuote3
 	DropFireLighterQuote1: DropFireLighterQuote1
 }
+
+Dryad: {
+	AwakeQuote1: AwakeQuote1
+	AwakeQuote2: AwakeQuote2
+}

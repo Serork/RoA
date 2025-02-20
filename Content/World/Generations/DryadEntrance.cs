@@ -70,7 +70,7 @@ sealed class DryadEntrance : ModSystem {
             while (!flag60) {
                 flag60 = true;
                 while ((num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) ||
-                    Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width * 0.75f) {
+                    Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width) {
                     num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - 150), (int)((double)Main.maxTilesX / 2 + 150));
                 }
 
@@ -560,12 +560,13 @@ sealed class DryadEntrance : ModSystem {
         int num7_ = (int)(origin.Y + distance * 0.5);
         for (int x2 = num4; x2 < num5_; x2++) {
             for (int y2 = num6_; y2 < num7_; y2++) {
-                if (Main.tile[x2, y2].WallType != wallType) {
+                int y3 = y2 - 16;
+                if (Main.tile[x2, y3].WallType != wallType) {
                     double num9 = Math.Abs((double)x2 - origin.X);
-                    double num10 = Math.Abs((double)y2 - origin.Y);
-                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.8) {
-                        WorldGenHelper.ReplaceWall(x2, y2, wallType);
-                        WorldGenHelper.ReplaceTile(x2, y2, tileType);
+                    double num10 = Math.Abs((double)y3 - origin.Y);
+                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.75) {
+                        WorldGenHelper.ReplaceWall(x2, y3, wallType);
+                        WorldGenHelper.ReplaceTile(x2, y3, tileType);
                     }
                 }
             }
