@@ -244,7 +244,7 @@ sealed class FenethStatueWorldGen : ModSystem {
                                         for (int j = num869 - 10; j < num869 + 11; j++) {
                                             if (genRand.NextChance(0.7f) && Main.tile[i, j].HasTile && Main.tile[i, j].TileType == TileID.AshGrass &&
                                                 !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
-                                                if (genRand.NextBool(20)) {
+                                                if (genRand.NextBool(10)) {
                                                     WorldGen.PlaceTile(i, j - 1, TileID.BloomingHerbs, style: 5);
                                                 }
                                                 else {
