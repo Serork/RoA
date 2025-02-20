@@ -23,6 +23,7 @@ sealed class BackwoodsRocks01Rubble : BackwoodsRocks1Rubble {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.BreakableWhenPlacing[Type] = true;
@@ -31,7 +32,7 @@ sealed class BackwoodsRocks01Rubble : BackwoodsRocks1Rubble {
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newTile.LavaDeath = false;
+        TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
         TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
         TileObjectData.addAlternate(1);
@@ -66,6 +67,7 @@ class BackwoodsRocks0Rubble : BackwoodsRocks1Rubble {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.BreakableWhenPlacing[Type] = true;
@@ -134,6 +136,7 @@ class BackwoodsRocks1Rubble : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.BreakableWhenPlacing[Type] = true;

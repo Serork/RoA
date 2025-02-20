@@ -29,6 +29,7 @@ sealed class BackwoodsRocks3x2Rubble : ModTile, TileHooks.IGetTileDrawData {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 3;
