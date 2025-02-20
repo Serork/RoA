@@ -4,9 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Content.Tiles.Ambient;
-using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -247,9 +245,14 @@ sealed class FenethStatue : ModTile {
                               new Rectangle(frameX, frameY, width, height),
                               Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
+        if (tile.TileFrameY == 0 && (tile.TileFrameX == 72 || tile.TileFrameX == 36)) {
+            Color color = Color.Orange;
+            color *= 0.5f;
+            Lighting.AddLight(new Point(i, j).ToWorldCoordinates() - Vector2.One * 8f, new Vector3(color.R / 255f, color.G / 255f, color.B / 255f));
+        }
+
         return false;
     }
-
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
         yield return new Item(ModContent.ItemType<Items.Placeable.Station.FenethStatue>());
     }

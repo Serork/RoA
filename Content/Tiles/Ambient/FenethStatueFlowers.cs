@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Tiles;
 using RoA.Core.Utility;
 
@@ -19,6 +21,7 @@ sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
         Main.tileNoFail[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = false;
+        Main.tileLighted[Type] = true;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
@@ -35,6 +38,14 @@ sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
         DustType = (ushort)ModContent.DustType<Dusts.Fireblossom2>();
         HitSound = SoundID.Grass;
         AddMapEntry(new Microsoft.Xna.Framework.Color(243, 138, 3));
+    }
+
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
+        Color color = Color.Orange;
+        color *= 0.5f;
+        r = color.R / 255f;
+        g = color.G / 255f;
+        b = color.B / 255f;
     }
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
