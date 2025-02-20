@@ -676,7 +676,7 @@ sealed class DryadEntrance : ModSystem {
                             }
                         }
                         if (flag5) {
-                            int height = genRand.Next(6);
+                            int height = genRand.NextBool() ? genRand.Next(2, 6) : genRand.NextBool() ? genRand.Next(3, 6) : genRand.Next(1, 6);
                             for (int num35 = y2; num35 < y2 + height; num35++) {
                                 int num36 = num35 + 1;
                                 Tile tile = Main.tile[x2, num36];
