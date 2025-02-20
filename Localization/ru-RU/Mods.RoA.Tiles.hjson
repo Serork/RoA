@@ -42,5 +42,5 @@ JawTrap.MapEntry: Капкан-ловушка
 BackwoodsDungeonChest.MapEntry: Запертый сундук чащи
 BackwoodsDungeonChest2.MapEntry: Сундук чащи
 BackwoodsStoneChest.MapEntry: Сундук из полированного мрачного камня
-TreeDryad.MapEntry: Одеревеневшая дриада
-// FenethStatue.MapEntry: Feneth Statue
+TreeDryad.MapEntry: Кокон дриады
+FenethStatue.MapEntry: Статуя Фенет
