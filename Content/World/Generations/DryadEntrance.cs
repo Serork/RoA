@@ -700,7 +700,7 @@ sealed class DryadEntrance : ModSystem {
                     break;
                 }
                 int y3 = y2;
-                if (WorldGen.SolidTile2(x2, y3) && Main.tile[x2, y3].TileType != TileID.Dirt && genRand.NextBool(2) && !Main.tile[x2, y3 - 1].HasTile) {
+                if (WorldGen.SolidTile2(x2, y3) && Main.tile[x2, y3].TileType != TileID.Dirt && !Main.tile[x2, y3 - 1].HasTile) {
                     WorldGen.PlaceTile(x2, y3 - 1, 187, mute: true, forced: false, -1, genRand.Next(50, 53) - 3);
                     bigPlaced = true;
                 }
@@ -710,7 +710,7 @@ sealed class DryadEntrance : ModSystem {
         for (int x2 = num4; x2 < num5_; x2++) {
             for (int y2 = num6_; y2 < num7_; y2++) {
                 int y3 = y2;
-                if (WorldGen.SolidTile2(x2, y3) && Main.tile[x2, y3].TileType != TileID.Dirt && WorldGen.SolidTile2(x2 + 1, y3) && Main.tile[x2 + 1, y3].TileType != TileID.Dirt && !Main.tile[x2, y3 - 1].HasTile && !Main.tile[x2 + 1, y3 - 1].HasTile) {
+                if (WorldGen.SolidTile2(x2, y3) && Main.tile[x2, y3].TileType != TileID.Dirt && WorldGen.SolidTile2(x2 + 1, y3) && genRand.NextBool(3) && Main.tile[x2 + 1, y3].TileType != TileID.Dirt && !Main.tile[x2, y3 - 1].HasTile && !Main.tile[x2 + 1, y3 - 1].HasTile) {
                     if (genRand.NextBool() && !mediumPlaced1) {
                         ushort type = (ushort)ModContent.TileType<TreeDryadDecoration2>();
                         Tile tile = Main.tile[x2, y3 - 1];
