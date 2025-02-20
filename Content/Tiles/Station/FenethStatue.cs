@@ -247,7 +247,7 @@ sealed class FenethStatue : ModTile {
 
         if (tile.TileFrameY == 0 && (tile.TileFrameX == 72 || tile.TileFrameX == 36)) {
             Color color = Color.Orange;
-            color *= 0.5f;
+            color *= 0.4f;
             Lighting.AddLight(new Point(i, j).ToWorldCoordinates() - Vector2.One * 8f, new Vector3(color.R / 255f, color.G / 255f, color.B / 255f));
         }
 
