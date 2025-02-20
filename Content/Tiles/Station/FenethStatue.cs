@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
+using RoA.Content.Tiles.Ambient;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -182,6 +184,27 @@ sealed class FenethStatue : ModTile {
 
     public override bool CanExplode(int i, int j) => false;
 
+    public override void KillMultiTile(int i, int j, int frameX, int frameY) {
+        Main.NewText(frameX);
+        for (int k = 0; k < 5; k++) {
+            Dust.NewDustPerfect(new Point(i + (frameX == 0 ? 3 : 0), j).ToWorldCoordinates() + new Vector2(frameX == 0 ? -16f : 0, 0f), ModContent.DustType<Dusts.Fireblossom2>());
+        }
+    }
+
+    public override void RandomUpdate(int x, int y) {
+        int num868 = x;
+        int num869 = y;
+        var genRand = WorldGen.genRand;
+        for (int i = num868 - 10; i < num868 + 11; i++) {
+            for (int j = num869 - 10; j < num869 + 11; j++) {
+                if (Main.tile[i, j].HasTile && TileID.Sets.Grass[Main.tile[i, j].TileType] &&
+                    !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].TopSlope) {
+                    WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4));
+                }
+            }
+        }
+    }
+
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         // not cool 
         Tile tile = Main.tile[i, j];
@@ -216,6 +239,11 @@ sealed class FenethStatue : ModTile {
                               new Vector2(i * 16 - (int)Main.screenPosition.X + offsetX, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0)) + zero,
                               new Rectangle(frameX, frameY, width, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>(TileLoader.GetTile(Type).Texture + "_Glow").Value,
+                              new Vector2(i * 16 - (int)Main.screenPosition.X + offsetX, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0)) + zero,
+                              new Rectangle(frameX, frameY, width, height),
+                              Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
         return false;
     }

@@ -1,4 +1,6 @@
-﻿using RoA.Content.Tiles.Station;
+﻿using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Station;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -227,10 +229,10 @@ sealed class FenethStatueWorldGen : ModSystem {
                         if (_fenethStatuePlaced) {
                             break;
                         }
-                        for (int num869 = Main.maxTilesY - 180; num869 < Main.maxTilesY - 140; num869++) {
+                        for (int num869 = Main.maxTilesY - 170; num869 < Main.maxTilesY - 140; num869++) {
                             if (Main.tile[num868, num869].LiquidAmount <= 0 && Main.tile[num868, num869].TileType == 633 && Main.tile[num868, num869].HasTile && !Main.tile[num868, num869 - 1].HasTile && genRand.Next(30) == 0) {
                                 ushort type = (ushort)ModContent.TileType<FenethStatue>();
-                                WorldGen.Place3x4(num868, num869 - 1, type, WorldGen.genRand.NextBool().ToInt());
+                                WorldGen.Place3x4(num868, num869 - 1, type, genRand.NextBool().ToInt());
                                 if (Main.tile[num868, num869 - 1].TileType == type) {
                                     _fenethStatuePlaced = true;
                                     for (int i = num868 - 20; i < num868 + 21; i++) {
@@ -238,7 +240,20 @@ sealed class FenethStatueWorldGen : ModSystem {
                                             Main.tile[i, j].LiquidAmount = 0;
                                         }
                                     }
-                                    Console.WriteLine(num868 + " " + num869);
+                                    for (int i = num868 - 10; i < num868 + 11; i++) {
+                                        for (int j = num869 - 10; j < num869 + 11; j++) {
+                                            if (genRand.NextChance(0.7f) && Main.tile[i, j].HasTile && Main.tile[i, j].TileType == TileID.AshGrass &&
+                                                !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
+                                                if (genRand.NextBool(20)) {
+                                                    WorldGen.PlaceTile(i, j - 1, TileID.BloomingHerbs, style: 5);
+                                                }
+                                                else {
+                                                    WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //Console.WriteLine(num868 + " " + num869);
                                     break;
                                 }
                             }
