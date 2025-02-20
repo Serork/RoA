@@ -16,9 +16,9 @@ sealed class FenethStatue : ModItem {
     public override void SetDefaults() {
         Item.SetSize(36, 40);
 
-        Item.SetDefaultToStackable(1);
-
         Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Station.FenethStatue>());
+
+        Item.SetDefaultToStackable(1);
 
         Item.rare = ItemRarityID.LightRed;
     }
