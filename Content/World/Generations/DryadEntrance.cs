@@ -32,14 +32,14 @@ sealed class DryadEntrance : ModSystem {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mount Caves"));
         tasks.RemoveAt(genIndex);
 
-        tasks.Insert(genIndex, new PassLegacy("Extra Mount Caves", ExtraMountCavesGenerator, 49.9993f));
+        tasks.Insert(genIndex, new PassLegacy("Mount Caves, Dryad Entrance Mount Cave", ExtraMountCavesGenerator, 49.9993f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mountain Caves"));
         tasks.RemoveAt(genIndex);
 
-        tasks.Insert(genIndex, new PassLegacy("Dryad Entrance", DryadEntranceGenerator, 14.2958f));
+        tasks.Insert(genIndex, new PassLegacy("Mountain Caves, Dryad Entrance", DryadEntranceGenerator, 14.2958f));
 
-        tasks.Add(new PassLegacy("Dryad Entrance Clean Up", DryadEntranceCleanUp));
+        tasks.Add(new PassLegacy("Dryad Entrance", DryadEntranceCleanUp));
     }
 
     private void DryadEntranceCleanUp(GenerationProgress progress, GameConfiguration configuration) {
@@ -594,7 +594,7 @@ sealed class DryadEntrance : ModSystem {
             if (!Main.tile[i - 1, j].HasTile && !Main.tile[i - 2, j].HasTile &&
                 !Main.tile[i + 1, j].HasTile && !Main.tile[i + 2, j].HasTile) {
                 bool flag5 = true;
-                for (int k = -2; k < 5; k++) {
+                for (int k = -1; k < 3; k++) {
                     if (!Main.tile[i + k, j + 1].HasTile) {
                         flag5 = false;
                     }
