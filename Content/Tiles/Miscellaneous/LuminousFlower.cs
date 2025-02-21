@@ -45,6 +45,8 @@ sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
         HitSound = SoundID.Grass;
 
         AnimationFrameHeight = 54;
+
+        Main.tileCut[Type] = false;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 6;
