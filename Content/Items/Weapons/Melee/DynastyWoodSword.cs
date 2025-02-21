@@ -27,10 +27,10 @@ sealed class DynastyWoodSword : ModItem {
         Item.UseSound = SoundID.Item1;
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ItemID.DynastyWood, 7)
-    //		.AddTile(TileID.WorkBenches)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.DynastyWood, 7)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

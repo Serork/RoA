@@ -32,7 +32,7 @@ sealed class FeathersInABottle : NatureItem {
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient(ItemID.CloudinaBottle)
-            .AddIngredient(ItemID.Feather, 10)
+            .AddIngredient(ItemID.Feather, 5)
             .AddTile(TileID.TinkerersWorkbench)
             .Register();
     }

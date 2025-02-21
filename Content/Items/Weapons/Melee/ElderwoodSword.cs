@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Placeable.Crafting;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -25,10 +27,10 @@ sealed class ElderwoodSword : ModItem {
         Item.UseSound = SoundID.Item1;
     }
 
-    //public override void AddRecipes () {
-    //	CreateRecipe()
-    //		.AddIngredient<Materials.Elderwood>(7)
-    //		.AddTile(TileID.WorkBenches)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<Elderwood>(7)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }
