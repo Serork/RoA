@@ -10,7 +10,7 @@ using Terraria;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class ExoticTulip : TulipLikeTileBase {
-    public override int[] AnchorValidTiles => [TileID.Sand];
+    public override int[] AnchorValidTiles => [TileID.Grass];
 
     public override ushort ExtraChance => 1000;
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core.Utility;
 
 using System;
@@ -12,6 +13,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
+using Terraria.WorldBuilding;
 
 namespace RoA.Common.Tiles;
 
@@ -127,6 +129,16 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
                     i = genRand.Next(10, Main.maxTilesX - 10);
                 }
 
+                // stinks
+                if (instance.Type == ModContent.TileType<ExoticTulip>()) {
+                    if (genRand.NextBool()) {
+                        i = genRand.Next(275, 1000);
+                    }
+                    else {
+                        i = genRand.Next(Main.maxTilesX - 1000, Main.maxTilesX - 275);
+                    }
+                }
+
                 int j = !onSurface ? genRand.Next((int)Main.worldSurface - 1, (int)Main.maxTilesY - 100 + 1) : genRand.Next(WorldGenHelper.SafeFloatingIslandY, (int)Main.worldSurface - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (!tile.HasTile) {
@@ -145,9 +157,9 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
     private static bool TryToPlace(int i, int j, TileGenerationData tileGenerationData) {
         var instance = tileGenerationData.Instance;
-        if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
-            return false;
-        }
+        //if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
+        //    return false;
+        //}
 
         if (Helper.OnScreenWorld(i, j)) {
             return false;
@@ -155,10 +167,10 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
         UnifiedRandom genRand = WorldGen.genRand;
         i = genRand.Next(Math.Max(10, i - 10), Math.Min(Main.maxTilesX - 10, i + 10));
+        ushort tileType = instance.Type;
         bool onSurface = instance.OnSurface && !instance.InUnderground;
         j = onSurface ? WorldGenHelper.GetFirstTileY(i) : j;
         j -= 1;
-        ushort tileType = instance.Type;
         byte styleX = instance.StyleX;
         if (!Main.tileAlch[Main.tile[i, j].TileType] && HasValidGroundOnSpot(i, j, tileGenerationData) && NoNearbySame(i, j, tileGenerationData) &&
             (tileGenerationData.Is2x3 ? WorldGenHelper.Place2x3(i, j, tileType, style: styleX, countCut: false) : 
@@ -170,7 +182,7 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
                 //Helper.NewMessage(new Vector2(i, j).ToString(), Color.White);
 
-                //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
+                Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
 
                 if (Main.netMode == NetmodeID.Server && Main.tile[i, j].HasTile)
                     NetMessage.SendTileSquare(-1, i, j);

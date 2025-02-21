@@ -26,7 +26,6 @@ sealed class FlamingFabric : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.Cobweb, 5)
-			.AddIngredient(ItemID.Fireblossom)
 			.AddIngredient(ItemID.Hellstone)
 			.AddTile(TileID.Loom)
 			.Register();

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Druidic;
+using RoA.Content.Tiles.Station;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -18,7 +19,15 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
 		Item.maxStack = 1;
 		Item.value = Item.sellPrice(gold: 2);
 		Item.rare = ItemRarityID.Orange;
-	}
+    }
+
+    //public override void AddRecipes() {
+    //    CreateRecipe()
+    //        .AddIngredient(ModContent.ItemType<TwigWreath>())
+    //        .AddIngredient(ItemID.Fireblossom, 10)
+    //        .AddTile(ModContent.TileType<FenethStatue>())
+    //        .Register();
+    //}
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
