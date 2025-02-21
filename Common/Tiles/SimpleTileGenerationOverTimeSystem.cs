@@ -157,9 +157,9 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
     private static bool TryToPlace(int i, int j, TileGenerationData tileGenerationData) {
         var instance = tileGenerationData.Instance;
-        //if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
-        //    return false;
-        //}
+        if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
+            return false;
+        }
 
         if (Helper.OnScreenWorld(i, j)) {
             return false;
