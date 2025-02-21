@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Buffs;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -28,9 +30,9 @@ sealed class DynastyWoodHelmet : ModItem {
         => body.type == ModContent.ItemType<DynastyWoodBreastplate>() && legs.type == ModContent.ItemType<DynastyWoodLeggings>();
 
     public override void UpdateArmorSet(Player player) {
-        player.statDefense += 1;
-
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.DynastySetBonus").Value;
+
+        player.GetModPlayer<DynastyWoodSetBonusHandler>().IsSetBonusActive = true;
     }
 
     public override void AddRecipes() {
@@ -38,5 +40,25 @@ sealed class DynastyWoodHelmet : ModItem {
             .AddIngredient(ItemID.DynastyWood, 20)
             .AddTile(TileID.WorkBenches)
             .Register();
+    }
+
+    private sealed class DynastyWoodSetBonusHandler : ModPlayer {
+        public bool IsSetBonusActive;
+
+        public override void ResetEffects() {
+            IsSetBonusActive = false;
+        }
+
+        public override void OnHitAnything(float x, float y, Entity victim) {
+            if (!IsSetBonusActive) {
+                return;
+            }
+
+            byte blocksAmount = 5;
+            float neededDistance = blocksAmount * 16f;
+            if (Player.Distance(new Vector2(x, y)) < neededDistance && !Player.HasBuff<DynastySetBonusBuff>()) {
+                Player.AddBuff(ModContent.BuffType<DynastySetBonusBuff>(), DynastySetBonusBuff.TIME);
+            }
+        }
     }
 }

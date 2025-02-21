@@ -1,5 +1,8 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Buffs;
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -29,7 +32,8 @@ sealed class ElderwoodHelmet : ModItem {
 
     public override void UpdateArmorSet(Player player) {
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.ElderwoodSetBonus").Value;
-        player.statDefense += 1;
+
+        player.GetModPlayer<ElderwoodSetBonusHandler>().IsSetBonusActive = true;
     }
 
     public override void AddRecipes() {
@@ -37,5 +41,24 @@ sealed class ElderwoodHelmet : ModItem {
             .AddIngredient<Placeable.Crafting.Elderwood>(20)
             .AddTile(TileID.WorkBenches)
             .Register();
+    }
+
+    private sealed class ElderwoodSetBonusHandler : ModPlayer {
+        public bool IsSetBonusActive;
+
+        public override void ResetEffects() {
+            IsSetBonusActive = false;
+        }
+
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
+            if (!IsSetBonusActive) {
+                return;
+            }
+
+            if (Main.rand.NextChance(0.2)) {
+                modifiers.FinalDamage *= 0.5f;
+                Player.AddBuff(ModContent.BuffType<ElderwoodSetBonusBuff>(), ElderwoodSetBonusBuff.TIME);
+            }
+        }
     }
 }

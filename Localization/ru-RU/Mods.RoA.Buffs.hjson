@@ -225,3 +225,13 @@ Root: {
 	DisplayName: Капкан
 	Description: Передвижение временно ограниченно
 }
+
+DynastySetBonusBuff: {
+	// DisplayName: Dynasty Set Bonus Buff
+	// Description: Mods.RoA.Buffs.DynastySetBonusBuff.Description
+}
+
+ElderwoodSetBonusBuff: {
+	// DisplayName: Elderwood Set Bonus Buff
+	// Description: Mods.RoA.Buffs.ElderwoodSetBonusBuff.Description
+}
