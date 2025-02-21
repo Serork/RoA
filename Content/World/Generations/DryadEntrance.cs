@@ -559,7 +559,7 @@ sealed class DryadEntrance : ModSystem {
                 if (Main.tile[x2, y3].WallType != wallType) {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y3 - origin.Y);
-                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2) {
+                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 1.2f) {
                         WorldGenHelper.ReplaceWall(x2, y3, WallID.DirtUnsafe);
                         WorldGenHelper.ReplaceTile(x2, y3, TileID.Dirt);
                     }
