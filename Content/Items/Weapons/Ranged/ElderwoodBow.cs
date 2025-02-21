@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Ranged;
+
 sealed class ElderwoodBow : ModItem {
     public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
