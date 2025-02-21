@@ -157,7 +157,8 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
 
     private static bool TryToPlace(int i, int j, TileGenerationData tileGenerationData) {
         var instance = tileGenerationData.Instance;
-        if (!Main.rand.NextBool(30 + instance.ExtraChance)) {
+        UnifiedRandom genRand = WorldGen.genRand;
+        if (!genRand.NextBool(30 + instance.ExtraChance)) {
             return false;
         }
 
@@ -165,7 +166,6 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
             return false;
         }
 
-        UnifiedRandom genRand = WorldGen.genRand;
         i = genRand.Next(Math.Max(10, i - 10), Math.Min(Main.maxTilesX - 10, i + 10));
         ushort tileType = instance.Type;
         bool onSurface = instance.OnSurface && !instance.InUnderground;
