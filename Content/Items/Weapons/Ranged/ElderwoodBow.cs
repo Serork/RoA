@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Placeable.Crafting;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -29,10 +31,10 @@ sealed class ElderwoodBow : ModItem {
         Item.shootSpeed = 11f;
     }
 
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient<Elderwood>(10)
-    //        .AddTile(TileID.WorkBenches)
-    //        .Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<Elderwood>(10)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }

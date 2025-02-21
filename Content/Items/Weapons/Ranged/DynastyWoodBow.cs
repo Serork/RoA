@@ -30,10 +30,10 @@ sealed class DynastyWoodBow : ModItem {
         Item.shootSpeed = 11f;
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ItemID.DynastyWood, 10)
-    //		.AddTile(TileID.WorkBenches)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.DynastyWood, 10)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }
