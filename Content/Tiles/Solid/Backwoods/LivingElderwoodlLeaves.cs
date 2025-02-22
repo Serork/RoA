@@ -9,6 +9,7 @@ using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -21,12 +22,14 @@ namespace RoA.Content.Tiles.Solid.Backwoods;
 
 sealed class LivingElderwoodlLeaves : ModTile {
 	public override void SetStaticDefaults() {
-        TileHelper.Solid(Type, false, false);
-        TileHelper.MergeWith(Type, (ushort)ModContent.TileType<LivingElderwood>());
+        TileHelper.Solid(Type, false, false, brick: false);
         TileHelper.MergeWith(Type, TileID.Dirt);
 
-        TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
+
+        TileID.Sets.Leaves[Type] = true;
+        TileID.Sets.ForcedDirtMerging[Type] = true;
 
         HitSound = SoundID.Grass;
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
@@ -34,9 +37,7 @@ sealed class LivingElderwoodlLeaves : ModTile {
 	}
 
     public override void ModifyFrameMerge(int i, int j, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight) {
-        ////We use this method to set the merge values of the adjacent tiles to -2 if the tile nearby is a snow block
-        ////-2 is what terraria uses to designate the tiles that will merge with ours using the custom frames
-        //WorldGen.TileMergeAttempt(-2, ModContent.TileType<LivingElderwood>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);
+        WorldGen.TileMergeAttemptFrametest(i, j, ModContent.TileType<LivingElderwoodlLeaves>(), ModContent.TileType<LivingElderwood>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
