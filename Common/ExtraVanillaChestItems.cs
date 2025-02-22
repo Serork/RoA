@@ -1,6 +1,7 @@
 ﻿using ReLogic.Utilities;
 
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Druidic.Claws;
@@ -28,6 +29,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
     private bool _hellfireClawsAdded;
     private bool _giantTreeSaplingAdded;
     private bool _feathersBottleAdded;
+    private bool _oniMaskAdded;
 
     [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Lights")]
     public extern static void WorldGen_MakeDungeon_Lights(WorldGen worldGen, ushort tileType, ref int failCount, int failMax, ref int numAdd, int[] roomWall);
@@ -1466,6 +1468,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
         _hellfireClawsAdded = false;
         _giantTreeSaplingAdded = false;
         _feathersBottleAdded = false;
+        _oniMaskAdded = false;
     }
 
     private static bool IsUndergroundDesert(int x, int y) {
@@ -2057,6 +2060,15 @@ sealed class ExtraVanillaChestItems : ModSystem {
                                     break;
                             }
 
+                            if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
+                                if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
+                                    _oniMaskAdded = true;
+                                    chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
+                                    chest.item[num10].Prefix(-1);
+                                    num10++;
+                                }
+                            }
+
                             num10++;
                             if (genRand.Next(20) == 0) {
                                 chest.item[num10].SetDefaults(997);
@@ -2309,6 +2321,16 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             }
 
                             num10++;
+
+                            if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
+                                if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
+                                    _oniMaskAdded = true;
+                                    chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
+                                    chest.item[num10].Prefix(-1);
+                                    num10++;
+                                }
+                            }
+
                             if (flag6) {
                                 if (genRand.Next(2) == 0) {
                                     chest.item[num10].SetDefaults(4450);
@@ -2511,6 +2533,15 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             }
 
                             num10++;
+                        }
+
+                        if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
+                            if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
+                                _oniMaskAdded = true;
+                                chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
+                                chest.item[num10].Prefix(-1);
+                                num10++;
+                            }
                         }
 
                         if (genRand.Next(3) == 0) {
