@@ -54,7 +54,7 @@ sealed class LuminousFlower : ModTile {
                 TileObjectData objectData = TileObjectData.GetTileData(tileType, 0);
                 if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
                     if (!Main.tile[i, j - 1].AnyLiquid() && !Main.tile[i, j - 1].AnyWall()) {
-                        Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
+                        //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
                         WorldGenHelper.Place2x3(i, j - 1, tileType, countCut: false);
                     }
                 }
