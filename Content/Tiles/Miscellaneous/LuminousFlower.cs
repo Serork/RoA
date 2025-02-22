@@ -101,7 +101,11 @@ sealed class LuminousFlower : ModTile {
         Main.tileCut[Type] = false;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 6;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 2 : 6;
+
+    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
+        fail = false;
+    }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         LuminiousFlowerLightUp(i, j, out float _, modTile: TileLoader.GetTile(Type));
