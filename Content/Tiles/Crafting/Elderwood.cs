@@ -16,9 +16,6 @@ sealed class Elderwood : ModTile {
 	public override void SetStaticDefaults() {
         TileHelper.Solid(Type, false, false);
         Main.tileMergeDirt[Type] = true;
-		Main.tileMerge[Type][TileID.Dirt] = true;
-		Main.tileMerge[Type][TileID.Grass] = true;
-		Main.tileMerge[TileID.Grass][Type] = true;
 		Main.tileBlockLight[Type] = true;
 		Main.tileLighted[Type] = true;
 
