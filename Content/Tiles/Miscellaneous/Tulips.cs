@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
 using RoA.Core.Utility;
@@ -138,6 +139,17 @@ sealed class ExoticTulip : ModTile {
         AddMapEntry(new(216, 78, 142), name);
     }
 
+    public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
+        offsetY = -14;
+        height = 32;
+    }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 10;
+
+    public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
+        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
+    }
+
     public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Druidic.ExoticTulip>())];
 
     public override void MouseOver(int i, int j) {
@@ -176,6 +188,17 @@ sealed class SweetTulip : ModTile {
 
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(new(255, 165, 0), name);
+    }
+
+    public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
+        offsetY = -14;
+        height = 32;
+    }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 10;
+
+    public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
+        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Druidic.SweetTulip>())];
@@ -218,6 +241,17 @@ sealed class WeepingTulip : ModTile {
 
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(new(0, 0, 255), name);
+    }
+
+    public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
+        offsetY = -14;
+        height = 32;
+    }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 10;
+
+    public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
+        spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Druidic.WeepingTulip>())];
