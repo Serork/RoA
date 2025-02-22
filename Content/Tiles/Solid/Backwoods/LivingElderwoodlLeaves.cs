@@ -33,6 +33,12 @@ sealed class LivingElderwoodlLeaves : ModTile {
 		AddMapEntry(new Color(0, 128, 0));
 	}
 
+    public override void ModifyFrameMerge(int i, int j, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight) {
+        ////We use this method to set the merge values of the adjacent tiles to -2 if the tile nearby is a snow block
+        ////-2 is what terraria uses to designate the tiles that will merge with ours using the custom frames
+        //WorldGen.TileMergeAttempt(-2, ModContent.TileType<LivingElderwood>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);
+    }
+
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
         yield return new Item(ItemID.None);
     }
