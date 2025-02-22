@@ -31,9 +31,9 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient(ItemID.Ebonwood, 8)
-            .AddIngredient(ItemID.ShadowScale, 5)
             .AddIngredient(ItemID.DemoniteBar, 8)
+            .AddIngredient(ItemID.ShadowScale, 5)
+            .AddIngredient(ItemID.Ebonwood, 8)
             .Register();
     }
 
@@ -146,9 +146,9 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient(ItemID.Shadewood, 8)
-            .AddIngredient(ItemID.TissueSample, 5)
             .AddIngredient(ItemID.CrimtaneBar, 8)
+            .AddIngredient(ItemID.TissueSample, 5)
+            .AddIngredient(ItemID.Shadewood, 8)
             .Register();
     }
 

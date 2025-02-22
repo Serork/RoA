@@ -38,7 +38,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient(ModContent.ItemType<Elderwood>(), 16)
-            .AddIngredient(ModContent.ItemType<FlamingFabric>(), 10)
+            .AddIngredient(ModContent.ItemType<NaturesHeart>(), 1)
             .AddTile(TileID.Anvils)
             .Register();
     }
