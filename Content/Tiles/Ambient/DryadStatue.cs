@@ -22,6 +22,8 @@ sealed class DryadStatue : ModTile {
 		Main.tileLighted[Type] = true;
 		Main.tileHammer[Type] = true;
 
+        Main.tileSpelunker[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.DrawYOffset = 2;
 		TileObjectData.newTile.Width = 2;

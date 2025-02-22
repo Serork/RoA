@@ -15,6 +15,8 @@ sealed class OniMask : ModTile {
 		Main.tileLavaDeath[Type] = true;
 		Main.tileNoAttach[Type] = true;
 
+        Main.tileSpelunker[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
         TileObjectData.newTile.CoordinateHeights = [16, 16];
         TileObjectData.newTile.Width = 2;

@@ -16,6 +16,8 @@ sealed class Moss : ModTile {
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLavaDeath[Type] = true;
 
+        Main.tileSpelunker[Type] = true;
+
         TileID.Sets.FramesOnKillWall[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
@@ -26,6 +28,7 @@ sealed class Moss : ModTile {
 		TileObjectData.newTile.Height = 4;
 		TileObjectData.newTile.Width = 4;
 		TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16, 16 };
+		TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.Origin = new Point16(2, 2);
         TileObjectData.addTile(Type);
 
