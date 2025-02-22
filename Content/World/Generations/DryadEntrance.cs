@@ -714,7 +714,7 @@ sealed class DryadEntrance : ModSystem {
             for (int y2 = num6_; y2 < num7_; y2++) {
                 int y3 = y2;
                 if (WorldGen.SolidTile2(x2, y3) && (Main.tile[x2, y3].TileType == tileType || Main.tile[x2, y3].TileType == tileType2) && WorldGen.SolidTile2(x2 + 1, y3) && genRand.NextBool(3) && (Main.tile[x2 + 1, y3].TileType == tileType || Main.tile[x2 + 1, y3].TileType == tileType2) && !Main.tile[x2, y3 - 1].HasTile && !Main.tile[x2 + 1, y3 - 1].HasTile) {
-                    if (placedIndex % 2 == 0 && (!mediumPlaced1 || (genRand.NextBool(3) && mediumPlaced1))) {
+                    if (placedIndex % 2 == 0 && (!mediumPlaced1 || (genRand.NextBool(2) && mediumPlaced1))) {
                         ushort type = (ushort)ModContent.TileType<TreeDryadDecoration2>();
                         Tile tile = Main.tile[x2, y3 - 1];
                         short frameX = (short)((0 + 2 * genRand.Next(0, 2)) * 18);
