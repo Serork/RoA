@@ -709,7 +709,7 @@ sealed class DryadEntrance : ModSystem {
             }
         }
         bool mediumPlaced1 = false;
-        int placedIndex = 1;
+        int placedIndex = 2;
         for (int x2 = num4; x2 < num5_; x2++) {
             for (int y2 = num6_; y2 < num7_; y2++) {
                 int y3 = y2;
@@ -749,7 +749,7 @@ sealed class DryadEntrance : ModSystem {
             }
         }
         bool smallPlaced1 = false;
-        placedIndex = 1;
+        placedIndex = 2;
         for (int x2 = num4; x2 < num5_; x2++) {
             for (int y2 = num6_; y2 < num7_; y2++) {
                 int y3 = y2;
