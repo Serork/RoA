@@ -22,8 +22,6 @@ sealed class DryadStatue : ModTile {
 		Main.tileLighted[Type] = true;
 		Main.tileHammer[Type] = true;
 
-        Main.tileSpelunker[Type] = true;
-
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.DrawYOffset = 2;
 		TileObjectData.newTile.Width = 2;
@@ -45,6 +43,8 @@ sealed class DryadStatue : ModTile {
 		DustType = DustID.Stone;
 		MineResist = 1.5f;
 	}
+
+	public override bool IsTileSpelunkable(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameX <= 72;
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
 		if (WorldGenHelper.GetTileSafely(i, j).TileFrameX <= 72) {

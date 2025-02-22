@@ -2060,6 +2060,8 @@ sealed class ExtraVanillaChestItems : ModSystem {
                                     break;
                             }
 
+                            num10++;
+
                             if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
                                 if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
                                     _oniMaskAdded = true;
@@ -2069,7 +2071,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                                 }
                             }
 
-                            num10++;
+
                             if (genRand.Next(20) == 0) {
                                 chest.item[num10].SetDefaults(997);
                                 chest.item[num10].Prefix(-1);
