@@ -26,6 +26,7 @@ using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
@@ -649,7 +650,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             return false;
         }
 
-        return true;
+        return false;
     }
 
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
@@ -676,11 +677,16 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
 
     void ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
         int i = pos.X, j = pos.Y;
+        Tile tile = Main.tile[i, j];
+        Vector2 zero = Vector2.Zero;
+        Microsoft.Xna.Framework.Rectangle value = new Microsoft.Xna.Framework.Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16);
+        Main.spriteBatch.Draw(TextureAssets.Tile[tile.TileType].Value, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, value, Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+
         if (IsTop(i, j)) {
             DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
         }
 
-        Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        tile = WorldGenHelper.GetTileSafely(i, j);
         Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
                                    j * 16 - (int)Main.screenPosition.Y);
         Color color = Lighting.GetColor(i, j);
