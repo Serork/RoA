@@ -65,6 +65,7 @@ sealed class LuminousFlower : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         HitSound = SoundID.Grass;
         DustType = DustID.Grass;
@@ -72,7 +73,9 @@ sealed class LuminousFlower : ModTile {
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(new(211, 141, 162), name);
 
-        Main.tileLavaDeath[Type] = true;
+        Main.tileSpelunker[Type] = true;
+        Main.tileOreFinderPriority[Type] = 750;
+
         Main.tileNoAttach[Type] = true;
         Main.tileWaterDeath[Type] = false;
 
@@ -88,6 +91,7 @@ sealed class LuminousFlower : ModTile {
         anchorValidTiles.Add(ModContent.TileType<BackwoodsGrass>());
         TileObjectData.newTile.AnchorValidTiles = [.. anchorValidTiles];
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
+        TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.Width = 2;
         TileObjectData.newTile.Height = 3;
         TileObjectData.newTile.DrawYOffset = 6;

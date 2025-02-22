@@ -47,7 +47,6 @@ sealed class GrowTulips : ILoadable {
                     }
                 }
                 if (!flag) {
-                    Main.NewText(1);
                     if (i < 1000 || i > Main.maxTilesX - 1000) {
                         if (Main.tile[i, j].TileType == TileID.Grass || Main.tile[i, j].TileType == TileID.GolfGrass) {
                             if (!Main.tile[i, j - 1].AnyLiquid() && !Main.tile[i, j - 1].AnyWall()) {
@@ -73,7 +72,6 @@ sealed class GrowTulips : ILoadable {
                     }
                 }
                 if (!flag) {
-                    Main.NewText(2);
                     if (Main.tile[i, j].TileType == TileID.JungleGrass) {
                         if (!Main.tile[i, j - 1].AnyLiquid()) {
                             Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
@@ -98,7 +96,6 @@ sealed class GrowTulips : ILoadable {
                         }
                     }
                     if (!flag) {
-                        Main.NewText(3);
                         TileObjectData objectData = TileObjectData.GetTileData(tileType, 0);
                         if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
                             if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType]) {
@@ -121,12 +118,14 @@ sealed class ExoticTulip : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.AnchorValidTiles = [TileID.Grass];
         TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Style = 0;
         TileObjectData.newTile.DrawYOffset = 2;
@@ -134,6 +133,9 @@ sealed class ExoticTulip : ModTile {
 
         HitSound = SoundID.Grass;
         DustType = DustID.Grass;
+
+        Main.tileSpelunker[Type] = true;
+        Main.tileOreFinderPriority[Type] = 750;
 
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(new(216, 78, 142), name);
@@ -172,16 +174,21 @@ sealed class SweetTulip : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.AnchorValidTiles = [TileID.JungleGrass];
         TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Style = 0;
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
+
+        Main.tileSpelunker[Type] = true;
+        Main.tileOreFinderPriority[Type] = 750;
 
         HitSound = SoundID.Grass;
         DustType = DustID.Grass;
@@ -223,16 +230,21 @@ sealed class WeepingTulip : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.AnchorValidTiles = [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
         TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Style = 0;
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
+
+        Main.tileSpelunker[Type] = true;
+        Main.tileOreFinderPriority[Type] = 750;
 
         HitSound = SoundID.Grass;
         DustType = DustID.Bone;
