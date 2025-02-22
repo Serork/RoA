@@ -28,6 +28,9 @@ sealed class BackwoodsPot : ModTile {
         Main.tileLavaDeath[Type] = true;
         Main.tileCut[Type] = true;
 
+        Main.tileOreFinderPriority[Type] = 100;
+        Main.tileSpelunker[Type] = true;
+
         TileID.Sets.DisableSmartCursor[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
