@@ -13,6 +13,7 @@ using System;
 
 namespace RoA.Common.Tiles;
 
+[Autoload(false)]
 abstract class SimpleTileBaseToGenerateOverTime : ModTile {
     public virtual int[] AnchorValidTiles { get; }
     public virtual int[] AnchorValidWalls { get; } = null;

@@ -175,7 +175,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             return;
         }
 
-        if (!IsGrown(i, j) && WorldGen.genRand.NextBool(50)) {
+        if (!IsGrown(i, j) && Main.rand.NextBool(50)) {
             WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;
             if (Main.netMode != NetmodeID.SinglePlayer) {
                 NetMessage.SendTileSquare(-1, i, j, 1);
@@ -183,11 +183,9 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         }
     }
 
-    protected bool TryPlacePlant(int i, int j, int style = 0, params int[] validTiles){
-        ushort tileTypeToGrow = Type;
-
-        int num3 = 15;
-        int num4 = 5;
+    public static bool TryPlacePlant(int i, int j, ushort tileTypeToGrow, int style = 0, int checkRadius = 15, int maxAlchNearby = 5, params int[] validTiles){
+        int num3 = checkRadius;
+        int num4 = maxAlchNearby;
         int num5 = 0;
         num3 = (int)((double)num3 * ((double)Main.maxTilesX / 4200.0));
         int num6 = Utils.Clamp(i - num3, 4, Main.maxTilesX - 4);
@@ -202,14 +200,17 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
                 }
             }
         }
-
         if (num5 < num4) {
-            if (!Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j + 1].HasTile && !Main.tile[i, j + 1].IsHalfBlock && Main.tile[i, j + 1].Slope == 0) {
-                for (int k = 0; k < validTiles.Length; k++) {
-                    if (Main.tile[i, j + 1].TileType != validTiles[k]) {
-                        return false;
-                    }
+            for (int k = 0; k < validTiles.Length; k++) {
+                if (Main.tile[i, j].TileType != validTiles[k]) {
+                    return false;
                 }
+                else {
+                    break;
+                }
+            }
+            j -= 1;
+            if (!Main.tile[i, j].HasTile && Main.tile[i, j + 1].HasUnactuatedTile && !Main.tile[i, j + 1].IsHalfBlock && Main.tile[i, j + 1].Slope == 0) {
                 Tile tile = Main.tile[i, j];
                 PlantBase plant = TileLoader.GetTile(tileTypeToGrow) as PlantBase;
                 tile.ClearTile();

@@ -8,6 +8,7 @@ using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
@@ -18,6 +19,13 @@ sealed class GutwrenchingHooks : BaseClawsItem {
 
         //NatureWeaponHandler.SetPotentialDamage(Item, 24);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, (ushort)(UseTime - UseTime / 3));
+    }
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.CrimtaneBar, 10)
+            .AddTile(TileID.Anvils)
+            .Register();
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(216, 73, 73), new Color(255, 114, 114));

@@ -47,7 +47,7 @@ sealed class LivingElderwoodlLeaves : ModTile {
     public override void RandomUpdate(int i, int j) {
         if (Main.tile[i, j].HasUnactuatedTile) {
             int num34 = 10;
-            if (WorldGen.genRand.Next(num34) == 0 && WorldGen.GrowMoreVines(i, j) && !Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].LiquidType != LiquidID.Lava) {
+            if (Main.rand.Next(num34) == 0 && WorldGen.GrowMoreVines(i, j) && !Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].LiquidType != LiquidID.Lava) {
                 bool flag5 = false;
                 ushort type7 = (ushort)ModContent.TileType<BackwoodsVines>();
                 if (Main.tile[i, j].WallType == 68 || Main.tile[i, j].WallType == ModContent.WallType<BackwoodsGrassWall>() || Main.tile[i, j].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>() || Main.tile[i, j].WallType == 65 || Main.tile[i, j].WallType == 66 || Main.tile[i, j].WallType == 63)

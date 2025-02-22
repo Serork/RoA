@@ -192,7 +192,7 @@ sealed class FenethStatue : ModTile {
     public override void RandomUpdate(int x, int y) {
         int num868 = x;
         int num869 = y;
-        var genRand = WorldGen.genRand;
+        var genRand = Main.rand;
         for (int i = num868 - 10; i < num868 + 11; i++) {
             for (int j = num869 - 10; j < num869 + 11; j++) {
                 if (genRand.NextBool(20)) {

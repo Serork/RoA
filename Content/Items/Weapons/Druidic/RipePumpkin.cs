@@ -24,6 +24,13 @@ sealed class RipePumpkin : NatureItem {
         NatureWeaponHandler.SetFillingRate(Item, 0.5f);
     }
 
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.Pumpkin, 15)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
+
     public override bool CanUseItem(Player player) {
 		if (player.IsLocal()) {
 			return player.ownedProjectileCounts[Item.shoot] < 1;

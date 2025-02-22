@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-using RoA.Content.Tiles.Miscellaneous;
+﻿using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core.Utility;
 
 using System;
@@ -13,10 +11,10 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
-using Terraria.WorldBuilding;
 
 namespace RoA.Common.Tiles;
 
+[Autoload(false)]
 sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
     public readonly struct TileGenerationData(SimpleTileBaseToGenerateOverTime instance, byte index, byte amount) {
         public readonly SimpleTileBaseToGenerateOverTime Instance = instance;

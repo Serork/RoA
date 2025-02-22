@@ -116,8 +116,8 @@ sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
         Tile down = Main.tile[i, j + 1];
         Tile up = Main.tile[i, j - 1];
         int type = ModContent.TileType<MossGrowth>();
-        if (WorldGen.genRand.NextBool(6) && me.HasUnactuatedTile && !me.IsHalfBlock && !me.BottomSlope && !me.LeftSlope && !me.RightSlope && !me.TopSlope) {
-            short framing = (short)(WorldGen.genRand.Next(3) * 18);
+        if (Main.rand.NextBool(6) && me.HasUnactuatedTile && !me.IsHalfBlock && !me.BottomSlope && !me.LeftSlope && !me.RightSlope && !me.TopSlope) {
+            short framing = (short)(Main.rand.Next(3) * 18);
             if (!left.HasTile) {
                 WorldGen.PlaceTile(i + 1, j, type, mute: true);
                 left.TileFrameY = (short)(108 + framing);
@@ -140,7 +140,7 @@ sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
             }
         }
 
-        if (Main.tile[i, j].HasUnactuatedTile && (j > Main.worldSurface - 1 || WorldGen.genRand.NextBool(2))) {
+        if (Main.tile[i, j].HasUnactuatedTile && (j > Main.worldSurface - 1 || Main.rand.NextBool(2))) {
             int num = i - 1;
             int num2 = i + 2;
             int num3 = j - 1;

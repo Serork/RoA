@@ -5,39 +5,91 @@ using RoA.Common.Tiles;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Terraria.Utilities;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
-sealed class LuminousFlower : SimpleTileBaseToGenerateOverTime {
+sealed class LuminousFlower : ModTile {
     public const float MINLIGHTMULT = 0.5f;
 
-    public override int[] AnchorValidTiles => [TileID.Grass, TileID.JungleGrass, TileID.CorruptGrass, TileID.CrimsonGrass, (ushort)ModContent.TileType<BackwoodsGrass>()];
+    public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Miscellaneous.LuminousFlower>())];
 
-    public override ushort ExtraChance => 300;
+    public override void Load() {
+        On_WorldGen.plantDye += On_WorldGen_plantDye;
+    }
 
-    public override ushort DropItem => (ushort)ModContent.ItemType<Items.Miscellaneous.LuminousFlower>();
+    private void On_WorldGen_plantDye(On_WorldGen.orig_plantDye orig, int i, int j, bool exoticPlant) {
+        orig(i, j, exoticPlant);
 
-    public override byte XSize => 2;
-    public override byte YSize => 3;
+        if (!exoticPlant) {
+            UnifiedRandom unifiedRandom = (WorldGen.gen ? WorldGen.genRand : Main.rand);
+            if (!Main.tile[i, j].HasTile || i < 95 || i > Main.maxTilesX - 95 || j < 95 || j > Main.maxTilesY - 95)
+                return;
 
-    public override Color MapColor => new(211, 141, 162);
+            int num = 90;
+            num = 240;
 
-    protected override void SafeSetStaticDefaults() {
+            if (((double)j < Main.worldSurface || WorldGen.remixWorldGen) && (!Main.tile[i, j - 1].HasTile ||
+                Main.tileCut[Main.tile[i, j - 1].TileType])) {
+                int num2 = Utils.Clamp(i - num, 1, Main.maxTilesX - 1 - 1);
+                int num3 = Utils.Clamp(i + num, 1, Main.maxTilesX - 1 - 1);
+                int num4 = Utils.Clamp(j - num, 1, Main.maxTilesY - 1 - 1);
+                int num5 = Utils.Clamp(j + num, 1, Main.maxTilesY - 1 - 1);
+                ushort tileType = (ushort)ModContent.TileType<LuminousFlower>();
+                for (int k = num2; k < num3; k++) {
+                    for (int l = num4; l < num5; l++) {
+                        if (Main.tile[k, l].HasTile && Main.tile[k, l].TileType == tileType)
+                            return;
+                    }
+                }
+                TileObjectData objectData = TileObjectData.GetTileData(tileType, 0);
+                if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
+                    if (!Main.tile[i, j - 1].AnyLiquid() && !Main.tile[i, j - 1].AnyWall()) {
+                        Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
+                        WorldGenHelper.Place2x3(i, j - 1, tileType, countCut: false);
+                    }
+                }
+            }
+        }
+    }
+
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileCut[Type] = true;
+
+        HitSound = SoundID.Grass;
+        DustType = DustID.Grass;
+
+        LocalizedText name = CreateMapEntryName();
+        AddMapEntry(new(211, 141, 162), name);
+
         Main.tileLavaDeath[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileWaterDeath[Type] = false;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
-        TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
+        List<int> anchorValidTiles = [];
+        for (int i = 0; i < TileLoader.TileCount; i++) {
+            if (TileID.Sets.Conversion.Grass[i]) {
+                anchorValidTiles.Add(i);
+            }
+        }
+        anchorValidTiles.Add(TileID.CorruptGrass);
+        anchorValidTiles.Add(TileID.CrimsonGrass);
+        anchorValidTiles.Add(ModContent.TileType<BackwoodsGrass>());
+        TileObjectData.newTile.AnchorValidTiles = [.. anchorValidTiles];
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
-        TileObjectData.newTile.Width = XSize;
-        TileObjectData.newTile.Height = YSize;
+        TileObjectData.newTile.Width = 2;
+        TileObjectData.newTile.Height = 3;
         TileObjectData.newTile.DrawYOffset = 6;
         TileObjectData.addTile(Type);
 

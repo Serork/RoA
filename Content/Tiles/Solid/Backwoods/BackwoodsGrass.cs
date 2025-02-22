@@ -151,10 +151,10 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
     public override void RandomUpdate(int i, int j) {
         int x = i, y = j;
         if (Main.tile[i, j].LiquidAmount <= 32 && !Framing.GetTileSafely(x, y - 1).HasTile && Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock &&
-            (j > Main.worldSurface - 1 || WorldGen.genRand.NextBool(2))) {
-            if (WorldGen.genRand.NextChance(0.045)) {
+            (j > Main.worldSurface - 1 || Main.rand.NextBool(2))) {
+            if (Main.rand.NextChance(0.045)) {
                 int mintType = ModContent.TileType<MiracleMint>();
-                int style = WorldGen.genRand.Next(2);
+                int style = Main.rand.Next(2);
                 if (WorldGen.PlaceTile(x, y - 1, mintType, true, style: style)) {
                     Main.tile[x, y - 1].CopyPaintAndCoating(Main.tile[i, j]);
                 }
@@ -167,8 +167,8 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
                 }
             }
             else {
-                if (WorldGen.genRand.NextChance(0.15)) {
-                    if (WorldGen.PlaceTile(x, y - 1, (ushort)ModContent.TileType<BackwoodsBush>(), true, style: WorldGen.genRand.Next(4))) {
+                if (Main.rand.NextChance(0.15)) {
+                    if (WorldGen.PlaceTile(x, y - 1, (ushort)ModContent.TileType<BackwoodsBush>(), true, style: Main.rand.Next(4))) {
                         Main.tile[x, y - 1].CopyPaintAndCoating(Main.tile[i, j]);
                     }
                     if (Main.netMode == NetmodeID.Server && Main.tile[i, y - 1].HasTile) {
@@ -177,7 +177,7 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
 
                     return;
                 }
-                if (WorldGen.PlaceTile(x, y - 1, (ushort)ModContent.TileType<BackwoodsPlants>(), true, style: WorldGen.genRand.Next(20))) {
+                if (WorldGen.PlaceTile(x, y - 1, (ushort)ModContent.TileType<BackwoodsPlants>(), true, style: Main.rand.Next(20))) {
                     Main.tile[x, y - 1].CopyPaintAndCoating(Main.tile[i, j]);
                 }
                 if (Main.netMode == NetmodeID.Server && Main.tile[i, y - 1].HasTile) {
@@ -188,7 +188,7 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
 
         if (Main.tile[i, j].HasUnactuatedTile) {
             int num34 = 1;
-            if (WorldGen.genRand.Next(num34) == 0 && WorldGen.GrowMoreVines(i, j) && !Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].LiquidType != LiquidID.Lava) {
+            if (Main.rand.Next(num34) == 0 && WorldGen.GrowMoreVines(i, j) && !Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].LiquidType != LiquidID.Lava) {
                 bool flag5 = false;
                 ushort type7 = (ushort)ModContent.TileType<BackwoodsVines>();
                 if (Main.tile[i, j].WallType == 68 || Main.tile[i, j].WallType == ModContent.WallType<BackwoodsGrassWall>() || Main.tile[i, j].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>() || Main.tile[i, j].WallType == 65 || Main.tile[i, j].WallType == 66 || Main.tile[i, j].WallType == 63)

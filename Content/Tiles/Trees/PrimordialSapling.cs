@@ -57,7 +57,7 @@ sealed class PrimordialSapling : ModTile {
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
 	public override void RandomUpdate(int i, int j) {
-		if (WorldGen.genRand.NextBool(15)) {
+		if (Main.rand.NextBool(15)) {
 			GrowTree(i, j);
         }
 	}
@@ -65,7 +65,7 @@ sealed class PrimordialSapling : ModTile {
 	internal static void GrowTree(int i, int j) {
         bool success = false;
         if (Main.hardMode) {
-            success = BackwoodsBigTree.TryGrowBigTree(i, j + 2, placeRand: WorldGen.genRand);
+            success = BackwoodsBigTree.TryGrowBigTree(i, j + 2, placeRand: Main.rand);
         }
         if (!success && !TileID.Sets.TreeSapling[WorldGenHelper.GetTileSafely(i + 1, j).TileType] && !TileID.Sets.TreeSapling[WorldGenHelper.GetTileSafely(i - 1, j).TileType]) {
             success = WorldGenHelper.GrowTreeWithBranches<TreeBranch>(i, j + 2, branchChance: 10);

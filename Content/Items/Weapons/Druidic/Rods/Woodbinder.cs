@@ -6,6 +6,8 @@ using Mono.Cecil;
 using RoA.Common.Druid;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Items.Materials;
+using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -31,6 +33,14 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
         NatureWeaponHandler.SetPotentialDamage(Item, 16);
         NatureWeaponHandler.SetFillingRate(Item, 0.25f);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
+    }
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ModContent.ItemType<Elderwood>(), 16)
+            .AddIngredient(ModContent.ItemType<FlamingFabric>(), 10)
+            .AddTile(TileID.Anvils)
+            .Register();
     }
 
     public sealed class WoodbinderBase : BaseRodProjectile {

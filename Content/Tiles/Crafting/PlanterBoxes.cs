@@ -68,7 +68,7 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
         public override void RandomUpdate(int i, int j, int type) {
             if (type == ModContent.TileType<PlanterBoxes>()) {
                 int num3 = j - 1;
-                if (!Main.tile[i, num3].HasTile && WorldGen.genRand.Next(2) == 0) {
+                if (!Main.tile[i, num3].HasTile && Main.rand.Next(2) == 0) {
                     WorldGen.PlaceTile(i, num3, 3, mute: true);
                     if (Main.netMode == 2 && Main.tile[i, num3].HasTile)
                         NetMessage.SendTileSquare(-1, i, num3);

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common.Druid;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Materials;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Content.VisualEffects;
 using RoA.Core;
@@ -29,6 +30,14 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
         NatureWeaponHandler.SetFillingRate(Item, 0.35f);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
+    }
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.HellstoneBar, 6)
+            .AddIngredient(ModContent.ItemType<FlamingFabric>(), 10)
+            .AddTile(TileID.Anvils)
+            .Register();
     }
 
     public sealed class TectonicCaneBase : BaseRodProjectile {

@@ -1,8 +1,7 @@
-﻿using Terraria.ID;
+﻿using RoA.Core;
+
 using Terraria;
 using Terraria.ModLoader;
-
-using RoA.Core;
 
 namespace RoA.Content.Items.Materials;
 
