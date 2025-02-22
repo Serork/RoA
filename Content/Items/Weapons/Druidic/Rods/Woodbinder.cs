@@ -39,7 +39,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
         CreateRecipe()
             .AddIngredient(ModContent.ItemType<Elderwood>(), 16)
             .AddIngredient(ModContent.ItemType<NaturesHeart>(), 1)
-            .AddTile(TileID.Anvils)
+            .AddTile(TileID.WorkBenches)
             .Register();
     }
 
