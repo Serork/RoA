@@ -46,6 +46,7 @@ sealed class GrowTulips : ILoadable {
                     }
                 }
                 if (!flag) {
+                    Main.NewText(1);
                     if (i < 1000 || i > Main.maxTilesX - 1000) {
                         if (Main.tile[i, j].TileType == TileID.Grass || Main.tile[i, j].TileType == TileID.GolfGrass) {
                             if (!Main.tile[i, j - 1].AnyLiquid() && !Main.tile[i, j - 1].AnyWall()) {
@@ -71,10 +72,11 @@ sealed class GrowTulips : ILoadable {
                     }
                 }
                 if (!flag) {
+                    Main.NewText(2);
                     if (Main.tile[i, j].TileType == TileID.JungleGrass) {
                         if (!Main.tile[i, j - 1].AnyLiquid()) {
                             Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
-                            WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 0);
+                            WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 1);
                         }
                     }
                 }
@@ -95,11 +97,12 @@ sealed class GrowTulips : ILoadable {
                         }
                     }
                     if (!flag) {
+                        Main.NewText(3);
                         TileObjectData objectData = TileObjectData.GetTileData(tileType, 0);
                         if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
                             if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType]) {
                                 Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
-                                WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 0);
+                                WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 2);
                             }
                         }
                     }

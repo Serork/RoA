@@ -217,7 +217,6 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
                 tile.TileType = tileTypeToGrow;
                 tile.HasTile = true;
                 tile.TileFrameX = (short)(plant.FrameWidth * style);
-                tile.CopyPaintAndCoating(Main.tile[i, j + 1]);
                 if (Main.tile[i, j].HasTile && Main.netMode == NetmodeID.Server) {
                     NetMessage.SendTileSquare(-1, i, j);
                 }
