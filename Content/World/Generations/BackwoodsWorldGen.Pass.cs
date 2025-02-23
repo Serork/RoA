@@ -1556,7 +1556,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         bool flag5 = false;
-        if (_random.NextBool(4)) {
+        bool onePlaced = false;
+        if ((_random.NextBool(4) && onePlaced) || !onePlaced) {
             for (int i2 = -2; i2 <= 2; i2++) {
                 if (flag5) {
                     break;
@@ -1565,6 +1566,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (i2 > -2 && i2 < 2) {
                         WorldGen.AddBuriedChest(startX + i2 + _random.Next(1, 3), startY + j2, 0, notNearOtherChests: true, -1, trySlope: false, 0);
                         flag5 = true;
+                        onePlaced = true;
                         break;
                     }
                 }
