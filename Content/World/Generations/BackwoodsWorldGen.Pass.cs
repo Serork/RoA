@@ -78,6 +78,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private int _nextItemIndex;
     private bool _costumeAdded;
     private bool _wandsAdded;
+    private bool _oneChestPlacedInBigTree;
 
     private int CenterX {
         get => _positionToPlaceBiome.X;
@@ -1556,8 +1557,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         bool flag5 = false;
-        bool onePlaced = false;
-        if ((_random.NextBool(4) && onePlaced) || !onePlaced) {
+        if ((_random.NextBool(4) && _oneChestPlacedInBigTree) || !_oneChestPlacedInBigTree) {
             for (int i2 = -2; i2 <= 2; i2++) {
                 if (flag5) {
                     break;
@@ -1566,7 +1566,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (i2 > -2 && i2 < 2) {
                         WorldGen.AddBuriedChest(startX + i2 + _random.Next(1, 3), startY + j2, 0, notNearOtherChests: true, -1, trySlope: false, 0);
                         flag5 = true;
-                        onePlaced = true;
+                        _oneChestPlacedInBigTree = true;
                         break;
                     }
                 }
@@ -3638,6 +3638,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step0_Setup() {
+        _oneChestPlacedInBigTree = false;
         _wandsAdded = false;
 
         _backwoodsPlants.Clear();
