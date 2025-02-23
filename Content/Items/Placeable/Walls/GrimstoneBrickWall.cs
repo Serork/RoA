@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Walls;
@@ -22,10 +23,10 @@ sealed class GrimstoneBrickWall : ModItem {
         Item.value = 20;
     }
 
-	//public override void AddRecipes() {
-	//	CreateRecipe(4)
-	//		.AddIngredient<Crafting.Grimstone>()
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
+    public override void AddRecipes() {
+        CreateRecipe(4)
+            .AddIngredient<Crafting.Grimstone>()
+            .AddTile(TileID.WorkBenches)
+            .Register();
+    }
 }
