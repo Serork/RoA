@@ -34,7 +34,7 @@ sealed class DreadheartCrimsonChestplate : NatureItem {
 
 	public override void AddRecipes() {
 		CreateRecipe()
-			.AddIngredient(ItemID.ShadowScale, 20)
+			.AddIngredient(ItemID.TissueSample, 20)
 			.AddIngredient<Materials.NaturesHeart>()
 			.AddTile<Tiles.Ambient.OvergrownAltar>()
 			.Register();

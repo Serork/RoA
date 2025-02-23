@@ -1,3 +1,5 @@
+using RoA.Content.Items.Equipables.Wreaths;
+using RoA.Content.Items.Materials;
 using RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 
 using Terraria;
@@ -23,5 +25,13 @@ sealed class MercuriumBolt : ModItem {
         Item.value = 90;
         Item.DamageType = DamageClass.Ranged;
         Item.rare = 3;
+    }
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.WoodenArrow, 100)
+            .AddIngredient<MercuriumNugget>(1)
+            .AddTile(TileID.Anvils)
+            .Register();
     }
 }

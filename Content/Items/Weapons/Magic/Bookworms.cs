@@ -26,7 +26,7 @@ sealed class Bookworms : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useTime = Item.useAnimation = 20;
+        Item.useTime = Item.useAnimation = 30;
         Item.autoReuse = false;
         Item.useTurn = false;
 
@@ -66,6 +66,8 @@ sealed class BookwormsProjectile : ModProjectile {
 
     public override string Texture => ResourceManager.EmptyTexture;
 
+    private static int MaxTimeLeft => 90;
+
     public override void SetStaticDefaults() {
         ProjectileID.Sets.NeedsUUID[Type] = true;
     }
@@ -82,9 +84,9 @@ sealed class BookwormsProjectile : ModProjectile {
 
         Projectile.tileCollide = false;
 
-        Projectile.timeLeft = 90;
+        Projectile.timeLeft = MaxTimeLeft;
 
-        Projectile.penetrate = 2;
+        Projectile.penetrate = -1;
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -147,7 +149,7 @@ sealed class BookwormsProjectile : ModProjectile {
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         int timeLeftExtra = (int)Projectile.ai[2] * 2;
-        int timeLeft = 90 - timeLeftExtra;
+        int timeLeft = MaxTimeLeft - timeLeftExtra;
         if (Projectile.timeLeft < timeLeft - 5) {
             if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
                 Projectile.timeLeft -= 1;
@@ -225,6 +227,9 @@ sealed class BookwormsProjectile : ModProjectile {
             float length2 = 20f * (Projectile.ai[0] == 3f ? 0.6f : Projectile.ai[2] <= 1 ? 1f : 0.5f);
             Projectile.rotation = dif.ToRotation() + (float)Math.PI / 2f;
             Projectile.Center = following.Center - dif * length2;
+            if (following.ai[0] == 0f && following.identity > Projectile.identity) {
+                Projectile.Center += dif * length2;
+            }
         }
     }
 

@@ -69,7 +69,7 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
 
     public override void AddRecipes() {
     	CreateRecipe()
-    		.AddIngredient(ItemID.ShadowScale, 10)
+    		.AddIngredient(ItemID.TissueSample, 10)
     		.AddIngredient<Materials.NaturesHeart>()
     		.AddTile<Tiles.Ambient.OvergrownAltar>()
     		.Register();

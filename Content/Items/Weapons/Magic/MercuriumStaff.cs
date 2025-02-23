@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
+using RoA.Content.Items.Materials;
 using RoA.Content.Projectiles.Friendly.Magic;
 
 using System;
@@ -69,10 +70,10 @@ sealed class MercuriumStaff : ModItem {
         return true;
     }
 
-    //public override void AddRecipes() {
-    //	CreateRecipe()
-    //		.AddIngredient(ModContent.ItemType<MercuriumNugget>(), 16)
-    //		.AddTile(TileID.Anvils)
-    //		.Register();
-    //}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 10)
+            .AddTile(TileID.Anvils)
+            .Register();
+    }
 }

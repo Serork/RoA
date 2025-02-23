@@ -25,13 +25,13 @@ sealed class DreadheartCrimsonLeggings : NatureItem {
 		Item.defense = 4;
 	}
 
-	public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;		
+	public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
 
-	//public override void AddRecipes() {
-	//	CreateRecipe()
-	//		.AddIngredient(ItemID.ShadowScale, 15)
-	//		.AddIngredient<NaturesHeart>()
-	//		.AddTile<OvergrownAltar>()
-	//		.Register();
-	//}
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.TissueSample, 15)
+            .AddIngredient<Materials.NaturesHeart>()
+            .AddTile<Tiles.Ambient.OvergrownAltar>()
+            .Register();
+    }
 }
