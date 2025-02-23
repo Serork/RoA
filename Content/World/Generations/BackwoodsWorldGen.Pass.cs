@@ -1557,7 +1557,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         bool flag5 = false;
-        if ((_random.NextBool(4) && _oneChestPlacedInBigTree) || !_oneChestPlacedInBigTree) {
+        if ((_random.NextBool(5) && _oneChestPlacedInBigTree) || !_oneChestPlacedInBigTree) {
             for (int i2 = -2; i2 <= 2; i2++) {
                 if (flag5) {
                     break;
