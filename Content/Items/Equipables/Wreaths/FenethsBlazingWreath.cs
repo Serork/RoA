@@ -43,6 +43,10 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
         }
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers) {
+            if (target.immortal) {
+                return;
+            }
+
             if (Player.whoAmI != Main.myPlayer) {
                 return;
             }
@@ -67,6 +71,10 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
         }
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers) {
+            if (target.immortal) {
+                return;
+            }
+
             if (Player.whoAmI != Main.myPlayer) {
                 return;
             }
