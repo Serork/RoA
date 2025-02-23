@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Druidic;
-using RoA.Content.Tiles.Station;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -20,14 +19,6 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
 		Item.value = Item.sellPrice(gold: 2);
 		Item.rare = ItemRarityID.Orange;
     }
-
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient(ModContent.ItemType<TwigWreath>())
-    //        .AddIngredient(ItemID.Fireblossom, 10)
-    //        .AddTile(ModContent.TileType<FenethStatue>())
-    //        .Register();
-    //}
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
@@ -92,19 +83,5 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
                 Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width, Player);
             }
         }
-
-        //public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit) {
-        //    if (blazingWreath && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
-        //        int _type = ModContent.ProjectileType<Projectiles.Friendly.Druid.Fireblossom>();
-        //        Projectile.NewProjectile(target.GetProjectileSpawnSource(), target.Center, Vector2.Zero, _type, damage, knockback, Player.whoAmI, target.whoAmI);
-        //    }
-        //}
-
-        //public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit) {
-        //    if (blazingWreath && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
-        //        int _type = ModContent.ProjectileType<Projectiles.Friendly.Druid.Fireblossom>();
-        //        Projectile.NewProjectile(target.GetProjectileSpawnSource(), target.Center, Vector2.Zero, _type, damage, knockback, proj.owner, target.whoAmI);
-        //    }
-        //}
     }
 }
