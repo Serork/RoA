@@ -34,7 +34,7 @@ sealed class DryadShopItemReplacement : GlobalNPC {
         if (moddedPlanterBoxes.Count > 0) {
             Helper.ExcludeFrom(items, out position, [.. moddedPlanterBoxes]);
         }
-        Helper.InsertAt(items, (short)ModContent.ItemType<EmptyPlanterBox>(), (short)(position != 0 ? position : 8));
+        Helper.InsertAt(items, (short)ModContent.ItemType<EmptyPlanterBox>(), (short)(position != 0 ? position - 1 : 8));
 
         if (!Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
             return;

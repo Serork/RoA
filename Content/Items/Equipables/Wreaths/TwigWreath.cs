@@ -4,11 +4,22 @@ using RoA.Common.Druid.Wreath;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Wreaths;
 
 sealed class TwigWreath : BaseWreathItem {
-	protected override void SafeSetDefaults() {
+    private sealed class TwigWreathInDryadShopSystem : GlobalNPC {
+        public override void ModifyShop(NPCShop shop) {
+            if (shop.NpcType != NPCID.Dryad) {
+                return;
+            }
+
+            shop.InsertAfter(ItemID.DirtRod, ModContent.ItemType<TwigWreath>());
+        }
+    }
+    
+    protected override void SafeSetDefaults() {
 		int width = 20; int height = width; 
 		Item.Size = new Vector2(width, height);
 
