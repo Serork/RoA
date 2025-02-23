@@ -48,7 +48,7 @@ sealed class MercuriumPickaxe : ModItem {
 
     public override void AddRecipes() {
 		CreateRecipe()
-			.AddIngredient<Materials.MercuriumNugget>(16)
+			.AddIngredient<Materials.MercuriumNugget>(18)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

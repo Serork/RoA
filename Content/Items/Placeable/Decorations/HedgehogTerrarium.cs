@@ -1,4 +1,7 @@
+using RoA.Content.Items.Miscellaneous;
+
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Decorations;
@@ -19,5 +22,13 @@ sealed class HedgehogTerrarium : ModItem {
         Item.width = 32;
         Item.height = 32;
         Item.createTile = ModContent.TileType<Tiles.Decorations.HedgehogTerrarium>();
+    }
+
+
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.Terrarium)
+            .AddIngredient(ModContent.ItemType<Hedgehog>())
+            .Register();
     }
 }
