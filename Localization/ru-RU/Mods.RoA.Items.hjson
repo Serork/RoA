@@ -1600,10 +1600,10 @@ LivingPalmChestplate: {
 
 LivingPalmGreaves: {
 	// DisplayName: Living Palm Greaves
-	// Tooltip: 4% increased nature base damage
+	// Tooltip: Увеличивает начальный природный урон на 4%
 }
 
 LivingPalmHelmet: {
 	// DisplayName: Living Palm Helmet
-	// Tooltip: 4% increased nature base damage
+	// Tooltip: Увеличивает начальный природный урон на 4%
 }

@@ -26,7 +26,7 @@ WhenCharged: ", когда [kw/n:венок заполнен],"
 LivingWoodSetBonus: Увеличивает скорость [kw/n:заполнения венка] на 10%
 LivingBorealSetBonus: Увеличивает скорость [kw/n:заполнения венка] на 10%
 LivingMahoganySetBonus: Увеличивает скорость [kw/n:заполнения венка] на 10%
-// LivingPalmSetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
+LivingPalmSetBonus: Увеличивает скорость [kw/n:заполнения венка] на 10%
 DreadheartCrimsonSetBonus:
 	'''
 	Получение урона, когда [kw/n:венок заполнен], тратит его, выпуская рой насекомых
