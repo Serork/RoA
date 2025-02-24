@@ -1384,7 +1384,7 @@ BackwoodsGrassSeeds: {
 
 BloodCursor: {
 	DisplayName: Курсор по крови
-	Tooltip: "Заставляет курсор мыши пульсировать"
+	Tooltip: Заставляет курсор мыши пульсировать
 }
 
 BackwoodsRavenBanner: {
@@ -1600,10 +1600,10 @@ LivingPalmChestplate: {
 
 LivingPalmGreaves: {
 	// DisplayName: Living Palm Greaves
-	// Tooltip: Увеличивает начальный природный урон на 4%
+	// Tooltip: 4% increased nature base damage
 }
 
 LivingPalmHelmet: {
 	// DisplayName: Living Palm Helmet
-	// Tooltip: Увеличивает начальный природный урон на 4%
+	// Tooltip: 4% increased nature base damage
 }

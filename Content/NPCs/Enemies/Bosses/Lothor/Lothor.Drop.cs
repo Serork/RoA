@@ -18,13 +18,13 @@ sealed partial class Lothor : ModNPC {
         npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<LothorTrophy>(), 10));
 
         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
-        notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<LothorMask>(), 7));
         notExpertRule.OnSuccess(ItemDropRule.OneFromOptions(1,
                                                             ModContent.ItemType<SphereOfAspiration>(),
                                                             ModContent.ItemType<ChemicalPrisoner>(),
                                                             ModContent.ItemType<FlederStaff>(),
                                                             ModContent.ItemType<BloodshedAxe>(),
                                                             ModContent.ItemType<SoulOfTheWoods>()));
+        notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<LothorMask>(), 7));
         notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<BloodCursor>(), 20));
         npcLoot.Add(notExpertRule);
 
