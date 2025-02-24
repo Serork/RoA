@@ -92,7 +92,7 @@ sealed class ElathaAmulet : ModItem {
         return false;
     }
 
-    public override bool CanUseItem(Player player) => true/*ElathaAmuletCooldownHandler.ElathaAmuletCooldown <= 0*/;
+    public override bool CanUseItem(Player player) => ElathaAmuletCooldownHandler.ElathaAmuletCooldown <= 0;
 
     public override bool? UseItem(Player player) {
         if (player.ItemAnimationJustStarted) {
@@ -138,11 +138,11 @@ sealed class ElathaAmulet : ModItem {
     }
 
     internal static void ChangeMoonPhase(Player player) {
-        //if (ElathaAmuletCooldownHandler.ElathaAmuletCooldown > 0) {
-        //    return;
-        //}
+        if (ElathaAmuletCooldownHandler.ElathaAmuletCooldown > 0) {
+            return;
+        }
 
-        //ElathaAmuletCooldownHandler.ElathaAmuletCooldown = 6;
+        ElathaAmuletCooldownHandler.ElathaAmuletCooldown = 6;
 
         Main.moonPhase++;
         if (Main.moonPhase > 7) {
