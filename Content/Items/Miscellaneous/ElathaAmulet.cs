@@ -4,6 +4,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -13,12 +14,15 @@ namespace RoA.Content.Items.Miscellaneous;
 
 sealed class ElathaAmulet : ModItem {
 	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Elatha Scepter");
-		//Tooltip.SetDefault("Changes the phases of the Moon");
-	}
+        //DisplayName.SetDefault("Elatha Scepter");
+        //Tooltip.SetDefault("Changes the phases of the Moon");
+
+        Main.RegisterItemAnimation(Type, new DrawAnimationVertical(8, 4));
+        ItemID.Sets.AnimatesAsSoul[Type] = true;
+    }
 
 	public override void SetDefaults() {
-		Item.Size = new Vector2(16, 40);
+		Item.Size = new Vector2(16, 42);
         Item.rare = ItemRarityID.Green;
         Item.useAnimation = 20;
         Item.useTime = 20;
