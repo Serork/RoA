@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Core.Utility;
 
 using System;
@@ -35,14 +36,17 @@ sealed class LothorBag : ModItem {
     public override bool CanRightClick() => true;
 
     public override void ModifyItemLoot(ItemLoot itemLoot) {
+        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<LothorMask>(), 7));
+
+        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.BloodbathLocket>()));
+
         itemLoot.Add(new OneFromRulesRule(1, ItemDropRule.Common(ModContent.ItemType<SphereOfAspiration>()),
                                              ItemDropRule.Common(ModContent.ItemType<Weapons.Ranged.ChemicalPrisoner>()),
                                              ItemDropRule.Common(ModContent.ItemType<Weapons.Summon.FlederStaff>()),
                                              ItemDropRule.Common(ModContent.ItemType<Weapons.Melee.BloodshedAxe>()),
                                              ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.SoulOfTheWoods>())));
-        //itemLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<Pets.MoonFlower>(), 4));
-        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<LothorMask>(), 7));
-        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Equipables.Accessories.BloodbathLocket>()));
+
+        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodCursor>(), 20));
 
         itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Lothor>()));
     }
