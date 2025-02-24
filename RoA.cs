@@ -14,11 +14,6 @@ using Terraria.ModLoader;
 namespace RoA;
 
 sealed class RoA : Mod {
-    public enum NetMessagePacket : sbyte {
-        EvilLeafPacket = -1,
-        WreathResourceSync = -2
-    }
-
     public static readonly string ModSourcePath = Path.Combine(Program.SavePathShared, "ModSources");
 
     private static RoA? _instance;
@@ -35,26 +30,6 @@ sealed class RoA : Mod {
 
     public override void HandlePacket(BinaryReader reader, int sender) {
         MultiplayerSystem.HandlePacket(reader, sender);
-
-        //NetMessagePacket msgType = (NetMessagePacket)reader.ReadSByte();
-        //switch (msgType) {
-        //    case NetMessagePacket.EvilLeafPacket:
-        //        int identity = reader.ReadInt32();
-        //        Vector2 twigPosition = reader.ReadVector2();
-        //        Projectile projectile = Main.projectile.FirstOrDefault(x => x.identity == identity);
-        //        projectile.As<EvilLeaf>().
-        //            SetUpTwigPosition(twigPosition);
-        //        break;
-        //    case NetMessagePacket.WreathResourceSync:
-        //        byte playerNumber = reader.ReadByte();
-        //        ushort currentResource = reader.ReadUInt16();
-        //        WreathHandler handler = Main.player[playerNumber].GetModPlayer<WreathHandler>();
-        //        handler.ReceivePlayerSync(currentResource);
-        //        if (Main.netMode == NetmodeID.Server) {
-        //            handler.SyncPlayer(-1, sender, false);
-        //        }
-        //        break;
-        //}
     }
 
     public override void PostSetupContent() {

@@ -1589,8 +1589,8 @@ BackwoodsStoneChest_Trapped: {
 }
 
 FenethStatue: {
-	// DisplayName: Feneth Statue
-	// Tooltip: ""
+	DisplayName: Статуя Фенет
+	Tooltip: ""
 }
 
 LivingPalmChestplate: {
