@@ -17,9 +17,36 @@ sealed class ElathaAmulet : ModItem {
 	public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Elatha Scepter");
         //Tooltip.SetDefault("Changes the phases of the Moon");
+
+        Main.RegisterItemAnimation(Type, new DrawAnimationVertical(20, 4));
     }
 
-	public override void SetDefaults() {
+    public override void Load() {
+        On_Player.GetItemDrawFrame += On_Player_GetItemDrawFrame;
+    }
+
+    private Rectangle On_Player_GetItemDrawFrame(On_Player.orig_GetItemDrawFrame orig, Player self, int type) {
+        if (Main.dedServ)
+            return Rectangle.Empty;
+
+        if (type == ModContent.ItemType<ElathaAmulet>()) {
+            byte usedFrame = 0;
+            if (Main.moonPhase == 0 || Main.moonPhase == 1) usedFrame = 0;
+            if (Main.moonPhase == 2 || Main.moonPhase == 3) usedFrame = 1;
+            if (Main.moonPhase == 4 || Main.moonPhase == 5) usedFrame = 2;
+            if (Main.moonPhase == 6 || Main.moonPhase == 7) usedFrame = 3;
+            int height = 42;
+            int y = (int)(usedFrame * height);
+            Texture2D text = ModContent.Request<Texture2D>(Texture).Value;
+            Rectangle frame = new(0, y, text.Width, height);
+            return frame;
+        }
+        else {
+            return orig(self, type);
+        }
+    }
+
+    public override void SetDefaults() {
 		Item.Size = new Vector2(16, 42);
         Item.rare = ItemRarityID.Green;
         Item.useAnimation = 20;
@@ -31,7 +58,7 @@ sealed class ElathaAmulet : ModItem {
 	}
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
-        Texture2D text = ModContent.Request<Texture2D>(Texture + "_Animated").Value;
+        Texture2D text = ModContent.Request<Texture2D>(Texture).Value;
         byte usedFrame = 0;
         if (Main.moonPhase == 0 || Main.moonPhase == 1) usedFrame = 0;
         if (Main.moonPhase == 2 || Main.moonPhase == 3) usedFrame = 1;
@@ -47,7 +74,7 @@ sealed class ElathaAmulet : ModItem {
     }
 
     public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI) {
-        Texture2D text = ModContent.Request<Texture2D>(Texture + "_Animated").Value;
+        Texture2D text = ModContent.Request<Texture2D>(Texture).Value;
         byte usedFrame = 0;
         if (Main.moonPhase == 0 || Main.moonPhase == 1) usedFrame = 0;
         if (Main.moonPhase == 2 || Main.moonPhase == 3) usedFrame = 1;
@@ -65,7 +92,7 @@ sealed class ElathaAmulet : ModItem {
         return false;
     }
 
-    public override bool CanUseItem(Player player) => ElathaAmuletCooldownHandler.ElathaAmuletCooldown <= 0;
+    public override bool CanUseItem(Player player) => true/*ElathaAmuletCooldownHandler.ElathaAmuletCooldown <= 0*/;
 
     public override bool? UseItem(Player player) {
         if (player.ItemAnimationJustStarted) {
@@ -111,11 +138,11 @@ sealed class ElathaAmulet : ModItem {
     }
 
     internal static void ChangeMoonPhase(Player player) {
-        if (ElathaAmuletCooldownHandler.ElathaAmuletCooldown > 0) {
-            return;
-        }
+        //if (ElathaAmuletCooldownHandler.ElathaAmuletCooldown > 0) {
+        //    return;
+        //}
 
-        ElathaAmuletCooldownHandler.ElathaAmuletCooldown = 6;
+        //ElathaAmuletCooldownHandler.ElathaAmuletCooldown = 6;
 
         Main.moonPhase++;
         if (Main.moonPhase > 7) {
