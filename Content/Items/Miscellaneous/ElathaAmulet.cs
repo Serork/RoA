@@ -111,11 +111,11 @@ sealed class ElathaAmulet : ModItem {
     }
 
     internal static void ChangeMoonPhase(Player player) {
-        //if (ElathaAmuletCooldownHandler.ElathaAmuletCooldown > 0) {
-        //    return;
-        //}
+        if (ElathaAmuletCooldownHandler.ElathaAmuletCooldown > 0) {
+            return;
+        }
 
-        //ElathaAmuletCooldownHandler.ElathaAmuletCooldown = 6;
+        ElathaAmuletCooldownHandler.ElathaAmuletCooldown = 6;
 
         Main.moonPhase++;
         if (Main.moonPhase > 7) {
