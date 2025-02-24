@@ -65,7 +65,7 @@ sealed class MercuriumFumes : ModProjectile {
         }
     }
 
-    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100) * Projectile.Opacity;
+    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity;
 
     public override bool? CanCutTiles() => false;
 }
