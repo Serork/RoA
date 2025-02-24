@@ -1384,7 +1384,7 @@ BackwoodsGrassSeeds: {
 
 BloodCursor: {
 	DisplayName: Курсор по крови
-	// Tooltip: ""
+	Tooltip: "Заставляет курсор мыши пульсировать"
 }
 
 BackwoodsRavenBanner: {
