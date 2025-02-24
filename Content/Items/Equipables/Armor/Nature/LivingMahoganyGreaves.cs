@@ -24,8 +24,6 @@ sealed class LivingMahoganyGreaves : NatureItem {
         Item.defense = 2;
     }
 
-    public override void UpdateEquip(Player player) => player.maxRunSpeed += 0.02f;
-
     public override void AddRecipes() {
     	CreateRecipe()
     		.AddIngredient(ItemID.BorealWood, 15)

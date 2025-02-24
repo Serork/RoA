@@ -1592,3 +1592,18 @@ FenethStatue: {
 	// DisplayName: Feneth Statue
 	// Tooltip: ""
 }
+
+LivingPalmChestplate: {
+	// DisplayName: Living Palm Chestplate
+	// Tooltip: ""
+}
+
+LivingPalmGreaves: {
+	// DisplayName: Living Palm Greaves
+	// Tooltip: ""
+}
+
+LivingPalmHelmet: {
+	// DisplayName: Living Palm Helmet
+	// Tooltip: ""
+}

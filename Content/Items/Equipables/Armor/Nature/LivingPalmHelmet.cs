@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -12,15 +11,14 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Head)]
-sealed class LivingMahoganyHelmet : NatureItem {
+
+sealed class LivingPalmHelmet : NatureItem {
 	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Living Mahogany Helmet");
-		//Tooltip.SetDefault("4% increased nature critical strike chance");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 28; int height = 26;
+        int width = 30; int height = 26;
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;
@@ -29,18 +27,18 @@ sealed class LivingMahoganyHelmet : NatureItem {
         Item.defense = 1;
     }
 
-	public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
+	public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.NatureDamage) += 0.04f;
 
-    public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingMahoganyChestplate>() && legs.type == ModContent.ItemType<LivingMahoganyGreaves>();
+	public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingPalmChestplate>() && legs.type == ModContent.ItemType<LivingPalmGreaves>();
 
 	public override void UpdateArmorSet(Player player) {
-        player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.LivingMahoganySetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
+		player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingPalmSetBonus");
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
     }
 
 	public override void AddRecipes() {
 		CreateRecipe()
-			.AddIngredient(ItemID.RichMahogany, 10)
+			.AddIngredient(ItemID.PalmWood, 10)
 			.AddIngredient<Materials.Galipot>(5)
 			.AddTile(TileID.LivingLoom)
 			.Register();

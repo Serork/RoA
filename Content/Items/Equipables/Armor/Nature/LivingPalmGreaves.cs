@@ -10,11 +10,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Legs)]
-sealed class LivingWoodGreaves : NatureItem {
+sealed class LivingPalmGreaves : NatureItem {
 	public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Living Wood Greaves");
-        //Tooltip.SetDefault("2% increased potential speed");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
     protected override void SafeSetDefaults() {
@@ -27,9 +25,13 @@ sealed class LivingWoodGreaves : NatureItem {
         Item.defense = 2;
     }
 
+    public override void UpdateEquip(Player player) {
+        player.GetDamage(DruidClass.NatureDamage) += 0.04f;
+    }
+
     public override void AddRecipes() {
     	CreateRecipe()
-    		.AddIngredient(ItemID.Wood, 15)
+    		.AddIngredient(ItemID.PalmWood, 15)
     		.AddIngredient<Materials.Galipot>(2)
     		.AddTile(TileID.LivingLoom)
     		.Register();

@@ -27,8 +27,7 @@ sealed class LivingBorealWoodGreaves : NatureItem {
     }
 
     public override void UpdateEquip(Player player) {
-        player.maxRunSpeed += 0.02f;
-        player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier -= 0.04f;
+
     }
 
     public override void AddRecipes() {

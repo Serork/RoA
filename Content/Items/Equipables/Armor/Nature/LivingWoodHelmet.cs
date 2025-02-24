@@ -28,8 +28,6 @@ sealed class LivingWoodHelmet : NatureItem {
 		Item.defense = 2;
 	}
 
-    public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier -= 0.04f;
-
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingWoodChestplate>() && legs.type == ModContent.ItemType<LivingWoodGreaves>();
 
 	public override void UpdateArmorSet(Player player) {

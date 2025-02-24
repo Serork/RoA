@@ -422,7 +422,7 @@ LivingBorealWoodChestplate: {
 
 LivingBorealWoodGreaves: {
 	DisplayName: Living Boreal Wood Greaves
-	Tooltip: 4% increased nature [kw/n:potential] speed
+	Tooltip: ""
 }
 
 LivingBorealWoodHelmet: {
@@ -437,26 +437,22 @@ LivingWoodChestplate: {
 
 LivingWoodGreaves: {
 	DisplayName: Living Wood Greaves
-	Tooltip: 4% increased nature [kw/n:potential] speed
+	Tooltip: ""
 }
 
 LivingWoodHelmet: {
 	DisplayName: Living Wood Helmet
-	Tooltip: 4% increased nature [kw/n:potential] speed
+	Tooltip: ""
 }
 
 LivingMahoganyChestplate: {
 	DisplayName: Living Mahogany Chestplate
-	Tooltip:
-		'''
-		6% increased nature [kw/n:potential] damage
-		6% increased nature [kw/n:potential] speed
-		'''
+	Tooltip: 6% increased nature [kw/n:potential] damage
 }
 
 LivingMahoganyGreaves: {
 	DisplayName: Living Mahogany Greaves
-	Tooltip: 2% increased movement speed
+	Tooltip: ""
 }
 
 LivingMahoganyHelmet: {
@@ -1597,4 +1593,19 @@ BackwoodsStoneChest_Trapped: {
 FenethStatue: {
 	DisplayName: Feneth Statue
 	Tooltip: ""
+}
+
+LivingPalmChestplate: {
+	DisplayName: Living Palm Chestplate
+	Tooltip: ""
+}
+
+LivingPalmGreaves: {
+	DisplayName: Living Palm Greaves
+	Tooltip: "4% increased nature base damage"
+}
+
+LivingPalmHelmet: {
+	DisplayName: Living Palm Helmet
+	Tooltip: "4% increased nature base damage"
 }
