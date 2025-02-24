@@ -26,7 +26,7 @@ sealed class WorshipperGarb : ModItem {
     }
 
     public override void UpdateEquip(Player player) {
-        player.GetDamage(DamageClass.Summon) += 0.1f;
+        player.GetDamage(DamageClass.Summon) += 0.08f;
         player.moveSpeed += 0.1f;
     }
 	

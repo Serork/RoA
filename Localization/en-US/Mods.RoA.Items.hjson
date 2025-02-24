@@ -1602,10 +1602,10 @@ LivingPalmChestplate: {
 
 LivingPalmGreaves: {
 	DisplayName: Living Palm Greaves
-	Tooltip: "4% increased nature base damage"
+	Tooltip: 4% increased nature base damage
 }
 
 LivingPalmHelmet: {
 	DisplayName: Living Palm Helmet
-	Tooltip: "4% increased nature base damage"
+	Tooltip: 4% increased nature base damage
 }
