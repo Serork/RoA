@@ -1386,7 +1386,7 @@ BackwoodsGrassSeeds: {
 
 BloodCursor: {
 	DisplayName: Blood Cursor
-	Tooltip: ""
+	Tooltip: "Causes your mouse cursor to pulse"
 }
 
 BackwoodsRavenBanner: {
