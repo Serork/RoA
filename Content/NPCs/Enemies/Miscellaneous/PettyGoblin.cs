@@ -373,7 +373,6 @@ sealed class PettyGoblin : ModNPC {
                 NPC.netUpdate = true;
             }
         }
-        Main.NewText(_directionTimer);
         if (NPC.velocity.Y == 0.4f && flag3 && _directionTimer <= 0) {
             _directionTimer--;
             if (_directionTimer <= -60) {
