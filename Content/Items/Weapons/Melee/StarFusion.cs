@@ -40,9 +40,9 @@ sealed class StarFusion : ModItem {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient(ItemID.HellstoneBar, 15)
-            .AddIngredient(ItemID.FallenStar, 15)
-            .AddIngredient<Materials.MercuriumNugget>(5)
+            .AddIngredient(ItemID.Starfury)
+            .AddIngredient(ItemID.HellstoneBar, 10)
+            .AddIngredient<Materials.MercuriumNugget>(10)
             .AddTile(TileID.Anvils)
             .Register();
     }

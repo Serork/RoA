@@ -30,7 +30,9 @@ sealed class Beacon : ModItem {
 	public override void AddRecipes() {
     	CreateRecipe()
 			.AddIngredient<Materials.MercuriumNugget>(10)
-    		.AddTile(TileID.Anvils)
+            .AddIngredient(ItemID.Lens)
+            .AddIngredient(ItemID.Wire, 5)
+            .AddTile(TileID.Anvils)
     		.Register();
     }
 }

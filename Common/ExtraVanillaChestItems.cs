@@ -2079,7 +2079,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             bool flag17 = !chest.item.Any(x => !x.IsEmpty() && x.type == ModContent.ItemType<OniMask>());
                             bool flag16 = flag15 && !_tanningRackAdded && flag17;
                             if (genRand.Next(20) == 0 || flag16) {
-                                chest.item[num10].SetDefaults(flag15 ? ModContent.ItemType<TanningRack>() : 997);
+                                chest.item[num10].SetDefaults(flag15 || genRand.NextBool(5) ? ModContent.ItemType<TanningRack>() : 997);
                                 chest.item[num10].Prefix(-1);
                                 num10++;
                                 if (flag16) {
@@ -2291,7 +2291,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                                 chest.item[num10].Prefix(-1);
                             }
                             else if (genRand.Next(15) == 0 || flag16) {
-                                chest.item[num10].SetDefaults(flag15 ? ModContent.ItemType<TanningRack>() : 997);
+                                chest.item[num10].SetDefaults(flag15 || genRand.NextBool(5)  ? ModContent.ItemType<TanningRack>() : 997);
                                 chest.item[num10].Prefix(-1);
                                 if (flag16) {
                                     _tanningRackAdded = true;

@@ -5,12 +5,14 @@ using RoA.Content.Items.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
 using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Biomes.CaveHouse;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -19,7 +21,38 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Crafting;
 
 sealed class TanningRack : ModTile {
-	private static ushort SkinningBuffType => (ushort)ModContent.BuffType<Skinning>();
+    public override void Load() {
+        On_HouseBuilder.PlaceBiomeSpecificTool += On_HouseBuilder_PlaceBiomeSpecificTool;
+    }
+
+    private void On_HouseBuilder_PlaceBiomeSpecificTool(On_HouseBuilder.orig_PlaceBiomeSpecificTool orig, HouseBuilder self, HouseBuilderContext context) {
+		orig(self, context);
+
+        bool flag2 = false;
+        int type = ModContent.TileType<TanningRack>();
+        foreach (Rectangle room2 in self.Rooms) {
+            int num3 = room2.Height - 2 + room2.Y;
+            for (int k = 0; k < 10; k++) {
+                int num4 = WorldGen.genRand.Next(2, room2.Width - 2) + room2.X;
+                WorldGen.PlaceTile(num4, num3, type, mute: true, forced: true);
+                if (flag2 = Main.tile[num4, num3].HasTile && Main.tile[num4, num3].TileType == type)
+                    break;
+            }
+
+            if (flag2)
+                break;
+
+            for (int l = room2.X + 2; l <= room2.X + room2.Width - 2; l++) {
+                if (flag2 = WorldGen.PlaceTile(l, num3, type, mute: true, forced: true))
+                    break;
+            }
+
+            if (flag2)
+                break;
+        }
+    }
+
+    private static ushort SkinningBuffType => (ushort)ModContent.BuffType<Skinning>();
 
     public override void SetStaticDefaults() {
 		Main.tileFrameImportant[Type] = true;
