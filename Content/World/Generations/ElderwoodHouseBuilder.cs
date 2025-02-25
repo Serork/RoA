@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Sets;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Crafting;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
 using RoA.Content.Tiles.Platforms;
@@ -192,6 +193,7 @@ public class HouseBuilderCustom {
     public readonly bool IsValid;
 
     internal static bool _painting1, _painting2, _painting3;
+    internal static bool _placedTanningRack;
 
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
@@ -724,33 +726,33 @@ public class HouseBuilderCustom {
                 context.SharpenerCount++;
         }
 
-        if (Type != HouseType.Desert || context.ExtractinatorCount >= _random.Next(2, 5))
+        if (_placedTanningRack) {
             return;
-
+        }
         bool flag2 = false;
+        int type = ModContent.TileType<TanningRack>();
         foreach (Rectangle room2 in Rooms) {
             int num3 = room2.Height - 2 + room2.Y;
             for (int k = 0; k < 10; k++) {
                 int num4 = _random.Next(2, room2.Width - 2) + room2.X;
-                WorldGen.PlaceTile(num4, num3, 219, mute: true, forced: true);
-                if (flag2 = _tiles[num4, num3].HasTile && _tiles[num4, num3].TileType == 219)
+                WorldGen.PlaceTile(num4, num3, type, mute: true, forced: true);
+                if (flag2 = _tiles[num4, num3].HasTile && _tiles[num4, num3].TileType == type) {
+                    _placedTanningRack = true;
                     break;
+                }
             }
 
             if (flag2)
                 break;
 
             for (int l = room2.X + 2; l <= room2.X + room2.Width - 2; l++) {
-                if (flag2 = WorldGen.PlaceTile(l, num3, 219, mute: true, forced: true))
+                if (flag2 = WorldGen.PlaceTile(l, num3, type, mute: true, forced: true))
                     break;
             }
 
             if (flag2)
                 break;
         }
-
-        if (flag2)
-            context.ExtractinatorCount++;
     }
 }
 
