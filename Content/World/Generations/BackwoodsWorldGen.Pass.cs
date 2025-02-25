@@ -2968,7 +2968,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         PlaceGateway(true);
 
-        ElderwoodHouseBuilder._placedTanningRack = false;
         double count = (WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055)) */* * 0.5f */1f;
         for (int num555 = 0; num555 < count; num555++) {
             //progress.Set((float)(i + 1) / roomCount);

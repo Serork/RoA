@@ -32,7 +32,6 @@ sealed class ExtraVanillaChestItems : ModSystem {
     private bool _giantTreeSaplingAdded;
     private bool _feathersBottleAdded;
     private bool _oniMaskAdded;
-    private bool _tanningRackAdded;
 
     [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Lights")]
     public extern static void WorldGen_MakeDungeon_Lights(WorldGen worldGen, ushort tileType, ref int failCount, int failMax, ref int numAdd, int[] roomWall);
@@ -1472,7 +1471,6 @@ sealed class ExtraVanillaChestItems : ModSystem {
         _giantTreeSaplingAdded = false;
         _feathersBottleAdded = false;
         _oniMaskAdded = false;
-        _tanningRackAdded = false;
     }
 
     private static bool IsUndergroundDesert(int x, int y) {
@@ -2076,15 +2074,10 @@ sealed class ExtraVanillaChestItems : ModSystem {
                                 }
                             }
 
-                            bool flag17 = !chest.item.Any(x => !x.IsEmpty() && x.type == ModContent.ItemType<OniMask>());
-                            bool flag16 = flag15 && !_tanningRackAdded && flag17;
-                            if (genRand.Next(20) == 0 || flag16) {
-                                chest.item[num10].SetDefaults(flag15 || genRand.NextBool(5) ? ModContent.ItemType<TanningRack>() : 997);
+                            if (genRand.Next(20) == 0) {
+                                chest.item[num10].SetDefaults(genRand.NextBool(4) ? ModContent.ItemType<TanningRack>() : 997);
                                 chest.item[num10].Prefix(-1);
                                 num10++;
-                                if (flag16) {
-                                    _tanningRackAdded = true;
-                                }
                             }
                             else if (genRand.Next(20) == 0) {
                                 chest.item[num10].SetDefaults(930);
@@ -2283,19 +2276,13 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             if (WorldGen.tenthAnniversaryWorldGen)
                                 maxValue = 15;
 
-                            bool flag15 = chestTileType == (ushort)ModContent.TileType<ElderwoodChest>();
-                            bool flag17 = !chest.item.Any(x => !x.IsEmpty() && x.type == ModContent.ItemType<OniMask>());
-                            bool flag16 = flag15 && !_tanningRackAdded && flag17;
                             if (genRand.Next(maxValue) == 0 && flag14) {
                                 chest.item[num10].SetDefaults(906);
                                 chest.item[num10].Prefix(-1);
                             }
-                            else if (genRand.Next(15) == 0 || flag16) {
-                                chest.item[num10].SetDefaults(flag15 || genRand.NextBool(5)  ? ModContent.ItemType<TanningRack>() : 997);
+                            else if (genRand.Next(15) == 0) {
+                                chest.item[num10].SetDefaults(genRand.NextBool(4) ? ModContent.ItemType<TanningRack>() : 997);
                                 chest.item[num10].Prefix(-1);
-                                if (flag16) {
-                                    _tanningRackAdded = true;
-                                }
                             }
                             else {
                                 if (num21 == 0) {

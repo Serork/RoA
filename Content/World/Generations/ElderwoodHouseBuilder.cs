@@ -193,7 +193,6 @@ public class HouseBuilderCustom {
     public readonly bool IsValid;
 
     internal static bool _painting1, _painting2, _painting3;
-    internal static bool _placedTanningRack;
 
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
@@ -726,8 +725,7 @@ public class HouseBuilderCustom {
                 context.SharpenerCount++;
         }
 
-        bool flag3 = _random.NextBool(10);
-        if (_placedTanningRack && !flag3) {
+        if (!_random.NextBool(20)) {
             return;
         }
         bool flag2 = false;
@@ -738,7 +736,6 @@ public class HouseBuilderCustom {
                 int num4 = _random.Next(2, room2.Width - 2) + room2.X;
                 WorldGen.PlaceTile(num4, num3, type, mute: true, forced: true);
                 if (flag2 = _tiles[num4, num3].HasTile && _tiles[num4, num3].TileType == type) {
-                    _placedTanningRack = true;
                     break;
                 }
             }
