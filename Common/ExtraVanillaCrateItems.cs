@@ -1,5 +1,6 @@
 ﻿using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Materials;
+using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic;
@@ -53,7 +54,8 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         {
             ItemDropRule.NotScalingWithLuck(ItemID.SailfishBoots, 40),
             ItemDropRule.NotScalingWithLuck(ItemID.TsunamiInABottle, 40),
-            ItemDropRule.NotScalingWithLuck(ItemID.Extractinator, 50)
+            ItemDropRule.NotScalingWithLuck(ItemID.Extractinator, 50),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<TanningRack>(), 50)
         };
         IItemDropRule[] hardmodeThemed = new IItemDropRule[]
         {
