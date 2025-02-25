@@ -725,7 +725,7 @@ public class HouseBuilderCustom {
                 context.SharpenerCount++;
         }
 
-        if (!_random.NextBool(20)) {
+        if (!_random.NextChance(0.075)) {
             return;
         }
         bool flag2 = false;
