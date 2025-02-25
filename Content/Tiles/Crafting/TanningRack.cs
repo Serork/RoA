@@ -28,7 +28,7 @@ sealed class TanningRack : ModTile {
     private void On_HouseBuilder_PlaceBiomeSpecificTool(On_HouseBuilder.orig_PlaceBiomeSpecificTool orig, HouseBuilder self, HouseBuilderContext context) {
 		orig(self, context);
 
-        if (WorldGen.genRand.NextBool(20) && self.Type != HouseType.Ice) {
+        if (WorldGen.genRand.NextChance(0.075) && self.Type != HouseType.Ice) {
             bool flag2 = false;
             int type = ModContent.TileType<TanningRack>();
             foreach (Rectangle room2 in self.Rooms) {
@@ -36,8 +36,10 @@ sealed class TanningRack : ModTile {
                 for (int k = 0; k < 10; k++) {
                     int num4 = WorldGen.genRand.Next(2, room2.Width - 2) + room2.X;
                     WorldGen.PlaceTile(num4, num3, type, mute: true, forced: true);
-                    if (flag2 = Main.tile[num4, num3].HasTile && Main.tile[num4, num3].TileType == type)
+                    if (flag2 = Main.tile[num4, num3].HasTile && Main.tile[num4, num3].TileType == type) {
+                        Console.WriteLine(num4 + " " + num3);
                         break;
+                    }
                 }
 
                 if (flag2)
