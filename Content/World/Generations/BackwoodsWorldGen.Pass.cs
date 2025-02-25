@@ -3709,7 +3709,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         BackwoodsVars.BackwoodsStartX = CenterX;
         BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX) + 15;
-        CenterY = BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
+        CenterY = BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX);
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsHalfSizeX = _biomeWidth / 2;
     }
