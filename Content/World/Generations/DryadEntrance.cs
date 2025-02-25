@@ -630,7 +630,7 @@ sealed class DryadEntrance : ModSystem {
             bool flag2 = num4 < size - 4;
             bool flag3 = num4 > size - 8;
             if (flag) {
-                Mountinater3((int)vector2D.X, (int)vector2D.Y);
+                Mountinater3((int)vector2D.X, (int)vector2D.Y, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
             }
             for (int k = num5; k < num6; k++) {
                 for (int l = num7; l < num8; l++) {
@@ -668,7 +668,7 @@ sealed class DryadEntrance : ModSystem {
             if (vector2D2.Y < -2.0)
                 vector2D2.Y = -2.0;
         }
-        Mountinater3((int)vector2D.X, (int)vector2D.Y - 4, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
+        Mountinater3((int)vector2D.X, (int)vector2D.Y, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
         ushort placeholderTileType = tileType, placeholderWallType = wallType;
         size = 20;
         WorldGenHelper.TileWallRunner((int)vector2D.X, (int)vector2D.Y, size / 2, size, placeholderTileType, placeholderWallType, overRide: true);
