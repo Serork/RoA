@@ -42,7 +42,7 @@ sealed class LivingBorealWoodHelmet : NatureItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.BorealWood, 10)
-			.AddIngredient<Materials.Galipot>(5)
+			.AddIngredient<Materials.Galipot>(3)
 			.AddTile(TileID.LivingLoom)
 			.Register();
 	}

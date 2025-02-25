@@ -32,7 +32,7 @@ sealed class LivingBorealWoodChestplate : NatureItem {
     public override void AddRecipes() {
     	CreateRecipe()
     		.AddIngredient(ItemID.BorealWood, 20)
-    		.AddIngredient<Materials.Galipot>(3)
+    		.AddIngredient<Materials.Galipot>(5)
     		.AddTile(TileID.LivingLoom)
     		.Register();
     }
