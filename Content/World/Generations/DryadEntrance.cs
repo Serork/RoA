@@ -72,7 +72,7 @@ sealed class DryadEntrance : ModSystem {
                 flag60 = true;
                 while ((num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) ||
                     Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width ||
-                    (num1053 < GenVars.jungleMaxX + 20 && num1053 > GenVars.jungleMinX - 20)) {
+                    (num1053 < GenVars.jungleMaxX + 50 && num1053 > GenVars.jungleMinX - 50)) {
                     num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
                 }
 
