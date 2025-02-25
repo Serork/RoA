@@ -78,11 +78,12 @@ sealed class PettyGoblin : ModNPC {
     private const int ATTACKING = (int)States.Attacking;
     private const int AWAY = (int)States.RunningAway;
 
+    private int _directionTimer;
+    private int _direction;
+
     private CoinGenerator Coins { get; set; }
 
     public override void SetStaticDefaults() {
-        // DisplayName.SetDefault("Petty Goblin");
-
         Main.npcFrameCount[Type] = FRAMES_COUNT;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
@@ -198,6 +199,10 @@ sealed class PettyGoblin : ModNPC {
         if (NPC.velocity.X != 0f) {
             NPC.direction = NPC.spriteDirection = Math.Sign(NPC.velocity.X);
         }
+        if (Math.Abs(distance) < 50 && !Collision.CanHit(player, NPC) && _directionTimer <= 0) {
+            _directionTimer = 200;
+            _direction = distance.GetDirection();
+        }
         bool flag2 = (double)Math.Abs(distanceY) < 50;
         bool close = direction < 50.0 && flag2;
         bool close2 = direction < 150.0 && flag2;
@@ -235,13 +240,20 @@ sealed class PettyGoblin : ModNPC {
     }
 
     private void MakeALittleJump() {
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            return;
+        }
         if (NPC.velocity.Y != 0f) {
             return;
         }
         NPC.velocity.Y -= Main.rand.NextFloat(2f, 5f) * Main.rand.NextFloat(1.1f, 1.75f) * 0.75f;
+        NPC.netUpdate = true;
     }
 
     private void Offensive() {
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            return;
+        }
         if (CurrentState == ATTACKING) {
             return;
         }
@@ -287,6 +299,11 @@ sealed class PettyGoblin : ModNPC {
 
     private void Walking(Player player, bool close, float distance, int direction = 1) {
         bool away = direction != 1;
+        bool flag5 = _directionTimer > 0;
+        if (flag5) {
+            direction = _direction;
+            _directionTimer--;
+        }
         bool attacking = CurrentState == ATTACKING && NPC.life <= NPC.lifeMax / 3;
         float movementSpeed = (attacking ? 3.25f : !away ? 2.5f : 4f) * 0.65f;
         float acceleration = (attacking ? 13.5f : !away ? 10f : 15f) * 0.65f;
@@ -298,10 +315,11 @@ sealed class PettyGoblin : ModNPC {
             }
         }
         if (close) {
-            if (away && Main.rand.NextChance(0.1)) {
+            if (away && Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextChance(0.1)) {
                 MovementDirection *= -1;
+                NPC.netUpdate = true;
             }
-            if (Stole && Main.rand.NextChance(0.05)) {
+            if (Stole && Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextChance(0.05)) {
                 Stole = false;
                 NPC.netUpdate = true;
             }
@@ -310,7 +328,7 @@ sealed class PettyGoblin : ModNPC {
             }
         }
         else {
-            NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, (float)Math.Sign(distance) * direction * MovementDirection * movementSpeed, 1f / acceleration);
+            NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, (flag5 ? direction : ((float)Math.Sign(distance) * direction)) * MovementDirection * movementSpeed, 1f / acceleration);
         }
         int sizeX = 16;
         int sizeY = 6;
@@ -323,11 +341,6 @@ sealed class PettyGoblin : ModNPC {
         float jumpHeight = 5f;
         if (flag4) {
             Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
-            //MovementDirection *= -1;
-            //if (Math.Abs(NPC.velocity.X) <= 0.25f) {
-            //    NPC.velocity.Y = -jumpHeight;
-            //    NPC.netUpdate = true;
-            //}
         }
         if (away) {
             Invisible = false;
@@ -384,16 +397,6 @@ sealed class PettyGoblin : ModNPC {
                         flag22 = true;
                     }
                 }
-
-                //if (flag22) {
-                //    NPC.direction *= -1;
-                //    NPC.velocity.X *= -1f;
-                //    NPC.netUpdate = true;
-                //}
-
-                //if (NPC.velocity.Y < 0f) {
-                //    NPC.velocity.Y *= 1.2f;
-                //}
             }
         }
         bool lava = NPC_Collision_LavaCollision(NPC);
@@ -404,6 +407,9 @@ sealed class PettyGoblin : ModNPC {
     }
 
     private void DoJump() {
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            return;
+        }
         NPC.velocity.Y -= Main.rand.NextFloat(2f, 5f) * Main.rand.NextFloat(1.25f, 1.75f) * 0.85f;
         NPC.velocity.X += Main.rand.NextFloat(2f, 5f) * 0.1f * MovementDirection;
         NPC.netUpdate = true;
@@ -413,6 +419,9 @@ sealed class PettyGoblin : ModNPC {
         bool flag = NPC.velocity.X > 0f && NPC.Center.X < Main.player[NPC.target].Center.X;
         bool flag2 = NPC.velocity.X < 0f && NPC.Center.X > Main.player[NPC.target].Center.X;
         if (flag || flag2) {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                return;
+            }
             NPC.velocity.Y -= Main.rand.NextFloat(2f, 5f) * Main.rand.NextFloat(1.25f, 1.75f) * 0.85f;
             NPC.velocity.X -= Main.rand.NextFloat(2f, 5f) * 0.025f * (flag ? -1 : 1);
             NPC.netUpdate = true;
@@ -420,6 +429,9 @@ sealed class PettyGoblin : ModNPC {
     }
 
     private void StealMoney() {
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            return;
+        }
         bool flag3 = CurrentState != AWAY;
         bool flag4 = CurrentState != ATTACKING;
         bool flag = flag3 && NPC.extraValue >= 10000f;
@@ -468,15 +480,18 @@ sealed class PettyGoblin : ModNPC {
                     SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
                 }
                 Stole = true;
+                NPC.netUpdate = true;
                 if (flag) {
                     MakeALittleJump();
                     CurrentState = AWAY;
+                    NPC.netUpdate = true;
                     return;
                 }
             }
             if (flag2) {
                 MakeALittleJump();
                 CurrentState = ATTACKING;
+                NPC.netUpdate = true;
             }
         }
     }
