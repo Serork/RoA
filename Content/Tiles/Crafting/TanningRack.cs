@@ -1,10 +1,11 @@
+using Microsoft.Xna.Framework;
+
 using RoA.Content.Buffs;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
 
 using System.Linq;
-using System.Numerics;
 
 using Terraria;
 using Terraria.Audio;
@@ -35,27 +36,12 @@ sealed class TanningRack : ModTile {
         TileID.Sets.HasOutlines[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
 
-        //ModTranslation name = CreateMapEntryName();
-        //name.SetDefault("Tanning Rack");
-        //AddMapEntry(new Color(111, 22, 22));
+        AddMapEntry(new Color(193, 125, 83), CreateMapEntryName());
 
         DustType = DustID.t_LivingWood;
-        //TileID.Sets.DisableSmartCursor[Type] = true;
-        //AdjTiles = new int[] { TileID.Dressers };
     }
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
-
-    //public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-    //	int item = Item.NewItem(i * 16, j * 16, 28, 22, ModContent.ItemType<Items.Placeable.Crafting.TanningRack>(), 1, false, 0, false, false);
-    //	if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0)
-    //		NetMessage.SendData(21, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
-    //	Player player = Main.player[Main.myPlayer];
-    //	int type = (ushort)ModContent.BuffType<Skinning>();
-    //	if (player.FindBuffIndex(type) == -1)
-    //		return;
-    //	player.ClearBuff(type);
-    //}
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
