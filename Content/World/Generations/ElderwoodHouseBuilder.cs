@@ -726,7 +726,8 @@ public class HouseBuilderCustom {
                 context.SharpenerCount++;
         }
 
-        if (_placedTanningRack || !_random.NextBool(5)) {
+        bool flag = !_placedTanningRack && _random.NextBool(5);
+        if (_placedTanningRack && !flag) {
             return;
         }
         bool flag2 = false;
