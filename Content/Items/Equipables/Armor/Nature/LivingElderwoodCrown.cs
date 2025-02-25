@@ -67,7 +67,7 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
     public override void AddRecipes() {
     	CreateRecipe()
     		.AddIngredient<Placeable.Crafting.Elderwood>(10)
-    		.AddIngredient<Materials.Galipot>(5)
+    		.AddIngredient<Materials.Galipot>(3)
     		.AddTile(TileID.LivingLoom)
     		.Register();
     }

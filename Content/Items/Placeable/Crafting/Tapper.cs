@@ -36,7 +36,7 @@ partial class Tapper : ModItem {
         CreateRecipe()
             .AddRecipeGroup(RecipeGroupID.Wood, 10)
             .AddRecipeGroup(RecipeGroupID.IronBar, 2)
-            .AddTile(TileID.WorkBenches)
+            .AddTile(TileID.Sawmill)
             .Register();
     }
 }

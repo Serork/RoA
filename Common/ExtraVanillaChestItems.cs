@@ -2,6 +2,7 @@
 
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Druidic.Claws;
@@ -10,6 +11,7 @@ using RoA.Content.Tiles.Furniture;
 using RoA.Core.Utility;
 
 using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -30,6 +32,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
     private bool _giantTreeSaplingAdded;
     private bool _feathersBottleAdded;
     private bool _oniMaskAdded;
+    private bool _tanningRackAdded;
 
     [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Lights")]
     public extern static void WorldGen_MakeDungeon_Lights(WorldGen worldGen, ushort tileType, ref int failCount, int failMax, ref int numAdd, int[] roomWall);
@@ -1469,6 +1472,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
         _giantTreeSaplingAdded = false;
         _feathersBottleAdded = false;
         _oniMaskAdded = false;
+        _tanningRackAdded = false;
     }
 
     private static bool IsUndergroundDesert(int x, int y) {
@@ -2062,7 +2066,8 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
                             num10++;
 
-                            if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
+                            bool flag15 = chestTileType == (ushort)ModContent.TileType<ElderwoodChest>();
+                            if (flag15) {
                                 if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
                                     _oniMaskAdded = true;
                                     chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
@@ -2071,11 +2076,15 @@ sealed class ExtraVanillaChestItems : ModSystem {
                                 }
                             }
 
-
-                            if (genRand.Next(20) == 0) {
-                                chest.item[num10].SetDefaults(997);
+                            bool flag17 = !chest.item.Any(x => !x.IsEmpty() && x.type == ModContent.ItemType<OniMask>());
+                            bool flag16 = flag15 && !_tanningRackAdded && flag17;
+                            if (genRand.Next(20) == 0 || flag16) {
+                                chest.item[num10].SetDefaults(flag15 ? ModContent.ItemType<TanningRack>() : 997);
                                 chest.item[num10].Prefix(-1);
                                 num10++;
+                                if (flag16) {
+                                    _tanningRackAdded = true;
+                                }
                             }
                             else if (genRand.Next(20) == 0) {
                                 chest.item[num10].SetDefaults(930);
@@ -2274,13 +2283,19 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             if (WorldGen.tenthAnniversaryWorldGen)
                                 maxValue = 15;
 
+                            bool flag15 = chestTileType == (ushort)ModContent.TileType<ElderwoodChest>();
+                            bool flag17 = !chest.item.Any(x => !x.IsEmpty() && x.type == ModContent.ItemType<OniMask>());
+                            bool flag16 = flag15 && !_tanningRackAdded && flag17;
                             if (genRand.Next(maxValue) == 0 && flag14) {
                                 chest.item[num10].SetDefaults(906);
                                 chest.item[num10].Prefix(-1);
                             }
-                            else if (genRand.Next(15) == 0) {
-                                chest.item[num10].SetDefaults(997);
+                            else if (genRand.Next(15) == 0 || flag16) {
+                                chest.item[num10].SetDefaults(flag15 ? ModContent.ItemType<TanningRack>() : 997);
                                 chest.item[num10].Prefix(-1);
+                                if (flag16) {
+                                    _tanningRackAdded = true;
+                                }
                             }
                             else {
                                 if (num21 == 0) {
