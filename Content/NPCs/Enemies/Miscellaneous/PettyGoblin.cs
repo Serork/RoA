@@ -6,6 +6,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -83,6 +84,16 @@ sealed class PettyGoblin : ModNPC {
 
     private CoinGenerator Coins { get; set; }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_directionTimer);
+        writer.Write(_direction);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _directionTimer = reader.ReadInt32();
+        _direction = reader.ReadInt32();
+    }
+
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = FRAMES_COUNT;
 
@@ -109,7 +120,7 @@ sealed class PettyGoblin : ModNPC {
         NPC.knockBackResist = 0.7f;
         NPC.rarity = 1;
         NPC.aiStyle = -1;
-        NPC.noTileCollide = true;
+        NPC.noTileCollide = false;
         NPC.noGravity = true;
 
         DrawOffsetY = -2f;
@@ -192,7 +203,7 @@ sealed class PettyGoblin : ModNPC {
             MovementDirection = 1;
         }
         NPC.Opacity = MathHelper.Clamp(NPC.Opacity += Invisible ? -0.05f : 0.05f, 0.3f, 1f);
-        NPC.noTileCollide = NPC.noGravity = true;
+        //NPC.noTileCollide = NPC.noGravity = true;
         float distance = player.Center.X - NPC.Center.X;
         float distanceY = player.Center.Y - NPC.Center.Y;
         double direction = (double)Math.Abs(distance);
@@ -202,6 +213,7 @@ sealed class PettyGoblin : ModNPC {
         if (Math.Abs(distance) < 50 && !Collision.CanHit(player, NPC) && _directionTimer <= 0) {
             _directionTimer = 200;
             _direction = distance.GetDirection();
+            NPC.netUpdate = true;
         }
         bool flag2 = (double)Math.Abs(distanceY) < 50;
         bool close = direction < 50.0 && flag2;
@@ -303,6 +315,9 @@ sealed class PettyGoblin : ModNPC {
         if (flag5) {
             direction = _direction;
             _directionTimer--;
+            if (Collision.CanHit(player, NPC)) {
+                _directionTimer = 0;
+            }
         }
         bool attacking = CurrentState == ATTACKING && NPC.life <= NPC.lifeMax / 3;
         float movementSpeed = (attacking ? 3.25f : !away ? 2.5f : 4f) * 0.65f;
@@ -332,14 +347,14 @@ sealed class PettyGoblin : ModNPC {
         }
         int sizeX = 16;
         int sizeY = 6;
-        Vector2 Position = new Vector2(NPC.Center.X - sizeX / 2, NPC.position.Y + NPC.height - sizeY);
+        Vector2 Position = new(NPC.Center.X - sizeX / 2, NPC.position.Y + NPC.height - sizeY);
         bool acceptTopSurfaces = NPC.Bottom.Y >= player.getRect().Top;
         bool flag = Collision.SolidCollision(Position, sizeX, sizeY, acceptTopSurfaces);
         bool flag2 = Collision.SolidCollision(Position, sizeX, sizeY - 2, acceptTopSurfaces);
         bool flag3 = !Collision.SolidCollision(Position + new Vector2(32 * NPC.direction, 0f), 16, 16, acceptTopSurfaces);
         bool flag4 = Collision.SolidCollision(NPC.Center + new Vector2(NPC.width * NPC.direction, -sizeY), 16, 16, true) && away;
         float jumpHeight = 5f;
-        if (flag4) {
+        /*if (flag4) */{
             Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
         }
         if (away) {
@@ -351,14 +366,19 @@ sealed class PettyGoblin : ModNPC {
         else if (flag) {
             NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y + speedY, min, 0f);
         }
-        else if (NPC.velocity.Y == 0f & flag3) {
-            NPC.velocity.Y = -jumpHeight;
-            NPC.netUpdate = true;
-        }
         else {
             NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y - speedY, -jumpHeight, 16f);
             if (away) {
                 Invisible = true;
+                NPC.netUpdate = true;
+            }
+        }
+        Main.NewText(_directionTimer);
+        if (NPC.velocity.Y == 0.4f && flag3 && _directionTimer <= 0) {
+            _directionTimer--;
+            if (_directionTimer <= -60) {
+                _directionTimer = 200;
+                _direction = -distance.GetDirection();
                 NPC.netUpdate = true;
             }
         }

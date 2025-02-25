@@ -668,7 +668,7 @@ sealed class DryadEntrance : ModSystem {
             if (vector2D2.Y < -2.0)
                 vector2D2.Y = -2.0;
         }
-        Mountinater3((int)vector2D.X, (int)vector2D.Y, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
+        Mountinater3((int)vector2D.X, (int)vector2D.Y - 4, 4, [wallType, WallID.DirtUnsafe, WallID.GrassUnsafe, WallID.FlowerUnsafe, WallID.Cave6Unsafe]);
         ushort placeholderTileType = tileType, placeholderWallType = wallType;
         size = 20;
         WorldGenHelper.TileWallRunner((int)vector2D.X, (int)vector2D.Y, size / 2, size, placeholderTileType, placeholderWallType, overRide: true);
