@@ -37,7 +37,6 @@ sealed class TanningRack : ModTile {
                     int num4 = WorldGen.genRand.Next(2, room2.Width - 2) + room2.X;
                     WorldGen.PlaceTile(num4, num3, type, mute: true, forced: true);
                     if (flag2 = Main.tile[num4, num3].HasTile && Main.tile[num4, num3].TileType == type) {
-                        Console.WriteLine(num4 + " " + num3);
                         break;
                     }
                 }
