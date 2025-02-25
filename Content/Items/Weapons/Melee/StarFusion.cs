@@ -38,6 +38,15 @@ sealed class StarFusion : ModItem {
         //Item.glowMask = RiseofAgesGlowMask.Get(nameof(StarFusion));
     }
 
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.HellstoneBar, 15)
+            .AddIngredient(ItemID.FallenStar, 15)
+            .AddIngredient<Materials.MercuriumNugget>(5)
+            .AddTile(TileID.Anvils)
+            .Register();
+    }
+
     public override void MeleeEffects(Player player, Rectangle hitbox) {
         if (Main.rand.Next(5) == 0 && Main.rand.NextChance(0.75))
             Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, Main.rand.NextBool(3) ? DustID.YellowStarDust : DustID.Enchanted_Gold, 0f, 0f, 150, default(Color), 1.2f);
@@ -61,13 +70,4 @@ sealed class StarFusion : ModItem {
             spawnStar();
         }
     }
-
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient(ItemID.HellstoneBar, 15)
-    //        .AddIngredient(ItemID.FallenStar, 15)
-    //        .AddIngredient<Materials.MercuriumNugget>(5)
-    //        .AddTile(TileID.Anvils)
-    //        .Register();
-    //}
 }

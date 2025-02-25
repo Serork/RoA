@@ -440,7 +440,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             bool flag = false;
             for (int num298 = Left; num298 < Right; num298++) {
                 for (int num299 = BackwoodsVars.FirstTileYAtCenter - 10; (double)num299 < y; num299++) {
-                    if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
+                    if (_random.Next(count > count / 2 ? 2 : 3) == 0 || _random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
                         int num300 = -1;
                         int num301 = -1;
@@ -546,7 +546,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             bool flag = false;
             for (int num298 = Right; num298 > Left; num298--) {
                 for (int num299 = BackwoodsVars.FirstTileYAtCenter - 10; (double)num299 < y; num299++) {
-                    if (_random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
+                    if (_random.Next(count > count / 2 ? 2 : 3) == 0 || _random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
                         bool flag8 = false;
                         int num300 = -1;
                         int num301 = -1;
