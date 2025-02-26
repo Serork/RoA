@@ -29,6 +29,8 @@ sealed class Ravencaller : ModNPC {
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[NPC.type] = 23;
+
+        ItemID.Sets.KillsToBanner[Type] = 25;
     }
 
     public override void HitEffect(NPC.HitInfo hit) {

@@ -3,11 +3,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -27,6 +29,8 @@ sealed class Ent : RoANPC {
             PortraitPositionYOverride = -1f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
+
+        ItemID.Sets.KillsToBanner[Type] = 25;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -70,6 +74,8 @@ sealed class Ent : RoANPC {
 
         return base.PreDraw(spriteBatch, screenPos, drawColor);
     }
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<NaturesHeart>()));
 
     public override void HitEffect(NPC.HitInfo hit) {
         if (Main.netMode == NetmodeID.Server) {
@@ -149,9 +155,6 @@ sealed class Ent : RoANPC {
 			ChangeFrame(((int)roaNPC.CurrentFrame, frameHeight));
 		}
     }
-
-    //public override void ModifyNPCLoot(NPCLoot npcLoot)
-    //	=> npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<NaturesHeart>(), 2));
 
     //public override void HitEffect (NPC.HitInfo hit) {
     //	if (Main.netMode == NetmodeID.Server) {

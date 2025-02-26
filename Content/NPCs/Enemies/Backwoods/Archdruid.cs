@@ -54,7 +54,9 @@ sealed class Archdruid : DruidNPC {
 
     public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 30;
-	}
+
+        ItemID.Sets.KillsToBanner[Type] = 25;
+    }
 
 	public override void SetDefaults() {
         base.SetDefaults();

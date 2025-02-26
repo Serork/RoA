@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Materials;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
@@ -12,9 +14,11 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.ModLoader.Utilities;
 using Terraria.Utilities;
 
@@ -106,6 +110,8 @@ sealed class PettyGoblin : ModNPC {
             Velocity = 1.5f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        ItemID.Sets.KillsToBanner[Type] = 10;
     }
 
     public override void SetDefaults() {
@@ -132,6 +138,8 @@ sealed class PettyGoblin : ModNPC {
         Banner = Type;
         BannerItem = ModContent.ItemType<PettyGoblinBanner>();
     }
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(new CommonDrop(ModContent.ItemType<PettyBag>(), 10, 1, 1, 4));
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {

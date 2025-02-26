@@ -32,6 +32,9 @@ sealed class Pipistrelle : ModNPC {
             PortraitPositionYOverride = 8f,
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        NPCID.Sets.DontDoHardmodeScaling[Type] = true;
+        NPCID.Sets.CantTakeLunchMoney[Type] = true;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {

@@ -34,6 +34,8 @@ sealed class DeerSkullHead : BaseHead {
             PortraitPositionYOverride = 0f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        ItemID.Sets.KillsToBanner[Type] = 25;
     }
 
     public override void SetDefaults() {
