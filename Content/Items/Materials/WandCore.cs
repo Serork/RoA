@@ -7,7 +7,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Materials;
 
-[Autoload(false)]
 sealed class WandCore : ModItem {
 	public override void SetStaticDefaults() {
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
