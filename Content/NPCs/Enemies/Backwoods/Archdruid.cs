@@ -4,7 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.Items.Weapons.Druidic;
+using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
 
@@ -14,6 +18,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -58,7 +63,12 @@ sealed class Archdruid : DruidNPC {
         ItemID.Sets.KillsToBanner[Type] = 25;
     }
 
-	public override void SetDefaults() {
+    public override void ModifyNPCLoot(NPCLoot npcLoot) {
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SacrificialSickleOfTheMoon>(), 13));
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DeerSkull>(), 7));
+    }
+
+    public override void SetDefaults() {
         base.SetDefaults();
 
         NPC.lifeMax = 500;

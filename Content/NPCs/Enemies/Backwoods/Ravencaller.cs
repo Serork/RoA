@@ -4,7 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Armor.Ranged;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.Items.Weapons.Magic;
 using RoA.Core.Utility;
 
 using System;
@@ -14,6 +17,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -31,6 +35,11 @@ sealed class Ravencaller : ModNPC {
         Main.npcFrameCount[NPC.type] = 23;
 
         ItemID.Sets.KillsToBanner[Type] = 25;
+    }
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot) {
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<RavencallersCloak>(), 13));
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<RavensEye>(), 17));
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
