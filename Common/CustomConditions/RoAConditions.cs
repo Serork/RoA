@@ -28,7 +28,7 @@ static class RoAConditions {
     public static Condition Has05LuckOrMore = new("Mods.RoA.Conditions.HasSaddleCondition",
         () => {
             bool flag = false;
-            if (Main.LocalPlayer.luck >= 0.75f) {
+            if (Main.LocalPlayer.luck >= 0.5f) {
                 flag = true;
             }
             return flag;
