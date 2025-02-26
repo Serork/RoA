@@ -66,6 +66,27 @@ sealed class Ent : RoANPC {
         ItemID.Sets.KillsToBanner[BannerItem] = 25;
     }
 
+    public override void Load() {
+        On_NPC.NPCLoot_DropItems += On_NPC_NPCLoot_DropItems;
+        On_NPC.NPCLoot_DropMoney += On_NPC_NPCLoot_DropMoney;
+    }
+
+    private void On_NPC_NPCLoot_DropMoney(On_NPC.orig_NPCLoot_DropMoney orig, NPC self, Player closestPlayer) {
+        if (self.type == ModContent.NPCType<Ent>() && self.SpawnedFromStatue) {
+            return;
+        }
+
+        orig(self, closestPlayer);
+    }
+
+    private void On_NPC_NPCLoot_DropItems(On_NPC.orig_NPCLoot_DropItems orig, NPC self, Player closestPlayer) {
+        if (self.type == ModContent.NPCType<Ent>() && self.SpawnedFromStatue) {
+            return;
+        }
+
+        orig(self, closestPlayer);
+    }
+
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (NPC.IsABestiaryIconDummy) {
             NPC.spriteDirection = NPC.direction = 1;
@@ -113,9 +134,8 @@ sealed class Ent : RoANPC {
 
 		NPC.realLife = NPC.whoAmI;
 
-		NPC.lifeMax = npc.lifeMax - (int)(50 * NPC.ai[3]);
+		NPC.lifeMax = npc.lifeMax;
 
-        npc.value = NPC.value;
         NPC.defense = npc.defense;
 		NPC.Center = npc.Center - Vector2.UnitY * 32f;
 		NPC.velocity = npc.velocity;

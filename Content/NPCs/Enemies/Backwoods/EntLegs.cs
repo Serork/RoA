@@ -82,6 +82,7 @@ sealed class EntLegs : RoANPC {
 				npc.ai[3] = NPC.ai[3];
                 npc.life = npc.lifeMax = NPC.lifeMax;
 				npc.SpawnedFromStatue = NPC.SpawnedFromStatue;
+                npc.value = NPC.value;
 
                 NPC.realLife = npc.whoAmI;
 
