@@ -140,8 +140,6 @@ sealed class Archdruid : DruidNPC {
         NPC.ApplyFighterAI(true, (npc) => {
             float num87 = 1f * 0.9f;
             float num88 = 0.07f * 0.9f;
-            //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
-            //num88 += (1f - (float)life / (float)lifeMax) * 0.15f;
             if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
                 if (npc.velocity.Y == 0f)
                     npc.velocity *= 0.7f;
@@ -156,7 +154,7 @@ sealed class Archdruid : DruidNPC {
                 if (npc.velocity.X < 0f - num87)
                     npc.velocity.X = 0f - num87;
             }
-        });
+        }, shouldOpenDoors: true, knocksOnDoors: true);
     }
 
     protected override void ChangeToAttackState() {
