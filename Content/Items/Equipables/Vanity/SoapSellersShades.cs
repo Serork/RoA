@@ -1,8 +1,4 @@
-using Humanizer;
-
 using Microsoft.Xna.Framework;
-using RoA.Common.Players;
-using RoA.Content.Items.Consumables;
 
 using Terraria;
 using Terraria.ID;
