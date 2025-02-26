@@ -29,8 +29,6 @@ sealed class Ent : RoANPC {
             PortraitPositionYOverride = -1f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
-
-        ItemID.Sets.KillsToBanner[Type] = 25;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -65,6 +63,7 @@ sealed class Ent : RoANPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<EntBanner>();
+        ItemID.Sets.KillsToBanner[BannerItem] = 25;
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {

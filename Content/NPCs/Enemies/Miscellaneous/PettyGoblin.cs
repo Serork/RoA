@@ -110,8 +110,6 @@ sealed class PettyGoblin : ModNPC {
             Velocity = 1.5f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
-
-        ItemID.Sets.KillsToBanner[Type] = 10;
     }
 
     public override void SetDefaults() {
@@ -137,6 +135,7 @@ sealed class PettyGoblin : ModNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<PettyGoblinBanner>();
+        ItemID.Sets.KillsToBanner[BannerItem] = 10;
     }
 
     public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(new CommonDrop(ModContent.ItemType<PettyBag>(), 10, 1, 1, 4));

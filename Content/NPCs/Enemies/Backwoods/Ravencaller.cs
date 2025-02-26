@@ -33,8 +33,6 @@ sealed class Ravencaller : ModNPC {
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[NPC.type] = 23;
-
-        ItemID.Sets.KillsToBanner[Type] = 25;
     }
 
     public override void ModifyNPCLoot(NPCLoot npcLoot) {
@@ -82,6 +80,7 @@ sealed class Ravencaller : ModNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<RavencallerBanner>();
+        ItemID.Sets.KillsToBanner[BannerItem] = 25;
 
         NPC.rarity = 1;
     }
