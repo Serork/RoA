@@ -13,7 +13,7 @@ namespace RoA.Common.CustomConditions;
 
 static class RoAConditions {
     public static Condition InBackwoods = new("Mods.RoA.Conditions.BackwoodsBiome", () => Main.LocalPlayer.InModBiome<BackwoodsBiome>());
-    public static Condition HasAnySaddle = new("Mods.RoA.Conditions.HasSaddleCondition", 
+    public static Condition HasAnySaddle = new("Mods.RoA.Conditions.HasSaddle", 
         () => {
             bool flag = false;
             int[] saddles = [ItemID.DarkHorseSaddle, ItemID.MajesticHorseSaddle, ItemID.PaintedHorseSaddle];
@@ -25,7 +25,7 @@ static class RoAConditions {
             return flag;
         });
 
-    public static Condition Has05LuckOrMore = new("Mods.RoA.Conditions.HasSaddleCondition",
+    public static Condition Has05LuckOrMore = new("Mods.RoA.Conditions.HasSaddle",
         () => {
             bool flag = false;
             if (Main.LocalPlayer.luck >= 0.5f) {
@@ -34,7 +34,7 @@ static class RoAConditions {
             return flag;
         });
 
-    public static Condition SailorHatCondition = new("Mods.RoA.Conditions.SailorHatCondition",
+    public static Condition SailorHatCondition = new("Mods.RoA.Conditions.SailorHat",
         () => {
             bool flag = false;
             Player player = Main.LocalPlayer;

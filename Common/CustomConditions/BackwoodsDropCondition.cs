@@ -11,8 +11,8 @@ public class BackwoodsDropCondition : IItemDropRuleCondition, IProvideItemCondit
     }
 
     public bool CanShowItemDropInUI() {
-        return true;
+        return false;
     }
 
-    public string GetConditionDescription() => Language.GetOrRegister("Mods.RoA.Conditions.BackwoodsDrop").Value;
+    public string GetConditionDescription() => Language.GetOrRegister("Mods.RoA.Conditions.InBackwoods").Value;
 }
