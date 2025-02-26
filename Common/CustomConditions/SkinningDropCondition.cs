@@ -16,7 +16,7 @@ sealed class SkinningDropCondition : IItemDropRuleCondition {
         return false;
     }
 
-    public bool CanShowItemDropInUI() => true;
+    public bool CanShowItemDropInUI() => false;
 
     public string GetConditionDescription() => Language.GetOrRegister("Mods.RoA.Conditions.TanningRack").Value;
 }
