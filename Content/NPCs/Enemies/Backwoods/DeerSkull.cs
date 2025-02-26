@@ -60,7 +60,6 @@ sealed class DeerSkullHead : BaseHead {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<DeerSkullBanner>();
-        ItemID.Sets.KillsToBanner[BannerItem] = 25;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
