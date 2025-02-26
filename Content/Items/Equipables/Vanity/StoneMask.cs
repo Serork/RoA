@@ -1,11 +1,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Core.Utility;
+using RoA.Common.CustomConditions;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -13,7 +14,13 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class StoneMask : ModItem {
-	public override void SetStaticDefaults() {
+    private sealed class StoneMaskDrop : GlobalNPC {
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
+            npcLoot.Add(ItemDropRule.ByCondition(new BackwoodsDropCondition(), ModContent.ItemType<StoneMask>(), 144));
+        }
+    }
+
+    public override void SetStaticDefaults() {
 		//Tooltip.SetDefault("'Cursed'");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
