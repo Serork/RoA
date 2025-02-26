@@ -2,6 +2,7 @@
 
 using RoA.Common.GlowMasks;
 using RoA.Common.Items;
+using RoA.Content.Items.Materials;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 
@@ -18,7 +19,17 @@ sealed class RodOfTheDragonfire : Rod {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient<SphereOfPyre>()
+            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
+            .AddIngredient(ItemID.GoldBar, 10)
+            .AddIngredient(ModContent.ItemType<SphereOfPyre>())
+            .AddTile(TileID.Anvils)
+            .Register();
+
+        CreateRecipe()
+            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
+            .AddIngredient(ItemID.PlatinumBar, 10)
+            .AddIngredient(ModContent.ItemType<SphereOfPyre>())
+            .AddTile(TileID.Anvils)
             .Register();
     }
 

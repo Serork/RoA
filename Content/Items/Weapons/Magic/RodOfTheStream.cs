@@ -3,6 +3,7 @@
 using RoA.Common.GlowMasks;
 using RoA.Common.Items;
 using RoA.Content.Buffs;
+using RoA.Content.Items.Materials;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 
@@ -21,7 +22,17 @@ sealed class RodOfTheStream : Rod {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient<SphereOfStream>()
+            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
+            .AddIngredient(ItemID.GoldBar, 10)
+            .AddIngredient(ModContent.ItemType<SphereOfStream>())
+            .AddTile(TileID.Anvils)
+            .Register();
+
+        CreateRecipe()
+            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
+            .AddIngredient(ItemID.PlatinumBar, 10)
+            .AddIngredient(ModContent.ItemType<SphereOfStream>())
+            .AddTile(TileID.Anvils)
             .Register();
     }
 
