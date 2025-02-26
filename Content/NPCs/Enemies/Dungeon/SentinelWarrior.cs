@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Armor.Ranged;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
@@ -130,7 +131,8 @@ sealed class SentinelWarrior : ModNPC {
         var skeletonsDropRules = Main.ItemDropsDB.GetRulesForNPCID(NPCID.AngryBones, true);
         foreach (var skeletonDropRule in skeletonsDropRules)
             npcLoot.Add(skeletonDropRule);
-        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SentinelTaurusMask>(), 20));
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SentinelTaurusMask>(), 14));
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SentinelShield>(), 10));
     }
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
