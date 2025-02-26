@@ -5,9 +5,11 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.GlowMasks;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Materials;
+using RoA.Content.Items.Special;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -17,9 +19,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using RoA.Content.Items.Special;
-using RoA.Common.Items;
 
 namespace RoA.Content.Items.Miscellaneous;
 
@@ -31,14 +30,24 @@ sealed class RodOfTheCondor : ModItem {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient<SphereOfCondor>()
+            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
+            .AddIngredient(ItemID.GoldBar, 10)
+            .AddIngredient(ModContent.ItemType<SphereOfCondor>())
+            .AddTile(TileID.Anvils)
+            .Register();
+
+        CreateRecipe()
+            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
+            .AddIngredient(ItemID.PlatinumBar, 10)
+            .AddIngredient(ModContent.ItemType<SphereOfCondor>())
+            .AddTile(TileID.Anvils)
             .Register();
     }
 
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfCondor>();
+        //ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfCondor>();
     }
 
     public override void SetDefaults() {

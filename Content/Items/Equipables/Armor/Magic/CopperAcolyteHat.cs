@@ -41,7 +41,7 @@ sealed class CopperAcolyteHat : ModItem {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient(ItemID.CopperBar, 5)
+            .AddIngredient(ItemID.CopperBar, 8)
             .AddIngredient(ItemID.Leather, 5)
             .AddTile(TileID.Anvils)
             .Register();

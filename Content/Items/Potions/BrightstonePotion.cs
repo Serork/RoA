@@ -38,10 +38,8 @@ sealed class BrightstonePotion : ModItem {
 
 	public override void AddRecipes() {
 		CreateRecipe()
-			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient(ItemID.Sunflower)
-			.AddIngredient(ItemID.Moonglow)
-			.AddIngredient<Materials.Galipot>()
+			.AddIngredient(ItemID.ShinePotion)
+			.AddIngredient<Materials.Bonerose>()
 			.AddTile(TileID.Bottles)
 			.Register();
 	}

@@ -14,6 +14,8 @@ sealed class SoapSellersShades : ModItem {
         Item.ResearchUnlockCount = 1;
 
         ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
+
+        ItemID.Sets.ShimmerTransformToItem[ItemID.FamiliarWig] = Type;
     }
 
     public override void SetDefaults() {

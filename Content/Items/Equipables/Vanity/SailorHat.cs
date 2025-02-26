@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.CustomConditions;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -9,7 +11,17 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class SailorHat : ModItem {
-	public override void SetStaticDefaults() {
+    private sealed class SailorHatInMerchantShop : GlobalNPC {
+        public override void ModifyShop(NPCShop shop) {
+            if (shop.NpcType != NPCID.Pirate) {
+                return;
+            }
+
+            shop.InsertAfter(ItemID.PiratePants, ModContent.ItemType<SailorHat>(), RoAConditions.SailorHatCondition);
+        }
+    }
+
+    public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Sailor Hat");
         //Tooltip.SetDefault("'Who the hell am I?'");
         ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;

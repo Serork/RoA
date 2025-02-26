@@ -29,7 +29,7 @@ sealed class AlmondMilk : ModItem {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient(ModContent.ItemType<Almond>(), 2)
+            .AddIngredient(ModContent.ItemType<Almond>())
             .AddIngredient(ItemID.Bottle)
             .AddTile(TileID.CookingPots)
             .Register();

@@ -27,8 +27,8 @@ sealed class TinAcolyteJacket : ModItem {
 
     public override void AddRecipes () {
     	CreateRecipe()
-    		.AddIngredient(ItemID.TinBar, 15)
-    		.AddIngredient(ItemID.Leather, 5)
+    		.AddIngredient(ItemID.TinBar, 10)
+    		.AddIngredient(ItemID.Leather, 8)
     		.AddTile(TileID.Anvils)
     		.Register();
     }

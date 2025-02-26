@@ -25,9 +25,9 @@ sealed class DevilHunterCloak : ModItem {
 
 	public override void AddRecipes() {
 		CreateRecipe()
-			.AddIngredient<Materials.FlamingFabric>(18)
-			.AddIngredient(ItemID.BlackThread)
-			.AddTile(TileID.DemonAltar)
+			.AddIngredient<Materials.FlamingFabric>(15)
+			.AddIngredient(ItemID.RedDye)
+			.AddTile(TileID.Loom)
 			.Register();
 	}
 }

@@ -42,7 +42,6 @@ sealed class ResiliencePotion : NatureItem {
 			.AddIngredient(ItemID.BottledWater)
 			.AddIngredient<Materials.MiracleMint>()
 			.AddIngredient(ItemID.Moonglow)
-			.AddIngredient<Materials.Galipot>()
 			.AddTile(TileID.Bottles)
 			.Register();
 	}

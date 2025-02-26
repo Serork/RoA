@@ -51,9 +51,8 @@ sealed class DeathWardPotion : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient<Materials.Bonerose>()
-			.AddIngredient(ItemID.Daybloom)
-			.AddIngredient(ItemID.Deathweed)
+			.AddIngredient<Materials.MiracleMint>()
+			.AddIngredient(ItemID.Fireblossom)
 			.AddIngredient(ItemID.Worm)
 			.AddTile(TileID.Bottles)
 			.Register();

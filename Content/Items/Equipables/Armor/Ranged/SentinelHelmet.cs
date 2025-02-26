@@ -43,7 +43,7 @@ sealed class SentinelHelmet : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient<Materials.MercuriumNugget>(10)
-			.AddIngredient(ItemID.Leather, 4)
+			.AddIngredient(ItemID.Leather, 8)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

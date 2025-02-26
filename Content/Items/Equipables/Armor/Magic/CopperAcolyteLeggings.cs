@@ -28,7 +28,7 @@ sealed class CopperAcolyteLeggings : ModItem {
 
     public override void AddRecipes () {
     	CreateRecipe()
-    		.AddIngredient(ItemID.CopperBar, 10)
+    		.AddIngredient(ItemID.CopperBar, 6)
     		.AddIngredient(ItemID.Leather, 5)
     		.AddTile(TileID.Anvils)
     		.Register();

@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.CustomConditions;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -9,7 +11,17 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Legs)]
 sealed class PresidentPants : ModItem {
-	public override void SetStaticDefaults() {
+    private sealed class PresidentPantsInMerchantShop : GlobalNPC {
+        public override void ModifyShop(NPCShop shop) {
+            if (shop.NpcType != NPCID.Merchant) {
+                return;
+            }
+
+            shop.InsertAfter(ModContent.ItemType<PresidentJacket>(), ModContent.ItemType<PresidentPants>(), RoAConditions.Has05LuckOrMore);
+        }
+    }
+
+    public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("President's Pants");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}

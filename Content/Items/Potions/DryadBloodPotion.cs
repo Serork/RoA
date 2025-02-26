@@ -40,7 +40,7 @@ sealed class DryadBloodPotion : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient<Materials.Bonerose>()
+			.AddIngredient<Materials.MiracleMint>()
 			.AddIngredient(ItemID.Waterleaf)
 			.AddIngredient<Materials.Galipot>()
 			.AddTile(TileID.Bottles)

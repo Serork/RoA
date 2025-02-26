@@ -75,9 +75,8 @@ sealed class FlametrackerHat : ModItem {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient<Materials.FlamingFabric>(8)
-			.AddIngredient(ItemID.Leather, 3)
-            .AddIngredient(ItemID.Candle)
+            .AddIngredient<Materials.FlamingFabric>(12)
+			.AddIngredient(ItemID.Leather, 10)
             .AddTile(TileID.Loom)
             .Register();
     }

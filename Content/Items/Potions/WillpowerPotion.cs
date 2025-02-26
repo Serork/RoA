@@ -39,9 +39,9 @@ sealed class WillpowerPotion : NatureItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient<Materials.MiracleMint>()
-			.AddIngredient(ItemID.Shiverthorn)
-			.AddIngredient<Materials.Galipot>()
+            .AddIngredient(ItemID.Blinkroot)
+            .AddIngredient<Materials.Bonerose>()
+            .AddIngredient<Materials.Galipot>()
 			.AddTile(TileID.Bottles)
 			.Register();
 	}

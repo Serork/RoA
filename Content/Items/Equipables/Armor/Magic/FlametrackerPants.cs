@@ -30,8 +30,8 @@ sealed class FlametrackerPants : ModItem {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient<Materials.FlamingFabric>(10)
-            .AddIngredient(ItemID.Leather, 5)
+            .AddIngredient<Materials.FlamingFabric>(15)
+            .AddIngredient(ItemID.Leather, 10)
             .AddTile(TileID.Loom)
             .Register();
     }

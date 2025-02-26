@@ -42,7 +42,7 @@ sealed class BloodlustPotion : ModItem {
 			.AddIngredient(ItemID.BottledWater)
 			.AddIngredient(ItemID.Deathweed)
 			.AddIngredient<Materials.Bonerose>()
-			.AddIngredient(ItemID.Fireblossom)
+			.AddIngredient(ItemID.Vine)
 			.AddTile(TileID.Bottles)
 			.Register();
 	}

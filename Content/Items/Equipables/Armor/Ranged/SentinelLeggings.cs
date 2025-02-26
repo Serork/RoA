@@ -32,7 +32,7 @@ sealed class SentinelLeggings : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient<Materials.MercuriumNugget>(8)
-			.AddIngredient(ItemID.Leather, 4)
+			.AddIngredient(ItemID.Leather, 8)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

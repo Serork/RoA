@@ -32,12 +32,20 @@ sealed class WeaknessPotion : ModItem {
 	}
 
 	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient(ItemID.Deathweed)
-			.AddIngredient(ItemID.Shiverthorn)
-			.AddIngredient<Materials.Bonerose>()
+		CreateRecipe(3)
+			.AddIngredient(ItemID.BottledWater, 3)
+            .AddIngredient<Materials.Bonerose>()
+            .AddIngredient<Materials.MiracleMint>()
+            .AddIngredient(ItemID.RottenChunk)
 			.AddTile(TileID.Bottles)
 			.Register();
-	}
+
+        CreateRecipe(3)
+            .AddIngredient(ItemID.BottledWater, 3)
+            .AddIngredient<Materials.Bonerose>()
+            .AddIngredient<Materials.MiracleMint>()
+            .AddIngredient(ItemID.Vertebrae)
+            .AddTile(TileID.Bottles)
+            .Register();
+    }
 }

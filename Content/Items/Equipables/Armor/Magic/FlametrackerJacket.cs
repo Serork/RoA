@@ -38,8 +38,8 @@ sealed class FlametrackerJacket : ModItem {
 
     public override void AddRecipes () {
     	CreateRecipe()
-    		.AddIngredient<Materials.FlamingFabric>(12)
-    		.AddIngredient(ItemID.Leather, 8)
+    		.AddIngredient<Materials.FlamingFabric>(20)
+    		.AddIngredient(ItemID.Leather, 15)
     		.AddTile(TileID.Loom)
     		.Register();
     }

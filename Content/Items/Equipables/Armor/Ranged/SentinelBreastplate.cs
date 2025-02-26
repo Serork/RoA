@@ -30,7 +30,7 @@ sealed class SentinelBreastplate : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient<Materials.MercuriumNugget>(10)
-			.AddIngredient(ItemID.Leather, 5)
+			.AddIngredient(ItemID.Leather, 12)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

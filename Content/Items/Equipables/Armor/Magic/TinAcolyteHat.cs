@@ -39,7 +39,7 @@ public class TinAcolyteHat : ModItem {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient(ItemID.TinBar, 5)
+            .AddIngredient(ItemID.TinBar, 8)
             .AddIngredient(ItemID.Leather, 5)
             .AddTile(TileID.Anvils)
             .Register();

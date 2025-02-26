@@ -27,7 +27,7 @@ sealed class TinAcolyteLeggings : ModItem {
 
     public override void AddRecipes () {
     	CreateRecipe()
-    		.AddIngredient(ItemID.TinBar, 10)
+    		.AddIngredient(ItemID.TinBar, 6)
     		.AddIngredient(ItemID.Leather, 5)
     		.AddTile(TileID.Anvils)
     		.Register();

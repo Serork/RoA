@@ -28,8 +28,8 @@ sealed class CopperAcolyteJacket : ModItem {
 
     public override void AddRecipes() {
         CreateRecipe()
-            .AddIngredient(ItemID.CopperBar, 15)
-            .AddIngredient(ItemID.Leather, 5)
+            .AddIngredient(ItemID.CopperBar, 10)
+            .AddIngredient(ItemID.Leather, 8)
             .AddTile(TileID.Anvils)
             .Register();
     }

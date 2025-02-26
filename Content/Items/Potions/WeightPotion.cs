@@ -40,8 +40,8 @@ sealed class WeightPotion : ModItem {
 	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient<Materials.Cloudberry>()
-			.AddIngredient(ItemID.Deathweed)
+            .AddIngredient(ItemID.Daybloom)
+            .AddIngredient(ItemID.SiltBlock)
 			.AddTile(TileID.Bottles)
 			.Register();
 	}

@@ -25,9 +25,9 @@ sealed class DevilHunterPants : ModItem {
 
 	public override void AddRecipes() {
 		CreateRecipe()
-			.AddIngredient<Materials.FlamingFabric>(15)
-			.AddIngredient(ItemID.BlackThread)
-			.AddTile(TileID.DemonAltar)
+			.AddIngredient<Materials.FlamingFabric>(10)
+			.AddIngredient(ItemID.RedDye)
+			.AddTile(TileID.Loom)
 			.Register();
 	}
 }

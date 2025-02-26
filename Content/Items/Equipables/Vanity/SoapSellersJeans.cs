@@ -11,6 +11,8 @@ sealed class SoapSellersJeans : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Soap Seller's Jeans");
         Item.ResearchUnlockCount = 1;
+
+        ItemID.Sets.ShimmerTransformToItem[ItemID.FamiliarPants] = Type;
     }
 
     public override void SetDefaults() {
