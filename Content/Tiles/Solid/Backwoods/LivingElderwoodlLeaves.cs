@@ -24,7 +24,6 @@ sealed class LivingElderwoodlLeaves : ModTile {
 	public override void SetStaticDefaults() {
         TileHelper.Solid(Type, false, false, brick: false);
         TileHelper.MergeWith(Type, TileID.Dirt);
-        TileHelper.MergeWith(Type, (ushort)ModContent.TileType<BackwoodsGrass>());
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
         TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
