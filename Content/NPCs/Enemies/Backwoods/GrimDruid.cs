@@ -4,7 +4,10 @@ using RoA.Common;
 using RoA.Common.BackwoodsSystems;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
@@ -14,6 +17,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -54,6 +58,10 @@ sealed class GrimDruid : DruidNPC {
         bestiaryEntry.Info.AddRange([
             new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Grimdruid")
         ]);
+    }
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot) {
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BandOfNature>(), 20));
     }
 
     public override void HitEffect(NPC.HitInfo hit) {

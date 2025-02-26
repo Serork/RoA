@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -12,6 +13,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -59,6 +61,10 @@ sealed class Lumberjack : RoANPC {
             new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Lumberjack"),
 			new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<BackwoodsBiome>().ModBiomeBestiaryInfoElement)
         ]);
+    }
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot) {
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Coffin>(), 50));
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
