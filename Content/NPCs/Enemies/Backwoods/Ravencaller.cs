@@ -145,7 +145,7 @@ sealed class Ravencaller : ModNPC {
 
     public override void AI() {
         if (whenYouWalking)
-            NPC.ApplyFighterAI(BackwoodsFogHandler.IsFogActive, shouldOpenDoors: true, knocksOnDoors: true);
+            NPC.ApplyFighterAI(BackwoodsFogHandler.IsFogActive);
         else {
             NPC.ResetAIStyle();
             NPC.velocity.X *= 0.8f;

@@ -123,7 +123,7 @@ sealed class GrimDruid : DruidNPC {
                 if (npc.velocity.X < 0f - num87)
                     npc.velocity.X = 0f - num87;
             }
-        }, shouldOpenDoors: true, knocksOnDoors: true);
+        });
     }
 
     protected override void Attacking() {

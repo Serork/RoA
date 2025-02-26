@@ -196,6 +196,8 @@ static class NPCExtensions {
         int targetDelay = 60;
         int npcTypeForSomeReason = NPC.type;
 
+        NPC.TargetClosest(faceTarget: true);
+
         movementX(npc);
 
         bool tileChecks = false;
@@ -335,7 +337,7 @@ static class NPCExtensions {
         }
     }
 
-    public static void ApplyFighterAI(this NPC npc, bool backwoods = false, Action<NPC>? movementX = null, bool isWiderNPC = false, bool shouldOpenDoors = false, bool knocksOnDoors = false) {
+    public static void ApplyFighterAI(this NPC npc, bool backwoods = false, Action<NPC>? movementX = null, bool ignoreBranches = false) {
         npc.aiStyle = -1;
         npc.ModNPC.AIType = -1;
 
@@ -495,9 +497,9 @@ static class NPCExtensions {
                 npc.direction = 1;
         }
 
-        LegacyFighterAI(npc, true, (npc) => {
-            float num87 = 1f * 0.9f;
-            float num88 = 0.07f * 0.9f;
+        if (movementX == null) {
+            float num87 = 1f;
+            float num88 = 0.07f;
             //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
             //num88 += (1f - (float)life / (float)lifeMax) * 0.15f;
             if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
@@ -514,6 +516,318 @@ static class NPCExtensions {
                 if (npc.velocity.X < 0f - num87)
                     npc.velocity.X = 0f - num87;
             }
-        });
+        }
+        else {
+            movementX.Invoke(npc);
+        }
+
+        if (npc.velocity.Y == 0f || flag) {
+            int num181 = (int)(npc.position.Y + (float)npc.height + 7f) / 16;
+            int num182 = (int)(npc.position.Y - 9f) / 16;
+            int num183 = (int)npc.position.X / 16;
+            int num184 = (int)(npc.position.X + (float)npc.width) / 16;
+            int num185 = (int)(npc.position.X + 8f) / 16;
+            int num186 = (int)(npc.position.X + (float)npc.width - 8f) / 16;
+            bool flag22 = false;
+            for (int num187 = num185; num187 <= num186; num187++) {
+                if (num187 >= num183 && num187 <= num184 && Main.tile[num187, num181] == null) {
+                    flag22 = true;
+                    continue;
+                }
+
+                if (Main.tile[num187, num182].HasUnactuatedTile && Main.tileSolid[Main.tile[num187, num182].TileType]) {
+                    canOpenDoor2 = false;
+                    break;
+                }
+
+                if (!flag22 && num187 >= num183 && num187 <= num184 && Main.tile[num187, num181].HasUnactuatedTile && Main.tileSolid[Main.tile[num187, num181].TileType])
+                    canOpenDoor2 = true;
+            }
+
+            if (!canOpenDoor2 && npc.velocity.Y < 0f)
+                npc.velocity.Y = 0f;
+
+            if (flag22)
+                return;
+        }
+
+        if (npc.velocity.Y >= 0f/* && npc.directionY != 1*/) {
+            int num188 = 0;
+            if (npc.velocity.X < 0f)
+                num188 = -1;
+
+            if (npc.velocity.X > 0f)
+                num188 = 1;
+
+            Vector2 vector39 = npc.position;
+            vector39.X += npc.velocity.X;
+            int num189 = (int)((vector39.X + (float)(npc.width / 2) + (float)((npc.width / 2 + 1) * num188)) / 16f);
+            int num190 = (int)((vector39.Y + (float)npc.height - 1f) / 16f);
+            if (WorldGen.InWorld(num189, num190, 4)) {
+                //if (Main.tile[num189, num190] == null)
+                //    Main.tile[num189, num190] = new Tile();
+
+                //if (Main.tile[num189, num190 - 1] == null)
+                //    Main.tile[num189, num190 - 1] = new Tile();
+
+                //if (Main.tile[num189, num190 - 2] == null)
+                //    Main.tile[num189, num190 - 2] = new Tile();
+
+                //if (Main.tile[num189, num190 - 3] == null)
+                //    Main.tile[num189, num190 - 3] = new Tile();
+
+                //if (Main.tile[num189, num190 + 1] == null)
+                //    Main.tile[num189, num190 + 1] = new Tile();
+
+                //if (Main.tile[num189 - num188, num190 - 3] == null)
+                //    Main.tile[num189 - num188, num190 - 3] = new Tile();
+
+                if ((float)(num189 * 16) < vector39.X + (float)npc.width && (float)(num189 * 16 + 16) > vector39.X && ((Main.tile[num189, num190].HasUnactuatedTile && !Main.tile[num189, num190].TopSlope && !Main.tile[num189, num190 - 1].TopSlope && Main.tileSolid[Main.tile[num189, num190].TileType] && !Main.tileSolidTop[Main.tile[num189, num190].TileType]) || (Main.tile[num189, num190 - 1].IsHalfBlock && Main.tile[num189, num190 - 1].HasUnactuatedTile)) && (!Main.tile[num189, num190 - 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num189, num190 - 1].TileType] || Main.tileSolidTop[Main.tile[num189, num190 - 1].TileType] || (Main.tile[num189, num190 - 1].IsHalfBlock && (!Main.tile[num189, num190 - 4].HasUnactuatedTile || !Main.tileSolid[Main.tile[num189, num190 - 4].TileType] || Main.tileSolidTop[Main.tile[num189, num190 - 4].TileType]))) && (!Main.tile[num189, num190 - 2].HasUnactuatedTile || !Main.tileSolid[Main.tile[num189, num190 - 2].TileType] || Main.tileSolidTop[Main.tile[num189, num190 - 2].TileType]) && (!Main.tile[num189, num190 - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[num189, num190 - 3].TileType] || Main.tileSolidTop[Main.tile[num189, num190 - 3].TileType]) && (!Main.tile[num189 - num188, num190 - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[num189 - num188, num190 - 3].TileType])) {
+                    float num191 = num190 * 16;
+                    if (Main.tile[num189, num190].IsHalfBlock)
+                        num191 += 8f;
+
+                    if (Main.tile[num189, num190 - 1].IsHalfBlock)
+                        num191 -= 8f;
+
+                    if (num191 < vector39.Y + (float)npc.height) {
+                        float num192 = vector39.Y + (float)npc.height - num191;
+                        float num193 = 16.1f;
+                        if (npc.type == 163 || npc.type == 164 || npc.type == 236 || npc.type == 239 || npc.type == 530)
+                            num193 += 8f;
+
+                        if (num192 <= num193) {
+                            npc.gfxOffY += npc.position.Y + (float)npc.height - num191;
+                            npc.position.Y = num191 - (float)npc.height;
+                            if (num192 < 9f)
+                                npc.stepSpeed = 1f;
+                            else
+                                npc.stepSpeed = 2f;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (canOpenDoor2) {
+            int num194 = (int)((npc.position.X + (float)(npc.width / 2) + (float)(/*15*/npc.width / 2 * npc.direction)) / 16f);
+            int num195 = (int)((npc.position.Y + (float)npc.height - 15f) / 16f);
+            //if (npc.type == 109 || npc.type == 163 || npc.type == 164 || npc.type == 199 || npc.type == 236 || npc.type == 239 || npc.type == 257 || npc.type == 258 || npc.type == 290 || npc.type == 391 || npc.type == 425 || npc.type == 427 || npc.type == 426 || npc.type == 580 || npc.type == 508 || npc.type == 415 || npc.type == 530 || npc.type == 532 || npc.type == 582)
+                num194 = (int)((npc.position.X + (float)(npc.width / 2) + (float)((npc.width / 2 + 16) * npc.direction)) / 16f);
+
+            //if (Main.tile[num194, num195] == null)
+            //    Main.tile[num194, num195] = new Tile();
+
+            //if (Main.tile[num194, num195 - 1] == null)
+            //    Main.tile[num194, num195 - 1] = new Tile();
+
+            //if (Main.tile[num194, num195 - 2] == null)
+            //    Main.tile[num194, num195 - 2] = new Tile();
+
+            //if (Main.tile[num194, num195 - 3] == null)
+            //    Main.tile[num194, num195 - 3] = new Tile();
+
+            //if (Main.tile[num194, num195 + 1] == null)
+            //    Main.tile[num194, num195 + 1] = new Tile();
+
+            //if (Main.tile[num194 + direction, num195 - 1] == null)
+            //    Main.tile[num194 + direction, num195 - 1] = new Tile();
+
+            //if (Main.tile[num194 + direction, num195 + 1] == null)
+            //    Main.tile[num194 + direction, num195 + 1] = new Tile();
+
+            //if (Main.tile[num194 - direction, num195 + 1] == null)
+            //    Main.tile[num194 - direction, num195 + 1] = new Tile();
+
+            //Main.tile[num194, num195 + 1].IsHalfBlock;
+            if (Main.tile[num194, num195 - 1].HasUnactuatedTile && (TileLoader.IsClosedDoor(Main.tile[num194, num195 - 1]) || Main.tile[num194, num195 - 1].TileType == 388) && canOpenDoor) {
+                npc.ai[2] += 1f;
+                npc.ai[3] = 0f;
+                if (npc.ai[2] >= 60f) {
+                    bool flag23 = npc.type == 3 || npc.type == 430 || npc.type == 590 || npc.type == 331 || npc.type == 332 || npc.type == 132 || npc.type == 161 || npc.type == 186 || npc.type == 187 || npc.type == 188 || npc.type == 189 || npc.type == 200 || npc.type == 223 || npc.type == 320 || npc.type == 321 || npc.type == 319 || npc.type == 21 || npc.type == 324 || npc.type == 323 || npc.type == 322 || npc.type == 44 || npc.type == 196 || npc.type == 167 || npc.type == 77 || npc.type == 197 || npc.type == 202 || npc.type == 203 || npc.type == 449 || npc.type == 450 || npc.type == 451 || npc.type == 452 || npc.type == 481 || npc.type == 201 || npc.type == 635;
+                    bool flag24 = Main.player[npc.target].ZoneGraveyard && Main.rand.Next(60) == 0;
+                    if ((!Main.bloodMoon || Main.getGoodWorld) && !flag24 && flag23)
+                        npc.ai[1] = 0f;
+
+                    npc.velocity.X = 0.5f * (float)(-npc.direction);
+                    int num196 = 5;
+                    if (Main.tile[num194, num195 - 1].TileType == 388)
+                        num196 = 2;
+
+                    npc.ai[1] += num196;
+                    if (npc.type == 27)
+                        npc.ai[1] += 1f;
+
+                    if (npc.type == 31 || npc.type == 294 || npc.type == 295 || npc.type == 296)
+                        npc.ai[1] += 6f;
+
+                    npc.ai[2] = 0f;
+                    bool flag25 = false;
+                    if (npc.ai[1] >= 10f) {
+                        flag25 = true;
+                        npc.ai[1] = 10f;
+                    }
+
+                    if (npc.type == 460)
+                        flag25 = true;
+
+                    WorldGen.KillTile(num194, num195 - 1, fail: true);
+                    if ((Main.netMode != 1 || !flag25) && flag25 && Main.netMode != 1) {
+                        if (npc.type == 26) {
+                            WorldGen.KillTile(num194, num195 - 1);
+                            if (Main.netMode == 2)
+                                NetMessage.SendData(17, -1, -1, null, 0, num194, num195 - 1);
+                        }
+                        else {
+                            if (Main.tile[num194, num195 - 1].TileType == 10) {
+                                bool flag26 = WorldGen.OpenDoor(num194, num195 - 1, npc.direction);
+                                if (!flag26) {
+                                    npc.ai[3] = num56;
+                                    npc.netUpdate = true;
+                                }
+
+                                if (Main.netMode == 2 && flag26)
+                                    NetMessage.SendData(19, -1, -1, null, 0, num194, num195 - 1, npc.direction);
+                            }
+
+                            if (Main.tile[num194, num195 - 1].TileType == 388) {
+                                bool flag27 = WorldGen.ShiftTallGate(num194, num195 - 1, closing: false);
+                                if (!flag27) {
+                                    npc.ai[3] = num56;
+                                    npc.netUpdate = true;
+                                }
+
+                                if (Main.netMode == 2 && flag27)
+                                    NetMessage.SendData(19, -1, -1, null, 4, num194, num195 - 1);
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                int num197 = npc.spriteDirection;
+                if (npc.type == 425)
+                    num197 *= -1;
+
+                bool flag15 = ignoreBranches || (!ignoreBranches && Main.player[npc.target].position.Y > npc.Center.Y - npc.height);
+                //flag15 = false;
+                NPC NPC = npc;
+                if (NPC.velocity.X < 0f && NPC.direction == -1 || NPC.velocity.X > 0f && NPC.direction == 1) {
+                    bool JumpCheck(int tileX, int tileY) {
+                        if (NPC.height >= 32 && Main.tile[tileX, tileY - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 2].TileType]) {
+                            if (Main.tile[tileX, tileY - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 3].TileType]) {
+                                NPC.velocity.Y = -8f;
+                                NPC.netUpdate = true;
+                            }
+                            else {
+                                NPC.velocity.Y = -7f;
+                                NPC.netUpdate = true;
+                            }
+                            return true;
+                        }
+                        else if (Main.tile[tileX, tileY - 1].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 1].TileType]) {
+                            NPC.velocity.Y = -6f;
+                            NPC.netUpdate = true;
+                            return true;
+                        }
+                        else if (NPC.position.Y + NPC.height - tileY * 16 > 20f && Main.tile[tileX, tileY].HasUnactuatedTile && !Main.tile[tileX, tileY].TopSlope && Main.tileSolid[Main.tile[tileX, tileY].TileType]) {
+                            NPC.velocity.Y = -5f;
+                            NPC.netUpdate = true;
+                            return true;
+                        }
+                        else if (NPC.directionY < 0 && (!Main.tile[tileX, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY + 1].TileType]) && (!Main.tile[tileX + NPC.direction, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX + NPC.direction, tileY + 1].TileType])) {
+                            NPC.velocity.Y = -8f;
+                            NPC.velocity.X *= 1.5f;
+                            NPC.netUpdate = true;
+                            return true;
+                        }
+                        return false;
+                    }
+                    if (!JumpCheck(num194, num195)) {
+                        NPC.ai[1] = 0f;
+                        NPC.ai[2] = 0f;
+                    }
+                }
+
+                if ((npc.type == 31 || npc.type == 294 || npc.type == 295 || npc.type == 296 || npc.type == 47 || npc.type == 77 || npc.type == 104 || npc.type == 168 || npc.type == 196 || npc.type == 385 || npc.type == 389 || npc.type == 464 || npc.type == 470 || (npc.type >= 524 && npc.type <= 527)) && npc.velocity.Y == 0f) {
+                    int num204 = 100;
+                    int num205 = 50;
+                    if (npc.type == 586) {
+                        num204 = 150;
+                        num205 = 150;
+                    }
+
+                    if (Math.Abs(npc.position.X + (float)(npc.width / 2) - (Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2))) < (float)num204 && Math.Abs(npc.position.Y + (float)(npc.height / 2) - (Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2))) < (float)num205 && ((npc.direction > 0 && npc.velocity.X >= 1f) || (npc.direction < 0 && npc.velocity.X <= -1f))) {
+                        if (npc.type == 586) {
+                            npc.velocity.X += npc.direction;
+                            npc.velocity.X *= 2f;
+                            if (npc.velocity.X > 8f)
+                                npc.velocity.X = 8f;
+
+                            if (npc.velocity.X < -8f)
+                                npc.velocity.X = -8f;
+
+                            npc.velocity.Y = -4.5f;
+                            if (npc.position.Y > Main.player[npc.target].position.Y + 40f)
+                                npc.velocity.Y -= 2f;
+
+                            if (npc.position.Y > Main.player[npc.target].position.Y + 80f)
+                                npc.velocity.Y -= 2f;
+
+                            if (npc.position.Y > Main.player[npc.target].position.Y + 120f)
+                                npc.velocity.Y -= 2f;
+                        }
+                        else {
+                            npc.velocity.X *= 2f;
+                            if (npc.velocity.X > 3f)
+                                npc.velocity.X = 3f;
+
+                            if (npc.velocity.X < -3f)
+                                npc.velocity.X = -3f;
+
+                            npc.velocity.Y = -4f;
+                        }
+
+                        npc.netUpdate = true;
+                    }
+                }
+
+                if (npc.type == 120 && npc.velocity.Y < 0f)
+                    npc.velocity.Y *= 1.1f;
+
+                if (npc.type == 287 && npc.velocity.Y == 0f && Math.Abs(npc.position.X + (float)(npc.width / 2) - (Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2))) < 150f && Math.Abs(npc.position.Y + (float)(npc.height / 2) - (Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2))) < 50f && ((npc.direction > 0 && npc.velocity.X >= 1f) || (npc.direction < 0 && npc.velocity.X <= -1f))) {
+                    npc.velocity.X = 8 * npc.direction;
+                    npc.velocity.Y = -4f;
+                    npc.netUpdate = true;
+                }
+
+                if (npc.type == 287 && npc.velocity.Y < 0f) {
+                    npc.velocity.X *= 1.2f;
+                    npc.velocity.Y *= 1.1f;
+                }
+
+                if (npc.type == 460 && npc.velocity.Y < 0f) {
+                    npc.velocity.X *= 1.3f;
+                    npc.velocity.Y *= 1.1f;
+                }
+            }
+        }
+        else if (canOpenDoor) {
+            npc.ai[1] = 0f;
+            npc.ai[2] = 0f;
+        }
+        Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+
+        //if (Main.netMode != 1 && npc.type == 120 && npc.ai[3] >= (float)num56) {
+        //    int targetTileX = (int)Main.player[target].Center.X / 16;
+        //    int targetTileY = (int)Main.player[target].Center.Y / 16;
+        //    Vector2 chosenTile = Vector2.Zero;
+        //    if (AI_AttemptToFindTeleportSpot(ref chosenTile, targetTileX, targetTileY, 20, 9)) {
+        //        position.X = chosenTile.X * 16f - (float)(width / 2);
+        //        position.Y = chosenTile.Y * 16f - (float)height;
+        //        npc.ai[3] = -120f;
+        //        netUpdate = true;
+        //    }
+        //}
     }
 }
