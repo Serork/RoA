@@ -132,7 +132,9 @@ sealed class Ent : RoANPC {
             NPC.KillNPC();
 		}
 
-		NPC.realLife = NPC.whoAmI;
+        npc.value = NPC.value;
+
+        NPC.realLife = NPC.whoAmI;
 
 		NPC.lifeMax = npc.lifeMax;
 
