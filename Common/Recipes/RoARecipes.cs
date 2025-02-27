@@ -3,8 +3,10 @@ using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Armor.Magic;
 using RoA.Content.Items.Equipables.Armor.Nature;
 using RoA.Content.Items.Equipables.Armor.Ranged;
+using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Vanity;
+using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable;
@@ -13,6 +15,8 @@ using RoA.Content.Items.Placeable.Furniture;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Special;
 using RoA.Content.Items.Tools;
+using RoA.Content.Items.Weapons.Druidic;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
@@ -34,6 +38,268 @@ sealed class RoARecipes : ModSystem {
         AddGalipotItems();
         AddHerbItems();
         AddPlanterBoxes();
+        AddOtherSawmill();
+        AddDruidItems1();
+        AddCopperSets();
+        AddBoneHarpySet();
+        AddCorruptionRelatedStuff();
+        AddCrimsonRelatedStuff();
+        AddTinkererWorkShopItems();
+        AddWreaths();
+    }
+
+    private static void AddWreaths() {
+        Recipe item = Recipe.Create(ModContent.ItemType<ForestWreath>());
+        item.AddIngredient<TwigWreath>(1);
+        item.AddIngredient(ItemID.Daybloom, 5);
+        item.SortBeforeFirstRecipesOf(ItemID.IceTorch);
+        item.Register();
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<ForestWreath2>());
+        item.AddIngredient<ForestWreath>(1);
+        item.AddIngredient(ItemID.Sunflower, 1);
+        item.AddIngredient<NaturesHeart>(1);
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<JungleWreath>());
+        item.AddIngredient<TwigWreath>(1);
+        item.AddIngredient(ItemID.Moonglow, 5);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<JungleWreath2>());
+        item.AddIngredient<JungleWreath>(1);
+        item.AddIngredient(ItemID.JungleRose, 1);
+        item.AddIngredient<NaturesHeart>(1);
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<BeachWreath>());
+        item.AddIngredient<TwigWreath>(1);
+        item.AddIngredient(ItemID.Waterleaf, 5);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<BeachWreath2>());
+        item.AddIngredient<BeachWreath>(1);
+        item.AddIngredient(ItemID.Coral, 1);
+        item.AddIngredient<NaturesHeart>(1);
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<SnowWreath>());
+        item.AddIngredient<TwigWreath>(1);
+        item.AddIngredient(ItemID.Shiverthorn, 5);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<SnowWreath2>());
+        item.AddIngredient<SnowWreath>(1);
+        item.AddIngredient<Cloudberry>(1);
+        item.AddIngredient<NaturesHeart>(1);
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.Register();
+    }
+
+    private static void AddTinkererWorkShopItems() {
+        Recipe item = Recipe.Create(ModContent.ItemType<AlchemicalSkull>());
+        item.AddIngredient(ItemID.ObsidianSkull);
+        item.AddIngredient(ItemID.Bezoar);
+        item.AddIngredient<NaturesHeart>(1);
+        item.AddTile(TileID.TinkerersWorkbench);
+        item.SortAfterFirstRecipesOf(ItemID.ObsidianShield);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<FeathersInABalloon>());
+        item.AddIngredient<FeathersInABottle>(1);
+        item.AddIngredient(ItemID.ShinyRedBalloon);
+        item.AddTile(TileID.TinkerersWorkbench);
+        item.SortAfterFirstRecipesOf(ItemID.FartInABalloon);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<BandOfPurity>());
+        item.AddIngredient<BandOfNature>(1);
+        item.AddIngredient(ItemID.BandofRegeneration);
+        item.AddTile(TileID.TinkerersWorkbench);
+        item.SortAfterFirstRecipesOf(ItemID.ManaRegenerationBand);
+        item.Register();
+    }
+
+    private static void AddCrimsonRelatedStuff() {
+        Recipe item = Recipe.Create(ModContent.ItemType<DreadheartCrimsonHelmet>());
+        item.AddIngredient(ItemID.TissueSample, 10);
+        item.AddIngredient<NaturesHeart>();
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfterFirstRecipesOf(ItemID.CrimsonGreaves);
+        item.Register();
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<DreadheartCrimsonChestplate>());
+        item.AddIngredient(ItemID.TissueSample, 20);
+        item.AddIngredient<NaturesHeart>();
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<DreadheartCrimsonLeggings>());
+        item.AddIngredient(ItemID.TissueSample, 15);
+        item.AddIngredient<NaturesHeart>();
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.Register();
+
+        // weapons
+        item = Recipe.Create(ModContent.ItemType<GutwrenchingHooks>());
+        item.AddIngredient(ItemID.CrimtaneBar, 10);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.CrimsonYoyo);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<ShadewoodStaff>());
+        item.AddIngredient(ItemID.CrimtaneBar, 8);
+        item.AddIngredient(ItemID.TissueSample, 5);
+        item.AddIngredient(ItemID.Shadewood, 8);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.TheMeatball);
+        item.Register();
+    }
+
+    private static void AddCorruptionRelatedStuff() {
+        Recipe item = Recipe.Create(ModContent.ItemType<DreadheartCorruptionHelmet>());
+        item.AddIngredient(ItemID.ShadowScale, 10);
+        item.AddIngredient<NaturesHeart>();
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfterFirstRecipesOf(ItemID.ShadowGreaves);
+        item.Register();
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<DreadheartCorruptionChestplate>());
+        item.AddIngredient(ItemID.ShadowScale, 20);
+        item.AddIngredient<NaturesHeart>();
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<DreadheartCorruptionLeggings>());
+        item.AddIngredient(ItemID.ShadowScale, 15);
+        item.AddIngredient<NaturesHeart>();
+        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.Register();
+
+        // weapons
+        item = Recipe.Create(ModContent.ItemType<HorrorPincers>());
+        item.AddIngredient(ItemID.DemoniteBar, 10);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.CorruptYoyo);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<EbonwoodStaff>());
+        item.AddIngredient(ItemID.DemoniteBar, 8);
+        item.AddIngredient(ItemID.ShadowScale, 5);
+        item.AddIngredient(ItemID.Ebonwood, 8);
+        item.AddTile(TileID.Anvils);
+        item.SortBeforeFirstRecipesOf(ItemID.CorruptYoyo);
+        item.Register();
+    }
+
+    private static void AddBoneHarpySet() {
+        Recipe item = Recipe.Create(ModContent.ItemType<WorshipperBonehelm>());
+        item.AddIngredient(ItemID.Bone, 40);
+        item.AddIngredient(ItemID.Leather, 5);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfterFirstRecipesOf(ItemID.NecroGreaves);
+        item.Register();
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<WorshipperMantle>());
+        item.AddIngredient(ItemID.Bone, 50);
+        item.AddIngredient(ItemID.Leather, 5);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<WorshipperGarb>());
+        item.AddIngredient(ItemID.Bone, 40);
+        item.AddIngredient(ItemID.Leather, 5);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfter(temp);
+        item.Register();
+    }
+
+    private static void AddCopperSets() {
+        Recipe item = Recipe.Create(ModContent.ItemType<CopperAcolyteHat>());
+        item.AddIngredient(ItemID.CopperBar, 8);
+        item.AddIngredient(ItemID.Leather, 5);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.CopperGreaves);
+        item.Register();
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<CopperAcolyteJacket>());
+        item.AddIngredient(ItemID.CopperBar, 10);
+        item.AddIngredient(ItemID.Leather, 8);
+        item.AddTile(TileID.Anvils);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<CopperAcolyteLeggings>());
+        item.AddIngredient(ItemID.CopperBar, 6);
+        item.AddIngredient(ItemID.Leather, 5);
+        item.AddTile(TileID.Anvils);
+        item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<TinAcolyteHat>());
+        item.AddIngredient(ItemID.TinBar, 8);
+        item.AddIngredient(ItemID.Leather, 5);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.TinGreaves);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<TinAcolyteJacket>());
+        item.AddIngredient(ItemID.TinBar, 10);
+        item.AddIngredient(ItemID.Leather, 8);
+        item.AddTile(TileID.Anvils);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<TinAcolyteLeggings>());
+        item.AddIngredient(ItemID.TinBar, 6);
+        item.AddIngredient(ItemID.Leather, 5);
+        item.AddTile(TileID.Anvils);
+        item.SortAfter(temp);
+        item.Register();
+    }
+
+    private static void AddDruidItems1() {
+        Recipe item = Recipe.Create(ModContent.ItemType<PastoralRod>());
+        item.AddRecipeGroup(RecipeGroupID.Wood, 5);
+        item.AddIngredient(ItemID.Rope, 10);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfterFirstRecipesOf(ItemID.WoodYoyo);
+        item.Register();
+
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<SapStream>());
+        item.AddRecipeGroup(RecipeGroupID.Wood, 10);
+        item.AddIngredient(ModContent.ItemType<Galipot>(), 5);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfter(temp);
+        item.Register();
+    }
+
+    private static void AddOtherSawmill() {
+        Recipe item = Recipe.Create(ModContent.ItemType<Tapper>());
+        item.AddRecipeGroup(RecipeGroupID.Wood, 10);
+        item.AddRecipeGroup(RecipeGroupID.IronBar, 2);
+        item.AddTile(TileID.Sawmill);
+        item.SortBeforeFirstRecipesOf(ItemID.Trapdoor);
+        item.Register();
     }
 
     private static void AddPlanterBoxes() {

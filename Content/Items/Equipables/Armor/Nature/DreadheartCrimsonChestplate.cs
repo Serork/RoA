@@ -31,12 +31,4 @@ sealed class DreadheartCrimsonChestplate : NatureItem {
         player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.08f;
         player.GetKnockback(DruidClass.NatureDamage) += 0.5f;
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.TissueSample, 20)
-			.AddIngredient<Materials.NaturesHeart>()
-			.AddTile<Tiles.Ambient.OvergrownAltar>()
-			.Register();
-	}
 }

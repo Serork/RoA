@@ -23,13 +23,6 @@ sealed class JungleWreath : BaseWreathItem {
             player.GetModPlayer<JungleWreathPlayer>().poisonedSkin = true;
         }
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-			.AddIngredient<TwigWreath>(1)
-    		.AddIngredient(ItemID.Moonglow, 5)
-    		.Register();
-    }
 }
 
 sealed class JungleWreathPlayer : ModPlayer {

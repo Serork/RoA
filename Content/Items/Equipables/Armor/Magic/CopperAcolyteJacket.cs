@@ -25,12 +25,4 @@ sealed class CopperAcolyteJacket : ModItem {
     }
 
     public override void UpdateEquip(Player player) => player.statManaMax2 += 40;
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.CopperBar, 10)
-            .AddIngredient(ItemID.Leather, 8)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
 }

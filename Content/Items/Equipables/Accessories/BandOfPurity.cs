@@ -28,17 +28,9 @@ sealed class BandOfPurity : NatureItem {
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
-        player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.05f;
-        if (player.GetModPlayer<WreathHandler>().IsFull) {
-            player.lifeRegen += 10;
-        }
-	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ModContent.ItemType<BandOfNature>())
-			.AddIngredient(ItemID.BandofRegeneration)
-			.AddTile(TileID.TinkerersWorkbench)
-			.Register();
+		player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.05f;
+		if (player.GetModPlayer<WreathHandler>().IsFull) {
+			player.lifeRegen += 10;
+		}
 	}
 }

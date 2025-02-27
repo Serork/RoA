@@ -35,13 +35,4 @@ sealed class AlchemicalSkull : ModItem {
 		player.buffImmune[ModContent.BuffType<ToxicFumes>()] = true;
         player.buffImmune[ModContent.BuffType<ToxicFumesNoTimeDisplay>()] = true;
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.ObsidianSkull)
-			.AddIngredient(ItemID.Bezoar)
-			.AddIngredient<Materials.NaturesHeart>(1)
-			.AddTile(TileID.TinkerersWorkbench)
-			.Register();
-	}
 }

@@ -17,16 +17,9 @@ sealed class SnowWreath : BaseWreathItem {
 		Item.rare = ItemRarityID.Blue;
 	}
 
-    public override void UpdateAccessory(Player player, bool hideVisual) {
-        if (player.GetModPlayer<WreathHandler>().IsFull) {
-            player.GetCritChance(DruidClass.NatureDamage) += 2;
-        }
-    }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-			.AddIngredient<TwigWreath>(1)
-    		.AddIngredient(ItemID.Shiverthorn, 5)
-    		.Register();
-    }
+	public override void UpdateAccessory(Player player, bool hideVisual) {
+		if (player.GetModPlayer<WreathHandler>().IsFull) {
+			player.GetCritChance(DruidClass.NatureDamage) += 2;
+		}
+	}
 }

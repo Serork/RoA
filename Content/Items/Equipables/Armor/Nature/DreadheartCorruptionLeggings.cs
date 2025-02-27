@@ -26,12 +26,4 @@ sealed class DreadheartCorruptionLeggings : NatureItem {
 	}
 
 	public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;		
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.ShadowScale, 15)
-			.AddIngredient<Materials.NaturesHeart>()
-			.AddTile<Tiles.Ambient.OvergrownAltar>()
-			.Register();
-	}
 }

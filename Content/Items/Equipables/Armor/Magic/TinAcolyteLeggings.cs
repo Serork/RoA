@@ -24,12 +24,4 @@ sealed class TinAcolyteLeggings : ModItem {
     }
 
     public override void UpdateEquip(Player player) => player.GetCritChance(DamageClass.Magic) += 8;
-
-    public override void AddRecipes () {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.TinBar, 6)
-    		.AddIngredient(ItemID.Leather, 5)
-    		.AddTile(TileID.Anvils)
-    		.Register();
-    }
 }

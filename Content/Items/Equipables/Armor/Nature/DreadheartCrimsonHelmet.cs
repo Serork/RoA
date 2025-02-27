@@ -67,14 +67,6 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
         BaseFormHandler.RegisterForm<CrimsonInsectForm>();
     }
 
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.TissueSample, 10)
-    		.AddIngredient<Materials.NaturesHeart>()
-    		.AddTile<Tiles.Ambient.OvergrownAltar>()
-    		.Register();
-    }
-
     internal class DreadheartSetBonusHandler : ModPlayer {
         public bool IsEffectActive;
 

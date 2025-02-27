@@ -18,13 +18,4 @@ sealed class BeachWreath2 : BaseWreathItem {
     public override void UpdateAccessory(Player player, bool hideVisual) {
 
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-			.AddIngredient<BeachWreath>(1)
-    		.AddIngredient(ItemID.Coral)
-			.AddIngredient<Materials.NaturesHeart>(1)
-			.AddTile<Tiles.Ambient.OvergrownAltar>()
-    		.Register();
-    }
 }

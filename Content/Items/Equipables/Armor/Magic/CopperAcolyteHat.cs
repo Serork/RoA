@@ -38,12 +38,4 @@ sealed class CopperAcolyteHat : ModItem {
             player.GetDamage(DamageClass.Magic) += 0.4f;
         }
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.CopperBar, 8)
-            .AddIngredient(ItemID.Leather, 5)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
 }

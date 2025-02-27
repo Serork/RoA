@@ -26,13 +26,4 @@ sealed class SnowWreath2 : BaseWreathItem {
             player.GetCritChance(DruidClass.NatureDamage) += 2;
         }
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-			.AddIngredient<SnowWreath>(1)
-			.AddIngredient<Materials.Cloudberry>(1)
-			.AddIngredient<Materials.NaturesHeart>(1)
-			.AddTile<Tiles.Ambient.OvergrownAltar>()
-    		.Register();
-    }
 }

@@ -31,12 +31,4 @@ partial class Tapper : ModItem {
         Item.value = Item.sellPrice(silver: 10);
         Item.createTile = ModContent.TileType<Tiles.Crafting.Tapper>();
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 10)
-            .AddRecipeGroup(RecipeGroupID.IronBar, 2)
-            .AddTile(TileID.Sawmill)
-            .Register();
-    }
 }

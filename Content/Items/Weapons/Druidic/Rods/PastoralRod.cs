@@ -28,14 +28,6 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 5)
-            .AddIngredient(ItemID.Rope, 10)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
-
     public sealed class PastoralRodBase : BaseRodProjectile {
         protected override bool ShouldntUpdateRotationAndDirection() => false;
 

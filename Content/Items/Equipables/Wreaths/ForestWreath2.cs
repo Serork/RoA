@@ -26,13 +26,4 @@ sealed class ForestWreath2 : BaseWreathItem {
             player.statLifeMax2 += 40;
         }
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-			.AddIngredient<ForestWreath>(1)
-    		.AddIngredient(ItemID.Sunflower)
-			.AddIngredient<Materials.NaturesHeart>(1)
-			.AddTile<Tiles.Ambient.OvergrownAltar>()
-    		.Register();
-    }
 }

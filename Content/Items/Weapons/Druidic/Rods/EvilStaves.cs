@@ -29,14 +29,6 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.DemoniteBar, 8)
-            .AddIngredient(ItemID.ShadowScale, 5)
-            .AddIngredient(ItemID.Ebonwood, 8)
-            .Register();
-    }
-
     public sealed class EbonwoodStaffBase : BaseRodProjectile {
         private Vector2 _mousePosition;
 
@@ -142,14 +134,6 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
         NatureWeaponHandler.SetFillingRate(Item, 0.35f);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
-    }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.CrimtaneBar, 8)
-            .AddIngredient(ItemID.TissueSample, 5)
-            .AddIngredient(ItemID.Shadewood, 8)
-            .Register();
     }
 
     public sealed class ShadewoodStaffBase : BaseRodProjectile {

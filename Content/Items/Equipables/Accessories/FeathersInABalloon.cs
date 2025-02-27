@@ -26,12 +26,4 @@ sealed class FeathersInABalloon : NatureItem {
         player.GetJumpState<FeathersInABottle.FeathersInABottleExtraJump>().Enable();
         player.jumpBoost = true;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<FeathersInABottle>())
-            .AddIngredient(ItemID.ShinyRedBalloon)
-            .AddTile(TileID.TinkerersWorkbench)
-            .Register();
-    }
 }

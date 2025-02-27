@@ -21,10 +21,4 @@ sealed class BeachWreath : BaseWreathItem {
 
     }
 
-    public override void AddRecipes() {
-    	CreateRecipe()
-			.AddIngredient<TwigWreath>(1)
-    		.AddIngredient(ItemID.Waterleaf, 5)
-    		.Register();
-    }
 }

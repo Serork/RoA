@@ -159,14 +159,6 @@ sealed class WorshipperBonehelm : ModItem {
         SummonHarpy(player);
     }
 	
-	 public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.Leather, 5)
-			.AddIngredient(ItemID.Bone, 40)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
-
     private static void SummonHarpy(Player player) {
         int type = ModContent.ProjectileType<BoneHarpy>();
         if (player.ownedProjectileCounts[type] < 1) {

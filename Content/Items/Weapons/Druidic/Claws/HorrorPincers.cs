@@ -16,13 +16,6 @@ sealed class HorrorPincers : BaseClawsItem {
         Item.SetWeaponValues(8, 4f);
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.DemoniteBar, 10)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
-
     protected override (Color, Color) SlashColors(Player player) => (new Color(132, 75, 140), new Color(160, 100, 200));
 
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {

@@ -36,12 +36,4 @@ public class TinAcolyteHat : ModItem {
             player.GetDamage(DruidClass.NatureDamage) += 0.4f;
         }
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.TinBar, 8)
-            .AddIngredient(ItemID.Leather, 5)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
 }

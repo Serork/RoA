@@ -61,12 +61,4 @@ sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupCont
     void IPostSetupContent.PostSetupContent() {
         BaseFormHandler.RegisterForm<CorruptionInsectForm>();
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.ShadowScale, 10)
-    		.AddIngredient<Materials.NaturesHeart>()
-    		.AddTile<Tiles.Ambient.OvergrownAltar>()
-    		.Register();
-    }
 }

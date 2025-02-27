@@ -37,14 +37,6 @@ sealed class SapStream : NatureItem {
         Item.staff[Item.type] = true;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 10)
-            .AddIngredient(ModContent.ItemType<Galipot>(), 5)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
-
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 velocity2 = new Vector2(velocity.X, velocity.Y).SafeNormalize(Vector2.Zero);
         position += velocity2 * 40f;

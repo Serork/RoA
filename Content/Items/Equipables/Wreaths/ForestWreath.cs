@@ -22,11 +22,4 @@ sealed class ForestWreath : BaseWreathItem {
             player.statLifeMax2 += 40;
         }
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-			.AddIngredient<TwigWreath>(1)
-    		.AddIngredient(ItemID.Daybloom, 5)
-    		.Register();
-    }
 }

@@ -26,12 +26,4 @@ sealed class DreadheartCrimsonLeggings : NatureItem {
 	}
 
 	public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.TissueSample, 15)
-            .AddIngredient<Materials.NaturesHeart>()
-            .AddTile<Tiles.Ambient.OvergrownAltar>()
-            .Register();
-    }
 }
