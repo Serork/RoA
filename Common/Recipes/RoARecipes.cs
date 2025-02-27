@@ -603,6 +603,27 @@ sealed class RoARecipes : ModSystem {
         item.SortAfter(temp);
         item.Register();
 
+        item = Recipe.Create(ModContent.ItemType<LivingElderwoodCrown>());
+        item.AddIngredient<Elderwood>(10);
+        item.AddIngredient<Content.Items.Materials.Galipot>(3);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingElderwoodBreastplate>());
+        item.AddIngredient<Elderwood>(20);
+        item.AddIngredient<Content.Items.Materials.Galipot>(5);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingElderwoodGreaves>());
+        item.AddIngredient<Elderwood>(15);
+        item.AddIngredient<Content.Items.Materials.Galipot>(2);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodSword>());
         item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(7);

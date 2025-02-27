@@ -38,12 +38,4 @@ sealed class LivingBorealWoodHelmet : NatureItem {
 		player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingBorealSetBonus");
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.BorealWood, 10)
-			.AddIngredient<Materials.Galipot>(3)
-			.AddTile(TileID.LivingLoom)
-			.Register();
-	}
 }

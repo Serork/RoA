@@ -32,12 +32,4 @@ sealed class LivingElderwoodBreastplate : NatureItem {
 			player.statDefense += 3;
 		}
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Placeable.Crafting.Elderwood>(20)
-			.AddIngredient<Materials.Galipot>(5)
-			.AddTile(TileID.LivingLoom)
-			.Register();
-	}
 }
