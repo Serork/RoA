@@ -22,12 +22,4 @@ sealed class FlamingFabric : ModItem {
 		Item.rare = ItemRarityID.Green;
 		Item.maxStack = Item.CommonMaxStack;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.Cobweb, 5)
-			.AddIngredient(ItemID.Hellstone)
-			.AddTile(TileID.Loom)
-			.Register();
-	}
 }

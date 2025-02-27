@@ -31,12 +31,4 @@ sealed class FlinxFurUshanka : ModItem {
 		player.buffImmune[BuffID.Chilled] = true;
 		player.buffImmune[BuffID.Frozen] = true;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.Silk, 4)
-			.AddIngredient(ItemID.FlinxFur, 4)
-			.AddTile(TileID.Loom)
-			.Register();
-	}
 }

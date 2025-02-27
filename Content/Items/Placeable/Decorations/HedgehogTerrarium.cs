@@ -23,12 +23,4 @@ sealed class HedgehogTerrarium : ModItem {
         Item.height = 32;
         Item.createTile = ModContent.TileType<Tiles.Decorations.HedgehogTerrarium>();
     }
-
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.Terrarium)
-            .AddIngredient(ModContent.ItemType<Hedgehog>())
-            .Register();
-    }
 }

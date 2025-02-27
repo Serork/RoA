@@ -22,12 +22,4 @@ public class BackwoodsStoneChest_Trapped : ModItem {
         Item.width = 32;
         Item.height = 28;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<BackwoodsStoneChest>()
-            .AddIngredient(ItemID.Wire, 10)
-            .AddTile(TileID.HeavyWorkBench)
-            .Register();
-    }
 }

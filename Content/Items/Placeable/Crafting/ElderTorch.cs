@@ -282,12 +282,4 @@ sealed class ElderTorch : ModItem {
             Lighting.AddLight(Item.Center, 0.25f, 0.65f, 0.85f);
         }
     }
-
-    public override void AddRecipes() {
-        CreateRecipe(3)
-            .AddIngredient(ItemID.Torch, 3)
-            .AddIngredient<Grimstone>()
-            .SortAfterFirstRecipesOf(ItemID.JungleTorch)
-            .Register();
-    }
 }

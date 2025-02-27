@@ -22,12 +22,4 @@ public class ElderwoodChest_Trapped : ModItem {
         Item.width = 32;
         Item.height = 28;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<ElderwoodChest>()
-            .AddIngredient(ItemID.Wire, 10)
-            .AddTile(TileID.HeavyWorkBench)
-            .Register();
-    }
 }

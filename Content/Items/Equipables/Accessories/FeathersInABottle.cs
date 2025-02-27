@@ -29,14 +29,6 @@ sealed class FeathersInABottle : NatureItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) => player.GetJumpState<FeathersInABottleExtraJump>().Enable();
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.CloudinaBottle)
-            .AddIngredient(ItemID.Feather, 5)
-            .AddTile(TileID.TinkerersWorkbench)
-            .Register();
-    }
-
     internal sealed class FeathersInABottleExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;
 

@@ -24,11 +24,4 @@ sealed class MercuriumNugget : ModItem {
 		Item.rare = ItemRarityID.Blue;
 		Item.maxStack = Item.CommonMaxStack;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Placeable.Crafting.MercuriumOre>(4)
-			.AddTile(TileID.Furnaces)
-			.Register();
-	}
 }

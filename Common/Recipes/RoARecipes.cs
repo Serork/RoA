@@ -12,6 +12,7 @@ using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Items.Placeable.Decorations;
 using RoA.Content.Items.Placeable.Furniture;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Special;
@@ -23,9 +24,12 @@ using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 
+using System.Linq;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Common.Recipes;
 
@@ -48,6 +52,70 @@ sealed class RoARecipes : ModSystem {
         AddTinkererWorkShopItems();
         AddWreaths();
         AddFood();
+        AddTerrarium();
+        AddIceBiomeItems();
+        AddTrappedChests();
+        AddTorch();
+        AddWalls();
+    }
+
+    private static void AddWalls() {
+
+    }
+
+    private static void AddTorch() {
+        Recipe item = Recipe.Create(ModContent.ItemType<ElderTorch>());
+        item.AddIngredient(ItemID.Torch, 3);
+        item.AddIngredient<Grimstone>();
+        item.SortAfterFirstRecipesOf(ItemID.JungleTorch);
+        item.Register();
+    }
+
+    private static void AddTrappedChests() {
+        Recipe item = Recipe.Create(ModContent.ItemType<BackwoodsDungeonChest_Trapped>());
+        item.AddIngredient<BackwoodsDungeonChest>(1);
+        item.AddIngredient(ItemID.Wire, 10);
+        item.AddTile(TileID.HeavyWorkBench);
+        item.SortAfterFirstRecipesOf(ItemID.Fake_DungeonDesertChest);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<BackwoodsStoneChest_Trapped>());
+        item.AddIngredient<BackwoodsStoneChest>(1);
+        item.AddIngredient(ItemID.Wire, 10);
+        item.AddTile(TileID.HeavyWorkBench);
+        item.SortAfterFirstRecipesOf(ItemID.Fake_StardustChest);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<ElderwoodChest_Trapped>());
+        item.AddIngredient<ElderwoodChest>(1);
+        item.AddIngredient(ItemID.Wire, 10);
+        item.AddTile(TileID.HeavyWorkBench);
+        item.SortAfterFirstRecipesOf(ItemID.Fake_AshWoodChest);
+        item.Register();
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<ElderwoodChest2_Trapped>());
+        item.AddIngredient<ElderwoodChest2>(1);
+        item.AddIngredient(ItemID.Wire, 10);
+        item.AddTile(TileID.HeavyWorkBench);
+        item.SortAfter(temp);
+        item.Register();
+    }
+
+    private static void AddIceBiomeItems() {
+        Recipe item = Recipe.Create(ModContent.ItemType<FlinxFurUshanka>());
+        item.AddIngredient(ItemID.Silk, 4);
+        item.AddIngredient(ItemID.FlinxFur, 4);
+        item.AddTile(TileID.Loom);
+        item.SortBeforeFirstRecipesOf(ItemID.FlinxFurCoat);
+        item.Register();
+    }
+
+    private static void AddTerrarium() {
+        Recipe item = Recipe.Create(ModContent.ItemType<HedgehogTerrarium>());
+        item.AddIngredient(ItemID.Terrarium);
+        item.AddIngredient<Hedgehog>(1);
+        item.SortAfterFirstRecipesOf(ItemID.OwlCage);
+        item.Register();
     }
 
     private static void AddFood() {
@@ -149,6 +217,13 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient(ItemID.BandofRegeneration);
         item.AddTile(TileID.TinkerersWorkbench);
         item.SortAfterFirstRecipesOf(ItemID.ManaRegenerationBand);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<FeathersInABottle>());
+        item.AddIngredient(ItemID.CloudinaBottle);
+        item.AddIngredient(ItemID.Feather, 5);
+        item.AddTile(TileID.TinkerersWorkbench);
+        item.SortAfterFirstRecipesOf(ItemID.FartinaJar);
         item.Register();
     }
 
@@ -666,10 +741,23 @@ sealed class RoARecipes : ModSystem {
         item.AddTile(TileID.Anvils);
         item.SortAfterFirstRecipesOf(ItemID.ImpStaff);
         item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<FlamingFabric>());
+        item.AddIngredient(ItemID.Hellstone, 1);
+        item.AddIngredient(ItemID.Cobweb, 5);
+        item.AddTile(TileID.Loom);
+        item.SortAfterFirstRecipesOf(ItemID.HellstoneBar);
+        item.Register();
     }
 
     private static void AddMercuriumItems(Recipe starFusion) {
-        Recipe item = Recipe.Create(ModContent.ItemType<MercuriumBolter>());
+        Recipe item = Recipe.Create(ModContent.ItemType<MercuriumNugget>());
+        item.AddIngredient<Content.Items.Placeable.Crafting.MercuriumOre>(4);
+        item.AddTile(TileID.Furnaces);
+        item.SortAfterFirstRecipesOf(ItemID.CrimtaneBar);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<MercuriumBolter>());
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(8);
         item.AddTile(TileID.Anvils);
         item.SortAfterFirstRecipesOf(ItemID.Magiluminescence);
@@ -874,7 +962,25 @@ sealed class RoARecipes : ModSystem {
     }
 
     private static void AddElderwoodItems() {
-        Recipe item = Recipe.Create(ModContent.ItemType<ElderwoodHelmet>());
+        Recipe item = Recipe.Create(ModContent.ItemType<Elderwood>());
+        item.AddIngredient<Content.Items.Placeable.Furniture.ElderwoodPlatform>(2);
+        Recipe ashWoodFromPlatform = Main.recipe.FirstOrDefault(x => x.createItem.type == ItemID.AshWoodPlatform);
+        item.SortAfter(ashWoodFromPlatform);
+        item.Register();
+        item = Recipe.Create(ModContent.ItemType<Elderwood>());
+        item.AddIngredient<Content.Items.Placeable.Walls.ElderwoodWall>(4);
+        item.AddTile(TileID.WorkBenches);
+        Recipe ashWoodFromWall = Main.recipe.FirstOrDefault(x => x.createItem.type == ItemID.AshWoodWall);
+        item.SortAfter(ashWoodFromWall);
+        item.Register();
+        item = Recipe.Create(ModContent.ItemType<Elderwood>());
+        item.AddIngredient<Content.Items.Placeable.Walls.ElderwoodFence>(4);
+        item.AddTile(TileID.WorkBenches);
+        Recipe ashWoodFromFence = Main.recipe.FirstOrDefault(x => x.createItem.type == ItemID.AshWoodFence);
+        item.SortAfter(ashWoodFromFence);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<ElderwoodHelmet>());
         item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(20);
         item.AddTile(TileID.WorkBenches);
         item.SortAfterFirstRecipesOf(ItemID.AshWoodToilet);
