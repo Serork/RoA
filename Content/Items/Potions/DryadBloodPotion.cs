@@ -37,7 +37,11 @@ sealed class DryadBloodPotion : ModItem {
 		Item.buffTime = 3600 * 8;
 	}
 
-	public override void AddRecipes() {
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
+    }
+
+    public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.BottledWater)
 			.AddIngredient<Materials.MiracleMint>()

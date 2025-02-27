@@ -110,6 +110,9 @@ abstract class Wand : ModItem {
 
     protected virtual void SafeSetDefaults() { }
 
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        => itemGroup = ContentSamples.CreativeHelper.ItemGroup.Wands;
+
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
         foreach (TooltipLine tooltipLine in tooltips) {
             if (tooltipLine.Mod == "Terraria" && tooltipLine.Name == "Placeable") {

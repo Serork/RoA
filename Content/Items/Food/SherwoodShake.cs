@@ -22,6 +22,10 @@ sealed class SherwoodShake : ModItem {
         ItemID.Sets.IsFood[Type] = true;
     }
 
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.Food;
+    }
+
     public override void SetDefaults() {
         Item.DefaultToFood(14, 34, 26, 72000, useGulpSound: true);
         Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(0, 2));

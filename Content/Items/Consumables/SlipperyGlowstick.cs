@@ -15,6 +15,8 @@ public class SlipperyGlowstick : ModItem {
 
         ItemID.Sets.SingleUseInGamepad[Type] = true;
         ItemID.Sets.Torches[Type] = true;
+
+		ItemID.Sets.Glowsticks[Type] = true;
     }
 
 	public override void SetDefaults() {

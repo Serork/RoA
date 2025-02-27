@@ -17,24 +17,28 @@ sealed class PrismaticPotion : ModItem {
 			new Color(195, 17, 79),
             new Color(88, 111, 156)
         };
-	}
+    }
 
-	public override void SetDefaults() {
-		int width = 20; int height = 30;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 20; int height = 30;
+        Item.Size = new Vector2(width, height);
 
         Item.maxStack = 9999;
         Item.rare = ItemRarityID.Green;
 
-		Item.useTime = Item.useAnimation = 15;
-		Item.useStyle = ItemUseStyleID.DrinkLiquid;
+        Item.useTime = Item.useAnimation = 15;
+        Item.useStyle = ItemUseStyleID.DrinkLiquid;
 
-		Item.UseSound = SoundID.Item3;
-		Item.consumable = true;
+        Item.UseSound = SoundID.Item3;
+        Item.consumable = true;
 
-		Item.buffType = ModContent.BuffType<PrismaticFavor>();
-		Item.buffTime = 3600 * 4;
-	}
+        Item.buffType = ModContent.BuffType<PrismaticFavor>();
+        Item.buffTime = 3600 * 4;
+    }
+
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
+    }
 
     public override void AddRecipes() {
         CreateRecipe()

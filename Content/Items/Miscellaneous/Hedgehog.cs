@@ -30,4 +30,8 @@ sealed class Hedgehog : ModItem {
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.Hedgehog>();
         Item.shootSpeed = 3f;
     }
+
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.Critters;
+    }
 }

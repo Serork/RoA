@@ -27,7 +27,11 @@ sealed class Cloudberry : ModItem {
 
     }
 
-	public override void SetDefaults() {
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.AlchemyPlants;
+    }
+
+    public override void SetDefaults() {
 		int width = 24; int height = 26;
 		Item.Size = new Vector2(width, height);
 

@@ -31,7 +31,11 @@ sealed class WeaknessPotion : ModItem {
 		Item.shootSpeed = 10f;
 	}
 
-	public override void AddRecipes() {
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
+    }
+
+    public override void AddRecipes() {
 		CreateRecipe(3)
 			.AddIngredient(ItemID.BottledWater, 3)
             .AddIngredient<Materials.Bonerose>()

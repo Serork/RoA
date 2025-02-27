@@ -48,7 +48,11 @@ sealed class DeathWardPotion : ModItem {
 		return true;
 	}
 
-	public override void AddRecipes() {
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
+    }
+
+    public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.BottledWater)
 			.AddIngredient<Materials.MiracleMint>()

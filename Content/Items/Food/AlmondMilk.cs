@@ -22,6 +22,10 @@ sealed class AlmondMilk : ModItem {
         ItemID.Sets.IsFood[Type] = true;
     }
 
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.Food;
+    }
+
     public override void SetDefaults() {
         Item.DefaultToFood(24, 42, 26, 36000, useGulpSound: true);
         Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(0, 1));

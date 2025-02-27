@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using RoA.Content.Tiles.Plants;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Seeds;
@@ -10,9 +11,9 @@ namespace RoA.Content.Items.Placeable.Seeds;
 sealed class MiracleMintSeeds : ModItem {
 	public override void SetStaticDefaults () {
 		Item.ResearchUnlockCount = 25;
-	}   
+    }
 
-   public override void SetDefaults() {
+    public override void SetDefaults() {
         Item.autoReuse = true;
         Item.useTurn = true;
         Item.useStyle = 1;
@@ -25,5 +26,9 @@ sealed class MiracleMintSeeds : ModItem {
         Item.width = 22;
         Item.height = 18;
         Item.value = 80;
+    }
+
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.AlchemySeeds;
     }
 }

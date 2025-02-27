@@ -18,4 +18,7 @@ sealed class BackwoodsDungeonKey : ModItem {
         Item.maxStack = Item.CommonMaxStack;
         Item.rare = 8;
     }
+
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        => itemGroup = ContentSamples.CreativeHelper.ItemGroup.Keys;
 }

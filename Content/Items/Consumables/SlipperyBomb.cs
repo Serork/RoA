@@ -39,7 +39,10 @@ sealed class SlipperyBomb : ModItem {
 		Item.shootSpeed = 5f;
 	}
 
-	public override void AddRecipes() {
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+    => itemGroup = ContentSamples.CreativeHelper.ItemGroup.Bombs;
+
+    public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient(ItemID.Bomb)
 			.AddIngredient<Materials.Galipot>()

@@ -16,8 +16,8 @@ namespace RoA.Content.Items.Special.Lothor;
 
 sealed class LothorBag : ModItem {
     public override void SetStaticDefaults() {
-        //ItemID.Sets.BossBag[Type] = true;
-        //ItemID.Sets.PreHardmodeLikeBossBag[Type] = true;
+        ItemID.Sets.BossBag[Type] = true;
+        ItemID.Sets.PreHardmodeLikeBossBag[Type] = true;
 
         Item.ResearchUnlockCount = 3;
     }
@@ -100,6 +100,7 @@ sealed class LothorBag : ModItem {
         for (float num6 = 0f; num6 < 1f; num6 += 0.34f) {
             spriteBatch.Draw(texture, drawPos + new Vector2(0f, 4f).RotatedBy((num6 + num4) * ((float)Math.PI * 2f)) * globalTimeWrappedHourly, frame, new Color(200, 60, 60, 77), rotation, frameOrigin, scale, SpriteEffects.None, 0f);
         }
-        return true;
+        spriteBatch.Draw(texture, drawPos, frame, lightColor, rotation, frameOrigin, scale, SpriteEffects.None, 0f);
+        return false;
     }
 }

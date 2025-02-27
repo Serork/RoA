@@ -24,6 +24,10 @@ sealed class Pistachio : ModItem {
         ItemID.Sets.ShimmerTransformToItem[Type] = 5342;
     }
 
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.Food;
+    }
+
     public override void SetDefaults() {
         Item.DefaultToFood(22, 27, 26, 18000);
         Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(0, 1));
