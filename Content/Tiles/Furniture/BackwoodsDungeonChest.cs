@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Miscellaneous;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -71,6 +73,19 @@ sealed class BackwoodsDungeonChest : ModTile {
     public override ushort GetMapOption(int i, int j) => this.IsLockedChest(i, j) ? (ushort)0 : (ushort)1;
 
     public override bool IsLockedChest(int i, int j) => (int)Main.tile[i, j].TileFrameX / 36 == 0;
+
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.BackwoodsDungeonChest>());
+    }
+
+    public override bool LockChest(int i, int j, ref short frameXAdjustment, ref bool manual) {
+        bool flag = Main.tile[i, j].TileFrameX == 0;
+        if (!flag && Main.tile[i, j].TileFrameX <= 36 && NPC.downedPlantBoss) {
+            frameXAdjustment = -36;
+            return true;
+        }
+        return false;
+    }
 
     public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual) {
 		if (!NPC.downedPlantBoss) {
