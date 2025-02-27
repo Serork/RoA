@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
-using RoA.Common.Items;
-using RoA.Content.Items.Materials;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 

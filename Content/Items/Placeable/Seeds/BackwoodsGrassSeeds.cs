@@ -29,6 +29,10 @@ sealed class BackwoodsGrassSeeds : ModItem {
         //Item.createTile = ModContent.TileType<BackwoodsGrass>();
     }
 
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
+        itemGroup = ContentSamples.CreativeHelper.ItemGroup.Blocks;
+    }
+
     public override bool? UseItem(Player player) {
         if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
             Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
