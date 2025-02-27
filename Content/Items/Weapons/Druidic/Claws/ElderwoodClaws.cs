@@ -23,14 +23,6 @@ sealed class ElderwoodClaws : BaseClawsItem {
 	
 	protected override (Color, Color) SlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<Elderwood>(), 10)
-            .AddRecipeGroup(RecipeGroupID.IronBar, 5)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
-
     private Vector2 GetPos(Player player, bool leftSided) {
         int direction = leftSided ? -1 : 1;
         GetPoints(player, direction, out Point point1, out Point point2);

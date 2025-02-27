@@ -23,11 +23,4 @@ sealed class LivingBackwoodsLeavesWall : ModItem {
         Item.height = 24;
         Item.createWall = ModContent.WallType<Tiles.Walls.LivingBackwoodsLeavesWall>();
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe(4)
-			.AddIngredient<Elderwood>()
-			.AddTile(TileID.LivingLoom)
-			.Register();
-	}
 }

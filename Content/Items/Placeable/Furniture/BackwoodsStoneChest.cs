@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-using RoA.Content.Items.Placeable.Crafting;
+﻿using RoA.Content.Items.Placeable.Crafting;
 using RoA.Core;
 
 using Terraria.ID;
@@ -19,13 +17,5 @@ sealed class BackwoodsStoneChest : ModItem {
         Item.value = 500;
 
         Item.createTile = ModContent.TileType<Tiles.Furniture.BackwoodsStoneChest>();
-	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<GrimstoneBrick>(8)
-			.AddRecipeGroup(RecipeGroupID.IronBar, 2)
-			.AddTile(TileID.WorkBenches)
-			.Register();
 	}
 }

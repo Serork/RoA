@@ -30,15 +30,6 @@ sealed class MercuriumBolt : ModItem {
         Item.rare = 3;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.WoodenArrow, 100)
-            .AddIngredient<MercuriumNugget>(1)
-            .AddTile(TileID.Anvils)
-            .SortAfterFirstRecipesOf(ItemID.UnholyArrow)
-            .Register();
-    }
-
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
         itemGroup = ContentSamples.CreativeHelper.ItemGroup.Ammo;
     }

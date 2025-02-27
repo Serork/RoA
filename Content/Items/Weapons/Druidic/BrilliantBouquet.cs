@@ -49,14 +49,6 @@ sealed class BrilliantBouquet : NatureItem {
         Item.shootSpeed = 8f;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<ExoticTulip>())
-            .AddIngredient(ModContent.ItemType<SweetTulip>())
-            .AddIngredient(ModContent.ItemType<WeepingTulip>())
-            .Register();
-    }
-
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         float offset3 = Item.width * 1.4f;
         if (!Collision.CanHit(player.Center, 0, 0, position + Vector2.Normalize(velocity) * offset3, 0, 0)) {

@@ -35,14 +35,6 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<Elderwood>(), 16)
-            .AddIngredient(ModContent.ItemType<NaturesHeart>(), 1)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
-
     public sealed class WoodbinderBase : BaseRodProjectile {
         private Vector2 _mousePosition;
         private float _strength = 0.15f;

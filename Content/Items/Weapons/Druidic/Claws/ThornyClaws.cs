@@ -17,15 +17,6 @@ sealed class ThornyClaws : BaseClawsItem {
         Item.SetWeaponValues(14, 4f);
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.RichMahogany, 10)
-            .AddIngredient(ItemID.Stinger, 8)
-            .AddIngredient(ItemID.JungleSpores, 6)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
-
     protected override (Color, Color) SlashColors(Player player) => (new Color(75, 167, 85), new Color(100, 200, 110));
 
     //protected override bool ShouldModifyShootStats => false;

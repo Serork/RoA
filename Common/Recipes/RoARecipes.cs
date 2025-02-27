@@ -24,6 +24,7 @@ using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
+using RoA.Content.Items.Weapons.Ranged.Ammo;
 
 using System.Linq;
 
@@ -45,13 +46,13 @@ sealed class RoARecipes : ModSystem {
         AddHerbItems();
         AddPlanterBoxes();
         AddOtherSawmill();
-        AddDruidItems1();
+        AddWreaths(out Recipe lastWreath);
+        AddDruidItems(lastWreath);
         AddCopperSets();
         AddBoneHarpySet();
         AddCorruptionRelatedStuff();
         AddCrimsonRelatedStuff();
         AddTinkererWorkShopItems();
-        AddWreaths();
         AddFood();
         AddTerrarium();
         AddIceBiomeItems();
@@ -84,8 +85,13 @@ sealed class RoARecipes : ModSystem {
         item = Recipe.Create(ModContent.ItemType<GrimstoneWall>(), 4);
         item.AddIngredient<Content.Items.Placeable.Crafting.Grimstone>();
         item.AddTile(TileID.WorkBenches);
-        item.AddCondition(Condition.InGraveyard);
-        item.SortAfterFirstRecipesOf(ItemID.Rocks4Echo);
+        item.SortAfterFirstRecipesOf(ItemID.StoneWall);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<LivingBackwoodsLeavesWall>(), 4);
+        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>();
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfterFirstRecipesOf(ItemID.LivingLeafWall);
         item.Register();
     }
 
@@ -101,6 +107,13 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<Grimstone>(2);
         item.AddTile(TileID.Furnaces);
         item.SortAfterFirstRecipesOf(ItemID.CrimtaneBrick);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<BackwoodsStoneChest>());
+        item.AddIngredient<GrimstoneBrick>(8);
+        item.AddRecipeGroup(RecipeGroupID.IronBar, 2);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfterFirstRecipesOf(ItemID.DesertChest);
         item.Register();
     }
     
@@ -132,7 +145,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<BackwoodsStoneChest>(1);
         item.AddIngredient(ItemID.Wire, 10);
         item.AddTile(TileID.HeavyWorkBench);
-        item.SortAfterFirstRecipesOf(ItemID.Fake_StardustChest);
+        item.SortAfterFirstRecipesOf(ItemID.Fake_DesertChest);
         item.Register();
 
         item = Recipe.Create(ModContent.ItemType<ElderwoodChest_Trapped>());
@@ -184,7 +197,7 @@ sealed class RoARecipes : ModSystem {
         item.Register();
     }
 
-    private static void AddWreaths() {
+    private static void AddWreaths(out Recipe lastWreath) {
         Recipe item = Recipe.Create(ModContent.ItemType<ForestWreath>());
         item.AddIngredient<TwigWreath>(1);
         item.AddIngredient(ItemID.Daybloom, 5);
@@ -243,6 +256,7 @@ sealed class RoARecipes : ModSystem {
         item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
         item.SortAfter(temp);
         item.Register();
+        lastWreath = item;
     }
 
     private static void AddTinkererWorkShopItems() {
@@ -419,7 +433,7 @@ sealed class RoARecipes : ModSystem {
         item.Register();
     }
 
-    private static void AddDruidItems1() {
+    private static void AddDruidItems(Recipe lastWreath) {
         Recipe item = Recipe.Create(ModContent.ItemType<PastoralRod>());
         item.AddRecipeGroup(RecipeGroupID.Wood, 5);
         item.AddIngredient(ItemID.Rope, 10);
@@ -433,6 +447,34 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient(ModContent.ItemType<Galipot>(), 5);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<SapStream>());
+        item.AddRecipeGroup(RecipeGroupID.Wood, 10);
+        item.AddIngredient(ModContent.ItemType<Galipot>(), 5);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<BrilliantBouquet>());
+        item.AddIngredient(ModContent.ItemType<ExoticTulip>());
+        item.AddIngredient(ModContent.ItemType<SweetTulip>());
+        item.AddIngredient(ModContent.ItemType<WeepingTulip>());
+        item.SortAfter(lastWreath);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<ThornyClaws>());
+        item.AddIngredient(ItemID.RichMahogany, 10);
+        item.AddIngredient(ItemID.Stinger, 8);
+        item.AddIngredient(ItemID.JungleSpores, 6);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.ThornWhip);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<RipePumpkin>());
+        item.AddIngredient(ItemID.Pumpkin, 15);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfterFirstRecipesOf(ItemID.PumpkinLeggings);
         item.Register();
     }
 
@@ -800,7 +842,14 @@ sealed class RoARecipes : ModSystem {
     }
 
     private static void AddMercuriumItems(Recipe starFusion) {
-        Recipe item = Recipe.Create(ModContent.ItemType<MercuriumNugget>());
+        Recipe item = Recipe.Create(ModContent.ItemType<MercuriumBolt>());
+        item.AddIngredient(ItemID.WoodenArrow, 100);
+        item.AddIngredient<MercuriumNugget>(1);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.UnholyArrow);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<MercuriumNugget>());
         item.AddIngredient<Content.Items.Placeable.Crafting.MercuriumOre>(4);
         item.AddTile(TileID.Furnaces);
         item.SortAfterFirstRecipesOf(ItemID.CrimtaneBar);
@@ -1087,6 +1136,22 @@ sealed class RoARecipes : ModSystem {
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodBow>());
         item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(10);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<ElderwoodClaws>());
+        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(10);
+        item.AddRecipeGroup(RecipeGroupID.IronBar, 5);
+        item.AddTile(TileID.Anvils);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<Woodbinder>());
+        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(16);
+        item.AddIngredient<NaturesHeart>(1);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
