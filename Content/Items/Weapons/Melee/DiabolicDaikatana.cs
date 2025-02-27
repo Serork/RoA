@@ -93,7 +93,7 @@ sealed class DiabolicDaikatana : ModItem {
                 return;
             }
 
-            Vector2 drawPosition = drawInfo.Position + new Vector2(0f, -2f);
+            Vector2 drawPosition = drawInfo.drawPlayer.MountedCenter - drawInfo.drawPlayer.Size / 2f + new Vector2(0f, -2f);
             drawPosition.X += 12f;
             if (player.direction == 1) {
                 drawPosition.X -= 4f;

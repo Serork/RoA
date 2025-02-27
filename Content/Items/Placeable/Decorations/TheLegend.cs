@@ -11,7 +11,7 @@ public class TheLegend : ModItem {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("The Legend");
         //Tooltip.SetDefault("'CKnight'");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1000000;
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
     public override void SetDefaults() {

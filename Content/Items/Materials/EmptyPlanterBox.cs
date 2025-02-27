@@ -1,10 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-
-using RoA.Content.Tiles.Crafting;
-
-using System;
-
-using Terraria;
+﻿using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +7,7 @@ namespace RoA.Content.Items.Materials;
 
 sealed class EmptyPlanterBox : ModItem {
     public override void SetStaticDefaults() {
-        // Item.ResearchUnlockCount = 25;
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
     }
 
     public override void SetDefaults() {

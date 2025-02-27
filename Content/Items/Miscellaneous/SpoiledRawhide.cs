@@ -7,11 +7,11 @@ namespace RoA.Content.Items.Miscellaneous;
 
 sealed class SpoiledRawhide : ModItem {
 	public override void SetStaticDefaults() {
-		// DisplayName.SetDefault("Spoiled Rawhide");
-		// Tooltip.SetDefault("This hide wasn't treated fast enough");
+        // DisplayName.SetDefault("Spoiled Rawhide");
+        // Tooltip.SetDefault("This hide wasn't treated fast enough");
 
-		Item.ResearchUnlockCount = 1;
-	}
+        Item.ResearchUnlockCount = 50;
+    }
 
 	public override void SetDefaults() {
 		int width = 26; int height = 22;

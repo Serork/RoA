@@ -11,7 +11,7 @@ sealed class MillionDollarPainting : ModItem {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Million Dollar Painting");
         //Tooltip.SetDefault("'VFD'");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1000000;
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
     public override void SetDefaults() {

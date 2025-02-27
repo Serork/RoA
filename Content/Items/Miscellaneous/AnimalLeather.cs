@@ -3,6 +3,7 @@
 using RoA.Content.Tiles.Crafting;
 
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,6 +13,8 @@ sealed class AnimalLeather : ModItem {
 	public override void SetStaticDefaults() {
 		// DisplayName.SetDefault("Animal Leather");
         Item.ResearchUnlockCount = 50;
+
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[ItemID.Leather] = 50;
     }
 
 	public override void SetDefaults() {
