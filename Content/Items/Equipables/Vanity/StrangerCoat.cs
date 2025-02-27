@@ -24,12 +24,4 @@ sealed class StrangerCoat : ModItem {
 		Item.value = Item.sellPrice(gold: 10);
 		Item.vanity = true;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Materials.FlamingFabric>(18)
-			.AddIngredient(ItemID.BlackInk)
-			.AddTile(TileID.DemonAltar)
-			.Register();
-	}
 }

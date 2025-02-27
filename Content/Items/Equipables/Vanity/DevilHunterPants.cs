@@ -22,12 +22,4 @@ sealed class DevilHunterPants : ModItem {
 		Item.value = Item.sellPrice(gold: 5);
 		Item.vanity = true;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Materials.FlamingFabric>(10)
-			.AddIngredient(ItemID.RedDye)
-			.AddTile(TileID.Loom)
-			.Register();
-	}
 }

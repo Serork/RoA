@@ -1,10 +1,15 @@
-﻿using RoA.Content.Items.Equipables.Armor.Ranged;
+﻿using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Armor.Magic;
+using RoA.Content.Items.Equipables.Armor.Nature;
+using RoA.Content.Items.Equipables.Armor.Ranged;
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Furniture;
 using RoA.Content.Items.Special;
 using RoA.Content.Items.Tools;
+using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
@@ -20,6 +25,98 @@ sealed class RoARecipes : ModSystem {
         AddElderwoodItems();
         AddDynastyWoodItems();
         AddMercuriumItems();
+        AddHellstoneItems();
+        AddFlamingFabricItems();
+    }
+
+    private static void AddFlamingFabricItems() {
+        // armor
+        Recipe item = Recipe.Create(ModContent.ItemType<AshwalkerHood>());
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(15);
+        item.AddTile(TileID.Loom);
+        item.SortAfterFirstRecipesOf(ItemID.FireproofBugNet);
+        item.Register();
+
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<AshwalkerRobe>());
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(25);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<AshwalkerLeggings>());
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(20);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<FlametrackerHat>());
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(12);
+        item.AddIngredient(ItemID.Leather, 10);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<FlametrackerJacket>());
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(20);
+        item.AddIngredient(ItemID.Leather, 15);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<FlametrackerPants>());
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(15);
+        item.AddIngredient(ItemID.Leather, 10);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
+
+        // accessories
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<CosmicHat>());
+        item.AddIngredient(ItemID.WizardHat, 1);
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(3);
+        item.AddIngredient(ItemID.ManaCrystal, 1);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
+
+        // vanity
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<DevilHunterCloak>());
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(15);
+        item.AddIngredient(ItemID.RedDye, 1);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<DevilHunterPants>());
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(10);
+        item.AddIngredient(ItemID.RedDye, 1);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
+    }
+
+    private static void AddHellstoneItems() {
+        Recipe item = Recipe.Create(ModContent.ItemType<StarFusion>());
+        item.AddIngredient(ItemID.Starfury, 1);
+        item.AddIngredient(ItemID.HellstoneBar, 10);
+        item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.FieryGreatsword);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<TectonicCane>());
+        item.AddIngredient(ItemID.HellstoneBar, 6);
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(10);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.ImpStaff);
+        item.Register();
     }
 
     private static void AddMercuriumItems() {
@@ -52,15 +149,6 @@ sealed class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<MercuriumSword>());
-        item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
-        item.AddTile(TileID.Anvils);
-        item.SortAfter(temp);
-        item.Register();
-
-        temp = item;
-        item = Recipe.Create(ModContent.ItemType<StarFusion>());
-        item.AddIngredient(ItemID.Starfury, 1);
-        item.AddIngredient(ItemID.HellstoneBar, 10);
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
         item.AddTile(TileID.Anvils);
         item.SortAfter(temp);

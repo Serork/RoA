@@ -37,11 +37,4 @@ sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask 
     public void SetDrawSettings(Player player, ref Texture2D texture, ref Color color) {
         color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5;
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient<Materials.FlamingFabric>(25)
-    		.AddTile(TileID.Loom)
-    		.Register();
-    }
 }

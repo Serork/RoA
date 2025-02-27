@@ -65,13 +65,4 @@ sealed class CosmicHat : ModItem {
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.GetModPlayer<CosmisHatHandler>().IsEffectActive = true;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.WizardHat)
-			.AddIngredient<Materials.FlamingFabric>(3)
-			.AddIngredient(ItemID.ManaCrystal, 1)
-			.AddTile(TileID.Loom)
-			.Register();
-	}
 }

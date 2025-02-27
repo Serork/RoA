@@ -22,12 +22,4 @@ sealed class StrangerPants : ModItem {
 		Item.value = Item.sellPrice(gold: 5);
 		Item.vanity = true;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Materials.FlamingFabric>(15)
-			.AddIngredient(ItemID.BlackInk)
-			.AddTile(TileID.DemonAltar)
-			.Register();
-	}
 }

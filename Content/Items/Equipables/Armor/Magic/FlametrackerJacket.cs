@@ -35,14 +35,6 @@ sealed class FlametrackerJacket : ModItem {
         player.GetDamage(DamageClass.Magic) += 0.05f;
         Lighting.AddLight(player.Center - new Vector2(6f * player.direction, 4f), new Vector3(194, 44, 44) * 0.0035f);
     }
-
-    public override void AddRecipes () {
-    	CreateRecipe()
-    		.AddIngredient<Materials.FlamingFabric>(20)
-    		.AddIngredient(ItemID.Leather, 15)
-    		.AddTile(TileID.Loom)
-    		.Register();
-    }
 }
 
 sealed class FlametrackerJacketFlame : PlayerDrawLayer {

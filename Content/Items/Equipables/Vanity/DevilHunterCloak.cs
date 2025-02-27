@@ -22,12 +22,4 @@ sealed class DevilHunterCloak : ModItem {
 		Item.value = Item.sellPrice(gold: 10);
 		Item.vanity = true;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Materials.FlamingFabric>(15)
-			.AddIngredient(ItemID.RedDye)
-			.AddTile(TileID.Loom)
-			.Register();
-	}
 }

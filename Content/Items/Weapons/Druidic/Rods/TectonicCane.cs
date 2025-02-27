@@ -32,14 +32,6 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.HellstoneBar, 6)
-            .AddIngredient(ModContent.ItemType<FlamingFabric>(), 10)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
-
     public sealed class TectonicCaneBase : BaseRodProjectile {
 
         private Vector2 _tempMousePosition;

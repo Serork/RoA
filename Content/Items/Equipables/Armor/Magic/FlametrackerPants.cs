@@ -27,12 +27,4 @@ sealed class FlametrackerPants : ModItem {
         player.manaCost -= 0.08f;
         player.GetDamage(DamageClass.Magic) += 0.05f;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<Materials.FlamingFabric>(15)
-            .AddIngredient(ItemID.Leather, 10)
-            .AddTile(TileID.Loom)
-            .Register();
-    }
 }

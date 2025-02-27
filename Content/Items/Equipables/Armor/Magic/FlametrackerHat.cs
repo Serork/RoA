@@ -72,14 +72,6 @@ sealed class FlametrackerHat : ModItem {
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.FlametrackerSetBonus").Value;
         player.GetModPlayer<FlametrackerSetBonusHandler>().IsActive = true;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<Materials.FlamingFabric>(12)
-			.AddIngredient(ItemID.Leather, 10)
-            .AddTile(TileID.Loom)
-            .Register();
-    }
 }
 
 sealed class FlametrackerHatFlame : PlayerDrawLayer {
