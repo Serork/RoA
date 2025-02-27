@@ -20,10 +20,4 @@ sealed class ElderwoodPlatform : ModItem {
 		Item.value = 0;
         Item.createTile = ModContent.TileType<Tiles.Platforms.ElderwoodPlatform>();
 	}
-
-		public override void AddRecipes() {
-			CreateRecipe(2)
-				.AddIngredient<Crafting.Elderwood>(1)
-				.Register();
-		}
 }

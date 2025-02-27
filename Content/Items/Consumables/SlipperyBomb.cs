@@ -41,11 +41,4 @@ sealed class SlipperyBomb : ModItem {
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
 		=> itemGroup = ContentSamples.CreativeHelper.ItemGroup.Bombs;
-
-    public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.Bomb)
-			.AddIngredient<Materials.Galipot>()
-			.Register();
-	}
 }

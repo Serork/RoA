@@ -55,11 +55,4 @@ public class SlipperyGlowstick : ModItem {
 	public override void PostUpdate() {
 		Lighting.AddLight((int)((Item.position.X + Item.width / 2) / 16f), (int)((Item.position.Y + Item.height / 2) / 16f), 0.45f, 0.35f, 0f);
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe(5)
-			.AddIngredient(ItemID.Glowstick, 5)
-			.AddIngredient<Materials.Galipot>()
-			.Register();
-	}
 }

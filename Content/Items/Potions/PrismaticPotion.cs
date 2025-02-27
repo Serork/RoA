@@ -39,15 +39,4 @@ sealed class PrismaticPotion : ModItem {
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
         itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.BottledWater)
-            .AddIngredient(ItemID.Prismite)
-            .AddIngredient(ItemID.ButterflyDust)
-            .AddIngredient(ItemID.Deathweed)
-            .AddIngredient<Materials.MiracleMint>()
-            .AddTile(TileID.Bottles)
-            .Register();
-    }
 }

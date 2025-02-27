@@ -39,12 +39,4 @@ sealed class BrightstonePotion : ModItem {
 	public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
 		itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
 	}
-
-    public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.ShinePotion)
-			.AddIngredient<Materials.Bonerose>()
-			.AddTile(TileID.Bottles)
-			.Register();
-	}
 }

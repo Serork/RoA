@@ -10,11 +10,4 @@ sealed class MiracleMintHangingPot : ModItem {
         Item.value = Item.sellPrice(0, 0, 25);
         Item.Size = new Microsoft.Xna.Framework.Vector2(16, 36);
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.PotSuspended)
-            .AddIngredient<Materials.MiracleMint>(1)
-            .Register();
-    }
 }

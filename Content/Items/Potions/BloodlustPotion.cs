@@ -39,14 +39,4 @@ sealed class BloodlustPotion : ModItem {
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
 		=> itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
-
-    public override void AddRecipes () {
-		CreateRecipe()
-			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient(ItemID.Deathweed)
-			.AddIngredient<Materials.Bonerose>()
-			.AddIngredient(ItemID.Vine)
-			.AddTile(TileID.Bottles)
-			.Register();
-	}
 }

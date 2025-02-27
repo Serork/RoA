@@ -40,11 +40,4 @@ sealed class SlipperyDynamite : ModItem {
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
 		=> itemGroup = ContentSamples.CreativeHelper.ItemGroup.Bombs;
-
-    public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.Dynamite)
-			.AddIngredient<Materials.Galipot>()
-			.Register();
-	}
 }

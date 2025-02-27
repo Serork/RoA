@@ -40,14 +40,4 @@ sealed class DryadBloodPotion : ModItem {
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
         itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
     }
-
-    public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient<Materials.MiracleMint>()
-			.AddIngredient(ItemID.Waterleaf)
-			.AddIngredient<Materials.Galipot>()
-			.AddTile(TileID.Bottles)
-			.Register();
-	}
 }

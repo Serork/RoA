@@ -34,22 +34,4 @@ sealed class WeaknessPotion : ModItem {
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
         itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
     }
-
-    public override void AddRecipes() {
-		CreateRecipe(3)
-			.AddIngredient(ItemID.BottledWater, 3)
-            .AddIngredient<Materials.Bonerose>()
-            .AddIngredient<Materials.MiracleMint>()
-            .AddIngredient(ItemID.RottenChunk)
-			.AddTile(TileID.Bottles)
-			.Register();
-
-        CreateRecipe(3)
-            .AddIngredient(ItemID.BottledWater, 3)
-            .AddIngredient<Materials.Bonerose>()
-            .AddIngredient<Materials.MiracleMint>()
-            .AddIngredient(ItemID.Vertebrae)
-            .AddTile(TileID.Bottles)
-            .Register();
-    }
 }

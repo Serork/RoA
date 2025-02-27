@@ -40,13 +40,4 @@ sealed class ResiliencePotion : NatureItem {
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
         itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
     }
-
-    public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.BottledWater)
-			.AddIngredient<Materials.MiracleMint>()
-			.AddIngredient(ItemID.Moonglow)
-			.AddTile(TileID.Bottles)
-			.Register();
-	}
 }

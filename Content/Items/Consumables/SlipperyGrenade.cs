@@ -40,11 +40,4 @@ sealed class SlipperyGrenade : ModItem {
 		Item.shootSpeed = 5.5f;
 		Item.knockBack = 8f;
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe(2)
-			.AddIngredient(ItemID.Grenade, 2)
-			.AddIngredient<Materials.Galipot>(1)
-			.Register();
-	}
 }

@@ -39,14 +39,4 @@ sealed class WillpowerPotion : NatureItem {
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
         itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
     }
-
-    public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.BottledWater)
-            .AddIngredient(ItemID.Blinkroot)
-            .AddIngredient<Materials.Bonerose>()
-            .AddIngredient<Materials.Galipot>()
-			.AddTile(TileID.Bottles)
-			.Register();
-	}
 }

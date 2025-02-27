@@ -1,12 +1,16 @@
-﻿using RoA.Content.Items.Equipables.Accessories;
+﻿using RoA.Content.Items.Consumables;
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Armor.Magic;
 using RoA.Content.Items.Equipables.Armor.Nature;
 using RoA.Content.Items.Equipables.Armor.Ranged;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Vanity;
+using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
+using RoA.Content.Items.Placeable;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Furniture;
+using RoA.Content.Items.Potions;
 using RoA.Content.Items.Special;
 using RoA.Content.Items.Tools;
 using RoA.Content.Items.Weapons.Druidic.Rods;
@@ -24,9 +28,181 @@ sealed class RoARecipes : ModSystem {
     public override void AddRecipes() {
         AddElderwoodItems();
         AddDynastyWoodItems();
-        AddMercuriumItems();
-        AddHellstoneItems();
+        AddHellstoneItems(out Recipe starFusion);
+        AddMercuriumItems(starFusion);
         AddFlamingFabricItems();
+        AddGalipotItems();
+        AddHerbItems();
+        AddPlanterBoxes();
+    }
+
+    private static void AddPlanterBoxes() {
+        void addRecipe(short itemType) {
+            Recipe result = Recipe.Create(itemType);
+            result.AddIngredient(ModContent.ItemType<EmptyPlanterBox>(), 1);
+            result.SortBeforeFirstRecipesOf(ItemID.PotSuspendedDaybloom);
+            result.Register();
+        }
+        short[] planterBoxes = [ItemID.BlinkrootPlanterBox, ItemID.CorruptPlanterBox, ItemID.CrimsonPlanterBox, ItemID.DayBloomPlanterBox,
+                                ItemID.FireBlossomPlanterBox, ItemID.MoonglowPlanterBox, ItemID.ShiverthornPlanterBox, ItemID.WaterleafPlanterBox];
+        foreach (short planterBox in planterBoxes) {
+            addRecipe(planterBox);
+        }
+        for (int i = ItemID.Count; i < ItemLoader.ItemCount; i++) {
+            ModItem item = ItemLoader.GetItem(i);
+            if (item.Type == ModContent.ItemType<EmptyPlanterBox>()) {
+                continue;
+            }
+            if (item.GetType().ToString().Contains("PlanterBox")) {
+                addRecipe((short)item.Type);
+            }
+        }
+    }
+
+    private static void AddHerbItems() {
+        Recipe item = Recipe.Create(ModContent.ItemType<Herbarium>());
+        item.AddIngredient(ItemID.Book);
+        item.AddIngredient(ItemID.Daybloom);
+        item.AddIngredient(ItemID.Shiverthorn);
+        item.AddIngredient(ItemID.Blinkroot);
+        item.AddIngredient(ItemID.Waterleaf);
+        item.AddIngredient(ItemID.Deathweed);
+        item.AddIngredient(ItemID.Moonglow);
+        item.AddIngredient(ModContent.ItemType<Content.Items.Materials.MiracleMint>());
+        item.AddIngredient(ModContent.ItemType<Content.Items.Materials.Bonerose>());
+        item.AddIngredient(ItemID.Fireblossom);
+        item.AddTile(TileID.Bookcases);
+        item.SortAfterFirstRecipesOf(ItemID.GarlandHat);
+        item.Register();
+
+        // tiles
+        item = Recipe.Create(ModContent.ItemType<MiracleMintHangingPot>());
+        item.AddIngredient(ItemID.PotSuspended);
+        item.AddIngredient(ModContent.ItemType<Content.Items.Materials.MiracleMint>());
+        item.SortAfterFirstRecipesOf(ItemID.PotSuspendedFireblossom);
+        item.Register();
+
+        // throwable potions
+        item = Recipe.Create(ModContent.ItemType<WeaknessPotion>(), 3);
+        item.AddIngredient(ItemID.BottledWater, 3);
+        item.AddIngredient<Content.Items.Materials.Bonerose>();
+        item.AddIngredient<Content.Items.Materials.MiracleMint>();
+        item.AddIngredient(ItemID.RottenChunk);
+        item.AddTile(TileID.Bottles);
+        item.SortAfterFirstRecipesOf(ItemID.StinkPotion);
+        item.Register();
+
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<WeaknessPotion>(), 3);
+        item.AddIngredient(ItemID.BottledWater, 3);
+        item.AddIngredient<Content.Items.Materials.Bonerose>();
+        item.AddIngredient<Content.Items.Materials.MiracleMint>();
+        item.AddIngredient(ItemID.Vertebrae);
+        item.AddTile(TileID.Bottles);
+        item.SortAfter(temp);
+        item.Register();
+
+        // other potions
+        item = Recipe.Create(ModContent.ItemType<BloodlustPotion>());
+        item.AddIngredient(ItemID.BottledWater);
+        item.AddIngredient(ItemID.Deathweed);
+        item.AddIngredient<Content.Items.Materials.Bonerose>();
+        item.AddIngredient(ItemID.Vine);
+        item.AddTile(TileID.Bottles);
+        item.SortAfterFirstRecipesOf(ItemID.LifeforcePotion);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<DeathWardPotion>());
+        item.AddIngredient(ItemID.BottledWater);
+        item.AddIngredient<Content.Items.Materials.MiracleMint>();
+        item.AddIngredient(ItemID.Fireblossom);
+        item.AddIngredient(ItemID.Worm);
+        item.AddTile(TileID.Bottles);
+        item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<DryadBloodPotion>());
+        item.AddIngredient(ItemID.BottledWater);
+        item.AddIngredient<Content.Items.Materials.MiracleMint>();
+        item.AddIngredient(ItemID.Waterleaf);
+        item.AddIngredient<Content.Items.Materials.Galipot>();
+        item.AddTile(TileID.Bottles);
+        item.SortAfterFirstRecipesOf(ItemID.WarmthPotion);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<PrismaticPotion>());
+        item.AddIngredient(ItemID.BottledWater);
+        item.AddIngredient(ItemID.Prismite);
+        item.AddIngredient(ItemID.ButterflyDust);
+        item.AddIngredient(ItemID.Deathweed);
+        item.AddIngredient<Content.Items.Materials.MiracleMint>();
+        item.AddTile(TileID.Bottles);
+        item.SortAfterFirstRecipesOf(ItemID.WrathPotion);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<WeightPotion>());
+        item.AddIngredient(ItemID.BottledWater);
+        item.AddIngredient(ItemID.Daybloom);
+        item.AddIngredient(ItemID.SiltBlock);
+        item.AddTile(TileID.Bottles);
+        item.SortAfterFirstRecipesOf(ItemID.FeatherfallPotion);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<ResiliencePotion>());
+        item.AddIngredient(ItemID.BottledWater);
+        item.AddIngredient<Content.Items.Materials.MiracleMint>();
+        item.AddIngredient(ItemID.Moonglow);
+        item.AddTile(TileID.Bottles);
+        item.SortAfterFirstRecipesOf(ItemID.MagicPowerPotion);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<WillpowerPotion>());
+        item.AddIngredient(ItemID.BottledWater);
+        item.AddIngredient(ItemID.Blinkroot);
+        item.AddIngredient<Content.Items.Materials.Bonerose>();
+        item.AddIngredient<Content.Items.Materials.Galipot>();
+        item.AddTile(TileID.Bottles);
+        item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<BrightstonePotion>());
+        item.AddIngredient(ItemID.ShinePotion);
+        item.AddIngredient<Content.Items.Materials.Bonerose>();
+        item.AddTile(TileID.Bottles);
+        item.SortAfterFirstRecipesOf(ItemID.ShinePotion);
+        item.Register();
+    }
+
+    private static void AddGalipotItems() {
+        // slippery items
+        Recipe item = Recipe.Create(ModContent.ItemType<SlipperyGrenade>(), 2);
+        item.AddIngredient(ItemID.Grenade, 2);
+        item.AddIngredient<Content.Items.Materials.Galipot>(1);
+        item.SortAfterFirstRecipesOf(ItemID.WoodYoyo);
+        item.Register();
+
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<SlipperyBomb>());
+        item.AddIngredient(ItemID.Bomb);
+        item.AddIngredient<Content.Items.Materials.Galipot>(1);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<SlipperyDynamite>());
+        item.AddIngredient(ItemID.Dynamite);
+        item.AddIngredient<Content.Items.Materials.Galipot>(1);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<SlipperyGlowstick>(), 5);
+        item.AddIngredient(ItemID.Glowstick, 5);
+        item.AddIngredient<Content.Items.Materials.Galipot>(1);
+        item.SortAfter(temp);
+        item.Register();
     }
 
     private static void AddFlamingFabricItems() {
@@ -75,16 +251,6 @@ sealed class RoARecipes : ModSystem {
         item.SortAfter(temp);
         item.Register();
 
-        // accessories
-        temp = item;
-        item = Recipe.Create(ModContent.ItemType<CosmicHat>());
-        item.AddIngredient(ItemID.WizardHat, 1);
-        item.AddIngredient<Content.Items.Materials.FlamingFabric>(3);
-        item.AddIngredient(ItemID.ManaCrystal, 1);
-        item.AddTile(TileID.Loom);
-        item.SortAfter(temp);
-        item.Register();
-
         // vanity
         temp = item;
         item = Recipe.Create(ModContent.ItemType<DevilHunterCloak>());
@@ -100,16 +266,27 @@ sealed class RoARecipes : ModSystem {
         item.AddTile(TileID.Loom);
         item.SortAfter(temp);
         item.Register();
+
+        // accessories
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<CosmicHat>());
+        item.AddIngredient(ItemID.WizardHat, 1);
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(3);
+        item.AddIngredient(ItemID.ManaCrystal, 1);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
     }
 
-    private static void AddHellstoneItems() {
+    private static void AddHellstoneItems(out Recipe starFusion) {
         Recipe item = Recipe.Create(ModContent.ItemType<StarFusion>());
         item.AddIngredient(ItemID.Starfury, 1);
         item.AddIngredient(ItemID.HellstoneBar, 10);
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
         item.AddTile(TileID.Anvils);
-        item.SortAfterFirstRecipesOf(ItemID.FieryGreatsword);
+        item.SortAfterFirstRecipesOf(ItemID.FireproofBugNet);
         item.Register();
+        starFusion = item;
 
         item = Recipe.Create(ModContent.ItemType<TectonicCane>());
         item.AddIngredient(ItemID.HellstoneBar, 6);
@@ -119,7 +296,7 @@ sealed class RoARecipes : ModSystem {
         item.Register();
     }
 
-    private static void AddMercuriumItems() {
+    private static void AddMercuriumItems(Recipe starFusion) {
         Recipe item = Recipe.Create(ModContent.ItemType<MercuriumBolter>());
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(8);
         item.AddTile(TileID.Anvils);
@@ -195,7 +372,7 @@ sealed class RoARecipes : ModSystem {
         item.Register();
 
         // staves
-        temp = item;
+        temp = starFusion;
         item = Recipe.Create(ModContent.ItemType<RodOfTheDragonfire>());
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(15);
         item.AddIngredient(ItemID.GoldBar, 10);
@@ -512,6 +689,11 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(6);
         item.AddTile(TileID.Sawmill);
         item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<ElderwoodPlatform>(), 2);
+        item.AddIngredient(ModContent.ItemType<Elderwood>(), 1);
+        item.SortAfterFirstRecipesOf(ItemID.AshWoodPlatform);
         item.Register();
     }
 }
