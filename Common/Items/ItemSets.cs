@@ -14,8 +14,20 @@ using Terraria.ModLoader;
 namespace RoA.Common.Items;
 
 sealed class ItemSets : ILoadable {
+    public static bool[] ShouldCreateTile = ItemID.Sets.Factory.CreateBoolSet(true);
+
     public void Load(Mod mod) {
         On_SmartCursorHelper.Step_GrassSeeds += On_SmartCursorHelper_Step_GrassSeeds;
+        On_Player.PlaceThing_Tiles_PlaceIt += On_Player_PlaceThing_Tiles_PlaceIt;
+    }
+
+    private TileObject On_Player_PlaceThing_Tiles_PlaceIt(On_Player.orig_PlaceThing_Tiles_PlaceIt orig, Player self, bool newObjectType, TileObject data, int tileToCreate) {
+        Item item = self.inventory[self.selectedItem];
+        if (!ShouldCreateTile[item.type]) {
+            return data;
+        }
+
+        return orig(self, newObjectType, data, tileToCreate);
     }
 
     private void On_SmartCursorHelper_Step_GrassSeeds(On_SmartCursorHelper.orig_Step_GrassSeeds orig, object providedInfo, ref int focusedX, ref int focusedY) {
