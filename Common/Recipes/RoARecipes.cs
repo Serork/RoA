@@ -964,19 +964,19 @@ sealed class RoARecipes : ModSystem {
     private static void AddElderwoodItems() {
         Recipe item = Recipe.Create(ModContent.ItemType<Elderwood>());
         item.AddIngredient<Content.Items.Placeable.Furniture.ElderwoodPlatform>(2);
-        Recipe ashWoodFromPlatform = Main.recipe.FirstOrDefault(x => x.createItem.type == ItemID.AshWoodPlatform);
+        Recipe ashWoodFromPlatform = Main.recipe.FirstOrDefault(x => x.requiredItem.Any(x2 => x2.type == ItemID.AshWoodPlatform));
         item.SortAfter(ashWoodFromPlatform);
         item.Register();
         item = Recipe.Create(ModContent.ItemType<Elderwood>());
         item.AddIngredient<Content.Items.Placeable.Walls.ElderwoodWall>(4);
         item.AddTile(TileID.WorkBenches);
-        Recipe ashWoodFromWall = Main.recipe.FirstOrDefault(x => x.createItem.type == ItemID.AshWoodWall);
+        Recipe ashWoodFromWall = Main.recipe.FirstOrDefault(x => x.requiredItem.Any(x2 => x2.type == ItemID.AshWoodWall));
         item.SortAfter(ashWoodFromWall);
         item.Register();
         item = Recipe.Create(ModContent.ItemType<Elderwood>());
         item.AddIngredient<Content.Items.Placeable.Walls.ElderwoodFence>(4);
         item.AddTile(TileID.WorkBenches);
-        Recipe ashWoodFromFence = Main.recipe.FirstOrDefault(x => x.createItem.type == ItemID.AshWoodFence);
+        Recipe ashWoodFromFence = Main.recipe.FirstOrDefault(x => x.requiredItem.Any(x2 => x2.type == ItemID.AshWoodFence));
         item.SortAfter(ashWoodFromFence);
         item.Register();
 
