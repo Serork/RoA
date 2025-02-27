@@ -21,11 +21,4 @@ sealed class ElderwoodFence : ModItem {
         Item.height = 30;
         Item.createWall = ModContent.WallType<Tiles.Walls.ElderwoodFence>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe(4)
-			.AddIngredient<Crafting.Elderwood>()
-			.AddTile(TileID.WorkBenches)
-			.Register();
-	}
 }

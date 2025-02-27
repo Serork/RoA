@@ -14,6 +14,7 @@ using RoA.Content.Items.Placeable;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Decorations;
 using RoA.Content.Items.Placeable.Furniture;
+using RoA.Content.Items.Placeable.Walls;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Special;
 using RoA.Content.Items.Tools;
@@ -57,10 +58,58 @@ sealed class RoARecipes : ModSystem {
         AddTrappedChests();
         AddTorch();
         AddWalls();
+        AddCampfire();
+        AddOther();
     }
 
     private static void AddWalls() {
+        Recipe item = Recipe.Create(ModContent.ItemType<ElderwoodFence>(), 4);
+        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>();
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfterFirstRecipesOf(ItemID.AshWoodFence);
+        item.Register();
 
+        item = Recipe.Create(ModContent.ItemType<ElderwoodWall>(), 4);
+        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>();
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfterFirstRecipesOf(ItemID.AshWoodWall);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<GrimstoneBrickWall>(), 4);
+        item.AddIngredient<Content.Items.Placeable.Crafting.GrimstoneBrick>();
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfterFirstRecipesOf(ItemID.CrimtaneBrickWall);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<GrimstoneWall>(), 4);
+        item.AddIngredient<Content.Items.Placeable.Crafting.Grimstone>();
+        item.AddTile(TileID.WorkBenches);
+        item.AddCondition(Condition.InGraveyard);
+        item.SortAfterFirstRecipesOf(ItemID.Rocks4Echo);
+        item.Register();
+    }
+
+    private static void AddOther() {
+        Recipe item = Recipe.Create(ModContent.ItemType<Grimstone>());
+        item.AddIngredient(ItemID.StoneBlock);
+        item.AddCondition(Condition.NearWater);
+        Recipe mudBlock = Main.recipe.FirstOrDefault(x => x.createItem.type == ItemID.MudBlock && x.requiredItem.Any(x2 => x2.type == ItemID.DirtBlock));
+        item.SortAfter(mudBlock);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<GrimstoneBrick>());
+        item.AddIngredient<Grimstone>(2);
+        item.AddTile(TileID.Furnaces);
+        item.SortAfterFirstRecipesOf(ItemID.CrimtaneBrick);
+        item.Register();
+    }
+    
+    private static void AddCampfire() {
+        Recipe item = Recipe.Create(ModContent.ItemType<BackwoodsCampfire>());
+        item.AddRecipeGroup(RecipeGroupID.Wood, 10);
+        item.AddIngredient<ElderTorch>(5);
+        item.SortAfterFirstRecipesOf(ItemID.JungleCampfire);
+        item.Register();
     }
 
     private static void AddTorch() {

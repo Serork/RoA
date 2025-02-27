@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-using Terraria;
+﻿using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -26,11 +24,4 @@ sealed class GrimstoneBrick : ModItem {
 
         Item.createTile = ModContent.TileType<Tiles.Solid.BackwoodsStoneBrick>();
 	}
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<Grimstone>(2)
-            .AddTile(TileID.Furnaces)
-            .Register();
-    }
 }

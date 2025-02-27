@@ -21,11 +21,4 @@ sealed class GrimstoneWall : ModItem {
         Item.height = 24;
         Item.createWall = ModContent.WallType<Tiles.Walls.GrimstoneWall>();
 	}
-
-	public override void AddRecipes() {
-		CreateRecipe(4)
-			.AddIngredient<Crafting.Grimstone>()
-			.AddTile(TileID.WorkBenches)
-			.Register();
-	}
 }

@@ -22,11 +22,4 @@ sealed class GrimstoneBrickWall : ModItem {
         Item.createWall = ModContent.WallType<Tiles.Walls.GrimstoneBrickWall>();
         Item.value = 20;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe(4)
-            .AddIngredient<Crafting.Grimstone>()
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
 }
