@@ -135,6 +135,6 @@ sealed class SentinelWarrior : ModNPC {
         npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SentinelShield>(), 10));
     }
 
-    public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        => spawnInfo.Player.ZoneDungeon && spawnInfo.SpawnTileY > Main.rockLayer ? SpawnCondition.Dungeon.Chance * 0.025f : 0f;
+    //public override float SpawnChance(NPCSpawnInfo spawnInfo)
+    //    => spawnInfo.Player.ZoneDungeon && spawnInfo.SpawnTileY > Main.rockLayer ? SpawnCondition.Dungeon.Chance * 0.025f : 0f;
 }

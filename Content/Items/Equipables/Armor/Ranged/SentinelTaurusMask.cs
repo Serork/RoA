@@ -2,8 +2,11 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Players;
 
+using System.Linq;
+
 using Terraria;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -12,7 +15,23 @@ namespace RoA.Content.Items.Equipables.Armor.Ranged;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class SentinelTaurusMask : ModItem {
-	public override void SetStaticDefaults() {
+	private sealed class SentinelTaurusDrop : GlobalNPC {
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
+            int[] npcNetIds9 = new int[5] {
+				31,
+				32,
+				294,
+				295,
+				296
+			};
+			if (npcNetIds9.Contains(npc.netID)) {
+				npcLoot.Add(ItemDropRule.Common((ushort)ModContent.ItemType<SentinelTaurusMask>(), 450));
+            }
+        }
+    }
+
+
+    public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Sentinel Taurus Mask");
 		//Tooltip.SetDefault("Increases running acceleration speed");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

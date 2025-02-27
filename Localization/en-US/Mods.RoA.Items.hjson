@@ -1611,11 +1611,20 @@ LivingPalmHelmet: {
 }
 
 BeachWreath: {
-	DisplayName: Beach Wreath
-	Tooltip: ""
+	DisplayName: Beach Wreath I
+	Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		While [kw/n:wreath] is charged:
+		'''
 }
 
 BeachWreath2: {
-	DisplayName: Beach Wreath2
-	Tooltip: ""
+	DisplayName: Beach Wreath II
+	Tooltip:
+		'''
+		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Up to 10% reduced damage taken
+		While [kw/n:wreath] is charged:
+		'''
 }
