@@ -27,11 +27,4 @@ sealed class DynastyWoodHammer : ModItem {
         Item.rare = ItemRarityID.White;
         Item.UseSound = SoundID.Item1;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.DynastyWood, 8)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
 }

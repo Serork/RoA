@@ -21,13 +21,4 @@ sealed class ElderwoodPiano : ModItem {
         Item.value = Item.sellPrice(copper: 60);
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodPiano>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(15)
-			.AddIngredient(ItemID.Bone, 4)
-			.AddIngredient(ItemID.Book)
-			.AddTile(TileID.Sawmill)
-			.Register();
-	}
 }

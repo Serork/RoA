@@ -16,22 +16,6 @@ namespace RoA.Content.Items.Weapons.Magic;
 sealed class RodOfTheShock : Rod {
     protected override Color? LightingColor => new(86, 173, 177);
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
-            .AddIngredient(ItemID.GoldBar, 10)
-            .AddIngredient(ModContent.ItemType<SphereOfShock>())
-            .AddTile(TileID.Anvils)
-            .Register();
-
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
-            .AddIngredient(ItemID.PlatinumBar, 10)
-            .AddIngredient(ModContent.ItemType<SphereOfShock>())
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
-
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 

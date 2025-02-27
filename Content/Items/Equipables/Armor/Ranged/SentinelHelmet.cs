@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Players;
+using RoA.Content.Items.Weapons.Magic;
+using RoA.Content.Items.Weapons.Ranged;
 
 using System;
 
@@ -38,13 +40,5 @@ sealed class SentinelHelmet : ModItem {
     public override void UpdateArmorSet(Player player) {
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.SentinelSetBonus1").Value;
 		if (Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) < 1f) player.detectCreature = true;
-	}
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Materials.MercuriumNugget>(10)
-			.AddIngredient(ItemID.Leather, 8)
-			.AddTile(TileID.Anvils)
-			.Register();
 	}
 }

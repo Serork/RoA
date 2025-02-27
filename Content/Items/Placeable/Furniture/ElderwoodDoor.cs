@@ -21,11 +21,4 @@ sealed class ElderwoodDoor : ModItem {
         Item.value = 200;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodDoorClosed>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(6)
-			.AddTile(TileID.WorkBenches)
-			.Register();
-	}
 }

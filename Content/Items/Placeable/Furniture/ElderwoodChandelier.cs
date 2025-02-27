@@ -21,13 +21,4 @@ sealed class ElderwoodChandelier : ModItem {
 		Item.value = 3000;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChandelier>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(4)
-			.AddIngredient(ItemID.Torch, 4)
-			.AddIngredient(ItemID.Chain)
-			.AddTile(TileID.WorkBenches)
-			.Register();
-	}
 }

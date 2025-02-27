@@ -45,11 +45,4 @@ sealed class MercuriumPickaxe : ModItem {
         if (Main.rand.Next(5) == 0)
             Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, ModContent.DustType<ToxicFumes>(), player.direction * 2, 0f, 0, default(Color), 1.3f);
     }
-
-    public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Materials.MercuriumNugget>(18)
-			.AddTile(TileID.Anvils)
-			.Register();
-	}
 }

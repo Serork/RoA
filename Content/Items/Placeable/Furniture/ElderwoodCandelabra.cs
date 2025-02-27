@@ -21,12 +21,4 @@ sealed class ElderwoodCandelabra : ModItem {
         Item.value = 1500;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodCandelabra>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(5)
-			.AddIngredient(ItemID.Torch, 3)
-			.AddTile(TileID.WorkBenches)
-			.Register();
-	}
 }

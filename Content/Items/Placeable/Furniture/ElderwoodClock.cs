@@ -21,13 +21,4 @@ sealed class ElderwoodClock : ModItem {
         Item.value = 300;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodClock>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(10)
-			.AddRecipeGroup(RecipeGroupID.IronBar, 3)
-			.AddIngredient(ItemID.Glass, 6)
-			.AddTile(TileID.Sawmill)
-			.Register();
-	}
 }

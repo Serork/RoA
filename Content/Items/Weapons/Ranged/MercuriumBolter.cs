@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
 using RoA.Content.Items.Materials;
+using RoA.Content.Items.Tools;
+using RoA.Content.Items.Weapons.Melee;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -52,11 +54,4 @@ sealed class MercuriumBolter : ModItem {
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(-1f, 0);
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 8)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
 }

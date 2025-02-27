@@ -15,11 +15,4 @@ sealed class ElderwoodToilet : ModItem {
         Item.maxStack = Item.CommonMaxStack;
         Item.value = 150;
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(6)
-            .AddTile(TileID.Sawmill)
-            .Register();
-	}
 }

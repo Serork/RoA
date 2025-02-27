@@ -21,12 +21,4 @@ sealed class ElderwoodBookcase : ModItem {
         Item.value = 300;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBookcase>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(20)
-			.AddIngredient(ItemID.Book, 10)
-			.AddTile(TileID.Sawmill)
-			.Register();
-	}
 }

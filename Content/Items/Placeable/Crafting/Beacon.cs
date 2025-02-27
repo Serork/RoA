@@ -10,6 +10,8 @@ namespace RoA.Content.Items.Placeable.Crafting;
 sealed class Beacon : ModItem {
     public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        ItemID.Sets.SortingPriorityWiring[Type] = 82;
     }
 
     public override void SetDefaults() {
@@ -26,13 +28,7 @@ sealed class Beacon : ModItem {
 
         Item.createTile = ModContent.TileType<Tiles.Crafting.Beacon>();
     }
-	
-	public override void AddRecipes() {
-    	CreateRecipe()
-			.AddIngredient<Materials.MercuriumNugget>(10)
-            .AddIngredient(ItemID.Lens)
-            .AddIngredient(ItemID.Wire, 5)
-            .AddTile(TileID.Anvils)
-    		.Register();
-    }
+
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        => itemGroup = ContentSamples.CreativeHelper.ItemGroup.Wiring;
 }

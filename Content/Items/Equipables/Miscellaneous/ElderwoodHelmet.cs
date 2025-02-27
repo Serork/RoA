@@ -36,13 +36,6 @@ sealed class ElderwoodHelmet : ModItem {
         player.GetModPlayer<ElderwoodSetBonusHandler>().IsSetBonusActive = true;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<Placeable.Crafting.Elderwood>(20)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
-
     private sealed class ElderwoodSetBonusHandler : ModPlayer {
         public bool IsSetBonusActive;
 

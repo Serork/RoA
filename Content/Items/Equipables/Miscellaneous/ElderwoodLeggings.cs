@@ -22,11 +22,4 @@ sealed class ElderwoodLeggings : ModItem {
 
         Item.defense = 2;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<Placeable.Crafting.Elderwood>(25)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
 }

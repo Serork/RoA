@@ -13,6 +13,7 @@ sealed class BackwoodsCampfire : ModItem {
         CreateRecipe()
             .AddRecipeGroup(RecipeGroupID.Wood, 10)
             .AddIngredient<ElderTorch>(5)
+            .SortAfterFirstRecipesOf(ItemID.JungleCampfire)
             .Register();
     }
 }

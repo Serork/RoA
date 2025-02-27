@@ -31,11 +31,4 @@ sealed class ElderwoodBow : ModItem {
         Item.useAmmo = AmmoID.Arrow;
         Item.shootSpeed = 11f;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<Elderwood>(10)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
 }

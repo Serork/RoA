@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
 using RoA.Content.Items.Materials;
+using RoA.Content.Items.Tools;
 
 using Terraria;
 using Terraria.ID;
@@ -41,12 +42,5 @@ sealed class MercuriumSword : ModItem {
     public override void MeleeEffects(Player player, Rectangle hitbox) {
         if (Main.rand.Next(5) == 0)
             Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, ModContent.DustType<ToxicFumes>(), player.direction * 2, 0f, 0, default(Color), 1.3f);
-    }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 10)
-            .AddTile(TileID.Anvils)
-            .Register();
     }
 }

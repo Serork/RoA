@@ -287,6 +287,7 @@ sealed class ElderTorch : ModItem {
         CreateRecipe(3)
             .AddIngredient(ItemID.Torch, 3)
             .AddIngredient<Grimstone>()
+            .SortAfterFirstRecipesOf(ItemID.JungleTorch)
             .Register();
     }
 }

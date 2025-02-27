@@ -22,11 +22,4 @@ sealed class DynastyWoodLeggings : ModItem {
 
         Item.defense = 2;
     }
-
-    public override void AddRecipes () {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.DynastyWood, 25)
-    		.AddTile(TileID.WorkBenches)
-    		.Register();
-    }
 }

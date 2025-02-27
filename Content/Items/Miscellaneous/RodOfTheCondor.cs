@@ -10,6 +10,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Special;
+using RoA.Content.Items.Weapons.Magic;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -27,22 +28,6 @@ sealed class RodOfTheCondor : ModItem {
     private static CondorWingsHandler GetHandler(Player player) => player.GetModPlayer<CondorWingsHandler>();
 
     private static Color LightingColor => new(42, 148, 194);
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
-            .AddIngredient(ItemID.GoldBar, 10)
-            .AddIngredient(ModContent.ItemType<SphereOfCondor>())
-            .AddTile(TileID.Anvils)
-            .Register();
-
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
-            .AddIngredient(ItemID.PlatinumBar, 10)
-            .AddIngredient(ModContent.ItemType<SphereOfCondor>())
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
 
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;

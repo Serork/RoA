@@ -21,12 +21,4 @@ sealed class ElderwoodSofa : ModItem {
 		Item.value = Item.sellPrice(copper: 60);
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodSofa>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(5)
-			.AddIngredient(ItemID.Silk, 2)
-			.AddTile(TileID.Sawmill)
-			.Register();
-	}
 }

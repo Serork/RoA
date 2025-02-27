@@ -20,12 +20,4 @@ sealed class ElderwoodBed : ModItem {
         Item.value = 2000;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBed>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(15)
-			.AddIngredient(ItemID.Silk, 5)
-			.AddTile(TileID.Sawmill)
-			.Register();
-	}
 }

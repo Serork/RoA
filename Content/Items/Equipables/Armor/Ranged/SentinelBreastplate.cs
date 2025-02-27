@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Weapons.Magic;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -26,13 +28,5 @@ sealed class SentinelBreastplate : ModItem {
 
 	public override void UpdateEquip(Player player)	
 		=> player.arrowDamage += 0.1f;
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Materials.MercuriumNugget>(10)
-			.AddIngredient(ItemID.Leather, 12)
-			.AddTile(TileID.Anvils)
-			.Register();
-	}
 }
 

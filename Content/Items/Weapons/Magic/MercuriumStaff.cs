@@ -2,6 +2,9 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
 using RoA.Content.Items.Materials;
+using RoA.Content.Items.Weapons.Melee;
+using RoA.Content.Items.Weapons.Ranged;
+using RoA.Content.Items.Weapons.Ranged.Ammo;
 using RoA.Content.Projectiles.Friendly.Magic;
 
 using System;
@@ -68,12 +71,5 @@ sealed class MercuriumStaff : ModItem {
             Main.dust[dust2].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
         }
         return true;
-    }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 10)
-            .AddTile(TileID.Anvils)
-            .Register();
     }
 }

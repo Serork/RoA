@@ -1,3 +1,4 @@
+using RoA.Content.Items.Equipables.Armor.Ranged;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Materials;
 using RoA.Content.Projectiles.Friendly.Ranged.Ammo;
@@ -34,6 +35,7 @@ sealed class MercuriumBolt : ModItem {
             .AddIngredient(ItemID.WoodenArrow, 100)
             .AddIngredient<MercuriumNugget>(1)
             .AddTile(TileID.Anvils)
+            .SortAfterFirstRecipesOf(ItemID.UnholyArrow)
             .Register();
     }
 

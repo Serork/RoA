@@ -20,11 +20,4 @@ sealed class ElderwoodBathtub : ModItem {
         Item.value = 300;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodBathtub>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(14)
-			.AddTile(TileID.Sawmill)
-			.Register();
-	}
 }

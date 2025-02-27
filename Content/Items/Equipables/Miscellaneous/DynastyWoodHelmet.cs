@@ -35,13 +35,6 @@ sealed class DynastyWoodHelmet : ModItem {
         player.GetModPlayer<DynastyWoodSetBonusHandler>().IsSetBonusActive = true;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.DynastyWood, 20)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
-
     private sealed class DynastyWoodSetBonusHandler : ModPlayer {
         public bool IsSetBonusActive;
 

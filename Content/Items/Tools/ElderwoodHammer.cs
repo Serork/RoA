@@ -29,11 +29,4 @@ sealed class ElderwoodHammer : ModItem {
         Item.rare = ItemRarityID.White;
         Item.UseSound = SoundID.Item1;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-			.AddIngredient<Placeable.Crafting.Elderwood>(8)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
 }

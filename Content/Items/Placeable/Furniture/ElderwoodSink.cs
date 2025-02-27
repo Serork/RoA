@@ -21,12 +21,4 @@ sealed class ElderwoodSink : ModItem {
 		Item.value = 300;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodSink>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(6)
-			.AddIngredient(ItemID.WaterBucket)
-			.AddTile(TileID.WorkBenches)
-			.Register();
-	}
 }

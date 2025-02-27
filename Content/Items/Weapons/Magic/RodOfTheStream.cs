@@ -20,22 +20,6 @@ namespace RoA.Content.Items.Weapons.Magic;
 sealed class RodOfTheStream : Rod {
     protected override Color? LightingColor => new(57, 136, 232);
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
-            .AddIngredient(ItemID.GoldBar, 10)
-            .AddIngredient(ModContent.ItemType<SphereOfStream>())
-            .AddTile(TileID.Anvils)
-            .Register();
-
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MercuriumNugget>(), 15)
-            .AddIngredient(ItemID.PlatinumBar, 10)
-            .AddIngredient(ModContent.ItemType<SphereOfStream>())
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
-
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Rod of the Stream");
         // Tooltip.SetDefault("Casts a water spit which splits into two when hits enemies\n'Forged with Aqua'");

@@ -26,11 +26,4 @@ sealed class ElderwoodSword : ModItem {
         Item.rare = ItemRarityID.White;
         Item.UseSound = SoundID.Item1;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<Elderwood>(7)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
 }

@@ -21,10 +21,4 @@ sealed class ElderwoodWorkbench : ModItem {
         Item.value = 150;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodWorkbench>();
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient<Crafting.Elderwood>(10)
-			.Register();
-	}
 }

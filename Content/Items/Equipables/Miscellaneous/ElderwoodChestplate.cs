@@ -22,11 +22,4 @@ sealed class ElderwoodChestplate : ModItem {
 
         Item.defense = 3;
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<Placeable.Crafting.Elderwood>(30)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
 }
