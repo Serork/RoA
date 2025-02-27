@@ -26,12 +26,4 @@ sealed class LivingWoodGreaves : NatureItem {
 
         Item.defense = 2;
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.Wood, 15)
-    		.AddIngredient<Materials.Galipot>(2)
-    		.AddTile(TileID.LivingLoom)
-    		.Register();
-    }
 }

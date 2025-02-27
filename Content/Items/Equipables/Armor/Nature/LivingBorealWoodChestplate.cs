@@ -28,12 +28,4 @@ sealed class LivingBorealWoodChestplate : NatureItem {
     }
 
 	public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.04f;
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.BorealWood, 20)
-    		.AddIngredient<Materials.Galipot>(5)
-    		.AddTile(TileID.LivingLoom)
-    		.Register();
-    }
 }

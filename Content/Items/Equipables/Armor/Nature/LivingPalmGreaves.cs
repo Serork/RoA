@@ -28,12 +28,4 @@ sealed class LivingPalmGreaves : NatureItem {
     public override void UpdateEquip(Player player) {
         player.GetDamage(DruidClass.NatureDamage) += 0.04f;
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.PalmWood, 15)
-    		.AddIngredient<Materials.Galipot>(2)
-    		.AddTile(TileID.LivingLoom)
-    		.Register();
-    }
 }

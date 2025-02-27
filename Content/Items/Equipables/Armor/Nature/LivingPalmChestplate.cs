@@ -24,12 +24,4 @@ sealed class LivingPalmChestplate : NatureItem {
 
         Item.defense = 2;
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.PalmWood, 20)
-    		.AddIngredient<Materials.Galipot>(5)
-    		.AddTile(TileID.LivingLoom)
-    		.Register();
-    }
 }

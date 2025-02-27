@@ -29,12 +29,4 @@ sealed class LivingBorealWoodGreaves : NatureItem {
     public override void UpdateEquip(Player player) {
 
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.BorealWood, 15)
-    		.AddIngredient<Materials.Galipot>(2)
-    		.AddTile(TileID.LivingLoom)
-    		.Register();
-    }
 }

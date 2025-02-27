@@ -22,7 +22,7 @@ sealed class CustomVanillaRecipes : ModSystem {
         RecipeHelper.NewRecipe(ItemID.WarAxeoftheNight, [ItemID.ShadowScale], [5], false);
         RecipeHelper.NewRecipe(ItemID.BloodLustCluster, [ItemID.TissueSample], [5], false);
 
-        // other herb relative items
+        // other herb related items
         RecipeHelper.NewRecipe(ItemID.GarlandHat, [ModContent.ItemType<MiracleMint>()], [1], false);
         RecipeHelper.NewRecipe(ItemID.GenderChangePotion, [ModContent.ItemType<MiracleMint>()], [1], false);
     }

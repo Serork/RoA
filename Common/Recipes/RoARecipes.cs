@@ -63,14 +63,14 @@ sealed class RoARecipes : ModSystem {
         Recipe item = Recipe.Create(ModContent.ItemType<Herbarium>());
         item.AddIngredient(ItemID.Book);
         item.AddIngredient(ItemID.Daybloom);
-        item.AddIngredient(ItemID.Shiverthorn);
+        item.AddIngredient(ItemID.Moonglow);
         item.AddIngredient(ItemID.Blinkroot);
         item.AddIngredient(ItemID.Waterleaf);
         item.AddIngredient(ItemID.Deathweed);
-        item.AddIngredient(ItemID.Moonglow);
-        item.AddIngredient(ModContent.ItemType<Content.Items.Materials.MiracleMint>());
-        item.AddIngredient(ModContent.ItemType<Content.Items.Materials.Bonerose>());
+        item.AddIngredient(ItemID.Shiverthorn);
         item.AddIngredient(ItemID.Fireblossom);
+        item.AddIngredient(ModContent.ItemType<Content.Items.Materials.MiracleMint>());
+        //item.AddIngredient(ModContent.ItemType<Content.Items.Materials.Bonerose>());
         item.AddTile(TileID.Bookcases);
         item.SortAfterFirstRecipesOf(ItemID.GarlandHat);
         item.Register();
@@ -203,6 +203,91 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<Content.Items.Materials.Galipot>(1);
         item.SortAfter(temp);
         item.Register();
+
+        // armor
+        item = Recipe.Create(ModContent.ItemType<LivingWoodHelmet>());
+        item.AddIngredient(ItemID.Wood, 10);
+        item.AddIngredient<Content.Items.Materials.Galipot>(3);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfterFirstRecipesOf(ItemID.WoodGreaves);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingWoodChestplate>());
+        item.AddIngredient(ItemID.Wood, 20);
+        item.AddIngredient<Content.Items.Materials.Galipot>(5);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingWoodGreaves>());
+        item.AddIngredient(ItemID.Wood, 15);
+        item.AddIngredient<Content.Items.Materials.Galipot>(2);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<LivingBorealWoodHelmet>());
+        item.AddIngredient(ItemID.BorealWood, 10);
+        item.AddIngredient<Content.Items.Materials.Galipot>(3);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfterFirstRecipesOf(ItemID.BorealWoodGreaves);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingBorealWoodChestplate>());
+        item.AddIngredient(ItemID.BorealWood, 20);
+        item.AddIngredient<Content.Items.Materials.Galipot>(5);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingBorealWoodGreaves>());
+        item.AddIngredient(ItemID.BorealWood, 15);
+        item.AddIngredient<Content.Items.Materials.Galipot>(2);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<LivingPalmHelmet>());
+        item.AddIngredient(ItemID.PalmWood, 10);
+        item.AddIngredient<Content.Items.Materials.Galipot>(3);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfterFirstRecipesOf(ItemID.PalmWoodGreaves);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingPalmChestplate>());
+        item.AddIngredient(ItemID.PalmWood, 20);
+        item.AddIngredient<Content.Items.Materials.Galipot>(5);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingPalmGreaves>());
+        item.AddIngredient(ItemID.PalmWood, 15);
+        item.AddIngredient<Content.Items.Materials.Galipot>(2);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<LivingMahoganyHelmet>());
+        item.AddIngredient(ItemID.RichMahogany, 10);
+        item.AddIngredient<Content.Items.Materials.Galipot>(3);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfterFirstRecipesOf(ItemID.RichMahoganyGreaves);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingMahoganyChestplate>());
+        item.AddIngredient(ItemID.RichMahogany, 20);
+        item.AddIngredient<Content.Items.Materials.Galipot>(5);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<LivingMahoganyGreaves>());
+        item.AddIngredient(ItemID.RichMahogany, 15);
+        item.AddIngredient<Content.Items.Materials.Galipot>(2);
+        item.AddTile(TileID.LivingLoom);
+        item.SortAfter(temp);
+        item.Register();
     }
 
     private static void AddFlamingFabricItems() {
@@ -212,14 +297,12 @@ sealed class RoARecipes : ModSystem {
         item.AddTile(TileID.Loom);
         item.SortAfterFirstRecipesOf(ItemID.FireproofBugNet);
         item.Register();
-
         Recipe temp = item;
         item = Recipe.Create(ModContent.ItemType<AshwalkerRobe>());
         item.AddIngredient<Content.Items.Materials.FlamingFabric>(25);
         item.AddTile(TileID.Loom);
         item.SortAfter(temp);
         item.Register();
-
         temp = item;
         item = Recipe.Create(ModContent.ItemType<AshwalkerLeggings>());
         item.AddIngredient<Content.Items.Materials.FlamingFabric>(20);
@@ -234,7 +317,6 @@ sealed class RoARecipes : ModSystem {
         item.AddTile(TileID.Loom);
         item.SortAfter(temp);
         item.Register();
-
         temp = item;
         item = Recipe.Create(ModContent.ItemType<FlametrackerJacket>());
         item.AddIngredient<Content.Items.Materials.FlamingFabric>(20);
@@ -242,7 +324,6 @@ sealed class RoARecipes : ModSystem {
         item.AddTile(TileID.Loom);
         item.SortAfter(temp);
         item.Register();
-
         temp = item;
         item = Recipe.Create(ModContent.ItemType<FlametrackerPants>());
         item.AddIngredient<Content.Items.Materials.FlamingFabric>(15);

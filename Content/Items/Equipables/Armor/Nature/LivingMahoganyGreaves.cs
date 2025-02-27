@@ -23,12 +23,4 @@ sealed class LivingMahoganyGreaves : NatureItem {
 
         Item.defense = 2;
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.BorealWood, 15)
-    		.AddIngredient<Materials.Galipot>(2)
-    		.AddTile(TileID.LivingLoom)
-    		.Register();
-    }
 }

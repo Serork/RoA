@@ -30,12 +30,4 @@ sealed class LivingMahoganyChestplate : NatureItem {
     public override void UpdateEquip(Player player) {
         player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    		.AddIngredient(ItemID.RichMahogany, 20)
-    		.AddIngredient<Materials.Galipot>(5)
-    		.AddTile(TileID.LivingLoom)
-    		.Register();
-    }
 }

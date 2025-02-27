@@ -37,12 +37,4 @@ sealed class LivingMahoganyHelmet : NatureItem {
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.LivingMahoganySetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.RichMahogany, 10)
-			.AddIngredient<Materials.Galipot>(3)
-			.AddTile(TileID.LivingLoom)
-			.Register();
-	}
 }

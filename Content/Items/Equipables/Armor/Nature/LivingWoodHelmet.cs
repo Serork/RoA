@@ -34,12 +34,4 @@ sealed class LivingWoodHelmet : NatureItem {
         player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingWoodSetBonus");
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
     }
-
-	public override void AddRecipes() {
-		CreateRecipe()
-			.AddIngredient(ItemID.Wood, 10)
-			.AddIngredient<Materials.Galipot>(3)
-			.AddTile(TileID.LivingLoom)
-			.Register();
-	}
 }
