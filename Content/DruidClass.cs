@@ -1,5 +1,7 @@
-﻿using Terraria.ID;
+﻿using System.Runtime.CompilerServices;
+
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content;
