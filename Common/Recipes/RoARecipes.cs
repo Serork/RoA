@@ -7,6 +7,7 @@ using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Equipables.Wreaths;
+using RoA.Content.Items.Food;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable;
@@ -46,6 +47,24 @@ sealed class RoARecipes : ModSystem {
         AddCrimsonRelatedStuff();
         AddTinkererWorkShopItems();
         AddWreaths();
+        AddFood();
+    }
+
+    private static void AddFood() {
+        Recipe item = Recipe.Create(ModContent.ItemType<AlmondMilk>());
+        item.AddIngredient<Almond>(1);
+        item.AddIngredient(ItemID.Bottle);
+        item.AddTile(TileID.CookingPots);
+        item.SortAfterFirstRecipesOf(ItemID.PeachSangria);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<SherwoodShake>());
+        item.AddIngredient<Pistachio>(1);
+        item.AddIngredient(ItemID.Cherry);
+        item.AddIngredient(ItemID.Bottle);
+        item.AddTile(TileID.CookingPots);
+        item.SortAfterFirstRecipesOf(ItemID.SmoothieofDarkness);
+        item.Register();
     }
 
     private static void AddWreaths() {
@@ -326,7 +345,13 @@ sealed class RoARecipes : ModSystem {
     }
 
     private static void AddHerbItems() {
-        Recipe item = Recipe.Create(ModContent.ItemType<Herbarium>());
+        Recipe item = Recipe.Create(ModContent.ItemType<LuminousFlowerHat>());
+        item.AddIngredient(ModContent.ItemType<LuminousFlower>());
+        item.AddIngredient(ItemID.Sunflower);
+        item.SortBeforeFirstRecipesOf(ItemID.GarlandHat);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<Herbarium>());
         item.AddIngredient(ItemID.Book);
         item.AddIngredient(ItemID.Daybloom);
         item.AddIngredient(ItemID.Moonglow);

@@ -30,13 +30,4 @@ sealed class SherwoodShake : ModItem {
         Item.DefaultToFood(14, 34, 26, 72000, useGulpSound: true);
         Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(0, 2));
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<Pistachio>())
-            .AddIngredient(ItemID.Cherry)
-            .AddIngredient(ItemID.Bottle)
-            .AddTile(TileID.CookingPots)
-            .Register();
-    }
 }

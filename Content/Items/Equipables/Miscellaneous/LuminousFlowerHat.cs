@@ -68,12 +68,4 @@ sealed class LuminousFlowerHat : ModItem {
         glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
         glowMaskColor = Color.White * GetLerpValue(drawPlayer) * (1f - shadow);
     }
-
-    public override void AddRecipes() {
-    	CreateRecipe()
-    				.AddIngredient<Items.Miscellaneous.LuminousFlower>()
-    				.AddIngredient(ItemID.Sunflower)
-    				.AddTile(TileID.WorkBenches)
-    				.Register();
-    }
 }

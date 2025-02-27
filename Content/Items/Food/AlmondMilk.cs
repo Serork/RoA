@@ -30,12 +30,4 @@ sealed class AlmondMilk : ModItem {
         Item.DefaultToFood(24, 42, 26, 36000, useGulpSound: true);
         Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(0, 1));
     }
-
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ModContent.ItemType<Almond>())
-            .AddIngredient(ItemID.Bottle)
-            .AddTile(TileID.CookingPots)
-            .Register();
-    }
 }
