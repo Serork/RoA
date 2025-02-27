@@ -85,15 +85,4 @@ sealed class RodOfTheDragonfire : Rod {
 
         return false;
     }
-
-    //public override void AddRecipes() {
-    //    CreateRecipe()
-    //        .AddIngredient<Elderwood>(10)
-    //        .AddRecipeGroup(CustomRecipes.GoldRecipeGroup, 5)
-    //        .AddIngredient(ItemID.Meteorite, 10)
-    //        .AddIngredient(ItemID.Ruby, 7)
-    //        .AddIngredient(ItemID.ManaCrystal)
-    //        .AddTile(TileID.DemonAltar)
-    //        .Register();
-    //}
 }

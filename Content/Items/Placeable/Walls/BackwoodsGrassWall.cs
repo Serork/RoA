@@ -23,11 +23,4 @@ sealed class BackwoodsGrassWall : ModItem {
         Item.createWall = ModContent.WallType<Tiles.Walls.BackwoodsGrassWall2>();
         Item.value = 20;
     }
-
-	//public override void AddRecipes() {
-	//	CreateRecipe(4)
-	//		.AddIngredient<Crafting.Grimstone>()
-	//		.AddTile(TileID.WorkBenches)
-	//		.Register();
-	//}
 }

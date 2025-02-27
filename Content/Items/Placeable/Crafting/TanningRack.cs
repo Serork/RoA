@@ -31,20 +31,4 @@ sealed class TanningRack : ModItem {
         Item.value = Item.sellPrice(silver: 20);
         Item.createTile = ModContent.TileType<Tiles.Crafting.TanningRack>();
     }
-
-    //public override bool? UseItem(Player player) {
-    //    if (player.ItemAnimationJustStarted) {
-    //        BackwoodsBiomePass.PlaceBackwoodsCattail(Player.tileTargetX, Player.tileTargetY);
-    //    }
-
-    //    return base.UseItem(player);
-    //}
-
-    //public override void AddRecipes () {
-    //    CreateRecipe()
-    //        .AddRecipeGroup(RecipeGroupID.Wood, 15)
-    //        .AddRecipeGroup(ItemID.Bunny)
-    //        .AddTile(TileID.WorkBenches)
-    //       .Register();
-    //}
 }

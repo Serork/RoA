@@ -44,14 +44,10 @@ sealed class DiabolicDaikatana : ModItem {
 
         Item.value = Item.buyPrice(gold: 1, silver: 60);
         Item.rare = ItemRarityID.Orange;
-        //Item.UseSound = SoundID.Item1;
 
         Item.useTurn = false;
         Item.noMelee = true;
         Item.noUseGraphic = true;
-        //Item.noMelee = true;
-        //Item.noUseGraphic = true;
-        //Item.channel = true;
         Item.holdStyle = ItemHoldStyleID.HoldHeavy;
 
         Item.shoot = ModContent.ProjectileType<DiabolicDaikatanaProj>();
