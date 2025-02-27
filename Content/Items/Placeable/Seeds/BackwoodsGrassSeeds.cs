@@ -3,12 +3,29 @@ using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using static Terraria.ID.ContentSamples.CreativeHelper;
 
 namespace RoA.Content.Items.Placeable.Seeds;
 
 sealed class BackwoodsGrassSeeds : ModItem {
+    public override void Load() {
+        On_ContentSamples.CreativeHelper.GetItemGroup += CreativeHelper_GetItemGroup; ;
+    }
+
+    private ContentSamples.CreativeHelper.ItemGroup CreativeHelper_GetItemGroup(On_ContentSamples.CreativeHelper.orig_GetItemGroup orig, Item item, out int orderInGroup) {
+        if (item.type == ModContent.ItemType<BackwoodsGrassSeeds>()) {
+            orderInGroup = 5;
+
+            return ItemGroup.Blocks;
+        }
+
+        return orig(item, out orderInGroup);
+    }
+
     public override void SetStaticDefaults() {
         //ItemTrader.ChlorophyteExtractinator.AddOption_OneWay(Type, 1, ItemID.DirtBlock, 1);
 		Item.ResearchUnlockCount = 25;
