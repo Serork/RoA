@@ -27,6 +27,7 @@ sealed class Beacon : ModItem {
         Item.consumable = true;
 
         Item.rare = ItemRarityID.Blue;
+        Item.value = Item.sellPrice(0, 0, 10, 0);
 
         Item.createTile = ModContent.TileType<Tiles.Crafting.Beacon>();
     }

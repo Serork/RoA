@@ -28,7 +28,8 @@ partial class Tapper : ModItem {
 
         Item.consumable = true;
         Item.rare = ItemRarityID.White;
-        Item.value = Item.sellPrice(silver: 10);
         Item.createTile = ModContent.TileType<Tiles.Crafting.Tapper>();
+
+        Item.value = Item.sellPrice(0, 0, 2, 0);
     }
 }

@@ -23,6 +23,6 @@ sealed class MercuriumNugget : ModItem {
 		Item.rare = ItemRarityID.Blue;
 		Item.maxStack = Item.CommonMaxStack;
 
-        Item.value = Item.sellPrice(0, 0, 35, 0);
+        Item.value = Item.sellPrice(0, 0, 40, 0);
     }
 }

@@ -13,7 +13,7 @@ sealed class ElderwoodChest2 : ModItem {
 
         Item.SetDefaultToStackable(Terraria.Item.CommonMaxStack);
 
-        Item.value = 500;
+        Item.value = Item.buyPrice(0, 0, 50);
 
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChest2>();
 	}

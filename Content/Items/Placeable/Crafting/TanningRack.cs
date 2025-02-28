@@ -28,7 +28,8 @@ sealed class TanningRack : ModItem {
 
         Item.consumable = true;
         Item.rare = ItemRarityID.White;
-        Item.value = Item.sellPrice(silver: 20);
         Item.createTile = ModContent.TileType<Tiles.Crafting.TanningRack>();
+
+        Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 }

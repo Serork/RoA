@@ -2,6 +2,7 @@
 
 using RoA.Core;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,7 +16,7 @@ sealed class ElderwoodChest : ModItem {
 
         Item.SetDefaultToStackable(Terraria.Item.CommonMaxStack);
 
-        Item.value = 500;
+        Item.value = Item.buyPrice(0, 0, 50);
 
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChest>();
 	}

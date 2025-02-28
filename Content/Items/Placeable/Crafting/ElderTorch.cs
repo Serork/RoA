@@ -250,7 +250,6 @@ sealed class ElderTorch : ModItem {
 
     public override void SetDefaults() {
         Item.DefaultToTorch(ModContent.TileType<Tiles.Crafting.ElderTorch>(), 0, false);
-        Item.value = 50;
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {

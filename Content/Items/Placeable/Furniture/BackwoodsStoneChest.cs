@@ -1,6 +1,7 @@
 ﻿using RoA.Content.Items.Placeable.Crafting;
 using RoA.Core;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,7 +15,7 @@ sealed class BackwoodsStoneChest : ModItem {
 
         Item.SetDefaultToStackable(Terraria.Item.CommonMaxStack);
 
-        Item.value = 500;
+		Item.value = 500;
 
         Item.createTile = ModContent.TileType<Tiles.Furniture.BackwoodsStoneChest>();
 	}
