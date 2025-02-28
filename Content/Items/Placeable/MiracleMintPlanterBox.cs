@@ -22,6 +22,6 @@ sealed class MiracleMintPlanterBox : ModItem {
         Item.placeStyle = 0;
         Item.width = 28;
         Item.height = 24;
-        Item.value = Item.buyPrice(0, 0, 1);
+        Item.value = Item.sellPrice(0, 0, 0, 20);
     }
 }

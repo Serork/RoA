@@ -14,7 +14,7 @@ sealed class EmptyPlanterBox : ModItem {
         int width = 28; int height = 16;
         Item.Size = new Microsoft.Xna.Framework.Vector2(width, height);
 
-        Item.value = Item.buyPrice(0, 0, 1);
+        Item.value = Item.sellPrice(0, 0, 0, 20);
         Item.rare = ItemRarityID.White;
         Item.maxStack = Item.CommonMaxStack;
     }

@@ -19,5 +19,7 @@ sealed class JawTrap : ModItem {
         Item.consumable = true;
         //Item.value = 300;
         Item.createTile = ModContent.TileType<Tiles.Miscellaneous.JawTrap>();
+
+        Item.value = Item.sellPrice(0, 0, 20, 0);
     }
 }

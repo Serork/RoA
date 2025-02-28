@@ -26,5 +26,7 @@ sealed class MillionDollarPainting : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         Item.createTile = ModContent.TileType<Tiles.Decorations.MillionDollarPainting>();
+
+        Item.value = Item.sellPrice(0, 0, 15, 0);
     }
 }

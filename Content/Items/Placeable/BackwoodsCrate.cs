@@ -55,7 +55,7 @@ sealed class BackwoodsCrate : ModItem {
         Item.autoReuse = true;
         Item.useStyle = 1;
         Item.consumable = true;
-        Item.value = Item.sellPrice(0, 1);
+        Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 
     public override bool CanRightClick() {
