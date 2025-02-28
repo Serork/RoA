@@ -30,9 +30,10 @@ sealed class NaturesHeart : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = Item.CommonMaxStack;
-		Item.value = Item.sellPrice(silver: 10);
 		Item.rare = ItemRarityID.Green;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 50, 0);
+    }
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
         float value = 0.2f;

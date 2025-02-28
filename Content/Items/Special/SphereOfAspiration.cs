@@ -13,6 +13,8 @@ abstract class MagicSphere : ModItem {
         int width = 24, height = width;
         Item.Size = new Vector2(width, height);
         Item.rare = ItemRarityID.Orange;
+
+        Item.value = Item.sellPrice(0, 2, 50, 0);
     }
 
     public override void PostUpdate() {

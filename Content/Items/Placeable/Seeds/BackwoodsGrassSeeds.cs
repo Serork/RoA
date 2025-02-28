@@ -27,8 +27,9 @@ sealed class BackwoodsGrassSeeds : ModItem {
         Item.consumable = true;
         Item.width = 14;
         Item.height = 14;
-        Item.value = 40;
         Item.createTile = ModContent.TileType<BackwoodsGrass>();
+
+        Item.value = Item.sellPrice(0, 0, 0, 4);
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {

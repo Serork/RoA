@@ -49,7 +49,7 @@ sealed class LuminousFlowerHat : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;
-        Item.value = Item.sellPrice(silver: 35);
+        Item.value = Item.sellPrice(0, 0, 50, 0);
     }
 
     private static float GetLerpValue(Player player) => player.GetModPlayer<LuminousFlowerHatLightValueHandler>().LightValue;

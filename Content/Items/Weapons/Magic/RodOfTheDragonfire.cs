@@ -37,7 +37,7 @@ sealed class RodOfTheDragonfire : Rod {
 
         Item.mana = 19;
 
-        Item.value = Item.buyPrice(gold: 1, silver: 10);
+        Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item73;
 

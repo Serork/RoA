@@ -20,8 +20,9 @@ sealed class MercuriumNugget : ModItem {
 		int width = 20; int height = 20;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 30);
 		Item.rare = ItemRarityID.Blue;
 		Item.maxStack = Item.CommonMaxStack;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 35, 0);
+    }
 }

@@ -16,8 +16,10 @@ sealed class LuminousFlower : ModItem {
 
     public override void SetDefaults() {
 		Item.SetSize(34, 38);
-		Item.SetDefaultOthers(Item.sellPrice(gold: 3, silver: 50), ItemRarityID.Blue);
-	}
+
+        Item.rare = ItemRarityID.Blue;
+        Item.value = Item.sellPrice(0, 0, 30, 0);
+    }
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
         LightUp(Item, spriteBatch, Texture, rotation);

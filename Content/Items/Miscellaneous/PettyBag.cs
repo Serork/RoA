@@ -21,8 +21,9 @@ sealed class PettyBag : ModItem {
         //Item.UseSound = SoundID.Item59;
         Item.useAnimation = Item.useTime = 28;
         Item.noUseGraphic = true;
+
         Item.rare = ItemRarityID.Orange;
-        Item.value = Item.sellPrice(0, 2);
+        Item.value = Item.sellPrice(0, 3, 0, 0);
     }
 
     public override bool CanUseItem(Player player) {

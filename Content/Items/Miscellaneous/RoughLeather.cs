@@ -22,8 +22,9 @@ sealed class RoughLeather : ModItem {
 		Item.useStyle = ItemUseStyleID.Swing;
 
 		Item.maxStack = Item.CommonMaxStack;
-		Item.value = Item.sellPrice(copper: 25);
-	}
+
+        Item.value = Item.sellPrice(0, 0, 0, 25);
+    }
 
 	public override bool CanUseItem(Player player) => Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == (ushort)ModContent.TileType<TanningRack>() &&
 													  player.position.X / 16f - Player.tileRangeX - Item.tileBoost - player.blockRange <= Player.tileTargetX &&

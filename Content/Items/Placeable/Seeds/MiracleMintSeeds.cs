@@ -25,7 +25,8 @@ sealed class MiracleMintSeeds : ModItem {
         Item.placeStyle = 0;
         Item.width = 22;
         Item.height = 18;
-        Item.value = 80;
+
+        Item.value = Item.sellPrice(0, 0, 0, 16);
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {

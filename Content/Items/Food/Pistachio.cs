@@ -30,6 +30,6 @@ sealed class Pistachio : ModItem {
 
     public override void SetDefaults() {
         Item.DefaultToFood(22, 27, 26, 18000);
-        Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(0, 1));
+        Item.SetShopValues(ItemRarityColor.Blue1, Item.sellPrice(0, 0, 20, 0));
     }
 }

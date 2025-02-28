@@ -10,6 +10,14 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class AnimalLeather : ModItem {
+	private sealed class LeatherValueChanger : GlobalItem {
+        public override void SetDefaults(Item entity) {
+            if (entity.type == ItemID.Leather) {
+				entity.value = Item.sellPrice(0, 0, 1, 0);
+            }
+        }
+    }
+
 	public override void SetStaticDefaults() {
 		// DisplayName.SetDefault("Animal Leather");
         Item.ResearchUnlockCount = 50;
@@ -25,8 +33,9 @@ sealed class AnimalLeather : ModItem {
 		Item.useStyle = ItemUseStyleID.Swing;
 
 		Item.maxStack = Item.CommonMaxStack;
-		Item.value = Item.sellPrice(copper: 25);
-	}
+
+        Item.value = Item.sellPrice(0, 0, 0, 25);
+    }
 
 	public override bool CanUseItem(Player player)
 		=> Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == (ushort)ModContent.TileType<TanningRack>()
