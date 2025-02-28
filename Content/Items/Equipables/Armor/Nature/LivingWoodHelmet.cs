@@ -23,9 +23,9 @@ sealed class LivingWoodHelmet : NatureItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.sellPrice(silver: 20);
+        Item.value = Item.sellPrice(0, 0, 15, 0);
 
-		Item.defense = 2;
+        Item.defense = 2;
 	}
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingWoodChestplate>() && legs.type == ModContent.ItemType<LivingWoodGreaves>();

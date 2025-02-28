@@ -25,7 +25,7 @@ sealed class ElderwoodHammer : ModItem {
         Item.knockBack = 5f;
         Item.hammer = 25;
 
-        Item.value = Item.sellPrice(copper: 20);
+        Item.value = Item.sellPrice(copper: 10);
         Item.rare = ItemRarityID.White;
         Item.UseSound = SoundID.Item1;
     }

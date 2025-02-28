@@ -22,9 +22,9 @@ sealed class DreadheartCorruptionChestplate : NatureItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
-		Item.value = Item.sellPrice(silver: 60);
+        Item.value = Item.sellPrice(0, 0, 60, 0);
 
-		Item.defense = 5;
+        Item.defense = 5;
 	}
 
 	public override void UpdateEquip(Player player) {

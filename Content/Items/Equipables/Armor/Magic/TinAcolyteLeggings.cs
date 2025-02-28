@@ -18,9 +18,10 @@ sealed class TinAcolyteLeggings : ModItem {
         int width = 22; int height = 18;
         Item.Size = new Vector2(width, height);
 
-        Item.value = Item.sellPrice(silver: 45);
         Item.rare = ItemRarityID.Blue;
         Item.defense = 2;
+
+        Item.value = Item.sellPrice(0, 0, 6, 50);
     }
 
     public override void UpdateEquip(Player player) => player.GetCritChance(DamageClass.Magic) += 8;

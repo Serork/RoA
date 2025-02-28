@@ -53,10 +53,11 @@ sealed class FlametrackerHat : ModItem {
         int width = 34; int height = width;
         Item.Size = new Vector2(width, height);
 
-        Item.value = Item.sellPrice(silver: 90);
         Item.rare = ItemRarityID.Orange;
 
         Item.defense = 4;
+
+        Item.value = Item.sellPrice(0, 0, 90, 0);
     }
 
     public override void UpdateEquip(Player player) {

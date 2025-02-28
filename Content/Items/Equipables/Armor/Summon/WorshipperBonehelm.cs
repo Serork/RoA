@@ -141,9 +141,10 @@ sealed class WorshipperBonehelm : ModItem {
         int width = 28; int height = 22;
         Item.Size = new Vector2(width, height);
 
-        Item.value = Item.sellPrice(silver: 75);
         Item.rare = ItemRarityID.Orange;
         Item.defense = 5;
+
+        Item.value = Item.sellPrice(0, 0, 90, 0);
     }
 
     public override void UpdateEquip(Player player) {

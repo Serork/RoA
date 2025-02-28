@@ -17,10 +17,11 @@ sealed class FlametrackerPants : ModItem {
         int width = 22; int height = 18;
         Item.Size = new Vector2(width, height);
 
-        Item.value = Item.sellPrice(silver: 60);
         Item.rare = ItemRarityID.Orange;
 
         Item.defense = 6;
+
+        Item.value = Item.sellPrice(0, 0, 60, 0);
     }
 
     public override void UpdateEquip(Player player) {

@@ -25,7 +25,7 @@ sealed class LivingBorealWoodHelmet : NatureItem {
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;
-        Item.value = Item.sellPrice(silver: 20);
+        Item.value = Item.sellPrice(0, 0, 15, 0);
 
         Item.defense = 1;
     }

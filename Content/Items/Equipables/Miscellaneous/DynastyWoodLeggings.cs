@@ -18,7 +18,7 @@ sealed class DynastyWoodLeggings : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.White;
-        Item.value = Item.sellPrice(silver: 5);
+        Item.value = Item.sellPrice(0, 0, 2, 0);
 
         Item.defense = 2;
     }

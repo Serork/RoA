@@ -31,10 +31,11 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Orange;
-		Item.value = Item.sellPrice(silver: 80);
 
 		Item.defense = 4;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 90, 0);
+    }
 
 	public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
 

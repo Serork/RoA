@@ -41,10 +41,11 @@ sealed class SentinelTaurusMask : ModItem {
 		int width = 26; int height = 24;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 75);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 3;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 50, 0);
+    }
 
 	public override void UpdateEquip(Player player)
 		=> player.runAcceleration *= 1.5f;

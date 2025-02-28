@@ -19,10 +19,12 @@ sealed class WorshipperGarb : ModItem {
         int width = 26; int height = 18;
         Item.Size = new Vector2(width, height);
 
-        Item.value = Item.sellPrice(silver: 45);
         Item.rare = ItemRarityID.Orange;
 
         Item.defense = 5;
+
+
+        Item.value = Item.sellPrice(0, 0, 60, 0);
     }
 
     public override void UpdateEquip(Player player) {

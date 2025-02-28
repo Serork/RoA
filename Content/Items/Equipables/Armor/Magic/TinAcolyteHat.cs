@@ -19,9 +19,10 @@ public class TinAcolyteHat : ModItem {
         int width = 28; int height = 16;
         Item.Size = new Vector2(width, height);
 
-        Item.value = Item.sellPrice(silver: 75);
         Item.rare = ItemRarityID.Blue;
         Item.defense = 2;
+
+        Item.value = Item.sellPrice(0, 0, 4, 50);
     }
 
     public override void UpdateEquip(Player player) => player.manaCost -= 0.06f;

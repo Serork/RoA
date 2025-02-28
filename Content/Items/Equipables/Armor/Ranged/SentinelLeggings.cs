@@ -21,10 +21,11 @@ sealed class SentinelLeggings : ModItem {
 		int width = 22; int height = 16;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 45);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 4;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 40, 0);
+    }
 
 	public override void UpdateEquip(Player player)
 		=> player.arrowDamage += 0.1f;

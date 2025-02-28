@@ -20,9 +20,10 @@ sealed class CopperAcolyteHat : ModItem {
         int width = 28; int height = 16;
         Item.Size = new Vector2(width, height);
 
-        Item.value = Item.sellPrice(silver: 75);
         Item.rare = ItemRarityID.Blue;
         Item.defense = 2;
+
+        Item.value = Item.sellPrice(0, 0, 3, 0);
     }
 
     public override void UpdateEquip(Player player)

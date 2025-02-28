@@ -29,7 +29,7 @@ sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupCont
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
-		Item.value = Item.sellPrice(silver: 75);
+		Item.value = Item.sellPrice(0, 0, 75, 0);
 
 		Item.defense = 3;
 	}

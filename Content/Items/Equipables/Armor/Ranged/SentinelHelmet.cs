@@ -26,10 +26,11 @@ sealed class SentinelHelmet : ModItem {
 		int width = 24; int height = 26;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 75);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 5;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 30, 0);
+    }
 
 	public override void UpdateEquip(Player player)	=> player.GetModPlayer<RangedArmorSetPlayer>().ArrowConsumptionReduce += 0.1f;
 	

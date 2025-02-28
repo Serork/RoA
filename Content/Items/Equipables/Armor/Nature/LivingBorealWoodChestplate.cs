@@ -22,7 +22,7 @@ sealed class LivingBorealWoodChestplate : NatureItem {
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;
-        Item.value = Item.sellPrice(silver: 15);
+        Item.value = Item.sellPrice(0, 0, 25, 0);
 
         Item.defense = 2;
     }

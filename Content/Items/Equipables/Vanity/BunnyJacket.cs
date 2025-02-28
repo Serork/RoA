@@ -19,7 +19,8 @@ sealed class BunnyJacket : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
-		Item.value = Item.sellPrice(silver: 55);
 		Item.vanity = true;
-	}
+
+        Item.value = Item.sellPrice(silver: 50);
+    }
 }

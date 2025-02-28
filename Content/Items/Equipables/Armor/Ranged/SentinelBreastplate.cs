@@ -21,10 +21,11 @@ sealed class SentinelBreastplate : ModItem {
 		int width = 26; int height = 20;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 60);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 6;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 50, 0);
+    }
 
 	public override void UpdateEquip(Player player)	
 		=> player.arrowDamage += 0.1f;

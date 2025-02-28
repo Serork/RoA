@@ -20,9 +20,9 @@ sealed class DreadheartCrimsonLeggings : NatureItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
-		Item.value = Item.sellPrice(silver: 45);
+        Item.value = Item.sellPrice(0, 0, 60, 0);
 
-		Item.defense = 4;
+        Item.defense = 4;
 	}
 
 	public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;

@@ -27,10 +27,11 @@ sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask 
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Orange;
-		Item.value = Item.sellPrice(silver: 80);
 
 		Item.defense = 6;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 60, 0);
+    }
 
 	public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.NatureDamage) += 0.1f;
 

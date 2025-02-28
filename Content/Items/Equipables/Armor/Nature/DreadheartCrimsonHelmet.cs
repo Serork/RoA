@@ -34,9 +34,9 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
-		Item.value = Item.sellPrice(silver: 75);
+        Item.value = Item.sellPrice(0, 1, 0, 0);
 
-		Item.defense = 3;
+        Item.defense = 3;
 	}
 
     public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;

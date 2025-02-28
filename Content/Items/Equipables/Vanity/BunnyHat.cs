@@ -19,9 +19,10 @@ sealed class BunnyHat : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
-		Item.value = Item.sellPrice(silver: 65);
 		Item.vanity = true;
-	}
+
+        Item.value = Item.sellPrice(silver: 50);
+    }
 
 	public override bool IsVanitySet(int head, int body, int legs) => body == ModContent.ItemType<BunnyJacket>() && legs == ModContent.ItemType<BunnyPants>();
 }

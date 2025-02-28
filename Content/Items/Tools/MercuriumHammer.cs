@@ -29,10 +29,11 @@ public class MercuriumHammer : ModItem {
 		Item.knockBack = 5f;
 		Item.hammer = 60;
 
-		Item.value = Item.sellPrice(silver: 30);
 		Item.rare = ItemRarityID.Blue;
 		Item.UseSound = SoundID.Item1;
-	}
+
+        Item.value = Item.sellPrice(silver: 30);
+    }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
         target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), Main.rand.Next(40, 120));

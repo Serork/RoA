@@ -22,9 +22,9 @@ sealed class LivingElderwoodBreastplate : NatureItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.sellPrice(silver: 50);
+        Item.value = Item.sellPrice(0, 0, 25, 0);
 
-		Item.defense = 4;
+        Item.defense = 4;
 	}
 
 	public override void UpdateEquip(Player player) {

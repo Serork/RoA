@@ -31,7 +31,7 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.sellPrice(silver: 25);
+		Item.value = Item.sellPrice(0, 0, 15, 0);
 
 		Item.defense = 1;
 	}

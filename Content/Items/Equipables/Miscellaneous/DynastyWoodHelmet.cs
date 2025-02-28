@@ -21,7 +21,7 @@ sealed class DynastyWoodHelmet : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.White;
-        Item.value = Item.sellPrice(silver: 10);
+        Item.value = Item.sellPrice(0, 0, 1, 50);
 
         Item.defense = 2;
     }

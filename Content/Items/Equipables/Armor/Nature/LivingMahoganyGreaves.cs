@@ -19,7 +19,7 @@ sealed class LivingMahoganyGreaves : NatureItem {
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;
-        Item.value = Item.sellPrice(silver: 10);
+        Item.value = Item.sellPrice(0, 0, 20, 0);
 
         Item.defense = 2;
     }
