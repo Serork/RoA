@@ -28,6 +28,8 @@ sealed class AlmondMilk : ModItem {
 
     public override void SetDefaults() {
         Item.DefaultToFood(24, 42, 26, 36000, useGulpSound: true);
-        Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(0, 1));
+
+        Item.rare = ItemRarityID.Blue;
+        Item.value = Item.sellPrice(0, 0, 20, 0);
     }
 }

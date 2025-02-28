@@ -29,6 +29,8 @@ sealed class Hedgehog : ModItem {
         Item.autoReuse = true;
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.Hedgehog>();
         Item.shootSpeed = 3f;
+
+        Item.value = Item.sellPrice(0, 0, 10, 0);
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {

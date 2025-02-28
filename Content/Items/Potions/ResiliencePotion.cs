@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -35,7 +36,9 @@ sealed class ResiliencePotion : NatureItem {
 
         Item.buffType = ModContent.BuffType<Resilience>();
 		Item.buffTime = 3600 * 6;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 2, 0);
+    }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
         itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;

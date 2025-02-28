@@ -28,6 +28,8 @@ sealed class SherwoodShake : ModItem {
 
     public override void SetDefaults() {
         Item.DefaultToFood(14, 34, 26, 72000, useGulpSound: true);
-        Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(0, 2));
+
+        Item.rare = ItemRarityID.Green;
+        Item.value = Item.sellPrice(0, 0, 40, 0);
     }
 }

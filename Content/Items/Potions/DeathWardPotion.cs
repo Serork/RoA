@@ -37,7 +37,9 @@ sealed class DeathWardPotion : ModItem {
 
 		Item.buffType = ModContent.BuffType<DeathWard>();
 		Item.buffTime = 3600 * 2;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 2, 0);
+    }
 
 	public override void OnConsumeItem(Player player) => player.AddBuff(BuffID.PotionSickness, 3600);
 

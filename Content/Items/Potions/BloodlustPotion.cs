@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -35,6 +36,8 @@ sealed class BloodlustPotion : ModItem {
 
 		Item.buffType = ModContent.BuffType<Bloodlust>();
 		Item.buffTime = 3600 / 2;
+
+		Item.value = Item.sellPrice(0, 0, 2, 0);
 	}
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)

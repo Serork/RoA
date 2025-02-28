@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -29,7 +30,9 @@ sealed class WeaknessPotion : ModItem {
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.WeaknessPotion>();
 		Item.shootSpeed = 10f;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 0, 40);
+    }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
         itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;

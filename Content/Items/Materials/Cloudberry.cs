@@ -35,7 +35,6 @@ sealed class Cloudberry : ModItem {
 		int width = 24; int height = 26;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 10);
 		Item.rare = ItemRarityID.White;
 		Item.maxStack = Item.CommonMaxStack;
 
@@ -47,5 +46,7 @@ sealed class Cloudberry : ModItem {
 		Item.consumable = true;
 		Item.buffType = ModContent.BuffType<ExtraRegen>();
 		Item.buffTime = 600;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 0, 40);
+    }
 }
