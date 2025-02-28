@@ -23,7 +23,7 @@ sealed class OniMask : ModItem {
 
         Item.defense = 1;
 
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Blue;
         Item.value = Item.buyPrice(gold: 10);
         Item.value = Item.sellPrice(gold: 2, silver: 50);
 

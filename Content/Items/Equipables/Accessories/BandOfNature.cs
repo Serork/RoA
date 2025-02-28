@@ -22,7 +22,7 @@ sealed class BandOfNature : NatureItem {
 		int width = 28; int height = 20;
 		Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.Green;
 		Item.accessory = true;
 		Item.value = Item.sellPrice(gold: 1);
 	}
