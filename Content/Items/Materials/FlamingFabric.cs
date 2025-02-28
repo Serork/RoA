@@ -21,5 +21,7 @@ sealed class FlamingFabric : ModItem {
 		Item.value = Item.sellPrice(silver: 35);
 		Item.rare = ItemRarityID.Green;
 		Item.maxStack = Item.CommonMaxStack;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 20, 0);
+    }
 }

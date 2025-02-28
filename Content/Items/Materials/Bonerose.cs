@@ -18,5 +18,7 @@ sealed class Bonerose : ModItem {
 		Item.SetDefaultOthers(Item.sellPrice(copper: 20));
 
         Item.SetDefaultToStackable(Item.CommonMaxStack);
+
+        Item.value = Item.sellPrice(0, 0, 0, 50);
     }
 }

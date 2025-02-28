@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 
 using RoA.Core;
+using Newtonsoft.Json.Linq;
 
 namespace RoA.Content.Items.Materials;
 
@@ -19,6 +20,8 @@ sealed class MiracleMint : ModItem {
         Item.SetDefaultOthers(Item.sellPrice(copper: 20));
 
         Item.SetDefaultToStackable(Item.CommonMaxStack);
+
+        Item.value = Item.sellPrice(0, 0, 0, 20);
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
