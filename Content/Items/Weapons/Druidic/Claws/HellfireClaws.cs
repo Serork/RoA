@@ -8,6 +8,7 @@ using RoA.Core;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
@@ -19,6 +20,8 @@ sealed class HellfireClaws : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(16, 4.2f);
+
+        Item.rare = ItemRarityID.Orange;
     }
 
     public override bool CanUseItem(Player player) => base.CanUseItem(player) && player.ownedProjectileCounts[ModContent.ProjectileType<HellfireClawsSlash>()] < 1;

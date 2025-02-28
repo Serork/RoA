@@ -27,7 +27,7 @@ sealed class SentinelHelmet : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(silver: 75);
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.Green;
 		Item.defense = 5;
 	}
 

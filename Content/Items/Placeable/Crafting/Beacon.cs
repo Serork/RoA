@@ -26,6 +26,8 @@ sealed class Beacon : ModItem {
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;
 
+        Item.rare = ItemRarityID.Blue;
+
         Item.createTile = ModContent.TileType<Tiles.Crafting.Beacon>();
     }
 

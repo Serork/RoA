@@ -32,7 +32,7 @@ sealed class WeepingTulip : NatureItem {
         Item.knockBack = 1.5f;
 
         Item.value = Item.sellPrice(silver: 50);
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item65;
 
         Item.shootSpeed = 8f;

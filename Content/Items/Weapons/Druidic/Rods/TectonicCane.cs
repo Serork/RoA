@@ -29,6 +29,8 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
         NatureWeaponHandler.SetFillingRate(Item, 0.35f);
+
+        Item.rare = ItemRarityID.Orange;
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 

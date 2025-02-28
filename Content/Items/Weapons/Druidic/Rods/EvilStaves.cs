@@ -26,6 +26,8 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
         NatureWeaponHandler.SetFillingRate(Item, 0.35f);
+
+        Item.rare = ItemRarityID.Green;
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
@@ -133,6 +135,8 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
         NatureWeaponHandler.SetFillingRate(Item, 0.35f);
+
+        Item.rare = ItemRarityID.Green;
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 

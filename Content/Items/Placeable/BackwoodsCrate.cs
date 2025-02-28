@@ -47,7 +47,7 @@ sealed class BackwoodsCrate : ModItem {
     public override void SetDefaults() {
         Item.width = 32;
         Item.height = 34;
-        Item.rare = 2;
+        Item.rare = ItemRarityID.Green;
         Item.maxStack = Item.CommonMaxStack;
         Item.createTile = ModContent.TileType<Tiles.Decorations.BackwoodsCrate>();
         Item.useAnimation = 15;

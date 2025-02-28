@@ -60,7 +60,7 @@ sealed class SoapSellersShades : ModItem {
         int width = 20; int height = 10;
         Item.Size = new Vector2(width, height);
 
-        Item.rare = ItemRarityID.White;
+        Item.rare = ItemRarityID.Green;
         Item.value = Item.sellPrice(copper: 65);
 
         Item.vanity = true;

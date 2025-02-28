@@ -19,7 +19,7 @@ sealed class SoapSellersJacket : ModItem {
         int width = 24; int height = width;
         Item.Size = new Vector2(width, height);
 
-        Item.rare = ItemRarityID.White;
+        Item.rare = ItemRarityID.Green;
         Item.value = Item.sellPrice(copper: 50);
 
         Item.vanity = true;

@@ -22,7 +22,7 @@ sealed class SentinelLeggings : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(silver: 45);
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.Green;
 		Item.defense = 4;
 	}
 

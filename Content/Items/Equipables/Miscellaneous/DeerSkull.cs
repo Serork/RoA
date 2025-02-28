@@ -23,7 +23,7 @@ sealed class DeerSkull : ModItem {
 
         Item.defense = 3;
 
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(silver: 40);
     }
 

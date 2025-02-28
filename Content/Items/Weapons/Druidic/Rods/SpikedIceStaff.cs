@@ -26,6 +26,8 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 18);
         NatureWeaponHandler.SetFillingRate(Item, 0.65f);
+
+        Item.rare = ItemRarityID.Blue;
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 22);
 
         Item.staff[Type] = true;

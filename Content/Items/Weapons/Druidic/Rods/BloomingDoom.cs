@@ -33,6 +33,8 @@ sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
         Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65); 
         Item.SetSize(36, 38);
 
+        Item.rare = ItemRarityID.Green;
+
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
         base.SafeSetDefaults();

@@ -34,6 +34,8 @@ sealed class Bookworms : ModItem {
         Item.damage = 14;
         Item.knockBack = 2f;
 
+        Item.rare = ItemRarityID.Blue;
+
         Item.noMelee = true;
         Item.mana = 10;
 

@@ -32,7 +32,7 @@ sealed class Bane : ModItem {
         Item.mana = 50;
 
         Item.value = Item.sellPrice(gold: 1, silver: 10);
-        Item.rare = ItemRarityID.Orange;
+        Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item45;
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Magic.BaneSpell>();

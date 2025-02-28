@@ -48,7 +48,7 @@ sealed class ElathaAmulet : ModItem {
 
     public override void SetDefaults() {
 		Item.Size = new Vector2(16, 42);
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.LightRed;
         Item.useAnimation = 20;
         Item.useTime = 20;
         Item.reuseDelay = 60;

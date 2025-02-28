@@ -37,6 +37,8 @@ sealed class PlanetomaStaff : ModItem {
         Item.mana = 20;
         Item.sentry = true;
 
+        Item.rare = ItemRarityID.Blue;
+
         Item.DamageType = DamageClass.Summon;
     }
 

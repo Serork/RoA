@@ -30,7 +30,7 @@ sealed class PresidentJacket : ModItem {
 		int width = 30; int height = 22;
 		Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Orange;
+		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.sellPrice(gold: 6, silver: 50);
 		Item.vanity = true;
 	}

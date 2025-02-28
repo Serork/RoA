@@ -122,7 +122,7 @@ sealed class BloodCursor : ModItem {
         Item.height = 24;
         Item.accessory = true;
         Item.vanity = true;
-        Item.SetShopValues(ItemRarityColor.Orange3, Item.sellPrice(0, 1));
+        Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));
         Item.hasVanityEffects = true;
     }
 

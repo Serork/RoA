@@ -17,6 +17,8 @@ sealed class GutwrenchingHooks : BaseClawsItem {
         Item.SetSize(26);
         Item.SetWeaponValues(8, 4f);
 
+        Item.rare = ItemRarityID.Blue;
+
         //NatureWeaponHandler.SetPotentialDamage(Item, 24);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, (ushort)(UseTime - UseTime / 3));
     }

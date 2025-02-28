@@ -30,7 +30,7 @@ sealed class FlederSlayer : ModItem {
         Item.knockBack = 8f;
 
         Item.value = Item.sellPrice(gold: 1, silver: 40);
-        Item.rare = ItemRarityID.Orange;
+        Item.rare = ItemRarityID.LightRed;
         Item.UseSound = SoundID.Item1;
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Melee.FlederSlayer>();

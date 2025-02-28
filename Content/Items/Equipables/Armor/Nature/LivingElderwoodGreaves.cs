@@ -21,7 +21,7 @@ sealed class LivingElderwoodGreaves : NatureItem {
         int width = 22; int height = 18;
 		Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Green;
+		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.sellPrice(silver: 15);
 
 		Item.defense = 3;

@@ -37,6 +37,8 @@ sealed class GastroIntestinalMallet : ModItem {
         Item.mana = 20;
         Item.sentry = true;
 
+        Item.rare = ItemRarityID.Blue;
+
         Item.DamageType = DamageClass.Summon;
     }
 

@@ -21,7 +21,7 @@ sealed class Herbarium : NatureItem {
         int width = 28; int height = 32;
         Item.Size = new Vector2(width, height);
 
-        Item.rare = ItemRarityID.Orange;
+        Item.rare = ItemRarityID.Green;
         Item.accessory = true;
         Item.value = Item.sellPrice(gold: 2);
     }

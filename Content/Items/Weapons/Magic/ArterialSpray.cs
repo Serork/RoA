@@ -30,6 +30,7 @@ sealed class ArterialSpray : ModItem {
         Item.SetWeaponValues(8, 1f);
 
         Item.mana = 10;
+        Item.rare = ItemRarityID.Blue;
 
         Item.noUseGraphic = true;
     }

@@ -21,7 +21,7 @@ sealed class FireflyPin : NatureItem {
         int width = 24; int height = width;
 		Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.Orange;
 		Item.accessory = true;
 
 		Item.value = Item.buyPrice(gold: 3);

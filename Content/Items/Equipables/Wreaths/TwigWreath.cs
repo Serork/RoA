@@ -25,7 +25,7 @@ sealed class TwigWreath : BaseWreathItem {
 
 		Item.maxStack = 1;
 		Item.value = Item.buyPrice(gold: 3);
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.White;
 	}
 
     public override void UpdateAccessory(Player player, bool hideVisual) {

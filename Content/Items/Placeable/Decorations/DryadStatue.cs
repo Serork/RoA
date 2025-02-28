@@ -20,7 +20,7 @@ sealed class DryadStatue : ModItem {
 
         Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Ambient.DryadStatue>());
 
-        Item.rare = ItemRarityID.White;
+        Item.rare = ItemRarityID.Blue;
         Item.value = Item.sellPrice(gold: 3);
     }
 }

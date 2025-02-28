@@ -22,7 +22,7 @@ sealed class SentinelBreastplate : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.value = Item.sellPrice(silver: 60);
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.Green;
 		Item.defense = 6;
 	}
 

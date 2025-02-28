@@ -24,7 +24,7 @@ sealed class BrightstonePotion : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.maxStack = 9999;
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Blue;
 
         Item.useTime = Item.useAnimation = 15;
         Item.useStyle = ItemUseStyleID.DrinkLiquid;

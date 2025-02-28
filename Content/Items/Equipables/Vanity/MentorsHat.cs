@@ -33,7 +33,7 @@ sealed class MentorsHat : ModItem {
 		int width = 26; int height = 18;
 		Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.Orange;
 		Item.value = Item.sellPrice(silver: 50);
 		Item.vanity = true;
 	}

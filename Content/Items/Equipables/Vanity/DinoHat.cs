@@ -33,7 +33,7 @@ sealed class DinoHat : ModItem {
 		int width = 24; int height = 22;
 		Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Orange;
+		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.buyPrice(gold: 2, silver: 50);
 		Item.value = Item.sellPrice(silver: 50);
 		Item.vanity = true;
