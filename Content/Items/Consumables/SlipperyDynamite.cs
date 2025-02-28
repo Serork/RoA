@@ -25,7 +25,6 @@ sealed class SlipperyDynamite : ModItem {
         Item.noUseGraphic = true;
 
 		Item.UseSound = SoundID.Item1;
-		Item.value = Item.sellPrice(silver: 4);
 
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.useTime = Item.useAnimation = 40;
@@ -36,7 +35,9 @@ sealed class SlipperyDynamite : ModItem {
 
 		Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.SlipperyDynamite>();
 		Item.shootSpeed = 4f;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 10, 0);
+    }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
 		=> itemGroup = ContentSamples.CreativeHelper.ItemGroup.Bombs;

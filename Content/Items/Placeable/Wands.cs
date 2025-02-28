@@ -105,7 +105,8 @@ abstract class Wand : ModItem {
         Item.width = 32;
         Item.height = 34;
         Item.rare = 1;
-        Item.value = Item.sellPrice(silver: 25);
+
+        Item.value = Item.sellPrice(0, 0, 40, 0);
     }
 
     protected virtual void SafeSetDefaults() { }

@@ -27,7 +27,6 @@ public class SlipperyGlowstick : ModItem {
         Item.maxStack = Item.CommonMaxStack;
 
         Item.UseSound = SoundID.Item1;
-		Item.value = Item.sellPrice(copper: 2);
 
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.useTime = Item.useAnimation = 15;
@@ -41,7 +40,9 @@ public class SlipperyGlowstick : ModItem {
 
 		Item.holdStyle = 1;
 		Item.color = new Color(255, 225, 255, 0);
-	}
+
+        Item.value = Item.sellPrice(0, 0, 4, 5);
+    }
 
 	public override void HoldItem(Player player) {
 		player.itemLocation.X -= 2 * player.direction;

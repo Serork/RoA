@@ -27,7 +27,6 @@ sealed class SlipperyGrenade : ModItem {
         Item.noUseGraphic = true;
 		Item.UseSound = SoundID.Item1;
 
-		Item.value = Item.sellPrice(copper: 20);
 		Item.useStyle = ItemUseStyleID.Shoot;
 
 		Item.useTime = Item.useAnimation = 45;
@@ -39,5 +38,7 @@ sealed class SlipperyGrenade : ModItem {
 		Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.SlipperyGrenade>();
 		Item.shootSpeed = 5.5f;
 		Item.knockBack = 8f;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 4, 25);
+    }
 }

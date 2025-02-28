@@ -55,7 +55,9 @@ sealed class ElathaAmulet : ModItem {
         Item.useStyle = ItemUseStyleID.HoldUp;
         Item.UseSound = SoundID.Item28;
         Item.mana = 30;
-	}
+
+        Item.value = Item.sellPrice(0, 2, 0, 0);
+    }
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
         Texture2D text = ModContent.Request<Texture2D>(Texture).Value;
