@@ -1614,7 +1614,7 @@ BeachWreath: {
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		While [kw/n:wreath] is charged:
-		Increased movement speed by 20%
+		Increased movement speed by 10%
 		''' */
 }
 
@@ -1625,7 +1625,7 @@ BeachWreath2: {
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
 		While [kw/n:wreath] is charged:
-		Increased movement speed by 20%
+		Increased movement speed by 10%
 		''' */
 }
 

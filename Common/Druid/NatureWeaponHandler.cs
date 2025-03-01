@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Druid.Wreath;
 using RoA.Content;
 using RoA.Content.Prefixes;
@@ -174,11 +176,16 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         }
 
         if (ActivePrefix != null) {
-            if (HasPotentialDamage()) {
-                damage *= ActivePrefix._druidDamageMult;
+            if (ActivePrefix._vanillaAdapted) {
+                damage *= 1f + (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult - 2f) / 4f;
             }
             else {
-                damage *= (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult) / 2f;
+                if (HasPotentialDamage()) {
+                    damage *= ActivePrefix._druidDamageMult;
+                }
+                else {
+                    damage *= (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult) / 2f;
+                }
             }
         }
     }

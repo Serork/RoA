@@ -12,6 +12,31 @@ Thorny: Колючий
 Stumpy: Коренастый
 Irritated: Раздраженный
 Overripe: Переспелый
+// Keen: "{$Prefix.Keen}"
+// Superior: "{$Prefix.Superior}"
+// Forceful: "{$Prefix.Forceful}"
+// Broken: "{$Prefix.Broken}"
+// Damaged: "{$Prefix.Damaged}"
+// Shoddy: "{$Prefix.Shoddy}"
+// Hurtful: "{$Prefix.Hurtful}"
+// Strong: "{$Prefix.Strong}"
+// Unpleasant: "{$Prefix.Unpleasant}"
+// Weak: "{$Prefix.Weak}"
+// Ruthless: "{$Prefix.Ruthless}"
+// Godly: "{$Prefix.Godly}"
+// Demonic: "{$Prefix.Demonic}"
+// Zealous: "{$Prefix.Zealous}"
+// Quick: "{$Prefix.Quick}"
+// Deadly: "{$Prefix.Deadly}"
+// Agile: "{$Prefix.Agile}"
+// Nimble: "{$Prefix.Nimble}"
+// Murderous: "{$Prefix.Murderous}"
+// Slow: "{$Prefix.Slow}"
+// Sluggish: "{$Prefix.Sluggish}"
+// Lazy: "{$Prefix.Lazy}"
+// Annoying: "{$Prefix.Annoying}"
+// Nasty: "{$Prefix.Nasty}"
+TipsyEffect: Опьяняет при использовании
 DruidDamageModifier: "{0:+0;-#} к начальному урону"
 DruidDamageModifierMult: "{0:+0;-#}% к начальному урону"
 DruidDamageModifier1: "{0:+0;-#} к наносимому урону"
@@ -24,4 +49,3 @@ DruidPotentialDamageModifierMult: "{0:+0;-#}% к возможному урону
 DruidSpeedModifier: "{0:+0;-#}% к скорости"
 DruidPotentialSpeedModifier: "{0:+0;-#}% к возможной скорости"
 DruidFillingRateModifierMult: "{0:+0;-#}% к скорость заполнения"
-TipsyEffect: Опьяняет при использовании

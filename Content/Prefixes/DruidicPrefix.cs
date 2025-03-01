@@ -20,7 +20,8 @@ sealed class DruidicPrefix(string name,
                            float druidKnockback = 0f, 
 						   float druidKnockbackMult = 1f,
 						   float fillingRateMult = 1f,
-						   bool shouldApplyTipsy = false) : ModPrefix {
+						   bool shouldApplyTipsy = false,
+						   bool vanillaAdapted = false) : ModPrefix {
 	private const string LOCALIZATION = "Mods.RoA.Prefixes.";
 
     sealed class PrefixLoader : ILoadable {
@@ -53,7 +54,58 @@ sealed class DruidicPrefix(string name,
                 druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1.1f, druidKnockbackMult: 1.05f, druidCrit: 0));
 			mod.AddContent(new DruidicPrefix("Irritated",
                 druidDamageMult: 0.8f, potentialDamageMult: 0.95f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidCrit: 0));
-		}
+
+			// vanilla
+            mod.AddContent(new DruidicPrefix("Keen", vanillaAdapted: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidCrit: 3));
+            mod.AddContent(new DruidicPrefix("Superior", vanillaAdapted: true,
+                druidDamageMult: 1.1f, potentialDamageMult: 1.1f, druidSpeedMult: 1f, druidKnockbackMult: 1.1f, druidCrit: 3));
+            mod.AddContent(new DruidicPrefix("Forceful", vanillaAdapted: true,
+				druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 1.15f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Broken", vanillaAdapted: true,
+				druidDamageMult: 0.7f, potentialDamageMult: 0.7f, druidSpeedMult: 1f, druidKnockbackMult: 0.8f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Damaged", vanillaAdapted: true,
+				druidDamageMult: 0.85f, potentialDamageMult: 0.85f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Shoddy", vanillaAdapted: true,
+				druidDamageMult: 0.9f, potentialDamageMult: 0.9f, druidSpeedMult: 1f, druidKnockbackMult: 0.85f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Hurtful", vanillaAdapted: true,
+				druidDamageMult: 1.1f, potentialDamageMult: 1.1f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Strong", vanillaAdapted: true,
+				druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 1.15f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Unpleasant", vanillaAdapted: true,
+				druidDamageMult: 1.05f, potentialDamageMult: 1.05f, druidSpeedMult: 1f, druidKnockbackMult: 1.15f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Weak", vanillaAdapted: true,
+				druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 0.8f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Ruthless", vanillaAdapted: true,
+				druidDamageMult: 1.18f, potentialDamageMult: 1.18f, druidSpeedMult: 1f, druidKnockbackMult: 0.9f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Godly", vanillaAdapted: true,
+				druidDamageMult: 1.15f, potentialDamageMult: 1.15f, druidSpeedMult: 1f, druidKnockbackMult: 1.15f, druidCrit: 5));
+            mod.AddContent(new DruidicPrefix("Demonic", vanillaAdapted: true,
+				druidDamageMult: 1.15f, potentialDamageMult: 1.15f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidCrit: 5));
+            mod.AddContent(new DruidicPrefix("Zealous", vanillaAdapted: true,
+				druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidCrit: 5));
+
+            mod.AddContent(new DruidicPrefix("Quick", vanillaAdapted: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1.1f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Deadly", vanillaAdapted: true,
+                druidDamageMult: 1.1f, potentialDamageMult: 1.1f, druidSpeedMult: 1.1f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Agile", vanillaAdapted: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1.1f, druidKnockbackMult: 1f, druidCrit: 3));
+            mod.AddContent(new DruidicPrefix("Nimble", vanillaAdapted: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1.05f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Murderous", vanillaAdapted: true,
+                druidDamageMult: 1.07f, potentialDamageMult: 1.07f, druidSpeedMult: 1.06f, druidKnockbackMult: 1f, druidCrit: 3));
+            mod.AddContent(new DruidicPrefix("Slow", vanillaAdapted: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 0.85f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Sluggish", vanillaAdapted: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 0.8f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Lazy", vanillaAdapted: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 0.92f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Annoying", vanillaAdapted: true,
+                druidDamageMult: 0.8f, potentialDamageMult: 0.8f, druidSpeedMult: 0.85f, druidKnockbackMult: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Nasty", vanillaAdapted: true,
+                druidDamageMult: 0.95f, potentialDamageMult: 0.95f, druidSpeedMult: 1.1f, druidKnockbackMult: 0.9f, druidCrit: 2));
+        }
 
         void ILoadable.Unload() { }
 	}
@@ -87,6 +139,7 @@ sealed class DruidicPrefix(string name,
     internal readonly float _potentialDruidSpeedMult = potentialSpeedMult;
 	internal readonly float _fillingRateMult = fillingRateMult;
 	internal readonly bool _shouldApplyTipsy = shouldApplyTipsy;
+    internal readonly bool _vanillaAdapted = vanillaAdapted;
 
     private static LocalizedText GetLocalizedText(string name) => Language.GetOrRegister(LOCALIZATION + name);
 
@@ -145,7 +198,81 @@ sealed class DruidicPrefix(string name,
 			case "Irritated":
                 valueMult *= 0.825f;
                 break;
-		}
+
+            case "Keen":
+                valueMult *= 1.06f;
+                break;
+            case "Superior":
+                valueMult *= 1.3f;
+                break;
+            case "Forceful":
+                valueMult *= 1.15f;
+                break;
+            case "Broken":
+                valueMult *= 0.7f;
+                break;
+            case "Damaged":
+                valueMult *= 0.86f;
+                break;
+            case "Shoddy":
+                valueMult *= 0.8f;
+                break;
+            case "Hurtful":
+                valueMult *= 1.1f;
+                break;
+            case "Strong":
+                valueMult *= 1.15f;
+                break;
+            case "Unpleasant":
+                valueMult *= 1.22f;
+                break;
+            case "Weak":
+                valueMult *= 0.82f;
+                break;
+            case "Ruthless":
+                valueMult *= 1.06f;
+                break;
+            case "Godly":
+                valueMult *= 1.5f;
+                break;
+            case "Demonic":
+                valueMult *= 1.3f;
+                break;
+            case "Zealous":
+                valueMult *= 1.115f;
+                break;
+
+            case "Quick":
+                valueMult *= 1.11f;
+                break;
+            case "Deadly":
+                valueMult *= 1.23f;
+                break;
+            case "Agile":
+                valueMult *= 1.18f;
+                break;
+            case "Nimble":
+                valueMult *= 1.05f;
+                break;
+            case "Murderous":
+                valueMult *= 1.225f;
+                break;
+            case "Slow":
+                valueMult *= 0.87f;
+                break;
+            case "Sluggish":
+                valueMult *= 0.82f;
+                break;
+            case "Lazy":
+                valueMult *= 0.92f;
+                break;
+            case "Annoying":
+                valueMult *= 0.75f;
+                break;
+            case "Nasty":
+                valueMult *= 1.08f;
+                break;
+        }
 	}
 
 	public override void Apply(Item item) {
@@ -158,7 +285,7 @@ sealed class DruidicPrefix(string name,
 
     public override IEnumerable<TooltipLine> GetTooltipLines(Item item) {
 		NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
-		string baseExtra = !handler.HasPotentialDamage() ? "1" : string.Empty;
+		string baseExtra = !handler.HasPotentialDamage() || _vanillaAdapted ? "1" : string.Empty;
         if (_druidDamage != 0) {
 			yield return new TooltipLine(Mod, "ExtraDruidDamage", GetLocalizedText("DruidDamageModifier" + baseExtra).Format(_druidDamage)) {
 				IsModifier = true,
@@ -167,10 +294,16 @@ sealed class DruidicPrefix(string name,
 		}
 		if (_druidDamageMult != 1f) {
 			float value = _druidDamageMult;
-			if (!handler.HasPotentialDamage()) {
-				value += _potentialDamageMult;
-				value /= 2f;
+			if (_vanillaAdapted) {
+				value = 1f;
+                value += (_druidDamageMult + _potentialDamageMult - 2f) / 4f;
             }
+			else {
+				if (!handler.HasPotentialDamage()) {
+					value += _potentialDamageMult;
+					value /= 2f;
+				}
+			}
             yield return new TooltipLine(Mod, "ExtraDruidDamageMult", GetLocalizedText("DruidDamageModifierMult" + baseExtra).Format(value * 100f - 100f)) {
 				IsModifier = true,
 				IsModifierBad = value < 1f
@@ -182,7 +315,7 @@ sealed class DruidicPrefix(string name,
 				IsModifierBad = _potentialDamage < 0
 			};
 		}
-		if (_potentialDamageMult != 1f && handler.HasPotentialDamage()) {
+		if (_potentialDamageMult != 1f && handler.HasPotentialDamage() && !_vanillaAdapted) {
             float value = _potentialDamageMult;
             //value += _druidDamageMult;
             //value /= 2f;
