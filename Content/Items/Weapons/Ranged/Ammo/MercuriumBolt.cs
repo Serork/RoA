@@ -28,7 +28,7 @@ sealed class MercuriumBolt : ModItem {
         Item.DamageType = DamageClass.Ranged;
         Item.rare = ItemRarityID.Blue;
 
-        Item.value = Item.sellPrice(0, 0, 2, 0);
+        Item.value = Item.sellPrice(0, 0, 1, 50);
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
