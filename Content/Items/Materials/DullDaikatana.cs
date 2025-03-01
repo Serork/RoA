@@ -19,6 +19,6 @@ sealed class DullDaikatana : ModItem {
 		Item.rare = ItemRarityID.Orange;
 		Item.maxStack = Item.CommonMaxStack;
 
-        Item.value = Item.sellPrice(0, 1, 0, 0);
+        Item.value = Item.sellPrice(0, 1, 25, 0);
     }
 }

@@ -39,8 +39,8 @@ sealed class RoARecipes : ModSystem {
     public override void AddRecipes() {
         AddElderwoodItems();
         AddDynastyWoodItems();
-        AddHellstoneItems(out Recipe starFusion);
-        AddMercuriumItems(starFusion);
+        AddHellstoneItems(out Recipe daikatana);
+        AddMercuriumItems(daikatana);
         AddFlamingFabricItems();
         AddGalipotItems();
         AddHerbItems();
@@ -816,7 +816,7 @@ sealed class RoARecipes : ModSystem {
         item.Register();
     }
 
-    private static void AddHellstoneItems(out Recipe starFusion) {
+    private static void AddHellstoneItems(out Recipe daikatana) {
         Recipe item = Recipe.Create(ModContent.ItemType<StarFusion>());
         item.AddIngredient(ItemID.Starfury, 1);
         item.AddIngredient(ItemID.HellstoneBar, 10);
@@ -824,7 +824,15 @@ sealed class RoARecipes : ModSystem {
         item.AddTile(TileID.Anvils);
         item.SortAfterFirstRecipesOf(ItemID.FireproofBugNet);
         item.Register();
-        starFusion = item;
+
+        item = Recipe.Create(ModContent.ItemType<DiabolicDaikatana>());
+        item.AddIngredient<Content.Items.Materials.DullDaikatana>(1);
+        item.AddIngredient(ItemID.HellstoneBar, 10);
+        item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
+        item.AddTile(TileID.Anvils);
+        item.SortAfterFirstRecipesOf(ItemID.FireproofBugNet);
+        item.Register();
+        daikatana = item;
 
         item = Recipe.Create(ModContent.ItemType<TectonicCane>());
         item.AddIngredient(ItemID.HellstoneBar, 6);
