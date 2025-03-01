@@ -29,11 +29,11 @@ sealed class MercuriumStaff : ModItem {
         Item.useTurn = false;
 
         Item.DamageType = DamageClass.Magic;
-        Item.damage = 10;
-        Item.knockBack = 2.5f;
+        Item.damage = 26;
+        Item.knockBack = 5f;
 
         Item.noMelee = true;
-        Item.mana = 11;
+        Item.mana = 12;
 
         Item.rare = ItemRarityID.Blue;
         Item.UseSound = SoundID.Item43;

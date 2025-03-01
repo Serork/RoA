@@ -23,16 +23,15 @@ sealed class FireLighter : ModItem {
 
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.holdStyle = 3;
-        Item.useTime = Item.useAnimation = 14;
+        Item.useTime = Item.useAnimation = 36;
         Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Magic;
-        Item.damage = 8;
+        Item.damage = 30;
         Item.knockBack = 4;
 
         Item.noMelee = true;
-        Item.reuseDelay = 28;
-        Item.mana = 10;
+        Item.mana = 14;
 
         Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item17;

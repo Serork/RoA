@@ -25,11 +25,15 @@ sealed class ArterialSpray : ModItem {
 
     public override void SetDefaults() {
         Item.SetSize(42);
-        Item.DefaultToMagicWeapon(ModContent.ProjectileType<ArterialSprayProjectile3>(), 0, 1f);
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 20);
-        Item.SetWeaponValues(8, 1f);
 
-        Item.mana = 10;
+        Item.DefaultToMagicWeapon(ModContent.ProjectileType<ArterialSprayProjectile3>(), 0, 1f);
+
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 20);
+
+        Item.damage = 16;
+        Item.crit = 4;
+
+        Item.mana = 14;
         Item.rare = ItemRarityID.Blue;
 
         Item.value = Item.sellPrice(0, 1, 50, 0);

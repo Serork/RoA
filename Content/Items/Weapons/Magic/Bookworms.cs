@@ -26,7 +26,7 @@ sealed class Bookworms : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useTime = Item.useAnimation = 30;
+        Item.useTime = Item.useAnimation = 26;
         Item.autoReuse = false;
         Item.useTurn = false;
 
