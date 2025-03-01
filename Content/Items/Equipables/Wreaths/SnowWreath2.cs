@@ -24,7 +24,7 @@ sealed class SnowWreath2 : BaseWreathItem {
             player.endurance += 0.1f;
         }
         if (handler.IsFull) {
-            player.GetCritChance(DruidClass.NatureDamage) += 2;
+            player.GetCritChance(DruidClass.NatureDamage) += 6;
         }
     }
 }

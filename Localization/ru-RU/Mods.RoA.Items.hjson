@@ -306,7 +306,7 @@ SnowWreath: {
 	Tooltip:
 		'''
 		[kw/n:Венок] заполняется при нанесении природного урона
-		Когда [kw/n:венок заполнен], увеличивает шанс на критический удар природным уроном на 2%
+		Когда [kw/n:венок заполнен], увеличивает шанс на критический удар природным уроном на 6%
 		'''
 }
 
@@ -316,7 +316,7 @@ SnowWreath2: {
 		'''
 		[kw/n:Венок] заполняется при нанесении природного урона и дает:
 		Снижение получаемого урона вплоть до 10%
-		Когда [kw/n:венок заполнен], увеличивает шанс на критический удар природным уроном на 2%
+		Когда [kw/n:венок заполнен], увеличивает шанс на критический удар природным уроном на 6%
 		'''
 }
 
@@ -1614,6 +1614,7 @@ BeachWreath: {
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		While [kw/n:wreath] is charged:
+		Increased movement speed by 20%
 		''' */
 }
 
@@ -1624,6 +1625,7 @@ BeachWreath2: {
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
 		While [kw/n:wreath] is charged:
+		Increased movement speed by 20%
 		''' */
 }
 

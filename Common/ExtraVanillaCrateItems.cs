@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Seeds;
@@ -401,6 +402,10 @@ sealed class ExtraVanillaCrateItems : ModSystem {
             ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.FlameWakerBoots, ItemID.SuperheatedBlood, ItemID.LavaFishbowl, ItemID.LavaFishingHook, ItemID.VolcanoSmall),
         };
         IItemDropRule bc_pot = ItemDropRule.NotScalingWithLuck(ItemID.PotSuspended, 4, 2, 2);
+        IItemDropRule bc_coolshirt = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<StrangerCoat>(), 30);
+        IItemDropRule bc_daikatana = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DullDaikatana>(), 30);
+        IItemDropRule bc_coolshirt2 = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<StrangerCoat>(), 15);
+        IItemDropRule bc_daikatana2 = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DullDaikatana>(), 15);
         IItemDropRule bc_obsi = ItemDropRule.Common(ItemID.ObsidianLockbox);
         IItemDropRule bc_wet = ItemDropRule.NotScalingWithLuck(ItemID.WetBomb, 3, 7, 10);
         IItemDropRule bc_plant = ItemDropRule.OneFromOptionsNotScalingWithLuck(2, ItemID.PottedLavaPlantPalm, ItemID.PottedLavaPlantBush, ItemID.PottedLavaPlantBramble, ItemID.PottedLavaPlantBulb, ItemID.PottedLavaPlantTendrils);
@@ -653,6 +658,8 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         };
         IItemDropRule[] obsidian = new IItemDropRule[] {
             ItemDropRule.SequentialRulesNotScalingWithLuck(1, bc_lava),
+            bc_coolshirt,
+            bc_daikatana,
 
             bc_pot,
             bc_obsi,
@@ -670,6 +677,8 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         };
         IItemDropRule[] hellstone = new IItemDropRule[] {
             ItemDropRule.SequentialRulesNotScalingWithLuck(1, bc_lava),
+            bc_coolshirt2,
+            bc_daikatana2,
 
             bc_pot,
             bc_obsi,

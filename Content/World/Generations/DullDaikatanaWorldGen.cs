@@ -26,7 +26,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
 
     private void DullDaikatanaGenerator(GenerationProgress progress, GameConfiguration configuration) {
         var genRand = WorldGen.genRand;
-        int count = WorldGenHelper.WorldSize * 2;
+        int count = WorldGenHelper.WorldSize;
         for (int num436 = 0; num436 < count; num436++) {
             double value2 = (double)num436 / (double)(count);
             progress.Set(value2);
@@ -67,8 +67,16 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                             }
                         }
                         if (flag) {
-                            WorldGen.PlaceTile(num438, num439, tileType);
-                            // WorldGen.Place1x2(num438, y2 - 1, TileID.Chairs, 0);
+                            bool flag4 = true;
+                            if (!(num436 == 1 ? genRand.NextBool(2) : num436 != 2 || genRand.NextBool(3))) {
+                                flag4 = false;
+                            }
+                            if (flag4) {
+                                WorldGen.PlaceTile(num438, num439, tileType);
+                            }
+                            else {
+                                flag24 = true;
+                            }
 
                             if (!_chairPlaced) {
                                 int y2 = num439;

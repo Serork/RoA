@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
+
 using Terraria;
 using Terraria.ID;
 
@@ -17,6 +19,8 @@ sealed class BeachWreath2 : BaseWreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-
+        if (player.GetModPlayer<WreathHandler>().IsFull) {
+            player.moveSpeed += 0.1f;
+        }
     }
 }
