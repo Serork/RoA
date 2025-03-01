@@ -34,12 +34,13 @@ sealed class RodOfTheTerra : Rod {
         int width = 42; int height = 42;
         Item.Size = new Vector2(width, height);
 
-        Item.useTime = Item.useAnimation = 8;
+        Item.useTime = Item.useAnimation = 60;
         Item.autoReuse = false;
 
         Item.damage = 29;
+        Item.knockBack = 0f;
 
-        Item.mana = 7;
+        Item.mana = 3;
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;

@@ -30,12 +30,15 @@ sealed class RodOfTheShock : Rod {
         int width = 42; int height = 42;
         Item.Size = new Vector2(width, height);
 
-        Item.useTime = Item.useAnimation = 8;
+        Item.useTime = Item.useAnimation = 10;
         Item.autoReuse = true;
 
-        Item.damage = 3;
+        Item.damage = 15;
+        Item.knockBack = 1.5f;
 
         Item.mana = 11;
+
+        Item.crit = 6;
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;

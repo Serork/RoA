@@ -40,10 +40,10 @@ sealed class RodOfTheStream : Rod {
         Item.useTime = Item.useAnimation = 40;
         Item.autoReuse = false;
 
-        Item.damage = 5;
+        Item.damage = 41;
         Item.knockBack = 6f;
 
-        Item.mana = 30;
+        Item.mana = 20;
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
