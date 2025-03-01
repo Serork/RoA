@@ -57,7 +57,7 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
             return;
         }
         int type = ModContent.ItemType<MercuriumOre>();
-        if (Player.HasItem(type) || (Player.whoAmI == Main.myPlayer && Main.mouseItem.type == type) || Player.trashItem.type == type) Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
+        if (Player.HasItemInAnyInventory(type) || (Player.whoAmI == Main.myPlayer && Main.mouseItem.type == type) || Player.trashItem.type == type) Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
 
         foreach (Item item in Main.ActiveItems) {
             if (item is null || !item.active || item.type != ModContent.ItemType<MercuriumOre>() || item.Distance(Player.Center) > 100f)
