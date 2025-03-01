@@ -28,8 +28,8 @@ sealed class RavensEye : ModItem {
         Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Magic;
-        Item.damage = 31;
-        Item.knockBack = 1;
+        Item.damage = 32;
+        Item.knockBack = 2f;
 
         Item.noMelee = true;
         Item.channel = true;
