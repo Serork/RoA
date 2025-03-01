@@ -39,7 +39,19 @@ sealed class DullDaikatana : ModTile {
         Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, itemType);
     }
 
-    public override bool CreateDust(int i, int j, ref int type) => false;
+    public override bool CreateDust(int i, int j, ref int type) {
+        if (Main.rand.NextBool(4)) {
+            type = ModContent.DustType<Dusts.DullDaikatana3>();
+        }
+        else if (Main.rand.NextBool(2)) {
+            type = ModContent.DustType<Dusts.DullDaikatana2>();
+        }
+        else {
+            type = ModContent.DustType<Dusts.DullDaikatana1>();
+        }
+
+        return base.CreateDust(i, j, ref type);
+    }
 
     //public override void KillMultiTile(int i, int j, int frameX, int frameY) {
     //	if (frameX == 0) Item.NewItem(i * 16, j * 16, 32, 48, ModContent.ItemType<Items.Equipables.Armor.Miscellaneous.OniMask>(), 1, false, 0, false, false);
