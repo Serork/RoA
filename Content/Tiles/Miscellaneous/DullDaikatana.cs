@@ -32,6 +32,8 @@ sealed class DullDaikatana : ModTile {
         MinPick = 65;
     }
 
+    public override bool CanExplode(int i, int j) => Main.hardMode;
+
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
         int itemType = ModContent.ItemType<Items.Materials.DullDaikatana>();
         Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, itemType);
