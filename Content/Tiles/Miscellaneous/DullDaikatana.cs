@@ -40,10 +40,10 @@ sealed class DullDaikatana : ModTile {
     }
 
     public override bool CreateDust(int i, int j, ref int type) {
-        if (Main.rand.NextBool(4)) {
+        if (Main.rand.NextBool(8)) {
             type = ModContent.DustType<Dusts.DullDaikatana3>();
         }
-        else if (Main.rand.NextBool(4)) {
+        else if (Main.rand.NextBool(8)) {
             type = ModContent.DustType<Dusts.DullDaikatana2>();
         }
         else {
