@@ -123,12 +123,10 @@ sealed class DiabolicDaikatana : ModItem {
                 offset.Y -= 13;
             }
             if (player.gravDir == -1f) {
-                //position.Y -= 1;
             }
             position += offset * scale;
             position.Y -= (texture.Height / 2f + 8f) * (scale - 1f);
             position.X -= texture.Width / 6f * (scale - 1f) * player.direction;
-            //position += Vector2.UnitY * player.gfxOffY;
             SpriteEffects effects = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             float rotation = 2.3f + (player.gravDir == -1 ? 0.1f : 0f);
             bool gravReversed = player.gravDir == -1f;
