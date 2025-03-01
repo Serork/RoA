@@ -43,7 +43,7 @@ sealed class RodOfTheStream : Rod {
         Item.damage = 41;
         Item.knockBack = 6f;
 
-        Item.mana = 30;
+        Item.mana = 25;
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
