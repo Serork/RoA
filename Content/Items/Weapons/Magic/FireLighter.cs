@@ -33,7 +33,7 @@ sealed class FireLighter : ModItem {
         Item.noMelee = true;
         Item.mana = 14;
 
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item17;
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Magic.HarmonizingBeam>();
