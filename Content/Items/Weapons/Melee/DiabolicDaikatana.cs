@@ -52,7 +52,7 @@ sealed class DiabolicDaikatana : ModItem {
         Item.shoot = ModContent.ProjectileType<DiabolicDaikatanaProj>();
         Item.shootSpeed = 1f;
 
-        Item.value = Item.sellPrice(0, 2, 0, 0);
+        Item.value = Item.sellPrice(0, 2, 50, 0);
     }
 
     //public override void AddRecipes() {
