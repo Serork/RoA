@@ -6,6 +6,8 @@ using RoA.Content.Emotes;
 using Terraria;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
+using Terraria.ID;
+using RoA.Content.NPCs.Friendly;
 
 namespace RoA.Common;
 
@@ -14,7 +16,31 @@ sealed class EmotePicker : ILoadable {
         On_EmoteBubble.ProbeBosses += On_EmoteBubble_ProbeBosses;
         On_EmoteBubble.ProbeBiomes += On_EmoteBubble_ProbeBiomes;
         On_EmoteBubble.ProbeWeather += On_EmoteBubble_ProbeWeather;
+        On_EmoteBubble.ProbeExceptions += On_EmoteBubble_ProbeExceptions;
     }
+
+    private void On_EmoteBubble_ProbeExceptions(On_EmoteBubble.orig_ProbeExceptions orig, EmoteBubble self, System.Collections.Generic.List<int> list, Player plr, WorldUIAnchor other) {
+        orig(self, list, plr, other);
+
+        NPC nPC = (NPC)self.anchor.entity;
+        if (nPC.type == NPCID.WitchDoctor || nPC.type == NPCID.Dryad) {
+            list.Add(ModContent.EmoteBubbleType<BackwoodsEmote>());
+        }
+
+        int hunterType = ModContent.NPCType<Hunter>();
+        bool flag = ((NPC)other.entity).type == hunterType;
+        if (flag || (plr.InModBiome<BackwoodsBiome>() && Main.rand.NextBool(5))) {
+            list.Add(ModContent.EmoteBubbleType<HunterEmote>());
+            list.Add(ModContent.EmoteBubbleType<BackwoodsEmote>());
+            list.Add(ModContent.EmoteBubbleType<LothorEmote>());
+        }
+
+        if (NPC.AnyNPCs(hunterType)) {
+            if (nPC.type == NPCID.ArmsDealer || nPC.type == NPCID.GoblinTinkerer) {
+                list.Add(ModContent.EmoteBubbleType<HunterEmote>());
+            }
+        }
+     }
 
     private void On_EmoteBubble_ProbeWeather(On_EmoteBubble.orig_ProbeWeather orig, EmoteBubble self, System.Collections.Generic.List<int> list, Terraria.Player plr) {
         orig(self, list, plr);
