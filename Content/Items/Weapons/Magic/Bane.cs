@@ -1,5 +1,8 @@
 using Microsoft.Xna.Framework;
 
+using System.Collections.Generic;
+using System.Linq;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -26,10 +29,12 @@ sealed class Bane : ModItem {
 
         Item.DamageType = DamageClass.Magic;
         Item.damage = 1;
-        Item.knockBack = 1;
+        Item.knockBack = 0;
 
         Item.noMelee = true;
-        Item.mana = 50;
+        Item.mana = 35;
+
+        Item.crit = 0;
 
         Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item45;
@@ -38,6 +43,13 @@ sealed class Bane : ModItem {
         Item.shootSpeed = 6f;
 
         Item.value = Item.sellPrice(0, 1, 50, 0);
+    }
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips) {
+        TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "CritChance" && x.Mod == "Terraria");
+        if (tt != null) {
+            tooltips.Remove(tt);
+        }
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(2f, 0f);

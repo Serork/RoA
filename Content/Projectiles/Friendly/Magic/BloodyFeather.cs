@@ -9,9 +9,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
 sealed class BloodyFeather : ModProjectile {
-    private int _direction;
-    private bool _flag = true;
-
     //public override void SetStaticDefaults()	
     //	=> DisplayName.SetDefault("Bloody Feather");
 
@@ -37,19 +34,19 @@ sealed class BloodyFeather : ModProjectile {
     public override void AI() {
         if (Projectile.alpha >= 0) Projectile.alpha -= 22;
         if (Projectile.timeLeft == 60) Projectile.tileCollide = true;
-        if (_flag) {
+        if (Projectile.localAI[0] == 0f) {
             Player player = Main.player[Projectile.owner];
-            _direction = -player.direction;
-            _flag = false;
+            Projectile.localAI[0] = -player.direction;
         }
         Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 1.57f;
-        Projectile.ai[0]++;
-        if (Projectile.ai[0] % 8 == 0 && Projectile.velocity.Length() > 6f) {
+        int direction = (int)Projectile.localAI[0];
+        Projectile.ai[0] += 1 * direction;
+        if (Math.Abs(Projectile.ai[0]) % 8 == 0 && Projectile.velocity.Length() > 6f) {
             bool flag = Main.rand.NextBool(3);
             int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, flag ? 60 : 96, Projectile.velocity.X, Projectile.velocity.Y, 0, default, flag ? 1.2f : 0.8f);
             Main.dust[dust].velocity *= 0.75f;
         }
-        Projectile.velocity.X = (float)(Math.Cos(60) * Projectile.ai[0] / 8) * _direction;
+        Projectile.velocity.X = (float)(Math.Cos(60) * Projectile.ai[0] / 8);
         Projectile.velocity.X *= 1.2f;
         Projectile.velocity.Y *= 0.98f;
     }

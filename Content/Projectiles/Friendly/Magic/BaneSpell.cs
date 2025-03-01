@@ -36,6 +36,10 @@ sealed class BaneSpell : ModProjectile {
         Projectile.alpha = 200;
     }
 
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        modifiers.DisableCrit();
+    }
+
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 4;
         return true;
@@ -84,14 +88,14 @@ sealed class BaneSpell : ModProjectile {
                 break;
             }
         }
-        target.AddBuff(ModContent.BuffType<EssenceDrain>(), 1200);
+        target.AddBuff(ModContent.BuffType<EssenceDrain>(), 600);
         target.GetGlobalNPC<EssenceDrainNPC>().Source = Projectile.owner;
 
         SoundEngine.PlaySound(SoundID.NPCDeath55, Projectile.Center);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        target.AddBuff(ModContent.BuffType<EssenceDrain>(), 1200);
+        target.AddBuff(ModContent.BuffType<EssenceDrain>(), 600);
         SoundEngine.PlaySound(SoundID.NPCDeath55, Projectile.Center);
     }
 
