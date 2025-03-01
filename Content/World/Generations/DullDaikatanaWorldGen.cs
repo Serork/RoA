@@ -26,7 +26,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
 
     private void DullDaikatanaGenerator(GenerationProgress progress, GameConfiguration configuration) {
         var genRand = WorldGen.genRand;
-        int count = WorldGenHelper.WorldSize;
+        int count = WorldGenHelper.WorldSize * 2;
         for (int num436 = 0; num436 < count; num436++) {
             double value2 = (double)num436 / (double)(count);
             progress.Set(value2);
