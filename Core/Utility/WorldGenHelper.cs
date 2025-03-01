@@ -899,18 +899,24 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static void Place1x2(int x, int y, ushort type, int styleX, int styleY, Action? onPlaced = null) {
+    public static void Place1x2(int x, int y, ushort type, int styleX, int styleY, Action? onPlaced = null, byte? paintID = null) {
         if (WorldGen.SolidTile2(x, y + 1) & !Framing.GetTileSafely(x, y - 1).HasTile) {
             Tile tile = Framing.GetTileSafely(x, y - 1);
             tile.HasTile = true;
             tile.TileFrameY = (short)styleY;
             tile.TileFrameX = (short)styleX;
             tile.TileType = type;
+            if (paintID != null) {
+                tile.TileColor = paintID.Value;
+            }
             tile = Framing.GetTileSafely(x, y);
             tile.HasTile = true;
             tile.TileFrameY = (short)(styleY + 18);
             tile.TileFrameX = (short)styleX;
             tile.TileType = type;
+            if (paintID != null) {
+                tile.TileColor = paintID.Value;
+            }
             onPlaced?.Invoke();
         }
     }

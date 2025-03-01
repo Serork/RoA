@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.GameContent.Generation;
+using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
@@ -13,7 +14,11 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.World.Generations;
 
 sealed class DullDaikatanaWorldGen : ModSystem {
+    private static bool _chairPlaced;
+
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
+        _chairPlaced = false;
+
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Hellforge"));
 
         tasks.Insert(genIndex, new PassLegacy("Dull Daikatana", DullDaikatanaGenerator, 9213.443f));
@@ -63,7 +68,49 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                         }
                         if (flag) {
                             WorldGen.PlaceTile(num438, num439, tileType);
-                            Console.WriteLine(num438 + " " + num439);
+                            // WorldGen.Place1x2(num438, y2 - 1, TileID.Chairs, 0);
+
+                            if (!_chairPlaced) {
+                                int y2 = num439;
+                                for (; !WorldGen.SolidTile(num438, y2) && !TileID.Sets.Platforms[Main.tile[num438, y2].TileType] && y2 < Main.maxTilesY - 20; y2++) {
+                                }
+                                int x2 = num438 + 1;
+                                int x3 = x2;
+                                bool flag2 = false;
+                                int attempts = 10;
+                                while (attempts > 0 && (Main.tile[x2, y2 - 1].HasTile || Main.tile[x2, y2 - 2].HasTile)) {
+                                    flag2 = true;
+                                    x2++;
+                                    attempts--;
+                                    if (!Main.tile[x2, y2].HasTile) {
+                                        break;
+                                    }
+                                }
+                                bool flag3 = false;
+                                if (attempts > 0) {
+                                    WorldGenHelper.Place1x2(x2, y2 - 1, TileID.Chairs, 0, 0, paintID: PaintID.WhitePaint);
+                                    if (Main.tile[x2, y2 - 1].TileType == TileID.Chairs) {
+                                        flag3 = true;
+                                        _chairPlaced = true;
+                                    }
+                                }
+                                if (!flag3) {
+                                    x2 = x3;
+                                    attempts = 10;
+                                    while (attempts > 0 && (Main.tile[x2, y2 - 1].HasTile || Main.tile[x2, y2 - 2].HasTile)) {
+                                        flag2 = false;
+                                        x2--;
+                                        attempts--;
+                                        if (!Main.tile[x2, y2].HasTile) {
+                                            break;
+                                        }
+                                    }
+                                    if (attempts > 0) {
+                                        WorldGenHelper.Place1x2(x2, y2 - 1, TileID.Chairs, 18, 0, paintID: PaintID.WhitePaint);
+                                        _chairPlaced = true;
+                                    }
+                                }
+                            }
                         }
                         if (Main.tile[num438, num439].TileType == tileType) {
                             flag24 = true;
