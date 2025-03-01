@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -59,6 +60,17 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
         int type = ModContent.ItemType<MercuriumOre>();
         if (Player.HasItemInAnyInventory(type) || (Player.whoAmI == Main.myPlayer && Main.mouseItem.type == type) || Player.trashItem.type == type) Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
 
+        if (Player.whoAmI == Main.myPlayer) {
+            if (Player.chest != -1) {
+                for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
+                    Item item = Main.chest[Player.chest].item[i];
+                    if (!item.IsEmpty() && item.type == ModContent.ItemType<MercuriumOre>()) {
+                        Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
+                        break;
+                    }
+                }
+            }
+        }
         foreach (Item item in Main.ActiveItems) {
             if (item is null || !item.active || item.type != ModContent.ItemType<MercuriumOre>() || item.Distance(Player.Center) > 100f)
                 continue;
