@@ -1628,3 +1628,8 @@ BeachWreath2: {
 		While [kw/n:wreath] is charged:
 		'''
 }
+
+DullDaikatana: {
+	DisplayName: Dull Daikatana
+	Tooltip: ""
+}

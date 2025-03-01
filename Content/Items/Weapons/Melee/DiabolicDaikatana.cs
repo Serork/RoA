@@ -95,6 +95,9 @@ sealed class DiabolicDaikatana : ModItem {
             if (player.direction == 1) {
                 drawPosition.X -= 4f;
             }
+            if (player.sitting.isSitting) {
+                drawPosition.Y -= 4f;
+            }
             if (player.itemAnimation < player.itemAnimationMax - 1 && player.itemAnimation != 0) {
                 return;
             }
