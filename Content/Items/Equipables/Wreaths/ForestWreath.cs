@@ -19,10 +19,6 @@ sealed class ForestWreath : BaseWreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        WreathHandler handler = player.GetModPlayer<WreathHandler>();
-        if (!handler.IsEmpty2) {
-            player.endurance += 0.1f;
-        }
         if (player.GetModPlayer<WreathHandler>().IsFull) {
             player.statLifeMax2 += 40;
         }
