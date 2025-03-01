@@ -43,7 +43,7 @@ sealed class DullDaikatana : ModTile {
         if (Main.rand.NextBool(4)) {
             type = ModContent.DustType<Dusts.DullDaikatana3>();
         }
-        else if (Main.rand.NextBool(2)) {
+        else if (Main.rand.NextBool(4)) {
             type = ModContent.DustType<Dusts.DullDaikatana2>();
         }
         else {
