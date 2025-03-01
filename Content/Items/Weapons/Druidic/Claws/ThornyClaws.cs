@@ -17,6 +17,8 @@ sealed class ThornyClaws : BaseClawsItem {
         Item.SetWeaponValues(14, 4f);
 
         Item.rare = ItemRarityID.Orange;
+
+        Item.value = Item.sellPrice(0, 0, 50, 0);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(75, 167, 85), new Color(100, 200, 110));

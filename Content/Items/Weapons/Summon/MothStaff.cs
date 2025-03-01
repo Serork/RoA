@@ -43,12 +43,13 @@ sealed class MothStaff : ModItem {
 		Item.damage = 15;
 		Item.knockBack = 4f;
 
-        Item.value = Item.sellPrice(gold: 1, silver: 25);
 		Item.rare = ItemRarityID.Green;
 		Item.UseSound = SoundID.Item77;
 
 		Item.shoot = ModContent.ProjectileType<Moth>();
         Item.buffType = ModContent.BuffType<Buffs.Moth>();
+
+        Item.value = Item.sellPrice(0, 1, 50, 0);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

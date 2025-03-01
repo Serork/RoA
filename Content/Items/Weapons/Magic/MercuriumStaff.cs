@@ -35,12 +35,13 @@ sealed class MercuriumStaff : ModItem {
         Item.noMelee = true;
         Item.mana = 11;
 
-        Item.value = Item.sellPrice(silver: 42);
         Item.rare = ItemRarityID.Blue;
         Item.UseSound = SoundID.Item43;
 
         Item.shoot = ModContent.ProjectileType<QuicksilverBolt>();
         Item.shootSpeed = 6f;
+
+        Item.value = Item.sellPrice(0, 0, 25, 0);
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {

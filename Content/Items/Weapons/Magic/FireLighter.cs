@@ -34,12 +34,13 @@ sealed class FireLighter : ModItem {
         Item.reuseDelay = 28;
         Item.mana = 10;
 
-        Item.value = Item.sellPrice(silver: 40);
         Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item17;
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Magic.HarmonizingBeam>();
         Item.shootSpeed = 3f;
+
+        Item.value = Item.sellPrice(0, 1, 25, 0);
     }
 
     public override Vector2? HoldoutOffset()

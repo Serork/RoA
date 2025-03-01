@@ -26,7 +26,6 @@ sealed class MercuriumBolter : ModItem {
         Item.useTime = Item.useAnimation = 35;
         Item.useStyle = ItemUseStyleID.Shoot;
 
-        Item.value = Item.sellPrice(silver: 42);
         Item.rare = ItemRarityID.Blue;
 
         Item.shoot = ProjectileID.WoodenArrowFriendly;
@@ -36,6 +35,8 @@ sealed class MercuriumBolter : ModItem {
         Item.UseSound = SoundID.Item61;
         Item.autoReuse = false;
         Item.noMelee = true;
+
+        Item.value = Item.sellPrice(0, 0, 22, 50);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

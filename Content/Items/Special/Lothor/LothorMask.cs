@@ -22,8 +22,9 @@ sealed class LothorMask : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;
-        Item.value = Item.sellPrice(0, 0, 75);
 
         Item.vanity = true;
+
+        Item.value = Item.sellPrice(0, 0, 75, 0);
     }
 }

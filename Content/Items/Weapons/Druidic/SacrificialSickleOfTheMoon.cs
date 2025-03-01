@@ -43,14 +43,15 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 		Item.damage = 16;
 		Item.knockBack = 4f;
 
-		Item.value = Item.sellPrice(gold: 1, silver: 40);
 		Item.rare = ItemRarityID.Orange;
 		Item.UseSound = SoundID.Item71;
 
 		Item.shootSpeed = 5f;
 		Item.shoot = ProjectileID.WoodenArrowFriendly;
 
-		Item.staff[Item.type] = true;
+        Item.value = Item.sellPrice(0, 1, 50, 0);
+
+        Item.staff[Item.type] = true;
 
 		NatureWeaponHandler.SetPotentialDamage(Item, 38);
 		NatureWeaponHandler.SetFillingRate(Item, 0.5f);

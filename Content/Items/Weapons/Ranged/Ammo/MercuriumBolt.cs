@@ -25,9 +25,10 @@ sealed class MercuriumBolt : ModItem {
         Item.consumable = true;
         Item.ammo = AmmoID.Arrow;
         Item.knockBack = 4.2f;
-        Item.value = 90;
         Item.DamageType = DamageClass.Ranged;
         Item.rare = ItemRarityID.Blue;
+
+        Item.value = Item.sellPrice(0, 0, 2, 0);
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {

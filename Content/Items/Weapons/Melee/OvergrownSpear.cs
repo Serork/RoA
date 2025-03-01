@@ -31,13 +31,14 @@ sealed class OvergrownSpear : ModItem {
 		Item.damage = 18;
 		Item.knockBack = 4f;
 
-		Item.value = Item.buyPrice(silver: 80);
 		Item.rare = ItemRarityID.Green;
 		Item.UseSound = SoundID.Item1;
 
 		Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Melee.OvergrownSpear>();
 		Item.shootSpeed = 8f;
-	}
+
+        Item.value = Item.sellPrice(0, 1, 50, 0);
+    }
 }
 
 sealed class OvergrownSpearPlayer : ModPlayer {

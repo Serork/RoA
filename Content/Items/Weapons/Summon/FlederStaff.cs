@@ -36,7 +36,6 @@ sealed class FlederStaff : ModItem {
         Item.knockBack = 2f;
 
         Item.rare = ItemRarityID.Orange;
-        Item.value = Item.sellPrice(gold: 1, silver: 40);
 
         Item.shoot = (ushort)ModContent.ProjectileType<Projectiles.Friendly.Summon.LittleFleder>();
         Item.shootSpeed = 5f;
@@ -44,6 +43,8 @@ sealed class FlederStaff : ModItem {
         Item.noMelee = true;
 
         Item.buffType = ModContent.BuffType<Buffs.LittleFleder>();
+
+        Item.value = Item.sellPrice(0, 2, 25, 0);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

@@ -35,12 +35,13 @@ sealed class RavensEye : ModItem {
         Item.channel = true;
         Item.mana = 15;
 
-        Item.value = Item.sellPrice(silver: 45);
         Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item105;
 
         Item.shoot = ModContent.ProjectileType<BloodyFeather>();
         Item.shootSpeed = 12f;
+
+        Item.value = Item.sellPrice(0, 1, 50, 0);
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {

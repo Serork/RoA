@@ -34,6 +34,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
         NatureWeaponHandler.SetFillingRate(Item, 0.25f);
 
         Item.rare = ItemRarityID.Green;
+        Item.value = Item.sellPrice(0, 0, 50, 0);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 

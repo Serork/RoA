@@ -14,7 +14,7 @@ abstract class MagicSphere : ModItem {
         Item.Size = new Vector2(width, height);
         Item.rare = ItemRarityID.Orange;
 
-        Item.value = Item.sellPrice(0, 2, 50, 0);
+        Item.value = Item.sellPrice(0, 2, 25, 0);
     }
 
     public override void PostUpdate() {

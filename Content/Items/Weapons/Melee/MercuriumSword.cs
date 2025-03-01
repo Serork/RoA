@@ -26,10 +26,11 @@ sealed class MercuriumSword : ModItem {
         Item.damage = 11;
         Item.knockBack = 4f;
 
-        Item.value = Item.sellPrice(silver: 42);
         Item.rare = ItemRarityID.Blue;
 
         Item.UseSound = SoundID.Item1;
+
+        Item.value = Item.sellPrice(0, 0, 25, 0);
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {

@@ -31,12 +31,13 @@ sealed class Bane : ModItem {
         Item.noMelee = true;
         Item.mana = 50;
 
-        Item.value = Item.sellPrice(gold: 1, silver: 10);
         Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item45;
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Magic.BaneSpell>();
         Item.shootSpeed = 6f;
+
+        Item.value = Item.sellPrice(0, 1, 50, 0);
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(2f, 0f);

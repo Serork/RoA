@@ -39,6 +39,8 @@ sealed class PlanetomaStaff : ModItem {
 
         Item.rare = ItemRarityID.Blue;
 
+        Item.value = Item.sellPrice(0, 1, 50, 0);
+
         Item.DamageType = DamageClass.Summon;
     }
 

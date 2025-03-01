@@ -27,6 +27,8 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
         NatureWeaponHandler.SetFillingRate(Item, 1f);
 
         Item.rare = ItemRarityID.Blue;
+        Item.value = Item.sellPrice(0, 0, 30, 0);
+
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 15);
     }
 

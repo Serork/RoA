@@ -31,9 +31,10 @@ sealed class StarFusion : ModItem {
         Item.damage = 22;
         Item.knockBack = 4f;
 
-        Item.value = Item.sellPrice(silver: 75);
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item1;
+
+        Item.value = Item.sellPrice(0, 2, 0, 0);
 
         //Item.glowMask = RiseofAgesGlowMask.Get(nameof(StarFusion));
     }

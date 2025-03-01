@@ -30,9 +30,10 @@ sealed class StoneMask : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.sellPrice(gold: 1);
 		Item.vanity = true;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 30, 0);
+    }
 
     internal sealed class StoneMaskDrawLayer : PlayerDrawLayer {
 		public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.FaceAcc);

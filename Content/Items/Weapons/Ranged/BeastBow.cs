@@ -33,14 +33,15 @@ sealed class BeastBow : ModItem {
 		Item.damage = 11; 
 		Item.knockBack = 2.15f;
 
-		Item.value = Item.sellPrice(gold: 1, silver: 20);
 		Item.rare = ItemRarityID.Green; 
 		Item.UseSound = SoundID.Item5;
 
 		Item.shoot = ProjectileID.WoodenArrowFriendly;
 		Item.useAmmo = AmmoID.Arrow;
 		Item.shootSpeed = 8f;
-	}
+
+        Item.value = Item.sellPrice(0, 1, 50, 0);
+    }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<BeastProj>()] < 1) {

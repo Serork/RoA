@@ -36,7 +36,6 @@ sealed class BrilliantBouquet : NatureItem {
         Item.useTime = Item.useAnimation = 25;
 
         //item.reuseDelay = 60;
-        Item.value = Item.buyPrice(0, 0, 30, 21);
 
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.UseSound = SoundID.Item65;
@@ -47,6 +46,8 @@ sealed class BrilliantBouquet : NatureItem {
 
         Item.shoot = ModContent.ProjectileType<TulipPetalOld>();
         Item.shootSpeed = 8f;
+
+        Item.value = Item.buyPrice(0, 2, 0, 0);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

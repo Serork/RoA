@@ -35,6 +35,8 @@ sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
 
         Item.rare = ItemRarityID.Green;
 
+        Item.value = Item.sellPrice(0, 2, 50, 0);
+
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
         base.SafeSetDefaults();

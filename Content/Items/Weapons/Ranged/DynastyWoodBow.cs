@@ -21,7 +21,7 @@ sealed class DynastyWoodBow : ModItem {
         Item.damage = 10;
         Item.knockBack = 1;
 
-        Item.value = Item.sellPrice(copper: 20);
+        Item.value = Item.sellPrice(copper: 40);
         Item.rare = ItemRarityID.White;
         Item.UseSound = SoundID.Item5;
 

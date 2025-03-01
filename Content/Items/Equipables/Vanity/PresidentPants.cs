@@ -31,7 +31,8 @@ sealed class PresidentPants : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.sellPrice(gold: 3, silver: 50);
 		Item.vanity = true;
-	}
+
+        Item.value = Item.sellPrice(0, 4, 0, 0);
+    }
 }

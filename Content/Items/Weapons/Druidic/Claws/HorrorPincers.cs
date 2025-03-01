@@ -16,6 +16,8 @@ sealed class HorrorPincers : BaseClawsItem {
         Item.SetWeaponValues(8, 4f);
 
         Item.rare = ItemRarityID.Blue;
+
+        Item.value = Item.sellPrice(0, 0, 25, 0);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(132, 75, 140), new Color(160, 100, 200));

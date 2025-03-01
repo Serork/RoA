@@ -25,6 +25,8 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 15);
         NatureWeaponHandler.SetFillingRate(Item, 0.45f);
+
+        Item.value = Item.sellPrice(0, 0, 1, 0);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 

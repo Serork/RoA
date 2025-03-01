@@ -42,7 +42,6 @@ sealed class DiabolicDaikatana : ModItem {
         Item.damage = 14;
         Item.knockBack = 3f;
 
-        Item.value = Item.buyPrice(gold: 1, silver: 60);
         Item.rare = ItemRarityID.Orange;
 
         Item.useTurn = false;
@@ -52,6 +51,8 @@ sealed class DiabolicDaikatana : ModItem {
 
         Item.shoot = ModContent.ProjectileType<DiabolicDaikatanaProj>();
         Item.shootSpeed = 1f;
+
+        Item.value = Item.sellPrice(0, 2, 0, 0);
     }
 
     //public override void AddRecipes() {

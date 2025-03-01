@@ -19,7 +19,7 @@ sealed class FlinxFurUshanka : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Green;
-		Item.value = Item.sellPrice(gold: 2);
+		Item.value = Item.sellPrice(0, 0, 50, 0);
 
 		Item.defense = 1;
 	}

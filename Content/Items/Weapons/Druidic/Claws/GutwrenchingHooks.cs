@@ -21,6 +21,8 @@ sealed class GutwrenchingHooks : BaseClawsItem {
 
         //NatureWeaponHandler.SetPotentialDamage(Item, 24);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, (ushort)(UseTime - UseTime / 3));
+
+        Item.value = Item.sellPrice(0, 0, 25, 0);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(216, 73, 73), new Color(255, 114, 114));

@@ -18,8 +18,8 @@ sealed class DoubleFocusCharm : NatureItem {
 		Item.rare = ItemRarityID.Green;
 		Item.accessory = true;
 
-		Item.value = Item.sellPrice(0, 1, 0, 0);
-	}
+        Item.value = Item.sellPrice(0, 1, 50, 0);
+    }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) => player.GetDamage(DruidClass.NatureDamage) += 0.12f;
 }

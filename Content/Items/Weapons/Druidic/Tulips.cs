@@ -31,7 +31,7 @@ sealed class WeepingTulip : NatureItem {
         Item.damage = 10;
         Item.knockBack = 1.5f;
 
-        Item.value = Item.sellPrice(silver: 50);
+        Item.value = Item.sellPrice(0, 0, 80, 0);
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item65;
 
@@ -93,7 +93,8 @@ sealed class SweetTulip : NatureItem {
         Item.damage = 8;
         Item.knockBack = 1.5f;
 
-        Item.value = Item.sellPrice(silver: 50);
+        Item.value = Item.sellPrice(0, 0, 40, 0);
+
         Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item65;
 
@@ -155,7 +156,8 @@ sealed class ExoticTulip : NatureItem {
         Item.damage = 6;
         Item.knockBack = 1.5f;
 
-        Item.value = Item.sellPrice(silver: 50);
+        Item.value = Item.sellPrice(0, 0, 25, 0);
+
         Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item65;
 

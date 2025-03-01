@@ -31,7 +31,7 @@ sealed class MercuriumPickaxe : ModItem {
 		Item.rare = ItemRarityID.Blue;
 		Item.UseSound = SoundID.Item1;
 
-        Item.value = Item.buyPrice(silver: 45);
+		Item.value = Item.sellPrice(silver: 45);
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {

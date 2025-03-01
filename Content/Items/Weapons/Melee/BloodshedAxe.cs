@@ -32,9 +32,10 @@ sealed class BloodshedAxe : ModItem {
 
         Item.useTime = Item.useAnimation = 50; // DO NOT CHANGE AT ANY COST
 
-        Item.value = Item.sellPrice(gold: 1, silver: 10);
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item1;
+
+        Item.value = Item.sellPrice(0, 2, 25, 0);
     }
 
     public override bool CanUseItem(Player player) {

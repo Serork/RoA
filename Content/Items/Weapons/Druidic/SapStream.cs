@@ -27,12 +27,13 @@ sealed class SapStream : NatureItem {
         NatureWeaponHandler.SetPotentialDamage(Item, 12);
         NatureWeaponHandler.SetFillingRate(Item, 0.5f);
 
-        Item.value = Item.sellPrice(silver: 15);
         Item.rare = ItemRarityID.Blue;
         Item.UseSound = SoundID.Item20;
 
         Item.shootSpeed = 1f;
         Item.shoot = ModContent.ProjectileType<GalipotStream>();
+
+        Item.value = Item.sellPrice(silver: 20);
 
         Item.staff[Item.type] = true;
     }

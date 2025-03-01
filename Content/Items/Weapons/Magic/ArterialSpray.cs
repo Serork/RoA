@@ -32,6 +32,8 @@ sealed class ArterialSpray : ModItem {
         Item.mana = 10;
         Item.rare = ItemRarityID.Blue;
 
+        Item.value = Item.sellPrice(0, 1, 50, 0);
+
         Item.noUseGraphic = true;
     }
 }

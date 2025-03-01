@@ -32,12 +32,13 @@ sealed class ChemicalPrisoner : ModItem {
         Item.damage = 25;
         Item.knockBack = 3;
 
-        Item.value = Item.sellPrice(gold: 1, silver: 65);
         Item.rare = ItemRarityID.Orange;
 
         Item.useAmmo = AmmoID.Bullet;
         Item.shootSpeed = 8f;
         Item.shoot = ProjectileID.PurificationPowder;
+
+        Item.value = Item.sellPrice(0, 2, 25, 0);
     }
 
     public override Vector2? HoldoutOffset()

@@ -21,7 +21,8 @@ sealed class StrangerCoat : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Orange;
-		Item.value = Item.sellPrice(gold: 10);
 		Item.vanity = true;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 30, 0);
+    }
 }

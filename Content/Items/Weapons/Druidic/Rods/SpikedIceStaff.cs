@@ -28,6 +28,8 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         NatureWeaponHandler.SetFillingRate(Item, 0.65f);
 
         Item.rare = ItemRarityID.Blue;
+
+        Item.value = Item.sellPrice(0, 1, 0, 0);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 22);
 
         Item.staff[Type] = true;

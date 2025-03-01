@@ -22,6 +22,8 @@ sealed class HellfireClaws : BaseClawsItem {
         Item.SetWeaponValues(16, 4.2f);
 
         Item.rare = ItemRarityID.Orange;
+
+        Item.value = Item.sellPrice(0, 2, 50, 0);
     }
 
     public override bool CanUseItem(Player player) => base.CanUseItem(player) && player.ownedProjectileCounts[ModContent.ProjectileType<HellfireClawsSlash>()] < 1;

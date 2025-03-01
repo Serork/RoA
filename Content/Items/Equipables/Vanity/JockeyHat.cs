@@ -32,8 +32,8 @@ sealed class JockeyHat : ModItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.buyPrice(gold: 2, silver: 50);
-		Item.value = Item.sellPrice(silver: 50);
 		Item.vanity = true;
-	}
+
+        Item.value = Item.sellPrice(0, 3, 0, 0);
+    }
 }

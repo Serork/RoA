@@ -20,6 +20,8 @@ sealed class MushroomStaff : NatureItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 12);
         NatureWeaponHandler.SetFillingRate(Item, 0.5f);
+
+        Item.value = Item.sellPrice(0, 0, 20, 0);
     }
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

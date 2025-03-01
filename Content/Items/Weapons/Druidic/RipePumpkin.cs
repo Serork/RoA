@@ -22,6 +22,8 @@ sealed class RipePumpkin : NatureItem {
 
 		NatureWeaponHandler.SetPotentialDamage(Item, 18);
         NatureWeaponHandler.SetFillingRate(Item, 0.5f);
+
+        Item.value = Item.sellPrice(0, 0, 20, 0);
     }
 
     public override bool CanUseItem(Player player) {

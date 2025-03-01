@@ -46,6 +46,9 @@ sealed class PineCone : NatureItem {
 
 		NatureWeaponHandler.SetPotentialDamage(Item, 10);
         NatureWeaponHandler.SetFillingRate(Item, 0.8f);
+
+
+        Item.value = Item.sellPrice(0, 0, 15, 0);
     }
 
     private static bool IsValidForPineConeDrop(int i, int j) {

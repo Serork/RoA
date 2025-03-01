@@ -29,12 +29,13 @@ sealed class FlederSlayer : ModItem {
         Item.damage = 35;
         Item.knockBack = 8f;
 
-        Item.value = Item.sellPrice(gold: 1, silver: 40);
         Item.rare = ItemRarityID.LightRed;
         Item.UseSound = SoundID.Item1;
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Melee.FlederSlayer>();
         Item.shootSpeed = 4f;
+
+        Item.value = Item.sellPrice(0, 3, 50, 0);
     }
 
     public override bool CanUseItem(Player player) {

@@ -19,6 +19,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
 
         Item.rare = ItemRarityID.Green;
+
+        Item.value = Item.sellPrice(0, 0, 50, 0);
     }
 
     //protected override (Color, Color) SlashColors(Player player) => (new(72, 86, 214), new(114, 126, 255));
