@@ -93,7 +93,7 @@ sealed class ProtectiveRoots : NatureProjectile {
         if (Projectile.localAI[1] == 0) {
             int timeLeft = 225;
             Projectile.timeLeft = (int)Math.Min(timeLeft, timeLeft * value4);
-            Projectile.penetrate = Projectile.maxPenetrate = maxFrame + 1;
+            Projectile.penetrate = Projectile.maxPenetrate = (maxFrame + 1) * 2;
             //Projectile.scale = Math.Min(1f, value2 * 2.5f);
             Projectile.rotation = Projectile.ai[2] / 100f * 2f * MathHelper.TwoPi * Main.player[Projectile.owner].direction;
         }
