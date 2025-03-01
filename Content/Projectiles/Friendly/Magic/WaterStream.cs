@@ -64,6 +64,9 @@ sealed class WaterStream : ModProjectile {
 
             return;
 		}
+        else {
+            Projectile.tileCollide = Projectile.timeLeft < 40;
+        }
 
         if (Projectile.owner == Main.myPlayer) {
 			int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);

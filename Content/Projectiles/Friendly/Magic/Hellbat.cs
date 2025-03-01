@@ -3,6 +3,8 @@
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -86,6 +88,71 @@ sealed class Hellbat : ModProjectile {
         if (Projectile.frame >= Main.projFrames[Type]) {
             Projectile.frame = 0;
         }
+
+        int num606 = -1;
+        Vector2 vector52 = Projectile.Center;
+        float num607 = 300f;
+
+        if (Projectile.localAI[0] == 0f && Projectile.ai[1] == 0f)
+            Projectile.localAI[0] = 30f;
+
+        if (Projectile.localAI[0] > 0f)
+            Projectile.localAI[0]--;
+
+        if (Projectile.ai[1] == 0f && Projectile.localAI[0] == 0f) {
+            for (int num608 = 0; num608 < 200; num608++) {
+                NPC nPC7 = Main.npc[num608];
+                if (nPC7.CanBeChasedBy(this) && (Projectile.ai[1] == 0f || Projectile.ai[1] == (float)(num608 + 1))) {
+                    Vector2 center7 = nPC7.Center;
+                    float num609 = Vector2.Distance(center7, vector52);
+                    if (num609 < num607 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, nPC7.position, nPC7.width, nPC7.height)) {
+                        num607 = num609;
+                        vector52 = center7;
+                        num606 = num608;
+                    }
+                }
+            }
+
+            if (num606 >= 0) {
+                Projectile.ai[1] = num606 + 1;
+                Projectile.netUpdate = true;
+            }
+
+            num606 = -1;
+        }
+
+
+        bool flag33 = false;
+        if (Projectile.ai[1] != 0f) {
+            int num610 = (int)(Projectile.ai[1] - 1f);
+            if (Main.npc[num610].active && !Main.npc[num610].dontTakeDamage && Main.npc[num610].immune[Projectile.owner] == 0) {
+                float num611 = Main.npc[num610].position.X + (float)(Main.npc[num610].width / 2);
+                float num612 = Main.npc[num610].position.Y + (float)(Main.npc[num610].height / 2);
+                float num613 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num611) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num612);
+                if (num613 < num607) {
+                    flag33 = true;
+                    vector52 = Main.npc[num610].Center;
+                }
+            }
+            else {
+                Projectile.ai[1] = 0f;
+                flag33 = false;
+                Projectile.netUpdate = true;
+            }
+        }
+        if (flag33) {
+            Vector2 v6 = vector52 - Projectile.Center;
+            float num614 = Projectile.velocity.ToRotation();
+            float num615 = v6.ToRotation();
+            double num616 = num615 - num614;
+            if (num616 > Math.PI)
+                num616 -= Math.PI * 2.0;
+
+            if (num616 < -Math.PI)
+                num616 += Math.PI * 2.0;
+
+            Projectile.velocity = Projectile.velocity.RotatedBy(num616 * 0.05);
+        }
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
@@ -112,7 +179,7 @@ sealed class Hellbat : ModProjectile {
 			target.DelBuff(buffIndex);
 		}
 		if (!Projectile.wet && !target.wet) {
-			target.AddBuff(BuffID.OnFire3, Main.rand.Next(30, 90), false);
+			target.AddBuff(BuffID.OnFire, Main.rand.Next(30, 90), false);
 		}
 	}
 
@@ -124,7 +191,7 @@ sealed class Hellbat : ModProjectile {
 			target.DelBuff(buffIndex);
 		}
 		if (!Projectile.wet && !target.wet) {
-			target.AddBuff(BuffID.OnFire3, Main.rand.Next(30, 90), false);
+			target.AddBuff(BuffID.OnFire, Main.rand.Next(30, 90), false);
 		}
 	}
 	

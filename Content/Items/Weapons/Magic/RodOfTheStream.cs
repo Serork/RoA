@@ -60,7 +60,7 @@ sealed class RodOfTheStream : Rod {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
+        /*if (base.Shoot(player, source, position, velocity, type, damage, knockback))*/ {
             int amount = 2;
             for (int i = 0; i < 20; i++) {
                 Vector2 dustPosition = position;

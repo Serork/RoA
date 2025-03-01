@@ -23,7 +23,7 @@ sealed class EmotePicker : ILoadable {
         orig(self, list, plr, other);
 
         NPC nPC = (NPC)self.anchor.entity;
-        if (nPC.type == NPCID.WitchDoctor || nPC.type == NPCID.Dryad) {
+        if (/*nPC.type == NPCID.WitchDoctor ||*/ nPC.type == NPCID.Dryad) {
             list.Add(ModContent.EmoteBubbleType<BackwoodsEmote>());
         }
 

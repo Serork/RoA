@@ -29,13 +29,15 @@ sealed class RodOfTheDragonfire : Rod {
         int width = 42; int height = 42;
         Item.Size = new Vector2(width, height);
 
-        Item.useTime = Item.useAnimation = 6;
+        Item.useTime = Item.useAnimation = 26;
         Item.autoReuse = true;
 
-        Item.damage = 6;
+        Item.damage = 20;
         Item.knockBack = 2f;
 
-        Item.mana = 19;
+        Item.crit = 4;
+
+        Item.mana = 14;
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
@@ -53,7 +55,7 @@ sealed class RodOfTheDragonfire : Rod {
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
-            int amount = Main.rand.Next(2, 4);
+            int amount = 2;
             Vector2 dustPosition = position;
             for (int i = -amount + 1; i < amount; i++) {
                 Vector2 vector2 = Utils.RotatedBy(velocity, (double)(i / 10f)) * Main.rand.NextFloat(0.75f, 1.35f);
