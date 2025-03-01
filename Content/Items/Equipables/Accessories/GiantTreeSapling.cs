@@ -23,7 +23,8 @@ sealed class GiantTreeSapling : NatureItem {
 
 		Item.rare = ItemRarityID.Blue;
 		Item.accessory = true;
-		Item.value = Item.sellPrice(gold: 1);
+
+		Item.value = Item.sellPrice(0, 0, 75, 0);
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {

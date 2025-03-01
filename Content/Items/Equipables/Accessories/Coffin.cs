@@ -25,7 +25,6 @@ sealed class Coffin : ModItem {
 		int width = 32; int height = width;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 60);
 		Item.rare = ItemRarityID.Green;
 
 		Item.accessory = true;
@@ -39,7 +38,9 @@ sealed class Coffin : ModItem {
 
 		Item.createTile = ModContent.TileType<Tiles.Decorations.Coffin>();
 		Item.consumable = true;
-	}
+
+        Item.value = Item.sellPrice(0, 1, 0, 0);
+    }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.GetModPlayer<CoffinPlayer>().boneTrousle = true;

@@ -27,10 +27,11 @@ sealed class BloodbathLocket : ModItem {
         int width = 28; int height = width;
         Item.Size = new Vector2(width, height);
 
-        Item.value = Item.sellPrice(gold: 2);
         Item.rare = ItemRarityID.Green;
         Item.accessory = true;
         Item.expert = true;
+
+        Item.value = Item.sellPrice(0, 2, 0, 0);
     }
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {

@@ -23,7 +23,7 @@ sealed class SoulOfTheWoods : NatureItem {
 		Item.rare = ItemRarityID.Orange;
 		Item.accessory = true;
 
-        Item.value = Item.sellPrice(gold: 2, silver: 30);
+        Item.value = Item.sellPrice(0, 2, 0, 0);
     }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {

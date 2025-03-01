@@ -23,7 +23,8 @@ sealed class Herbarium : NatureItem {
 
         Item.rare = ItemRarityID.Green;
         Item.accessory = true;
-        Item.value = Item.sellPrice(gold: 2);
+
+        Item.value = Item.sellPrice(0, 0, 3, 0);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {

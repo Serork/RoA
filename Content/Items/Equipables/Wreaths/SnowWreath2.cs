@@ -13,9 +13,10 @@ sealed class SnowWreath2 : BaseWreathItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = 1;
-		Item.value = Item.sellPrice(gold: 1, silver: 50);
 		Item.rare = ItemRarityID.Green;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 75, 0);
+    }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();

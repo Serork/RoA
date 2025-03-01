@@ -57,10 +57,11 @@ sealed class CosmicHat : ModItem {
 		int width = 34; int height = 22;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(gold: 1, silver: 80);
 		Item.rare = ItemRarityID.Orange;
 		Item.accessory = true;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 50, 0);
+    }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.GetModPlayer<CosmisHatHandler>().IsEffectActive = true;

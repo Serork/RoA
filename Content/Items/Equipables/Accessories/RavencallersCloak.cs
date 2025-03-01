@@ -39,10 +39,11 @@ sealed class RavencallersCloak : ModItem {
 		int width = 24; int height = 34;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 80);
 		Item.rare = ItemRarityID.Green;
 		Item.accessory = true;
-	}
+
+        Item.value = Item.sellPrice(0, 1, 0, 0);
+    }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
         RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();

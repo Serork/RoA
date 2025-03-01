@@ -29,7 +29,7 @@ sealed class MoonFlower : ModItem {
         Item.autoReuse = false;
         Item.UseSound = SoundID.Item8;
 
-        Item.value = Item.sellPrice(0, 0, 80, 60);
+        Item.value = Item.sellPrice(0, 5, 0, 0);
         Item.rare = ItemRarityID.Orange;
 
         Item.buffType = ModContent.BuffType<SmallMoon>();

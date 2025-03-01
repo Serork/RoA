@@ -11,6 +11,7 @@ using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI.Gamepad;
 
@@ -122,8 +123,10 @@ sealed class BloodCursor : ModItem {
         Item.height = 24;
         Item.accessory = true;
         Item.vanity = true;
-        Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));
+        Item.rare = ItemRarityID.LightRed;
         Item.hasVanityEffects = true;
+
+        Item.value = Item.sellPrice(0, 2, 0, 0);
     }
 
     public override void UpdateEquip(Player player) => player.GetModPlayer<BloodCursorHandler>().IsEffectActive = true;

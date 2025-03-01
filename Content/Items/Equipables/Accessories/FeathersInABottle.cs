@@ -24,7 +24,8 @@ sealed class FeathersInABottle : NatureItem {
 
         Item.accessory = true;
         Item.rare = ItemRarityID.Green;
-        Item.value = 50000;
+
+        Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) => player.GetJumpState<FeathersInABottleExtraJump>().Enable();

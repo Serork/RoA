@@ -13,8 +13,9 @@ sealed class ForestWreath : BaseWreathItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = 1;
-		Item.value = Item.sellPrice(gold: 1);
 		Item.rare = ItemRarityID.Blue;
+
+        Item.value = Item.sellPrice(0, 0, 50, 0);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {

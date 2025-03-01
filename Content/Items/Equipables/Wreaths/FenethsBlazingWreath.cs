@@ -16,8 +16,9 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = 1;
-		Item.value = Item.sellPrice(gold: 2);
 		Item.rare = ItemRarityID.Orange;
+
+        Item.value = Item.sellPrice(0, 0, 75, 0);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {

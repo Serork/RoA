@@ -27,13 +27,14 @@ sealed class RagingBoots : NatureItem {
 
         Item.damage = 34;
         Item.knockBack = 5f;
-        Item.value = Item.buyPrice(gold: 3);
         Item.defense = 2;
         Item.rare = ItemRarityID.Orange;
         Item.accessory = true;
 
         NatureWeaponHandler.SetPotentialDamage(Item, 45);
         NatureWeaponHandler.SetFillingRate(Item, 0.25f);
+
+        Item.value = Item.sellPrice(0, 1, 75, 0);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {

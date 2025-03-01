@@ -24,8 +24,9 @@ sealed class BandOfPurity : NatureItem {
 
 		Item.rare = ItemRarityID.Green;
 		Item.accessory = true;
-		Item.value = Item.sellPrice(gold: 1, silver: 50);
-	}
+
+        Item.value = Item.sellPrice(0, 1, 50, 0);
+    }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.05f;

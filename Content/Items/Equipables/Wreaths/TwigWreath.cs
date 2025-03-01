@@ -24,9 +24,10 @@ sealed class TwigWreath : BaseWreathItem {
 		Item.Size = new Vector2(width, height);
 
 		Item.maxStack = 1;
-		Item.value = Item.buyPrice(gold: 3);
 		Item.rare = ItemRarityID.White;
-	}
+
+        Item.value = Item.sellPrice(0, 0, 50, 0);
+    }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         if (player.GetModPlayer<WreathHandler>().IsFull) {

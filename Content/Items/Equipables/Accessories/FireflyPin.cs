@@ -24,8 +24,6 @@ sealed class FireflyPin : NatureItem {
 		Item.rare = ItemRarityID.Orange;
 		Item.accessory = true;
 
-		Item.value = Item.buyPrice(gold: 3);
-
         Item.useStyle = 1;
         Item.autoReuse = true;
         Item.useTurn = true;
@@ -34,6 +32,8 @@ sealed class FireflyPin : NatureItem {
         Item.consumable = true;
         Item.makeNPC = ModContent.NPCType<FireflyMimic>();
         Item.noUseGraphic = true;
+
+        Item.value = Item.sellPrice(0, 3, 0, 0);
     }
 
 	public override void UpdateAccessory(Player player, bool hideVisual)  => player.GetModPlayer<DruidStats>().KeepBonusesForTime += 120f;

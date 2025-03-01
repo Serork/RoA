@@ -19,7 +19,8 @@ sealed class FeathersInABalloon : NatureItem {
 
         Item.accessory = true;
         Item.rare = ItemRarityID.LightRed;
-        Item.value = 150000;
+
+        Item.value = Item.sellPrice(0, 3, 0, 0);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {

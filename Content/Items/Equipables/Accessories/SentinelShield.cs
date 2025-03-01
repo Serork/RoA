@@ -23,10 +23,11 @@ sealed class SentinelShield : ModItem {
 	public override void SetDefaults() {
         Item.width = 26;
         Item.height = 28;
-        Item.value = Item.sellPrice(0, 0, 80, 0);
         Item.rare = ItemRarityID.Green;
         Item.accessory = true;
         Item.defense = 1;
+
+        Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {

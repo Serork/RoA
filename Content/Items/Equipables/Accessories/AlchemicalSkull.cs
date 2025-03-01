@@ -23,11 +23,12 @@ sealed class AlchemicalSkull : ModItem {
 		int width = 22; int height = 28;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(gold: 1, silver: 60);
 		Item.rare = ItemRarityID.Orange;
 		Item.accessory = true;
 		Item.defense = 1;
-	}
+
+        Item.value = Item.sellPrice(0, 3, 0, 0);
+    }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.fireWalk = true;
