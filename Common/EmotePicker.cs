@@ -28,7 +28,7 @@ sealed class EmotePicker : ILoadable {
         }
 
         int hunterType = ModContent.NPCType<Hunter>();
-        bool flag = ((NPC)other.entity).type == hunterType;
+        bool flag = other != null && ((NPC)other.entity).type == hunterType;
         if (flag || (plr.InModBiome<BackwoodsBiome>() && Main.rand.NextBool(5))) {
             list.Add(ModContent.EmoteBubbleType<HunterEmote>());
             list.Add(ModContent.EmoteBubbleType<BackwoodsEmote>());
