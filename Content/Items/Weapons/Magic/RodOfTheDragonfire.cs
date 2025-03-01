@@ -32,7 +32,7 @@ sealed class RodOfTheDragonfire : Rod {
         Item.useTime = Item.useAnimation = 26;
         Item.autoReuse = true;
 
-        Item.damage = 20;
+        Item.damage = 26;
         Item.knockBack = 2f;
 
         Item.crit = 4;
