@@ -33,7 +33,7 @@ sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
         Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item65); 
         Item.SetSize(36, 38);
 
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 2, 50, 0);
 
