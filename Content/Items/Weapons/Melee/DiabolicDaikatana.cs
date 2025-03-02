@@ -39,8 +39,10 @@ sealed class DiabolicDaikatana : ModItem {
         Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 14;
-        Item.knockBack = 3f;
+        Item.damage = 28;
+        Item.knockBack = 5f;
+
+        Item.crit = 6;
 
         Item.rare = ItemRarityID.Orange;
 
@@ -238,7 +240,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
                 Projectile.ai[0] = 1f;
                 SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                 Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, Main.MouseWorld, 12f);
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.MountedCenter + velocity * 2f, velocity, ModContent.ProjectileType<JudgementCut>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.MountedCenter + velocity * 2f, velocity, ModContent.ProjectileType<JudgementCut>(), Projectile.damage / 2, Projectile.knockBack / 2.5f, Projectile.owner);
                 Projectile.netUpdate = true;
             }
             if (Progress > 0.375f && Progress < 0.575f && Projectile.numUpdates == -1) {
