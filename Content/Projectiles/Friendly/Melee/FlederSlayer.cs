@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Utilities;
 
-using RoA.Common.Networking.Packets;
-using RoA.Common.Networking;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -19,8 +17,6 @@ using Terraria.Enums;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.WorldBuilding;
-using Humanizer;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
