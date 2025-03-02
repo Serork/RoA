@@ -19,9 +19,11 @@ sealed class MercuriumBolter : ModItem {
         int width = 34; int height = 18;
         Item.Size = new Vector2(width, height);
 
-        Item.damage = 8;
+        Item.damage = 10;
         Item.knockBack = 0f;
         Item.DamageType = DamageClass.Ranged;
+
+        Item.crit = 4;
 
         Item.useTime = Item.useAnimation = 35;
         Item.useStyle = ItemUseStyleID.Shoot;
