@@ -49,3 +49,5 @@ DruidPotentialDamageModifierMult: "{0:+0;-#}% potential damage"
 DruidSpeedModifier: "{0:+0;-#}% speed"
 DruidPotentialSpeedModifier: "{0:+0;-#}% potential speed"
 DruidFillingRateModifierMult: "{0:+0;-#}% charge rate"
+DruidSizeModifier: "{0:+0;-#}% size"
+Large: Mods.RoA.Prefixes.Large

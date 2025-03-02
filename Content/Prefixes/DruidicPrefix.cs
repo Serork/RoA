@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Druid;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
@@ -20,8 +21,10 @@ sealed class DruidicPrefix(string name,
                            float druidKnockback = 0f, 
 						   float druidKnockbackMult = 1f,
 						   float fillingRateMult = 1f,
+                           float druidSize = 1f,
 						   bool shouldApplyTipsy = false,
-						   bool vanillaAdapted = false) : ModPrefix {
+						   bool vanillaAdapted = false,
+                           bool forClaws = false) : ModPrefix {
 	private const string LOCALIZATION = "Mods.RoA.Prefixes.";
 
     sealed class PrefixLoader : ILoadable {
@@ -105,6 +108,10 @@ sealed class DruidicPrefix(string name,
                 druidDamageMult: 0.8f, potentialDamageMult: 0.8f, druidSpeedMult: 0.85f, druidKnockbackMult: 1f, druidCrit: 0));
             mod.AddContent(new DruidicPrefix("Nasty", vanillaAdapted: true,
                 druidDamageMult: 0.95f, potentialDamageMult: 0.95f, druidSpeedMult: 1.1f, druidKnockbackMult: 0.9f, druidCrit: 2));
+
+            // melee (claws)
+            mod.AddContent(new DruidicPrefix("Large", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1.1f, druidKnockbackMult: 1f, druidSize: 1.12f, druidCrit: 0));
         }
 
         void ILoadable.Unload() { }
@@ -138,8 +145,10 @@ sealed class DruidicPrefix(string name,
 	internal readonly float _druidSpeedMult = druidSpeedMult;
     internal readonly float _potentialDruidSpeedMult = potentialSpeedMult;
 	internal readonly float _fillingRateMult = fillingRateMult;
-	internal readonly bool _shouldApplyTipsy = shouldApplyTipsy;
+    internal readonly float _druidSize = druidSize;
+    internal readonly bool _shouldApplyTipsy = shouldApplyTipsy;
     internal readonly bool _vanillaAdapted = vanillaAdapted;
+    internal readonly bool _forClaws = forClaws;
 
     private static LocalizedText GetLocalizedText(string name) => Language.GetOrRegister(LOCALIZATION + name);
 
@@ -147,7 +156,10 @@ sealed class DruidicPrefix(string name,
 
     public override float RollChance(Item item) => 1f;
 
-	public override bool CanRoll(Item item) => item.IsADruidicWeapon();
+    public override bool CanRoll(Item item) {
+        bool flag = item.ModItem is BaseClawsItem;
+        return item.IsADruidicWeapon() && ((!flag && !_forClaws) || (flag && (_forClaws || _vanillaAdapted)));
+    }
 
 	public override void SetStaticDefaults() {
 		DruidicPrefixes.Add(Type, this);
@@ -272,6 +284,10 @@ sealed class DruidicPrefix(string name,
             case "Nasty":
                 valueMult *= 1.08f;
                 break;
+
+            case "Large":
+                valueMult *= 1.125f;
+                break;
         }
 	}
 
@@ -342,6 +358,13 @@ sealed class DruidicPrefix(string name,
             yield return new TooltipLine(Mod, "ExtraDruidCrit", GetLocalizedText("DruidCritModifier").Format(_druidCrit)) {
                 IsModifier = true,
                 IsModifierBad = _druidCrit < 0
+            };
+        }
+        if (_druidSize != 1f) {
+            float value = _druidSize;
+            yield return new TooltipLine(Mod, "ExtraDruidSize", GetLocalizedText("DruidSizeModifier").Format(value * 100f - 100)) {
+                IsModifier = true,
+                IsModifierBad = value < 1f
             };
         }
         if (_druidKnockback != 0f) {

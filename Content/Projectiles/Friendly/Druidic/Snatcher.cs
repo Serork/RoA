@@ -354,14 +354,14 @@ sealed class Snatcher : NatureProjectile {
         Projectile.Center = playerCenter;
         if (Projectile.ai[0] == 0f) {
             bool flag = player.ownedProjectileCounts[Type] < 1;
-            float ai1 = 1f;
+            float ai1 = flag.ToDirectionInt();
             Projectile.ai[1] = ai1 * -player.direction;
             if (!flag) {
                 if (Projectile.owner == Main.myPlayer) {
                     foreach (Projectile projectile in Main.ActiveProjectiles) {
                         if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI) {
                             Projectile.ai[0] = projectile.whoAmI + 1f;
-                            Projectile.ai[1] = -projectile.ai[1];
+                            //Projectile.ai[1] = -projectile.ai[1];
                             Projectile.netUpdate = true;
                         }
                     }

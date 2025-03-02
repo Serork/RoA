@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Content;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Prefixes;
 using RoA.Core.Utility;
 
@@ -40,10 +41,26 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public override int ChoosePrefix(Item item, UnifiedRandom rand) {
         if (item.IsADruidicWeapon() && !item.accessory) {
             int result = DruidicPrefix.DruidicPrefixes.ElementAt(rand.Next(0, DruidicPrefix.DruidicPrefixes.Count)).Key;
+            while (item.ModItem is not BaseClawsItem && DruidicPrefix.DruidicPrefixes[result]._forClaws) {
+                result = DruidicPrefix.DruidicPrefixes.ElementAt(rand.Next(0, DruidicPrefix.DruidicPrefixes.Count)).Key;
+            }
+            while (item.ModItem is BaseClawsItem && !DruidicPrefix.DruidicPrefixes[result]._forClaws && !DruidicPrefix.DruidicPrefixes[result]._vanillaAdapted) {
+                result = DruidicPrefix.DruidicPrefixes.ElementAt(rand.Next(0, DruidicPrefix.DruidicPrefixes.Count)).Key;
+            }
             return result;
         }
 
         return base.ChoosePrefix(item, rand);
+    }
+
+    public static float GetSize(Item item) {
+        NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
+        DruidicPrefix activePrefix = handler.ActivePrefix;
+        float result = item.scale;
+        if (activePrefix != null) {
+            result *= activePrefix._druidSize;
+        }
+        return result;
     }
 
     public static float GetFillingRate(Item item) {

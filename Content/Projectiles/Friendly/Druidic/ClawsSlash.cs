@@ -294,7 +294,7 @@ class ClawsSlash : NatureProjectile {
 
         if (_scale == 0f) {
             _scale = 1f;
-            float scale = Main.player[Projectile.owner].CappedMeleeScale();
+            float scale = Main.player[Projectile.owner].CappedMeleeOrDruidScale();
             if (scale != 1f) {
                 _scale *= scale;
                 Projectile.scale *= scale;

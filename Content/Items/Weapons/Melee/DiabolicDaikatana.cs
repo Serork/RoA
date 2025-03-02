@@ -104,7 +104,7 @@ sealed class DiabolicDaikatana : ModItem {
                 return;
             }
 
-            float scale = player.CappedMeleeScale();
+            float scale = player.CappedMeleeOrDruidScale();
             Texture2D texture = _daikatanaTexture.Value;
             Vector2 position = new((int)(drawPosition.X), (int)(drawPosition.Y));
             Vector2 offset = new(texture.Width / 2f * player.direction, 0f);
@@ -215,7 +215,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
 
             if (Projectile.localAI[2] == 0f) {
                 Projectile.localAI[2] = 1f;
-                float scale = Main.player[Projectile.owner].CappedMeleeScale();
+                float scale = Main.player[Projectile.owner].CappedMeleeOrDruidScale();
                 if (scale != 1f) {
                     Projectile.localAI[2] *= scale;
                     Projectile.scale *= scale;

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Common.Druid;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 
 using System;
 using System.Collections.Generic;
@@ -252,13 +254,17 @@ static class Helper {
         return value2 / (2.0f * (value2 - value) + 1.0f);
     }
 
-    public static float CappedMeleeScale(this Player player) {
+    public static float CappedMeleeOrDruidScale(this Player player) {
         var item = player.HeldItem;
-        return Math.Clamp(player.GetAdjustedItemScale(item), 0.5f * item.scale, 2f * item.scale);
+        float result = player.GetAdjustedItemScale(item);
+        if (item.ModItem != null && item.ModItem is BaseClawsItem) {
+            result *= NatureWeaponHandler.GetSize(item);
+        }
+        return Math.Clamp(result, 0.5f * item.scale, 2f * item.scale);
     }
 
     public static void ScaleUp(Projectile proj) {
-        float scale = Main.player[proj.owner].CappedMeleeScale();
+        float scale = Main.player[proj.owner].CappedMeleeOrDruidScale();
         if (scale != 1f) {
             proj.scale *= scale;
             proj.width = (int)(proj.width * proj.scale);
