@@ -189,7 +189,7 @@ sealed class BeastProj : ModProjectile  {
 					else {
 						array = player.inventory[minValue];
 						if (player.inventory[minValue].stack > 0) {
-							if (player.inventory[minValue].maxStack != 1 && Main.rand.NextBool(3)) {
+							if (player.inventory[minValue].maxStack != 1 && Main.rand.NextBool(3) && player.IsAmmoFreeThisShot(player.HeldItem, player.inventory[minValue], Projectile.identity)) {
 								player.inventory[minValue].stack -= 1;
 							}
 						}
