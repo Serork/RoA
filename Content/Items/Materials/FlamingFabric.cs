@@ -13,10 +13,11 @@ sealed class FlamingFabric : ModItem {
 	}
 
 	public override void SetDefaults() {
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Decorations.FlamingFabric>());
+
 		int width = 24; int height = 26;
 		Item.Size = new Vector2(width, height);
 
-		Item.value = Item.sellPrice(silver: 35);
 		Item.rare = ItemRarityID.Green;
 		Item.maxStack = Item.CommonMaxStack;
 
