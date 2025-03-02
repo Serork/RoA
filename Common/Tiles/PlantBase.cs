@@ -228,6 +228,52 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         return false;
     }
 
+    public static bool TryPlacePlant2(int i, int j, ushort tileTypeToGrow, int style = 0, int checkRadius = 15, int maxAlchNearby = 5, Action<Point>? onPlaced = null, params int[] validTiles) {
+        int num3 = checkRadius;
+        int num4 = maxAlchNearby;
+        int num5 = 0;
+        num3 = (int)((double)num3 * ((double)Main.maxTilesX / 4200.0));
+        int num6 = Utils.Clamp(i - num3, 4, Main.maxTilesX - 4);
+        int num7 = Utils.Clamp(i + num3, 4, Main.maxTilesX - 4);
+        int num8 = Utils.Clamp(j - num3, 4, Main.maxTilesY - 4);
+        int num9 = Utils.Clamp(j + num3, 4, Main.maxTilesY - 4);
+        for (int i2 = num6; i2 <= num7; i2++) {
+            for (int j2 = num8; j2 <= num9; j2++) {
+                int checkTileType = Main.tile[i2, j2].TileType;
+                if (Main.tileAlch[checkTileType] || (checkTileType >= TileID.Count && TileLoader.GetTile(checkTileType) is PlantBase)) {
+                    num5++;
+                }
+            }
+        }
+        if (num5 < num4) {
+            for (int k = 0; k < validTiles.Length; k++) {
+                if (Main.tile[i, j].TileType != validTiles[k]) {
+                    return false;
+                }
+                else {
+                    break;
+                }
+            }
+            j -= 1;
+            if (!Main.tile[i, j].HasTile && Main.tile[i, j + 1].HasUnactuatedTile && !Main.tile[i, j + 1].IsHalfBlock && Main.tile[i, j + 1].Slope == 0) {
+                Tile tile = Main.tile[i, j];
+                PlantBase plant = TileLoader.GetTile(tileTypeToGrow) as PlantBase;
+                tile.ClearTile();
+                tile.TileType = tileTypeToGrow;
+                tile.HasTile = true;
+                tile.TileFrameX = (short)(plant.FrameWidth * style);
+                onPlaced?.Invoke(new Point(i, j));
+                if (Main.tile[i, j].HasTile && Main.netMode == NetmodeID.Server) {
+                    NetMessage.SendTileSquare(-1, i, j);
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     private class ReplaceCutTilesWithSeed : ILoadable {
         public void Load(Mod mod) {
             On_Player.PlaceThing_Tiles += On_Player_PlaceThing_Tiles;

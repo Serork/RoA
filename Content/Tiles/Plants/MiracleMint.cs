@@ -19,7 +19,25 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Plants;
 
-sealed class MiracleMint : PlantBase {
+sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
+    void TileHooks.IGrowPlantRandom.OnGlobalRandomUpdate(int i, int j) {
+        if (WorldGen.gen) {
+            return;
+        }
+
+        if (j < Main.worldSurface) {
+            return;
+        }
+
+        TryPlacePlant2(i, j, Type, 0, onPlaced: (position) => {
+            int x = position.X, y = position.Y;
+            ModContent.GetInstance<MiracleMintTE>().Place(x, y);
+            if (Main.netMode != NetmodeID.SinglePlayer) {
+                MultiplayerSystem.SendPacket(new PlaceMiracleMintPacket(x, y));
+            }
+        }, validTiles: AnchorValidTiles);
+    }
+
     protected override void SafeSetStaticDefaults() {
         Main.tileLighted[Type] = true;
 
