@@ -9,6 +9,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.IO;
+using System.Threading.Channels;
 
 using Terraria;
 using Terraria.Audio;
@@ -22,6 +23,21 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
 abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
+    public override void Load() {
+        On_Player.TryAllowingItemReuse += On_Player_TryAllowingItemReuse;
+    }
+
+    private void On_Player_TryAllowingItemReuse(On_Player.orig_TryAllowingItemReuse orig, Player self, Item sItem) {
+        orig(self, sItem);
+
+        bool flag = false;
+        if (self.autoReuseAllWeapons && sItem.IsADruidicWeapon() && sItem.useStyle == ItemUseStyleID.HiddenAnimation && sItem.shoot == ProjectileID.WoodenArrowFriendly)
+            flag = true;
+
+        if (flag)
+            self.releaseUseItem = true;
+    }
+
     protected virtual ushort ShootType() => (ushort)ProjectileID.WoodenArrowFriendly;
 
     protected virtual ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
@@ -300,7 +316,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         }
         if (_leftTimeToReuse > 2) {
             if (Owner.itemTime < 2) {
-                Owner.itemTime = Owner.itemAnimation = 2;
+                Owner.itemTime = Owner.itemAnimation = 10;
             }
             Owner.bodyFrame.Y = Owner.legFrame.Y;
             Projectile.timeLeft = 2;
