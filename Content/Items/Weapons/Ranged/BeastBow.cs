@@ -29,9 +29,13 @@ sealed class BeastBow : ModItem {
 
 		Item.noUseGraphic = true;
 
+		Item.reuseDelay = 30;
+
+		Item.crit = 6;
+
 		Item.DamageType = DamageClass.Ranged; 
-		Item.damage = 11; 
-		Item.knockBack = 2.15f;
+		Item.damage = 15; 
+		Item.knockBack = 2f;
 
 		Item.rare = ItemRarityID.Green; 
 		Item.UseSound = SoundID.Item5;
@@ -93,7 +97,8 @@ sealed class BeastProj : ModProjectile  {
             else if (_player.direction == -1)
                 effects = SpriteEffects.None;
         }
-        Main.spriteBatch.Draw(_texture, Projectile.Center - Main.screenPosition/* + new Vector2(0f, Projectile.gfxOffY + 4f)*/, _texture.Bounds, lightColor, Projectile.rotation + _rotOffset - ((float)Math.PI / 2f + (float)Math.PI * 1.8f) * _player.direction * _player.gravDir + 0.45f * _player.direction * _player.gravDir, _origin, Projectile.scale, effects, 0);
+		Vector2 position = Projectile.Center - Main.screenPosition/* + new Vector2(0f, Projectile.gfxOffY + 4f)*/;
+        Main.spriteBatch.Draw(_texture, position, _texture.Bounds, lightColor, Projectile.rotation + _rotOffset - ((float)Math.PI / 2f + (float)Math.PI * 1.8f) * _player.direction * _player.gravDir + 0.45f * _player.direction * _player.gravDir, _origin, Projectile.scale, effects, 0);
 		return false;
 	}
 
@@ -113,12 +118,31 @@ sealed class BeastProj : ModProjectile  {
 		_rotation2 = reader.ReadSingle();
     }
 
-	public override void AI() {
+    public override void Load() {
+        On_Player.CanAutoReuseItem += On_Player_CanAutoReuseItem;
+    }
+
+    private bool On_Player_CanAutoReuseItem(On_Player.orig_CanAutoReuseItem orig, Player self, Item sItem) {
+		bool result = orig(self, sItem);
+		return result;
+    }
+
+    public override void AI() {
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
-		Projectile.timeLeft = player.itemAnimation;
+		int extra = 5;
+        Projectile.timeLeft = player.itemAnimation;
+		bool flag = player.reuseDelay < extra;
+		Projectile.timeLeft = 2;
 		Projectile.damage = 0;
-		float offset = (player.direction != 1 ? 3f : 4f) * -player.direction;
+		if (Projectile.localAI[0] == 0f) {
+			Projectile.localAI[0] = 1f;
+			Projectile.localAI[1] = (int)player.itemAnimationMax * 4 + 10;
+        }
+		if (--Projectile.localAI[1] <= 0f) {
+			Projectile.Kill();
+		}
+        float offset = (player.direction != 1 ? 3f : 4f) * -player.direction;
 		if (Main.myPlayer == Projectile.owner) {
 			if (player.noItems || player.CCed || player.itemAnimation <= 0 || player.itemTime <= 0) {
 				Projectile.Kill();
@@ -128,14 +152,15 @@ sealed class BeastProj : ModProjectile  {
 			Vector2 mouseWorld = Main.MouseWorld;
 			Vector2 position = Vector2.Subtract(mouseWorld, center);
 			position.Normalize();
-			if (!Utils.HasNaNs(position)) 
+			if (!Utils.HasNaNs(position) && !flag) 
 				Projectile.velocity = position;
 			player.ChangeDir(Projectile.direction);
-            _rotation2 = (float)Math.Atan2(mouseWorld.Y - center.Y, mouseWorld.X - center.X) + _rotation;
+			if (!flag) {
+				_rotation2 = (float)Math.Atan2(mouseWorld.Y - center.Y, mouseWorld.X - center.X) + _rotation;
+			}
 			Projectile.netUpdate = true;
 		}
-		Projectile.rotation = _rotation2;
-        Projectile.ai[1] += 0.0045f * player.gravDir;
+		Projectile.rotation = _rotation2;	
 		double rads = 1.0 * player.direction - (double)(Projectile.ai[1] - 0.5f) * player.direction * (3.14 + 2.0) + (float)Math.PI;
 		if (player.gravDir == -1f) {
 			rads -= MathHelper.PiOver4 * player.direction;
@@ -149,7 +174,12 @@ sealed class BeastProj : ModProjectile  {
 		Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true) + Projectile.velocity * 20f + new Vector2(offset * player.direction, 2f * player.direction * player.gravDir).RotatedBy(Projectile.velocity.ToRotation());
 		Vector2 velocity2 = Projectile.Center + velocity * (float)(31.4 + 31.4 * Projectile.ai[1]);
 		Projectile.direction = Projectile.spriteDirection = player.direction;
-		++_attackTimer;
+
+		if (flag) {
+			return;
+		}
+        Projectile.ai[1] += 0.0045f * player.gravDir;
+        ++_attackTimer;
 		if (_attackTimer >= Projectile.ai[2] / 3f) {
 			_rotation -= 0.075f * player.direction * player.gravDir;
             _attackTimer = 0f;
@@ -168,7 +198,9 @@ sealed class BeastProj : ModProjectile  {
 					if (player.inventory[num2].stack > 0) {
 						num = true;
 						if (player.inventory[num2].maxStack != 1 && Main.rand.NextBool(3)) {
-							player.inventory[num2].stack -= 1;
+							if (!player.IsAmmoFreeThisShot(player.HeldItem, player.inventory[num2], Projectile.identity)) {
+								player.inventory[num2].stack -= 1;
+							}
 						}
 
 					}
@@ -189,8 +221,10 @@ sealed class BeastProj : ModProjectile  {
 					else {
 						array = player.inventory[minValue];
 						if (player.inventory[minValue].stack > 0) {
-							if (player.inventory[minValue].maxStack != 1 && Main.rand.NextBool(3) && player.IsAmmoFreeThisShot(player.HeldItem, player.inventory[minValue], Projectile.identity)) {
-								player.inventory[minValue].stack -= 1;
+							if (player.inventory[minValue].maxStack != 1 && Main.rand.NextBool(3)) {
+								if (!player.IsAmmoFreeThisShot(player.HeldItem, player.inventory[minValue], Projectile.identity)) {
+									player.inventory[minValue].stack -= 1;
+								}
 							}
 						}
 						else {
@@ -204,7 +238,13 @@ sealed class BeastProj : ModProjectile  {
 			if (flag2 || array == null)
 				Projectile.Kill();
 			projToShoot = array.shoot;
-			Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 4f, Helper.VelocityToPoint(Projectile.Center, velocity2, 7f), projToShoot, 7, 2.15f, Projectile.owner);
+			Item beastBowItem = ItemLoader.GetItem(ModContent.ItemType<BeastBow>()).Item;
+			int damage = (int)player.GetTotalDamage(DamageClass.Ranged).ApplyTo(beastBowItem.damage);
+            float knockBack = player.GetTotalKnockback(DamageClass.Ranged).ApplyTo(beastBowItem.knockBack);
+			if (Projectile.owner == Main.myPlayer) {
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 4f, Helper.VelocityToPoint(Projectile.Center, velocity2, 7f), projToShoot,
+					damage, knockBack, Projectile.owner);
+			}
 		}
     }
 }

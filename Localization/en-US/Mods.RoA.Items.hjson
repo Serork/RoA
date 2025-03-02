@@ -134,7 +134,11 @@ RodOfTheCondor: {
 
 BeastBow: {
 	DisplayName: Weeping
-	Tooltip: "'Is it the master weeping for its bow, or is the bow weeping for its master?'"
+	Tooltip: 
+		'''
+		33% chance to save ammo
+		'Is it the master weeping for its bow, or is the bow weeping for its master?'
+		'''
 }
 
 DoubleFocusCharm: {
