@@ -111,7 +111,37 @@ sealed class DruidicPrefix(string name,
 
             // melee (claws)
             mod.AddContent(new DruidicPrefix("Large", vanillaAdapted: true, forClaws: true,
-                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1.1f, druidKnockbackMult: 1f, druidSize: 1.12f, druidCrit: 0));
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidSize: 1.12f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Massive", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidSize: 1.18f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Dangerous", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1.05f, potentialDamageMult: 1.05f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidSize: 1.05f, druidCrit: 2));
+            mod.AddContent(new DruidicPrefix("Savage", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1.1f, potentialDamageMult: 1.1f, druidSpeedMult: 1f, druidKnockbackMult: 1.1f, druidSize: 1.1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Sharp", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1.15f, potentialDamageMult: 1.15f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidSize: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Pointy", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1.1f, potentialDamageMult: 1.1f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidSize: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Tiny", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidSize: 0.82f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Terrible", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 0.85f, potentialDamageMult: 0.85f, druidSpeedMult: 1f, druidKnockbackMult: 0.85f, druidSize: 0.87f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Small", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidSize: 0.9f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Dull", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 0.85f, potentialDamageMult: 0.85f, druidSpeedMult: 1f, druidKnockbackMult: 1f, druidSize: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Unhappy", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 0.9f, druidKnockbackMult: 0.9f, druidSize: 0.9f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Bulky", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1.05f, potentialDamageMult: 1.05f, druidSpeedMult: 0.85f, druidKnockbackMult: 1.1f, druidSize: 1.1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Shameful", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 0.9f, potentialDamageMult: 0.9f, druidSpeedMult: 1f, druidKnockbackMult: 0.8f, druidSize: 1.1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Heavy", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 0.9f, druidKnockbackMult: 1.15f, druidSize: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Light", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1f, potentialDamageMult: 1f, druidSpeedMult: 1.15f, druidKnockbackMult: 0.9f, druidSize: 1f, druidCrit: 0));
+            mod.AddContent(new DruidicPrefix("Legendary", vanillaAdapted: true, forClaws: true,
+                druidDamageMult: 1.15f, potentialDamageMult: 1.15f, druidSpeedMult: 1.1f, druidKnockbackMult: 1.15f, druidSize: 1.1f, druidCrit: 5));
         }
 
         void ILoadable.Unload() { }
@@ -288,6 +318,51 @@ sealed class DruidicPrefix(string name,
             case "Large":
                 valueMult *= 1.125f;
                 break;
+            case "Massive":
+                valueMult *= 1.2f;
+                break;
+            case "Dangerous":
+                valueMult *= 1.16f;
+                break;
+            case "Savage":
+                valueMult *= 1.39f;
+                break;
+            case "Sharp":
+                valueMult *= 1.16f;
+                break;
+            case "Pointy":
+                valueMult *= 1.1f;
+                break;
+            case "Tiny":
+                valueMult *= 0.84f;
+                break;
+            case "Terrible":
+                valueMult *= 0.7f;
+                break;
+            case "Small":
+                valueMult *= 0.91f;
+                break;
+            case "Dull":
+                valueMult *= 0.86f;
+                break;
+            case "Unhappy":
+                valueMult *= 0.77f;
+                break;
+            case "Bulky":
+                valueMult *= 1.08f;
+                break;
+            case "Shameful":
+                valueMult *= 0.82f;
+                break;
+            case "Heavy":
+                valueMult *= 1.035f;
+                break;
+            case "Light":
+                valueMult *= 1.035f;
+                break;
+            case "Legendary":
+                valueMult *= 1.8f;
+                break;
         }
 	}
 
@@ -302,6 +377,7 @@ sealed class DruidicPrefix(string name,
     public override IEnumerable<TooltipLine> GetTooltipLines(Item item) {
 		NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
 		string baseExtra = !handler.HasPotentialDamage() ? "1" : string.Empty;
+        bool claws = item.ModItem is BaseClawsItem;
         if (_druidDamage != 0) {
 			yield return new TooltipLine(Mod, "ExtraDruidDamage", GetLocalizedText("DruidDamageModifier" + baseExtra).Format(_druidDamage)) {
 				IsModifier = true,
@@ -313,7 +389,7 @@ sealed class DruidicPrefix(string name,
 			if (!handler.HasPotentialDamage() || _vanillaAdapted) {
                 if (_vanillaAdapted && !handler.HasPotentialDamage()) {
                     value = 1f;
-                    value += (_druidDamageMult + _potentialDamageMult - 2f) / 4f;
+                    value += (_druidDamageMult + _potentialDamageMult - 2f) / (_forClaws || claws ? 2f : 4f);
                 }
                 else {
                     value += _potentialDamageMult;
@@ -333,8 +409,6 @@ sealed class DruidicPrefix(string name,
 		}
 		if (_potentialDamageMult != 1f && handler.HasPotentialDamage()) {
             float value = _potentialDamageMult;
-            //value += _druidDamageMult;
-            //value /= 2f;
             yield return new TooltipLine(Mod, "ExtraDruidPotentialDamageMult", GetLocalizedText("DruidPotentialDamageModifierMult").Format(value * 100f - 100f)) {
 				IsModifier = true,
 				IsModifierBad = value < 1f

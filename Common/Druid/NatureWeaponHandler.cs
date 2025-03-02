@@ -192,13 +192,14 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             damage.Flat = Math.Min(GetItemDamage(item) + GetBasePotentialDamage(item, player), damage.Flat);
         }
 
+        bool claws = item.ModItem is BaseClawsItem;
         if (ActivePrefix != null) {
             if (HasPotentialDamage()) {
                 damage *= ActivePrefix._druidDamageMult;
             }
             else {
                 if (ActivePrefix._vanillaAdapted) {
-                    float modifier = 1f + (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult - 2f) / 4f;
+                    float modifier = 1f + (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult - 2f) / (ActivePrefix._forClaws || claws ? 2f : 4f);
                     damage *= modifier;
                 }
                 else {

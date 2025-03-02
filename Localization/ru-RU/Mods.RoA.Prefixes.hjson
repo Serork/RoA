@@ -51,3 +51,18 @@ DruidPotentialSpeedModifier: "{0:+0;-#}% к возможной скорости"
 DruidFillingRateModifierMult: "{0:+0;-#}% к скорость заполнения"
 // DruidSizeModifier: "{0:+0;-#}% size"
 // Large: Mods.RoA.Prefixes.Large
+// Massive: Mods.RoA.Prefixes.Massive
+// Dangerous: Mods.RoA.Prefixes.Dangerous
+// Savage: Mods.RoA.Prefixes.Savage
+// Sharp: Mods.RoA.Prefixes.Sharp
+// Pointy: Mods.RoA.Prefixes.Pointy
+// Tiny: Mods.RoA.Prefixes.Tiny
+// Terrible: Mods.RoA.Prefixes.Terrible
+// Small: Mods.RoA.Prefixes.Small
+// Dull: Mods.RoA.Prefixes.Dull
+// Unhappy: Mods.RoA.Prefixes.Unhappy
+// Bulky: Mods.RoA.Prefixes.Bulky
+// Shameful: Mods.RoA.Prefixes.Shameful
+// Heavy: Mods.RoA.Prefixes.Heavy
+// Light: Mods.RoA.Prefixes.Light
+// Legendary: Mods.RoA.Prefixes.Legendary

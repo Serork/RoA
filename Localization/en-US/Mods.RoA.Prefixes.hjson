@@ -12,6 +12,7 @@ Thorny: Thorny
 Stumpy: Stumpy
 Irritated: Irritated
 Overripe: Overripe
+TipsyEffect: Makes you tipsy when used
 Keen: "{$Prefix.Keen}"
 Superior: "{$Prefix.Superior}"
 Forceful: "{$Prefix.Forceful}"
@@ -36,7 +37,22 @@ Sluggish: "{$Prefix.Sluggish}"
 Lazy: "{$Prefix.Lazy}"
 Annoying: "{$Prefix.Annoying}"
 Nasty: "{$Prefix.Nasty}"
-TipsyEffect: Makes you tipsy when used
+Large: "{$Prefix.Large}"
+Massive: "{$Prefix.Massive}"
+Dangerous: "{$Prefix.Dangerous}"
+Savage: "{$Prefix.Savage}"
+Sharp: "{$Prefix.Sharp}"
+Pointy: "{$Prefix.Pointy}"
+Tiny: "{$Prefix.Tiny}"
+Terrible: "{$Prefix.Terrible}"
+Small: "{$Prefix.Small}"
+Dull: "{$Prefix.Dull}"
+Unhappy: "{$Prefix.Unhappy}"
+Bulky: "{$Prefix.Bulky}"
+Shameful: "{$Prefix.Shameful}"
+Heavy: "{$Prefix.Heavy}"
+Light: "{$Prefix.Light}"
+Legendary: "{$Prefix.Legendary}"
 DruidDamageModifier: "{0:+0;-#} base damage"
 DruidDamageModifierMult: "{0:+0;-#}% base damage"
 DruidDamageModifier1: "{0:+0;-#} damage"
@@ -50,4 +66,3 @@ DruidSpeedModifier: "{0:+0;-#}% speed"
 DruidPotentialSpeedModifier: "{0:+0;-#}% potential speed"
 DruidFillingRateModifierMult: "{0:+0;-#}% charge rate"
 DruidSizeModifier: "{0:+0;-#}% size"
-Large: Mods.RoA.Prefixes.Large
