@@ -29,7 +29,7 @@ sealed class OvergrownSpear : ModItem {
 
 		Item.DamageType = DamageClass.Melee;
 		Item.damage = 18;
-		Item.knockBack = 4f;
+		Item.knockBack = 5f;
 
 		Item.rare = ItemRarityID.Green;
 		Item.UseSound = SoundID.Item1;

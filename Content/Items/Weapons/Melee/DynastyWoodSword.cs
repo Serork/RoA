@@ -14,11 +14,11 @@ sealed class DynastyWoodSword : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.useTime = Item.useAnimation = 24;
+        Item.useTime = Item.useAnimation = 20;
         Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 7;
+        Item.damage = 12;
         Item.knockBack = 4f;
 
         Item.value = Item.sellPrice(copper: 40);

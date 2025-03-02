@@ -25,7 +25,7 @@ sealed class BloodshedAxe : ModItem {
 
         Item.DamageType = DamageClass.Melee;
         Item.damage = 34;
-        Item.knockBack = 4f;
+        Item.knockBack = 8f;
 
         Item.noMelee = true;
         Item.noUseGraphic = true;
@@ -44,7 +44,9 @@ sealed class BloodshedAxe : ModItem {
             return false;
         }
         player.direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
-        Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, type, Item.damage, Item.knockBack, player.whoAmI).rotation = player.direction == 1 ? 0f : MathHelper.Pi;
+        int damage = (int)(Item.damage * 1.5f);
+        Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, type, 
+            damage, Item.knockBack, player.whoAmI).rotation = player.direction == 1 ? 0f : MathHelper.Pi;
         return true;
     }
 }

@@ -62,6 +62,7 @@ sealed class BloodshedAxe : ModProjectile {
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         int type = ModContent.ProjectileType<BloodshedAxeEnergy>();
+        modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
         Player player = Main.player[Projectile.owner];
         if (player.ownedProjectileCounts[type] != 0) {
             modifiers.SetCrit();
@@ -292,7 +293,8 @@ sealed class BloodshedAxe : ModProjectile {
         if (Projectile.ai[1] == 2 && Projectile.localAI[1] == 0f && player.statLife > player.statLifeMax2 / 5) {
             _powerUp = true;
             Projectile.damage = Projectile.damage - Projectile.damage / 3;
-            int damage = Main.rand.Next(Projectile.damage - Projectile.damage / 3, Projectile.damage);
+            int damage2 = Projectile.damage - Projectile.damage / 2;
+            int damage = Main.DamageVar(damage2, 30, player.luck);
             player.statLife -= damage;
             CombatText.NewText(player.Hitbox, CombatText.DamagedFriendly, damage, false, false);
 

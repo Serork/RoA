@@ -126,7 +126,7 @@ sealed class OvergrownSphere : ModProjectile {
 				var rec2 = Projectile.getRect();
 				if (rect.Intersects(rec2) && _collisionRegistered == 0) {
 					SoundEngine.PlaySound(SoundID.NPCDeath55, Projectile.Center);
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, proj.velocity, boltType, (int)player.GetTotalDamage(DamageClass.Melee).ApplyTo(player.GetSelectedItem().damage), player.GetTotalKnockback(DamageClass.Melee).ApplyTo(player.GetSelectedItem().knockBack), Projectile.owner);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, proj.velocity, boltType, (int)player.GetTotalDamage(DamageClass.Melee).ApplyTo(player.GetSelectedItem().damage) * 2, player.GetTotalKnockback(DamageClass.Melee).ApplyTo(player.GetSelectedItem().knockBack) / 2, Projectile.owner);
 					float dustCount = 8f;
 					int dustCount2 = 0;
 					while (dustCount2 < dustCount) {

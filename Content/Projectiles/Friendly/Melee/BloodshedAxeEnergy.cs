@@ -65,7 +65,7 @@ sealed class BloodshedAxeEnergy : ModProjectile {
 				Main.dust[dust].noGravity = true;
 			}*/
 
-            player.Heal((int)(Projectile.damage * 1.25f));
+            player.Heal(Main.DamageVar((int)(Projectile.damage / 2 + Projectile.damage / 4), 30, player.luck));
             _canHeal = false;
         }
     }

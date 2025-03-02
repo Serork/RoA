@@ -23,8 +23,8 @@ sealed class MercuriumSword : ModItem {
         Item.useTurn = false;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 11;
-        Item.knockBack = 4f;
+        Item.damage = 14;
+        Item.knockBack = 3f;
 
         Item.rare = ItemRarityID.Blue;
 
