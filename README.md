@@ -3,4 +3,4 @@
 # Rise of Ages
 
 Source code of <b>Rise of Ages</b>, a mod for Terraria. The mod is <b>currently in pre-release stage</b>.
-<h5>by Serork, has2r, peege.on, AlexTheDev and others</h5>
+<h5>by Serork, has2r, peege.on, AlexTheDev and cleo.</h5>
