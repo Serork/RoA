@@ -20,7 +20,7 @@ sealed class LivingMahoganyHelmet : NatureItem {
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 28; int height = 26;
+        int width = 26; int height = 26;
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;

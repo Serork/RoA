@@ -21,7 +21,7 @@ sealed class LivingBorealWoodHelmet : NatureItem {
 	}
 
     protected override void SafeSetDefaults() {
-        int width = 26; int height = 24;
+        int width = 24; int height = 24;
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;
