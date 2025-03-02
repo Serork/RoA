@@ -285,7 +285,7 @@ sealed class DruidicPrefix(string name,
 
     public override IEnumerable<TooltipLine> GetTooltipLines(Item item) {
 		NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
-		string baseExtra = !handler.HasPotentialDamage() || _vanillaAdapted ? "1" : string.Empty;
+		string baseExtra = !handler.HasPotentialDamage() ? "1" : string.Empty;
         if (_druidDamage != 0) {
 			yield return new TooltipLine(Mod, "ExtraDruidDamage", GetLocalizedText("DruidDamageModifier" + baseExtra).Format(_druidDamage)) {
 				IsModifier = true,
@@ -294,16 +294,17 @@ sealed class DruidicPrefix(string name,
 		}
 		if (_druidDamageMult != 1f) {
 			float value = _druidDamageMult;
-			if (_vanillaAdapted) {
-				value = 1f;
-                value += (_druidDamageMult + _potentialDamageMult - 2f) / 4f;
-            }
-			else {
-				if (!handler.HasPotentialDamage()) {
-					value += _potentialDamageMult;
-					value /= 2f;
-				}
+			if (!handler.HasPotentialDamage() || _vanillaAdapted) {
+                if (_vanillaAdapted && !handler.HasPotentialDamage()) {
+                    value = 1f;
+                    value += (_druidDamageMult + _potentialDamageMult - 2f) / 4f;
+                }
+                else {
+                    value += _potentialDamageMult;
+                    value /= 2f;
+                }
 			}
+            Main.NewText(value);
             yield return new TooltipLine(Mod, "ExtraDruidDamageMult", GetLocalizedText("DruidDamageModifierMult" + baseExtra).Format(value * 100f - 100f)) {
 				IsModifier = true,
 				IsModifierBad = value < 1f
@@ -315,7 +316,7 @@ sealed class DruidicPrefix(string name,
 				IsModifierBad = _potentialDamage < 0
 			};
 		}
-		if (_potentialDamageMult != 1f && handler.HasPotentialDamage() && !_vanillaAdapted) {
+		if (_potentialDamageMult != 1f && handler.HasPotentialDamage()) {
             float value = _potentialDamageMult;
             //value += _druidDamageMult;
             //value /= 2f;
