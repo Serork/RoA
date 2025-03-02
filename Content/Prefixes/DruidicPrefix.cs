@@ -304,7 +304,6 @@ sealed class DruidicPrefix(string name,
                     value /= 2f;
                 }
 			}
-            Main.NewText(value);
             yield return new TooltipLine(Mod, "ExtraDruidDamageMult", GetLocalizedText("DruidDamageModifierMult" + baseExtra).Format(value * 100f - 100f)) {
 				IsModifier = true,
 				IsModifierBad = value < 1f
