@@ -14,12 +14,11 @@ sealed class DynastyWoodBow : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useTime = Item.useAnimation = 29;
+        Item.useTime = Item.useAnimation = 27;
         Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Ranged;
-        Item.damage = 10;
-        Item.knockBack = 1;
+        Item.damage = 9;
 
         Item.value = Item.sellPrice(copper: 40);
         Item.rare = ItemRarityID.White;
@@ -27,6 +26,6 @@ sealed class DynastyWoodBow : ModItem {
 
         Item.shoot = ProjectileID.PurificationPowder;
         Item.useAmmo = AmmoID.Arrow;
-        Item.shootSpeed = 11f;
+        Item.shootSpeed = 6.4f;
     }
 }

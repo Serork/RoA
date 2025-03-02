@@ -66,6 +66,19 @@ sealed class TransformTileSystem : ILoadable {
             }
         }
 
+        public override bool CreateDust(int i, int j, int type, ref int dustType) {
+            if (!(OnKillActNormal[type] || WorldGen.gen)) {
+                if (!(!WorldGen.CanKillTile(i, j))) {
+                    int dustType2 = TileHelper.GetKillTileDust(i, j, ReplaceToTypeOnKill[type], 0, 0);
+                    if (Main.rand.NextBool(3)) {
+                        dustType = dustType2;
+                    }
+                }
+            }
+
+            return base.CreateDust(i, j, type, ref dustType);
+        }
+
         private sealed class TileReplacementSystem : ModPlayer {
             readonly struct ReplacementData(Point positionInWorld, ushort replaceToType) {
                 public readonly Point PositionInWorld = positionInWorld;

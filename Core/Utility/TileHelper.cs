@@ -399,6 +399,1875 @@ static class TileHelper {
         }
     }
 
+    public static int GetKillTileDust(int i, int j, int tileType, int tileFrameX, int tileFrameY) {
+        var genRand = WorldGen.genRand;
+        int num = 0;
+        if (tileType == 216)
+            num = -1;
+
+        if (tileType == 324)
+            num = ((tileFrameY != 0) ? (281 + tileFrameX / 18) : 280);
+
+        if (tileType == 216)
+            num = -1;
+
+        if (tileType == 335)
+            num = -1;
+
+        if (tileType == 338)
+            num = -1;
+
+        if (tileType == 0)
+            num = 0;
+
+        if (tileType == 192)
+            num = 3;
+
+        if (tileType == 208)
+            num = 126;
+        else if (tileType == 408 || tileType == 409)
+            num = 265;
+        else if (tileType == 669)
+            num = 314;
+        else if (tileType == 670)
+            num = 315;
+        else if (tileType == 671)
+            num = 316;
+        else if (tileType == 672)
+            num = 317;
+        else if (tileType == 673)
+            num = 318;
+        else if (tileType == 674)
+            num = 319;
+        else if (tileType == 675)
+            num = 320;
+        else if (tileType == 676)
+            num = 321;
+
+        if (tileType == 16) {
+            num = 1;
+            if (tileFrameX >= 36)
+                num = 82;
+        }
+        else if (tileType == 415 || tileType == 500) {
+            num = 6;
+        }
+        else if (tileType == 416 || tileType == 501) {
+            num = 61;
+        }
+        else if (tileType == 417 || tileType == 502) {
+            num = 242;
+        }
+        else if (tileType == 418 || tileType == 503) {
+            num = 135;
+        }
+        else if (tileType == 474) {
+            num = 18;
+        }
+
+        if (tileType == 1 || tileType == 17 || tileType == 38 || tileType == 39 || tileType == 41 || tileType == 43 || tileType == 44 || tileType == 481 || tileType == 482 || tileType == 483 || tileType == 48 || Main.tileStone[tileType] || tileType == 85 || tileType == 90 || tileType == 92 || tileType == 96 || tileType == 97 || tileType == 99 || tileType == 117 || tileType == 130 || tileType == 131 || tileType == 132 || tileType == 135 || tileType == 135 || tileType == 142 || tileType == 143 || tileType == 144 || tileType == 210 || tileType == 207 || tileType == 235 || tileType == 247 || tileType == 272 || tileType == 273 || tileType == 283 || tileType == 410 || tileType == 480 || tileType == 509 || tileType == 618 || tileType == 657 || tileType == 658 || tileType == 677 || tileType == 678 || tileType == 679)
+            num = 1;
+
+        if (tileType == 379)
+            num = 257;
+
+        if (tileType == 311)
+            num = 207;
+
+        if (tileType == 312)
+            num = 208;
+
+        if (tileType == 313)
+            num = 209;
+
+        if (tileType == 104)
+            num = -1;
+
+        if (tileType == 95 || tileType == 98 || tileType == 100 || tileType == 174 || tileType == 173)
+            num = 6;
+
+        if (tileType == 30 || tileType == 86 || tileType == 94 || tileType == 106 || tileType == 114 || tileType == 124 || tileType == 128 || tileType == 269)
+            num = 7;
+
+        if (tileType == 372)
+            num = 242;
+
+        if (tileType == 646)
+            num = 29;
+
+        if (tileType == 49)
+            num = 29;
+
+        if (tileType == 371)
+            num = 243;
+
+        if (tileType == 334)
+            num = 7;
+
+        switch (tileType) {
+            case 10:
+            case 11:
+            case 87:
+            case 89:
+            case 93:
+            case 139:
+            case 209:
+            case 319:
+            case 320:
+            case 386:
+            case 387:
+            case 390:
+            case 405:
+            case 406:
+            case 411:
+            case 412:
+            case 419:
+            case 420:
+            case 421:
+            case 422:
+            case 423:
+            case 424:
+            case 425:
+            case 428:
+            case 429:
+            case 441:
+            case 442:
+            case 445:
+            case 446:
+            case 447:
+            case 448:
+            case 449:
+            case 450:
+            case 451:
+            case 452:
+            case 453:
+            case 455:
+            case 456:
+            case 457:
+            case 462:
+            case 463:
+            case 464:
+            case 465:
+            case 466:
+            case 468:
+            case 476:
+            case 486:
+            case 487:
+            case 489:
+            case 490:
+            case 491:
+            case 493:
+            case 494:
+            case 497:
+            case 510:
+            case 511:
+            case 520:
+            case 521:
+            case 522:
+            case 523:
+            case 524:
+            case 525:
+            case 526:
+            case 527:
+            case 531:
+            case 545:
+            case 547:
+            case 548:
+            case 560:
+            case 564:
+            case 565:
+            case 567:
+            case 572:
+            case 579:
+            case 591:
+            case 592:
+            case 593:
+            case 594:
+            case 613:
+            case 614:
+            case 621:
+            case 622:
+            case 623:
+            case 624:
+            case 630:
+            case 631:
+            case 656:
+                num = -1;
+                break;
+            case 668:
+                num = 0;
+                break;
+            case 407:
+                num = 10;
+                break;
+            case 454:
+                num = 139;
+                break;
+            case 41:
+            case 481:
+            case 677:
+                num = 275;
+                break;
+            case 43:
+            case 482:
+            case 678:
+                num = 276;
+                break;
+            case 44:
+            case 483:
+            case 679:
+                num = 277;
+                break;
+            case 473:
+                num = 82;
+                break;
+            case 472:
+            case 546:
+            case 557:
+                num = 8;
+                break;
+            case 498:
+                num = 30;
+                break;
+            case 517:
+            case 687:
+                num = 258;
+                break;
+            case 535:
+            case 689:
+                num = 299;
+                break;
+            case 537:
+            case 690:
+                num = 300;
+                break;
+            case 540:
+            case 688:
+                num = 301;
+                break;
+            case 626:
+            case 691:
+                num = 305;
+                break;
+            case 184: {
+                int num2 = tileFrameX / 22;
+                switch (num2) {
+                    case 5:
+                        num = 258;
+                        break;
+                    case 6:
+                        num = 299;
+                        break;
+                    case 7:
+                        num = 300;
+                        break;
+                    case 8:
+                        num = 301;
+                        break;
+                    case 9:
+                        num = 305;
+                        break;
+                    case 10:
+                        num = 267;
+                        break;
+                    default:
+                        num = 93 + num2;
+                        break;
+                }
+
+                break;
+            }
+            case 515:
+                num = 96;
+                break;
+            case 516:
+                num = 97;
+                break;
+            case 514:
+                num = 95;
+                break;
+            case 513:
+                num = 94;
+                break;
+            case 512:
+                num = 93;
+                break;
+            case 541:
+                num = 226;
+                break;
+            case 590:
+                num = 1;
+                break;
+            case 583:
+                num = ((genRand.Next(10) != 0) ? 1 : 87);
+                break;
+            case 584:
+                num = ((genRand.Next(10) != 0) ? 1 : 86);
+                break;
+            case 585:
+                num = ((genRand.Next(10) != 0) ? 1 : 88);
+                break;
+            case 586:
+                num = ((genRand.Next(10) != 0) ? 1 : 89);
+                break;
+            case 587:
+                num = ((genRand.Next(10) != 0) ? 1 : 90);
+                break;
+            case 588:
+                num = ((genRand.Next(10) != 0) ? 1 : 91);
+                break;
+            case 589:
+                num = ((genRand.Next(10) != 0) ? 1 : 138);
+                break;
+            case 595:
+                num = 78;
+                break;
+            case 596:
+                num = 78;
+                break;
+            case 615:
+                num = 78;
+                break;
+            case 616:
+                num = 78;
+                break;
+            case 633:
+                num = ((genRand.Next(6) != 0) ? 237 : 36);
+                break;
+            case 637:
+            case 638:
+                num = 237;
+                break;
+            case 634:
+                num = ((genRand.Next(10) != 0) ? 36 : 31);
+                if (genRand.Next(12) == 0)
+                    num = 6;
+                break;
+        }
+
+        if (Main.tileMoss[tileType])
+            num = ((tileType == 381) ? 258 : ((tileType == 534) ? 299 : ((tileType == 536) ? 300 : ((tileType == 539) ? 301 : ((tileType == 625) ? 305 : ((tileType != 627) ? (tileType - 179 + 93) : 267))))));
+
+        if (tileType == 240) {
+            int num3 = tileFrameX / 54;
+            if (tileFrameY >= 54)
+                num3 += 36 * (tileFrameY / 54);
+
+            num = 7;
+            if (num3 == 16 || num3 == 17)
+                num = 26;
+
+            if (num3 >= 46 && num3 <= 49)
+                num = -1;
+        }
+
+        if (tileType == 241)
+            num = 1;
+
+        if (tileType == 242)
+            num = -1;
+
+        if (tileType == 529) {
+            switch (Main.tile[i, j + 1].TileType) {
+                case 116:
+                    num = (num = 47);
+                    break;
+                case 234:
+                    num = (num = 125);
+                    break;
+                case 112:
+                    num = (num = 17);
+                    break;
+                default:
+                    num = ((i >= WorldGen.beachDistance && i <= Main.maxTilesX - WorldGen.beachDistance) ? 289 : 290);
+                    break;
+            }
+        }
+
+        if (tileType == 356)
+            num = -1;
+
+        if (tileType == 663)
+            num = -1;
+
+        if (tileType == 351)
+            num = -1;
+
+        if (tileType == 246)
+            num = -1;
+
+        if (tileType == 36)
+            num = -1;
+
+        if (tileType == 365)
+            num = 239;
+
+        if (tileType == 366)
+            num = 30;
+
+        if (tileType == 504)
+            num = -1;
+
+        if (tileType == 357 || tileType == 367 || tileType == 561)
+            num = 236;
+
+        if (tileType == 368 || tileType == 369 || tileType == 576)
+            num = 240;
+
+        if (tileType == 170)
+            num = 196;
+
+        if (tileType == 315)
+            num = 225;
+
+        if (tileType == 641)
+            num = ((genRand.Next(2) != 0) ? 161 : 243);
+
+        if (tileType == 659)
+            num = 308;
+
+        if (tileType == 667)
+            num = 308;
+
+        if (tileType == 346)
+            num = 128;
+
+        if (tileType == 347)
+            num = 117;
+
+        if (tileType == 348)
+            num = 42;
+
+        if (tileType == 350)
+            num = 226;
+
+        if (tileType == 370)
+            num = ((genRand.Next(2) != 0) ? 23 : 6);
+
+        if (tileType == 171)
+            num = ((genRand.Next(2) != 0) ? (-1) : 196);
+
+        if (tileType == 326)
+            num = 13;
+
+        if (tileType == 327)
+            num = 13;
+
+        if (tileType == 345)
+            num = 13;
+
+        if (tileType == 458)
+            num = 13;
+
+        if (tileType == 459)
+            num = 13;
+
+        if (tileType == 336)
+            num = 6;
+
+        if (tileType == 340)
+            num = 75;
+
+        if (tileType == 341)
+            num = 65;
+
+        if (tileType == 342)
+            num = 135;
+
+        if (tileType == 343)
+            num = 169;
+
+        if (tileType == 344)
+            num = 156;
+
+        if (tileType == 328)
+            num = 13;
+
+        if (tileType == 329)
+            num = 13;
+
+        if (tileType == 507)
+            num = 13;
+
+        if (tileType == 508)
+            num = 13;
+
+        if (tileType == 562)
+            num = -1;
+
+        if (tileType == 571)
+            num = 40;
+
+        if (tileType == 563)
+            num = -1;
+
+        if (tileType == 330)
+            num = 9;
+
+        if (tileType == 331)
+            num = 11;
+
+        if (tileType == 332)
+            num = 19;
+
+        if (tileType == 333)
+            num = 11;
+
+        if (tileType == 101)
+            num = -1;
+
+        if (tileType == 19) {
+            switch (tileFrameY / 18) {
+                case 0:
+                    num = 7;
+                    break;
+                case 1:
+                    num = 77;
+                    break;
+                case 2:
+                    num = 78;
+                    break;
+                case 3:
+                    num = 79;
+                    break;
+                case 4:
+                    num = 26;
+                    break;
+                case 5:
+                    num = 126;
+                    break;
+                case 6:
+                    num = 275;
+                    break;
+                case 7:
+                    num = 277;
+                    break;
+                case 8:
+                    num = 276;
+                    break;
+                case 9:
+                    num = 1;
+                    break;
+                case 10:
+                    num = 214;
+                    break;
+                case 11:
+                    num = 214;
+                    break;
+                case 12:
+                    num = 214;
+                    break;
+                case 13:
+                    num = 109;
+                    break;
+                case 14:
+                    num = 13;
+                    break;
+                case 15:
+                    num = 189;
+                    break;
+                case 16:
+                    num = 191;
+                    break;
+                case 17:
+                    num = 215;
+                    break;
+                case 18:
+                    num = 26;
+                    break;
+                case 19:
+                    num = 214;
+                    break;
+                case 20:
+                    num = 4;
+                    break;
+                case 21:
+                    num = 10;
+                    break;
+                case 22:
+                    num = 32;
+                    break;
+                case 23:
+                    num = 78;
+                    break;
+                case 24:
+                    num = 147;
+                    break;
+                case 25:
+                    num = 40;
+                    break;
+                case 26:
+                    num = 226;
+                    break;
+                case 27:
+                    num = 23;
+                    break;
+                case 28:
+                    num = 240;
+                    break;
+                case 29:
+                    num = 236;
+                    break;
+                case 30:
+                    num = 68 + Main.rand.Next(3);
+                    break;
+                case 31:
+                    num = 10;
+                    break;
+                case 32:
+                    num = 78;
+                    break;
+                case 33:
+                    num = 148;
+                    break;
+                case 34:
+                    num = 5;
+                    break;
+                case 35:
+                    num = 80;
+                    break;
+                case 37:
+                    num = 18;
+                    break;
+                case 38:
+                    num = 6;
+                    break;
+                case 39:
+                    num = 61;
+                    break;
+                case 40:
+                    num = 242;
+                    break;
+                case 41:
+                    num = 135;
+                    break;
+                case 42:
+                    num = 287;
+                    break;
+                case 44:
+                    num = 273;
+                    break;
+                case 45:
+                    num = 243;
+                    break;
+                case 46:
+                    num = 243;
+                    break;
+                case 47:
+                    num = 36;
+                    break;
+                case 48:
+                    num = 226;
+                    break;
+                default:
+                    num = 1;
+                    break;
+            }
+        }
+
+        if (tileType == 79) {
+            int num4 = tileFrameY / 36;
+            num = ((num4 == 0) ? 7 : ((num4 == 1) ? 77 : ((num4 == 2) ? 78 : ((num4 == 3) ? 79 : ((num4 == 4) ? 126 : ((num4 == 8) ? 109 : ((num4 < 9) ? 1 : (-1))))))));
+        }
+
+        if (tileType == 18) {
+            switch (tileFrameX / 36) {
+                case 0:
+                    num = 7;
+                    break;
+                case 1:
+                    num = 77;
+                    break;
+                case 2:
+                    num = 78;
+                    break;
+                case 3:
+                    num = 79;
+                    break;
+                case 4:
+                    num = 26;
+                    break;
+                case 5:
+                    num = 40;
+                    break;
+                case 6:
+                    num = 5;
+                    break;
+                case 7:
+                    num = 26;
+                    break;
+                case 8:
+                    num = 4;
+                    break;
+                case 9:
+                    num = 126;
+                    break;
+                case 10:
+                    num = 148;
+                    break;
+                case 11:
+                case 12:
+                case 13:
+                    num = 1;
+                    break;
+                case 14:
+                    num = 109;
+                    break;
+                case 15:
+                    num = 126;
+                    break;
+                default:
+                    num = -1;
+                    break;
+            }
+        }
+
+        if (tileType == 14 || tileType == 87 || tileType == 88 || tileType == 469)
+            num = -1;
+
+        if (tileType >= 255 && tileType <= 261) {
+            int num5 = tileType - 255;
+            num = 86 + num5;
+            if (num5 == 6)
+                num = 138;
+        }
+
+        if (tileType >= 262 && tileType <= 268) {
+            int num6 = tileType - 262;
+            num = 86 + num6;
+            if (num6 == 6)
+                num = 138;
+        }
+
+        if (tileType == 178) {
+            int num7 = tileFrameX / 18;
+            num = 86 + num7;
+            if (num7 == 6)
+                num = 138;
+        }
+
+        if (tileType == 440) {
+            switch (tileFrameX / 54) {
+                case 0:
+                    num = 90;
+                    break;
+                case 1:
+                    num = 88;
+                    break;
+                case 2:
+                    num = 89;
+                    break;
+                case 3:
+                    num = 87;
+                    break;
+                case 4:
+                    num = 86;
+                    break;
+                case 5:
+                    num = 91;
+                    break;
+                case 6:
+                    num = 138;
+                    break;
+                default:
+                    num = -1;
+                    break;
+            }
+
+            if (tileFrameY < 54)
+                num = -1;
+        }
+
+        switch (tileType) {
+            case 426:
+            case 427:
+                num = 90;
+                break;
+            case 430:
+            case 435:
+                num = 89;
+                break;
+            case 431:
+            case 436:
+                num = 88;
+                break;
+            case 432:
+            case 437:
+                num = 87;
+                break;
+            case 433:
+            case 438:
+                num = 86;
+                break;
+            case 434:
+            case 439:
+                num = 91;
+                break;
+            case 496:
+                num = 109;
+                break;
+            case 549:
+                num = 3;
+                break;
+            case 552:
+                num = 32;
+                break;
+        }
+
+        if (tileType == 186)
+            num = ((tileFrameX <= 360) ? 26 : ((tileFrameX <= 846) ? 1 : ((tileFrameX <= 954) ? 9 : ((tileFrameX <= 1062) ? 11 : ((tileFrameX <= 1170) ? 10 : ((tileFrameX > 1332) ? ((tileFrameX > 1386) ? 80 : 10) : 0))))));
+
+        if (tileType == 187) {
+            if (tileFrameX <= 144)
+                num = 1;
+            else if (tileFrameX <= 306)
+                num = 38;
+            else if (tileFrameX <= 468)
+                num = 36;
+            else if (tileFrameX <= 738)
+                num = 30;
+            else if (tileFrameX <= 970)
+                num = 1;
+            else if (tileFrameX <= 1132)
+                num = 148;
+            else if (tileFrameX <= 1132)
+                num = 155;
+            else if (tileFrameX <= 1348)
+                num = 1;
+            else if (tileFrameX <= 1564)
+                num = 0;
+            else if (tileFrameX <= 1890)
+                num = 250;
+            else if (tileFrameX <= 2196)
+                num = 240;
+            else if (tileFrameX <= 2520)
+                num = 236;
+        }
+
+        if (tileType == 647) {
+            int num8 = tileFrameX / 54;
+            if (num8 < 7)
+                num = 26;
+            else if (num8 < 16)
+                num = 1;
+            else if (num8 < 18)
+                num = 9;
+            else if (num8 < 20)
+                num = 11;
+            else if (num8 < 22)
+                num = 10;
+            else if (num8 < 26)
+                num = 7;
+            else if (num8 < 32)
+                num = 80;
+            else if (num8 < 35)
+                num = 80;
+        }
+
+        if (tileType == 648) {
+            int num9 = tileFrameX / 54;
+            num9 += tileFrameY / 36 * 35;
+            if (num9 < 3)
+                num = 1;
+            else if (num9 < 6)
+                num = 38;
+            else if (num9 < 9)
+                num = 36;
+            else if (num9 < 14)
+                num = 30;
+            else if (num9 < 17)
+                num = 1;
+            else if (num9 < 18)
+                num = 1;
+            else if (num9 < 21)
+                num = 148;
+            else if (num9 < 29)
+                num = 155;
+            else if (num9 < 35)
+                num = 287;
+            else if (num9 < 41)
+                num = 240;
+            else if (num9 < 47)
+                num = 236;
+            else if (num9 < 50)
+                num = 0;
+            else if (num9 < 52)
+                num = 2;
+            else if (num9 < 55)
+                num = 26;
+        }
+
+        if (tileType == 105) {
+            num = 1;
+            if (tileFrameX >= 1548 && tileFrameX <= 1654 && tileFrameY < 54)
+                num = 148;
+        }
+
+        if (tileType == 349)
+            num = 1;
+
+        if (tileType == 337 || tileType == 506)
+            num = 1;
+
+        if (tileType == 239) {
+            int num10 = tileFrameX / 18;
+            if (num10 == 0)
+                num = 9;
+
+            if (num10 == 1)
+                num = 81;
+
+            if (num10 == 2)
+                num = 8;
+
+            if (num10 == 3)
+                num = 82;
+
+            if (num10 == 4)
+                num = 11;
+
+            if (num10 == 5)
+                num = 83;
+
+            if (num10 == 6)
+                num = 10;
+
+            if (num10 == 7)
+                num = 84;
+
+            if (num10 == 8)
+                num = 14;
+
+            if (num10 == 9)
+                num = 23;
+
+            if (num10 == 10)
+                num = 25;
+
+            if (num10 == 11)
+                num = 48;
+
+            if (num10 == 12)
+                num = 144;
+
+            if (num10 == 13)
+                num = 49;
+
+            if (num10 == 14)
+                num = 145;
+
+            if (num10 == 15)
+                num = 50;
+
+            if (num10 == 16)
+                num = 146;
+
+            if (num10 == 17)
+                num = 128;
+
+            if (num10 == 18)
+                num = 84;
+
+            if (num10 == 19)
+                num = 117;
+
+            if (num10 == 20)
+                num = 42;
+
+            if (num10 == 21)
+                num = -1;
+
+            if (num10 == 22)
+                num = 265;
+        }
+
+        if (tileType == 185) {
+            if (tileFrameY == 18) {
+                int num11 = tileFrameX / 36;
+                if (num11 < 6)
+                    num = 1;
+                else if (num11 < 16)
+                    num = 26;
+                else if (num11 == 16)
+                    num = 9;
+                else if (num11 == 17)
+                    num = 11;
+                else if (num11 == 18)
+                    num = 10;
+                else if (num11 == 19)
+                    num = 86;
+                else if (num11 == 20)
+                    num = 87;
+                else if (num11 == 21)
+                    num = 88;
+                else if (num11 == 22)
+                    num = 89;
+                else if (num11 == 23)
+                    num = 90;
+                else if (num11 == 24)
+                    num = 91;
+                else if (num11 < 31)
+                    num = 80;
+                else if (num11 < 33)
+                    num = 7;
+                else if (num11 < 34)
+                    num = 8;
+                else if (num11 < 38)
+                    num = 30;
+                else if (num11 < 41)
+                    num = 1;
+                else if (num11 < 47)
+                    num = 287;
+                else if (num11 < 53)
+                    num = 240;
+                else if (num11 < 59)
+                    num = 236;
+            }
+            else {
+                int num12 = tileFrameX / 18;
+                if (num12 < 6)
+                    num = 1;
+                else if (num12 < 12)
+                    num = 0;
+                else if (num12 < 28)
+                    num = 26;
+                else if (num12 < 33)
+                    num = 1;
+                else if (num12 < 36)
+                    num = 0;
+                else if (num12 < 48)
+                    num = 80;
+                else if (num12 < 54)
+                    num = 30;
+                else if (num12 < 60)
+                    num = 287;
+                else if (num12 < 66)
+                    num = 240;
+                else if (num12 < 72)
+                    num = 236;
+                else if (num12 < 73)
+                    num = 0;
+                else if (num12 < 77)
+                    num = 32;
+            }
+        }
+
+        if (tileType == 649) {
+            int num13 = tileFrameX / 36 + tileFrameY / 18 * 53;
+            if (num13 < 6)
+                num = 1;
+            else if (num13 < 16)
+                num = 26;
+            else if (num13 == 16)
+                num = 9;
+            else if (num13 == 17)
+                num = 11;
+            else if (num13 == 18)
+                num = 10;
+            else if (num13 == 19)
+                num = 86;
+            else if (num13 == 20)
+                num = 87;
+            else if (num13 == 21)
+                num = 88;
+            else if (num13 == 22)
+                num = 89;
+            else if (num13 == 23)
+                num = 90;
+            else if (num13 == 24)
+                num = 91;
+            else if (num13 < 31)
+                num = 80;
+            else if (num13 < 33)
+                num = 7;
+            else if (num13 < 34)
+                num = 8;
+            else if (num13 < 38)
+                num = 30;
+            else if (num13 < 41)
+                num = 1;
+            else if (num13 < 47)
+                num = 287;
+            else if (num13 < 53)
+                num = 240;
+            else if (num13 < 59)
+                num = 236;
+            else if (num13 < 62)
+                num = 0;
+            else if (num13 < 65)
+                num = 32;
+        }
+
+        if (tileType == 650) {
+            int num14 = tileFrameX / 18;
+            if (num14 < 6)
+                num = 1;
+            else if (num14 < 12)
+                num = 0;
+            else if (num14 < 28)
+                num = 26;
+            else if (num14 < 33)
+                num = 1;
+            else if (num14 < 36)
+                num = 0;
+            else if (num14 < 48)
+                num = 80;
+            else if (num14 < 54)
+                num = 30;
+            else if (num14 < 60)
+                num = 287;
+            else if (num14 < 66)
+                num = 240;
+            else if (num14 < 72)
+                num = 236;
+            else if (num14 < 73)
+                num = 0;
+            else if (num14 < 77)
+                num = 32;
+        }
+
+        if (tileType == 237)
+            num = 148;
+
+        if (tileType == 157)
+            num = 77;
+
+        if (tileType == 158 || tileType == 232 || tileType == 383 || tileType == 575)
+            num = 78;
+
+        if (tileType == 159)
+            num = 78;
+
+        if (tileType == 15)
+            num = -1;
+
+        if (tileType == 191)
+            num = 7;
+
+        if (tileType == 5) {
+            num = 7;
+            if (i > 5 && i < Main.maxTilesX - 5) {
+                int num15 = i;
+                int k = j;
+                if (tileFrameX == 66 && tileFrameY <= 45)
+                    num15++;
+
+                if (tileFrameX == 88 && tileFrameY >= 66 && tileFrameY <= 110)
+                    num15--;
+
+                if (tileFrameX == 22 && tileFrameY >= 132 && tileFrameY <= 176)
+                    num15--;
+
+                if (tileFrameX == 44 && tileFrameY >= 132 && tileFrameY <= 176)
+                    num15++;
+
+                if (tileFrameX == 44 && tileFrameY >= 132 && tileFrameY <= 176)
+                    num15++;
+
+                if (tileFrameX == 44 && tileFrameY >= 198)
+                    num15++;
+
+                if (tileFrameX == 66 && tileFrameY >= 198)
+                    num15--;
+
+                for (; Main.tile[num15, k] != null && (!Main.tile[num15, k].HasTile || !Main.tileSolid[Main.tile[num15, k].TileType]); k++) {
+                }
+
+                if (Main.tile[num15, k] != null) {
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 23)
+                        num = 77;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 661)
+                        num = 77;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 60)
+                        num = 78;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 70)
+                        num = 26;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 109)
+                        num = 79;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 199)
+                        num = 121;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 662)
+                        num = 121;
+
+                    // Extra patch context.
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 147)
+                        num = 122;
+
+                    TileLoader.TreeDust(Main.tile[num15, k], ref num);
+                }
+            }
+        }
+
+        if (tileType == 323) {
+            num = 215;
+            if (i > 5 && i < Main.maxTilesX - 5) {
+                int l;
+                for (l = j; Main.tile[i, l] != null && (!Main.tile[i, l].HasTile || !Main.tileSolid[Main.tile[i, l].TileType]); l++) {
+                }
+
+                if (Main.tile[i, l] != null) {
+                    if (Main.tile[i, l].HasTile && Main.tile[i, l].TileType == 234)
+                        num = 121;
+
+                    if (Main.tile[i, l].HasTile && Main.tile[i, l].TileType == 116)
+                        num = 79;
+
+                    // Extra patch context.
+                    if (Main.tile[i, l].HasTile && Main.tile[i, l].TileType == 112)
+                        num = 77;
+
+                    TileLoader.PalmTreeDust(Main.tile[i, l], ref num);
+                }
+            }
+        }
+
+        if (tileType == 137) {
+            switch (tileFrameY / 18) {
+                default:
+                    num = 1;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    num = 148;
+                    break;
+                case 5:
+                    num = 1;
+                    break;
+            }
+        }
+
+        if (tileType == 443)
+            num = 1;
+
+        if (tileType == 444)
+            num = -1;
+
+        if (tileType == 212)
+            num = -1;
+
+        if (tileType == 213)
+            num = 129;
+
+        if (tileType == 214)
+            num = 1;
+
+        if (tileType == 215)
+            num = -6;
+
+        if (tileType == 325)
+            num = 81;
+
+        if (tileType == 251)
+            num = 189;
+
+        if (tileType == 252)
+            num = 190;
+
+        if (tileType == 253)
+            num = 191;
+
+        if (tileType == 254) {
+            if (tileFrameX < 72) {
+                num = 3;
+            }
+            else if (tileFrameX < 108) {
+                num = 3;
+                if (genRand.Next(3) == 0)
+                    num = 189;
+            }
+            else if (tileFrameX < 144) {
+                num = 3;
+                if (genRand.Next(2) == 0)
+                    num = 189;
+            }
+            else {
+                num = 3;
+                if (genRand.Next(4) != 0)
+                    num = 189;
+            }
+        }
+
+        if (tileType == 467)
+            num = -1;
+
+        if (tileType == 21)
+            num = ((tileFrameX >= 1008) ? (-1) : ((tileFrameX >= 612) ? 11 : ((tileFrameX >= 576) ? 148 : ((tileFrameX >= 540) ? 26 : ((tileFrameX >= 504) ? 126 : ((tileFrameX >= 468) ? 116 : ((tileFrameX >= 432) ? 7 : ((tileFrameX >= 396) ? 11 : ((tileFrameX >= 360) ? 10 : ((tileFrameX >= 324) ? 79 : ((tileFrameX >= 288) ? 78 : ((tileFrameX >= 252) ? 77 : ((tileFrameX >= 216) ? 1 : ((tileFrameX >= 180) ? 7 : ((tileFrameX >= 108) ? 37 : ((tileFrameX < 36) ? 7 : 10))))))))))))))));
+
+        if (tileType == 382)
+            num = 3;
+
+        if (tileType == 2 || tileType == 477)
+            num = ((genRand.Next(2) != 0) ? 2 : 0);
+
+        if (tileType == 127)
+            num = 67;
+
+        if (tileType == 91)
+            num = -1;
+
+        if (tileType == 198)
+            num = 109;
+
+        if (tileType == 26)
+            num = ((tileFrameX < 54) ? 8 : 5);
+
+        if (tileType == 34)
+            num = -1;
+
+        if (tileType == 6)
+            num = 8;
+
+        if (tileType == 7 || tileType == 47 || tileType == 284 || tileType == 682)
+            num = 9;
+
+        if (tileType == 8 || tileType == 45 || tileType == 102 || tileType == 680)
+            num = 10;
+
+        if (tileType == 9 || tileType == 42 || tileType == 46 || tileType == 126 || tileType == 136 || tileType == 681)
+            num = 11;
+
+        if (tileType == 166 || tileType == 175)
+            num = 81;
+
+        if (tileType == 167)
+            num = 82;
+
+        if (tileType == 168 || tileType == 176)
+            num = 83;
+
+        if (tileType == 169 || tileType == 177)
+            num = 84;
+
+        if (tileType == 199 || tileType == 662)
+            num = 117;
+
+        if (tileType == 205)
+            num = 125;
+
+        if (tileType == 201)
+            num = 125;
+
+        if (tileType == 211)
+            num = 128;
+
+        if (tileType == 227) {
+            switch (tileFrameX / 34) {
+                case 0:
+                case 1:
+                    num = 26;
+                    break;
+                case 3:
+                    num = 3;
+                    break;
+                case 2:
+                case 4:
+                case 5:
+                case 6:
+                    num = 40;
+                    break;
+                case 7:
+                    num = 117;
+                    break;
+                case 8:
+                    num = 17;
+                    break;
+                case 9:
+                    num = 6;
+                    break;
+                case 10:
+                    num = 3;
+                    break;
+                case 11:
+                    num = 26;
+                    break;
+            }
+        }
+
+        if (tileType == 204 || tileType == 478) {
+            num = 117;
+            if (genRand.Next(2) == 0)
+                num = 1;
+        }
+
+        if (tileType == 203)
+            num = 117;
+
+        if (tileType == 243)
+            num = ((genRand.Next(2) != 0) ? 13 : 7);
+
+        if (tileType == 219)
+            num = -1;
+
+        if (tileType == 642)
+            num = -128;
+
+        if (tileType == 244)
+            num = ((genRand.Next(2) == 0) ? 1 : 13);
+
+        if (tileType == 597) {
+            num = -1;
+        }
+        else if ((tileType >= 358 && tileType <= 364) || (tileType >= 275 && tileType <= 282) || tileType == 285 || tileType == 286 || (tileType >= 288 && tileType <= 297) || (tileType >= 316 && tileType <= 318) || tileType == 298 || tileType == 299 || tileType == 309 || tileType == 310 || tileType == 339 || tileType == 538 || tileType == 413 || tileType == 414 || tileType == 505 || tileType == 521 || tileType == 522 || tileType == 523 || tileType == 524 || tileType == 525 || tileType == 526 || tileType == 527 || tileType == 532 || tileType == 543 || tileType == 544 || tileType == 550 || tileType == 551 || tileType == 533 || tileType == 553 || tileType == 554 || tileType == 555 || tileType == 556 || tileType == 558 || tileType == 559 || tileType == 542 || tileType == 391 || tileType == 394 || tileType == 392 || tileType == 393 || tileType == 568 || tileType == 569 || tileType == 570 || tileType == 582 || tileType == 580 || tileType == 598 || tileType == 599 || tileType == 600 || tileType == 601 || tileType == 602 || tileType == 603 || tileType == 604 || tileType == 605 || tileType == 606 || tileType == 607 || tileType == 608 || tileType == 609 || tileType == 610 || tileType == 611 || tileType == 612 || tileType == 619 || tileType == 620 || tileType == 629 || tileType == 632 || tileType == 640 || tileType == 643 || tileType == 644 || tileType == 645) {
+            num = 13;
+            if (genRand.Next(3) != 0)
+                num = -1;
+        }
+
+        if (tileType == 13)
+            num = ((tileFrameX < 90) ? 13 : (-1));
+
+        if (tileType == 189)
+            num = 16;
+
+        if (tileType == 460)
+            num = 16;
+
+        if (tileType == 530) {
+            switch (Main.tile[i, j + 2 - tileFrameY / 18].TileType) {
+                case 116:
+                    num = 47;
+                    break;
+                case 234:
+                    num = 125;
+                    break;
+                case 112:
+                    num = 17;
+                    break;
+                default:
+                    num = ((tileFrameX >= 270) ? 291 : 40);
+                    break;
+            }
+        }
+
+        if (tileType == 518) {
+            if (tileFrameY == 0)
+                num = 3;
+            else if (tileFrameY == 18)
+                num = 47;
+            else if (tileFrameY == 36)
+                num = 40;
+        }
+        else if (tileType == 519) {
+            if (tileFrameY == 0)
+                num = 3;
+            else if (tileFrameY == 18)
+                num = 40;
+            else if (tileFrameY == 36)
+                num = 47;
+            else if (tileFrameY == 54)
+                num = 125;
+            else if (tileFrameY == 72)
+                num = 17;
+            else if (tileFrameY == 90)
+                num = 26;
+        }
+        else if (tileType == 636) {
+            num = 17;
+        }
+        else if (tileType == 528) {
+            num = 26;
+        }
+
+        if (tileType == 12)
+            num = 12;
+
+        if (tileType == 639)
+            num = 48;
+
+        if (tileType == 3 || tileType == 73)
+            num = 3;
+
+        if (tileType == 54)
+            num = 13;
+
+        if (tileType == 22 || tileType == 140)
+            num = 14;
+
+        if (tileType == 78)
+            num = 22;
+
+        if (tileType == 28 || tileType == 653) {
+            num = 22;
+            if (tileFrameY >= 72 && tileFrameY <= 90)
+                num = 1;
+
+            if (tileFrameY >= 144 && tileFrameY <= 234)
+                num = 48;
+
+            if (tileFrameY >= 252 && tileFrameY <= 358)
+                num = 85;
+
+            if (tileFrameY >= 360 && tileFrameY <= 466)
+                num = 26;
+
+            if (tileFrameY >= 468 && tileFrameY <= 574)
+                num = 36;
+
+            if (tileFrameY >= 576 && tileFrameY <= 790)
+                num = 18;
+
+            if (tileFrameY >= 792 && tileFrameY <= 898)
+                num = 5;
+
+            if (tileFrameY >= 900 && tileFrameY <= 1006)
+                num = 0;
+
+            if (tileFrameY >= 1008 && tileFrameY <= 1114)
+                num = 148;
+
+            if (tileFrameY >= 1116 && tileFrameY <= 1222)
+                num = 241;
+
+            if (tileFrameY >= 1224 && tileFrameY <= 1330)
+                num = 287;
+        }
+
+        if (tileType == 163)
+            num = 118;
+
+        if (tileType == 164)
+            num = 119;
+
+        if (tileType == 200)
+            num = 120;
+
+        if (tileType == 221 || tileType == 248)
+            num = 144;
+
+        if (tileType == 222 || tileType == 249)
+            num = 145;
+
+        if (tileType == 223 || tileType == 250)
+            num = 146;
+
+        if (tileType == 224)
+            num = 149;
+
+        if (tileType == 225)
+            num = 147;
+
+        if (tileType == 229)
+            num = 153;
+
+        if (tileType == 231) {
+            num = 153;
+            if (genRand.Next(3) == 0)
+                num = 26;
+        }
+
+        if (tileType == 226)
+            num = 148;
+
+        if (tileType == 103)
+            num = -1;
+
+        if (tileType == 29)
+            num = 23;
+
+        if (tileType == 40)
+            num = 28;
+
+        if (tileType == 50)
+            num = 22;
+
+        if (tileType == 51)
+            num = 30;
+
+        if (tileType == 52 || tileType == 353)
+            num = 3;
+
+        if (tileType == 53 || tileType == 81 || tileType == 151 || tileType == 202 || tileType == 274 || tileType == 495)
+            num = 32;
+
+        if (tileType == 56 || tileType == 152)
+            num = 37;
+
+        if (tileType == 75 || tileType == 683)
+            num = 109;
+
+        if (tileType == 57 || tileType == 119 || tileType == 141 || tileType == 234 || tileType == 635 || tileType == 654)
+            num = 36;
+
+        if (tileType == 59 || tileType == 120)
+            num = 38;
+
+        if (tileType == 61 || tileType == 62 || tileType == 74 || tileType == 80 || tileType == 188 || tileType == 233 || tileType == 236 || tileType == 384 || tileType == 652 || tileType == 651)
+            num = 40;
+
+        if (tileType == 485)
+            num = 32;
+
+        if (tileType == 238)
+            num = ((genRand.Next(3) != 0) ? 166 : 167);
+
+        if (tileType == 69)
+            num = 7;
+
+        if (tileType == 655)
+            num = 166;
+
+        if (tileType == 71 || tileType == 72 || tileType == 190 || tileType == 578)
+            num = 26;
+
+        if (tileType == 70)
+            num = 17;
+
+        if (tileType == 112)
+            num = 14;
+
+        if (tileType == 123)
+            num = 53;
+
+        if (tileType == 161)
+            num = 80;
+
+        if (tileType == 206)
+            num = 80;
+
+        if (tileType == 162)
+            num = 80;
+
+        if (tileType == 165) {
+            switch (tileFrameX / 54) {
+                case 0:
+                    num = 80;
+                    break;
+                case 1:
+                    num = 1;
+                    break;
+                case 2:
+                    num = 30;
+                    break;
+                case 3:
+                    num = 147;
+                    break;
+                case 4:
+                    num = 1;
+                    break;
+                case 5:
+                    num = 14;
+                    break;
+                case 6:
+                    num = 117;
+                    break;
+                case 7:
+                    num = 250;
+                    break;
+                case 8:
+                    num = 240;
+                    break;
+                case 9:
+                    num = 236;
+                    break;
+                default:
+                    num = 1;
+                    break;
+            }
+        }
+
+        if (tileType == 666)
+            num = 322;
+
+        if (tileType == 193)
+            num = 4;
+
+        if (tileType == 194)
+            num = 26;
+
+        if (tileType == 195)
+            num = 5;
+
+        if (tileType == 196)
+            num = 108;
+
+        if (tileType == 460)
+            num = 108;
+
+        if (tileType == 197)
+            num = 4;
+
+        if (tileType == 153)
+            num = 26;
+
+        if (tileType == 154)
+            num = 32;
+
+        if (tileType == 155)
+            num = 2;
+
+        if (tileType == 156)
+            num = 1;
+
+        if (tileType == 116 || tileType == 118 || tileType == 147 || tileType == 148)
+            num = 51;
+
+        if (tileType == 109 || tileType == 492)
+            num = ((genRand.Next(2) != 0) ? 47 : 0);
+
+        if (tileType == 110 || tileType == 113 || tileType == 115)
+            num = 47;
+
+        if (tileType == 107 || tileType == 121 || tileType == 685)
+            num = 48;
+
+        if (tileType == 108 || tileType == 122 || tileType == 146 || tileType == 686)
+            num = 49;
+
+        if (tileType == 111 || tileType == 145 || tileType == 150)
+            num = 50;
+
+        if (tileType == 133) {
+            num = 50;
+            if (tileFrameX >= 54)
+                num = 146;
+        }
+
+        if (tileType == 134) {
+            num = 49;
+            if (tileFrameX >= 36)
+                num = 145;
+        }
+
+        if (tileType == 149)
+            num = 49;
+
+        if (Main.tileAlch[tileType]) {
+            int num16 = tileFrameX / 18;
+            if (num16 == 0)
+                num = 3;
+
+            if (num16 == 1)
+                num = 3;
+
+            if (num16 == 2)
+                num = 7;
+
+            if (num16 == 3)
+                num = 17;
+
+            if (num16 == 4)
+                num = 289;
+
+            if (num16 == 5)
+                num = 6;
+
+            if (num16 == 6)
+                num = 224;
+        }
+
+        if (tileType == 58 || tileType == 76 || tileType == 77 || tileType == 684)
+            num = ((genRand.Next(2) != 0) ? 25 : 6);
+
+        if (tileType == 37)
+            num = ((genRand.Next(2) != 0) ? 23 : 6);
+
+        if (tileType == 32)
+            num = ((genRand.Next(2) != 0) ? 24 : 14);
+
+        if (tileType == 352)
+            num = ((genRand.Next(3) != 0) ? 125 : 5);
+
+        if (tileType == 23 || tileType == 24 || tileType == 661)
+            num = ((genRand.Next(2) != 0) ? 17 : 14);
+
+        if (tileType == 25 || tileType == 31)
+            num = ((tileType == 31 && tileFrameX >= 36) ? 5 : ((genRand.Next(2) != 0) ? 1 : 14));
+
+        if (tileType == 20) {
+            switch (tileFrameX / 54) {
+                case 1:
+                    num = 122;
+                    break;
+                case 2:
+                    num = 78;
+                    break;
+                case 3:
+                    num = 77;
+                    break;
+                case 4:
+                    num = 121;
+                    break;
+                case 5:
+                    num = 79;
+                    break;
+                default:
+                    num = 7;
+                    break;
+            }
+        }
+
+        if (tileType == 27)
+            num = ((genRand.Next(2) != 0) ? 19 : 3);
+
+        if (tileType == 129) {
+            if (tileFrameX >= 324)
+                num = 69;
+
+            num = ((tileFrameX != 0 && tileFrameX != 54 && tileFrameX != 108) ? ((tileFrameX != 18 && tileFrameX != 72 && tileFrameX != 126) ? 70 : 69) : 68);
+        }
+
+        if (tileType == 385)
+            num = genRand.Next(68, 71);
+
+        if (tileType == 4) {
+            int num17 = (int)MathHelper.Clamp(tileFrameY / 22, 0f, TorchID.Count - 1);
+            num = TorchID.Dust[num17];
+        }
+
+        if (tileType == 35) {
+            num = 189;
+            if (tileFrameX < 36 && genRand.Next(2) == 0)
+                num = 6;
+        }
+
+        if ((tileType == 34 || tileType == 42) && genRand.Next(2) == 0)
+            num = 6;
+
+        if (tileType == 270)
+            num = -1;
+
+        if (tileType == 271)
+            num = -1;
+
+        if (tileType == 581)
+            num = -1;
+
+        if (tileType == 660)
+            num = -1;
+
+        if (tileType == 79 || tileType == 90 || tileType == 101)
+            num = -1;
+
+        if (tileType == 33 || tileType == 34 || tileType == 42 || tileType == 93 || tileType == 100)
+            num = -1;
+
+        if (tileType == 321 || tileType == 574)
+            num = 214;
+
+        if (tileType == 322)
+            num = 215;
+
+        if (tileType == 635)
+            num = 36;
+
+        bool flag = tileType == 178 || tileType == 440;
+        if (tileType == 178 || (uint)(tileType - 426) <= 1u || (uint)(tileType - 430) <= 10u)
+            flag = true;
+
+        if (TileLoader.GetTile(tileType) is ModTile modTile)
+            num = modTile.DustType;
+
+        return num;
+    }
+
     public static int GetKillTileDust(int i, int j, Tile tileCache) {
         var genRand = WorldGen.genRand;
         int num = 0;
