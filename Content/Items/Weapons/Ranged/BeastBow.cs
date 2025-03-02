@@ -242,7 +242,8 @@ sealed class BeastProj : ModProjectile  {
 			int damage = (int)player.GetTotalDamage(DamageClass.Ranged).ApplyTo(beastBowItem.damage);
             float knockBack = player.GetTotalKnockback(DamageClass.Ranged).ApplyTo(beastBowItem.knockBack);
 			if (Projectile.owner == Main.myPlayer) {
-				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 4f, Helper.VelocityToPoint(Projectile.Center, velocity2, 7f), projToShoot,
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 4f, 
+					Helper.VelocityToPoint(Projectile.Center, velocity2, 7f), projToShoot,
 					damage, knockBack, Projectile.owner);
 			}
 		}
