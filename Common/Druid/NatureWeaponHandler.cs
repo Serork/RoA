@@ -181,7 +181,8 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             }
             else {
                 if (ActivePrefix._vanillaAdapted) {
-                    damage *= 1f + (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult - 2f) / 4f;
+                    float modifier = 1f + (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult - 2f) / 4f;
+                    damage *= modifier;
                 }
                 else {
                     damage *= (ActivePrefix._druidDamageMult + ActivePrefix._potentialDamageMult) / 2f;
