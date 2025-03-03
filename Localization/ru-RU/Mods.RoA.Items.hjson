@@ -1613,7 +1613,7 @@ LivingPalmHelmet: {
 }
 
 BeachWreath: {
-	DisplayName: Пустынный венок I
+	DisplayName: Пляжный венок I
 	/* Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
@@ -1623,7 +1623,7 @@ BeachWreath: {
 }
 
 BeachWreath2: {
-	DisplayName: Пустынный венок II
+	DisplayName: Пляжный венок II
 	/* Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
