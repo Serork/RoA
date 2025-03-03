@@ -15,13 +15,13 @@ Hunter: {
 	NotEnoughTradeQuote3: Последнее, что тебе следует делать, это потешаться над отчаянными. Например, мной, дитя.
 	TradeQuote1: Спасибо. С этой кожей я смогу прожить ещё хоть день.
 	TradeQuote2: Премного благодарен. Эти припасы мне пригодятся.
-	// TradeQuote3: TradeQuote3
+	TradeQuote3: Спасибо, дитя. Теперь я уверен, что я не умру к рассвету.
 	// DropFireLighterQuote1: DropFireLighterQuote1
 }
 
 Dryad: {
-	// AwakeQuote1: AwakeQuote1
-	// AwakeQuote2: AwakeQuote2
+	AwakeQuote1: Уберите от меня свои руки! УБЕРИТЕ СВОИ... Что?
+	AwakeQuote2: Вы все сгниете! ВЫ ВСЕ... А ты кто?
 }
 
-// GoblinTinkerer.PettyGoblinQuote1: PettyGoblinQuote1
+GoblinTinkerer.PettyGoblinQuote1: Тебя обставил тот мелкий воришка? Скажу честно, ты не первый.

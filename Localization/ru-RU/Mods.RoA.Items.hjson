@@ -1327,7 +1327,7 @@ EntBanner: {
 }
 
 FlederBanner: {
-	// DisplayName: Fleder Banner
+	DisplayName: Знамя нетопыря
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Fleder.DisplayName}"
 }
 
@@ -1539,7 +1539,7 @@ BackwoodsGrassWall: {
 
 BackwoodsDungeonKey: {
 	DisplayName: Ключ чащи
-	// Tooltip: Unlocks a Backwoods Chest in the dungeon
+	Tooltip: Открывает сундук чащи в подземелье
 }
 
 BackwoodsDungeonChest: {
@@ -1583,12 +1583,12 @@ BackwoodsStoneChest: {
 }
 
 GrimstoneBrickWall: {
-	// DisplayName: Polished Grimrock Wall
+	DisplayName: Стена из полированного мрачного камня
 	// Tooltip: ""
 }
 
 BackwoodsStoneChest_Trapped: {
-	// DisplayName: Trapped Polished Grimrock Chest
+	DisplayName: Сундук-ловушка из полированного мрачного камня
 	// Tooltip: ""
 }
 
@@ -1598,22 +1598,22 @@ FenethStatue: {
 }
 
 LivingPalmChestplate: {
-	// DisplayName: Living Palm Chestplate
-	// Tooltip: ""
+	DisplayName: Живой пальмовый нагрудник
+	Tooltip: ""
 }
 
 LivingPalmGreaves: {
-	// DisplayName: Living Palm Greaves
-	// Tooltip: 4% increased nature base damage
+	DisplayName: Живые пальмовые поножи
+	Tooltip: Увеличивает начальный природный урон на 4%
 }
 
 LivingPalmHelmet: {
-	// DisplayName: Living Palm Helmet
-	// Tooltip: 4% increased nature base damage
+	DisplayName: Живой пальмовый шлем
+	Tooltip: Увеличивает начальный природный урон на 4%
 }
 
 BeachWreath: {
-	// DisplayName: Beach Wreath I
+	DisplayName: Пустынный венок I
 	/* Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
@@ -1623,7 +1623,7 @@ BeachWreath: {
 }
 
 BeachWreath2: {
-	// DisplayName: Beach Wreath II
+	DisplayName: Пустынный венок II
 	/* Tooltip:
 		'''
 		[kw/n:Wreath] is charged by dealing nature damage, providing:
@@ -1634,6 +1634,6 @@ BeachWreath2: {
 }
 
 DullDaikatana: {
-	// DisplayName: Dull Daikatana
-	// Tooltip: "'Lost and Scattered'"
+	DisplayName: Затупившаяся дай-катана
+	Tooltip: "'Разбросанная и потерянная'"
 }
