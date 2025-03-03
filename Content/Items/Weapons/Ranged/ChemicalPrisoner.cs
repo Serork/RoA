@@ -24,13 +24,13 @@ sealed class ChemicalPrisoner : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useTime = Item.useAnimation = 18;
-        Item.autoReuse = true;
+        Item.useTime = Item.useAnimation = 14;
+        Item.autoReuse = false;
 
         Item.DamageType = DamageClass.Ranged;
         Item.noMelee = true;
-        Item.damage = 25;
-        Item.knockBack = 3;
+        Item.damage = 27;
+        Item.knockBack = 3f;
 
         Item.rare = ItemRarityID.Orange;
 
