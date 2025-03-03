@@ -248,6 +248,10 @@ sealed class FlederSlayer : ModProjectile {
             else if (_timeLeft == min) {
                 SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 
+                for (int i = 0; i < Projectile.localNPCImmunity.Length; i++) {
+                    Projectile.localNPCImmunity[i] = 0;
+                }
+
                 Projectile.ai[0] = itemAnimationMax;
 
                 player.bodyFrame.Y = player.bodyFrame.Height * 4;
@@ -483,6 +487,7 @@ sealed class FlederSlayer : ModProjectile {
         if (Main.player[Projectile.owner].channel) {
             modifiers.Knockback *= 0f;
         }
+        modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
         modifiers.FinalDamage *=
                             Projectile.ai[1] >= 3f
                           ? Projectile.scale * 3f * (1f + _charge)
