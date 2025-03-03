@@ -73,7 +73,6 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                             }
                             if (flag4) {
                                 WorldGen.PlaceTile(num438, num439, tileType);
-                                Console.WriteLine(num438 + " " + num439);
                             }
                             else {
                                 flag24 = true;
