@@ -54,6 +54,10 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
             return;
         }
 
+        if (Player.buffImmune[BuffID.Poisoned]) {
+            return;
+        }
+
         if (Player.HasBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>())) {
             return;
         }
