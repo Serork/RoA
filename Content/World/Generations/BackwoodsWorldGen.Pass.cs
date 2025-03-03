@@ -2354,8 +2354,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(_grassTileType) && WorldGen.SolidTile(x, y) && !aboveTile.HasTile) {
                     tile = WorldGenHelper.GetTileSafely(x, y - 1);
                     if (_random.NextBool(6) && (tile.WallType == _grassWallType || tile.WallType == _flowerGrassWallType || tile.WallType == _leavesWallType)) {
-                        int num3 = 15;
-                        int num4 = 2;
+                        int num3 = 10;
+                        int num4 = 4;
                         int num5 = 0;
                         num3 = (int)((double)num3 * ((double)Main.maxTilesX / 4200.0));
                         int num6 = Utils.Clamp(x - num3, 4, Main.maxTilesX - 4);
@@ -2365,7 +2365,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         for (int i2 = num6; i2 <= num7; i2++) {
                             for (int j2 = num8; j2 <= num9; j2++) {
                                 int checkTileType = Main.tile[i2, j2].TileType;
-                                if (checkTileType >= TileID.Count && TileLoader.GetTile(checkTileType) is PlantBase) {
+                                if (checkTileType == _mintTileType) {
                                     num5++;
                                 }
                             }
