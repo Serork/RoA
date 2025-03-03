@@ -68,11 +68,12 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                         }
                         if (flag) {
                             bool flag4 = true;
-                            if (!(num436 == 1 ? genRand.NextBool(2) : num436 != 2 || genRand.NextBool(3))) {
+                            if (!((num436 == 1 ? genRand.NextBool(2) : num436 != 2 || genRand.NextBool(2)))) {
                                 flag4 = false;
                             }
                             if (flag4) {
                                 WorldGen.PlaceTile(num438, num439, tileType);
+                                Console.WriteLine(num438 + " " + num439);
                             }
                             else {
                                 flag24 = true;

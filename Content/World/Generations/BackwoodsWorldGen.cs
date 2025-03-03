@@ -16,23 +16,23 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex += 6;
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new("Backwoods", LAYERWEIGHT));
         genIndex += 3;
-        tasks.Insert(genIndex, new PassLegacy("Backwoods 1", BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
+        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
         genIndex -= 2;
-        tasks.Insert(genIndex, new PassLegacy("Backwoods 2", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
+        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex -= 3;
-        tasks.Insert(genIndex, new PassLegacy("Backwoods 3", BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
+        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex += 1;
-        tasks.Insert(genIndex, new PassLegacy("Backwoods 4", BackwoodsWorldGenPass.BackwoodsTilesReplacement));
+        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsTilesReplacement));
 
-        tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods 5", BackwoodsWorldGenPass.BackwoodsOnLast0));
-        tasks.Insert(tasks.Count - 2, new PassLegacy("Backwoods 6", BackwoodsWorldGenPass.BackwoodsOnLast));
+        tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast0));
+        tasks.Insert(tasks.Count - 2, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast));
 
-        tasks.Add(new PassLegacy("Backwoods 7", BackwoodsWorldGenPass.BackwoodsOnLast1));
+        tasks.Add(new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast1));
     }
 }
