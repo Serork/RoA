@@ -2110,7 +2110,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                            flag ? _random.Next(15, 20) : 1,
                                            0.5);
                         },
-                        () => addItemInChest(_random.NextBool(2) ? ModContent.ItemType<MercuriumNugget>() : WorldGen.SavedOreTiers.Gold == TileID.Gold ? ItemID.GoldBar : ItemID.PlatinumBar,
+                        () => addItemInChest(_random.NextBool(2) ? ModContent.ItemType<Items.Materials.MercuriumNugget>() : WorldGen.SavedOreTiers.Gold == TileID.Gold ? ItemID.GoldBar : ItemID.PlatinumBar,
                                              _random.Next(3, 11),
                                              0.75),
                         () => addItemInChest(_random.NextBool(4) ? ModContent.ItemType<PrismaticPotion>() : ModContent.ItemType<DeathWardPotion>(),

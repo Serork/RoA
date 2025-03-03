@@ -17,7 +17,9 @@ sealed class MercuriumNugget : ModItem {
 	}
 
 	public override void SetDefaults() {
-		int width = 20; int height = 20;
+        Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Decorations.MercuriumNugget>());
+
+        int width = 20; int height = 20;
 		Item.Size = new Vector2(width, height);
 
 		Item.rare = ItemRarityID.Blue;
