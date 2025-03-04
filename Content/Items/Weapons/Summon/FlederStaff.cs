@@ -24,7 +24,7 @@ sealed class FlederStaff : ModItem {
         Item.damage = 19;
         Item.crit = 5;
 
-        Item.mana = 4;
+        Item.mana = 10;
 
         Item.channel = true;
 
