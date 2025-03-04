@@ -1,13 +1,14 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Dusts;
 
-using System;
-
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,9 +24,100 @@ sealed class DeathWard : ModBuff {
 }
 
 sealed class BehelitPlayer : ModPlayer {
-	public bool behelitPotion;
+    private sealed class BehelitVisualEffectOnPlayer : ILoadable {
+        void ILoadable.Load(Mod mod) {
+            On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
+            On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += On_PlayerDrawLayers_DrawPlayer_RenderAllLayers;
+        }
 
-	public override void ResetEffects() => behelitPotion = false;
+        private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo) {
+            var drawPlayer = drawinfo.drawPlayer;
+            var handler = drawPlayer.GetModPlayer<BehelitPlayer>();
+            if (handler.behelitPotion && drawinfo.shadow == handler.ghostFade) {
+                for (int i = 0; i < drawinfo.DrawDataCache.Count; i++) {
+                    DrawData value = drawinfo.DrawDataCache[i];
+                    value.color = Color.Lerp(value.color, Color.Red, 0.5f);
+                    value.color.A = (byte)((float)(int)value.color.A * 0.5f);
+                    drawinfo.DrawDataCache[i] = value;
+                }
+            }
+
+            orig(ref drawinfo);
+        }
+
+        private void On_LegacyPlayerRenderer_DrawPlayerFull(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
+            SpriteBatch spriteBatch = camera.SpriteBatch;
+            SamplerState samplerState = camera.Sampler;
+            if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f)
+                samplerState = LegacyPlayerRenderer.MountedSamplerState;
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
+            if (Main.gamePaused)
+                drawPlayer.PlayerFrame();
+
+            Vector2 position = default(Vector2);
+            var handler = drawPlayer.GetModPlayer<BehelitPlayer>();
+            if (handler.behelitPotion) {
+                if (!drawPlayer.ghost) {
+                    if (!drawPlayer.invis) {
+                        _ = drawPlayer.position;
+                        if (!Main.gamePaused)
+                            handler.ghostFade += handler.ghostDir * 0.03f;
+
+                        if ((double)handler.ghostFade < 0.05) {
+                            handler.ghostDir = 1f;
+                            handler.ghostFade = 0.15f;
+                        }
+                        else if ((double)handler.ghostFade > 0.95) {
+                            handler.ghostDir = -1f;
+                            handler.ghostFade = 0.95f;
+                        }
+
+                        float num2 = handler.ghostFade * 5f;
+                        for (int l = 0; l < 4; l++) {
+                            float num3;
+                            float num4;
+                            switch (l) {
+                                default:
+                                    num3 = num2;
+                                    num4 = 0f;
+                                    break;
+                                case 1:
+                                    num3 = 0f - num2;
+                                    num4 = 0f;
+                                    break;
+                                case 2:
+                                    num3 = 0f;
+                                    num4 = num2;
+                                    break;
+                                case 3:
+                                    num3 = 0f;
+                                    num4 = 0f - num2;
+                                    break;
+                            }
+
+                            position = new Vector2(drawPlayer.position.X + num3, drawPlayer.position.Y + drawPlayer.gfxOffY + num4);
+                            self.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, handler.ghostFade);
+                        }
+                    }
+                }
+            }
+
+            spriteBatch.End();
+
+            orig(self, camera, drawPlayer);
+        }
+
+        void ILoadable.Unload() { }
+    }
+
+
+    public bool behelitPotion;
+
+    private float ghostFade;
+    private float ghostDir;
+
+    public override void ResetEffects() => behelitPotion = false;
 
     public override bool FreeDodge(Player.HurtInfo info) {
 		if (behelitPotion && Player.statLife <= info.Damage) {
