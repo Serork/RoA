@@ -87,7 +87,7 @@ sealed class TreeDryad : ModTile {
                 npc.netUpdate = true;
 
                 int emoteType = ModContent.EmoteBubbleType<BackwoodsEmote>();
-                EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(npc), 80);
+                EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(npc), (int)npc.ai[1]);
             }
         }
     }
