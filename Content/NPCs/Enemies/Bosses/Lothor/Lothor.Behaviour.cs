@@ -132,7 +132,6 @@ sealed partial class Lothor : ModNPC {
     private bool _shouldSpawnPipistrelles;
     private bool _isDead;
     private float _deadStateProgress;
-    private Player _target;
     private bool _targetIsDeadOrNoTarget;
     private bool _shouldEnrage;
     private int _hpLoseInEnrage;
@@ -146,7 +145,7 @@ sealed partial class Lothor : ModNPC {
 
     private LothorAIState CurrentAIState { get => (LothorAIState)NPC.ai[3]; set => NPC.ai[3] = (byte)value; }
 
-    private Player Target => _target;
+    private Player Target => Main.player[NPC.target];
     private List<LothorAIState> Attacks => [LothorAIState.ClawsAttack, LothorAIState.SpittingAttack, LothorAIState.Scream, LothorAIState.FlightAttackPreparation, LothorAIState.WreathAttack];
     private List<LothorAIState> FlightStates => [LothorAIState.Flight, LothorAIState.AirDash, LothorAIState.FlightAttackPreparation, LothorAIState.ChargingWreath, LothorAIState.WreathAttack];
     private List<LothorAIState> AirAttacks => [LothorAIState.AirDash, LothorAIState.FlightAttackPreparation];
@@ -470,15 +469,19 @@ sealed partial class Lothor : ModNPC {
                     _frameTimer += 1.0;
                 }
                 else if (FlightAttackTimer != 0f && BeforeAttackTimer > 0f) {
-                    if (_frameChosen) {
-                        CurrentFrame = neededFrame;
-                    }
-                    else {
-                        ApplyFlyingAnimation();
-                        if (CurrentFrame == neededFrame) {
-                            _frameChosen = true;
-                            NPC.netUpdate = true;
+                    if (Main.netMode != NetmodeID.MultiplayerClient) {
+                        if (_frameChosen) {
+                            CurrentFrame = neededFrame;
                         }
+                        else {
+                            ApplyFlyingAnimation();
+                            if (CurrentFrame == neededFrame) {
+                                _frameChosen = true;
+                                NPC.netUpdate = true;
+                            }
+                        }
+
+                        NPC.netUpdate = true;
                     }
                 }
                 else {
@@ -709,6 +712,7 @@ sealed partial class Lothor : ModNPC {
                     SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "Wingslap") { Volume = 1.5f }, NPC.Center);
                 }
                 _frameTimer = 1.0;
+                NPC.netUpdate = true;
             }
         }
         if (CurrentFrame > 25) {
@@ -745,8 +749,9 @@ sealed partial class Lothor : ModNPC {
     private void HandleActiveState() {
         _targetIsDeadOrNoTarget = true;
         if (GetTargetPlayer(out Player target)) {
-            _target = target;
+            NPC.target = target.whoAmI;
             _targetIsDeadOrNoTarget = false;
+            NPC.netUpdate = true;
         }
         if (!_targetIsDeadOrNoTarget && NPC.Opacity < 1f) {
             NPC.Opacity += 0.025f;
@@ -831,6 +836,8 @@ sealed partial class Lothor : ModNPC {
             _attackTime = 0;
             ThatThingMakeHimScream();
             _previousState = CurrentAIState;
+
+            NPC.netUpdate = true;
         }
 
         if (ScreamTimer >= ScreamAttackTime) {
@@ -900,10 +907,12 @@ sealed partial class Lothor : ModNPC {
         if (firstTime) {
             PlayRoarSound();
         }
+
         string tag = "Lothor Scream";
         float strength = firstTime ? 20f : 5f;
         PunchCameraModifier punchCameraModifier = new PunchCameraModifier(NPC.Center, MathHelper.TwoPi.ToRotationVector2(), strength, firstTime ? 10f : 12.5f, 25, 1000f, tag);
         Main.instance.CameraModifiers.Add(punchCameraModifier);
+
         if (Main.netMode != NetmodeID.MultiplayerClient) {
             Vector2 center = new Vector2(NPC.Center.X + NPC.width / 2 * NPC.direction, NPC.position.Y + NPC.height / 4);
             ushort projType = (ushort)ModContent.ProjectileType<LothorScream>();
@@ -936,6 +945,7 @@ sealed partial class Lothor : ModNPC {
             _distanceProgress = Vector2.Distance(NPC.Center, _tempPosition);
             if (_distanceProgress2 == -1f) {
                 _distanceProgress2 = _distanceProgress;
+                NPC.netUpdate = true;
             }
             void spawnSpike() {
                 Glow();
@@ -1002,16 +1012,8 @@ sealed partial class Lothor : ModNPC {
         int type = ModContent.NPCType<Pipistrelle>();
         if (_shouldSpawnPipistrelles && NPC.CountNPCS(type) < 1) {
             Vector2 positionToSpawn = NPC.Center + Vector2.UnitY * NPC.height / 2f;
-            if (Main.netMode != NetmodeID.MultiplayerClient) {
-                NPC npc = NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: -1f);
-                if (Main.netMode == NetmodeID.Server && npc.whoAmI < Main.maxNPCs) {
-                    NetMessage.SendData(MessageID.SyncNPC, number: npc.whoAmI);
-                }
-                npc = NPC.NewNPCDirect(NPC.GetSource_Death(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 1f);
-                if (Main.netMode == NetmodeID.Server && npc.whoAmI < Main.maxNPCs) {
-                    NetMessage.SendData(MessageID.SyncNPC, number: npc.whoAmI);
-                }
-            }
+            NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: -1f);
+            NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 1f);
         }
     }
 
@@ -1020,9 +1022,14 @@ sealed partial class Lothor : ModNPC {
 
         _wreathLookingPosition = Target.Center;
 
-        void updatePositionToMove(float x = 300f, float y = -50f) => _tempPosition = Target.Center + new Vector2(_tempDirection * x, y);
+        void updatePositionToMove(float x = 300f, float y = -50f) {
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                _tempPosition = Target.Center + new Vector2(_tempDirection * x, y);
+                NPC.netUpdate = true;
+            }
+        }
         float speed = 7f;
-        if (_tempDirection == 0) {
+        if (_tempDirection == 0 && Main.netMode != NetmodeID.MultiplayerClient) {
             _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
             updatePositionToMove();
         }
@@ -1144,7 +1151,7 @@ sealed partial class Lothor : ModNPC {
                 _spitCount--;
                 SoundEngine.PlaySound(SoundID.Item111, NPC.Center);
 
-                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                if (NPC.target == Main.myPlayer) {
                     int damage = NPC.damage / 3;
                     float knockBack = 0.2f;
                     ushort type = (ushort)ModContent.ProjectileType<LothorAngleAttack>();
@@ -1158,7 +1165,8 @@ sealed partial class Lothor : ModNPC {
                     if (lengthY > maxY) {
                         lengthY = maxY;
                     }
-                    int whoAmI = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.One, type, damage, knockBack, Main.myPlayer, NPC.whoAmI,
+                    int whoAmI = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.One, type, damage, knockBack, NPC.target,
+                        NPC.whoAmI,
                         position.X + lengthX,
                         position.Y - lengthY);
 
@@ -1259,7 +1267,7 @@ sealed partial class Lothor : ModNPC {
         if (AirDashTimer > 10f) {
             if (distance < minDistance || (Vector2.Distance(NPC.Center, Target.Center) > minDistance * 2f && NPC.velocity.Length() > dashStrength * 0.75f) || NPC.velocity.Length() > dashStrength * 1.25f) {
                 _dashStrength = 0f;
-                if (Main.rand.NextChance(DashCount / (GetJumpCountToEncourageFlightState() + 0))) {
+                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextChance(DashCount / (GetJumpCountToEncourageFlightState() + 0))) {
                     _shouldWreathAttack = !_shouldWreathAttack;
                     ChooseAttack(LothorAIState.FlightAttackPreparation);
 
@@ -1574,7 +1582,7 @@ sealed partial class Lothor : ModNPC {
             if (!OnPlayersDead(false) && NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
                 GoToFlightState();
                 _shouldWreathAttack = !_shouldWreathAttack;
-                if (Main.rand.NextBool()) {
+                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool()) {
                     _shouldWreathAttack = !_shouldWreathAttack;
                     NPC.netUpdate = true;
                 }
@@ -1666,9 +1674,7 @@ sealed partial class Lothor : ModNPC {
             _stompSpawned = true;
         }
 
-        if (Main.netMode != NetmodeID.Server) {
-            SoundEngine.PlaySound(SoundID.DD2_OgreGroundPound, NPC.Center);
-        }
+        SoundEngine.PlaySound(SoundID.DD2_OgreGroundPound, NPC.Center);
 
         float strength = 7.5f/*Main.expertMode ? 7.5f : 5f*/;
         int distInTiles = 20/*Main.expertMode ? 20 : 15*/;
@@ -1787,10 +1793,16 @@ sealed partial class Lothor : ModNPC {
 
         writer.Write(_attackTime);
 
-        writer.Write(_currentFrame);
+        writer.Write(CurrentFrame);
         writer.Write(_frameChosen);
 
+        writer.Write(_distanceProgress);
         writer.Write(_distanceProgress2);
+
+        writer.Write(_targetIsDeadOrNoTarget);
+
+        writer.Write(_applyFlightAttackAnimation);
+        writer.Write(_flightAttackAnimationDone);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -1803,10 +1815,16 @@ sealed partial class Lothor : ModNPC {
 
         _attackTime = reader.ReadInt32();
 
-        _currentFrame = reader.ReadByte();
+        CurrentFrame = reader.ReadByte();
         _frameChosen = reader.ReadBoolean();
 
+        _distanceProgress = reader.ReadSingle();
         _distanceProgress2 = reader.ReadSingle();
+
+        _targetIsDeadOrNoTarget = reader.ReadBoolean();
+
+        _applyFlightAttackAnimation = reader.ReadBoolean();
+        _flightAttackAnimationDone = reader.ReadBoolean();
     }
 
     private void ResetExtraDrawInfo() {
@@ -1818,8 +1836,8 @@ sealed partial class Lothor : ModNPC {
         }
         _drawWreath = false;
         _wreathLookingPosition = NPC.Center;
-        _distanceProgress = _distanceProgress2 = -1f;
-        NPC.netUpdate = true;
+        _distanceProgress = 0f; 
+        _distanceProgress2 = -1f;
     }
 
     private void PrepareJump() {
@@ -1836,7 +1854,7 @@ sealed partial class Lothor : ModNPC {
         bool flag4 = !_targetIsDeadOrNoTarget && DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
         if (flag4) {
             if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && DashTimer % 5f == 0f) {
-                if (Main.rand.NextBool(5)) {
+                if (Main.rand.NextBool(5) && (Main.expertMode || _shouldEnrage) && Main.netMode != NetmodeID.MultiplayerClient) {
                     ChooseAttack(LothorAIState.Scream);
                     NPC.netUpdate = true;
                     return;

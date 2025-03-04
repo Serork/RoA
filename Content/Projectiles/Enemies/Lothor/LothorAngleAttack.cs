@@ -5,6 +5,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.ID;
@@ -16,6 +17,8 @@ sealed class LothorAngleAttack : ModProjectile {
     private float _distX = 0f;
     private float _distY = 250f;
     private float _timer;
+
+    private Vector2 _startPosition;
 
     public int UsedBossFrame;
 
@@ -75,6 +78,7 @@ sealed class LothorAngleAttack : ModProjectile {
         if (Projectile.localAI[1] == 0f) {
             Projectile.localAI[1] = npc.direction;
 
+            _startPosition = npc.position;
         }
         int npcDirection = (int)Projectile.localAI[1];
 
@@ -82,11 +86,7 @@ sealed class LothorAngleAttack : ModProjectile {
             Projectile.Kill();
         }
 
-        if (!npc.active) {
-            return;
-        }
-
-        Vector2 startPos = new(npc.position.X + npc.width / 2 * npcDirection, npc.position.Y + npc.height / 4);
+        Vector2 startPos = new(_startPosition.X + npc.width / 2 * npcDirection, _startPosition.Y + npc.height / 4);
         float value = npcDirection == -1 ? npc.width / 2.5f + 4 : 0;
 
         int bossCurrentFrame = (int)UsedBossFrame;
@@ -183,6 +183,16 @@ sealed class LothorAngleAttack : ModProjectile {
             obj.velocity += Projectile.velocity * 0.5f;
             obj.noLight = obj.noLightEmittence = true;
         }
+    }
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(UsedBossFrame);
+        writer.Write(_timer);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        UsedBossFrame = reader.ReadInt32();
+        _timer = reader.ReadSingle();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {

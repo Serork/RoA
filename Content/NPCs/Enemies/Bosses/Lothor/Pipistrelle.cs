@@ -136,9 +136,11 @@ sealed class Pipistrelle : ModNPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2 * hit.HitDirection, -2f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PipistrelleGore2".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PipistrelleGore1".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PipistrelleGore1".GetGoreType());
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PipistrelleGore2".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PipistrelleGore1".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PipistrelleGore1".GetGoreType());
+        }
     }
 
     public override void AI() {
@@ -161,12 +163,16 @@ sealed class Pipistrelle : ModNPC {
             }
         }
 
-        Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
+        if (!Main.dedServ) {
+            Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
+        }
 
         NPC owner = Main.npc[(int)NPC.ai[0]];
         float lifeProgress = _shouldEnrage ? 1f : !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor ? 0f : owner.As<Lothor>().LifeProgress;
         NPC.knockBackResist = 0.1f - 0.1f * lifeProgress;
-        void playScreamSound() => SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
+        void playScreamSound() {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
+        }
         if (NPC.localAI[2] == 0f) {
             NPC.localAI[2] = 1f;
             NPC.localAI[0] = owner.Center.X + (int)NPC.ai[3] * 100f;
@@ -213,7 +219,7 @@ sealed class Pipistrelle : ModNPC {
                         int projectile = 
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-x * sqrt, -y * sqrt) * 1.5f, ModContent.ProjectileType<CursedAcorn>(),
                             NPC.damage, 0, Main.myPlayer, ai2: player.whoAmI);
-                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
+                        //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                     }
                 }
             }
