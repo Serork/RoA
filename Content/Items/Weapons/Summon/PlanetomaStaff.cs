@@ -25,16 +25,16 @@ sealed class PlanetomaStaff : ModItem {
         Item.useStyle = ItemUseStyleID.Swing;
         Item.shootSpeed = 14f;
         Item.shoot = ModContent.ProjectileType<PlanetomaStaffProjectile>();
-        Item.damage = 24;
+        Item.damage = 14;
         Item.width = 18;
         Item.height = 20;
         Item.UseSound = SoundID.Item1;
         Item.useAnimation = 30;
         Item.useTime = 30;
         Item.noMelee = true;
-        Item.knockBack = 7.5f;
+        Item.knockBack = 4.5f;
         //Item.summon = true;
-        Item.mana = 20;
+        Item.mana = 18;
         Item.sentry = true;
 
         Item.rare = ItemRarityID.Blue;
