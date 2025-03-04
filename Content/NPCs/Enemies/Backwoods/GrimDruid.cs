@@ -69,9 +69,9 @@ sealed class GrimDruid : DruidNPC {
             if (NPC.Center.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 25) {
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
                     int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul>());
-                    //if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-                    //    NetMessage.SendData(MessageID.SyncNPC, number: npc);
-                    //}
+                    if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                        NetMessage.SendData(MessageID.SyncNPC, number: npc);
+                    }
                 }
             }
         }

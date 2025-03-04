@@ -159,9 +159,9 @@ sealed partial class DruidSoul : RoANPC {
             }
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul2>());
-                //if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-                //    NetMessage.SendData(MessageID.SyncNPC, number: npc);
-                //}
+                if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                    NetMessage.SendData(MessageID.SyncNPC, number: npc);
+                }
             }
             NPC.KillNPC();
             return;

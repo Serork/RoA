@@ -39,9 +39,9 @@ sealed class FlederSachem : ModNPC {
 				int main = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Fleder>(), NPC.whoAmI);
 				Main.npc[main].npcSlots = 1.25f;
 				Main.npc[main].netUpdate = true;
-    //            if (Main.netMode == NetmodeID.Server && main < Main.maxNPCs) {
-				//	NetMessage.SendData(MessageID.SyncNPC, number: main);
-				//}
+                if (Main.netMode == NetmodeID.Server && main < Main.maxNPCs) {
+					NetMessage.SendData(MessageID.SyncNPC, number: main);
+				}
 				for (int i = 0; i < Main.rand.Next(Main.expertMode ? 3 : 1, Main.expertMode ? 3 : 5); i++) {
 					int npc = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<BabyFleder>(), NPC.whoAmI);
 					NPC babyFleder = Main.npc[npc];
@@ -50,9 +50,9 @@ sealed class FlederSachem : ModNPC {
                         babyFleder.netUpdate = true;
 						NPC.netUpdate = true;
                     }
-					//if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-					//	NetMessage.SendData(MessageID.SyncNPC, number: npc);
-					//}
+					if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+						NetMessage.SendData(MessageID.SyncNPC, number: npc);
+					}
 				}
 			}
 			NPC.KillNPC();

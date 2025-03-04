@@ -80,10 +80,10 @@ sealed class SentinelWarrior : ModNPC {
         Vector2 spawnAt = NPC.Center + new Vector2(0f, NPC.height / 2f);
         ushort type = (ushort)ModContent.NPCType<SentinelSpirit>();
 
-        if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(2)) {
+        if (Main.rand.NextBool(2)) {
             int npc = NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnAt.X, (int)spawnAt.Y, type);
-            //if (Main.netMode == NetmodeID.Server)
-            //    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
         }
     }
 
@@ -91,10 +91,10 @@ sealed class SentinelWarrior : ModNPC {
         Vector2 spawnAt = NPC.Top + new Vector2(0f, 10f);
         ushort type = (ushort)ModContent.NPCType<SentinelSpirit>();
 
-        if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(2)) {
+        if (Main.rand.NextBool(2)) {
             int npc = NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnAt.X, (int)spawnAt.Y, type);
-            //if (Main.netMode == NetmodeID.Server)
-            //    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
         }
 
         if (NPC.life <= 0) {

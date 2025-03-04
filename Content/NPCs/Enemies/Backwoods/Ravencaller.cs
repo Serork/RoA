@@ -140,7 +140,7 @@ sealed class Ravencaller : ModNPC {
         Main.npc[npcSlot].TargetClosest();
         Main.npc[npcSlot].ai[3] = 1f;
         Main.npc[npcSlot].netUpdate = true;
-        //NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
+        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
     }
 
     public override void AI() {
@@ -226,9 +226,9 @@ sealed class Ravencaller : ModNPC {
             Vector2 spread = Vector2.Normalize(spreadOld) * 2.25f;
 
             int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)position.X, (int)position.Y, ModContent.NPCType<SummonedRaven>(), 0, spread.X, spread.Y);
-            //if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-            //    NetMessage.SendData(MessageID.SyncNPC, number: npc);
-            //}
+            if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                NetMessage.SendData(MessageID.SyncNPC, number: npc);
+            }
         }
     }
 

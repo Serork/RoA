@@ -101,9 +101,9 @@ sealed class Lumberjack : RoANPC {
 		}
 
 		int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCID.PantlessSkeleton);
-		//if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-		//	NetMessage.SendData(MessageID.SyncNPC, number: npc);
-		//}
+		if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+			NetMessage.SendData(MessageID.SyncNPC, number: npc);
+		}
 	}
 
 	public override void FindFrame(int frameHeight) {
