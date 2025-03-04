@@ -67,5 +67,8 @@ sealed class BackwoodsRaven : ModNPC {
 
     public override void AI() {
         NPC.KillNPC();
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            Main.BestiaryTracker.Kills.RegisterKill(NPC);
+        }
     }
 }
