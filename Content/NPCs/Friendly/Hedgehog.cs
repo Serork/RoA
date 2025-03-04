@@ -18,8 +18,6 @@ sealed class Hedgehog : ModNPC {
     private bool chosen;
     private int choice;
 
-    private float _curlUpTimer;
-
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Hedgehog");
         Main.npcFrameCount[NPC.type] = 5;
@@ -69,10 +67,6 @@ sealed class Hedgehog : ModNPC {
         => alert;
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num493 = 0; (double)num493 < hit.Damage / (double)NPC.lifeMax * 20.0; num493++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, hit.HitDirection, -1f);
@@ -85,8 +79,10 @@ sealed class Hedgehog : ModNPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2 * hit.HitDirection, -2f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HedgehogGore1".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HedgehogGore2".GetGoreType());
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HedgehogGore1".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HedgehogGore2".GetGoreType());
+        }
     }
 
     public override void FindFrame(int frameHeight) {
@@ -115,22 +111,25 @@ sealed class Hedgehog : ModNPC {
         else Main.npcCatchable[NPC.type] = true;
         NPC.dontCountMe = true;
 
-        bool flag = _curlUpTimer >= 20f;
+        bool flag = NPC.ai[2] >= 20f;
         if (!flag) {
-            _curlUpTimer++;
+            NPC.ai[2]++;
         }
 
-        bool flag2 = false;
-        foreach (Player player in Main.ActivePlayers) {
-            if (!player.dead && Vector2.Distance(player.position, NPC.position) <= 300) {
-                flag2 = true;
+        NPC.ai[1] = 0f;
+        if (Main.netMode != 1) {
+            foreach (Player player in Main.ActivePlayers) {
+                if (!player.dead && Vector2.Distance(player.position, NPC.position) <= 300) {
+                    NPC.ai[1] = 1f;
+                    NPC.netUpdate = true;
 
-                break;
+                    break;
+                }
             }
         }
 
-        if (flag && flag2) {
-            if (!chosen) {
+        if (flag && NPC.ai[1] == 1f) {
+            if (!chosen && Main.netMode != 1) {
                 choice = Main.rand.Next(0, 2);
                 chosen = true;
                 NPC.netUpdate = true;
@@ -142,7 +141,6 @@ sealed class Hedgehog : ModNPC {
                 alert = true;
                 NPC.aiStyle = 0;
             }
-            NPC.netUpdate = true;
         }
         else {
             chosen = false;
@@ -150,7 +148,6 @@ sealed class Hedgehog : ModNPC {
             NPC.aiStyle = 7;
             NPC.damage = 0;
             alert = false;
-            NPC.netUpdate = true;
         }
 
         if (NPC.ai[3] != 0f) {
