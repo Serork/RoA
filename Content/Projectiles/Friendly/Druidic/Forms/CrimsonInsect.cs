@@ -1,44 +1,20 @@
-using Microsoft.Xna.Framework;
-
 using Terraria;
 using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic.Forms;
 
-sealed class CrimsonInsect : FormProjectile {
+class CrimsonInsect : CorruptionInsect {
 	public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("Crimson Swarmer");
 		Main.projFrames[Projectile.type] = 4;
 	}
 
 	protected override void SafeSetDefaults() {
-		Projectile.CloneDefaults(ProjectileID.Bee);
-
-		int width = 12; int height = width;
-		Projectile.Size = new Vector2(width, height);
-
-		AIType = ProjectileID.Bee;
-
-		Projectile.scale = 1f;
-		Projectile.penetrate = 1;
-		Projectile.timeLeft = 600;
-		Projectile.alpha = 250;
-
-        Projectile.friendly = true;
-        Projectile.hostile = false;
+		base.SafeSetDefaults();
     }
 
 	public override void AI() {
-		if (Projectile.alpha > 0) Projectile.alpha -= 10;
-
-		Projectile.velocity *= 0.98f;
-
-		Projectile.frameCounter++;
-		if (Projectile.frameCounter > 4) {
-			Projectile.frame++;
-			Projectile.frameCounter = 0;
-		}
-		if (Projectile.frame >= 4) Projectile.frame = 0;
+		base.AI();
 	}
 
 	public override void OnKill(int timeLeft) {

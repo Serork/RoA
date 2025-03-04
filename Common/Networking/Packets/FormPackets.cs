@@ -7,7 +7,6 @@ using System.IO;
 
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader.IO;
 
 using static RoA.Content.Forms.FlederForm;
 

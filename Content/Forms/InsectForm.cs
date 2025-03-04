@@ -114,7 +114,7 @@ abstract class InsectForm : BaseForm {
                     //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
                     SoundEngine.PlaySound(SoundID.NPCHit32, player.position);
                     for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
-                        int insectDamage = 15;
+                        int insectDamage = 10;
                         float insectKnockback = 3f;
                         int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
                         insectKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
