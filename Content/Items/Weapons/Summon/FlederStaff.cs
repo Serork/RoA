@@ -22,7 +22,6 @@ sealed class FlederStaff : ModItem {
         Item.staff[Item.type] = true;
         Item.DamageType = DamageClass.Summon;
         Item.damage = 19;
-        Item.crit = 5;
 
         Item.mana = 10;
 

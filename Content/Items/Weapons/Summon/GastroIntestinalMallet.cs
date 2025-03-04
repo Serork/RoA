@@ -25,7 +25,7 @@ sealed class GastroIntestinalMallet : ModItem {
         Item.useStyle = ItemUseStyleID.Swing;
         Item.shootSpeed = 14f;
         Item.shoot = ModContent.ProjectileType<GastroIntestinalMalletProjectile>();
-        Item.damage = 26;
+        Item.damage = 25;
         Item.width = 18;
         Item.height = 20;
         Item.UseSound = SoundID.Item1;
