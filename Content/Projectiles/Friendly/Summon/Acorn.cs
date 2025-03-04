@@ -60,6 +60,9 @@ sealed class Acorn : ModProjectile {
         if (target.whoAmI == npc.whoAmI) {
             Projectile.Kill();
         }
+        else {
+            Projectile.damage = (int)((double)Projectile.damage * 0.9);
+        }
     }
 
     public override void AI() {

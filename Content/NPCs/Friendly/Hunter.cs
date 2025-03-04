@@ -69,6 +69,8 @@ sealed class Hunter : ModNPC {
 
     public override bool UsesPartyHat() => false;
 
+    public override bool? CanFallThroughPlatforms() => true;
+
     public override void SetDefaults() {
         NPC.friendly = true;
         NPC.width = 18;
@@ -136,6 +138,10 @@ sealed class Hunter : ModNPC {
     }
 
     public override void FindFrame(int frameHeight) {
+        if (Main.dedServ) {
+            return;
+        }
+
         int num236 = 10;
         if (TownNPCProfiles.Instance.GetProfile(NPC, out var profile)) {
             Asset<Texture2D> textureNPCShouldUse = profile.GetTextureNPCShouldUse(NPC);

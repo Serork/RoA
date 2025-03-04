@@ -77,7 +77,7 @@ sealed class HunterSpawnSystem : ModSystem {
     public override void PostUpdatePlayers() {
         //Main.NewText(Main.dayTime + " " + Main.time);
 
-        //Main.NewText(HunterWasKilled + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
+        Helper.NewMessage(HunterWasKilled + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
 
         if (HunterWasKilled) {
             return;
@@ -90,78 +90,87 @@ sealed class HunterSpawnSystem : ModSystem {
         SpawnHunterAttacks();
     }
 
-    private void SpawnHunterAttacks() {
-        void setUpPosition(Vector2 basePosition, ref Vector2 position) {
-            position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
-            int attempts = 1000;
-            bool flag = false;
-            for (int j2 = (int)position.Y / 16; j2 < (int)position.Y / 16 + 2; j2++) {
-                if (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, j2).TileType]) {
-                    flag = true;
-                    break;
-                }
+    private sealed class HunterAttackPlayer : ModPlayer {
+        public override void PostUpdate() {
+            if (Main.myPlayer != Player.whoAmI) {
+                return;
             }
-            while (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, (int)position.Y / 16).TileType] ||
-                Lighting.GetColor((int)position.X / 16, (int)position.Y / 16).ToVector3().Length() >= 0.5f ||
-                Vector2.Distance(basePosition, position) < 200f || !flag) {
-                position = basePosition;
+
+            void setUpPosition(Vector2 basePosition, ref Vector2 position) {
                 position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
-                if (--attempts <= 0) {
-                    break;
+                int attempts = 1000;
+                bool flag = false;
+                for (int j2 = (int)position.Y / 16; j2 < (int)position.Y / 16 + 2; j2++) {
+                    if (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, j2).TileType]) {
+                        flag = true;
+                        break;
+                    }
+                }
+                while (Main.tileSolid[WorldGenHelper.GetTileSafely((int)position.X / 16, (int)position.Y / 16).TileType] ||
+                    Lighting.GetColor((int)position.X / 16, (int)position.Y / 16).ToVector3().Length() >= 0.5f ||
+                    Vector2.Distance(basePosition, position) < 200f || !flag) {
+                    position = basePosition;
+                    position += Main.rand.RandomPointInArea(Main.screenWidth / 2f, Main.screenHeight / 2f);
+                    if (--attempts <= 0) {
+                        break;
+                    }
                 }
             }
-        }
-        if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(150)) {
-            if (Main.rand.NextChance(0.85)) {
-                foreach (Player player in Main.ActivePlayers) {
+            if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(10)) {
+                if (Main.rand.NextChance(0.85)) {
+                    Player player = Player;
                     if (!player.InModBiome<BackwoodsBiome>()) {
-                        continue;
+                        return;
                     }
 
-                    if (player.whoAmI == Main.myPlayer) {
+                    int num = 40;
+                    num = Main.DamageVar(num, 0f - player.luck);
+                    float knockBack = 2f;
+                    Vector2 position = player.Center;
+                    setUpPosition(player.Center, ref position);
+                    bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
+                    if ((flag2 && Main.rand.NextBool(10)) || !flag2) {
+                        if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
+                            int proj = Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
+                                position.X, position.Y,
+                                num, knockBack,
+                                ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
+                            //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+                        }
+                    }
+                }
+                else {
+                    foreach (NPC npc in Main.ActiveNPCs) {
+                        if (!(!npc.dontTakeDamage && npc.lifeMax > 5 && !npc.friendly && !npc.townNPC)) {
+                            continue;
+                        }
+
+                        if (!Main.player[npc.target].InModBiome<BackwoodsBiome>()) {
+                            continue;
+                        }
+
                         int num = 40;
-                        num = Main.DamageVar(num, 0f - player.luck);
                         float knockBack = 2f;
-                        Vector2 position = player.Center;
-                        setUpPosition(player.Center, ref position);
+                        Vector2 position = npc.Center;
+                        setUpPosition(npc.Center, ref position);
                         bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
                         if ((flag2 && Main.rand.NextBool(10)) || !flag2) {
-                            if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
-                                Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
+                            if (Collision.CanHit(npc.position, npc.width, npc.height, position, 0, 0)) {
+                                int proj = Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
                                     position.X, position.Y,
                                     num, knockBack,
-                                    ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
+                                    ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Main.myPlayer, ai2: npc.whoAmI);
+                                //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                             }
                         }
                     }
                 }
             }
-            else {
-                foreach (NPC npc in Main.ActiveNPCs) {
-                    if (!(!npc.dontTakeDamage && npc.lifeMax > 5 && !npc.friendly && !npc.townNPC)) {
-                        continue;
-                    }
-
-                    if (!Main.player[npc.target].InModBiome<BackwoodsBiome>()) {
-                        continue;
-                    }
-
-                    int num = 40;
-                    float knockBack = 2f;
-                    Vector2 position = npc.Center;
-                    setUpPosition(npc.Center, ref position);
-                    bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
-                    if ((flag2 && Main.rand.NextBool(10)) || !flag2) {
-                        if (Collision.CanHit(npc.position, npc.width, npc.height, position, 0, 0)) {
-                            Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
-                                position.X, position.Y,
-                                num, knockBack,
-                                ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Main.myPlayer, ai2: npc.whoAmI);
-                        }
-                    }
-                }
-            }
         }
+    }
+
+    private void SpawnHunterAttacks() {
+       
     }
 
     private void SetHunterSpawnVariables() {
@@ -495,8 +504,7 @@ sealed class HunterSpawnSystem : ModSystem {
             num49 = SpawnNPC_TryFindingProperGroundTileType(num49, num, num2);
 
             if (tile.LiquidAmount <= 0 && 
-                (num49 == ModContent.TileType<BackwoodsGrass>() || num49 == ModContent.TileType<LivingElderwood>() || num49 == ModContent.TileType<BackwoodsGreenMoss>())
-                && num49 != ModContent.TileType<TreeBranch>() &&
+                (num49 == ModContent.TileType<BackwoodsGrass>() || num49 == ModContent.TileType<LivingElderwood>() || num49 == ModContent.TileType<BackwoodsGreenMoss>()) &&
                 num2 < BackwoodsVars.FirstTileYAtCenter + 10) {
                 //Main.LocalPlayer.position = new Vector2(num, num2).ToWorldCoordinates();
                 int newNPC = NPC.NewNPC(new EntitySource_SpawnNPC(), num * 16 + 8, num2 * 16, ModContent.NPCType<Hunter>(), 1);
