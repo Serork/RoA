@@ -78,7 +78,7 @@ sealed class CrowdRaven : ModNPC {
         if (NPC.life <= 0 && Main.netMode != NetmodeID.MultiplayerClient) {
             int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<BackwoodsRaven>());
             if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-                NetMessage.SendData(MessageID.SyncNPC, number: npc);
+                //NetMessage.SendData(MessageID.SyncNPC, number: npc);
             }
         }
 
@@ -165,7 +165,7 @@ sealed class CrowdRaven : ModNPC {
                     }
                     int npcSlot = NPC.NewNPC(NPC.GetSource_FromAI(), x, y, Type, ai3: 2f);
                     Main.npc[npcSlot].netUpdate = true;
-                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
+                    //NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
                 }
             }
         }

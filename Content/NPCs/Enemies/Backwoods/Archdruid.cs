@@ -199,7 +199,7 @@ sealed class Archdruid : DruidNPC {
                             npc.life = npc.lifeMax;
                             npc.SpawnedFromStatue = true;
                             npc.value = 0f;
-                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
+                            //NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
                         }
                     }
                     else {

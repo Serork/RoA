@@ -89,7 +89,7 @@ sealed class EntLegs : RoANPC {
 
                 npc.netUpdate = true;
 
-                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
+                //NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcSlot);
             }
 
 			NPC.netUpdate = true;
