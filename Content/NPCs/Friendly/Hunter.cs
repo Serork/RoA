@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Common.WorldEvents;
 using RoA.Content.Emotes;
 using RoA.Content.Items.Weapons.Magic;
@@ -250,9 +252,11 @@ sealed class Hunter : ModNPC {
                 if (player.GetModPlayer<DropHunterRewardHandler>().JustTraded) {
                     NPC.ai[0] = -20f;
                     NPC.frameCounter = 0;
+                    NPC.netUpdate = true;
                 }
                 else {
                     NPC.ai[0] = -5f;
+                    NPC.netUpdate = true;
                 }
                 flag0 = true;
             }
@@ -499,7 +503,7 @@ sealed class Hunter : ModNPC {
         }
     }
 
-    private sealed class DropHunterRewardHandler : ModPlayer {
+    internal sealed class DropHunterRewardHandler : ModPlayer {
         public int TradeCount { get; private set; }
         public bool JustTraded { get; private set; }
 
@@ -511,12 +515,19 @@ sealed class Hunter : ModNPC {
             TradeCount = tag.GetInt(nameof(TradeCount));
         }
 
+        internal void Trade1(bool state) {
+            JustTraded = state;
+        }
+
         public void GetHunterReward(NPC hunter, bool shouldGiveFireLighter) {
             int num = ItemID.GoldCoin;
             if (shouldGiveFireLighter) {
                 num = ModContent.ItemType<FireLighter>();
             }
-            JustTraded = true;
+            Trade1(true);
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new TradedWithHunterPacket1(Player, true));
+            }
             Item item = new Item();
             item.SetDefaults(num);
             item.stack = shouldGiveFireLighter ? 1 : GOLDAMOUNTTODROP;
@@ -533,7 +544,10 @@ sealed class Hunter : ModNPC {
 
         public override void PostUpdate() {
             if (JustTraded && Player.talkNPC == -1) {
-                JustTraded = false;
+                Trade1(false);
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new TradedWithHunterPacket1(Player, false));
+                }
             }
         }
     }
