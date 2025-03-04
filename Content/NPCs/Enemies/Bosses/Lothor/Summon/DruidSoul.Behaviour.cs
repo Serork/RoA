@@ -38,20 +38,10 @@ sealed partial class DruidSoul : RoANPC {
     public bool ShouldConsumeItsEnergy { get; private set; }
 
     public override void SendExtraAI(BinaryWriter writer) {
-        writer.WriteVector2(_velocity);
-        writer.WriteVector2(_velocity2);
-        writer.WriteVector2(_velocity3);
-        writer.WriteVector2(_velocity4);
-        writer.Write(_consumeValue);
         writer.Write(ShouldConsumeItsEnergy);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
-        _velocity = reader.ReadVector2();
-        _velocity2 = reader.ReadVector2();
-        _velocity3 = reader.ReadVector2();
-        _velocity4 = reader.ReadVector2();
-        _consumeValue = reader.ReadSingle();
         ShouldConsumeItsEnergy = reader.ReadBoolean();
     }
 
@@ -61,18 +51,30 @@ sealed partial class DruidSoul : RoANPC {
         KillNPCIfIsntInBackwoods();
 
         Appearance();
+
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            return;
+        }
+
         NPC.velocity *= 1f - StateTimer;
 
-        if (ConsumesItself()) {
-            ShouldConsumeItsEnergy = true;
-        }
-        else if (ShouldConsumeItsEnergy) {
-            Vector2 altarPosition = GetAltarPosition();
-            Player player = Main.player[NPC.target];
-            if (player.Distance(altarPosition) > 120f || NPC.Distance(altarPosition) > 120f) {
-                ShouldConsumeItsEnergy = false;
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (ConsumesItself()) {
+                if (!ShouldConsumeItsEnergy) {
+                    NPC.netUpdate = true;
+                }
+                ShouldConsumeItsEnergy = true;
+            }
+            else if (ShouldConsumeItsEnergy) {
+                Vector2 altarPosition = GetAltarPosition();
+                Player player = Main.player[NPC.target];
+                if (player.Distance(altarPosition) > 120f || NPC.Distance(altarPosition) > 120f) {
+                    ShouldConsumeItsEnergy = false;
+                    NPC.netUpdate = true;
+                }
             }
         }
+
         UpdatePositionsAndRotation();
         NormalBehaviourHandler();
         AbsorbSoulHandler();
@@ -142,9 +144,9 @@ sealed partial class DruidSoul : RoANPC {
             LothorSummoningHandler.PreArrivedLothorBoss.Item1 = true;
             LothorSummoningHandler._summonedNaturally = false;
 
-            if (Main.netMode == NetmodeID.Server) {
-                NetMessage.SendData(MessageID.WorldData);
-            }
+            //if (Main.netMode == NetmodeID.Server) {
+            //    NetMessage.SendData(MessageID.WorldData);
+            //}
 
             if (Main.netMode == NetmodeID.SinglePlayer) {
                 NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul2>());
@@ -152,13 +154,6 @@ sealed partial class DruidSoul : RoANPC {
             else {
                 MultiplayerSystem.SendPacket(new SpawnDruidSoul2Packet(NPC.Center));
             }
-
-            //if (Main.netMode != NetmodeID.MultiplayerClient) {
-            //    int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul2>());
-            //    if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-            //        NetMessage.SendData(MessageID.SyncNPC, number: npc);
-            //    }
-            //}
 
             NPC.KillNPC();
             return;

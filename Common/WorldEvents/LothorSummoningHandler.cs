@@ -12,6 +12,7 @@ using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -457,7 +458,7 @@ sealed class LothorSummoningHandler : ModSystem {
         LothorShake.shake = LothorShake.before = false;
     }
 
-    public override void PostUpdateEverything() {
+    public override void PostUpdatePlayers() {
         int type = ModContent.NPCType<Lothor>();
         bool flag = NPC.AnyNPCs(type);
         if (!PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2 || flag) {
@@ -495,22 +496,24 @@ sealed class LothorSummoningHandler : ModSystem {
         else if (_preArrivedLothorBossTimer >= 3f && !ActiveMessages.Item1) {
             ActiveMessages.Item1 = true;
             string message = Language.GetText("Mods.RoA.World.LothorArrival1").ToString();
-            Helper.NewMessage($"{message}", color);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                Helper.NewMessage($"{message}", color);
             Shake(10f, 5f);
         }
         else if (_preArrivedLothorBossTimer >= 4.262f && !_shake2) {
             _shake2 = true;
-            LothorShake.shake = true;
+            LothorShake.shake = true; 
         }
         else if (_preArrivedLothorBossTimer >= 5f && !ActiveMessages.Item2) {
             ActiveMessages.Item2 = true;
             string message = Language.GetText("Mods.RoA.World.LothorArrival2").ToString();
-            Helper.NewMessage($"{message}", color);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                Helper.NewMessage($"{message}", color);
             Shake(20f, 10f);
         }
         else if (_preArrivedLothorBossTimer >= 6f && !ActiveMessages.Item3) {
             ActiveMessages.Item3 = true;
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.75f }, 
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.75f },
                 AltarHandler.GetAltarPosition().ToWorldCoordinates());
         }
         else if (flag2) {
