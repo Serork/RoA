@@ -120,11 +120,14 @@ sealed class Hunter : ModNPC {
         if (!(bestiaryEntry == null || bestiaryEntry.Info == null)) {
             if (/*IsNpcOnscreen(NPC.Center) &&*/
                 bestiaryEntry.UIInfoProvider.GetEntryUICollectionInfo().UnlockState != Terraria.GameContent.Bestiary.BestiaryEntryUnlockState.CanShowDropsWithDropRates_4) {
-                if (Main.netMode != NetmodeID.MultiplayerClient) {
-                    int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, type);
+                if (Main.netMode == NetmodeID.SinglePlayer) {
+                    int npc = NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, type);
                     if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
                         NetMessage.SendData(MessageID.SyncNPC, number: npc);
                     }
+                }
+                else {
+                    MultiplayerSystem.SendPacket(new SpawnHunter2Packet(NPC.Center));
                 }
             }
         }

@@ -436,6 +436,15 @@ sealed partial class DruidSoul : RoANPC {
         _velocity2 *= value;
         _velocity3 *= value;
         NPC.position += (_velocity2 + _velocity3) * (1f - altarStrength);
+        float dist = Vector2.Distance(altarCoords, NPC.position);
+        float value2 = (1f - altarStrength * 1.5f);
+        value2 = MathHelper.Clamp(value2, 0f, 1f);
+        if (dist < 80f) {
+            NPC.position.Y -= dist * 0.015f * value2;
+        }
+        if (dist > 100f) {
+            NPC.position.Y += dist * 0.005f;
+        }
         Vector2 vector = NPC.DirectionTo(altarCoords) * 0.1f;
         NPC.position += vector;
     }
@@ -502,6 +511,7 @@ sealed partial class DruidSoul : RoANPC {
                     value8 *= 3.5f;
                     float value9 = 0.2f * value8;
                     NPC.position.Y -= value9;
+
                     NPC.velocity.Y = MathHelper.Lerp(NPC.velocity.Y, Helper.VelocityToPoint(NPC.Center, pos, 1f).Y, value9);
                     //NPC.velocity.Y = MathHelper.Lerp(NPC.velocity.Y, Helper.VelocityToPoint(NPC.Center, pos, 2f).Y, 2f * value8);
                 }

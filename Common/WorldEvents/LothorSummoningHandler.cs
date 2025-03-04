@@ -17,6 +17,8 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
+using static System.Net.Mime.MediaTypeNames;
+
 namespace RoA.Common.WorldEvents;
 
 sealed class LothorSummoningHandler : ModSystem {
@@ -499,7 +501,12 @@ sealed class LothorSummoningHandler : ModSystem {
         else if (_preArrivedLothorBossTimer >= 3f && !ActiveMessages.Item1) {
             ActiveMessages.Item1 = true;
             string message = Language.GetText("Mods.RoA.World.LothorArrival1").ToString();
-            Helper.NewMessage($"{message}", color);
+            if (Main.netMode == 0) {
+                Helper.NewMessage($"{message}", color);
+            }
+            else {
+                ChatHelper.BroadcastChatMessage(NetworkText.FromKey($"{message}"), color);
+            }
             Shake(10f, 5f);
         }
         else if (_preArrivedLothorBossTimer >= 4.262f && !_shake2) {
@@ -512,7 +519,12 @@ sealed class LothorSummoningHandler : ModSystem {
         else if (_preArrivedLothorBossTimer >= 5f && !ActiveMessages.Item2) {
             ActiveMessages.Item2 = true;
             string message = Language.GetText("Mods.RoA.World.LothorArrival2").ToString();
-            Helper.NewMessage($"{message}", color);
+            if (Main.netMode == 0) {
+                Helper.NewMessage($"{message}", color);
+            }
+            else {
+                ChatHelper.BroadcastChatMessage(NetworkText.FromKey($"{message}"), color);
+            }
             Shake(20f, 10f);
         }
         else if (_preArrivedLothorBossTimer >= 6f && !ActiveMessages.Item3) {
