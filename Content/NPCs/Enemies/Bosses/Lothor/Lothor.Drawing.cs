@@ -163,13 +163,15 @@ sealed partial class Lothor : ModNPC {
         float rotation = MathHelper.Pi;
         spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
         sourceRectangle = frame.GetSourceRectangle(texture);
-        float progress = _distanceProgress / _distanceProgress2;
+        float progress = _distanceProgress2 == 0f ? 0f : _distanceProgress / _distanceProgress2;
         int height = (int)(texture.Height * progress);
         sourceRectangle.Height = height;
         height = (int)(texture.Height * (1f - progress));
         position.Y += height / 2f;
         spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
 
-        Lighting.AddLight(NPC.Center + WreathOffset(), new Vector3(1f, 0.2f, 0.2f) * 1.25f * progress);
+        if (!Main.dedServ) {
+            Lighting.AddLight(NPC.Center + WreathOffset(), new Vector3(1f, 0.2f, 0.2f) * 1.25f * progress);
+        }
     }
 }

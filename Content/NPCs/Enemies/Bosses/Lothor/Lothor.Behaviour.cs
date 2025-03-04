@@ -136,6 +136,7 @@ sealed partial class Lothor : ModNPC {
     private bool _targetIsDeadOrNoTarget;
     private bool _shouldEnrage;
     private int _hpLoseInEnrage;
+    private double _frameTimer;
 
     private static bool _firstTimeEnrage;
 
@@ -329,6 +330,166 @@ sealed partial class Lothor : ModNPC {
             else {
                 deactivate();
             }
+        }
+    }
+
+    public override void PostAI() {
+        NPC.spriteDirection = -NPC.direction;
+        _drawOffset.Y = -6f;
+        switch (CurrentAIState) {
+            case LothorAIState.Fall:
+                _currentColumn = SpriteSheetColumn.Stand;
+                CurrentFrame = (byte)(NPC.velocity.Y != 0f ? 19 : 0);
+                break;
+            case LothorAIState.Idle:
+                _currentColumn = SpriteSheetColumn.Stand;
+                CurrentFrame = (byte)MathHelper.Lerp(16, 19, PreparationProgress);
+                if (CurrentFrame > 18) {
+                    CurrentFrame = 18;
+                }
+                break;
+            case LothorAIState.Jump:
+                _currentColumn = SpriteSheetColumn.Stand;
+                CurrentFrame = 19;
+                break;
+            case LothorAIState.Flight:
+            case LothorAIState.AirDash:
+                if (StillInJumpBeforeFlightTimer <= 0f || _previousState == LothorAIState.WreathAttack) {
+                    _drawOffset.Y = 16f;
+                    ApplyFlyingAnimation();
+                }
+                break;
+            case LothorAIState.ClawsAttack:
+                if (BeforeAttackTimer <= 0f) {
+                    _currentColumn = SpriteSheetColumn.Stand;
+                    byte minFrame = 2;
+                    byte maxFrames = 8;
+                    float min = ClawsAttackTime * 0.15f;
+                    bool flag = ClawsTimer < min;
+                    if (CurrentFrame < minFrame || CurrentFrame >= maxFrames || flag) {
+                        CurrentFrame = minFrame;
+                    }
+                    if (!flag) {
+                        CurrentFrame = (byte)MathHelper.Lerp(minFrame, maxFrames, (ClawsTimer - min) / (ClawsAttackTime - min));
+                        if (CurrentFrame > maxFrames) {
+                            CurrentFrame = maxFrames;
+                        }
+                    }
+                }
+                break;
+            case LothorAIState.SpittingAttack:
+                if (BeforeAttackTimer <= 0f) {
+                    _currentColumn = SpriteSheetColumn.Stand;
+                    byte minFrame = 9;
+                    byte maxFrames = 16;
+                    float min = SpittingAttackTime * 0.15f;
+                    bool flag = SpittingTimer < min;
+                    if (CurrentFrame < minFrame || CurrentFrame >= maxFrames || flag) {
+                        CurrentFrame = minFrame;
+                    }
+                    if (!flag) {
+                        CurrentFrame = (byte)MathHelper.Lerp(minFrame, maxFrames, (SpittingTimer - min) / (SpittingAttackTime - min));
+                        if (CurrentFrame > maxFrames) {
+                            CurrentFrame = maxFrames;
+                        }
+                    }
+                }
+                break;
+            case LothorAIState.Scream:
+                if (BeforeAttackTimer <= 0f) {
+                    _currentColumn = SpriteSheetColumn.Stand;
+                    byte minFrame = 9;
+                    byte maxFrames = 12;
+                    float min = ScreamAttackTime * 0.15f;
+                    bool flag = ScreamTimer < min;
+                    if (CurrentFrame < minFrame || CurrentFrame >= maxFrames || flag) {
+                        CurrentFrame = minFrame;
+                    }
+                    if (!flag) {
+                        if (ScreamTimer < MinDelayToStartScreaming * 0.75f) {
+                            CurrentFrame = (byte)(minFrame + 1);
+                        }
+                        else if (ScreamTimer < MinDelayToStartScreaming) {
+                            CurrentFrame = (byte)(minFrame + 2);
+                        }
+                        else {
+                            CurrentFrame = (byte)(minFrame + 3);
+                        }
+                    }
+                }
+                break;
+            case LothorAIState.FlightAttackPreparation:
+                _drawOffset.Y = 16f;
+
+                _currentColumn = SpriteSheetColumn.Flight;
+
+                byte neededFrame = 23;
+                if (_applyFlightAttackAnimation && !_flightAttackAnimationDone) {
+                    if (_frameTimer <= 0.0) {
+                        CurrentFrame = neededFrame;
+                    }
+                    else {
+                        double secondFrameRate = FLIGHTFRAMERATE;
+                        if (_frameTimer < secondFrameRate) {
+                            CurrentFrame = 25;
+                        }
+                        else if (_frameTimer < secondFrameRate + 12.0) {
+                            CurrentFrame = 20;
+                            void createDusts() {
+                                for (int k = 0; k < 20; k++) {
+                                    Dust dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<RedLineDust>());
+                                    dust.scale = 1.4f + Main.rand.NextFloatRange(0.2f);
+                                    dust.velocity = (NPC.rotation + MathHelper.Pi).ToRotationVector2().RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI / 12f)) * (0.5f + Main.rand.NextFloat() * 2.5f) * 15f;
+                                    dust.velocity += new Vector2((1f + Main.rand.NextFloat()) * NPC.direction, 0f);
+                                    dust.velocity.X *= -NPC.direction;
+                                    dust.velocity *= 0.25f;
+                                    dust.noLight = true;
+                                    dust.noGravity = true;
+                                }
+                            }
+                            if (_shouldWreathAttack) {
+                                if (!_drawWreath) {
+                                    SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "WreathSpawn"), NPC.Center);
+                                    createDusts();
+                                    _drawWreath = true;
+                                }
+                            }
+                            else {
+                                if (!_shouldSpawnPipistrelles) {
+                                    SoundEngine.PlaySound(new(ResourceManager.NPCSounds + "LothorScream2"), NPC.Center);
+                                    createDusts();
+                                    _shouldSpawnPipistrelles = true;
+                                }
+                            }
+                        }
+                        else {
+                            _flightAttackAnimationDone = true;
+                            _applyFlightAttackAnimation = false;
+                        }
+                    }
+                    _frameTimer += 1.0;
+                }
+                else if (FlightAttackTimer != 0f && BeforeAttackTimer > 0f) {
+                    if (_frameChosen) {
+                        CurrentFrame = neededFrame;
+                    }
+                    else {
+                        ApplyFlyingAnimation();
+                        if (CurrentFrame == neededFrame) {
+                            _frameChosen = true;
+                            NPC.netUpdate = true;
+                        }
+                    }
+                }
+                else {
+                    ApplyFlyingAnimation();
+                }
+                break;
+            case LothorAIState.ChargingWreath:
+            case LothorAIState.WreathAttack:
+                _drawOffset.Y = 16f;
+                ApplyFlyingAnimation();
+                break;
         }
     }
 
@@ -535,19 +696,19 @@ sealed partial class Lothor : ModNPC {
 
     private void ApplyFlyingAnimation() {
         _currentColumn = SpriteSheetColumn.Flight;
-        if (NPC.frameCounter <= 0.0) {
+        if (_frameTimer <= 0.0) {
             CurrentFrame = 20;
-            //NPC.frameCounter += NPC.velocity.Length() / 4f;
-            NPC.frameCounter += 1.0;
+            //_frameTimer += NPC.velocity.Length() / 4f;
+            _frameTimer += 1.0;
         }
         else {
             double flightFrameRate = FLIGHTFRAMERATE;
-            if (++NPC.frameCounter > 1.0 + flightFrameRate) {
+            if (++_frameTimer > 1.0 + flightFrameRate) {
                 CurrentFrame++;
                 if (CurrentFrame == 22) {
                     SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "Wingslap") { Volume = 1.5f }, NPC.Center);
                 }
-                NPC.frameCounter = 1.0;
+                _frameTimer = 1.0;
             }
         }
         if (CurrentFrame > 25) {
@@ -556,162 +717,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     partial void HandleAnimations() {
-        NPC.spriteDirection = -NPC.direction;
-        _drawOffset.Y = -6f;
-        switch (CurrentAIState) {
-            case LothorAIState.Fall:
-                _currentColumn = SpriteSheetColumn.Stand;
-                CurrentFrame = (byte)(NPC.velocity.Y != 0f ? 19 : 0);
-                break;
-            case LothorAIState.Idle:
-                _currentColumn = SpriteSheetColumn.Stand;
-                CurrentFrame = (byte)MathHelper.Lerp(16, 19, PreparationProgress);
-                if (CurrentFrame > 18) {
-                    CurrentFrame = 18;
-                }
-                break;
-            case LothorAIState.Jump:
-                _currentColumn = SpriteSheetColumn.Stand;
-                CurrentFrame = 19;
-                break;
-            case LothorAIState.Flight:
-            case LothorAIState.AirDash:
-                if (StillInJumpBeforeFlightTimer <= 0f || _previousState == LothorAIState.WreathAttack) {
-                    _drawOffset.Y = 16f;
-                    ApplyFlyingAnimation();
-                }
-                break;
-            case LothorAIState.ClawsAttack:
-                if (BeforeAttackTimer <= 0f) {
-                    _currentColumn = SpriteSheetColumn.Stand;
-                    byte minFrame = 2;
-                    byte maxFrames = 8;
-                    float min = ClawsAttackTime * 0.15f;
-                    bool flag = ClawsTimer < min;
-                    if (CurrentFrame < minFrame || CurrentFrame >= maxFrames || flag) {
-                        CurrentFrame = minFrame;
-                    }
-                    if (!flag) {
-                        CurrentFrame = (byte)MathHelper.Lerp(minFrame, maxFrames, (ClawsTimer - min) / (ClawsAttackTime - min));
-                        if (CurrentFrame > maxFrames) {
-                            CurrentFrame = maxFrames;
-                        }
-                    }
-                }
-                break;
-            case LothorAIState.SpittingAttack:
-                if (BeforeAttackTimer <= 0f) {
-                    _currentColumn = SpriteSheetColumn.Stand;
-                    byte minFrame = 9;
-                    byte maxFrames = 16;
-                    float min = SpittingAttackTime * 0.15f;
-                    bool flag = SpittingTimer < min;
-                    if (CurrentFrame < minFrame || CurrentFrame >= maxFrames || flag) {
-                        CurrentFrame = minFrame;
-                    }
-                    if (!flag) {
-                        CurrentFrame = (byte)MathHelper.Lerp(minFrame, maxFrames, (SpittingTimer - min) / (SpittingAttackTime - min));
-                        if (CurrentFrame > maxFrames) {
-                            CurrentFrame = maxFrames;
-                        }
-                    }
-                }
-                break;
-            case LothorAIState.Scream:
-                if (BeforeAttackTimer <= 0f) {
-                    _currentColumn = SpriteSheetColumn.Stand;
-                    byte minFrame = 9;
-                    byte maxFrames = 12;
-                    float min = ScreamAttackTime * 0.15f;
-                    bool flag = ScreamTimer < min;
-                    if (CurrentFrame < minFrame || CurrentFrame >= maxFrames || flag) {
-                        CurrentFrame = minFrame;
-                    }
-                    if (!flag) {
-                        if (ScreamTimer < MinDelayToStartScreaming * 0.75f) {
-                            CurrentFrame = (byte)(minFrame + 1);
-                        }
-                        else if (ScreamTimer < MinDelayToStartScreaming) {
-                            CurrentFrame = (byte)(minFrame + 2);
-                        }
-                        else {
-                            CurrentFrame = (byte)(minFrame + 3);
-                        }
-                    }
-                }
-                break;
-            case LothorAIState.FlightAttackPreparation:
-                _drawOffset.Y = 16f;
 
-                _currentColumn = SpriteSheetColumn.Flight;
-
-                byte neededFrame = 23;
-                if (_applyFlightAttackAnimation && !_flightAttackAnimationDone) {
-                    if (NPC.frameCounter <= 0.0) {
-                        CurrentFrame = neededFrame;
-                    }
-                    else {
-                        double secondFrameRate = FLIGHTFRAMERATE;
-                        if (NPC.frameCounter < secondFrameRate) {
-                            CurrentFrame = 25;
-                        }
-                        else if (NPC.frameCounter < secondFrameRate + 12.0) {
-                            CurrentFrame = 20;
-                            void createDusts() {
-                                for (int k = 0; k < 20; k++) {
-                                    Dust dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<RedLineDust>());
-                                    dust.scale = 1.4f + Main.rand.NextFloatRange(0.2f);
-                                    dust.velocity = (NPC.rotation + MathHelper.Pi).ToRotationVector2().RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI / 12f)) * (0.5f + Main.rand.NextFloat() * 2.5f) * 15f;
-                                    dust.velocity += new Vector2((1f + Main.rand.NextFloat()) * NPC.direction, 0f);
-                                    dust.velocity.X *= -NPC.direction;
-                                    dust.velocity *= 0.25f;
-                                    dust.noLight = true;
-                                    dust.noGravity = true;
-                                }
-                            }
-                            if (_shouldWreathAttack) {
-                                if (!_drawWreath) {
-                                    SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "WreathSpawn"), NPC.Center);
-                                    createDusts();
-                                    _drawWreath = true;
-                                }
-                            }
-                            else {
-                                if (!_shouldSpawnPipistrelles) {
-                                    SoundEngine.PlaySound(new(ResourceManager.NPCSounds + "LothorScream2"), NPC.Center);
-                                    createDusts();
-                                    _shouldSpawnPipistrelles = true;
-                                }
-                            }
-                        }
-                        else {
-                            _flightAttackAnimationDone = true;
-                            _applyFlightAttackAnimation = false;
-                        }
-                    }
-                    NPC.frameCounter += 1.0;
-                }
-                else if (FlightAttackTimer != 0f && BeforeAttackTimer > 0f) {
-                    if (_frameChosen) {
-                        CurrentFrame = neededFrame;
-                    }
-                    else {
-                        ApplyFlyingAnimation();
-                        if (CurrentFrame == neededFrame) {
-                            _frameChosen = true;
-                        }
-                    }
-                }
-                else {
-                    ApplyFlyingAnimation();
-                }
-                break;
-            case LothorAIState.ChargingWreath:
-            case LothorAIState.WreathAttack:
-                _drawOffset.Y = 16f;
-                ApplyFlyingAnimation();
-                break;
-        }
     }
 
     private void Glow() {
@@ -737,7 +743,6 @@ sealed partial class Lothor : ModNPC {
     }
 
     private void HandleActiveState() {
-        _target ??= Main.LocalPlayer;
         _targetIsDeadOrNoTarget = true;
         if (GetTargetPlayer(out Player target)) {
             _target = target;
@@ -903,7 +908,7 @@ sealed partial class Lothor : ModNPC {
             Vector2 center = new Vector2(NPC.Center.X + NPC.width / 2 * NPC.direction, NPC.position.Y + NPC.height / 4);
             ushort projType = (ushort)ModContent.ProjectileType<LothorScream>();
             int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), center + new Vector2(-6f * NPC.direction, -6f), Vector2.Zero, projType, 0, 0f, Main.myPlayer, firstTime ? 1f : 0f, NPC.target);
-            NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
+            //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
         }
     }
 
@@ -920,10 +925,16 @@ sealed partial class Lothor : ModNPC {
             WreathTimer += WreathAttackTime * (0.075f - 0.035f * LifeProgress);
         }
         else {
-            void updatePositionToMove(float x = 300f, float y = -100f) => _tempPosition = new Vector2(Target.Center.X + _tempDirection * x, Target.Center.Y + y);
-            if (_tempDirection == 0) {
+            void updatePositionToMove(float x = 300f, float y = -100f) {
+                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                    _tempPosition = new Vector2(Target.Center.X + _tempDirection * x, Target.Center.Y + y);
+                    NPC.netUpdate = true;
+                }
+            }
+            if (_tempDirection == 0 && Main.netMode != NetmodeID.MultiplayerClient) {
                 _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
                 updatePositionToMove();
+                NPC.netUpdate = true;
             }
             _distanceProgress = Vector2.Distance(NPC.Center, _tempPosition);
             if (_distanceProgress2 == -1f) {
@@ -960,7 +971,7 @@ sealed partial class Lothor : ModNPC {
                     int damage = NPC.damage;
                     float knockBack = 0f;
                     int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer);
-                    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
+                    //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                 }
             }
             float speed = 8f + 2f * LifeProgress;
@@ -1063,7 +1074,7 @@ sealed partial class Lothor : ModNPC {
                     if (!flag) {
                         FlightAttackTimer++;
                         if (!_applyFlightAttackAnimation && !_flightAttackAnimationDone) {
-                            NPC.frameCounter = 0.0;
+                            _frameTimer = 0.0;
                             _applyFlightAttackAnimation = true;
                         }
                     }
@@ -1154,10 +1165,9 @@ sealed partial class Lothor : ModNPC {
                         position.X + lengthX,
                         position.Y - lengthY);
 
-                    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, whoAmI);
+                    //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, whoAmI);
 
                     Main.projectile[whoAmI].As<LothorAngleAttack>().UsedBossFrame = usedFrame;
-                    Main.projectile[whoAmI].netUpdate = true;
                 }
             }
         }
@@ -1198,7 +1208,7 @@ sealed partial class Lothor : ModNPC {
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 ushort projType = (ushort)ModContent.ProjectileType<LothorClawsSlash>();
                 int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType, NPC.damage / 2, 2f, Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
-                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
+                //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
             }
             string name = "LothorSwipe";
             if (LifeProgress > 0.66f) {
@@ -1252,9 +1262,11 @@ sealed partial class Lothor : ModNPC {
         if (AirDashTimer > 10f) {
             if (distance < minDistance || (Vector2.Distance(NPC.Center, Target.Center) > minDistance * 2f && NPC.velocity.Length() > dashStrength * 0.75f) || NPC.velocity.Length() > dashStrength * 1.25f) {
                 _dashStrength = 0f;
-                if (Main.rand.NextChance(DashCount / (GetJumpCountToEncourageFlightState() + 0))) {
+                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextChance(DashCount / (GetJumpCountToEncourageFlightState() + 0))) {
                     _shouldWreathAttack = !_shouldWreathAttack;
                     ChooseAttack(LothorAIState.FlightAttackPreparation);
+
+                    NPC.netUpdate = true;
 
                     return;
                 }
@@ -1326,6 +1338,8 @@ sealed partial class Lothor : ModNPC {
         NPC.TargetClosest();
         DashDelay = GetAttackDelay();
         _yOffsetProgressBeforeLanding = 0f;
+
+        NPC.netUpdate = true;
     }
 
     private void ChargingWreath() {
@@ -1563,8 +1577,9 @@ sealed partial class Lothor : ModNPC {
             if (!OnPlayersDead(false) && NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
                 GoToFlightState();
                 _shouldWreathAttack = !_shouldWreathAttack;
-                if (Main.rand.NextBool()) {
+                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool()) {
                     _shouldWreathAttack = !_shouldWreathAttack;
+                    NPC.netUpdate = true;
                 }
                 _previousAttacks.Clear();
                 return;
@@ -1680,7 +1695,7 @@ sealed partial class Lothor : ModNPC {
         int damage = NPC.damage / 2;
         float knockback = 2f;
         int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.velocity, Vector2.Zero, type, damage, knockback, Main.myPlayer, 0f, size);
-        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
+        //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
     }
 
     private void IdleState() {
@@ -1763,28 +1778,38 @@ sealed partial class Lothor : ModNPC {
                 PlayRoarSound();
                 break;
         }
-
-        NPC.netUpdate = true;
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
-        writer.Write(_spitCount);
+        writer.Write(_shouldWreathAttack);
+        writer.Write(_frameTimer);
+
         writer.WriteVector2(_tempPosition);
-        writer.Write(_attackTime);
         writer.Write(_tempDirection);
         writer.Write((byte)_previousState);
-        writer.Write(_dashStrength);
-        writer.Write(_shouldWreathAttack);
+
+        writer.Write(_attackTime);
+
+        writer.Write(_currentFrame);
+        writer.Write(_frameChosen);
+
+        writer.Write(_distanceProgress2);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
-        _spitCount = reader.ReadInt32();
+        _shouldWreathAttack = reader.ReadBoolean();
+        _frameTimer = reader.ReadDouble();
+
         _tempPosition = reader.ReadVector2();
-        _attackTime = reader.ReadInt32();
         _tempDirection = reader.ReadInt32();
         _previousState = (LothorAIState)reader.ReadByte();
-        _dashStrength = reader.ReadByte();
-        _shouldWreathAttack = reader.ReadBoolean();
+
+        _attackTime = reader.ReadInt32();
+
+        _currentFrame = reader.ReadByte();
+        _frameChosen = reader.ReadBoolean();
+
+        _distanceProgress2 = reader.ReadSingle();
     }
 
     private void ResetExtraDrawInfo() {
@@ -1797,6 +1822,7 @@ sealed partial class Lothor : ModNPC {
         _drawWreath = false;
         _wreathLookingPosition = NPC.Center;
         _distanceProgress = _distanceProgress2 = -1f;
+        NPC.netUpdate = true;
     }
 
     private void PrepareJump() {
@@ -1812,9 +1838,12 @@ sealed partial class Lothor : ModNPC {
         bool flag2 = distance < 250f;
         bool flag4 = !_targetIsDeadOrNoTarget && DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
         if (flag4) {
-            if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && DashTimer % 5f == 0f && Main.rand.NextBool(5)) {
-                ChooseAttack(LothorAIState.Scream);
-                return;
+            if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && DashTimer % 5f == 0f) {
+                if (Main.rand.NextBool(5) && Main.netMode != NetmodeID.MultiplayerClient) {
+                    ChooseAttack(LothorAIState.Scream);
+                    NPC.netUpdate = true;
+                    return;
+                }
             }
             if (_previousState != LothorAIState.ClawsAttack && _previousState != LothorAIState.SpittingAttack && _previousState != LothorAIState.Scream && flag2 &&
                 flag) {
@@ -1823,7 +1852,7 @@ sealed partial class Lothor : ModNPC {
             }
             bool flag3 = distance > 400f && distance < 900f;
             if (flag3 &&
-                flag/* && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 */) {
+                flag) {
                 if (_previousState != LothorAIState.SpittingAttack) {
                     ChooseAttack(LothorAIState.SpittingAttack);
                 }

@@ -76,7 +76,6 @@ sealed class TreeDryad : ModTile {
 
                 npc.velocity.X *= 0.8f;
 
-                //int dir = (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].Center.X - npc.Center.X).GetDirection();
                 if (npc.ai[1] > 50f) {
                     npc.ai[1] -= 1;
                 }
