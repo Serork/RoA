@@ -396,6 +396,10 @@ sealed class LittleFleder : ModProjectile {
                 Projectile.velocity.Y *= 0.95f;
             }
 
+            if (Projectile.Bottom.Y > targetCenter.Y) {
+                Projectile.velocity.Y -= 0.125f;
+            }
+
             if (distanceBetweenTargetAndMe > 200f) {
                 float acceleration = 7.5f + num2 * num;
                 v *= acceleration;

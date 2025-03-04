@@ -18,7 +18,7 @@ sealed class MercuriumBolt : ModItem {
 	public override void SetDefaults() {
         Item.shootSpeed = 4.3f;
         Item.shoot = ModContent.ProjectileType<MercuriumBoltProjectile>();
-        Item.damage = 19;
+        Item.damage = 15;
         Item.width = 14;
         Item.height = 32;
         Item.maxStack = Item.CommonMaxStack;
