@@ -241,7 +241,7 @@ sealed class Hunter : ModNPC {
             NPC.frameCounter = 0;
 
             int emoteType = ModContent.EmoteBubbleType<BackwoodsEmote>();
-            if (Main.rand.NextBool(6) || (BackwoodsFogHandler.IsFogActive && Main.rand.NextBool(3))) {
+            if (Main.rand.NextBool(5) || (BackwoodsFogHandler.IsFogActive && Main.rand.NextBool(3))) {
                 emoteType = ModContent.EmoteBubbleType<BackwoodsFogEmote>();
             }
             else if (Main.rand.NextBool(5)) {
