@@ -163,7 +163,7 @@ sealed partial class Lothor : ModNPC {
         float rotation = MathHelper.Pi;
         spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
         sourceRectangle = frame.GetSourceRectangle(texture);
-        float progress = _distanceProgress2 == 0f ? 0f : _distanceProgress / _distanceProgress2;
+        float progress = _distanceProgress2 == 0f || _distanceProgress2 == -1f ? 1f : _distanceProgress / _distanceProgress2;
         int height = (int)(texture.Height * progress);
         sourceRectangle.Height = height;
         height = (int)(texture.Height * (1f - progress));

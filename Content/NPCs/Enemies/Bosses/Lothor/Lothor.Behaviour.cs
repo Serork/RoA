@@ -926,15 +926,12 @@ sealed partial class Lothor : ModNPC {
         }
         else {
             void updatePositionToMove(float x = 300f, float y = -100f) {
-                if (Main.netMode != NetmodeID.MultiplayerClient) {
-                    _tempPosition = new Vector2(Target.Center.X + _tempDirection * x, Target.Center.Y + y);
-                    NPC.netUpdate = true;
-                }
+                _tempPosition = new Vector2(Target.Center.X + _tempDirection * x, Target.Center.Y + y);
+                NPC.netUpdate = true;
             }
-            if (_tempDirection == 0 && Main.netMode != NetmodeID.MultiplayerClient) {
+            if (_tempDirection == 0) {
                 _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
                 updatePositionToMove();
-                NPC.netUpdate = true;
             }
             _distanceProgress = Vector2.Distance(NPC.Center, _tempPosition);
             if (_distanceProgress2 == -1f) {
@@ -1262,7 +1259,7 @@ sealed partial class Lothor : ModNPC {
         if (AirDashTimer > 10f) {
             if (distance < minDistance || (Vector2.Distance(NPC.Center, Target.Center) > minDistance * 2f && NPC.velocity.Length() > dashStrength * 0.75f) || NPC.velocity.Length() > dashStrength * 1.25f) {
                 _dashStrength = 0f;
-                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextChance(DashCount / (GetJumpCountToEncourageFlightState() + 0))) {
+                if (Main.rand.NextChance(DashCount / (GetJumpCountToEncourageFlightState() + 0))) {
                     _shouldWreathAttack = !_shouldWreathAttack;
                     ChooseAttack(LothorAIState.FlightAttackPreparation);
 
@@ -1577,7 +1574,7 @@ sealed partial class Lothor : ModNPC {
             if (!OnPlayersDead(false) && NPC.velocity.Y > 1f && NPC.velocity.Length() > 5f && IsAboutToGoToChangeMainState) {
                 GoToFlightState();
                 _shouldWreathAttack = !_shouldWreathAttack;
-                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool()) {
+                if (Main.rand.NextBool()) {
                     _shouldWreathAttack = !_shouldWreathAttack;
                     NPC.netUpdate = true;
                 }
@@ -1839,7 +1836,7 @@ sealed partial class Lothor : ModNPC {
         bool flag4 = !_targetIsDeadOrNoTarget && DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
         if (flag4) {
             if (_previousState != LothorAIState.Scream && GetDoneAttackCount(LothorAIState.SpittingAttack) < 2 && DashTimer % 5f == 0f) {
-                if (Main.rand.NextBool(5) && Main.netMode != NetmodeID.MultiplayerClient) {
+                if (Main.rand.NextBool(5)) {
                     ChooseAttack(LothorAIState.Scream);
                     NPC.netUpdate = true;
                     return;
