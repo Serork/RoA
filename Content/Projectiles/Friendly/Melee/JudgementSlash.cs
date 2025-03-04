@@ -8,6 +8,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -22,29 +23,42 @@ sealed class JudgementSlash : ModProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override void OnSpawn(IEntitySource source) {
-        _startCenter = Projectile.Center;
-        switch (Main.rand.Next(3)) {
-            case 0:
-                _baseColor = new(28, 39, 59);
-                break;
-            case 1:
-                _baseColor = new(15, 31, 110);
-                break;
-            case 2:
-                _baseColor = new(62, 85, 120);
-                break;
+        if (Projectile.owner == Main.myPlayer) {
+            _startCenter = Projectile.Center;
+            switch (Main.rand.Next(3)) {
+                case 0:
+                    _baseColor = new(28, 39, 59);
+                    break;
+                case 1:
+                    _baseColor = new(15, 31, 110);
+                    break;
+                case 2:
+                    _baseColor = new(62, 85, 120);
+                    break;
+            }
+            switch (Main.rand.Next(3)) {
+                case 0:
+                    _slashColor = new(23, 80, 166);
+                    break;
+                case 1:
+                    _slashColor = new(30, 87, 171);
+                    break;
+                case 2:
+                    _slashColor = new(42, 90, 127);
+                    break;
+            }
+            Projectile.netUpdate = true;
         }
-        switch (Main.rand.Next(3)) {
-            case 0:
-                _slashColor = new(23, 80, 166);
-                break;
-            case 1:
-                _slashColor = new(30, 87, 171);
-                break;
-            case 2:
-                _slashColor = new(42, 90, 127);
-                break;
-        }
+    }
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.WriteVector2(_startCenter);
+        writer.WriteRGBA(_slashColor);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _startCenter = reader.ReadVector2();
+        _slashColor = reader.ReadRGBA();    
     }
 
     public override void SetDefaults() {
