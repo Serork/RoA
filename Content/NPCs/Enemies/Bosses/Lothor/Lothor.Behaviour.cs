@@ -14,6 +14,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Terraria;
@@ -24,6 +25,7 @@ using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
@@ -207,14 +209,16 @@ sealed partial class Lothor : ModNPC {
         double pi = Math.PI * 2.0;
         float scale = 1f;
         string enraged = _shouldEnrage ? "_Enraged" : string.Empty;
-        for (int i = 0; i < 2; i++) {
-            foreach (int gore in gores) {
-                Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + gore + enraged).Type, scale);
+        if (!Main.dedServ) {
+            for (int i = 0; i < 2; i++) {
+                foreach (int gore in gores) {
+                    Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + gore + enraged).Type, scale);
+                }
             }
-        }
-        for (int i = 1; i < 7; i++) {
-            if (!gores.Equals(i)) {
-                Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + i + (i != 5 ? enraged : string.Empty)).Type, scale);
+            for (int i = 1; i < 7; i++) {
+                if (!gores.Equals(i)) {
+                    Gore.NewGoreDirect(NPC.GetSource_Death(), NPC.Center, Utils.NextVector2Unit(Main.rand, 0f, (float)pi) * 2f, ModContent.Find<ModGore>(RoA.ModName + "/LothorGore" + i + (i != 5 ? enraged : string.Empty)).Type, scale);
+                }
             }
         }
 
@@ -955,7 +959,8 @@ sealed partial class Lothor : ModNPC {
                     int type = ModContent.ProjectileType<LothorSpike>();
                     int damage = NPC.damage;
                     float knockBack = 0f;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer);
+                    int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer);
+                    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                 }
             }
             float speed = 8f + 2f * LifeProgress;
@@ -1149,7 +1154,10 @@ sealed partial class Lothor : ModNPC {
                         position.X + lengthX,
                         position.Y - lengthY);
 
+                    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, whoAmI);
+
                     Main.projectile[whoAmI].As<LothorAngleAttack>().UsedBossFrame = usedFrame;
+                    Main.projectile[whoAmI].netUpdate = true;
                 }
             }
         }
@@ -1755,6 +1763,28 @@ sealed partial class Lothor : ModNPC {
                 PlayRoarSound();
                 break;
         }
+
+        NPC.netUpdate = true;
+    }
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_spitCount);
+        writer.WriteVector2(_tempPosition);
+        writer.Write(_attackTime);
+        writer.Write(_tempDirection);
+        writer.Write((byte)_previousState);
+        writer.Write(_dashStrength);
+        writer.Write(_shouldWreathAttack);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _spitCount = reader.ReadInt32();
+        _tempPosition = reader.ReadVector2();
+        _attackTime = reader.ReadInt32();
+        _tempDirection = reader.ReadInt32();
+        _previousState = (LothorAIState)reader.ReadByte();
+        _dashStrength = reader.ReadByte();
+        _shouldWreathAttack = reader.ReadBoolean();
     }
 
     private void ResetExtraDrawInfo() {

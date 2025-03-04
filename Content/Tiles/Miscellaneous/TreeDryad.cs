@@ -26,6 +26,14 @@ namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class TreeDryad : ModTile {
     private sealed class DryadAIChanges : GlobalNPC {
+        public override bool? CanChat(NPC npc) {
+            if (npc.type == NPCID.Dryad) {
+                return npc.ai[0] != -20f;
+            }
+
+            return base.CanChat(npc);
+        }
+
         public override void FindFrame(NPC npc, int frameHeight) {
             if (npc.type != NPCID.Dryad) {
                 return;

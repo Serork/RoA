@@ -61,7 +61,7 @@ sealed class Acorn : ModProjectile {
             Projectile.Kill();
         }
         else {
-            Projectile.damage = (int)((double)Projectile.damage * 0.9);
+            Projectile.damage = (int)((double)Projectile.damage * 0.95);
         }
     }
 
