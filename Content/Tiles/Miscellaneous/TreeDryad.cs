@@ -71,7 +71,6 @@ sealed class TreeDryad : ModTile {
                 int dir = (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].Center.X - npc.Center.X).GetDirection();
                 if (npc.ai[1] > 50f) {
                     npc.ai[1] -= 1;
-                    npc.direction = npc.spriteDirection = -dir;
                 }
                 else {
                     npc.direction = npc.spriteDirection = dir;
@@ -170,6 +169,14 @@ sealed class TreeDryad : ModTile {
         AddMapEntry(new Color(191, 143, 111), CreateMapEntryName());
 
         DustType = DustID.WoodFurniture;
+    }
+
+    public override bool CreateDust(int i, int j, ref int type) {
+        if (Main.rand.NextBool(5)) {
+            type = DustID.Grass;
+        }
+
+        return base.CreateDust(i, j, ref type);
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
