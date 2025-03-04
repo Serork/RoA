@@ -11,8 +11,8 @@ using Terraria.ID;
 
 namespace RoA.Common.Networking.Packets;
 
-sealed class PlayItemSoundPacket : NetPacket {
-    public PlayItemSoundPacket(Player player, int soundStyle, Vector2 position) {
+sealed class PlayOtherItemSoundPacket : NetPacket {
+    public PlayOtherItemSoundPacket(Player player, int soundStyle, Vector2 position) {
         Writer.TryWriteSenderPlayer(player);
         Writer.Write(soundStyle);
         Writer.WriteVector2(position);
@@ -28,7 +28,7 @@ sealed class PlayItemSoundPacket : NetPacket {
             SoundEngine.PlaySound(SoundID.Item95, position);
         }
         if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new PlayItemSoundPacket(player, soundStyle, position), ignoreClient: sender);
+            MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, soundStyle, position), ignoreClient: sender);
         }
     }
 }

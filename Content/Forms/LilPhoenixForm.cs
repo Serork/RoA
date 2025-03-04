@@ -223,7 +223,7 @@ sealed class LilPhoenixForm : BaseForm {
                 }
                 plr._prepared = true;
             }
-            AttackCharge = plr._charge2 / max * 1.25f;
+            BaseFormDataStorage.ChangeAttackCharge1(player, plr._charge2 / max * 1.25f);
         }
         else {
             if (plr._isPreparing) {
@@ -314,7 +314,7 @@ sealed class LilPhoenixForm : BaseForm {
             plr._phoenixJumpsCD = 30;
             SoundEngine.PlaySound(SoundID.Item45, player.position);
             plr._phoenixJustJumped = plr._phoenixJustJumpedForAnimation = true;
-            AttackCharge = 1f;
+            BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
             int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(40f);
             float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(2f);
             ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixFlames>();
@@ -447,7 +447,7 @@ sealed class LilPhoenixForm : BaseForm {
             playerDrawData.Add(item);
         }
         if (glowTexture != null) {
-            float value = MathHelper.Clamp(Math.Max(_attackCharge2, _attackCharge), 0f, 1f);
+            float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
             DrawData item = new(ModContent.Request<Texture2D>(Texture + "_Glow2").Value, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             playerDrawData.Add(item);
         }

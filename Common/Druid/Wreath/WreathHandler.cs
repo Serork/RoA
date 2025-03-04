@@ -257,7 +257,7 @@ sealed class WreathHandler : ModPlayer {
                                 result = 1;
                             }
                             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                                MultiplayerSystem.SendPacket(new PlayItemSoundPacket(Player, result, SpecialAttackData.SpawnPosition));
+                                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(Player, result, SpecialAttackData.SpawnPosition));
                             }
                         }
                     }

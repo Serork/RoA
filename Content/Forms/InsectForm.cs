@@ -108,7 +108,7 @@ abstract class InsectForm : BaseForm {
             if (!player.wet) {
                 insectTimer++;
                 if (insectTimer >= 90) {
-                    AttackCharge = 1f;
+                    BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
                     //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
                     SoundEngine.PlaySound(SoundID.NPCHit32, player.position);
                     for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
@@ -143,7 +143,7 @@ abstract class InsectForm : BaseForm {
                 shootCounter = 0;
         }
         if (shootCounter % 15 == 5 && shootCounter > 0) {
-            AttackCharge = 1.25f;
+            BaseFormDataStorage.ChangeAttackCharge1(player, 1.25f);
             //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
 
             SoundEngine.PlaySound(SoundID.Item17, player.Center);

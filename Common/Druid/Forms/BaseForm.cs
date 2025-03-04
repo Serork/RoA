@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -41,6 +43,22 @@ sealed class BaseFormBuff(BaseForm parent) : ModBuff {
 }
 
 abstract class BaseForm : ModMount {
+    internal sealed class BaseFormDataStorage : ModPlayer {
+        internal float _attackCharge, _attackCharge2;
+
+        public float AttackCharge {
+            get => Ease.QuintOut(_attackCharge);
+            private set => _attackCharge = value;
+        }
+
+        internal static void ChangeAttackCharge1(Player player, float value) {
+            player.GetModPlayer<BaseFormDataStorage>().AttackCharge = value;
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new BaseFormPacket1(player, value));
+            }
+        }
+    }
+
     private delegate void ExtraJumpLoader_UpdateHorizontalSpeeds_orig(Player player);
     private static object Hook_ExtraJumpLoader_UpdateHorizontalSpeeds;
 
@@ -51,13 +69,6 @@ abstract class BaseForm : ModMount {
     }
 
     private static MovementSpeedInfo _playerMovementSpeedInfo;
-
-    protected float _attackCharge, _attackCharge2;
-
-    public float AttackCharge {
-        get => Ease.QuintOut(_attackCharge);
-        protected set => _attackCharge = value;
-    }
 
     public BaseFormBuff MountBuff { get; init; }
 
@@ -140,12 +151,31 @@ abstract class BaseForm : ModMount {
     protected virtual Color LightingColor { get; } = Color.White;
     public virtual SoundStyle? HurtSound { get; } = null;
 
+    private void ChangeAttackCharge1(Player player) {
+        ref float attackCharge = ref player.GetModPlayer<BaseFormDataStorage>()._attackCharge;
+        if (attackCharge > 0f) {
+            attackCharge -= TimeSystem.LogicDeltaTime;
+        }
+    }
+
+    private void ChangeAttackCharge2(Player player, float value) {
+        ref float attackCharge2 = ref player.GetModPlayer<BaseFormDataStorage>()._attackCharge2;
+        attackCharge2 = value;
+    }
+
+    private void ChangeAttackCharge2(Player player) {
+        ref float attackCharge2 = ref player.GetModPlayer<BaseFormDataStorage>()._attackCharge2;
+        if (attackCharge2 > 0f) {
+            attackCharge2 -= TimeSystem.LogicDeltaTime;
+        }
+    }
+
     public sealed override void SetMount(Player player, ref bool skipDust) {
         int buffType = MountBuff.Type;
         player.ClearBuff(buffType);
         player.AddBuffInStart(buffType, 3600);
 
-        _attackCharge2 = 1.5f;
+        ChangeAttackCharge2(player, 1.5f);
 
         SafeSetMount(player, ref skipDust);
     }
@@ -163,17 +193,13 @@ abstract class BaseForm : ModMount {
 
         SpawnRunDusts(player);
 
-        if (_attackCharge > 0f) {
-            _attackCharge -= TimeSystem.LogicDeltaTime;
-        }
-        if (_attackCharge2 > 0f) {
-            _attackCharge2 -= TimeSystem.LogicDeltaTime;
-        }
+        ChangeAttackCharge1(player);
+        ChangeAttackCharge2(player);
 
         if (LightingColor == Color.White) {
             return;
         }
-        float value = MathHelper.Clamp(_attackCharge, 0f, 1f);
+        float value = MathHelper.Clamp(player.GetModPlayer<BaseFormDataStorage>()._attackCharge, 0f, 1f);
         Lighting.AddLight(GetLightingPos(player) == Vector2.Zero ? player.Center : GetLightingPos(player), LightingColor.ToVector3() * value);
     }
 
@@ -265,7 +291,7 @@ abstract class BaseForm : ModMount {
 
     protected virtual void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         if (glowTexture != null) {
-            float value = MathHelper.Clamp(Math.Max(_attackCharge2, _attackCharge), 0f, 1f);
+            float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             playerDrawData.Add(item);
         }
