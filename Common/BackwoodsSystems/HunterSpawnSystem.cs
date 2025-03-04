@@ -77,7 +77,7 @@ sealed class HunterSpawnSystem : ModSystem {
     public override void PostUpdatePlayers() {
         //Main.NewText(Main.dayTime + " " + Main.time);
 
-        Helper.NewMessage(HunterWasKilled + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
+        //Helper.NewMessage(HunterWasKilled + " " + ShouldSpawnHunter + " " + ShouldDespawnHunter + " " + ShouldSpawnHunterAttack);
 
         if (HunterWasKilled) {
             return;
@@ -116,7 +116,7 @@ sealed class HunterSpawnSystem : ModSystem {
                     }
                 }
             }
-            if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(10)) {
+            if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(100)) {
                 if (Main.rand.NextChance(0.85)) {
                     Player player = Player;
                     if (!player.InModBiome<BackwoodsBiome>()) {
