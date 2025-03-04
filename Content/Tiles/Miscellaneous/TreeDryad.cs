@@ -1,15 +1,21 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using MonoMod.Cil;
+
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
+using RoA.Content.Emotes;
 using RoA.Content.NPCs.Friendly;
 using RoA.Core.Utility;
+
+using System;
 using System.IO;
 
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -19,6 +25,73 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class TreeDryad : ModTile {
+    private sealed class DryadAIChanges : GlobalNPC {
+        public override void FindFrame(NPC npc, int frameHeight) {
+            if (npc.type != NPCID.Dryad) {
+                return;
+            }
+            if (npc.ai[0] != -25f) {
+                return;
+            }
+            int num237 = Main.npcFrameCount[npc.type] - NPCID.Sets.AttackFrameCount[npc.type];
+            npc.ai[2]++;
+            int num268 = 0;
+            int num269 = 0;
+            int num270 = -1;
+            int num271 = -1;
+
+            num269 = (npc.ai[2] % 16.0 < 8.0) ? (num237 - 2) : 0;
+
+            npc.frame.Y = frameHeight * num269;
+        }
+
+        public override void AI(NPC npc) {
+            if (npc.type != NPCID.Dryad) {
+                return;
+            }
+            if (npc.ai[0] == -25f) {
+                if (npc.ai[1] > 0f) {
+                    npc.ai[1] -= 1f;
+
+                    npc.velocity.X *= 0.8f;
+
+                    int dir = (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].Center.X - npc.Center.X).GetDirection();
+                    npc.direction = npc.spriteDirection = dir;
+                }
+                else {
+                    npc.ai[1] = npc.ai[0] = 0f;
+                    npc.frameCounter = 0.0;
+                    npc.ai[2] = 0;
+                }
+            }
+            if (npc.ai[0] != -20f) {
+                return;
+            }
+            if (npc.ai[1] > 0f) {
+                npc.ai[1] -= 1;
+
+                npc.velocity.X *= 0.8f;
+
+                int dir = (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].Center.X - npc.Center.X).GetDirection();
+                if (npc.ai[1] > 50f) {
+                    npc.ai[1] -= 1;
+                    npc.direction = npc.spriteDirection = -dir;
+                }
+                else {
+                    npc.direction = npc.spriteDirection = dir;
+                }
+            }
+            else {
+                npc.ai[1] = 80;
+                npc.ai[0] = -25f;
+                npc.ai[2] = 0f;
+
+                int emoteType = ModContent.EmoteBubbleType<BackwoodsEmote>();
+                EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(npc), 80);
+            }
+        }
+    }
+
     private static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
 
     private sealed class DryadAwakeHandler : ModSystem {
@@ -136,6 +209,8 @@ sealed class TreeDryad : ModTile {
         }
         int whoAmI = NPC.NewNPC(NPC.GetSource_TownSpawn(), (int)position.X + 10, (int)position.Y + 40, NPCID.Dryad);
         Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? -1 : 1;
+        Main.npc[whoAmI].ai[0] = -20f;
+        Main.npc[whoAmI].ai[1] = 150f;
         Main.npc[whoAmI].netUpdate = true;
 
         DryadAwakeHandler.DryadAwake = true;

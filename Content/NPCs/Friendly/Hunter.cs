@@ -24,19 +24,22 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using System.Collections.Generic;
 
 namespace RoA.Content.NPCs.Friendly;
 
 sealed class Hunter : ModNPC {
     // dont forget hjson
-    private const int MAXQUOTES = 8;
-    private const int MAXNOTENOUGHTRADEQUOTES = 3;
-    private const int MAXTRADEQUOTES = 3;
-    private const int MAXFIRELIGHTERQUOTES = 1;
-    private const int TRADEAMOUNTTODROPFIRELIGHTER = 10;
+    private const byte MAXQUOTES = 8;
+    private const byte MAXNOTENOUGHTRADEQUOTES = 3;
+    private const byte MAXTRADEQUOTES = 3;
+    private const byte MAXFIRELIGHTERQUOTES = 1;
+    private const byte TRADEAMOUNTTODROPFIRELIGHTER = 10;
 
-    private const int LEATHERAMOOUNTNEEDED = 15;
-    private const int GOLDAMOUNTTODROP = 3;
+    private const byte LEATHERAMOOUNTNEEDED = 15;
+    private const byte GOLDAMOUNTTODROP = 3;
+
+    private const byte MAXNAMES = 3;
 
     private int _currentQuote, _currentNotEnoughTradeQuote, _currentTradeQuote, _currentFireLighterQuote;
 
@@ -56,6 +59,8 @@ sealed class Hunter : ModNPC {
 
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
 
+        NPCID.Sets.SpawnsWithCustomName[Type] = true;
+
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             //Velocity = 1f,
             //Direction = 1
@@ -74,6 +79,15 @@ sealed class Hunter : ModNPC {
     public override bool UsesPartyHat() => false;
 
     public override bool? CanFallThroughPlatforms() => true;
+
+    public override List<string> SetNPCNameList() {
+        string getName(byte index) => Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Name{index}");
+        List<string> names = [];
+        for (byte i = 0; i < MAXNAMES; i++) {
+            names.Add(getName((byte)(i + 1)));
+        }
+        return names;
+    }
 
     public override void SetDefaults() {
         NPC.friendly = true;

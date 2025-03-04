@@ -1,4 +1,7 @@
 Hunter: {
+	// Name1: Name1
+	// Name2: Name2
+	// Name3: Name3
 	Button1: Говорить
 	Button2_1: Обмен
 	// Button2_2: "{$Mods.RoA.NPC.Quotes.Hunter.Button2_1} (15 {$ItemName.Leather})"
