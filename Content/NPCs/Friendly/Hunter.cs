@@ -240,27 +240,27 @@ sealed class Hunter : ModNPC {
 
             NPC.frameCounter = 0;
 
-            if (Main.netMode != 1) {
-                int emoteType = ModContent.EmoteBubbleType<BackwoodsEmote>();
-                if (Main.rand.NextBool(6) || (BackwoodsFogHandler.IsFogActive && Main.rand.NextBool(3))) {
-                    emoteType = ModContent.EmoteBubbleType<BackwoodsFogEmote>();
-                }
-                else if (Main.rand.NextBool(6)) {
-                    emoteType = EmoteID.EmoteFear;
-                }
-                else if (Main.rand.NextBool(6)) {
-                    emoteType = ModContent.EmoteBubbleType<HunterEmote>();
-                }
-                else if (Main.rand.NextBool(6)) {
-                    emoteType = ModContent.EmoteBubbleType<LothorEmote>();
-                }
-                EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(NPC), 100);
+            int emoteType = ModContent.EmoteBubbleType<BackwoodsEmote>();
+            if (Main.rand.NextBool(6) || (BackwoodsFogHandler.IsFogActive && Main.rand.NextBool(3))) {
+                emoteType = ModContent.EmoteBubbleType<BackwoodsFogEmote>();
             }
+            else if (Main.rand.NextBool(5)) {
+                emoteType = EmoteID.EmoteFear;
+            }
+            else if (Main.rand.NextBool(8)) {
+                emoteType = ModContent.EmoteBubbleType<HunterEmote>();
+            }
+            else if (Main.rand.NextBool(6)) {
+                emoteType = ModContent.EmoteBubbleType<LothorEmote>();
+            }
+            EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(NPC), 100);
         }
 
         if (NPC.ai[0] == -10f) {
             if (NPC.ai[1] > 0f) {
                 NPC.ai[1]--;
+
+                NPC.velocity.X *= 0.8f;
 
                 NPC.direction = NPC.spriteDirection = (Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)].Center.X - NPC.Center.X).GetDirection();
             }
