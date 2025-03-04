@@ -57,6 +57,22 @@ abstract class BaseForm : ModMount {
                 MultiplayerSystem.SendPacket(new BaseFormPacket1(player, value));
             }
         }
+
+        internal static void ChangeAttackCharge2(Player player, float value) {
+            player.GetModPlayer<BaseFormDataStorage>()._attackCharge2 = value;
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new BaseFormPacket2(player, value));
+            }
+        }
+
+        public override void PostUpdateMiscEffects() {
+            if (_attackCharge > 0f) {
+                _attackCharge -= TimeSystem.LogicDeltaTime;
+            }
+            if (_attackCharge2 > 0f) {
+                _attackCharge2 -= TimeSystem.LogicDeltaTime;
+            }
+        }
     }
 
     private delegate void ExtraJumpLoader_UpdateHorizontalSpeeds_orig(Player player);
@@ -151,31 +167,12 @@ abstract class BaseForm : ModMount {
     protected virtual Color LightingColor { get; } = Color.White;
     public virtual SoundStyle? HurtSound { get; } = null;
 
-    private void ChangeAttackCharge1(Player player) {
-        ref float attackCharge = ref player.GetModPlayer<BaseFormDataStorage>()._attackCharge;
-        if (attackCharge > 0f) {
-            attackCharge -= TimeSystem.LogicDeltaTime;
-        }
-    }
-
-    private void ChangeAttackCharge2(Player player, float value) {
-        ref float attackCharge2 = ref player.GetModPlayer<BaseFormDataStorage>()._attackCharge2;
-        attackCharge2 = value;
-    }
-
-    private void ChangeAttackCharge2(Player player) {
-        ref float attackCharge2 = ref player.GetModPlayer<BaseFormDataStorage>()._attackCharge2;
-        if (attackCharge2 > 0f) {
-            attackCharge2 -= TimeSystem.LogicDeltaTime;
-        }
-    }
-
     public sealed override void SetMount(Player player, ref bool skipDust) {
         int buffType = MountBuff.Type;
         player.ClearBuff(buffType);
         player.AddBuffInStart(buffType, 3600);
 
-        ChangeAttackCharge2(player, 1.5f);
+        BaseFormDataStorage.ChangeAttackCharge2(player, 1.5f);
 
         SafeSetMount(player, ref skipDust);
     }
@@ -192,9 +189,6 @@ abstract class BaseForm : ModMount {
         SafeUpdateEffects(player);
 
         SpawnRunDusts(player);
-
-        ChangeAttackCharge1(player);
-        ChangeAttackCharge2(player);
 
         if (LightingColor == Color.White) {
             return;

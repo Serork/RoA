@@ -37,7 +37,7 @@ sealed class BehelitPlayer : ModPlayer {
                 for (int i = 0; i < drawinfo.DrawDataCache.Count; i++) {
                     DrawData value = drawinfo.DrawDataCache[i];
                     value.color = Color.Lerp(value.color, Color.Red, 0.5f);
-                    value.color.A = (byte)((float)(int)value.color.A * 0.5f);
+                    value.color.A = (byte)((float)(int)value.color.A * 0.65f);
                     drawinfo.DrawDataCache[i] = value;
                 }
             }

@@ -208,7 +208,7 @@ BloodShedAxesDebuff: {
 
 LittleFleder: {
 	DisplayName: Little Fleder
-	Description: The little fleder will fight for you
+	Description: The little fleder will fight for you and collect life hearts
 }
 
 EssenceDrain: {

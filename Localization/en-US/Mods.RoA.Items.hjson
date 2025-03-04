@@ -1218,7 +1218,7 @@ ChemicalPrisoner: {
 
 FlederStaff: {
 	DisplayName: Fleder Staff
-	Tooltip: Summons a fleder to fight for you
+	Tooltip: Summons a fleder to fight for you and collect life hearts
 }
 
 FlederSlayer: {

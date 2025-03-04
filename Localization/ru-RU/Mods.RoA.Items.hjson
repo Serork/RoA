@@ -1216,7 +1216,7 @@ ChemicalPrisoner: {
 
 FlederStaff: {
 	DisplayName: Посох нетопыря
-	Tooltip: Призывает нетопыря, сражающегося за вас
+	Tooltip: Призывает нетопыря, сражающегося за вас и собирающего восстанавливающие сердца
 }
 
 FlederSlayer: {

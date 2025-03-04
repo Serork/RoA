@@ -208,7 +208,7 @@ BloodShedAxesDebuff: {
 
 LittleFleder: {
 	DisplayName: Малыш-нетопырь
-	Description: Малыш-нетопырь сражается за вас
+	Description: Малыш-нетопырь сражается за вас и собирает восстанавливающие сердца
 }
 
 EssenceDrain: {
