@@ -92,13 +92,20 @@ sealed class BaseFormHandler : ModPlayer {
 
     public static void ApplyForm<T>(Player player, T instance = null) where T : FormInfo {
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
-        T formInstance = instance ?? GetForm<T>();
-        if (!player.GetModPlayer<WreathHandler>().IsFull6) {
-            player.GetModPlayer<WreathHandler>().SlowlyActivateForm(instance);
+        if (handler.IsInDruidicForm) {
             return;
         }
 
-        SoundEngine.PlaySound(formInstance.BaseForm.ApplySound, player.Center);
+        T formInstance = instance ?? GetForm<T>();
+        if (!player.GetModPlayer<WreathHandler>().IsFull6) {
+            player.GetModPlayer<WreathHandler>().SlowlyActivateForm(formInstance);
+            return;
+        }
+
+        if (player.whoAmI == Main.myPlayer) {
+            SoundEngine.PlaySound(formInstance.BaseForm.ApplySound, player.Center);
+        }
+
         player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
@@ -117,7 +124,10 @@ sealed class BaseFormHandler : ModPlayer {
         if (formInstance != null) {
             player.ClearBuff(formInstance.MountBuff.Type);
             player.GetModPlayer<WreathHandler>().Reset(true);
-            SoundEngine.PlaySound(formInstance.BaseForm.ReleaseSound, player.Center);
+
+            if (player.whoAmI == Main.myPlayer) {
+                SoundEngine.PlaySound(formInstance.BaseForm.ReleaseSound, player.Center);
+            }
         }
         handler.HardResetActiveForm();
     }

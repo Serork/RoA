@@ -288,9 +288,6 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
         if (StartSlowlyIncreasingUntilFull) {
-            //StartSlowlyIncreasingUntilFull = false;
-            //_formInfo = null;
-            //ResetChangingValue();
             return;
         }
         if (Player.mount.Active) {
@@ -299,6 +296,10 @@ sealed class WreathHandler : ModPlayer {
         StartSlowlyIncreasingUntilFull = true;
         _formInfo = formInfo;
         IncreaseResourceValue(increaseUntilFull: true);
+    }
+
+    internal void Reset1() {
+        StartSlowlyIncreasingUntilFull = false;
     }
 
     public void Dusts_ResetStayTime() {
@@ -366,7 +367,13 @@ sealed class WreathHandler : ModPlayer {
             else if (!Player.ItemAnimationActive) {
                 Dusts_ResetStayTime();
                 StartSlowlyIncreasingUntilFull = false;
-                BaseFormHandler.ApplyForm(Player, _formInfo);
+                if (!Main.dedServ) {
+                    BaseFormHandler.ApplyForm(Player, _formInfo);
+                }
+
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new FormPacket1(Player));
+                }
             }
         }
         else if ( _stayTime <= 0f && !_shouldDecrease) {

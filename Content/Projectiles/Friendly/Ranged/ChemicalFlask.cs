@@ -91,10 +91,12 @@ sealed class ChemicalFlask : ModProjectile {
             Main.dust[dust].velocity *= 3f;
         }
         SoundEngine.PlaySound(SoundID.Shatter, Projectile.position);
-        Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/ChemicalFlask1").Type, 1f);
-        Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/ChemicalFlask2").Type, 1f);
-        Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/ChemicalFlask3").Type, 1f);
-        Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/ChemicalFlask4").Type, 1f);
+        if (!Main.dedServ) {
+            Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/ChemicalFlask1").Type, 1f);
+            Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/ChemicalFlask2").Type, 1f);
+            Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/ChemicalFlask3").Type, 1f);
+            Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/ChemicalFlask4").Type, 1f);
+        }
         if (Projectile.owner == Main.myPlayer) {
             for (int i = 0; i < 3; i++) {
                 float _velocityX = -Projectile.velocity.X * Main.rand.Next(10, 30) * 0.01f + Main.rand.Next(-20, 21) * 0.3f;
