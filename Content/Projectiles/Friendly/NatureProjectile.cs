@@ -40,10 +40,12 @@ abstract class NatureProjectile : ModProjectile {
     }
 
     public sealed override void SendExtraAI(BinaryWriter writer) {
-        writer.Write(_syncItem);
-        if (_syncItem) {
-            writer.Write(WreathPointsFine);
-            ItemIO.Send(Item, writer, true);
+        if (this is not FormProjectile) {
+            writer.Write(_syncItem);
+            if (_syncItem) {
+                writer.Write(WreathPointsFine);
+                ItemIO.Send(Item, writer, true);
+            }
         }
 
         SafeSendExtraAI(writer);
@@ -52,10 +54,12 @@ abstract class NatureProjectile : ModProjectile {
     protected virtual void SafeSendExtraAI(BinaryWriter writer) { }
 
     public sealed override void ReceiveExtraAI(BinaryReader reader) {
-        _syncItem = reader.ReadBoolean();
-        if (_syncItem) {
-            WreathPointsFine = reader.ReadSingle();
-            Item = ItemIO.Receive(reader, true);
+        if (this is not FormProjectile) {
+            _syncItem = reader.ReadBoolean();
+            if (_syncItem) {
+                WreathPointsFine = reader.ReadSingle();
+                Item = ItemIO.Receive(reader, true);
+            }
         }
 
         SafeReceiveExtraAI(reader);
@@ -96,13 +100,16 @@ abstract class NatureProjectile : ModProjectile {
 
     public sealed override void PostAI() {
         SafePostAI();
-        if (Item != null) {
-            Projectile.damage = NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]);
-            _syncItem = false;
-            Projectile.netUpdate = true;
-        }
-        else {
-            _syncItem = true;
+
+        if (this is not FormProjectile) {
+            if (Item != null) {
+                Projectile.damage = NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]);
+                _syncItem = false;
+                Projectile.netUpdate = true;
+            }
+            else {
+                _syncItem = true;
+            }
         }
     }
 

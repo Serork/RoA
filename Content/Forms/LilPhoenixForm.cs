@@ -329,7 +329,6 @@ sealed class LilPhoenixForm : BaseForm {
                 plr.ResetDash();
             }
             plr._dashed2 = false;
-            //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
         }
 
         if (player.controlJump && !plr._isPreparing) {
