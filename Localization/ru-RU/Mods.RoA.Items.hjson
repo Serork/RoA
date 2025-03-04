@@ -581,7 +581,7 @@ Grimstone: {
 
 MercuriumNugget: {
 	DisplayName: Ртутный самородок
-	Tooltip: "'Это тоже не стоит держать в руках...'"
+	Tooltip: "'А вот сейчас уже можно!'"
 }
 
 MillionDollarPainting: {
@@ -1539,7 +1539,7 @@ BackwoodsGrassWall: {
 
 BackwoodsDungeonKey: {
 	DisplayName: Ключ чащи
-	Tooltip: Открывает сундук чащи в подземелье
+	Tooltip: Открывает сундук чащи в темнице
 }
 
 BackwoodsDungeonChest: {
