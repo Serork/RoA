@@ -12,12 +12,9 @@ using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Common.WorldEvents;
 
@@ -493,38 +490,22 @@ sealed class LothorSummoningHandler : ModSystem {
         if (_preArrivedLothorBossTimer >= 2.465f && !_shake) {
             _summonedNaturally = false;
             _shake = true;
-            NPC.SetEventFlagCleared(ref LothorShake.shake, -1);
-            if (Main.netMode == NetmodeID.Server) {
-                NetMessage.SendData(MessageID.WorldData);
-            }
+            LothorShake.shake = true;
         }
         else if (_preArrivedLothorBossTimer >= 3f && !ActiveMessages.Item1) {
             ActiveMessages.Item1 = true;
             string message = Language.GetText("Mods.RoA.World.LothorArrival1").ToString();
-            if (Main.netMode == 0) {
-                Helper.NewMessage($"{message}", color);
-            }
-            else {
-                ChatHelper.BroadcastChatMessage(NetworkText.FromKey($"{message}"), color);
-            }
+            Helper.NewMessage($"{message}", color);
             Shake(10f, 5f);
         }
         else if (_preArrivedLothorBossTimer >= 4.262f && !_shake2) {
             _shake2 = true;
-            NPC.SetEventFlagCleared(ref LothorShake.shake, -1);
-            if (Main.netMode == NetmodeID.Server) {
-                NetMessage.SendData(MessageID.WorldData);
-            }
+            LothorShake.shake = true;
         }
         else if (_preArrivedLothorBossTimer >= 5f && !ActiveMessages.Item2) {
             ActiveMessages.Item2 = true;
             string message = Language.GetText("Mods.RoA.World.LothorArrival2").ToString();
-            if (Main.netMode == 0) {
-                Helper.NewMessage($"{message}", color);
-            }
-            else {
-                ChatHelper.BroadcastChatMessage(NetworkText.FromKey($"{message}"), color);
-            }
+            Helper.NewMessage($"{message}", color);
             Shake(20f, 10f);
         }
         else if (_preArrivedLothorBossTimer >= 6f && !ActiveMessages.Item3) {
@@ -554,10 +535,7 @@ sealed class LothorSummoningHandler : ModSystem {
                         ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", Language.GetTextValue("Mods.RoA.NPCs.Lothor.DisplayName")), new Color(175, 75, 255));
                 }
             }
-            NPC.SetEventFlagCleared(ref PreArrivedLothorBoss.Item2, -1);
-            if (Main.netMode == NetmodeID.Server) {
-                NetMessage.SendData(MessageID.WorldData);
-            }
+            PreArrivedLothorBoss.Item2 = true;
         }
         if (!flag && _summonedNaturally) {
             Reset();
