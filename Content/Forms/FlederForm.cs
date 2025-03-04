@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Common.Players;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
@@ -21,7 +23,7 @@ sealed class FlederForm : BaseForm {
     protected override Vector2 GetLightingPos(Player player) => player.Center;
     protected override Color LightingColor => new(79, 124, 211);
 
-    private class FlederFormHandler : ModPlayer, IDoubleTap {
+    internal sealed class FlederFormHandler : ModPlayer, IDoubleTap {
         public const int CD = 50, DURATION = 35;
         public const float SPEED = 10f;
 
@@ -29,6 +31,7 @@ sealed class FlederForm : BaseForm {
         internal float _dashDelay, _dashTimer;
         private int[] _localNPCImmunity = new int[Main.npc.Length];
         internal int _shootCounter;
+        internal bool _holdingLmb;
 
         public bool ActiveDash => _dashDelay > 0;
 
@@ -179,12 +182,15 @@ sealed class FlederForm : BaseForm {
             }
         }
 
-        private void UseFlederDash(IDoubleTap.TapDirection direction) {
+        internal void UseFlederDash(IDoubleTap.TapDirection direction) {
             if (ActiveDash) {
                 return;
             }
 
             _dashDirection = direction;
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new FlederFormPacket1(Player, direction));
+            }
         }
     }
 
@@ -238,15 +244,10 @@ sealed class FlederForm : BaseForm {
     }
 
     private void SpecialAttackHandler(Player player) {
-        if (player.whoAmI != Main.myPlayer || Main.mouseText)
-            return;
+        void dustEffects1() {
+            ref int shootCounter = ref player.GetModPlayer<FlederFormHandler>()._shootCounter;
+            ref bool holdingLmb = ref player.GetModPlayer<FlederFormHandler>()._holdingLmb;
 
-        if (player.GetModPlayer<FlederFormHandler>()._dashDelay > FlederFormHandler.CD - 5) {
-            AttackCharge = 1.5f;
-        }
-
-        ref int shootCounter = ref player.GetModPlayer<FlederFormHandler>()._shootCounter;
-        if (player.controlUseItem && Main.mouseLeft) {
             shootCounter++;
 
             bool flag = shootCounter >= 100;
@@ -280,6 +281,42 @@ sealed class FlederForm : BaseForm {
                 }
             }
         }
+
+        ref int shootCounter = ref player.GetModPlayer<FlederFormHandler>()._shootCounter;
+
+        ref bool holdingLmb = ref player.GetModPlayer<FlederFormHandler>()._holdingLmb;
+        bool flag = player.whoAmI != Main.myPlayer;
+        if (flag && holdingLmb) {
+            dustEffects1();
+        }
+
+        if (shootCounter == 40 || shootCounter == 70 || shootCounter == 100) {
+            SoundEngine.PlaySound(SoundID.MaxMana, player.position);
+        }
+
+        if (flag || Main.mouseText)
+            return;
+        if (player.GetModPlayer<FlederFormHandler>()._dashDelay > FlederFormHandler.CD - 5) {
+            AttackCharge = 1.5f;
+        }
+
+        if (player.controlUseItem && Main.mouseLeft) {
+            if (!holdingLmb) {
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new FlederFormPacket2(player, true));
+                }
+            }
+            holdingLmb = true;
+            dustEffects1();
+        }
+        else {
+            if (holdingLmb) {
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new FlederFormPacket2(player, false));
+                }
+            }
+            holdingLmb = false;
+        }
         string context = "flederformattack";
         int baseDamage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(10);
         if (player.releaseUseItem && Main.mouseLeftRelease) {
@@ -290,6 +327,8 @@ sealed class FlederForm : BaseForm {
                 Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 3, ModContent.ProjectileType<FlederBomb>(), baseDamage, 3f, player.whoAmI, 0f, 0f);
                 player.velocity.Y = 0f;
                 player.velocity.Y -= 5f;
+
+                NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
             }
             if (shootCounter >= 70 && shootCounter < 100) {
                 AttackCharge = 1.5f;
@@ -298,6 +337,8 @@ sealed class FlederForm : BaseForm {
                 Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 5, ModContent.ProjectileType<FlederBomb>(), baseDamage * 2, 3.6f, player.whoAmI, 1f, 0f);
                 player.velocity.Y = 0f;
                 player.velocity.Y -= 7.5f;
+
+                NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
             }
             if (shootCounter >= 100) {
                 AttackCharge = 1.5f;
@@ -306,11 +347,10 @@ sealed class FlederForm : BaseForm {
                 Projectile.NewProjectile(player.GetSource_Misc(context), player.Center.X, player.Center.Y, Velocity.X, Velocity.Y + 8, ModContent.ProjectileType<FlederBomb>(), baseDamage * 3, 4.15f, player.whoAmI, 2f, 0f);
                 player.velocity.Y = 0f;
                 player.velocity.Y -= 10f;
+
+                NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
             }
             shootCounter = 0;
-        }
-        if (shootCounter == 40 || shootCounter == 70 || shootCounter == 100) {
-            SoundEngine.PlaySound(SoundID.MaxMana, player.position);
         }
     }
 

@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 interface IDoubleTap {
-    public enum TapDirection {
+    public enum TapDirection : sbyte {
         None = -1,
         Down,
         Top,
