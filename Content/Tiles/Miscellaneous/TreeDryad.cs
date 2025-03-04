@@ -35,13 +35,8 @@ sealed class TreeDryad : ModTile {
             }
             int num237 = Main.npcFrameCount[npc.type] - NPCID.Sets.AttackFrameCount[npc.type];
             npc.ai[2]++;
-            int num268 = 0;
             int num269 = 0;
-            int num270 = -1;
-            int num271 = -1;
-
             num269 = (npc.ai[2] % 16.0 < 8.0) ? (num237 - 2) : 0;
-
             npc.frame.Y = frameHeight * num269;
         }
 
@@ -62,6 +57,7 @@ sealed class TreeDryad : ModTile {
                     npc.ai[1] = npc.ai[0] = 0f;
                     npc.frameCounter = 0.0;
                     npc.ai[2] = 0;
+                    npc.netUpdate = true;
                 }
             }
             if (npc.ai[0] != -20f) {
@@ -85,6 +81,8 @@ sealed class TreeDryad : ModTile {
                 npc.ai[1] = 80;
                 npc.ai[0] = -25f;
                 npc.ai[2] = 0f;
+                npc.frameCounter = 0.0;
+                npc.netUpdate = true;
 
                 int emoteType = ModContent.EmoteBubbleType<BackwoodsEmote>();
                 EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(npc), 80);
