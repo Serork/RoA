@@ -17,6 +17,9 @@ sealed class Hedgehog : ModNPC {
     private bool alert;
     private bool chosen;
     private int choice;
+    private bool _playerNearby;
+
+    private float _curlUpTimer, _rotation;
 
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Hedgehog");
@@ -55,12 +58,16 @@ sealed class Hedgehog : ModNPC {
         writer.Write(alert);
         writer.Write(chosen);
         writer.Write(choice);
+        writer.Write(_playerNearby);
+        writer.Write(_rotation);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         alert = reader.ReadBoolean();
         chosen = reader.ReadBoolean();
         choice = reader.ReadInt32();
+        _playerNearby = reader.ReadBoolean();
+        _rotation = reader.ReadSingle();
     }
 
     public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -111,16 +118,17 @@ sealed class Hedgehog : ModNPC {
         else Main.npcCatchable[NPC.type] = true;
         NPC.dontCountMe = true;
 
-        bool flag = NPC.ai[2] >= 20f;
+        bool flag = _curlUpTimer >= 20f;
         if (!flag) {
-            NPC.ai[2]++;
+            _curlUpTimer++;
         }
 
-        NPC.ai[1] = 0f;
-        if (Main.netMode != 1) {
+        _playerNearby = false;
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
             foreach (Player player in Main.ActivePlayers) {
                 if (!player.dead && Vector2.Distance(player.position, NPC.position) <= 300) {
-                    NPC.ai[1] = 1f;
+                    _playerNearby = true;
+
                     NPC.netUpdate = true;
 
                     break;
@@ -128,8 +136,8 @@ sealed class Hedgehog : ModNPC {
             }
         }
 
-        if (flag && NPC.ai[1] == 1f) {
-            if (!chosen && Main.netMode != 1) {
+        if (flag && _playerNearby) {
+            if (!chosen && Main.netMode != NetmodeID.MultiplayerClient) {
                 choice = Main.rand.Next(0, 2);
                 chosen = true;
                 NPC.netUpdate = true;
@@ -141,6 +149,7 @@ sealed class Hedgehog : ModNPC {
                 alert = true;
                 NPC.aiStyle = 0;
             }
+            NPC.netUpdate = true;
         }
         else {
             chosen = false;
@@ -150,11 +159,11 @@ sealed class Hedgehog : ModNPC {
             alert = false;
         }
 
-        if (NPC.ai[3] != 0f) {
+        if (_rotation != 0f) {
             if (NPC.aiStyle == 0) {
-                NPC.rotation = NPC.ai[3];
+                NPC.rotation = _rotation;
             }
-            NPC.ai[3] = 0f;
+            _rotation = 0f;
         }
     }
 }
