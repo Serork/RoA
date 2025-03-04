@@ -238,7 +238,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             bool flag = Projectile.timeLeft <= _swingTimeMax * 0.6f;
             if (flag && Main.myPlayer == Projectile.owner && Projectile.ai[0] == 0f) {
                 Projectile.ai[0] = 1f;
-                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SwordSliceMagic") { Volume = 1.5f }, Projectile.Center);
                 Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, Main.MouseWorld, 12f);
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.MountedCenter + velocity * 2f, velocity, ModContent.ProjectileType<JudgementCut>(), Projectile.damage / 2, Projectile.knockBack / 2.5f, Projectile.owner);
                 Projectile.netUpdate = true;

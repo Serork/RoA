@@ -339,7 +339,7 @@ sealed class FlederSlayer : ModProjectile {
                         else {
                             Projectile.ai[1] = 3f;
 
-                            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HeavySword") { Volume = 0.75f }, Projectile.Center);
+                            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HeavySword") { Volume = 1f }, Projectile.Center);
                         }
 
                         Projectile.scale = MathHelper.Lerp(Projectile.scale, Projectile.localAI[2] * 1.5f, 0.1f);

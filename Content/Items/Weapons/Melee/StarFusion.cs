@@ -5,6 +5,7 @@ using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -61,5 +62,6 @@ sealed class StarFusion : ModItem {
         for (int i = 0; i < 3; i++) {
             spawnStar();
         }
+        SoundEngine.PlaySound(SoundID.Item4 with { Volume = 0.3f, Pitch = -0.2f }, target.Center);
     }
 }

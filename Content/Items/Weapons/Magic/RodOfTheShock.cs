@@ -5,8 +5,9 @@ using RoA.Common.Items;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
-
+using RoA.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -42,7 +43,7 @@ sealed class RodOfTheShock : Rod {
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
-        Item.UseSound = SoundID.Item81;
+        Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "Zap") { Volume = 0.7f, PitchVariance = 0.2f };
 
         Item.channel = true;
 

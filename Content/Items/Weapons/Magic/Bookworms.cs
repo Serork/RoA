@@ -8,6 +8,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -168,6 +169,8 @@ sealed class BookwormsProjectile : ModProjectile {
                 Projectile.netUpdate = true;
             }
             Projectile.direction = Projectile.spriteDirection = _direction;
+            SoundEngine.PlaySound(SoundID.NPCHit18 with { Volume = 0.4f, Pitch = -0.3f }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item7 with { Volume = 1.2f, Pitch = 0.3f }, Projectile.Center);
         }
         Projectile.Opacity = Utils.GetLerpValue(timeLeft, timeLeft - 10, Projectile.timeLeft, true);
         if (Projectile.ai[0] == 0f && Projectile.localAI[0] == 0f) {
