@@ -19,6 +19,7 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Content.NPCs.Enemies.Backwoods;
 
 namespace RoA.Common.Druid.Forms;
 
@@ -51,16 +52,16 @@ abstract class BaseForm : ModMount {
             private set => _attackCharge = value;
         }
 
-        internal static void ChangeAttackCharge1(Player player, float value) {
+        internal static void ChangeAttackCharge1(Player player, float value, bool net = true) {
             player.GetModPlayer<BaseFormDataStorage>().AttackCharge = value;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (net && Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new BaseFormPacket1(player, value));
             }
         }
 
-        internal static void ChangeAttackCharge2(Player player, float value) {
+        internal static void ChangeAttackCharge2(Player player, float value, bool net = true) {
             player.GetModPlayer<BaseFormDataStorage>()._attackCharge2 = value;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (net && Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new BaseFormPacket2(player, value));
             }
         }

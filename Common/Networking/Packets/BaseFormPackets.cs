@@ -22,7 +22,7 @@ sealed class BaseFormPacket1 : NetPacket {
         }
 
         float value = reader.ReadSingle();
-        BaseForm.BaseFormDataStorage.ChangeAttackCharge1(player, value);
+        BaseForm.BaseFormDataStorage.ChangeAttackCharge1(player, value, false);
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new BaseFormPacket1(player, value), ignoreClient: sender);
