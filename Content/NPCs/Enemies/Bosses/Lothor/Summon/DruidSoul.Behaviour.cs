@@ -32,7 +32,6 @@ sealed partial class DruidSoul : RoANPC {
     private Vector2 _velocity, _velocity2, _velocity3, _velocity4;
     private SlotId _lothorSummonSound;
     private bool _lothorSummonSoundPlayed;
-    private float _consumeValue;
     private float _canChangeDirectionAgain;
 
     public bool ShouldConsumeItsEnergy { get; private set; }
@@ -42,7 +41,6 @@ sealed partial class DruidSoul : RoANPC {
         writer.WriteVector2(_velocity2);
         writer.WriteVector2(_velocity3);
         writer.WriteVector2(_velocity4);
-        writer.Write(_consumeValue);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -50,7 +48,6 @@ sealed partial class DruidSoul : RoANPC {
         _velocity2 = reader.ReadVector2();
         _velocity3 = reader.ReadVector2();
         _velocity4 = reader.ReadVector2();
-        _consumeValue = reader.ReadSingle();
     }
 
     public override void AI() {
@@ -190,7 +187,6 @@ sealed partial class DruidSoul : RoANPC {
 
         MoveToAltar2();
 
-        _consumeValue = 0f;
         NPC.ai[2] = NPC.ai[3] = 0f;
         bool flag4 = Helper.EaseInOut3(altarStrength) > 0.0025f;
         if (!flag4) {
@@ -302,8 +298,6 @@ sealed partial class DruidSoul : RoANPC {
             NPC.direction = (player3.Center.X - center.X).GetDirection();
             NPC.spriteDirection = -NPC.direction;
         }
-
-        NPC.netUpdate = true;
     }
 
     private void MoveToAltar() {
