@@ -73,7 +73,9 @@ sealed class TreeDryad : ModTile {
                     npc.ai[1] -= 1;
                 }
                 else {
-                    npc.direction = npc.spriteDirection = dir;
+                    if (npc.ai[1] == 50f) {
+                        npc.direction = npc.spriteDirection = -npc.direction;
+                    }
                 }
             }
             else {
