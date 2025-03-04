@@ -83,7 +83,6 @@ sealed class FlederForm : BaseForm {
                 if (WorldGen.SolidOrSlopedTile(tileCoordinates1.X, tileCoordinates1.Y) || WorldGen.SolidOrSlopedTile(tileCoordinates2.X, tileCoordinates2.Y)) {
                     Player.velocity.X /= 2f;
                 }
-                //Player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
             }
 
             if (ActiveDash) {
@@ -148,21 +147,14 @@ sealed class FlederForm : BaseForm {
 
                             _dashTimer = DURATION;
                             _dashDelay = CD;
-                            //Player.velocity.X = -num3 * 9;
-                            //Player.velocity.Y = -4f;
                             Player.velocity *= 0.9f;
-                            //Player.GiveImmuneTimeForCollisionAttack(20);
                             _localNPCImmunity[i] = 10;
                             Player.immune = true;
                             Player.immuneTime = 10;
                             Player.immuneNoBlink = true;
-                            //Player.GetModPlayer<WreathHandler>().IncreaseResourceValue(0.1f);
                         }
                     }
                 }
-                //if ((!Player.controlLeft || !(Player.velocity.X < 0f)) && (!Player.controlRight || !(Player.velocity.X > 0f))) {
-                //    Player.velocity.X *= 0.95f;
-                //}
                 _dashTimer--;
             }
         }
@@ -292,7 +284,6 @@ sealed class FlederForm : BaseForm {
         int baseDamage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(10);
         if (player.releaseUseItem && Main.mouseLeftRelease) {
             if (shootCounter >= 40 && shootCounter < 70) {
-                //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
                 AttackCharge = 1.5f;
                 FlederFormHandler.SpawnDusts(player, 1);
                 Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);
@@ -301,7 +292,6 @@ sealed class FlederForm : BaseForm {
                 player.velocity.Y -= 5f;
             }
             if (shootCounter >= 70 && shootCounter < 100) {
-                //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
                 AttackCharge = 1.5f;
                 FlederFormHandler.SpawnDusts(player, 2);
                 Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);
@@ -310,7 +300,6 @@ sealed class FlederForm : BaseForm {
                 player.velocity.Y -= 7.5f;
             }
             if (shootCounter >= 100) {
-                //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
                 AttackCharge = 1.5f;
                 FlederFormHandler.SpawnDusts(player);
                 Vector2 Velocity = Helper.VelocityToPoint(player.Center, Main.rand.RandomPointInArea(new Vector2(player.Center.X, player.Center.Y + 100), new Vector2(player.Center.X, player.Center.Y + 100)), 4);

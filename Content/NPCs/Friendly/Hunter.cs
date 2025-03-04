@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Common.WorldEvents;
 using RoA.Content.Emotes;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Core.Utility;
@@ -16,6 +17,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -160,7 +162,27 @@ sealed class Hunter : ModNPC {
                     NPC.spriteDirection = -1;
 
                 int num237 = Main.npcFrameCount[Type] - NPCID.Sets.AttackFrameCount[Type];
-                if (NPC.ai[0] == 23f) {
+                if (NPC.ai[0] == -10f) {
+                    ref double frameCounter = ref NPC.frameCounter;
+                    frameCounter += 1.5;
+                    int num268 = 0;
+                    int num269 = 0;
+
+                    if (frameCounter >= 10)
+                        num269 = 19;
+                    else {
+                        num269 = 0;
+                    }
+                    if (frameCounter >= 20) {
+                        frameCounter = 0;
+                        num269 = 0;
+                    }
+
+                    NPC.frame.Y = num * num269;
+                    if (frameCounter >= 420.0)
+                        frameCounter = 0.0;
+                }
+                else if (NPC.ai[0] == 23f) {
 
                 }
                 else if (NPC.ai[0] >= 20f && NPC.ai[0] <= 22f) {
@@ -203,6 +225,49 @@ sealed class Hunter : ModNPC {
 
     public override void AI() {
         NPC.homeTileX = NPC.homeTileY = -1;
+
+        bool flag0 = false;
+        foreach (Player player in Main.ActivePlayers) {
+            if (player.talkNPC == NPC.whoAmI) {
+                NPC.ai[0] = -5f;
+                flag0 = true;
+            }
+        }
+
+        if (!flag0 && NPC.ai[0] == -5f) {
+            NPC.ai[0] = -10f;
+            NPC.ai[1] = 100f;
+
+            NPC.frameCounter = 0;
+
+            if (Main.netMode != 1) {
+                int emoteType = ModContent.EmoteBubbleType<BackwoodsEmote>();
+                if (Main.rand.NextBool(6) || (BackwoodsFogHandler.IsFogActive && Main.rand.NextBool(3))) {
+                    emoteType = ModContent.EmoteBubbleType<BackwoodsFogEmote>();
+                }
+                else if (Main.rand.NextBool(6)) {
+                    emoteType = EmoteID.EmoteFear;
+                }
+                else if (Main.rand.NextBool(6)) {
+                    emoteType = ModContent.EmoteBubbleType<HunterEmote>();
+                }
+                else if (Main.rand.NextBool(6)) {
+                    emoteType = ModContent.EmoteBubbleType<LothorEmote>();
+                }
+                EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(NPC), 100);
+            }
+        }
+
+        if (NPC.ai[0] == -10f) {
+            if (NPC.ai[1] > 0f) {
+                NPC.ai[1]--;
+
+                NPC.direction = NPC.spriteDirection = (Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)].Center.X - NPC.Center.X).GetDirection();
+            }
+            else {
+                NPC.ai[0] = 0f;
+            }
+        }
 
         if (NPC.ai[0] == 0f) {
             NPC.ai[1] -= 4f;

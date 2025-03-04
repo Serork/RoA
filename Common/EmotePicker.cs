@@ -36,9 +36,8 @@ sealed class EmotePicker : ILoadable {
         }
 
         if (NPC.AnyNPCs(hunterType)) {
-            if (nPC.type == NPCID.ArmsDealer || nPC.type == NPCID.GoblinTinkerer) {
-                list.Add(ModContent.EmoteBubbleType<HunterEmote>());
-            }
+            list.Add(ModContent.EmoteBubbleType<HunterEmote>());
+            list.Add(ModContent.EmoteBubbleType<BackwoodsEmote>());
         }
      }
 
