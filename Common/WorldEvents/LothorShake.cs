@@ -30,16 +30,12 @@ sealed class LothorShake : ModSystem {
     }
 
     public override void PostUpdateNPCs() {
-		if (Main.dedServ) {
-			return;
-		}
-
         string shader = ShaderLoader.LothorSky;
 		bool flag = NPC.AnyNPCs(ModContent.NPCType<Lothor>());
 		if (flag && !shake) {
 			shake = true;
         }
-        if (!shake && !before && !NPC.AnyNPCs(ModContent.NPCType<Lothor>())) {
+        if (!shake && !before && !flag) {
 			Reset();
             if (Filters.Scene[shader].IsActive()) {
                 Filters.Scene[shader].Deactivate();

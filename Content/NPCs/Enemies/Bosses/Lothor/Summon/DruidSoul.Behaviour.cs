@@ -43,7 +43,6 @@ sealed partial class DruidSoul : RoANPC {
         writer.WriteVector2(_velocity3);
         writer.WriteVector2(_velocity4);
         writer.Write(_consumeValue);
-        writer.Write(ShouldConsumeItsEnergy);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -52,7 +51,6 @@ sealed partial class DruidSoul : RoANPC {
         _velocity3 = reader.ReadVector2();
         _velocity4 = reader.ReadVector2();
         _consumeValue = reader.ReadSingle();
-        ShouldConsumeItsEnergy = reader.ReadBoolean();
     }
 
     public override void AI() {
@@ -386,7 +384,7 @@ sealed partial class DruidSoul : RoANPC {
         _velocity3 *= value;
         NPC.position += (_velocity2 + _velocity3) * (1f - altarStrength);
         float dist = Vector2.Distance(altarCoords, NPC.position);
-        float value2 = (1f - altarStrength * 1.5f);
+        float value2 = (1f - altarStrength * 1.25f);
         value2 = MathHelper.Clamp(value2, 0f, 1f);
         if (dist < 80f) {
             NPC.position.Y -= dist * 0.015f * value2;

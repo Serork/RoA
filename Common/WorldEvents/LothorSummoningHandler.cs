@@ -6,6 +6,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -456,6 +457,14 @@ sealed class LothorSummoningHandler : ModSystem {
         PreArrivedLothorBoss = (false, false);
         ActiveMessages = (false, false, false);
         LothorShake.shake = LothorShake.before = false;
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        writer.Write(PreArrivedLothorBoss.Item2);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        PreArrivedLothorBoss.Item2 = reader.ReadBoolean();
     }
 
     public override void PostUpdateEverything() {
