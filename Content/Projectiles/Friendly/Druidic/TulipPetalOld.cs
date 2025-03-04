@@ -32,7 +32,7 @@ sealed class TulipPetalOld : NatureProjectile {
     }
 
     protected override void SafeSetDefaults() {
-        Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
+        //Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 
         int width = 6; int height = width;
         Projectile.Size = new Vector2(width, height);
@@ -42,6 +42,8 @@ sealed class TulipPetalOld : NatureProjectile {
 
         Projectile.penetrate = -1;
         Projectile.aiStyle = -1;
+
+        AIType = -1;
 
         Projectile.timeLeft = 120;
     }

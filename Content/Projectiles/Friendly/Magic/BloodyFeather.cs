@@ -13,7 +13,7 @@ sealed class BloodyFeather : ModProjectile {
     //	=> DisplayName.SetDefault("Bloody Feather");
 
     public override void SetDefaults() {
-        Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
+        //Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 
         int width = 10; int height = 20;
         Projectile.Size = new Vector2(width, height);

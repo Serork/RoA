@@ -23,7 +23,7 @@ sealed class QuicksilverBolt : ModProjectile {
         int width = 4; int height = width;
         Projectile.Size = new Vector2(width, height);
 
-        Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
+        //Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 
         Projectile.DamageType = DamageClass.Magic;
 
