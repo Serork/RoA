@@ -185,7 +185,7 @@ sealed class HunterSpawnSystem : ModSystem {
                     ShouldSpawnHunterAttack = false;
                 }
                 if (!hunterAlive && !ShouldDespawnHunter) {
-                    if (/*Main.rand.NextBool(7) && */NPC.downedBoss2) {
+                    if (Main.rand.NextBool(7) && NPC.downedBoss2) {
                         ShouldSpawnHunter = true;
                         ShouldSpawnHunterAttack = false;
                     }
