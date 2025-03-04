@@ -40,6 +40,8 @@ sealed partial class DruidSoul : RoANPC {
 
         NPC.aiStyle = AIType = -1;
 
+        NPC.netAlways = true;
+
         NPC.npcSlots = 5f;
 
         NPC.rarity = 1;

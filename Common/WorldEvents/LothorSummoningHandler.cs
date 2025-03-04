@@ -458,7 +458,7 @@ sealed class LothorSummoningHandler : ModSystem {
         LothorShake.shake = LothorShake.before = false;
     }
 
-    public override void PostUpdatePlayers() {
+    public override void PostUpdateEverything() {
         int type = ModContent.NPCType<Lothor>();
         bool flag = NPC.AnyNPCs(type);
         if (!PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2 || flag) {
@@ -502,7 +502,7 @@ sealed class LothorSummoningHandler : ModSystem {
         }
         else if (_preArrivedLothorBossTimer >= 4.262f && !_shake2) {
             _shake2 = true;
-            LothorShake.shake = true; 
+            LothorShake.shake = true;
         }
         else if (_preArrivedLothorBossTimer >= 5f && !ActiveMessages.Item2) {
             ActiveMessages.Item2 = true;
@@ -539,6 +539,9 @@ sealed class LothorSummoningHandler : ModSystem {
                 }
             }
             PreArrivedLothorBoss.Item2 = true;
+            if (Main.netMode == NetmodeID.Server) {
+                NetMessage.SendData(MessageID.WorldData);
+            }
         }
         if (!flag && _summonedNaturally) {
             Reset();
