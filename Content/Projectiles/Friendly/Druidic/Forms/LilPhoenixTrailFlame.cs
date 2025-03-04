@@ -56,17 +56,15 @@ sealed class LilPhoenixTrailFlame : FormProjectile {
         if (Projectile.ai[2] != 1f) {
             Projectile.timeLeft = 260;
             Projectile.position = vector2;
-            if (Main.myPlayer == player.whoAmI) {
-                bool flag = true;
-                foreach (Vector2 trailPosition in _positions) {
-                    if (trailPosition.Distance(Projectile.position) <= 1.5f) {
-                        flag = false;
-                        break;
-                    }
+            bool flag = true;
+            foreach (Vector2 trailPosition in _positions) {
+                if (trailPosition.Distance(Projectile.position) <= 1.5f) {
+                    flag = false;
+                    break;
                 }
-                if (flag) {
-                    _positions.Add(Projectile.position);
-                }
+            }
+            if (flag) {
+                _positions.Add(Projectile.position);
             }
             Projectile.netUpdate = true;
         }

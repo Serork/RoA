@@ -106,6 +106,10 @@ sealed class BaseFormHandler : ModPlayer {
             SoundEngine.PlaySound(formInstance.BaseForm.ApplySound, player.Center);
         }
 
+        if (formInstance is null) {
+            return;
+        }
+
         player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);

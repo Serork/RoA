@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Forms;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
@@ -38,6 +40,7 @@ sealed class LilPhoenixForm : BaseForm {
         internal bool _isPreparing, _wasPreparing, _prepared;
         internal float _charge, _charge2, _charge3;
         internal bool _dashed, _dashed2;
+        internal bool _holdLmb;
 
         internal void ResetDash() {
             if (_dashed) {
@@ -162,37 +165,59 @@ sealed class LilPhoenixForm : BaseForm {
             sqrt = speed / sqrt;
             player.velocity.X = vector.X * sqrt;
             player.velocity.Y = vector.Y * sqrt;
+            plr._prepared = false;
             plr._dashed2 = plr._dashed = true;
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PhoenixFormPacket2(player));
+            }
             ushort type = (ushort)ModContent.ProjectileType<LilPhoenixTrailFlame>();
             int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(40f);
             float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(0f);
             for (int i = 0; i < 2; i++) {
                 Projectile.NewProjectile(player.GetSource_Misc("phoenixdash"), player.Center, Vector2.Zero, type, damage, knockBack, player.whoAmI, (float)i);
             }
-            int k = 36;
-            for (int i = 0; i < k; i++) {
-                int x = (int)((double)player.position.X - 3.0 + (double)player.width / 2.0);
-                int y = (int)((double)player.position.Y - 8.0 + (double)player.height / 2.0);
-                Vector2 vector3 = (new Vector2((float)player.width / 2f, player.height) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
-                Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
-                int dust = Dust.NewDust(vector3 + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
-                Main.dust[dust].noGravity = true;
-                Main.dust[dust].noLight = true;
-                Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
-            }
+
+            NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
             //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
         }
-        bool flag2 = player.controlUseItem && Main.mouseLeft && !Main.mouseText && player.whoAmI == Main.myPlayer;
-        if (plr._isPreparing) {
-            flag2 = player.controlUseItem && Main.mouseLeft && player.whoAmI == Main.myPlayer;
-        }
-        if (!flag2) {
-            if (plr._charge > 0f) {
-                plr._prepared = false;
-                dash();
+        if (player.whoAmI == Main.myPlayer) {
+            bool flag2 = player.controlUseItem && Main.mouseLeft && !Main.mouseText;
+            if (plr._holdLmb != flag2) {
+                plr._holdLmb = flag2;
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new PhoenixFormPacket1(player, flag2));
+                }
+            }
+            if (plr._isPreparing) {
+                flag2 = player.controlUseItem && Main.mouseLeft;
+                if (plr._holdLmb != flag2) {
+                    plr._holdLmb = flag2;
+                    if (Main.netMode == NetmodeID.MultiplayerClient) {
+                        MultiplayerSystem.SendPacket(new PhoenixFormPacket1(player, flag2));
+                    }
+                }
             }
         }
-        if (flag && flag2 && !plr._wasPreparing && !plr._dashed) {
+        if (!plr._holdLmb) {
+            if (plr._charge > 0f) {
+                if (player.whoAmI == Main.myPlayer) {
+                    dash();
+                }
+
+                int k = 36;
+                for (int i = 0; i < k; i++) {
+                    int x = (int)((double)player.position.X - 3.0 + (double)player.width / 2.0);
+                    int y = (int)((double)player.position.Y - 8.0 + (double)player.height / 2.0);
+                    Vector2 vector3 = (new Vector2((float)player.width / 2f, player.height) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
+                    Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
+                    int dust = Dust.NewDust(vector3 + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].noLight = true;
+                    Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
+                }
+            }
+        }
+        if (flag && plr._holdLmb && !plr._wasPreparing && !plr._dashed) {
             player.controlJump = false;
             player.controlLeft = player.controlRight = false;
             player.velocity *= 0.7f;
@@ -318,17 +343,21 @@ sealed class LilPhoenixForm : BaseForm {
             int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(40f);
             float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(2f);
             ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixFlames>();
-            for (int i = 0; i < 2; i++) {
-                int proj = Projectile.NewProjectile(player.GetSource_Misc("phoenixjump"), 
-                    player.Center + new Vector2(14f * i * (i == 1 ? -1f : 1f), -4f) + Vector2.UnitX * player.direction * 6f + (player.direction == -1 ? new Vector2(8f, 0f) : Vector2.Zero),
-                    Vector2.Zero, projType, damage, knockBack, player.whoAmI);
-                if (Main.netMode != NetmodeID.SinglePlayer)
-                    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+            if (player.whoAmI == Main.myPlayer) {
+                for (int i = 0; i < 2; i++) {
+                    int proj = Projectile.NewProjectile(player.GetSource_Misc("phoenixjump"),
+                        player.Center + new Vector2(14f * i * (i == 1 ? -1f : 1f), -4f) + Vector2.UnitX * player.direction * 6f + (player.direction == -1 ? new Vector2(8f, 0f) : Vector2.Zero),
+                        Vector2.Zero, projType, damage, knockBack, player.whoAmI);
+                    //if (Main.netMode != NetmodeID.SinglePlayer)
+                    //    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+                }
             }
             if (plr._dashed) {
                 plr.ResetDash();
             }
             plr._dashed2 = false;
+
+            NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
         }
 
         if (player.controlJump && !plr._isPreparing) {

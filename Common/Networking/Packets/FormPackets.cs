@@ -9,8 +9,50 @@ using Terraria;
 using Terraria.ID;
 
 using static RoA.Content.Forms.FlederForm;
+using static RoA.Content.Forms.LilPhoenixForm;
 
 namespace RoA.Common.Networking.Packets;
+
+sealed class PhoenixFormPacket1 : NetPacket {
+    public PhoenixFormPacket1(Player player, bool value) {
+        Writer.TryWriteSenderPlayer(player);
+        Writer.Write(value);
+    }
+
+    public override void Read(BinaryReader reader, int sender) {
+        if (!reader.TryReadSenderPlayer(sender, out var player)) {
+            return;
+        }
+
+        bool value = reader.ReadBoolean();
+        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        plr._holdLmb = value;
+
+        if (Main.netMode == NetmodeID.Server) {
+            MultiplayerSystem.SendPacket(new PhoenixFormPacket1(player, value), ignoreClient: sender);
+        }
+    }
+}
+
+sealed class PhoenixFormPacket2 : NetPacket {
+    public PhoenixFormPacket2(Player player) {
+        Writer.TryWriteSenderPlayer(player);
+    }
+
+    public override void Read(BinaryReader reader, int sender) {
+        if (!reader.TryReadSenderPlayer(sender, out var player)) {
+            return;
+        }
+
+        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        plr._prepared = false;
+        plr._dashed2 = plr._dashed = true;
+
+        if (Main.netMode == NetmodeID.Server) {
+            MultiplayerSystem.SendPacket(new PhoenixFormPacket2(player), ignoreClient: sender);
+        }
+    }
+}
 
 sealed class InsectFormPacket1 : NetPacket {
     public InsectFormPacket1(Player player, bool value) {
