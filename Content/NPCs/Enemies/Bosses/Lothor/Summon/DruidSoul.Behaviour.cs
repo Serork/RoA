@@ -389,7 +389,7 @@ sealed partial class DruidSoul : RoANPC {
         if (dist < 80f) {
             NPC.position.Y -= dist * 0.015f * value2;
         }
-        if (dist > 100f) {
+        if (dist > 100f && dist < 150f) {
             NPC.position.Y += dist * 0.005f;
         }
         Vector2 vector = NPC.DirectionTo(altarCoords) * 0.1f;
