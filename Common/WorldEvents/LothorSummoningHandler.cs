@@ -470,8 +470,13 @@ sealed class LothorSummoningHandler : ModSystem {
     public override void PostUpdateEverything() {
         int type = ModContent.NPCType<Lothor>();
         bool flag = NPC.AnyNPCs(type);
+        if (PreArrivedLothorBoss.Item2) {
+            if (_preArrivedLothorBossTimer < 0f) {
+                _preArrivedLothorBossTimer++;
+            }
+        }
         if (!PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2 || flag) {
-            if (PreArrivedLothorBoss.Item2 && !flag) {
+            if (PreArrivedLothorBoss.Item2 && !flag && _preArrivedLothorBossTimer >= 0f) {
                 Reset();
                 return;
             }
@@ -547,10 +552,8 @@ sealed class LothorSummoningHandler : ModSystem {
                         ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", Language.GetTextValue("Mods.RoA.NPCs.Lothor.DisplayName")), new Color(175, 75, 255));
                 }
             }
+            _preArrivedLothorBossTimer = -10f;
             PreArrivedLothorBoss.Item2 = true;
-            if (Main.netMode == NetmodeID.Server) {
-                NetMessage.SendData(MessageID.WorldData);
-            }
         }
         if (!flag && _summonedNaturally) {
             Reset();
