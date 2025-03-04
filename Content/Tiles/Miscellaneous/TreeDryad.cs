@@ -68,13 +68,14 @@ sealed class TreeDryad : ModTile {
 
                 npc.velocity.X *= 0.8f;
 
-                int dir = (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].Center.X - npc.Center.X).GetDirection();
+                //int dir = (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].Center.X - npc.Center.X).GetDirection();
                 if (npc.ai[1] > 50f) {
                     npc.ai[1] -= 1;
                 }
                 else {
-                    if (npc.ai[1] == 50f) {
-                        npc.direction = npc.spriteDirection = -npc.direction;
+                    if (npc.ai[1] == 49f) {
+                        npc.direction *= -1;
+                        npc.spriteDirection = npc.direction;
                     }
                 }
             }
