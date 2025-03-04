@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
 
@@ -25,7 +27,7 @@ abstract class InsectForm : BaseForm {
     protected virtual float InsectDustScale { get; } = 1f;
     protected virtual ushort InsectProjectileType { get; } = (ushort)ModContent.ProjectileType<CorruptionInsect>();
 
-    private class InsectFormHandler : ModPlayer {
+    internal sealed class InsectFormHandler : ModPlayer {
         internal bool? _facedRight;
         internal int _shootCounter, _insectTimer;
         internal float _directionChangedFor;
@@ -128,11 +130,20 @@ abstract class InsectForm : BaseForm {
         if (!Main.mouseLeft || !player.controlUseItem) {
             if (player.GetModPlayer<InsectFormHandler>()._directionChangedFor <= 0f) {
                 facedRight = null;
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new InsectFormPacket2(player));
+                }
             }
             return;
         }
         player.GetModPlayer<InsectFormHandler>()._directionChangedFor = 1f;
-        facedRight = (Main.MouseWorld.X > player.position.X ? 1 : -1) == 1;
+        var value = (Main.MouseWorld.X > player.position.X ? 1 : -1) == 1;
+        if (facedRight != value) {
+            facedRight = value;
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new InsectFormPacket1(player, facedRight.Value));
+            }
+        }
         ref int shootCounter = ref player.GetModPlayer<InsectFormHandler>()._shootCounter;
         if (!Main.mouseText) {
             if (player.controlUseItem && Main.mouseLeft) {
@@ -164,7 +175,7 @@ abstract class InsectForm : BaseForm {
             shootKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(shootKnockback);
 
             int type = ModContent.ProjectileType<ToxicStream>();
-            int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(10);
+            int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(20);
             for (int num58 = 0; num58 < 2; num58++) {
                 int num59 = Dust.NewDust(playerPos + velocity * 2.5f, 0, 0, MountData.spawnDust, 0f, 0f, 0, default(Color), 1f + Main.rand.NextFloatRange(0.1f));
                 Main.dust[num59].velocity = Main.dust[num59].velocity.RotatedByRandom(MathHelper.PiOver4);
