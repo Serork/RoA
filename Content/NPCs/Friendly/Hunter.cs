@@ -182,6 +182,24 @@ sealed class Hunter : ModNPC {
                     if (frameCounter >= 420.0)
                         frameCounter = 0.0;
                 }
+                else if (NPC.ai[0] == -20f) {
+                    ref double frameCounter = ref NPC.frameCounter;
+                    frameCounter += 1.0;
+
+                    int num268 = 0;
+                    if (frameCounter >= 8)
+                        num268 = 16;
+                    else {
+                        num268 = 0;
+                    }
+                    if (frameCounter >= 16)
+                        num268 = 17;
+                    if (frameCounter >= 52)
+                        num268 = 16;
+                    if (frameCounter >= 60)
+                        num268 = 0;
+                    NPC.frame.Y = num * num268;
+                }
                 else if (NPC.ai[0] == 23f) {
 
                 }
@@ -229,7 +247,13 @@ sealed class Hunter : ModNPC {
         bool flag0 = false;
         foreach (Player player in Main.ActivePlayers) {
             if (player.talkNPC == NPC.whoAmI) {
-                NPC.ai[0] = -5f;
+                if (player.GetModPlayer<DropHunterRewardHandler>().JustTraded) {
+                    NPC.ai[0] = -20f;
+                    NPC.frameCounter = 0;
+                }
+                else {
+                    NPC.ai[0] = -5f;
+                }
                 flag0 = true;
             }
         }
@@ -261,6 +285,19 @@ sealed class Hunter : ModNPC {
         if (NPC.ai[0] == -10f) {
             if (NPC.ai[1] > 0f) {
                 NPC.ai[1]--;
+
+                NPC.velocity.X *= 0.8f;
+
+                NPC.direction = NPC.spriteDirection = (Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)].Center.X - NPC.Center.X).GetDirection();
+            }
+            else {
+                NPC.ai[0] = 0f;
+            }
+        }
+
+        if (NPC.ai[0] == -20f) {
+            if (NPC.ai[1] > 0f) {
+                NPC.ai[1] -= 2f;
 
                 NPC.velocity.X *= 0.8f;
 
@@ -464,6 +501,7 @@ sealed class Hunter : ModNPC {
 
     private sealed class DropHunterRewardHandler : ModPlayer {
         public int TradeCount { get; private set; }
+        public bool JustTraded { get; private set; }
 
         public override void SaveData(TagCompound tag) {
             tag[nameof(TradeCount)] = TradeCount;
@@ -478,6 +516,7 @@ sealed class Hunter : ModNPC {
             if (shouldGiveFireLighter) {
                 num = ModContent.ItemType<FireLighter>();
             }
+            JustTraded = true;
             Item item = new Item();
             item.SetDefaults(num);
             item.stack = shouldGiveFireLighter ? 1 : GOLDAMOUNTTODROP;
@@ -490,6 +529,12 @@ sealed class Hunter : ModNPC {
                 }
             }
             TradeCount++;
+        }
+
+        public override void PostUpdate() {
+            if (JustTraded && Player.talkNPC == -1) {
+                JustTraded = false;
+            }
         }
     }
 
