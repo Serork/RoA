@@ -1644,3 +1644,8 @@ BoneroseHangingPot: {
 	DisplayName: Bonerose Hanging Pot
 	Tooltip: ""
 }
+
+LothorEnrageMonolith: {
+	DisplayName: Lothor Enrage Monolith
+	Tooltip: ""
+}

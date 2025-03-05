@@ -18,7 +18,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -128,7 +127,7 @@ sealed partial class Lothor : ModNPC {
     private bool _isDead;
     private float _deadStateProgress;
     private bool _targetIsDeadOrNoTarget;
-    private bool _shouldEnrage;
+    internal bool _shouldEnrage;
     private int _hpLoseInEnrage;
     private double _frameTimer;
 
@@ -263,68 +262,6 @@ sealed partial class Lothor : ModNPC {
 
         _deadStateProgress = 0f;
         _isDead = true;
-    }
-
-    public sealed class EnragedVisuals : ModPlayer {
-        internal float _opacity;
-        internal bool _isActive;
-
-        public override void UpdateDead() {
-            UpdateVisuals();
-        }
-
-        public override void PostUpdate() {
-            UpdateVisuals();
-        }
-
-        private void UpdateVisuals() {
-            string shader = ShaderLoader.EnragedLothorSky;
-            int type = ModContent.NPCType<Lothor>();
-            if (!_isActive) {
-                Player.ManageSpecialBiomeVisuals(shader, false);
-            }
-            _isActive = false;
-            Filters.Scene[shader].GetShader().UseOpacity(_opacity).UseColor(Color.Red);
-            NPC npc = null;
-            if (NPC.AnyNPCs(type)) {
-                npc = Main.npc.FirstOrDefault(x => x.active && x.type == type);
-            }
-            void deactivate() {
-                if (Filters.Scene[shader].IsActive()) {
-                    Filters.Scene[shader].Deactivate();
-                }
-                if (_opacity > 0f) {
-                    _opacity -= 0.05f;
-                }
-                else {
-                    _opacity = 0f;
-                }
-            }
-            if (npc == null) {
-                deactivate();
-                return;
-            }
-            bool enragedLothor = npc.As<Lothor>()._shouldEnrage;
-            if (enragedLothor) {
-                _isActive = true;
-                if (_opacity < 1f) {
-                    _opacity += 0.05f;
-                }
-                else {
-                    _opacity = 1f;
-                }
-                Player.ManageSpecialBiomeVisuals(shader, _isActive);
-                if (!Filters.Scene[shader].IsActive()) {
-                    Filters.Scene.Activate(shader);
-                }
-                else {
-                    Filters.Scene[shader].GetShader().UseOpacity(_opacity);
-                }
-            }
-            else {
-                deactivate();
-            }
-        }
     }
 
     public override void PostAI() {
