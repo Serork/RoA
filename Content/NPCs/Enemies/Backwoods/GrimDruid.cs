@@ -102,7 +102,7 @@ sealed class GrimDruid : DruidNPC {
     protected override (Func<bool>, float) ShouldBeAttacking() => (() => true, 450f);
 
     protected override void Walking() {
-        NPC.ApplyFighterAI(true, movementX: (npc) => {
+        NPC.ApplyFighterAI(false, movementX: (npc) => {
             float num87 = 1f * 0.8f;
             float num88 = 0.07f * 0.8f;
             //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
