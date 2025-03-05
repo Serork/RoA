@@ -116,7 +116,7 @@ sealed class LothorEnrageMonolith : ModTile {
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 16, 16];
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
-        AddMapEntry(new Color(10, 139, 166, 255));
+        AddMapEntry(new Color(216, 14, 19));
         //DustType = ModContent.DustType<CosmicCrystalDust>();
         //AnimationFrameHeight = 18 * 5;
 
