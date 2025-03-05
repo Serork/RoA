@@ -482,6 +482,7 @@ sealed partial class PettyGoblin : ModNPC {
             return;
         }
         NPC.extraValue += value2;
+        NPC.moneyPing(NPC.Center + Helper.VelocityToPoint(NPC.Center, player.Center, 25f));
         if (Main.netMode != NetmodeID.SinglePlayer) {
             MultiplayerSystem.SendPacket(new NPCExtraValuePacket(NPC.whoAmI, NPC.extraValue));
         }
