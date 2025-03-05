@@ -1,13 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Common;
 using RoA.Common.NPCs;
-using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
-using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
@@ -24,9 +20,7 @@ using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.Graphics.Effects;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 

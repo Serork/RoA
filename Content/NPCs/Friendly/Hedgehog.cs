@@ -4,6 +4,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 
+using System;
 using System.IO;
 
 using Terraria;
@@ -19,7 +20,7 @@ sealed class Hedgehog : ModNPC {
     private int choice;
     private bool _playerNearby;
 
-    private float _curlUpTimer, _rotation;
+    private float _curlUpTimer;
 
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Hedgehog");
@@ -48,6 +49,8 @@ sealed class Hedgehog : ModNPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
+    public override bool? CanBeCaughtBy(Item item, Player player) => !alert;
+
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([
             new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Hedgehog")
@@ -59,7 +62,6 @@ sealed class Hedgehog : ModNPC {
         writer.Write(chosen);
         writer.Write(choice);
         writer.Write(_playerNearby);
-        writer.Write(_rotation);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -67,7 +69,6 @@ sealed class Hedgehog : ModNPC {
         chosen = reader.ReadBoolean();
         choice = reader.ReadInt32();
         _playerNearby = reader.ReadBoolean();
-        _rotation = reader.ReadSingle();
     }
 
     public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -112,10 +113,10 @@ sealed class Hedgehog : ModNPC {
 
     public override void AI() {
         if (alert) {
-            Main.npcCatchable[NPC.type] = false;
+            //Main.npcCatchable[NPC.type] = false;
             NPC.dontCountMe = false;
         }
-        else Main.npcCatchable[NPC.type] = true;
+        //else Main.npcCatchable[NPC.type] = true;
         NPC.dontCountMe = true;
 
         bool flag = _curlUpTimer >= 20f;
@@ -124,15 +125,11 @@ sealed class Hedgehog : ModNPC {
         }
 
         _playerNearby = false;
-        if (Main.netMode != NetmodeID.MultiplayerClient) {
-            foreach (Player player in Main.ActivePlayers) {
-                if (!player.dead && Vector2.Distance(player.position, NPC.position) <= 300) {
-                    _playerNearby = true;
+        foreach (Player player in Main.ActivePlayers) {
+            if (!player.dead && Vector2.Distance(player.position, NPC.position) <= 300) {
+                _playerNearby = true;
 
-                    NPC.netUpdate = true;
-
-                    break;
-                }
+                break;
             }
         }
 
@@ -156,13 +153,6 @@ sealed class Hedgehog : ModNPC {
             NPC.aiStyle = 7;
             NPC.damage = 0;
             alert = false;
-        }
-
-        if (_rotation != 0f) {
-            if (NPC.aiStyle == 0) {
-                NPC.rotation = _rotation;
-            }
-            _rotation = 0f;
         }
     }
 }
