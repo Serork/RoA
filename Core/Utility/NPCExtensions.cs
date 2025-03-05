@@ -337,7 +337,7 @@ static class NPCExtensions {
         }
     }
 
-    public static void ApplyFighterAI(this NPC npc, bool backwoods = false, Action<NPC>? movementX = null, bool ignoreBranches = false, bool isWiderNPC = false, bool shouldOpenDoors = false, bool knocksOnDoors = false) {
+    public static void ApplyFighterAI(this NPC npc, bool shouldTargetPlayer = true, Action<NPC>? movementX = null, bool ignoreBranches = false, bool isWiderNPC = false, bool shouldOpenDoors = false, bool knocksOnDoors = false) {
         npc.aiStyle = -1;
         npc.ModNPC.AIType = -1;
 
@@ -427,7 +427,7 @@ static class NPCExtensions {
                 npc.ai[3] = 0f;
         }
 
-        bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
+        //bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
 
         Player? player = null;
         float dist = float.MaxValue;
@@ -438,13 +438,8 @@ static class NPCExtensions {
             }
         }
 
-        bool flag13 = player != null && player.InModBiome<BackwoodsBiome>();
-        if (backwoods) {
-            shouldTargetPlayer = flag13;
-        }
-        else {
-            shouldTargetPlayer = true;
-        }
+        //bool flag13 = player != null && player.InModBiome<BackwoodsBiome>() && targetPlayer;
+        //shouldTargetPlayer = shouldTargetPlayer;
         //else {
         //    shouldDespawn = false;
         //}
@@ -477,7 +472,7 @@ static class NPCExtensions {
                 npc.directionY = -1;
         }
         else if (!(npc.ai[2] > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
-            bool flag12 = backwoods && flag13/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
+            bool flag12 = shouldTargetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
             if (!flag12 && (double)(npc.position.Y / 16f) < Main.worldSurface/* && npc.type != 624 && npc.type != 631*/) {
                 npc.EncourageDespawn(10);
             }

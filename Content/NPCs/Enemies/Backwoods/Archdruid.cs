@@ -135,7 +135,7 @@ sealed class Archdruid : DruidNPC {
     }
 
     protected override void Walking() {
-        NPC.ApplyFighterAI(false, (npc) => {
+        NPC.ApplyFighterAI(true, (npc) => {
             float num87 = 1f * 0.9f;
             float num88 = 0.07f * 0.9f;
             if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
