@@ -5,6 +5,8 @@ using Terraria.ModLoader;
 using Terraria;
 using RoA.Core;
 using Microsoft.Xna.Framework;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
@@ -59,10 +61,64 @@ sealed class BloodShedAxesTarget : ModProjectile {
         float knockback = Projectile.knockBack;
         Dusts(target);
 
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new BloodshedAxeHitDustPacket(player, Projectile.identity, NPC));
+        }
+
         float dir = Main.rand.NextBool() ? -1f : 1f;
 
         if (Projectile.owner == Main.myPlayer) {
             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Hit by Bloodshed Axe"), target.Center, Vector2.Zero, type, damage, knockback, Projectile.owner, target.whoAmI, dir);
+        }
+    }
+
+    internal static void Dusts(int identity, int whoAmI) {
+        NPC npc = Main.npc[whoAmI];
+        Projectile prpjectile = Main.projectile[identity];
+        for (int num251 = 0; num251 < 4; num251++) {
+            int num252 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Blood, npc.velocity.X, npc.velocity.Y, 150, default, 1.2f);
+            Main.dust[num252].position = (Main.dust[num252].position + prpjectile.Center) / 2f;
+            Main.dust[num252].noGravity = true;
+            Dust dust2 = Main.dust[num252];
+            dust2.velocity *= 0.5f;
+        }
+        for (int i = 0; i < 5; i++) {
+            Color newColor = Main.hslToRgb((0.92f + Main.rand.NextFloat() * 0.02f) % 1f, 1f, 0.4f + Main.rand.NextFloat() * 0.25f);
+            int num4 = Dust.NewDust(npc.Center - new Vector2(0f, npc.height / 4f), 0, 0, ModContent.DustType<VampParticle>(), 0f, 0f, 0, newColor);
+            Main.dust[num4].velocity = Main.rand.NextVector2Circular(2f, 2f);
+            Main.dust[num4].velocity -= -prpjectile.velocity * (0.5f + 0.5f * Main.rand.NextFloat()) * 1.4f;
+            Main.dust[num4].noGravity = true;
+            Main.dust[num4].scale = 1f;
+            Main.dust[num4].position -= Main.rand.NextVector2Circular(16f, 16f);
+            Main.dust[num4].velocity = prpjectile.velocity;
+            if (num4 != 6000) {
+                Dust dust = Dust.CloneDust(num4);
+                dust.scale /= 2f;
+                dust.fadeIn *= 0.75f;
+                dust.color = new Color(255, 255, 255, 255);
+            }
+        }
+        for (int num251 = 0; num251 < 3; num251++) {
+            int num252 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Blood, prpjectile.velocity.X, prpjectile.velocity.Y, 50, default, 1.2f);
+            Main.dust[num252].position = (Main.dust[num252].position + prpjectile.Center) / 2f;
+            Main.dust[num252].noGravity = true;
+            Dust dust2 = Main.dust[num252];
+            dust2.velocity *= 0.5f;
+        }
+        for (int num253 = 0; num253 < 2; num253++) {
+            int num252 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Blood, prpjectile.velocity.X, prpjectile.velocity.Y, 50, default, 0.4f);
+            switch (num253) {
+                case 0:
+                    Main.dust[num252].position = (Main.dust[num252].position + prpjectile.Center * 5f) / 6f;
+                    break;
+                case 1:
+                    Main.dust[num252].position = (Main.dust[num252].position + (prpjectile.Center + prpjectile.velocity / 2f) * 5f) / 6f;
+                    break;
+            }
+            Dust dust2 = Main.dust[num252];
+            dust2.velocity *= 0.1f;
+            Main.dust[num252].noGravity = true;
+            Main.dust[num252].fadeIn = 1f;
         }
     }
 
