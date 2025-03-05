@@ -1639,3 +1639,8 @@ DullDaikatana: {
 	DisplayName: Dull Daikatana
 	Tooltip: "'Scattered and Lost'"
 }
+
+BoneroseHangingPot: {
+	DisplayName: Bonerose Hanging Pot
+	Tooltip: ""
+}

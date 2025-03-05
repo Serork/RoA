@@ -539,6 +539,13 @@ sealed class RoARecipes : ModSystem {
         item.SortAfterFirstRecipesOf(ItemID.PotSuspendedFireblossom);
         item.Register();
 
+        Recipe temp = item;
+        item = Recipe.Create(ModContent.ItemType<BoneroseHangingPot>());
+        item.AddIngredient(ItemID.PotSuspended);
+        item.AddIngredient(ModContent.ItemType<Content.Items.Materials.Bonerose>());
+        item.SortAfter(temp);
+        item.Register();
+
         // throwable potions
         item = Recipe.Create(ModContent.ItemType<WeaknessPotion>(), 3);
         item.AddIngredient(ItemID.BottledWater, 3);
@@ -549,7 +556,7 @@ sealed class RoARecipes : ModSystem {
         item.SortAfterFirstRecipesOf(ItemID.StinkPotion);
         item.Register();
 
-        Recipe temp = item;
+        temp = item;
         item = Recipe.Create(ModContent.ItemType<WeaknessPotion>(), 3);
         item.AddIngredient(ItemID.BottledWater, 3);
         item.AddIngredient<Content.Items.Materials.Bonerose>();

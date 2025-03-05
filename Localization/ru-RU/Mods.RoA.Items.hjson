@@ -1637,3 +1637,8 @@ DullDaikatana: {
 	DisplayName: Затупившаяся дай-катана
 	Tooltip: "'Разбросанная и потерянная'"
 }
+
+BoneroseHangingPot: {
+	// DisplayName: Bonerose Hanging Pot
+	// Tooltip: ""
+}
