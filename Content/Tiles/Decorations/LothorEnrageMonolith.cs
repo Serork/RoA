@@ -127,6 +127,10 @@ sealed class LothorEnrageMonolith : ModTile {
         yield return new Item(ModContent.ItemType<Items.Placeable.Decorations.LothorEnrageMonolith>());
     }
 
+    public override void NumDust(int i, int j, bool fail, ref int num) {
+        num = (int)(num / 2);
+    }
+
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
         return true;
     }
