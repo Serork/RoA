@@ -109,7 +109,7 @@ sealed class EntLegs : RoANPC {
 		short state = (short)State;
 		switch (state) {
 			case WALK:
-				NPC.LegacyFighterAI(false, (npc) => {
+				NPC.ApplyFighterAI(false, (npc) => {
                     float num87 = 1f * 0.8f;
                     float num88 = 0.07f * 0.8f;
                     //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
