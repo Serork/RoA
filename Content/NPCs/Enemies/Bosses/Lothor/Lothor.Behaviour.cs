@@ -186,7 +186,7 @@ sealed partial class Lothor : ModNPC {
 
     private float MinDelayBeforeAttack => DashDelay * 0.2f;
     private float MinToChargeFlightAttack => FlightAttackTimeMax * 0.35f;
-    private float MinDelayToStartScreaming => ScreamAttackTime * 0.35f;
+    private float MinDelayToStartScreaming => ScreamAttackTime * 0.3f;
 
     private bool JustDidAirDash => NPC.velocity.Length() > 4.5f && DashTimer < DashDelay * 0.15f;
     private bool IsDashing => _previousState != LothorAIState.WreathAttack && StillInJumpBeforeFlightTimer <= 0f && ((CurrentAIState == LothorAIState.Fall && _previousState != LothorAIState.Flight && Math.Abs(NPC.velocity.X) > 5f) ||
