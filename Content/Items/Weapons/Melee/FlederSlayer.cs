@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.GameContent.Prefixes;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,6 +11,8 @@ sealed class FlederSlayer : ModItem {
     public override void SetStaticDefaults() {
         // Tooltip.SetDefault("'It's too big to be called a sword'\nSends vulnerable enemies back with a crushing blow");
         Item.ResearchUnlockCount = 1;
+
+        PrefixLegacy.ItemSets.SwordsHammersAxesPicks[Type] = true;
     }
 
     public override void SetDefaults() {

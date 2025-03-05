@@ -18,6 +18,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.Prefixes;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -27,6 +28,8 @@ namespace RoA.Content.Items.Weapons.Melee;
 sealed class DiabolicDaikatana : ModItem {
     public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        PrefixLegacy.ItemSets.SwordsHammersAxesPicks[Type] = true;
     }
 
     public override void SetDefaults() {

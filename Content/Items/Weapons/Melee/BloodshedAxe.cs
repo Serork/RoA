@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.GameContent.Prefixes;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,6 +13,8 @@ sealed class BloodshedAxe : ModItem {
         // Tooltip.SetDefault("'There will be blood'");
 
         Item.ResearchUnlockCount = 1;
+
+        PrefixLegacy.ItemSets.SwordsHammersAxesPicks[Type] = true;
     }
 
     public override void SetDefaults() {
