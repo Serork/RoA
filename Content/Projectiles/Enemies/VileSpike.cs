@@ -3,6 +3,7 @@
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 
+using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
@@ -42,6 +43,10 @@ sealed class VileSpike : ModProjectile {
 	public override bool? CanDamage() => Projectile.alpha == 0;
 
     public override bool ShouldUpdatePosition() => false;
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        behindNPCsAndTiles.Add(index);
+    }
 
     public override void AI () {
 		float height = 6f;
@@ -129,6 +134,10 @@ sealed class VileSpikeTip : ModProjectile {
 	public override void AI() => Projectile.velocity = Vector2.Zero;
 
     public override bool ShouldUpdatePosition() => false;
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        behindNPCsAndTiles.Add(index);
+    }
 
     public override void OnKill(int timeLeft) {
         if (Main.rand.NextBool(3)) {

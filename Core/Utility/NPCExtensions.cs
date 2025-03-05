@@ -442,6 +442,9 @@ static class NPCExtensions {
         if (backwoods) {
             shouldTargetPlayer = flag13;
         }
+        else {
+            shouldTargetPlayer = true;
+        }
         //else {
         //    shouldDespawn = false;
         //}
