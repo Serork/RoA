@@ -107,9 +107,10 @@ sealed class EntLegs : RoANPC {
 		}
 
 		short state = (short)State;
-		switch (state) {
+		NPC me = Main.npc[NPC.realLife];
+        switch (state) {
 			case WALK:
-				NPC.ApplyFighterAI(true, movementX: (npc) => {
+				NPC.ApplyFighterAI(true, targetPlayer2: me.life < (int)(me.lifeMax * 0.8f), movementX: (npc) => {
                     float num87 = 1f * 0.8f;
                     float num88 = 0.07f * 0.8f;
                     //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
@@ -134,12 +135,14 @@ sealed class EntLegs : RoANPC {
                 if (_attackTimer < 0f && NPC.velocity.Y < 0f) {
 					NPC.velocity.Y = 0f;
 				}
-				if (!Main.player[NPC.target].dead && ++_attackTimer >= 300f && NPC.velocity.Y == 0f && Vector2.Distance(Main.player[NPC.target].position, NPC.position) < 500.0) {
-					if (Collision.CanHit(NPC, Main.player[NPC.target])) {
-                        _attackTimer = 0f;
-						ChangeState(SHIELD, keepState: false);
+				if (NPC.HasValidTarget) {
+					if (!Main.player[NPC.target].dead && ++_attackTimer >= 300f && NPC.velocity.Y == 0f && Vector2.Distance(Main.player[NPC.target].position, NPC.position) < 500.0) {
+						if (Collision.CanHit(NPC, Main.player[NPC.target])) {
+							_attackTimer = 0f;
+							ChangeState(SHIELD, keepState: false);
 
-						NPC.defense += 500;
+							NPC.defense += 500;
+						}
 					}
 				}
 				break;

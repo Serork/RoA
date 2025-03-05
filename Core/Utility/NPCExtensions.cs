@@ -337,7 +337,7 @@ static class NPCExtensions {
         }
     }
 
-    public static void ApplyFighterAI(this NPC npc, bool backwoods, bool targetPlayer = true, Action<NPC>? movementX = null, bool isWiderNPC = false, bool shouldOpenDoors = false, bool knocksOnDoors = false) {
+    public static void ApplyFighterAI(this NPC npc, bool backwoods, bool targetPlayer = true, bool targetPlayer2 = false, Action<NPC>? movementX = null, bool isWiderNPC = false, bool shouldOpenDoors = false, bool knocksOnDoors = false) {
         npc.aiStyle = -1;
         npc.ModNPC.AIType = -1;
 
@@ -438,7 +438,7 @@ static class NPCExtensions {
             }
         }
 
-        bool flag13 = player != null && (player.InModBiome<BackwoodsBiome>() || npc.life < (int)(npc.lifeMax * 0.8f)) && targetPlayer;
+        bool flag13 = player != null && (player.InModBiome<BackwoodsBiome>() || npc.life < (int)(npc.lifeMax * 0.8f) || targetPlayer2) && targetPlayer;
         if (backwoods) {
             shouldTargetPlayer = flag13;
         }
