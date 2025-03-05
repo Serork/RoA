@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.Dusts;
 using RoA.Core;
@@ -19,8 +20,6 @@ sealed class LothorAngleAttack : ModProjectile {
     private float _timer;
 
     private Vector2 _startPosition;
-
-    public int UsedBossFrame;
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -89,7 +88,7 @@ sealed class LothorAngleAttack : ModProjectile {
         Vector2 startPos = new(_startPosition.X + npc.width / 2 * npcDirection, _startPosition.Y + npc.height / 4);
         float value = npcDirection == -1 ? npc.width / 2.5f + 4 : 0;
 
-        int bossCurrentFrame = (int)UsedBossFrame;
+        int bossCurrentFrame = (int)Projectile.ai[2];
         switch (bossCurrentFrame) {
             case 0:
                 startPos += new Vector2(-26 * npcDirection + value, -32);
@@ -123,7 +122,8 @@ sealed class LothorAngleAttack : ModProjectile {
             startPos.X -= 4f;
         }
 
-        Vector2 destination = new(Projectile.ai[1], Projectile.ai[2]);
+        Vector2 target = new HalfVector2() { PackedValue = ReLogic.Utilities.ReinterpretCast.FloatAsUInt(Projectile.ai[1]) }.ToVector2();
+        Vector2 destination = new(target.X, target.Y);
         destination.X -= npcDirection == -1 ? value : 0;
         Vector2 mid = startPos + (destination - startPos) / 2;
         Vector2 dev = mid - new Vector2(0, _distY - _distX);
@@ -186,12 +186,10 @@ sealed class LothorAngleAttack : ModProjectile {
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
-        writer.Write(UsedBossFrame);
         writer.Write(_timer);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
-        UsedBossFrame = reader.ReadInt32();
         _timer = reader.ReadSingle();
     }
 
