@@ -79,10 +79,13 @@ sealed partial class PettyGoblin : ModNPC {
     private void InvinsibleRunAway(bool super = false) {
         IsInvinsible = true;
 
-        if (NPC.justHit) {
-            NPC.TargetClosest();
-            GoToAttackStage(Main.player[NPC.target]);
-            return;
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (NPC.justHit && (!super || (super && Main.rand.NextBool()))) {
+                NPC.TargetClosest();
+                GoToAttackStage(Main.player[NPC.target]);
+                NPC.netUpdate = true;
+                return;
+            }
         }
 
         SimpleMovement(super);
@@ -250,22 +253,37 @@ sealed partial class PettyGoblin : ModNPC {
     private void RunAway(bool super = false) {
         IsInvinsible = false;
 
-        foreach (Player player in Main.ActivePlayers) {
-            if (!Collision.CanHit(player, NPC)) {
-                continue;
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (NPC.justHit && (!super || (super && Main.rand.NextBool()))) {
+                NPC.TargetClosest();
+                GoToAttackStage(Main.player[NPC.target]);
+                NPC.netUpdate = true;
+                return;
             }
-            float distance = NPC.Distance(player.Center);
-            if (NPC.justHit) {
-                bool flag = NPC.life > NPC.lifeMax * 0.75f;
-                if (distance > 300f && flag) {
-                    if ((NPC.direction == 1 && player.Center.X > NPC.Center.X) || (NPC.direction == -1 && player.Center.X < NPC.Center.X)) {
-                        NPC.direction *= -1;
-                        break;
+        }
+
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (!super || (super && Main.rand.NextBool())) {
+                foreach (Player player in Main.ActivePlayers) {
+                    if (!Collision.CanHit(player, NPC)) {
+                        continue;
                     }
-                }
-                else {
-                    GoToAttackStage(player);
-                    return;
+                    float distance = NPC.Distance(player.Center);
+                    if (NPC.justHit) {
+                        bool flag = NPC.life > NPC.lifeMax * 0.75f;
+                        if (distance > 300f && flag) {
+                            if ((NPC.direction == 1 && player.Center.X > NPC.Center.X) || (NPC.direction == -1 && player.Center.X < NPC.Center.X)) {
+                                NPC.direction *= -1;
+                                NPC.netUpdate = true;
+                                break;
+                            }
+                        }
+                        else {
+                            GoToAttackStage(player);
+                            NPC.netUpdate = true;
+                            return;
+                        }
+                    }
                 }
             }
         }
