@@ -17,10 +17,10 @@ sealed class LothorEnrageMonolith : ModItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        player.GetModPlayer<EnragedVisuals>()._isActive = true;
+        player.GetModPlayer<EnragedVisuals>()._isActive2 = true;
     }
 
     public override void UpdateVanity(Player player) {
-        player.GetModPlayer<EnragedVisuals>()._isActive = true;
+        player.GetModPlayer<EnragedVisuals>()._isActive2 = true;
     }
 }

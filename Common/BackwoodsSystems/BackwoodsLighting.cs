@@ -51,7 +51,7 @@ sealed class BackwoodsLighting : ModSystem {
 				Brightness2 += BackwoodsBiome.TransitionSpeed;
 			}
 			float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1500f;
-            if (flag && (LothorEnrageScene.MonolithNearby || (npc != null && npc.active && npc.As<Lothor>() != null && npc.As<Lothor>().LifeProgress == 1f))) {
+            if (flag && (LothorEnrageScene.MonolithNearby || handler._isActive2 || (npc != null && npc.active && npc.As<Lothor>() != null && npc.As<Lothor>().LifeProgress == 1f))) {
 				strength = Math.Max(strength, 1.5f * handler._opacity);
 			}
             strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2 + Helper.EaseInOut3(Math.Min(1f, AltarHandler.GetAltarStrength())) * 0.5f/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;
