@@ -159,10 +159,16 @@ sealed class BloodshedAxe : ModProjectile {
             }
 
             for (int i = 0; i < 15; i++) {
-                Vector2 position = target.Center + new Vector2(Main.rand.Next(-Projectile.width + 20, Projectile.width - 10) - 5f, 10f) + Main.rand.NextVector2Circular(target.width, target.height) + Projectile.velocity * (0.5f + 0.5f * Main.rand.NextFloat()) * 1.4f; ;
-                Vector2 velocity = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(0.5f, 2f);
-                VisualEffectSystem.New<BloodShedParticle>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity - new Vector2(0f, 0.5f),
-                    new Color(82, 15, 15), rotation: Main.rand.NextFloat(MathHelper.TwoPi));
+                Vector2 position = target.Center + new Vector2(Main.rand.Next(-Projectile.width + 20, Projectile.width - 10) - 5f, 10f) + Main.rand.NextVector2Circular(target.width, target.height) + Projectile.velocity * (0.5f + 0.5f * Main.rand.NextFloat()) * 1.4f;
+                Vector2 velocity = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(0.5f, 2f) - new Vector2(0f, 0.5f);
+                float rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+                Color color = new(82, 15, 15, 255);
+                VisualEffectSystem.New<BloodShedParticle>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity,
+                    color, rotation: rotation);
+
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.BloodShedParticle, player, VisualEffectLayer.BEHINDPLAYERS, position, velocity, color, 1f, rotation));
+                }
             }
 
             if (_powerUp) {

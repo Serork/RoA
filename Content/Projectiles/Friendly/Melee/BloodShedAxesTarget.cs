@@ -13,22 +13,6 @@ sealed class BloodShedAxesTarget : ModProjectile {
 
     public override string Texture => ResourceManager.EmptyTexture;
 
-    /*public override bool PreDraw(ref Color lightColor) {
-        Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        Main.spriteBatch.BeginBlendState(BlendState.Additive);
-        Main.spriteBatch.Draw(texture2D,
-                              Projectile.Center - Main.screenPosition + new Vector2(0f, Main.npc[NPC].gfxOffY),
-                              null,
-                              lightColor * Projectile.Opacity,
-                              Projectile.rotation,
-                              texture2D.Size() / 2f,
-                              Projectile.scale,
-                              SpriteEffects.None,
-                              0f);
-        Main.spriteBatch.EndBlendState();
-        return false;
-    }*/
-
     public override void SetDefaults() {
         int width = 14; int height = 14;
         Projectile.Size = new Vector2(width, height);
@@ -55,15 +39,20 @@ sealed class BloodShedAxesTarget : ModProjectile {
         }
         Projectile.Center = target.Center;
         target.AddBuff(ModContent.BuffType<BloodShedAxesDebuff>(), 10);
-        if (player.itemAnimation < player.itemAnimationMax / 2 - player.itemAnimationMax / 4 && Projectile.ai[1] == 0f) {
-            Projectile.ai[1] = 1f;
-        }
-        if (player.ItemAnimationJustStarted && Projectile.ai[1] == 2f) {
-            Projectile.ai[1] = 0f;
+        if (player.whoAmI == Main.myPlayer) {
+            if (player.itemAnimation < player.itemAnimationMax / 2 - player.itemAnimationMax / 4 && Projectile.ai[1] == 0f) {
+                Projectile.ai[1] = 1f;
+                Projectile.netUpdate = true;
+            }
+            if (player.ItemAnimationJustStarted && Projectile.ai[1] == 2f) {
+                Projectile.ai[1] = 0f;
+                Projectile.netUpdate = true;
+            }
         }
         if (Projectile.ai[1] != 1f || Projectile.ai[1] == 2f) {
             return;
         }
+
         Projectile.ai[1] = 2f;
         int type = ModContent.ProjectileType<BloodshedAxeEnergy>(); //spawn axes at target position
         int damage = Projectile.damage;
@@ -72,7 +61,9 @@ sealed class BloodShedAxesTarget : ModProjectile {
 
         float dir = Main.rand.NextBool() ? -1f : 1f;
 
-        Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Hit by Bloodshed Axe"), target.Center, Vector2.Zero, type, damage, knockback, Projectile.owner, target.whoAmI, dir);
+        if (Projectile.owner == Main.myPlayer) {
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Hit by Bloodshed Axe"), target.Center, Vector2.Zero, type, damage, knockback, Projectile.owner, target.whoAmI, dir);
+        }
     }
 
     private void Dusts(NPC npc) {

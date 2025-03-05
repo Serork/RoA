@@ -13,17 +13,15 @@ using Terraria.ID;
 namespace RoA.Common.Networking.Packets;
 
 sealed class VisualEffectSpawnPacket : NetPacket {
-    public enum VisualEffectPacketType {
-        ClawsHit
+    public enum VisualEffectPacketType : byte {
+        ClawsHit,
+        BloodShedParticle
     }
 
-    private readonly VisualEffectPacketType _packetType;
-
     public VisualEffectSpawnPacket(VisualEffectPacketType packetType, Player player, int layer, Vector2 position, Vector2 velocity, Color color, float scale, float rotation) {
-        _packetType = packetType;
-
         Writer.TryWriteSenderPlayer(player);
-		Writer.Write(layer);
+        Writer.Write((byte)packetType);
+        Writer.Write(layer);
         Writer.WriteVector2(position);
         Writer.WriteVector2(velocity);
         Writer.WriteRGBA(color);
@@ -36,6 +34,7 @@ sealed class VisualEffectSpawnPacket : NetPacket {
 			return;
 		}
 
+        VisualEffectPacketType packetType = (VisualEffectPacketType)reader.ReadByte();
         int layer = reader.ReadInt32();
         Vector2 position = reader.ReadVector2();
         Vector2 velocity = reader.ReadVector2();
@@ -44,21 +43,24 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         float rotation = reader.ReadSingle();
 
         void createVisualEffect<T>() where T : VisualEffect<T>, new() {
-            VisualEffectSystem.New<T>(layer, onServer: true).
+            VisualEffectSystem.New<T>(layer, onServer: true)?.
                         Setup(position,
                               velocity,
                               color,
                               scale,
                               rotation);
         }
-        switch (_packetType) {
+        switch (packetType) {
             case VisualEffectPacketType.ClawsHit:
                 createVisualEffect<ClawsSlashHit>();
+                break;
+            case VisualEffectPacketType.BloodShedParticle:
+                createVisualEffect<BloodShedParticle>();
                 break;
         }
 
         if (Main.netMode == NetmodeID.Server) {
-			MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(_packetType, player, layer, position, velocity, color, scale, rotation), ignoreClient: sender);
+			MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(packetType, player, layer, position, velocity, color, scale, rotation), ignoreClient: sender);
 		}
 	}
 }
