@@ -194,13 +194,12 @@ sealed class PettyGoblin : ModNPC {
                 }
                 NPC.noTileCollide = false;
                 if (NPC.velocity.Y == 0f) {
-                    if (Main.netMode != NetmodeID.Server) {
-                        SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
-                    }
+                    SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
                     MovementDirection *= -1;
-                    Coins.SpawnCoins(true);
+                    if (Main.netMode != NetmodeID.MultiplayerClient) {
+                        Coins.SpawnCoins(true);
+                    }
                     DoJump();
-                    NPC.netUpdate = true;
                 }
                 NPC.noGravity = false;
                 return;
@@ -208,6 +207,9 @@ sealed class PettyGoblin : ModNPC {
         }
         if (MovementDirection == 0) {
             MovementDirection = 1;
+        }
+        if (Stole) {
+            Invisible = false;
         }
         NPC.Opacity = MathHelper.Clamp(NPC.Opacity += Invisible ? -0.05f : 0.05f, 0.3f, 1f);
         //NPC.noTileCollide = NPC.noGravity = true;
@@ -220,7 +222,6 @@ sealed class PettyGoblin : ModNPC {
         if (Math.Abs(distance) < 50 && !Collision.CanHit(player, NPC) && _directionTimer <= 0) {
             _directionTimer = 200;
             _direction = distance.GetDirection();
-            NPC.netUpdate = true;
         }
         bool flag2 = (double)Math.Abs(distanceY) < 50;
         bool close = direction < 50.0 && flag2;
@@ -292,7 +293,6 @@ sealed class PettyGoblin : ModNPC {
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GoblinsDagger>(), NPC.damage * 2, 2f, Main.myPlayer, NPC.whoAmI);
             }
-            NPC.netUpdate = true;
         }
     }
 
@@ -377,7 +377,6 @@ sealed class PettyGoblin : ModNPC {
             NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y - speedY, -jumpHeight, 16f);
             if (away) {
                 Invisible = true;
-                NPC.netUpdate = true;
             }
         }
         if (NPC.velocity.Y == 0.4f && flag3 && _directionTimer <= 0) {
@@ -385,10 +384,9 @@ sealed class PettyGoblin : ModNPC {
             if (_directionTimer <= -60) {
                 _directionTimer = 200;
                 _direction = -distance.GetDirection();
-                NPC.netUpdate = true;
             }
         }
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.velocity.Y == 0f && Main.netMode != NetmodeID.MultiplayerClient) {
             int collisionWidth = 18;
             int collisionHeight = 40;
             int num20 = (int)((NPC.position.X + (float)(collisionWidth / 2) + (float)(15 * NPC.direction)) / 16f);
@@ -501,16 +499,13 @@ sealed class PettyGoblin : ModNPC {
                 }
                 float coins = stack * value;
                 NPC.extraValue += (int)coins;
-                if (Main.netMode != NetmodeID.Server) {
-                    SoundEngine.PlaySound(SoundID.CoinPickup, NPC.Center);
-                    SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
-                }
+                SoundEngine.PlaySound(SoundID.CoinPickup, NPC.Center);
+                SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
                 Stole = true;
                 NPC.netUpdate = true;
                 if (flag) {
                     MakeALittleJump();
                     CurrentState = AWAY;
-                    NPC.netUpdate = true;
                     return;
                 }
             }
@@ -528,14 +523,14 @@ sealed class PettyGoblin : ModNPC {
         if (NPC.life < NPC.lifeMax * 0.4) {
             CurrentState = AWAY;
             MakeALittleJump();
-            NPC.netUpdate = true;
         }
         else {
             Offensive();
-            NPC.netUpdate = true;
         }
-        if (CurrentState == AWAY) {
-            Coins.SpawnCoins(true);
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (CurrentState == AWAY) {
+                Coins.SpawnCoins(true);
+            }
         }
 
         if (NPC.life > 0) {

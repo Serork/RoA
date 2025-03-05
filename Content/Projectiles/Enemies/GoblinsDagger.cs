@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.NPCs.Enemies.Miscellaneous;
 using RoA.Core.Utility;
 
@@ -57,11 +59,10 @@ sealed class GoblinsDagger : ModProjectile {
         if (Main.netMode != NetmodeID.Server) {
             SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, Projectile.Center);
         }
-        if (Main.rand.NextChance(0.45)) {
-            NPC npc = Main.npc[NPC];
-            (npc.ModNPC as PettyGoblin).CurrentState = 1;
-            (npc.ModNPC as PettyGoblin).Attacking = false;
-            npc.netUpdate = true;
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (Main.rand.NextChance(0.45)) {
+                MultiplayerSystem.SendPacket(new ChangePettyGoblinStatePacket(target, NPC));
+            }
         }
     }
 
