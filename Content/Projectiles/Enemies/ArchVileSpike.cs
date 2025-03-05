@@ -39,6 +39,8 @@ sealed class ArchVileSpike : ModProjectile {
 
         Projectile.friendly = false;
         Projectile.hostile = true;
+
+		Projectile.hide = true;
     }
 
 	public override bool? CanDamage() => Projectile.alpha == 0;
@@ -133,7 +135,9 @@ sealed class ArchVileSpikeTip : ModProjectile {
 		Projectile.timeLeft = 270;
 
 		Projectile.alpha = 0;
-	}
+
+        Projectile.hide = true;
+    }
 
 	public override void AI() => Projectile.velocity = Vector2.Zero;
 

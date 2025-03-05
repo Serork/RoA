@@ -38,6 +38,8 @@ sealed class VileSpike : ModProjectile {
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.tileCollide = false;
+
+        Projectile.hide = true;
     }
 
 	public override bool? CanDamage() => Projectile.alpha == 0;
@@ -129,6 +131,8 @@ sealed class VileSpikeTip : ModProjectile {
 
 		Projectile.alpha = 0;
         Projectile.tileCollide = false;
+
+        Projectile.hide = true;
     }
 
 	public override void AI() => Projectile.velocity = Vector2.Zero;
