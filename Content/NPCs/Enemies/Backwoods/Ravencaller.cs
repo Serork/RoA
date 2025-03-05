@@ -144,9 +144,9 @@ sealed class Ravencaller : ModNPC {
     public override void AI() {
         Player player = Main.player[NPC.target];
 
-        bool flag5 = player.InModBiome<BackwoodsBiome>() && BackwoodsFogHandler.IsFogActive;
+        bool flag5 = BackwoodsFogHandler.IsFogActive;
         if (whenYouWalking)
-            NPC.ApplyFighterAI(flag5);
+            NPC.ApplyFighterAI(true, flag5);
         else {
             NPC.ResetAIStyle();
             NPC.velocity.X *= 0.8f;

@@ -109,7 +109,7 @@ sealed class EntLegs : RoANPC {
 		short state = (short)State;
 		switch (state) {
 			case WALK:
-				NPC.ApplyFighterAI(true, (npc) => {
+				NPC.ApplyFighterAI(true, movementX: (npc) => {
                     float num87 = 1f * 0.8f;
                     float num88 = 0.07f * 0.8f;
                     //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
@@ -128,7 +128,7 @@ sealed class EntLegs : RoANPC {
 						if (npc.velocity.X < 0f - num87)
 							npc.velocity.X = 0f - num87;
 					}
-				}, true);
+				});
 				//NPC.PseudoGolemAI(0.3f);
 
                 if (_attackTimer < 0f && NPC.velocity.Y < 0f) {
