@@ -386,7 +386,7 @@ sealed class PettyGoblin : ModNPC {
                 _direction = -distance.GetDirection();
             }
         }
-        if (NPC.velocity.Y == 0f && Main.netMode != NetmodeID.MultiplayerClient) {
+        if (NPC.velocity.Y == 0f) {
             int collisionWidth = 18;
             int collisionHeight = 40;
             int num20 = (int)((NPC.position.X + (float)(collisionWidth / 2) + (float)(15 * NPC.direction)) / 16f);
@@ -503,6 +503,11 @@ sealed class PettyGoblin : ModNPC {
                 SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
                 Stole = true;
                 NPC.netUpdate = true;
+                if (Main.netMode == 2) {
+                    NPC.netUpdate = true;
+                    NetMessage.SendData(23, -1, -1, null, NPC.whoAmI);
+                    NetMessage.SendData(54, -1, -1, null, NPC.whoAmI);
+                }
                 if (flag) {
                     MakeALittleJump();
                     CurrentState = AWAY;
