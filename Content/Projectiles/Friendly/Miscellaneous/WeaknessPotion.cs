@@ -53,9 +53,12 @@ sealed class WeaknessPotion : ModProjectile {
 			Vector2 value30 = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
 			value30.Normalize();
 			value30 *= 0.4f;
-			int _gore = Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center + value30 * 10f, value30 * Main.rand.Next(4, 9) * 0.66f + Vector2.UnitY * 1.5f, Main.rand.Next(435, 438), Main.rand.Next(20, 100) * 0.01f);
-			Main.gore[_gore].sticky = false;
-			Main.gore[_gore].GetAlpha(new Color(100, 148, 36, 100));
+
+			if (!Main.dedServ) {
+				int _gore = Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center + value30 * 10f, value30 * Main.rand.Next(4, 9) * 0.66f + Vector2.UnitY * 1.5f, Main.rand.Next(435, 438), Main.rand.Next(20, 100) * 0.01f);
+				Main.gore[_gore].sticky = false;
+				Main.gore[_gore].GetAlpha(new Color(100, 148, 36, 100));
+			}
 		}
 	}
 }

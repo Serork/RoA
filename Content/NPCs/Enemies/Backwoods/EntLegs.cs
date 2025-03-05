@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -70,6 +71,14 @@ sealed class EntLegs : RoANPC {
         }
 
         return base.PreAI();
+    }
+
+    public override void SendExtraAI(BinaryWriter writer) {
+		writer.Write(_attackTimer);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+		_attackTimer = reader.ReadSingle();
     }
 
     public override void AI() {

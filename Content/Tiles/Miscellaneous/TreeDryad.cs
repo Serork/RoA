@@ -212,15 +212,17 @@ sealed class TreeDryad : ModTile {
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
         Vector2 position = new Point(i, j).ToWorldCoordinates();
-        if (Main.netMode != NetmodeID.Server) {
+        {
             int dustType = DustID.WoodFurniture;
             for (int k = 0; k < 20; k++) {
                 Dust.NewDust(position, 36, 54, dustType, 2.5f * Main.rand.NextFloatDirection(), 2.5f * Main.rand.NextFloatDirection());
             }
-            Vector2 offset = new(-12f, 4f);
-            Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset, Vector2.Zero, "TreeDryadGore1".GetGoreType());
-            Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset + new Vector2(8, 0), Vector2.Zero, "TreeDryadGore2".GetGoreType());
-            Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset + new Vector2(16, 0), Vector2.Zero, "TreeDryadGore3".GetGoreType());
+            if (!Main.dedServ) {
+                Vector2 offset = new(-12f, 4f);
+                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset, Vector2.Zero, "TreeDryadGore1".GetGoreType());
+                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset + new Vector2(8, 0), Vector2.Zero, "TreeDryadGore2".GetGoreType());
+                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset + new Vector2(16, 0), Vector2.Zero, "TreeDryadGore3".GetGoreType());
+            }
         }
         int whoAmI = NPC.NewNPC(NPC.GetSource_TownSpawn(), (int)position.X + 10, (int)position.Y + 40, NPCID.Dryad);
         Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? -1 : 1;

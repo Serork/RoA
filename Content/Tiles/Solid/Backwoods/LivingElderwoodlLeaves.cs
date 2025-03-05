@@ -95,8 +95,10 @@ sealed class LivingElderwoodlLeaves : ModTile {
             Tile tile = Main.tile[x, y + 1];
             if (!WorldGen.SolidTile(tile) && !tile.AnyLiquid()) {
                 float windForVisuals = Main.WindForVisuals;
-                if ((!(windForVisuals < -0.2f) || (!WorldGen.SolidTile(Main.tile[x - 1, y + 1]) && !WorldGen.SolidTile(Main.tile[x - 2, y + 1]))) && (!(windForVisuals > 0.2f) || (!WorldGen.SolidTile(Main.tile[x + 1, y + 1]) && !WorldGen.SolidTile(Main.tile[x + 2, y + 1]))))
-                    Gore.NewGorePerfect(entitySource, new Vector2(x * 16, y * 16 + 16), Vector2.Zero, leafGoreType).Frame.CurrentColumn = Main.tile[x, y].TileColor;
+                if (!Main.dedServ) {
+                    if ((!(windForVisuals < -0.2f) || (!WorldGen.SolidTile(Main.tile[x - 1, y + 1]) && !WorldGen.SolidTile(Main.tile[x - 2, y + 1]))) && (!(windForVisuals > 0.2f) || (!WorldGen.SolidTile(Main.tile[x + 1, y + 1]) && !WorldGen.SolidTile(Main.tile[x + 2, y + 1]))))
+                        Gore.NewGorePerfect(entitySource, new Vector2(x * 16, y * 16 + 16), Vector2.Zero, leafGoreType).Frame.CurrentColumn = Main.tile[x, y].TileColor;
+                }
             }
             if (Main.rand.NextBool()) {
                 int num = 0;
@@ -111,7 +113,9 @@ sealed class LivingElderwoodlLeaves : ModTile {
                     if (num == -1)
                         num2 = -10;
 
-                    Gore.NewGorePerfect(entitySource, new Vector2(x * 16 + 8 + 4 * num + num2, y * 16 + 8), Vector2.Zero, leafGoreType).Frame.CurrentColumn = Main.tile[x, y].TileColor;
+                    if (!Main.dedServ) {
+                        Gore.NewGorePerfect(entitySource, new Vector2(x * 16 + 8 + 4 * num + num2, y * 16 + 8), Vector2.Zero, leafGoreType).Frame.CurrentColumn = Main.tile[x, y].TileColor;
+                    }
                 }
             }
         }

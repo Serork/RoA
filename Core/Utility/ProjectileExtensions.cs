@@ -189,13 +189,15 @@ static class ProjectileExtensions {
             }
 
             if (Main.rand.Next(40) == 0) {
-                int num12 = Main.rand.Next(276, 283);
-                int num13 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, vector, num12);
-                Main.gore[num13].velocity.X *= 1f + (float)Main.rand.Next(-50, 51) * 0.01f;
-                Main.gore[num13].velocity.Y *= 1f + (float)Main.rand.Next(-50, 51) * 0.01f;
-                Main.gore[num13].scale *= 1f + (float)Main.rand.Next(-20, 21) * 0.01f;
-                Main.gore[num13].velocity.X += (float)Main.rand.Next(-50, 51) * 0.05f;
-                Main.gore[num13].velocity.Y += (float)Main.rand.Next(-50, 51) * 0.05f;
+                if (!Main.dedServ) {
+                    int num12 = Main.rand.Next(276, 283);
+                    int num13 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, vector, num12);
+                    Main.gore[num13].velocity.X *= 1f + (float)Main.rand.Next(-50, 51) * 0.01f;
+                    Main.gore[num13].velocity.Y *= 1f + (float)Main.rand.Next(-50, 51) * 0.01f;
+                    Main.gore[num13].scale *= 1f + (float)Main.rand.Next(-20, 21) * 0.01f;
+                    Main.gore[num13].velocity.X += (float)Main.rand.Next(-50, 51) * 0.05f;
+                    Main.gore[num13].velocity.Y += (float)Main.rand.Next(-50, 51) * 0.05f;
+                }
             }
         }
         else if (player.meleeEnchant == 8 && Main.rand.Next(4) == 0) {

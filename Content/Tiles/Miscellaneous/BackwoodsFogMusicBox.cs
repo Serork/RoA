@@ -102,7 +102,9 @@ sealed class BackwoodsFogMusicBox : MusicBox {
                             position.X -= 4f;
                         }
 
-                        Gore.NewGore(new EntitySource_TileUpdate(i, j), position, velocity, goreType, 0.8f);
+                        if (!Main.dedServ) {
+                            Gore.NewGore(new EntitySource_TileUpdate(i, j), position, velocity, goreType, 0.8f);
+                        }
                     }
                 }
             }

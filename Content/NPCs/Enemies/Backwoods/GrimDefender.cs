@@ -498,17 +498,16 @@ sealed class GrimDefender : ModNPC {
     }
 
     private void SpawnHitGores() {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         for (int i = 0; i < 10; i++) {
             int dust = Dust.NewDust(new Vector2(NPC.Center.X, NPC.Center.Y), 10, 10, ModContent.DustType<WoodTrash>(), 0, 0, 0, default, 0.4f + Main.rand.NextFloat(0, 1f));
             Main.dust[dust].velocity *= 0.3f;
         }
-        int count = Main.rand.Next(3);
-        for (int i = count - count / 2; i < 2 + count * 2; i++) {
-            Gore.NewGore(NPC.GetSource_FromAI(), NPC.position, Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + "/VileSpikeGore").Type, 1f);
+
+        if (!Main.dedServ) {
+            int count = Main.rand.Next(3);
+            for (int i = count - count / 2; i < 2 + count * 2; i++) {
+                Gore.NewGore(NPC.GetSource_FromAI(), NPC.position, Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + "/VileSpikeGore").Type, 1f);
+            }
         }
     }
 

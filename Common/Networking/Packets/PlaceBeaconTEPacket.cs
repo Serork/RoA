@@ -8,8 +8,8 @@ using RoA.Content.Tiles.Plants;
 
 namespace RoA.Common.Networking.Packets;
 
-sealed class PlaceMiracleMintPacket : NetPacket {
-    public PlaceMiracleMintPacket(int i, int j) {
+sealed class PlaceBeaconTEPacket : NetPacket {
+    public PlaceBeaconTEPacket(int i, int j) {
         Writer.Write(i);
         Writer.Write(j);
     }
@@ -18,7 +18,7 @@ sealed class PlaceMiracleMintPacket : NetPacket {
         int i = reader.ReadInt32();
         int j = reader.ReadInt32();
         if (WorldGen.InWorld(i, j) && !TileEntity.ByPosition.ContainsKey(new Point16(i, j))) {
-            ModContent.GetInstance<MiracleMintTE>().Place(i, j);
+            ModContent.GetInstance<BeaconTE>().Place(i, j);
         }
     }
 }

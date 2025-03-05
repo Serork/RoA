@@ -38,8 +38,8 @@ sealed class Hedgehog : ModNPC {
         NPC.damage = 0;
         NPC.dontCountMe = true;
         NPC.catchItem = (short)ModContent.ItemType<Items.Miscellaneous.Hedgehog>();
-        NPC.npcSlots = 0;
         NPC.aiStyle = 7;
+
         AIType = NPCID.Bunny;
 
         Banner = Type;
@@ -149,7 +149,6 @@ sealed class Hedgehog : ModNPC {
                 alert = true;
                 NPC.aiStyle = 0;
             }
-            NPC.netUpdate = true;
         }
         else {
             chosen = false;

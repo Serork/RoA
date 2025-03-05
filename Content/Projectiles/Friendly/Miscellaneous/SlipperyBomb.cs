@@ -86,10 +86,12 @@ sealed class SlipperyBomb : ModProjectile {
 			Main.dust[dustIndex].velocity *= 2.5f;
 		}
 
-		for (int g = 0; g < 1; g++) {
-			int goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + (Projectile.width / 2), Projectile.position.Y + (Projectile.height / 2) - 4f), default(Vector2), Main.rand.Next(61, 64), 1f);
-			goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + (Projectile.width / 2), Projectile.position.Y + (Projectile.height / 2) - 4f), default(Vector2), Main.rand.Next(61, 64), 1f);
-			goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + (Projectile.width / 2), Projectile.position.Y + (Projectile.height / 2) - 4f), default(Vector2), Main.rand.Next(61, 64), 1f);
+		if (!Main.dedServ) {
+			for (int g = 0; g < 1; g++) {
+				int goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + (Projectile.width / 2), Projectile.position.Y + (Projectile.height / 2) - 4f), default(Vector2), Main.rand.Next(61, 64), 1f);
+				goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + (Projectile.width / 2), Projectile.position.Y + (Projectile.height / 2) - 4f), default(Vector2), Main.rand.Next(61, 64), 1f);
+				goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + (Projectile.width / 2), Projectile.position.Y + (Projectile.height / 2) - 4f), default(Vector2), Main.rand.Next(61, 64), 1f);
+			}
 		}
 
 		Projectile.position.X = Projectile.position.X + (Projectile.width / 2);

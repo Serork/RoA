@@ -88,8 +88,11 @@ sealed class VileSpike : ModProjectile {
             int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), 10, 10, ModContent.DustType<WoodTrash>(), 0, 0, 0, default, 0.4f + Main.rand.NextFloat(0, 1f));
             Main.dust[dust].velocity *= 0.3f;
         }
-        for (int i = Main.rand.Next(3); i < 2; i++) {
-            Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + "/VileSpikeGore").Type, 1f);
+
+        if (!Main.dedServ) {
+            for (int i = Main.rand.Next(3); i < 2; i++) {
+                Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + "/VileSpikeGore").Type, 1f);
+            }
         }
 
         if (Projectile.ai[1] < 6f) {
@@ -135,8 +138,11 @@ sealed class VileSpikeTip : ModProjectile {
             int dust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), 10, 10, ModContent.DustType<WoodTrash>(), 0, 0, 0, default, 0.4f + Main.rand.NextFloat(0, 1f));
             Main.dust[dust].velocity *= 0.3f;
         }
-        for (int i = Main.rand.Next(3); i < 2; i++) {
-            Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + "/VileSpikeGore").Type, 1f);
+
+        if (!Main.dedServ) {
+            for (int i = Main.rand.Next(3); i < 2; i++) {
+                Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + "/VileSpikeGore").Type, 1f);
+            }
         }
     }
 

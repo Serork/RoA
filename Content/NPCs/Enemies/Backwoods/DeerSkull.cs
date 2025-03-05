@@ -87,10 +87,6 @@ sealed class DeerSkullHead : BaseHead {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
@@ -103,8 +99,10 @@ sealed class DeerSkullHead : BaseHead {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, 2.5f * (float)hit.HitDirection, -2.5f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore1".GetGoreType(), Scale: NPC.scale);
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore2".GetGoreType(), Scale: NPC.scale);
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore1".GetGoreType(), Scale: NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore2".GetGoreType(), Scale: NPC.scale);
+        }
     }
 
     public override void PostAI() {
@@ -242,10 +240,6 @@ sealed class DeerSkullBody : BaseBody {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
@@ -258,10 +252,12 @@ sealed class DeerSkullBody : BaseBody {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, 2.5f * (float)hit.HitDirection, -2.5f);
         }
 
-        int num = (int)NPC.ai[2];
-        bool rib = num >= 5 && num <= 7;
-        string gore = rib ? "DeerSkullGore32" : "DeerSkullGore3";
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, gore.GetGoreType(), Scale: NPC.scale);
+        if (!Main.dedServ) {
+            int num = (int)NPC.ai[2];
+            bool rib = num >= 5 && num <= 7;
+            string gore = rib ? "DeerSkullGore32" : "DeerSkullGore3";
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, gore.GetGoreType(), Scale: NPC.scale);
+        }
     }
 }
 
@@ -281,10 +277,6 @@ sealed class DeerSkullTail : BaseTail {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num681 = 0; (double)num681 < hit.Damage / (double)NPC.lifeMax * 50.0; num681++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f);
@@ -297,7 +289,9 @@ sealed class DeerSkullTail : BaseTail {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, 2.5f * (float)hit.HitDirection, -2.5f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore4".GetGoreType(), Scale: NPC.scale);
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "DeerSkullGore4".GetGoreType(), Scale: NPC.scale);
+        }
     }
 }
 

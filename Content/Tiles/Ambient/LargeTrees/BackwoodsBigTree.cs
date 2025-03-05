@@ -603,21 +603,26 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         float num2 = 10f;
 
         int chance = (int)(BackwoodsVars.AllTreesWorldPositions.Count / 100f);
-        if ((gen && placeRand.NextBool(chance)) || !gen)
-            Gore.NewGore(null, new Vector2(i - 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-        if ((gen && placeRand.NextBool(chance)) || !gen)
-            Gore.NewGore(null, new Vector2(i, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-        if ((gen && placeRand.NextBool(chance)) || !gen)
-            Gore.NewGore(null, new Vector2(i + 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+        if (!Main.dedServ) {
+            if ((gen && placeRand.NextBool(chance)) || !gen)
+                Gore.NewGore(null, new Vector2(i - 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+            if ((gen && placeRand.NextBool(chance)) || !gen)
+                Gore.NewGore(null, new Vector2(i, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+            if ((gen && placeRand.NextBool(chance)) || !gen)
+                Gore.NewGore(null, new Vector2(i + 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+        }
 
         if (IsTop(i, j)) {
-            for (int k = 0; k < 5; k++) {
-                if ((gen && placeRand.NextBool(chance)) || !gen)
-                    Gore.NewGore(null, new Vector2(i - 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-                if ((gen && placeRand.NextBool(chance)) || !gen)
-                    Gore.NewGore(null, new Vector2(i, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-                if ((gen && placeRand.NextBool(chance)) || !gen)
-                    Gore.NewGore(null, new Vector2(i + 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+            if (!Main.dedServ) {
+                for (int k = 0; k < 5; k++) {
+                    if ((gen && placeRand.NextBool(chance)) || !gen)
+                        Gore.NewGore(null, new Vector2(i - 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                    if ((gen && placeRand.NextBool(chance)) || !gen)
+                        Gore.NewGore(null, new Vector2(i, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                    if ((gen && placeRand.NextBool(chance)) || !gen)
+                        Gore.NewGore(null, new Vector2(i + 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                }
+
             }
 
             ushort leafGoreType = (ushort)ModContent.GoreType<BackwoodsLeaf>();
@@ -626,11 +631,13 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                 Vector2 offset = new Vector2(placeRand.NextFloat(-150f, 150f), placeRand.NextFloat(0f, 200f)).RotatedBy(MathHelper.TwoPi);
                 Vector2 position = (new Vector2(i + 5, j - 15) * 16) + offset;
                 if ((gen && placeRand.NextBool(chance)) || !gen)
-                    Gore.NewGore(null,
-                    position,
-                    Utils.RandomVector2(placeRand, 0f - num2, num2),
-                    leafGoreType,
-                    0.7f + placeRand.NextFloat() * 0.6f);
+                    if (!Main.dedServ) {
+                        Gore.NewGore(null,
+                                    position,
+                                    Utils.RandomVector2(placeRand, 0f - num2, num2),
+                                    leafGoreType,
+                                    0.7f + placeRand.NextFloat() * 0.6f);
+                    }
             }
         }
     }
@@ -849,8 +856,10 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                 tile = Main.tile[x, y + 1];
                 if (!WorldGen.SolidTile(tile) && !tile.AnyLiquid()) {
                     float windForVisuals = Main.WindForVisuals;
-                    if ((!(windForVisuals < -0.2f) || (!WorldGen.SolidTile(Main.tile[x - 1, y + 1]) && !WorldGen.SolidTile(Main.tile[x - 2, y + 1]))) && (!(windForVisuals > 0.2f) || (!WorldGen.SolidTile(Main.tile[x + 1, y + 1]) && !WorldGen.SolidTile(Main.tile[x + 2, y + 1]))))
-                        Gore.NewGorePerfect(entitySource, position != null ? position.Value : new Vector2(x * 16, y * 16 + 16), Vector2.Zero, leafGoreType).Frame.CurrentColumn = Main.tile[x, y].TileColor;
+                    if (!Main.dedServ) {
+                        if ((!(windForVisuals < -0.2f) || (!WorldGen.SolidTile(Main.tile[x - 1, y + 1]) && !WorldGen.SolidTile(Main.tile[x - 2, y + 1]))) && (!(windForVisuals > 0.2f) || (!WorldGen.SolidTile(Main.tile[x + 1, y + 1]) && !WorldGen.SolidTile(Main.tile[x + 2, y + 1]))))
+                            Gore.NewGorePerfect(entitySource, position != null ? position.Value : new Vector2(x * 16, y * 16 + 16), Vector2.Zero, leafGoreType).Frame.CurrentColumn = Main.tile[x, y].TileColor;
+                    }
                 }
                 if (Main.rand.NextBool()) {
                     int num = 0;
@@ -865,7 +874,9 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                         if (num == -1)
                             num2 = -10;
 
-                        Gore.NewGorePerfect(entitySource, position != null ? new Vector2(position.Value.X + 8 + 4 * num + num2, position.Value.Y * 16 + 8) : new Vector2(x * 16 + 8 + 4 * num + num2, y * 16 + 8), Vector2.Zero, leafGoreType).Frame.CurrentColumn = Main.tile[x, y].TileColor;
+                        if (!Main.dedServ) {
+                            Gore.NewGorePerfect(entitySource, position != null ? new Vector2(position.Value.X + 8 + 4 * num + num2, position.Value.Y * 16 + 8) : new Vector2(x * 16 + 8 + 4 * num + num2, y * 16 + 8), Vector2.Zero, leafGoreType).Frame.CurrentColumn = Main.tile[x, y].TileColor;
+                        }
                     }
                 }
             }

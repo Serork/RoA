@@ -104,7 +104,12 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         TileObjectData.addTile(Type);
     }
 
-    public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<BeaconTE>().Place(i, j);
+    public override void PlaceInWorld(int i, int j, Item item) {
+        ModContent.GetInstance<BeaconTE>().Place(i, j);
+        if (Main.netMode != NetmodeID.SinglePlayer) {
+            MultiplayerSystem.SendPacket(new PlaceBeaconTEPacket(i, j));
+        }
+    }
 
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
         if (Main.netMode != NetmodeID.Server) {
@@ -591,12 +596,14 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                 name = "Amber";
                 break;
         }
-        if (name != string.Empty) {
-            for (int k = 0; k < 3; k++) {
-                int gore = Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(i, j),
-                    gorePosition,
-                    Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type, 1f);
-                Main.gore[gore].velocity *= 0.5f;
+        if (!Main.dedServ) {
+            if (name != string.Empty) {
+                for (int k = 0; k < 3; k++) {
+                    int gore = Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(i, j),
+                        gorePosition,
+                        Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type, 1f);
+                    Main.gore[gore].velocity *= 0.5f;
+                }
             }
         }
     }

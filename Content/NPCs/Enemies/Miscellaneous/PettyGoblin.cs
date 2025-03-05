@@ -538,10 +538,6 @@ sealed class PettyGoblin : ModNPC {
             Coins.SpawnCoins(true);
         }
 
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
@@ -554,10 +550,12 @@ sealed class PettyGoblin : ModNPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PettyGoblinGore1".GetGoreType(), Scale: NPC.scale);
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "PettyGoblinGore2".GetGoreType(), Scale: NPC.scale);
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "PettyGoblinGore3".GetGoreType(), Scale: NPC.scale);
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "PettyGoblinGore4".GetGoreType(), Scale: NPC.scale);
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "PettyGoblinGore1".GetGoreType(), Scale: NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "PettyGoblinGore2".GetGoreType(), Scale: NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "PettyGoblinGore3".GetGoreType(), Scale: NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "PettyGoblinGore4".GetGoreType(), Scale: NPC.scale);
+        }
     }
 
     private class CoinGenerator {

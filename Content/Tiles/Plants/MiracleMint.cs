@@ -33,7 +33,7 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
             int x = position.X, y = position.Y;
             ModContent.GetInstance<MiracleMintTE>().Place(x, y);
             if (Main.netMode != NetmodeID.SinglePlayer) {
-                MultiplayerSystem.SendPacket(new PlaceMiracleMintPacket(x, y));
+                MultiplayerSystem.SendPacket(new PlaceMiracleMintTEPacket(x, y));
             }
         }, validTiles: AnchorValidTiles);
     }
@@ -60,7 +60,13 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
 
     protected override int[] AnchorValidTiles => [ModContent.TileType<BackwoodsGrass>()];
 
-    public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<MiracleMintTE>().Place(i, j);
+    public override void PlaceInWorld(int i, int j, Item item) {
+        ModContent.GetInstance<MiracleMintTE>().Place(i, j);
+        if (Main.netMode != NetmodeID.SinglePlayer) {
+            MultiplayerSystem.SendPacket(new PlaceMiracleMintTEPacket(i, j));
+        }
+    }
+
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
         if (Main.netMode != NetmodeID.Server) {
             if (!fail) {

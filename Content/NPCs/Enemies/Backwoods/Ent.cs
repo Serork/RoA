@@ -98,10 +98,6 @@ sealed class Ent : RoANPC {
     public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<NaturesHeart>()));
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         int dustType = ModContent.DustType<WoodTrash>();
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 50.0; num828++) {
@@ -115,10 +111,12 @@ sealed class Ent : RoANPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType, 2.5f * hit.HitDirection, -2.5f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, "EntGore2".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 10f), NPC.velocity, "EntGore1".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, (Main.rand.NextBool() ? "EntGore1" : "EntGore3").GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 30f), NPC.velocity, "EntGore3".GetGoreType());
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, "EntGore2".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 10f), NPC.velocity, "EntGore1".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, (Main.rand.NextBool() ? "EntGore1" : "EntGore3").GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 30f), NPC.velocity, "EntGore3".GetGoreType());
+        }
     }
 
     public override void AI() {

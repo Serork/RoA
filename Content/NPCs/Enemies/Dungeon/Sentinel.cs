@@ -106,9 +106,11 @@ sealed class Sentinel : ModNPC {
                 Main.dust[num759].noGravity = true;
             }
 
-            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "UndeadGore1".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "UndeadGore2".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "UndeadGore2".GetGoreType(), Scale: NPC.scale);
+            if (!Main.dedServ) {
+                Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "UndeadGore1".GetGoreType(), Scale: NPC.scale);
+                Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "UndeadGore2".GetGoreType(), Scale: NPC.scale);
+                Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "UndeadGore2".GetGoreType(), Scale: NPC.scale);
+            }
         }
 
         //if (NPC.life <= 0) {

@@ -100,9 +100,11 @@ sealed class BackwoodsPot : ModTile {
 
     public void DropGores(int i, int j, int frameX, int frameY) {
         string path = GorePath(i, j, frameX / 36, frameY / 36);
-        for (int k = 0; k < 3; k++) {
-            Gore.NewGore(new EntitySource_TileBreak(i, j), new Vector2(i * 16, j * 16), default(Vector2),
-                ModContent.Find<ModGore>(RoA.ModName + "/" + path + k).Type);
+        if (!Main.dedServ) {
+            for (int k = 0; k < 3; k++) {
+                Gore.NewGore(new EntitySource_TileBreak(i, j), new Vector2(i * 16, j * 16), default(Vector2),
+                    ModContent.Find<ModGore>(RoA.ModName + "/" + path + k).Type);
+            }
         }
     }
 

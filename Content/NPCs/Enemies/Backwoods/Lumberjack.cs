@@ -68,10 +68,6 @@ sealed class Lumberjack : RoANPC {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
@@ -84,11 +80,13 @@ sealed class Lumberjack : RoANPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "LumberHead".GetGoreType(), Scale: NPC.scale);
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberAxe".GetGoreType(), Scale: NPC.scale);
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberArm".GetGoreType(), Scale: NPC.scale);
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
+		if (!Main.dedServ) {
+			Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "LumberHead".GetGoreType(), Scale: NPC.scale);
+			Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberAxe".GetGoreType(), Scale: NPC.scale);
+			Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberArm".GetGoreType(), Scale: NPC.scale);
+			Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
+			Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
+		}
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {

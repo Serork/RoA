@@ -82,10 +82,6 @@ sealed class CrowdRaven : ModNPC {
             }
         }
 
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
@@ -98,8 +94,10 @@ sealed class CrowdRaven : ModNPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2 * hit.HitDirection, -2f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "SummonedRavenGore1".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X + 14f, NPC.position.Y), NPC.velocity, "SummonedRavenGore2".GetGoreType());
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "SummonedRavenGore1".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X + 14f, NPC.position.Y), NPC.velocity, "SummonedRavenGore2".GetGoreType());
+        }
     }
 
     public override void SetDefaults() {

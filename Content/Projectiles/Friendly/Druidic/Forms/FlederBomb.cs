@@ -51,9 +51,11 @@ sealed class FlederBomb : FormProjectile {
             Projectile.tileCollide = false;
             if (Projectile.timeLeft == 10) {
                 if (Projectile.ai[0] != 0) {
-                    Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(5f, 0f), default(Vector2), Main.rand.Next(61, 64), 0.8f);
-                    Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(5f, 0f), default(Vector2), Main.rand.Next(61, 64), 0.8f);
-                    Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(5f, 0f), default(Vector2), Main.rand.Next(61, 64), 0.8f);
+                    if (!Main.dedServ) {
+                        Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(5f, 0f), default(Vector2), Main.rand.Next(61, 64), 0.8f);
+                        Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(5f, 0f), default(Vector2), Main.rand.Next(61, 64), 0.8f);
+                        Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(5f, 0f), default(Vector2), Main.rand.Next(61, 64), 0.8f);
+                    }
                 }
                 for (int i = 0; i < 12 + 6 * Projectile.ai[0]; i++) {
                     int dust1 = Dust.NewDust(Projectile.position, Projectile.width - 6, Projectile.height - 6, 59, 0f, 0f, 0, default(Color), Main.rand.NextFloat(0.9f, 1.5f));

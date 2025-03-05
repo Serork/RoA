@@ -83,10 +83,6 @@ sealed class Hog : RoANPC {
         _currentAI = 2;
         NPC.netUpdate = true;
 
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num493 = 0; (double)num493 < hit.Damage / (double)NPC.lifeMax * 50.0; num493++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, hit.HitDirection, -1f);
@@ -99,10 +95,12 @@ sealed class Hog : RoANPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2 * hit.HitDirection, -2f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore2".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore1".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore3".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore3".GetGoreType());
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore2".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore1".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore3".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "HogGore3".GetGoreType());
+        }
     }
 
     private void AdaptedUnicornAI() {

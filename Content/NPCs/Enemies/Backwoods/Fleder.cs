@@ -55,10 +55,6 @@ sealed class Fleder : ModNPC {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
-        if (Main.netMode == NetmodeID.Server) {
-            return;
-        }
-
         if (NPC.life > 0) {
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
@@ -71,9 +67,11 @@ sealed class Fleder : ModNPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2 * hit.HitDirection, -2f);
         }
 
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "FlederGore2".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "FlederGore1".GetGoreType());
-        Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "FlederGore1".GetGoreType());
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "FlederGore2".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "FlederGore1".GetGoreType());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "FlederGore1".GetGoreType());
+        }
     }
 
     public override void SetDefaults() {
