@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Enemies;
@@ -441,7 +443,7 @@ sealed partial class PettyGoblin : ModNPC {
             return;
         }
         Player player = target;
-        int value2 = 0;
+        ulong value2 = 0;
         for (int i = 0; i < 58; i++) {
             Item item = player.inventory[i];
             float value = 0f;
@@ -460,7 +462,7 @@ sealed partial class PettyGoblin : ModNPC {
             if (value < 1f) {
                 continue;
             }
-            value2 += (int)value;
+            value2 += (ulong)value;
         }
         for (int i = 0; i < 58; i++) {
             Item item = player.inventory[i];
@@ -481,7 +483,7 @@ sealed partial class PettyGoblin : ModNPC {
             GoToAttackStage(player);
             return;
         }
-        NPC.extraValue += value2;
+        NPC.extraValue += (int)value2;
         NPC.moneyPing(NPC.Center + Helper.VelocityToPoint(NPC.Center, player.Center, 25f));
         if (Main.netMode != NetmodeID.SinglePlayer) {
             MultiplayerSystem.SendPacket(new NPCExtraValuePacket(NPC.whoAmI, NPC.extraValue));
