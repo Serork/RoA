@@ -23,7 +23,7 @@ namespace RoA.Content.Tiles.Decorations;
 
 sealed class EnragedVisuals : ModPlayer {
     internal float _opacity;
-    internal bool _isActive;
+    internal bool _isActive, _isActive2;
 
     public override void UpdateDead() {
         UpdateVisuals();
@@ -56,11 +56,11 @@ sealed class EnragedVisuals : ModPlayer {
                 _opacity = 0f;
             }
         }
-        if (npc == null && !LothorEnrageScene.MonolithNearby) {
+        if (npc == null && !LothorEnrageScene.MonolithNearby && !_isActive2) {
             deactivate();
             return;
         }
-        bool enragedLothor = LothorEnrageScene.MonolithNearby || npc.As<Lothor>()._shouldEnrage;
+        bool enragedLothor = LothorEnrageScene.MonolithNearby || _isActive2 || npc.As<Lothor>()._shouldEnrage;
         if (enragedLothor) {
             _isActive = true;
             if (_opacity < 1f) {

@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using RoA.Content.Tiles.Decorations;
+
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,11 +16,11 @@ sealed class LothorEnrageMonolith : ModItem {
         Item.placeStyle = 0;
     }
 
-    //public override void UpdateAccessory(Player player, bool hideVisual) {
-    //    player.Aequus().cosmicMonolithShader = true;
-    //}
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetModPlayer<EnragedVisuals>()._isActive = true;
+    }
 
-    //public override void UpdateVanity(Player player) {
-    //    player.Aequus().cosmicMonolithShader = true;
-    //}
+    public override void UpdateVanity(Player player) {
+        player.GetModPlayer<EnragedVisuals>()._isActive = true;
+    }
 }
