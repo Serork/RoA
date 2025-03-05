@@ -59,16 +59,16 @@ sealed class GoblinsDagger : ModProjectile {
         if (Main.netMode != NetmodeID.Server) {
             SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, Projectile.Center);
         }
-        if (Main.netMode != NetmodeID.MultiplayerClient) {
-            if (Main.rand.NextChance(0.45)) {
-                MultiplayerSystem.SendPacket(new ChangePettyGoblinStatePacket(target, NPC));
-            }
+        NPC npc = Main.npc[NPC];
+        if (npc.active && Main.rand.NextBool()) {
+            npc.ai[0] = 1f;
+            npc.netUpdate = true;
         }
     }
 
     public override void AI() {
         NPC npc = Main.npc[NPC];
-        if (!npc.active || npc.ai[3] == 0f) {
+        if (!npc.active || npc.ai[1] != 3f) {
             Projectile.Kill();
         }
         bool flag = Projectile.spriteDirection != -1;

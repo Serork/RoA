@@ -357,6 +357,7 @@ sealed class Archdruid : DruidNPC {
 
                 point2.Y++;
             }
+            point2.Y += 1;
             positionX = point2.X;
             positionY = point2.Y;
             float stateTimer = StateTimer - 0.25f;

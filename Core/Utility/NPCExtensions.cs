@@ -337,7 +337,7 @@ static class NPCExtensions {
         }
     }
 
-    public static void ApplyFighterAI(this NPC npc, bool backwoods, bool targetPlayer = true, bool targetPlayer2 = false, Action<NPC>? movementX = null, bool isWiderNPC = false, bool shouldOpenDoors = false, bool knocksOnDoors = false) {
+    public static void ApplyFighterAI(this NPC npc, bool backwoods, bool targetPlayer = true, bool targetPlayer2 = false, Action<NPC>? movementX = null, bool isWiderNPC = false, bool shouldOpenDoors = false, bool knocksOnDoors = false, int targetDelay = 60) {
         npc.aiStyle = -1;
         npc.ModNPC.AIType = -1;
 
@@ -356,7 +356,7 @@ static class NPCExtensions {
 
         flag6 = false;
 
-        int num56 = 60;
+        int num56 = targetDelay;
 
         bool flag7 = false;
         bool canOpenDoor = true;
@@ -578,7 +578,6 @@ static class NPCExtensions {
                 }
             }
         }
-        int targetDelay = 60;
         if (tileChecks) {
             int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
             int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
@@ -652,15 +651,15 @@ static class NPCExtensions {
                         return false;
                     }
                     if (!JumpCheck(tileX, tileY)) {
-                        NPC.ai[1] = 0f;
-                        NPC.ai[2] = 0f;
+                        //NPC.ai[1] = 0f;
+                        //NPC.ai[2] = 0f;
                     }
                 }
             }
         }
         else if (knocksOnDoors) {
-            NPC.ai[1] = 0f;
-            NPC.ai[2] = 0f;
+            //NPC.ai[1] = 0f;
+            //NPC.ai[2] = 0f;
         }
 
         Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
