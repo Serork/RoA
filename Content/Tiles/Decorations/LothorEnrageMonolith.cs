@@ -112,7 +112,7 @@ sealed class LothorEnrageMonolith : ModTile {
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.Width = 3;
         TileObjectData.newTile.Height = 5;
-        TileObjectData.newTile.Origin = new Point16(1, 3);
+        TileObjectData.newTile.Origin = new Point16(1, 4);
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 16, 16];
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
