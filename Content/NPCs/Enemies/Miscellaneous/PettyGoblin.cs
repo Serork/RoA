@@ -55,8 +55,6 @@ sealed partial class PettyGoblin : ModNPC {
         NPC.aiStyle = -1;
         NPC.rarity = 2;
 
-        DrawOffsetY = -2f;
-
         Banner = Type;
         BannerItem = ModContent.ItemType<PettyGoblinBanner>();
         ItemID.Sets.KillsToBanner[BannerItem] = 10;
