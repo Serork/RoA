@@ -58,14 +58,12 @@ sealed class Hedgehog : ModNPC {
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
-        writer.Write(alert);
         writer.Write(chosen);
         writer.Write(choice);
         writer.Write(_playerNearby);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
-        alert = reader.ReadBoolean();
         chosen = reader.ReadBoolean();
         choice = reader.ReadInt32();
         _playerNearby = reader.ReadBoolean();
@@ -124,12 +122,19 @@ sealed class Hedgehog : ModNPC {
             _curlUpTimer++;
         }
 
-        _playerNearby = false;
-        foreach (Player player in Main.ActivePlayers) {
-            if (!player.dead && Vector2.Distance(player.position, NPC.position) <= 300) {
-                _playerNearby = true;
+        if (!_playerNearby) {
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                foreach (Player player in Main.ActivePlayers) {
+                    if (!player.dead && Vector2.Distance(player.position, NPC.position) <= 300) {
+                        _playerNearby = true;
 
-                break;
+                        NPC.target = player.whoAmI;
+
+                        NPC.netUpdate = true;
+
+                        break;
+                    }
+                }
             }
         }
 
@@ -140,11 +145,14 @@ sealed class Hedgehog : ModNPC {
                 NPC.netUpdate = true;
             }
             if (choice == 0) alert = false;
-            if (choice == 1) {
+            if (choice == 1 && !alert) {
                 NPC.rotation += 0.3f * NPC.velocity.X;
                 NPC.damage = 10;
                 alert = true;
                 NPC.aiStyle = 0;
+            }
+            if (Vector2.Distance(Main.player[NPC.target].position, NPC.position) > 300) {
+                _playerNearby = false;
             }
         }
         else {
