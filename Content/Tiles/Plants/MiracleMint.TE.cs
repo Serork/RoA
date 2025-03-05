@@ -14,7 +14,7 @@ sealed class MiracleMintTE : ModTileEntity {
 
     public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            NetMessage.SendTileSquare(Main.myPlayer, i, j);
+            //NetMessage.SendTileSquare(Main.myPlayer, i, j);
             NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type);
 
             return -1;
@@ -35,5 +35,5 @@ sealed class MiracleMintTE : ModTileEntity {
 
     public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
 
-    public override bool IsTileValidForEntity(int i, int j) => WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<MiracleMint>());
+    public override bool IsTileValidForEntity(int x, int y) => true;/*WorldGenHelper.GetTileSafely(x, y).ActiveTile(ModContent.TileType<Beacon>());*/
 }

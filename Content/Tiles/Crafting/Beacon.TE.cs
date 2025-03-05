@@ -160,7 +160,7 @@ sealed class BeaconTE : ModTileEntity {
 
     public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
 
-    public override bool IsTileValidForEntity(int x, int y) => WorldGenHelper.GetTileSafely(x, y).ActiveTile(ModContent.TileType<Beacon>());
+    public override bool IsTileValidForEntity(int x, int y) => true;/*WorldGenHelper.GetTileSafely(x, y).ActiveTile(ModContent.TileType<Beacon>());*/
 
     public override void NetSend(BinaryWriter writer) {
         writer.Write(IsUsed);

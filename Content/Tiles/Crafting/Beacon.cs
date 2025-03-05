@@ -106,7 +106,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
 
     public override void PlaceInWorld(int i, int j, Item item) {
         ModContent.GetInstance<BeaconTE>().Place(i, j);
-        if (Main.netMode != NetmodeID.SinglePlayer) {
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
             MultiplayerSystem.SendPacket(new PlaceBeaconTEPacket(i, j));
         }
     }
