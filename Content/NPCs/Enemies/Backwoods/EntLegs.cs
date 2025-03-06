@@ -14,6 +14,7 @@ using Terraria.Audio;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
@@ -29,8 +30,10 @@ sealed class EntLegs : RoANPC {
 	private const short ATTACK = (short)States.Attacking;
 
 	private float _attackTimer;
+	private bool _shouldAggro;
 
-	public override string Texture => ResourceManager.EmptyTexture;
+
+    public override string Texture => ResourceManager.EmptyTexture;
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => false;
 
@@ -75,10 +78,12 @@ sealed class EntLegs : RoANPC {
 
     public override void SendExtraAI(BinaryWriter writer) {
 		writer.Write(_attackTimer);
+		writer.Write(_shouldAggro);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
 		_attackTimer = reader.ReadSingle();
+		_shouldAggro = reader.ReadBoolean();
     }
 
     public override void AI() {
@@ -107,10 +112,16 @@ sealed class EntLegs : RoANPC {
 		}
 
 		short state = (short)State;
-		NPC me = Main.npc[NPC.realLife];
+		if (Main.netMode != 1) {
+			NPC me = NPC.realLife != 1 ? Main.npc[NPC.realLife] : null;
+			if (me != null && me.life < (int)(me.lifeMax * 0.8f)) {
+                _shouldAggro = true;
+				NPC.netUpdate = true;
+			}
+		}
         switch (state) {
 			case WALK:
-				NPC.ApplyFighterAI(true, targetPlayer2: me.life < (int)(me.lifeMax * 0.8f), movementX: (npc) => {
+				NPC.ApplyFighterAI(true, targetPlayer2: _shouldAggro, movementX: (npc) => {
                     float num87 = 1f * 0.8f;
                     float num88 = 0.07f * 0.8f;
                     //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
