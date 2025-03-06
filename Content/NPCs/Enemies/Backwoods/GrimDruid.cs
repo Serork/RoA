@@ -104,6 +104,10 @@ sealed class GrimDruid : DruidNPC {
     protected override void Walking() {
         NPC.aiStyle = NPC.ModNPC.AIType = -1;
 
+        if (NPC.target == 0 || NPC.target == 255) {
+            NPC.TargetClosest(true);
+        }
+
         NPC npc = NPC;
         if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
             npc.directionY = -1;
@@ -119,7 +123,7 @@ sealed class GrimDruid : DruidNPC {
 
         flag6 = false;
 
-        bool targetPlayer = !Main.IsItDay();
+        bool targetPlayer = true;
         int num56 = 60;
 
         bool flag7 = false;
@@ -154,6 +158,7 @@ sealed class GrimDruid : DruidNPC {
         bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
 
         shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.player[npc.target].InModBiome<BackwoodsBiome>() && targetPlayer);
+        Main.NewText(shouldTargetPlayer);
         if (npc.ai[3] < (float)num56 && shouldTargetPlayer) {
             npc.TargetClosest();
             if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
