@@ -23,7 +23,7 @@ sealed partial class PettyGoblin : ModNPC {
                 return;
             }
 
-            chat = Language.GetTextValue($"Mods.RoA.NPC.Quotes.GoblinTinkerer.PettyGoblinQuote{/*Main.rand.NextBool().ToInt() + */1}");
+            chat = Language.GetTextValue($"Mods.RoA.NPC.Town.GoblinTinkerer.PettyGoblinQuote{/*Main.rand.NextBool().ToInt() + */1}");
         }
     }
 

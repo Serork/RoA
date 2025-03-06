@@ -81,7 +81,7 @@ sealed class Hunter : ModNPC {
     public override bool? CanFallThroughPlatforms() => true;
 
     public override List<string> SetNPCNameList() {
-        string getName(byte index) => Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Name{index}");
+        string getName(byte index) => Language.GetTextValue($"Mods.RoA.NPC.Town.{nameof(Hunter)}.Name{index}");
         List<string> names = [];
         for (byte i = 0; i < MAXNAMES; i++) {
             names.Add(getName((byte)(i + 1)));
@@ -437,12 +437,12 @@ sealed class Hunter : ModNPC {
     public override ITownNPCProfile TownNPCProfile() => NPCProfile;
 
     public override void SetChatButtons(ref string button, ref string button2) {
-        button = Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Button1");
+        button = Language.GetTextValue($"Mods.RoA.NPC.Town.{nameof(Hunter)}.Button1");
         int variant = 1;
         if (HasPlayerEnoughLeatherInInventory()) {
             variant = 2;
         }
-        button2 = Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Button2_{variant}");
+        button2 = Language.GetTextValue($"Mods.RoA.NPC.Town.{nameof(Hunter)}.Button2_{variant}");
     }
 
     public override bool CanGoToStatue(bool toKingStatue) => false;
@@ -464,7 +464,7 @@ sealed class Hunter : ModNPC {
         while (_currentQuote == currentTradeQuoteIndex) {
             _currentQuote = Main.rand.Next(MAXQUOTES);
         }
-        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Quote{_currentQuote + 1}");
+        return Language.GetTextValue($"Mods.RoA.NPC.Town.{nameof(Hunter)}.Quote{_currentQuote + 1}");
     }
 
     private string GetQuote() {
@@ -472,7 +472,7 @@ sealed class Hunter : ModNPC {
         if (_currentQuote > MAXQUOTES - 1) {
             _currentQuote = 0;
         }
-        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.Quote{_currentQuote + 1}");
+        return Language.GetTextValue($"Mods.RoA.NPC.Town.{nameof(Hunter)}.Quote{_currentQuote + 1}");
     }
 
     private string GetNotEnoughTradeQuote() {
@@ -482,7 +482,7 @@ sealed class Hunter : ModNPC {
                 _currentNotEnoughTradeQuote = Main.rand.Next(MAXNOTENOUGHTRADEQUOTES);
             }
         }
-        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.NotEnoughTradeQuote{_currentNotEnoughTradeQuote + 1}");
+        return Language.GetTextValue($"Mods.RoA.NPC.Town.{nameof(Hunter)}.NotEnoughTradeQuote{_currentNotEnoughTradeQuote + 1}");
     }
 
     private string GetTradeQuote() {
@@ -492,7 +492,7 @@ sealed class Hunter : ModNPC {
                 _currentTradeQuote = Main.rand.Next(MAXTRADEQUOTES);
             }
         }
-        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.TradeQuote{_currentTradeQuote + 1}");
+        return Language.GetTextValue($"Mods.RoA.NPC.Town.{nameof(Hunter)}.TradeQuote{_currentTradeQuote + 1}");
     }
 
     private string GetDropFireLighterQuote() {
@@ -502,7 +502,7 @@ sealed class Hunter : ModNPC {
                 _currentFireLighterQuote = Main.rand.Next(MAXFIRELIGHTERQUOTES);
             }
         }
-        return Language.GetTextValue($"Mods.RoA.NPC.Quotes.{nameof(Hunter)}.DropFireLighterQuote{_currentFireLighterQuote + 1}");
+        return Language.GetTextValue($"Mods.RoA.NPC.Town.{nameof(Hunter)}.DropFireLighterQuote{_currentFireLighterQuote + 1}");
     }
 
     public override void OnChatButtonClicked(bool firstButton, ref string shopName) {
