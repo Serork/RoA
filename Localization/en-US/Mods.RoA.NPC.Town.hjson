@@ -29,3 +29,11 @@ Dryad: {
 }
 
 GoblinTinkerer.PettyGoblinQuote1: Did you get ransacked by that sleazy fool? Tell you what, you're not alone.
+
+Guide: {
+	HelpText1: HelpText1
+	HelpText2: HelpText2
+	HelpText3: HelpText3
+	HelpText4: HelpText4
+	HelpText5: HelpText5
+}
