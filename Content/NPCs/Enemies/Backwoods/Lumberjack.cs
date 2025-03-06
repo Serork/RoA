@@ -9,6 +9,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -21,6 +22,8 @@ namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class Lumberjack : RoANPC {
 	private const float MAXSPEED = 1.65f;
+
+    private float _timer, _timer2;
 
     private enum States {
         Spawned,
@@ -152,7 +155,21 @@ sealed class Lumberjack : RoANPC {
 		ChangeFrame((currentFrame, frameHeight));
 	}
 
-	public override void AI() {
+    public override void SendExtraAI(BinaryWriter writer) {
+        base.SendExtraAI(writer);
+
+        writer.Write(_timer);
+        writer.Write(_timer2);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        base.ReceiveExtraAI(reader);
+
+        _timer = reader.ReadSingle();
+        _timer2 = reader.ReadSingle();
+    }
+
+    public override void AI() {
 		Player player;
 		float closeRange = 65f;
 		switch (State) {
@@ -238,6 +255,29 @@ sealed class Lumberjack : RoANPC {
                     npc.TargetClosest();
                     if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
                         npc.directionY = -1;
+                }
+                else if (!(_timer > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
+                    bool flag12 = targetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
+                    if (!flag12 && (double)(npc.position.Y / 16f) < Main.worldSurface/* && npc.type != 624 && npc.type != 631*/) {
+                        npc.EncourageDespawn(10);
+                    }
+
+                    if (npc.velocity.X == 0f) {
+                        if (npc.velocity.Y == 0f) {
+                            _timer2 += 1f;
+                            if (_timer2 >= 2f) {
+                                npc.direction *= -1;
+                                npc.spriteDirection = npc.direction;
+                                _timer2 = 0f;
+                            }
+                        }
+                    }
+                    else {
+                        _timer2 = 0f;
+                    }
+
+                    if (npc.direction == 0)
+                        npc.direction = 1;
                 }
 
                 float num87 = 1f * 1.25f;

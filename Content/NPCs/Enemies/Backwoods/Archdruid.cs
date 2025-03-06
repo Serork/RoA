@@ -29,6 +29,8 @@ sealed class Archdruid : DruidNPC {
     private byte _attackCounter;
     private bool _entAttack, _entAttack2;
 
+    private float _timer, _timer2;
+
     protected override Color MagicCastColor => new(50, 193, 97, 0);
 
     protected override byte MaxFrame => (byte)(_entAttack ? Main.npcFrameCount[Type] : (19 - 1));
@@ -195,6 +197,29 @@ sealed class Archdruid : DruidNPC {
             npc.TargetClosest();
             if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
                 npc.directionY = -1;
+        }
+        else if (!(_timer > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
+            bool flag12 = targetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
+            if (!flag12 && (double)(npc.position.Y / 16f) < Main.worldSurface/* && npc.type != 624 && npc.type != 631*/) {
+                npc.EncourageDespawn(10);
+            }
+
+            if (npc.velocity.X == 0f) {
+                if (npc.velocity.Y == 0f) {
+                    _timer2 += 1f;
+                    if (_timer2 >= 2f) {
+                        npc.direction *= -1;
+                        npc.spriteDirection = npc.direction;
+                        _timer2 = 0f;
+                    }
+                }
+            }
+            else {
+                _timer2 = 0f;
+            }
+
+            if (npc.direction == 0)
+                npc.direction = 1;
         }
 
         float num87 = 1f * 0.9f;
@@ -521,6 +546,8 @@ sealed class Archdruid : DruidNPC {
         writer.Write(_comboAttack);
         writer.Write(_comboAttack2);
         writer.Write(_entAttack);
+        writer.Write(_timer);
+        writer.Write(_timer2);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -529,5 +556,7 @@ sealed class Archdruid : DruidNPC {
         _comboAttack = reader.ReadBoolean();
         _comboAttack2 = reader.ReadBoolean();
         _entAttack = reader.ReadBoolean();
+        _timer = reader.ReadSingle();
+        _timer2 = reader.ReadSingle();
     }
 }

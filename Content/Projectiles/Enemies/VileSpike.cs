@@ -118,13 +118,9 @@ sealed class VileSpikeTip : ModProjectile {
 
 		Projectile.alpha = 0;
         Projectile.tileCollide = false;
-
-        Projectile.hide = true;
     }
 
 	public override void AI() => Projectile.velocity = Vector2.Zero;
-
-    public override bool ShouldUpdatePosition() => false;
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
         behindNPCsAndTiles.Add(index);

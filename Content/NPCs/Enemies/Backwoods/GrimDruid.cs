@@ -13,6 +13,7 @@ using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -25,6 +26,22 @@ namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class GrimDruid : DruidNPC {
     protected override Color MagicCastColor => new(234, 15, 35, 0);
+
+    private float _timer, _timer2;
+
+    public override void SendExtraAI(BinaryWriter writer) {
+        base.SendExtraAI(writer);
+
+        writer.Write(_timer);
+        writer.Write(_timer2);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        base.ReceiveExtraAI(reader);
+
+        _timer = reader.ReadSingle();
+        _timer2 = reader.ReadSingle();
+    }
 
     public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 19;
@@ -158,11 +175,33 @@ sealed class GrimDruid : DruidNPC {
         bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
 
         shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.player[npc.target].InModBiome<BackwoodsBiome>() && targetPlayer);
-        Main.NewText(shouldTargetPlayer);
         if (npc.ai[3] < (float)num56 && shouldTargetPlayer) {
             npc.TargetClosest();
             if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
                 npc.directionY = -1;
+        }
+        else if (!(_timer > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
+            bool flag12 = targetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
+            if (!flag12 && (double)(npc.position.Y / 16f) < Main.worldSurface/* && npc.type != 624 && npc.type != 631*/) {
+                npc.EncourageDespawn(10);
+            }
+
+            if (npc.velocity.X == 0f) {
+                if (npc.velocity.Y == 0f) {
+                    _timer2 += 1f;
+                    if (_timer2 >= 2f) {
+                        npc.direction *= -1;
+                        npc.spriteDirection = npc.direction;
+                        _timer2 = 0f;
+                    }
+                }
+            }
+            else {
+                _timer2 = 0f;
+            }
+
+            if (npc.direction == 0)
+                npc.direction = 1;
         }
 
         float num87 = 1f * 0.8f;
