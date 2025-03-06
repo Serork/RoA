@@ -41,7 +41,7 @@ sealed class TreeDryadDecoration1Rubble : ModTile {
         RegisterItemDrop(ModContent.ItemType<NaturesHeart>());
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 9;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
 

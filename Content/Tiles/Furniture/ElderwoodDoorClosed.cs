@@ -62,7 +62,7 @@ sealed class ElderwoodDoorClosed : ModTile {
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = 1;
+	public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
 	public override void KillMultiTile(int i, int j, int TileFrameX, int TileFrameY) {
 		//int item = Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Placeable.Furniture.ElderwoodDoor>(), 1, false, 0, false, false);

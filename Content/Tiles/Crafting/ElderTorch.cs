@@ -105,7 +105,7 @@ class ElderTorch : ModTile {
         }
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 10;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 10;
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
         Tile tile = Main.tile[i, j];

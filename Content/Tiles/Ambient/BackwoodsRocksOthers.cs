@@ -154,7 +154,7 @@ class BackwoodsRocks1 : ModTile {
         MineResist = 1.25f;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 9;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
         if (i % 2 != 1) {

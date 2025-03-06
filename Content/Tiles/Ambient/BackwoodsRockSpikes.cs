@@ -89,7 +89,7 @@ abstract class BackwoodsRockSpikes : ModTile, TileHooks.IGetTileDrawData {
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => BackwoodsGreenMoss.SetupLight(ref r, ref g, ref b);
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = IsSmall ? 3 : 5;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? (IsSmall ? 1 : 2) : IsSmall ? 3 : 5;
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
         if (i % 2 != 1) {

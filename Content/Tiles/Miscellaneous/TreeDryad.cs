@@ -243,5 +243,5 @@ sealed class TreeDryad : ModTile {
 
     public override bool CanKillTile(int i, int j, ref bool blockDamaged) => AbleToBeDestroyed;
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 5;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 2 : 5;
 }

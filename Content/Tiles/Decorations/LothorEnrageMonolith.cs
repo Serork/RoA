@@ -131,7 +131,7 @@ sealed class LothorEnrageMonolith : ModTile {
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) {
-        num = (int)(num / 2);
+        num = fail ? num / 3 : (int)(num / 2);
     }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {

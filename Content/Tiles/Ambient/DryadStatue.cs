@@ -53,5 +53,5 @@ sealed class DryadStatue : ModTile {
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => false;
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = 5;
+	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 2 : 5;
 }

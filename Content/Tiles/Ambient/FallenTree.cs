@@ -49,7 +49,7 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.ITil
         AddMapEntry(new Microsoft.Xna.Framework.Color(91, 74, 67), CreateMapEntryName());
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 8;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 2 : 8;
 
     public override bool CanExplode(int i, int j) {
         if (!Main.hardMode) {
