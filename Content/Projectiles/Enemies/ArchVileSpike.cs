@@ -39,17 +39,11 @@ sealed class ArchVileSpike : ModProjectile {
 
         Projectile.friendly = false;
         Projectile.hostile = true;
-
-		Projectile.hide = true;
     }
 
 	public override bool? CanDamage() => Projectile.alpha == 0;
 
     public override bool ShouldUpdatePosition() => false;
-
-    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
-        behindNPCsAndTiles.Add(index);
-    }
 
     public override void AI () {
 		float height = 6f;
