@@ -25,9 +25,14 @@ sealed class SharpIcicle : NatureProjectile {
 
         Projectile.timeLeft = 200;
         Projectile.penetrate = 1;
+
+        Projectile.Opacity = 0.5f;
     }
 
-    protected override void SafeOnSpawn(IEntitySource source) => Projectile.ai[2] = Projectile.velocity.Length();
+    protected override void SafeOnSpawn(IEntitySource source) {
+        Projectile.ai[2] = Projectile.velocity.Length();
+        Projectile.damage -= 5;
+    }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 4;
@@ -41,9 +46,10 @@ sealed class SharpIcicle : NatureProjectile {
         Projectile.rotation = Helper.VelocityAngle(Projectile.velocity);
 
         if (Projectile.ai[1] == 1f) {
-            //if (Projectile.ai[0] % 4f == 0f) {
-            //    Projectile.damage++;
-            //}
+            if (Projectile.Opacity < 1f) {
+                Projectile.Opacity += 0.1f;
+                Projectile.damage++;
+            }
             Projectile.velocity.Y += Projectile.ai[2] * 0.1f;
             Projectile.velocity.Y = Math.Min(15f, Projectile.velocity.Y);
             Projectile.velocity.X *= 0.95f;

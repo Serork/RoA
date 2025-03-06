@@ -9,6 +9,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -39,6 +40,8 @@ sealed class ArterialSpray : ModItem {
         Item.value = Item.sellPrice(0, 1, 50, 0);
 
         Item.noUseGraphic = true;
+
+        Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "RazorThree") { Volume = 0.3f, Pitch = 0.1f, PitchVariance = 0.1f };
     }
 }
 

@@ -412,7 +412,7 @@ sealed class FlederSlayer : ModProjectile {
                                         PunchCameraModifier punchCameraModifier = new PunchCameraModifier(projectileCenter, MathHelper.PiOver2.ToRotationVector2(), strength, 10f, 20, 1000f, tag);
                                         Main.instance.CameraModifiers.Add(punchCameraModifier);
                                     }
-                                    SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Clang") { Volume = 0.95f }, Projectile.Center);
+                                    if (!_empoweredAttack) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Clang") { Volume = 0.95f }, Projectile.Center);
                                 }
                             }
                             Projectile.rotation += extraRotation;

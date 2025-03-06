@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -255,6 +256,10 @@ sealed class TulipFlower : NatureProjectile {
                 Projectile.netUpdate = true;
             }
         }
+
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 1.2f });
+
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "LeavesAmbient") { Volume = 1.2f, MaxInstances = 1 });
     }
 
     public override void AI() {

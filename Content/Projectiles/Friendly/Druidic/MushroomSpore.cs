@@ -27,7 +27,7 @@ sealed class MushroomSpore : NatureProjectile {
         Projectile.Size = new Vector2(width, height);
 
         Projectile.penetrate = 1;
-        Projectile.timeLeft = 300;
+        Projectile.timeLeft = 600;
 
         Projectile.tileCollide = true;
         Projectile.friendly = true;

@@ -191,7 +191,7 @@ sealed class EvilBranch : NatureProjectile {
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WoodCreak") { Volume = 0.6f, PitchVariance = 0.1f, Pitch = 0.6f });
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WoodCreak") { Volume = 0.6f, PitchVariance = 0.2f, Pitch = 0.8f });
 
             byte index = 0;
             foreach (LeafInfo leafInfo in _leavesInfo) {
