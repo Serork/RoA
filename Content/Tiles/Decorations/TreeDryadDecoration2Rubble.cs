@@ -30,6 +30,8 @@ sealed class TreeDryadDecoration2Rubble : ModTile {
         AddMapEntry(new Color(191, 143, 111));
 
         RegisterItemDrop(ModContent.ItemType<NaturesHeart>());
+
+        MineResist = 0.01f;
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {

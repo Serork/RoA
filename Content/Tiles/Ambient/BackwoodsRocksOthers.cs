@@ -151,7 +151,7 @@ class BackwoodsRocks1 : ModTile {
         DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
 
-        MineResist = 1.25f;
+        MineResist = 0.01f;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;

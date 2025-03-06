@@ -51,7 +51,7 @@ sealed class BackwoodsRocks3x2 : ModTile, TileHooks.IGetTileDrawData {
         DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
         AddMapEntry(new Color(34, 37, 46));
 
-        MineResist = 1.25f;
+        MineResist = 0.01f;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {

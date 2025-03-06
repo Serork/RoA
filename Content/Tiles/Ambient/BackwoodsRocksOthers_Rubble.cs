@@ -90,7 +90,7 @@ class BackwoodsRocks0Rubble : BackwoodsRocks1Rubble {
         DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
 
-        MineResist = 1.25f;
+        MineResist = 0.01f;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {

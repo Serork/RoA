@@ -35,6 +35,8 @@ sealed class TreeDryadDecoration1 : ModTile {
 
         DustType = DustID.WoodFurniture;
         AddMapEntry(new Color(191, 143, 111));
+
+        MineResist = 0.01f;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;

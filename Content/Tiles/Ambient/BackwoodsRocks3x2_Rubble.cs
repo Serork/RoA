@@ -53,6 +53,8 @@ sealed class BackwoodsRocks3x2Rubble : ModTile, TileHooks.IGetTileDrawData {
 
         // Tiles placed by Rubblemaker drop the item used to place them.
         RegisterItemDrop(ModContent.ItemType<Grimstone>());
+
+        MineResist = 0.01f;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {

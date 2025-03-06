@@ -39,6 +39,8 @@ sealed class TreeDryadDecoration1Rubble : ModTile {
         AddMapEntry(new Color(191, 143, 111));
 
         RegisterItemDrop(ModContent.ItemType<NaturesHeart>());
+
+        MineResist = 0.01f;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;
