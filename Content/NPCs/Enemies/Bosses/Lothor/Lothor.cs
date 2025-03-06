@@ -59,4 +59,8 @@ sealed partial class Lothor : ModNPC {
     public override void Unload() => UnloadAnimations();
 
     partial void UnloadAnimations();
+
+    public override void BossLoot(ref string name, ref int potionType) {
+        potionType = ItemID.HealingPotion;
+    }
 }
