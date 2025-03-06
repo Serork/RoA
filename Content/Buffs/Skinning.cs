@@ -52,8 +52,8 @@ sealed class SkinningPlayer : ModPlayer {
 		}
 	reset:
 		skinning = false;
-		if (Player.chest != -1) {
-			for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
+        if (Player.chest >= 0) {
+            for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
 				Item item = Main.chest[Player.chest].item[i];
 				if (valid(item)) {
 					int stack = item.stack;

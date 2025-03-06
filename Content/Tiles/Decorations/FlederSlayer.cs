@@ -24,7 +24,7 @@ sealed class FlederSlayerDecoration : ModTile {
         TileObjectData.newTile.DrawYOffset = 4;
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(216, 14, 19));
+        AddMapEntry(new Color(172, 157, 148), CreateMapEntryName());
         //DustType = ModContent.DustType<CosmicCrystalDust>();
         //AnimationFrameHeight = 18 * 5;
 
@@ -36,6 +36,7 @@ sealed class FlederSlayerDecoration : ModTile {
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) {
+        num = 0;
         //num = (int)(num / 2);
     }
 

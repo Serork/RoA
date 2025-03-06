@@ -46,3 +46,4 @@ TreeDryad.MapEntry: Dryad Coccoon
 FenethStatue.MapEntry: Feneth Statue
 TanningRack.MapEntry: Tanning Rack
 DullDaikatana.MapEntry: Dull Daikatana
+FlederSlayerDecoration.MapEntry: "{$Mods.RoA.Items.FlederSlayer.DisplayName}"
