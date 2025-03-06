@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Placeable.Decorations;
+
 using Terraria;
 using Terraria.GameContent.Prefixes;
 using Terraria.ID;
@@ -13,6 +15,8 @@ sealed class FlederSlayer : ModItem {
         Item.ResearchUnlockCount = 1;
 
         PrefixLegacy.ItemSets.SwordsHammersAxesPicks[Type] = true;
+
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<FlederSlayerDecoration>();
     }
 
     public override void SetDefaults() {
