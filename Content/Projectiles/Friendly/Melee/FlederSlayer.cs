@@ -33,6 +33,7 @@ sealed class FlederSlayer : ModProjectile {
     private int _timeLeft;
     private float _timingProgress;
     private bool _empoweredAttack;
+    private bool _twinkleSoundPlayed;
 
     public override void SetDefaults() {
         int width = 88; int height = width;
@@ -221,6 +222,12 @@ sealed class FlederSlayer : ModProjectile {
             SoundStyle style = new SoundStyle(ResourceManager.ItemSounds + "Whisper") { Volume = 1.15f };
 
             if (_charge >= 0.6f) {
+                var style2 = new SoundStyle(ResourceManager.ItemSounds + "Twinkle") { Volume = 1f };
+                if (Math.Round(_timingProgress, 2) == 1f && !_twinkleSoundPlayed) {
+                    SoundEngine.PlaySound(style2, Projectile.Center);
+                    _twinkleSoundPlayed = true;
+                }
+
                 if (_timingProgress < 1f) {
                     _timingProgress += 0.1f;
                 }
@@ -262,8 +269,6 @@ sealed class FlederSlayer : ModProjectile {
                 if (_timingProgress >= 1.3f && _timingProgress <= 2.2f) {
                     _empoweredAttack = true;
                 }
-
-                Main.NewText(_timingProgress + " " + _empoweredAttack);
 
                 SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 
@@ -326,16 +331,7 @@ sealed class FlederSlayer : ModProjectile {
 
                         player.velocity.X *= 0.935f;
 
-                        //if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease) {
-                        //    Main.NewText(123);
-                        //    Projectile.ai[1] = 2f;
-
-                        //    SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
-                        //}
-
                         Projectile.ai[1] = 2f;
-
-                        //SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 
                         player.bodyFrame.Y = player.bodyFrame.Height * 3;
                     }
@@ -358,7 +354,7 @@ sealed class FlederSlayer : ModProjectile {
                         else {
                             Projectile.ai[1] = 3f;
 
-                            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HeavySword") { Volume = 1f }, Projectile.Center);
+                            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + (_empoweredAttack ? "PerfectSlash" : "HeavySword")) { Volume = 1f }, Projectile.Center);
                         }
 
                         Projectile.scale = MathHelper.Lerp(Projectile.scale, Projectile.localAI[2] * 1.5f, 0.1f);

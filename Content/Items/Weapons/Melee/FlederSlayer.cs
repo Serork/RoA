@@ -47,7 +47,7 @@ sealed class FlederSlayer : ModItem {
             return false;
         }
         player.direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
-        Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, type, Item.damage, Item.knockBack, player.whoAmI).rotation = player.direction == 1 ? 0f : MathHelper.Pi;
+        //Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, type, Item.damage, Item.knockBack, player.whoAmI).rotation = player.direction == 1 ? 0f : MathHelper.Pi;
         return true;
     }
 }
