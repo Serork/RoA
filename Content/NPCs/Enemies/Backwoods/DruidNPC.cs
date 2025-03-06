@@ -186,14 +186,17 @@ abstract class DruidNPC : RoANPC {
                     //if (NPC.justHit && AttackTimer > -TimeToRecoveryAfterGettingHit()) {
                     //    AttackTimer -= -TimeToRecoveryAfterGettingHit() * 0.25f;
                     //}
-                    if (!player.dead && AttackTimer >= 0f) {
-                        if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
-                            AttackTimer = 0f;
-                            AttackType = Main.rand.Next(0, 2);
-                            ChangeToAttackState();
-                            ChangeState((int)States.Attacking);
+                    if (Main.netMode != NetmodeID.MultiplayerClient) {
+                        if (!player.dead && AttackTimer >= 0f) {
+                            if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
+                                AttackTimer = 0f;
+                                AttackType = Main.rand.Next(0, 2);
+                                ChangeToAttackState();
+                                ChangeState((int)States.Attacking);
+                                NPC.netUpdate = true;
+                            }
+                            return;
                         }
-                        return;
                     }
                 }
                 break;

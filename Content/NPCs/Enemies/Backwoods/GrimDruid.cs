@@ -135,18 +135,19 @@ sealed class GrimDruid : DruidNPC {
                 StateTimer += TimeSystem.LogicDeltaTime;
                 if (StateTimer >= 0.17f) {
                     Attack = true;
-                    NPC.netUpdate = true;
                 }
                 if (StateTimer >= 0.25f) {
                     AttackEffects(position);
                 }
-                if (StateTimer >= 1.75f) {
-                    GrimDruidAttack(position);
-                    AttackType = Main.rand.Next(0, 2);
-                    AttackTimer = -TimeToChangeState();
-                    AttackEndTimer = -0.3f;
+                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                    if (StateTimer >= 1.75f) {
+                        GrimDruidAttack(position);
+                        AttackType = Main.rand.Next(0, 2);
+                        AttackTimer = -TimeToChangeState();
+                        AttackEndTimer = -0.3f;
+                        NPC.netUpdate = true;
+                    }
                 }
-                NPC.netUpdate = true;
             }
             else {
                 AttackEffects(position);

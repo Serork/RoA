@@ -236,6 +236,7 @@ sealed class Archdruid : DruidNPC {
                         //Attack = false;
                         if (Main.netMode != NetmodeID.MultiplayerClient) {
                             AttackType = Main.rand.Next(0, 2);
+                            NPC.netUpdate = true;
                         }
                         AttackTimer = -TimeToChangeState();
                         AttackEndTimer = _entAttack ? -0.05f : -0.3f;
