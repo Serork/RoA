@@ -83,6 +83,40 @@ class ClawsSlash : NatureProjectile {
     public override void OnHitPlayer(Player target, Player.HurtInfo info) => Projectile.ApplyFlaskEffects(target);
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => Projectile.ApplyFlaskEffects(target);
 
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<InfectedWave>()] > 0 ||
+                    Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<HemorrhageWave>()] > 0) {
+            modifiers.Knockback *= 0f;
+        }
+
+        if (FirstSlashColor != null && SecondSlashColor != null) {
+            float angle = MathHelper.PiOver2;
+            Vector2 offset = new(0.2f);
+            Vector2 velocity = 1.5f * offset;
+            Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
+            Color color = Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()));
+            if (ShouldFullBright) {
+                color = Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat());
+            }
+            color.A = 25;
+            if (!ShouldFullBright) {
+                Point pos = target.Center.ToTileCoordinates();
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.25f, 1f);
+                color *= brightness;
+            }
+            position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
+            velocity = angle.ToRotationVector2() * velocity * 0.5f;
+            int layer = VisualEffectLayer.ABOVENPCS;
+            VisualEffectSystem.New<ClawsSlashHit>(layer).
+                Setup(position,
+                      velocity,
+                      color);
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
+            }
+        }
+    }
+
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<InfectedWave>()] > 0 ||
             Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<HemorrhageWave>()] > 0) {

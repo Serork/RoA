@@ -48,6 +48,10 @@ sealed class PineCone : NatureProjectile {
         modifiers.FinalDamage *= 0.5f + 0.5f * Math.Min(10f, Projectile.velocity.Y) * 0.2f;
     }
 
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        modifiers.FinalDamage *= 0.5f + 0.5f * Math.Min(10f, Projectile.velocity.Y) * 0.2f;
+    }
+
     public override bool? CanDamage() => Projectile.velocity.Y >= 2f && (Math.Abs(Projectile.rotation) < 0.1f && Math.Abs(Projectile.ai[0]) < 0.5f) || Projectile.ai[1] != 0f;
 
     public override void AI() {

@@ -69,6 +69,10 @@ sealed class BloodshedAxe : ModProjectile {
         }
     }
 
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
+    }
+
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Player player = Main.player[Projectile.owner];
         int itemAnimationMax = player.itemAnimationMax;

@@ -282,6 +282,28 @@ sealed class HellfireClawsSlash : ClawsSlash {
         }
     }
 
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        modifiers.Knockback *= 0f;
+        float fromValue = Ease.QuintIn(Projectile.localAI[0] / Projectile.ai[1]);
+        Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), fromValue),
+              color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), fromValue);
+        float angle = MathHelper.PiOver2;
+        Vector2 offset = new(0.2f);
+        Vector2 velocity = 1.5f * offset;
+        Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
+        Color color = Color.Lerp(color1, color2, Main.rand.NextFloat())/*Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()))*/;
+        color.A = 50;
+        position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
+        velocity = angle.ToRotationVector2() * velocity * 0.5f;
+        int layer = VisualEffectLayer.ABOVENPCS;
+        VisualEffectSystem.New<ClawsSlashHit>(layer)?.Setup(position,
+                  velocity,
+                  color);
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
+        }
+    }
+
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         modifiers.Knockback *= 0f;
         float fromValue = Ease.QuintIn(Projectile.localAI[0] / Projectile.ai[1]);

@@ -512,6 +512,14 @@ sealed class FlederSlayer : ModProjectile {
                           : 1f;
     }
 
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
+        modifiers.FinalDamage *=
+                            Projectile.ai[1] >= 3f
+                          ? Projectile.scale * 3f * (1f + _charge)
+                          : 1f;
+    }
+
     public override bool ShouldUpdatePosition()
         => false;
 

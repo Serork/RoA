@@ -67,6 +67,10 @@ sealed class ShockLightning : ModProjectile {
         modifiers.Defense *= Main.rand.NextFloat(0.1f, 0.3f);
     }
 
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        modifiers.ScalingArmorPenetration += (float)(1f - Main.rand.NextFloat(0.1f, 0.3f));
+    }
+
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         if (Projectile.localAI[0] == 0f) {
