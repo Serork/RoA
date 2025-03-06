@@ -31,6 +31,10 @@ sealed class BloodshedAxe : ModProjectile {
     private float _f;
     private int _time = -1;
 
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.AllowsContactDamageFromJellyfish[Type] = true;
+    }
+
     public override void SetDefaults() {
         int width = 78; int height = 62;
         Projectile.Size = new Vector2(width, height);

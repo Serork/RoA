@@ -175,6 +175,10 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
 
     public override string Texture => ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse";
 
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.AllowsContactDamageFromJellyfish[Type] = true;
+    }
+
     public override void SetDefaults() {
         Projectile.localNPCHitCooldown = 500;
         Projectile.usesLocalNPCImmunity = true;

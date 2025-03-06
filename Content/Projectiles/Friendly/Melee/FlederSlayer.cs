@@ -35,6 +35,10 @@ sealed class FlederSlayer : ModProjectile {
     private bool _empoweredAttack;
     private bool _twinkleSoundPlayed;
 
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.AllowsContactDamageFromJellyfish[Type] = true;
+    }
+
     public override void SetDefaults() {
         int width = 88; int height = width;
         Projectile.Size = new Vector2(width, height);

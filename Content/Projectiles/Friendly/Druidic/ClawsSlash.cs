@@ -101,7 +101,7 @@ class ClawsSlash : NatureProjectile {
             color.A = 25;
             if (!ShouldFullBright) {
                 Point pos = target.Center.ToTileCoordinates();
-                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.25f, 1f);
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.5f, 1f);
                 color *= brightness;
             }
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
@@ -135,7 +135,7 @@ class ClawsSlash : NatureProjectile {
             color.A = 25;
             if (!ShouldFullBright) {
                 Point pos = target.Center.ToTileCoordinates();
-                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.25f, 1f);
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.5f, 1f);
                 color *= brightness;
             }
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
