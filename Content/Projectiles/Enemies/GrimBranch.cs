@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using RoA.Content.Dusts;
 using RoA.Core;
 
+using System.IO;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -77,13 +79,14 @@ sealed class GrimBranch : ModProjectile {
             }
             gobacktimer++;
         }
-        if (Main.rand.Next(reducer) == 0 && Projectile.timeLeft < 70 && Projectile.timeLeft > 20 && vibechecker == 0 || Projectile.ai[0] == 100 && Projectile.timeLeft == 80) {
-            if (Main.netMode != NetmodeID.MultiplayerClient) {
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (Main.rand.Next(reducer) == 0 && Projectile.timeLeft < 70 && Projectile.timeLeft > 20 && vibechecker == 0 || Projectile.ai[0] == 100 && Projectile.timeLeft == 80) {
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, Projectile.velocity.X, Projectile.velocity.Y, Type, Projectile.damage, 0f, Projectile.owner, Projectile.timeLeft, rememberRotation);
+                Projectile.velocity += new Vector2(0, 5).RotatedBy(rememberRotation);
+                vibechecker = Projectile.timeLeft;
+                reducer += 40;
+                Projectile.netUpdate = true;
             }
-            Projectile.velocity += new Vector2(0, 5).RotatedBy(rememberRotation);
-            vibechecker = Projectile.timeLeft;
-            reducer += 40;
         }
         if (vibechecker - Projectile.timeLeft >= 5 && Projectile.timeLeft > 20) {
             Projectile.velocity -= new Vector2(0, 5).RotatedBy(rememberRotation);
@@ -91,20 +94,28 @@ sealed class GrimBranch : ModProjectile {
         }
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(vibechecker);
+        writer.Write(reducer);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        vibechecker = reader.ReadInt32();
+        reducer = reader.ReadInt32();
+    }
+
     public override void OnKill(int timeLeft) {
-        if (Main.netMode != NetmodeID.Server) {
-            SoundEngine.PlaySound(SoundID.Grass, new Vector2(Projectile.position.X, Projectile.position.Y));
-            for (int i = 0; i < 5; i++) {
-                int dust = Dust.NewDust(Projectile.Center - Projectile.velocity * 1f, 0, 0, ModContent.DustType<GrimDruidDust>(), 0, 0, 255, Scale: 0.8f);
-                Main.dust[dust].velocity *= 0.1f;
-                Main.dust[dust].velocity += Projectile.velocity;
+        //SoundEngine.PlaySound(SoundID.Grass, new Vector2(Projectile.position.X, Projectile.position.Y));
+        for (int i = 0; i < 5; i++) {
+            int dust = Dust.NewDust(Projectile.Center - Projectile.velocity * 1f, 0, 0, ModContent.DustType<GrimDruidDust>(), 0, 0, 255, Scale: 0.8f);
+            Main.dust[dust].velocity *= 0.1f;
+            Main.dust[dust].velocity += Projectile.velocity;
+            Main.dust[dust].velocity *= 0.5f;
+            if (Main.rand.NextBool()) {
                 Main.dust[dust].velocity *= 0.5f;
-                if (Main.rand.NextBool()) {
-                    Main.dust[dust].velocity *= 0.5f;
-                }
-                if (Main.rand.NextBool()) {
-                    Main.dust[dust].velocity *= 0.5f;
-                }
+            }
+            if (Main.rand.NextBool()) {
+                Main.dust[dust].velocity *= 0.5f;
             }
         }
     }

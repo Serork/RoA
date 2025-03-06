@@ -15,77 +15,66 @@ namespace RoA.Content.Projectiles.Enemies;
 
 sealed class VileSpike : ModProjectile {
     private const int MAX_TIMELEFT = 270;
-    
-	private bool _spawnedNext;
 
-	public override void SendExtraAI(BinaryWriter writer) => writer.Write(_spawnedNext);
+    private bool _spawnedNext;
 
-	public override void ReceiveExtraAI(BinaryReader reader) => _spawnedNext = reader.ReadBoolean();
+    public override void SendExtraAI(BinaryWriter writer) => writer.Write(_spawnedNext);
 
-	public override void SetDefaults () {
-		int width = 30; int height = 32;
-		Projectile.Size = new Vector2(width, height);
+    public override void ReceiveExtraAI(BinaryReader reader) => _spawnedNext = reader.ReadBoolean();
 
-		Projectile.CloneDefaults(ProjectileID.VilethornBase);
+    public override void SetDefaults() {
+        int width = 30; int height = 32;
+        Projectile.Size = new Vector2(width, height);
 
-		Projectile.aiStyle = AIType = -1;
+        Projectile.CloneDefaults(ProjectileID.VilethornBase);
 
-		Projectile.penetrate = -1;
-		Projectile.timeLeft = MAX_TIMELEFT;
+        Projectile.aiStyle = AIType = -1;
 
-		Projectile.alpha = byte.MaxValue;
+        Projectile.penetrate = -1;
+        Projectile.timeLeft = MAX_TIMELEFT;
+
+        Projectile.alpha = byte.MaxValue;
 
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.tileCollide = false;
-
-        Projectile.hide = true;
     }
 
-	public override bool? CanDamage() => Projectile.alpha == 0;
+    public override bool? CanDamage() => Projectile.alpha == 0;
 
     public override bool ShouldUpdatePosition() => false;
 
-    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
-        behindNPCsAndTiles.Add(index);
-    }
-
-    public override void AI () {
-		float height = 6f;
-		float height2 = 4f;
-		Projectile.velocity = Vector2.Zero;
-		Projectile.ai[0]++;
-		if (Projectile.ai[1] == 0f && Projectile.ai[0] < 55f) {
-			if (Main.netMode != NetmodeID.Server) {
+    public override void AI() {
+        float height = 6f;
+        float height2 = 4f;
+        Projectile.velocity = Vector2.Zero;
+        Projectile.ai[0]++;
+        if (Projectile.ai[1] == 0f && Projectile.ai[0] < 55f) {
+            if (Main.netMode != NetmodeID.Server) {
                 int dust = Dust.NewDust(new Vector2(Projectile.Center.X + Main.rand.Next(-32, 32), Projectile.Center.Y + 12f), 8, 8, ModContent.DustType<GrimDruidDust>(), 0f, Main.rand.NextFloat(-2.5f, -0.5f), 255, Scale: 0.9f + Main.rand.NextFloat(0f, 0.4f));
                 Main.dust[dust].velocity *= 0.25f;
             }
-		}
-		if (Projectile.ai[0] < 30f) {
-			if (Projectile.ai[1] == 0f) {
-				Projectile.timeLeft = MAX_TIMELEFT;
-				return;
-			}
-		}
-        if (Projectile.alpha != 0) {
-			Projectile.alpha = 0;
-		}
-		if (Projectile.ai[0] % height2 == 0 && !_spawnedNext) {
-			if (Main.netMode != NetmodeID.MultiplayerClient) {
-				int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y - 32), Vector2.Zero, ModContent.ProjectileType<VileSpike>(), Projectile.damage, Projectile.knockBack, 0);
-                Main.projectile[projectile].ai[1] = Projectile.ai[1] + 1f;
-                Main.projectile[projectile].netUpdate = true;
-                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
-            }
-			_spawnedNext = true;
-			Projectile.netUpdate = true;
-		}
-		if (Projectile.ai[1] >= height) {
-			Projectile.ai[1] = height + 1;
-			Projectile.Kill();
-            Projectile.netUpdate = true;
         }
-	}
+        if (Projectile.ai[0] < 30f) {
+            if (Projectile.ai[1] == 0f) {
+                Projectile.timeLeft = MAX_TIMELEFT;
+                return;
+            }
+        }
+        if (Projectile.alpha != 0) {
+            Projectile.alpha = 0;
+        }
+        if (Projectile.ai[0] % height2 == 0 && !_spawnedNext) {
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y - 32), Vector2.Zero, ModContent.ProjectileType<VileSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai1: Projectile.ai[1] + 1f);
+            }
+            _spawnedNext = true;
+        }
+        if (Projectile.ai[1] >= height) {
+            Projectile.ai[1] = height + 1;
+            Projectile.Kill();
+        }
+    }
 
     public override void OnKill(int timeLeft) {
         if (Main.rand.NextBool(3)) {
@@ -108,8 +97,6 @@ sealed class VileSpike : ModProjectile {
 
         if (Main.netMode != NetmodeID.MultiplayerClient) {
             int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<VileSpikeTip>(), Projectile.damage, Projectile.knockBack);
-            Main.projectile[projectile].netUpdate = true;
-            NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
         }
     }
 }
