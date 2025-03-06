@@ -651,7 +651,7 @@ sealed class FlederSlayer : ModProjectile {
         else {
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(sparkTexture2D,
-                             Projectile.Center + offset + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                             Projectile.Center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                              null,
                              color * Projectile.Opacity * 0.7f * charge,
                              MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction,
@@ -660,7 +660,7 @@ sealed class FlederSlayer : ModProjectile {
                              SpriteEffects.None,
                              0f);
             spriteBatch.Draw(sparkTexture2D,
-                             Projectile.Center + offset + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                             Projectile.Center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                              null,
                              color * Projectile.Opacity * 0.7f * charge,
                              MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction + MathHelper.PiOver2,
