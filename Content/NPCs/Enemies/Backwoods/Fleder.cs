@@ -75,9 +75,9 @@ sealed class Fleder : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 80;
-        NPC.damage = 22;
-        NPC.defense = 3;
+        NPC.lifeMax = 100;
+        NPC.damage = 50;
+        NPC.defense = 8;
         NPC.knockBackResist = 0.5f;
 
         int width = 30; int height = 30;
@@ -85,7 +85,7 @@ sealed class Fleder : ModNPC {
 
         NPC.aiStyle = -1;
 
-        NPC.value = Item.buyPrice(0, 0, 1, 5);
+        NPC.value = Item.buyPrice(0, 0, 2, 0);
 
         NPC.HitSound = SoundID.NPCHit27;
         NPC.DeathSound = SoundID.NPCDeath39;

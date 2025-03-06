@@ -92,10 +92,10 @@ sealed class BabyFleder : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 80;
-        NPC.damage = 22;
-        NPC.defense = 3;
-        NPC.knockBackResist = 1.25f;
+        NPC.lifeMax = 50;
+        NPC.damage = 25;
+        NPC.defense = 4;
+        NPC.knockBackResist = 1.1f;
 
         int width = 25; int height = 25;
         NPC.Size = new Vector2(width, height);
@@ -103,7 +103,7 @@ sealed class BabyFleder : ModNPC {
         NPC.aiStyle = -1;
 
         NPC.npcSlots = 0.8f;
-        NPC.value = Item.buyPrice(0, 0, 0, 75);
+        NPC.value = Item.buyPrice(0, 0, 0, 95);
 
         NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;
