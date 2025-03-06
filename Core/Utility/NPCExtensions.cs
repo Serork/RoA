@@ -477,7 +477,7 @@ static class NPCExtensions {
                 npc.directionY = -1;
         }
         else if (!(npc.ai[2] > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
-            bool flag12 = backwoods/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
+            bool flag12 = backwoods && targetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
             if (!flag12 && (double)(npc.position.Y / 16f) < Main.worldSurface/* && npc.type != 624 && npc.type != 631*/) {
                 npc.EncourageDespawn(10);
             }

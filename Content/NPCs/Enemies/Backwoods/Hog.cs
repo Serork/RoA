@@ -38,17 +38,19 @@ sealed class Hog : RoANPC {
     public override void SetDefaults() {
 		NPC.CloneDefaults(NPCID.Bunny);
 
-		NPC.lifeMax = 100;
-		NPC.damage = 12;
-		NPC.defense = 2;
+		NPC.lifeMax = 85;
+		NPC.damage = 22;
+		NPC.defense = 6;
         NPC.knockBackResist = 0.75f;
 
         NPC.aiStyle = -1;
 
+        NPC.npcSlots = 0.9f;
+
         int width = 40; int height = 35;
 		NPC.Size = new Vector2(width, height);
 
-		NPC.value = Item.buyPrice(0, 0, 0, 80);
+		NPC.value = Item.buyPrice(0, 0, 1, 0);
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 

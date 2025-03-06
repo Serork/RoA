@@ -157,7 +157,7 @@ sealed class Lumberjack : RoANPC {
 		float closeRange = 65f;
 		switch (State) {
 			case (float)States.Spawned:
-				NPC.TargetClosest(false);
+				NPC.TargetClosest();
 				player = Main.player[NPC.target];
 				if (NPC.position.ToTileCoordinates().Y < Main.worldSurface) {
 					if (NPC.Distance(player.Center) > closeRange && ((NPC.position.X > player.position.X && player.direction == 1) || (NPC.position.X < player.position.X && player.direction == -1))) {
@@ -171,7 +171,6 @@ sealed class Lumberjack : RoANPC {
                 ChangeState((int)States.Walking);
 				break;
 			case (float)States.Walking:
-                //NPC.TargetClosest();
                 if (Attack) {
 					Attack = false;
 					NPC.netUpdate = true;
@@ -182,22 +181,181 @@ sealed class Lumberjack : RoANPC {
 						NPC.velocity.Y = 0f;
 					}
 				}
-                NPC.aiStyle = 3;
-				AIType = 580;
-                Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
-                if (Math.Abs(NPC.Center.X - Main.player[NPC.target].Center.X) <= 20f && Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
-                    NPC.velocity.X *= 0.99f;
-                    NPC.velocity.X += (float)NPC.direction * 0.025f;
+
+                NPC.aiStyle = NPC.ModNPC.AIType = -1;
+
+                NPC npc = NPC;
+                if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
+                    npc.directionY = -1;
+
+                bool flag = false;
+                bool canOpenDoor2 = false;
+                bool flag6 = false;
+                if (npc.velocity.X == 0f)
+                    flag6 = true;
+
+                if (npc.justHit)
+                    flag6 = false;
+
+                flag6 = false;
+
+                bool targetPlayer = !Main.IsItDay();
+                int num56 = 60;
+
+                bool flag7 = false;
+                bool canOpenDoor = true;
+
+                bool flag9 = false;
+                int num64 = npc.type;
+
+                bool flag10 = true;
+
+                if (!flag9 && flag10) {
+                    if (npc.velocity.Y == 0f && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
+                        flag7 = true;
+
+                    if (npc.position.X == npc.oldPosition.X || npc.ai[3] >= (float)num56 || flag7)
+                        npc.ai[3] += 1f;
+                    else if ((double)Math.Abs(npc.velocity.X) > 0.9 && npc.ai[3] > 0f)
+                        npc.ai[3] -= 1f;
+
+                    if (npc.ai[3] > (float)(num56 * 10))
+                        npc.ai[3] = 0f;
+
+                    if (npc.justHit)
+                        npc.ai[3] = 0f;
+
+                    if (npc.ai[3] == (float)num56)
+                        npc.netUpdate = true;
+
+                    if (Main.player[npc.target].Hitbox.Intersects(npc.Hitbox))
+                        npc.ai[3] = 0f;
                 }
-                if (NPC.velocity.Y <= -6f) {
-					NPC.velocity.Y = -6f;
-				}
-				NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MAXSPEED, MAXSPEED);
-				player = Main.player[NPC.target];
-				if (NPC.Distance(player.Center) < closeRange && !player.dead) {
-                    StateTimer = 0.2f;
-                    ChangeState((int)States.Attacking);
-				}
+
+                bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
+
+                shouldTargetPlayer = targetPlayer;
+                if (npc.ai[3] < (float)num56 && shouldTargetPlayer) {
+                    npc.TargetClosest();
+                    if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
+                        npc.directionY = -1;
+                }
+
+                float num87 = 1f * 1.25f;
+                float num88 = 0.07f * 1.25f;
+                if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
+                    if (npc.velocity.Y == 0f)
+                        npc.velocity *= 0.7f;
+                }
+                else if (npc.velocity.X < num87 && npc.direction == 1) {
+                    npc.velocity.X += num88;
+                    if (npc.velocity.X > num87)
+                        npc.velocity.X = num87;
+                }
+                else if (npc.velocity.X > 0f - num87 && npc.direction == -1) {
+                    npc.velocity.X -= num88;
+                    if (npc.velocity.X < 0f - num87)
+                        npc.velocity.X = 0f - num87;
+                }
+
+                bool tileChecks = false;
+                if (NPC.velocity.Y == 0f) {
+                    int num77 = (int)(NPC.position.Y + NPC.height + 7f) / 16;
+                    int num189 = (int)NPC.position.X / 16;
+                    int num79 = (int)(NPC.position.X + NPC.width) / 16;
+                    for (int num80 = num189; num80 <= num79; num80++) {
+                        if (Main.tile[num80, num77].HasUnactuatedTile && Main.tileSolid[Main.tile[num80, num77].TileType]) {
+                            tileChecks = true;
+                            break;
+                        }
+                    }
+                }
+                if (NPC.velocity.Y >= 0f) {
+                    int direction = Math.Sign(NPC.velocity.X);
+
+                    Vector2 position3 = NPC.position;
+                    position3.X += NPC.velocity.X;
+                    int num82 = (int)((position3.X + NPC.width / 2 + (NPC.width / 2 + 1) * direction) / 16f);
+                    int num83 = (int)((position3.Y + NPC.height - 1f) / 16f);
+                    if (num82 * 16 < position3.X + NPC.width && num82 * 16 + 16 > position3.X && (Main.tile[num82, num83].HasUnactuatedTile && !Main.tile[num82, num83].TopSlope && !Main.tile[num82, num83 - 1].TopSlope && Main.tileSolid[Main.tile[num82, num83].TileType] && !Main.tileSolidTop[Main.tile[num82, num83].TileType] || Main.tile[num82, num83 - 1].IsHalfBlock && Main.tile[num82, num83 - 1].HasUnactuatedTile) && (!Main.tile[num82, num83 - 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82, num83 - 1].TileType] || Main.tileSolidTop[Main.tile[num82, num83 - 1].TileType] || Main.tile[num82, num83 - 1].IsHalfBlock && (!Main.tile[num82, num83 - 4].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82, num83 - 4].TileType] || Main.tileSolidTop[Main.tile[num82, num83 - 4].TileType])) && (!Main.tile[num82, num83 - 2].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82, num83 - 2].TileType] || Main.tileSolidTop[Main.tile[num82, num83 - 2].TileType]) && (!Main.tile[num82, num83 - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82, num83 - 3].TileType] || Main.tileSolidTop[Main.tile[num82, num83 - 3].TileType]) && (!Main.tile[num82 - direction, num83 - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82 - direction, num83 - 3].TileType])) {
+                        float num84 = num83 * 16;
+                        if (Main.tile[num82, num83].IsHalfBlock) {
+                            num84 += 8f;
+                        }
+
+                        if (Main.tile[num82, num83 - 1].IsHalfBlock) {
+                            num84 -= 8f;
+                        }
+                        if (num84 < position3.Y + NPC.height) {
+                            float num85 = position3.Y + NPC.height - num84;
+                            float num86 = 16.1f;
+                            if (NPC.type == NPCID.BlackRecluse || NPC.type == NPCID.WallCreeper || NPC.type == NPCID.JungleCreeper || NPC.type == NPCID.BloodCrawler || NPC.type == NPCID.DesertScorpionWalk) {
+                                num86 += 8f;
+                            }
+
+                            if (num85 <= num86) {
+                                NPC.gfxOffY += NPC.position.Y + NPC.height - num84;
+                                NPC.position.Y = num84 - NPC.height;
+                                if (num85 < 9f) {
+                                    NPC.stepSpeed = 1f;
+                                }
+                                else {
+                                    NPC.stepSpeed = 2f;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (tileChecks) {
+                    int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
+                    int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
+
+                    {
+                        if (NPC.velocity.X < 0f && NPC.direction == -1 || NPC.velocity.X > 0f && NPC.direction == 1) {
+                            bool JumpCheck(int tileX, int tileY) {
+                                if (NPC.height >= 32 && Main.tile[tileX, tileY - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 2].TileType]) {
+                                    if (Main.tile[tileX, tileY - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 3].TileType]) {
+                                        NPC.velocity.Y = -8f;
+                                        NPC.netUpdate = true;
+                                    }
+                                    else {
+                                        NPC.velocity.Y = -7f;
+                                        NPC.netUpdate = true;
+                                    }
+                                    return true;
+                                }
+                                else if (Main.tile[tileX, tileY - 1].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 1].TileType]) {
+                                    NPC.velocity.Y = -6f;
+                                    NPC.netUpdate = true;
+                                    return true;
+                                }
+                                else if (NPC.position.Y + NPC.height - tileY * 16 > 20f && Main.tile[tileX, tileY].HasUnactuatedTile && !Main.tile[tileX, tileY].TopSlope && Main.tileSolid[Main.tile[tileX, tileY].TileType]) {
+                                    NPC.velocity.Y = -5f;
+                                    NPC.netUpdate = true;
+                                    return true;
+                                }
+                                else if (NPC.directionY < 0 && (!Main.tile[tileX, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY + 1].TileType]) && (!Main.tile[tileX + NPC.direction, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX + NPC.direction, tileY + 1].TileType])) {
+                                    NPC.velocity.Y = -8f;
+                                    NPC.velocity.X *= 1.5f;
+                                    NPC.netUpdate = true;
+                                    return true;
+                                }
+                                return false;
+                            }
+                            if (!JumpCheck(tileX, tileY)) {
+                            }
+                        }
+                    }
+                }
+                Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+
+                player = Main.player[NPC.target];
+                if (shouldTargetPlayer && Collision.CanHit(NPC, player)) {
+                    if (NPC.Distance(player.Center) < closeRange && !player.dead) {
+                        StateTimer = 0.2f;
+                        ChangeState((int)States.Attacking);
+                    }
+                }
 				break;
 			case (float)States.Attacking:
 				player = Main.player[NPC.target];
@@ -205,7 +363,8 @@ sealed class Lumberjack : RoANPC {
 				if ((inRange || player.dead) && StateTimer <= 0.2f) {
 					StateTimer = 0.1f;
                     ChangeState((int)States.Walking);
-					return;
+                    NPC.TargetClosest();
+                    return;
 				}
 				if (NPC.velocity.Y == 0f) {
                     NPC.ResetAIStyle();

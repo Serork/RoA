@@ -384,7 +384,6 @@ sealed class FlederSlayer : ModProjectile {
                         float extraRotation = playerDirection * 0.35f * Helper.EaseInOut3(progress) * slow * slow2;
                         Vector2 extra = Vector2.Normalize(Projectile.velocity) * -((Projectile.rotation + (playerDirection != 1 ? MathHelper.Pi : 0f)) * playerDirection).ToRotationVector2() * 165f * Projectile.localAI[2];
                         Vector2 projectileCenter = Projectile.Center + extra;
-                        //Dust.NewDustDirect(projectileCenter, 0, 0, DustID.Dirt);
                         if (!_released && Projectile.ai[1] <= 16f) {
                             if (Projectile.ai[1] > 4f && WorldGen.SolidTile(Math.Clamp((int)projectileCenter.X / 16, 1, Main.maxTilesX), Math.Clamp((int)projectileCenter.Y / 16 + 1, 1, Main.maxTilesY))) {
                                 _released = true;
