@@ -266,7 +266,7 @@ sealed class FlederSlayer : ModProjectile {
                 player.bodyFrame.Y = player.bodyFrame.Height * 4;
             }
             else if (_timeLeft == min) {
-                if (_timingProgress >= 1.3f && _timingProgress <= 2.2f) {
+                if (_timingProgress >= 1.3f && _timingProgress <= 2.3f) {
                     _empoweredAttack = true;
                 }
 
