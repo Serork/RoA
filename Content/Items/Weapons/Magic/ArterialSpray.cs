@@ -246,7 +246,8 @@ sealed class ArterialSprayProjectile2 : ModProjectile {
             int num147 = 8;
             int num148 = 2;
             int num149 = 1;
-            num149 = ProjectileID.Sets.TrailCacheLength[Projectile.type];
+            //num149 = (int)(ProjectileID.Sets.TrailCacheLength[Projectile.type] * 0.5f);
+            num149 = (int)(ProjectileID.Sets.TrailCacheLength[Projectile.type] * 0.85f);
             num147 = 0;
             num148 = -2;
             Texture2D texture2 = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray4").Value;
