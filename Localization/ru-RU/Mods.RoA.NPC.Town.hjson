@@ -29,3 +29,11 @@ Dryad: {
 }
 
 GoblinTinkerer.PettyGoblinQuote1: Тебя обставил тот мелкий воришка? Скажу честно, ты не первый.
+
+Guide: {
+	// HelpText1: HelpText1
+	// HelpText2: HelpText2
+	// HelpText3: HelpText3
+	// HelpText4: HelpText4
+	// HelpText5: HelpText5
+}
