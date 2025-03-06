@@ -388,10 +388,11 @@ sealed class FlederSlayer : ModProjectile {
                                 if (_charge > 0.35f) {
                                     if (Projectile.owner == Main.myPlayer) {
                                         for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
-                                            float value = _empoweredAttack ? 1.75f : 1f;
-                                            Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * _charge * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
-                                            float size = 2f * (Math.Max(_charge, 0.6f) * 1.15f + 0.15f) * value;
-                                            int damage = (int)((Projectile.damage + Projectile.damage / 2) * (_charge * 1.15f + 0.15f) * value);
+                                            float value = _empoweredAttack ? 1.35f : 1f;
+                                            float value2 = MathHelper.Clamp(_charge * 1.5f, 0f, 1f);
+                                            Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * value2 * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
+                                            float size = 2f * (value2 * 1.15f + 0.15f) * value;
+                                            int damage = (int)((Projectile.damage + Projectile.damage / 2) * (value2 * 1.15f + 0.15f) * value);
                                             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
                                                                            projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
                                                                            velocity,
