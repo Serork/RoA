@@ -225,9 +225,9 @@ sealed class FlederSlayer : ModProjectile {
             float offset = MathHelper.Pi / 1.15f * playerDirection;
             SoundStyle style = new SoundStyle(ResourceManager.ItemSounds + "Whisper") { Volume = 1.15f };
 
-            if (_charge >= 0.6f) {
+            if (_charge >= 0.8f) {
                 //var style2 = new SoundStyle(ResourceManager.ItemSounds + "Twinkle") { Volume = 1f };
-                if (Math.Round(_timingProgress, 2) == 1f && !_twinkleSoundPlayed) {
+                if (!_twinkleSoundPlayed) {
                     SoundEngine.PlaySound(SoundID.MaxMana, Projectile.Center);
                     _twinkleSoundPlayed = true;
                 }
@@ -392,7 +392,7 @@ sealed class FlederSlayer : ModProjectile {
                                 if (_charge > 0.35f) {
                                     if (Projectile.owner == Main.myPlayer) {
                                         for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
-                                            float value = _empoweredAttack ? 1.35f : 1f;
+                                            float value = _empoweredAttack ? 1.25f : 1f;
                                             float value2 = MathHelper.Clamp(_charge * 1.5f, 0f, 1f);
                                             Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * value2 * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
                                             float size = 2f * (value2 * 1.15f + 0.15f) * value;
