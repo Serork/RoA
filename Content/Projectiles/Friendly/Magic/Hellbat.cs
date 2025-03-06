@@ -72,7 +72,7 @@ sealed class Hellbat : ModProjectile {
 			}
 		}
 		else {
-			Projectile.alpha = 0;
+			//Projectile.alpha = 0;
 			Projectile.Opacity = 1f - Utils.GetLerpValue(10, 0, Projectile.timeLeft, true);
 
         }
