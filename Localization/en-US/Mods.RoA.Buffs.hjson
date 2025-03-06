@@ -227,11 +227,11 @@ Root: {
 }
 
 DynastySetBonusBuff: {
-	DisplayName: Dynasty Set Bonus Buff
-	Description: Mods.RoA.Buffs.DynastySetBonusBuff.Description
+	DisplayName: Sakura's Precision
+	Description: Movement speed is increased, but quickly wanes
 }
 
 ElderwoodSetBonusBuff: {
-	DisplayName: Elderwood Set Bonus Buff
-	Description: Mods.RoA.Buffs.ElderwoodSetBonusBuff.Description
+	DisplayName: Backwoods' Protection
+	Description: Movement speed is briefly decreased
 }

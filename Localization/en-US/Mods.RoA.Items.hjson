@@ -1650,11 +1650,11 @@ BoneroseHangingPot: {
 }
 
 LothorEnrageMonolith: {
-	DisplayName: Lothor Enrage Monolith
-	Tooltip: ""
+	DisplayName: Eclipse Monolith
+	Tooltip: "'You see this only once in 216 years...'"
 }
 
 FlederSlayerDecoration: {
-	DisplayName: Fleder Slayer Decoration
-	Tooltip: ""
+	DisplayName: Fleder Slayer Decorum
+	Tooltip: "'Gloria filio'"
 }
