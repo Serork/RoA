@@ -217,7 +217,7 @@ sealed class GastroIntestinalMalletProjectile2 : ModProjectile {
         Projectile.height = 10;
         Projectile.aiStyle = 1;
         Projectile.alpha = 255;
-        Projectile.penetrate = -1;
+        Projectile.penetrate = 1;
         Projectile.friendly = true;
         Projectile.DamageType = DamageClass.Summon;
         Projectile.hide = true;
