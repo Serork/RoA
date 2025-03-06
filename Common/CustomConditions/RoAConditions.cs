@@ -12,6 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.CustomConditions;
 
 static class RoAConditions {
+    public static Condition LothorEnrageMonolith = new("Mods.RoA.Conditions.LothorEnrageMonolith", () => Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(ModContent.ItemType<FlederSlayer>()));
     public static Condition InBackwoods = new("Mods.RoA.Conditions.BackwoodsBiome", () => Main.LocalPlayer.InModBiome<BackwoodsBiome>());
     public static Condition HasAnySaddle = new("Mods.RoA.Conditions.HasSaddle", 
         () => {

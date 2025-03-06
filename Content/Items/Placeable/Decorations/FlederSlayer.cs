@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Weapons.Melee;
+using RoA.Core;
 
 using Terraria;
 using Terraria.ID;
@@ -17,5 +18,9 @@ sealed class FlederSlayerDecoration : ModItem {
 		Item.CloneDefaults(ItemID.BloodMoonMonolith);
         Item.createTile = ModContent.TileType<Tiles.Decorations.FlederSlayerDecoration>();
         Item.placeStyle = 0;
+
+        Item.rare = ItemRarityID.LightRed;
+
+        Item.value = Item.sellPrice(0, 3, 50, 0);
     }
 }

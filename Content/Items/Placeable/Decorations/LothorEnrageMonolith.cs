@@ -1,4 +1,6 @@
-﻿using RoA.Content.Tiles.Decorations;
+﻿using RoA.Common.CustomConditions;
+using RoA.Content.Tiles.Decorations;
+using RoA.Core;
 
 using Terraria;
 using Terraria.ID;
@@ -7,6 +9,17 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Placeable.Decorations;
 
 sealed class LothorEnrageMonolith : ModItem {
+    private sealed class LothorEnrageMonolithInPartyGirlShop : GlobalNPC {
+        public override void ModifyShop(NPCShop shop) {
+            if (shop.NpcType != NPCID.PartyGirl) {
+                return;
+            }
+
+
+            shop.InsertBefore(ItemID.FogMachine, ModContent.ItemType<LothorEnrageMonolith>(), RoAConditions.LothorEnrageMonolith);
+        }
+    }
+
     public override void SetDefaults() {
         Item.SetSize(26, 32);
 		
@@ -16,6 +29,8 @@ sealed class LothorEnrageMonolith : ModItem {
         Item.hasVanityEffects = true;
         Item.createTile = ModContent.TileType<Tiles.Decorations.LothorEnrageMonolith>();
         Item.placeStyle = 0;
+
+        Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
