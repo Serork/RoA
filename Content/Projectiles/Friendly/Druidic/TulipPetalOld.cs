@@ -46,6 +46,11 @@ sealed class TulipPetalOld : NatureProjectile {
         AIType = -1;
 
         Projectile.timeLeft = 120;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
+
+        Projectile.friendly = true;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => Collision.CheckAABBvAABBCollision(Projectile.position - Vector2.One * 2f, Projectile.Size + Vector2.One * 4f, targetHitbox.Location.ToVector2(), targetHitbox.Size());
@@ -97,22 +102,20 @@ sealed class TulipPetalOld : NatureProjectile {
                 Projectile.Center = Projectile.position;
             }
             if (_explosionMultiplier == 10 && Projectile.ai[1] % 3 == 0) {
-                if (Main.netMode != NetmodeID.Server) {
-                    if (Projectile.frame == 2) {
-                        int _dust = Dust.NewDust(new Vector2(Projectile.position.X - 4, Projectile.position.Y - 4), 8, 8, DustID.BlueTorch, 0f, 0f, 40, new Color(170, 170, 255), 2f);
-                        Main.dust[_dust].noGravity = true;
-                        Main.dust[_dust].velocity *= 0.9f;
-                    }
-                    else if (Projectile.frame == 1) {
-                        int _dust2 = Dust.NewDust(new Vector2(Projectile.position.X - 4, Projectile.position.Y - 4), 8, 8, DustID.YellowTorch, 0f, 0f, 40, new Color(255, 170, 110), 2f);
-                        Main.dust[_dust2].noGravity = true;
-                        Main.dust[_dust2].velocity *= 0.9f;
-                    }
-                    else {
-                        int _dust3 = Dust.NewDust(new Vector2(Projectile.position.X - 4, Projectile.position.Y - 4), 8, 8, DustID.PurpleTorch, 0f, 0f, 40, new Color(255, 130, 170), 2f);
-                        Main.dust[_dust3].noGravity = true;
-                        Main.dust[_dust3].velocity *= 0.9f;
-                    }
+                if (Projectile.frame == 2) {
+                    int _dust = Dust.NewDust(new Vector2(Projectile.position.X - 4, Projectile.position.Y - 4), 8, 8, DustID.BlueTorch, 0f, 0f, 40, new Color(170, 170, 255), 2f);
+                    Main.dust[_dust].noGravity = true;
+                    Main.dust[_dust].velocity *= 0.9f;
+                }
+                else if (Projectile.frame == 1) {
+                    int _dust2 = Dust.NewDust(new Vector2(Projectile.position.X - 4, Projectile.position.Y - 4), 8, 8, DustID.YellowTorch, 0f, 0f, 40, new Color(255, 170, 110), 2f);
+                    Main.dust[_dust2].noGravity = true;
+                    Main.dust[_dust2].velocity *= 0.9f;
+                }
+                else {
+                    int _dust3 = Dust.NewDust(new Vector2(Projectile.position.X - 4, Projectile.position.Y - 4), 8, 8, DustID.PurpleTorch, 0f, 0f, 40, new Color(255, 130, 170), 2f);
+                    Main.dust[_dust3].noGravity = true;
+                    Main.dust[_dust3].velocity *= 0.9f;
                 }
             }
         }
