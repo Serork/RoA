@@ -737,6 +737,10 @@ sealed class FlederSlayer : ModProjectile {
             return false;
         }
 
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+            Projectile.damage = (int)((double)Projectile.damage * 0.9);
+        }
+
         public override bool? CanCutTiles() => true;
 
         public override bool? CanDamage() => Projectile.Opacity >= 0.25f;
