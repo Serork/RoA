@@ -119,7 +119,11 @@ RodOfTheStream: {
 
 RodOfTheShock: {
 	DisplayName: Rod of the Shock
-	Tooltip: Channels a lightning bolt
+	Tooltip:
+		'''
+		Channels a lightning bolt
+		Lighting bolt damage ignores enemy defense
+		'''
 }
 
 RodOfTheTerra: {

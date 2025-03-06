@@ -119,7 +119,11 @@ RodOfTheStream: {
 
 RodOfTheShock: {
 	DisplayName: Жезл шока
-	Tooltip: Выпускает разряд молнии
+	Tooltip:
+		'''
+		Выпускает разряд молнии
+		Урон молнии игнорирует вражескую защиту
+		'''
 }
 
 RodOfTheTerra: {
