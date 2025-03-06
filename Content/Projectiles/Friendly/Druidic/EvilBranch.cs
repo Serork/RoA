@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -189,6 +190,8 @@ sealed class EvilBranch : NatureProjectile {
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
+
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WoodCreak") { Volume = 0.6f, PitchVariance = 0.1f, Pitch = 0.6f });
 
             byte index = 0;
             foreach (LeafInfo leafInfo in _leavesInfo) {

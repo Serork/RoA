@@ -20,15 +20,23 @@ sealed class PumpkinSeed : NatureProjectile {
         Projectile.aiStyle = 1;
         AIType = ProjectileID.Bullet;
 
-        Projectile.timeLeft = 150;
+        Projectile.timeLeft = 90;
 
         DrawOffsetX = -2;
+    }
+
+    public override void SafePostAI() {
+        Projectile.velocity *= 0.99f;
+        if (Projectile.timeLeft <= 50) {
+            Projectile.velocity.Y += 0.4f;
+            Projectile.rotation += Projectile.velocity.Y * Projectile.direction;
+        }
     }
 
     protected override void SafeOnSpawn(IEntitySource source) => Projectile.scale = Main.rand.NextFloat(0.8f, 1.2f);
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
+        SoundEngine.PlaySound(SoundID.Dig with { Pitch = 1.1f, Volume = 0.5f }, Projectile.Center);
 
         return base.OnTileCollide(oldVelocity);
     }

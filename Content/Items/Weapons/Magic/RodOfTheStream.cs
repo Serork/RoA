@@ -6,10 +6,11 @@ using RoA.Content.Buffs;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
-
+using RoA.Core;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -47,7 +48,7 @@ sealed class RodOfTheStream : Rod {
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
-        Item.UseSound = SoundID.Item87;
+        Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "Splash") { Volume = 0.9f, Pitch = -0.2f, PitchVariance = 0.2f };
 
         Item.shoot = ModContent.ProjectileType<WaterStream>();
         Item.shootSpeed = 6f;

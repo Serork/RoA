@@ -17,6 +17,7 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -49,7 +50,7 @@ sealed class RodOfTheCondor : ModItem {
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
-        Item.UseSound = SoundID.Item1;
+        Item.UseSound = Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "WhatTheFuckIsAKilometer") { Volume = 0.9f };
 
         Item.staff[Item.type] = true;
     }

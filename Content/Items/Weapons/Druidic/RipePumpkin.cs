@@ -16,7 +16,7 @@ sealed class RipePumpkin : NatureItem {
     protected override void SafeSetDefaults() {
 		Item.SetSize(30, 28);
 		Item.SetWeaponValues(4, 6f);
-		Item.SetDefaultToUsable(ItemUseStyleID.Swing, 45, 20, false, useSound: SoundID.NPCHit7);
+		Item.SetDefaultToUsable(ItemUseStyleID.Swing, 45, 20, false, useSound: SoundID.Item7);
 		Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Druidic.RipePumpkin>());
 		Item.SetDefaultOthers(Item.sellPrice(silver: 20), ItemRarityID.Blue);
 

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
-
+using Steamworks;
 using System;
 using System.Collections.Generic;
 
@@ -70,6 +70,7 @@ sealed class ProtectiveRoots : NatureProjectile {
             Vector2 newPos = vector2.RotatedBy(rejection * factor);
             Projectile.NewProjectile(source, pos.X + newPos.X, pos.Y + newPos.Y, 0f, 0f, Type, Projectile.damage, Projectile.knockBack, player.whoAmI, (float)i, Projectile.ai[2], -1f);
         }
+        SoundEngine.PlaySound(SoundID.Item80, Projectile.Center);
         Projectile.Kill();
         Projectile.netUpdate = true;
     }
@@ -142,7 +143,7 @@ sealed class ProtectiveRoots : NatureProjectile {
             Main.dust[dust].velocity *= 0.35f + Main.rand.NextFloatRange(0.2f);
             Main.dust[dust].velocity *= 1.15f + Main.rand.NextFloatRange(0.2f);
         }
-        if (Main.rand.Next(3) == 0) SoundEngine.PlaySound(SoundID.Item48, Projectile.Center);
+        SoundEngine.PlaySound(SoundID.Item48 with { Volume = 0.6f, Pitch = -0.2f, MaxInstances = 1 }, Projectile.Center);
         SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
     }
 

@@ -27,7 +27,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(36, 42);
-        Item.SetDefaultToUsable(-1, 24, useSound: SoundID.Item80);
+        Item.SetDefaultToUsable(-1, 24, useSound: SoundID.Item1);
         Item.SetWeaponValues(10, 2f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 16);

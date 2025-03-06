@@ -3,8 +3,9 @@
 using RoA.Common.GlowMasks;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
-
+using RoA.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -41,7 +42,8 @@ sealed class RodOfTheDragonfire : Rod {
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
-        Item.UseSound = SoundID.Item73;
+
+        Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "ScreechCast") { Volume = 0.9f, PitchVariance = 0.1f };
 
         Item.shoot = ModContent.ProjectileType<Hellbat>();
         Item.shootSpeed = 5f;
