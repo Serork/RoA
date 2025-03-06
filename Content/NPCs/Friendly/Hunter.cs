@@ -39,7 +39,7 @@ sealed class Hunter : ModNPC {
     private const byte LEATHERAMOOUNTNEEDED = 15;
     private const byte GOLDAMOUNTTODROP = 3;
 
-    private const byte MAXNAMES = 3;
+    private const byte MAXNAMES = 4;
 
     private int _currentQuote, _currentNotEnoughTradeQuote, _currentTradeQuote, _currentFireLighterQuote;
 

@@ -1,7 +1,8 @@
 Hunter: {
-	Name1: Name1
-	Name2: Name2
-	Name3: Name3
+	Name1: Hunter
+	Name2: Biden
+	Name3: Caleb
+	Name4: Evan
 	Button1: Talk
 	Button2_1: Barter
 	Button2_2: "{$Mods.RoA.NPC.Quotes.Hunter.Button2_1} (15 {$ItemName.Leather})"
@@ -19,7 +20,7 @@ Hunter: {
 	TradeQuote1: Thank you. With this leather, I may live to fight another day.
 	TradeQuote2: Much obliged. These supplies will serve me well.
 	TradeQuote3: Thank you, kid. Now I am sure I won't be dead by daylight.
-	DropFireLighterQuote1: DropFireLighterQuote1
+	DropFireLighterQuote1: Listen, kid. I will meet my end sooner or later. Have this. It's my relic.
 }
 
 Dryad: {
