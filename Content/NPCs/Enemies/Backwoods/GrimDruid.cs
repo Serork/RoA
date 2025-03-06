@@ -121,10 +121,6 @@ sealed class GrimDruid : DruidNPC {
     protected override void Walking() {
         NPC.aiStyle = NPC.ModNPC.AIType = -1;
 
-        if (NPC.target == 0 || NPC.target == 255) {
-            NPC.TargetClosest(true);
-        }
-
         NPC npc = NPC;
         if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
             npc.directionY = -1;
