@@ -31,6 +31,8 @@ sealed class FlederSlayer : ModProjectile {
     private int _direction;
     private bool _init, _init2;
     private int _timeLeft;
+    private float _timingProgress;
+    private bool _empoweredAttack;
 
     public override void SetDefaults() {
         int width = 88; int height = width;
@@ -208,6 +210,7 @@ sealed class FlederSlayer : ModProjectile {
         bool lastSlash2 = Projectile.ai[1] < 13f;
         bool turnOnAvailable = false;
         bool flag3 = _timeLeft > min;
+
         if (player.dead || !player.active) {
             Projectile.Kill();
         }
@@ -216,6 +219,16 @@ sealed class FlederSlayer : ModProjectile {
             float dir = (float)(Math.PI / 2.0 + (double)playerDirection * 1.0);
             float offset = MathHelper.Pi / 1.15f * playerDirection;
             SoundStyle style = new SoundStyle(ResourceManager.ItemSounds + "Whisper") { Volume = 1.15f };
+
+            if (_charge >= 0.6f) {
+                if (_timingProgress < 1f) {
+                    _timingProgress += 0.1f;
+                }
+                else {
+                    _timingProgress += 0.1f;
+                }
+            }
+
             if (flag3) {
                 CalculateExtraRotation();
 
@@ -246,6 +259,12 @@ sealed class FlederSlayer : ModProjectile {
                 player.bodyFrame.Y = player.bodyFrame.Height * 4;
             }
             else if (_timeLeft == min) {
+                if (_timingProgress >= 1.3f && _timingProgress <= 2.2f) {
+                    _empoweredAttack = true;
+                }
+
+                Main.NewText(_timingProgress + " " + _empoweredAttack);
+
                 SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 
                 for (int i = 0; i < Projectile.localNPCImmunity.Length; i++) {
@@ -373,14 +392,17 @@ sealed class FlederSlayer : ModProjectile {
                                 if (_charge > 0.35f) {
                                     if (Projectile.owner == Main.myPlayer) {
                                         for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
+                                            Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * _charge * player.GetTotalAttackSpeed(DamageClass.Melee) * (_empoweredAttack ? 1.5f : 1f));
+                                            float size = Main.rand.NextFloat(1f, 1.75f) * Main.rand.NextFloat(1.1f, 1.8f) * (_charge * 1.15f + 0.15f) * (_empoweredAttack ? 1.5f : 1f);
+                                            int damage = (int)((Projectile.damage + Projectile.damage / 2) * (_charge * 1.15f + 0.15f) * (_empoweredAttack ? 1.5f : 1f));
                                             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
                                                                            projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
-                                                                           Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * _charge * player.GetTotalAttackSpeed(DamageClass.Melee)),
+                                                                           velocity,
                                                                            ModContent.ProjectileType<WaveSlash>(),
-                                                                           (int)((Projectile.damage + Projectile.damage / 2) * (_charge * 1.15f + 0.15f)),
+                                                                           damage,
                                                                            Projectile.knockBack,
                                                                            Projectile.owner,
-                                                                           Main.rand.NextFloat(1f, 1.75f) * Main.rand.NextFloat(1.1f, 1.8f) * (_charge * 1.15f + 0.15f));
+                                                                           size);
                                         }
                                     }
                                     if (Main.netMode != NetmodeID.Server && Main.myPlayer == Projectile.owner) {
@@ -639,6 +661,32 @@ sealed class FlederSlayer : ModProjectile {
                              0f);
             spriteBatch.EndBlendState();
         }
+
+        float opacity = MathHelper.Clamp(_timingProgress, 0f, 1f);
+        if (_timingProgress > 1.5f) {
+            opacity = MathHelper.Clamp(1f - (_timingProgress - 0.5f - 1f) * 2f, 0f, 1f);
+        }
+        spriteBatch.BeginBlendState(BlendState.Additive);
+        spriteBatch.Draw(sparkTexture2D,
+                            Projectile.Center + offset + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                            null,
+                            color * Projectile.Opacity * 0.7f * opacity,
+                            MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f),
+                            new Vector2(sparkTexture2D.Width / 2, sparkTexture2D.Height / 2),
+                            Projectile.scale * 0.8f,
+                            SpriteEffects.None,
+                            0f);
+        spriteBatch.Draw(sparkTexture2D,
+                            Projectile.Center + offset + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                            null,
+                            color * Projectile.Opacity * 0.7f * opacity,
+                            MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) + MathHelper.PiOver2,
+                            new Vector2(sparkTexture2D.Width / 2, sparkTexture2D.Height / 2),
+                            Projectile.scale * 0.8f,
+                            SpriteEffects.None,
+                            0f);
+        spriteBatch.EndBlendState();
+
         return false;
     }
 
