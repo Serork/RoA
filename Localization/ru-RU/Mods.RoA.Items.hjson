@@ -1647,3 +1647,8 @@ LothorEnrageMonolith: {
 	// DisplayName: Lothor Enrage Monolith
 	// Tooltip: ""
 }
+
+FlederSlayerDecoration: {
+	// DisplayName: Fleder Slayer Decoration
+	// Tooltip: ""
+}

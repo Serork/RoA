@@ -109,7 +109,6 @@ sealed class LothorEnrageScene : ModSceneEffect {
 sealed class LothorEnrageMonolith : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
-        Main.tileLighted[Type] = true;
 
         TileID.Sets.HasOutlines[Type] = true;
 
@@ -140,12 +139,6 @@ sealed class LothorEnrageMonolith : ModTile {
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
-    }
-
-    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
-        r = 0f;
-        g = 0.1f;
-        b = 0.15f;
     }
 
     public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
@@ -220,7 +213,7 @@ sealed class LothorEnrageMonolith : ModTile {
         int frameX = Main.tile[i, j].TileFrameX;
         int frameY = Main.tile[i, j].TileFrameY;
         int height = frameY % (18 * 5 + 2) == 54 ? 18 : 16;
-        if (frameY >= 18 * 4 + 2) {
+        if (frameY >= 18 * 5 + 2) {
             frameY += Main.tileFrame[Type] * (18 * 5 + 2);
         }
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
