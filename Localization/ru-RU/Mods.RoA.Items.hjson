@@ -1224,7 +1224,7 @@ FlederStaff: {
 }
 
 FlederSlayer: {
-	DisplayName: Бич нетопырей
+	DisplayName: Погибель нетопырей
 	Tooltip:
 		'''
 		Отправляет слабых врагов в полет сильным ударом
@@ -1643,16 +1643,16 @@ DullDaikatana: {
 }
 
 BoneroseHangingPot: {
-	// DisplayName: Bonerose Hanging Pot
+	DisplayName: Подвесная костероза
 	// Tooltip: ""
 }
 
 LothorEnrageMonolith: {
-	// DisplayName: Lothor Enrage Monolith
-	// Tooltip: ""
+	DisplayName: Монолит затмения
+	Tooltip: "'Такое увидишь лишь раз в 216 лет..."
 }
 
 FlederSlayerDecoration: {
-	// DisplayName: Fleder Slayer Decoration
-	// Tooltip: ""
+	DisplayName: Декор 'Погибель нетопырей'
+	Tooltip: "'Gloria filio'"
 }

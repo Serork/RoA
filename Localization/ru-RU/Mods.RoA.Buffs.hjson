@@ -227,11 +227,11 @@ Root: {
 }
 
 DynastySetBonusBuff: {
-	// DisplayName: Dynasty Set Bonus Buff
-	// Description: Mods.RoA.Buffs.DynastySetBonusBuff.Description
+	DisplayName: Меткость сакуры
+	Description: Скорость передвижения увеличена, но быстро угасает
 }
 
 ElderwoodSetBonusBuff: {
-	// DisplayName: Elderwood Set Bonus Buff
-	// Description: Mods.RoA.Buffs.ElderwoodSetBonusBuff.Description
+	DisplayName: Защита чащи
+	Description: Скорость передвижения кратковременно снижена
 }
