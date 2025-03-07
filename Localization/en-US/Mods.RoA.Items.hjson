@@ -1688,7 +1688,6 @@ Has2rShades: {
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
-
 EldritchRing: {
 	DisplayName: Eldritch Ring
 	Tooltip: "{$Mods.RoA.RoADev}"

@@ -177,8 +177,8 @@ sealed class BoneHarpy : InteractableProjectile {
                         Projectile.Center, 
                         Vector2.Normalize(target.Center - Projectile.Center) * 4.5f,
                         ModContent.ProjectileType<BoneHarpyFeather>(),
-                        Projectile.damage / 3, 
-                        Projectile.knockBack / 3f, 
+                        Projectile.damage, 
+                        Projectile.knockBack, 
                         Projectile.owner);
                 }
             }

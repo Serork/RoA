@@ -163,9 +163,11 @@ sealed class WorshipperBonehelm : ModItem {
     private static void SummonHarpy(Player player) {
         int type = ModContent.ProjectileType<BoneHarpy>();
         if (player.ownedProjectileCounts[type] < 1) {
+            int damage = (int)player.GetTotalDamage(DamageClass.Summon).ApplyTo(30);
+            float knockBack = player.GetTotalKnockback(DamageClass.Summon).ApplyTo(2.5f);
             Projectile.NewProjectile(player.GetSource_Misc("worshipperarmorset"), player.MountedCenter, Vector2.Zero, type,
-                (int)player.GetTotalDamage(DamageClass.Summon).ApplyTo(30),
-                player.GetTotalKnockback(DamageClass.Summon).ApplyTo(2.5f),
+                damage,
+                knockBack,
                 player.whoAmI);
         }
     }
