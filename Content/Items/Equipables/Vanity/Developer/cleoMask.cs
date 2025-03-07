@@ -2,6 +2,7 @@
 
 using RoA.Common.GlowMasks;
 using RoA.Common.Players;
+using RoA.Content.Dusts;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -56,7 +57,7 @@ sealed class cleoMask : ModItem {
                 int num4 = Main.rand.Next(6);
                 r.Y += 2 * (int)player.gravDir;
                 if (num4 == 0 || num4 == 1) {
-                    dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, DustID.FireworksRGB, 0f, 0f, 100, Color.Lerp(Color.Blue, Color.LightBlue, Main.rand.NextFloat() * 0.5f));
+                    dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, ModContent.DustType<cleoDust>(), 0f, 0f, 50, Color.Lerp(Color.Blue, Color.LightBlue, Main.rand.NextFloat() * 0.5f));
                     dust.shader = GameShaders.Armor.GetSecondaryShader(player.cBody, player);
                     dust.scale = 0.66f;
                     dust.noGravity = true;
@@ -69,8 +70,8 @@ sealed class cleoMask : ModItem {
                         dust.fadeIn = 0.8f;
                 }
 
-                type = DustID.FireworksRGB;
-                alpha = 100;
+                type = ModContent.DustType<cleoDust>();
+                alpha = 50;
                 scale = 0.7f;
                 num3 = 0.5f;
 
