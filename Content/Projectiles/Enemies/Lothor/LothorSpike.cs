@@ -124,7 +124,7 @@ sealed class LothorSpike : ModProjectile {
         Vector2 origin;
         Rectangle sourceRectangle;
         SpriteEffects effects;
-        start += velocity * 20f;
+        start += velocity * 17f;
         while (index < length) {
             effects = SpriteEffects.None;
             bool flag = _partInfo[index].Variant == 1;
