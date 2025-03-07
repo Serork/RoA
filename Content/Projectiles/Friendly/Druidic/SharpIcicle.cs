@@ -31,7 +31,6 @@ sealed class SharpIcicle : NatureProjectile {
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Projectile.ai[2] = Projectile.velocity.Length();
-        Projectile.damage -= 5;
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
@@ -40,15 +39,34 @@ sealed class SharpIcicle : NatureProjectile {
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (Projectile.Opacity < 1f) {
+            Player player = Main.player[Projectile.owner];
+            int penalty = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(player.HeldItem.damage) / 2;
+            modifiers.FinalDamage *= penalty / (float)player.HeldItem.damage;
+        }
+    }
+
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        if (Projectile.Opacity < 1f) {
+            Player player = Main.player[Projectile.owner];
+            int penalty = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(player.HeldItem.damage) / 2;
+            modifiers.FinalDamage *= penalty / (float)player.HeldItem.damage;
+        }
+    }
+
     public override void AI() {
         Player player = Main.player[Projectile.owner];
 
         Projectile.rotation = Helper.VelocityAngle(Projectile.velocity);
 
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+        }
+
         if (Projectile.ai[1] == 1f) {
             if (Projectile.Opacity < 1f) {
                 Projectile.Opacity += 0.1f;
-                Projectile.damage++;
             }
             Projectile.velocity.Y += Projectile.ai[2] * 0.1f;
             Projectile.velocity.Y = Math.Min(15f, Projectile.velocity.Y);
