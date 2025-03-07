@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core.Utility;
 
 using System;
@@ -74,6 +75,15 @@ sealed class CursedAcorn : ModProjectile {
 
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
+        float lifeProgress = 1f;
+        foreach (NPC npc in Main.ActiveNPCs) {
+            if (npc.type == ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Lothor>()) {
+                lifeProgress = npc.As<NPCs.Enemies.Bosses.Lothor.Lothor>().LifeProgress;
+                break;
+            }
+        }
+        int damage = (int)MathHelper.Lerp(NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_DAMAGE, NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_DAMAGE2, lifeProgress);
+        int knockBack = (int)MathHelper.Lerp(NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_KNOCKBACK, NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_KNOCKBACK2, lifeProgress);
         if (Main.netMode != NetmodeID.MultiplayerClient) {
             Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center + Vector2.UnitY * 22f, -Vector2.UnitY, ModContent.ProjectileType<LothorSpike>(), 
                 Projectile.damage, Projectile.knockBack, Main.myPlayer, ai2: 12.5f);

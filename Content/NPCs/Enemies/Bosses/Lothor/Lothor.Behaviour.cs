@@ -24,6 +24,32 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class Lothor : ModNPC {
+    public const int CLAWS_DAMAGE = 80;
+    public const float CLAWS_KNOCKBACK = 4.5f;
+    public const int CLAWS_DAMAGE2 = 100;
+    public const float CLAWS_KNOCKBACK2 = 6f;
+
+    public const int WREATH_DAMAGE = 50;
+    public const float WREATH_KNOCKBACK = 1f;
+    public const int WREATH_DAMAGE2 = 80;
+    public const float WREATH_KNOCKBACK2 = 3f;
+
+    public const int ACORN_DAMAGE = 20;
+    public const float ACORN_KNOCKBACK = 1f;
+    public const int ACORN_DAMAGE2 = 50;
+    public const float ACORN_KNOCKBACK2 = 0f;
+
+    public const int SPIT_DAMAGE = 20;
+    public const float SPIT_KNOCKBACK = 0f;
+    public const int SPIT_DAMAGE2 = 40;
+    public const float SPIT_KNOCKBACK2 = 0f;
+
+    public const int STOMP_DAMAGE = 45;
+    public const float STOMP_KNOCKBACK = 0f;
+    public const int STOMP_DAMAGE2 = 90;
+    public const float STOMP_KNOCKBACK2 = 0f;
+
+
     private const double FLIGHTFRAMERATE = 6.0;
     private const int SPITCOUNT = 4;
 
@@ -967,8 +993,9 @@ sealed partial class Lothor : ModNPC {
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
                     Vector2 velocity = Helper.VelocityToPoint(NPC.Center, Target.Center, 2f);
                     int type = ModContent.ProjectileType<LothorSpike>();
-                    int damage = NPC.damage;
-                    float knockBack = 0f;
+                    int damage = (int)MathHelper.Lerp(WREATH_DAMAGE, WREATH_DAMAGE2, LifeProgress);
+                    damage /= 2;
+                    int knockBack = (int)MathHelper.Lerp(WREATH_KNOCKBACK, WREATH_KNOCKBACK2, LifeProgress);
                     int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer);
                     //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                 }
@@ -1143,9 +1170,11 @@ sealed partial class Lothor : ModNPC {
                 _spitCount--;
                 SoundEngine.PlaySound(SoundID.Item111, NPC.Center);
 
+                int damage = (int)MathHelper.Lerp(SPIT_DAMAGE, SPIT_DAMAGE2, LifeProgress);
+                damage /= 2;
+                int knockBack = (int)MathHelper.Lerp(SPIT_KNOCKBACK, SPIT_KNOCKBACK2, LifeProgress);
+
                 if (NPC.target == Main.myPlayer) {
-                    int damage = NPC.damage / 3;
-                    float knockBack = 0.2f;
                     ushort type = (ushort)ModContent.ProjectileType<LothorAngleAttack>();
                     Vector2 position = _tempPosition;
                     float between = 1.75f;
@@ -1157,6 +1186,7 @@ sealed partial class Lothor : ModNPC {
                     if (lengthY > maxY) {
                         lengthY = maxY;
                     }
+
                     HalfVector2 halfVector = new(position.X + lengthX, position.Y - lengthY);
                     int whoAmI = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.One, type, damage, knockBack, NPC.target,
                         NPC.whoAmI,
@@ -1204,7 +1234,12 @@ sealed partial class Lothor : ModNPC {
         if (ClawsTimer == 1f) {
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 ushort projType = (ushort)ModContent.ProjectileType<LothorClawsSlash>();
-                int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType, NPC.damage / 2, 2f, Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
+                int damage = (int)MathHelper.Lerp(CLAWS_DAMAGE, CLAWS_DAMAGE2, LifeProgress);
+                damage /= 2;
+                int knockBack = (int)MathHelper.Lerp(CLAWS_KNOCKBACK, CLAWS_KNOCKBACK2, LifeProgress);
+                int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType, 
+                    damage, knockBack,
+                    Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
                 //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
             }
             string name = "LothorSwipe";
@@ -1694,7 +1729,7 @@ sealed partial class Lothor : ModNPC {
         //    delay -= delay / 4;
         //}
         delay += delay * 0.333f;
-        float scalableValue = MathHelper.Lerp(0.75f, 0.5f, LifeProgress);
+        float scalableValue = MathHelper.Lerp(0.75f, !Main.expertMode ? 0.6f : 0.5f, LifeProgress);
         delay *= scalableValue;
         return delay;
     }
@@ -1738,9 +1773,10 @@ sealed partial class Lothor : ModNPC {
 
         float size = strength * 5f;
         int type = ModContent.ProjectileType<LothorStomp>();
-        int damage = NPC.damage / 2;
-        float knockback = 2f;
-        int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.velocity, Vector2.Zero, type, damage, knockback, Main.myPlayer, 0f, size);
+        int damage = (int)MathHelper.Lerp(STOMP_DAMAGE, STOMP_DAMAGE2, LifeProgress);
+        damage /= 2;
+        int knockBack = (int)MathHelper.Lerp(STOMP_KNOCKBACK, STOMP_KNOCKBACK2, LifeProgress);
+        int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.velocity, Vector2.Zero, type, damage, knockBack, Main.myPlayer, 0f, size);
         //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
     }
 

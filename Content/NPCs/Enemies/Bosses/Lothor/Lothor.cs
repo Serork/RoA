@@ -32,22 +32,29 @@ sealed partial class Lothor : ModNPC {
         ]);
     }
 
+    public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment) {
+		NPC.lifeMax = (int)((float)NPC.lifeMax * 0.8f * balance * bossAdjustment);
+        //NPC.damage = (int)((double)NPC.damage * 0.65f);
+
+        NPC.defense += 4;
+    }
+
     public override void SetDefaults() {
-        NPC.damage = 46;
+        NPC.damage = 45;
         NPC.lifeMax = 6000;
-        NPC.defense = 8;
+        NPC.defense = 15;
 
         NPC.Size = Vector2.One * 72f;
 
         NPC.aiStyle = AIType = -1;
 
-        NPC.npcSlots = 10f;
+        NPC.npcSlots = 9f;
 
         NPC.boss = true;
 
         NPC.HitSound = new SoundStyle(ResourceManager.NPCSounds + "LothorHit") { Volume = 0.8f };
 
-        NPC.value = Item.buyPrice(gold: 5);
+        NPC.value = Item.buyPrice(gold: 6);
 
         if (!Main.dedServ) {
             Music = MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor");

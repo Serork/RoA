@@ -43,13 +43,19 @@ sealed class Pipistrelle : ModNPC {
         ]);
     }
 
+    public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment) {
+        NPC.lifeMax = (int)((double)NPC.lifeMax * 0.7 * (double)balance);
+    }
+
     public override void SetDefaults() {
         NPC.lifeMax = 150;
-        NPC.damage = 12;
+        NPC.damage = 20;
         NPC.defense = 6;
         NPC.Size = new Vector2(32, 32);
         NPC.aiStyle = -1;
+
         AnimationType = 82;
+
         NPC.HitSound = SoundID.NPCHit27;
         NPC.DeathSound = SoundID.NPCDeath39;
         NPC.noGravity = true;
@@ -145,8 +151,22 @@ sealed class Pipistrelle : ModNPC {
 
     public override void AI() {
         _shouldEnrage = !Main.player[NPC.target].InModBiome<BackwoodsBiome>();
+        int lothor = ModContent.NPCType<Lothor>();
         NPC owner = Main.npc[(int)NPC.ai[0]];
-        if (owner == null || owner.type != ModContent.NPCType<Lothor>() || !owner.active || !owner.As<Lothor>()._shouldEnrage) {
+        bool flag3 = owner == null || owner.type != lothor || !owner.active;
+        if (flag3 && NPC.localAI[3] == 0f) {
+            foreach (NPC npc in Main.ActiveNPCs) {
+                if (npc.type == lothor) {
+                    NPC.ai[0] = npc.whoAmI;
+                    owner = Main.npc[(int)NPC.ai[0]];
+                    flag3 = owner == null || owner.type != lothor || !owner.active;
+                    break;
+                }
+            }
+            NPC.localAI[3] = 1f;
+        }
+        bool flag2 = flag3 || !owner.As<Lothor>()._shouldEnrage;
+        if (flag2) {
             _shouldEnrage = false;
         }
 
@@ -156,7 +176,6 @@ sealed class Pipistrelle : ModNPC {
 
         float overlapVelocity = 0.04f;
         for (int i = 0; i < Main.maxNPCs; i++) {
-            // Fix overlap with other minions
             Projectile other = Main.projectile[i];
             if (i != NPC.whoAmI && other.active && Math.Abs(NPC.position.X - other.position.X) + Math.Abs(NPC.position.Y - other.position.Y) < NPC.width / 1.5f) {
                 if (NPC.position.X < other.position.X) NPC.velocity.X -= overlapVelocity;
@@ -171,8 +190,19 @@ sealed class Pipistrelle : ModNPC {
             Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
         }
 
-        float lifeProgress = _shouldEnrage ? 1f : !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor ? 0f : owner.As<Lothor>().LifeProgress;
-        NPC.knockBackResist = 0.1f - 0.1f * lifeProgress;
+        bool flag = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor;
+        float lifeProgress = _shouldEnrage ? 1f : flag ? 0f : owner.As<Lothor>().LifeProgress;
+        NPC.knockBackResist = 0.5f - 0.5f * lifeProgress;
+
+        if (!flag3) {
+            if (owner.life < owner.lifeMax * 0.5f) {
+                NPC.defense = (int)(18 * Main.GameModeInfo.EnemyDamageMultiplier);
+            }
+            else if (owner.life < owner.lifeMax * 0.75f) {
+                NPC.defense = (int)(12 * Main.GameModeInfo.EnemyDamageMultiplier);
+            }
+        }
+
         void playScreamSound() {
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
         }
@@ -219,9 +249,12 @@ sealed class Pipistrelle : ModNPC {
                     NPC.velocity.X = x * sqrt;
                     NPC.velocity.Y = y * sqrt;
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
+                        int damage = (int)MathHelper.Lerp(Lothor.ACORN_DAMAGE, Lothor.ACORN_DAMAGE2, lifeProgress);
+                        int knockBack = (int)MathHelper.Lerp(Lothor.ACORN_KNOCKBACK, Lothor.ACORN_KNOCKBACK2, lifeProgress);
                         int projectile = 
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-x * sqrt, -y * sqrt) * 1.5f, ModContent.ProjectileType<CursedAcorn>(),
-                            NPC.damage, 0, Main.myPlayer, ai2: player.whoAmI);
+                            damage, knockBack,
+                            Main.myPlayer, ai2: player.whoAmI);
                         //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                     }
                 }
