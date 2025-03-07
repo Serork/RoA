@@ -52,11 +52,16 @@ sealed class LothorSpike : ModProjectile {
         for (int i = 0; i < _partInfo.Length; i++) {
             length += _partInfo[i].Progress;
         }
-        Vector2 lineEnd = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * length * 11f;
+        float length2 = 11f;
+        if (Projectile.velocity == -Vector2.UnitY) {
+            length2 = 6.5f;
+        }
+        Vector2 lineEnd = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * length * length2;
         return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 30f);
     }
 
     public override void AI() {
+
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
             _partInfo = new PartInfo[LENGTH];

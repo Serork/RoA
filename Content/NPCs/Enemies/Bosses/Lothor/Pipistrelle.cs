@@ -145,6 +145,10 @@ sealed class Pipistrelle : ModNPC {
 
     public override void AI() {
         _shouldEnrage = !Main.player[NPC.target].InModBiome<BackwoodsBiome>();
+        NPC owner = Main.npc[(int)NPC.ai[0]];
+        if (owner == null || owner.type != ModContent.NPCType<Lothor>() || !owner.active || !owner.As<Lothor>()._shouldEnrage) {
+            _shouldEnrage = false;
+        }
 
         NPC.OffsetTheSameNPC(0.2f);
 
@@ -167,7 +171,6 @@ sealed class Pipistrelle : ModNPC {
             Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
         }
 
-        NPC owner = Main.npc[(int)NPC.ai[0]];
         float lifeProgress = _shouldEnrage ? 1f : !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor ? 0f : owner.As<Lothor>().LifeProgress;
         NPC.knockBackResist = 0.1f - 0.1f * lifeProgress;
         void playScreamSound() {

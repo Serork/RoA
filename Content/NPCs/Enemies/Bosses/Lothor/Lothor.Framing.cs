@@ -12,11 +12,12 @@ sealed partial class Lothor : ModNPC {
     public enum SpriteSheetColumn : byte {
         Stand,
         Flight,
+        FlightScream,
         Death
     }
 
     private SpriteSheetColumn _currentColumn = SpriteSheetColumn.Stand;
-    private List<SpriteSheetLineInfo> _spriteSheet = [new(19, 146, 106), new(6, 146, 88), new(7, 146, 58)];
+    private List<SpriteSheetLineInfo> _spriteSheet = [new(19, 146, 106), new(6, 146, 88), new(4, 146, 92), new(7, 146, 58)];
     private byte _currentFrame;
 
     private byte CurrentFrame {

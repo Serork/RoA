@@ -6,6 +6,7 @@ using RoA.Content.Dusts;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -225,14 +226,20 @@ sealed class LothorEnrageMonolith : ModTile {
         if (t == null)
             t = TextureAssets.Tile[Type].Value;
         int frameHeight = 18 * 5 + 2;
-        bool isOn = frameY > frameHeight;
+        bool isOn = frameY == 0 || frameY > frameHeight;
         spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f), new Rectangle(frameX, frameY - (isOn ? frameHeight : 0), 16, height), color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
         if (isOn) {
-            t = ModContent.Request<Texture2D>(Texture + "_Draw").Value;
-            spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f), new Rectangle(frameX, frameY - (isOn ? frameHeight : 0), 16, height), 
-                Color.White * Main.LocalPlayer.GetModPlayer<EnragedVisuals>()._opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            //Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Color.Red.ToVector3());
+            frameY -= 18 * 5 + 2;
         }
+        if (Math.Abs(frameY) == 92) {
+            frameY = 0;
+        }
+        t = ModContent.Request<Texture2D>(Texture + "_Draw").Value;
+        Main.NewText(frameY);
+        spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f), new Rectangle(frameX, frameY, 16, height), 
+            Color.White * Main.LocalPlayer.GetModPlayer<EnragedVisuals>()._opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        //Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Color.Red.ToVector3());
         
         return false;
     }
