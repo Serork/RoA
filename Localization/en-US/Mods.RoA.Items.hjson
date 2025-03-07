@@ -1719,21 +1719,21 @@ PeegeonHood: {
 }
 
 SerorkBreastplate: {
-	DisplayName: Serork Breastplate
-	Tooltip: ""
+	DisplayName: Serork's Breastplate
+	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkGreaves: {
-	DisplayName: Serork Greaves
-	Tooltip: ""
+	DisplayName: Seror'sk Greaves
+	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkHelmet: {
-	DisplayName: Serork Helmet
-	Tooltip: ""
+	DisplayName: Serork's Helmet
+	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkMask: {
-	DisplayName: Serork Mask
-	Tooltip: ""
+	DisplayName: Serork's Mask
+	Tooltip: "{$Mods.RoA.RoADev}"
 }
