@@ -272,6 +272,7 @@ sealed class FlederSlayer : ModProjectile {
             else if (_timeLeft == min) {
                 if (_timingProgress >= 1.3f && _timingProgress <= 2.3f) {
                     _empoweredAttack = true;
+                    _charge = 1f;
                 }
 
                 SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
@@ -392,10 +393,11 @@ sealed class FlederSlayer : ModProjectile {
                                     if (Projectile.owner == Main.myPlayer) {
                                         for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
                                             float value = _empoweredAttack ? 1.25f : 1f;
+                                            float value0 = _empoweredAttack ? 1.5f : 1f;
                                             float value2 = MathHelper.Clamp(_charge * 1.5f, 0f, 1f);
                                             Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * value2 * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
                                             float size = 2f * (value2 * 1.15f + 0.15f) * value;
-                                            int damage = (int)((Projectile.damage + Projectile.damage / 2) * (value2 * 1.15f + 0.15f) * value);
+                                            int damage = (int)((Projectile.damage + Projectile.damage / 2) * (value2 * 1.15f + 0.15f) * value0);
                                             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
                                                                            projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
                                                                            velocity,
