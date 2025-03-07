@@ -113,6 +113,9 @@ sealed class LothorClawsSlash : ModProjectile {
         if (npc.ai[0] > npc.ai[1] * 0.335f) {
             result = true;
         }
+        if (Projectile.Opacity < 0.5f) {
+            result = false;
+        }
         return result;
     }
 

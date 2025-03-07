@@ -1658,3 +1658,82 @@ FlederSlayerDecoration: {
 	DisplayName: Fleder Slayer Decorum
 	Tooltip: "'Gloria filio'"
 }
+
+Has2rJacket: {
+	DisplayName: The Unspeakable One's Jacket
+	Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'And strange moons circle through the skies'
+		'''
+}
+
+Has2rMask: {
+	DisplayName: The Unspeakable One's Mask
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+Has2rPants: {
+	DisplayName: The Unspeakable One's Pants
+	Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'But stranger still is
+		lost Carcosa'
+		'''
+}
+
+Has2rShades: {
+	DisplayName: The Unspeakable One's Shades
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+NFAHorns: {
+	DisplayName: N.F.A's Horns
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+NFAJacket: {
+	DisplayName: N.F.A's Jacket
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+NFAPants: {
+	DisplayName: N.F.A's Pants
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+PeegeonChestguard: {
+	DisplayName: Peegeon's Chestguard
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+PeegeonGreaves: {
+	DisplayName: Peegeon's Greaves
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+PeegeonHood: {
+	DisplayName: Peegeon's Hood
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+SerorkBreastplate: {
+	DisplayName: Serork Breastplate
+	Tooltip: ""
+}
+
+SerorkGreaves: {
+	DisplayName: Serork Greaves
+	Tooltip: ""
+}
+
+SerorkHelmet: {
+	DisplayName: Serork Helmet
+	Tooltip: ""
+}
+
+SerorkMask: {
+	DisplayName: Serork Mask
+	Tooltip: ""
+}

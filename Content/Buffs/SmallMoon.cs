@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Pets;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -37,6 +38,7 @@ sealed class SmallMoonPlayer : ModPlayer {
 
     private float _lerpColorProgress;
     private Color _lerpColor;
+    private Color? _currentColor = null, _nextColor = null;
 
     public override void ResetEffects() {
         smallMoon = false;
@@ -53,6 +55,18 @@ sealed class SmallMoonPlayer : ModPlayer {
         SetInfo();
     }
 
+    private bool ShouldBeRandom() {
+        string[] keywords = ["roa", "rise", "ages"];
+        bool flag = false;
+        foreach (string kw in keywords) {
+            if (Player.name.ToLower().Contains(kw)) {
+                flag = true;
+                break;
+            }
+        }
+        return Player.name == "Serork" || flag;
+    }
+
     private void SetInfo() {
         if (Main.bloodMoon) smallMoonColor = Color.Red;
         else if (Main.pumpkinMoon) smallMoonColor = Color.Orange;
@@ -63,7 +77,15 @@ sealed class SmallMoonPlayer : ModPlayer {
 
         if (Player.name == "peege.on") smallMoonColor = Player.underShirtColor;
         if (Player.name == "has2r") smallMoonColor = Color.Indigo;
-        if (Player.name == "Serork") smallMoonColor = Color.Yellow;
+        if (ShouldBeRandom()) {
+            if (_currentColor == null) {
+                _currentColor = Color.Yellow;
+            }
+            if (_nextColor == null) {
+                _nextColor = new Color(Main.rand.Next(256), Main.rand.Next(256), Main.rand.Next(256));
+            }
+            smallMoonColor = GetLerpColor([_currentColor.Value, _nextColor.Value]);
+        }
         if (Player.name == "cleo.") {
             smallMoonColor = GetLerpColor([Color.Black, Color.White]);
         }
@@ -94,8 +116,14 @@ sealed class SmallMoonPlayer : ModPlayer {
                 _lerpColor = Color.Lerp(from[i], from[i == colorCount - 1 ? 0 : (i + 1)], Utils.Remap(_lerpColorProgress, min, max, 0f, 1f, true));
             }
         }
+        if (ShouldBeRandom() && Math.Round(_lerpColorProgress, 2) == 0.5f) {
+            _currentColor = new Color(Main.rand.Next(256), Main.rand.Next(256), Main.rand.Next(256));
+        }
         if (_lerpColorProgress > 1f) {
             _lerpColorProgress = 0f;
+            if (ShouldBeRandom()) {
+                _nextColor = new Color(Main.rand.Next(256), Main.rand.Next(256), Main.rand.Next(256));
+            }
         }
         return _lerpColor;
     }
