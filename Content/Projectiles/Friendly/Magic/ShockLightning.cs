@@ -264,7 +264,7 @@ sealed class ShockLightning : ModProjectile {
             Vector2 middleOrigin = new(0, _segmentTexture.Height() / 2f);
             Vector2 middleScale = new((dest - source).Length(), thicknessScale);
             spriteBatch.Draw(_endTexture2.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.01f, SpriteEffects.None, 0f);
-            if (random.NextChance(Math.Clamp(thicknessScale * 2f, 0f, 1f))) {
+            if (random.NextChance(Math.Clamp(thicknessScale * 2f, 0f, 1f)) && (thicknessScale < 0.9f || (thicknessScale >= 0.9f && random.NextChance(0.75)))) {
                 spriteBatch.BeginBlendState(BlendState.Additive);
                 spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color * 0.75f, rotation, middleOrigin, middleScale * 0.95f, SpriteEffects.None, 0f);
                 spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.015f, SpriteEffects.None, 0f);
