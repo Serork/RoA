@@ -54,14 +54,13 @@ sealed class LothorSpike : ModProjectile {
         }
         float length2 = 12f;
         if (Projectile.velocity == -Vector2.UnitY) {
-            length2 = 7.5f;
+            length2 = 8f;
         }
         Vector2 lineEnd = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * length * length2;
         return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 30f);
     }
 
     public override void AI() {
-
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
             _partInfo = new PartInfo[LENGTH];
@@ -124,6 +123,7 @@ sealed class LothorSpike : ModProjectile {
         Vector2 origin;
         Rectangle sourceRectangle;
         SpriteEffects effects;
+        start += velocity * 4f;
         while (index < length) {
             effects = SpriteEffects.None;
             bool flag = _partInfo[index].Variant == 1;
@@ -160,7 +160,7 @@ sealed class LothorSpike : ModProjectile {
             }
             if (flag2) {
                 sourceRectangle.Height -= 6;
-                offset -= 7f;
+                offset = -4f;
             }
             if (flag4) {
                 offset = 6f;
