@@ -50,9 +50,9 @@ sealed class GrimDruid : DruidNPC {
 	public override void SetDefaults() {
         base.SetDefaults();
 
-        NPC.lifeMax = 280;
-        NPC.damage = 30;
-        NPC.defense = 5;
+        NPC.lifeMax = 300;
+        NPC.damage = 25;
+        NPC.defense = 10;
         NPC.knockBackResist = 0.35f;
 
         int width = 28; int height = 48;
@@ -60,7 +60,7 @@ sealed class GrimDruid : DruidNPC {
 
         NPC.aiStyle = -1;
 
-        NPC.npcSlots = 1.1f;
+        NPC.npcSlots = 1.25f;
         NPC.value = Item.buyPrice(0, 0, 3, 0);
 
         DrawOffsetY = -2;
@@ -363,7 +363,7 @@ sealed class GrimDruid : DruidNPC {
             SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
             Vector2 directionNormalized = Vector2.Normalize(Main.player[NPC.target].Center - NPC.Center);
             if (Main.netMode != NetmodeID.MultiplayerClient) {
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + 18 * NPC.direction, NPC.Center.Y), new Vector2(directionNormalized.X * 5, directionNormalized.Y * 5), ModContent.ProjectileType<GrimBranch>(), NPC.damage / 2, 0.3f, Main.myPlayer, 100, 0f);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + 18 * NPC.direction, NPC.Center.Y), new Vector2(directionNormalized.X * 5, directionNormalized.Y * 5), ModContent.ProjectileType<GrimBranch>(), 35, 1f, Main.myPlayer, 100, 0f);
             }
             return;
         }
@@ -385,7 +385,7 @@ sealed class GrimDruid : DruidNPC {
         }
         SoundEngine.PlaySound(SoundID.Item76, position);
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(positionX * 16f + 8, positionY * 16f - 30), Vector2.Zero, ModContent.ProjectileType<VileSpike>(), NPC.damage / 2, 0.2f, Main.myPlayer);
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(positionX * 16f + 8, positionY * 16f - 30), Vector2.Zero, ModContent.ProjectileType<VileSpike>(), 45, 2f, Main.myPlayer);
         }
     }
 

@@ -77,7 +77,7 @@ sealed class Fleder : ModNPC {
     public override void SetDefaults() {
         NPC.lifeMax = 100;
         NPC.damage = 50;
-        NPC.defense = 8;
+        NPC.defense = 9;
         NPC.knockBackResist = 0.5f;
 
         int width = 30; int height = 30;

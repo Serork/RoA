@@ -40,7 +40,7 @@ sealed class Hog : RoANPC {
 
 		NPC.lifeMax = 85;
 		NPC.damage = 22;
-		NPC.defense = 6;
+		NPC.defense = 7;
         NPC.knockBackResist = 0.75f;
 
         NPC.aiStyle = -1;

@@ -48,7 +48,7 @@ sealed class EntLegs : RoANPC {
 
     public override void SetDefaults() {
 		NPC.lifeMax = 500;
-		NPC.damage = 36;
+		NPC.damage = 35;
 		NPC.defense = 6;
 		NPC.knockBackResist = 0f;
 
@@ -56,7 +56,7 @@ sealed class EntLegs : RoANPC {
 
         NPC.aiStyle = -1;
 
-        NPC.value = Item.buyPrice(0, 0, 6, 7);
+        NPC.value = Item.buyPrice(0, 0, 15, 0);
 
         NPC.HitSound = SoundID.NPCHit52;
 		NPC.DeathSound = SoundID.NPCDeath27;
@@ -196,8 +196,9 @@ sealed class EntLegs : RoANPC {
 					if (Main.netMode != NetmodeID.MultiplayerClient) {
 						Vector2 spreadOld = new Vector2(Main.player[NPC.target].position.X - center.X, Main.player[NPC.target].position.Y - center.Y).RotatedByRandom(MathHelper.ToRadians(30));
 						Vector2 spread = Vector2.Normalize(spreadOld);
-						int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), center.X + 14f * NPC.direction, center.Y + 8f, spread.X * 4f, spread.Y * 4f, ModContent.ProjectileType<PrimordialLeaf>(), NPC.damage / 2, 0.1f, Main.myPlayer);
-						NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
+						int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), center.X + 14f * NPC.direction, center.Y + 8f, spread.X * 4f, spread.Y * 4f, ModContent.ProjectileType<PrimordialLeaf>(),
+							25, 1f, Main.myPlayer);
+						//NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
 					}
 				}
 				if (++_attackTimer >= 100f) {

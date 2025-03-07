@@ -32,11 +32,13 @@ sealed class SapSlime : ModNPC {
 
     public override void SetDefaults() {
         NPC.lifeMax = 50;
-        NPC.defense = 3;
-        NPC.damage = 5;
+        NPC.defense = 4;
+        NPC.damage = 12;
+
         NPC.width = 34;
         NPC.height = 24;
-        NPC.npcSlots = 0.1f;
+        NPC.npcSlots = 0.4f;
+
         NPC.value = Item.buyPrice(silver: 20);
         NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;

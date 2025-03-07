@@ -36,10 +36,10 @@ sealed class Lumberjack : RoANPC {
     }
 
 	public override void SetDefaults() {
-		NPC.lifeMax = 200;
-		NPC.damage = 44;
-		NPC.defense = 8;
-		NPC.knockBackResist = 0.1f;
+		NPC.lifeMax = 130;
+		NPC.damage = 30;
+		NPC.defense = 12;
+		NPC.knockBackResist = 0.25f;
 
 		int width = 28; int height = 44;
 		NPC.Size = new Vector2(width, height);
@@ -47,7 +47,7 @@ sealed class Lumberjack : RoANPC {
 		NPC.aiStyle = -1;
 
 		NPC.npcSlots = 1.25f;
-		NPC.value = Item.buyPrice(0, 0, 25, 5);
+		NPC.value = Item.buyPrice(0, 0, 15, 0);
 
 		NPC.HitSound = SoundID.NPCHit1;
 		NPC.DeathSound = SoundID.NPCDeath1;
@@ -97,14 +97,16 @@ sealed class Lumberjack : RoANPC {
     }
 
     public override void OnKill() {
-		if (Main.netMode == NetmodeID.MultiplayerClient) {
-			return;
-		}
+        if (NPC.downedBoss2) {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                return;
+            }
 
-		int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCID.PantlessSkeleton);
-		if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-			NetMessage.SendData(MessageID.SyncNPC, number: npc);
-		}
+            int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCID.PantlessSkeleton);
+            if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                NetMessage.SendData(MessageID.SyncNPC, number: npc);
+            }
+        }
 	}
 
 	public override void FindFrame(int frameHeight) {
@@ -415,7 +417,8 @@ sealed class Lumberjack : RoANPC {
 							Attack = true;
 							SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
 							if (Main.netMode != NetmodeID.MultiplayerClient) {
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(NPC.width / 2 * NPC.direction + 10, 0f), Vector2.Zero, ModContent.ProjectileType<LumberjackAxeSlash>(), NPC.damage, 3f, Main.myPlayer);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(NPC.width / 2 * NPC.direction + 10, 0f), Vector2.Zero, ModContent.ProjectileType<LumberjackAxeSlash>(), 
+                                    60, 3f, Main.myPlayer);
 							}
 							NPC.netUpdate = true;
 						}

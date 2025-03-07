@@ -46,13 +46,15 @@ sealed partial class PettyGoblin : ModNPC {
     public override void SetDefaults() {
         NPC.width = 20;
         NPC.height = 46;
-        NPC.damage = 10;
-        NPC.defense = 6;
-        NPC.lifeMax = 40;
+
+        NPC.damage = 15;
+        NPC.defense = 4;
+        NPC.lifeMax = 70;
+
         NPC.HitSound = SoundID.DD2_GoblinBomberHurt;
         NPC.DeathSound = SoundID.DD2_GoblinBomberScream;
         NPC.value = Item.buyPrice(silver: 5, copper: 75);
-        NPC.knockBackResist = 0.7f;
+        NPC.knockBackResist = 0.5f;
         NPC.aiStyle = -1;
         NPC.rarity = 2;
 

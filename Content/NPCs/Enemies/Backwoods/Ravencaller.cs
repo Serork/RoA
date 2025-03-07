@@ -63,11 +63,11 @@ sealed class Ravencaller : ModNPC {
 
     public override void SetDefaults() {
         NPC.width = 32; NPC.height = 40;
-        NPC.value = Item.sellPrice(0, 0, 6, 30);
-        NPC.damage = 32;
+        NPC.value = Item.sellPrice(0, 0, 10, 0);
+        NPC.damage = 30;
         NPC.lifeMax = 300;
         NPC.defense = 3;
-        NPC.npcSlots = 1.25f;
+        NPC.npcSlots = 1.5f;
         NPC.aiStyle = -1;
         NPC.knockBackResist = 0.2f;
         NPC.HitSound = SoundID.NPCHit19;

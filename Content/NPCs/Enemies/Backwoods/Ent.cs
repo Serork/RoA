@@ -39,7 +39,7 @@ sealed class Ent : RoANPC {
 
     public override void SetDefaults() {
         NPC.lifeMax = 500;
-        NPC.damage = 36;
+        NPC.damage = 35;
         NPC.defense = 6;
         NPC.knockBackResist = 0f;
         
@@ -50,7 +50,7 @@ sealed class Ent : RoANPC {
         NPC.dontCountMe = true;
 		NPC.noTileCollide = true;
 
-		NPC.npcSlots = 0f;
+		NPC.npcSlots = 1.5f;
 
         NPC.aiStyle = -1;
 

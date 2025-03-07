@@ -38,8 +38,8 @@ sealed class DeerSkullHead : BaseHead {
 
     public override void SetDefaults() {
         NPC.lifeMax = 200;
-        NPC.damage = 44;
-        NPC.defense = 8;
+        NPC.damage = 40;
+        NPC.defense = 14;
         NPC.knockBackResist = 0f;
 
         int width = 50; int height = 50;
@@ -48,7 +48,7 @@ sealed class DeerSkullHead : BaseHead {
         NPC.aiStyle = -1;
 
         NPC.npcSlots = 0.3f;
-        NPC.value = Item.buyPrice(0, 0, 25, 5);
+        NPC.value = Item.buyPrice(0, 0, 35, 0);
 
         NPC.HitSound = SoundID.NPCHit2;
         NPC.DeathSound = SoundID.NPCDeath2;

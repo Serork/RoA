@@ -94,7 +94,7 @@ sealed class BabyFleder : ModNPC {
     public override void SetDefaults() {
         NPC.lifeMax = 50;
         NPC.damage = 25;
-        NPC.defense = 4;
+        NPC.defense = 5;
         NPC.knockBackResist = 1.1f;
 
         int width = 25; int height = 25;

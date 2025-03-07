@@ -59,7 +59,7 @@ sealed class GrimDefender : ModNPC {
 
     public override void SetDefaults() {
         NPC.lifeMax = 50;
-        NPC.damage = 24;
+        NPC.damage = 30;
         NPC.defense = 10;
 
         int width = 22; int height = 28;
@@ -67,10 +67,13 @@ sealed class GrimDefender : ModNPC {
 
         NPC.aiStyle = -1;
 
+        NPC.npcSlots = 1.25f;
+
         NPC.dontTakeDamage = true;
 
         //NPC.npcSlots = 0.8f;
-        //NPC.value = Item.buyPrice(0, 0, 0, 75);
+
+        NPC.value = Item.buyPrice(0, 0, 2, 0);
 
         NPC.HitSound = SoundID.NPCHit7;
         NPC.DeathSound = SoundID.NPCDeath6;
@@ -477,7 +480,8 @@ sealed class GrimDefender : ModNPC {
                     }
                     if (_spearAttack) {
                         if (Main.netMode != NetmodeID.MultiplayerClient) {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(), NPC.damage / 2, 4f, Main.myPlayer, NPC.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(), 
+                                60, 4f, Main.myPlayer, NPC.whoAmI);
                         }
                         //_tempPosition = Main.player[NPC.target].Center;
                         //_extraVelocity = Vector2.Zero;
