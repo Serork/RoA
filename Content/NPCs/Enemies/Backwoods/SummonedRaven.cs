@@ -85,9 +85,9 @@ sealed class SummonedRaven : ModNPC {
 
 		NPC.alpha = 255;
 
-        NPC.lifeMax = 40;
+        NPC.lifeMax = 45;
         NPC.damage = 22;
-        NPC.defense = 2;
+        NPC.defense = 5;
 
         NPC.npcSlots = 0.25f;
 
