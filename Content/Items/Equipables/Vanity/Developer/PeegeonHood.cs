@@ -1,8 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using RoA.Common.GlowMasks;
+using RoA.Core;
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -34,7 +38,7 @@ sealed class PeegeonHood : ModItem {
           body == EquipLoader.GetEquipSlot(Mod, nameof(PeegeonChestguard), EquipType.Body) &&
           legs == EquipLoader.GetEquipSlot(Mod, nameof(PeegeonGreaves), EquipType.Legs);
 
-    public override void UpdateVanitySet(Player player) {
+    /*public override void UpdateVanitySet(Player player) {
         int num = 0;
         num += player.bodyFrame.Y / 56;
         if (num >= Main.OffsetsPlayerHeadgear.Length)
@@ -126,6 +130,78 @@ sealed class PeegeonHood : ModItem {
             obj.customData = this;
             obj.scale = num4;
             obj.shader = GameShaders.Armor.GetSecondaryShader(player.cHead > 0 ? player.cHead : GameShaders.Armor.GetShaderIdFromItemId(1065), player);
+        }
+    }*/
+    public class EyeTrail : PlayerDrawLayer
+    {
+        private Asset<Texture2D> eyeTrailTexture, eyeTrailGlowTexture;
+        public Vector2[] trailPos = new Vector2[10];
+        public Vector2[] oldPos = new Vector2[10];
+        public float idleCount;
+
+        public override void Load()
+            => eyeTrailTexture = eyeTrailGlowTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "PeegeonHood_Glow");
+
+        public override void Unload()
+            => eyeTrailTexture = null;
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+            => drawInfo.drawPlayer.armor[10].type == ModContent.ItemType<PeegeonHood>();
+
+        public override Position GetDefaultPosition()
+            => new AfterParent(PlayerDrawLayers.Head);
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            if (drawInfo.shadow != 0f || drawInfo.drawPlayer.dead)
+                return;
+            Player _player = drawInfo.drawPlayer;
+            Texture2D texture = eyeTrailTexture.Value;
+            Texture2D glow_texture = eyeTrailGlowTexture.Value;
+            Rectangle bodyFrame = _player.bodyFrame;
+            SpriteEffects effect = _player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            for (int i = trailPos.Length - 1; i > 0; i--) {
+                trailPos[i] = _player.MountedCenter + (oldPos[3] - _player.MountedCenter) * (i) / trailPos.Length;
+                trailPos[i].Y -= idleCount * i;
+                trailPos[i] += new Vector2(0, idleCount * i / 3).RotatedByRandom(360);
+            }
+
+            for (int i = oldPos.Length - 1; i > 0; i--) {
+                oldPos[i] = oldPos[i - 1];
+            }
+
+            if ((oldPos[0].X != _player.MountedCenter.X || oldPos[0].Y != _player.MountedCenter.Y) && idleCount > 0f) idleCount -= 0.1f;
+            else if (idleCount < 1f) idleCount += 0.025f;
+            if (idleCount < 0f) idleCount = 0f;
+
+            oldPos[0] = trailPos[0] = _player.MountedCenter;
+
+            int offset = 0;
+            int height = texture.Height / 20;
+            int rate = 1;
+
+            for (int i = 0; i < trailPos.Length; i += rate)
+            {
+
+                float x = (int)(trailPos[i].X);
+                float y = (int)(trailPos[i].Y - (float)(3 + offset));
+
+
+                float alpha = 15f;
+                Color color = Lighting.GetColor((int)(x / 16f), (int)(y / 16f));
+                color *= (trailPos.Length - i) / alpha;
+
+                Color color2 = Color.White;
+                color2 *= (trailPos.Length - i) / alpha;
+                DrawData drawData = new DrawData(texture, new Vector2((float)x - Main.screenPosition.X, (float)y - Main.screenPosition.Y), new Rectangle?(bodyFrame), color2, 0f, new Vector2((float)texture.Width / 2f, (float)height / 2f), 1f, effect, 0);
+                drawInfo.DrawDataCache.Add(drawData);
+
+                color = _player.underShirtColor;
+                color *= (trailPos.Length - i) / alpha;
+                DrawData drawDataGlow = new DrawData(glow_texture, new Vector2((float)x - Main.screenPosition.X, (float)y - Main.screenPosition.Y), new Rectangle?(bodyFrame), color, 0f, new Vector2((float)texture.Width / 2f, (float)height / 2f), 1f, effect, 0);
+                drawInfo.DrawDataCache.Add(drawDataGlow);
+            }
         }
     }
 }
