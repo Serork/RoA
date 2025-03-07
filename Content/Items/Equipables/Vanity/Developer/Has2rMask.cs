@@ -62,51 +62,51 @@ sealed class Has2rMask : ModItem {
         }
 
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
-            orig(ref drawInfo);
-            return;
             Player player = drawInfo.drawPlayer;
-            int itemType = ModContent.ItemType<Has2rMask>();
-            bool flag = ItemLoader.GetItem(itemType).IsVanitySet(player.head, player.body, player.legs);
-            if (flag) {
-                Player _player = drawInfo.drawPlayer;
-                for (int i = 0; i < MAX; i++) {
-                    if (!Main.gamePaused)
-                        randomMovement[i] = Main.rand.NextFloat(-0.1f, 0.1f);
-                    Vector2 _position = new(drawInfo.Center.X - (float)((i == 0 ? -1 : (i - 1f)) * 6) - 13f * _player.direction, drawInfo.Center.Y - 10f);
-                    if (_player.gravDir == -1.0) _position.Y += 50f;
-                    tentaclePosition = new((float)(int)_position.X, (float)(int)_position.Y);
+            if (drawInfo.shadow == 0) {
+                int itemType = ModContent.ItemType<Has2rMask>();
+                bool flag = ItemLoader.GetItem(itemType).IsVanitySet(player.head, player.body, player.legs);
+                if (flag) {
+                    Player _player = drawInfo.drawPlayer;
+                    for (int i = 0; i < MAX; i++) {
+                        if (!Main.gamePaused)
+                            randomMovement[i] = Main.rand.NextFloat(-0.1f, 0.1f);
+                        Vector2 _position = new(drawInfo.Center.X - (float)((i == 0 ? -1 : (i - 1f)) * 6) - 13f * _player.direction, drawInfo.Center.Y - 10f);
+                        if (_player.gravDir == -1.0) _position.Y += 50f;
+                        tentaclePosition = new((float)(int)_position.X, (float)(int)_position.Y);
 
-                    if (_player.gravDir == -1.0)
-                        tentaclePosition.Y += 50f;
+                        if (_player.gravDir == -1.0)
+                            tentaclePosition.Y += 50f;
 
-                    if (!Main.gamePaused) {
-                        Pulsation(i);
-                        Rotation(i);
+                        if (!Main.gamePaused) {
+                            Pulsation(i);
+                            Rotation(i);
+                        }
+
+                        int shader = 0;
+                        shader = drawInfo.cBody;
+
+                        if (i == 0) {
+                            shader = drawInfo.cHead;
+                        }
+                        if (i == 2) {
+                            shader = drawInfo.cLegs;
+                        }
+
+                        var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "Tentacle");
+                        Texture2D _texture = asset.Value;
+                        Vector2 _position2 = tentaclePosition - Main.screenPosition;
+                        Vector2 _origin = new(_texture.Width * 0.5f, _texture.Height * 0.5f);
+                        Color _color = new(255, 215, 0, 140);
+                        bool _flag = (i == 0 ? -1f : (float)(i - 1f)) != 0 ? _player.direction * (int)_player.gravDir < 0 : _player.direction * (int)_player.gravDir > 0;
+                        SpriteEffects _effect = _flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                        DrawData _drawData = new(_texture, _position2, null, _color, rotation[i], _origin, scale[i], _effect, 0);
+                        _drawData.shader = shader;
+                        drawInfo.DrawDataCache.Add(_drawData);
                     }
 
-                    int shader = 0;
-                    shader = drawInfo.cBody;
-
-                    if (i == 0) {
-                        shader = drawInfo.cHead;
-                    }
-                    if (i == 2) {
-                        shader = drawInfo.cLegs;
-                    }
-
-                    var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "Tentacle");
-                    Texture2D _texture = asset.Value;
-                    Vector2 _position2 = tentaclePosition - Main.screenPosition;
-                    Vector2 _origin = new(_texture.Width * 0.5f, _texture.Height * 0.5f);
-                    Color _color = new(255, 215, 0, 140);
-                    bool _flag = (i == 0 ? -1f : (float)(i - 1f)) != 0 ? _player.direction * (int)_player.gravDir < 0 : _player.direction * (int)_player.gravDir > 0;
-                    SpriteEffects _effect = _flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    DrawData _drawData = new(_texture, _position2, null, _color, rotation[i], _origin, scale[i], _effect, 0);
-                    _drawData.shader = shader;
-                    drawInfo.DrawDataCache.Add(_drawData);
+                    return;
                 }
-
-                return;
             }
 
             orig(ref drawInfo);
