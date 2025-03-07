@@ -54,7 +54,7 @@ sealed class LothorSpike : ModProjectile {
         }
         float length2 = 12f;
         if (Projectile.velocity == -Vector2.UnitY) {
-            length2 = 8f;
+            length2 = 7.5f;
         }
         Vector2 lineEnd = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * length * length2;
         return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 30f);
