@@ -21,6 +21,8 @@ sealed class LothorAngleAttack : ModProjectile {
 
     private Vector2 _startPosition;
 
+    internal int UsedLothorFrame;
+
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override bool PreDraw(ref Color lightColor) => false;
@@ -88,7 +90,7 @@ sealed class LothorAngleAttack : ModProjectile {
         Vector2 startPos = new(_startPosition.X + npc.width / 2 * npcDirection, _startPosition.Y + npc.height / 4);
         float value = npcDirection == -1 ? npc.width / 2.5f + 4 : 0;
 
-        int bossCurrentFrame = (int)Projectile.ai[2];
+        int bossCurrentFrame = UsedLothorFrame;
         switch (bossCurrentFrame) {
             case 0:
                 startPos += new Vector2(-26 * npcDirection + value, -32);
@@ -122,8 +124,7 @@ sealed class LothorAngleAttack : ModProjectile {
             startPos.X -= 4f;
         }
 
-        Vector2 target = new HalfVector2() { PackedValue = ReLogic.Utilities.ReinterpretCast.FloatAsUInt(Projectile.ai[1]) }.ToVector2();
-        Vector2 destination = new(target.X, target.Y);
+        Vector2 destination = new(Projectile.ai[1], Projectile.ai[2]);
         destination.X -= npcDirection == -1 ? value : 0;
         Vector2 mid = startPos + (destination - startPos) / 2;
         Vector2 dev = mid - new Vector2(0, _distY - _distX);

@@ -1143,7 +1143,7 @@ sealed partial class Lothor : ModNPC {
                 _spitCount--;
                 SoundEngine.PlaySound(SoundID.Item111, NPC.Center);
 
-                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                if (NPC.target == Main.myPlayer) {
                     int damage = NPC.damage / 3;
                     float knockBack = 0.2f;
                     ushort type = (ushort)ModContent.ProjectileType<LothorAngleAttack>();
@@ -1158,10 +1158,11 @@ sealed partial class Lothor : ModNPC {
                         lengthY = maxY;
                     }
                     HalfVector2 halfVector = new(position.X + lengthX, position.Y - lengthY);
-                    int whoAmI = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.One, type, damage, knockBack, Main.myPlayer,
+                    int whoAmI = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.One, type, damage, knockBack, NPC.target,
                         NPC.whoAmI,
-                        ReLogic.Utilities.ReinterpretCast.UIntAsFloat(halfVector.PackedValue),
-                        usedFrame);
+                        position.X + lengthX, 
+                        position.Y - lengthY);
+                    Main.projectile[whoAmI].As<LothorAngleAttack>().UsedLothorFrame = usedFrame;
 
                     //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, whoAmI);
                 }
