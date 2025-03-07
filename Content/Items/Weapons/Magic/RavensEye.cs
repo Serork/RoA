@@ -47,7 +47,7 @@ sealed class RavensEye : ModItem {
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = new Vector2(velocity.X, velocity.Y).SafeNormalize(Vector2.Zero);
         position += newVelocity * 40;
-        position += new Vector2(-newVelocity.Y, newVelocity.X) * (-5f * player.direction);
+        position += new Vector2(-newVelocity.Y, newVelocity.X) * (-10f * player.direction);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
