@@ -33,10 +33,10 @@ sealed partial class PettyGoblin : ModNPC {
         Main.npcFrameCount[Type] = FRAMES_COUNT;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            Position = new Vector2(0f, 5f),
+            Position = new Vector2(0f, 0f),
 
             PortraitPositionXOverride = 0f,
-            PortraitPositionYOverride = 24f,
+            PortraitPositionYOverride = 0f,
 
             Velocity = 1.5f
         };
