@@ -1688,6 +1688,12 @@ Has2rShades: {
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
+
+EldritchRing: {
+	DisplayName: Eldritch Ring
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
 NFAHorns: {
 	DisplayName: N.F.A's Horns
 	Tooltip: "{$Mods.RoA.RoADev}"
@@ -1720,7 +1726,7 @@ PeegeonHood: {
 
 PeegeonCape: {
 	DisplayName: Peegeon's Cape
-	Tooltip:"{$Mods.RoA.RoADev}"
+	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkBreastplate: {
