@@ -1717,21 +1717,51 @@ PeegeonHood: {
 }
 
 SerorkBreastplate: {
-	// DisplayName: Serork Breastplate
-	// Tooltip: ""
+	// DisplayName: Serork's Breastplate
+	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkGreaves: {
-	// DisplayName: Serork Greaves
-	// Tooltip: ""
+	// DisplayName: Seror'sk Greaves
+	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkHelmet: {
-	// DisplayName: Serork Helmet
-	// Tooltip: ""
+	// DisplayName: Serork's Helmet
+	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkMask: {
-	// DisplayName: Serork Mask
-	// Tooltip: ""
+	// DisplayName: Serork's Mask
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+BRIPEsHeart: {
+	// DisplayName: BRIPE's Heart
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+BRIPEsHelmet: {
+	// DisplayName: BRIPE's Helmet
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+BRIPEsRocketBoots: {
+	// DisplayName: BRIPE's Rocket Boots
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+cleoChestguard: {
+	// DisplayName: cleo.'s Chestguard
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+cleoMask: {
+	// DisplayName: cleo.'s Mask
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+cleoPants: {
+	// DisplayName: cleo.'s Pants
+	// Tooltip: "{$Mods.RoA.RoADev}"
 }

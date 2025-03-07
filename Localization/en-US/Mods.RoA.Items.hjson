@@ -1737,3 +1737,33 @@ SerorkMask: {
 	DisplayName: Serork's Mask
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
+
+BRIPEsHeart: {
+	DisplayName: BRIPE's Heart
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+BRIPEsHelmet: {
+	DisplayName: BRIPE's Helmet
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+BRIPEsRocketBoots: {
+	DisplayName: BRIPE's Rocket Boots
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+cleoChestguard: {
+	DisplayName: cleo.'s Chestguard
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+cleoMask: {
+	DisplayName: cleo.'s Mask
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+cleoPants: {
+	DisplayName: cleo.'s Pants
+	Tooltip: "{$Mods.RoA.RoADev}"
+}

@@ -242,7 +242,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 if (ArmorGlowMasks.TryGetValue(player.body, out ModItem armorGlowMaskModItem)) {
                     Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem.Texture + "_Body_Glow").Value;
                     Color glowMaskColor = Color.White * (1f - drawInfo.shadow);
-                    (armorGlowMaskModItem as IDrawArmorGlowMask).SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor);
+                    (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor);
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawInfo.shadow);
                     Rectangle bodyFrame = drawInfo.compTorsoFrame;
                     Vector2 vector = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.bodyFrame.Width / 2, drawInfo.drawPlayer.bodyFrame.Height / 2);
@@ -258,6 +258,30 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     drawInfo.DrawDataCache.Add(drawData);
                 }
             }
+        }
+    }
+
+    public sealed class BodyGlowMaskHandler2 : ModPlayer {
+        private static Dictionary<int, Func<Color>> _bodyColor;
+
+        public static void RegisterData(int bodySlot, Func<Color> color) {
+            if (!_bodyColor.ContainsKey(bodySlot)) {
+                _bodyColor.Add(bodySlot, color);
+            }
+        }
+
+        public override void Load()
+            => _bodyColor = new Dictionary<int, Func<Color>>();
+
+        public override void Unload()
+            => _bodyColor = null;
+
+        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) {
+            if (!_bodyColor.TryGetValue(Player.body, out Func<Color> color))
+                return;
+
+            drawInfo.bodyGlowColor = color();
+            drawInfo.armGlowColor = color();
         }
     }
 }
