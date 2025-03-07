@@ -45,6 +45,12 @@ sealed class LothorSpike : ModProjectile {
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.tileCollide = false;
+
+        Projectile.hide = true;
+    }
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        behindNPCsAndTiles.Add(index);
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -54,7 +60,7 @@ sealed class LothorSpike : ModProjectile {
         }
         float length2 = 12f;
         if (Projectile.velocity == -Vector2.UnitY) {
-            length2 = 7.5f;
+            length2 = 8f;
         }
         Vector2 lineEnd = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * length * length2;
         return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 30f);
@@ -123,7 +129,7 @@ sealed class LothorSpike : ModProjectile {
         Vector2 origin;
         Rectangle sourceRectangle;
         SpriteEffects effects;
-        start += velocity * 4f;
+        start += velocity * 7f;
         while (index < length) {
             effects = SpriteEffects.None;
             bool flag = _partInfo[index].Variant == 1;
