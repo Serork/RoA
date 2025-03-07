@@ -27,7 +27,12 @@ sealed class NFAHorns : ModItem {
 		Item.vanity = true;
 	}
 
-	public override bool IsVanitySet(int head, int body, int legs) => body == ModContent.ItemType<NFAJacket>() && legs == ModContent.ItemType<NFAPants>();
+    public override bool IsVanitySet(int head, int body, int legs)
+       => head == EquipLoader.GetEquipSlot(Mod, nameof(NFAHorns), EquipType.Head) &&
+          body == EquipLoader.GetEquipSlot(Mod, nameof(NFAJacket), EquipType.Body) &&
+          legs == EquipLoader.GetEquipSlot(Mod, nameof(NFAPants), EquipType.Legs);
 
-    public override void ArmorSetShadows(Player player) => player.armorEffectDrawShadowLokis = true;
+    public override void UpdateVanitySet(Player player) {
+        player.armorEffectDrawShadowLokis = true;
+    }
 }

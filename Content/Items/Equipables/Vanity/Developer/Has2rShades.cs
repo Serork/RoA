@@ -32,9 +32,11 @@ sealed class Has2rShades : ModItem {
     }
 
     public override bool IsVanitySet(int head, int body, int legs)
-		=> body == ModContent.ItemType<Has2rJacket>() && legs == ModContent.ItemType<Has2rPants>();
+       => (head == EquipLoader.GetEquipSlot(Mod, nameof(Has2rMask), EquipType.Head) || head == EquipLoader.GetEquipSlot(Mod, nameof(Has2rShades), EquipType.Head)) &&
+          body == EquipLoader.GetEquipSlot(Mod, nameof(Has2rJacket), EquipType.Body) &&
+          legs == EquipLoader.GetEquipSlot(Mod, nameof(Has2rPants), EquipType.Legs);
 
-	public override void UpdateVanitySet(Player player) => player.yoraiz0rDarkness = true;
+    public override void UpdateVanitySet(Player player) => player.yoraiz0rDarkness = true;
 
 	public override void UpdateArmorSet(Player player) => player.yoraiz0rDarkness = true;
 }

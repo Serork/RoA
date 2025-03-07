@@ -26,5 +26,7 @@ sealed class PeegeonHood : ModItem {
     }
 
     public override bool IsVanitySet(int head, int body, int legs)
-       => body == ModContent.ItemType<PeegeonChestguard>() && legs == ModContent.ItemType<PeegeonGreaves>();
+       => head == EquipLoader.GetEquipSlot(Mod, nameof(PeegeonHood), EquipType.Head) &&
+          body == EquipLoader.GetEquipSlot(Mod, nameof(PeegeonChestguard), EquipType.Body) &&
+          legs == EquipLoader.GetEquipSlot(Mod, nameof(PeegeonGreaves), EquipType.Legs);
 }

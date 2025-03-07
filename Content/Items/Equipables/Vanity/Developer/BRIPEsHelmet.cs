@@ -40,12 +40,12 @@ sealed class BRIPEsHelmet : ModItem {
     }
 
 
-    public override bool IsArmorSet(Item head, Item body, Item legs)
-        => body.type == ModContent.ItemType<BRIPEsHeart>() && legs.type == ModContent.ItemType<BRIPEsRocketBoots>();
+    public override bool IsVanitySet(int head, int body, int legs)
+       => head == EquipLoader.GetEquipSlot(Mod, nameof(BRIPEsHelmet), EquipType.Head) &&
+          body == EquipLoader.GetEquipSlot(Mod, nameof(BRIPEsHeart), EquipType.Body) &&
+          legs == EquipLoader.GetEquipSlot(Mod, nameof(BRIPEsRocketBoots), EquipType.Legs);
 
-    public override void ArmorSetShadows(Player player)
-        => player.armorEffectDrawOutlines = true;
-
-    //public override void UpdateArmorSet(Player player)
-    //    => player.rocketBoots = 1;			
+    public override void UpdateVanitySet(Player player) {
+        player.armorEffectDrawOutlines = true;
+    }		
 }

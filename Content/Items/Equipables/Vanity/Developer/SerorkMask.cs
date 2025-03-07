@@ -25,5 +25,7 @@ sealed class SerorkMask : ModItem {
     }
 
     public override bool IsVanitySet(int head, int body, int legs)
-       => body == ModContent.ItemType<SerorkBreastplate>() && legs == ModContent.ItemType<SerorkGreaves>();
+       => (head == EquipLoader.GetEquipSlot(Mod, nameof(SerorkHelmet), EquipType.Head) || head == EquipLoader.GetEquipSlot(Mod, nameof(SerorkMask), EquipType.Head)) &&
+          body == EquipLoader.GetEquipSlot(Mod, nameof(SerorkBreastplate), EquipType.Body) &&
+          legs == EquipLoader.GetEquipSlot(Mod, nameof(SerorkGreaves), EquipType.Legs);
 }
