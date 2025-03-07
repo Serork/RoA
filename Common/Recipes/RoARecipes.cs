@@ -836,7 +836,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<Content.Items.Materials.DullDaikatana>(1);
         item.AddIngredient(ItemID.HellstoneBar, 10);
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
-        item.AddTile(TileID.Anvils);
+        item.AddTile(TileID.DemonAltar);
         item.SortAfterFirstRecipesOf(ItemID.FireproofBugNet);
         item.Register();
         daikatana = item;
@@ -866,7 +866,7 @@ sealed class RoARecipes : ModSystem {
 
         item = Recipe.Create(ModContent.ItemType<MercuriumNugget>());
         item.AddIngredient<Content.Items.Placeable.Crafting.MercuriumOre>(4);
-        item.AddTile(TileID.Furnaces);
+        item.AddTile(TileID.DemonAltar);
         item.SortAfterFirstRecipesOf(ItemID.CrimtaneBar);
         item.Register();
 
