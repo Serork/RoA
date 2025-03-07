@@ -66,7 +66,7 @@ sealed class Ravencaller : ModNPC {
         NPC.value = Item.sellPrice(0, 0, 10, 0);
         NPC.damage = 30;
         NPC.lifeMax = 300;
-        NPC.defense = 3;
+        NPC.defense = 4;
         NPC.npcSlots = 1.5f;
         NPC.aiStyle = -1;
         NPC.knockBackResist = 0.2f;
