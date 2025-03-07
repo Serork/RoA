@@ -62,6 +62,8 @@ sealed class Has2rMask : ModItem {
         }
 
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
+            orig(ref drawInfo);
+            return;
             Player player = drawInfo.drawPlayer;
             int itemType = ModContent.ItemType<Has2rMask>();
             bool flag = ItemLoader.GetItem(itemType).IsVanitySet(player.head, player.body, player.legs);

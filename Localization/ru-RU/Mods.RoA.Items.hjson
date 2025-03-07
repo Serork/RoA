@@ -1716,6 +1716,12 @@ PeegeonHood: {
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
+PeegeonCape: {
+	// DisplayName: Peegeon's Cape
+	// Tooltip:"{$Mods.RoA.RoADev}"
+}
+
+
 SerorkBreastplate: {
 	// DisplayName: Serork's Breastplate
 	// Tooltip: "{$Mods.RoA.RoADev}"
