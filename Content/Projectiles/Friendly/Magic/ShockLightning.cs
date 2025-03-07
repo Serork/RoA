@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Enums;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
@@ -232,6 +233,14 @@ sealed class ShockLightning : ModProjectile {
         public readonly Vector2 Position => _a + (_b - _a);
         public readonly Player Player => Main.player[_projectile.owner];
 
+        private static uint PseudoRand(ref uint seed) {
+            seed ^= seed << 13;
+            seed ^= seed >> 17;
+            return seed;
+        }
+
+        private static float PseudoRandRange(ref uint seed, float min, float max) => min + (float)((double)(PseudoRand(ref seed) & 1023U) / 1024.0 * ((double)max - (double)min));
+
         public void Draw(SpriteBatch spriteBatch, Color color = default) {
             Player player = Main.player[_projectile.owner];
             Vector2 pos = player.itemLocation + Utils.SafeNormalize(_projectile.velocity, Vector2.One) * (player.HeldItem.width + player.HeldItem.width / 4);
@@ -248,16 +257,20 @@ sealed class ShockLightning : ModProjectile {
                 dust.fadeIn = dust.scale + 0.1f;
                 dust.noGravity = true;
             }
+            uint seed = (uint)(_projectile.position.GetHashCode());
+            UnifiedRandom random = new((int)seed);
             float rotation = (dest - source).ToRotation();
             Vector2 capOrigin = new(_endTexture.Width(), _endTexture.Height() / 2f);
             Vector2 middleOrigin = new(0, _segmentTexture.Height() / 2f);
             Vector2 middleScale = new((dest - source).Length(), thicknessScale);
             spriteBatch.Draw(_endTexture2.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.01f, SpriteEffects.None, 0f);
-            spriteBatch.BeginBlendState(BlendState.Additive);
-            spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color * 0.75f, rotation, middleOrigin, middleScale * 0.95f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.015f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.02f, SpriteEffects.None, 0f);
-            spriteBatch.EndBlendState();
+            if (random.NextChance(Math.Clamp(thicknessScale * 2f, 0f, 1f))) {
+                spriteBatch.BeginBlendState(BlendState.Additive);
+                spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color * 0.75f, rotation, middleOrigin, middleScale * 0.95f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.015f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.02f, SpriteEffects.None, 0f);
+                spriteBatch.EndBlendState();
+            }
             spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.85f, SpriteEffects.None, 0f);
             spriteBatch.Draw(_endTexture.Value, source - Main.screenPosition, null, color, rotation, capOrigin, thicknessScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(_endTexture.Value, dest - Main.screenPosition, null, color, rotation + MathHelper.Pi, capOrigin, thicknessScale, SpriteEffects.None, 0f);
