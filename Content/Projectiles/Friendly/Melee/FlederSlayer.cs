@@ -392,7 +392,7 @@ sealed class FlederSlayer : ModProjectile {
                                 if (_charge > 0.35f) {
                                     if (Projectile.owner == Main.myPlayer) {
                                         for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
-                                            float value = _empoweredAttack ? 1.25f : 1f;
+                                            float value = _empoweredAttack ? 1.3f : 1f;
                                             float value0 = _empoweredAttack ? 1.5f : 1f;
                                             float value2 = MathHelper.Clamp(_charge * 1.5f, 0f, 1f);
                                             Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * value2 * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
