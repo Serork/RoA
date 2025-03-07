@@ -112,6 +112,8 @@ sealed class ShockLightning : ModProjectile {
     }
 
     private void UpdateSegments() {
+        uint seed = (uint)(Projectile.position.GetHashCode());
+        UnifiedRandom random = new((int)seed);
         Player player = Main.player[Projectile.owner];
         Vector2 source = player.itemLocation + (new Vector2(0f, 3f) * player.direction).RotatedBy(Projectile.velocity.ToRotation()) + Utils.SafeNormalize(Projectile.velocity, Vector2.One) * (player.HeldItem.width + player.HeldItem.width / 4);
         float thickness = 3.25f;
@@ -125,7 +127,7 @@ sealed class ShockLightning : ModProjectile {
                 0
             };
         for (int i = 0; i < positionCount; i++) {
-            positions.Add(Main.rand.NextFloat(0, 1));
+            positions.Add(random.NextFloat(0, 1));
         }
         positions.Sort();
         Vector2 prevPoint = source;
@@ -135,14 +137,14 @@ sealed class ShockLightning : ModProjectile {
             float position = positions[i];
             float scale = (length * JAGGEDNESS) * (position - positions[i - 1]);
             float envelope = position > 0.95f ? 20 * (1 - position) : 1;
-            float displacement = Main.rand.NextFloatRange(SWAY);
+            float displacement = random.NextFloatRange(SWAY);
             displacement -= (displacement - prevDisplacement) * (1 - scale);
             displacement *= envelope;
             Vector2 to = source + position * dif + displacement * normal;
-            if (tempThickness > 0.25f && Main.rand.NextChance(0.25)) {
+            if (tempThickness > 0.25f && random.NextChance(0.25)) {
                 tempThickness -= tempThickness / 10;
             }
-            _results.Add(new Line(Projectile, prevPoint, to, tempThickness));
+            _results.Add(new Line(Projectile, prevPoint, to, tempThickness, random));
             prevPoint = to;
             prevDisplacement = displacement;
         }
@@ -225,10 +227,11 @@ sealed class ShockLightning : ModProjectile {
 
     public override bool? CanCutTiles() => false;
 
-    private readonly struct Line(Projectile projectile, Vector2 a, Vector2 b, float thickness = 1) {
+    private readonly struct Line(Projectile projectile, Vector2 a, Vector2 b, float thickness = 1, UnifiedRandom random = null) {
         private readonly Projectile _projectile = projectile;
         private readonly Vector2 _a = a, _b = b;
         private readonly float _thickness = thickness;
+        private readonly UnifiedRandom _random = random;
 
         public readonly Vector2 Position => _a + (_b - _a);
         public readonly Player Player => Main.player[_projectile.owner];
@@ -258,7 +261,7 @@ sealed class ShockLightning : ModProjectile {
                 dust.noGravity = true;
             }
             uint seed = (uint)(_projectile.position.GetHashCode());
-            UnifiedRandom random = new((int)seed);
+            UnifiedRandom random = _random ?? new((int)seed);
             float rotation = (dest - source).ToRotation();
             Vector2 capOrigin = new(_endTexture.Width(), _endTexture.Height() / 2f);
             Vector2 middleOrigin = new(0, _segmentTexture.Height() / 2f);
