@@ -52,7 +52,7 @@ sealed class LothorSpike : ModProjectile {
         for (int i = 0; i < _partInfo.Length; i++) {
             length += _partInfo[i].Progress;
         }
-        float length2 = 11f;
+        float length2 = 12f;
         if (Projectile.velocity == -Vector2.UnitY) {
             length2 = 7.5f;
         }
