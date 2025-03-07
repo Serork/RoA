@@ -54,7 +54,7 @@ sealed class LothorSpike : ModProjectile {
         }
         float length2 = 11f;
         if (Projectile.velocity == -Vector2.UnitY) {
-            length2 = 6.5f;
+            length2 = 7.5f;
         }
         Vector2 lineEnd = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * length * length2;
         return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 30f);
@@ -125,13 +125,20 @@ sealed class LothorSpike : ModProjectile {
         Rectangle sourceRectangle;
         SpriteEffects effects;
         while (index < length) {
-            if (index == length - 1) {
+            effects = SpriteEffects.None;
+            bool flag = _partInfo[index].Variant == 1;
+            int y = flag ? 17 : 0;
+            bool flag2 = index == 0;
+            float offset = 3f;
+            bool flag3 = index == length - 1;
+            bool flag4 = index == length - 2;
+            if (flag3) {
                 texture = ModContent.Request<Texture2D>(TipTexture).Value;
                 width = texture.Width;
                 height = texture.Height;
                 sourceRectangle = new(0, 0, width, 0);
             }
-            else if (index == 0) {
+            else if (flag2) {
                 texture = ModContent.Request<Texture2D>(StartTexture).Value;
                 width = texture.Width;
                 height = texture.Height;
@@ -140,16 +147,30 @@ sealed class LothorSpike : ModProjectile {
             else {
                 texture = ModContent.Request<Texture2D>(Texture).Value;
                 width = texture.Width;
-                height = texture.Height / 2;
-                sourceRectangle = new(0, _partInfo[index].Variant * height, width, 0);
+                height = 15;
+                effects = SpriteEffects.FlipVertically;
+                sourceRectangle = new(0, y, width, 0);
             }
             sourceRectangle.Height = (int)(height * _partInfo[index].Progress);
-            effects = (SpriteEffects)_partInfo[index].Direction;
+            if (!flag) {
+                sourceRectangle.Height -= 3;
+                if (!flag3) {
+                    offset = -1f;
+                }
+            }
+            if (flag2) {
+                sourceRectangle.Height -= 6;
+                offset -= 7f;
+            }
+            if (flag4) {
+                offset = 6f;
+            }
             origin = new Vector2(width, height) / 2f;
-            height -= 4;
             Vector2 drawPosition = start;
+
             Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, sourceRectangle, Color.White * Projectile.Opacity, velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi, origin, Projectile.scale, effects);
             start += height * velocity;
+            start += velocity * offset;
             index++;
         }
         return false;
