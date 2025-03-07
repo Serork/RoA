@@ -50,6 +50,7 @@ sealed class DropRoADevsItems : ILoadable {
                     self.QuickSpawnItem(source, Main.rand.NextBool() ? ModContent.ItemType<Has2rMask>() : ModContent.ItemType<Has2rShades>());
                     self.QuickSpawnItem(source, ModContent.ItemType<Has2rJacket>());
                     self.QuickSpawnItem(source, ModContent.ItemType<Has2rPants>());
+                    self.QuickSpawnItem(source, ModContent.ItemType<EldritchRing>());
                     break;
                 case 3:
                     self.QuickSpawnItem(source, ModContent.ItemType<BRIPEsHelmet>());
