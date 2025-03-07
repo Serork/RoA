@@ -39,7 +39,7 @@ sealed class SapSlime : ModNPC {
         NPC.height = 24;
         NPC.npcSlots = 0.4f;
 
-        NPC.value = Item.buyPrice(silver: 20);
+        NPC.value = Item.buyPrice(0, 0, 0, 75);
         NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.aiStyle = 1;
