@@ -58,7 +58,7 @@ sealed class cleoMask : ModItem {
                 r.Y += 2 * (int)player.gravDir;
                 if (num4 == 0 || num4 == 1) {
                     dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, ModContent.DustType<cleoDust>(), 0f, 0f, 50, Color.Lerp(Color.Blue, Color.LightBlue, Main.rand.NextFloat() * 0.5f));
-                    dust.shader = GameShaders.Armor.GetSecondaryShader(player.cBody, player);
+                    dust.shader = GameShaders.Armor.GetSecondaryShader(player.cLegs, player);
                     dust.scale = 0.66f;
                     dust.noGravity = true;
                     dust.velocity *= 0.25f;
@@ -76,7 +76,7 @@ sealed class cleoMask : ModItem {
                 num3 = 0.5f;
 
                 dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, type, 0f, 0f, alpha, Color.Lerp(Color.Blue, Color.LightBlue, Main.rand.NextFloat() * 0.5f), scale);
-                dust.shader = GameShaders.Armor.GetSecondaryShader(player.cBody, player);
+                dust.shader = GameShaders.Armor.GetSecondaryShader(player.cLegs, player);
                 dust.velocity += vector;
                 dust.velocity *= num3;
                 dust.noLight = dust.noLightEmittence = true;

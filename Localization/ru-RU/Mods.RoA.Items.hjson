@@ -1753,12 +1753,20 @@ BRIPEsRocketBoots: {
 
 cleoChestguard: {
 	// DisplayName: cleo.'s Chestguard
-	// Tooltip: "{$Mods.RoA.RoADev}"
+	/* Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'The One They Left Behind'
+		''' */
 }
 
 cleoMask: {
 	// DisplayName: cleo.'s Mask
-	// Tooltip: "{$Mods.RoA.RoADev}"
+	/* Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'Lil' Gunther'
+		''' */
 }
 
 cleoPants: {

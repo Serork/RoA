@@ -1,8 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.GlowMasks;
+using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -39,4 +43,92 @@ sealed class Has2rMask : ModItem {
        => (head == EquipLoader.GetEquipSlot(Mod, nameof(Has2rMask), EquipType.Head) || head == EquipLoader.GetEquipSlot(Mod, nameof(Has2rShades), EquipType.Head)) &&
           body == EquipLoader.GetEquipSlot(Mod, nameof(Has2rJacket), EquipType.Body) &&
           legs == EquipLoader.GetEquipSlot(Mod, nameof(Has2rPants), EquipType.Legs);
+
+    private sealed class TentaclesDrawLayer : ILoadable {
+        private const int MAX = 3;
+
+        private Vector2 tentaclePosition;
+
+        private readonly bool[] pulseBack = new bool[MAX];
+        private readonly bool[] rotationBack = new bool[MAX];
+
+        private readonly float[] scale = new float[MAX];
+        private readonly float[] pulse = new float[MAX];
+        private readonly float[] rotation = new float[MAX];
+        private readonly float[] randomMovement = new float[MAX];
+
+        void ILoadable.Load(Mod mod) {
+            On_PlayerDrawLayers.DrawPlayer_08_Backpacks += On_PlayerDrawLayers_DrawPlayer_08_Backpacks;
+        }
+
+        private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
+            Player player = drawInfo.drawPlayer;
+            int itemType = ModContent.ItemType<Has2rMask>();
+            bool flag = ItemLoader.GetItem(itemType).IsVanitySet(player.head, player.body, player.legs);
+            if (flag) {
+                Player _player = drawInfo.drawPlayer;
+                for (int i = 0; i < MAX; i++) {
+                    if (!Main.gamePaused)
+                        randomMovement[i] = Main.rand.NextFloat(-0.1f, 0.1f);
+                    Vector2 _position = new(drawInfo.Center.X - (float)((i == 0 ? -1 : (i - 1f)) * 6) - 13f * _player.direction, drawInfo.Center.Y - 10f);
+                    if (_player.gravDir == -1.0) _position.Y += 50f;
+                    tentaclePosition = new((float)(int)_position.X, (float)(int)_position.Y);
+
+                    if (_player.gravDir == -1.0)
+                        tentaclePosition.Y += 50f;
+
+                    if (!Main.gamePaused) {
+                        Pulsation(i);
+                        Rotation(i);
+                    }
+
+                    int shader = 0;
+                    shader = drawInfo.cBody;
+
+                    if (i == 0) {
+                        shader = drawInfo.cHead;
+                    }
+                    if (i == 2) {
+                        shader = drawInfo.cLegs;
+                    }
+
+                    var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "Tentacle");
+                    Texture2D _texture = asset.Value;
+                    Vector2 _position2 = tentaclePosition - Main.screenPosition;
+                    Vector2 _origin = new(_texture.Width * 0.5f, _texture.Height * 0.5f);
+                    Color _color = new(255, 215, 0, 140);
+                    bool _flag = (i == 0 ? -1f : (float)(i - 1f)) != 0 ? _player.direction * (int)_player.gravDir < 0 : _player.direction * (int)_player.gravDir > 0;
+                    SpriteEffects _effect = _flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    DrawData _drawData = new(_texture, _position2, null, _color, rotation[i], _origin, scale[i], _effect, 0);
+                    _drawData.shader = shader;
+                    drawInfo.DrawDataCache.Add(_drawData);
+                }
+
+                return;
+            }
+
+            orig(ref drawInfo);
+        }
+
+        void ILoadable.Unload() { }
+
+        private void Pulsation(int index) {
+            scale[index] = 1f + pulse[index];
+            float _speed = 0.0025f;
+            pulse[index] += _speed * (pulseBack[index] ? -1f : 1f);
+            if (pulseBack[index]) {
+                if (pulse[index] <= randomMovement[index] - 0.2) pulseBack[index] = false;
+            }
+            else { if (pulse[index] >= randomMovement[index] + 0.2) pulseBack[index] = true; }
+        }
+
+        private void Rotation(int index) {
+            float _speed = 0.0025f;
+            rotation[index] += _speed * (rotationBack[index] ? -1f : 1f);
+            if (rotationBack[index]) {
+                if (rotation[index] <= randomMovement[index] - 0.18f) rotationBack[index] = false;
+            }
+            else { if (rotation[index] >= randomMovement[index] + 0.18f) rotationBack[index] = true; }
+        }
+    }
 }

@@ -1,8 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 
+using System;
+
 using Terraria;
 using Terraria.GameContent.Creative;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.Initializers;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Vanity.Developer;
@@ -29,4 +33,99 @@ sealed class PeegeonHood : ModItem {
        => head == EquipLoader.GetEquipSlot(Mod, nameof(PeegeonHood), EquipType.Head) &&
           body == EquipLoader.GetEquipSlot(Mod, nameof(PeegeonChestguard), EquipType.Body) &&
           legs == EquipLoader.GetEquipSlot(Mod, nameof(PeegeonGreaves), EquipType.Legs);
+
+    public override void UpdateVanitySet(Player player) {
+        int num = 0;
+        num += player.bodyFrame.Y / 56;
+        if (num >= Main.OffsetsPlayerHeadgear.Length)
+            num = 0;
+
+        Vector2 vector = Main.OffsetsPlayerHeadgear[num];
+        vector *= player.Directions;
+        Vector2 vector2 = new Vector2(player.width / 2, player.height / 2) + vector + (player.MountedCenter - player.Center);
+        player.sitting.GetSittingOffsetInfo(player, out var posOffset, out var seatAdjustment);
+        vector2 += posOffset + new Vector2(0f, seatAdjustment);
+
+        //if (player.face == 19)
+        //    vector2.Y -= 5f * player.gravDir;
+
+        //if (head == 276)
+        vector2.X -= 2.5f * (float)player.direction;
+
+        if (player.mount.Active && player.mount.Type == 52) {
+            vector2.X += 14f * (float)player.direction;
+            vector2.Y -= 2f * player.gravDir;
+        }
+
+        float y = -11.5f * player.gravDir;
+        Vector2 vector3 = new Vector2(3 * player.direction - ((player.direction == 1) ? 1 : 0), y) + Vector2.UnitY * player.gfxOffY + vector2;
+        Vector2 vector4 = new Vector2(3 * player.shadowDirection[1] - ((player.direction == 1) ? 1 : 0), y) + vector2;
+        Vector2 vector5 = Vector2.Zero;
+        if (player.mount.Active && player.mount.Cart) {
+            int num2 = Math.Sign(player.velocity.X);
+            if (num2 == 0)
+                num2 = player.direction;
+
+            vector5 = new Vector2(MathHelper.Lerp(0f, -8f, player.fullRotation / ((float)Math.PI / 4f)), MathHelper.Lerp(0f, 2f, Math.Abs(player.fullRotation / ((float)Math.PI / 4f)))).RotatedBy(player.fullRotation);
+            if (num2 == Math.Sign(player.fullRotation))
+                vector5 *= MathHelper.Lerp(1f, 0.6f, Math.Abs(player.fullRotation / ((float)Math.PI / 4f)));
+        }
+
+        if (player.fullRotation != 0f) {
+            vector3 = vector3.RotatedBy(player.fullRotation, player.fullRotationOrigin);
+            vector4 = vector4.RotatedBy(player.fullRotation, player.fullRotationOrigin);
+        }
+
+        float num3 = 0f;
+        Vector2 vector6 = player.position + vector3 + vector5;
+        Vector2 vector7 = player.oldPosition + vector4 + vector5;
+        vector7.Y -= num3 / 2f;
+        vector6.Y -= num3 / 2f;
+        float num4 = 1f;
+        num4 = 0.5f;
+        //switch (player.yoraiz0rEye % 10) {
+        //    case 1:
+        //        return;
+        //    case 2:
+        //        num4 = 0.5f;
+        //        break;
+        //    case 3:
+        //        num4 = 0.625f;
+        //        break;
+        //    case 4:
+        //        num4 = 0.75f;
+        //        break;
+        //    case 5:
+        //        num4 = 0.875f;
+        //        break;
+        //    case 6:
+        //        num4 = 1f;
+        //        break;
+        //    case 7:
+        //        num4 = 1.1f;
+        //        break;
+        //}
+
+        //if (player.yoraiz0rEye < 7) {
+        //    DelegateMethods.v3_1 = Main.hslToRgb(Main.rgbToHsl(player.eyeColor).X, 1f, 0.5f).ToVector3() * 0.5f * num4;
+        //    if (player.velocity != Vector2.Zero)
+        //        Utils.PlotTileLine(player.Center, player.Center + player.velocity * 2f, 4f, DelegateMethods.CastLightOpen);
+        //    else
+        //        Utils.PlotTileLine(player.Left, player.Right, 4f, DelegateMethods.CastLightOpen);
+        //}
+
+        int num5 = (int)Vector2.Distance(vector6, vector7) / 3 + 1;
+        if (Vector2.Distance(vector6, vector7) % 3f != 0f)
+            num5++;
+
+        for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
+            Dust obj = Main.dust[Dust.NewDust(player.Center, 0, 0, DustID.TheDestroyer)];
+            obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5);
+            obj.noGravity = true;
+            obj.velocity = Vector2.Zero;
+            obj.customData = this;
+            obj.scale = num4;
+            obj.shader = GameShaders.Armor.GetSecondaryShader(player.cHead > 0 ? player.cHead : GameShaders.Armor.GetShaderIdFromItemId(1065), player);
+        }
+    }
 }
