@@ -48,7 +48,7 @@ sealed class Pipistrelle : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 150;
+        NPC.lifeMax = 120;
         NPC.damage = 20;
         NPC.defense = 6;
         NPC.Size = new Vector2(32, 32);
@@ -196,10 +196,10 @@ sealed class Pipistrelle : ModNPC {
 
         if (!flag3) {
             if (owner.life < owner.lifeMax * 0.5f) {
-                NPC.defense = (int)(18 * Main.GameModeInfo.EnemyDamageMultiplier);
+                NPC.defense = (int)(12 * Main.GameModeInfo.EnemyDamageMultiplier);
             }
             else if (owner.life < owner.lifeMax * 0.75f) {
-                NPC.defense = (int)(12 * Main.GameModeInfo.EnemyDamageMultiplier);
+                NPC.defense = (int)(9 * Main.GameModeInfo.EnemyDamageMultiplier);
             }
         }
 
@@ -250,6 +250,7 @@ sealed class Pipistrelle : ModNPC {
                     NPC.velocity.Y = y * sqrt;
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
                         int damage = (int)MathHelper.Lerp(Lothor.ACORN_DAMAGE, Lothor.ACORN_DAMAGE2, lifeProgress);
+                        damage /= 2;
                         int knockBack = (int)MathHelper.Lerp(Lothor.ACORN_KNOCKBACK, Lothor.ACORN_KNOCKBACK2, lifeProgress);
                         int projectile = 
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-x * sqrt, -y * sqrt) * 1.5f, ModContent.ProjectileType<CursedAcorn>(),

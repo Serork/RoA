@@ -39,12 +39,12 @@ sealed partial class Lothor : ModNPC {
     public const int ACORN_DAMAGE2 = 50;
     public const float ACORN_KNOCKBACK2 = 0f;
 
-    public const int SPIT_DAMAGE = 20;
+    public const int SPIT_DAMAGE = 30;
     public const float SPIT_KNOCKBACK = 0f;
-    public const int SPIT_DAMAGE2 = 40;
+    public const int SPIT_DAMAGE2 = 60;
     public const float SPIT_KNOCKBACK2 = 0f;
 
-    public const int STOMP_DAMAGE = 45;
+    public const int STOMP_DAMAGE = 50;
     public const float STOMP_KNOCKBACK = 0f;
     public const int STOMP_DAMAGE2 = 90;
     public const float STOMP_KNOCKBACK2 = 0f;
