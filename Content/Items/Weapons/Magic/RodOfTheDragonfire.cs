@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(shouldApplyItemAlpha: true)]
 sealed class RodOfTheDragonfire : Rod {
     protected override Color? LightingColor => new(255, 154, 116);
 

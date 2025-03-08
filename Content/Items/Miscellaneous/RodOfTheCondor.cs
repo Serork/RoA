@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(shouldApplyItemAlpha: true)]
 sealed class RodOfTheCondor : ModItem {
     private static CondorWingsHandler GetHandler(Player player) => player.GetModPlayer<CondorWingsHandler>();
 

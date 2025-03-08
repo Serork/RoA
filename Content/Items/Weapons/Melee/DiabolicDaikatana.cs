@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Melee;
 
-[AutoloadGlowMask(0, 0, 178, 178)]
+[AutoloadGlowMask(0, 0, 178, 178, shouldApplyItemAlpha: true)]
 sealed class DiabolicDaikatana : ModItem {
     public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(shouldApplyItemAlpha: true)]
 sealed class RodOfTheTerra : Rod {
     protected override Color? LightingColor => new(73, 170, 104);
 

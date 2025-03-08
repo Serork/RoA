@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Special;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(shouldApplyItemAlpha: true)]
 sealed class SphereOfStream : MagicSphere {
     public override void SetStaticDefaults() {
         ItemID.Sets.ShimmerTransformToItem[Type] = (ushort)ModContent.ItemType<SphereOfAspiration>();

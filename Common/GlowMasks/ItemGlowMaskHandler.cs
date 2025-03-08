@@ -53,7 +53,9 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     color.A = (byte)((float)(int)color.A * (1f - item.shimmerTime));
                 }
 
-                spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.GlowColor, rotation, origin, 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null,
+                    glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.GlowColor,
+                    rotation, origin, 1f, SpriteEffects.None, 0f);
                 if (item.shimmered)
                     spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, 1f, SpriteEffects.None, 0f);
             }

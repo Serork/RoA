@@ -1,13 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
-using RoA.Common.Items;
-using RoA.Content.Buffs;
-using RoA.Content.Items.Materials;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 using RoA.Core;
-using System;
 
 using Terraria;
 using Terraria.Audio;
@@ -17,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(shouldApplyItemAlpha: true)]
 sealed class RodOfTheStream : Rod {
     protected override Color? LightingColor => new(57, 136, 232);
 

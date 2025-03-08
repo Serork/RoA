@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
-using RoA.Common.Items;
-using RoA.Content.Items.Materials;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 using RoA.Core;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -13,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(shouldApplyItemAlpha: true)]
 sealed class RodOfTheShock : Rod {
     protected override Color? LightingColor => new(86, 173, 177);
 
