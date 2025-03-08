@@ -21,11 +21,11 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
     protected override void SafeSetDefaults() {
         Item.SetSize(36);
         Item.SetDefaultToUsable(ItemUseStyleID.Shoot, 24, useSound: SoundID.Item7);
-        Item.SetWeaponValues(8, 4f);
+        Item.SetWeaponValues(6, 4f);
         Item.SetDefaultOthers(Item.sellPrice(silver: 15), ItemRarityID.Blue);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 18);
-        NatureWeaponHandler.SetFillingRate(Item, 0.65f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 20);
+        NatureWeaponHandler.SetFillingRate(Item, 0.4f);
 
         Item.rare = ItemRarityID.Blue;
 
@@ -44,7 +44,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         private float _attackTimer, _attackTime;
         private Vector2 _mousePos;
 
-        private int Min => (int)(_attackTime * 0.9f);
+        private int Min => (int)(_attackTime * 0.4f);
         private int PerShoot => (int)(_attackTime * 0.4f);
         private bool MinPassed => _attackTimer >= Min;
 

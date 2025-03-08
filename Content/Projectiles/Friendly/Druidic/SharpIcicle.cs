@@ -24,7 +24,7 @@ sealed class SharpIcicle : NatureProjectile {
         Projectile.aiStyle = -1;
 
         Projectile.timeLeft = 200;
-        Projectile.penetrate = 1;
+        Projectile.penetrate = 2;
 
         Projectile.Opacity = 0.5f;
     }

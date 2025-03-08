@@ -38,7 +38,7 @@ sealed class ShepherdLeaves : NatureProjectile {
 
     public override bool PreDraw(ref Color lightColor) => true;
 
-    public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
+    public override void SetStaticDefaults() => Main.projFrames[Type] = 5;
 
     protected override void SafeSetDefaults() {
         Projectile.Size = 8 * Vector2.One;

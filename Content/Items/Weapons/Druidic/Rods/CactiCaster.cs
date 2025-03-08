@@ -68,14 +68,10 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             else if (_leftTimeToReuse <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
                 _makeDust = false;
                 for (int num559 = 0; num559 < 10; num559++) {
-                    bool flag = Main.rand.NextBool(4);
-                    int dustType = flag ? ModContent.DustType<CactiCasterDust>() : DustID.JunglePlants;
-                    int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: flag ? 0 : 120);
+                    int dustType = DustID.OasisCactus;
+                    int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: Main.rand.Next(80));
                     Dust dust2 = Main.dust[num560];
                     dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
-                    if (!flag) {
-                        dust2.noLight = true;
-                    }
                     dust2.scale *= 1.2f;
                     dust2.velocity *= Main.rand.NextFloat(1f, 1.25f);
                     dust2.velocity *= 1.25f;
@@ -86,17 +82,13 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                 }
             }
             if (Main.rand.NextBool(5)) {
-                bool flag = Main.rand.NextBool(4);
-                int dustType = flag ? ModContent.DustType<CactiCasterDust>() : DustID.JunglePlants;
-                int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: flag ? 0 : 120);
+                int dustType = DustID.OasisCactus;
+                int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: Main.rand.Next(80));
                 Dust dust2 = Main.dust[num560];
                 dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
                 dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
                 dust2.noGravity = true;
                 dust2.scale *= 1f;
-                if (!flag) {
-                    dust2.noLight = true;
-                }
                 if (Main.rand.NextBool(2)) {
                     dust2.scale *= 1.2f;
                 }
@@ -132,6 +124,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
                                                     Vector2.Zero,
                                                     Scale: Main.rand.NextFloat(1.25f, 1.5f));
                     dust.noGravity = true;
+                    dust.noLight = true;
                 }
             }
         }

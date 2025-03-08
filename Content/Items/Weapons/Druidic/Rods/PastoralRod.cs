@@ -49,7 +49,7 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
             Vector2 direction = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
             velocity = direction.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2) + MathHelper.Pi) * 4f * NatureWeaponHandler.GetUseSpeedMultiplier(player.GetSelectedItem(), player);
 
-            _color = Color.Lerp(new Color(200, 0, 80), new Color(200, 255, 80), Main.rand.NextFloat());
+            _color = Color.Lerp(new Color(200, 70, 100), new Color(200, 230, 80), Main.rand.NextFloat());
 
             string hexString = _color.Value.Hex3();
             ai0 = Helper.FromHexString(hexString);
