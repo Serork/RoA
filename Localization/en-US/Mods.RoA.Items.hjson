@@ -50,7 +50,7 @@ MushroomStaff: {
 
 PastoralRod: {
 	DisplayName: Pastoral Cane
-	Tooltip: Launches mind-controlled sparks
+	Tooltip: Launches a bunch of fallen leaves
 }
 
 RipePumpkin: {
@@ -89,7 +89,7 @@ CactiCaster: {
 
 SpikedIceStaff: {
 	DisplayName: Spiked Ice Cane
-	Tooltip: Shoots up to three icicles
+	Tooltip: Shoots up to three icicles that fall after reaching the cursor position
 }
 
 LuminousFlower: {

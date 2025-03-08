@@ -50,7 +50,7 @@ MushroomStaff: {
 
 PastoralRod: {
 	DisplayName: Пастушья трость
-	Tooltip: Выпускает искры, управляемые разумом
+	Tooltip: Выпускает несколько опавших листьев
 }
 
 RipePumpkin: {
@@ -89,7 +89,7 @@ CactiCaster: {
 
 SpikedIceStaff: {
 	DisplayName: Шипастая ледяная трость
-	Tooltip: Выпускает до 3 сосулек за раз
+	Tooltip: Выпускает до 3 сосулек, падающих при достижении курсора
 }
 
 LuminousFlower: {

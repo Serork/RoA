@@ -53,5 +53,5 @@ WorshipperSetBonus:
 	Double tap {0} to send it out to attack temporarily
 	While idle, {1} on Harpy to ride it
 	'''
-DynastySetBonus: Melee damage provides a brief flutter of speed
+DynastySetBonus: Attacking in close range provides a brief flutter of speed
 ElderwoodSetBonus: Provides a chance to reduce damage taken, but leaves you vulnerable afterwards

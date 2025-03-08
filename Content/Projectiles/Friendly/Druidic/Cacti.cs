@@ -98,7 +98,7 @@ sealed class Cacti : NatureProjectile {
                 Main.EntitySpriteDraw(trailTexture,
                                       Projectile.oldPos[i] + (dif * offsetYBetween / 2f + origin - dif * offsetYBetween * i) - Main.screenPosition,
                                       null,
-                                      color,
+                                      color * scale,
                                       baseRotation,
                                       origin,
                                       scale,
@@ -139,20 +139,29 @@ sealed class Cacti : NatureProjectile {
         }
 
         SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves2") { Volume = 0.3f, Pitch = -0.75f });
+
+        if (!Main.dedServ) {
+            for (int i = 0; i < 2; i++)
+                Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/CactiGore").Type, 1f);
+        }
 
         for (int num559 = 0; num559 < 10; num559++) {
-            int num560 = Dust.NewDust(Projectile.Center - Projectile.velocity, Projectile.width, Projectile.height, DustID.JunglePlants, Alpha: 120);
+            int num560 = Dust.NewDust(Projectile.Center - Projectile.velocity, Projectile.width, Projectile.height, DustID.OasisCactus, Alpha: Main.rand.Next(80));
             Dust dust2 = Main.dust[num560];
+            dust2.noGravity = Main.rand.NextBool();
             dust2.noLight = true;
             if (Main.rand.NextBool(2)) {
                 dust2.scale *= 1.2f;
             }
         }
 
-        for (float num17 = 0f; num17 < 1f; num17 += 0.025f) {
-            Dust dust8 = Dust.NewDustPerfect(Projectile.Center + Vector2.UnitY * Projectile.Size.Y + Main.rand.NextVector2Circular(80, 40f) * Projectile.scale + Projectile.velocity.SafeNormalize(Vector2.UnitY) * num17, ModContent.DustType<CactiCasterDust>(), Main.rand.NextVector2Circular(3f, 3f), Scale: Main.rand.NextFloat(1.25f, 1.5f));
+        for (float num17 = 0f; num17 < 1f; num17 += 0.05f) {
+            bool flag = Main.rand.NextBool(2);
+            Dust dust8 = Dust.NewDustPerfect(Projectile.Center + Vector2.UnitY * Projectile.Size.Y + Main.rand.NextVector2Circular(80, 40f) * Projectile.scale + Projectile.velocity.SafeNormalize(Vector2.UnitY) * num17, flag ? ModContent.DustType<CactiCasterDust>() : DustID.OasisCactus, Main.rand.NextVector2Circular(3f, 3f), Scale: Main.rand.NextFloat(1.25f, 1.5f));
             dust8.velocity.Y -= 4f;
             dust8.noGravity = true;
+            dust8.noLight = true;
             Dust dust2 = dust8;
             dust2.velocity += Projectile.velocity * 0.2f;
             dust2.velocity *= 1.01f;
@@ -171,7 +180,7 @@ sealed class Cacti : NatureProjectile {
         switch (_state) { 
             case State.Normal:
                 if (Main.rand.NextBool(2)) {
-                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.JunglePlants, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 120, default, 1.4f + Main.rand.NextFloat(0f, 0.075f));
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.OasisCactus, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 80, default, 1.4f + Main.rand.NextFloat(0f, 0.075f));
                     Main.dust[dust].noGravity = true;
                 }
 
@@ -184,6 +193,7 @@ sealed class Cacti : NatureProjectile {
                         for (int i = 0; i < 15; i++) {
                             int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
                             Main.dust[dust].noGravity = true;
+                            Main.dust[dust].noLight = true;
                         }
                     }
                 }
@@ -209,6 +219,8 @@ sealed class Cacti : NatureProjectile {
                             Main.dust[dust].position.X += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
                             Main.dust[dust].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
                             Main.dust[dust].noGravity = true;
+                            Main.dust[dust].noLight = true;
+
                             if (Main.dust[dust].position != Projectile.Center) {
                                 Main.dust[dust].velocity = Projectile.DirectionTo(Main.dust[dust].position) * 2f;
                             }
@@ -222,10 +234,11 @@ sealed class Cacti : NatureProjectile {
                 if (Main.rand.NextBool(5)) {
                     Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, ModContent.DustType<CactiCasterDust>(), 0f, 0f, 0, default(Color), Main.rand.NextFloat(0.8f, 1f) * 1.4f * 0.95f);
                     dust2.noGravity = true;
+                    dust2.noLight = true;
                     dust2.velocity = Projectile.velocity * 0.5f;
                     dust2.fadeIn = 1f;
                 }
-                //Projectile.localAI[2] += Projectile.velocity.X * 0.0075f;
+                Projectile.localAI[2] += Projectile.velocity.X * 0.0075f;
                 for (int i = 0; i < 2; i++) {
                     int direction = i != 0 ? 1 : -1;
                     Vector2 vector32 = new(Projectile.Size.X * 0.4f * direction, Projectile.Size.Y * 0.15f);
@@ -234,6 +247,7 @@ sealed class Cacti : NatureProjectile {
                     Dust dust = Main.dust[type];
                     dust.scale = Main.rand.NextFloat(0.8f, 1f) * 1.4f;
                     dust.noGravity = true;
+                    dust.noLight = true;
                     dust.velocity = (dust.velocity * 0.25f + Vector2.Normalize(vector32)).SafeNormalize(new Vector2(10f * direction, -1f)) * Main.rand.NextFloat(1f, 1.5f) * 3f;
                     dust.velocity -= new Vector2(3f * direction, 5f).RotatedBy(baseRotation);
                     dust.fadeIn = 1f;
