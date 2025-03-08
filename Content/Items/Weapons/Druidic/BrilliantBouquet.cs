@@ -58,14 +58,15 @@ sealed class BrilliantBouquet : NatureItem {
 
         int petalType = Main.rand.Next(3);
         bool flag = player.GetModPlayer<WreathHandler>().IsFull;
-        if (flag) {
-            petalType = 3;
-		}
+  //      if (flag) {
+  //          petalType = 3;
+		//}
         Vector2 velocity2 = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
         int petalType2 = petalType;
-        if (flag) {
-            petalType2 = 1;
-        }
+        //if (flag) {
+        //    petalType2 = 1;
+        //}
+        //petalType2 = 1;
         float rot = velocity2.ToRotation();
         if (player.direction == 1) {
             rot -= MathHelper.PiOver4 / 4f;

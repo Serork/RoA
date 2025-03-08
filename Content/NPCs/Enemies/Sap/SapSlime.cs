@@ -155,7 +155,7 @@ sealed class SapSlime : ModNPC {
                 NPC.ai[1] = 75f;
                 NPC.netUpdate = true;
             }
-            else if (Main.rand.NextChance(0.1f)) {
+            else if (Main.rand.NextChance(0.05f)) {
                 int num2 = GenerateItemInsideBody(NPC.ai[0] == -999f);
                 NPC.ai[1] = num2;
                 NPC.netUpdate = true;
