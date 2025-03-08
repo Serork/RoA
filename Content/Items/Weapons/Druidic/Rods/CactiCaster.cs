@@ -58,7 +58,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             float opacity = 1f;
             Vector2 mousePoint = player.GetViableMousePosition();
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
-            float y = player.MountedCenter.Y - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
+            float y = mousePoint.Y + player.height - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
             if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {
                 if (Projectile.owner == Main.myPlayer) {
                     _position = new(mousePoint.X, y);
@@ -103,7 +103,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 4);
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 3);
 
         protected override bool DespawnWithProj() => true;
 
