@@ -69,6 +69,7 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
+            Color color = Color.Lerp(new Color(200, 0, 80), new Color(200, 255, 80), Main.rand.NextFloat());
             for (int i = 0; i < 2; i++) {
                 Vector2 randomPosition = Main.rand.NextVector2Unit();
                 float areaSize = step * 2f;
@@ -81,7 +82,7 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
                 dust.noGravity = true;
                 dust.noLight = true;
                 dust.velocity *= 0.4f;
-                dust.color = _color.Value;
+                dust.color = color;
             }
         }
     }
