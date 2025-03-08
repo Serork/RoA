@@ -53,8 +53,6 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
         protected override void SafestOnSpawn(IEntitySource source) {
             //Color[] colors = [new Color(255, 0, 0), new Color(0, 255, 0), new Color(255, 255, 0)];
             //_color = Main.rand.NextFromList(colors);
-            _color = Color.Lerp(new Color(255, 0, 0), new Color(255, 255, 0), Main.rand.NextFloat());
-            Projectile.netUpdate = true;
         }
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
@@ -62,6 +60,9 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
             Vector2 pointPosition = player.GetViableMousePosition();
             Vector2 direction = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
             velocity = direction.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2) + MathHelper.Pi) * 4f * NatureWeaponHandler.GetUseSpeedMultiplier(player.GetSelectedItem(), player);
+
+            _color = Color.Lerp(new Color(200, 0, 80), new Color(200, 255, 80), Main.rand.NextFloat());
+            Projectile.netUpdate = true;
 
             string hexString = _color.Value.Hex3();
             ai0 = Helper.FromHexString(hexString);
