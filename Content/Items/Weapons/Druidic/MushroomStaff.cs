@@ -13,13 +13,13 @@ namespace RoA.Content.Items.Weapons.Druidic;
 sealed class MushroomStaff : NatureItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(38);
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 35, useSound: SoundID.Item156);
-        Item.SetWeaponValues(4, 2f);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 55, useSound: SoundID.Item156);
+        Item.SetWeaponValues(3, 2f);
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<MushroomSpore>(), 4f);
         Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.Blue);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 12);
-        NatureWeaponHandler.SetFillingRate(Item, 0.5f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 16);
+        NatureWeaponHandler.SetFillingRate(Item, 0.2f);
 
         Item.value = Item.sellPrice(0, 0, 20, 0);
     }

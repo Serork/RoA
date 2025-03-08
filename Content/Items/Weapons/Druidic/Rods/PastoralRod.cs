@@ -23,8 +23,8 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
         Item.SetDefaultToUsable(-1, 27, useSound: SoundID.Item7);
         Item.SetWeaponValues(8, 1f);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 15);
-        NatureWeaponHandler.SetFillingRate(Item, 0.45f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 23);
+        NatureWeaponHandler.SetFillingRate(Item, 0.6f);
 
         Item.value = Item.sellPrice(0, 0, 1, 0);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);

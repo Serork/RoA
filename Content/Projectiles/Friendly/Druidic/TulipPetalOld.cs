@@ -74,9 +74,9 @@ sealed class TulipPetalOld : NatureProjectile {
 
         Projectile.ai[1]++;
         if (Projectile.ai[0] == 0 || Projectile.ai[0] == 3) {
-            if (Projectile.ai[1] > 8 && Projectile.ai[1] % _flowerRarity == 0 && Projectile.ai[1] < 50) {
+            if (Projectile.ai[1] > 4 && Projectile.ai[1] % _flowerRarity == 0 && Projectile.ai[1] < 46) {
                 if (Projectile.owner == Main.myPlayer)
-                    CreateNatureProjectile(Projectile.GetSource_FromThis(), Item, Projectile.Center.X + Main.rand.NextFloat(-2f, 2f), Projectile.Center.Y + Main.rand.NextFloat(-2f, 2f), 0, 0, ModContent.ProjectileType<TulipTrailOld>(), (int)(Projectile.damage * 0.3f), 0, Projectile.owner, Projectile.frame, Projectile.ai[1]);
+                    CreateNatureProjectile(Projectile.GetSource_FromThis(), Item, Projectile.Center.X + Main.rand.NextFloat(-2f, 2f), Projectile.Center.Y + Main.rand.NextFloat(-2f, 2f), 0, 0, ModContent.ProjectileType<TulipTrailOld>(), (int)(Projectile.damage * 0.3f), 0, Projectile.owner, Projectile.frame, Projectile.ai[1] + 4);
             }
         }
         if (Projectile.ai[0] == 1 || Projectile.ai[0] == 3) {

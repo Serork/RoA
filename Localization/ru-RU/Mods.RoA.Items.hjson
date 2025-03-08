@@ -20,7 +20,7 @@ HellfireClaws: {
 
 HorrorPincers: {
 	DisplayName: Клещи ужаса
-	Tooltip: "'Изготовлены наподобие хилецер пожирателя душ'"
+	Tooltip: "'Изготовлены наподобие хелицер пожирателя душ'"
 }
 
 ThornyClaws: {
@@ -137,7 +137,7 @@ RodOfTheCondor: {
 }
 
 BeastBow: {
-	DisplayName: Стеннания
+	DisplayName: Стенания
 	Tooltip:
 		'''
 		33% шанс не использовать боеприпасы
@@ -1209,7 +1209,7 @@ LothorTrophy: {
 }
 
 BloodbathLocket: {
-	DisplayName: Подвеска жажды крови
+	DisplayName: Подвеска резни
 	Tooltip: Увеличивает урон на 1% за каждого врага и на 5% за каждого босса поблизости, вплоть до 25%
 }
 
@@ -1639,7 +1639,7 @@ BeachWreath2: {
 
 DullDaikatana: {
 	DisplayName: Затупившаяся дай-катана
-	Tooltip: "'Разбросанная и потерянная'"
+	Tooltip: "'Брошенная и потерянная'"
 }
 
 BoneroseHangingPot: {
@@ -1711,22 +1711,22 @@ NFAPants: {
 }
 
 PeegeonChestguard: {
-	DisplayName: Нагрудник Peegeon
+	DisplayName: Нагрудник PeegeOn
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonGreaves: {
-	DisplayName: Поножи Peegeon
+	DisplayName: Поножи PeegeOn
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonHood: {
-	DisplayName: Капюшон Peegeon
+	DisplayName: Капюшон PeegeOn
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonCape: {
-	DisplayName: Плащ Peegeon
+	DisplayName: Плащ PeegeOn
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1751,22 +1751,22 @@ SerorkMask: {
 }
 
 BRIPEsHeart: {
-	DisplayName: Сердце BRIPE
+	DisplayName: Сердце Bripe
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsHelmet: {
-	DisplayName: Шлем BRIPE
+	DisplayName: Шлем Bripe
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsRocketBoots: {
-	DisplayName: Ракетные ботинки BRIPE
+	DisplayName: Ракетные ботинки Bripe
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 cleoChestguard: {
-	DisplayName: Нагрудник cleo.
+	DisplayName: Нагрудник Cleo
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1775,7 +1775,7 @@ cleoChestguard: {
 }
 
 cleoMask: {
-	DisplayName: Маска cleo.
+	DisplayName: Маска Cleo
 	/* Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1784,6 +1784,6 @@ cleoMask: {
 }
 
 cleoPants: {
-	DisplayName: Штаны cleo.
+	DisplayName: Штаны Cleo
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }

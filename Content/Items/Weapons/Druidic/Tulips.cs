@@ -147,13 +147,13 @@ sealed class ExoticTulip : NatureItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useTime = Item.useAnimation = 30;
+        Item.useTime = Item.useAnimation = 40;
         Item.autoReuse = false;
 
         Item.staff[Item.type] = true;
         Item.noMelee = true;
 
-        Item.damage = 6;
+        Item.damage = 4;
         Item.knockBack = 1.5f;
 
         Item.value = Item.sellPrice(0, 0, 25, 0);
@@ -164,8 +164,8 @@ sealed class ExoticTulip : NatureItem {
         Item.shootSpeed = 8f;
         Item.shoot = ModContent.ProjectileType<TulipPetalOld>();
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 20);
-        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 18);
+        NatureWeaponHandler.SetFillingRate(Item, 0.2f);
     }
 
     //public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {

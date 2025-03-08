@@ -1394,7 +1394,7 @@ BackwoodsGrassSeeds: {
 
 BloodCursor: {
 	DisplayName: Blood Cursor
-	Tooltip: Causes your mouse cursor to pulse
+	Tooltip: Causes your mouse cursor to pulsate
 }
 
 BackwoodsRavenBanner: {
@@ -1651,7 +1651,7 @@ BoneroseHangingPot: {
 
 LothorEnrageMonolith: {
 	DisplayName: Eclipse Monolith
-	Tooltip: "'You see this only once in 216 years...'"
+	Tooltip: "'You can only see this once in 216 years...'"
 }
 
 FlederSlayerDecoration: {
@@ -1713,22 +1713,22 @@ NFAPants: {
 }
 
 PeegeonChestguard: {
-	DisplayName: Peegeon's Chestguard
+	DisplayName: PeegeOn's Chestguard
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonGreaves: {
-	DisplayName: Peegeon's Greaves
+	DisplayName: PeegeOn's Greaves
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonHood: {
-	DisplayName: Peegeon's Hood
+	DisplayName: PeegeOn's Hood
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonCape: {
-	DisplayName: Peegeon's Cape
+	DisplayName: PeegeOn's Cape
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1753,22 +1753,22 @@ SerorkMask: {
 }
 
 BRIPEsHeart: {
-	DisplayName: BRIPE's Heart
+	DisplayName: Bripe's Heart
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsHelmet: {
-	DisplayName: BRIPE's Helmet
+	DisplayName: Bripe's Helmet
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsRocketBoots: {
-	DisplayName: BRIPE's Rocket Boots
+	DisplayName: Bripe's Rocket Boots
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 cleoChestguard: {
-	DisplayName: cleo.'s Chestguard
+	DisplayName: Cleo's Chestguard
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1777,7 +1777,7 @@ cleoChestguard: {
 }
 
 cleoMask: {
-	DisplayName: cleo.'s Mask
+	DisplayName: Cleo's Mask
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1786,6 +1786,6 @@ cleoMask: {
 }
 
 cleoPants: {
-	DisplayName: cleo.'s Pants
+	DisplayName: Cleo's Pants
 	Tooltip: "{$Mods.RoA.RoADev}"
 }

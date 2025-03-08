@@ -17,15 +17,15 @@ sealed class SapStream : NatureItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useTime = Item.useAnimation = 20;
+        Item.useTime = Item.useAnimation = 32;
         Item.autoReuse = true;
 
         Item.noMelee = true;
         Item.knockBack = 2f;
 
-        Item.damage = 2;
-        NatureWeaponHandler.SetPotentialDamage(Item, 12);
-        NatureWeaponHandler.SetFillingRate(Item, 0.5f);
+        Item.damage = 6;
+        NatureWeaponHandler.SetPotentialDamage(Item, 16);
+        NatureWeaponHandler.SetFillingRate(Item, 0.25f);
 
         Item.rare = ItemRarityID.Blue;
         Item.UseSound = SoundID.Item20;
