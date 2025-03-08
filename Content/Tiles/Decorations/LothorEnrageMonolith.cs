@@ -229,6 +229,17 @@ sealed class LothorEnrageMonolith : ModTile {
         bool isOn = frameY == 0 || frameY > frameHeight;
         spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f), new Rectangle(frameX, frameY - (isOn ? frameHeight : 0), 16, height), color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
+        if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
+            int num = (color.R + color.G + color.B) / 3;
+            if (num > 10) {
+                Texture2D highlightTexture = TextureAssets.HighlightMask[Type].Value;
+                Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
+                spriteBatch.Draw(highlightTexture, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f),
+                    new Rectangle(frameX, frameY - (isOn ? frameHeight : 0), 16, height), highlightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                //Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+            }
+        }
+
         if (isOn) {
             frameY -= 18 * 5 + 2;
         }
