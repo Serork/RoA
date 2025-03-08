@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.GlowMasks;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -13,7 +15,9 @@ sealed class NFAPants : ModItem {
 		//DisplayName.SetDefault("le Blanc's Boots");
 		//Tooltip.SetDefault("'Great for impersonating RoA devs?' Sure!");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+
+        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.legSlot, this);
+    }
 
 	public override void SetDefaults() {
 		int width = 32; int height = 24;

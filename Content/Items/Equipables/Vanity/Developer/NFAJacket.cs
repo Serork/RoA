@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.GlowMasks;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -13,7 +15,9 @@ sealed class NFAJacket : ModItem {
 		//DisplayName.SetDefault("le Blanc's Shirt");
 		//Tooltip.SetDefault("'Great for impersonating RoA devs?' Sure!");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+
+        ItemGlowMaskHandler.BodyGlowMaskHandler2.RegisterData(Item.bodySlot, () => Color.White);
+    }
 
 	public override void SetDefaults() {
 		int width = 34; int height = 18;

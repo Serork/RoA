@@ -280,8 +280,8 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             if (!_bodyColor.TryGetValue(Player.body, out Func<Color> color))
                 return;
 
-            drawInfo.bodyGlowColor = color();
-            drawInfo.armGlowColor = color();
+            drawInfo.bodyGlowColor = color() * (1f - drawInfo.shadow);
+            drawInfo.armGlowColor = color() * (1f - drawInfo.shadow);
         }
     }
 }

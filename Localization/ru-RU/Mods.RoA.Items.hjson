@@ -1721,7 +1721,7 @@ PeegeonGreaves: {
 }
 
 PeegeonHood: {
-	DisplayName: Капющон Peegeon
+	DisplayName: Капюшон Peegeon
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1761,7 +1761,7 @@ BRIPEsHelmet: {
 }
 
 BRIPEsRocketBoots: {
-	DisplayName: Рокетный ботинки BRIPE
+	DisplayName: Ракетные ботинки BRIPE
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1770,7 +1770,7 @@ cleoChestguard: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Тот, кого они оставили позади'
+		'The One They Left Behind'
 		'''
 }
 
