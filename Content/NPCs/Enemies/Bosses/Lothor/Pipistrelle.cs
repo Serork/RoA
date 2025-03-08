@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.Diagnostics.Metrics;
 
 using Terraria;
 using Terraria.Audio;
@@ -208,8 +209,15 @@ sealed class Pipistrelle : ModNPC {
         }
         if (NPC.localAI[2] == 0f) {
             NPC.localAI[2] = 1f;
-            NPC.localAI[0] = owner.Center.X + (int)NPC.ai[3] * 100f;
-            NPC.localAI[1] = owner.Center.Y + 10f;
+            Vector2 center = owner.Center + owner.velocity;
+            if (NPC.ai[3] == 2f) {
+                NPC.localAI[0] = center.X;
+                NPC.localAI[1] = center.Y + 20f;
+            }
+            else {
+                NPC.localAI[0] = center.X + (int)NPC.ai[3] * 100f;
+                NPC.localAI[1] = center.Y + 10f;
+            }
             Vector2 positionToMove = new(NPC.localAI[0], NPC.localAI[1]);
             NPC.velocity = NPC.DirectionTo(positionToMove) * 5f;
             playScreamSound();

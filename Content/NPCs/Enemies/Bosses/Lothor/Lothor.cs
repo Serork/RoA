@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 
 using RoA.Common.NPCs;
 using RoA.Content.Biomes.Backwoods;
@@ -61,6 +63,19 @@ sealed partial class Lothor : ModNPC {
         }
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+    }
+
+    public override void Load() {
+        On_NPC.getGoodAdjustments += On_NPC_getGoodAdjustments;
+    }
+
+    private void On_NPC_getGoodAdjustments(On_NPC.orig_getGoodAdjustments orig, NPC self) {
+        orig(self);
+
+        if (self.type == ModContent.NPCType<Lothor>()) {
+            self.lifeMax = (int)((double)self.lifeMax * 1.35);
+            self.defense += 4;
+        }
     }
 
     public override void Unload() => UnloadAnimations();

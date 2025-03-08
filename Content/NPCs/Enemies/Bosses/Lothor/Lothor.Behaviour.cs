@@ -1033,6 +1033,10 @@ sealed partial class Lothor : ModNPC {
             Vector2 positionToSpawn = NPC.Center + Vector2.UnitY * NPC.height / 2f;
             NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: -1f);
             NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 1f);
+
+            if (Main.getGoodWorld) {
+                NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 2f);
+            }
         }
     }
 
@@ -1047,18 +1051,18 @@ sealed partial class Lothor : ModNPC {
                 NPC.netUpdate = true;
             }
         }
-        float speed = 7f;
+        float speed = MathHelper.Lerp(7f, 10f, LifeProgress);
         if (_tempDirection == 0 && Main.netMode != NetmodeID.MultiplayerClient) {
             _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
             updatePositionToMove();
         }
         if (NPC.velocity.Length() > speed) {
-            float inertia = speed * 2f;
+            float inertia = 14f;
             NPC.velocity *= (float)Math.Pow(0.99, inertia * 2.0 / inertia);
         }
         Vector2 desiredVelocity = NPC.DirectionTo(_tempPosition) * speed;
         if (FlightAttackTimer == 0f) {
-            float acceleration = 0.2f;
+            float acceleration = MathHelper.Lerp(0.2f, 0.3f, LifeProgress);
             NPC.SimpleFlyMovement(desiredVelocity, acceleration);
             float min = 5f;
             if (Vector2.Distance(_tempPosition, NPC.Center) < min) {
@@ -1619,6 +1623,9 @@ sealed partial class Lothor : ModNPC {
         if (shouldScream) {
             TryToStartFlightScreaming();
         }
+        else {
+            DashDelay -= DashDelay / 3;
+        }
         NPC.TargetClosest();
     }
 
@@ -1729,7 +1736,7 @@ sealed partial class Lothor : ModNPC {
         //    delay -= delay / 4;
         //}
         delay += delay * 0.333f;
-        float scalableValue = MathHelper.Lerp(0.75f, !Main.expertMode ? 0.6f : 0.5f, LifeProgress);
+        float scalableValue = MathHelper.Lerp(0.75f, !Main.expertMode ? 0.6f : Main.getGoodWorld ? 0.4f : 0.5f, LifeProgress);
         delay *= scalableValue;
         return delay;
     }
@@ -1754,7 +1761,7 @@ sealed partial class Lothor : ModNPC {
 
         SoundEngine.PlaySound(SoundID.DD2_OgreGroundPound, NPC.Center);
 
-        float strength = 7.5f/*Main.expertMode ? 7.5f : 5f*/;
+        float strength = Main.getGoodWorld ? 12.5f : Main.expertMode ? 10f : 7.5f/*Main.expertMode ? 7.5f : 5f*/;
         int distInTiles = 20/*Main.expertMode ? 20 : 15*/;
         foreach (Player target in Main.player) {
             bool targetStands = target.velocity.Y == 0f || target.sliding;
