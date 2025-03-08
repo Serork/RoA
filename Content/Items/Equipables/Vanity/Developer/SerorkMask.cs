@@ -288,72 +288,57 @@ sealed class SerorkMask : ModItem {
         }
 
         private void On_LegacyPlayerRenderer_DrawPlayerFull(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
-            SpriteBatch spriteBatch = camera.SpriteBatch;
-            SamplerState samplerState = camera.Sampler;
-            if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f)
-                samplerState = LegacyPlayerRenderer.MountedSamplerState;
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
-            //if (Main.gamePaused)
-            //    drawPlayer.PlayerFrame();
-
             Vector2 position = default(Vector2);
             var handler = drawPlayer.GetModPlayer<SerorkVisualsStorage>();
-            //bool flag = ItemLoader.GetItem(ModContent.ItemType<SerorkMask>()).IsVanitySet(drawPlayer.head, drawPlayer.body, drawPlayer.legs);
-            //if (flag)
-            {
-                if (!drawPlayer.ghost) {
-                    if (!drawPlayer.invis) {
-                        _ = drawPlayer.position;
-                        //if (!Main.gamePaused)
-                        //    handler.ghostFade += handler.ghostDir * 0.03f;
+            if (!drawPlayer.ghost) {
+                if (!drawPlayer.invis) {
+                    _ = drawPlayer.position;
+                    //if (!Main.gamePaused)
+                    //    handler.ghostFade += handler.ghostDir * 0.03f;
 
-                        //if ((double)handler.ghostFade < 0.05) {
-                        //    handler.ghostDir = 1f;
-                        //    handler.ghostFade = 0.15f;
-                        //}
-                        //else if ((double)handler.ghostFade > 0.95) {
-                        //    handler.ghostDir = -1f;
-                        //    handler.ghostFade = 0.95f;
-                        //}
+                    //if ((double)handler.ghostFade < 0.05) {
+                    //    handler.ghostDir = 1f;
+                    //    handler.ghostFade = 0.15f;
+                    //}
+                    //else if ((double)handler.ghostFade > 0.95) {
+                    //    handler.ghostDir = -1f;
+                    //    handler.ghostFade = 0.95f;
+                    //}
 
-                        if (!Main.gamePaused) {
-                            handler.ghostFade = MathHelper.SmoothStep(handler.ghostFade, 
-                                (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
-                                0.25f);
+                    if (!Main.gamePaused) {
+                        handler.ghostFade = MathHelper.SmoothStep(handler.ghostFade, 
+                            (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                            0.25f);
+                    }
+
+                    float num2 = handler.ghostFade;
+                    for (int l = 0; l < 4; l++) {
+                        float num3;
+                        float num4;
+                        switch (l) {
+                            default:
+                                num3 = num2;
+                                num4 = 0f;
+                                break;
+                            case 1:
+                                num3 = 0f - num2;
+                                num4 = 0f;
+                                break;
+                            case 2:
+                                num3 = 0f;
+                                num4 = num2;
+                                break;
+                            case 3:
+                                num3 = 0f;
+                                num4 = 0f - num2;
+                                break;
                         }
 
-                        float num2 = handler.ghostFade;
-                        for (int l = 0; l < 4; l++) {
-                            float num3;
-                            float num4;
-                            switch (l) {
-                                default:
-                                    num3 = num2;
-                                    num4 = 0f;
-                                    break;
-                                case 1:
-                                    num3 = 0f - num2;
-                                    num4 = 0f;
-                                    break;
-                                case 2:
-                                    num3 = 0f;
-                                    num4 = num2;
-                                    break;
-                                case 3:
-                                    num3 = 0f;
-                                    num4 = 0f - num2;
-                                    break;
-                            }
-
-                            position = new Vector2(drawPlayer.position.X + num3, drawPlayer.position.Y + drawPlayer.gfxOffY + num4);
-                            //self.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, handler.ghostFade);
-                        }
+                        position = new Vector2(drawPlayer.position.X + num3, drawPlayer.position.Y + drawPlayer.gfxOffY + num4);
+                        //self.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, handler.ghostFade);
                     }
                 }
             }
-
-            spriteBatch.End();
 
             orig(self, camera, drawPlayer);
         }
