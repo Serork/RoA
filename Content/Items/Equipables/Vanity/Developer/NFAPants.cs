@@ -23,9 +23,8 @@ sealed class NFAPants : ModItem {
 		int width = 32; int height = 24;
 		Item.Size = new Vector2(width, height);
 
-		Item.sellPrice(gold: 5); 
-		Item.rare = ItemRarityID.Cyan;
-
-		Item.vanity = true;
-	}
+        Item.rare = ItemRarityID.Cyan;
+        Item.value = Item.buyPrice(gold: 5);
+        Item.vanity = true;
+    }
 }

@@ -33,11 +33,10 @@ sealed class Has2rMask : ModItem {
 		int width = 18; int height = 24;
 		Item.Size = new Vector2(width, height);
 
-		Item.sellPrice(gold: 5);
-		Item.rare = ItemRarityID.Cyan;
-
-		Item.vanity = true;
-	}
+        Item.rare = ItemRarityID.Cyan;
+        Item.value = Item.buyPrice(gold: 5);
+        Item.vanity = true;
+    }
 
     public override bool IsVanitySet(int head, int body, int legs)
        => (head == EquipLoader.GetEquipSlot(Mod, nameof(Has2rMask), EquipType.Head) || head == EquipLoader.GetEquipSlot(Mod, nameof(Has2rShades), EquipType.Head)) &&

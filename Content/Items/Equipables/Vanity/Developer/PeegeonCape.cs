@@ -19,11 +19,10 @@ sealed class PeegeonCape : ModItem {
         int width = 24; int height = 24;
         Item.Size = new Vector2(width, height);
 
-        Item.rare = ItemRarityID.Cyan;
-        Item.sellPrice(gold: 5);
-
         Item.accessory = true;
 
+        Item.rare = ItemRarityID.Cyan;
+        Item.value = Item.buyPrice(gold: 5);
         Item.vanity = true;
     }
 

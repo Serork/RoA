@@ -23,9 +23,8 @@ sealed class NFAJacket : ModItem {
 		int width = 34; int height = 18;
 		Item.Size = new Vector2(width, height);
 
-		Item.sellPrice(gold: 5);
-		Item.rare = ItemRarityID.Cyan;
-
-		Item.vanity = true;
-	}
+        Item.rare = ItemRarityID.Cyan;
+        Item.value = Item.buyPrice(gold: 5);
+        Item.vanity = true;
+    }
 }

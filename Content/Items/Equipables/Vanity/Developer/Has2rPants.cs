@@ -16,9 +16,8 @@ sealed class Has2rPants : ModItem {
         int width = 22; int height = 18;
         Item.Size = new Vector2(width, height);
 
-        Item.sellPrice(gold: 5);
         Item.rare = ItemRarityID.Cyan;
-
+        Item.value = Item.buyPrice(gold: 5);
         Item.vanity = true;
     }
 }

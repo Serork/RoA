@@ -24,9 +24,8 @@ sealed class SerorkMask : ModItem {
         int width = 28; int height = 28;
         Item.Size = new Vector2(width, height);
 
-        Item.sellPrice(gold: 5);
         Item.rare = ItemRarityID.Cyan;
-
+        Item.value = Item.buyPrice(gold: 5);
         Item.vanity = true;
     }
 

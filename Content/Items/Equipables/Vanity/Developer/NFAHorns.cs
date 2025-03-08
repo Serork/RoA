@@ -23,11 +23,10 @@ sealed class NFAHorns : ModItem {
 		int width = 20; int height = 26;
 		Item.Size = new Vector2(width, height);
 
-		Item.sellPrice(gold: 5);
-		Item.rare = ItemRarityID.Cyan;
-
-		Item.vanity = true;
-	}
+        Item.rare = ItemRarityID.Cyan;
+        Item.value = Item.buyPrice(gold: 5);
+        Item.vanity = true;
+    }
 
     public override bool IsVanitySet(int head, int body, int legs)
        => head == EquipLoader.GetEquipSlot(Mod, nameof(NFAHorns), EquipType.Head) &&
