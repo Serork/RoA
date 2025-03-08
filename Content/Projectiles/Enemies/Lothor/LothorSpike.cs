@@ -111,7 +111,7 @@ sealed class LothorSpike : ModProjectile {
             if (_partInfo[i].Progress < 1f) {
                 _partInfo[i].Progress += Main.getGoodWorld ? 0.65f : Main.expertMode ? 0.525f : 0.325f;
                 if (_partInfo[i].Progress > 1f) {
-                    _partInfo[i].Progress = 1f;
+                    _partInfo[i].Progress = 1.3f;
                 }
                 break;
             }
