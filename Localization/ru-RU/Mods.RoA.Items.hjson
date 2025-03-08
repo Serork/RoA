@@ -1618,23 +1618,21 @@ LivingPalmHelmet: {
 
 BeachWreath: {
 	DisplayName: Пляжный венок I
-	/* Tooltip:
+	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
-		While [kw/n:wreath] is charged:
-		Increased movement speed by 10%
-		''' */
+		[kw/n:Венок] заполняется при нанесении природного урона
+		Когда [kw/n:венок заполнен], увеличивает скорость передвижения на 10%
+		'''
 }
 
 BeachWreath2: {
 	DisplayName: Пляжный венок II
-	/* Tooltip:
+	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		While [kw/n:wreath] is charged:
-		Increased movement speed by 10%
-		''' */
+		[kw/n:Венок] заполняется при нанесении природного урона и дает:
+		Снижение получаемого урона вплоть до 10%
+		Когда [kw/n:венок заполнен], увеличивает скорость передвижения на 10%
+		'''
 }
 
 DullDaikatana: {
@@ -1654,7 +1652,7 @@ LothorEnrageMonolith: {
 
 FlederSlayerDecoration: {
 	DisplayName: Декор 'Погибель нетопырей'
-	Tooltip: "'Gloria filio'"
+	Tooltip: "'Ради славы'"
 }
 
 Has2rJacket: {
@@ -1711,42 +1709,42 @@ NFAPants: {
 }
 
 PeegeonChestguard: {
-	DisplayName: Нагрудник PeegeOn
+	DisplayName: Нагрудник PeegeOn'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonGreaves: {
-	DisplayName: Поножи PeegeOn
+	DisplayName: Поножи PeegeOn'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonHood: {
-	DisplayName: Капюшон PeegeOn
+	DisplayName: Капюшон PeegeOn'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonCape: {
-	DisplayName: Плащ PeegeOn
+	DisplayName: Плащ PeegeOn'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkBreastplate: {
-	DisplayName: Нагрудник Serork
+	DisplayName: Нагрудник Serork'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkGreaves: {
-	DisplayName: Поножи Serork
+	DisplayName: Поножи Serork'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkHelmet: {
-	DisplayName: Шлем Serork
+	DisplayName: Шлем Serork'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkMask: {
-	DisplayName: Маска Serork
+	DisplayName: Маска Serork'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1767,11 +1765,11 @@ BRIPEsRocketBoots: {
 
 cleoChestguard: {
 	DisplayName: Нагрудник Cleo
-	Tooltip:
+	/* Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
 		'The One They Left Behind'
-		'''
+		''' */
 }
 
 cleoMask: {
