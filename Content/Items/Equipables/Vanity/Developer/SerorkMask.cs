@@ -256,6 +256,34 @@ sealed class SerorkMask : ModItem {
                 }
             }
 
+            //for (int i = 0; i < drawinfo.DrawDataCache.Count; i++) {
+            //    if (drawPlayer.body == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SerorkBreastplate), EquipType.Body)) {
+            //        DrawData value = drawinfo.DrawDataCache[i];
+            //        if (value.shader == drawPlayer.cBody &&
+            //            value.color == drawinfo.colorArmorBody) {
+            //            value.shader = 0;
+            //        }
+            //        drawinfo.DrawDataCache[i] = value;
+            //    }
+            //    if (drawPlayer.head == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SerorkHelmet), EquipType.Head) || 
+            //        drawPlayer.head == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SerorkMask), EquipType.Head)) {
+            //        DrawData value = drawinfo.DrawDataCache[i];
+            //        if (value.shader == drawPlayer.cHead &&
+            //            value.color == drawinfo.colorArmorHead) {
+            //            value.shader = 0;
+            //        }
+            //        drawinfo.DrawDataCache[i] = value;
+            //    }
+            //    if (drawPlayer.legs == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SerorkGreaves), EquipType.Legs)) {
+            //        DrawData value = drawinfo.DrawDataCache[i];
+            //        if (value.shader == drawPlayer.cLegs &&
+            //            value.color == drawinfo.colorArmorLegs) {
+            //            value.shader = 0;
+            //        }
+            //        drawinfo.DrawDataCache[i] = value;
+            //    }
+            //}
+
             orig(ref drawinfo);
         }
 
