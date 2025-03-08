@@ -155,14 +155,14 @@ sealed class PeegeonHood : ModItem {
         {
             if (drawInfo.shadow != 0f || drawInfo.drawPlayer.dead)
                 return;
-            Player _player = drawInfo.drawPlayer;
+            Player player = drawInfo.drawPlayer;
             Texture2D texture = eyeTrailTexture.Value;
             Texture2D glow_texture = eyeTrailGlowTexture.Value;
-            Rectangle bodyFrame = _player.bodyFrame;
-            SpriteEffects effect = _player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            Rectangle bodyFrame = player.bodyFrame;
+            SpriteEffects effect = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             for (int i = trailPos.Length - 1; i > 0; i--) {
-                trailPos[i] = _player.MountedCenter + (oldPos[3] - _player.MountedCenter) * (i) / trailPos.Length;
+                trailPos[i] = player.MountedCenter + (oldPos[3] - player.MountedCenter) * (i) / trailPos.Length;
                 trailPos[i].Y -= idleCount * i;
                 trailPos[i] += new Vector2(0, idleCount * i / 3).RotatedByRandom(360);
             }
@@ -171,11 +171,11 @@ sealed class PeegeonHood : ModItem {
                 oldPos[i] = oldPos[i - 1];
             }
 
-            if ((oldPos[0].X != _player.MountedCenter.X || oldPos[0].Y != _player.MountedCenter.Y) && idleCount > 0f) idleCount -= 0.1f;
+            if ((oldPos[0].X != player.MountedCenter.X || oldPos[0].Y != player.MountedCenter.Y) && idleCount > 0f) idleCount -= 0.1f;
             else if (idleCount < 1f) idleCount += 0.025f;
             if (idleCount < 0f) idleCount = 0f;
 
-            oldPos[0] = trailPos[0] = _player.MountedCenter;
+            oldPos[0] = trailPos[0] = player.MountedCenter;
 
             int offset = 0;
             int height = texture.Height / 20;
@@ -194,12 +194,12 @@ sealed class PeegeonHood : ModItem {
 
                 Color color2 = Color.White;
                 color2 *= (trailPos.Length - i) / alpha;
-                DrawData drawData = new DrawData(texture, new Vector2((float)x - Main.screenPosition.X, (float)y - Main.screenPosition.Y), new Rectangle?(bodyFrame), color2, 0f, new Vector2((float)texture.Width / 2f, (float)height / 2f), 1f, effect, 0);
+                DrawData drawData = new DrawData(texture, new Vector2((float)x - Main.screenPosition.X, (float)y - Main.screenPosition.Y) + new Vector2(0f, player.gfxOffY), new Rectangle?(bodyFrame), color2, 0f, new Vector2((float)texture.Width / 2f, (float)height / 2f), 1f, effect, 0);
                 drawInfo.DrawDataCache.Add(drawData);
 
-                color = _player.underShirtColor;
+                color = player.underShirtColor;
                 color *= (trailPos.Length - i) / alpha;
-                DrawData drawDataGlow = new DrawData(glow_texture, new Vector2((float)x - Main.screenPosition.X, (float)y - Main.screenPosition.Y), new Rectangle?(bodyFrame), color, 0f, new Vector2((float)texture.Width / 2f, (float)height / 2f), 1f, effect, 0);
+                DrawData drawDataGlow = new DrawData(glow_texture, new Vector2((float)x - Main.screenPosition.X, (float)y - Main.screenPosition.Y) + new Vector2(0f, player.gfxOffY), new Rectangle?(bodyFrame), color, 0f, new Vector2((float)texture.Width / 2f, (float)height / 2f), 1f, effect, 0);
                 drawInfo.DrawDataCache.Add(drawDataGlow);
             }
         }
