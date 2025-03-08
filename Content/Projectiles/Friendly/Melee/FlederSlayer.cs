@@ -206,7 +206,7 @@ sealed class FlederSlayer : ModProjectile {
             }
         }
         Lighting.AddLight(Projectile.Center + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale, 
-        Color.White.ToVector3() * MathHelper.Clamp(_charge * 2f, 0f, 1f) * 0.35f);
+        Color.White.ToVector3() * MathHelper.Clamp(_charge * 2f, 0f, 1f) * 0.65f);
         int itemAnimationMax = 40;
         int min = itemAnimationMax / 2 - itemAnimationMax / 4;
         Projectile.Opacity = Utils.GetLerpValue(itemAnimationMax, itemAnimationMax - 7, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 7f, Projectile.timeLeft, clamped: true);
@@ -650,7 +650,8 @@ sealed class FlederSlayer : ModProjectile {
                              0f);
             spriteBatch.EndBlendState();
         }
-        else {
+        color = Color.White;
+        if (!flag) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(sparkTexture2D,
                              Projectile.Center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
