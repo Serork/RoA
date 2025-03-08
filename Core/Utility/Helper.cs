@@ -24,6 +24,18 @@ static class Helper {
     public static readonly Color GlowMaskColor = new Color(255, 255, 255, 0) * 0.8f;
     public static string ArmorSetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
 
+    public static string ToHexString(float f) {
+        var bytes = BitConverter.GetBytes(f);
+        var i = BitConverter.ToInt32(bytes, 0);
+        return "0x" + i.ToString("X8");
+    }
+
+    public static float FromHexString(string s) {
+        var i = Convert.ToInt32(s, 16);
+        var bytes = BitConverter.GetBytes(i);
+        return BitConverter.ToSingle(bytes, 0);
+    }
+
     public static void InsertAt(Item[] array, short insert, short at) {
         Array.Copy(array, at, array, at + 1, array.Length - at - 1);
         array[at + 1] = new Item();

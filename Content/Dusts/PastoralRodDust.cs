@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class PastoralRodDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White * (dust.alpha / 255f);
+    public override Color? GetAlpha(Dust dust, Color lightColor) => dust.color.MultiplyRGB(lightColor) * (1f - (dust.alpha / 255f));
 
     public override void OnSpawn(Dust dust) => UpdateType = 262;
 }
