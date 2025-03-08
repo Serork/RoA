@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Melee;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(shouldApplyItemAlpha: true)]
 sealed class StarFusion : ModItem {
     public override void SetStaticDefaults() {
         // Tooltip.SetDefault("Creates magical constellation on hit");
