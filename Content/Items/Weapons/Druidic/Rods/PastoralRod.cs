@@ -36,18 +36,6 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
     public sealed class PastoralRodBase : BaseRodProjectile {
         private Color? _color = null;
 
-        protected override void SafeSendExtraAI(BinaryWriter writer) {
-            base.SafeSendExtraAI(writer);
-
-            writer.WriteRGB(_color.Value);
-        }
-
-        protected override void SafeReceiveExtraAI(BinaryReader reader) {
-            base.SafeReceiveExtraAI(reader);
-
-            _color = reader.ReadRGB();
-        }
-
         protected override bool ShouldntUpdateRotationAndDirection() => false;
 
         protected override void SafestOnSpawn(IEntitySource source) {
@@ -62,7 +50,6 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
             velocity = direction.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2) + MathHelper.Pi) * 4f * NatureWeaponHandler.GetUseSpeedMultiplier(player.GetSelectedItem(), player);
 
             _color = Color.Lerp(new Color(200, 0, 80), new Color(200, 255, 80), Main.rand.NextFloat());
-            Projectile.netUpdate = true;
 
             string hexString = _color.Value.Hex3();
             ai0 = Helper.FromHexString(hexString);
