@@ -1078,7 +1078,11 @@ sealed partial class Lothor : ModNPC {
         else {
             Glow2();
 
-            NPC.velocity *= 0.925f - 0.025f * LifeProgress;
+            float value = 0.925f;
+            if (Main.getGoodWorld) {
+                value -= 0.025f * LifeProgress;
+            }
+            NPC.velocity *= value;
             if (!_shouldWreathAttack) {
                 CreateCircleDusts();
             }
