@@ -176,7 +176,7 @@ sealed class LothorClawsSlash : ModProjectile {
         return false;
     }
 
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(BuffID.Bleeding, 120);
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(BuffID.Bleeding, 180);
 
-    public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(BuffID.Bleeding, 120);
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(BuffID.Bleeding, 180);
 }
