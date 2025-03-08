@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common;
 using RoA.Common.Druid;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -11,6 +12,7 @@ using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
@@ -75,12 +77,26 @@ sealed class ShepherdLeaves : NatureProjectile {
         Projectile.Opacity = Utils.GetLerpValue(0, 10, Projectile.timeLeft, true);
     }
 
+    public override void OnKill(int timeLeft) {
+        for (int i = 0; i < 5; i++) {
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 8, 8, 176, Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), 0, new Color(Color.Azure.ToVector3()), 1.3f);
+            Main.dust[dust].velocity *= 0.5f;
+            Main.dust[dust].scale *= 0.6f;
+            Main.dust[dust].noLight = true;
+            Main.dust[dust].color = _color;
+            Main.dust[dust].noLight = true;
+            Main.dust[dust].noGravity = true;
+        }
+    }
+
     public override void SafePostAI() {
-        //if (Main.netMode != NetmodeID.Server) {
-        //    Dust dust = Main.dust[Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(3f, 3f), 0, 0, DustID.AmberBolt, Scale: Main.rand.NextFloat(1f, 1.3f))];
-        //    dust.velocity *= 0.4f;
-        //    dust.noGravity = true;
-        //}
+        if (Main.rand.NextBool(5)) {
+            Dust dust = Main.dust[Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(3f, 3f), 0, 0, ModContent.DustType<PastoralRodDust>(), Scale: Main.rand.NextFloat(1f, 1.3f))];
+            dust.velocity *= 0.4f;
+            dust.color = _color;
+            dust.noLight = true;
+            dust.noGravity = true;
+        }
 
         ProjectileHelper.Animate(Projectile, 4);
     }
