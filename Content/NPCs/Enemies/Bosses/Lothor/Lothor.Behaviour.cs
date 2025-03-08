@@ -818,7 +818,8 @@ sealed partial class Lothor : ModNPC {
     }
 
     private void Scream() {
-        if (++_attackTime > 8) {
+        int attackRate = (int)(8 - 2 * LifeProgress);
+        if (++_attackTime > attackRate) {
             List<ushort> invalidBuffTypeToRemove = [];
             // examples
             //invalidBuffTypeToRemove.Add(BuffID.Confused);
@@ -1062,12 +1063,9 @@ sealed partial class Lothor : ModNPC {
         }
         Vector2 desiredVelocity = NPC.DirectionTo(_tempPosition) * speed;
         if (FlightAttackTimer == 0f) {
-            float acceleration = 0.2f;
-            if (Main.getGoodWorld) {
-                acceleration = MathHelper.Lerp(0.2f, 0.3f, LifeProgress);
-            }
+            float acceleration = 0.2f + 0.2f * LifeProgress;
             NPC.SimpleFlyMovement(desiredVelocity, acceleration);
-            float min = 5f;
+            float min = 5f + 15f * LifeProgress;
             if (Vector2.Distance(_tempPosition, NPC.Center) < min) {
                 FlightAttackTimer = 1f;
                 SetTimeBeforeAttack(MinToChargeFlightAttack, true);
@@ -1696,8 +1694,8 @@ sealed partial class Lothor : ModNPC {
                 int maxTilesDistance = 15;
                 bool closeRange = distance.Length() < 16 * maxTilesDistance;
                 if (NPC.Center.Y < Target.Center.Y && closeRange) {
-                    float fallAcceleration = 0.01f;
-                    float fallVelocityY = 0.9f;
+                    float fallAcceleration = 0.01f + 0.02f * LifeProgress;
+                    float fallVelocityY = 0.9f + 0.2f * LifeProgress;
                     if (FallStrengthIfClose < fallVelocityY) {
                         FallStrengthIfClose += fallAcceleration;
                     }
