@@ -83,10 +83,11 @@ sealed class CursedAcorn : ModProjectile {
             }
         }
         int damage = (int)MathHelper.Lerp(NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_DAMAGE, NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_DAMAGE2, lifeProgress);
+        damage /= 4;
         int knockBack = (int)MathHelper.Lerp(NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_KNOCKBACK, NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_KNOCKBACK2, lifeProgress);
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center + Vector2.UnitY * 22f, -Vector2.UnitY, ModContent.ProjectileType<LothorSpike>(), 
-                Projectile.damage, Projectile.knockBack, Main.myPlayer, ai2: 12.5f);
+            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center + Vector2.UnitY * 22f, -Vector2.UnitY, ModContent.ProjectileType<LothorSpike>(),
+                damage, knockBack, Main.myPlayer, ai2: 12.5f);
         }
     }
 }
