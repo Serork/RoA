@@ -48,18 +48,18 @@ sealed class BehelitPlayer : ModPlayer {
         }
 
         private void On_LegacyPlayerRenderer_DrawPlayerFull(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
-            SpriteBatch spriteBatch = camera.SpriteBatch;
-            SamplerState samplerState = camera.Sampler;
-            if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f)
-                samplerState = LegacyPlayerRenderer.MountedSamplerState;
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
-            //if (Main.gamePaused)
-            //    drawPlayer.PlayerFrame();
-
-            Vector2 position = default(Vector2);
             var handler = drawPlayer.GetModPlayer<BehelitPlayer>();
             if (handler.behelitPotion) {
+                SpriteBatch spriteBatch = camera.SpriteBatch;
+                SamplerState samplerState = camera.Sampler;
+                if (drawPlayer.mount.Active && drawPlayer.fullRotation != 0f)
+                    samplerState = LegacyPlayerRenderer.MountedSamplerState;
+
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
+                //if (Main.gamePaused)
+                //    drawPlayer.PlayerFrame();
+
+                Vector2 position = default(Vector2);
                 if (!drawPlayer.ghost) {
                     if (!drawPlayer.invis) {
                         _ = drawPlayer.position;
@@ -103,9 +103,9 @@ sealed class BehelitPlayer : ModPlayer {
                         }
                     }
                 }
-            }
 
-            spriteBatch.End();
+                spriteBatch.End();
+            }
 
             orig(self, camera, drawPlayer);
         }
