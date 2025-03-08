@@ -156,7 +156,7 @@ sealed partial class Lothor : ModNPC {
     internal bool _shouldEnrage;
     private int _hpLoseInEnrage;
     private double _frameTimer;
-    private bool _shouldScreamInFlight;
+    private bool _shouldScreamInFlight, _shouldScreamInFlight2;
 
     private static bool _firstTimeEnrage;
 
@@ -1062,7 +1062,10 @@ sealed partial class Lothor : ModNPC {
         }
         Vector2 desiredVelocity = NPC.DirectionTo(_tempPosition) * speed;
         if (FlightAttackTimer == 0f) {
-            float acceleration = MathHelper.Lerp(0.2f, 0.3f, LifeProgress);
+            float acceleration = 0.2f;
+            if (Main.getGoodWorld) {
+                acceleration = MathHelper.Lerp(0.2f, 0.3f, LifeProgress);
+            }
             NPC.SimpleFlyMovement(desiredVelocity, acceleration);
             float min = 5f;
             if (Vector2.Distance(_tempPosition, NPC.Center) < min) {
@@ -1335,7 +1338,7 @@ sealed partial class Lothor : ModNPC {
             }
         }
         if (DashTimer >= DashDelay && shouldReset) {
-            if (TryToStopFlightScreamign()) {
+            if (TryToStopFlightScreaming()) {
                 return;
             }
 
@@ -1353,12 +1356,14 @@ sealed partial class Lothor : ModNPC {
         }
     }
 
-    private bool TryToStopFlightScreamign() {
+    private bool TryToStopFlightScreaming() {
         if (_shouldScreamInFlight) {
             _shouldScreamInFlight = false;
             _frameChosen = false;
+            _shouldScreamInFlight2 = true;
             CurrentFrame = 21;
             GoToFlightState(resetDashCount: false, shouldScream: false);
+            AirDashTimer *= 0.5f;
             return true;
         }
 
@@ -1474,7 +1479,8 @@ sealed partial class Lothor : ModNPC {
             AirDashTimer++;
             LookAtPlayer();
             return;
-        } 
+        }
+        _shouldScreamInFlight2 = false;
         if (OnPlayersDead()) {
             return;
         }
@@ -1622,9 +1628,6 @@ sealed partial class Lothor : ModNPC {
         DashDelay = GetAttackDelay();
         if (shouldScream) {
             TryToStartFlightScreaming();
-        }
-        else {
-            DashDelay -= DashDelay / 3;
         }
         NPC.TargetClosest();
     }
