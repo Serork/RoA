@@ -54,8 +54,8 @@ sealed class BehelitPlayer : ModPlayer {
                 samplerState = LegacyPlayerRenderer.MountedSamplerState;
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
-            if (Main.gamePaused)
-                drawPlayer.PlayerFrame();
+            //if (Main.gamePaused)
+            //    drawPlayer.PlayerFrame();
 
             Vector2 position = default(Vector2);
             var handler = drawPlayer.GetModPlayer<BehelitPlayer>();

@@ -58,8 +58,8 @@ sealed class SerorkMask : ModItem {
                         glowMaskColor = Color.White * (1f - drawinfo.shadow);
                         glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                         drawData.color = glowMaskColor * 0.25f;
-                        drawData.color = Color.Lerp(drawData.color, Color.Blue, 0.5f);
-                        drawData.color.A = (byte)((float)(int)drawData.color.A * 0.2f);
+                        drawData.color = Color.Lerp(drawData.color, Color.LightBlue, 0.5f);
+                        drawData.color.A = (byte)((float)(int)drawData.color.A * 0.375f);
                         var handler = drawinfo.drawPlayer.GetModPlayer<SerorkVisualsStorage>();
                         float num2 = handler.ghostFade;
                         for (int l = 0; l < 4; l++) {
@@ -130,8 +130,8 @@ sealed class SerorkMask : ModItem {
                     Color glowMaskColor = Color.White * (1f - drawinfo.shadow);
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                     drawData.color = glowMaskColor * 0.25f;
-                    drawData.color = Color.Lerp(drawData.color, Color.Blue, 0.5f);
-                    drawData.color.A = (byte)((float)(int)drawData.color.A * 0.2f);
+                    drawData.color = Color.Lerp(drawData.color, Color.LightBlue, 0.5f);
+                    drawData.color.A = (byte)((float)(int)drawData.color.A * 0.375f);
                     var handler = drawinfo.drawPlayer.GetModPlayer<SerorkVisualsStorage>();
                     float num2 = handler.ghostFade;
                     for (int l = 0; l < 4; l++) {
@@ -192,8 +192,8 @@ sealed class SerorkMask : ModItem {
                     Color glowMaskColor = Color.White * (1f - drawinfo.shadow);
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                     item2.color = glowMaskColor * 0.25f;
-                    item2.color = Color.Lerp(item2.color, Color.Blue, 0.5f);
-                    item2.color.A = (byte)((float)(int)item2.color.A * 0.2f);
+                    item2.color = Color.Lerp(item2.color, Color.LightBlue, 0.5f);
+                    item2.color.A = (byte)((float)(int)item2.color.A * 0.375f);
                     var handler = drawPlayer.GetModPlayer<SerorkVisualsStorage>();
                     float num2 = handler.ghostFade;
                     for (int l = 0; l < 4; l++) {
@@ -249,8 +249,8 @@ sealed class SerorkMask : ModItem {
                 if (flag && drawinfo.shadow == handler.ghostFade) {
                     for (int i = 0; i < drawinfo.DrawDataCache.Count; i++) {
                         DrawData value = drawinfo.DrawDataCache[i];
-                        value.color = Color.Lerp(value.color, Color.Blue, 0.5f);
-                        value.color.A = (byte)((float)(int)value.color.A * 0.2f);
+                        value.color = Color.Lerp(value.color, Color.LightBlue, 0.5f);
+                        value.color.A = (byte)((float)(int)value.color.A * 0.375f);
                         drawinfo.DrawDataCache[i] = value;
                     }
                 }
@@ -294,13 +294,14 @@ sealed class SerorkMask : ModItem {
                 samplerState = LegacyPlayerRenderer.MountedSamplerState;
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
-            if (Main.gamePaused)
-                drawPlayer.PlayerFrame();
+            //if (Main.gamePaused)
+            //    drawPlayer.PlayerFrame();
 
             Vector2 position = default(Vector2);
             var handler = drawPlayer.GetModPlayer<SerorkVisualsStorage>();
-            bool flag = ItemLoader.GetItem(ModContent.ItemType<SerorkMask>()).IsVanitySet(drawPlayer.head, drawPlayer.body, drawPlayer.legs);
-            if (flag) {
+            //bool flag = ItemLoader.GetItem(ModContent.ItemType<SerorkMask>()).IsVanitySet(drawPlayer.head, drawPlayer.body, drawPlayer.legs);
+            //if (flag)
+            {
                 if (!drawPlayer.ghost) {
                     if (!drawPlayer.invis) {
                         _ = drawPlayer.position;
