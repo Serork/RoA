@@ -161,21 +161,23 @@ sealed class PeegeonHood : ModItem {
             Rectangle bodyFrame = player.bodyFrame;
             SpriteEffects effect = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            for (int i = trailPos.Length - 1; i > 0; i--) {
-                trailPos[i] = player.MountedCenter + (oldPos[3] - player.MountedCenter) * (i) / trailPos.Length;
-                trailPos[i].Y -= idleCount * i;
-                trailPos[i] += new Vector2(0, idleCount * i / 3).RotatedByRandom(360);
+
+            if (!Main.gamePaused) {
+                for (int i = trailPos.Length - 1; i > 0; i--) {
+                    trailPos[i] = player.MountedCenter + (oldPos[3] - player.MountedCenter) * (i) / trailPos.Length;
+                    trailPos[i].Y -= idleCount * i;
+                    trailPos[i] += new Vector2(0, idleCount * i / 3).RotatedByRandom(360);
+                }
+
+                for (int i = oldPos.Length - 1; i > 0; i--) {
+                    oldPos[i] = oldPos[i - 1];
+                }
+                if ((oldPos[0].X != player.MountedCenter.X || oldPos[0].Y != player.MountedCenter.Y) && idleCount > 0f) idleCount -= 0.1f;
+                else if (idleCount < 1f) idleCount += 0.025f;
+                if (idleCount < 0f) idleCount = 0f;
+
+                oldPos[0] = trailPos[0] = player.MountedCenter;
             }
-
-            for (int i = oldPos.Length - 1; i > 0; i--) {
-                oldPos[i] = oldPos[i - 1];
-            }
-
-            if ((oldPos[0].X != player.MountedCenter.X || oldPos[0].Y != player.MountedCenter.Y) && idleCount > 0f) idleCount -= 0.1f;
-            else if (idleCount < 1f) idleCount += 0.025f;
-            if (idleCount < 0f) idleCount = 0f;
-
-            oldPos[0] = trailPos[0] = player.MountedCenter;
 
             int offset = 0;
             int height = texture.Height / 20;

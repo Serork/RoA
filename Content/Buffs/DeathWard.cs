@@ -32,13 +32,15 @@ sealed class BehelitPlayer : ModPlayer {
 
         private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo) {
             var drawPlayer = drawinfo.drawPlayer;
-            var handler = drawPlayer.GetModPlayer<BehelitPlayer>();
-            if (handler.behelitPotion && drawinfo.shadow == handler.ghostFade) {
-                for (int i = 0; i < drawinfo.DrawDataCache.Count; i++) {
-                    DrawData value = drawinfo.DrawDataCache[i];
-                    value.color = Color.Lerp(value.color, Color.Red, 0.5f);
-                    value.color.A = (byte)((float)(int)value.color.A * 0.2f);
-                    drawinfo.DrawDataCache[i] = value;
+            if (drawPlayer.active) {
+                var handler = drawPlayer.GetModPlayer<BehelitPlayer>();
+                if (handler.behelitPotion && drawinfo.shadow == handler.ghostFade) {
+                    for (int i = 0; i < drawinfo.DrawDataCache.Count; i++) {
+                        DrawData value = drawinfo.DrawDataCache[i];
+                        value.color = Color.Lerp(value.color, Color.Red, 0.5f);
+                        value.color.A = (byte)((float)(int)value.color.A * 0.2f);
+                        drawinfo.DrawDataCache[i] = value;
+                    }
                 }
             }
 
