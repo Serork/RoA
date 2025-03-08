@@ -87,7 +87,9 @@ sealed class BackwoodsNPCs : GlobalNPC {
                         pool.Add(ModContent.NPCType<Ravencaller>(), 0.2f);
                         pool.Add(ModContent.NPCType<DeerSkullHead>(), 0.2f);
                     }
-                    if (Main.GetMoonPhase() == Terraria.Enums.MoonPhase.Full) {
+                    var moonPhase = Main.GetMoonPhase();
+                    if (moonPhase == Terraria.Enums.MoonPhase.Full ||
+                        moonPhase == Terraria.Enums.MoonPhase.Empty) {
                         pool.Add(ModContent.NPCType<Archdruid>(), 0.01f);
                     }
                 }
