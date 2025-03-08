@@ -1035,8 +1035,12 @@ sealed partial class Lothor : ModNPC {
             NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: -1f);
             NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 1f);
 
-            if (Main.getGoodWorld) {
+            int playerCount = Main.player.Count(x => x.active);
+            if (Main.getGoodWorld || playerCount > 2) {
                 NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 2f);
+                if (playerCount > 3) {
+                    NPC.NewNPCDirect(NPC.GetSource_FromAI(), positionToSpawn, type, ai0: NPC.whoAmI, ai3: 3f);
+                }
             }
         }
     }

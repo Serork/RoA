@@ -210,7 +210,11 @@ sealed class Pipistrelle : ModNPC {
         if (NPC.localAI[2] == 0f) {
             NPC.localAI[2] = 1f;
             Vector2 center = owner.Center + owner.velocity;
-            if (NPC.ai[3] == 2f) {
+            if (NPC.ai[3] == 3f) {
+                NPC.localAI[0] = center.X;
+                NPC.localAI[1] = center.Y + 10f;
+            }
+            else if (NPC.ai[3] == 2f) {
                 NPC.localAI[0] = center.X;
                 NPC.localAI[1] = center.Y + 20f;
             }
