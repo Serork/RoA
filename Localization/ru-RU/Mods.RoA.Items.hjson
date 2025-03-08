@@ -1658,120 +1658,124 @@ FlederSlayerDecoration: {
 }
 
 Has2rJacket: {
-	// DisplayName: The Unspeakable One's Jacket
-	/* Tooltip:
+	DisplayName: Куртка Неназываемого
+	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'And strange moons circle through the skies'
-		''' */
+		'И луны странные кружат на небесах,'
+		'''
 }
 
 Has2rMask: {
-	// DisplayName: The Unspeakable One's Mask
+	DisplayName: Маска Неназываемого
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 Has2rPants: {
-	// DisplayName: The Unspeakable One's Pants
-	/* Tooltip:
+	DisplayName: Штаны Неназываемого
+	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'But stranger still is
-		lost Carcosa'
-		''' */
+		'Но всех странней, как странная угроза,
+		Затерянная в вечности Каркоза.'
+		'''
 }
 
 Has2rShades: {
-	// DisplayName: The Unspeakable One's Shades
+	DisplayName: Солнечные очки Неназываемого
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 EldritchRing: {
-	// DisplayName: Eldritch Ring
+	DisplayName: Жуткое кольцо
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 NFAHorns: {
-	// DisplayName: N.F.A's Horns
+	DisplayName: Рога N.F.A.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 NFAJacket: {
-	// DisplayName: N.F.A's Jacket
-	// Tooltip: "{$Mods.RoA.RoADev}"
+	DisplayName: Куртка N.F.A.
+	Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'Уровень крутизны этого чела несравним.'
+		'''
 }
 
 NFAPants: {
-	// DisplayName: N.F.A's Pants
+	DisplayName: Штаны N.F.A.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonChestguard: {
-	// DisplayName: Peegeon's Chestguard
+	DisplayName: Нагрудник Peegeon
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonGreaves: {
-	// DisplayName: Peegeon's Greaves
+	DisplayName: Поножи Peegeon
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonHood: {
-	// DisplayName: Peegeon's Hood
+	DisplayName: Капющон Peegeon
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonCape: {
-	// DisplayName: Peegeon's Cape
+	DisplayName: Плащ Peegeon
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkBreastplate: {
-	// DisplayName: Serork's Breastplate
+	DisplayName: Нагрудник Serork
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkGreaves: {
-	// DisplayName: Seror'sk Greaves
+	DisplayName: Поножи Serork
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkHelmet: {
-	// DisplayName: Serork's Helmet
+	DisplayName: Шлем Serork
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkMask: {
-	// DisplayName: Serork's Mask
+	DisplayName: Маска Serork
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsHeart: {
-	// DisplayName: BRIPE's Heart
+	DisplayName: Сердце BRIPE
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsHelmet: {
-	// DisplayName: BRIPE's Helmet
+	DisplayName: Шлем BRIPE
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsRocketBoots: {
-	// DisplayName: BRIPE's Rocket Boots
+	DisplayName: Рокетный ботинки BRIPE
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 cleoChestguard: {
-	// DisplayName: cleo.'s Chestguard
-	/* Tooltip:
+	DisplayName: Нагрудник cleo.
+	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'The One They Left Behind'
-		''' */
+		'Тот, кого они оставили позади'
+		'''
 }
 
 cleoMask: {
-	// DisplayName: cleo.'s Mask
+	DisplayName: Маска cleo.
 	/* Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1780,6 +1784,6 @@ cleoMask: {
 }
 
 cleoPants: {
-	// DisplayName: cleo.'s Pants
+	DisplayName: Штаны cleo.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
