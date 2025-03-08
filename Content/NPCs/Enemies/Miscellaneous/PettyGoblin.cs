@@ -11,6 +11,7 @@ using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
 
 namespace RoA.Content.NPCs.Enemies.Miscellaneous;
 
@@ -61,6 +62,10 @@ sealed partial class PettyGoblin : ModNPC {
         Banner = Type;
         BannerItem = ModContent.ItemType<PettyGoblinBanner>();
         ItemID.Sets.KillsToBanner[BannerItem] = 10;
+    }
+
+    public override float SpawnChance(NPCSpawnInfo spawnInfo) {
+        return !NPC.AnyNPCs(Type) && NPC.downedGoblins ? SpawnCondition.Overworld.Chance * 0.025f : 0f;
     }
 
     public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(new CommonDrop(ModContent.ItemType<PettyBag>(), 10, 1, 1, 4));
