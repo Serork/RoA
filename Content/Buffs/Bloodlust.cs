@@ -21,12 +21,12 @@ sealed class BloodlustPlayer : ModPlayer {
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         if (bloodlustEffect & target.life <= 0) {
-            BloodlustHeal(damageDone);
+            BloodlustHeal(Main.rand.Next(2, 5));
         }
     }
 
 	private void BloodlustHeal(int damageDone) {
-        int heal = (damageDone / 2) + 1;
+        int heal = damageDone;
         Player.statLife += heal;
         Player.statLife = Math.Min(Player.statLifeMax2, Player.statLife);
         Player.HealEffect(heal, true);
