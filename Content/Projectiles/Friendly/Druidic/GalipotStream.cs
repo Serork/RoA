@@ -45,7 +45,8 @@ sealed class GalipotStream : NatureProjectile {
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.immune[Projectile.owner] = 20;
         float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f) / 2);
+        Projectile.damage = (int)(Projectile.damage * 0.75f);
+        //target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f) / 2);
         //if (Projectile.ai[1] != 1f) {
         //    Projectile.Kill();
         //}
@@ -143,7 +144,7 @@ sealed class GalipotStream : NatureProjectile {
                 Projectile.velocity = Vector2.Zero;
 
                 Projectile.ai[1] = 1f;
-                Projectile.maxPenetrate = Projectile.penetrate = -1;
+                Projectile.maxPenetrate = Projectile.penetrate = 3;
             }
         }
         else {

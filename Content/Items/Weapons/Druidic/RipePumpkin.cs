@@ -20,7 +20,7 @@ sealed class RipePumpkin : NatureItem {
 		Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Druidic.RipePumpkin>());
 		Item.SetDefaultOthers(Item.sellPrice(silver: 20), ItemRarityID.Blue);
 
-		NatureWeaponHandler.SetPotentialDamage(Item, 18);
+		NatureWeaponHandler.SetPotentialDamage(Item, 24);
         NatureWeaponHandler.SetFillingRate(Item, 0.5f);
 
         Item.value = Item.sellPrice(0, 0, 20, 0);

@@ -15,7 +15,7 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 sealed class GutwrenchingHooks : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
-        Item.SetWeaponValues(8, 4f);
+        Item.SetWeaponValues(12, 4f);
 
         Item.rare = ItemRarityID.Blue;
 

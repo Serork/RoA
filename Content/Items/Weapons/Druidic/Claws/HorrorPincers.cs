@@ -13,14 +13,14 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 sealed class HorrorPincers : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
-        Item.SetWeaponValues(8, 4f);
+        Item.SetWeaponValues(12, 4f);
 
         Item.rare = ItemRarityID.Blue;
 
         Item.value = Item.sellPrice(0, 0, 25, 0);
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (new Color(132, 75, 140), new Color(160, 100, 200));
+    protected override (Color, Color) SlashColors(Player player) => (new Color(112, 75, 140), new Color(130, 100, 210));
 
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
         int offset = 30 * player.direction;
