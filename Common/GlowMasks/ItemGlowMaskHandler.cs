@@ -160,7 +160,8 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         private static void DrawHeadGlowMask(ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             if (player.head != -1) {
-                if (ArmorGlowMasks.TryGetValue(player.head, out ModItem armorGlowMaskModItem)) {
+                if (ArmorGlowMasks.TryGetValue(player.head, out ModItem armorGlowMaskModItem) &&
+                    ModContent.HasAsset(armorGlowMaskModItem.Texture + "_Head_Glow")) {
                     Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem.Texture + "_Head_Glow").Value;
                     Color glowMaskColor = Color.White * (1f - drawInfo.shadow);
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
@@ -207,7 +208,8 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         private static void DrawArmorGlowMask(ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             if (player.legs != -1) {
-                if (ArmorGlowMasks.TryGetValue(player.legs, out ModItem armorGlowMaskModItem)) {
+                if (ArmorGlowMasks.TryGetValue(player.legs, out ModItem armorGlowMaskModItem) &&
+                    ModContent.HasAsset(armorGlowMaskModItem.Texture + "_Legs_Glow")) {
                     Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem.Texture + "_Legs_Glow").Value;
                     Color glowMaskColor = Color.White * (1f - drawInfo.shadow);
                     if (armorGlowMaskModItem is IDrawArmorGlowMask armorGlowMask) {
@@ -239,7 +241,8 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         private static void DrawArmorGlowMask(ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             if (player.body != -1) {
-                if (ArmorGlowMasks.TryGetValue(player.body, out ModItem armorGlowMaskModItem)) {
+                if (ArmorGlowMasks.TryGetValue(player.body, out ModItem armorGlowMaskModItem) && 
+                    ModContent.HasAsset(armorGlowMaskModItem.Texture + "_Body_Glow")) {
                     Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem.Texture + "_Body_Glow").Value;
                     Color glowMaskColor = Color.White * (1f - drawInfo.shadow);
                     (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor);
