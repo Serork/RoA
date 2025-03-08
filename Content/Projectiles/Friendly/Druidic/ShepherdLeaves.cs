@@ -78,7 +78,7 @@ sealed class ShepherdLeaves : NatureProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 8, 8, ModContent.DustType<PastoralRodDust>(), Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), 0, new Color(Color.Azure.ToVector3()), Scale: Main.rand.NextFloat(1f, 1.3f));
             Main.dust[dust].velocity *= 0.5f;
             Main.dust[dust].noLight = true;
