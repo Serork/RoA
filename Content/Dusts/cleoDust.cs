@@ -6,8 +6,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class CondorDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White * (dust.alpha / 255f);
+sealed class cleoDust : ModDust {
+    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.Lerp(lightColor, new Color(255, 255, 255, 0), 0.85f);
 
-    public override void OnSpawn(Dust dust) => UpdateType = DustID.Enchanted_Pink;
+    public override void OnSpawn(Dust dust) => UpdateType = 107;
 }
