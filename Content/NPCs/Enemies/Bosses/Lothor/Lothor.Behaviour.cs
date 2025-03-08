@@ -1698,7 +1698,7 @@ sealed partial class Lothor : ModNPC {
                 int maxTilesDistance = 15;
                 bool closeRange = distance.Length() < 16 * maxTilesDistance;
                 if (NPC.Center.Y < Target.Center.Y && closeRange) {
-                    float fallAcceleration = 0.01f + 0.02f * LifeProgress;
+                    float fallAcceleration = 0.01f + (!Main.expertMode ? 0.01f : 0.02f) * LifeProgress;
                     float fallVelocityY = 0.9f + 0.2f * LifeProgress;
                     if (FallStrengthIfClose < fallVelocityY) {
                         FallStrengthIfClose += fallAcceleration;
