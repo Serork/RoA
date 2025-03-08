@@ -30,7 +30,7 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 	}
 
     protected override void SafeSetDefaults() {
-		int width = 32; int height = width;
+		int width = 40; int height = width;
 		Item.Size = new Vector2(width, height);
 
 		Item.useStyle = ItemUseStyleID.Shoot;
