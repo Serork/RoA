@@ -650,7 +650,8 @@ sealed class FlederSlayer : ModProjectile {
                              0f);
             spriteBatch.EndBlendState();
         }
-        else {
+        color = Color.White;
+        if (!flag) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(sparkTexture2D,
                              Projectile.Center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),

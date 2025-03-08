@@ -79,11 +79,11 @@ sealed class HunterProjectile1 : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         Color color = Color.White;
         Texture2D sparkle = ModContent.Request<Texture2D>(ProjectileLoader.GetProjectile(ModContent.ProjectileType<FlederSlayer>()).Texture + "_Spark").Value;
-        Texture2D blood = ModContent.Request<Texture2D>(ResourceManager.Textures + "Bloom0").Value;
+        Texture2D bloom = ModContent.Request<Texture2D>(ResourceManager.Textures + "Bloom0").Value;
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         float scale = Projectile.ai[0] / 3f;
-        Main.EntitySpriteDraw(blood, drawPosition, null, color.MultiplyAlpha(Helper.Wave(0.5f, 1f, speed: 2f)) * 0.15f, Projectile.rotation, blood.Size() / 2f, (Projectile.scale * 0.5f + Helper.Wave(-0.25f, 0.25f, speed: 1f)) * _extraScale, 0, 0);
+        Main.EntitySpriteDraw(bloom, drawPosition, null, color.MultiplyAlpha(Helper.Wave(0.5f, 1f, speed: 2f)) * 0.15f, Projectile.rotation, bloom.Size() / 2f, (Projectile.scale * 0.5f + Helper.Wave(-0.25f, 0.25f, speed: 1f)) * _extraScale, 0, 0);
         Main.EntitySpriteDraw(sparkle, drawPosition, null, color, Projectile.rotation, sparkle.Size() / 2f, (Projectile.scale + scale) * _extraScale, 0, 0);
         Main.EntitySpriteDraw(sparkle, drawPosition, null, color, Projectile.rotation + MathHelper.PiOver2, sparkle.Size() / 2f, (Projectile.scale + scale) * _extraScale, 0, 0);
 
