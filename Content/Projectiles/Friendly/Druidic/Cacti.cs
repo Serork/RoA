@@ -51,6 +51,7 @@ sealed class Cacti : NatureProjectile {
         _useTimeFactor = reader.ReadSingle();
     }
 
+    public override bool? CanDamage() => Projectile.Opacity > 0.5f;
     public override bool? CanCutTiles() => Projectile.Opacity > 0.75f;
 
     protected override void SafeOnSpawn(IEntitySource source) {
