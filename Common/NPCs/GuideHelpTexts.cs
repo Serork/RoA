@@ -289,82 +289,82 @@ sealed class GuideHelpTexts : ILoadable {
                 return;
             }
             if (!flag23 && Main.helpText == 70 + num5 && NPC.downedBoss2) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1100");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1100");
                 return;
             }
 
             if (!flag24 && Main.helpText == 71 + num5 && Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1101");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1101");
                 return;
             }
 
             if (!flag25 && Main.helpText == 72 + num5 && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1102");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1102");
                 return;
             }
 
             if (!flag26 && Main.helpText == 73 + num5) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1103");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1103");
                 return;
             }
 
             if (!flag27 && Main.helpText == 74 + num5) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1104");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1104");
                 return;
             }
 
             if (!flag28 && Main.helpText == 75 + num5 && Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1105");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1105");
                 return;
             }
 
             if (!flag29 && Main.helpText == 76 + num5 && Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1106");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1106");
                 return;
             }
 
             if (!flag30 && Main.helpText == 77 + num5) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1107");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1107");
                 return;
             }
 
             if (!flag31 && Main.helpText == 78 + num5 && Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1108");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1108");
                 return;
             }
 
             if (!flag32 && Main.helpText == 79 + num5) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1109");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1109");
                 return;
             }
 
             if (!flag33 && Main.helpText == 80 + num5 && num >= 5) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1110");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1110");
                 return;
             }
 
             if (!flag34 && Main.helpText == 81 + num5 && num >= 11) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1111");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1111");
                 return;
             }
 
             if (!flag35 && NPC.downedBoss2 && Main.helpText == 82 + num5) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1112");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1112");
                 return;
             }
 
             if (!flag36 && Main.helpText == 83 + num5 && flag14) {
-                Main.npcChatText = Language.GetTextValueWith("GuideMain.helpTextSpecific.Help_1113", obj);
+                Main.npcChatText = Language.GetTextValueWith("GuideHelpTextSpecific.Help_1113", obj);
                 return;
             }
 
             if (!flag37 && Main.helpText == 84 + num5 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1114");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1114");
                 return;
             }
 
             if (!flag38 && Main.helpText == 85 + num5 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1115");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1115");
                 return;
             }
 
@@ -384,7 +384,7 @@ sealed class GuideHelpTexts : ILoadable {
             }
 
             if (flag7 && WorldGen.crimson && Main.helpText == 103) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1159");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1159");
                 return;
             }
 
@@ -398,12 +398,12 @@ sealed class GuideHelpTexts : ILoadable {
 			if (Main.helpText == 202 && !hardMode && Main.LocalPlayer.statLifeMax >= 140) {
 			*/
             if (Main.helpText == 202 + num6 && !Main.hardMode && Main.LocalPlayer.ConsumedLifeCrystals >= 2) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1120");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1120");
                 return;
             }
 
             if (Main.helpText == 203 + num6 && Main.hardMode && NPC.downedMechBossAny) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1121");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1121");
                 return;
             }
 
@@ -411,7 +411,7 @@ sealed class GuideHelpTexts : ILoadable {
 			if (Main.helpText == 204 && !NPC.downedGoblins && Main.LocalPlayer.statLifeMax >= 200 && WorldGen.shadowOrbSmashed) {
 			*/
             if (Main.helpText == 204 + num6 && !NPC.downedGoblins && Main.LocalPlayer.ConsumedLifeCrystals >= 5 && WorldGen.shadowOrbSmashed) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1122");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1122");
                 return;
             }
 
@@ -419,12 +419,12 @@ sealed class GuideHelpTexts : ILoadable {
 			if (Main.helpText == 205 && hardMode && !NPC.downedPirates && Main.LocalPlayer.statLifeMax >= 200) {
 			*/
             if (Main.helpText == 205 + num6 && Main.hardMode && !NPC.downedPirates && Main.LocalPlayer.ConsumedLifeCrystals >= 5) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1123");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1123");
                 return;
             }
 
             if (Main.helpText == 206 + num6 && Main.hardMode && NPC.downedGolemBoss && !NPC.downedMartians) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1124");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1124");
                 return;
             }
 
@@ -440,7 +440,7 @@ sealed class GuideHelpTexts : ILoadable {
 
             num6 = 1;
             if (Main.helpText == 207 + num6 && (NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3)) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1125");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1125");
                 return;
             }
 
@@ -452,47 +452,47 @@ sealed class GuideHelpTexts : ILoadable {
             num6 += 1;
 
             if (Main.helpText == 208 + num6 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1130");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1130");
                 return;
             }
 
             if (Main.helpText == 209 + num6 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1131");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1131");
                 return;
             }
 
             if (Main.helpText == 210 + num6 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1132");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1132");
                 return;
             }
 
             if (Main.helpText == 211 + num6 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1133");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1133");
                 return;
             }
 
             if (Main.helpText == 212 + num6 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1134");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1134");
                 return;
             }
 
             if (Main.helpText == 213 + num6 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1135");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1135");
                 return;
             }
 
             if (Main.helpText == 214 + num6 && !Main.hardMode && (flag4 || flag5)) {
-                Main.npcChatText = Language.GetTextValueWith("GuideMain.helpTextSpecific.Help_1136", obj);
+                Main.npcChatText = Language.GetTextValueWith("GuideHelpTextSpecific.Help_1136", obj);
                 return;
             }
 
             if (Main.helpText == 215 + num6 && Main.LocalPlayer.anglerQuestsFinished < 1) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1137");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1137");
                 return;
             }
 
             if (Main.helpText == 216 + num6 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1138");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1138");
                 return;
             }
 
@@ -611,7 +611,7 @@ sealed class GuideHelpTexts : ILoadable {
 			if (Main.helpText == 1140 && NPC.downedBoss1 && !NPC.downedBoss2 && WorldGen.crimson && Main.LocalPlayer.statLifeMax >= 300) {
 			*/
             if (Main.helpText == 1140 && NPC.downedBoss1 && !NPC.downedBoss2 && WorldGen.crimson && Main.LocalPlayer.ConsumedLifeCrystals >= 10) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1140");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1140");
                 return;
             }
 
@@ -619,12 +619,12 @@ sealed class GuideHelpTexts : ILoadable {
 			if (Main.helpText == 1141 && NPC.downedBoss1 && !NPC.downedBoss2 && WorldGen.crimson && Main.LocalPlayer.statLifeMax >= 300) {
 			*/
             if (Main.helpText == 1141 && NPC.downedBoss1 && !NPC.downedBoss2 && WorldGen.crimson && Main.LocalPlayer.ConsumedLifeCrystals >= 10) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1141");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1141");
                 return;
             }
 
             if (Main.helpText == 1142 && NPC.downedBoss2 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1142");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1142");
                 return;
             }
 
@@ -632,32 +632,32 @@ sealed class GuideHelpTexts : ILoadable {
 			if (Main.helpText == 1143 && NPC.downedBoss2 && !NPC.downedQueenBee && Main.LocalPlayer.statLifeMax >= 300) {
 			*/
             if (Main.helpText == 1143 && NPC.downedBoss2 && !NPC.downedQueenBee && Main.LocalPlayer.ConsumedLifeCrystals >= 10) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1143");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1143");
                 return;
             }
 
             if (Main.helpText == 1144 && flag10) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1144");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1144");
                 return;
             }
 
             if (Main.helpText == 1145 && flag11 && !Main.hardMode) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1145");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1145");
                 return;
             }
 
             if (Main.helpText == 1146 && Main.hardMode && Main.LocalPlayer.wingsLogic == 0 && !Main.LocalPlayer.mount.Active && !NPC.downedPlantBoss) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1146");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1146");
                 return;
             }
 
             if (Main.helpText == 1147 && Main.hardMode && WorldGen.SavedOreTiers.Adamantite == 111 && !NPC.downedMechBossAny) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1147");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1147");
                 return;
             }
 
             if (Main.helpText == 1148 && Main.hardMode && WorldGen.SavedOreTiers.Adamantite == 223 && !NPC.downedMechBossAny) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1148");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1148");
                 return;
             }
 
@@ -665,52 +665,52 @@ sealed class GuideHelpTexts : ILoadable {
 			if (Main.helpText == 1149 && hardMode && NPC.downedMechBossAny && Main.LocalPlayer.statLifeMax < 500) {
 			*/
             if (Main.helpText == 1149 && Main.hardMode && NPC.downedMechBossAny && Main.LocalPlayer.ConsumedLifeCrystals == Player.LifeCrystalMax && Main.LocalPlayer.ConsumedLifeFruit < Player.LifeFruitMax) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1149");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1149");
                 return;
             }
 
             if (Main.helpText == 1150 && Main.hardMode && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && !NPC.downedPlantBoss) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1150");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1150");
                 return;
             }
 
             if (Main.helpText == 1151 && Main.hardMode && NPC.downedPlantBoss && !NPC.downedGolemBoss && flag12) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1151");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1151");
                 return;
             }
 
             if (Main.helpText == 1152 && Main.hardMode && NPC.downedPlantBoss && !NPC.downedGolemBoss && !flag12) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1152");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1152");
                 return;
             }
 
             if (Main.helpText == 1153 && Main.hardMode && flag13) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1153");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1153");
                 return;
             }
 
             if (Main.helpText == 1154 && Main.hardMode && !NPC.downedFishron) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1154");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1154");
                 return;
             }
 
             if (Main.helpText == 1155 && Main.hardMode && NPC.downedGolemBoss && !NPC.downedHalloweenTree && !NPC.downedHalloweenKing) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1155");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1155");
                 return;
             }
 
             if (Main.helpText == 1156 && Main.hardMode && NPC.downedGolemBoss && !NPC.downedChristmasIceQueen && !NPC.downedChristmasTree && !NPC.downedChristmasSantank) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1156");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1156");
                 return;
             }
 
             if (Main.helpText == 1157 && Main.hardMode && NPC.downedGolemBoss && NPC.AnyNPCs(437) && !NPC.downedMoonlord) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1157");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1157");
                 return;
             }
 
             if (Main.helpText == 1158 && Main.hardMode && NPC.LunarApocalypseIsUp && !NPC.downedMoonlord) {
-                Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1158");
+                Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1158");
                 return;
             }
 
@@ -721,7 +721,7 @@ sealed class GuideHelpTexts : ILoadable {
                 Main.helpText = 0;
         }
 
-        Main.npcChatText = Language.GetTextValue("GuideMain.helpTextSpecific.Help_1160");
+        Main.npcChatText = Language.GetTextValue("GuideHelpTextSpecific.Help_1160");
     }
 
     void ILoadable.Unload() { }
