@@ -29,7 +29,7 @@ sealed class JawTrapActivatedPacket : NetPacket {
         int j = reader.ReadInt32();
 
         JawTrap.JawTrapTE jawTrapTE = TileHelper.GetTE<JawTrap.JawTrapTE>(i, j);
-        jawTrapTE?.Activate(i, j, player);
+        jawTrapTE.Activate(player);
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new JawTrapActivatedPacket(player, i, j), ignoreClient: sender);
