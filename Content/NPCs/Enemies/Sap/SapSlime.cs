@@ -28,6 +28,8 @@ sealed class SapSlime : ModNPC {
         Main.npcFrameCount[NPC.type] = 3;
 
         NPCID.Sets.ShimmerTransformToNPC[Type] = NPCID.ShimmerSlime;
+
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
     }
 
     public override void SetDefaults() {

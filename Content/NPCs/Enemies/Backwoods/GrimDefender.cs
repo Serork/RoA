@@ -55,6 +55,11 @@ sealed class GrimDefender : ModNPC {
             PortraitPositionYOverride = 0f,
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Bleeding] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
     }
 
     public override void SetDefaults() {

@@ -29,6 +29,10 @@ sealed class Ent : RoANPC {
             PortraitPositionYOverride = -1f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
+
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Bleeding] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {

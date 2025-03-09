@@ -42,6 +42,8 @@ sealed partial class PettyGoblin : ModNPC {
             Velocity = 1.5f
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
     }
 
     public override void SetDefaults() {

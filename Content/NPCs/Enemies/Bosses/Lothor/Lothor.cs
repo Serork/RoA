@@ -26,6 +26,10 @@ sealed partial class Lothor : ModNPC {
             PortraitPositionYOverride = 0f,
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Shimmer] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
