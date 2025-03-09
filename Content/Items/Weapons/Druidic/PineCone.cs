@@ -1,7 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.BackwoodsSystems;
 using RoA.Common.Druid;
+using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Trees;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -59,7 +62,7 @@ sealed class PineCone : NatureItem {
         On_WorldGen.GetCommonTreeFoliageData += On_WorldGen_GetCommonTreeFoliageData;
         On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
         On_WorldGen.GetTreeFrame += On_WorldGen_GetTreeFrame;
-        //On_WorldGen.GrowTree += On_WorldGen_GrowTree;
+        On_WorldGen.GrowTree += On_WorldGen_GrowTree;
         On_WorldGen.KillTile_GetTreeDrops += On_WorldGen_KillTile_GetTreeDrops;
     }
 
@@ -169,6 +172,11 @@ sealed class PineCone : NatureItem {
             TileColorCache cache = Main.tile[i, j].BlockColorAndCoating();
             if (Main.tenthAnniversaryWorld && !WorldGen.gen)
                 cache.Color = (byte)genRand.Next(1, 13);
+
+            bool isPrimordialTree = false;
+            if (Main.tile[i, j].TileType == ModContent.TileType<BackwoodsGrass>()) {
+                isPrimordialTree = true;
+            }
 
             int num = 2;
             int num2 = genRand.Next(5, 17);
@@ -331,9 +339,12 @@ sealed class PineCone : NatureItem {
                         tile.HasTile = true;
                         Main.tile[i - 1, k].TileType = 5;
                         Main.tile[i - 1, k].UseBlockColors(cache);
+                        if (isPrimordialTree) {
+                            BackwoodsVars.AddBackwoodsTree(i - 1, k);
+                        }
                         num4 = genRand.Next(3);
                         if (genRand.Next(3) < 2 && !flag2) {
-                            if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(3))) {
+                            if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
                                 GeneratedStorage.PineConeAddedToWorld = true;
                                 num4 = 3;
                                 if (num4 == 3) {
@@ -382,9 +393,12 @@ sealed class PineCone : NatureItem {
                     tile.HasTile = true;
                     Main.tile[i + 1, k].TileType = 5;
                     Main.tile[i + 1, k].UseBlockColors(cache);
+                    if (isPrimordialTree) {
+                        BackwoodsVars.AddBackwoodsTree(i - 1, k);
+                    }
                     num4 = genRand.Next(3);
                     if (genRand.Next(3) < 2 && !flag2) {
-                        if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(3))) {
+                        if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
                             GeneratedStorage.PineConeAddedToWorld = true;
                             num4 = 3;
                             if (num4 == 3) {

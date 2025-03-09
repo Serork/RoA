@@ -151,7 +151,7 @@ sealed class BackwoodsVars : ModSystem {
     }
 
     public override void Load() {
-        On_WorldGen.GrowTree += On_WorldGen_GrowTree;
+        //On_WorldGen.GrowTree += On_WorldGen_GrowTree;
         On_TeleportPylonsSystem.OnPlayerJoining += On_TeleportPylonsSystem_OnPlayerJoining;
     }
 
@@ -187,6 +187,7 @@ sealed class BackwoodsVars : ModSystem {
         }
     }
 
+    // check out pine cone
     private bool On_WorldGen_GrowTree(On_WorldGen.orig_GrowTree orig, int i, int y) {
         int j;
         for (j = y; TileID.Sets.TreeSapling[Main.tile[i, j].TileType]; j++) {
@@ -374,13 +375,14 @@ sealed class BackwoodsVars : ModSystem {
                         }
                         num4 = genRand.Next(3);
                         if (genRand.Next(3) < 2 && !flag2) {
-                            if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
+                            if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(1))) {
                                 PineCone.GeneratedStorage.PineConeAddedToWorld = true;
                                 num4 = 3;
                                 if (num4 == 3) {
                                     Main.tile[i - 1, k].TileFrameX = 44;
                                     Main.tile[i - 1, k].TileFrameY = 264;
                                 }
+                                Console.WriteLine(i + " " + j);
                             }
 
                             if (num4 == 0) {
@@ -428,13 +430,14 @@ sealed class BackwoodsVars : ModSystem {
                     }
                     num4 = genRand.Next(3);
                     if (genRand.Next(3) < 2 && !flag2) {
-                        if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
+                        if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(1))) {
                             PineCone.GeneratedStorage.PineConeAddedToWorld = true;
                             num4 = 3;
                             if (num4 == 3) {
                                 Main.tile[i + 1, k].TileFrameX = 66;
                                 Main.tile[i + 1, k].TileFrameY = 264;
                             }
+                            Console.WriteLine(i + " " + j);
                         }
 
                         if (num4 == 0) {

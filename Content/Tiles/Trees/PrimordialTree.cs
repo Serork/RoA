@@ -37,7 +37,7 @@ sealed class PrimordialTreeGlow : GlobalTile {
         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
         foreach (Point position in PrimordialTreeDrawPoints.ToList()) {
             if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
-                return;
+                continue;
             }
 
             int i = position.X, j = position.Y;
