@@ -56,7 +56,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             Player player = Owner;
             int type = ModContent.ProjectileType<Cacti>();
             float opacity = 1f;
-            Vector2 mousePoint = player.GetViableMousePosition();
+            Vector2 mousePoint = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = mousePoint.Y + player.height - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
             if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {

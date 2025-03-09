@@ -65,7 +65,7 @@ sealed class Cacti : NatureProjectile {
         Projectile.ai[2] = NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player);
         _useTimeFactor = 0.0275f * (float)(1f - Projectile.ai[2] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
 
-        Vector2 mousePoint = player.GetViableMousePosition();
+        Vector2 mousePoint = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
         float y = mousePoint.Y + player.height - player.height * (3f + _useTimeFactor * player.height * 0.75f);
         Vector2 pointPosition = new(mousePoint.X, y);
         float lastY = Math.Abs(y - Main.screenPosition.Y + Main.screenHeight);
