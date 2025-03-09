@@ -255,19 +255,19 @@ sealed class GuideHelpTexts : ILoadable {
                 Main.npcChatText = Lang.dialog(197);
                 return;
             }
-            if (!flag16 && Main.helpText == 64) {
-                Main.npcChatText = Lang.dialog(198);
-                return;
-            }
-            int num5 = 2;
-            if (!flag16 && !TreeDryad.AbleToBeDestroyed && Main.helpText == 65) {
+            //if (!flag16 && Main.helpText == 64) {
+            //    Main.npcChatText = Lang.dialog(198);
+            //    return;
+            //}
+            if (!flag16 && !TreeDryad.AbleToBeDestroyed && Main.helpText == 64) {
                 Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{1}");
                 return;
             }
-            if (!flag16 && TreeDryad.AbleToBeDestroyed && Main.helpText == 66) {
+            if (!flag16 && TreeDryad.AbleToBeDestroyed && Main.helpText == 65) {
                 Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{2}");
                 return;
             }
+            int num5 = 1;
             if (!flag19 && Main.helpText == 65 + num5 && NPC.downedBoss3) {
                 Main.npcChatText = Lang.dialog(199);
                 return;
