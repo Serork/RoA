@@ -35,7 +35,7 @@ sealed class DeerSkullHead : BaseHead {
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
-        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+        NPCID.Sets.ImmuneToRegularBuffs[Type] = true;
     }
 
     public override void SetDefaults() {
@@ -233,7 +233,7 @@ sealed class DeerSkullBody : BaseBody {
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
-        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+        NPCID.Sets.ImmuneToRegularBuffs[Type] = true;
     }
 
     public override void SetDefaults() {
@@ -272,8 +272,7 @@ sealed class DeerSkullTail : BaseTail {
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
-        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
-        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+        NPCID.Sets.ImmuneToRegularBuffs[Type] = true;
     }
 
     public override void SetDefaults() {

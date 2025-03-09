@@ -29,6 +29,7 @@ sealed class SapSlime : ModNPC {
 
         NPCID.Sets.ShimmerTransformToNPC[Type] = NPCID.ShimmerSlime;
 
+        NPCID.Sets.ImmuneToRegularBuffs[Type] = true;
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
     }
 

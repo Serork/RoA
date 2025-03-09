@@ -56,10 +56,12 @@ sealed class GrimDefender : ModNPC {
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
-        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
-        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Bleeding] = true;
-        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
-        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+        //NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+        //NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Bleeding] = true;
+        //NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
+        //NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+
+        NPCID.Sets.ImmuneToRegularBuffs[Type] = true;
     }
 
     public override void SetDefaults() {
