@@ -318,15 +318,21 @@ sealed partial class Lothor : ModNPC {
                 if (_shouldScreamInFlight) {
                     ApplyFlyingAnimation();
                     if (DashTimer > minDelay) {
-                        if (Main.netMode != NetmodeID.MultiplayerClient) {
-                            if (_frameChosen) {
-                            }
-                            else {
-                                if (CurrentFrame == neededFrameInFlightStateToStartAttack) {
-                                    _frameChosen = true;
+                        if (Main.getGoodWorld || Main.masterMode) {
+                            _frameChosen = true;
+                            CurrentFrame = neededFrameInFlightStateToStartAttack;
+                        }
+                        else {
+                            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                                if (_frameChosen) {
                                 }
+                                else {
+                                    if (CurrentFrame == neededFrameInFlightStateToStartAttack) {
+                                        _frameChosen = true;
+                                    }
 
-                                NPC.netUpdate = true;
+                                    NPC.netUpdate = true;
+                                }
                             }
                         }
                         if (_frameChosen) {
@@ -469,13 +475,19 @@ sealed partial class Lothor : ModNPC {
                 }
                 else if (FlightAttackTimer != 0f && BeforeAttackTimer > 0f) {
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
-                        if (_frameChosen) {
+                        if (Main.getGoodWorld || Main.masterMode) {
+                            _frameChosen = true;
                             CurrentFrame = neededFrameInFlightStateToStartAttack;
                         }
                         else {
-                            ApplyFlyingAnimation();
-                            if (CurrentFrame == neededFrameInFlightStateToStartAttack) {
-                                _frameChosen = true;
+                            if (_frameChosen) {
+                                CurrentFrame = neededFrameInFlightStateToStartAttack;
+                            }
+                            else {
+                                ApplyFlyingAnimation();
+                                if (CurrentFrame == neededFrameInFlightStateToStartAttack) {
+                                    _frameChosen = true;
+                                }
                             }
                         }
 
@@ -1961,7 +1973,12 @@ sealed partial class Lothor : ModNPC {
         if (flag4) {
             if (_previousState != LothorAIState.Scream && GetAttackDoneCount(LothorAIState.SpittingAttack) < 2 && DashTimer % 5f == 0f) {
                 if (Main.rand.NextBool(6) && (Main.expertMode || _shouldEnrage) && Main.netMode != NetmodeID.MultiplayerClient) {
-                    ChooseAttack(LothorAIState.Scream);
+                    if (_previousState != LothorAIState.SpittingAttack && Main.rand.NextBool()) {
+                        ChooseAttack(LothorAIState.SpittingAttack);
+                    }
+                    else {
+                        ChooseAttack(LothorAIState.Scream);
+                    }
                     NPC.netUpdate = true;
                     return;
                 }
@@ -1971,11 +1988,14 @@ sealed partial class Lothor : ModNPC {
                 ChooseAttack(LothorAIState.ClawsAttack);
                 return;
             }
-            bool flag3 = distance > 400f && distance < 900f;
+            bool flag3 = distance > 250f && distance < 900f;
             if (flag3 &&
                 flag) {
                 if (_previousState != LothorAIState.SpittingAttack) {
-                    ChooseAttack(LothorAIState.SpittingAttack);
+                    if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool()) {
+                        ChooseAttack(LothorAIState.SpittingAttack);
+                        NPC.netUpdate = true;
+                    }
                 }
                 return;
             }

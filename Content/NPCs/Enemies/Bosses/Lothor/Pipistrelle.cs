@@ -244,31 +244,38 @@ sealed class Pipistrelle : ModNPC {
             NPC.LookAtPlayer(player);
             NPC.SlightlyMoveTo(destination, speed, 12.5f);
             if (NPC.Distance(destination) < 100f || NPC.localAI[2] > 300f) {
-                NPC.localAI[3]++;
-                if (NPC.localAI[3] > 20f) {
-                    NPC.ai[2] = 1f;
-                    float speed2 = 6.5f + 1.25f * lifeProgress;
-                    float x = NPC.Center.X - player.Center.X;
-                    float y = NPC.Center.Y - player.Center.Y;
-                    float acceleration = Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) / 4f;
-                    acceleration += 10f - acceleration;
-                    x -= player.velocity.X * acceleration;
-                    y -= player.velocity.Y * acceleration / 4f;
-                    x *= 1f;
-                    y *= 1f;
-                    float sqrt = (float)Math.Sqrt(x * x + y * y);
-                    sqrt = speed2 / sqrt;
-                    NPC.velocity.X = x * sqrt;
-                    NPC.velocity.Y = y * sqrt;
-                    if (Main.netMode != NetmodeID.MultiplayerClient) {
-                        int damage = (int)MathHelper.Lerp(Lothor.ACORN_DAMAGE, Lothor.ACORN_DAMAGE2, lifeProgress);
-                        damage /= 2;
-                        int knockBack = (int)MathHelper.Lerp(Lothor.ACORN_KNOCKBACK, Lothor.ACORN_KNOCKBACK2, lifeProgress);
-                        int projectile = 
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-x * sqrt, -y * sqrt) * 1.5f, ModContent.ProjectileType<CursedAcorn>(),
-                            damage, knockBack,
-                            Main.myPlayer, ai2: player.whoAmI);
-                        //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
+                NPC previous = Main.npc[NPC.whoAmI - 1];
+                bool flag5 = true;
+                if (previous != null && previous.active && previous.ModNPC is Pipistrelle && previous.ai[2] != 1f) {
+                    flag5 = false;
+                }
+                if (flag5) {
+                    NPC.localAI[3]++;
+                    if (NPC.localAI[3] > 20f) {
+                        NPC.ai[2] = 1f;
+                        float speed2 = 6.5f + 1.25f * lifeProgress;
+                        float x = NPC.Center.X - player.Center.X;
+                        float y = NPC.Center.Y - player.Center.Y;
+                        float acceleration = Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) / 4f;
+                        acceleration += 10f - acceleration;
+                        x -= player.velocity.X * acceleration;
+                        y -= player.velocity.Y * acceleration / 4f;
+                        x *= 1f;
+                        y *= 1f;
+                        float sqrt = (float)Math.Sqrt(x * x + y * y);
+                        sqrt = speed2 / sqrt;
+                        NPC.velocity.X = x * sqrt;
+                        NPC.velocity.Y = y * sqrt;
+                        if (Main.netMode != NetmodeID.MultiplayerClient) {
+                            int damage = (int)MathHelper.Lerp(Lothor.ACORN_DAMAGE, Lothor.ACORN_DAMAGE2, lifeProgress);
+                            damage /= 2;
+                            int knockBack = (int)MathHelper.Lerp(Lothor.ACORN_KNOCKBACK, Lothor.ACORN_KNOCKBACK2, lifeProgress);
+                            int projectile =
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-x * sqrt, -y * sqrt) * 1.5f, ModContent.ProjectileType<CursedAcorn>(),
+                                damage, knockBack,
+                                Main.myPlayer, ai2: player.whoAmI);
+                            //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
+                        }
                     }
                 }
             }
