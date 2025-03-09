@@ -444,7 +444,7 @@ sealed class GuideHelpTexts : ILoadable {
                 return;
             }
 
-            if (Main.helpText == 208 && NPC.downedBoss3 && !DownedBossSystem.DownedLothorBoss) {
+            if (Main.helpText == 208 + num6 && NPC.downedBoss3 && !DownedBossSystem.DownedLothorBoss) {
                 Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{5}");
                 return;
             }
