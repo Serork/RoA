@@ -154,6 +154,17 @@ sealed class Ravencaller : ModNPC {
 
         NPC.chaseable = NPC.alpha < 50;
 
+        if (NPC.chaseable) {
+            for (int i = 0; i < NPC.maxBuffs; i++) {
+                if (NPC.buffType[i] >= 0) {
+                    continue;
+                }
+                if (NPC.buffType[i] != 0) {
+                    NPC.DelBuff(i);
+                }
+            }
+        }
+
         if (timer >= 270 && whenYouWalking && retreat) {
             retreat = false;
             NPC.netUpdate = true;

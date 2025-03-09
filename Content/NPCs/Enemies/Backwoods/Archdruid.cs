@@ -59,6 +59,9 @@ sealed class Archdruid : DruidNPC {
 
     public override void SetStaticDefaults() {
 		Main.npcFrameCount[Type] = 30;
+
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
     }
 
     public override void ModifyNPCLoot(NPCLoot npcLoot) {
