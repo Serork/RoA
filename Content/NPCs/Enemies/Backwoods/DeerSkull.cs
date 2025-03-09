@@ -273,6 +273,7 @@ sealed class DeerSkullTail : BaseTail {
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
     }
 
     public override void SetDefaults() {
