@@ -166,7 +166,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
                 }
-                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(3) && flag) {
+                bool flag3 = WorldGen.noTrapsWorldGen;
+                int chance = 3;
+                if (WorldGen.noTrapsWorldGen)
+                    chance = ((!WorldGen.tenthAnniversaryWorldGen && !WorldGen.notTheBees) ? 1 : 2);
+                else if (WorldGen.getGoodWorldGen)
+                    chance = 2;
+
+                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(chance) && flag) {
                     int x = i, y = j;
                     bool flag2 = false;
                     if (WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1) && (!Main.tile[x, y - 1].HasTile && !Main.tile[x + 1, y - 1].HasTile) && ((!Main.tile[x, y].HasTile && !Main.tile[x + 1, y].HasTile) || (Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && Main.tileCut[WorldGenHelper.GetTileSafely(i + 1, j).TileType])))
@@ -2796,23 +2803,23 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //Step10_SpreadMossGrass();
 
         double num377 = (double)Main.maxTilesX * 0.035;
-        //if (WorldGen.noTrapsWorldGen)
-        //    num377 = ((!WorldGen.tenthAnniversaryWorldGen && !WorldGen.notTheBees) ? (num377 * 100.0) : (num377 * 5.0));
-        //else if (WorldGen.getGoodWorldGen)
-        //    num377 *= 1.5;
-        //if (Main.starGame)
-        //    num377 *= Main.starGameMath(0.2);
+        if (WorldGen.noTrapsWorldGen)
+            num377 = ((!WorldGen.tenthAnniversaryWorldGen && !WorldGen.notTheBees) ? (num377 * 100.0) : (num377 * 5.0));
+        else if (WorldGen.getGoodWorldGen)
+            num377 *= 1.5;
+        if (Main.starGame)
+            num377 *= Main.starGameMath(0.2);
 
         for (int num378 = 0; (double)num378 < num377; num378++) {
             for (int num379 = 0; num379 < 1150; num379++) {
-                //if (WorldGen.noTrapsWorldGen) {
-                //    int num380 = WorldGen.genRand.Next(Left - 20, Right + 20);
-                //    int num381 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
-                    
-                //    if (((double)num381 > Main.worldSurface || Main.tile[num380, num381].WallType > 0) && WorldGen.placeTrap(num380, num381, 0))
-                //        break;
-                //}
-                //else {
+                if (WorldGen.noTrapsWorldGen) {
+                    int num380 = WorldGen.genRand.Next(Left - 20, Right + 20);
+                    int num381 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
+
+                    if (((double)num381 > Main.worldSurface || Main.tile[num380, num381].WallType > 0) && WorldGen.placeTrap(num380, num381, 0))
+                        break;
+                }
+                else {
                     int num382 = WorldGen.genRand.Next(Left - 20, Right + 20);
                     int num383 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
                     while (WorldGen.oceanDepths(num382, num383)) {
@@ -2822,7 +2829,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
                     if (Main.tile[num382, num383].WallType == 0 && WorldGen.placeTrap(num382, num383, 0))
                         break;
-                //}
+                }
             }
         }
 
