@@ -779,6 +779,7 @@ sealed class DryadEntrance : ModSystem {
                             bool flag = true;
                             if (flag) {
                                 extraX = result2.X < 0f ? genRand.Next(4) : -(8 + genRand.Next(4));
+                                extraX -= 4;
                                 entranceX = i + 4 + extraX;
                                 entranceY = j - 1;
                                 flag4 = true;
