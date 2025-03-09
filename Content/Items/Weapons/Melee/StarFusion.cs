@@ -52,6 +52,7 @@ sealed class StarFusion : ModItem {
         if (target.immortal) {
             return;
         }
+
         int index = 0;
         void spawnStar() {
             index++;
