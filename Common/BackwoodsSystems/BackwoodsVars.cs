@@ -4,6 +4,7 @@ using RoA.Common.CustomSkyAmbience;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Trees;
+using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
 using System;
@@ -61,6 +62,13 @@ sealed class BackwoodsVars : ModSystem {
     public static int BackwoodsHalfSizeX { get; internal set; }
 
     public static HashSet<ushort> BackwoodsTileTypes { get; } = [(ushort)ModContent.TileType<LivingElderwood>(), (ushort)ModContent.TileType<LivingElderwoodlLeaves>(), (ushort)ModContent.TileType<TreeBranch>(), (ushort)ModContent.TileType<BackwoodsGrass>(), (ushort)ModContent.TileType<BackwoodsGreenMoss>(), (ushort)ModContent.TileType<BackwoodsStone>(), TileID.Dirt];
+    public static HashSet<ushort> BackwoodsWallTypes { get; } = [
+        (ushort)ModContent.WallType<BackwoodsGrassWall>(),
+        (ushort)ModContent.WallType<BackwoodsFlowerGrassWall>(),
+        (ushort)ModContent.WallType<ElderwoodWall3>(),
+        (ushort)ModContent.WallType<ElderwoodWall2>(),
+        (ushort)ModContent.WallType<LivingBackwoodsLeavesWall2>()
+    ];
 
     public override void Unload() {
         AllTreesWorldPositions.Clear();
