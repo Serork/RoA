@@ -262,11 +262,15 @@ sealed class DryadEntrance : ModSystem {
         }
 
         byte livingTreePaintColor = 12, livingTreeWallPaintColor = 12;
+        ushort treeDryad = (ushort)ModContent.TileType<TreeDryad>();
         for (int i = _dryadEntranceX - distance / 2; i < _dryadEntranceX + distance / 2; i++) {
             for (int j = _dryadEntranceY - distance / 2; j < _dryadEntranceY + distance / 2; j++) {
                 Tile tile = Main.tile[i, j];
                 if (tile.HasTile) {
-                    if (tile.WallType == 244) {
+                    if (tile.TileType == treeDryad) {
+                        tile.TileColor = livingTreePaintColor;
+                    }
+                    else if (tile.WallType == 244) {
                         tile.TileColor = livingTreePaintColor;
                     }
                     else if (tile.TileType == 192 || tile.TileType == 191) {
@@ -844,7 +848,7 @@ sealed class DryadEntrance : ModSystem {
             }
         }
         ushort tileType2 = 192;
-        ushort wallType2 = WallID.LivingLeaf;
+        ushort wallType2 = WallID.LivingWoodUnsafe;
         num_ = 6;
         num2_ = 4;
         for (int k = 0; k < 2; k++) {
