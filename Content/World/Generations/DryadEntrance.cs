@@ -951,7 +951,7 @@ sealed class DryadEntrance : ModSystem {
                     break;
                 }
                 int y3 = y2;
-                if (WorldGen.SolidTile2(x2, y3) && (Main.tile[x2, y3].TileType == tileType || Main.tile[x2, y3].TileType == tileType2)) {
+                if (WorldGen.SolidTile2(x2, y3) && !(Main.tile[x2, y3 - 1].HasTile && (Main.tile[x2, y3].TileType == tileType || Main.tile[x2, y3].TileType == tileType2)) {
                     WorldGen.PlaceTile(x2, y3 - 1, 187, mute: true, forced: false, -1, genRand.Next(50, 53) - 3);
                     if (Main.tile[x2, y3 - 1].TileType == 187) {
                         bigPlaced = true;
