@@ -1055,6 +1055,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+
+        BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
     }
 
     private void Platform(int x, int y) {
@@ -3721,15 +3723,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         SkipTilesByTileType(TileID.Sand, tileCountToCheck: tileCountToCheck * 2, offsetPositionDirectionOnCheck: -1);
 
         int mid = Main.maxTilesX / 2;
-        if (CenterX >= mid && CenterX < mid + 100) {
+        while (CenterX >= mid && CenterX < mid + 100) {
             CenterX++;
         }
-        if (CenterX <= mid && CenterX > mid - 100) {
+        while (CenterX <= mid && CenterX > mid - 100) {
             CenterX--;
         }
         BackwoodsVars.BackwoodsStartX = CenterX;
         BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 15;
-        CenterY = BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX);
+        CenterY = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsHalfSizeX = _biomeWidth / 2;
     }

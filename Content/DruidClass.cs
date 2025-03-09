@@ -1,6 +1,7 @@
 ﻿using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Prefixes;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -42,8 +43,10 @@ sealed class DruidClass : DamageClass {
             int index = WorldGen.genRand.Next(list.Count);
             int num = DruidicPrefix.DruidicPrefixes.ElementAt(index).Key;
             item.Prefix(num);
-            if (item.prefix == num)
+            if (item.prefix == num) {
+                Console.WriteLine(DruidicPrefix.DruidicPrefixes.ElementAt(index));
                 return;
+            }
 
             list.RemoveAt(index);
         }
