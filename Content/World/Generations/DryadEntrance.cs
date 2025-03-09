@@ -665,7 +665,7 @@ sealed class DryadEntrance : ModSystem {
             if (num8 > Main.maxTilesY)
                 num8 = Main.maxTilesY;
 
-            num2 = num * (double)genRand.Next(100, 110) * 0.01;
+            num2 = num * 100 * 0.01;
             float value = 1f - MathHelper.Clamp(num4 / (float)size * 0.5f, 0f, 0.9f);
             if (sizeValue < 1.25f && genRand.NextChance(value * 1.25f)) {
                 sizeValue += genRand.NextFloat(0.05f, 0.085f) * 0.75f;
