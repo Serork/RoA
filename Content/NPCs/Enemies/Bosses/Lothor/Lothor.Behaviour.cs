@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 using RoA.Common;
 using RoA.Common.NPCs;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
@@ -833,9 +834,13 @@ sealed partial class Lothor : ModNPC {
         int attackRate = (int)(8 - 2 * LifeProgress);
         if (++_attackTime > attackRate) {
             List<ushort> invalidBuffTypeToRemove = [];
-            // examples
-            //invalidBuffTypeToRemove.Add(BuffID.Confused);
-            //invalidBuffTypeToRemove.Add((ushort)ModContent.BuffType<Deceleration>());
+            invalidBuffTypeToRemove.Add(BuffID.BetsysCurse);
+            invalidBuffTypeToRemove.Add((ushort)ModContent.BuffType<EssenceDrain>());
+            invalidBuffTypeToRemove.Add(BuffID.BoneJavelin);
+            invalidBuffTypeToRemove.Add(BuffID.Daybreak);
+            invalidBuffTypeToRemove.Add(BuffID.StardustMinionBleed);
+            invalidBuffTypeToRemove.Add(BuffID.Ichor);
+            invalidBuffTypeToRemove.Add(BuffID.DryadsWardDebuff);
             for (int i = 0; i < NPC.maxBuffs; i++) {
                 if (NPC.buffType[i] >= 0 && invalidBuffTypeToRemove.Contains((ushort)NPC.buffType[i])) {
                     continue;
