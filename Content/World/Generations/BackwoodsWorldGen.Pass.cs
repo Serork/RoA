@@ -1888,7 +1888,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         WeightedRandom<float> weightedRandom = new WeightedRandom<float>();
         weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.25f);
         weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.25f);
-        weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.5f);
+        weightedRandom.Add(0.35f + 0.1f * _random.NextFloat(), 0.5f);
         weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.85f);
         weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.85f);
@@ -1910,7 +1910,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
             bool flag = false;
-            int check = 20;
+            int check = 20 * WorldGenHelper.WorldSize;
             attempts = 100;
             for (int x2 = baseX - check; x2 < baseX + check; x2++) {
                 for (int y2 = baseY - check; y2 < baseY + check; y2++) {
