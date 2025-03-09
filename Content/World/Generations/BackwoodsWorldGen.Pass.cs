@@ -119,6 +119,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step2_ClearZone();
         SetUpMessage(Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods"));
         Step3_GenerateBase();
+        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 15;
         Step4_CleanUp();
         Step5_CleanUp();
         BackwoodsVars.FirstTileYAtCenter = CenterY = WorldGenHelper.GetFirstTileY(CenterX, true) + 5;
@@ -1889,8 +1890,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.25f);
         weightedRandom.Add(0.35f + 0.1f * _random.NextFloatRange(1f), 0.5f);
         weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.75f);
-        weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.75f);
-        weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.75f);
+        weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.85f);
+        weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.85f);
         if (posY == 0) {
             baseY = (int)(minY + (generateY - minY) * weightedRandom);
         }
@@ -3730,7 +3731,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             CenterX--;
         }
         BackwoodsVars.BackwoodsStartX = CenterX;
-        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 15;
         CenterY = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsHalfSizeX = _biomeWidth / 2;
