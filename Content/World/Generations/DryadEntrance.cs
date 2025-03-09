@@ -770,7 +770,7 @@ sealed class DryadEntrance : ModSystem {
                 Point killPos = killTiles[k];
                 i = killPos.X;
                 j = killPos.Y;
-                if (Vector2.Distance(new Vector2(i, j), new Vector2((int)vector2D3.X, (int)vector2D3.Y)) > size * 1.55f) {
+                if (Vector2.Distance(new Vector2(i, j), new Vector2((int)vector2D3.X, (int)vector2D3.Y)) > size * 1.6f) {
                     if (!Main.tile[i, j].HasTile && !Main.tile[i + 1, j].HasTile) {
                         bool flag6 = Main.tile[i - 1, j].TileType == tileType;
                         bool flag7 = Main.tile[i + 2, j].TileType == tileType;
