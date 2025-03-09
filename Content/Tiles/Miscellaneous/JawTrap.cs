@@ -1,8 +1,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Common.Tiles;
 using RoA.Content.Buffs;
+using RoA.Content.Tiles.Crafting;
 using RoA.Core.Utility;
 
 using System;
@@ -17,6 +21,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using System.IO;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
@@ -34,7 +39,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                NetMessage.SendTileSquare(Main.myPlayer, i, j);
+                //NetMessage.SendTileSquare(Main.myPlayer, i, j);
                 NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type);
 
                 return -1;
@@ -43,10 +48,29 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
             return Place(i, j);
         }
 
+        internal void Activate(int i, int j, Player player) {
+            JawTrapTE tileEntity = TileHelper.GetTE<JawTrapTE>(i, j);
+            if (tileEntity == null) {
+                tileEntity = TileHelper.GetTE<JawTrapTE>(i - 1, j);
+            }
+            if (tileEntity == null) {
+                return;
+            }
+            tileEntity.ActivatedTimer = RELOAD;
+            player.AddBuff(ModContent.BuffType<Root>(), tileEntity.ActivatedTimer / 2);
+            int num = 40;
+            num = Main.DamageVar(num, 0f - player.luck);
+            player.Hurt(PlayerDeathReason.ByCustomReason(player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").Value),
+                num, 0, cooldownCounter: 4);
+            player.AddBuff(BuffID.Bleeding, 600);
+        }
+
         public override void Update() {
             if (Find(Position.X, Position.Y) == -1) {
                 return;
             }
+
+            Helper.NewMessage(ActivatedTimer);
 
             if (ActivatedTimer > 0) {
                 ActivatedTimer--;
@@ -68,13 +92,12 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                 }
                 Rectangle playerHitbox = new((int)player.position.X, (int)player.Bottom.Y - 10, player.width, 10);
                 if (playerHitbox.Intersects(hitbox)) {
-                    ActivatedTimer = RELOAD;
-                    player.AddBuff(ModContent.BuffType<Root>(), ActivatedTimer / 2);
-                    int num = 40;
-                    num = Main.DamageVar(num, 0f - player.luck);
-                    player.Hurt(PlayerDeathReason.ByCustomReason(player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").Value),
-                        num, 0, cooldownCounter: 4);
-                    player.AddBuff(BuffID.Bleeding, 600);
+                    if (Main.netMode == NetmodeID.SinglePlayer) {
+                        Activate(Position.X, Position.Y, player);
+                    }
+                    else {
+                        MultiplayerSystem.SendPacket(new JawTrapActivatedPacket(player, Position.X, Position.Y));
+                    }
                     break;
                 }
             }
@@ -82,7 +105,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
 
         public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
 
-        public override bool IsTileValidForEntity(int i, int j) => WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<JawTrap>());
+        public override bool IsTileValidForEntity(int i, int j) => true/*WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<JawTrap>())*/;
     }
 
     public override void SetStaticDefaults() {
@@ -111,16 +134,20 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         HitSound = SoundID.Dig;
     }
 
-    public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<JawTrapTE>().Place(i, j);
-    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
-        TileHelper.RemovePostPlayerDrawPoint(i, j);
+    public override void PlaceInWorld(int i, int j, Item item) {
+        ModContent.GetInstance<JawTrapTE>().Place(i, j);
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new PlaceJawTrapTEPacket(i, j));
+        }
+    }
 
+    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
         if (Main.netMode != NetmodeID.Server) {
             if (!fail) {
                 ModContent.GetInstance<JawTrapTE>().Kill(i, j);
-                //if (Main.netMode != NetmodeID.SinglePlayer) {
-                //    MultiplayerSystem.SendPacket(new RemoveMiracleTileEntityOnServerPacket(i, j));
-                //}
+                if (Main.netMode != NetmodeID.SinglePlayer) {
+                    MultiplayerSystem.SendPacket(new RemoveJawTrapTileEntityOnServerPacket(i, j));
+                }
             }
         }
     }
@@ -128,6 +155,10 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
     void TileHooks.ITileAfterPlayerDraw.PostPlayerDraw(SpriteBatch spriteBatch, Point pos) {
         int i = pos.X; int j = pos.Y;
         Tile tile = Main.tile[i, j];
+        int type = ModContent.TileType<JawTrap>();
+        if (tile.TileType != type) {
+            return;
+        }
         Vector2 zero = Vector2.Zero;
         int width = 20;
         int offsetY = 0;
@@ -135,7 +166,10 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         short frameX = tile.TileFrameX;
         short frameY = tile.TileFrameY;
         TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX, ref frameY);
-        Main.spriteBatch.Draw(TextureAssets.Tile[TileLoader.GetTile(ModContent.TileType<JawTrap>()).Type].Value,
+        //Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
+        var texture = PaintsRenderer.TryGetPaintedTexture(i, j, TileLoader.GetTile(type).Texture);
+        texture ??= TextureAssets.Tile[type].Value;
+        Main.spriteBatch.Draw(texture,
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                               new Rectangle(frameX, frameY, width, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);

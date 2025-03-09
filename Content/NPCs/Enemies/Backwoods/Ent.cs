@@ -33,6 +33,7 @@ sealed class Ent : RoANPC {
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Bleeding] = true;
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {

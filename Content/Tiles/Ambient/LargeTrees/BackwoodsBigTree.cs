@@ -749,6 +749,9 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
 
     private static void DrawItselfParts(int i, int j, SpriteBatch spriteBatch, string texture, int type) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        if (!TileDrawing.IsVisible(tile)) {
+            return;
+        }
         bool shouldDrawBranch = IsNormalBranch(i, j);
         Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
                                    j * 16 - (int)Main.screenPosition.Y);
