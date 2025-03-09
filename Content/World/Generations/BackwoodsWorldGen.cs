@@ -59,8 +59,8 @@ sealed class BackwoodsWorldGen : ModSystem {
     private void On_WorldGen_PaintTheLivingTrees(On_WorldGen.orig_PaintTheLivingTrees orig, byte livingTreePaintColor, byte livingTreeWallPaintColor) {
         orig(livingTreePaintColor, livingTreeWallPaintColor);
 
-        livingTreePaintColor = PaintID.LimePaint;
-        livingTreeWallPaintColor = PaintID.LimePaint;
+        livingTreePaintColor = PaintID.YellowPaint;
+        livingTreeWallPaintColor = PaintID.YellowPaint;
 
         int elderwoodTileType = ModContent.TileType<LivingElderwood>();
         int elderwoodWallType = ModContent.WallType<ElderwoodWall3>();
