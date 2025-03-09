@@ -293,7 +293,7 @@ sealed class DryadEntrance : ModSystem {
                 }
 
                 if (tile.WallType == 244)
-                    tile.WallType = livingTreePaintColor;
+                    tile.WallColor = livingTreePaintColor;
             }
         }
     }

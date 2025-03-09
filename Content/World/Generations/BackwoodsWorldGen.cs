@@ -59,8 +59,8 @@ sealed class BackwoodsWorldGen : ModSystem {
     private void On_WorldGen_PaintTheLivingTrees(On_WorldGen.orig_PaintTheLivingTrees orig, byte livingTreePaintColor, byte livingTreeWallPaintColor) {
         orig(livingTreePaintColor, livingTreeWallPaintColor);
 
-        livingTreePaintColor = 15;
-        livingTreeWallPaintColor = 15;
+        livingTreePaintColor = PaintID.LimePaint;
+        livingTreeWallPaintColor = PaintID.LimePaint;
 
         int elderwoodTileType = ModContent.TileType<LivingElderwood>();
         int elderwoodWallType = ModContent.WallType<ElderwoodWall3>();
@@ -87,7 +87,7 @@ sealed class BackwoodsWorldGen : ModSystem {
                 }
 
                 if (tile.WallType == elderwoodWallType)
-                    tile.WallType = livingTreePaintColor;
+                    tile.WallColor = livingTreePaintColor;
             }
         }
     }
