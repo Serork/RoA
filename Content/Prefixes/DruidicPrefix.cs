@@ -27,8 +27,8 @@ sealed class DruidicPrefix(string name,
                            bool forClaws = false) : ModPrefix {
 	private const string LOCALIZATION = "Mods.RoA.Prefixes.";
 
-    public static string[] BestNotClaws => ["Bountiful", "Blooming", "Godly", "Demonic"];
-    public static string[] BestClaws => ["Legendary", "Godly", "Demonic"];
+    public static string[] BestNotClaws => ["Bountiful", "Blooming", "Godly", "Demonic", "Ruthless"];
+    public static string[] BestClaws => ["Legendary", "Godly", "Demonic", "Ruthless"];
 
     sealed class PrefixLoader : ILoadable {
 		void ILoadable.Load(Mod mod) {

@@ -1,5 +1,7 @@
-﻿using RoA.Content.Items.Weapons.Druidic.Claws;
+﻿using RoA.Content.Items.Placeable;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Prefixes;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -17,38 +19,36 @@ sealed class DruidClass : DamageClass {
         On_WorldGen.GiveItemGoodPrefixes += On_WorldGen_GiveItemGoodPrefixes;
     }
 
-    private static IEnumerable<DruidicPrefix> GoodPrefixIdsForDruidWeapon1 = DruidicPrefix.DruidicPrefixes.Values.Where(x => DruidicPrefix.BestNotClaws.Contains(x.Name));
-    private static IEnumerable<DruidicPrefix> GoodPrefixIdsForDruidWeapon2 = DruidicPrefix.DruidicPrefixes.Values.Where(x => DruidicPrefix.BestClaws.Contains(x.Name));
+    private static Dictionary<int, DruidicPrefix> GoodPrefixIdsForDruidWeapon1 => DruidicPrefix.DruidicPrefixes.Where(x => DruidicPrefix.BestNotClaws.Contains(x.Value.Name)).ToDictionary();
+    private static Dictionary<int, DruidicPrefix> GoodPrefixIdsForDruidWeapon2 => DruidicPrefix.DruidicPrefixes.Where(x => DruidicPrefix.BestClaws.Contains(x.Value.Name)).ToDictionary();
 
     private void On_WorldGen_GiveItemGoodPrefixes(On_WorldGen.orig_GiveItemGoodPrefixes orig, Item item) {
         orig(item);
 
-        if (item.DamageType == NatureDamage) {
+        if (item.IsADruidicWeapon()) {
             if (item.ModItem is not BaseClawsItem) {
-                PrefixItemFromOptions(item, GoodPrefixIdsForDruidWeapon1.ToList());
+                PrefixItemFromOptions(item, GoodPrefixIdsForDruidWeapon1);
             }
             else {
-                PrefixItemFromOptions(item, GoodPrefixIdsForDruidWeapon2.ToList());
+                PrefixItemFromOptions(item, GoodPrefixIdsForDruidWeapon2);
             }
         }
     }
 
-    private static void PrefixItemFromOptions(Item item, List<DruidicPrefix> options) {
+    private static void PrefixItemFromOptions(Item item, Dictionary<int, DruidicPrefix> options) {
         int prefix = item.prefix;
-        if (!item.Prefix(-3))
-            return;
 
         var list = options;
         while (list.Count > 0) {
-            int index = WorldGen.genRand.Next(list.Count);
-            int num = DruidicPrefix.DruidicPrefixes.ElementAt(index).Key;
+            var prefix2 = GoodPrefixIdsForDruidWeapon1.ElementAt(WorldGen.genRand.Next(0, GoodPrefixIdsForDruidWeapon1.Count));
+            int index = prefix2.Key;
+            int num = index;
             item.Prefix(num);
             if (item.prefix == num) {
-                Console.WriteLine(DruidicPrefix.DruidicPrefixes.ElementAt(index));
                 return;
             }
 
-            list.RemoveAt(index);
+            list.Remove(index);
         }
 
         item.Prefix(prefix);
