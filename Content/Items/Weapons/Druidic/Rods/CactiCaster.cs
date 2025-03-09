@@ -115,8 +115,8 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
             float offset = 10f;
             float reversed = 1f - step;
-            if (step > 0f) {
-                Vector2 spawnPosition = corePosition + (Vector2.UnitY * offset * reversed).RotatedBy(step * MathHelper.Pi * 5f * -player.direction);
+            if (step > 0.025f) {
+                Vector2 spawnPosition = corePosition + (Vector2.UnitY * offset * reversed).RotatedBy(step * MathHelper.Pi * 5f * player.direction);
 
                 for (int i = 0; i < 4; i++) {
                     Dust dust = Dust.NewDustPerfect(spawnPosition,
