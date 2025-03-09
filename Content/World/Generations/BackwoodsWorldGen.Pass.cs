@@ -1914,7 +1914,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             attempts = 100;
             for (int x2 = baseX - check; x2 < baseX + check; x2++) {
                 for (int y2 = baseY - check; y2 < baseY + check; y2++) {
-                    if (WorldGenHelper.ActiveTile(x2, y2, _elderWoodChestTileType)) {
+                    if (WorldGenHelper.ActiveTile(x2, y2, _elderWoodChestTileType) ||
+                        Main.tile[x2, y2].WallType == _elderwoodWallType) {
                         flag = true;
                         break;
                     }
@@ -2190,7 +2191,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Point killPos = killTiles[_random.Next(killTiles.Count)];
             Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
             if ((tile.ActiveWall(placeholderWallType) || tile.ActiveWall(_elderwoodWallType)) && !tile.HasTile) {
-                if (_random.NextBool(17)) {
+                if (_random.NextBool(19)) {
                     WorldGen.PlaceTile(killPos.X, killPos.Y, ModContent.TileType<Tiles.Crafting.ElderTorch2>());
                     if (TileID.Sets.Torch[Main.tile[killPos.X, killPos.Y].TileType]) {
                         placedTorch = true;
@@ -4071,7 +4072,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX : Left) : Left;
         int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX : Right) : Right;
         for (int i = left - 50; i <= right + 50; i++) {
-            if (i < left - 10 || i > right + 10) {
+            if (i < left - 20 || i > right + 20) {
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + 20; j++) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j);
                     if (WorldGenHelper.ActiveTile(i, j, _grassTileType) && !_backwoodsPlants.Contains(WorldGenHelper.GetTileSafely(i, j - 1).TileType) && tile.Slope == SlopeType.Solid && !tile.IsHalfBlock) {
@@ -4081,7 +4082,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         for (int i = left - 10; i <= right + 10; i++) {
-            if (i > CenterX - 10 && i < CenterX + 10) {
+            if (i > CenterX - 10 && i < CenterX + 12) {
                 continue;
             }
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + 20; j++) {
