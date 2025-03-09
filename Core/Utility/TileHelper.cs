@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
@@ -13,7 +12,6 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
-using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -211,7 +209,7 @@ static class TileHelper {
         orig(self);
 
         PostSolidTileDrawPoints.Clear();
-        PostPlayerDrawPoints.Clear();
+        //PostPlayerDrawPoints.Clear();
     }
 
     public static void Unload() {

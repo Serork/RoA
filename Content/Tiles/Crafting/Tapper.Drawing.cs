@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Tiles;
 using RoA.Core.Utility;
 
@@ -89,7 +90,10 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
                 drawXOffset += 18;
             }
             Rectangle rect = new(0, 0, coordinateWidth, num12);
-            Texture2D texture = TextureAssets.Tile[tileType].Value;
+
+            Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(Main.tile[i, j], i, j);
+            texture ??= TextureAssets.Tile[type].Value;
+
             Vector2 drawPosition = new(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
             Main.spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
             if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
@@ -155,8 +159,8 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
                         Vector2 zero = Vector2.Zero;
                         Vector2 position = unscaledPosition - zero;
                         Color color = Lighting.GetColor(i, j);
-                        Asset<Texture2D>? tapperBracingAsset = ModContent.Request<Texture2D>((TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
-                        Main.spriteBatch.Draw(tapperBracingAsset.Value,
+                        var texture = PaintsRenderer.TryGetPaintedTexture(flag ? i - 1 : (i + 1), j, (TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
+                        Main.spriteBatch.Draw(texture,
                             new Vector2((float)(i * 16 - (int)position.X),
                                         (float)(j * 16 - (int)position.Y) - 6),
                             new Rectangle(0, flag ? 28 : 0, coordinateWidth,

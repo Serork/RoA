@@ -18,17 +18,10 @@ sealed class TanningRack : ModItem {
         int width = 28; int height = 22;
         Item.Size = new Vector2(width, height);
 
-        Item.maxStack = 99;
-        Item.useTurn = true;
-        Item.autoReuse = true;
-
-        Item.useAnimation = 20;
-        Item.useTime = 20;
-        Item.useStyle = ItemUseStyleID.Swing;
+        Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Crafting.TanningRack>());
 
         Item.consumable = true;
         Item.rare = ItemRarityID.White;
-        Item.createTile = ModContent.TileType<Tiles.Crafting.TanningRack>();
 
         Item.value = Item.sellPrice(0, 1, 0, 0);
     }

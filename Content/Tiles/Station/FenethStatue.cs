@@ -243,7 +243,11 @@ sealed class FenethStatue : ModTile {
             frameX += 6;
             offsetX += 6;
         }
-        Main.spriteBatch.Draw(TextureAssets.Tile[Type].Value,
+
+        Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
+        texture ??= TextureAssets.Tile[Type].Value;
+
+        Main.spriteBatch.Draw(texture,
                               new Vector2(i * 16 - (int)Main.screenPosition.X + offsetX, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0)) + zero,
                               new Rectangle(frameX, frameY, width, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);

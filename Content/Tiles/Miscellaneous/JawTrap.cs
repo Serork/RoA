@@ -73,6 +73,10 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         }
 
         public override void Update() {
+            if (Find(Position.X, Position.Y) == -1) {
+                return;
+            }
+
             if (ActivatedTimer > 0) {
                 ActivatedTimer--;
             }
@@ -177,9 +181,8 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         short frameY = tile.TileFrameY;
         TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX, ref frameY);
         Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
-        //var texture = PaintsRenderer.TryGetPaintedTexture(i, j, TileLoader.GetTile(type).Texture);
         texture ??= TextureAssets.Tile[type].Value;
-        Main.spriteBatch.Draw(texture,
+        spriteBatch.Draw(texture,
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                               new Rectangle(frameX, frameY, width, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);

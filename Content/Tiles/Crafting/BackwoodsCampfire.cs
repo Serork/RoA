@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -18,8 +20,6 @@ namespace RoA.Content.Tiles.Crafting;
 
 // Campfires are special tiles that support the block swap feature and the biome torch feature. ExampleSurfaceBiome shows how the biome campfire is assigned.
 sealed class BackwoodsCampfire : ModTile {
-    private Asset<Texture2D> flameTexture;
-
     public override void SetStaticDefaults() {
         // Properties
         Main.tileLighted[Type] = true;
@@ -38,10 +38,6 @@ sealed class BackwoodsCampfire : ModTile {
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(254, 121, 2), Language.GetText("ItemName.Campfire"));
-
-        if (!Main.dedServ) {
-            flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
-        }
     }
 
     public override void NearbyEffects(int i, int j, bool closer) {
@@ -171,7 +167,8 @@ sealed class BackwoodsCampfire : ModTile {
 
             Rectangle drawRectangle = new Rectangle(tile.TileFrameX, tile.TileFrameY + addFrY, 16, 16);
 
-            spriteBatch.Draw(flameTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, drawRectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            var texture = PaintsRenderer.TryGetPaintedTexture(i, j, TileLoader.GetTile(Type).Texture + "_Flame");
+            spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, drawRectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
     }
 }

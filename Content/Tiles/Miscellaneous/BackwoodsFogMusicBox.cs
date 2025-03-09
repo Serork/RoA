@@ -6,6 +6,7 @@ using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ModLoader;
 
@@ -35,7 +36,9 @@ sealed class BackwoodsFogMusicBox : MusicBox {
                 tileX = 18;
             }
             Color color = Lighting.GetColor(i, j);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value,
+            Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
+            texture ??= TextureAssets.Tile[Type].Value;
+            Main.spriteBatch.Draw(texture,
                                   new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
                                   new Rectangle(tileX, tile.TileFrameY + Main.tileFrame[modTile.Type] * 36, 16, height),
                                   color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
