@@ -89,6 +89,10 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         TileHelper.AddFluentPoint(this, i, j);
 
         Tile tile = Main.tile[i, j];

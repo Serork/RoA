@@ -68,6 +68,10 @@ sealed class ElderwoodCandle : ModTile {
     }*/
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
+
         if (Framing.GetTileSafely(i, j).TileFrameX != 0 || Framing.GetTileSafely(i, j).TileFrameY != 0) {
             return;
         }

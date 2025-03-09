@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.CodeAnalysis.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
@@ -182,6 +183,9 @@ static class TileHelper {
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         foreach ((ModTile modTile, Point tilePosition) in PostPlayerDrawPoints) {
             if (modTile is ITileAfterPlayerDraw tileHaveExtras && modTile is not null) {
+                if (!TileDrawing.IsVisible(Main.tile[tilePosition.X, tilePosition.Y])) {
+                    continue;
+                }
                 tileHaveExtras.PostPlayerDraw(Main.spriteBatch, tilePosition);
             }
         }
@@ -194,6 +198,9 @@ static class TileHelper {
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         foreach ((ModTile modTile, Point position) in PostSolidTileDrawPoints) {
             if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null) {
+                if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
+                    continue;
+                }
                 tileHaveExtras.PostDrawExtra(Main.spriteBatch, position);
             }
         }

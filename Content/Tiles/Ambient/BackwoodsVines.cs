@@ -6,6 +6,7 @@ using RoA.Core.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using RoA.Content.Tiles.Walls;
+using Terraria.GameContent.Drawing;
 
 namespace RoA.Content.Tiles.Ambient;
 
@@ -28,6 +29,10 @@ class BackwoodsVines : ModTile {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         bool intoRenderTargets = true;
         bool flag = intoRenderTargets || Main.LightingEveryFrame;
 

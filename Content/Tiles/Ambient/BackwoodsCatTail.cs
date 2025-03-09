@@ -255,6 +255,10 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         if (Main.tile[i, j].TileFrameX / 18 <= 4) {
             TileHelper.AddSpecialPoint(i, j, 4);
         }

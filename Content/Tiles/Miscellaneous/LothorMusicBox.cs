@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
+using Terraria.GameContent.Drawing;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Miscellaneous;
@@ -12,6 +13,10 @@ sealed class LothorMusicBox : MusicBox {
     protected override int GoreOffsetX => 4;
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
+
         Tile tile = Main.tile[i, j];
         if (tile.TileFrameX > 18) {
             float value = 1f;

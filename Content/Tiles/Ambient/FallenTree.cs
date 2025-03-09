@@ -13,6 +13,7 @@ using RoA.Core.Utility;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -60,6 +61,10 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.ITil
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         TileHelper.AddPostSolidTileDrawPoint(this, i, j);
 
         return true;

@@ -13,6 +13,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
@@ -78,6 +79,10 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         TileHelper.AddPostSolidTileDrawPoint(this, i, j);
 
         return true;

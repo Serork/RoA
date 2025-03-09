@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -56,6 +57,10 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         TileHelper.AddPostSolidTileDrawPoint(this, i, j);
 
         return false;

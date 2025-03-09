@@ -15,6 +15,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
@@ -213,7 +214,13 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
     }
 
-    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => TileHelper.AddPostSolidTileDrawPoint(this, i, j);
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
+
+        TileHelper.AddPostSolidTileDrawPoint(this, i, j);
+    }
 
     public static void TeleportPlayerTo(int i, int j, Player player) {
         if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<Beacon>()) {

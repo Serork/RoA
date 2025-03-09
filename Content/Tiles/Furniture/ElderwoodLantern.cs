@@ -71,6 +71,10 @@ public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn {
         }
     }
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         TileHelper.AddFluentPoint(this, i, j);
         /*if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4))) {
             Tile tile = Main.tile[i, j];

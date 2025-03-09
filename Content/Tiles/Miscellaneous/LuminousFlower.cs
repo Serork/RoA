@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -112,6 +113,10 @@ sealed class LuminousFlower : ModTile {
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        //if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+        //    return;
+        //}
+
         LuminiousFlowerLightUp(i, j, out float _, modTile: TileLoader.GetTile(Type));
     }
 

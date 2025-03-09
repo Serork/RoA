@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -120,6 +121,9 @@ sealed class NexusGateway : ModTile {
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         Tile tile = Main.tile[i, j];
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen) {
             zero = Vector2.Zero;

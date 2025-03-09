@@ -13,6 +13,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -185,6 +186,10 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
+
         Tile tile = Main.tile[i, j];
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen) {

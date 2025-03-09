@@ -126,6 +126,10 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         TileHelper.AddSpecialPoint(i, j, 12);
 
         return false;

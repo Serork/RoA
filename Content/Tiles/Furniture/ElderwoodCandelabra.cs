@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -82,6 +83,10 @@ sealed class ElderwoodCandelabra : ModTile {
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
+
         Tile tile = Main.tile[i, j];
         if (tile.TileFrameX > 36 || tile.TileFrameY != 0) {
             return;

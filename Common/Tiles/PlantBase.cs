@@ -101,6 +101,10 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         if (GetStage(i, j) == PlantStage.Planted/* && !AnchorValidTiles.Contains(WorldGenHelper.GetTileSafely(i, j + 1).TileType)*/) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
             Vector2 origin = new Vector2(FrameWidth, 21) / 2f;

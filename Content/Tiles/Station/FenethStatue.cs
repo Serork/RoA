@@ -11,6 +11,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -209,6 +210,10 @@ sealed class FenethStatue : ModTile {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         // not cool 
         Tile tile = Main.tile[i, j];
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);

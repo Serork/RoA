@@ -5,6 +5,7 @@ using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -38,6 +39,10 @@ sealed class MercuriumOre : ModTile {
 	}
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
+
         if (Main.rand.Next(2) == 0) {
             Vector2 position = new Vector2(i, j).ToWorldCoordinates();
             int dust = Dust.NewDust(position - Vector2.One * 16f, 16, 16, ModContent.DustType<Dusts.ToxicFumes>(), 0f, -4f, 100, new Color(), 1.5f);

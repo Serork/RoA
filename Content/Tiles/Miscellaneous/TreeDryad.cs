@@ -14,6 +14,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.GameContent.UI;
 using Terraria.ID;
@@ -190,6 +191,10 @@ sealed class TreeDryad : ModTile {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         Tile tile = Main.tile[i, j];
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen) {

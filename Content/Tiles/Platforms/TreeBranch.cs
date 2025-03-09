@@ -14,6 +14,7 @@ using System;
 using RoA.Common.Tiles;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Tiles.Trees;
+using Terraria.GameContent.Drawing;
 
 namespace RoA.Content.Tiles.Platforms;
 
@@ -82,6 +83,10 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         ulong seedForRandomness = (ulong)(i + j);
         int frame = Math.Min(Utils.RandomInt(ref seedForRandomness, FrameCount + 1), FrameCount - 1);
         bool reversed = true;

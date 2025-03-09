@@ -12,6 +12,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -143,6 +144,10 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
     public override bool IsTileDangerous(int i, int j, Player player) => true;
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         TileHelper.AddPostPlayerDrawPoint(this, i, j);
 
         return false;

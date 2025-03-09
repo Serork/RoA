@@ -20,6 +20,7 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using RoA.Content.Tiles.Walls;
 using Terraria.GameContent.Metadata;
+using Terraria.GameContent.Drawing;
 
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
@@ -143,6 +144,10 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => EmitDusts(i, j);
 
     public static void EmitDusts(int i, int j) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
+
         if (Main.rand.NextBool(300)) {
             Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, ModContent.DustType<BackwoodsDust>());
         }

@@ -283,6 +283,10 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return false;
+        }
+
         int x = i, y = j;
         //if (Main.tile[x, y].HasTile && Main.tile[x, y].TileType == Type) {
         //Main.instance.LoadTiles(Main.tile[x, y].TileType);

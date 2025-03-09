@@ -147,6 +147,9 @@ sealed class BackwoodsCampfire : ModTile {
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         var tile = Main.tile[i, j];
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
         if (tile.TileFrameY < 36) {
             Color color = new Color(255, 255, 255, 0);
 

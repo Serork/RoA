@@ -14,6 +14,7 @@ using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -101,6 +102,10 @@ sealed class OvergrownAltar : ModTile {
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         OvergrownAltarTE overgrownAltarTE = TileHelper.GetTE<OvergrownAltarTE>(i, j);
         if (overgrownAltarTE != null) {
+            if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+                return false;
+            }
+
             float counting = MathHelper.Clamp(overgrownAltarTE.Counting, 0f, 0.98f);
             //float value = (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f;
             float factor = counting;
