@@ -34,6 +34,10 @@ sealed class MercuriumSword : ModItem {
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
+        if (target.immortal) {
+            return;
+        }
+
         Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 0.5f;
         ushort type = (ushort)ModContent.ProjectileType<Projectiles.Friendly.Melee.MercuriumFumes>();
         Projectile.NewProjectile(target.GetSource_FromAI(), target.Center.X, target.Center.Y, velocity.X, velocity.Y, type, Item.damage / 3, Item.knockBack / 3f, player.whoAmI);

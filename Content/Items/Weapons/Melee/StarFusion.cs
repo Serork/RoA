@@ -49,6 +49,9 @@ sealed class StarFusion : ModItem {
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
+        if (target.immortal) {
+            return;
+        }
         int index = 0;
         void spawnStar() {
             index++;

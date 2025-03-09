@@ -65,6 +65,10 @@ sealed class BloodshedAxe : ModProjectile {
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (target.immortal) {
+            return;
+        }
+
         int type = ModContent.ProjectileType<BloodshedAxeEnergy>();
         modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
         Player player = Main.player[Projectile.owner];
@@ -135,6 +139,10 @@ sealed class BloodshedAxe : ModProjectile {
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.AddBuff(BuffID.Bleeding, 100);
+
+        if (target.immortal) {
+            return;
+        }
         Player player = Main.player[Projectile.owner];
         /*if (player.ownedProjectileCounts[type] != 0) {
 			return;
