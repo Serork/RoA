@@ -1983,11 +1983,11 @@ sealed partial class Lothor : ModNPC {
                 ChooseAttack(LothorAIState.ClawsAttack);
                 return;
             }
-            bool flag3 = distance > 250f && distance < 900f;
+            bool flag3 = distance > 350f && distance < 900f;
             if (flag3 &&
                 flag) {
-                if (_previousState != LothorAIState.SpittingAttack) {
-                    if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(2) && DashTimer % 5f == 0f) {
+                if (_previousState != LothorAIState.SpittingAttack && _previousState != LothorAIState.Scream) {
+                    if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(3) && DashTimer % 5f == 0f) {
                         ChooseAttack(LothorAIState.SpittingAttack);
                         NPC.netUpdate = true;
                     }
