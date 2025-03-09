@@ -1086,22 +1086,24 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static void TileWallRunner(int i, int j, double strength, int steps, ushort tileType, ushort wallType, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int ignoreTileType = -1, bool onlyWall = false) {
+    public static void TileWallRunner(int i, int j, double strength, int steps, ushort tileType, ushort wallType, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int ignoreTileType = -1, bool onlyWall = false, bool applySeedSettings = false) {
         var drunkWorldGen = WorldGen.drunkWorldGen;
         var remixWorldGen = WorldGen.remixWorldGen;
         var genRand = WorldGen.genRand;
         var getGoodWorldGen = WorldGen.getGoodWorldGen;
-        if (!GenVars.mudWall) {
-            if (drunkWorldGen) {
-                strength *= 1.0 + (double)genRand.Next(-80, 81) * 0.01;
-                steps = (int)((double)steps * (1.0 + (double)genRand.Next(-80, 81) * 0.01));
-            }
-            else if (remixWorldGen) {
-                strength *= 1.0 + (double)genRand.Next(-50, 51) * 0.01;
-            }
-            else if (getGoodWorldGen && tileType != 57) {
-                strength *= 1.0 + (double)genRand.Next(-80, 81) * 0.015;
-                steps += genRand.Next(3);
+        if (applySeedSettings) {
+            if (!GenVars.mudWall) {
+                if (drunkWorldGen) {
+                    strength *= 1.0 + (double)genRand.Next(-80, 81) * 0.01;
+                    steps = (int)((double)steps * (1.0 + (double)genRand.Next(-80, 81) * 0.01));
+                }
+                else if (remixWorldGen) {
+                    strength *= 1.0 + (double)genRand.Next(-50, 51) * 0.01;
+                }
+                else if (getGoodWorldGen && tileType != 57) {
+                    strength *= 1.0 + (double)genRand.Next(-80, 81) * 0.015;
+                    steps += genRand.Next(3);
+                }
             }
         }
 
@@ -1826,18 +1828,20 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[] ignoreTileTypes = null) {
-        if (!GenVars.mudWall) {
-            if (WorldGen.drunkWorldGen) {
-                strength *= 1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.01;
-                steps = (int)((double)steps * (1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.01));
-            }
-            else if (WorldGen.remixWorldGen) {
-                strength *= 1.0 + (double)WorldGen.genRand.Next(-50, 51) * 0.01;
-            }
-            else if (WorldGen.getGoodWorldGen && type != 57) {
-                strength *= 1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.015;
-                steps += WorldGen.genRand.Next(3);
+    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[] ignoreTileTypes = null, bool applySeedSettings = false) {
+        if (applySeedSettings) {
+            if (!GenVars.mudWall) {
+                if (WorldGen.drunkWorldGen) {
+                    strength *= 1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.01;
+                    steps = (int)((double)steps * (1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.01));
+                }
+                else if (WorldGen.remixWorldGen) {
+                    strength *= 1.0 + (double)WorldGen.genRand.Next(-50, 51) * 0.01;
+                }
+                else if (WorldGen.getGoodWorldGen && type != 57) {
+                    strength *= 1.0 + (double)WorldGen.genRand.Next(-80, 81) * 0.015;
+                    steps += WorldGen.genRand.Next(3);
+                }
             }
         }
 
