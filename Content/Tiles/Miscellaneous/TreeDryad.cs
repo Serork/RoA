@@ -100,7 +100,7 @@ sealed class TreeDryad : ModTile {
         }
     }
 
-    private static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
+    public static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
 
     private sealed class DryadAwakeHandler : ModSystem {
         public static bool DryadAwake;
@@ -140,7 +140,7 @@ sealed class TreeDryad : ModTile {
                 return;
             }
 
-            chat = Language.GetTextValue($"Mods.RoA.NPC.Town.Dryad.AwakeQuote{Main.rand.NextBool().ToInt() + 1}");
+            chat = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.AwakeQuote{Main.rand.NextBool().ToInt() + 1}");
             DryadAwakeHandler.DryadAwake = false;
         }
     }

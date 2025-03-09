@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-namespace RoA.Common;
+namespace RoA.Common.Items;
 
 sealed class DropRoADevsItems : ILoadable {
     private static bool _roaDevItemsDropped;

@@ -10,7 +10,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common;
+namespace RoA.Common.NPCs;
 
 sealed class DryadShopItemReplacement : GlobalNPC {
     public override void ModifyActiveShop(NPC npc, string shopName, Item[] items) {
@@ -21,7 +21,7 @@ sealed class DryadShopItemReplacement : GlobalNPC {
             return;
         }
 
-        short[] planterBoxes = [ItemID.BlinkrootPlanterBox, ItemID.CorruptPlanterBox, ItemID.CrimsonPlanterBox, ItemID.DayBloomPlanterBox, 
+        short[] planterBoxes = [ItemID.BlinkrootPlanterBox, ItemID.CorruptPlanterBox, ItemID.CrimsonPlanterBox, ItemID.DayBloomPlanterBox,
                                 ItemID.FireBlossomPlanterBox, ItemID.MoonglowPlanterBox, ItemID.ShiverthornPlanterBox, ItemID.WaterleafPlanterBox];
         Helper.ExcludeFrom(items, out short position, planterBoxes);
         List<short> moddedPlanterBoxes = [];

@@ -13,7 +13,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common;
+namespace RoA.Common.Items;
 
 sealed class ExtraVanillaCrateItems : ModSystem {
     public override void Load() {

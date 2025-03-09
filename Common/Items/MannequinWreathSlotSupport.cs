@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using RoA.Common.InterfaceElements;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
@@ -28,7 +27,7 @@ using Terraria.UI;
 using Terraria.UI.Chat;
 using Terraria.UI.Gamepad;
 
-namespace RoA.Common;
+namespace RoA.Common.Items;
 
 sealed class MannequinWreathSlotSupport : ILoadable {
     [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowTime")]
@@ -171,7 +170,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                     return TEDisplayDoll_TryFitting(self, inv, context, slot);
             }
 
-            if ((Main.cursorOverride == 8 && context == 23) || context == 24 || context == 25) {
+            if (Main.cursorOverride == 8 && context == 23 || context == 24 || context == 25) {
                 inv[slot] = Main.player[Main.myPlayer].GetItem(Main.myPlayer, inv[slot], GetItemSettings.InventoryEntityToPlayerInventorySettings);
                 if (Main.netMode == 1) {
                     if (context == 25)
@@ -188,7 +187,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
         private void On_ItemSlot_Handle_ItemArray_int_int(On_ItemSlot.orig_Handle_ItemArray_int_int orig, Item[] inv, int context, int slot) {
             Item item = inv[slot];
-            if (context == 24 && ((item.ModItem != null && item.ModItem is BaseWreathItem) || (Main.mouseItem.ModItem != null && Main.mouseItem.ModItem is BaseWreathItem))) {
+            if (context == 24 && (item.ModItem != null && item.ModItem is BaseWreathItem || Main.mouseItem.ModItem != null && Main.mouseItem.ModItem is BaseWreathItem)) {
                 return;
             }
             orig(inv, context, slot);
@@ -210,7 +209,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 return true;
             }
 
-            return orig(self, inv, context, slot, justCheck);   
+            return orig(self, inv, context, slot, justCheck);
         }
 
         internal static void WriteItem(int mannequinIndex, bool dye, BinaryWriter writer) {
@@ -336,7 +335,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         On_TEDisplayDoll.DrawInner += On_TEDisplayDoll_DrawInner;
     }
 
-    private void On_TEDisplayDoll_DrawInner(On_TEDisplayDoll.orig_DrawInner orig, TEDisplayDoll self, Terraria.Player player, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch) {
+    private void On_TEDisplayDoll_DrawInner(On_TEDisplayDoll.orig_DrawInner orig, TEDisplayDoll self, Player player, SpriteBatch spriteBatch) {
         Main.inventoryScale = 0.72f;
         DrawSlotPairSet(self, player, spriteBatch, 3, 0, 0f, 0.5f, 23);
         DrawSlotPairSet(self, player, spriteBatch, 5, 3, 3f, 0.5f, 24);
@@ -346,10 +345,10 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             return;
         }
         int x = (int)(73f + 0 * 56f * Main.inventoryScale);
-        int y = (int)((float)Main.instance.invBottom + ((float)2 + 0.5f) * 56f * Main.inventoryScale);
+        int y = (int)(Main.instance.invBottom + (2 + 0.5f) * 56f * Main.inventoryScale);
         if (data.Wreath != null) {
             Item[] items = [data.Wreath];
-            if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, x, y, (float)TextureAssets.InventoryBack.Width() * Main.inventoryScale, (float)TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
+            if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, x, y, TextureAssets.InventoryBack.Width() * Main.inventoryScale, TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
                 player.mouseInterface = true;
                 int context = -10;
                 int slot = 0;
@@ -429,10 +428,10 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             Draw(spriteBatch, items, -10, WreathSlot.GetSlot(player).Type, new Vector2(x, y), default, TextureAssets.InventoryBack8.Value);
             //ItemSlot.Draw(spriteBatch, items, -10, WreathSlot.GetSlot(player).Type, new Vector2(x, y), default);
         }
-        y = (int)((float)Main.instance.invBottom + ((float)3 + 0.5f) * 56f * Main.inventoryScale);
+        y = (int)(Main.instance.invBottom + (3 + 0.5f) * 56f * Main.inventoryScale);
         if (data.Dye != null) {
             Item[] items = [data.Dye];
-            if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, x, y, (float)TextureAssets.InventoryBack.Width() * Main.inventoryScale, (float)TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
+            if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, x, y, TextureAssets.InventoryBack.Width() * Main.inventoryScale, TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
                 player.mouseInterface = true;
                 int slot = 0;
                 int context = 25;
@@ -571,7 +570,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         return TextureAssets.InventoryBack3.Value;
     }
 
-    public static void Draw(SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor = default(Color), Texture2D inventoryBack = null, Texture2D mainTexture = null) {
+    public static void Draw(SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor = default, Texture2D inventoryBack = null, Texture2D mainTexture = null) {
         Player player = Main.player[Main.myPlayer];
         Item item = inv[slot];
         float inventoryScale = Main.inventoryScale;
@@ -605,15 +604,15 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         }
         else if (item.type > 0 && item.stack > 0 && ItemSlot.Options.HighlightNewItems && item.newAndShiny && context != 13 && context != 21 && context != 14 && context != 22) {
             value = TextureAssets.InventoryBack15.Value;
-            float num2 = (float)(int)Main.mouseTextColor / 255f;
+            float num2 = Main.mouseTextColor / 255f;
             num2 = num2 * 0.2f + 0.8f;
             color2 = color2.MultiplyRGBA(new Color(num2, num2, num2));
         }
         else if (!highlightThingsForMouse && item.type > 0 && item.stack > 0 && num != 0 && context != 13 && context != 21 && context != 22) {
             value = TextureAssets.InventoryBack15.Value;
-            float num3 = (float)(int)Main.mouseTextColor / 255f;
+            float num3 = Main.mouseTextColor / 255f;
             num3 = num3 * 0.2f + 0.8f;
-            color2 = ((num != 1) ? color2.MultiplyRGBA(new Color(num3 / 2f, num3, num3 / 2f)) : color2.MultiplyRGBA(new Color(num3, num3 / 2f, num3 / 2f)));
+            color2 = num != 1 ? color2.MultiplyRGBA(new Color(num3 / 2f, num3, num3 / 2f)) : color2.MultiplyRGBA(new Color(num3, num3 / 2f, num3 / 2f));
         }
         else if (context == 0 && slot < 10) {
             value = TextureAssets.InventoryBack9.Value;
@@ -703,8 +702,8 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                     if (ItemSlot.DrawGoldBGForCraftingMaterial) {
                         ItemSlot.DrawGoldBGForCraftingMaterial = false;
                         value = TextureAssets.InventoryBack14.Value;
-                        float num4 = (float)(int)color2.A / 255f;
-                        num4 = ((!(num4 < 0.7f)) ? 1f : Utils.GetLerpValue(0f, 0.7f, num4, clamped: true));
+                        float num4 = color2.A / 255f;
+                        num4 = !(num4 < 0.7f) ? 1f : Utils.GetLerpValue(0f, 0.7f, num4, clamped: true);
                         color2 = Color.White * num4;
                     }
                     break;
@@ -719,7 +718,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             float num5 = Main.invAlpha / 255f;
             Color value2 = new Color(63, 65, 151, 255) * num5;
             Color value3 = Main.hslToRgb(ItemSlot_inventoryGlowHue(null)[slot], 1f, 0.5f) * num5;
-            float num6 = (float)ItemSlot_inventoryGlowTime(null)[slot] / 300f;
+            float num6 = ItemSlot_inventoryGlowTime(null)[slot] / 300f;
             num6 *= num6;
             color2 = Color.Lerp(value2, value3, num6 / 2f);
             value = TextureAssets.InventoryBack13.Value;
@@ -732,7 +731,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 value4 = new Color(104, 52, 52, 255) * num7;
 
             Color value5 = Main.hslToRgb(ItemSlot_inventoryGlowHueChest(null)[slot], 1f, 0.5f) * num7;
-            float num8 = (float)ItemSlot_inventoryGlowTimeChest(null)[slot] / 300f;
+            float num8 = ItemSlot_inventoryGlowTimeChest(null)[slot] / 300f;
             num8 *= num8;
             color2 = Color.Lerp(value4, value5, num8 / 2f);
             value = TextureAssets.InventoryBack13.Value;
@@ -751,7 +750,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         }
 
         if (!flag2)
-            spriteBatch.Draw(value, position, null, color2, 0f, default(Vector2), inventoryScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(value, position, null, color2, 0f, default, inventoryScale, SpriteEffects.None, 0f);
 
         int num9 = -1;
         switch (context) {
@@ -821,7 +820,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             rectangle.Width -= 2;
             rectangle.Height -= 2;
 
-            if ((context is ItemSlot.Context.ModdedAccessorySlot or ItemSlot.Context.ModdedVanityAccessorySlot or ItemSlot.Context.ModdedDyeSlot) || mainTexture != null) {
+            if (context is ItemSlot.Context.ModdedAccessorySlot or ItemSlot.Context.ModdedVanityAccessorySlot or ItemSlot.Context.ModdedDyeSlot || mainTexture != null) {
                 DrawSlotTexture(value6, position + value.Size() / 2f * inventoryScale, rectangle, Color.White * 0.35f, 0f, rectangle.Size() / 2f, inventoryScale, SpriteEffects.None, 0f, slot, context, mainTexture);
                 goto SkipVanillaDraw;
             }
@@ -933,17 +932,17 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
             if (context == 13 && item.potion) {
                 Vector2 position2 = position + value.Size() * inventoryScale / 2f - TextureAssets.Cd.Value.Size() * inventoryScale / 2f;
-                Color color3 = item.GetAlpha(color) * ((float)player.potionDelay / (float)player.potionDelayTime);
-                spriteBatch.Draw(TextureAssets.Cd.Value, position2, null, color3, 0f, default(Vector2), scale, SpriteEffects.None, 0f);
+                Color color3 = item.GetAlpha(color) * (player.potionDelay / (float)player.potionDelayTime);
+                spriteBatch.Draw(TextureAssets.Cd.Value, position2, null, color3, 0f, default, scale, SpriteEffects.None, 0f);
 
                 // Extra context.
             }
 
             // TML: Added handling of the new 'masterOnly' item field.
-            if ((Math.Abs(context) == 10 || context == 18) && ((item.expertOnly && !Main.expertMode) || (item.masterOnly && !Main.masterMode))) {
+            if ((Math.Abs(context) == 10 || context == 18) && (item.expertOnly && !Main.expertMode || item.masterOnly && !Main.masterMode)) {
                 Vector2 position3 = position + value.Size() * inventoryScale / 2f - TextureAssets.Cd.Value.Size() * inventoryScale / 2f;
                 Color white = Color.White;
-                spriteBatch.Draw(TextureAssets.Cd.Value, position3, null, white, 0f, default(Vector2), scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureAssets.Cd.Value, position3, null, white, 0f, default, scale, SpriteEffects.None, 0f);
             }
 
             // Extra context.
@@ -951,7 +950,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         else if (context == 6) {
             Texture2D value11 = TextureAssets.Trash.Value;
             Vector2 position4 = position + value.Size() * inventoryScale / 2f - value11.Size() * inventoryScale / 2f;
-            spriteBatch.Draw(value11, position4, null, new Color(100, 100, 100, 100), 0f, default(Vector2), inventoryScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(value11, position4, null, new Color(100, 100, 100, 100), 0f, default, inventoryScale, SpriteEffects.None, 0f);
         }
 
         if (context == 0 && slot < 10) {
@@ -983,8 +982,8 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         int num = inventoryContextTarget;
         for (int i = 0; i < slotsToShowLine; i++) {
             for (int j = 0; j < 2; j++) {
-                int num2 = (int)(73f + ((float)i + offsetX) * 56f * Main.inventoryScale);
-                int num3 = (int)((float)Main.instance.invBottom + ((float)j + offsetY) * 56f * Main.inventoryScale);
+                int num2 = (int)(73f + (i + offsetX) * 56f * Main.inventoryScale);
+                int num3 = (int)(Main.instance.invBottom + (j + offsetY) * 56f * Main.inventoryScale);
                 if (j == 0) {
                     items = _items;
                     num = inventoryContextTarget;
@@ -994,7 +993,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                     num = 25;
                 }
 
-                if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, num2, num3, (float)TextureAssets.InventoryBack.Width() * Main.inventoryScale, (float)TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
+                if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, num2, num3, TextureAssets.InventoryBack.Width() * Main.inventoryScale, TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
                     player.mouseInterface = true;
                     ItemSlot.Handle(items, num, i + slotsArrayOffset);
                 }

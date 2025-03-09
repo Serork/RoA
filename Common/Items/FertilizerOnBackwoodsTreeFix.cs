@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-
 using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Trees;
 
@@ -7,7 +6,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common;
+namespace RoA.Common.Items;
 
 sealed class FertilizerOnBackwoodsTreeFix : GlobalProjectile {
     public override void AI(Projectile projectile) {
@@ -55,9 +54,9 @@ sealed class FertilizerOnBackwoodsTreeFix : GlobalProjectile {
 
         if (flag4 && flag3) {
             int num92 = (int)(projectile.position.X / 16f) - 1;
-            int num93 = (int)((projectile.position.X + (float)projectile.width) / 16f) + 2;
+            int num93 = (int)((projectile.position.X + projectile.width) / 16f) + 2;
             int num94 = (int)(projectile.position.Y / 16f) - 1;
-            int num95 = (int)((projectile.position.Y + (float)projectile.height) / 16f) + 2;
+            int num95 = (int)((projectile.position.Y + projectile.height) / 16f) + 2;
             if (num92 < 0)
                 num92 = 0;
 
@@ -70,12 +69,12 @@ sealed class FertilizerOnBackwoodsTreeFix : GlobalProjectile {
             if (num95 > Main.maxTilesY)
                 num95 = Main.maxTilesY;
 
-            Vector2 vector15 = default(Vector2);
+            Vector2 vector15 = default;
             for (int num96 = num92; num96 < num93; num96++) {
                 for (int num97 = num94; num97 < num95; num97++) {
                     vector15.X = num96 * 16;
                     vector15.Y = num97 * 16;
-                    if (!(projectile.position.X + (float)projectile.width > vector15.X) || !(projectile.position.X < vector15.X + 16f) || !(projectile.position.Y + (float)projectile.height > vector15.Y) || !(projectile.position.Y < vector15.Y + 16f) || !Main.tile[num96, num97].HasTile)
+                    if (!(projectile.position.X + projectile.width > vector15.X) || !(projectile.position.X < vector15.X + 16f) || !(projectile.position.Y + projectile.height > vector15.Y) || !(projectile.position.Y < vector15.Y + 16f) || !Main.tile[num96, num97].HasTile)
                         continue;
 
                     if (!flag3)

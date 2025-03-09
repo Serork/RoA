@@ -1,4 +1,5 @@
-﻿using RoA.Core.Utility;
+﻿using RoA.Common.Items;
+using RoA.Core.Utility;
 
 using System.IO;
 

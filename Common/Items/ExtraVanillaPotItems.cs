@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace RoA.Common;
+namespace RoA.Common.Items;
 
 sealed class ExtraVanillaPotItems : ModSystem {
     public override void Load() {

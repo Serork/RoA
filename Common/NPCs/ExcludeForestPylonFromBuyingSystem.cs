@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common;
+namespace RoA.Common.NPCs;
 
 sealed class ExcludeForestPylonFromBuyingSystem : GlobalNPC {
     public override void ModifyActiveShop(NPC npc, string shopName, Item[] items) {

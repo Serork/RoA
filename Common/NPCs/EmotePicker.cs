@@ -1,5 +1,4 @@
-﻿using RoA.Common.NPCs;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Emotes;
 
@@ -9,7 +8,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using RoA.Content.NPCs.Friendly;
 
-namespace RoA.Common;
+namespace RoA.Common.NPCs;
 
 sealed class EmotePicker : ILoadable {
     public void Load(Mod mod) {
@@ -29,7 +28,7 @@ sealed class EmotePicker : ILoadable {
 
         int hunterType = ModContent.NPCType<Hunter>();
         bool flag = other != null && ((NPC)other.entity).type == hunterType;
-        if (flag || (plr.InModBiome<BackwoodsBiome>() && Main.rand.NextBool(5))) {
+        if (flag || plr.InModBiome<BackwoodsBiome>() && Main.rand.NextBool(5)) {
             list.Add(ModContent.EmoteBubbleType<HunterEmote>());
             list.Add(ModContent.EmoteBubbleType<BackwoodsEmote>());
             list.Add(ModContent.EmoteBubbleType<LothorEmote>());
@@ -39,9 +38,9 @@ sealed class EmotePicker : ILoadable {
             list.Add(ModContent.EmoteBubbleType<HunterEmote>());
             list.Add(ModContent.EmoteBubbleType<BackwoodsEmote>());
         }
-     }
+    }
 
-    private void On_EmoteBubble_ProbeWeather(On_EmoteBubble.orig_ProbeWeather orig, EmoteBubble self, System.Collections.Generic.List<int> list, Terraria.Player plr) {
+    private void On_EmoteBubble_ProbeWeather(On_EmoteBubble.orig_ProbeWeather orig, EmoteBubble self, System.Collections.Generic.List<int> list, Player plr) {
         orig(self, list, plr);
 
         if (plr.InModBiome<BackwoodsBiome>() && BackwoodsFogHandler.IsFogActive) {
@@ -49,10 +48,10 @@ sealed class EmotePicker : ILoadable {
         }
     }
 
-    private void On_EmoteBubble_ProbeBiomes(On_EmoteBubble.orig_ProbeBiomes orig, EmoteBubble self, System.Collections.Generic.List<int> list, Terraria.Player plr) {
+    private void On_EmoteBubble_ProbeBiomes(On_EmoteBubble.orig_ProbeBiomes orig, EmoteBubble self, System.Collections.Generic.List<int> list, Player plr) {
         if ((double)(plr.position.Y / 16f) < Main.worldSurface * 0.45)
             list.Add(22);
-        else if ((double)(plr.position.Y / 16f) > Main.rockLayer + (double)(Main.maxTilesY / 2) - 100.0)
+        else if ((double)(plr.position.Y / 16f) > Main.rockLayer + Main.maxTilesY / 2 - 100.0)
             list.Add(31);
         else if ((double)(plr.position.Y / 16f) > Main.rockLayer)
             list.Add(30);
@@ -68,7 +67,7 @@ sealed class EmotePicker : ILoadable {
             list.Add(32);
         else if (plr.InModBiome<BackwoodsBiome>())
             list.Add(ModContent.EmoteBubbleType<BackwoodsEmote>());
-        else if ((double)(plr.position.Y / 16f) < Main.worldSurface && (plr.position.X < 4000f || plr.position.X > (float)(16 * (Main.maxTilesX - 250))))
+        else if ((double)(plr.position.Y / 16f) < Main.worldSurface && (plr.position.X < 4000f || plr.position.X > 16 * (Main.maxTilesX - 250)))
             list.Add(29);
         else if (plr.ZoneDesert)
             list.Add(28);

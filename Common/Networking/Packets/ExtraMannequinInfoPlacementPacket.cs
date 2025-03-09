@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using RoA.Common.Items;
 
 namespace RoA.Common.Networking.Packets;
 

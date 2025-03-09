@@ -15,7 +15,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace RoA.Common;
+namespace RoA.Common.Items;
 
 sealed class ExtraItemsOnShakingTrees : ILoadable {
     [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "KillTile_GetItemDrops")]
@@ -65,7 +65,7 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
         bool createLeaves = true;
         if (TileLoader.GlobalShakeTree(x, y, treeType)) { }
         else if (!PlantLoader.ShakeTree(x, y, Main.tile[x, num].TileType, ref createLeaves)) {
-        
+
         }
         else if (Main.getGoodWorld && genRand.Next(17) == 0) {
             Projectile.NewProjectile(GetProjectileSource_ShakeTree(x, y), x * 16, y * 16, (float)Main.rand.Next(-100, 101) * 0.002f, 0f, 28, 0, 0f, Main.myPlayer, 16f, 16f);

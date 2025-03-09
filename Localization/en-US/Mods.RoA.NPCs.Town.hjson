@@ -5,7 +5,7 @@ Hunter: {
 	Name4: Evan
 	Button1: Talk
 	Button2_1: Barter
-	Button2_2: "{$Mods.RoA.NPC.Town.Hunter.Button2_1} (15 {$ItemName.Leather})"
+	Button2_2: "{$Mods.RoA.NPCs.Town.Hunter.Button2_1} (15 {$ItemName.Leather})"
 	Quote1: There, behind you! Ah, that must have been the wind.
 	Quote2: An awfully unpleasant druid has told me this part of the forest is off limits. I think I am starting to understand why.
 	Quote3: I don’t quite remember the road I took to get here. I had to cut through some foliage, but now it seems to have grown back right behind me.

@@ -14,7 +14,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace RoA.Common;
+namespace RoA.Common.Items;
 
 sealed class ExtraVanillaOrbItems : ILoadable {
     public void Load(Mod mod) {

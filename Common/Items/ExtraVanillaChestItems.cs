@@ -22,7 +22,7 @@ using Terraria.UI;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
-namespace RoA.Common;
+namespace RoA.Common.Items;
 
 sealed class ExtraVanillaChestItems : ModSystem {
     private bool _cactiCactusRodAdded;
@@ -58,7 +58,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
     private void On_WorldGen_IslandHouse(On_WorldGen.orig_IslandHouse orig, int i, int j, int islandStyle) {
         bool flag = WorldGen.crimson;
         if (WorldGen.drunkWorldGen)
-            flag = (GenVars.crimsonLeft && i < Main.maxTilesX / 2) || ((!GenVars.crimsonLeft && i > Main.maxTilesX / 2) ? true : false);
+            flag = GenVars.crimsonLeft && i < Main.maxTilesX / 2 || (!GenVars.crimsonLeft && i > Main.maxTilesX / 2 ? true : false);
 
         byte type = 202;
         byte wall = 82;
@@ -78,9 +78,9 @@ sealed class ExtraVanillaChestItems : ModSystem {
         }
 
         vector2D.X = i;
-        int num4 = (int)(vector2D.X - (double)num2 - 1.0);
-        int num5 = (int)(vector2D.X + (double)num2 + 1.0);
-        int num6 = (int)(vector2D.Y - (double)num3 - 1.0);
+        int num4 = (int)(vector2D.X - num2 - 1.0);
+        int num5 = (int)(vector2D.X + num2 + 1.0);
+        int num6 = (int)(vector2D.Y - num3 - 1.0);
         int num7 = (int)(vector2D.Y + 2.0);
         if (num4 < 0)
             num4 = 0;
@@ -96,7 +96,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
         for (int l = num4; l <= num5; l++) {
             for (int m = num6 - 1; m < num7 + 1; m++) {
-                if (m != num6 - 1 || (l != num4 && l != num5)) {
+                if (m != num6 - 1 || l != num4 && l != num5) {
                     Tile tile = Main.tile[l, m];
                     tile.HasTile = true;
                     tile.LiquidAmount = 0;
@@ -108,9 +108,9 @@ sealed class ExtraVanillaChestItems : ModSystem {
             }
         }
 
-        num4 = (int)(vector2D.X - (double)num2);
-        num5 = (int)(vector2D.X + (double)num2);
-        num6 = (int)(vector2D.Y - (double)num3);
+        num4 = (int)(vector2D.X - num2);
+        num5 = (int)(vector2D.X + num2);
+        num6 = (int)(vector2D.Y - num3);
         num7 = (int)(vector2D.Y + 1.0);
         if (num4 < 0)
             num4 = 0;
@@ -126,7 +126,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
         for (int n = num4; n <= num5; n++) {
             for (int num8 = num6; num8 < num7; num8++) {
-                if ((num8 != num6 || (n != num4 && n != num5)) && Main.tile[n, num8].WallType == 0) {
+                if ((num8 != num6 || n != num4 && n != num5) && Main.tile[n, num8].WallType == 0) {
                     Tile tile = Main.tile[n, num8];
                     tile.HasTile = false;
                     Main.tile[n, num8].WallType = wall;
@@ -190,9 +190,9 @@ sealed class ExtraVanillaChestItems : ModSystem {
             case 3:
                 contain = 2219;
                 break;
-            //case 4:
-            //    contain = ModContent.ItemType<FeathersInABottle>();
-            //    break;
+                //case 4:
+                //    contain = ModContent.ItemType<FeathersInABottle>();
+                //    break;
         }
 
         if (WorldGen.getGoodWorldGen)
@@ -317,7 +317,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
         for (int i = num3; i < num5; i++) {
             for (int j = Y - 20; j < Y + 10; j++) {
-                if (Main.tile[i, j].WallType == 0 && !Main.tile[i, j].HasTile && (double)j < Main.worldSurface)
+                if (Main.tile[i, j].WallType == 0 && !Main.tile[i, j].HasTile && j < Main.worldSurface)
                     return;
             }
         }
@@ -488,7 +488,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
         int num = genRand.Next(3);
         genRand.Next(3);
         if (WorldGen.remixWorldGen)
-            num = (WorldGen.crimson ? 2 : 0);
+            num = WorldGen.crimson ? 2 : 0;
 
         ushort num2;
         int num3;
@@ -526,7 +526,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
         GenVars.dxStrength2 = genRand.Next(35, 50);
         GenVars.dyStrength2 = genRand.Next(10, 15);
         double num4 = Main.maxTilesX / 60;
-        num4 += (double)genRand.Next(0, (int)(num4 / 3.0));
+        num4 += genRand.Next(0, (int)(num4 / 3.0));
         double num5 = num4;
         int num6 = 5;
         WorldGen.DungeonRoom(GenVars.dungeonX, GenVars.dungeonY, num2, num3);
@@ -545,7 +545,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
             if (num6 > 0)
                 num6--;
 
-            if ((num6 == 0) & (genRand.Next(3) == 0)) {
+            if (num6 == 0 & genRand.Next(3) == 0) {
                 num6 = 5;
                 if (genRand.Next(2) == 0) {
                     int dungeonX = GenVars.dungeonX;
@@ -589,7 +589,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
             if (num6 > 0)
                 num6--;
 
-            if (num6 == 0 && genRand.Next(5) == 0 && (double)GenVars.dungeonY > Main.worldSurface + 100.0) {
+            if (num6 == 0 && genRand.Next(5) == 0 && GenVars.dungeonY > Main.worldSurface + 100.0) {
                 num6 = 10;
                 int dungeonX2 = GenVars.dungeonX;
                 int dungeonY2 = GenVars.dungeonY;
@@ -609,11 +609,11 @@ sealed class ExtraVanillaChestItems : ModSystem {
         for (num10 = 0; num10 < num9; num10++) {
             int i2 = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
             int num11 = GenVars.dMinY;
-            if ((double)num11 < Main.worldSurface)
+            if (num11 < Main.worldSurface)
                 num11 = (int)Main.worldSurface;
 
             int j = genRand.Next(num11, GenVars.dMaxY);
-            num10 = ((!WorldGen.DungeonPitTrap(i2, j, num2, num3)) ? (num10 + 1) : (num10 + 1500));
+            num10 = !WorldGen.DungeonPitTrap(i2, j, num2, num3) ? num10 + 1 : num10 + 1500;
         }
 
         for (int k = 0; k < GenVars.numDRooms; k++) {
@@ -1053,10 +1053,10 @@ sealed class ExtraVanillaChestItems : ModSystem {
                 int num56 = genRand.Next(GenVars.dMinY, GenVars.dMaxY);
                 for (int num57 = num55 - num54; num57 < num55 + num54; num57++) {
                     for (int num58 = num56 - num54; num58 < num56 + num54; num58++) {
-                        if ((double)num58 > Main.worldSurface) {
+                        if (num58 > Main.worldSurface) {
                             double num59 = Math.Abs(num55 - num57);
                             double num60 = Math.Abs(num56 - num58);
-                            if (Math.Sqrt(num59 * num59 + num60 * num60) < (double)num54 * 0.4 && Main.wallDungeon[Main.tile[num57, num58].WallType])
+                            if (Math.Sqrt(num59 * num59 + num60 * num60) < num54 * 0.4 && Main.wallDungeon[Main.tile[num57, num58].WallType])
                                 WorldGen.Spread.WallDungeon(num57, num58, array[num53]);
                         }
                     }
@@ -1070,7 +1070,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
             int num63 = GenVars.dungeonPlatformY[num61];
             int num64 = Main.maxTilesX;
             int num65 = 10;
-            if ((double)num63 < Main.worldSurface + 50.0)
+            if (num63 < Main.worldSurface + 50.0)
                 num65 = 20;
 
             for (int num66 = num63 - 5; num66 <= num63 + 5; num66++) {
@@ -1299,7 +1299,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         }
                     }
 
-                    if (flag6 && (!Main.tile[num83, num84 - 1].HasTile & !Main.tile[num83, num84 - 2].HasTile & !Main.tile[num83, num84 - 3].HasTile)) {
+                    if (flag6 && !Main.tile[num83, num84 - 1].HasTile & !Main.tile[num83, num84 - 2].HasTile & !Main.tile[num83, num84 - 3].HasTile) {
                         int num88 = num83;
                         int num89 = num83;
                         for (; num88 > GenVars.dMinX && num88 < GenVars.dMaxX && !Main.tile[num88, num84].HasTile && !Main.tile[num88, num84 - 1].HasTile && !Main.tile[num88, num84 + 1].HasTile; num88 += num85) {
@@ -1326,7 +1326,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                                 WorldGen.TileFrame(num83, num84);
                                 if (flag7) {
                                     WorldGen.PlaceTile(num83, num84 - 1, 50, mute: true);
-                                    if (genRand.Next(50) == 0 && (double)num84 > (Main.worldSurface + Main.rockLayer) / 2.0 && Main.tile[num83, num84 - 1].TileType == 50)
+                                    if (genRand.Next(50) == 0 && num84 > (Main.worldSurface + Main.rockLayer) / 2.0 && Main.tile[num83, num84 - 1].TileType == 50)
                                         Main.tile[num83, num84 - 1].TileFrameX = 90;
                                 }
 
@@ -1375,7 +1375,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
         for (int num93 = 0; num93 < GenVars.numDRooms; num93++) {
             int num94 = 0;
             while (num94 < 1000) {
-                int num95 = (int)((double)GenVars.dRoomSize[num93] * 0.4);
+                int num95 = (int)(GenVars.dRoomSize[num93] * 0.4);
                 int i3 = GenVars.dRoomX[num93] + genRand.Next(-num95, num95 + 1);
                 int num96 = GenVars.dRoomY[num93] + genRand.Next(-num95, num95 + 1);
                 int num97 = 0;
@@ -1391,7 +1391,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         num97 = 156;
                         break;
                     case 4:
-                        num97 = ((!WorldGen.remixWorldGen) ? 157 : 2623);
+                        num97 = !WorldGen.remixWorldGen ? 157 : 2623;
                         break;
                     case 5:
                         num97 = 163;
@@ -1415,7 +1415,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         break;
                 }
 
-                if ((double)num96 < Main.worldSurface + 50.0) {
+                if (num96 < Main.worldSurface + 50.0) {
                     num97 = 327;
                     style3 = 0;
                 }
@@ -1474,13 +1474,13 @@ sealed class ExtraVanillaChestItems : ModSystem {
     }
 
     private static bool IsUndergroundDesert(int x, int y) {
-        if ((double)y < Main.worldSurface)
+        if (y < Main.worldSurface)
             return false;
 
-        if ((double)x < (double)Main.maxTilesX * 0.15 || (double)x > (double)Main.maxTilesX * 0.85)
+        if (x < Main.maxTilesX * 0.15 || x > Main.maxTilesX * 0.85)
             return false;
 
-        if (WorldGen.remixWorldGen && (double)y > Main.rockLayer)
+        if (WorldGen.remixWorldGen && y > Main.rockLayer)
             return false;
 
         int num = 15;
@@ -1495,7 +1495,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
     }
 
     private static bool IsDungeon(int x, int y) {
-        if ((double)y < Main.worldSurface)
+        if (y < Main.worldSurface)
             return false;
 
         if (x < 0 || x > Main.maxTilesX)
@@ -1558,7 +1558,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                 }
             }
 
-            if (WorldGen.remixWorldGen && (double)i > (double)Main.maxTilesX * 0.37 && (double)i < (double)Main.maxTilesX * 0.63 && k > Main.maxTilesY - 250)
+            if (WorldGen.remixWorldGen && i > Main.maxTilesX * 0.37 && i < Main.maxTilesX * 0.63 && k > Main.maxTilesY - 250)
                 return false;
 
             int num5 = 2;
@@ -1578,7 +1578,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
             int num7 = k;
             int num8 = -1;
             int num9 = 0;
-            bool flag12 = (double)num7 >= Main.worldSurface + 25.0;
+            bool flag12 = num7 >= Main.worldSurface + 25.0;
             if (WorldGen.remixWorldGen)
                 flag12 = num7 < Main.maxTilesY - 400;
 
@@ -1588,7 +1588,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
             if (Style >= 0)
                 num9 = Style;
 
-            if ((chestTileType == 467 && num9 == 10) || (contain == 0 && num7 <= Main.maxTilesY - 205 && IsUndergroundDesert(i, k))) {
+            if (chestTileType == 467 && num9 == 10 || contain == 0 && num7 <= Main.maxTilesY - 205 && IsUndergroundDesert(i, k)) {
                 flag2 = true;
                 num9 = 10;
                 chestTileType = 467;
@@ -1599,7 +1599,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                     added = true;
                 }
                 if (!added) {
-                    contain = ((num7 <= (GenVars.desertHiveHigh * 3 + GenVars.desertHiveLow * 4) / 7) ? Utils.SelectRandom(genRand, new short[5] {
+                    contain = num7 <= (GenVars.desertHiveHigh * 3 + GenVars.desertHiveLow * 4) / 7 ? Utils.SelectRandom(genRand, new short[5] {
                         (short)ModContent.ItemType<CactiCaster>(),
                         4056,
                         4055,
@@ -1610,14 +1610,14 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         4061,
                         4062,
                         4276
-                    }));
+                    });
 
                     if (WorldGen.getGoodWorldGen && genRand.Next(num) == 0)
                         contain = 52;
                 }
             }
 
-            if (chestTileType == 21 && (num9 == 11 || (contain == 0 && (double)num7 >= Main.worldSurface + 25.0 && num7 <= Main.maxTilesY - 205 && (Main.tile[i, k].TileType == 147 || Main.tile[i, k].TileType == 161 || Main.tile[i, k].TileType == 162)))) {
+            if (chestTileType == 21 && (num9 == 11 || contain == 0 && num7 >= Main.worldSurface + 25.0 && num7 <= Main.maxTilesY - 205 && (Main.tile[i, k].TileType == 147 || Main.tile[i, k].TileType == 161 || Main.tile[i, k].TileType == 162))) {
                 flag = true;
                 num9 = 11;
                 bool added = false;
@@ -1639,7 +1639,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             contain = 950;
                             break;
                         case 3:
-                            contain = ((!WorldGen.remixWorldGen) ? 1319 : 725);
+                            contain = !WorldGen.remixWorldGen ? 1319 : 725;
                             break;
                         case 4:
                             contain = 987;
@@ -1731,7 +1731,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                 chestTileType = 467;
             }
 
-            num8 = ((chestTileType != 467) ? WorldGen.PlaceChest(i - 1, num7 - 1, chestTileType, notNearOtherChests, num9) : WorldGen.PlaceChest(i - 1, num7 - 1, chestTileType, notNearOtherChests, num9));
+            num8 = chestTileType != 467 ? WorldGen.PlaceChest(i - 1, num7 - 1, chestTileType, notNearOtherChests, num9) : WorldGen.PlaceChest(i - 1, num7 - 1, chestTileType, notNearOtherChests, num9);
             if (num8 >= 0) {
                 if (flag11) {
                     GenVars.hellChest++;
@@ -1742,11 +1742,11 @@ sealed class ExtraVanillaChestItems : ModSystem {
                 Chest chest = Main.chest[num8];
                 int num10 = 0;
                 while (num10 == 0) {
-                    bool flag13 = (double)num7 < Main.worldSurface + 25.0;
+                    bool flag13 = num7 < Main.worldSurface + 25.0;
                     if (WorldGen.remixWorldGen)
-                        flag13 = (double)num7 >= (Main.rockLayer + (double)((Main.maxTilesY - 350) * 2)) / 3.0;
+                        flag13 = num7 >= (Main.rockLayer + (Main.maxTilesY - 350) * 2) / 3.0;
 
-                    if ((num9 == 0 && flag13) || flag9) {
+                    if (num9 == 0 && flag13 || flag9) {
                         if (contain > 0) {
                             chest.item[num10].SetDefaults(contain);
                             chest.item[num10].Prefix(-1);
@@ -1992,7 +1992,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             num10++;
                         }
                     }
-                    else if ((!WorldGen.remixWorldGen && (double)num7 < Main.rockLayer) || (WorldGen.remixWorldGen && (double)num7 > Main.rockLayer && num7 < Main.maxTilesY - 250)) {
+                    else if (!WorldGen.remixWorldGen && num7 < Main.rockLayer || WorldGen.remixWorldGen && num7 > Main.rockLayer && num7 < Main.maxTilesY - 250) {
                         if (contain > 0) {
                             if (contain == 832) {
                                 chest.item[num10].SetDefaults(933);
@@ -2066,7 +2066,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
                             bool flag15 = chestTileType == (ushort)ModContent.TileType<ElderwoodChest>();
                             if (flag15) {
-                                if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
+                                if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
                                     _oniMaskAdded = true;
                                     chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                     chest.item[num10].Prefix(-1);
@@ -2222,7 +2222,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             num10++;
                         }
                     }
-                    else if (num7 < Main.maxTilesY - 250 || (WorldGen.remixWorldGen && (Style == 7 || Style == 14))) {
+                    else if (num7 < Main.maxTilesY - 250 || WorldGen.remixWorldGen && (Style == 7 || Style == 14)) {
                         if (contain > 0) {
                             chest.item[num10].SetDefaults(contain);
                             chest.item[num10].Prefix(-1);
@@ -2270,7 +2270,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             int num21 = genRand.Next(7);
                             bool flag14 = num7 > GenVars.lavaLine;
                             if (WorldGen.remixWorldGen)
-                                flag14 = (double)num7 > Main.worldSurface && (double)num7 < Main.rockLayer;
+                                flag14 = num7 > Main.worldSurface && num7 < Main.rockLayer;
 
                             int maxValue = 20;
                             if (WorldGen.tenthAnniversaryWorldGen)
@@ -2327,7 +2327,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             num10++;
 
                             if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
-                                if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
+                                if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
                                     _oniMaskAdded = true;
                                     chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                     chest.item[num10].Prefix(-1);
@@ -2540,7 +2540,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         }
 
                         if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
-                            if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
+                            if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
                                 _oniMaskAdded = true;
                                 chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                 chest.item[num10].Prefix(-1);
