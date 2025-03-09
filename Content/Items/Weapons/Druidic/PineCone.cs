@@ -344,7 +344,7 @@ sealed class PineCone : NatureItem {
                         }
                         num4 = genRand.Next(3);
                         if (genRand.Next(3) < 2 && !flag2) {
-                            if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
+                            if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
                                 GeneratedStorage.PineConeAddedToWorld = true;
                                 num4 = 3;
                                 if (num4 == 3) {
@@ -398,7 +398,7 @@ sealed class PineCone : NatureItem {
                     }
                     num4 = genRand.Next(3);
                     if (genRand.Next(3) < 2 && !flag2) {
-                        if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
+                        if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
                             GeneratedStorage.PineConeAddedToWorld = true;
                             num4 = 3;
                             if (num4 == 3) {

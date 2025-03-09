@@ -3,6 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Cache;
 using RoA.Common.Sets;
@@ -703,7 +704,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         bool left = !IsTrunk(i - 1, j);
         SpriteEffects effects = SpriteEffects.FlipHorizontally;
         if (IsTrunk(i, j) && !IsTop(i, j)) {
-            Texture2D extraTexture = ModContent.Request<Texture2D>(TileLoader.GetTile(GetSelfType()).Texture + "_Extra").Value;
+            Texture2D extraTexture = PaintsRenderer.TryGetPaintedTexture(i, j, TileLoader.GetTile(GetSelfType()).Texture + "_Extra");
             ulong seed = (ulong)(i * j % 192372);
             if (Utils.RandomInt(ref seed, 10) < 3) {
                 int height = 18;
@@ -768,7 +769,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         }
         bool flag = tile.WallType > 0;
         if (shouldDrawBigBranch) {
-            Texture2D bigBranchTexture = ModContent.Request<Texture2D>(texture + "_BigBranches").Value;
+            Texture2D bigBranchTexture = PaintsRenderer.TryGetPaintedTexture(i, j, texture + "_BigBranches");
             Vector2 textureSize = bigBranchTexture.Size();
             spriteFrame = new(1, 3);
             ulong seed = (ulong)(i * j % 192372);
@@ -802,7 +803,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             spriteBatch.Draw(bigBranchTexture, drawPosition - Vector2.UnitX * 10f + origin, sourceRectangle, color, num8 * num4, origin, 1f, effects, 0f);
         }
         if (shouldDrawBranch) {
-            Texture2D branchTexture = ModContent.Request<Texture2D>(texture + "_Branches").Value;
+            Texture2D branchTexture = PaintsRenderer.TryGetPaintedTexture(i, j, texture + "_Branches");
             offsetY = 0;
             if (left) {
                 offsetX = 10;
@@ -824,6 +825,10 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                 return;
             }
             Texture2D topTexture = ModContent.Request<Texture2D>(texture + "_Top").Value;
+            if ((Main.tile[i + 1, j].TileType == type && Main.tile[i + 1, j].TileColor == Main.tile[i, j].TileColor) ||
+                (Main.tile[i - 1, j].TileType == type && Main.tile[i - 1, j].TileColor == Main.tile[i, j].TileColor)) {
+                topTexture = PaintsRenderer.TryGetPaintedTexture(i, j, texture + "_Top");
+            }
             Vector2 textureSize = topTexture.Size();
             Vector2 offset = -textureSize;
             offset.X += textureSize.X / 2f;

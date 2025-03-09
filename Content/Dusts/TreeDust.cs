@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Common.WorldEvents;
 
 using Terraria;

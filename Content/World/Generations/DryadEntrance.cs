@@ -260,6 +260,42 @@ sealed class DryadEntrance : ModSystem {
                 } 
             }
         }
+
+        byte livingTreePaintColor = 12, livingTreeWallPaintColor = 12;
+        for (int i = _dryadEntranceX - distance / 2; i < _dryadEntranceX + distance / 2; i++) {
+            for (int j = _dryadEntranceY - distance / 2; j < _dryadEntranceY + distance / 2; j++) {
+                Tile tile = Main.tile[i, j];
+                if (tile.HasTile) {
+                    if (tile.WallType == 244) {
+                        tile.TileColor = livingTreePaintColor;
+                    }
+                    else if (tile.TileType == 192 || tile.TileType == 191) {
+                        tile.TileColor = livingTreePaintColor;
+                    }
+                    else if (tile.TileType == 52 || tile.TileType == 382) {
+                        int x = i;
+                        int y = j;
+                        WorldGenHelper.GetVineTop(i, j, out x, out y);
+                        if (Main.tile[x, y].TileType == 192)
+                            tile.TileColor = livingTreePaintColor;
+                    }
+                    else if (tile.TileType == 187) {
+                        Tile tile2 = tile;
+                        int num = 0;
+                        while (tile2.TileType == 187) {
+                            num++;
+                            tile2 = Main.tile[i, j + (int)num];
+                        }
+
+                        if (tile2.TileType == 192)
+                            tile.TileColor = livingTreePaintColor;
+                    }
+                }
+
+                if (tile.WallType == 244)
+                    tile.WallType = livingTreePaintColor;
+            }
+        }
     }
 
     private void ExtraMountCavesGenerator(GenerationProgress progress, GameConfiguration configuration) {

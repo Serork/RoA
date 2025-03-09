@@ -745,6 +745,18 @@ static class WorldGenHelper {
         }
     }
 
+    public static void GetVineTop(int i, int j, out int x, out int y) {
+        x = i;
+        y = j;
+        Tile tileSafely = Framing.GetTileSafely(x, y);
+        if (TileID.Sets.IsVine[tileSafely.TileType]) {
+            while (y > 20 && tileSafely.HasTile && TileID.Sets.IsVine[tileSafely.TileType]) {
+                y--;
+                tileSafely = Framing.GetTileSafely(x, y);
+            }
+        }
+    }
+
     // adapted vanilla
     public static void SlopeAreaNatural(int i, int j, int size, ushort? tileType = null) {
         for (int num583 = i - size; num583 < i + size; num583++) {

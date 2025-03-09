@@ -118,7 +118,8 @@ sealed class OvergrownAltar : ModTile {
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;
             }
-            Texture2D texture = TextureAssets.Tile[Type].Value;
+            Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
+            texture ??= TextureAssets.Tile[Type].Value;
             Rectangle rectangle = new(tile.TileFrameX, !NPC.downedBoss2 ? tile.TileFrameY + 36 * 2 : tile.TileFrameY + 36 * frame, 16, 16);
             Vector2 position = new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero;
             spriteBatch.Draw(texture, position, rectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);

@@ -1,4 +1,8 @@
 ﻿using RoA.Common.BackwoodsSystems;
+using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Walls;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -49,6 +53,43 @@ sealed class BackwoodsWorldGen : ModSystem {
 
     public override void Load() {
         On_WorldGen.Convert += On_WorldGen_Convert;
+        On_WorldGen.PaintTheLivingTrees += On_WorldGen_PaintTheLivingTrees;
+    }
+
+    private void On_WorldGen_PaintTheLivingTrees(On_WorldGen.orig_PaintTheLivingTrees orig, byte livingTreePaintColor, byte livingTreeWallPaintColor) {
+        orig(livingTreePaintColor, livingTreeWallPaintColor);
+
+        livingTreePaintColor = 15;
+        livingTreeWallPaintColor = 15;
+
+        int elderwoodTileType = ModContent.TileType<LivingElderwood>();
+        int elderwoodWallType = ModContent.WallType<ElderwoodWall3>();
+        int vineTileType = ModContent.TileType<BackwoodsVines>();
+        int vineTileType2 = ModContent.TileType<BackwoodsVinesFlower>();
+        int elderwoodLeavesTileType = ModContent.TileType<LivingElderwoodlLeaves>();
+        for (int i = 0; i < Main.maxTilesX; i++) {
+            for (int j = 0; j < Main.maxTilesY; j++) {
+                Tile tile = Main.tile[i, j];
+                if (tile.HasTile) {
+                    if (tile.WallType == elderwoodWallType) {
+                        tile.TileColor = livingTreePaintColor;
+                    }
+                    else if (tile.TileType == elderwoodLeavesTileType || tile.TileType == elderwoodTileType) {
+                        tile.TileColor = livingTreePaintColor;
+                    }
+                    else if (tile.TileType == vineTileType || tile.TileType == vineTileType2) {
+                        int x = i;
+                        int y = j;
+                        WorldGenHelper.GetVineTop(i, j, out x, out y);
+                        if (Main.tile[x, y].TileType == elderwoodLeavesTileType)
+                            tile.TileColor = livingTreePaintColor;
+                    }
+                }
+
+                if (tile.WallType == elderwoodWallType)
+                    tile.WallType = livingTreePaintColor;
+            }
+        }
     }
 
     private void On_WorldGen_Convert(On_WorldGen.orig_Convert orig, int i, int j, int conversionType, int size) {

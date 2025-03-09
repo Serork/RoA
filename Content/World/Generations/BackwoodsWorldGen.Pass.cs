@@ -206,7 +206,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int attempts = 100000;
         while (--attempts > 0) {
             int x = _random.Next(Left, Right);
-            int y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 10 * WorldGenHelper.WorldSize, (int)Main.worldSurface + 5);
+            int y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 15 * WorldGenHelper.WorldSize, (int)Main.worldSurface + 5);
             int type = ModContent.TileType<NexusGateway>();
             if (again) {
                 x = _gatewayLocation.X;
@@ -216,7 +216,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 else {
                     x = _random.Next(Left, Right);
-                    y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 10 * WorldGenHelper.WorldSize, (int)Main.worldSurface + 5);
+                    y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 15 * WorldGenHelper.WorldSize, (int)Main.worldSurface + 5);
                 }
             }
             if (!TileObject.CanPlace(x, y, type, 0, 1, out var objectData)) {
@@ -3728,7 +3728,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             CenterX--;
         }
         BackwoodsVars.BackwoodsStartX = CenterX;
-        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX) + 15;
+        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 15;
         CenterY = BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX);
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsHalfSizeX = _biomeWidth / 2;

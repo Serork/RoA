@@ -99,7 +99,8 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
         if (Main.drawToScreen) {
             zero = Vector2.Zero;
         }
-        Texture2D texture = TextureAssets.Tile[Type].Value;
+        Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(Main.tile[i, j], i, j);
+        texture ??= TextureAssets.Tile[Type].Value;
         int frameWidth = texture.Width, frameHeight = texture.Height / FrameCount;
         Vector2 drawPosition = new Point(i, j).ToVector2() * 16f + zero;
         drawPosition.X += -(!reversed ? (frameWidth / 2 - 2) : 2);

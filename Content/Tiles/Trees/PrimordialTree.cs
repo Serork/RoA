@@ -1,8 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
 using RoA.Content.Dusts;
@@ -65,7 +67,8 @@ sealed class PrimordialTreeGlow : GlobalTile {
                 int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
                 int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
                 float opacity = BackwoodsFogHandler.Opacity > 0f ? BackwoodsFogHandler.Opacity : 1f;
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>(PrimordialTree.TexturePath + "_Glow").Value,
+                var texture = PaintsRenderer.TryGetPaintedTexture(i, j, PrimordialTree.TexturePath + "_Glow");
+                Main.spriteBatch.Draw(texture,
                                       new Vector2(i * 16 - (int)Main.screenPosition.X - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
                                       j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY),
                                       new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
@@ -121,13 +124,15 @@ sealed class PrimordialTree : ModTree {
 
     public static string TexturePath => $"{RoA.ModName}/Resources/Textures/Tiles/Trees/{nameof(PrimordialTree)}";
 
-    public override TreePaintingSettings TreeShaderSettings => new() {
-        UseSpecialGroups = true,
-        SpecialGroupMinimalHueValue = 11f / 72f,
-        SpecialGroupMaximumHueValue = 0.25f,
-        SpecialGroupMinimumSaturationValue = 0.88f,
-        SpecialGroupMaximumSaturationValue = 1f
-    };
+    public override TreePaintingSettings TreeShaderSettings => WoodJungle;
+
+    private static TreePaintingSettings WoodJungle = new TreePaintingSettings {
+		UseSpecialGroups = true,
+		SpecialGroupMinimalHueValue = 1f / 6f,
+		SpecialGroupMaximumHueValue = 5f / 6f,
+		SpecialGroupMinimumSaturationValue = 0f,
+		SpecialGroupMaximumSaturationValue = 1f
+	};
 
     public override void SetStaticDefaults() => GrowsOnTileId = [ModContent.TileType<BackwoodsGrass>()];
 

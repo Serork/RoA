@@ -158,7 +158,9 @@ sealed class BackwoodsFogHandler : ModSystem {
             int num2 = tileWorkSpace.Y + tileWorkSpace.Height;
             for (int i = tileWorkSpace.X; i < num; i++) {
                 for (int j = tileWorkSpace.Y; j < num2; j++) {
-                    TrySpawnFog(i, j);
+                    if (j < Main.worldSurface) {
+                        TrySpawnFog(i, j);
+                    }
                 }
             }
         }
