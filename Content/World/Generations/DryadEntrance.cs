@@ -258,6 +258,9 @@ sealed class DryadEntrance : ModSystem {
                 if (Main.tile[x2, y2].WallType == PlaceholderWallType) {
                     Main.tile[x2, y2].WallType = WallID.LivingWoodUnsafe;
                 } 
+                //if (Main.tile[x2, y2].WallType == ModContent.WallType<LivingBackwoodsLeavesWall2>()) {
+                //    Main.tile[x2, y2].WallType = WallID.LivingWoodUnsafe;
+                //}
             }
         }
 
@@ -850,7 +853,7 @@ sealed class DryadEntrance : ModSystem {
             }
         }
         ushort tileType2 = 192;
-        ushort wallType2 = WallID.LivingWoodUnsafe;
+        ushort wallType2 = WallID.LivingLeaf;
         num_ = 6;
         num2_ = 4;
         for (int k = 0; k < 2; k++) {
