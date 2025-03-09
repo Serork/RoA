@@ -19,7 +19,7 @@ using Terraria.Utilities;
 namespace RoA.Content.Items.Weapons.Druidic;
 
 sealed class PineCone : NatureItem {
-    private sealed class GeneratedStorage : ModSystem {
+    internal sealed class GeneratedStorage : ModSystem {
         public static bool PineConeAddedToWorld;
 
         private static void Reset() {
@@ -59,7 +59,7 @@ sealed class PineCone : NatureItem {
         On_WorldGen.GetCommonTreeFoliageData += On_WorldGen_GetCommonTreeFoliageData;
         On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
         On_WorldGen.GetTreeFrame += On_WorldGen_GetTreeFrame;
-        On_WorldGen.GrowTree += On_WorldGen_GrowTree;
+        //On_WorldGen.GrowTree += On_WorldGen_GrowTree;
         On_WorldGen.KillTile_GetTreeDrops += On_WorldGen_KillTile_GetTreeDrops;
     }
 
@@ -333,7 +333,7 @@ sealed class PineCone : NatureItem {
                         Main.tile[i - 1, k].UseBlockColors(cache);
                         num4 = genRand.Next(3);
                         if (genRand.Next(3) < 2 && !flag2) {
-                            if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
+                            if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(3))) {
                                 GeneratedStorage.PineConeAddedToWorld = true;
                                 num4 = 3;
                                 if (num4 == 3) {
@@ -384,7 +384,7 @@ sealed class PineCone : NatureItem {
                     Main.tile[i + 1, k].UseBlockColors(cache);
                     num4 = genRand.Next(3);
                     if (genRand.Next(3) < 2 && !flag2) {
-                        if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
+                        if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(3))) {
                             GeneratedStorage.PineConeAddedToWorld = true;
                             num4 = 3;
                             if (num4 == 3) {

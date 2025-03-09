@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.CustomSkyAmbience;
+using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Trees;
@@ -373,6 +374,15 @@ sealed class BackwoodsVars : ModSystem {
                         }
                         num4 = genRand.Next(3);
                         if (genRand.Next(3) < 2 && !flag2) {
+                            if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
+                                PineCone.GeneratedStorage.PineConeAddedToWorld = true;
+                                num4 = 3;
+                                if (num4 == 3) {
+                                    Main.tile[i - 1, k].TileFrameX = 44;
+                                    Main.tile[i - 1, k].TileFrameY = 264;
+                                }
+                            }
+
                             if (num4 == 0) {
                                 Main.tile[i - 1, k].TileFrameX = 44;
                                 Main.tile[i - 1, k].TileFrameY = 198;
@@ -418,6 +428,15 @@ sealed class BackwoodsVars : ModSystem {
                     }
                     num4 = genRand.Next(3);
                     if (genRand.Next(3) < 2 && !flag2) {
+                        if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(10))) {
+                            PineCone.GeneratedStorage.PineConeAddedToWorld = true;
+                            num4 = 3;
+                            if (num4 == 3) {
+                                Main.tile[i + 1, k].TileFrameX = 66;
+                                Main.tile[i + 1, k].TileFrameY = 264;
+                            }
+                        }
+
                         if (num4 == 0) {
                             Main.tile[i + 1, k].TileFrameX = 66;
                             Main.tile[i + 1, k].TileFrameY = 198;
