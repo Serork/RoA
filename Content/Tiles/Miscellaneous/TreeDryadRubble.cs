@@ -155,7 +155,9 @@ sealed class TreeDryadRubble : ModTile {
         int frameY = !flag ? tile.TileFrameY + 4 : 0; 
         int height = flag ? 22 : 16;
         int frameX = tile.TileFrameX;
-        Main.spriteBatch.Draw(TextureAssets.Tile[Type].Value,
+        Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
+        texture ??= TextureAssets.Tile[Type].Value;
+        Main.spriteBatch.Draw(texture,
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0) + 2) + zero,
                               new Rectangle(frameX, frameY, 16, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
