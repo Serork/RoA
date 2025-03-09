@@ -1887,7 +1887,7 @@ sealed partial class Lothor : ModNPC {
                 WreathAttackTime = GetAttackDelay();
                 _dashStrength = 0f;
                 _tempPosition = NPC.Center - new Vector2(0f * NPC.direction, 150f);
-                PlayRoarSound();
+                //PlayRoarSound();
                 break;
         }
     }
@@ -1971,14 +1971,9 @@ sealed partial class Lothor : ModNPC {
         bool flag2 = distance < 250f;
         bool flag4 = !_targetIsDeadOrNoTarget && DashTimer > MinDelayBeforeAttack * 0.5f && DashTimer < MinDelayBeforeAttack * 1.25f;
         if (flag4) {
-            if (_previousState != LothorAIState.Scream && GetAttackDoneCount(LothorAIState.SpittingAttack) < 2 && DashTimer % 5f == 0f) {
+            if (_previousState != LothorAIState.Scream && DashTimer % 5f == 0f) {
                 if (Main.rand.NextBool(6) && (Main.expertMode || _shouldEnrage) && Main.netMode != NetmodeID.MultiplayerClient) {
-                    if (_previousState != LothorAIState.SpittingAttack && Main.rand.NextBool()) {
-                        ChooseAttack(LothorAIState.SpittingAttack);
-                    }
-                    else {
-                        ChooseAttack(LothorAIState.Scream);
-                    }
+                    ChooseAttack(LothorAIState.Scream);
                     NPC.netUpdate = true;
                     return;
                 }
@@ -1992,7 +1987,7 @@ sealed partial class Lothor : ModNPC {
             if (flag3 &&
                 flag) {
                 if (_previousState != LothorAIState.SpittingAttack) {
-                    if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool()) {
+                    if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(2) && DashTimer % 5f == 0f) {
                         ChooseAttack(LothorAIState.SpittingAttack);
                         NPC.netUpdate = true;
                     }
