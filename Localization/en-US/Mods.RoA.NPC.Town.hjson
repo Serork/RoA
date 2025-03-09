@@ -31,9 +31,21 @@ Dryad: {
 GoblinTinkerer.PettyGoblinQuote1: Did you get ransacked by that sleazy fool? Tell you what, you're not alone.
 
 Guide: {
-	HelpText1: HelpText1
-	HelpText2: HelpText2
-	HelpText3: HelpText3
-	HelpText4: HelpText4
-	HelpText5: HelpText5
+	// Remove Vanilla Dryad quote.
+	
+	/* If the Dryad is not present AND no Boss has been killed:
+	HelpText1: Have you seen that wooden cocoon? It seems a powerful foe has cursed it. Maybe killing it will lift the curse? */
+	
+	/* If the Dryad is not present BUT a Boss has been killed:
+	HelpText2: Have you checked on that wooden woman? Perhaps she needs a little push? */
+	
+	/* If the Eater of Worlds/Brain of Cthulhu has been defeated: 
+	HelpText3: I think now nothing should stop you from chopping down those trees in the backwoods.
+	HelpText4: Have you checked on those chests deep below in the backwoods? I think their curse is lifted. */
+	
+	/* If the Skeletron has been defeated AND Lothor has not been defeated: 
+	HelpText5: That weird altar in the backwoods yearns for some souls. Have you tried bringing some to it? */
+	
+	// HelpText4: HelpText4
+	// HelpText5: HelpText5
 }
