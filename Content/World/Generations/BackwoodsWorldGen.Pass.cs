@@ -226,6 +226,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
             objectData.random = -1;
             if (TileObject.Place(objectData)) {
+                for (int i = -10; i < 11; i++) {
+                    for (int j = -20; j < 0; j++) {
+                        if (Main.tile[x + i, y + j].TileType == TileID.Sand) {
+                            Main.tile[x + i, y + j].TileType = TileID.Dirt;
+                        }
+                    }
+                }
                 _gatewayLocation = new Point(x, y);
                 WorldGenHelper.ModifiedTileRunner(x + 3, y + 13, 20, 1, _dirtTileType, true, overRide: true, ignoreTileTypes: [type, _stoneTileType, _grassTileType]);
                 break;
@@ -3721,7 +3728,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             CenterX--;
         }
         BackwoodsVars.BackwoodsStartX = CenterX;
-        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 15;
+        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX) + 15;
         CenterY = BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX);
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsHalfSizeX = _biomeWidth / 2;
