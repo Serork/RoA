@@ -60,10 +60,6 @@ sealed class ShepherdLeaves : NatureProjectile {
     }
 
     public override void AI() {
-        if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
-            Projectile.timeLeft -= 1;
-        }
-
         Player player = Main.player[Projectile.owner];
         if (Projectile.IsOwnerMyPlayer(player)) {
             Vector2 pointPosition = Main.player[Projectile.owner].GetViableMousePosition();
