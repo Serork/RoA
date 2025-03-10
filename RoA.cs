@@ -79,7 +79,7 @@ sealed class RoA : Mod {
             ["Event_" + TMLAchievements.RoAAchivement.OpenRootboundChest]);
 
             new ModCallAchievement().Add(Instance,
-            "SilentHill",
+            "SilentHills",
             AchievementCategory.Slayer,
             null, null,
             false, false,
@@ -132,7 +132,7 @@ sealed class RoA : Mod {
                     new string[] { "Event_" + TMLAchievements.RoAAchivement.OpenRootboundChest });
 
                 mod.Call("AddAchievement", Instance,
-                    "SilentHill",
+                    "SilentHills",
                     AchievementCategory.Slayer,
                     null,
                     null,
