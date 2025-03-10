@@ -50,6 +50,8 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool IsInUse => !Owner.CCed && (Owner.controlUseItem || !MinPassed);
 
+        protected override bool ShouldWaitUntilProjDespawns() => false;
+
         protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.08f);
 
         protected override bool DespawnWithProj() => false;
@@ -60,7 +62,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool ShouldntUpdateRotationAndDirection() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) / 2 + NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 3);
 
         protected override void SafestOnSpawn(IEntitySource source) {
             _attackTime = NatureWeaponHandler.GetUseSpeed(Owner.GetSelectedItem(), Owner);
