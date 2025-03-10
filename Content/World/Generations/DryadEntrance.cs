@@ -274,7 +274,7 @@ sealed class DryadEntrance : ModSystem {
                         if (tile.TileType == treeDryad) {
                             tile.TileColor = livingTreePaintColor;
                         }
-                        else if (tile.WallType == 244) {
+                        else if (tile.WallType == 244 || tile.WallType == WallID.LivingLeaf) {
                             tile.TileColor = livingTreePaintColor;
                         }
                         else if (tile.TileType == 192 || tile.TileType == 191) {
@@ -300,7 +300,7 @@ sealed class DryadEntrance : ModSystem {
                         }
                     }
 
-                    if (tile.WallType == 244)
+                    if (tile.WallType == 244 || tile.WallType == WallID.LivingLeaf)
                         tile.WallColor = livingTreePaintColor;
                 }
             }

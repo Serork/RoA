@@ -759,7 +759,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
     public ElderwoodHouseBuilder(IEnumerable<Rectangle> rooms)
         : base(HouseType.Wood, rooms) {
         base.TileType = (ushort)ModContent.TileType<LivingElderwood>();
-        base.WallType = (ushort)ModContent.WallType<ElderwoodWall>();
+        base.WallType = (ushort)ModContent.WallType<ElderwoodWall3>();
         base.BeamType = 124;
         //if (Main.tenthAnniversaryWorld) {
         //    if (Main.getGoodWorld) {
