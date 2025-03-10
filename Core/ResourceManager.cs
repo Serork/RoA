@@ -22,13 +22,13 @@ static class ResourceManager {
     public static string EmptyTexture => Textures + "Empty";
     public static string PixelTexture => Textures + "Pixel";
 
-
+    public static string AchievementsTextures => UITextures + "Achievements/";
 
     public static string Effects => RoA.ModName + $"/{EFFECTSPATH}/";
 
     public static Texture2D Pixel => ModContent.Request<Texture2D>(PixelTexture, AssetRequestMode.ImmediateLoad).Value;
 
-    public static string GUITextures => Textures + "GUI/";
+    public static string UITextures => Textures + "UI/";
 
     public static string BackgroundTextures => Textures + "Backgrounds/";
 

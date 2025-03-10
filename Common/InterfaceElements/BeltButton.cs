@@ -31,7 +31,7 @@ sealed class BeltButton() : InterfaceElement(RoA.ModName + ": Belt Button", Inte
             return;
         }
 
-        string textureName = ResourceManager.GUITextures + "BeltButton";
+        string textureName = ResourceManager.UITextures + "BeltButton";
         _beltButtonTexture = ModContent.Request<Texture2D>(textureName);
         _beltButtonTextureOutline = ModContent.Request<Texture2D>(textureName + "_Outline");
     }

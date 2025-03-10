@@ -187,7 +187,7 @@ sealed class SphereHandler : GlobalItem {
                     num5 -= 260;
                     num6 += 26;
                 }
-                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "TerraLeaf").Value;
+                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TerraLeaf").Value;
                 int height = texture.Height;
                 int width = texture.Width;
                 spriteBatch.Draw(texture, item.Center - Main.screenPosition + new Vector2((float)(26 * (i - 1) + num5) - 48,
@@ -282,7 +282,7 @@ sealed class SphereHandler : GlobalItem {
                     num5 -= 260;
                     num6 += 26;
                 }
-                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "CondorFeather").Value;
+                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "CondorFeather").Value;
                 int height = texture.Height;
                 int width = texture.Width;
                 spriteBatch.Draw(texture, item.Center - Main.screenPosition + 

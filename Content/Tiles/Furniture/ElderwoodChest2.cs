@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
+using RoA.Common.TMLAchievements;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -232,7 +233,9 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
 						SoundEngine.PlaySound(SoundID.MenuClose);
 					}
 					else {
-						player.chest = chest;
+						TMLAchievements.CompleteEventAchievement(TMLAchievements.RoAAchivement.OpenRootboundChest);
+
+                        player.chest = chest;
 						Main.playerInventory = true;
 						Main.recBigList = false;
 						player.chestX = left;

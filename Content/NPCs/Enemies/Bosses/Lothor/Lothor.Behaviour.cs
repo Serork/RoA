@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Common;
 using RoA.Common.NPCs;
+using RoA.Common.TMLAchievements;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
@@ -827,6 +828,9 @@ sealed partial class Lothor : ModNPC {
         NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);
         if (Main.netMode == NetmodeID.Server) {
             NetMessage.SendData(MessageID.WorldData);
+        }
+        if (CanDropFlederSlayer) {
+            TMLAchievements.CompleteEventAchievement(TMLAchievements.RoAAchivement.GutsOfSteel);
         }
     }
 

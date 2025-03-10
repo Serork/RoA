@@ -61,7 +61,7 @@ class WreathSlot : ModAccessorySlot {
 
     public override bool IsHidden() => IsHiddenBase() || Main.LocalPlayer.CurrentLoadoutIndex != 0;
 
-    public override string FunctionalTexture => ResourceManager.GUITextures + "Wreath_SlotBackground";
+    public override string FunctionalTexture => ResourceManager.UITextures + "Wreath_SlotBackground";
 
     public override bool PreDraw(AccessorySlotType context, Item item, Vector2 position, bool isHovered) {
         if (isHovered) {

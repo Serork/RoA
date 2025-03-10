@@ -26,7 +26,7 @@ sealed class ItemTooltipLeaves : GlobalItem {
             return;
         }
 
-        _leavesSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Leaves"), new SpriteFrame(3, 1));
+        _leavesSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.UITextures + "Leaves"), new SpriteFrame(3, 1));
     }
 
     public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {

@@ -41,7 +41,7 @@ sealed class BeaconMapLayer : ModMapLayer {
                 /*if (Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(Beacon.GetLargeGemItem(i, j))) */ {
                     scaleIfSelected = num * 2f;
                 }
-                Texture2D value = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Beacon_Icons").Value;
+                Texture2D value = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Beacon_Icons").Value;
                 bool num2 = (Main.DroneCameraTracker == null || !Main.DroneCameraTracker.IsInUse());
                 Color color = Color.White;
                 if (!num2) {

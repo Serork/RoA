@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.TMLAchievements;
 using RoA.Content.Buffs;
-using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -49,6 +49,18 @@ sealed class MercuriumOre : ModItem {
 }
 
 sealed class MercuriumOrePlayerHandler : ModPlayer {
+    private sealed class MercuriumOreAchievement : GlobalItem {
+        public override bool InstancePerEntity => true;
+
+        public override bool OnPickup(Item item, Player player) {
+            if (player.buffImmune[BuffID.Poisoned] && item.type == ModContent.ItemType<MercuriumOre>()) {
+                TMLAchievements.CompleteEventAchievement(TMLAchievements.RoAAchivement.WhatsThatSmell);
+            }
+
+            return base.OnPickup(item, player);
+        }
+    }
+
     public override void PostUpdate() {
         if (Player.dead) {
             return;

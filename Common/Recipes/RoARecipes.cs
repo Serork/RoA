@@ -26,6 +26,7 @@ using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Ranged.Ammo;
 
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
@@ -197,11 +198,16 @@ sealed class RoARecipes : ModSystem {
         item.Register();
     }
 
+    private static void CompleteAchievement(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack) {
+        TMLAchievements.TMLAchievements.CompleteEventAchievement(TMLAchievements.TMLAchievements.RoAAchivement.NotPostMortem);
+    }
+
     private static void AddWreaths(out Recipe lastWreath) {
         Recipe item = Recipe.Create(ModContent.ItemType<ForestWreath>());
         item.AddIngredient<TwigWreath>(1);
         item.AddIngredient(ItemID.Daybloom, 5);
         item.SortBeforeFirstRecipesOf(ItemID.IceTorch);
+        item.AddOnCraftCallback(CompleteAchievement);
         item.Register();
         Recipe temp = item;
         item = Recipe.Create(ModContent.ItemType<ForestWreath2>());
@@ -210,6 +216,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<NaturesHeart>(1);
         item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
         item.SortAfter(temp);
+        item.AddOnCraftCallback(CompleteAchievement);
         item.Register();
 
         temp = item;
@@ -218,6 +225,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient(ItemID.Moonglow, 5);
         item.SortAfter(temp);
         item.Register();
+        item.AddOnCraftCallback(CompleteAchievement);
         temp = item;
         item = Recipe.Create(ModContent.ItemType<JungleWreath2>());
         item.AddIngredient<JungleWreath>(1);
@@ -225,6 +233,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<NaturesHeart>(1);
         item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
         item.SortAfter(temp);
+        item.AddOnCraftCallback(CompleteAchievement);
         item.Register();
 
         temp = item;
@@ -232,6 +241,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<TwigWreath>(1);
         item.AddIngredient(ItemID.Waterleaf, 5);
         item.SortAfter(temp);
+        item.AddOnCraftCallback(CompleteAchievement);
         item.Register();
         temp = item;
         item = Recipe.Create(ModContent.ItemType<BeachWreath2>());
@@ -240,6 +250,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<NaturesHeart>(1);
         item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
         item.SortAfter(temp);
+        item.AddOnCraftCallback(CompleteAchievement);
         item.Register();
 
         temp = item;
@@ -247,6 +258,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<TwigWreath>(1);
         item.AddIngredient(ItemID.Shiverthorn, 5);
         item.SortAfter(temp);
+        item.AddOnCraftCallback(CompleteAchievement);
         item.Register();
         temp = item;
         item = Recipe.Create(ModContent.ItemType<SnowWreath2>());
@@ -255,6 +267,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<NaturesHeart>(1);
         item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
         item.SortAfter(temp);
+        item.AddOnCraftCallback(CompleteAchievement);
         item.Register();
         lastWreath = item;
     }
