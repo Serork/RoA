@@ -71,7 +71,10 @@ sealed class BackwoodsWorldGen : ModSystem {
             for (int j = 0; j < Main.maxTilesY; j++) {
                 Tile tile = Main.tile[i, j];
                 if (tile.HasTile) {
-                    if (tile.WallType == elderwoodWallType) {
+                    if (tile.TileType == ModContent.TileType<OvergrownAltar>()) {
+                        tile.TileColor = PaintID.RedPaint;
+                    }
+                    else if (tile.WallType == elderwoodWallType) {
                         tile.TileColor = livingTreePaintColor;
                     }
                     else if (tile.TileType == elderwoodLeavesTileType || tile.TileType == elderwoodTileType) {
