@@ -46,7 +46,7 @@ sealed class TrailerCameraTest : ModPlayer {
 
         if (!_shifted) {
             Point altarPosition = new Point(BackwoodsVars.BackwoodsStartX + 9, BackwoodsVars.FirstTileYAtCenter - 25);
-            Point backwoodsBottomPosition = new Point(BackwoodsVars.BackwoodsStartX + 9, BackwoodsVars.FirstTileYAtCenter + BackwoodsVars.BackwoodsSizeY * 2 - 100);
+            Point backwoodsBottomPosition = new Point(BackwoodsVars.BackwoodsStartX + 9, BackwoodsVars.FirstTileYAtCenter + BackwoodsVars.BackwoodsSizeY * 2 - BackwoodsVars.BackwoodsSizeY / 2 - BackwoodsVars.BackwoodsSizeY / 3);
             CameraSystem.AsymetricalPan(700, 240, 100, backwoodsBottomPosition.ToWorldCoordinates(), altarPosition.ToWorldCoordinates(), EaseFunction);
             _shifted = true;
         }

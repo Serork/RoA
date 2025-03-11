@@ -4,16 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
-using RoA.Common.Players;
-using RoA.Content.Tiles.Decorations;
 using RoA.Core;
-using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
 using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
