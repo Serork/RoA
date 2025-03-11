@@ -1,10 +1,15 @@
 Hunter: {
-	Name1: Hunter
-	Name2: Biden
+	Name1: Gehrman
+	Name2: Gascoigne
 	Name3: Caleb
 	Name4: Evan
+	//Name5: Hemingway
+	//Name6: Geralt
+	//Name7: Franz
+	//Name8: Elmer
+	//Name9: Ahab
 	Button1: Talk
-	Button2_1: Barter
+	Button2_1: Trade
 	Button2_2: "{$Mods.RoA.NPCs.Town.Hunter.Button2_1} (15 {$ItemName.Leather})"
 	Quote1: There, behind you! Ah, that must have been the wind.
 	Quote2: An awfully unpleasant druid has told me this part of the forest is off limits. I think I am starting to understand why.
@@ -14,26 +19,38 @@ Hunter: {
 	Quote6: I had to make a run for it, so my clothes need mending. I’m willing to spare some coin for any leather you have in your possession.
 	Quote7: Argh!!! Startle me like that again and I’ll start blasting!
 	Quote8: Harpoon? Sorry, kid, but this gun shoots real bullets.
+	//Quote9: Me, afraid of the dark? You must be kidding me! The dark should be afraid of me.
+	//Quote10: I could use some leather but my hands aren’t as steady as they used to be. If you can procure some, I am willing to trade.
+	//Quote11: Last night, I almost shot a tree! I swear, it looked like it was smiling at me wisely.
+	//Quote13: Any creature who dares to ambush should know that I can… I will defend myself!
+	//Quote14: I’ve seen a dozen lumberjacks walking about, but they haven’t cut a single tree! So, what I'm wondering is - who’s paying them?!
+	//Quote15: Hey, at least I didn’t get lost in a poisonous swamp. Trust me, those places are inhabited by dark souls.
+	//Quote16: A “wild” hunt? That just sounds like a regular hunt to me, kid.
+	//Quote17: Every time I turn, I leave a mark on a tree. Yet somehow, I always end up back in the same spot! What kind of a world is this?
+	//Quote18: These woods… I can feel the weight of their history upon my mind. It is dangerous to stay here.
+
+
 	NotEnoughTradeQuote1: I am interested in refined leather only! If I had a use for dirty scraps, I would have already skinned the carcasses of my prey.
 	NotEnoughTradeQuote2: Are you trying to swindle me? If you don’t have any leather you better get out of my way!
-	NotEnoughTradeQuote3: The last thing you want to do is to taunt a desperate man like me, kid.
+	NotEnoughTradeQuote3: The last thing you want to do is taunt a desperate man like me, kid.
 	TradeQuote1: Thank you. With this leather, I may live to fight another day.
 	TradeQuote2: Much obliged. These supplies will serve me well.
 	TradeQuote3: Thank you, kid. Now I am sure I won't be dead by daylight.
-	DropFireLighterQuote1: Listen, kid. I will meet my end sooner or later. Have this. It's my relic.
+	DropFireLighterQuote1: Listen, kid. I have a feeling we're not going to meet again. Please take this... I no longer have a use for it. 
 }
 
 Dryad: {
 	AwakeQuote1: Get your hands off me! GET YOUR HAND... What?
 	AwakeQuote2: You will all rot! You will... Who are you?
+	AwakeQuote3: A drastic change in the world has spurred my awakening. A powerful monster was slain... was that your doing?
 }
 
 GoblinTinkerer.PettyGoblinQuote1: Did you get ransacked by that sleazy fool? Tell you what, you're not alone.
 
 Guide: {
-	HelpText1: Have you seen that wooden cocoon? It seems a powerful foe has cursed it. Maybe killing it will lift the curse?
+	HelpText1: Have you seen that wooden cocoon? It has stayed dormant for millenia. Maybe defeating a powerful foe will bring it to life?
 	HelpText2: Have you checked on that wooden woman? Perhaps she needs a little push?
-	HelpText3: I think now nothing should stop you from chopping down those trees in the backwoods.
-	HelpText4: Have you checked on those chests deep below in the backwoods? I think their curse is lifted.
+	HelpText3: Once you forge appropriate tools, nothing should stop you from chopping down those trees in the backwoods.
+	HelpText4: Have you seen those chests hidden deep below in the backwoods? A strong pickaxe may help you reach them.
 	HelpText5: That weird altar in the backwoods yearns for some souls. Have you tried bringing some to it?
 }
