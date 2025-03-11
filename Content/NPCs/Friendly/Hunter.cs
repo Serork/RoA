@@ -32,7 +32,7 @@ sealed class Hunter : ModNPC {
     // dont forget hjson
     private const byte MAXQUOTES = 17;
     private const byte MAXNOTENOUGHTRADEQUOTES = 3;
-    private const byte MAXTRADEQUOTES = 3;
+    private const byte MAXTRADEQUOTES = 4;
     private const byte MAXFIRELIGHTERQUOTES = 1;
     private const byte TRADEAMOUNTTODROPFIRELIGHTER = 10;
 
