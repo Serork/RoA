@@ -22,13 +22,12 @@ Hunter: {
 	Quote9: Me, afraid of the dark? You must be kidding me! The dark should be afraid of me.
 	Quote10: Мне бы не помешала кожа, но руки у меня уже не такие, как раньше. Если сможешь раздобыть, я готов поторговать.
 	Quote11: Вчера вечером я чуть не подстрелил дерево! Клянусь, оно как будто мудро мне улыбалось.
-	Quote13: Любой монстр, осмеливщийся устроить мне засаду, должен знать... Я буду защищаться!
-	Quote14: Я видел дюжину лесорубов, которые здесь бродили, но они не срубили ни одного дерева! Так вот, мне интересно - кто им платит?!
-	Quote15: Ну, по крайней мере я не заблудился в ядовитом болоте. Поверь мне, эти места населены темными душами.
-	Quote16: «Дикая» охота? Звучит как обычная охота, малыш.
-	Quote17: Каждый раз, когда я поворачиваюсь, я оставляю метку на дереве. Но каким-то образом я всегда оказываюсь на том же месте! Что это за мир?
-	Quote18: Эти леса... Я чувствую, как они даваят на мой разум. Оставаться здесь опасно.
-	
+	Quote12: Любой монстр, осмеливщийся устроить мне засаду, должен знать... Я буду защищаться!
+	Quote13: Я видел дюжину лесорубов, которые здесь бродили, но они не срубили ни одного дерева! Так вот, мне интересно - кто им платит?!
+	Quote14: Ну, по крайней мере я не заблудился в ядовитом болоте. Поверь мне, эти места населены темными душами.
+	Quote15: «Дикая» охота? Звучит как обычная охота, малыш.
+	Quote16: Каждый раз, когда я поворачиваюсь, я оставляю метку на дереве. Но каким-то образом я всегда оказываюсь на том же месте! Что это за мир?
+	Quote17: Эти леса... Я чувствую, как они даваят на мой разум. Оставаться здесь опасно.
 	NotEnoughTradeQuote1: Меня интересует только обработанная кожа! Если бы мне нужны были рваная плоть, я бы давно уже освежевал туши своих жертв.
 	NotEnoughTradeQuote2: Ты, что, пытаешься меня обмануть? Если у тебя нет кожи, то проваливай с пути.
 	NotEnoughTradeQuote3: Последнее, что тебе следует делать, это потешаться над отчаянными. Например, мной, дитя.
@@ -47,9 +46,9 @@ Dryad: {
 GoblinTinkerer.PettyGoblinQuote1: Тебя обставил тот мелкий воришка? Скажу честно, ты не первый.
 
 Guide: {
-	// HelpText1: Have you seen that wooden cocoon? It seems a powerful foe has cursed it. Maybe killing it will lift the curse?
+	// HelpText1: Have you seen that wooden cocoon? It has stayed dormant for millenia. Maybe defeating a powerful foe will bring it to life?
 	// HelpText2: Have you checked on that wooden woman? Perhaps she needs a little push?
-	// HelpText3: I think now nothing should stop you from chopping down those trees in the backwoods.
-	// HelpText4: Have you checked on those chests deep below in the backwoods? I think their curse is lifted.
-	// HelpText5: That weird altar in the backwoods yearns for some souls. Have you tried bringing some to it?
+	// HelpText3: Once you forge appropriate tools, nothing should stop you from chopping down those trees in the backwoods.
+	// HelpText4: Have you seen those chests hidden deep below in the backwoods? A strong pickaxe may help you reach them.
+	// HelpText5: That weird altar in the backwoods yearns for souls. Have you tried bringing some to it?
 }
