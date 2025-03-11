@@ -18,12 +18,14 @@ sealed class ElderwoodHammer : ModItem {
         Item.damage = 4;
         Item.DamageType = DamageClass.Melee;
 
-        Item.useTime = Item.useAnimation = 36;
+        Item.useAnimation = 30;
+        Item.useTime = 20;
+
         Item.useStyle = ItemUseStyleID.Swing;
         Item.autoReuse = true;
 
         Item.knockBack = 5f;
-        Item.hammer = 25;
+        Item.hammer = 50;
 
         Item.value = Item.sellPrice(copper: 10);
         Item.rare = ItemRarityID.White;

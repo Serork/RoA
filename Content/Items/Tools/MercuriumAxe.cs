@@ -21,8 +21,10 @@ sealed class MercuriumAxe : ModItem {
 		Item.damage = 18;
 		Item.DamageType = DamageClass.Melee;
 
-		Item.useTime = Item.useAnimation = 24;
-		Item.useStyle = ItemUseStyleID.Swing;
+        Item.useAnimation = 28;
+        Item.useTime = 15;
+
+        Item.useStyle = ItemUseStyleID.Swing;
         Item.autoReuse = true;
 
         Item.useTurn = true;

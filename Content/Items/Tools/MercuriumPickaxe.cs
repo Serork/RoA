@@ -21,8 +21,10 @@ sealed class MercuriumPickaxe : ModItem {
 		Item.damage = 8;
 		Item.DamageType = DamageClass.Melee;
 
-		Item.useTime = Item.useAnimation = 18;
-		Item.useStyle = ItemUseStyleID.Swing;
+        Item.useAnimation = 28;
+        Item.useTime = 15;
+
+        Item.useStyle = ItemUseStyleID.Swing;
 
 		Item.useTurn = true;
 
