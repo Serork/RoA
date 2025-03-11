@@ -820,8 +820,9 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
             for (int j = room.Y + 1; j < room.Y + room.Height - 1; j++) {
                 if (j <= Main.worldSurface) {
                     bool flag = false;
-                    for (int i2 = i - 1; i2 < i + 2; i2++) {
-                        for (int j2 = j - 1; j2 < j + 2; j2++) {
+                    int check = 5;
+                    for (int i2 = i - check; i2 < i + check + 1; i2++) {
+                        for (int j2 = j - check; j2 < j + check + 1; j2++) {
                             if (i2 != 0 && j2 != 0) {
                                 if (Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsGrassWall>() ||
                                     Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>()) {
@@ -831,7 +832,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
                         }
                     }
                     if (Main.tile[i, j].WallType == 0 || !Main.tile[i, j].AnyWall()) {
-                        Main.tile[i, j].WallType = flag ? (ushort)ModContent.WallType<BackwoodsGrassWall>() : WallType;
+                        Main.tile[i, j].WallType = flag ? (ushort)(WorldGen.genRand.NextBool() ? 0 : ModContent.WallType<BackwoodsGrassWall>()) : WallType;
                     }
                 }
             }
