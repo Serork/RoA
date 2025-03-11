@@ -8,9 +8,11 @@ Hunter: {
 	Name7: Franz
 	Name8: Elmer
 	Name9: Ahab
+
 	Button1: Talk
 	Button2_1: Trade
 	Button2_2: "{$Mods.RoA.NPCs.Town.Hunter.Button2_1} (15 {$ItemName.Leather})"
+
 	Quote1: There, behind you! Ah, that must have been the wind.
 	Quote2: An awfully unpleasant druid has told me this part of the forest is off limits. I think I am starting to understand why.
 	Quote3: I don’t quite remember the road I took to get here. I had to cut through some foliage, but now it seems to have grown back right behind me.
@@ -28,12 +30,15 @@ Hunter: {
 	Quote15: A “wild” hunt? That just sounds like a regular hunt to me, kid.
 	Quote16: Every time I turn, I leave a mark on a tree. Yet somehow, I always end up back in the same spot! What kind of a world is this?
 	Quote17: These woods… I can feel the weight of their history upon my mind. It is dangerous to stay here.
+
 	NotEnoughTradeQuote1: I am interested in refined leather only! If I had a use for dirty scraps, I would have already skinned the carcasses of my prey.
 	NotEnoughTradeQuote2: Are you trying to swindle me? If you don’t have any leather you better get out of my way!
 	NotEnoughTradeQuote3: The last thing you want to do is taunt a desperate man like me, kid.
+
 	TradeQuote1: Thank you. With this leather, I may live to fight another day.
 	TradeQuote2: Much obliged. These supplies will serve me well.
 	TradeQuote3: Thank you, kid. Now I am sure I won't be dead by daylight.
+
 	DropFireLighterQuote1: Listen, kid. I have a feeling we're not going to meet again. Please take this... I no longer have a use for it.
 }
 
