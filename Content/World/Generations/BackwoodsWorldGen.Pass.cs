@@ -66,7 +66,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private HashSet<Point> _biomeSurface = [], _altarTiles = [];
     private GenerationProgress _progress = null;
     private Point _positionToPlaceBiome;
-    private int _biomeWidth = 100, _biomeHeight = 162;
+    private int _biomeWidth, _biomeHeight;
     private ushort _dirtTileType, _grassTileType, _stoneTileType, _mossTileType, _mossGrowthTileType, _elderwoodTileType, _elderwoodTileType2, _elderwoodTileType3, _leavesTileType;
     private ushort _dirtWallType, _grassWallType, _flowerGrassWallType, _elderwoodWallType, _elderwoodWallType2, _leavesWallType;
     private ushort _fallenTreeTileType, _plantsTileType, _bushTileType, _elderWoodChestTileType, _altarTileType, _mintTileType, _vinesTileType, _vinesTileType2, _potTileType;
@@ -1911,7 +1911,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
             bool flag = false;
-            int check = 20 * WorldGenHelper.WorldSize;
+            int check = 30 * WorldGenHelper.WorldSize;
             attempts = 100;
             for (int x2 = baseX - check; x2 < baseX + check; x2++) {
                 for (int y2 = baseY - check; y2 < baseY + check; y2++) {
@@ -3686,6 +3686,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _biomeSurface = [];
         _altarTiles = [];
 
+        _biomeWidth = 100;
+        _biomeHeight = 162;
         _biomeWidth += (int)(_biomeWidth * 1.35f * WorldGenHelper.WorldSize2);
         _biomeHeight += (int)(_biomeHeight * 1.35f * WorldGenHelper.WorldSize2);
 
