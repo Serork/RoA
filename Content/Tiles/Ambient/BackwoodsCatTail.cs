@@ -243,6 +243,8 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;
 
+        Main.tileLavaDeath[Type] = true;
+
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.BreakableWhenPlacing[Type] = true;
 

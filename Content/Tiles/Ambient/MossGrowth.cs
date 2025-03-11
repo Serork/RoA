@@ -24,10 +24,12 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
-        Main.tileLavaDeath[Type] = true;
+        //Main.tileLavaDeath[Type] = true;
         Main.tileLighted[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileNoFail[Type] = true;
+
+        Main.tileObsidianKill[Type] = true;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
 

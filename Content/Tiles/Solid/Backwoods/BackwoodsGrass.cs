@@ -1,26 +1,21 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Networking.Packets;
-using RoA.Common.Networking;
 using RoA.Common.Tiles;
 using RoA.Content.Dusts;
 using RoA.Content.Tiles.Ambient;
-using RoA.Content.Tiles.Crafting;
-using RoA.Content.Tiles.Plants;
+using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
 using System;
 using System.Linq;
 
 using Terraria;
-using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
+using Terraria.GameContent.Metadata;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using RoA.Content.Tiles.Walls;
-using Terraria.GameContent.Metadata;
-using Terraria.GameContent.Drawing;
 
 namespace RoA.Content.Tiles.Solid.Backwoods;
 

@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Tiles;
+using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Trees;
 using RoA.Core.Utility;
 
 using System;
@@ -21,6 +23,8 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;
+
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.BreakableWhenPlacing[Type] = true;
@@ -98,7 +102,30 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
                         if (!tile5.HasTile)
                             continue;
 
-                        if (tile5.TileType == ModContent.TileType<BackwoodsGrass>() || tile5.TileType == 2 || tile5.TileType == 23 || tile5.TileType == 109 || tile5.TileType == 199 || tile5.TileType == 477 || tile5.TileType == 492) {
+                        bool flag = false;
+                        bool flag2 = false;
+                        if (tile5.TileType == ModContent.TileType<BackwoodsGrass>()) {
+                            flag = true;
+                        }
+                        if (flag && !Main.hardMode) {
+                            for (int i2 = num - 1; i2 <= num + 1; i2++) {
+                                if (flag2) {
+                                    break;
+                                }
+                                for (int j2 = num2 - 1; j2 <= num2 + 1; j2++) {
+                                    if (Main.tile[i2, j2 - 1].TileType == TileID.Trees ||
+                                        Main.tile[i2, j2 - 1].TileType == ModContent.TileType<BackwoodsBigTree>()) {
+                                        flag2 = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (flag2) {
+                            flag = false;
+                        }
+                        if (flag || 
+                            tile5.TileType == 2 || tile5.TileType == 23 || tile5.TileType == 109 || tile5.TileType == 199 || tile5.TileType == 477 || tile5.TileType == 492) {
                             tile5.TileType = 0;
                             WorldGen.SquareTileFrame(i, j);
                             if (Main.netMode == 2)
