@@ -23,7 +23,7 @@ public class MercuriumHammer : ModItem {
 		Item.DamageType = DamageClass.Melee;
 
         Item.useAnimation = 30;
-        Item.useTime = 16;
+        Item.useTime = 18;
 
         Item.useStyle = ItemUseStyleID.Swing;
 
