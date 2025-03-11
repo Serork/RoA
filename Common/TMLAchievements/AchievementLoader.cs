@@ -161,9 +161,9 @@ static class AchievementLoader {
         if (flag) {
             Cards.SetValue(Main.AchievementAdvisor, cards.OrderBy((c) => c.order).ToList());
         }
-        foreach (var ach in cards.OrderBy((c) => c.order).ToList()) {
-            Console.WriteLine(ach.achievement.Name + " " + ach.order);
-        }
+        //foreach (var ach in cards.OrderBy((c) => c.order).ToList()) {
+        //    Console.WriteLine(ach.achievement.Name + " " + ach.order);
+        //}
     }
 
     public static void OnItemPickup(Player player, short type, int count) {

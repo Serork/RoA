@@ -125,7 +125,6 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
-        Main.tileObsidianKill[Type] = true;
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
