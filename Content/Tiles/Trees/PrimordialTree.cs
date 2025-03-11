@@ -33,6 +33,7 @@ sealed class MakePrimordialTreeImmuneToLava : ILoadable {
         On_Liquid.AddWater += On_Liquid_AddWater;
     }
 
+    // also look for On_Liquid_DelWater in BackwoodsLilypad
     private bool CheckTile(int checkX, int checkY) {
         bool result = true;
         if (Main.tile[checkX, checkY].HasTile) {
