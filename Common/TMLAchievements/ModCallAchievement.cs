@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 
+using Terraria;
 using Terraria.Achievements;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.TMLAchievements;
@@ -44,7 +46,7 @@ internal class ModCallAchievement : ModAchievement {
     }
 
     internal void Add(Mod mod, string name, AchievementCategory cat, string texture, string borderTexture, bool showBar, bool showCard, float cardOrder, string[] conditions) {
-        if (!ModLoader.HasMod("TMLAchievements")) {
+        if (Main.netMode != NetmodeID.Server && !ModLoader.HasMod("TMLAchievements")) {
             this.name = name;
             this.cat = cat;
             bar = showBar;

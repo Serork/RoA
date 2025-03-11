@@ -123,13 +123,14 @@ sealed class BackwoodsVars : ModSystem {
     }
 
     public override void NetSend(BinaryWriter writer) {
-        writer.Write(FirstTileYAtCenter);
-        writer.Write(BackwoodsTileForBackground);
         writer.Write(_preDownedBossTimer);
         writer.Write(_backwoodsAwake);
-        writer.Write(BackwoodsStartX);
-        writer.Write(BackwoodsHalfSizeX);
-        writer.Write(BackwoodsSizeY);
+
+        //writer.Write(FirstTileYAtCenter);
+        //writer.Write(BackwoodsTileForBackground);
+        //writer.Write(BackwoodsStartX);
+        //writer.Write(BackwoodsHalfSizeX);
+        //writer.Write(BackwoodsSizeY);
 
         //writer.Write(BackwoodsTreeCountInWorld);
         //for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
@@ -140,13 +141,14 @@ sealed class BackwoodsVars : ModSystem {
     }
 
     public override void NetReceive(BinaryReader reader) {
-        FirstTileYAtCenter = reader.ReadInt32();
-        BackwoodsTileForBackground = reader.ReadInt32();
         _preDownedBossTimer = reader.ReadSingle();
         _backwoodsAwake = reader.ReadBoolean();
-        BackwoodsStartX = reader.ReadInt32();
-        BackwoodsHalfSizeX = reader.ReadInt32();
-        BackwoodsSizeY = reader.ReadInt32();
+
+        //FirstTileYAtCenter = reader.ReadInt32();
+        //BackwoodsTileForBackground = reader.ReadInt32();
+        //BackwoodsStartX = reader.ReadInt32();
+        //BackwoodsHalfSizeX = reader.ReadInt32();
+        //BackwoodsSizeY = reader.ReadInt32();
 
         //BackwoodsTreeCountInWorld = reader.ReadInt16();
         //AllTreesWorldPositions.Clear();
