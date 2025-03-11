@@ -140,7 +140,7 @@ sealed class TreeDryad : ModTile {
                 return;
             }
 
-            chat = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.AwakeQuote{Main.rand.NextBool().ToInt() + 1}");
+            chat = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.AwakeQuote{Main.rand.Next(3) + 1}");
             DryadAwakeHandler.DryadAwake = false;
         }
     }
