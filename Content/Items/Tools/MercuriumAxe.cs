@@ -25,6 +25,8 @@ sealed class MercuriumAxe : ModItem {
 		Item.useStyle = ItemUseStyleID.Swing;
         Item.autoReuse = true;
 
+        Item.useTurn = true;
+
         Item.knockBack = 5f;
 		Item.axe = 75 / 5;
 

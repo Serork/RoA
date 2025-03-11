@@ -22,9 +22,12 @@ public class MercuriumHammer : ModItem {
 		Item.damage = 20;
 		Item.DamageType = DamageClass.Melee;
 
-		Item.useTime = Item.useAnimation = 40;
+		Item.useTime = Item.useAnimation = 30;
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.autoReuse = true;
+
+		Item.useTurn = true;
+
+        Item.autoReuse = true;
 
 		Item.knockBack = 5f;
 		Item.hammer = 60;
