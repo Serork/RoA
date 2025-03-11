@@ -104,8 +104,7 @@ sealed class LothorEnrageScene : ModSceneEffect {
         return MonolithNearby;
     }
 
-    public override void SpecialVisuals(Player player, bool isActive) {
-    }
+    public override void SpecialVisuals(Player player, bool isActive) { }
 }
 
 sealed class LothorEnrageMonolith : ModTile {

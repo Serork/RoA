@@ -7,11 +7,13 @@ using RoA.Common;
 using RoA.Common.Players;
 using RoA.Content.Tiles.Decorations;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
 using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -40,6 +42,9 @@ sealed class BackwoodsMenu : ModMenu {
             Main.time = 5000;
             Main.dayTime = true;
         }
+    }
+
+    public override void PostDrawLogo(SpriteBatch spriteBatch, Vector2 logoDrawCenter, float logoRotation, float logoScale, Color drawColor) {
     }
 
     public override bool PreDrawLogo(SpriteBatch spriteBatch, ref Vector2 logoDrawCenter, ref float logoRotation, ref float logoScale, ref Color drawColor) {

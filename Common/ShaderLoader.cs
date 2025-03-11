@@ -13,18 +13,17 @@ using Terraria.ModLoader;
 namespace RoA.Common;
 
 sealed class ShaderLoader : ModSystem {
-    public static readonly string BackwoodsSky = "Backwoods Sky";
-    public static readonly string BackwoodsFog = "Backwoods Fog";
-    public static readonly string LothorSky = "Lothor Sky";
-    public static readonly string EnragedLothorSky = "Enraged Lothor Sky";
-    public static readonly string Vignette = "RoA Vignette";
+    public static readonly string BackwoodsSky = RoA.ModName + "Backwoods Sky";
+    public static readonly string BackwoodsFog = RoA.ModName + "Backwoods Fog";
+    public static readonly string LothorSky = RoA.ModName + "Lothor Sky";
+    public static readonly string EnragedLothorSky = RoA.ModName + "Enraged Lothor Sky";
+    public static readonly string Vignette = RoA.ModName + "Vignette";
 
     public static VignetteScreenShaderData VignetteShaderData { get; private set; }
     public static Effect VignetteEffectData { get; private set; }
 
     public override void OnModLoad() {
         Asset<Effect> vignetteShader = ModContent.Request<Effect>(ResourceManager.Effects + "Vignette", AssetRequestMode.ImmediateLoad);
-        GameShaders.Misc[Vignette] = new MiscShaderData(vignetteShader, Vignette);
         VignetteEffectData = vignetteShader.Value;
         VignetteShaderData = new VignetteScreenShaderData(vignetteShader.Value, "MainPS");
         Filters.Scene[Vignette] = new Filter(VignetteShaderData, (EffectPriority)100);
