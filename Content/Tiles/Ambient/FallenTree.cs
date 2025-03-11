@@ -25,9 +25,10 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.ITil
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
-        Main.tileLavaDeath[Type] = true;
+        Main.tileLavaDeath[Type] = false;
         Main.tileLighted[Type] = true;
         Main.tileAxe[Type] = true;
+        Main.tileObsidianKill[Type] = true;
 
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 3;
@@ -35,7 +36,7 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.ITil
         TileObjectData.newTile.Origin = new Point16(0, 1);
         TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
         TileObjectData.newTile.UsesCustomCanPlace = true;
-        TileObjectData.newTile.LavaDeath = true;
+        TileObjectData.newTile.LavaDeath = false;
         TileObjectData.newTile.CoordinateHeights = [16, 16];
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinatePadding = 2;

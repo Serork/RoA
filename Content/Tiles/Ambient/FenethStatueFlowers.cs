@@ -24,6 +24,7 @@ sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = false;
         Main.tileLighted[Type] = true;
+        Main.tileObsidianKill[Type] = true;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;

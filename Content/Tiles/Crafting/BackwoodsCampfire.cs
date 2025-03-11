@@ -26,6 +26,7 @@ sealed class BackwoodsCampfire : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileWaterDeath[Type] = true;
         Main.tileLavaDeath[Type] = true;
+
         TileID.Sets.HasOutlines[Type] = true;
         TileID.Sets.InteractibleByNPCs[Type] = true;
         TileID.Sets.Campfire[Type] = true;
