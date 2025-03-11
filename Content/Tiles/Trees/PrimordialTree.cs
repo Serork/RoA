@@ -39,9 +39,6 @@ sealed class MakePrimordialTreeImmuneToLava : ILoadable {
             if (Main.tile[checkX, checkY].TileType == TileID.Trees && PrimordialTree.IsPrimordialTree(checkX, checkY) && !Main.hardMode) {
                 result = false;
             }
-            if (Main.tile[checkX, checkY].TileType == ModContent.TileType<BackwoodsBigTree>() && !Main.hardMode) {
-                result = false;
-            }
         }
         return result;
     }

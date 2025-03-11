@@ -107,13 +107,13 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
                         if (tile5.TileType == ModContent.TileType<BackwoodsGrass>()) {
                             flag = true;
                         }
-                        if (flag && !Main.hardMode) {
+                        if (flag) {
                             for (int i2 = num - 1; i2 <= num + 1; i2++) {
                                 if (flag2) {
                                     break;
                                 }
                                 for (int j2 = num2 - 1; j2 <= num2 + 1; j2++) {
-                                    if (Main.tile[i2, j2 - 1].TileType == TileID.Trees ||
+                                    if ((Main.tile[i2, j2 - 1].TileType == TileID.Trees && !Main.hardMode) ||
                                         Main.tile[i2, j2 - 1].TileType == ModContent.TileType<BackwoodsBigTree>()) {
                                         flag2 = true;
                                         break;
