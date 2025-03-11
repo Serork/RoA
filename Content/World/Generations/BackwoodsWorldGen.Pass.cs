@@ -125,6 +125,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         BackwoodsVars.FirstTileYAtCenter = CenterY = WorldGenHelper.GetFirstTileY(CenterX, true) + 5;
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true) + 2;
+        BackwoodsVars.BackwoodsSizeY = _biomeHeight;
         SetUpMessage(Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods4"), 1f);
         Step11_AddOre();
         Step8_AddCaves();

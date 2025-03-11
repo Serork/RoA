@@ -14,6 +14,9 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Common.CameraSystem;
+using RoA.Common.BackwoodsSystems;
+using RoA.Core;
 
 namespace RoA.Content.Forms;
 
@@ -56,8 +59,6 @@ sealed class FlederForm : BaseForm {
         }
 
         public override void PreUpdateMovement() {
-            //Main.LocalPlayer.position = new Point(1145, 312).ToWorldCoordinates();
-
             bool flag = _dashDirection != IDoubleTap.TapDirection.None || ActiveDash;
             if (flag && !Player.GetModPlayer<BaseFormHandler>().IsConsideredAs<FlederForm>()) {
                 _dashDirection = IDoubleTap.TapDirection.None;
