@@ -30,7 +30,7 @@ namespace RoA.Content.NPCs.Friendly;
 
 sealed class Hunter : ModNPC {
     // dont forget hjson
-    private const byte MAXQUOTES = 8;
+    private const byte MAXQUOTES = 18;
     private const byte MAXNOTENOUGHTRADEQUOTES = 3;
     private const byte MAXTRADEQUOTES = 3;
     private const byte MAXFIRELIGHTERQUOTES = 1;
@@ -39,7 +39,7 @@ sealed class Hunter : ModNPC {
     private const byte LEATHERAMOOUNTNEEDED = 15;
     private const byte GOLDAMOUNTTODROP = 3;
 
-    private const byte MAXNAMES = 4;
+    private const byte MAXNAMES = 9;
 
     private int _currentQuote, _currentNotEnoughTradeQuote, _currentTradeQuote, _currentFireLighterQuote;
 

@@ -1,29 +1,29 @@
 BestialCommunion: {
-	// Name: Bestial Communion
-	// Description: Description
+	Name: Bestial Communion
+	Description: "Одержать победу над Лотором Диким — обманутым глупцом чащи".
 }
 
 WhatsThatSmell: {
-	// Name: What's That Smell?
-	// Description: Description
+	Name: What's That Smell?
+	Description: "Добыть свой первый самородок ртути и не отравиться".
 }
 
 GrootsLoot: {
-	// Name: Groot's Loot
-	// Description: Description
+	Name: Groot's Loot
+	Description: "Открыть один из опутанных корнями сундуков в глубине чащи".
 }
 
 SilentHills: {
-	// Name: Silent Hills
-	// Description: Description
+	Name: Silent Hills
+	Description: "Выжить во время тумана — утреннего события, во время которого дальше своего носа не видно».
 }
 
 NotPostMortem: {
-	// Name: Not Post-Mortem
-	// Description: Description
+	Name: Not Post-Mortem
+	Description: "Смастерить свой первый венок из охапки цветков".
 }
 
 GutsOfSteel: {
-	// Name: Guts of Steel
-	// Description: Description
+	Name: Guts of Steel
+	Description: "Одержать победу над разъяренным Лотором Диким и заполучить глыбу железа".
 }
