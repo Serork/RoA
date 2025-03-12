@@ -364,13 +364,13 @@ public class HouseBuilderCustom {
                             else {
                                 switch (_random.Next(3)) {
                                     case 0:
-                                        WorldGen.PlaceTile(num4, num5, ModContent.TileType<Absolute>(), mute: true, forced: false, -1, 0);
+                                        WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Absolute>(), 0, WallType);
                                         break;
                                     case 1:
-                                        WorldGen.PlaceTile(num4, num5, ModContent.TileType<Them>(), mute: true, forced: false, -1, 0);
+                                        WorldGenHelper.PlaceXxXWall(num4, num5, 2, 3, (ushort)ModContent.TileType<Them>(), 0, WallType);
                                         break;
                                     case 2:
-                                        WorldGen.PlaceTile(num4, num5, ModContent.TileType<Nihility>(), mute: true, forced: false, -1, 0);
+                                        WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<Nihility>(), 0, WallType);
                                         break;
                                 }
                             }
