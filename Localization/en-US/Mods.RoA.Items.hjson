@@ -1791,6 +1791,6 @@ cleoPants: {
 }
 
 IOU: {
-	DisplayName: IOU
-	Tooltip: ""
+	DisplayName: I.O.U.
+	Tooltip: "'I own you a Druid weapon. @ N.F.A.'"
 }

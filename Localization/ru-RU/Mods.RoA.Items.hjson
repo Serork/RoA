@@ -1690,12 +1690,12 @@ EldritchRing: {
 }
 
 NFAHorns: {
-	DisplayName: Рога N.F.A.
+	DisplayName: Рога Н.Ф.А.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 NFAJacket: {
-	DisplayName: Куртка N.F.A.
+	DisplayName: Куртка Н.Ф.А.
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1704,7 +1704,7 @@ NFAJacket: {
 }
 
 NFAPants: {
-	DisplayName: Штаны N.F.A.
+	DisplayName: Штаны Н.Ф.А.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1787,6 +1787,6 @@ cleoPants: {
 }
 
 IOU: {
-	// DisplayName: IOU
-	// Tooltip: ""
+	DisplayName: Я.Т.Д.
+	Tooltip: "'Я тебе дожен оружие для Друида. @ Н.Ф.А.'"
 }
