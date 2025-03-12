@@ -1709,8 +1709,13 @@ NFAPants: {
 }
 
 NFAWings: {
-	DisplayName: Крылья Н. Ф. А.
-	Tooltip: "{$Mods.RoA.RoADev}"
+	DisplayName: Крылья Н. Ф. А
+	Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'Пора расправить крылья, те самые хлопальники, большие пушки!'
+		'Они ничего не делают...'
+		'''
 }
 
 PeegeonChestguard: {
