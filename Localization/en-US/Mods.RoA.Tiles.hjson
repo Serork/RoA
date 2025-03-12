@@ -22,9 +22,6 @@ ElderwoodPlatform.MapEntry: Elderwood Platform
 ElderwoodTable.MapEntry: Elderwood Table
 ElderwoodWorkbench.MapEntry: Elderwood Workbench
 ElderwoodBookcase.MapEntry: Elderwood Bookcase
-MillionDollarPainting.MapEntry: Million Dollar Painting
-Moss.MapEntry: '''"Moss"'''
-TheLegend.MapEntry: '''"The Legend"'''
 Cloudberry.MapEntry: Cloudberry
 LivingElderwood3.MapEntry: Living Elderwood
 ElderwoodChest2.MapEntry: Rootbound Chest
@@ -47,4 +44,11 @@ FenethStatue.MapEntry: Feneth Statue
 TanningRack.MapEntry: Tanning Rack
 DullDaikatana.MapEntry: Dull Daikatana
 FlederSlayerDecoration.MapEntry: Fleder Slayer
-Nihility.MapEntry: Nihility
+
+//Paintings
+MillionDollarPainting.MapEntry: Million Dollar Painting
+Moss.MapEntry: '''"Moss"'''
+TheLegend.MapEntry: '''"The Legend"'''
+Absolute.MapEntry: '''"Absolute"'''
+Nihility.MapEntry: '''"Nihility"'''
+Them.MapEntry: '''"Them"'''

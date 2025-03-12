@@ -1797,15 +1797,15 @@ IOU: {
 
 Nihility: {
 	DisplayName: Nihility
-	Tooltip: ""
+	Tooltip: "'N.F.A.'"
 }
 
 Absolute: {
 	DisplayName: Absolute
-	Tooltip: ""
+	Tooltip: "'N.F.A.'"
 }
 
 Them: {
 	DisplayName: Them
-	Tooltip: ""
+	Tooltip: "'N.F.A.'"
 }

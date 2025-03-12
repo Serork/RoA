@@ -1792,16 +1792,16 @@ IOU: {
 }
 
 Nihility: {
-	// DisplayName: Nihility
-	// Tooltip: ""
+	DisplayName: Небытие
+	Tooltip: "'Н.Ф.А.'"
 }
 
 Absolute: {
-	// DisplayName: Absolute
-	// Tooltip: ""
+	DisplayName: Абсолютный
+	Tooltip: "'Н.Ф.А.'"
 }
 
 Them: {
-	// DisplayName: Them
-	// Tooltip: ""
+	DisplayName: Они
+	Tooltip: "'Н.Ф.А.'"
 }
