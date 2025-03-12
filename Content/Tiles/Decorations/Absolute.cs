@@ -29,7 +29,7 @@ sealed class Absolute : ModTile {
         TileObjectData.newTile.Origin = new Terraria.DataStructures.Point16(1, 0);
         TileObjectData.addTile(Type);
 
-		//DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
-		AddMapEntry(new Color(99, 50, 30), Language.GetText("MapObject.Painting"));
-	}
+        LocalizedText name = CreateMapEntryName();
+        AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), name);
+    }
 }

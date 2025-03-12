@@ -28,8 +28,6 @@ sealed class Nihility : ModTile {
         TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
-		//DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
-		// name.SetDefault("MOX");
-		//AddMapEntry(new Color(72, 139, 77), name);
+        AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), name);
 	}
 }
