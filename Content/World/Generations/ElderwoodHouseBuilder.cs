@@ -193,6 +193,7 @@ public class HouseBuilderCustom {
     public readonly bool IsValid;
 
     internal static bool _painting1, _painting2, _painting3;
+    internal static byte _nextPaintingIndex;
 
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
@@ -362,15 +363,21 @@ public class HouseBuilderCustom {
                                 WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
                             }
                             else {
-                                switch (_random.Next(3)) {
+                                switch (_nextPaintingIndex) {
                                     case 0:
-                                        WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Absolute>(), 0, WallType);
+                                        if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Absolute>(), 0, WallType)) {
+                                            _nextPaintingIndex++;
+                                        }
                                         break;
                                     case 1:
-                                        WorldGenHelper.PlaceXxXWall(num4, num5, 2, 3, (ushort)ModContent.TileType<Them>(), 0, WallType);
+                                        if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 3, (ushort)ModContent.TileType<Them>(), 0, WallType)) {
+                                            _nextPaintingIndex++;
+                                        }
                                         break;
                                     case 2:
-                                        WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<Nihility>(), 0, WallType);
+                                        if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<Nihility>(), 0, WallType)) {
+                                            _nextPaintingIndex = 0;
+                                        }
                                         break;
                                 }
                             }
