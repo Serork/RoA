@@ -252,9 +252,9 @@ sealed class TreeDryad : ModTile {
             }
         }
         int whoAmI = NPC.NewNPC(NPC.GetSource_TownSpawn(), (int)position.X + 10, (int)position.Y + 40, NPCID.Dryad);
-        Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? -1 : 1;
         Main.npc[whoAmI].ai[0] = -20f;
         Main.npc[whoAmI].ai[1] = 150f;
+        Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? 1 : -1;
         Main.npc[whoAmI].homeless = true;
         Main.npc[whoAmI].homeTileX = Main.npc[whoAmI].homeTileY = -1;
         Main.npc[whoAmI].netUpdate = true;
