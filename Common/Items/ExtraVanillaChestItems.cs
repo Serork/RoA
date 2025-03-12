@@ -1775,6 +1775,11 @@ sealed class ExtraVanillaChestItems : ModSystem {
                                     break;
                             }
 
+                            if (contain == ModContent.ItemType<IOU>()) {
+                                chest.item[num10].SetDefaults(ModContent.ItemType<Hedgehog>());
+                                num10++;
+                            }
+
                             if (Main.tenthAnniversaryWorld && flag9) {
                                 chest.item[num10++].SetDefaults(848);
                                 chest.item[num10++].SetDefaults(866);
@@ -2001,6 +2006,12 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             chest.item[num10].SetDefaults(contain);
                             chest.item[num10].Prefix(-1);
                             num10++;
+
+                            if (contain == ModContent.ItemType<IOU>()) {
+                                chest.item[num10].SetDefaults(ModContent.ItemType<Hedgehog>());
+                                num10++;
+                            }
+
                             if (flag4) {
                                 if (genRand.Next(2) == 0)
                                     chest.item[num10++].SetDefaults(4425);
@@ -2226,6 +2237,12 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             chest.item[num10].SetDefaults(contain);
                             chest.item[num10].Prefix(-1);
                             num10++;
+
+                            if (contain == ModContent.ItemType<IOU>()) {
+                                chest.item[num10].SetDefaults(ModContent.ItemType<Hedgehog>());
+                                num10++;
+                            }
+
                             if (flag && genRand.Next(5) == 0) {
                                 chest.item[num10].SetDefaults(3199);
                                 num10++;

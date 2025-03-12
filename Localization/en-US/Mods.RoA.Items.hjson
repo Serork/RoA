@@ -1789,3 +1789,8 @@ cleoPants: {
 	DisplayName: Cleo's Pants
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
+
+IOU: {
+	DisplayName: IOU
+	Tooltip: ""
+}
