@@ -39,17 +39,20 @@ Hunter: {
 }
 
 Dryad: {
+	// IntroQuote: At last, I am free from this coccoon, thanks to you. Growing in silence for centuries has been excruciating.
 	AwakeQuote1: Уберите от меня свои руки! УБЕРИТЕ СВОИ... Что?
 	AwakeQuote2: Вы все сгниете! ВЫ ВСЕ... А ты кто?
 	AwakeQuote3: Резкое изменение в мире подстегнуло мое пробуждение. Погиб могущественный монстр... это твоих рук дело?
+	// AwakeQuote4: I know this is a great burden for us to bear, but this world's balance need to be restored.
+	// AwakeQuote5: I would welcome a better place to put down roots. Not in a literal sense, of course!
 }
 
 GoblinTinkerer.PettyGoblinQuote1: Тебя обставил тот мелкий воришка с волшебным мешком? Скажу честно, ты не первый.
 
 Guide: {
-	// HelpText1: Have you seen that wooden cocoon? It has stayed dormant for millenia. Maybe defeating a powerful foe will bring it to life?
-	// HelpText2: Have you checked on that wooden woman? Perhaps she needs a little push?
+	// HelpText1: Have you seen that wooden cocoon? It has stayed dormant for ages. Maybe defeating a powerful foe will bring it to life?
+	// HelpText2: Have you checked on that wooden woman? Perhaps she needs a little push...
 	// HelpText3: Once you forge appropriate tools, nothing should stop you from chopping down those trees in the backwoods.
 	// HelpText4: Have you seen those chests hidden deep below in the backwoods? A strong pickaxe may help you reach them.
-	// HelpText5: That weird altar in the backwoods yearns for souls. Have you tried bringing some to it?
+	// HelpText5: That altar in the backwoods yearns for souls of those who once worshipped it. Try fulfilling its hunger if you seek an ancient monster.
 }

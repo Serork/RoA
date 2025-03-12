@@ -12,7 +12,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-
 namespace RoA.Content.NPCs.Enemies.Miscellaneous;
 
 sealed partial class PettyGoblin : ModNPC {
@@ -21,11 +20,107 @@ sealed partial class PettyGoblin : ModNPC {
             if (npc.type != NPCID.GoblinTinkerer) {
                 return;
             }
-            if (!Main.rand.NextBool(10)) {
-                return;
+
+            bool flag7 = false;
+            bool flag15 = false;
+            for (int i = 0; i < 200; i++) {
+                if (Main.npc[i].active) {
+                    if (Main.npc[i].type == NPCID.Mechanic)
+                        flag7 = true;
+                    else if (Main.npc[i].type == NPCID.Stylist)
+                        flag15 = true;
+                }
             }
 
-            chat = Language.GetTextValue($"Mods.RoA.NPCs.Town.GoblinTinkerer.PettyGoblinQuote{/*Main.rand.NextBool().ToInt() + */1}");
+            object obj = Lang.CreateDialogSubstitutionObject(npc);
+            string result = string.Empty;
+            if (npc.homeless) {
+                int max = 6;
+                switch (Main.rand.Next(max)) {
+                    case 0:
+                        result = Lang.dialog(121);
+                        break;
+                    case 1:
+                        result = Lang.dialog(122);
+                        break;
+                    case 2:
+                        result = Lang.dialog(123);
+                        break;
+                    case 3:
+                        result = Lang.dialog(124);
+                        break;
+                    case 4:
+                        if (Main.rand.NextBool(max)) {
+                            result = Language.GetTextValue($"Mods.RoA.NPCs.Town.GoblinTinkerer.PettyGoblinQuote1");
+                        }
+                        else {
+                            result = Lang.dialog(124);
+                        }
+                        break;
+                    default:
+                        result = Lang.dialog(125);
+                        break;
+                }
+            }
+            else if (npc.HasSpecialEventText("GoblinTinkerer", out string specialEventText)) {
+                result = specialEventText;
+            }
+            else if (flag7 && Main.rand.Next(5) == 0) {
+                result = Lang.dialog(126);
+            }
+            else if (flag15 && Main.rand.Next(5) == 0) {
+                result = Lang.dialog(309);
+            }
+            else {
+                LocalizedText[] array2 = Language.FindAll(Lang.CreateDialogFilter("GoblinTinkererChatter.", obj));
+                int num4 = Main.rand.Next(array2.Length + 5);
+                if (Main.rand.NextBool(array2.Length + 5)) {
+                    result = Language.GetTextValue($"Mods.RoA.NPCs.Town.GoblinTinkerer.PettyGoblinQuote1");
+                }
+                else if (num4 >= 5) {
+                    result = array2[num4 - 5].FormatWith(obj);
+                }
+                else if (!Main.dayTime) {
+                    switch (num4) {
+                        case 0:
+                            result = Lang.dialog(127);
+                            break;
+                        case 1:
+                            result = Lang.dialog(128);
+                            break;
+                        case 2:
+                            result = Lang.dialog(129);
+                            break;
+                        case 3:
+                            result = Lang.dialog(130);
+                            break;
+                        default:
+                            result = Lang.dialog(131);
+                            break;
+                    }
+                }
+                else {
+                    switch (num4) {
+                        case 0:
+                            result = Lang.dialog(132);
+                            break;
+                        case 1:
+                            result = Lang.dialog(133);
+                            break;
+                        case 2:
+                            result = Lang.dialog(134);
+                            break;
+                        case 3:
+                            result = Lang.dialog(135);
+                            break;
+                        default:
+                            result = Lang.dialog(136);
+                            break;
+                    }
+                }
+            }
+
+            chat = result;
         }
     }
 

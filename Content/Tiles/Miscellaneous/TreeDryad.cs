@@ -132,15 +132,34 @@ sealed class TreeDryad : ModTile {
     }
 
     private sealed class ExtraDruidQuote : GlobalNPC {
+        private byte _currentQuoteIndex;
+
+        private const byte MAXAWAKEQUOTES = 5;
+
+        public override bool InstancePerEntity => true;
+
         public override void GetChat(NPC npc, ref string chat) {
             if (npc.type != NPCID.Dryad) {
                 return;
             }
             if (!DryadAwakeHandler.DryadAwake) {
+                bool hasHome = npc.homeTileX != -1 && npc.homeTileY != -1 && !npc.homeless;
+                if (!hasHome) {
+                    string getMessage() {
+                        ref byte index = ref npc.GetGlobalNPC<ExtraDruidQuote>()._currentQuoteIndex;
+                        string result = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.AwakeQuote{index + 1}");
+                        if (++index > MAXAWAKEQUOTES - 1) {
+                            index = 0;
+                        }
+                        return result;
+                    }
+
+                    chat = getMessage();
+                }
                 return;
             }
 
-            chat = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.AwakeQuote{Main.rand.Next(3) + 1}");
+            chat = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.IntroQuote");
             DryadAwakeHandler.DryadAwake = false;
         }
     }
@@ -236,6 +255,8 @@ sealed class TreeDryad : ModTile {
         Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? -1 : 1;
         Main.npc[whoAmI].ai[0] = -20f;
         Main.npc[whoAmI].ai[1] = 150f;
+        Main.npc[whoAmI].homeless = true;
+        Main.npc[whoAmI].homeTileX = Main.npc[whoAmI].homeTileY = -1;
         Main.npc[whoAmI].netUpdate = true;
 
         DryadAwakeHandler.DryadAwake = true;

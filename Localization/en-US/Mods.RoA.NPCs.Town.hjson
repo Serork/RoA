@@ -39,12 +39,12 @@ Hunter: {
 }
 
 Dryad: {
-	//IntroQuote: At last, I am free from this coccoon, thanks to you. Growing in silence for centuries has been excruciating.
+	IntroQuote: At last, I am free from this coccoon, thanks to you. Growing in silence for centuries has been excruciating.
 	AwakeQuote1: The other Dryads… tell me, have they survived? No, I can already sense it isn’t so.
 	AwakeQuote2: Is the war of Cthulhu over? If so, why is his presence still plaguing this world?
 	AwakeQuote3: A drastic change in the world has spurred my awakening. A powerful monster was slain... was that your doing?
-	//AwakeQuote4: I know this is a great burden for us to bear, but this world's balance need to be restored.
-	//AwakeQuote5: I would welcome a better place to put down roots. Not in a literal sense, of course!
+	AwakeQuote4: I know this is a great burden for us to bear, but this world's balance need to be restored.
+	AwakeQuote5: I would welcome a better place to put down roots. Not in a literal sense, of course!
 }
 
 GoblinTinkerer.PettyGoblinQuote1: Did you get ransacked by that sleazy fool with a magic sack? Tell you what, you're not alone.
