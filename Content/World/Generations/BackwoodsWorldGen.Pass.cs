@@ -3972,7 +3972,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     randomness += _random.Next(-1, 2);
                     randomnessPoints[max - testJ] = randomness;
                 }
-                if (SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, testJ].TileType) ||
+                if (/*SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, testJ].TileType) ||*/
                     SandTileTypes.Contains(Main.tile[x, testJ].TileType)) {
                     break;
                 }
@@ -4042,7 +4042,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int y = Math.Min(CenterY - EdgeY, (int)Main.worldSurface + 10);
         double randomnessY = y + 50.0;
         for (int i = Left - 100; i < Right + 100; i++) {
-            for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Main.worldSurface; j++) {
                 randomnessY += (double)_random.NextFloat(-2f, 3f);
                 randomnessY = Math.Clamp(randomnessY, y + 30.0, y + 60.0);
                 bool spread = false;

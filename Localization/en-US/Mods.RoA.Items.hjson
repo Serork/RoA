@@ -1712,7 +1712,6 @@ NFAPants: {
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
-
 NFAWings: {
 	DisplayName: N.F.A.'s Wings
 	Tooltip:

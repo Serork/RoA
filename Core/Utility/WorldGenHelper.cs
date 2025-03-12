@@ -361,7 +361,7 @@ static class WorldGenHelper {
                 if ((!WorldGen.tenthAnniversaryWorldGen && (double)i > (double)Main.maxTilesX * 0.45 && (double)i <= (double)Main.maxTilesX * 0.55) || i < num || i >= Main.maxTilesX - num)
                     return;
             }
-            else if ((WorldGen.gen || (grass != 199 && grass != 23 && grass != 661 && grass != 662)) && (Main.tile[i, j].TileType != dirt || !Main.tile[i, j].HasTile || ((double)j >= (maxY == -1 ? Main.worldSurface : maxY) && dirt == 0)) && growUnderground) {
+            else if (grass != ModContent.TileType<BackwoodsGrass>() && ((WorldGen.gen || (grass != 199 && grass != 23 && grass != 661 && grass != 662)) && (Main.tile[i, j].TileType != dirt || !Main.tile[i, j].HasTile || ((double)j >= (maxY == -1 ? Main.worldSurface : maxY) && dirt == 0)) && growUnderground)) {
                 return;
             }
 
