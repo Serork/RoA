@@ -92,6 +92,10 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 	public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.ArmOverItem);
 
 	protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         Player player = drawInfo.drawPlayer;
         if (!player.active) {
 			return;
@@ -152,6 +156,10 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
+            if (drawInfo.hideEntirePlayer) {
+                return;
+            }
+
             Player player = drawInfo.drawPlayer;
             if (!player.active || player.invis) {
                 return;
@@ -200,6 +208,10 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Leggings);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
+            if (drawInfo.hideEntirePlayer) {
+                return;
+            }
+
             Player player = drawInfo.drawPlayer;
             if (!player.active || player.invis) {
                 return;
@@ -233,6 +245,10 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
+            if (drawInfo.hideEntirePlayer) {
+                return;
+            }
+
             Player player = drawInfo.drawPlayer;
             if (!player.active || player.invis) {
                 return;

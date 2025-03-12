@@ -55,6 +55,10 @@ sealed class FlametrackerJacketFlame : PlayerDrawLayer {
         => new AfterParent(PlayerDrawLayers.EyebrellaCloud);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         Player player = drawInfo.drawPlayer;
         if (drawInfo.shadow != 0f || player.dead)
             return;
@@ -94,6 +98,10 @@ sealed class FlametrackerJacketMask : PlayerDrawLayer {
         => new AfterParent(PlayerDrawLayers.Torso);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         Player player = drawInfo.drawPlayer;
         if (drawInfo.shadow != 0f || player.dead || player.ZoneUnderworldHeight)
             return;

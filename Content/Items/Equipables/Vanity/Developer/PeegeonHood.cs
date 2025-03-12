@@ -152,6 +152,10 @@ sealed class PeegeonHood : ModItem {
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
+            if (drawInfo.hideEntirePlayer) {
+                return;
+            }
+
             if (drawInfo.shadow != 0f || drawInfo.drawPlayer.dead)
                 return;
             Player player = drawInfo.drawPlayer;

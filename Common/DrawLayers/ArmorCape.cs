@@ -32,6 +32,10 @@ sealed class ArmorCape : PlayerDrawLayer {
         => new AfterParent(PlayerDrawLayers.FrontAccFront);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         Player player = drawInfo.drawPlayer;
         if (player.dead || player.invis || player.front != -1 || player.ShouldNotDraw) return;
 

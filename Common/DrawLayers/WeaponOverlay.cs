@@ -17,6 +17,10 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
     public static string GetItemNameForTexture(Item item) => item.ModItem.GetType().Name.Replace(" ", string.Empty);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         DrawClawsOnPlayer(drawInfo);
     }
 

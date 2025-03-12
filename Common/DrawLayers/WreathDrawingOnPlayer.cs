@@ -42,6 +42,10 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
     }
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         DrawWreathsOnPlayer(drawInfo);
     }
 

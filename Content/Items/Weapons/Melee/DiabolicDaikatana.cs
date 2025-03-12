@@ -105,6 +105,10 @@ sealed class DiabolicDaikatana : ModItem {
         public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.ArmOverItem);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
+            if (drawInfo.hideEntirePlayer) {
+                return;
+            }
+
             Player player = drawInfo.drawPlayer;
             if (drawInfo.shadow != 0f || player.dead) {
                 return;

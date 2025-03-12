@@ -54,7 +54,11 @@ sealed class StoneMask : ModItem {
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
-			Player player = drawInfo.drawPlayer;
+            if (drawInfo.hideEntirePlayer) {
+                return;
+            }
+
+            Player player = drawInfo.drawPlayer;
             if (!IsActive(drawInfo.drawPlayer)) {
                 return;
             }

@@ -1708,6 +1708,11 @@ NFAPants: {
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
+NFAWings: {
+	DisplayName: Крылья Н. Ф. А
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
 PeegeonChestguard: {
 	DisplayName: Нагрудник Peege.On'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
@@ -1764,7 +1769,7 @@ BRIPEsRocketBoots: {
 }
 
 cleoChestguard: {
-	DisplayName: Нагрудник Cleo.
+	DisplayName: Нагрудник cleo.
 	/* Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1773,7 +1778,7 @@ cleoChestguard: {
 }
 
 cleoMask: {
-	DisplayName: Маска Cleo.
+	DisplayName: Маска cleo.
 	/* Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1782,7 +1787,7 @@ cleoMask: {
 }
 
 cleoPants: {
-	DisplayName: Штаны Cleo.
+	DisplayName: Штаны cleo.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 

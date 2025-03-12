@@ -269,6 +269,10 @@ sealed class RodOfTheCondor : ModItem {
             public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => GetHandler(drawInfo.drawPlayer).IsActive;
 
             protected override void Draw(ref PlayerDrawSet drawInfo) {
+                if (drawInfo.hideEntirePlayer) {
+                    return;
+                }
+
                 if (drawInfo.drawPlayer.dead) {
                     return;
                 }

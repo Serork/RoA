@@ -89,6 +89,10 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
         => new AfterParent(PlayerDrawLayers.Head);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         Player player = drawInfo.drawPlayer;
         if (drawInfo.shadow != 0f || player.face != -1 || player.dead/* || player.GetModPlayer<MagicArmorSetPlayer>().flameTrackerArmorSet*/ || player.statMana != player.statManaMax2)
             return;
@@ -132,6 +136,10 @@ sealed class FlametrackerHatMask : PlayerDrawLayer {
         => new AfterParent(PlayerDrawLayers.FaceAcc);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         Player player = drawInfo.drawPlayer;
         if (drawInfo.shadow != 0f || player.dead || !player.ZoneUnderworldHeight)
             return;

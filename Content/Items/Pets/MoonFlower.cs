@@ -126,6 +126,10 @@ sealed class MoonFlowerUseGlow : PlayerDrawLayer {
         => new BeforeParent(PlayerDrawLayers.ArmOverItem);
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.hideEntirePlayer) {
+            return;
+        }
+
         Player player = drawInfo.drawPlayer;
         Texture2D texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<MoonFlower>()).Texture + "_Glow").Value;
         if (drawInfo.shadow != 0f || player.dead || player.frozen || player.itemAnimation <= 0)
