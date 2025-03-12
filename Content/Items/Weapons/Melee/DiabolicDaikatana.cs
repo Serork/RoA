@@ -26,6 +26,25 @@ namespace RoA.Content.Items.Weapons.Melee;
 
 [AutoloadGlowMask(0, 0, 178, 178, shouldApplyItemAlpha: true)]
 sealed class DiabolicDaikatana : ModItem {
+    public static Vector2 GetPlayerArmPosition(Projectile proj) {
+        Player player = Main.player[proj.owner];
+        Vector2 vector = Main.OffsetsPlayerOnhand[player.bodyFrame.Y / 56] * 2f;
+        if (player.direction != 1)
+            vector.X = (float)player.bodyFrame.Width - vector.X;
+
+        if (player.gravDir != 1f)
+            vector.Y = (float)player.bodyFrame.Height - vector.Y;
+
+        vector -= new Vector2(player.bodyFrame.Width - player.width, player.bodyFrame.Height - 42) / 2f;
+        Vector2 pos = player.MountedCenter - new Vector2(20f, 42f) / 2f + vector;
+        if (player.mount.Active && player.mount.Type == 52) {
+            pos.Y -= player.mount.PlayerOffsetHitbox;
+            pos += new Vector2(12 * player.direction, -12f);
+        }
+
+        return player.RotatedRelativePoint(pos, true);
+    }
+
     public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
@@ -95,7 +114,7 @@ sealed class DiabolicDaikatana : ModItem {
                 return;
             }
 
-            Vector2 drawPosition = drawInfo.drawPlayer.RotatedRelativePoint(drawInfo.drawPlayer.MountedCenter, true) - drawInfo.drawPlayer.Size / 2f + new Vector2(0f, -2f) + new Vector2(0f, drawInfo.drawPlayer.gfxOffY);
+            Vector2 drawPosition = drawInfo.drawPlayer.RotatedRelativePoint(drawInfo.drawPlayer.MountedCenter, true) - drawInfo.drawPlayer.Size / 2f + new Vector2(0f, -2f);
             drawPosition.X += 12f;
             if (player.direction == 1) {
                 drawPosition.X -= 4f;
@@ -177,6 +196,8 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.AllowsContactDamageFromJellyfish[Type] = true;
+
+        ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
 
     public override void SetDefaults() {
@@ -203,24 +224,6 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
 
     public override bool? CanCutTiles() => Progress > 0.375f && Progress < 0.575f;
 
-    public static Vector2 GetPlayerArmPosition(Projectile proj) {
-        Player player = Main.player[proj.owner];
-        Vector2 vector = Main.OffsetsPlayerOnhand[player.bodyFrame.Y / 56] * 2f;
-        if (player.direction != 1)
-            vector.X = (float)player.bodyFrame.Width - vector.X;
-
-        if (player.gravDir != 1f)
-            vector.Y = (float)player.bodyFrame.Height - vector.Y;
-
-        vector -= new Vector2(player.bodyFrame.Width - player.width, player.bodyFrame.Height - 42) / 2f;
-        Vector2 pos = player.MountedCenter - new Vector2(20f, 42f) / 2f + vector + Vector2.UnitY * player.gfxOffY;
-        if (player.mount.Active && player.mount.Type == 52) {
-            pos.Y -= player.mount.PlayerOffsetHitbox;
-            pos += new Vector2(12 * player.direction, -12f);
-        }
-
-        return player.RotatedRelativePoint(pos, true);
-    }
 
     public override void AI() {
         Projectile.extraUpdates = 5;
@@ -255,7 +258,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             BaseAngleVector = new Vector2(0.88f * Projectile.direction, 0.47f);
             InterpolateSword(progress, out var angleVector, out float swingProgress, out float scale);
             SetArmRotation(player, swingProgress);
-            var arm = player.RotatedRelativePoint(player.MountedCenter, true);
+            var arm = DiabolicDaikatana.GetPlayerArmPosition(Projectile);
             AngleVector = angleVector;
             Projectile.position = arm + AngleVector * _swordHeight / 2f;
             Projectile.position.X -= Projectile.width / 2f;
@@ -315,7 +318,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
     private void GetSwordDrawInfo(out Texture2D texture, out Vector2 handPosition, out float rotationOffset, out Vector2 origin, out SpriteEffects effects) {
         texture = TextureAssets.Projectile[Type].Value;
         Player player = Main.player[Projectile.owner];
-        handPosition = GetPlayerArmPosition(Projectile) - new Vector2(0f, player.gfxOffY);
+        handPosition = DiabolicDaikatana.GetPlayerArmPosition(Projectile);
         if (player.gravDir == -1f) {
             handPosition.Y -= 1;
         }
