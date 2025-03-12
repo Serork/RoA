@@ -2,6 +2,7 @@
 
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic;
@@ -1236,14 +1237,12 @@ sealed class ExtraVanillaChestItems : ModSystem {
                 bool flag0 = false;
                 if (num80 == (WorldGen.drunkWorldGen ? 6 : 5)) {
                     chestTileType = (ushort)ModContent.TileType<BackwoodsDungeonChest>();
+                    contain = ModContent.ItemType<IOU>();
                     flag0 = true;
                 }
 
                 if (flag0) {
-                    WorldGenHelper.PlaceChest(num81, num82, chestTileType, notNearOtherChests: false, onPlaced: (chest) => {
-                        flag5 = true;
-                        //Console.WriteLine(num81 + " " + num82);
-                    });
+                    flag5 = WorldGen.AddBuriedChest(num81, num82, contain, notNearOtherChests: false, 0, trySlope: false, chestTileType);
                 }
                 else {
                     flag5 = WorldGen.AddBuriedChest(num81, num82, contain, notNearOtherChests: false, style2, trySlope: false, chestTileType);
@@ -2494,6 +2493,12 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             chest.item[num10].SetDefaults(contain);
                             chest.item[num10].Prefix(-1);
                             num10++;
+
+                            if (contain == ModContent.ItemType<IOU>()) {
+                                chest.item[num10].SetDefaults(ModContent.ItemType<Hedgehog>());
+                                num10++;
+                            }
+
                             if (flag7 && genRand.Next(5) == 0) {
                                 chest.item[num10].SetDefaults(5010);
                                 num10++;
@@ -2744,7 +2749,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             num10++;
                         }
 
-                        if ((num9 == 23 || num9 == 24 || num9 == 25 || num9 == 26 || num9 == 27) && genRand.Next(2) == 0) {
+                        if ((num9 == 23 || num9 == 24 || num9 == 25 || num9 == 26 || num9 == 27 || chestTileType == ModContent.TileType<BackwoodsDungeonChest>()) && genRand.Next(2) == 0) {
                             chest.item[num10].SetDefaults(5234);
                             num10++;
                         }
@@ -2796,7 +2801,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         num10++;
                     }
 
-                    if (num9 == 13 && genRand.Next(2) == 0) {
+                    if ((num9 == 13 || chestTileType == ModContent.TileType<BackwoodsDungeonChest>()) && genRand.Next(2) == 0) {
                         chest.item[num10].SetDefaults(5234);
                         num10++;
                     }

@@ -39,7 +39,7 @@ sealed class BackwoodsDungeonChest : ModTile {
 
         AdjTiles = [TileID.Containers];
 
-        Color mapColor = new(174, 129, 92);
+        Color mapColor = new(124, 127, 140);
         AddMapEntry(mapColor, CreateMapEntryName());
         AddMapEntry(mapColor, Language.GetText("Mods.RoA.Tiles.BackwoodsDungeonChest2.MapEntry"));
 
