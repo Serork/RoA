@@ -291,7 +291,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             }
         }
         else {
-            Projectile.timeLeft++;
+            Projectile.Kill();
         }
         _swingTime--;
         Projectile.hide = true;
@@ -330,6 +330,9 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             else {
                 handPosition.Y -= 1;
             }
+        }
+        if (Progress > 0.6f) {
+            handPosition += Projectile.rotation.ToRotationVector2() * -3f;
         }
         if (player.gravDir == -1) {
             if (player.direction == -1) {

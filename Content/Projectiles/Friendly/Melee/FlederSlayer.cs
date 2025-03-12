@@ -216,6 +216,10 @@ sealed class FlederSlayer : ModProjectile {
         bool turnOnAvailable = false;
         bool flag3 = _timeLeft > min;
 
+        if (!(!player.frozen && !player.stoned)) {
+            Projectile.Kill();
+        }
+
         if (player.dead || !player.active) {
             Projectile.Kill();
         }
@@ -568,6 +572,7 @@ sealed class FlederSlayer : ModProjectile {
         float charge = Math.Clamp(_charge - 0.5f + _charge * 1.5f, 0f, 1f);
         float osc = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10f);
         Vector2 offset = -new Vector2(15f * (Projectile.localAI[2] - 0.5f), 0f).RotatedBy(Projectile.rotation);
+        offset += Projectile.rotation.ToRotationVector2() * (-30f * (MathHelper.Clamp(Projectile.scale - 1.25f, 0f, 1f)));
         Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) + offset;
         if (flag) {
             spriteBatch.BeginBlendState(BlendState.Additive);

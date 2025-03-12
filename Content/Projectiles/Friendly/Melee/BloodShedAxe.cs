@@ -223,6 +223,11 @@ sealed class BloodshedAxe : ModProjectile {
         Player player = Main.player[Projectile.owner];
         player.heldProj = Projectile.whoAmI;
         int itemAnimationMax = 50;
+
+        if (!(!player.frozen && !player.stoned)) {
+            Projectile.Kill();
+        }
+
         if (Projectile.owner == Main.myPlayer) {
             if (!_init) {
                 _time = itemAnimationMax;
