@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -29,7 +30,8 @@ sealed class NFAWings : ModItem {
             Vector2 vector12 = vector + new Vector2(num12 - 9, num11 + 2) * directions;
             Color glowMaskColor = Color.White * (1f - drawinfo.shadow);
             glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
-            DrawData item = new DrawData(TextureAssets.Wings[drawinfo.drawPlayer.wings].Value, vector12.Floor(), new Rectangle(0, TextureAssets.Wings[drawinfo.drawPlayer.wings].Height() / num13 * drawinfo.drawPlayer.wingFrame, TextureAssets.Wings[drawinfo.drawPlayer.wings].Width(), TextureAssets.Wings[drawinfo.drawPlayer.wings].Height() / num13),
+            DrawData item = new DrawData(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<NFAWings>()).Texture + "_Wings_Glow").Value,
+                vector12.Floor(), new Rectangle(0, TextureAssets.Wings[drawinfo.drawPlayer.wings].Height() / num13 * drawinfo.drawPlayer.wingFrame, TextureAssets.Wings[drawinfo.drawPlayer.wings].Width(), TextureAssets.Wings[drawinfo.drawPlayer.wings].Height() / num13),
                 glowMaskColor, drawinfo.drawPlayer.bodyRotation, new Vector2(TextureAssets.Wings[drawinfo.drawPlayer.wings].Width() / 2, TextureAssets.Wings[drawinfo.drawPlayer.wings].Height() / num13 / 2), 1f, drawinfo.playerEffect);
             item.shader = drawinfo.cWings;
             drawinfo.DrawDataCache.Add(item);
