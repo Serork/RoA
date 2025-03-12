@@ -2107,9 +2107,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             bool flag10 = false;
                             if (_nextItemIndex >= 5) {
                                 _nextItemIndex = 0;
-                                addItemInChest(ModContent.ItemType<BunnyHat>(), 1, 1);
-                                addItemInChest(ModContent.ItemType<BunnyJacket>(), 1);
-                                addItemInChest(ModContent.ItemType<BunnyPants>(), 1);
+                                if (!_wandsAdded || _random.NextBool(20)) {
+                                    _wandsAdded = true;
+                                    addItemInChest(ModContent.ItemType<LivingPrimordialWand>(), 1, 1);
+                                    addItemInChest(ModContent.ItemType<LivingPrimordialWand2>(), 1, 1);
+                                }
+                                else {
+                                    addItemInChest(ModContent.ItemType<BunnyHat>(), 1, 1);
+                                    addItemInChest(ModContent.ItemType<BunnyJacket>(), 1);
+                                    addItemInChest(ModContent.ItemType<BunnyPants>(), 1);
+                                }
                                 flag10 = true;
                             }
                             if (!flag10) {
@@ -2117,46 +2124,45 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             }
                         },
                         () => {
-                            if (!_wandsAdded || _random.NextBool(5)) {
-                                _wandsAdded = true;
-                                addItemInChest(ModContent.ItemType<LivingPrimordialWand>(), 1, 1);
-                                addItemInChest(ModContent.ItemType<LivingPrimordialWand2>(), 1, 1);
+                            bool flag = _random.NextChance(0.75);
+                            if ( _random.NextChance(0.75)) {
+                                int itemToAddType = ItemID.Dynamite;
+                                addItemInChest(itemToAddType, 1);
+                            }
+                            else if ( _random.NextChance(0.25)) {
+                                int itemToAddType = ItemID.Bomb;
+                                addItemInChest(itemToAddType, _random.Next(15, 20));
                             }
                         },
-                        () => {
-                            bool flag = _random.NextBool(3);
-                            int itemToAddType = flag ? ModContent.ItemType<SlipperyBomb>() : ModContent.ItemType<SlipperyDynamite>();
-                            addItemInChest(itemToAddType,
-                                           flag ? _random.Next(15, 20) : 1,
-                                           0.5);
-                        },
-                        () => addItemInChest(_random.NextBool(2) ? ModContent.ItemType<Items.Materials.MercuriumNugget>() : WorldGen.SavedOreTiers.Gold == TileID.Gold ? ItemID.GoldBar : ItemID.PlatinumBar,
-                                             _random.Next(3, 11),
-                                             0.75),
-                        () => addItemInChest(_random.NextBool(4) ? ModContent.ItemType<PrismaticPotion>() : ModContent.ItemType<DeathWardPotion>(),
-                                             1,
+                        () => addItemInChest(_random.NextBool(2) ? ItemID.JestersArrow : (WorldGen.SavedOreTiers.Gold == TileID.Silver ? ItemID.SilverBullet : ItemID.TungstenBullet),
+                                             _random.Next(25, 51),
+                                             0.5),
+                        () => addItemInChest(WorldGen.SavedOreTiers.Gold == TileID.Gold ? ItemID.GoldBar : ItemID.PlatinumBar,
+                                             _random.Next(15, 30),
+                                             0.5),
+                        () => addItemInChest(_random.NextBool(2) ? ItemID.HealingPotion : ItemID.RestorationPotion,
+                                              _random.Next(6, 11),
                                              0.5),
                         () => addItemInChest(_random.Next([ItemID.RestorationPotion, ItemID.HealingPotion]),
                                              _random.Next(3, 9),
                                              0.5),
-                        () => addItemInChest(_random.Next([ItemID.SpelunkerPotion, ItemID.ManaRegenerationPotion, ItemID.ObsidianSkinPotion, ItemID.MagicPowerPotion, ItemID.HeartreachPotion, ItemID.ThornsPotion, ItemID.InfernoPotion, ItemID.LifeforcePotion, ItemID.BattlePotion]),
+                        () => addItemInChest(_random.Next([ItemID.GravitationPotion, ModContent.ItemType<ResiliencePotion>(),
+                            ItemID.ArcheryPotion, ModContent.ItemType<DryadBloodPotion>(), ItemID.MiningPotion]),
                                              _random.Next(1, 3),
                                              0.75),
-                        () => addItemInChest(_random.Next([ModContent.ItemType<DryadBloodPotion>(), ModContent.ItemType<WillpowerPotion>(), ModContent.ItemType<BloodlustPotion>(), ModContent.ItemType<BrightstonePotion>(), ModContent.ItemType<ResiliencePotion>(), ModContent.ItemType<WeightPotion>()]),
+                        () => addItemInChest(_random.Next([ItemID.InvisibilityPotion, ItemID.ObsidianSkinPotion, ItemID.BattlePotion,
+                            ModContent.ItemType<WeightPotion>(), ItemID.HunterPotion]),
                                              _random.Next(1, 3),
-                                             0.75),
-                        () => addItemInChest(_random.Next([ItemID.RecallPotion, ItemID.TeleportationPotion, ItemID.PotionOfReturn]),
+                                             0.66),
+                        () => addItemInChest(ItemID.RecallPotion,
                                              _random.Next(1, 3),
-                                             0.75),
-                        () => addItemInChest(_random.Next([ModContent.ItemType<Items.Placeable.Crafting.ElderTorch>(), ModContent.ItemType<SlipperyGlowstick>()]),
+                                             0.5),
+                        () => addItemInChest(_random.Next([ItemID.Torch, ItemID.Glowstick]),
                                              _random.Next(15, 30),
-                                             0.75),
+                                             0.5),
                         () => addItemInChest(_random.Next([ItemID.GoldCoin]),
-                                             _random.Next(2, 6),
+                                             _random.Next(2, 4),
                                              0.75),
-                        () => addItemInChest(_random.Next([ItemID.GoldCoin]),
-                                             _random.Next(2, 6),
-                                             0.25)
                     ];
                     foreach (Action add in addings) {
                         add();
