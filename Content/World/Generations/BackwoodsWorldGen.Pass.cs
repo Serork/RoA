@@ -2123,17 +2123,20 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 addItemInChest(firstItemType, 1);
                             }
                         },
-                        () => {
-                            bool flag = _random.NextChance(0.75);
-                            if ( _random.NextChance(0.75)) {
-                                int itemToAddType = ItemID.Dynamite;
-                                addItemInChest(itemToAddType, 1);
-                            }
-                            else if ( _random.NextChance(0.25)) {
-                                int itemToAddType = ItemID.Bomb;
-                                addItemInChest(itemToAddType, _random.Next(15, 20));
-                            }
-                        },
+                        //() => {
+                        //    bool flag = _random.NextChance(0.75);
+                        //    if ( _random.NextChance(0.75)) {
+                        //        int itemToAddType = ItemID.Dynamite;
+                        //        addItemInChest(itemToAddType, 1);
+                        //    }
+                        //    else if ( _random.NextChance(0.25)) {
+                        //        int itemToAddType = ItemID.Bomb;
+                        //        addItemInChest(itemToAddType, _random.Next(15, 20));
+                        //    }
+                        //},
+                        () => addItemInChest(ItemID.Dynamite,
+                                             1,
+                                             0.33),
                         () => addItemInChest(_random.NextBool(2) ? ItemID.JestersArrow : (WorldGen.SavedOreTiers.Gold == TileID.Silver ? ItemID.SilverBullet : ItemID.TungstenBullet),
                                              _random.Next(25, 51),
                                              0.5),
