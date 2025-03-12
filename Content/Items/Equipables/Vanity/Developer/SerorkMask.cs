@@ -192,6 +192,20 @@ sealed class SerorkMask : ModItem {
         private sealed class SerorkVisualsStorage : ModPlayer {
             public float ghostFade, ghostFade2, ghostFade3;
             public float ghostDir;
+
+            public override void PostUpdate() {
+                if (!Main.gamePaused) {
+                    ghostFade = MathHelper.SmoothStep(ghostFade,
+                        (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                        0.25f);
+                    ghostFade2 = MathHelper.SmoothStep(ghostFade2,
+                         (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                         0.25f);
+                    ghostFade3 = MathHelper.SmoothStep(ghostFade3,
+                         (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                         0.25f);
+                }
+            }
         }
 
         void ILoadable.Load(Mod mod) {
@@ -330,18 +344,6 @@ sealed class SerorkMask : ModItem {
                     //    handler.ghostDir = -1f;
                     //    handler.ghostFade = 0.95f;
                     //}
-
-                    if (!Main.gamePaused) {
-                        handler.ghostFade = MathHelper.SmoothStep(handler.ghostFade, 
-                            (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
-                            0.25f);
-                        handler.ghostFade2 = MathHelper.SmoothStep(handler.ghostFade2,
-                             (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
-                             0.25f);
-                        handler.ghostFade3 = MathHelper.SmoothStep(handler.ghostFade3,
-                             (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
-                             0.25f);
-                    }
 
                     float num2 = handler.ghostFade;
                     for (int l = 0; l < 4; l++) {
