@@ -1,6 +1,6 @@
 InBackwoods: Mods.RoA.Conditions.InBackwoods
 TanningRack: Mods.RoA.Conditions.TanningRack
-FlederSlayer: Drops if the Lothor the Wild is killed while enraged
+FlederSlayer: Drops if Lothor the Wild is killed while enraged
 BackwoodsBiome: Mods.RoA.Conditions.BackwoodsBiome
 HasSaddle: Mods.RoA.Conditions.HasSaddleCondition
 SailorHat: Mods.RoA.Conditions.SailorHatCondition
