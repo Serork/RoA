@@ -1713,22 +1713,22 @@ NFAPants: {
 }
 
 PeegeonChestguard: {
-	DisplayName: PeegeOn's Chestguard
+	DisplayName: Peege.On's Chestguard
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonGreaves: {
-	DisplayName: PeegeOn's Greaves
+	DisplayName: Peege.On's Greaves
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonHood: {
-	DisplayName: PeegeOn's Hood
+	DisplayName: Peege.On's Hood
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonCape: {
-	DisplayName: PeegeOn's Cape
+	DisplayName: Peege.On's Cape
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1768,7 +1768,7 @@ BRIPEsRocketBoots: {
 }
 
 cleoChestguard: {
-	DisplayName: Cleo's Chestguard
+	DisplayName: Cleo.'s Chestguard
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1777,7 +1777,7 @@ cleoChestguard: {
 }
 
 cleoMask: {
-	DisplayName: Cleo's Mask
+	DisplayName: Cleo.'s Mask
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1786,7 +1786,7 @@ cleoMask: {
 }
 
 cleoPants: {
-	DisplayName: Cleo's Pants
+	DisplayName: Cleo.'s Pants
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 

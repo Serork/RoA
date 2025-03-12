@@ -1690,12 +1690,12 @@ EldritchRing: {
 }
 
 NFAHorns: {
-	DisplayName: Рога Н.Ф.А.
+	DisplayName: Рога Н. Ф. А.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 NFAJacket: {
-	DisplayName: Вонючая куртка Н.Ф.А.
+	DisplayName: Вонючая куртка Н. Ф. А.
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1704,27 +1704,27 @@ NFAJacket: {
 }
 
 NFAPants: {
-	DisplayName: Штаны Н.Ф.А.
+	DisplayName: Штаны Н. Ф. А.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonChestguard: {
-	DisplayName: Нагрудник PeegeOn'а
+	DisplayName: Нагрудник Peege.On'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonGreaves: {
-	DisplayName: Поножи PeegeOn'а
+	DisplayName: Поножи Peege.On'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonHood: {
-	DisplayName: Капюшон PeegeOn'а
+	DisplayName: Капюшон Peege.On'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonCape: {
-	DisplayName: Плащ PeegeOn'а
+	DisplayName: Плащ Peege.On'а
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1749,22 +1749,22 @@ SerorkMask: {
 }
 
 BRIPEsHeart: {
-	DisplayName: Сердце Bripe
+	DisplayName: Сердце BRIPE
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsHelmet: {
-	DisplayName: Шлем Bripe
+	DisplayName: Шлем BRIPE
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsRocketBoots: {
-	DisplayName: Ракетные ботинки Bripe
+	DisplayName: Ракетные ботинки BRIPE
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 cleoChestguard: {
-	DisplayName: Нагрудник Cleo
+	DisplayName: Нагрудник Cleo.
 	/* Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1773,7 +1773,7 @@ cleoChestguard: {
 }
 
 cleoMask: {
-	DisplayName: Маска Cleo
+	DisplayName: Маска Cleo.
 	/* Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1782,26 +1782,26 @@ cleoMask: {
 }
 
 cleoPants: {
-	DisplayName: Штаны Cleo
+	DisplayName: Штаны Cleo.
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 IOU: {
-	DisplayName: Я.Т.Д.
-	Tooltip: "'Я тебе должен оружие для Друида. @ Н.Ф.А.'"
+	DisplayName: Я. Т. Д.
+	Tooltip: "'Я тебе должен оружие для Друида. @ Н. Ф. А.'"
 }
 
 Nihility: {
 	DisplayName: '''"Небытие"'''
-	Tooltip: "'Н.Ф.А.'"
+	Tooltip: "'Н. Ф. А.'"
 }
 
 Absolute: {
 	DisplayName: '''"Абсолютный"'''
-	Tooltip: "'Н.Ф.А.'"
+	Tooltip: "'Н. Ф. А.'"
 }
 
 Them: {
 	DisplayName: '''"Они"'''
-	Tooltip: "'Н.Ф.А.'"
+	Tooltip: "'Н. Ф. А.'"
 }
