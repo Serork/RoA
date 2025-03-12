@@ -16,7 +16,7 @@ sealed class TrailerCameraTest : ModPlayer {
         float result = MathHelper.Clamp(amount, 0f, 1f);
         //result = MathHelper.Hermite(value1, 0f, value2, 0f, result);
 
-        result = MathHelper.Lerp(value1, value2, Ease.SineIn(Ease.CubeOut(amount)));
+        result = MathHelper.Lerp(value1, value2, Ease.SineIn(Ease.SineOut(amount)));
 
         return result;
     }
@@ -30,12 +30,12 @@ sealed class TrailerCameraTest : ModPlayer {
 
     private class LightHackGlobalWall : GlobalWall {
         public override void ModifyLight(int i, int j, int type, ref float r, ref float g, ref float b) {
-            if (CameraSystem.AsymetricalPanModifier.Progress > 0) {
-                float value = 1f - CameraSystem.AsymetricalPanModifier.Progress;
-                r = MathHelper.Clamp(r + value, 0, 1);
-                g = MathHelper.Clamp(g + value, 0, 1);
-                b = MathHelper.Clamp(b + value, 0, 1);
-            }
+            //if (CameraSystem.AsymetricalPanModifier.Progress > 0) {
+            //    float value = 1f - CameraSystem.AsymetricalPanModifier.Progress;
+            //    r = MathHelper.Clamp(r + value, 0, 1);
+            //    g = MathHelper.Clamp(g + value, 0, 1);
+            //    b = MathHelper.Clamp(b + value, 0, 1);
+            //}
         }
     }
 
@@ -47,7 +47,7 @@ sealed class TrailerCameraTest : ModPlayer {
         if (!_shifted) {
             Point altarPosition = new Point(BackwoodsVars.BackwoodsStartX + 9, BackwoodsVars.FirstTileYAtCenter - 25);
             Point backwoodsBottomPosition = new Point(BackwoodsVars.BackwoodsStartX + 9, BackwoodsVars.FirstTileYAtCenter + BackwoodsVars.BackwoodsSizeY * 2 - BackwoodsVars.BackwoodsSizeY / 2);
-            CameraSystem.AsymetricalPan(BackwoodsVars.BackwoodsSizeY * 5, 240, BackwoodsVars.BackwoodsSizeY, backwoodsBottomPosition.ToWorldCoordinates(), altarPosition.ToWorldCoordinates(), EaseFunction);
+            CameraSystem.AsymetricalPan(BackwoodsVars.BackwoodsSizeY * 10, 240, BackwoodsVars.BackwoodsSizeY, backwoodsBottomPosition.ToWorldCoordinates(), altarPosition.ToWorldCoordinates(), EaseFunction);
             _shifted = true;
         }
     }

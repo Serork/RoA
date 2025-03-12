@@ -76,7 +76,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private byte _nextHerb;
     private Point _gatewayLocation;
     private Vector2D _gatewayVelocity;
-    private int _nextItemIndex;
+    private int _nextItemIndex, _nextItemIndex2;
     private bool _costumeAdded;
     private bool _wandsAdded;
     private bool _oneChestPlacedInBigTree;
@@ -2104,23 +2104,35 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     Action[] addings = [
                         () => {
                             _nextItemIndex++;
-                            bool flag10 = false;
+                            _nextItemIndex2++;
+                            if (_nextItemIndex2 >= 3) {
+                                _nextItemIndex2 = 0;
+                            }
                             if (_nextItemIndex >= 5) {
                                 _nextItemIndex = 0;
-                                if (!_wandsAdded || _random.NextBool(20)) {
-                                    _wandsAdded = true;
-                                    addItemInChest(ModContent.ItemType<LivingPrimordialWand>(), 1, 1);
-                                    addItemInChest(ModContent.ItemType<LivingPrimordialWand2>(), 1, 1);
-                                }
-                                else {
-                                    addItemInChest(ModContent.ItemType<BunnyHat>(), 1, 1);
-                                    addItemInChest(ModContent.ItemType<BunnyJacket>(), 1);
-                                    addItemInChest(ModContent.ItemType<BunnyPants>(), 1);
-                                }
+                            }
+                            addItemInChest(firstItemType, 1);
+                            int secondItemType;
+                            switch (_nextItemIndex2) {
+                                case 0:
+                                    secondItemType = ModContent.ItemType<BunnyHat>();
+                                    break;
+                                case 1:
+                                    secondItemType = ModContent.ItemType<BunnyJacket>();
+                                    break;
+                                default:
+                                    secondItemType = ModContent.ItemType<BunnyPants>();
+                                    break;
+                            }
+                            bool flag10 = false;
+                            if (!_wandsAdded || _random.NextBool(20)) {
+                                _wandsAdded = true;
+                                addItemInChest(ModContent.ItemType<LivingPrimordialWand>(), 1, 1);
+                                addItemInChest(ModContent.ItemType<LivingPrimordialWand2>(), 1, 1);
                                 flag10 = true;
                             }
                             if (!flag10) {
-                                addItemInChest(firstItemType, 1);
+                                addItemInChest(secondItemType, 1);
                             }
                         },
                         //() => {
