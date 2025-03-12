@@ -1714,7 +1714,7 @@ NFAPants: {
 
 
 NFAWings: {
-	DisplayName:N.F.A.'s Wings
+	DisplayName: N.F.A.'s Wings
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1774,7 +1774,7 @@ BRIPEsRocketBoots: {
 }
 
 cleoChestguard: {
-	DisplayName: сleo.'s Chestguard
+	DisplayName: cleo.'s Chestguard
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1783,7 +1783,7 @@ cleoChestguard: {
 }
 
 cleoMask: {
-	DisplayName: сleo.'s Mask
+	DisplayName: cleo.'s Mask
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1792,7 +1792,7 @@ cleoMask: {
 }
 
 cleoPants: {
-	DisplayName: сleo.'s Pants
+	DisplayName: cleo.'s Pants
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 

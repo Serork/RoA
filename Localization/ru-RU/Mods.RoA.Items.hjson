@@ -1709,7 +1709,7 @@ NFAPants: {
 }
 
 NFAWings: {
-	DisplayName: Крылья Н. Ф. А
+	DisplayName: Крылья Н. Ф. А.
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
