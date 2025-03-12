@@ -65,7 +65,7 @@ sealed class RoA : Mod {
             new ModCallAchievement().Add(Instance,
             "WhatsThatSmell",
             AchievementCategory.Explorer,
-            null, null,
+            ResourceManager.AchievementsTextures + "Achievement_MineMercuriumNugget", null,
             false, true,
             6.5f,
             ["Event_" + TMLAchievements.RoAAchivement.WhatsThatSmell]);
@@ -116,8 +116,7 @@ sealed class RoA : Mod {
                 mod.Call("AddAchievement", Instance,
                     "WhatsThatSmell",
                     AchievementCategory.Explorer,
-                    null,
-                    null,
+                    ResourceManager.AchievementsTextures + "Achievement_MineMercuriumNugget", null,
                     false, true,
                     6.5f,
                     new string[] { "Event_" + TMLAchievements.RoAAchivement.WhatsThatSmell });
