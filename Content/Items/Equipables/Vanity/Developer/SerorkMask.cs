@@ -91,6 +91,16 @@ sealed class SerorkMask : ModItem {
                             drawData.shader = drawinfo.cHead;
                             drawinfo.DrawDataCache.Add(drawData);
                         }
+
+                        if (typeof(T).Name == nameof(SerorkMask)) {
+                            glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<T>()).Texture + "_Head_Glow2").Value;
+                            drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
+                            glowMaskColor = Color.White * (1f - drawinfo.shadow);
+                            glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
+                            drawData.color = glowMaskColor;
+                            drawData.shader = drawinfo.cHead;
+                            drawinfo.DrawDataCache.Add(drawData);
+                        }
                     }
                 }
                 drawself<SerorkMask>(ref drawInfo);
@@ -167,6 +177,14 @@ sealed class SerorkMask : ModItem {
                         drawData.shader = drawinfo.cLegs;
                         drawinfo.DrawDataCache.Add(drawData);
                     }
+
+                    glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkGreaves>()).Texture + "_Legs_Glow2").Value;
+                    drawData = new(glowMaskTexture, drawPos.Floor() + legsOffset, player.legFrame, default, player.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0);
+                    glowMaskColor = Color.White * (1f - drawinfo.shadow);
+                    glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
+                    drawData.color = glowMaskColor;
+                    drawData.shader = drawinfo.cLegs;
+                    drawinfo.DrawDataCache.Add(drawData);
                 }
             }
         }
