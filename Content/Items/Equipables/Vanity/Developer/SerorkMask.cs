@@ -65,7 +65,7 @@ sealed class SerorkMask : ModItem {
                         drawData.color = Color.Lerp(drawData.color, Color.LightBlue, 0.5f);
                         drawData.color.A = (byte)((float)(int)drawData.color.A * 0.375f);
                         var handler = drawinfo.drawPlayer.GetModPlayer<SerorkVisualsStorage>();
-                        float num2 = handler.ghostFade;
+                        float num2 = handler.ghostFade2;
                         for (int l = 0; l < 4; l++) {
                             float num3;
                             float num4;
@@ -151,7 +151,7 @@ sealed class SerorkMask : ModItem {
                     drawData.color = Color.Lerp(drawData.color, Color.LightBlue, 0.5f);
                     drawData.color.A = (byte)((float)(int)drawData.color.A * 0.375f);
                     var handler = drawinfo.drawPlayer.GetModPlayer<SerorkVisualsStorage>();
-                    float num2 = handler.ghostFade;
+                    float num2 = handler.ghostFade3;
                     for (int l = 0; l < 4; l++) {
                         float num3;
                         float num4;
@@ -190,7 +190,7 @@ sealed class SerorkMask : ModItem {
         }
 
         private sealed class SerorkVisualsStorage : ModPlayer {
-            public float ghostFade;
+            public float ghostFade, ghostFade2, ghostFade3;
             public float ghostDir;
         }
 
@@ -335,6 +335,12 @@ sealed class SerorkMask : ModItem {
                         handler.ghostFade = MathHelper.SmoothStep(handler.ghostFade, 
                             (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
                             0.25f);
+                        handler.ghostFade2 = MathHelper.SmoothStep(handler.ghostFade2,
+                             (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                             0.25f);
+                        handler.ghostFade3 = MathHelper.SmoothStep(handler.ghostFade3,
+                             (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                             0.25f);
                     }
 
                     float num2 = handler.ghostFade;
