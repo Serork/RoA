@@ -358,7 +358,7 @@ public class HouseBuilderCustom {
                         }
                         else {
                             PaintingEntry paintingEntry = WorldGen.RandHousePicture();
-                            if (_random.NextBool(3)) {
+                            if (_random.NextBool(4)) {
                                 WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
                             }
                             else {
