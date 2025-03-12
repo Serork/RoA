@@ -126,7 +126,7 @@ sealed class BackwoodsCrate : ModItem {
         IItemDropRule[] crateLoot = [
             ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ElathaAmulet>(), 20),
 
-            ItemDropRule.AlwaysAtleastOneSuccess(ItemDropRule.SequentialRulesNotScalingWithLuck(2, costume), ItemDropRule.SequentialRulesNotScalingWithLuck(1, mainItems)),
+            ItemDropRule.AlwaysAtleastOneSuccess(ItemDropRule.SequentialRulesNotScalingWithLuck(4, costume), ItemDropRule.SequentialRulesNotScalingWithLuck(1, mainItems)),
 
             ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DryadStatue>(), 6),
 

@@ -1,5 +1,7 @@
-﻿using RoA.Common.WorldEvents;
+﻿using RoA.Common.CustomConditions;
+using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.NPCs.Friendly;
 using RoA.Content.Tiles.Platforms;
@@ -10,11 +12,16 @@ using RoA.Core.Utility;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ModLoader;
 
 namespace RoA.Common.BackwoodsSystems;
 
 sealed class BackwoodsNPCs : GlobalNPC {
+    public override void ModifyGlobalLoot(GlobalLoot globalLoot) {
+        globalLoot.Add(ItemDropRule.ByCondition(new BackwoodsKeyCondition(), ModContent.ItemType<BackwoodsDungeonKey>(), 2500, 1, 1));
+    }
+
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns) {
         if (player.InModBiome<BackwoodsBiome>() && !player.ZoneJungle) {
             spawnRate = (int)(spawnRate * 0.2f);
