@@ -1712,9 +1712,15 @@ NFAPants: {
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
+
 NFAWings: {
 	DisplayName: N.F.A.'s Wings
-	Tooltip: "{$Mods.RoA.RoADev}"
+	Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'Time to unfurl the wings, the ol' flappers, the big guns!'
+		'They don't do anything...'
+		'''
 }
 
 PeegeonChestguard: {
@@ -1758,17 +1764,17 @@ SerorkMask: {
 }
 
 BRIPEsHeart: {
-	DisplayName: Bripe's Heart
+	DisplayName: BRIPE's Heart
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsHelmet: {
-	DisplayName: Bripe's Helmet
+	DisplayName: BRIPE's Helmet
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 BRIPEsRocketBoots: {
-	DisplayName: Bripe's Rocket Boots
+	DisplayName: BRIPE's Rocket Boots
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
