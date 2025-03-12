@@ -1794,3 +1794,18 @@ IOU: {
 	DisplayName: I.O.U.
 	Tooltip: "'I own you a Druid weapon. @ N.F.A.'"
 }
+
+Nihility: {
+	DisplayName: Nihility
+	Tooltip: ""
+}
+
+Absolute: {
+	DisplayName: Absolute
+	Tooltip: ""
+}
+
+Them: {
+	DisplayName: Them
+	Tooltip: ""
+}

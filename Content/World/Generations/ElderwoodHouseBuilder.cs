@@ -321,7 +321,7 @@ public class HouseBuilderCustom {
                 switch (i + num3 % 2) {
                     case 0: {
                         int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
-                        bool flag2 = _random.NextBool(8);
+                        bool flag2 = _random.NextBool(10);
                         bool flag = !_painting1 || !_painting2 || !_painting3;
                         if (flag || flag2) {
                             int attempts = 1000;
@@ -358,7 +358,22 @@ public class HouseBuilderCustom {
                         }
                         else {
                             PaintingEntry paintingEntry = WorldGen.RandHousePicture();
-                            WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
+                            if (_random.NextBool(5)) {
+                                WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
+                            }
+                            else {
+                                switch (_random.Next(3)) {
+                                    case 0:
+                                        WorldGen.PlaceTile(num4, num5, ModContent.TileType<Absolute>(), mute: true, forced: false, -1, 0);
+                                        break;
+                                    case 1:
+                                        WorldGen.PlaceTile(num4, num5, ModContent.TileType<Them>(), mute: true, forced: false, -1, 0);
+                                        break;
+                                    case 2:
+                                        WorldGen.PlaceTile(num4, num5, ModContent.TileType<Nihility>(), mute: true, forced: false, -1, 0);
+                                        break;
+                                }
+                            }
                         }
                         //WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, 0);
                         break;

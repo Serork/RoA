@@ -1790,3 +1790,18 @@ IOU: {
 	DisplayName: Я.Т.Д.
 	Tooltip: "'Я тебе должен оружие для Друида. @ Н.Ф.А.'"
 }
+
+Nihility: {
+	// DisplayName: Nihility
+	// Tooltip: ""
+}
+
+Absolute: {
+	// DisplayName: Absolute
+	// Tooltip: ""
+}
+
+Them: {
+	// DisplayName: Them
+	// Tooltip: ""
+}
