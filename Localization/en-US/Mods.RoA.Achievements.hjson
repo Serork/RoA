@@ -1,6 +1,6 @@
 BestialCommunion: {
 	Name: Bestial Communion
-	Description: Defeat the Lothor the Wild, a betrayed fool of the backwoods.
+	Description: Defeat Lothor the Wild, a betrayed fool of the backwoods.
 }
 
 WhatsThatSmell: {
@@ -10,7 +10,7 @@ WhatsThatSmell: {
 
 GrootsLoot: {
 	Name: Groot's Loot
-	Description: Open an rootbound chest in the underground backwoods.
+	Description: Open a rootbound chest in the underground backwoods.
 }
 
 SilentHills: {
