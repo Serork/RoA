@@ -10,6 +10,7 @@ using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Items.Placeable.Decorations;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Special;
 using RoA.Content.Items.Weapons.Magic;
@@ -97,7 +98,6 @@ sealed class BackwoodsCrate : ModItem {
             ItemDropRule.NotScalingWithLuck(ItemID.TungstenOre, 1, 20, 35),
             ItemDropRule.NotScalingWithLuck(ItemID.GoldOre, 1, 20, 35),
             ItemDropRule.NotScalingWithLuck(ItemID.PlatinumOre, 1, 20, 35),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<MercuriumOre>(), 1, 20, 35),
         ];
         IItemDropRule[] bars = [
             ItemDropRule.NotScalingWithLuck(ItemID.IronBar, 1, 6, 16),
@@ -107,9 +107,6 @@ sealed class BackwoodsCrate : ModItem {
             ItemDropRule.NotScalingWithLuck(ItemID.GoldBar, 1, 6, 16),
             ItemDropRule.NotScalingWithLuck(ItemID.PlatinumBar, 1, 6, 16)
         ];
-        IItemDropRule[] bars2 = [
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<MercuriumNugget>(), 1, 6, 16),
-        ];
         IItemDropRule[] potions = [
             ItemDropRule.NotScalingWithLuck(ItemID.ObsidianSkinPotion, 1, 2, 4),
             ItemDropRule.NotScalingWithLuck(ItemID.SpelunkerPotion, 1, 2, 4),
@@ -117,15 +114,6 @@ sealed class BackwoodsCrate : ModItem {
             ItemDropRule.NotScalingWithLuck(ItemID.GravitationPotion, 1, 2, 4),
             ItemDropRule.NotScalingWithLuck(ItemID.MiningPotion, 1, 2, 4),
             ItemDropRule.NotScalingWithLuck(ItemID.HeartreachPotion, 1, 2, 4)
-        ];
-        IItemDropRule[] potions2 = [
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DryadBloodPotion>(), 1, 2, 4),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<WillpowerPotion>(), 1, 2, 4),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<BloodlustPotion>(), 1, 2, 4),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<BrightstonePotion>(), 1, 2, 4),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ResiliencePotion>(), 1, 2, 4),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<WeightPotion>(), 1, 2, 4),
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DeathWardPotion>(), 1)
         ];
         IItemDropRule[] extraPotions = [
             ItemDropRule.NotScalingWithLuck(ItemID.HealingPotion, 1, 5, 17),
@@ -138,15 +126,16 @@ sealed class BackwoodsCrate : ModItem {
         IItemDropRule[] crateLoot = [
             ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ElathaAmulet>(), 20),
 
-            ItemDropRule.AlwaysAtleastOneSuccess(ItemDropRule.SequentialRulesNotScalingWithLuck(6, costume), ItemDropRule.SequentialRulesNotScalingWithLuck(1, mainItems)),
+            ItemDropRule.AlwaysAtleastOneSuccess(ItemDropRule.SequentialRulesNotScalingWithLuck(2, costume), ItemDropRule.SequentialRulesNotScalingWithLuck(1, mainItems)),
+
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DryadStatue>(), 6),
+
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<Moss>(), 20),
 
             goldCoin,
-            new OneFromRulesRule(4, slipperyItems),
-            new OneFromRulesRule(3, bars2),
             new OneFromRulesRule(7, ores),
-            new OneFromRulesRule(6, bars),
-            new OneFromRulesRule(6, potions),
-            new OneFromRulesRule(6, potions2),
+            new OneFromRulesRule(4, bars),
+            new OneFromRulesRule(4, potions),
 
             new OneFromRulesRule(2, extraPotions),
             new OneFromRulesRule(2, extraBait),
