@@ -338,7 +338,7 @@ sealed class BloodshedAxe : ModProjectile {
         if (_powerUp) Lighting.AddLight(Projectile.Center, 0.4f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255);
         
         float armRotation = Projectile.rotation - MathHelper.PiOver2;
-        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
+        player.SetCompositeBothArms(armRotation, Player.CompositeArmStretchAmount.Full);
         if (_time > 0) {
             _time--;
         }
