@@ -135,11 +135,16 @@ sealed class BeastProj : ModProjectile  {
 		bool flag = player.reuseDelay < extra;
 		Projectile.timeLeft = 2;
 		Projectile.damage = 0;
-		if (Projectile.localAI[0] == 0f) {
-			Projectile.localAI[0] = 1f;
-			Projectile.localAI[1] = (int)player.itemAnimationMax * 4 + 10;
+        if (player.itemAnimation <= 1) {
+			Projectile.localAI[1]++;
         }
-		if (--Projectile.localAI[1] <= 0f) {
+		if (Projectile.localAI[1] >= 3) {
+			Projectile.Kill();
+		}
+        if (Projectile.localAI[0] == 0f) {
+			Projectile.localAI[0] = 1f;
+        }
+		if (player.frozen || player.stoned) {
 			Projectile.Kill();
 		}
         float offset = (player.direction != 1 ? 3f : 4f) * -player.direction;
