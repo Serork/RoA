@@ -22,7 +22,6 @@ ElderwoodPlatform.MapEntry: Платформа из древнего дерев�
 ElderwoodTable.MapEntry: Стол из древнего дерева
 ElderwoodWorkbench.MapEntry: Верстак из древнего дерева
 ElderwoodBookcase.MapEntry: Книжный шкаф из древнего дерева
-
 Cloudberry.MapEntry: Морошка
 LivingElderwood3.MapEntry: Живое древнее дерево
 ElderwoodChest2.MapEntry: Опутанный корнями сундук
@@ -45,7 +44,6 @@ FenethStatue.MapEntry: Статуя Фенет
 TanningRack.MapEntry: Дубильный станок
 DullDaikatana.MapEntry: Затупившаяся дай-катана
 FlederSlayerDecoration.MapEntry: Погибель нетопырей
-
 //Paintings
 MillionDollarPainting.MapEntry: Картина на миллион долларов
 Moss.MapEntry: '''"Мох"'''

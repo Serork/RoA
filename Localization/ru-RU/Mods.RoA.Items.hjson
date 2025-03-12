@@ -1695,7 +1695,7 @@ NFAHorns: {
 }
 
 NFAJacket: {
-	DisplayName: Куртка Н.Ф.А.
+	DisplayName: Вонючая куртка Н.Ф.А.
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1792,16 +1792,16 @@ IOU: {
 }
 
 Nihility: {
-	DisplayName: Небытие
+	DisplayName: '''"Небытие"'''
 	Tooltip: "'Н.Ф.А.'"
 }
 
 Absolute: {
-	DisplayName: Абсолютный
+	DisplayName: '''"Абсолютный"'''
 	Tooltip: "'Н.Ф.А.'"
 }
 
 Them: {
-	DisplayName: Они
+	DisplayName: '''"Они"'''
 	Tooltip: "'Н.Ф.А.'"
 }
