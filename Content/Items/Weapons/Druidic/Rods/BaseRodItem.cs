@@ -293,6 +293,10 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void ActiveCheck() {
+        if (!(!Owner.frozen && !Owner.stoned)) {
+            Projectile.Kill();
+        }
+
         if (!Owner.active || Owner.dead || Owner.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
             Projectile.Kill();
         }
