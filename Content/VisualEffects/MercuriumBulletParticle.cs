@@ -38,11 +38,11 @@ sealed class MercuriumBulletParticle : VisualEffect<MercuriumBulletParticle> {
         Vector2 position = Position - Main.screenPosition;
         SpriteEffects effects = SpriteEffects.None;
         Color shineColor = new(255, 200, 150);
-        Color color3 = color * _scale * 0.5f;
-        color3.A = (byte)(color3.A * (1.0 - (double)_scale));
-        Color color4 = color3 * _scale * 0.5f;
-        color4.G = (byte)(color4.G * (double)_scale);
-        color4.B = (byte)(color4.R * (0.25 + (double)_scale * 0.75));
+        Color color3 = color * 1f * 0.5f;
+        color3.A = (byte)(color3.A * (1.0 - (double)1f));
+        Color color4 = color3 * 1f * 0.5f;
+        color4.G = (byte)(color4.G * (double)1f);
+        color4.B = (byte)(color4.R * (0.25 + (double)1f * 0.75));
         spriteBatch.Draw(Texture, position, null, color4, MathHelper.PiOver2 + Rotation, origin, _scale * 0.6f, effects, 0f);
         spriteBatch.Draw(Texture, position, null, color3, Rotation, origin, _scale * 0.6f, effects, 0f);
         spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, _scale * 0.3f , effects, 0f);
