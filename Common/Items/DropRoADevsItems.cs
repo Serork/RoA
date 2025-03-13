@@ -39,7 +39,7 @@ sealed class DropRoADevsItems : ILoadable {
                     self.QuickSpawnItem(source, ModContent.ItemType<PeegeonHood>());
                     self.QuickSpawnItem(source, ModContent.ItemType<PeegeonChestguard>());
                     self.QuickSpawnItem(source, ModContent.ItemType<PeegeonGreaves>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<PeegeonCape>());
+                    //self.QuickSpawnItem(source, ModContent.ItemType<PeegeonCape>());
                     break;
                 case 1:
                     self.QuickSpawnItem(source, Main.rand.NextBool() ? ModContent.ItemType<SerorkHelmet>() : ModContent.ItemType<SerorkMask>());
@@ -50,7 +50,7 @@ sealed class DropRoADevsItems : ILoadable {
                     self.QuickSpawnItem(source, Main.rand.NextBool() ? ModContent.ItemType<Has2rMask>() : ModContent.ItemType<Has2rShades>());
                     self.QuickSpawnItem(source, ModContent.ItemType<Has2rJacket>());
                     self.QuickSpawnItem(source, ModContent.ItemType<Has2rPants>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<EldritchRing>());
+                    //self.QuickSpawnItem(source, ModContent.ItemType<EldritchRing>());
                     break;
                 case 3:
                     self.QuickSpawnItem(source, ModContent.ItemType<BRIPEsHelmet>());

@@ -185,7 +185,7 @@ sealed class BeastProj : ModProjectile  {
 		}
         Projectile.ai[1] += 0.0045f * player.gravDir;
         ++_attackTimer;
-		if (_attackTimer >= Projectile.ai[2] / 3f) {
+		if (_attackTimer >= Projectile.ai[2] / 2f) {
 			_rotation -= 0.075f * player.direction * player.gravDir;
             _attackTimer = 0f;
 			Projectile.netUpdate = true;

@@ -124,8 +124,7 @@ sealed class RoA : Mod {
                 mod.Call("AddAchievement", Instance,
                     "GrootsLoot",
                     AchievementCategory.Explorer,
-                    null,
-                    null,
+                    ResourceManager.AchievementsTextures + "Achievement_OpenRootboundChest", null,
                     false, true,
                     14.5f,
                     new string[] { "Event_" + TMLAchievements.RoAAchivement.OpenRootboundChest });
@@ -142,8 +141,7 @@ sealed class RoA : Mod {
                 mod.Call("AddAchievement", Instance,
                     "NotPostMortem",
                     AchievementCategory.Collector,
-                    null,
-                    null,
+                    ResourceManager.AchievementsTextures + "Achievement_CraftDruidWreath", null,
                     false, true,
                     13.5f,
                     new string[] { "Event_" + TMLAchievements.RoAAchivement.NotPostMortem });

@@ -6,6 +6,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
 [AutoloadEquip(EquipType.Wings)]
@@ -13,7 +14,8 @@ sealed class NFAWings : ModItem {
     private class NFAWingsGlowMask : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Wings);
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.wingsLogic == EquipLoader.GetEquipSlot(RoA.Instance, nameof(NFAWings), EquipType.Wings);
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) =>
+            drawInfo.drawPlayer.wings == EquipLoader.GetEquipSlot(RoA.Instance, nameof(NFAWings), EquipType.Wings);
 
         protected override void Draw(ref PlayerDrawSet drawinfo) {
             if (drawinfo.drawPlayer.dead || drawinfo.hideEntirePlayer) {
@@ -39,6 +41,8 @@ sealed class NFAWings : ModItem {
     }
 
     public override void SetStaticDefaults() {
+        Item.ResearchUnlockCount = 1;
+
         ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(150, 7f);
     }
 
