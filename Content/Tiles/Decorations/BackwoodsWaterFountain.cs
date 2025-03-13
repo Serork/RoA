@@ -75,13 +75,27 @@ sealed class BackwoodsWaterFountain : ModTile {
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         Tile tile = Main.tile[i, j];
-        Texture2D texture = TextureAssets.Tile[Type].Value;
+        var texture = Main.instance.TilePaintSystem.TryGetTileAndRequestIfNotReady(Type, 0, Main.tile[i, j].TileColor);
+        if (texture == null)
+            texture = TextureAssets.Tile[Type].Value;
 
         Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
         int animate = tile.TileFrameY >= 72 ? (Main.tileFrame[Type] * (AnimationFrameHeight)) : 0;
 
+        Color color = Lighting.GetColor(i, j);
         spriteBatch.Draw(texture, new Vector2(i * 16, j * 16) - Main.screenPosition + zero + Vector2.UnitY * 2f,
-            new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, 16), Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
+            new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, 16), color, 0f, default, 1f, SpriteEffects.None, 0f);
+
+        if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
+            int num = (color.R + color.G + color.B) / 3;
+            if (num > 10) {
+                Texture2D highlightTexture = TextureAssets.HighlightMask[Type].Value;
+                Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
+                spriteBatch.Draw(highlightTexture, new Vector2(i * 16, j * 16) - Main.screenPosition + zero + Vector2.UnitY * 2f,
+                    new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, 16), highlightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                //Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+            }
+        }
 
         return false;
     }
