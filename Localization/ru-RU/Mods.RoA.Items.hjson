@@ -1817,11 +1817,11 @@ Them: {
 }
 
 GalipotArrow: {
-	// DisplayName: Galipot Arrow
+	DisplayName: Живичная стрела
 	// Tooltip: ""
 }
 
 MercuriumBullet: {
-	// DisplayName: Mercurium Bullet
+	DisplayName: Ртутная пуля
 	// Tooltip: ""
 }

@@ -767,8 +767,8 @@ sealed class RoARecipes : ModSystem {
         item.Register();
 
         // other
-        item = Recipe.Create(ModContent.ItemType<GalipotArrow>(), 10);
-        item.AddIngredient(ItemID.WoodenArrow, 10);
+        item = Recipe.Create(ModContent.ItemType<GalipotArrow>(), 30);
+        item.AddIngredient(ItemID.WoodenArrow, 30);
         item.AddIngredient<Content.Items.Materials.Galipot>(1);
         item.SortAfterFirstRecipesOf(ItemID.FrostburnArrow);
         item.Register();
@@ -877,14 +877,14 @@ sealed class RoARecipes : ModSystem {
     }
 
     private static void AddMercuriumItems(Recipe starFusion) {
-        Recipe item = Recipe.Create(ModContent.ItemType<MercuriumBolt>());
+        Recipe item = Recipe.Create(ModContent.ItemType<MercuriumBolt>(), 100);
         item.AddIngredient(ItemID.WoodenArrow, 100);
         item.AddIngredient<MercuriumNugget>(1);
         item.AddTile(TileID.Anvils);
         item.SortAfterFirstRecipesOf(ItemID.UnholyArrow);
         item.Register();
 
-        item = Recipe.Create(ModContent.ItemType<MercuriumBullet>());
+        item = Recipe.Create(ModContent.ItemType<MercuriumBullet>(), 70);
         item.AddIngredient(ItemID.MusketBall, 70);
         item.AddIngredient<MercuriumNugget>(1);
         item.AddTile(TileID.Anvils);
