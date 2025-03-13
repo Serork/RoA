@@ -25,7 +25,7 @@ sealed class DrawBehindPlayer : ILoadable {
                 continue;
             ModDust modDust = DustLoader.GetDust(dust.type);
             if (modDust != null && modDust is IDrawDustPrePlayer drawDustPostPlayer) {
-                drawDustPostPlayer.DrawPostPlayer(dust);
+                drawDustPostPlayer.DrawPrePlayer(dust);
             }
         }
         Main.spriteBatch.End();

@@ -2,6 +2,7 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
 using RoA.Core;
 
 using Terraria;
@@ -55,7 +56,7 @@ sealed class EldritchRing : ModItem {
                     if (Player.direction == 1)
                         num = -40;
                     int num2 = Dust.NewDust(new Vector2(Player.position.X + (float)(Player.width / 4) + (float)num / 2 - num / 8, Player.position.Y + (float)(Player.height / 2) - 15f), 30, 30,
-                        DustID.Snow, 0f, 0f, 50, Color.Yellow, 0.6f);
+                        ModContent.DustType<SnowDust>(), 0f, 0f, 50, Color.Yellow, 0.6f);
                     Main.dust[num2].fadeIn = 1.1f;
                     Main.dust[num2].noGravity = true;
                     Main.dust[num2].noLight = true;

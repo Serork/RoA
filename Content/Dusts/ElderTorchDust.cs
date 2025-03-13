@@ -12,7 +12,7 @@ namespace RoA.Content.Dusts;
 class ElderTorchDust2 : ElderTorchDust, IDrawDustPrePlayer {
     public override string Texture => DustLoader.GetDust(ModContent.DustType<ElderTorchDust>()).Texture;
 
-    public void DrawPostPlayer(Dust dust) {
+    public void DrawPrePlayer(Dust dust) {
         Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, dust.GetAlpha(dust.color), dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
     }
 
