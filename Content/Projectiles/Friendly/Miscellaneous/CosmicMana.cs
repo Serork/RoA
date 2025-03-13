@@ -42,7 +42,7 @@ sealed class CosmicMana : ModProjectile {
         Player player = Main.player[Projectile.owner];
         Projectile.rotation += Projectile.velocity.X * 0.2f;
         if (player.active && (double)Vector2.Distance(player.Center, Projectile.Center) < 25.0) {
-            int newMana = Main.rand.Next(2, 10);
+            int newMana = Main.rand.Next(3, 7);
             player.statMana += newMana;
             player.ManaEffect(newMana);
             Projectile.Kill();
@@ -61,15 +61,18 @@ sealed class CosmicMana : ModProjectile {
         float lifetime = Projectile.timeLeft < 25 ? Projectile.timeLeft / 25f : 1f;
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-        GameShaders.Misc["RainbowRod"].Apply();
-        vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, p => Color.Lerp(Color.DarkBlue.MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)), Color.OrangeRed.MultiplyAlpha(0.5f), p), p => (float)(60.0 * Projectile.scale * (1.0 - p)), -Main.screenPosition + Projectile.Size / 2, true);
+        MiscShaderData miscShaderData = GameShaders.Misc["RainbowRod"];
+        miscShaderData.UseSaturation(-2.8f);
+        miscShaderData.UseOpacity(1f);
+        miscShaderData.Apply();
+        vertexStrip.PrepareStripWithProceduralPadding(
+            Projectile.oldPos,
+            Projectile.oldRot,
+            p => Color.Lerp(Color.DarkBlue.MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)), Color.OrangeRed.MultiplyAlpha(0.5f), p), 
+            p => (float)(60.0 * Projectile.scale * (1.0 - p)),
+            -Main.screenPosition + Projectile.Size / 2, true);
         vertexStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        //spriteBatch.End();
-        //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-        //spriteBatch.BeginBlendState(BlendState.Additive);
-        //Texture2D backTexture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Suslight");
-        //spriteBatch.Draw(backTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), Color.FromNonPremultiplied(byte.MaxValue, 0, 0, 50), 0.0f, backTexture.Size() / 2f, (float)(0.8f + 0.2f * Math.Sin(Main.time / 10)), SpriteEffects.None, 0.0f);
         spriteBatch.EndBlendState();
         Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f), Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0)), SpriteEffects.None, 0.0f);

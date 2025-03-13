@@ -29,7 +29,7 @@ sealed class CosmicHat : ModItem {
 
             if (timer > 0f) timer -= 1f;
 			Player player = Player;
-            if ((float)player.statMana < (float)player.statManaMax2 * 0.35f && timer <= 0.0 && player.whoAmI == Main.myPlayer) {
+            if ((float)player.statMana < (float)player.statManaMax2 * 0.4f && timer <= 0.0 && player.whoAmI == Main.myPlayer) {
                 float x = player.position.X + (float)Main.rand.Next(-600, 450);
                 float y = player.position.Y - (float)Main.rand.Next(750, 1000);
                 Vector2 vector2 = new Vector2(x, y);
@@ -39,7 +39,7 @@ sealed class CosmicHat : ModItem {
                 float speedX = playerX * speed;
                 float speedY = playerY * speed;
                 Projectile.NewProjectile(player.GetSource_Misc("cosmichat"), x, y, speedX, speedY, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, 0f, 0f);
-                timer = 15f;
+                timer = 20f;
             }
         }
     }
