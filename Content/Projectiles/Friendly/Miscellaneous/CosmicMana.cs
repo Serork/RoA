@@ -42,7 +42,7 @@ sealed class CosmicMana : ModProjectile {
         Player player = Main.player[Projectile.owner];
         Projectile.rotation += Projectile.velocity.X * 0.2f;
         if (player.active && (double)Vector2.Distance(player.Center, Projectile.Center) < 25.0) {
-            int newMana = Main.rand.Next(2, 5) * Main.rand.Next(1, 3);
+            int newMana = Main.rand.Next(2, 10);
             player.statMana += newMana;
             player.ManaEffect(newMana);
             Projectile.Kill();
