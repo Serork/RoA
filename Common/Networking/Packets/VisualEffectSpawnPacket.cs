@@ -15,7 +15,8 @@ namespace RoA.Common.Networking.Packets;
 sealed class VisualEffectSpawnPacket : NetPacket {
     public enum VisualEffectPacketType : byte {
         ClawsHit,
-        BloodShedParticle
+        BloodShedParticle,
+        MercuriumBulletParticle
     }
 
     public VisualEffectSpawnPacket(VisualEffectPacketType packetType, Player player, int layer, Vector2 position, Vector2 velocity, Color color, float scale, float rotation) {
@@ -56,6 +57,9 @@ sealed class VisualEffectSpawnPacket : NetPacket {
                 break;
             case VisualEffectPacketType.BloodShedParticle:
                 createVisualEffect<BloodShedParticle>();
+                break;
+            case VisualEffectPacketType.MercuriumBulletParticle:
+                createVisualEffect<MercuriumBulletParticle>();
                 break;
         }
 

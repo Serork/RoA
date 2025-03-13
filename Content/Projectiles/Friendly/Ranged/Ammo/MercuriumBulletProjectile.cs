@@ -1,6 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
+using RoA.Common.VisualEffects;
+using RoA.Content.VisualEffects;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -61,6 +66,21 @@ sealed class MercuriumBulletProjectile : ModProjectile {
         // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
         Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
         SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+
+        Vector2 offset = new(0.2f);
+        Vector2 velocity = 1.5f * offset;
+        Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
+        Color color = new Color(242, 255, 214) * 0.75f;
+        position = Projectile.Center;
+        velocity = Vector2.Zero;
+        int layer = VisualEffectLayer.ABOVENPCS;
+        VisualEffectSystem.New<MercuriumBulletParticle>(layer).
+            Setup(position,
+                  velocity,
+                  color);
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.MercuriumBulletParticle, Main.player[Projectile.owner], layer, position, velocity, color, 1f, 0f));
+        }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
