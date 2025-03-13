@@ -49,8 +49,8 @@ sealed class Pipistrelle : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 120;
-        NPC.damage = 20;
+        NPC.lifeMax = 100;
+        NPC.damage = 30;
         NPC.defense = 6;
         NPC.Size = new Vector2(32, 32);
         NPC.aiStyle = -1;
@@ -197,10 +197,10 @@ sealed class Pipistrelle : ModNPC {
 
         if (!flag3) {
             if (owner.life < owner.lifeMax * 0.5f) {
-                NPC.defense = (int)(12 * Main.GameModeInfo.EnemyDamageMultiplier);
+                NPC.defense = (int)(10 * Main.GameModeInfo.EnemyDamageMultiplier);
             }
             else if (owner.life < owner.lifeMax * 0.75f) {
-                NPC.defense = (int)(9 * Main.GameModeInfo.EnemyDamageMultiplier);
+                NPC.defense = (int)(8 * Main.GameModeInfo.EnemyDamageMultiplier);
             }
         }
 
