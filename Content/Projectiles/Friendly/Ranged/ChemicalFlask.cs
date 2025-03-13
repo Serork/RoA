@@ -72,7 +72,7 @@ sealed class ChemicalFlask : ModProjectile {
             Main.dust[dust].velocity *= 0.8f;
         }
 
-        float distance = 50f;
+        float distance = 40f;
         for (int findProjectile = 0; findProjectile < Main.maxProjectiles; findProjectile++) {
             Projectile projectile = Main.projectile[findProjectile];
             if (projectile.owner == Projectile.owner && projectile.active && projectile.aiStyle == 1 && Vector2.Distance(Projectile.Center, projectile.Center) < distance)
