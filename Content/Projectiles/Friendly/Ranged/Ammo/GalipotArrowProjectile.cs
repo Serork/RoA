@@ -196,7 +196,7 @@ sealed class GalipotArrowProjectile : ModProjectile {
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
         if (Projectile.owner == Main.myPlayer) {
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GalipotStream2>(), Projectile.damage / 2, Projectile.knockBack / 2, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GalipotStream2>(), Projectile.damage, 0, Projectile.owner);
         }
         for (int num671 = 0; num671 < 6; num671++) {
             int num672 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.Galipot>(), 0f, 0f, Alpha: 50);
