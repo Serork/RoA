@@ -166,6 +166,7 @@ sealed class FenethStatue : ModTile {
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Origin = new Point16(1, 3);
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+        TileObjectData.newTile.LavaPlacement = LiquidPlacement.Allowed;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
         TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;

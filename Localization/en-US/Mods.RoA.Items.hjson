@@ -1829,3 +1829,8 @@ MercuriumBullet: {
 	DisplayName: Mercurium Bullet
 	Tooltip: ""
 }
+
+BackwoodsWaterFountain: {
+	DisplayName: Backwoods Water Fountain
+	Tooltip: ""
+}

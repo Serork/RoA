@@ -1,0 +1,125 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent;
+using Terraria.GameContent.ObjectInteractions;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
+
+namespace RoA.Content.Tiles.Decorations;
+
+sealed class BackwoodsWaterFountain : ModTile {
+    private sealed class BackwoodsWaterFountainInWitchDoctorShop : GlobalNPC {
+        public override void ModifyShop(NPCShop shop) {
+            if (shop.NpcType != NPCID.WitchDoctor) {
+                return;
+            }
+
+            shop.InsertAfter(ItemID.JungleWaterFountain, ModContent.ItemType<Items.Placeable.Decorations.BackwoodsWaterFountain>());
+        }
+    }
+
+    public override void SetStaticDefaults() {
+        Main.tileLighted[Type] = true;
+        Main.tileFrameImportant[Type] = true;
+        Main.tileLavaDeath[Type] = false;
+        Main.tileWaterDeath[Type] = false;
+
+        TileObjectData.newTile.LavaDeath = false;
+        TileObjectData.newTile.LavaPlacement = LiquidPlacement.Allowed;
+        TileObjectData.addTile(Type);
+
+        TileID.Sets.HasOutlines[Type] = true;
+        TileID.Sets.DisableSmartCursor[Type] = true;
+
+        TileObjectData.newTile.Width = 2;
+        TileObjectData.newTile.Height = 4;
+        TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 16];
+        TileObjectData.newTile.CoordinateWidth = 16;
+        TileObjectData.newTile.CoordinatePadding = 2;
+        TileObjectData.newTile.Origin = new Point16(1, 3);
+        TileObjectData.newTile.UsesCustomCanPlace = true;
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 2, 0);
+        TileObjectData.newTile.StyleLineSkip = 2;
+
+        TileObjectData.addTile(Type);
+
+        RegisterItemDrop(ModContent.ItemType<Items.Placeable.Decorations.BackwoodsWaterFountain>());
+
+        DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
+
+        AddMapEntry(new Color(144, 148, 144), Language.GetText("MapObject.WaterFountain"));
+
+        AnimationFrameHeight = 72;
+    }
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
+
+    public override void NearbyEffects(int i, int j, bool closer) {
+        if (!Main.dedServ && Main.tile[i, j].TileFrameY >= 72) {
+            Main.SceneMetrics.ActiveFountainColor = ModContent.Find<ModWaterStyle>(RoA.ModName + "/DruidBiomeWaterStyle").Slot;
+        }
+    }
+
+    public override void AnimateTile(ref int frame, ref int frameCounter) {
+        frame = Main.tileFrame[TileID.WaterFountain];
+        frameCounter = Main.tileFrameCounter[TileID.WaterFountain];
+    }
+
+    public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        Tile tile = Main.tile[i, j];
+        Texture2D texture = TextureAssets.Tile[Type].Value;
+
+        Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
+        int animate = tile.TileFrameY >= 72 ? (Main.tileFrame[Type] * (AnimationFrameHeight)) : 0;
+
+        spriteBatch.Draw(texture, new Vector2(i * 16, j * 16) - Main.screenPosition + zero + Vector2.UnitY * 2f,
+            new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, 16), Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
+
+        return false;
+    }
+
+    public override bool RightClick(int i, int j) {
+        SoundEngine.PlaySound(in SoundID.Mech, new Vector2?(new Vector2(i * 16, j * 16)));
+
+        HitWire(i, j);
+
+        return base.RightClick(i, j);
+    }
+
+    public override void MouseOver(int i, int j) {
+        Player player = Main.LocalPlayer;
+        player.noThrow = 2;
+        player.cursorItemIconEnabled = true;
+        player.cursorItemIconID = ModContent.ItemType<Items.Placeable.Decorations.BackwoodsWaterFountain>();
+    }
+
+    public override void HitWire(int i, int j) {
+        Tile tile = Main.tile[i, j];
+        int topX = i - tile.TileFrameX % 36 / 18;
+        int topY = j - tile.TileFrameY % 72 / 18;
+
+        short frameAdjustment = (short)(tile.TileFrameY >= 72 ? -72 : 72);
+
+        for (int x = topX; x < topX + 2; x++) {
+            for (int y = topY; y < topY + 4; y++) {
+                Main.tile[x, y].TileFrameY += frameAdjustment;
+
+                if (Wiring.running) {
+                    Wiring.SkipWire(x, y);
+                }
+            }
+        }
+
+        if (Main.netMode != NetmodeID.SinglePlayer) {
+            NetMessage.SendTileSquare(-1, topX, topY, 2, 4);
+        }
+    }
+}
