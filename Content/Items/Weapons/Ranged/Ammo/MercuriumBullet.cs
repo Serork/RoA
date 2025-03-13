@@ -24,6 +24,9 @@ sealed class MercuriumBullet : ModItem {
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
         Item.ammo = AmmoID.Bullet;
+
+        Item.rare = ItemRarityID.Blue;
+
         Item.value = Item.sellPrice(0, 0, 0, 8);
         Item.DamageType = DamageClass.Ranged;
     }
