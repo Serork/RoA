@@ -1815,3 +1815,8 @@ Them: {
 	DisplayName: '''"Они"'''
 	Tooltip: "'Н. Ф. А.'"
 }
+
+GalipotArrow: {
+	// DisplayName: Galipot Arrow
+	// Tooltip: ""
+}

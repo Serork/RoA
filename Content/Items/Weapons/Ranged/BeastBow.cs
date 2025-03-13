@@ -34,7 +34,7 @@ sealed class BeastBow : ModItem {
 		Item.crit = 6;
 
 		Item.DamageType = DamageClass.Ranged; 
-		Item.damage = 15; 
+		Item.damage = 18; 
 		Item.knockBack = 2f;
 
 		Item.rare = ItemRarityID.Green; 
@@ -185,7 +185,7 @@ sealed class BeastProj : ModProjectile  {
 		}
         Projectile.ai[1] += 0.0045f * player.gravDir;
         ++_attackTimer;
-		if (_attackTimer >= Projectile.ai[2] / 2f) {
+        if (_attackTimer >= 25 / 2f) {
 			_rotation -= 0.075f * player.direction * player.gravDir;
             _attackTimer = 0f;
 			Projectile.netUpdate = true;

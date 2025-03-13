@@ -1819,3 +1819,8 @@ Them: {
 	DisplayName: Them
 	Tooltip: "'N.F.A.'"
 }
+
+GalipotArrow: {
+	DisplayName: Galipot Arrow
+	Tooltip: ""
+}

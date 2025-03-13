@@ -54,7 +54,7 @@ sealed class GalipotStream : NatureProjectile {
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
         float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f) / 2);
+        //target.AddBuff(ModContent.BuffType<SolidifyingSap>(), (int)(60f * num2 * 2f) / 2);
         //if (Projectile.ai[1] != 1f) {
         //    Projectile.Kill();
         //}
