@@ -72,6 +72,10 @@ sealed class ElathaAmulet : ModItem {
         spriteBatch.Draw(text, position,
             frame, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
 
+        text = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        spriteBatch.Draw(text, position,
+            frame, Color.White, 0f, origin, scale, SpriteEffects.None, 0f);
+
         return false;
     }
 
@@ -90,6 +94,10 @@ sealed class ElathaAmulet : ModItem {
         Vector2 position = Item.Center - Main.screenPosition;
         spriteBatch.Draw(text, position + Vector2.UnitY * 2f,
             frame, lightColor, rotation, Item.Size / 2f, scale, SpriteEffects.None, 0f);
+
+        text = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        spriteBatch.Draw(text, position + Vector2.UnitY * 2f,
+            frame, Color.White, rotation, Item.Size / 2f, scale, SpriteEffects.None, 0f);
 
         return false;
     }

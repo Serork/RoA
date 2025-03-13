@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.GlowMasks;
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,6 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
+[AutoloadGlowMask]
 sealed class Bane : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Bane");

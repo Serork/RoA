@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
+using RoA.Common.GlowMasks;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -9,6 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Melee;
 
+[AutoloadGlowMask]
 sealed class OvergrownSpear : ModItem {
 	public override void SetStaticDefaults() {
 		//Tooltip.SetDefault("Hitting the orbiting spheres releases a magic spear");
