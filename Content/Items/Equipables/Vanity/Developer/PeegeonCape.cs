@@ -81,9 +81,5 @@ sealed class PeegeonCape : ModItem {
         player.wings = -1;
         player.wingsLogic = _wingsSlot;
         player.flapSound = true;
-
-        if (player.controlJump) {
-            player.bodyFrame.Y = 0;
-        }
     }
 }
