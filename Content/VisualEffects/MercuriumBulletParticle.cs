@@ -18,7 +18,7 @@ sealed class MercuriumBulletParticle : VisualEffect<MercuriumBulletParticle> {
     private float _scale;
 
     protected override void SetDefaults() {
-        TimeLeft = MaxTimeLeft = 30;
+        TimeLeft = MaxTimeLeft = 25;
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
