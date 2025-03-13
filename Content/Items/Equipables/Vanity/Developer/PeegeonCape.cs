@@ -51,17 +51,19 @@ sealed class PeegeonCape : ModItem {
             if (Player.controlJump && Player.wingTime > 0f && Player.jump == 0 && Player.velocity.Y != 0f)
                 flag21 = true;
 
-            if (flag21) {
-                int num = 4;
-                if (Player.direction == 1)
-                    num = -40;
-                int num2 = Dust.NewDust(new Vector2(Player.position.X + (float)(Player.width / 2) + (float)num, Player.position.Y + (float)(Player.height / 2) - 15f), 30, 30,
-                    DustID.Snow, 0f, 0f, 50, default(Color), 0.6f);
-                Main.dust[num2].fadeIn = 1.1f;
-                Main.dust[num2].noGravity = true;
-                Main.dust[num2].noLight = true;
-                Main.dust[num2].velocity *= 0.3f;
-                Main.dust[num2].shader = GameShaders.Armor.GetSecondaryShader(Player.cWings, Player);
+            if (flag21 && Player.wingsLogic == _wingsSlot) {
+                if (Main.rand.NextBool(3)) {
+                    int num = 4;
+                    if (Player.direction == 1)
+                        num = -40;
+                    int num2 = Dust.NewDust(new Vector2(Player.position.X + (float)(Player.width / 4) + (float)num / 2 - num / 8, Player.position.Y + (float)(Player.height / 2) - 15f), 30, 30,
+                        DustID.Snow, 0f, 0f, 100, Color.Black, 0.6f);
+                    Main.dust[num2].fadeIn = 1.1f;
+                    Main.dust[num2].noGravity = true;
+                    Main.dust[num2].noLight = true;
+                    Main.dust[num2].velocity *= 0.3f;
+                    Main.dust[num2].shader = GameShaders.Armor.GetSecondaryShader(Player.cWings, Player);
+                }
             }
         }
     }

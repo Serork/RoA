@@ -44,6 +44,25 @@ sealed class EldritchRing : ModItem {
             else {
                 flapSound = false;
             }
+
+            bool flag21 = false;
+            if (Player.controlJump && Player.wingTime > 0f && Player.jump == 0 && Player.velocity.Y != 0f)
+                flag21 = true;
+
+            if (flag21 && Player.wingsLogic == _wingsSlot) {
+                if (Main.rand.NextBool(3)) {
+                    int num = 4;
+                    if (Player.direction == 1)
+                        num = -40;
+                    int num2 = Dust.NewDust(new Vector2(Player.position.X + (float)(Player.width / 4) + (float)num / 2 - num / 8, Player.position.Y + (float)(Player.height / 2) - 15f), 30, 30,
+                        DustID.Snow, 0f, 0f, 50, Color.Yellow, 0.6f);
+                    Main.dust[num2].fadeIn = 1.1f;
+                    Main.dust[num2].noGravity = true;
+                    Main.dust[num2].noLight = true;
+                    Main.dust[num2].velocity *= 0.3f;
+                    Main.dust[num2].shader = GameShaders.Armor.GetSecondaryShader(Player.cWings, Player);
+                }
+            }
         }
     }
 
@@ -93,29 +112,23 @@ sealed class EldritchRing : ModItem {
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             int itemType = ModContent.ItemType<EldritchRing>();
-            if (!drawInfo.hideEntirePlayer && drawInfo.shadow == 0 && !player.dead) {
-                for (int i = 3; i <= 19; i++) {
-                    if (player.armor[i].type == itemType) {
-                        var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "YellowSignRune");
-                        Player _player = drawInfo.drawPlayer;
-                        Texture2D texture = asset.Value;
-                        Vector2 origin = new(texture.Width * 0.5f, texture.Height * 0.5f);
-                        Color _color = new(255, 215, 50, 180);
-                        Vector2 _position2 = runePosition - Main.screenPosition;
-                        Vector2 _position = new(drawInfo.Center.X, drawInfo.Center.Y);
-                        if (_player.gravDir == -1.0) _position.Y += 60f;
-                        if (!Main.gamePaused) {
-                            runePosition = new((float)(int)_position.X, (float)(int)_position.Y);
-                            runeRotation += (_player.direction > 0 ? 0.04f : -0.04f) + _player.velocity.X * 0.02f;
-                        }
-                        int index = i;
-                        if (index > 9) {
-                            index -= 10;
-                        }
-                        DrawData drawData = new(texture, _position2 - new Vector2(3f * _player.direction, 0f), new Rectangle?(), _color, runeRotation, origin, 1f, SpriteEffects.None, 0);
-                        drawData.shader = GameShaders.Armor.GetShaderIdFromItemId(player.dye[index].type);
-                        drawInfo.DrawDataCache.Add(drawData);
+            if (!drawInfo.hideEntirePlayer && drawInfo.shadow == 0 && !player.dead && player.wingsLogic == _wingsSlot) {
+                {
+                    var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "YellowSignRune");
+                    Player _player = drawInfo.drawPlayer;
+                    Texture2D texture = asset.Value;
+                    Vector2 origin = new(texture.Width * 0.5f, texture.Height * 0.5f);
+                    Color _color = new(255, 215, 50, 180);
+                    Vector2 _position2 = runePosition - Main.screenPosition;
+                    Vector2 _position = new(drawInfo.Center.X, drawInfo.Center.Y);
+                    if (_player.gravDir == -1.0) _position.Y += 60f;
+                    if (!Main.gamePaused) {
+                        runePosition = new((float)(int)_position.X, (float)(int)_position.Y);
+                        runeRotation += (_player.direction > 0 ? 0.04f : -0.04f) + _player.velocity.X * 0.02f;
                     }
+                    DrawData drawData = new(texture, _position2 - new Vector2(3f * _player.direction, 0f), new Rectangle?(), _color, runeRotation, origin, 1f, SpriteEffects.None, 0);
+                    drawData.shader = drawInfo.cWings;
+                    drawInfo.DrawDataCache.Add(drawData);
                 }
             }
 
