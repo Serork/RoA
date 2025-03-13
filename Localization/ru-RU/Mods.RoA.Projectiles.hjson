@@ -151,4 +151,4 @@ BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
 // HarmonizingBeam.DisplayName: Harmonizing Beam
 // GalipotArrowProjectile.DisplayName: Galipot Arrow
 // MercuriumBulletProjectile.DisplayName: Mercurium Bullet
-// GalipotStream2.DisplayName: Galipot Stream
+GalipotStream2.DisplayName: Поток живицы
