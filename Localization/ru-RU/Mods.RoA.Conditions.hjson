@@ -6,3 +6,6 @@ FlederSlayer: Выпадает, если Лотор Лютый убит в со�
 // SailorHat: Mods.RoA.Conditions.SailorHatCondition
 // LothorEnrageMonolith: Mods.RoA.Conditions.LothorEnrageMonolith
 BackwoodsKeyCondition: Выпадает в сложном режиме в чаще
+// HasPeegeonSet: Mods.RoA.Conditions.HasPeegeonSet
+// HasNFASet: Mods.RoA.Conditions.HasNFASet
+// HasHas2rSet: Mods.RoA.Conditions.HasHas2rSet

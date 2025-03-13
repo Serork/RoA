@@ -6,3 +6,6 @@ HasSaddle: Mods.RoA.Conditions.HasSaddleCondition
 SailorHat: Mods.RoA.Conditions.SailorHatCondition
 LothorEnrageMonolith: Mods.RoA.Conditions.LothorEnrageMonolith
 BackwoodsKeyCondition: Drops in the Hardmode Backwoods
+HasPeegeonSet: Mods.RoA.Conditions.HasPeegeonSet
+HasNFASet: Mods.RoA.Conditions.HasNFASet
+HasHas2rSet: Mods.RoA.Conditions.HasHas2rSet

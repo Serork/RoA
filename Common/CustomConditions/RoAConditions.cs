@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Equipables.Vanity.Developer;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Core.Utility;
 
@@ -12,6 +13,36 @@ using Terraria.ModLoader;
 namespace RoA.Common.CustomConditions;
 
 static class RoAConditions {
+    private static bool HasDevItem(params int[] devSetItems) {
+        bool result = false;
+        Player player = Main.LocalPlayer;
+        foreach (int devItem in devSetItems) {
+            if (player.HasItemInInventoryOrOpenVoidBag(devItem)) {
+                result = true;
+                break;
+            }
+        }
+        if (player.armor.Any(x => !x.IsEmpty() && devSetItems.Contains(x.type))) {
+            result = true;
+        }
+        return result;
+    }
+
+    public static Condition HasPeegeonSet = new("Mods.RoA.Conditions.HasPeegeonSet", 
+        () => {
+            return HasDevItem(ModContent.ItemType<PeegeonChestguard>(), ModContent.ItemType<PeegeonGreaves>(), ModContent.ItemType<PeegeonHood>());
+        });
+
+    public static Condition HasNFASet = new("Mods.RoA.Conditions.HasNFASet",
+        () => {
+            return HasDevItem(ModContent.ItemType<NFAHorns>(), ModContent.ItemType<NFAJacket>(), ModContent.ItemType<NFAPants>());
+        });
+
+    public static Condition HasHas2rSet = new("Mods.RoA.Conditions.HasHas2rSet",
+        () => {
+            return HasDevItem(ModContent.ItemType<Has2rJacket>(), ModContent.ItemType<Has2rMask>(), ModContent.ItemType<Has2rPants>(), ModContent.ItemType<Has2rShades>());
+        });
+
     public static Condition LothorEnrageMonolith = new("Mods.RoA.Conditions.LothorEnrageMonolith", () => Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(ModContent.ItemType<FlederSlayer>()));
     public static Condition InBackwoods = new("Mods.RoA.Conditions.BackwoodsBiome", () => Main.LocalPlayer.InModBiome<BackwoodsBiome>());
     public static Condition HasAnySaddle = new("Mods.RoA.Conditions.HasSaddle", 

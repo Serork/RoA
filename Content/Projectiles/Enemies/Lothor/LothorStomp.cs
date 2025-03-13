@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -33,6 +35,10 @@ sealed class LothorStomp : ModProjectile {
             Projectile.Kill();
             return;
         }
+        NPC npc = Main.npc[(int)Projectile.ai[2]];
+        if (npc.active && npc.ModNPC != null && npc.As<NPCs.Enemies.Bosses.Lothor.Lothor>()._shouldEnrage) {
+            Projectile.localAI[0] = 1f;
+        }
         Projectile.velocity = Vector2.Zero;
         Projectile.position = Projectile.Center;
         Projectile.Size = new Vector2(16f, 8f) * MathHelper.Lerp(5f, num, Utils.GetLerpValue(0f, 9f, Projectile.ai[0]));
@@ -45,6 +51,11 @@ sealed class LothorStomp : ModProjectile {
             return;
         }
         int num4 = (int)Projectile.ai[0] / 3;
+        bool enraged = Projectile.localAI[0] == 1f;
+        int enragedDust = ModContent.DustType<RedLineDust>();
+        if (enraged) {
+            num4 += num4 / 3;
+        }
         for (int i = point.X; i <= point2.X; i++) {
             for (int j = point.Y; j <= point2.Y; j++) {
                 if (Vector2.Distance(Projectile.Center, new Vector2(i * 16, j * 16)) > num3)
@@ -59,26 +70,51 @@ sealed class LothorStomp : ModProjectile {
                 }
                 int num5 = WorldGen.KillTile_GetTileDustAmount(fail: true, tileSafely, i, j);
                 for (int k = 0; k < num5; k++) {
-                    Dust obj = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
-                    obj.velocity.Y -= 3f + num4 * 1.5f;
-                    obj.velocity.Y *= Main.rand.NextFloat();
-                    obj.velocity.Y *= 0.75f;
-                    obj.scale += num4 * 0.03f;
-                }
-                if (num4 >= 2) {
-                    for (int m = 0; m < num5 - 1; m++) {
-                        Dust obj2 = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
-                        obj2.velocity.Y -= 1f + num4;
-                        obj2.velocity.Y *= Main.rand.NextFloat();
-                        obj2.velocity.Y *= 0.75f;
+                    if (enraged) {
+                        Dust obj = Main.dust[Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, enragedDust)];
+                        obj.velocity.Y -= 3f + num4 * 1.5f;
+                        obj.velocity.Y *= Main.rand.NextFloat();
+                        obj.velocity.Y *= 0.9f;
+                        obj.scale += num4 * 0.03f;
+                    }
+                    else {
+                        Dust obj = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
+                        obj.velocity.Y -= 3f + num4 * 1.5f;
+                        obj.velocity.Y *= Main.rand.NextFloat();
+                        obj.velocity.Y *= 0.75f;
+                        obj.scale += num4 * 0.03f;
                     }
                 }
                 if (num4 >= 2) {
                     for (int m = 0; m < num5 - 1; m++) {
-                        Dust obj2 = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
-                        obj2.velocity.Y -= 1f + num4;
-                        obj2.velocity.Y *= Main.rand.NextFloat();
-                        obj2.velocity.Y *= 0.75f;
+                        if (enraged) {
+                            Dust obj2 = Main.dust[Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, enragedDust)];
+                            obj2.velocity.Y -= 1f + num4;
+                            obj2.velocity.Y *= Main.rand.NextFloat();
+                            obj2.velocity.Y *= 0.9f;
+                        }
+                        else {
+                            Dust obj2 = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
+                            obj2.velocity.Y -= 1f + num4;
+                            obj2.velocity.Y *= Main.rand.NextFloat();
+                            obj2.velocity.Y *= 0.75f;
+                        }
+                    }
+                }
+                if (num4 >= 2) {
+                    for (int m = 0; m < num5 - 1; m++) {
+                        if (enraged) {
+                            Dust obj2 = Main.dust[Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, enragedDust)];
+                            obj2.velocity.Y -= 1f + num4;
+                            obj2.velocity.Y *= Main.rand.NextFloat();
+                            obj2.velocity.Y *= 0.9f;
+                        }
+                        else {
+                            Dust obj2 = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
+                            obj2.velocity.Y -= 1f + num4;
+                            obj2.velocity.Y *= Main.rand.NextFloat();
+                            obj2.velocity.Y *= 0.75f;
+                        }
                     }
                 }
                 if (num5 <= 0 || Main.rand.Next(3) == 0) {

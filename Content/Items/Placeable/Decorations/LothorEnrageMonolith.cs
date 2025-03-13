@@ -15,7 +15,6 @@ sealed class LothorEnrageMonolith : ModItem {
                 return;
             }
 
-
             shop.InsertAfter(3747, ModContent.ItemType<LothorEnrageMonolith>(), RoAConditions.LothorEnrageMonolith);
         }
     }

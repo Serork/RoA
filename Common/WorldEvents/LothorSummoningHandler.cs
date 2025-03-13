@@ -542,10 +542,12 @@ sealed class LothorSummoningHandler : ModSystem {
                     }
                 }
             }
-            if (Main.netMode != 1) {
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
                 if (!NPC.AnyNPCs(type)) {
                     Player player = spawnPlayer;
-                    NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)tileCoords.X + -(tileCoords.X - player.Center.X).GetDirection() * 1000, (int)tileCoords.Y - 500, type);
+                    NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), 
+                        (int)player.Center.X + -(tileCoords.X - player.Center.X).GetDirection() * 1000, 
+                        (int)player.Center.Y - 500, type);
                     if (Main.netMode == 0)
                         Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Language.GetTextValue("Mods.RoA.NPCs.Lothor.DisplayName")), 175, 75);
                     else if (Main.netMode == 2)

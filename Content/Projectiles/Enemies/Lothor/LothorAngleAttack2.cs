@@ -31,13 +31,13 @@ sealed class LothorAngleAttack2 : ModProjectile {
     }
 
     public override void AI() {
-        if (Main.netMode != NetmodeID.Server) {
-            if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
-                int dust = Dust.NewDust(Projectile.position + Projectile.velocity + Vector2.UnitY * 4f, 2, 2, ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1.35f);
-                Main.dust[dust].noGravity = true;
-                Main.dust[dust].velocity *= 0.5f;
-                Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
-            }
+        bool enraged = Projectile.ai[0] == 1f;
+
+        if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
+            int dust = Dust.NewDust(Projectile.position + Projectile.velocity + Vector2.UnitY * 4f, 2, 2, enraged ? ModContent.DustType<LothorPoison2>() : ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1.35f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity *= 0.5f;
+            Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
         }
         Vector2 lastVelocity = Projectile.velocity;
         if (Projectile.velocity.X != lastVelocity.X)
@@ -55,13 +55,14 @@ sealed class LothorAngleAttack2 : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        if (Main.netMode != NetmodeID.Server)
-            for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
-                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
-                                        Projectile.height, ModContent.DustType<LothorPoison>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
-                Main.dust[dust].noGravity = true;
-                Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
-            }
+        bool enraged = Projectile.ai[0] == 1f;
+
+        for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
+            int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
+                                    Projectile.height, enraged ? ModContent.DustType<LothorPoison2>() : ModContent.DustType<LothorPoison>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
+        }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {

@@ -1791,7 +1791,7 @@ sealed partial class Lothor : ModNPC {
 
         SoundEngine.PlaySound(SoundID.DD2_OgreGroundPound, NPC.Center);
 
-        float strength = Main.getGoodWorld ? 12.5f : Main.expertMode ? 10f : 7.5f/*Main.expertMode ? 7.5f : 5f*/;
+        float strength = 7.5f;
         int distInTiles = 20/*Main.expertMode ? 20 : 15*/;
         foreach (Player target in Main.player) {
             bool targetStands = target.velocity.Y == 0f || target.sliding;
@@ -1813,7 +1813,7 @@ sealed partial class Lothor : ModNPC {
         int damage = (int)MathHelper.Lerp(STOMP_DAMAGE, STOMP_DAMAGE2, LifeProgress);
         damage /= 2;
         int knockBack = (int)MathHelper.Lerp(STOMP_KNOCKBACK, STOMP_KNOCKBACK2, LifeProgress);
-        int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.velocity, Vector2.Zero, type, damage, knockBack, Main.myPlayer, 0f, size);
+        int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.velocity, Vector2.Zero, type, damage, knockBack, Main.myPlayer, 0f, size, NPC.whoAmI);
         //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
     }
 

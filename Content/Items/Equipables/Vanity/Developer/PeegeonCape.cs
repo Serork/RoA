@@ -46,7 +46,6 @@ sealed class PeegeonCape : ModItem {
         }
     }
 
-
     private static int _wingsSlot = -1;
 
     private static string WingsTextureName => ResourceManager.EmptyTexture;
