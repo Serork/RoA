@@ -15,9 +15,9 @@ sealed class MercuriumBullet : ModItem {
 	public override void SetDefaults() {
         Item.shoot = ModContent.ProjectileType<MercuriumBulletProjectile>();
 
-        Item.shootSpeed = 4.5f;
-        Item.damage = 11;
-        Item.knockBack = 3.5f;
+        Item.shootSpeed = 3f;
+        Item.damage = 13;
+        Item.knockBack = 5f;
 
         Item.width = 20;
         Item.height = 20;
