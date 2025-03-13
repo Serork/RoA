@@ -44,7 +44,7 @@ MiracleMint: {
 }
 
 MushroomStaff: {
-	DisplayName: Грибная трость
+	DisplayName: Большая поганка
 	Tooltip: Выпускает горсть нисходящих спор
 }
 
@@ -1827,6 +1827,6 @@ MercuriumBullet: {
 }
 
 BackwoodsWaterFountain: {
-	// DisplayName: Backwoods Water Fountain
+	DisplayName: Фонтан чащобной воды
 	// Tooltip: ""
 }
