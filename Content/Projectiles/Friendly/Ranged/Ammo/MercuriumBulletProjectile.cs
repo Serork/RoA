@@ -34,7 +34,7 @@ sealed class MercuriumBulletProjectile : ModProjectile {
     }
 
     public override void AI() {
-        if (Main.rand.NextBool(3)) {
+        if (Main.rand.NextBool(3) && Vector2.Distance(Projectile.position, Main.player[Projectile.owner].position) > 100f) {
             int num67 = Dust.NewDust(Projectile.position - Vector2.One * 18f - Projectile.velocity * 5f, 24, 24, ModContent.DustType<Dusts.ToxicFumes>(), 0f, 0f, Alpha: 50);
             Main.dust[num67].noGravity = true;
             Main.dust[num67].fadeIn = 1.5f;
