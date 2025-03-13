@@ -21,7 +21,8 @@ sealed class CosmicMana : ModProjectile {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Cosmic Mana");
 
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }
 
     public override void SetDefaults() {
@@ -54,13 +55,6 @@ sealed class CosmicMana : ModProjectile {
             SoundStyle sound = SoundID.Item9;
             SoundEngine.PlaySound(sound.WithVolumeScale(0.5f), Projectile.position);
         }
-        for (int num28 = Projectile.oldPos.Length - 1; num28 > 0; num28--) {
-            Projectile.oldPos[num28] = Projectile.oldPos[num28 - 1];
-            Projectile.oldRot[num28] = Projectile.oldRot[num28 - 1];
-        }
-
-        Projectile.oldPos[0] = Projectile.position;
-        Projectile.oldRot[0] = Projectile.rotation;
         for (int i = 0; i < 1; i++)
             Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleTorch, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default, 1.2f);
     }
@@ -79,7 +73,8 @@ sealed class CosmicMana : ModProjectile {
             Projectile.oldRot,
             p => Color.Lerp(Color.DarkBlue.MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)), Color.OrangeRed.MultiplyAlpha(0.5f), p), 
             p => (float)(60.0 * Projectile.scale * (1.0 - p)),
-            -Main.screenPosition + Projectile.Size / 2, true);
+            -Main.screenPosition + Projectile.Size / 2, 
+            true);
         vertexStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         spriteBatch.EndBlendState();
