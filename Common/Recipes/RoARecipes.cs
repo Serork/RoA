@@ -765,6 +765,13 @@ sealed class RoARecipes : ModSystem {
         item.AddTile(TileID.LivingLoom);
         item.SortAfter(temp);
         item.Register();
+
+        // other
+        item = Recipe.Create(ModContent.ItemType<GalipotArrow>());
+        item.AddIngredient(ItemID.WoodenArrow, 10);
+        item.AddIngredient<Content.Items.Materials.Galipot>(1);
+        item.SortAfterFirstRecipesOf(ItemID.FrostburnArrow);
+        item.Register();
     }
 
     private static void AddFlamingFabricItems() {

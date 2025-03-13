@@ -18,17 +18,17 @@ sealed class GalipotArrow : ModItem {
 	public override void SetDefaults() {
         Item.shootSpeed = 4.3f;
         Item.shoot = ModContent.ProjectileType<GalipotArrowProjectile>();
-        Item.damage = 16;
+        Item.damage = 9;
         Item.width = 14;
         Item.height = 32;
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
         Item.ammo = AmmoID.Arrow;
-        Item.knockBack = 4.2f;
+        Item.knockBack = 2.5f;
         Item.DamageType = DamageClass.Ranged;
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.White;
 
-        Item.value = Item.sellPrice(0, 0, 1, 50);
+        Item.value = Item.sellPrice(0, 0, 0, 8);
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {

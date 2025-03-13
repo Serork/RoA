@@ -40,7 +40,7 @@ sealed class MercuriumBoltProjectile : ModProjectile {
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 600, quiet: false);
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 600);
     }
 
     public override void OnKill(int timeLeft) {
