@@ -38,7 +38,7 @@ class ToxicFumes : ModBuff {
 	public override void Update(NPC npc, ref int buffIndex) {
 		npc.GetGlobalNPC<ToxicFumesNPC>().toxicFumes = true;
 		if (npc.boss) return;
-		npc.velocity *= 0.95f;
+		npc.velocity.X *= 0.95f;
 
 	}
 }
