@@ -13,8 +13,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static tModPorter.ProgressUpdate;
-
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class OvergrownSphere : ModProjectile {

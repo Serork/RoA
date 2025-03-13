@@ -164,6 +164,7 @@ sealed class FenethStatue : ModTile {
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 16];
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinatePadding = 2;
+        TileObjectData.newTile.Origin = new Point16(1, 3);
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
@@ -187,7 +188,6 @@ sealed class FenethStatue : ModTile {
     public override bool CanExplode(int i, int j) => false;
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        Main.NewText(frameX);
         for (int k = 0; k < 5; k++) {
             Dust.NewDustPerfect(new Point(i + (frameX == 0 ? 3 : 0), j).ToWorldCoordinates() + new Vector2(frameX == 0 ? -16f : 0, 0f), ModContent.DustType<Dusts.Fireblossom2>());
         }
