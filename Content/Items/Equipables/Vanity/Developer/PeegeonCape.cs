@@ -71,7 +71,7 @@ sealed class PeegeonCape : ModItem {
 
         public override void PostUpdate() {
             if (Player.wingsLogic == _wingsSlot && Player.controlJump && Player.velocity.Y != 0f) {
-                Player.bodyFrame.Y = 56;
+
             }
         }
     }
