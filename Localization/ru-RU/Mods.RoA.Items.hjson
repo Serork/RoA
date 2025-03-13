@@ -1820,3 +1820,8 @@ GalipotArrow: {
 	// DisplayName: Galipot Arrow
 	// Tooltip: ""
 }
+
+MercuriumBullet: {
+	// DisplayName: Mercurium Bullet
+	// Tooltip: ""
+}

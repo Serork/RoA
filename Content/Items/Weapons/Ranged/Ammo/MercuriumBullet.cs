@@ -1,6 +1,3 @@
-using RoA.Content.Items.Equipables.Armor.Ranged;
-using RoA.Content.Items.Equipables.Wreaths;
-using RoA.Content.Items.Materials;
 using RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 
 using Terraria;
@@ -10,25 +7,25 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Ranged.Ammo;
 
-sealed class GalipotArrow : ModItem {
+sealed class MercuriumBullet : ModItem {
 	public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
     }
 
 	public override void SetDefaults() {
-        Item.shootSpeed = 4.3f;
-        Item.shoot = ModContent.ProjectileType<GalipotArrowProjectile>();
-        Item.damage = 9;
-        Item.width = 14;
-        Item.height = 34;
+        Item.shoot = ModContent.ProjectileType<MercuriumBulletProjectile>();
+
+        Item.shootSpeed = 4.5f;
+        Item.damage = 11;
+        Item.knockBack = 3.5f;
+
+        Item.width = 20;
+        Item.height = 20;
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
-        Item.ammo = AmmoID.Arrow;
-        Item.knockBack = 2.5f;
+        Item.ammo = AmmoID.Bullet;
+        Item.value = 18;
         Item.DamageType = DamageClass.Ranged;
-        Item.rare = ItemRarityID.White;
-
-        Item.value = Item.sellPrice(0, 0, 0, 8);
     }
 
     public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
