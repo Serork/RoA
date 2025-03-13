@@ -53,7 +53,7 @@ sealed class BackwoodsWaterFountain : ModTile {
 
         RegisterItemDrop(ModContent.ItemType<Items.Placeable.Decorations.BackwoodsWaterFountain>());
 
-        DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
+        DustType = DustID.Stone;
 
         AddMapEntry(new Color(144, 148, 144), Language.GetText("MapObject.WaterFountain"));
 
