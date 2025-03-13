@@ -66,6 +66,16 @@ sealed class EldritchRing : ModItem {
                 }
             }
         }
+
+        public override void PostUpdate() {
+            if (!Player.sandStorm && !Player.pulley && !Player.shieldRaised &&
+                !Player.mount.Active && Player.grappling[0] < 0 &&
+                (!Player.wet || !Player.ShouldFloatInWater) &&
+                Player.swimTime <= 0
+                && Player.itemAnimation <= 0 && Player.wingsLogic == _wingsSlot && Player.controlJump && Player.velocity.Y != 0f) {
+                Player.bodyFrame.Y = Player.bodyFrame.Height * 6;
+            }
+        }
     }
 
 
