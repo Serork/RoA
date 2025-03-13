@@ -152,3 +152,4 @@ BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
 // GalipotArrowProjectile.DisplayName: Galipot Arrow
 // MercuriumBulletProjectile.DisplayName: Mercurium Bullet
 GalipotStream2.DisplayName: Поток живицы
+// MercuriumZipperProjectile.DisplayName: Mercurium Zipper

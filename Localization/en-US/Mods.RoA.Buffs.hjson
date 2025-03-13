@@ -235,3 +235,8 @@ ElderwoodSetBonusBuff: {
 	DisplayName: Backwoods' Protection
 	Description: Movement speed is briefly decreased
 }
+
+MercuriumZipperDebuff: {
+	DisplayName: Mercurium Zipper
+	Description: Mods.RoA.Buffs.MercuriumZipperDebuff.Description
+}

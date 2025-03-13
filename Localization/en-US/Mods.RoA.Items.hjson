@@ -1834,3 +1834,12 @@ BackwoodsWaterFountain: {
 	DisplayName: Backwoods Water Fountain
 	Tooltip: ""
 }
+
+MercuriumZipper: {
+	DisplayName: Mercurium Zipper
+	Tooltip:
+		'''
+		{$CommonItemTooltip.SummonTagDamage}
+		{$CommonItemTooltip.Whips}
+		'''
+}

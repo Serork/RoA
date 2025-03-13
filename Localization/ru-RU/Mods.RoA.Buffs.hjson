@@ -235,3 +235,8 @@ ElderwoodSetBonusBuff: {
 	DisplayName: Защита чащи
 	Description: Скорость передвижения кратковременно снижена
 }
+
+MercuriumZipperDebuff: {
+	// DisplayName: Mercurium Zipper
+	// Description: Mods.RoA.Buffs.MercuriumZipperDebuff.Description
+}

@@ -1830,3 +1830,12 @@ BackwoodsWaterFountain: {
 	DisplayName: Фонтан чащобной воды
 	// Tooltip: ""
 }
+
+MercuriumZipper: {
+	// DisplayName: Mercurium Zipper
+	Tooltip:
+		'''
+		{$CommonItemTooltip.SummonTagDamage}
+		{$CommonItemTooltip.Whips}
+		'''
+}

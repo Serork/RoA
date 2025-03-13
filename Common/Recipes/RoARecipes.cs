@@ -25,6 +25,7 @@ using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Ranged.Ammo;
+using RoA.Content.Items.Weapons.Summon;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -934,6 +935,13 @@ sealed class RoARecipes : ModSystem {
         temp = item;
         item = Recipe.Create(ModContent.ItemType<MercuriumStaff>());
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
+        item.AddTile(TileID.Anvils);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<MercuriumZipper>());
+        item.AddIngredient<Content.Items.Materials.MercuriumNugget>(12);
         item.AddTile(TileID.Anvils);
         item.SortAfter(temp);
         item.Register();
