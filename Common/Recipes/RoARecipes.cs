@@ -767,7 +767,7 @@ sealed class RoARecipes : ModSystem {
         item.Register();
 
         // other
-        item = Recipe.Create(ModContent.ItemType<GalipotArrow>());
+        item = Recipe.Create(ModContent.ItemType<GalipotArrow>(), 10);
         item.AddIngredient(ItemID.WoodenArrow, 10);
         item.AddIngredient<Content.Items.Materials.Galipot>(1);
         item.SortAfterFirstRecipesOf(ItemID.FrostburnArrow);
