@@ -18,7 +18,7 @@ sealed class GalipotArrow : ModItem {
 	public override void SetDefaults() {
         Item.shootSpeed = 4.3f;
         Item.shoot = ModContent.ProjectileType<GalipotArrowProjectile>();
-        Item.damage = 9;
+        Item.damage = 7;
         Item.width = 14;
         Item.height = 34;
         Item.maxStack = Item.CommonMaxStack;

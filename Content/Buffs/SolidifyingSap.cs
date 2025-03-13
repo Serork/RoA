@@ -1,11 +1,9 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Common.Sets;
 using RoA.Content.Dusts;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
