@@ -42,13 +42,13 @@ sealed partial class Lothor : ModNPC {
 		NPC.lifeMax = (int)((float)NPC.lifeMax * 0.8f * balance * bossAdjustment);
         //NPC.damage = (int)((double)NPC.damage * 0.65f);
 
-        NPC.defense += 4;
+        NPC.defense += 6;
     }
 
     public override void SetDefaults() {
-        NPC.damage = 45;
+        NPC.damage = 40;
         NPC.lifeMax = 6000;
-        NPC.defense = 15;
+        NPC.defense = 14;
 
         NPC.Size = Vector2.One * 72f;
 
