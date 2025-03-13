@@ -25,7 +25,8 @@ sealed class SolidifyingSap : ModBuff {
 
 	public override void Update(NPC npc, ref int buffIndex) {
 		npc.GetGlobalNPC<SolidifyingSapNPC>().solidifyingSap = true;
-		float value = MathHelper.Clamp(npc.knockBackResist, 0f, 1f);
+        if (npc.boss) return;
+        float value = MathHelper.Clamp(npc.knockBackResist, 0f, 1f);
 		float value2 = MathHelper.Lerp(value, 1f, (1f - value) * 0.999f);
         npc.velocity.X *= value2;
 	}
