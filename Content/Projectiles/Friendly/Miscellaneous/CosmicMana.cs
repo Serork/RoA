@@ -22,7 +22,6 @@ sealed class CosmicMana : ModProjectile {
         // DisplayName.SetDefault("Cosmic Mana");
 
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
-        ProjectileID.Sets.TrailingMode[Projectile.type] = 1;
     }
 
     public override void SetDefaults() {
@@ -41,8 +40,8 @@ sealed class CosmicMana : ModProjectile {
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         Projectile.rotation += Projectile.velocity.X * 0.2f;
-        if (player.active && (double)Vector2.Distance(player.Center, Projectile.Center) < 25.0) {
-            int newMana = Main.rand.Next(3, 7);
+        if (player.active && (double)Vector2.Distance(player.Center, Projectile.Center) < 35.0) {
+            int newMana = Main.rand.Next(9, 16);
             player.statMana += newMana;
             player.ManaEffect(newMana);
             Projectile.Kill();
@@ -52,6 +51,13 @@ sealed class CosmicMana : ModProjectile {
             SoundStyle sound = SoundID.Item9;
             SoundEngine.PlaySound(sound.WithVolumeScale(0.5f), Projectile.position);
         }
+        for (int num28 = Projectile.oldPos.Length - 1; num28 > 0; num28--) {
+            Projectile.oldPos[num28] = Projectile.oldPos[num28 - 1];
+            Projectile.oldRot[num28] = Projectile.oldRot[num28 - 1];
+        }
+
+        Projectile.oldPos[0] = Projectile.position;
+        Projectile.oldRot[0] = Projectile.rotation;
         for (int i = 0; i < 1; i++)
             Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleTorch, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default, 1.2f);
     }
