@@ -63,25 +63,29 @@ sealed class CosmicMana : ModProjectile {
         SpriteBatch spriteBatch = Main.spriteBatch;
         float lifetime = Projectile.timeLeft < 25 ? Projectile.timeLeft / 25f : 1f;
         spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-        MiscShaderData miscShaderData = GameShaders.Misc["RainbowRod"];
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+        MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
         miscShaderData.UseSaturation(-2.8f);
-        miscShaderData.UseOpacity(1f);
+        miscShaderData.UseOpacity(2f);
         miscShaderData.Apply();
-        vertexStrip.PrepareStripWithProceduralPadding(
-            Projectile.oldPos,
-            Projectile.oldRot,
-            p => Color.Lerp(Color.DarkBlue.MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)), Color.OrangeRed.MultiplyAlpha(0.5f), p), 
-            p => (float)(60.0 * Projectile.scale * (1.0 - p)),
-            -Main.screenPosition + Projectile.Size / 2, 
-            true);
+        vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, 
+            StripColors, StripWidth, -Main.screenPosition + Projectile.Size / 2f);
         vertexStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         spriteBatch.EndBlendState();
         Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f), Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0)), SpriteEffects.None, 0.0f);
+        for (int i = 0; i < 3; i++) {
+            spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f), Main.GlobalTimeWrappedHourly * i * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
+        }
         return false;
     }
+    private Color StripColors(float progressOnStrip) {
+        float num = 1f - progressOnStrip;
+        Color result = new Color(48, 63, 150) * (num * num * num * num) ;
+        return result;
+    }
+
+    private float StripWidth(float progressOnStrip) => 16f;
 
     public override Color? GetAlpha(Color lightColor)
         => new Color?(Color.White);
