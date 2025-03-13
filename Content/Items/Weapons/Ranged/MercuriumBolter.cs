@@ -17,7 +17,7 @@ sealed class MercuriumBolter : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.damage = 10;
-        Item.knockBack = 0f;
+        Item.knockBack = 0.1f;
         Item.DamageType = DamageClass.Ranged;
 
         Item.crit = 4;
