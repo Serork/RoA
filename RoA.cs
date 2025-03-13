@@ -57,7 +57,7 @@ sealed class RoA : Mod {
             new ModCallAchievement().Add(Instance,
             "BestialCommunion",
             AchievementCategory.Slayer,
-            null, null,
+            ResourceManager.AchievementsTextures + "Achievement_DefeatLothor", null,
             false, true,
             20.5f,
             ["Kill_" + ModContent.NPCType<Lothor>()]);
@@ -81,7 +81,7 @@ sealed class RoA : Mod {
             new ModCallAchievement().Add(Instance,
             "SilentHills",
             AchievementCategory.Slayer,
-            null, null,
+            ResourceManager.AchievementsTextures + "Achievement_SurviveBackwoodsFog", null,
             false, false,
             0f,
             ["Event_" + TMLAchievements.RoAAchivement.SilentHills]);
@@ -97,7 +97,7 @@ sealed class RoA : Mod {
             new ModCallAchievement().Add(Instance,
             "GutsOfSteel",
             AchievementCategory.Challenger,
-            null, null,
+            ResourceManager.AchievementsTextures + "Achievement_DefeatLothorEnraged", null,
             false, true,
             20.6f,
             ["Event_" + TMLAchievements.RoAAchivement.GutsOfSteel]);
