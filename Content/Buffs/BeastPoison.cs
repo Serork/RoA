@@ -56,7 +56,7 @@ sealed class BeastPoisonNPC : GlobalNPC {
         }
 
         if (beastPoison) {
-            drawColor = Color.Lerp(drawColor, Color.YellowGreen, 0.25f);
+            drawColor = Color.Lerp(drawColor, Color.YellowGreen.MultiplyRGB(drawColor), 0.25f);
             if (Main.rand.Next(15) >= 10) {
                 int rotDust = Dust.NewDust(npc.position - new Vector2(1f, 1f), npc.width + 1, npc.height + 1, 5, npc.velocity.X * 0.6f, npc.velocity.Y * 0.4f, 125, Color.YellowGreen, 1.1f);
                 Main.dust[rotDust].noGravity = true;

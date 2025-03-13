@@ -101,7 +101,7 @@ sealed class ToxicFumesNPC : GlobalNPC {
 
 	public override void DrawEffects(NPC npc, ref Color drawColor) {
 		if (toxicFumes && npc.active) {
-            drawColor = Color.Lerp(drawColor, new Color(130, 230, 130), 0.25f);
+            drawColor = Color.Lerp(drawColor, new Color(130, 230, 130).MultiplyRGB(drawColor), 0.25f);
             if (Main.rand.Next(4) == 0) {
 				int dust = Dust.NewDust(npc.position - new Vector2(0f, -2f) - npc.Size / 2f, npc.width, npc.height, ModContent.DustType<Dusts.ToxicFumes>(), npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 0, default, 1.5f);
 				Main.dust[dust].noGravity = true;

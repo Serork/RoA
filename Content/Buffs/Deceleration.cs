@@ -95,7 +95,7 @@ sealed class DecelerationNPC : GlobalNPC {
             return;
         }
         if (deceleration) {
-            drawColor = Color.Lerp(drawColor, Color.Blue, 0.25f);
+            drawColor = Color.Lerp(drawColor, Color.Blue.MultiplyRGB(drawColor), 0.25f);
 			if (Main.rand.NextBool(1, 3)) {
 				for (int k = 0; k < 2; k++)
 					if (Main.rand.NextBool(1, 3)) {

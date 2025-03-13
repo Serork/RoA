@@ -99,6 +99,6 @@ sealed class BurningNPC : GlobalNPC {
             dust14.velocity.Y -= 0.75f;
         }
 
-        drawColor = Color.Lerp(drawColor, Color.DarkOrange, 0.25f);
+        drawColor = Color.Lerp(drawColor, Color.DarkOrange.MultiplyRGB(drawColor), 0.25f);
     }
 }

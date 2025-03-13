@@ -69,7 +69,7 @@ sealed class SolidifyingSapNPC : GlobalNPC {
 			return;
 		}
 		if (solidifyingSap) {
-            drawColor = Color.Lerp(drawColor, Color.LightGoldenrodYellow, 0.25f);
+            drawColor = Color.Lerp(drawColor, Color.LightGoldenrodYellow.MultiplyRGB(drawColor), 0.25f);
 			if (Main.rand.NextBool(1, 3)) {
 				for (int k = 0; k < 2; k++) {
 					if (Main.rand.NextBool(1, 2)) {
