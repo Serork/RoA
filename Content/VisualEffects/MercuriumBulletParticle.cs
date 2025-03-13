@@ -15,6 +15,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.VisualEffects;
 
 sealed class MercuriumBulletParticle : VisualEffect<MercuriumBulletParticle> {
+    private float _scale;
+
     protected override void SetDefaults() {
         TimeLeft = MaxTimeLeft = 30;
     }
@@ -22,7 +24,7 @@ sealed class MercuriumBulletParticle : VisualEffect<MercuriumBulletParticle> {
     public override void Update(ref ParticleRendererSettings settings) {
         float t = (float)((MaxTimeLeft - TimeLeft) / (double)MaxTimeLeft * 60.0);
         float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 3f, t, true) * Utils.GetLerpValue((float)(MaxTimeLeft - MaxTimeLeft / 5f), MaxTimeLeft / 2f, t, true);
-        Scale = scale;
+        _scale = scale * Scale;
 
         if (--TimeLeft <= 0) {
             RestInPool();
@@ -36,14 +38,14 @@ sealed class MercuriumBulletParticle : VisualEffect<MercuriumBulletParticle> {
         Vector2 position = Position - Main.screenPosition;
         SpriteEffects effects = SpriteEffects.None;
         Color shineColor = new(255, 200, 150);
-        Color color3 = color * Scale * 0.5f;
-        color3.A = (byte)(color3.A * (1.0 - (double)Scale));
-        Color color4 = color3 * Scale * 0.5f;
-        color4.G = (byte)(color4.G * (double)Scale);
-        color4.B = (byte)(color4.R * (0.25 + (double)Scale * 0.75));
-        spriteBatch.Draw(Texture, position, null, color4, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f, effects, 0f);
-        spriteBatch.Draw(Texture, position, null, color3, Rotation, origin, Scale * 0.6f, effects, 0f);
-        spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, Scale * 0.3f , effects, 0f);
-        spriteBatch.Draw(Texture, position, null, color4, Rotation, origin, Scale * 0.3f, effects, 0f);
+        Color color3 = color * _scale * 0.5f;
+        color3.A = (byte)(color3.A * (1.0 - (double)_scale));
+        Color color4 = color3 * _scale * 0.5f;
+        color4.G = (byte)(color4.G * (double)_scale);
+        color4.B = (byte)(color4.R * (0.25 + (double)_scale * 0.75));
+        spriteBatch.Draw(Texture, position, null, color4, MathHelper.PiOver2 + Rotation, origin, _scale * 0.6f, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color3, Rotation, origin, _scale * 0.6f, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, _scale * 0.3f , effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color4, Rotation, origin, _scale * 0.3f, effects, 0f);
     }
 }

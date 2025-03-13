@@ -74,12 +74,15 @@ sealed class MercuriumBulletProjectile : ModProjectile {
         position = Projectile.Center;
         velocity = Vector2.Zero;
         int layer = VisualEffectLayer.ABOVENPCS;
+        float scale = Main.rand.NextFloat(0.7f, 1.3f);
         VisualEffectSystem.New<MercuriumBulletParticle>(layer).
             Setup(position,
                   velocity,
-                  color);
+                  color,
+                  scale);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.MercuriumBulletParticle, Main.player[Projectile.owner], layer, position, velocity, color, 1f, 0f));
+            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.MercuriumBulletParticle, Main.player[Projectile.owner], layer, position, velocity, color,
+                scale, 0f));
         }
     }
 
