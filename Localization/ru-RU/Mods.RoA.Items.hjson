@@ -44,7 +44,7 @@ MiracleMint: {
 }
 
 MushroomStaff: {
-	DisplayName: Грибной посох
+	DisplayName: Грибная трость
 	Tooltip: Выпускает горсть нисходящих спор
 }
 
