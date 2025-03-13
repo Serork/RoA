@@ -70,6 +70,8 @@ sealed class GalipotArrowProjectile : ModProjectile {
             return false;
         }
 
+        public override bool? CanDamage() => Projectile.ai[1] == 1f;
+
         public override void OnSpawn(IEntitySource source) {
             Projectile.velocity *= Main.rand.NextFloat(1.25f, 1.75f) * Main.rand.NextFloat(0.75f, 1f);
             Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloatDirection() * MathHelper.PiOver2) * Projectile.velocity.Length() * 0.1f;
