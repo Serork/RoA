@@ -28,7 +28,7 @@ sealed class CosmicMana : ModProjectile {
         int width = 16; int height = width;
         Projectile.Size = new Vector2(width, height);
 
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
         Projectile.aiStyle = 1;
         Projectile.timeLeft = 145;
         Projectile.alpha = 255;
@@ -45,6 +45,9 @@ sealed class CosmicMana : ModProjectile {
             player.statMana += newMana;
             player.ManaEffect(newMana);
             Projectile.Kill();
+        }
+        if (Projectile.position.Y > player.Bottom.Y) {
+            Projectile.tileCollide = true;
         }
         if (Projectile.soundDelay == 0) {
             Projectile.soundDelay = 20 + Main.rand.Next(40);
