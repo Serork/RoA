@@ -53,7 +53,7 @@ sealed class PeegeonCape : ModItem {
                 flag21 = true;
 
             if (flag21 && Player.wingsLogic == _wingsSlot) {
-                if (Main.rand.NextBool(3)) {
+                if (Main.rand.NextBool(2)) {
                     int num = 4;
                     if (Player.direction == 1)
                         num = -40;
