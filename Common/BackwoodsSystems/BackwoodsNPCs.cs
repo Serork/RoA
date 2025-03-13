@@ -90,8 +90,8 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     pool.Add(ModContent.NPCType<Fleder>(), 1f * chance);
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f * (chance - 0.5f));
                     var ent = ModContent.NPCType<EntLegs>();
-                    if (!NPC.AnyNPCs(ent)) {
-                        pool.Add(ent, 0.05f);
+                    if (!NPC.AnyNPCs(ent) && surface) {
+                        pool.Add(ent, 0.025f);
                     }
                     if (BackwoodsFogHandler.IsFogActive && surface) {
                         pool.Add(ModContent.NPCType<Ravencaller>(), 0.2f);
