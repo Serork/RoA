@@ -54,8 +54,9 @@ sealed class LothorAngleAttack : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
+        bool enraged = Projectile.localAI[0] == 1f;
         for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
-            int dust = Dust.NewDust(Projectile.position, 2, 2, ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1f);
+            int dust = Dust.NewDust(Projectile.position, 2, 2, enraged ? ModContent.DustType<LothorPoison2>() : ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1f);
             Main.dust[dust].noGravity = true;
             dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
               Projectile.height, ModContent.DustType<LothorPoison>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
@@ -63,8 +64,7 @@ sealed class LothorAngleAttack : ModProjectile {
             Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
         }
 
-        bool enraged = Projectile.localAI[0] == 1f;
-        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y + 1f, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, enraged.ToInt(), 0f);
+        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y + 1f, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, 0f, 0f, enraged.ToInt());
         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
     }
 

@@ -75,7 +75,7 @@ sealed class LothorStomp : ModProjectile {
                         obj.velocity.Y -= 3f + num4 * 1.5f;
                         obj.velocity.Y *= Main.rand.NextFloat();
                         obj.velocity.Y *= 0.9f;
-                        obj.scale += num4 * 0.03f;
+                        obj.scale += num4 * 0.06f;
                     }
                     else {
                         Dust obj = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
@@ -92,6 +92,7 @@ sealed class LothorStomp : ModProjectile {
                             obj2.velocity.Y -= 1f + num4;
                             obj2.velocity.Y *= Main.rand.NextFloat();
                             obj2.velocity.Y *= 0.9f;
+                            obj2.scale *= 1.1f;
                         }
                         else {
                             Dust obj2 = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
@@ -108,6 +109,7 @@ sealed class LothorStomp : ModProjectile {
                             obj2.velocity.Y -= 1f + num4;
                             obj2.velocity.Y *= Main.rand.NextFloat();
                             obj2.velocity.Y *= 0.9f;
+                            obj2.scale *= 1.1f;
                         }
                         else {
                             Dust obj2 = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];

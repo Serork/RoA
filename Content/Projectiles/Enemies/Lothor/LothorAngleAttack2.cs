@@ -31,7 +31,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
     }
 
     public override void AI() {
-        bool enraged = Projectile.ai[0] == 1f;
+        bool enraged = Projectile.ai[2] == 1f;
 
         if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
             int dust = Dust.NewDust(Projectile.position + Projectile.velocity + Vector2.UnitY * 4f, 2, 2, enraged ? ModContent.DustType<LothorPoison2>() : ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1.35f);
@@ -55,7 +55,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        bool enraged = Projectile.ai[0] == 1f;
+        bool enraged = Projectile.ai[2] == 1f;
 
         for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
             int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
