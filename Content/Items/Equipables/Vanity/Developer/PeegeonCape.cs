@@ -70,12 +70,40 @@ sealed class PeegeonCape : ModItem {
         }
 
         public override void PostUpdate() {
-            if (!Player.sandStorm && !Player.pulley && !Player.shieldRaised &&
-                !Player.mount.Active && Player.grappling[0] < 0 &&
-                (!Player.wet || !Player.ShouldFloatInWater) &&
-                Player.swimTime <= 0
-                && Player.itemAnimation <= 0 && Player.wingsLogic == _wingsSlot && Player.controlJump && Player.velocity.Y != 0f) {
-                Player.bodyFrame.Y = Player.bodyFrame.Height * 6;
+            bool flag3 = Player.CanVisuallyHoldItem(Player.HeldItem);
+            bool flag4 = false;
+            if (flag3 && Player.inventory[Player.selectedItem].holdStyle == 1 && (!Player.wet || !Player.inventory[Player.selectedItem].noWet) && (!Player.happyFunTorchTime || Player.inventory[Player.selectedItem].createTile != 4)) {
+                flag4 = true;
+            }
+            else if (flag3 && Player.inventory[Player.selectedItem].holdStyle == 2 && (!Player.wet || !Player.inventory[Player.selectedItem].noWet)) {
+                flag4 = true;
+            }
+            else if (flag3 && Player.inventory[Player.selectedItem].holdStyle == 3) {
+                flag4 = true;
+            }
+            else if (flag3 && Player.inventory[Player.selectedItem].holdStyle == 5) {
+                flag4 = true;
+            }
+            else if (flag3 && Player.inventory[Player.selectedItem].holdStyle == 7) {
+                flag4 = true;
+            }
+            else if (flag3 && Player.inventory[Player.selectedItem].holdStyle == 4 && Player.velocity.Y == 0f && Player.gravDir == 1f) {
+                flag4 = true;
+            }
+            bool flag = !flag4 && !Player.sandStorm && Player.swimTime <= 0 && Player.itemAnimation <= 0 && !Player.pulley &&
+                        !Player.shieldRaised && !Player.mount.Active && Player.grappling[0] <= 0 && !(Player.wet && Player.ShouldFloatInWater);
+            if (flag && Player.velocity.Y != 0f) {
+                if (Player.velocity.Y > 0f) {
+                    if (Player.controlJump) {
+                        Player.bodyFrame.Y = Player.bodyFrame.Height * 6;
+                    }
+                    else {
+                        Player.bodyFrame.Y = Player.bodyFrame.Height * 5;
+                    }
+                }
+                else {
+                    Player.bodyFrame.Y = Player.bodyFrame.Height * 6;
+                }
             }
         }
     }
