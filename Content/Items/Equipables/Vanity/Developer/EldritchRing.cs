@@ -93,7 +93,7 @@ sealed class EldritchRing : ModItem {
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             int itemType = ModContent.ItemType<EldritchRing>();
-            if (drawInfo.shadow == 0) {
+            if (!drawInfo.hideEntirePlayer && drawInfo.shadow == 0 && !player.dead) {
                 for (int i = 3; i <= 19; i++) {
                     if (player.armor[i].type == itemType) {
                         var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "YellowSignRune");
