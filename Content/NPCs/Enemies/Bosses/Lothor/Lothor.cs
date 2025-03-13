@@ -46,7 +46,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.damage = 40;
+        NPC.damage = 50;
         NPC.lifeMax = 6000;
         NPC.defense = 14;
 
