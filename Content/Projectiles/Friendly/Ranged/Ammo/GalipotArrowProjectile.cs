@@ -42,7 +42,7 @@ sealed class GalipotArrowProjectile : ModProjectile {
 
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-        for (int num671 = 0; num671 < 10; num671++) {
+        for (int num671 = 0; num671 < 6; num671++) {
             int num672 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.Galipot>(), 0f, 0f, Alpha: 50);
             Main.dust[num672].noGravity = true;
             Main.dust[num672].fadeIn = 1.5f;
