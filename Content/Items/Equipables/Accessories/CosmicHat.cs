@@ -39,7 +39,7 @@ sealed class CosmicHat : ModItem {
                 float speedX = playerX * speed;
                 float speedY = playerY * speed;
                 Projectile.NewProjectile(player.GetSource_Misc("cosmichat"), x, y, speedX, speedY, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, 0f, 0f);
-                timer = 10f;
+                timer = 15f;
             }
         }
     }
