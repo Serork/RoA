@@ -1018,7 +1018,7 @@ sealed partial class Lothor : ModNPC {
                     int damage = (int)MathHelper.Lerp(WREATH_DAMAGE, WREATH_DAMAGE2, LifeProgress);
                     damage /= 2;
                     int knockBack = (int)MathHelper.Lerp(WREATH_KNOCKBACK, WREATH_KNOCKBACK2, LifeProgress);
-                    int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer);
+                    int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, damage, knockBack, Main.myPlayer, ai1: 1f);
                     //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                 }
             }

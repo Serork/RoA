@@ -3,9 +3,12 @@ using Microsoft.Xna.Framework;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core;
 
+using System;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -42,6 +45,23 @@ sealed class PeegeonCape : ModItem {
             }
             else {
                 flapSound = false;
+            }
+
+            bool flag21 = false;
+            if (Player.controlJump && Player.wingTime > 0f && Player.jump == 0 && Player.velocity.Y != 0f)
+                flag21 = true;
+
+            if (flag21) {
+                int num = 4;
+                if (Player.direction == 1)
+                    num = -40;
+                int num2 = Dust.NewDust(new Vector2(Player.position.X + (float)(Player.width / 2) + (float)num, Player.position.Y + (float)(Player.height / 2) - 15f), 30, 30,
+                    DustID.Snow, 0f, 0f, 50, default(Color), 0.6f);
+                Main.dust[num2].fadeIn = 1.1f;
+                Main.dust[num2].noGravity = true;
+                Main.dust[num2].noLight = true;
+                Main.dust[num2].velocity *= 0.3f;
+                Main.dust[num2].shader = GameShaders.Armor.GetSecondaryShader(Player.cWings, Player);
             }
         }
     }

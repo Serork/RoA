@@ -52,7 +52,12 @@ sealed class LothorSpike : ModProjectile {
     public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
-        behindNPCsAndTiles.Add(index);
+        if (Projectile.ai[1] == 0f) {
+            behindNPCsAndTiles.Add(index);
+        }
+        else {
+            overPlayers.Add(index);
+        }
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
