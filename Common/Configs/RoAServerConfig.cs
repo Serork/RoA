@@ -18,20 +18,20 @@ sealed class RoAServerConfig : ModConfig {
     public bool DropDevSets;
 
     [Range(0.5f, 1.5f)]
-    [Increment(0.1f)]
-    [DrawTicks]
+    [Increment(0.05f)]
+    //[DrawTicks]
     [DefaultValue(1f)]
     public float BackwoodsWidthMultiplier;
 
     [Range(0.5f, 1.5f)]
-    [Increment(0.1f)]
-    [DrawTicks]
+    [Increment(0.05f)]
+    //[DrawTicks]
     [DefaultValue(1f)]
     public float BackwoodsHeightMultiplier;
 
     [Range(0f, 1f)]
     [Increment(0.5f)]
-    [DrawTicks]
+    //[DrawTicks]
     [DefaultValue(0f)]
     public float EvilBiomeExtraItemChance;
 }

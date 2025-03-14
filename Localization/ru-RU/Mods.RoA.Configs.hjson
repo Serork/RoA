@@ -15,7 +15,7 @@ WreathDrawingModes: {
 }
 
 RoAClientConfig: {
-	// DisplayName: Client Config
+	// DisplayName: Client Configuration
 
 	DruidLeaves: {
 		// Label: Druid Leaves
@@ -39,7 +39,7 @@ RoAClientConfig: {
 }
 
 RoAServerConfig: {
-	// DisplayName: Server Config
+	// DisplayName: Configuration
 
 	VanillaRecipes: {
 		// Label: Vanilla Recipes
