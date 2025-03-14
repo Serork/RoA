@@ -81,8 +81,8 @@ RoAServerConfig: {
 		Mods: {
 			RoA: {
 				Configs: {
-					// GeneralOptionsHeader2: Mods. Ro A. Configs. General Options Header2 Header
-					// GenerationOptionHeader: Mods. Ro A. Configs. Generation Option Header Header
+					// GeneralOptionsHeader2: General Options
+					// GenerationOptionHeader: Generation Options
 				}
 			}
 		}

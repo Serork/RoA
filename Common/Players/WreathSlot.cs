@@ -40,8 +40,8 @@ class WreathSlot : ModAccessorySlot {
     public static bool GetHideVisuals(Player player) => GetSlot(player).HideVisuals;
 
     public static Vector2 GetCustomLocation() {
-        int mapH = (FancyWreathDrawing.MapEnabled && !Main.mapFullscreen && Main.mapStyle == 1) ? 256 : 0;
-        mapH = (FancyWreathDrawing.MapEnabled && (mapH + 600) > Main.screenHeight) ? Main.screenHeight - 600 : mapH;
+        int mapH = ((FancyWreathDrawing.MapEnabled || Main.mapEnabled) && !Main.mapFullscreen && Main.mapStyle == 1) ? 256 : 0;
+        mapH = ((FancyWreathDrawing.MapEnabled || Main.mapEnabled) && (mapH + 600) > Main.screenHeight) ? Main.screenHeight - 600 : mapH;
         int offsetX = 47 * 2;
         int x = (Main.netMode == NetmodeID.MultiplayerClient) ? Main.screenWidth - 135 - offsetX - 47 : Main.screenWidth - 94 - offsetX + 2 - 64;
         int y = mapH + 174;
