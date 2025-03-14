@@ -35,7 +35,7 @@ sealed class EldritchRing : ModItem {
                 Player.wingTime = Player.wingTimeMax;
             }
 
-            bool flag22 = Player.wingFrame == 3;
+            bool flag22 = Player.wingFrame == 3 && Player.wingTime != Player.wingTimeMax;
             if (flag22) {
                 if (!flapSound)
                     SoundEngine.PlaySound(SoundID.Item24, Player.position);
@@ -47,7 +47,7 @@ sealed class EldritchRing : ModItem {
             }
 
             bool flag21 = false;
-            if (Player.controlJump && Player.wingTime > 0f && Player.jump == 0 && Player.velocity.Y != 0f)
+            if (Player.controlJump && Player.wingTime > 0f && Player.wingTime != Player.wingTimeMax && Player.jump == 0 && Player.velocity.Y != 0f)
                 flag21 = true;
 
             if (flag21 && Player.wingsLogic == _wingsSlot) {

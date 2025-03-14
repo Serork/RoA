@@ -72,7 +72,7 @@ sealed class KeywordSystem : ILoadable {
                 if (highlightMode == RoAConfig.HighlightModes.Always) {
                     _keywordColorOpacity = 1f;
                 }
-                else if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || WreathDrawing.JustDrawn) {
+                else if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || FancyWreathDrawing.IsHoveringUI || WreathDrawing.JustDrawn) {
                     if (_keywordColorOpacity > 0f) {
                         _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
                     }

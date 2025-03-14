@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
+using RoA.Common.Configs;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Forms;
 using RoA.Core;
@@ -41,6 +42,10 @@ sealed class WreathDrawing : PlayerDrawLayer {
     public override Position GetDefaultPosition() => PlayerDrawLayers.AfterLastVanillaLayer;
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode != RoAConfig.WreathDrawingModes.Normal) {
+            return;
+        }
+
         Player player = drawInfo.drawPlayer;
         if (drawInfo.shadow != 0f || !player.active || player.whoAmI != Main.myPlayer) {
             return;

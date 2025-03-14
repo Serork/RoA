@@ -1,10 +1,15 @@
 ﻿using System.ComponentModel;
 
+using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace RoA.Common.Configs;
 
 sealed class RoAConfig : ModConfig {
+    public static RoAConfig Instance => ModContent.GetInstance<RoAConfig>();
+    public static bool IsFancy => Instance.WreathDrawingMode == WreathDrawingModes.Fancy || Instance.WreathDrawingMode == WreathDrawingModes.Fancy2;
+    public static bool IsBars => Instance.WreathDrawingMode == WreathDrawingModes.Bars || Instance.WreathDrawingMode == WreathDrawingModes.Bars2;
+
     public override ConfigScope Mode => ConfigScope.ClientSide;
 
     public enum HighlightModes {
@@ -23,7 +28,9 @@ sealed class RoAConfig : ModConfig {
     public enum WreathDrawingModes {
         Normal,
         Fancy,
-        Bars
+        Fancy2,
+        Bars,
+        Bars2
     }
 
     [DefaultValue(WreathDrawingModes.Normal)]

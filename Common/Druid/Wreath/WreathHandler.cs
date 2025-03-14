@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Configs;
 using RoA.Common.Druid.Claws;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
@@ -617,6 +618,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts_ActualMaking() {
+        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode != RoAConfig.WreathDrawingModes.Normal) {
+            return;
+        }
+
         Dust dust = Dust.NewDustPerfect(LightingPosition - new Vector2(0, 23) + Main.rand.NextVector2CircularEdge(26, 20) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(), new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 0.4f), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
         dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
         dust.alpha = (int)(DrawColorOpacity * PulseIntensity * 255f);
@@ -627,6 +632,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void MakeDustsOnHit(float progress = -1f) {
+        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode != RoAConfig.WreathDrawingModes.Normal) {
+            return;
+        }
+
         float actualProgress = ActualProgress3;
         ushort dustType = GetDustType();
         if (actualProgress >= 0.1f && actualProgress <= 0.95f) {

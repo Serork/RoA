@@ -15,6 +15,8 @@ abstract class InterfaceElement(string name, InterfaceScaleType scaleType) : Gam
 
     public virtual void Load(Mod mod) { }
     public virtual void Unload() { }
+
+    public virtual bool ShouldDrawSelfInMenu() => false;
 }
 
 [Autoload(Side = ModSide.Client)]
@@ -33,11 +35,11 @@ sealed class InterfaceElementsSystem : ModSystem {
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
-        if (Main.gameMenu) {
-            return;
-        }
-
         foreach (InterfaceElement element in GetElements()) {
+            if (!element.ShouldDrawSelfInMenu() && Main.gameMenu) {
+                continue;
+            }
+
             int index = element.GetInsertIndex(layers);
             if (index != -1) {
                 layers.Insert(index, element);

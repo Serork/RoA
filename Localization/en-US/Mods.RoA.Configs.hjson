@@ -29,4 +29,6 @@ WreathDrawingModes: {
 	Normal.Label: Normal
 	Fancy.Label: Fancy
 	Bars.Label: Bars
+	Fancy2.Label: Fancy2
+	Bars2.Label: Bars2
 }
