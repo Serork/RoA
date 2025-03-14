@@ -9,8 +9,8 @@ WreathDrawingModes: {
 	// Tooltip: ""
 	Normal.Label: Классический
 	Fancy.Label: Узорчатый
-	Fancy2.Label: Узорчатый 2
 	Bars.Label: Полоски
+	Fancy2.Label: Узорчатый 2
 	Bars2.Label: Полоски 2
 }
 
@@ -34,7 +34,7 @@ RoAClientConfig: {
 
 	VanillaResprites: {
 		Label: Изменение спрайтов предметов оригинальной игры
-		Tooltip: "Изменяет спрайты алхимических трав и Мерзкой колючки"
+		Tooltip: Изменяет спрайты алхимических трав и Мерзкой колючки
 	}
 
 	Headers: {
@@ -54,7 +54,7 @@ RoAServerConfig: {
 
 	VanillaRecipes: {
 		Label: Изменения рецептов оригинальной игры
-		Tooltip: "Изменяет рецепты крафта некоторых зелий и пр."
+		Tooltip: Изменяет рецепты крафта некоторых зелий и пр.
 	}
 
 	DropDevSets: {
@@ -74,7 +74,7 @@ RoAServerConfig: {
 
 	EvilBiomeExtraItemChance: {
 		Label: Шанс дополнительных предметов злого биома
-		Tooltip: "Позволяет получить несколько предметов раз со Сферы теней/Сердца багрянца"
+		Tooltip: Позволяет получить несколько предметов раз со Сферы теней/Сердца багрянца
 	}
 
 	Headers: {

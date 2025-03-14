@@ -34,7 +34,7 @@ RoAClientConfig: {
 
 	VanillaResprites: {
 		Label: Vanilla Resprites
-		Tooltip: "Changes several sprites, such as alchemical herbs and Vilethorn"
+		Tooltip: Changes several sprites, such as alchemical herbs and Vilethorn
 	}
 
 	Headers: {
@@ -54,7 +54,7 @@ RoAServerConfig: {
 
 	VanillaRecipes: {
 		Label: Vanilla Recipes
-		Tooltip: "Changes several item recipes, such as potions and etc."
+		Tooltip: Changes several item recipes, such as potions and etc.
 	}
 
 	DropDevSets: {
@@ -74,7 +74,7 @@ RoAServerConfig: {
 
 	EvilBiomeExtraItemChance: {
 		Label: Evil Biome Extra Item Chance
-		Tooltip: "Allows Shadow Orbs/Crimson Hearts to drop multiple items"
+		Tooltip: Allows Shadow Orbs/Crimson Hearts to drop multiple items
 	}
 
 	Headers: {
