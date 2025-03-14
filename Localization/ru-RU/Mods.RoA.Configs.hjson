@@ -1,40 +1,40 @@
 HighlightModes: {
 	// Tooltip: ""
-	// Normal.Label: Normal
-	// Always.Label: Always
-	// Off.Label: Off
+	Normal.Label: Стандартно
+	Always.Label: Всегда
+	Off.Label: Выключено
 }
 
 WreathDrawingModes: {
 	// Tooltip: ""
-	// Normal.Label: Normal
-	// Fancy.Label: Fancy
-	// Bars.Label: Bars
-	// Fancy2.Label: Fancy2
-	// Bars2.Label: Bars2
+	Normal.Label: Классический
+	Fancy.Label: Узорчатый
+	Fancy2.Label: Узорчатый 2
+	Bars.Label: Полоски
+	Bars2.Label: Полоски 2
 }
 
 RoAClientConfig: {
-	// DisplayName: Client Configuration
+	DisplayName: Настройки клиента
 
 	DruidLeaves: {
-		// Label: Druid Leaves
+		Label: Листья на предметах для друидов
 		// Tooltip: ""
 	}
 
 	HighlightMode: {
-		// Label: Druid Text Highlight Mode
+		Label: Подсветка текста на предметах для друидов
 		// Tooltip: ""
 	}
 
 	WreathDrawingMode: {
-		// Label: Wreath Drawing Mode
+		Label: Стиль индикатора венка
 		// Tooltip: ""
 	}
 
 	VanillaResprites: {
-		// Label: Vanilla Resprites
-		// Tooltip: ""
+		Label: Изменение спрайтов предметов оригинальной игры
+		Tooltip: "Изменяет спрайты алхимических трав и Мерзкой колючки"
 	}
 
 	Headers: {
@@ -50,31 +50,31 @@ RoAClientConfig: {
 }
 
 RoAServerConfig: {
-	// DisplayName: Configuration
+	DisplayName: Настройки
 
 	VanillaRecipes: {
-		// Label: Vanilla Recipes
-		// Tooltip: ""
+		Label: Изменения рецептов оригинальной игры
+		Tooltip: "Изменяет рецепты крафта некоторых зелий и пр."
 	}
 
 	DropDevSets: {
-		// Label: Drop Developer Vanity Sets
+		Label: Выпадение предметов разработчиков мода 'RoA'
 		// Tooltip: ""
 	}
 
 	BackwoodsWidthMultiplier: {
-		// Label: Backwoods Biome Width Multiplier
+		Label: Множитель ширины биома 'Чаща'
 		// Tooltip: ""
 	}
 
 	BackwoodsHeightMultiplier: {
-		// Label: Backwoods Biome Height Multiplier
+		Label: Множитель высоты биома 'Чаща'
 		// Tooltip: ""
 	}
 
 	EvilBiomeExtraItemChance: {
-		// Label: Evil Biome Extra Item Chance
-		// Tooltip: ""
+		Label: Шанс дополнительных предметов злого биома
+		Tooltip: "Позволяет получить несколько предметов раз со Сферы теней/Сердца багрянца"
 	}
 
 	Headers: {
