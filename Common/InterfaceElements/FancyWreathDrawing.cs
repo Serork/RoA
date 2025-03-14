@@ -172,7 +172,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
             Player localPlayer = Main.LocalPlayer;
             Color textColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
-            string text3 = Language.GetTextValue("Mods.RoA.Wreath");
+            string text3 = Language.GetTextValue("Mods.RoA.WreathSlot") + ":";
             string text4 = " ";
             bool flag = stats.CurrentResource < 100;
             bool flag2 = stats.CurrentResource < 10;
@@ -290,7 +290,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
             Player localPlayer = Main.LocalPlayer;
             Color textColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
-            string text3 = Language.GetTextValue("Mods.RoA.Wreath");
+            string text3 = Language.GetTextValue("Mods.RoA.WreathSlot") + ":";
             string text4 = " ";
             bool flag = stats.CurrentResource < 100;
             bool flag2 = stats.CurrentResource < 10;
