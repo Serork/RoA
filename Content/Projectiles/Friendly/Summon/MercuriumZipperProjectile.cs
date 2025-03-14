@@ -45,7 +45,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
 
     public static void FillWhipControlPoints(Projectile proj, List<Vector2> controlPoints) {
         Projectile.GetWhipSettings(proj, out var timeToFlyOut, out var segments, out var rangeMultiplier);
-        rangeMultiplier *= 0.8f;
+        rangeMultiplier *= 0.95f;
         float num = proj.ai[0] / timeToFlyOut;
         float num2 = 0.5f;
         float num3 = 1f + num2;
@@ -125,8 +125,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             dust.velocity *= 0.5f;
         }
 
-        float num = Utils.GetLerpValue(0.1f, 0.7f, swingProgress, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, swingProgress, clamped: true);
-        if (num > 0.7f && num < 0.85f && !Main.rand.NextBool(4)) {
+        if (Utils.GetLerpValue(0.1f, 0.7f, swingProgress, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, swingProgress, clamped: true) > 0.8f && !Main.rand.NextBool(4)) {
             List<Vector2> points = Projectile.WhipPointsForCollision;
             points.Clear();
             Projectile.FillWhipControlPoints(Projectile, points);
