@@ -7,34 +7,34 @@ HighlightModes: {
 
 WreathDrawingModes: {
 	Tooltip: ""
-	Normal.Label: Normal
+	Normal.Label: Classic
 	Fancy.Label: Fancy
 	Bars.Label: Bars
-	Fancy2.Label: Fancy2
-	Bars2.Label: Bars2
+	Fancy2.Label: Fancy 2
+	Bars2.Label: Bars 2
 }
 
 RoAClientConfig: {
 	DisplayName: Client Configuration
 
 	DruidLeaves: {
-		Label: Druid Leaves
-		Tooltip: ""
+		Label: Druid Tooltip Graphics
+		Tooltip: Adds a leaf visual to druid item names
 	}
 
 	HighlightMode: {
-		Label: Druid Text Highlight Mode
+		Label: Druid Keyword Highlight Mode
 		Tooltip: ""
 	}
 
 	WreathDrawingMode: {
-		Label: Wreath Drawing Mode
+		Label: Wreath UI Style
 		Tooltip: ""
 	}
 
 	VanillaResprites: {
-		Label: Vanilla Resprites
-		Tooltip: Changes several sprites, such as alchemical herbs and Vilethorn
+		Label: Vanilla Sprite Changes
+		Tooltip: Replaces some textures i. e. alchemical herbs and Vilethorn
 	}
 
 	Headers: {
@@ -53,13 +53,13 @@ RoAServerConfig: {
 	DisplayName: Configuration
 
 	VanillaRecipes: {
-		Label: Vanilla Recipes
-		Tooltip: Changes several item recipes, such as potions and etc.
+		Label: Vanilla Recipe Changes
+		Tooltip: Replaces several item recipes i. e. potions
 	}
 
 	DropDevSets: {
 		Label: Drop Developer Vanity Sets
-		Tooltip: ""
+		Tooltip: If enabled, RoA developer sets will drop from pre-hardmode Treasure Bags
 	}
 
 	BackwoodsWidthMultiplier: {
@@ -74,7 +74,7 @@ RoAServerConfig: {
 
 	EvilBiomeExtraItemChance: {
 		Label: Evil Biome Extra Item Chance
-		Tooltip: Allows Shadow Orbs/Crimson Hearts to drop multiple items
+		Tooltip: Allows Shadow Orbs/Crimson Hearts to drop two items at once
 	}
 
 	Headers: {
@@ -82,7 +82,7 @@ RoAServerConfig: {
 			RoA: {
 				Configs: {
 					GeneralOptionsHeader2: General Options
-					GenerationOptionHeader: Generation Options
+					GenerationOptionHeader: Worldgen Options
 				}
 			}
 		}
