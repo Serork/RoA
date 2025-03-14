@@ -5,6 +5,7 @@ using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Terraria;
@@ -37,7 +38,65 @@ sealed class MercuriumZipperProjectile : ModProjectile {
         Projectile.localNPCHitCooldown = -1;
 
         Projectile.WhipSettings.Segments = 17;
-        Projectile.WhipSettings.RangeMultiplier = 1f;
+        Projectile.WhipSettings.RangeMultiplier = 1.1f;
+    }
+
+    public override bool? CanCutTiles() => null;
+
+    public static void FillWhipControlPoints(Projectile proj, List<Vector2> controlPoints) {
+        Projectile.GetWhipSettings(proj, out var timeToFlyOut, out var segments, out var rangeMultiplier);
+        rangeMultiplier *= 1f;
+        float num = proj.ai[0] / timeToFlyOut;
+        float num2 = 0.5f;
+        float num3 = 1f + num2;
+        float num4 = (float)Math.PI * 10f * (1f - num * num3) * (float)(-proj.spriteDirection) / (float)segments;
+        float num5 = num * num3;
+        float num6 = 0f;
+        if (num5 > 1f) {
+            num6 = (num5 - 1f) / num2;
+            num5 = MathHelper.Lerp(1f, 0f, num6);
+        }
+
+        float num7 = proj.ai[0] - 1f;
+        Player player = Main.player[proj.owner];
+        Item heldItem = Main.player[proj.owner].HeldItem;
+        num7 = (float)(ContentSamples.ItemsByType[heldItem.type].useAnimation * 2) * num * player.whipRangeMultiplier;
+        float num8 = proj.velocity.Length() * num7 * num5 * rangeMultiplier / (float)segments;
+        float num9 = 1f;
+        Vector2 playerArmPosition = Main.GetPlayerArmPosition(proj);
+        Vector2 vector = playerArmPosition;
+        float num10 = 0f - (float)Math.PI / 2f;
+        Vector2 vector2 = vector;
+        float num11 = 0f + (float)Math.PI / 2f + (float)Math.PI / 2f * (float)proj.spriteDirection;
+        Vector2 vector3 = vector;
+        float num12 = 0f + (float)Math.PI / 2f;
+        controlPoints.Add(playerArmPosition);
+        for (int i = 0; i < segments; i++) {
+            float num13 = (float)i / (float)segments;
+            float num14 = num4 * num13 * num9;
+            Vector2 vector4 = vector + num10.ToRotationVector2() * num8;
+            Vector2 vector5 = vector3 + num12.ToRotationVector2() * (num8 * 2f);
+            Vector2 vector6 = vector2 + num11.ToRotationVector2() * (num8 * 2f);
+            float num15 = 1f - num5;
+            float num16 = 1f - num15 * num15;
+            Vector2 value = Vector2.Lerp(vector5, vector4, num16 * 0.9f + 0.1f);
+            Vector2 vector7 = Vector2.Lerp(vector6, value, num16 * 0.7f + 0.3f);
+            Vector2 spinningpoint = playerArmPosition + (vector7 - playerArmPosition) * new Vector2(1f, num3);
+            float num17 = num6;
+            num17 *= num17;
+            Vector2 item = spinningpoint.RotatedBy(proj.rotation + 4.712389f * num17 * (float)proj.spriteDirection, playerArmPosition);
+            controlPoints.Add(item);
+            num10 += num14;
+            num12 += num14;
+            num11 += num14;
+            vector = vector4;
+            vector3 = vector5;
+            vector2 = vector6;
+        }
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        return base.Colliding(projHitbox, targetHitbox);
     }
 
     public override void AI() {
@@ -124,7 +183,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         List<Vector2> list = new List<Vector2>();
-        Projectile.FillWhipControlPoints(Projectile, list);
+        FillWhipControlPoints(Projectile, list);
 
         DrawLine(list);
 
