@@ -39,6 +39,7 @@ Annoying: "{$Prefix.Annoying}"
 Nasty: "{$Prefix.Nasty}"
 Large: "{$Prefix.Large}"
 Massive: "{$Prefix.Massive}"
+//You know what else is massive?
 Dangerous: "{$Prefix.Dangerous}"
 Savage: "{$Prefix.Savage}"
 Sharp: "{$Prefix.Sharp}"

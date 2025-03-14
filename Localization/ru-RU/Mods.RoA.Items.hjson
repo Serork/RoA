@@ -1818,12 +1818,12 @@ Them: {
 
 GalipotArrow: {
 	DisplayName: Живичная стрела
-	// Tooltip: ""
+	Tooltip: При ударе оставляет сгусток живицы
 }
 
 MercuriumBullet: {
 	DisplayName: Ртутная пуля
-	// Tooltip: ""
+	Tooltip: "'На самом деле, не очень быстрая пуля».'"
 }
 
 BackwoodsWaterFountain: {
@@ -1832,10 +1832,11 @@ BackwoodsWaterFountain: {
 }
 
 MercuriumZipper: {
-	// DisplayName: Mercurium Zipper
+	DisplayName: Ртутная молния
 	Tooltip:
 		'''
 		{$CommonItemTooltip.SummonTagDamage}
 		{$CommonItemTooltip.Whips}
+		'Ариведерчи!'
 		'''
 }

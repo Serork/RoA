@@ -1,11 +1,13 @@
+//Actual Conditions
+FlederSlayer: Выпадает, если Лотор Лютый убит в состоянии ярости
+BackwoodsKeyCondition: Выпадает в сложном режиме в чаще
+//Misc
 // InBackwoods: Mods.RoA.Conditions.InBackwoods
 // TanningRack: Mods.RoA.Conditions.TanningRack
-FlederSlayer: Выпадает, если Лотор Лютый убит в состоянии ярости
 // BackwoodsBiome: Mods.RoA.Conditions.BackwoodsBiome
 // HasSaddle: Mods.RoA.Conditions.HasSaddleCondition
 // SailorHat: Mods.RoA.Conditions.SailorHatCondition
 // LothorEnrageMonolith: Mods.RoA.Conditions.LothorEnrageMonolith
-BackwoodsKeyCondition: Выпадает в сложном режиме в чаще
 // HasPeegeonSet: Mods.RoA.Conditions.HasPeegeonSet
 // HasNFASet: Mods.RoA.Conditions.HasNFASet
 // HasHas2rSet: Mods.RoA.Conditions.HasHas2rSet

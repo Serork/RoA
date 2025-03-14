@@ -1822,12 +1822,12 @@ Them: {
 
 GalipotArrow: {
 	DisplayName: Galipot Arrow
-	Tooltip: ""
+	Tooltip: Leaves a splooge of sap on hit
 }
 
 MercuriumBullet: {
 	DisplayName: Mercurium Bullet
-	Tooltip: ""
+	Tooltip: "'Actually, a very not quick(silver) bullet.'"
 }
 
 BackwoodsWaterFountain: {
@@ -1841,5 +1841,6 @@ MercuriumZipper: {
 		'''
 		{$CommonItemTooltip.SummonTagDamage}
 		{$CommonItemTooltip.Whips}
+		'Arrivederci!'
 		'''
 }
