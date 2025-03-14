@@ -51,6 +51,7 @@ sealed class WreathHandler : ModPlayer {
     private bool _shouldDecrease, _shouldDecrease2;
     private FormInfo _formInfo;
     private bool _shouldSync;
+    private int _hitEffectTimer;
 
     public bool HasEnougthToJump;
 
@@ -221,7 +222,11 @@ sealed class WreathHandler : ModPlayer {
         ClawsReset(natureProjectile, nonDataReset);
 
         IncreaseResourceValue(natureProjectile.WreathPointsFine);
-        MakeDustsOnHit();
+
+        if (_hitEffectTimer <= 0) {
+            MakeDustsOnHit();
+            _hitEffectTimer = 5;
+        }
     }
 
     internal void ForcedHardReset() {
@@ -316,6 +321,10 @@ sealed class WreathHandler : ModPlayer {
         ApplyBuffs();
         GetWreathType();
         MakeDusts();
+
+        if (_hitEffectTimer > 0) {
+            _hitEffectTimer = 0;
+        }
 
         if (StartSlowlyIncreasingUntilFull) {
             if (!Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet) {
