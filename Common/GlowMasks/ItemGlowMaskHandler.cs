@@ -161,7 +161,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             }
 
             Player player = drawInfo.drawPlayer;
-            if (!player.active || player.invis) {
+            if (!player.active || player.invis || player.dead) {
                 return;
             }
             DrawHeadGlowMask(ref drawInfo);
@@ -213,7 +213,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             }
 
             Player player = drawInfo.drawPlayer;
-            if (!player.active || player.invis) {
+            if (!player.active || player.invis || player.dead) {
                 return;
             }
             DrawArmorGlowMask(ref drawInfo);
@@ -250,7 +250,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             }
 
             Player player = drawInfo.drawPlayer;
-            if (!player.active || player.invis) {
+            if (!player.active || player.invis || player.dead) {
                 return;
             }
             DrawArmorGlowMask(ref drawInfo);

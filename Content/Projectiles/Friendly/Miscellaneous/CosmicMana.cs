@@ -30,31 +30,42 @@ sealed class CosmicMana : ModProjectile {
         Projectile.Size = new Vector2(width, height);
 
         Projectile.tileCollide = false;
-        Projectile.aiStyle = 1;
-        Projectile.timeLeft = 145;
-        Projectile.alpha = 255;
+        Projectile.aiStyle = -1;
+        Projectile.alpha = 0;
         Projectile.friendly = true;
         Projectile.hostile = false;
-        AIType = 14;
     }
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        Projectile.rotation += Projectile.velocity.X * 0.2f;
-        if (player.active && (double)Vector2.Distance(player.Center, Projectile.Center) < 35.0) {
-            int newMana = Main.rand.Next(9, 16);
-            player.statMana += newMana;
-            player.ManaEffect(newMana);
-            Projectile.Kill();
+
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = (int)(Projectile.ai[0] + 1) * 60;
+
+            Projectile.timeLeft = (int)Projectile.localAI[0];
         }
-        if (Projectile.position.Y > player.Bottom.Y) {
-            Projectile.tileCollide = true;
-        }
+
+        double deg = (double)(Projectile.ai[1] + Projectile.ai[0] * 240) / 2;
+        double rad = deg * (Math.PI / 180);
+        double dist = 100;
+        Projectile.position.X = MathHelper.SmoothStep(Projectile.position.X, 
+            player.MountedCenter.X - (int)(Math.Cos(rad) * dist) - player.width / 2 + Projectile.velocity.X, 0.15f);
+        Projectile.position.Y = MathHelper.SmoothStep(Projectile.position.Y,
+            player.MountedCenter.Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + 4 + player.gfxOffY + Projectile.velocity.Y, 0.15f);
+        Projectile.ai[1] += 3f;
+        Projectile.velocity = -Helper.VelocityToPoint(player.MountedCenter, Projectile.Center, 1f) * Projectile.ai[1] / 200f;
+
+        int maxTimeLeft = (int)Projectile.localAI[0];
+        Projectile.Opacity = Utils.GetLerpValue(0, 15, Projectile.timeLeft, true) *
+            Utils.GetLerpValue(maxTimeLeft, maxTimeLeft - 15, Projectile.timeLeft, true);
+        Projectile.rotation = Projectile.ai[1] * 0.025f + Projectile.ai[0] * 0.1f;
+
         if (Projectile.soundDelay == 0) {
             Projectile.soundDelay = 20 + Main.rand.Next(40);
             SoundStyle sound = SoundID.Item9;
             SoundEngine.PlaySound(sound.WithVolumeScale(0.5f), Projectile.position);
         }
+        if (Main.rand.NextBool())
         for (int i = 0; i < 1; i++)
             Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleTorch, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default, 1.2f);
     }
@@ -68,14 +79,19 @@ sealed class CosmicMana : ModProjectile {
         miscShaderData.UseSaturation(-2.8f);
         miscShaderData.UseOpacity(2f);
         miscShaderData.Apply();
-        vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, 
+        vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot,
             StripColors, StripWidth, -Main.screenPosition + Projectile.Size / 2f);
         vertexStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         spriteBatch.EndBlendState();
         Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        for (int i = 0; i < 3; i++) {
-            spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f), Main.GlobalTimeWrappedHourly * i * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
+        spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(),
+            new Color(0.9f, 1f, 0.7f, 0.5f) * Projectile.Opacity, Projectile.rotation, projectileTexture.Size() / 2f,
+            Projectile.scale, SpriteEffects.None, 0.0f);
+        for (int i = 0; i < 4; i++) {
+            spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), 
+                new Color(0.9f, 1f, 0.7f, 0.3f) * Projectile.Opacity * 0.75f, 
+                Main.GlobalTimeWrappedHourly * i * 3f * Projectile.direction + Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
         }
         return false;
     }

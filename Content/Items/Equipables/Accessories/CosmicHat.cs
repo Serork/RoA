@@ -1,10 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,10 +17,33 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Face)]
 sealed class CosmicHat : ModItem {
-	private class CosmisHatHandler : ModPlayer {
-        private float timer = 0f;
+	private sealed class CosmicHatHandler : ModPlayer {
+        private float _timer, _timer2;
+        private int _lastMana;
 
 		public bool IsEffectActive;
+        public bool IsEffectActive2;
+
+        public override void Load() {
+            On_Player.GetManaCost += On_Player_GetManaCost;
+            On_Player.UpdateManaRegen += On_Player_UpdateManaRegen;
+        }
+
+        private void On_Player_UpdateManaRegen(On_Player.orig_UpdateManaRegen orig, Player self) {
+            if (self.GetModPlayer<CosmicHatHandler>()._timer > 0f) {
+                return;
+            }
+
+            orig(self);
+        }
+
+        private int On_Player_GetManaCost(On_Player.orig_GetManaCost orig, Player self, Item item) {
+            if (self.GetModPlayer<CosmicHatHandler>()._timer > 0f) {
+                return 0;
+            }
+
+            return orig(self, item);
+        }
 
         public override void ResetEffects() {
 			IsEffectActive = false;
@@ -27,19 +54,31 @@ sealed class CosmicHat : ModItem {
 				return;
 			}
 
-            if (timer > 0f) timer -= 1f;
 			Player player = Player;
-            if ((float)player.statMana < (float)player.statManaMax2 * 0.4f && timer <= 0.0 && player.whoAmI == Main.myPlayer) {
-                float x = player.position.X + (float)Main.rand.Next(-600, 450);
-                float y = player.position.Y - (float)Main.rand.Next(750, 1000);
-                Vector2 vector2 = new Vector2(x, y);
-                float playerX = player.position.X + (float)(player.width / 2) - vector2.X;
-                float playerY = player.position.Y + (float)(player.height / 2) - vector2.Y;
-                float speed = 15f / (float)Math.Sqrt((double)playerX * (double)playerX + (double)playerY * (double)playerY);
-                float speedX = playerX * speed;
-                float speedY = playerY * speed;
-                Projectile.NewProjectile(player.GetSource_Misc("cosmichat"), x, y, speedX, speedY, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, 0f, 0f);
-                timer = 40f;
+            float min = 0.4f;
+            if (_timer > 0f) {
+                _timer--;
+                player.manaRegen = 0;
+                player.manaRegenDelay = 0;
+            }
+            if (!IsEffectActive2 && _timer <= 0f) {
+                if ((float)player.statMana < (float)player.statManaMax2 * min) {
+                    if (!player.HasBuff(BuffID.ManaSickness)) {
+                        IsEffectActive2 = true;
+                        _timer = _timer2 = 180f;
+                        _lastMana = player.statMana;
+
+                        if (player.whoAmI == Main.myPlayer) {
+                            for (int i = 0; i < 3; i++) {
+                                Projectile.NewProjectile(player.GetSource_Misc("cosmichat"),
+                                    Player.Center.X, Player.Center.Y, 0f, 0f, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, i, 0f);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (player.statMana > (float)player.statManaMax2 * min) {
+                IsEffectActive2 = false;
             }
         }
     }
@@ -64,6 +103,6 @@ sealed class CosmicHat : ModItem {
     }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
-		player.GetModPlayer<CosmisHatHandler>().IsEffectActive = true;
+		player.GetModPlayer<CosmicHatHandler>().IsEffectActive = true;
 	}
 }

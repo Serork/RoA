@@ -14,26 +14,7 @@ sealed class RespriteLoader : ILoadable {
         string texturePath = ResourceManager.ItemsTextures;
         int id = 4;
         if (!ModContent.GetInstance<RoAClientConfig>().VanillaResprites) {
-            texturePath = ResourceManager.ItemsTextures;
-            TextureAssets.Item[ItemID.Daybloom] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Daybloom}");
-            TextureAssets.Item[ItemID.Blinkroot] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Blinkroot}");
-            TextureAssets.Item[ItemID.Deathweed] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Deathweed}");
-            TextureAssets.Item[ItemID.Fireblossom] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Fireblossom}");
-            TextureAssets.Item[ItemID.Moonglow] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Moonglow}");
-            TextureAssets.Item[ItemID.Shiverthorn] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Shiverthorn}");
-            TextureAssets.Item[ItemID.Waterleaf] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Waterleaf}");
-
-            texturePath = ResourceManager.TilesTextures;
-            id = 4;
-            TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
-            id = 12;
-            TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
-            id = 16;
-            TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
-            id = 17;
-            TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
-            id = 18;
-            TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
+            UnloadInner();
 
             return;
         }
@@ -60,5 +41,28 @@ sealed class RespriteLoader : ILoadable {
         TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>(texturePath + $"Tree_Branches_{id}");
     }
 
-    public void Unload() { }
+    private void UnloadInner() {
+        TextureAssets.Item[ItemID.Daybloom] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Daybloom}");
+        TextureAssets.Item[ItemID.Blinkroot] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Blinkroot}");
+        TextureAssets.Item[ItemID.Deathweed] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Deathweed}");
+        TextureAssets.Item[ItemID.Fireblossom] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Fireblossom}");
+        TextureAssets.Item[ItemID.Moonglow] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Moonglow}");
+        TextureAssets.Item[ItemID.Shiverthorn] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Shiverthorn}");
+        TextureAssets.Item[ItemID.Waterleaf] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Waterleaf}");
+
+        int id = 4;
+        TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
+        id = 12;
+        TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
+        id = 16;
+        TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
+        id = 17;
+        TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
+        id = 18;
+        TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
+    }
+
+    public void Unload() {
+        UnloadInner();
+    }
 }
