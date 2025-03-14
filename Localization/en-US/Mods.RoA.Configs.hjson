@@ -25,6 +25,11 @@ RoAConfig: {
 		Label: Vanilla Recipes
 		Tooltip: ""
 	}
+
+	DruidLeaves: {
+		Label: Druid Leaves
+		Tooltip: ""
+	}
 }
 
 HighlightModes: {

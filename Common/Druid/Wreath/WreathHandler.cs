@@ -571,6 +571,12 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
         CurrentResource = (ushort)(_tempResource + _increaseValue * ChangingProgress);
+        bool flag = CurrentResource > 195 && CurrentResource < 200;
+        if (!_shouldDecrease &&
+            ((CurrentResource > 95 && CurrentResource < 100) ||
+            flag)) {
+            CurrentResource = (ushort)(flag ? 200 : 100);
+        }
     }
 
     internal void Reset(bool slowReset = false, float extraChangingValue = 1f) {
