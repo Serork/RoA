@@ -36,6 +36,17 @@ RoAClientConfig: {
 		// Label: Vanilla Resprites
 		// Tooltip: ""
 	}
+
+	Headers: {
+		Mods: {
+			RoA: {
+				Configs: {
+					// GeneralOptionsHeader: General Options
+					// DruidOptionsHeader: Druid Options
+				}
+			}
+		}
+	}
 }
 
 RoAServerConfig: {
@@ -64,5 +75,16 @@ RoAServerConfig: {
 	EvilBiomeExtraItemChance: {
 		// Label: Evil Biome Extra Item Chance
 		// Tooltip: ""
+	}
+
+	Headers: {
+		Mods: {
+			RoA: {
+				Configs: {
+					// GeneralOptionsHeader2: Mods. Ro A. Configs. General Options Header2 Header
+					// GenerationOptionHeader: Mods. Ro A. Configs. Generation Option Header Header
+				}
+			}
+		}
 	}
 }

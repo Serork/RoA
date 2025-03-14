@@ -10,6 +10,7 @@ sealed class RoAServerConfig : ModConfig {
 
     public static RoAServerConfig Instance => ModContent.GetInstance<RoAServerConfig>();
 
+    [Header("Mods.RoA.Configs.GeneralOptionsHeader2")]
     [DefaultValue(false)]
     [ReloadRequired]
     public bool VanillaRecipes;
@@ -17,6 +18,13 @@ sealed class RoAServerConfig : ModConfig {
     [DefaultValue(true)]
     public bool DropDevSets;
 
+    [Range(0f, 1f)]
+    [Increment(0.5f)]
+    //[DrawTicks]
+    [DefaultValue(0f)]
+    public float EvilBiomeExtraItemChance;
+
+    [Header("Mods.RoA.Configs.GenerationOptionHeader")]
     [Range(0.5f, 1.5f)]
     [Increment(0.05f)]
     //[DrawTicks]
@@ -28,10 +36,4 @@ sealed class RoAServerConfig : ModConfig {
     //[DrawTicks]
     [DefaultValue(1f)]
     public float BackwoodsHeightMultiplier;
-
-    [Range(0f, 1f)]
-    [Increment(0.5f)]
-    //[DrawTicks]
-    [DefaultValue(0f)]
-    public float EvilBiomeExtraItemChance;
 }

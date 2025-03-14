@@ -17,7 +17,12 @@ sealed class RoAClientConfig : ModConfig {
         Always,
         Off
     }
+    [Header("Mods.RoA.Configs.GeneralOptionsHeader")]
+    [DefaultValue(true)]
+    [ReloadRequired]
+    public bool VanillaResprites;
 
+    [Header("Mods.RoA.Configs.DruidOptionsHeader")]
     [DefaultValue(true)]
     public bool DruidLeaves;
 
@@ -36,8 +41,4 @@ sealed class RoAClientConfig : ModConfig {
     [DefaultValue(WreathDrawingModes.Normal)]
     //[DrawTicks]
     public WreathDrawingModes WreathDrawingMode;
-
-    [DefaultValue(true)]
-    [ReloadRequired]
-    public bool VanillaResprites;
 }
