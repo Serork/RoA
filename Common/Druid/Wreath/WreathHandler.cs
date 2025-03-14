@@ -141,7 +141,7 @@ sealed class WreathHandler : ModPlayer {
     }
     public Color BaseColor => new(255, 255, 200, 200);
     public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
-    public Vector2 LightingPosition => Utils.Floor(Player.Top - Vector2.UnitY * 15f);
+    public Vector2 LightingPosition => ModContent.GetInstance<RoAConfig>().WreathDrawingMode != RoAConfig.WreathDrawingModes.Normal ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * 15f);
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress3), 0.35f);
 
     public ClawsHandler ClawsStats => Player.GetModPlayer<ClawsHandler>();
