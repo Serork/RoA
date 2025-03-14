@@ -23,7 +23,7 @@ RoAClientConfig: {
 	}
 
 	HighlightMode: {
-		Label: Highlight Mode
+		Label: Druid Text Highlight Mode
 		Tooltip: ""
 	}
 
@@ -47,7 +47,7 @@ RoAServerConfig: {
 	}
 
 	DropDevSets: {
-		Label: Drop Developers Vanity Sets
+		Label: Drop Developer Vanity Sets
 		Tooltip: ""
 	}
 
