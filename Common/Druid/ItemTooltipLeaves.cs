@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Configs;
 using RoA.Common.InterfaceElements;
 using RoA.Core;
 using RoA.Core.Data;
@@ -89,8 +90,10 @@ sealed class ItemTooltipLeaves : GlobalItem {
                 }
             }
 
-            ulong seed = (ulong)item.type;
-            drawTooltipLineLeaves(line, LEAVESCOUNT, seed);
+            if (!ModContent.GetInstance<RoAConfig>().HideDruidLeaves) {
+                ulong seed = (ulong)item.type;
+                drawTooltipLineLeaves(line, LEAVESCOUNT, seed);
+            }
         }
 
         return base.PreDrawTooltipLine(item, line, ref yOffset);

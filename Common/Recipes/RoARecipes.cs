@@ -833,15 +833,15 @@ sealed class RoARecipes : ModSystem {
         item.SortAfter(temp);
         item.Register();
 
-        //// accessories
-        //temp = item;
-        //item = Recipe.Create(ModContent.ItemType<CosmicHat>());
-        //item.AddIngredient(ItemID.WizardHat, 1);
-        //item.AddIngredient<Content.Items.Materials.FlamingFabric>(3);
-        //item.AddIngredient(ItemID.ManaCrystal, 1);
-        //item.AddTile(TileID.Loom);
-        //item.SortAfter(temp);
-        //item.Register();
+        // accessories
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<CosmicHat>());
+        item.AddIngredient(ItemID.WizardHat, 1);
+        item.AddIngredient<Content.Items.Materials.FlamingFabric>(3);
+        item.AddIngredient(ItemID.ManaCrystal, 1);
+        item.AddTile(TileID.Loom);
+        item.SortAfter(temp);
+        item.Register();
     }
 
     private static void AddHellstoneItems(out Recipe daikatana) {

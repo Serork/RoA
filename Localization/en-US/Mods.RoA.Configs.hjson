@@ -1,0 +1,32 @@
+RoAConfig: {
+	DisplayName: Client Config
+
+	HideDruidLeaves: {
+		Label: Hide Druid Leaves
+		Tooltip: ""
+	}
+
+	HighlightMode: {
+		Label: Highlight Druid Text Mode
+		Tooltip: ""
+	}
+
+	WreathDrawingMode: {
+		Label: Wreath Drawing Mode
+		Tooltip: ""
+	}
+}
+
+HighlightModes: {
+	Tooltip: ""
+	Normal.Label: Normal
+	Always.Label: Always
+	Off.Label: Off
+}
+
+WreathDrawingModes: {
+	Tooltip: ""
+	Normal.Label: Normal
+	Fancy.Label: Fancy
+	Bars.Label: Bars
+}

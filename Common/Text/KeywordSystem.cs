@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Configs;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.InterfaceElements;
 using RoA.Core;
@@ -46,34 +47,43 @@ sealed class KeywordSystem : ILoadable {
     }
 
     private void On_Main_DrawInterface_36_Cursor(On_Main.orig_DrawInterface_36_Cursor orig) {
-        if (!Main.gameMenu) {
-            bool flag = false;
-            int num2 = 11;
-            for (int i = 0; i < Player.MaxBuffs; i++) {
-                if (Main.player[Main.myPlayer].buffType[i] > 0) {
-                    _ = Main.player[Main.myPlayer].buffType[i];
-                    int x = 32 + i * 38;
-                    int num3 = 76;
-                    int num4 = i;
-                    while (num4 >= num2) {
-                        num4 -= num2;
-                        x = 32 + num4 * 38;
-                        num3 += 50;
-                    }
-                    int num = Main.player[Main.myPlayer].buffType[i];
-                    if (Main.mouseX < x + TextureAssets.Buff[num].Width() && Main.mouseY < num3 + TextureAssets.Buff[num].Height() && Main.mouseX > x && Main.mouseY > num3) {
-                        flag = true;
+        var highlightMode = ModContent.GetInstance<RoAConfig>().HighlightMode;
+        if (highlightMode != RoAConfig.HighlightModes.Off) {
+            if (!Main.gameMenu) {
+                bool flag = false;
+                int num2 = 11;
+                for (int i = 0; i < Player.MaxBuffs; i++) {
+                    if (Main.player[Main.myPlayer].buffType[i] > 0) {
+                        _ = Main.player[Main.myPlayer].buffType[i];
+                        int x = 32 + i * 38;
+                        int num3 = 76;
+                        int num4 = i;
+                        while (num4 >= num2) {
+                            num4 -= num2;
+                            x = 32 + num4 * 38;
+                            num3 += 50;
+                        }
+                        int num = Main.player[Main.myPlayer].buffType[i];
+                        if (Main.mouseX < x + TextureAssets.Buff[num].Width() && Main.mouseY < num3 + TextureAssets.Buff[num].Height() && Main.mouseX > x && Main.mouseY > num3) {
+                            flag = true;
+                        }
                     }
                 }
-            }
-            if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || WreathDrawing.JustDrawn) {
-                if (_keywordColorOpacity > 0f) {
-                    _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
+                if (highlightMode == RoAConfig.HighlightModes.Always) {
+                    _keywordColorOpacity = 1f;
+                }
+                else if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || WreathDrawing.JustDrawn) {
+                    if (_keywordColorOpacity > 0f) {
+                        _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
+                    }
+                }
+                else if (_keywordColorOpacity != 1f) {
+                    _keywordColorOpacity = 1f;
                 }
             }
-            else if (_keywordColorOpacity != 1f) {
-                _keywordColorOpacity = 1f;
-            }
+        }
+        else {
+            _keywordColorOpacity = 0f;
         }
         orig();
     }
