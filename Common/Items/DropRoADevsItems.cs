@@ -1,4 +1,5 @@
-﻿using RoA.Content.Items.Equipables.Vanity.Developer;
+﻿using RoA.Common.Configs;
+using RoA.Content.Items.Equipables.Vanity.Developer;
 
 using System;
 
@@ -32,6 +33,10 @@ sealed class DropRoADevsItems : ILoadable {
     }
 
     private void TryGettingRoADevArmor(Player self, IEntitySource source) {
+        if (!ModContent.GetInstance<RoAServerConfig>().DropDevSets) {
+            return;
+        }
+
         if (Main.rand.Next(Main.tenthAnniversaryWorld ? 8 : 16) == 0) {
             _roaDevItemsDropped = true;
             switch (Main.rand.Next(6)) {

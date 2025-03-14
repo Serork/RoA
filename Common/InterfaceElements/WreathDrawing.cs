@@ -42,7 +42,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
     public override Position GetDefaultPosition() => PlayerDrawLayers.AfterLastVanillaLayer;
 
     protected override void Draw(ref PlayerDrawSet drawInfo) {
-        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode != RoAConfig.WreathDrawingModes.Normal) {
+        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal) {
             return;
         }
 

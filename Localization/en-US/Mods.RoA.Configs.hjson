@@ -1,37 +1,3 @@
-RoAConfig: {
-	DisplayName: Client Config
-
-	HideDruidLeaves: {
-		Label: Druid Leaves
-		Tooltip: ""
-	}
-
-	HighlightMode: {
-		Label: Highlight Druid Text Mode
-		Tooltip: ""
-	}
-
-	WreathDrawingMode: {
-		Label: Wreath Drawing Mode
-		Tooltip: ""
-	}
-
-	HerbsResprites: {
-		Label: Herbs Resprites
-		Tooltip: ""
-	}
-
-	VanillaRecipes: {
-		Label: Vanilla Recipes
-		Tooltip: ""
-	}
-
-	DruidLeaves: {
-		Label: Druid Leaves
-		Tooltip: ""
-	}
-}
-
 HighlightModes: {
 	Tooltip: ""
 	Normal.Label: Normal
@@ -46,4 +12,57 @@ WreathDrawingModes: {
 	Bars.Label: Bars
 	Fancy2.Label: Fancy2
 	Bars2.Label: Bars2
+}
+
+RoAClientConfig: {
+	DisplayName: Client Config
+
+	DruidLeaves: {
+		Label: Druid Leaves
+		Tooltip: ""
+	}
+
+	HighlightMode: {
+		Label: Highlight Mode
+		Tooltip: ""
+	}
+
+	WreathDrawingMode: {
+		Label: Wreath Drawing Mode
+		Tooltip: ""
+	}
+
+	VanillaResprites: {
+		Label: Vanilla Resprites
+		Tooltip: ""
+	}
+}
+
+RoAServerConfig: {
+	DisplayName: Server Config
+
+	VanillaRecipes: {
+		Label: Vanilla Recipes
+		Tooltip: ""
+	}
+
+	DropDevSets: {
+		Label: Drop Developers Vanity Sets
+		Tooltip: ""
+	}
+
+	BackwoodsWidthMultiplier: {
+		Label: Backwoods Biome Width Multiplier
+		Tooltip: ""
+	}
+
+	BackwoodsHeightMultiplier: {
+		Label: Backwoods Biome Height Multiplier
+		Tooltip: ""
+	}
+
+	EvilBiomeExtraItemChance: {
+		Label: Evil Biome Extra Item Chance
+		Tooltip: ""
+	}
 }

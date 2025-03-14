@@ -3,6 +3,7 @@
 using ReLogic.Utilities;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Common.Configs;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
@@ -3708,8 +3709,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _biomeSurface = [];
         _altarTiles = [];
 
-        _biomeWidth = 100;
-        _biomeHeight = 162;
+        var config = ModContent.GetInstance<RoAServerConfig>();
+        _biomeWidth = (int)(100 * config.BackwoodsWidthMultiplier);
+        _biomeHeight = (int)(162 * config.BackwoodsHeightMultiplier);
         _biomeWidth += (int)(_biomeWidth * 1.35f * WorldGenHelper.WorldSize2);
         _biomeHeight += (int)(_biomeHeight * 1.35f * WorldGenHelper.WorldSize2);
 

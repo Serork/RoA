@@ -90,7 +90,7 @@ sealed class ItemTooltipLeaves : GlobalItem {
                 }
             }
 
-            if (ModContent.GetInstance<RoAConfig>().DruidLeaves) {
+            if (ModContent.GetInstance<RoAClientConfig>().DruidLeaves) {
                 ulong seed = (ulong)item.type;
                 drawTooltipLineLeaves(line, LEAVESCOUNT, seed);
             }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Configs;
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Summon;
+using RoA.Core.Utility;
 
 using System;
 
@@ -69,6 +71,7 @@ sealed class ExtraVanillaOrbItems : ILoadable {
             }
         }
 
+        var config = ModContent.GetInstance<RoAServerConfig>();
         if (Main.netMode != 1 && !WorldGen.noTileActions) {
             switch (type) {
                 case 12:
@@ -79,66 +82,210 @@ sealed class ExtraVanillaOrbItems : ILoadable {
                     break;
                 case 31:
                     if (flag) {
-                        int num3 = Main.rand.Next(7);
-                        if (!WorldGen.shadowOrbSmashed)
-                            num3 = 0;
-                        switch (num3) {
-                            case 0: {
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 800, 1, noBroadcast: false, -1);
-                                int stack = WorldGen.genRand.Next(100, 101);
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 97, stack);
-                                break;
+                        if (config.EvilBiomeExtraItemChance == 0f) {
+                            int num3 = Main.rand.Next(7);
+                            if (!WorldGen.shadowOrbSmashed)
+                                num3 = 0;
+                            switch (num3) {
+                                case 0: {
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 800, 1, noBroadcast: false, -1);
+                                    int stack = WorldGen.genRand.Next(100, 101);
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 97, stack);
+                                    break;
+                                }
+                                case 1:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, /*1256*/ModContent.ItemType<CrimsonRod>(), 1, noBroadcast: false, -1);
+                                    break;
+                                case 2:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 802, 1, noBroadcast: false, -1);
+                                    break;
+                                case 3:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 3062, 1, noBroadcast: false, -1);
+                                    break;
+                                case 4:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 1290, 1, noBroadcast: false, -1);
+                                    break;
+                                case 5:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<ArterialSpray>(), 1, noBroadcast: false, -1);
+                                    break;
+                                case 6:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<GastroIntestinalMallet>(), 1, noBroadcast: false, -1);
+                                    break;
                             }
-                            case 1:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, /*1256*/ModContent.ItemType<CrimsonRod>(), 1, noBroadcast: false, -1);
-                                break;
-                            case 2:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 802, 1, noBroadcast: false, -1);
-                                break;
-                            case 3:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 3062, 1, noBroadcast: false, -1);
-                                break;
-                            case 4:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 1290, 1, noBroadcast: false, -1);
-                                break;
-                            case 5:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<ArterialSpray>(), 1, noBroadcast: false, -1);
-                                break;
-                            case 6:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<GastroIntestinalMallet>(), 1, noBroadcast: false, -1);
-                                break;
+                        }
+                        else {
+                            int num4 = Main.rand.Next(7);
+                            if (!WorldGen.shadowOrbSmashed)
+                                num4 = 0;
+
+                            switch (num4) {
+                                case 0: {
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 800, 1, noBroadcast: false, -1);
+                                    int stack = WorldGen.genRand.Next(100, 101);
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 97, stack);
+                                    break;
+                                }
+                                case 1:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, /*1256*/ModContent.ItemType<CrimsonRod>(), 1, noBroadcast: false, -1);
+                                    break;
+                                case 2:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 802, 1, noBroadcast: false, -1);
+                                    break;
+                                case 3:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 3062, 1, noBroadcast: false, -1);
+                                    break;
+                                case 4:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 1290, 1, noBroadcast: false, -1);
+                                    break;
+                                case 5:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<ArterialSpray>(), 1, noBroadcast: false, -1);
+                                    break;
+                                case 6:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<GastroIntestinalMallet>(), 1, noBroadcast: false, -1);
+                                    break;
+                            }
+
+                            if (Main.rand.NextChance(config.EvilBiomeExtraItemChance)) {
+                                int num42 = num4;
+                                num4 = Main.rand.Next(7);
+                                if (!WorldGen.shadowOrbSmashed)
+                                    num4 = 0;
+
+                                while (num4 == num42) {
+                                    num4 = Main.rand.Next(7);
+                                }
+
+                                switch (num4) {
+                                    case 0: {
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 800, 1, noBroadcast: false, -1);
+                                        int stack = WorldGen.genRand.Next(100, 101);
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 97, stack);
+                                        break;
+                                    }
+                                    case 1:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, /*1256*/ModContent.ItemType<CrimsonRod>(), 1, noBroadcast: false, -1);
+                                        break;
+                                    case 2:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 802, 1, noBroadcast: false, -1);
+                                        break;
+                                    case 3:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 3062, 1, noBroadcast: false, -1);
+                                        break;
+                                    case 4:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 1290, 1, noBroadcast: false, -1);
+                                        break;
+                                    case 5:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<ArterialSpray>(), 1, noBroadcast: false, -1);
+                                        break;
+                                    case 6:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<GastroIntestinalMallet>(), 1, noBroadcast: false, -1);
+                                        break;
+                                }
+                            }
                         }
                     }
                     else {
-                        int num4 = Main.rand.Next(7);
-                        if (!WorldGen.shadowOrbSmashed)
-                            num4 = 0;
+                        if (config.EvilBiomeExtraItemChance == 0f) {
+                            int num4 = Main.rand.Next(7);
+                            if (!WorldGen.shadowOrbSmashed)
+                                num4 = 0;
 
-                        switch (num4) {
-                            case 0: {
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 96, 1, noBroadcast: false, -1);
-                                int stack2 = WorldGen.genRand.Next(100, 101);
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 97, stack2);
-                                break;
+                            switch (num4) {
+                                case 0: {
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 96, 1, noBroadcast: false, -1);
+                                    int stack2 = WorldGen.genRand.Next(100, 101);
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 97, stack2);
+                                    break;
+                                }
+                                case 1:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, /*64*/ModContent.ItemType<Vilethorn>(), 1, noBroadcast: false, -1);
+                                    break;
+                                case 2:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 162, 1, noBroadcast: false, -1);
+                                    break;
+                                case 3:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 115, 1, noBroadcast: false, -1);
+                                    break;
+                                case 4:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 111, 1, noBroadcast: false, -1);
+                                    break;
+                                case 5:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<Bookworms>(), 1, noBroadcast: false, -1);
+                                    break;
+                                case 6:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<PlanetomaStaff>(), 1, noBroadcast: false, -1);
+                                    break;
                             }
-                            case 1:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, /*64*/ModContent.ItemType<Vilethorn>(), 1, noBroadcast: false, -1);
-                                break;
-                            case 2:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 162, 1, noBroadcast: false, -1);
-                                break;
-                            case 3:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 115, 1, noBroadcast: false, -1);
-                                break;
-                            case 4:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 111, 1, noBroadcast: false, -1);
-                                break;
-                            case 5:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<Bookworms>(), 1, noBroadcast: false, -1);
-                                break;
-                            case 6:
-                                Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<PlanetomaStaff>(), 1, noBroadcast: false, -1);
-                                break;
+                        }
+                        else {
+                            int num4 = Main.rand.Next(7);
+                            if (!WorldGen.shadowOrbSmashed)
+                                num4 = 0;
+
+                            switch (num4) {
+                                case 0: {
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 96, 1, noBroadcast: false, -1);
+                                    int stack2 = WorldGen.genRand.Next(100, 101);
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 97, stack2);
+                                    break;
+                                }
+                                case 1:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, /*64*/ModContent.ItemType<Vilethorn>(), 1, noBroadcast: false, -1);
+                                    break;
+                                case 2:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 162, 1, noBroadcast: false, -1);
+                                    break;
+                                case 3:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 115, 1, noBroadcast: false, -1);
+                                    break;
+                                case 4:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 111, 1, noBroadcast: false, -1);
+                                    break;
+                                case 5:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<Bookworms>(), 1, noBroadcast: false, -1);
+                                    break;
+                                case 6:
+                                    Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<PlanetomaStaff>(), 1, noBroadcast: false, -1);
+                                    break;
+                            }
+
+                            if (Main.rand.NextChance(config.EvilBiomeExtraItemChance)) {
+                                int num42 = num4;
+                                num4 = Main.rand.Next(7);
+                                if (!WorldGen.shadowOrbSmashed)
+                                    num4 = 0;
+
+                                while (num4 == num42) {
+                                    num4 = Main.rand.Next(7);
+                                }
+
+                                switch (num4) {
+                                    case 0: {
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 96, 1, noBroadcast: false, -1);
+                                        int stack2 = WorldGen.genRand.Next(100, 101);
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 97, stack2);
+                                        break;
+                                    }
+                                    case 1:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, /*64*/ModContent.ItemType<Vilethorn>(), 1, noBroadcast: false, -1);
+                                        break;
+                                    case 2:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 162, 1, noBroadcast: false, -1);
+                                        break;
+                                    case 3:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 115, 1, noBroadcast: false, -1);
+                                        break;
+                                    case 4:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, 111, 1, noBroadcast: false, -1);
+                                        break;
+                                    case 5:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<Bookworms>(), 1, noBroadcast: false, -1);
+                                        break;
+                                    case 6:
+                                        Item.NewItem(WorldGen.GetItemSource_FromTileBreak(num, num2), num * 16, num2 * 16, 32, 32, ModContent.ItemType<PlanetomaStaff>(), 1, noBroadcast: false, -1);
+                                        break;
+                                }
+                            }
                         }
                     }
                     WorldGen.shadowOrbSmashed = true;

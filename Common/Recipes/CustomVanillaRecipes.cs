@@ -9,7 +9,7 @@ namespace RoA.Common.Recipes;
 
 sealed class CustomVanillaRecipes : ModSystem {
     public override void PostAddRecipes() {
-        if (ModContent.GetInstance<RoAConfig>().VanillaRecipes) {
+        if (ModContent.GetInstance<RoAServerConfig>().VanillaRecipes) {
             return;
         }
 

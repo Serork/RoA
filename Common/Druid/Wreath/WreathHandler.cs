@@ -141,7 +141,7 @@ sealed class WreathHandler : ModPlayer {
     }
     public Color BaseColor => new(255, 255, 200, 200);
     public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
-    public Vector2 LightingPosition => ModContent.GetInstance<RoAConfig>().WreathDrawingMode != RoAConfig.WreathDrawingModes.Normal ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * 15f);
+    public Vector2 LightingPosition => ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * 15f);
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress3), 0.35f);
 
     public ClawsHandler ClawsStats => Player.GetModPlayer<ClawsHandler>();
@@ -571,6 +571,8 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
         CurrentResource = (ushort)(_tempResource + _increaseValue * ChangingProgress);
+
+        // floor
         bool flag = CurrentResource > 195 && CurrentResource < 200;
         if (!_shouldDecrease &&
             ((CurrentResource > 95 && CurrentResource < 100) ||
@@ -624,7 +626,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts_ActualMaking() {
-        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode != RoAConfig.WreathDrawingModes.Normal) {
+        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal) {
             return;
         }
 
@@ -638,7 +640,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void MakeDustsOnHit(float progress = -1f) {
-        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode != RoAConfig.WreathDrawingModes.Normal) {
+        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal) {
             return;
         }
 

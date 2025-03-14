@@ -53,16 +53,16 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
     private void On_PlayerResourceSetsManager_Draw(On_PlayerResourceSetsManager.orig_Draw orig, PlayerResourceSetsManager self) {
         orig(self);
-        if (RoAConfig.IsFancy) {
+        if (RoAClientConfig.IsFancy) {
             DrawInner1();
         }
-        else if (RoAConfig.IsBars) {
+        else if (RoAClientConfig.IsBars) {
             DrawInner2();
         }
     }
 
     private void On_Main_DrawInventory(On_Main.orig_DrawInventory orig, Main self) {
-        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode == RoAConfig.WreathDrawingModes.Normal) {
+        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal) {
             orig(self);
             return;
         }
@@ -153,7 +153,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
     }
 
     private void DrawInner1() {
-        if (!RoAConfig.IsFancy) {
+        if (!RoAClientConfig.IsFancy) {
             return;
         }
 
@@ -167,7 +167,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         int width = 44, height = 46;
         int UI_ScreenAnchorX = Main.screenWidth - 870;
         Vector2 position = new Vector2(500 + UI_ScreenAnchorX + width / 2, 15f + height / 2);
-        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode == RoAConfig.WreathDrawingModes.Fancy2) {
+        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Fancy2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
             Player localPlayer = Main.LocalPlayer;
@@ -272,7 +272,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
     }
 
     private void DrawInner2() {
-        if (!RoAConfig.IsBars) {
+        if (!RoAClientConfig.IsBars) {
             return;
         }
 
@@ -285,7 +285,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         int width = 44, height = 44;
         int UI_ScreenAnchorX = Main.screenWidth - 870;
         Vector2 position = new Vector2(500 + UI_ScreenAnchorX + width / 2, 15f + height / 2);
-        if (ModContent.GetInstance<RoAConfig>().WreathDrawingMode == RoAConfig.WreathDrawingModes.Bars2) {
+        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
             Player localPlayer = Main.LocalPlayer;

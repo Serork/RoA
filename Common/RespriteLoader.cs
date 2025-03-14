@@ -13,7 +13,7 @@ sealed class RespriteLoader : ILoadable {
     public void Load(Mod mod) {
         string texturePath = ResourceManager.ItemsTextures;
         int id = 4;
-        if (!ModContent.GetInstance<RoAConfig>().HerbsResprites) {
+        if (!ModContent.GetInstance<RoAClientConfig>().VanillaResprites) {
             texturePath = ResourceManager.ItemsTextures;
             TextureAssets.Item[ItemID.Daybloom] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Daybloom}");
             TextureAssets.Item[ItemID.Blinkroot] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Blinkroot}");

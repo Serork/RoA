@@ -1,11 +1,16 @@
+using RoA.Common.Configs;
 using RoA.Common.Druid;
+using RoA.Core;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic;
 
 sealed class Vilethorn : NatureItem {
+    public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? base.Texture : $"Terraria/Images/Item_{ItemID.Vilethorn}";
+
     protected override void SafeSetDefaults() {
         Item.damage = 2;
         Item.useStyle = 1;

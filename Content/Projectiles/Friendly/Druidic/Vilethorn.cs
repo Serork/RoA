@@ -5,14 +5,18 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using RoA.Core;
+using RoA.Common.Configs;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class VilethornTip : Vilethorn {
-    public override string Texture => ResourceManager.FriendlyProjectileTextures + "Druidic/VilethornTip";
+    public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? ResourceManager.FriendlyProjectileTextures + "Druidic/VilethornTip" :
+        $"Terraria/Images/Projectile_{ProjectileID.VilethornTip}";
 }
 
 class Vilethorn : NatureProjectile {
+    public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? base.Texture : $"Terraria/Images/Projectile_{ProjectileID.VilethornBase}";
+
     protected override void SafeSetDefaults() {
         Projectile.width = 28;
         Projectile.height = 28;

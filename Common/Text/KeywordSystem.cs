@@ -47,8 +47,8 @@ sealed class KeywordSystem : ILoadable {
     }
 
     private void On_Main_DrawInterface_36_Cursor(On_Main.orig_DrawInterface_36_Cursor orig) {
-        var highlightMode = ModContent.GetInstance<RoAConfig>().HighlightMode;
-        if (highlightMode != RoAConfig.HighlightModes.Off) {
+        var highlightMode = ModContent.GetInstance<RoAClientConfig>().HighlightMode;
+        if (highlightMode != RoAClientConfig.HighlightModes.Off) {
             if (!Main.gameMenu) {
                 bool flag = false;
                 int num2 = 11;
@@ -69,7 +69,7 @@ sealed class KeywordSystem : ILoadable {
                         }
                     }
                 }
-                if (highlightMode == RoAConfig.HighlightModes.Always) {
+                if (highlightMode == RoAClientConfig.HighlightModes.Always) {
                     _keywordColorOpacity = 1f;
                 }
                 else if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || FancyWreathDrawing.IsHoveringUI || WreathDrawing.JustDrawn) {

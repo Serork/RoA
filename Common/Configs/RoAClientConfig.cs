@@ -5,12 +5,12 @@ using Terraria.ModLoader.Config;
 
 namespace RoA.Common.Configs;
 
-sealed class RoAConfig : ModConfig {
-    public static RoAConfig Instance => ModContent.GetInstance<RoAConfig>();
+sealed class RoAClientConfig : ModConfig {
+    public override ConfigScope Mode => ConfigScope.ClientSide;
+
+    public static RoAClientConfig Instance => ModContent.GetInstance<RoAClientConfig>();
     public static bool IsFancy => Instance.WreathDrawingMode == WreathDrawingModes.Fancy || Instance.WreathDrawingMode == WreathDrawingModes.Fancy2;
     public static bool IsBars => Instance.WreathDrawingMode == WreathDrawingModes.Bars || Instance.WreathDrawingMode == WreathDrawingModes.Bars2;
-
-    public override ConfigScope Mode => ConfigScope.ClientSide;
 
     public enum HighlightModes {
         Normal,
@@ -39,9 +39,5 @@ sealed class RoAConfig : ModConfig {
 
     [DefaultValue(true)]
     [ReloadRequired]
-    public bool HerbsResprites;
-
-    [DefaultValue(false)]
-    [ReloadRequired]
-    public bool VanillaRecipes;
+    public bool VanillaResprites;
 }

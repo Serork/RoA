@@ -16,8 +16,8 @@ RoAConfig: {
 		// Tooltip: ""
 	}
 
-	HerbsResprites: {
-		// Label: Herbs Resprites
+	VanillaResprites: {
+		// Label: Vanilla Resprites
 		// Tooltip: ""
 	}
 
@@ -28,6 +28,21 @@ RoAConfig: {
 
 	DruidLeaves: {
 		// Label: Druid Leaves
+		// Tooltip: ""
+	}
+
+	DropDevSets: {
+		// Label: Drop Dev Sets
+		// Tooltip: ""
+	}
+
+	BackwoodsWidthMultiplier: {
+		// Label: Backwoods Width Multiplier
+		// Tooltip: ""
+	}
+
+	BackwoodsHeightMultiplier: {
+		// Label: Backwoods Height Multiplier
 		// Tooltip: ""
 	}
 }
@@ -46,4 +61,57 @@ WreathDrawingModes: {
 	// Bars.Label: Bars
 	// Fancy2.Label: Fancy2
 	// Bars2.Label: Bars2
+}
+
+RoAClientConfig: {
+	// DisplayName: Ro A Client Config
+
+	DruidLeaves: {
+		// Label: Druid Leaves
+		// Tooltip: ""
+	}
+
+	HighlightMode: {
+		// Label: Highlight Mode
+		// Tooltip: ""
+	}
+
+	WreathDrawingMode: {
+		// Label: Wreath Drawing Mode
+		// Tooltip: ""
+	}
+
+	VanillaResprites: {
+		// Label: Vanilla Resprites
+		// Tooltip: ""
+	}
+}
+
+RoAServerConfig: {
+	// DisplayName: Ro A Server Config
+
+	VanillaRecipes: {
+		// Label: Vanilla Recipes
+		// Tooltip: ""
+	}
+
+	DropDevSets: {
+		// Label: Drop Dev Sets
+		// Tooltip: ""
+	}
+
+	BackwoodsWidthMultiplier: {
+		// Label: Backwoods Width Multiplier
+		// Tooltip: ""
+	}
+
+	BackwoodsHeightMultiplier: {
+		// Label: Backwoods Height Multiplier
+		// Tooltip: ""
+	}
+
+	EvilBiomeExtraItemChance: {
+		// Label: Evil Biome Extra Item Chance
+		// Tooltip: ""
+	}
 }
