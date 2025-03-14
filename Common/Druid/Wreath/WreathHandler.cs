@@ -225,7 +225,7 @@ sealed class WreathHandler : ModPlayer {
 
         if (_hitEffectTimer <= 0) {
             MakeDustsOnHit();
-            _hitEffectTimer = 5;
+            _hitEffectTimer = 3;
         }
     }
 
