@@ -1,4 +1,5 @@
-﻿using RoA.Content.Items.Materials;
+﻿using RoA.Common.Configs;
+using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 
 using Terraria.ID;
@@ -8,6 +9,10 @@ namespace RoA.Common.Recipes;
 
 sealed class CustomVanillaRecipes : ModSystem {
     public override void PostAddRecipes() {
+        if (ModContent.GetInstance<RoAConfig>().VanillaRecipes) {
+            return;
+        }
+
         // potions overhaul
         RecipeHelper.NewRecipe(ItemID.EndurancePotion, [ModContent.ItemType<Bonerose>()], [1], false, [ItemID.Blinkroot]);
         RecipeHelper.NewRecipe(ItemID.FeatherfallPotion, [ModContent.ItemType<Cloudberry>()], [1], false, [ItemID.Daybloom, ItemID.Blinkroot]);

@@ -18,8 +18,8 @@ sealed class RoAConfig : ModConfig {
         Off
     }
 
-    [DefaultValue(false)]
-    public bool HideDruidLeaves;
+    [DefaultValue(true)]
+    public bool DruidLeaves;
 
     [DefaultValue(HighlightModes.Normal)]
     [DrawTicks]
@@ -36,4 +36,12 @@ sealed class RoAConfig : ModConfig {
     [DefaultValue(WreathDrawingModes.Normal)]
     [DrawTicks]
     public WreathDrawingModes WreathDrawingMode;
+
+    [DefaultValue(true)]
+    [ReloadRequired]
+    public bool HerbsResprites;
+
+    [DefaultValue(false)]
+    [ReloadRequired]
+    public bool VanillaRecipes;
 }

@@ -2,7 +2,7 @@ RoAConfig: {
 	DisplayName: Client Config
 
 	HideDruidLeaves: {
-		Label: Hide Druid Leaves
+		Label: Druid Leaves
 		Tooltip: ""
 	}
 
@@ -13,6 +13,16 @@ RoAConfig: {
 
 	WreathDrawingMode: {
 		Label: Wreath Drawing Mode
+		Tooltip: ""
+	}
+
+	HerbsResprites: {
+		Label: Herbs Resprites
+		Tooltip: ""
+	}
+
+	VanillaRecipes: {
+		Label: Vanilla Recipes
 		Tooltip: ""
 	}
 }
