@@ -41,8 +41,8 @@ RoAClientConfig: {
 		Mods: {
 			RoA: {
 				Configs: {
-					// GeneralOptionsHeader: General Options
-					// DruidOptionsHeader: Druid Options
+					GeneralOptionsHeader: Основные настройки
+					DruidOptionsHeader: Настройки класса 'Друид'
 				}
 			}
 		}
@@ -81,8 +81,8 @@ RoAServerConfig: {
 		Mods: {
 			RoA: {
 				Configs: {
-					// GeneralOptionsHeader2: General Options
-					// GenerationOptionHeader: Generation Options
+					GeneralOptionsHeader2: Основные настройки
+					GenerationOptionHeader: Настройки создания мира
 				}
 			}
 		}
