@@ -27,7 +27,7 @@ sealed class RoAClientConfig : ModConfig {
     public bool DruidLeaves;
 
     [DefaultValue(HighlightModes.Normal)]
-    //[DrawTicks]
+    [DrawTicks]
     public HighlightModes HighlightMode;
 
     public enum WreathDrawingModes {
@@ -39,6 +39,6 @@ sealed class RoAClientConfig : ModConfig {
     }
 
     [DefaultValue(WreathDrawingModes.Normal)]
-    //[DrawTicks]
+    [DrawTicks]
     public WreathDrawingModes WreathDrawingMode;
 }
