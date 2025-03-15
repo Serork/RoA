@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
@@ -11,6 +12,8 @@ using Terraria.ID;
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 sealed class HorrorPincers : BaseClawsItem {
+    protected override ushort UseTime => 18;
+
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(12, 4f);
@@ -18,6 +21,8 @@ sealed class HorrorPincers : BaseClawsItem {
         Item.rare = ItemRarityID.Blue;
 
         Item.value = Item.sellPrice(0, 0, 25, 0);
+
+        NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(112, 75, 140), new Color(130, 100, 210));

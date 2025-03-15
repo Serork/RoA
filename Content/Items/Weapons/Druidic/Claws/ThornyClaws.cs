@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
@@ -12,6 +13,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 sealed class ThornyClaws : BaseClawsItem {
+    protected override ushort UseTime => 18; 
+
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(22, 4f);
@@ -19,11 +22,11 @@ sealed class ThornyClaws : BaseClawsItem {
         Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
+
+        NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(75, 167, 85), new Color(100, 200, 110));
-
-    //protected override bool ShouldModifyShootStats => false;
 
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
         ushort type = (ushort)ModContent.ProjectileType<Snatcher>();

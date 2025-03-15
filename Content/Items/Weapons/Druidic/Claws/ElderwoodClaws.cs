@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Projectiles.Friendly.Druidic;
@@ -13,6 +14,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 sealed class ElderwoodClaws : BaseClawsItem {
+    protected override ushort UseTime => 18;
+
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(26, 3f);
@@ -21,6 +24,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
         Item.rare = ItemRarityID.Green;
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
+
+        NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 	
 	protected override (Color, Color) SlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));

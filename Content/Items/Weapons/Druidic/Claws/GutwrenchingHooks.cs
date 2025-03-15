@@ -13,16 +13,17 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 sealed class GutwrenchingHooks : BaseClawsItem {
+    protected override ushort UseTime => 18;
+
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(12, 4f);
 
         Item.rare = ItemRarityID.Blue;
 
-        //NatureWeaponHandler.SetPotentialDamage(Item, 24);
-        //NatureWeaponHandler.SetPotentialUseSpeed(Item, (ushort)(UseTime - UseTime / 3));
-
         Item.value = Item.sellPrice(0, 0, 25, 0);
+
+        NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(216, 73, 73), new Color(255, 114, 114));

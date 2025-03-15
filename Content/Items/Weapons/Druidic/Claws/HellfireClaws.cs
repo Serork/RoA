@@ -15,6 +15,8 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 [WeaponOverlay(WeaponType.Claws, 0xffffff)]
 sealed class HellfireClaws : BaseClawsItem {
+    protected override ushort UseTime => 18;
+
     public override Color? GetAlpha(Color lightColor) => Color.White;
 
     protected override void SafeSetDefaults() {
@@ -24,15 +26,16 @@ sealed class HellfireClaws : BaseClawsItem {
         Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 2, 50, 0);
+
+        NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 
     public override bool CanUseItem(Player player) => base.CanUseItem(player) && player.ownedProjectileCounts[ModContent.ProjectileType<HellfireClawsSlash>()] < 1;
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
-        bool flag = handler.GetIsFull((ushort)(handler.CurrentResource/* + handler.GetIncreaseValue(0f) / 2*/), true);
-        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), flag ? ModContent.ProjectileType<HellfireClawsSlash>() : type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/, NatureWeaponHandler.GetUseSpeed(Item, player));
-        //NetMessage.SendData(MessageID.PlayerControls, number: player.whoAmI);
+        bool flag = handler.GetIsFull(handler.CurrentResource, true);
+        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), flag ? ModContent.ProjectileType<HellfireClawsSlash>() : type, damage, knockback, player.whoAmI, player.direction, NatureWeaponHandler.GetUseSpeed(Item, player));
 
         return false;
     }
