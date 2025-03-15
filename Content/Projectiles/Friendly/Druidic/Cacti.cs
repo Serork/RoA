@@ -59,11 +59,9 @@ sealed class Cacti : NatureProjectile {
 
     protected override void SafeOnSpawn(IEntitySource source) {
         int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
-        if (!Main.projectile.IndexInRange(byUUID)) {
-            return;
+        if (Main.projectile.IndexInRange(byUUID)) {
+            _parent = Main.projectile[byUUID];
         }
-
-        _parent = Main.projectile[byUUID];
 
         if (Projectile.owner != Main.myPlayer) {
             return;
@@ -178,22 +176,34 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void AI() {
-        bool flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
-        int baseType = ModContent.ProjectileType<CactiCaster.CactiCasterBase>();
-        if (_parent == null) {
-            Projectile.Kill();
-            return;
-        }
-        while (_parent.type != baseType) {
-            _parent = Main.projectile.FirstOrDefault(x => x.active && x.owner == Projectile.owner && x.type == baseType);
-        }
-        Vector2 corePosition = flag ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
         Projectile.Opacity = Utils.GetLerpValue(180, 155, Projectile.timeLeft, true);
 
         Projectile.tileCollide = _state == State.Enchanted;
 
         switch (_state) { 
             case State.Normal:
+                if (_parent == null) {
+                    int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
+                    if (Main.projectile.IndexInRange(byUUID)) {
+                        _parent = Main.projectile[byUUID];
+                    }
+                }
+                bool flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
+                int baseType = ModContent.ProjectileType<CactiCaster.CactiCasterBase>();
+                if (_parent == null) {
+                    Projectile.Kill();
+                    return;
+                }
+                while (_parent != null && _parent.type != baseType) {
+                    _parent = Main.projectile.FirstOrDefault(x => x.active && x.owner == Projectile.owner && x.type == baseType);
+                }
+                if (_parent == null) {
+                    Projectile.Kill();
+                    return;
+                }
+                flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
+                Vector2 corePosition = flag ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
+
                 if (Main.rand.NextBool(2)) {
                     int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.OasisCactus, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 80, default, 1.4f + Main.rand.NextFloat(0f, 0.075f));
                     Main.dust[dust].noGravity = true;
@@ -228,17 +238,15 @@ sealed class Cacti : NatureProjectile {
                         Projectile.netUpdate = true;
                     }
 
-                    if (Main.netMode != NetmodeID.Server) {
-                        for (int i = 0; i < 30; i++) {
-                            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CactiCasterDust>(), 0f, -2f, 0, default, 1.5f);
-                            Main.dust[dust].position.X += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
-                            Main.dust[dust].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
-                            Main.dust[dust].noGravity = true;
-                            Main.dust[dust].noLight = true;
+                    for (int i = 0; i < 30; i++) {
+                        int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CactiCasterDust>(), 0f, -2f, 0, default, 1.5f);
+                        Main.dust[dust].position.X += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
+                        Main.dust[dust].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].noLight = true;
 
-                            if (Main.dust[dust].position != Projectile.Center) {
-                                Main.dust[dust].velocity = Projectile.DirectionTo(Main.dust[dust].position) * 2f;
-                            }
+                        if (Main.dust[dust].position != Projectile.Center) {
+                            Main.dust[dust].velocity = Projectile.DirectionTo(Main.dust[dust].position) * 2f;
                         }
                     }
                 }
