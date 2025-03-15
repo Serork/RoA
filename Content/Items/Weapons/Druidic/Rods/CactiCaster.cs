@@ -33,7 +33,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
     }
 
     public sealed class CactiCasterBase : BaseRodProjectile {
-        private Vector2 _position = Vector2.Zero;
+        internal Vector2 _position = Vector2.Zero;
         private float _rotation2 = float.MaxValue, _rotation3;
         private bool _makeDust = true;
 
@@ -49,6 +49,19 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             _position = reader.ReadVector2();
         }
 
+        public override void SafePostAI() {
+            Player player = Owner;
+            Vector2 mousePoint = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
+            float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
+            float y = mousePoint.Y + player.height - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
+            if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {
+                if (Projectile.owner == Main.myPlayer && _position == Vector2.Zero) {
+                    _position = new(mousePoint.X, y);
+                    Projectile.netUpdate = true;
+                }
+            }
+        }
+
         public override void PostDraw(Color lightColor) {
             if (!_makeDust) {
                 return;
@@ -60,10 +73,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = mousePoint.Y + player.height - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
             if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {
-                if (Projectile.owner == Main.myPlayer) {
-                    _position = new(mousePoint.X, y);
-                    Projectile.netUpdate = true;
-                }
+
             }
             else if (_leftTimeToReuse <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
                 _makeDust = false;
