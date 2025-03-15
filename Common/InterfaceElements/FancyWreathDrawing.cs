@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.Configs;
 using RoA.Common.Druid.Wreath;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -21,6 +23,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terraria.UI;
+
+using tModPorter;
 
 namespace RoA.Common.InterfaceElements;
 
@@ -53,11 +57,29 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
     private void On_PlayerResourceSetsManager_Draw(On_PlayerResourceSetsManager.orig_Draw orig, PlayerResourceSetsManager self) {
         orig(self);
+
+        var config = ModContent.GetInstance<RoAClientConfig>();
+        var wreathPosition = config.WreathPosition;
+        if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
+            wreathPosition = RoAClientConfig.WreathPositions.Health;
+        }
+        bool flag = wreathPosition == RoAClientConfig.WreathPositions.Player;
+        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+        if (flag) {
+            Main.spriteBatch.End();
+            Main.spriteBatch.BeginWorld();
+        }
+
         if (RoAClientConfig.IsFancy) {
             DrawInner1();
         }
         else if (RoAClientConfig.IsBars) {
             DrawInner2();
+        }
+
+        if (flag) {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(in snapshot);
         }
     }
 
@@ -167,9 +189,24 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         int width = 44, height = 46;
         int UI_ScreenAnchorX = Main.screenWidth - 870;
         Vector2 position = new Vector2(500 + UI_ScreenAnchorX + width / 2, 15f + height / 2);
-        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Fancy2) {
+        var config = ModContent.GetInstance<RoAClientConfig>();
+        var wreathPosition = config.WreathPosition;
+        if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
+            wreathPosition = RoAClientConfig.WreathPositions.Health;
+        }
+        if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+            position = Main.ScreenSize.ToVector2() / 2f;
+            position.Y -= player.height * 1.5f;
+        }
+        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Fancy2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
+            if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+                vector3 = Main.ScreenSize.ToVector2() / 2f;
+                vector3.Y -= player.height * 1.5f;
+
+                vector = vector3 + new Vector2(-4f, 3f) + new Vector2(0f, -40f);
+            }
             Player localPlayer = Main.LocalPlayer;
             Color textColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
             string text3 = Language.GetTextValue("Mods.RoA.WreathSlot") + ":";
@@ -195,7 +232,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
         Rectangle frame = new(0, 0, width, height);
         int num5 = 255;
-        int a = (int)((double)num5 * 0.9);
+        int a = (int)((double)num5 * 1);
         Color color = new(num5, num5, num5, a);
         Vector2 origin = new(width / 2, height / 2);
         float scale = Main.UIScale;
@@ -203,8 +240,18 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
         IsHoveringUI = false;
         Vector2 mouseScreen = Main.MouseScreen;
-        if (mouseScreen.X > (float)(500 + UI_ScreenAnchorX) && mouseScreen.X < (float)(500 + width + UI_ScreenAnchorX) && 
-            mouseScreen.Y > 15f && mouseScreen.Y < (float)(15f + height)) {
+        float startX = (float)(500 + UI_ScreenAnchorX);
+        float endX = (float)(500 + width + UI_ScreenAnchorX);
+        float startY = 15f;
+        float endY = (float)(15f + height);
+        if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+            startX = position.X - width / 2;
+            endX = startX + width;
+            startY = position.Y - height / 2;
+            endY = startY + height;
+        }
+        if (mouseScreen.X > startX && mouseScreen.X < endX && 
+            mouseScreen.Y > startY && mouseScreen.Y < endY) {
             if (!Main.mouseText) {
                 player.cursorItemIconEnabled = false;
                 string text = "[kw/n:" + stats.CurrentResource + "]" + "/" + stats.TotalResource;
@@ -285,9 +332,24 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         int width = 44, height = 44;
         int UI_ScreenAnchorX = Main.screenWidth - 870;
         Vector2 position = new Vector2(500 + UI_ScreenAnchorX + width / 2, 15f + height / 2);
-        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2) {
+        var config = ModContent.GetInstance<RoAClientConfig>();
+        var wreathPosition = config.WreathPosition;
+        if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
+            wreathPosition = RoAClientConfig.WreathPositions.Health;
+        }
+        if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+            position = Main.ScreenSize.ToVector2() / 2f;
+            position.Y -= player.height * 1.5f;
+        }
+        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
+            if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+                vector3 = Main.ScreenSize.ToVector2() / 2f;
+                vector3.Y -= player.height * 1.5f;
+
+                vector = vector3 + new Vector2(-4f, 3f) + new Vector2(0f, -40f);
+            }
             Player localPlayer = Main.LocalPlayer;
             Color textColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
             string text3 = Language.GetTextValue("Mods.RoA.WreathSlot") + ":";
@@ -313,7 +375,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
         Rectangle frame = new(0, 0, width, height);
         int num5 = 255;
-        int a = (int)((double)num5 * 0.9);
+        int a = (int)((double)num5 * 1);
         Color color = new(num5, num5, num5, a);
         Vector2 origin = new(width / 2, height / 2);
         float scale = Main.UIScale;
@@ -321,8 +383,18 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
         IsHoveringUI = false;
         Vector2 mouseScreen = Main.MouseScreen;
-        if (mouseScreen.X > (float)(500 + UI_ScreenAnchorX) && mouseScreen.X < (float)(500 + width + UI_ScreenAnchorX) &&
-            mouseScreen.Y > 15f && mouseScreen.Y < (float)(15f + height)) {
+        float startX = (float)(500 + UI_ScreenAnchorX);
+        float endX = (float)(500 + width + UI_ScreenAnchorX);
+        float startY = 15f;
+        float endY = (float)(15f + height);
+        if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+            startX = position.X - width / 2;
+            endX = startX + width;
+            startY = position.Y - height / 2;
+            endY = startY + height;
+        }
+        if (mouseScreen.X > startX && mouseScreen.X < endX &&
+            mouseScreen.Y > startY && mouseScreen.Y < endY) {
             if (!Main.mouseText) {
                 player.cursorItemIconEnabled = false;
                 string text = "[kw/n:" + stats.CurrentResource + "]" + "/" + stats.TotalResource;

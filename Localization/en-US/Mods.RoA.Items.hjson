@@ -1122,7 +1122,7 @@ CosmicHat: {
 	DisplayName: Cosmic Hat
 	Tooltip:
 		'''
-	    Reduces mana cost to 0 when your will is too low
+		Reduces mana cost to 0 when your will is too low
 		'Great for a walk in a shadowy forest'
 		'''
 }

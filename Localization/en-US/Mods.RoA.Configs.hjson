@@ -47,6 +47,11 @@ RoAClientConfig: {
 			}
 		}
 	}
+
+	WreathPosition: {
+		Label: Wreath Position
+		Tooltip: ""
+	}
 }
 
 RoAServerConfig: {
@@ -87,4 +92,10 @@ RoAServerConfig: {
 			}
 		}
 	}
+}
+
+WreathPositions: {
+	Tooltip: ""
+	Health.Label: Health
+	Player.Label: Player
 }

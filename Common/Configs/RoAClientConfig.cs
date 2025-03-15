@@ -41,4 +41,13 @@ sealed class RoAClientConfig : ModConfig {
     [DefaultValue(WreathDrawingModes.Normal)]
     [DrawTicks]
     public WreathDrawingModes WreathDrawingMode;
+
+    public enum WreathPositions {
+        Health,
+        Player
+    }
+
+    [DefaultValue(WreathPositions.Health)]
+    [DrawTicks]
+    public WreathPositions WreathPosition;
 }

@@ -28,6 +28,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Forms.BaseFormHandler;
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Common.Druid.Wreath;
 
@@ -52,6 +53,7 @@ sealed class WreathHandler : ModPlayer {
     private FormInfo _formInfo;
     private bool _shouldSync;
     private int _hitEffectTimer;
+    private bool _barsDustsCreated;
 
     public bool HasEnougthToJump;
 
@@ -118,11 +120,12 @@ sealed class WreathHandler : ModPlayer {
     public bool IsEmpty2 => ActualProgress2 <= 0.05f;
     public bool IsEmpty3 => ActualProgress2 <= 0.15f;
     public bool IsFull => Progress >= 0.95f;
-    public bool GetIsFull(ushort currentResource, bool clawsReset = false) => (clawsReset ? GetActualProgress2(currentResource) : GetProgress(currentResource)) > 0.95f;
+    public bool WillBeFull(ushort currentResource, bool clawsReset = false) => (clawsReset ? GetActualProgress2(currentResource) : GetProgress(currentResource)) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
     public bool IsFull3 => IsFull && Progress <= 1.1f;
     public bool IsFull4 => Progress >= 0.85f;
     public bool IsFull6 => Progress >= 0.975f;
+    public bool IsFull7 => Progress >= 1.9f;
     public bool IsMinCharged => ActualProgress2 > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
@@ -142,7 +145,17 @@ sealed class WreathHandler : ModPlayer {
     }
     public Color BaseColor => new(255, 255, 200, 200);
     public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
-    public Vector2 LightingPosition => ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * 15f);
+    public Vector2 LightingPosition {
+        get  {
+            var config = ModContent.GetInstance<RoAClientConfig>();
+            bool flag = false;
+            if (config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal &&
+                config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
+                flag = true;
+            }
+            return flag ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * 15f);
+        }
+    }
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress3), 0.35f);
 
     public ClawsHandler ClawsStats => Player.GetModPlayer<ClawsHandler>();
@@ -191,9 +204,6 @@ sealed class WreathHandler : ModPlayer {
 
     public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
         OnHitNPC(proj, target: target);
-        //else {
-
-        //}
     }
 
     public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
@@ -209,9 +219,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void OnHitNPC(Projectile proj, bool nonDataReset = false, NPC target = null) {
-        if (target != null && target.immortal) {
-            return;
-        }
+        //if (target != null && target.immortal) {
+        //    return;
+        //}
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;
         }
@@ -240,7 +250,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && Player.ItemAnimationActive && natureProjectile.Item == selectedItem) {
             selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
-            if (!_shouldDecrease && !_shouldDecrease2 && GetIsFull((ushort)(CurrentResource/* + GetIncreaseValue(natureProjectile.WreathPointsFine) / 2*/), true)) {
+            if (!_shouldDecrease && !_shouldDecrease2 && WillBeFull(CurrentResource, true)) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     if (!SpecialAttackData.OnlySpawn || nonDataReset) {
                         ForcedHardReset();
@@ -317,10 +327,49 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
+    private void ResetBarsVisualParameters() {
+        if (!IsFull || (IsFull && !IsFull2)) {
+            _barsDustsCreated = false;
+        }
+    }
+
     public override void PostUpdateEquips() {
         ApplyBuffs();
         GetWreathType();
         MakeDusts();
+
+        if (IsChangingValue && !_shouldDecrease) {
+            ushort dustType = GetDustType();
+            bool bars = RoAClientConfig.IsBars;
+            if (bars) {
+                if ((IsFull3 || IsFull2) && !_barsDustsCreated) {
+                    int count = 20;
+                    for (int i = 0; i < count; i++) {
+                        float progress2 = 2f;
+                        Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress2));
+                        dust.velocity *= 1.25f * progress2;
+                        if (i >= (int)(count * 0.8f)) {
+                            dust.velocity *= 2f * progress2;
+                        }
+                        else if (i >= count / 2) {
+                            dust.velocity *= 1.5f * progress2;
+                        }
+                        dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
+                        dust.noGravity = true;
+                        dust.position += dust.velocity * 0.75f;
+                        dust.noLight = true;
+                        dust.noLightEmittence = true;
+                        dust.alpha = (int)(DrawColorOpacity * 255f);
+                        dust.customData = DrawColorOpacity * PulseIntensity * 1.6f;
+                    }
+
+                    _barsDustsCreated = true;
+                }
+            }
+        }
+        else {
+            ResetBarsVisualParameters();
+        }
 
         if (_hitEffectTimer > 0) {
             _hitEffectTimer = 0;
@@ -508,6 +557,8 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (_shouldDecrease) {
+            _addExtraValue = 0f;
+
             return;
         }
 
@@ -526,13 +577,14 @@ sealed class WreathHandler : ModPlayer {
 
         _stayTime = STAYTIMEMAX;
         ChangeItsValue();
-        _increaseValue = StartSlowlyIncreasingUntilFull ? (ushort)(MaxResource - CurrentResource) : (ushort)(GetIncreaseValue(fine) * Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier);
+        _increaseValue = StartSlowlyIncreasingUntilFull ? (ushort)(MaxResource - CurrentResource) :
+            (ushort)(GetIncreaseValue(fine) * Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier);
     }
 
-    internal ushort GetIncreaseValue(float fine) => (ushort)(AddResourceValue() - AddResourceValue() * fine);
+    internal ushort GetIncreaseValue(float fine) => (ushort)Math.Max(2, AddResourceValue() - AddResourceValue() * fine);
 
     private void ChangingHandler() {
-        if (IsFull && _addExtraValue > 0f) {
+        if ((IsFull3 || (SoulOfTheWoods && IsFull2)) && _addExtraValue > 0f) {
             _addExtraValue = 0f;
         }
 
@@ -614,6 +666,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void ChangeItsValue() {
+        if (IsFull7) {
+            ResetBarsVisualParameters();
+        }
+
         _tempResource = CurrentResource;
         ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
         _currentChangingTime = ChangingTimeValue;
@@ -635,7 +691,14 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void MakeDusts_ActualMaking() {
-        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal) {
+        bool flag = RoAClientConfig.IsBars;
+        if (flag) {
+            return;
+        }
+
+        var config = ModContent.GetInstance<RoAClientConfig>();
+        if (config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal &&
+            config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
             return;
         }
 
@@ -649,12 +712,19 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void MakeDustsOnHit(float progress = -1f) {
-        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal) {
+        var config = ModContent.GetInstance<RoAClientConfig>();
+        if (config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal &&
+            config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
+            return;
+        }
+
+        ushort dustType = GetDustType();
+        bool flag = RoAClientConfig.IsBars;
+        if (flag) {
             return;
         }
 
         float actualProgress = ActualProgress3;
-        ushort dustType = GetDustType();
         if (actualProgress >= 0.1f && actualProgress <= 0.95f) {
             if (progress == -1f) {
                 progress = actualProgress * 1.25f + 0.1f;
@@ -696,6 +766,11 @@ sealed class WreathHandler : ModPlayer {
 
     private void AddLight() {
         if (Player.whoAmI != Main.myPlayer) {
+            return;
+        }
+
+        bool flag = RoAClientConfig.IsBars;
+        if (flag) {
             return;
         }
 
