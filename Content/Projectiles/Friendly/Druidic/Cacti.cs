@@ -181,7 +181,6 @@ sealed class Cacti : NatureProjectile {
         Projectile.tileCollide = _state == State.Enchanted;
 
         float distY = (Main.player[Projectile.owner].position.Y - Projectile.position.Y);
-        Main.NewText(distY);
         if (distY > 600f) {
             Projectile.Kill();
             return;
