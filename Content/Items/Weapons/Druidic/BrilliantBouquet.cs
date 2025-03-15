@@ -66,7 +66,7 @@ sealed class BrilliantBouquet : NatureItem {
         if (flag) {
             petalType2 = 1;
         }
-        petalType2 = 1;
+        //petalType2 = 1;
         float rot = velocity2.ToRotation();
         if (player.direction == 1) {
             rot -= MathHelper.PiOver4 / 4f;
