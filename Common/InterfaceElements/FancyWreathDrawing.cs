@@ -195,6 +195,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
             position = Main.ScreenSize.ToVector2() / 2f;
             position.Y -= player.height * 1.5f;
+
+            if (!player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
+                return;
+            }
         }
         if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Fancy2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
@@ -338,6 +342,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
             position = Main.ScreenSize.ToVector2() / 2f;
             position.Y -= player.height * 1.5f;
+
+            if (!player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
+                return;
+            }
         }
         if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
