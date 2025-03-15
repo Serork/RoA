@@ -209,9 +209,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void OnHitNPC(Projectile proj, bool nonDataReset = false, NPC target = null) {
-        //if (target != null && target.immortal) {
-        //    return;
-        //}
+        if (target != null && target.immortal) {
+            return;
+        }
         if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
             return;
         }
