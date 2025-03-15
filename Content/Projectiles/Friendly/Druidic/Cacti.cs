@@ -179,8 +179,13 @@ sealed class Cacti : NatureProjectile {
 
     public override void AI() {
         bool flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
-        if (_parent.type != ModContent.ProjectileType<CactiCaster.CactiCasterBase>()) {
+        int baseType = ModContent.ProjectileType<CactiCaster.CactiCasterBase>();
+        if (_parent == null) {
+            Projectile.Kill();
             return;
+        }
+        while (_parent.type != baseType) {
+            _parent = Main.projectile.FirstOrDefault(x => x.active && x.owner == Projectile.owner && x.type == baseType);
         }
         Vector2 corePosition = flag ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
         Projectile.Opacity = Utils.GetLerpValue(180, 155, Projectile.timeLeft, true);
