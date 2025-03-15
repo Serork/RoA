@@ -38,7 +38,7 @@ sealed class RootRing : NatureProjectile {
         //Projectile.light = 0.25f;
 
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 10;
+        Projectile.localNPCHitCooldown = 30;
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
@@ -100,17 +100,17 @@ sealed class RootRing : NatureProjectile {
         => Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) >= 110f && Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) <= 170f;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        Player player = Main.player[Projectile.owner];
-        SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
-        if (Vector2.Distance(target.Center, player.Center) < 135f)
-            return;
-        if (!target.CanBeChasedBy())
-            return;
-        float hitDirectionX = target.position.X > player.position.X ? 1f : -1f;
-        float hitDirectionY = target.position.Y > player.position.Y ? 1f : -1f;
-        float knockback2 = hit.Knockback * Projectile.knockBack * target.knockBackResist;
-        target.velocity.X += knockback2 * hitDirectionX;
-        target.velocity.Y += knockback2 * hitDirectionY;
+        //Player player = Main.player[Projectile.owner];
+        //SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
+        //if (Vector2.Distance(target.Center, player.Center) < 135f)
+        //    return;
+        //if (!target.CanBeChasedBy())
+        //    return;
+        //float hitDirectionX = target.position.X > player.position.X ? 1f : -1f;
+        //float hitDirectionY = target.position.Y > player.position.Y ? 1f : -1f;
+        //float knockback2 = hit.Knockback * Projectile.knockBack * target.knockBackResist;
+        //target.velocity.X += knockback2 * hitDirectionX;
+        //target.velocity.Y += knockback2 * hitDirectionY;
     }
 
     public override bool? CanCutTiles()
