@@ -673,7 +673,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void ChangeItsValue() {
-        ResetVisualParametersForNotNormal();
+        int value = CurrentResource % 100;
+        if (_shouldDecrease || !(value > 90 || value < 5)) {
+            ResetVisualParametersForNotNormal();
+        }
 
         _tempResource = CurrentResource;
         ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
