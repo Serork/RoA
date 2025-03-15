@@ -23,8 +23,7 @@ sealed class RoAClientConfig : ModConfig {
         Option2,
         Option3,
         Option4,
-        Option5,
-        Option6
+        Option5
     }
 
     [Header("Mods.RoA.Configs.GeneralOptionsHeader")]

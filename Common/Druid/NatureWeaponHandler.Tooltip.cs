@@ -43,7 +43,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                         tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                         break;
                     case RoAClientConfig.DamageTooltipOptions.Option2:
-                        tooltips[index].Text = $"{GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)} {natureDamageText}";
+                        tooltips[index].Text = $"{GetNatureDamage(item, player)} ({GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)}) {natureDamageText}";
                         break;
                     case RoAClientConfig.DamageTooltipOptions.Option3:
                         int maxExtraDamage = GetPotentialDamage(item, player);
@@ -59,9 +59,6 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                         tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                         break;
                     case RoAClientConfig.DamageTooltipOptions.Option5:
-                        tooltips[index].Text = $"{GetNatureDamage(item, player)} ({GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)}) {natureDamageText}";
-                        break;
-                    case RoAClientConfig.DamageTooltipOptions.Option6:
                         if (extraDamage > 0) {
                             string[] damageTooltipWords = damageTooltip.Split(' ');
                             string damage = GetNatureDamage(item, Main.LocalPlayer).ToString();
