@@ -158,6 +158,11 @@ sealed class PeegeonHood : ModItem {
 
             if (drawInfo.shadow != 0f || drawInfo.drawPlayer.dead)
                 return;
+
+            if (drawInfo.drawPlayer.face > 0) {
+                return;
+            }
+
             Player player = drawInfo.drawPlayer;
             Texture2D texture = eyeTrailTexture.Value;
             Texture2D glow_texture = eyeTrailGlowTexture.Value;
