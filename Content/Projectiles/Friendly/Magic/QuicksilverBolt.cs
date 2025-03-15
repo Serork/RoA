@@ -33,6 +33,8 @@ sealed class QuicksilverBolt : ModProjectile {
 
         Projectile.timeLeft = 140;
 
+        Projectile.friendly = true;
+
         Projectile.tileCollide = true;
 
         Projectile.alpha = 255;

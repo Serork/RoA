@@ -31,7 +31,7 @@ sealed class ThornyClaws : BaseClawsItem {
         ushort type = (ushort)ModContent.ProjectileType<Snatcher>();
         bool shouldReset = true;
         int count = 0;
-        foreach (Projectile projectile in  Main.ActiveProjectiles) {
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (count > 1) {
                 break;
             }

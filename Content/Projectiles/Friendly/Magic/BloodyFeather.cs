@@ -28,7 +28,6 @@ sealed class BloodyFeather : ModProjectile {
 
         //Projectile.extraUpdates = 1;
         Projectile.alpha = 255;
-
     }
 
     public override void AI() {

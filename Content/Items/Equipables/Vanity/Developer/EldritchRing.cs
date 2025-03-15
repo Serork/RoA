@@ -163,30 +163,32 @@ sealed class EldritchRing : ModItem {
 
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
-            int itemType = ModContent.ItemType<EldritchRing>();
-            bool flag = false;
-            bool flag24 = false;
-            for (int i = 13; i < 20; i++) {
-                if (!player.armor[i].IsEmpty() && player.armor[i].type == itemType) {
-                    flag24 = true;
+            if (drawInfo.shadow == 0) {
+                int itemType = ModContent.ItemType<EldritchRing>();
+                bool flag = false;
+                bool flag24 = false;
+                for (int i = 13; i < 20; i++) {
+                    if (!player.armor[i].IsEmpty() && player.armor[i].type == itemType) {
+                        flag24 = true;
+                    }
                 }
-            }
-            Vector2 position2 = runePosition - Main.screenPosition;
-            Vector2 position = new(drawInfo.Center.X, drawInfo.Center.Y);
-            if (!Main.gamePaused) {
-                runePosition = new((float)(int)position.X, (float)(int)position.Y);
-                runeRotation += (player.direction > 0 ? 0.04f : -0.04f) + player.velocity.X * 0.02f;
-            }
-            if (!drawInfo.hideEntirePlayer && drawInfo.shadow == 0 && !player.dead && (player.wingsLogic == _wingsSlot
-                || flag24)) {
-                var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "YellowSignRune");
-                Texture2D texture = asset.Value;
-                Vector2 origin = new(texture.Width * 0.5f, texture.Height * 0.5f);
-                Color color = new(255, 215, 50, 180);
-                if (player.gravDir == -1.0) position.Y += 60f;
-                DrawData drawData = new(texture, position2 - new Vector2(3f * player.direction, 0f), new Rectangle?(), color, runeRotation, origin, 1f, SpriteEffects.None, 0);
-                drawData.shader = drawInfo.cWings;
-                drawInfo.DrawDataCache.Add(drawData);
+                Vector2 position2 = runePosition - Main.screenPosition;
+                Vector2 position = new(drawInfo.Center.X, drawInfo.Center.Y);
+                if (!Main.gamePaused) {
+                    runePosition = new((float)(int)position.X, (float)(int)position.Y);
+                    runeRotation += (player.direction > 0 ? 0.04f : -0.04f) + player.velocity.X * 0.02f;
+                }
+                if (!drawInfo.hideEntirePlayer && !player.dead && (player.wingsLogic == _wingsSlot
+                    || flag24)) {
+                    var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "YellowSignRune");
+                    Texture2D texture = asset.Value;
+                    Vector2 origin = new(texture.Width * 0.5f, texture.Height * 0.5f);
+                    Color color = new(255, 215, 50, 180);
+                    if (player.gravDir == -1.0) position.Y += 60f;
+                    DrawData drawData = new(texture, position2 - new Vector2(3f * player.direction, 0f), new Rectangle?(), color, runeRotation, origin, 1f, SpriteEffects.None, 0);
+                    drawData.shader = drawInfo.cWings;
+                    drawInfo.DrawDataCache.Add(drawData);
+                }
             }
 
             orig(ref drawInfo);

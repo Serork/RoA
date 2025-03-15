@@ -101,6 +101,7 @@ sealed class RavencallersCloak : ModItem {
             }
 
             SoundEngine.PlaySound(SoundID.NPCDeath6 with { Volume = 0.5f, Pitch = -0.35f, PitchVariance = Main.rand.NextFloat() * 0.1f, }, lastPositionInfo.Position);
+
             ResetPositions();
         }
 
