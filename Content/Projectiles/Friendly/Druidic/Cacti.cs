@@ -180,28 +180,20 @@ sealed class Cacti : NatureProjectile {
 
         Projectile.tileCollide = _state == State.Enchanted;
 
+        float distY = (Main.player[Projectile.owner].position.Y - Projectile.position.Y);
+        Main.NewText(distY);
+        if (distY > 600f) {
+            Projectile.Kill();
+            return;
+        }
+
         switch (_state) { 
             case State.Normal:
-                if (_parent == null) {
-                    int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
-                    if (Main.projectile.IndexInRange(byUUID)) {
-                        _parent = Main.projectile[byUUID];
-                    }
-                }
-                bool flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
                 int baseType = ModContent.ProjectileType<CactiCaster.CactiCasterBase>();
-                if (_parent == null) {
-                    Projectile.Kill();
-                    return;
-                }
                 while (_parent != null && _parent.type != baseType) {
                     _parent = Main.projectile.FirstOrDefault(x => x.active && x.owner == Projectile.owner && x.type == baseType);
                 }
-                if (_parent == null) {
-                    Projectile.Kill();
-                    return;
-                }
-                flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
+                bool flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
                 Vector2 corePosition = flag ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
 
                 if (Main.rand.NextBool(2)) {
