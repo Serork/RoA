@@ -46,7 +46,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
         Projectile.tileCollide = false;
 
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 20;
+        Projectile.localNPCHitCooldown = 25;
 
         Projectile.hide = true;
 
@@ -69,7 +69,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             if (Temporary) {
                 Projectile.localAI[0] = Length * 10;
                 Projectile.localAI[0] *= 1f + Projectile.ai[1] - 1f;
-                Projectile.localAI[0] *= 3;
+                Projectile.localAI[0] *= 2;
             }
             _currentLength = _offsetY = 22 * Length;
             Main.rand.NextDouble();
