@@ -280,7 +280,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi, origin, scale, SpriteEffects.None, 0f);
 
         // full icon
-        if (stats.IsFull) {
+        if (stats.IsFull1) {
             frame.X = 170;
             frame.Y = stats.IsPhoenixWreath ? 130 : 82;
             frame.Width = 6;
@@ -434,7 +434,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi, origin, scale, SpriteEffects.None, 0f);
 
         // full icon
-        if (stats.IsFull) {
+        if (stats.IsFull1) {
             frame.X = 144;
             frame.Y = stats.IsPhoenixWreath ? 104 : 56;
             frame.Width = 28;

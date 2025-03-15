@@ -30,7 +30,7 @@ sealed class BandOfNature : NatureItem {
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.05f;
-		if (player.GetModPlayer<WreathHandler>().IsFull) {
+		if (player.GetModPlayer<WreathHandler>().IsFull1) {
             player.statDefense += 3;
         }
 	}

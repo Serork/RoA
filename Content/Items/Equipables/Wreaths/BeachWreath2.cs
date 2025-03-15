@@ -23,7 +23,7 @@ sealed class BeachWreath2 : BaseWreathItem {
         if (!handler.IsEmpty2) {
             player.endurance += 0.1f;
         }
-        if (player.GetModPlayer<WreathHandler>().IsFull) {
+        if (player.GetModPlayer<WreathHandler>().IsFull1) {
             player.moveSpeed += 0.1f;
         }
     }

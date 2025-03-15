@@ -105,7 +105,7 @@ sealed class WreathHandler : ModPlayer {
     public float ActualProgress4 => MathHelper.Clamp(ActualProgress2, 0f, 1f);
     public float ActualProgress5 => MathHelper.Clamp(ActualProgress4 * 1.5f, 0f, 1f);
     public float Progress => HasKeepTime ? _keepProgress : ActualProgress2;
-    public float GetProgress(ushort currentResource) => HasKeepTime ? Math.Max(1f, GetActualProgress2(currentResource)) : GetActualProgress2(currentResource);
+    public float GetProgress(ushort currentResource) => HasKeepTime ? _keepProgress : GetActualProgress2(currentResource);
     public float Progress2 => HasKeepTime ? _keepProgress : ActualProgress;
     public float ChangingProgress {
         get {
@@ -116,10 +116,10 @@ sealed class WreathHandler : ModPlayer {
     public bool IsEmpty => ActualProgress2 <= 0.01f;
     public bool IsEmpty2 => ActualProgress2 <= 0.05f;
     public bool IsEmpty3 => ActualProgress2 <= 0.15f;
-    public bool IsFull => Progress >= 0.95f;
+    public bool IsFull1 => Progress >= 0.95f;
     public bool WillBeFull(ushort currentResource, bool clawsReset = false) => (clawsReset ? GetActualProgress2(currentResource) : GetProgress(currentResource)) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
-    public bool IsFull3 => IsFull && Progress <= 1.1f;
+    public bool IsFull3 => IsFull1 && Progress <= 1.1f;
     public bool IsFull4 => Progress >= 0.85f;
     public bool IsFull6 => Progress >= 0.975f;
     public bool IsFull7 => Progress >= 1.9f;
@@ -326,7 +326,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void ResetVisualParametersForNotNormal() {
-        if (!IsFull || (IsFull && !IsFull2)) {
+        if (!IsFull1 || (IsFull1 && !IsFull2)) {
             _barsDustsCreated = false;
         }
     }
@@ -351,7 +351,7 @@ sealed class WreathHandler : ModPlayer {
                 if ((IsFull3 || IsFull2) && !_barsDustsCreated) {
                     int count = 20;
                     for (int i = 0; i < count; i++) {
-                        float progress2 = 2f;
+                        float progress2 = 1.35f;
                         Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress2));
                         dust.velocity *= 1.25f * progress2;
                         if (i >= (int)(count * 0.8f)) {
@@ -525,7 +525,7 @@ sealed class WreathHandler : ModPlayer {
 
                 return;
             }
-            if (IsFull) {
+            if (IsFull1) {
                 Player.AddBuff(buff2, 10);
                 if (Player.FindBuff(buff, out buffIndex)) {
                     Player.DelBuff(buffIndex);
@@ -659,7 +659,7 @@ sealed class WreathHandler : ModPlayer {
 
     internal void Reset(bool slowReset = false, float extraChangingValue = 1f) {
         if (!_shouldDecrease2) {
-            if (IsFull && !HasKeepTime) {
+            if (IsFull1 && !HasKeepTime) {
                 _keepBonusesForTime = DruidPlayerStats.KeepBonusesForTime;
                 _keepProgress = ActualProgress2;
             }
@@ -699,7 +699,7 @@ sealed class WreathHandler : ModPlayer {
 
     private void MakeDusts() {
         if (Player.whoAmI == Main.myPlayer) {
-            if (PulseIntensity > 0f && (IsFull2 || IsFull3)) {
+            if ((PulseIntensity > 0f || _keepBonusesForTime > 0f) && (IsFull2 || IsFull3)) {
                 if (Player.miscCounter % 6 == 0 && Main.rand.NextChance(0.5)) {
                     MakeDusts_ActualMaking();
                 }
@@ -781,13 +781,13 @@ sealed class WreathHandler : ModPlayer {
 
     private ushort GetDustType() {
         ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() : ModContent.DustType<Content.Dusts.WreathDust>());
-        ushort dustType = (ushort)(IsFull && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
+        ushort dustType = (ushort)(IsFull1 && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
         return dustType;
     }
 
     private ushort GetDustType2() {
         ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3_2>() : ModContent.DustType<Content.Dusts.WreathDust_2>());
-        ushort dustType = (ushort)(IsFull && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2_2>() : basicDustType);
+        ushort dustType = (ushort)(IsFull1 && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2_2>() : basicDustType);
         return dustType;
     }
 

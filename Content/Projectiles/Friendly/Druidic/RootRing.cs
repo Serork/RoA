@@ -30,6 +30,8 @@ sealed class RootRing : NatureProjectile {
         Projectile.penetrate = -1;
         Projectile.friendly = true;
 
+        Projectile.hostile = false;
+
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
 
@@ -99,20 +101,9 @@ sealed class RootRing : NatureProjectile {
     }
 
     public override bool? CanHitNPC(NPC target)
-        => Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) >= 110f && Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) <= 170f;
+        => target.CanBeChasedBy() && Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) >= 110f && Vector2.Distance(target.Center, Main.player[Projectile.owner].Center) <= 170f;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        //Player player = Main.player[Projectile.owner];
-        //SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
-        //if (Vector2.Distance(target.Center, player.Center) < 135f)
-        //    return;
-        //if (!target.CanBeChasedBy())
-        //    return;
-        //float hitDirectionX = target.position.X > player.position.X ? 1f : -1f;
-        //float hitDirectionY = target.position.Y > player.position.Y ? 1f : -1f;
-        //float knockback2 = hit.Knockback * Projectile.knockBack * target.knockBackResist;
-        //target.velocity.X += knockback2 * hitDirectionX;
-        //target.velocity.Y += knockback2 * hitDirectionY;
     }
 
     public override bool? CanCutTiles()

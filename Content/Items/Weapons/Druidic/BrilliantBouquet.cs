@@ -57,7 +57,7 @@ sealed class BrilliantBouquet : NatureItem {
         }
 
         int petalType = Main.rand.Next(3);
-        bool flag = player.GetModPlayer<WreathHandler>().IsFull;
+        bool flag = player.GetModPlayer<WreathHandler>().IsFull1;
         if (flag) {
             petalType = 3;
         }

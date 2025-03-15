@@ -50,7 +50,7 @@ sealed class FireblossomExplosion : NatureProjectile {
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         Player player = Main.player[Projectile.owner];
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
-        if (handler.IsFull 
+        if (handler.IsFull1 
             && player.GetModPlayer<FenethsBlazingWreath.FenethsBlazingWreathHandler>().IsEffectActive
             && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
             int type = ModContent.ProjectileType<Fireblossom>();
@@ -152,7 +152,7 @@ sealed class Fireblossom : NatureProjectile {
         NPC targetNPC = flag ? null : Main.npc[(int)Projectile.ai[0]];
         Player targetPlayer = !flag ? null : Main.player[(int)Projectile.ai[0]];
         int onFireForEnemiesType = ModContent.BuffType<OnFire>();
-        if (Main.player[Projectile.owner].GetModPlayer<WreathHandler>().IsFull) {
+        if (Main.player[Projectile.owner].GetModPlayer<WreathHandler>().IsFull1) {
             if (Projectile.ai[2] == 0f) {
                 float num2 = (float)Main.rand.Next(75, 150) * 0.025f;
                 int time = (int)(60f * num2 * 2f);

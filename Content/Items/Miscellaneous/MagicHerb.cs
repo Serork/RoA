@@ -116,7 +116,7 @@ class MagicHerb1 : ModItem {
 	}
 
 	public override bool OnPickup(Player player) {
-        if (player.GetModPlayer<WreathHandler>().IsFull) {
+        if (player.GetModPlayer<WreathHandler>().IsFull1) {
             player.statLife += 40;
             if (Main.myPlayer == player.whoAmI) {
                 player.HealEffect(40);

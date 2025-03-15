@@ -29,7 +29,7 @@ sealed class GiantTreeSapling : NatureItem {
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
-        if (player.GetModPlayer<WreathHandler>().IsFull) {
+        if (player.GetModPlayer<WreathHandler>().IsFull1) {
             player.statLifeMax2 += 20;
         }
     }
