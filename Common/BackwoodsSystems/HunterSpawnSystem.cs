@@ -145,7 +145,7 @@ sealed class HunterSpawnSystem : ModSystem {
                             continue;
                         }
 
-                        if (!Main.player[npc.target].InModBiome<BackwoodsBiome>()) {
+                        if (npc.target != 255 && Main.player[npc.target] != null && !Main.player[npc.target].InModBiome<BackwoodsBiome>()) {
                             continue;
                         }
 

@@ -115,7 +115,10 @@ class WreathSlot : ModAccessorySlot {
         }
     }
 
-    public override bool CanAcceptItem(Item checkItem, AccessorySlotType context) => IsItemValidForSlot(checkItem);
+    public override bool CanAcceptItem(Item checkItem, AccessorySlotType context) {
+        bool result = IsItemValidForSlot(checkItem);
+        return result;
+    }
 
     public static bool IsItemValidForSlot(Item item) => item.ModItem is BaseWreathItem;
 
