@@ -17,6 +17,7 @@ sealed class RoAClientConfig : ModConfig {
         Always,
         Off
     }
+
     [Header("Mods.RoA.Configs.GeneralOptionsHeader")]
     [DefaultValue(true)]
     [ReloadRequired]
@@ -38,7 +39,6 @@ sealed class RoAClientConfig : ModConfig {
         Bars2
     }
 
-    [Header("Mods.RoA.Configs.DruidOptionsHeader2")]
     [DefaultValue(WreathDrawingModes.Normal)]
     [DrawTicks]
     public WreathDrawingModes WreathDrawingMode;

@@ -42,8 +42,7 @@ RoAClientConfig: {
 			RoA: {
 				Configs: {
 					GeneralOptionsHeader: Основные настройки
-					DruidOptionsHeader: Настройки класса 'Друид' 1
-					DruidOptionsHeader2: Настройки класса 'Друид' 2
+					DruidOptionsHeader: Настройки класса 'Друид'
 				}
 			}
 		}
