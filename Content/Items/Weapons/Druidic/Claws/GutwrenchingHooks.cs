@@ -13,8 +13,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 sealed class GutwrenchingHooks : BaseClawsItem {
-    protected override ushort UseTime => 18;
-
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(12, 4f);
@@ -23,6 +21,7 @@ sealed class GutwrenchingHooks : BaseClawsItem {
 
         Item.value = Item.sellPrice(0, 0, 25, 0);
 
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 

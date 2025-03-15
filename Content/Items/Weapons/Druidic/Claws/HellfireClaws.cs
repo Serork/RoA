@@ -15,8 +15,6 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 [WeaponOverlay(WeaponType.Claws, 0xffffff)]
 sealed class HellfireClaws : BaseClawsItem {
-    protected override ushort UseTime => 18;
-
     public override Color? GetAlpha(Color lightColor) => Color.White;
 
     protected override void SafeSetDefaults() {
@@ -27,6 +25,7 @@ sealed class HellfireClaws : BaseClawsItem {
 
         Item.value = Item.sellPrice(0, 2, 50, 0);
 
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 

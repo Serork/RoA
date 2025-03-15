@@ -14,8 +14,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 sealed class ElderwoodClaws : BaseClawsItem {
-    protected override ushort UseTime => 18;
-
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(26, 3f);
@@ -25,6 +23,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
 
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 	

@@ -15,10 +15,7 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 
 [WeaponOverlay(WeaponType.Claws)]
 abstract class BaseClawsItem : NatureItem {
-    protected virtual ushort UseTime => 18;
-
     protected sealed override void SafeSetDefaults2() {
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, UseTime, UseTime, false, autoReuse: true);
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }
 
