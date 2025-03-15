@@ -126,6 +126,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsFull4 => Progress >= 0.85f;
     public bool IsFull6 => Progress >= 0.975f;
     public bool IsFull7 => Progress >= 1.9f;
+
     public bool IsMinCharged => ActualProgress2 > 0.1f;
 
     public float AddValue => BASEADDVALUE + _addExtraValue;
@@ -327,21 +328,18 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    private void ResetBarsVisualParameters() {
+    private void ResetVisualParametersForNotNormal() {
         if (!IsFull || (IsFull && !IsFull2)) {
             _barsDustsCreated = false;
         }
     }
 
-    public override void PostUpdateEquips() {
-        ApplyBuffs();
-        GetWreathType();
-        MakeDusts();
-
+    private void VisualEffectOnFullForNotNormal() {
         if (IsChangingValue && !_shouldDecrease) {
             ushort dustType = GetDustType();
-            bool bars = RoAClientConfig.IsBars;
-            if (bars) {
+            bool noNormal = RoAClientConfig.IsBars || RoAClientConfig.IsFancy;
+            int value = CurrentResource % 100;
+            if (noNormal && (value > 90 || value < 5)) {
                 if ((IsFull3 || IsFull2) && !_barsDustsCreated) {
                     int count = 20;
                     for (int i = 0; i < count; i++) {
@@ -368,8 +366,16 @@ sealed class WreathHandler : ModPlayer {
             }
         }
         else {
-            ResetBarsVisualParameters();
+            ResetVisualParametersForNotNormal();
         }
+    }
+
+    public override void PostUpdateEquips() {
+        ApplyBuffs();
+        GetWreathType();
+        MakeDusts();
+
+        VisualEffectOnFullForNotNormal();
 
         if (_hitEffectTimer > 0) {
             _hitEffectTimer = 0;
@@ -639,6 +645,7 @@ sealed class WreathHandler : ModPlayer {
             ((CurrentResource > 95 && CurrentResource < 100) ||
             flag)) {
             CurrentResource = (ushort)(flag ? 200 : 100);
+            VisualEffectOnFullForNotNormal();
         }
     }
 
@@ -666,9 +673,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void ChangeItsValue() {
-        if (IsFull7) {
-            ResetBarsVisualParameters();
-        }
+        ResetVisualParametersForNotNormal();
 
         _tempResource = CurrentResource;
         ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
@@ -765,6 +770,8 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void AddLight() {
+        return;
+
         if (Player.whoAmI != Main.myPlayer) {
             return;
         }
