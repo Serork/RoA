@@ -347,7 +347,7 @@ sealed class WreathHandler : ModPlayer {
             var config = ModContent.GetInstance<RoAClientConfig>();
             bool noNormal = IsNormalNearHPBar() || RoAClientConfig.IsBars || RoAClientConfig.IsFancy;
             int value = CurrentResource % 100;
-            if (noNormal && (value > 90 || value < 5)) {
+            if (noNormal && CurrentResource > 50 && (value > 90 || value < 5)) {
                 if ((IsFull3 || IsFull2) && !_barsDustsCreated) {
                     int count = 20;
                     for (int i = 0; i < count; i++) {
