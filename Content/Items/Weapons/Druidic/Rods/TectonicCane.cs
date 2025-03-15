@@ -25,10 +25,10 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
     protected override void SafeSetDefaults() {
         Item.SetSize(36, 38);
         Item.SetDefaultToUsable(-1, 40, useSound: SoundID.Item7);
-        Item.SetWeaponValues(5, 4f);
+        Item.SetWeaponValues(12, 4f);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 15);
-        NatureWeaponHandler.SetFillingRate(Item, 0.35f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 30);
+        NatureWeaponHandler.SetFillingRate(Item, 0.15f);
 
         Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(0, 0, 65, 0);

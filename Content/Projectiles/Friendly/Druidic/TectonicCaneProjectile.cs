@@ -251,7 +251,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
             if (Projectile.owner == Main.myPlayer) {
                 for (int i = 0; i < 7; i++) {
                     Vector2 velocity = new Vector2(0f, 7.5f + Main.rand.NextFloatRange(2.5f)).RotatedBy(MathHelper.Pi / i + Main.rand.NextFloatRange(MathHelper.PiOver4) + MathHelper.PiOver2);
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), startPosition + Main.rand.Random2(0f, size.X - 4f, 0f, size.X / 2f), velocity * 0.6f, ModContent.ProjectileType<TectonicCaneFlames>(),
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), startPosition + Main.rand.Random2(0f, size.X - 4f, 0f, size.X / 2f), velocity * 0.4f, ModContent.ProjectileType<TectonicCaneFlames>(),
                         Projectile.damage, Projectile.knockBack, Projectile.owner);
                 }
             }

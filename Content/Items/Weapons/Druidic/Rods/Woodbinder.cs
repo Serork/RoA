@@ -30,7 +30,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
         Item.SetDefaultToUsable(-1, 24, useSound: SoundID.Item1);
         Item.SetWeaponValues(10, 2f);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 16);
+        NatureWeaponHandler.SetPotentialDamage(Item, 22);
         NatureWeaponHandler.SetFillingRate(Item, 0.25f);
 
         Item.rare = ItemRarityID.Green;

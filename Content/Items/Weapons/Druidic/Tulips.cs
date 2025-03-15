@@ -38,8 +38,8 @@ sealed class WeepingTulip : NatureItem {
         Item.shootSpeed = 8f;
         Item.shoot = ModContent.ProjectileType<TulipPetalOld>();
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 26);
-        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 30);
+        NatureWeaponHandler.SetFillingRate(Item, 0.15f);
     }
 
     //public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
@@ -102,7 +102,7 @@ sealed class SweetTulip : NatureItem {
         Item.shoot = ModContent.ProjectileType<TulipPetalOld>();
 
         NatureWeaponHandler.SetPotentialDamage(Item, 22);
-        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.25f);
     }
 
     //public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {

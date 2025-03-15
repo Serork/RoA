@@ -162,7 +162,7 @@ sealed class MeltingStar : ModProjectile {
         //spriteBatch.EndBlendState();
         Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f) * Projectile.Opacity, Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0)), SpriteEffects.None, 0.0f);
-        spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.4f, 0.1f, 0f, 0.1f), Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, 2.2f - Projectile.ai[0] / 20f, SpriteEffects.None, 0.0f);
+        spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.4f, 0.1f, 0f, 0.1f), Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Math.Clamp(2.2f - Projectile.ai[0] / 20f, -2.5f, 2.5f), SpriteEffects.None, 0.0f);
         return false;
     }
 

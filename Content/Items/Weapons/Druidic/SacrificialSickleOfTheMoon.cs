@@ -40,7 +40,7 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 		Item.useTurn = false;
 		Item.noMelee = true;
 
-		Item.damage = 16;
+		Item.damage = 30;
 		Item.knockBack = 4f;
 
 		Item.rare = ItemRarityID.Orange;
@@ -53,8 +53,8 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 
         Item.staff[Item.type] = true;
 
-		NatureWeaponHandler.SetPotentialDamage(Item, 38);
-		NatureWeaponHandler.SetFillingRate(Item, 0.5f);
+		NatureWeaponHandler.SetPotentialDamage(Item, 60);
+		NatureWeaponHandler.SetFillingRate(Item, 0.2f);
 	}
 
     public override void MeleeEffects(Player player, Rectangle hitbox) {
@@ -93,14 +93,14 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
 		if (Main.moonPhase == 0 || Main.moonPhase == 1) {
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<MoonSigil>()] < 1)
-				Projectile.NewProjectile(source, player.GetViableMousePosition(), Vector2.Zero, ModContent.ProjectileType<MoonSigil>(), damage, knockback, player.whoAmI);
+				Projectile.NewProjectile(source, player.GetViableMousePosition(), Vector2.Zero, ModContent.ProjectileType<MoonSigil>(), (int)(damage * 3.5f), knockback, player.whoAmI);
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<MoonSigil>()] == 1) return false;
 		}
 		if (Main.moonPhase == 2 || Main.moonPhase == 3 || Main.moonPhase == 6 || Main.moonPhase == 7) {
-			Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + player.height / 2), new Vector2(velocity.X, velocity.Y), ModContent.ProjectileType<MoonSickle>(), damage, knockback, player.whoAmI);
+			Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + player.height / 2), new Vector2(velocity.X, velocity.Y), ModContent.ProjectileType<MoonSickle>(), (int)(damage * 1.5f), knockback, player.whoAmI);
 		}
 		if (Main.moonPhase == 4 || Main.moonPhase == 5)
-			Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + player.height / 2), new Vector2(velocity.X, velocity.Y), ModContent.ProjectileType<SacrificialSickle>(), damage, knockback, player.whoAmI);
+			Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + player.height / 2), new Vector2(velocity.X, velocity.Y), ModContent.ProjectileType<SacrificialSickle>(), (int)(damage * 1.5f), knockback, player.whoAmI);
 		return false;
 	}
 

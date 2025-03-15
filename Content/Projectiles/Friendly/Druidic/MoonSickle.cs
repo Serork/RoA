@@ -31,7 +31,9 @@ sealed class MoonSickle : NatureProjectile {
         Projectile.timeLeft = 60;
 
         Projectile.friendly = true;
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
+
+        Projectile.penetrate = 3;
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -110,7 +112,7 @@ sealed class MoonSickle : NatureProjectile {
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 20;
-        return true;
+        return Projectile.timeLeft < 30;
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {

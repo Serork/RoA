@@ -16,7 +16,7 @@ sealed class MoonlightBeam : NatureProjectile {
         int width = 5; int height = width;
         Projectile.Size = new Vector2(width, height);
 
-        Projectile.penetrate = 2;
+        Projectile.penetrate = 5;
         Projectile.timeLeft = 5 * 60;
 
         Projectile.aiStyle = -1;

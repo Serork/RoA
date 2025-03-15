@@ -1802,7 +1802,7 @@ cleoPants: {
 
 IOU: {
 	DisplayName: I.O.U.
-	Tooltip: "'I own you a Druid weapon. @ N.F.A.'"
+	Tooltip: "'I owe you a Druid weapon. -R. O. A.'"
 }
 
 Nihility: {

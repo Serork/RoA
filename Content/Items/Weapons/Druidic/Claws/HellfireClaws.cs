@@ -19,7 +19,7 @@ sealed class HellfireClaws : BaseClawsItem {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
-        Item.SetWeaponValues(16, 4.2f);
+        Item.SetWeaponValues(30, 4.2f);
 
         Item.rare = ItemRarityID.Orange;
 

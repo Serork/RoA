@@ -21,11 +21,11 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSize(44);
-        Item.SetDefaultToUsable(-1, 30, useSound: SoundID.Item7);
+        Item.SetDefaultToUsable(-1, 44, useSound: SoundID.Item7);
         Item.SetWeaponValues(5, 4f);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 15);
-        NatureWeaponHandler.SetFillingRate(Item, 0.35f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 28);
+        NatureWeaponHandler.SetFillingRate(Item, 0.2f);
 
         Item.rare = ItemRarityID.Green;
         Item.value = Item.sellPrice(0, 0, 40, 0);

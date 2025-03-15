@@ -29,7 +29,7 @@ sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
     }
 
     protected override void SafeSetDefaults() {
-        Item.SetWeaponValues(6, 1.5f);
+        Item.SetWeaponValues(12, 1.5f);
         Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item7); 
         Item.SetSize(36, 38);
 
@@ -55,7 +55,7 @@ abstract class TulipBaseItem<T> : BaseRodItem<T> where T : BaseRodProjectile {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TulipFlower>();
 
     protected override void SafeSetDefaults() {
-        NatureWeaponHandler.SetFillingRate(Item, 0.4f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.12f);
     }
 }
 

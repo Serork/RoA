@@ -15,7 +15,7 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 sealed class ElderwoodClaws : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
-        Item.SetWeaponValues(12, 3f);
+        Item.SetWeaponValues(26, 3f);
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
 
         Item.rare = ItemRarityID.Green;
