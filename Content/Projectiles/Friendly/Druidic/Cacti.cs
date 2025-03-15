@@ -29,7 +29,10 @@ sealed class Cacti : NatureProjectile {
     private Projectile _parent = null;
     private float _useTimeFactor;
 
-    public override void SetStaticDefaults() => Projectile.SetTrail(2, 6);
+    public override void SetStaticDefaults() {
+        Projectile.SetTrail(2, 6);
+        ProjectileID.Sets.NeedsUUID[Type] = true;
+    }
 
     protected override void SafeSetDefaults() {
         Projectile.Size = 24 * Vector2.One;
@@ -55,7 +58,12 @@ sealed class Cacti : NatureProjectile {
     public override bool? CanCutTiles() => Projectile.Opacity > 0.75f;
 
     protected override void SafeOnSpawn(IEntitySource source) {
-        _parent = Main.projectile.FirstOrDefault(x => x.owner == Projectile.owner && (x.type == ModContent.ProjectileType<CactiCaster.CactiCasterBase>() || x.identity == (int)Projectile.ai[1]));
+        int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
+        if (!Main.projectile.IndexInRange(byUUID)) {
+            return;
+        }
+
+        _parent = Main.projectile[byUUID];
 
         if (Projectile.owner != Main.myPlayer) {
             return;
@@ -170,10 +178,11 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void AI() {
-        bool flag = _parent == null || (!_parent.active && _parent.As<CactiCaster.CactiCasterBase>() != null);
-        var cactiCasterBase = _parent.As<CactiCaster.CactiCasterBase>();
-        bool flag2 = cactiCasterBase == null;
-        Vector2 corePosition = flag || flag2 ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
+        bool flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
+        if (_parent.type != ModContent.ProjectileType<CactiCaster.CactiCasterBase>()) {
+            return;
+        }
+        Vector2 corePosition = flag ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
         Projectile.Opacity = Utils.GetLerpValue(180, 155, Projectile.timeLeft, true);
 
         Projectile.tileCollide = _state == State.Enchanted;

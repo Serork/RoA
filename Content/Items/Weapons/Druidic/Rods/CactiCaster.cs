@@ -37,6 +37,12 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
         private float _rotation2 = float.MaxValue, _rotation3;
         private bool _makeDust = true;
 
+        public override void SetStaticDefaults() {
+            base.SetStaticDefaults();
+
+            ProjectileID.Sets.NeedsUUID[Type] = true;
+        }
+
         protected override void SafeSendExtraAI(BinaryWriter writer) {
             base.SafeSendExtraAI(writer);
 
@@ -120,7 +126,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
         protected override bool ShouldPlayShootSound() => false;
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) 
-            => ai1 = Projectile.identity;
+            => ai1 = Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI);
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
             float offset = 10f;
