@@ -30,7 +30,6 @@ sealed class TulipTrailOld : NatureProjectile {
 		Projectile.alpha = 55;
 
 		Projectile.appliesImmunityTimeOnSingleHits = true;
-
         Projectile.usesIDStaticNPCImmunity = true;
         Projectile.idStaticNPCHitCooldown = 10;
     }
