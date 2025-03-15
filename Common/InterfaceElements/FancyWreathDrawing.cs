@@ -192,8 +192,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
             wreathPosition = RoAClientConfig.WreathPositions.Health;
         }
+        Vector2 screenSize = Main.ScreenSize.ToVector2();
+        screenSize *= Main.UIScale;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
-            position = Main.ScreenSize.ToVector2() / 2f;
+            position = screenSize / 2f;
             position.Y -= player.height * 1.5f;
 
             if (!player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
@@ -204,7 +206,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
             if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
-                vector3 = Main.ScreenSize.ToVector2() / 2f;
+                vector3 = screenSize / 2f;
                 vector3.Y -= player.height * 1.5f;
 
                 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(0f, -40f);
@@ -238,6 +240,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         Color color = new(num5, num5, num5, a);
         Vector2 origin = new(width / 2, height / 2);
         float scale = Main.UIScale;
+        if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+            scale = 1f;
+        }
         spriteBatch.Draw(mainTexture, position, frame, color, 0f, origin, scale, SpriteEffects.None, 0f);
 
         IsHoveringUI = false;
@@ -339,8 +344,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
             wreathPosition = RoAClientConfig.WreathPositions.Health;
         }
+        Vector2 screenSize = Main.ScreenSize.ToVector2();
+        screenSize *= Main.UIScale;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
-            position = Main.ScreenSize.ToVector2() / 2f;
+            position = screenSize / 2f;
             position.Y -= player.height * 1.5f;
 
             if (!player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
@@ -351,7 +358,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
             if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
-                vector3 = Main.ScreenSize.ToVector2() / 2f;
+                vector3 = screenSize / 2f;
                 vector3.Y -= player.height * 1.5f;
 
                 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(0f, -40f);
@@ -385,6 +392,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         Color color = new(num5, num5, num5, a);
         Vector2 origin = new(width / 2, height / 2);
         float scale = Main.UIScale;
+        if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+            scale = 1f;
+        }
+
         spriteBatch.Draw(mainTexture, position, frame, color, 0f, origin, scale, SpriteEffects.None, 0f);
 
         IsHoveringUI = false;
