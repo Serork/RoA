@@ -8,6 +8,7 @@ HighlightModes: {
 WreathDrawingModes: {
 	// Tooltip: ""
 	Normal.Label: Классический
+	Normal2.Label: Классический 2
 	Fancy.Label: Узорчатый
 	Bars.Label: Полоски
 	Fancy2.Label: Узорчатый 2

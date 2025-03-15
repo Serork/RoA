@@ -10,7 +10,6 @@ using RoA.Content.Buffs;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Wreaths;
-using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Projectiles.Friendly;
@@ -19,7 +18,6 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -28,7 +26,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Forms.BaseFormHandler;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Common.Druid.Wreath;
 
@@ -145,8 +142,8 @@ sealed class WreathHandler : ModPlayer {
         }
     }
     public Color BaseColor => new(255, 255, 200, 200);
-    public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)LightingPosition.X / 16, (int)LightingPosition.Y / 16)) * DrawColorOpacity);
-    public Vector2 LightingPosition {
+    public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)NormalWreathPosition.X / 16, (int)NormalWreathPosition.Y / 16)) * DrawColorOpacity);
+    public Vector2 NormalWreathPosition {
         get  {
             var config = ModContent.GetInstance<RoAClientConfig>();
             bool flag = false;
@@ -154,7 +151,7 @@ sealed class WreathHandler : ModPlayer {
                 config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
                 flag = true;
             }
-            return flag ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * 15f);
+            return flag || IsNormalNearHPBar() ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * 15f);
         }
     }
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress3), 0.35f);
@@ -334,17 +331,28 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
+    private bool IsNormalNearHPBar() {
+        var config = ModContent.GetInstance<RoAClientConfig>();
+        bool flag5 = false;
+        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal &&
+            config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
+            flag5 = true;
+        }
+        return flag5;
+    }
+
     private void VisualEffectOnFullForNotNormal() {
         if (IsChangingValue && !_shouldDecrease) {
             ushort dustType = GetDustType();
-            bool noNormal = RoAClientConfig.IsBars || RoAClientConfig.IsFancy;
+            var config = ModContent.GetInstance<RoAClientConfig>();
+            bool noNormal = IsNormalNearHPBar() || RoAClientConfig.IsBars || RoAClientConfig.IsFancy;
             int value = CurrentResource % 100;
             if (noNormal && (value > 90 || value < 5)) {
                 if ((IsFull3 || IsFull2) && !_barsDustsCreated) {
                     int count = 20;
                     for (int i = 0; i < count; i++) {
                         float progress2 = 2f;
-                        Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress2));
+                        Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress2));
                         dust.velocity *= 1.25f * progress2;
                         if (i >= (int)(count * 0.8f)) {
                             dust.velocity *= 2f * progress2;
@@ -705,12 +713,17 @@ sealed class WreathHandler : ModPlayer {
         }
 
         var config = ModContent.GetInstance<RoAClientConfig>();
+        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal &&
+            config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
+            return;
+        }
+
         if (config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal &&
             config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
             return;
         }
 
-        Dust dust = Dust.NewDustPerfect(LightingPosition - new Vector2(0, 23) + Main.rand.NextVector2CircularEdge(26, 20) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(), new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 0.4f), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
+        Dust dust = Dust.NewDustPerfect(NormalWreathPosition - new Vector2(0, 23) + Main.rand.NextVector2CircularEdge(26, 20) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(), new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 0.4f), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
         dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
         dust.alpha = (int)(DrawColorOpacity * PulseIntensity * 255f);
         dust.noGravity = true;
@@ -722,6 +735,11 @@ sealed class WreathHandler : ModPlayer {
     public void MakeDustsOnHit(float progress = -1f) {
         var config = ModContent.GetInstance<RoAClientConfig>();
         if (config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal &&
+            config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
+            return;
+        }
+
+        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal &&
             config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
             return;
         }
@@ -740,7 +758,7 @@ sealed class WreathHandler : ModPlayer {
             int count = Math.Min((int)(15 * progress), 10);
             for (int i = 0; i < count; i++) {
                 if (Main.rand.NextChance(0.5)) {
-                    Dust dust = Dust.NewDustDirect(LightingPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
+                    Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
                     dust.velocity *= 1.25f * progress;
                     if (i >= (int)(count * 0.8f)) {
                         dust.velocity *= 2f * progress;
@@ -792,10 +810,10 @@ sealed class WreathHandler : ModPlayer {
         if (value2 > 0f) {
             progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
         }
-        Lighting.AddLight(LightingPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (1.35f + value));
+        Lighting.AddLight(NormalWreathPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (1.35f + value));
         if (SoulOfTheWoods) {
             progress = value2;
-            Lighting.AddLight(LightingPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));
+            Lighting.AddLight(NormalWreathPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));
         }
     }
 }

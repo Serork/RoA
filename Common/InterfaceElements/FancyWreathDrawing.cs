@@ -10,7 +10,6 @@ using RoA.Common.Druid.Wreath;
 using RoA.Core;
 using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -21,10 +20,7 @@ using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
 using Terraria.UI;
-
-using tModPorter;
 
 namespace RoA.Common.InterfaceElements;
 
@@ -84,7 +80,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
     }
 
     private void On_Main_DrawInventory(On_Main.orig_DrawInventory orig, Main self) {
-        if (ModContent.GetInstance<RoAClientConfig>().WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal) {
+        var config = ModContent.GetInstance<RoAClientConfig>();
+        bool flag5 = config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal;
+        if (flag5 && config.WreathPosition != RoAClientConfig.WreathPositions.Health) {
             orig(self);
             return;
         }

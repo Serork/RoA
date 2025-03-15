@@ -33,6 +33,7 @@ sealed class RoAClientConfig : ModConfig {
 
     public enum WreathDrawingModes {
         Normal,
+        Normal2,
         Fancy,
         Fancy2,
         Bars,
@@ -48,7 +49,7 @@ sealed class RoAClientConfig : ModConfig {
         Player
     }
 
-    [DefaultValue(WreathPositions.Health)]
+    [DefaultValue(WreathPositions.Player)]
     [DrawTicks]
     public WreathPositions WreathPosition;
 }
