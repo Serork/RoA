@@ -1,4 +1,5 @@
 PotentialDamage: "[kw/n:возможный] урон"
+// DruidToolTipOption1: Damage scales with [kw/n:wreath] charge
 FillingRate1: Чрезвычайно низкая скорость [kw/n:заполнения венка]
 FillingRate2: Очень низкая скорость [kw/n:заполнения венка]
 FillingRate3: Низкая скорость [kw/n:заполнения венка]

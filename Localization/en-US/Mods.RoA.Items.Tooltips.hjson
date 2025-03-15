@@ -1,4 +1,5 @@
 PotentialDamage: "[kw/n:potential] damage"
+DruidToolTipOption1: Damage scales with [kw/n:wreath] charge
 FillingRate1: Extremely slow [kw/n:wreath charge] rate
 FillingRate2: Very slow [kw/n:wreath charge] rate
 FillingRate3: Slow [kw/n:wreath charge] rate

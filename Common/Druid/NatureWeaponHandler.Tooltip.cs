@@ -2,6 +2,7 @@
 
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Configs;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -26,9 +27,18 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
         int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Damage"));
         if (index != -1) {
+            Player player = Main.LocalPlayer;
             string tag, tooltip;
             string keyword = GetLocalizedText("PotentialKeyWord");
             if (HasPotentialDamage()) {
+                //var config = ModContent.GetInstance<RoAClientConfig>();
+                //switch (config.DamageTooltipOption) {
+                //    case RoAClientConfig.DamageTooltipOptions.Option1:
+                //        string damageTooltip = tooltips[index].Text;
+                //        tooltips[index].Text = $"{GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)} {Language.GetText("Mods.RoA.DamageClasses.DruidClass.DisplayName").Value}";
+                //        tooltips[++index].Text = GetLocalizedText("DruidToolTipOption1");
+                //        break;
+                //}
                 int extraDamage = GetExtraDamage(item, Main.LocalPlayer);
                 if (extraDamage > 0) {
                     string damageTooltip = tooltips[index].Text;

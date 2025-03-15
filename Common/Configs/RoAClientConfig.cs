@@ -18,12 +18,25 @@ sealed class RoAClientConfig : ModConfig {
         Off
     }
 
+    public enum DamageTooltipOptions {
+        Option1,
+        Option2,
+        Option3,
+        Option4,
+        Option5
+    }
+
     [Header("Mods.RoA.Configs.GeneralOptionsHeader")]
     [DefaultValue(true)]
     [ReloadRequired]
     public bool VanillaResprites;
 
     [Header("Mods.RoA.Configs.DruidOptionsHeader")]
+
+    [DefaultValue(DamageTooltipOptions.Option1)]
+    [DrawTicks]
+    public DamageTooltipOptions DamageTooltipOption;
+
     [DefaultValue(true)]
     public bool DruidLeaves;
 

@@ -39,6 +39,8 @@ sealed class RootRing : NatureProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 30;
+
+        ShouldIncreaseWreathPoints = false;
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {

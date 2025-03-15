@@ -42,7 +42,7 @@ sealed class WreathHandler : ModPlayer {
 
     private ushort _currentResource, _tempResource;
     private float _addExtraValue;
-    private float _keepBonusesForTime;
+    private float _keepBonusesForTime, _keepProgress;
     private byte _boost;
     private ushort _increaseValue;
     private float _currentChangingTime, _currentChangingMult, _stayTime, _extraChangingValueMultiplier;
@@ -104,9 +104,9 @@ sealed class WreathHandler : ModPlayer {
     public float ActualProgress3 => SoulOfTheWoods ? (ActualProgress2 - 1f) : ActualProgress2;
     public float ActualProgress4 => MathHelper.Clamp(ActualProgress2, 0f, 1f);
     public float ActualProgress5 => MathHelper.Clamp(ActualProgress4 * 1.5f, 0f, 1f);
-    public float Progress => HasKeepTime ? Math.Max(1f, ActualProgress2) : ActualProgress2;
+    public float Progress => HasKeepTime ? _keepProgress : ActualProgress2;
     public float GetProgress(ushort currentResource) => HasKeepTime ? Math.Max(1f, GetActualProgress2(currentResource)) : GetActualProgress2(currentResource);
-    public float Progress2 => HasKeepTime ? Math.Max(1f, ActualProgress) : ActualProgress;
+    public float Progress2 => HasKeepTime ? _keepProgress : ActualProgress;
     public float ChangingProgress {
         get {
             float value = MathHelper.Clamp(ChangingTimeValue - _currentChangingTime, 0f, 1f);
@@ -473,7 +473,7 @@ sealed class WreathHandler : ModPlayer {
                 _stayTime = 0f;
             }
         }
-        if (HasKeepTime && ActualProgress2 <= 1f) {
+        if (HasKeepTime) {
             _keepBonusesForTime -= 1f;
         }
         PulseIntensity = _stayTime <= 0.35f ? 0f : _stayTime > 0.35f && _stayTime <= 1.35f ? Ease.CubeInOut(_stayTime - 0.35f) : MathHelper.Lerp(PulseIntensity, 1f, 0.2f);
@@ -661,6 +661,7 @@ sealed class WreathHandler : ModPlayer {
         if (!_shouldDecrease2) {
             if (IsFull && !HasKeepTime) {
                 _keepBonusesForTime = DruidPlayerStats.KeepBonusesForTime;
+                _keepProgress = ActualProgress2;
             }
 
             _shouldDecrease = true;

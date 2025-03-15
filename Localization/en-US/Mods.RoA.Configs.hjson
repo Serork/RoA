@@ -53,6 +53,11 @@ RoAClientConfig: {
 		Label: Wreath UI Position
 		Tooltip: ""
 	}
+
+	DamageTooltipOption: {
+		Label: Damage Tooltip Option
+		Tooltip: ""
+	}
 }
 
 RoAServerConfig: {
@@ -99,4 +104,13 @@ WreathPositions: {
 	Tooltip: ""
 	Health.Label: Top Right
 	Player.Label: Above Player
+}
+
+DamageTooltipOptions: {
+	Tooltip: ""
+	Option1.Label: Option1
+	Option2.Label: Option2
+	Option3.Label: Option3
+	Option4.Label: Option4
+	Option5.Label: Option5
 }
