@@ -113,4 +113,5 @@ DamageTooltipOptions: {
 	Option3.Label: Option3
 	Option4.Label: Option4
 	Option5.Label: Option5
+	Option6.Label: Option6
 }

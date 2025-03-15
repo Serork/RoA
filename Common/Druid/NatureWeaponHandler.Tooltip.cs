@@ -31,26 +31,49 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             string tag, tooltip;
             string keyword = GetLocalizedText("PotentialKeyWord");
             if (HasPotentialDamage()) {
-                //var config = ModContent.GetInstance<RoAClientConfig>();
-                //switch (config.DamageTooltipOption) {
-                //    case RoAClientConfig.DamageTooltipOptions.Option1:
-                //        string damageTooltip = tooltips[index].Text;
-                //        tooltips[index].Text = $"{GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)} {Language.GetText("Mods.RoA.DamageClasses.DruidClass.DisplayName").Value}";
-                //        tooltips[++index].Text = GetLocalizedText("DruidToolTipOption1");
-                //        break;
-                //}
-                int extraDamage = GetExtraDamage(item, Main.LocalPlayer);
-                if (extraDamage > 0) {
-                    string damageTooltip = tooltips[index].Text;
-                    string[] damageTooltipWords = damageTooltip.Split(' ');
-                    string damage = GetNatureDamage(item, Main.LocalPlayer).ToString();
-                    tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
+                var config = ModContent.GetInstance<RoAClientConfig>();
+                string damageTooltip = tooltips[index].Text;
+                string natureDamageText = Language.GetText("Mods.RoA.DamageClasses.DruidClass.DisplayName").Value;
+                int extraDamage = GetExtraDamage(item, player);
+                switch (config.DamageTooltipOption) {
+                    case RoAClientConfig.DamageTooltipOptions.Option1:
+                        tooltips[index].Text = $"{GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)} {natureDamageText}";
+                        tag = "DruidDamageTip";
+                        tooltip = GetLocalizedText("DruidToolTipOption1");
+                        tooltips.Insert(index + 1, new(Mod, tag, tooltip));
+                        break;
+                    case RoAClientConfig.DamageTooltipOptions.Option2:
+                        tooltips[index].Text = $"{GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)} {natureDamageText}";
+                        break;
+                    case RoAClientConfig.DamageTooltipOptions.Option3:
+                        int maxExtraDamage = GetPotentialDamage(item, player);
+                        float progress = (float)extraDamage / maxExtraDamage;
+                        tooltips[index].Text = 
+                            $"{GetNatureDamage(item, player)}/{GetBasePotentialDamage(item, player)} {natureDamageText}" +
+                            " " + $"({(int)(progress * 100f)}% {GetLocalizedText("DruidToolTipOption3")})";
+                        break;
+                    case RoAClientConfig.DamageTooltipOptions.Option4:
+                        tooltips[index].Text = $"{GetFinalBaseDamage(item, player)} {GetLocalizedText("DruidToolTipOption4_1")}";
+                        tag = "PotentialDamage";
+                        tooltip = $"{GetBasePotentialDamage(item, player)} {GetLocalizedText("PotentialDamage")}";
+                        tooltips.Insert(index + 1, new(Mod, tag, tooltip));
+                        break;
+                    case RoAClientConfig.DamageTooltipOptions.Option5:
+                        tooltips[index].Text = $"{GetNatureDamage(item, player)} ({GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)}) {natureDamageText}";
+                        break;
+                    case RoAClientConfig.DamageTooltipOptions.Option6:
+                        if (extraDamage > 0) {
+                            string[] damageTooltipWords = damageTooltip.Split(' ');
+                            string damage = GetNatureDamage(item, Main.LocalPlayer).ToString();
+                            tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
+                        }
+                        tag = "PotentialDamage";
+                        string potentialDamage = GetBasePotentialDamage(item, Main.LocalPlayer).ToString();
+                        tooltip = potentialDamage.AddSpace() + GetLocalizedText("PotentialDamage");
+                        tooltips.Insert(index + 1, new(Mod, tag, tooltip));
+                        index++;
+                        break;
                 }
-                tag = "PotentialDamage";
-                string potentialDamage = GetBasePotentialDamage(item, Main.LocalPlayer).ToString();
-                tooltip = potentialDamage.AddSpace() + GetLocalizedText("PotentialDamage");
-                tooltips.Insert(index + 1, new(Mod, tag, tooltip));
-                index++;
             }
             int speedIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Speed"));
             if (speedIndex != -1 && item.useAnimation > 0) {
