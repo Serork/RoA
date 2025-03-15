@@ -33,45 +33,44 @@ sealed class DropRoADevsItems : ILoadable {
     }
 
     private void TryGettingRoADevArmor(Player self, IEntitySource source) {
-        if (!ModContent.GetInstance<RoAServerConfig>().DropDevSets) {
-            return;
-        }
-
-        if (Main.rand.Next(Main.tenthAnniversaryWorld ? 8 : 16) == 0) {
-            _roaDevItemsDropped = true;
-            switch (Main.rand.Next(6)) {
-                case 0:
-                    self.QuickSpawnItem(source, ModContent.ItemType<PeegeonHood>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<PeegeonChestguard>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<PeegeonGreaves>());
-                    //self.QuickSpawnItem(source, ModContent.ItemType<PeegeonCape>());
-                    break;
-                case 1:
-                    self.QuickSpawnItem(source, Main.rand.NextBool() ? ModContent.ItemType<SerorkHelmet>() : ModContent.ItemType<SerorkMask>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<SerorkBreastplate>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<SerorkGreaves>());
-                    break;
-                case 2:
-                    self.QuickSpawnItem(source, Main.rand.NextBool() ? ModContent.ItemType<Has2rMask>() : ModContent.ItemType<Has2rShades>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<Has2rJacket>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<Has2rPants>());
-                    //self.QuickSpawnItem(source, ModContent.ItemType<EldritchRing>());
-                    break;
-                case 3:
-                    self.QuickSpawnItem(source, ModContent.ItemType<BRIPEsHelmet>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<BRIPEsHeart>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<BRIPEsRocketBoots>());
-                    break;
-                case 4:
-                    self.QuickSpawnItem(source, ModContent.ItemType<NFAHorns>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<NFAJacket>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<NFAPants>());
-                    break;
-                case 5:
-                    self.QuickSpawnItem(source, ModContent.ItemType<cleoMask>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<cleoChestguard>());
-                    self.QuickSpawnItem(source, ModContent.ItemType<cleoPants>());
-                    break;
+        bool flag = ModContent.GetInstance<RoAServerConfig>().DropDevSets;
+        if (flag || (Main.hardMode && !flag)) {
+            if (Main.rand.Next(Main.tenthAnniversaryWorld ? 8 : 16) == 0) {
+                _roaDevItemsDropped = true;
+                switch (Main.rand.Next(6)) {
+                    case 0:
+                        self.QuickSpawnItem(source, ModContent.ItemType<PeegeonHood>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<PeegeonChestguard>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<PeegeonGreaves>());
+                        //self.QuickSpawnItem(source, ModContent.ItemType<PeegeonCape>());
+                        break;
+                    case 1:
+                        self.QuickSpawnItem(source, Main.rand.NextBool() ? ModContent.ItemType<SerorkHelmet>() : ModContent.ItemType<SerorkMask>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<SerorkBreastplate>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<SerorkGreaves>());
+                        break;
+                    case 2:
+                        self.QuickSpawnItem(source, Main.rand.NextBool() ? ModContent.ItemType<Has2rMask>() : ModContent.ItemType<Has2rShades>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<Has2rJacket>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<Has2rPants>());
+                        //self.QuickSpawnItem(source, ModContent.ItemType<EldritchRing>());
+                        break;
+                    case 3:
+                        self.QuickSpawnItem(source, ModContent.ItemType<BRIPEsHelmet>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<BRIPEsHeart>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<BRIPEsRocketBoots>());
+                        break;
+                    case 4:
+                        self.QuickSpawnItem(source, ModContent.ItemType<NFAHorns>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<NFAJacket>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<NFAPants>());
+                        break;
+                    case 5:
+                        self.QuickSpawnItem(source, ModContent.ItemType<cleoMask>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<cleoChestguard>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<cleoPants>());
+                        break;
+                }
             }
         }
     }

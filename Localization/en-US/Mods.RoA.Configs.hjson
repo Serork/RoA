@@ -42,7 +42,8 @@ RoAClientConfig: {
 			RoA: {
 				Configs: {
 					GeneralOptionsHeader: General Options
-					DruidOptionsHeader: Druid Options
+					DruidOptionsHeader: Druid Options 1
+					DruidOptionsHeader2: Druid Options 2
 				}
 			}
 		}

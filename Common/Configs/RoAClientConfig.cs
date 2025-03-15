@@ -38,6 +38,7 @@ sealed class RoAClientConfig : ModConfig {
         Bars2
     }
 
+    [Header("Mods.RoA.Configs.DruidOptionsHeader2")]
     [DefaultValue(WreathDrawingModes.Normal)]
     [DrawTicks]
     public WreathDrawingModes WreathDrawingMode;
