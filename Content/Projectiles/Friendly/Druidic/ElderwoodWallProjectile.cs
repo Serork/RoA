@@ -11,6 +11,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
@@ -45,7 +46,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
         Projectile.tileCollide = false;
 
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = -1;
+        Projectile.localNPCHitCooldown = 20;
 
         Projectile.hide = true;
 
@@ -53,8 +54,12 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-        return Collision.CheckAABBvAABBCollision(new Vector2(Projectile.position.X, Projectile.ai[2] - _currentLength), new Vector2(texture.Width, _currentLength + texture.Height * EXTRA), targetHitbox.Location.ToVector2(), targetHitbox.Size());
+        Vector2 basePos = new Vector2(Projectile.position.X, Projectile.ai[2] + _currentLength - 35 * (Length - 1));
+        return Collision.CheckAABBvAABBCollision(
+            basePos,
+            new Vector2(30, -(_currentLength - 35 * (Length - 1))), 
+            targetHitbox.Location.ToVector2(), 
+            targetHitbox.Size());
     }
 
     public override void AI() {
@@ -64,6 +69,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
             if (Temporary) {
                 Projectile.localAI[0] = Length * 10;
                 Projectile.localAI[0] *= 1f + Projectile.ai[1] - 1f;
+                Projectile.localAI[0] *= 3;
             }
             _currentLength = _offsetY = 22 * Length;
             Main.rand.NextDouble();

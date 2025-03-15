@@ -5,7 +5,7 @@ using RoA.Core;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class TectonicCaneFlames : FormProjectile {
+sealed class TectonicCaneFlames : NatureProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
     public override bool PreDraw(ref Color lightColor) => false;
 
@@ -49,12 +49,11 @@ sealed class TectonicCaneFlames : FormProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        if (Main.netMode != NetmodeID.Server)
-            for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
-                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
-                                        Projectile.height, 6, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
-                Main.dust[dust].noGravity = true;
-            }
+        for (int value = 0; value < 11 + Main.rand.Next(0, 5); value++) {
+            int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width,
+                                    Projectile.height, 6, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
+            Main.dust[dust].noGravity = true;
+        }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
