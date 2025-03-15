@@ -29,11 +29,15 @@ sealed class TulipTrailOld : NatureProjectile {
 		Projectile.timeLeft = 100;
 		Projectile.alpha = 55;
 
-		Projectile.usesIDStaticNPCImmunity = true;
-		Projectile.idStaticNPCHitCooldown = 300;
-	}
+		Projectile.appliesImmunityTimeOnSingleHits = true;
 
-	public override void AI() {
+        Projectile.usesIDStaticNPCImmunity = true;
+        Projectile.idStaticNPCHitCooldown = 10;
+    }
+
+    public override bool? CanDamage() => Projectile.Opacity >= 0.45f;
+
+    public override void AI() {
 		if (!_initialize) {
 			Projectile.rotation = Main.rand.Next(360);
 			_drawScaleMax = 0.2f + Main.rand.NextFloat(1f, 1.4f) / Projectile.ai[1] * 8f;
