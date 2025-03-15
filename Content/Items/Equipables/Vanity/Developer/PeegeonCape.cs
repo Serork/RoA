@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
@@ -27,32 +28,42 @@ sealed class PeegeonCape : ModItem {
         }
 
         public override void FrameEffects() {
-            if (!IsWingsActive) {
-                return;
+            if (IsWingsActive) {
+                Player.wingTimeMax = 150;
+
+                if (((Player.velocity.Y == 0f || Player.sliding) && Player.releaseJump) || (Player.autoJump && Player.justJumped)) {
+                    Player.wingTime = Player.wingTimeMax;
+                }
             }
 
-            Player.wingTimeMax = 150;
-
-            if (((Player.velocity.Y == 0f || Player.sliding) && Player.releaseJump) || (Player.autoJump && Player.justJumped)) {
-                Player.wingTime = Player.wingTimeMax;
+            bool flag24 = false;
+            for (int i = 13; i < 20; i++) {
+                if (!Player.armor[i].IsEmpty() && Player.armor[i].wingSlot > 0) {
+                    flag24 = true;
+                }
             }
 
-            bool flag22 = Player.wingFrame == 3 && Player.wingTime != Player.wingTimeMax;
-            if (flag22) {
-                if (!flapSound)
-                    SoundEngine.PlaySound(SoundID.Item24, Player.position);
+            bool flag23 = Player.wingsLogic == _wingsSlot;
+            if (flag23 && !flag24) {
+                Player.flapSound = true;
 
-                flapSound = true;
-            }
-            else {
-                flapSound = false;
+                bool flag22 = Player.wingFrame == 3 && Player.wingTime != Player.wingTimeMax;
+                if (flag22) {
+                    if (!flapSound)
+                        SoundEngine.PlaySound(SoundID.Item24, Player.position);
+
+                    flapSound = true;
+                }
+                else {
+                    flapSound = false;
+                }
             }
 
             bool flag21 = false;
-            if (Player.controlJump && Player.wingTime > 0f && Player.wingTime != Player.wingTimeMax && Player.jump == 0 && Player.velocity.Y != 0f)
+            if (Player.controlJump && Player.wingTime != Player.wingTimeMax && Player.jump == 0 && Player.velocity.Y != 0f)
                 flag21 = true;
 
-            if (flag21 && Player.wingsLogic == _wingsSlot) {
+            if (flag21 && flag23) {
                 if (Main.rand.NextBool(2)) {
                     int num = 4;
                     if (Player.direction == 1)
@@ -141,6 +152,5 @@ sealed class PeegeonCape : ModItem {
         player.noFallDmg = true;
         player.wings = -1;
         player.wingsLogic = _wingsSlot;
-        player.flapSound = true;
     }
 }
