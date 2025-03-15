@@ -50,7 +50,7 @@ RoAClientConfig: {
 	}
 
 	WreathPosition: {
-		// Label: Wreath Position
+		Label: Расположение индикатора венка
 		// Tooltip: ""
 	}
 }
@@ -97,6 +97,6 @@ RoAServerConfig: {
 
 WreathPositions: {
 	// Tooltip: ""
-	// Health.Label: Health
-	// Player.Label: Player
+	Health.Label: Сверху справа
+	Player.Label: Над игроком
 }

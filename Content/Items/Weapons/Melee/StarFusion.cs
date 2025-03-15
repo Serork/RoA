@@ -1,9 +1,10 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core.Utility;
-
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -40,12 +41,26 @@ sealed class StarFusion : ModItem {
         //Item.glowMask = RiseofAgesGlowMask.Get(nameof(StarFusion));
     }
 
-    public override void MeleeEffects(Player player, Rectangle hitbox) {
-        if (Main.rand.Next(5) == 0 && Main.rand.NextChance(0.75))
-            Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, Main.rand.NextBool(3) ? DustID.YellowStarDust : DustID.Enchanted_Gold, 0f, 0f, 150, default(Color), 1.2f);
+    private static void GetPointOnSwungItemPath(Player player, float spriteWidth, float spriteHeight, float normalizedPointOnPath, float itemScale, out Vector2 location, out Vector2 outwardDirection) {
+        float num = (float)Math.Sqrt(spriteWidth * spriteWidth + spriteHeight * spriteHeight);
+        float num2 = (float)(player.direction == 1).ToInt() * ((float)Math.PI / 2f);
+        if (player.gravDir == -1f)
+            num2 += (float)Math.PI / 2f * (float)player.direction;
 
-        if (Main.rand.Next(10) == 0 && Main.rand.NextChance(0.75))
-            Gore.NewGore(new EntitySource_ItemUse(player, Item), new Vector2(hitbox.X, hitbox.Y), default(Vector2), Main.rand.Next(16, 17));
+        outwardDirection = player.itemRotation.ToRotationVector2().RotatedBy(3.926991f + num2);
+        location = player.RotatedRelativePoint(player.itemLocation + outwardDirection * num * normalizedPointOnPath * itemScale);
+    }
+
+    public override bool? UseItem(Player player) {
+        if (Main.rand.NextChance(0.5)) {
+            GetPointOnSwungItemPath(player, 58f, 58f, 0.3f + Main.rand.NextFloat(0.6f), 1f, out var location, out var outwardDirection);
+            Vector2 vector = outwardDirection.RotatedBy((float)Math.PI / 2f * (float)player.direction * player.gravDir);
+            Dust dust = Dust.NewDustPerfect(location, Main.rand.NextBool(3) ? DustID.Enchanted_Gold : DustID.YellowStarDust, vector * 4f, 255, default(Color), 1.2f);
+            dust.noGravity = true;
+            dust.noLightEmittence = true;
+        }
+
+        return base.UseItem(player);
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {

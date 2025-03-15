@@ -50,7 +50,7 @@ RoAClientConfig: {
 	}
 
 	WreathPosition: {
-		Label: Wreath Position
+		Label: Wreath UI Position
 		Tooltip: ""
 	}
 }
@@ -97,6 +97,6 @@ RoAServerConfig: {
 
 WreathPositions: {
 	Tooltip: ""
-	Health.Label: Health
-	Player.Label: Player
+	Health.Label: Top Right
+	Player.Label: Above Player
 }

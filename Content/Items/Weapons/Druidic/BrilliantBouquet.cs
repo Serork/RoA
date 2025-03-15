@@ -24,7 +24,7 @@ sealed class BrilliantBouquet : NatureItem {
         Item.staff[Type] = true;
 
         NatureWeaponHandler.SetPotentialDamage(Item, 18);
-        NatureWeaponHandler.SetFillingRate(Item, 0.3f);
+        NatureWeaponHandler.SetFillingRate(Item, 0.15f);
 
         Item.damage = 7;
         Item.knockBack = 1f;

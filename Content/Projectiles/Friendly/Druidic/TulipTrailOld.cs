@@ -28,6 +28,9 @@ sealed class TulipTrailOld : NatureProjectile {
 		Projectile.friendly = true;
 		Projectile.timeLeft = 100;
 		Projectile.alpha = 55;
+
+		Projectile.usesIDStaticNPCImmunity = true;
+		Projectile.idStaticNPCHitCooldown = 300;
 	}
 
 	public override void AI() {
