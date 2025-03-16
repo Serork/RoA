@@ -16,6 +16,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
+using static System.Net.Mime.MediaTypeNames;
+
 namespace RoA.Common.Druid;
 
 sealed partial class NatureWeaponHandler : GlobalItem {
@@ -81,6 +83,9 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         DruidicPrefix activePrefix = handler.ActivePrefix;
         if (activePrefix != null) {
             result += activePrefix._druidDamage;
+            if (handler.HasPotentialDamage()) {
+                result = (int)(result * activePrefix._druidDamageMult);
+            }
         }
         return result;
     }
@@ -96,7 +101,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public static ushort GetFinalBaseDamage(Item item, Player player) 
-        => (ushort)(Main.gameMenu ? GetItemDamage(item) : player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(GetItemDamage(item)));
+        => (ushort)(Main.gameMenu || Main.InGameUI.IsVisible ? GetItemDamage(item) : player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(GetItemDamage(item)));
     public static ushort GetFinalUseTime(Item item, Player player) => (ushort)(GetItemUseTime(item) / player.GetTotalAttackSpeed(DruidClass.NatureDamage));
 
     public static ushort GetBasePotentialDamage(Item item, Player player) {
@@ -107,11 +112,11 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         if (flag) {
             baseDamage += activePrefix._potentialDamage;
         }
-        ushort result = (ushort)(baseDamage * (Main.gameMenu ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier));
+        ushort result = (ushort)(baseDamage * (Main.gameMenu || Main.InGameUI.IsVisible ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier));
         if (flag) {
             result = (ushort)(result * activePrefix._potentialDamageMult);
         }
-        result = (ushort)(result * (Main.gameMenu ? 1f : player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f)));
+        result = (ushort)(result * (Main.gameMenu || Main.InGameUI.IsVisible ? 1f : player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f)));
         return (ushort)result;
     }
     public static ushort GetPotentialDamage(Item item, Player player) => (ushort)Math.Max(0, GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));
@@ -121,7 +126,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         ushort baseSpeed = handler._basePotentialUseSpeed;
         DruidicPrefix activePrefix = handler.ActivePrefix;
         bool flag = activePrefix != null;
-        ushort result = (ushort)(baseSpeed / (Main.gameMenu ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier));
+        ushort result = (ushort)(baseSpeed / (Main.gameMenu || Main.InGameUI.IsVisible ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier));
         if (flag) {
             result = (ushort)(result / activePrefix._potentialDruidSpeedMult);
         }
@@ -131,11 +136,11 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static ushort GetPotentialUseSpeed(Item item, Player player) => (ushort)Math.Max(0, GetFinalUseTime(item, player) - GetBasePotentialUseSpeed(item, player));
 
     public static ushort GetExtraPotentialDamage(Player player, Item item) {
-        float progress = MathHelper.Clamp(Main.gameMenu ? 0f : GetWreathStats(player).Progress, 0f, 1f);
+        float progress = MathHelper.Clamp(Main.gameMenu || Main.InGameUI.IsVisible ? 0f : GetWreathStats(player).Progress, 0f, 1f);
         return (ushort)((ushort)(progress * GetPotentialDamage(item, player)) + (progress > 0.01f ? 1 : 0));
     }
     public static ushort GetExtraPotentialUseSpeed(Player player, Item item) {
-        float progress = MathHelper.Clamp(Main.gameMenu ? 0f : GetWreathStats(player).Progress, 0f, 1f);
+        float progress = MathHelper.Clamp(Main.gameMenu || Main.InGameUI.IsVisible ? 0f : GetWreathStats(player).Progress, 0f, 1f);
         return (ushort)((ushort)(progress * GetPotentialUseSpeed(item, player)) + (progress > 0.01f ? 1 : 0));
     }
 
