@@ -60,11 +60,6 @@ sealed class CosmicMana : ModProjectile {
             Utils.GetLerpValue(maxTimeLeft, maxTimeLeft - 15, Projectile.timeLeft, true);
         Projectile.rotation = Projectile.ai[1] * 0.025f + Projectile.ai[0] * 0.1f;
 
-        if (Projectile.soundDelay == 0) {
-            Projectile.soundDelay = 20 + Main.rand.Next(20, 60);
-            SoundStyle sound = SoundID.Item9;
-            SoundEngine.PlaySound(sound.WithVolumeScale(0.5f), Projectile.position);
-        }
         if (Main.rand.NextBool(3))
             for (int i = 0; i < 1; i++) {
                 int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(3) ? DustID.Enchanted_Gold : DustID.YellowStarDust, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default,
@@ -120,6 +115,8 @@ sealed class CosmicMana : ModProjectile {
         => new Color?(Color.White);
 
     public override void OnKill(int timeLeft) {
+        SoundStyle sound = SoundID.Item9;
+        SoundEngine.PlaySound(sound.WithVolumeScale(0.5f), Projectile.position);
         for (int i = 0; i < 10; i++) {
             int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(3) ? DustID.Enchanted_Gold : DustID.YellowStarDust, Main.rand.Next(-4, 4), Main.rand.Next(-4, 4), 150, default, 
                 Main.rand.NextFloat(0.7f, 0.9f));
