@@ -1119,11 +1119,11 @@ ElderwoodHammer: {
 }
 
 CosmicHat: {
-	DisplayName: Cosmic Hat
+	DisplayName: Stargazer's Hat
 	Tooltip:
 		'''
-		Reduces mana cost to 0 when your will is too low
-		'Great for a walk in a shadowy forest'
+		Reduces mana cost to nothing when your will is too low
+		'How does it feel to be free?'
 		'''
 }
 

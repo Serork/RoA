@@ -26,7 +26,7 @@ sealed class CosmicMana : ModProjectile {
     }
 
     public override void SetDefaults() {
-        int width = 16; int height = width;
+        int width = 18; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.tileCollide = false;
