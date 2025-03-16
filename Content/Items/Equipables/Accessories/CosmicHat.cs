@@ -12,6 +12,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -42,6 +43,18 @@ sealed class CosmicHat : ModItem {
                 glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                 DrawData drawData;
                 var drawinfo = drawInfo;
+
+                Texture2D maskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<CosmicHat>()).Texture + "_Face_Mask").Value;
+                drawData = GetHeadGlowMask(ref drawInfo, maskTexture, glowMaskColor);
+                Color color = Lighting.GetColor((int)((double)player.position.X + (double)player.width * 0.5) / 16, (int)(((double)player.position.Y + (double)player.height * 0.25) / 16.0));
+                glowMaskColor = GameShaders.Hair.GetColor(12, player, false ? color : Color.White);
+                glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
+                drawData.color = glowMaskColor;
+                drawData.shader = PlayerDrawHelper.PackShader(12, PlayerDrawHelper.ShaderConfiguration.HairShader);
+                drawinfo.DrawDataCache.Add(drawData);
+
+
+                drawinfo = drawInfo;
                 drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                 glowMaskColor = Color.White;
                 glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
@@ -55,6 +68,9 @@ sealed class CosmicHat : ModItem {
             Rectangle bodyFrame = drawInfo.drawPlayer.bodyFrame;
             bodyFrame.Width += 2;
             Vector2 helmetOffset = drawInfo.helmetOffset;
+            if (drawInfo.drawPlayer.direction == -1) {
+                helmetOffset.X -= 2f;
+            }
             DrawData item = new(glowMaskTexture,
                 helmetOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
                 (float)(drawInfo.drawPlayer.width / 2)),
