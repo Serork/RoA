@@ -172,7 +172,7 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		15% decreased wreath discharge speed
+		15% decreased wreath [kw/n:discharging] speed
 		While [kw/n:wreath] is charged, increases defense by 5
 		'''
 }
@@ -247,7 +247,7 @@ WillpowerPotion: {
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases [kw/n:wreath] discharge speed by 80%
+	Tooltip: Decreases [kw/n:wreath] [kw/n:discharging] speed by 80%
 }
 
 ForestWreath: {

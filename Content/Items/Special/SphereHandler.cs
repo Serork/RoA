@@ -134,7 +134,6 @@ sealed class SphereHandler : GlobalItem {
                 _cdToTransformation = 100;
                 
 				MakeEffects(item, new(30, 177, 77));
-                }
             }
             return true;
         }
@@ -368,6 +367,7 @@ sealed class SphereHandler : GlobalItem {
                 Main.reforgeItem = new Item();
                 return;
             }
+
             MakeEffects(item, new(60, 222, 190));
             
 			PopupText.NewText(PopupTextContext.ItemReforge, reforgeItem, reforgeItem.stack, noStack: true);
