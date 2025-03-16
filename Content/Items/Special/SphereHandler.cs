@@ -224,7 +224,6 @@ sealed class SphereHandler : GlobalItem {
                 _cdToTransformation = 100;
                 
 				MakeEffects(item, new(59, 183, 208));
-                }
             }
 
             return true;
