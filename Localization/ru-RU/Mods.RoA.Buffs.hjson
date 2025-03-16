@@ -218,7 +218,7 @@ EssenceDrain: {
 
 SmallMoon: {
 	DisplayName: Маленькая луна
-	Description: Каким человеком ты бы хотел быть?
+	Description: "'Каким человеком ты бы хотел быть?'"
 }
 
 Root: {
@@ -242,11 +242,11 @@ MercuriumZipperDebuff: {
 }
 
 CosmicHat_Buff: {
-	// DisplayName: Cosmic Hat_ Buff
-	// Description: Mods.RoA.Buffs.CosmicHat_Buff.Description
+	DisplayName: Свобода звезды
+	Description: "'Каково это-быть свободным?'"
 }
 
 CosmicHat_Cooldown: {
-	// DisplayName: Cosmic Hat_ Cooldown
-	// Description: Mods.RoA.Buffs.CosmicHat_Cooldown.Description
+	DisplayName: Груз звезды
+	Description: "'Вот, потяни за мою нить'"
 }
