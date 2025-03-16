@@ -45,7 +45,7 @@ sealed class Coffin : ModItem {
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.GetModPlayer<CoffinPlayer>().boneTrousle = true;
-		player.moveSpeed -= 0.2f;
+		//player.moveSpeed -= 0.2f;
 	}
 }
 
