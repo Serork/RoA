@@ -126,7 +126,7 @@ sealed class CosmicHat : ModItem {
             if (_timer > 0f) {
                 _timer--;
                 if (_timer <= 0f) {
-                    player.AddBuff(cddebuff, 300);
+                    player.AddBuff(cddebuff, 420);
                 }
                 player.manaRegen = 0;
                 player.manaRegenDelay = 0;
