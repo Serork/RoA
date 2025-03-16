@@ -32,9 +32,18 @@ sealed class EnragedLothorSky : CustomSky {
         _moonColor = moonColor;
         _sunColor = sunColor;
         _sceneArea = sceneArea;
+
+
+        if (_intensity2 > 0f) {
+            for (int i = 0; i < 10; i++) {
+                if (_shouldSunDraw && Main.dayTime) {
+                    DrawSunAndMoon(_sceneArea, Color.Red * _intensity2, Color.Red * _intensity2, 0.95f, 1f);
+                }
+            }
+        }
     }
 
-    private void DrawSunAndMoon(Main.SceneArea sceneArea, Microsoft.Xna.Framework.Color moonColor, Microsoft.Xna.Framework.Color sunColor, float tempMushroomInfluence) {
+    private void DrawSunAndMoon(Main.SceneArea sceneArea, Microsoft.Xna.Framework.Color moonColor, Microsoft.Xna.Framework.Color sunColor, float tempMushroomInfluence, float blackOpacity = 0.75f) {
         Texture2D value = TextureAssets.Sun.Value;
         int num = Main.moonType;
         if (!TextureAssets.Moon.IndexInRange(num))
@@ -129,8 +138,8 @@ sealed class EnragedLothorSky : CustomSky {
 
             Vector2 origin = value.Size() / 2f;
             Vector2 position = new Vector2(num3, num4 + Main.sunModY) + sceneArea.SceneLocalScreenPositionOffset;
-            Main.spriteBatch.Draw(value, position, null, color, rotation, origin, num5, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(value, position, null, Color.Black * 0.75f * _intensity2, rotation, origin, num5 * 0.7f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(value, position, null, color * _intensity2, rotation, origin, num5, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(value, position, null, Color.Black * blackOpacity * _intensity2, rotation, origin, num5 * 0.7f, SpriteEffects.None, 0f);
         }
 
         if (!Main.dayTime) {
@@ -229,9 +238,9 @@ sealed class EnragedLothorSky : CustomSky {
 
             _shouldSunDraw = true;
 
-            if (_shouldSunDraw && Main.dayTime) {
-                DrawSunAndMoon(_sceneArea, Color.Red * _intensity2, Color.Red * _intensity2, 0.95f);
-            }
+            //if (_shouldSunDraw && Main.dayTime) {
+            //    DrawSunAndMoon(_sceneArea, Color.Red * _intensity2, Color.Red * _intensity2, 0.95f, 0.);
+            //}
         }
 	}
 	
