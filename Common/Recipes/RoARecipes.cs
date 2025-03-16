@@ -26,6 +26,7 @@ using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Ranged.Ammo;
 using RoA.Content.Items.Weapons.Summon;
+using RoA.Content.Tiles.Station;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -267,6 +268,14 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient<Cloudberry>(1);
         item.AddIngredient<NaturesHeart>(1);
         item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.SortAfter(temp);
+        item.AddOnCraftCallback(CompleteAchievement);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<FenethsBlazingWreath>());
+        item.AddIngredient<TwigWreath>(1);
+        item.AddIngredient(ItemID.Fireblossom, 10);
+        item.AddTile<FenethStatue>();
         item.SortAfter(temp);
         item.AddOnCraftCallback(CompleteAchievement);
         item.Register();
