@@ -1,34 +1,34 @@
 ClawsSlash.DisplayName: Разрез когтями
 HemorrhageWave.DisplayName: Кровоточащая волна
 InfectedWave.DisplayName: Инфицирующая волна
-// MushroomSpore.DisplayName: Mushroom Spore
+MushroomSpore.DisplayName: Грибная спора
 // BaseRodProjectileType.DisplayName: Base Rod Projectile Type
 // BaseRodProjectile.DisplayName: Base Rod Projectile
 // PastoralRodBase.DisplayName: Pastoral Rod Base
 // PastoralRodEnergy.DisplayName: Pastoral Rod Energy
-// ShepherdLeaves.DisplayName: Shepherd Leaves
-// RipePumpkin.DisplayName: Ripe Pumpkin
-// PumpkinSeed.DisplayName: Pumpkin Seed
+ShepherdLeaves.DisplayName: Пастушьи листья
+RipePumpkin.DisplayName: Спелая тыква
+PumpkinSeed.DisplayName: Тыквенные семена
 // ExoticTulipBase.DisplayName: Exotic Tulip
 // SweepTulipBase.DisplayName: Sweep Tulip
 // WeepingTulipBase.DisplayName: Weeping Tulip
-// TulipFlower.DisplayName: Tulip Flower
-// TulipPetal.DisplayName: Tulip Petal
-// Bone.DisplayName: Tulip Bone
-// PineCone.DisplayName: Pine Cone
+TulipFlower.DisplayName: Цветок тюльпана
+TulipPetal.DisplayName: Лепесток тюльпана
+Bone.DisplayName: Кость тюльпана
+PineCone.DisplayName: Сосновая шишка
 // CactiCasterBase.DisplayName: Cacti Caster Base
-// Cacti.DisplayName: Cacti
-// CactiExplosion.DisplayName: Cacti Explosion
-// SharpIcicle.DisplayName: Sharp Icicle
+Cacti.DisplayName: Кактус
+CactiExplosion.DisplayName: Кактусовый взрыв
+SharpIcicle.DisplayName: Острая сосулька
 // SpikedIceStaffBase.DisplayName: Spiked Ice Staff Base
 // LumberjackAxeSlash.DisplayName: Lumberjack Axe Slash
-// GrimBranch.DisplayName: Grim Branch
-// VileSpike.DisplayName: Vile Spike
-// VileSpikeTip.DisplayName: Vile Spike Tip
-// PrimordialLeaf.DisplayName: Primordial Leaf
-// ArchBranch.DisplayName: Arch Branch
-// ArchVileSpike.DisplayName: Arch Vile Spike
-// ArchVileSpikeTip.DisplayName: Arch Vile Spike Tip
+GrimBranch.DisplayName: Мрачная ветвь
+VileSpike.DisplayName: Мерзкий шип
+VileSpikeTip.DisplayName: Кончик мерзкого шипа
+PrimordialLeaf.DisplayName: Предвечный лист
+ArchBranch.DisplayName: Великая ветвь
+ArchVileSpike.DisplayName: Великий мерзкий шип
+ArchVileSpikeTip.DisplayName: Кончик великого мерзкого шипа
 // TestSlash.DisplayName: Test Slash
 JudgementCut.DisplayName: Приговор
 JudgementSlash.DisplayName: Резкая критика
@@ -45,28 +45,28 @@ Brightstone.DisplayName: Светлокамень
 // ElderwoodWallProjectile.DisplayName: Elderwood Wall
 // HellfireClawsSlash.DisplayName: Hellfire Claws Slash
 // HellfireFault.DisplayName: Hellfire Fault
-// HellfireFractureTestProjectile.DisplayName: Hellfire Fracture
-// HellfireFracture.DisplayName: Hellfire Fracture
+HellfireFractureTestProjectile.DisplayName: Разрыв адского пламени
+HellfireFracture.DisplayName: Разрыв адского пламени
 GalipotStream.DisplayName: Поток живицы
 // WoodbinderBase.DisplayName: Woodbinder Base
-// ProtectiveRoots.DisplayName: Protective Roots
-// SlipperyBomb.DisplayName: Slippery Bomb
-// SlipperyDynamite.DisplayName: Slippery Dynamite
-// SlipperyGlowstick.DisplayName: Slippery Glowstick
-// SlipperyGrenade.DisplayName: Slippery Grenade
+ProtectiveRoots.DisplayName: Защищающие корни
+SlipperyBomb.DisplayName: Скользкая бомба
+SlipperyDynamite.DisplayName: Скользкий динамит
+SlipperyGlowstick.DisplayName: Скользкая светящаяся палочка
+SlipperyGrenade.DisplayName: Скользкая граната
 // EbonwoodStaffBase.DisplayName: Ebonwood Staff Base
 // ShadewoodStaffBase.DisplayName: Shadewood Staff Base
-// Bee.DisplayName: Bee
-// TulipPetalOld.DisplayName: Tulip Petal
-// TulipTrailOld.DisplayName: Tulip Petal
+Bee.DisplayName: Пчела
+TulipPetalOld.DisplayName: Лепесток тюльпана
+TulipTrailOld.DisplayName: Лепесток тюльпана
 // WeepingTulipExplosion.DisplayName: Weeping Tulip Explosion
 // BloomingDoomBase.DisplayName: Blooming Doom Base
-// EvilBranch.DisplayName: Evil Branch
-// EvilLeaf.DisplayName: Evil Leaf
-// MoonlightBeam.DisplayName: Moonlight Beam
-// MoonSickle.DisplayName: Moon Sickle
-// MoonSigil.DisplayName: Moon Sigil
-// SacrificialSickle.DisplayName: Sacrificial Sickle
+EvilBranch.DisplayName: Злая ветвь
+EvilLeaf.DisplayName: Злой лепесток
+MoonlightBeam.DisplayName: Луч луны
+MoonSickle.DisplayName: Серп луны
+MoonSigil.DisplayName: Символ луны
+SacrificialSickle.DisplayName: Жертвенный серп
 // FlederBomb.DisplayName: Fleder Bomb
 // FlederFlame.DisplayName: Fleder Flame
 // ToxicStream.DisplayName: Toxic Stream
@@ -137,9 +137,9 @@ VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
 BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
 BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
 BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
-// ArterialSprayProjectile.DisplayName: Arterial Spray
-// ArterialSprayProjectile2.DisplayName: Arterial Spray
-// ArterialSprayProjectile3.DisplayName: Arterial Spray
+ArterialSprayProjectile.DisplayName: Артериальный брызги
+ArterialSprayProjectile2.DisplayName: Артериальный брызги
+ArterialSprayProjectile3.DisplayName: Артериальный брызги
 // GastroIntestinalMalletProjectile.DisplayName: Gastrointestinal Mallet
 // GastroIntestinalMalletProjectile2.DisplayName: Gastrointestinal Mallet
 // BookwormsProjectile.DisplayName: Bookworms
@@ -149,7 +149,7 @@ BloodRain.DisplayName: "{$ProjectileName.CrimsonRod}"
 // HunterProjectile1.DisplayName: Hunter Sniper
 // HunterProjectile2.DisplayName: Hunter Sniper
 // HarmonizingBeam.DisplayName: Harmonizing Beam
-// GalipotArrowProjectile.DisplayName: Galipot Arrow
-// MercuriumBulletProjectile.DisplayName: Mercurium Bullet
+GalipotArrowProjectile.DisplayName: Живичная стрела
+MercuriumBulletProjectile.DisplayName: Ртутная пуля
 GalipotStream2.DisplayName: Поток живицы
-// MercuriumZipperProjectile.DisplayName: Mercurium Zipper
+MercuriumZipperProjectile.DisplayName: Ртутная молния

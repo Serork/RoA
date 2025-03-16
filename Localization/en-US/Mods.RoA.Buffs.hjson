@@ -61,7 +61,7 @@ ExtraRegen: {
 }
 
 Hemorrhage: {
-	DisplayName: Hemorrhage
+	DisplayName: Haemorrhage
 	Description: Losing life
 }
 
