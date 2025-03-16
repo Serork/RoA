@@ -133,6 +133,10 @@ sealed class LuminousFlower : ModTile {
             }
             lengths[k] = player.Distance(new Point(i, j).ToWorldCoordinates());
         }
+        if (lengths.Length <= 0) {
+            progress = 0f;
+            return;
+        }
         float dist = lengths.Min();
         float maxDist = 300f;
         void lightUp(float progress) {
