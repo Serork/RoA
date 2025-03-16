@@ -32,12 +32,16 @@ sealed class TectonicCaneProjectile : NatureProjectile {
                     Vector2 position = projectile.position - Vector2.UnitY * 120f * projectile.ai[0];
                     position.X += i * 10f;
                     bool flag2 = true;
-                    if (WorldGenHelper.GetTileSafely(position.ToTileCoordinates()).HasTile ||
-                        WorldGenHelper.GetTileSafely(position.ToTileCoordinates() + new Point(0, 1)).HasTile ||
-                        WorldGenHelper.GetTileSafely(position.ToTileCoordinates() + new Point(0, 2)).HasTile) {
-                        flag2 = false;
+                    for (int i2 = 0; i2 < 3; i2++) {
+                        Point pos = position.ToTileCoordinates() + new Point(0, i2);
+                        if (WorldGenHelper.GetTileSafely(pos).HasTile && 
+                            Main.tileSolid[WorldGenHelper.GetTileSafely(pos).TileType]) {
+                            flag2 = false;
+                            break;
+                        }
                     }
-                    bool flag = projectile.ai[0] > 0.1f;
+                    bool flag = projectile.ai[0] > 0.2f;
+                    Main.NewText(projectile.ai[0]);
                     if ((flag2 && flag) || !flag) {
                         positions.Add(position);
                     }

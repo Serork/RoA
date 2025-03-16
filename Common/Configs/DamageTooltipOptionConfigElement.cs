@@ -50,7 +50,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
     public DamageTooltipOptionConfigElement() {
         Width.Set(0, 1f);
         float ratio = Main.screenHeight / (float)Main.screenWidth;
-        Height.Set(150, 0f);
+        Height.Set(145, 0f);
 
         valueStrings = Enum.GetNames(typeof(RoAClientConfig.DamageTooltipOptions));
         for (int i = 0; i < valueStrings.Length; i++) {
@@ -565,7 +565,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         MouseText_DrawItemTooltip(0, 0, X, Y, out int numLines2);
 
         int height = numLines2 <= 2 ? 122 : 150;
-        Height.Set(150, 0f);
+        Height.Set(145, 0f);
         _lastHeight = height;
 
         Recalculate();
