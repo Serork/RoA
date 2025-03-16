@@ -55,7 +55,7 @@ RoAClientConfig: {
 	}
 
 	DamageTooltipOption: {
-		// Label: Druid Damage Tooltip Option
+		Label: Варианты написания урона класса 'Друид'
 		// Tooltip: ""
 	}
 }
