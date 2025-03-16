@@ -68,7 +68,7 @@ sealed class RootRing : NatureProjectile {
         Vector2 position = new((float)(player.Center.X - (Projectile.width / 2)), (float)(player.Center.Y - 90 + (float)(player.gfxOffY - 60.0)));
         Projectile.position = new Vector2((int)position.X, (int)position.Y);
         if (player.gravDir == -1.0) Projectile.position.Y += 120f;
-        Projectile.rotation += 0.06f;
+        Projectile.rotation += 0.03f;
 
         if (Projectile.owner == Main.myPlayer) {
             var stats = player.GetModPlayer<WreathHandler>();
@@ -117,7 +117,7 @@ sealed class RootRing : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         var stats = player.GetModPlayer<WreathHandler>();
         float projOpacity = 1f - (float)_alpha / 255f;
-        Color color = stats.BaseColor * (0.5f + 0.5f * (1f - Projectile.ai[0]));
+        Color color = stats.BaseColor * (0.5f + 0.5f * (1f - Projectile.ai[0])) * 0.75f;
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
         //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
@@ -139,6 +139,12 @@ sealed class RootRing : NatureProjectile {
         for (int i = 0; i < 3; i++) {
             spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
         }
+
+        float scale2 = Projectile.scale + (float)(0.15f * Math.Sin(Main.time / 10.0));
+        spriteBatch.Draw(texture, position, null, 
+            (color * projOpacity).MultiplyAlpha(scale) * 0.75f, 
+            Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2),
+            scale2, SpriteEffects.None, 0);
 
         spriteBatch.EndBlendState();
         return false;
