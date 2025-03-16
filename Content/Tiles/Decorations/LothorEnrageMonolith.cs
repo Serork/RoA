@@ -122,7 +122,8 @@ sealed class LothorEnrageMonolith : ModTile {
         TileObjectData.addTile(Type);
         AddMapEntry(new Color(216, 14, 19));
         //DustType = ModContent.DustType<CosmicCrystalDust>();
-        //AnimationFrameHeight = 18 * 5;
+
+        AnimationFrameHeight = 18 * 5;
 
         DustType = ModContent.DustType<LothorEnrageMonolithDust>();
     }
@@ -150,16 +151,6 @@ sealed class LothorEnrageMonolith : ModTile {
         if (Main.tile[i, j].TileFrameY >= 18 * 5 + 2) {
             LothorEnrageScene.MonolithNearby = true;
         }
-    }
-
-    public override void AnimateTile(ref int frame, ref int frameCounter) {
-        //frameCounter++;
-        //if (frameCounter > 4) {
-        //    frameCounter = 0;
-        //    frame++;
-        //    if (frame >= 11)
-        //        frame = 0;
-        //}
     }
 
     public override bool RightClick(int i, int j) {
@@ -210,6 +201,17 @@ sealed class LothorEnrageMonolith : ModTile {
         NetMessage.SendTileSquare(-1, x, y, 3, 5);
     }
 
+    public override void AnimateTile(ref int frame, ref int frameCounter) {
+        if (++frameCounter >= 8) {
+            frameCounter = 0;
+            frame = ++frame % 3;
+        }
+    }
+
+    public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset) {
+        frameYOffset = Main.tileFrame[type] * AnimationFrameHeight;
+    }
+
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         if (!TileDrawing.IsVisible(Main.tile[i, j])) {
             return false;
@@ -218,9 +220,9 @@ sealed class LothorEnrageMonolith : ModTile {
         int frameX = Main.tile[i, j].TileFrameX;
         int frameY = Main.tile[i, j].TileFrameY;
         int height = frameY % (18 * 5 + 2) == 54 ? 18 : 16;
-        if (frameY >= 18 * 5 + 2) {
-            frameY += Main.tileFrame[Type] * (18 * 5 + 2);
-        }
+        //if (frameY >= 18 * 5 + 2) {
+        //    frameY += Main.tileFrame[Type] * (18 * 5 + 2);
+        //}
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen) {
             zero = Vector2.Zero;
@@ -250,8 +252,19 @@ sealed class LothorEnrageMonolith : ModTile {
         if (Math.Abs(frameY) == 92) {
             frameY = 0;
         }
+
+        int width = 16;
+        int offsetY = 0;
+        int height2 = 16;
+        short frameX2 = Main.tile[i, j].TileFrameX;
+        short frameY2 = Main.tile[i, j].TileFrameY;
+        int addFrX = 0;
+        int addFrY = 0;
+        TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX2, ref frameY2);
+        TileLoader.SetAnimationFrame(Type, i, j, ref addFrX, ref addFrY);
+
         t = ModContent.Request<Texture2D>(Texture + "_Draw").Value;
-        spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f), new Rectangle(frameX, frameY, 16, height), 
+        spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f), new Rectangle(frameX, frameY + addFrY, 16, height), 
             Color.White * Main.LocalPlayer.GetModPlayer<EnragedVisuals>()._opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         //Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Color.Red.ToVector3());
         
