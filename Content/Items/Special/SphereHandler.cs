@@ -132,11 +132,8 @@ sealed class SphereHandler : GlobalItem {
                 _terraTime = 0;
                 item.ChangeItemType(ModContent.ItemType<SphereOfQuake>());
                 _cdToTransformation = 100;
-                for (int i = 0; i < 20; i++) {
-                    int num = Dust.NewDust(item.Center, 1, 1, 309);
-                    Main.dust[num].scale *= 1.5f;
-                    Main.dust[num].color = new(30, 177, 77);
-                }
+
+                MakeEffects(item, new(30, 177, 77));
             }
             return true;
         }
@@ -225,11 +222,8 @@ sealed class SphereHandler : GlobalItem {
                 _flyTime = 0;
                 item.ChangeItemType(ModContent.ItemType<SphereOfCondor>());
                 _cdToTransformation = 100;
-                for (int i = 0; i < 20; i++) {
-                    int num = Dust.NewDust(item.Center, 1, 1, 309);
-                    Main.dust[num].scale *= 1.5f;
-                    Main.dust[num].color = new(59, 183, 208);
-                }
+
+                MakeEffects(item, new(59, 183, 208));
             }
 
             return true;
@@ -237,6 +231,15 @@ sealed class SphereHandler : GlobalItem {
 
         _flyTime = 0;
         return false;
+    }
+
+    private static void MakeEffects(Item item, Color color) {
+        for (int i = 0; i < 20; i++) {
+            int num = Dust.NewDust(item.Center, 1, 1, 309);
+            Main.dust[num].scale *= 1.5f;
+            Main.dust[num].color = new(59, 183, 208);
+        }
+        //SoundEngine.PlaySound(SoundID.Owl, item.Center);
     }
 
     private static void DrawCondor(Item item, SpriteBatch spriteBatch) {
@@ -363,11 +366,7 @@ sealed class SphereHandler : GlobalItem {
                 Main.reforgeItem = new Item();
                 return;
             }
-            for (int i = 0; i < 20; i++) {
-                int num = Dust.NewDust(player.Center, 1, 1, 309);
-                Main.dust[num].scale *= 1.5f;
-                Main.dust[num].color = new(60, 222, 190);
-            }
+            MakeEffects(item, new(60, 222, 190));
             PopupText.NewText(PopupTextContext.ItemReforge, reforgeItem, reforgeItem.stack, noStack: true);
             Main.reforgeItem = item;
             SoundEngine.PlaySound(SoundID.Grab);
@@ -411,11 +410,8 @@ sealed class SphereHandler : GlobalItem {
 
                             item.ChangeItemType(ModContent.ItemType<SphereOfStream>());
                             _cdToTransformation = 100;
-                            for (int i = 0; i < 20; i++) {
-                                int num = Dust.NewDust(item.Center, 1, 1, 309);
-                                Main.dust[num].scale *= 1.5f;
-                                Main.dust[num].color = new(57, 136, 232);
-                            }
+
+                            MakeEffects(item, new(57, 136, 232));
                         }
                     }
                 }
@@ -512,11 +508,8 @@ sealed class SphereHandler : GlobalItem {
 
                             item.ChangeItemType(ModContent.ItemType<SphereOfPyre>());
                             _cdToTransformation = 100;
-                            for (int i = 0; i < 20; i++) {
-                                int num = Dust.NewDust(item.Center, 1, 1, 309);
-                                Main.dust[num].scale *= 1.5f;
-                                Main.dust[num].color = new(249, 115, 43);
-                            }
+
+                            MakeEffects(item, new(249, 115, 43));
                         }
                     }
                 }
