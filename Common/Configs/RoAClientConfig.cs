@@ -3,6 +3,8 @@
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
+using static RoA.Common.Configs.RoAClientConfig;
+
 namespace RoA.Common.Configs;
 
 sealed class RoAClientConfig : ModConfig {
@@ -33,6 +35,7 @@ sealed class RoAClientConfig : ModConfig {
 
     [Header("Mods.RoA.Configs.DruidOptionsHeader")]
 
+    [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement))]
     [DefaultValue(DamageTooltipOptions.Option1)]
     [DrawTicks]
     public DamageTooltipOptions DamageTooltipOption;

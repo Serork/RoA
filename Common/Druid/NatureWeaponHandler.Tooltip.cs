@@ -59,18 +59,27 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                         tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                         break;
                     case RoAClientConfig.DamageTooltipOptions.Option5:
+                        string[] damageTooltipWords = damageTooltip.Split(' ');
+                        string damage = GetNatureDamage(item, player).ToString();
                         if (extraDamage > 0) {
-                            string[] damageTooltipWords = damageTooltip.Split(' ');
-                            string damage = GetNatureDamage(item, Main.LocalPlayer).ToString();
                             tooltips[index].Text = string.Concat(damage, $"(+{extraDamage}) ", damageTooltip.AsSpan(damage.Length).Trim());
                         }
+                        else {
+                            string extra = " ";
+                            if (Main.gameMenu || Main.InGameUI.IsVisible) {
+                                extra = "(+0) ";
+                            }
+                            tooltips[index].Text = $"{damage}{extra}{natureDamageText}";
+                        }
                         tag = "PotentialDamage";
-                        string potentialDamage = GetBasePotentialDamage(item, Main.LocalPlayer).ToString();
-                        tooltip = potentialDamage.AddSpace() + GetLocalizedText("PotentialDamage");
+                        string potentialDamage = GetBasePotentialDamage(item, player).ToString();
+                        tooltip = $"{GetBasePotentialDamage(item, player)} {GetLocalizedText("PotentialDamage")}";
                         tooltips.Insert(index + 1, new(Mod, tag, tooltip));
-                        index++;
                         break;
                 }
+            }
+            if (Main.gameMenu) {
+                return;
             }
             int speedIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Speed"));
             if (speedIndex != -1 && item.useAnimation > 0) {

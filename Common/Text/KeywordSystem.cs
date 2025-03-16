@@ -6,6 +6,7 @@ using RoA.Common.InterfaceElements;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Concurrent;
 using System.Reflection;
 
@@ -17,7 +18,7 @@ using Terraria.UI.Chat;
 namespace RoA.Common.Text;
 
 sealed class KeywordSystem : ILoadable {
-    private static float _keywordColorOpacity = 1f;
+    internal static float _keywordColorOpacity = 1f, _keywordColorOpacity2;
 
     public class KeywordTagHandler : ITagHandler {
         TextSnippet ITagHandler.Parse(string text, Color baseColor, string options) {
@@ -46,10 +47,11 @@ sealed class KeywordSystem : ILoadable {
         ChatManager.Register<KeywordTagHandler>(["kw", "keyword"]);
     }
 
-    private void On_Main_DrawInterface_36_Cursor(On_Main.orig_DrawInterface_36_Cursor orig) {
+    internal static void UpdateLogic(bool flag3 = false) {
         var highlightMode = ModContent.GetInstance<RoAClientConfig>().HighlightMode;
-        if (highlightMode != RoAClientConfig.HighlightModes.Off) {
-            if (!Main.gameMenu) {
+        bool flag2 = highlightMode != RoAClientConfig.HighlightModes.Off;
+        if (flag2) {
+            if (!Main.gameMenu || flag3) {
                 bool flag = false;
                 int num2 = 11;
                 for (int i = 0; i < Player.MaxBuffs; i++) {
@@ -69,10 +71,11 @@ sealed class KeywordSystem : ILoadable {
                         }
                     }
                 }
-                if (highlightMode == RoAClientConfig.HighlightModes.Always) {
+                bool flag4 = highlightMode == RoAClientConfig.HighlightModes.Always;
+                if (flag4) {
                     _keywordColorOpacity = 1f;
                 }
-                else if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag || FancyWreathDrawing.IsHoveringUI || WreathDrawing.JustDrawn) {
+                else if ((!Main.HoverItem.IsEmpty() && Main.HoverItem.IsDruidic()) || flag3 || flag || FancyWreathDrawing.IsHoveringUI || WreathDrawing.JustDrawn) {
                     if (_keywordColorOpacity > 0f) {
                         _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
                     }
@@ -80,11 +83,30 @@ sealed class KeywordSystem : ILoadable {
                 else if (_keywordColorOpacity != 1f) {
                     _keywordColorOpacity = 1f;
                 }
+                if (!flag4) {
+                    if (flag3) {
+                        if (_keywordColorOpacity2 <= 0f) {
+                            _keywordColorOpacity2 = 180f;
+                            _keywordColorOpacity = 1f;
+                        }
+                        else {
+                            _keywordColorOpacity2--;
+                        }
+                    }
+                }
+                else {
+                    _keywordColorOpacity2 = 0f;
+                }
             }
         }
         else {
             _keywordColorOpacity = 0f;
         }
+    }
+
+    private void On_Main_DrawInterface_36_Cursor(On_Main.orig_DrawInterface_36_Cursor orig) {
+        UpdateLogic();
+
         orig();
     }
 

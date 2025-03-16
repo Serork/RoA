@@ -61,6 +61,10 @@ sealed class WreathHandler : ModPlayer {
     public static Color SoulOfTheWoodsColor => new(248, 119, 119);
 
     public static Color GetCurrentColor(Player player) {
+        if (Main.gameMenu) {
+            return StandardColor;
+        }
+
         var self = player.GetModPlayer<WreathHandler>();
         if (Main.HoverItem.type == ModContent.ItemType<SoulOfTheWoods>()) {
             return SoulOfTheWoodsColor;

@@ -1,5 +1,6 @@
 PotentialDamage: "[kw/n:potential] nature damage"
 DruidToolTipOption1: Damage scales with [kw/n:wreath] [kw/n:charge]
+DruidToolTipOption1_2: Damage scales with wreath charge
 DruidToolTipOption3: "[kw/n:charge]"
 DruidToolTipOption4_1: base nature damage
 FillingRate1: Extremely slow [kw/n:wreath charge] rate

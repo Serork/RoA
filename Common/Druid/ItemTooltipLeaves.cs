@@ -31,10 +31,6 @@ sealed class ItemTooltipLeaves : GlobalItem {
     }
 
     public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {
-        if (Main.gameMenu) {
-            return false;
-        }
-
         if (!item.IsDruidic()) {
             TooltipFallingLeaves.ResetData();
 
@@ -55,7 +51,7 @@ sealed class ItemTooltipLeaves : GlobalItem {
 
                     int direction = inFirstHalf ? 1 : -1;
 
-                    Vector2 originalSpot = new(line.OriginalX, line.OriginalY),
+                    Vector2 originalSpot = new(line.X, line.Y),
                             position = originalSpot;
 
                     position.X += inFirstHalf ? FontAssets.MouseText.Value.MeasureString(line.Text).X : 0f;
