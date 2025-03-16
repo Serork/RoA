@@ -614,7 +614,7 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
 
         _lock = new EnumElement();
 
-        modifying = RoAClientConfig.DamageTooltipOptions.Option1;
+        modifying = ModContent.GetInstance<RoAClientConfig>().DamageTooltipOption;
 
         Recalculate();
     }
