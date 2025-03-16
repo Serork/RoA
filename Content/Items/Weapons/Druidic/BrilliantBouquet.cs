@@ -75,7 +75,7 @@ sealed class BrilliantBouquet : NatureItem {
         Vector2 offset = new(size, -size);
         offset *= player.direction;
         position += (Item.Size * offset).RotatedBy(rot);
-        position += new Vector2(6f * -player.direction, 0f * player.direction).RotatedBy(rot);
+        position += new Vector2(6f, 0f * player.direction).RotatedBy(rot);
         int amount = 27;
         if (petalType == 1) {
             amount = 32;
