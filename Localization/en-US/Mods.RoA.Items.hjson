@@ -504,7 +504,7 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Living Elderwood Breastplate
-	Tooltip: Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
+	Tooltip: Increases defense by 3 when [kw/n:wreath] is charged
 }
 
 LivingElderwoodCrown: {
@@ -744,7 +744,7 @@ Herbarium: {
 	Tooltip:
 		'''
 		Enemies occasionally drop healing herbs
-		If [kw/n:wreath] is [kw/n:charged], consumes it to restore additional life
+		If [kw/n:wreath] is charged, consumes it to restore additional life
 		'''
 }
 
