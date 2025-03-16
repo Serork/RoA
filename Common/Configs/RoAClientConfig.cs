@@ -38,6 +38,11 @@ sealed class RoAClientConfig : ModConfig {
     [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement))]
     [DefaultValue(DamageTooltipOptions.Option1)]
     [DrawTicks]
+    public DamageTooltipOptions DamageTooltipOption_Internal;
+
+    [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement2))]
+    [DefaultValue(DamageTooltipOptions.Option1)]
+    [DrawTicks]
     public DamageTooltipOptions DamageTooltipOption;
 
     [DefaultValue(true)]

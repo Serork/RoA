@@ -56,6 +56,12 @@ RoAClientConfig: {
 
 	DamageTooltipOption: {
 		Label: Druid Damage Tooltip Option
+		Label2: Preview (save configuration to update)
+		Tooltip: ""
+	}
+
+	DamageTooltipOption_Internal: {
+		Label: ""
 		Tooltip: ""
 	}
 }
