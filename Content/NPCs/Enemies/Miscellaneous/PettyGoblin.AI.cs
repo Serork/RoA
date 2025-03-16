@@ -50,6 +50,8 @@ sealed partial class PettyGoblin : ModNPC {
         float opacity = 0.05f;
         NPC.Opacity = MathHelper.Clamp(NPC.Opacity += IsInvinsible ? -opacity : opacity, 0.3f, 1f);
 
+        NPC.chaseable = NPC.Opacity >= 0.9f;
+
         switch (State) {
             case GoblinAIState.InvinsibleWalking:
                 WalkingToPlayer1();
