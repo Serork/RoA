@@ -108,9 +108,9 @@ WreathPositions: {
 
 DamageTooltipOptions: {
 	Tooltip: ""
-	Option1.Label: 1
-	Option2.Label: 2
-	Option3.Label: 3
-	Option4.Label: 4
-	Option5.Label: 5
+	Option1.Label: "1"
+	Option2.Label: "2"
+	Option3.Label: "3"
+	Option4.Label: "4"
+	Option5.Label: "5"
 }

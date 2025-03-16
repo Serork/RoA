@@ -33,6 +33,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
     private Func<object> _getValueString;
     private Func<int> _getIndex;
     private Action<int> _setValue;
+    private Item _hoverItem;
 
     private EnumElement _lock;
 
@@ -244,7 +245,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         bool settingsEnabled_OpaqueBoxBehindTooltips = Main.SettingsEnabled_OpaqueBoxBehindTooltips;
         ref byte mouseTextColor = ref Main.mouseTextColor;
         Microsoft.Xna.Framework.Color color = new Microsoft.Xna.Framework.Color(mouseTextColor, mouseTextColor, mouseTextColor, mouseTextColor);
-        Item hoverItem = Main.HoverItem;
+        Item hoverItem = _hoverItem;
         int yoyoLogo = -1;
         int researchLine = -1;
         rare = hoverItem.rare;
@@ -283,7 +284,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         Vector2 zero = Vector2.Zero;
 
         // TML's abstractions over tooltip arrays.
-        List<TooltipLine> lines = ItemLoader.ModifyTooltips(Main.HoverItem, ref numLines, tooltipNames, ref array, ref array2, ref array3, ref yoyoLogo, out Color?[] overrideColor, prefixlineIndex);
+        List<TooltipLine> lines = ItemLoader.ModifyTooltips(_hoverItem, ref numLines, tooltipNames, ref array, ref array2, ref array3, ref yoyoLogo, out Color?[] overrideColor, prefixlineIndex);
         List<DrawableTooltipLine> drawableLines = lines.Select((TooltipLine x, int i) => new DrawableTooltipLine(x, i, 0, 0, Color.White)).ToList();
         int num0 = -(!Main.gameMenu ? 1 : 0);
         numLines2 = numLines + num0;
@@ -325,7 +326,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
             Utils.DrawInvBG(Main.spriteBatch, new Microsoft.Xna.Framework.Rectangle(X - num17, Y - num18, (int)zero.X + num17 * 2, (int)zero.Y + num18 + num18 / 2), new Microsoft.Xna.Framework.Color(23, 25, 81, 255) * 0.925f);
         }
 
-        bool globalCanDraw = ItemLoader.PreDrawTooltip(Main.HoverItem, lines.AsReadOnly(), ref X, ref Y);
+        bool globalCanDraw = ItemLoader.PreDrawTooltip(_hoverItem, lines.AsReadOnly(), ref X, ref Y);
         for (int k = 0; k < numLines ; k++) {
             int x = X;
             int y = Y + num16;
@@ -431,7 +432,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
                     //drawableLines[k].OverrideColor = realLineColor;
                 }
 
-                ItemLoader.PreDrawTooltipLine(Main.HoverItem, drawableLines[k], ref num12);
+                ItemLoader.PreDrawTooltipLine(_hoverItem, drawableLines[k], ref num12);
 
                 if (drawableLines[k].Name != "ItemName" &&
                     drawableLines[k].Name != "Damage" &&
@@ -445,12 +446,12 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
             }
 
         PostDraw:
-            ItemLoader.PostDrawTooltipLine(Main.HoverItem, drawableLines[k]);
+            ItemLoader.PostDrawTooltipLine(_hoverItem, drawableLines[k]);
 
             num16 += (int)(FontAssets.MouseText.Value.MeasureString(drawableLines[k].Text).Y + (float)num12);
         }
 
-        ItemLoader.PostDrawTooltip(Main.HoverItem, drawableLines.AsReadOnly());
+        ItemLoader.PostDrawTooltip(_hoverItem, drawableLines.AsReadOnly());
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
@@ -552,15 +553,16 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         if (!Main.mouseItem.IsAir)
             X += 34;
 
-        Main.HoverItem.SetDefaults(ModContent.ItemType<TectonicCane>());
-        Main.HoverItem.stack = 1;
+        if (_hoverItem == null) {
+            _hoverItem = new Item();
+            _hoverItem.SetDefaults(ModContent.ItemType<TectonicCane>());
+            _hoverItem.stack = 1;
+        }
         string cursorText = "123";
         new Microsoft.Xna.Framework.Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
         vector = ChatManager.GetStringSize(FontAssets.MouseText.Value, cursorText, Vector2.One);
         KeywordSystem.UpdateLogic(true);
         MouseText_DrawItemTooltip(0, 0, X, Y, out int numLines2);
-        Main.HoverItem.type = 0;
-        Main.HoverItem.stack = 0;
 
         int height = numLines2 <= 2 ? 122 : 150;
         Height.Set(150, 0f);
