@@ -38,9 +38,6 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 switch (Main.gameMenu || Main.InGameUI.IsVisible ? DamageTooltipOptionConfigElement2.modifying : config.DamageTooltipOption) {
                     case RoAClientConfig.DamageTooltipOptions.Option1:
                         tooltips[index].Text = $"{GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)} {natureDamageText}";
-                        tag = "DruidDamageTip";
-                        tooltip = GetLocalizedText("DruidToolTipOption1");
-                        tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                         break;
                     case RoAClientConfig.DamageTooltipOptions.Option2:
                         tooltips[index].Text = $"{GetNatureDamage(item, player)} ({GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)}) {natureDamageText}";
@@ -57,6 +54,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                         tag = "PotentialDamage";
                         tooltip = $"{GetBasePotentialDamage(item, player)} {GetLocalizedText("PotentialDamage")}";
                         tooltips.Insert(index + 1, new(Mod, tag, tooltip));
+                        index++;
                         break;
                     case RoAClientConfig.DamageTooltipOptions.Option5:
                         string[] damageTooltipWords = damageTooltip.Split(' ');
@@ -75,7 +73,13 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                         string potentialDamage = GetBasePotentialDamage(item, player).ToString();
                         tooltip = $"{GetBasePotentialDamage(item, player)} {GetLocalizedText("PotentialDamage")}";
                         tooltips.Insert(index + 1, new(Mod, tag, tooltip));
+                        index++;
                         break;
+                }
+                if (Main.gameMenu || Main.InGameUI.IsVisible ? BooleanElement2.Value2 : config.DamageScaling) {
+                    tag = "DruidDamageTip";
+                    tooltip = GetLocalizedText("DruidToolTipOption1");
+                    tooltips.Insert(index + 1, new(Mod, tag, tooltip));
                 }
             }
             if (Main.gameMenu) {

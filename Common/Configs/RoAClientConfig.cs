@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 using static RoA.Common.Configs.RoAClientConfig;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Common.Configs;
 
@@ -44,6 +45,10 @@ sealed class RoAClientConfig : ModConfig {
     [DefaultValue(DamageTooltipOptions.Option1)]
     [DrawTicks]
     public DamageTooltipOptions DamageTooltipOption;
+
+    [CustomModConfigItem(typeof(BooleanElement2))]
+    [DefaultValue(true)]
+    public bool DamageScaling;
 
     [CustomModConfigItem(typeof(BooleanElement))]
     [DefaultValue(true)]

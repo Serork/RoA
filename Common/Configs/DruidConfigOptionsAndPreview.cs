@@ -23,6 +23,37 @@ using Terraria.UI.Chat;
 
 namespace RoA.Common.Configs;
 
+sealed class BooleanElement2 : ConfigElement<bool> {
+    private Asset<Texture2D> _toggleTexture;
+
+    internal static bool Value2;
+
+    // TODO. Display status string? (right now only on/off texture, but True/False, Yes/No, Enabled/Disabled options)
+    public override void OnBind() {
+        base.OnBind();
+        _toggleTexture = Main.Assets.Request<Texture2D>("Images/UI/Settings_Toggle");
+
+        OnLeftClick += (ev, v) => Value2 = !Value2;
+
+        Value2 = Value;
+    }
+
+    protected override void DrawSelf(SpriteBatch spriteBatch) {
+        base.DrawSelf(spriteBatch);
+
+        if (Value != Value2) {
+            Value = Value2;
+        }
+
+        CalculatedStyle dimensions = base.GetDimensions();
+        // "Yes" and "No" since no "True" and "False" translation available
+        Terraria.UI.Chat.ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, Value2 ? Lang.menu[126].Value : Lang.menu[124].Value, new Vector2(dimensions.X + dimensions.Width - 60, dimensions.Y + 8f), Color.White, 0f, Vector2.Zero, new Vector2(0.8f));
+        Rectangle sourceRectangle = new Rectangle(Value2 ? ((_toggleTexture.Width() - 2) / 2 + 2) : 0, 0, (_toggleTexture.Width() - 2) / 2, _toggleTexture.Height());
+        Vector2 drawPosition = new Vector2(dimensions.X + dimensions.Width - sourceRectangle.Width - 10f, dimensions.Y + 8f);
+        spriteBatch.Draw(_toggleTexture.Value, drawPosition, sourceRectangle, Color.White, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
+    }
+}
+
 sealed class BooleanElement : ConfigElement<bool> {
     private Asset<Texture2D> _toggleTexture;
 
@@ -82,7 +113,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
     public DamageTooltipOptionConfigElement() {
         Width.Set(0, 1f);
         float ratio = Main.screenHeight / (float)Main.screenWidth;
-        Height.Set(145, 0f);
+        Height.Set(145 + 20 + 8, 0f);
 
         valueStrings = Enum.GetNames(typeof(RoAClientConfig.DamageTooltipOptions));
         for (int i = 0; i < valueStrings.Length; i++) {
@@ -481,7 +512,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         MouseText_DrawItemTooltip(0, 0, X, Y, out int numLines2);
 
         int height = numLines2 <= 2 ? 122 : 150;
-        Height.Set(145, 0f);
+        Height.Set(145 + 20 + 8, 0f);
         _lastHeight = height;
 
         Recalculate();

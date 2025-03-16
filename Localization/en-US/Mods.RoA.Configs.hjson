@@ -64,6 +64,11 @@ RoAClientConfig: {
 		Label: ""
 		Tooltip: ""
 	}
+
+	DamageScaling: {
+		Label: Druid Damage Scaling Info
+		Tooltip: ""
+	}
 }
 
 RoAServerConfig: {

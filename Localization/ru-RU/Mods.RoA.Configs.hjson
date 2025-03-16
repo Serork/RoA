@@ -64,6 +64,11 @@ RoAClientConfig: {
 		// Label: ""
 		// Tooltip: ""
 	}
+
+	DamageScaling: {
+		Label: Информация о масштабируемости урона класса 'Друид'
+		// Tooltip: ""
+	}
 }
 
 RoAServerConfig: {
