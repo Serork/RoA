@@ -1,14 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Druid.Wreath;
+using RoA.Common.GlowMasks;
+using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 using System;
-using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -17,7 +18,54 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Face)]
 sealed class CosmicHat : ModItem {
-	private sealed class CosmicHatHandler : ModPlayer {
+    private sealed class CosmicHatFaceGlowing : PlayerDrawLayer {
+        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
+
+        protected override void Draw(ref PlayerDrawSet drawInfo) {
+            if (drawInfo.hideEntirePlayer) {
+                return;
+            }
+
+            Player player = drawInfo.drawPlayer;
+            if (!player.active || player.invis) {
+                return;
+            }
+            DrawHeadGlowMask(ref drawInfo);
+        }
+
+        private static void DrawHeadGlowMask(ref PlayerDrawSet drawInfo) {
+            Player player = drawInfo.drawPlayer;
+            if (player.face == EquipLoader.GetEquipSlot(RoA.Instance, typeof(CosmicHat).Name, EquipType.Face)) {
+                Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<CosmicHat>()).Texture + "_Face_Glow").Value;
+                Color glowMaskColor = Color.White;
+                glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
+                DrawData drawData;
+                var drawinfo = drawInfo;
+                drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
+                glowMaskColor = Color.White;
+                glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
+                drawData.color = glowMaskColor;
+                drawData.shader = drawinfo.cHead;
+                drawinfo.DrawDataCache.Add(drawData);
+            }
+        }
+
+        public static DrawData GetHeadGlowMask(ref PlayerDrawSet drawInfo, Texture2D glowMaskTexture, Color glowMaskColor) {
+            Rectangle bodyFrame = drawInfo.drawPlayer.bodyFrame;
+            bodyFrame.Width += 2;
+            Vector2 helmetOffset = drawInfo.helmetOffset;
+            DrawData item = new(glowMaskTexture,
+                helmetOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
+                (float)(drawInfo.drawPlayer.width / 2)),
+                (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height -
+                (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect,
+                bodyFrame, glowMaskColor, drawInfo.drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect) {
+            };
+            return item;
+        }
+    }
+
+    private sealed class CosmicHatHandler : ModPlayer {
         private float _timer, _timer2;
         private int _lastMana;
 
@@ -54,25 +102,30 @@ sealed class CosmicHat : ModItem {
 				return;
 			}
 
-			Player player = Player;
+            int cddebuff = ModContent.BuffType<CosmicHat_Cooldown>();
+            int buff = ModContent.BuffType<CosmicHat_Buff>();
+            Player player = Player;
             float min = 0.4f;
             if (_timer > 0f) {
                 _timer--;
+                if (_timer <= 0f) {
+                    player.AddBuff(cddebuff, 300);
+                }
                 player.manaRegen = 0;
                 player.manaRegenDelay = 0;
             }
             if (!IsEffectActive2 && _timer <= 0f) {
-                if ((float)player.statMana < (float)player.statManaMax2 * min) {
-                    if (!player.HasBuff(BuffID.ManaSickness)) {
-                        IsEffectActive2 = true;
-                        _timer = _timer2 = 180f;
-                        _lastMana = player.statMana;
+                if (!player.HasBuff(cddebuff) && (float)player.statMana < (float)player.statManaMax2 * min) {
+                    IsEffectActive2 = true;
+                    _timer = _timer2 = 180f;
+                    _lastMana = player.statMana;
 
-                        if (player.whoAmI == Main.myPlayer) {
-                            for (int i = 0; i < 3; i++) {
-                                Projectile.NewProjectile(player.GetSource_Misc("cosmichat"),
-                                    Player.Center.X, Player.Center.Y, 0f, 0f, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, i, 0f);
-                            }
+                    player.AddBuff(buff, (int)_timer2);
+
+                    if (player.whoAmI == Main.myPlayer) {
+                        for (int i = 0; i < 3; i++) {
+                            Projectile.NewProjectile(player.GetSource_Misc("cosmichat"),
+                                Player.Center.X, Player.Center.Y, 0f, 0f, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, i, 0f);
                         }
                     }
                 }
@@ -84,8 +137,6 @@ sealed class CosmicHat : ModItem {
     }
 
 	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Cosmic Hat");
-		//Tooltip.SetDefault("Mana stars fall, when your will is too low\n'Great for a walk in a shadowy forest'");
 		ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
         ArmorIDs.Head.Sets.DrawFullHair[Item.faceSlot] = true;
 
