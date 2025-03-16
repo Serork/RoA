@@ -139,8 +139,8 @@ sealed class CosmicHat : ModItem {
 
                     player.AddBuff(buff, (int)_timer2);
 
-                    if (player.whoAmI == Main.myPlayer) {
-                        for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < 3; i++) {
+                        if (player.whoAmI == Main.myPlayer) {
                             Projectile.NewProjectile(player.GetSource_Misc("cosmichat"),
                                 Player.Center.X, Player.Center.Y, 0f, 0f, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, i, 0f);
                             SoundEngine.PlaySound(SoundID.Item9 with { Volume = 0.5f, PitchVariance = 0.5f }, player.Center);
