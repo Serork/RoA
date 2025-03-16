@@ -77,12 +77,14 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public bool HasPotentialDamage() => _basePotentialDamage > 0;
     public bool HasPotentialUseSpeed() => _basePotentialUseSpeed > 0;
 
-    public static int GetItemDamage(Item item) {
+    public static int GetItemDamage(Item item, Player player) {
         int result = item.damage;
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
         DruidicPrefix activePrefix = handler.ActivePrefix;
         if (activePrefix != null) {
             result += activePrefix._druidDamage;
+            bool flag = Main.gameMenu || Main.InGameUI.IsVisible;
+            result += flag ? 0 : player.GetModPlayer<DruidStats>().DruidBaseDamage;
             if (handler.HasPotentialDamage()) {
                 result = (int)(result * activePrefix._druidDamageMult);
             }
@@ -101,22 +103,25 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public static ushort GetFinalBaseDamage(Item item, Player player) 
-        => (ushort)(Main.gameMenu || Main.InGameUI.IsVisible ? GetItemDamage(item) : player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(GetItemDamage(item)));
+        => (ushort)(Main.gameMenu || Main.InGameUI.IsVisible ? GetItemDamage(item, player) : player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(GetItemDamage(item, player)));
     public static ushort GetFinalUseTime(Item item, Player player) => (ushort)(GetItemUseTime(item) / player.GetTotalAttackSpeed(DruidClass.NatureDamage));
 
     public static ushort GetBasePotentialDamage(Item item, Player player) {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
         ushort baseDamage = handler._basePotentialDamage;
         DruidicPrefix activePrefix = handler.ActivePrefix;
+        var stats = player.GetModPlayer<DruidStats>();
         bool flag = activePrefix != null;
+        bool flag2 = Main.gameMenu || Main.InGameUI.IsVisible;
+        baseDamage += (ushort)(flag2 ? 0 : stats.DruidPotentialDamage);
         if (flag) {
             baseDamage += activePrefix._potentialDamage;
         }
-        ushort result = (ushort)(baseDamage * (Main.gameMenu || Main.InGameUI.IsVisible ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier));
+        ushort result = (ushort)(baseDamage * (flag2 ? 1f : stats.DruidPotentialDamageMultiplier));
         if (flag) {
             result = (ushort)(result * activePrefix._potentialDamageMult);
         }
-        result = (ushort)(result * (Main.gameMenu || Main.InGameUI.IsVisible ? 1f : player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f)));
+        result = (ushort)(result * (flag2 ? 1f : player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f)));
         return (ushort)result;
     }
     public static ushort GetPotentialDamage(Item item, Player player) => (ushort)Math.Max(0, GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));
@@ -154,7 +159,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
-    public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = (ushort)Math.Max(potentialDamage, GetItemDamage(item));
+    public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = (ushort)Math.Max(potentialDamage, GetItemDamage(item, Main.LocalPlayer));
     public static void SetPotentialUseSpeed(Item item, ushort potentialUseTime) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialUseSpeed = (ushort)Math.Min(potentialUseTime, GetItemUseTime(item));
 
     public static void SetFillingRate(Item item, float fillingRate) {
@@ -195,7 +200,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         if (GetBasePotentialDamage(item, player) > 0) {
             int extraDamage = GetExtraDamage(item, player);
             damage.Flat += extraDamage;
-            damage.Flat = Math.Min(GetItemDamage(item) + GetBasePotentialDamage(item, player), damage.Flat);
+            damage.Flat = Math.Min(GetItemDamage(item, player) + GetBasePotentialDamage(item, player), damage.Flat);
         }
 
         bool claws = item.ModItem is BaseClawsItem;
