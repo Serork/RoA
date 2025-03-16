@@ -141,21 +141,24 @@ BeastBow: {
 	Tooltip:
 		'''
 		33% chance to save ammo
-		'Is it the master weeping for its bow, or is the bow weeping for its master?'
+		'Is it the master weeping for the bow, or is the bow weeping for its master?'
 		'''
 }
 
 DoubleFocusCharm: {
 	DisplayName: Tarnished Charm
-	Tooltip: 12% increased nature base damage
+	Tooltip: 
+		'''
+		15% decreased wreath discharge speed
+		While [kw/n:wreath] is charged, increases maximum health by 25
+		'''
 }
 
 BandOfNature: {
 	DisplayName: Band of Nature
 	Tooltip:
 		'''
-		5% increased nature [kw/n:potential] damage
-		Increases defense by 3 when [kw/n:wreath] is [kw/n:charged]
+		15% increased [kw/n:wreath] [kw/n:charge rate]
 		'''
 }
 
@@ -163,8 +166,8 @@ BandOfPurity: {
 	DisplayName: Band of Purity
 	Tooltip:
 		'''
-		5% increased nature [kw/n:potential] damage
-		While [kw/n:wreath] is charged, increases regeneration
+		20% increased [kw/n:wreath] [kw/n:charge rate]
+		While [kw/n:wreath] is charged, increases health regeneration
 		'''
 }
 
@@ -172,8 +175,8 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		10% increased [kw/n:wreath] [kw/n:charge rate]
-		While [kw/n:wreath] is charged, increases maximum life by 20
+		5% increased nature [kw/n:potential] damage
+		While [kw/n:wreath] is charged, increases defence by 3
 		'''
 }
 
