@@ -66,11 +66,12 @@ sealed class BeaconTE : ModTileEntity {
             if (WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>())) {
                 int gemType = Beacon.GetGemDropID(i, j);
                 bool flag =
-                    gemType == ItemID.Diamond ? Main.rand.NextBool(3) :
-                    (gemType == ItemID.Ruby || gemType == ItemID.Amber) ? Main.rand.NextChance(0.66) :
-                    gemType == ItemID.Emerald ? Main.rand.NextChance(0.8) :
-                    gemType == ItemID.Sapphire ? Main.rand.NextChance(0.9) :
-                    gemType != ItemID.Topaz || Main.rand.NextChance(0.95);
+                    (gemType == ItemID.Diamond || gemType == ItemID.Amber) ? Main.rand.NextBool(3) :
+                    gemType == ItemID.Ruby ? Main.rand.NextChance(0.4) :
+                    gemType == ItemID.Emerald ? Main.rand.NextChance(0.5) :
+                    gemType == ItemID.Sapphire ? Main.rand.NextChance(0.6) :
+                    gemType == ItemID.Topaz ? Main.rand.NextChance(0.7) :
+                    gemType == ItemID.Amethyst ? Main.rand.NextChance(0.8) : true;
                 if (flag) {
                     Beacon.ActionWithGem(i, j, true, false, true);
                 }

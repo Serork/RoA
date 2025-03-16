@@ -282,11 +282,13 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
         int style = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
         dusts(player.getRect(), style);
-        SoundEngine.PlaySound(SoundID.Item6, player.position);
         player.Teleport(newPos, num2);
         player.velocity = Vector2.Zero;
+
+        SoundEngine.PlaySound(SoundID.Item6, player.position);
         SoundEngine.PlaySound(SoundID.Item6, player.position);
         SoundEngine.PlaySound(SoundID.Item8, player.position);
+
         dusts(player.getRect(), style);
     }
 
