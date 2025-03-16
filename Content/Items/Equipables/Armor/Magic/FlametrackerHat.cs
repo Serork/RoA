@@ -8,6 +8,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
@@ -24,17 +25,20 @@ sealed class FlametrackerSetBonusHandler : ModPlayer {
 
     public override void OnConsumeMana(Item item, int manaConsumed) {
         if (IsActive) {
-            if (Player.statMana == Player.statManaMax2 && Player.whoAmI == Main.myPlayer) {
-                Vector2 mousePos = Player.GetViableMousePosition();
-                int direction = (mousePos - Player.Center).X.GetDirection();
-                Vector2 projectilePos = new Vector2(Player.Top.X + 16f * direction + (direction == 1 && mousePos.Y < Player.Bottom.Y ? -10f : 0f), Player.Top.Y - 2f);
-                Projectile.NewProjectile(Player.GetSource_Misc("frametrackersetbonus"),
-                    projectilePos,
-                    Helper.VelocityToPoint(projectilePos, mousePos, 5f),
-                    ModContent.ProjectileType<TrackingBolt>(),
-                    (int)Player.GetTotalDamage(DamageClass.Magic).ApplyTo(25),
-                    Player.GetTotalKnockback(DamageClass.Magic).ApplyTo(1.5f),
-                    Player.whoAmI);
+            if (Player.statMana == Player.statManaMax2) {
+                //SoundEngine.PlaySound(SoundID.Owl, Player.Center);
+                if (Player.whoAmI == Main.myPlayer) {
+                    Vector2 mousePos = Player.GetViableMousePosition();
+                    int direction = (mousePos - Player.Center).X.GetDirection();
+                    Vector2 projectilePos = new Vector2(Player.Top.X + 16f * direction + (direction == 1 && mousePos.Y < Player.Bottom.Y ? -10f : 0f), Player.Top.Y - 2f);
+                    Projectile.NewProjectile(Player.GetSource_Misc("frametrackersetbonus"),
+                        projectilePos,
+                        Helper.VelocityToPoint(projectilePos, mousePos, 5f),
+                        ModContent.ProjectileType<TrackingBolt>(),
+                        (int)Player.GetTotalDamage(DamageClass.Magic).ApplyTo(25),
+                        Player.GetTotalKnockback(DamageClass.Magic).ApplyTo(1.5f),
+                        Player.whoAmI);
+                }
             }
         }
     }
