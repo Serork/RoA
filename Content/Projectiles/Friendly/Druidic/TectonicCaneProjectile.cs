@@ -40,7 +40,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
                             break;
                         }
                     }
-                    bool flag = projectile.ai[0] > 0.2f;
+                    bool flag = projectile.ai[0] > 0.1f;
                     if ((flag2 && flag) || !flag) {
                         positions.Add(position);
                     }
