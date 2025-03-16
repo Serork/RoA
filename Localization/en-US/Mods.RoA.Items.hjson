@@ -147,23 +147,19 @@ BeastBow: {
 
 DoubleFocusCharm: {
 	DisplayName: Tarnished Charm
-	Tooltip:
-		'''
-		Increased maximum nature [kw/n:potential] damage by 3
-		While [kw/n:wreath] is charged, increases maximum health by 20
-		'''
+	Tooltip: Increases [kw/n:potential] nature damage by 3
 }
 
 BandOfNature: {
 	DisplayName: Band of Nature
-	Tooltip: 15% increased [kw/n:wreath] [kw/n:charging] rate
+	Tooltip: Increases [kw/n:wreath] [kw/n:charging] rate by 15%
 }
 
 BandOfPurity: {
 	DisplayName: Band of Purity
 	Tooltip:
 		'''
-		20% increased [kw/n:wreath] [kw/n:charging] rate
+		Increases [kw/n:wreath] [kw/n:charging] rate by 20%
 		While [kw/n:wreath] is charged, increases health regeneration
 		'''
 }
@@ -172,7 +168,7 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		15% decreased wreath [kw/n:discharging] speed
+		15% decreased wreath [kw/n:discharging] rate
 		While [kw/n:wreath] is charged, increases defense by 5
 		'''
 }
@@ -247,7 +243,7 @@ WillpowerPotion: {
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases [kw/n:wreath] [kw/n:discharging] speed by 80%
+	Tooltip: Decreases [kw/n:wreath] [kw/n:discharging] rate by 80%
 }
 
 ForestWreath: {

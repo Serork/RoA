@@ -147,11 +147,7 @@ BeastBow: {
 
 DoubleFocusCharm: {
 	DisplayName: Потусклый брелок
-	Tooltip:
-		'''
-		Увеличивает максимальный природный [kw/n:возможный] урона на 3
-		Когда [kw/n:венок заполнен], увеличивает максимальное здоровье на 20
-		'''
+	Tooltip: Увеличивает [kw/n:возможный] природный урон на 3
 }
 
 BandOfNature: {
@@ -424,7 +420,7 @@ LivingBorealWoodChestplate: {
 
 LivingBorealWoodGreaves: {
 	DisplayName: Живые таежные поножи
-	Tooltip: Увеличивает [kw/n:возможную] скорость на 4%
+	Tooltip: Увеличивает [kw/n:возможную] скорость атаки на 4%
 }
 
 LivingBorealWoodHelmet: {
@@ -439,12 +435,12 @@ LivingWoodChestplate: {
 
 LivingWoodGreaves: {
 	DisplayName: Поножи из живого дерева
-	Tooltip: Увеличивает [kw/n:возможную] скорость на 4%
+	Tooltip: Увеличивает [kw/n:возможную] скорость атаки на 4%
 }
 
 LivingWoodHelmet: {
 	DisplayName: Шлем из живого дерева
-	Tooltip: Увеличивает [kw/n:возможную] скорость на 4%
+	Tooltip: Увеличивает [kw/n:возможную] скорость атаки на 4%
 }
 
 LivingMahoganyChestplate: {
@@ -452,7 +448,7 @@ LivingMahoganyChestplate: {
 	Tooltip:
 		'''
 		Увеличивает [kw/n:возможный] природный урона на 6%
-		Увеличивает [kw/n:возможную] скорость на 6%
+		Увеличивает [kw/n:возможную] скорость атаки на 6%
 		'''
 }
 
@@ -1430,17 +1426,17 @@ SherwoodShake: {
 
 SphereOfAspiration: {
 	DisplayName: Сфера стремлений
-	Tooltip: "'Брось её, сожги её, упокой её, перекуй её, утопи её, техномагия'"
+	Tooltip: "'Брось её, сожги её, благослави её, перекуй её, утопи её, техномагия'"
 }
 
 SphereOfCondor: {
 	DisplayName: Сфера кондора
-	Tooltip: "'Сожги её, упокой её, перекуй её, утопи её, техномагия'"
+	Tooltip: "'Сожги её, благослави её, перекуй её, утопи её, техномагия'"
 }
 
 SphereOfPyre: {
 	DisplayName: Сфера костра
-	Tooltip: "'Брось её, упокой её, перекуй её, утопи её, техномагия'"
+	Tooltip: "'Брось её, благослави её, перекуй её, утопи её, техномагия'"
 }
 
 SphereOfQuake: {
@@ -1450,12 +1446,12 @@ SphereOfQuake: {
 
 SphereOfShock: {
 	DisplayName: Сфера шока
-	Tooltip: "'Брось её, сожги её, упокой её, утопи её, техномагия'"
+	Tooltip: "'Брось её, сожги её, благослави её, утопи её, техномагия'"
 }
 
 SphereOfStream: {
 	DisplayName: Сфера потока
-	Tooltip: "'Брось её, сожги её, упокой её, перекуй её, техномагия'"
+	Tooltip: "'Брось её, сожги её, благослави её, перекуй её, техномагия'"
 }
 
 DeerSkullBanner: {
