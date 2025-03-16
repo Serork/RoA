@@ -143,8 +143,10 @@ sealed class ProtectiveRoots : NatureProjectile {
             Main.dust[dust].velocity *= 0.35f + Main.rand.NextFloatRange(0.2f);
             Main.dust[dust].velocity *= 1.15f + Main.rand.NextFloatRange(0.2f);
         }
-        SoundEngine.PlaySound(SoundID.Item48 with { Volume = 0.6f, Pitch = -0.2f, MaxInstances = 1 }, Projectile.Center);
-        SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
+        if (Projectile.ai[2] == -1f) {
+            SoundEngine.PlaySound(SoundID.Item48 with { Volume = 0.6f, Pitch = -0.2f, MaxInstances = 1 }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
+        }
     }
 
     public override bool? CanDamage() => Projectile.alpha != 255;

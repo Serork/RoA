@@ -1827,7 +1827,7 @@ GalipotArrow: {
 
 MercuriumBullet: {
 	DisplayName: Mercurium Bullet
-	Tooltip: "'Actually, a very not quick(silver) bullet.'"
+	Tooltip: "'Might as well be called a 'slow' silver bullet'"
 }
 
 BackwoodsWaterFountain: {

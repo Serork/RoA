@@ -1823,7 +1823,7 @@ GalipotArrow: {
 
 MercuriumBullet: {
 	DisplayName: Ртутная пуля
-	Tooltip: "'На самом деле, не очень быстрая пуля.'"
+	Tooltip: "''Быстрее пули' в этом случае уже никого не удивит'"
 }
 
 BackwoodsWaterFountain: {
