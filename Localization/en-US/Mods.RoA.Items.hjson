@@ -156,14 +156,14 @@ DoubleFocusCharm: {
 
 BandOfNature: {
 	DisplayName: Band of Nature
-	Tooltip: 15% increased [kw/n:wreath] charging rate
+	Tooltip: 15% increased [kw/n:wreath] [kw/n:charging rate]
 }
 
 BandOfPurity: {
 	DisplayName: Band of Purity
 	Tooltip:
 		'''
-		20% increased [kw/n:wreath] charging rate
+		20% increased [kw/n:wreath] [kw/n:charging rate]
 		While [kw/n:wreath] is charged, increases health regeneration
 		'''
 }
@@ -173,7 +173,7 @@ GiantTreeSapling: {
 	Tooltip:
 		'''
 		5% increased nature [kw/n:potential] damage
-		While [kw/n:wreath] is charged, increases defense by 3
+		While [kw/n:wreath] is charged, increases defence by 3
 		'''
 }
 
@@ -240,7 +240,7 @@ WillpowerPotion: {
 	DisplayName: Willpower Potion
 	Tooltip:
 		'''
-		Increases [kw/n:wreath] charging rate
+		Increases [kw/n:wreath] [kw/n:charging rate]
 		'Fifteen percent concentrated power of will'
 		'''
 }
