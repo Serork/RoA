@@ -86,7 +86,7 @@ sealed class ItemTooltipLeaves : GlobalItem {
                 }
             }
 
-            if (ModContent.GetInstance<RoAClientConfig>().DruidLeaves) {
+            if (Main.gameMenu || Main.InGameUI.IsVisible ? BooleanElement.Value2 : ModContent.GetInstance<RoAClientConfig>().DruidLeaves) {
                 ulong seed = (ulong)item.type;
                 drawTooltipLineLeaves(line, LEAVESCOUNT, seed);
             }

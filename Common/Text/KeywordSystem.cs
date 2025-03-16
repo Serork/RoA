@@ -15,6 +15,8 @@ using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 
+using tModPorter;
+
 namespace RoA.Common.Text;
 
 sealed class KeywordSystem : ILoadable {
@@ -48,7 +50,7 @@ sealed class KeywordSystem : ILoadable {
     }
 
     internal static void UpdateLogic(bool flag3 = false) {
-        var highlightMode = ModContent.GetInstance<RoAClientConfig>().HighlightMode;
+        var highlightMode = Main.gameMenu || Main.InGameUI.IsVisible ? DamageTooltipOptionConfigElement3.modifying : ModContent.GetInstance<RoAClientConfig>().HighlightMode;
         bool flag2 = highlightMode != RoAClientConfig.HighlightModes.Off;
         if (flag2) {
             if (!Main.gameMenu || flag3) {

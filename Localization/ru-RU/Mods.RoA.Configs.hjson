@@ -56,7 +56,7 @@ RoAClientConfig: {
 
 	DamageTooltipOption: {
 		Label: Варианты написания урона класса 'Друид'
-		Label2: Предпросмотр (сохраните конфигурацию чтобы обновить)
+		Label2: Предпросмотр
 		// Tooltip: ""
 	}
 

@@ -45,9 +45,11 @@ sealed class RoAClientConfig : ModConfig {
     [DrawTicks]
     public DamageTooltipOptions DamageTooltipOption;
 
+    [CustomModConfigItem(typeof(BooleanElement))]
     [DefaultValue(true)]
     public bool DruidLeaves;
 
+    [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement3))]
     [DefaultValue(HighlightModes.Normal)]
     [DrawTicks]
     public HighlightModes HighlightMode;

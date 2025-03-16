@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Text;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 
@@ -11,11 +13,8 @@ using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.GameContent;
-using Terraria.GameContent.UI;
 using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
@@ -23,6 +22,38 @@ using Terraria.UI;
 using Terraria.UI.Chat;
 
 namespace RoA.Common.Configs;
+
+sealed class BooleanElement : ConfigElement<bool> {
+    private Asset<Texture2D> _toggleTexture;
+
+    internal static bool Value2;
+
+    // TODO. Display status string? (right now only on/off texture, but True/False, Yes/No, Enabled/Disabled options)
+    public override void OnBind() {
+        base.OnBind();
+        _toggleTexture = Main.Assets.Request<Texture2D>("Images/UI/Settings_Toggle");
+
+        OnLeftClick += (ev, v) => Value2 = !Value2;
+
+        Value2 = Value;
+    }
+
+    protected override void DrawSelf(SpriteBatch spriteBatch) {
+        base.DrawSelf(spriteBatch);
+
+        if (Value != Value2) {
+            Value = Value2;
+        }
+
+        CalculatedStyle dimensions = base.GetDimensions();
+        // "Yes" and "No" since no "True" and "False" translation available
+        Terraria.UI.Chat.ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, Value2 ? Lang.menu[126].Value : Lang.menu[124].Value, new Vector2(dimensions.X + dimensions.Width - 60, dimensions.Y + 8f), Color.White, 0f, Vector2.Zero, new Vector2(0.8f));
+        Rectangle sourceRectangle = new Rectangle(Value2 ? ((_toggleTexture.Width() - 2) / 2 + 2) : 0, 0, (_toggleTexture.Width() - 2) / 2, _toggleTexture.Height());
+        Vector2 drawPosition = new Vector2(dimensions.X + dimensions.Width - sourceRectangle.Width - 10f, dimensions.Y + 8f);
+        spriteBatch.Draw(_toggleTexture.Value, drawPosition, sourceRectangle, Color.White, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
+    }
+}
+
 
 sealed class DamageTooltipOptionConfigElement : ConfigElement {
     private static int _lastHeight = 150;
@@ -165,12 +196,6 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
     }
 
     public int UpdateCount { get; private set; }
-
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "rightLock")]
-    public extern static ref RangeElement RangeElement_rightLock(RangeElement self);
-
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "rightHover")]
-    public extern static ref RangeElement RangeElement_rightHover(RangeElement self);
 
     public static void MouseText_DrawItemTooltip_GetLinesInfo(Item item, ref int yoyoLogo, ref int researchLine, float oldKB, ref int numLines, string[] toolTipLine, bool[] preFixLine, bool[] badPreFixLine, string[] toolTipNames, out int prefixlineIndex) {
         prefixlineIndex = -1;
@@ -564,7 +589,7 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
 
     //private ref RoAClientConfig.DamageTooltipOptions modifying => ref ModContent.GetInstance<RoAClientConfig>().DamageTooltipOption;
 
-    private RoAClientConfig.DamageTooltipOptions modifying = RoAClientConfig.DamageTooltipOptions.Option1;
+    internal static RoAClientConfig.DamageTooltipOptions modifying = RoAClientConfig.DamageTooltipOptions.Option1;
 
     public DamageTooltipOptionConfigElement2() {
         Width.Set(0, 1f);
@@ -957,6 +982,335 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
 
         ref RangeElement rightHover = ref RangeElement_rightHover(null);
         ref RangeElement rightLock = ref RangeElement_rightLock(null);
+
+        rightHover = null;
+
+        if (!Main.mouseLeft) {
+            rightLock = null;
+        }
+
+        if (rightLock == _lock) {
+            num2 = 1;
+        }
+        else if (rightLock != null) {
+            num2 = 2;
+        }
+
+        dimensions = GetDimensions();
+        float num3 = dimensions.Width + 1f;
+        vector = new Vector2(dimensions.X, dimensions.Y);
+        bool flag2 = IsMouseHovering;
+
+        if (num2 == 1) {
+            flag2 = true;
+        }
+
+        if (num2 == 2) {
+            flag2 = false;
+        }
+
+        Vector2 vector2 = vector;
+        vector2.X += 8f;
+        vector2.Y += 2f + num;
+        vector2.X -= 17f;
+        //TextureAssets.ColorBar.Value.Frame(1, 1, 0, 0);
+        vector2 = new Vector2(dimensions.X + dimensions.Width - 10f, dimensions.Y + 10f + num);
+        IngameOptions.valuePosition = vector2;
+        float obj = DrawValueBar(spriteBatch, 1f, Proportion, num2, ColorMethod);
+
+        if (IngameOptions.inBar || rightLock == _lock) {
+            rightHover = _lock;
+            if (PlayerInput.Triggers.Current.MouseLeft && rightLock == _lock) {
+                Proportion = obj;
+            }
+        }
+
+        if (rightHover != null && rightLock == null && PlayerInput.Triggers.JustPressed.MouseLeft) {
+            rightLock = rightHover;
+        }
+
+        Height.Set(30, 0f);
+        //_lastHeight = height;
+
+        Recalculate();
+    }
+
+    public override void Update(GameTime gameTime) {
+        UpdateCount++;
+    }
+
+
+    internal class EnumElement : RangeElement {
+        private Func<object> _getValue;
+        private Func<object> _getValueString;
+        private Func<int> _getIndex;
+        private Action<int> _setValue;
+        private int max;
+        private string[] valueStrings;
+
+        public override int NumberTicks => valueStrings.Length;
+        public override float TickIncrement => 1f / (valueStrings.Length - 1);
+
+        protected override float Proportion {
+            get => _getIndex() / (float)(max - 1);
+            set => _setValue((int)(Math.Round(value * (max - 1))));
+        }
+
+        public override void OnBind() {
+            base.OnBind();
+            valueStrings = Enum.GetNames(MemberInfo.Type);
+
+            // Retrieve individual Enum member labels
+            for (int i = 0; i < valueStrings.Length; i++) {
+                var enumFieldFieldInfo = MemberInfo.Type.GetField(valueStrings[i]);
+                if (enumFieldFieldInfo != null) {
+                    valueStrings[i] = "";
+                }
+            }
+
+            max = valueStrings.Length;
+
+            //valueEnums = Enum.GetValues(variable.Type);
+
+            TextDisplayFunction = () => MemberInfo.Name + ": " + _getValueString();
+            _getValue = () => DefaultGetValue();
+            _getValueString = () => DefaultGetStringValue();
+            _getIndex = () => DefaultGetIndex();
+            _setValue = (int value) => DefaultSetValue(value);
+
+            /*
+            if (array != null) {
+                _GetValue = () => array[index];
+                _SetValue = (int valueIndex) => { array[index] = (Enum)Enum.GetValues(memberInfo.Type).GetValue(valueIndex); Interface.modConfig.SetPendingChanges(); };
+                _TextDisplayFunction = () => index + 1 + ": " + _GetValueString();
+            }
+            */
+
+            if (Label != null) {
+                TextDisplayFunction = () => Label + ": " + _getValueString();
+            }
+        }
+
+        private void DefaultSetValue(int index) {
+            if (!MemberInfo.CanWrite)
+                return;
+
+            MemberInfo.SetValue(Item, Enum.GetValues(MemberInfo.Type).GetValue(index));
+        }
+
+        private object DefaultGetValue() {
+            return MemberInfo.GetValue(Item);
+        }
+
+        private int DefaultGetIndex() {
+            return Array.IndexOf(Enum.GetValues(MemberInfo.Type), _getValue());
+        }
+
+        private string DefaultGetStringValue() {
+            int index = _getIndex();
+            if (index < 0) // User manually entered invalid enum number into json or loading future Enum value saved as int.
+                return Language.GetTextValue("tModLoader.ModConfigUnknownEnum");
+            return valueStrings[index];
+        }
+    }
+}
+
+sealed class DamageTooltipOptionConfigElement3 : ConfigElement {
+    private static int _lastHeight = 150;
+
+    private int max;
+    private string[] valueStrings;
+    private Func<object> _getValue;
+    private Func<object> _getValueString;
+    private Func<int> _getIndex;
+    private Action<int> _setValue;
+    private Item _hoverItem;
+
+    private EnumElement _lock;
+
+    protected Color SliderColor { get; set; } = Color.White;
+    protected Utils.ColorLerpMethod ColorMethod { get; set; }
+
+    protected float Proportion {
+        get => _getIndex() / (float)(max - 1);
+        set => _setValue((int)(Math.Round(value * (max - 1))));
+    }
+
+    //private ref RoAClientConfig.DamageTooltipOptions modifying => ref ModContent.GetInstance<RoAClientConfig>().DamageTooltipOption;
+
+    internal static RoAClientConfig.HighlightModes modifying = RoAClientConfig.HighlightModes.Normal;
+
+    public DamageTooltipOptionConfigElement3() {
+        Width.Set(0, 1f);
+        float ratio = Main.screenHeight / (float)Main.screenWidth;
+        Height.Set(30, 0f);
+
+        valueStrings = Enum.GetNames(typeof(RoAClientConfig.HighlightModes));
+        for (int i = 0; i < valueStrings.Length; i++) {
+            var enumFieldFieldInfo = modifying;
+            string name = Language.GetTextValue($"Mods.RoA.Configs.DamageTooltipOptions.Option{i + 1}.Label");
+            valueStrings[i] = name;
+        }
+
+        max = valueStrings.Length;
+
+        ColorMethod = new Utils.ColorLerpMethod((percent) => Color.Lerp(Color.Black, SliderColor, percent));
+
+        _getValue = () => DefaultGetValue();
+        _getValueString = () => DefaultGetStringValue();
+        _getIndex = () => DefaultGetIndex();
+        _setValue = (int value) => DefaultSetValue(value);
+
+        _lock = new EnumElement();
+
+        modifying = ModContent.GetInstance<RoAClientConfig>().HighlightMode;
+
+        Recalculate();
+    }
+
+    private void DefaultSetValue(int index) {
+        if (!MemberInfo.CanWrite)
+            return;
+
+        modifying = (RoAClientConfig.HighlightModes)Enum.GetValues(typeof(RoAClientConfig.HighlightModes)).GetValue(index);
+        SetObject(modifying);
+    }
+
+    private object DefaultGetValue() {
+        return GetObject();
+    }
+
+    private int DefaultGetIndex() {
+        return Array.IndexOf(Enum.GetValues(typeof(RoAClientConfig.HighlightModes)), _getValue());
+    }
+
+    private string DefaultGetStringValue() {
+        int index = _getIndex();
+        if (index < 0) // User manually entered invalid enum number into json or loading future Enum value saved as int.
+            return Language.GetTextValue("tModLoader.ModConfigUnknownEnum");
+        return valueStrings[index];
+    }
+
+    public float DrawValueBar(SpriteBatch sb, float scale, float perc, int lockState = 0, Utils.ColorLerpMethod colorMethod = null) {
+        perc = Utils.Clamp(perc, -.05f, 1.05f);
+
+        if (colorMethod == null)
+            colorMethod = new Utils.ColorLerpMethod(Utils.ColorLerp_BlackToWhite);
+
+        Texture2D colorBarTexture = TextureAssets.ColorBar.Value;
+        Vector2 vector = new Vector2((float)colorBarTexture.Width, (float)colorBarTexture.Height) * scale;
+        IngameOptions.valuePosition.X -= (float)((int)vector.X);
+        Rectangle rectangle = new Rectangle((int)IngameOptions.valuePosition.X, (int)IngameOptions.valuePosition.Y - (int)vector.Y / 2, (int)vector.X, (int)vector.Y);
+        Rectangle destinationRectangle = rectangle;
+        int num = 167;
+        float num2 = rectangle.X + 5f * scale;
+        float num3 = rectangle.Y + 4f * scale;
+
+        if (true) {
+            int numTicks = valueStrings.Length;
+            if (numTicks > 1) {
+                for (int tick = 0; tick < numTicks; tick++) {
+                    float percent = tick * 1f / (valueStrings.Length - 1);
+
+                    if (percent <= 1f)
+                        sb.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)(num2 + num * percent * scale), rectangle.Y - 2, 2, rectangle.Height + 4), Color.White);
+                }
+            }
+        }
+
+        sb.Draw(colorBarTexture, rectangle, Color.White);
+
+        for (float num4 = 0f; num4 < (float)num; num4 += 1f) {
+            float percent = num4 / (float)num;
+            sb.Draw(TextureAssets.ColorBlip.Value, new Vector2(num2 + num4 * scale, num3), null, colorMethod(percent), 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+        }
+
+        rectangle.Inflate((int)(-5f * scale), 2);
+
+        //rectangle.X = (int)num2;
+        //rectangle.Y = (int)num3;
+
+        bool flag = rectangle.Contains(new Point(Main.mouseX, Main.mouseY));
+
+        if (lockState == 2) {
+            flag = false;
+        }
+
+        if (flag || lockState == 1) {
+            sb.Draw(TextureAssets.ColorHighlight.Value, destinationRectangle, Main.OurFavoriteColor);
+        }
+
+        var colorSlider = TextureAssets.ColorSlider.Value;
+
+        sb.Draw(colorSlider, new Vector2(num2 + 167f * scale * perc, num3 + 4f * scale), null, Color.White, 0f, colorSlider.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+
+        if (Main.mouseX >= rectangle.X && Main.mouseX <= rectangle.X + rectangle.Width) {
+            IngameOptions.inBar = flag;
+            return (Main.mouseX - rectangle.X) / (float)rectangle.Width;
+        }
+
+        IngameOptions.inBar = false;
+
+        if (rectangle.X >= Main.mouseX) {
+            return 0f;
+        }
+
+        return 1f;
+    }
+
+    public int UpdateCount { get; private set; }
+
+    public override void Draw(SpriteBatch spriteBatch) {
+        string name = "Normal";
+        switch (modifying) {
+            case RoAClientConfig.HighlightModes.Always:
+                name = "Always";
+                break;
+            case RoAClientConfig.HighlightModes.Off:
+                name = "Off";
+                break;
+        }
+        Label =
+            Language.GetTextValue("Mods.RoA.Configs.RoAClientConfig.HighlightMode.Label") + ": " +
+            Language.GetTextValue($"Mods.RoA.Configs.HighlightModes.{name}.Label");
+
+        Width.Set(0, 1f);
+
+        CalculatedStyle dimensions = base.GetDimensions();
+        float settingsWidth = dimensions.Width + 1f;
+        Vector2 vector = new Vector2(dimensions.X, dimensions.Y);
+        Vector2 baseScale = new Vector2(0.8f);
+        Color color = IsMouseHovering ? Color.White : Color.White;
+
+        if (!MemberInfo.CanWrite)
+            color = Color.Gray;
+
+        color = Color.Lerp(color, Color.White, base.IsMouseHovering ? 1f : 0f);
+        Color panelColor = base.IsMouseHovering ? UICommon.DefaultUIBlue : UICommon.DefaultUIBlue.MultiplyRGBA(new Color(180, 180, 180));
+        Vector2 position = vector;
+
+        if (Flashing) {
+            float ratio = Utils.Turn01ToCyclic010(((UpdateCount % flashRate) / (float)flashRate)) * 0.5f + 0.5f;
+            panelColor = Color.Lerp(panelColor, Color.White, MathF.Pow(ratio, 2));
+        }
+        DrawPanel2(spriteBatch, position, TextureAssets.SettingsPanel.Value, settingsWidth, dimensions.Height, panelColor);
+
+        if (DrawLabel) {
+            position.X += 8f;
+            position.Y += 8f;
+
+            string label = TextDisplayFunction();
+            if (ReloadRequired && ValueChanged) {
+                label += " - [c/FF0000:" + Language.GetTextValue("tModLoader.ModReloadRequired") + "]";
+            }
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, label, position, color, 0f, Vector2.Zero, baseScale, settingsWidth, 2f);
+        }
+
+        float num = 6f;
+        int num2 = 0;
+
+        ref RangeElement rightHover = ref DamageTooltipOptionConfigElement2.RangeElement_rightHover(null);
+        ref RangeElement rightLock = ref DamageTooltipOptionConfigElement2.RangeElement_rightLock(null);
 
         rightHover = null;
 

@@ -35,7 +35,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 string damageTooltip = tooltips[index].Text;
                 string natureDamageText = Language.GetText("Mods.RoA.DamageClasses.DruidClass.DisplayName").Value;
                 int extraDamage = GetExtraDamage(item, player);
-                switch (config.DamageTooltipOption) {
+                switch (Main.gameMenu || Main.InGameUI.IsVisible ? DamageTooltipOptionConfigElement2.modifying : config.DamageTooltipOption) {
                     case RoAClientConfig.DamageTooltipOptions.Option1:
                         tooltips[index].Text = $"{GetFinalBaseDamage(item, player)}-{GetBasePotentialDamage(item, player)} {natureDamageText}";
                         tag = "DruidDamageTip";
