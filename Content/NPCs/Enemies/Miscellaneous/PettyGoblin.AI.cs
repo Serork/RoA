@@ -487,6 +487,7 @@ sealed partial class PettyGoblin : ModNPC {
         }
         NPC.extraValue += (int)value2;
         NPC.moneyPing(NPC.Center + Helper.VelocityToPoint(NPC.Center, player.Center, 25f));
+        SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
         if (Main.netMode != NetmodeID.SinglePlayer) {
             MultiplayerSystem.SendPacket(new NPCExtraValuePacket(NPC.whoAmI, NPC.extraValue));
         }
