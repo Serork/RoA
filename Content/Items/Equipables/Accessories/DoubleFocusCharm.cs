@@ -21,5 +21,12 @@ sealed class DoubleFocusCharm : NatureItem {
         Item.value = Item.sellPrice(0, 1, 50, 0);
     }
 
-	public override void UpdateAccessory(Player player, bool hideVisual) => player.GetDamage(DruidClass.NatureDamage) += 0.12f;
+	public override void UpdateAccessory(Player player, bool hideVisual) =>
+	
+	public override void UpdateAccessory(Player player, bool hideVisual) {
+		player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.15f;
+		if (player.GetModPlayer<WreathHandler>().IsFull1) {
+            player.statLifeMax2 += 25;
+        }
+	}
 }

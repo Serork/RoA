@@ -29,7 +29,7 @@ sealed class BandOfPurity : NatureItem {
     }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
-		player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.05f;
+		player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.2f;
 		if (player.GetModPlayer<WreathHandler>().IsFull1) {
 			player.lifeRegen += 10;
 		}
