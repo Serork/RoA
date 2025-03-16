@@ -157,7 +157,7 @@ sealed class CosmicHat : ModItem {
 
 	public override void SetStaticDefaults() {
 		ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
-        ArmorIDs.Head.Sets.DrawFullHair[Item.faceSlot] = true;
+        ArmorIDs.Head.Sets.DrawHatHair[Item.faceSlot] = true;
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
