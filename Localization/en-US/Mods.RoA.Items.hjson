@@ -146,7 +146,7 @@ BeastBow: {
 }
 
 DoubleFocusCharm: {
-	DisplayName: Double Focus Charm
+	DisplayName: Tarnished Charm
 	Tooltip: 12% increased nature base damage
 }
 

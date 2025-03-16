@@ -146,7 +146,7 @@ BeastBow: {
 }
 
 DoubleFocusCharm: {
-	DisplayName: Брелок двойного сосредоточения
+	DisplayName: Потусклый брелок
 	Tooltip: Увеличивает природный начальный урон на 12%
 }
 
