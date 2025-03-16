@@ -25,9 +25,9 @@ sealed class DoubleFocusCharm : NatureItem {
     }
 	
 	public override void UpdateAccessory(Player player, bool hideVisual) {
-		player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.15f;
+		player.GetModPlayer<DruidStats>().DruidPotentialDamage += 3;
 		if (player.GetModPlayer<WreathHandler>().IsFull1) {
-            player.statLifeMax2 += 25;
+            player.statLifeMax2 += 20;
         }
 	}
 }

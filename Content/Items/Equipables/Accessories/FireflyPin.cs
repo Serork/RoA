@@ -36,5 +36,5 @@ sealed class FireflyPin : NatureItem {
         Item.value = Item.sellPrice(0, 3, 0, 0);
     }
 
-	public override void UpdateAccessory(Player player, bool hideVisual)  => player.GetModPlayer<DruidStats>().KeepBonusesForTime += 120f;
+	public override void UpdateAccessory(Player player, bool hideVisual)  => player.GetModPlayer<DruidStats>().KeepBonusesForTime += 150f;
 }

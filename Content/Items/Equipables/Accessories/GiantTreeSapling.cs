@@ -27,10 +27,10 @@ sealed class GiantTreeSapling : NatureItem {
 		Item.value = Item.sellPrice(0, 0, 75, 0);
 	}
 
-	public override void UpdateAccessory(Player player, bool hideVisual) {
-		player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.05f;
-        if (player.GetModPlayer<WreathHandler>().IsFull1) {
-            player.statDefense += 3;
+	public override void UpdateAccessory(Player player, bool hideVisual) {      		
+		player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.15f;
+		if (player.GetModPlayer<WreathHandler>().IsFull1) {
+            player.statDefense += 5;
         }
     }
 }

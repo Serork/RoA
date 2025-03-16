@@ -149,8 +149,8 @@ DoubleFocusCharm: {
 	DisplayName: Tarnished Charm
 	Tooltip:
 		'''
-		15% decreased wreath discharge speed
-		While [kw/n:wreath] is charged, increases maximum health by 25
+		Increased maximum nature [kw/n:potential] damage by 3
+		While [kw/n:wreath] is charged, increases maximum health by 20
 		'''
 }
 
@@ -172,14 +172,14 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		5% increased nature [kw/n:potential] damage
-		While [kw/n:wreath] is charged, increases defense by 3
+		15% decreased wreath discharge speed
+		While [kw/n:wreath] is charged, increases defense by 5
 		'''
 }
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: When [kw/n:wreath] is depleted, provides its full charge bonuses for 2 extra seconds
+	Tooltip: When [kw/n:wreath] is depleted, provides its full charge bonuses for 2.5 extra seconds
 }
 
 RavencallersCloak: {
@@ -247,7 +247,7 @@ WillpowerPotion: {
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases [kw/n:wreath] discharge speed by 25%
+	Tooltip: Decreases [kw/n:wreath] discharge speed by 80%
 }
 
 ForestWreath: {
