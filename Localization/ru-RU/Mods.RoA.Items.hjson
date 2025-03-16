@@ -420,7 +420,7 @@ LivingBorealWoodChestplate: {
 
 LivingBorealWoodGreaves: {
 	DisplayName: Живые таежные поножи
-	Tooltip: Увеличивает [kw/n:возможную] скорость атаки на 4%
+	Tooltip: ""
 }
 
 LivingBorealWoodHelmet: {
@@ -435,26 +435,22 @@ LivingWoodChestplate: {
 
 LivingWoodGreaves: {
 	DisplayName: Поножи из живого дерева
-	Tooltip: Увеличивает [kw/n:возможную] скорость атаки на 4%
+	Tooltip: ""
 }
 
 LivingWoodHelmet: {
 	DisplayName: Шлем из живого дерева
-	Tooltip: Увеличивает [kw/n:возможную] скорость атаки на 4%
+	Tooltip: ""
 }
 
 LivingMahoganyChestplate: {
 	DisplayName: Живой джунглевый нагрудник
-	Tooltip:
-		'''
-		Увеличивает [kw/n:возможный] природный урона на 6%
-		Увеличивает [kw/n:возможную] скорость атаки на 6%
-		'''
+	Tooltip: "Увеличивает [kw/n:возможный] природный урона на 6%"
 }
 
 LivingMahoganyGreaves: {
 	DisplayName: Живые джунглевые поножи
-	Tooltip: Увеличивает скорость передвижения на 2%
+	Tooltip: ""
 }
 
 LivingMahoganyHelmet: {
