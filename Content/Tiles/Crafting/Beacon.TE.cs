@@ -71,7 +71,7 @@ sealed class BeaconTE : ModTileEntity {
                     gemType == ItemID.Emerald ? Main.rand.NextChance(0.5) :
                     gemType == ItemID.Sapphire ? Main.rand.NextChance(0.6) :
                     gemType == ItemID.Topaz ? Main.rand.NextChance(0.7) :
-                    gemType == ItemID.Amethyst ? Main.rand.NextChance(0.8) : true;
+                    gemType != ItemID.Amethyst || Main.rand.NextChance(0.8);
                 if (flag) {
                     Beacon.ActionWithGem(i, j, true, false, true);
                 }
