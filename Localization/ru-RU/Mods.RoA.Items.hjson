@@ -445,7 +445,7 @@ LivingWoodHelmet: {
 
 LivingMahoganyChestplate: {
 	DisplayName: Живой джунглевый нагрудник
-	Tooltip: "Увеличивает [kw/n:возможный] природный урона на 6%"
+	Tooltip: Увеличивает [kw/n:возможный] природный урона на 6%
 }
 
 LivingMahoganyGreaves: {
