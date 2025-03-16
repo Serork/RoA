@@ -60,14 +60,12 @@ sealed class CosmicMana : ModProjectile {
             Utils.GetLerpValue(maxTimeLeft, maxTimeLeft - 15, Projectile.timeLeft, true);
         Projectile.rotation = Projectile.ai[1] * 0.025f + Projectile.ai[0] * 0.1f;
 
-        if (Projectile.soundDelay == 0) {
-            Projectile.soundDelay = 20 + Main.rand.Next(40);
-            SoundStyle sound = SoundID.Item9;
-            SoundEngine.PlaySound(sound.WithVolumeScale(0.5f), Projectile.position);
-        }
-        if (Main.rand.NextBool())
-        for (int i = 0; i < 1; i++)
-            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleTorch, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default, 1.2f);
+        if (Main.rand.NextBool(3))
+            for (int i = 0; i < 1; i++) {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(3) ? DustID.Enchanted_Gold : DustID.YellowStarDust, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default,
+                    Main.rand.NextFloat(0.7f, 0.9f));
+                Main.dust[dust].velocity *= 0.5f;
+            }
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -86,12 +84,22 @@ sealed class CosmicMana : ModProjectile {
         spriteBatch.EndBlendState();
         Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(),
-            new Color(0.9f, 1f, 0.7f, 0.5f) * Projectile.Opacity, Projectile.rotation, projectileTexture.Size() / 2f,
+            new Color(0.9f, 1f, 0.7f, 1f) * Projectile.Opacity, Projectile.rotation, projectileTexture.Size() / 2f,
             Projectile.scale, SpriteEffects.None, 0.0f);
         for (int i = 0; i < 4; i++) {
+            float value = Main.GlobalTimeWrappedHourly * i * 1f * Projectile.direction;
+            float value2 = Projectile.ai[1] * i * 1f;
             spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), 
-                new Color(0.9f, 1f, 0.7f, 0.3f) * Projectile.Opacity * 0.75f, 
-                Main.GlobalTimeWrappedHourly * i * 3f * Projectile.direction + Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
+                new Color(0.9f, 1f, 0.7f, 0.1f) * Projectile.Opacity * 0.5f,
+                Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
+        }
+        for (int i = 0; i < 4; i++) {
+            float value = Main.GlobalTimeWrappedHourly * i * 1f * Projectile.direction;
+            float value2 = Projectile.ai[1] * i * 1f;
+            float value3 = 1f - (Projectile.ai[1] / 300f);
+            spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(),
+                new Color(0.9f, 1f, 0.7f, 0.1f) * Projectile.Opacity * 0.5f * value3,
+                value + Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale + value2 * 0.001f - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
         }
         return false;
     }
@@ -107,10 +115,14 @@ sealed class CosmicMana : ModProjectile {
         => new Color?(Color.White);
 
     public override void OnKill(int timeLeft) {
+        SoundStyle sound = SoundID.Item9;
+        SoundEngine.PlaySound(sound.WithVolumeScale(0.5f), Projectile.position);
         for (int i = 0; i < 10; i++) {
-            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 62, Main.rand.Next(-4, 4), Main.rand.Next(-4, 4), 150, default, 1.2f);
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(3) ? DustID.Enchanted_Gold : DustID.YellowStarDust, Main.rand.Next(-4, 4), Main.rand.Next(-4, 4), 150, default, 
+                Main.rand.NextFloat(0.7f, 0.9f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].velocity *= 3f * Main.rand.NextFloat();
+            Main.dust[dust].velocity *= 0.75f;
         }
     }
 }
