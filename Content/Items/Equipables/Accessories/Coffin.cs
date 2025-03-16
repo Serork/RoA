@@ -6,6 +6,7 @@ using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -44,7 +45,7 @@ sealed class Coffin : ModItem {
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.GetModPlayer<CoffinPlayer>().boneTrousle = true;
-		player.moveSpeed -= 0.2f;
+		//player.moveSpeed -= 0.2f;
 	}
 }
 
@@ -58,20 +59,28 @@ sealed class CoffinPlayer : ModPlayer {
     }
 
 	private void SpawnBones() {
-        IEntitySource source = Player.GetSource_Misc("coffinspawn");
-        int index = 0, max = 4;
-        void spawn(int type) {
-            Vector2 boneVel = Vector2.One.RotatedBy(MathHelper.Pi * (float)index / max + Main.rand.NextFloatRange(MathHelper.PiOver2));
-            boneVel *= 2.5f + Main.rand.NextFloat(2.5f);
-            Projectile.NewProjectile(source, Player.Center.X, Player.Center.Y, boneVel.X, boneVel.Y, type, 18, 1f, Player.whoAmI);
-            index++;
-        }
-        spawn(ModContent.ProjectileType<BoneSkull>());
-        spawn(ModContent.ProjectileType<BoneBody>());
-        for (int i = 0; i < 2; i++) {
-            spawn(ModContent.ProjectileType<BoneArm>());
-            spawn(ModContent.ProjectileType<BoneLeg>());
-        }
+		if (Player.whoAmI == Main.myPlayer) {
+			IEntitySource source = Player.GetSource_Misc("coffinspawn");
+			int index = 0, max = 4;
+
+			int damage = 24;
+			float knockback = 7f;
+
+			void spawn(int type) {
+				Vector2 boneVel = Vector2.One.RotatedBy(MathHelper.Pi * (float)index / max + Main.rand.NextFloatRange(MathHelper.PiOver2));
+				boneVel *= 2.5f + Main.rand.NextFloat(2.5f);
+				Projectile.NewProjectile(source, Player.Center.X, Player.Center.Y, boneVel.X, boneVel.Y, type,
+                    damage, knockback,
+					Player.whoAmI);
+				index++;
+			}
+			spawn(ModContent.ProjectileType<BoneSkull>());
+			spawn(ModContent.ProjectileType<BoneBody>());
+			for (int i = 0; i < 2; i++) {
+				spawn(ModContent.ProjectileType<BoneArm>());
+				spawn(ModContent.ProjectileType<BoneLeg>());
+			}
+		}
     }
 
     public override void OnHurt(Player.HurtInfo info) {
@@ -79,6 +88,7 @@ sealed class CoffinPlayer : ModPlayer {
 			hurtCount++;
 			if (hurtCount == 1) {
 				SpawnBones();
+                SoundEngine.PlaySound(SoundID.NPCHit2, Player.Center);
             }
             if (hurtCount > 2) hurtCount = 0;
         }
