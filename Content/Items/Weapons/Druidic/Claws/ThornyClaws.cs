@@ -50,7 +50,8 @@ sealed class ThornyClaws : BaseClawsItem {
             StartVelocity = Helper.VelocityToPoint(player.Center, player.GetViableMousePosition(), 1f).SafeNormalize(Vector2.Zero),
             ProjectileTypeToSpawn = type,
             ShouldReset = shouldReset,
-            ShouldSpawn = player.ownedProjectileCounts[type] < 2
+            ShouldSpawn = player.ownedProjectileCounts[type] < 2,
+            //PlaySoundStyle = SoundID.Owl
         });
     }
 }

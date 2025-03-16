@@ -8,6 +8,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -51,6 +52,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
         clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
             Owner = Item,
             SpawnProjectile = (Player player) => {
+                //SoundEngine.PlaySound(SoundID.Dolphin, player.Center);
+
                 for (int k = 0; k < 2; k++) {
                     switch (k) {
                         case 0:
@@ -83,7 +86,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
                             break;
                     }
                 }
-            }
+            },
         });
     }
 

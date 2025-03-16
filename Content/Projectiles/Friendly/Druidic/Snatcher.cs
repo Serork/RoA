@@ -10,6 +10,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -289,6 +290,9 @@ sealed class Snatcher : NatureProjectile {
         }
         if (Projectile.owner == Main.myPlayer && player.itemAnimation > player.itemAnimationMax - 10 && !flag && !IsAttacking && !IsAttacking2) {
             Projectile.ai[2] = 5f;
+
+            //SoundEngine.PlaySound(SoundID.Owl, GetPos());
+
             Vector2 mousePos = Helper.GetLimitedPosition(player.Center, _mousePos, 200f, DIST * 0.75f);
             Projectile.localAI[1] = mousePos.X;
             Projectile.localAI[2] = mousePos.Y;
