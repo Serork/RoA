@@ -55,7 +55,7 @@ RoAClientConfig: {
 	}
 
 	DamageTooltipOption: {
-		Label: Druid Damage Tooltip Option
+		Label: Druid Damage Tooltip Format
 		Label2: Preview
 		Tooltip: ""
 	}
@@ -66,7 +66,7 @@ RoAClientConfig: {
 	}
 
 	DamageScaling: {
-		Label: Druid Damage Scaling Info
+		Label: Druid Damage Scaling Hint
 		Tooltip: ""
 	}
 }

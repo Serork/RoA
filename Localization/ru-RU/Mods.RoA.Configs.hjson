@@ -55,7 +55,7 @@ RoAClientConfig: {
 	}
 
 	DamageTooltipOption: {
-		Label: Варианты написания урона класса 'Друид'
+		Label: Формат описания урона класса 'Друид'
 		Label2: Предпросмотр
 		// Tooltip: ""
 	}
@@ -66,7 +66,7 @@ RoAClientConfig: {
 	}
 
 	DamageScaling: {
-		Label: Информация о масштабируемости урона класса 'Друид'
+		Label: Подсказка о масштабировании урона класса 'Друид'
 		// Tooltip: ""
 	}
 }
