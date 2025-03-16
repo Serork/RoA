@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
+using RoA.Common.Druid;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -20,8 +23,6 @@ sealed class DoubleFocusCharm : NatureItem {
 
         Item.value = Item.sellPrice(0, 1, 50, 0);
     }
-
-	public override void UpdateAccessory(Player player, bool hideVisual) =>
 	
 	public override void UpdateAccessory(Player player, bool hideVisual) {
 		player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.15f;

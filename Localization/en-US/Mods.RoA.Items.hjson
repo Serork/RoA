@@ -147,7 +147,7 @@ BeastBow: {
 
 DoubleFocusCharm: {
 	DisplayName: Tarnished Charm
-	Tooltip: 
+	Tooltip:
 		'''
 		15% decreased wreath discharge speed
 		While [kw/n:wreath] is charged, increases maximum health by 25
@@ -156,10 +156,7 @@ DoubleFocusCharm: {
 
 BandOfNature: {
 	DisplayName: Band of Nature
-	Tooltip:
-		'''
-		15% increased [kw/n:wreath] [kw/n:charge rate]
-		'''
+	Tooltip: 15% increased [kw/n:wreath] [kw/n:charge rate]
 }
 
 BandOfPurity: {

@@ -156,10 +156,7 @@ DoubleFocusCharm: {
 
 BandOfNature: {
 	DisplayName: Браслет природы
-	Tooltip:
-		'''
-		Увеличивает скорость [kw/n:заполнения венка] на 15%
-		'''
+	Tooltip: Увеличивает скорость [kw/n:заполнения венка] на 15%
 }
 
 BandOfPurity: {
