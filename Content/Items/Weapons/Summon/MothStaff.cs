@@ -2,6 +2,8 @@
 
 using RoA.Content.Projectiles.Friendly.Summon;
 
+using RoA.Content.Items.Equipables.Accessories;
+
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -20,7 +22,8 @@ sealed class MothStaff : ModItem {
 		ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
 		ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
 
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        Item.ResearchUnlockCount = 1;		
+		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<DoubleFocusCharm>();
 	}
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "FreeUpPetsAndMinions")]

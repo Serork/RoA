@@ -4,6 +4,8 @@ using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Druidic;
 
+using RoA.Content.Items.Weapons.Melee;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -13,7 +15,8 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 sealed class SoulOfTheWoods : NatureItem {
 	public override void SetStaticDefaults() {
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        Item.ResearchUnlockCount = 1;		
+		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BloodshedAxe>();
 	}
 
     protected override void SafeSetDefaults() {

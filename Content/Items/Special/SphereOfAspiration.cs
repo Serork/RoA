@@ -4,11 +4,18 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using RoA.Content.Items.Weapons.Summon;
+
 namespace RoA.Content.Items.Special;
 
 abstract class MagicSphere : ModItem {
     protected virtual Color? LightingColor { get; } = null;
 
+	public override void SetStaticDefaults() {
+		Item.ResearchUnlockCount = 1;
+	    ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<FlederStaff>();
+    }
+	
     public override void SetDefaults() {
         int width = 24, height = width;
         Item.Size = new Vector2(width, height);

@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using RoA.Common.Druid.Forms;
 using RoA.Common.GlowMasks;
 
+using RoA.Content.Items.Weapons.Ranged;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -14,7 +16,9 @@ namespace RoA.Content.Items.Weapons.Melee;
 sealed class OvergrownSpear : ModItem {
 	public override void SetStaticDefaults() {
 		//Tooltip.SetDefault("Hitting the orbiting spheres releases a magic spear");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        Item.ResearchUnlockCount = 1;		
+		
+		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BeastBow>();
 	}
 
 	public override void SetDefaults() {

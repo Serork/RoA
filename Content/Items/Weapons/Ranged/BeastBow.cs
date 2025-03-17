@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core.Utility;
 
+using RoA.Content.Items.Weapons.Magic;
+
 using System;
 using System.IO;
 
@@ -17,6 +19,8 @@ namespace RoA.Content.Items.Weapons.Ranged;
 sealed class BeastBow : ModItem {
 	public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
+		
+		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<Bane>();
     }
 
 	public override void SetDefaults() {

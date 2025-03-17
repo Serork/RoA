@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Ranged;
 
+using RoA.Content.Items.Special;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -17,6 +19,8 @@ sealed class ChemicalPrisoner : ModItem {
         // Tooltip.SetDefault("");
 
         Item.ResearchUnlockCount = 1;
+		
+		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SphereOfAspiration>();
     }
 
     public override void SetDefaults() {

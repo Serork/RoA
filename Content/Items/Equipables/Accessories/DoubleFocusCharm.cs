@@ -3,6 +3,8 @@
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Druid;
 
+using RoA.Content.Items.Weapons.Melee;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,6 +14,8 @@ namespace RoA.Content.Items.Equipables.Accessories;
 sealed class DoubleFocusCharm : NatureItem {
 	public override void SetStaticDefaults() {
 		Item.ResearchUnlockCount = 1;
+		
+		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<OvergrownSpear>();
 	}
 
     protected override void SafeSetDefaults() {
