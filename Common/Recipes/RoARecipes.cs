@@ -121,7 +121,13 @@ sealed class RoARecipes : ModSystem {
 
         // accessories
         item = Recipe.Create(ModContent.ItemType<RoyalQualityHoney>());
+        item.AddIngredient(ItemID.BottledHoney, 1);
+		item.AddIngredient(ItemID.LifeCrystal, 1);
+		item.AddIngredient(ItemID.BeeWax, 8);
+        item.AddTile(TileID.Furnaces);
+        item.SortAfterFirstRecipesOf(ItemID.HornetStaff);
         item.Register();
+
     }
     
     private static void AddCampfire() {
@@ -993,9 +999,13 @@ sealed class RoARecipes : ModSystem {
         item.Register();
 
         // accessories
+		temp = item;
         item = Recipe.Create(ModContent.ItemType<MercuriumCenser>());
+        item.AddIngredient<Content.Items.Materials.MercuriumNugget>(12);
+        item.AddTile(TileID.Anvils);
+        item.SortAfter(temp);
         item.Register();
-
+		
         // staves
         temp = starFusion;
         item = Recipe.Create(ModContent.ItemType<RodOfTheDragonfire>());
