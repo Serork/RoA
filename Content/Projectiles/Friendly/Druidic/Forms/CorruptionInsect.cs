@@ -29,9 +29,6 @@ class CorruptionInsect : FormProjectile {
 
         Projectile.friendly = true;
 		Projectile.hostile = false;
-
-        Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 10;
     }
 
 	public override void AI() {
