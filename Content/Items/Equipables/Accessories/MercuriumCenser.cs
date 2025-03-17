@@ -11,9 +11,6 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 sealed class MercuriumCenser : NatureItem {
     private class MercuriumCenserHandler : ModPlayer {
-        private const float SPAWNTIME = 30f;
-        private const byte FUMESCOUNT = 3;
-
         private float _spawnFumesTimer;
 
         public bool IsEffectActive;
