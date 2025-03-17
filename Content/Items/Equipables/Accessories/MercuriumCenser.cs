@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Druid;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -28,7 +29,7 @@ sealed class MercuriumCenser : NatureItem {
             }
 
             float spawnTime = 15f;
-            int spawnCount = 5;
+            int spawnCount = 3;
             if (--_spawnFumesTimer <= 0f) {
                 _spawnFumesTimer = spawnTime;
 
@@ -39,7 +40,7 @@ sealed class MercuriumCenser : NatureItem {
                 ushort type = (ushort)ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.MercuriumCenserToxicFumes>();
                 IEntitySource source = Player.GetSource_FromThis();
                 int damage = 15;
-                float knockback = 3f;
+                float knockback = 2f;
                 Vector2 spawnPosition = Player.Center;
                 float offset = Main.rand.NextFloat(MathHelper.TwoPi);
                 for (int i = 0; i < spawnCount; i++) {
@@ -63,5 +64,8 @@ sealed class MercuriumCenser : NatureItem {
         Item.value = Item.sellPrice(0, 0, 20, 0);
     }
 
-    public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<MercuriumCenserHandler>().IsEffectActive = true;
+	public override void UpdateAccessory(Player player, bool hideVisual) {      		
+		player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.15f;
+		player.GetModPlayer<MercuriumCenserHandler>().IsEffectActive = true;
+    }
 }

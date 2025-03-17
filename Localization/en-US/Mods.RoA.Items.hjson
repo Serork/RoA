@@ -64,17 +64,17 @@ RipePumpkin: {
 
 ExoticTulip: {
 	DisplayName: Exotic Tulip
-	Tooltip: Shoots a fragrant petal
+	Tooltip: Shoots a pink petal that leaves a damaging trail
 }
 
 SweetTulip: {
 	DisplayName: Sweet Tulip
-	Tooltip: Shoots a honey petal
+	Tooltip: Shoots an orange petal that attracts bees
 }
 
 WeepingTulip: {
 	DisplayName: Weeping Tulip
-	Tooltip: Shoots a magic petal
+	Tooltip: Shoots a blue petal that explodes on contact
 }
 
 PineCone: {
@@ -152,14 +152,14 @@ DoubleFocusCharm: {
 
 BandOfNature: {
 	DisplayName: Band of Nature
-	Tooltip: Increases [kw/n:wreath] [kw/n:charging] rate by 15%
+	Tooltip: Increases [kw/n:wreath] [kw/n:charge] rate by 15%
 }
 
 BandOfPurity: {
 	DisplayName: Band of Purity
 	Tooltip:
 		'''
-		Increases [kw/n:wreath] [kw/n:charging] rate by 20%
+		Increases [kw/n:wreath] [kw/n:charge] rate by 20%
 		While [kw/n:wreath] is charged, increases health regeneration
 		'''
 }
@@ -168,7 +168,7 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		15% decreased wreath [kw/n:discharging] rate
+		15% decreased wreath [kw/n:discharge] rate
 		While [kw/n:wreath] is charged, increases defense by 5
 		'''
 }
@@ -236,14 +236,14 @@ WillpowerPotion: {
 	DisplayName: Willpower Potion
 	Tooltip:
 		'''
-		Increases [kw/n:wreath] [kw/n:charging] rate
+		Increases [kw/n:wreath] [kw/n:charge] rate
 		'Fifteen percent concentrated power of will'
 		'''
 }
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases [kw/n:wreath] [kw/n:discharging] rate by 80%
+	Tooltip: Decreases [kw/n:wreath] [kw/n:discharge] rate by 80%
 }
 
 ForestWreath: {
@@ -1848,10 +1848,19 @@ MercuriumBlunderbuss: {
 
 MercuriumCenser: {
 	DisplayName: Mercurium Censer
-	Tooltip: ""
+	Tooltip:
+		'''
+		Decreases wreath [kw/n:discharge] rate by 15% 
+		While [kw/n:wreath] is charged, coats you in a cloud of toxic fumes
+		'ITS CALLED AURA BRUH'
+		'''
 }
 
 RoyalQualityHoney: {
 	DisplayName: Royal Quality Honey
-	Tooltip: ""
+	Tooltip:
+		'''
+		Increasing health regeneration provides a further honeyed boost
+		'Figs, cheese and a drizzle of honey'
+		'''
 }

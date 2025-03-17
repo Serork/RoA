@@ -67,7 +67,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         }
 
         if (Projectile.Opacity > 0f) {
-            Projectile.Opacity -= Projectile.localAI[0] * 0.025f * 0.4f;
+            Projectile.Opacity -= Projectile.localAI[0] * 0.025f * 0.2f;
         }
         else {
             Projectile.Kill();

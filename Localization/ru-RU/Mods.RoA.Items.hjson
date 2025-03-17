@@ -64,17 +64,17 @@ RipePumpkin: {
 
 ExoticTulip: {
 	DisplayName: Экзотичный тюльпан
-	Tooltip: Стреляет душистым лепестком
+	Tooltip: Стреляет розовым лепестком, оставляющим болезненный след
 }
 
 SweetTulip: {
 	DisplayName: Сладкий тюльпан
-	Tooltip: Стреляет медовым лепестком
+	Tooltip: Стреляет оранжевым лепестком, привлекающим пчёл
 }
 
 WeepingTulip: {
 	DisplayName: Стенающий тюльпан
-	Tooltip: Стреляет волшебным лепестком
+	Tooltip: Стреляет голубым лепестком, взрывающимся при касании
 }
 
 PineCone: {
@@ -1839,11 +1839,20 @@ MercuriumBlunderbuss: {
 }
 
 MercuriumCenser: {
-	// DisplayName: Mercurium Censer
-	// Tooltip: ""
+	DisplayName: Ртутное кадило
+	Tooltip:
+		'''
+		Снижает скорость [kw/n:опустошения венка] на 15%
+		Когда [kw/n:венок заполнен], покрывает вас облаком токсичных паров
+		'ЭТО НАЗЫВАЕТСЯ АУРА БРО'
+		'''
 }
 
 RoyalQualityHoney: {
-	// DisplayName: Royal Quality Honey
-	// Tooltip: ""
+	DisplayName: Мед королевского качества
+	Tooltip:
+		'''
+		Повышение регенерации здоровья даёт медовый бонус
+		'Финики, сыр и полить мёдом'
+		'''
 }
