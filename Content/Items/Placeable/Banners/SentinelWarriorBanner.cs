@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Banners;
 
+[Autoload(false)]
 sealed class SentinelWarriorBanner : ModItem {
     public override void SetDefaults() {
         Item.DefaultToPlaceableTile(ModContent.TileType<MonsterBanners>(), (int)MonsterBanners.StyleID.SentinelWarrior);

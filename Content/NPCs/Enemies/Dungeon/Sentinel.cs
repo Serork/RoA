@@ -15,6 +15,7 @@ using Terraria.ModLoader.Utilities;
 
 namespace RoA.Content.NPCs.Enemies.Dungeon;
 
+[Autoload(false)]
 sealed class Sentinel : ModNPC {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Sentinel");

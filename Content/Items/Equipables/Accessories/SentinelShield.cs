@@ -12,6 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
+[Autoload(false)]
 [AutoloadEquip(EquipType.Shield)]
 sealed class SentinelShield : ModItem {
 	public override void SetStaticDefaults() {

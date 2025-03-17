@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Dungeon;
 
+[Autoload(false)]
 public class SentinelSpirit : ModNPC {
     public override Color? GetAlpha(Color drawColor) => new Color(200, 200, 200, 100) * (1f - NPC.alpha / 255f);
 
