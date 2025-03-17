@@ -69,16 +69,19 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 		if (Main.moonPhase == 0 || Main.moonPhase == 1) {
 			Item.useStyle = ItemUseStyleID.Shoot;
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<MoonSigil>()] == 1) Item.UseSound = SoundID.Item1;
-		}
+            Item.noMelee = true;
+        }
 		if (Main.moonPhase == 4 || Main.moonPhase == 5) {
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.UseSound = SoundID.Item71;
-			if (player.ownedProjectileCounts[ModContent.ProjectileType<SacrificialSickle>()] == 1) return false;
+            Item.noMelee = false;
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<SacrificialSickle>()] == 1) return false;
 		}
 		if (Main.moonPhase == 2 || Main.moonPhase == 3 || Main.moonPhase == 6 || Main.moonPhase == 7) {
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.UseSound = SoundID.Item71;
-		}
+            Item.noMelee = false;
+        }
 		if (Main.moonPhase == 4 || Main.moonPhase == 5) {
 			Item.noMelee = true;
 			Item.noUseGraphic = true;
