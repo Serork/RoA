@@ -27,7 +27,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         //Projectile.usesLocalNPCImmunity = true;
         //Projectile.localNPCHitCooldown = 50;
 
-        ShouldIncreaseWreathPoints = true;
+        ShouldIncreaseWreathPoints = false;
 
         Projectile.aiStyle = -1;
     }
