@@ -64,7 +64,7 @@ sealed class PeegeonCape : ModItem {
                 flag21 = true;
 
             if (flag21 && flag23) {
-                if (Main.rand.NextBool(2)) {
+                if (Main.rand.NextBool(1)) {
                     int num = 4;
                     if (Player.direction == 1)
                         num = -40;

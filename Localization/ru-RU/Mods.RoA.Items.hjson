@@ -944,7 +944,7 @@ ElderwoodSword: {
 
 MercuriumSword: {
 	DisplayName: Ртутный меч
-	Tooltip: Создает облака паров ртути при ударе
+	Tooltip: Создает пары ртути при ударе
 }
 
 StarFusion: {
@@ -959,7 +959,7 @@ RavensEye: {
 
 MercuriumStaff: {
 	DisplayName: Ртутный жезл
-	Tooltip: Стреляет ртутными осколками, что бесконечно распадаются
+	Tooltip: Стреляет нестабильным ртутным осколком
 }
 
 MiracleMintSeeds: {
@@ -1112,7 +1112,7 @@ CosmicHat: {
 	DisplayName: Шляпа зведочётши
 	Tooltip:
 		'''
-		Уменьшает затраты маны до нуля, когда сила воли опустела
+		Кратковременно снижает затраты маны до нуля когда сила воли почти потеряна
 		'Каково это-быть свободным?'
 		'''
 }
@@ -1144,7 +1144,11 @@ ElderwoodToilet: {
 
 RagingBoots: {
 	DisplayName: Яростные сапоги
-	Tooltip: Сотрясают землю при приземлении
+	Tooltip:
+		'''
+		Увеличивают ускорение свободного падения
+		Сотрясают землю при приземлении
+		'''
 }
 
 WingIcon: {
@@ -1711,22 +1715,22 @@ NFAWings: {
 }
 
 PeegeonChestguard: {
-	DisplayName: Нагрудник Peege.On'а
+	DisplayName: Нагрудник Пижона
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonGreaves: {
-	DisplayName: Поножи Peege.On'а
+	DisplayName: Поножи Пижона
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonHood: {
-	DisplayName: Капюшон Peege.On'а
+	DisplayName: Капюшон Пижона
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 PeegeonCape: {
-	DisplayName: Плащ Peege.On'а
+	DisplayName: Плащ Пижона
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
@@ -1790,7 +1794,7 @@ cleoPants: {
 
 IOU: {
 	DisplayName: Я. Т. Д.
-	Tooltip: "'Я тебе должен оружие для Друида. -Р. О. А.'"
+	Tooltip: "'Я тебе должен оружие Друида'"
 }
 
 Nihility: {
@@ -1844,7 +1848,7 @@ MercuriumCenser: {
 		'''
 		Снижает скорость [kw/n:опустошения венка] на 15%
 		Когда [kw/n:венок заполнен], покрывает вас облаком токсичных паров
-		'ЭТО НАЗЫВАЕТСЯ АУРА БРО'
+		'Это называется АУРА бро'
 		'''
 }
 

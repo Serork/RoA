@@ -965,7 +965,7 @@ RavensEye: {
 
 MercuriumStaff: {
 	DisplayName: Mercurium Staff
-	Tooltip: Shoots mercury shards that split endlessly
+	Tooltip: Shoots an unstable mercurium shard
 }
 
 MiracleMintSeeds: {
@@ -1118,7 +1118,7 @@ CosmicHat: {
 	DisplayName: Stargazer's Hat
 	Tooltip:
 		'''
-		Reduces mana cost to nothing when your will is too low
+		Briefly reduces mana cost to zero when your will is too low
 		'How does it feel to be free?'
 		'''
 }
@@ -1150,7 +1150,11 @@ ElderwoodToilet: {
 
 RagingBoots: {
 	DisplayName: Raging Boots
-	Tooltip: Sends a powerful wave upon landing
+	Tooltip:
+		'''
+		Increases falling acceleration
+		Sends a mighty ripple upon landing
+		'''
 }
 
 WingIcon: {
@@ -1660,7 +1664,7 @@ Has2rJacket: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'And strange moons circle through the skies,'
+		'And strange moons circle through the skies...'
 		'''
 }
 
@@ -1674,8 +1678,7 @@ Has2rPants: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'But stranger still is
-		lost Carcosa'
+		'...But stranger still is lost Carcosa'
 		'''
 }
 
@@ -1798,7 +1801,7 @@ cleoPants: {
 
 IOU: {
 	DisplayName: I.O.U.
-	Tooltip: "'I owe you a Druid weapon. -R. O. A.'"
+	Tooltip: "'I owe you a Druid weapon'"
 }
 
 Nihility: {
@@ -1852,7 +1855,7 @@ MercuriumCenser: {
 		'''
 		Decreases wreath [kw/n:discharge] rate by 15% 
 		While [kw/n:wreath] is charged, coats you in a cloud of toxic fumes
-		'ITS CALLED AURA BRUH'
+		'It's called AURA bruh'
 		'''
 }
 
