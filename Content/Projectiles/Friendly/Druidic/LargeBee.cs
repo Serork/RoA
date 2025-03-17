@@ -34,9 +34,6 @@ sealed class LargeBee : NatureProjectile {
 
         Projectile.friendly = true;
         Projectile.hostile = false;
-
-        Projectile.friendly = true;
-        Projectile.hostile = false;
     }
 
     public override void AI() {
