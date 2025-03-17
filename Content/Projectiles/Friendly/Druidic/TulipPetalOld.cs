@@ -85,7 +85,8 @@ sealed class TulipPetalOld : NatureProjectile {
 
                 if (Main.player[Projectile.owner].strongBees) {
                     if (Projectile.owner == Main.myPlayer) {
-                        for (int i = 0; i < _largeBee.Length - 1; i++) {
+                        int max = _largeBee.Length;
+                        for (int i = 0; i < max; i++) {
                             if (Main.rand.NextBool()) {
                                 _largeBee[i] = true;
                             }

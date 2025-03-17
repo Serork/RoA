@@ -41,7 +41,7 @@ sealed class RoyalQualityHoney : ModItem {
         int width = 22; int height = 26;
         Item.Size = new Vector2(width, height);
 
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Orange;
         Item.accessory = true;
 
         Item.value = Item.sellPrice(0, 0, 70, 0);
