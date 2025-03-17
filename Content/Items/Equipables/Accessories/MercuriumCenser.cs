@@ -61,7 +61,7 @@ sealed class MercuriumCenser : NatureItem {
         Item.rare = ItemRarityID.Blue;
         Item.accessory = true;
 
-        Item.value = Item.sellPrice(0, 0, 20, 0);
+        Item.value = Item.sellPrice(0, 0, 25, 0);
     }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) {      		

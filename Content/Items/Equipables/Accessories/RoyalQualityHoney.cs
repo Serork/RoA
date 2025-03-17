@@ -44,7 +44,7 @@ sealed class RoyalQualityHoney : ModItem {
         Item.rare = ItemRarityID.Green;
         Item.accessory = true;
 
-        Item.value = Item.sellPrice(0, 0, 20, 0);
+        Item.value = Item.sellPrice(0, 0, 70, 0);
     }
 
 	public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<RoyalQualityHoneyHandler>().IsEffectActive = true;
