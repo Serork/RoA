@@ -24,8 +24,8 @@ sealed class MercuriumCenserToxicFumes : ModProjectile {
 
         Projectile.friendly = true;
 
-        Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 50;
+        //Projectile.usesLocalNPCImmunity = true;
+        //Projectile.localNPCHitCooldown = 50;
 
         Projectile.aiStyle = -1;
     }
