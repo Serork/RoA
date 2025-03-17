@@ -76,12 +76,12 @@ sealed class QuicksilverBolt : ModProjectile {
         }
         SoundEngine.PlaySound(SoundID.Item118, new Vector2(Projectile.position.X, Projectile.position.Y));
     }
-	
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-		target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), Main.rand.Next(90, 180), false);
-	}
-	
-	public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-		target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), Main.rand.Next(90, 180), false);
-	}
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 180);
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 180);
+    }
 }

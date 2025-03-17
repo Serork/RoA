@@ -87,10 +87,10 @@ sealed class MercuriumBulletProjectile : ModProjectile {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 600);
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 420);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 600);
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 420);
     }
 }
