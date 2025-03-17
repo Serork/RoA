@@ -9,8 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Principal;
 
 using Terraria;
 using Terraria.GameContent;
@@ -44,6 +42,9 @@ sealed class EvilLeaf : NatureProjectile {
         Projectile.penetrate = 1;
         Projectile.hide = true;
         Projectile.tileCollide = false;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
 
     internal void SetUpTwigPosition(Vector2 position) {
