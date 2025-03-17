@@ -8,12 +8,12 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
-sealed class MercuriumCenserToxicFumes : ModProjectile {
+sealed class MercuriumCenserToxicFumes : NatureProjectile {
     public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<MercuriumFumes>()).Texture;
 
     public override void SetStaticDefaults() => Main.projFrames[Projectile.type] = 3;
 
-    public override void SetDefaults() {
+    protected override void SafeSetDefaults() {
         int width = 24; int height = width;
         Projectile.Size = new Vector2(width, height);
 
@@ -26,6 +26,8 @@ sealed class MercuriumCenserToxicFumes : ModProjectile {
 
         //Projectile.usesLocalNPCImmunity = true;
         //Projectile.localNPCHitCooldown = 50;
+
+        ShouldIncreaseWreathPoints = true;
 
         Projectile.aiStyle = -1;
     }

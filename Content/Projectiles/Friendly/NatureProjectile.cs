@@ -40,11 +40,13 @@ abstract class NatureProjectile : ModProjectile {
     }
 
     public sealed override void SendExtraAI(BinaryWriter writer) {
-        if (this is not FormProjectile) {
-            writer.Write(_syncItem);
-            if (_syncItem) {
-                writer.Write(WreathPointsFine);
-                ItemIO.Send(Item, writer, true);
+        if (ShouldIncreaseWreathPoints) {
+            if (this is not FormProjectile) {
+                writer.Write(_syncItem);
+                if (_syncItem) {
+                    writer.Write(WreathPointsFine);
+                    ItemIO.Send(Item, writer, true);
+                }
             }
         }
 
@@ -54,11 +56,13 @@ abstract class NatureProjectile : ModProjectile {
     protected virtual void SafeSendExtraAI(BinaryWriter writer) { }
 
     public sealed override void ReceiveExtraAI(BinaryReader reader) {
-        if (this is not FormProjectile) {
-            _syncItem = reader.ReadBoolean();
-            if (_syncItem) {
-                WreathPointsFine = reader.ReadSingle();
-                Item = ItemIO.Receive(reader, true);
+        if (ShouldIncreaseWreathPoints) {
+            if (this is not FormProjectile) {
+                _syncItem = reader.ReadBoolean();
+                if (_syncItem) {
+                    WreathPointsFine = reader.ReadSingle();
+                    Item = ItemIO.Receive(reader, true);
+                }
             }
         }
 
@@ -68,6 +72,9 @@ abstract class NatureProjectile : ModProjectile {
     protected virtual void SafeReceiveExtraAI(BinaryReader reader) { }
 
     private void SetItem(Item item) {
+        if (!ShouldIncreaseWreathPoints) {
+            return;
+        }
         if (item.IsEmpty() || !item.IsADruidicWeapon()) {
             return;
         }
@@ -101,7 +108,7 @@ abstract class NatureProjectile : ModProjectile {
     public sealed override void PostAI() {
         SafePostAI();
 
-        if (this is not FormProjectile) {
+        if (ShouldIncreaseWreathPoints && this is not FormProjectile) {
             if (Item != null) {
                 Projectile.damage = NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]);
                 _syncItem = false;

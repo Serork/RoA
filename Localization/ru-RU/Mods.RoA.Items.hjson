@@ -1842,3 +1842,8 @@ MercuriumCenser: {
 	// DisplayName: Mercurium Censer
 	// Tooltip: ""
 }
+
+RoyalQualityHoney: {
+	// DisplayName: Royal Quality Honey
+	// Tooltip: ""
+}
