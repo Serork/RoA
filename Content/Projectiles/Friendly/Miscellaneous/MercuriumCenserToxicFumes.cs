@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-
+using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Melee;
 
@@ -19,8 +19,8 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
 
         Projectile.penetrate = -1;
 
-        Projectile.timeLeft = 150;
-        Projectile.tileCollide = false;
+        Projectile.timeLeft = 250;
+        Projectile.tileCollide = true;
 
         Projectile.friendly = true;
 
@@ -33,6 +33,11 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
     }
 
     public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        Projectile.Opacity -= 0.1f;
+        return false; 
+    }
 
     public override void AI() {
         if (Projectile.owner == Main.myPlayer) {
@@ -50,7 +55,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
             Projectile.ai[1] = 0f;
         }
 
-        if (++Projectile.frameCounter >= 6) {
+        if (++Projectile.frameCounter >= 8) {
             Projectile.frameCounter = 0;
             if (++Projectile.frame >= Main.projFrames[Projectile.type])
                 Projectile.frame = 0;
@@ -67,14 +72,31 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         }
 
         if (Projectile.Opacity > 0f) {
-            Projectile.Opacity -= Projectile.localAI[0] * 0.025f * 0.2f;
+            Projectile.Opacity -= Projectile.localAI[0] * 0.025f * 0.3f;
         }
         else {
             Projectile.Kill();
         }
+
+        Projectile.velocity *= 0.995f;
     }
 
     public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity * 0.75f;
 
     public override bool? CanCutTiles() => false;
+
+    public override bool PreDraw(ref Color lightColor) {
+        if (Projectile.owner == Main.myPlayer) {
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+            Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+            Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
+            Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+            Color color = Projectile.GetAlpha(lightColor) * 0.5f;
+            for (int i = 0; i < 2; i++)
+                spriteBatch.Draw(texture, drawPos + new Vector2 (0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(Main.GlobalTimeWrappedHourly * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+        }
+        return false;
+    }
 }
