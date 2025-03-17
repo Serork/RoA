@@ -65,7 +65,7 @@ sealed class MercuriumCenserToxicFumes : ModProjectile {
         }
 
         if (Projectile.Opacity > 0f) {
-            Projectile.Opacity -= Projectile.localAI[0] * 0.025f * 0.5f;
+            Projectile.Opacity -= Projectile.localAI[0] * 0.025f * 0.4f;
         }
         else {
             Projectile.Kill();
