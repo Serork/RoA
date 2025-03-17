@@ -86,7 +86,7 @@ sealed class SlipperyDynamite : ModProjectile {
 		if (memorizeVelocity == Vector2.Zero)
 			memorizeVelocity = oldVelocity * 0.75f;
 		Projectile.tileCollide = false;
-        Projectile.ai[2] = 50f;
+        Projectile.ai[2] = 10f;
         return false;
 	}
 
