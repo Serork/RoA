@@ -17,8 +17,7 @@ sealed class OvergrownSpear : ModItem {
 	public override void SetStaticDefaults() {
 		//Tooltip.SetDefault("Hitting the orbiting spheres releases a magic spear");
         Item.ResearchUnlockCount = 1;		
-		
-		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BeastBow>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BeastBow>();
 	}
 
 	public override void SetDefaults() {

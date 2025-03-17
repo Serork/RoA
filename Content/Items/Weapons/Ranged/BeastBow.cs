@@ -19,8 +19,7 @@ namespace RoA.Content.Items.Weapons.Ranged;
 sealed class BeastBow : ModItem {
 	public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
-		
-		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<Bane>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<Bane>();
     }
 
 	public override void SetDefaults() {

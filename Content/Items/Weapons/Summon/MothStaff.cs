@@ -21,9 +21,8 @@ sealed class MothStaff : ModItem {
 		//Tooltip.SetDefault("Summöns a moth to fight for you");
 		ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
 		ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
-
         Item.ResearchUnlockCount = 1;		
-		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<DoubleFocusCharm>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<DoubleFocusCharm>();
 	}
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "FreeUpPetsAndMinions")]

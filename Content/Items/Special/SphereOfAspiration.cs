@@ -13,7 +13,7 @@ abstract class MagicSphere : ModItem {
 
 	public override void SetStaticDefaults() {
 		Item.ResearchUnlockCount = 1;
-	    ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<FlederStaff>();
+	    //ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<FlederStaff>();
     }
 	
     public override void SetDefaults() {

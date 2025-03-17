@@ -13,12 +13,9 @@ sealed class BloodshedAxe : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Bloodshed Axe");
         // Tooltip.SetDefault("'There will be blood'");
-
         Item.ResearchUnlockCount = 1;
-
         PrefixLegacy.ItemSets.SwordsHammersAxesPicks[Type] = true;
-				
-        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ChemicalPrisoner>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ChemicalPrisoner>();
     }
 
     public override void SetDefaults() {

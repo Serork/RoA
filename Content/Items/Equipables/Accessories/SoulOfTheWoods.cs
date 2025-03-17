@@ -16,7 +16,7 @@ namespace RoA.Content.Items.Equipables.Accessories;
 sealed class SoulOfTheWoods : NatureItem {
 	public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;		
-		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BloodshedAxe>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BloodshedAxe>();
 	}
 
     protected override void SafeSetDefaults() {

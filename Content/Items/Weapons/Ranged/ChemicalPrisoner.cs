@@ -17,10 +17,8 @@ namespace RoA.Content.Items.Weapons.Ranged;
 sealed class ChemicalPrisoner : ModItem {
     public override void SetStaticDefaults() {
         // Tooltip.SetDefault("");
-
         Item.ResearchUnlockCount = 1;
-		
-		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SphereOfAspiration>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SphereOfAspiration>();
     }
 
     public override void SetDefaults() {
