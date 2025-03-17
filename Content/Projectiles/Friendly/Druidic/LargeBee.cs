@@ -35,9 +35,6 @@ sealed class LargeBee : NatureProjectile {
         Projectile.friendly = true;
         Projectile.hostile = false;
 
-        Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 10;
-
         Projectile.friendly = true;
         Projectile.hostile = false;
     }
