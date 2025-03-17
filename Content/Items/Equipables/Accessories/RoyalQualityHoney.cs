@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
-sealed class RoyalQualityHoney : NatureItem {
+sealed class RoyalQualityHoney : ModItem {
     private class RoyalQualityHoneyHandler : ModPlayer {
         public bool IsEffectActive;
 
@@ -33,7 +33,7 @@ sealed class RoyalQualityHoney : NatureItem {
 
     public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
-    protected override void SafeSetDefaults() {
+    public override void SetDefaults() {
         int width = 22; int height = 26;
         Item.Size = new Vector2(width, height);
 
