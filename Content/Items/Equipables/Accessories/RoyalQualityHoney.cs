@@ -19,9 +19,8 @@ sealed class RoyalQualityHoney : NatureItem {
                 return;
             }
 
-            if (Player.FindBuff(BuffID.Regeneration, out int buffIndex)) {
-                Player.AddBuff(BuffID.Honey, Player.buffTime[buffIndex]);
-                Player.ClearBuff(BuffID.Regeneration);
+            if (Player.lifeRegen >= 4) {
+                Player.AddBuff(BuffID.Honey, 1);
             }
         }
     }
