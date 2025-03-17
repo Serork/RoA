@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -19,8 +20,13 @@ sealed class RoyalQualityHoney : NatureItem {
                 return;
             }
 
+            if (Player.HasBuff(BuffID.Honey)) {
+                return;
+            }
+
             if (Player.lifeRegen >= 4) {
-                Player.AddBuff(BuffID.Honey, 1);
+                Player.AddBuff(ModContent.BuffType<Honey>(), 1);
+                Player.honey = true;
             }
         }
     }

@@ -250,3 +250,8 @@ CosmicHat_Cooldown: {
 	DisplayName: Груз звезды
 	Description: "'Вот, потяни за мою нить'"
 }
+
+Honey: {
+	DisplayName: Honey
+	Description: "{$BuffDescription.Honey}"
+}
