@@ -39,7 +39,16 @@ sealed class SlipperyGrenade : ModProjectile {
 		if (!Projectile.tileCollide) {
 			memorizeVelocity *= 0.97f;
 			Projectile.velocity = memorizeVelocity;
-			effectCounter++;
+            if (Projectile.ai[2] <= 0f) {
+                if (!Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
+                    memorizeVelocity = Vector2.Zero;
+                    Projectile.tileCollide = true;
+                }
+            }
+            else {
+                Projectile.ai[2]--;
+            }
+            effectCounter++;
 			if (effectCounter == effectCounterMax && effectCounterMax < 20) {
 				effectCounterMax += 3;
 				effectCounter = 0;
@@ -66,7 +75,8 @@ sealed class SlipperyGrenade : ModProjectile {
 		if (memorizeVelocity == Vector2.Zero)
 			memorizeVelocity = oldVelocity * 0.5f;
 		Projectile.tileCollide = false;
-		return false;
+        Projectile.ai[2] = 50f;
+        return false;
 	}
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {

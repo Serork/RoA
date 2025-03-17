@@ -33,7 +33,16 @@ sealed class SlipperyDynamite : ModProjectile {
 			memorizeVelocity *= 0.965f;
 			Projectile.velocity = memorizeVelocity;
 			effectCounter++;
-			if (effectCounter == effectCounterMax && effectCounterMax < 20) {
+            if (Projectile.ai[2] <= 0f) {
+                if (!Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
+                    memorizeVelocity = Vector2.Zero;
+                    Projectile.tileCollide = true;
+                }
+            }
+            else {
+                Projectile.ai[2]--;
+            }
+            if (effectCounter == effectCounterMax && effectCounterMax < 20) {
 				effectCounterMax += 3;
 				effectCounter = 0;
                 SoundEngine.PlaySound(SoundID.WormDig, Projectile.position);
@@ -77,7 +86,8 @@ sealed class SlipperyDynamite : ModProjectile {
 		if (memorizeVelocity == Vector2.Zero)
 			memorizeVelocity = oldVelocity * 0.75f;
 		Projectile.tileCollide = false;
-		return false;
+        Projectile.ai[2] = 50f;
+        return false;
 	}
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {

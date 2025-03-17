@@ -33,6 +33,15 @@ sealed class SlipperyGlowstick : ModProjectile {
 		if (!Projectile.tileCollide) {
 			memorizeVelocity *= 0.955f;
 			Projectile.velocity = memorizeVelocity;
+			if (Projectile.ai[2] <= 0f) {
+				if (!Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
+					memorizeVelocity = Vector2.Zero;
+					Projectile.tileCollide = true;
+				}
+			}
+			else {
+				Projectile.ai[2]--;
+            }
 			effectCounter++;
 			if (effectCounter == effectCounterMax && effectCounterMax < 20) {
 				effectCounterMax += 3;
@@ -51,6 +60,7 @@ sealed class SlipperyGlowstick : ModProjectile {
 		if (memorizeVelocity == Vector2.Zero)
 			memorizeVelocity = oldVelocity * 0.75f;
 		Projectile.tileCollide = false;
+		Projectile.ai[2] = 50f;
 		return false;
 	}
 
