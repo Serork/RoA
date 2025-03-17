@@ -3752,10 +3752,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         SkipTilesByTileType(TileID.Sand, tileCountToCheck: tileCountToCheck * 2, offsetPositionDirectionOnCheck: -1);
 
         int mid = Main.maxTilesX / 2;
-        while (CenterX >= mid && CenterX < mid + _biomeWidth) {
+        while (CenterX >= mid && CenterX < mid + _biomeWidth * 2) {
             CenterX++;
         }
-        while (CenterX <= mid && CenterX > mid - _biomeWidth) {
+        while (CenterX <= mid && CenterX > mid - _biomeWidth * 2) {
             CenterX--;
         }
         BackwoodsVars.BackwoodsStartX = CenterX;
