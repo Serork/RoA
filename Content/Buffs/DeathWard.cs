@@ -24,7 +24,7 @@ sealed class DeathWard : ModBuff {
 }
 
 sealed class BehelitPlayer : ModPlayer {
-    private sealed class BehelitVisualEffectOnPlayer : ILoadable {
+     private class BehelitVisualEffectOnPlayer : ILoadable {
         void ILoadable.Load(Mod mod) {
             On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
             On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += On_PlayerDrawLayers_DrawPlayer_RenderAllLayers;

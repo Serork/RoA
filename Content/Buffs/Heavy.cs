@@ -27,7 +27,7 @@ sealed class Heavy : ModBuff {
         player.GetModPlayer<HeavyExtraEffects>().IsEffectActive = true;
     }
 
-    private sealed class HeavyExtraEffects : ModPlayer {
+     private class HeavyExtraEffects : ModPlayer {
         private bool _onGround;
         private Vector2 _speedBeforeGround;
 		private int _fallLength;

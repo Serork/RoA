@@ -12,7 +12,7 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class MentorsHat : ModItem {
-	private sealed class MentorsHatDrop : GlobalNPC {
+	 private class MentorsHatDrop : GlobalNPC {
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
             if (npc.type != NPCID.ArmoredViking) {
 				return;

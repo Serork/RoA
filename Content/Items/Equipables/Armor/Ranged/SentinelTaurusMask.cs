@@ -15,7 +15,7 @@ namespace RoA.Content.Items.Equipables.Armor.Ranged;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class SentinelTaurusMask : ModItem {
-	private sealed class SentinelTaurusDrop : GlobalNPC {
+	 private class SentinelTaurusDrop : GlobalNPC {
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
             int[] npcNetIds9 = new int[5] {
 				31,

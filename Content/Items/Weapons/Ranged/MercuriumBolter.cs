@@ -18,11 +18,11 @@ sealed class MercuriumBolter : ModItem {
 
         Item.damage = 10;
         Item.knockBack = 0.1f;
-        Item.DamageType = DamageClass.Ranged;
-
+        Item.useTime = Item.useAnimation = 35;
         Item.crit = 4;
 
-        Item.useTime = Item.useAnimation = 35;
+        Item.DamageType = DamageClass.Ranged;
+
         Item.useStyle = ItemUseStyleID.Shoot;
 
         Item.rare = ItemRarityID.Blue;

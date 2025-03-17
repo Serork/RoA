@@ -64,7 +64,7 @@ sealed partial class BackwoodsBiomeFog : ModBiome {
 }
 
 sealed partial class BackwoodsBiome : ModBiome {
-    private sealed class Shop_ForestFix : ILoadable {
+     private class Shop_ForestFix : ILoadable {
         [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "ApplyPreference")]
         public extern static void BiomePreferenceListTrait_ApplyPreference(BiomePreferenceListTrait self, BiomePreferenceListTrait.BiomePreference preference, HelperInfo info, ShopHelper shopHelperInstance);
 
@@ -94,7 +94,7 @@ sealed partial class BackwoodsBiome : ModBiome {
         public void Unload() { }
     }
 
-    private sealed class TownNPCsStayHomeWhenBackwoodsFogIsActive : GlobalNPC {
+     private class TownNPCsStayHomeWhenBackwoodsFogIsActive : GlobalNPC {
         private static bool _dayTime;
 
         public override bool PreAI(NPC npc) {

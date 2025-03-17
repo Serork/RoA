@@ -65,7 +65,7 @@ sealed class ChemicalPrisoner : ModItem {
         return false;
     }
 
-    private sealed class ChemicalPrisonerPlayer : ModPlayer {
+     private class ChemicalPrisonerPlayer : ModPlayer {
         public int count;
 
         public override void PostUpdateMiscEffects() {

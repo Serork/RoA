@@ -18,7 +18,7 @@ namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
 [AutoloadEquip(EquipType.Back)]
 sealed class PeegeonCape : ModItem {
-    private sealed class PeegeonCapeWingsLogic : ModPlayer {
+     private class PeegeonCapeWingsLogic : ModPlayer {
         public bool IsWingsActive;
 
         private bool flapSound;

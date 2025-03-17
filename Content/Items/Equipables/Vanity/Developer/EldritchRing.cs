@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
 sealed class EldritchRing : ModItem {
-    private sealed class EldritchRingWingsLogic : ModPlayer {
+     private class EldritchRingWingsLogic : ModPlayer {
         public bool IsWingsActive;
 
         private bool flapSound;
@@ -153,7 +153,7 @@ sealed class EldritchRing : ModItem {
         player.wingsLogic = _wingsSlot;
     }
 
-    private sealed class EldritchRingDrawLayer : ILoadable {
+     private class EldritchRingDrawLayer : ILoadable {
         private Vector2 runePosition;
         private float runeRotation;
 

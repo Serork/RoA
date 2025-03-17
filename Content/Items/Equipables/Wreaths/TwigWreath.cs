@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Wreaths;
 
 sealed class TwigWreath : BaseWreathItem {
-    private sealed class TwigWreathInDryadShopSystem : GlobalNPC {
+     private class TwigWreathInDryadShopSystem : GlobalNPC {
         public override void ModifyShop(NPCShop shop) {
             if (shop.NpcType != NPCID.Dryad) {
                 return;

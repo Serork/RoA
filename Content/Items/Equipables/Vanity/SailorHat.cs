@@ -11,7 +11,7 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class SailorHat : ModItem {
-    private sealed class SailorHatInMerchantShop : GlobalNPC {
+     private class SailorHatInMerchantShop : GlobalNPC {
         public override void ModifyShop(NPCShop shop) {
             if (shop.NpcType != NPCID.Pirate) {
                 return;

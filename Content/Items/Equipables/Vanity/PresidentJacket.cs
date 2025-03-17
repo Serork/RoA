@@ -11,7 +11,7 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Body)]
 sealed class PresidentJacket : ModItem {
-    private sealed class PresidentJacketInMerchantShop : GlobalNPC {
+     private class PresidentJacketInMerchantShop : GlobalNPC {
         public override void ModifyShop(NPCShop shop) {
             if (shop.NpcType != NPCID.Merchant) {
                 return;

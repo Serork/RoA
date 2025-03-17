@@ -119,7 +119,7 @@ sealed class ElathaAmulet : ModItem {
         return base.UseItem(player);
     }
 
-    private sealed class ElathaAmuletCooldownHandler : ModSystem {
+     private class ElathaAmuletCooldownHandler : ModSystem {
         public static short ElathaAmuletCooldown;
 
         public override void Load() {

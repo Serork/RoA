@@ -15,7 +15,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Decorations;
 
 sealed class BackwoodsWaterFountain : ModTile {
-    private sealed class BackwoodsWaterFountainInWitchDoctorShop : GlobalNPC {
+     private class BackwoodsWaterFountainInWitchDoctorShop : GlobalNPC {
         public override void ModifyShop(NPCShop shop) {
             if (shop.NpcType != NPCID.WitchDoctor) {
                 return;

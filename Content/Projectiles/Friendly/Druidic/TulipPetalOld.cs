@@ -249,7 +249,7 @@ sealed class TulipPetalOld : NatureProjectile {
         }
     }
 
-    private sealed class WeepingTulipExplosion : NatureProjectile {
+     private class WeepingTulipExplosion : NatureProjectile {
         public override string Texture => ResourceManager.EmptyTexture;
 
         public override bool PreDraw(ref Color lightColor) => false;

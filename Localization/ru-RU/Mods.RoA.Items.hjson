@@ -1832,3 +1832,13 @@ MercuriumZipper: {
 		'Ариведерчи!'
 		'''
 }
+
+MercuriumBlunderbuss: {
+	// DisplayName: Mercurium Blunderbuss
+	// Tooltip: ""
+}
+
+MercuriumCenser: {
+	// DisplayName: Mercurium Censer
+	// Tooltip: ""
+}

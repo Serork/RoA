@@ -90,7 +90,7 @@ sealed class HunterSpawnSystem : ModSystem {
         SpawnHunterAttacks();
     }
 
-    private sealed class HunterAttackPlayer : ModPlayer {
+     private class HunterAttackPlayer : ModPlayer {
         public override void PostUpdate() {
             if (Main.myPlayer != Player.whoAmI) {
                 return;

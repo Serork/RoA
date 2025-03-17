@@ -38,7 +38,7 @@ sealed class TransformTileSystem : ILoadable {
         return original(self, hitCounter, damage, x, y, pickPower, bufferIndex, tileTarget);
     }
 
-    private sealed class TileReplacement : GlobalTile {
+     private class TileReplacement : GlobalTile {
         public override bool CanExplode(int i, int j, int type) {
             if (!OnKillActNormal[type] || WorldGen.gen) {
                 WorldGen.KillTile(i, j);
@@ -79,7 +79,7 @@ sealed class TransformTileSystem : ILoadable {
             return base.CreateDust(i, j, type, ref dustType);
         }
 
-        private sealed class TileReplacementSystem : ModPlayer {
+         private class TileReplacementSystem : ModPlayer {
             readonly struct ReplacementData(Point positionInWorld, ushort replaceToType) {
                 public readonly Point PositionInWorld = positionInWorld;
                 public readonly ushort ReplaceToType = replaceToType;

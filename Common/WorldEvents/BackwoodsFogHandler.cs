@@ -18,7 +18,7 @@ using Terraria.ModLoader.IO;
 namespace RoA.Common.WorldEvents;
 
 sealed class BackwoodsFogHandler : ModSystem {
-    //private sealed class ActivateFog : ModCommand {
+    // private class ActivateFog : ModCommand {
     //    public override CommandType Type => CommandType.World;
     //    public override string Command => "togglebackwoodsfog";
     //    public override string Usage => "/togglebackwoodsfog";

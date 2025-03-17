@@ -48,7 +48,7 @@ sealed class RagingBoots : NatureItem {
         }
     }
 
-    private sealed class RagingBootsAttackHandler : ModPlayer {
+     private class RagingBootsAttackHandler : ModPlayer {
         private bool _onGround;
         private Vector2 _speedBeforeGround;
 		private int _fallLength;

@@ -68,7 +68,7 @@ sealed class BloodbathLocket : ModItem {
         if (!hideVisual) player.GetModPlayer<BloodbathLocketPlayer>().theWildEye = true;
     }
 
-    private sealed class BloodbathLocketEyes : ILoadable {
+     private class BloodbathLocketEyes : ILoadable {
         private class EyesData {
             public Vector2 Position;
             public int TimeLeft, MaxTimeLeft;
@@ -149,7 +149,7 @@ sealed class BloodbathLocket : ModItem {
         }
     }
 
-    private sealed class BloodbathLocketPlayer : ModPlayer {
+     private class BloodbathLocketPlayer : ModPlayer {
         public bool bloodbathLocket, theWildEye;
         internal float bloodbathDamage { get; private set; }
         private const float bloodbathDamageMax = 0.25f;

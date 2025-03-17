@@ -1,29 +1,31 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
+using RoA.Content.Projectiles.Friendly.Melee;
 
 using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Projectiles.Friendly.Melee;
+namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
-sealed class MercuriumFumes : ModProjectile {
+sealed class MercuriumCenserToxicFumes : ModProjectile {
+    public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<MercuriumFumes>()).Texture;
+
     public override void SetStaticDefaults() => Main.projFrames[Projectile.type] = 3;
 
     public override void SetDefaults() {
         int width = 24; int height = width;
         Projectile.Size = new Vector2(width, height);
 
-        Projectile.DamageType = DamageClass.Melee;
         Projectile.penetrate = -1;
 
-        Projectile.timeLeft = 90;
+        Projectile.timeLeft = 150;
         Projectile.tileCollide = false;
 
         Projectile.friendly = true;
 
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 10;
+        Projectile.localNPCHitCooldown = 50;
 
         Projectile.aiStyle = -1;
     }
@@ -35,13 +37,14 @@ sealed class MercuriumFumes : ModProjectile {
             if (Projectile.localAI[0] == 0f) {
                 Projectile.ai[1] = Main.rand.NextFloat(0.75f, 1f);
 
-                Projectile.localAI[0] = Projectile.Opacity;
+                Projectile.localAI[0] = 1f;
                 Projectile.netUpdate = true;
             }
         }
 
         if (Projectile.ai[1] != 0f) {
             Projectile.Opacity = Projectile.ai[1];
+            Projectile.localAI[0] = Projectile.Opacity;
             Projectile.ai[1] = 0f;
         }
 
@@ -53,27 +56,23 @@ sealed class MercuriumFumes : ModProjectile {
 
         if (Projectile.owner == Main.myPlayer) {
             float distance = 30f;
-            //for (int findPlayer = 0; findPlayer < byte.MaxValue; findPlayer++) {
-            //    Player player = Main.player[findPlayer];
-            //    if (player.active && !player.dead && Vector2.Distance(Projectile.Center, player.Center) < distance)
-            //        player.AddBuff(ModContent.BuffType<ToxicFumes>(), 180, false);
-            //}
             for (int findNPC = 0; findNPC < Main.npc.Length; findNPC++) {
                 NPC npc = Main.npc[findNPC];
-                if (npc.active && npc.life > 0 && !npc.friendly && Vector2.Distance(Projectile.Center, npc.Center) < distance)
+                if (npc.active && npc.life > 0 && !npc.friendly && Vector2.Distance(Projectile.Center, npc.Center) < distance) {
                     npc.AddBuff(ModContent.BuffType<ToxicFumes>(), Main.rand.Next(40, 120));
+                }
             }
         }
 
         if (Projectile.Opacity > 0f) {
-            Projectile.Opacity -= Projectile.localAI[0] * 0.025f;
+            Projectile.Opacity -= Projectile.localAI[0] * 0.025f * 0.5f;
         }
         else {
             Projectile.Kill();
         }
     }
 
-    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity;
+    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity * 0.75f;
 
     public override bool? CanCutTiles() => false;
 }

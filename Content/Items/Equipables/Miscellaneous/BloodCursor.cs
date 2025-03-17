@@ -18,7 +18,7 @@ using Terraria.UI.Gamepad;
 namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 sealed class BloodCursor : ModItem {
-    private sealed class BloodCursorHandler : ModPlayer {
+     private class BloodCursorHandler : ModPlayer {
         public bool IsEffectActive;
 
         public override void Load() {

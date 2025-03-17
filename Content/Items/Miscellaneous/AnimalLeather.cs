@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class AnimalLeather : ModItem {
-	private sealed class LeatherValueChanger : GlobalItem {
+	 private class LeatherValueChanger : GlobalItem {
         public override void SetDefaults(Item entity) {
             if (entity.type == ItemID.Leather) {
 				entity.value = Item.sellPrice(0, 0, 1, 0);

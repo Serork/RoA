@@ -43,7 +43,7 @@ sealed class Has2rMask : ModItem {
           body == EquipLoader.GetEquipSlot(Mod, nameof(Has2rJacket), EquipType.Body) &&
           legs == EquipLoader.GetEquipSlot(Mod, nameof(Has2rPants), EquipType.Legs);
 
-    private sealed class TentaclesDrawLayer : ILoadable {
+     private class TentaclesDrawLayer : ILoadable {
         private const int MAX = 3;
 
         private Vector2 tentaclePosition;

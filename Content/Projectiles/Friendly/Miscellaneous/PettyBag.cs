@@ -20,7 +20,7 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 sealed class PettyBag : InteractableProjectile {
-    private sealed class PettyBagItemExtra : GlobalItem {
+     private class PettyBagItemExtra : GlobalItem {
         public bool WasCollectedByPettyBag;
 
         public override bool InstancePerEntity => true;

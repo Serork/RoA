@@ -30,7 +30,7 @@ sealed class BackwoodsVars : ModSystem {
     private static float _preDownedBossTimer;
     private static bool _backwoodsAwake;
 
-    private sealed class RemoveUnusedTreeCords2 : GlobalTile {
+     private class RemoveUnusedTreeCords2 : GlobalTile {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem) {
             if (!Main.hardMode) {
                 if (!fail && !effectOnly && !noItem) {

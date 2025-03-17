@@ -54,7 +54,7 @@ sealed class DruidClass : DamageClass {
         item.Prefix(prefix);
     }
 
-    private sealed class ResearchSorting : GlobalItem {
+     private class ResearchSorting : GlobalItem {
         public override void ModifyResearchSorting(Item item, ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
             if (item.DamageType.CountsAsClass<DruidClass>()) {
                 itemGroup = (ContentSamples.CreativeHelper.ItemGroup)554; 

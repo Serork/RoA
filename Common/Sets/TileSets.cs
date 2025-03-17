@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Sets;
 
 sealed class TileSets : ModSystem {
-    private sealed class PreventsSlopesBelowSystem : GlobalTile {
+     private class PreventsSlopesBelowSystem : GlobalTile {
         public override bool Slope(int i, int j, int type) {
             Tile aboveTile = Framing.GetTileSafely(i, j - 1);
             if (!aboveTile.HasTile) {

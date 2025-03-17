@@ -204,7 +204,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         }
     }
 
-    private sealed class LegsGlowMaskHandler : PlayerDrawLayer {
+     private class LegsGlowMaskHandler : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Leggings);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
@@ -241,7 +241,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         }
     }
 
-    private sealed class BodyGlowMaskHandler : PlayerDrawLayer {
+     private class BodyGlowMaskHandler : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {

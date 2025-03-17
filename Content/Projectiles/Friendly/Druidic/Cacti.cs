@@ -271,7 +271,7 @@ sealed class Cacti : NatureProjectile {
         }
     }
 
-    private sealed class CactiExplosion : NatureProjectile {
+     private class CactiExplosion : NatureProjectile {
         public override string Texture => ResourceManager.EmptyTexture;
 
         public override bool PreDraw(ref Color lightColor) => false;

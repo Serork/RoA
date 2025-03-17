@@ -125,7 +125,7 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
         }
     }
 
-    private sealed class TapperBracingDrawing : GlobalTile {
+     private class TapperBracingDrawing : GlobalTile {
         // separate
         public static List<Point> DrawPoints { get; private set; } = [];
 

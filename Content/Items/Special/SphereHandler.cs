@@ -300,7 +300,7 @@ sealed class SphereHandler : GlobalItem {
     #region SHOCK
     private static List<Color> _lerpColors = [new Color(175, 241, 205), new Color(60, 222, 190)];
 
-    private sealed class LerpColorHandler : ModPlayer {
+     private class LerpColorHandler : ModPlayer {
         private float _lerpColorProgress;
         private Color _lerpColor;
 

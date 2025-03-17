@@ -55,7 +55,7 @@ sealed partial class Lothor : ModNPC {
     private const double FLIGHTFRAMERATE = 6.0;
     private const int SPITCOUNT = 4;
 
-    private sealed class TossedPlayerStateHandler : ModPlayer {
+     private class TossedPlayerStateHandler : ModPlayer {
         public float Tossed;
 
         public override void PostUpdateMiscEffects() {
@@ -68,7 +68,7 @@ sealed partial class Lothor : ModNPC {
         }
     }
 
-    private sealed class ScreamProjectileHandler : GlobalProjectile {
+     private class ScreamProjectileHandler : GlobalProjectile {
         private Vector2 _storedVelocity;
         private float _storedRotation;
         private float _effectTimer;

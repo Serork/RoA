@@ -14,7 +14,7 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class StoneMask : ModItem {
-    private sealed class StoneMaskDrop : GlobalNPC {
+     private class StoneMaskDrop : GlobalNPC {
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
             npcLoot.Add(ItemDropRule.ByCondition(new BackwoodsDropCondition(), ModContent.ItemType<StoneMask>(), 144));
         }
@@ -44,7 +44,7 @@ sealed class StoneMask : ModItem {
             return flag;
         }
 
-	    private sealed class DisableHeadDrawing : ModPlayer {
+	     private class DisableHeadDrawing : ModPlayer {
             public override void HideDrawLayers(PlayerDrawSet drawInfo) {
 				if (IsActive(drawInfo.drawPlayer)) {
 					//PlayerDrawLayers.Head.Hide();

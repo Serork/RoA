@@ -38,7 +38,7 @@ abstract class Wand : ModItem {
     protected abstract ushort ItemToConsume { get; }
     protected abstract ushort TileToPlace { get; }
 
-    private sealed class ExtraLoader : ILoadable {
+     private class ExtraLoader : ILoadable {
         public void Load(Mod mod) {
             On_Player.PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate += On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate;
         }

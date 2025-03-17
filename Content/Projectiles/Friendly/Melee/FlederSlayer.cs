@@ -711,7 +711,7 @@ sealed class FlederSlayer : ModProjectile {
         return false;
     }
 
-    private sealed class WaveSlash : ModProjectile {
+     private class WaveSlash : ModProjectile {
         public override string Texture => ResourceManager.Textures + "FlederSlayerSlash";
 
         public override bool PreDraw(ref Color lightColor) {

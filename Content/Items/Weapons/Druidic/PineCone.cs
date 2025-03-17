@@ -37,7 +37,7 @@ sealed class PineCone : NatureItem {
         }
     }
 
-    private sealed class ExtraMapOptionForTrees : GlobalTile {
+     private class ExtraMapOptionForTrees : GlobalTile {
     }
 
     protected override void SafeSetDefaults() {

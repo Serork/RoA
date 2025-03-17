@@ -18,7 +18,7 @@ using Terraria.Utilities;
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
 sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
-    private sealed class BloomingDoomInWitchDoctorShopSystem : GlobalNPC {
+     private class BloomingDoomInWitchDoctorShopSystem : GlobalNPC {
         public override void ModifyShop(NPCShop shop) {
             if (shop.NpcType != NPCID.WitchDoctor) {
                 return;

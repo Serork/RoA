@@ -11,7 +11,7 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class JockeyHat : ModItem {
-    private sealed class JockeyHatInMerchantShop : GlobalNPC {
+     private class JockeyHatInMerchantShop : GlobalNPC {
         public override void ModifyShop(NPCShop shop) {
             if (shop.NpcType != NPCID.Merchant) {
                 return;

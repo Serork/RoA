@@ -26,7 +26,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class TreeDryad : ModTile {
-    private sealed class DryadAIChanges : GlobalNPC {
+     private class DryadAIChanges : GlobalNPC {
         public override bool? CanChat(NPC npc) {
             if (npc.type == NPCID.Dryad) {
                 return npc.ai[0] != -20f;
@@ -102,7 +102,7 @@ sealed class TreeDryad : ModTile {
 
     public static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
 
-    private sealed class DryadAwakeHandler : ModSystem {
+     private class DryadAwakeHandler : ModSystem {
         public static bool DryadAwake;
 
         public override void ClearWorld() {
@@ -131,7 +131,7 @@ sealed class TreeDryad : ModTile {
         }
     }
 
-    private sealed class ExtraDruidQuote : GlobalNPC {
+     private class ExtraDruidQuote : GlobalNPC {
         private byte _currentQuoteIndex;
 
         private const byte MAXAWAKEQUOTES = 5;

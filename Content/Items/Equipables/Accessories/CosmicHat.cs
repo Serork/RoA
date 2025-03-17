@@ -20,7 +20,7 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Face)]
 sealed class CosmicHat : ModItem {
-    private sealed class CosmicHatFaceGlowing : PlayerDrawLayer {
+     private class CosmicHatFaceGlowing : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
@@ -82,7 +82,7 @@ sealed class CosmicHat : ModItem {
         }
     }
 
-    private sealed class CosmicHatHandler : ModPlayer {
+     private class CosmicHatHandler : ModPlayer {
         private float _timer, _timer2;
         private int _lastMana;
 

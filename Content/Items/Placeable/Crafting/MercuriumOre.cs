@@ -49,7 +49,7 @@ sealed class MercuriumOre : ModItem {
 }
 
 sealed class MercuriumOrePlayerHandler : ModPlayer {
-    private sealed class MercuriumOreAchievement : GlobalItem {
+     private class MercuriumOreAchievement : GlobalItem {
         public override bool InstancePerEntity => true;
 
         public override bool OnPickup(Item item, Player player) {

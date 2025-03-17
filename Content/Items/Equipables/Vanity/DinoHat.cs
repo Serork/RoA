@@ -11,7 +11,7 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class DinoHat : ModItem {
-    private sealed class DinoHatInMerchantShop : GlobalNPC {
+     private class DinoHatInMerchantShop : GlobalNPC {
         public override void ModifyShop(NPCShop shop) {
             if (shop.NpcType != NPCID.Merchant) {
                 return;
