@@ -13,10 +13,8 @@ sealed class FlederStaff : ModItem {
     public override void SetStaticDefaults() {
         ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
         ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
-
         Item.ResearchUnlockCount = 1;
-		
-		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SoulOfTheWoods>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SoulOfTheWoods>();
     }
 
     public override void SetDefaults() {

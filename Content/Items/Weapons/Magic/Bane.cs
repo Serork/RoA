@@ -19,10 +19,8 @@ sealed class Bane : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Bane");
         // Tooltip.SetDefault("Drains life out of your enemies");
-
         Item.ResearchUnlockCount = 1;
-		
-		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<MothStaff>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<MothStaff>();
     }
 
     public override void SetDefaults() {
