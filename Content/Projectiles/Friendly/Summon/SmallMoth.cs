@@ -19,7 +19,7 @@ sealed class SmallMoth : ModProjectile {
         Projectile.penetrate = 3;
         Projectile.alpha = 255;
         Projectile.timeLeft = 600;
-        Projectile.extraUpdates = 3;
+        Projectile.extraUpdates = 0;
         Projectile.noEnchantmentVisuals = true;
 
         int width = 14; int height = width;
@@ -33,8 +33,6 @@ sealed class SmallMoth : ModProjectile {
         Projectile.minionSlots = 0f;
         Projectile.tileCollide = false;
 
-        Projectile.timeLeft = 300;
-
         Projectile.DamageType = DamageClass.Summon;
 
         Projectile.friendly = true;
@@ -44,7 +42,7 @@ sealed class SmallMoth : ModProjectile {
     }
 
     public override void AI() {
-        if (Projectile.timeLeft == 220) {
+        if (Projectile.timeLeft == 400) {
             Projectile.tileCollide = true;
         }
 

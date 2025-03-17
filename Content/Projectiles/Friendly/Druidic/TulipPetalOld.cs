@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
+using System.IO;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -23,12 +26,29 @@ sealed class TulipPetalOld : NatureProjectile {
     private int _allBees = 0; // this bullshittery is to add the third bee projectile when using beeCounter breaks other functions
     private int _flowerRarity = 3; // the lower the more flowers
     private int _explosionMultiplier = 0; // affects size of explosion and dust rays
+    private bool[] _largeBee = new bool[3];
 
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 3;
 
         ProjectileID.Sets.TrailCacheLength[Type] = 3;
         ProjectileID.Sets.TrailingMode[Type] = 0;
+    }
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
+        for (int i = 0; i < _largeBee.Length - 1; i++) {
+            writer.Write(_largeBee[i]);
+        }
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
+        for (int i = 0; i < _largeBee.Length - 1; i++) {
+            _largeBee[i] = reader.ReadBoolean();
+        }
     }
 
     protected override void SafeSetDefaults() {
@@ -62,6 +82,17 @@ sealed class TulipPetalOld : NatureProjectile {
                 Projectile.penetrate = 1;
                 _beeDrawOffset[0] = _beeDrawOffset[1] = _beeDrawOffset[2] = 50;
                 _beeDrawAlpha[0] = _beeDrawAlpha[1] = _beeDrawAlpha[2] = 0f;
+
+                if (Main.player[Projectile.owner].strongBees) {
+                    if (Projectile.owner == Main.myPlayer) {
+                        for (int i = 0; i < _largeBee.Length - 1; i++) {
+                            if (Main.rand.NextBool()) {
+                                _largeBee[i] = true;
+                            }
+                        }
+                        Projectile.netUpdate = true;
+                    }
+                }
             }
             Projectile.rotation = Main.rand.Next(360);
             if (Projectile.ai[0] < 3) Projectile.frame = (int)Projectile.ai[0];
@@ -125,11 +156,14 @@ sealed class TulipPetalOld : NatureProjectile {
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         if (Projectile.ai[0] == 1 || Projectile.ai[0] == 3) {
-            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "Bee");
-            Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            Rectangle frameRect = new Rectangle(0, texture.Height / 4 * beeFrame, texture.Width, texture.Height / 4);
-            Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
             for (int k = 0; k < _beeCounter + 1; k++) {
+                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "Bee");
+                if (_largeBee[k]) {
+                    texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LargeBee");
+                }
+                Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+                Rectangle frameRect = new Rectangle(0, texture.Height / 4 * beeFrame, texture.Width, texture.Height / 4);
+                Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
                 Vector2 drawPos = Projectile.oldPos[0] - Main.screenPosition + drawOrigin + new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation * Projectile.direction + k * 120));
                 Color color = Projectile.GetAlpha(lightColor) * _beeDrawAlpha[k];
                 if (Projectile.velocity.X > 0)
@@ -172,6 +206,20 @@ sealed class TulipPetalOld : NatureProjectile {
         }
     }
 
+    public int beeDamage(int dmg, bool flag) {
+        if (flag)
+            return dmg + Main.rand.Next(1, 4);
+
+        return dmg + Main.rand.Next(2);
+    }
+
+    public float beeKB(float KB, bool flag) {
+        if (flag)
+            return 0.5f + KB * 1.1f;
+
+        return KB;
+    }
+
     public override void OnKill(int timeLeft) {
         Player player = Main.player[Projectile.owner];
         Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -180,7 +228,11 @@ sealed class TulipPetalOld : NatureProjectile {
                 Vector2 spawnOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
                 for (int k = 0; k < _beeCounter + _allBees; k++) {
                     Vector2 spawnPos = Projectile.oldPos[0] + spawnOrigin + new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation * Projectile.direction + k * 120));
-                    CreateNatureProjectile(Projectile.GetSource_Death(), Item, spawnPos, Vector2.Normalize(new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation + k * 120))), ModContent.ProjectileType<Bee>(), (int)(Projectile.damage * 0.3f), 0, player.whoAmI);
+                    CreateNatureProjectile(Projectile.GetSource_Death(), Item, spawnPos, Vector2.Normalize(new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation + k * 120))), 
+                        _largeBee[k] ? ModContent.ProjectileType<LargeBee>() : ModContent.ProjectileType<Bee>(),
+                        beeDamage((int)(Projectile.damage * 0.333f), _largeBee[k]),
+                        beeKB(0f, _largeBee[k]),
+                        player.whoAmI);
                 }
             }
         }

@@ -20,6 +20,10 @@ sealed class RoyalQualityHoney : ModItem {
                 return;
             }
 
+            if (Player.dead) {
+                return;
+            }
+
             if (Player.HasBuff(BuffID.Honey)) {
                 return;
             }

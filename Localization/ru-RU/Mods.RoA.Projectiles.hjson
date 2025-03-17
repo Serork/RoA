@@ -56,7 +56,7 @@ SlipperyGlowstick.DisplayName: Скользкая светящаяся пало�
 SlipperyGrenade.DisplayName: Скользкая граната
 // EbonwoodStaffBase.DisplayName: Ebonwood Staff Base
 // ShadewoodStaffBase.DisplayName: Shadewood Staff Base
-Bee.DisplayName: Пчела
+Bee.DisplayName: "{$ProjectileName.Bee}"
 TulipPetalOld.DisplayName: Лепесток тюльпана
 TulipTrailOld.DisplayName: Лепесток тюльпана
 // WeepingTulipExplosion.DisplayName: Weeping Tulip Explosion
@@ -154,3 +154,4 @@ MercuriumBulletProjectile.DisplayName: Ртутная пуля
 GalipotStream2.DisplayName: Поток живицы
 MercuriumZipperProjectile.DisplayName: Ртутная молния
 // MercuriumCenserToxicFumes.DisplayName: Mercurium Censer Toxic Fumes
+LargeBee.DisplayName: "{$ProjectileName.Bee}"

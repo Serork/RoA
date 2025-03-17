@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Core;
 
@@ -9,8 +10,8 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class Bee : NatureProjectile {
-    public override string Texture => ResourceManager.ProjectileTextures + nameof(Bee);
+sealed class LargeBee : NatureProjectile {
+    public override string Texture => ResourceManager.ProjectileTextures + nameof(LargeBee);
 
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 4;
@@ -22,12 +23,12 @@ sealed class Bee : NatureProjectile {
         Projectile.noEnchantmentVisuals = true;
         Projectile.extraUpdates = 3;
 
-        int width = 12; int height = width;
+        int width = 16; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.scale = 1f;
-        Projectile.penetrate = 3;
-        Projectile.timeLeft = 600;
+        Projectile.penetrate = 4;
+        Projectile.timeLeft = 660;
 
         Projectile.tileCollide = true;
 
@@ -42,7 +43,7 @@ sealed class Bee : NatureProjectile {
     }
 
     public override void AI() {
-        //if (Projectile.timeLeft == 400) {
+        //if (Projectile.timeLeft == 220) {
         //    Projectile.tileCollide = true;
         //}
 
@@ -139,6 +140,9 @@ sealed class Bee : NatureProjectile {
         //speed = 9f;
         //acceleration = 0.2f;
 
+        speed = 6.8f;
+        acceleration = 0.14f;
+
         Vector2 vector26 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
         float num312 = targetPositionX - vector26.X;
         float num313 = targetPositionY - vector26.Y;
@@ -183,6 +187,13 @@ sealed class Bee : NatureProjectile {
         }
 
         return base.OnTileCollide(oldVelocity);
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (Main.expertMode) {
+            if (target.type >= 13 && target.type <= 15)
+                modifiers.FinalDamage /= 5;
+        }
     }
 
     public override void SafePostAI() {

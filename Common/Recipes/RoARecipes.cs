@@ -118,6 +118,10 @@ sealed class RoARecipes : ModSystem {
         item.AddTile(TileID.WorkBenches);
         item.SortAfterFirstRecipesOf(ItemID.DesertChest);
         item.Register();
+
+        // accessories
+        item = Recipe.Create(ModContent.ItemType<RoyalQualityHoney>());
+        item.Register();
     }
     
     private static void AddCampfire() {
@@ -986,6 +990,10 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient(ItemID.Wire, 5);
         item.AddTile(TileID.Anvils);
         item.SortAfter(temp);
+        item.Register();
+
+        // accessories
+        item = Recipe.Create(ModContent.ItemType<MercuriumCenser>());
         item.Register();
 
         // staves

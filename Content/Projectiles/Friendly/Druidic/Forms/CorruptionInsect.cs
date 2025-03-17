@@ -16,18 +16,16 @@ class CorruptionInsect : FormProjectile {
         Projectile.aiStyle = -1;
         Projectile.alpha = 255;
         Projectile.noEnchantmentVisuals = true;
-        Projectile.extraUpdates = 3;
+        Projectile.extraUpdates = 0;
 
         int width = 12; int height = width;
 		Projectile.Size = new Vector2(width, height);
 
 		Projectile.scale = 1f;
-		Projectile.penetrate = 1;
+		Projectile.penetrate = 3;
 		Projectile.timeLeft = 600;
 
         Projectile.tileCollide = false;
-
-        Projectile.timeLeft = 300;
 
         Projectile.friendly = true;
 		Projectile.hostile = false;
@@ -37,9 +35,9 @@ class CorruptionInsect : FormProjectile {
     }
 
 	public override void AI() {
-        if (Projectile.timeLeft == 220) {
-            Projectile.tileCollide = true;
-        }
+        //if (Projectile.timeLeft == 220) {
+        //    Projectile.tileCollide = true;
+        //}
 
         if (Projectile.alpha > 0) Projectile.alpha -= 10;
 
@@ -89,18 +87,18 @@ class CorruptionInsect : FormProjectile {
         if (Projectile.ai[0] > 30f) {
             Projectile.ai[0] = 30f;
 
-            NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
-            if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
-                float distanceBetween = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
-                float neededDistance = targetDistance;
-                if (distanceBetween < neededDistance && !targetFoundByOwner) {
-                    if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
-                        targetDistance = distanceBetween;
-                        targetPosition = ownerMinionAttackTargetNPC2.Center;
-                        targetFoundByOwner = true;
-                    }
-                }
-            }
+            //NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
+            //if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
+            //    float distanceBetween = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
+            //    float neededDistance = targetDistance;
+            //    if (distanceBetween < neededDistance && !targetFoundByOwner) {
+            //        if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
+            //            targetDistance = distanceBetween;
+            //            targetPosition = ownerMinionAttackTargetNPC2.Center;
+            //            targetFoundByOwner = true;
+            //        }
+            //    }
+            //}
 
             if (!targetFoundByOwner) {
                 for (int num306 = 0; num306 < 200; num306++) {
@@ -130,9 +128,6 @@ class CorruptionInsect : FormProjectile {
 
         float speed = 6f;
         float acceleration = 0.1f;
-
-        speed = 9f;
-        acceleration = 0.2f;
 
         Vector2 vector26 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
         float num312 = targetPositionX - vector26.X;
@@ -165,7 +160,22 @@ class CorruptionInsect : FormProjectile {
         }
     }
 
-	public override void OnKill(int timeLeft) {
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        if (Projectile.penetrate > 0) {
+            Projectile.penetrate--;
+            if (Projectile.velocity.X != Projectile.oldVelocity.X)
+                Projectile.velocity.X = 0f - Projectile.oldVelocity.X;
+
+            if (Projectile.velocity.Y != Projectile.oldVelocity.Y)
+                Projectile.velocity.Y = 0f - Projectile.oldVelocity.Y;
+
+            return false;
+        }
+
+        return base.OnTileCollide(oldVelocity);
+    }
+
+    public override void OnKill(int timeLeft) {
 		for (int count = 0; count < 9; count++) {
 			int dust = Dust.NewDust(Projectile.position, 10, 10, DustID.CursedTorch, 0, 0, 0, default, 0.8f);
 			Main.dust[dust].noGravity = true;

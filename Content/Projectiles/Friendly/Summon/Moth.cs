@@ -210,7 +210,8 @@ sealed class Moth : ModProjectile {
                     if (Main.myPlayer == Projectile.owner) {
                         for (int k = 0; k < Main.rand.Next(3, 5); k++) {
                             Vector2 summonPos = Projectile.Center + new Vector2(0f, -16f);
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), summonPos, Vector2.Normalize(new Vector2(0, 16f).RotatedByRandom(MathHelper.ToRadians(360))), ModContent.ProjectileType<SmallMoth>(), (int)(Projectile.damage * 0.5f), 0, player.whoAmI);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), summonPos, Vector2.Normalize(new Vector2(0, 16f).RotatedByRandom(MathHelper.ToRadians(360))), ModContent.ProjectileType<SmallMoth>(),
+                                Projectile.damage, 0, player.whoAmI);
                         }
                     }
                     SoundEngine.PlaySound(SoundID.NPCHit32, Projectile.Center);
