@@ -806,7 +806,7 @@ sealed class DryadEntrance : ModSystem {
         int num7_ = (int)(origin.Y + distance * 0.5);
         for (int x2 = num4; x2 < num5_; x2++) {
             for (int y2 = num6_; y2 < num7_; y2++) {
-                int y3 = y2 - 12;
+                int y3 = y2 - 8;
                 if (Main.tile[x2, y3].WallType != wallType) {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y3 - origin.Y);
