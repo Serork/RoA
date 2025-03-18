@@ -1,6 +1,11 @@
 ElderwoodClaws: {
 	DisplayName: Elderwood Claws
-	Tooltip: "'Fashioned after a Fleder'"
+	Tooltip:
+		'''
+		Attack foes with primal slashes
+		Consume full [kw/n:wreath] charge to grow a palisade of roots
+		'Fashioned after a Fleder'
+		'''
 }
 
 Elderwood: {
@@ -10,22 +15,42 @@ Elderwood: {
 
 GutwrenchingHooks: {
 	DisplayName: Gutwrenching Hooks
-	Tooltip: "'Fashioned after a Crimera'"
+	Tooltip:
+		'''
+		Attack foes with bloody slashes
+		Consume full [kw/n:wreath] charge to expel flesh and viscera
+		'Fashioned after a Crimera'
+		'''
 }
 
 HellfireClaws: {
 	DisplayName: Hellfire Claws
-	Tooltip: "'Claws so fire, they set everything on fire'"
+	Tooltip:
+		'''
+		Attack foes with flaming slashes
+		Consume full [kw/n:wreath] charge to tear a fiery fracture
+		'Claws so fire, they set everything on fire'
+		'''
 }
 
 HorrorPincers: {
 	DisplayName: Horror Pincers
-	Tooltip: "'Fashioned after an Eater of Souls'"
+	Tooltip:
+		'''
+		Attack foes with shadowy slashes
+		Consume full [kw/n:wreath] charge to expel bile and putrescence
+		'Fashioned after an Eater of Souls'
+		'''
 }
 
 ThornyClaws: {
 	DisplayName: Thorny Claws
-	Tooltip: "'Sting like a Hornet, bite like a Man Eater'"
+	Tooltip:
+		'''
+		Attack foes with feral slashes
+		Consume full [kw/n:wreath] charge to grow a pair of lesser man eaters
+		'Sting like a Hornet, bite like a Man Eater'
+		'''
 }
 
 ElderwoodChest: {
@@ -45,19 +70,19 @@ MiracleMint: {
 
 MushroomStaff: {
 	DisplayName: Grand Toadstool
-	Tooltip: Releases a bunch of floating spores
+	Tooltip: Releases floating spores that slowly drift downwards
 }
 
 PastoralRod: {
 	DisplayName: Pastoral Cane
-	Tooltip: Launches a bunch of fallen leaves
+	Tooltip: Launches a few fallen leaves
 }
 
 RipePumpkin: {
 	DisplayName: Ripe Pumpkin
 	Tooltip:
 		'''
-		Launches a pumpkin
+		Hurls a heavy pumpkin
 		Attack again to explode it into seeds
 		'''
 }
@@ -79,12 +104,12 @@ WeepingTulip: {
 
 PineCone: {
 	DisplayName: Pine Cone
-	Tooltip: Conjures a falling pine cone
+	Tooltip: Conjures a pine cone that fall unto your foe
 }
 
 CactiCaster: {
 	DisplayName: Cacti Cane
-	Tooltip: Launches a cactus ball from the ground
+	Tooltip: Rises a cactus ball out the ground then launches it at foes
 }
 
 SpikedIceStaff: {
@@ -104,17 +129,21 @@ Bonerose: {
 
 DiabolicDaikatana: {
 	DisplayName: Diabolic Daikatana
-	Tooltip: "'Where's your motivation?'"
+	Tooltip:
+		'''
+		Unleashes a vortex of blue sword slashes forward
+		'Where's your motivation?'
+		'''
 }
 
 RodOfTheDragonfire: {
 	DisplayName: Rod of the Pyre
-	Tooltip: Channels a swarm of flaming bats
+	Tooltip: Releases flaming bats that hone onto your enemies
 }
 
 RodOfTheStream: {
 	DisplayName: Rod of the Stream
-	Tooltip: Launches a trifecta of fresh dew
+	Tooltip: Shoots streams of fresh dew in a trident shape
 }
 
 RodOfTheShock: {
@@ -128,7 +157,7 @@ RodOfTheShock: {
 
 RodOfTheTerra: {
 	DisplayName: Rod of the Quake
-	Tooltip: Charges up a tremor beam
+	Tooltip: Charges up before unleashing a tremor beam
 }
 
 RodOfTheCondor: {
@@ -140,6 +169,7 @@ BeastBow: {
 	DisplayName: Weeping
 	Tooltip:
 		'''
+		Shoots several arrows at an awkward angle
 		33% chance to save ammo
 		'Is it the master weeping for the bow, or is the bow weeping for its master?'
 		'''
@@ -175,7 +205,7 @@ GiantTreeSapling: {
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: When [kw/n:wreath] is depleted, provides its full charge bonuses for 2.5 extra seconds
+	Tooltip: When [kw/n:wreath] begins discharging, provides its full charge bonuses for 2.5 extra seconds
 }
 
 RavencallersCloak: {
@@ -185,7 +215,7 @@ RavencallersCloak: {
 
 Tapper: {
 	DisplayName: Tapper
-	Tooltip: Collects Galipot from a tree
+	Tooltip: Over time collects Galipot from a tree
 }
 
 Galipot: {
@@ -194,18 +224,18 @@ Galipot: {
 }
 
 AnimalLeather: {
-	DisplayName: Animal Leather
+	DisplayName: Animal Rawhide
 	Tooltip: Can be processed at the Tanning Rack
 }
 
 RoughLeather: {
-	DisplayName: Crude Leather
+	DisplayName: Crude Skin
 	Tooltip: Can be processed at the Tanning Rack
 }
 
 SpoiledRawhide: {
-	DisplayName: Spoiled Rawhide
-	Tooltip: Rotten remains of leather that was not refined quickly enough
+	DisplayName: Spoiled Leather
+	Tooltip: Rotten remains that were not refined fast enough
 }
 
 TanningRack: {
@@ -483,8 +513,8 @@ BrilliantBouquet: {
 	DisplayName: Brilliant Bouquet
 	Tooltip:
 		'''
-		Shoots a bouquet of vibrant petals
-		While [kw/n:wreath] is charged, they cross-pollinate
+		Shoots a bouquet of vibrant petals, each with a special effect
+		While [kw/n:wreath] is charged, they cross-pollinate sharing those effects
 		'''
 }
 
@@ -617,7 +647,7 @@ FlamingFabric: {
 
 NaturesHeart: {
 	DisplayName: Nature's Heart
-	Tooltip: A grafted remnant of higher beings
+	Tooltip: "'A grafted remnant of higher beings'"
 }
 
 DeerSkull: {
@@ -627,7 +657,7 @@ DeerSkull: {
 
 OniMask: {
 	DisplayName: Oni Mask
-	Tooltip: Scares away Youkai
+	Tooltip: Scares away the Yōkai
 }
 
 ElderwoodBathtub: {
@@ -740,7 +770,7 @@ Herbarium: {
 	Tooltip:
 		'''
 		Enemies occasionally drop healing herbs
-		If [kw/n:wreath] is charged, consumes it to restore additional life
+		When [kw/n:wreath] is charged, consumes it to restore additional life
 		'''
 }
 
@@ -903,11 +933,6 @@ Hedgehog: {
 	Tooltip: "'Spiky, but cute'"
 }
 
-WandCore: {
-	DisplayName: Arcane Twig
-	Tooltip: "'The magics have not faded yet...'"
-}
-
 OvergrownSpear: {
 	DisplayName: Overgrown Spear
 	Tooltip: "'Aim for the balls for a burst of energy'"
@@ -930,12 +955,16 @@ ElderwoodBow: {
 
 MercuriumBolter: {
 	DisplayName: Mercurium Bolter
-	Tooltip: Splits arrows into lightweight bolts
+	Tooltip: Splits arrows into multiple, but weaker bolts
 }
 
 MercuriumBolt: {
 	DisplayName: Mercurium Arrow
-	Tooltip: "'Heavily toxic'"
+	Tooltip:
+		'''
+		Leaves a trail of toxic fumes at the cost of falling much closer
+		'Heavily toxic'
+		'''
 }
 
 DynastyWoodSword: {
@@ -950,7 +979,7 @@ ElderwoodSword: {
 
 MercuriumSword: {
 	DisplayName: Mercurium Sword
-	Tooltip: Creates clouds of noxious fumes on hit
+	Tooltip: Creates clouds of toxic fumes on hit
 }
 
 StarFusion: {
@@ -965,7 +994,7 @@ RavensEye: {
 
 MercuriumStaff: {
 	DisplayName: Mercurium Staff
-	Tooltip: Shoots an unstable mercurium shard
+	Tooltip: Shoots an unstable mercurium shard that shatters several times mid-air
 }
 
 MiracleMintSeeds: {
@@ -1217,7 +1246,7 @@ BloodbathLocket: {
 
 ChemicalPrisoner: {
 	DisplayName: Chemical Prisoner
-	Tooltip: ""
+	Tooltip: Every three shots launches a flask that shatters its contents on contact or when shot by a bullet
 }
 
 FlederStaff: {
@@ -1229,7 +1258,8 @@ FlederSlayer: {
 	DisplayName: Fleder Slayer
 	Tooltip:
 		'''
-		Sends vulnerable enemies back with a crushing blow
+		Sends vulnerable enemies flying with a crushing blow
+		Strike at just the right moment to unleash a more powerful wave
 		'It's too big to be called a sword'
 		'''
 }
@@ -1274,7 +1304,7 @@ LivingPrimordialWand2: {
 
 MoonFlower: {
 	DisplayName: Moon Flower
-	Tooltip: "'What name will you be remembered as?'"
+	Tooltip: "'What name will you be remembered with?'"
 }
 
 FeathersInABottle: {
@@ -1525,7 +1555,7 @@ GrimstoneBrick: {
 
 FireLighter: {
 	DisplayName: Fire Lighter
-	Tooltip: Good for starting a fire
+	Tooltip: "'Good for starting a fire'"
 }
 
 LivingBackwoodsLeavesWall: {
@@ -1678,7 +1708,8 @@ Has2rPants: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'...But stranger still is lost Carcosa'
+		'...But stranger still is 
+		lost Carcosa.'
 		'''
 }
 
@@ -1702,7 +1733,7 @@ NFAJacket: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'The man's level of cool is unparalleled.'
+		'The man's level of cool is unparalleled'
 		'''
 }
 
@@ -1826,7 +1857,11 @@ GalipotArrow: {
 
 MercuriumBullet: {
 	DisplayName: Mercurium Bullet
-	Tooltip: "'Might as well be called a 'slow' silver bullet'"
+	Tooltip:
+		'''
+		Deals lower damage, with a much higher knockback and afflicts enemies with toxic fumes
+		'Might as well be called a 'slow' silver bullet'
+		'''
 }
 
 BackwoodsWaterFountain: {
@@ -1842,11 +1877,6 @@ MercuriumZipper: {
 		{$CommonItemTooltip.Whips}
 		'Arrivederci!'
 		'''
-}
-
-MercuriumBlunderbuss: {
-	DisplayName: Mercurium Blunderbuss
-	Tooltip: ""
 }
 
 MercuriumCenser: {
