@@ -121,6 +121,13 @@ class MagicHerb1 : ModItem {
             if (Main.myPlayer == player.whoAmI) {
                 player.HealEffect(40);
             }
+            player.GetModPlayer<WreathHandler>().ForcedHardReset();
+        }
+        else {
+            player.statLife += 20;
+            if (Main.myPlayer == player.whoAmI) {
+                player.HealEffect(20);
+            }
         }
         SoundEngine.PlaySound(SoundID.Item60, player.position);
         return false;
