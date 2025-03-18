@@ -43,7 +43,7 @@ sealed class NFAWings : ModItem {
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(150, 7f);
+        ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(0, 0f);
     }
 
     public override void SetDefaults() {
