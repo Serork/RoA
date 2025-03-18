@@ -2,8 +2,7 @@ ElderwoodClaws: {
 	DisplayName: Elderwood Claws
 	Tooltip:
 		'''
-		Attack foes with primal slashes
-		Consume full [kw/n:wreath] charge to grow a palisade of roots
+		Consume a full [kw/n:wreath] charge to grow a palisade of roots
 		'Fashioned after a Fleder'
 		'''
 }
@@ -17,8 +16,7 @@ GutwrenchingHooks: {
 	DisplayName: Gutwrenching Hooks
 	Tooltip:
 		'''
-		Attack foes with bloody slashes
-		Consume full [kw/n:wreath] charge to expel flesh and viscera
+		Consume a full [kw/n:wreath] charge to expel flesh and viscera
 		'Fashioned after a Crimera'
 		'''
 }
@@ -27,8 +25,7 @@ HellfireClaws: {
 	DisplayName: Hellfire Claws
 	Tooltip:
 		'''
-		Attack foes with flaming slashes
-		Consume full [kw/n:wreath] charge to tear a fiery fracture
+		Consumes a full [kw/n:wreath] charge to tear a fiery fracture
 		'Claws so fire, they set everything on fire'
 		'''
 }
@@ -37,8 +34,7 @@ HorrorPincers: {
 	DisplayName: Horror Pincers
 	Tooltip:
 		'''
-		Attack foes with shadowy slashes
-		Consume full [kw/n:wreath] charge to expel bile and putrescence
+		Consumes a full [kw/n:wreath] charge to expel bile and putrescence
 		'Fashioned after an Eater of Souls'
 		'''
 }
@@ -47,8 +43,7 @@ ThornyClaws: {
 	DisplayName: Thorny Claws
 	Tooltip:
 		'''
-		Attack foes with feral slashes
-		Consume full [kw/n:wreath] charge to grow a pair of lesser man eaters
+		Consumes a full [kw/n:wreath] charge to grow a lesser man eater
 		'Sting like a Hornet, bite like a Man Eater'
 		'''
 }
@@ -89,7 +84,7 @@ RipePumpkin: {
 
 ExoticTulip: {
 	DisplayName: Exotic Tulip
-	Tooltip: Shoots a pink petal that leaves a damaging trail
+	Tooltip: Shoots a pink petal that leaves a flowery trail
 }
 
 SweetTulip: {
@@ -99,17 +94,17 @@ SweetTulip: {
 
 WeepingTulip: {
 	DisplayName: Weeping Tulip
-	Tooltip: Shoots a blue petal that explodes on contact
+	Tooltip: Shoots a blue petal that creates a magical explosion
 }
 
 PineCone: {
 	DisplayName: Pine Cone
-	Tooltip: Conjures a pine cone that fall unto your foe
+	Tooltip: Conjures a falling pine cone
 }
 
 CactiCaster: {
 	DisplayName: Cacti Cane
-	Tooltip: Rises a cactus ball out the ground then launches it at foes
+	Tooltip: Conjures a cactus ball from the ground, then launches it at the target
 }
 
 SpikedIceStaff: {
@@ -131,19 +126,19 @@ DiabolicDaikatana: {
 	DisplayName: Diabolic Daikatana
 	Tooltip:
 		'''
-		Unleashes a vortex of blue sword slashes forward
+		Unleashes a vortex of sword slashes
 		'Where's your motivation?'
 		'''
 }
 
 RodOfTheDragonfire: {
 	DisplayName: Rod of the Pyre
-	Tooltip: Releases flaming bats that hone onto your enemies
+	Tooltip: Releases flaming bats that home onto your enemies
 }
 
 RodOfTheStream: {
 	DisplayName: Rod of the Stream
-	Tooltip: Shoots streams of fresh dew in a trident shape
+	Tooltip: Launches a trifecta of fresh dew
 }
 
 RodOfTheShock: {
@@ -166,7 +161,7 @@ RodOfTheCondor: {
 }
 
 BeastBow: {
-	DisplayName: Weeping
+	DisplayName: Bow of Weeping
 	Tooltip:
 		'''
 		Shoots several arrows at an awkward angle
@@ -205,7 +200,7 @@ GiantTreeSapling: {
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: When [kw/n:wreath] begins discharging, provides its full charge bonuses for 2.5 extra seconds
+	Tooltip: When [kw/n:wreath] is discharged, provides its full charge bonuses for 2.5 extra seconds
 }
 
 RavencallersCloak: {
@@ -215,7 +210,7 @@ RavencallersCloak: {
 
 Tapper: {
 	DisplayName: Tapper
-	Tooltip: Over time collects Galipot from a tree
+	Tooltip: Collects Galipot from a tree over time
 }
 
 Galipot: {
@@ -770,7 +765,7 @@ Herbarium: {
 	Tooltip:
 		'''
 		Enemies occasionally drop healing herbs
-		When [kw/n:wreath] is charged, consumes it to restore additional life
+		If [kw/n:wreath] is charged, consumes it to restore additional life
 		'''
 }
 
@@ -955,16 +950,12 @@ ElderwoodBow: {
 
 MercuriumBolter: {
 	DisplayName: Mercurium Bolter
-	Tooltip: Splits arrows into multiple, but weaker bolts
+	Tooltip: Splits arrows into weaker lightweight bolts
 }
 
 MercuriumBolt: {
 	DisplayName: Mercurium Arrow
-	Tooltip:
-		'''
-		Leaves a trail of toxic fumes at the cost of falling much closer
-		'Heavily toxic'
-		'''
+	Tooltip: "'Heavily toxic'"
 }
 
 DynastyWoodSword: {
@@ -994,7 +985,7 @@ RavensEye: {
 
 MercuriumStaff: {
 	DisplayName: Mercurium Staff
-	Tooltip: Shoots an unstable mercurium shard that shatters several times mid-air
+	Tooltip: Shoots an unstable mercurium shard
 }
 
 MiracleMintSeeds: {
@@ -1246,7 +1237,7 @@ BloodbathLocket: {
 
 ChemicalPrisoner: {
 	DisplayName: Chemical Prisoner
-	Tooltip: Every three shots launches a flask that shatters its contents on contact or when shot by a bullet
+	Tooltip: Occasionally launches a flask of poison
 }
 
 FlederStaff: {
@@ -1259,7 +1250,7 @@ FlederSlayer: {
 	Tooltip:
 		'''
 		Sends vulnerable enemies flying with a crushing blow
-		Strike at just the right moment to unleash a more powerful wave
+		Strike at the right moment to unleash an even stronger wave
 		'It's too big to be called a sword'
 		'''
 }
@@ -1708,8 +1699,7 @@ Has2rPants: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'...But stranger still is 
-		lost Carcosa.'
+		'...But stranger still is lost Carcosa.'
 		'''
 }
 
@@ -1857,11 +1847,7 @@ GalipotArrow: {
 
 MercuriumBullet: {
 	DisplayName: Mercurium Bullet
-	Tooltip:
-		'''
-		Deals lower damage, with a much higher knockback and afflicts enemies with toxic fumes
-		'Might as well be called a 'slow' silver bullet'
-		'''
+	Tooltip: "'Might as well be called a 'slow' silver bullet'"
 }
 
 BackwoodsWaterFountain: {
