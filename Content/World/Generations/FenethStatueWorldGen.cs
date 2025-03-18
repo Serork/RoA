@@ -223,8 +223,9 @@ sealed class FenethStatueWorldGen : ModSystem {
                 }
             }
             bool hasCalamity = ModLoader.HasMod("CalamityMod");
+            bool hasSpooky = ModLoader.HasMod("Spooky");
             while (!_fenethStatuePlaced) {
-                for (int num868 = hasCalamity ? Main.maxTilesX / 2 : 100; num868 < Main.maxTilesX - 100; num868++) {
+                for (int num868 = hasCalamity ? Main.maxTilesX / 2 : 100; num868 < (hasSpooky ? Main.maxTilesX / 2 : (Main.maxTilesX - 100)); num868++) {
                     if ((double)num868 < (double)Main.maxTilesX * 0.17 || (double)num868 > (double)Main.maxTilesX * 0.83) {
                         if (_fenethStatuePlaced) {
                             break;
