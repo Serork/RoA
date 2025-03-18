@@ -22,6 +22,8 @@ sealed class BackwoodsWorldGen : ModSystem {
     public static BackwoodsBiomePass BackwoodsWorldGenPass { get; private set; }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
+        bool hasSpirit = ModLoader.HasMod("SpiritMod");
+
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         genIndex += 6;
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new("Backwoods", LAYERWEIGHT));
@@ -31,6 +33,13 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
         genIndex -= 2;
         tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
+
+        if (hasSpirit) {
+            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Chests"));
+            genIndex += 2;
+
+            tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
+        }
 
         //genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Spreading Grass"));
         //tasks.RemoveAt(genIndex);

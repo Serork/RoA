@@ -265,7 +265,7 @@ static class WorldGenHelper {
                         continue;
                     }
 
-                    if (!ignoreWallTypes.Contains(num)) {
+                    if (!ignoreWallTypes.Contains(num) && shouldSpread(new Point(item.X, item.Y))) {
                         tile.WallType = num;
                         onSpread();
                     }

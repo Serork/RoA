@@ -1365,10 +1365,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step13_GrowBigTrees() {
-        int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX + 10 : Left) : Left;
+        int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX + 5 : Left) : Left;
         _leftTreeX = _random.Next(left + 15, left + 30);
         GrowBigTree(_leftTreeX);
-        int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX - 10 : Right) : Right;
+        int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX - 5 : Right) : Right;
         _rightTreeX = _random.Next(right - 30, right - 15);
         GrowBigTree(Math.Max(_rightTreeX, CenterX + 40), false);
     }
@@ -1879,7 +1879,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GetRandomPosition(int posX, int posY, out int baseX, out int baseY, bool rootLootRoom = true) {
         int startX = Left + 2;
         int endX = Right - 2;
-        int centerY = rootLootRoom ? (BackwoodsVars.FirstTileYAtCenter + EdgeY / 2) : ((int)Main.worldSurface + 15);
+        int centerY = rootLootRoom ? (BackwoodsVars.FirstTileYAtCenter + EdgeY) : ((int)Main.worldSurface + 15);
         int minY = centerY;
         int generateY = Bottom - 10;
         if (posX == 0) {
@@ -1891,10 +1891,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         WeightedRandom<float> weightedRandom = new WeightedRandom<float>();
         weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.25f);
         weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.25f);
-        weightedRandom.Add(0.35f + 0.1f * _random.NextFloat(), 0.5f);
+        weightedRandom.Add(0.35f + 0.1f * _random.NextFloat(), 0.75f);
         weightedRandom.Add(0.5f + 0.1f * _random.NextFloatRange(1f), 0.75f);
         weightedRandom.Add(0.65f + 0.1f * _random.NextFloatRange(1f), 0.85f);
-        weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(0.1f), 0.85f);
+        weightedRandom.Add(0.8f + 0.1f * _random.NextFloatRange(1f), 0.85f);
         if (posY == 0) {
             baseY = (int)(minY + (generateY - minY) * weightedRandom);
         }
@@ -1948,7 +1948,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         int attempts = 1000;
         while (--attempts > 0) {
-            int num = _biomeWidth / 3;
+            int num = Math.Max(50, _biomeWidth / 3);
             bool flag = true;
             for (int i = origin.X - num; i <= origin.X + num; i++) {
                 if (!flag) {
@@ -3698,6 +3698,18 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
     }
 
+    public void ReplaceAllSnowBlockForSpiritModSupport(GenerationProgress progress, GameConfiguration config) {
+        _grassTileType = (ushort)ModContent.TileType<BackwoodsGrass>();
+        for (int i = Left - 75; i < Right + 75; i++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
+                Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                if (tile.ActiveTile(TileID.SnowBlock)) {
+                    WorldGenHelper.ReplaceTile(i, j, _grassTileType);
+                }
+            }
+        }
+    }
+
     private void Step0_Setup() {
         _oneChestPlacedInBigTree = false;
         _wandsAdded = false;
@@ -3718,8 +3730,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         CenterX = GenVars.JungleX;
         CenterY = (int)Main.worldSurface;
 
+        bool hasSpirit = ModLoader.HasMod("SpiritMod");
+
         _dirtTileType = (ushort)ModContent.TileType<BackwoodsDirt>();
-        _grassTileType = (ushort)ModContent.TileType<BackwoodsGrass>();
+        _grassTileType = hasSpirit ? TileID.SnowBlock : (ushort)ModContent.TileType<BackwoodsGrass>();
         _stoneTileType = (ushort)ModContent.TileType<BackwoodsStone>();
         _mossTileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         _mossGrowthTileType = (ushort)ModContent.TileType<MossGrowth>();
@@ -3752,10 +3766,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         SkipTilesByTileType(TileID.Sand, tileCountToCheck: tileCountToCheck * 2, offsetPositionDirectionOnCheck: -1);
 
         int mid = Main.maxTilesX / 2;
-        while (CenterX >= mid && CenterX < mid + _biomeWidth * 2) {
+        while (CenterX >= mid && CenterX < mid + _biomeWidth * 3) {
             CenterX++;
         }
-        while (CenterX <= mid && CenterX > mid - _biomeWidth * 2) {
+        while (CenterX <= mid && CenterX > mid - _biomeWidth * 3) {
             CenterX--;
         }
         BackwoodsVars.BackwoodsStartX = CenterX;
