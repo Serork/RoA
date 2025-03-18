@@ -3861,7 +3861,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int max = Math.Min(leftY, rightY) == leftY ? topLeftTileX : topRightTileX;
         int extraHeight = Math.Abs(between);
         _biomeHeight += extraHeight;
-        CenterY += extraHeight;
         _toLeft = max == topLeftTileX;
         void setSurfaceY() {
             int getSurfaceOffset() {
