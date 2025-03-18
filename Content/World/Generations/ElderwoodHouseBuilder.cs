@@ -838,8 +838,8 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         WorldUtils.Gen(new Point(room.X, room.Y), new Shapes.Rectangle(room.Width, room.Height), Actions.Chain(new Modifiers.Dither(0.85), new Modifiers.Blotches(2, 0.85), new Modifiers.SkipTiles(51), new Modifiers.SkipTiles([.. TileSets.Paintings]), new Modifiers.OnlyWalls(WallType),
             ((double)room.Y > Main.worldSurface) ? (((GenAction)new ClearWallCustom(frameNeighbors: true))) : (WorldGen.genRand.NextBool() ? (GenAction)new ClearWallCustom(frameNeighbors: true) : ((GenAction)new PlaceWall(2, fail: true)))));
 
-        for (int i = room.X + 1; i < room.X + room.Width - 1; i++) {
-            for (int j = room.Y + 1; j < room.Y + room.Height - 1; j++) {
+        for (int i = room.X; i < room.X + room.Width; i++) {
+            for (int j = room.Y; j < room.Y + room.Height; j++) {
                 if (j <= Main.worldSurface) {
                     bool flag = false;
                     int check = 10;
