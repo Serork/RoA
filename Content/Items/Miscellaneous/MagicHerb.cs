@@ -14,6 +14,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace RoA.Content.Items.Miscellaneous;
 
@@ -36,6 +37,24 @@ class MagicHerb1 : ModItem {
 
     public override void Load() {
         On_Main.DrawItem += On_Main_DrawItem;
+        On_Item.DespawnIfMeetingConditions += On_Item_DespawnIfMeetingConditions;
+    }
+
+    private void On_Item_DespawnIfMeetingConditions(On_Item.orig_DespawnIfMeetingConditions orig, Item self, int i) {
+        orig(self, i);
+
+        if (self.ModItem != null && self.ModItem is MagicHerb1 && self.timeSinceItemSpawned > 900) {
+            for (int l = 0; l < 20; l++) {
+                Dust.NewDust(self.position, self.width, self.height, 15, self.velocity.X, self.velocity.Y, 150, 
+                    Color.Lerp(Color.Green, Color.Lime, Main.rand.NextFloat()), 1.2f);
+            }
+
+            self.active = false;
+            self.type = 0;
+            self.stack = 0;
+            if (Main.netMode == 2)
+                NetMessage.SendData(21, -1, -1, null, i);
+        }
     }
 
     private void On_Main_DrawItem(On_Main.orig_DrawItem orig, Main self, Item item, int whoami) {
@@ -106,7 +125,7 @@ class MagicHerb1 : ModItem {
 	public override void SetDefaults() {
 		int width = 20; int height = width;
 		Item.Size = new Vector2(width, height);
-	}
+    }
 
 	public override bool ItemSpace(Player player) => true;
 
