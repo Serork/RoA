@@ -29,7 +29,9 @@ class MagicHerb1 : ModItem {
         ItemID.Sets.ItemsThatShouldNotBeInInventory[Type] = true;
         ItemID.Sets.IsAPickup[Type] = true;
 
-		Item.ResearchUnlockCount = 0;
+        ItemID.Sets.IgnoresEncumberingStone[Type] = true;
+
+        Item.ResearchUnlockCount = 0;
     }
 
     public override void Load() {
