@@ -852,7 +852,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
                         }
                     }
                     if (Main.tile[i, j].WallType == 0 || !Main.tile[i, j].AnyWall()) {
-                        Main.tile[i, j].WallType = flag ? (ushort)(WorldGen.genRand.NextBool() ? WallType : ModContent.WallType<BackwoodsGrassWall>()) : WallType;
+                        Main.tile[i, j].WallType = flag ? (ushort)(WorldGen.genRand.NextBool() ? WallID.DirtUnsafe : ModContent.WallType<BackwoodsGrassWall>()) : WallType;
                     }
                 }
             }
