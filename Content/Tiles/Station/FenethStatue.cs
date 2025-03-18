@@ -4,8 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Solid.Backwoods;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -201,7 +203,8 @@ sealed class FenethStatue : ModTile {
         for (int i = num868 - 10; i < num868 + 11; i++) {
             for (int j = num869 - 10; j < num869 + 11; j++) {
                 if (genRand.NextBool(20)) {
-                    if (Main.tile[i, j].HasTile && TileID.Sets.Grass[Main.tile[i, j].TileType] &&
+                    int[] grass = [TileID.Ash, 2, 23, 109, 199, 477, 492, 633, ModContent.TileType<BackwoodsGrass>()];
+                    if (Main.tile[i, j].HasTile && (grass.Contains(Main.tile[i, j].TileType)) &&
                         !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && !Main.tile[i, j - 1].HasTile) {
                         WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4), mute: true);
                     }

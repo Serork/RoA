@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 
 using RoA.Common.Tiles;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -36,7 +37,9 @@ sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Style = 0;
         TileObjectData.newTile.LavaDeath = false;
+        TileObjectData.newTile.AnchorValidTiles = [TileID.Ash, 2, 23, 109, 199, 477, 492, 633, ModContent.TileType<BackwoodsGrass>()];
         TileObjectData.addTile(Type);
+        
 
         DustType = (ushort)ModContent.DustType<Dusts.Fireblossom2>();
         HitSound = SoundID.Grass;
