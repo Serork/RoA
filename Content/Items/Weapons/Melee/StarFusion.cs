@@ -77,7 +77,7 @@ sealed class StarFusion : ModItem {
             Vector2 spawnPos = target.Center + offset;
             Vector2 projectileVelocity = Helper.VelocityToPoint(spawnPos, target.Center, 1f);
             Projectile.NewProjectile(target.GetSource_OnHit(target), spawnPos.X, spawnPos.Y, projectileVelocity.X, projectileVelocity.Y, type,
-                Item.damage / 2 + Item.damage / 4, Item.knockBack, player.whoAmI, 0f, (float)index, target.whoAmI);
+                Item.damage, Item.knockBack, player.whoAmI, 0f, (float)index, target.whoAmI);
         }
         for (int i = 0; i < 3; i++) {
             spawnStar();
