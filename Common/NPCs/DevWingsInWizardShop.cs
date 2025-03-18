@@ -13,7 +13,7 @@ sealed class DevWingsInWizardShop : GlobalNPC {
         }
 
         shop.InsertAfter(ItemID.EmptyDropper, ModContent.ItemType<PeegeonCape>(), RoAConditions.HasPeegeonSet);
-        shop.InsertAfter(ItemID.EmptyDropper, ModContent.ItemType<NFAWings>(), RoAConditions.HasNFASet);
+        //shop.InsertAfter(ItemID.EmptyDropper, ModContent.ItemType<NFAWings>(), RoAConditions.HasNFASet);
         shop.InsertAfter(ItemID.EmptyDropper, ModContent.ItemType<EldritchRing>(), RoAConditions.HasHas2rSet);
     }
 }
