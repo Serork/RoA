@@ -3704,7 +3704,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(TileID.SnowBlock)) {
-                    WorldGenHelper.ReplaceTile(i, j, _grassTileType);
+                    tile.TileType = _grassTileType;
                 }
             }
         }
