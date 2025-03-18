@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Items.Weapons.Druidic.Claws;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -291,7 +292,7 @@ sealed class Snatcher : NatureProjectile {
         if (Projectile.owner == Main.myPlayer && player.itemAnimation > player.itemAnimationMax - 10 && !flag && !IsAttacking && !IsAttacking2) {
             Projectile.ai[2] = 5f;
 
-            //SoundEngine.PlaySound(SoundID.Owl, GetPos());
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SnatcherBite") { Volume = 0.75f }, GetPos());
 
             Vector2 mousePos = Helper.GetLimitedPosition(player.Center, _mousePos, 200f, DIST * 0.75f);
             Projectile.localAI[1] = mousePos.X;

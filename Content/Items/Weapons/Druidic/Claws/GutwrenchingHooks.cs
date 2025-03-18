@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -36,7 +37,7 @@ sealed class GutwrenchingHooks : BaseClawsItem {
             Owner = Item,
             SpawnPosition = new Vector2(position.X, position.Y - 14f),
             StartVelocity = point,
-            PlaySoundStyle = SoundID.Item95
+            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "ClawsWave") { Volume = 0.75f }
         });
     }
 }

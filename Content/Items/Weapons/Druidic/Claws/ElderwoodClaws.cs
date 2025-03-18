@@ -52,7 +52,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
         clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
             Owner = Item,
             SpawnProjectile = (Player player) => {
-                //SoundEngine.PlaySound(SoundID.Dolphin, player.Center);
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsRoot") { Volume = 2.5f }, player.Center);
 
                 for (int k = 0; k < 2; k++) {
                     switch (k) {

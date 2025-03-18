@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -51,7 +52,7 @@ sealed class ThornyClaws : BaseClawsItem {
             ProjectileTypeToSpawn = type,
             ShouldReset = shouldReset,
             ShouldSpawn = player.ownedProjectileCounts[type] < 2,
-            //PlaySoundStyle = SoundID.Owl
+            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "Leaves2") { Pitch = 0.3f, Volume = 1.2f }
         });
     }
 }

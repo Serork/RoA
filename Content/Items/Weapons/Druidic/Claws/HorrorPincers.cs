@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
@@ -35,7 +36,7 @@ sealed class HorrorPincers : BaseClawsItem {
             Owner = Item,
             SpawnPosition = new Vector2(position.X, position.Y - 14f),
             StartVelocity = point,
-            PlaySoundStyle = SoundID.Item95
+            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "ClawsWave") { Volume = 0.75f }
         });
     }
 }
