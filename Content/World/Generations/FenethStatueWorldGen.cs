@@ -270,7 +270,7 @@ sealed class FenethStatueWorldGen : ModSystem {
             while (!_fenethStatuePlaced) {
                 for (int num868 = 100;
                     num868 < (Main.maxTilesX - 100); num868++) {
-                    if ((double)num868 < (double)Main.maxTilesX * 0.4 || (double)num868 > (double)Main.maxTilesX * 0.6) {
+                    if ((double)num868 < (double)Main.maxTilesX * 0.34 || (double)num868 > (double)Main.maxTilesX * 0.66) {
                         if (_fenethStatuePlaced) {
                             break;
                         }
@@ -287,7 +287,7 @@ sealed class FenethStatueWorldGen : ModSystem {
                                     }
                                     for (int i = num868 - 10; i < num868 + 11; i++) {
                                         for (int j = num869 - 10; j < num869 + 11; j++) {
-                                            if (genRand.NextChance(0.7f) && Main.tile[i, j].HasTile && Main.tile[i, j].TileType == TileID.ObsidianBric &&
+                                            if (genRand.NextChance(0.7f) && Main.tile[i, j].HasTile && Main.tile[i, j].TileType == TileID.ObsidianBrick &&
                                                 !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
                                                 if (genRand.NextBool(10)) {
                                                     WorldGen.PlaceTile(i, j - 1, TileID.BloomingHerbs, style: 5);
