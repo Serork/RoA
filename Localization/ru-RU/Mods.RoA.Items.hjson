@@ -927,11 +927,6 @@ Hedgehog: {
 	Tooltip: "'Колючий, но милый'"
 }
 
-WandCore: {
-	DisplayName: Зачарованная ветка
-	Tooltip: "'Не вся магия еще увяла...'"
-}
-
 OvergrownSpear: {
 	DisplayName: Заросшее копье
 	Tooltip: "'Бейте по шарам, чтобы выпустить энергию'"
@@ -1874,11 +1869,6 @@ MercuriumZipper: {
 		{$CommonItemTooltip.Whips}
 		'Ариведерчи!'
 		'''
-}
-
-MercuriumBlunderbuss: {
-	// DisplayName: Mercurium Blunderbuss
-	// Tooltip: ""
 }
 
 MercuriumCenser: {
