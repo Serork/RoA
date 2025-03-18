@@ -866,8 +866,8 @@ sealed class RoARecipes : ModSystem {
     private static void AddHellstoneItems(out Recipe daikatana) {
         Recipe item = Recipe.Create(ModContent.ItemType<StarFusion>());
         item.AddIngredient(ItemID.Starfury, 1);
+        item.AddIngredient(ItemID.MeteoriteBar, 10);
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
-		item.AddIngredient(ItemID.MeteoriteBar, 10);
         item.AddTile(TileID.Anvils);
         item.SortAfterFirstRecipesOf(ItemID.OrangePhaseblade);
         item.Register();
