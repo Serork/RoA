@@ -16,7 +16,7 @@ sealed class MercuriumBullet : ModItem {
         Item.shoot = ModContent.ProjectileType<MercuriumBulletProjectile>();
 
         Item.shootSpeed = 3f;
-        Item.damage = 9;
+        Item.damage = 8;
         Item.knockBack = 7f;
 
         Item.width = 20;
