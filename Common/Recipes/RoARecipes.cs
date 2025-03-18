@@ -867,9 +867,9 @@ sealed class RoARecipes : ModSystem {
         Recipe item = Recipe.Create(ModContent.ItemType<StarFusion>());
         item.AddIngredient(ItemID.Starfury, 1);
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
-		item.AddIngredient(ItemID.HellstoneBar, 10);
+		item.AddIngredient(ItemID.MeteoriteBar, 10);
         item.AddTile(TileID.Anvils);
-        item.SortAfterFirstRecipesOf(ItemID.FireproofBugNet);
+        item.SortAfterFirstRecipesOf(ItemID.OrangePhaseblade);
         item.Register();
 
         item = Recipe.Create(ModContent.ItemType<DiabolicDaikatana>());

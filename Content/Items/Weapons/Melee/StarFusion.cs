@@ -1,13 +1,13 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
-using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core.Utility;
+
 using System;
+
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -25,13 +25,13 @@ sealed class StarFusion : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.useTime = Item.useAnimation = 40;
+        Item.useTime = Item.useAnimation = 35;
         Item.autoReuse = false;
         Item.useTurn = true;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 22;
-        Item.knockBack = 4f;
+        Item.damage = 20;
+        Item.knockBack = 5.25f;
 
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item1;
@@ -76,7 +76,8 @@ sealed class StarFusion : ModItem {
             ushort type = (ushort)ModContent.ProjectileType<MeltingStar>();
             Vector2 spawnPos = target.Center + offset;
             Vector2 projectileVelocity = Helper.VelocityToPoint(spawnPos, target.Center, 1f);
-            Projectile.NewProjectile(target.GetSource_OnHit(target), spawnPos.X, spawnPos.Y, projectileVelocity.X, projectileVelocity.Y, type, Item.damage / 2 + Item.damage / 4, Item.knockBack, player.whoAmI, 0f, (float)index, target.whoAmI);
+            Projectile.NewProjectile(target.GetSource_OnHit(target), spawnPos.X, spawnPos.Y, projectileVelocity.X, projectileVelocity.Y, type,
+                Item.damage / 2 + Item.damage / 4, Item.knockBack, player.whoAmI, 0f, (float)index, target.whoAmI);
         }
         for (int i = 0; i < 3; i++) {
             spawnStar();
