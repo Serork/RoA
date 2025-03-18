@@ -275,7 +275,7 @@ sealed class FenethStatueWorldGen : ModSystem {
                             break;
                         }
                         for (int num869 = Main.maxTilesY - 170; num869 < Main.maxTilesY - 140; num869++) {
-                            if (Main.tile[num868, num869].LiquidAmount <= 0 && Main.tile[num868, num869].TileType == TileID.ObsidianBrick && Main.tile[num868, num869].HasTile && !Main.tile[num868, num869 - 1].HasTile && genRand.Next(30) == 0) {
+                            if (Main.tile[num868, num869].LiquidAmount <= 0 && Main.tile[num868, num869].TileType == TileID.Ash && Main.tile[num868, num869].HasTile && !Main.tile[num868, num869 - 1].HasTile && genRand.Next(30) == 0) {
                                 ushort type = (ushort)ModContent.TileType<FenethStatue>();
                                 WorldGen.Place3x4(num868, num869 - 1, type, genRand.NextBool().ToInt());
                                 if (Main.tile[num868, num869 - 1].TileType == type) {
@@ -287,7 +287,7 @@ sealed class FenethStatueWorldGen : ModSystem {
                                     }
                                     for (int i = num868 - 10; i < num868 + 11; i++) {
                                         for (int j = num869 - 10; j < num869 + 11; j++) {
-                                            if (genRand.NextChance(0.7f) && Main.tile[i, j].HasTile && Main.tile[i, j].TileType == TileID.ObsidianBrick &&
+                                            if (genRand.NextChance(0.7f) && Main.tile[i, j].HasTile && Main.tile[i, j].TileType == TileID.Ash &&
                                                 !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
                                                 if (genRand.NextBool(10)) {
                                                     WorldGen.PlaceTile(i, j - 1, TileID.BloomingHerbs, style: 5);
