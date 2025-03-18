@@ -23,6 +23,12 @@ float2 uZoom;
 float Radius;
 float FadeDistance;
 
+float smoothProgress(float progress) {
+    progress = lerp(-3.14/2, 3.14/2, progress);
+    progress = sin(progress);
+    progress = (progress/2) + .5;
+    return progress;
+}
 
 float4 MainPS(float2 coords : TEXCOORD0) : COLOR0
 {
