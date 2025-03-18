@@ -270,7 +270,7 @@ sealed class FenethStatueWorldGen : ModSystem {
             while (!_fenethStatuePlaced) {
                 for (int num868 = 100;
                     num868 < (Main.maxTilesX - 100); num868++) {
-                    if ((double)num868 < (double)Main.maxTilesX * 0.17 || (double)num868 > (double)Main.maxTilesX * 0.83) {
+                    if ((double)num868 < (double)Main.maxTilesX * 0.34 || (double)num868 > (double)Main.maxTilesX * 0.66) {
                         if (_fenethStatuePlaced) {
                             break;
                         }
