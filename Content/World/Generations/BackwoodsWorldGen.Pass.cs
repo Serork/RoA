@@ -2016,7 +2016,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     Tile tile = WorldGenHelper.GetTileSafely(x2, y2);
                     if (tile.ActiveWall(placeholderWallType)) {
                         if (y2 < Main.worldSurface) {
-
+                            WorldGenHelper.ReplaceWall(x2, y2, WallID.DirtUnsafe);
                         }
                         else {
                             WorldGen.KillWall(x2, y2);

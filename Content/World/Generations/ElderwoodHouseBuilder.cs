@@ -842,14 +842,12 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
             for (int j = room.Y + 1; j < room.Y + room.Height - 1; j++) {
                 if (j <= Main.worldSurface) {
                     bool flag = false;
-                    int check = 5;
+                    int check = 10;
                     for (int i2 = i - check; i2 < i + check + 1; i2++) {
                         for (int j2 = j - check; j2 < j + check + 1; j2++) {
-                            if (i2 != 0 && j2 != 0) {
-                                if (Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsGrassWall>() ||
-                                    Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>()) {
-                                    flag = true;
-                                }
+                            if (Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsGrassWall>() ||
+                                Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>()) {
+                                flag = true;
                             }
                         }
                     }
