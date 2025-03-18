@@ -44,9 +44,9 @@ class MagicHerb1 : ModItem {
         orig(self, i);
 
         if (self.ModItem != null && self.ModItem is MagicHerb1 && self.timeSinceItemSpawned > 900) {
-            for (int l = 0; l < 20; l++) {
-                Dust.NewDust(self.position, self.width, self.height, 15, self.velocity.X, self.velocity.Y, 150, 
-                    Color.Lerp(Color.Green, Color.Lime, Main.rand.NextFloat()), 1.2f);
+            for (int l = 0; l < 10; l++) {
+                Dust.NewDust(self.position, self.width, self.height, 15, self.velocity.X, self.velocity.Y, 200,
+                    Color.Lime, 0.9f);
             }
 
             self.active = false;
