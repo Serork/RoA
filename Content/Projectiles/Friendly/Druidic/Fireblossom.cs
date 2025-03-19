@@ -65,7 +65,7 @@ sealed class FireblossomExplosion : NatureProjectile {
                 }
             }
             int projectile2 = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
-            Main.projectile[projectile2].As<Fireblossom>().SetPosition(target.Center + (new Vector2(Projectile.ai[0], Projectile.ai[1]) - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f, target, false);
+            Main.projectile[projectile2].As<Fireblossom>().SetPosition(target.Center + (new Vector2(Projectile.ai[0], Projectile.ai[1]) - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f, false);
         }
     }
 }
@@ -140,17 +140,34 @@ sealed class Fireblossom : NatureProjectile {
         _position = reader.ReadVector2();
     }
 
-    public void SetPosition(Vector2 position, Entity entity, bool isPlayer) {
+    public void SetPosition(Vector2 position, bool isPlayer) {
         _position = position;
         Vector2 center = Main.player[Projectile.owner].Center;
         bool flag = (int)Projectile.ai[0] == Projectile.owner;
+        Entity entity = isPlayer ? Main.player[(int)Projectile.ai[0]] : Main.npc[(int)Projectile.ai[0]];
         Projectile.rotation = Helper.VelocityAngle((entity.Center - center).SafeNormalize(Vector2.Zero)) + (flag ? MathHelper.PiOver2 : MathHelper.Pi);
         _position -= entity.Center;
 
         Projectile.netUpdate = true;
     }
 
+    public override bool ShouldUpdatePosition() => false;
+
     public override void AI() {
+        if (Projectile.ai[1] != 0f) {
+            Projectile.localAI[0] = 1f;
+
+            if (Projectile.whoAmI == Main.myPlayer) {
+                SetPosition(new Vector2(Projectile.ai[1], Projectile.ai[2]), Projectile.velocity == Vector2.One);
+            }
+
+            Projectile.frame = Main.rand.Next(3);
+            Projectile.spriteDirection = Projectile.direction = 1 - Main.rand.Next(2) == 0 ? 2 : 0;
+
+            Projectile.ai[1] = Projectile.ai[2] = 0f;
+            Projectile.velocity = Vector2.Zero;
+        }
+
         bool flag = (int)Projectile.ai[0] == Projectile.owner;
         NPC targetNPC = flag ? null : Main.npc[(int)Projectile.ai[0]];
         Player targetPlayer = !flag ? null : Main.player[(int)Projectile.ai[0]];
@@ -182,12 +199,6 @@ sealed class Fireblossom : NatureProjectile {
                 }
                 Projectile.ai[2] = time;
             }
-        }
-        if (Projectile.localAI[0] <= 0f) {
-            Projectile.localAI[0] = 1f;
-
-            Projectile.frame = Main.rand.Next(3);
-            Projectile.spriteDirection = Projectile.direction = 1 - Main.rand.Next(2) == 0 ? 2 : 0;
         }
         if (Projectile.localAI[2] >= (!CanExplode ? Projectile.ai[2] * 0.015f : 2f)) {
             if (CanExplode) {
