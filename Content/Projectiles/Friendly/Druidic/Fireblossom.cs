@@ -5,6 +5,8 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
@@ -48,6 +50,9 @@ sealed class FireblossomExplosion : NatureProjectile {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        if (target.immortal) {
+            return;
+        }
         Player player = Main.player[Projectile.owner];
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
         if (handler.IsFull1 
@@ -60,7 +65,7 @@ sealed class FireblossomExplosion : NatureProjectile {
                 }
             }
             int projectile2 = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
-            Main.projectile[projectile2].As<Fireblossom>().SetPosition(target.Center + (new Vector2(Projectile.ai[0], Projectile.ai[1]) - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f, target);
+            Main.projectile[projectile2].As<Fireblossom>().SetPosition(target.Center + (new Vector2(Projectile.ai[0], Projectile.ai[1]) - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f, target, false);
         }
     }
 }
@@ -135,15 +140,13 @@ sealed class Fireblossom : NatureProjectile {
         _position = reader.ReadVector2();
     }
 
-    public void SetPosition(Vector2 position, Entity entity) {
+    public void SetPosition(Vector2 position, Entity entity, bool isPlayer) {
         _position = position;
         Vector2 center = Main.player[Projectile.owner].Center;
         bool flag = (int)Projectile.ai[0] == Projectile.owner;
         Projectile.rotation = Helper.VelocityAngle((entity.Center - center).SafeNormalize(Vector2.Zero)) + (flag ? MathHelper.PiOver2 : MathHelper.Pi);
-        //if ((_position - center).X.GetDirection() == 1) {
-        //    Projectile.rotation += MathHelper.PiOver2;
-        //}
         _position -= entity.Center;
+
         Projectile.netUpdate = true;
     }
 
@@ -161,7 +164,6 @@ sealed class Fireblossom : NatureProjectile {
                 }
                 else {
                     targetNPC.AddBuff(onFireForEnemiesType, time);
-                    //SetPosition(Main.player[Projectile.owner], targetNPC);
                 }
                 Projectile.ai[2] = 1f;
             }
@@ -177,7 +179,6 @@ sealed class Fireblossom : NatureProjectile {
                 }
                 else {
                     targetNPC.AddBuff(onFireForEnemiesType, time);
-                    //SetPosition(Main.player[Projectile.owner], targetNPC);
                 }
                 Projectile.ai[2] = time;
             }
@@ -220,7 +221,6 @@ sealed class Fireblossom : NatureProjectile {
                 Projectile.localAI[2] = !CanExplode ? Projectile.ai[2] * 0.015f : 2f;
             }
             targetPlayer.onFire = false;
-            //Vector2 center = targetPlayer.Center + _position + new Vector2(0f, targetPlayer.gfxOffY);
             Projectile.Center = new Vector2((int)targetPlayer.Center.X, (int)targetPlayer.Center.Y) + new Vector2(0f, targetPlayer.gfxOffY);
         }
         float rate = (float)(Speed % 5.0);
