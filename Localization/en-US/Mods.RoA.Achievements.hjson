@@ -1,29 +1,29 @@
-BestialCommunion: {
+DefeatLothor: {
 	Name: Bestial Communion
 	Description: Defeat Lothor the Wild, a betrayed fool of the backwoods.
 }
 
-WhatsThatSmell: {
+MineMercuriumNugget: {
 	Name: What's That Smell?
 	Description: Mine your first nugget of mercury without getting sick.
 }
 
-GrootsLoot: {
+OpenRootboundChest: {
 	Name: Groot's Loot
 	Description: Open a rootbound chest in the underground backwoods.
 }
 
-SilentHills: {
+SurviveBackwoodsFog: {
 	Name: Silent Hills
 	Description: Survive the fog, a morning event in the backwoods when one can't see an inch beyond.
 }
 
-NotPostMortem: {
+CraftDruidWreath: {
 	Name: Not Post-Mortem
 	Description: Craft your first wreath using a handful of flowers.
 }
 
-GutsOfSteel: {
+DefeatLothorEnraged: {
 	Name: Guts of Steel
 	Description: Defeat the enraged Lotor the Wild and obtain the lump of iron.
 }

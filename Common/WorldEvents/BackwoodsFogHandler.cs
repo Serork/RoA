@@ -131,11 +131,8 @@ sealed class BackwoodsFogHandler : ModSystem {
                     continue;
                 }
                 if (player.whoAmI == Main.myPlayer) {
-                    if (Main.netMode != NetmodeID.Server) {
-                        if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
-                            mod.Call("Event", "SilentHills");
-                        }
-                    }
+                    RoA.CompleteAchievement("SurviveBackwoodsFog");
+                    RoAAchievementInGameNotification.RoAAchievementStorage.SurviveBackwoodsFog = true;
                 }
             }
         }

@@ -20,6 +20,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
@@ -824,16 +825,15 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void OnKill() {
+        RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothor = true;
+
         NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);
         if (Main.netMode == NetmodeID.Server) {
             NetMessage.SendData(MessageID.WorldData);
         }
         if (CanDropFlederSlayer) {
-            if (Main.netMode != NetmodeID.Server) {
-                if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
-                    mod.Call("Event", "GutsOfSteel");
-                }
-            }
+            RoA.CompleteAchievement("DefeatLothorEnraged");
+            RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothorEnraged = true;
         }
     }
 

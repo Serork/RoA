@@ -210,11 +210,8 @@ sealed class RoARecipes : ModSystem {
     }
 
     private static void CompleteAchievement(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack) {
-        if (Main.netMode != NetmodeID.Server) {
-            if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
-                mod.Call("Event", "NotPostMortem");
-            }
-        }
+        RoA.CompleteAchievement("CraftDruidWreath");
+        RoAAchievementInGameNotification.RoAAchievementStorage.CraftDruidWreath = true;
     }
 
     private static void AddWreaths(out Recipe lastWreath) {

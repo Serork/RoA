@@ -2,6 +2,7 @@ using MonoMod.RuntimeDetour;
 
 using ReLogic.Content.Sources;
 
+using RoA.Common;
 using RoA.Common.Networking;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
@@ -11,7 +12,11 @@ using System.Reflection;
 
 using Terraria;
 using Terraria.Achievements;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace RoA;
 
@@ -49,13 +54,28 @@ sealed class RoA : Mod {
         return hook;
     }
 
+    public static void CompleteAchievement(string name) {
+        if (Main.netMode != NetmodeID.Server) {
+            if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
+                mod.Call("Event", name);
+            }
+            else {
+                InGameNotificationsTracker.AddNotification(new RoAAchievementInGameNotification(name));
+                Main.NewText(Language.GetTextValue("Achievements.Completed", Language.GetTextValue($"Mods.RoA.Achievements.{name}.Name")));
+                if (SoundEngine.FindActiveSound(in SoundID.AchievementComplete) == null) {
+                    SoundEngine.PlaySound(in SoundID.AchievementComplete);
+                }
+            }
+        }
+    }
+
     private void LoadAchievements() {
         if (!ModLoader.HasMod("TMLAchievements")) {
         }
         else {
             if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
                 mod.Call("AddAchievement", Instance,
-                    "BestialCommunion",
+                    "DefeatLothor",
                     AchievementCategory.Slayer,
                     ResourceManager.AchievementsTextures + "Achievement_DefeatLothor", null, 
                     false, true,
@@ -63,15 +83,15 @@ sealed class RoA : Mod {
                     new string[] { "Kill_" + ModContent.NPCType<Lothor>() });
 
                 mod.Call("AddAchievement", Instance,
-                    "WhatsThatSmell",
+                    "MineMercuriumNugget",
                     AchievementCategory.Explorer,
                     ResourceManager.AchievementsTextures + "Achievement_MineMercuriumNugget", null,
                     false, true,
                     6.5f,
-                    new string[] { "Event_" + "WhatsThatSmell" });
+                    new string[] { "Event_" + "MineMercuriumNugget" });
 
                 mod.Call("AddAchievement", Instance,
-                    "GrootsLoot",
+                    "OpenRootboundChest",
                     AchievementCategory.Explorer,
                     ResourceManager.AchievementsTextures + "Achievement_OpenRootboundChest", null,
                     false, true,
@@ -79,28 +99,28 @@ sealed class RoA : Mod {
                     new string[] { "Event_" + "OpenRootboundChest" });
 
                 mod.Call("AddAchievement", Instance,
-                    "SilentHills",
+                    "SurviveBackwoodsFog",
                     AchievementCategory.Slayer,
                     ResourceManager.AchievementsTextures + "Achievement_SurviveBackwoodsFog", null,
                     false, false,
                     0f,
-                    new string[] { "Event_" + "SilentHills" });
+                    new string[] { "Event_" + "SurviveBackwoodsFog" });
 
                 mod.Call("AddAchievement", Instance,
-                    "NotPostMortem",
+                    "CraftDruidWreath",
                     AchievementCategory.Collector,
                     ResourceManager.AchievementsTextures + "Achievement_CraftDruidWreath", null,
                     false, true,
                     13.5f,
-                    new string[] { "Event_" + "NotPostMortem" });
+                    new string[] { "Event_" + "CraftDruidWreath" });
 
                 mod.Call("AddAchievement", Instance,
-                    "GutsOfSteel",
+                    "DefeatLothorEnraged",
                     AchievementCategory.Challenger,
                     ResourceManager.AchievementsTextures + "Achievement_DefeatLothorEnraged", null,
                     false, true,
                     20.6f,
-                    new string[] { "Event_" + "GutsOfSteel" });
+                    new string[] { "Event_" + "DefeatLothorEnraged" });
             }
         }
     }

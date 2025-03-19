@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
@@ -53,11 +54,8 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
 
         public override bool OnPickup(Item item, Player player) {
             if (player.buffImmune[BuffID.Poisoned] && item.type == ModContent.ItemType<MercuriumOre>()) {
-                if (Main.netMode != NetmodeID.Server) {
-                    if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
-                        mod.Call("Event", "WhatsThatSmell");
-                    }
-                }
+                RoA.CompleteAchievement("MineMercuriumNugget");
+                RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget = true;
             }
 
             return base.OnPickup(item, player);
