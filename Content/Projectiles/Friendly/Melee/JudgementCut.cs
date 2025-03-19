@@ -41,8 +41,8 @@ sealed class JudgementCut : ModProjectile {
                 Vector2 velocity = new Vector2(0, 14 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
                 float duration = 0.01f;
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - velocity * 8, velocity, ModContent.ProjectileType<JudgementSlash>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-                if (Projectile.localAI[0] % 6f == 0f) SoundEngine.PlaySound(SoundID.Item1 with { PitchVariance = 0.5f }, Projectile.Center);
             }
+            if (Projectile.localAI[0] % 6f == 0f) SoundEngine.PlaySound(SoundID.Item1 with { PitchVariance = 0.5f }, Projectile.Center);
         }
     }
 }

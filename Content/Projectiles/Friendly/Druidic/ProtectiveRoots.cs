@@ -70,7 +70,6 @@ sealed class ProtectiveRoots : NatureProjectile {
             Vector2 newPos = vector2.RotatedBy(rejection * factor);
             Projectile.NewProjectile(source, pos.X + newPos.X, pos.Y + newPos.Y, 0f, 0f, Type, Projectile.damage, Projectile.knockBack, player.whoAmI, (float)i, Projectile.ai[2], -1f);
         }
-        SoundEngine.PlaySound(SoundID.Item80, Projectile.Center);
         Projectile.Kill();
         Projectile.netUpdate = true;
     }
@@ -127,6 +126,10 @@ sealed class ProtectiveRoots : NatureProjectile {
     }
 
     public override void OnKill(int timeLeft) {
+        if (Projectile.ai[2] != -1f) {
+            SoundEngine.PlaySound(SoundID.Item80, Projectile.Center);
+        }
+
         Vector2 radius = Projectile.frame switch {
             0 => new(4f, 4f),
             1 => new(8f, 8f),
