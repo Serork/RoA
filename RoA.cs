@@ -63,6 +63,10 @@ sealed class RoA : Mod {
                 return;
             }
 
+            if (Player.whoAmI != Main.myPlayer) {
+                return;
+            }
+
             var storage = Player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>();
             if (storage.DefeatLothor) {
                 CompleteAchievement("DefeatLothor");

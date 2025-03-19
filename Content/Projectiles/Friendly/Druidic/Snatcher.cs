@@ -29,6 +29,7 @@ sealed class Snatcher : NatureProjectile {
     private float _lerpValue;
     private int _alpha = 255;
     private int _startDirection;
+    private bool _shouldPlayAttackSound, _shouldPlayAttackSound2;
 
     private Vector2[] _oldPositions = new Vector2[18];
 
@@ -292,14 +293,21 @@ sealed class Snatcher : NatureProjectile {
         if (Projectile.owner == Main.myPlayer && player.itemAnimation > player.itemAnimationMax - 10 && !flag && !IsAttacking && !IsAttacking2) {
             Projectile.ai[2] = 5f;
 
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SnatcherBite") { Volume = 0.75f }, GetPos());
-
             Vector2 mousePos = Helper.GetLimitedPosition(player.Center, _mousePos, 200f, DIST * 0.75f);
             Projectile.localAI[1] = mousePos.X;
             Projectile.localAI[2] = mousePos.Y;
             Projectile.netUpdate = true;
         }
         if (IsAttacking) {
+            if (Projectile.ai[2] >= 4f && !_shouldPlayAttackSound2) {
+                _shouldPlayAttackSound = true;
+                _shouldPlayAttackSound2 = true;
+            }
+            if (_shouldPlayAttackSound) {
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SnatcherBite") { Volume = 0.75f }, player.Center);
+                _shouldPlayAttackSound = false;
+            }
+
             Projectile.ai[2] -= TimeSystem.LogicDeltaTime * 5f;
             Vector2 mousePos = AttackPos;
             mousePos += Helper.VelocityToPoint(GetPos(), mousePos, (mousePos - GetPos()).Length() * 0.1f);
@@ -311,6 +319,7 @@ sealed class Snatcher : NatureProjectile {
             }
         }
         else {
+            _shouldPlayAttackSound2 = _shouldPlayAttackSound = false;
             _attackVector = Vector2.Lerp(_attackVector, Vector2.Zero, 0.03f);
             _attackVector *= 0.97f;
         }
