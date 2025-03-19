@@ -11,7 +11,6 @@ using Terraria.ID;
 
 namespace RoA.Common.Networking.Packets;
 
-// СИНХРОНИЗИРОВАТЬ ВСЕ НЕОБХОДИМЫЕ ЗВУКИ
 sealed class PlayOtherItemSoundPacket : NetPacket {
     public PlayOtherItemSoundPacket(Player player, int soundStyle, Vector2 position) {
         Writer.TryWriteSenderPlayer(player);
@@ -33,6 +32,9 @@ sealed class PlayOtherItemSoundPacket : NetPacket {
         }
         else if (soundStyle == 3) {
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsRoot") { Volume = 2.5f }, position);
+        }
+        else if (soundStyle == 4) {
+            SoundEngine.PlaySound(SoundID.NPCDeath22, position);
         }
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, soundStyle, position), ignoreClient: sender);

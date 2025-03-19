@@ -101,6 +101,9 @@ sealed class RipePumpkin : NatureProjectile {
                         //_rotateWiggler.Stop();
                         Projectile.Kill();
                         SoundEngine.PlaySound(SoundID.NPCDeath22, Projectile.position);
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 4, Projectile.position));
+                        }
                         int count = Projectile.ai[2] <= 4.5f ? 2 : 3;
                         for (int i = 0; i < count; i++) {
                             float posX = Main.rand.Next(-15, 16);
