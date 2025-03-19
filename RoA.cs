@@ -112,8 +112,7 @@ sealed class RoA : Mod {
                 flag = storage.DefeatLothorEnraged;
                 break;
         }
-        Main.NewText(Color.LightBlue);
-        /*if (!flag) */{
+        if (!flag) {
             InGameNotificationsTracker.AddNotification(new RoAAchievementInGameNotification(name));
             string achievementName = Language.GetTextValue($"Mods.RoA.Achievements.{name}.Name");
             Main.NewText(Language.GetTextValue("Achievements.Completed", "[c/ADD8E6:" + achievementName + "]"));
