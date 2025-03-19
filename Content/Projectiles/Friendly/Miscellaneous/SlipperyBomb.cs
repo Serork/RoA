@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria.GameContent.Achievements;
 using Terraria.Audio;
+using RoA.Content.Dusts;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 sealed class SlipperyBomb : ModProjectile {
@@ -46,11 +47,12 @@ sealed class SlipperyBomb : ModProjectile {
 				effectCounter = 0;
 				SoundEngine.PlaySound(SoundID.WormDig, Projectile.position);
 			}
-			if (effectCounter % 4 == 0 && effectCounterMax < 20) {
-				int dustDig = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 20, 20, 102, 0f, 0f, 0, default(Color), 1.5f);
-				Main.dust[dustDig].velocity *= 0.1f;
-			}
-		}
+            if (effectCounter % 4 == 0 && effectCounterMax < 20) {
+                int dustDig = Dust.NewDust(Projectile.Center - Vector2.One * 10, 20, 20, ModContent.DustType<Galipot2>(), 0f, 0f, 0, default(Color), 1f);
+                Main.dust[dustDig].velocity *= 0.1f;
+                Main.dust[dustDig].noGravity = true;
+            }
+        }
 
 		if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3) {
 			Projectile.tileCollide = false;

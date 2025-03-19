@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
+using RoA.Content.Dusts;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
@@ -48,11 +49,12 @@ sealed class SlipperyGlowstick : ModProjectile {
 				effectCounter = 0;
                 SoundEngine.PlaySound(SoundID.WormDig, Projectile.position);
             }
-			if (effectCounter % 4 == 0 && effectCounterMax < 20) {
-				int dustDig = Dust.NewDust(Projectile.position - new Vector2(3f, 6f), 20, 20, DustID.AmberBolt, 0f, 0f, 100, default, 1.1f);
-				Main.dust[dustDig].velocity *= 0.1f;
-			}
-		}
+            if (effectCounter % 4 == 0 && effectCounterMax < 20) {
+                int dustDig = Dust.NewDust(Projectile.Center - Vector2.One * 10, 20, 20, ModContent.DustType<Galipot2>(), 0f, 0f, 0, default(Color), 1f);
+                Main.dust[dustDig].velocity *= 0.1f;
+                Main.dust[dustDig].noGravity = true;
+            }
+        }
 		return;
 	}
 
