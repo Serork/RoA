@@ -60,10 +60,10 @@ sealed class RoA : Mod {
                 return;
             }
 
-            Main.NewText(RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget);
-
             if (RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothor) {
-                CompleteAchievement("DefeatLothor");
+                if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
+                    mod.Call("Kil", "DefeatLothor");
+                }
             }
             if (RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget) {
                 CompleteAchievement("MineMercuriumNugget");
