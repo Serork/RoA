@@ -37,7 +37,7 @@ WreathFullCharged2: {
 
 Bloodlust: {
 	DisplayName: Жажда крови
-	Description: Критические удары восстанавливают здоровье
+	Description: Убийства восстанавливают здоровье
 }
 
 DeathWard: {

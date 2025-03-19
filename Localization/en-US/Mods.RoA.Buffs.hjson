@@ -37,7 +37,7 @@ WreathFullCharged2: {
 
 Bloodlust: {
 	DisplayName: Bloodlust
-	Description: Critical hits restore life
+	Description: Kills restore life
 }
 
 DeathWard: {
