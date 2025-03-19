@@ -51,19 +51,19 @@ sealed class OvergrownSpearPlayer : ModPlayer {
 
 	public override void UpdateEquips() {
 		ushort type = (ushort)ModContent.ProjectileType<Projectiles.Friendly.Melee.OvergrownSphere>();
-		if (Player.inventory[Player.selectedItem].type == ModContent.ItemType<OvergrownSpear>() && Player.active && !Player.dead && !Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
-			bool flag = Player.ownedProjectileCounts[type] <= 1;
-			if (!_overgrownSphereSpawned && flag) {
-				if (Player.whoAmI == Main.myPlayer) {
+		if (Player.whoAmI == Main.myPlayer) {
+			if (Player.inventory[Player.selectedItem].type == ModContent.ItemType<OvergrownSpear>() && Player.active && !Player.dead && !Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+				bool flag = Player.ownedProjectileCounts[type] <= 1;
+				if (!_overgrownSphereSpawned && flag) {
 					int _randCord = Main.rand.Next(-20, 20);
 					for (int i = 0; i < 3; i++) {
-						Projectile.NewProjectile(Player.GetSource_Misc("orbsspawned"), Player.MountedCenter.X + _randCord, Player.MountedCenter.Y + _randCord, 0f, 0f, type, 0, 0f, 0, 1 * i, 0);
+						Projectile.NewProjectile(Player.GetSource_Misc("orbsspawned"), Player.MountedCenter.X + _randCord, Player.MountedCenter.Y + _randCord, 0f, 0f, type, 0, 0f, Player.whoAmI, 1 * i, 0);
 					}
+					_overgrownSphereSpawned = true;
 				}
-                _overgrownSphereSpawned = true;
-            }
-			if (Player.ownedProjectileCounts[type] < 1) {
-				_overgrownSphereSpawned = false;
+				if (Player.ownedProjectileCounts[type] < 1) {
+					_overgrownSphereSpawned = false;
+				}
 			}
 		}
 	}

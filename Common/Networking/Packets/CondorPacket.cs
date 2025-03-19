@@ -26,7 +26,7 @@ sealed class CondorPacket : NetPacket {
         bool active = reader.ReadBoolean();
         Vector2 mousePosition = reader.ReadVector2();
 
-        player.GetModPlayer<RodOfTheCondor.CondorWingsHandler>().ReceivePacket(active, mousePosition);
+        player.GetModPlayer<RodOfTheCondor.CondorWingsHandler>().ReceivePacket(active, mousePosition, player);
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new CondorPacket(player, active, mousePosition), ignoreClient: sender);

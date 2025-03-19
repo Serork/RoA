@@ -50,7 +50,7 @@ sealed class RodOfTheCondor : ModItem {
 
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
-        Item.UseSound = Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "WhatTheFuckIsAKilometer") { Volume = 0.9f };
+        //Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "WhatTheFuckIsAKilometer") { Volume = 0.9f };
 
         Item.staff[Item.type] = true;
     }
@@ -179,6 +179,17 @@ sealed class RodOfTheCondor : ModItem {
             if (!IsActive) {
                 return;
             }
+
+            bool flag22 = _wingFrame == 3;
+            if (flag22) {
+                if (!Player.flapSound)
+                    SoundEngine.PlaySound(SoundID.Item32, Player.position);
+
+                Player.flapSound = true;
+            }
+            else {
+                Player.flapSound = false;
+            }
             if (Player.ItemAnimationActive) {
                 if (Player.velocity.Length() > 1f) {
                     int num27 = 4;
@@ -228,6 +239,8 @@ sealed class RodOfTheCondor : ModItem {
             Player.velocity *= 0.8f;
             HandleCondorWings();
 
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WhatTheFuckIsAKilometer") { Volume = 0.9f }, Player.Center);
+
             if (Player.whoAmI == Main.myPlayer) {
                 _mousePosition = Player.GetViableMousePosition();
             }
@@ -240,9 +253,11 @@ sealed class RodOfTheCondor : ModItem {
             Player.velocity += Helper.VelocityToPoint(Player.Center, _mousePosition, 1f);
         }
 
-        internal void ReceivePacket(bool active, Vector2 mousePosition) {
+        internal void ReceivePacket(bool active, Vector2 mousePosition, Player player) {
             _active = active;
             _mousePosition = mousePosition;
+
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WhatTheFuckIsAKilometer") { Volume = 0.9f }, player.Center);
         }
 
         private void HandleCondorWings() {

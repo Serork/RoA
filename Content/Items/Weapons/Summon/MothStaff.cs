@@ -12,6 +12,8 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 
 namespace RoA.Content.Items.Weapons.Summon;
 
@@ -68,9 +70,13 @@ sealed class MothStaff : ModItem {
         UpdatePositionInPlayersHand(player);
     }
 
-    private static void OnUse_Effects(Player player, Item item) {
+    internal static void OnUse_Effects(Player player, Item item) {
         player.ApplyItemAnimation(item);
         SoundEngine.PlaySound(item.UseSound, player.Center);
+
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 5, player.Center));
+        }
 
         Vector2 position = GetDustsPosition(player);
         for (int num615 = 0; num615 < 16; num615++) {

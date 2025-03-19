@@ -36,6 +36,15 @@ sealed class PlayOtherItemSoundPacket : NetPacket {
         else if (soundStyle == 4) {
             SoundEngine.PlaySound(SoundID.NPCDeath22, position);
         }
+        else if (soundStyle == 5) {
+            SoundEngine.PlaySound(SoundID.Item77, position);
+        }
+        else if (soundStyle == 6) {
+            SoundEngine.PlaySound(SoundID.Item5, position);
+        }
+        else if (soundStyle == 7) {
+            SoundEngine.PlaySound(SoundID.Item36, position);
+        }
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, soundStyle, position), ignoreClient: sender);
         }

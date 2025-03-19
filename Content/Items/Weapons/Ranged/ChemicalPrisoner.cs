@@ -10,6 +10,8 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 
 namespace RoA.Content.Items.Weapons.Ranged;
 
@@ -58,10 +60,18 @@ sealed class ChemicalPrisoner : ModItem {
         int flaskType = ModContent.ProjectileType<ChemicalFlask>();
         if (player.GetModPlayer<ChemicalPrisonerPlayer>().count > 3) {
             SoundEngine.PlaySound(SoundID.Item5, player.Center);
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 6, player.Center));
+            }
+
             Projectile.NewProjectile(source, position.X, position.Y - 2, velocity.X * 0.8f, velocity.Y * 0.8f, flaskType, damage, knockback, player.whoAmI);
         }
         else {
             SoundEngine.PlaySound(SoundID.Item36, player.Center);
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 7, player.Center));
+            }
+
             Projectile.NewProjectile(source, position.X, position.Y - 2, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 1f);
         }
         return false;
