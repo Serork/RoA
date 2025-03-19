@@ -55,6 +55,16 @@ sealed class SphereHandler : GlobalItem {
         Main.spriteBatch.BeginWorld();
         List<Item> items = Main.item.Where(x => x.active && _spheresToHandle.Contains(x.type)).ToList();
         foreach (Item item in items) {
+            bool flag = false;
+            foreach (Player player in Main.ActivePlayers) {
+                if (!player.dead && Vector2.Distance(player.Center, item.Center) <= player.GetItemGrabRange(item)) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                break;
+            }
             DrawStream(item, Main.spriteBatch);
             DrawPyre(item, Main.spriteBatch);
             DrawTerra(item, Main.spriteBatch);
@@ -76,6 +86,12 @@ sealed class SphereHandler : GlobalItem {
         if (item.beingGrabbed) {
             _terraTime = _breath = _breath2 = _flyTime = 0;
         }
+        foreach (Player player in Main.ActivePlayers) {
+            if (!player.dead && Vector2.Distance(player.Center, item.Center) <= player.GetItemGrabRange(item)) {
+                _terraTime = _breath = _breath2 = _flyTime = 0;
+                break;
+            }
+        }
     }
 
     public override void Update(Item item, ref float gravity, ref float maxFallSpeed) {
@@ -91,7 +107,7 @@ sealed class SphereHandler : GlobalItem {
         UpdateStream(item);
         UpdatePyre(item);
         if (UpdateCondor(item)) {
-            float value = 1f - (float)_flyTime / _flyTimeMax;
+            float value = 1f - (float)MathHelper.Max(_flyTime - 100, 0f) / _flyTimeMax;
             gravity *= value;
             maxFallSpeed *= value;
         }
@@ -217,13 +233,21 @@ sealed class SphereHandler : GlobalItem {
             _flyTime = 0;
         }
         else {
-            _flyTime += 2;
-            if (_flyTime >= _flyTimeMax) {
+            if (item.velocity.Y == 0f) {
                 _flyTime = 0;
-                item.ChangeItemType(ModContent.ItemType<SphereOfCondor>());
-                _cdToTransformation = 100;
 
-                MakeEffects(item, new(59, 183, 208));
+                return false;
+            }
+
+            _flyTime += 2;
+            if (_flyTime >= 100) {
+                if (_flyTime - 100 >= _flyTimeMax) {
+                    _flyTime = 0;
+                    item.ChangeItemType(ModContent.ItemType<SphereOfCondor>());
+                    _cdToTransformation = 100;
+
+                    MakeEffects(item, new(59, 183, 208));
+                }
             }
 
             return true;
@@ -259,7 +283,10 @@ sealed class SphereHandler : GlobalItem {
         if (_flyTime == 0) {
             return;
         }
-        _flyTime = _flyTimeMax - _flyTime;
+        if (_flyTime < 100) {
+            return;
+        }
+        _flyTime = _flyTimeMax - (_flyTime - 100);
         if (_flyTime < _flyTimeMax) {
             int num = 50;
             for (int i = 1; i < _flyTimeMax / num + 1; i++) {

@@ -151,26 +151,27 @@ sealed class EldritchRing : ModItem {
         player.noFallDmg = true;
         player.wings = -1;
         player.wingsLogic = _wingsSlot;
+
+        player.GetModPlayer<EldritchRingDrawLayer.EldritchRingHandler>().shouldDraw = !hideVisual;
     }
 
-     private class EldritchRingDrawLayer : ILoadable {
-        private class EldritchRingHandler : ModPlayer {
+    public override void UpdateVanity(Player player) {
+        player.GetModPlayer<EldritchRingDrawLayer.EldritchRingHandler>().shouldDraw = true;
+    }
+
+    private class EldritchRingDrawLayer : ILoadable {
+        internal class EldritchRingHandler : ModPlayer {
             public Vector2 runePosition;
             public float runeRotation;
             public bool shouldDraw;
 
+            public override void ResetEffects() => shouldDraw = false;
+
             public override void PostUpdateEquips() {
                 int itemType = ModContent.ItemType<EldritchRing>();
-                shouldDraw = false;
-                for (int i = 3; i < 20; i++) {
-                    if (!Player.armor[i].IsEmpty() && Player.armor[i].type == itemType) {
-                        shouldDraw = true;
-                        break;
-                    }
-                }
                 if (shouldDraw) {
                     Vector2 position2 = runePosition - Main.screenPosition;
-                    Vector2 position = new(Player.Center.X, Player.Center.Y);
+                    Vector2 position = new(Player.MountedCenter.X, Player.MountedCenter.Y);
                     if (!Main.gamePaused) {
                         runePosition = new((float)(int)position.X, (float)(int)position.Y);
                         runeRotation += (Player.direction > 0 ? 0.04f : -0.04f) + Player.velocity.X * 0.02f;
