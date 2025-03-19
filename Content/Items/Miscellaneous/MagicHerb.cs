@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Core;
 
 using System;
 using System.Runtime.CompilerServices;
@@ -150,7 +151,8 @@ class MagicHerb1 : ModItem {
                 player.HealEffect(20);
             }
         }
-        SoundEngine.PlaySound(SoundID.Item60, player.position);
+        SoundEngine.PlaySound(SoundID.Grab, player.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HealQuick") { Volume = 0.8f, PitchVariance = 0.2f }, player.Center);
         return false;
 	}
 }

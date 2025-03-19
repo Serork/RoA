@@ -100,7 +100,7 @@ sealed class RavencallersCloak : ModItem {
                 Main.dust[dust].velocity = (Main.dust[dust].velocity + Player.velocity) / 2f;
             }
 
-            SoundEngine.PlaySound(SoundID.NPCDeath6 with { Volume = 0.5f, Pitch = -0.35f, PitchVariance = Main.rand.NextFloat() * 0.1f, }, lastPositionInfo.Position);
+            SoundEngine.PlaySound(SoundID.NPCDeath6 with { Volume = 0.35f, Pitch = -0.35f, PitchVariance = Main.rand.NextFloat() * 0.1f, }, lastPositionInfo.Position);
 
             ResetPositions();
         }
@@ -264,8 +264,12 @@ sealed class RavencallersCloak : ModItem {
                     return;
                 }
 
+				if (!Player.FindBuff(buffType, out int buffIndex)) {
+                        SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap with { Volume = 0.6f, Pitch = 0.2f }, Player.Center);
+                }
+				
                 Player.AddBuff(buffType, 10);
-
+				
                 _resetted = false;
 
                 if (!_resetted2) {

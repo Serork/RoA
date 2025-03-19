@@ -204,7 +204,7 @@ FireflyPin: {
 }
 
 RavencallersCloak: {
-	DisplayName: Ravencallers Cloak
+	DisplayName: Ravencaller's Cloak
 	Tooltip: Casts a shadow that captures the attention of enemies
 }
 

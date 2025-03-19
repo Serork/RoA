@@ -239,7 +239,7 @@ sealed class SphereHandler : GlobalItem {
             Main.dust[num].scale *= 1.5f;
             Main.dust[num].color = color;
         }
-        //SoundEngine.PlaySound(SoundID.Owl, item.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Enchant") { PitchVariance = 0.1f }, item.Center);
     }
 	
     private static void DrawCondor(Item item, SpriteBatch spriteBatch) {

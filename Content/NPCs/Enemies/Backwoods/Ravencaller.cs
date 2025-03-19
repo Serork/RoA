@@ -224,7 +224,7 @@ sealed class Ravencaller : ModNPC {
 
     private void Summon() {
         Vector2 position = new Vector2(NPC.Center.X + 6 * NPC.direction, NPC.Center.Y - 4);
-        SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap);
+        SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap with { Volume = 1.25f, Pitch = 0.2f }, NPC.Center);
         for (int i = 0; i < 12; i++) {
             Dust.NewDust(position, 16, 16, DustID.Smoke, (float)Math.Cos(MathHelper.Pi / 6 * i), (float)Math.Sin(MathHelper.Pi / 6 * i), 0, Color.Black, 0.7f);
         }

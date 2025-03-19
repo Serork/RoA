@@ -18,7 +18,7 @@ sealed class PettyBag : ModItem {
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.PettyBag>();
         Item.width = 22;
         Item.height = 24;
-        //Item.UseSound = SoundID.Item59;
+        Item.UseSound = SoundID.Item7;
         Item.useAnimation = Item.useTime = 28;
         Item.noUseGraphic = true;
 

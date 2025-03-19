@@ -6,6 +6,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Common.PopupTexts;
 using RoA.Common.Projectiles;
 using RoA.Content.Items.Miscellaneous;
+using RoA.Core;
 
 using System;
 using System.Collections.Generic;
@@ -108,7 +109,7 @@ sealed class PettyBag : InteractableProjectile {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num);
             }
-
+			SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "BagOpen") { Volume = 1f }, projectile.Center);
             BagItems.Clear();
         }
     }

@@ -8,11 +8,13 @@ using RoA.Common.Tiles;
 using RoA.Content.Buffs;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core.Utility;
+using RoA.Core;
 
 using System;
 using System.Runtime.CompilerServices;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -61,7 +63,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                     num, 0, cooldownCounter: 4);
                 player.AddBuff(BuffID.Bleeding, 600);
             }
-            //SoundEngine.PlaySound(SoundID.Owl, player.Center);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SteelTrap") { Volume = 3f, Pitch = 0.3f, PitchVariance = 0.1f }, player.Center);
             //NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
         }
 

@@ -272,7 +272,7 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
         Projectile.velocity = Vector2.Zero;
         int meInQueue = (int)Projectile.ai[2];
         if (Projectile.ai[1] == 0f) {
-            //SoundEngine.PlaySound(SoundID.Owl, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item18 with { Pitch = -0.2f, Volume = 0.3f }, Projectile.Center);
         }
         Projectile.ai[1] += (1f + 0.1f * meInQueue) * _direction;
         float counter = Projectile.ai[1] / 180f;

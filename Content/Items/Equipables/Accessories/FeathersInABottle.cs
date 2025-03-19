@@ -4,8 +4,10 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
+using RoA.Core;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -69,6 +71,8 @@ sealed class FeathersInABottle : NatureItem {
         public override void OnStarted(Player player, ref bool playSound) {
             var handler = player.GetModPlayer<WreathHandler>();
             handler.Consume(0.25f);
+			
+			SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Flutter") { Volume = 1.2f }, player.Center);
 
             int offsetY = player.height;
             if (player.gravDir == -1f)

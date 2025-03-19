@@ -285,9 +285,9 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         player.Teleport(newPos, num2);
         player.velocity = Vector2.Zero;
 
-        SoundEngine.PlaySound(SoundID.Item6, player.position);
-        SoundEngine.PlaySound(SoundID.Item6, player.position);
-        SoundEngine.PlaySound(SoundID.Item8, player.position);
+        SoundEngine.PlaySound(SoundID.Item6 with { Volume = 0.7f }, player.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "StrongSignal") { Volume = 0.7f, PitchVariance = 0.1f }, player.Center);
+        SoundEngine.PlaySound(SoundID.Item8, player.Center);
 
         dusts(player.getRect(), style);
     }
@@ -553,7 +553,8 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                         }
                     }
                     else {
-                        SoundEngine.PlaySound(SoundID.MenuTick, new Point(i, l).ToWorldCoordinates());
+                        //SoundEngine.PlaySound(SoundID.MenuTick, new Point(i, l).ToWorldCoordinates());
+						SoundEngine.PlaySound(SoundID.Unlock, new Point(i, l).ToWorldCoordinates());
                     }
                 }
                 if (flag || (tile2.TileFrameY >= getTileFrameY(variant) &&
@@ -570,7 +571,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
 
     public static void RemoveGemEffects(int i, int j) {
         Vector2 position = new Point(i, j).ToWorldCoordinates();
-        SoundEngine.PlaySound(SoundID.Dig, position);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "GemCrack") { PitchVariance = 0.2f }, position);
         for (int k = 0; k < 8; k++) {
             Color color = GetEffectsColor(i, j);
             int dust = Dust.NewDust(position + Vector2.UnitY * 2f, 4, 4, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);

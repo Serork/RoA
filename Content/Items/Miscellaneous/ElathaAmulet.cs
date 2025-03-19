@@ -53,7 +53,7 @@ sealed class ElathaAmulet : ModItem {
         Item.useTime = 20;
         Item.reuseDelay = 60;
         Item.useStyle = ItemUseStyleID.HoldUp;
-        Item.UseSound = SoundID.Item28;
+        Item.UseSound = SoundID.Item4;
         Item.mana = 30;
 
         Item.value = Item.sellPrice(0, 2, 0, 0);
