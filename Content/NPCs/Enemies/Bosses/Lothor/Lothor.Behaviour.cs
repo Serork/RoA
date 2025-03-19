@@ -26,19 +26,19 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class Lothor : ModNPC {
-    public const int CLAWS_DAMAGE = 50; // было 80
+    public const int CLAWS_DAMAGE = 40; // было 80
     public const float CLAWS_KNOCKBACK = 4.5f;
-    public const int CLAWS_DAMAGE2 = 70; // было 100 
+    public const int CLAWS_DAMAGE2 = 60; // было 100 
     public const float CLAWS_KNOCKBACK2 = 6f;
 
-    public const int WREATH_DAMAGE = 70; // было 50
+    public const int WREATH_DAMAGE = 80; // было 50
     public const float WREATH_KNOCKBACK = 1f;
     public const int WREATH_DAMAGE2 = 100; // было 80
     public const float WREATH_KNOCKBACK2 = 3f;
 
-    public const int ACORN_DAMAGE = 30; // было 20
+    public const int ACORN_DAMAGE = 15; // было 20
     public const float ACORN_KNOCKBACK = 1f;
-    public const int ACORN_DAMAGE2 = 40; // было 50
+    public const int ACORN_DAMAGE2 = 35; // было 50
     public const float ACORN_KNOCKBACK2 = 0f;
 
     public const int SPIT_DAMAGE = 20; // было 30
