@@ -898,6 +898,7 @@ sealed partial class Lothor : ModNPC {
     private void ThatThingMakeHimScream() {
         bool firstTime = _previousState != CurrentAIState;
 
+		float screamCoeff = Main.getGoodWorld ? 3.5f : 5.5f;
         float maxDist = 800f;
         foreach (Player player in Main.ActivePlayers) {
             if (player.dead) {
@@ -907,7 +908,7 @@ sealed partial class Lothor : ModNPC {
             if (dist <= maxDist) {
                 Vector2 velocity = player.Center - NPC.Center;
                 velocity.Normalize();
-                player.velocity += velocity * (maxDist - dist) / 140f;
+                player.velocity += velocity * (maxDist - dist) / (25f * screamCoeff);
             }
         }
 
@@ -920,7 +921,7 @@ sealed partial class Lothor : ModNPC {
             if (dist <= maxDist) {
                 Vector2 velocity = npc.Center - NPC.Center;
                 velocity.Normalize();
-                npc.velocity += velocity * (maxDist - dist) / 140f;
+                npc.velocity += velocity * (maxDist - dist) / (25f * screamCoeff);
             }
         }
 
@@ -937,7 +938,7 @@ sealed partial class Lothor : ModNPC {
                 if (dist <= maxDist) {
                     Vector2 velocity = projectile.Center - NPC.Center;
                     velocity.Normalize();
-                    projectile.velocity += velocity * (maxDist - dist) / 140f;
+                    projectile.velocity += velocity * (maxDist - dist) / (25f * screamCoeff);
                 }
             }
         }
