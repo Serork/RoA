@@ -140,7 +140,7 @@ sealed class RoA : Mod {
                     ResourceManager.AchievementsTextures + "Achievement_DefeatLothor", null, 
                     false, true,
                     20.5f,
-                    new string[] { "Event" + "DefeatLothor" });
+                    new string[] { "Event_" + "DefeatLothor" });
 
                 mod.Call("AddAchievement", Instance,
                     "MineMercuriumNugget",
