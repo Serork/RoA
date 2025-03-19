@@ -907,7 +907,7 @@ sealed partial class Lothor : ModNPC {
             if (dist <= maxDist) {
                 Vector2 velocity = player.Center - NPC.Center;
                 velocity.Normalize();
-                player.velocity += velocity * (maxDist - dist) / 150f;
+                player.velocity += velocity * (maxDist - dist) / 140f;
             }
         }
 
@@ -920,7 +920,7 @@ sealed partial class Lothor : ModNPC {
             if (dist <= maxDist) {
                 Vector2 velocity = npc.Center - NPC.Center;
                 velocity.Normalize();
-                npc.velocity += velocity * (maxDist - dist) / 150f;
+                npc.velocity += velocity * (maxDist - dist) / 140f;
             }
         }
 
@@ -937,7 +937,7 @@ sealed partial class Lothor : ModNPC {
                 if (dist <= maxDist) {
                     Vector2 velocity = projectile.Center - NPC.Center;
                     velocity.Normalize();
-                    projectile.velocity += velocity * (maxDist - dist) / 150f;
+                    projectile.velocity += velocity * (maxDist - dist) / 140f;
                 }
             }
         }
