@@ -132,7 +132,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                 }
                 if (player.whoAmI == Main.myPlayer) {
                     RoA.CompleteAchievement("SurviveBackwoodsFog");
-                    RoAAchievementInGameNotification.RoAAchievementStorage.SurviveBackwoodsFog = true;
+                    player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().SurviveBackwoodsFog = true;
                 }
             }
         }

@@ -16,6 +16,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI;
 
 namespace RoA;
@@ -60,24 +61,25 @@ sealed class RoA : Mod {
                 return;
             }
 
-            if (RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothor) {
+            var storage = Player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>();
+            if (storage.DefeatLothor) {
                 if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
                     mod.Call("Kil", "DefeatLothor");
                 }
             }
-            if (RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget) {
+            if (storage.MineMercuriumNugget) {
                 CompleteAchievement("MineMercuriumNugget");
             }
-            if (RoAAchievementInGameNotification.RoAAchievementStorage.OpenRootboundChest) {
+            if (storage.OpenRootboundChest) {
                 CompleteAchievement("OpenRootboundChest");
             }
-            if (RoAAchievementInGameNotification.RoAAchievementStorage.SurviveBackwoodsFog) {
+            if (storage.SurviveBackwoodsFog) {
                 CompleteAchievement("SurviveBackwoodsFog");
             }
-            if (RoAAchievementInGameNotification.RoAAchievementStorage.CraftDruidWreath) {
+            if (storage.CraftDruidWreath) {
                 CompleteAchievement("CraftDruidWreath");
             }
-            if (RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothorEnraged) {
+            if (storage.DefeatLothorEnraged) {
                 CompleteAchievement("DefeatLothorEnraged");
             }
         }
@@ -88,25 +90,26 @@ sealed class RoA : Mod {
             return;
         }
 
+        var storage = Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>();
         bool flag = false;
         switch (name) {
             case "DefeatLothor":
-                flag = RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothor;
+                flag = storage.DefeatLothor;
                 break;
             case "MineMercuriumNugget":
-                flag = RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget;
+                flag = storage.MineMercuriumNugget;
                 break;
             case "OpenRootboundChest":
-                flag = RoAAchievementInGameNotification.RoAAchievementStorage.OpenRootboundChest;
+                flag = storage.OpenRootboundChest;
                 break;
             case "SurviveBackwoodsFog":
-                flag = RoAAchievementInGameNotification.RoAAchievementStorage.SurviveBackwoodsFog;
+                flag = storage.SurviveBackwoodsFog;
                 break;
             case "CraftDruidWreath":
-                flag = RoAAchievementInGameNotification.RoAAchievementStorage.CraftDruidWreath;
+                flag = storage.CraftDruidWreath;
                 break;
             case "DefeatLothorEnraged":
-                flag = RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothorEnraged;
+                flag = storage.DefeatLothorEnraged;
                 break;
         }
         if (!flag) {

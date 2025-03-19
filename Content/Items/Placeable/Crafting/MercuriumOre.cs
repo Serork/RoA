@@ -53,9 +53,9 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
         public override bool InstancePerEntity => true;
 
         public override bool OnPickup(Item item, Player player) {
-            if (player.buffImmune[BuffID.Poisoned] && item.type == ModContent.ItemType<MercuriumOre>()) {
+            if (player.buffImmune[BuffID.Poisoned] && player.whoAmI == Main.myPlayer && item.type == ModContent.ItemType<MercuriumOre>()) {
                 RoA.CompleteAchievement("MineMercuriumNugget");
-                RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget = true;
+                player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().MineMercuriumNugget = true;
             }
 
             return base.OnPickup(item, player);

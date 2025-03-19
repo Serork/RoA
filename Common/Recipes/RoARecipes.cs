@@ -211,7 +211,7 @@ sealed class RoARecipes : ModSystem {
 
     private static void CompleteAchievement(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack) {
         RoA.CompleteAchievement("CraftDruidWreath");
-        RoAAchievementInGameNotification.RoAAchievementStorage.CraftDruidWreath = true;
+        Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().CraftDruidWreath = true;
     }
 
     private static void AddWreaths(out Recipe lastWreath) {

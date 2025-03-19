@@ -16,24 +16,15 @@ using Terraria.UI;
 namespace RoA.Common;
 
 sealed class RoAAchievementInGameNotification : IInGameNotification {
-    internal class RoAAchievementStorage : ModSystem {
-        public static bool DefeatLothor = false;
-        public static bool MineMercuriumNugget = false;
-        public static bool OpenRootboundChest = false;
-        public static bool SurviveBackwoodsFog = false;
-        public static bool CraftDruidWreath = false;
-        public static bool DefeatLothorEnraged = false;
+    internal class RoAAchievementStorage_Player : ModPlayer {
+        public bool DefeatLothor = false;
+        public bool MineMercuriumNugget = false;
+        public bool OpenRootboundChest = false;
+        public bool SurviveBackwoodsFog = false;
+        public bool CraftDruidWreath = false;
+        public bool DefeatLothorEnraged = false;
 
-        public override void ClearWorld() {
-            DefeatLothor = false;
-            MineMercuriumNugget = false;
-            OpenRootboundChest = false;
-            SurviveBackwoodsFog = false;
-            CraftDruidWreath = false;
-            DefeatLothorEnraged = false;
-        }
-
-        public override void SaveWorldData(TagCompound tag) {
+        public override void SaveData(TagCompound tag) {
             if (DefeatLothor) {
                 tag["DefeatLothor"] = true;
             }
@@ -54,7 +45,7 @@ sealed class RoAAchievementInGameNotification : IInGameNotification {
             }
         }
 
-        public override void LoadWorldData(TagCompound tag) {
+        public override void LoadData(TagCompound tag) {
             DefeatLothor = tag.ContainsKey("DefeatLothor");
             MineMercuriumNugget = tag.ContainsKey("MineMercuriumNugget");
             OpenRootboundChest = tag.ContainsKey("OpenRootboundChest");
@@ -63,6 +54,54 @@ sealed class RoAAchievementInGameNotification : IInGameNotification {
             DefeatLothorEnraged = tag.ContainsKey("DefeatLothorEnraged");
         }
     }
+
+    //internal class RoAAchievementStorage_World : ModSystem {
+    //    public static bool DefeatLothor = false;
+    //    public static bool MineMercuriumNugget = false;
+    //    public static bool OpenRootboundChest = false;
+    //    public static bool SurviveBackwoodsFog = false;
+    //    public static bool CraftDruidWreath = false;
+    //    public static bool DefeatLothorEnraged = false;
+
+    //    public override void ClearWorld() {
+    //        DefeatLothor = false;
+    //        MineMercuriumNugget = false;
+    //        OpenRootboundChest = false;
+    //        SurviveBackwoodsFog = false;
+    //        CraftDruidWreath = false;
+    //        DefeatLothorEnraged = false;
+    //    }
+
+    //    public override void SaveWorldData(TagCompound tag) {
+    //        if (DefeatLothor) {
+    //            tag["DefeatLothor"] = true;
+    //        }
+    //        if (MineMercuriumNugget) {
+    //            tag["MineMercuriumNugget"] = true;
+    //        }
+    //        if (OpenRootboundChest) {
+    //            tag["OpenRootboundChest"] = true;
+    //        }
+    //        if (SurviveBackwoodsFog) {
+    //            tag["SurviveBackwoodsFog"] = true;
+    //        }
+    //        if (CraftDruidWreath) {
+    //            tag["CraftDruidWreath"] = true;
+    //        }
+    //        if (DefeatLothorEnraged) {
+    //            tag["DefeatLothorEnraged"] = true;
+    //        }
+    //    }
+
+    //    public override void LoadWorldData(TagCompound tag) {
+    //        DefeatLothor = tag.ContainsKey("DefeatLothor");
+    //        MineMercuriumNugget = tag.ContainsKey("MineMercuriumNugget");
+    //        OpenRootboundChest = tag.ContainsKey("OpenRootboundChest");
+    //        SurviveBackwoodsFog = tag.ContainsKey("SurviveBackwoodsFog");
+    //        CraftDruidWreath = tag.ContainsKey("CraftDruidWreath");
+    //        DefeatLothorEnraged = tag.ContainsKey("DefeatLothorEnraged");
+    //    }
+    //}
 
     private Asset<Texture2D> _achievementTexture;
     private Asset<Texture2D> _achievementBorderTexture;

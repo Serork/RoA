@@ -233,7 +233,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
 					}
 					else {
 						RoA.CompleteAchievement("OpenRootboundChest");
-                        RoAAchievementInGameNotification.RoAAchievementStorage.OpenRootboundChest = true;
+                        player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().OpenRootboundChest = true;
 
                         player.chest = chest;
 						Main.playerInventory = true;

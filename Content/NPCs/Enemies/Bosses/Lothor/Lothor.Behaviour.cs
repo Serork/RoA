@@ -826,7 +826,7 @@ sealed partial class Lothor : ModNPC {
 
     public override void OnKill() {
         RoA.ShowAchievementNotification("DefeatLothor");
-        RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothor = true;
+        Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothor = true;
 
         NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);
         if (Main.netMode == NetmodeID.Server) {
@@ -835,7 +835,7 @@ sealed partial class Lothor : ModNPC {
 
         if (CanDropFlederSlayer) {
             RoA.CompleteAchievement("DefeatLothorEnraged");
-            RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothorEnraged = true;
+            Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothorEnraged = true;
         }
     }
 
