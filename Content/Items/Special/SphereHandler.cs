@@ -468,6 +468,9 @@ sealed class SphereHandler : GlobalItem {
 
         var handler = item.GetGlobalItem<SphereHandler>();
         int _breath = handler._breath;
+        if (_breath == 0) {
+            return;
+        }
         int _breathMax = handler._breathMax;
         if (_breath < _breathMax) {
             int num = 50;
@@ -566,6 +569,9 @@ sealed class SphereHandler : GlobalItem {
 
         var handler = item.GetGlobalItem<SphereHandler>();
         int _breath2 = handler._breath2;
+        if (_breath2 == 0) {
+            return;
+        }
         int _breathMax2 = handler._breathMax2;
         if (_breath2 < _breathMax2) {
             int num = 50;
