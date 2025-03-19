@@ -824,13 +824,6 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void OnKill() {
-        if (!DownedBossSystem.DownedLothorBoss) {
-            if (Main.netMode != NetmodeID.Server) {
-                if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
-                    mod.Call("Event", "BestialCommunion");
-                }
-            }
-        }
         NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);
         if (Main.netMode == NetmodeID.Server) {
             NetMessage.SendData(MessageID.WorldData);
