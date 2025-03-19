@@ -19,12 +19,6 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 
-class ElderTorch2 : ElderTorch {
-    public override float GetTorchLuck(Player player) => 0f;
-
-    public override string Texture => TileLoader.GetTile(ModContent.TileType<ElderTorch>()).Texture;
-}
-
 class ElderTorch : ModTile {
     private Asset<Texture2D> _flameTexture;
 
