@@ -390,7 +390,8 @@ sealed class FlederSlayer : ModProjectile {
                         Vector2 extra = Vector2.Normalize(Projectile.velocity) * -((Projectile.rotation + (playerDirection != 1 ? MathHelper.Pi : 0f)) * playerDirection).ToRotationVector2() * 165f * Projectile.localAI[2];
                         Vector2 projectileCenter = Projectile.Center + extra;
                         if (!_released && Projectile.ai[1] <= 16f) {
-                            if (Projectile.ai[1] > 4f && WorldGen.SolidTile(Math.Clamp((int)projectileCenter.X / 16, 1, Main.maxTilesX), Math.Clamp((int)projectileCenter.Y / 16 + 1, 1, Main.maxTilesY))) {
+                            if (Projectile.ai[1] > 4f && 
+                                WorldGenHelper.SolidTile(Math.Clamp((int)projectileCenter.X / 16, 1, Main.maxTilesX), Math.Clamp((int)projectileCenter.Y / 16 + 1, 1, Main.maxTilesY))) {
                                 _released = true;
 
                                 if (_charge > 0.35f) {
@@ -806,7 +807,7 @@ sealed class FlederSlayer : ModProjectile {
             Player player = Main.player[Projectile.owner];
             Projectile.velocity *= 0.9f + Math.Clamp((player.GetTotalAttackSpeed(DamageClass.Melee) - 1f) * 0.1f, 0f, 1f);
             float y = player.MountedCenter.Y - 10f;
-            while (!WorldGen.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction) / 16, (int)y / 16)) {
+            while (!WorldGenHelper.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction) / 16, (int)y / 16)) {
                 y++;
             }
             Projectile.position.Y = y - 22f;
