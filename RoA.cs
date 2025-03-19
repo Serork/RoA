@@ -54,7 +54,34 @@ sealed class RoA : Mod {
         return hook;
     }
 
-    public static void ShowAchivementNotification(string name) {
+    private class CompleteAchivementsOnEnteringWorldSystem : ModPlayer {
+        public override void OnEnterWorld() {
+            if (ModLoader.HasMod("TMLAchievements")) {
+                return;
+            }
+
+            if (RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothor) {
+                CompleteAchievement("DefeatLothor");
+            }
+            if (RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget) {
+                CompleteAchievement("MineMercuriumNugget");
+            }
+            if (RoAAchievementInGameNotification.RoAAchievementStorage.OpenRootboundChest) {
+                CompleteAchievement("OpenRootboundChest");
+            }
+            if (RoAAchievementInGameNotification.RoAAchievementStorage.SurviveBackwoodsFog) {
+                CompleteAchievement("SurviveBackwoodsFog");
+            }
+            if (RoAAchievementInGameNotification.RoAAchievementStorage.CraftDruidWreath) {
+                CompleteAchievement("CraftDruidWreath");
+            }
+            if (RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothorEnraged) {
+                CompleteAchievement("DefeatLothorEnraged");
+            }
+        }
+    }
+
+    public static void ShowAchievementNotification(string name) {
         if (ModLoader.HasMod("TMLAchievements")) {
             return;
         }
@@ -95,7 +122,7 @@ sealed class RoA : Mod {
                 mod.Call("Event", name);
             }
 
-            ShowAchivementNotification(name);
+            ShowAchievementNotification(name);
         }
     }
 
