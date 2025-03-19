@@ -200,7 +200,7 @@ GiantTreeSapling: {
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: When [kw/n:wreath] begins discharging, provides its full charge bonuses for 2 extra seconds
+	Tooltip: When [kw/n:wreath] is discharged, provides its full charge bonuses for 2 extra seconds
 }
 
 RavencallersCloak: {
@@ -357,11 +357,7 @@ SnowWreath2: {
 
 Cloudberry: {
 	DisplayName: Cloudberry
-	Tooltip:
-		'''
-		Restores 1 life per second
-		Does not inflict 'Potion Sickness'
-		'''
+	Tooltip: Recovers 1 life per second
 }
 
 SoulOfTheWoods: {
@@ -1241,7 +1237,7 @@ BloodbathLocket: {
 
 ChemicalPrisoner: {
 	DisplayName: Chemical Prisoner
-	Tooltip: Occasionally launches a flask that shatters its poison when shot
+	Tooltip: Occasionally launches a poison flask that shatters when shot
 }
 
 FlederStaff: {
