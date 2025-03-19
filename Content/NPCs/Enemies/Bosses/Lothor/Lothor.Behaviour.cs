@@ -825,7 +825,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void OnKill() {
-        RoA.ShowAchievementNotification("DefeatLothor");
+        RoA.CompleteAchievement("DefeatLothor");
         Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothor = true;
 
         NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);

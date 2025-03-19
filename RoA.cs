@@ -63,9 +63,7 @@ sealed class RoA : Mod {
 
             var storage = Player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>();
             if (storage.DefeatLothor) {
-                if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
-                    mod.Call("Kil", "DefeatLothor");
-                }
+                CompleteAchievement("DefeatLothor");
             }
             if (storage.MineMercuriumNugget) {
                 CompleteAchievement("MineMercuriumNugget");
@@ -142,7 +140,7 @@ sealed class RoA : Mod {
                     ResourceManager.AchievementsTextures + "Achievement_DefeatLothor", null, 
                     false, true,
                     20.5f,
-                    new string[] { "Kill_" + ModContent.NPCType<Lothor>() });
+                    new string[] { "Event" + "DefeatLothor" });
 
                 mod.Call("AddAchievement", Instance,
                     "MineMercuriumNugget",
