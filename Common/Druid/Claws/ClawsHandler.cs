@@ -22,6 +22,7 @@ sealed class ClawsHandler : ModPlayer {
         public Action<Player>? SpawnProjectile = null;
         public Action<Player>? OnSpawn = null;
         public bool OnlySpawn = false;
+        public Action<Player>? OnAttack = null;
     }
 
     public readonly struct SpecialAttackSpawnInfo(AttackSpawnInfoArgs args) {
@@ -35,6 +36,7 @@ sealed class ClawsHandler : ModPlayer {
         public readonly Action<Player>? SpawnProjectile = args.SpawnProjectile;
         public readonly Action<Player>? OnSpawn = args.OnSpawn;
         public readonly bool OnlySpawn = args.OnlySpawn;
+        public readonly Action<Player>? OnAttack = args.OnAttack;
     }
 
     public (Color, Color) SlashColors { get; private set; }

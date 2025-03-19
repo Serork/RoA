@@ -2,6 +2,8 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
@@ -87,6 +89,11 @@ sealed class ElderwoodClaws : BaseClawsItem {
                     }
                 }
             },
+            OnAttack = (player) => {
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 3, player.Center));
+                }
+            }
         });
     }
 

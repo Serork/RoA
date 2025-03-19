@@ -2,6 +2,8 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -52,7 +54,12 @@ sealed class ThornyClaws : BaseClawsItem {
             ProjectileTypeToSpawn = type,
             ShouldReset = shouldReset,
             ShouldSpawn = player.ownedProjectileCounts[type] < 2,
-            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "Leaves2") { Pitch = 0.3f, Volume = 1.2f }
+            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "Leaves2") { Pitch = 0.3f, Volume = 1.2f },
+            OnAttack = (player) => {
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 2, player.Center));
+                }
+            }
         });
     }
 }

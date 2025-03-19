@@ -2,6 +2,8 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -36,7 +38,12 @@ sealed class HorrorPincers : BaseClawsItem {
             Owner = Item,
             SpawnPosition = new Vector2(position.X, position.Y - 14f),
             StartVelocity = point,
-            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "ClawsWave") { Volume = 0.75f }
+            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "ClawsWave") { Volume = 0.75f },
+            OnAttack = (player) =>{
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 1, player.Center));
+                }
+            }
         });
     }
 }
