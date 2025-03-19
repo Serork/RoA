@@ -18,16 +18,6 @@ using Terraria.Utilities;
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 
 sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
-     private class BloomingDoomInWitchDoctorShopSystem : GlobalNPC {
-        public override void ModifyShop(NPCShop shop) {
-            if (shop.NpcType != NPCID.WitchDoctor) {
-                return;
-            }
-
-            shop.InsertAfter(ItemID.Blowgun, ModContent.ItemType<BloomingDoom>());
-        }
-    }
-
     protected override void SafeSetDefaults() {
         Item.SetWeaponValues(12, 1.5f);
         Item.SetDefaultToUsable(-1, 60, useSound: SoundID.Item7); 

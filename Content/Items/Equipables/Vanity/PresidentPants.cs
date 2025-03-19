@@ -11,16 +11,6 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Legs)]
 sealed class PresidentPants : ModItem {
-     private class PresidentPantsInMerchantShop : GlobalNPC {
-        public override void ModifyShop(NPCShop shop) {
-            if (shop.NpcType != NPCID.Merchant) {
-                return;
-            }
-
-            shop.InsertAfter(ModContent.ItemType<PresidentJacket>(), ModContent.ItemType<PresidentPants>(), RoAConditions.Has05LuckOrMore);
-        }
-    }
-
     public override void SetStaticDefaults() {
 		//DisplayName.SetDefault("President's Pants");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

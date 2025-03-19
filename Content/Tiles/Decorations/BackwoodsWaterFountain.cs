@@ -15,16 +15,6 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Decorations;
 
 sealed class BackwoodsWaterFountain : ModTile {
-     private class BackwoodsWaterFountainInWitchDoctorShop : GlobalNPC {
-        public override void ModifyShop(NPCShop shop) {
-            if (shop.NpcType != NPCID.WitchDoctor) {
-                return;
-            }
-
-            shop.InsertAfter(ItemID.JungleWaterFountain, ModContent.ItemType<Items.Placeable.Decorations.BackwoodsWaterFountain>());
-        }
-    }
-
     public override void SetStaticDefaults() {
         Main.tileLighted[Type] = true;
         Main.tileFrameImportant[Type] = true;

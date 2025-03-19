@@ -11,16 +11,6 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class JockeyHat : ModItem {
-     private class JockeyHatInMerchantShop : GlobalNPC {
-        public override void ModifyShop(NPCShop shop) {
-            if (shop.NpcType != NPCID.Merchant) {
-                return;
-            }
-
-            shop.InsertAfter(ItemID.MiningHelmet, ModContent.ItemType<JockeyHat>(), RoAConditions.HasAnySaddle);
-        }
-    }
-
     public override void SetStaticDefaults(){
 		//Tooltip.SetDefault("-100% running speed");
 		ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;

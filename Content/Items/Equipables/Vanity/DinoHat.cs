@@ -11,16 +11,6 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class DinoHat : ModItem {
-     private class DinoHatInMerchantShop : GlobalNPC {
-        public override void ModifyShop(NPCShop shop) {
-            if (shop.NpcType != NPCID.Merchant) {
-                return;
-            }
-
-            shop.InsertAfter(ItemID.MiningHelmet, ModContent.ItemType<DinoHat>(), RoAConditions.HasAnySaddle);
-        }
-    }
-
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Dino's Hat");
         //Tooltip.SetDefault("'Scary monsters, super creeps\nKeep me running, running scared'");

@@ -9,16 +9,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Placeable.Decorations;
 
 sealed class LothorEnrageMonolith : ModItem {
-     private class LothorEnrageMonolithInPartyGirlShop : GlobalNPC {
-        public override void ModifyShop(NPCShop shop) {
-            if (shop.NpcType != NPCID.PartyGirl) {
-                return;
-            }
-
-            shop.InsertAfter(3747, ModContent.ItemType<LothorEnrageMonolith>(), RoAConditions.LothorEnrageMonolith);
-        }
-    }
-
     public override void SetDefaults() {
         Item.SetSize(26, 32);
 		
