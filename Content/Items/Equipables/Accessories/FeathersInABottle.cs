@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
@@ -33,7 +34,8 @@ sealed class FeathersInABottle : NatureItem {
     internal sealed class FeathersInABottleExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;
 
-        public override bool CanStart(Player player) => player.GetModPlayer<WreathHandler>().HasEnough(0.25f);
+        public override bool CanStart(Player player) => !player.GetModPlayer<BaseFormHandler>().IsInDruidicForm &&
+            !player.GetModPlayer<WreathHandler>().StartSlowlyIncreasingUntilFull && player.GetModPlayer<WreathHandler>().HasEnough(0.25f);
 
         public override float GetDurationMultiplier(Player player) => 1f;
 
