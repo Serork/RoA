@@ -36,7 +36,7 @@ sealed class DeathWardPotion : ModItem {
 		Item.consumable = true;
 
 		Item.buffType = ModContent.BuffType<DeathWard>();
-		Item.buffTime = 3600 * 2;
+		Item.buffTime = 3600;
 
         Item.value = Item.sellPrice(0, 0, 2, 0);
     }

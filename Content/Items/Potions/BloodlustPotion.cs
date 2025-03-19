@@ -35,7 +35,7 @@ sealed class BloodlustPotion : ModItem {
 		Item.consumable = true;
 
 		Item.buffType = ModContent.BuffType<Bloodlust>();
-		Item.buffTime = 3600 / 2;
+		Item.buffTime = 3600 * 8;
 
 		Item.value = Item.sellPrice(0, 0, 2, 0);
 	}
