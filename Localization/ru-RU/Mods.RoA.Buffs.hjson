@@ -66,8 +66,8 @@ Hemorrhage: {
 }
 
 Brightstone: {
-	DisplayName: Гало из светлокамня
-	Description: Разбрасывает сгустки света
+	DisplayName: Вуаль из светлокамня
+	Description: Оставляет шлейф из светящейся пыли
 }
 
 DryadBlood: {

@@ -66,8 +66,8 @@ Hemorrhage: {
 }
 
 Brightstone: {
-	DisplayName: Brightstone Halo
-	Description: Emit glowing lumps of light
+	DisplayName: Brightstone Veil
+	Description: Leaving a trail of glowing dust
 }
 
 DryadBlood: {

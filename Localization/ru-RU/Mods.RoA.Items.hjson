@@ -369,7 +369,7 @@ SoulOfTheWoods: {
 
 BrightstonePotion: {
 	DisplayName: Зелье из светлокамня
-	Tooltip: Испускает сгустки света
+	Tooltip: Оставляет шлейф из светящейся пыли
 }
 
 DryadBloodPotion: {
