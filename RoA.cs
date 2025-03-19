@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 using MonoMod.RuntimeDetour;
 
 using ReLogic.Content.Sources;
@@ -110,9 +112,11 @@ sealed class RoA : Mod {
                 flag = storage.DefeatLothorEnraged;
                 break;
         }
-        if (!flag) {
+        Main.NewText(Color.LightBlue);
+        /*if (!flag) */{
             InGameNotificationsTracker.AddNotification(new RoAAchievementInGameNotification(name));
-            Main.NewText(Language.GetTextValue("Achievements.Completed", Language.GetTextValue($"Mods.RoA.Achievements.{name}.Name")));
+            string achievementName = Language.GetTextValue($"Mods.RoA.Achievements.{name}.Name");
+            Main.NewText(Language.GetTextValue("Achievements.Completed", "[c/ADD8E6:" + achievementName + "]"));
             if (SoundEngine.FindActiveSound(in SoundID.AchievementComplete) == null) {
                 SoundEngine.PlaySound(in SoundID.AchievementComplete);
             }
