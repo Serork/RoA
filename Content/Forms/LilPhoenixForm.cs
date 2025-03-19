@@ -22,6 +22,8 @@ namespace RoA.Content.Forms;
 sealed class LilPhoenixForm : BaseForm {
     public override SoundStyle? HurtSound => SoundID.NPCHit31;
 
+    public override Vector2 WreathOffset => new(0f, 5.5f);
+
     protected override Color LightingColor {
         get {
             float num56 = 1f;

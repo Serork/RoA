@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
@@ -14,14 +14,13 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using RoA.Common.CameraSystem;
-using RoA.Common.BackwoodsSystems;
-using RoA.Core;
 
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
     public override SoundStyle? HurtSound => SoundID.NPCHit27;
+
+    public override Vector2 WreathOffset => new(0f, 7.5f);
 
     protected override Vector2 GetLightingPos(Player player) => player.Center;
     protected override Color LightingColor => new(79, 124, 211);

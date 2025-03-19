@@ -20,6 +20,7 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using RoA.Common.Druid.Forms;
 
 namespace RoA.Common.InterfaceElements;
 
@@ -67,6 +68,11 @@ sealed class WreathDrawing : PlayerDrawLayer {
         WreathHandler stats = player.GetModPlayer<WreathHandler>();
         Vector2 playerPosition = Utils.Floor(new Vector2((int)(drawInfo.Position.X + (float)(drawInfo.drawPlayer.width / 2)),
             (int)(drawInfo.Position.Y + (float)drawInfo.drawPlayer.height - 40f)));
+        var formHandler = player.GetModPlayer<BaseFormHandler>();
+        var currentForm = formHandler.CurrentForm;
+        if (formHandler.IsInDruidicForm && currentForm != null) {
+            playerPosition += currentForm.BaseForm.WreathOffset;
+        }
         playerPosition.Y -= 12f;
         Vector2 position;
         bool breathUI = player.breath < player.breathMax || player.lavaTime < player.lavaMax;
