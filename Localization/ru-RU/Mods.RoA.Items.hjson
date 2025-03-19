@@ -200,7 +200,7 @@ GiantTreeSapling: {
 
 FireflyPin: {
 	DisplayName: Заколка-светлячок
-	Tooltip: Когда [kw/n:венок] начинает опустошаться, он сохраняет бонусы полного заряда еще 2 секунды
+	Tooltip: Когда [kw/n:венок] опустошается, он сохраняет бонусы полного заряда еще 2 секунды
 }
 
 RavencallersCloak: {
@@ -351,11 +351,7 @@ SnowWreath2: {
 
 Cloudberry: {
 	DisplayName: Морошка
-	Tooltip:
-		'''
-		Восстанавливает 1 здоровье в секунду
-		Не накладывает 'Послезельевую болезнь'
-		'''
+	Tooltip: Восстанавливает 1 здоровье в секунду
 }
 
 SoulOfTheWoods: {
@@ -1235,7 +1231,7 @@ BloodbathLocket: {
 
 ChemicalPrisoner: {
 	DisplayName: Химический узник
-	Tooltip: Иногда запускает склянку, яд в которой расплёскивается при попадании пулей
+	Tooltip: Иногда запускает склянку с ядом, разбивающуюся при попадании пулей
 }
 
 FlederStaff: {
@@ -1407,7 +1403,7 @@ SentinelWarriorBanner: {
 }
 
 BackwoodsGrassSeeds: {
-	DisplayName: Семена Травы Чащи
+	DisplayName: Семена Травы чащи
 	// Tooltip: ""
 }
 
@@ -1417,7 +1413,7 @@ BloodCursor: {
 }
 
 BackwoodsRavenBanner: {
-	DisplayName: Знамя ворона Чащи
+	DisplayName: Знамя ворона чащи
 	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.CrowdRaven.DisplayName}, {$Mods.RoA.NPCs.SummonedRaven.DisplayName}"
 }
 
