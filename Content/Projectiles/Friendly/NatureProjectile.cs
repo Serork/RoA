@@ -85,19 +85,6 @@ abstract class NatureProjectile : ModProjectile {
         Projectile.netUpdate = true;
     }
 
-    public static int CreateNatureProjectile(IEntitySource spawnSource, Item item, Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f) {
-        return CreateNatureProjectile(spawnSource, item, position.X, position.Y, velocity.X, velocity.Y, Type, Damage, KnockBack, Owner, ai0, ai1, ai2);
-    }
-
-    public static int CreateNatureProjectile(IEntitySource spawnSource, Item item, float X, float Y, float SpeedX, float SpeedY, int Type, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f) {
-        int whoAmI = Projectile.NewProjectile(spawnSource, X, Y, SpeedX, SpeedY, Type, Damage, KnockBack, Owner, ai0, ai1, ai2);
-        //Projectile projectile = Main.projectile[whoAmI];
-        //if (projectile.ModProjectile is not FormProjectile) {
-        //    projectile.As<NatureProjectile>().SetItem(item);
-        //}
-        return whoAmI;
-    }
-
     public sealed override void OnSpawn(IEntitySource source) {
         if (this is not FormProjectile && Projectile.owner == Main.myPlayer) {
             SetItem(Projectile.GetOwnerAsPlayer().GetSelectedItem());

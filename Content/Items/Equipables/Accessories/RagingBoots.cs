@@ -104,7 +104,7 @@ sealed class RagingBoots : NatureItem {
                         for (int i = 0; i < count; i++) {
                             var shootTo = velo.RotatedBy(MathHelper.PiOver2 * (i < count / 2).ToDirectionInt() + MathHelper.PiOver4 * 0.75f * Main.rand.NextFloatDirection());
                             var shootLocation = center + Vector2.Normalize(shootTo) * 10f;
-                            NatureProjectile.CreateNatureProjectile(Player.GetSource_Misc("ragingboots"), item, shootLocation, shootTo, 
+                            Projectile.NewProjectile(Player.GetSource_Misc("ragingboots"), shootLocation, shootTo, 
                                 ModContent.ProjectileType<RagingBootsWave>(),
                                 NatureWeaponHandler.GetNatureDamage(item, Player),
                                 Player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(item.knockBack), 

@@ -242,6 +242,11 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     public sealed override void AI() {
+        if (Owner.whoAmI != Main.myPlayer && Projectile.localAI[2] == 0f) {
+            Projectile.localAI[2] = 1f;
+
+            SoundEngine.PlaySound(Item.UseSound, Owner.Center);
+        }
         //Main.NewText(NatureWeaponHandler.GetUseSpeed(Item, Owner));
 
         ActiveCheck();

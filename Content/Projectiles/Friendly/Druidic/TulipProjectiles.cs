@@ -256,13 +256,15 @@ sealed class TulipFlower : NatureProjectile {
                 Projectile.netUpdate = true;
             }
         }
-
-        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 1.2f });
-
-        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "LeavesAmbient") { Volume = 1.2f, MaxInstances = 1 });
     }
 
     public override void AI() {
+        if (Projectile.localAI[0] == 0f) {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 1.2f });
+
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "LeavesAmbient") { Volume = 1.2f, MaxInstances = 1 });
+        }
+
         Projectile.localAI[0] += 1f;
         if (Projectile.localAI[0] >= Max) {
             Projectile.Kill();

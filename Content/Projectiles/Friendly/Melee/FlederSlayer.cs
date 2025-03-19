@@ -199,6 +199,9 @@ sealed class FlederSlayer : ModProjectile {
         }
         if (Projectile.localAI[2] == 0f) {
             Projectile.localAI[2] = 1f;
+
+            SoundEngine.PlaySound(SoundID.Item1, player.Center);
+
             float scale = Main.player[Projectile.owner].CappedMeleeOrDruidScale();
             if (scale != 1f) {
                 Projectile.localAI[2] *= scale;
