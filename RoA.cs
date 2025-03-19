@@ -56,9 +56,11 @@ sealed class RoA : Mod {
 
     private class CompleteAchivementsOnEnteringWorldSystem : ModPlayer {
         public override void OnEnterWorld() {
-            if (ModLoader.HasMod("TMLAchievements")) {
+            if (!ModLoader.HasMod("TMLAchievements")) {
                 return;
             }
+
+            Main.NewText(RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget);
 
             if (RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothor) {
                 CompleteAchievement("DefeatLothor");
