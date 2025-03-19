@@ -3,8 +3,6 @@ using MonoMod.RuntimeDetour;
 using ReLogic.Content.Sources;
 
 using RoA.Common.Networking;
-using RoA.Common.TMLAchievements;
-using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 
@@ -13,7 +11,6 @@ using System.Reflection;
 
 using Terraria;
 using Terraria.Achievements;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA;
@@ -54,53 +51,6 @@ sealed class RoA : Mod {
 
     private void LoadAchievements() {
         if (!ModLoader.HasMod("TMLAchievements")) {
-            new ModCallAchievement().Add(Instance,
-            "BestialCommunion",
-            AchievementCategory.Slayer,
-            ResourceManager.AchievementsTextures + "Achievement_DefeatLothor", null,
-            false, true,
-            20.5f,
-            ["Kill_" + ModContent.NPCType<Lothor>()]);
-
-            new ModCallAchievement().Add(Instance,
-            "WhatsThatSmell",
-            AchievementCategory.Explorer,
-            ResourceManager.AchievementsTextures + "Achievement_MineMercuriumNugget", null,
-            false, true,
-            6.5f,
-            ["Event_" + TMLAchievements.RoAAchivement.WhatsThatSmell]);
-
-            new ModCallAchievement().Add(Instance,
-            "GrootsLoot",
-            AchievementCategory.Explorer,
-            ResourceManager.AchievementsTextures + "Achievement_OpenRootboundChest", null,
-            false, true,
-            14.5f,
-            ["Event_" + TMLAchievements.RoAAchivement.OpenRootboundChest]);
-
-            new ModCallAchievement().Add(Instance,
-            "SilentHills",
-            AchievementCategory.Slayer,
-            ResourceManager.AchievementsTextures + "Achievement_SurviveBackwoodsFog", null,
-            false, false,
-            0f,
-            ["Event_" + TMLAchievements.RoAAchivement.SilentHills]);
-
-            new ModCallAchievement().Add(Instance,
-            "NotPostMortem",
-            AchievementCategory.Collector,
-            ResourceManager.AchievementsTextures + "Achievement_CraftDruidWreath", null,
-            false, true,
-            13.5f,
-            ["Event_" + TMLAchievements.RoAAchivement.NotPostMortem]);
-
-            new ModCallAchievement().Add(Instance,
-            "GutsOfSteel",
-            AchievementCategory.Challenger,
-            ResourceManager.AchievementsTextures + "Achievement_DefeatLothorEnraged", null,
-            false, true,
-            20.6f,
-            ["Event_" + TMLAchievements.RoAAchivement.GutsOfSteel]);
         }
         else {
             if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
@@ -118,7 +68,7 @@ sealed class RoA : Mod {
                     ResourceManager.AchievementsTextures + "Achievement_MineMercuriumNugget", null,
                     false, true,
                     6.5f,
-                    new string[] { "Event_" + TMLAchievements.RoAAchivement.WhatsThatSmell });
+                    new string[] { "Event_" + "WhatsThatSmell" });
 
                 mod.Call("AddAchievement", Instance,
                     "GrootsLoot",
@@ -126,7 +76,7 @@ sealed class RoA : Mod {
                     ResourceManager.AchievementsTextures + "Achievement_OpenRootboundChest", null,
                     false, true,
                     14.5f,
-                    new string[] { "Event_" + TMLAchievements.RoAAchivement.OpenRootboundChest });
+                    new string[] { "Event_" + "OpenRootboundChest" });
 
                 mod.Call("AddAchievement", Instance,
                     "SilentHills",
@@ -134,7 +84,7 @@ sealed class RoA : Mod {
                     ResourceManager.AchievementsTextures + "Achievement_SurviveBackwoodsFog", null,
                     false, false,
                     0f,
-                    new string[] { "Event_" + TMLAchievements.RoAAchivement.SilentHills });
+                    new string[] { "Event_" + "SilentHills" });
 
                 mod.Call("AddAchievement", Instance,
                     "NotPostMortem",
@@ -142,7 +92,7 @@ sealed class RoA : Mod {
                     ResourceManager.AchievementsTextures + "Achievement_CraftDruidWreath", null,
                     false, true,
                     13.5f,
-                    new string[] { "Event_" + TMLAchievements.RoAAchivement.NotPostMortem });
+                    new string[] { "Event_" + "NotPostMortem" });
 
                 mod.Call("AddAchievement", Instance,
                     "GutsOfSteel",
@@ -150,7 +100,7 @@ sealed class RoA : Mod {
                     ResourceManager.AchievementsTextures + "Achievement_DefeatLothorEnraged", null,
                     false, true,
                     20.6f,
-                    new string[] { "Event_" + TMLAchievements.RoAAchivement.GutsOfSteel });
+                    new string[] { "Event_" + "GutsOfSteel" });
             }
         }
     }

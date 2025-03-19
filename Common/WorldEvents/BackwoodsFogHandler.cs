@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Players;
-using RoA.Common.TMLAchievements;
 using RoA.Common.VisualEffects;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
@@ -132,7 +131,11 @@ sealed class BackwoodsFogHandler : ModSystem {
                     continue;
                 }
                 if (player.whoAmI == Main.myPlayer) {
-                    TMLAchievements.TMLAchievements.CompleteEventAchievement(TMLAchievements.TMLAchievements.RoAAchivement.SilentHills);
+                    if (Main.netMode != NetmodeID.Server) {
+                        if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
+                            mod.Call("Event", "SilentHills");
+                        }
+                    }
                 }
             }
         }

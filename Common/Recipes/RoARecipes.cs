@@ -34,7 +34,6 @@ using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace RoA.Common.Recipes;
 
@@ -211,7 +210,11 @@ sealed class RoARecipes : ModSystem {
     }
 
     private static void CompleteAchievement(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack) {
-        TMLAchievements.TMLAchievements.CompleteEventAchievement(TMLAchievements.TMLAchievements.RoAAchivement.NotPostMortem);
+        if (Main.netMode != NetmodeID.Server) {
+            if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
+                mod.Call("Event", "NotPostMortem");
+            }
+        }
     }
 
     private static void AddWreaths(out Recipe lastWreath) {

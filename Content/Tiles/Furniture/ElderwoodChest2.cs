@@ -2,8 +2,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
-using RoA.Common.TMLAchievements;
-using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -233,7 +231,11 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
 						SoundEngine.PlaySound(SoundID.MenuClose);
 					}
 					else {
-						TMLAchievements.CompleteEventAchievement(TMLAchievements.RoAAchivement.OpenRootboundChest);
+                        if (Main.netMode != NetmodeID.Server) {
+                            if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
+                                mod.Call("Event", "OpenRootboundChest");
+                            }
+                        }
 
                         player.chest = chest;
 						Main.playerInventory = true;
