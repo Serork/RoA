@@ -26,14 +26,14 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed partial class Lothor : ModNPC {
-    public const int CLAWS_DAMAGE = 60; // было 80
+    public const int CLAWS_DAMAGE = 50; // было 80
     public const float CLAWS_KNOCKBACK = 4.5f;
-    public const int CLAWS_DAMAGE2 = 80; // было 100 
+    public const int CLAWS_DAMAGE2 = 70; // было 100 
     public const float CLAWS_KNOCKBACK2 = 6f;
 
-    public const int WREATH_DAMAGE = 80; // было 50
+    public const int WREATH_DAMAGE = 70; // было 50
     public const float WREATH_KNOCKBACK = 1f;
-    public const int WREATH_DAMAGE2 = 120; // было 80
+    public const int WREATH_DAMAGE2 = 100; // было 80
     public const float WREATH_KNOCKBACK2 = 3f;
 
     public const int ACORN_DAMAGE = 30; // было 20
@@ -43,12 +43,12 @@ sealed partial class Lothor : ModNPC {
 
     public const int SPIT_DAMAGE = 20; // было 30
     public const float SPIT_KNOCKBACK = 0f;
-    public const int SPIT_DAMAGE2 = 40; // было 60
+    public const int SPIT_DAMAGE2 = 30; // было 60
     public const float SPIT_KNOCKBACK2 = 0f;
 
-    public const int STOMP_DAMAGE = 50; // было 50
+    public const int STOMP_DAMAGE = 40; // было 50
     public const float STOMP_KNOCKBACK = 0f;
-    public const int STOMP_DAMAGE2 = 80; // было 90
+    public const int STOMP_DAMAGE2 = 60; // было 90
     public const float STOMP_KNOCKBACK2 = 0f;
 
 
@@ -1791,8 +1791,8 @@ sealed partial class Lothor : ModNPC {
 
         SoundEngine.PlaySound(SoundID.DD2_OgreGroundPound, NPC.Center);
 
-        float strength = 7.5f;
-        int distInTiles = 20/*Main.expertMode ? 20 : 15*/;
+        float strength = 3.5f;
+        int distInTiles = 20;
         foreach (Player target in Main.player) {
             bool targetStands = target.velocity.Y == 0f || target.sliding;
             if (Vector2.Distance(target.Center, NPC.Center) < distInTiles * 16f && targetStands) {
