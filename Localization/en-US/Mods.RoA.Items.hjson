@@ -25,7 +25,7 @@ HellfireClaws: {
 	DisplayName: Hellfire Claws
 	Tooltip:
 		'''
-		Consumes a full [kw/n:wreath] charge to tear a fiery fracture
+		Consume a full [kw/n:wreath] charge to tear a fiery fracture
 		'Claws so fire, they set everything on fire'
 		'''
 }
@@ -34,7 +34,7 @@ HorrorPincers: {
 	DisplayName: Horror Pincers
 	Tooltip:
 		'''
-		Consumes a full [kw/n:wreath] charge to expel bile and putrescence
+		Consume a full [kw/n:wreath] charge to expel bile and putrescence
 		'Fashioned after an Eater of Souls'
 		'''
 }
@@ -43,7 +43,7 @@ ThornyClaws: {
 	DisplayName: Thorny Claws
 	Tooltip:
 		'''
-		Consumes a full [kw/n:wreath] charge to grow a lesser man eater
+		Consume a full [kw/n:wreath] charge to grow a lesser man eater
 		'Sting like a Hornet, bite like a Man Eater'
 		'''
 }
@@ -200,7 +200,7 @@ GiantTreeSapling: {
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: When [kw/n:wreath] is discharged, provides its full charge bonuses for 2.5 extra seconds
+	Tooltip: When [kw/n:wreath] begins discharging, provides its full charge bonuses for 2 extra seconds
 }
 
 RavencallersCloak: {
@@ -357,7 +357,11 @@ SnowWreath2: {
 
 Cloudberry: {
 	DisplayName: Cloudberry
-	Tooltip: Recovers 1 life per second
+	Tooltip:
+		'''
+		Restores 1 life per second
+		Does not inflict 'Potion Sickness'
+		'''
 }
 
 SoulOfTheWoods: {
@@ -509,7 +513,7 @@ BrilliantBouquet: {
 	Tooltip:
 		'''
 		Shoots a bouquet of vibrant petals, each with a special effect
-		While [kw/n:wreath] is charged, they cross-pollinate sharing those effects
+		While [kw/n:wreath] is charged, they cross-pollinate
 		'''
 }
 
@@ -975,7 +979,7 @@ MercuriumSword: {
 
 StarFusion: {
 	DisplayName: Star Fusion
-	Tooltip: Summons a constellation upon hitting an enemy
+	Tooltip: Summons a constellation on hit
 }
 
 RavensEye: {
@@ -985,7 +989,7 @@ RavensEye: {
 
 MercuriumStaff: {
 	DisplayName: Mercurium Staff
-	Tooltip: Shoots an unstable mercurium shard
+	Tooltip: Shoots a crumbling mercurium shard
 }
 
 MiracleMintSeeds: {
@@ -1237,7 +1241,7 @@ BloodbathLocket: {
 
 ChemicalPrisoner: {
 	DisplayName: Chemical Prisoner
-	Tooltip: Occasionally launches a flask of poison
+	Tooltip: Occasionally launches a flask that shatters its poison when shot
 }
 
 FlederStaff: {
