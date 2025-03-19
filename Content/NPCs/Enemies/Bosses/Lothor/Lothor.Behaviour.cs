@@ -907,9 +907,7 @@ sealed partial class Lothor : ModNPC {
             if (dist <= maxDist) {
                 Vector2 velocity = player.Center - NPC.Center;
                 velocity.Normalize();
-                float maxSpeed = 10f;
-                player.velocity += velocity * Math.Max((maxDist - dist) / 100f, maxSpeed) * 0.15f;
-                player.velocity *= 1f - Math.Abs(dist) * 0.0035f;
+                player.velocity += velocity * (maxDist - dist) / 150f;
             }
         }
 
