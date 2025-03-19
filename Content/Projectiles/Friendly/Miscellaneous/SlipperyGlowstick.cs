@@ -12,7 +12,7 @@ sealed class SlipperyGlowstick : ModProjectile {
 	private int effectCounter;
 	private int effectCounterMax = 1;
 
-	public override void SetDefaults() {
+    public override void SetDefaults() {
 		int width = 6; int height = width;
 		Projectile.Size = new Vector2(width, height);
 

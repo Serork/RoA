@@ -13,7 +13,13 @@ sealed class SlipperyBomb : ModProjectile {
 	private int effectCounter;
 	private int effectCounterMax = 1;
 
-	public override void SetDefaults() {
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
+
+        ProjectileID.Sets.Explosive[Type] = true;
+    }
+
+    public override void SetDefaults() {
 		int width = 22; int height = width;
 		Projectile.Size = new Vector2(width, height);
 
