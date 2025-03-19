@@ -578,7 +578,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private static void PlaceBegin(int i, int j, int height, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk, bool gen = false) {
         short getFrameYForStart() => (short)(180 + (placeRand.NextBool() ? 18 : 0));
         for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
-            for (int checkX = i - 2; checkX < i + 3; checkX++) {
+            for (int checkX = i - 2; checkX < i + 4; checkX++) {
                 Tile tile = WorldGenHelper.GetTileSafely(checkX, checkY);
                 tile.HasTile = false;
             }
@@ -606,41 +606,43 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         float num2 = 10f;
 
         int chance = (int)(BackwoodsVars.AllTreesWorldPositions.Count / 100f);
-        if (!Main.dedServ) {
-            if ((gen && placeRand.NextBool(chance)) || !gen)
-                Gore.NewGore(null, new Vector2(i - 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-            if ((gen && placeRand.NextBool(chance)) || !gen)
-                Gore.NewGore(null, new Vector2(i, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-            if ((gen && placeRand.NextBool(chance)) || !gen)
-                Gore.NewGore(null, new Vector2(i + 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-        }
-
-        if (IsTop(i, j)) {
+        if (!WorldGen.gen) {
             if (!Main.dedServ) {
-                for (int k = 0; k < 5; k++) {
-                    if ((gen && placeRand.NextBool(chance)) || !gen)
-                        Gore.NewGore(null, new Vector2(i - 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-                    if ((gen && placeRand.NextBool(chance)) || !gen)
-                        Gore.NewGore(null, new Vector2(i, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-                    if ((gen && placeRand.NextBool(chance)) || !gen)
-                        Gore.NewGore(null, new Vector2(i + 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
-                }
-
+                if ((gen && placeRand.NextBool(chance)) || !gen)
+                    Gore.NewGore(null, new Vector2(i - 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                if ((gen && placeRand.NextBool(chance)) || !gen)
+                    Gore.NewGore(null, new Vector2(i, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                if ((gen && placeRand.NextBool(chance)) || !gen)
+                    Gore.NewGore(null, new Vector2(i + 1, j).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
             }
 
-            ushort leafGoreType = (ushort)ModContent.GoreType<BackwoodsLeaf>();
-            int count = placeRand.Next(3, 6) * 10;
-            for (int k = 0; k < count; k++) {
-                Vector2 offset = new Vector2(placeRand.NextFloat(-150f, 150f), placeRand.NextFloat(0f, 200f)).RotatedBy(MathHelper.TwoPi);
-                Vector2 position = (new Vector2(i + 5, j - 15) * 16) + offset;
-                if ((gen && placeRand.NextBool(chance)) || !gen)
-                    if (!Main.dedServ) {
-                        Gore.NewGore(null,
-                                    position,
-                                    Utils.RandomVector2(placeRand, 0f - num2, num2),
-                                    leafGoreType,
-                                    0.7f + placeRand.NextFloat() * 0.6f);
+            if (IsTop(i, j)) {
+                if (!Main.dedServ) {
+                    for (int k = 0; k < 5; k++) {
+                        if ((gen && placeRand.NextBool(chance)) || !gen)
+                            Gore.NewGore(null, new Vector2(i - 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                        if ((gen && placeRand.NextBool(chance)) || !gen)
+                            Gore.NewGore(null, new Vector2(i, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
+                        if ((gen && placeRand.NextBool(chance)) || !gen)
+                            Gore.NewGore(null, new Vector2(i + 1, j - k).ToWorldCoordinates() + new Vector2(8, 8), Utils.RandomVector2(placeRand, 0f - num2, num2), ModContent.GoreType<BackwoodsLeaf>(), 0.7f + placeRand.NextFloat() * 0.6f);
                     }
+
+                }
+
+                ushort leafGoreType = (ushort)ModContent.GoreType<BackwoodsLeaf>();
+                int count = placeRand.Next(3, 6) * 10;
+                for (int k = 0; k < count; k++) {
+                    Vector2 offset = new Vector2(placeRand.NextFloat(-150f, 150f), placeRand.NextFloat(0f, 200f)).RotatedBy(MathHelper.TwoPi);
+                    Vector2 position = (new Vector2(i + 5, j - 15) * 16) + offset;
+                    if ((gen && placeRand.NextBool(chance)) || !gen)
+                        if (!Main.dedServ) {
+                            Gore.NewGore(null,
+                                        position,
+                                        Utils.RandomVector2(placeRand, 0f - num2, num2),
+                                        leafGoreType,
+                                        0.7f + placeRand.NextFloat() * 0.6f);
+                        }
+                }
             }
         }
     }

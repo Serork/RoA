@@ -18,6 +18,7 @@ using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
 using RoA.Content.Tiles.Plants;
@@ -4124,8 +4125,38 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+        //int bigTreeCount = (int)(_biomeWidth / 50f);
+        //int altarPosXToCheck = CenterX + 5;
+        //for (int k = 0; k < bigTreeCount / 2; k++) {
+        //    bool flag = false;
+        //    for (int i = left - 10; i <= right + 10; i++) {
+        //        if (flag) {
+        //            break;
+        //        }
+        //        if (i > altarPosXToCheck - 10 && i < altarPosXToCheck + 15) {
+        //            continue;
+        //        }
+        //        if (i < altarPosXToCheck - _biomeWidth / 2 || i > altarPosXToCheck + 2 + _biomeWidth / 2) {
+        //            continue;
+        //        }
+        //        for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + 10; j++) {
+        //            bool flag2 = false;
+        //            for (int checkX = -30; checkX < 31; checkX++) {
+        //                if (WorldGenHelper.GetTileSafely(i + checkX, j + 1).TileType == ModContent.TileType<BackwoodsBigTree>() || 
+        //                    WorldGenHelper.GetTileSafely(i + checkX, j + 1).TileType == _elderwoodTileType) { 
+        //                    flag2 = true;
+        //                    break;
+        //                }
+        //            }
+        //            if (!flag2 && BackwoodsBigTree.TryGrowBigTree(i, j + 1, placeRand: WorldGen.genRand, ignoreAcorns: true, ignoreTrees: true, gen: true)) {
+        //                flag = true;
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
         for (int i = left - 10; i <= right + 10; i++) {
-            if (i > CenterX - 10 && i < CenterX + 12) {
+            if (i > CenterX - 10 && i < CenterX + 15) {
                 continue;
             }
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + 20; j++) {
