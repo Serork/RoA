@@ -61,6 +61,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                     num, 0, cooldownCounter: 4);
                 player.AddBuff(BuffID.Bleeding, 600);
             }
+            //SoundEngine.PlaySound(SoundID.Owl, player.Center);
             //NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
         }
 
