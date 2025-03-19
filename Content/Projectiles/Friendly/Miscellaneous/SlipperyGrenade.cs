@@ -95,7 +95,7 @@ sealed class SlipperyGrenade : ModProjectile {
 		if (memorizeVelocity == Vector2.Zero)
 			memorizeVelocity = oldVelocity * 0.5f;
 		Projectile.tileCollide = false;
-        Projectile.ai[2] = 10f;
+        Projectile.ai[2] = 1f;
         return false;
 	}
 
