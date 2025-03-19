@@ -54,18 +54,48 @@ sealed class RoA : Mod {
         return hook;
     }
 
+    public static void ShowAchivementNotification(string name) {
+        if (ModLoader.HasMod("TMLAchievements")) {
+            return;
+        }
+
+        bool flag = false;
+        switch (name) {
+            case "DefeatLothor":
+                flag = RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothor;
+                break;
+            case "MineMercuriumNugget":
+                flag = RoAAchievementInGameNotification.RoAAchievementStorage.MineMercuriumNugget;
+                break;
+            case "OpenRootboundChest":
+                flag = RoAAchievementInGameNotification.RoAAchievementStorage.OpenRootboundChest;
+                break;
+            case "SurviveBackwoodsFog":
+                flag = RoAAchievementInGameNotification.RoAAchievementStorage.SurviveBackwoodsFog;
+                break;
+            case "CraftDruidWreath":
+                flag = RoAAchievementInGameNotification.RoAAchievementStorage.CraftDruidWreath;
+                break;
+            case "DefeatLothorEnraged":
+                flag = RoAAchievementInGameNotification.RoAAchievementStorage.DefeatLothorEnraged;
+                break;
+        }
+        if (!flag) {
+            InGameNotificationsTracker.AddNotification(new RoAAchievementInGameNotification(name));
+            Main.NewText(Language.GetTextValue("Achievements.Completed", Language.GetTextValue($"Mods.RoA.Achievements.{name}.Name")));
+            if (SoundEngine.FindActiveSound(in SoundID.AchievementComplete) == null) {
+                SoundEngine.PlaySound(in SoundID.AchievementComplete);
+            }
+        }
+    }
+
     public static void CompleteAchievement(string name) {
         if (Main.netMode != NetmodeID.Server) {
             if (ModLoader.TryGetMod("TMLAchievements", out Mod mod)) {
                 mod.Call("Event", name);
             }
-            else {
-                InGameNotificationsTracker.AddNotification(new RoAAchievementInGameNotification(name));
-                Main.NewText(Language.GetTextValue("Achievements.Completed", Language.GetTextValue($"Mods.RoA.Achievements.{name}.Name")));
-                if (SoundEngine.FindActiveSound(in SoundID.AchievementComplete) == null) {
-                    SoundEngine.PlaySound(in SoundID.AchievementComplete);
-                }
-            }
+
+            ShowAchivementNotification(name);
         }
     }
 

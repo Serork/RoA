@@ -152,7 +152,7 @@ sealed class RoAAchievementInGameNotification : IInGameNotification {
             if (Main.mouseLeft && Main.mouseLeftRelease) {
                 Main.mouseLeftRelease = false;
 
-                Main.NewText("Mods.RoA.AchievementModNotification");
+                Main.NewText(Language.GetTextValue("Mods.RoA.AchievementModNotification"));
 
                 //IngameFancyUI.OpenAchievementsAndGoto(_theAchievement);
                 _ingameDisplayTimeLeft = 0;
