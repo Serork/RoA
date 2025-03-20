@@ -140,6 +140,13 @@ class MagicHerb1 : ModItem {
 	}
 
 	public override bool OnPickup(Player player) {
+        bool flag = false;
+        foreach (Player checkPlayer in Main.ActivePlayers) {
+            if (checkPlayer.GetModPlayer<WreathHandler>().IsFull1) {
+                flag = true;
+                break;
+            }
+        }
         if (player.GetModPlayer<WreathHandler>().IsFull1) {
             player.statLife += 40;
             if (Main.myPlayer == player.whoAmI) {
@@ -155,8 +162,10 @@ class MagicHerb1 : ModItem {
         }
         SoundEngine.PlaySound(SoundID.Grab, player.Center);
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HealQuick") { Volume = 0.8f, PitchVariance = 0.2f }, player.Center);
-        if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 9, player.Center));
+        if (flag) {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 9, player.Center));
+            }
         }
         return false;
 	}
