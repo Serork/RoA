@@ -2214,7 +2214,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        attempts2 = 20;
+        attempts2 = 15;
         while (!placedTorch) {
             if (attempts2-- <= 0) {
                 break;
@@ -2222,7 +2222,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Point killPos = killTiles[_random.Next(killTiles.Count)];
             Tile tile = WorldGenHelper.GetTileSafely(killPos.X, killPos.Y);
             if ((tile.ActiveWall(placeholderWallType) || tile.ActiveWall(_elderwoodWallType)) && !tile.HasTile) {
-                if (_random.NextBool(40)) {
+                if (_random.NextBool(50)) {
                     WorldGen.PlaceTile(killPos.X, killPos.Y, TileID.Torches, style: 1);
                     if (TileID.Sets.Torch[Main.tile[killPos.X, killPos.Y].TileType]) {
                         placedTorch = true;
@@ -2402,7 +2402,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
                 if (tile.ActiveTile(_grassTileType) && WorldGen.SolidTile(x, y) && !aboveTile.HasTile) {
                     tile = WorldGenHelper.GetTileSafely(x, y - 1);
-                    if (_random.NextBool(3) && (tile.WallType == _grassWallType || tile.WallType == _flowerGrassWallType || tile.WallType == _leavesWallType)) {
+                    if (_random.NextBool(4) && (tile.WallType == _grassWallType || tile.WallType == _flowerGrassWallType || tile.WallType == _leavesWallType)) {
                         int num3 = 20;
                         int num4 = 2;
                         int num5 = 0;
