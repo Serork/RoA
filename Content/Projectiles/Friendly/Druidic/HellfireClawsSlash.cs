@@ -287,7 +287,8 @@ sealed class HellfireClawsSlash : ClawsSlash {
     }
 
     public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
-        modifiers.Knockback *= 0f;
+        modifiers.Knockback *= 0.5f;
+        modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
         float fromValue = Ease.QuintIn(Projectile.localAI[0] / Projectile.ai[1]);
         Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), fromValue),
               color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), fromValue);
@@ -309,7 +310,8 @@ sealed class HellfireClawsSlash : ClawsSlash {
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
-        modifiers.Knockback *= 0f;
+        modifiers.Knockback *= 0.5f;
+        modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
         float fromValue = Ease.QuintIn(Projectile.localAI[0] / Projectile.ai[1]);
         Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), fromValue),
               color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), fromValue);
