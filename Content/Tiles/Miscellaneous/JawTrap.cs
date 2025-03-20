@@ -148,6 +148,8 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
 
         DustType = -1;
         HitSound = SoundID.Dig;
+
+        MineResist = 1.5f;
     }
 
     public override void PlaceInWorld(int i, int j, Item item) {
