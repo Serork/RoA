@@ -510,7 +510,7 @@ sealed class Archdruid : DruidNPC {
         }
         ushort dustType = (ushort)ModContent.DustType<ArchdruidDust>();
         if (Main.netMode != NetmodeID.Server) {
-            if (StateTimer >= 0.6f || _comboAttack2) {
+            if (StateTimer >= 0.55f || _comboAttack2) {
                 if (Main.rand.NextChance(!_comboAttack2 ? (StateTimer - 0.55f + 0.25f) : (StateTimer + 0.25f))) {
                     if (Main.rand.NextBool()) {
                         int dust = Dust.NewDust(new Vector2(NPC.Center.X + 21 * NPC.direction - 4, NPC.Center.Y - 4), 4, 4, dustType, 0f, 0f, 255, Scale: 0.9f);

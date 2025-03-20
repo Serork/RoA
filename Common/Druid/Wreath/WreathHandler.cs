@@ -480,6 +480,10 @@ sealed class WreathHandler : ModPlayer {
         if (Player.IsLocal() && Player.GetSelectedItem().ModItem is NatureItem natureItem) {
             natureItem.WhileBeingHold(Player, Progress);
         }
+
+        if (Player.dead) {
+            ForcedHardReset();
+        }
     }
 
     public override void Load() {
