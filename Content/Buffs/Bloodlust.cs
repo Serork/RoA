@@ -20,10 +20,8 @@ sealed class BloodlustPlayer : ModPlayer {
 	public override void ResetEffects() => bloodlustEffect = false;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        int lifesteal = Main.getGoodWorld ? Main.rand.Next(20, 40) : Main.masterMode ? Main.rand.Next(10, 20) : Main.expertMode ? Main.rand.Next(10, 20) : 5;
-		
-		if (bloodlustEffect & target.life <= 0) {
-            BloodlustHeal(lifesteal);
+        if (bloodlustEffect & target.life <= 0) {
+            BloodlustHeal(Main.rand.Next(20, 40));
         }
     }
 
