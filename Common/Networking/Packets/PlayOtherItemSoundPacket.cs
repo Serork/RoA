@@ -45,6 +45,13 @@ sealed class PlayOtherItemSoundPacket : NetPacket {
         else if (soundStyle == 7) {
             SoundEngine.PlaySound(SoundID.Item36, position);
         }
+        else if (soundStyle == 8) {
+            SoundEngine.PlaySound(SoundID.Unlock, position);
+        }
+        else if (soundStyle == 9) {
+            SoundEngine.PlaySound(SoundID.Grab, position);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HealQuick") { Volume = 0.8f, PitchVariance = 0.2f }, position);
+        }
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, soundStyle, position), ignoreClient: sender);
         }

@@ -16,6 +16,8 @@ using Terraria.UI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Collections;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 
 namespace RoA.Content.Items.Miscellaneous;
 
@@ -153,6 +155,9 @@ class MagicHerb1 : ModItem {
         }
         SoundEngine.PlaySound(SoundID.Grab, player.Center);
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HealQuick") { Volume = 0.8f, PitchVariance = 0.2f }, player.Center);
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 9, player.Center));
+        }
         return false;
 	}
 }
