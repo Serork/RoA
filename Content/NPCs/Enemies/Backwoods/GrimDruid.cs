@@ -259,14 +259,14 @@ sealed class GrimDruid : DruidNPC {
                     }
 
                     if (num85 <= num86) {
-                        NPC.gfxOffY += NPC.position.Y + NPC.height - num84;
-                        NPC.position.Y = num84 - NPC.height;
-                        if (num85 < 9f) {
-                            NPC.stepSpeed = 1f;
-                        }
-                        else {
-                            NPC.stepSpeed = 2f;
-                        }
+                        //NPC.gfxOffY += NPC.position.Y + NPC.height - num84;
+                        //NPC.position.Y = num84 - NPC.height;
+                        //if (num85 < 9f) {
+                        //    NPC.stepSpeed = 1f;
+                        //}
+                        //else {
+                        //    NPC.stepSpeed = 2f;
+                        //}
                     }
                 }
             }

@@ -55,10 +55,11 @@ sealed class FireblossomExplosion : NatureProjectile {
         }
         Player player = Main.player[Projectile.owner];
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        int type = ModContent.ProjectileType<Fireblossom>();
         if (handler.IsFull1 
             && player.GetModPlayer<FenethsBlazingWreath.FenethsBlazingWreathHandler>().IsEffectActive
-            && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
-            int type = ModContent.ProjectileType<Fireblossom>();
+            && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
+            player.ownedProjectileCounts[type] < 10) {
             foreach (Projectile projectile in Main.ActiveProjectiles) {
                 if (projectile.owner == Projectile.owner && projectile.type == type && projectile.ai[0] == target.whoAmI) {
                     return;
