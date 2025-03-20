@@ -248,7 +248,7 @@ sealed class TulipPetalOld : NatureProjectile {
             Projectile.position.Y = Projectile.position.Y - (Projectile.height / 2);
             if (Projectile.owner == Main.myPlayer) {
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ModContent.ProjectileType<WeepingTulipExplosion>(), 
-                    (int)(Projectile.damage * 0.5f * _explosionMultiplier * 0.1f), 0, Projectile.owner, ai2: _explosionMultiplier);
+                    (int)(Projectile.damage * 0.5f * _explosionMultiplier * 0.25f), 0, Projectile.owner, ai2: _explosionMultiplier);
             }
             int dustCount = 8 + 8 * _explosionMultiplier;
             int currentDustCount = 0;
