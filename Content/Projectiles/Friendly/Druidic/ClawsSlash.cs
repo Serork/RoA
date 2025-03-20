@@ -10,6 +10,7 @@ using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.VisualEffects;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -315,7 +316,7 @@ class ClawsSlash : NatureProjectile {
         Player player = Owner;
         if (!_soundPlayed) {
             _soundPlayed = true;
-            SoundEngine.PlaySound(SoundID.Item1 with { PitchVariance = 0.1f }, player.Center);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsAttack"), player.Center);
         }
 
         player.direction = (int)Projectile.ai[0];
