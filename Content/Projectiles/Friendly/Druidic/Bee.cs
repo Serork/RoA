@@ -5,6 +5,7 @@ using RoA.Core;
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
@@ -33,6 +34,13 @@ sealed class Bee : NatureProjectile {
 
         Projectile.friendly = true;
         Projectile.hostile = false;
+    }
+
+    protected override void SafeOnSpawn(IEntitySource source) {
+        base.SafeOnSpawn(source);
+
+        WreathPointsFine /= 3f;
+        Projectile.damage /= 3;
     }
 
     public override void AI() {
@@ -161,6 +169,13 @@ sealed class Bee : NatureProjectile {
             Projectile.velocity.Y -= acceleration;
             if (Projectile.velocity.Y > 0f && num313 < 0f)
                 Projectile.velocity.Y -= acceleration * 2f;
+        }
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (Main.expertMode) {
+            if (target.type >= 13 && target.type <= 15)
+                modifiers.FinalDamage /= 5;
         }
     }
 

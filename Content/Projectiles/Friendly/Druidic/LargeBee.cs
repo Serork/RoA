@@ -6,6 +6,7 @@ using RoA.Core;
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
@@ -34,6 +35,13 @@ sealed class LargeBee : NatureProjectile {
 
         Projectile.friendly = true;
         Projectile.hostile = false;
+    }
+
+    protected override void SafeOnSpawn(IEntitySource source) {
+        base.SafeOnSpawn(source);
+
+        WreathPointsFine /= 3f;
+        Projectile.damage /= 3;
     }
 
     public override void AI() {

@@ -65,9 +65,11 @@ sealed class FireblossomExplosion : NatureProjectile {
                     return;
                 }
             }
-            Vector2 center = target.Center + (new Vector2(Projectile.ai[0], Projectile.ai[1]) - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f;
-            int projectile2 = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, Projectile.damage, Projectile.knockBack,
-                Projectile.owner, target.whoAmI, center.X, center.Y);
+            if (player.whoAmI == Main.myPlayer) {
+                Vector2 center = target.Center + (new Vector2(Projectile.ai[0], Projectile.ai[1]) - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f;
+                int projectile2 = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, Projectile.damage, Projectile.knockBack,
+                    Projectile.owner, target.whoAmI, center.X, center.Y);
+            }
         }
     }
 }
