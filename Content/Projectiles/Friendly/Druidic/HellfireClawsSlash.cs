@@ -49,19 +49,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
     }
 
     protected override void SafeSetDefaults() {
-        Projectile.width = Projectile.height = 0;
-        Projectile.aiStyle = -1;
-        Projectile.friendly = true;
-        Projectile.penetrate = -1;
-        Projectile.tileCollide = false;
-        Projectile.ignoreWater = true;
-
-        Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 10;
-
-        Projectile.ownerHitCheck = true;
-        Projectile.ownerHitCheckDistance = 300f;
-        Projectile.noEnchantmentVisuals = true;
+        base.SafeSetDefaults();
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {

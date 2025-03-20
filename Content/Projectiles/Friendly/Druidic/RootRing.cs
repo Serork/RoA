@@ -39,8 +39,9 @@ sealed class RootRing : NatureProjectile {
 
         //Projectile.light = 0.25f;
 
-        Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 30;
+        Projectile.appliesImmunityTimeOnSingleHits = true;
+        Projectile.usesIDStaticNPCImmunity = true;
+        Projectile.idStaticNPCHitCooldown = 30;
 
         ShouldIncreaseWreathPoints = false;
     }
