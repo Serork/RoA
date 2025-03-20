@@ -30,6 +30,10 @@ sealed class Bee : NatureProjectile {
         Projectile.penetrate = 3;
         Projectile.timeLeft = 600;
 
+        Projectile.appliesImmunityTimeOnSingleHits = true;
+        Projectile.usesIDStaticNPCImmunity = true;
+        Projectile.idStaticNPCHitCooldown = 10;
+
         Projectile.tileCollide = true;
 
         Projectile.friendly = true;

@@ -31,6 +31,10 @@ sealed class LargeBee : NatureProjectile {
         Projectile.penetrate = 4;
         Projectile.timeLeft = 660;
 
+        Projectile.appliesImmunityTimeOnSingleHits = true;
+        Projectile.usesIDStaticNPCImmunity = true;
+        Projectile.idStaticNPCHitCooldown = 10;
+
         Projectile.tileCollide = true;
 
         Projectile.friendly = true;
