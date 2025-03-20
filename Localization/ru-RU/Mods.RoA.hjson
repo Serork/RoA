@@ -10,15 +10,15 @@ ChecklistLothorSummon: Проведите Душу Друида, время от
 
 LothorMusicDisplay: {
 	Author: Croul
-	DisplayName: Кровавый танец
+	DisplayName: Кровавый танец (Музыкальная тема Лотора Лютого)
 }
 
 BackwoodsMusicDisplay: {
 	Author: Croul
-	DisplayName: Песнь друидов
+	DisplayName: Песнь друидов (Музыкальная тема чащи)
 }
 
 BackwoodsFogMusicDisplay: {
 	Author: Croul
-	DisplayName: Шепот нетопырей
+	DisplayName: Шепот нетопырей (Музыкальная тема тумана чащи)
 }

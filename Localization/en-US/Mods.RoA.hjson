@@ -10,15 +10,15 @@ ChecklistLothorSummon: Guide a Druid Soul, appearing occasionally from Grim Drui
 
 LothorMusicDisplay: {
 	Author: Croul
-	DisplayName: Bloody Dance
+	DisplayName: Bloody Dance (Lothor the Wild Theme)
 }
 
 BackwoodsMusicDisplay: {
 	Author: Croul
-	DisplayName: Song of Druids
+	DisplayName: Song of Druids (Backwoods Theme)
 }
 
 BackwoodsFogMusicDisplay: {
 	Author: Croul
-	DisplayName: Whisper of Fleders
+	DisplayName: Whisper of Fleders (Backwoods Fog Theme)
 }
