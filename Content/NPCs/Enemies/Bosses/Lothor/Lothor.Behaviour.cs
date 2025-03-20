@@ -909,7 +909,7 @@ sealed partial class Lothor : ModNPC {
 		float screamCoeff = Main.getGoodWorld ? 3.5f : 5.5f;
         float maxDist = 800f;
 
-        if (ScreamTimer < ScreamAttackTime / 2) {
+        if (ScreamTimer < ScreamAttackTime - ScreamAttackTime / 4) {
             foreach (Player player in Main.ActivePlayers) {
                 if (player.dead) {
                     continue;
