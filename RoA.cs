@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using MonoMod.RuntimeDetour;
 
@@ -6,9 +7,15 @@ using ReLogic.Content.Sources;
 
 using RoA.Common;
 using RoA.Common.Networking;
+using RoA.Common.NPCs;
+using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Items.Pets;
+using RoA.Content.Items.Special.Lothor;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -48,6 +55,60 @@ sealed class RoA : Mod {
         }
 
         LoadAchievements();
+
+        DoBossChecklistIntegration();
+    }
+
+    private void DoBossChecklistIntegration() {
+        if (!ModLoader.TryGetMod("BossChecklist", out Mod bossChecklistMod)) {
+            return;
+        }
+
+        if (bossChecklistMod.Version < new Version(1, 6)) {
+            return;
+        }
+
+        string internalName = nameof(Lothor);
+
+        // Value inferred from boss progression, see the wiki for details
+        float weight = 6.5f;
+
+        // Used for tracking checklist progress
+        Func<bool> downed = () => DownedBossSystem.DownedLothorBoss;
+
+        // The NPC type of the boss
+        int bossType = ModContent.NPCType<Lothor>();
+
+        // "collectibles" like relic, trophy, mask, pet
+        List<int> collectibles = new List<int>() {
+            ModContent.ItemType<LothorRelic>(),
+            ModContent.ItemType<MoonFlower>(),
+            ModContent.ItemType<LothorTrophy>(),
+            ModContent.ItemType<LothorMask>(),
+            ModContent.ItemType<LothorMusicBox>(),
+            ModContent.ItemType<BloodCursor>(),
+        };
+
+        var customPortrait = (SpriteBatch sb, Rectangle rect, Color color) => {
+            Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.Textures + "Lothor_Checklist").Value;
+            Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
+            sb.Draw(texture, centered, color);
+        };
+
+        bossChecklistMod.Call(
+            "LogBoss",
+            Instance,
+            internalName,
+            weight,
+            downed,
+            bossType,
+            new Dictionary<string, object>() {
+                ["spawnInfo"] = Language.GetOrRegister("Mods.RoA.ChecklistLothorSummon"),
+                ["collectibles"] = collectibles,
+                ["customPortrait"] = customPortrait
+                // Other optional arguments as needed are inferred from the wiki
+            }
+        );
     }
 
     public static Hook Detour(MethodInfo source, MethodInfo target) {
