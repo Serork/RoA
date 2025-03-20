@@ -78,6 +78,8 @@ sealed class GalipotStream : NatureProjectile {
     }
 
     public override void AI() {
+        ShouldApplyItemDamage = Projectile.penetrate >= 2;
+
         bool flag2 = IsActive && Projectile.velocity.Length() > 0.5f;
 
         //Lighting.AddLight(Projectile.Top, Color.Lerp(new Color(255, 241, 44), new Color(204, 128, 14), 0.75f).ToVector3() * 0.5f);
