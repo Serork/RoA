@@ -132,6 +132,10 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
         BeaconTE beaconTE = GetTE(i, j);
         if (HasGemInIt(i, j) && beaconTE != null) {
+            if (!Main.dedServ) {
+                Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), GetEffectsColor(i, j).ToVector3() * 0.75f);
+            }
+
             Vector2 zero = Vector2.Zero;
             Vector2 position = new Point(i, j).ToWorldCoordinates();
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Beacon_Light");

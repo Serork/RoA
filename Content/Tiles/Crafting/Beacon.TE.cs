@@ -58,9 +58,6 @@ sealed class BeaconTE : ModTileEntity {
     public override void Update() {
         int i = Position.X;
         int j = Position.Y - 2;
-        if (Beacon.HasGemInIt(i, j)) {
-            Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Beacon.GetEffectsColor(i, j).ToVector3());
-        }
 
         UpdateAnimation(() => {
             if (WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<Beacon>())) {

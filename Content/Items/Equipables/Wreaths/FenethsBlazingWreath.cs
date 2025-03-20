@@ -50,10 +50,12 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
                     center = target.Center + (Player.Center - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f;
                 }
                 int type = ModContent.ProjectileType<Fireblossom>();
-                int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + proj.damage / 2, proj.knockBack, Player.whoAmI, 
-                    target.whoAmI, center.X, center.Y);
+                int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + proj.damage / 2, proj.knockBack,
+                    Player.whoAmI, target.whoAmI, center.X, center.Y);
 
-                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.One, type, 10 + proj.damage / 2, proj.knockBack, Player.whoAmI, Player.whoAmI);
+                center = Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width;
+                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + proj.damage / 2, proj.knockBack, 
+                    Player.whoAmI, Player.whoAmI, center.X, center.Y);
             }
         }
 
@@ -68,11 +70,13 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
 
             if (IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1) {
                 int type = ModContent.ProjectileType<Fireblossom>();
-                int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack, Player.whoAmI, target.whoAmI);
-                Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.itemLocation, false);
+                int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack, 
+                    Player.whoAmI, target.whoAmI, Player.itemLocation.X, Player.itemLocation.Y);
+                Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.itemLocation);
 
-                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.One, type, 10 + item.damage / 2, item.knockBack, Player.whoAmI, Player.whoAmI);
-                Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width, true);
+                Vector2 center = Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width;
+                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack, 
+                    Player.whoAmI, Player.whoAmI, center.X, center.Y);
             }
         }
     }

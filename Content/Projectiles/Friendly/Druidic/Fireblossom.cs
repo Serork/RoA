@@ -65,7 +65,7 @@ sealed class FireblossomExplosion : NatureProjectile {
                 }
             }
             int projectile2 = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
-            Main.projectile[projectile2].As<Fireblossom>().SetPosition(target.Center + (new Vector2(Projectile.ai[0], Projectile.ai[1]) - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f, false);
+            Main.projectile[projectile2].As<Fireblossom>().SetPosition(target.Center + (new Vector2(Projectile.ai[0], Projectile.ai[1]) - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f);
         }
     }
 }
@@ -140,26 +140,22 @@ sealed class Fireblossom : NatureProjectile {
         _position = reader.ReadVector2();
     }
 
-    public void SetPosition(Vector2 position, bool isPlayer) {
+    public void SetPosition(Vector2 position) {
         _position = position;
         Vector2 center = Main.player[Projectile.owner].Center;
         bool flag = (int)Projectile.ai[0] == Projectile.owner;
-        Entity entity = isPlayer ? Main.player[(int)Projectile.ai[0]] : Main.npc[(int)Projectile.ai[0]];
+        Entity entity = flag ? Main.player[(int)Projectile.ai[0]] : Main.npc[(int)Projectile.ai[0]];
         Projectile.rotation = Helper.VelocityAngle((entity.Center - center).SafeNormalize(Vector2.Zero)) + (flag ? MathHelper.PiOver2 : MathHelper.Pi);
         _position -= entity.Center;
-
-        Projectile.netUpdate = true;
     }
 
     public override bool ShouldUpdatePosition() => false;
 
     public override void AI() {
-        if (Projectile.ai[1] != 0f) {
+        if (Projectile.localAI[0] <= 0f) {
             Projectile.localAI[0] = 1f;
 
-            if (Projectile.whoAmI == Main.myPlayer) {
-                SetPosition(new Vector2(Projectile.ai[1], Projectile.ai[2]), Projectile.velocity == Vector2.One);
-            }
+            SetPosition(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 
             Projectile.frame = Main.rand.Next(3);
             Projectile.spriteDirection = Projectile.direction = 1 - Main.rand.Next(2) == 0 ? 2 : 0;
