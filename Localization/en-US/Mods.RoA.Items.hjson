@@ -200,7 +200,7 @@ GiantTreeSapling: {
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: Whenever full [kw/n:wreath] charge boons are to be lost, prolongs them for 2 extra seconds
+	Tooltip: When full [kw/n:wreath] charge effects end, they linger for 2 extra seconds
 }
 
 RavencallersCloak: {
