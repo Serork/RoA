@@ -225,8 +225,8 @@ sealed class FenethStatueWorldGen : ModSystem {
             bool hasCalamity = ModLoader.HasMod("CalamityMod");
             bool hasSpooky = ModLoader.HasMod("Spooky");
             int jungleSide = (GenVars.JungleX < Main.maxTilesX / 2).ToInt();
-            int startX = hasSpooky ? jungleSide == 1 ? 100 : Main.maxTilesX / 2 : hasCalamity ? Main.maxTilesX / 2 : 100;
-            int endX = hasSpooky ? jungleSide == 1 ? Main.maxTilesX / 2 : (Main.maxTilesX - 100) : (Main.maxTilesX - 100);
+            int startX = hasSpooky ? jungleSide != 1 ? 100 : Main.maxTilesX / 2 : hasCalamity ? Main.maxTilesX / 2 : 100;
+            int endX = hasSpooky ? jungleSide != 1 ? Main.maxTilesX / 2 : (Main.maxTilesX - 100) : (Main.maxTilesX - 100);
             while (!_fenethStatuePlaced) {
                 for (int num868 = startX;
                     num868 < endX; num868++) {
