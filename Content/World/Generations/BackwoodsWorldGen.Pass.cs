@@ -2214,7 +2214,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        attempts2 = 15;
+        attempts2 = 20;
         while (!placedTorch) {
             if (attempts2-- <= 0) {
                 break;
