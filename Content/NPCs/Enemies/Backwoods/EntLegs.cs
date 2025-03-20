@@ -119,6 +119,11 @@ sealed class EntLegs : RoANPC {
 				NPC.netUpdate = true;
 			}
 		}
+		foreach (NPC checkNPC in Main.ActiveNPCs) {
+			if (checkNPC.type == ModContent.NPCType<Archdruid>() && checkNPC.life < (int)(checkNPC.lifeMax * 0.8f)) {
+				_shouldAggro = true;
+            }
+		}
         switch (state) {
 			case WALK:
 				NPC.ApplyFighterAI(true, targetPlayer2: _shouldAggro, movementX: (npc) => {

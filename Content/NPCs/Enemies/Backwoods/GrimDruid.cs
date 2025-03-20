@@ -408,7 +408,7 @@ sealed class GrimDruid : DruidNPC {
         }
         ushort dustType = (ushort)ModContent.DustType<GrimDruidDust>();
         if (Main.netMode != NetmodeID.Server) {
-            if (StateTimer >= 0.55f) {
+            if (StateTimer >= 0.6f) {
                 if (Main.rand.NextChance(StateTimer - 0.55f + 0.25f)) {
                     if (Main.rand.NextBool()) {
                         int dust = Dust.NewDust(new Vector2(NPC.Center.X + 19 * NPC.direction - 4, NPC.Center.Y - 2), 4, 4, dustType, 0f, 0f, 255, Scale: 0.9f);
