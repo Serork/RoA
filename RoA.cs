@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 using MonoMod.RuntimeDetour;
@@ -57,6 +58,25 @@ sealed class RoA : Mod {
         LoadAchievements();
 
         DoBossChecklistIntegration();
+        DoMusicDisplayIntegration();
+    }
+
+    private void DoMusicDisplayIntegration() {
+        if (!ModLoader.TryGetMod("MusicDisplay", out Mod musicDisplay)) {
+            return;
+        }
+
+        LocalizedText author = Language.GetOrRegister("Mods.RoA.LothorMusicDisplay.Author");
+        LocalizedText displayName = Language.GetOrRegister("Mods.RoA.LothorMusicDisplay.DisplayName");
+        musicDisplay.Call("AddMusic", (short)MusicLoader.GetMusicSlot(Instance, $"{ResourceManager.SOUNDSPATH}/Music/Lothor"), displayName, author, Instance.DisplayName);
+
+        author = Language.GetOrRegister("Mods.RoA.BackwoodsMusicDisplay.Author");
+        displayName = Language.GetOrRegister("Mods.RoA.BackwoodsMusicDisplay.DisplayName");
+        musicDisplay.Call("AddMusic", (short)MusicLoader.GetMusicSlot(Instance, $"{ResourceManager.SOUNDSPATH}/Music/ThicketNight"), displayName, author, Instance.DisplayName);
+
+        author = Language.GetOrRegister("Mods.RoA.BackwoodsFogMusicDisplay.Author");
+        displayName = Language.GetOrRegister("Mods.RoA.BackwoodsFogMusicDisplay.DisplayName");
+        musicDisplay.Call("AddMusic", (short)MusicLoader.GetMusicSlot(Instance, $"{ResourceManager.SOUNDSPATH}/Music/Fog"), displayName, author, Instance.DisplayName);
     }
 
     private void DoBossChecklistIntegration() {

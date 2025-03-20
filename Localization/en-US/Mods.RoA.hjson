@@ -7,3 +7,18 @@ ReforgeSphereText: ???
 RoADev: "'Great for impersonating RoA devs? Sure!'"
 AchievementModNotification: Download Achievement Mod to see the achievement!
 ChecklistLothorSummon: Guide a Druid Soul, appearing occasionally from Grim Druids, to an Overgrown Altar in Backwoods
+
+LothorMusicDisplay: {
+	Author: Croul
+	DisplayName: Bloody Dance
+}
+
+BackwoodsMusicDisplay: {
+	Author: Croul
+	DisplayName: Song of Druids
+}
+
+BackwoodsFogMusicDisplay: {
+	Author: Croul
+	DisplayName: Whisper of Fleders
+}
