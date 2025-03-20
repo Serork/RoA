@@ -602,11 +602,11 @@ sealed class RoARecipes : ModSystem {
         // other potions
         item = Recipe.Create(ModContent.ItemType<BloodlustPotion>());
         item.AddIngredient(ItemID.BottledWater);
-        item.AddIngredient(ItemID.Deathweed);
+        item.AddIngredient(ItemID.FlarefinKoi);
+		item.AddIngredient(ItemID.Deathweed);
         item.AddIngredient<Content.Items.Materials.Bonerose>();
-        item.AddIngredient(ItemID.Vine);
         item.AddTile(TileID.Bottles);
-        item.SortAfterFirstRecipesOf(ItemID.LifeforcePotion);
+        item.SortAfterFirstRecipesOf(ItemID.InfernoPotion);
         item.Register();
 
         temp = item;
