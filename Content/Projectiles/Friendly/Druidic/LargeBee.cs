@@ -35,13 +35,14 @@ sealed class LargeBee : NatureProjectile {
 
         Projectile.friendly = true;
         Projectile.hostile = false;
+
+        ShouldApplyItemDamage = false;
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
         base.SafeOnSpawn(source);
 
-        WreathPointsFine /= 3f;
-        Projectile.damage /= 3;
+        WreathPointsFine *= 3f;
     }
 
     public override void AI() {

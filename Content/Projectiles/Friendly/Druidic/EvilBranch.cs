@@ -103,6 +103,8 @@ sealed class EvilBranch : NatureProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
+
+        ShouldApplyItemDamage = false;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {

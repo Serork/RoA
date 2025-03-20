@@ -231,7 +231,8 @@ sealed class TulipPetalOld : NatureProjectile {
                     Vector2 spawnPos = Projectile.oldPos[0] + spawnOrigin + new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation * Projectile.direction + k * 120));
                     Projectile.NewProjectile(Projectile.GetSource_Death(), spawnPos, Vector2.Normalize(new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation + k * 120))), 
                         _largeBee[k] ? ModContent.ProjectileType<LargeBee>() : ModContent.ProjectileType<Bee>(),
-                        beeDamage((int)(Projectile.damage * 0.333f), _largeBee[k]),
+                        beeDamage((int)(Projectile.damage * 0.333f),
+                        _largeBee[k]),
                         beeKB(0f, _largeBee[k]),
                         player.whoAmI);
                 }
@@ -246,7 +247,8 @@ sealed class TulipPetalOld : NatureProjectile {
             Projectile.position.X = Projectile.position.X - (Projectile.width / 2);
             Projectile.position.Y = Projectile.position.Y - (Projectile.height / 2);
             if (Projectile.owner == Main.myPlayer) {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ModContent.ProjectileType<WeepingTulipExplosion>(), (int)(Projectile.damage * 0.5f * _explosionMultiplier * 0.1f), 0, Projectile.owner, ai2: _explosionMultiplier);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ModContent.ProjectileType<WeepingTulipExplosion>(), 
+                    (int)(Projectile.damage * 0.5f * _explosionMultiplier * 0.1f), 0, Projectile.owner, ai2: _explosionMultiplier);
             }
             int dustCount = 8 + 8 * _explosionMultiplier;
             int currentDustCount = 0;
@@ -319,6 +321,8 @@ sealed class TulipPetalOld : NatureProjectile {
             Projectile.localNPCHitCooldown = -1;
 
             Projectile.timeLeft = 10;
+
+            ShouldApplyItemDamage = false;
         }
 
         protected override void SafeOnSpawn(IEntitySource source) {

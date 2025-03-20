@@ -24,6 +24,8 @@ sealed class RagingBootsWave : NatureProjectile {
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
         AIType = 14;
+
+        ShouldApplyItemDamage = false;
     }
 
     public override bool? CanCutTiles() => false;

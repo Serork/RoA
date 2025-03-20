@@ -31,6 +31,7 @@ abstract class NatureProjectile : ModProjectile {
     internal Item Item { get; private set; } = null;
 
     public bool ShouldIncreaseWreathPoints { get; protected set; } = true;
+    public bool ShouldApplyItemDamage { get; protected set; } = true;
 
     public float WreathPointsFine {
         get => _wreathPointsFine;
@@ -97,7 +98,9 @@ abstract class NatureProjectile : ModProjectile {
 
         if (ShouldIncreaseWreathPoints && this is not FormProjectile) {
             if (Item != null) {
-                Projectile.damage = NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]);
+                if (ShouldApplyItemDamage) {
+                    Projectile.damage = NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]);
+                }
                 _syncItem = false;
                 Projectile.netUpdate = true;
             }
