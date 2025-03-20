@@ -498,7 +498,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 //}
 
                                 WorldGenHelper.CustomWall2(num300, num301, wallType, (point) => {
-                                    return point.X > Left - 25 && point.X < Right + 25;
+                                    return point.X > Left - 25 - _random.Next(5) && point.X < Right + 25 + _random.Next(5);
                                 }, () => {
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
@@ -604,7 +604,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 //}
 
                                 WorldGenHelper.CustomWall2(num300, num301, wallType, (point) => {
-                                    return point.X > Left - 25 && point.X < Right + 25;
+                                    return point.X > Left - 25 - _random.Next(5) && point.X < Right + 25 + _random.Next(5);
                                 }, () => {
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
