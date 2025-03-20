@@ -47,11 +47,17 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     private void DrawChain(SpriteBatch spriteBatch, Color drawColor1, Color drawColor2) {
+        if (NPC.Opacity <= 0f) {
+            return;
+        }
+        Vector2 altarPos = AltarHandler.GetAltarPosition().ToWorldCoordinates();
+        Vector2 altarCoords = altarPos + Vector2.UnitY * 5f;
+        if (Vector2.Distance(NPC.Center, altarCoords) > 500f) {
+            return;
+        }
         Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Chain").Value;
         Rectangle? sourceRectangle = null;
         Vector2 origin = (sourceRectangle.HasValue ? (sourceRectangle.Value.Size() / 2f) : (texture.Size() / 2f));
-        Vector2 altarPos = AltarHandler.GetAltarPosition().ToWorldCoordinates();
-        Vector2 altarCoords = altarPos + Vector2.UnitY * 5f;
         Vector2 from = NPC.Center + new Vector2(0f, 4f);
         Vector2 npcCenter = (from + Vector2.UnitY * 8f).MoveTowards(altarCoords, 10f);
         Player player = Main.player[NPC.target];
