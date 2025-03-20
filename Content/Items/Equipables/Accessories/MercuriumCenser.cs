@@ -33,20 +33,19 @@ sealed class MercuriumCenser : NatureItem {
             if (--_spawnFumesTimer <= 0f) {
                 _spawnFumesTimer = spawnTime;
 
-                if (Player.whoAmI != Main.myPlayer) {
-                    return;
-                }
-
                 ushort type = (ushort)ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.MercuriumCenserToxicFumes>();
                 IEntitySource source = Player.GetSource_FromThis();
                 int damage = 8;
                 float knockback = 0f;
                 Vector2 spawnPosition = Player.Center;
-                float offset = Main.rand.NextFloat(MathHelper.TwoPi);
-                for (int i = 0; i < spawnCount; i++) {
-                    Vector2 velocity = Vector2.One.RotatedBy(MathHelper.TwoPi / i + offset * i) + Vector2.Clamp(Player.velocity, new Vector2 (-2f, -2f), new Vector2 (2f, 2f));
-                    Projectile.NewProjectile(source, spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type,
-                        damage, knockback, Player.whoAmI);
+
+                if (Player.whoAmI == Main.myPlayer) {
+                    float offset = Main.rand.NextFloat(MathHelper.TwoPi);
+                    for (int i = 0; i < spawnCount; i++) {
+                        Vector2 velocity = Vector2.One.RotatedBy(MathHelper.TwoPi / i + offset * i) + Vector2.Clamp(Player.velocity, new Vector2(-2f, -2f), new Vector2(2f, 2f));
+                        Projectile.NewProjectile(source, spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type,
+                            damage, knockback, Player.whoAmI);
+                    }
                 }
             }
         }
