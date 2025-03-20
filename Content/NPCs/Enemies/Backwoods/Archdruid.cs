@@ -501,12 +501,7 @@ sealed class Archdruid : DruidNPC {
         }
 
         if (AttackType == 1) {
-            NPC.localAI[3] += TimeSystem.LogicDeltaTime;
-            if (NPC.localAI[3] > 0.1f) {
-                PlayersOldPosition = position;
-                NPC.localAI[3] = 0f;
-                NPC.netUpdate = true;
-            }
+            PlayersOldPosition = position;
         }
         ushort dustType = (ushort)ModContent.DustType<ArchdruidDust>();
         if (Main.netMode != NetmodeID.Server) {
