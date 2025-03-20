@@ -909,7 +909,7 @@ sealed partial class Lothor : ModNPC {
 		float screamCoeff = Main.getGoodWorld ? 3.5f : 5.5f;
         float maxDist = 800f;
 
-        if (firstTime) {
+        if (ScreamTimer < ScreamAttackTime / 2) {
             foreach (Player player in Main.ActivePlayers) {
                 if (player.dead) {
                     continue;
@@ -918,7 +918,9 @@ sealed partial class Lothor : ModNPC {
                 if (dist <= maxDist) {
                     Vector2 velocity = player.Center - NPC.Center;
                     velocity.Normalize();
-                    player.velocity *= (maxDist - dist) / maxDist;
+                    float value = (maxDist - dist) / maxDist;
+                    value *= 0.1f;
+                    player.velocity *= value;
                 }
             }
         }
