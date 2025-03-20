@@ -40,13 +40,13 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
     }
 
     public override void AI() {
-        if (Projectile.owner == Main.myPlayer) {
-            if (Projectile.localAI[0] == 0f) {
+        if (Projectile.localAI[0] == 0f) {
+            if (Projectile.owner == Main.myPlayer) {
                 Projectile.ai[1] = Main.rand.NextFloat(0.75f, 1f);
-
-                Projectile.localAI[0] = 1f;
                 Projectile.netUpdate = true;
             }
+
+            Projectile.localAI[0] = 1f;
         }
 
         if (Projectile.ai[1] != 0f) {
@@ -86,17 +86,16 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
     public override bool? CanCutTiles() => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        if (Projectile.owner == Main.myPlayer) {
-            SpriteBatch spriteBatch = Main.spriteBatch;
-            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-            Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-            Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
-            Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
-            Color color = Projectile.GetAlpha(lightColor) * 0.5f;
-            for (int i = 0; i < 2; i++)
-                spriteBatch.Draw(texture, drawPos + new Vector2 (0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(Main.GlobalTimeWrappedHourly * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
-        }
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+        Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
+        Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+        Color color = Projectile.GetAlpha(lightColor) * 0.5f;
+        for (int i = 0; i < 2; i++)
+            spriteBatch.Draw(texture, drawPos + new Vector2 (0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(Main.GlobalTimeWrappedHourly * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+
         return false;
     }
 }

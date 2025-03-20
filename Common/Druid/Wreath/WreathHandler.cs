@@ -733,6 +733,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void MakeDustsOnHit(float progress = -1f) {
+        if (Player.whoAmI != Main.myPlayer) {
+            return;
+        }
+
         var config = ModContent.GetInstance<RoAClientConfig>();
         if (config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal &&
             config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
