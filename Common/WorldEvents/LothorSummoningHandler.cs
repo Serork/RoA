@@ -527,7 +527,7 @@ sealed class LothorSummoningHandler : ModSystem {
         }
         else if (_preArrivedLothorBossTimer >= 6f && !ActiveMessages.Item3) {
             ActiveMessages.Item3 = true;
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 0.75f },
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 1f },
                 AltarHandler.GetAltarPosition().ToWorldCoordinates());
         }
         else if (flag2) {
