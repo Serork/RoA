@@ -2288,6 +2288,30 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+        if (hasRemnants) {
+            for (int x = Left; x <= Right; x++) {
+                for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom; y++) {
+                    Tile tile = WorldGenHelper.GetTileSafely(x, y);
+                    if (tile.WallType == WallID.JungleUnsafe) {
+                        tile.WallType = _dirtWallType;
+                    }
+                    if (tile.TileType == TileID.JungleGrass) {
+                        tile.TileType = _grassTileType;
+                    }
+                    if (tile.TileType == TileID.LivingMahogany) {
+                        tile.TileType = _elderwoodTileType;
+                    }
+                    if (tile.TileType == TileID.RichMahoganyBeam) {
+                        tile.TileType = TileID.WoodenBeam;
+                    }
+                    if (tile.TileType == TileID.Mud) {
+                        tile.TileType = TileID.Dirt;
+                    }
+                }
+            }
+        }
     }
 
     public void BackwoodsOnLast1(GenerationProgress progress, GameConfiguration config) {
@@ -2302,6 +2326,18 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //}
 
         Step_AddJawTraps();
+
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+        if (hasRemnants) {
+            for (int x = Left; x <= Right; x++) {
+                for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom; y++) {
+                    Tile tile = WorldGenHelper.GetTileSafely(x, y);
+                    if (tile.WallType == WallID.JungleUnsafe) {
+                        tile.WallType = _dirtWallType;
+                    }
+                }
+            }
+        }
 
         if (!WorldGen.InWorld(_gatewayLocation.X, _gatewayLocation.Y, 30)) {
             return;
@@ -2402,7 +2438,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
                 if (tile.ActiveTile(_grassTileType) && WorldGen.SolidTile(x, y) && !aboveTile.HasTile) {
                     tile = WorldGenHelper.GetTileSafely(x, y - 1);
-                    if (_random.NextBool(5) && (tile.WallType == _grassWallType || tile.WallType == _flowerGrassWallType || tile.WallType == _leavesWallType)) {
+                    if (_random.NextBool(ModLoader.HasMod("Remnants") ? 10 : 5) && (tile.WallType == _grassWallType || tile.WallType == _flowerGrassWallType || tile.WallType == _leavesWallType)) {
                         int num3 = 20;
                         int num4 = 2;
                         int num5 = 0;
@@ -3734,8 +3770,31 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _biomeWidth += (int)(_biomeWidth * 1.35f * WorldGenHelper.WorldSize2);
         _biomeHeight += (int)(_biomeHeight * 1.35f * WorldGenHelper.WorldSize2);
 
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+
         CenterX = GenVars.JungleX;
         CenterY = (int)Main.worldSurface;
+
+        if (hasRemnants) {
+            CenterX = Main.maxTilesX / 2;
+            bool flag = false;
+            while (WorldGenHelper.GetTileSafely(CenterX, CenterY).TileType != TileID.Mud) {
+                CenterX--;
+                if (CenterX < 500) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                CenterX = Main.maxTilesX / 2;
+                while (WorldGenHelper.GetTileSafely(CenterX, CenterY).TileType != TileID.Mud) {
+                    CenterX++;
+                    if (CenterX > Main.maxTilesX - 500) {
+                        break;
+                    }
+                }
+            }
+        }
 
         bool hasSpirit = ModLoader.HasMod("SpiritMod");
 

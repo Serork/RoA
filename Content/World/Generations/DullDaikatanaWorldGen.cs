@@ -26,7 +26,8 @@ sealed class DullDaikatanaWorldGen : ModSystem {
 
     private void DullDaikatanaGenerator(GenerationProgress progress, GameConfiguration configuration) {
         var genRand = WorldGen.genRand;
-        int count = WorldGenHelper.WorldSize;
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+        int count = WorldGenHelper.WorldSize * (hasRemnants ? 2 : 1);
         for (int num436 = 0; num436 < count; num436++) {
             double value2 = (double)num436 / (double)(count);
             progress.Set(value2);
@@ -68,8 +69,10 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                         }
                         if (flag) {
                             bool flag4 = true;
-                            if (!((num436 == 1 ? genRand.NextBool(2) : num436 != 2 || genRand.NextBool(2)))) {
-                                flag4 = false;
+                            if (!hasRemnants) {
+                                if (!((num436 == 1 ? genRand.NextBool(2) : num436 != 2 || genRand.NextBool(2)))) {
+                                    flag4 = false;
+                                }
                             }
                             if (flag4) {
                                 WorldGen.PlaceTile(num438, num439, tileType);
