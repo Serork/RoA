@@ -81,7 +81,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                 flag24 = true;
                             }
 
-                            if (!_chairPlaced) {
+                            if (!_chairPlaced || (hasRemnants && genRand.NextBool(2))) {
                                 int y2 = num439;
                                 for (; !WorldGen.SolidTile(num438, y2) && !TileID.Sets.Platforms[Main.tile[num438, y2].TileType] && y2 < Main.maxTilesY - 20; y2++) {
                                 }
