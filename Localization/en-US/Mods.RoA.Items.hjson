@@ -200,7 +200,7 @@ GiantTreeSapling: {
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: When [kw/n:wreath] is discharged, provides its full charge bonuses for 2 extra seconds
+	Tooltip: Whenever full [kw/n:wreath] charge boons are to be lost, prolongs them for 2 extra seconds
 }
 
 RavencallersCloak: {
