@@ -252,6 +252,8 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
 
     public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
 
+    public override bool? CanCutTiles() => false;
+
     public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
 
     public override void AI() {
