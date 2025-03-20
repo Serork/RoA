@@ -74,7 +74,6 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
                 Player.ownedProjectileCounts[type] < 10) {
                 int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack, 
                     Player.whoAmI, target.whoAmI, Player.itemLocation.X, Player.itemLocation.Y);
-                Main.projectile[projectile].As<Fireblossom>().SetPosition(Player.itemLocation);
 
                 Vector2 center = Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width;
                 projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack, 
