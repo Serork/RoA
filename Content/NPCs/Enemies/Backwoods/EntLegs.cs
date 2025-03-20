@@ -262,7 +262,7 @@ sealed class EntLegs : RoANPC {
         PunchCameraModifier punchCameraModifier = new(NPC.Bottom, MathHelper.PiOver2.ToRotationVector2(), 4f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 5f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 20, 2000f, tag);
         Main.instance.CameraModifiers.Add(punchCameraModifier);
 		if (!empowered) {
-			SoundEngine.PlaySound(SoundID.Item73, NPC.Bottom);
+			SoundEngine.PlaySound(SoundID.Item73 with { Volume = 0.5f, PitchVariance = 0.1f }, NPC.Bottom);
 			float num2 = 10f;
 			if (Main.netMode != NetmodeID.Server) {
 				for (int i = 0; i < Main.rand.Next(1, 4); i++) {

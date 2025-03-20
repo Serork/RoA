@@ -246,7 +246,7 @@ sealed partial class Lothor : ModNPC {
         }
 
         if (flag) {
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorHit"), NPC.Center);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorNew/LothorHurt") { Volume = 0.7f, PitchVariance = 0.1f }, NPC.Center);
         }
 
         if (Main.netMode != NetmodeID.MultiplayerClient) {
@@ -280,7 +280,7 @@ sealed partial class Lothor : ModNPC {
         }
 
         ThatThingMakeHimScream();
-        SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorDeath"), NPC.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorNew/LothorDeath"), NPC.Center);
         ActualDeath();
     }
 
@@ -462,7 +462,7 @@ sealed partial class Lothor : ModNPC {
                             }
                             else {
                                 if (!_shouldSpawnPipistrelles) {
-                                    SoundEngine.PlaySound(new(ResourceManager.NPCSounds + "LothorScream2"), NPC.Center);
+                                    SoundEngine.PlaySound(new(ResourceManager.NPCSounds + "LothorNew/LothorSpawn"), NPC.Center);
                                     createDusts();
                                     _shouldSpawnPipistrelles = true;
                                 }
@@ -952,7 +952,7 @@ sealed partial class Lothor : ModNPC {
         }
 
         if (firstTime) {
-            PlayRoarSound();
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorNew/LothorExpertRoar") { Volume = 2.5f, PitchVariance = 0.1f }, NPC.Center);
         }
 
         string tag = "Lothor Scream";
@@ -1209,7 +1209,8 @@ sealed partial class Lothor : ModNPC {
                 Glow();
 
                 _spitCount--;
-                SoundEngine.PlaySound(SoundID.Item111, NPC.Center);
+                SoundEngine.PlaySound(SoundID.Item111 with { Pitch = -0.2f + _spitCount * 0.1f, PitchVariance = 0.1f }, NPC.Center);
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Splash") { Volume = 0.6f, Pitch = -0.5f + _spitCount * 0.1f }, NPC.Center);
 
                 int damage = (int)MathHelper.Lerp(SPIT_DAMAGE, SPIT_DAMAGE2, LifeProgress);
                 damage /= 2;
@@ -1283,14 +1284,15 @@ sealed partial class Lothor : ModNPC {
                     Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
                 //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
             }
-            string name = "LothorSwipe";
+            /*string name = "LothorSwipe";
             if (LifeProgress > 0.66f) {
                 name = "LothorSwipe3";
             }
             else if (LifeProgress > 0.33f) {
                 name = "LothorSwipe2";
-            }
-            SoundStyle swipeSound = new(ResourceManager.NPCSounds + name) { PitchVariance = 0.1f };
+            }*/
+            string name = "LothorNew/LothorSwipe";
+            SoundStyle swipeSound = new(ResourceManager.NPCSounds + name) { PitchVariance = 0.1f, Volume = 0.8f };
             SoundEngine.PlaySound(swipeSound, NPC.Center);
         }
         if (ClawsTimer < ClawsAttackTime / 2f) {
@@ -1796,7 +1798,8 @@ sealed partial class Lothor : ModNPC {
             _stompSpawned = true;
         }
 
-        SoundEngine.PlaySound(SoundID.DD2_OgreGroundPound, NPC.Center);
+        SoundEngine.PlaySound(SoundID.Item73 with { Pitch = -0.3f, PitchVariance = 0.1f }, NPC.Bottom);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 0.5f, Pitch = -0.3f, PitchVariance = 0.1f }, NPC.Bottom);
 
         float strength = 3.5f;
         int distInTiles = 20;
@@ -2025,7 +2028,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     private void PlayRoarSound() {
-        SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorRoar") { Volume = 1f, PitchVariance = 0.1f }, NPC.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorNew/LothorBasicRoar") { PitchVariance = 0.2f }, NPC.Center);
     }
 
     private bool GetTargetPlayer(out Player player) {

@@ -74,7 +74,8 @@ sealed class CursedAcorn : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
+        SoundEngine.PlaySound(SoundID.Item20 with { Pitch = 0.3f}, Projectile.Center);
+        SoundEngine.PlaySound(SoundID.Dig with { Volume = 0.8f, Pitch = 0.5f }, Projectile.Center);
         float lifeProgress = 1f;
         foreach (NPC npc in Main.ActiveNPCs) {
             if (npc.type == ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Lothor>()) {
