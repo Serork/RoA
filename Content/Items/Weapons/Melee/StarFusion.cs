@@ -25,13 +25,13 @@ sealed class StarFusion : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.useTime = Item.useAnimation = 35;
+        Item.useTime = Item.useAnimation = 40;
         Item.autoReuse = false;
         Item.useTurn = true;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 20;
-        Item.knockBack = 5.25f;
+        Item.damage = 23;
+        Item.knockBack = 5.5f;
 
         Item.rare = ItemRarityID.Orange;
         Item.UseSound = SoundID.Item1;
