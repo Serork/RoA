@@ -822,6 +822,9 @@ sealed partial class Lothor : ModNPC {
                 WreathAttack();
                 break;
         }
+        if (NPC.Opacity < 0.9f) {
+            NPC.noTileCollide = true;
+        }
     }
 
     public override void OnKill() {

@@ -95,7 +95,7 @@ sealed class LuminousFlower : ModTile {
         TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.Width = 2;
         TileObjectData.newTile.Height = 3;
-        TileObjectData.newTile.DrawYOffset = 6;
+        TileObjectData.newTile.DrawYOffset = 0;
         TileObjectData.addTile(Type);
 
         DustType = DustID.Grass;
