@@ -13,6 +13,6 @@ sealed class Root : ModBuff {
 		player.velocity.X *= 0.5f;
 		player.controlLeft = player.controlRight = player.controlUp = player.controlDown = false;
 		player.controlJump = false;
-		player.controlUseItem = false;
+		//player.controlUseItem = false;
     }
 }
