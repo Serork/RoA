@@ -216,7 +216,7 @@ sealed class HellfireFracture : NatureProjectile {
         int count = 0;
         Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), 0.8f),
               color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), 0.8f);
-        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.75f * Projectile.Opacity;
+        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.8f * Projectile.Opacity;
         do {
             bool flag4 = false;
             if (count > 2) {

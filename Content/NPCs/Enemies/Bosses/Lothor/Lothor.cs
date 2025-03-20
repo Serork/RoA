@@ -58,7 +58,7 @@ sealed partial class Lothor : ModNPC {
 
         NPC.boss = true;
 
-        NPC.HitSound = new SoundStyle(ResourceManager.NPCSounds + "LothorHit") { Volume = 0.8f };
+        NPC.HitSound = new SoundStyle(ResourceManager.NPCSounds + "LothorNew/LothorHurt") { Volume = 0.7f, PitchVariance = 0.1f };
 
         NPC.value = Item.buyPrice(gold: 6);
 

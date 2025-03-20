@@ -908,17 +908,31 @@ sealed partial class Lothor : ModNPC {
 
 		float screamCoeff = Main.getGoodWorld ? 3.5f : 5.5f;
         float maxDist = 800f;
-        foreach (Player player in Main.ActivePlayers) {
-            if (player.dead) {
-                continue;
-            }
-            float dist = NPC.Distance(player.Center);
-            if (dist <= maxDist) {
-                Vector2 velocity = player.Center - NPC.Center;
-                velocity.Normalize();
-                player.velocity += velocity * (maxDist - dist) / (25f * screamCoeff);
+
+        if (firstTime) {
+            foreach (Player player in Main.ActivePlayers) {
+                if (player.dead) {
+                    continue;
+                }
+                float dist = NPC.Distance(player.Center);
+                if (dist <= maxDist) {
+                    Vector2 velocity = player.Center - NPC.Center;
+                    velocity.Normalize();
+                    player.velocity *= (maxDist - dist) / maxDist;
+                }
             }
         }
+        //foreach (Player player in Main.ActivePlayers) {
+        //    if (player.dead) {
+        //        continue;
+        //    }
+        //    float dist = NPC.Distance(player.Center);
+        //    if (dist <= maxDist) {
+        //        Vector2 velocity = player.Center - NPC.Center;
+        //        velocity.Normalize();
+        //        player.velocity += velocity * (maxDist - dist) / (25f * screamCoeff);
+        //    }
+        //}
 
         foreach (NPC npc in Main.ActiveNPCs) {
             if (npc.whoAmI == NPC.whoAmI) {
