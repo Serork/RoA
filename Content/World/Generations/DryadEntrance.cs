@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 
 using ReLogic.Utilities;
 
+using RoA.Common.Items;
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -187,8 +189,18 @@ sealed class DryadEntrance : ModSystem {
             num8 = num3 + 8;
 
         int contain = 832;
-        if (genRand.Next(3) == 0)
+        bool summonStaffAdded = false;
+        if (genRand.Next(3) == 0) {
             contain = 4281;
+            summonStaffAdded = true;
+        }
+        if (!summonStaffAdded && genRand.Next(5) == 0) {
+            contain = ModContent.ItemType<GiantTreeSapling>();
+        }
+        if (!summonStaffAdded && !ExtraVanillaChestItems._giantTreeSaplingAdded) {
+            ExtraVanillaChestItems._giantTreeSaplingAdded = true;
+            contain = ModContent.ItemType<GiantTreeSapling>();
+        }
 
         if (WorldGen.remixWorldGen) {
             int num10 = genRand.Next(1, 3);

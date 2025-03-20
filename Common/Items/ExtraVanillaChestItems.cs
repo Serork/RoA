@@ -26,13 +26,13 @@ using Terraria.WorldBuilding;
 namespace RoA.Common.Items;
 
 sealed class ExtraVanillaChestItems : ModSystem {
-    private bool _cactiCactusRodAdded;
-    private bool _iceRodAdded;
-    private bool _mushroomStaffAdded;
-    private bool _hellfireClawsAdded;
-    private bool _giantTreeSaplingAdded;
-    private bool _feathersBottleAdded;
-    private bool _oniMaskAdded;
+    private static bool _cactiCactusRodAdded;
+    private static bool _iceRodAdded;
+    private static bool _mushroomStaffAdded;
+    private static bool _hellfireClawsAdded;
+    internal static bool _giantTreeSaplingAdded;
+    private static bool _feathersBottleAdded;
+    private static bool _oniMaskAdded;
 
     [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MakeDungeon_Lights")]
     public extern static void WorldGen_MakeDungeon_Lights(WorldGen worldGen, ushort tileType, ref int failCount, int failMax, ref int numAdd, int[] roomWall);
@@ -52,7 +52,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
     public override void Load() {
         On_WorldGen.AddBuriedChest_int_int_int_bool_int_bool_ushort += On_WorldGen_AddBuriedChest_int_int_int_bool_int_bool_ushort;
         On_WorldGen.MakeDungeon += On_WorldGen_MakeDungeon;
-        On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
+        //On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
         On_WorldGen.IslandHouse += On_WorldGen_IslandHouse;
     }
 
@@ -292,191 +292,6 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
             if (num26 <= 0)
                 break;
-        }
-    }
-
-    private void On_WorldGen_GrowLivingTreePassageRoom(On_WorldGen.orig_GrowLivingTreePassageRoom orig, int minl, int minr, int Y) {
-        UnifiedRandom genRand = WorldGen.genRand;
-        int num = genRand.Next(2);
-        if (num == 0)
-            num = -1;
-
-        int num2 = Y - 2;
-        int num3 = (minl + minr) / 2;
-        if (num < 0)
-            num3--;
-
-        if (num > 0)
-            num3++;
-
-        int num4 = genRand.Next(15, 30);
-        int num5 = num3 + num4;
-        if (num < 0) {
-            num5 = num3;
-            num3 -= num4;
-        }
-
-        for (int i = num3; i < num5; i++) {
-            for (int j = Y - 20; j < Y + 10; j++) {
-                if (Main.tile[i, j].WallType == 0 && !Main.tile[i, j].HasTile && j < Main.worldSurface)
-                    return;
-            }
-        }
-
-        GenVars.dMinX = num3;
-        GenVars.dMaxX = num5;
-        if (num < 0)
-            GenVars.dMinX -= 40;
-        else
-            GenVars.dMaxX += 40;
-
-        for (int k = num3; k <= num5; k++) {
-            for (int l = num2 - 2; l <= Y + 2; l++) {
-                if (Main.tile[k - 1, l].TileType == 40)
-                    Main.tile[k - 1, l].TileType = 0;
-
-                if (Main.tile[k + 1, l].TileType == 40)
-                    Main.tile[k + 1, l].TileType = 0;
-
-                if (Main.tile[k, l - 1].TileType == 40)
-                    Main.tile[k, l - 1].TileType = 0;
-
-                if (Main.tile[k, l + 1].TileType == 40)
-                    Main.tile[k, l + 1].TileType = 0;
-
-                if (Main.tile[k, l].WallType != 244 && Main.tile[k, l].TileType != 19) {
-                    Tile tile = Main.tile[k, l];
-                    tile.HasTile = true;
-                    Main.tile[k, l].TileType = 191;
-                    tile.IsHalfBlock = false;
-                }
-
-                if (l >= num2 && l <= Y) {
-                    Tile tile = Main.tile[k, l];
-                    Main.tile[k, l].LiquidAmount = 0;
-                    Main.tile[k, l].WallType = 244;
-                    tile.HasTile = false;
-                }
-            }
-        }
-
-        int i2 = (minl + minr) / 2 + 3 * num;
-        WorldGen.PlaceTile(i2, Y, 10, mute: true, forced: false, -1, 7);
-        int num6 = genRand.Next(5, 9);
-        int num7 = genRand.Next(4, 6);
-        if (num < 0) {
-            num5 = num3 + num6;
-            num3 -= num6;
-        }
-        else {
-            num3 = num5 - num6;
-            num5 += num6;
-        }
-
-        num2 = Y - num7;
-        for (int m = num3 - 2; m <= num5 + 2; m++) {
-            for (int n = num2 - 2; n <= Y + 2; n++) {
-                if (Main.tile[m - 1, n].TileType == 40)
-                    Main.tile[m - 1, n].TileType = 40;
-
-                if (Main.tile[m + 1, n].TileType == 40)
-                    Main.tile[m + 1, n].TileType = 40;
-
-                if (Main.tile[m, n - 1].TileType == 40)
-                    Main.tile[m, n - 1].TileType = 40;
-
-                if (Main.tile[m, n + 1].TileType == 40)
-                    Main.tile[m, n + 1].TileType = 40;
-
-                if (Main.tile[m, n].WallType != 244 && Main.tile[m, n].TileType != 19) {
-                    Tile tile = Main.tile[m, n];
-                    tile.HasTile = true;
-                    Main.tile[m, n].TileType = 191;
-                    tile.IsHalfBlock = false;
-                }
-
-                if (n >= num2 && n <= Y && m >= num3 && m <= num5) {
-                    Tile tile = Main.tile[m, n];
-                    Main.tile[m, n].LiquidAmount = 0;
-                    Main.tile[m, n].WallType = 244;
-                    tile.HasTile = false;
-                }
-            }
-        }
-
-        i2 = num3 - 2;
-        if (num < 0)
-            i2 = num5 + 2;
-
-        WorldGen.PlaceTile(i2, Y, 10, mute: true, forced: false, -1, 7);
-        int num8 = num5;
-        if (num < 0)
-            num8 = num3;
-
-        int num9 = 2;
-        if (genRand.Next(num9) == 0) {
-            num9 += 2;
-            WorldGen.PlaceTile(num8, Y, 15, mute: true, forced: false, -1, 5);
-            if (num < 0) {
-                Main.tile[num8, Y - 1].TileFrameX += 18;
-                Main.tile[num8, Y].TileFrameX += 18;
-            }
-        }
-
-        num8 = num5 - 2;
-        if (num < 0)
-            num8 = num3 + 2;
-
-        WorldGen.PlaceTile(num8, Y, 304, mute: true);
-        num8 = num5 - 4;
-        if (num < 0)
-            num8 = num3 + 4;
-
-        if (genRand.Next(num9) == 0) {
-            WorldGen.PlaceTile(num8, Y, 15, mute: true, forced: false, -1, 5);
-            if (num > 0) {
-                Main.tile[num8, Y - 1].TileFrameX += 18;
-                Main.tile[num8, Y].TileFrameX += 18;
-            }
-        }
-
-        num8 = num5 - 7;
-        if (num < 0)
-            num8 = num3 + 8;
-
-        int contain = 832;
-        bool summonStaffAdded = false;
-        if (genRand.Next(3) == 0) {
-            contain = 4281;
-            summonStaffAdded = true;
-        }
-        if (!summonStaffAdded && genRand.Next(5) == 0) {
-            contain = ModContent.ItemType<GiantTreeSapling>();
-        }
-        if (!summonStaffAdded && !_giantTreeSaplingAdded) {
-            _giantTreeSaplingAdded = true;
-            contain = ModContent.ItemType<GiantTreeSapling>();
-        }
-
-        if (WorldGen.remixWorldGen) {
-            int num10 = genRand.Next(1, 3);
-            for (int num11 = 0; num11 < num10; num11++) {
-                bool flag = false;
-                while (!flag) {
-                    int num12 = genRand.Next(Main.maxTilesX / 8, Main.maxTilesX - Main.maxTilesX / 8);
-                    int num13 = genRand.Next((int)Main.rockLayer, Main.maxTilesY - 350);
-                    if (!WorldGen.IsTileNearby(num12, num13, 53, 20) && !WorldGen.IsTileNearby(num12, num13, 147, 20) && !WorldGen.IsTileNearby(num12, num13, 59, 20))
-                        flag = WorldGen.AddBuriedChest(num12, num13, contain, notNearOtherChests: false, 12, trySlope: false, 0);
-                }
-            }
-
-            if (WorldGen.crimson)
-                WorldGen.AddBuriedChest(num8, Y, 0, notNearOtherChests: false, 14, trySlope: false, 0);
-            else
-                WorldGen.AddBuriedChest(num8, Y, 0, notNearOtherChests: false, 7, trySlope: false, 0);
-        }
-        else {
-            WorldGen.AddBuriedChest(num8, Y, contain, notNearOtherChests: false, 12, trySlope: false, 0);
         }
     }
 
