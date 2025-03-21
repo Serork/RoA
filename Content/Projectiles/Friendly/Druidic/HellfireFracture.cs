@@ -45,10 +45,6 @@ sealed class HellfireFracture : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         float max = 4.5f;
         bool flag = Projectile.ai[0] < max;
-        //if (flag && Projectile.ai[1] > 0f) {
-        //    Projectile.ai[1] -= TimeSystem.LogicDeltaTime * max;
-        //    Projectile.ai[0] += 0.15f;
-        //}
         Projectile.ai[0] = Math.Min(Projectile.ai[0], max);
         float height = 100f;
         Vector2 baseValue = Projectile.position;
@@ -94,14 +90,6 @@ sealed class HellfireFracture : NatureProjectile {
     private static float PseudoRandRange(ref uint seed, float min, float max) => min + (float)((double)(PseudoRand(ref seed) & 1023U) / 1024.0 * ((double)max - (double)min));
 
     public override bool PreDraw(ref Color lightColor) {
-        //Projectile? parent = GetParent();
-        //if (parent != null) {
-        //    float fromValue = 1f/* - Ease.QuintIn(parent.localAI[0] / parent.ai[1])*/;
-        //    Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), fromValue),
-        //          color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), fromValue);
-        //    _color = Color.Lerp(color1, color2, fromValue) * 0.85f;
-        //}
-        //_color = Color.White;
         _timer++;
         _timer += Main.rand.NextFloatRange(0.5f);
         float count = _timer * 0.75f;
@@ -110,9 +98,9 @@ sealed class HellfireFracture : NatureProjectile {
         SpriteBatch spriteBatch = Main.spriteBatch;
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-        DrawSlash(/*_color * */(num13 / 2f * 0.3f + 0.85f), lightColor);
+        DrawSlash((num13 / 2f * 0.3f + 0.85f), lightColor);
         for (float num14 = -4f; num14 < 4f; num14 += 1f) {
-            DrawSlash(/*_color * */(num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
+            DrawSlash((num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
         }
         spriteBatch.EndBlendState();
 
@@ -193,7 +181,6 @@ sealed class HellfireFracture : NatureProjectile {
             rot += 0.2f;
             rot -= MathHelper.TwoPi;
         }
-        //color = color.MultiplyRGB(lightColor);
         bool flag0 = Projectile.direction == -1;
         Vector2 pos1 = _first, pos2 = _last;
         Vector2 dif = pos2 - pos1;
@@ -230,7 +217,7 @@ sealed class HellfireFracture : NatureProjectile {
             float progress = num4 / num1;
             float pi = MathHelper.Pi * 0.9f;
             Vector2 vector2_2 = a + vec.RotatedBy(pi * progress - pi) * 0.6f * num4 + vec * num4 * 0.6f;
-            Vector2 vector2_3 = /*(double)num4 >= (double)num1 ? b : */vector2_2 + (random.NextBool() ? (float)num2 * vector2_1 * PseudoRandRange(ref seed, -6f, 6f) : Vector2.Zero);
+            Vector2 vector2_3 = vector2_2 + (random.NextBool() ? (float)num2 * vector2_1 * PseudoRandRange(ref seed, -6f, 6f) : Vector2.Zero);
             Vector2 vector2_4 = vector2_3;
             Vector2 offset = Vector2.UnitY * num1 / 2f;
             Vector2 offset2 = Vector2.Zero;
