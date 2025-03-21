@@ -1,5 +1,5 @@
 displayName = Rise of Ages
-author = RoA Gang (has2r, peege.on, Serork and others)
+author = RoA Gang (Serork, has2r, peege.on, N.F.A. and cleo.)
 
 version = 0.1.0.0
 homepage = https://forums.terraria.org/index.php?threads/rise-of-ages-lore-bosses-and-druid-class.72219/
