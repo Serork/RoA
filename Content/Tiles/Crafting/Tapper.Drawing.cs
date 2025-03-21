@@ -103,15 +103,6 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
 
             Vector2 drawPosition = new(i * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset, j * 16 - (int)position.Y + num5);
             Main.spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
-            if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
-                int num = (color.R + color.G + color.B) / 3;
-                if (num > 10) {
-                    Texture2D highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight_Galipot").Value;
-                    Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
-                    rect = new(0, num12 * uniqueAnimationFrame, coordinateWidth, num12);
-                    Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
-                }
-            }
 
             TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
             if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
@@ -120,6 +111,16 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
                 int frameXOffset = uniqueAnimationFrame * num12;
                 rect.Y = num12 * uniqueAnimationFrame;
                 Main.spriteBatch.Draw(sourceRectangle: rect, texture: texture, position: drawPosition, color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+            }
+
+            if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
+                int num = (color.R + color.G + color.B) / 3;
+                if (num > 10) {
+                    Texture2D highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight_Galipot").Value;
+                    Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
+                    rect = new(0, num12 * uniqueAnimationFrame, coordinateWidth, num12);
+                    Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+                }
             }
         }
     }
