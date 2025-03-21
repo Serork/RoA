@@ -1,5 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
 
+using Microsoft.Xna.Framework;
+
+using RoA.Common.NPCs;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 
@@ -36,7 +39,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment) {
-        NPC.lifeMax = (int)((float)NPC.lifeMax * 0.8f * balance * bossAdjustment);
+		NPC.lifeMax = (int)((float)NPC.lifeMax * 0.8f * balance * bossAdjustment);
         //NPC.damage = (int)((double)NPC.damage * 0.65f);
 
         NPC.defense += 6;

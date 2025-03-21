@@ -11,17 +11,17 @@ namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class NFAHorns : ModItem {
-    public override void SetStaticDefaults() {
-        ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
+	public override void SetStaticDefaults() {
+		ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
 
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
         ItemGlowMaskHandler.RegisterArmorGlowMask(Item.headSlot, this);
     }
 
     public override void SetDefaults() {
-        int width = 20; int height = 26;
-        Item.Size = new Vector2(width, height);
+		int width = 20; int height = 26;
+		Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Cyan;
         Item.value = Item.buyPrice(gold: 5);

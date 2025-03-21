@@ -7,6 +7,7 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
+using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
@@ -17,7 +18,7 @@ using Terraria.UI.Gamepad;
 namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 sealed class BloodCursor : ModItem {
-    private class BloodCursorHandler : ModPlayer {
+     private class BloodCursorHandler : ModPlayer {
         public bool IsEffectActive;
 
         public override void Load() {
@@ -51,7 +52,7 @@ sealed class BloodCursor : ModItem {
                 Main.spriteBatch.BeginBlendState(BlendState.Additive, isUI: true);
                 for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                     drawCursor(Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
-                            * Helper.Wave(0f, 3f, 12f, 0.5f) * 1f,
+                            * Helper.Wave(0f, 3f, 12f, 0.5f) * 1f, 
                             Main.rand.NextFloatRange(0.05f) * 1f,
                             Helper.Wave(0.5f, 0.75f, 12f, 0.5f) * 1f);
                 }

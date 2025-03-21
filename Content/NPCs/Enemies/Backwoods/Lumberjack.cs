@@ -21,7 +21,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class Lumberjack : RoANPC {
-    private const float MAXSPEED = 1.65f;
+	private const float MAXSPEED = 1.65f;
 
     private float _timer, _timer2;
 
@@ -32,25 +32,25 @@ sealed class Lumberjack : RoANPC {
     }
 
     public override void SetStaticDefaults() {
-        Main.npcFrameCount[Type] = 21;
+		Main.npcFrameCount[Type] = 21;
     }
 
-    public override void SetDefaults() {
-        NPC.lifeMax = 130;
-        NPC.damage = 30;
-        NPC.defense = 12;
-        NPC.knockBackResist = 0.25f;
+	public override void SetDefaults() {
+		NPC.lifeMax = 130;
+		NPC.damage = 30;
+		NPC.defense = 12;
+		NPC.knockBackResist = 0.25f;
 
-        int width = 28; int height = 44;
-        NPC.Size = new Vector2(width, height);
+		int width = 28; int height = 44;
+		NPC.Size = new Vector2(width, height);
 
-        NPC.aiStyle = -1;
+		NPC.aiStyle = -1;
 
-        NPC.npcSlots = 1.25f;
-        NPC.value = Item.buyPrice(0, 0, 15, 0);
+		NPC.npcSlots = 1.25f;
+		NPC.value = Item.buyPrice(0, 0, 15, 0);
 
-        NPC.HitSound = SoundID.NPCHit1;
-        NPC.DeathSound = SoundID.NPCDeath1;
+		NPC.HitSound = SoundID.NPCHit1;
+		NPC.DeathSound = SoundID.NPCDeath1;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
@@ -62,7 +62,7 @@ sealed class Lumberjack : RoANPC {
         bestiaryEntry.Info.AddRange([
             BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
             new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Lumberjack"),
-            new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<BackwoodsBiome>().ModBiomeBestiaryInfoElement)
+			new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<BackwoodsBiome>().ModBiomeBestiaryInfoElement)
         ]);
     }
 
@@ -83,13 +83,13 @@ sealed class Lumberjack : RoANPC {
             Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
         }
 
-        if (!Main.dedServ) {
-            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "LumberHead".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberAxe".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberArm".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
-        }
+		if (!Main.dedServ) {
+			Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "LumberHead".GetGoreType(), Scale: NPC.scale);
+			Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberAxe".GetGoreType(), Scale: NPC.scale);
+			Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, "LumberArm".GetGoreType(), Scale: NPC.scale);
+			Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
+			Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 34f), NPC.velocity, "LumberLeg".GetGoreType(), Scale: NPC.scale);
+		}
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
@@ -107,9 +107,9 @@ sealed class Lumberjack : RoANPC {
                 NetMessage.SendData(MessageID.SyncNPC, number: npc);
             }
         }
-    }
+	}
 
-    public override void FindFrame(int frameHeight) {
+	public override void FindFrame(int frameHeight) {
         double walkingCounter = 4.0;
         int currentFrame = Math.Min((int)CurrentFrame, Main.npcFrameCount[Type] - 1);
         if (NPC.IsABestiaryIconDummy) {
@@ -123,39 +123,39 @@ sealed class Lumberjack : RoANPC {
                 ChangeFrame((currentFrame, frameHeight));
             }
 
-            return;
+			return;
         }
-
-        NPC.spriteDirection = NPC.direction;
-        double attackCounter = walkingCounter + 50.0;
-        switch (State) {
-            case (float)States.Walking:
-                bool isDead = Main.player[NPC.target].dead;
-                if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
-                    CurrentFrame = 3;
-                }
-                else if (NPC.velocity.X == 0f) {
-                    CurrentFrame = 0;
-                }
-                else {
-                    NPC.frameCounter += 1f * Math.Abs(NPC.velocity.X / MAXSPEED);
+        
+		NPC.spriteDirection = NPC.direction;
+		double attackCounter = walkingCounter + 50.0;
+		switch (State) {
+			case (float)States.Walking:
+				bool isDead = Main.player[NPC.target].dead;
+				if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
+					CurrentFrame = 3;
+				}
+				else if (NPC.velocity.X == 0f) {
+					CurrentFrame = 0;
+				}
+				else {
+					NPC.frameCounter += 1f * Math.Abs(NPC.velocity.X / MAXSPEED);
                     if (NPC.frameCounter > walkingCounter) {
-                        int lastWalkingFrame = 7;
-                        if (++CurrentFrame >= lastWalkingFrame + (isDead ? 6 : 0)) {
-                            CurrentFrame = isDead ? 7 : 0;
-                        }
-                        NPC.frameCounter = 0.0;
-                    }
-                }
-                break;
-            case (float)States.Attacking:
-                NPC.frameCounter = 0.0;
-                double progress = (double)Helper.EaseInOut3(StateTimer);
-                CurrentFrame = 13 + (int)(8.0 * progress);
-                break;
-        }
-        ChangeFrame((currentFrame, frameHeight));
-    }
+						int lastWalkingFrame = 7;
+						if (++CurrentFrame >= lastWalkingFrame + (isDead ? 6 : 0)) {
+							CurrentFrame = isDead ? 7 : 0;
+						}
+						NPC.frameCounter = 0.0;
+					}
+				}
+				break;
+			case (float)States.Attacking:
+				NPC.frameCounter = 0.0;
+				double progress = (double)Helper.EaseInOut3(StateTimer);
+				CurrentFrame = 13 + (int)(8.0 * progress);
+				break;
+		}
+		ChangeFrame((currentFrame, frameHeight));
+	}
 
     public override void SendExtraAI(BinaryWriter writer) {
         base.SendExtraAI(writer);
@@ -172,34 +172,34 @@ sealed class Lumberjack : RoANPC {
     }
 
     public override void AI() {
-        Player player;
-        float closeRange = 65f;
-        switch (State) {
-            case (float)States.Spawned:
-                NPC.TargetClosest();
-                player = Main.player[NPC.target];
-                if (NPC.position.ToTileCoordinates().Y < Main.worldSurface) {
-                    if (NPC.Distance(player.Center) > closeRange && ((NPC.position.X > player.position.X && player.direction == 1) || (NPC.position.X < player.position.X && player.direction == -1))) {
-                        if (Main.netMode != NetmodeID.MultiplayerClient) {
-                            NPC.KillNPC();
-                            return;
-                        }
-                    }
-                }
+		Player player;
+		float closeRange = 65f;
+		switch (State) {
+			case (float)States.Spawned:
+				NPC.TargetClosest();
+				player = Main.player[NPC.target];
+				if (NPC.position.ToTileCoordinates().Y < Main.worldSurface) {
+					if (NPC.Distance(player.Center) > closeRange && ((NPC.position.X > player.position.X && player.direction == 1) || (NPC.position.X < player.position.X && player.direction == -1))) {
+						if (Main.netMode != NetmodeID.MultiplayerClient) {
+							NPC.KillNPC();
+							return;
+						}
+					}
+				}
                 StateTimer = 0.2f;
                 ChangeState((int)States.Walking);
-                break;
-            case (float)States.Walking:
+				break;
+			case (float)States.Walking:
                 if (Attack) {
-                    Attack = false;
-                    NPC.netUpdate = true;
-                }
-                if (StateTimer > 0f) {
-                    StateTimer -= TimeSystem.LogicDeltaTime;
-                    if (NPC.velocity.Y < 0f) {
-                        NPC.velocity.Y = 0f;
-                    }
-                }
+					Attack = false;
+					NPC.netUpdate = true;
+				}
+				if (StateTimer > 0f) {
+					StateTimer -= TimeSystem.LogicDeltaTime;
+					if (NPC.velocity.Y < 0f) {
+						NPC.velocity.Y = 0f;
+					}
+				}
 
                 NPC.aiStyle = NPC.ModNPC.AIType = -1;
 
@@ -397,61 +397,61 @@ sealed class Lumberjack : RoANPC {
                         ChangeState((int)States.Attacking);
                     }
                 }
-                break;
-            case (float)States.Attacking:
-                player = Main.player[NPC.target];
-                bool inRange = NPC.Distance(player.Center) >= closeRange;
-                if ((inRange || player.dead) && StateTimer <= 0.2f) {
-                    StateTimer = 0.1f;
+				break;
+			case (float)States.Attacking:
+				player = Main.player[NPC.target];
+				bool inRange = NPC.Distance(player.Center) >= closeRange;
+				if ((inRange || player.dead) && StateTimer <= 0.2f) {
+					StateTimer = 0.1f;
                     ChangeState((int)States.Walking);
                     NPC.TargetClosest();
                     return;
-                }
-                if (NPC.velocity.Y == 0f) {
+				}
+				if (NPC.velocity.Y == 0f) {
                     NPC.ResetAIStyle();
                     NPC.velocity.X *= 0.8f;
                     StateTimer += TimeSystem.LogicDeltaTime / 2f;
-                    StateTimer *= 1.05f;
-                    if (StateTimer >= 0.6f) {
-                        if (!Attack) {
-                            Attack = true;
-                            SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
-                            if (Main.netMode != NetmodeID.MultiplayerClient) {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(NPC.width / 2 * NPC.direction + 10, 0f), Vector2.Zero, ModContent.ProjectileType<LumberjackAxeSlash>(),
+					StateTimer *= 1.05f;
+					if (StateTimer >= 0.6f) {
+						if (!Attack) {
+							Attack = true;
+							SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
+							if (Main.netMode != NetmodeID.MultiplayerClient) {
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(NPC.width / 2 * NPC.direction + 10, 0f), Vector2.Zero, ModContent.ProjectileType<LumberjackAxeSlash>(), 
                                     60, 3f, Main.myPlayer);
-                            }
-                            NPC.netUpdate = true;
-                        }
-                        if (StateTimer >= 1f) {
-                            StateTimer = 0f;
-                            Attack = false;
-                            NPC.netUpdate = true;
-                        }
-                    }
-                }
-                break;
-        }
-    }
+							}
+							NPC.netUpdate = true;
+						}
+						if (StateTimer >= 1f) {
+							StateTimer = 0f;
+							Attack = false;
+							NPC.netUpdate = true;
+						}
+					}
+				}
+				break;
+		}
+	}
 
-    private class LumberjackAxeSlash : ModProjectile {
-        public override string Texture => ResourceManager.EmptyTexture;
+	private class LumberjackAxeSlash : ModProjectile {
+		public override string Texture => ResourceManager.EmptyTexture;
 
-        public override bool PreDraw(ref Color lightColor) => false;
+		public override bool PreDraw(ref Color lightColor) => false;
 
         public override void SetDefaults() {
-            int width = 120; int height = 60;
-            Projectile.Size = new Vector2(width, height);
+			int width = 120; int height = 60;
+			Projectile.Size = new Vector2(width, height);
 
-            Projectile.friendly = false;
-            Projectile.hostile = true;
+			Projectile.friendly = false;
+			Projectile.hostile = true;
 
-            Projectile.aiStyle = -1;
-            Projectile.penetrate = -1;
-            Projectile.timeLeft = 10;
+			Projectile.aiStyle = -1;
+			Projectile.penetrate = -1;
+			Projectile.timeLeft = 10;
 
-            Projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 
-            Projectile.alpha = byte.MaxValue;
-        }
-    }
+			Projectile.alpha = byte.MaxValue;
+		}
+	}
 }

@@ -13,21 +13,21 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodBookcase : ModTile {
-    public override void SetStaticDefaults() {
-        Main.tileSolidTop[Type] = true;
-        Main.tileFrameImportant[Type] = true;
-        Main.tileNoAttach[Type] = true;
-        Main.tileTable[Type] = true;
+	public override void SetStaticDefaults() {
+		Main.tileSolidTop[Type] = true;
+		Main.tileFrameImportant[Type] = true;
+		Main.tileNoAttach[Type] = true;
+		Main.tileTable[Type] = true;
 
-        TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
-        TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 18];
-        AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
+		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
+		TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 18];
+		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
         TileObjectData.addTile(Type);
 
         DustType = ModContent.DustType<WoodTrash>();
         AdjTiles = [TileID.Bookcases];
-        AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.Bookcase"));
-    }
+		AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.Bookcase"));
+	}
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 

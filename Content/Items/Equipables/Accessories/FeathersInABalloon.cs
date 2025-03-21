@@ -9,9 +9,9 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Balloon)]
 sealed class FeathersInABalloon : NatureItem {
-    public override void SetStaticDefaults() {
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+	public override void SetStaticDefaults() {
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
     protected override void SafeSetDefaults() {
         int width = 22; int height = 28;

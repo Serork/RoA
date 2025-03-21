@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Druid;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Trees;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -36,17 +37,17 @@ sealed class PineCone : NatureItem {
         }
     }
 
-    private class ExtraMapOptionForTrees : GlobalTile {
+     private class ExtraMapOptionForTrees : GlobalTile {
     }
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(18, 28);
-        Item.SetWeaponValues(10, 0.5f);
-        Item.SetDefaultToUsable(ItemUseStyleID.HoldUp, 25, false, useSound: SoundID.Item1);
-        Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Druidic.PineCone>());
-        Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.White);
+		Item.SetSize(18, 28);
+		Item.SetWeaponValues(10, 0.5f);
+		Item.SetDefaultToUsable(ItemUseStyleID.HoldUp, 25, false, useSound: SoundID.Item1);
+		Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Druidic.PineCone>());
+		Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.White);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 28);
+		NatureWeaponHandler.SetPotentialDamage(Item, 28);
         NatureWeaponHandler.SetFillingRate(Item, 0.8f);
 
         Item.value = Item.sellPrice(0, 0, 15, 0);
@@ -148,15 +149,15 @@ sealed class PineCone : NatureItem {
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 2;
 
-    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        if (player.IsLocal()) {
-            if (Collision.CanHitLine(player.Center, 2, 2, player.GetViableMousePosition(), 2, 2)) {
-                Projectile.NewProjectile(player.GetSource_ItemUse(Item), Vector2.Zero, Vector2.Zero, type, damage, knockback, player.whoAmI);
-            }
-        }
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+		if (player.IsLocal()) {
+			if (Collision.CanHitLine(player.Center, 2, 2, player.GetViableMousePosition(), 2, 2)) {
+				Projectile.NewProjectile(player.GetSource_ItemUse(Item), Vector2.Zero, Vector2.Zero, type, damage, knockback, player.whoAmI);
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
     private bool On_WorldGen_GrowTree(On_WorldGen.orig_GrowTree orig, int i, int y) {
         int j;

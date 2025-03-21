@@ -1,15 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-
-using RoA.Content.Tiles.Trees;
-
-using System.Runtime.CompilerServices;
-
-using Terraria;
+﻿using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Achievements;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework;
+using RoA.Content.Tiles.Trees;
 
 namespace RoA.Common.Tiles;
 

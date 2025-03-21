@@ -2,7 +2,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
+using RoA.Core.Utility;
 
+using System;
 using System.IO;
 
 using Terraria;
@@ -106,7 +108,7 @@ sealed class TulipPetalOld : NatureProjectile {
         if (Projectile.ai[0] == 0 || Projectile.ai[0] == 3) {
             if (Projectile.ai[1] > 4 && Projectile.ai[1] % _flowerRarity == 0 && Projectile.ai[1] < 46) {
                 if (Projectile.owner == Main.myPlayer)
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(),
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), 
                         Projectile.Center.X + Main.rand.NextFloat(-2f, 2f), Projectile.Center.Y + Main.rand.NextFloat(-2f, 2f), 0, 0, ModContent.ProjectileType<TulipTrailOld>(), (int)(Projectile.damage * 0.3f), 0, Projectile.owner, Projectile.frame, Projectile.ai[1] + 4);
             }
         }
@@ -227,7 +229,7 @@ sealed class TulipPetalOld : NatureProjectile {
                 Vector2 spawnOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
                 for (int k = 0; k < _beeCounter + _allBees; k++) {
                     Vector2 spawnPos = Projectile.oldPos[0] + spawnOrigin + new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation * Projectile.direction + k * 120));
-                    Projectile.NewProjectile(Projectile.GetSource_Death(), spawnPos, Vector2.Normalize(new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation + k * 120))),
+                    Projectile.NewProjectile(Projectile.GetSource_Death(), spawnPos, Vector2.Normalize(new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation + k * 120))), 
                         _largeBee[k] ? ModContent.ProjectileType<LargeBee>() : ModContent.ProjectileType<Bee>(),
                         beeDamage((int)(Projectile.damage * 0.333f),
                         _largeBee[k]),
@@ -245,7 +247,7 @@ sealed class TulipPetalOld : NatureProjectile {
             Projectile.position.X = Projectile.position.X - (Projectile.width / 2);
             Projectile.position.Y = Projectile.position.Y - (Projectile.height / 2);
             if (Projectile.owner == Main.myPlayer) {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ModContent.ProjectileType<WeepingTulipExplosion>(),
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ModContent.ProjectileType<WeepingTulipExplosion>(), 
                     (int)(Projectile.damage * 0.5f * _explosionMultiplier * 0.25f), 0, Projectile.owner, ai2: _explosionMultiplier);
             }
             int dustCount = 8 + 8 * _explosionMultiplier;
@@ -302,7 +304,7 @@ sealed class TulipPetalOld : NatureProjectile {
         }
     }
 
-    private class WeepingTulipExplosion : NatureProjectile {
+     private class WeepingTulipExplosion : NatureProjectile {
         public override string Texture => ResourceManager.EmptyTexture;
 
         public override bool PreDraw(ref Color lightColor) => false;

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Common.WorldEvents;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
 

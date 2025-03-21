@@ -1,14 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Furniture;
 
 sealed class ElderwoodSofa : ModItem {
-    public override void SetDefaults() {
-        int width = 32; int height = 20;
-        Item.Size = new Vector2(width, height);
+	public override void SetDefaults() {
+		int width = 32; int height = 20;
+		Item.Size = new Vector2(width, height);
 
         Item.maxStack = Terraria.Item.CommonMaxStack;
         Item.useTurn = true;
@@ -17,7 +18,7 @@ sealed class ElderwoodSofa : ModItem {
         Item.useTime = 10;
         Item.useStyle = 1;
         Item.consumable = true;
-        Item.value = Item.sellPrice(copper: 60);
+		Item.value = Item.sellPrice(copper: 60);
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodSofa>();
     }
 }

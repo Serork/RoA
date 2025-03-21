@@ -1,14 +1,13 @@
-using RoA.Content.Biomes.Backwoods;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
-using Terraria.GameContent.Ambience;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Net;
+using Terraria.ID;
+using Terraria.GameContent.Ambience;
+using RoA.Content.Biomes.Backwoods;
 
 namespace RoA.Common.CustomSkyAmbience;
 
@@ -107,8 +106,8 @@ sealed class CustomAmbienceServer : ILoadable {
 
         ResetSpawnTime();
         IEnumerable<CustomSkyEntityType> source = from pair in _spawnConditions
-                                                  where pair.Value()
-                                                  select pair.Key;
+                                            where pair.Value()
+                                            select pair.Key;
 
         if (source.Count((type) => true) == 0)
             return;

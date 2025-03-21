@@ -2,8 +2,8 @@
 
 using RoA.Core;
 
-using Terraria;
 using Terraria.ID;
+using Terraria;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic.Forms;
 

@@ -5,6 +5,8 @@ using Terraria.GameContent.Prefixes;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using RoA.Content.Items.Weapons.Ranged;
+
 namespace RoA.Content.Items.Weapons.Melee;
 
 sealed class BloodshedAxe : ModItem {
@@ -13,7 +15,7 @@ sealed class BloodshedAxe : ModItem {
         // Tooltip.SetDefault("'There will be blood'");
         Item.ResearchUnlockCount = 1;
         PrefixLegacy.ItemSets.SwordsHammersAxesPicks[Type] = true;
-        //ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ChemicalPrisoner>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ChemicalPrisoner>();
     }
 
     public override void SetDefaults() {
@@ -47,7 +49,7 @@ sealed class BloodshedAxe : ModItem {
         }
         player.direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
         int damage = (int)(Item.damage * 1.5f);
-        Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, type,
+        Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, type, 
             damage, Item.knockBack, player.whoAmI).rotation = player.direction == 1 ? 0f : MathHelper.Pi;
         return true;
     }

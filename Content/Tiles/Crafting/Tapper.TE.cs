@@ -6,6 +6,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
+using System.Drawing;
 using System.IO;
 
 using Terraria;

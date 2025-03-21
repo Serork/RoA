@@ -1,12 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core;
@@ -17,9 +22,13 @@ using System.IO;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
@@ -109,7 +118,7 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {
-        position = new(NPC.position.X + 22 / 2, NPC.position.Y + NPC.gfxOffY);
+        position = new (NPC.position.X + 22 / 2, NPC.position.Y + NPC.gfxOffY);
         position += new Vector2(22, 28) / 2f;
         position.X -= 11;
         position.Y -= 9;
@@ -357,7 +366,7 @@ sealed class GrimDefender : ModNPC {
                     if (!flag3) {
                         NPC.ai[2]++;
                         //if (NPC.ai[2] <= num * 0.4f) {
-                        _tempPosition = Main.player[NPC.target].Center;
+                            _tempPosition = Main.player[NPC.target].Center;
                         //}
                         progress = NPC.ai[2] / num;
                         _extraVelocity2 = diff * speed * progress;
@@ -478,7 +487,7 @@ sealed class GrimDefender : ModNPC {
                     }
                     if (_spearAttack) {
                         if (Main.netMode != NetmodeID.MultiplayerClient) {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(),
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(), 
                                 60, 4f, Main.myPlayer, NPC.whoAmI);
                         }
                         //_tempPosition = Main.player[NPC.target].Center;

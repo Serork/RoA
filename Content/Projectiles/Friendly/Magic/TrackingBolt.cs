@@ -185,8 +185,8 @@ sealed class TrackingBolt : ModProjectile {
         miscShaderData.UseOpacity(1f);
         miscShaderData.Apply();
         _vertexStrip.PrepareStripWithProceduralPadding(
-            Projectile.oldPos,
-            Projectile.oldRot,
+            Projectile.oldPos, 
+            Projectile.oldRot, 
             p => Color.Lerp(new Color(194, 44, 44).MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)) * Projectile.Opacity, new Color(250, 198, 164).MultiplyAlpha(0.5f) * Projectile.Opacity, p),
             p => (float)(35 * Projectile.scale * (1.0 - p)),
             -Main.screenPosition + Projectile.Size / 2, true);

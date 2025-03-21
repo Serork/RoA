@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Tiles.Ambient.LargeTrees;
+using RoA.Core;
 
 using Terraria;
 using Terraria.ID;

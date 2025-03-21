@@ -7,9 +7,9 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Decorations;
 
 sealed class Nihility : ModTile {
-    public override void SetStaticDefaults() {
-        Main.tileFrameImportant[Type] = true;
-        Main.tileLavaDeath[Type] = true;
+	public override void SetStaticDefaults() {
+		Main.tileFrameImportant[Type] = true;
+		Main.tileLavaDeath[Type] = true;
 
         Main.tileSpelunker[Type] = true;
 
@@ -20,14 +20,14 @@ sealed class Nihility : ModTile {
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
-        TileObjectData.newTile.Height = 3;
-        TileObjectData.newTile.Width = 3;
-        TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
-        TileObjectData.newTile.LavaDeath = true;
+		TileObjectData.newTile.Height = 3;
+		TileObjectData.newTile.Width = 3;
+		TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
+		TileObjectData.newTile.LavaDeath = true;
         //TileObjectData.newTile.Origin = new Point16(2, 2);
         TileObjectData.addTile(Type);
 
-        LocalizedText name = CreateMapEntryName();
+		LocalizedText name = CreateMapEntryName();
         AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), name);
-    }
+	}
 }

@@ -97,7 +97,7 @@ static class TileHelper {
         }
     }
 
-    private static Point[][] _addSpecialPointSpecialPositions;
+    private static Point[][] _addSpecialPointSpecialPositions; 
     private static int[] _addSpecialPointSpecialsCount;
     private static List<Point> _addVineRootsPositions;
 

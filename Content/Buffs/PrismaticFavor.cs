@@ -4,12 +4,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.Buffs;
 
 sealed class PrismaticFavor : ModBuff {
-    public override void SetStaticDefaults() {
-        // DisplayName.SetDefault("Bloodlust");
-        // Description.SetDefault("You restore some health on deadly hits");
-    }
+	public override void SetStaticDefaults() {
+		// DisplayName.SetDefault("Bloodlust");
+		// Description.SetDefault("You restore some health on deadly hits");
+	}
 
-    public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<PrismaticFavorPlayer>().IsEffectActive = true;
+	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<PrismaticFavorPlayer>().IsEffectActive = true;
 
     internal class PrismaticFavorPlayer : ModPlayer {
         public bool IsEffectActive;

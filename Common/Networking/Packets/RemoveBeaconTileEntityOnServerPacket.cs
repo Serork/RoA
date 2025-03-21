@@ -1,9 +1,8 @@
-﻿using RoA.Content.Tiles.Crafting;
+﻿using System.IO;
 
-using System.IO;
-
-using Terraria;
 using Terraria.DataStructures;
+using Terraria;
+using RoA.Content.Tiles.Crafting;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Networking.Packets;

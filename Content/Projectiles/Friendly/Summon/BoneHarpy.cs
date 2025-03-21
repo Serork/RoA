@@ -10,6 +10,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -172,12 +173,12 @@ sealed class BoneHarpy : InteractableProjectile {
                 SoundEngine.PlaySound(SoundID.Item42, Projectile.Center);
 
                 if (Projectile.owner == Main.myPlayer) {
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(),
-                        Projectile.Center,
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), 
+                        Projectile.Center, 
                         Vector2.Normalize(target.Center - Projectile.Center) * 4.5f,
                         ModContent.ProjectileType<BoneHarpyFeather>(),
-                        Projectile.damage,
-                        Projectile.knockBack,
+                        Projectile.damage, 
+                        Projectile.knockBack, 
                         Projectile.owner);
                 }
             }

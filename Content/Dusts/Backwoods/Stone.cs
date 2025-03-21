@@ -5,5 +5,5 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts.Backwoods;
 
 sealed class Stone : ModDust {
-    public override void OnSpawn(Dust dust) => UpdateType = DustID.Stone;
+	public override void OnSpawn(Dust dust) => UpdateType = DustID.Stone;
 }

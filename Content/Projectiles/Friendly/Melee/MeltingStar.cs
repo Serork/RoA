@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -83,13 +84,13 @@ sealed class MeltingStar : ModProjectile {
     public override void AI() {
         if (Main.rand.Next(20) == 0 || (Main.tenthAnniversaryWorld && Main.rand.Next(15) == 0))
             for (int index = 0; index < 2; ++index) {
-                if (Main.rand.Next(100) <= 35) {
+            if (Main.rand.Next(100) <= 35) {
                     if (Main.rand.NextChance(0.75)) {
                         Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, Projectile.velocity.X * -0.2f, Projectile.velocity.Y * -0.2f, 150, default, Main.rand.NextFloat(1f, 1.25f));
                         dust.noGravity = true;
                     }
-                }
             }
+        }
 
         if (Projectile.Opacity < 1f) {
             Projectile.Opacity += 0.1f;

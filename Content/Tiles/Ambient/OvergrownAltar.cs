@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
@@ -21,19 +23,19 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class OvergrownAltar : ModTile {
-    public override void SetStaticDefaults() {
-        AnimationFrameHeight = 36;
+	public override void SetStaticDefaults () {
+		AnimationFrameHeight = 36;
 
-        Main.tileLighted[Type] = true;
-        Main.tileFrameImportant[Type] = true;
-        Main.tileNoAttach[Type] = true;
-        Main.tileLighted[Type] = true;
+		Main.tileLighted[Type] = true;
+		Main.tileFrameImportant[Type] = true;
+		Main.tileNoAttach[Type] = true;
+		Main.tileLighted[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
         TileObjectData.newTile.Origin = new Point16(1, 1);
-        TileObjectData.newTile.DrawYOffset = 2;
-        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<OvergrownAltarTE>().Hook_AfterPlacement, -1, 0, false);
-        TileObjectData.addTile(Type);
+		TileObjectData.newTile.DrawYOffset = 2;
+		TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<OvergrownAltarTE>().Hook_AfterPlacement, -1, 0, false);
+		TileObjectData.addTile(Type);
 
         TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         TileID.Sets.PreventsSandfall[Type] = true;
@@ -44,16 +46,16 @@ sealed class OvergrownAltar : ModTile {
 
         AddMapEntry(new Color(197, 254, 143), CreateMapEntryName());
 
-        DustType = 59;
-    }
+		DustType = 59;
+	}
 
-    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => false;
+	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => false;
 
-    public override bool CanExplode(int i, int j) => false;
+	public override bool CanExplode(int i, int j) => false;
 
-    public override bool CanKillTile(int i, int j, ref bool blockDamaged) => false;
+	public override bool CanKillTile(int i, int j, ref bool blockDamaged) => false;
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
     public override void PlaceInWorld(int i, int j, Item item) => ModContent.GetInstance<OvergrownAltarTE>().Place(i, j);
 
@@ -125,7 +127,7 @@ sealed class OvergrownAltar : ModTile {
             if (!NPC.downedBoss2) {
                 return false;
             }
-
+            
             if (!IsValid(i, j)) {
                 return false;
             }

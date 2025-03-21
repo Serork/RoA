@@ -148,7 +148,7 @@ sealed class WreathHandler : ModPlayer {
     public Color BaseColor => new(255, 255, 200, 200);
     public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)NormalWreathPosition.X / 16, (int)NormalWreathPosition.Y / 16)) * DrawColorOpacity);
     public Vector2 NormalWreathPosition {
-        get {
+        get  {
             var config = ModContent.GetInstance<RoAClientConfig>();
             bool flag = false;
             if (config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal &&
@@ -269,7 +269,7 @@ sealed class WreathHandler : ModPlayer {
                                 Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
                             }
 
-                            SpecialAttackData.OnAttack?.Invoke(Player);
+                            SpecialAttackData.OnAttack?.Invoke(Player); 
 
                             SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
                         }
@@ -448,7 +448,7 @@ sealed class WreathHandler : ModPlayer {
                 }
             }
         }
-        else if (_stayTime <= 0f && !_shouldDecrease) {
+        else if ( _stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
         }
         else if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 
 using ReLogic.Utilities;
 
@@ -267,7 +269,7 @@ sealed class DryadEntrance : ModSystem {
                 }
                 if (Main.tile[x2, y2].WallType == PlaceholderWallType) {
                     Main.tile[x2, y2].WallType = WallID.LivingWoodUnsafe;
-                }
+                } 
                 //if (Main.tile[x2, y2].WallType == ModContent.WallType<LivingBackwoodsLeavesWall2>()) {
                 //    Main.tile[x2, y2].WallType = WallID.LivingWoodUnsafe;
                 //}
@@ -901,7 +903,7 @@ sealed class DryadEntrance : ModSystem {
                 }
             }
         }
-        foreach (Point killPos in killTiles) {
+        foreach (Point killPos in killTiles) { 
             i = killPos.X;
             j = killPos.Y;
             if (Vector2.Distance(new Vector2(i, j), new Vector2((int)vector2D3.X, (int)vector2D3.Y)) > size * 1.25f) {

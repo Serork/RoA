@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Terraria.GameContent.ItemDropRules;
 
 namespace RoA.Common.Items.ItemDropRules;

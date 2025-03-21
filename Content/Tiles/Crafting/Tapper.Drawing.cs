@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.Tiles;
 using RoA.Core.Utility;
@@ -123,7 +125,7 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
         }
     }
 
-    private class TapperBracingDrawing : GlobalTile {
+     private class TapperBracingDrawing : GlobalTile {
         // separate
         public static List<Point> DrawPoints { get; private set; } = [];
 

@@ -257,7 +257,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             startY = position.Y - height / 2;
             endY = startY + height;
         }
-        if (mouseScreen.X > startX && mouseScreen.X < endX &&
+        if (mouseScreen.X > startX && mouseScreen.X < endX && 
             mouseScreen.Y > startY && mouseScreen.Y < endY) {
             if (!Main.mouseText) {
                 player.cursorItemIconEnabled = false;

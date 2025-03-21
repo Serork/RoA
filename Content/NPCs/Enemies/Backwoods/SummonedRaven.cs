@@ -1,13 +1,17 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -16,15 +20,15 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class SummonedRaven : ModNPC {
-    public enum States {
-        Spawn,
-        Attacking
-    }
+	public enum States {
+		Spawn,
+		Attacking
+	}
 
-    private const short SPAWN = (short)States.Spawn;
-    private const short ATTACKING = (short)States.Attacking;
+	private const short SPAWN = (short)States.Spawn;
+	private const short ATTACKING = (short)States.Attacking;
 
-    private ref float State => ref NPC.ai[2];
+	private ref float State => ref NPC.ai[2];
     private ref float Acceleration => ref NPC.ai[3];
 
     public override void HitEffect(NPC.HitInfo hit) {
@@ -54,10 +58,10 @@ sealed class SummonedRaven : ModNPC {
     }
 
     public override void SetStaticDefaults() {
-        //base.SetStaticDefaults();
+		//base.SetStaticDefaults();
 
-        // DisplayName.SetDefault("Summoned Raven");
-        Main.npcFrameCount[Type] = 5;
+		// DisplayName.SetDefault("Summoned Raven");
+		Main.npcFrameCount[Type] = 5;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             //Position = new Vector2(2f, -10f),
@@ -75,11 +79,11 @@ sealed class SummonedRaven : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.CloneDefaults(NPCID.Raven);
+		NPC.CloneDefaults(NPCID.Raven);
 
-        NPC.aiStyle = -1;
+		NPC.aiStyle = -1;
 
-        NPC.alpha = 255;
+		NPC.alpha = 255;
 
         NPC.lifeMax = 45;
         NPC.damage = 22;
@@ -109,50 +113,50 @@ sealed class SummonedRaven : ModNPC {
 
         if (NPC.NearestTheSame(out NPC npc)) {
             NPC.OffsetNPC(npc, 0.2f);
-        }
+		}
 
-        if (Acceleration < 1.5f) {
-            Acceleration += 0.065f;
-            Acceleration *= 1.05f;
-        }
+		if (Acceleration < 1.5f) {
+			Acceleration += 0.065f;
+			Acceleration *= 1.05f;
+		}
 
         short state = (short)State;
-        if (state == SPAWN) {
-            NPC.noGravity = true;
+		if (state == SPAWN) {
+			NPC.noGravity = true;
 
-            if (NPC.ai[0] == 0f && NPC.ai[1] == 0f) {
-                NPC.alpha = 0;
+			if (NPC.ai[0] == 0f && NPC.ai[1] == 0f) {
+				NPC.alpha = 0;
 
-                State = ATTACKING;
-            }
+				State = ATTACKING;
+			}
 
-            NPC.velocity = new Vector2(NPC.ai[0], NPC.ai[1]) * Acceleration * 0.75f;
+			NPC.velocity = new Vector2(NPC.ai[0], NPC.ai[1]) * Acceleration * 0.75f;
             NPC.rotation = NPC.velocity.ToRotation() + MathHelper.ToRadians(90f);
 
             if (Main.netMode != NetmodeID.Server && Main.rand.NextBool()) {
-                int dust = Dust.NewDust(NPC.position, 16, 16, 108, NPC.velocity.X * 0.01f, NPC.velocity.Y * 0.01f, NPC.alpha, new Color(30, 30, 55), Main.rand.NextFloat(1.1f, 1.3f));
-                Main.dust[dust].noLight = true;
-                Main.dust[dust].noGravity = true;
-                Main.dust[dust].velocity.X *= 0.4f;
-                Main.dust[dust].velocity.Y *= 0.4f;
-            }
+				int dust = Dust.NewDust(NPC.position, 16, 16, 108, NPC.velocity.X * 0.01f, NPC.velocity.Y * 0.01f, NPC.alpha, new Color(30, 30, 55), Main.rand.NextFloat(1.1f, 1.3f));
+				Main.dust[dust].noLight = true;
+				Main.dust[dust].noGravity = true;
+				Main.dust[dust].velocity.X *= 0.4f;
+				Main.dust[dust].velocity.Y *= 0.4f;
+			}
 
-            if (NPC.alpha > 0) {
+			if (NPC.alpha > 0) {
                 NPC.alpha -= 20 - Main.rand.Next(1, 10);
 
                 if (Main.netMode != NetmodeID.Server) {
-                    if (Main.rand.NextBool(10)) {
-                        for (int i = 0; i < 16; i++) {
-                            int dust = Dust.NewDust(NPC.position, 20, 20, 108, (float)Math.Cos(MathHelper.Pi / 6 * i), (float)Math.Sin(MathHelper.Pi / 6 * i), 140, new Color(30, 30, 55), 1.2f);
-                            Main.dust[dust].noGravity = true;
-                        }
-                    }
-                }
-                return;
-            }
-            State = ATTACKING;
-            NPC.netUpdate = true;
-            return;
+					if (Main.rand.NextBool(10)) {
+						for (int i = 0; i < 16; i++) {
+							int dust = Dust.NewDust(NPC.position, 20, 20, 108, (float)Math.Cos(MathHelper.Pi / 6 * i), (float)Math.Sin(MathHelper.Pi / 6 * i), 140, new Color(30, 30, 55), 1.2f);
+							Main.dust[dust].noGravity = true;
+						}
+					}
+				}
+				return;
+			}
+			State = ATTACKING;
+			NPC.netUpdate = true;
+			return;
         }
 
         NPC.ApplyAdvancedFlierAI();
@@ -161,8 +165,8 @@ sealed class SummonedRaven : ModNPC {
         NPC.rotation = Helper.SmoothAngleLerp(NPC.rotation, value, (Math.Abs(value) * 0.2f + 0.2f));
 
         NPC.alpha = 0;
-        //AnimationType = 301;
-    }
+		//AnimationType = 301;
+	}
 
 
     public override void FindFrame(int frameHeight) {
@@ -213,15 +217,15 @@ sealed class SummonedRaven : ModNPC {
         NPC.frame.Y = 0;
     }
 
-    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+		Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         if (NPC.IsABestiaryIconDummy) {
             NPC.Opacity = 1f;
         }
-        spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(NPC.width, NPC.height) / 2, NPC.frame, drawColor * (1f - NPC.alpha / 255f), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.velocity.X > 0f ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+		spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(NPC.width, NPC.height) / 2, NPC.frame, drawColor * (1f - NPC.alpha / 255f), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.velocity.X > 0f? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
         texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
         spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(NPC.width, NPC.height) / 2, NPC.frame, new Color(200, 200, 200, 100) * (1f - NPC.alpha / 255f), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.velocity.X > 0f ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-
-        return false;
-    }
+        
+		return false;
+	}
 }

@@ -142,7 +142,7 @@ sealed class FlederSlayer : ModProjectile {
         }
         Player player = Main.player[Projectile.owner];
         for (int i2 = 1; i2 < 6; i2++) {
-            Vector2 boxPosition = Projectile.position + new Vector2(-30f * player.direction, 0f) + ((Projectile.rotation + _extraRotation)).ToRotationVector2() * 20f * i2 +
+            Vector2 boxPosition = Projectile.position + new Vector2(-30f * player.direction, 0f) + ((Projectile.rotation + _extraRotation)).ToRotationVector2() * 20f * i2 + 
                 new Vector2(-20f + (player.direction == 1 ? 100f : 0f), 20f);
             int boxWidth = 20;
             int boxHeight = 20;
@@ -208,7 +208,7 @@ sealed class FlederSlayer : ModProjectile {
                 Projectile.scale *= scale;
             }
         }
-        Lighting.AddLight(Projectile.Center + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale,
+        Lighting.AddLight(Projectile.Center + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale, 
         Color.White.ToVector3() * MathHelper.Clamp(_charge * 2f, 0f, 1f) * 0.35f);
         int itemAnimationMax = 40;
         int min = itemAnimationMax / 2 - itemAnimationMax / 4;
@@ -393,7 +393,7 @@ sealed class FlederSlayer : ModProjectile {
                         Vector2 extra = Vector2.Normalize(Projectile.velocity) * -((Projectile.rotation + (playerDirection != 1 ? MathHelper.Pi : 0f)) * playerDirection).ToRotationVector2() * 165f * Projectile.localAI[2];
                         Vector2 projectileCenter = Projectile.Center + extra;
                         if (!_released && Projectile.ai[1] <= 16f) {
-                            if (Projectile.ai[1] > 4f &&
+                            if (Projectile.ai[1] > 4f && 
                                 WorldGenHelper.SolidTile(Math.Clamp((int)projectileCenter.X / 16, 1, Main.maxTilesX), Math.Clamp((int)projectileCenter.Y / 16 + 1, 1, Main.maxTilesY))) {
                                 _released = true;
 
@@ -715,7 +715,7 @@ sealed class FlederSlayer : ModProjectile {
         return false;
     }
 
-    private class WaveSlash : ModProjectile {
+     private class WaveSlash : ModProjectile {
         public override string Texture => ResourceManager.Textures + "FlederSlayerSlash";
 
         public override bool PreDraw(ref Color lightColor) {

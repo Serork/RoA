@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
 sealed class WaterStream : ModProjectile {
-    private bool IsMain => Projectile.ai[1] == -5f;
+	private bool IsMain => Projectile.ai[1] == -5f;
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -21,35 +21,35 @@ sealed class WaterStream : ModProjectile {
     public override void SetDefaults() {
         Projectile.localNPCHitCooldown = 500;
         Projectile.usesLocalNPCImmunity = true;
+        
+		int width = 20; int height = width;
+		Projectile.Size = new Vector2(width, height);
 
-        int width = 20; int height = width;
-        Projectile.Size = new Vector2(width, height);
+		Projectile.DamageType = DamageClass.Magic;
+		Projectile.friendly = true;
 
-        Projectile.DamageType = DamageClass.Magic;
-        Projectile.friendly = true;
+		Projectile.aiStyle = 1;
 
-        Projectile.aiStyle = 1;
+		Projectile.alpha = 75;
 
-        Projectile.alpha = 75;
+		Projectile.penetrate = -1;
 
-        Projectile.penetrate = -1;
+		Projectile.timeLeft = int.MaxValue;
+		Projectile.extraUpdates = 2;
 
-        Projectile.timeLeft = int.MaxValue;
-        Projectile.extraUpdates = 2;
+		Projectile.ignoreWater = true;
+		Projectile.tileCollide = true;
 
-        Projectile.ignoreWater = true;
-        Projectile.tileCollide = true;
+		AIType = ProjectileID.Bullet;
+	}
 
-        AIType = ProjectileID.Bullet;
-    }
+	public override bool PreAI() {
+		if (Collision.LavaCollision(Projectile.position, Projectile.width, Projectile.height) && Projectile.ai[1] != -5f) {
+			Projectile.Kill();
+		}
 
-    public override bool PreAI() {
-        if (Collision.LavaCollision(Projectile.position, Projectile.width, Projectile.height) && Projectile.ai[1] != -5f) {
-            Projectile.Kill();
-        }
-
-        return base.PreAI();
-    }
+		return base.PreAI();
+	}
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 2;
@@ -58,45 +58,45 @@ sealed class WaterStream : ModProjectile {
     }
 
     public override void AI() {
-        Projectile.velocity *= IsMain ? 0.985f : 0.95f;
-        if (IsMain) {
+		Projectile.velocity *= IsMain ? 0.985f : 0.95f;
+		if (IsMain) {
             Projectile.tileCollide = false;
 
             return;
-        }
+		}
         else {
             Projectile.tileCollide = Projectile.timeLeft < 40;
         }
 
         if (Projectile.owner == Main.myPlayer) {
-            int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
-            if (Main.projectile.IndexInRange(byUUID)) {
-                Projectile parent = Main.projectile[byUUID];
+			int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
+			if (Main.projectile.IndexInRange(byUUID)) {
+				Projectile parent = Main.projectile[byUUID];
                 if (!parent.active) {
-                    Projectile.Kill();
-                }
+					Projectile.Kill();
+				}
 
-                if (++Projectile.ai[2] <= Projectile.alpha) {
-                    Projectile.timeLeft = 70;
-                    parent.timeLeft = Projectile.timeLeft;
-                    parent.netUpdate = true;
-                    Projectile.netUpdate = true;
+				if (++Projectile.ai[2] <= Projectile.alpha) {
+					Projectile.timeLeft = 70;
+					parent.timeLeft = Projectile.timeLeft;
+					parent.netUpdate = true;
+					Projectile.netUpdate = true;
                 }
-                else if (Projectile.timeLeft <= 55) {
-                    Vector2 movement = parent.position - Projectile.position;
-                    Vector2 speed = movement * (25f / movement.Length());
-                    Projectile.velocity += (speed - Projectile.velocity) / 30f;
-                    if (Vector2.Distance(parent.Center, Projectile.Center) <= 5f) {
-                        parent.Kill();
-                        Projectile.Kill();
-                        parent.netUpdate = true;
+				else if (Projectile.timeLeft <= 55) {
+					Vector2 movement = parent.position - Projectile.position;
+					Vector2 speed = movement * (25f / movement.Length());
+					Projectile.velocity += (speed - Projectile.velocity) / 30f;
+					if (Vector2.Distance(parent.Center, Projectile.Center) <= 5f) {
+						parent.Kill();
+						Projectile.Kill();
+						parent.netUpdate = true;
                     }
-                }
-            }
-            else {
-                Projectile.Kill();
-            }
-        }
+				}
+			}
+			else {
+				Projectile.Kill();
+			}
+		}
 
         for (int k = 0; k < 3; k++) {
             int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.DungeonWater, 0.0f, 0.0f, 100, new Color(), 1.2f);
@@ -114,11 +114,11 @@ sealed class WaterStream : ModProjectile {
         }
 
         Projectile.netUpdate = true;
-    }
+	}
 
-    public override bool? CanDamage() => Projectile.ai[1] != -5f;
+	public override bool? CanDamage() => Projectile.ai[1] != -5f;
 
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         int buff = BuffID.OnFire3;
         //int buff = BuffID.Wet;
         if (target.FindBuff(buff, out int buffIndex)) {

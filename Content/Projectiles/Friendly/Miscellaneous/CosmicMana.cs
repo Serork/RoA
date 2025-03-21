@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -49,7 +50,7 @@ sealed class CosmicMana : ModProjectile {
         double deg = (double)(Projectile.ai[0] * 30 + 60);
         double rad = deg * (Math.PI / 180);
         double dist = 35;
-        Projectile.position.X = MathHelper.SmoothStep(Projectile.position.X,
+        Projectile.position.X = MathHelper.SmoothStep(Projectile.position.X, 
             player.MountedCenter.X - (int)(Math.Cos(rad) * dist) - player.width / 2 + Projectile.velocity.X, 0.3f);
         Projectile.position.Y = MathHelper.SmoothStep(Projectile.position.Y,
             player.MountedCenter.Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + 4 + player.gfxOffY + Projectile.velocity.Y, 0.3f);
@@ -90,7 +91,7 @@ sealed class CosmicMana : ModProjectile {
         for (int i = 0; i < 2; i++) {
             float value = Main.GlobalTimeWrappedHourly * i * 1f * Projectile.direction;
             float value2 = Projectile.ai[1] * i * 1f;
-            spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(),
+            spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), 
                 new Color(1f, 1f, 1f, 1f) * Projectile.Opacity * 0.5f,
                 Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
         }
@@ -106,7 +107,7 @@ sealed class CosmicMana : ModProjectile {
     }
     private Color StripColors(float progressOnStrip) {
         float num = 1f - progressOnStrip;
-        Color result = new Color(48, 63, 150) * (num * num * num * num);
+        Color result = new Color(48, 63, 150) * (num * num * num * num) ;
         return result;
     }
 
@@ -118,7 +119,7 @@ sealed class CosmicMana : ModProjectile {
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.MaxMana with { Volume = 0.75f, Pitch = -0.2f - 0.2f * Projectile.ai[0] }, Projectile.Center);
         for (int i = 0; i < 6; i++) {
-            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(3) ? DustID.Enchanted_Gold : DustID.YellowStarDust, Main.rand.Next(-4, 4), Main.rand.Next(-4, 4), 150, default,
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(3) ? DustID.Enchanted_Gold : DustID.YellowStarDust, Main.rand.Next(-4, 4), Main.rand.Next(-4, 4), 150, default, 
                 Main.rand.NextFloat(0.7f, 0.9f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].velocity *= Main.rand.NextFloat(0.5f);

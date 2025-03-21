@@ -2,8 +2,9 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
-using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
+using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -28,8 +29,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
-
-    protected override (Color, Color) SlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));
+	
+	protected override (Color, Color) SlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));
 
     private Vector2 GetPos(Player player, bool leftSided) {
         int direction = leftSided ? -1 : 1;

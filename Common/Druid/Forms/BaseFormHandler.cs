@@ -5,10 +5,12 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Utilities.Extensions;
+using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;

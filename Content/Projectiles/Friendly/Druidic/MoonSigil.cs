@@ -1,15 +1,22 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using RoA.Content.Items.Weapons.Druidic;
-using RoA.Core.Utility;
 
-using System.IO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Terraria.Audio;
+
+using Terraria.ID;
+
+using Terraria.ModLoader;
 
 using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
+using System.IO;
+using RoA.Core.Utility;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 sealed class MoonSigil : NatureProjectile {
@@ -55,7 +62,7 @@ sealed class MoonSigil : NatureProjectile {
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
         base.SafeReceiveExtraAI(reader);
 
-        _mousePosition = reader.ReadVector2();
+        _mousePosition = reader.ReadVector2();  
     }
 
     public override void AI() {

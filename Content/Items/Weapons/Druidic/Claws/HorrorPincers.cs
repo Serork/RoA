@@ -39,7 +39,7 @@ sealed class HorrorPincers : BaseClawsItem {
             SpawnPosition = new Vector2(position.X, position.Y - 14f),
             StartVelocity = point,
             PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "ClawsWave") { Volume = 0.75f },
-            OnAttack = (player) => {
+            OnAttack = (player) =>{
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 1, player.Center));
                 }

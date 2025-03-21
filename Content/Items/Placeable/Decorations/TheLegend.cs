@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.GameContent.Creative;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Decorations;

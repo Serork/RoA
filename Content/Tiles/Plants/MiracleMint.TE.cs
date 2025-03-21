@@ -1,11 +1,11 @@
-﻿using RoA.Common;
-using RoA.Core.Utility;
-
-using System;
-
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using RoA.Core.Utility;
+using RoA.Common;
+
+using System;
 
 namespace RoA.Content.Tiles.Plants;
 

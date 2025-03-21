@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Items.Weapons.Druidic;
+using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
 
@@ -56,7 +58,7 @@ sealed class Archdruid : DruidNPC {
     }
 
     public override void SetStaticDefaults() {
-        Main.npcFrameCount[Type] = 30;
+		Main.npcFrameCount[Type] = 30;
 
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
@@ -106,7 +108,7 @@ sealed class Archdruid : DruidNPC {
 
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (!_entAttack) {
-            base.PostDraw(spriteBatch, screenPos, drawColor);
+            base.PostDraw(spriteBatch, screenPos, drawColor); 
         }
     }
 

@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
 sealed class BackwoodsStone : ModTile {
-    public override void SetStaticDefaults() {
+	public override void SetStaticDefaults() {
         TileHelper.Solid(Type, blendAll: false);
         TileHelper.MergeWith(Type, (ushort)ModContent.TileType<BackwoodsGrass>());
 
@@ -19,8 +19,8 @@ sealed class BackwoodsStone : ModTile {
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
         HitSound = SoundID.Tink;
-        AddMapEntry(new Color(53, 55, 54));
+		AddMapEntry(new Color(53, 55, 54));
 
         MineResist = 1.25f;
-    }
+	}
 }

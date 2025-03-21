@@ -1,14 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using ReLogic.Content;
-
+using RoA.Common.GlowMasks;
 using RoA.Core;
+using System;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.Initializers;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Vanity.Developer;
@@ -129,7 +131,8 @@ sealed class PeegeonHood : ModItem {
             obj.shader = GameShaders.Armor.GetSecondaryShader(player.cHead > 0 ? player.cHead : GameShaders.Armor.GetShaderIdFromItemId(1065), player);
         }
     }*/
-    public class EyeTrail : PlayerDrawLayer {
+    public class EyeTrail : PlayerDrawLayer
+    {
         private Asset<Texture2D> eyeTrailTexture, eyeTrailGlowTexture;
         public Vector2[] trailPos = new Vector2[10];
         public Vector2[] oldPos = new Vector2[10];
@@ -147,7 +150,8 @@ sealed class PeegeonHood : ModItem {
         public override Position GetDefaultPosition()
             => new AfterParent(PlayerDrawLayers.Head);
 
-        protected override void Draw(ref PlayerDrawSet drawInfo) {
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
             if (drawInfo.hideEntirePlayer) {
                 return;
             }
@@ -187,7 +191,8 @@ sealed class PeegeonHood : ModItem {
             int height = texture.Height / 20;
             int rate = 1;
 
-            for (int i = 0; i < trailPos.Length; i += rate) {
+            for (int i = 0; i < trailPos.Length; i += rate)
+            {
 
                 float x = (int)(trailPos[i].X);
                 float y = (int)(trailPos[i].Y - (float)(3 + offset));

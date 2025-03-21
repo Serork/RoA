@@ -20,6 +20,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
@@ -54,7 +55,7 @@ sealed partial class Lothor : ModNPC {
     private const double FLIGHTFRAMERATE = 6.0;
     private const int SPITCOUNT = 4;
 
-    private class TossedPlayerStateHandler : ModPlayer {
+     private class TossedPlayerStateHandler : ModPlayer {
         public float Tossed;
 
         public override void PostUpdateMiscEffects() {
@@ -67,7 +68,7 @@ sealed partial class Lothor : ModNPC {
         }
     }
 
-    private class ScreamProjectileHandler : GlobalProjectile {
+     private class ScreamProjectileHandler : GlobalProjectile {
         private Vector2 _storedVelocity;
         private float _storedRotation;
         private float _effectTimer;
@@ -905,7 +906,7 @@ sealed partial class Lothor : ModNPC {
     private void ThatThingMakeHimScream() {
         bool firstTime = _previousState != CurrentAIState;
 
-        float screamCoeff = Main.getGoodWorld ? 3.5f : 5.5f;
+		float screamCoeff = Main.getGoodWorld ? 3.5f : 5.5f;
         float maxDist = 800f;
 
         if (ScreamTimer < ScreamAttackTime - ScreamAttackTime / 4) {
@@ -1247,7 +1248,7 @@ sealed partial class Lothor : ModNPC {
                     HalfVector2 halfVector = new(position.X + lengthX, position.Y - lengthY);
                     int whoAmI = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.One, type, damage, knockBack, NPC.target,
                         NPC.whoAmI,
-                        position.X + lengthX,
+                        position.X + lengthX, 
                         position.Y - lengthY);
                     Main.projectile[whoAmI].As<LothorAngleAttack>().UsedLothorFrame = usedFrame;
 
@@ -1294,7 +1295,7 @@ sealed partial class Lothor : ModNPC {
                 int damage = (int)MathHelper.Lerp(CLAWS_DAMAGE, CLAWS_DAMAGE2, LifeProgress);
                 damage /= 2;
                 int knockBack = (int)MathHelper.Lerp(CLAWS_KNOCKBACK, CLAWS_KNOCKBACK2, LifeProgress);
-                int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType,
+                int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, projType, 
                     damage, knockBack,
                     Main.myPlayer, NPC.whoAmI, ClawsAttackTime * 0.6f);
                 //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
@@ -1360,7 +1361,7 @@ sealed partial class Lothor : ModNPC {
 
                     return;
                 }
-
+                
                 GoToFlightState(false, false);
                 _yOffsetProgressBeforeLanding = 0f;
             }
@@ -1607,7 +1608,7 @@ sealed partial class Lothor : ModNPC {
             float dashStrength = GetDashStrength();
             float yStrength = Math.Abs(NPC.Center.Y - Target.Center.Y) / 16f;
             float maxSpeedY = dashStrength * 6.5f;
-            yStrength = MathHelper.Clamp(yStrength, -maxSpeedY, maxSpeedY);
+            yStrength = MathHelper.Clamp(yStrength, -maxSpeedY, maxSpeedY); 
             if (IsAboutToGoToChangeMainState) {
                 yStrength = maxSpeedY * 0.25f * Math.Sign(yStrength);
             }
@@ -1983,7 +1984,7 @@ sealed partial class Lothor : ModNPC {
         }
         _drawWreath = false;
         _wreathLookingPosition = NPC.Center;
-        _distanceProgress = 0f;
+        _distanceProgress = 0f; 
         _distanceProgress2 = -1f;
     }
 

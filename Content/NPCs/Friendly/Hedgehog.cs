@@ -4,6 +4,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 
+using System;
 using System.IO;
 
 using Terraria;

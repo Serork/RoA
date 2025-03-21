@@ -1,11 +1,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using MonoMod.Cil;
+
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Content.Emotes;
+using RoA.Content.NPCs.Friendly;
 using RoA.Core.Utility;
 
+using System;
 using System.IO;
 
 using Terraria;
@@ -22,7 +26,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class TreeDryad : ModTile {
-    private class DryadAIChanges : GlobalNPC {
+     private class DryadAIChanges : GlobalNPC {
         public override bool? CanChat(NPC npc) {
             if (npc.type == NPCID.Dryad) {
                 return npc.ai[0] != -20f;
@@ -98,7 +102,7 @@ sealed class TreeDryad : ModTile {
 
     public static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
 
-    private class DryadAwakeHandler : ModSystem {
+     private class DryadAwakeHandler : ModSystem {
         public static bool DryadAwake;
 
         public override void ClearWorld() {
@@ -127,7 +131,7 @@ sealed class TreeDryad : ModTile {
         }
     }
 
-    private class ExtraDruidQuote : GlobalNPC {
+     private class ExtraDruidQuote : GlobalNPC {
         private byte _currentQuoteIndex;
 
         private const byte MAXAWAKEQUOTES = 5;
@@ -216,7 +220,7 @@ sealed class TreeDryad : ModTile {
             zero = Vector2.Zero;
         }
         bool flag = tile.TileFrameY == 0;
-        int frameY = !flag ? tile.TileFrameY + 4 : 0;
+        int frameY = !flag ? tile.TileFrameY + 4 : 0; 
         int height = flag ? 22 : 16;
         int frameX = tile.TileFrameX;
         if (AbleToBeDestroyed) {

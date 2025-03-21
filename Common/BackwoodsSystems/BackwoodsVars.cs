@@ -1,17 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.CustomSkyAmbience;
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Trees;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.NetModules;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -25,7 +30,7 @@ sealed class BackwoodsVars : ModSystem {
     private static float _preDownedBossTimer;
     private static bool _backwoodsAwake;
 
-    private class RemoveUnusedTreeCords2 : GlobalTile {
+     private class RemoveUnusedTreeCords2 : GlobalTile {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem) {
             if (!Main.hardMode) {
                 if (!fail && !effectOnly && !noItem) {

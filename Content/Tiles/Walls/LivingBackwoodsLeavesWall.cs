@@ -19,14 +19,14 @@ sealed class LivingBackwoodsLeavesWall2 : LivingBackwoodsLeavesWall {
 }
 
 class LivingBackwoodsLeavesWall : ModWall {
-    public override void SetStaticDefaults() {
+	public override void SetStaticDefaults() {
         Main.wallHouse[Type] = true;
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
-        AddMapEntry(new Color(0, 75, 38));
+		AddMapEntry(new Color(0, 75, 38));
 
         HitSound = SoundID.Dig;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }

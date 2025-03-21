@@ -171,7 +171,7 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
         j -= 1;
         byte styleX = instance.StyleX;
         if (!Main.tileAlch[Main.tile[i, j].TileType] && HasValidGroundOnSpot(i, j, tileGenerationData) && NoNearbySame(i, j, tileGenerationData) &&
-            (tileGenerationData.Is2x3 ? WorldGenHelper.Place2x3(i, j, tileType, style: styleX, countCut: false) :
+            (tileGenerationData.Is2x3 ? WorldGenHelper.Place2x3(i, j, tileType, style: styleX, countCut: false) : 
              tileGenerationData.Is2x2 ? WorldGenHelper.Place2x2(i, j, tileType, style: styleX, countCut: false) : WorldGen.PlaceTile(i, j, tileType, mute: true, forced: true, style: styleX))) {
             if ((tileGenerationData.Is1x1 && WorldGenHelper.GetTileSafely(i, j).ActiveTile(tileType)) || !tileGenerationData.Is1x1) {
                 if (tileGenerationData.Is1x1) {

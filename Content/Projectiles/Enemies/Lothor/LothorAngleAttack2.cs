@@ -1,11 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-
-using RoA.Content.Dusts;
-using RoA.Core;
-
+﻿using Terraria.ID;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Core;
+using Microsoft.Xna.Framework;
+using RoA.Content.Dusts;
 
 namespace RoA.Content.Projectiles.Enemies.Lothor;
 

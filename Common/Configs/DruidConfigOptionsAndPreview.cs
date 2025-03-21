@@ -232,7 +232,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         prefixlineIndex = -1;
         toolTipLine[0] = item.HoverName;
         toolTipNames[0] = "ItemName";
-
+        
         int damage = 10;
         toolTipLine[numLines] = damage + item.DamageType.DisplayName.Value;
         toolTipNames[numLines] = "Damage";
@@ -326,7 +326,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         }
 
         bool globalCanDraw = ItemLoader.PreDrawTooltip(_hoverItem, lines.AsReadOnly(), ref X, ref Y);
-        for (int k = 0; k < numLines; k++) {
+        for (int k = 0; k < numLines ; k++) {
             int x = X;
             int y = Y + num16;
             drawableLines[k].X = x;
@@ -440,7 +440,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
                     continue;
                 }
 
-                ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, drawableLines[k].Font, drawableLines[k].Text,
+                ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, drawableLines[k].Font, drawableLines[k].Text, 
                     new Vector2(drawableLines[k].X, drawableLines[k].Y), realLineColor, drawableLines[k].Rotation, drawableLines[k].Origin, drawableLines[k].BaseScale, drawableLines[k].MaxWidth, drawableLines[k].Spread);
             }
 

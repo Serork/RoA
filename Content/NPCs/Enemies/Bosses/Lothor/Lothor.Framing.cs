@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;

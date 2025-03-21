@@ -10,32 +10,32 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Tools;
 
 public class MercuriumHammer : ModItem {
-    public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Mercurium Hammer");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+	public override void SetStaticDefaults() {
+		//DisplayName.SetDefault("Mercurium Hammer");
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
-    public override void SetDefaults() {
-        int width = 44; int height = 38;
-        Item.Size = new Vector2(width, height);
+	public override void SetDefaults() {
+		int width = 44; int height = 38;
+		Item.Size = new Vector2(width, height);
 
-        Item.damage = 20;
-        Item.DamageType = DamageClass.Melee;
+		Item.damage = 20;
+		Item.DamageType = DamageClass.Melee;
 
         Item.useAnimation = 30;
         Item.useTime = 18;
 
         Item.useStyle = ItemUseStyleID.Swing;
 
-        Item.useTurn = true;
+		Item.useTurn = true;
 
         Item.autoReuse = true;
 
-        Item.knockBack = 5f;
-        Item.hammer = 60;
+		Item.knockBack = 5f;
+		Item.hammer = 60;
 
-        Item.rare = ItemRarityID.Blue;
-        Item.UseSound = SoundID.Item1;
+		Item.rare = ItemRarityID.Blue;
+		Item.UseSound = SoundID.Item1;
 
         Item.value = Item.sellPrice(silver: 30);
     }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Stubble.Core.Classes;
+
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;

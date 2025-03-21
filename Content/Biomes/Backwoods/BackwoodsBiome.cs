@@ -4,12 +4,15 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
+using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Tiles.Crafting;
 using RoA.Core;
 
 using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.Graphics.Capture;
 using Terraria.ModLoader;
@@ -61,7 +64,7 @@ sealed partial class BackwoodsBiomeFog : ModBiome {
 }
 
 sealed partial class BackwoodsBiome : ModBiome {
-    private class Shop_ForestFix : ILoadable {
+     private class Shop_ForestFix : ILoadable {
         [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "ApplyPreference")]
         public extern static void BiomePreferenceListTrait_ApplyPreference(BiomePreferenceListTrait self, BiomePreferenceListTrait.BiomePreference preference, HelperInfo info, ShopHelper shopHelperInstance);
 
@@ -91,7 +94,7 @@ sealed partial class BackwoodsBiome : ModBiome {
         public void Unload() { }
     }
 
-    private class TownNPCsStayHomeWhenBackwoodsFogIsActive : GlobalNPC {
+     private class TownNPCsStayHomeWhenBackwoodsFogIsActive : GlobalNPC {
         private static bool _dayTime;
 
         public override bool PreAI(NPC npc) {
@@ -129,7 +132,7 @@ sealed partial class BackwoodsBiome : ModBiome {
         return isInBiome;
     }
 
-    public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface");
+    public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName +  "/BackwoodsBackgroundSurface");
 
     public override int Music => BackwoodsFogHandler.IsFogActive ? MusicLoader.GetMusicSlot(ResourceManager.Music + "Fog") : /*Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") :*/ MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight");
 

@@ -177,7 +177,7 @@ sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
         }
     }
 
-    private class SpreadFromGreenMossToGrimstoneSystem : GlobalTile {
+     private class SpreadFromGreenMossToGrimstoneSystem : GlobalTile {
         public override void RandomUpdate(int i, int j, int type) {
             //if (type == TileID.GreenMoss || type == TileID.GreenMossBrick) {
             //    if (Main.tile[i, j].HasUnactuatedTile && (j > Main.worldSurface - 1 || WorldGen.genRand.NextBool(2))) {

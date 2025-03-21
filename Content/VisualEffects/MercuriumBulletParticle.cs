@@ -2,10 +2,15 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.VisualEffects;
+using RoA.Content.Dusts;
+using RoA.Core.Utility;
+
+using System;
 
 using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics.Renderers;
+using Terraria.ModLoader;
 
 namespace RoA.Content.VisualEffects;
 
@@ -40,7 +45,7 @@ sealed class MercuriumBulletParticle : VisualEffect<MercuriumBulletParticle> {
         color4.B = (byte)(color4.R * (0.25 + (double)1f * 0.75));
         spriteBatch.Draw(Texture, position, null, color4, MathHelper.PiOver2 + Rotation, origin, _scale * 0.6f, effects, 0f);
         spriteBatch.Draw(Texture, position, null, color3, Rotation, origin, _scale * 0.6f, effects, 0f);
-        spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, _scale * 0.3f, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, _scale * 0.3f , effects, 0f);
         spriteBatch.Draw(Texture, position, null, color4, Rotation, origin, _scale * 0.3f, effects, 0f);
     }
 }

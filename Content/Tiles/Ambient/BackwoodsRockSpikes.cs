@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
+using RoA.Common.WorldEvents;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 

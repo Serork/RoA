@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Tiles;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;

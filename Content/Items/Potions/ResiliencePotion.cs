@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Potions;
 
 sealed class ResiliencePotion : NatureItem {
-    public override void SetStaticDefaults() {
+	public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Resilience Potion");
         //Tooltip.SetDefault("Decreases Wreath discharge speed");
         Item.ResearchUnlockCount = 20;
@@ -17,11 +17,11 @@ sealed class ResiliencePotion : NatureItem {
             new Color(108, 145, 210),
             new Color(30, 183, 210),
             new Color(9, 230, 197),
-            new Color(135, 255, 203)
+			new Color(135, 255, 203)
         };
     }
 
-    protected override void SafeSetDefaults() {
+	protected override void SafeSetDefaults() {
         int width = 18; int height = 30;
         Item.Size = new Vector2(width, height);
 
@@ -35,7 +35,7 @@ sealed class ResiliencePotion : NatureItem {
         Item.consumable = true;
 
         Item.buffType = ModContent.BuffType<Resilience>();
-        Item.buffTime = 3600 * 6;
+		Item.buffTime = 3600 * 6;
 
         Item.value = Item.sellPrice(0, 0, 2, 0);
     }

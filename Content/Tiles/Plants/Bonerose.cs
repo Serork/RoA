@@ -1,4 +1,6 @@
-﻿using RoA.Common.Tiles;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Tiles;
 
 using Terraria;
 using Terraria.ID;

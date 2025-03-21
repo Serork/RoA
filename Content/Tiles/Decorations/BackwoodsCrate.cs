@@ -18,7 +18,7 @@ sealed class BackwoodsCrate : ModTile {
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(160, 120, 92));
-    }
+    } 
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 }

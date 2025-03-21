@@ -29,7 +29,7 @@ sealed class Hedgehog : ModItem {
         Item.autoReuse = true;
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.Hedgehog>();
         Item.shootSpeed = 3f;
-
+		
         Item.UseSound = SoundID.Item7;
 
         Item.value = Item.sellPrice(0, 0, 10, 0);

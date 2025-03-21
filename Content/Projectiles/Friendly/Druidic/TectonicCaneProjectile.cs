@@ -1,22 +1,20 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using RoA.Common;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
-using RoA.Core;
+using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Core.Utility;
-
-using System;
+using RoA.Core;
 using System.Collections.Generic;
-
-using Terraria;
-using Terraria.Audio;
+using System;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Tile_Entities;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria;
+using Terraria.Audio;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -36,7 +34,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
                     bool flag2 = true;
                     for (int i2 = 0; i2 < 3; i2++) {
                         Point pos = position.ToTileCoordinates() + new Point(0, i2);
-                        if (WorldGenHelper.GetTileSafely(pos).HasTile &&
+                        if (WorldGenHelper.GetTileSafely(pos).HasTile && 
                             Main.tileSolid[WorldGenHelper.GetTileSafely(pos).TileType]) {
                             flag2 = false;
                             break;

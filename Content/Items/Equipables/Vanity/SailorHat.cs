@@ -14,14 +14,14 @@ sealed class SailorHat : ModItem {
         //Tooltip.SetDefault("'Who the hell am I?'");
         ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+	}
 
-    public override void SetDefaults() {
-        int width = 20; int height = 18;
-        Item.Size = new Vector2(width, height);
+	public override void SetDefaults() {
+		int width = 20; int height = 18;
+		Item.Size = new Vector2(width, height);
 
-        Item.rare = ItemRarityID.Orange;
-        Item.vanity = true;
+		Item.rare = ItemRarityID.Orange;
+		Item.vanity = true;
 
         Item.value = Item.sellPrice(0, 3, 0, 0);
     }

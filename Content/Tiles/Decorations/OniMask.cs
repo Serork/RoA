@@ -10,10 +10,10 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Decorations;
 
 sealed class OniMask : ModTile {
-    public override void SetStaticDefaults() {
-        Main.tileFrameImportant[Type] = true;
-        Main.tileLavaDeath[Type] = true;
-        Main.tileNoAttach[Type] = true;
+	public override void SetStaticDefaults() {
+		Main.tileFrameImportant[Type] = true;
+		Main.tileLavaDeath[Type] = true;
+		Main.tileNoAttach[Type] = true;
 
         Main.tileSpelunker[Type] = true;
 
@@ -26,17 +26,17 @@ sealed class OniMask : ModTile {
         TileObjectData.newTile.AnchorTop = AnchorData.Empty;
         TileObjectData.newTile.AnchorWall = true;
 
-        AddMapEntry(new Color(161, 59, 50), CreateMapEntryName());
+		AddMapEntry(new Color(161, 59, 50), CreateMapEntryName());
 
-        TileObjectData.addTile(Type);
-    }
+		TileObjectData.addTile(Type);
+	}
 
     public override bool CreateDust(int i, int j, ref int type) {
-        if (Main.rand.NextBool(3)) {
-            type = ModContent.DustType<OniMaskDust2>();
-        }
-        else {
-            type = ModContent.DustType<OniMaskDust1>();
+		if (Main.rand.NextBool(3)) {
+			type = ModContent.DustType<OniMaskDust2>();
+		}
+		else {
+			type = ModContent.DustType<OniMaskDust1>();
         }
 
         return base.CreateDust(i, j, ref type);
@@ -47,7 +47,7 @@ sealed class OniMask : ModTile {
     //}
 
     public override void NearbyEffects(int i, int j, bool closer) {
-        Player player = Main.player[Main.myPlayer];
-        if (closer && !player.dead) player.AddBuff(ModContent.BuffType<Buffs.OniMask>(), 60, true);
-    }
+		Player player = Main.player[Main.myPlayer];
+		if (closer && !player.dead) player.AddBuff(ModContent.BuffType<Buffs.OniMask>(), 60, true);
+	}
 }

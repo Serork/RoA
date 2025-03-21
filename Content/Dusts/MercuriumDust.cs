@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

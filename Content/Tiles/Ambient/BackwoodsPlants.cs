@@ -13,7 +13,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class BackwoodsPlants : ModTile {
-    public override void SetStaticDefaults() {
+	public override void SetStaticDefaults () {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;

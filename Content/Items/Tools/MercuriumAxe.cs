@@ -1,26 +1,25 @@
 using Microsoft.Xna.Framework;
-
-using RoA.Content.Dusts;
-
-using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria;
+using RoA.Content.Items.Materials;
+using RoA.Content.Dusts;
 
 namespace RoA.Content.Items.Tools;
 
 sealed class MercuriumAxe : ModItem {
-    public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Mercurium Axe");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+	public override void SetStaticDefaults() {
+		//DisplayName.SetDefault("Mercurium Axe");
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
-    public override void SetDefaults() {
-        int width = 38; int height = width;
-        Item.Size = new Vector2(width, height);
+	public override void SetDefaults() {
+		int width = 38; int height = width;
+		Item.Size = new Vector2(width, height);
 
-        Item.damage = 18;
-        Item.DamageType = DamageClass.Melee;
+		Item.damage = 18;
+		Item.DamageType = DamageClass.Melee;
 
         Item.useAnimation = 28;
         Item.useTime = 15;
@@ -31,10 +30,10 @@ sealed class MercuriumAxe : ModItem {
         Item.useTurn = true;
 
         Item.knockBack = 5f;
-        Item.axe = 75 / 5;
+		Item.axe = 75 / 5;
 
-        Item.rare = ItemRarityID.Blue;
-        Item.UseSound = SoundID.Item1;
+		Item.rare = ItemRarityID.Blue;
+		Item.UseSound = SoundID.Item1;
 
         Item.value = Item.sellPrice(silver: 30);
     }

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -86,7 +87,7 @@ sealed class RipePumpkin : NatureProjectile {
                 _rotateWiggler.Update();*/
                 float progress = Math.Min((Projectile.ai[0] - min2) / (max - min2), 1f);
                 //Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
-                Projectile.rotation = Projectile.ai[1];
+				Projectile.rotation = Projectile.ai[1];
                 if (Projectile.ai[0] >= max * 0.75f) {
                     int type = ModContent.ItemType<Items.Weapons.Druidic.RipePumpkin>();
                     if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && (Main.player[Projectile.owner].GetSelectedItem().type == type || Main.mouseItem.type == type)) {

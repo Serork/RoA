@@ -9,11 +9,11 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Body)]
 sealed class LivingPalmChestplate : NatureItem {
-    public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Living Boreal Wood Chestplate");
-        //Tooltip.SetDefault("4% increased nature potential damage");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+	public override void SetStaticDefaults() {
+		//DisplayName.SetDefault("Living Boreal Wood Chestplate");
+		//Tooltip.SetDefault("4% increased nature potential damage");
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
     protected override void SafeSetDefaults() {
         int width = 30; int height = 22;

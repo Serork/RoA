@@ -1,4 +1,5 @@
-﻿using RoA.Content.Tiles.Decorations;
+﻿using RoA.Common.CustomConditions;
+using RoA.Content.Tiles.Decorations;
 using RoA.Core;
 
 using Terraria;
@@ -10,8 +11,8 @@ namespace RoA.Content.Items.Placeable.Decorations;
 sealed class LothorEnrageMonolith : ModItem {
     public override void SetDefaults() {
         Item.SetSize(26, 32);
-
-        Item.CloneDefaults(ItemID.BloodMoonMonolith);
+		
+		Item.CloneDefaults(ItemID.BloodMoonMonolith);
         Item.accessory = true;
         Item.vanity = true;
         Item.hasVanityEffects = true;

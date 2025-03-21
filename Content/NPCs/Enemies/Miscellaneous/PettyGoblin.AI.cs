@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Enemies;
@@ -195,8 +197,7 @@ sealed partial class PettyGoblin : ModNPC {
             return;
         }
         bool flag = NPC.life < NPC.lifeMax / 2;
-        if (StoleMoney || flag) ;
-        {
+        if (StoleMoney || flag); {
             if (NPC.ai[0] == 1f && !flag) {
                 if (CanRunAway(flag2: false)) {
                     return;

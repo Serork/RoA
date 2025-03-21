@@ -1,6 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
+using RoA.Content.NPCs.Enemies.Miscellaneous;
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;

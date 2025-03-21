@@ -53,7 +53,7 @@ sealed class BloodCloudMoving : NatureProjectile {
             Projectile.frame++;
             if (Projectile.frame > 3)
                 Projectile.frame = 0;
-        }
+        } 
     }
 
     public override void OnKill(int timeLeft) {

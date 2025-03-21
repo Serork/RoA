@@ -558,7 +558,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                     }
                     else {
                         //SoundEngine.PlaySound(SoundID.MenuTick, new Point(i, l).ToWorldCoordinates());
-                        SoundEngine.PlaySound(SoundID.Unlock, new Point(i, l).ToWorldCoordinates());
+						SoundEngine.PlaySound(SoundID.Unlock, new Point(i, l).ToWorldCoordinates());
                         if (Main.netMode == NetmodeID.MultiplayerClient) {
                             MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 8, new Point(i, l).ToWorldCoordinates()));
                         }

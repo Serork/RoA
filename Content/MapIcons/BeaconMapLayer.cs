@@ -38,8 +38,7 @@ sealed class BeaconMapLayer : ModMapLayer {
             int i = beaconTE.Position.X;
             int j = beaconTE.Position.Y - 1;
             if (Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(Beacon.GetLargeGemItemID(i, j))) {
-                /*if (Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(Beacon.GetLargeGemItem(i, j))) */
-                {
+                /*if (Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(Beacon.GetLargeGemItem(i, j))) */ {
                     scaleIfSelected = num * 2f;
                 }
                 Texture2D value = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Beacon_Icons").Value;

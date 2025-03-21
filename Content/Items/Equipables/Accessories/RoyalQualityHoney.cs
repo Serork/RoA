@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -46,5 +47,5 @@ sealed class RoyalQualityHoney : ModItem {
         Item.value = Item.sellPrice(0, 0, 70, 0);
     }
 
-    public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<RoyalQualityHoneyHandler>().IsEffectActive = true;
+	public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<RoyalQualityHoneyHandler>().IsEffectActive = true;
 }

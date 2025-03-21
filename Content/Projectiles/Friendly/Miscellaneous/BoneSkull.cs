@@ -26,7 +26,7 @@ sealed class BoneSkull : ModProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        if (player.GetModPlayer<CoffinPlayer>().hurtCount == 2) Projectile.Kill();
+        if (player.GetModPlayer<CoffinPlayer>().hurtCount == 2) Projectile.Kill();       
     }
 
     public override void OnKill(int timeLeft) {

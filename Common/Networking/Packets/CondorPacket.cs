@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Buffs;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
 

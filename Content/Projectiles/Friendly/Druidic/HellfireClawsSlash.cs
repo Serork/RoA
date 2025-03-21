@@ -6,6 +6,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
+using RoA.Content.Items.Weapons;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -157,7 +158,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
                 _projectile.netUpdate = true;
             }
         }
-    }
+    }   
 
     public Vector2 GetPos(float extraRot = 0f) {
         float rot = Projectile.rotation + (float)(Projectile.ai[0] * extraRot);
@@ -213,45 +214,45 @@ sealed class HellfireClawsSlash : ClawsSlash {
         if (Projectile.localAI[0] >= Projectile.ai[1] * 0.3f && Projectile.localAI[0] < Projectile.ai[1] * 1.45f) {
             //for (int index = 0; index < MAX; index += 2) {
             //    int index2 = Math.Max(0, index - 2);
-            //if (oldRot[index2] != 0f) {
-            for (int i = 0; i < 2; i++) {
-                float spriteWidth = 15, spriteHeight = spriteWidth;
-                float num = (float)Math.Sqrt(spriteWidth * spriteWidth + spriteHeight * spriteHeight);
-                float normalizedPointOnPath = 0.2f + 0.8f * Main.rand.NextFloat();
-                float rotation = Projectile.rotation + MathHelper.PiOver4 / 2f * Projectile.ai[0]; /*+ MathHelper.PiOver4 * Projectile.ai[0];*/
-                if (Projectile.ai[0] == -1) {
-                    rotation += MathHelper.PiOver4 / 2f;
+                //if (oldRot[index2] != 0f) {
+                    for (int i = 0; i < 2; i++) {
+                        float spriteWidth = 15, spriteHeight = spriteWidth;
+                        float num = (float)Math.Sqrt(spriteWidth * spriteWidth + spriteHeight * spriteHeight);
+                        float normalizedPointOnPath = 0.2f + 0.8f * Main.rand.NextFloat();
+                        float rotation = Projectile.rotation + MathHelper.PiOver4 / 2f * Projectile.ai[0]; /*+ MathHelper.PiOver4 * Projectile.ai[0];*/
+                        if (Projectile.ai[0] == -1) {
+                            rotation += MathHelper.PiOver4 / 2f;
+                        }
+                        Vector2 outwardDirection = rotation.ToRotationVector2().RotatedBy(3.926991f * Projectile.ai[0]);
+                        float itemScale = Projectile.scale;
+                        Vector2 location = Owner.RotatedRelativePoint(Projectile.Center + outwardDirection * num * normalizedPointOnPath * itemScale);
+                        Vector2 vector = outwardDirection.RotatedBy((float)Math.PI / 2f * (float)Projectile.ai[0] * Owner.gravDir);
+                        float f = rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
+                        Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
+                        float num1 = Projectile.ai[0];
+                        float offset = Owner.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
+                        int offsetY = 0;
+                        for (float i2 = -MathHelper.PiOver4; i2 <= MathHelper.PiOver4; i2 += MathHelper.PiOver2) {
+                            Rectangle rectangle = Utils.CenteredRectangle((rotation * Owner.gravDir + i2).ToRotationVector2() * 35f * Projectile.scale, new Vector2(35f * Projectile.scale, 35f * Projectile.scale));
+                            location = location + Main.rand.NextVector2FromRectangle(rectangle) + Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale;
+                            offsetY += Main.rand.Next(-1, 2);
+                            if (offsetY > 5) {
+                                offsetY = 5;
+                            }
+                            if (offsetY < -5) {
+                                offsetY = -5;
+                            }
+                            if (location.Distance(Owner.Center) > 37.5f + offsetY) {
+                                //if (Projectile.localAI[0] % 11 == 0) {
+                                    Dust dust = Dust.NewDustPerfect(location, 6, vector * 4.5f * Main.rand.NextFloat() /*- new Vector2?(rotationVector2 * Owner.gravDir) * 4f*/, 100, default(Color), 2.5f + Main.rand.NextFloatRange(0.25f));
+                                    dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
+                                    dust.noGravity = true;
+                                    dust.scale *= Projectile.scale;
+                                //}
+                            }
+                        }
+                    //}
                 }
-                Vector2 outwardDirection = rotation.ToRotationVector2().RotatedBy(3.926991f * Projectile.ai[0]);
-                float itemScale = Projectile.scale;
-                Vector2 location = Owner.RotatedRelativePoint(Projectile.Center + outwardDirection * num * normalizedPointOnPath * itemScale);
-                Vector2 vector = outwardDirection.RotatedBy((float)Math.PI / 2f * (float)Projectile.ai[0] * Owner.gravDir);
-                float f = rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
-                Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
-                float num1 = Projectile.ai[0];
-                float offset = Owner.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
-                int offsetY = 0;
-                for (float i2 = -MathHelper.PiOver4; i2 <= MathHelper.PiOver4; i2 += MathHelper.PiOver2) {
-                    Rectangle rectangle = Utils.CenteredRectangle((rotation * Owner.gravDir + i2).ToRotationVector2() * 35f * Projectile.scale, new Vector2(35f * Projectile.scale, 35f * Projectile.scale));
-                    location = location + Main.rand.NextVector2FromRectangle(rectangle) + Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale;
-                    offsetY += Main.rand.Next(-1, 2);
-                    if (offsetY > 5) {
-                        offsetY = 5;
-                    }
-                    if (offsetY < -5) {
-                        offsetY = -5;
-                    }
-                    if (location.Distance(Owner.Center) > 37.5f + offsetY) {
-                        //if (Projectile.localAI[0] % 11 == 0) {
-                        Dust dust = Dust.NewDustPerfect(location, 6, vector * 4.5f * Main.rand.NextFloat() /*- new Vector2?(rotationVector2 * Owner.gravDir) * 4f*/, 100, default(Color), 2.5f + Main.rand.NextFloatRange(0.25f));
-                        dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
-                        dust.noGravity = true;
-                        dust.scale *= Projectile.scale;
-                        //}
-                    }
-                }
-                //}
-            }
             //}
         }
         Projectile.localAI[2] += 0.0125f * Projectile.ai[0];

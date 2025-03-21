@@ -1,4 +1,4 @@
-﻿namespace RoA.Common.VisualEffects;
+﻿namespace RoA.Common.VisualEffects; 
 
 static class VisualEffectLayer {
     public const int BEHINDNPCS = 0;

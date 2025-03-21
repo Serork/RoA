@@ -10,6 +10,8 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
@@ -140,8 +142,8 @@ sealed class RootRing : NatureProjectile {
         }
 
         float scale2 = Projectile.scale + (float)(0.15f * Math.Sin(Main.time / 10.0));
-        spriteBatch.Draw(texture, position, null,
-            (color * projOpacity).MultiplyAlpha(scale) * 0.75f,
+        spriteBatch.Draw(texture, position, null, 
+            (color * projOpacity).MultiplyAlpha(scale) * 0.75f, 
             Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2),
             scale2, SpriteEffects.None, 0);
 

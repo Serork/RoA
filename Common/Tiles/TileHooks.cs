@@ -13,7 +13,7 @@ sealed class TileHooks {
     }
 
     public interface IRequireMinAxePower {
-        int MinAxe { get; }
+        int MinAxe { get; } 
     }
 
     public interface IGetTileDrawData {

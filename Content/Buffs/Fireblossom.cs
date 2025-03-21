@@ -14,6 +14,6 @@ sealed class Fireblossom : ModBuff {
     public override bool PreDraw(SpriteBatch spriteBatch, int buffIndex, ref BuffDrawParams drawParams) => false;
 
     public override void SetStaticDefaults() {
-        Main.debuff[Type] = true;
-    }
+		Main.debuff[Type] = true;
+	}
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.VisualEffects;
+using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.VisualEffects;
 using RoA.Core.Utility;

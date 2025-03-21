@@ -1,12 +1,11 @@
-﻿using RoA.Common.Configs;
-using RoA.Core;
-
+﻿using Microsoft.Xna.Framework.Graphics.PackedVector;
 using System;
-
-using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria;
 using Terraria.ModLoader;
+using RoA.Core;
+using RoA.Common.Configs;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -63,7 +62,7 @@ class Vilethorn : NatureProjectile {
                 Main.projectile[num72].ai[1] = Projectile.ai[1] + 1f;
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, num72);
             }
-
+           
             return;
         }
 

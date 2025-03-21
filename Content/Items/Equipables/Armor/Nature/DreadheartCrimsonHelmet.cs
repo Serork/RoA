@@ -1,11 +1,14 @@
 using Microsoft.Xna.Framework;
 
+using Mono.Cecil;
+
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -21,20 +24,20 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 [AutoloadGlowMask2("_Head_Glow")]
 sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent {
     public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Dreadheart Helmet");
-        //Tooltip.SetDefault("4% increased nature critical strike chance");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+		//DisplayName.SetDefault("Dreadheart Helmet");
+		//Tooltip.SetDefault("4% increased nature critical strike chance");
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
     protected override void SafeSetDefaults() {
         int width = 22; int height = 20;
-        Item.Size = new Vector2(width, height);
+		Item.Size = new Vector2(width, height);
 
-        Item.rare = ItemRarityID.Green;
+		Item.rare = ItemRarityID.Green;
         Item.value = Item.sellPrice(0, 1, 0, 0);
 
         Item.defense = 3;
-    }
+	}
 
     public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
 
@@ -91,7 +94,7 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
                     int damage = (int)Player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
                     insectKnockback = Player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
                     Vector2 spread = new Vector2(0, Main.rand.Next(-5, -2)).RotatedByRandom(MathHelper.ToRadians(90));
-                    Projectile.NewProjectile(Player.GetSource_OnHurt(modifiers.DamageSource), new Vector2(Player.position.X, Player.position.Y + 4), new Vector2(spread.X, spread.Y),
+                    Projectile.NewProjectile(Player.GetSource_OnHurt(modifiers.DamageSource), new Vector2(Player.position.X, Player.position.Y + 4), new Vector2(spread.X, spread.Y), 
                         Player.HasSetBonusFrom<DreadheartCorruptionHelmet>() ? (ushort)ModContent.ProjectileType<CrimsonInsect>() : (ushort)ModContent.ProjectileType<CorruptionInsect>(), damage, insectKnockback, Player.whoAmI);
                 }
             }

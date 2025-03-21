@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
+using RoA.Common;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -8,6 +11,7 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
@@ -124,8 +128,8 @@ sealed partial class Lothor : ModNPC {
 
         spriteBatch.BeginBlendState(BlendState.Additive);
         for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
-            spriteBatch.Draw(GlowMask, NPC.position + offset +
-                Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+            spriteBatch.Draw(GlowMask, NPC.position + offset + 
+                Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2()) 
                 * Helper.Wave(0f, 3f, 12f, 0.5f) * LifeProgress,
                 NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * LifeProgress * NPC.Opacity, NPC.rotation + Main.rand.NextFloatRange(0.05f) * LifeProgress, origin, NPC.scale, effects, 0f);
         }

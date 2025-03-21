@@ -16,11 +16,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class Ent : RoANPC {
-    private int ParentNPCIndex => (int)StateTimer;
-    private NPC Parent => Main.npc[ParentNPCIndex];
+	private int ParentNPCIndex => (int)StateTimer;
+	private NPC Parent => Main.npc[ParentNPCIndex];
 
-    public override void SetStaticDefaults() {
-        Main.npcFrameCount[Type] = 18;
+	public override void SetStaticDefaults() {
+		Main.npcFrameCount[Type] = 18;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             SpriteDirection = -1,
@@ -47,15 +47,15 @@ sealed class Ent : RoANPC {
         NPC.damage = 35;
         NPC.defense = 6;
         NPC.knockBackResist = 0f;
-
-        int width = 80; int height = 100;
-        NPC.Size = new Vector2(width, height);
+        
+		int width = 80; int height = 100;
+		NPC.Size = new Vector2(width, height);
 
         NPC.netAlways = true;
         NPC.dontCountMe = true;
-        NPC.noTileCollide = true;
+		NPC.noTileCollide = true;
 
-        NPC.npcSlots = 1.5f;
+		NPC.npcSlots = 1.5f;
 
         NPC.aiStyle = -1;
 
@@ -125,32 +125,32 @@ sealed class Ent : RoANPC {
     }
 
     public override void AI() {
-        if (ParentNPCIndex <= 0) {
-            NPC.KillNPC();
-            return;
-        }
-
+		if (ParentNPCIndex <= 0) {
+			NPC.KillNPC();
+			return;
+		}
+		
         NPC npc = Parent;
         if (npc == null || !npc.active) {
             NPC.KillNPC();
-        }
+		}
 
         npc.value = NPC.value;
 
         NPC.realLife = NPC.whoAmI;
 
-        NPC.lifeMax = npc.lifeMax;
+		NPC.lifeMax = npc.lifeMax;
 
         NPC.defense = npc.defense;
-        NPC.Center = npc.Center - Vector2.UnitY * 32f;
-        NPC.velocity = npc.velocity;
+		NPC.Center = npc.Center - Vector2.UnitY * 32f;
+		NPC.velocity = npc.velocity;
 
-        NPC.netUpdate = true;
+		NPC.netUpdate = true;
     }
 
-    public override void OnKill() => Parent.KillNPC();
+	public override void OnKill() => Parent.KillNPC();
 
-    public override void FindFrame(int frameHeight) {
+	public override void FindFrame(int frameHeight) {
         if (NPC.IsABestiaryIconDummy) {
             if (++NPC.frameCounter >= 6.0) {
                 NPC.frameCounter = 0.0;
@@ -163,21 +163,21 @@ sealed class Ent : RoANPC {
         }
 
         if (ParentNPCIndex <= 0) {
-            return;
-        }
+			return;
+		}
 
-        NPC npc = Parent;
-        if (npc == null || !npc.active) {
-            return;
-        }
+		NPC npc = Parent;
+		if (npc == null || !npc.active) {
+			return;
+		}
 
         NPC.direction = npc.direction;
-        NPC.spriteDirection = -NPC.direction;
-
-        ModNPC modNPC = npc.ModNPC;
+		NPC.spriteDirection = -NPC.direction;
+		
+		ModNPC modNPC = npc.ModNPC;
         if (modNPC != null && modNPC is RoANPC roaNPC) {
-            ChangeFrame(((int)roaNPC.CurrentFrame, frameHeight));
-        }
+			ChangeFrame(((int)roaNPC.CurrentFrame, frameHeight));
+		}
     }
 
     //public override void HitEffect (NPC.HitInfo hit) {

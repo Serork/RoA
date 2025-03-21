@@ -5,6 +5,8 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using System.Runtime.CompilerServices;
 
 using Terraria;
+using Terraria.Graphics.Renderers;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 

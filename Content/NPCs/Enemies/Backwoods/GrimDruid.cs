@@ -5,7 +5,9 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
@@ -42,10 +44,10 @@ sealed class GrimDruid : DruidNPC {
     }
 
     public override void SetStaticDefaults() {
-        Main.npcFrameCount[Type] = 19;
+		Main.npcFrameCount[Type] = 19;
     }
 
-    public override void SetDefaults() {
+	public override void SetDefaults() {
         base.SetDefaults();
 
         NPC.lifeMax = 300;

@@ -5,6 +5,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.PopupTexts;
 using RoA.Common.Projectiles;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Core;
 
 using System;
@@ -20,7 +21,7 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 sealed class PettyBag : InteractableProjectile {
-    private class PettyBagItemExtra : GlobalItem {
+     private class PettyBagItemExtra : GlobalItem {
         public bool WasCollectedByPettyBag;
 
         public override bool InstancePerEntity => true;
@@ -76,7 +77,7 @@ sealed class PettyBag : InteractableProjectile {
                 if (item.stack + bagItem.stack <= bagItem.maxStack) {
                     bagItem.stack += item.stack;
 
-                    if (projectile.owner == Main.myPlayer)
+                    if (projectile.owner == Main.myPlayer) 
                         CustomPopupText.NewText(CustomPopupTextContext.PettyBag, item, item.stack, noStack: false, true);
 
                     return true;
@@ -108,7 +109,7 @@ sealed class PettyBag : InteractableProjectile {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num);
             }
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "BagOpen") { Volume = 1f }, projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "BagOpen") { Volume = 1f }, projectile.Center);
             BagItems.Clear();
         }
     }
@@ -199,7 +200,7 @@ sealed class PettyBag : InteractableProjectile {
                             MultiplayerSystem.SendPacket(new ItemPositionPacket(player, j, itemToPickUp.velocity, item.shimmered, item.beingGrabbed));
                         }
                     }
-                    SpawnDust(1);
+					SpawnDust(1);
                 }
             }
         }
@@ -240,7 +241,7 @@ sealed class PettyBag : InteractableProjectile {
         Projectile.velocity.X *= 0.925f;
         if ((double)Projectile.velocity.X < 0.1 && (double)Projectile.velocity.X > -0.1)
             Projectile.velocity.X = 0f;
-
+        
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
@@ -300,8 +301,8 @@ sealed class PettyBag : InteractableProjectile {
         }
 
         GrabNearbyItems();
-
-        SpawnDust(10);
+		
+		SpawnDust(10);
     }
 
     private void SpawnDust(int chance) {

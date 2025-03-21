@@ -2,8 +2,8 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
-using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;

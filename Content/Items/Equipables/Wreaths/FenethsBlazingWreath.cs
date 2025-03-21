@@ -11,12 +11,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Wreaths;
 
 sealed class FenethsBlazingWreath : BaseWreathItem {
-    protected override void SafeSetDefaults() {
-        int width = 30; int height = 30;
-        Item.Size = new Vector2(width, height);
+	protected override void SafeSetDefaults() {
+		int width = 30; int height = 30;
+		Item.Size = new Vector2(width, height);
 
-        Item.maxStack = 1;
-        Item.rare = ItemRarityID.Orange;
+		Item.maxStack = 1;
+		Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 0, 75, 0);
     }
@@ -27,11 +27,11 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
         player.GetModPlayer<FenethsBlazingWreathHandler>().IsEffectActive = true;
     }
 
-    internal class FenethsBlazingWreathHandler : ModPlayer {
-        public bool IsEffectActive;
+	internal class FenethsBlazingWreathHandler : ModPlayer {
+		public bool IsEffectActive;
 
         public override void ResetEffects() {
-            IsEffectActive = false;
+			IsEffectActive = false;
         }
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers) {
@@ -55,7 +55,7 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
                     Player.whoAmI, target.whoAmI, center.X, center.Y);
 
                 center = Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width;
-                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + proj.damage / 2, proj.knockBack,
+                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + proj.damage / 2, proj.knockBack, 
                     Player.whoAmI, Player.whoAmI, center.X, center.Y);
             }
         }
@@ -72,11 +72,11 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
             int type = ModContent.ProjectileType<Fireblossom>();
             if (IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
                 Player.ownedProjectileCounts[type] < 10) {
-                int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack,
+                int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack, 
                     Player.whoAmI, target.whoAmI, Player.itemLocation.X, Player.itemLocation.Y);
 
                 Vector2 center = Player.Center + (target.Center - Player.Center).SafeNormalize(Vector2.Zero) * Player.width;
-                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack,
+                projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack, 
                     Player.whoAmI, Player.whoAmI, center.X, center.Y);
             }
         }

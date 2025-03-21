@@ -1,6 +1,5 @@
-﻿using RoA.Common.Items;
-
-using System.IO;
+﻿using System.IO;
+using RoA.Common.Items;
 
 namespace RoA.Common.Networking.Packets;
 

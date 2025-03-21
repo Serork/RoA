@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
 
@@ -14,13 +15,13 @@ namespace RoA.Content.Items.Equipables.Accessories;
 [Autoload(false)]
 [AutoloadEquip(EquipType.Shield)]
 sealed class SentinelShield : ModItem {
-    public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Coffin");
-        //Tooltip.SetDefault("Shoot bones in random positions on taking damage");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+	public override void SetStaticDefaults() {
+		//DisplayName.SetDefault("Coffin");
+		//Tooltip.SetDefault("Shoot bones in random positions on taking damage");
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
-    public override void SetDefaults() {
+	public override void SetDefaults() {
         Item.width = 26;
         Item.height = 28;
         Item.rare = ItemRarityID.Green;
@@ -30,12 +31,12 @@ sealed class SentinelShield : ModItem {
         Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 
-    public override void UpdateAccessory(Player player, bool hideVisual) {
+	public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetModPlayer<SentinelShieldHandler>().IsEffectActive = true;
     }
 
-    private class SentinelShieldHandler : ModPlayer {
-        public bool IsEffectActive;
+	private class SentinelShieldHandler : ModPlayer {
+		public bool IsEffectActive;
 
         public override void ResetEffects() {
             IsEffectActive = false;

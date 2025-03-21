@@ -28,7 +28,7 @@ static class RoAConditions {
         return result;
     }
 
-    public static Condition HasPeegeonSet = new("Mods.RoA.Conditions.HasPeegeonSet",
+    public static Condition HasPeegeonSet = new("Mods.RoA.Conditions.HasPeegeonSet", 
         () => {
             return HasDevItem(ModContent.ItemType<PeegeonChestguard>(), ModContent.ItemType<PeegeonGreaves>(), ModContent.ItemType<PeegeonHood>());
         });
@@ -45,7 +45,7 @@ static class RoAConditions {
 
     public static Condition LothorEnrageMonolith = new("Mods.RoA.Conditions.LothorEnrageMonolith", () => Main.LocalPlayer.HasItemInInventoryOrOpenVoidBag(ModContent.ItemType<FlederSlayer>()));
     public static Condition InBackwoods = new("Mods.RoA.Conditions.BackwoodsBiome", () => Main.LocalPlayer.InModBiome<BackwoodsBiome>());
-    public static Condition HasAnySaddle = new("Mods.RoA.Conditions.HasSaddle",
+    public static Condition HasAnySaddle = new("Mods.RoA.Conditions.HasSaddle", 
         () => {
             bool flag = false;
             int[] saddles = [ItemID.DarkHorseSaddle, ItemID.MajesticHorseSaddle, ItemID.PaintedHorseSaddle];

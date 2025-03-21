@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using System.Linq;
+
+using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,11 +8,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class PettyBag : ModItem {
-    public override void SetStaticDefaults() {
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+	public override void SetStaticDefaults() {
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
-    public override void SetDefaults() {
+	public override void SetDefaults() {
         Item.useStyle = ItemUseStyleID.Swing;
         Item.shootSpeed = 4f;
         Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.PettyBag>();

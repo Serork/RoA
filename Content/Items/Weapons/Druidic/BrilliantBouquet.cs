@@ -5,6 +5,8 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -13,10 +15,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Druidic;
 
 sealed class BrilliantBouquet : NatureItem {
-    public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Brilliant Bouquet");
-        //Tooltip.SetDefault("Launches a random tulip petal\nCombines all effects while Wreath is charged");
-    }
+	public override void SetStaticDefaults() {
+		//DisplayName.SetDefault("Brilliant Bouquet");
+		//Tooltip.SetDefault("Launches a random tulip petal\nCombines all effects while Wreath is charged");
+	}
 
     protected override void SafeSetDefaults() {
         Item.staff[Type] = true;
@@ -102,7 +104,7 @@ sealed class BrilliantBouquet : NatureItem {
         return false;
     }
 
-    public override Vector2? HoldoutOffset() => new(-14, 10);
+	public override Vector2? HoldoutOffset() => new(-14, 10);
 }
 
 

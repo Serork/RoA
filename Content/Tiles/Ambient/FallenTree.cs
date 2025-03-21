@@ -6,6 +6,7 @@ using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Trees;
 using RoA.Core.Utility;
 

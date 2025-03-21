@@ -6,6 +6,7 @@ using RoA.Common.InterfaceElements;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Concurrent;
 using System.Reflection;
 
@@ -13,6 +14,8 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
+
+using tModPorter;
 
 namespace RoA.Common.Text;
 

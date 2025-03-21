@@ -1,6 +1,5 @@
 ﻿using RoA.Common.CustomConditions;
 using RoA.Content.Items.Equipables.Vanity;
-
 using Terraria.ID;
 using Terraria.ModLoader;
 

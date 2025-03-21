@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Dusts;
 using RoA.Core;
+using RoA.Content.Buffs;
 
 using System;
 
@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Content.Dusts;
 
 namespace RoA.Content.Projectiles.Friendly.Magic;
 

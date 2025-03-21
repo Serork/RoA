@@ -1,12 +1,12 @@
 ﻿using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Emotes;
-using RoA.Content.NPCs.Friendly;
 
 using Terraria;
 using Terraria.GameContent.UI;
-using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ID;
+using RoA.Content.NPCs.Friendly;
 
 namespace RoA.Common.NPCs;
 

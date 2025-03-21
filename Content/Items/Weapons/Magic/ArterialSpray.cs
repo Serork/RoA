@@ -149,7 +149,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
 
         if (num36 < 0.25f)
             compositeArmStretchAmount3 = CompositeArmStretchAmount.None;
-        else
+        else 
             compositeArmStretchAmount3 = CompositeArmStretchAmount.Quarter;
 
         player.SetCompositeArmFront(enabled: true, compositeArmStretchAmount3, num37);

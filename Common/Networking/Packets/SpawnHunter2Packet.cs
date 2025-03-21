@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.NPCs.Friendly;
+using RoA.Content.Tiles.Crafting;
 
 using System.IO;
 

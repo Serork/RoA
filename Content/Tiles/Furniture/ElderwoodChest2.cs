@@ -25,16 +25,16 @@ namespace RoA.Content.Tiles.Furniture;
 sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
     // separate
     private static List<Point> _drawPoints = [];
-    private static float _rotationOffset, _scaleOffset;
+	private static float _rotationOffset, _scaleOffset;
 
-    public override void SetStaticDefaults() {
-        Main.tileSpelunker[Type] = true;
-        Main.tileContainer[Type] = true;
-        Main.tileShine2[Type] = true;
-        Main.tileShine[Type] = 1200;
-        Main.tileFrameImportant[Type] = true;
-        Main.tileNoAttach[Type] = true;
-        Main.tileOreFinderPriority[Type] = 500;
+	public override void SetStaticDefaults()  {
+		Main.tileSpelunker[Type] = true;
+		Main.tileContainer[Type] = true;
+		Main.tileShine2[Type] = true;
+		Main.tileShine[Type] = 1200;
+		Main.tileFrameImportant[Type] = true;
+		Main.tileNoAttach[Type] = true;
+		Main.tileOreFinderPriority[Type] = 500;
 
         TileID.Sets.HasOutlines[Type] = true;
         TileID.Sets.BasicChest[Type] = true;
@@ -56,14 +56,14 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
         HitSound = SoundID.Dig;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-        TileObjectData.newTile.Origin = new Point16(0, 1);
-        TileObjectData.newTile.CoordinateHeights = [16, 18];
-        TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
-        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
-        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
-        TileObjectData.newTile.AnchorInvalidTiles = [TileID.MagicalIceBlock];
-        TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newTile.LavaDeath = false;
+		TileObjectData.newTile.Origin = new Point16(0, 1);
+		TileObjectData.newTile.CoordinateHeights = [16, 18];
+		TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
+		TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
+		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
+		TileObjectData.newTile.AnchorInvalidTiles = [TileID.MagicalIceBlock];
+		TileObjectData.newTile.StyleHorizontal = true;
+		TileObjectData.newTile.LavaDeath = false;
         TileObjectData.newTile.AnchorInvalidTiles = [
                 TileID.MagicalIceBlock,
                 TileID.Boulder,
@@ -72,7 +72,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
                 TileID.RollingCactus
             ];
         TileObjectData.addTile(Type);
-    }
+	}
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
         yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest2>());
@@ -88,7 +88,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
         return true;
     }
 
-    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+	void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
         int i = pos.X;
         int j = pos.Y;
         ulong speed = ((ulong)j << 32) | (ulong)i;
@@ -96,10 +96,10 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
         float directionMax = posX;
         Tile tile = Main.tile[i, j];
         float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
-        var modTile = TileLoader.GetTile(tile.TileType);
-        if (modTile == null) {
-            return;
-        }
+		var modTile = TileLoader.GetTile(tile.TileType);
+		if (modTile == null) {
+			return;
+		}
         bool flag2 = modTile.IsLockedChest(i, j);
         if (flag2 && tile.TileFrameX == 36 && tile.TileFrameY == 0) {
             Vector2 zero = Vector2.Zero;
@@ -121,15 +121,15 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
         On_Main.DrawTileEntities += On_Main_DrawTileEntities;
     }
 
-    private void On_Main_DrawTileEntities(On_Main.orig_DrawTileEntities orig, Main self, bool solidLayer, bool overRenderTargets, bool intoRenderTargets) {
-        bool flag = intoRenderTargets || Lighting.UpdateEveryFrame;
-        if (solidLayer && flag) {
-            _rotationOffset = MathHelper.SmoothStep(_rotationOffset, Main.rand.NextFloatRange(0.1f), 0.2f);
-            _scaleOffset = MathHelper.SmoothStep(_scaleOffset, Main.rand.NextFloatRange(0.1f), 0.15f);
-        }
+	private void On_Main_DrawTileEntities(On_Main.orig_DrawTileEntities orig, Main self, bool solidLayer, bool overRenderTargets, bool intoRenderTargets) {
+		bool flag = intoRenderTargets || Lighting.UpdateEveryFrame;
+		if (solidLayer && flag) {
+			_rotationOffset = MathHelper.SmoothStep(_rotationOffset, Main.rand.NextFloatRange(0.1f), 0.2f);
+			_scaleOffset = MathHelper.SmoothStep(_scaleOffset, Main.rand.NextFloatRange(0.1f), 0.15f);
+		}
 
-        orig(self, solidLayer, overRenderTargets, intoRenderTargets);
-    }
+		orig(self, solidLayer, overRenderTargets, intoRenderTargets);
+	}
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => !IsLockedChest(i, j);
 
@@ -138,144 +138,144 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
     }
 
     public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual) {
-        bool flag = NPC.downedBoss2;
-        if (flag) {
-            return false;
+		bool flag = NPC.downedBoss2;
+		if (flag) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static string MapChestName(string name, int i, int j) {
+		int left = i;
+		int top = j;
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameX % 36 != 0)  {
+			left--;
+		}
+
+		if (tile.TileFrameY != 0)  {
+			top--;
+		}
+
+		int chest = Chest.FindChest(left, top);
+		if (chest < 0)  {
+			return Language.GetTextValue("LegacyChestType.0");
+		}
+
+		if (Main.chest[chest].name == string.Empty) {
+			return name;
+		}
+
+		return name + ": " + Main.chest[chest].name;
+	}
+
+	public override void NumDust(int i, int j, bool fail, ref int num) => num = 9;
+
+	public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
+
+	public override bool RightClick(int i, int j)  {
+		Player player = Main.LocalPlayer;
+		Tile tile = Main.tile[i, j];
+		Main.mouseRightRelease = false;
+		int left = i;
+		int top = j;
+		if (tile.TileFrameX % 36 != 0) {
+			left--;
+		}
+
+		if (tile.TileFrameY != 0) {
+			top--;
+		}
+
+		if (player.sign >= 0) {
+			SoundEngine.PlaySound(SoundID.MenuClose);
+			player.sign = -1;
+			Main.editSign = false;
+			Main.npcChatText = string.Empty;
+		}
+
+		if (Main.editChest) {
+			SoundEngine.PlaySound(SoundID.MenuTick);
+			Main.editChest = false;
+			Main.npcChatText = string.Empty;
+
         }
 
-        return true;
-    }
+		if (player.editedChestName) {
+			NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f);
+			player.editedChestName = false;
+		}
 
-    public static string MapChestName(string name, int i, int j) {
-        int left = i;
-        int top = j;
-        Tile tile = Main.tile[i, j];
-        if (tile.TileFrameX % 36 != 0) {
-            left--;
-        }
+		bool isLocked = IsLockedChest(left, top);
+		if (Main.netMode == NetmodeID.MultiplayerClient && !isLocked)  {
+			if (left == player.chestX && top == player.chestY && player.chest >= 0)  {
+				player.chest = -1;
+				Recipe.FindRecipes();
+				SoundEngine.PlaySound(SoundID.MenuClose);
+			}
+			else {
+				NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, left, top);
+				Main.stackSplit = 600;
+			}
+		}
+		else {
+			if (isLocked)  {
 
-        if (tile.TileFrameY != 0) {
-            top--;
-        }
-
-        int chest = Chest.FindChest(left, top);
-        if (chest < 0) {
-            return Language.GetTextValue("LegacyChestType.0");
-        }
-
-        if (Main.chest[chest].name == string.Empty) {
-            return name;
-        }
-
-        return name + ": " + Main.chest[chest].name;
-    }
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 9;
-
-    public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
-
-    public override bool RightClick(int i, int j) {
-        Player player = Main.LocalPlayer;
-        Tile tile = Main.tile[i, j];
-        Main.mouseRightRelease = false;
-        int left = i;
-        int top = j;
-        if (tile.TileFrameX % 36 != 0) {
-            left--;
-        }
-
-        if (tile.TileFrameY != 0) {
-            top--;
-        }
-
-        if (player.sign >= 0) {
-            SoundEngine.PlaySound(SoundID.MenuClose);
-            player.sign = -1;
-            Main.editSign = false;
-            Main.npcChatText = string.Empty;
-        }
-
-        if (Main.editChest) {
-            SoundEngine.PlaySound(SoundID.MenuTick);
-            Main.editChest = false;
-            Main.npcChatText = string.Empty;
-
-        }
-
-        if (player.editedChestName) {
-            NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f);
-            player.editedChestName = false;
-        }
-
-        bool isLocked = IsLockedChest(left, top);
-        if (Main.netMode == NetmodeID.MultiplayerClient && !isLocked) {
-            if (left == player.chestX && top == player.chestY && player.chest >= 0) {
-                player.chest = -1;
-                Recipe.FindRecipes();
-                SoundEngine.PlaySound(SoundID.MenuClose);
-            }
-            else {
-                NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, left, top);
-                Main.stackSplit = 600;
-            }
-        }
-        else {
-            if (isLocked) {
-
-            }
-            else {
-                int chest = Chest.FindChest(left, top);
-                if (chest >= 0) {
-                    Main.stackSplit = 600;
-                    if (chest == player.chest) {
-                        player.chest = -1;
-                        SoundEngine.PlaySound(SoundID.MenuClose);
-                    }
-                    else {
-                        RoA.CompleteAchievement("OpenRootboundChest");
+			}
+			else {
+				int chest = Chest.FindChest(left, top);
+				if (chest >= 0) {
+					Main.stackSplit = 600;
+					if (chest == player.chest) {
+						player.chest = -1;
+						SoundEngine.PlaySound(SoundID.MenuClose);
+					}
+					else {
+						RoA.CompleteAchievement("OpenRootboundChest");
                         player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().OpenRootboundChest = true;
 
                         player.chest = chest;
-                        Main.playerInventory = true;
-                        Main.recBigList = false;
-                        player.chestX = left;
-                        player.chestY = top;
+						Main.playerInventory = true;
+						Main.recBigList = false;
+						player.chestX = left;
+						player.chestY = top;
                         SoundEngine.PlaySound(SoundID.MenuOpen);
                     }
 
-                    Recipe.FindRecipes();
-                }
-            }
-        }
+					Recipe.FindRecipes();
+				}
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
     public override LocalizedText DefaultContainerName(int frameX, int frameY) {
         return this.GetLocalization("MapEntry");
     }
 
     public override void MouseOver(int i, int j) {
-        Player player = Main.LocalPlayer;
-        Tile tile = Main.tile[i, j];
-        int left = i;
-        int top = j;
-        if (tile.TileFrameX % 36 != 0) {
-            left--;
-        }
+		Player player = Main.LocalPlayer;
+		Tile tile = Main.tile[i, j];
+		int left = i;
+		int top = j;
+		if (tile.TileFrameX % 36 != 0) {
+			left--;
+		}
 
-        if (tile.TileFrameY != 0) {
-            top--;
-        }
+		if (tile.TileFrameY != 0) {
+			top--;
+		}
 
-        int chest = Chest.FindChest(left, top);
-        if (chest < 0) {
-            player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
-        }
-        else {
+		int chest = Chest.FindChest(left, top);
+		if (chest < 0) {
+			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
+		}
+		else  {
             string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
             bool isLocked = IsLockedChest(left, top);
-            if (!isLocked) {
+			if (!isLocked) {
                 player.noThrow = 2;
                 player.cursorItemIconEnabled = true;
                 player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
@@ -284,14 +284,14 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
             }
             //player.cursorItemIconText = "";
         }
-    }
+	}
 
-    public override void MouseOverFar(int i, int j) {
-        MouseOver(i, j);
-        Player player = Main.LocalPlayer;
-        if (player.cursorItemIconText == string.Empty) {
-            player.cursorItemIconEnabled = false;
-            player.cursorItemIconID = 0;
-        }
-    }
+	public override void MouseOverFar(int i, int j)  {
+		MouseOver(i, j);
+		Player player = Main.LocalPlayer;
+		if (player.cursorItemIconText == string.Empty)  {
+			player.cursorItemIconEnabled = false;
+			player.cursorItemIconID = 0;
+		}
+	}
 }

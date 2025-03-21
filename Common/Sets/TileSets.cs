@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Sets;
 
 sealed class TileSets : ModSystem {
-    private class PreventsSlopesBelowSystem : GlobalTile {
+     private class PreventsSlopesBelowSystem : GlobalTile {
         public override bool Slope(int i, int j, int type) {
             Tile aboveTile = Framing.GetTileSafely(i, j - 1);
             if (!aboveTile.HasTile) {
@@ -50,7 +50,7 @@ sealed class TileSets : ModSystem {
 
             if (tile2.HasTile) {
                 int type = tile2.TileType;
-                if (!ShouldKillTileBelow[type] && (type != ModContent.TileType<BackwoodsBigTree>() ||
+                if (!ShouldKillTileBelow[type] && (type != ModContent.TileType<BackwoodsBigTree>() || 
                     (type == ModContent.TileType<BackwoodsBigTree>() && BackwoodsBigTree.IsStart(i, j - 1)))) {
                     if (tile.TileType != type) {
                         return false;

@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;

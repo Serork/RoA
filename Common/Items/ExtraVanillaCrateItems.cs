@@ -23,7 +23,7 @@ sealed class ExtraVanillaCrateItems : ModSystem {
     }
 
     private void On_ItemDropDatabase_RegisterHerbBag(On_ItemDropDatabase.orig_RegisterHerbBag orig, ItemDropDatabase self) {
-        self.RegisterToItem(ItemID.HerbBag,
+        self.RegisterToItem(ItemID.HerbBag, 
             new HerbBagDropsItemDropRule(
                 ModContent.ItemType<MiracleMint>(), ItemID.Daybloom, ItemID.Moonglow, ItemID.Blinkroot, ItemID.Waterleaf, ItemID.Deathweed, ItemID.Fireblossom, ItemID.Shiverthorn,
                 ModContent.ItemType<MiracleMintSeeds>(), ItemID.DaybloomSeeds, ItemID.MoonglowSeeds, ItemID.BlinkrootSeeds, ItemID.WaterleafSeeds, ItemID.DeathweedSeeds, ItemID.FireblossomSeeds, ItemID.ShiverthornSeeds));
@@ -348,7 +348,7 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         IItemDropRule bc_bamboo = ItemDropRule.NotScalingWithLuck(ItemID.BambooBlock, 3, 20, 50);
         IItemDropRule bc_seaweed = ItemDropRule.NotScalingWithLuck(ItemID.Seaweed, 20);
 
-        IItemDropRule bc_sky = ItemDropRule.OneFromOptionsNotScalingWithLuck(1,
+        IItemDropRule bc_sky = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, 
             ItemID.LuckyHorseshoe, ItemID.CelestialMagnet, ItemID.Starfury, ItemID.ShinyRedBalloon, ModContent.ItemType<FeathersInABottle>());
         IItemDropRule bc_cloud = ItemDropRule.NotScalingWithLuck(ItemID.Cloud, 2, 50, 100);
         IItemDropRule bc_fledgeWings = ItemDropRule.NotScalingWithLuck(ItemID.CreativeWings, 40, 1, 1);
@@ -359,7 +359,7 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         IItemDropRule bc_corrupt = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.BallOHurt, ItemID.BandofStarpower, ItemID.Musket, ItemID.ShadowOrb,
             /*ItemID.Vilethorn*/ModContent.ItemType<Vilethorn>(),
             ModContent.ItemType<Bookworms>(), ModContent.ItemType<PlanetomaStaff>());
-        IItemDropRule bc_crimson = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.TheUndertaker, ItemID.TheRottedFork,
+        IItemDropRule bc_crimson = ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.TheUndertaker, ItemID.TheRottedFork, 
             /*ItemID.CrimsonRod*/ModContent.ItemType<CrimsonRod>(),
             ItemID.PanicNecklace, ItemID.CrimsonHeart,
             ModContent.ItemType<ArterialSpray>(), ModContent.ItemType<GastroIntestinalMallet>());

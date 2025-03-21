@@ -1,8 +1,15 @@
-﻿using RoA.Common.Configs;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
+
+using RoA.Common.Configs;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Text;
 
 using Terraria;
 using Terraria.Localization;
@@ -38,7 +45,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                     case RoAClientConfig.DamageTooltipOptions.Option3:
                         int maxExtraDamage = GetPotentialDamage(item, player);
                         float progress = (float)extraDamage / maxExtraDamage;
-                        tooltips[index].Text =
+                        tooltips[index].Text = 
                             $"{GetNatureDamage(item, player)}/{GetBasePotentialDamage(item, player)} {natureDamageText}" +
                             " " + $"({(int)(progress * 100f)}% {GetLocalizedText("DruidToolTipOption3")})";
                         break;
@@ -140,9 +147,8 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             int knockbackIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Knockback"));
             tag = "FillingRate";
             int fillingRate = (int)(GetFillingRate(item) * Main.LocalPlayer.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier * 100);
-            byte tooltipValue = (byte)Math.Clamp(fillingRate / 10, 1, 7);
+            byte tooltipValue = (byte)Math.Clamp(fillingRate / 10, 1, 7); 
             tooltip = Language.GetOrRegister($"Mods.RoA.Items.Tooltips.FillingRate{tooltipValue}").Value;
             tooltips.Insert(knockbackIndex + 1, new(Mod, tag, tooltip));
         }
-    }
-}
+    }}

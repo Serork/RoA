@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Projectiles.Friendly.Druidic;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;

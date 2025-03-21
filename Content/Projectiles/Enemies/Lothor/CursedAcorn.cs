@@ -1,7 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core.Utility;
+
+using System;
 
 using Terraria;
 using Terraria.Audio;
@@ -70,7 +74,7 @@ sealed class CursedAcorn : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        SoundEngine.PlaySound(SoundID.Item20 with { Pitch = 0.3f }, Projectile.Center);
+        SoundEngine.PlaySound(SoundID.Item20 with { Pitch = 0.3f}, Projectile.Center);
         SoundEngine.PlaySound(SoundID.Dig with { Volume = 0.8f, Pitch = 0.5f }, Projectile.Center);
         float lifeProgress = 1f;
         foreach (NPC npc in Main.ActiveNPCs) {

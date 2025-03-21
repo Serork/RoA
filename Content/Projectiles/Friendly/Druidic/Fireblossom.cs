@@ -5,6 +5,8 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
@@ -54,7 +56,7 @@ sealed class FireblossomExplosion : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
         int type = ModContent.ProjectileType<Fireblossom>();
-        if (handler.IsFull1
+        if (handler.IsFull1 
             && player.GetModPlayer<FenethsBlazingWreath.FenethsBlazingWreathHandler>().IsEffectActive
             && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
             player.ownedProjectileCounts[type] < 10) {
@@ -324,7 +326,7 @@ sealed class Fireblossom : NatureProjectile {
         int height = texture.Height / 3;
         rectangle.Y = height * Projectile.frame;
         float scale = Projectile.scale;
-        sb.Draw(glowMaskTexture.Value, Projectile.Center - new Vector2(0f, Projectile.height) + new Vector2(0f, (float)Projectile.height) - Main.screenPosition,
+        sb.Draw(glowMaskTexture.Value, Projectile.Center - new Vector2(0f, Projectile.height) + new Vector2(0f, (float)Projectile.height) - Main.screenPosition, 
             rectangle,
             Color.White * 0.5f
     * Projectile.Opacity, Projectile.rotation, offset, scale, effects, 0);

@@ -11,7 +11,7 @@ static class ProjectileHooks {
         void Draw(ref Color lightColor, PlayerDrawSet drawinfo);
     }
 
-    private class DrawProjectile : ILoadable {
+     private class DrawProjectile : ILoadable {
         public void Load(Mod mod) {
             On_PlayerDrawLayers.DrawPlayer_11_Balloons += On_PlayerDrawLayers_DrawPlayer_11_Balloons;
         }

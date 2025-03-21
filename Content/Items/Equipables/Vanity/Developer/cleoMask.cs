@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Common.Players;
 using RoA.Content.Dusts;
 
 using Terraria;
@@ -104,6 +105,6 @@ sealed class cleoMask : ModItem {
 
     public override bool IsVanitySet(int head, int body, int legs)
        => head == EquipLoader.GetEquipSlot(Mod, nameof(cleoMask), EquipType.Head) &&
-          body == EquipLoader.GetEquipSlot(Mod, nameof(cleoChestguard), EquipType.Body) &&
+          body == EquipLoader.GetEquipSlot(Mod, nameof(cleoChestguard), EquipType.Body) && 
           legs == EquipLoader.GetEquipSlot(Mod, nameof(cleoPants), EquipType.Legs);
 }

@@ -1,3 +1,5 @@
+using Humanizer;
+
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Pets;
@@ -90,7 +92,7 @@ sealed class SmallMoonPlayer : ModPlayer {
         if (Player.name == "NotFurryAlex") {
             smallMoonColor = GetLerpColor([new Color(255, 33, 140), new Color(255, 216, 0), new Color(33, 177, 255)]);
         }
-        if (Player.name == "N.F.A.") {
+		if (Player.name == "N.F.A.") {
             smallMoonColor = GetLerpColor([new Color(255, 33, 140), new Color(255, 216, 0), new Color(33, 177, 255)]);
         }
         if (Player.name == "Heretic") {

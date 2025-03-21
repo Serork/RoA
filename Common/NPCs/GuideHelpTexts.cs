@@ -1,9 +1,9 @@
-﻿using RoA.Content.Tiles.Miscellaneous;
-
-using Terraria;
-using Terraria.ID;
+﻿using Terraria;
 using Terraria.Localization;
+using Terraria.Map;
 using Terraria.ModLoader;
+using Terraria.ID;
+using RoA.Content.Tiles.Miscellaneous;
 
 namespace RoA.Common.NPCs;
 

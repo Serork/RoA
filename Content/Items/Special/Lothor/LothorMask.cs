@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.GlowMasks;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

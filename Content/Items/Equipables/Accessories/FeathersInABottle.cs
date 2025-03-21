@@ -3,8 +3,8 @@
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Dusts;
-using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core;
 
 using Terraria;
 using Terraria.Audio;
@@ -17,9 +17,9 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Waist)]
 sealed class FeathersInABottle : NatureItem {
-    public override void SetStaticDefaults() {
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-    }
+	public override void SetStaticDefaults() {
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
     protected override void SafeSetDefaults() {
         int width = 22; int height = 28;
@@ -71,8 +71,8 @@ sealed class FeathersInABottle : NatureItem {
         public override void OnStarted(Player player, ref bool playSound) {
             var handler = player.GetModPlayer<WreathHandler>();
             handler.Consume(0.25f);
-
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Flutter") { Volume = 1.2f }, player.Center);
+			
+			SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Flutter") { Volume = 1.2f }, player.Center);
 
             int offsetY = player.height;
             if (player.gravDir == -1f)
@@ -88,7 +88,7 @@ sealed class FeathersInABottle : NatureItem {
                 variant = 1;
             }
             for (int i = 0; i < 5; i++) {
-                Dust dust = Dust.NewDustDirect(player.position + new Vector2(-34f, offsetY), 102, 32, ModContent.DustType<FeatherDust>(), -player.velocity.X * 0.5f, player.velocity.Y * 0.5f, variant,
+                Dust dust = Dust.NewDustDirect(player.position + new Vector2(-34f, offsetY), 102, 32, ModContent.DustType<FeatherDust>(), -player.velocity.X * 0.5f, player.velocity.Y * 0.5f, variant, 
                     default, 1f);
                 dust.velocity = dust.velocity * 0.5f - player.velocity * new Vector2(0.1f, 0.3f);
                 dust.customData = Main.rand.NextFloatRange(50f);

@@ -7,6 +7,8 @@ using MonoMod.Cil;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Crafting;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;

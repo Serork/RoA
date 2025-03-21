@@ -3,6 +3,9 @@
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
+using static RoA.Common.Configs.RoAClientConfig;
+using static System.Net.Mime.MediaTypeNames;
+
 namespace RoA.Common.Configs;
 
 sealed class RoAClientConfig : ModConfig {

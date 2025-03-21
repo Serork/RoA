@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
@@ -15,8 +15,10 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Common.Projectiles;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
@@ -58,7 +60,7 @@ sealed class BloodshedAxe : ModProjectile {
 
     public override void CutTiles() {
         Utils.PlotTileLine(Projectile.Center + (Projectile.rotation - 0.7853982f).ToRotationVector2() * 55f * Projectile.scale,
-            Projectile.Center + (Projectile.rotation + 0.7853982f).ToRotationVector2() * 55f * Projectile.scale, 55f * Projectile.scale,
+            Projectile.Center + (Projectile.rotation + 0.7853982f).ToRotationVector2() * 55f * Projectile.scale, 55f * Projectile.scale, 
             new Utils.TileActionAttempt(DelegateMethods.CutTiles));
     }
 
@@ -334,7 +336,7 @@ sealed class BloodshedAxe : ModProjectile {
             }
         }
         if (_powerUp) Lighting.AddLight(Projectile.Center, 0.4f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255);
-
+        
         float armRotation = Projectile.rotation - MathHelper.PiOver2;
         player.SetCompositeBothArms(armRotation, Player.CompositeArmStretchAmount.Full);
         if (_time > 0) {

@@ -6,12 +6,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.Buffs;
 
 sealed class DryadBlood : ModBuff {
-    public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Dryad Blood");
-        //Description.SetDefault("Damaging debuffs deal 75% less damage");
-    }
+	public override void SetStaticDefaults() {
+		//DisplayName.SetDefault("Dryad Blood");
+		//Description.SetDefault("Damaging debuffs deal 75% less damage");
+	}
 
-    public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<DryadBloodPlayer>().dryadBlood = true;
+	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<DryadBloodPlayer>().dryadBlood = true;
 }
 
 sealed class DryadBloodPlayer : ModPlayer {

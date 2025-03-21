@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Tiles;
+using RoA.Content.Dusts.Backwoods;
+using RoA.Content.Items.Materials;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -12,6 +14,7 @@ using System.Reflection;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 

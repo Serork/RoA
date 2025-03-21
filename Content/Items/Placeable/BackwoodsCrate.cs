@@ -1,11 +1,18 @@
+using Humanizer;
+
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Items.ItemDropRules;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
+using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
+using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Decorations;
+using RoA.Content.Items.Potions;
+using RoA.Content.Items.Special;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;

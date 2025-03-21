@@ -1,5 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
+using RoA.Common.BackwoodsSystems;
 using RoA.Common.Sets;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Crafting;
@@ -153,7 +157,7 @@ public static class CustomHouseUtils {
     private static HouseType GetHouseType(IEnumerable<Rectangle> rooms) {
         Dictionary<ushort, int> dictionary = new Dictionary<ushort, int>();
         ushort wood = (ushort)ModContent.TileType<LivingElderwood>(),
-               stone = (ushort)ModContent.TileType<BackwoodsStone>(),
+               stone = (ushort)ModContent.TileType<BackwoodsStone>(), 
                grass = (ushort)ModContent.TileType<BackwoodsGrass>(),
                moss = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         foreach (Rectangle room in rooms) {

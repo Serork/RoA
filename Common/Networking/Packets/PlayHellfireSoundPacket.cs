@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Tiles.Crafting;
 using RoA.Core;
 using RoA.Core.Utility;
 

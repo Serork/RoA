@@ -1,15 +1,17 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
-using RoA.Common.Networking;
-using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Ranged;
+
+using RoA.Content.Items.Special;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 
 namespace RoA.Content.Items.Weapons.Ranged;
 
@@ -18,7 +20,7 @@ sealed class ChemicalPrisoner : ModItem {
     public override void SetStaticDefaults() {
         // Tooltip.SetDefault("");
         Item.ResearchUnlockCount = 1;
-        //ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SphereOfAspiration>();
+		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SphereOfAspiration>();
     }
 
     public override void SetDefaults() {
@@ -75,7 +77,7 @@ sealed class ChemicalPrisoner : ModItem {
         return false;
     }
 
-    private class ChemicalPrisonerPlayer : ModPlayer {
+     private class ChemicalPrisonerPlayer : ModPlayer {
         public int count;
 
         public override void PostUpdateMiscEffects() {

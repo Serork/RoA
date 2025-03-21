@@ -13,6 +13,7 @@ using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -544,8 +545,8 @@ sealed class LothorSummoningHandler : ModSystem {
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 if (!NPC.AnyNPCs(type)) {
                     Player player = spawnPlayer;
-                    NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI),
-                        (int)player.Center.X + -(tileCoords.X - player.Center.X).GetDirection() * 1000,
+                    NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), 
+                        (int)player.Center.X + -(tileCoords.X - player.Center.X).GetDirection() * 1000, 
                         (int)player.Center.Y - 500, type);
                     if (Main.netMode == 0)
                         Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Language.GetTextValue("Mods.RoA.NPCs.Lothor.DisplayName")), 175, 75);

@@ -7,6 +7,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.Diagnostics.Metrics;
 
 using Terraria;
 using Terraria.Audio;
@@ -81,7 +82,7 @@ sealed class Pipistrelle : ModNPC {
                 bestiaryOffset = Vector2.UnitX * 5f;
             }
             float progress = (Math.Abs(rotation) / MathHelper.PiOver2) * NPC.spriteDirection;
-            spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value,
+            spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value, 
                 position + origin + bestiaryOffset +
                 new Vector2(-27f, 4f - (NPC.spriteDirection != 1 ? progress * -20f : 0f)) + Vector2.UnitX * -40f * progress -
                 Vector2.UnitY * 12f,

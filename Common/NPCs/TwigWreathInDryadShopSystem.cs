@@ -1,5 +1,4 @@
 ﻿using RoA.Content.Items.Equipables.Wreaths;
-
 using Terraria.ID;
 using Terraria.ModLoader;
 

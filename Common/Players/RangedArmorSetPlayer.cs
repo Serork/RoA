@@ -1,8 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-
+﻿using Terraria.ID;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
 
 namespace RoA.Common.Players;
 

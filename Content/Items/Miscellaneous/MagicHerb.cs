@@ -1,20 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
-using RoA.Common.Networking;
-using RoA.Common.Networking.Packets;
 using RoA.Core;
 
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.Renderers;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Collections;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 
 namespace RoA.Content.Items.Miscellaneous;
 
@@ -25,8 +28,8 @@ class MagicHerb1 : ModItem {
     public extern static void Main_DrawItem_GetBasics(Main main, Item item, int slot, out Texture2D texture, out Microsoft.Xna.Framework.Rectangle frame, out Microsoft.Xna.Framework.Rectangle glowmaskFrame);
 
     public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Magic Herb");
-        ItemID.Sets.ItemIconPulse[Item.type] = true;
+		//DisplayName.SetDefault("Magic Herb");
+		ItemID.Sets.ItemIconPulse[Item.type] = true;
         ItemID.Sets.ItemsThatShouldNotBeInInventory[Type] = true;
         ItemID.Sets.IsAPickup[Type] = true;
 
@@ -58,7 +61,7 @@ class MagicHerb1 : ModItem {
     }
 
     private void On_Main_DrawItem(On_Main.orig_DrawItem orig, Main self, Item item, int whoami) {
-        orig(self, item, whoami);
+		orig(self, item, whoami);
 
         if (!item.active || item.IsAir)
             return;
@@ -122,21 +125,21 @@ class MagicHerb1 : ModItem {
 
     public override Color? GetAlpha(Color lightColor) => Color.White;
 
-    public override void SetDefaults() {
-        int width = 20; int height = width;
-        Item.Size = new Vector2(width, height);
+	public override void SetDefaults() {
+		int width = 20; int height = width;
+		Item.Size = new Vector2(width, height);
     }
 
-    public override bool ItemSpace(Player player) => true;
+	public override bool ItemSpace(Player player) => true;
 
-    public override bool CanPickup(Player player) => true;
+	public override bool CanPickup(Player player) => true;
 
-    public override void PostUpdate() {
-        _ = Main.rand.Next(90, 111) * 0.01f * (Main.essScale * 0.5f);
-        Lighting.AddLight(Item.Center, Color.LightGreen.ToVector3() * 0.5f * Main.essScale);
-    }
+	public override void PostUpdate() {
+		_ = Main.rand.Next(90, 111) * 0.01f * (Main.essScale * 0.5f);
+		Lighting.AddLight(Item.Center, Color.LightGreen.ToVector3() * 0.5f * Main.essScale);
+	}
 
-    public override bool OnPickup(Player player) {
+	public override bool OnPickup(Player player) {
         bool flag = false;
         foreach (Player checkPlayer in Main.ActivePlayers) {
             if (checkPlayer.GetModPlayer<WreathHandler>().IsFull1) {
@@ -165,5 +168,5 @@ class MagicHerb1 : ModItem {
             }
         }
         return false;
-    }
+	}
 }

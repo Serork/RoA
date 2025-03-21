@@ -4,7 +4,6 @@ using RoA.Common.GlowMasks;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 using RoA.Core;
-
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;

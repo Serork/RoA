@@ -23,7 +23,7 @@ sealed class ArmorCape : PlayerDrawLayer {
         int tinJacket = ModContent.ItemType<TinAcolyteJacket>();
         Player player = drawInfo.drawPlayer;
         if (player.CheckArmorSlot(copperJacket, 1, 11) || player.CheckVanitySlot(copperJacket, 11) ||
-            player.CheckArmorSlot(tinJacket, 1, 11) || player.CheckVanitySlot(tinJacket, 11))
+            player.CheckArmorSlot( tinJacket, 1, 11) || player.CheckVanitySlot(tinJacket, 11))
             return true;
         return false;
     }

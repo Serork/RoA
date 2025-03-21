@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Druid.Wreath;
 using RoA.Content;
 using RoA.Content.Items.Weapons.Druidic.Claws;
@@ -13,6 +15,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Common.Druid;
 
@@ -98,7 +102,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         return result;
     }
 
-    public static ushort GetFinalBaseDamage(Item item, Player player)
+    public static ushort GetFinalBaseDamage(Item item, Player player) 
         => (ushort)(Main.gameMenu || Main.InGameUI.IsVisible ? GetItemDamage(item, player) : player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(GetItemDamage(item, player)));
     public static ushort GetFinalUseTime(Item item, Player player) => (ushort)(GetItemUseTime(item) / player.GetTotalAttackSpeed(DruidClass.NatureDamage));
 

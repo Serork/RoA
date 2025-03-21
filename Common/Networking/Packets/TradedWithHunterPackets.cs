@@ -1,4 +1,8 @@
-﻿using RoA.Content.NPCs.Friendly;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Content.Buffs;
+using RoA.Content.Items.Miscellaneous;
+using RoA.Content.NPCs.Friendly;
 using RoA.Core.Utility;
 
 using System.IO;

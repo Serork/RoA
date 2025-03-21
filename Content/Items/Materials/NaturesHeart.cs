@@ -14,23 +14,23 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Materials;
 
 sealed class NaturesHeart : ModItem {
-    public override Color? GetAlpha(Color lightColor) => lightColor;
+	public override Color? GetAlpha(Color lightColor) => lightColor;
 
     public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Nature's Heart");
-        //Tooltip.SetDefault("'Seems like is was a source of life for higher beings...'");
-        Main.RegisterItemAnimation(Type, new DrawAnimationVertical(10, 6));
-        ItemID.Sets.AnimatesAsSoul[Type] = true;
+		//DisplayName.SetDefault("Nature's Heart");
+		//Tooltip.SetDefault("'Seems like is was a source of life for higher beings...'");
+		Main.RegisterItemAnimation(Type, new DrawAnimationVertical(10, 6));
+		ItemID.Sets.AnimatesAsSoul[Type] = true;
 
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
-    }
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
+	}
 
-    public override void SetDefaults() {
-        int width = 22; int height = 32;
-        Item.Size = new Vector2(width, height);
+	public override void SetDefaults() {
+		int width = 22; int height = 32;
+		Item.Size = new Vector2(width, height);
 
-        Item.maxStack = Item.CommonMaxStack;
-        Item.rare = ItemRarityID.Green;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.rare = ItemRarityID.Green;
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
     }

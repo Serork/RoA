@@ -36,7 +36,7 @@ sealed class ElderwoodHelmet : ModItem {
         player.GetModPlayer<ElderwoodSetBonusHandler>().IsSetBonusActive = true;
     }
 
-    private class ElderwoodSetBonusHandler : ModPlayer {
+     private class ElderwoodSetBonusHandler : ModPlayer {
         public bool IsSetBonusActive;
 
         public override void ResetEffects() {

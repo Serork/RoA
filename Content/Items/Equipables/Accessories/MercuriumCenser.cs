@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Druid;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Core.Utility;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
@@ -63,8 +64,8 @@ sealed class MercuriumCenser : NatureItem {
         Item.value = Item.sellPrice(0, 0, 25, 0);
     }
 
-    public override void UpdateAccessory(Player player, bool hideVisual) {
-        player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.15f;
-        player.GetModPlayer<MercuriumCenserHandler>().IsEffectActive = true;
+	public override void UpdateAccessory(Player player, bool hideVisual) {      		
+		player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.15f;
+		player.GetModPlayer<MercuriumCenserHandler>().IsEffectActive = true;
     }
 }

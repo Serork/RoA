@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Potions;
 
 sealed class WillpowerPotion : NatureItem {
-    public override void SetStaticDefaults() {
+	public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Willpower Potion");
         //Tooltip.SetDefault("Increases Wreath charge speed");
         Item.ResearchUnlockCount = 20;
@@ -34,7 +34,7 @@ sealed class WillpowerPotion : NatureItem {
         Item.consumable = true;
 
         Item.buffType = ModContent.BuffType<Willpower>();
-        Item.buffTime = 3600 * 6;
+		Item.buffTime = 3600 * 6;
 
         Item.value = Item.sellPrice(0, 0, 2, 0);
     }

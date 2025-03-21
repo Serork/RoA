@@ -134,8 +134,8 @@ sealed class FenethStatue : ModTile {
                             offsetX += 3;
                         }
 
-                        sb.Draw(sourceRectangle: new Rectangle(frameX, frameY, width, height), texture: value,
-                            position: new Vector2(num9 * 16 - (int)(position.X + (float)(width - 16) / 2f) + drawXOffset + offsetX,
+                        sb.Draw(sourceRectangle: new Rectangle(frameX, frameY, width, height), texture: value, 
+                            position: new Vector2(num9 * 16 - (int)(position.X + (float)(width - 16) / 2f) + drawXOffset + offsetX, 
                             num10 * 16 - (int)position.Y + num5 + offsetY), color: color, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
                         num8 += num12 + tileData.CoordinatePadding;
                     }

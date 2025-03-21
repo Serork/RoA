@@ -1,13 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
-using RoA.Common.VisualEffects;
-using RoA.Content.Dusts;
-using RoA.Core.Utility;
-
+using Terraria.ModLoader;
 using Terraria;
 using Terraria.Graphics.Renderers;
-using Terraria.ModLoader;
+
+using RoA.Content.Dusts;
+using RoA.Core.Utility;
+using RoA.Core;
+using RoA.Common.VisualEffects;
 
 namespace RoA.Content.VisualEffects;
 

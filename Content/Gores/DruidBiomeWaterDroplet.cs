@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -20,9 +19,9 @@ sealed class DruidBiomeWaterDroplet : ModGore {
         int num1 = 4;
         ++gore.frameCounter;
         if (gore.frame <= 4) {
-            int x = (int)(gore.position.X / 16.0);
-            int y = (int)(gore.position.Y / 16.0) - 1;
-            if (WorldGen.InWorld(x, y) && !Main.tile[x, y].HasTile)
+            int x = (int) (gore.position.X / 16.0);
+            int y = (int) (gore.position.Y / 16.0) - 1;
+            if (WorldGen.InWorld(x, y) && !Main.tile [x, y].HasTile)
                 gore.active = false;
             if (gore.frame == 0 || gore.frame == 1 || gore.frame == 2)
                 num1 = 24 + Main.rand.Next(256);
@@ -33,8 +32,8 @@ sealed class DruidBiomeWaterDroplet : ModGore {
                 ++gore.frame;
                 if (gore.frame == 5) {
                     int index = Gore.NewGore(null, gore.position, gore.velocity, gore.type);
-                    Main.gore[index].frame = 9;
-                    Main.gore[index].velocity *= 0.0f;
+                    Main.gore [index].frame = 9;
+                    Main.gore [index].velocity *= 0.0f;
                 }
             }
         }
@@ -90,11 +89,11 @@ sealed class DruidBiomeWaterDroplet : ModGore {
                     Identifier = "Terraria/Drip"
                 }, new Vector2?(gore.position + new Vector2(8f, 8f)));
             }
-            int x = (int)(gore.position.X + 8.0) / 16;
-            int y = (int)(gore.position.Y + 14.0) / 16;
-            if (Main.tile[x, y] != null && Main.tile[x, y].LiquidAmount > 0) {
+            int x = (int) (gore.position.X + 8.0) / 16;
+            int y = (int) (gore.position.Y + 14.0) / 16;
+            if (Main.tile [x, y] != null && Main.tile [x, y].LiquidAmount > 0) {
                 gore.velocity *= 0.0f;
-                gore.position.Y = y * 16 - Main.tile[x, y].LiquidAmount / 16;
+                gore.position.Y = y * 16 - Main.tile [x, y].LiquidAmount / 16;
             }
         }
         gore.position += gore.velocity;

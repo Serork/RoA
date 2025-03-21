@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Buffs;
+using RoA.Core.Utility;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Terraria;
@@ -133,7 +135,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
 
             // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
             Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 50f;
-            Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
+            Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() + 
                 offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
             dust.position = points[pointIndex] + offset;
             dust.fadeIn = 0.3f;

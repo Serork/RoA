@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
+using RoA.Content.Items.Materials;
+using RoA.Content.Items.Tools;
 
 using Terraria;
 using Terraria.ID;

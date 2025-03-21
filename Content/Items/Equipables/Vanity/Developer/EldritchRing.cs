@@ -1,9 +1,12 @@
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -15,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
 sealed class EldritchRing : ModItem {
-    private class EldritchRingWingsLogic : ModPlayer {
+     private class EldritchRingWingsLogic : ModPlayer {
         public bool IsWingsActive;
 
         private bool flapSound;

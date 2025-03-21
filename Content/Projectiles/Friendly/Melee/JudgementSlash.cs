@@ -58,7 +58,7 @@ sealed class JudgementSlash : ModProjectile {
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         _startCenter = reader.ReadVector2();
-        _slashColor = reader.ReadRGBA();
+        _slashColor = reader.ReadRGBA();    
     }
 
     public override void SetDefaults() {
