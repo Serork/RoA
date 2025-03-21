@@ -14,11 +14,12 @@ abstract class FolliageDust : ModDust {
         dust.velocity *= 0.1f;
         dust.noGravity = true;
         dust.noLight = true;
-        dust.scale *= 1f;
+        dust.scale *= 0.8f;
     }
 
     public override bool Update(Dust dust) {
         dust.position += dust.velocity;
+        dust.rotation += 0.05f * dust.velocity.X;
         if (Main.rand.Next(3) <= 1) {
             dust.velocity *= 0.995f - Main.rand.NextFloat(0.001f, 0.1f);
         }
@@ -27,7 +28,7 @@ abstract class FolliageDust : ModDust {
             dust.fadeIn -= 0.1f;
         }
         else {
-            dust.alpha += 3;
+            dust.alpha += 2;
             if (dust.alpha >= 250) {
                 dust.active = false;
             }

@@ -10,7 +10,7 @@ namespace RoA.Content.Dusts;
 sealed class FeatherDust : ModDust {
     private Vector2 _velocity;
 
-    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White;
+    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White * 0.7f;
 
     public override void OnSpawn(Dust dust) {
         int maxFramesY = 3;
@@ -47,10 +47,8 @@ sealed class FeatherDust : ModDust {
 
             dust.position.Y += 0.2f;
         }
-        else {
-            if ((dust.scale *= 0.99f) <= 0f) {
-                dust.active = false;
-            }
+        if ((dust.scale *= 0.99f) <= 0.4f) {
+            dust.active = false;
         }
 
         return false;

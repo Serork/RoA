@@ -1,14 +1,14 @@
 ﻿Lothor: {
-	Author: by Croul
-	DisplayName: Кровавый танец (Музыкальная тема Лотора Лютого)
+	Author: Croul
+	DisplayName: Лотор Лютый
 }
 
 Backwoods: {
-	Author: by Croul
-	DisplayName: Песнь друидов (Музыкальная тема чащи)
+	Author: Croul и A44
+	DisplayName: Чаща
 }
 
 BackwoodsFog: {
-	Author: by Croul
-	DisplayName: Шёпот нетопырей (Музыкальная тема тумана чащи)
+	Author: A44
+	DisplayName: Туман
 }
