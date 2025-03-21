@@ -9,8 +9,8 @@ sealed class LothorRelic : BossRelic {
     public override string RelicTextureName => ResourceManager.DecorationsTileTextures + nameof(LothorRelic);
 
     public override void SetStaticDefaults() {
-		base.SetStaticDefaults();
-	}
+        base.SetStaticDefaults();
+    }
 }
 
 

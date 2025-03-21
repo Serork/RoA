@@ -35,7 +35,7 @@ sealed class DynastyWoodHelmet : ModItem {
         player.GetModPlayer<DynastyWoodSetBonusHandler>().IsSetBonusActive = true;
     }
 
-     private class DynastyWoodSetBonusHandler : ModPlayer {
+    private class DynastyWoodSetBonusHandler : ModPlayer {
         public bool IsSetBonusActive;
 
         public override void ResetEffects() {

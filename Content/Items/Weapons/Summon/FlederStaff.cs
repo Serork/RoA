@@ -5,8 +5,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using RoA.Content.Items.Equipables.Accessories;
-
 namespace RoA.Content.Items.Weapons.Summon;
 
 sealed class FlederStaff : ModItem {
@@ -14,7 +12,7 @@ sealed class FlederStaff : ModItem {
         ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
         ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
         Item.ResearchUnlockCount = 1;
-		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SoulOfTheWoods>();
+        //ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SoulOfTheWoods>();
     }
 
     public override void SetDefaults() {

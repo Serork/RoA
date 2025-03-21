@@ -1,16 +1,14 @@
-﻿using Newtonsoft.Json.Linq;
-
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Walls;
 
 sealed class BackwoodsGrassWall : ModItem {
-	public override void SetStaticDefaults () {
-		Item.ResearchUnlockCount = 400;
-	}
-	
-	public override void SetDefaults() {
+    public override void SetStaticDefaults() {
+        Item.ResearchUnlockCount = 400;
+    }
+
+    public override void SetDefaults() {
         Item.useStyle = 1;
         Item.useTurn = true;
         Item.useAnimation = 15;

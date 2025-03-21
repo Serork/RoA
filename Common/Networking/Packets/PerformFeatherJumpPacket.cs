@@ -17,10 +17,10 @@ sealed class PerformFeatherJumpPacket : NetPacket {
         Writer.Write(jumpType);
     }
 
-	public override void Read(BinaryReader reader, int sender) {
-		if (!reader.TryReadSenderPlayer(sender, out var player)) {
-			return;
-		}
+    public override void Read(BinaryReader reader, int sender) {
+        if (!reader.TryReadSenderPlayer(sender, out var player)) {
+            return;
+        }
 
         int jumpType = reader.ReadInt32();
         var jump = ExtraJumpLoader.OrderedJumps.FirstOrDefault(x => x.Type == jumpType);
@@ -28,9 +28,9 @@ sealed class PerformFeatherJumpPacket : NetPacket {
         PerformJump(jump, player);
 
         if (Main.netMode == NetmodeID.Server) {
-			MultiplayerSystem.SendPacket(new PerformFeatherJumpPacket(player, jumpType), ignoreClient: sender);
-		}
-	}
+            MultiplayerSystem.SendPacket(new PerformFeatherJumpPacket(player, jumpType), ignoreClient: sender);
+        }
+    }
 
     private static void PerformJump(ExtraJump jump, Player player) {
         // Set velocity and jump duration

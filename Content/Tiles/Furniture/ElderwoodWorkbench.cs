@@ -11,7 +11,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodWorkbench : ModTile {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         Main.tileSolidTop[Type] = true;
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;

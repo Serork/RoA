@@ -1,9 +1,12 @@
-﻿using RoA.Content.Dusts;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Content.Dusts;
+
 using System;
+
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria;
-using Microsoft.Xna.Framework;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 

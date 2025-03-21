@@ -13,8 +13,8 @@ using Terraria.ID;
 namespace RoA.Common.WorldEvents;
 
 sealed class EnragedLothorSky : CustomSky {
-	private bool _hasTile;
-	private float _alpha = 0;
+    private bool _hasTile;
+    private float _alpha = 0;
 
     private static float _intensity, _intensity2;
     private static bool _shouldSunDraw;
@@ -222,19 +222,19 @@ sealed class EnragedLothorSky : CustomSky {
         }
     }
 
-	public override Color OnTileColor(Color inColor) {
-		float amt = Helper.EaseInOut3(_intensity) * .5f * LothorSummoningHandler._alpha;
-		return inColor.MultiplyRGB(new Color(1f - amt, 1f - amt, 1f - amt));
-	}
+    public override Color OnTileColor(Color inColor) {
+        float amt = Helper.EaseInOut3(_intensity) * .5f * LothorSummoningHandler._alpha;
+        return inColor.MultiplyRGB(new Color(1f - amt, 1f - amt, 1f - amt));
+    }
 
-	public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
+    public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         _shouldSunDraw = false;
 
         if (!Main.gameMenu) {
-			if ((double)maxDepth >= 3.00000000549776E+38 && (double)minDepth < 3.00000000549776E+38) {
-				Color color = Color.Lerp(Color.Red, Color.Black, 0.75f) * 0.75f;
-				spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color * Math.Min(1f, (float)((Main.screenPosition.Y - 800.0) / 1000.0)) * _intensity);
-			}
+            if ((double)maxDepth >= 3.00000000549776E+38 && (double)minDepth < 3.00000000549776E+38) {
+                Color color = Color.Lerp(Color.Red, Color.Black, 0.75f) * 0.75f;
+                spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color * Math.Min(1f, (float)((Main.screenPosition.Y - 800.0) / 1000.0)) * _intensity);
+            }
 
             _shouldSunDraw = true;
 
@@ -242,16 +242,16 @@ sealed class EnragedLothorSky : CustomSky {
             //    DrawSunAndMoon(_sceneArea, Color.Red * _intensity2, Color.Red * _intensity2, 0.95f, 0.);
             //}
         }
-	}
-	
-	public override void Activate(Vector2 position, params object[] args) => _hasTile = true;
+    }
 
-	public override void Deactivate(params object[] args) => _hasTile = false;
-	
-	public override void Reset() {
-		_intensity = 0f;
-		_hasTile = false;
-	}	
+    public override void Activate(Vector2 position, params object[] args) => _hasTile = true;
 
-	public override bool IsActive() => _intensity > 0f;
+    public override void Deactivate(params object[] args) => _hasTile = false;
+
+    public override void Reset() {
+        _intensity = 0f;
+        _hasTile = false;
+    }
+
+    public override bool IsActive() => _intensity > 0f;
 }

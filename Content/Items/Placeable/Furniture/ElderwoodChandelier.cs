@@ -1,15 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Furniture;
 
 sealed class ElderwoodChandelier : ModItem {
-	public override void SetDefaults() {
-		int width = 30; int height = 28;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 30; int height = 28;
+        Item.Size = new Vector2(width, height);
 
         Item.maxStack = Terraria.Item.CommonMaxStack;
         Item.useTurn = true;
@@ -18,7 +17,7 @@ sealed class ElderwoodChandelier : ModItem {
         Item.useTime = 10;
         Item.useStyle = 1;
         Item.consumable = true;
-		Item.value = 3000;
+        Item.value = 3000;
         Item.createTile = ModContent.TileType<Tiles.Furniture.ElderwoodChandelier>();
     }
 }

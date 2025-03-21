@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
-using RoA.Content.NPCs.Friendly;
-using RoA.Content.Tiles.Crafting;
 
 using System.IO;
 

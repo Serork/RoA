@@ -19,14 +19,14 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class BackwoodsDungeonChest : ModTile {
-	public override void SetStaticDefaults() {
-		Main.tileSpelunker[Type] = true;
-		Main.tileContainer[Type] = true;
-		Main.tileShine2[Type] = true;
-		//Main.tileShine[Type] = 1200;
-		Main.tileFrameImportant[Type] = true;
-		Main.tileNoAttach[Type] = true;
-		Main.tileOreFinderPriority[Type] = 500;
+    public override void SetStaticDefaults() {
+        Main.tileSpelunker[Type] = true;
+        Main.tileContainer[Type] = true;
+        Main.tileShine2[Type] = true;
+        //Main.tileShine[Type] = 1200;
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileOreFinderPriority[Type] = 500;
 
         TileID.Sets.HasOutlines[Type] = true;
         TileID.Sets.BasicChest[Type] = true;
@@ -66,7 +66,7 @@ sealed class BackwoodsDungeonChest : ModTile {
                 TileID.RollingCactus
             ];
         TileObjectData.addTile(Type);
-	}
+    }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
@@ -88,9 +88,9 @@ sealed class BackwoodsDungeonChest : ModTile {
     }
 
     public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual) {
-		if (!NPC.downedPlantBoss) {
-			return false;
-		}
+        if (!NPC.downedPlantBoss) {
+            return false;
+        }
 
         frameXAdjustment = 36;
 
@@ -102,7 +102,7 @@ sealed class BackwoodsDungeonChest : ModTile {
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
 
-	public override bool RightClick(int i, int j)  {
+    public override bool RightClick(int i, int j) {
         Terraria.Player localPlayer = Main.LocalPlayer;
         Tile tile = Main.tile[i, j];
         Main.mouseRightRelease = false;
@@ -210,12 +210,12 @@ sealed class BackwoodsDungeonChest : ModTile {
         localPlayer.cursorItemIconEnabled = true;
     }
 
-	public override void MouseOverFar(int i, int j)  {
-		MouseOver(i, j);
-		Player player = Main.LocalPlayer;
-		if (player.cursorItemIconText == string.Empty)  {
-			player.cursorItemIconEnabled = false;
-			player.cursorItemIconID = 0;
-		}
-	}
+    public override void MouseOverFar(int i, int j) {
+        MouseOver(i, j);
+        Player player = Main.LocalPlayer;
+        if (player.cursorItemIconText == string.Empty) {
+            player.cursorItemIconEnabled = false;
+            player.cursorItemIconID = 0;
+        }
+    }
 }

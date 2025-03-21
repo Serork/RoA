@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Potions;
 
 sealed class WeightPotion : ModItem {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Weight Potion");
         //Tooltip.SetDefault("Negates fall damage\nAccelerates falling speed");
         Item.ResearchUnlockCount = 20;
@@ -21,7 +21,7 @@ sealed class WeightPotion : ModItem {
         };
     }
 
-	public override void SetDefaults() {
+    public override void SetDefaults() {
         int width = 16; int height = 30;
         Item.Size = new Vector2(width, height);
 
@@ -35,7 +35,7 @@ sealed class WeightPotion : ModItem {
         Item.consumable = true;
 
         Item.buffType = ModContent.BuffType<Heavy>();
-		Item.buffTime = 3600 * 6;
+        Item.buffTime = 3600 * 6;
 
         Item.value = Item.sellPrice(0, 0, 2, 0);
     }

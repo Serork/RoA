@@ -1,13 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Mono.Cecil;
-
 using RoA.Common.Druid;
-using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
-using RoA.Content.Items.Materials;
-using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;

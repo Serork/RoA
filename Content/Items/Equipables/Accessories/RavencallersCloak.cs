@@ -5,15 +5,12 @@ using RoA.Common.Utilities.Extensions;
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
-using System;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
-using Terraria.GameContent.Drawing;
 using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
@@ -33,23 +30,23 @@ sealed class RavencallersCloak : ModItem {
         }
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    }
 
-	public override void SetDefaults() {
-		int width = 24; int height = 34;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 24; int height = 34;
+        Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Green;
-		Item.accessory = true;
+        Item.rare = ItemRarityID.Green;
+        Item.accessory = true;
 
         Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 
-	public override void UpdateAccessory(Player player, bool hideVisual) {
+    public override void UpdateAccessory(Player player, bool hideVisual) {
         RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
         data.RavencallersCloak = true;
         data.RavencallersCloakVisible = !hideVisual;
-	}
+    }
 
     private class RavencallerPlayer : ModPlayer {
         private const float RESETTIME = 300f;
@@ -225,7 +222,7 @@ sealed class RavencallersCloak : ModItem {
                         }
                     }
                     else {
-  
+
                     }
                     drawPlayer.position = lastPositionInfo.Position + Vector2.UnitY * offsetY;
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, camera.Rasterizer, null, camera.GameViewMatrix.TransformationMatrix);
@@ -264,12 +261,12 @@ sealed class RavencallersCloak : ModItem {
                     return;
                 }
 
-				if (!Player.FindBuff(buffType, out int buffIndex)) {
-                        SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap with { Volume = 0.6f, Pitch = 0.2f }, Player.Center);
+                if (!Player.FindBuff(buffType, out int buffIndex)) {
+                    SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap with { Volume = 0.6f, Pitch = 0.2f }, Player.Center);
                 }
-				
+
                 Player.AddBuff(buffType, 10);
-				
+
                 _resetted = false;
 
                 if (!_resetted2) {

@@ -1,15 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Graphics;
+
 using RoA.Common.Cache;
 using RoA.Common.Configs;
+using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Forms;
 using RoA.Core;
 using RoA.Core.Data;
-
-using ReLogic.Content;
-using ReLogic.Graphics;
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,6 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
-using RoA.Common.Druid.Forms;
 
 namespace RoA.Common.InterfaceElements;
 

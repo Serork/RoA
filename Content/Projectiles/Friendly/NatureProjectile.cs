@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-using RoA.Common.Druid;
+﻿using RoA.Common.Druid;
 using RoA.Core;
 using RoA.Core.Utility;
 

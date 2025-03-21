@@ -14,40 +14,40 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class StoneMask : ModItem {
-     private class StoneMaskDrop : GlobalNPC {
+    private class StoneMaskDrop : GlobalNPC {
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
             npcLoot.Add(ItemDropRule.ByCondition(new BackwoodsDropCondition(), ModContent.ItemType<StoneMask>(), 144));
         }
     }
 
     public override void SetStaticDefaults() {
-		//Tooltip.SetDefault("'Cursed'");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+        //Tooltip.SetDefault("'Cursed'");
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
-	public override void SetDefaults() {
-		int width = 24; int height = 24;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 24; int height = 24;
+        Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Blue;
-		Item.vanity = true;
+        Item.rare = ItemRarityID.Blue;
+        Item.vanity = true;
 
         Item.value = Item.sellPrice(0, 0, 30, 0);
     }
 
     internal sealed class StoneMaskDrawLayer : PlayerDrawLayer {
-		public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.FaceAcc);
+        public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.FaceAcc);
 
-		private static bool IsActive(Player player) {
-			int itemType = ModContent.ItemType<StoneMask>();
+        private static bool IsActive(Player player) {
+            int itemType = ModContent.ItemType<StoneMask>();
             bool flag = player.armor[10].type == itemType || player.armor[0].type == itemType;
             return flag;
         }
 
-	     private class DisableHeadDrawing : ModPlayer {
+        private class DisableHeadDrawing : ModPlayer {
             public override void HideDrawLayers(PlayerDrawSet drawInfo) {
-				if (IsActive(drawInfo.drawPlayer)) {
-					//PlayerDrawLayers.Head.Hide();
+                if (IsActive(drawInfo.drawPlayer)) {
+                    //PlayerDrawLayers.Head.Hide();
                     PlayerDrawLayers.HeadBack.Hide();
                 }
             }

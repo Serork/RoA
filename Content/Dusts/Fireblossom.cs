@@ -7,9 +7,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 class Fireblossom : ModDust {
-	public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0) * (1f - (float)dust.alpha / 255f);
+    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0) * (1f - (float)dust.alpha / 255f);
 
-	public override void OnSpawn(Dust dust) => UpdateType = DustID.MeteorHead;
+    public override void OnSpawn(Dust dust) => UpdateType = DustID.MeteorHead;
 
     public override bool PreDraw(Dust dust) {
         if (!dust.noLight)

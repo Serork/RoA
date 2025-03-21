@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Core.Utility;
 
 using System;
-using System.Security.Policy;
 
 using Terraria;
 using Terraria.Audio;
@@ -82,7 +81,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 color *= 1f - Projectile.localAI[2] / 25f;
                 spriteBatch.Draw(texture, drawPos, null, color * opacity, Projectile.oldRot[k] - MathHelper.PiOver2, drawOrigin, Projectile.scale, SpriteEffects.FlipHorizontally, 0f);
             }
-            if (Projectile.ai[0] == 2f) { 
+            if (Projectile.ai[0] == 2f) {
                 int length = Projectile.oldPos.Length / 2 + Projectile.oldPos.Length / 5;
                 for (int k = 0; k < length; k++) {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition;
@@ -106,7 +105,7 @@ sealed class SacrificialSickle : NatureProjectile {
         base.SafeOnSpawn(source);
 
         Player player = Main.player[Projectile.owner];
-        Vector2 pos = player.RotatedRelativePoint(player.MountedCenter, true); 
+        Vector2 pos = player.RotatedRelativePoint(player.MountedCenter, true);
         Projectile.Center = pos;
         float randomness = Main.rand.NextFloatDirection();
         float min = 0.75f;
@@ -182,7 +181,7 @@ sealed class SacrificialSickle : NatureProjectile {
 
             if (flag)
                 Projectile.ai[1] += 1f;
-            
+
             if (Projectile.ai[1] >= 10f) {
                 Projectile.ai[0] = 1f;
                 Projectile.ai[1] = 0f;

@@ -1,12 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using RoA.Core.Data;
+using RoA.Core.Utility;
 
 using Terraria;
-using Terraria.ID;
-
 using Terraria.GameContent.Metadata;
-
-using RoA.Core.Utility;
-using RoA.Core.Data;
+using Terraria.ID;
 
 namespace RoA.Common.Tiles;
 

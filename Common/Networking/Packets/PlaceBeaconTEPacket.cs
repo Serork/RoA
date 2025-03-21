@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics.PackedVector;
-
-using RoA.Content.Tiles.Crafting;
+﻿using RoA.Content.Tiles.Crafting;
 
 using System.IO;
 

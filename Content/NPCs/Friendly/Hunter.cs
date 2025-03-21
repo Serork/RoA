@@ -4,14 +4,15 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.WorldEvents;
 using RoA.Content.Emotes;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
@@ -24,7 +25,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using System.Collections.Generic;
 
 namespace RoA.Content.NPCs.Friendly;
 
@@ -50,9 +50,9 @@ sealed class Hunter : ModNPC {
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 26;
 
-        NPCID.Sets.ExtraFramesCount[Type] = 9; 
+        NPCID.Sets.ExtraFramesCount[Type] = 9;
         NPCID.Sets.AttackFrameCount[Type] = 4;
-        NPCID.Sets.DangerDetectRange[Type] = 700; 
+        NPCID.Sets.DangerDetectRange[Type] = 700;
         NPCID.Sets.PrettySafe[Type] = 300;
         NPCID.Sets.AttackTime[Type] = 0;
         NPCID.Sets.AttackAverageChance[Type] = 0;
@@ -251,7 +251,7 @@ sealed class Hunter : ModNPC {
 
                 return;
             }
-           
+
             NPC.frameCounter = 0.0;
             NPC.frame.Y = num;
         }

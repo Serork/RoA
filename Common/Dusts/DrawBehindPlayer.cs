@@ -1,7 +1,5 @@
 ﻿using RoA.Core.Utility;
 
-using System.Collections.Generic;
-
 using Terraria;
 using Terraria.Graphics;
 using Terraria.Graphics.Renderers;

@@ -9,10 +9,10 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Legs)]
 sealed class LivingMahoganyGreaves : NatureItem {
-	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Living Mahogany Greaves");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override void SetStaticDefaults() {
+        //DisplayName.SetDefault("Living Mahogany Greaves");
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
     protected override void SafeSetDefaults() {
         int width = 22; int height = 18;

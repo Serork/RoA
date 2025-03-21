@@ -180,7 +180,7 @@ sealed partial class RoA : Mod {
                 mod.Call("AddAchievement", Instance,
                     "DefeatLothor",
                     AchievementCategory.Slayer,
-                    ResourceManager.AchievementsTextures + "Achievement_DefeatLothor", null, 
+                    ResourceManager.AchievementsTextures + "Achievement_DefeatLothor", null,
                     false, true,
                     20.5f,
                     new string[] { "Event_" + "DefeatLothor" });

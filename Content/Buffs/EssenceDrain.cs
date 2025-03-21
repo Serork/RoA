@@ -120,7 +120,7 @@ internal class EssenceDrainNPC : GlobalNPC {
             color = drawColor.MultiplyRGB(Color.DarkViolet) * fadeMult;
             color = new Color(color.R, color.G, color.B * MathHelper.Lerp(1f, 2f, (float)Math.Sin(_essenceDrainTimer * 0.25f)), MathHelper.Lerp(0.75f, 1f, (float)Math.Sin(_essenceDrainTimer * 0.25f)));
             Vector2 origin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
-            spriteBatch.Draw(texture, npc.Top + Vector2.UnitY * offset.Y * 0.5f - Vector2.UnitY * texture.Height * 0.6f - Main.screenPosition, new Rectangle?(), 
+            spriteBatch.Draw(texture, npc.Top + Vector2.UnitY * offset.Y * 0.5f - Vector2.UnitY * texture.Height * 0.6f - Main.screenPosition, new Rectangle?(),
                 color, 0f, origin, fadeMult / 0.8f, SpriteEffects.None, 0);
         }
         else fadeMult = 0f;

@@ -95,13 +95,13 @@ class ToxicCrystal1 : ModProjectile {
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         float num2 = (float)Main.rand.Next(90, 180) * 0.01f;
-		target.AddBuff(BuffID.Poisoned, (int)(60f * num2 * 2f), true);
+        target.AddBuff(BuffID.Poisoned, (int)(60f * num2 * 2f), true);
         // target.AddBuff(ModContent.BuffType<ToxicFumes>(), (int)(60f * num2 * 2f), true);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
         float num2 = (float)Main.rand.Next(90, 180) * 0.01f;
-		target.AddBuff(BuffID.Poisoned, (int)(60f * num2 * 2f), true);
+        target.AddBuff(BuffID.Poisoned, (int)(60f * num2 * 2f), true);
         // target.AddBuff(ModContent.BuffType<ToxicFumes>(), (int)(60f * num2 * 2f), true);
     }
 }

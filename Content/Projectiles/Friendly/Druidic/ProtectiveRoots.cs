@@ -1,13 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
-using Steamworks;
+
 using System;
-using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;

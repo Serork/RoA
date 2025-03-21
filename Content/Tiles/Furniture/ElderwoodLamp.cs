@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
@@ -27,7 +26,7 @@ sealed class ElderwoodLamp : ModTile {
         TileObjectData.newTile.WaterDeath = true;
         TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
         TileObjectData.newTile.LavaPlacement = LiquidPlacement.NotAllowed;
-		TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);

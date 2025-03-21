@@ -20,24 +20,24 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 [AutoloadEquip(EquipType.Head)]
 [AutoloadGlowMask2("_Head_Glow")]
 sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
-	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Ashwalker Hood");
-		//Tooltip.SetDefault("6% increased nature potential damage");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override void SetStaticDefaults() {
+        //DisplayName.SetDefault("Ashwalker Hood");
+        //Tooltip.SetDefault("6% increased nature potential damage");
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
     protected override void SafeSetDefaults() {
         int width = 24; int height = 22;
-		Item.Size = new Vector2(width, height);
+        Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Orange;
+        Item.rare = ItemRarityID.Orange;
 
-		Item.defense = 4;
+        Item.defense = 4;
 
         Item.value = Item.sellPrice(0, 0, 90, 0);
     }
 
-	public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
+    public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<AshwalkerRobe>() && legs.type == ModContent.ItemType<AshwalkerLeggings>();
 
@@ -47,7 +47,7 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
     }
 
     public override void UpdateArmorSet(Player player) {
-		player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.AshwalkerHoodSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
+        player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.AshwalkerHoodSetBonus").WithFormatArgs(Helper.ArmorSetBonusKey).Value;
         player.GetModPlayer<AshwalkerSetBonusHandler>().AshWalkerSet = true;
         //player.GetModPlayer<DruidArmorSetPlayer>().ashwalkerArmor = true;
         //Lighting.AddLight(player.Center, new Vector3(0.2f, 0.1f, 0.1f));

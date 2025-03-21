@@ -125,7 +125,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
 
         protected override bool ShouldPlayShootSound() => false;
 
-        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) 
+        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2)
             => ai1 = Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI);
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {

@@ -1,7 +1,6 @@
 ﻿using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
-using Terraria.UI;
 
 using static Terraria.GameContent.Creative.ItemFilters.AAccessories;
 

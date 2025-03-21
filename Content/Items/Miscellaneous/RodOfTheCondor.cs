@@ -8,9 +8,6 @@ using RoA.Common.GlowMasks;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Dusts;
-using RoA.Content.Items.Materials;
-using RoA.Content.Items.Special;
-using RoA.Content.Items.Weapons.Magic;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -235,7 +232,7 @@ sealed class RodOfTheCondor : ModItem {
         public override void Load() => _wingsSlot = EquipLoader.AddEquipTexture(Mod, WingsTextureName, EquipType.Wings, name: WingsLayerName);
 
         public void ActivateCondor() {
-             _active = true;
+            _active = true;
             Player.velocity *= 0.8f;
             HandleCondorWings();
 

@@ -9,7 +9,6 @@ using Terraria.GameContent.Creative;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
@@ -34,7 +33,7 @@ sealed class SerorkMask : ModItem {
           body == EquipLoader.GetEquipSlot(Mod, nameof(SerorkBreastplate), EquipType.Body) &&
           legs == EquipLoader.GetEquipSlot(Mod, nameof(SerorkGreaves), EquipType.Legs);
 
-     private class SerorkVisuals : ILoadable {
+    private class SerorkVisuals : ILoadable {
         public sealed class SerorkVisualsHeadGlowing : PlayerDrawLayer {
             public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
 
@@ -122,7 +121,7 @@ sealed class SerorkMask : ModItem {
             }
         }
 
-         private class SerorkVisualsLegsGlowing : PlayerDrawLayer {
+        private class SerorkVisualsLegsGlowing : PlayerDrawLayer {
             public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
 
             protected override void Draw(ref PlayerDrawSet drawInfo) {
@@ -189,7 +188,7 @@ sealed class SerorkMask : ModItem {
             }
         }
 
-         private class SerorkVisualsStorage : ModPlayer {
+        private class SerorkVisualsStorage : ModPlayer {
             public float ghostFade, ghostFade2, ghostFade3;
             public float ghostDir;
 

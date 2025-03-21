@@ -6,7 +6,6 @@ using RoA.Common.Druid;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;

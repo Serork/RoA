@@ -2,9 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Forms;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
-using RoA.Content.Projectiles.Friendly.Druidic;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
 
@@ -27,7 +26,7 @@ sealed class LilPhoenixForm : BaseForm {
     protected override Color LightingColor {
         get {
             float num56 = 1f;
-            return new(num56, num56 * 0.65f, num56 * 0.4f) ;
+            return new(num56, num56 * 0.65f, num56 * 0.4f);
         }
     }
 

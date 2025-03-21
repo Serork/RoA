@@ -186,7 +186,7 @@ sealed class Cacti : NatureProjectile {
             return;
         }
 
-        switch (_state) { 
+        switch (_state) {
             case State.Normal:
                 int baseType = ModContent.ProjectileType<CactiCaster.CactiCasterBase>();
                 while (_parent != null && _parent.type != baseType) {
@@ -271,7 +271,7 @@ sealed class Cacti : NatureProjectile {
         }
     }
 
-     private class CactiExplosion : NatureProjectile {
+    private class CactiExplosion : NatureProjectile {
         public override string Texture => ResourceManager.EmptyTexture;
 
         public override bool PreDraw(ref Color lightColor) => false;

@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.WorldEvents;
-
 using Terraria;
-using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
 using Terraria.ModLoader;
 

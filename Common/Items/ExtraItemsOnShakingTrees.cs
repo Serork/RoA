@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+
 using RoA.Content.Items.Food;
 using RoA.Content.Items.Placeable;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Content.Tiles.Trees;
 
 using System.Reflection;
 using System.Runtime.CompilerServices;

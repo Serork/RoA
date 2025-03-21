@@ -11,7 +11,7 @@ namespace RoA.Content.Items.Placeable.Seeds;
 sealed class BackwoodsGrassSeeds : ModItem {
     public override void SetStaticDefaults() {
         //ItemTrader.ChlorophyteExtractinator.AddOption_OneWay(Type, 1, ItemID.DirtBlock, 1);
-		Item.ResearchUnlockCount = 25;
+        Item.ResearchUnlockCount = 25;
         ItemID.Sets.GrassSeeds[Type] = true;
 
         ItemSets.ShouldCreateTile[Type] = false;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Content.Projectiles.Friendly;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -48,10 +47,10 @@ sealed class RagingBoots : NatureItem {
         }
     }
 
-     private class RagingBootsAttackHandler : ModPlayer {
+    private class RagingBootsAttackHandler : ModPlayer {
         private bool _onGround;
         private Vector2 _speedBeforeGround;
-		private int _fallLength;
+        private int _fallLength;
 
         public bool IsEffectActive;
 
@@ -104,10 +103,10 @@ sealed class RagingBoots : NatureItem {
                         for (int i = 0; i < count; i++) {
                             var shootTo = velo.RotatedBy(MathHelper.PiOver2 * (i < count / 2).ToDirectionInt() + MathHelper.PiOver4 * 0.75f * Main.rand.NextFloatDirection());
                             var shootLocation = center + Vector2.Normalize(shootTo) * 10f;
-                            Projectile.NewProjectile(Player.GetSource_Misc("ragingboots"), shootLocation, shootTo, 
+                            Projectile.NewProjectile(Player.GetSource_Misc("ragingboots"), shootLocation, shootTo,
                                 ModContent.ProjectileType<RagingBootsWave>(),
                                 NatureWeaponHandler.GetNatureDamage(item, Player),
-                                Player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(item.knockBack), 
+                                Player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(item.knockBack),
                                 Player.whoAmI,
                                 (int)(18 + count2 * 2f));
                         }
@@ -120,8 +119,8 @@ sealed class RagingBoots : NatureItem {
             }
 
             _speedBeforeGround = Player.velocity;
-			if (Player.velocity.Y > 9.5f) _fallLength++;
-			else _fallLength = 0;
+            if (Player.velocity.Y > 9.5f) _fallLength++;
+            else _fallLength = 0;
             _onGround = false;
         }
     }

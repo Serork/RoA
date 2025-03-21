@@ -2,8 +2,6 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
 
-using RoA.Content.Items.Weapons.Summon;
-
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,7 +18,7 @@ sealed class Bane : ModItem {
         // DisplayName.SetDefault("Bane");
         // Tooltip.SetDefault("Drains life out of your enemies");
         Item.ResearchUnlockCount = 1;
-		//ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<MothStaff>();
+        //ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<MothStaff>();
     }
 
     public override void SetDefaults() {

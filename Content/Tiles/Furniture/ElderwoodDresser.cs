@@ -1,13 +1,10 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Items.Placeable.Furniture;
-
 using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
@@ -45,9 +42,9 @@ sealed class ElderwoodDresser : ModTile {
                 TileID.RollingCactus
             ];
         TileObjectData.newTile.LavaDeath = false;
-		
-		TileObjectData.newTile.CoordinateHeights = [16, 18];
-		
+
+        TileObjectData.newTile.CoordinateHeights = [16, 18];
+
         TileObjectData.addTile(Type);
 
         LocalizedText name = CreateMapEntryName();

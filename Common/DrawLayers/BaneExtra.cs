@@ -1,15 +1,13 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Weapons.Magic;
+using RoA.Core;
 using RoA.Core.Utility;
-
-using System;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using RoA.Core;
 
 namespace RoA.Common.DrawLayers;
 

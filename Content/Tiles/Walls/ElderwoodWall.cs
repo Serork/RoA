@@ -26,11 +26,11 @@ sealed class ElderwoodWall2 : ElderwoodWall {
 }
 
 class ElderwoodWall : ModWall {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         Main.wallHouse[Type] = true;
         DustType = (ushort)ModContent.DustType<WoodTrash>();
-		AddMapEntry(new Color(112, 55, 31));
-	}
+        AddMapEntry(new Color(112, 55, 31));
+    }
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }

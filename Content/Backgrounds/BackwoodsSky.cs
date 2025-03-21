@@ -30,16 +30,16 @@ sealed class BackwoodsSky : CustomSky {
     }
 
     public override Color OnTileColor(Color inColor) {
-		float amt = _opacity * .3f;
-		return inColor.MultiplyRGB(new Color(1f - amt, 1f - amt, 1f - amt));
-	}
+        float amt = _opacity * .3f;
+        return inColor.MultiplyRGB(new Color(1f - amt, 1f - amt, 1f - amt));
+    }
 
-	public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
+    public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         if (maxDepth >= 3E+38f && minDepth < 3E+38f && !Main.gameMenu) {
             Texture2D skyTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsSky").Value;
             spriteBatch.Draw(skyTexture,
-				new Rectangle(-(int)(Main.screenWidth * 0.1f), -(int)(Main.screenHeight * 0.1f), (int)(Main.screenWidth * 1.2f), (int)(Main.screenHeight * 1.2f)),
-				Main.ColorOfTheSkies * 0.95f * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _opacity));
+                new Rectangle(-(int)(Main.screenWidth * 0.1f), -(int)(Main.screenHeight * 0.1f), (int)(Main.screenWidth * 1.2f), (int)(Main.screenHeight * 1.2f)),
+                Main.ColorOfTheSkies * 0.95f * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _opacity));
             spriteBatch.Draw(skyTexture,
                 new Rectangle(-(int)(Main.screenWidth * 0.1f), -(int)(Main.screenHeight * 0.1f), (int)(Main.screenWidth * 1.2f), (int)(Main.screenHeight * 1.2f)),
                 Color.Black.MultiplyRGB(Main.ColorOfTheSkies) * 0.15f * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _opacity));

@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using RoA.Common.Dusts;
-
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;

@@ -2,9 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
-using RoA.Content.Biomes.Backwoods;
+using RoA.Common.Networking.Packets;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -19,7 +18,6 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using RoA.Content.NPCs.Enemies.Backwoods;
 
 namespace RoA.Common.Druid.Forms;
 

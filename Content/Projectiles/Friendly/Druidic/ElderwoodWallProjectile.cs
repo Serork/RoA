@@ -7,11 +7,8 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
-using System.IO;
 
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
@@ -57,8 +54,8 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
         Vector2 basePos = new Vector2(Projectile.position.X, Projectile.ai[2] + _currentLength - 35 * (Length - 1));
         return Collision.CheckAABBvAABBCollision(
             basePos,
-            new Vector2(30, -(_currentLength - 35 * (Length - 1))), 
-            targetHitbox.Location.ToVector2(), 
+            new Vector2(30, -(_currentLength - 35 * (Length - 1))),
+            targetHitbox.Location.ToVector2(),
             targetHitbox.Size());
     }
 

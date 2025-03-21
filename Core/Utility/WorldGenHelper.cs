@@ -3,7 +3,6 @@
 using ReLogic.Utilities;
 
 using RoA.Common.BackwoodsSystems;
-using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.World.Generations;
@@ -1862,7 +1861,7 @@ static class WorldGenHelper {
                     if (Main.tile[num + 1, num2] == null)
                         return false;
 
-                    if (!Main.tile[num - 1, num2].IsActuated && Main.tile[num - 1, num2].TileType != ignoreTileType && Main.tile[num - 1, num2].HasTile && Main.tileSolid[Main.tile[num - 1, num2].TileType] && !Main.tileSolidTop[Main.tile[num - 1, num2].TileType] && Main.tile[num - 1, num2].Slope == 0 && !Main.tile[num - 1, num2].IsHalfBlock && 
+                    if (!Main.tile[num - 1, num2].IsActuated && Main.tile[num - 1, num2].TileType != ignoreTileType && Main.tile[num - 1, num2].HasTile && Main.tileSolid[Main.tile[num - 1, num2].TileType] && !Main.tileSolidTop[Main.tile[num - 1, num2].TileType] && Main.tile[num - 1, num2].Slope == 0 && !Main.tile[num - 1, num2].IsHalfBlock &&
                         !Main.tile[num + 1, num2].IsActuated && Main.tile[num + 1, num2].TileType != ignoreTileType && Main.tile[num + 1, num2].HasTile && Main.tileSolid[Main.tile[num + 1, num2].TileType] && !Main.tileSolidTop[Main.tile[num + 1, num2].TileType] && Main.tile[num + 1, num2].Slope == 0 && !Main.tile[num + 1, num2].IsHalfBlock)
                         return false;
                 }

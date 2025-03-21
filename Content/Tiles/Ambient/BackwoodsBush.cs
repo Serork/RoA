@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Audio;
@@ -33,7 +32,7 @@ sealed class BackwoodsBush : ModTile {
         return true;
     }
 
-    public override void SetStaticDefaults () {
+    public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileNoAttach[Type] = true;

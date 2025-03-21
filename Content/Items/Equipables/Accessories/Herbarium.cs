@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
 
 using Terraria;
@@ -51,7 +50,7 @@ internal class HerbariumPlayer : ModPlayer {
                 Item.NewItem(self.GetSource_Loot(), (int)self.position.X, (int)self.position.Y, self.width, self.height, 58);
         }
 
-        if (self.type != NPCID.MotherSlime && self.type != NPCID.CorruptSlime && self.type != NPCID.Slimer && 
+        if (self.type != NPCID.MotherSlime && self.type != NPCID.CorruptSlime && self.type != NPCID.Slimer &&
             closestPlayer.RollLuck(2) == 0 && self.lifeMax > 1 && self.damage > 0 &&
             closestPlayer.statMana < closestPlayer.statManaMax2)
             Item.NewItem(self.GetSource_Loot(), (int)self.position.X, (int)self.position.Y, self.width, self.height, 184);

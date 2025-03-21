@@ -121,14 +121,14 @@ sealed class RoARecipes : ModSystem {
         // accessories
         item = Recipe.Create(ModContent.ItemType<RoyalQualityHoney>());
         item.AddIngredient(ItemID.BottledHoney, 1);
-		item.AddIngredient(ItemID.LifeCrystal, 1);
-		item.AddIngredient(ItemID.BeeWax, 8);
+        item.AddIngredient(ItemID.LifeCrystal, 1);
+        item.AddIngredient(ItemID.BeeWax, 8);
         item.AddTile(TileID.Furnaces);
         item.SortAfterFirstRecipesOf(ItemID.HornetStaff);
         item.Register();
 
     }
-    
+
     private static void AddCampfire() {
         Recipe item = Recipe.Create(ModContent.ItemType<BackwoodsCampfire>());
         item.AddRecipeGroup(RecipeGroupID.Wood, 10);
@@ -875,7 +875,7 @@ sealed class RoARecipes : ModSystem {
         item = Recipe.Create(ModContent.ItemType<DiabolicDaikatana>());
         item.AddIngredient<Content.Items.Materials.DullDaikatana>(1);
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
-		item.AddIngredient(ItemID.Bone, 25);
+        item.AddIngredient(ItemID.Bone, 25);
         item.AddTile(TileID.DemonAltar);
         item.SortAfterFirstRecipesOf(ItemID.FireproofBugNet);
         item.Register();
@@ -999,13 +999,13 @@ sealed class RoARecipes : ModSystem {
         item.Register();
 
         // accessories
-		temp = item;
+        temp = item;
         item = Recipe.Create(ModContent.ItemType<MercuriumCenser>());
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(12);
         item.AddTile(TileID.Anvils);
         item.SortAfter(temp);
         item.Register();
-		
+
         // staves
         temp = starFusion;
         item = Recipe.Create(ModContent.ItemType<RodOfTheDragonfire>());

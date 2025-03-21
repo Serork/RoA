@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
@@ -12,7 +11,6 @@ using System;
 using System.IO;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -228,7 +226,7 @@ sealed class DeerSkullHead : BaseHead {
 
 sealed class DeerSkullBody : BaseBody {
     public override void SetStaticDefaults() {
-        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() { 
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             Hide = true
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);

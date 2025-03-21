@@ -34,11 +34,11 @@ sealed class TransformTileSystem : ILoadable {
         if (!OnKillActNormal[tileTarget.TileType]) {
             return true;
         }
-        
+
         return original(self, hitCounter, damage, x, y, pickPower, bufferIndex, tileTarget);
     }
 
-     private class TileReplacement : GlobalTile {
+    private class TileReplacement : GlobalTile {
         public override bool CanExplode(int i, int j, int type) {
             if (!OnKillActNormal[type] || WorldGen.gen) {
                 WorldGen.KillTile(i, j);
@@ -79,7 +79,7 @@ sealed class TransformTileSystem : ILoadable {
             return base.CreateDust(i, j, type, ref dustType);
         }
 
-         private class TileReplacementSystem : ModPlayer {
+        private class TileReplacementSystem : ModPlayer {
             readonly struct ReplacementData(Point positionInWorld, ushort replaceToType) {
                 public readonly Point PositionInWorld = positionInWorld;
                 public readonly ushort ReplaceToType = replaceToType;

@@ -1,12 +1,14 @@
-﻿using RoA.Content.Buffs;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
+using RoA.Content.Buffs;
 using RoA.Content.Dusts;
+using RoA.Core;
+
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
-using RoA.Core;
-using Microsoft.Xna.Framework;
-using RoA.Common.Networking.Packets;
-using RoA.Common.Networking;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 

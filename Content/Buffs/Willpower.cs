@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Buffs;
 
 sealed class Willpower : ModBuff {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Willpower");
         // Description.SetDefault("Wreath is charged 10% faster");
     }

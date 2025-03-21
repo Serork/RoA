@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.Dusts.Backwoods;
-
 using System.Collections.Generic;
 
 using Terraria;
@@ -50,7 +48,7 @@ sealed class ElderwoodBed : ModTile {
         height = 2; // Default to the Height defined for TileObjectData.newTile
         //extraY = 0; // Depends on how you set up frameHeight and CoordinateHeights and CoordinatePaddingFix.Y
     }
-    
+
     public override void ModifySleepingTargetInfo(int i, int j, ref TileRestingInfo info) => info.VisualOffset.Y += 4f;
 
     public override bool RightClick(int i, int j) {

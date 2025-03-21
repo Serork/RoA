@@ -9,7 +9,6 @@ using RoA.Core.Utility;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Druidic.Claws;
 

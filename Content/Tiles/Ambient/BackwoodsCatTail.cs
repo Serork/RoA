@@ -1,19 +1,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Mono.Cecil.Cil;
-
-using MonoMod.Cil;
-
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
-using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.World.Generations;
 using RoA.Core.Utility;
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 using Terraria;
@@ -238,7 +231,7 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
         return num;
     }
 
-    public override void SetStaticDefaults () {
+    public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;

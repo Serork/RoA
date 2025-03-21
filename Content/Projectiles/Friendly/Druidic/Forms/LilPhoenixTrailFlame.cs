@@ -1,11 +1,12 @@
-﻿using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
-using RoA.Core;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+
 using RoA.Content.Forms;
+using RoA.Core;
+
+using System;
+using System.Collections.Generic;
+
+using Terraria;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic.Forms;
 
@@ -32,7 +33,7 @@ sealed class LilPhoenixTrailFlame : FormProjectile {
                 return true;
             }
         }
-        
+
         return base.Colliding(projHitbox, targetHitbox);
     }
 

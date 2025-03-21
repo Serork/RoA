@@ -16,7 +16,7 @@ sealed class WreathItemToShowHandler : ModPlayer {
     }
 
     public override void OnEnterWorld() {
-        if (Player.whoAmI == Main.myPlayer && !BeltButton.IsUsed && 
+        if (Player.whoAmI == Main.myPlayer && !BeltButton.IsUsed &&
             (!WreathSlot.GetFunctionalItem(Player).IsAir || !WreathSlot.GetVanityItem(Player).IsAir || !WreathSlot.GetDyeItem(Player).IsAir)) {
             BeltButton.ToggleTo(true);
         }

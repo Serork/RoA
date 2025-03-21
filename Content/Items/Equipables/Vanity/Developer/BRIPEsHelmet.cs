@@ -46,5 +46,5 @@ sealed class BRIPEsHelmet : ModItem {
 
     public override void UpdateVanitySet(Player player) {
         player.armorEffectDrawOutlines = true;
-    }		
+    }
 }

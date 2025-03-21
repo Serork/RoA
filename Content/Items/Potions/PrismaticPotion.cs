@@ -9,12 +9,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Potions;
 
 sealed class PrismaticPotion : ModItem {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 20;
         ItemID.Sets.DrinkParticleColors[Type] = new Color[4] {
-			new Color(169, 226, 232),
-			new Color(218, 62, 184),
-			new Color(195, 17, 79),
+            new Color(169, 226, 232),
+            new Color(218, 62, 184),
+            new Color(195, 17, 79),
             new Color(88, 111, 156)
         };
     }

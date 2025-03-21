@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using ReLogic.Content;
 
 using RoA.Common.Tiles;
@@ -18,7 +19,7 @@ sealed class DruidBiomeWaterfallStyle : ModWaterfallStyle {
 sealed class DruidBiomeWaterStyle : ModWaterStyle {
     public override string Texture => ResourceManager.BackwoodsTextures + GetType().Name;
 
-    public override int ChooseWaterfallStyle()  => ModContent.Find<ModWaterfallStyle>(RoA.ModName + "/DruidBiomeWaterfallStyle").Slot;
+    public override int ChooseWaterfallStyle() => ModContent.Find<ModWaterfallStyle>(RoA.ModName + "/DruidBiomeWaterfallStyle").Slot;
 
     public override int GetSplashDust() => DustID.Water_Jungle;
 
@@ -26,7 +27,7 @@ sealed class DruidBiomeWaterStyle : ModWaterStyle {
 
     public override Asset<Texture2D> GetRainTexture() => ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "DruidBiomeRain");
 
-    public override byte GetRainVariant()  => (byte)Main.rand.Next(3);
+    public override byte GetRainVariant() => (byte)Main.rand.Next(3);
 
     public override void LightColorMultiplier(ref float r, ref float g, ref float b) {
         float value = MathHelper.Clamp((ModContent.GetInstance<TileCount>().BackwoodsTiles - 140f) / 100f, 0f, 0.5f);

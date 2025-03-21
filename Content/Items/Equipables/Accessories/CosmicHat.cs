@@ -1,12 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Druid.Wreath;
-using RoA.Common.GlowMasks;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
-
-using System;
 
 using Terraria;
 using Terraria.Audio;
@@ -20,7 +16,7 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Face)]
 sealed class CosmicHat : ModItem {
-     private class CosmicHatFaceGlowing : PlayerDrawLayer {
+    private class CosmicHatFaceGlowing : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
@@ -82,11 +78,11 @@ sealed class CosmicHat : ModItem {
         }
     }
 
-     private class CosmicHatHandler : ModPlayer {
+    private class CosmicHatHandler : ModPlayer {
         private float _timer, _timer2;
         private int _lastMana;
 
-		public bool IsEffectActive;
+        public bool IsEffectActive;
         public bool IsEffectActive2;
 
         public override void Load() {
@@ -111,13 +107,13 @@ sealed class CosmicHat : ModItem {
         }
 
         public override void ResetEffects() {
-			IsEffectActive = false;
+            IsEffectActive = false;
         }
 
         public override void PostUpdateEquips() {
-			if (!IsEffectActive) {
-				return;
-			}
+            if (!IsEffectActive) {
+                return;
+            }
 
             int cddebuff = ModContent.BuffType<CosmicHat_Cooldown>();
             int buff = ModContent.BuffType<CosmicHat_Buff>();
@@ -154,24 +150,24 @@ sealed class CosmicHat : ModItem {
         }
     }
 
-	public override void SetStaticDefaults() {
-		ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
+    public override void SetStaticDefaults() {
+        ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
         ArmorIDs.Head.Sets.DrawHatHair[Item.faceSlot] = true;
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    }
 
-	public override void SetDefaults() {
-		int width = 34; int height = 22;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 34; int height = 22;
+        Item.Size = new Vector2(width, height);
 
-		Item.rare = ItemRarityID.Orange;
-		Item.accessory = true;
+        Item.rare = ItemRarityID.Orange;
+        Item.accessory = true;
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
     }
 
-	public override void UpdateAccessory(Player player, bool hideVisual) {
-		player.GetModPlayer<CosmicHatHandler>().IsEffectActive = true;
-	}
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetModPlayer<CosmicHatHandler>().IsEffectActive = true;
+    }
 }

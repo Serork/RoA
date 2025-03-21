@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Sets;
-using RoA.Content.Dusts;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -18,17 +17,17 @@ sealed class BeastPoison : ModBuff {
         Main.pvpBuff[Type] = true;
         Main.buffNoSave[Type] = true;
 
-        BuffSets.Debuffs[Type] = true;  
+        BuffSets.Debuffs[Type] = true;
     }
 
-	public override void Update(Player player, ref int buffIndex) {
-		player.GetModPlayer<BeastPoisonPlayer>().beastPoison = true;
-		//player.moveSpeed *= 0.25f;
-	}
+    public override void Update(Player player, ref int buffIndex) {
+        player.GetModPlayer<BeastPoisonPlayer>().beastPoison = true;
+        //player.moveSpeed *= 0.25f;
+    }
 
-	public override void Update(NPC npc, ref int buffIndex) {
-		npc.GetGlobalNPC<BeastPoisonNPC>().beastPoison = true;
-	}
+    public override void Update(NPC npc, ref int buffIndex) {
+        npc.GetGlobalNPC<BeastPoisonNPC>().beastPoison = true;
+    }
 }
 
 sealed class BeastPoisonNPC : GlobalNPC {

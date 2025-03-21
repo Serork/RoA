@@ -45,28 +45,26 @@ abstract class SkeletonBodyPart : ModProjectile {
         if (Projectile.velocity.X < posX) {
             Projectile.velocity.X = Projectile.velocity.X + speedFactor;
             if (Projectile.velocity.X < 0f && posX > 0f)
-                Projectile.velocity.X = Projectile.velocity.X + speedFactor;     
+                Projectile.velocity.X = Projectile.velocity.X + speedFactor;
         }
         else if (Projectile.velocity.X > posX) {
             Projectile.velocity.X = Projectile.velocity.X - speedFactor;
             if (Projectile.velocity.X > 0f && posX < 0f)
-                Projectile.velocity.X = Projectile.velocity.X - speedFactor;           
+                Projectile.velocity.X = Projectile.velocity.X - speedFactor;
         }
-        if (Projectile.velocity.Y < posY)
-        {
+        if (Projectile.velocity.Y < posY) {
             Projectile.velocity.Y = Projectile.velocity.Y + speedFactor;
             if (Projectile.velocity.Y < 0f && posY > 0f)
-                Projectile.velocity.Y = Projectile.velocity.Y + speedFactor;   
+                Projectile.velocity.Y = Projectile.velocity.Y + speedFactor;
         }
-        else if (Projectile.velocity.Y > posY)
-        {
+        else if (Projectile.velocity.Y > posY) {
             Projectile.velocity.Y = Projectile.velocity.Y - speedFactor;
             if (Projectile.velocity.Y > 0f && posY < 0f)
                 Projectile.velocity.Y = Projectile.velocity.Y - speedFactor;
         }
         if (player.Hitbox.Intersects(Projectile.Hitbox) || !player.active)
             Projectile.Kill();
-      
+
         Projectile.rotation += 0.3f * Projectile.direction;
     }
 

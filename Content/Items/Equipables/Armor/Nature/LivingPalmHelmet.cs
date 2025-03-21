@@ -13,9 +13,9 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 [AutoloadEquip(EquipType.Head)]
 
 sealed class LivingPalmHelmet : NatureItem {
-	public override void SetStaticDefaults() {
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override void SetStaticDefaults() {
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
     protected override void SafeSetDefaults() {
         int width = 30; int height = 26;
@@ -27,12 +27,12 @@ sealed class LivingPalmHelmet : NatureItem {
         Item.defense = 1;
     }
 
-	public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.NatureDamage) += 0.04f;
+    public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.NatureDamage) += 0.04f;
 
-	public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingPalmChestplate>() && legs.type == ModContent.ItemType<LivingPalmGreaves>();
+    public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingPalmChestplate>() && legs.type == ModContent.ItemType<LivingPalmGreaves>();
 
-	public override void UpdateArmorSet(Player player) {
-		player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingPalmSetBonus");
+    public override void UpdateArmorSet(Player player) {
+        player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingPalmSetBonus");
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
     }
 }

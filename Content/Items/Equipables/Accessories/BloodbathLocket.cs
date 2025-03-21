@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Common.Cache;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -68,7 +66,7 @@ sealed class BloodbathLocket : ModItem {
         if (!hideVisual) player.GetModPlayer<BloodbathLocketPlayer>().theWildEye = true;
     }
 
-     private class BloodbathLocketEyes : ILoadable {
+    private class BloodbathLocketEyes : ILoadable {
         private class EyesData {
             public Vector2 Position;
             public int TimeLeft, MaxTimeLeft;
@@ -138,7 +136,7 @@ sealed class BloodbathLocket : ModItem {
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
                     Main.spriteBatch.Draw(texture, eyes.Position - Main.screenPosition +
                             Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
-                            * Helper.Wave(0f, 3f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f), null, 
+                            * Helper.Wave(0f, 3f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f), null,
                             Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f)) * opacity * 0.75f,
                             eyes.Rotation + Main.rand.NextFloatRange(0.05f),
                             Vector2.Zero, 1f, default, 0f);
@@ -149,7 +147,7 @@ sealed class BloodbathLocket : ModItem {
         }
     }
 
-     private class BloodbathLocketPlayer : ModPlayer {
+    private class BloodbathLocketPlayer : ModPlayer {
         public bool bloodbathLocket, theWildEye;
         internal float bloodbathDamage { get; private set; }
         private const float bloodbathDamageMax = 0.25f;

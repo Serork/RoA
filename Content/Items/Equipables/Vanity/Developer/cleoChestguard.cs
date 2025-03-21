@@ -29,7 +29,7 @@ sealed class cleoChestguard : ModItem {
         Item.vanity = true;
     }
 
-     private class RespiratorDrawLayer : ILoadable {
+    private class RespiratorDrawLayer : ILoadable {
         void ILoadable.Load(Mod mod) {
             On_PlayerDrawLayers.DrawPlayer_08_Backpacks += On_PlayerDrawLayers_DrawPlayer_08_Backpacks;
         }

@@ -1,13 +1,12 @@
-﻿using RoA.Content.Items.Weapons.Magic;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
-using Terraria.Audio;
-using Terraria.ID;
 using Terraria;
+using Terraria.Audio;
+using Terraria.Graphics.Capture;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using Terraria.Graphics.Capture;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
 
 namespace RoA.Common.Items;
 

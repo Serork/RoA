@@ -11,9 +11,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 

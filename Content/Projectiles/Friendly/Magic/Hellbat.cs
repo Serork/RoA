@@ -13,36 +13,36 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
 sealed class Hellbat : ModProjectile {
-	public override Color? GetAlpha(Color lightColor) => Color.White * (1f - Projectile.alpha / 255f) * Projectile.Opacity;
+    public override Color? GetAlpha(Color lightColor) => Color.White * (1f - Projectile.alpha / 255f) * Projectile.Opacity;
 
-	public override void SetStaticDefaults() {
-		Main.projFrames[Type] = 5;
-	}
+    public override void SetStaticDefaults() {
+        Main.projFrames[Type] = 5;
+    }
 
-	public override void SetDefaults() {
-		int width = 44; int height = 40;
-		Projectile.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 44; int height = 40;
+        Projectile.Size = new Vector2(width, height);
 
-		Projectile.friendly = true;
+        Projectile.friendly = true;
 
-		Projectile.DamageType = DamageClass.Magic;
-		Projectile.penetrate = 1;
+        Projectile.DamageType = DamageClass.Magic;
+        Projectile.penetrate = 1;
 
-		Projectile.aiStyle = 1;
-		AIType = ProjectileID.Bullet;
+        Projectile.aiStyle = 1;
+        AIType = ProjectileID.Bullet;
 
-		Projectile.ignoreWater = false;
+        Projectile.ignoreWater = false;
 
-		Projectile.extraUpdates = 1;
+        Projectile.extraUpdates = 1;
 
-		Projectile.alpha = 255;
-		Projectile.timeLeft = 70;
+        Projectile.alpha = 255;
+        Projectile.timeLeft = 70;
 
-		DrawOriginOffsetY = 1;
-	}
+        DrawOriginOffsetY = 1;
+    }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) {
-		hitbox = new Rectangle((int)Projectile.Center.X - 6, (int)Projectile.Center.Y - 6, 12, 12);
+        hitbox = new Rectangle((int)Projectile.Center.X - 6, (int)Projectile.Center.Y - 6, 12, 12);
     }
 
     public override void AI() {
@@ -57,28 +57,28 @@ sealed class Hellbat : ModProjectile {
             Main.dust[num179].velocity *= 0.2f;
         }
 
-		if (Projectile.timeLeft >= 10) {
+        if (Projectile.timeLeft >= 10) {
             if (Projectile.ai[0] == 1f) {
-				Projectile.scale += 0.008f;
-				if (Projectile.scale >= 1.4f) {
-					Projectile.alpha += 25;
-				}
-			}
-			else if (Projectile.alpha > 0) {
-				Projectile.alpha -= 15;
-			}
-			else {
-				Projectile.ai[0] = 1f;
-			}
-		}
-		else {
-			//Projectile.alpha = 0;
-			Projectile.Opacity = 1f - Utils.GetLerpValue(10, 0, Projectile.timeLeft, true);
+                Projectile.scale += 0.008f;
+                if (Projectile.scale >= 1.4f) {
+                    Projectile.alpha += 25;
+                }
+            }
+            else if (Projectile.alpha > 0) {
+                Projectile.alpha -= 15;
+            }
+            else {
+                Projectile.ai[0] = 1f;
+            }
+        }
+        else {
+            //Projectile.alpha = 0;
+            Projectile.Opacity = 1f - Utils.GetLerpValue(10, 0, Projectile.timeLeft, true);
 
         }
-		Projectile.rotation = 0f;
-		Projectile.spriteDirection = -Projectile.direction;
-	}
+        Projectile.rotation = 0f;
+        Projectile.spriteDirection = -Projectile.direction;
+    }
 
     public override void PostAI() {
         Projectile.frameCounter++;
@@ -156,12 +156,12 @@ sealed class Hellbat : ModProjectile {
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-		width = height = 10;
-		return true;
-	}
+        width = height = 10;
+        return true;
+    }
 
-	public override void OnKill(int timeLeft) {
-		SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+    public override void OnKill(int timeLeft) {
+        SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
 
         for (int num303 = 0; num303 < 2; num303++) {
             int num304 = Dust.NewDust(Projectile.position + Vector2.One * 4f, Projectile.width - 8, Projectile.height - 8, 6, Scale: 1.5f);
@@ -171,36 +171,36 @@ sealed class Hellbat : ModProjectile {
         }
     }
 
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-		target.immune[Projectile.owner] = 8;
-		int buff = ModContent.BuffType<Deceleration>();
-		//int buff = BuffID.Wet;
-		if (target.FindBuff(buff, out int buffIndex)) {
-			target.DelBuff(buffIndex);
-		}
-		if (!Projectile.wet && !target.wet) {
-			target.AddBuff(BuffID.OnFire, Main.rand.Next(30, 90), false);
-		}
-	}
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        target.immune[Projectile.owner] = 8;
+        int buff = ModContent.BuffType<Deceleration>();
+        //int buff = BuffID.Wet;
+        if (target.FindBuff(buff, out int buffIndex)) {
+            target.DelBuff(buffIndex);
+        }
+        if (!Projectile.wet && !target.wet) {
+            target.AddBuff(BuffID.OnFire, Main.rand.Next(30, 90), false);
+        }
+    }
 
-	public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-		//target.immune[Projectile.owner] = 8;
-		int buff = ModContent.BuffType<Deceleration>();
-		//int buff = BuffID.Wet;
-		if (target.FindBuff(buff, out int buffIndex)) {
-			target.DelBuff(buffIndex);
-		}
-		if (!Projectile.wet && !target.wet) {
-			target.AddBuff(BuffID.OnFire, Main.rand.Next(30, 90), false);
-		}
-	}
-	
-	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
-		//if (Projectile.wet || target.wet) {
-		//	modifiers.FinalDamage /= 2;
-		//}
-		//if (Main.player[Projectile.owner].position.Y > (Main.maxTilesY - 200) * 16) {
-		//	modifiers.FinalDamage *= 1.5f;
-		//}
-	}
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        //target.immune[Projectile.owner] = 8;
+        int buff = ModContent.BuffType<Deceleration>();
+        //int buff = BuffID.Wet;
+        if (target.FindBuff(buff, out int buffIndex)) {
+            target.DelBuff(buffIndex);
+        }
+        if (!Projectile.wet && !target.wet) {
+            target.AddBuff(BuffID.OnFire, Main.rand.Next(30, 90), false);
+        }
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        //if (Projectile.wet || target.wet) {
+        //	modifiers.FinalDamage /= 2;
+        //}
+        //if (Main.player[Projectile.owner].position.Y > (Main.maxTilesY - 200) * 16) {
+        //	modifiers.FinalDamage *= 1.5f;
+        //}
+    }
 }

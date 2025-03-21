@@ -8,7 +8,6 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.GameContent;
@@ -119,9 +118,9 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
             texture ??= TextureAssets.Tile[Type].Value;
             spriteBatch.Draw(texture, new Vector2(i * 16f, j * 16f - 5f + offsetY) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition
-                + origin + new Vector2(flag ? -4f : 0f, 0f), 
+                + origin + new Vector2(flag ? -4f : 0f, 0f),
                 new Rectangle(tile.TileFrameX, tile.TileFrameY, FrameWidth, 21), Lighting.GetColor(i, j), 0f,
-                origin, 
+                origin,
                 1f,
                 spriteEffects, 0f);
 
@@ -189,7 +188,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         }
     }
 
-    public static bool TryPlacePlant(int i, int j, ushort tileTypeToGrow, int style = 0, int checkRadius = 15, int maxAlchNearby = 5, params int[] validTiles){
+    public static bool TryPlacePlant(int i, int j, ushort tileTypeToGrow, int style = 0, int checkRadius = 15, int maxAlchNearby = 5, params int[] validTiles) {
         int num3 = checkRadius;
         int num4 = maxAlchNearby;
         int num5 = 0;

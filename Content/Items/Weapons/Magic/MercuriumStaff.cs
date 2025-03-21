@@ -1,10 +1,6 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
-using RoA.Content.Items.Materials;
-using RoA.Content.Items.Weapons.Melee;
-using RoA.Content.Items.Weapons.Ranged;
-using RoA.Content.Items.Weapons.Ranged.Ammo;
 using RoA.Content.Projectiles.Friendly.Magic;
 
 using System;

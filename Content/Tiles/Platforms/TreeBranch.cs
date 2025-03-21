@@ -1,20 +1,19 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
-
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 
-using Terraria.GameContent;
-
-using RoA.Core.Utility;
-
-using System;
 using RoA.Common.Tiles;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Tiles.Trees;
+using RoA.Core.Utility;
+
+using System;
+
+using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Platforms;
 
@@ -105,10 +104,10 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
         Vector2 drawPosition = new Point(i, j).ToVector2() * 16f + zero;
         drawPosition.X += -(!reversed ? (frameWidth / 2 - 2) : 2);
         Rectangle? sourceRectangle = new Rectangle(0, frameHeight * frame, frameWidth, frameHeight);
-        Main.EntitySpriteDraw(texture, 
+        Main.EntitySpriteDraw(texture,
                               drawPosition - Main.screenPosition,
                               sourceRectangle,
-                              Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, 
+                              Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f,
                               !reversed ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
         return false;

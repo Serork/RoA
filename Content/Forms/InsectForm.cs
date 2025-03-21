@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Druid.Forms;
-using RoA.Common.Druid.Wreath;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
 using RoA.Core.Utility;
 
@@ -165,7 +164,7 @@ abstract class InsectForm : BaseForm {
                 playerPos = new Vector2(player.position.X + 18, player.position.Y + 8);
                 velocity = Helper.VelocityToPoint(playerPos, Main.rand.RandomPointInArea(new Vector2(playerPos.X + 60, playerPos.Y + 30), new Vector2(playerPos.X + 60, playerPos.Y + 30)), 4);
             }
-            else { 
+            else {
                 playerPos = new Vector2(player.position.X - 6, player.position.Y + 8);
                 velocity = Helper.VelocityToPoint(playerPos, Main.rand.RandomPointInArea(new Vector2(playerPos.X - 60, playerPos.Y + 30), new Vector2(playerPos.X - 60, playerPos.Y + 30)), 4);
             }

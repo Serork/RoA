@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using RoA.Content.Tiles.Ambient.LargeTrees;
+
 using RoA.Content.Tiles.Trees;
 
 using Terraria;
