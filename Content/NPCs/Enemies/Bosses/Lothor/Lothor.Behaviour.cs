@@ -1099,7 +1099,10 @@ sealed partial class Lothor : ModNPC {
                 NPC.netUpdate = true;
             }
         }
-        float speed = MathHelper.Lerp(7f, 10f, LifeProgress);
+        float speed = 7f/*MathHelper.Lerp(7f, 10f, LifeProgress)*/;
+        if (Main.masterMode) {
+            speed = MathHelper.Lerp(7f, 10f, LifeProgress);
+        }
         if (_tempDirection == 0 && Main.netMode != NetmodeID.MultiplayerClient) {
             _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
             updatePositionToMove();
@@ -1110,7 +1113,10 @@ sealed partial class Lothor : ModNPC {
         }
         Vector2 desiredVelocity = NPC.DirectionTo(_tempPosition) * speed;
         if (FlightAttackTimer == 0f) {
-            float acceleration = 0.2f + 0.2f * LifeProgress;
+            float acceleration = 0.2f;
+            if (Main.masterMode) {
+                acceleration += 0.2f * LifeProgress;
+            }
             NPC.SimpleFlyMovement(desiredVelocity, acceleration);
             float min = 5f + 15f * LifeProgress;
             if (Vector2.Distance(_tempPosition, NPC.Center) < min) {
