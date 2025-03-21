@@ -7,18 +7,3 @@ SocialWreathSlot: Внешний вид: Венок
 RoADev: "'Отлично подходит для подражания внешности разработчиков 'RoA'? Конечно!'"
 AchievementModNotification: Скачайте Achievement Mod чтобы увидеть достижение!
 ChecklistLothorSummon: Проведите Душу Друида, время от времени появляющуюся из Мрачных друидов, к заросшему алтарю в чаще
-
-LothorMusicDisplay: {
-	Author: Croul
-	DisplayName: Кровавый танец (Музыкальная тема Лотора Лютого)
-}
-
-BackwoodsMusicDisplay: {
-	Author: Croul
-	DisplayName: Песнь друидов (Музыкальная тема чащи)
-}
-
-BackwoodsFogMusicDisplay: {
-	Author: Croul
-	DisplayName: Шёпот нетопырей (Музыкальная тема тумана чащи)
-}

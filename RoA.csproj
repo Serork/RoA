@@ -12,6 +12,7 @@
 	  <None Remove="Localization\en-US\Mods.RoA.Configs.hjson" />
 	  <None Remove="Localization\en-US\Mods.RoA.Emotes.hjson" />
 	  <None Remove="Localization\en-US\Mods.RoA.GameTips.hjson" />
+	  <None Remove="Localization\en-US\Mods.RoA.MusicDisplay.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Bestiary.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Biomes.hjson" />
 	  <None Remove="Localization\en-US_Mods.RoA.Buffs.hjson" />
