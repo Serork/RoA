@@ -1,8 +1,6 @@
 ﻿using RoA.Common.Configs;
 using RoA.Content.Items.Equipables.Vanity.Developer;
 
-using System;
-
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -64,7 +62,7 @@ sealed class DropRoADevsItems : ILoadable {
                         self.QuickSpawnItem(source, ModContent.ItemType<NFAHorns>());
                         self.QuickSpawnItem(source, ModContent.ItemType<NFAJacket>());
                         self.QuickSpawnItem(source, ModContent.ItemType<NFAPants>());
-						self.QuickSpawnItem(source, ModContent.ItemType<NFAWings>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<NFAWings>());
                         break;
                     case 5:
                         self.QuickSpawnItem(source, ModContent.ItemType<cleoMask>());

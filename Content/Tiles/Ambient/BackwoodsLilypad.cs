@@ -5,10 +5,7 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Common.Tiles;
 using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Content.Tiles.Trees;
 using RoA.Core.Utility;
-
-using System;
 
 using Terraria;
 using Terraria.GameContent;
@@ -19,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
-	public override void SetStaticDefaults () {
+    public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;
@@ -124,7 +121,7 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
                         if (flag2) {
                             flag = false;
                         }
-                        if (flag || 
+                        if (flag ||
                             tile5.TileType == 2 || tile5.TileType == 23 || tile5.TileType == 109 || tile5.TileType == 199 || tile5.TileType == 477 || tile5.TileType == 492) {
                             tile5.TileType = 0;
                             WorldGen.SquareTileFrame(i, j);

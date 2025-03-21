@@ -1,12 +1,14 @@
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Core.Utility;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
+using RoA.Core.Utility;
+
+using Terraria;
 using Terraria.GameContent.Drawing;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Ambient;
 

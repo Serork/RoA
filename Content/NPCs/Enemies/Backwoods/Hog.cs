@@ -18,11 +18,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class Hog : RoANPC {
-	private int _currentAI;
-	private float _extraAITimer;
+    private int _currentAI;
+    private float _extraAITimer;
 
-	public override void SetStaticDefaults() {
-		Main.npcFrameCount[Type] = 16;
+    public override void SetStaticDefaults() {
+        Main.npcFrameCount[Type] = 16;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
         };
@@ -36,11 +36,11 @@ sealed class Hog : RoANPC {
     }
 
     public override void SetDefaults() {
-		NPC.CloneDefaults(NPCID.Bunny);
+        NPC.CloneDefaults(NPCID.Bunny);
 
-		NPC.lifeMax = 85;
-		NPC.damage = 22;
-		NPC.defense = 7;
+        NPC.lifeMax = 85;
+        NPC.damage = 22;
+        NPC.defense = 7;
         NPC.knockBackResist = 0.75f;
 
         NPC.aiStyle = -1;
@@ -48,9 +48,9 @@ sealed class Hog : RoANPC {
         NPC.npcSlots = 0.9f;
 
         int width = 40; int height = 35;
-		NPC.Size = new Vector2(width, height);
+        NPC.Size = new Vector2(width, height);
 
-		NPC.value = Item.buyPrice(0, 0, 1, 0);
+        NPC.value = Item.buyPrice(0, 0, 1, 0);
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
@@ -70,16 +70,16 @@ sealed class Hog : RoANPC {
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
-		writer.Write(_currentAI);
-		writer.Write(_extraAITimer);
-	}
+        writer.Write(_currentAI);
+        writer.Write(_extraAITimer);
+    }
 
-	public override void ReceiveExtraAI(BinaryReader reader) {
-		_currentAI = reader.ReadInt32();
-		_extraAITimer = reader.ReadSingle();
-	}
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _currentAI = reader.ReadInt32();
+        _extraAITimer = reader.ReadSingle();
+    }
 
-	public override bool CanHitPlayer(Player target, ref int cooldownSlot) => _currentAI == 2;
+    public override bool CanHitPlayer(Player target, ref int cooldownSlot) => _currentAI == 2;
 
     public override void HitEffect(NPC.HitInfo hit) {
         _currentAI = 2;
@@ -264,15 +264,15 @@ sealed class Hog : RoANPC {
         }
     }
 
-	public override void AI() {
+    public override void AI() {
         NPC.chaseable = _currentAI == 2;
         if (_currentAI == 1) {
             if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
                 NPC.velocity.X *= 0.85f;
             }
             if (++_extraAITimer >= 30f) {
-				_extraAITimer = 0f;
-				_currentAI = 0;
+                _extraAITimer = 0f;
+                _currentAI = 0;
                 NPC.netUpdate = true;
             }
             NPC.spriteDirection = NPC.direction = Main.player[NPC.target].Center.DirectionFrom(NPC.Center).X.GetDirection();
@@ -280,9 +280,9 @@ sealed class Hog : RoANPC {
         if (NPC.localAI[1] > 0f) {
             NPC.localAI[1]--;
         }
-		int currentAI = _currentAI;
-		switch (currentAI) {
-			case 0:
+        int currentAI = _currentAI;
+        switch (currentAI) {
+            case 0:
                 //NPC.aiStyle = 7;
                 //AIType = 46;
                 //NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -0.9f, 0.9f);
@@ -396,17 +396,17 @@ sealed class Hog : RoANPC {
                     }
                 }
                 break;
-			case 2:
+            case 2:
                 //NPC.aiStyle = 26;
                 //AIType = 86;
                 AdaptedUnicornAI();
-				//float distance = Main.player[NPC.target].Distance(NPC.Center);
-				//float extraSpeed = (distance < 250f ? 1f + (1f - distance / 250f) : 1f) * 1.25f;
-				//float maxSpeed = extraSpeed * 2f;
-				//NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -maxSpeed, maxSpeed);
-				break;
-		}
-	}
+                //float distance = Main.player[NPC.target].Distance(NPC.Center);
+                //float extraSpeed = (distance < 250f ? 1f + (1f - distance / 250f) : 1f) * 1.25f;
+                //float maxSpeed = extraSpeed * 2f;
+                //NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -maxSpeed, maxSpeed);
+                break;
+        }
+    }
 
     //public override void HitEffect(NPC.HitInfo hit) {
     //	if (Main.netMode == NetmodeID.Server) {
@@ -433,32 +433,32 @@ sealed class Hog : RoANPC {
     }
 
     public override void PostAI() {
-		if (Main.netMode != NetmodeID.MultiplayerClient) {
-			foreach (Player player in Main.ActivePlayers) {
-				Item item = player.inventory[player.selectedItem];
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            foreach (Player player in Main.ActivePlayers) {
+                Item item = player.inventory[player.selectedItem];
                 if (player.whoAmI != Main.myPlayer) {
                     return;
                 }
-				if (item.IsEmpty()) {
-					return;
-				}
-				if (item.type != ItemID.Acorn) {
-					return;
-				}
-				if (!Main.mouseRight || !Main.mouseRightRelease) {
-					return;
-				}
-				Rectangle mouseRect = new((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 4, 4);
-				Rectangle npcRect = new((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height);
+                if (item.IsEmpty()) {
+                    return;
+                }
+                if (item.type != ItemID.Acorn) {
+                    return;
+                }
+                if (!Main.mouseRight || !Main.mouseRightRelease) {
+                    return;
+                }
+                Rectangle mouseRect = new((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 4, 4);
+                Rectangle npcRect = new((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height);
                 npcRect.Inflate(5, 5);
                 if (NPC.Distance(player.Center) < NPC.width * 2 && mouseRect.Intersects(npcRect) && NPC.localAI[1] <= 0f) {
                     NPC.localAI[1] = 80f;
 
                     item.stack -= 1;
-					if (item.stack <= 0) {
-						item.SetDefaults();
-					}
-					_currentAI = 1;
+                    if (item.stack <= 0) {
+                        item.SetDefaults();
+                    }
+                    _currentAI = 1;
                     NPC.target = player.whoAmI;
                     NPC.spriteDirection = NPC.direction = player.Center.DirectionFrom(NPC.Center).X.GetDirection();
                     Color[] particlesColor = {
@@ -480,18 +480,18 @@ sealed class Hog : RoANPC {
                                             Scale: ((float)(0.8 + 0.2 * (double)Main.rand.NextFloat()))).fadeIn = 0f;
                     }
                     int healAmount = NPC.lifeMax / 10 + NPC.life / 5;
-					EmoteBubble.NewBubble(0, new WorldUIAnchor(NPC), 50);
-					NPC.life += healAmount;
+                    EmoteBubble.NewBubble(0, new WorldUIAnchor(NPC), 50);
+                    NPC.life += healAmount;
                     if (NPC.life > NPC.lifeMax) {
                         NPC.life = NPC.lifeMax;
                     }
-					NPC.netUpdate = true;
-				}
-			}
-		}
-	}
+                    NPC.netUpdate = true;
+                }
+            }
+        }
+    }
 
-	public override void FindFrame(int frameHeight) {
+    public override void FindFrame(int frameHeight) {
         int currentFrame = Math.Min((int)CurrentFrame, Main.npcFrameCount[Type] - 1);
         if (NPC.IsABestiaryIconDummy) {
             if (++NPC.frameCounter >= 7.0) {
@@ -507,7 +507,7 @@ sealed class Hog : RoANPC {
             return;
         }
 
-		void slowMovementAnimation() {
+        void slowMovementAnimation() {
             if (Math.Abs(NPC.velocity.X) > 0.1f) {
                 if (++NPC.frameCounter >= 7.0) {
                     NPC.frameCounter = 0.0;
@@ -517,43 +517,43 @@ sealed class Hog : RoANPC {
                     }
                 }
             }
-		}
+        }
 
-		if (NPC.velocity.Y < 0f) {
-			CurrentFrame = 15;
-		}
-		else if (NPC.velocity.Y > 0f) {
-			CurrentFrame = 13;
-		}
-		else if (Math.Abs(NPC.velocity.X) < 0.1f) {
-			CurrentFrame = 0;
-		}
-		else {
-			if (_currentAI == 2) {
-				float speed = Math.Abs(NPC.velocity.X);
+        if (NPC.velocity.Y < 0f) {
+            CurrentFrame = 15;
+        }
+        else if (NPC.velocity.Y > 0f) {
+            CurrentFrame = 13;
+        }
+        else if (Math.Abs(NPC.velocity.X) < 0.1f) {
+            CurrentFrame = 0;
+        }
+        else {
+            if (_currentAI == 2) {
+                float speed = Math.Abs(NPC.velocity.X);
                 if (speed > 2f) {
                     NPC.spriteDirection = NPC.direction = NPC.velocity.X.GetDirection();
                 }
-				else {
+                else {
                     NPC.spriteDirection = NPC.direction;
                 }
-				if (speed < 3f) {
-					slowMovementAnimation();
-				}
-				else if (++NPC.frameCounter >= Math.Clamp((double)(3f - Math.Abs(NPC.velocity.X)) * 2.0 + 4.0, 6.0, 20.0)) {
-					NPC.frameCounter = 0.0;
-					CurrentFrame++;
-					if (CurrentFrame < 9 || CurrentFrame > 14) {
-						CurrentFrame = 9;
-					}
-				}
-			}
-			else {
-				slowMovementAnimation();
+                if (speed < 3f) {
+                    slowMovementAnimation();
+                }
+                else if (++NPC.frameCounter >= Math.Clamp((double)(3f - Math.Abs(NPC.velocity.X)) * 2.0 + 4.0, 6.0, 20.0)) {
+                    NPC.frameCounter = 0.0;
+                    CurrentFrame++;
+                    if (CurrentFrame < 9 || CurrentFrame > 14) {
+                        CurrentFrame = 9;
+                    }
+                }
+            }
+            else {
+                slowMovementAnimation();
                 NPC.spriteDirection = NPC.direction;
             }
-		}
+        }
 
-		ChangeFrame((currentFrame, frameHeight));
-	}
+        ChangeFrame((currentFrame, frameHeight));
+    }
 }

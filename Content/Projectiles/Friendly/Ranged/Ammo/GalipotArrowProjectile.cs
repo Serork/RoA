@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 
 sealed class GalipotArrowProjectile : ModProjectile {
-     private class GalipotStream2 : ModProjectile {
+    private class GalipotStream2 : ModProjectile {
         public bool IsActive => Projectile.ai[1] == 0f;
 
         public override void SetStaticDefaults() {

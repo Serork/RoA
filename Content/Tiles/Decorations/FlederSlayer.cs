@@ -7,7 +7,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -62,7 +61,7 @@ sealed class FlederSlayerDecoration : ModTile {
             t = TextureAssets.Tile[Type].Value;
         int frameHeight = 18 * 6 + 2;
         spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 4f), new Rectangle(frameX, frameY, 16, height), color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-        
+
         return false;
     }
 }

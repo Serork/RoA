@@ -9,7 +9,6 @@ using RoA.Core.Utility;
 
 using System;
 using System.IO;
-using System.Threading.Channels;
 
 using Terraria;
 using Terraria.Audio;
@@ -18,7 +17,6 @@ using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Items.Weapons.Druidic.Rods;
 

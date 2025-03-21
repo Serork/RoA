@@ -16,10 +16,10 @@ sealed class BackwoodsDungeonChest : ModItem {
         Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
         Item item = self.inventory[self.selectedItem];
         if (!tile.HasTile || item.type != 5328 || !TileID.Sets.IsAContainer[tile.TileType] ||
-            !(self.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetX) || 
+            !(self.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetX) ||
             !((self.position.X + (float)self.width) / 16f + (float)Player.tileRangeX + (float)item.tileBoost - 1f + (float)self.blockRange >= (float)Player.tileTargetX) ||
-            !(self.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetY) || 
-            !((self.position.Y + (float)self.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)self.blockRange >= (float)Player.tileTargetY) || 
+            !(self.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetY) ||
+            !((self.position.Y + (float)self.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)self.blockRange >= (float)Player.tileTargetY) ||
             !self.ItemTimeIsZero || self.itemAnimation <= 0 || !self.controlUseItem)
             return;
 

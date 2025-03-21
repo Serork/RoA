@@ -23,8 +23,8 @@ sealed class LuminousFlowerHat : ModItem {
             int type = ModContent.ItemType<LuminousFlowerHat>();
             if (Player.armor[0].type == type || Player.armor[10].type == type) {
                 float length = Player.velocity.Length();
-                LightValue = MathHelper.Lerp(LightValue, 
-                    MathHelper.Clamp(Utils.GetLerpValue(0f, Math.Abs(Player.maxRunSpeed), length, true), 
+                LightValue = MathHelper.Lerp(LightValue,
+                    MathHelper.Clamp(Utils.GetLerpValue(0f, Math.Abs(Player.maxRunSpeed), length, true),
                     Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f), (float)Math.Round(length * 0.1f, 2));
             }
             else {

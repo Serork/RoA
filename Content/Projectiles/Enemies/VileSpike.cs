@@ -3,7 +3,6 @@
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 
-using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
@@ -102,25 +101,25 @@ sealed class VileSpike : ModProjectile {
 }
 
 sealed class VileSpikeTip : ModProjectile {
-	public override void SetDefaults() {
-		int width = 30; int height = 32;
-		Projectile.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 30; int height = 32;
+        Projectile.Size = new Vector2(width, height);
 
-		Projectile.CloneDefaults(ProjectileID.VilethornTip);
+        Projectile.CloneDefaults(ProjectileID.VilethornTip);
 
-		Projectile.friendly = false;
-		Projectile.hostile = true;
+        Projectile.friendly = false;
+        Projectile.hostile = true;
 
-		Projectile.aiStyle = AIType = -1;
+        Projectile.aiStyle = AIType = -1;
 
-		Projectile.penetrate = -1;
-		Projectile.timeLeft = 270;
+        Projectile.penetrate = -1;
+        Projectile.timeLeft = 270;
 
-		Projectile.alpha = 0;
+        Projectile.alpha = 0;
         Projectile.tileCollide = false;
     }
 
-	public override void AI() => Projectile.velocity = Vector2.Zero;
+    public override void AI() => Projectile.velocity = Vector2.Zero;
 
     public override void OnKill(int timeLeft) {
         if (Main.rand.NextBool(3)) {

@@ -7,7 +7,6 @@ using RoA.Content.Backgrounds;
 using RoA.Core;
 
 using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 
 namespace RoA.Common;

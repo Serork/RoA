@@ -1,6 +1,3 @@
-using RoA.Content.Items.Equipables.Armor.Ranged;
-using RoA.Content.Items.Equipables.Wreaths;
-using RoA.Content.Items.Materials;
 using RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 
 using Terraria;
@@ -11,11 +8,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Ranged.Ammo;
 
 sealed class GalipotArrow : ModItem {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
     }
 
-	public override void SetDefaults() {
+    public override void SetDefaults() {
         Item.shootSpeed = 4.3f;
         Item.shoot = ModContent.ProjectileType<GalipotArrowProjectile>();
         Item.damage = 7;

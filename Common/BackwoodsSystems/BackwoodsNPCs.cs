@@ -3,7 +3,6 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.NPCs.Enemies.Backwoods;
-using RoA.Content.NPCs.Friendly;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;

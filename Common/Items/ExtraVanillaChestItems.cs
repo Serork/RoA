@@ -9,17 +9,14 @@ using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Tiles.Furniture;
-using RoA.Core.Utility;
 
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 

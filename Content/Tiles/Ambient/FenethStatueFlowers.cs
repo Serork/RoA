@@ -1,10 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Common.Tiles;
-using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -18,7 +15,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
-	public override void SetStaticDefaults () {
+    public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileNoFail[Type] = true;
@@ -39,7 +36,7 @@ sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
         TileObjectData.newTile.LavaDeath = false;
         TileObjectData.newTile.AnchorValidTiles = [TileID.Ash, 2, 23, 109, 199, 477, 492, 633, ModContent.TileType<BackwoodsGrass>()];
         TileObjectData.addTile(Type);
-        
+
 
         DustType = (ushort)ModContent.DustType<Dusts.Fireblossom2>();
         HitSound = SoundID.Grass;

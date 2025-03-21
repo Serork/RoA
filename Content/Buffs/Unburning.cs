@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.DrawLayers;
-using RoA.Common.Sets;
-
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

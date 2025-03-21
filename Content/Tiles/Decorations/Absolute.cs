@@ -1,5 +1,3 @@
-using Microsoft.Xna.Framework;
-
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -9,9 +7,9 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Decorations;
 
 sealed class Absolute : ModTile {
-	public override void SetStaticDefaults() {
-		Main.tileFrameImportant[Type] = true;
-		Main.tileLavaDeath[Type] = true;
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         Main.tileSpelunker[Type] = true;
 
@@ -22,10 +20,10 @@ sealed class Absolute : ModTile {
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
-		TileObjectData.newTile.Height = 2;
-		TileObjectData.newTile.Width = 2;
-		TileObjectData.newTile.CoordinateHeights = [16, 16];
-		TileObjectData.newTile.LavaDeath = true;
+        TileObjectData.newTile.Height = 2;
+        TileObjectData.newTile.Width = 2;
+        TileObjectData.newTile.CoordinateHeights = [16, 16];
+        TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.Origin = new Terraria.DataStructures.Point16(1, 0);
         TileObjectData.addTile(Type);
 

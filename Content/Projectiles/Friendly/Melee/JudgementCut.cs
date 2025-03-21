@@ -1,10 +1,11 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Microsoft.Xna.Framework;
 
-using Microsoft.Xna.Framework;
 using RoA.Core;
+
+using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 

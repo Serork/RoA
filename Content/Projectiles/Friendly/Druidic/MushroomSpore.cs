@@ -4,7 +4,6 @@ using RoA.Common;
 using RoA.Core.Utility;
 
 using System;
-using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -14,13 +13,13 @@ namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 sealed class MushroomSpore : NatureProjectile {
     private enum State {
-        Direct, 
+        Direct,
         Float
     }
 
     private State _state = State.Direct;
 
-	public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
+    public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
 
     protected override void SafeSetDefaults() {
         int width = 10; int height = width;

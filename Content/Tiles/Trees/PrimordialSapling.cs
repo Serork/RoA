@@ -19,50 +19,50 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Trees;
 
 sealed class PrimordialSapling : ModTile {
-	public override void SetStaticDefaults() {
-		Main.tileFrameImportant[Type] = true;
-		Main.tileNoAttach[Type] = true;
-		Main.tileLavaDeath[Type] = true;
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.SwaysInWindBasic[Type] = true;
-		TileID.Sets.CommonSapling[Type] = true;
-		TileID.Sets.TreeSapling[Type] = true;
+        TileID.Sets.CommonSapling[Type] = true;
+        TileID.Sets.TreeSapling[Type] = true;
 
         TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
 
         TileObjectData.newTile.Width = 1;
-		TileObjectData.newTile.Height = 2;
-		TileObjectData.newTile.Origin = new Point16(0, 1);
-		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
-		TileObjectData.newTile.UsesCustomCanPlace = true;
-		TileObjectData.newTile.CoordinateHeights = [16, 18];
-		TileObjectData.newTile.CoordinateWidth = 16;
-		TileObjectData.newTile.CoordinatePadding = 2;
-		TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<BackwoodsGrass>()];
-		TileObjectData.newTile.StyleHorizontal = true;
-		TileObjectData.newTile.DrawFlipHorizontal = true;
-		TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
-		TileObjectData.newTile.LavaDeath = true;
-		TileObjectData.newTile.RandomStyleRange = 3;
-		TileObjectData.addTile(Type);
+        TileObjectData.newTile.Height = 2;
+        TileObjectData.newTile.Origin = new Point16(0, 1);
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
+        TileObjectData.newTile.UsesCustomCanPlace = true;
+        TileObjectData.newTile.CoordinateHeights = [16, 18];
+        TileObjectData.newTile.CoordinateWidth = 16;
+        TileObjectData.newTile.CoordinatePadding = 2;
+        TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<BackwoodsGrass>()];
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.DrawFlipHorizontal = true;
+        TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
+        TileObjectData.newTile.LavaDeath = true;
+        TileObjectData.newTile.RandomStyleRange = 3;
+        TileObjectData.addTile(Type);
 
-		AdjTiles = [TileID.Saplings];
+        AdjTiles = [TileID.Saplings];
 
-		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(163, 116, 81), name);
-		DustType = ModContent.DustType<WoodTrash>();
-		HitSound = SoundID.Dig;
-	}
+        LocalizedText name = CreateMapEntryName();
+        AddMapEntry(new Color(163, 116, 81), name);
+        DustType = ModContent.DustType<WoodTrash>();
+        HitSound = SoundID.Dig;
+    }
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
-	public override void RandomUpdate(int i, int j) {
-		if (Main.rand.NextBool(15)) {
-			GrowTree(i, j);
+    public override void RandomUpdate(int i, int j) {
+        if (Main.rand.NextBool(15)) {
+            GrowTree(i, j);
         }
-	}
+    }
 
-	internal static void GrowTree(int i, int j) {
+    internal static void GrowTree(int i, int j) {
         bool success = false;
         if (Main.hardMode) {
             success = BackwoodsBigTree.TryGrowBigTree(i, j + 2, placeRand: Main.rand);
@@ -76,9 +76,9 @@ sealed class PrimordialSapling : ModTile {
         }
     }
 
-	public override void SetSpriteEffects(int i, int j, ref SpriteEffects effects) {
-		if (i % 2 == 1) {
-			effects = SpriteEffects.FlipHorizontally;
-		}
-	}
+    public override void SetSpriteEffects(int i, int j, ref SpriteEffects effects) {
+        if (i % 2 == 1) {
+            effects = SpriteEffects.FlipHorizontally;
+        }
+    }
 }

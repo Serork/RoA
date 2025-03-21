@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.GlowMasks;
 using RoA.Core;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,7 +15,7 @@ sealed class LuminousFlower : ModItem {
     }
 
     public override void SetDefaults() {
-		Item.SetSize(34, 38);
+        Item.SetSize(34, 38);
 
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.sellPrice(0, 0, 30, 0);

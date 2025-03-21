@@ -11,11 +11,11 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Body)]
 sealed class LivingBorealWoodChestplate : NatureItem {
-	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Living Boreal Wood Chestplate");
-		//Tooltip.SetDefault("4% increased nature potential damage");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override void SetStaticDefaults() {
+        //DisplayName.SetDefault("Living Boreal Wood Chestplate");
+        //Tooltip.SetDefault("4% increased nature potential damage");
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
     protected override void SafeSetDefaults() {
         int width = 34; int height = 26;
@@ -27,5 +27,5 @@ sealed class LivingBorealWoodChestplate : NatureItem {
         Item.defense = 2;
     }
 
-	public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.04f;
+    public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.04f;
 }

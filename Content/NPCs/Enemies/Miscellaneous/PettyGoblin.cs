@@ -7,7 +7,6 @@ using RoA.Core.Utility;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -15,7 +14,7 @@ using Terraria.ModLoader.Utilities;
 namespace RoA.Content.NPCs.Enemies.Miscellaneous;
 
 sealed partial class PettyGoblin : ModNPC {
-     private class ExtraGoblinTinkererQuote : GlobalNPC {
+    private class ExtraGoblinTinkererQuote : GlobalNPC {
         public override void GetChat(NPC npc, ref string chat) {
             if (npc.type != NPCID.GoblinTinkerer) {
                 return;

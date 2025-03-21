@@ -1,12 +1,10 @@
-﻿using RoA.Content.Items.Placeable;
-using RoA.Content.Items.Weapons.Druidic.Claws;
+﻿using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Prefixes;
 using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.ID;
@@ -54,15 +52,15 @@ sealed class DruidClass : DamageClass {
         item.Prefix(prefix);
     }
 
-     private class ResearchSorting : GlobalItem {
+    private class ResearchSorting : GlobalItem {
         public override void ModifyResearchSorting(Item item, ref ContentSamples.CreativeHelper.ItemGroup itemGroup) {
             if (item.DamageType.CountsAsClass<DruidClass>()) {
-                itemGroup = (ContentSamples.CreativeHelper.ItemGroup)554; 
+                itemGroup = (ContentSamples.CreativeHelper.ItemGroup)554;
             }
         }
     }
 
-    public static DruidClass NatureDamage => ModContent.GetInstance<DruidClass>();  
+    public static DruidClass NatureDamage => ModContent.GetInstance<DruidClass>();
 
     public override bool UseStandardCritCalcs => true;
 

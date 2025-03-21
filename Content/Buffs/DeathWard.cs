@@ -15,16 +15,16 @@ using Terraria.ModLoader;
 namespace RoA.Content.Buffs;
 
 sealed class DeathWard : ModBuff {
-	public override void SetStaticDefaults() {
-		// DisplayName.SetDefault("Death Ward");
-		// Description.SetDefault("Your next fatal hit will be prevented");
-	}
+    public override void SetStaticDefaults() {
+        // DisplayName.SetDefault("Death Ward");
+        // Description.SetDefault("Your next fatal hit will be prevented");
+    }
 
-	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<BehelitPlayer>().behelitPotion = true;
+    public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<BehelitPlayer>().behelitPotion = true;
 }
 
 sealed class BehelitPlayer : ModPlayer {
-     private class BehelitVisualEffectOnPlayer : ILoadable {
+    private class BehelitVisualEffectOnPlayer : ILoadable {
         void ILoadable.Load(Mod mod) {
             On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
             On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += On_PlayerDrawLayers_DrawPlayer_RenderAllLayers;
@@ -122,7 +122,7 @@ sealed class BehelitPlayer : ModPlayer {
     public override void ResetEffects() => behelitPotion = false;
 
     public override bool FreeDodge(Player.HurtInfo info) {
-		if (behelitPotion && Player.statLife <= info.Damage) {
+        if (behelitPotion && Player.statLife <= info.Damage) {
             int time = Player.longInvince ? 80 : 40;
             DeathWardImmune(time);
 

@@ -1,17 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 
-using RoA.Common.NPCs;
 using RoA.Content.Biomes.Backwoods;
-using RoA.Content.NPCs.Enemies.Backwoods;
 
 using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
-using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;

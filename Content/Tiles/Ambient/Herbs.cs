@@ -1,14 +1,17 @@
-﻿using Terraria.GameContent.Metadata;
-using Terraria.ID;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Common.Tiles;
+
+using System.Collections.Generic;
+
 using Terraria;
+using Terraria.GameContent.Drawing;
+using Terraria.GameContent.Metadata;
+using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using RoA.Common.Tiles;
-using Terraria.GameContent.Drawing;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria.Localization;
-using System.Collections.Generic;
 
 namespace RoA.Content.Tiles.Ambient;
 
@@ -52,7 +55,7 @@ sealed class Herbs : ModTile, TileHooks.IGetTileDrawData {
         AddMapEntry(new Color(32, 168, 117), name);
         name = Lang.GetItemName(ItemID.Fireblossom);
         AddMapEntry(new Color(177, 69, 49), name);
-        name = Lang.GetItemName(ItemID.Shiverthorn); 
+        name = Lang.GetItemName(ItemID.Shiverthorn);
         AddMapEntry(new Color(40, 152, 240), name);
     }
 

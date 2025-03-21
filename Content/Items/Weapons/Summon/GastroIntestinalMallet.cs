@@ -189,7 +189,7 @@ sealed class GastroIntestinalMalletProjectile : ModProjectile {
                             if (flag22) {
                                 velocity.X += Projectile.DirectionTo(Main.npc[num442].Center).SafeNormalize(Vector2.Zero).X * Vector2.Distance(Main.npc[num442].Center, Projectile.Center) * 0.01f;
                             }
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), 
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(),
                                 Projectile.Center - new Vector2(_direction == 1 ? 4f : -4f, 4f), velocity,
                                 ModContent.ProjectileType<GastroIntestinalMalletProjectile2>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         }

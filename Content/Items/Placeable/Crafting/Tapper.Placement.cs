@@ -14,7 +14,7 @@ partial class Tapper : ModItem {
     private bool On_Player_PlaceThing_Tiles_CheckRopeUsability(On_Player.orig_PlaceThing_Tiles_CheckRopeUsability orig, Player self, bool canUse) {
         Item item = self.inventory[self.selectedItem];
         int tileToCreate = item.createTile;
-        if (Tiles.Crafting.Tapper.ImATapper[tileToCreate]) { 
+        if (Tiles.Crafting.Tapper.ImATapper[tileToCreate]) {
             bool flag = (WorldGenHelper.ActiveTile(Player.tileTargetX - 1, Player.tileTargetY - 1, TileID.Trees) || WorldGenHelper.ActiveTile(Player.tileTargetX + 1, Player.tileTargetY - 1, TileID.Trees)) && !WorldGenHelper.ActiveTile(Player.tileTargetX, Player.tileTargetY - 1, tileToCreate) && !WorldGenHelper.ActiveTile(Player.tileTargetX, Player.tileTargetY + 1, tileToCreate);
             for (int testJ = Player.tileTargetY; testJ > Player.tileTargetY - 8; testJ--) {
                 if (WorldGenHelper.ActiveTile(Player.tileTargetX, testJ, tileToCreate)) {

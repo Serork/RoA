@@ -1,15 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Furniture;
 
 sealed class ElderwoodWorkbench : ModItem {
-	public override void SetDefaults() {
-		int width = 32; int height = 18;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 32; int height = 18;
+        Item.Size = new Vector2(width, height);
 
         Item.maxStack = Terraria.Item.CommonMaxStack;
         Item.useTurn = true;

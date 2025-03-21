@@ -1,11 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Utilities.Extensions;
 using RoA.Common.WorldEvents;
-using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 
 using System;

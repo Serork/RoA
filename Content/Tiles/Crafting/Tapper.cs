@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
@@ -13,7 +12,6 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -27,12 +25,12 @@ partial class Tapper : ModTile {
     public string GalipotTexture => Texture + "_Galipot";
 
     public override void SetStaticDefaults() {
-		Main.tileFrameImportant[Type] = true;
-		Main.tileNoAttach[Type] = true;
-		Main.tileLavaDeath[Type] = true;
-		Main.tileShine2[Type] = true;
-		Main.tileShine[Type] = 1500;
-		Main.tileNoFail[Type] = true;
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileLavaDeath[Type] = true;
+        Main.tileShine2[Type] = true;
+        Main.tileShine[Type] = 1500;
+        Main.tileNoFail[Type] = true;
         Main.tileAxe[Type] = true;
 
         TileID.Sets.HasOutlines[Type] = true;
@@ -45,8 +43,8 @@ partial class Tapper : ModTile {
         TileObjectData.newTile.CoordinateHeights = [28];
         TileObjectData.newTile.AnchorRight = AnchorData.Empty;
         TileObjectData.newTile.AnchorLeft = new AnchorData(Terraria.Enums.AnchorType.Tree, TileObjectData.newTile.Width, 0);
-		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
-		TileObjectData.newTile.AnchorTop = AnchorData.Empty;
+        TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
+        TileObjectData.newTile.AnchorTop = AnchorData.Empty;
         TileObjectData.newTile.DrawXOffset = -8;
         TileObjectData.newTile.DrawYOffset = -6;
         TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TapperTE>().Hook_AfterPlacement, -1, 0, true);

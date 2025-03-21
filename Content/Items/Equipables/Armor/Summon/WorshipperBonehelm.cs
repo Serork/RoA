@@ -159,7 +159,7 @@ sealed class WorshipperBonehelm : ModItem {
 
         SummonHarpy(player);
     }
-	
+
     private static void SummonHarpy(Player player) {
         int type = ModContent.ProjectileType<BoneHarpy>();
         if (player.ownedProjectileCounts[type] < 1) {

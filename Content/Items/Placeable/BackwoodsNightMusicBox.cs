@@ -1,9 +1,3 @@
-using RoA.Core;
-
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
 namespace RoA.Content.Items.Placeable;
 
 //sealed class BackwoodsNightMusicBox : ModItem {

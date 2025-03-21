@@ -1,8 +1,6 @@
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.NPCs.Enemies.Backwoods;
 
-using System;
-
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,18 +12,18 @@ sealed class MonsterBanners : ModBannerTile {
     public enum StyleID {
         Archdruid,
         Grimdruid,
-		Hog,
-		Lumberjack,
-		BabyFleder,
-		Fleder,
-		Ent,
-		Ravencaller,
-		PettyGoblin,
-		Hedgehog,
-		SapSlime,
-		Sentinel,
-		SentinelWarrior,
-		GrimDefender,
+        Hog,
+        Lumberjack,
+        BabyFleder,
+        Fleder,
+        Ent,
+        Ravencaller,
+        PettyGoblin,
+        Hedgehog,
+        SapSlime,
+        Sentinel,
+        SentinelWarrior,
+        GrimDefender,
         BackwoodsRaven,
         DeerSkullBanner
     }

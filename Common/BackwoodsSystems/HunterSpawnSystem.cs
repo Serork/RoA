@@ -3,7 +3,6 @@
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Friendly;
 using RoA.Content.Projectiles;
-using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -90,7 +89,7 @@ sealed class HunterSpawnSystem : ModSystem {
         SpawnHunterAttacks();
     }
 
-     private class HunterAttackPlayer : ModPlayer {
+    private class HunterAttackPlayer : ModPlayer {
         public override void PostUpdate() {
             if (Main.myPlayer != Player.whoAmI) {
                 return;
@@ -170,7 +169,7 @@ sealed class HunterSpawnSystem : ModSystem {
     }
 
     private void SpawnHunterAttacks() {
-       
+
     }
 
     private void SetHunterSpawnVariables() {
@@ -503,7 +502,7 @@ sealed class HunterSpawnSystem : ModSystem {
             int num49 = tile.TileType;
             num49 = SpawnNPC_TryFindingProperGroundTileType(num49, num, num2);
 
-            if (tile.LiquidAmount <= 0 && 
+            if (tile.LiquidAmount <= 0 &&
                 (num49 == ModContent.TileType<BackwoodsGrass>() || num49 == ModContent.TileType<LivingElderwood>() || num49 == ModContent.TileType<BackwoodsGreenMoss>()) &&
                 num2 < BackwoodsVars.FirstTileYAtCenter + 10) {
                 //Main.LocalPlayer.position = new Vector2(num, num2).ToWorldCoordinates();

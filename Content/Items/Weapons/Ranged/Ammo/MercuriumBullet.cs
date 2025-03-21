@@ -8,11 +8,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Ranged.Ammo;
 
 sealed class MercuriumBullet : ModItem {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
     }
 
-	public override void SetDefaults() {
+    public override void SetDefaults() {
         Item.shoot = ModContent.ProjectileType<MercuriumBulletProjectile>();
 
         Item.shootSpeed = 3f;

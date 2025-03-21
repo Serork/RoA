@@ -12,18 +12,18 @@ using Terraria.ModLoader;
 namespace RoA.Content.Buffs;
 
 public class Brightstone : ModBuff {
-	public override void SetStaticDefaults() {
-		// DisplayName.SetDefault("Brightstone Lights");
-		// Description.SetDefault("You emit glowing lumps of light");
-	}
+    public override void SetStaticDefaults() {
+        // DisplayName.SetDefault("Brightstone Lights");
+        // Description.SetDefault("You emit glowing lumps of light");
+    }
 
-	public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<BrightstonePlayer>().brightstoneEffect = true;
+    public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<BrightstonePlayer>().brightstoneEffect = true;
 }
 
 sealed class BrightstonePlayer : ModPlayer {
     private Vector2[] _oldPositions = new Vector2[5];
-    
-	public bool brightstoneEffect;
+
+    public bool brightstoneEffect;
 
     public override void Load() {
         ResetPositions();
@@ -36,11 +36,11 @@ sealed class BrightstonePlayer : ModPlayer {
     }
 
     public override void ResetEffects()
-		=> brightstoneEffect = false;
+        => brightstoneEffect = false;
 
-	public override void UpdateEquips() {
-		if (!brightstoneEffect)
-			return;
+    public override void UpdateEquips() {
+        if (!brightstoneEffect)
+            return;
 
         for (int num2 = _oldPositions.Length - 1; num2 > 0; num2--) {
             _oldPositions[num2] = _oldPositions[num2 - 1];
@@ -53,8 +53,8 @@ sealed class BrightstonePlayer : ModPlayer {
             if (Vector2.Distance(_oldPositions[1], Player.Center) > Math.Sqrt(Player.width * Player.height) * 0.05f && Player.miscCounter % 2 == 0) {
                 Projectile.NewProjectile(Player.GetSource_Misc("brightstone"), pos.X, pos.Y, 0, 0, ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.Brightstone>(), 0, 0, Player.whoAmI);
             }
-		}
-	}
+        }
+    }
 
     public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright) {
         if (drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.active || drawInfo.shadow != 0f) {

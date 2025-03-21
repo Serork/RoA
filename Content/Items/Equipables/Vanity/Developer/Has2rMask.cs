@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.GlowMasks;
 using RoA.Core;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -16,11 +15,11 @@ namespace RoA.Content.Items.Equipables.Vanity.Developer;
 [AutoloadEquip(EquipType.Head)]
 [AutoloadGlowMask2("_Head_Glow")]
 sealed class Has2rMask : ModItem {
-	public override void SetStaticDefaults() {
-		ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
+    public override void SetStaticDefaults() {
+        ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
 
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
     public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
         if (drawPlayer.active && drawPlayer.hair == 26) {
@@ -30,8 +29,8 @@ sealed class Has2rMask : ModItem {
     }
 
     public override void SetDefaults() {
-		int width = 18; int height = 24;
-		Item.Size = new Vector2(width, height);
+        int width = 18; int height = 24;
+        Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Cyan;
         Item.value = Item.buyPrice(gold: 5);
@@ -43,7 +42,7 @@ sealed class Has2rMask : ModItem {
           body == EquipLoader.GetEquipSlot(Mod, nameof(Has2rJacket), EquipType.Body) &&
           legs == EquipLoader.GetEquipSlot(Mod, nameof(Has2rPants), EquipType.Legs);
 
-     private class TentaclesDrawLayer : ILoadable {
+    private class TentaclesDrawLayer : ILoadable {
         private const int MAX = 3;
 
         private Vector2 tentaclePosition;

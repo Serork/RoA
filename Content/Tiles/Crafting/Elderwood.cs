@@ -13,11 +13,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Tiles.Crafting;
 
 sealed class Elderwood : ModTile {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         TileHelper.Solid(Type, false, false);
         Main.tileMergeDirt[Type] = true;
-		Main.tileBlockLight[Type] = true;
-		Main.tileLighted[Type] = true;
+        Main.tileBlockLight[Type] = true;
+        Main.tileLighted[Type] = true;
 
         TileID.Sets.ChecksForMerge[Type] = true;
 
@@ -28,7 +28,7 @@ sealed class Elderwood : ModTile {
         MinPick = LivingElderwood.MINTILEREQUIRED;
     }
 
-	public override IEnumerable<Item> GetItemDrops(int i, int j) {
-		yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
-	}
+    public override IEnumerable<Item> GetItemDrops(int i, int j) {
+        yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
+    }
 }

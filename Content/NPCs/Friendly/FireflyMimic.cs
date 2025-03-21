@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Friendly;
 
 sealed class FireflyMimic : ModNPC {
-     private class FireflyMimicActuallyMimic : GlobalNPC {
+    private class FireflyMimicActuallyMimic : GlobalNPC {
         public override void OnSpawn(NPC npc, IEntitySource source) {
             Player closestPlayer = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
             if (npc.type == NPCID.Firefly && closestPlayer.RollLuck(40) == 0) {
@@ -118,7 +118,7 @@ sealed class FireflyMimic : ModNPC {
             }
         }
 
-        NPC.scale = NPC.ai[3];  
+        NPC.scale = NPC.ai[3];
         if (NPC.localAI[2] > 0f) {
             int i3 = (int)NPC.Center.X / 16;
             int j3 = (int)NPC.Center.Y / 16;

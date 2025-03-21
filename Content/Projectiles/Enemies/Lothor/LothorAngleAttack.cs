@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
 
-using System;
 using System.IO;
 
 using Terraria;

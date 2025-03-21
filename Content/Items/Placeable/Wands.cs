@@ -38,7 +38,7 @@ abstract class Wand : ModItem {
     protected abstract ushort ItemToConsume { get; }
     protected abstract ushort TileToPlace { get; }
 
-     private class ExtraLoader : ILoadable {
+    private class ExtraLoader : ILoadable {
         public void Load(Mod mod) {
             On_Player.PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate += On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate;
         }
@@ -73,7 +73,7 @@ abstract class Wand : ModItem {
                 if (inv[l].type == tileWand)
                     num10 += inv[l].stack;
             }
-            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, num10.ToString(), 
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, num10.ToString(),
                 position + new Vector2(-18f, 4f) * Main.inventoryScale, drawColor, 0f, Vector2.Zero, new Vector2(Main.inventoryScale * 0.8f), -1f, Main.inventoryScale);
         }
     }

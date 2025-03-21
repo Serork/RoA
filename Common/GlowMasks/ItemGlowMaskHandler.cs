@@ -16,18 +16,18 @@ namespace RoA.Common.GlowMasks;
 
 [Autoload(Side = ModSide.Client)]
 sealed class ItemGlowMaskHandler : PlayerDrawLayer {
-	public interface IDrawArmorGlowMask {
-		void SetDrawSettings(Player player, ref Texture2D texture, ref Color color);
-	}
-    
+    public interface IDrawArmorGlowMask {
+        void SetDrawSettings(Player player, ref Texture2D texture, ref Color color);
+    }
+
     // only head layer support for now
     public interface IAdvancedGlowMaskDraw {
         void Draw(ref PlayerDrawSet drawInfo, ref Texture2D texture, ref Color color);
     }
 
     public readonly struct GlowMaskInfo(Asset<Texture2D> glowMask, Color glowColor, bool shouldApplyItemAlpha) {
-		public readonly Asset<Texture2D> GlowMask = glowMask;
-		public readonly Color GlowColor = glowColor;
+        public readonly Asset<Texture2D> GlowMask = glowMask;
+        public readonly Color GlowColor = glowColor;
         public readonly bool ShouldApplyItemAlpha = shouldApplyItemAlpha;
     }
 
@@ -38,7 +38,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
             if (item.type >= ItemID.Count && GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
                 Texture2D glowMaskTexture = glowMaskInfo.GlowMask.Value;
-				Vector2 origin = glowMaskTexture.Size() / 2f;
+                Vector2 origin = glowMaskTexture.Size() / 2f;
                 Color color = Color.Lerp(glowMaskInfo.GlowColor, lightColor, Lighting.Brightness((int)item.Center.X / 16, (int)item.Center.Y / 16));
                 if (item.shimmered) {
                     color.R = (byte)(255f * (1f - item.shimmerTime));
@@ -81,25 +81,25 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     public static void RegisterArmorGlowMask(int slotId, ModItem modItem) => ArmorGlowMasks.TryAdd(slotId, modItem);
 
     public override void Unload() {
-		GlowMasks.Clear();
-		GlowMasks = null;
+        GlowMasks.Clear();
+        GlowMasks = null;
         ArmorGlowMasks.Clear();
         ArmorGlowMasks = null;
     }
 
-	public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => GlowMasks != null;
+    public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => GlowMasks != null;
 
-	public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.ArmOverItem);
+    public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.ArmOverItem);
 
-	protected override void Draw(ref PlayerDrawSet drawInfo) {
+    protected override void Draw(ref PlayerDrawSet drawInfo) {
         if (drawInfo.hideEntirePlayer) {
             return;
         }
 
         Player player = drawInfo.drawPlayer;
         if (!player.active) {
-			return;
-		}
+            return;
+        }
         if (drawInfo.shadow != 0f) {
             return;
         }
@@ -204,7 +204,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         }
     }
 
-     private class LegsGlowMaskHandler : PlayerDrawLayer {
+    private class LegsGlowMaskHandler : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Leggings);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
@@ -241,7 +241,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         }
     }
 
-     private class BodyGlowMaskHandler : PlayerDrawLayer {
+    private class BodyGlowMaskHandler : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
@@ -259,7 +259,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         private static void DrawArmorGlowMask(ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             if (player.body != -1) {
-                if (ArmorGlowMasks.TryGetValue(player.body, out ModItem armorGlowMaskModItem) && 
+                if (ArmorGlowMasks.TryGetValue(player.body, out ModItem armorGlowMaskModItem) &&
                     ModContent.HasAsset(armorGlowMaskModItem.Texture + "_Body_Glow")) {
                     Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem.Texture + "_Body_Glow").Value;
                     Color glowMaskColor = Color.White;

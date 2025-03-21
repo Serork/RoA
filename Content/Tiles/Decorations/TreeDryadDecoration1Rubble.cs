@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Materials;
-using RoA.Content.Items.Placeable.Crafting;
 
 using Terraria;
 using Terraria.DataStructures;

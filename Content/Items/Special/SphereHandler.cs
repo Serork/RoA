@@ -257,7 +257,7 @@ sealed class SphereHandler : GlobalItem {
         return false;
     }
 
-	private static void MakeEffects(Item item, Color color) {
+    private static void MakeEffects(Item item, Color color) {
         for (int i = 0; i < 20; i++) {
             int num = Dust.NewDust(item.Center, 1, 1, 309);
             Main.dust[num].scale *= 1.5f;
@@ -265,7 +265,7 @@ sealed class SphereHandler : GlobalItem {
         }
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Enchant") { PitchVariance = 0.1f }, item.Center);
     }
-	
+
     private static void DrawCondor(Item item, SpriteBatch spriteBatch) {
         bool sphere = _spheresToHandle.Contains(item.type);
         if (!sphere) {
@@ -315,9 +315,9 @@ sealed class SphereHandler : GlobalItem {
                 Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "CondorFeather").Value;
                 int height = texture.Height;
                 int width = texture.Width;
-                spriteBatch.Draw(texture, item.Center - Main.screenPosition + 
+                spriteBatch.Draw(texture, item.Center - Main.screenPosition +
                     new Vector2((float)(26 * (i - 1) + num5) - 45f,
-                    -50f + ((float)height - (float)height * num3) / 2f + (float)num6), new Microsoft.Xna.Framework.Rectangle(0, 0, width, height), new Microsoft.Xna.Framework.Color(num2, num2, num2, num2), 0f, default(Vector2), 
+                    -50f + ((float)height - (float)height * num3) / 2f + (float)num6), new Microsoft.Xna.Framework.Rectangle(0, 0, width, height), new Microsoft.Xna.Framework.Color(num2, num2, num2, num2), 0f, default(Vector2),
                     num3, SpriteEffects.None, 0f);
             }
         }
@@ -327,7 +327,7 @@ sealed class SphereHandler : GlobalItem {
     #region SHOCK
     private static List<Color> _lerpColors = [new Color(175, 241, 205), new Color(60, 222, 190)];
 
-     private class LerpColorHandler : ModPlayer {
+    private class LerpColorHandler : ModPlayer {
         private float _lerpColorProgress;
         private Color _lerpColor;
 

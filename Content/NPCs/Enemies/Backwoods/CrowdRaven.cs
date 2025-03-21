@@ -17,11 +17,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class CrowdRaven : ModNPC {
-	public override void SetStaticDefaults() {
-		//base.SetStaticDefaults();
+    public override void SetStaticDefaults() {
+        //base.SetStaticDefaults();
 
-		// DisplayName.SetDefault("Summoned Raven");
-		Main.npcFrameCount[Type] = 5;
+        // DisplayName.SetDefault("Summoned Raven");
+        Main.npcFrameCount[Type] = 5;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             //Position = new Vector2(2f, -10f),

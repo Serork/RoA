@@ -1,8 +1,9 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
+﻿using Microsoft.Xna.Framework;
+
+using Terraria;
 using Terraria.GameContent.Creative;
-using Microsoft.Xna.Framework;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Vanity.Developer;
 

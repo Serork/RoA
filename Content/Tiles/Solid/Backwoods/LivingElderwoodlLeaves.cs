@@ -1,5 +1,3 @@
-using FullSerializer.Internal;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,7 +7,6 @@ using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -21,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
 sealed class LivingElderwoodlLeaves : ModTile {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         TileHelper.Solid(Type, false, false, brick: false);
         TileHelper.MergeWith(Type, TileID.Dirt);
 
@@ -35,8 +32,8 @@ sealed class LivingElderwoodlLeaves : ModTile {
 
         HitSound = SoundID.Grass;
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
-		AddMapEntry(new Color(0, 128, 0));
-	}
+        AddMapEntry(new Color(0, 128, 0));
+    }
 
     public override void ModifyFrameMerge(int i, int j, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight) {
         WorldGen.TileMergeAttemptFrametest(i, j, ModContent.TileType<LivingElderwoodlLeaves>(), ModContent.TileType<LivingElderwood>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);

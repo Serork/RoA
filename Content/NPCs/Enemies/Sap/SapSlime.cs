@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Banners;
@@ -59,12 +57,12 @@ sealed class SapSlime : ModNPC {
 
     private int GenerateItemInsideBody(bool isBallooned) {
         //if (Main.rand.NextBool(3)) {
-            WeightedRandom<int> weightedRandom = new();
-            weightedRandom.Add(ModContent.ItemType<SlipperyBomb>());
-            //weightedRandom.Add(ModContent.ItemType<SlipperyDynamite>(), 0.5);
-            weightedRandom.Add(ModContent.ItemType<SlipperyGrenade>());
-            weightedRandom.Add(ModContent.ItemType<SlipperyGlowstick>());
-            return weightedRandom.Get();
+        WeightedRandom<int> weightedRandom = new();
+        weightedRandom.Add(ModContent.ItemType<SlipperyBomb>());
+        //weightedRandom.Add(ModContent.ItemType<SlipperyDynamite>(), 0.5);
+        weightedRandom.Add(ModContent.ItemType<SlipperyGrenade>());
+        weightedRandom.Add(ModContent.ItemType<SlipperyGlowstick>());
+        return weightedRandom.Get();
         //}
         //else {
         //    return ModContent.ItemType<Galipot>();

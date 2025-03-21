@@ -152,7 +152,7 @@ sealed class TreeDryadRubble : ModTile {
             zero = Vector2.Zero;
         }
         bool flag = tile.TileFrameY == 0;
-        int frameY = !flag ? tile.TileFrameY + 4 : 0; 
+        int frameY = !flag ? tile.TileFrameY + 4 : 0;
         int height = flag ? 22 : 16;
         int frameX = tile.TileFrameX;
         Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);

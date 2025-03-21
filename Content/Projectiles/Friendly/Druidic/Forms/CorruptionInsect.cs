@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+
 using System;
 
 using Terraria;
@@ -7,45 +8,45 @@ using Terraria.ID;
 namespace RoA.Content.Projectiles.Friendly.Druidic.Forms;
 
 class CorruptionInsect : FormProjectile {
-	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Corruption Swarmer");
-		Main.projFrames[Projectile.type] = 4;
-	}
+    public override void SetStaticDefaults() {
+        //DisplayName.SetDefault("Corruption Swarmer");
+        Main.projFrames[Projectile.type] = 4;
+    }
 
-	protected override void SafeSetDefaults() {
+    protected override void SafeSetDefaults() {
         Projectile.aiStyle = -1;
         Projectile.alpha = 255;
         Projectile.noEnchantmentVisuals = true;
         Projectile.extraUpdates = 0;
 
         int width = 12; int height = width;
-		Projectile.Size = new Vector2(width, height);
+        Projectile.Size = new Vector2(width, height);
 
-		Projectile.scale = 1f;
-		Projectile.penetrate = 3;
-		Projectile.timeLeft = 600;
+        Projectile.scale = 1f;
+        Projectile.penetrate = 3;
+        Projectile.timeLeft = 600;
 
         Projectile.tileCollide = false;
 
         Projectile.friendly = true;
-		Projectile.hostile = false;
+        Projectile.hostile = false;
     }
 
-	public override void AI() {
+    public override void AI() {
         //if (Projectile.timeLeft == 220) {
         //    Projectile.tileCollide = true;
         //}
 
         if (Projectile.alpha > 0) Projectile.alpha -= 10;
 
-		Projectile.velocity *= 0.98f;
+        Projectile.velocity *= 0.98f;
 
-		Projectile.frameCounter++;
-		if (Projectile.frameCounter > 4) {
-			Projectile.frame++;
-			Projectile.frameCounter = 0;
-		}
-		if (Projectile.frame >= 4) Projectile.frame = 0;
+        Projectile.frameCounter++;
+        if (Projectile.frameCounter > 4) {
+            Projectile.frame++;
+            Projectile.frameCounter = 0;
+        }
+        if (Projectile.frame >= 4) Projectile.frame = 0;
 
         Projectile.frameCounter++;
         if (Projectile.frameCounter > 2) {
@@ -173,11 +174,11 @@ class CorruptionInsect : FormProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-		for (int count = 0; count < 9; count++) {
-			int dust = Dust.NewDust(Projectile.position, 10, 10, DustID.CursedTorch, 0, 0, 0, default, 0.8f);
-			Main.dust[dust].noGravity = true;
-			Main.dust[dust].fadeIn = 0.6f;
-			Main.dust[dust].velocity *= 0.4f;
-		}
-	}
+        for (int count = 0; count < 9; count++) {
+            int dust = Dust.NewDust(Projectile.position, 10, 10, DustID.CursedTorch, 0, 0, 0, default, 0.8f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].fadeIn = 0.6f;
+            Main.dust[dust].velocity *= 0.4f;
+        }
+    }
 }

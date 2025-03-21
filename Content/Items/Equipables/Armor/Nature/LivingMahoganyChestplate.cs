@@ -11,11 +11,11 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Body)]
 sealed class LivingMahoganyChestplate : NatureItem {
-	public override void SetStaticDefaults() {
-		//DisplayName.SetDefault("Living Mahogany Chestplate");
-		//Tooltip.SetDefault("6% increased nature potential damage");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override void SetStaticDefaults() {
+        //DisplayName.SetDefault("Living Mahogany Chestplate");
+        //Tooltip.SetDefault("6% increased nature potential damage");
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
     protected override void SafeSetDefaults() {
         int width = 30; int height = 22;

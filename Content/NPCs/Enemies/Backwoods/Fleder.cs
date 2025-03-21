@@ -1,28 +1,28 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
 
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-
-using Microsoft.Xna.Framework;
-
-using RoA.Content.Tiles.Platforms;
-using System.Collections.Generic;
-using System.Linq;
-using RoA.Core.Utility;
-using System.IO;
 using RoA.Common.BackwoodsSystems;
 using RoA.Content.Biomes.Backwoods;
-using Terraria.DataStructures;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.Tiles.Platforms;
+using RoA.Core.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class Fleder : ModNPC {
     private enum State {
-        Normal, 
+        Normal,
         Sitting,
         Attacking
     }

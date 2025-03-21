@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Core;
 
@@ -7,7 +6,6 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 

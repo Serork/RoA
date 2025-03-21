@@ -1,6 +1,4 @@
-﻿using Humanizer;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
@@ -27,7 +25,6 @@ using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
@@ -273,8 +270,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
 
         Main.tileMergeDirt[Type] = false;
         Main.tileSolid[Type] = false;
-        Main.tileLighted[Type] = false; 
-        Main.tileBlockLight[Type] = false; 
+        Main.tileLighted[Type] = false;
+        Main.tileBlockLight[Type] = false;
         Main.tileFrameImportant[Type] = true;
         Main.tileAxe[Type] = true;
 
@@ -342,8 +339,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             for (int k = 0; k < count; k++) {
                 Vector2 offset = new Vector2(placeRandom.NextFloat(0f, 100f) * direction, placeRandom.NextFloat(0f, 200f)).RotatedBy(MathHelper.TwoPi);
                 Vector2 position = (new Vector2(i, j - 15) * 16) + offset;
-                Gore.NewGore(null, 
-                    position, 
+                Gore.NewGore(null,
+                    position,
                     new Vector2(),
                     leafGoreType,
                     placeRandom.Next(90, 130) * 0.01f);
@@ -484,7 +481,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                         WorldGen.KillTile(i + 2, checkJ, false, false, false);
                     }
                 }
-                if (IsTrunk(i - 1, checkJ))  {
+                if (IsTrunk(i - 1, checkJ)) {
                     WorldGen.KillTile(i - 1, checkJ, false, false, false);
                     if (IsBranch(i - 2, checkJ)) {
                         WorldGen.KillTile(i - 2, checkJ, false, false, false);

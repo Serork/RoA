@@ -10,33 +10,33 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Tools;
 
 sealed class MercuriumPickaxe : ModItem {
-	public override void SetStaticDefaults() {
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override void SetStaticDefaults() {
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
-	public override void SetDefaults() {
-		int width = 36; int height = width;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 36; int height = width;
+        Item.Size = new Vector2(width, height);
 
-		Item.damage = 8;
-		Item.DamageType = DamageClass.Melee;
+        Item.damage = 8;
+        Item.DamageType = DamageClass.Melee;
 
         Item.useAnimation = 28;
         Item.useTime = 15;
 
         Item.useStyle = ItemUseStyleID.Swing;
 
-		Item.useTurn = true;
+        Item.useTurn = true;
 
-		Item.autoReuse = true;
+        Item.autoReuse = true;
 
-		Item.knockBack = 5f;
-		Item.pick = 65;
+        Item.knockBack = 5f;
+        Item.pick = 65;
 
-		Item.rare = ItemRarityID.Blue;
-		Item.UseSound = SoundID.Item1;
+        Item.rare = ItemRarityID.Blue;
+        Item.UseSound = SoundID.Item1;
 
-		Item.value = Item.sellPrice(silver: 45);
+        Item.value = Item.sellPrice(silver: 45);
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {

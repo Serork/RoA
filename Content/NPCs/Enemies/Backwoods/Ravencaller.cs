@@ -5,7 +5,6 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Equipables.Accessories;
-using RoA.Content.Items.Equipables.Armor.Ranged;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Core.Utility;

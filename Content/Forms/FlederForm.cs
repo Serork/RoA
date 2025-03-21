@@ -163,7 +163,7 @@ sealed class FlederForm : BaseForm {
                 _dashTimer--;
             }
         }
-        
+
         internal static void SpawnDusts(Player player, int strength = 3) {
             Vector2 vector11 = player.Center;
             for (int k = 0; k < 40 - 10 * (3 - strength); k++) {

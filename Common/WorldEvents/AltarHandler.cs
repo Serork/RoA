@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core.Utility;
@@ -8,7 +7,6 @@ using System;
 using System.IO;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;

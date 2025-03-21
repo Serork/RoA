@@ -1,11 +1,8 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
-using RoA.Content.Items.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
-
-using System;
 
 using Terraria;
 using Terraria.Audio;
@@ -18,7 +15,7 @@ namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
 [AutoloadEquip(EquipType.Back)]
 sealed class PeegeonCape : ModItem {
-     private class PeegeonCapeWingsLogic : ModPlayer {
+    private class PeegeonCapeWingsLogic : ModPlayer {
         public bool IsWingsActive;
 
         private bool flapSound;

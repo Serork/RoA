@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Potions;
 
 sealed class DryadBloodPotion : ModItem {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Dryad Blood Potion");
         //Tooltip.SetDefault("Increases resistance to damaging debuffs");
         Item.ResearchUnlockCount = 20;
@@ -21,7 +21,7 @@ sealed class DryadBloodPotion : ModItem {
         };
     }
 
-	public override void SetDefaults() {
+    public override void SetDefaults() {
         int width = 20; int height = 30;
         Item.Size = new Vector2(width, height);
 
@@ -35,7 +35,7 @@ sealed class DryadBloodPotion : ModItem {
         Item.consumable = true;
 
         Item.buffType = ModContent.BuffType<DryadBlood>();
-		Item.buffTime = 3600 * 8;
+        Item.buffTime = 3600 * 8;
 
         Item.value = Item.sellPrice(0, 0, 2, 0);
     }

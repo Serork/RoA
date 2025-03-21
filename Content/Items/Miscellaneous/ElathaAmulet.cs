@@ -14,7 +14,7 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class ElathaAmulet : ModItem {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Elatha Scepter");
         //Tooltip.SetDefault("Changes the phases of the Moon");
 
@@ -47,7 +47,7 @@ sealed class ElathaAmulet : ModItem {
     }
 
     public override void SetDefaults() {
-		Item.Size = new Vector2(16, 42);
+        Item.Size = new Vector2(16, 42);
         Item.rare = ItemRarityID.LightRed;
         Item.useAnimation = 20;
         Item.useTime = 20;
@@ -110,7 +110,7 @@ sealed class ElathaAmulet : ModItem {
                 if (Main.netMode == NetmodeID.SinglePlayer) {
                     ChangeMoonPhase(player);
                 }
-                else { 
+                else {
                     MultiplayerSystem.SendPacket(new ElathaAmuletUsagePacket(player));
                 }
             }
@@ -119,7 +119,7 @@ sealed class ElathaAmulet : ModItem {
         return base.UseItem(player);
     }
 
-     private class ElathaAmuletCooldownHandler : ModSystem {
+    private class ElathaAmuletCooldownHandler : ModSystem {
         public static short ElathaAmuletCooldown;
 
         public override void Load() {

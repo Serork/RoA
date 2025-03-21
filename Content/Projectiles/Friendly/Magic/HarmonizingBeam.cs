@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Dusts;
 using RoA.Core;
 
 using Terraria;
@@ -10,37 +9,37 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
 sealed class HarmonizingBeam : ModProjectile {
-	public override string Texture => ResourceManager.EmptyTexture;
+    public override string Texture => ResourceManager.EmptyTexture;
 
-	public override void SetDefaults() {
-		int width = 16; int height = width;
-		Projectile.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 16; int height = width;
+        Projectile.Size = new Vector2(width, height);
 
-		Projectile.aiStyle = -1;
-		AIType = ProjectileID.Bullet;
+        Projectile.aiStyle = -1;
+        AIType = ProjectileID.Bullet;
 
-		Projectile.friendly = true;
-		Projectile.tileCollide = true;
-		Projectile.DamageType = DamageClass.Magic;
+        Projectile.friendly = true;
+        Projectile.tileCollide = true;
+        Projectile.DamageType = DamageClass.Magic;
 
-		Projectile.penetrate = 1;
-		Projectile.timeLeft = 120;
+        Projectile.penetrate = 1;
+        Projectile.timeLeft = 120;
 
-		Projectile.extraUpdates = 1;
-		Projectile.alpha = 255;
-	}
+        Projectile.extraUpdates = 1;
+        Projectile.alpha = 255;
+    }
 
-	public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-		width = height = 8;
-		return true;
-	}
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+        return true;
+    }
 
-	public override void AI() {
-		Projectile.position += new Vector2(0f, Projectile.ai[0] * Projectile.ai[2]).RotatedBy(Projectile.velocity.ToRotation());
-		if (Projectile.ai[1] != 1f) Projectile.ai[0] -= 1f;
-		else Projectile.ai[0] += 1;
-		if (Projectile.ai[0] <= -6) Projectile.ai[1] = 1f;
-		if (Projectile.ai[0] >= 6) Projectile.ai[1] = 0f;
+    public override void AI() {
+        Projectile.position += new Vector2(0f, Projectile.ai[0] * Projectile.ai[2]).RotatedBy(Projectile.velocity.ToRotation());
+        if (Projectile.ai[1] != 1f) Projectile.ai[0] -= 1f;
+        else Projectile.ai[0] += 1;
+        if (Projectile.ai[0] <= -6) Projectile.ai[1] = 1f;
+        if (Projectile.ai[0] >= 6) Projectile.ai[1] = 0f;
 
 
         if (Projectile.timeLeft > 120 - 1) {
@@ -70,9 +69,9 @@ sealed class HarmonizingBeam : ModProjectile {
         }
     }
 
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-		=> target.AddBuff(BuffID.OnFire, 180);
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        => target.AddBuff(BuffID.OnFire, 180);
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info)
-		=> target.AddBuff(BuffID.OnFire, 180);
+        => target.AddBuff(BuffID.OnFire, 180);
 }

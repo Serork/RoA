@@ -1,14 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria.ModLoader;
-using Terraria.ID;
 
 namespace RoA.Content.Items.Placeable.Furniture;
 
 sealed class ElderwoodBed : ModItem {
-	public override void SetDefaults() {
-		int width = 32; int height = 22;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 32; int height = 22;
+        Item.Size = new Vector2(width, height);
 
         Item.maxStack = Terraria.Item.CommonMaxStack;
         Item.useTurn = true;

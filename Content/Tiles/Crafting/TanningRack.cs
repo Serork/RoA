@@ -26,7 +26,7 @@ sealed class TanningRack : ModTile {
     }
 
     private void On_HouseBuilder_PlaceBiomeSpecificTool(On_HouseBuilder.orig_PlaceBiomeSpecificTool orig, HouseBuilder self, HouseBuilderContext context) {
-		orig(self, context);
+        orig(self, context);
 
         if (WorldGen.genRand.NextChance(0.075) && self.Type != HouseType.Ice) {
             bool flag2 = false;
@@ -58,16 +58,16 @@ sealed class TanningRack : ModTile {
     private static ushort SkinningBuffType => (ushort)ModContent.BuffType<Skinning>();
 
     public override void SetStaticDefaults() {
-		Main.tileFrameImportant[Type] = true;
-		Main.tileNoAttach[Type] = true;
-		Main.tileLavaDeath[Type] = true;
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-		TileObjectData.newTile.Origin = new Point16(1, 1);
-		TileObjectData.newTile.CoordinateHeights = [16, 16];
-		TileObjectData.newTile.StyleHorizontal = true;
-		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
-		TileObjectData.addTile(Type);
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
+        TileObjectData.newTile.Origin = new Point16(1, 1);
+        TileObjectData.newTile.CoordinateHeights = [16, 16];
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
+        TileObjectData.addTile(Type);
 
         TileID.Sets.HasOutlines[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
@@ -77,37 +77,37 @@ sealed class TanningRack : ModTile {
         DustType = DustID.t_LivingWood;
     }
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
     public override bool RightClick(int i, int j) {
-		Player player = Main.player[Main.myPlayer];
-		player.AddBuff(SkinningBuffType, 18000);
+        Player player = Main.player[Main.myPlayer];
+        player.AddBuff(SkinningBuffType, 18000);
         SoundStyle leatherSound = new(ResourceManager.Sounds + "Leather") {
             PitchVariance = 0.1f,
-			Volume = 1.5f
+            Volume = 1.5f
         };
         SoundEngine.PlaySound(leatherSound, player.GetViableMousePosition());
         return true;
-	}
+    }
 
-	public override void MouseOver(int i, int j) {
-		Player player = Main.player[Main.myPlayer];
-		if (player.HasBuff(SkinningBuffType)) {
-			int[] leather = [ModContent.ItemType<AnimalLeather>(), ModContent.ItemType<RoughLeather>()];
-			bool flag = leather.Contains(player.GetSelectedItem().type);
+    public override void MouseOver(int i, int j) {
+        Player player = Main.player[Main.myPlayer];
+        if (player.HasBuff(SkinningBuffType)) {
+            int[] leather = [ModContent.ItemType<AnimalLeather>(), ModContent.ItemType<RoughLeather>()];
+            bool flag = leather.Contains(player.GetSelectedItem().type);
             if (flag) {
-				player.noThrow = 2;
-				player.cursorItemIconEnabled = true;
-				player.cursorItemIconID = ItemID.Leather;
-			}
+                player.noThrow = 2;
+                player.cursorItemIconEnabled = true;
+                player.cursorItemIconID = ItemID.Leather;
+            }
 
-			return;
-		}
+            return;
+        }
 
-		player.noThrow = 2;
-		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Items.Placeable.Crafting.TanningRack>();
-	}
+        player.noThrow = 2;
+        player.cursorItemIconEnabled = true;
+        player.cursorItemIconID = ModContent.ItemType<Items.Placeable.Crafting.TanningRack>();
+    }
 }

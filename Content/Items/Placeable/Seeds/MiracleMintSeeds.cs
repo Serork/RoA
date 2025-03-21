@@ -1,5 +1,3 @@
-using Newtonsoft.Json.Linq;
-
 using RoA.Content.Tiles.Plants;
 
 using Terraria;
@@ -9,8 +7,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Placeable.Seeds;
 
 sealed class MiracleMintSeeds : ModItem {
-	public override void SetStaticDefaults () {
-		Item.ResearchUnlockCount = 25;
+    public override void SetStaticDefaults() {
+        Item.ResearchUnlockCount = 25;
     }
 
     public override void SetDefaults() {

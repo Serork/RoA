@@ -30,10 +30,10 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         Writer.Write(rotation);
     }
 
-	public override void Read(BinaryReader reader, int sender) {
-		if (!reader.TryReadSenderPlayer(sender, out var player)) {
-			return;
-		}
+    public override void Read(BinaryReader reader, int sender) {
+        if (!reader.TryReadSenderPlayer(sender, out var player)) {
+            return;
+        }
 
         VisualEffectPacketType packetType = (VisualEffectPacketType)reader.ReadByte();
         int layer = reader.ReadInt32();
@@ -64,7 +64,7 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         }
 
         if (Main.netMode == NetmodeID.Server) {
-			MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(packetType, player, layer, position, velocity, color, scale, rotation), ignoreClient: sender);
-		}
-	}
+            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(packetType, player, layer, position, velocity, color, scale, rotation), ignoreClient: sender);
+        }
+    }
 }

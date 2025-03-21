@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using ReLogic.Content;
 
@@ -10,11 +9,9 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
-using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -248,12 +245,12 @@ sealed class PrimordialTree : ModTree {
     public override TreePaintingSettings TreeShaderSettings => WoodJungle;
 
     private static TreePaintingSettings WoodJungle = new TreePaintingSettings {
-		UseSpecialGroups = true,
-		SpecialGroupMinimalHueValue = 1f / 6f,
-		SpecialGroupMaximumHueValue = 5f / 6f,
-		SpecialGroupMinimumSaturationValue = 0f,
-		SpecialGroupMaximumSaturationValue = 1f
-	};
+        UseSpecialGroups = true,
+        SpecialGroupMinimalHueValue = 1f / 6f,
+        SpecialGroupMaximumHueValue = 5f / 6f,
+        SpecialGroupMinimumSaturationValue = 0f,
+        SpecialGroupMaximumSaturationValue = 1f
+    };
 
     public override void SetStaticDefaults() => GrowsOnTileId = [ModContent.TileType<BackwoodsGrass>()];
 

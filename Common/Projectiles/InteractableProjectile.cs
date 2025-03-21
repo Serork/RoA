@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;

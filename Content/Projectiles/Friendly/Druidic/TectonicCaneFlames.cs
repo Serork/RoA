@@ -1,7 +1,9 @@
-﻿using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+
 using RoA.Core;
+
+using Terraria;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 

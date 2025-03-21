@@ -1,12 +1,14 @@
+using Microsoft.Xna.Framework;
+
+using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Druidic;
+using RoA.Core.Utility;
+
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using RoA.Common.Druid;
-using RoA.Core.Utility;
 
 namespace RoA.Content.Items.Weapons.Druidic;
 

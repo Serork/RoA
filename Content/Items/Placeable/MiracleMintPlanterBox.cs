@@ -6,11 +6,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Placeable;
 
 sealed class MiracleMintPlanterBox : ModItem {
-	public override void SetStaticDefaults () {
-		Item.ResearchUnlockCount = 25;
-	}   
-	
-	public override void SetDefaults() {
+    public override void SetStaticDefaults() {
+        Item.ResearchUnlockCount = 25;
+    }
+
+    public override void SetDefaults() {
         Item.useStyle = 1;
         Item.useTurn = true;
         Item.useAnimation = 15;

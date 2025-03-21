@@ -1,14 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-
-using RoA.Content.Biomes.Backwoods;
+﻿using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 
-using System;
-using System.Linq;
-
 using Terraria;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;

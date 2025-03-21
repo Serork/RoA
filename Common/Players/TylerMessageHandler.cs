@@ -6,7 +6,6 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.Localization;
@@ -92,7 +91,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
 
     private void GiveIdleMessageCooldown() => PutMessageTypeOnCooldown(MessageSource.Idle, Main.rand.Next(5800, 7200));
 
-    public void PutMessageTypeOnCooldown(MessageSource source, int timeInFrames)  => _messageCooldownsByType[(int)source] = timeInFrames;
+    public void PutMessageTypeOnCooldown(MessageSource source, int timeInFrames) => _messageCooldownsByType[(int)source] = timeInFrames;
 
     public void TryCreatingMessageWithCooldown(MessageSource messageSource, Vector2 position, Vector2 velocity, int cooldownTimeInTicks) {
         if (Main.netMode == NetmodeID.Server || _messageCooldownsByType[(int)messageSource] > 0) {
@@ -107,7 +106,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
         if (Main.netMode == NetmodeID.Server || !IsTylerSet()) {
             return;
         }
-        
+
         GiveIdleMessageCooldown();
         SpawnPopupText(source, _variation, position, velocity);
         SpawnEmoteBubble();

@@ -7,16 +7,16 @@ using Terraria.ModLoader;
 namespace RoA.Content.Tiles.Walls;
 
 sealed class BackwoodsGrassWall2 : ModWall {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         Main.wallHouse[Type] = true;
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
-		AddMapEntry(new Color(0, 67, 17));
+        AddMapEntry(new Color(0, 67, 17));
 
-		WallID.Sets.WallSpreadStopsAtAir[Type] = true;
+        WallID.Sets.WallSpreadStopsAtAir[Type] = true;
 
         HitSound = SoundID.Grass;
     }
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }

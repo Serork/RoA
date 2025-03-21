@@ -6,7 +6,6 @@ using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 using RoA.Core.Utility;
 
-using System.Collections;
 using System.Collections.Generic;
 
 using Terraria;
@@ -58,7 +57,7 @@ sealed class BackwoodsPot : ModTile {
         var tileFrameY = Main.tile[i, j].TileFrameY;
         if (tileFrameY < 72)
             return 0;
-        else 
+        else
             return 1;
     }
 

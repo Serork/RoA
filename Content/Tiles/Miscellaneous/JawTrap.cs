@@ -1,16 +1,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
 using RoA.Content.Buffs;
-using RoA.Content.Tiles.Crafting;
-using RoA.Core.Utility;
 using RoA.Core;
+using RoA.Core.Utility;
 
-using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -23,7 +21,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using System.IO;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 

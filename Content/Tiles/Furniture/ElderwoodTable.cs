@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+
 using System.Collections.Generic;
 
 using Terraria;
@@ -10,7 +11,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodTable : ModTile {
-	public override void SetStaticDefaults() {
+    public override void SetStaticDefaults() {
         Main.tileSolidTop[Type] = true;
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;

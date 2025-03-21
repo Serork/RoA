@@ -1,15 +1,13 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Terraria.ID;
 
+using Terraria;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria;
-
-using Microsoft.Xna.Framework;
-using System;
 
 namespace RoA.Common.Tiles;
 

@@ -1,20 +1,19 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
+﻿using RoA.Core;
 
-using RoA.Core;
-using Newtonsoft.Json.Linq;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Materials;
 
 sealed class MiracleMint : ModItem {
-	public override void SetStaticDefaults() {
-		Item.ResearchUnlockCount = 25;
+    public override void SetStaticDefaults() {
+        Item.ResearchUnlockCount = 25;
 
-		//ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
-	}
+        //ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
+    }
 
-	public override void SetDefaults() {
+    public override void SetDefaults() {
         Item.SetSize(20, 22);
 
         Item.SetDefaultOthers(Item.sellPrice(copper: 20));

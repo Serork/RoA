@@ -26,7 +26,7 @@ sealed class FlametrackerSetBonusHandler : ModPlayer {
     public override void OnConsumeMana(Item item, int manaConsumed) {
         if (IsActive) {
             if (Player.statMana == Player.statManaMax2) {
-			SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "FireWoosh") { Volume = 5.5f }, Player.Center);
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "FireWoosh") { Volume = 5.5f }, Player.Center);
                 if (Player.whoAmI == Main.myPlayer) {
                     Vector2 mousePos = Player.GetViableMousePosition();
                     int direction = (mousePos - Player.Center).X.GetDirection();

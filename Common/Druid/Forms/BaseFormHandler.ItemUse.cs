@@ -1,5 +1,4 @@
-﻿using RoA.Common.DrawLayers;
-using RoA.Common.Druid.Wreath;
+﻿using RoA.Common.Druid.Wreath;
 
 using Terraria;
 using Terraria.ModLoader;

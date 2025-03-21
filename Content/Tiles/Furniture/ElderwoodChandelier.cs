@@ -1,6 +1,4 @@
-﻿using FullSerializer.Internal;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
@@ -21,40 +19,40 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHooks.ITileFlameData {
-	public override void SetStaticDefaults() {
-		Main.tileLighted[Type] = true;
-		Main.tileFrameImportant[Type] = true;
-		Main.tileLavaDeath[Type] = true;
+    public override void SetStaticDefaults() {
+        Main.tileLighted[Type] = true;
+        Main.tileFrameImportant[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
-		TileObjectData.newTile.Origin = new Point16(1, 0);
-		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 1, 1);
-		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
+        TileObjectData.newTile.Origin = new Point16(1, 0);
+        TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 1, 1);
+        TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
         TileObjectData.newTile.DrawYOffset = -2;
         TileObjectData.newTile.Height = 3;
-		TileObjectData.newTile.Width = 3;
-		TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16 };
-		TileObjectData.newTile.StyleHorizontal = true;
-		TileObjectData.newTile.StyleWrapLimit = 111;
-		TileObjectData.addTile(Type);
+        TileObjectData.newTile.Width = 3;
+        TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16 };
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.StyleWrapLimit = 111;
+        TileObjectData.addTile(Type);
 
         DustType = ModContent.DustType<WoodTrash>();
         AdjTiles = [TileID.Chandeliers];
 
-		AddMapEntry(new Color(235, 166, 135), Language.GetText("MapObject.Chandelier"));
+        AddMapEntry(new Color(235, 166, 135), Language.GetText("MapObject.Chandelier"));
 
-		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
-		TileID.Sets.DisableSmartCursor[Type] = true;
-	}
+        AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
+        TileID.Sets.DisableSmartCursor[Type] = true;
+    }
 
-	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
-		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX < 54) {
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
+        Tile tile = Main.tile[i, j];
+        if (tile.TileFrameX < 54) {
             r = 1f;
             g = 0.95f;
             b = 0.8f;
         }
-	}
+    }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
         yield return new Item(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChandelier>());
@@ -62,7 +60,7 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
-	public override void HitWire(int i, int j) {
+    public override void HitWire(int i, int j) {
         Tile tile = Main.tile[i, j];
         int topX = i - tile.TileFrameX / 18 % 3;
         int topY = j - tile.TileFrameY / 18 % 3;

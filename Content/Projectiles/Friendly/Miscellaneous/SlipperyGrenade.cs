@@ -1,16 +1,18 @@
+using Microsoft.Xna.Framework;
+
+using RoA.Content.Dusts;
+
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using RoA.Content.Dusts;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 sealed class SlipperyGrenade : ModProjectile {
-	private Vector2 memorizeVelocity;
-	private int effectCounter;
-	private int effectCounterMax = 1;
+    private Vector2 memorizeVelocity;
+    private int effectCounter;
+    private int effectCounterMax = 1;
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
@@ -19,20 +21,20 @@ sealed class SlipperyGrenade : ModProjectile {
     }
 
     public override void SetDefaults() {
-		int width = 14; int height = width;
-		Projectile.Size = new Vector2(width, height);
+        int width = 14; int height = width;
+        Projectile.Size = new Vector2(width, height);
 
         Projectile.penetrate = -1;
-		Projectile.friendly = true;
+        Projectile.friendly = true;
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
         Projectile.tileCollide = true;
-		Projectile.timeLeft = 180;
+        Projectile.timeLeft = 180;
 
-		Projectile.DamageType = DamageClass.Ranged;
-	}
+        Projectile.DamageType = DamageClass.Ranged;
+    }
 
     public override void PrepareBombToBlow() {
         Projectile.alpha = 255;
@@ -51,13 +53,13 @@ sealed class SlipperyGrenade : ModProjectile {
     }
 
     public override void AI() {
-		if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3) {
+        if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3) {
             Projectile.PrepareBombToBlow();
         }
 
         if (!Projectile.tileCollide) {
-			memorizeVelocity *= 0.97f;
-			Projectile.velocity = memorizeVelocity;
+            memorizeVelocity *= 0.97f;
+            Projectile.velocity = memorizeVelocity;
             if (Projectile.ai[2] <= 0f) {
                 if (!Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
                     memorizeVelocity = Vector2.Zero;
@@ -68,36 +70,36 @@ sealed class SlipperyGrenade : ModProjectile {
                 Projectile.ai[2]--;
             }
             effectCounter++;
-			if (effectCounter == effectCounterMax && effectCounterMax < 20) {
-				effectCounterMax += 3;
-				effectCounter = 0;
+            if (effectCounter == effectCounterMax && effectCounterMax < 20) {
+                effectCounterMax += 3;
+                effectCounter = 0;
                 SoundEngine.PlaySound(SoundID.WormDig, Projectile.position);
             }
-			if (effectCounter % 4 == 0 && effectCounterMax < 20) {
-				int dustDig = Dust.NewDust(Projectile.Center - Vector2.One * 10, 20, 20, ModContent.DustType<Galipot2>(), 0f, 0f, 0, default(Color), 1f);
-				Main.dust[dustDig].velocity *= 0.1f;
-				Main.dust[dustDig].noGravity = true;
+            if (effectCounter % 4 == 0 && effectCounterMax < 20) {
+                int dustDig = Dust.NewDust(Projectile.Center - Vector2.One * 10, 20, 20, ModContent.DustType<Galipot2>(), 0f, 0f, 0, default(Color), 1f);
+                Main.dust[dustDig].velocity *= 0.1f;
+                Main.dust[dustDig].noGravity = true;
             }
-		}
+        }
 
-		Projectile.ai[0] += 1f;
-		if (Projectile.ai[0] >= 20f && Projectile.tileCollide)
-			Projectile.velocity.Y = Projectile.velocity.Y + 0.4f; // 0.1f for arrow gravity, 0.4f for knife gravity
-		if (Projectile.velocity.Y > 16f)
-			Projectile.velocity.Y = 16f;
+        Projectile.ai[0] += 1f;
+        if (Projectile.ai[0] >= 20f && Projectile.tileCollide)
+            Projectile.velocity.Y = Projectile.velocity.Y + 0.4f; // 0.1f for arrow gravity, 0.4f for knife gravity
+        if (Projectile.velocity.Y > 16f)
+            Projectile.velocity.Y = 16f;
 
-		Projectile.rotation += Projectile.velocity.X * 0.1f;
-		return;
-	}
+        Projectile.rotation += Projectile.velocity.X * 0.1f;
+        return;
+    }
 
-	public override bool OnTileCollide(Vector2 oldVelocity) {
-		if (Projectile.ai[1] != 0) return true;
-		if (memorizeVelocity == Vector2.Zero)
-			memorizeVelocity = oldVelocity * 0.5f;
-		Projectile.tileCollide = false;
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        if (Projectile.ai[1] != 0) return true;
+        if (memorizeVelocity == Vector2.Zero)
+            memorizeVelocity = oldVelocity * 0.5f;
+        Projectile.tileCollide = false;
         Projectile.ai[2] = 1f;
         return false;
-	}
+    }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         if (Projectile.timeLeft > 4)

@@ -57,7 +57,7 @@ sealed class BoneHarpyMount : ModMount {
 
         skipDust = true;
     }
-    
+
     public override void Dismount(Player player, ref bool skipDust) {
         player.GetModPlayer<WorshipperBonehelm.BoneHarpyOptions>().JumpOffHarpy();
 
@@ -80,7 +80,8 @@ sealed class BoneHarpyMount : ModMount {
         bool up = (player.controlUp || player.controlJump) && handler.FlyTime > 0f;
         float value = up ? 0f : 0.3f;
         if (handler.FlyTime > 0f) {
-            /*if (up) */{
+            /*if (up) */
+            {
                 handler.FlyTime -= 1f;
             }
         }

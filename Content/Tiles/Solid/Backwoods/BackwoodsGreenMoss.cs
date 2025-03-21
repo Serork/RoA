@@ -21,7 +21,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Solid.Backwoods;
 
 sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
-     private class TealMossPlacementOnGrimstone : GlobalItem {
+    private class TealMossPlacementOnGrimstone : GlobalItem {
         public override bool? UseItem(Item item, Player player) {
             if (item.type == ModContent.ItemType<TealMoss>()) {
                 if (Main.netMode != NetmodeID.Server && player.ItemAnimationJustStarted) {
@@ -30,7 +30,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
                         return false;
                     }
                     bool flag = tile.TileType == ModContent.TileType<BackwoodsStoneBrick>();
-                    if (tile.HasTile && 
+                    if (tile.HasTile &&
                         (tile.TileType == ModContent.TileType<BackwoodsStone>() || flag)
                         && player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY)) {
                         tile.TileType = flag ? (ushort)ModContent.TileType<BackwoodsGreenMossBrick>() : (ushort)ModContent.TileType<BackwoodsGreenMoss>();

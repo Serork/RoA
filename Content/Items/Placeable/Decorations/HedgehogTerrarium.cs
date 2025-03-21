@@ -1,7 +1,4 @@
-using RoA.Content.Items.Miscellaneous;
-
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Decorations;

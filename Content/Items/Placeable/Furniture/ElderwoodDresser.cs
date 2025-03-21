@@ -1,14 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Furniture;
 sealed class ElderwoodDresser : ModItem {
-	public override void SetDefaults() {
-		int width = 36; int height = 24;
-		Item.Size = new Vector2(width, height);
+    public override void SetDefaults() {
+        int width = 36; int height = 24;
+        Item.Size = new Vector2(width, height);
 
         Item.maxStack = Terraria.Item.CommonMaxStack;
         Item.useTurn = true;
