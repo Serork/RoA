@@ -1099,7 +1099,7 @@ sealed partial class Lothor : ModNPC {
                 NPC.netUpdate = true;
             }
         }
-        float speed = 7f/*MathHelper.Lerp(7f, 10f, LifeProgress)*/;
+        float speed = 7f;
         if (Main.masterMode) {
             speed = MathHelper.Lerp(7f, 10f, LifeProgress);
         }
@@ -1796,7 +1796,7 @@ sealed partial class Lothor : ModNPC {
         //    delay -= delay / 4;
         //}
         delay += delay * 0.333f;
-        float scalableValue = MathHelper.Lerp(0.75f, !Main.expertMode ? 0.6f : Main.getGoodWorld ? 0.4f : 0.5f, LifeProgress);
+        float scalableValue = MathHelper.Lerp(0.75f, !Main.expertMode ? 0.6f : Main.getGoodWorld ? 0.4f : Main.masterMode ? 0.45f : 0.5f, LifeProgress);
         delay *= scalableValue;
         return delay;
     }
