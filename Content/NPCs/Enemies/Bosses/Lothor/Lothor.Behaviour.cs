@@ -1230,35 +1230,32 @@ sealed partial class Lothor : ModNPC {
                 Glow();
 
                 _spitCount--;
-                SoundEngine.PlaySound(SoundID.Item111 with { Pitch = -0.2f + _spitCount * 0.1f, PitchVariance = 0.1f }, NPC.Center);
-                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Splash") { Volume = 0.6f, Pitch = -0.5f + _spitCount * 0.1f }, NPC.Center);
 
                 int damage = (int)MathHelper.Lerp(SPIT_DAMAGE, SPIT_DAMAGE2, LifeProgress);
                 damage /= 2;
                 int knockBack = (int)MathHelper.Lerp(SPIT_KNOCKBACK, SPIT_KNOCKBACK2, LifeProgress);
 
-                if (NPC.target == Main.myPlayer) {
-                    ushort type = (ushort)ModContent.ProjectileType<LothorAngleAttack>();
-                    Vector2 position = _tempPosition;
-                    float between = 1.75f;
-                    float range = 22.5f;
-                    float variation = (usedFrame * 8f) / range * Math.Abs((position - NPC.Center).Length()) / between * NPC.direction;
-                    float lengthY = Math.Abs((position - NPC.Center).Length() / 7.5f);
-                    float lengthX = -variation + Math.Abs((int)((position - NPC.Center).Length() / 3)) * NPC.direction;
-                    float maxY = 135f;
-                    if (lengthY > maxY) {
-                        lengthY = maxY;
-                    }
+                ushort type = (ushort)ModContent.ProjectileType<LothorAngleAttack>();
+                Vector2 position = _tempPosition;
+                float between = 1.75f;
+                float range = 22.5f;
+                float variation = (usedFrame * 8f) / range * Math.Abs((position - NPC.Center).Length()) / between * NPC.direction;
+                float lengthY = Math.Abs((position - NPC.Center).Length() / 7.5f);
+                float lengthX = -variation + Math.Abs((int)((position - NPC.Center).Length() / 3)) * NPC.direction;
+                float maxY = 135f;
+                if (lengthY > maxY) {
+                    lengthY = maxY;
+                }
 
-                    HalfVector2 halfVector = new(position.X + lengthX, position.Y - lengthY);
-                    int whoAmI = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.One, type, damage, knockBack, NPC.target,
-                        NPC.whoAmI,
+                HalfVector2 halfVector = new(position.X + lengthX, position.Y - lengthY);
+                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                    int whoAmI = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.One, type, damage, knockBack, Main.myPlayer,
+                        usedFrame,
                         position.X + lengthX,
                         position.Y - lengthY);
-                    Main.projectile[whoAmI].As<LothorAngleAttack>().UsedLothorFrame = usedFrame;
-
-                    //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, whoAmI);
                 }
+
+                //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, whoAmI);
             }
         }
 
@@ -2023,7 +2020,7 @@ sealed partial class Lothor : ModNPC {
                 ChooseAttack(LothorAIState.ClawsAttack);
                 return;
             }
-            bool flag3 = distance > 300f && distance < 900f;
+            bool flag3 = distance > 250f && distance < 900f;
             if (flag3 &&
                 flag) {
                 if (_previousState != LothorAIState.SpittingAttack && _previousState != LothorAIState.Scream) {

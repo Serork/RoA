@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -8,6 +9,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,10 +19,9 @@ sealed class LothorAngleAttack : ModProjectile {
     private float _distX = 0f;
     private float _distY = 250f;
     private float _timer;
+    private NPC _owner;
 
     private Vector2 _startPosition;
-
-    internal int UsedLothorFrame;
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -63,7 +64,7 @@ sealed class LothorAngleAttack : ModProjectile {
             Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
         }
 
-        if (Projectile.owner == Main.myPlayer) {
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y + 1f, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, 0f, 0f, enraged.ToInt());
         }
     }
@@ -75,10 +76,22 @@ sealed class LothorAngleAttack : ModProjectile {
         else {
             Projectile.tileCollide = true;
         }
-
-        NPC npc = Main.npc[(int)Projectile.ai[0]];
+        if (_owner == null) {
+            foreach (NPC checkNPC in Main.ActiveNPCs) {
+                if (checkNPC.type == ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Lothor>() && Vector2.Distance(checkNPC.Center, Projectile.Center) < 10f) {
+                    _owner = checkNPC;
+                    break;
+                }
+            }
+        }
+        NPC npc = _owner;
+        int bossCurrentFrame = (int)Projectile.ai[0];
         if (Projectile.localAI[1] == 0f) {
             Projectile.localAI[1] = npc.direction;
+
+            int spitCount = 4 - bossCurrentFrame;
+            SoundEngine.PlaySound(SoundID.Item111 with { Pitch = -0.2f + spitCount * 0.1f, PitchVariance = 0.1f }, Projectile.Center);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Splash") { Volume = 0.6f, Pitch = -0.5f + spitCount * 0.1f }, Projectile.Center);
 
             _startPosition = npc.position;
         }
@@ -96,7 +109,6 @@ sealed class LothorAngleAttack : ModProjectile {
         Vector2 startPos = new(_startPosition.X + npc.width / 2 * npcDirection, _startPosition.Y + npc.height / 4);
         float value = npcDirection == -1 ? npc.width / 2.5f + 4 : 0;
 
-        int bossCurrentFrame = UsedLothorFrame;
         switch (bossCurrentFrame) {
             case 0:
                 startPos += new Vector2(-26 * npcDirection + value, -32);
@@ -106,19 +118,19 @@ sealed class LothorAngleAttack : ModProjectile {
                 break;
             case 2:
                 startPos += new Vector2(-10 * npcDirection + value, -26);
-                _distY = 150f;
+                //_distY = 150f;
                 break;
             case 3:
                 startPos += new Vector2(0 * npcDirection + value, -15);
-                _distY = 100f;
+                //_distY = 100f;
                 break;
             case 4:
                 startPos += new Vector2(5 * npcDirection + value, -6);
-                _distY = 50f;
+                //_distY = 50f;
                 break;
             case 5:
                 startPos += new Vector2(8 * npcDirection + value, 2);
-                _distY = 50f;
+                //distY = 50f;
                 break;
         }
 
@@ -135,27 +147,10 @@ sealed class LothorAngleAttack : ModProjectile {
         Vector2 mid = startPos + (destination - startPos) / 2;
         Vector2 dev = mid - new Vector2(0, _distY - _distX);
 
-        float speed = 0.015f;
+        float speed = _timer < 0.4f ? 0.015f : 0.01f;
         _timer += speed;
 
         bool enraged = Projectile.localAI[0] == 1f;
-        if (Projectile.owner == Main.myPlayer) {
-            Vector2 position = Projectile.position + Vector2.One * 4f;
-            for (int i = 0; i < Main.rand.Next(1, 4); i++) {
-                if (Main.rand.NextBool(5)) {
-                    Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat();
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position.X, position.Y,
-                        velocity.X, velocity.Y, ModContent.ProjectileType<PoisonBubble_Large>(), Projectile.damage, 0f, Projectile.owner, enraged.ToInt());
-                }
-            }
-            for (int i = 0; i < Main.rand.Next(1, 4); i++) {
-                if (Main.rand.NextBool(5)) {
-                    Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat();
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position.X, position.Y,
-                        velocity.X, velocity.Y, ModContent.ProjectileType<PoisonBubble_Small>(), Projectile.damage, 0f, Projectile.owner, enraged.ToInt());
-                }
-            }
-        }
 
         float counting = 0.0f;
         if (counting < 1.0f) {
@@ -191,6 +186,24 @@ sealed class LothorAngleAttack : ModProjectile {
 
         if (Projectile.timeLeft > 300 - 1) {
             return;
+        }
+
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            Vector2 position = Projectile.position + Vector2.One * 4f;
+            for (int i = 0; i < Main.rand.Next(1, 4); i++) {
+                if (Main.rand.NextBool(5)) {
+                    Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat();
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position.X, position.Y,
+                        velocity.X, velocity.Y, ModContent.ProjectileType<PoisonBubble_Large>(), Projectile.damage, 0f, Projectile.owner, enraged.ToInt());
+                }
+            }
+            for (int i = 0; i < Main.rand.Next(1, 4); i++) {
+                if (Main.rand.NextBool(5)) {
+                    Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat();
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position.X, position.Y,
+                        velocity.X, velocity.Y, ModContent.ProjectileType<PoisonBubble_Small>(), Projectile.damage, 0f, Projectile.owner, enraged.ToInt());
+                }
+            }
         }
 
         float num3 = 0f;
