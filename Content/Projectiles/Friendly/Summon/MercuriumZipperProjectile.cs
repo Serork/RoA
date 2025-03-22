@@ -164,7 +164,8 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             }
 
             if (proj.DamageType != DamageClass.Summon ||
-                ProjectileID.Sets.IsAWhip[proj.type]) {
+                ProjectileID.Sets.IsAWhip[proj.type] || 
+                !proj.minion) {
                 return;
             }
 
