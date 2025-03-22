@@ -165,8 +165,8 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             }
 
             if (proj.DamageType != DamageClass.Summon ||
-                ProjectileID.Sets.IsAWhip[proj.type] || 
-                !proj.minion) {
+                ProjectileID.Sets.IsAWhip[proj.type] ||
+                proj.type == ModContent.ProjectileType<MercuriumZipper_MercuriumCenserToxicFumes>()) {
                 return;
             }
 
