@@ -2,6 +2,7 @@
 using RoA.Content.Items.Materials;
 using RoA.Core.Utility;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,6 +12,13 @@ sealed class CustomVanillaRecipes : ModSystem {
     public override void PostAddRecipes() {
         if (ModContent.GetInstance<RoAServerConfig>().VanillaRecipes) {
             return;
+        }
+
+        for (int i = 0; i < Recipe.numRecipes; i++) {
+            Recipe recipe = Main.recipe[i];
+            if (recipe.HasResult(ItemID.Leather)) {
+                recipe.DisableRecipe();
+            }
         }
 
         // potions overhaul
