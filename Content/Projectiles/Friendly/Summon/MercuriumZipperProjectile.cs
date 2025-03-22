@@ -211,7 +211,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 
         Projectile.position = Vector2.Lerp(Projectile.position, target.Center, 0.15f);
 
-        if (Vector2.Distance(player.Center, target.Center) > 300f) {
+        if (Progress == 0f && Vector2.Distance(player.Center, target.Center) > 300f) {
             Projectile.Kill();
 
             Dusts();
