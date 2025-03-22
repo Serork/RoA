@@ -106,14 +106,13 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
         ushort baseDamage = handler._basePotentialDamage;
         DruidicPrefix activePrefix = handler.ActivePrefix;
-        var stats = player.GetModPlayer<DruidStats>();
         bool flag = activePrefix != null;
         bool flag2 = Main.gameMenu || Main.InGameUI.IsVisible;
-        baseDamage += (ushort)(flag2 ? 0 : stats.DruidPotentialDamage);
+        baseDamage += (ushort)(flag2 ? 0 : player.GetModPlayer<DruidStats>().DruidPotentialDamage);
         if (flag) {
             baseDamage += activePrefix._potentialDamage;
         }
-        ushort result = (ushort)(baseDamage * (flag2 ? 1f : stats.DruidPotentialDamageMultiplier));
+        ushort result = (ushort)(baseDamage * (flag2 ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier));
         if (flag) {
             result = (ushort)(result * activePrefix._potentialDamageMult);
         }
