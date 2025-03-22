@@ -2023,7 +2023,7 @@ sealed partial class Lothor : ModNPC {
                 ChooseAttack(LothorAIState.ClawsAttack);
                 return;
             }
-            bool flag3 = distance > 350f && distance < 900f;
+            bool flag3 = distance > 300f && distance < 900f;
             if (flag3 &&
                 flag) {
                 if (_previousState != LothorAIState.SpittingAttack && _previousState != LothorAIState.Scream) {
