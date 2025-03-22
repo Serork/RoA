@@ -397,7 +397,7 @@ sealed class FlederSlayer : ModProjectile {
                                 WorldGenHelper.SolidTile(Math.Clamp((int)projectileCenter.X / 16, 1, Main.maxTilesX), Math.Clamp((int)projectileCenter.Y / 16 + 1, 1, Main.maxTilesY))) {
                                 _released = true;
 
-                                if (_charge > 0.35f) {
+                                if (_charge > 0.35f && Projectile.ai[1] > 8f) {
                                     if (Projectile.owner == Main.myPlayer) {
                                         for (int i = 0; i < Main.rand.Next(2, 4) + (int)(_charge * 3); i++) {
                                             float value = _empoweredAttack ? 1.25f : 1f;
