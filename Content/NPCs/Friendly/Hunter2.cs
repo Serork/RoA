@@ -24,9 +24,13 @@ sealed class Hunter2 : ModNPC {
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.RemoveAt(3);
+        bestiaryEntry.Info.RemoveAt(4);
         bestiaryEntry.Info.AddRange([
-            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Hunter")
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Hunter"),
+            new BossBestiaryInfoElement()
         ]);
+        bestiaryEntry.Info.RemoveAt(3);
     }
 
     public override void FindFrame(int frameHeight) {
@@ -84,6 +88,14 @@ sealed class Hunter2 : ModNPC {
 
         NPC.aiStyle = AIType = -1;
 
+        NPC.damage = 10;
+        NPC.defense = 15;
+        NPC.lifeMax = 250;
+
+        NPC.friendly = false;
+
+        NPC.boss = true;
+
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
         NPC.rarity = 5;
@@ -91,6 +103,9 @@ sealed class Hunter2 : ModNPC {
 
     public override void AI() {
         NPC.KillNPC();
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            Main.BestiaryTracker.Kills.RegisterKill(NPC);
+        }
     }
 
     public override void ModifyNPCLoot(NPCLoot npcLoot) {

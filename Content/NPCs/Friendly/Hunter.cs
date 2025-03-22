@@ -121,8 +121,7 @@ sealed class Hunter : ModNPC {
             if (/*IsNpcOnscreen(NPC.Center) &&*/
                 bestiaryEntry.UIInfoProvider.GetEntryUICollectionInfo().UnlockState == Terraria.GameContent.Bestiary.BestiaryEntryUnlockState.NotKnownAtAll_0) {
                 if (Main.netMode == NetmodeID.SinglePlayer) {
-                    Main.NewText(123);
-                    NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, type);
+                    NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, type); 
                 }
                 else {
                     MultiplayerSystem.SendPacket(new SpawnHunter2Packet(NPC.Center));
@@ -264,8 +263,6 @@ sealed class Hunter : ModNPC {
         bool flag0 = false;
         foreach (Player player in Main.ActivePlayers) {
             if (player.talkNPC == NPC.whoAmI) {
-                UnlockBestiaryEntry();
-
                 if (player.GetModPlayer<DropHunterRewardHandler>().JustTraded) {
                     NPC.ai[0] = -20f;
                     NPC.frameCounter = 0;
@@ -454,7 +451,7 @@ sealed class Hunter : ModNPC {
 
     private string On_NPC_GetChat(On_NPC.orig_GetChat orig, NPC self) {
         if (self.type == ModContent.NPCType<Hunter>()) {
-            //UnlockBestiaryEntry();
+            UnlockBestiaryEntry();
 
             return self.As<Hunter>().GetRandomQuote();
         }
