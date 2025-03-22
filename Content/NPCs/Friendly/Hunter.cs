@@ -7,6 +7,7 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.WorldEvents;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Emotes;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Core.Utility;
@@ -19,6 +20,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.UI;
 using Terraria.ID;
@@ -57,19 +59,19 @@ sealed class Hunter : ModNPC {
         NPCID.Sets.AttackTime[Type] = 0;
         NPCID.Sets.AttackAverageChance[Type] = 0;
 
+        NPCID.Sets.ActsLikeTownNPC[Type] = true;
+
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
 
         NPCID.Sets.SpawnsWithCustomName[Type] = true;
 
-        NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            //Velocity = 1f,
-            //Direction = 1
-            Hide = true
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            Velocity = 1f,
+            Direction = -1
         };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
         NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<HunterEmote>();
-
-        NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
 
         NPCProfile = new Profiles.StackedNPCProfile(
             new Profiles.DefaultNPCProfile(Texture, -1)
@@ -89,6 +91,12 @@ sealed class Hunter : ModNPC {
         return names;
     }
 
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement("Mods.RoA.Bestiary.Hunter")
+        ]);
+    }
+
     public override void SetDefaults() {
         NPC.friendly = true;
         NPC.width = 18;
@@ -101,6 +109,8 @@ sealed class Hunter : ModNPC {
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0.5f;
         NPC.homeless = true;
+
+        SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
     }
 
     public override void OnKill() {
@@ -120,12 +130,12 @@ sealed class Hunter : ModNPC {
         if (!(bestiaryEntry == null || bestiaryEntry.Info == null)) {
             if (/*IsNpcOnscreen(NPC.Center) &&*/
                 bestiaryEntry.UIInfoProvider.GetEntryUICollectionInfo().UnlockState == Terraria.GameContent.Bestiary.BestiaryEntryUnlockState.NotKnownAtAll_0) {
-                if (Main.netMode == NetmodeID.SinglePlayer) {
-                    NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, type); 
-                }
-                else {
-                    MultiplayerSystem.SendPacket(new SpawnHunter2Packet(NPC.Center));
-                }
+                //if (Main.netMode == NetmodeID.SinglePlayer) {
+                //    NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, type); 
+                //}
+                //else {
+                //    MultiplayerSystem.SendPacket(new SpawnHunter2Packet(NPC.Center));
+                //}
             }
         }
     }

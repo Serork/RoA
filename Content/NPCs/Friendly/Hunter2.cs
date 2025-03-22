@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Friendly;
 
+[Autoload(false)]
 // for bestiary
 sealed class Hunter2 : ModNPC {
     public override string Texture => NPCLoader.GetNPC(ModContent.NPCType<Hunter>()).Texture;
