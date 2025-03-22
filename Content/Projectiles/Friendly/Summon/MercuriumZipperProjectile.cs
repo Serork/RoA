@@ -225,8 +225,9 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 
         ref int damageDone = ref player.GetModPlayer<SummonDamageSum>().DamageDone;
         if (++Projectile.localAI[1] > 50f) {
-            int damageNeeded = Projectile.damage * 5;
-            if (damageDone >= damageNeeded) {
+            //int damageNeeded = Projectile.damage * 5;
+            //if (damageDone >= damageNeeded)
+            {
                 if (Progress < 1f) {
                     Progress += 0.025f;
 
@@ -560,12 +561,12 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             npc = ownerMinionAttackTargetNPC2;
         }
 
-        if (Projectile.ai[2] == 2f && Projectile.whoAmI == Main.myPlayer) {
+        if (Projectile.ai[2] == 2f && player.whoAmI == Main.myPlayer) {
             Projectile.NewProjectile(Projectile.GetSource_OnHit(npc), npc.Center, Vector2.Zero,
                 ModContent.ProjectileType<MercuriumZipper_Effect>(), Projectile.damage, Projectile.knockBack, Projectile.owner,
                 npc.whoAmI);
 
-            Main.player[Projectile.owner].GetModPlayer<AttackCountStorage>().MercuriumZipperAttackCount = 0;
+            //Main.player[Projectile.owner].GetModPlayer<AttackCountStorage>().MercuriumZipperAttackCount = 0;
 
             Projectile.Kill();
         }
