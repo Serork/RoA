@@ -2027,7 +2027,7 @@ sealed partial class Lothor : ModNPC {
             if (flag3 &&
                 flag) {
                 if (_previousState != LothorAIState.SpittingAttack && _previousState != LothorAIState.Scream) {
-                    if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(3) && DashTimer % 5f == 0f) {
+                    if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(2) && DashTimer % 5f == 0f) {
                         ChooseAttack(LothorAIState.SpittingAttack);
                         NPC.netUpdate = true;
                     }

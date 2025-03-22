@@ -232,7 +232,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 
                     Vector2 spawnPosition = Vector2.Lerp(Projectile.position, basePosition, Progress);
                     if (Main.rand.NextBool(3)) {
-                        Dust obj2 = Main.dust[Dust.NewDust(spawnPosition + diff * 10f - Vector2.One * 4, 8, 8, ModContent.DustType<MercuriumDust2>(), 
+                        Dust obj2 = Main.dust[Dust.NewDust(spawnPosition + diff * 7.5f - Vector2.One * 4, 8, 8, ModContent.DustType<MercuriumDust2>(), 
                             diff.X, diff.Y, 
                             0, default, 1f + Main.rand.NextFloat(0.2f, 0.5f))];
                         obj2.velocity *= 0.5f;
@@ -542,9 +542,9 @@ sealed class MercuriumZipperProjectile : ModProjectile {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        //if (target.immortal) {
-        //    return;
-        //}
+        if (target.immortal) {
+            return;
+        }
 
         target.AddBuff(ModContent.BuffType<MercuriumZipperDebuff>(), 240);
 
