@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -228,7 +229,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             return;
         }
 
-        if (player.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease) {
+        if (player.HeldItem.type == ModContent.ItemType<MercuriumZipper>() && player.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease) {
             Main.mouseLeftRelease = false;
             player.controlUseItem = false;
             player.itemAnimation = player.itemTime = 10;
