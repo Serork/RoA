@@ -229,7 +229,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             return;
         }
 
-        if (player.HeldItem.type == ModContent.ItemType<MercuriumZipper>() && player.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease) {
+        if (player.whoAmI == Main.myPlayer && player.HeldItem.type == ModContent.ItemType<MercuriumZipper>() && Main.mouseLeft && Main.mouseLeftRelease) {
             Main.mouseLeftRelease = false;
             player.controlUseItem = false;
             player.itemAnimation = player.itemTime = 10;
@@ -243,34 +243,38 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         Projectile.localAI[0] = Utils.AngleLerp(Projectile.localAI[0], MathHelper.Pi + dist * 0.01f, 0.1f);
 
         ref int damageDone = ref player.GetModPlayer<SummonDamageSum>().DamageDone;
-        if (++Projectile.localAI[1] > 50f) {
+        if (++Projectile.localAI[1] > 50f && Projectile.ai[2] != -100f) {
             int damageNeeded = (int)Projectile.ai[2] * 5;
             if (damageDone >= damageNeeded) {
-                if (Progress < 1f) {
-                    Progress += 0.025f;
+                Projectile.ai[2] = -100f;
+                Projectile.netUpdate = true;
+            }
+        }
+        if (Projectile.ai[2] == -100f) {
+            if (Progress < 1f) {
+                Progress += 0.025f;
 
-                    Vector2 spawnPosition = Vector2.Lerp(Projectile.position, basePosition, Progress);
-                    if (Progress < 0.85f && Main.rand.NextBool(3)) {
-                        Dust obj2 = Main.dust[Dust.NewDust(spawnPosition + diff * 7.5f - Vector2.One * 4, 8, 8, ModContent.DustType<MercuriumDust2>(), 
-                            diff.X, diff.Y, 
-                            0, default, 1f + Main.rand.NextFloat(0.2f, 0.5f))];
-                        obj2.velocity *= 0.5f;
-                        obj2.noGravity = true;
-                        obj2.fadeIn = 0.5f;
-                        obj2.noLight = true;
-                    }
+                Vector2 spawnPosition = Vector2.Lerp(Projectile.position, basePosition, Progress);
+                if (Progress < 0.85f && Main.rand.NextBool(3)) {
+                    Dust obj2 = Main.dust[Dust.NewDust(spawnPosition + diff * 7.5f - Vector2.One * 4, 8, 8, ModContent.DustType<MercuriumDust2>(),
+                        diff.X, diff.Y,
+                        0, default, 1f + Main.rand.NextFloat(0.2f, 0.5f))];
+                    obj2.velocity *= 0.5f;
+                    obj2.noGravity = true;
+                    obj2.fadeIn = 0.5f;
+                    obj2.noLight = true;
+                }
 
-                    if (Math.Round(Projectile.localAI[1]) % 2.0 == 0.0 && Progress < 0.8f && player.whoAmI == Main.myPlayer) {
-                        int spawnCount = 1;
-                        ushort type = (ushort)ModContent.ProjectileType<MercuriumZipper_MercuriumCenserToxicFumes>();
-                        IEntitySource source = player.GetSource_FromThis();
-                        int damage = (int)(Projectile.damage * 0.75f);
-                        float knockback = 0f;
-                        for (int i = 0; i < spawnCount; i++) {
-                            Vector2 velocity = diff.RotatedByRandom(MathHelper.PiOver4 * 1.2f);
-                            Projectile.NewProjectile(source, spawnPosition + new Vector2 (Main.rand.NextFloat (-1f, 1f), Main.rand.NextFloat(-1f, 1f)), velocity, type,
-                                damage, knockback, player.whoAmI);
-                        }
+                if (Math.Round(Projectile.localAI[1]) % 2.0 == 0.0 && Progress < 0.8f && player.whoAmI == Main.myPlayer) {
+                    int spawnCount = 1;
+                    ushort type = (ushort)ModContent.ProjectileType<MercuriumZipper_MercuriumCenserToxicFumes>();
+                    IEntitySource source = player.GetSource_FromThis();
+                    int damage = (int)(Projectile.damage * 0.75f);
+                    float knockback = 0f;
+                    for (int i = 0; i < spawnCount; i++) {
+                        Vector2 velocity = diff.RotatedByRandom(MathHelper.PiOver4 * 1.2f);
+                        Projectile.NewProjectile(source, spawnPosition + new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f)), velocity, type,
+                            damage, knockback, player.whoAmI);
                     }
                 }
             }
@@ -369,7 +373,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             values2[index2] = MathHelper.Lerp(values2[index2], rotation + value * 0.01f * -direction, progress * current);
             Vector2 offset = new Vector2((height / 4f + (value * (float)progress * current)) * direction, 0f).RotatedBy(rotation);
             Main.EntitySpriteDraw(texture, startPosition + offset - Main.screenPosition, frame,
-                color * (1f - (!flag ? progress3 : value)), 
+                color * opacity/*(1f - (!flag ? progress3 : value))*/, 
                 values2[index2], origin, scale, flip, 0);
 
             Vector2 diff2 = diff * height;
@@ -558,6 +562,10 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             dust.velocity += spinningPoint.RotatedBy(Main.player[Projectile.owner].direction * ((float)Math.PI / 2f));
             dust.velocity *= 0.5f;
         }
+
+        Player player = Main.player[Projectile.owner];
+        player.heldProj = Projectile.whoAmI;
+        player.MatchItemTimeToItemAnimation();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
