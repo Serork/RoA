@@ -1691,16 +1691,18 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
-        if (Main.netMode != NetmodeID.MultiplayerClient) {
-            if (flag || Main.rand.NextBool(2)) {
-                _shouldScreamInFlight = true;
-                _frameChosen = false;
-                _previousState = default;
-                DashTimer = 0;
-                _attackTime = 0;
-                DashDelay = GetScreamAttackDelay();
-                SetTimeBeforeAttack(DashDelay * 0.25f);
-                NPC.netUpdate = true;
+        if (Main.expertMode || _shouldEnrage) {
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                if (flag || Main.rand.NextBool(2)) {
+                    _shouldScreamInFlight = true;
+                    _frameChosen = false;
+                    _previousState = default;
+                    DashTimer = 0;
+                    _attackTime = 0;
+                    DashDelay = GetScreamAttackDelay();
+                    SetTimeBeforeAttack(DashDelay * 0.25f);
+                    NPC.netUpdate = true;
+                }
             }
         }
     }
