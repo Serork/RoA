@@ -43,7 +43,7 @@ sealed class BeltButton() : InterfaceElement(RoA.ModName + ": Belt Button", Inte
     }
 
     protected override bool DrawSelf() {
-        if (Main.playerInventory && Main.EquipPage != 2) {
+        if (Main.playerInventory && Main.EquipPage < 1) {
             if (!_isUsedInternal) {
                 IsUsed = WreathSlot.IsItemValidForSlot(Main.mouseItem);
             }
