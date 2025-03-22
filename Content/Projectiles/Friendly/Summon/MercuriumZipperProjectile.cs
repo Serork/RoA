@@ -554,7 +554,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
                 offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
             dust.position = points[pointIndex] + offset;
             dust.fadeIn = 0.3f;
-            dust.alpha = 150;
+            dust.alpha = 100;
             Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
             dust.noGravity = true;
             dust.velocity *= 0.5f;
