@@ -219,6 +219,15 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             return;
         }
 
+        if (player.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease) {
+            Main.mouseLeftRelease = false;
+            player.controlUseItem = false;
+            player.itemAnimation = player.itemTime = 10;
+            Projectile.Kill();
+            Dusts();
+            return;
+        }
+
         float dist = Vector2.Distance(Projectile.position, target.Center);
         dist *= (target.Center - Projectile.position).X.GetDirection();
         Projectile.localAI[0] = Utils.AngleLerp(Projectile.localAI[0], MathHelper.Pi + dist * 0.01f, 0.1f);
