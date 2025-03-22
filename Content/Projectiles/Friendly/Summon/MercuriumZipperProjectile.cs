@@ -566,7 +566,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
                 ModContent.ProjectileType<MercuriumZipper_Effect>(), Projectile.damage, Projectile.knockBack, Projectile.owner,
                 npc.whoAmI);
 
-            //Main.player[Projectile.owner].GetModPlayer<AttackCountStorage>().MercuriumZipperAttackCount = 0;
+            Main.player[Projectile.owner].GetModPlayer<AttackCountStorage>().MercuriumZipperAttackCount = 0;
 
             Projectile.Kill();
         }
