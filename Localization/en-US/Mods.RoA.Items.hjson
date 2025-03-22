@@ -1861,7 +1861,7 @@ MercuriumZipper: {
 		'''
 		{$CommonItemTooltip.SummonTagDamage}
 		{$CommonItemTooltip.Whips}
-		Every fifth attack creates a zipper that opens when hit by summons, releasing toxic fumes
+		Every third attack creates a zipper that opens when hit by summons, releasing toxic fumes
 		'Schott Key No.2'
 		'''
 }
