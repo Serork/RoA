@@ -1,4 +1,7 @@
-﻿using RoA.Content.Biomes.Backwoods;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -100,6 +103,12 @@ sealed class Hunter2 : ModNPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
         NPC.rarity = 5;
+    }
+
+    public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        if (!NPC.IsABestiaryIconDummy) {
+            NPC.boss = false;
+        }
     }
 
     public override void AI() {
