@@ -59,7 +59,7 @@ class WreathSlot : ModAccessorySlot {
 
     public override Vector2? CustomLocation => GetCustomLocation();
 
-    protected bool IsHiddenBase() => (!IsItemValidForSlot(Main.mouseItem) && !BeltButton.IsUsed) || Main.EquipPage == 2;
+    protected bool IsHiddenBase() => (!IsItemValidForSlot(Main.mouseItem) && !BeltButton.IsUsed) || Main.EquipPage >= 1;
 
     public override bool IsHidden() => IsHiddenBase() || Main.LocalPlayer.CurrentLoadoutIndex != 0;
 
