@@ -484,7 +484,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             Projectile.ai[2] = 1f;
 
             ref byte attackCount = ref Main.player[Projectile.owner].GetModPlayer<AttackCountStorage>().MercuriumZipperAttackCount;
-            if (attackCount >= 3) {
+            if (attackCount >= 4) {
                 Projectile.ai[2] = 2f;
             }
             else {
