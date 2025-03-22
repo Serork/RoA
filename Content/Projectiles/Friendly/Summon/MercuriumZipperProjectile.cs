@@ -225,7 +225,8 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 
         ref int damageDone = ref player.GetModPlayer<SummonDamageSum>().DamageDone;
         if (++Projectile.localAI[1] > 50f) {
-            {
+            int damageNeeded = Projectile.damage * 5;
+            if (damageDone >= damageNeeded) {
                 if (Progress < 1f) {
                     Progress += 0.025f;
 
