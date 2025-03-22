@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
+using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -330,6 +331,21 @@ abstract class BaseRodProjectile : NatureProjectile {
             Owner.heldProj = Projectile.whoAmI;
         }
         if (_shot && DespawnWithProj() && !haveProjsActive) {
+            Projectile.Kill();
+        }
+
+        if (Owner.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease &&
+            UseTime > 0.25f && UseTime < 0.75f) {
+            if (DespawnWithProj()) {
+                foreach (Projectile projectile in Main.ActiveProjectiles) {
+                    if (projectile.owner == Owner.whoAmI && projectile.type == ShootType) {
+                        projectile.Kill();
+                    }
+                }
+            }
+            Main.mouseLeftRelease = false;
+            Owner.controlUseItem = false;
+            Owner.itemAnimation = Owner.itemTime = NatureWeaponHandler.GetUseSpeed(Item, Owner);
             Projectile.Kill();
         }
     }
