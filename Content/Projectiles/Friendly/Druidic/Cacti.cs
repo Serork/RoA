@@ -67,6 +67,11 @@ sealed class Cacti : NatureProjectile {
             return;
         }
 
+        if (_parent == null) {
+            Projectile.Kill();
+            return;
+        }
+
         Player player = Main.player[Projectile.owner];
 
         Projectile.ai[2] = NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player);
@@ -140,7 +145,7 @@ sealed class Cacti : NatureProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        if (!CanCutTiles().Value) {
+        if (Projectile.Opacity < 0.75f) {
             return;
         }
 
