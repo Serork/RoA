@@ -566,6 +566,13 @@ sealed class MercuriumZipperProjectile : ModProjectile {
         Player player = Main.player[Projectile.owner];
         player.heldProj = Projectile.whoAmI;
         player.MatchItemTimeToItemAnimation();
+
+        if ((double)player.itemAnimation < (double)player.itemAnimationMax * 0.333)
+            player.bodyFrame.Y = player.bodyFrame.Height * 3;
+        else if ((double)player.itemAnimation < (double)player.itemAnimationMax * 0.666)
+            player.bodyFrame.Y = player.bodyFrame.Height * 2;
+        else
+            player.bodyFrame.Y = player.bodyFrame.Height;
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
