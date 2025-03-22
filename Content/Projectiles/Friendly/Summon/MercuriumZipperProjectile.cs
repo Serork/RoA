@@ -2,18 +2,400 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
+using RoA.Content.Projectiles.Friendly.Melee;
+using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
+sealed class MercuriumZipper_MercuriumCenserToxicFumes : ModProjectile {
+    public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<MercuriumFumes>()).Texture;
+
+    public override void SetStaticDefaults() => Main.projFrames[Projectile.type] = 3;
+
+    public override void SetDefaults() {
+        int width = 24; int height = width;
+        Projectile.Size = new Vector2(width, height);
+
+        Projectile.penetrate = -1;
+
+        Projectile.timeLeft = 250;
+        Projectile.tileCollide = false;
+
+        Projectile.friendly = true;
+
+        //Projectile.usesLocalNPCImmunity = true;
+        //Projectile.localNPCHitCooldown = 50;
+
+        Projectile.appliesImmunityTimeOnSingleHits = true;
+        Projectile.usesIDStaticNPCImmunity = true;
+        Projectile.idStaticNPCHitCooldown = 10;
+
+        Projectile.aiStyle = -1;
+    }
+
+    public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        Projectile.Opacity -= 0.1f;
+        return false;
+    }
+
+    public override void AI() {
+        if (Projectile.localAI[0] == 0f) {
+            if (Projectile.owner == Main.myPlayer) {
+                Projectile.ai[1] = Main.rand.NextFloat(0.75f, 1f);
+                Projectile.netUpdate = true;
+            }
+
+            Projectile.localAI[0] = 1f;
+        }
+
+        if (Projectile.ai[1] != 0f) {
+            Projectile.Opacity = Projectile.ai[1];
+            Projectile.localAI[0] = Projectile.Opacity;
+            Projectile.ai[1] = 0f;
+        }
+
+        if (++Projectile.frameCounter >= 8) {
+            Projectile.frameCounter = 0;
+            if (++Projectile.frame >= Main.projFrames[Projectile.type])
+                Projectile.frame = 0;
+        }
+
+        if (Projectile.owner == Main.myPlayer) {
+            float distance = 30f;
+            for (int findNPC = 0; findNPC < Main.npc.Length; findNPC++) {
+                NPC npc = Main.npc[findNPC];
+                if (npc.active && npc.life > 0 && !npc.friendly && Vector2.Distance(Projectile.Center, npc.Center) < distance) {
+                    npc.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 80);
+                }
+            }
+        }
+
+        if (Projectile.Opacity > 0f) {
+            Projectile.Opacity -= Projectile.localAI[0] * 0.025f * 0.3f;
+        }
+        else {
+            Projectile.Kill();
+        }
+
+        Projectile.velocity *= 0.995f;
+    }
+
+    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity * 0.75f;
+
+    public override bool? CanCutTiles() => false;
+
+    public override bool PreDraw(ref Color lightColor) {
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+        Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
+        Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+        Color color = Projectile.GetAlpha(lightColor) * 0.5f;
+        for (int i = 0; i < 2; i++)
+            spriteBatch.Draw(texture, drawPos + new Vector2(0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(Main.GlobalTimeWrappedHourly * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+
+        return false;
+    }
+}
+
+sealed class MercuriumZipper_Effect : ModProjectile {
+    public override string Texture => ResourceManager.EmptyTexture;
+
+    private ref float Progress => ref Projectile.ai[1];
+
+    public override void SetDefaults() {
+        Projectile.Size = Vector2.One;
+
+        Projectile.friendly = true;
+        Projectile.DamageType = DamageClass.Summon;
+
+        Projectile.penetrate = -1;
+        Projectile.tileCollide = false;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = -1;
+    }
+
+    public override bool ShouldUpdatePosition() => false;
+
+    public override bool? CanDamage() => Progress != 0f;
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        modifiers.FinalDamage *= 4f;
+        modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
+    }
+
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        modifiers.FinalDamage *= 4f;
+        modifiers.HitDirectionOverride = ((Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1));
+    }
+
+    private class SummonDamageSum : ModPlayer {
+        public int DamageDone;
+
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
+            if (proj.owner != Main.myPlayer) {
+                return;
+            }
+
+            NPC npc = null;
+            foreach (Projectile projectile in Main.ActiveProjectiles) {
+                if (projectile.owner == proj.owner && projectile.type == ModContent.ProjectileType<MercuriumZipper_Effect>()) {
+                    npc = Main.npc[(int)projectile.ai[0]];
+                }
+            }
+
+            if (npc == null || !npc.active || target != npc) {
+                return;
+            }
+
+            if (proj.DamageType != DamageClass.Summon ||
+                ProjectileID.Sets.IsAWhip[proj.type]) {
+                return;
+            }
+
+            DamageDone += hit.Damage;
+        }
+    }
+
+    public override void AI() {
+        Player player = Main.player[Projectile.owner];
+        NPC target = Main.npc[(int)Projectile.ai[0]];
+
+        if (!(!player.frozen && !player.stoned)) {
+            Projectile.Kill();
+
+            return;
+        }
+        if (!target.active || player.dead) {
+            Projectile.Kill();
+
+            return;
+        }
+
+        if (Progress == 0f) {
+            if (player.whoAmI == Main.myPlayer) {
+                int direction = (player.MountedCenter - target.Center).X.GetDirection();
+                if (Projectile.ai[2] != direction) {
+                    Projectile.ai[2] = direction;
+                    Projectile.netUpdate = true;
+                }
+            }
+        }
+
+        Vector2 basePosition = player.MountedCenter + Vector2.UnitY * player.gfxOffY;
+        Vector2 startPosition = basePosition,
+                endPosition = Projectile.position;
+        Vector2 diff = (endPosition - startPosition).SafeNormalize(Vector2.Zero);
+        float rotation = diff.ToRotation() - MathHelper.PiOver2;
+
+        if (Projectile.localAI[1] == 0f) {
+            Projectile.localAI[1] = 1f;
+
+            Projectile.localAI[0] = rotation;
+        }
+
+        Projectile.position = Vector2.Lerp(Projectile.position, target.Center, 0.15f);
+
+        if (Vector2.Distance(player.Center, target.Center) > 300f) {
+            Projectile.Kill();
+
+            Dusts();
+
+            return;
+        }
+
+        float dist = Vector2.Distance(Projectile.position, target.Center);
+        dist *= (target.Center - Projectile.position).X.GetDirection();
+        Projectile.localAI[0] = Utils.AngleLerp(Projectile.localAI[0], MathHelper.Pi + dist * 0.01f, 0.1f);
+
+        ref int damageDone = ref player.GetModPlayer<SummonDamageSum>().DamageDone;
+        if (++Projectile.localAI[1] > 50f) {
+            int damageNeeded = Projectile.damage * 5;
+            if (damageDone >= damageNeeded) {
+                if (Progress < 1f) {
+                    Progress += 0.025f;
+
+                    Vector2 spawnPosition = Vector2.Lerp(Projectile.position, basePosition, Progress);
+                    if (Main.rand.NextBool(3)) {
+                        Dust obj2 = Main.dust[Dust.NewDust(spawnPosition + diff * 4f - Vector2.One * 4, 8, 8, ModContent.DustType<MercuriumDust2>(), 
+                            diff.X, diff.Y, 
+                            0, default, 1f + Main.rand.NextFloat(0.2f, 0.5f))];
+                        obj2.velocity *= 0.5f;
+                        obj2.noGravity = true;
+                        obj2.fadeIn = 0.5f;
+                        obj2.noLight = true;
+                    }
+
+                    if (Math.Round(Projectile.localAI[1]) % 5.0 == 0.0 && Progress < 0.75f && player.whoAmI == Main.myPlayer) {
+                        int spawnCount = 1;
+                        ushort type = (ushort)ModContent.ProjectileType<MercuriumZipper_MercuriumCenserToxicFumes>();
+                        IEntitySource source = player.GetSource_FromThis();
+                        int damage = Projectile.damage;
+                        float knockback = 0f;
+                        for (int i = 0; i < spawnCount; i++) {
+                            Vector2 velocity = diff.RotatedByRandom(MathHelper.PiOver4 * 0.75f);
+                            Projectile.NewProjectile(source, spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type,
+                                damage, knockback, player.whoAmI);
+                        }
+                    }
+                }
+            }
+        }
+        Progress = MathHelper.Clamp(Progress, 0f, 1f);
+        if (Progress >= 1f) {
+            Projectile.Kill();
+        }
+    }
+
+    private void Dusts() {
+        int height = 8;
+        Player player = Main.player[Projectile.owner];
+        Vector2 basePosition = player.MountedCenter + Vector2.UnitY * player.gfxOffY;
+        Vector2 startPosition = basePosition,
+                endPosition = Projectile.position;
+        while (true) {
+            float dist = Vector2.Distance(startPosition, endPosition);
+            if (dist <= height) {
+                break;
+            }
+            Vector2 diff = (endPosition - startPosition).SafeNormalize(Vector2.Zero);
+            for (int i2 = 0; i2 < 2; i2++) {
+                Vector2 vector39 = startPosition - Vector2.One * 4;
+                Dust obj2 = Main.dust[Dust.NewDust(vector39, 8, 8, ModContent.DustType<MercuriumDust2>(), 0f, 0f, 0, default, 1f + Main.rand.NextFloat(0.2f, 0.5f))];
+                obj2.velocity *= 0.5f;
+                obj2.noGravity = true;
+                obj2.fadeIn = 0.5f;
+                obj2.noLight = true;
+            }
+            Vector2 diff2 = diff * height;
+            startPosition += diff2;
+        }
+    }
+
+    public override void OnKill(int timeLeft) {
+        ref int damageDone = ref Main.player[Projectile.owner].GetModPlayer<SummonDamageSum>().DamageDone;
+        damageDone = 0;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Player player = Main.player[Projectile.owner];
+        Vector2 basePosition = player.MountedCenter + Vector2.UnitY * player.gfxOffY;
+        Vector2 startPosition = Projectile.position,
+                endPosition = basePosition;
+        ModProjectile zipperWhip = ProjectileLoader.GetProjectile(ModContent.ProjectileType<MercuriumZipperProjectile>());
+        SpriteEffects flip = (int)Projectile.ai[2] > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        float opacity = Utils.GetLerpValue(0f, 0.35f, 1f - Progress, true);
+        int max = 0;
+        int height = 8;
+        float progress2 = Math.Max(0.025f, 1f - Progress);
+        while (true) {
+            float dist = Vector2.Distance(startPosition, endPosition);
+            if (dist <= height) {
+                break;
+            }
+            Vector2 diff = (endPosition - startPosition).SafeNormalize(Vector2.Zero);
+            Vector2 diff2 = diff * height;
+            startPosition += diff2;
+            max++;
+        }
+        startPosition = Projectile.position;
+        float[] values = new float[max];
+        float[] values2 = new float[max];
+        for (int i = 0; i < max; i++) {
+            values2[i] = -20f;
+        }
+        int index = 0;
+        while (true) {
+            Texture2D texture = ModContent.Request<Texture2D>(zipperWhip.Texture + "_Segment").Value;
+            int width = 16;
+            float dist = Vector2.Distance(startPosition, endPosition);
+            if (dist <= height) {
+                break;
+            }
+            Vector2 diff = (endPosition - startPosition).SafeNormalize(Vector2.Zero);
+            float rotation = diff.ToRotation() - MathHelper.PiOver2;
+            rotation += MathHelper.Pi;
+            for (int i = 0; i < max; i++) {
+                if (values2[i] == -20f) {
+                    values2[i] = rotation;
+                }
+            }
+            Color color = Lighting.GetColor(startPosition.ToTileCoordinates()) * opacity;
+            Rectangle frame = new(0, 0, width, height);
+            Vector2 origin = frame.Size() / 2f;
+            float scale = 1f;
+            float progress = Progress;
+            int index2 = max - index - 1;
+            float current = (float)Math.Min(max, index2 + 1) / max;
+            float progress3 = progress * MathHelper.Clamp(current * 2.5f, 0f, 1f);
+            values[index2] = MathHelper.Lerp(values[index2], height * max / 3f * current, progress3);
+            bool flag = (1f - current) > progress;
+            float value = flag ? 0f : values[index2];
+            int direction = (index % 2 == 0).ToDirectionInt();
+            values2[index2] = MathHelper.Lerp(values2[index2], rotation + value * 0.01f * -direction, progress * current);
+            Vector2 offset = new Vector2((height / 4f + (value * (float)progress * current)) * direction, 0f).RotatedBy(rotation);
+            Main.EntitySpriteDraw(texture, startPosition + offset - Main.screenPosition, frame,
+                color * (1f - (!flag ? progress3 : value)), 
+                values2[index2], origin, scale, flip, 0);
+
+            Vector2 diff2 = diff * height;
+            startPosition += diff2;
+            index++;
+        }
+        Vector2 diff3 = (endPosition - startPosition).SafeNormalize(Vector2.Zero);
+        float rotation2 = diff3.ToRotation() - MathHelper.PiOver2;
+        rotation2 += MathHelper.Pi;
+        Rectangle frame2 = new(0, 0, 18, 16);
+        Vector2 origin2 = frame2.Size() / 2f;
+        float scale2 = 1f;
+        Vector2 offset2 = new Vector2(0f, height / 2f).RotatedBy(rotation2);
+        Vector2 drawPosition = Vector2.Lerp(Projectile.position, basePosition, Progress);
+        Color color2 = Lighting.GetColor(drawPosition.ToTileCoordinates());
+        color2 *= opacity;
+        Main.EntitySpriteDraw(ModContent.Request<Texture2D>(zipperWhip.Texture + "_Slider").Value,
+            drawPosition +
+            offset2 -
+            Main.screenPosition, frame2,
+            color2, rotation2, origin2, scale2, flip, 0);
+
+        rotation2 = Utils.AngleLerp(Projectile.localAI[0], rotation2, MathHelper.Clamp(Progress * 5f, 0f, 1f));
+        frame2 = new(0, 0, 14, 22);
+        origin2 = frame2.Size() / 2f;
+        scale2 = 1f;
+        offset2 = new Vector2(0f, height + 2).RotatedBy(rotation2);
+        Main.EntitySpriteDraw(ModContent.Request<Texture2D>(zipperWhip.Texture + "_Puller").Value,
+            drawPosition +
+            -offset2 -
+            Main.screenPosition, frame2,
+            color2, rotation2, origin2, scale2, flip, 0);
+
+        return false;
+    }
+}
+
 sealed class MercuriumZipperProjectile : ModProjectile {
+    private sealed class AttackCountStorage : ModPlayer {
+        public byte MercuriumZipperAttackCount;
+
+        public override void ResetEffects() {
+        }
+    }
+
     private float Timer {
         get => Projectile.ai[0];
         set => Projectile.ai[0] = value;
@@ -98,6 +480,18 @@ sealed class MercuriumZipperProjectile : ModProjectile {
     }
 
     public override void AI() {
+        if (Projectile.ai[2] == 0f) {
+            Projectile.ai[2] = 1f;
+
+            ref byte attackCount = ref Main.player[Projectile.owner].GetModPlayer<AttackCountStorage>().MercuriumZipperAttackCount;
+            if (attackCount >= 3) {
+                Projectile.ai[2] = 2f;
+            }
+            else {
+                attackCount++;
+            }
+        }
+
         float swingTime = Main.player[Projectile.owner].itemAnimationMax * Projectile.MaxUpdates;
         // Spawn Dust along the whip path
         // This is the dust code used by Durendal. Consult the Terraria source code for even more examples, found in Projectile.AI_165_Whip.
@@ -148,12 +542,33 @@ sealed class MercuriumZipperProjectile : ModProjectile {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        //if (target.immortal) {
+        //    return;
+        //}
+
         target.AddBuff(ModContent.BuffType<MercuriumZipperDebuff>(), 240);
 
-        Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
+        Player player = Main.player[Projectile.owner];
+        player.MinionAttackTargetNPC = target.whoAmI;
         Projectile.damage = (int)(Projectile.damage * 0.6f);
 
-        target.AddBuff(ModContent.BuffType<ToxicFumes>(), 180);
+        //target.AddBuff(ModContent.BuffType<ToxicFumes>(), 180);
+
+        NPC npc = target;
+        NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
+        if (ownerMinionAttackTargetNPC2 != null) {
+            npc = ownerMinionAttackTargetNPC2;
+        }
+
+        if (Projectile.ai[2] == 2f && Projectile.whoAmI == Main.myPlayer) {
+            Projectile.NewProjectile(Projectile.GetSource_OnHit(npc), npc.Center, Vector2.Zero,
+                ModContent.ProjectileType<MercuriumZipper_Effect>(), Projectile.damage, Projectile.knockBack, Projectile.owner,
+                npc.whoAmI);
+
+            Main.player[Projectile.owner].GetModPlayer<AttackCountStorage>().MercuriumZipperAttackCount = 0;
+
+            Projectile.Kill();
+        }
     }
 
     // This method draws a line between all points of the whip, in case there's empty space between the sprites.

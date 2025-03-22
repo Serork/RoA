@@ -155,3 +155,5 @@ GalipotStream2.DisplayName: Поток живицы
 MercuriumZipperProjectile.DisplayName: Ртутная молния
 // MercuriumCenserToxicFumes.DisplayName: Mercurium Censer Toxic Fumes
 LargeBee.DisplayName: "{$ProjectileName.Bee}"
+// MercuriumZipper_Effect.DisplayName: Mercurium Zipper
+// MercuriumZipper_MercuriumCenserToxicFumes.DisplayName: Mercurium Zipper Toxic Fumes

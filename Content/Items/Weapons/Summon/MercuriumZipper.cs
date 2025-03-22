@@ -20,6 +20,8 @@ sealed class MercuriumZipper : ModItem {
         Item.value = Item.sellPrice(0, 0, 40, 0);
     }
 
+    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<MercuriumZipper_Effect>()] < 1;
+
     // Makes the whip receive melee prefixes
     public override bool MeleePrefix() {
         return true;

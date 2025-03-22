@@ -40,11 +40,11 @@ sealed class MercuriumPickaxe : ModItem {
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
-        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), Main.rand.Next(40, 120));
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 80);
     }
 
     public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo) {
-        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), Main.rand.Next(40, 120));
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 80);
     }
 
     public override void MeleeEffects(Player player, Rectangle hitbox) {
