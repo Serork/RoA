@@ -14,8 +14,9 @@ sealed class MercuriumZipper : ModItem {
     public override void SetDefaults() {
         Item.DefaultToWhip(ModContent.ProjectileType<MercuriumZipperProjectile>(), 21, 2, 4);
 
+        Item.useStyle = ItemUseStyleID.HiddenAnimation;
+
         Item.rare = ItemRarityID.Blue;
-        Item.channel = true;
 
         Item.value = Item.sellPrice(0, 0, 40, 0);
     }
