@@ -48,9 +48,9 @@ sealed class Pipistrelle : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 100;
+        NPC.lifeMax = 80;
         NPC.damage = 30;
-        NPC.defense = 6;
+        NPC.defense = 5;
         NPC.Size = new Vector2(32, 32);
         NPC.aiStyle = -1;
 
