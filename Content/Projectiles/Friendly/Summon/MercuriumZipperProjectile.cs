@@ -231,7 +231,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
                     Progress += 0.025f;
 
                     Vector2 spawnPosition = Vector2.Lerp(Projectile.position, basePosition, Progress);
-                    if (Main.rand.NextBool(3)) {
+                    if (Progress < 0.85f && Main.rand.NextBool(3)) {
                         Dust obj2 = Main.dust[Dust.NewDust(spawnPosition + diff * 7.5f - Vector2.One * 4, 8, 8, ModContent.DustType<MercuriumDust2>(), 
                             diff.X, diff.Y, 
                             0, default, 1f + Main.rand.NextFloat(0.2f, 0.5f))];
