@@ -9,6 +9,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -174,6 +175,14 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         }
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(Projectile.localAI[2]);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        Projectile.localAI[2] = reader.ReadSingle();
+    }
+
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         NPC target = Main.npc[(int)Projectile.ai[0]];
@@ -192,8 +201,8 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         if (Progress == 0f) {
             if (player.whoAmI == Main.myPlayer) {
                 int direction = (player.MountedCenter - target.Center).X.GetDirection();
-                if (Projectile.ai[2] != direction) {
-                    Projectile.ai[2] = direction;
+                if (Projectile.localAI[2] != direction) {
+                    Projectile.localAI[2] = direction;
                     Projectile.netUpdate = true;
                 }
             }
@@ -234,7 +243,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 
         ref int damageDone = ref player.GetModPlayer<SummonDamageSum>().DamageDone;
         if (++Projectile.localAI[1] > 50f) {
-            int damageNeeded = Projectile.damage * 5;
+            int damageNeeded = (int)Projectile.ai[2] * 5;
             if (damageDone >= damageNeeded) {
                 if (Progress < 1f) {
                     Progress += 0.025f;
@@ -307,7 +316,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         Vector2 startPosition = Projectile.position,
                 endPosition = basePosition;
         ModProjectile zipperWhip = ProjectileLoader.GetProjectile(ModContent.ProjectileType<MercuriumZipperProjectile>());
-        SpriteEffects flip = (int)Projectile.ai[2] > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        SpriteEffects flip = (int)Projectile.localAI[2] > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         float opacity = Utils.GetLerpValue(0f, 0.35f, 1f - Progress, true);
         int max = 0;
         int height = 8;
@@ -572,7 +581,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
         if (Projectile.ai[2] == 2f && player.whoAmI == Main.myPlayer) {
             Projectile.NewProjectile(Projectile.GetSource_OnHit(npc), npc.Center, Vector2.Zero,
                 ModContent.ProjectileType<MercuriumZipper_Effect>(), Projectile.damage, Projectile.knockBack, Projectile.owner,
-                npc.whoAmI);
+                npc.whoAmI, ai2: hit.Damage);
 
             Main.player[Projectile.owner].GetModPlayer<AttackCountStorage>().MercuriumZipperAttackCount = 0;
 
