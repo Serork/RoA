@@ -5,17 +5,17 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Enemies.Lothor;
 
-sealed class PoisonBubble_Large : ModProjectile {
+sealed class PoisonBubble_Small : ModProjectile {
     public override Color? GetAlpha(Color lightColor) => (int)Projectile.ai[0] == 1 ? Color.White * Projectile.Opacity : (lightColor * Projectile.Opacity);
 
     public override void SetStaticDefaults() {
-        Main.projFrames[Projectile.type] = 4;
+        Main.projFrames[Projectile.type] = 3;
     }
 
     public override void SetDefaults() {
         Projectile.aiStyle = -1;
-        Projectile.width = 12;
-        Projectile.height = 12;
+        Projectile.width = 6;
+        Projectile.height = 6;
         Projectile.scale = 1f;
         Projectile.hostile = true;
 
@@ -28,7 +28,7 @@ sealed class PoisonBubble_Large : ModProjectile {
             if (++Projectile.localAI[0] >= 4f) {
                 Projectile.localAI[0] = 0f;
                 Projectile.frame++;
-                if (Projectile.frame >= 4) {
+                if (Projectile.frame >= 3) {
                     Projectile.Kill();
                 }
             }

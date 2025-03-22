@@ -6,6 +6,7 @@ using RoA.Core;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.UI.ModBrowser;
 
 namespace RoA.Content.Projectiles.Enemies.Lothor;
 
@@ -35,6 +36,23 @@ sealed class LothorAngleAttack2 : ModProjectile {
     public override void AI() {
         bool enraged = Projectile.ai[2] == 1f;
 
+        if (Projectile.owner == Main.myPlayer) {
+            for (int i = 0; i < Main.rand.Next(1, 4); i++) {
+                if (Main.rand.NextBool(10)) {
+                    Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat();
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X + Main.rand.NextFloatDirection() * 20, Projectile.Center.Y,
+                        velocity.X, velocity.Y - Main.rand.NextFloat(1f, 2f) * 0.5f, ModContent.ProjectileType<PoisonBubble_Large>(), Projectile.damage, 0f, Projectile.owner, enraged.ToInt());
+                }
+            }
+            for (int i = 0; i < Main.rand.Next(1, 4); i++) {
+                if (Main.rand.NextBool(10)) {
+                    Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat();
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X + Main.rand.NextFloatDirection() * 20, Projectile.Center.Y,
+                        velocity.X, velocity.Y - Main.rand.NextFloat(1f, 2f) * 0.5f, ModContent.ProjectileType<PoisonBubble_Small>(), Projectile.damage, 0f, Projectile.owner, enraged.ToInt());
+                }
+            }
+        }
+
         if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
             int dust = Dust.NewDust(Projectile.position + Projectile.velocity + Vector2.UnitY * 4f, 2, 2, enraged ? ModContent.DustType<LothorPoison2>() : ModContent.DustType<LothorPoison>(), 0f, -0.5f, 0, default, 1.35f);
             Main.dust[dust].noGravity = true;
@@ -48,11 +66,16 @@ sealed class LothorAngleAttack2 : ModProjectile {
             Projectile.velocity.Y = lastVelocity.Y * -0.5f;
 
         Projectile.localAI[2] = 0f;
+
+        if (Collision.SolidCollision(Projectile.position, 20, 20)) {
+            Projectile.position.Y -= 5f;
+        }
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         Projectile.velocity = Vector2.Zero;
         Projectile.localAI[2] = 10f;
+        Projectile.position.Y -= 5f;
         return false;
     }
 

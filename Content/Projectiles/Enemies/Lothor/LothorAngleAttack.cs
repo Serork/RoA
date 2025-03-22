@@ -4,6 +4,7 @@ using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
 using System.IO;
 
 using Terraria;
@@ -62,8 +63,9 @@ sealed class LothorAngleAttack : ModProjectile {
             Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
         }
 
-        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y + 1f, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, 0f, 0f, enraged.ToInt());
-        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+        if (Projectile.owner == Main.myPlayer) {
+            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y + 1f, 0f, 0f, ModContent.ProjectileType<LothorAngleAttack2>(), Projectile.damage * 2, 0f, Projectile.owner, 0f, 0f, enraged.ToInt());
+        }
     }
 
     public override void AI() {
@@ -136,6 +138,25 @@ sealed class LothorAngleAttack : ModProjectile {
         float speed = 0.015f;
         _timer += speed;
 
+        bool enraged = Projectile.localAI[0] == 1f;
+        if (Projectile.owner == Main.myPlayer) {
+            Vector2 position = Projectile.position + Vector2.One * 4f;
+            for (int i = 0; i < Main.rand.Next(1, 4); i++) {
+                if (Main.rand.NextBool(5)) {
+                    Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat();
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position.X, position.Y,
+                        velocity.X, velocity.Y, ModContent.ProjectileType<PoisonBubble_Large>(), Projectile.damage, 0f, Projectile.owner, enraged.ToInt());
+                }
+            }
+            for (int i = 0; i < Main.rand.Next(1, 4); i++) {
+                if (Main.rand.NextBool(5)) {
+                    Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat();
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position.X, position.Y,
+                        velocity.X, velocity.Y, ModContent.ProjectileType<PoisonBubble_Small>(), Projectile.damage, 0f, Projectile.owner, enraged.ToInt());
+                }
+            }
+        }
+
         float counting = 0.0f;
         if (counting < 1.0f) {
             counting += 1.0f * _timer;
@@ -144,7 +165,6 @@ sealed class LothorAngleAttack : ModProjectile {
             Projectile.position = Vector2.Lerp(start, end, counting);
         }
 
-        bool enraged = Projectile.localAI[0] == 1f;
         int dust = enraged ? ModContent.DustType<LothorPoison2>() : ModContent.DustType<LothorPoison>();
 
         if (Projectile.localAI[2] == 0f) {
@@ -185,7 +205,7 @@ sealed class LothorAngleAttack : ModProjectile {
 
         for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
             Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, dust, Alpha: 100, Scale: 1.1f)];
-            obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
+            obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f + Main.rand.RandomPointInArea(2f);
             obj.noGravity = true;
             obj.velocity *= 0.1f;
             obj.velocity += Projectile.velocity * 0.5f;
