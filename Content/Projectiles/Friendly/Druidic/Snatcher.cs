@@ -19,6 +19,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
+// TODO: optimize (rewrite)
 sealed class Snatcher : NatureProjectile {
     private const float DIST = 75f;
     private const ushort TIMELEFT = 300;
@@ -30,6 +31,7 @@ sealed class Snatcher : NatureProjectile {
     private int _alpha = 255;
     private int _startDirection;
     private bool _shouldPlayAttackSound, _shouldPlayAttackSound2;
+    private int _timeLeft;
 
     private Vector2[] _oldPositions = new Vector2[18];
 
@@ -48,6 +50,7 @@ sealed class Snatcher : NatureProjectile {
         writer.Write(Projectile.localAI[2]);
         writer.Write(_rotation);
         writer.Write(_startDirection);
+        writer.Write(_timeLeft);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
@@ -59,6 +62,7 @@ sealed class Snatcher : NatureProjectile {
         Projectile.localAI[2] = reader.ReadSingle();
         _rotation = reader.ReadSingle();
         _startDirection = reader.ReadInt32();
+        _timeLeft = reader.ReadInt32();
     }
 
     public override void SetStaticDefaults() {
@@ -151,6 +155,8 @@ sealed class Snatcher : NatureProjectile {
         if (Projectile.timeLeft > 20) {
             Projectile.timeLeft += TIMELEFT;
         }
+        _timeLeft = Projectile.timeLeft;
+        Projectile.netUpdate = true;
     }
 
     public override bool? CanCutTiles() => false;
@@ -227,6 +233,11 @@ sealed class Snatcher : NatureProjectile {
     }
 
     public override void SafePostAI() {
+        if (_timeLeft > 0) {
+            _timeLeft--;
+            Projectile.timeLeft = _timeLeft;
+        }
+
         for (int num2 = _oldPositions.Length - 1; num2 > 0; num2--) {
             _oldPositions[num2] = _oldPositions[num2 - 1];
         }
