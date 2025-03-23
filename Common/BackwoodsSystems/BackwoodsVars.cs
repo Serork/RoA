@@ -121,8 +121,9 @@ sealed class BackwoodsVars : ModSystem {
         writer.Write(_preDownedBossTimer);
         writer.Write(_backwoodsAwake);
 
-        //writer.Write(FirstTileYAtCenter);
-        //writer.Write(BackwoodsTileForBackground);
+        writer.Write(FirstTileYAtCenter);
+        writer.Write(BackwoodsTileForBackground);
+
         //writer.Write(BackwoodsStartX);
         //writer.Write(BackwoodsHalfSizeX);
         //writer.Write(BackwoodsSizeY);
@@ -139,8 +140,9 @@ sealed class BackwoodsVars : ModSystem {
         _preDownedBossTimer = reader.ReadSingle();
         _backwoodsAwake = reader.ReadBoolean();
 
-        //FirstTileYAtCenter = reader.ReadInt32();
-        //BackwoodsTileForBackground = reader.ReadInt32();
+        FirstTileYAtCenter = reader.ReadInt32();
+        BackwoodsTileForBackground = reader.ReadInt32();
+
         //BackwoodsStartX = reader.ReadInt32();
         //BackwoodsHalfSizeX = reader.ReadInt32();
         //BackwoodsSizeY = reader.ReadInt32();
