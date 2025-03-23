@@ -263,6 +263,8 @@ sealed partial class Lothor : ModNPC {
                 NetMessage.SendData(MessageID.SyncNPC, number: npc);
             }
         }
+
+        _shouldEnrage = false;
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
