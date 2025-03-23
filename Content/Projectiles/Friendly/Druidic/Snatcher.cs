@@ -86,7 +86,6 @@ sealed class Snatcher : NatureProjectile {
 
         Projectile.netImportant = true;
 
-        //Projectile.alpha = 255;
         Projectile.Opacity = 1f;
     }
 
@@ -151,7 +150,6 @@ sealed class Snatcher : NatureProjectile {
         }
         if (Projectile.timeLeft > 20) {
             Projectile.timeLeft += TIMELEFT;
-            //Projectile.netUpdate = true;
         }
     }
 
@@ -220,7 +218,6 @@ sealed class Snatcher : NatureProjectile {
     private void ResetAttackState() {
         Projectile.ai[2] = 1f;
         Projectile.localAI[1] = Projectile.localAI[2] = 0f;
-        //Projectile.netUpdate = true;
     }
 
     private bool CantAttack() {
@@ -277,7 +274,7 @@ sealed class Snatcher : NatureProjectile {
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (projectile.owner == Projectile.owner && projectile.type == Type) {
                 if (projectile.ai[0] != (Projectile.whoAmI + 1f)) {
-                    if (projectile.ai[2] > 4.5f) {
+                    if (projectile.ai[2] > 3f) {
                         flag = true;
                     }
                 }
@@ -376,6 +373,9 @@ sealed class Snatcher : NatureProjectile {
                         if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI) {
                             Projectile.ai[0] = projectile.whoAmI + 1f;
                             //Projectile.ai[1] = -projectile.ai[1];
+                            if (_startDirection * Projectile.ai[1] == projectile.As<Snatcher>()._startDirection * projectile.ai[1]) {
+                                Projectile.ai[1] *= -1;
+                            }
                             Projectile.netUpdate = true;
                         }
                     }
@@ -385,11 +385,6 @@ sealed class Snatcher : NatureProjectile {
                 Projectile.ai[0] = 1f;
             }
             Projectile.ai[2] = 0f;
-            //if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[Type] < 2) {
-            //    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, Projectile.velocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI + 1f,
-            //        -Projectile.ai[1], 0f);
-            //    Projectile.netUpdate = true;
-            //}
         }
         if (Projectile.owner == Main.myPlayer) {
             _mousePos = player.GetViableMousePosition();
@@ -417,16 +412,8 @@ sealed class Snatcher : NatureProjectile {
         if (target2.Length() > 1f && _attackVector.Length() < 1f) {
             Projectile.velocity = Helper.SmoothAngleLerp(Projectile.velocity.ToRotation(), target2.ToRotation(), lerp * 3.5f).ToRotationVector2().SafeNormalize(Vector2.Zero);
         }
-        //Main.NewText(Projectile.velocity);
         _targetVector2.X = Helper.Approach(_targetVector2.X, target.X, lerp);
         _targetVector2.Y = Helper.Approach(_targetVector2.Y, target.Y, lerp * 0.1f);
-        //if (Vector2.Distance(_targetVector2, _targetVector) >= DIST / 2f) {
-        //    _targetVector2 = Vector2.Lerp(_targetVector2, _targetVector, lerp * 3f);
-        //}
-        //if (_targetVector2.Length() > maxLength / 2f + maxLength / 5f) {
-        //    float inertia = _targetVector2.Length() * 0.015f;
-        //    _targetVector2 *= (float)Math.Pow(0.98, inertia * 2.0 / inertia);
-        //}
         _rotation = Utils.AngleLerp(_rotation, rotation, 0.05f - (0.04f * (_attackVector.Length() < 50f ? (_attackVector.Length() - 25f) / 25f : 1f)) + (IsAttacking ? Math.Min(1f, _lerpValue * 2f) : 0f));
         Projectile.rotation = _rotation;
 
@@ -448,6 +435,7 @@ sealed class Snatcher : NatureProjectile {
         Vector2 drawPosition = GetPos();
         int direction = (int)Projectile.ai[1];
         direction *= (drawPosition - Main.player[Projectile.owner].Center).X.GetDirection() * _startDirection;
+
         SpriteEffects effects = direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
         Vector2 mountedCenter = Main.player[Projectile.owner].MountedCenter;
@@ -463,11 +451,9 @@ sealed class Snatcher : NatureProjectile {
         Rectangle rectangle = new Rectangle(0, 0, width, 36);
         Vector2 value2 = new Vector2(0f, Main.player[Projectile.owner].gfxOffY);
         float rotation = Projectile.rotation;
-        //Main.spriteBatch.Draw(texture, drawPosition.Floor() - Main.screenPosition, new Rectangle?(rectangle), Color.White, rotation, rectangle.Size() / 2f - Vector2.UnitY * 4f, Projectile.scale, SpriteEffects.None, 0f);
 
-        //num -= 40f * Projectile.scale;
         Vector2 vector = drawPosition;
-        position = Projectile.Center /*+ value * 20f*/;
+        position = Projectile.Center;
         var velocity = (Projectile.rotation - (direction == 1 ? MathHelper.Pi : 0)).ToRotationVector2();
         Vector2 baseValue = Vector2.Normalize(velocity.RotatedBy(MathHelper.PiOver2 * direction));
         value = baseValue;
@@ -485,7 +471,7 @@ sealed class Snatcher : NatureProjectile {
             else {
                 rectangle = new Rectangle(0, 62, width, 18);
             }
-            Vector2 lightPos = vector/* + value * rectangle.Height * 0.75f*/;
+            Vector2 lightPos = vector;
             color = Lighting.GetColor((int)lightPos.X / 16, (int)lightPos.Y / 16) * opacity;
             Main.spriteBatch.Draw(texture, vector - Main.screenPosition, new Rectangle?(rectangle), color, value.ToRotation() - MathHelper.PiOver2, new Vector2((rectangle.Width / 2), 0f), Projectile.scale, SpriteEffects.None, 0f);
             Vector2 to = position - Vector2.Normalize(_targetVector2) * -direction;
