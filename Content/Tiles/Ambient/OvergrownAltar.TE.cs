@@ -40,6 +40,9 @@ sealed class OvergrownAltarTE : ModTileEntity {
         if (Counting > 0.8f) {
             if (factor > 0f && Main.rand.NextChance(1f - (double)Math.Min(0.25f, factor - 0.5f))) {
                 float volume = 2.5f * Math.Max(0.3f, factor + 0.1f);
+                float dist = Vector2.Distance(Main.LocalPlayer.Center, Position.ToWorldCoordinates());
+                float dist2 = MathHelper.Clamp(1f - dist / 1400f, 0f, 1f);
+                volume *= dist2;
                 var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = volume };
                 var sound = SoundEngine.FindActiveSound(in style);
                 if (Main.netMode == NetmodeID.Server) {
