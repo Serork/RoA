@@ -573,6 +573,9 @@ sealed partial class Lothor : ModNPC {
             //}
             _shouldEnrage = flag;
         }
+        else {
+            _shouldEnrage = false;
+        }
     }
 
     private void UpdateWreath() {
