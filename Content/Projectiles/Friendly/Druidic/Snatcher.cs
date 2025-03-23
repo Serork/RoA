@@ -287,6 +287,17 @@ sealed class Snatcher : NatureProjectile {
         if (CantAttack()) {
             flag = true;
         }
+        if (!flag && player.ownedProjectileCounts[Type] > 1 && Projectile.ai[0] == 1f) {
+            foreach (Projectile projectile in Main.ActiveProjectiles) {
+                if (projectile.owner == Projectile.owner && projectile.type == Type &&
+                    Projectile.whoAmI != projectile.whoAmI) {
+                    if (projectile.ai[2] > 3f) {
+                        flag = true;
+                    }
+                    break;
+                }
+            }
+        }
         if (Projectile.owner == Main.myPlayer && player.itemAnimation > player.itemAnimationMax - player.itemAnimationMax / 2 && !flag && !IsAttacking && !IsAttacking2) {
             Projectile.ai[2] = 5f;
 
@@ -385,6 +396,9 @@ sealed class Snatcher : NatureProjectile {
                 Projectile.ai[0] = 1f;
             }
             Projectile.ai[2] = 0f;
+        }
+        if (player.ownedProjectileCounts[Type] == 1 && Projectile.ai[0] != 1f) {
+            Projectile.ai[0] = 1f;
         }
         if (Projectile.owner == Main.myPlayer) {
             _mousePos = player.GetViableMousePosition();
