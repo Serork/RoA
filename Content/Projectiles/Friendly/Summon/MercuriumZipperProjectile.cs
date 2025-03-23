@@ -234,9 +234,9 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             Main.mouseLeftRelease = false;
             player.controlUseItem = false;
             player.itemAnimation = player.itemTime = 10;
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ZipperBreak") { PitchVariance = 0.1f, Volume = 0.8f }, Projectile.Center);
+            Projectile.ai[2] = -200f;
             Projectile.Kill();
-            Dusts();
+            Projectile.netUpdate = true;
             return;
         }
 
@@ -317,6 +317,11 @@ sealed class MercuriumZipper_Effect : ModProjectile {
     public override void OnKill(int timeLeft) {
         ref int damageDone = ref Main.player[Projectile.owner].GetModPlayer<SummonDamageSum>().DamageDone;
         damageDone = 0;
+
+        if (Projectile.ai[2] == -200f) {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ZipperBreak") { PitchVariance = 0.1f, Volume = 0.8f }, Projectile.Center);
+            Dusts();
+        }
     }
 
     public override bool PreDraw(ref Color lightColor) {
