@@ -343,9 +343,6 @@ sealed class Snatcher : NatureProjectile {
         Vector2 result = Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
         if (Projectile.Opacity > 0f) {
             Vector2 to = Vector2.Lerp(playerCenter, result, MathHelper.Clamp(result.Length() * (1f - Projectile.Opacity), 0f, 1f));
-            //if (to.Distance(playerCenter) > DIST * 2f) {
-            //    to = playerCenter;
-            //}
             return to;
         }
         return result;
@@ -383,7 +380,6 @@ sealed class Snatcher : NatureProjectile {
                     foreach (Projectile projectile in Main.ActiveProjectiles) {
                         if (projectile.owner == Projectile.owner && projectile.type == Type && projectile.whoAmI != Projectile.whoAmI) {
                             Projectile.ai[0] = projectile.whoAmI + 1f;
-                            //Projectile.ai[1] = -projectile.ai[1];
                             if (_startDirection * Projectile.ai[1] == projectile.As<Snatcher>()._startDirection * projectile.ai[1]) {
                                 Projectile.ai[1] *= -1;
                             }
