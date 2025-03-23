@@ -38,7 +38,7 @@ sealed class OvergrownAltarTE : ModTileEntity {
         Counting2 = MathHelper.Lerp(Counting2, counting, factor > 0.5f ? Math.Max(0.1f, counting * 0.1f) : counting < 0.5f ? 0.075f : Math.Max(0.05f, counting * 0.025f));
         Counting += TimeSystem.LogicDeltaTime / (3f - MathHelper.Min(0.9f, factor) * 2.5f) * Math.Max(0.05f, Counting) * 7f;
         if (Counting > 0.8f) {
-            if (factor > 0f && Main.rand.NextChance(1f - (double)Math.Min(0.25f, factor - 0.5f))/* || LothorInvasion.preArrivedLothorBoss.Item2*/) {
+            if (factor > 0f && Main.rand.NextChance(1f - (double)Math.Min(0.25f, factor - 0.5f))) {
                 float volume = 2.5f * Math.Max(0.3f, factor + 0.1f);
                 var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = volume };
                 var sound = SoundEngine.FindActiveSound(in style);

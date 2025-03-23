@@ -128,7 +128,7 @@ sealed class HunterSpawnSystem : ModSystem {
                     Vector2 position = player.Center;
                     setUpPosition(player.Center, ref position);
                     bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
-                    if ((flag2 && Main.rand.NextBool(10)) || !flag2) {
+                    if (flag2 && Main.rand.NextBool(10)) {
                         if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {
                             int proj = Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
                                 position.X, position.Y,
@@ -153,7 +153,7 @@ sealed class HunterSpawnSystem : ModSystem {
                         Vector2 position = npc.Center;
                         setUpPosition(npc.Center, ref position);
                         bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
-                        if ((flag2 && Main.rand.NextBool(10)) || !flag2) {
+                        if (flag2 && Main.rand.NextBool(10)) {
                             if (Collision.CanHit(npc.position, npc.width, npc.height, position, 0, 0)) {
                                 int proj = Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
                                     position.X, position.Y,
