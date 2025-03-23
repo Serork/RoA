@@ -90,7 +90,7 @@ sealed class HunterSpawnSystem : ModSystem {
     }
 
     private class HunterAttackPlayer : ModPlayer {
-        private static int _cooldown;
+        private int _cooldown;
 
         public override void PostUpdate() {
             if (Main.myPlayer != Player.whoAmI) {
