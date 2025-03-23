@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Miscellaneous;
@@ -22,6 +23,20 @@ sealed class BackwoodsFogMusicBox : MusicBox {
 
         Tile tile = Main.tile[i, j];
         ModTile modTile = TileLoader.GetTile(Type);
+
+        void drawHighlight(Vector2 drawPosition, Color color, int coordinateWidth, int num12, SpriteEffects spriteEffects) {
+            if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
+                int num = (color.R + color.G + color.B) / 3;
+                if (num > 10) {
+                    Texture2D highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight_Galipot").Value;
+                    Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
+                    Rectangle rect = new(0, 0, coordinateWidth, num12);
+                    Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, 
+                        effects: spriteEffects, layerDepth: 0f);
+                }
+            }
+        }
+
         if (modTile != null && tile.TileFrameX > 18) {
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
@@ -38,8 +53,9 @@ sealed class BackwoodsFogMusicBox : MusicBox {
             Color color = Lighting.GetColor(i, j);
             Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
             texture ??= TextureAssets.Tile[Type].Value;
+            Vector2 drawPosition = new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero;
             Main.spriteBatch.Draw(texture,
-                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
+                                  drawPosition,
                                   new Rectangle(tileX, tile.TileFrameY + Main.tileFrame[modTile.Type] * 36, 16, height),
                                   color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
@@ -116,6 +132,8 @@ sealed class BackwoodsFogMusicBox : MusicBox {
                     }
                 }
             }
+
+            drawHighlight(drawPosition, color, 16, height, SpriteEffects.None);
 
             return false;
         }

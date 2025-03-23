@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -19,6 +20,10 @@ abstract class MusicBox : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileObsidianKill[Type] = true;
 
+        TileID.Sets.HasOutlines[Type] = true;
+
+        TileID.Sets.DisableSmartCursor[Type] = true;
+
         TileObjectData.newTile.LavaDeath = false;
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
         TileObjectData.newTile.Origin = new Point16(0, 1);
@@ -31,6 +36,8 @@ abstract class MusicBox : ModTile {
         DustType = -1;
         HitSound = SoundID.Dig;
     }
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
     public override void MouseOver(int i, int j) {
         Player player = Main.LocalPlayer;
