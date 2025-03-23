@@ -184,20 +184,12 @@ abstract class InsectForm : BaseForm {
 
             int type = ModContent.ProjectileType<ToxicStream>();
             int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(20);
-            for (int num58 = 0; num58 < 2; num58++) {
-                int num59 = Dust.NewDust(playerPos + velocity * 2.5f, 0, 0, MountData.spawnDust, 0f, 0f, 0, default(Color), 1f + Main.rand.NextFloatRange(0.1f));
-                Main.dust[num59].velocity = Main.dust[num59].velocity.RotatedByRandom(MathHelper.PiOver4);
-                Main.dust[num59].velocity *= 0.2f;
-                Main.dust[num59].velocity += velocity / 5f;
-                Main.dust[num59].noGravity = true;
-                Main.dust[num59].fadeIn = 1.25f;
-            }
-            Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, 0f), type, damage, shootKnockback, player.whoAmI, 0f);
+            Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, 0f), type, damage, shootKnockback, player.whoAmI, 0f, 0f, 2f);
             if (shootCounter >= 80) {
                 shootKnockback = 2.5f;
                 shootKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(shootKnockback);
-                Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, 1f), type, damage, shootKnockback, player.whoAmI, 0f);
-                Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, -1f), type, damage, shootKnockback, player.whoAmI, 0f);
+                Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, 1f), type, damage, shootKnockback, player.whoAmI, 0f, 0f, 2f);
+                Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, -1f), type, damage, shootKnockback, player.whoAmI, 0f, 0f);
                 shootCounter = -35;
             }
         }
