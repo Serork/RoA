@@ -267,6 +267,9 @@ sealed class BaseFormHandler : ModPlayer {
                 position.X -= 6f;
                 position.Y -= 4f;
                 position.Y -= player.HeightMapOffset;
+                if (position.Y == 38) {
+                    position.Y = 48;
+                }
                 Vector2 origin = texture.Size() / 2f;
                 spriteBatch.Draw(texture, position + origin - Vector2.UnitY * player.height / 2f, null, Color.White, 0f, origin, 1f, (SpriteEffects)(player.direction != 1).ToInt(), 0f);
             }
