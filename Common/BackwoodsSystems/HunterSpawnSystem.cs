@@ -142,7 +142,6 @@ sealed class HunterSpawnSystem : ModSystem {
                                 num, knockBack,
                                 ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
                             _cooldown = 600;
-                            //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                         }
                     }
                 }
@@ -161,14 +160,13 @@ sealed class HunterSpawnSystem : ModSystem {
                         Vector2 position = npc.Center;
                         setUpPosition(npc.Center, ref position);
                         bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
-                        if (flag2 && Main.rand.NextBool(10)) {
+                        if (flag2 && Main.rand.NextBool(1)) {
                             if (Collision.CanHit(npc.position, npc.width, npc.height, position, 0, 0)) {
                                 int proj = Projectile.NewProjectile(new EntitySource_Misc("hunterattack"),
                                     position.X, position.Y,
                                     num, knockBack,
-                                    ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Main.myPlayer, ai2: npc.whoAmI);
+                                    ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Player.whoAmI, ai2: npc.whoAmI);
                                 _cooldown = 600;
-                                //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                             }
                         }
                     }

@@ -59,9 +59,11 @@ sealed class HunterProjectile1 : ModProjectile {
             Projectile.ai[1] += speed;
         }
         else {
-            if ((Projectile.owner == Main.myPlayer && flag) || (!flag && Main.netMode != NetmodeID.MultiplayerClient)) {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Helper.VelocityToPoint(Projectile.Center, flag ? player.Center : target.Center, 10f),
-                    ModContent.ProjectileType<HunterProjectile2>(), Projectile.damage, Projectile.knockBack, flag ? Projectile.owner : Main.myPlayer);
+            if (Projectile.owner == Main.myPlayer) {
+                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Helper.VelocityToPoint(Projectile.Center,
+                    flag ? player.Center : target.Center, 10f),
+                    ModContent.ProjectileType<HunterProjectile2>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
+                    ai2: !flag ? 1f : 0f);
             }
             Projectile.Kill();
         }
@@ -129,17 +131,17 @@ sealed class HunterProjectile2 : ModProjectile {
 
         Projectile.extraUpdates = 2;
 
-        bool flag = Projectile.owner != 255;
-        if (!flag) {
-            Projectile.friendly = true;
-            Projectile.hostile = false;
-            return;
-        }
         Projectile.friendly = false;
         Projectile.hostile = true;
     }
 
     public override void AI() {
+        bool flag = Projectile.ai[2] == 1f;
+        if (flag) {
+            Projectile.friendly = true;
+            Projectile.hostile = false;
+        }
+
         Projectile.tileCollide = Projectile.timeLeft < 220;
 
         Projectile.ai[0] -= 1f;
