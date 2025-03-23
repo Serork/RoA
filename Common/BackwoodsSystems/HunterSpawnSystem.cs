@@ -90,8 +90,15 @@ sealed class HunterSpawnSystem : ModSystem {
     }
 
     private class HunterAttackPlayer : ModPlayer {
+        private static int _cooldown;
+
         public override void PostUpdate() {
             if (Main.myPlayer != Player.whoAmI) {
+                return;
+            }
+
+            if (_cooldown > 0) {
+                _cooldown--;
                 return;
             }
 
@@ -134,6 +141,7 @@ sealed class HunterSpawnSystem : ModSystem {
                                 position.X, position.Y,
                                 num, knockBack,
                                 ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
+                            _cooldown = 600;
                             //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                         }
                     }
@@ -159,6 +167,7 @@ sealed class HunterSpawnSystem : ModSystem {
                                     position.X, position.Y,
                                     num, knockBack,
                                     ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Main.myPlayer, ai2: npc.whoAmI);
+                                _cooldown = 600;
                                 //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                             }
                         }
