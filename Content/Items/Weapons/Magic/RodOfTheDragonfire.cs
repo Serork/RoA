@@ -44,7 +44,7 @@ sealed class RodOfTheDragonfire : Rod {
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
 
-        Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "ScreechCast") { Volume = 0.9f, PitchVariance = 0.1f };
+        Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "ScreechCast") { Volume = 0.75f, PitchVariance = 0.1f };
 
         Item.shoot = ModContent.ProjectileType<Hellbat>();
         Item.shootSpeed = 5f;
@@ -63,22 +63,10 @@ sealed class RodOfTheDragonfire : Rod {
             for (int i = -amount + 1; i < amount; i++) {
                 Vector2 vector2 = Utils.RotatedBy(velocity, (double)(i / 10f)) * Main.rand.NextFloat(0.75f, 1.35f);
                 if (Main.rand.NextBool()) {
-                    Dust dust = Dust.NewDustDirect(dustPosition, 0, 0, 6, velocity.X, velocity.Y, 100);
-                    dust.scale = 0.2f;
-                    for (int i2 = 0; i2 < 3; i2++) {
-                        if (Main.rand.Next(4) == 0) {
-                            dust.noGravity = true;
-                            dust.scale *= 3f;
-                            dust.velocity.X *= 2f;
-                            dust.velocity.Y *= 2f;
-                        }
-                        else {
-                            dust.scale *= 1.5f;
-                        }
-                    }
-                    if (dust.scale < 1f) {
-                        dust.scale = 1f;
-                    }
+                    Dust dust = Dust.NewDustDirect(dustPosition, 0, 0, 6, velocity.X, velocity.Y, 100, default, Main.rand.NextFloat(0.5f, 2f));
+                    dust.velocity.X *= Main.rand.NextFloat(0f, 3f);
+                    dust.velocity.Y *= Main.rand.NextFloat(0f, 3f);
+                    dust.fadeIn = Main.rand.NextFloat(1f, 2f);
                     dust.noGravity = true;
                 }
                 Vector2 spawnPosition = position + vector2.SafeNormalize(Vector2.Zero) * -4f + vector2 + vector2 + new Vector2(0f, 12f * player.direction).RotatedBy(velocity.ToRotation());

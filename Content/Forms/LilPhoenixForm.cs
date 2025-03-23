@@ -5,6 +5,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -337,7 +338,7 @@ sealed class LilPhoenixForm : BaseForm {
         void jump() {
             player.velocity.Y = -jumpSpeed * player.gravDir;
             plr._phoenixJump = (int)((double)jumpHeight * 2f);
-            plr._phoenixJumpsCD = 30;
+            plr._phoenixJumpsCD = 15;
             SoundEngine.PlaySound(SoundID.Item45, player.position);
             plr._phoenixJustJumped = plr._phoenixJustJumpedForAnimation = true;
             BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
@@ -390,7 +391,7 @@ sealed class LilPhoenixForm : BaseForm {
                     if (player.velocity.Y == 0f || player.sliding) {
                         player.velocity.Y = -jumpSpeed * player.gravDir;
                         plr._phoenixJump = (int)((double)jumpHeight * 2.5f);
-                        plr._phoenixJumpsCD = 30;
+                        plr._phoenixJumpsCD = 15;
                     }
                     else {
                         if (justJumped) {
@@ -491,6 +492,8 @@ sealed class LilPhoenixForm : BaseForm {
             Main.dust[dust].velocity.Y -= 0.5f;
             Main.dust[dust].velocity.Y *= 2.5f;
         }
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "BirdCall") { Pitch = 0.9f, PitchVariance = 0.1f, Volume = 2f }, player.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Screech") { Pitch = -0.7f, PitchVariance = 0.1f, Volume = 0.8f }, player.Center);
         skipDust = true;
     }
 

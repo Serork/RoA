@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -233,6 +234,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             Main.mouseLeftRelease = false;
             player.controlUseItem = false;
             player.itemAnimation = player.itemTime = 10;
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ZipperBreak") { PitchVariance = 0.1f, Volume = 0.8f }, Projectile.Center);
             Projectile.Kill();
             Dusts();
             return;
@@ -247,6 +249,8 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             int damageNeeded = (int)Projectile.ai[2] * 5;
             if (damageDone >= damageNeeded) {
                 Projectile.ai[2] = -100f;
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ZipperAttack") { PitchVariance = 0.1f, Pitch = 0.8f, Volume = 1.2f }, Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Gyas") { Pitch = -0.3f, Volume = 0.8f }, Projectile.Center);
                 Projectile.netUpdate = true;
             }
         }

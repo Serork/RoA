@@ -235,6 +235,7 @@ abstract class InsectForm : BaseForm {
             Main.dust[dust].fadeIn = 1.25f;
             Main.dust[dust].velocity += Helper.VelocityToPoint(position, player.Center, 2f);
         }
+        SoundEngine.PlaySound(SoundID.Zombie46 with { Pitch = -0.35f, Volume = 0.6f }, player.Center);
         skipDust = true;
     }
 

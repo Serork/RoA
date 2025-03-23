@@ -70,9 +70,10 @@ sealed class LilPhoenixTrailFlame : FormProjectile {
             Projectile.netUpdate = true;
         }
         foreach (Vector2 trailPosition in _positions) {
-            if (Main.rand.NextBool()) {
-                int dust = Dust.NewDust(trailPosition, 2, 2, 6, 0f, -0.5f, Projectile.alpha, default, 1.5f);
+            if (Main.rand.NextBool(8)) {
+                int dust = Dust.NewDust(trailPosition, 2, 2, 6, 0f, -0.5f, Projectile.alpha, default, Main.rand.NextFloat(1f, 2f));
                 Main.dust[dust].noGravity = true;
+                Main.dust[dust].fadeIn = Main.rand.NextFloat(0.5f, 1.5f);
             }
         }
     }

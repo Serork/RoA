@@ -57,7 +57,7 @@ sealed class Hellbat : ModProjectile {
             Main.dust[num179].velocity *= 0.2f;
         }
 
-        if (Projectile.timeLeft >= 10) {
+        if (Projectile.timeLeft >= 20) {
             if (Projectile.ai[0] == 1f) {
                 Projectile.scale += 0.008f;
                 if (Projectile.scale >= 1.4f) {
@@ -73,7 +73,7 @@ sealed class Hellbat : ModProjectile {
         }
         else {
             //Projectile.alpha = 0;
-            Projectile.Opacity = 1f - Utils.GetLerpValue(10, 0, Projectile.timeLeft, true);
+            Projectile.Opacity = 1f - Utils.GetLerpValue(20, 0, Projectile.timeLeft, true);
 
         }
         Projectile.rotation = 0f;
@@ -161,7 +161,9 @@ sealed class Hellbat : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+        if (timeLeft == 0) return;
+
+        SoundEngine.PlaySound(SoundID.Item10 with { Volume = 0.5f, Pitch = 0.3f }, Projectile.position);
 
         for (int num303 = 0; num303 < 2; num303++) {
             int num304 = Dust.NewDust(Projectile.position + Vector2.One * 4f, Projectile.width - 8, Projectile.height - 8, 6, Scale: 1.5f);

@@ -227,6 +227,8 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
         Projectile.Center = point2.ToWorldCoordinates();
 
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Quake") { Pitch = 0.3f, Volume = 0.6f }, Projectile.Center);
+
         Projectile.netUpdate = true;
     }
 
@@ -268,13 +270,14 @@ sealed class TectonicCaneProjectile : NatureProjectile {
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), startPosition + Main.rand.Random2(0f, size.X - 4f, 0f, size.X / 2f), velocity * 0.4f, ModContent.ProjectileType<TectonicCaneFlames>(),
                         Projectile.damage, Projectile.knockBack, Projectile.owner);
                 }
+                SoundEngine.PlaySound(SoundID.Item20 with { Pitch = -0.35f, Volume = 0.3f }, Projectile.Center);
             }
         }
 
-        if (Projectile.localAI[2] < 16f) {
+        if (Projectile.localAI[2] < 30f) {
             Projectile.localAI[2]++;
-            if (Projectile.localAI[2] % 3f == 0f) {
-                SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.35f, Volume = 1f }, Projectile.Center);
+            if (Projectile.localAI[2] % 2f == 0f) {
+                SoundEngine.PlaySound(SoundID.WormDig with { Pitch = -0.35f - Projectile.localAI[2] * 0.1f, Volume = 2f - Projectile.localAI[2] * 0.1f }, Projectile.Center);
             }
         }
         if (Projectile.ai[0] < 1f) {

@@ -6,6 +6,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -403,6 +404,7 @@ sealed class FlederForm : BaseForm {
             Main.dust[dust].fadeIn = 1.8f;
             Main.dust[dust].noGravity = true;
         }
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream1") { Pitch = -0.3f, PitchVariance = 0.1f, Volume = 0.8f }, player.Center);
         skipDust = true;
     }
 
