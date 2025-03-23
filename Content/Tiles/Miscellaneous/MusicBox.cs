@@ -49,8 +49,6 @@ abstract class MusicBox : ModTile {
     public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
         Tile tile = Main.tile[i, j];
 
-        Main.NewText(123);
-
         if (Main.gamePaused || !Main.instance.IsActive || Lighting.UpdateEveryFrame && !Main.rand.NextBool(4)) {
             return;
         }
