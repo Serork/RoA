@@ -233,13 +233,7 @@ sealed class Snatcher : NatureProjectile {
         _oldPositions[0] = GetPos();
 
         _lerpValue = MathHelper.Lerp(_lerpValue, AttackFactor, 0.1f);
-        //if (_attackCount > 2) {
-        //    Projectile.Kill();
-        //}
         if (Projectile.timeLeft < 20) {
-            //Projectile.alpha += 42;
-            //if (Projectile.alpha > 255)
-            //    Projectile.alpha = 255;
         }
         else {
             _alpha -= 65;
