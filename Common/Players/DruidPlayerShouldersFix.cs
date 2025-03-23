@@ -13,17 +13,15 @@ sealed class DruidPlayerShouldersFix : ILoadable {
 
     private void On_PlayerDrawSet_CreateCompositeData(On_PlayerDrawSet.orig_CreateCompositeData orig, ref PlayerDrawSet self) {
         orig(ref self);
-        if (self.drawPlayer.velocity.Y != 0f) {
-            foreach (Projectile projectile in Main.ActiveProjectiles) {
-                if (projectile.owner != self.drawPlayer.whoAmI) {
-                    continue;
-                }
-                if (projectile.ModProjectile is BaseRodProjectile) {
-                    self.drawPlayer.bodyFrame.Y = 0;
-                    self.compShoulderOverFrontArm = true;
-                    self.hideCompositeShoulders = false;
-                    break;
-                }
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            if (projectile.owner != self.drawPlayer.whoAmI) {
+                continue;
+            }
+            if (projectile.ModProjectile is BaseRodProjectile) {
+                self.drawPlayer.bodyFrame.Y = 0;
+                self.compShoulderOverFrontArm = true;
+                self.hideCompositeShoulders = false;
+                break;
             }
         }
     }
