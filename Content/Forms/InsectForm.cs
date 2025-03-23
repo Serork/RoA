@@ -113,7 +113,10 @@ abstract class InsectForm : BaseForm {
                 if (insectTimer >= 90) {
                     BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
                     //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
-                    SoundEngine.PlaySound(SoundID.NPCHit32, player.position);
+                    SoundEngine.PlaySound(SoundID.NPCHit32, player.Center);
+                    if (Main.netMode == NetmodeID.MultiplayerClient) {
+                        MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 11, player.Center));
+                    }
                     for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
                         int insectDamage = 10;
                         float insectKnockback = 3f;
@@ -159,6 +162,10 @@ abstract class InsectForm : BaseForm {
             //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
 
             SoundEngine.PlaySound(SoundID.Item17, player.Center);
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 12, player.Center));
+            }
+
             Vector2 playerPos, velocity;
             if (facedRight.Value) {
                 playerPos = new Vector2(player.position.X + 18, player.position.Y + 8);

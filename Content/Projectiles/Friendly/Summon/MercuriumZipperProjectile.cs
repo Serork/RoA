@@ -224,9 +224,10 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 
         Projectile.position = Vector2.Lerp(Projectile.position, target.Center, 0.15f);
 
-        if (Progress == 0f && Vector2.Distance(player.Center, target.Center) > 400f) {
+        if (player.whoAmI == Main.myPlayer && Progress == 0f && Vector2.Distance(player.Center, target.Center) > 400f) {
+            Projectile.ai[2] = -200f;
             Projectile.Kill();
-            Dusts();
+            Projectile.netUpdate = true;
             return;
         }
 

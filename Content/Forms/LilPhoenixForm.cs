@@ -153,7 +153,10 @@ sealed class LilPhoenixForm : BaseForm {
             }
         }
         void dash() {
-            SoundEngine.PlaySound(SoundID.Item74, player.position);
+            SoundEngine.PlaySound(SoundID.Item74, player.Center);
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 10, player.Center));
+            }
             Vector2 vector_ = player.GetViableMousePosition();
             player.controlLeft = player.controlRight = false;
             player.direction = -(player.Center - vector_).X.GetDirection();
