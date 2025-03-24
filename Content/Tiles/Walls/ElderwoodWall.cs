@@ -14,7 +14,7 @@ sealed class ElderwoodWall3 : ElderwoodWall, IRequireMinHammerPower, IResistToHa
     int IRequireMinHammerPower.MinHammer => 55;
 
     bool IResistToHammer.CanBeApplied(int i, int j) => true;
-    float IResistToHammer.ResistToPick => 0.25f;
+    float IResistToHammer.ResistToPick => 0.25f * 0.75f;
 
     public override void SetStaticDefaults() {
         base.SetStaticDefaults();
