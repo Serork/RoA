@@ -868,7 +868,7 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient(ItemID.Starfury, 1);
         item.AddIngredient(ItemID.MeteoriteBar, 10);
         item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
-        item.AddTile(TileID.Anvils);
+        item.AddTile(TileID.DemonAltar);
         item.SortAfterFirstRecipesOf(ItemID.OrangePhaseblade);
         item.Register();
 
