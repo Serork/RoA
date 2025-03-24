@@ -117,8 +117,8 @@ sealed class BackwoodsFogHandler : ModSystem {
 
                 _fogTime = (int)((float)num3 * num4) * 0.5f;
 
-                string message = Language.GetText("Mods.RoA.World.BackwoodsFog").ToString();
-                Helper.NewMessage($"{message}...", Helper.EventMessageColor);
+                //string message = Language.GetText("Mods.RoA.World.BackwoodsFog").ToString();
+                //Helper.NewMessage($"{message}...", Helper.EventMessageColor);
                 IsFogActive = true;
             }
         }
