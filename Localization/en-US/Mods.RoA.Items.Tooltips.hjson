@@ -1,6 +1,6 @@
-PotentialDamage: "potential nature damage"
+PotentialDamage: potential nature damage
 DruidToolTipOption1: Damage scales with wreath charge
-DruidToolTipOption3: "charge"
+DruidToolTipOption3: charge
 DruidToolTipOption4_1: base nature damage
 FillingRate1: Extremely slow wreath charge rate
 FillingRate2: Very slow wreath charge rate

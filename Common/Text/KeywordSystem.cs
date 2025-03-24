@@ -20,15 +20,14 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 
-using ReLogic.Content;
-using ReLogic.Graphics;
-
 using KeywordInfo = (byte, string);
 
 namespace RoA.Common.Text;
 
 sealed class KeywordSystem : ILoadable {
     internal static float _keywordColorOpacity = 1f, _keywordColorOpacity2;
+
+    private static bool _overResourceBar;
 
     private sealed class KeywordSystemForVanillaTooltips : GlobalItem {
         private readonly List<KeywordInfo> _keywords_EN = [(0, "mana"), (1, "life"), (1, "health"), (2, "wreath")];
@@ -112,6 +111,8 @@ sealed class KeywordSystem : ILoadable {
             string text = "[kw/l:" + localPlayer.statLife + "]" + "/" + localPlayer.statLifeMax2;
             Main.instance.MouseTextHackZoom(text);
             Main.mouseText = true;
+
+            _overResourceBar = true;
         }
     }
 
@@ -121,6 +122,7 @@ sealed class KeywordSystem : ILoadable {
             localPlayer.cursorItemIconEnabled = false;
             string text = "[kw/m:" + localPlayer.statMana + "]" + "/" + localPlayer.statManaMax2;
             Main.instance.MouseTextHackZoom(text);
+            _overResourceBar = true;
             Main.mouseText = true;
         }
     }
@@ -153,7 +155,7 @@ sealed class KeywordSystem : ILoadable {
                 if (flag4) {
                     _keywordColorOpacity = 1f;
                 }
-                else if ((!Main.HoverItem.IsEmpty()/* && Main.HoverItem.IsDruidic()*/) || flag3 || flag || FancyWreathDrawing.IsHoveringUI || WreathDrawing.JustDrawn) {
+                else if ((!Main.HoverItem.IsEmpty()/* && Main.HoverItem.IsDruidic()*/) || flag3 || flag || FancyWreathDrawing.IsHoveringUI || WreathDrawing.JustDrawn || _overResourceBar) {
                     if (_keywordColorOpacity > 0f) {
                         _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
                     }
@@ -179,6 +181,10 @@ sealed class KeywordSystem : ILoadable {
         }
         else {
             _keywordColorOpacity = 0f;
+        }
+
+        if (!Main.mouseText && _overResourceBar) {
+            _overResourceBar = false;
         }
     }
 
