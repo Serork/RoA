@@ -29,6 +29,28 @@ sealed class MinAxeAndHammerSystem : ILoadable {
 
     void ILoadable.Load(Mod mod) {
         On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
+        On_Player.ItemCheck_UseMiningTools_TryHittingWall += On_Player_ItemCheck_UseMiningTools_TryHittingWall;
+    }
+
+    private void On_Player_ItemCheck_UseMiningTools_TryHittingWall(On_Player.orig_ItemCheck_UseMiningTools_TryHittingWall orig, Player self, Item sItem, int wX, int wY) {
+        if (Main.tile[wX, wY].WallType > 0 && (!Main.tile[wX, wY].HasTile || wX != Player.tileTargetX || wY != Player.tileTargetY ||
+            (!Main.tileHammer[Main.tile[wX, wY].TileType] && !self.poundRelease)) && self.toolTime == 0 && self.itemAnimation > 0 && self.controlUseItem && sItem.hammer > 0 &&
+            Player.CanPlayerSmashWall(wX, wY)) {
+            int damage = (int)((float)sItem.hammer * 1.5f);
+            Tile tile = Main.tile[wX, wY];
+            if (WallLoader.GetWall(tile.WallType) is TileHooks.IRequireMinHammerPower tileMinHammerPower) {
+                if (sItem.hammer < tileMinHammerPower.MinHammer) {
+                    damage = 0;
+                }
+                else {
+                    if (TileLoader.GetTile(tile.TileType) is TileHooks.IResistToHammer resistToHammer && resistToHammer.CanBeApplied(wX, wY)) {
+                        damage = (int)((double)damage * resistToHammer.ResistToPick);
+                    }
+                }
+            }
+            self.PickWall(wX, wY, damage);
+            self.itemTime = sItem.useTime / 2;
+        }
     }
 
     private void On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On_Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y) {
