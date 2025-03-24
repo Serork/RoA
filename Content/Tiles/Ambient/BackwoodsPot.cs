@@ -47,7 +47,7 @@ sealed class BackwoodsPot : ModTile {
         ];
         TileObjectData.addTile(Type);
 
-        HitSound = SoundID.Shatter;
+        //HitSound = SoundID.Shatter;
 
         AddMapEntry(new Color(74, 75, 87), Language.GetText("MapObject.Pot"));
         AddMapEntry(new Color(91, 74, 67), Language.GetText("MapObject.Pot"));
@@ -110,10 +110,6 @@ sealed class BackwoodsPot : ModTile {
     }
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        if (WorldGen.destroyObject) {
-            return;
-        }
-
         bool flag = false;
         int num = 0;
         int num9 = j;
@@ -121,7 +117,7 @@ sealed class BackwoodsPot : ModTile {
         }
         num *= -1;
         num += i;
-        int style = 0;
+        int style = Main.tile[i, j].TileFrameY / 18;
         int num16 = 0;
         while (style > 1) {
             style -= 2;
@@ -146,6 +142,12 @@ sealed class BackwoodsPot : ModTile {
         }
 
         WorldGen.destroyObject = true;
+        //if (num4 >= 7 && num4 <= 9)
+        SoundEngine.PlaySound(SoundID.Shatter, new Vector2(i * 16, j * 16));
+        //else if (num4 >= 16 && num4 <= 24)
+        //    SoundEngine.PlaySound(4, i * 16, j * 16);
+        //else
+        //    SoundEngine.PlaySound(13, i * 16, j * 16);
         for (int m = num; m < num + 2; m++) {
             for (int n = num9; n < num9 + 2; n++) {
                 if (Main.tile[m, n].TileType == Type && Main.tile[m, n].HasTile) {
@@ -160,7 +162,7 @@ sealed class BackwoodsPot : ModTile {
             DropGores(i, j, frameX, frameY);
 
         if (Main.netMode != 1)
-            SpawnLoot(i, j, num, num9, style);
+            SpawnLoot(i, j, num, num9, 0);
 
         WorldGen.destroyObject = false;
     }

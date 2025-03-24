@@ -33,6 +33,8 @@ sealed class LivingElderwoodlLeaves : ModTile {
         HitSound = SoundID.Grass;
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         AddMapEntry(new Color(0, 128, 0));
+
+        MineResist = 0.01f;
     }
 
     public override void ModifyFrameMerge(int i, int j, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight) {
