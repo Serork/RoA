@@ -1235,6 +1235,13 @@ sealed class RoARecipes : ModSystem {
 
         // furniture
         temp = item;
+        item = Recipe.Create(ModContent.ItemType<ElderwoodBeam>(), 2);
+        item.AddIngredient(ModContent.ItemType<Elderwood>(), 1);
+        item.AddTile(TileID.Sawmill);
+        item.SortAfter(temp);
+        item.Register();
+
+        temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodBathtub>());
         item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(14);
         item.AddTile(TileID.Sawmill);
@@ -1384,12 +1391,6 @@ sealed class RoARecipes : ModSystem {
         item = Recipe.Create(ModContent.ItemType<ElderwoodPlatform>(), 2);
         item.AddIngredient(ModContent.ItemType<Elderwood>(), 1);
         item.SortAfterFirstRecipesOf(ItemID.AshWoodPlatform);
-        item.Register();
-
-        item = Recipe.Create(ModContent.ItemType<ElderwoodBeam>(), 2);
-        item.AddIngredient(ModContent.ItemType<Elderwood>(), 1);
-        item.AddTile(TileID.Sawmill);
-        item.SortAfterFirstRecipesOf(ItemID.RichMahoganyBeam);
         item.Register();
     }
 }
