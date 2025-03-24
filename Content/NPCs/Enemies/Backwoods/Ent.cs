@@ -68,6 +68,8 @@ sealed class Ent : RoANPC {
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
+        DrawOffsetY = 2;
+
         Banner = Type;
         BannerItem = ModContent.ItemType<EntBanner>();
         ItemID.Sets.KillsToBanner[BannerItem] = 25;
