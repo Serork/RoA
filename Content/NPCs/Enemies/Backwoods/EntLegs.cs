@@ -187,14 +187,14 @@ sealed class EntLegs : RoANPC {
 
                     float dustCount = 14f;
                     int num1 = 0;
-                    Vector2 center = NPC.Center - Vector2.UnitY * 32f + Vector2.UnitY * 4f;
+                    Vector2 center = NPC.Center - Vector2.UnitY * 32f;
                     while (num1 < dustCount) {
                         Vector2 vector = Vector2.UnitX * 0f;
                         vector += -Vector2.UnitY.RotatedBy(num1 * (7f / dustCount)) * new Vector2(3f, 3f);
                         vector = vector.RotatedBy(NPC.velocity.ToRotation());
                         int num3 = Dust.NewDust(center, 0, 0, DustID.MagicMirror, 0f, 0f, 40, default, 1f);
                         Main.dust[num3].noGravity = true;
-                        Main.dust[num3].position = new Vector2(center.X + 20 * NPC.direction, center.Y + 6) + vector;
+                        Main.dust[num3].position = new Vector2(center.X + 20 * NPC.direction, center.Y + 6) + vector + Vector2.UnitY * 4f;
                         Main.dust[num3].velocity = NPC.velocity * 0f + vector.SafeNormalize(Vector2.UnitY) * 0.8f;
                         int num4 = num1;
                         num1 = num4 + 1;
