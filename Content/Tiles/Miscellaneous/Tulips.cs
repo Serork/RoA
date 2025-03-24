@@ -49,7 +49,8 @@ sealed class GrowTulips : ILoadable {
                 if (!flag) {
                     if (i < 1000 || i > Main.maxTilesX - 1000) {
                         if (Main.tile[i, j].TileType == TileID.Grass || Main.tile[i, j].TileType == TileID.GolfGrass) {
-                            if (!Main.tile[i, j - 1].AnyLiquid() && !Main.tile[i, j - 1].AnyWall()) {
+                            if (!Main.tile[i, j - 1].AnyLiquid() && !Main.tile[i, j - 1].AnyWall() &&
+                                Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 0);
                             }
                         }
@@ -72,13 +73,14 @@ sealed class GrowTulips : ILoadable {
                 }
                 if (!flag) {
                     if (Main.tile[i, j].TileType == TileID.JungleGrass) {
-                        if (!Main.tile[i, j - 1].AnyLiquid()) {
+                        if (!Main.tile[i, j - 1].AnyLiquid() &&
+                            Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
                             WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 1);
                         }
                     }
                 }
             }
-            /*if (NPC.downedBoss2) */{
+            if (NPC.downedBoss2) {
                 if ((double)j > Main.worldSurface && (!Main.tile[i, j - 1].HasTile
                     /* || Main.tileCut[Main.tile[i, j - 1].TileType]*/)) {
                     int num2 = Utils.Clamp(i - num, 1, Main.maxTilesX - 1 - 1);
@@ -96,8 +98,8 @@ sealed class GrowTulips : ILoadable {
                     if (!flag) {
                         TileObjectData objectData = TileObjectData.GetTileData(tileType, 0);
                         if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
-                            Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
-                            if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType]) {
+                            if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType] &&
+                                Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 2);
                             }
                         }

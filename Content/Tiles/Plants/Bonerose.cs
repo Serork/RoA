@@ -33,6 +33,14 @@ sealed class Bonerose : PlantBase, TileHooks.IGrowPlantRandom {
             return;
         }
 
+        if (WorldGen.gen) {
+            return;
+        }
+
+        if (!NPC.downedBoss3) {
+            return;
+        }
+
         TryPlacePlant(i, j, Type, 0, checkRadius: 25, maxAlchNearby: 2, validTiles: AnchorValidTiles);
     }
 }
