@@ -160,7 +160,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             if (Main.netMode != NetmodeID.Server) {
                 Player player = Main.LocalPlayer;
                 VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
-                localVignettePlayer.SetVignette(0, 2000 * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
+                localVignettePlayer.SetVignette(0, Main.screenWidth * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
             }
 
             Rectangle tileWorkSpace = GetTileWorkSpace();
