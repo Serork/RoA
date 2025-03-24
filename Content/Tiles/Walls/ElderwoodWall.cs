@@ -26,6 +26,8 @@ sealed class ElderwoodWall3 : ElderwoodWall, IRequireMinHammerPower, IResistToHa
     }
 
     public override string Texture => base.Texture[..^1];
+
+    public override bool CanExplode(int i, int j) => Main.hardMode;
 }
 
 sealed class ElderwoodWall2 : ElderwoodWall {
