@@ -8,6 +8,7 @@ using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
@@ -137,6 +138,8 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => EmitDusts(i, j);
+
+    public override bool CanDrop(int i, int j) => false;
 
     public static void EmitDusts(int i, int j) {
         if (!TileDrawing.IsVisible(Main.tile[i, j])) {
