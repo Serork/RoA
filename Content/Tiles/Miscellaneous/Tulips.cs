@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Tiles;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,11 +47,13 @@ sealed class GrowTulips : ILoadable {
                             flag = true;
                     }
                 }
+
                 if (!flag) {
-                    if (i < 1000 || i > Main.maxTilesX - 1000) {
+                    if (i < Main.maxTilesX / 3 || i > Main.maxTilesX - Main.maxTilesX / 3) {
                         if (Main.tile[i, j].TileType == TileID.Grass || Main.tile[i, j].TileType == TileID.GolfGrass) {
                             if (!Main.tile[i, j - 1].AnyLiquid() && !Main.tile[i, j - 1].AnyWall() &&
                                 Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
+                                //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 0);
                             }
                         }
@@ -75,6 +78,7 @@ sealed class GrowTulips : ILoadable {
                     if (Main.tile[i, j].TileType == TileID.JungleGrass) {
                         if (!Main.tile[i, j - 1].AnyLiquid() &&
                             Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
+                            //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
                             WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 1);
                         }
                     }
@@ -100,6 +104,7 @@ sealed class GrowTulips : ILoadable {
                         if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
                             if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType] &&
                                 Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
+                                //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 2);
                             }
                         }
