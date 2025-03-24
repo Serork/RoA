@@ -525,7 +525,7 @@ sealed class BackwoodsPot : ModTile {
             if (player2.InModBiome<BackwoodsBiome>()) {
                 num12 += Main.rand.Next(2, 7);
                 type = ModContent.ItemType<ElderTorch>();
-                num12 = (int)((float)num12 * 1.5f);
+                //num12 = (int)((float)num12 * 1.5f);
             }
             else if (player2.ZoneHallow) {
                 num12 += Main.rand.Next(2, 7);
