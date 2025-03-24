@@ -49,9 +49,9 @@ sealed class GrowTulips : ILoadable {
                 }
 
                 if (!flag) {
-                    if (i < Main.maxTilesX / 3 || i > Main.maxTilesX - Main.maxTilesX / 3) {
+                    if (i < Main.maxTilesX / 3 + 100 || i > Main.maxTilesX - Main.maxTilesX / 3 - 100) {
                         if (Main.tile[i, j].TileType == TileID.Grass || Main.tile[i, j].TileType == TileID.GolfGrass) {
-                            if (!Main.tile[i, j - 1].AnyLiquid() && 
+                            if (/*!Main.tile[i, j - 1].AnyLiquid() && */
                                 (!Main.tile[i, j - 1].AnyWall() || Main.tile[i, j - 1].WallType == WallID.FlowerUnsafe || Main.tile[i, j - 1].WallType == WallID.GrassUnsafe)) {
                                 if (Main.tileCut[Main.tile[i, j - 1].TileType]) {
                                     WorldGen.KillTile(i, j - 1);
