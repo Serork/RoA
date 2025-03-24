@@ -10,12 +10,7 @@ using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Content.Tiles.Walls;
 
-sealed class ElderwoodWall3 : ElderwoodWall, IRequireMinHammerPower, IResistToHammer {
-    int IRequireMinHammerPower.MinHammer => 55;
-
-    bool IResistToHammer.CanBeApplied(int i, int j) => true;
-    float IResistToHammer.ResistToPick => 0.25f;
-
+sealed class ElderwoodWall3 : ElderwoodWall {
     public override void SetStaticDefaults() {
         base.SetStaticDefaults();
 
@@ -26,15 +21,18 @@ sealed class ElderwoodWall3 : ElderwoodWall, IRequireMinHammerPower, IResistToHa
     }
 
     public override string Texture => base.Texture[..^1];
-
-    public override bool CanExplode(int i, int j) => Main.hardMode;
 }
 
 sealed class ElderwoodWall2 : ElderwoodWall {
     public override string Texture => base.Texture[..^1];
 }
 
-class ElderwoodWall : ModWall {
+class ElderwoodWall : ModWall, IRequireMinHammerPower, IResistToHammer {
+    int IRequireMinHammerPower.MinHammer => 55;
+
+    bool IResistToHammer.CanBeApplied(int i, int j) => true;
+    float IResistToHammer.ResistToPick => 0.25f;
+
     public override void SetStaticDefaults() {
         Main.wallHouse[Type] = true;
         DustType = (ushort)ModContent.DustType<WoodTrash>();
@@ -42,4 +40,6 @@ class ElderwoodWall : ModWall {
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+
+    public override bool CanExplode(int i, int j) => Main.hardMode;
 }
