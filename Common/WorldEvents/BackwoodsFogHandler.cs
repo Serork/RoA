@@ -160,6 +160,7 @@ sealed class BackwoodsFogHandler : ModSystem {
     }
 
     public override void PostUpdatePlayers() {
+        Main.NewText(Opacity + " " + Opacity2);
         if (Opacity > 0f) {
             if (Main.netMode != NetmodeID.Server) {
                 Player player = Main.LocalPlayer;
@@ -204,6 +205,13 @@ sealed class BackwoodsFogHandler : ModSystem {
             }
 
             return;
+        }
+
+        if (Opacity2 > 0f) {
+            Opacity2 -= 0.005f * 0.25f;
+        }
+        else {
+            Opacity2 = 0f;
         }
 
         if (Opacity < 0.75f) {
