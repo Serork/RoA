@@ -6,9 +6,16 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static RoA.Common.Tiles.TileHooks;
+
 namespace RoA.Content.Tiles.Walls;
 
-sealed class ElderwoodWall3 : ElderwoodWall {
+sealed class ElderwoodWall3 : ElderwoodWall, IRequireMinHammerPower, IResistToHammer {
+    int IRequireMinHammerPower.MinHammer => 55;
+
+    bool IResistToHammer.CanBeApplied(int i, int j) => true;
+    float IResistToHammer.ResistToPick => 0.25f;
+
     public override void SetStaticDefaults() {
         base.SetStaticDefaults();
 

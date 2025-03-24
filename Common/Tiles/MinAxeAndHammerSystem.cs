@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Tiles;
 
-sealed class MinAxeSystem : ILoadable {
+sealed class MinAxeAndHammerSystem : ILoadable {
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "ClearMiningCacheAt")]
     public extern static void Player_ClearMiningCacheAt(Player player, int x, int y, int hitTileCacheType);
@@ -63,6 +63,20 @@ sealed class MinAxeSystem : ILoadable {
                 if (tile.TileType == 26 && (sItem.hammer < 80 || !Main.hardMode)) {
                     num2 = 0;
                     self.Hurt(PlayerDeathReason.ByOther(4), self.statLife / 2, -self.direction);
+                }
+
+                if (TileLoader.GetTile(tile.TileType) is TileHooks.IRequireMinHammerPower tileMinHammerPower) {
+                    if (sItem.hammer < tileMinHammerPower.MinHammer) {
+                        num2 = 0;
+                    }
+                    else {
+                        if (TileLoader.GetTile(tile.TileType) is TileHooks.IResistToHammer resistToHammer && resistToHammer.CanBeApplied(x, y)) {
+                            num2 = (int)((double)num2 * resistToHammer.ResistToPick);
+                        }
+                        else {
+                            num2 = (int)((double)num2 * 0.75);
+                        }
+                    }
                 }
 
                 AchievementsHelper.CurrentlyMining = true;
