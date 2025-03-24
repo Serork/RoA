@@ -145,6 +145,8 @@ sealed class ExoticTulip : ModTile {
 
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(new(216, 78, 142), name);
+
+        MineResist = 0.01f;
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
@@ -201,6 +203,8 @@ sealed class SweetTulip : ModTile {
 
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(new(255, 165, 0), name);
+
+        MineResist = 0.01f;
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
@@ -259,6 +263,8 @@ sealed class WeepingTulip : ModTile {
 
         LocalizedText name = CreateMapEntryName();
         AddMapEntry(new(0, 0, 255), name);
+
+        MineResist = 0.01f;
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
