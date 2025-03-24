@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
@@ -78,8 +79,8 @@ sealed class GrowTulips : ILoadable {
                 }
             }
             /*if (NPC.downedBoss2) */{
-                if ((double)j > Main.worldSurface && (!Main.tile[i, j - 1].HasTile ||
-                    Main.tileCut[Main.tile[i, j - 1].TileType])) {
+                if ((double)j > Main.worldSurface && (!Main.tile[i, j - 1].HasTile
+                    /* || Main.tileCut[Main.tile[i, j - 1].TileType]*/)) {
                     int num2 = Utils.Clamp(i - num, 1, Main.maxTilesX - 1 - 1);
                     int num3 = Utils.Clamp(i + num, 1, Main.maxTilesX - 1 - 1);
                     int num4 = Utils.Clamp(j - num, 1, Main.maxTilesY - 1 - 1);
@@ -95,6 +96,7 @@ sealed class GrowTulips : ILoadable {
                     if (!flag) {
                         TileObjectData objectData = TileObjectData.GetTileData(tileType, 0);
                         if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
+                            Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
                             if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType]) {
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 2);
                             }
