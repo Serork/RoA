@@ -43,11 +43,12 @@ sealed class MinAxeAndHammerSystem : ILoadable {
                     damage = 0;
                 }
                 else {
-                    if (TileLoader.GetTile(tile.TileType) is TileHooks.IResistToHammer resistToHammer && resistToHammer.CanBeApplied(wX, wY)) {
+                    if (WallLoader.GetWall(tile.WallType) is TileHooks.IResistToHammer resistToHammer && resistToHammer.CanBeApplied(wX, wY)) {
                         damage = (int)((double)damage * resistToHammer.ResistToPick);
                     }
                 }
             }
+            Main.NewText(damage);
             self.PickWall(wX, wY, damage);
             self.itemTime = sItem.useTime / 2;
         }
