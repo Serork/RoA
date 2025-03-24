@@ -56,6 +56,7 @@ sealed class GrowTulips : ILoadable {
                                 if (Main.tileCut[Main.tile[i, j - 1].TileType]) {
                                     WorldGen.KillTile(i, j - 1);
                                 }
+                                Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 0);
                             }
                         }
@@ -82,6 +83,7 @@ sealed class GrowTulips : ILoadable {
                             if (Main.tileCut[Main.tile[i, j - 1].TileType]) {
                                 WorldGen.KillTile(i, j - 1);
                             }
+                            Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
                             WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 1);
                         }
                     }
@@ -106,6 +108,7 @@ sealed class GrowTulips : ILoadable {
                         TileObjectData objectData = TileObjectData.GetTileData(tileType, 0);
                         if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
                             if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType]) {
+                                Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 2);
                             }
                         }
