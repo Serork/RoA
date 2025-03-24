@@ -30,20 +30,21 @@ sealed class KeywordSystem : ILoadable {
     private static bool _overResourceBar;
 
     private sealed class KeywordSystemForVanillaTooltips : GlobalItem {
-        private readonly List<KeywordInfo> _keywords_EN = [(0, "mana"), (1, "life"), (1, "health"), (2, "wreath")];
-        private readonly List<KeywordInfo> _keywords_RU = [
-            (0, "мана"),  (0, "маны"),  (0, "мане"), (0, "ману"), (0, "маной"), (0, "маною"), (0, "мане"),
-            (1, "жизнь"), (1, "жизнью"), (1, "жизни"), (1, "жизней"), (1, "жизням"), (1, "жизнями"), (1, "жизнях"),
-            (1, "здоровье"), (1, "здоровья"), (1, "здоровью"), (1, "здоровьем"),
-            (2, "венок"), (2, "венка"), (2, "венку"), (2, "венком"), (2, "венке"),
-        ];
-
         public override bool InstancePerEntity => true;
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
-            List<KeywordInfo> checkArray = _keywords_EN;
-            if (GameCulture.FromCultureName(GameCulture.CultureName.Russian).IsActive) {
-                checkArray = _keywords_RU;
+            List<KeywordInfo> checkArray = [];
+            string[] manaWords = Language.GetTextValue("Mods.RoA.ManaWords").Split(';');
+            string[] lifeWords = Language.GetTextValue("Mods.RoA.LifeWords").Split(';');
+            string[] wreathWords = Language.GetTextValue("Mods.RoA.WreathWords").Split(';');
+            foreach (string manaWord in manaWords) {
+                checkArray.Add((0, manaWord));
+            }
+            foreach (string lifeWord in lifeWords) {
+                checkArray.Add((1, lifeWord));
+            }
+            foreach (string wreathWord in wreathWords) {
+                checkArray.Add((2, wreathWord));
             }
             foreach (TooltipLine tooltip in tooltips) {
                 if (tooltip.Name == "ItemName") {
