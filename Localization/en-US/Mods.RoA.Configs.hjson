@@ -24,7 +24,7 @@ RoAClientConfig: {
 	}
 
 	HighlightMode: {
-		Label: Druid Keyword Highlight Mode
+		Label: Resource Keyword Highlight
 		Tooltip: ""
 	}
 

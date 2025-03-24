@@ -24,7 +24,7 @@ RoAClientConfig: {
 	}
 
 	HighlightMode: {
-		Label: Выделение ключевых слов класса 'Друид'
+		Label: Выделение ключевых слов ресурсов
 		// Tooltip: ""
 	}
 
