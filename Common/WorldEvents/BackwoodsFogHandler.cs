@@ -45,6 +45,7 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     public static bool IsFogActive { get; private set; } = false;
     public static float Opacity { get; internal set; } = 0f;
+    public static float Opacity2 { get; internal set; } = 0f;
 
     public override void OnWorldLoad() => Reset();
     public override void OnWorldUnload() => Reset();
@@ -52,18 +53,21 @@ sealed class BackwoodsFogHandler : ModSystem {
     public override void SaveWorldData(TagCompound tag) {
         tag["backwoods" + nameof(IsFogActive)] = IsFogActive;
         tag["backwoods" + nameof(Opacity)] = Opacity;
+        tag["backwoods" + nameof(Opacity2)] = Opacity2;
         tag["backwoods" + nameof(_fogTime)] = _fogTime;
     }
 
     public override void LoadWorldData(TagCompound tag) {
         IsFogActive = tag.GetBool("backwoods" + nameof(IsFogActive));
         Opacity = tag.GetFloat("backwoods" + nameof(Opacity));
+        Opacity2 = tag.GetFloat("backwoods" + nameof(Opacity2));
         _fogTime = tag.GetFloat("backwoods" + nameof(_fogTime));
     }
 
     private static void Reset() {
         IsFogActive = false;
         Opacity = 0f;
+        Opacity2 = 0f;
         _fogTime = 0f;
     }
 
@@ -159,8 +163,24 @@ sealed class BackwoodsFogHandler : ModSystem {
         if (Opacity > 0f) {
             if (Main.netMode != NetmodeID.Server) {
                 Player player = Main.LocalPlayer;
+                if (player.position.Y / 16 < Main.worldSurface) {
+                    if (Opacity2 < 0.75f) {
+                        Opacity2 += 0.0175f * 0.15f;
+                    }
+                    else {
+                        Opacity2 = 0.75f;
+                    }
+                }
+                else {
+                    if (Opacity2 > 0f) {
+                        Opacity2 -= 0.005f * 0.25f;
+                    }
+                    else {
+                        Opacity2 = 0f;
+                    }
+                }
                 VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
-                localVignettePlayer.SetVignette(0, Main.screenWidth * Opacity, 0.625f * Opacity, Color.Gray, player.Center);
+                localVignettePlayer.SetVignette(0, Main.screenWidth * Opacity * Opacity2, 0.625f * Opacity * Opacity2, Color.Gray, player.Center);
             }
 
             Rectangle tileWorkSpace = GetTileWorkSpace();
