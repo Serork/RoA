@@ -41,9 +41,7 @@ sealed class LivingElderwoodlLeaves : ModTile {
         WorldGen.TileMergeAttemptFrametest(i, j, ModContent.TileType<LivingElderwoodlLeaves>(), ModContent.TileType<LivingElderwood>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);
     }
 
-    public override IEnumerable<Item> GetItemDrops(int i, int j) {
-        yield return new Item(ItemID.None);
-    }
+    public override bool CanDrop(int i, int j) => false;
 
     public override void RandomUpdate(int i, int j) {
         if (Main.tile[i, j].HasUnactuatedTile) {
