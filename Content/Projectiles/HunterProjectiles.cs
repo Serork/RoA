@@ -9,9 +9,11 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles;
@@ -120,6 +122,17 @@ sealed class HunterProjectile1 : ModProjectile {
 }
 
 sealed class HunterProjectile2 : ModProjectile {
+    private sealed class DeathMessageByHunterRifleHandle : ModPlayer {
+        public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource) {
+            int? sourceProjectileType = damageSource.SourceProjectileType;
+            if (sourceProjectileType.HasValue && sourceProjectileType == ModContent.ProjectileType<HunterProjectile2>()) {
+                damageSource = PlayerDeathReason.ByCustomReason(Player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.HunterRifle{Main.rand.Next(2)}").Value);
+            }
+
+            return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
+        }
+    }
+
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override Color? GetAlpha(Color lightColor) => Color.White;
