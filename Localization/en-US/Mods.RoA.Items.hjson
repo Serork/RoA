@@ -185,7 +185,7 @@ BandOfPurity: {
 	Tooltip:
 		'''
 		Increases wreath charge rate by 20%
-		While wreath is charged, increases health regeneration
+		While wreath is charged, increases life regeneration
 		'''
 }
 
@@ -1880,7 +1880,7 @@ RoyalQualityHoney: {
 	DisplayName: Royal Quality Honey
 	Tooltip:
 		'''
-		Increasing health regeneration provides a further honeyed boost
+		Increasing life regeneration provides a further honeyed boost
 		'Figs, cheese and a drizzle of honey'
 		'''
 }
