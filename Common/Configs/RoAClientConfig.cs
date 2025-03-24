@@ -31,8 +31,12 @@ sealed class RoAClientConfig : ModConfig {
     [ReloadRequired]
     public bool VanillaResprites;
 
-    [Header("Mods.RoA.Configs.DruidOptionsHeader")]
+    [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement3))]
+    [DefaultValue(HighlightModes.Normal)]
+    [DrawTicks]
+    public HighlightModes HighlightMode;
 
+    [Header("Mods.RoA.Configs.DruidOptionsHeader")]
     [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement))]
     [DefaultValue(DamageTooltipOptions.Option1)]
     [DrawTicks]
@@ -50,11 +54,6 @@ sealed class RoAClientConfig : ModConfig {
     [CustomModConfigItem(typeof(BooleanElement))]
     [DefaultValue(true)]
     public bool DruidLeaves;
-
-    [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement3))]
-    [DefaultValue(HighlightModes.Normal)]
-    [DrawTicks]
-    public HighlightModes HighlightMode;
 
     public enum WreathDrawingModes {
         Normal,
