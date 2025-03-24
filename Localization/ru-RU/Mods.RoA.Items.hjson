@@ -1877,3 +1877,8 @@ RoyalQualityHoney: {
 		'Финики, сыр и полить мёдом'
 		'''
 }
+
+ElderwoodBeam: {
+	// DisplayName: Elderwood Beam
+	// Tooltip: ""
+}

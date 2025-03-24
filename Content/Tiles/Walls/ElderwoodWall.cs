@@ -35,7 +35,7 @@ class ElderwoodWall : ModWall, IRequireMinHammerPower, IResistToHammer {
 
     public override void SetStaticDefaults() {
         Main.wallHouse[Type] = true;
-        DustType = (ushort)ModContent.DustType<WoodTrash>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
         AddMapEntry(new Color(112, 55, 31));
     }
 

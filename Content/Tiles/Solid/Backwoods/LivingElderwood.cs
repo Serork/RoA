@@ -47,7 +47,7 @@ class LivingElderwood : ModTile {
         TileID.Sets.GeneralPlacementTiles[Type] = false;
         TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
 
-        DustType = (ushort)ModContent.DustType<WoodTrash>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
         AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
 
         MineResist = 1.5f;

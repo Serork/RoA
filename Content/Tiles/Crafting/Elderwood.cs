@@ -21,7 +21,7 @@ sealed class Elderwood : ModTile {
 
         TileID.Sets.ChecksForMerge[Type] = true;
 
-        DustType = (ushort)ModContent.DustType<WoodTrash>();
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
         AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
 
         MineResist = 1.5f;

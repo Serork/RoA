@@ -1884,3 +1884,8 @@ RoyalQualityHoney: {
 		'Figs, cheese and a drizzle of honey'
 		'''
 }
+
+ElderwoodBeam: {
+	DisplayName: Elderwood Beam
+	Tooltip: ""
+}

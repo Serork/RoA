@@ -1385,5 +1385,11 @@ sealed class RoARecipes : ModSystem {
         item.AddIngredient(ModContent.ItemType<Elderwood>(), 1);
         item.SortAfterFirstRecipesOf(ItemID.AshWoodPlatform);
         item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<ElderwoodBeam>(), 2);
+        item.AddIngredient(ModContent.ItemType<Elderwood>(), 1);
+        item.AddTile(TileID.Sawmill);
+        item.SortAfterFirstRecipesOf(ItemID.RichMahoganyBeam);
+        item.Register();
     }
 }
