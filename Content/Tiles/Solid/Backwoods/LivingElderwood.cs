@@ -54,6 +54,8 @@ class LivingElderwood : ModTile {
         MinPick = MINTILEREQUIRED;
     }
 
+    public override bool CanExplode(int i, int j) => Main.hardMode;
+
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
         yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
     }

@@ -22,7 +22,7 @@ sealed class Fog : VisualEffect<Fog> {
         Color lightColor = Lighting.GetColor((int)(Position.X / 16f), (int)(Position.Y / 16f));
         float brightness = (lightColor.R / 255f + lightColor.G / 255f + lightColor.B / 255f) / 3f;
         float brightness2 = MathHelper.Clamp((brightness - 0.6f) * 5f, 0f, 1f);
-        _brightness = MathHelper.Lerp(_brightness, (1f - brightness2), 0.15f);
+        _brightness = MathHelper.Lerp(_brightness, 1f - brightness2, 0.15f);
         spritebatch.Draw(Texture, Position - Main.screenPosition, Frame, lightColor * _brightness * (1f - Alpha / 255f), Rotation, Origin, Scale, SpriteEffects.None, 0f);
     }
 
