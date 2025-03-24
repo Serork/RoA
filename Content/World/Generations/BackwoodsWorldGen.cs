@@ -140,7 +140,7 @@ sealed class BackwoodsWorldGen : ModSystem {
                     Tile tile = Main.tile[k, l];
                     int type = tile.TileType;
                     int wall = tile.TileType;
-                    if (i > BackwoodsVars.BackwoodsStartX - BackwoodsVars.BackwoodsHalfSizeX - 50 && i < BackwoodsVars.BackwoodsStartX + BackwoodsVars.BackwoodsHalfSizeX + 50) {
+                    if (i > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 50 && i < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 50) {
                         return;
                     }
                     if (tile.TileType != TileID.Dirt && BackwoodsVars.BackwoodsTileTypes.Contains(tile.TileType)) {

@@ -55,7 +55,8 @@ sealed class BackwoodsVars : ModSystem {
     public static int FirstTileYAtCenter { get; internal set; }
     public static int BackwoodsSizeY { get; internal set; }
     public static int BackwoodsTileForBackground { get; internal set; }
-    public static int BackwoodsStartX { get; internal set; }
+    public static int BackwoodsCenterX { get; internal set; }
+    public static int BackwoodsCenterY { get; internal set; }
     public static int BackwoodsHalfSizeX { get; internal set; }
 
     public static HashSet<ushort> BackwoodsTileTypes { get; } = [(ushort)ModContent.TileType<LivingElderwood>(), (ushort)ModContent.TileType<LivingElderwoodlLeaves>(), (ushort)ModContent.TileType<TreeBranch>(), (ushort)ModContent.TileType<BackwoodsGrass>(), (ushort)ModContent.TileType<BackwoodsGreenMoss>(), (ushort)ModContent.TileType<BackwoodsStone>(), TileID.Dirt];
@@ -79,7 +80,8 @@ sealed class BackwoodsVars : ModSystem {
         tag[nameof(BackwoodsTileForBackground)] = BackwoodsTileForBackground;
         tag[nameof(_preDownedBossTimer)] = _preDownedBossTimer;
         tag[nameof(_backwoodsAwake)] = _backwoodsAwake;
-        tag[nameof(BackwoodsStartX)] = BackwoodsStartX;
+        tag[nameof(BackwoodsCenterX)] = BackwoodsCenterX;
+        tag[nameof(BackwoodsCenterY)] = BackwoodsCenterY;
         tag[nameof(BackwoodsHalfSizeX)] = BackwoodsHalfSizeX;
         tag[nameof(BackwoodsSizeY)] = BackwoodsSizeY;
 
@@ -95,7 +97,8 @@ sealed class BackwoodsVars : ModSystem {
         BackwoodsTileForBackground = tag.GetInt(nameof(BackwoodsTileForBackground));
         _preDownedBossTimer = tag.GetFloat(nameof(_preDownedBossTimer));
         _backwoodsAwake = tag.GetBool(nameof(_backwoodsAwake));
-        BackwoodsStartX = tag.GetInt(nameof(BackwoodsStartX));
+        BackwoodsCenterX = tag.GetInt(nameof(BackwoodsCenterX));
+        BackwoodsCenterY = tag.GetInt(nameof(BackwoodsCenterY));
         BackwoodsHalfSizeX = tag.GetInt(nameof(BackwoodsHalfSizeX));
         BackwoodsSizeY = tag.GetInt(nameof(BackwoodsSizeY));
 
@@ -108,7 +111,7 @@ sealed class BackwoodsVars : ModSystem {
     }
 
     private static void ResetAllFlags() {
-        BackwoodsHalfSizeX = BackwoodsStartX = FirstTileYAtCenter = BackwoodsTileForBackground = BackwoodsSizeY = 0;
+        BackwoodsHalfSizeX = BackwoodsCenterX = FirstTileYAtCenter = BackwoodsTileForBackground = BackwoodsSizeY = BackwoodsCenterY = 0;
         _preDownedBossTimer = 0f;
         _backwoodsAwake = false;
 
@@ -124,9 +127,10 @@ sealed class BackwoodsVars : ModSystem {
         writer.Write(FirstTileYAtCenter);
         writer.Write(BackwoodsTileForBackground);
 
-        //writer.Write(BackwoodsStartX);
-        //writer.Write(BackwoodsHalfSizeX);
-        //writer.Write(BackwoodsSizeY);
+        writer.Write(BackwoodsCenterX);
+        writer.Write(BackwoodsHalfSizeX);
+        writer.Write(BackwoodsSizeY);
+        writer.Write(BackwoodsCenterY);
 
         //writer.Write(BackwoodsTreeCountInWorld);
         //for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
@@ -143,9 +147,10 @@ sealed class BackwoodsVars : ModSystem {
         FirstTileYAtCenter = reader.ReadInt32();
         BackwoodsTileForBackground = reader.ReadInt32();
 
-        //BackwoodsStartX = reader.ReadInt32();
-        //BackwoodsHalfSizeX = reader.ReadInt32();
-        //BackwoodsSizeY = reader.ReadInt32();
+        BackwoodsCenterX = reader.ReadInt32();
+        BackwoodsHalfSizeX = reader.ReadInt32();
+        BackwoodsSizeY = reader.ReadInt32();
+        BackwoodsCenterY = reader.ReadInt32();
 
         //BackwoodsTreeCountInWorld = reader.ReadInt16();
         //AllTreesWorldPositions.Clear();

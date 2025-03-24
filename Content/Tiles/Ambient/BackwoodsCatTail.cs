@@ -39,8 +39,8 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
             if (Main.tile[i, j].HasTile) {
             }
             else if (WorldGen.genRand.Next(600) == 0) {
-                int right = BackwoodsVars.BackwoodsStartX + BackwoodsVars.BackwoodsHalfSizeX;
-                int left = BackwoodsVars.BackwoodsStartX - BackwoodsVars.BackwoodsHalfSizeX;
+                int right = BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX;
+                int left = BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX;
                 BackwoodsBiomePass.PlaceBackwoodsLilypad(i, j, right, left);
                 if (Main.netMode == 2)
                     NetMessage.SendTileSquare(-1, i, j);
@@ -60,8 +60,8 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
             if (Main.tile[i, j].HasTile) {
             }
             else if (WorldGen.genRand.Next(600) == 0) {
-                int right = BackwoodsVars.BackwoodsStartX + BackwoodsVars.BackwoodsHalfSizeX;
-                int left = BackwoodsVars.BackwoodsStartX - BackwoodsVars.BackwoodsHalfSizeX;
+                int right = BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX;
+                int left = BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX;
                 BackwoodsBiomePass.PlaceBackwoodsLilypad(i, j, right, left);
                 if (Main.netMode == 2)
                     NetMessage.SendTileSquare(-1, i, j);

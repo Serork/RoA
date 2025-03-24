@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.BackwoodsSystems;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Consumables;
@@ -168,12 +169,22 @@ sealed class BackwoodsPot : ModTile {
     }
 
     private void SpawnLoot(int i, int j, int x2, int y2, int style) {
-        bool flag = (double)j < Main.rockLayer;
+        int firstTileY = BackwoodsVars.FirstTileYAtCenter;
+        int centerY = BackwoodsVars.BackwoodsCenterY;
+        int sizeY = BackwoodsVars.BackwoodsSizeY;
+        int sizeX = BackwoodsVars.BackwoodsHalfSizeX * 2;
+        int centerX = BackwoodsVars.BackwoodsCenterX;
+        int edgeY = sizeY / 4;
+
+        int worldSurface = firstTileY + edgeY;
+        int rockLayer = centerY - edgeY;
+        int bottom = centerY + sizeY / 2 - edgeY * 2;
+        bool flag = (double)j < rockLayer;
         bool flag2 = j < Main.UnderworldLayer;
-        if (Main.remixWorld) {
-            flag = (double)j > Main.rockLayer && j < Main.UnderworldLayer;
-            flag2 = (double)j > Main.worldSurface && (double)j < Main.rockLayer;
-        }
+        //if (Main.remixWorld) {
+        //    flag = (double)j > Main.rockLayer && j < Main.UnderworldLayer;
+        //    flag2 = (double)j > Main.worldSurface && (double)j < Main.rockLayer;
+        //}
 
         UnifiedRandom genRand = WorldGen.genRand;
 
@@ -238,7 +249,7 @@ sealed class BackwoodsPot : ModTile {
             return;
         }
 
-        if (genRand.Next(35) == 0 && Main.wallDungeon[Main.tile[i, j].WallType] && (double)j > Main.worldSurface) {
+        if (genRand.Next(35) == 0 && Main.wallDungeon[Main.tile[i, j].WallType] && (double)j > worldSurface) {
             Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, 327);
             return;
         }
@@ -261,7 +272,7 @@ sealed class BackwoodsPot : ModTile {
                     Main.npc[num2].netUpdate = true;
                 }
             }
-            else if ((double)j > Main.rockLayer && j < Main.maxTilesY - 350) {
+            else if ((double)j > rockLayer && j < Main.maxTilesY - 350) {
                 int num3 = -1;
                 num3 = ((Main.rand.Next(9) == 0) ? NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -7) : ((Main.rand.Next(7) == 0) ? NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -8) : ((Main.rand.Next(6) == 0) ? NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -9) : ((Main.rand.Next(3) != 0) ? NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, 1) : NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -3)))));
                 if (num3 > -1) {
@@ -269,7 +280,7 @@ sealed class BackwoodsPot : ModTile {
                     Main.npc[num3].netUpdate = true;
                 }
             }
-            else if ((double)j > Main.worldSurface && (double)j <= Main.rockLayer) {
+            else if ((double)j > worldSurface && (double)j <= rockLayer) {
                 int num4 = -1;
                 num4 = NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -6);
                 if (num4 > -1) {
@@ -291,7 +302,7 @@ sealed class BackwoodsPot : ModTile {
         }
 
         if (genRand.Next(45) == 0 || (Main.rand.Next(45) == 0 && Main.expertMode)) {
-            if ((double)j < Main.worldSurface) {
+            if ((double)j < worldSurface) {
                 int num5 = genRand.Next(10);
                 if (num5 == 0)
                     Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, 292);
@@ -615,11 +626,11 @@ sealed class BackwoodsPot : ModTile {
         }
 
         float num15 = 200 + genRand.Next(-100, 101);
-        if ((double)j < Main.worldSurface)
+        if ((double)j < worldSurface)
             num15 *= 0.5f;
         else if (flag)
             num15 *= 0.75f;
-        else if (j > Main.maxTilesY - 250)
+        else if (j > bottom)
             num15 *= 1.25f;
 
         num15 *= 1f + (float)Main.rand.Next(-20, 21) * 0.01f;
