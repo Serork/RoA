@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.BackwoodsSystems;
+using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 
 using Terraria;
@@ -15,9 +18,27 @@ sealed class ExtraVanillaPotItems : ModSystem {
     }
 
     private void On_WorldGen_SpawnThingsFromPot(On_WorldGen.orig_SpawnThingsFromPot orig, int i, int j, int x2, int y2, int style) {
+        Player player2 = Main.player[Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16)];
+
         bool flag = (double)j < Main.rockLayer;
         bool flag2 = j < Main.UnderworldLayer;
-        if (Main.remixWorld) {
+
+        int firstTileY = BackwoodsVars.FirstTileYAtCenter;
+        int centerY = BackwoodsVars.BackwoodsCenterY;
+        int sizeY = BackwoodsVars.BackwoodsSizeY;
+        int sizeX = BackwoodsVars.BackwoodsHalfSizeX * 2;
+        int centerX = BackwoodsVars.BackwoodsCenterX;
+        int edgeY = sizeY / 4;
+
+        int worldSurface = firstTileY + edgeY;
+        int rockLayer = centerY - edgeY;
+        int bottom = centerY + sizeY / 2 - edgeY * 2;
+        bool inBackwoods = player2.InModBiome<BackwoodsBiome>();
+        if (inBackwoods) {
+            flag = (double)j < rockLayer;
+            flag2 = j < Main.UnderworldLayer;
+        }
+        else if (Main.remixWorld) {
             flag = (double)j > Main.rockLayer && j < Main.UnderworldLayer;
             flag2 = (double)j > Main.worldSurface && (double)j < Main.rockLayer;
         }
@@ -84,7 +105,7 @@ sealed class ExtraVanillaPotItems : ModSystem {
             return;
         }
 
-        if (genRand.Next(35) == 0 && Main.wallDungeon[Main.tile[i, j].WallType] && (double)j > Main.worldSurface) {
+        if (genRand.Next(35) == 0 && Main.wallDungeon[Main.tile[i, j].WallType] && (double)j > (inBackwoods ? worldSurface : Main.worldSurface)) {
             Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, 327);
             return;
         }
@@ -107,7 +128,7 @@ sealed class ExtraVanillaPotItems : ModSystem {
                     Main.npc[num2].netUpdate = true;
                 }
             }
-            else if ((double)j > Main.rockLayer && j < Main.maxTilesY - 350) {
+            else if ((double)j > (inBackwoods ? rockLayer : Main.rockLayer) && j < Main.maxTilesY - 350) {
                 int num3 = -1;
                 num3 = ((Main.rand.Next(9) == 0) ? NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -7) : ((Main.rand.Next(7) == 0) ? NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -8) : ((Main.rand.Next(6) == 0) ? NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -9) : ((Main.rand.Next(3) != 0) ? NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, 1) : NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -3)))));
                 if (num3 > -1) {
@@ -115,7 +136,7 @@ sealed class ExtraVanillaPotItems : ModSystem {
                     Main.npc[num3].netUpdate = true;
                 }
             }
-            else if ((double)j > Main.worldSurface && (double)j <= Main.rockLayer) {
+            else if ((double)j > (inBackwoods ? worldSurface : Main.worldSurface) && (double)j <= (inBackwoods ? rockLayer : Main.rockLayer)) {
                 int num4 = -1;
                 num4 = NPC.NewNPC(new EntitySource_SpawnNPC(), x2 * 16 + 16, y2 * 16 + 32, -6);
                 if (num4 > -1) {
@@ -137,7 +158,7 @@ sealed class ExtraVanillaPotItems : ModSystem {
         }
 
         if (genRand.Next(45) == 0 || (Main.rand.Next(45) == 0 && Main.expertMode)) {
-            if ((double)j < Main.worldSurface) {
+            if ((double)j < (inBackwoods ? worldSurface : Main.worldSurface)) {
                 int num5 = genRand.Next(10);
                 if (num5 == 0)
                     Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, 292);
@@ -198,7 +219,7 @@ sealed class ExtraVanillaPotItems : ModSystem {
                 if (num6 >= 7)
                     Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, 2350, genRand.Next(1, 3));
             }
-            else if (flag2) {
+            else if (inBackwoods ? j < bottom : flag2) {
                 int num7 = genRand.Next(19);
                 if (num7 == 0)
                     Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, 296);
@@ -332,7 +353,6 @@ sealed class ExtraVanillaPotItems : ModSystem {
         if (Main.expertMode)
             num9--;
 
-        Player player2 = Main.player[Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16)];
         int num10 = 0;
         int num11 = 20;
         for (int k = 0; k < 50; k++) {
@@ -368,7 +388,11 @@ sealed class ExtraVanillaPotItems : ModSystem {
 
             int type = 8;
             int type2 = 282;
-            if (player2.ZoneHallow) {
+            if (player2.InModBiome<BackwoodsBiome>()) {
+                num12 += Main.rand.Next(2, 7);
+                type = ModContent.ItemType<ElderTorch>();
+            }
+            else if (player2.ZoneHallow) {
                 num12 += Main.rand.Next(2, 7);
                 type = 4387;
             }
@@ -456,11 +480,11 @@ sealed class ExtraVanillaPotItems : ModSystem {
         }
 
         float num15 = 200 + genRand.Next(-100, 101);
-        if ((double)j < Main.worldSurface)
+        if ((double)j < (inBackwoods ? worldSurface : Main.worldSurface))
             num15 *= 0.5f;
         else if (flag)
             num15 *= 0.75f;
-        else if (j > Main.maxTilesY - 250)
+        else if (j > (inBackwoods ? bottom : (Main.maxTilesY - 250)))
             num15 *= 1.25f;
 
         num15 *= 1f + (float)Main.rand.Next(-20, 21) * 0.01f;

@@ -363,7 +363,7 @@ sealed class BackwoodsPot : ModTile {
                 if (num6 >= 7)
                     Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, 2350, genRand.Next(1, 3));
             }
-            else if (flag2) {
+            else if (j < bottom) {
                 int num7 = genRand.Next(19);
                 if (num7 == 0)
                     Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, 296);
