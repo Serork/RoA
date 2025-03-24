@@ -488,7 +488,7 @@ sealed class BackwoodsPot : ModTile {
                     }
                     else {
                         float num10 = 200 + WorldGen.genRand.Next(-100, 101);
-                        if (j < Main.worldSurface && !WorldGen.remixWorldGen) {
+                        if (j < Main.worldSurface) {
                             num10 *= 0.5f;
                         }
                         else if (j < Main.rockLayer) {
