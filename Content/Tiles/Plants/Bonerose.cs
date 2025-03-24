@@ -25,7 +25,7 @@ sealed class Bonerose : PlantBase, TileHooks.IGrowPlantRandom {
     }
 
     void TileHooks.IGrowPlantRandom.OnGlobalRandomUpdate(int i, int j) {
-        if (j < Main.worldSurface) {
+        if (j < Main.worldSurface && !WorldGen.remixWorldGen) {
             return;
         }
 

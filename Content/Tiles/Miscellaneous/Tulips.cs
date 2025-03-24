@@ -33,7 +33,7 @@ sealed class GrowTulips : ILoadable {
             int num = 90;
             num = 240;
 
-            if (((double)j < Main.worldSurface || WorldGen.remixWorldGen) && (!Main.tile[i, j - 1].HasTile ||
+            if (((double)j < Main.worldSurface && !WorldGen.remixWorldGen) && (!Main.tile[i, j - 1].HasTile ||
                 Main.tileCut[Main.tile[i, j - 1].TileType])) {
                 int num2 = Utils.Clamp(i - num, 1, Main.maxTilesX - 1 - 1);
                 int num3 = Utils.Clamp(i + num, 1, Main.maxTilesX - 1 - 1);
@@ -51,9 +51,11 @@ sealed class GrowTulips : ILoadable {
                 if (!flag) {
                     if (i < Main.maxTilesX / 3 || i > Main.maxTilesX - Main.maxTilesX / 3) {
                         if (Main.tile[i, j].TileType == TileID.Grass || Main.tile[i, j].TileType == TileID.GolfGrass) {
-                            if (!Main.tile[i, j - 1].AnyLiquid() && !Main.tile[i, j - 1].AnyWall() &&
-                                Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
-                                //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
+                            if (!Main.tile[i, j - 1].AnyLiquid() && 
+                                (!Main.tile[i, j - 1].AnyWall() || Main.tile[i, j - 1].WallType == WallID.FlowerUnsafe || Main.tile[i, j - 1].WallType == WallID.GrassUnsafe)) {
+                                if (Main.tileCut[Main.tile[i, j - 1].TileType]) {
+                                    WorldGen.KillTile(i, j - 1);
+                                }
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 0);
                             }
                         }
@@ -76,15 +78,16 @@ sealed class GrowTulips : ILoadable {
                 }
                 if (!flag) {
                     if (Main.tile[i, j].TileType == TileID.JungleGrass) {
-                        if (!Main.tile[i, j - 1].AnyLiquid() &&
-                            Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
-                            //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
+                        if (!Main.tile[i, j - 1].AnyLiquid()) {
+                            if (Main.tileCut[Main.tile[i, j - 1].TileType]) {
+                                WorldGen.KillTile(i, j - 1);
+                            }
                             WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 1);
                         }
                     }
                 }
             }
-            if (NPC.downedBoss3) {
+            /*if (NPC.downedBoss3) */{
                 if ((double)j > Main.worldSurface && (!Main.tile[i, j - 1].HasTile
                     /* || Main.tileCut[Main.tile[i, j - 1].TileType]*/)) {
                     int num2 = Utils.Clamp(i - num, 1, Main.maxTilesX - 1 - 1);
@@ -102,9 +105,7 @@ sealed class GrowTulips : ILoadable {
                     if (!flag) {
                         TileObjectData objectData = TileObjectData.GetTileData(tileType, 0);
                         if (objectData.AnchorValidTiles.Contains(Main.tile[i, j].TileType)) {
-                            if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType] &&
-                                Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
-                                //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
+                            if (!Main.tile[i, j - 1].AnyLiquid() && Main.wallDungeon[Main.tile[i, j - 1].WallType]) {
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 2);
                             }
                         }
@@ -128,7 +129,7 @@ sealed class ExoticTulip : ModTile {
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-        TileObjectData.newTile.AnchorValidTiles = [TileID.Grass];
+        TileObjectData.newTile.AnchorValidTiles = [TileID.Grass, TileID.GolfGrass];
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.CoordinatePadding = 2;

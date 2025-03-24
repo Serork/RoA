@@ -24,7 +24,7 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
             return;
         }
 
-        if (j < Main.worldSurface) {
+        if (j < Main.worldSurface && !WorldGen.remixWorldGen) {
             return;
         }
 

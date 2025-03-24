@@ -177,7 +177,7 @@ sealed class BackwoodsPot : ModTile {
                     Projectile.NewProjectile(source, i * 16 + 16, j * 16 + 8, Main.rand.Next(-100, 101) * 0.002f, 0f, ProjectileID.Bomb, 0, 0f, Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16));
                 }
                 else if (WorldGen.genRand.NextBool(45) || Main.rand.NextBool(45) && Main.expertMode) {
-                    if (j < Main.worldSurface) {
+                    if (j < Main.worldSurface && !WorldGen.remixWorldGen) {
                         int pot;
                         int stack = 1;
                         if (WorldGen.genRand.NextChance(0.75)) {
@@ -488,7 +488,7 @@ sealed class BackwoodsPot : ModTile {
                     }
                     else {
                         float num10 = 200 + WorldGen.genRand.Next(-100, 101);
-                        if (j < Main.worldSurface) {
+                        if (j < Main.worldSurface && !WorldGen.remixWorldGen) {
                             num10 *= 0.5f;
                         }
                         else if (j < Main.rockLayer) {
