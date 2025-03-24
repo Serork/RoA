@@ -32,20 +32,14 @@ float smoothProgress(float progress) {
 
 float4 MainPS(float2 coords : TEXCOORD0) : COLOR0
 {
-    float4 origColor = tex2D(uImage0, coords);
-    float2 targetCoords = (uTargetPosition - uScreenPosition) / uScreenResolution;
-    float2 vec = (targetCoords - coords) * uScreenResolution;
-    float dist = sqrt(pow(vec.x, 2) + pow(vec.y, 2));
-    float lerpStrength = 0;
-    
-    if (dist > Radius)
-    {
-        float DistFromRadius = dist - Radius;
-        lerpStrength = clamp(DistFromRadius / FadeDistance, 0, 1);
-    }
-    
-    origColor = lerp(origColor, float4(uColor, 0), lerpStrength * uOpacity * uIntensity);
-    return origColor;
+    float INTENSITY = 15.0;
+    float4 BORDERCOLOR = float4(uColor.r, uColor.g, uColor.b, 0.0);
+
+    float4 color = tex2D(uImage0, coords);
+    float vig = INTENSITY * coords.x * coords.y * (1.0 - coords.x) * (1.0 - coords.y);
+    vig = pow(vig, uIntensity * 0.25);
+    color = lerp(BORDERCOLOR, color * vig, vig);
+    return color;
 }
 
 technique Technique1

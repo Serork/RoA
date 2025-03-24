@@ -180,7 +180,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                     }
                 }
                 VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
-                localVignettePlayer.SetVignette(0, Main.screenWidth * Opacity * Opacity2, 0.625f * Opacity * Opacity2, Color.Gray, player.Center);
+                localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero);
             }
 
             Rectangle tileWorkSpace = GetTileWorkSpace();
