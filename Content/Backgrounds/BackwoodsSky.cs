@@ -12,7 +12,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Backgrounds;
 
-[Autoload(Side = ModSide.Client)]
 sealed class BackwoodsSky : CustomSky {
     private bool _skyActive;
     private float _opacity;
