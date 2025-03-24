@@ -140,7 +140,6 @@ sealed class HunterSpawnSystem : ModSystem {
                                 num, knockBack,
                                 ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
                             _cooldown = 600;
-                            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "HunterShot"), position);
                         }
                     }
                 }
@@ -166,7 +165,6 @@ sealed class HunterSpawnSystem : ModSystem {
                                     num, knockBack,
                                     ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Player.whoAmI, ai2: npc.whoAmI);
                                 _cooldown = 600;
-                                SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "HunterShot"), position);
                             }
                         }
                     }
