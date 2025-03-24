@@ -177,7 +177,7 @@ sealed class BackwoodsPot : ModTile {
                     Projectile.NewProjectile(source, i * 16 + 16, j * 16 + 8, Main.rand.Next(-100, 101) * 0.002f, 0f, ProjectileID.Bomb, 0, 0f, Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16));
                 }
                 else if (WorldGen.genRand.NextBool(45) || Main.rand.NextBool(45) && Main.expertMode) {
-                    if (j < Main.worldSurface && !WorldGen.remixWorldGen) {
+                    if (j < Main.worldSurface) {
                         int pot;
                         int stack = 1;
                         if (WorldGen.genRand.NextChance(0.75)) {
