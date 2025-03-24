@@ -42,7 +42,7 @@ namespace RoA.Content.World.Generations;
 
 // one hella mess
 // god forgive me
-sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight) {
+sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight), ILoadable {
     public static readonly ushort[] SandInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone };
     public static readonly ushort[] SandInvalidWallTypesToKill = { WallID.SandstoneBrick, 187, 220, 222, 221, 275, 308, 310, 309, 216, 217, 219, 218, 304, 305, 307, 306, 216, 187, 304, 275 };
     public static readonly ushort[] MidInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone, TileID.Marble, TileID.Granite };
@@ -109,6 +109,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             _progress.Value = value.Value;
         }
     }
+
+    void ILoadable.Load(Mod mod) {
+        On_WorldGen.PlacePot += On_WorldGen_PlacePot;
+    }
+
+    private bool On_WorldGen_PlacePot(On_WorldGen.orig_PlacePot orig, int x, int y, ushort type, int style) {
+        if (x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX &&
+            y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 6) {
+            return orig(x, y, (ushort)ModContent.TileType<BackwoodsPot>(), WorldGen.genRand.Next(4));
+        }
+
+        return orig(x, y, type, style);
+    }
+
+    void ILoadable.Unload() { }
 
     protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
         SetUpMessage(Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods0"), 0f, progress);
