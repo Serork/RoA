@@ -48,7 +48,6 @@ sealed class MinAxeAndHammerSystem : ILoadable {
                     }
                 }
             }
-            Main.NewText(damage);
             self.PickWall(wX, wY, damage);
             self.itemTime = sItem.useTime / 2;
         }
