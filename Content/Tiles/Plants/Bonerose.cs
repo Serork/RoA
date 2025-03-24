@@ -1,5 +1,7 @@
 ﻿using RoA.Common.Tiles;
 
+using System;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,10 +30,6 @@ sealed class Bonerose : PlantBase, TileHooks.IGrowPlantRandom {
         }
 
         if (!Main.wallDungeon[Main.tile[i, j].WallType]) {
-            return;
-        }
-
-        if (!NPC.downedBoss3 && !WorldGen.gen) {
             return;
         }
 
