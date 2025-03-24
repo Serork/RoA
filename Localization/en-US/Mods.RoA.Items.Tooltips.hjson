@@ -1,14 +1,14 @@
-PotentialDamage: "[kw/n:potential] nature damage"
-DruidToolTipOption1: Damage scales with [kw/n:wreath] [kw/n:charge]
-DruidToolTipOption3: "[kw/n:charge]"
+PotentialDamage: "potential nature damage"
+DruidToolTipOption1: Damage scales with wreath charge
+DruidToolTipOption3: "charge"
 DruidToolTipOption4_1: base nature damage
-FillingRate1: Extremely slow [kw/n:wreath charge] rate
-FillingRate2: Very slow [kw/n:wreath charge] rate
-FillingRate3: Slow [kw/n:wreath charge] rate
-FillingRate4: Average [kw/n:wreath charge] rate
-FillingRate5: Fast [kw/n:wreath charge] rate
-FillingRate6: Very fast [kw/n:wreath charge] rate
-FillingRate7: Insanely fast [kw/n:wreath charge] rate
+FillingRate1: Extremely slow wreath charge rate
+FillingRate2: Very slow wreath charge rate
+FillingRate3: Slow wreath charge rate
+FillingRate4: Average wreath charge rate
+FillingRate5: Fast wreath charge rate
+FillingRate6: Very fast wreath charge rate
+FillingRate7: Insanely fast wreath charge rate
 AttackSpeed1: Extremely slow speed
 AttackSpeed2: Very slow speed
 AttackSpeed3: Slow speed
@@ -17,34 +17,34 @@ AttackSpeed5: Fast speed
 AttackSpeed6: Very fast speed
 AttackSpeed7: Extremely fast speed
 AttackSpeed8: Insanely fast speed
-AttackSpeed12: Extremely slow [kw/n:potential] speed
-AttackSpeed22: Very slow [kw/n:potential] speed
-AttackSpeed32: Slow [kw/n:potential] speed
-AttackSpeed42: Average [kw/n:potential] speed
-AttackSpeed52: Fast [kw/n:potential] speed
-AttackSpeed62: Very fast [kw/n:potential] speed
-AttackSpeed72: Extremely fast [kw/n:potential] speed
-AttackSpeed82: Insanely fast [kw/n:potential] speed
-WhenCharged: while [kw/n:wreath] is [kw/n:charged]
-LivingWoodSetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
-LivingBorealSetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
-LivingMahoganySetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
-LivingPalmSetBonus: Increases [kw/n:wreath] [kw/n:charge rate] by 10%
+AttackSpeed12: Extremely slow potential speed
+AttackSpeed22: Very slow potential speed
+AttackSpeed32: Slow potential speed
+AttackSpeed42: Average potential speed
+AttackSpeed52: Fast potential speed
+AttackSpeed62: Very fast potential speed
+AttackSpeed72: Extremely fast potential speed
+AttackSpeed82: Insanely fast potential speed
+WhenCharged: while wreath is charged
+LivingWoodSetBonus: Increases wreath charge rate by 10%
+LivingBorealSetBonus: Increases wreath charge rate by 10%
+LivingMahoganySetBonus: Increases wreath charge rate by 10%
+LivingPalmSetBonus: Increases wreath charge rate by 10%
 DreadheartCrimsonSetBonus:
 	'''
-	Taking damage while [kw/n:wreath] is [kw/n:full] depletes it, releasing a swarm of insects
-	Double tap {0} to turn into a [kw/n:Beetle]
+	Taking damage while wreath is full depletes it, releasing a swarm of insects
+	Double tap {0} to turn into a Beetle
 	'''
 LivingElderwoodCrownSetBonus:
 	'''
-	Increases [kw/n:wreath] charge rate by 10%
-	Double tap {0} to turn into a [kw/n:Fleder]
+	Increases wreath charge rate by 10%
+	Double tap {0} to turn into a Fleder
 	'''
 FlinxFurUshankaSetBonus: Provides immunity to chill and freezing effects
 AshwalkerHoodSetBonus:
 	'''
 	On Fire! debuff restores life instead
-	Double tap {0} to turn into [kw/n:Firebird]
+	Double tap {0} to turn into Firebird
 	'''
 AcolyteSetBonus: 40% increased magic damage when below 40 mana
 FlametrackerSetBonus: Magic weapons release an additional tracking bolt while at full mana that decreases target's defense

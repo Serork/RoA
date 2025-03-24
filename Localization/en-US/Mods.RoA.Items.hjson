@@ -2,7 +2,7 @@ ElderwoodClaws: {
 	DisplayName: Elderwood Claws
 	Tooltip:
 		'''
-		Consume a full [kw/n:wreath] charge to grow a palisade of roots
+		Consume a full wreath charge to grow a palisade of roots
 		'Fashioned after a Fleder'
 		'''
 }
@@ -16,7 +16,7 @@ GutwrenchingHooks: {
 	DisplayName: Gutwrenching Hooks
 	Tooltip:
 		'''
-		Consume a full [kw/n:wreath] charge to expel flesh and viscera
+		Consume a full wreath charge to expel flesh and viscera
 		'Fashioned after a Crimera'
 		'''
 }
@@ -25,7 +25,7 @@ HellfireClaws: {
 	DisplayName: Hellfire Claws
 	Tooltip:
 		'''
-		Consume a full [kw/n:wreath] charge to tear a fiery fracture
+		Consume a full wreath charge to tear a fiery fracture
 		'Claws so fire, they set everything on fire'
 		'''
 }
@@ -34,7 +34,7 @@ HorrorPincers: {
 	DisplayName: Horror Pincers
 	Tooltip:
 		'''
-		Consume a full [kw/n:wreath] charge to expel bile and putrescence
+		Consume a full wreath charge to expel bile and putrescence
 		'Fashioned after an Eater of Souls'
 		'''
 }
@@ -43,7 +43,7 @@ ThornyClaws: {
 	DisplayName: Thorny Claws
 	Tooltip:
 		'''
-		Consume a full [kw/n:wreath] charge to grow a lesser man eater
+		Consume a full wreath charge to grow a lesser man eater
 		'Sting like a Hornet, bite like a Man Eater'
 		'''
 }
@@ -172,20 +172,20 @@ BeastBow: {
 
 DoubleFocusCharm: {
 	DisplayName: Tarnished Charm
-	Tooltip: Increases [kw/n:potential] nature damage by 3
+	Tooltip: Increases potential nature damage by 3
 }
 
 BandOfNature: {
 	DisplayName: Band of Nature
-	Tooltip: Increases [kw/n:wreath] [kw/n:charge] rate by 15%
+	Tooltip: Increases wreath charge rate by 15%
 }
 
 BandOfPurity: {
 	DisplayName: Band of Purity
 	Tooltip:
 		'''
-		Increases [kw/n:wreath] [kw/n:charge] rate by 20%
-		While [kw/n:wreath] is charged, increases health regeneration
+		Increases wreath charge rate by 20%
+		While wreath is charged, increases health regeneration
 		'''
 }
 
@@ -193,14 +193,14 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		15% decreased wreath [kw/n:discharge] rate
-		While [kw/n:wreath] is charged, increases defense by 5
+		15% decreased wreath discharge rate
+		While wreath is charged, increases defense by 5
 		'''
 }
 
 FireflyPin: {
 	DisplayName: Firefly Pin
-	Tooltip: When full [kw/n:wreath] charge effects end, they linger for 2 extra seconds
+	Tooltip: When full wreath charge effects end, they linger for 2 extra seconds
 }
 
 RavencallersCloak: {
@@ -261,22 +261,22 @@ WillpowerPotion: {
 	DisplayName: Willpower Potion
 	Tooltip:
 		'''
-		Increases [kw/n:wreath] [kw/n:charge] rate
+		Increases wreath charge rate
 		'Fifteen percent concentrated power of will'
 		'''
 }
 
 ResiliencePotion: {
 	DisplayName: Resilience Potion
-	Tooltip: Decreases [kw/n:wreath] [kw/n:discharge] rate by 80%
+	Tooltip: Decreases wreath discharge rate by 80%
 }
 
 ForestWreath: {
 	DisplayName: Forest Wreath I
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage
-		While [kw/n:wreath] is charged:
+		Wreath is charged by dealing nature damage
+		While wreath is charged:
 		Increases maximum life by 40
 		'''
 }
@@ -285,7 +285,7 @@ TwigWreath: {
 	DisplayName: Twig Wreath
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Wreath is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
 		'''
 }
@@ -294,9 +294,9 @@ FenethsBlazingWreath: {
 	DisplayName: Feneth's Blazing Wreath
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Wreath is charged by dealing nature damage, providing:
 		Up to 20% chance for attacks to grow burning fireblossom on enemies and the holder
-		While [kw/n:wreath] is charged:
+		While wreath is charged:
 		Increases nature knockback
 		Fireblossom explodes over time, spreading to enemies nearby
 		'''
@@ -306,9 +306,9 @@ ForestWreath2: {
 	DisplayName: Forest Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Wreath is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
-		While [kw/n:wreath] is charged:
+		While wreath is charged:
 		Increases maximum life by 40
 		'''
 }
@@ -317,8 +317,8 @@ JungleWreath: {
 	DisplayName: Jungle Wreath I
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage
-		While [kw/n:wreath] is charged:
+		Wreath is charged by dealing nature damage
+		While wreath is charged:
 		Attackers are poisoned
 		'''
 }
@@ -327,9 +327,9 @@ JungleWreath2: {
 	DisplayName: Jungle Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Wreath is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
-		While [kw/n:wreath] is charged:
+		While wreath is charged:
 		Attackers are poisoned
 		'''
 }
@@ -338,8 +338,8 @@ SnowWreath: {
 	DisplayName: Snow Wreath I
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage
-		While [kw/n:wreath] is charged:
+		Wreath is charged by dealing nature damage
+		While wreath is charged:
 		Increases nature critical strike chance by 6%
 		'''
 }
@@ -348,9 +348,9 @@ SnowWreath2: {
 	DisplayName: Snow Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Wreath is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
-		While [kw/n:wreath] is charged:
+		While wreath is charged:
 		Increases nature critical strike chance by 6%
 		'''
 }
@@ -364,8 +364,8 @@ SoulOfTheWoods: {
 	DisplayName: Soul of the Woods
 	Tooltip:
 		'''
-		Allows charging the [kw/n:wreath] twice
-		While second [kw/n:wreath] is charged, creates a pulsating aura
+		Allows charging the wreath twice
+		While second wreath is charged, creates a pulsating aura
 		'''
 }
 
@@ -446,7 +446,7 @@ SlipperyGrenade: {
 
 LivingBorealWoodChestplate: {
 	DisplayName: Living Boreal Wood Chestplate
-	Tooltip: 4% increased nature [kw/n:potential] damage
+	Tooltip: 4% increased nature potential damage
 }
 
 LivingBorealWoodGreaves: {
@@ -456,12 +456,12 @@ LivingBorealWoodGreaves: {
 
 LivingBorealWoodHelmet: {
 	DisplayName: Living Boreal Wood Helmet
-	Tooltip: 4% increased nature [kw/n:potential] damage
+	Tooltip: 4% increased nature potential damage
 }
 
 LivingWoodChestplate: {
 	DisplayName: Living Wood Chestplate
-	Tooltip: 4% increased nature [kw/n:potential] damage
+	Tooltip: 4% increased nature potential damage
 }
 
 LivingWoodGreaves: {
@@ -476,7 +476,7 @@ LivingWoodHelmet: {
 
 LivingMahoganyChestplate: {
 	DisplayName: Living Mahogany Chestplate
-	Tooltip: 6% increased nature [kw/n:potential] damage
+	Tooltip: 6% increased nature potential damage
 }
 
 LivingMahoganyGreaves: {
@@ -509,7 +509,7 @@ BrilliantBouquet: {
 	Tooltip:
 		'''
 		Shoots a bouquet of vibrant petals, each with a special effect
-		While [kw/n:wreath] is charged, they cross-pollinate
+		While wreath is charged, they cross-pollinate
 		'''
 }
 
@@ -525,24 +525,24 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Living Elderwood Breastplate
-	Tooltip: Increases defense by 3 when [kw/n:wreath] is charged
+	Tooltip: Increases defense by 3 when wreath is charged
 }
 
 LivingElderwoodCrown: {
 	DisplayName: Living Elderwood Crown
-	Tooltip: 6% increased nature [kw/n:potential] damage
+	Tooltip: 6% increased nature potential damage
 }
 
 LivingElderwoodGreaves: {
 	DisplayName: Living Elderwood Greaves
-	Tooltip: 4% increased nature [kw/n:potential] damage and critical strike chance
+	Tooltip: 4% increased nature potential damage and critical strike chance
 }
 
 DreadheartCorruptionChestplate: {
 	DisplayName: Dreadheart Chestplate
 	Tooltip:
 		'''
-		8% increased nature [kw/n:potential] damage
+		8% increased nature potential damage
 		Increases nature knockback
 		'''
 }
@@ -561,7 +561,7 @@ DreadheartCrimsonChestplate: {
 	DisplayName: Dreadheart Chestplate
 	Tooltip:
 		'''
-		8% increased nature [kw/n:potential] damage
+		8% increased nature potential damage
 		Increases nature knockback
 		'''
 }
@@ -583,12 +583,12 @@ TectonicCane: {
 
 AshwalkerHood: {
 	DisplayName: Ashwalker Hood
-	Tooltip: 6% increased nature [kw/n:potential] damage
+	Tooltip: 6% increased nature potential damage
 }
 
 AshwalkerLeggings: {
 	DisplayName: Ashwalker Leggings
-	Tooltip: 6% increased nature [kw/n:potential] damage
+	Tooltip: 6% increased nature potential damage
 }
 
 AshwalkerRobe: {
@@ -765,7 +765,7 @@ Herbarium: {
 	Tooltip:
 		'''
 		Enemies occasionally drop healing herbs
-		If [kw/n:wreath] is charged, consumes it to restore additional life
+		If wreath is charged, consumes it to restore additional life
 		'''
 }
 
@@ -1300,14 +1300,14 @@ MoonFlower: {
 
 FeathersInABottle: {
 	DisplayName: Feathers in a Bottle
-	Tooltip: Allows the holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
+	Tooltip: Allows the holder to air jump, consuming 25% of wreath charge
 }
 
 FeathersInABalloon: {
 	DisplayName: Feathers in a Balloon
 	Tooltip:
 		'''
-		Allows the holder to air jump, consuming 25% of [kw/n:wreath] [kw/n:charge]
+		Allows the holder to air jump, consuming 25% of wreath charge
 		Increases jump height
 		'Heaven smiles above me'
 		'''
@@ -1643,8 +1643,8 @@ BeachWreath: {
 	DisplayName: Beach Wreath I
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
-		While [kw/n:wreath] is charged:
+		Wreath is charged by dealing nature damage, providing:
+		While wreath is charged:
 		Increased movement speed by 10%
 		'''
 }
@@ -1653,9 +1653,9 @@ BeachWreath2: {
 	DisplayName: Beach Wreath II
 	Tooltip:
 		'''
-		[kw/n:Wreath] is charged by dealing nature damage, providing:
+		Wreath is charged by dealing nature damage, providing:
 		Up to 10% reduced damage taken
-		While [kw/n:wreath] is charged:
+		While wreath is charged:
 		Increased movement speed by 10%
 		'''
 }
@@ -1870,8 +1870,8 @@ MercuriumCenser: {
 	DisplayName: Mercurium Censer
 	Tooltip:
 		'''
-		Decreases wreath [kw/n:discharge] rate by 15% 
-		While [kw/n:wreath] is charged, coats you in a cloud of toxic fumes
+		Decreases wreath discharge rate by 15% 
+		While wreath is charged, coats you in a cloud of toxic fumes
 		'It's called AURA bruh'
 		'''
 }

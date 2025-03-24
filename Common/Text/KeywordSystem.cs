@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Configs;
 using RoA.Common.Druid.Wreath;
@@ -14,9 +15,13 @@ using System.Text.RegularExpressions;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.UI.ResourceSets;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
+
+using ReLogic.Content;
+using ReLogic.Graphics;
 
 using KeywordInfo = (byte, string);
 
@@ -26,12 +31,12 @@ sealed class KeywordSystem : ILoadable {
     internal static float _keywordColorOpacity = 1f, _keywordColorOpacity2;
 
     private sealed class KeywordSystemForVanillaTooltips : GlobalItem {
-        private readonly List<KeywordInfo> _keywords_EN = [(0, "mana"), (1, "life"), (1, "health")];
+        private readonly List<KeywordInfo> _keywords_EN = [(0, "mana"), (1, "life"), (1, "health"), (2, "wreath")];
         private readonly List<KeywordInfo> _keywords_RU = [
             (0, "мана"),  (0, "маны"),  (0, "мане"), (0, "ману"), (0, "маной"), (0, "маною"), (0, "мане"),
-            (1, "жизнь"), (1, "жизни"), (1, "жизнь"), (1, "жизнью"),
-            (1, "жизни"), (1, "жизней"), (1, "жизням"), (1, "жизнями"), (1, "жизнях"),
+            (1, "жизнь"), (1, "жизнью"), (1, "жизни"), (1, "жизней"), (1, "жизням"), (1, "жизнями"), (1, "жизнях"),
             (1, "здоровье"), (1, "здоровья"), (1, "здоровью"), (1, "здоровьем"),
+            (2, "венок"), (2, "венка"), (2, "венку"), (2, "венком"), (2, "венке"),
         ];
 
         public override bool InstancePerEntity => true;
@@ -45,9 +50,9 @@ sealed class KeywordSystem : ILoadable {
                 if (tooltip.Name == "ItemName") {
                     continue;
                 }
-                char[] checks = ['l', 'm'];
+                char[] checks = ['m', 'l', 'n'];
                 for (int i = 0; i < checkArray.Count; i++) { 
-                    char tag = checkArray[i].Item1 == 0 ? checks[1] : checks[0];
+                    char tag = checks[checkArray[i].Item1];
                     string keyword = checkArray[i].Item2;
                     tooltip.Text = Regex.Replace(tooltip.Text, $@"\b{keyword}\b", $"[kw/{tag}:" + keyword + "]");
                     keyword = checkArray[i].Item2.ToUpper();
@@ -93,8 +98,31 @@ sealed class KeywordSystem : ILoadable {
     }
 
     public void Load(Mod mod) {
+        On_CommonResourceBarMethods.DrawLifeMouseOver += On_CommonResourceBarMethods_DrawLifeMouseOver;
+        On_CommonResourceBarMethods.DrawManaMouseOver += On_CommonResourceBarMethods_DrawManaMouseOver;
+
         On_Main.DrawInterface_36_Cursor += On_Main_DrawInterface_36_Cursor;
         ChatManager.Register<KeywordTagHandler>(["kw", "keyword"]);
+    }
+
+    private void On_CommonResourceBarMethods_DrawLifeMouseOver(On_CommonResourceBarMethods.orig_DrawLifeMouseOver orig) {
+        if (!Main.mouseText) {
+            Player localPlayer = Main.LocalPlayer;
+            localPlayer.cursorItemIconEnabled = false;
+            string text = "[kw/l:" + localPlayer.statLife + "]" + "/" + localPlayer.statLifeMax2;
+            Main.instance.MouseTextHackZoom(text);
+            Main.mouseText = true;
+        }
+    }
+
+    private void On_CommonResourceBarMethods_DrawManaMouseOver(On_CommonResourceBarMethods.orig_DrawManaMouseOver orig) {
+        if (!Main.mouseText) {
+            Player localPlayer = Main.LocalPlayer;
+            localPlayer.cursorItemIconEnabled = false;
+            string text = "[kw/m:" + localPlayer.statMana + "]" + "/" + localPlayer.statManaMax2;
+            Main.instance.MouseTextHackZoom(text);
+            Main.mouseText = true;
+        }
     }
 
     internal static void UpdateLogic(bool flag3 = false) {
