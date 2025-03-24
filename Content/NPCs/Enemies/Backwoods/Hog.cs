@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -20,6 +21,7 @@ namespace RoA.Content.NPCs.Enemies.Backwoods;
 sealed class Hog : RoANPC {
     private int _currentAI;
     private float _extraAITimer;
+    private int _soundTimer;
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 16;
@@ -280,6 +282,9 @@ sealed class Hog : RoANPC {
         if (NPC.localAI[1] > 0f) {
             NPC.localAI[1]--;
         }
+
+        if (_soundTimer++ % 150 == 0 && Main.rand.NextBool(4)) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "Hog") { Volume = _currentAI == 2 ? 0.7f : 0.3f, Pitch = _currentAI == 2 ? 0.5f : 0f, PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
+
         int currentAI = _currentAI;
         switch (currentAI) {
             case 0:

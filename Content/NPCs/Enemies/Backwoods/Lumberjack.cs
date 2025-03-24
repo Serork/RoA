@@ -36,7 +36,7 @@ sealed class Lumberjack : RoANPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 130;
+        NPC.lifeMax = 110;
         NPC.damage = 30;
         NPC.defense = 12;
         NPC.knockBackResist = 0.25f;

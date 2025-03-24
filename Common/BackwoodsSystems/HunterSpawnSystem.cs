@@ -4,11 +4,13 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Friendly;
 using RoA.Content.Projectiles;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -118,7 +120,7 @@ sealed class HunterSpawnSystem : ModSystem {
                     }
                 }
             }
-            if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(150)) {
+            if (!Main.dayTime && ShouldSpawnHunterAttack && Main.rand.NextBool(450)) {
                 if (Main.rand.NextChance(0.85)) {
                     Player player = Player;
                     if (!player.InModBiome<BackwoodsBiome>()) {
@@ -138,6 +140,7 @@ sealed class HunterSpawnSystem : ModSystem {
                                 num, knockBack,
                                 ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, player.whoAmI, ai2: -1f);
                             _cooldown = 600;
+                            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "HunterShot"), position);
                         }
                     }
                 }
@@ -163,6 +166,7 @@ sealed class HunterSpawnSystem : ModSystem {
                                     num, knockBack,
                                     ModContent.ProjectileType<HunterProjectile1>(), num, knockBack, Player.whoAmI, ai2: npc.whoAmI);
                                 _cooldown = 600;
+                                SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "HunterShot"), position);
                             }
                         }
                     }

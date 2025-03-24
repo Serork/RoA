@@ -5,6 +5,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Tiles.Platforms;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -13,6 +14,7 @@ using System.IO;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -266,6 +268,8 @@ sealed class Fleder : ModNPC {
                 }
             }
         }
+
+        if (NPC.localAI[1] % 200 == 1 && Main.rand.NextBool()) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)) { PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
 
         NPC.noTileCollide = false;
 

@@ -37,7 +37,7 @@ sealed class DeerSkullHead : BaseHead {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 200;
+        NPC.lifeMax = 130;
         NPC.damage = 40;
         NPC.defense = 14;
         NPC.knockBackResist = 0f;

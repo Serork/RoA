@@ -5,9 +5,11 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -43,7 +45,7 @@ sealed class Ent : RoANPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 500;
+        NPC.lifeMax = 450;
         NPC.damage = 35;
         NPC.defense = 6;
         NPC.knockBackResist = 0f;
@@ -61,7 +63,7 @@ sealed class Ent : RoANPC {
 
         NPC.rarity = 1;
 
-        NPC.HitSound = SoundID.NPCHit52;
+        NPC.HitSound = new SoundStyle(ResourceManager.NPCSounds + "EntHit3") { Pitch = 0f, Volume = 0.75f };
         NPC.DeathSound = SoundID.NPCDeath27;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];

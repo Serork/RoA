@@ -48,7 +48,7 @@ sealed class GrimDruid : DruidNPC {
     public override void SetDefaults() {
         base.SetDefaults();
 
-        NPC.lifeMax = 300;
+        NPC.lifeMax = 180;
         NPC.damage = 25;
         NPC.defense = 10;
         NPC.knockBackResist = 0.35f;

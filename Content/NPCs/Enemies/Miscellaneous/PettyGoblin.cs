@@ -146,7 +146,7 @@ sealed partial class PettyGoblin : ModNPC {
 
         NPC.damage = 15;
         NPC.defense = 4;
-        NPC.lifeMax = 70;
+        NPC.lifeMax = 90;
 
         NPC.HitSound = SoundID.DD2_GoblinBomberHurt;
         NPC.DeathSound = SoundID.DD2_GoblinBomberScream;

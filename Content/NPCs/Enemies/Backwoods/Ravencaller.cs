@@ -7,6 +7,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Items.Weapons.Magic;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -64,12 +65,12 @@ sealed class Ravencaller : ModNPC {
         NPC.width = 32; NPC.height = 40;
         NPC.value = Item.sellPrice(0, 0, 10, 0);
         NPC.damage = 30;
-        NPC.lifeMax = 300;
+        NPC.lifeMax = 250;
         NPC.defense = 8;
         NPC.npcSlots = 1.5f;
         NPC.aiStyle = -1;
         NPC.knockBackResist = 0.2f;
-        NPC.HitSound = SoundID.NPCHit19;
+        NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.alpha = 175;
 
@@ -224,6 +225,7 @@ sealed class Ravencaller : ModNPC {
     private void Summon() {
         Vector2 position = new Vector2(NPC.Center.X + 6 * NPC.direction, NPC.Center.Y - 4);
         SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap with { Volume = 1.25f, Pitch = 0.2f }, NPC.Center);
+        SoundEngine.PlaySound(new SoundStyle (ResourceManager.NPCSounds + "Crow") { Volume = 2f, Pitch = 0.3f, PitchVariance = 0.1f }, NPC.Center);
         for (int i = 0; i < 12; i++) {
             Dust.NewDust(position, 16, 16, DustID.Smoke, (float)Math.Cos(MathHelper.Pi / 6 * i), (float)Math.Sin(MathHelper.Pi / 6 * i), 0, Color.Black, 0.7f);
         }

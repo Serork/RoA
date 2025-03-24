@@ -57,7 +57,7 @@ sealed class EntLegs : RoANPC {
 
         NPC.value = Item.buyPrice(0, 0, 15, 0);
 
-        NPC.HitSound = SoundID.NPCHit52;
+        NPC.HitSound = new SoundStyle(ResourceManager.NPCSounds + "EntHit3") { Pitch = 0f, Volume = 0.75f };
         NPC.DeathSound = SoundID.NPCDeath27;
 
         NPC.dontTakeDamage = true;
@@ -68,8 +68,10 @@ sealed class EntLegs : RoANPC {
     public override bool? CanFallThroughPlatforms() => true;
 
     public override bool PreAI() {
-        if (NPC.oldVelocity.Y >= 1f && NPC.velocity.Y == 0f) {
-            Stomp(true);
+        if (NPC.oldVelocity.Y >= 1f) NPC.localAI[2]++;
+        if (NPC.velocity.Y == 0f) {
+            if (NPC.localAI[2] > 10) Stomp(true);
+            NPC.localAI[2] = 0;
         }
 
         return base.PreAI();
@@ -155,7 +157,8 @@ sealed class EntLegs : RoANPC {
                         if (Collision.CanHit(NPC, Main.player[NPC.target])) {
                             _attackTimer = 0f;
                             ChangeState(SHIELD, keepState: false);
-
+                            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 0.7f, Pitch = -0.5f }, NPC.position);
+                            SoundEngine.PlaySound(SoundID.Item46 with { Volume = 0.5f, Pitch = -0.75f }, NPC.position);
                             NPC.defense += 500;
                         }
                     }
@@ -180,7 +183,7 @@ sealed class EntLegs : RoANPC {
                 NPC.ResetAIStyle();
 
                 if (_attackTimer >= 20f && _attackTimer % 10f == 0f) {
-                    SoundEngine.PlaySound(SoundID.Item104, NPC.position);
+                    SoundEngine.PlaySound(SoundID.Item104 with { Volume = 0.7f, Pitch = _attackTimer * 0.01f, PitchVariance = 0.1f }, NPC.position);
 
                     float dustCount = 14f;
                     int num1 = 0;
@@ -258,10 +261,10 @@ sealed class EntLegs : RoANPC {
 
     private void Stomp(bool empowered = false) {
         string tag = "Ent Stomp";
-        PunchCameraModifier punchCameraModifier = new(NPC.Bottom, MathHelper.PiOver2.ToRotationVector2(), 4f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 5f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 20, 2000f, tag);
+        PunchCameraModifier punchCameraModifier = new(NPC.Bottom, MathHelper.PiOver2.ToRotationVector2(), 2f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 5f + (empowered ? Math.Abs(NPC.oldVelocity.Y) : 0f), 20, 2000f, tag);
         Main.instance.CameraModifiers.Add(punchCameraModifier);
+        SoundEngine.PlaySound(SoundID.Item73 with { Volume = empowered ? 0.6f : 0.3f, PitchVariance = 0.1f, Pitch = empowered ? -0.5f : -0.2f }, NPC.Bottom);
         if (!empowered) {
-            SoundEngine.PlaySound(SoundID.Item73 with { Volume = 0.5f, PitchVariance = 0.1f }, NPC.Bottom);
             float num2 = 10f;
             if (Main.netMode != NetmodeID.Server) {
                 for (int i = 0; i < Main.rand.Next(1, 4); i++) {

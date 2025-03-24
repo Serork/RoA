@@ -4,12 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -209,6 +211,9 @@ sealed class BabyFleder : ModNPC {
         if (hasParent && !Main.player[parent.target].InModBiome<BackwoodsBiome>()) {
             ResetParentState();
         }
+
+        if (NPC.localAI[1]++ % 200 == 1 && Main.rand.NextBool()) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)) { Volume = 0.8f, PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
+
         void move(bool flag) {
             if (!HasParent) {
                 if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || hasAggro || !Main.player[NPC.target].active) {

@@ -204,7 +204,7 @@ sealed class Pipistrelle : ModNPC {
         }
 
         void playScreamSound() {
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)), NPC.Center);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)) { PitchVariance = 0.1f }, NPC.Center);
         }
         if (NPC.localAI[2] == 0f) {
             NPC.localAI[2] = 1f;

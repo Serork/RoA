@@ -146,8 +146,8 @@ BookwormsProjectile.DisplayName: Bookworms
 PlanetomaStaffProjectile.DisplayName: Planetoma Staff
 PlanetomaStaffProjectile2.DisplayName: Planetoma Staff
 MercuriumBoltProjectile.DisplayName: Mercurium Bolt
-HunterProjectile1.DisplayName: Hunter Sniper
-HunterProjectile2.DisplayName: Hunter Sniper
+HunterProjectile1.DisplayName: Hunting Rifle
+HunterProjectile2.DisplayName: Hunting Rifle
 HarmonizingBeam.DisplayName: Harmonizing Beam
 GalipotArrowProjectile.DisplayName: Galipot Arrow
 MercuriumBulletProjectile.DisplayName: Mercurium Bullet

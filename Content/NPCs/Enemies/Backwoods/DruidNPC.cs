@@ -34,7 +34,7 @@ abstract class DruidNPC : RoANPC {
     }
 
     public override void SetDefaults() {
-        NPC.HitSound = SoundID.NPCHit19;
+        NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath30;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
