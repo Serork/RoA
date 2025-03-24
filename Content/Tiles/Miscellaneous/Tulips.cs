@@ -80,7 +80,7 @@ sealed class GrowTulips : ILoadable {
                     }
                 }
             }
-            if (NPC.downedBoss2) {
+            if (NPC.downedBoss3) {
                 if ((double)j > Main.worldSurface && (!Main.tile[i, j - 1].HasTile
                     /* || Main.tileCut[Main.tile[i, j - 1].TileType]*/)) {
                     int num2 = Utils.Clamp(i - num, 1, Main.maxTilesX - 1 - 1);
