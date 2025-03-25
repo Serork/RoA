@@ -49,7 +49,8 @@ sealed class HereticHood : ModItem {
 
             private static void DrawHeadGlowMask(ref PlayerDrawSet drawInfo) {
                 Player player = drawInfo.drawPlayer;
-                if (player.head == EquipLoader.GetEquipSlot(RoA.Instance, typeof(HereticHood).Name, EquipType.Head)) {
+                bool flag = ItemLoader.GetItem(ModContent.ItemType<HereticHood>()).IsVanitySet(player.head, player.body, player.legs);
+                if (flag && player.head == EquipLoader.GetEquipSlot(RoA.Instance, typeof(HereticHood).Name, EquipType.Head)) {
                     //Color glowMaskColor = Color.White;
                     //glowMaskColor = Color.White;
                     //glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
