@@ -35,7 +35,7 @@ sealed class DropRoADevsItems : ILoadable {
         if (flag || (Main.hardMode && !flag)) {
             if (Main.rand.Next(Main.tenthAnniversaryWorld ? 8 : 16) == 0) {
                 _roaDevItemsDropped = true;
-                switch (Main.rand.Next(6)) {
+                switch (Main.rand.Next(7)) {
                     case 0:
                         self.QuickSpawnItem(source, ModContent.ItemType<PeegeonHood>());
                         self.QuickSpawnItem(source, ModContent.ItemType<PeegeonChestguard>());
@@ -68,6 +68,11 @@ sealed class DropRoADevsItems : ILoadable {
                         self.QuickSpawnItem(source, ModContent.ItemType<cleoMask>());
                         self.QuickSpawnItem(source, ModContent.ItemType<cleoChestguard>());
                         self.QuickSpawnItem(source, ModContent.ItemType<cleoPants>());
+                        break;
+                    case 6:
+                        self.QuickSpawnItem(source, ModContent.ItemType<HereticHood>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<HereticChestguard>());
+                        self.QuickSpawnItem(source, ModContent.ItemType<HereticPants>());
                         break;
                 }
             }
