@@ -50,6 +50,8 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
 
         AdjTiles = [TileID.Containers];
 
+        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
+
         Color mapColor = new(133, 111, 91);
         AddMapEntry(mapColor, CreateMapEntryName());
         RegisterItemDrop(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest2>(), 1);
