@@ -1828,7 +1828,6 @@ HereticPants: {
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
-
 IOU: {
 	DisplayName: Я. Т. Д.
 	Tooltip: "'Я тебе должен оружие класса 'Друид'"

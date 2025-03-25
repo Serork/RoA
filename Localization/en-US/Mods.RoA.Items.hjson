@@ -1820,7 +1820,6 @@ cleoPants: {
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
-
 HereticHood: {
 	DisplayName: Heretic's Hood
 	Tooltip: "{$Mods.RoA.RoADev}"
@@ -1835,7 +1834,6 @@ HereticPants: {
 	DisplayName: Heretic's Garb
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
-
 
 IOU: {
 	DisplayName: I.O.U.
