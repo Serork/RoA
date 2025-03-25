@@ -172,7 +172,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
         return name + ": " + Main.chest[chest].name;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = 9;
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
 
