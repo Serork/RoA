@@ -15,7 +15,7 @@ sealed class HereticChestguard : ModItem {
     }
 
     public override void SetDefaults() {
-        int width = 32; int height = 30;
+        int width = 30; int height = 22;
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Cyan;
