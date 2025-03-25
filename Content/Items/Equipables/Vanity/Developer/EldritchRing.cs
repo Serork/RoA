@@ -139,7 +139,7 @@ sealed class EldritchRing : ModItem {
 
         Item.accessory = true;
 
-        Item.vanity = true;
+        //Item.vanity = true;
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {

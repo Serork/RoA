@@ -140,7 +140,7 @@ sealed class PeegeonCape : ModItem {
 
         Item.rare = ItemRarityID.Cyan;
         Item.value = Item.buyPrice(gold: 5);
-        Item.vanity = true;
+        //Item.vanity = true;
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {

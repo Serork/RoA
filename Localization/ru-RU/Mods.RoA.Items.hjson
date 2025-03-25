@@ -1703,7 +1703,11 @@ Has2rShades: {
 
 EldritchRing: {
 	DisplayName: Жуткое кольцо
-	// Tooltip: "{$Mods.RoA.RoADev}"
+	/* Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		{$CommonItemTooltip.FlightAndSlowfall}
+		''' */
 }
 
 NFAHorns: {
@@ -1752,7 +1756,11 @@ PeegeonHood: {
 
 PeegeonCape: {
 	DisplayName: Плащ Пижона
-	// Tooltip: "{$Mods.RoA.RoADev}"
+	/* Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		{$CommonItemTooltip.FlightAndSlowfall}
+		''' */
 }
 
 SerorkBreastplate: {
