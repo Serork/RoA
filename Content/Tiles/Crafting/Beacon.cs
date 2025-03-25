@@ -133,7 +133,9 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         BeaconTE beaconTE = GetTE(i, j);
         if (HasGemInIt(i, j) && beaconTE != null) {
             if (!Main.dedServ) {
-                Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), GetEffectsColor(i, j).ToVector3() * 0.85f);
+                for (int k = 0; k < 10; k++) {
+                    Lighting.AddLight(new Vector2(i, j - k).ToWorldCoordinates(), GetEffectsColor(i, j).ToVector3() * 0.85f);
+                }
             }
 
             Vector2 zero = Vector2.Zero;
