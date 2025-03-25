@@ -42,7 +42,7 @@ namespace RoA.Content.World.Generations;
 
 // one hella mess
 // god forgive me
-sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight), ILoadable {
+sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight) {
     public static readonly ushort[] SandInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone };
     public static readonly ushort[] SandInvalidWallTypesToKill = { WallID.SandstoneBrick, 187, 220, 222, 221, 275, 308, 310, 309, 216, 217, 219, 218, 304, 305, 307, 306, 216, 187, 304, 275 };
     public static readonly ushort[] MidInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone, TileID.Marble, TileID.Granite };
