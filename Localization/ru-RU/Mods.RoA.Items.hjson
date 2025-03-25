@@ -1813,6 +1813,22 @@ cleoPants: {
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
+HereticHood: {
+	DisplayName: Капюшон Heretic'а
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+HereticChestguard: {
+	DisplayName: Роба Heretic'а
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+HereticPants: {
+	DisplayName: Обмотки Heretic'а
+	// Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+
 IOU: {
 	DisplayName: Я. Т. Д.
 	Tooltip: "'Я тебе должен оружие класса 'Друид'"

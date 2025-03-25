@@ -1820,6 +1820,23 @@ cleoPants: {
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
+
+HereticHood: {
+	DisplayName: Heretic's Hood
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+HereticChestguard: {
+	DisplayName: Heretic's Robe
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+HereticPants: {
+	DisplayName: Heretic's Garb
+	Tooltip: "{$Mods.RoA.RoADev}"
+}
+
+
 IOU: {
 	DisplayName: I.O.U.
 	Tooltip: "'I owe you a Druid weapon'"
