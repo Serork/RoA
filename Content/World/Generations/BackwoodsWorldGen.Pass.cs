@@ -110,20 +110,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
     }
 
-    void ILoadable.Load(Mod mod) {
-        On_WorldGen.PlacePot += On_WorldGen_PlacePot;
-    }
-
-    private bool On_WorldGen_PlacePot(On_WorldGen.orig_PlacePot orig, int x, int y, ushort type, int style) {
-        if (x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX &&
-            y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 6) {
-            return orig(x, y, (ushort)ModContent.TileType<BackwoodsPot>(), WorldGen.genRand.Next(4));
+    private class NoForestPotsInBackwoods : ILoadable {
+        void ILoadable.Load(Mod mod) {
+            On_WorldGen.PlacePot += On_WorldGen_PlacePot;
         }
 
-        return orig(x, y, type, style);
-    }
+        private bool On_WorldGen_PlacePot(On_WorldGen.orig_PlacePot orig, int x, int y, ushort type, int style) {
+            if (x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX &&
+                y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 6) {
+                return orig(x, y, (ushort)ModContent.TileType<BackwoodsPot>(), WorldGen.genRand.Next(4));
+            }
 
-    void ILoadable.Unload() { }
+            return orig(x, y, type, style);
+        }
+
+        void ILoadable.Unload() { }
+    }
 
     protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
         SetUpMessage(Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods0"), 0f, progress);
