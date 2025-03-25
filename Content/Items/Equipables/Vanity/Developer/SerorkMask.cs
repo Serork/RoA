@@ -110,6 +110,9 @@ sealed class SerorkMask : ModItem {
                 Rectangle bodyFrame = drawInfo.drawPlayer.bodyFrame;
                 bodyFrame.Width += 2;
                 Vector2 helmetOffset = drawInfo.helmetOffset;
+                if (drawInfo.drawPlayer.direction == -1) {
+                    helmetOffset.X -= 2f;
+                }
                 DrawData item = new(glowMaskTexture,
                     helmetOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
                     (float)(drawInfo.drawPlayer.width / 2)),
