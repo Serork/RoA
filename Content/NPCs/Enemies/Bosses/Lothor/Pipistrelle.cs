@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
@@ -18,6 +19,7 @@ namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed class Pipistrelle : ModNPC {
     private bool _shouldEnrage;
+    private float _lightingColorValue = 1f;
 
     private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture);
     private Texture2D GlowMask => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
@@ -96,7 +98,12 @@ sealed class Pipistrelle : ModNPC {
         enrage(ref drawColor);
 
         spriteBatch.Draw(ItsSpriteSheet, position, NPC.frame, drawColor, rotation, origin, NPC.scale, effects, 0f);
-        spriteBatch.Draw(GlowMask, position, NPC.frame, Color.White, rotation, origin, NPC.scale, effects, 0f);
+
+        NPC owner = Main.npc[(int)NPC.ai[0]];
+        bool flag = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor;
+        float value = MathHelper.Clamp(flag ? _lightingColorValue : Math.Max(_lightingColorValue, owner.As<Lothor>().LifeProgress), 0f, 1f);
+        Color glowColor = Color.White * value;
+        spriteBatch.Draw(GlowMask, position, NPC.frame, glowColor, rotation, origin, NPC.scale, effects, 0f);
 
 
         NPC npc = Main.npc[(int)NPC.ai[0]];
@@ -107,7 +114,7 @@ sealed class Pipistrelle : ModNPC {
                 spriteBatch.Draw(GlowMask, position +
                     Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
-                    NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
+                    NPC.frame, glowColor.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
             }
             spriteBatch.EndBlendState();
         }
@@ -186,11 +193,17 @@ sealed class Pipistrelle : ModNPC {
             }
         }
 
-        if (!Main.dedServ) {
-            Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f);
+        bool flag = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor;
+
+        if (_lightingColorValue > 0f) {
+            _lightingColorValue -= TimeSystem.LogicDeltaTime;
         }
 
-        bool flag = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor;
+        if (!Main.dedServ) {
+            float value = MathHelper.Clamp(flag ? _lightingColorValue : Math.Max(_lightingColorValue, owner.As<Lothor>().LifeProgress), 0f, 1f);
+            Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f, new Vector3(1f, 0.2f, 0.2f) * 0.75f * value);
+        }
+
         float lifeProgress = _shouldEnrage ? 1f : flag ? 0f : owner.As<Lothor>().LifeProgress;
         NPC.knockBackResist = 0.5f - 0.5f * lifeProgress;
 
