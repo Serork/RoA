@@ -156,7 +156,7 @@ sealed class LuminousFlower : ModTile {
             }
         }
         if (dist < maxDist) {
-            progress = MathHelper.Clamp(1f - dist / maxDist, MINLIGHTMULT, 0.85f);
+            progress = MathHelper.Clamp(1f - dist / maxDist, MINLIGHTMULT, 1f);
             lightUp(progress);
         }
         else {

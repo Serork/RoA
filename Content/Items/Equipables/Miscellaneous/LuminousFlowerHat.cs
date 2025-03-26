@@ -25,7 +25,10 @@ sealed class LuminousFlowerHat : ModItem {
                 float length = Player.velocity.Length();
                 LightValue = MathHelper.Lerp(LightValue,
                     MathHelper.Clamp(Utils.GetLerpValue(0f, Math.Abs(Player.maxRunSpeed), length, true),
-                    Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f), (float)Math.Round(length * 0.1f, 2));
+                    Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 1f) * 1.5f, (float)Math.Round(length * 0.1f, 2));
+                if (LightValue < Math.Abs(Player.maxRunSpeed)) {
+                    LightValue = MathHelper.Lerp(LightValue, Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT, 0.1f);
+                }
             }
             else {
                 LightValue = Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT;
