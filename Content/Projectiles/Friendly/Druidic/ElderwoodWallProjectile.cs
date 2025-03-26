@@ -163,7 +163,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
                 float value3 = MathHelper.Clamp(start.Y - value, 0, texture.Height);
                 int value4 = (int)MathHelper.Clamp(texture.Height - value3, 0, texture.Height);
                 Rectangle rectangle = new(0, 0, texture.Width, flag ? value4 : texture.Height);
-                Color color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
+                Color color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16 - 1);
                 Vector2 origin = new(texture.Width / 2f, texture.Height);
                 Main.EntitySpriteDraw(texture, pos - Main.screenPosition, rectangle, color, Projectile.rotation, origin, Projectile.scale, effects);
                 if (flag) {
