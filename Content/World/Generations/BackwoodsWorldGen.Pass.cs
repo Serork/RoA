@@ -1734,7 +1734,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step12_AddRoots() {
         int minY = BackwoodsVars.FirstTileYAtCenter + _biomeHeight / 10;
         for (int i = Left - 25; i < Right + 25; i++) {
-            for (int j = minY; j < Bottom + 10; j++) {
+            for (int j = minY; j < Bottom + EdgeY; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _dirtTileType) || WorldGenHelper.ActiveTile(i, j, _stoneTileType)) &&
                     _random.NextChance(0.0025)) {
                     Root(i, j);
@@ -1813,7 +1813,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step10_SpreadMossGrass() {
         for (int i = Left - 100; i < Right + 100; i++) {
-            for (int j = CenterY - EdgeY; j < Bottom + 10; j++) {
+            for (int j = CenterY - EdgeY; j < Bottom + EdgeY; j++) {
                 if (WorldGen.SolidTile(i, j, true) && Main.tile[i, j].TileType != ModContent.TileType<ElderwoodDoorClosed>() && Main.tile[i, j].LiquidAmount <= 0 && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && 
                     _random.NextBool(Main.tile[i, j].TileType == _mossTileType || Main.tile[i, j].TileType == _stoneTileType ? 14 : Main.tile[i, j].TileType == _elderwoodTileType ?
                     Main.tile[i, j].WallType == _elderwoodWallType ? 4 : 8 : 10)) {
@@ -1841,7 +1841,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         for (int i = Left - 100; i < Right + 100; i++) {
-            for (int j = Top - 10; j < Bottom + 10; j++) {
+            for (int j = Top - 10; j < Bottom + EdgeY; j++) {
                 if (WorldGenHelper.ActiveTile(i, j, _mossTileType) && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock) {
                     for (int offset = 0; offset < 4; offset++) {
                         int i2 = i, j2 = j;
