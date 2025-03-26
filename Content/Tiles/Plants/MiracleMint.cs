@@ -34,7 +34,7 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
             if (Main.netMode != NetmodeID.SinglePlayer) {
                 MultiplayerSystem.SendPacket(new PlaceMiracleMintTEPacket(x, y));
             }
-        }, validTiles: AnchorValidTiles);
+        }, validTiles: [ModContent.TileType<BackwoodsGrass>()]);
     }
 
     protected override void SafeSetStaticDefaults() {
