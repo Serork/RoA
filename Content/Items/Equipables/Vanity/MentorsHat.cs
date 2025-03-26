@@ -10,16 +10,6 @@ namespace RoA.Content.Items.Equipables.Vanity;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class MentorsHat : ModItem {
-    private class MentorsHatDrop : GlobalNPC {
-        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
-            if (npc.type != NPCID.ArmoredViking) {
-                return;
-            }
-
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MentorsHat>(), 50));
-        }
-    }
-
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Mentor's Hat");
         //Tooltip.SetDefault("");

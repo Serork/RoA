@@ -1,164 +1,23 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.NPCs;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
-using RoA.Content.Emotes;
 using RoA.Core.Utility;
-
-using System.IO;
 
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.GameContent.UI;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
-sealed class TreeDryad : ModTile {
-    private class DryadAIChanges : GlobalNPC {
-        public override bool? CanChat(NPC npc) {
-            if (npc.type == NPCID.Dryad) {
-                return npc.ai[0] != -20f;
-            }
-
-            return base.CanChat(npc);
-        }
-
-        public override void FindFrame(NPC npc, int frameHeight) {
-            if (npc.type != NPCID.Dryad) {
-                return;
-            }
-            if (npc.ai[0] != -25f) {
-                return;
-            }
-            int num237 = Main.npcFrameCount[npc.type] - NPCID.Sets.AttackFrameCount[npc.type];
-            npc.ai[2]++;
-            int num269 = 0;
-            num269 = (npc.ai[2] % 16.0 < 8.0) ? (num237 - 2) : 0;
-            npc.frame.Y = frameHeight * num269;
-        }
-
-        public override void AI(NPC npc) {
-            if (npc.type != NPCID.Dryad) {
-                return;
-            }
-            if (npc.ai[0] == -25f) {
-                if (npc.ai[1] > 0f) {
-                    npc.ai[1] -= 1f;
-
-                    npc.velocity.X *= 0.8f;
-
-                    int dir = (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].Center.X - npc.Center.X).GetDirection();
-                    npc.direction = npc.spriteDirection = dir;
-                }
-                else {
-                    npc.ai[1] = npc.ai[0] = 0f;
-                    npc.frameCounter = 0.0;
-                    npc.ai[2] = 0;
-                    npc.netUpdate = true;
-                }
-            }
-            if (npc.ai[0] != -20f) {
-                return;
-            }
-            if (npc.ai[1] > 0f) {
-                npc.ai[1] -= 1;
-
-                npc.velocity.X *= 0.8f;
-
-                if (npc.ai[1] > 50f) {
-                    npc.ai[1] -= 1;
-                }
-                else {
-                    if (npc.ai[1] == 49f) {
-                        npc.direction *= -1;
-                        npc.spriteDirection = npc.direction;
-                    }
-                }
-            }
-            else {
-                npc.ai[1] = 80;
-                npc.ai[0] = -25f;
-                npc.ai[2] = 0f;
-                npc.frameCounter = 0.0;
-                npc.netUpdate = true;
-
-                int emoteType = ModContent.EmoteBubbleType<BackwoodsEmote>();
-                EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(npc), (int)npc.ai[1]);
-            }
-        }
-    }
-
+sealed class TreeDryad : ModTile {  
     public static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
-
-    private class DryadAwakeHandler : ModSystem {
-        public static bool DryadAwake;
-
-        public override void ClearWorld() {
-            DryadAwake = false;
-        }
-
-        public override void SaveWorldData(TagCompound tag) {
-            if (DryadAwake) {
-                tag["DryadAwake"] = true;
-            }
-        }
-
-        public override void LoadWorldData(TagCompound tag) {
-            DryadAwake = tag.ContainsKey("DryadAwake");
-        }
-
-        public override void NetSend(BinaryWriter writer) {
-            var flags = new BitsByte();
-            flags[0] = DryadAwake;
-            writer.Write(flags);
-        }
-
-        public override void NetReceive(BinaryReader reader) {
-            BitsByte flags = reader.ReadByte();
-            DryadAwake = flags[0];
-        }
-    }
-
-    private class ExtraDruidQuote : GlobalNPC {
-        private byte _currentQuoteIndex;
-
-        private const byte MAXAWAKEQUOTES = 5;
-
-        public override bool InstancePerEntity => true;
-
-        public override void GetChat(NPC npc, ref string chat) {
-            if (npc.type != NPCID.Dryad) {
-                return;
-            }
-            if (!DryadAwakeHandler.DryadAwake) {
-                bool hasHome = npc.homeTileX != -1 && npc.homeTileY != -1 && !npc.homeless;
-                if (!hasHome) {
-                    string getMessage() {
-                        ref byte index = ref npc.GetGlobalNPC<ExtraDruidQuote>()._currentQuoteIndex;
-                        string result = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.AwakeQuote{index + 1}");
-                        if (++index > MAXAWAKEQUOTES - 1) {
-                            index = 0;
-                        }
-                        return result;
-                    }
-
-                    chat = getMessage();
-                }
-                return;
-            }
-
-            chat = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.IntroQuote");
-            DryadAwakeHandler.DryadAwake = false;
-        }
-    }
 
     public override void Load() {
         On_Main.UpdateTime_SpawnTownNPCs += On_Main_UpdateTime_SpawnTownNPCs;
