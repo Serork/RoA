@@ -133,7 +133,6 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         TileObjectData.newTile.CoordinatePadding = 0;
         TileObjectData.newTile.CoordinateHeights = [20];
         TileObjectData.newTile.CoordinateWidth = 20;
-        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<JawTrapTE>().Hook_AfterPlacement, -1, 0, false);
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
