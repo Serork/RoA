@@ -122,7 +122,7 @@ sealed class HedgehogTerrarium : ModTile {
                 }
                 else {
                     hedgehogCageFrameCounter[i]++;
-                    if (rand.Next(2) == 0 && hedgehogCageFrameCounter[i] == 5) {
+                    if (rand.Next(3) == 0 && hedgehogCageFrameCounter[i] == 5) {
                         hedgehogCageFrameCounter[i] = -10;
                         hedgehogCageFrame[i]++;
                     }
