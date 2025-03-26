@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.ResourceSets;
+using Terraria.GameContent.UI.States;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
@@ -101,8 +102,16 @@ sealed class KeywordSystem : ILoadable {
         On_CommonResourceBarMethods.DrawLifeMouseOver += On_CommonResourceBarMethods_DrawLifeMouseOver;
         On_CommonResourceBarMethods.DrawManaMouseOver += On_CommonResourceBarMethods_DrawManaMouseOver;
 
+        On_UIBestiaryTest.Draw += On_UIBestiaryTest_Draw;
+
         On_Main.DrawInterface_36_Cursor += On_Main_DrawInterface_36_Cursor;
         ChatManager.Register<KeywordTagHandler>(["kw", "keyword"]);
+    }
+
+    private void On_UIBestiaryTest_Draw(On_UIBestiaryTest.orig_Draw orig, UIBestiaryTest self, SpriteBatch spriteBatch) {
+        orig(self, spriteBatch);
+
+        UpdateLogic();
     }
 
     private void On_CommonResourceBarMethods_DrawLifeMouseOver(On_CommonResourceBarMethods.orig_DrawLifeMouseOver orig) {
@@ -156,9 +165,9 @@ sealed class KeywordSystem : ILoadable {
                 if (flag4) {
                     _keywordColorOpacity = 1f;
                 }
-                else if ((!Main.HoverItem.IsEmpty()/* && Main.HoverItem.IsDruidic()*/) || flag3 || flag || FancyWreathDrawing.IsHoveringUI || WreathDrawing.JustDrawn || _overResourceBar) {
+                else if (!Main.HoverItem.IsEmpty() || flag3 || flag || FancyWreathDrawing.IsHoveringUI || WreathDrawing.JustDrawn || _overResourceBar) {
                     if (_keywordColorOpacity > 0f) {
-                        _keywordColorOpacity -= TimeSystem.LogicDeltaTime * 0.5f;
+                        _keywordColorOpacity -= TimeSystem.LogicDeltaTime * MathHelper.Lerp(0.25f, 0.5f, 0.5f);
                     }
                 }
                 else if (_keywordColorOpacity != 1f) {
