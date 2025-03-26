@@ -650,7 +650,7 @@ sealed class DryadEntrance : ModSystem {
         Samples(i, j, out int result, out Vector2D result2);
         int x = (int)vector2D.X, y = (int)vector2D.Y;
         y -= 3;
-        float sizeValue = 0.1f;
+        float sizeValue = 0.2f;
         Vector2D vector2D3 = default(Vector2D);
         vector2D3.X = i;
         vector2D3.Y = j;
