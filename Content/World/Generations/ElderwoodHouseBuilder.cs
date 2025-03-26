@@ -842,13 +842,15 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
                     for (int i2 = i - check; i2 < i + check + 1; i2++) {
                         for (int j2 = j - check; j2 < j + check + 1; j2++) {
                             if (Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsGrassWall>() ||
-                                Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>()) {
+                                Main.tile[i2, j2].WallType == ModContent.WallType<BackwoodsFlowerGrassWall>() ||
+                                Main.tile[i2, j2].WallType == WallID.GrassUnsafe ||
+                                Main.tile[i2, j2].WallType == WallID.FlowerUnsafe) {
                                 flag = true;
                             }
                         }
                     }
                     if (Main.tile[i, j].WallType == 0 || !Main.tile[i, j].AnyWall()) {
-                        Main.tile[i, j].WallType = flag ? (ushort)(WorldGen.genRand.NextBool() ? WallID.DirtUnsafe : ModContent.WallType<BackwoodsGrassWall>()) : WallType;
+                        Main.tile[i, j].WallType = flag ? (ushort)(WorldGen.genRand.NextBool() ? ModContent.WallType<BackwoodsFlowerGrassWall>() : ModContent.WallType<BackwoodsGrassWall>()) : WallType;
                     }
                 }
             }

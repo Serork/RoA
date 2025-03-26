@@ -74,7 +74,7 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
         }
         short num6 = (short)(WorldGen.genRand.Next(3) * 18);
         if (num2 >= 0) {
-            if (tile.TileFrameY < 0 || tile.TileFrameY > 36) {
+            if (tile.TileFrameY <= 0 || tile.TileFrameY > 36) {
                 tile.TileFrameY = num6;
             }
         }

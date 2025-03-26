@@ -35,7 +35,7 @@ sealed class BackwoodsRocks02 : BackwoodsRocks0 {
         DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
 
-        MineResist = 1.25f;
+        MineResist = 0.01f;
     }
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) { }
@@ -70,7 +70,7 @@ sealed class BackwoodsRocks01 : BackwoodsRocks0 {
         DustType = ModContent.DustType<Stone>();
         AddMapEntry(new Color(34, 37, 46));
 
-        MineResist = 1.25f;
+        MineResist = 0.01f;
     }
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) { }
