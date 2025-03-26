@@ -36,6 +36,7 @@ sealed class BackwoodsSpecial2 : BackwoodsRocks0 {
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
         height = 20;
+        offsetY -= 4;
     }
 
     public override ushort GetMapOption(int i, int j) {
