@@ -1936,7 +1936,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                     }
                 }
-                bool flag = false;
+                bool flag2 = false;
                 if (elderwoodWall) {
                     bool rootboundChest = false;
                     for (int checkX = i - 10; checkX < i + 11; checkX++) {
@@ -1949,12 +1949,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (!rootboundChest) {
                         elderwoodWall = false;
                     }
-                    else if (_random.NextChance(0.75)) {
+                    else if (_random.NextChance(0.5)) {
                         elderwoodWall = false;
-                        flag = true;
+                        flag2 = true;
                     }
                 }
-                if (!flag) {
+                if (!flag2) {
                     elderwoodWall |= Main.tile[i, j].WallType == _elderwoodWallType;
                 }
                 if (WorldGen.SolidTile(i, j, true) && Main.tile[i, j].TileType != ModContent.TileType<ElderwoodDoorClosed>() && Main.tile[i, j].LiquidAmount <= 0 && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && 
