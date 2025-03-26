@@ -148,6 +148,8 @@ sealed class LothorAngleAttack : ModProjectile {
         Vector2 dev = mid - new Vector2(0, _distY - _distX);
 
         float speed = _timer < 0.4f ? 0.015f : 0.01f;
+        speed *= 0.8f + 0.2f * npc.As<NPCs.Enemies.Bosses.Lothor.Lothor>().LifeProgress;
+        Main.NewText(speed);
         _timer += speed;
 
         bool enraged = Projectile.localAI[0] == 1f;
