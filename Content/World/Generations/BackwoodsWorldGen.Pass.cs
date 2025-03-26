@@ -9,6 +9,7 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Placeable;
+using RoA.Content.Items.Placeable.Walls;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
@@ -759,7 +760,28 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
-                bool flag3 = tile.WallType == _elderwoodWallType;
+                bool elderwoodWall = false;
+                for (int checkX = i - 2; checkX < i + 3; checkX++) {
+                    for (int checkY = j - 2; checkY < j + 3; checkY++) {
+                        if (Main.tile[checkX, checkY].WallType == _elderwoodWallType) {
+                            elderwoodWall = true;
+                        }
+                    }
+                }
+                if (elderwoodWall) {
+                    bool rootboundChest = false;
+                    for (int checkX = i - 10; checkX < i + 11; checkX++) {
+                        for (int checkY = j - 10; checkY < j + 11; checkY++) {
+                            if (Main.tile[checkX, checkY].TileType == ModContent.TileType<ElderwoodChest2>()) {
+                                rootboundChest = true;
+                            }
+                        }
+                    }
+                    if (!rootboundChest) {
+                        elderwoodWall = false;
+                    }
+                }
+                bool flag3 = elderwoodWall && _random.NextBool();
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && tile.TileType != ModContent.TileType<ElderwoodDoorClosed>()) {
                         WorldGenHelper.Place1x2Right(i + 1, j, (ushort)ModContent.TileType<BackwoodsRoots2_3>(), 24, _random.Next(3));
@@ -771,7 +793,28 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
-                bool flag3 = tile.WallType == _elderwoodWallType;
+                bool elderwoodWall = false;
+                for (int checkX = i - 2; checkX < i + 3; checkX++) {
+                    for (int checkY = j - 2; checkY < j + 3; checkY++) {
+                        if (Main.tile[checkX, checkY].WallType == _elderwoodWallType) {
+                            elderwoodWall = true;
+                        }
+                    }
+                }
+                if (elderwoodWall) {
+                    bool rootboundChest = false;
+                    for (int checkX = i - 10; checkX < i + 11; checkX++) {
+                        for (int checkY = j - 10; checkY < j + 11; checkY++) {
+                            if (Main.tile[checkX, checkY].TileType == ModContent.TileType<ElderwoodChest2>()) {
+                                rootboundChest = true;
+                            }
+                        }
+                    }
+                    if (!rootboundChest) {
+                        elderwoodWall = false;
+                    }
+                }
+                bool flag3 = elderwoodWall && _random.NextBool();
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && tile.TileType != ModContent.TileType<ElderwoodDoorClosed>()) {
                         WorldGenHelper.Place1x2Left(i - 1, j, (ushort)ModContent.TileType<BackwoodsRoots2_4>(), 24, _random.Next(3));
@@ -783,7 +826,28 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
-                bool flag3 = tile.WallType == _elderwoodWallType;
+                bool elderwoodWall = false;
+                for (int checkX = i - 2; checkX < i + 3; checkX++) {
+                    for (int checkY = j - 2; checkY < j + 3; checkY++) {
+                        if (Main.tile[checkX, checkY].WallType == _elderwoodWallType) {
+                            elderwoodWall = true;
+                        }
+                    }
+                }
+                if (elderwoodWall) {
+                    bool rootboundChest = false;
+                    for (int checkX = i - 10; checkX < i + 11; checkX++) {
+                        for (int checkY = j - 10; checkY < j + 11; checkY++) {
+                            if (Main.tile[checkX, checkY].TileType == ModContent.TileType<ElderwoodChest2>()) {
+                                rootboundChest = true;
+                            }
+                        }
+                    }
+                    if (!rootboundChest) {
+                        elderwoodWall = false;
+                    }
+                }
+                bool flag3 = elderwoodWall && _random.NextBool();
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3)) {
                         WorldGenHelper.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsRoots2>(), _random.Next(3));
@@ -795,7 +859,28 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
-                bool flag3 = tile.WallType == _elderwoodWallType;
+                bool elderwoodWall = false;
+                for (int checkX = i - 2; checkX < i + 3; checkX++) {
+                    for (int checkY = j - 2; checkY < j + 3; checkY++) {
+                        if (Main.tile[checkX, checkY].WallType == _elderwoodWallType) {
+                            elderwoodWall = true;
+                        }
+                    }
+                }
+                if (elderwoodWall) {
+                    bool rootboundChest = false;
+                    for (int checkX = i - 10; checkX < i + 11; checkX++) {
+                        for (int checkY = j - 10; checkY < j + 11; checkY++) {
+                            if (Main.tile[checkX, checkY].TileType == ModContent.TileType<ElderwoodChest2>()) {
+                                rootboundChest = true;
+                            }
+                        }
+                    }
+                    if (!rootboundChest) {
+                        elderwoodWall = false;
+                    }
+                }
+                bool flag3 = elderwoodWall && _random.NextBool();
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3)) {
                         WorldGenHelper.Place2x1Top(i, j + 1, (ushort)ModContent.TileType<BackwoodsRoots2_2>(), _random.Next(3));
@@ -1818,10 +1903,34 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step10_SpreadMossGrass() {
         for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY; j++) {
+                bool elderwoodWall = false;
+                for (int checkX = i - 2; checkX < i + 3; checkX++) {
+                    for (int checkY = j - 2; checkY < j + 3; checkY++) {
+                        if (Main.tile[checkX, checkY].WallType == _elderwoodWallType) {
+                            elderwoodWall = true;
+                        }
+                    }
+                }
+                if (elderwoodWall) {
+                    bool rootboundChest = false;
+                    for (int checkX = i - 10; checkX < i + 11; checkX++) {
+                        for (int checkY = j - 10; checkY < j + 11; checkY++) {
+                            if (Main.tile[checkX, checkY].TileType == ModContent.TileType<ElderwoodChest2>()) {
+                                rootboundChest = true;
+                            }
+                        }
+                    }
+                    if (!rootboundChest) {
+                        elderwoodWall = false;
+                    }
+                    if (_random.NextBool()) {
+                        elderwoodWall = false;
+                    }
+                }
                 if (WorldGen.SolidTile(i, j, true) && Main.tile[i, j].TileType != ModContent.TileType<ElderwoodDoorClosed>() && Main.tile[i, j].LiquidAmount <= 0 && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && 
                     _random.NextBool(Main.tile[i, j].TileType == _mossTileType || Main.tile[i, j].TileType == _stoneTileType ? 14 : Main.tile[i, j].TileType == _elderwoodTileType ?
-                    Main.tile[i, j].WallType == _elderwoodWallType ? 1 : 8 : 10)) {
-                    if (_random.NextChance(Main.tile[i, j].WallType == _elderwoodWallType ? 1 : 0.65)) {
+                    elderwoodWall ? 1 : 8 : 10)) {
+                    if (_random.NextChance(elderwoodWall ? 1 : 0.65)) {
                         for (int offset = 0; offset < 4; offset++) {
                             int i2 = i, j2 = j;
                             if (offset == 0) {
@@ -3932,8 +4041,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _elderwoodTileType3 = (ushort)ModContent.TileType<LivingElderwood3>();
         _leavesTileType = (ushort)ModContent.TileType<LivingElderwoodlLeaves>();
         _dirtWallType = WallID.DirtUnsafe;
-        _grassWallType = (ushort)ModContent.WallType<BackwoodsGrassWall>();
-        _flowerGrassWallType = (ushort)ModContent.WallType<BackwoodsFlowerGrassWall>();
+        _grassWallType = (ushort)ModContent.WallType<Tiles.Walls.BackwoodsGrassWall>();
+        _flowerGrassWallType = (ushort)ModContent.WallType<Tiles.Walls.BackwoodsFlowerGrassWall>();
         _elderwoodWallType = (ushort)ModContent.WallType<ElderwoodWall3>();
         _elderwoodWallType2 = (ushort)ModContent.WallType<ElderwoodWall2>();
         _leavesWallType = (ushort)ModContent.WallType<LivingBackwoodsLeavesWall2>();
