@@ -34,7 +34,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
                     Vector2 position = projectile.position - Vector2.UnitY * 120f * projectile.ai[0];
                     position.X += i * 10f;
                     bool flag2 = true;
-                    for (int i2 = 0; i2 < 3; i2++) {
+                    for (int i2 = 0; i2 < 2; i2++) {
                         Point pos = position.ToTileCoordinates() + new Point(0, i2);
                         if (WorldGenHelper.GetTileSafely(pos).HasTile &&
                             Main.tileSolid[WorldGenHelper.GetTileSafely(pos).TileType]) {
