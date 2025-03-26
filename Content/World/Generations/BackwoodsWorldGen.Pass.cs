@@ -784,7 +784,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag3 = (elderwoodWall && _random.NextChance(0.75)) || tile.WallType == _elderwoodWallType;
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && tile.TileType != ModContent.TileType<ElderwoodDoorClosed>()) {
-                        WorldGenHelper.Place1x2Right(i + 1, j, (ushort)ModContent.TileType<BackwoodsRoots2_3>(), 24, _random.Next(3));
+                        bool flag = true;
+                        if (Main.tile[i, j].WallType == WallID.LihzahrdBrickUnsafe || Main.tile[i, j].WallType == WallID.LihzahrdBrick) {
+                            flag = false;
+                        }
+                        if (flag) {
+                            WorldGenHelper.Place1x2Right(i + 1, j, (ushort)ModContent.TileType<BackwoodsRoots2_3>(), 24, _random.Next(3));
+                        }
                     }
                 }
             }
@@ -817,7 +823,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag3 = (elderwoodWall && _random.NextChance(0.75)) || tile.WallType == _elderwoodWallType;
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && tile.TileType != ModContent.TileType<ElderwoodDoorClosed>()) {
-                        WorldGenHelper.Place1x2Left(i - 1, j, (ushort)ModContent.TileType<BackwoodsRoots2_4>(), 24, _random.Next(3));
+                        bool flag = true;
+                        if (Main.tile[i, j].WallType == WallID.LihzahrdBrickUnsafe || Main.tile[i, j].WallType == WallID.LihzahrdBrick) {
+                            flag = false;
+                        }
+                        if (flag) {
+                            WorldGenHelper.Place1x2Left(i - 1, j, (ushort)ModContent.TileType<BackwoodsRoots2_4>(), 24, _random.Next(3));
+                        }
                     }
                 }
             }
@@ -850,7 +862,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag3 = (elderwoodWall && _random.NextChance(0.75)) || tile.WallType == _elderwoodWallType;
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3)) {
-                        WorldGenHelper.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsRoots2>(), _random.Next(3));
+                        bool flag = true;
+                        if (Main.tile[i, j].WallType == WallID.LihzahrdBrickUnsafe || Main.tile[i, j].WallType == WallID.LihzahrdBrick) {
+                            flag = false;
+                        }
+                        if (flag) {
+                            WorldGenHelper.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsRoots2>(), _random.Next(3));
+                        }
                     }
                 }
             }
@@ -883,7 +901,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag3 = (elderwoodWall && _random.NextChance(0.75)) || tile.WallType == _elderwoodWallType;
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3)) {
-                        WorldGenHelper.Place2x1Top(i, j + 1, (ushort)ModContent.TileType<BackwoodsRoots2_2>(), _random.Next(3));
+                        bool flag = true;
+                        if (Main.tile[i, j].WallType == WallID.LihzahrdBrickUnsafe || Main.tile[i, j].WallType == WallID.LihzahrdBrick) {
+                            flag = false;
+                        }
+                        if (flag) {
+                            WorldGenHelper.Place2x1Top(i, j + 1, (ushort)ModContent.TileType<BackwoodsRoots2_2>(), _random.Next(3));
+                        }
                     }
                 }
             }
@@ -1947,7 +1971,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 j2++;
                             }
                             if (!WorldGenHelper.ActiveTile(i2, j2)) {
-                                SpreadMossGrass2(i2, j2);
+                                bool flag = true;
+                                if (Main.tile[i2, j2].WallType == WallID.LihzahrdBrickUnsafe || Main.tile[i2, j2].WallType == WallID.LihzahrdBrick) {
+                                    flag = false;
+                                }
+                                if (flag) {
+                                    SpreadMossGrass2(i2, j2);
+                                }
                             }
                         }
                     }
