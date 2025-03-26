@@ -66,7 +66,7 @@ sealed class HedgehogTerrarium : ModTile {
                 if (hedgehogCageFrameCounter[i] <= rand.Next(30, 900))
                     continue;
 
-                if (rand.Next(10) == 0) {
+                if (rand.Next(3) == 0) {
                     hedgehogCageFrame[i] = 2;
                 }
 
@@ -103,15 +103,34 @@ sealed class HedgehogTerrarium : ModTile {
                     hedgehogCageFrame[i] = 11;
                 }
             }
-            else if (hedgehogCageFrame[i] >= 13) {
+            else if (hedgehogCageFrame[i] >= 13 && hedgehogCageFrame[i] <= 20) {
                 hedgehogCageFrameCounter[i]++;
                 if (hedgehogCageFrameCounter[i] >= 5) {
                     hedgehogCageFrameCounter[i] = 0;
                     hedgehogCageFrame[i]++;
                 }
+            }
+           else {
+                if (hedgehogCageFrameCounter[i] < 0) {
+                    hedgehogCageFrameCounter[i]++;
+                    if (hedgehogCageFrameCounter[i] >= -5) {
+                        hedgehogCageFrameCounter[i] = -10;
+                        hedgehogCageFrame[i]++;
+                        if (hedgehogCageFrame[i] > 41)
+                            hedgehogCageFrame[i] = 0;
+                    }
+                }
+                else {
+                    hedgehogCageFrameCounter[i]++;
+                    if (rand.Next(2) == 0 && hedgehogCageFrameCounter[i] == 5) {
+                        hedgehogCageFrameCounter[i] = -10;
+                        hedgehogCageFrame[i]++;
+                    }
+                    if (hedgehogCageFrameCounter[i] <= rand.Next(30, 900))
+                        continue;
 
-                if (hedgehogCageFrame[i] > 41)
-                    hedgehogCageFrame[i] = 0;
+                    hedgehogCageFrameCounter[i] = 0;
+                }
             }
         }
     }
