@@ -119,7 +119,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         private bool On_WorldGen_PlacePot(On_WorldGen.orig_PlacePot orig, int x, int y, ushort type, int style) {
             int potType = ModContent.TileType<BackwoodsPot>();
             if (type != potType && 
-                x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 50 && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 50
+                x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 100 && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 100
                 && y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 3) {
                 return WorldGen.PlacePot(x, y, (ushort)potType, WorldGen.genRand.Next(4));
             }
