@@ -33,7 +33,6 @@ sealed class LuminousFlowerHat : ModItem {
             else {
                 LightValue = Tiles.Miscellaneous.LuminousFlower.MINLIGHTMULT;
             }
-            Main.NewText(LightValue);
         }
     }
 
