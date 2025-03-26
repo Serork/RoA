@@ -150,7 +150,7 @@ sealed class LuminousFlower : ModTile {
                 }
                 int height = tile.TileFrameY == 36 ? 18 : 16;
                 Main.spriteBatch.Draw(modTile.GetTileGlowTexture(),
-                                      new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
+                                      new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                       new Rectangle(tile.TileFrameX, tile.TileFrameY + Main.tileFrame[modTile.Type] * 18 * 3 - 2, 16, height),
                                       Color.White * progress, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
