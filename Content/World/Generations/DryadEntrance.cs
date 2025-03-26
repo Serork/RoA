@@ -852,11 +852,11 @@ sealed class DryadEntrance : ModSystem {
             if (!Main.tile[i - 1, j].HasTile && !Main.tile[i - 2, j].HasTile &&
                 !Main.tile[i + 1, j].HasTile && !Main.tile[i + 2, j].HasTile) {
                 bool flag5 = true;
-                //for (int k = -1; k < 3; k++) {
-                //    if (!Main.tile[i + k, j + 1].HasTile) {
-                //        flag5 = false;
-                //    }
-                //}
+                for (int k = -1; k < 3; k++) {
+                    if (!Main.tile[i + k, j + 1].HasTile) {
+                        flag5 = false;
+                    }
+                }
                 if (flag5) {
                     int altered = genRand.NextBool() ? 2 : 0;
                     WorldGen.Place2xX(i, j, treeDryad, altered);
