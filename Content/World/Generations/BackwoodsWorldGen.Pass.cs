@@ -1950,7 +1950,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     if (!rootboundChest) {
                         elderwoodWall = false;
                     }
-                    else if (_random.NextChance(0.5)) {
+                    else if (_random.NextChance(0.75)) {
                         elderwoodWall = false;
                         flag2 = true;
                     }
