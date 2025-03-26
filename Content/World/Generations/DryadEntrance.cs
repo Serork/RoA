@@ -650,7 +650,7 @@ sealed class DryadEntrance : ModSystem {
         Samples(i, j, out int result, out Vector2D result2);
         int x = (int)vector2D.X, y = (int)vector2D.Y;
         y -= 3;
-        float sizeValue = 0.35f;
+        float sizeValue = 0.1f;
         Vector2D vector2D3 = default(Vector2D);
         vector2D3.X = i;
         vector2D3.Y = j;
@@ -679,6 +679,9 @@ sealed class DryadEntrance : ModSystem {
             float value = 1f - MathHelper.Clamp(num4 / (float)size * 0.5f, 0f, 0.9f);
             if (sizeValue < 1.25f && genRand.NextChance(value * 1.25f)) {
                 sizeValue += genRand.NextFloat(0.05f, 0.085f) * 0.75f;
+                if (value > 0.75f) {
+                    sizeValue += genRand.NextFloat(0.05f, 0.085f) * 0.25f;
+                }
             }
             num2 *= sizeValue;
             bool flag = num4 < size / 3;
