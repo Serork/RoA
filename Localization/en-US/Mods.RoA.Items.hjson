@@ -1,5 +1,5 @@
 ElderwoodClaws: {
-	DisplayName: Elderwood Claws
+	DisplayName: Everwood Claws
 	Tooltip:
 		'''
 		Consume a full wreath charge to grow a palisade of roots
@@ -8,7 +8,7 @@ ElderwoodClaws: {
 }
 
 Elderwood: {
-	DisplayName: Elderwood
+	DisplayName: Everwood
 	Tooltip: ""
 }
 
@@ -49,7 +49,7 @@ ThornyClaws: {
 }
 
 ElderwoodChest: {
-	DisplayName: Elderwood Chest
+	DisplayName: Everwood Chest
 	Tooltip: ""
 }
 
@@ -524,17 +524,17 @@ ElathaAmulet: {
 }
 
 LivingElderwoodBreastplate: {
-	DisplayName: Living Elderwood Breastplate
+	DisplayName: Living Everwood Breastplate
 	Tooltip: Increases defense by 3 when wreath is charged
 }
 
 LivingElderwoodCrown: {
-	DisplayName: Living Elderwood Crown
+	DisplayName: Living Everwood Crown
 	Tooltip: 6% increased nature potential damage
 }
 
 LivingElderwoodGreaves: {
-	DisplayName: Living Elderwood Greaves
+	DisplayName: Living Everwood Greaves
 	Tooltip: 4% increased nature potential damage and critical strike chance
 }
 
@@ -656,92 +656,92 @@ OniMask: {
 }
 
 ElderwoodBathtub: {
-	DisplayName: Elderwood Bathtub
+	DisplayName: Everwood Bathtub
 	Tooltip: ""
 }
 
 ElderwoodBed: {
-	DisplayName: Elderwood Bed
+	DisplayName: Everwood Bed
 	Tooltip: ""
 }
 
 ElderwoodBookcase: {
-	DisplayName: Elderwood Bookcase
+	DisplayName: Everwood Bookcase
 	Tooltip: ""
 }
 
 ElderwoodCandelabra: {
-	DisplayName: Elderwood Candelabra
+	DisplayName: Everwood Candelabra
 	Tooltip: ""
 }
 
 ElderwoodCandle: {
-	DisplayName: Elderwood Candle
+	DisplayName: Everwood Candle
 	Tooltip: ""
 }
 
 ElderwoodChair: {
-	DisplayName: Elderwood Chair
+	DisplayName: Everwood Chair
 	Tooltip: ""
 }
 
 ElderwoodChandelier: {
-	DisplayName: Elderwood Chandelier
+	DisplayName: Everwood Chandelier
 	Tooltip: ""
 }
 
 ElderwoodClock: {
-	DisplayName: Elderwood Clock
+	DisplayName: Everwood Clock
 	Tooltip: ""
 }
 
 ElderwoodDoor: {
-	DisplayName: Elderwood Door
+	DisplayName: Everwood Door
 	Tooltip: ""
 }
 
 ElderwoodDresser: {
-	DisplayName: Elderwood Dresser
+	DisplayName: Everwood Dresser
 	Tooltip: ""
 }
 
 ElderwoodLamp: {
-	DisplayName: Elderwood Lamp
+	DisplayName: Everwood Lamp
 	Tooltip: ""
 }
 
 ElderwoodLantern: {
-	DisplayName: Elderwood Lantern
+	DisplayName: Everwood Lantern
 	Tooltip: ""
 }
 
 ElderwoodPiano: {
-	DisplayName: Elderwood Piano
+	DisplayName: Everwood Piano
 	Tooltip: ""
 }
 
 ElderwoodPlatform: {
-	DisplayName: Elderwood Platform
+	DisplayName: Everwood Platform
 	Tooltip: ""
 }
 
 ElderwoodSink: {
-	DisplayName: Elderwood Sink
+	DisplayName: Everwood Sink
 	Tooltip: ""
 }
 
 ElderwoodSofa: {
-	DisplayName: Elderwood Sofa
+	DisplayName: Everwood Sofa
 	Tooltip: ""
 }
 
 ElderwoodTable: {
-	DisplayName: Elderwood Table
+	DisplayName: Everwood Table
 	Tooltip: ""
 }
 
 ElderwoodWorkbench: {
-	DisplayName: Elderwood Work Bench
+	DisplayName: Everwood Work Bench
 	Tooltip: ""
 }
 
@@ -944,7 +944,7 @@ DynastyWoodBow: {
 }
 
 ElderwoodBow: {
-	DisplayName: Elderwood Bow
+	DisplayName: Everwood Bow
 	Tooltip: ""
 }
 
@@ -964,7 +964,7 @@ DynastyWoodSword: {
 }
 
 ElderwoodSword: {
-	DisplayName: Elderwood Sword
+	DisplayName: Everwood Sword
 	Tooltip: ""
 }
 
@@ -1110,17 +1110,17 @@ DynastyWoodLeggings: {
 }
 
 ElderwoodChestplate: {
-	DisplayName: Elderwood Chestplate
+	DisplayName: Everwood Chestplate
 	Tooltip: ""
 }
 
 ElderwoodHelmet: {
-	DisplayName: Elderwood Helmet
+	DisplayName: Everwood Helmet
 	Tooltip: ""
 }
 
 ElderwoodLeggings: {
-	DisplayName: Elderwood Leggings
+	DisplayName: Everwood Leggings
 	Tooltip: ""
 }
 
@@ -1130,7 +1130,7 @@ DynastyWoodHammer: {
 }
 
 ElderwoodHammer: {
-	DisplayName: Elderwood Hammer
+	DisplayName: Everwood Hammer
 	Tooltip: ""
 }
 
@@ -1149,12 +1149,12 @@ BackwoodsCrate: {
 }
 
 ElderwoodFence: {
-	DisplayName: Elderwood Fence
+	DisplayName: Everwood Fence
 	Tooltip: ""
 }
 
 ElderwoodWall: {
-	DisplayName: Elderwood Wall
+	DisplayName: Everwood Wall
 	Tooltip: ""
 }
 
@@ -1164,7 +1164,7 @@ PrismaticPotion: {
 }
 
 ElderwoodToilet: {
-	DisplayName: Elderwood Toilet
+	DisplayName: Everwood Toilet
 	Tooltip: ""
 }
 
@@ -1276,20 +1276,20 @@ BackwoodsFogMusicBox: {
 }
 
 LivingPrimordialWand: {
-	DisplayName: Living Elderwood Wand
+	DisplayName: Living Everwood Wand
 	Tooltip:
 		'''
-		Consumes Elderwood
-		Places living elderwood
+		Consumes Everwood
+		Places living everwood
 		'''
 }
 
 LivingPrimordialWand2: {
-	DisplayName: Elderwood Leaf Wand
+	DisplayName: Everwood Leaf Wand
 	Tooltip:
 		'''
-		Consumes Elderwood
-		Places elderwood leaves
+		Consumes Everwood
+		Places everwood leaves
 		'''
 }
 
@@ -1550,7 +1550,7 @@ FireLighter: {
 }
 
 LivingBackwoodsLeavesWall: {
-	DisplayName: Living Elderwood Wall
+	DisplayName: Living Everwood Wall
 	Tooltip: ""
 }
 
@@ -1590,7 +1590,7 @@ BackwoodsDungeonChest_Trapped: {
 }
 
 ElderwoodChest_Trapped: {
-	DisplayName: Trapped Elderwood Chest
+	DisplayName: Trapped Everwood Chest
 	Tooltip: ""
 }
 
@@ -1909,6 +1909,6 @@ RoyalQualityHoney: {
 }
 
 ElderwoodBeam: {
-	DisplayName: Elderwood Beam
+	DisplayName: Everwood Beam
 	Tooltip: ""
 }

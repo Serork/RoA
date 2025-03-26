@@ -1,5 +1,5 @@
 ElderwoodClaws: {
-	DisplayName: Когти из древнего дерева
+	DisplayName: Когти из вечного дерева
 	Tooltip:
 		'''
 		Тратят полный заряд венка, чтобы вырастить частокол из корней
@@ -8,7 +8,7 @@ ElderwoodClaws: {
 }
 
 Elderwood: {
-	DisplayName: Древняя древесина
+	DisplayName: Вечная древесина
 	// Tooltip: ""
 }
 
@@ -49,7 +49,7 @@ ThornyClaws: {
 }
 
 ElderwoodChest: {
-	DisplayName: Сундук из древнего дерева
+	DisplayName: Сундук из вечного дерева
 	Tooltip: ""
 }
 
@@ -650,92 +650,92 @@ OniMask: {
 }
 
 ElderwoodBathtub: {
-	DisplayName: Ванна из древнего дерева
+	DisplayName: Ванна из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodBed: {
-	DisplayName: Кровать из древнего дерева
+	DisplayName: Кровать из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodBookcase: {
-	DisplayName: Книжный шкаф из древнего дерева
+	DisplayName: Книжный шкаф из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodCandelabra: {
-	DisplayName: Подсвечник из древнего дерева
+	DisplayName: Подсвечник из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodCandle: {
-	DisplayName: Свеча из древнего дерева
+	DisplayName: Свеча из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodChair: {
-	DisplayName: Стул из древнего дерева
+	DisplayName: Стул из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodChandelier: {
-	DisplayName: Люстра из древнего дерева
+	DisplayName: Люстра из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodClock: {
-	DisplayName: Часы из древнего дерева
+	DisplayName: Часы из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodDoor: {
-	DisplayName: Дверь из древнего дерева
+	DisplayName: Дверь из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodDresser: {
-	DisplayName: Комод из древнего дерева
+	DisplayName: Комод из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodLamp: {
-	DisplayName: Лампа из древнего дерева
+	DisplayName: Лампа из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodLantern: {
-	DisplayName: Фонарь из древнего дерева
+	DisplayName: Фонарь из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodPiano: {
-	DisplayName: Пианино из древнего дерева
+	DisplayName: Пианино из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodPlatform: {
-	DisplayName: Платформа из древнего дерева
+	DisplayName: Платформа из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodSink: {
-	DisplayName: Раковина из древнего дерева
+	DisplayName: Раковина из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodSofa: {
-	DisplayName: Диван из древнего дерева
+	DisplayName: Диван из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodTable: {
-	DisplayName: Стол из древнего дерева
+	DisplayName: Стол из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodWorkbench: {
-	DisplayName: Верстак из древнего дерева
+	DisplayName: Верстак из вечного дерева
 	// Tooltip: ""
 }
 
@@ -938,7 +938,7 @@ DynastyWoodBow: {
 }
 
 ElderwoodBow: {
-	DisplayName: Лук из древнего дерева
+	DisplayName: Лук из вечного дерева
 	// Tooltip: ""
 }
 
@@ -958,7 +958,7 @@ DynastyWoodSword: {
 }
 
 ElderwoodSword: {
-	DisplayName: Меч из древнего дерева
+	DisplayName: Меч из вечного дерева
 	// Tooltip: ""
 }
 
@@ -1104,17 +1104,17 @@ DynastyWoodLeggings: {
 }
 
 ElderwoodChestplate: {
-	DisplayName: Нагрудник из древнего дерева
+	DisplayName: Нагрудник из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodHelmet: {
-	DisplayName: Шлем из древнего дерева
+	DisplayName: Шлем из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodLeggings: {
-	DisplayName: Ботинки из древнего дерева
+	DisplayName: Ботинки из вечного дерева
 	// Tooltip: ""
 }
 
@@ -1124,7 +1124,7 @@ DynastyWoodHammer: {
 }
 
 ElderwoodHammer: {
-	DisplayName: Молот из древнего дерева
+	DisplayName: Молот из вечного дерева
 	// Tooltip: ""
 }
 
@@ -1143,12 +1143,12 @@ BackwoodsCrate: {
 }
 
 ElderwoodFence: {
-	DisplayName: Забор из древнего дерева
+	DisplayName: Забор из вечного дерева
 	// Tooltip: ""
 }
 
 ElderwoodWall: {
-	DisplayName: Стена из древнего дерева
+	DisplayName: Стена из вечного дерева
 	// Tooltip: ""
 }
 
@@ -1158,7 +1158,7 @@ PrismaticPotion: {
 }
 
 ElderwoodToilet: {
-	DisplayName: Унитаз из древнего дерева
+	DisplayName: Унитаз из вечного дерева
 	// Tooltip: ""
 }
 
@@ -1270,20 +1270,20 @@ BackwoodsFogMusicBox: {
 }
 
 LivingPrimordialWand: {
-	DisplayName: Ветвь древнего дерева
+	DisplayName: Ветвь вечного дерева
 	Tooltip:
 		'''
-		Используется: Древняя древесина
-		Размещает живое древнюю древесину
+		Используется: Вечная древесина
+		Размещает живое вечную древесину
 		'''
 }
 
 LivingPrimordialWand2: {
-	DisplayName: Ветвь с листьями древнего дерева
+	DisplayName: Ветвь с листьями вечного дерева
 	Tooltip:
 		'''
-		Используется: Древняя древесина
-		Размещает листья живой древней древесины
+		Используется: Вечная древесина
+		Размещает листья живой вечной древесины
 		'''
 }
 
@@ -1544,7 +1544,7 @@ FireLighter: {
 }
 
 LivingBackwoodsLeavesWall: {
-	DisplayName: Стена из живого древнего дерева
+	DisplayName: Стена из живого вечного дерева
 	// Tooltip: ""
 }
 
@@ -1584,7 +1584,7 @@ BackwoodsDungeonChest_Trapped: {
 }
 
 ElderwoodChest_Trapped: {
-	DisplayName: Сундук-ловушка из древнего дерева
+	DisplayName: Сундук-ловушка из вечного дерева
 	// Tooltip: ""
 }
 

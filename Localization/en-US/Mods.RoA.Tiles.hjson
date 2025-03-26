@@ -1,7 +1,7 @@
 PrimordialSapling.MapEntry: Sapling
 FallenTree.MapEntry: Fallen Tree
 MiracleMint.MapEntry: Miracle Mint
-ElderwoodChest.MapEntry: Elderwood Chest
+ElderwoodChest.MapEntry: Everwood Chest
 DryadStatue.MapEntry: Dryad Statue
 DryadStatue_Rubble.MapEntry: Dryad Statue
 TreeBranch.MapEntry: Tree Branch
@@ -12,25 +12,25 @@ SweetTulip.MapEntry: Sweet Tulip
 LuminousFlower.MapEntry: Luminous Flower
 Bonerose.MapEntry: Bonerose
 OvergrownAltar.MapEntry: Overgrown Altar
-LivingElderwood.MapEntry: Living Elderwood
-LivingElderwood2.MapEntry: Living Elderwood
-ElderwoodChair.MapEntry: Elderwood Chair
-ElderwoodChandelier.MapEntry: Elderwood Chandelier
-ElderwoodDoorClosed.MapEntry: Elderwood Door Closed
-ElderwoodDoorOpened.MapEntry: Elderwood Door Opened
-ElderwoodPiano.MapEntry: Elderwood Piano
-ElderwoodPlatform.MapEntry: Elderwood Platform
-ElderwoodTable.MapEntry: Elderwood Table
-ElderwoodWorkbench.MapEntry: Elderwood Workbench
-ElderwoodBookcase.MapEntry: Elderwood Bookcase
+LivingElderwood.MapEntry: Living Everwood
+LivingElderwood2.MapEntry: Living Everwood
+ElderwoodChair.MapEntry: Everwood Chair
+ElderwoodChandelier.MapEntry: Everwood Chandelier
+ElderwoodDoorClosed.MapEntry: Everwood Door Closed
+ElderwoodDoorOpened.MapEntry: Everwood Door Opened
+ElderwoodPiano.MapEntry: Everwood Piano
+ElderwoodPlatform.MapEntry: Everwood Platform
+ElderwoodTable.MapEntry: Everwood Table
+ElderwoodWorkbench.MapEntry: Everwood Workbench
+ElderwoodBookcase.MapEntry: Everwood Bookcase
 Cloudberry.MapEntry: Cloudberry
-LivingElderwood3.MapEntry: Living Elderwood
+LivingElderwood3.MapEntry: Living Everwood
 ElderwoodChest2.MapEntry: Rootbound Chest
-Elderwood.MapEntry: Elderwood
+Elderwood.MapEntry: Everwood
 MercuriumOre.MapEntry: Mercurium Ore
 NexusGateway.MapEntry: Peculiar Ingress
 OniMask.MapEntry: Oni Mask
-ElderwoodDresser.MapEntry: Elderwood Dresser
+ElderwoodDresser.MapEntry: Everwood Dresser
 Coffin.MapEntry: Coffin
 Tapper.MapEntry: Tapper
 // LothorMusicBox.MapEntry: Lothor Music Box
