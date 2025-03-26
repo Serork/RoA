@@ -88,7 +88,7 @@ sealed class HedgehogTerrarium : ModTile {
                     continue;
 
                 if (rand.Next(3) != 0) {
-                    if (rand.Next(7) == 0)
+                    if (rand.Next(5) == 0)
                         hedgehogCageFrame[i] = 13;
                     else
                         hedgehogCageFrame[i] = 12;
