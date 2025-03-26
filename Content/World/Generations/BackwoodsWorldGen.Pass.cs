@@ -2404,7 +2404,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int x = maxLeft; x < maxRight; x++) {
+        for (int x = maxLeft - 50; x < maxRight + 50; x++) {
             for (int y = WorldGenHelper.SafeFloatingIslandY; y < Bottom + EdgeY; y++) {
                 if (WorldGenHelper.ActiveTile(i, j, TileID.Pots)) {
                     WorldGen.KillTile(i, j);
