@@ -679,7 +679,7 @@ sealed class DryadEntrance : ModSystem {
             float value = 1f - MathHelper.Clamp(num4 / (float)size * 0.5f, 0f, 0.9f);
             if (sizeValue < 1.25f && genRand.NextChance(value * 1.25f)) {
                 sizeValue += genRand.NextFloat(0.05f, 0.085f) * 0.75f;
-                if (value > 0.75f && sizeValue < 0.5f) {
+                if (value > 0.5f && sizeValue < 0.5f) {
                     sizeValue += genRand.NextFloat(0.05f, 0.085f) * 0.25f;
                 }
             }
