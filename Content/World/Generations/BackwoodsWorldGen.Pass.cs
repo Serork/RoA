@@ -213,7 +213,23 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         WorldUtils.Gen(new Point(i, j), new ShapeRoot(angle, k, min, max), Actions.Chain(
             new Modifiers.SkipWalls(_elderwoodWallType, WallID.LihzahrdBrickUnsafe), 
             new Modifiers.SkipWalls(SkipBiomeInvalidWallTypeToKill), 
-            new Actions.PlaceWall((ushort)ModContent.WallType<Tiles.Walls.BackwoodsRootWall2>(), false)));
+            new PlaceWall2((ushort)ModContent.WallType<Tiles.Walls.BackwoodsRootWall2>(), false)));
+    }
+
+    public class PlaceWall2 : GenAction {
+        private ushort _type;
+        private bool _neighbors;
+
+        public PlaceWall2(ushort type, bool neighbors = true) {
+            _type = type;
+            _neighbors = neighbors;
+        }
+
+        public override bool Apply(Point origin, int x, int y, params object[] args) {
+            GenBase._tiles[x, y].WallType = _type;
+
+            return UnitApply(origin, x, y, args);
+        }
     }
 
     private void Step_AddJawTraps() {
