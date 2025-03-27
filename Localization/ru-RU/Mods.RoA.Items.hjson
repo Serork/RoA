@@ -1905,3 +1905,8 @@ ElderwoodBeam: {
 	// DisplayName: Everwood Beam
 	// Tooltip: ""
 }
+
+TealMossWall: {
+	// DisplayName: Teal Moss Wall
+	// Tooltip: ""
+}

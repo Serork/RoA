@@ -3463,7 +3463,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Tile tile7 = Main.tile[point2.X, point2.Y - 1];
             ushort num571 = 0;
             if ((tile6.TileType == _stoneTileType || tile6.TileType == _mossTileType || tile6.TileType == TileID.Stone) && tile7.WallType == 0)
-                num571 = (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)(196 + _random.Next(4))) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4)))));
+                num571 = (ushort)(_random.NextBool(4) ? ModContent.WallType<TealMossWall2>() : (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)(196 + _random.Next(4))) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4))))));
 
             if (tile6.HasTile && num571 != 0) {
                 bool flag34 = WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData)));
@@ -3489,7 +3489,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Tile tile7 = Main.tile[point2.X, point2.Y - 1];
             ushort num571 = 0;
             if ((tile6.TileType == _stoneTileType || tile6.TileType == _mossTileType || tile6.TileType == TileID.Stone) && tile7.WallType == 0)
-                num571 = (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)0) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4)))));
+                num571 = (ushort)(_random.NextBool(4) ? ModContent.WallType<TealMossWall2>() : (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)(196 + _random.Next(4))) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4))))));
 
             if (tile6.HasTile && num571 != 0) {
                 bool flag34 = WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData)));
