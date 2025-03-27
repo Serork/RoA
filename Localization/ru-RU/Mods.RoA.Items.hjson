@@ -1910,3 +1910,8 @@ TealMossWall: {
 	// DisplayName: Teal Moss Wall
 	// Tooltip: ""
 }
+
+BackwoodsRootWall: {
+	// DisplayName: Backwoods Root Wall
+	// Tooltip: ""
+}

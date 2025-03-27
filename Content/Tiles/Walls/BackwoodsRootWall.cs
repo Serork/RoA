@@ -1,25 +1,22 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts.Backwoods;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Walls;
 
-class TealMossWall : ModWall {
+class BackwoodsRootWall : ModWall {
     public override void SetStaticDefaults() {
-        AddMapEntry(new Color(34, 37, 46));
+        AddMapEntry(new Color(59, 46, 42));
 
         Main.wallHouse[Type] = true;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {
-        if (Main.rand.NextBool(3)) {
-            type = DustID.GreenMoss;
-        }
-        else {
-            type = ModContent.DustType<Dusts.Backwoods.Stone>();
-        }
+        type = ModContent.DustType<WoodTrash>();
 
         return base.CreateDust(i, j, ref type);
     }
@@ -27,22 +24,17 @@ class TealMossWall : ModWall {
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }
 
-class TealMossWall2 : TealMossWall {
+class BackwoodsRootWall2 : BackwoodsRootWall {
     public override string Texture => base.Texture[..^1];
 
     public override void SetStaticDefaults() {
-        AddMapEntry(new Color(34, 37, 46));
+        AddMapEntry(new Color(59, 46, 42));
 
         WallID.Sets.WallSpreadStopsAtAir[Type] = true;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {
-        if (Main.rand.NextBool(3)) {
-            type = DustID.GreenMoss;
-        }
-        else {
-            type = ModContent.DustType<Dusts.Backwoods.Stone>();
-        }
+        type = ModContent.DustType<WoodTrash>();
 
         return base.CreateDust(i, j, ref type);
     }

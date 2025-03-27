@@ -140,9 +140,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 15;
         Step4_CleanUp();
         Step5_CleanUp();
-        BackwoodsVars.FirstTileYAtCenter = CenterY = WorldGenHelper.GetFirstTileY(CenterX, true) + 5;
-        CenterY += _biomeHeight / 2;
+        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 5;
         BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true) + 2;
+        CenterY = BackwoodsVars.BackwoodsTileForBackground + _biomeHeight / 2;
         BackwoodsVars.BackwoodsSizeY = _biomeHeight;
         BackwoodsVars.BackwoodsCenterY = CenterY;
         SetUpMessage(Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods4"), 1f);
@@ -171,6 +171,49 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step6_SpreadGrass();
 
         //GenVars.structures.AddProtectedStructure(new Rectangle(Left - 20, Top - 20, _biomeWidth * 2 + 20, _biomeHeight * 2 + 20), 20);
+    }
+
+    private void Step_AddWallRootsAndMoss() {
+        int minY = (int)Main.worldSurface - 20;
+
+        for (int i = Left - 25; i < Right + 25; i++) {
+            for (int j = minY; j < Bottom - EdgeY / 2; j++) {
+                if ((WorldGenHelper.ActiveTile(i, j, _dirtTileType) || WorldGenHelper.ActiveTile(i, j, _stoneTileType) ||
+                    WorldGenHelper.ActiveTile(i, j, WallID.DirtUnsafe)) &&
+                    _random.NextChance(0.0035)) {
+                    WallRoot(i, j);
+                }
+            }
+        }
+
+        for (int i = Left - 25; i < Right + 25; i++) {
+            for (int j = minY; j < Bottom - EdgeY / 2; j++) {
+                if ((WorldGenHelper.ActiveTile(i, j, _mossTileType)) &&
+                    _random.NextChance(0.025)) {
+                    MossRoot(i, j);
+                }
+            }
+        }
+    }
+
+    private void MossRoot(int i, int j) {
+        int min = (int)(_random.Next(4, 7));
+        int max = (int)(_random.Next(1, 3));
+        double strenth = _random.NextFloat(max, min) * 3;
+        double step = strenth / 3;
+        Vector2 direction = Vector2.One.RotatedByRandom(Math.PI) * _random.NextFloat(0f, 10f);
+        WorldGenHelper.TileWallRunner(i + (int)direction.X, j + (int)direction.Y, strenth, (int)step, 0, (ushort)ModContent.WallType<TealMossWall2>(), addTile: true, noYChange: true, onlyWall: true, shouldntHasTile: true);
+    }
+
+    private void WallRoot(int i, int j) {
+        float angle = (1 + _random.Next(3)) / 3f * 2f + 0.57075f;
+        int k = (int)(_random.Next(12, 72) * 2);
+        int min = (int)(_random.Next(4, 9) * 1.25);
+        int max = (int)(_random.Next(1, 3) * 1.25);
+        WorldUtils.Gen(new Point(i, j), new ShapeRoot(angle, k, min, max), Actions.Chain(
+            new Modifiers.SkipWalls(_elderwoodWallType, WallID.LihzahrdBrickUnsafe), 
+            new Modifiers.SkipWalls(SkipBiomeInvalidWallTypeToKill), 
+            new Actions.PlaceWall((ushort)ModContent.WallType<Tiles.Walls.BackwoodsRootWall2>(), false)));
     }
 
     private void Step_AddJawTraps() {
@@ -1526,7 +1569,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         double y = Math.Max(CenterY - EdgeY, Main.worldSurface);
         int maxLeft = Left - 50;
         int maxRight = Right + 50;
-        ushort[] invalidWalls = [WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4, WallID.LihzahrdBrickUnsafe, 59, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
+        ushort[] invalidWalls = [(ushort)ModContent.WallType<TealMossWall2>(), (ushort)ModContent.WallType<BackwoodsRootWall2>(), WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4, WallID.LihzahrdBrickUnsafe, 59, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
         ushort[] invalidWalls2 = [23, 24, 42, 45, 10, 179, 181, 196, 197, 198, 199, 212, 213, 214, 215, 208, 209, 210, 211];
         for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
             num1047 += _random.Next(-1, 2);
@@ -3110,6 +3153,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         Step_AddGrassWalls();
 
+        Step_AddWallRootsAndMoss();
+
         progress.Set(0.4f);
         for (int i = 0; i < 3; i++) {
             GrowTrees();
@@ -3463,7 +3508,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Tile tile7 = Main.tile[point2.X, point2.Y - 1];
             ushort num571 = 0;
             if ((tile6.TileType == _stoneTileType || tile6.TileType == _mossTileType || tile6.TileType == TileID.Stone) && tile7.WallType == 0)
-                num571 = (ushort)(_random.NextBool(4) ? ModContent.WallType<TealMossWall2>() : (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)(196 + _random.Next(4))) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4))))));
+                num571 = (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)(196 + _random.Next(4))) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4)))));
 
             if (tile6.HasTile && num571 != 0) {
                 bool flag34 = WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData)));
@@ -3489,7 +3534,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Tile tile7 = Main.tile[point2.X, point2.Y - 1];
             ushort num571 = 0;
             if ((tile6.TileType == _stoneTileType || tile6.TileType == _mossTileType || tile6.TileType == TileID.Stone) && tile7.WallType == 0)
-                num571 = (ushort)(_random.NextBool(4) ? ModContent.WallType<TealMossWall2>() : (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)(196 + _random.Next(4))) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4))))));
+                num571 = (((double)point2.Y < CenterY + EdgeY/* + EdgeY / 3*/) ? ((ushort)0) : (_random.NextBool() ? (ushort)(_random.NextBool() ? 170 : 171) : ((ushort)(212 + _random.Next(4)))));
 
             if (tile6.HasTile && num571 != 0) {
                 bool flag34 = WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData)));
@@ -4196,6 +4241,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int leftY = WorldGenHelper.GetFirstTileY(topLeftTileX), rightY = WorldGenHelper.GetFirstTileY(topRightTileX);
         int max = Math.Min(leftY, rightY) == leftY ? topLeftTileX : topRightTileX;
         int extraHeight = Math.Abs(between);
+        CenterY += extraHeight;
         _biomeHeight += extraHeight;
         _toLeft = max == topLeftTileX;
         void setSurfaceY() {

@@ -102,11 +102,24 @@ sealed class RoARecipes : ModSystem {
         item.AddCondition(Condition.InGraveyard);
         item.SortAfterFirstRecipesOf(4500);
         item.Register();
-
+        Recipe temp = item;
         item = Recipe.Create(ModContent.ItemType<TealMoss>(), 1);
         item.AddIngredient<TealMossWall>(4);
         item.AddTile(TileID.WorkBenches);
         item.SortAfterFirstRecipesOf(ItemID.RedMoss);
+        item.Register();
+
+        item = Recipe.Create(ModContent.ItemType<BackwoodsRootWall>(), 4);
+        item.AddIngredient<Elderwood>();
+        item.AddTile(TileID.WorkBenches);
+        item.AddCondition(Condition.InGraveyard);
+        item.SortAfter(temp);
+        item.Register();
+        temp = item;
+        item = Recipe.Create(ModContent.ItemType<Elderwood>(), 1);
+        item.AddIngredient<BackwoodsRootWall>(4);
+        item.AddTile(TileID.WorkBenches);
+        item.SortAfter(temp);
         item.Register();
     }
 
