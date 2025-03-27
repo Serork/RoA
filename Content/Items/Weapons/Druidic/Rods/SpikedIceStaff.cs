@@ -5,6 +5,7 @@ using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
 using System.IO;
 
 using Terraria;
@@ -62,7 +63,9 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool ShouldntUpdateRotationAndDirection() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 3);
+        protected override byte TimeAfterShootToExist(Player player) {
+            return (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 3 * Math.Min(1f, _attackTimer / _attackTime));
+        }
 
         protected override void SafestOnSpawn(IEntitySource source) {
             _attackTime = NatureWeaponHandler.GetUseSpeed(Owner.GetSelectedItem(), Owner);
