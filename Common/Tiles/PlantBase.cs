@@ -254,13 +254,15 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             }
         }
         if (num5 < num4) {
+            bool flag = false;
             for (int k = 0; k < validTiles.Length; k++) {
-                if (Main.tile[i, j].TileType != validTiles[k]) {
-                    return false;
-                }
-                else {
+                if (Main.tile[i, j].TileType == validTiles[k]) {
+                    flag = true;
                     break;
                 }
+            }
+            if (!flag) {
+                return false;
             }
             j -= 1;
             if (!Main.tile[i, j].HasTile && Main.tile[i, j + 1].HasUnactuatedTile && !Main.tile[i, j + 1].IsHalfBlock && Main.tile[i, j + 1].Slope == 0) {
