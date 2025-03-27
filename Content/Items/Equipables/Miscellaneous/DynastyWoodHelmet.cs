@@ -47,7 +47,7 @@ sealed class DynastyWoodHelmet : ModItem {
                 return;
             }
 
-            byte blocksAmount = 5;
+            byte blocksAmount = 10;
             float neededDistance = blocksAmount * 16f;
             if (Player.Distance(new Vector2(x, y)) < neededDistance && !Player.HasBuff<DynastySetBonusBuff>()) {
                 Player.AddBuff(ModContent.BuffType<DynastySetBonusBuff>(), DynastySetBonusBuff.TIME);
