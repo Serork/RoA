@@ -13,13 +13,17 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Projectiles.Friendly;
 
 abstract class FormProjectile : NatureProjectile {
-    protected sealed override void SafeOnSpawn(IEntitySource source) {
-        SafeOnSpawn2(source);
-
+    protected override void SafeSetDefaults3() {
         ShouldIncreaseWreathPoints = false;
     }
 
-    protected virtual void SafeOnSpawn2(IEntitySource source) { }
+    //protected sealed override void SafeOnSpawn(IEntitySource source) {
+    //    SafeOnSpawn2(source);
+
+    //    ShouldIncreaseWreathPoints = false;
+    //}
+
+    //protected virtual void SafeOnSpawn2(IEntitySource source) { }
 }
 
 abstract class NatureProjectile : ModProjectile {
@@ -120,8 +124,10 @@ abstract class NatureProjectile : ModProjectile {
         }
 
         SafeSetDefaults2();
+        SafeSetDefaults3();
     }
 
     protected virtual void SafeSetDefaults() { }
     protected virtual void SafeSetDefaults2() { }
+    protected virtual void SafeSetDefaults3() { }
 }
