@@ -117,7 +117,8 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             result = (ushort)(result * activePrefix._potentialDamageMult);
         }
         result = (ushort)(result * (flag2 ? 1f : player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f)));
-        return (ushort)result;
+        result = (ushort)Math.Max(GetFinalBaseDamage(item, player), result);
+        return result;
     }
     public static ushort GetPotentialDamage(Item item, Player player) => (ushort)Math.Max(0, GetBasePotentialDamage(item, player) - GetFinalBaseDamage(item, player));
 
@@ -154,8 +155,8 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
 
-    public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = (ushort)Math.Max(potentialDamage, GetItemDamage(item, Main.LocalPlayer));
-    public static void SetPotentialUseSpeed(Item item, ushort potentialUseTime) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialUseSpeed = (ushort)Math.Min(potentialUseTime, GetItemUseTime(item));
+    public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = potentialDamage/*(ushort)Math.Max(potentialDamage, GetItemDamage(item, Main.LocalPlayer))*/;
+    public static void SetPotentialUseSpeed(Item item, ushort potentialUseTime) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialUseSpeed = potentialUseTime/*(ushort)Math.Min(potentialUseTime, GetItemUseTime(item))*/;
 
     public static void SetFillingRate(Item item, float fillingRate) {
         NatureWeaponHandler self = item.GetGlobalItem<NatureWeaponHandler>();

@@ -26,6 +26,8 @@ sealed class ElderwoodClaws : BaseClawsItem {
         Item.value = Item.sellPrice(0, 0, 50, 0);
 
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
+
+        NatureWeaponHandler.SetPotentialDamage(Item, 30);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 
