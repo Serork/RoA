@@ -24,6 +24,10 @@ static class Helper {
     public static readonly Color GlowMaskColor = new Color(255, 255, 255, 0) * 0.8f;
     public static string ArmorSetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
 
+    public static string FirstCharToUpper(string input) {
+        return input.First().ToString().ToUpper() + input.Substring(1);
+    }
+
     public static bool JustPressed(Keys key) {
         return Main.keyState.IsKeyDown(key) && !Main.oldKeyState.IsKeyDown(key);
     }

@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Players;
-using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Data;
 using RoA.Core.Utility;

@@ -56,7 +56,7 @@ sealed class KeywordSystem : ILoadable {
                     char tag = checks[checkArray[i].Item1];
                     string keyword = checkArray[i].Item2;
                     tooltip.Text = Regex.Replace(tooltip.Text, $@"\b{keyword}\b", $"[kw/{tag}:" + keyword + "]");
-                    keyword = checkArray[i].Item2.ToUpper();
+                    keyword = Helper.FirstCharToUpper(checkArray[i].Item2);
                     tooltip.Text = Regex.Replace(tooltip.Text, $@"\b{keyword}\b", $"[kw/{tag}:" + keyword + "]");
                 }
                 foreach (char check in checks) {
