@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -257,13 +259,18 @@ sealed class SphereHandler : GlobalItem {
         return false;
     }
 
-    private static void MakeEffects(Item item, Color color) {
+    internal static void MakeEffects(Item item, Color color, Vector2? defaultPos = null, bool server = false) {
+        Vector2 position = item == null || item.Center == Vector2.Zero ? defaultPos.Value : item.Center;
         for (int i = 0; i < 20; i++) {
-            int num = Dust.NewDust(item.Center, 1, 1, 309);
+            int num = Dust.NewDust(position, 1, 1, 309);
             Main.dust[num].scale *= 1.5f;
             Main.dust[num].color = color;
         }
-        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Enchant") { PitchVariance = 0.1f }, item.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Enchant") { PitchVariance = 0.1f }, position);
+
+        if (!server && Main.netMode != NetmodeID.SinglePlayer) {
+            MultiplayerSystem.SendPacket(new SphereEffectsPacket(position, color));
+        }
     }
 
     private static void DrawCondor(Item item, SpriteBatch spriteBatch) {
@@ -370,6 +377,8 @@ sealed class SphereHandler : GlobalItem {
 
     public override bool ReforgePrice(Item item, ref int reforgePrice, ref bool canApplyDiscount) {
         if (_spheresToHandle.Contains(item.type)) {
+            reforgePrice = 0;
+
             return false;
         }
 
@@ -381,6 +390,7 @@ sealed class SphereHandler : GlobalItem {
             Main.reforgeItem.ChangeItemType(ModContent.ItemType<SphereOfShock>());
             Player player = Main.LocalPlayer;
             Item item = player.GetItem(Main.myPlayer, Main.reforgeItem, GetItemSettings.GetItemInDropItemCheck);
+            MakeEffects(item, new(60, 222, 190), Main.LocalPlayer.Center);
             if (!item.IsEmpty()) {
                 Main.reforgeItem.position = player.Center;
                 int whoAmI = Item.NewItem(player.GetSource_Misc("reforgeitemdrop"), (int)player.position.X, (int)player.position.Y, player.width, player.height,
@@ -393,8 +403,6 @@ sealed class SphereHandler : GlobalItem {
                 Main.reforgeItem = new Item();
                 return;
             }
-
-            MakeEffects(item, new(60, 222, 190));
 
             PopupText.NewText(PopupTextContext.ItemReforge, reforgeItem, reforgeItem.stack, noStack: true);
             Main.reforgeItem = item;
