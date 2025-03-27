@@ -11,9 +11,9 @@ sealed class RoAServerConfig : ModConfig {
     public static RoAServerConfig Instance => ModContent.GetInstance<RoAServerConfig>();
 
     [Header("Mods.RoA.Configs.GeneralOptionsHeader2")]
-    [DefaultValue(false)]
+    [DefaultValue(true)]
     [ReloadRequired]
-    public bool VanillaRecipes;
+    public bool ChangeVanillaRecipes;
 
     [DefaultValue(true)]
     public bool DropDevSets;
