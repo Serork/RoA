@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Content.Items.Placeable;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -12,6 +13,91 @@ using Terraria.ModLoader;
 namespace RoA.Content.Tiles.Crafting;
 
 sealed class MercuriumOre : ModTile {
+    public override void Load() {
+        On_TileDrawing.DrawTiles_EmitParticles += On_TileDrawing_DrawTiles_EmitParticles;
+    }
+
+    private void On_TileDrawing_DrawTiles_EmitParticles(On_TileDrawing.orig_DrawTiles_EmitParticles orig, TileDrawing self, int j, int i, Tile tileCache, ushort typeCache, short tileFrameX, short tileFrameY, Color tileLight) {
+        if (typeCache == ModContent.TileType<MercuriumOre>()) {
+            var _rand = Items.Weapons.Druidic.PineCone.TileDrawing_rand(self);
+            if (Main.tileShine[typeCache] > 0) {
+                if (tileLight.R <= 20 && tileLight.B <= 20 && tileLight.G <= 20)
+                    return;
+
+                int num36 = tileLight.R;
+                if (tileLight.G > num36)
+                    num36 = tileLight.G;
+
+                if (tileLight.B > num36)
+                    num36 = tileLight.B;
+
+                num36 /= 30;
+                if (_rand.Next(Main.tileShine[typeCache]) >= num36 || ((typeCache == 21 || typeCache == 441) && (tileFrameX < 36 || tileFrameX >= 180) && (tileFrameX < 396 || tileFrameX > 409)) || ((typeCache == 467 || typeCache == 468) && (tileFrameX < 144 || tileFrameX >= 180)))
+                    return;
+
+                Color newColor = Color.White;
+                switch (typeCache) {
+                    case 178: {
+                        switch (tileFrameX / 18) {
+                            case 0:
+                                newColor = new Color(255, 0, 255, 255);
+                                break;
+                            case 1:
+                                newColor = new Color(255, 255, 0, 255);
+                                break;
+                            case 2:
+                                newColor = new Color(0, 0, 255, 255);
+                                break;
+                            case 3:
+                                newColor = new Color(0, 255, 0, 255);
+                                break;
+                            case 4:
+                                newColor = new Color(255, 0, 0, 255);
+                                break;
+                            case 5:
+                                newColor = new Color(255, 255, 255, 255);
+                                break;
+                            case 6:
+                                newColor = new Color(255, 255, 0, 255);
+                                break;
+                        }
+
+                        int num37 = Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, 43, 0f, 0f, 254, newColor, 0.5f);
+                        Main.dust[num37].velocity *= 0f;
+                        return;
+                    }
+                    case 63:
+                        newColor = new Color(0, 0, 255, 255);
+                        break;
+                }
+
+                newColor = Color.Green;
+
+                int num38 = Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, 43, 0f, 0f, 254, newColor, 0.5f);
+                Main.dust[num38].velocity *= 0f;
+            }
+            else if (Main.tileSolid[tileCache.TileType] && Main.shimmerAlpha > 0f && (tileLight.R > 20 || tileLight.B > 20 || tileLight.G > 20)) {
+                int num39 = tileLight.R;
+                if (tileLight.G > num39)
+                    num39 = tileLight.G;
+
+                if (tileLight.B > num39)
+                    num39 = tileLight.B;
+
+                int maxValue = 500;
+                if ((float)_rand.Next(maxValue) < 2f * Main.shimmerAlpha) {
+                    Color white = Color.White;
+                    float scale2 = ((float)num39 / 255f + 1f) / 2f;
+                    int num40 = Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, 43, 0f, 0f, 254, white, scale2);
+                    Main.dust[num40].velocity *= 0f;
+                }
+            }
+            return;
+        }
+
+        orig(self, j, i, tileCache, typeCache, tileFrameX, tileFrameY, tileLight);
+    }
+
     public override void SetStaticDefaults() {
         TileID.Sets.Ore[Type] = true;
 
