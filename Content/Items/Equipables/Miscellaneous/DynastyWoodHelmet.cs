@@ -43,6 +43,10 @@ sealed class DynastyWoodHelmet : ModItem {
         }
 
         public override void OnHitAnything(float x, float y, Entity victim) {
+            if (victim is NPC npc && npc.immortal) {
+                return;
+            }
+
             if (!IsSetBonusActive) {
                 return;
             }
