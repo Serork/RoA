@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -21,6 +21,7 @@ using Terraria.UI.Chat;
 
 namespace RoA.Content.Items.Special;
 
+// IT STINKS
 sealed class SphereHandler : GlobalItem {
     private const float DISTTOALTAR = 150f;
 
@@ -35,6 +36,8 @@ sealed class SphereHandler : GlobalItem {
     private int _flyTime, _flyTimeMax = 200;
     private int _terraTime, _terraTimeMax = 200;
     private int _cdToTransformation;
+
+    private bool _shouldIncreaseFlyTime, _shouldIncreaseTerraTime, _shouldIncreaseStreamTime, _shouldIncreasePyreTime;
 
     private int _breathCDMax {
         get {
@@ -67,6 +70,9 @@ sealed class SphereHandler : GlobalItem {
             if (flag) {
                 break;
             }
+            if (item.beingGrabbed) {
+                continue;
+            }
             DrawStream(item, Main.spriteBatch);
             DrawPyre(item, Main.spriteBatch);
             DrawTerra(item, Main.spriteBatch);
@@ -86,11 +92,18 @@ sealed class SphereHandler : GlobalItem {
 
     public override void PostUpdate(Item item) {
         if (item.beingGrabbed) {
-            _terraTime = _breath = _breath2 = _flyTime = 0;
+            _terraTime = _flyTime = 0;
+
+            _breath = _breathMax;
+            _breath2 = _breathMax2;
         }
         foreach (Player player in Main.ActivePlayers) {
             if (!player.dead && Vector2.Distance(player.Center, item.Center) <= player.GetItemGrabRange(item)) {
-                _terraTime = _breath = _breath2 = _flyTime = 0;
+                _terraTime = _flyTime = 0;
+
+                _breath = _breathMax;
+                _breath2 = _breathMax2;
+
                 break;
             }
         }
@@ -106,25 +119,63 @@ sealed class SphereHandler : GlobalItem {
             return;
         }
 
-        UpdateStream(item);
-        UpdatePyre(item);
-        if (UpdateCondor(item)) {
-            float value = 1f - (float)MathHelper.Max(_flyTime - 100, 0f) / _flyTimeMax;
-            gravity *= value;
-            maxFallSpeed *= value;
-        }
-        if (UpdateTerra(item)) {
-            Vector2 position = AltarHandler.GetAltarPosition().ToWorldCoordinates();
-            position += Helper.VelocityToPoint(position, item.Center, 1f);
-            float value2 = position.Distance(item.Center) / DISTTOALTAR;
-            float value = 1f - (float)_terraTime / _terraTimeMax;
-            value *= value2;
-            gravity *= value;
-            maxFallSpeed *= value;
-        }
+        UpdateStream_Inner(item, ref gravity, ref maxFallSpeed);
+
+        UpdatePyre_Inner(item, ref gravity, ref maxFallSpeed);
+
+        UpdateCondor_Inner(item, ref gravity, ref maxFallSpeed);
+
+        UpdateTerra_Inner(item, ref gravity, ref maxFallSpeed);
     }
 
     #region TERRA
+    private void UpdateTerra_Inner(Item item, ref float gravity, ref float maxFallSpeed) {
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (UpdateTerra(item)) {
+                Vector2 position = AltarHandler.GetAltarPosition().ToWorldCoordinates();
+                position += Helper.VelocityToPoint(position, item.Center, 1f);
+                float value2 = position.Distance(item.Center) / DISTTOALTAR;
+                float value = 1f - (float)_terraTime / _terraTimeMax;
+                value *= value2;
+                gravity *= value;
+                maxFallSpeed *= value;
+            }
+
+            if (_shouldIncreaseTerraTime) {
+                _terraTime += 1;
+                if (_terraTime >= _terraTimeMax) {
+                    _terraTime = 0;
+                    item.ChangeItemType(ModContent.ItemType<SphereOfQuake>());
+                    _cdToTransformation = 100;
+
+                    MakeEffects(item, new(30, 177, 77));
+                }
+
+                MultiplayerSystem.SendPacket(new SphereTerraTimeStatePacket2(item.whoAmI, _terraTime));
+            }
+            else {
+                if (_terraTime != 0) {
+                    MultiplayerSystem.SendPacket(new SphereTerraTimeStatePacket2(item.whoAmI, 0));
+                }
+                _terraTime = 0;
+            }
+        }
+    }
+
+    internal void UpdateTerraTime(int terraTime) {
+        _terraTime = terraTime;
+    }
+
+    internal void ChangeTerraTimeState(Item item, bool value, bool server = false) {
+        if (_shouldIncreaseTerraTime != value) {
+            _shouldIncreaseTerraTime = value;
+
+            if (!server && Main.netMode != NetmodeID.SinglePlayer) {
+                MultiplayerSystem.SendPacket(new SphereTerraTimeStatePacket(item.whoAmI, value));
+            }
+        }
+    }
+
     private bool UpdateTerra(Item item) {
         bool sphere = _spheresToHandle.Contains(item.type);
         if (!sphere) {
@@ -142,20 +193,15 @@ sealed class SphereHandler : GlobalItem {
             item.velocity.Y *= 0.95f;
 
             if (item.beingGrabbed) {
-                _terraTime = 0;
+                ChangeTerraTimeState(item, false);
+                return false;
             }
 
-            _terraTime += 1;
-            if (_terraTime >= _terraTimeMax) {
-                _terraTime = 0;
-                item.ChangeItemType(ModContent.ItemType<SphereOfQuake>());
-                _cdToTransformation = 100;
+            ChangeTerraTimeState(item, true);
 
-                MakeEffects(item, new(30, 177, 77));
-            }
             return true;
         }
-        _terraTime = 0;
+        ChangeTerraTimeState(item, false);
         return false;
     }
 
@@ -213,6 +259,39 @@ sealed class SphereHandler : GlobalItem {
     #endregion
 
     #region CONDOR
+    internal void UpdateFlyTime(int flyTime) {
+        _flyTime = flyTime;
+    }
+
+    private void UpdateCondor_Inner(Item item, ref float gravity, ref float maxFallSpeed) {
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            if (UpdateCondor(item)) {
+                float value = 1f - (float)MathHelper.Max(_flyTime - 100, 0f) / _flyTimeMax;
+                gravity *= value;
+                maxFallSpeed *= value;
+            }
+            if (_shouldIncreaseFlyTime) {
+                _flyTime += 2;
+                if (_flyTime >= 100) {
+                    if (_flyTime - 100 >= _flyTimeMax) {
+                        _flyTime = 0;
+                        item.ChangeItemType(ModContent.ItemType<SphereOfCondor>());
+                        _cdToTransformation = 100;
+
+                        MakeEffects(item, new(59, 183, 208));
+                    }
+                }
+                MultiplayerSystem.SendPacket(new SphereFlyTimeStatePacket2(item.whoAmI, _flyTime));
+            }
+            else {
+                if (_flyTime != 0) {
+                    MultiplayerSystem.SendPacket(new SphereFlyTimeStatePacket2(item.whoAmI, 0));
+                }
+                _flyTime = 0;
+            }
+        }
+    }
+
     private bool UpdateCondor(Item item) {
         bool sphere = _spheresToHandle.Contains(item.type);
         if (!sphere) {
@@ -224,39 +303,41 @@ sealed class SphereHandler : GlobalItem {
             return false;
         }
         if (item.wet || item.lavaWet || _terraTime > 0) {
-            _flyTime = 0;
+            ChangeFlyTimeState(item, false);
             return false;
         }
 
         if ((item.velocity.Y < 0.1f && _flyTime < _flyTimeMax * 0.8f) || item.beingGrabbed) {
-            _flyTime = 0;
+            ChangeFlyTimeState(item, false);
         }
         if (item.velocity.Y < 4f && _flyTime < 50) {
-            _flyTime = 0;
+            ChangeFlyTimeState(item, false);
         }
         else {
             if (item.velocity.Y == 0f) {
-                _flyTime = 0;
+                ChangeFlyTimeState(item, false);
 
                 return false;
             }
 
-            _flyTime += 2;
-            if (_flyTime >= 100) {
-                if (_flyTime - 100 >= _flyTimeMax) {
-                    _flyTime = 0;
-                    item.ChangeItemType(ModContent.ItemType<SphereOfCondor>());
-                    _cdToTransformation = 100;
-
-                    MakeEffects(item, new(59, 183, 208));
-                }
-            }
+            ChangeFlyTimeState(item, true);
 
             return true;
         }
 
-        _flyTime = 0;
+        ChangeFlyTimeState(item, false);
+
         return false;
+    }
+
+    internal void ChangeFlyTimeState(Item item, bool value, bool server = false) {
+        if (_shouldIncreaseFlyTime != value) {
+            _shouldIncreaseFlyTime = value;
+
+            if (!server && Main.netMode != NetmodeID.SinglePlayer) {
+                MultiplayerSystem.SendPacket(new SphereFlyTimeStatePacket(item.whoAmI, value));
+            }
+        }
     }
 
     internal static void MakeEffects(Item item, Color color, Vector2? defaultPos = null, bool server = false) {
@@ -412,7 +493,56 @@ sealed class SphereHandler : GlobalItem {
     #endregion
 
     #region STREAM
-    private void UpdateStream(Item item) {
+    internal void UpdateStreamTime(int streamTime, int streamTime2) {
+        _breath = streamTime;
+        _breathCD = streamTime2;
+    }
+
+    internal void ChangeStreamTimeState(Item item, bool value, bool server = false) {
+        if (_shouldIncreaseStreamTime != value) {
+            _shouldIncreaseStreamTime = value;
+
+            if (!server && Main.netMode != NetmodeID.SinglePlayer) {
+                MultiplayerSystem.SendPacket(new SphereStreamTimeStatePacket(item.whoAmI, value));
+            }
+        }
+    }
+
+    private void UpdateStream_Inner(Item item, ref float gravity, ref float maxFallSpeed) {
+        UpdateStream(item, true);
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            UpdateStream(item);
+
+            if (_shouldIncreaseStreamTime) {
+                _breathCD++;
+                if (_breathCD >= _breathCDMax) {
+                    _breathCD = 0;
+                    _breath -= 5;
+                    if (_breath <= 0) {
+                        _breath = 0;
+
+                        item.ChangeItemType(ModContent.ItemType<SphereOfStream>());
+                        _cdToTransformation = 100;
+
+                        MakeEffects(item, new(57, 136, 232));
+                    }
+                }
+
+                MultiplayerSystem.SendPacket(new SphereStreamTimeStatePacket2(item.whoAmI, _breath, _breathCD));
+            }
+            else {
+                if (_breath != _breathMax) {
+                    _breath = _breathMax;
+
+                    MultiplayerSystem.SendPacket(new SphereStreamTimeStatePacket2(item.whoAmI, _breath, 0));
+                }
+
+                _breathCD = 0;
+            }
+        }
+    }
+
+    private void UpdateStream(Item item, bool flag = false) {
         bool sphere = _spheresToHandle.Contains(item.type);
         if (!sphere) {
             return;
@@ -420,7 +550,7 @@ sealed class SphereHandler : GlobalItem {
         bool streamSphere = item.type == ModContent.ItemType<SphereOfStream>();
         bool validToHandle = sphere && !streamSphere;
         if (item.wet && !item.lavaWet && !item.shimmerWet) {
-            if (streamSphere) {
+            if (streamSphere && flag) {
                 if (item.velocity.Y > 0.86f) {
                     item.velocity.Y *= 0.9f;
                 }
@@ -430,36 +560,28 @@ sealed class SphereHandler : GlobalItem {
                 }
             }
             if (validToHandle) {
-                item.velocity *= 0.9f;
+                if (flag) {
+                    item.velocity *= 0.9f;
+                }
                 if (item.velocity.Length() < 1f) {
-                    item.velocity *= 0.95f;
-
-                    if (item.beingGrabbed) {
-                        _breathCD = _breath = 0;
+                    if (flag) {
+                        item.velocity *= 0.95f;
                     }
 
-                    _breathCD++;
-                    if (_breathCD >= _breathCDMax) {
-                        _breathCD = 0;
-                        _breath -= 5;
-                        if (_breath <= 0) {
-                            _breath = 0;
+                    if (!flag) {
+                        if (item.beingGrabbed) {
+                            ChangeStreamTimeState(item, false);
 
-                            item.ChangeItemType(ModContent.ItemType<SphereOfStream>());
-                            _cdToTransformation = 100;
-
-                            MakeEffects(item, new(57, 136, 232));
+                            return;
                         }
+
+                        ChangeStreamTimeState(item, true);
                     }
                 }
             }
         }
-        else if (!streamSphere) {
-            if (_breath != _breathMax) {
-                _breath = _breathMax;
-            }
-
-            _breathCD = 0;
+        else if (!streamSphere && flag) {
+            ChangeStreamTimeState(item, false);
         }
     }
 
@@ -513,7 +635,56 @@ sealed class SphereHandler : GlobalItem {
     #endregion
 
     #region PYRE
-    private void UpdatePyre(Item item) {
+    internal void UpdatePyreTime(int streamTime, int streamTime2) {
+        _breath2 = streamTime;
+        _breathCD2 = streamTime2;
+    }
+
+    internal void ChangePyreTimeState(Item item, bool value, bool server = false) {
+        if (_shouldIncreasePyreTime != value) {
+            _shouldIncreasePyreTime = value;
+
+            if (!server && Main.netMode != NetmodeID.SinglePlayer) {
+                MultiplayerSystem.SendPacket(new SpherePyreTimeStatePacket(item.whoAmI, value));
+            }
+        }
+    }
+
+    private void UpdatePyre_Inner(Item item, ref float gravity, ref float maxFallSpeed) {
+        UpdatePyre(item, true);
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            UpdatePyre(item);
+
+            if (_shouldIncreasePyreTime) {
+                _breathCD2++;
+                if (_breathCD2 >= _breathCDMax) {
+                    _breathCD2 = 0;
+                    _breath2 -= 5;
+                    if (_breath2 <= 0) {
+                        _breath2 = 0;
+
+                        item.ChangeItemType(ModContent.ItemType<SphereOfPyre>());
+                        _cdToTransformation = 100;
+
+                        MakeEffects(item, new(249, 115, 43));
+                    }
+                }
+
+                MultiplayerSystem.SendPacket(new SpherePyreTimeStatePacket2(item.whoAmI, _breath2, _breathCD2));
+            }
+            else {
+                if (_breath2 != _breathMax2) {
+                    _breath2 = _breathMax2;
+
+                    MultiplayerSystem.SendPacket(new SpherePyreTimeStatePacket2(item.whoAmI, _breath2, 0));
+                }
+
+                _breathCD2 = 0;
+            }
+        }
+    }
+
+    private void UpdatePyre(Item item, bool flag = false) {
         bool sphere = _spheresToHandle.Contains(item.type);
         if (!sphere) {
             return;
@@ -521,7 +692,7 @@ sealed class SphereHandler : GlobalItem {
         bool pyreSphere = item.type == ModContent.ItemType<SphereOfPyre>();
         bool validToHandle = sphere && !pyreSphere;
         if (item.wet && item.lavaWet && !item.shimmerWet) {
-            if (pyreSphere) {
+            if (pyreSphere && flag) {
                 if (item.velocity.Y > 0.86f) {
                     item.velocity.Y *= 0.9f;
                 }
@@ -531,36 +702,28 @@ sealed class SphereHandler : GlobalItem {
                 }
             }
             if (validToHandle) {
-                item.velocity *= 0.9f;
+                if (flag) {
+                    item.velocity *= 0.9f;
+                }
                 if (item.velocity.Length() < 1f) {
-                    item.velocity *= 0.95f;
-
-                    if (item.beingGrabbed) {
-                        _breathCD2 = _breath2 = 0;
+                    if (flag) {
+                        item.velocity *= 0.95f;
                     }
 
-                    _breathCD2++;
-                    if (_breathCD2 >= _breathCDMax) {
-                        _breathCD2 = 0;
-                        _breath2 -= 5;
-                        if (_breath2 <= 0) {
-                            _breath2 = 0;
+                    if (!flag) {
+                        if (item.beingGrabbed) {
+                            ChangePyreTimeState(item, false);
 
-                            item.ChangeItemType(ModContent.ItemType<SphereOfPyre>());
-                            _cdToTransformation = 100;
-
-                            MakeEffects(item, new(249, 115, 43));
+                            return;
                         }
+
+                        ChangePyreTimeState(item, true);
                     }
                 }
             }
         }
-        else if (!pyreSphere) {
-            if (_breath2 != _breathMax2) {
-                _breath2 = _breathMax2;
-            }
-
-            _breathCD2 = 0;
+        else if (!pyreSphere && flag) {
+            ChangePyreTimeState(item, false);
         }
     }
 
