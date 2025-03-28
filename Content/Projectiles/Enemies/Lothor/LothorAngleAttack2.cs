@@ -67,7 +67,7 @@ sealed class LothorAngleAttack2 : ModProjectile {
 
         Projectile.localAI[2] = 0f;
 
-        if (Collision.SolidCollision(Projectile.position, 20, 20)) {
+        if (Collision.SolidCollision(Projectile.Center - Vector2.One * 5, 10, 10)) {
             Projectile.position.Y -= 5f;
         }
     }

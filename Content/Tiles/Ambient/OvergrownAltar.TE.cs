@@ -37,7 +37,8 @@ sealed class OvergrownAltarTE : ModTileEntity {
         float counting = MathHelper.Clamp(1f - Counting, 0f, 1f);
         float factor = AltarHandler.GetAltarFactor();
         bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
-        if (flag6 || NPC.AnyNPCs(ModContent.NPCType<Lothor>())) {
+        bool flag7 = NPC.AnyNPCs(ModContent.NPCType<Lothor>());
+        if (flag6 || flag7) {
             factor = 1f;
         }
         Counting2 = MathHelper.Lerp(Counting2, counting, factor > 0.5f ? Math.Max(0.1f, counting * 0.1f) : counting < 0.5f ? 0.075f : Math.Max(0.05f, counting * 0.025f));
@@ -48,6 +49,9 @@ sealed class OvergrownAltarTE : ModTileEntity {
                 float dist = Vector2.Distance(Main.LocalPlayer.Center, Position.ToWorldCoordinates());
                 float dist2 = MathHelper.Clamp(1f - dist / 1400f, 0f, 1f);
                 volume *= dist2;
+                if (flag7) {
+                    volume *= 0.5f;
+                }
                 var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = volume };
                 var sound = SoundEngine.FindActiveSound(in style);
                 if (Main.netMode == NetmodeID.Server) {
