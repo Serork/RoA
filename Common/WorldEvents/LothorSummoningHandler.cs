@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -505,6 +508,13 @@ sealed class LothorSummoningHandler : ModSystem {
             _summonedNaturally = false;
             _shake = true;
             LothorShake.shake = true;
+
+            if (Main.netMode == NetmodeID.SinglePlayer) {
+                NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y, ModContent.NPCType<DruidSoul2>());
+            }
+            else {
+                MultiplayerSystem.SendPacket(new SpawnDruidSoul2Packet(Main.LocalPlayer.Center));
+            }
         }
         else if (_preArrivedLothorBossTimer >= 3f && !ActiveMessages.Item1) {
             ActiveMessages.Item1 = true;
