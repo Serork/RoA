@@ -40,6 +40,9 @@ sealed class LothorSummoningHandler : ModSystem {
     }
 
     private void On_Main_SetBackColor(On_Main.orig_SetBackColor orig, Main.InfoToSetBackColor info, out Color sunColor, out Color moonColor) {
+        orig(info, out sunColor, out moonColor);
+        return;
+
         if ((!(PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2) || !Main.LocalPlayer.InModBiome<BackwoodsBiome>()) && _alpha <= 0f) {
             orig(info, out sunColor, out moonColor);
             return;
@@ -58,7 +61,14 @@ sealed class LothorSummoningHandler : ModSystem {
                 _alpha *= 1.01f;
             }
         }
-        bool isDayTime = true;
+        bool isDayTime = Main.dayTime;
+        if (!isDayTime) {
+            Main.time = MathHelper.Lerp((float)Main.time, (float)Main.nightLength, 0.05f);
+        }
+        else {
+            Main.time = MathHelper.Lerp((float)Main.time, (float)Main.dayLength / 2, 0.05f);
+
+        }
         double num = (float)MathHelper.Lerp((float)Main.time, 27000, _alpha);
         Microsoft.Xna.Framework.Color bgColorToSet = Microsoft.Xna.Framework.Color.White;
         sunColor = Microsoft.Xna.Framework.Color.White;
