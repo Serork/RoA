@@ -188,7 +188,8 @@ sealed class SapSlime : ModNPC {
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo) {
         int y = spawnInfo.SpawnTileY;
-        return ModContent.GetInstance<SapTileCount>().isSapActive ? MathHelper.Clamp((float)ModContent.GetInstance<SapTileCount>().tapperTilesCount / 6f, 0f, 2f) / 5f : 0f;
+        return ModContent.GetInstance<SapTileCount>().isSapActive ?
+            MathHelper.Clamp((float)ModContent.GetInstance<SapTileCount>().tapperTilesCount / 6f, 0f, 2f) / 5f : 0f;
     }
 }
 
