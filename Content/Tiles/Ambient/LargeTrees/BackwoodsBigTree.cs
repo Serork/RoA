@@ -242,9 +242,9 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
                     bool flag3 = true;
                     for (int x = -1; x < 2; x++) {
                         for (int y = -1; y < 2; y++) {
-                            if (x != 0 && y != 0 && Math.Abs(x) != Math.Abs(y)) {
+                            if (x != 0 && y != 0) {
                                 Tile tile3 = WorldGenHelper.GetTileSafely(checkX + x, checkY + y);
-                                if (!tile3.HasTile || tile3.TileType != TileID.Trees) {
+                                if (tile3.TileType == TileID.Trees || tile3.TileType == ModContent.TileType<TreeBranch>()) {
                                     flag3 = false;
                                 }
                             }
