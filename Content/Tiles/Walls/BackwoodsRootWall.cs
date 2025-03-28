@@ -13,6 +13,8 @@ class BackwoodsRootWall : ModWall {
         AddMapEntry(new Color(59, 46, 42));
 
         Main.wallHouse[Type] = true;
+
+        Main.wallLight[Type] = true;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {
@@ -31,6 +33,8 @@ class BackwoodsRootWall2 : BackwoodsRootWall {
         AddMapEntry(new Color(59, 46, 42));
 
         WallID.Sets.WallSpreadStopsAtAir[Type] = true;
+
+        Main.wallLight[Type] = true;
     }
 
     public override bool CreateDust(int i, int j, ref int type) {
