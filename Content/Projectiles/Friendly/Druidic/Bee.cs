@@ -134,7 +134,7 @@ sealed class Bee : NatureProjectile {
             targetPositionX = targetPosition.X;
             targetPositionY = targetPosition.Y;
         }
-        if (!targetFoundManually) {
+        if (!targetFoundManually && !targetFoundByOwner) {
             targetPositionX = Projectile.position.X + (float)(Projectile.width / 2) + Projectile.velocity.X * 100f;
             targetPositionY = Projectile.position.Y + (float)(Projectile.height / 2) + Projectile.velocity.Y * 100f;
         }

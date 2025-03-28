@@ -99,13 +99,11 @@ sealed class SmallMoth : ModProjectile {
             NPC ownerMinionAttackTargetNPC2 = Projectile.OwnerMinionAttackTargetNPC;
             if (ownerMinionAttackTargetNPC2 != null && ownerMinionAttackTargetNPC2.CanBeChasedBy(this)) {
                 float distanceBetween = Vector2.Distance(ownerMinionAttackTargetNPC2.Center, Projectile.Center);
-                float neededDistance = targetDistance;
+                float neededDistance = 800f;
                 if (distanceBetween < neededDistance && !targetFoundByOwner) {
-                    if (Collision.CanHit(Projectile.Center, 1, 1, ownerMinionAttackTargetNPC2.Center, 1, 1)) {
-                        targetDistance = distanceBetween;
-                        targetPosition = ownerMinionAttackTargetNPC2.Center;
-                        targetFoundByOwner = true;
-                    }
+                    targetDistance = distanceBetween;
+                    targetPosition = ownerMinionAttackTargetNPC2.Center;
+                    targetFoundByOwner = true;
                 }
             }
 
@@ -130,7 +128,7 @@ sealed class SmallMoth : ModProjectile {
             targetPositionX = targetPosition.X;
             targetPositionY = targetPosition.Y;
         }
-        if (!targetFoundManually) {
+        if (!targetFoundManually && !targetFoundByOwner) {
             targetPositionX = Projectile.position.X + (float)(Projectile.width / 2) + Projectile.velocity.X * 100f;
             targetPositionY = Projectile.position.Y + (float)(Projectile.height / 2) + Projectile.velocity.Y * 100f;
         }
