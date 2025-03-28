@@ -4,6 +4,7 @@ using RoA.Common.Sets;
 using RoA.Core;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
@@ -18,6 +19,8 @@ sealed class FlametrackerDebuff : ModBuff {
         Main.debuff[Type] = true;
 
         BuffSets.Debuffs[Type] = true;
+
+        BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
     }
 
     public override void Update(NPC npc, ref int buffIndex) => npc.GetGlobalNPC<FlametrackerDebuffNPC>().flametrackerDebuff = true;

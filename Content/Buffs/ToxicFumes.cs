@@ -4,6 +4,7 @@ using RoA.Core;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -15,6 +16,8 @@ sealed class ToxicFumesNoTimeDisplay : ToxicFumes {
     public override void SetStaticDefaults() {
         base.SetStaticDefaults();
         Main.buffNoTimeDisplay[Type] = true;
+
+        BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
     }
 }
 
@@ -27,6 +30,7 @@ class ToxicFumes : ModBuff {
         Main.debuff[Type] = true;
         Main.buffNoTimeDisplay[Type] = true;
 
+        BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
     }
 
     public override void Update(Player player, ref int buffIndex) {
