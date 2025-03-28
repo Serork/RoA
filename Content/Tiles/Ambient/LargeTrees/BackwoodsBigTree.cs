@@ -236,7 +236,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         PlaceTrunk(pointToStartPlacingTrunk, height, placeRand, gen);
 
         for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
-            for (int checkX = i - 3; checkX < i + 5; checkX++) {
+            for (int checkX = i - 4; checkX < i + 6; checkX++) {
                 Tile tile2 = WorldGenHelper.GetTileSafely(checkX, checkY);
                 if (tile2.TileType == TileID.Trees || tile2.TileType == ModContent.TileType<TreeBranch>()) {
                     bool flag3 = true;
