@@ -38,6 +38,7 @@ sealed class NexusGateway : ModTile {
         }
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinatePadding = 2;
+        TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(0, 120, 154), CreateMapEntryName());
