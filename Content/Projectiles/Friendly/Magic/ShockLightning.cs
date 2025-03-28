@@ -112,7 +112,7 @@ sealed class ShockLightning : ModProjectile {
     }
 
     private void UpdateSegments() {
-        uint seed = (uint)(Projectile.position.GetHashCode());
+        uint seed = (uint)(Projectile.position.GetHashCode() + Main.time);
         UnifiedRandom random = new((int)seed);
         Player player = Main.player[Projectile.owner];
         Vector2 source = player.itemLocation + (new Vector2(0f, 3f) * player.direction).RotatedBy(Projectile.velocity.ToRotation()) + Utils.SafeNormalize(Projectile.velocity, Vector2.One) * (player.HeldItem.width + player.HeldItem.width / 4);
@@ -274,7 +274,7 @@ sealed class ShockLightning : ModProjectile {
                 spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.02f, SpriteEffects.None, 0f);
                 spriteBatch.EndBlendState();
             }
-            spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.85f, SpriteEffects.None, 0f);
+            //spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.85f, SpriteEffects.None, 0f);
             spriteBatch.Draw(_endTexture.Value, source - Main.screenPosition, null, color, rotation, capOrigin, thicknessScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(_endTexture.Value, dest - Main.screenPosition, null, color, rotation + MathHelper.Pi, capOrigin, thicknessScale, SpriteEffects.None, 0f);
         }
