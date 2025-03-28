@@ -180,7 +180,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = minY; j < Bottom - EdgeY / 2; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _dirtTileType) || WorldGenHelper.ActiveTile(i, j, _stoneTileType) ||
                     WorldGenHelper.ActiveTile(i, j, WallID.DirtUnsafe)) &&
-                    _random.NextChance(0.0035)) {
+                    _random.NextChance(0.0035) && _random.NextChance(0.75)) {
                     WallRoot(i, j);
                 }
             }
@@ -189,7 +189,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = Left - 25; i < Right + 25; i++) {
             for (int j = minY; j < Bottom - EdgeY / 2; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _mossTileType)) &&
-                    _random.NextChance(0.025)) {
+                    _random.NextChance(0.025) && _random.NextChance(0.75)) {
                     MossRoot(i, j);
                 }
             }
