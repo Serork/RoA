@@ -40,10 +40,13 @@ sealed class LothorSummoningHandler : ModSystem {
     }
 
     private void On_Main_SetBackColor(On_Main.orig_SetBackColor orig, Main.InfoToSetBackColor info, out Color sunColor, out Color moonColor) {
-        if ((!(PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2) || !Main.LocalPlayer.InModBiome<BackwoodsBiome>()) && _alpha <= 0f) {
-            orig(info, out sunColor, out moonColor);
-            return;
-        }
+        //if ((!(PreArrivedLothorBoss.Item1 || PreArrivedLothorBoss.Item2) || !Main.LocalPlayer.InModBiome<BackwoodsBiome>()) && _alpha <= 0f) {
+        //    orig(info, out sunColor, out moonColor);
+        //    return;
+        //}
+
+        orig(info, out sunColor, out moonColor);
+        return;
 
         bool flag = Main.LocalPlayer.InModBiome<BackwoodsBiome>();
         if (!flag) {
