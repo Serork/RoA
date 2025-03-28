@@ -137,6 +137,12 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     private void NormalBehaviourHandler() {
+        bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
+        if (NPC.AnyNPCs(ModContent.NPCType<Lothor>()) || flag6) {
+            NPC.KillNPC();
+            return;
+        }
+
         Movement();
 
         if (NPC.Opacity <= 0.05f && Helper.EaseInOut3(AltarHandler.GetAltarStrength()) > 0.925f) {
