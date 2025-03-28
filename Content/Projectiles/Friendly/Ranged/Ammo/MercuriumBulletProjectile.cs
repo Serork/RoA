@@ -39,6 +39,14 @@ sealed class MercuriumBulletProjectile : ModProjectile {
     }
 
     public override void AI() {
+        if (Main.rand.Next(6) == 0) {
+            int num179 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 279
+                , Projectile.velocity.X, Projectile.velocity.Y, 100, default(Color), 1.2f);
+            Main.dust[num179].noLightEmittence = true;
+            Main.dust[num179].noGravity = true;
+            Main.dust[num179].velocity *= 0.2f;
+        }
+
         if (Main.rand.NextBool(3) && Vector2.Distance(Projectile.position, Main.player[Projectile.owner].position) > 100f) {
             int num67 = Dust.NewDust(Projectile.position - Vector2.One * 18f - Projectile.velocity * 5f, 24, 24, ModContent.DustType<Dusts.ToxicFumes>(), 0f, 0f, Alpha: 50);
             Main.dust[num67].noGravity = true;

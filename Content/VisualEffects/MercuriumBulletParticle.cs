@@ -38,9 +38,9 @@ sealed class MercuriumBulletParticle : VisualEffect<MercuriumBulletParticle> {
         Color color4 = color3 * 1f * 0.5f;
         color4.G = (byte)(color4.G * (double)1f);
         color4.B = (byte)(color4.R * (0.25 + (double)1f * 0.75));
-        spriteBatch.Draw(Texture, position, null, color4, MathHelper.PiOver2 + Rotation, origin, _scale * 0.6f, effects, 0f);
-        spriteBatch.Draw(Texture, position, null, color3, Rotation, origin, _scale * 0.6f, effects, 0f);
-        spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, _scale * 0.3f, effects, 0f);
-        spriteBatch.Draw(Texture, position, null, color4, Rotation, origin, _scale * 0.3f, effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color4, MathHelper.PiOver2 + Rotation, origin, _scale * 0.3f * new Vector2(1f, 2.5f), effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color3, Rotation, origin, _scale * 0.3f * new Vector2(1f, 2.5f), effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, _scale * 0.3f * new Vector2(2f, 1f), effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color4, Rotation, origin, _scale * 0.3f * new Vector2(2f, 2f), effects, 0f);
     }
 }
