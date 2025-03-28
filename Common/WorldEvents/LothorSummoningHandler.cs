@@ -519,6 +519,10 @@ sealed class LothorSummoningHandler : ModSystem {
             else {
                 MultiplayerSystem.SendPacket(new SpawnDruidSoul2Packet(Main.LocalPlayer.Center));
             }
+
+            if (Main.netMode == NetmodeID.Server) {
+                NetMessage.SendData(MessageID.WorldData);
+            }
         }
         else if (_preArrivedLothorBossTimer >= 3f && !ActiveMessages.Item1) {
             ActiveMessages.Item1 = true;
