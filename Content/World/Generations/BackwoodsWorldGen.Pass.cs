@@ -174,7 +174,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step_AddWallRootsAndMoss() {
-        int minY = (int)Main.worldSurface - 20;
+        int minY = (int)Main.worldSurface + 10;
 
         for (int i = Left - 25; i < Right + 25; i++) {
             for (int j = minY; j < Bottom - EdgeY / 2; j++) {
