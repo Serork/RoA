@@ -8,6 +8,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,6 +19,8 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RoA.Common.Druid.Forms;
 
@@ -100,6 +103,65 @@ abstract class BaseForm : ModMount {
         On_Player.HorizontalMovement += On_Player_HorizontalMovement;
         Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = RoA.Detour(typeof(ExtraJumpLoader).GetMethod(nameof(ExtraJumpLoader.UpdateHorizontalSpeeds), BindingFlags.Public | BindingFlags.Static),
             typeof(BaseForm).GetMethod(nameof(ExtraJumpLoader_UpdateHorizontalSpeeds), BindingFlags.NonPublic | BindingFlags.Static));
+        On_Player.UpdateJumpHeight += On_Player_UpdateJumpHeight;
+    }
+
+    protected virtual bool ShouldApplyUpdateJumpHeightLogic { get; }
+
+    private void On_Player_UpdateJumpHeight(On_Player.orig_UpdateJumpHeight orig, Player self) {
+        if (self.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
+            if (mountData != null && !mountData.ShouldApplyUpdateJumpHeightLogic) {
+                bool flag = false;
+                if (flag) {
+                    Player.jumpHeight = self.mount.JumpHeight(self, self.velocity.X);
+                    Player.jumpSpeed = self.mount.JumpSpeed(self, self.velocity.X);
+                }
+                else {
+                    if (self.jumpBoost) {
+                        Player.jumpHeight = 20;
+                        Player.jumpSpeed = 6.51f;
+                    }
+
+                    if (self.empressBrooch)
+                        self.jumpSpeedBoost += 1.8f;
+
+                    if (self.frogLegJumpBoost) {
+                        self.jumpSpeedBoost += 2.4f;
+                        self.extraFall += 15;
+                    }
+
+                    if (self.moonLordLegs) {
+                        self.jumpSpeedBoost += 1.8f;
+                        self.extraFall += 10;
+                        Player.jumpHeight++;
+                    }
+
+                    if (self.wereWolf) {
+                        Player.jumpHeight += 2;
+                        Player.jumpSpeed += 0.2f;
+                    }
+
+                    if (self.portableStoolInfo.IsInUse)
+                        Player.jumpHeight += 5;
+
+                    Player.jumpSpeed += self.jumpSpeedBoost;
+                }
+
+                if (self.sticky) {
+                    Player.jumpHeight /= 10;
+                    Player.jumpSpeed /= 5f;
+                }
+
+                if (self.dazed) {
+                    Player.jumpHeight /= 5;
+                    Player.jumpSpeed /= 2f;
+                }
+                return;
+            }
+        }
+
+        orig(self);
     }
 
     public override void Unload() => Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = null;

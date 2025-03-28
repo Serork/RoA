@@ -22,6 +22,8 @@ namespace RoA.Content.Forms;
 sealed class LilPhoenixForm : BaseForm {
     public override SoundStyle? HurtSound => SoundID.NPCHit31;
 
+    protected override bool ShouldApplyUpdateJumpHeightLogic => true;
+
     public override Vector2 WreathOffset => new(0f, 5.5f);
 
     protected override Color LightingColor {
@@ -408,6 +410,9 @@ sealed class LilPhoenixForm : BaseForm {
             bool flag = plr._phoenixJumped || plr._phoenixJumped2;
             if (flag || plr._phoenixJumpsCD > 0) {
                 player.releaseJump = false;
+            }
+            else if (player.controlJump && player.releaseJump) {
+                plr._phoenixJustJumped = plr._phoenixJustJumpedForAnimation = true;
             }
         }
         else {
