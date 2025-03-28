@@ -1872,7 +1872,7 @@ BackwoodsWaterFountain: {
 }
 
 MercuriumZipper: {
-	DisplayName: Ртутная молния
+	DisplayName: Ртутная застёжка
 	Tooltip:
 		'''
 		{$CommonItemTooltip.SummonTagDamage}
@@ -1902,16 +1902,16 @@ RoyalQualityHoney: {
 }
 
 ElderwoodBeam: {
-	// DisplayName: Everwood Beam
+	DisplayName: Балка из вечного дерева
 	// Tooltip: ""
 }
 
 TealMossWall: {
-	// DisplayName: Teal Moss Wall
+	DisplayName: Бирюзовая замщелая стена
 	// Tooltip: ""
 }
 
 BackwoodsRootWall: {
-	// DisplayName: Backwoods Root Wall
+	DisplayName: Стена с чащобными корнями
 	// Tooltip: ""
 }

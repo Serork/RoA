@@ -66,4 +66,4 @@ DruidPotentialDamageModifierMult: "{0:+0;-#}% к возможному урону
 DruidSpeedModifier: "{0:+0;-#}% к скорости"
 DruidPotentialSpeedModifier: "{0:+0;-#}% к возможной скорости"
 DruidFillingRateModifierMult: "{0:+0;-#}% к скорость заполнения"
-// DruidSizeModifier: "{0:+0;-#}% size"
+DruidSizeModifier: "{0:+0;-#}% к размеру"
