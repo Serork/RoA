@@ -235,28 +235,6 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         PlaceBegin(i, j, height, placeRand, out Point pointToStartPlacingTrunk, gen);
         PlaceTrunk(pointToStartPlacingTrunk, height, placeRand, gen);
 
-        for (int checkY = j - (int)(height * 3f); checkY < j + 1; checkY++) {
-            for (int checkX = i - 4; checkX < i + 6; checkX++) {
-                Tile tile2 = WorldGenHelper.GetTileSafely(checkX, checkY);
-                if (tile2.TileType == TileID.Trees || tile2.TileType == ModContent.TileType<TreeBranch>()) {
-                    bool flag3 = true;
-                    for (int x = -1; x < 2; x++) {
-                        for (int y = -1; y < 2; y++) {
-                            if (x != 0 || y != 0) {
-                                Tile tile3 = WorldGenHelper.GetTileSafely(checkX + x, checkY + y);
-                                if (tile3.TileType == TileID.Trees || tile3.TileType == ModContent.TileType<TreeBranch>()) {
-                                    flag3 = false;
-                                }
-                            }
-                        }
-                    }
-                    if (flag3) {
-                        tile2.HasTile = false;
-                    }
-                }
-            }
-        }
-
         return true;
     }
 
@@ -578,6 +556,27 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             for (int checkX = i - 1; checkX < i + 3; checkX++) {
                 Tile tile = WorldGenHelper.GetTileSafely(checkX, checkY);
                 tile.HasTile = false;
+            }
+        }
+        for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
+            for (int checkX = i - 4; checkX < i + 6; checkX++) {
+                Tile tile2 = WorldGenHelper.GetTileSafely(checkX, checkY);
+                if (tile2.TileType == TileID.Trees || tile2.TileType == ModContent.TileType<TreeBranch>()) {
+                    bool flag3 = true;
+                    for (int x = -1; x < 2; x++) {
+                        for (int y = -1; y < 2; y++) {
+                            if (Math.Abs(x) != Math.Abs(y)) {
+                                Tile tile3 = WorldGenHelper.GetTileSafely(checkX + x, checkY + y);
+                                if (tile3.HasTile && (tile3.TileType == TileID.Trees || tile3.TileType == ModContent.TileType<TreeBranch>())) {
+                                    flag3 = false;
+                                }
+                            }
+                        }
+                    }
+                    if (flag3) {
+                        tile2.HasTile = false;
+                    }
+                }
             }
         }
         PlaceTileInternal(i - 1, j, 0, getFrameYForStart(), placeRand, gen);
