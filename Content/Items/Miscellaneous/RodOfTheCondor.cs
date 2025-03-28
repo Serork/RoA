@@ -200,6 +200,7 @@ sealed class RodOfTheCondor : ModItem {
                             _wingFrame = num29;
                     }
                 }
+                Player.blockExtraJumps = true;
                 Player.suffocating = false;
                 Player.suffocateDelay = 0;
                 Player.jump = 0;
