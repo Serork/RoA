@@ -86,7 +86,6 @@ sealed class LilPhoenixForm : BaseForm {
         MountData.fatigueMax = 0;
         MountData.jumpHeight = 15;
         MountData.jumpSpeed = 6f;
-        MountData.blockExtraJumps = false;
         MountData.totalFrames = 12;
         MountData.constantJump = false;
         MountData.usesHover = false;
@@ -406,7 +405,10 @@ sealed class LilPhoenixForm : BaseForm {
                     }
                 }
             }
-            player.releaseJump = false;
+            bool flag = plr._phoenixJumped || plr._phoenixJumped2;
+            if (flag || plr._phoenixJumpsCD > 0) {
+                player.releaseJump = false;
+            }
         }
         else {
             plr._phoenixJump = 0;

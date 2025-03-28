@@ -146,6 +146,8 @@ abstract class BaseForm : ModMount {
         MountData.yOffset = -10;
         MountData.playerHeadOffset = -10;
 
+        MountData.blockExtraJumps = false;
+
         SafeSetDefaults();
 
         MountData.playerYOffsets = Enumerable.Repeat(0, MountData.totalFrames).ToArray();
