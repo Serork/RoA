@@ -4,6 +4,7 @@ using RoA.Common;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.WorldEvents;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -35,6 +36,10 @@ sealed class OvergrownAltarTE : ModTileEntity {
     public override void Update() {
         float counting = MathHelper.Clamp(1f - Counting, 0f, 1f);
         float factor = AltarHandler.GetAltarFactor();
+        bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
+        if (flag6 || NPC.AnyNPCs(ModContent.NPCType<Lothor>())) {
+            factor = 1f;
+        }
         Counting2 = MathHelper.Lerp(Counting2, counting, factor > 0.5f ? Math.Max(0.1f, counting * 0.1f) : counting < 0.5f ? 0.075f : Math.Max(0.05f, counting * 0.025f));
         Counting += TimeSystem.LogicDeltaTime / (3f - MathHelper.Min(0.9f, factor) * 2.5f) * Math.Max(0.05f, Counting) * 7f;
         if (Counting > 0.8f) {
