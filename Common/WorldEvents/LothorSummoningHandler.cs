@@ -463,13 +463,13 @@ sealed class LothorSummoningHandler : ModSystem {
 
     public override void NetSend(BinaryWriter writer) {
         writer.Write(PreArrivedLothorBoss.Item1);
-        writer.Write(PreArrivedLothorBoss.Item2);
+        //writer.Write(PreArrivedLothorBoss.Item2);
         writer.Write(_summonedNaturally);
     }
 
     public override void NetReceive(BinaryReader reader) {
         PreArrivedLothorBoss.Item1 = reader.ReadBoolean();
-        PreArrivedLothorBoss.Item2 = reader.ReadBoolean();
+        //PreArrivedLothorBoss.Item2 = reader.ReadBoolean();
         _summonedNaturally = reader.ReadBoolean();
     }
 
