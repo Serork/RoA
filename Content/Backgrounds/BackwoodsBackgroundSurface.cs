@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Utilities.Extensions;
 using RoA.Common.WorldEvents;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 
 using System;
@@ -93,7 +94,11 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         pushBGTopHack = menuOffset;
         pushBGTopHack += offset;
         pushBGTopHack += offset2;
-        float captureOffset = 0f;
+        float captureOffset = CaptureManager.Instance.IsCapturing && 
+            CaptureBiome.GetCaptureBiome(CaptureInterface.Settings.BiomeChoiceIndex).BackgroundIndex == ModContent.GetInstance<BackwoodsBackgroundSurface>().Slot ? 600f : 0f;
+        if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
+            captureOffset = 0;
+        }
         if (canBGDraw) {
             var bgScale = 1.25f;
             var bgParallax = 0.3;
