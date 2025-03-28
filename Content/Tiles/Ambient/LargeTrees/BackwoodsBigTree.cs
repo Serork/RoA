@@ -236,7 +236,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
         PlaceTrunk(pointToStartPlacingTrunk, height, placeRand, gen);
 
         for (int checkY = j - (int)(height * 2f); checkY < j; checkY++) {
-            for (int checkX = i - 2; checkX < i + 4; checkX++) {
+            for (int checkX = i - 2; checkX < i + 3; checkX++) {
                 Tile tile2 = WorldGenHelper.GetTileSafely(checkX, checkY);
                 if (tile2.TileType == TileID.Trees || tile2.TileType == ModContent.TileType<TreeBranch>()) {
                     bool flag3 = true;
@@ -575,7 +575,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private static void PlaceBegin(int i, int j, int height, UnifiedRandom placeRand, out Point pointToStartPlacingTrunk, bool gen = false) {
         short getFrameYForStart() => (short)(180 + (placeRand.NextBool() ? 18 : 0));
         for (int checkY = j - (int)(height * 2f); checkY < j + 1; checkY++) {
-            for (int checkX = i - 2; checkX < i + 4; checkX++) {
+            for (int checkX = i - 2; checkX < i + 3; checkX++) {
                 Tile tile = WorldGenHelper.GetTileSafely(checkX, checkY);
                 tile.HasTile = false;
             }
