@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common;
 using RoA.Common.BackwoodsSystems;
+using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Equipables.Accessories;
@@ -82,7 +83,8 @@ sealed class GrimDruid : DruidNPC {
     public override void HitEffect(NPC.HitInfo hit) {
         if (NPC.life <= 0 && NPC.downedBoss2 && Main.rand.NextBool(5)) {
             if (NPC.Center.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 25) {
-                if (Main.netMode != NetmodeID.MultiplayerClient) {
+                bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
+                if (!flag6 && Main.netMode != NetmodeID.MultiplayerClient) {
                     int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DruidSoul>());
                     if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
                         NetMessage.SendData(MessageID.SyncNPC, number: npc);

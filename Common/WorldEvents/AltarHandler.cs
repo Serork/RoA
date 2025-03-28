@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core.Utility;
 
@@ -38,7 +39,7 @@ sealed class AltarHandler : ModSystem {
         Vector2 altarCoords = GetAltarPosition().ToWorldCoordinates();
         int type = ModContent.NPCType<DruidSoul>();
         NPC druidSoul = null;
-        bool flag = NPC.AnyNPCs(type);
+        bool flag = NPC.AnyNPCs(type) && !NPC.AnyNPCs(ModContent.NPCType<Lothor>());
         bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
         if (!flag6 && !flag) {
             if (_altarStrength > 0f) {

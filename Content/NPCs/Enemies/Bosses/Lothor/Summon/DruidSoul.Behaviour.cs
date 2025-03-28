@@ -106,9 +106,10 @@ sealed partial class DruidSoul : RoANPC {
         }
         target = NPC.target;
         Player player = Main.player[target];
-        if (AltarHandler.GetAltarStrength() < 0.1f) {
+        bool flag = NPC.AnyNPCs(ModContent.NPCType<Lothor>());
+        if (AltarHandler.GetAltarStrength() < 0.1f || flag) {
             if (StateTimer >= 1f) {
-                if (LothorSummoningHandler.PreArrivedLothorBoss.Item1 || player.dead || !player.InModBiome<BackwoodsBiome>() || NPC.CountNPCS(Type) > 1 || !NPC.downedBoss2) {
+                if (LothorSummoningHandler.PreArrivedLothorBoss.Item1 || flag || player.dead || !player.InModBiome<BackwoodsBiome>() || NPC.CountNPCS(Type) > 1 || !NPC.downedBoss2) {
                     NPC.Opacity -= 0.005f;
                     if (NPC.Opacity <= 0f) {
                         NPC.KillNPC();
