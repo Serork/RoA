@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,7 +17,7 @@ class TealMossWall : ModWall {
 
     public override bool CreateDust(int i, int j, ref int type) {
         if (Main.rand.NextBool(3)) {
-            type = DustID.GreenMoss;
+            type = ModContent.DustType<TealMossDust>();
         }
         else {
             type = ModContent.DustType<Dusts.Backwoods.Stone>();
@@ -38,7 +40,7 @@ class TealMossWall2 : TealMossWall {
 
     public override bool CreateDust(int i, int j, ref int type) {
         if (Main.rand.NextBool(3)) {
-            type = DustID.GreenMoss;
+            type = ModContent.DustType<TealMossDust>();
         }
         else {
             type = ModContent.DustType<Dusts.Backwoods.Stone>();

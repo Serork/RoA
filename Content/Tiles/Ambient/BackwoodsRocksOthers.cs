@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
+using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
@@ -118,7 +119,7 @@ sealed class BackwoodsRocks2 : BackwoodsRocks1, TileHooks.IGetTileDrawData {
 
     public override bool CreateDust(int i, int j, ref int type) {
         if (Main.rand.NextBool()) {
-            type = DustID.GreenMoss;
+            type = ModContent.DustType<TealMossDust>();
         }
 
         return base.CreateDust(i, j, ref type);

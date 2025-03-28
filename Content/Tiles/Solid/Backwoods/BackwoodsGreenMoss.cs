@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
+using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable;
 using RoA.Content.Tiles.Ambient;
 using RoA.Core.Utility;
@@ -148,7 +149,7 @@ sealed class BackwoodsGreenMoss : ModTile, IPostSetupContent {
         TransformTileSystem.OnKillActNormal[Type] = false;
         TransformTileSystem.ReplaceToTypeOnKill[Type] = stoneType;
 
-        DustType = DustID.GreenMoss;
+        DustType = ModContent.DustType<TealMossDust>();
         HitSound = SoundID.Dig;
         AddMapEntry(new Color(49, 134, 114));
     }

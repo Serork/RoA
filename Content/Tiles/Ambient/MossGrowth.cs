@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
+using RoA.Content.Dusts;
 using RoA.Content.Tiles.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
@@ -42,7 +43,7 @@ sealed class MossGrowth : ModTile, TileHooks.IGetTileDrawData {
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(29, 106, 88));
-        DustType = DustID.GreenMoss;
+        DustType = ModContent.DustType<TealMossDust>();
         HitSound = SoundID.Grass;
     }
 
