@@ -51,6 +51,9 @@ sealed class KeywordSystem : ILoadable {
                 if (tooltip.Name == "ItemName") {
                     continue;
                 }
+                if (tooltip.IsModifier || tooltip.IsModifierBad) {
+                    continue;
+                }
                 char[] checks = ['m', 'l', 'n'];
                 for (int i = 0; i < checkArray.Count; i++) { 
                     char tag = checks[checkArray[i].Item1];
@@ -97,19 +100,6 @@ sealed class KeywordSystem : ILoadable {
                 tip = tip.Replace(pattern, $"[kw/{check}:");
                 pattern = "]]";
                 tip = tip.Replace(pattern, "]");
-            }
-            for (int i = 0; i < checkArray.Count; i++) {
-                char tag = checks[checkArray[i].Item1];
-                string keyword = checkArray[i].Item2;
-                buffName = Regex.Replace(buffName, $@"\b{keyword}\b", $"[kw/{tag}:" + keyword + "]");
-                keyword = Helper.FirstCharToUpper(checkArray[i].Item2);
-                buffName = Regex.Replace(buffName, $@"\b{keyword}\b", $"[kw/{tag}:" + keyword + "]");
-            }
-            foreach (char check in checks) {
-                string pattern = $"[kw/{check}:[kw/{check}:";
-                buffName = buffName.Replace(pattern, $"[kw/{check}:");
-                pattern = "]]";
-                buffName = buffName.Replace(pattern, "]");
             }
         }
     }
