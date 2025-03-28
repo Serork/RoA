@@ -175,9 +175,6 @@ sealed class BaseFormHandler : ModPlayer {
         if (!IsInDruidicForm) {
             return;
         }
-        if (Player.stoned) {
-            return;
-        }
         SoundStyle? hurtSound = _currentForm.BaseForm.HurtSound;
         if (!hurtSound.HasValue) {
             return;

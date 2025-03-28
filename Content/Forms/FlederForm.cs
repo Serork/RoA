@@ -207,8 +207,6 @@ sealed class FlederForm : BaseForm {
         MountData.fallDamage = 0f;
         MountData.flightTimeMax = 60;
         MountData.fatigueMax = 40;
-        MountData.jumpHeight = 1;
-        MountData.jumpSpeed = 4f;
     }
 
     protected override void SafeUpdateEffects(Player player) {
@@ -239,6 +237,8 @@ sealed class FlederForm : BaseForm {
         else {
             player.fullRotation = fullRotation;
         }
+        Player.jumpHeight = 1;
+        Player.jumpSpeed = 4f;
         player.gravity *= 0.75f;
         player.velocity.Y = Math.Min(5f, player.velocity.Y);
         player.fullRotationOrigin = new Vector2(player.width / 2 + 4f * player.direction, player.height / 2 - 6f);

@@ -57,9 +57,7 @@ abstract class InsectForm : BaseForm {
         MountData.runSpeed = 5f;
         MountData.dashSpeed = 5f;
         MountData.flightTimeMax = 100;
-        MountData.jumpHeight = 50;
         MountData.acceleration = 0.2f;
-        MountData.jumpSpeed = 4f;
         MountData.totalFrames = 6;
         MountData.yOffset = 2;
 
@@ -85,6 +83,8 @@ abstract class InsectForm : BaseForm {
         if (!IsInAir(player)) {
             player.velocity.X *= 0.925f;
         }
+        Player.jumpHeight = 50;
+        Player.jumpSpeed = 4f;
         player.velocity.Y = Math.Min(5f, player.velocity.Y);
         player.fullRotationOrigin = new Vector2(player.width / 2 + 4f * player.direction, player.height / 2 - 10f);
 
