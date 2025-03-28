@@ -93,7 +93,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         pushBGTopHack = menuOffset;
         pushBGTopHack += offset;
         pushBGTopHack += offset2;
-        float captureOffset = CaptureManager.Instance.IsCapturing ? 600f : 0f;
+        float captureOffset = 0f;
         if (canBGDraw) {
             var bgScale = 1.25f;
             var bgParallax = 0.3;
