@@ -69,6 +69,38 @@ sealed class KeywordSystem : ILoadable {
         }
     }
 
+    private sealed class KeywordSystemForVanillaTooltips_Buffs : GlobalBuff {
+        public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare) {
+            List<KeywordInfo> checkArray = [];
+            string[] manaWords = Language.GetTextValue("Mods.RoA.ManaWords").Split(';');
+            string[] lifeWords = Language.GetTextValue("Mods.RoA.LifeWords").Split(';');
+            string[] wreathWords = Language.GetTextValue("Mods.RoA.WreathWords").Split(';');
+            foreach (string manaWord in manaWords) {
+                checkArray.Add((0, manaWord));
+            }
+            foreach (string lifeWord in lifeWords) {
+                checkArray.Add((1, lifeWord));
+            }
+            foreach (string wreathWord in wreathWords) {
+                checkArray.Add((2, wreathWord));
+            }
+            char[] checks = ['m', 'l', 'n'];
+            for (int i = 0; i < checkArray.Count; i++) {
+                char tag = checks[checkArray[i].Item1];
+                string keyword = checkArray[i].Item2;
+                tip = Regex.Replace(tip, $@"\b{keyword}\b", $"[kw/{tag}:" + keyword + "]");
+                keyword = Helper.FirstCharToUpper(checkArray[i].Item2);
+                tip = Regex.Replace(tip, $@"\b{keyword}\b", $"[kw/{tag}:" + keyword + "]");
+            }
+            foreach (char check in checks) {
+                string pattern = $"[kw/{check}:[kw/{check}:";
+                tip = tip.Replace(pattern, $"[kw/{check}:");
+                pattern = "]]";
+                tip = tip.Replace(pattern, "]");
+            }
+        }
+    }
+
     public class KeywordTagHandler : ITagHandler {
         TextSnippet ITagHandler.Parse(string text, Color baseColor, string options) {
             if (options is not null) {
