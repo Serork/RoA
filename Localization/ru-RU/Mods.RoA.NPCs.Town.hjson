@@ -39,12 +39,12 @@ Hunter: {
 }
 
 Dryad: {
-	// IntroQuote: At last, I am free from this coccoon, thanks to you. Growing in silence for centuries has been excruciating.
+	IntroQuote: Наконец я свободна от этого кокона, благодаря тебе. Расти в тишине на протяжении стольких лет было мукой.
 	AwakeQuote1: Уберите от меня свои руки! УБЕРИТЕ СВОИ... Что?
 	AwakeQuote2: Вы все сгниете! ВЫ ВСЕ... А ты кто?
 	AwakeQuote3: Резкое изменение в мире подстегнуло мое пробуждение. Погиб могущественный монстр... это твоих рук дело?
-	// AwakeQuote4: I know this is a great burden for us to bear, but this world's balance need to be restored.
-	// AwakeQuote5: I would welcome a better place to put down roots. Not in a literal sense, of course!
+	AwakeQuote4: Я знаю, что это тяжелое для нас бремя, но равновесие в этом мире необходимо восстановить.
+	AwakeQuote5: Я бы с радостью пустила корни в более подходящем месте. Не в буквальном смысле, конечно!
 }
 
 GoblinTinkerer.PettyGoblinQuote1: Тебя обставил тот мелкий воришка с волшебным мешком? Скажу честно, ты не первый.

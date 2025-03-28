@@ -237,8 +237,8 @@ ElderwoodSetBonusBuff: {
 }
 
 MercuriumZipperDebuff: {
-	// DisplayName: Mercurium Zipper
-	// Description: Mods.RoA.Buffs.MercuriumZipperDebuff.Description
+	DisplayName: Ртутная застёжка
+	Description: Сцеплены судьбой
 }
 
 CosmicHat_Buff: {
@@ -252,6 +252,6 @@ CosmicHat_Cooldown: {
 }
 
 Honey: {
-	DisplayName: Honey
+	DisplayName: Мёд
 	Description: "{$BuffDescription.Honey}"
 }
