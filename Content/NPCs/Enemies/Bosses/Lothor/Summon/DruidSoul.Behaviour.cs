@@ -152,6 +152,10 @@ sealed partial class DruidSoul : RoANPC {
             LothorSummoningHandler.PreArrivedLothorBoss.Item1 = true;
             LothorSummoningHandler._summonedNaturally = false;
 
+            if (Main.netMode == NetmodeID.Server) {
+                NetMessage.SendData(MessageID.WorldData);
+            }
+
             NPC.KillNPC();
             return;
         }
