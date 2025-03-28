@@ -50,7 +50,7 @@ sealed class OvergrownAltarTE : ModTileEntity {
                 float dist2 = MathHelper.Clamp(1f - dist / 1400f, 0f, 1f);
                 volume *= dist2;
                 if (flag7) {
-                    volume *= 0.5f;
+                    volume *= 0.25f;
                 }
                 var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = volume };
                 var sound = SoundEngine.FindActiveSound(in style);
