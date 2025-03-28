@@ -86,6 +86,51 @@ static class Helper {
         return (destination - entity.Center).SafeNormalize(fallback.Value);
     }
 
+    public static void GetJumpSettings(Player self, out int jumpHeight, out float jumpSpeed, out float jumpSpeedBoost, out float extraFall) {
+        extraFall = self.extraFall;
+        jumpSpeedBoost = self.jumpSpeedBoost;
+        jumpHeight = Player.jumpHeight;
+        jumpSpeed = Player.jumpSpeed;
+        if (self.jumpBoost) {
+            jumpHeight = 20;
+            jumpSpeed = 6.51f;
+        }
+
+        if (self.empressBrooch)
+            jumpSpeedBoost += 1.8f;
+
+        if (self.frogLegJumpBoost) {
+            jumpSpeedBoost += 2.4f;
+            extraFall += 15;
+        }
+
+        if (self.moonLordLegs) {
+            jumpSpeedBoost += 1.8f;
+            extraFall += 10;
+            jumpHeight++;
+        }
+
+        if (self.wereWolf) {
+            jumpHeight += 2;
+            jumpSpeed += 0.2f;
+        }
+
+        if (self.portableStoolInfo.IsInUse)
+            jumpHeight += 5;
+
+        jumpSpeed += jumpSpeedBoost;
+
+        if (self.sticky) {
+            jumpHeight /= 10;
+            jumpSpeed /= 5f;
+        }
+
+        if (self.dazed) {
+            jumpHeight /= 5;
+            jumpSpeed /= 2f;
+        }
+    }
+
     public static Color BuffColor(Color newColor, float R, float G, float B, float A) {
         newColor.R = (byte)(newColor.R * R);
         newColor.G = (byte)(newColor.G * G);

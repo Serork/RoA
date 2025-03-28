@@ -337,8 +337,9 @@ sealed class LilPhoenixForm : BaseForm {
 
     private void ExtraJumpsHandler(Player player) {
         LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
-        float jumpSpeed = 8.01f;
-        int jumpHeight = 5;
+        Helper.GetJumpSettings(player, out int jumpHeight, out float jumpSpeed, out float jumpSpeedBoost, out float extraFall);
+        jumpSpeed = jumpSpeed * 1.6f;
+        jumpHeight = jumpHeight / 3;
         void jump() {
             player.velocity.Y = -jumpSpeed * player.gravDir;
             plr._phoenixJump = (int)((double)jumpHeight * 2f);
