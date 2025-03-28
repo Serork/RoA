@@ -85,7 +85,7 @@ class BackwoodsVines : ModTile {
 
     public override void RandomUpdate(int i, int j) {
         if (Main.tile[i, j].HasUnactuatedTile) {
-            int num34 = 20;
+            int num34 = 2;
             if (Main.rand.Next(num34) == 0 && WorldGen.GrowMoreVines(i, j) && !Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].LiquidType != LiquidID.Lava) {
                 bool flag5 = false;
                 ushort type7 = (ushort)ModContent.TileType<BackwoodsVines>();
