@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Core.Utility;
 
@@ -10,9 +11,12 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.Graphics.Capture;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+
+using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Content.Tiles.Crafting;
 
@@ -132,6 +136,44 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
         public override void Load() {
             On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
             On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
+
+            On_Main.DrawTiles += On_Main_DrawTiles;
+        }
+
+        private void On_Main_DrawTiles(On_Main.orig_DrawTiles orig, Main self, bool solidLayer, bool forRenderTargets, bool intoRenderTargets, int waterStyleOverride) {
+            orig(self, solidLayer, forRenderTargets, intoRenderTargets, waterStyleOverride);
+
+            if (CaptureManager.Instance.IsCapturing) {
+                SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+                foreach (Point drawPoint in DrawPoints) {
+                    int i = drawPoint.X;
+                    int j = drawPoint.Y;
+                    int type = Main.tile[i, j].TileType;
+                    if (type == TileID.Trees) {
+                        ushort tapperTileType = (ushort)ModContent.TileType<Tapper>();
+                        bool flag = WorldGenHelper.GetTileSafely(i - 1, j).TileType == tapperTileType;
+                        bool flag2 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType;
+                        if (flag2 || flag) {
+                            int coordinateWidth = 30;
+                            int num12 = 28;
+                            Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
+                            Vector2 zero = Vector2.Zero;
+                            Vector2 position = unscaledPosition - zero;
+                            Color color = Lighting.GetColor(i, j);
+                            var texture = PaintsRenderer.TryGetPaintedTexture(flag ? i - 1 : (i + 1), j, (TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
+                            Main.spriteBatch.Draw(texture,
+                                new Vector2((float)(i * 16 - (int)position.X),
+                                            (float)(j * 16 - (int)position.Y) - 6),
+                                new Rectangle(0, flag ? 28 : 0, coordinateWidth,
+                                num12), color, 0f, Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 0);
+                        }
+                    }
+                }
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(in snapshot);
+            }
         }
 
         private void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
@@ -143,32 +185,34 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
         private void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
             orig(self);
 
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-            foreach (Point drawPoint in DrawPoints) {
-                int i = drawPoint.X;
-                int j = drawPoint.Y;
-                int type = Main.tile[i, j].TileType;
-                if (type == TileID.Trees) {
-                    ushort tapperTileType = (ushort)ModContent.TileType<Tapper>();
-                    bool flag = WorldGenHelper.GetTileSafely(i - 1, j).TileType == tapperTileType;
-                    bool flag2 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType;
-                    if (flag2 || flag) {
-                        int coordinateWidth = 30;
-                        int num12 = 28;
-                        Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
-                        Vector2 zero = Vector2.Zero;
-                        Vector2 position = unscaledPosition - zero;
-                        Color color = Lighting.GetColor(i, j);
-                        var texture = PaintsRenderer.TryGetPaintedTexture(flag ? i - 1 : (i + 1), j, (TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
-                        Main.spriteBatch.Draw(texture,
-                            new Vector2((float)(i * 16 - (int)position.X),
-                                        (float)(j * 16 - (int)position.Y) - 6),
-                            new Rectangle(0, flag ? 28 : 0, coordinateWidth,
-                            num12), color, 0f, Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 0);
+            if (!CaptureManager.Instance.IsCapturing) {
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+                foreach (Point drawPoint in DrawPoints) {
+                    int i = drawPoint.X;
+                    int j = drawPoint.Y;
+                    int type = Main.tile[i, j].TileType;
+                    if (type == TileID.Trees) {
+                        ushort tapperTileType = (ushort)ModContent.TileType<Tapper>();
+                        bool flag = WorldGenHelper.GetTileSafely(i - 1, j).TileType == tapperTileType;
+                        bool flag2 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType;
+                        if (flag2 || flag) {
+                            int coordinateWidth = 30;
+                            int num12 = 28;
+                            Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
+                            Vector2 zero = Vector2.Zero;
+                            Vector2 position = unscaledPosition - zero;
+                            Color color = Lighting.GetColor(i, j);
+                            var texture = PaintsRenderer.TryGetPaintedTexture(flag ? i - 1 : (i + 1), j, (TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
+                            Main.spriteBatch.Draw(texture,
+                                new Vector2((float)(i * 16 - (int)position.X),
+                                            (float)(j * 16 - (int)position.Y) - 6),
+                                new Rectangle(0, flag ? 28 : 0, coordinateWidth,
+                                num12), color, 0f, Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 0);
+                        }
                     }
                 }
+                Main.spriteBatch.End();
             }
-            Main.spriteBatch.End();
         }
 
         public override void Unload() {

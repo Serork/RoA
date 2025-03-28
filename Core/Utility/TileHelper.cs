@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -12,6 +13,7 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
+using Terraria.Graphics.Capture;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -173,6 +175,28 @@ static class TileHelper {
         On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
 
         On_Main.DrawPlayers_AfterProjectiles += On_Main_DrawPlayers_AfterProjectiles;
+
+        On_Main.DrawTiles += On_Main_DrawTiles;
+    }
+
+    private static void On_Main_DrawTiles(On_Main.orig_DrawTiles orig, Main self, bool solidLayer, bool forRenderTargets, bool intoRenderTargets, int waterStyleOverride) {
+        orig(self, solidLayer, forRenderTargets, intoRenderTargets, waterStyleOverride);
+
+        if (CaptureManager.Instance.IsCapturing) {
+            SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            foreach ((ModTile modTile, Point position) in PostSolidTileDrawPoints) {
+                if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null) {
+                    if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
+                        continue;
+                    }
+                    tileHaveExtras.PostDrawExtra(Main.spriteBatch, position);
+                }
+            }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(in snapshot);
+        }
     }
 
     private static void On_Main_DrawPlayers_AfterProjectiles(On_Main.orig_DrawPlayers_AfterProjectiles orig, Main self) {
@@ -193,16 +217,18 @@ static class TileHelper {
     private static void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
         orig(self);
 
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        foreach ((ModTile modTile, Point position) in PostSolidTileDrawPoints) {
-            if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null) {
-                if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
-                    continue;
+        if (!CaptureManager.Instance.IsCapturing) {
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            foreach ((ModTile modTile, Point position) in PostSolidTileDrawPoints) {
+                if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null) {
+                    if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
+                        continue;
+                    }
+                    tileHaveExtras.PostDrawExtra(Main.spriteBatch, position);
                 }
-                tileHaveExtras.PostDrawExtra(Main.spriteBatch, position);
             }
+            Main.spriteBatch.End();
         }
-        Main.spriteBatch.End();
     }
 
     private static void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
