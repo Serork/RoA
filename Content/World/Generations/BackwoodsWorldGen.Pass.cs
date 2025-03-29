@@ -4089,7 +4089,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     public void ReplaceAllSnowBlockForSpiritModSupport(GenerationProgress progress, GameConfiguration config) {
         _grassTileType = (ushort)ModContent.TileType<BackwoodsGrass>();
-        for (int i = Left - 100; i < Right + 100; i++) {
+        for (int i = Left - 105; i < Right + 105; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(TileID.SnowBlock)) {
