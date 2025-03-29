@@ -340,7 +340,7 @@ sealed class WreathHandler : ModPlayer {
         return flag5;
     }
 
-    private void VisualEffectOnFul() {
+    private void VisualEffectOnFull() {
         if (IsChangingValue && !_shouldDecrease) {
             ushort dustType = GetDustType();
             var config = ModContent.GetInstance<RoAClientConfig>();
@@ -370,8 +370,6 @@ sealed class WreathHandler : ModPlayer {
                         }
                     }
 
-                    Main.NewText(123);
-
                     // SoundEngine.PlaySound(SoundID.S
 
                     _onFullCreated = true;
@@ -388,7 +386,7 @@ sealed class WreathHandler : ModPlayer {
         GetWreathType();
         MakeDusts();
 
-        VisualEffectOnFul();
+        VisualEffectOnFull();
 
         if (_hitEffectTimer > 0) {
             _hitEffectTimer = 0;
@@ -662,7 +660,7 @@ sealed class WreathHandler : ModPlayer {
             ((CurrentResource > 95 && CurrentResource < 100) ||
             flag)) {
             CurrentResource = (ushort)(flag ? 200 : 100);
-            VisualEffectOnFul();
+            VisualEffectOnFull();
         }
     }
 
