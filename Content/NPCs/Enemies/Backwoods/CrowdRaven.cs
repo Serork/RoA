@@ -125,6 +125,8 @@ sealed class CrowdRaven : ModNPC {
     }
 
     public override void AI() {
+        NPC.chaseable = false;
+
         Vector3 rgb3 = new Vector3(1f, 0f, 0.1f) * 0.35f;
         Lighting.AddLight(NPC.Top + new Vector2(0f, 10f), rgb3);
 
