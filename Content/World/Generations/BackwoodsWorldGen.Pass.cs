@@ -202,7 +202,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         double strenth = _random.NextFloat(max, min) * 3;
         double step = strenth / 3;
         Vector2 direction = Vector2.One.RotatedByRandom(Math.PI) * _random.NextFloat(0f, 6.5f);
-        WorldGenHelper.TileWallRunner(i + (int)direction.X, j + (int)direction.Y, strenth, (int)step, 0, (ushort)ModContent.WallType<TealMossWall2>(), addTile: true, noYChange: true, onlyWall: true, shouldntHasTile: true);
+        WorldGenHelper.TileWallRunner(i + (int)direction.X, j + (int)direction.Y, strenth, (int)step, 0, (ushort)ModContent.WallType<TealMossWall2>(), 
+            addTile: true, noYChange: true, onlyWall: true, shouldntHasTile: true, skipWalls: _elderwoodWallType);
     }
 
     private void WallRoot(int i, int j) {
