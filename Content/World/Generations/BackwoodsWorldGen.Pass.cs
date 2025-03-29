@@ -1237,7 +1237,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(treeBranch) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
                     WorldGen.KillTile(i, j);
-                    if (_random.NextChance(0.4)) {
+                    if (_random.NextChance(0.5)) {
                         if (_random.NextChance(0.4)) {
                             WallBush(i, j + 3 + _random.Next(-1, 2), false);
                         }
