@@ -61,6 +61,9 @@ sealed class LothorSummoningHandler : ModSystem {
                 _alpha *= 1.01f;
             }
         }
+
+        orig(info, out sunColor, out moonColor);
+        return;
         bool isDayTime = Main.dayTime;
         double num = (float)MathHelper.Lerp((float)Main.time, 27000, _alpha);
         Microsoft.Xna.Framework.Color bgColorToSet = Microsoft.Xna.Framework.Color.White;
