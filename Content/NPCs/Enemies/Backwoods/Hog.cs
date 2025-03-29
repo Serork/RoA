@@ -283,7 +283,7 @@ sealed class Hog : RoANPC {
             NPC.localAI[1]--;
         }
 
-        if (_soundTimer++ % 150 == 0 && Main.rand.NextBool(4)) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "Hog") { Volume = _currentAI == 2 ? 0.7f : 0.3f, Pitch = _currentAI == 2 ? 0.5f : 0f, PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
+        if (_soundTimer++ % 150 == 0 && Main.rand.NextBool(5)) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "Hog") { Volume = _currentAI == 2 ? 0.6f : 0.2f, Pitch = _currentAI == 2 ? 0.5f : 0f, PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
 
         int currentAI = _currentAI;
         switch (currentAI) {

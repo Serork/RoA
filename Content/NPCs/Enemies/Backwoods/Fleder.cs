@@ -77,9 +77,9 @@ sealed class Fleder : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 100;
-        NPC.damage = 50;
-        NPC.defense = 9;
+        NPC.lifeMax = 95;
+        NPC.damage = 45;
+        NPC.defense = 7;
         NPC.knockBackResist = 0.5f;
 
         int width = 30; int height = 30;
@@ -89,8 +89,8 @@ sealed class Fleder : ModNPC {
 
         NPC.value = Item.buyPrice(0, 0, 2, 0);
 
-        NPC.HitSound = SoundID.NPCHit27;
-        NPC.DeathSound = SoundID.NPCDeath39;
+        NPC.HitSound = SoundID.NPCHit1;
+        NPC.DeathSound = SoundID.NPCDeath1;
 
         NPC.noGravity = true;
 
@@ -269,7 +269,7 @@ sealed class Fleder : ModNPC {
             }
         }
 
-        if (NPC.localAI[1] % 200 == 1 && Main.rand.NextBool()) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)) { PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
+        if (NPC.localAI[1] % 200 == 1 && Main.rand.NextBool(2) && NPC.Distance(player.Center) < 150f) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)) { PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
 
         NPC.noTileCollide = false;
 

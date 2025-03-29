@@ -42,7 +42,7 @@ sealed class FlederSachem : ModNPC {
                 if (Main.netMode == NetmodeID.Server && main < Main.maxNPCs) {
                     NetMessage.SendData(MessageID.SyncNPC, number: main);
                 }
-                for (int i = 0; i < Main.rand.Next(Main.expertMode ? 3 : 1, Main.expertMode ? 3 : 5); i++) {
+                for (int i = 0; i < Main.rand.Next(Main.expertMode ? 2 : 1, Main.expertMode ? 3 : 4); i++) {
                     int npc = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<BabyFleder>(), NPC.whoAmI);
                     NPC babyFleder = Main.npc[npc];
                     if (babyFleder.ModNPC is BabyFleder fleder) {

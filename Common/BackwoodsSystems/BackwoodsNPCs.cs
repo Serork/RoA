@@ -87,10 +87,10 @@ sealed class BackwoodsNPCs : GlobalNPC {
 
                 if (NPC.downedBoss2) {
                     pool.Add(ModContent.NPCType<Fleder>(), 1f * chance);
-                    pool.Add(ModContent.NPCType<FlederSachem>(), 0.2f * (chance - 0.5f));
+                    pool.Add(ModContent.NPCType<FlederSachem>(), 0.15f * (chance - 0.5f));
                     var ent = ModContent.NPCType<EntLegs>();
                     if (!NPC.AnyNPCs(ent) && surface) {
-                        pool.Add(ent, 0.025f);
+                        pool.Add(ent, 0.02f);
                     }
                     if (BackwoodsFogHandler.IsFogActive && surface) {
                         pool.Add(ModContent.NPCType<Ravencaller>(), 0.2f);
@@ -101,7 +101,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                         moonPhase == Terraria.Enums.MoonPhase.Empty) {
                         var archdruid = ModContent.NPCType<Archdruid>();
                         if (!NPC.AnyNPCs(archdruid)) {
-                            pool.Add(archdruid, 0.025f);
+                            pool.Add(archdruid, 0.01f);
                         }
                     }
                 }

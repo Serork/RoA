@@ -94,8 +94,8 @@ sealed class BabyFleder : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.lifeMax = 50;
-        NPC.damage = 25;
+        NPC.lifeMax = 45;
+        NPC.damage = 20;
         NPC.defense = 5;
         NPC.knockBackResist = 1.1f;
 
@@ -212,7 +212,7 @@ sealed class BabyFleder : ModNPC {
             ResetParentState();
         }
 
-        if (NPC.localAI[1]++ % 200 == 1 && Main.rand.NextBool()) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)) { Volume = 0.8f, PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
+        if (NPC.localAI[1]++ % 200 == 1 && Main.rand.NextBool(2) && NPC.Distance(player.Center) < 150f) SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream" + (Main.rand.NextBool(2) ? 1 : 2)) { Volume = 0.8f, PitchVariance = 0.2f, MaxInstances = 5 }, NPC.Center);
 
         void move(bool flag) {
             if (!HasParent) {

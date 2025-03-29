@@ -11,7 +11,7 @@ namespace RoA.Content.Projectiles.Enemies;
 
 sealed class PrimordialLeaf : ModProjectile {
     public override void SetStaticDefaults() {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         Main.projFrames[Projectile.type] = 5;
     }

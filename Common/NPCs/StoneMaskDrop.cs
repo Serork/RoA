@@ -9,6 +9,6 @@ namespace RoA.Common.NPCs;
 
 sealed class StoneMaskDrop : GlobalNPC {
     public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
-        npcLoot.Add(ItemDropRule.ByCondition(new BackwoodsDropCondition(), ModContent.ItemType<StoneMask>(), 144));
+        npcLoot.Add(ItemDropRule.ByCondition(new BackwoodsDropCondition(), ModContent.ItemType<StoneMask>(), 350));
     }
 }
