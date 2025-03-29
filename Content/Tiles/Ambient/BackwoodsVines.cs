@@ -112,6 +112,9 @@ class BackwoodsVines : ModTile {
                 if (flag5) {
                     int num36 = j + 1;
                     Tile tile = Main.tile[i, num36];
+                    if (Main.tile[i, num36 + 1].HasTile) {
+                        return;
+                    }
                     Main.tile[i, num36].TileType = type7;
                     tile.HasTile = true;
                     Main.tile[i, num36].CopyPaintAndCoating(Main.tile[i, j]);
