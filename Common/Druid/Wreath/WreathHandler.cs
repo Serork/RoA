@@ -241,9 +241,14 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
+    internal void OnResetEffects() {
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathDischarge") { PitchVariance = 0.1f, Volume = 0.8f }, Player.Center);
+    }
+
     internal void ForcedHardReset() {
         StartSlowlyIncreasingUntilFull = false;
         Reset();
+        OnResetEffects();
         OnWreathReset?.Invoke();
     }
 
@@ -370,7 +375,7 @@ sealed class WreathHandler : ModPlayer {
                         }
                     }
 
-                    // SoundEngine.PlaySound(SoundID.S
+                    SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathCharge") { PitchVariance = 0.1f, Volume = 0.8f }, Player.Center);
 
                     _onFullCreated = true;
                 }
@@ -454,6 +459,7 @@ sealed class WreathHandler : ModPlayer {
         }
         else if (_stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
+            if (!_shouldDecrease) OnResetEffects();
         }
         else if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
             BaseRodProjectile? rodProjectile = null;
@@ -769,7 +775,7 @@ sealed class WreathHandler : ModPlayer {
             }
             int count = Math.Min((int)(15 * progress), 10);
             for (int i = 0; i < count; i++) {
-                if (Main.rand.NextChance(0.5)) {
+                if (Main.rand.NextChance(0.3)) {
                     Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
                     dust.velocity *= 1.25f * progress;
                     if (i >= (int)(count * 0.8f)) {
