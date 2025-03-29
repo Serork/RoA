@@ -2673,6 +2673,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             WorldGen.SquareTileFrame(x2, y2);
                         }
                     }
+                    if (tile.TileType == TileID.WaterDrip && _random.NextChance(0.8)) {
+                        tile.HasTile = false;
+                    }
                 }
             }
         }
