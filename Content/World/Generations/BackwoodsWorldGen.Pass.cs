@@ -119,7 +119,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         private bool On_WorldGen_PlacePot(On_WorldGen.orig_PlacePot orig, int x, int y, ushort type, int style) {
             int potType = ModContent.TileType<BackwoodsPot>();
             if (type != potType && 
-                x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 100 && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 100
+                x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 50 && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 50
                 && y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 3) {
                 return WorldGen.PlacePot(x, y, (ushort)potType, WorldGen.genRand.Next(4));
             }
@@ -2667,7 +2667,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int x = Left - 100; x <= Right + 100; x++) {
             for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom + EdgeY + 10; y++) {
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
-                if (tile.HasTile && Main.tileCut[tile.TileType]) {
+                if (tile.HasTile) {
                     for (int x2 = x - 1; x2 < x + 2; x2++) {
                         for (int y2 = y - 1; y2 < y + 2; y2++) {
                             WorldGen.SquareTileFrame(x2, y2);
