@@ -141,8 +141,8 @@ sealed partial class PettyGoblin : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.width = 20;
-        NPC.height = 46;
+        int width = 28; int height = 48;
+        NPC.Size = new Vector2(width, height);
 
         NPC.damage = 15;
         NPC.defense = 4;

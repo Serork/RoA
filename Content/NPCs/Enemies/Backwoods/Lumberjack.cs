@@ -41,7 +41,7 @@ sealed class Lumberjack : RoANPC {
         NPC.defense = 12;
         NPC.knockBackResist = 0.25f;
 
-        int width = 28; int height = 44;
+        int width = 28; int height = 48;
         NPC.Size = new Vector2(width, height);
 
         NPC.aiStyle = -1;
