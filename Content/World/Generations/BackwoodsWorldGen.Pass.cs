@@ -273,7 +273,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int yMax = Math.Max(BackwoodsVars.FirstTileYAtCenter + 20, (int)Main.worldSurface + 5);
         while (--attempts > 0) {
             int x = _random.Next(Left, Right);
-            int y = _random.Next(yMin - 5, yMax + 5);
+            int y = _random.Next(yMin - 1, yMax + 1);
             int type = ModContent.TileType<NexusGateway>();
             if (again) {
                 x = _gatewayLocation.X;
@@ -283,7 +283,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 else {
                     x = _random.Next(Left, Right);
-                    y = _random.Next(yMin - 5, yMax + 5);
+                    y = _random.Next(yMin - 1, yMax + 1);
                 }
             }
             if (!TileObject.CanPlace(x, y, type, 0, 1, out var objectData)) {
@@ -1236,8 +1236,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(treeBranch) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
                     WorldGen.KillTile(i, j);
-                    if (_random.NextChance(0.5)) {
-                        if (_random.NextChance(0.5)) {
+                    if (_random.NextChance(0.4)) {
+                        if (_random.NextChance(0.4)) {
                             WallBush(i, j + 3 + _random.Next(-1, 2), false);
                         }
                         WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
