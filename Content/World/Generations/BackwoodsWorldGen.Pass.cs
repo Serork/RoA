@@ -2664,18 +2664,18 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int x = Left - 100; x <= Right + 100; x++) {
-            for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom + EdgeY + 10; y++) {
-                Tile tile = WorldGenHelper.GetTileSafely(x, y);
-                if (tile.HasTile) {
-                    for (int x2 = x - 1; x2 < x + 2; x2++) {
-                        for (int y2 = y - 1; y2 < y + 2; y2++) {
-                            WorldGen.SquareTileFrame(x2, y2);
-                        }
-                    }
-                }
-            }
-        }
+        //for (int x = Left - 100; x <= Right + 100; x++) {
+        //    for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom + EdgeY + 10; y++) {
+        //        Tile tile = WorldGenHelper.GetTileSafely(x, y);
+        //        if (tile.HasTile) {
+        //            for (int x2 = x - 1; x2 < x + 2; x2++) {
+        //                for (int y2 = y - 1; y2 < y + 2; y2++) {
+        //                    WorldGen.SquareTileFrame(x2, y2);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         if (!WorldGen.InWorld(_gatewayLocation.X, _gatewayLocation.Y, 30)) {
             return;
@@ -3669,6 +3669,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         num = l - 1;
         Tile tile = Main.tile[x, num];
+        if (tile.HasTile) {
+            return result;
+        }
         tile.HasTile = true;
         tile.TileType = (ushort)tileType;
         tile.TileFrameX = 0;
@@ -3880,6 +3883,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             return false;
 
         Tile tile = Main.tile[x, num];
+        if (tile.HasTile) {
+            return false;
+        }
         tile.HasTile = true;
         Main.tile[x, num].TileType = (ushort)tileType;
         if (_random.Next(2) == 0) {
