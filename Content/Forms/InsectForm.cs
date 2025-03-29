@@ -118,7 +118,7 @@ abstract class InsectForm : BaseForm {
                         MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 11, player.Center));
                     }
                     for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
-                        int insectDamage = 10;
+                        int insectDamage = 20;
                         float insectKnockback = 3f;
                         int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
                         insectKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
@@ -157,7 +157,7 @@ abstract class InsectForm : BaseForm {
             if (player.releaseUseItem && Main.mouseLeftRelease)
                 shootCounter = 0;
         }
-        if (shootCounter % 15 == 5 && shootCounter > 0) {
+        if (shootCounter % 10 == 5 && shootCounter > 0) {
             BaseFormDataStorage.ChangeAttackCharge1(player, 1.25f);
             //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
 
@@ -183,7 +183,7 @@ abstract class InsectForm : BaseForm {
             shootKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(shootKnockback);
 
             int type = ModContent.ProjectileType<ToxicStream>();
-            int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(20);
+            int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(54);
             Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, 0f), type, damage, shootKnockback, player.whoAmI, 0f, 0f, 2f);
             if (shootCounter >= 80) {
                 shootKnockback = 2.5f;

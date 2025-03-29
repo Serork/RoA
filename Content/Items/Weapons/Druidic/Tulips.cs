@@ -92,7 +92,7 @@ sealed class SweetTulip : NatureItem {
         Item.staff[Item.type] = true;
         Item.noMelee = true;
 
-        Item.damage = 8;
+        Item.damage = 11;
         Item.knockBack = 1.5f;
 
         Item.value = Item.sellPrice(0, 0, 40, 0);
@@ -103,8 +103,8 @@ sealed class SweetTulip : NatureItem {
         Item.shootSpeed = 8f;
         Item.shoot = ModContent.ProjectileType<TulipPetalOld>();
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 22);
-        NatureWeaponHandler.SetFillingRate(Item, 0.25f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 26);
+        NatureWeaponHandler.SetFillingRate(Item, 0.35f);
     }
 
     //public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {

@@ -133,7 +133,7 @@ sealed class FlederForm : BaseForm {
 
                         Rectangle rect = nPC.getRect();
                         if (rectangle.Intersects(rect) && (nPC.noTileCollide || Player.CanHit(nPC))) {
-                            int damage = 10;
+                            int damage = 40;
                             float num = Player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(damage);
                             float num2 = 3f;
                             bool crit = false;
@@ -321,7 +321,7 @@ sealed class FlederForm : BaseForm {
             holdingLmb = false;
         }
         string context = "flederformattack";
-        int baseDamage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(10);
+        int baseDamage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(30);
         if (player.releaseUseItem && Main.mouseLeftRelease) {
             if (shootCounter >= 40 && shootCounter < 70) {
                 BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
