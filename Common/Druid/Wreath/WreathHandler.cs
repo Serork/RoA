@@ -50,7 +50,7 @@ sealed class WreathHandler : ModPlayer {
     private FormInfo _formInfo;
     private bool _shouldSync;
     private int _hitEffectTimer;
-    private bool _barsDustsCreated;
+    private bool _onFullCreated;
 
     public bool HasEnougthToJump;
 
@@ -326,7 +326,7 @@ sealed class WreathHandler : ModPlayer {
 
     private void ResetVisualParametersForNotNormal() {
         if (!IsFull1 || (IsFull1 && !IsFull2)) {
-            _barsDustsCreated = false;
+            _onFullCreated = false;
         }
     }
 
@@ -346,29 +346,33 @@ sealed class WreathHandler : ModPlayer {
             var config = ModContent.GetInstance<RoAClientConfig>();
             bool noNormal = IsNormalNearHPBar() || RoAClientConfig.IsBars || RoAClientConfig.IsFancy;
             int value = CurrentResource % 100;
-            if (noNormal && CurrentResource > 50 && (value > 90 || value < 5)) {
-                if ((IsFull3 || IsFull2) && !_barsDustsCreated) {
-                    int count = 20;
-                    for (int i = 0; i < count; i++) {
-                        float progress2 = 1.35f;
-                        Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress2));
-                        dust.velocity *= 1.25f * progress2;
-                        if (i >= (int)(count * 0.8f)) {
-                            dust.velocity *= 2f * progress2;
+            if (CurrentResource > 50 && (value > 90 || value < 5)) {
+                if ((IsFull3 || IsFull2) && !_onFullCreated) {
+                    if (noNormal) {
+                        int count = 20;
+                        for (int i = 0; i < count; i++) {
+                            float progress2 = 1.35f;
+                            Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, 23), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress2));
+                            dust.velocity *= 1.25f * progress2;
+                            if (i >= (int)(count * 0.8f)) {
+                                dust.velocity *= 2f * progress2;
+                            }
+                            else if (i >= count / 2) {
+                                dust.velocity *= 1.5f * progress2;
+                            }
+                            dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
+                            dust.noGravity = true;
+                            dust.position += dust.velocity * 0.75f;
+                            dust.noLight = true;
+                            dust.noLightEmittence = true;
+                            dust.alpha = (int)(DrawColorOpacity * 255f);
+                            dust.customData = DrawColorOpacity * PulseIntensity * 1.6f;
                         }
-                        else if (i >= count / 2) {
-                            dust.velocity *= 1.5f * progress2;
-                        }
-                        dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
-                        dust.noGravity = true;
-                        dust.position += dust.velocity * 0.75f;
-                        dust.noLight = true;
-                        dust.noLightEmittence = true;
-                        dust.alpha = (int)(DrawColorOpacity * 255f);
-                        dust.customData = DrawColorOpacity * PulseIntensity * 1.6f;
                     }
 
-                    _barsDustsCreated = true;
+                    // SoundEngine.PlaySound(SoundID.S
+
+                    _onFullCreated = true;
                 }
             }
         }
