@@ -804,7 +804,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step_AddPills() {
         // adapted vanilla
-        for (int i = Left - 100; i <= Right + 100; i++) {
+        for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
@@ -843,7 +843,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        for (int i = Left - 100; i <= Right + 100; i++) {
+        for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
@@ -882,7 +882,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        for (int i = Left - 100; i <= Right + 100; i++) {
+        for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
@@ -921,7 +921,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        for (int i = Left - 100; i <= Right + 100; i++) {
+        for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
@@ -969,7 +969,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int i = Left - 100; i <= Right + 100; i++) {
+        for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
@@ -982,7 +982,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int i = Left - 100; i <= Right + 100; i++) {
+        for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
@@ -1973,7 +1973,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step10_SpreadMossGrass() {
-        for (int i = Left - 100; i < Right + 100; i++) {
+        for (int i = Left - 50; i < Right + 50; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY; j++) {
                 bool elderwoodWall = false;
                 for (int checkX = i - 1; checkX < i + 2; checkX++) {
