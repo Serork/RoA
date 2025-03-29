@@ -418,7 +418,7 @@ sealed class Lumberjack : RoANPC {
                             SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                             if (Main.netMode != NetmodeID.MultiplayerClient) {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(NPC.width / 2 * NPC.direction + 10, 0f), Vector2.Zero, ModContent.ProjectileType<LumberjackAxeSlash>(),
-                                    60, 3f, Main.myPlayer);
+                                    60 / 2, 3f, Main.myPlayer);
                             }
                             NPC.netUpdate = true;
                         }

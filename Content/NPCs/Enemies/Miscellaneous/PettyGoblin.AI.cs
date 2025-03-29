@@ -249,7 +249,8 @@ sealed partial class PettyGoblin : ModNPC {
         NPC.target = player.whoAmI;
         SoundEngine.PlaySound(SoundID.DD2_DarkMageHurt, NPC.Center);
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GoblinsDagger>(), 30, 1.5f, Main.myPlayer, NPC.whoAmI);
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GoblinsDagger>(),
+                30 / 2, 1.5f, Main.myPlayer, NPC.whoAmI);
         }
     }
 

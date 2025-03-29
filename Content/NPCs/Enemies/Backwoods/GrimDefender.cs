@@ -479,7 +479,7 @@ sealed class GrimDefender : ModNPC {
                     if (_spearAttack) {
                         if (Main.netMode != NetmodeID.MultiplayerClient) {
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(),
-                                60, 4f, Main.myPlayer, NPC.whoAmI);
+                                60 / 2, 4f, Main.myPlayer, NPC.whoAmI);
                         }
                         //_tempPosition = Main.player[NPC.target].Center;
                         //_extraVelocity = Vector2.Zero;

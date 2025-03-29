@@ -474,7 +474,8 @@ sealed class Archdruid : DruidNPC {
             SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
             Vector2 directionNormalized = Vector2.Normalize(Main.player[NPC.target].Center - NPC.Center);
             if (Main.netMode != NetmodeID.MultiplayerClient) {
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + 18 * NPC.direction, NPC.Center.Y), new Vector2(directionNormalized.X * 5, directionNormalized.Y * 5), ModContent.ProjectileType<ArchBranch>(), 60, 1.5f, Main.myPlayer, 100, 0f);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + 18 * NPC.direction, NPC.Center.Y), new Vector2(directionNormalized.X * 5, directionNormalized.Y * 5), ModContent.ProjectileType<ArchBranch>(), 
+                    60 / 2, 1.5f, Main.myPlayer, 100, 0f);
             }
             return;
         }
@@ -485,7 +486,8 @@ sealed class Archdruid : DruidNPC {
         }
         SoundEngine.PlaySound(SoundID.Item76, position);
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(positionX * 16f + 8, positionY * 16f - 30), Vector2.Zero, ModContent.ProjectileType<ArchVileSpike>(), 50, 2.5f, Main.myPlayer);
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(positionX * 16f + 8, positionY * 16f - 30), Vector2.Zero, ModContent.ProjectileType<ArchVileSpike>(),
+                50 / 2, 2.5f, Main.myPlayer);
         }
     }
 
