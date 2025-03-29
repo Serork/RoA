@@ -423,7 +423,7 @@ sealed partial class PettyGoblin : ModNPC {
                     }
                     else if (NPC.directionY < 0 && (!Main.tile[tileX, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY + 1].TileType]) && (!Main.tile[tileX + NPC.direction, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX + NPC.direction, tileY + 1].TileType])) {
                         NPC.velocity.Y = -8f;
-                        //NPC.velocity.X *= 1.5f;
+                        NPC.velocity.X *= 1.5f;
                         NPC.netUpdate = true;
                         return true;
                     }
