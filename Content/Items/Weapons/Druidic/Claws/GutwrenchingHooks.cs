@@ -15,7 +15,7 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 sealed class GutwrenchingHooks : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
-        Item.SetWeaponValues(12, 4f);
+        Item.SetWeaponValues(14, 4f);
 
         Item.rare = ItemRarityID.Blue;
 
@@ -23,7 +23,7 @@ sealed class GutwrenchingHooks : BaseClawsItem {
 
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 14);
+        NatureWeaponHandler.SetPotentialDamage(Item, 16);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 

@@ -44,7 +44,7 @@ sealed class Bee : NatureProjectile {
     protected override void SafeOnSpawn(IEntitySource source) {
         base.SafeOnSpawn(source);
 
-        WreathPointsFine *= 3f;
+        WreathPointsFine *= 6f;
     }
 
     public override void AI() {

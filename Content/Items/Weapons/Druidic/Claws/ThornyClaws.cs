@@ -18,15 +18,15 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 sealed class ThornyClaws : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
-        Item.SetWeaponValues(22, 4f);
+        Item.SetWeaponValues(26, 4f);
 
         Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 20, false, autoReuse: true);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 24);
+        NatureWeaponHandler.SetPotentialDamage(Item, 28);
         NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 

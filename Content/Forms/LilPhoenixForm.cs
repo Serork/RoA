@@ -177,7 +177,7 @@ sealed class LilPhoenixForm : BaseForm {
                 MultiplayerSystem.SendPacket(new PhoenixFormPacket2(player));
             }
             ushort type = (ushort)ModContent.ProjectileType<LilPhoenixTrailFlame>();
-            int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(40f);
+            int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(35f);
             float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(0f);
             for (int i = 0; i < 2; i++) {
                 Projectile.NewProjectile(player.GetSource_Misc("phoenixdash"), player.Center, Vector2.Zero, type, damage, knockBack, player.whoAmI, (float)i);
@@ -298,7 +298,7 @@ sealed class LilPhoenixForm : BaseForm {
                     player.immuneTime = 30;
                     player.immuneNoBlink = true;
                     SoundEngine.PlaySound(SoundID.Item14, player.position);
-                    int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(50f * value);
+                    int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(40f * value);
                     int knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(4f * value);
                     ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixExplosion>();
                     int proj = Projectile.NewProjectile(player.GetSource_Misc("phoenixexplosion"), player.Center.X, player.Center.Y, 0f, 0f, projType, damage, knockBack, player.whoAmI);
@@ -347,7 +347,7 @@ sealed class LilPhoenixForm : BaseForm {
             SoundEngine.PlaySound(SoundID.Item45, player.position);
             plr._phoenixJustJumped = plr._phoenixJustJumpedForAnimation = true;
             BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
-            int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(40f);
+            int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(50f);
             float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(2f);
             ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixFlames>();
             if (player.whoAmI == Main.myPlayer) {
