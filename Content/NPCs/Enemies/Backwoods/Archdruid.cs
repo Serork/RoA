@@ -144,10 +144,6 @@ sealed class Archdruid : DruidNPC {
         if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
             npc.directionY = -1;
 
-        if (NPC.target == 255) {
-            NPC.TargetClosest();
-        }
-
         bool flag = false;
         bool canOpenDoor2 = false;
         bool flag6 = false;
