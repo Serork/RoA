@@ -3470,7 +3470,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int stoneCount = (int)(tileCount * 0.000525f);
         int x;
         for (int i = 0; i < stoneCount; i++) {
-            x = _random.Next(startX - 100, endX + 100);
+            x = _random.Next(startX - 50, endX + 50);
             int y = _random.Next(y2 - EdgeY, minY);
             if ((((double)x > (double)CenterX - 10 && (double)x < (double)CenterX + 10)) && y < BackwoodsVars.FirstTileYAtCenter + EdgeY) {
                 continue;
@@ -3484,7 +3484,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         stoneCount = (int)(tileCount * 0.0035f);
         int maxY = CenterY + (int)(EdgeY * 1.5f);
         for (int i = 0; i < stoneCount; i++) {
-            x = _random.Next(startX - 100, endX + 100);
+            x = _random.Next(startX - 50, endX + 50);
             int y = _random.Next(minY, maxY);
             int sizeX = _random.Next(2, 7);
             int sizeY = _random.Next(2, 23);
@@ -3494,7 +3494,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
         stoneCount = (int)(tileCount * 0.0055f);
         for (int i = 0; i < stoneCount; i++) {
-            x = _random.Next(startX - 100, endX + 100);
+            x = _random.Next(startX - 50, endX + 50);
             int y = _random.Next(maxY, Bottom + EdgeY * 2);
             int sizeX = _random.Next(4, 10);
             int sizeY = _random.Next(5, 30);
