@@ -237,7 +237,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 else if (WorldGen.getGoodWorldGen)
                     chance = 2;
 
-                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(chance) && _random.NextBool(chance) && flag) {
+                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(chance) && flag) {
                     int x = i, y = j;
                     bool flag2 = false;
                     if (WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1) && !Main.tile[x, y - 1].HasTile && !Main.tile[x + 1, y - 1].HasTile &&
