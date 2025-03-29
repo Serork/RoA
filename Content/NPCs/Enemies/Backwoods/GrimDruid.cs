@@ -126,7 +126,6 @@ sealed class GrimDruid : DruidNPC {
         NPC npc = NPC;
         //if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
         //    npc.directionY = -1;
-        npc.directionY = 1;
 
         bool targetPlayer = true;
         bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
@@ -235,6 +234,7 @@ sealed class GrimDruid : DruidNPC {
                 }
             }
         }
+        npc.directionY = 1;
         if (NPC.velocity.Y >= 0f) {
             int direction = Math.Sign(NPC.velocity.X);
 

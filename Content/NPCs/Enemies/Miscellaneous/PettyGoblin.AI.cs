@@ -315,8 +315,6 @@ sealed partial class PettyGoblin : ModNPC {
                 npc.velocity.X = 0f - num87;
         }
 
-        npc.directionY = 1;
-
         int targetDelay = 20;
         int npcTypeForSomeReason = NPC.type;
 
@@ -397,6 +395,7 @@ sealed partial class PettyGoblin : ModNPC {
                 }
             }
         }
+        npc.directionY = 1;
         if (tileChecks) {
             int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
             int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);

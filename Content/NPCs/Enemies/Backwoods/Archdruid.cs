@@ -144,8 +144,6 @@ sealed class Archdruid : DruidNPC {
         //if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
         //    npc.directionY = -1;
 
-        npc.directionY = 1;
-
         bool targetPlayer = true;
         bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
 
@@ -287,6 +285,7 @@ sealed class Archdruid : DruidNPC {
                 }
             }
         }
+        npc.directionY = 1;
         if (tileChecks) {
             int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
             int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);

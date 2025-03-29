@@ -337,7 +337,6 @@ static class NPCExtensions {
 
         //if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
         //    npc.directionY = -1;
-        npc.directionY = 1;
 
         bool flag = false;
 
@@ -564,6 +563,7 @@ static class NPCExtensions {
                 }
             }
         }
+        npc.directionY = 1;
         if (tileChecks) {
             int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
             int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
