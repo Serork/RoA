@@ -150,11 +150,11 @@ abstract class InsectForm : BaseForm {
         }
         ref int shootCounter = ref player.GetModPlayer<InsectFormHandler>()._shootCounter;
         if (!Main.mouseText) {
-            if (player.controlUseItem && Main.mouseLeft) {
+            if (Main.mouseLeft) {
                 shootCounter++;
                 insectTimer = 0;
             }
-            if (player.releaseUseItem && Main.mouseLeftRelease)
+            if (Main.mouseLeftRelease)
                 shootCounter = 0;
         }
         if (shootCounter % 10 == 5 && shootCounter > 0) {
