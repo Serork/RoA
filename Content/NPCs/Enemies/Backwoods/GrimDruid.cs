@@ -126,6 +126,12 @@ sealed class GrimDruid : DruidNPC {
         if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
             npc.directionY = -1;
 
+
+        bool targetPlayer = true;
+        bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
+
+        shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].InModBiome<BackwoodsBiome>() && targetPlayer);
+
         bool flag = false;
         bool canOpenDoor2 = false;
         bool flag6 = false;
@@ -137,7 +143,6 @@ sealed class GrimDruid : DruidNPC {
 
         flag6 = false;
 
-        bool targetPlayer = true;
         int num56 = 60;
 
         bool flag7 = false;
@@ -169,9 +174,6 @@ sealed class GrimDruid : DruidNPC {
                 npc.ai[3] = 0f;
         }
 
-        bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
-
-        shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.player[npc.target].InModBiome<BackwoodsBiome>() && targetPlayer);
         if (npc.ai[3] < (float)num56 && shouldTargetPlayer) {
             npc.TargetClosest();
             if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)

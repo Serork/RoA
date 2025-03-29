@@ -423,16 +423,7 @@ static class NPCExtensions {
 
         bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
 
-        Player? player = null;
-        float dist = float.MaxValue;
-        for (int i = 0; i < 255; i++) {
-            if (Main.player[i].active && !Main.player[i].dead && !Main.player[i].ghost && Main.player[i].Distance(npc.Center) < dist) {
-                dist = Main.player[i].Distance(npc.Center);
-                player = Main.player[i];
-            }
-        }
-
-        bool flag13 = player != null && (player.InModBiome<BackwoodsBiome>() || npc.life < (int)(npc.lifeMax * 0.8f) || targetPlayer2) && targetPlayer;
+        bool flag13 = (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].InModBiome<BackwoodsBiome>() || npc.life < (int)(npc.lifeMax * 0.8f) || targetPlayer2) && targetPlayer;
         if (backwoods) {
             shouldTargetPlayer = flag13;
         }

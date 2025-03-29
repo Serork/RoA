@@ -252,7 +252,7 @@ sealed class Lumberjack : RoANPC {
 
                 bool shouldTargetPlayer = Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
 
-                shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.player[npc.target].InModBiome<BackwoodsBiome>() && targetPlayer);
+                shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].InModBiome<BackwoodsBiome>() && targetPlayer);
                 if (npc.ai[3] < (float)num56 && shouldTargetPlayer) {
                     npc.TargetClosest();
                     if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
