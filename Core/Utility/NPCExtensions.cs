@@ -335,8 +335,9 @@ static class NPCExtensions {
         npc.aiStyle = -1;
         npc.ModNPC.AIType = -1;
 
-        if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
-            npc.directionY = -1;
+        //if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
+        //    npc.directionY = -1;
+        npc.directionY = 1;
 
         bool flag = false;
 
@@ -458,8 +459,8 @@ static class NPCExtensions {
             //}
 
             npc.TargetClosest();
-            if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
-                npc.directionY = -1;
+            //if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
+            //    npc.directionY = -1;
         }
         else if (!(npc.ai[2] > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
             bool flag12 = backwoods && targetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;

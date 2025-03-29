@@ -204,8 +204,9 @@ sealed class Lumberjack : RoANPC {
                 NPC.aiStyle = NPC.ModNPC.AIType = -1;
 
                 NPC npc = NPC;
-                if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
-                    npc.directionY = -1;
+                //if (Main.player[npc.target].position.Y + (float)Main.player[npc.target].height == npc.position.Y + (float)npc.height)
+                //    npc.directionY = -1;
+                npc.directionY = 1;
 
                 bool flag = false;
                 bool canOpenDoor2 = false;
@@ -255,8 +256,8 @@ sealed class Lumberjack : RoANPC {
                 shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].InModBiome<BackwoodsBiome>() && targetPlayer);
                 if (npc.ai[3] < (float)num56 && shouldTargetPlayer) {
                     npc.TargetClosest();
-                    if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
-                        npc.directionY = -1;
+                    //if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
+                    //    npc.directionY = -1;
                 }
                 else if (!(_timer > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
                     bool flag12 = targetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;

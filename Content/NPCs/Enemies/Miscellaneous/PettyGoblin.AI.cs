@@ -315,6 +315,8 @@ sealed partial class PettyGoblin : ModNPC {
                 npc.velocity.X = 0f - num87;
         }
 
+        npc.directionY = 1;
+
         int targetDelay = 20;
         int npcTypeForSomeReason = NPC.type;
 
