@@ -1687,7 +1687,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int j = WorldGenHelper.GetFirstTileY(i, true);
         j += 2;
         int attempts = EdgeX - EdgeX / 3;
-        while (--attempts > 0 && (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.First(x => x.X == i).Y + 3)) {
+        while (--attempts > 0 && (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile || j > _biomeSurface.FirstOrDefault(x => x.X == i).Y + 3)) {
             if (i <= CenterX + 25 && i >= CenterX - 25) {
                 break;
             }
