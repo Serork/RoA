@@ -174,9 +174,9 @@ abstract class DruidNPC : RoANPC {
                 Walking();
                 if (NPC.HasPlayerTarget) {
                     player = Main.player[NPC.target];
-                    if (AttackTimer < -TimeToChangeState() + 0.2f && NPC.velocity.Y < 0f) {
-                        NPC.velocity.Y = 0f;
-                    }
+                    //if (AttackTimer < -TimeToChangeState() + 0.2f && NPC.velocity.Y < 0f) {
+                    //    NPC.velocity.Y = 0f;
+                    //}
                     if (ShouldAttack()) {
                         AttackTimer += TimeSystem.LogicDeltaTime;
                     }

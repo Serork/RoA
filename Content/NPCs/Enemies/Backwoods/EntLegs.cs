@@ -51,7 +51,8 @@ sealed class EntLegs : RoANPC {
         NPC.defense = 6;
         NPC.knockBackResist = 0f;
 
-        NPC.width = 35; NPC.height = 40;
+        int width = 28; int height = 48;
+        NPC.Size = new Vector2(width, height);
 
         NPC.aiStyle = -1;
 

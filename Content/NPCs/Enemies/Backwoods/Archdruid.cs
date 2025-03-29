@@ -322,6 +322,7 @@ sealed class Archdruid : DruidNPC {
                         }
                         return false;
                     }
+                    
                     if (!JumpCheck(tileX, tileY)) {
                     }
                 }
