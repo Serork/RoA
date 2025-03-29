@@ -41,7 +41,7 @@ sealed class DryadStatue : ModTile {
 
         AddMapEntry(new Color(200, 200, 200), CreateMapEntryName());
 
-        DustType = DustID.Stone;
+        DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
         MineResist = 1.5f;
     }
 
