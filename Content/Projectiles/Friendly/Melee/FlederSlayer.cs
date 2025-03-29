@@ -404,7 +404,7 @@ sealed class FlederSlayer : ModProjectile {
                                             float value0 = _empoweredAttack ? 1.5f : 1f;
                                             float value2 = MathHelper.Clamp(_charge * 1.5f, 0f, 1f);
                                             Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * value2 * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
-                                            float size = 2f * (value2 * 1.15f + 0.15f) * value;
+                                            float size = 2f * (value2 * 1.15f + 0.15f) * value * Projectile.scale;
                                             int damage = (int)((Projectile.damage + Projectile.damage / 2) * (value2 * 1.15f + 0.15f) * value0);
                                             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
                                                                            projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
