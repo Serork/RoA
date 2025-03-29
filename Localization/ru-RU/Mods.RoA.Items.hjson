@@ -1907,7 +1907,7 @@ ElderwoodBeam: {
 }
 
 TealMossWall: {
-	DisplayName: Бирюзовая замщелая стена
+	DisplayName: Бирюзовая замшелая стена
 	// Tooltip: ""
 }
 
