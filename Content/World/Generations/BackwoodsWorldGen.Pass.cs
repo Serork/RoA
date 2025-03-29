@@ -2555,7 +2555,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        if (ModLoader.HasMod("SpiritMod")) {
+        /*if (ModLoader.HasMod("SpiritMod"))*/ {
             for (int i = Left - 100; i <= Right + 100; i++) {
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
                     if (WorldGenHelper.ActiveTile(i, j, _dirtTileType)) {
@@ -4068,7 +4068,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     public void ReplaceAllSnowBlockForSpiritModSupport(GenerationProgress progress, GameConfiguration config) {
         _grassTileType = (ushort)ModContent.TileType<BackwoodsGrass>();
-        for (int i = Left - 75; i < Right + 75; i++) {
+        for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(TileID.SnowBlock)) {
@@ -4121,7 +4121,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        bool hasSpirit = ModLoader.HasMod("SpiritMod");
+        bool hasSpirit = true/*ModLoader.HasMod("SpiritMod")*/;
 
         _dirtTileType = (ushort)ModContent.TileType<BackwoodsDirt>();
         _grassTileType = hasSpirit ? TileID.SnowBlock : (ushort)ModContent.TileType<BackwoodsGrass>();
@@ -4350,7 +4350,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         AddCliffIfNeeded(topLeftTileX, topRightTileX);
 
-        if (ModLoader.HasMod("SpiritMod")) {
+        /*if (ModLoader.HasMod("SpiritMod")) */{
             for (int i = Left - 100; i <= Right + 100; i++) {
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
                     if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt)) {
