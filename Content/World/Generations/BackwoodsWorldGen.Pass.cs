@@ -976,7 +976,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
                 if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) && WorldGen.SolidTile2(tile)) {
                     if (_random.NextBool(4)) {
-                        WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsSpecial3>(), _random.Next(3));
+                        WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsSpecial3>(), _random.Next(4));
                     }
                 }
             }
