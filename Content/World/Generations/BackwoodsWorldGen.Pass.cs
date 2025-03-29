@@ -269,9 +269,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void PlaceGateway(bool again = false) {
         int attempts = 100000;
+        int yMin = Math.Min(BackwoodsVars.FirstTileYAtCenter + 20, (int)Main.worldSurface + 5);
+        int yMax = Math.Max(BackwoodsVars.FirstTileYAtCenter + 20, (int)Main.worldSurface + 5);
         while (--attempts > 0) {
             int x = _random.Next(Left, Right);
-            int y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 20, (int)Main.worldSurface + 5);
+            int y = _random.Next(yMin - 5, yMax + 5);
             int type = ModContent.TileType<NexusGateway>();
             if (again) {
                 x = _gatewayLocation.X;
@@ -281,7 +283,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 else {
                     x = _random.Next(Left, Right);
-                    y = _random.Next(BackwoodsVars.FirstTileYAtCenter + 20, (int)Main.worldSurface + 5);
+                    y = _random.Next(yMin - 5, yMax + 5);
                 }
             }
             if (!TileObject.CanPlace(x, y, type, 0, 1, out var objectData)) {
@@ -2662,11 +2664,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int x = Left - 25; x <= Right + 25; x++) {
+        for (int x = Left - 100; x <= Right + 100; x++) {
             for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom + EdgeY + 10; y++) {
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
                 if (tile.HasTile && Main.tileCut[tile.TileType]) {
-                    WorldGen.SquareTileFrame(x, y);
+                    for (int x2 = x - 1; x2 < x + 2; x2++) {
+                        for (int y2 = y - 1; y2 < y + 2; y2++) {
+                            WorldGen.SquareTileFrame(x2, y2);
+                        }
+                    }
                 }
             }
         }
