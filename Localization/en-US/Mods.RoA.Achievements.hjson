@@ -1,6 +1,6 @@
 DefeatLothor: {
 	Name: Bestial Communion
-	Description: Defeat Lothor the Wild, a betrayed fool of the backwoods.
+	Description: Defeat Lothor the Wild, the resurrected scourge of the backwoods.
 }
 
 MineMercuriumNugget: {
@@ -19,11 +19,11 @@ SurviveBackwoodsFog: {
 }
 
 CraftDruidWreath: {
-	Name: Not Post-Mortem
+	Name: Not Post Mortem
 	Description: Craft your first wreath using a handful of flowers.
 }
 
 DefeatLothorEnraged: {
 	Name: Guts of Steel
-	Description: Defeat the enraged Lotor the Wild and obtain the lump of iron.
+	Description: Defeat the enraged Lothor the Wild and obtain the lump of iron.
 }
