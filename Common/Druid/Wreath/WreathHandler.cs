@@ -459,7 +459,6 @@ sealed class WreathHandler : ModPlayer {
         }
         else if (_stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
-            if (!_shouldDecrease) OnResetEffects();
         }
         else if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
             BaseRodProjectile? rodProjectile = null;
@@ -672,6 +671,10 @@ sealed class WreathHandler : ModPlayer {
 
     internal void Reset(bool slowReset = false, float extraChangingValue = 1f) {
         if (!_shouldDecrease2) {
+            if (!_shouldDecrease) {
+                OnResetEffects();
+            }
+
             if (IsFull1 && !HasKeepTime) {
                 _keepBonusesForTime = DruidPlayerStats.KeepBonusesForTime;
                 _keepProgress = ActualProgress2;
@@ -685,6 +688,10 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (slowReset) {
+            if (!_shouldDecrease2) {
+                OnResetEffects();
+            }
+
             _shouldDecrease2 = true;
             _currentChangingMult = TimeSystem.LogicDeltaTime;
             _extraChangingValueMultiplier = extraChangingValue;
