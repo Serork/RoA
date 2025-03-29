@@ -4519,7 +4519,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void GrowTrees() {
         int left = _toLeft ? (_lastCliffX != 0 ? _lastCliffX : Left) : Left;
         int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX : Right) : Right;
-        for (int i = left - 50; i <= right + 50; i++) {
+        for (int i = left - 100; i <= right + 100; i++) {
             if (i < left - 20 || i > right + 20) {
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + 20; j++) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j);
