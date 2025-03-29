@@ -53,8 +53,14 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex += 3;
         tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
 
-        genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
-        genIndex -= 2;
+        if (!hasSpirit) {
+            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
+            genIndex -= 2;
+        }
+        else {
+            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Chests"));
+            genIndex += 2;
+        }
         tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
 
         if (hasSpirit) {
