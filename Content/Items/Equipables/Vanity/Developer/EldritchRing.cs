@@ -67,7 +67,7 @@ sealed class EldritchRing : ModItem {
                         num = -40;
                     int num2 = Dust.NewDust(new Vector2(Player.position.X + (float)(Player.width / 4) + (float)num / 2 - num / 8,
                         Player.position.Y + (float)(Player.height / 2)), 30, 30,
-                        ModContent.DustType<SnowDust>(), 0f, 0f, 50, Color.Yellow, 0.6f);
+                        ModContent.DustType<SnowDust2>(), 0f, 0f, 50, new(255, 215, 50, 180), 0.6f);
                     Main.dust[num2].fadeIn = 1.1f;
                     Main.dust[num2].noGravity = true;
                     Main.dust[num2].noLight = true;
