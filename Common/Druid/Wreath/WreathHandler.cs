@@ -51,6 +51,7 @@ sealed class WreathHandler : ModPlayer {
     private bool _shouldSync;
     private int _hitEffectTimer;
     private bool _onFullCreated;
+    private bool _useAltSounds = true;
 
     public bool HasEnougthToJump;
 
@@ -242,7 +243,8 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void OnResetEffects() {
-        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathDischarge") { PitchVariance = 0.1f, Volume = 0.8f }, Player.Center);
+        if (_useAltSounds) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathNewDischarge") { PitchVariance = 0.1f, Volume = 2f }, Player.Center);
+        else SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathDischarge") { PitchVariance = 0.1f, Volume = 0.8f }, Player.Center);
     }
 
     internal void ForcedHardReset() {
@@ -375,7 +377,8 @@ sealed class WreathHandler : ModPlayer {
                         }
                     }
 
-                    SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathCharge") { PitchVariance = 0.1f, Volume = 0.8f }, Player.Center);
+                    if (_useAltSounds) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathNewCharge") { Pitch = 0.1f, PitchVariance = 0.1f, Volume = 1.5f }, Player.Center);
+                    else SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathCharge") { PitchVariance = 0.1f, Volume = 0.8f }, Player.Center);
 
                     _onFullCreated = true;
                 }
