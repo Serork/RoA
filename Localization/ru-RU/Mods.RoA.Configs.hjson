@@ -71,7 +71,7 @@ RoAClientConfig: {
 	}
 
 	WreathSoundMode: {
-		// Label: Wreath Sound Mode
+		// Label: Wreath Sound Style
 		// Tooltip: ""
 	}
 }
@@ -133,6 +133,6 @@ DamageTooltipOptions: {
 
 WreathSoundModes: {
 	// Tooltip: ""
-	// Normal.Label: Normal
-	// Alt.Label: Alt
+	// Normal.Label: Classic
+	// Alt.Label: Fancy
 }
