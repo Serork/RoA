@@ -49,7 +49,7 @@ sealed class TrailerCameraTest : ModPlayer {
         public override string Command => "point1";
         public override string Usage => "/point1";
 
-        public override void Action(CommandCaller caller, string input, string[] args) => _point1 = Main.LocalPlayer.Center.ToTileCoordinates();
+        public override void Action(CommandCaller caller, string input, string[] args) => _point2 = Main.LocalPlayer.Center.ToTileCoordinates();
     }
 
     private class SetPoint2Command : ModCommand {
@@ -57,7 +57,7 @@ sealed class TrailerCameraTest : ModPlayer {
         public override string Command => "point2";
         public override string Usage => "/point2";
 
-        public override void Action(CommandCaller caller, string input, string[] args) => _point2 = Main.LocalPlayer.Center.ToTileCoordinates();
+        public override void Action(CommandCaller caller, string input, string[] args) => _point1 = Main.LocalPlayer.Center.ToTileCoordinates();
     }
 
     private class SetDurationInCommand : ModCommand {
