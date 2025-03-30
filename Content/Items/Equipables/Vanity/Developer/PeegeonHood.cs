@@ -192,6 +192,10 @@ sealed class PeegeonHood : ModItem {
                 float x = (int)(trailPos[i].X);
                 float y = (int)(trailPos[i].Y - (float)(3 + offset));
 
+                if (player.gravDir == -1f) {
+                    y += player.height / 2 - 4;
+                }
+
 
                 float alpha = 15f;
                 Color color = Lighting.GetColor((int)(x / 16f), (int)(y / 16f));
