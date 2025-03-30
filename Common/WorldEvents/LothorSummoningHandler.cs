@@ -533,6 +533,10 @@ sealed class LothorSummoningHandler : ModSystem {
             if (Main.netMode != NetmodeID.MultiplayerClient)
                 Helper.NewMessage($"{message}", color);
             Shake(10f, 5f);
+
+            Vector2 stompPos = AltarHandler.GetAltarPosition().ToWorldCoordinates() + new Vector2(0, -1000f).RotatedByRandom(2);
+            SoundEngine.PlaySound(SoundID.Item73 with { Volume = 0.6f, Pitch = -0.3f, PitchVariance = 0.1f }, stompPos);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 0.25f, Pitch = -0.3f, PitchVariance = 0.1f }, stompPos);
         }
         else if (_preArrivedLothorBossTimer >= 4.262f && !_shake2) {
             _shake2 = true;
@@ -544,10 +548,14 @@ sealed class LothorSummoningHandler : ModSystem {
             if (Main.netMode != NetmodeID.MultiplayerClient)
                 Helper.NewMessage($"{message}", color);
             Shake(20f, 10f);
+
+            Vector2 stompPos = AltarHandler.GetAltarPosition().ToWorldCoordinates() + new Vector2(0, -600f).RotatedByRandom(2);
+            SoundEngine.PlaySound(SoundID.Item73 with { Volume = 0.6f, Pitch = -0.3f, PitchVariance = 0.1f }, stompPos);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 0.25f, Pitch = -0.3f, PitchVariance = 0.1f }, stompPos);
         }
         else if (_preArrivedLothorBossTimer >= 6f && !ActiveMessages.Item3) {
             ActiveMessages.Item3 = true;
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream") { Volume = 1f },
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorScream2") { Volume = 0.8f, Pitch = 0.5f },
                 AltarHandler.GetAltarPosition().ToWorldCoordinates());
         }
         else if (flag2) {

@@ -477,7 +477,7 @@ sealed partial class DruidSoul : RoANPC {
                 if (Main.rand.NextBool(1 + Main.rand.Next(2) + (int)((3 + count) * MathHelper.Clamp(1f - altarStrength * 3f - (1f - NPC.scale), 0f, 1f)))) {
                     if (!_lothorSummonSoundPlayed) {
                         _lothorSummonSoundPlayed = true;
-                        _lothorSummonSound = SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorAltarSummon3") { Volume = 1f }, NPC.Center);
+                        _lothorSummonSound = SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorAltar2") { Volume = 1f }, NPC.Center);
                     }
                     Vector2 center = NPC.position + new Vector2(3f + Main.rand.Next(NPC.width - 3), NPC.height / 2f + 8f);
                     center.X += Main.rand.Next(-100, 100) * 0.05f;
