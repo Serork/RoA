@@ -21,7 +21,7 @@ sealed class BloodlustPlayer : ModPlayer {
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         if (bloodlustEffect & target.life <= 0) {
-            BloodlustHeal(Math.Min((int)(target.lifeMax * 0.01f), 100));
+            BloodlustHeal(Math.Max(1, (int)(Player.statLifeMax2 * Main.rand.NextFloat(0.005f, 0.01f))));
         }
     }
 
