@@ -124,11 +124,9 @@ sealed class BaseFormHandler : ModPlayer {
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
         T formInstance = instance ?? GetForm<T>();
         if (formInstance != null) {
-            if (player.HasBuff(formInstance.MountBuff.Type)) {
-                player.GetModPlayer<WreathHandler>().OnResetEffects();
-            }
             player.ClearBuff(formInstance.MountBuff.Type);
             player.GetModPlayer<WreathHandler>().Reset(true);
+            player.GetModPlayer<WreathHandler>().OnResetEffects();
 
             if (player.whoAmI == Main.myPlayer) {
                 SoundEngine.PlaySound(formInstance.BaseForm.ReleaseSound, player.Center);
