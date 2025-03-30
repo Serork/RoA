@@ -92,7 +92,7 @@ sealed class TrailerCameraTest : ModPlayer {
         if (!_shifted) {
             Point point1 = _point1;
             Point point2 = _point2;
-            CameraSystem.AsymetricalPan(_durationOut, _durationHold, _durationIn,
+            CameraSystem.AsymetricalPan(_durationIn, _durationHold, _durationOut,
                 point1.ToWorldCoordinates(), point2.ToWorldCoordinates(), EaseFunction);
             _shifted = true;
         }
