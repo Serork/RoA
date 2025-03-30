@@ -2,12 +2,14 @@
 
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -18,6 +20,8 @@ namespace RoA.Common.WorldEvents;
 sealed class AltarHandler : ModSystem {
     private static Point _altarPosition;
     private static float _altarStrength, _altarFactor;
+    private static bool _shouldUpdateAudio;
+    private static float _musicFade;
 
     internal static void SetPosition(Point altarPosition) {
         if (!WorldGen.gen) {
@@ -27,9 +31,50 @@ sealed class AltarHandler : ModSystem {
         _altarPosition = altarPosition;
     }
 
+    private sealed class LothorSummoningHandler2 : ModSceneEffect {
+        public override int Music => MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor");
+
+        public override SceneEffectPriority Priority => SceneEffectPriority.Event;
+
+        public override bool IsSceneEffectActive(Player player) {
+            bool result = LothorSummoningHandler.ActiveMessages.Item1 && !NPC.AnyDanger(true);
+            return result;
+        }
+    }
+
     public static Point GetAltarPosition() => _altarPosition;
     public static float GetAltarStrength() => _altarStrength;
     public static float GetAltarFactor() => _altarFactor;
+
+    public override void Load() {
+        On_Main.UpdateAudio += On_Main_UpdateAudio;
+        On_LegacyAudioSystem.UpdateCommonTrack += On_LegacyAudioSystem_UpdateCommonTrack;
+    }
+
+    private void On_LegacyAudioSystem_UpdateCommonTrack(On_LegacyAudioSystem.orig_UpdateCommonTrack orig, LegacyAudioSystem self, bool active, int i, float totalVolume, ref float tempFade) {
+        //if (LothorSummoningHandler.ActiveMessages.Item1) {
+        //    i = MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor");
+        //}
+
+        ////if (_shouldUpdateAudio) {
+        ////    if (Main.netMode != NetmodeID.Server) {
+        ////        totalVolume = Math.Min(totalVolume, MathHelper.Clamp(1f - _altarStrength * 2f, 0f, 1f));
+        ////    }
+        ////}
+
+        orig(self, active, i, totalVolume, ref tempFade);
+    }
+
+    private void On_Main_UpdateAudio(On_Main.orig_UpdateAudio orig, Main self) {
+        if (_shouldUpdateAudio) {
+            if (Main.netMode != NetmodeID.Server) {
+                Main.musicFade[Main.curMusic] = MathHelper.Clamp(1f - _altarStrength * 2f, 0f, 1f);
+                _musicFade = Main.musicFade[Main.curMusic];
+            }
+        }
+
+        orig(self);
+    }
 
     public override void PostUpdateNPCs() {
         if (!NPC.downedBoss2) {
@@ -41,6 +86,29 @@ sealed class AltarHandler : ModSystem {
         NPC druidSoul = null;
         bool flag = NPC.AnyNPCs(type);
         bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
+        if (flag6) {
+            bool check = LothorSummoningHandler.ActiveMessages.Item1 && !NPC.AnyDanger(true);
+            if (check) {
+                if (_musicFade < 1f) {
+                    _musicFade += 0.005f;
+                }
+                if (_musicFade < 0.2f) {
+                    Main.musicFade[Main.curMusic] *= MathHelper.Clamp(1f - _altarStrength * 2f, 0f, 1f);
+                }
+                else {
+                    Main.musicFade[Main.curMusic] *= Utils.Remap(_musicFade, 0f, 1f, 0.2f, 1f, true);
+                }
+            }
+            else {
+                if (LothorSummoningHandler.PreArrivedLothorBoss.Item1 && !NPC.AnyDanger(true)) {
+                    Main.musicFade[Main.curMusic] *= MathHelper.Clamp(1f - _altarStrength * 2f, 0f, 1f);
+                }
+                if (_musicFade > 0f) {
+                    _musicFade -= 0.005f;
+                }
+            }
+        }
+        _shouldUpdateAudio = false;
         if (!flag6 && !flag) {
             if (_altarStrength > 0f) {
                 _altarStrength -= 0.01f;
@@ -77,9 +145,7 @@ sealed class AltarHandler : ModSystem {
         if (druidSoul is null) {
             return;
         }
-        if (Main.netMode != NetmodeID.Server) {
-            Main.musicFade[Main.curMusic] = MathHelper.Clamp(1f - _altarStrength * 2f, -0.25f, 1f);
-        }
+        _shouldUpdateAudio = true;
         Vector2 npcCenter = druidSoul.Center;
         float radius = 100f;
         float x = npcCenter.X - altarCoords.X;

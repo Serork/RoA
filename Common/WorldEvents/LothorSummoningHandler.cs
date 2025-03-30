@@ -503,9 +503,9 @@ sealed class LothorSummoningHandler : ModSystem {
         bool flag2 = _preArrivedLothorBossTimer >= 9.5f;
         bool flag3 = _preArrivedLothorBossTimer < 8f;
         if (PreArrivedLothorBoss.Item1 && !flag && flag3) {
-            if (Main.netMode != NetmodeID.Server) {
-                Main.musicFade[Main.curMusic] = -0.25f;
-            }
+            //if (Main.netMode != NetmodeID.Server) {
+            //    Main.musicFade[Main.curMusic] = -0.25f;
+            //}
         }
         if (!flag) {
             _preArrivedLothorBossTimer += TimeSystem.LogicDeltaTime * 1f;
