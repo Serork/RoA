@@ -70,6 +70,10 @@ sealed class PlayOtherItemSoundPacket : NetPacket {
         else if (soundStyle == 15) {
             SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 0.3f, PitchVariance = 0.1f, Volume = 1f }, position);
         }
+        else if (soundStyle == 16) {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Twinkle") { Pitch = 0.3f, Volume = 0.2f }, position);
+            SoundEngine.PlaySound(SoundID.Item25 with { Pitch = -0.4f, Volume = 0.4f }, position);
+        }
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, soundStyle, position), ignoreClient: sender);
         }
