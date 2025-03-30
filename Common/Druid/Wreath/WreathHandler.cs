@@ -244,7 +244,7 @@ sealed class WreathHandler : ModPlayer {
 
     internal void OnResetEffects() {
         if (_useAltSounds) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathNewDischarge") { PitchVariance = 0.1f, Volume = 2f }, Player.Center);
-        else SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathDischarge") { PitchVariance = 0.1f, Volume = 0.8f }, Player.Center);
+        else SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathDischarge") { PitchVariance = 0.1f, Volume = 1f }, Player.Center);
     }
 
     internal void ForcedHardReset() {
@@ -675,7 +675,7 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    internal void Reset(bool slowReset = false, float extraChangingValue = 1f) {
+    internal void Reset(bool slowReset = false, float extraChangingValue = 1f, bool form = false) {
         if (!_shouldDecrease2) {
             if (!_shouldDecrease) {
                 OnResetEffects();
@@ -694,7 +694,7 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (slowReset) {
-            if (!_shouldDecrease2) {
+            if (!_shouldDecrease2 && !form) {
                 OnResetEffects();
             }
 
