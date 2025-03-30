@@ -142,7 +142,7 @@ sealed class PeegeonHood : ModItem {
             => eyeTrailTexture = null;
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-            => drawInfo.drawPlayer.armor[10].type == ModContent.ItemType<PeegeonHood>();
+            => true;
 
         public override Position GetDefaultPosition()
             => new AfterParent(PlayerDrawLayers.Head);
@@ -156,6 +156,13 @@ sealed class PeegeonHood : ModItem {
                 return;
 
             if (drawInfo.drawPlayer.face > 0) {
+                return;
+            }
+
+            if (drawInfo.drawPlayer.armor[10].type != ModContent.ItemType<PeegeonHood>() &&
+                trailPos != new Vector2[10]) {
+                trailPos = new Vector2[10];
+                oldPos = new Vector2[10];
                 return;
             }
 
