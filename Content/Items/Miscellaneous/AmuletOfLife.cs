@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
 
+[Autoload(false)]
 sealed class AmuletOfLife : ModItem {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Amulet Of Life");
