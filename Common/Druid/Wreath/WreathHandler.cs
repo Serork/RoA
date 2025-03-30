@@ -318,6 +318,8 @@ sealed class WreathHandler : ModPlayer {
         StartSlowlyIncreasingUntilFull = true;
         _formInfo = formInfo;
         IncreaseResourceValue(increaseUntilFull: true);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Twinkle") { Pitch = 0.3f, Volume = 0.2f }, Player.Center);
+        SoundEngine.PlaySound(SoundID.Item25 with { Pitch = -0.4f, Volume = 0.4f }, Player.Center);
     }
 
     internal void Reset1() {

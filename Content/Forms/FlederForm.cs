@@ -89,6 +89,8 @@ sealed class FlederForm : BaseForm {
                 if (WorldGen.SolidOrSlopedTile(tileCoordinates1.X, tileCoordinates1.Y) || WorldGen.SolidOrSlopedTile(tileCoordinates2.X, tileCoordinates2.Y)) {
                     Player.velocity.X /= 2f;
                 }
+
+                SoundEngine.PlaySound(SoundID.Item169 with { Pitch = -0.8f, PitchVariance = 0.1f, Volume = 0.6f }, Player.Center);
             }
 
             if (ActiveDash) {
@@ -331,6 +333,8 @@ sealed class FlederForm : BaseForm {
                 player.velocity.Y = 0f;
                 player.velocity.Y -= 5f;
 
+                SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 0.3f, PitchVariance = 0.1f, Volume = 1f }, player.Bottom);
+
                 NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
             }
             if (shootCounter >= 70 && shootCounter < 100) {
@@ -342,6 +346,8 @@ sealed class FlederForm : BaseForm {
                 player.velocity.Y -= 7.5f;
 
                 NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
+
+                SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 0.3f, PitchVariance = 0.1f, Volume = 1.2f }, player.Bottom);
             }
             if (shootCounter >= 100) {
                 BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
@@ -352,6 +358,8 @@ sealed class FlederForm : BaseForm {
                 player.velocity.Y -= 10f;
 
                 NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
+
+                SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 0.3f, PitchVariance = 0.1f, Volume = 1.4f }, player.Bottom);
             }
             shootCounter = 0;
         }
