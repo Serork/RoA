@@ -26,6 +26,11 @@ sealed class RoAClientConfig : ModConfig {
         Option5
     }
 
+    public enum WreathSoundModes {
+        Normal,
+        Alt
+    }
+
     [Header("Mods.RoA.Configs.GeneralOptionsHeader")]
     [DefaultValue(true)]
     [ReloadRequired]
@@ -35,6 +40,10 @@ sealed class RoAClientConfig : ModConfig {
     [DefaultValue(HighlightModes.Normal)]
     [DrawTicks]
     public HighlightModes HighlightMode;
+
+    [DefaultValue(WreathSoundModes.Alt)]
+    [DrawTicks]
+    public WreathSoundModes WreathSoundMode;
 
     [Header("Mods.RoA.Configs.DruidOptionsHeader")]
     [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement))]

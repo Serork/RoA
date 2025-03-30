@@ -69,6 +69,11 @@ RoAClientConfig: {
 		Label: Подсказка о масштабировании урона класса 'Друид'
 		// Tooltip: ""
 	}
+
+	WreathSoundMode: {
+		// Label: Wreath Sound Mode
+		// Tooltip: ""
+	}
 }
 
 RoAServerConfig: {
@@ -124,4 +129,10 @@ DamageTooltipOptions: {
 	// Option3.Label: "3"
 	// Option4.Label: "4"
 	// Option5.Label: "5"
+}
+
+WreathSoundModes: {
+	// Tooltip: ""
+	// Normal.Label: Normal
+	// Alt.Label: Alt
 }

@@ -397,6 +397,11 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PostUpdateEquips() {
+        bool alt = ModContent.GetInstance<RoAClientConfig>().WreathSoundMode == RoAClientConfig.WreathSoundModes.Alt;
+        if (_useAltSounds != alt) {
+            _useAltSounds = alt;
+        }
+
         ApplyBuffs();
         GetWreathType();
         MakeDusts();
