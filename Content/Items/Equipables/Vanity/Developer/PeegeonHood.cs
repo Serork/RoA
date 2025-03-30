@@ -169,7 +169,7 @@ sealed class PeegeonHood : ModItem {
             if (!Main.gamePaused) {
                 for (int i = trailPos.Length - 1; i > 0; i--) {
                     trailPos[i] = player.MountedCenter + (oldPos[3] - player.MountedCenter) * (i) / trailPos.Length;
-                    trailPos[i].Y -= idleCount * i;
+                    trailPos[i].Y -= idleCount * i * player.gravDir;
                     trailPos[i] += new Vector2(0, idleCount * i / 3).RotatedByRandom(360);
                 }
 
