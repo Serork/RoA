@@ -1915,3 +1915,8 @@ BackwoodsRootWall: {
 	DisplayName: Стена с чащобными корнями
 	// Tooltip: ""
 }
+
+DruidSoul: {
+	// DisplayName: Druid Soul
+	// Tooltip: ""
+}
