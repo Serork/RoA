@@ -55,7 +55,7 @@ ElderwoodChest: {
 
 DryadStatue: {
 	DisplayName: Статуя дриады
-	Tooltip: ""
+	Tooltip: "'Покинутый'"
 }
 
 MiracleMint: {

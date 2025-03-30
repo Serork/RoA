@@ -55,7 +55,7 @@ ElderwoodChest: {
 
 DryadStatue: {
 	DisplayName: Dryad Statue
-	Tooltip: ""
+	Tooltip: "'Forsaken'"
 }
 
 MiracleMint: {
