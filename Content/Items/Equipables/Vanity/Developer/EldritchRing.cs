@@ -171,7 +171,7 @@ sealed class EldritchRing : ModItem {
                     Vector2 position = new(Player.MountedCenter.X, Player.MountedCenter.Y);
                     if (!Main.gamePaused) {
                         runePosition = new((float)(int)position.X, (float)(int)position.Y);
-                        runeRotation += (Player.direction > 0 ? 0.04f : -0.04f) + Player.velocity.X * 0.02f;
+                        runeRotation += ((Player.direction > 0 ? 0.04f : -0.04f) + Player.velocity.X * 0.02f) * Player.gravDir;
                     }
                 }
             }

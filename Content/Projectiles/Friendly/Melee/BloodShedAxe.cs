@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
@@ -17,6 +18,8 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using static Terraria.Player;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
@@ -324,7 +327,7 @@ sealed class BloodshedAxe : ModProjectile {
             CombatText.NewText(player.Hitbox, CombatText.DamagedFriendly, damage, false, false);
 
             for (int i = 0; i < 10; i++) {
-                int dust = Dust.NewDust(Projectile.Center + new Vector2(0, -60).RotatedBy((Projectile.rotation + 90) * Projectile.spriteDirection), 0, 0, DustID.RainbowMk2, 0f, 0f, 0, new Color(255, 100, 100, 0), Main.rand.NextFloat(1f, 1.5f));
+                int dust = Dust.NewDust(Projectile.Center + new Vector2(0, -60).RotatedBy((Projectile.rotation + 90 * player.gravDir) * Projectile.spriteDirection), 0, 0, DustID.RainbowMk2, 0f, 0f, 0, new Color(255, 100, 100, 0), Main.rand.NextFloat(1f, 1.5f));
                 Main.dust[dust].velocity = Main.rand.NextVector2Circular(2f, 2f);
                 Main.dust[dust].position += Main.dust[dust].velocity * Main.rand.NextFloat(20f, 25f);
                 Main.dust[dust].velocity = rotationVector2 * Projectile.spriteDirection;
@@ -336,7 +339,8 @@ sealed class BloodshedAxe : ModProjectile {
         if (_powerUp) Lighting.AddLight(Projectile.Center, 0.4f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255, 0.2f * (255 - Projectile.alpha) / 255);
 
         float armRotation = Projectile.rotation - MathHelper.PiOver2;
-        player.SetCompositeBothArms(armRotation, Player.CompositeArmStretchAmount.Full);
+        player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, armRotation);
+        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
         if (_time > 0) {
             _time--;
         }
@@ -356,6 +360,8 @@ sealed class BloodshedAxe : ModProjectile {
         Player player = Main.player[Projectile.owner];
         Rectangle? rectangle = new Rectangle?(new Rectangle(66 * (Projectile.spriteDirection != 1 ? 1 : 0), 0, 66, 66));
         if (Projectile.ai[1] == 2 && Projectile.localAI[1] < 1f) Projectile.localAI[1] += 0.1f;
+        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+        Main.spriteBatch.BeginBlendState(BlendState.AlphaBlend);
 
         if (_powerUp && Projectile.ai[1] != 100f) {
             for (int i = 0; i < 3; i++) {
@@ -388,6 +394,8 @@ sealed class BloodshedAxe : ModProjectile {
                               Projectile.rotation + extraRotation + 0.78f,
                               new Vector2(0f, texture2D.Height),
                               Projectile.scale, SpriteEffects.None, 0f);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(in snapshot);
         return false;
     }
 }

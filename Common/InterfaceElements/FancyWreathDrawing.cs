@@ -192,6 +192,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
             wreathPosition = RoAClientConfig.WreathPositions.Health;
         }
+        bool reversedGravity = player.gravDir == -1f;
+        if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
+            reversedGravity = false;
+        }
         Vector2 screenSize = Main.ScreenSize.ToVector2();
         screenSize *= Main.UIScale;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
@@ -229,9 +233,16 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             else if (flag3) {
                 vector2.X *= 0.95f;
             }
-            spriteBatch.DrawString(FontAssets.MouseText.Value, text3, vector + new Vector2((0f - vector2.X) * 0.5f, 0f), textColor, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(FontAssets.MouseText.Value, stats.CurrentResource + "/" + stats.TotalResource, vector + new Vector2(vector2.X * 0.5f, 0f), textColor, 0f,
-                new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f, SpriteEffects.None, 0f);
+            if (reversedGravity) {
+                vector.Y += 28f;
+            }
+            spriteBatch.DrawString(FontAssets.MouseText.Value, text3,
+                reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2((0f - vector2.X) * 0.5f, 0f)) : (vector + new Vector2((0f - vector2.X) * 0.5f, 0f)), textColor, 0f, default(Vector2), 1f,
+                reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
+            spriteBatch.DrawString(FontAssets.MouseText.Value, stats.CurrentResource + "/" + stats.TotalResource,
+                reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2(vector2.X * 0.5f, 0f)) : (vector + new Vector2(vector2.X * 0.5f, 0f)), textColor, 0f,
+                new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f, 
+                reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
             position.Y += 6;
         }
         Rectangle frame = new(0, 0, width, height);
@@ -243,7 +254,20 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
             scale = 1f;
         }
-        spriteBatch.Draw(mainTexture, position, frame, color, 0f, origin, scale, SpriteEffects.None, 0f);
+
+        if (reversedGravity) {
+            position = Main.ReverseGravitySupport(position);
+        }
+        float rotation = 0f;
+        if (reversedGravity) {
+            rotation = MathHelper.Pi;
+        }
+        SpriteEffects effects = SpriteEffects.None;
+        if (reversedGravity) {
+            effects = SpriteEffects.FlipHorizontally;
+            position.Y -= 0f;
+        }
+        spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
 
         IsHoveringUI = false;
         Vector2 mouseScreen = Main.MouseScreen;
@@ -277,7 +301,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         origin = new Vector2(30, 30) / 2f;
         position -= Vector2.One * 2f;
         position.X += 1f;
-        spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi, origin, scale, SpriteEffects.None, 0f);
+        if (reversedGravity) {
+            position.Y += 4f;
+        }
+        spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi + rotation, origin, scale, effects, 0f);
 
         // full icon
         if (stats.IsFull1) {
@@ -292,7 +319,11 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             position2.X += 1f;
             position2 += origin2;
             position2.Y += 3f;
-            spriteBatch.Draw(mainTexture, position2, frame, color, 0f, origin, scale, SpriteEffects.None, 0f);
+            Vector2 offset = Vector2.Zero;
+            if (reversedGravity) {
+                offset.Y -= 32f;
+            }
+            spriteBatch.Draw(mainTexture, position2 + offset, frame, color, rotation, origin, scale, effects, 0f);
         }
 
         // soul of the woods fill
@@ -305,7 +336,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             progress = value;
             frame.Height = (int)(30 * progress);
             origin = new Vector2(30, 30) / 2f;
-            spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi + rotation, origin, scale, effects, 0f);
         }
 
         // soul of the woods full icon
@@ -321,7 +352,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             position2.X += 1f;
             position2 += origin2;
             position2.Y += 3f;
-            spriteBatch.Draw(mainTexture, position2, frame, color, 0f, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(mainTexture, position2, frame, color, rotation, origin, scale, effects, 0f);
         }
     }
 
@@ -354,6 +385,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 return;
             }
         }
+        bool reversedGravity = player.gravDir == -1f;
+        if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
+            reversedGravity = false;
+        }
         if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
@@ -381,9 +416,16 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             else if (flag3) {
                 vector2.X *= 0.95f;
             }
-            spriteBatch.DrawString(FontAssets.MouseText.Value, text3, vector + new Vector2((0f - vector2.X) * 0.5f, 0f), textColor, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(FontAssets.MouseText.Value, stats.CurrentResource + "/" + stats.TotalResource, vector + new Vector2(vector2.X * 0.5f, 0f), textColor, 0f,
-                new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f, SpriteEffects.None, 0f);
+            if (reversedGravity) {
+                vector.Y += 28f;
+            }
+            spriteBatch.DrawString(FontAssets.MouseText.Value, text3,
+                reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2((0f - vector2.X) * 0.5f, 0f)) : (vector + new Vector2((0f - vector2.X) * 0.5f, 0f)), textColor, 0f, default(Vector2), 1f,
+                reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
+            spriteBatch.DrawString(FontAssets.MouseText.Value, stats.CurrentResource + "/" + stats.TotalResource,
+                reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2(vector2.X * 0.5f, 0f)) : (vector + new Vector2(vector2.X * 0.5f, 0f)), textColor, 0f,
+                new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f,
+                reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
             position.Y += 6;
         }
         Rectangle frame = new(0, 0, width, height);
@@ -395,8 +437,22 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
             scale = 1f;
         }
-
-        spriteBatch.Draw(mainTexture, position, frame, color, 0f, origin, scale, SpriteEffects.None, 0f);
+        if (reversedGravity) {
+            position = Main.ReverseGravitySupport(position);
+        }
+        float rotation = 0f;
+        if (reversedGravity) {
+            rotation = MathHelper.Pi;
+        }
+        SpriteEffects effects = SpriteEffects.None;
+        if (reversedGravity) {
+            effects = SpriteEffects.FlipHorizontally;
+            position.Y -= 1f;
+        }
+        if (reversedGravity) {
+            position.Y += 1f;
+        }
+        spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
 
         IsHoveringUI = false;
         Vector2 mouseScreen = Main.MouseScreen;
@@ -431,7 +487,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         position -= Vector2.One * 2f;
         position.X += 1f;
         position += new Vector2(1f, 2f);
-        spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi, origin, scale, SpriteEffects.None, 0f);
+        spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi + rotation, origin, scale, effects, 0f);
 
         // full icon
         if (stats.IsFull1) {
@@ -442,7 +498,11 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             Vector2 origin2 = origin;
             origin = frame.Size() / 2f;
             Vector2 position2 = position;
-            spriteBatch.Draw(mainTexture, position2, frame, color, MathHelper.Pi, origin, scale, SpriteEffects.None, 0f);
+            Vector2 offset = Vector2.Zero;
+            //if (reversedGravity) {
+            //    offset.Y -= 32f;
+            //}
+            spriteBatch.Draw(mainTexture, position2 + offset, frame, color, MathHelper.Pi + rotation, origin, scale, effects, 0f);
         }
 
         // soul of the woods fill
@@ -455,7 +515,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             progress = value;
             frame.Height = (int)(28 * progress);
             origin = new Vector2(28, 28) / 2f;
-            spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(mainTexture, position, frame, color, MathHelper.Pi + rotation, origin, scale, effects, 0f);
         }
 
         // soul of the woods icon
@@ -467,7 +527,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             Vector2 origin2 = origin;
             origin = frame.Size() / 2f;
             Vector2 position2 = position;
-            spriteBatch.Draw(mainTexture, position2, frame, color, MathHelper.Pi, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(mainTexture, position2, frame, color, MathHelper.Pi + rotation, origin, scale, effects, 0f);
         }
     }
 }

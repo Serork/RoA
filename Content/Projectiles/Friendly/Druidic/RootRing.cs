@@ -64,7 +64,8 @@ sealed class RootRing : NatureProjectile {
         float projOpacity = 1f - (float)_alpha / 255f;
         Lighting.AddLight(Projectile.Center, new Color(248, 119, 119).ToVector3() * projOpacity);
 
-        Vector2 position = new((float)(player.Center.X - (Projectile.width / 2)), (float)(player.Center.Y - 90 + (float)(player.gfxOffY - 60.0)));
+        Vector2 position = new((float)(player.Center.X - (Projectile.width / 2)), (float)(player.Center.Y - 90 + (float)(player.gfxOffY - 60.0 + 
+            (player.gravDir == -1f ? -120f : 0f))));
         Projectile.position = new Vector2((int)position.X, (int)position.Y);
         if (player.gravDir == -1.0) Projectile.position.Y += 120f;
         Projectile.rotation += 0.03f;
@@ -110,7 +111,9 @@ sealed class RootRing : NatureProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        spriteBatch.BeginBlendState(BlendState.AlphaBlend, SamplerState.LinearClamp);
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, 
+            Main.GameViewMatrix.ZoomMatrix);
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 position = Projectile.Center - Main.screenPosition;
         Player player = Main.player[Projectile.owner];

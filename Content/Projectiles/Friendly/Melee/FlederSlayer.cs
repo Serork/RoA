@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Utilities;
 
+using RoA.Common.Cache;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -390,7 +391,7 @@ sealed class FlederSlayer : ModProjectile {
                         float slow = Math.Clamp(Projectile.ai[1] >= 10f ? Helper.EaseInOut4((Projectile.ai[1] - 10f) / 10f) : 1f, 0f, 1f);
                         float slow2 = Math.Clamp(Swing(Projectile.ai[1] >= 12f ? Projectile.ai[1] - 12f / 12f : 1f), 0f, 1f);
                         float extraRotation = playerDirection * 0.35f * Helper.EaseInOut3(progress) * slow * slow2;
-                        Vector2 extra = Vector2.Normalize(Projectile.velocity) * -((Projectile.rotation + (playerDirection != 1 ? MathHelper.Pi : 0f)) * playerDirection).ToRotationVector2() * 165f * Projectile.localAI[2];
+                        Vector2 extra = Vector2.Normalize(Projectile.velocity) * -((Projectile.rotation + (playerDirection != 1 ? MathHelper.Pi : 0f)) * playerDirection * player.gravDir).ToRotationVector2() * 165f * Projectile.localAI[2];
                         Vector2 projectileCenter = Projectile.Center + extra;
                         if (!_released && Projectile.ai[1] <= 16f) {
                             if (Projectile.ai[1] > 4f &&
@@ -406,7 +407,8 @@ sealed class FlederSlayer : ModProjectile {
                                             Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * value2 * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
                                             float size = 2f * (value2 * 1.15f + 0.15f) * value * Projectile.scale;
                                             int damage = (int)((Projectile.damage + Projectile.damage / 2) * (value2 * 1.15f + 0.15f) * value0);
-                                            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
+                                            if (Main.player[Projectile.owner].gravDir != -1f) {
+                                                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("Fleder Slayer Slash"),
                                                                            projectileCenter - extra / 2f + new Vector2(i * Main.rand.Next(5, 21)),
                                                                            velocity,
                                                                            ModContent.ProjectileType<WaveSlash>(),
@@ -414,6 +416,7 @@ sealed class FlederSlayer : ModProjectile {
                                                                            Projectile.knockBack,
                                                                            Projectile.owner,
                                                                            size);
+                                            }
                                         }
                                     }
                                     if (Main.netMode != NetmodeID.Server && Main.myPlayer == Projectile.owner) {
@@ -474,14 +477,19 @@ sealed class FlederSlayer : ModProjectile {
     }
 
     private void SlashDusts() {
+        if (Main.player[Projectile.owner].gravDir == -1f) {
+            return;
+        }
         if (_released) {
             return;
         }
         for (int i = 0; i < 4; i++) {
-            Vector2 rotation = Projectile.rotation.ToRotationVector2();
-            Vector2 velocity = rotation.RotatedBy(MathHelper.PiOver2 * -Main.player[Projectile.owner].direction) * Main.rand.NextFloat(2f, 12f);
+            float rotation2 = Projectile.rotation;
+            Vector2 rotation = rotation2.ToRotationVector2();
+            float rotation3 = MathHelper.PiOver2 * -Main.player[Projectile.owner].direction;
+            Vector2 velocity = rotation.RotatedBy(rotation3) * Main.rand.NextFloat(2f, 12f);
             Dust dust = Dust.NewDustPerfect(Projectile.Center + rotation * 10f + rotation * Main.rand.NextFloat(10f, 120f * Projectile.scale), ModContent.DustType<Slash>(), velocity, Math.Max(Main.rand.Next(70, 120) * (int)(_charge * 255f), 40), Color.White * Math.Max(0.3f, _charge));
-            dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+            dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi) /*+ (Main.player[Projectile.owner].gravDir == -1f ? MathHelper.PiOver2 : 0f)*/;
             dust.scale *= Projectile.scale * 1f;
             dust.fadeIn = dust.scale + 0.1f;
             dust.noGravity = true;
@@ -500,7 +508,8 @@ sealed class FlederSlayer : ModProjectile {
         Player player = Main.player[Projectile.owner];
         float armRotation = Projectile.rotation - MathHelper.PiOver2;
         player.bodyFrame.Y = 56;
-        player.SetCompositeBothArms(armRotation, Player.CompositeArmStretchAmount.Full);
+        player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, armRotation);
+        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
     }
 
     private static float Swing(float progress) {
@@ -578,6 +587,7 @@ sealed class FlederSlayer : ModProjectile {
         Vector2 offset = -new Vector2(15f * (Projectile.localAI[2] - 0.5f), 0f).RotatedBy(Projectile.rotation);
         offset += Projectile.rotation.ToRotationVector2() * (-30f * (MathHelper.Clamp(Projectile.scale - 1.25f, 0f, 1f)));
         Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) + offset;
+        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
         if (flag) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(glowBladeTexture2D,
@@ -602,6 +612,7 @@ sealed class FlederSlayer : ModProjectile {
                             0f);
         }
         else {
+            spriteBatch.BeginBlendState(BlendState.AlphaBlend);
             for (int i = 1; i < Projectile.oldPos.Length - 1; i += 2) {
                 spriteBatch.Draw(bladeTexture2D,
                             position - Projectile.Center + Projectile.oldPos[i],
@@ -613,7 +624,9 @@ sealed class FlederSlayer : ModProjectile {
                             SpriteEffects.None,
                             0f);
             }
+            spriteBatch.EndBlendState();
         }
+        spriteBatch.BeginBlendState(BlendState.AlphaBlend);
         spriteBatch.Draw(texture2D,
                          position,
                          rectangle,
@@ -623,6 +636,7 @@ sealed class FlederSlayer : ModProjectile {
                          Projectile.scale,
                          SpriteEffects.None,
                          0f);
+        spriteBatch.EndBlendState();
         spriteBatch.BeginBlendState(BlendState.Additive);
         spriteBatch.Draw(glowTexture2D,
                          position + new Vector2(osc, osc),
@@ -710,7 +724,8 @@ sealed class FlederSlayer : ModProjectile {
                             Projectile.scale * 0.8f,
                             SpriteEffects.None,
                             0f);
-        spriteBatch.EndBlendState();
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(in snapshot);
 
         return false;
     }
@@ -719,16 +734,23 @@ sealed class FlederSlayer : ModProjectile {
         public override string Texture => ResourceManager.Textures + "FlederSlayerSlash";
 
         public override bool PreDraw(ref Color lightColor) {
+            SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+            Main.spriteBatch.BeginBlendState(BlendState.AlphaBlend);
             Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            bool flag = Main.player[Projectile.owner].gravDir == -1f;
+            var effects = Main.player[Projectile.owner].direction == -1 ? (SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically) :
+                (SpriteEffects.None | SpriteEffects.FlipVertically);
             Main.spriteBatch.Draw(texture2D,
-                                  Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY),
+                                  Projectile.Center + new Vector2(0f, 0f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY),
                                   null,
                                   Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16 - 2) * Projectile.Opacity,
-                                  Projectile.rotation,
+                                  Projectile.rotation + (flag ? 0f : 0f),
                                   new Vector2(texture2D.Width / 2f, texture2D.Height),
                                   Projectile.scale,
                                   Projectile.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                                   0f);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(in snapshot);
             return false;
         }
 
@@ -809,9 +831,9 @@ sealed class FlederSlayer : ModProjectile {
             Projectile.direction = Projectile.velocity.X > 0f ? 1 : -1;
             Player player = Main.player[Projectile.owner];
             Projectile.velocity *= 0.9f + Math.Clamp((player.GetTotalAttackSpeed(DamageClass.Melee) - 1f) * 0.1f, 0f, 1f);
-            float y = player.MountedCenter.Y - 10f;
-            while (!WorldGenHelper.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction) / 16, (int)y / 16)) {
-                y++;
+            float y = player.Center.Y - 10f;
+            while (!WorldGenHelper.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction * player.gravDir) / 16, (int)y / 16)) {
+                y += 1;
             }
             Projectile.position.Y = y - 22f;
             int amt = 3;

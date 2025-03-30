@@ -219,68 +219,68 @@ sealed class SerorkMask : ModItem {
         private void On_PlayerDrawLayers_DrawCompositeArmorPiece(On_PlayerDrawLayers.orig_DrawCompositeArmorPiece orig, ref PlayerDrawSet drawinfo, CompositePlayerDrawContext context, DrawData data) {
             orig(ref drawinfo, context, data);
 
-            var drawPlayer = drawinfo.drawPlayer;
-            bool flag = ItemLoader.GetItem(ModContent.ItemType<SerorkMask>()).IsVanitySet(drawPlayer.head, drawPlayer.body, drawPlayer.legs);
-            if (drawPlayer.body != EquipLoader.GetEquipSlot(RoA.Instance, nameof(SerorkBreastplate), EquipType.Body)) {
-                return;
-            }
-            switch (context) {
-                case CompositePlayerDrawContext.BackShoulder:
-                case CompositePlayerDrawContext.BackArm:
-                case CompositePlayerDrawContext.FrontArm:
-                case CompositePlayerDrawContext.FrontShoulder: {
-                    DrawData item2 = data;
-                    item2.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow").Value;
-                    Color glowMaskColor = Color.White;
-                    glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
-                    item2.color = glowMaskColor * 0.25f;
-                    item2.color = Color.Lerp(item2.color, Color.LightBlue, 0.5f);
-                    item2.color.A = (byte)((float)(int)item2.color.A * 0.375f);
-                    var handler = drawPlayer.GetModPlayer<SerorkVisualsStorage>();
-                    float num2 = handler.ghostFade;
-                    for (int l = 0; l < 4; l++) {
-                        float num3;
-                        float num4;
-                        switch (l) {
-                            default:
-                                num3 = num2;
-                                num4 = 0f;
-                                break;
-                            case 1:
-                                num3 = 0f - num2;
-                                num4 = 0f;
-                                break;
-                            case 2:
-                                num3 = 0f;
-                                num4 = num2;
-                                break;
-                            case 3:
-                                num3 = 0f;
-                                num4 = 0f - num2;
-                                break;
-                        }
-                        item2.position = new Vector2(item2.position.X + num3, item2.position.Y + num4);
-                        Rectangle value2 = item2.sourceRect.Value;
-                        item2.sourceRect = value2;
-                        item2.shader = drawinfo.cBody;
-                        drawinfo.DrawDataCache.Add(item2);
-                    }
-                    break;
-                }
+            //var drawPlayer = drawinfo.drawPlayer;
+            //bool flag = ItemLoader.GetItem(ModContent.ItemType<SerorkMask>()).IsVanitySet(drawPlayer.head, drawPlayer.body, drawPlayer.legs);
+            //if (drawPlayer.body != EquipLoader.GetEquipSlot(RoA.Instance, nameof(SerorkBreastplate), EquipType.Body)) {
+            //    return;
+            //}
+            //switch (context) {
+            //    case CompositePlayerDrawContext.BackShoulder:
+            //    case CompositePlayerDrawContext.BackArm:
+            //    case CompositePlayerDrawContext.FrontArm:
+            //    case CompositePlayerDrawContext.FrontShoulder: {
+            //        DrawData item2 = data;
+            //        item2.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow").Value;
+            //        Color glowMaskColor = Color.White;
+            //        glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
+            //        item2.color = glowMaskColor * 0.25f;
+            //        item2.color = Color.Lerp(item2.color, Color.LightBlue, 0.5f);
+            //        item2.color.A = (byte)((float)(int)item2.color.A * 0.375f);
+            //        var handler = drawPlayer.GetModPlayer<SerorkVisualsStorage>();
+            //        float num2 = handler.ghostFade;
+            //        for (int l = 0; l < 4; l++) {
+            //            float num3;
+            //            float num4;
+            //            switch (l) {
+            //                default:
+            //                    num3 = num2;
+            //                    num4 = 0f;
+            //                    break;
+            //                case 1:
+            //                    num3 = 0f - num2;
+            //                    num4 = 0f;
+            //                    break;
+            //                case 2:
+            //                    num3 = 0f;
+            //                    num4 = num2;
+            //                    break;
+            //                case 3:
+            //                    num3 = 0f;
+            //                    num4 = 0f - num2;
+            //                    break;
+            //            }
+            //            item2.position = new Vector2(item2.position.X + num3, item2.position.Y + num4);
+            //            Rectangle value2 = item2.sourceRect.Value;
+            //            item2.sourceRect = value2;
+            //            item2.shader = drawinfo.cBody;
+            //            drawinfo.DrawDataCache.Add(item2);
+            //        }
+            //        break;
+            //    }
 
-                case CompositePlayerDrawContext.Torso: {
-                    DrawData item = data;
-                    item.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow2").Value;
-                    Color glowMaskColor = Color.White;
-                    glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
-                    item.color = glowMaskColor;
-                    Rectangle value = item.sourceRect.Value;
-                    item.sourceRect = value;
-                    item.shader = drawinfo.cBody;
-                    drawinfo.DrawDataCache.Add(item);
-                    break;
-                }
-            }
+            //    case CompositePlayerDrawContext.Torso: {
+            //        DrawData item = data;
+            //        item.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow2").Value;
+            //        Color glowMaskColor = Color.White;
+            //        glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
+            //        item.color = glowMaskColor;
+            //        Rectangle value = item.sourceRect.Value;
+            //        item.sourceRect = value;
+            //        item.shader = drawinfo.cBody;
+            //        drawinfo.DrawDataCache.Add(item);
+            //        break;
+            //    }
+            //}
         }
 
         private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo) {

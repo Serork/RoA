@@ -53,12 +53,12 @@ static class SpriteBatchExtensions {
 
     public static void BeginBlendState(this SpriteBatch spriteBatch, BlendState state, SamplerState samplerState = null, bool isUI = false, bool isUI2 = false) {
         spriteBatch.End();
-        spriteBatch.Begin(isUI2 ? SpriteSortMode.Immediate : isUI ? SpriteSortMode.Deferred : SpriteSortMode.Immediate, state, samplerState ?? Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+        spriteBatch.Begin(isUI2 ? SpriteSortMode.Immediate : isUI ? SpriteSortMode.Deferred : SpriteSortMode.Immediate, state, samplerState ?? Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.ZoomMatrix);
     }
 
     public static void EndBlendState(this SpriteBatch spriteBatch, bool isUI = false) {
         spriteBatch.End();
-        spriteBatch.Begin(isUI ? SpriteSortMode.Deferred : SpriteSortMode.Immediate, BlendState.AlphaBlend, isUI ? SamplerState.AnisotropicClamp : Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+        spriteBatch.Begin(isUI ? SpriteSortMode.Deferred : SpriteSortMode.Immediate, BlendState.AlphaBlend, isUI ? SamplerState.AnisotropicClamp : Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, isUI ? Main.UIScaleMatrix : Main.GameViewMatrix.ZoomMatrix);
     }
 
     public static void BeginWorld(this SpriteBatch spriteBatch, bool shader = false, Matrix? overrideMatrix = null, BlendState state = null) {
