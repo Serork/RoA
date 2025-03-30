@@ -1925,5 +1925,9 @@ BackwoodsRootWall: {
 
 DruidSoul: {
 	DisplayName: Druid Soul
-	Tooltip: "'A spirit surrendered as part of an ancient ritual'"
+		Tooltip:
+		'''
+		Can be caught with a bug net
+		'A spirit surrendered awaiting an ancient ritual'
+		'''
 }

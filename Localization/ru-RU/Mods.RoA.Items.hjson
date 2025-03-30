@@ -1917,6 +1917,10 @@ BackwoodsRootWall: {
 }
 
 DruidSoul: {
-	// DisplayName: Druid Soul
-	// Tooltip: "'A spirit surrendered as part of an ancient ritual'"
+	DisplayName: Душа друида
+	Tooltip:
+		'''
+		Может быть поймана сачком
+		'Дух подчинился, ожидая древний ритуал'
+		'''
 }
