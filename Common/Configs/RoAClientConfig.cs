@@ -41,10 +41,6 @@ sealed class RoAClientConfig : ModConfig {
     [DrawTicks]
     public HighlightModes HighlightMode;
 
-    [DefaultValue(WreathSoundModes.Alt)]
-    [DrawTicks]
-    public WreathSoundModes WreathSoundMode;
-
     [Header("Mods.RoA.Configs.DruidOptionsHeader")]
     [CustomModConfigItem(typeof(DamageTooltipOptionConfigElement))]
     [DefaultValue(DamageTooltipOptions.Option1)]
@@ -85,4 +81,8 @@ sealed class RoAClientConfig : ModConfig {
     [DefaultValue(WreathPositions.Player)]
     [DrawTicks]
     public WreathPositions WreathPosition;
+
+    [DefaultValue(WreathSoundModes.Alt)]
+    [DrawTicks]
+    public WreathSoundModes WreathSoundMode;
 }
