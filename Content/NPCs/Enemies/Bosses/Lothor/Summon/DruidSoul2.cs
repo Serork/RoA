@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
@@ -21,6 +22,14 @@ sealed class DruidSoul2 : ModNPC {
             PortraitPositionYOverride = -21f,
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        if (!NPC.IsABestiaryIconDummy) {
+            return false;
+        }
+
+        return base.PreDraw(spriteBatch, screenPos, drawColor);
     }
 
     public override void FindFrame(int frameHeight) {
