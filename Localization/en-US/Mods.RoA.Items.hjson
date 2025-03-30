@@ -875,7 +875,7 @@ FlinxFurUshanka: {
 
 CopperAcolyteHat: {
 	DisplayName: Acolyte Hat
-	Tooltip: 6% reduced mana costs
+	Tooltip: 6% reduced mana usage
 }
 
 CopperAcolyteJacket: {
@@ -890,7 +890,7 @@ CopperAcolyteLeggings: {
 
 TinAcolyteHat: {
 	DisplayName: Acolyte Hat
-	Tooltip: 6% reduced mana costs
+	Tooltip: 6% reduced mana usage
 }
 
 TinAcolyteJacket: {
@@ -1643,7 +1643,6 @@ BeachWreath: {
 	DisplayName: Beach Wreath I
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage, providing:
 		While wreath is charged:
 		Increased movement speed by 10%
 		'''
@@ -1927,7 +1926,7 @@ DruidSoul: {
 	DisplayName: Druid Soul
 	Tooltip:
 		'''
-		Can be caught with a bug net
+		Can be caught with a special bug net
 		'A spirit surrendered awaiting an ancient ritual'
 		'''
 }
