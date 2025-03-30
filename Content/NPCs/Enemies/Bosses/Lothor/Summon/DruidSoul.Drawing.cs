@@ -101,7 +101,7 @@ sealed partial class DruidSoul : RoANPC {
             int max2 = amount - Math.Clamp((int)(amount * 0.35f), amount < 8 ? 3 : 4, 6);
             if (k > max2) {
                 float progress2 = 1f - (k - max2) / (float)(amount - max2);
-                progress2 = Ease.TestIn(progress2);
+                progress2 = Ease.SineIn(progress2);
                 color = Color.Lerp(color, drawColor2, 1f - progress2);
             }
             max2 = amount - 4;
