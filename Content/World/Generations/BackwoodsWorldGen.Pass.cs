@@ -2245,7 +2245,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         ushort[] skipTileTypes = [_dirtTileType, TileID.Dirt, _stoneTileType, _mossTileType];
-        int attempts2 = 1000;
+        int attempts2 = 100;
         while (true) {
             int attempts = 100;
             while (GatewayNearby(baseX, baseY) || !skipTileTypes.Contains(WorldGenHelper.GetTileSafely(baseX, baseY).TileType) || WorldGenHelper.GetTileSafely(baseX, baseY).AnyWall()) {
