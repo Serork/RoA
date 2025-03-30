@@ -1643,6 +1643,7 @@ BeachWreath: {
 	DisplayName: Beach Wreath I
 	Tooltip:
 		'''
+		Wreath is charged by dealing nature damage
 		While wreath is charged:
 		Increased movement speed by 10%
 		'''
