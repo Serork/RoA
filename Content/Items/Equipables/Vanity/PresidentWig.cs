@@ -7,7 +7,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Vanity;
 
-[Autoload(false)]
 [AutoloadEquip(EquipType.Head)]
 sealed class PresidentWig : ModItem {
     public override void SetStaticDefaults() {

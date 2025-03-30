@@ -7,7 +7,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Vanity;
 
-[Autoload(false)]
 [AutoloadEquip(EquipType.Legs)]
 sealed class StrangerPants : ModItem {
     public override void SetStaticDefaults() {
