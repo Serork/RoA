@@ -40,6 +40,8 @@ sealed class BaseFormHandler : ModPlayer {
     private bool _shouldBeActive;
     private bool _startDecreasingWreath;
 
+    public bool CanTransform => IsInDruidicForm || !Player.mount.Active;
+
     public static IReadOnlyCollection<FormInfo> Forms => _formsByType.Values;
     public FormInfo CurrentForm => _currentForm;
     public bool IsInDruidicForm => CurrentForm != null;
