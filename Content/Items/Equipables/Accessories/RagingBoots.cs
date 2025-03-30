@@ -42,7 +42,7 @@ sealed class RagingBoots : NatureItem {
         player.moveSpeed += 0.05f;
         player.runAcceleration += 0.05f;
 
-        if (player.velocity.Y > 0f) {
+        if ((player.gravDir == 1 && player.velocity.Y > 0) || (player.gravDir == -1 && player.velocity.Y < 0)) {
             player.gravity *= 1.5f;
         }
     }
@@ -119,7 +119,8 @@ sealed class RagingBoots : NatureItem {
             }
 
             _speedBeforeGround = Player.velocity;
-            if (Player.velocity.Y > 9.5f) _fallLength++;
+            if ((Player.gravDir == 1 && Player.velocity.Y > 9.5f) || (Player.gravDir == -1 && Player.velocity.Y < -9.5f))
+                _fallLength++;
             else _fallLength = 0;
             _onGround = false;
         }
