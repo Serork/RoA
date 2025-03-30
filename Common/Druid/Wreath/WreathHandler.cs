@@ -243,7 +243,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void OnResetEffects() {
-        if (Player.whoAmI == Main.myPlayer) {
+        if (Player.whoAmI == Main.myPlayer && ShouldDrawItself) {
             if (_useAltSounds) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathNewDischarge") { PitchVariance = 0.1f, Volume = 2f }, Player.Center);
             else SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathDischarge") { PitchVariance = 0.1f, Volume = 1f }, Player.Center);
         }
@@ -382,7 +382,7 @@ sealed class WreathHandler : ModPlayer {
                         }
                     }
 
-                    if (Player.whoAmI == Main.myPlayer) {
+                    if (Player.whoAmI == Main.myPlayer && ShouldDrawItself) {
                         if (_useAltSounds) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathNewCharge") { Pitch = 0.1f, PitchVariance = 0.1f, Volume = 1.5f }, Player.Center);
                         else SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathCharge") { PitchVariance = 0.1f, Volume = 0.8f }, Player.Center);
                     }
