@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
@@ -254,6 +256,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
             scale = 1f;
         }
+        else {
+            position.Y += 24f * (Main.UIScale - 1f);
+        }
 
         if (reversedGravity) {
             position = Main.ReverseGravitySupport(position);
@@ -437,6 +442,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
             scale = 1f;
         }
+        else {
+            position.Y += 24f * (Main.UIScale - 1f);
+        }
         if (reversedGravity) {
             position = Main.ReverseGravitySupport(position);
         }
@@ -456,15 +464,17 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
         IsHoveringUI = false;
         Vector2 mouseScreen = Main.MouseScreen;
+        int width2 = (int)(width * Main.GameZoomTarget);
+        int height2 = (int)(height * Main.GameZoomTarget);
         float startX = (float)(500 + UI_ScreenAnchorX);
-        float endX = (float)(500 + width + UI_ScreenAnchorX);
+        float endX = (float)(500 + width2 + UI_ScreenAnchorX);
         float startY = 15f;
-        float endY = (float)(15f + height);
+        float endY = (float)(15f + height2);
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
-            startX = position.X - width / 2;
-            endX = startX + width;
-            startY = position.Y - height / 2;
-            endY = startY + height;
+            startX = position.X - width2 / 2;
+            endX = startX + width2;
+            startY = position.Y - height2 / 2;
+            endY = startY + height2;
         }
         if (mouseScreen.X > startX && mouseScreen.X < endX &&
             mouseScreen.Y > startY && mouseScreen.Y < endY) {
