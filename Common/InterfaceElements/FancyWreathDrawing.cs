@@ -275,7 +275,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
 
         IsHoveringUI = false;
-        Vector2 mouseScreen = Main.MouseScreen;
+        Matrix matrix2 = Matrix.Invert(Main.GameViewMatrix.ZoomMatrix);
+        Vector2 position3 = Main.ReverseGravitySupport(Main.MouseScreen);
+        Vector2.Transform(Main.screenPosition, matrix2);
+        Vector2 v2 = Vector2.Transform(position3, matrix2);
         float startX = (float)(500 + UI_ScreenAnchorX);
         float endX = (float)(500 + width + UI_ScreenAnchorX);
         float startY = 15f;
@@ -286,8 +289,8 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             startY = position.Y - height / 2;
             endY = startY + height;
         }
-        if (mouseScreen.X > startX && mouseScreen.X < endX &&
-            mouseScreen.Y > startY && mouseScreen.Y < endY) {
+        if (v2.X > startX && v2.X < endX &&
+            v2.Y > startY && v2.Y < endY) {
             if (!Main.mouseText) {
                 player.cursorItemIconEnabled = false;
                 string text = "[kw/n:" + stats.CurrentResource + "]" + "/" + stats.TotalResource;
@@ -463,21 +466,22 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
 
         IsHoveringUI = false;
-        Vector2 mouseScreen = Main.MouseScreen;
-        int width2 = (int)(width * Main.GameZoomTarget);
-        int height2 = (int)(height * Main.GameZoomTarget);
+        Matrix matrix2 = Matrix.Invert(Main.GameViewMatrix.ZoomMatrix);
+        Vector2 position3 = Main.ReverseGravitySupport(Main.MouseScreen);
+        Vector2.Transform(Main.screenPosition, matrix2);
+        Vector2 v2 = Vector2.Transform(position3, matrix2);
         float startX = (float)(500 + UI_ScreenAnchorX);
-        float endX = (float)(500 + width2 + UI_ScreenAnchorX);
+        float endX = (float)(500 + width + UI_ScreenAnchorX);
         float startY = 15f;
-        float endY = (float)(15f + height2);
+        float endY = (float)(15f + height);
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
-            startX = position.X - width2 / 2;
-            endX = startX + width2;
-            startY = position.Y - height2 / 2;
-            endY = startY + height2;
+            startX = position.X - width / 2;
+            endX = startX + width;
+            startY = position.Y - height / 2;
+            endY = startY + height;
         }
-        if (mouseScreen.X > startX && mouseScreen.X < endX &&
-            mouseScreen.Y > startY && mouseScreen.Y < endY) {
+        if (v2.X > startX && v2.X < endX &&
+            v2.Y > startY && v2.Y < endY) {
             if (!Main.mouseText) {
                 player.cursorItemIconEnabled = false;
                 string text = "[kw/n:" + stats.CurrentResource + "]" + "/" + stats.TotalResource;
