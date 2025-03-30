@@ -1237,12 +1237,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(treeBranch) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
                     WorldGen.KillTile(i, j);
-                    if (_random.NextChance(0.5)) {
-                        if (_random.NextChance(0.4)) {
-                            WallBush(i, j + 3 + _random.Next(-1, 2), false);
-                        }
-                        WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
-                    }
+                    WallBush2(i, j - 3, false);
+                    //if (_random.NextChance(0.35)) {
+                    //    WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
+                    //}
                 }
             }
         }
@@ -1549,6 +1547,36 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 for (int y = y1; y < y2; y++) {
                     double min = Math.Abs((double)(x - i)) + Math.Abs((double)(y - j));
                     double max = (double)sizeX * 0.5 * (1.0 + _random.Next(-5, 10) * 0.025);
+                    for (int x3 = x - 1; x3 < x + 1; x3++) {
+                        for (int y3 = y - 1; y3 < y + 1; y3++) {
+                            if (ignoreWalls && (WorldGenHelper.ActiveTile(x3, y3, _leavesTileType) || WorldGenHelper.GetTileSafely(x3, y3).WallType == _elderwoodWallType)) {
+                                return;
+                            }
+                        }
+                    }
+                    if (min < max && WorldGenHelper.GetTileSafely(x, y).WallType != _leavesWallType && (WorldGenHelper.GetTileSafely(x, y).WallType != _elderwoodWallType && (!WorldGen.SolidTile2(x, y) || WorldGenHelper.ActiveTile(x, y, _grassTileType)))) {
+                        WorldGenHelper.ReplaceWall(x, y, _leavesWallType);
+                    }
+                }
+            }
+        }
+    }
+
+    private void WallBush2(int i, int j, bool ignoreWalls = true) {
+        int sizeX = 8;
+        int sizeY = 3;
+        int sizeY2 = sizeY;
+        while (sizeY2 > 0) {
+            double progress = sizeX * ((double)sizeY2 / sizeY);
+            --sizeY2;
+            int x1 = (int)(i - progress * 0.5);
+            int x2 = (int)(i + progress * 0.5);
+            int y1 = (int)(j - progress * 0.5);
+            int y2 = (int)(j + progress * 0.5);
+            for (int x = x1; x < x2; x++) {
+                for (int y = y1; y < y2; y++) {
+                    double min = Math.Abs((double)(x - i)) + Math.Abs((double)(y - j));
+                    double max = (double)sizeX * 0.5 * (1.0 + 3 * 0.025);
                     for (int x3 = x - 1; x3 < x + 1; x3++) {
                         for (int y3 = y - 1; y3 < y + 1; y3++) {
                             if (ignoreWalls && (WorldGenHelper.ActiveTile(x3, y3, _leavesTileType) || WorldGenHelper.GetTileSafely(x3, y3).WallType == _elderwoodWallType)) {
