@@ -5,6 +5,8 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
+using System.Linq;
+
 using Terraria;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
@@ -103,7 +105,8 @@ class BackwoodsVines : ModTile {
                         break;
                     }
 
-                    if (Main.tile[i, num35].HasTile && Main.tile[i, num35].TileType == Type && !Main.tile[i, num35].BottomSlope) {
+                    ushort[] validTiles = [(ushort)ModContent.TileType<BackwoodsGrass>(), (ushort)ModContent.TileType<LivingElderwoodlLeaves>()];
+                    if (Main.tile[i, num35].HasTile && validTiles.Contains(Main.tile[i, num35].TileType) && !Main.tile[i, num35].BottomSlope) {
                         flag5 = true;
                         break;
                     }
