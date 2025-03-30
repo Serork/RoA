@@ -61,6 +61,15 @@ sealed class PlayOtherItemSoundPacket : NetPacket {
         else if (soundStyle == 12) {
             SoundEngine.PlaySound(SoundID.Item17, position);
         }
+        else if (soundStyle == 13) {
+            SoundEngine.PlaySound(SoundID.MaxMana, position);
+        }
+        else if (soundStyle == 14) {
+            SoundEngine.PlaySound(SoundID.Item169 with { Pitch = -0.8f, PitchVariance = 0.1f, Volume = 0.6f }, position);
+        }
+        else if (soundStyle == 15) {
+            SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 0.3f, PitchVariance = 0.1f, Volume = 1f }, position);
+        }
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, soundStyle, position), ignoreClient: sender);
         }
