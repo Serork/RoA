@@ -1922,3 +1922,8 @@ BackwoodsRootWall: {
 	DisplayName: Backwoods Root Wall
 	Tooltip: ""
 }
+
+DruidSoul: {
+	DisplayName: Druid Soul
+	Tooltip: ""
+}

@@ -4,6 +4,7 @@ using RoA.Content.Biomes.Backwoods;
 
 using Terraria;
 using Terraria.GameContent.Bestiary;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
@@ -37,5 +38,11 @@ sealed partial class DruidSoul : RoANPC {
         NPC.rarity = 1;
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
+
+        NPC.catchItem = ModContent.ItemType<Items.Consumables.DruidSoul>();
+    }
+
+    public override bool? CanBeCaughtBy(Item item, Player player) {
+        return item.type == ItemID.GoldenBugNet || item.type == ItemID.FireproofBugNet;
     }
 }
