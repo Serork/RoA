@@ -55,7 +55,7 @@ ElderwoodChest: {
 
 DryadStatue: {
 	DisplayName: Статуя дриады
-	Tooltip: "'Покинутый'"
+	Tooltip: "'Тем, кто пал защищая Террарию'"
 }
 
 MiracleMint: {
