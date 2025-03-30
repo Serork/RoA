@@ -10,7 +10,7 @@ sealed class DryadStatue : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Dryad Statue");
         // Tooltip.SetDefault("'Lost and forsaken'");
-        Item.ResearchUnlockCount = 1000000;
+        Item.ResearchUnlockCount = 1;
     }
 
     public override void SetDefaults() {
