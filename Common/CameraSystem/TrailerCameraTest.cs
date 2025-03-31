@@ -5,6 +5,8 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
 using Terraria.ModLoader;
 
@@ -49,7 +51,19 @@ sealed class TrailerCameraTest : ModSystem {
         public override string Command => "point1";
         public override string Usage => "/point1";
 
-        public override void Action(CommandCaller caller, string input, string[] args) => _point2 = Main.LocalPlayer.Center.ToTileCoordinates();
+        public override void Action(CommandCaller caller, string input, string[] args) {
+            Main.NewText(Main.LocalPlayer.Center.ToTileCoordinates());
+
+            if (!int.TryParse(args[0], out int x)) {
+                throw new UsageException(args[0] + " is not an integer");
+            }
+
+            if (!int.TryParse(args[1], out int y)) {
+                throw new UsageException(args[1] + " is not an integer");
+            }
+
+            _point2 = new Point(x, y);
+        }
     }
 
     private class SetPoint2Command : ModCommand {
@@ -57,7 +71,19 @@ sealed class TrailerCameraTest : ModSystem {
         public override string Command => "point2";
         public override string Usage => "/point2";
 
-        public override void Action(CommandCaller caller, string input, string[] args) => _point1 = Main.LocalPlayer.Center.ToTileCoordinates();
+        public override void Action(CommandCaller caller, string input, string[] args) {
+            Main.NewText(Main.LocalPlayer.Center.ToTileCoordinates());
+
+            if (!int.TryParse(args[0], out int x)) {
+                throw new UsageException(args[0] + " is not an integer");
+            }
+
+            if (!int.TryParse(args[1], out int y)) {
+                throw new UsageException(args[1] + " is not an integer");
+            }
+
+            _point1 = new Point(x, y);
+        }
     }
 
     private class SetDurationInCommand : ModCommand {

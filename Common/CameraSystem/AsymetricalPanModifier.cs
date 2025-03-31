@@ -64,8 +64,9 @@ internal class AsymetricalPanModifier : ICameraModifier {
                 cameraPosition.CameraPosition = offset + target;
             } //stay on target
 
-            Main.LocalPlayer.Center = cameraPosition.CameraPosition + -offset;
-            Main.LocalPlayer.invis = true;
+            if (Main.LocalPlayer.whoAmI == Main.myPlayer) {
+                Main.LocalPlayer.Center = cameraPosition.CameraPosition + -offset;
+            }
         }
     }
 
@@ -81,10 +82,12 @@ internal class AsymetricalPanModifier : ICameraModifier {
                 return;
             }
 
-            if (CameraSystem.AsymetricalPanModifier.TotalDuration > 0 && CameraSystem.AsymetricalPanModifier.target != Vector2.Zero) {
-                foreach (PlayerDrawLayer layer in _layers) {
-                    if (layer.FullName.Contains("Terraria") && !layer.FullName.Contains("Mount")) {
-                        layer.Hide();
+            if (Player.whoAmI == Main.myPlayer) {
+                if (CameraSystem.AsymetricalPanModifier.TotalDuration > 0 && CameraSystem.AsymetricalPanModifier.target != Vector2.Zero) {
+                    foreach (PlayerDrawLayer layer in _layers) {
+                        if (layer.FullName.Contains("Terraria") && !layer.FullName.Contains("Mount")) {
+                            layer.Hide();
+                        }
                     }
                 }
             }
