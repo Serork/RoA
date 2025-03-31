@@ -510,7 +510,7 @@ sealed class WreathHandler : ModPlayer {
             _keepBonusesForTime -= 1f;
         }
         if (Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm && !IsFull1) {
-            _keepBonusesForTime = Math.Max(10, _keepBonusesForTime);
+            _keepBonusesForTime = Math.Max(Math.Max(DruidPlayerStats.KeepBonusesForTime, 10), _keepBonusesForTime);
         }
 
         PulseIntensity = _stayTime <= 0.35f ? 0f : _stayTime > 0.35f && _stayTime <= 1.35f ? Ease.CubeInOut(_stayTime - 0.35f) : MathHelper.Lerp(PulseIntensity, 1f, 0.2f);
