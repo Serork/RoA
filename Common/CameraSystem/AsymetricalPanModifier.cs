@@ -3,7 +3,9 @@
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
+using Terraria.ModLoader;
 
 namespace RoA.Common.CameraSystem;
 
@@ -61,6 +63,31 @@ internal class AsymetricalPanModifier : ICameraModifier {
             else {
                 cameraPosition.CameraPosition = offset + target;
             } //stay on target
+
+            Main.LocalPlayer.Center = cameraPosition.CameraPosition + -offset;
+            Main.LocalPlayer.invis = true;
+        }
+    }
+
+    private class Test : ModPlayer {
+        private PlayerDrawLayer[] _layers;
+
+        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) {
+            _layers = PlayerDrawLayerLoader.GetDrawLayers(drawInfo);
+        }
+
+        public override void HideDrawLayers(PlayerDrawSet drawInfo) {
+            if (_layers == null) {
+                return;
+            }
+
+            if (CameraSystem.AsymetricalPanModifier.TotalDuration > 0 && CameraSystem.AsymetricalPanModifier.target != Vector2.Zero) {
+                foreach (PlayerDrawLayer layer in _layers) {
+                    if (layer.FullName.Contains("Terraria") && !layer.FullName.Contains("Mount")) {
+                        layer.Hide();
+                    }
+                }
+            }
         }
     }
 
