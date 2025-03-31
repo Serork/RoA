@@ -9,7 +9,7 @@ using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Common.CameraSystem;
-sealed class TrailerCameraTest : ModPlayer {
+sealed class TrailerCameraTest : ModSystem {
     private bool _shifted = true;
 
     private static Point _point1, _point2;
@@ -45,7 +45,7 @@ sealed class TrailerCameraTest : ModPlayer {
     }
 
     private class SetPoint1Command : ModCommand {
-        public override CommandType Type => CommandType.World;
+        public override CommandType Type => CommandType.Chat;
         public override string Command => "point1";
         public override string Usage => "/point1";
 
@@ -53,7 +53,7 @@ sealed class TrailerCameraTest : ModPlayer {
     }
 
     private class SetPoint2Command : ModCommand {
-        public override CommandType Type => CommandType.World;
+        public override CommandType Type => CommandType.Chat;
         public override string Command => "point2";
         public override string Usage => "/point2";
 
@@ -61,7 +61,7 @@ sealed class TrailerCameraTest : ModPlayer {
     }
 
     private class SetDurationInCommand : ModCommand {
-        public override CommandType Type => CommandType.World;
+        public override CommandType Type => CommandType.Chat;
         public override string Command => "duration";
         public override string Usage => "/duration in out hold";
 
@@ -84,7 +84,7 @@ sealed class TrailerCameraTest : ModPlayer {
         }
     }
 
-    public override void PostUpdate() {
+    public override void PostUpdatePlayers() {
         if (Helper.JustPressed(Keys.F5)) {
             _shifted = false;
         }
