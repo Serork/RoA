@@ -26,7 +26,7 @@ sealed class ChemicalPrisoner : ModItem {
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useTime = Item.useAnimation = 14;
+        Item.useTime = Item.useAnimation = 16;
         Item.autoReuse = true;
 
         Item.DamageType = DamageClass.Ranged;
