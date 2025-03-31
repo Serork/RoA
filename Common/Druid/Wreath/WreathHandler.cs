@@ -121,7 +121,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsEmpty => ActualProgress2 <= 0.01f;
     public bool IsEmpty2 => ActualProgress2 <= 0.05f;
     public bool IsEmpty3 => ActualProgress2 <= 0.15f;
-    public bool IsFull1 => Progress >= 0.95f;
+    public bool IsFull1 => Progress >= 0.95f || Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm;
     public bool WillBeFull(ushort currentResource, bool clawsReset = false) => (clawsReset ? GetActualProgress2(currentResource) : GetProgress(currentResource)) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
     public bool IsFull3 => IsFull1 && Progress <= 1.1f;
