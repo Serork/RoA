@@ -36,6 +36,9 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
 
         int length = numArray.Length;
         for (int index1 = 0; index1 < numArray.Length; ++index1) {
+            if (index1 == 2) {
+                continue;
+            }
             float num3 = (float)(0.5 - 0.1 * (length - index1));
             int i = numArray[index1];
             Main.instance.LoadBackground(i);
@@ -50,6 +53,9 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
                 num6 = -500;
             }
             float extraY = index1 == 2 ? -50f : 0;
+            if (index1 == 0) {
+                extraY -= 50;
+            }
             int num7 = Main.screenWidth / num4 + 2;
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int index2 = 0; index2 < num7; ++index2)
