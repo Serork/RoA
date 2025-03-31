@@ -90,7 +90,9 @@ sealed class FlederForm : BaseForm {
                     Player.velocity.X /= 2f;
                 }
 
-                SoundEngine.PlaySound(SoundID.Item169 with { Pitch = -0.8f, PitchVariance = 0.1f, Volume = 0.6f }, Player.Center);
+                if (Player.whoAmI == Main.myPlayer) {
+                    SoundEngine.PlaySound(SoundID.Item169 with { Pitch = -0.8f, PitchVariance = 0.1f, Volume = 0.6f }, Player.Center);
+                }
 
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(Player, 14, Player.Center));

@@ -159,12 +159,14 @@ sealed class PeegeonHood : ModItem {
                 return;
             }
 
-            if (drawInfo.drawPlayer.armor[10].type != ModContent.ItemType<PeegeonHood>() &&
-                drawInfo.drawPlayer.armor[0].type != ModContent.ItemType<PeegeonHood>() &&
-                trailPos != new Vector2[10]) {
-                trailPos = new Vector2[10];
-                oldPos = new Vector2[10];
-                return;
+            if (drawInfo.drawPlayer.whoAmI == Main.myPlayer) {
+                if (drawInfo.drawPlayer.armor[10].type != ModContent.ItemType<PeegeonHood>() &&
+                    drawInfo.drawPlayer.armor[0].type != ModContent.ItemType<PeegeonHood>() &&
+                    trailPos != new Vector2[10]) {
+                    trailPos = new Vector2[10];
+                    oldPos = new Vector2[10];
+                    return;
+                }
             }
 
             Player player = drawInfo.drawPlayer;
