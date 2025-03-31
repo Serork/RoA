@@ -87,7 +87,7 @@ sealed class DryadStatue_Rubble : ModTile {
 
         AddMapEntry(new Color(200, 200, 200), CreateMapEntryName());
 
-        DustType = DustID.Stone;
+        DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
 
         FlexibleTileWand.RubblePlacementLarge.AddVariations(ModContent.ItemType<Items.Placeable.Decorations.DryadStatue>(), Type, 2, 3, 4, 5);
     }
