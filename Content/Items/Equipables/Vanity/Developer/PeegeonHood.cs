@@ -155,18 +155,16 @@ sealed class PeegeonHood : ModItem {
             if (drawInfo.shadow != 0f || drawInfo.drawPlayer.dead)
                 return;
 
-            if (drawInfo.drawPlayer.face > 0) {
-                return;
-            }
-
-            if (drawInfo.drawPlayer.whoAmI == Main.myPlayer) {
-                if (drawInfo.drawPlayer.armor[10].type != ModContent.ItemType<PeegeonHood>() &&
-                    drawInfo.drawPlayer.armor[0].type != ModContent.ItemType<PeegeonHood>() &&
-                    trailPos != new Vector2[10]) {
+            if (drawInfo.drawPlayer.head != EquipLoader.GetEquipSlot(RoA.Instance, nameof(PeegeonHood), EquipType.Head)) {
+                if (trailPos != new Vector2[10]) {
                     trailPos = new Vector2[10];
                     oldPos = new Vector2[10];
                     return;
                 }
+            }
+
+            if (drawInfo.drawPlayer.face > 0) {
+                return;
             }
 
             Player player = drawInfo.drawPlayer;

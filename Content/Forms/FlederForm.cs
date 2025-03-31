@@ -48,6 +48,10 @@ sealed class FlederForm : BaseForm {
         }
 
         void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
+            if (player.whoAmI != Main.myPlayer) {
+                return;
+            }
+
             bool flag = direction == IDoubleTap.TapDirection.Right | direction == IDoubleTap.TapDirection.Left;
             if (!flag) {
                 return;
@@ -91,9 +95,7 @@ sealed class FlederForm : BaseForm {
                     Player.velocity.X /= 2f;
                 }
 
-                if (Player.whoAmI == Main.myPlayer) {
-                    SoundEngine.PlaySound(SoundID.Item169 with { Pitch = -0.8f, PitchVariance = 0.1f, Volume = 0.6f }, Player.Center);
-                }
+                SoundEngine.PlaySound(SoundID.Item169 with { Pitch = -0.8f, PitchVariance = 0.1f, Volume = 0.6f }, Player.Center);
 
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(Player, 14, Player.Center));
