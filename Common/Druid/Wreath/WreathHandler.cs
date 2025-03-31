@@ -290,8 +290,8 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    internal void Consume(float procentOfMax) {
-        CurrentResource -= (ushort)(TotalResource * 0.25f);
+    internal void Consume(float procentOfMax, bool total = false) {
+        CurrentResource -= (ushort)((total ? TotalResource : MaxResource) * 0.25f);
         _stayTime = STAYTIMEMAX;
 
         _shouldDecrease = _shouldDecrease2 = false;
