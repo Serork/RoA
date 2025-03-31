@@ -507,6 +507,10 @@ sealed class WreathHandler : ModPlayer {
         if (HasKeepTime) {
             _keepBonusesForTime -= 1f;
         }
+        if (Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm && !IsFull1) {
+            _keepBonusesForTime = Math.Max(10, _keepBonusesForTime);
+        }
+
         PulseIntensity = _stayTime <= 0.35f ? 0f : _stayTime > 0.35f && _stayTime <= 1.35f ? Ease.CubeInOut(_stayTime - 0.35f) : MathHelper.Lerp(PulseIntensity, 1f, 0.2f);
 
         if (Player.IsLocal() && Player.GetSelectedItem().ModItem is NatureItem natureItem) {
@@ -742,7 +746,7 @@ sealed class WreathHandler : ModPlayer {
 
     private void MakeDusts() {
         if (Player.whoAmI == Main.myPlayer) {
-            if ((PulseIntensity > 0f || _keepBonusesForTime > 0f) && (IsFull2 || IsFull3)) {
+            if ((PulseIntensity > 0f || HasKeepTime) && (IsFull2 || IsFull3)) {
                 if (Player.miscCounter % 6 == 0 && Main.rand.NextChance(0.5)) {
                     MakeDusts_ActualMaking();
                 }
