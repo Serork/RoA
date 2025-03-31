@@ -75,7 +75,7 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
             }
 
             WreathHandler handler = Player.GetModPlayer<WreathHandler>();
-            if (!handler.IsFull1) {
+            if (!handler.IsActualFull1) {
                 return;
             }
 

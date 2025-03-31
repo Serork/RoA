@@ -122,11 +122,13 @@ sealed class WreathHandler : ModPlayer {
     public bool IsEmpty2 => ActualProgress2 <= 0.05f;
     public bool IsEmpty3 => ActualProgress2 <= 0.15f;
     public bool IsFull1 => Progress >= 0.95f /*|| Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm*/;
+    public bool IsActualFull1 => ActualProgress2 >= 0.95f;
     public bool WillBeFull(ushort currentResource, bool clawsReset = false) => (clawsReset ? GetActualProgress2(currentResource) : GetProgress(currentResource)) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
     public bool IsFull3 => IsFull1 && Progress <= 1.1f;
     public bool IsFull4 => Progress >= 0.85f;
     public bool IsFull6 => Progress >= 0.975f;
+    public bool IsActualFull6 => ActualProgress2 >= 0.975f;
     public bool IsFull7 => Progress >= 1.9f;
 
     public bool IsMinCharged => ActualProgress2 > 0.1f;
@@ -261,7 +263,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && Player.ItemAnimationActive && natureProjectile.Item == selectedItem) {
             selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
-            if (!_shouldDecrease && !_shouldDecrease2 && IsFull6) {
+            if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     if (!SpecialAttackData.OnlySpawn || nonDataReset) {
                         ForcedHardReset();

@@ -139,12 +139,12 @@ class MagicHerb1 : ModItem {
     public override bool OnPickup(Player player) {
         bool flag = false;
         foreach (Player checkPlayer in Main.ActivePlayers) {
-            if (checkPlayer.GetModPlayer<WreathHandler>().IsFull1) {
+            if (checkPlayer.GetModPlayer<WreathHandler>().IsActualFull1) {
                 flag = true;
                 break;
             }
         }
-        if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        if (player.GetModPlayer<WreathHandler>().IsActualFull1) {
             player.statLife += 40;
             if (Main.myPlayer == player.whoAmI) {
                 player.HealEffect(40);
