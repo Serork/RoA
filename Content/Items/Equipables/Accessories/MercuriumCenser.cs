@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
+[AutoloadEquip(EquipType.Waist)]
 sealed class MercuriumCenser : NatureItem {
     private class MercuriumCenserHandler : ModPlayer {
         private float _spawnFumesTimer;
