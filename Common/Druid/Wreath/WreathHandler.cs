@@ -172,7 +172,7 @@ sealed class WreathHandler : ModPlayer {
 
     public ushort AddResourceValue() => (ushort)(AddValue * MaxResource);
 
-    public bool HasEnough(float percentOfMax) => CurrentResource >= (ushort)(TotalResource * percentOfMax);
+    public bool HasEnough(float percentOfMax, bool total = false) => CurrentResource >= (ushort)((total ? TotalResource : MaxResource) * percentOfMax);
 
     public override void Unload() {
         OnWreathReset = null;
