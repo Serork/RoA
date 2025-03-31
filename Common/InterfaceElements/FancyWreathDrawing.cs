@@ -8,6 +8,7 @@ using ReLogic.Graphics;
 
 using RoA.Common.Cache;
 using RoA.Common.Configs;
+using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -200,6 +201,8 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
         Vector2 screenSize = Main.ScreenSize.ToVector2();
         screenSize *= Main.UIScale;
+        var formHandler = player.GetModPlayer<BaseFormHandler>();
+        var currentForm = formHandler.CurrentForm;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
             position = screenSize / 2f;
             position.Y -= player.height * 1.5f;
@@ -238,6 +241,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             if (reversedGravity) {
                 vector.Y += 28f;
             }
+            if (formHandler.IsInDruidicForm && currentForm != null) {
+                vector += currentForm.BaseForm.WreathOffset2;
+            }
             spriteBatch.DrawString(FontAssets.MouseText.Value, text3,
                 reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2((0f - vector2.X) * 0.5f, 0f)) : (vector + new Vector2((0f - vector2.X) * 0.5f, 0f)), textColor, 0f, default(Vector2), 1f,
                 reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
@@ -271,6 +277,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (reversedGravity) {
             effects = SpriteEffects.FlipHorizontally;
             position.Y -= 0f;
+        }
+        if (formHandler.IsInDruidicForm && currentForm != null) {
+            position += currentForm.BaseForm.WreathOffset2;
         }
         spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
 
@@ -397,6 +406,8 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
             reversedGravity = false;
         }
+        var formHandler = player.GetModPlayer<BaseFormHandler>();
+        var currentForm = formHandler.CurrentForm;
         if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
@@ -426,6 +437,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             }
             if (reversedGravity) {
                 vector.Y += 28f;
+            }
+            if (formHandler.IsInDruidicForm && currentForm != null) {
+                vector2 += currentForm.BaseForm.WreathOffset2;
             }
             spriteBatch.DrawString(FontAssets.MouseText.Value, text3,
                 reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2((0f - vector2.X) * 0.5f, 0f)) : (vector + new Vector2((0f - vector2.X) * 0.5f, 0f)), textColor, 0f, default(Vector2), 1f,
@@ -462,6 +476,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
         if (reversedGravity) {
             position.Y += 1f;
+        }
+        if (formHandler.IsInDruidicForm && currentForm != null) {
+            position += currentForm.BaseForm.WreathOffset2;
         }
         spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
 

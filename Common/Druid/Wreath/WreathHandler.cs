@@ -533,7 +533,7 @@ sealed class WreathHandler : ModPlayer {
         Player player = drawinfo.drawPlayer;
         float positionY = drawinfo.Position.Y;
         if (player.whoAmI == Main.myPlayer && player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
-            drawinfo.Position.Y -= 35f;
+            drawinfo.Position.Y -= 35f + (RoAClientConfig.IsBars || RoAClientConfig.IsFancy ? 20f : 0f);
         }
         orig(ref drawinfo);
         drawinfo.Position.Y = positionY;

@@ -24,6 +24,7 @@ abstract class InsectForm : BaseForm {
     public override SoundStyle? HurtSound => SoundID.NPCHit31;
 
     public override Vector2 WreathOffset => new(0f, 12f);
+    public override Vector2 WreathOffset2 => new(0f, -10f);
 
     protected virtual float InsectDustScale { get; } = 1f;
     protected virtual ushort InsectProjectileType { get; } = (ushort)ModContent.ProjectileType<CorruptionInsect>();

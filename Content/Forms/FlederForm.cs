@@ -22,6 +22,7 @@ sealed class FlederForm : BaseForm {
     public override SoundStyle? HurtSound => SoundID.NPCHit27;
 
     public override Vector2 WreathOffset => new(0f, 7.5f);
+    public override Vector2 WreathOffset2 => new(0f, -10f);
 
     protected override Vector2 GetLightingPos(Player player) => player.Center;
     protected override Color LightingColor => new(79, 124, 211);

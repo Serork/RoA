@@ -25,6 +25,7 @@ sealed class LilPhoenixForm : BaseForm {
     protected override bool ShouldApplyUpdateJumpHeightLogic => true;
 
     public override Vector2 WreathOffset => new(0f, 5.5f);
+    public override Vector2 WreathOffset2 => new(0f, -20f);
 
     protected override Color LightingColor {
         get {

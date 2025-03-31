@@ -93,6 +93,7 @@ abstract class BaseForm : ModMount {
     public BaseForm() => MountBuff = new BaseFormBuff(this);
 
     public virtual Vector2 WreathOffset { get; } = Vector2.Zero;
+    public virtual Vector2 WreathOffset2 { get; } = Vector2.Zero;
 
     public virtual SoundStyle ApplySound { get; } = SoundID.Item25;
     public virtual SoundStyle ReleaseSound { get; } = SoundID.Item25;
