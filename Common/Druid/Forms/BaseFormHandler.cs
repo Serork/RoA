@@ -39,6 +39,7 @@ sealed class BaseFormHandler : ModPlayer {
     private FormInfo _currentForm;
     private bool _shouldBeActive;
     private bool _startDecreasingWreath;
+    private byte _sync;
 
     public bool CanTransform => IsInDruidicForm || !Player.mount.Active;
 
@@ -53,12 +54,11 @@ sealed class BaseFormHandler : ModPlayer {
     public FormInfo Deserialize(string typeName) => _formsByType[Type.GetType(typeName)];
 
     internal void InternalSetCurrentForm<T>(T formInstance) where T : FormInfo {
-        if (formInstance != null) {
-            _currentForm = formInstance;
+        _currentForm = formInstance;
+        _sync++;
 
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
-                MultiplayerSystem.SendPacket(new SpawnFormPacket(Player, Serialize()));
-            }
+        if (Main.netMode == NetmodeID.MultiplayerClient && _sync < 2) {
+            MultiplayerSystem.SendPacket(new SpawnFormPacket(Player, Serialize()));
         }
     }
 
@@ -113,6 +113,7 @@ sealed class BaseFormHandler : ModPlayer {
         player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
+        handler._sync = 0;
 
         if (player.heldProj != -1) {
             Main.projectile[player.heldProj].Kill();
