@@ -130,10 +130,13 @@ sealed class PeegeonHood : ModItem {
         }
     }*/
     public class EyeTrail : PlayerDrawLayer {
+        private class EyeTrailInfo : ModPlayer {
+            public Vector2[] trailPos = new Vector2[10];
+            public Vector2[] oldPos = new Vector2[10];
+            public float idleCount;
+        }
+
         private Asset<Texture2D> eyeTrailTexture, eyeTrailGlowTexture;
-        public Vector2[] trailPos = new Vector2[10];
-        public Vector2[] oldPos = new Vector2[10];
-        public float idleCount;
 
         public override void Load()
             => eyeTrailTexture = eyeTrailGlowTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "PeegeonHood_Glow");
@@ -155,16 +158,18 @@ sealed class PeegeonHood : ModItem {
             if (drawInfo.shadow != 0f || drawInfo.drawPlayer.dead)
                 return;
 
-            if (drawInfo.drawPlayer.head != EquipLoader.GetEquipSlot(RoA.Instance, nameof(PeegeonHood), EquipType.Head)) {
-                if (trailPos != new Vector2[10]) {
-                    trailPos = new Vector2[10];
-                    oldPos = new Vector2[10];
-                    return;
-                }
-            }
+            var handler = drawInfo.drawPlayer.GetModPlayer<EyeTrailInfo>();
 
             if (drawInfo.drawPlayer.face > 0) {
                 return;
+            }
+
+            if (drawInfo.drawPlayer.head != EquipLoader.GetEquipSlot(RoA.Instance, nameof(PeegeonHood), EquipType.Head)) {
+                if (handler.trailPos != new Vector2[10]) {
+                    handler.trailPos = new Vector2[10];
+                    handler.oldPos = new Vector2[10];
+                    return;
+                }
             }
 
             Player player = drawInfo.drawPlayer;
@@ -175,30 +180,30 @@ sealed class PeegeonHood : ModItem {
 
 
             if (!Main.gamePaused) {
-                for (int i = trailPos.Length - 1; i > 0; i--) {
-                    trailPos[i] = player.MountedCenter + (oldPos[3] - player.MountedCenter) * (i) / trailPos.Length;
-                    trailPos[i].Y -= idleCount * i * player.gravDir;
-                    trailPos[i] += new Vector2(0, idleCount * i / 3).RotatedByRandom(360);
+                for (int i = handler.trailPos.Length - 1; i > 0; i--) {
+                    handler.trailPos[i] = player.MountedCenter + (handler.oldPos[3] - player.MountedCenter) * (i) / handler.trailPos.Length;
+                    handler.trailPos[i].Y -= handler.idleCount * i * player.gravDir;
+                    handler.trailPos[i] += new Vector2(0, handler.idleCount * i / 3).RotatedByRandom(360);
                 }
 
-                for (int i = oldPos.Length - 1; i > 0; i--) {
-                    oldPos[i] = oldPos[i - 1];
+                for (int i = handler.oldPos.Length - 1; i > 0; i--) {
+                    handler.oldPos[i] = handler.oldPos[i - 1];
                 }
-                if ((oldPos[0].X != player.MountedCenter.X || oldPos[0].Y != player.MountedCenter.Y) && idleCount > 0f) idleCount -= 0.1f;
-                else if (idleCount < 1f) idleCount += 0.025f;
-                if (idleCount < 0f) idleCount = 0f;
+                if ((handler.oldPos[0].X != player.MountedCenter.X || handler.oldPos[0].Y != player.MountedCenter.Y) && handler.idleCount > 0f) handler.idleCount -= 0.1f;
+                else if (handler.idleCount < 1f) handler.idleCount += 0.025f;
+                if (handler.idleCount < 0f) handler.idleCount = 0f;
 
-                oldPos[0] = trailPos[0] = player.MountedCenter;
+                handler.oldPos[0] = handler.trailPos[0] = player.MountedCenter;
             }
 
             int offset = 0;
             int height = texture.Height / 20;
             int rate = 1;
 
-            for (int i = 0; i < trailPos.Length; i += rate) {
+            for (int i = 0; i < handler.trailPos.Length; i += rate) {
 
-                float x = (int)(trailPos[i].X);
-                float y = (int)(trailPos[i].Y - (float)(3 + offset));
+                float x = (int)(handler.trailPos[i].X);
+                float y = (int)(handler.trailPos[i].Y - (float)(3 + offset));
 
                 if (player.gravDir == -1f) {
                     y += player.height / 2 - 4;
@@ -207,15 +212,15 @@ sealed class PeegeonHood : ModItem {
 
                 float alpha = 15f;
                 Color color = Lighting.GetColor((int)(x / 16f), (int)(y / 16f));
-                color *= (trailPos.Length - i) / alpha;
+                color *= (handler.trailPos.Length - i) / alpha;
 
                 Color color2 = Color.White;
-                color2 *= (trailPos.Length - i) / alpha;
+                color2 *= (handler.trailPos.Length - i) / alpha;
                 DrawData drawData = new DrawData(texture, new Vector2((float)x - Main.screenPosition.X, (float)y - Main.screenPosition.Y) + new Vector2(0f, player.gfxOffY), new Rectangle?(bodyFrame), color2, 0f, new Vector2((float)texture.Width / 2f, (float)height / 2f), 1f, effect, 0);
                 drawInfo.DrawDataCache.Add(drawData);
 
                 color = player.underShirtColor;
-                color *= (trailPos.Length - i) / alpha;
+                color *= (handler.trailPos.Length - i) / alpha;
                 DrawData drawDataGlow = new DrawData(glow_texture, new Vector2((float)x - Main.screenPosition.X, (float)y - Main.screenPosition.Y) + new Vector2(0f, player.gfxOffY), new Rectangle?(bodyFrame), color, 0f, new Vector2((float)texture.Width / 2f, (float)height / 2f), 1f, effect, 0);
                 drawInfo.DrawDataCache.Add(drawDataGlow);
             }
