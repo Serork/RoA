@@ -101,7 +101,7 @@ sealed class BloodbathLocket : ModItem {
                 return;
             }
 
-            bool gameActive = !(Main.gamePaused || !Main.instance.IsActive);
+            bool gameActive = !Main.gamePaused;
             int eyesCount = Math.Min(_eyes.Length, (int)(handler.bloodbathDamage / 0.05f) + 1);
             if (gameActive && eyesCount > 0 && ++_eyesTimer > 120f) {
                 for (int i = 0; i < eyesCount; i++) {
