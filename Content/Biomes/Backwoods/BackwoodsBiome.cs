@@ -113,7 +113,7 @@ sealed partial class BackwoodsBiome : ModBiome {
     public static float TransitionSpeed => 0.05f;
 
     public static bool IsActiveForFogEffect => BiomeShouldBeActive;
-    public static bool BiomeShouldBeActive => ModContent.GetInstance<TileCount>().BackwoodsTiles >= 140f;
+    public static bool BiomeShouldBeActive => ModContent.GetInstance<TileCount>().BackwoodsTiles >= 2600f;
 
     public static BackwoodsBiome Instance => ModContent.GetInstance<BackwoodsBiome>();
 
