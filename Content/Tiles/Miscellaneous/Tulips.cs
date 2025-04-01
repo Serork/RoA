@@ -175,15 +175,6 @@ sealed class ExoticTulip : ModTile {
         if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
 
-            void dropItem(ushort itemType) {
-                int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
-                if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
-                }
-            }
-
-            dropItem((ushort)GetItemDrops(i, j).First().type);
-
             WorldGen.KillTile(i, j);
             if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
                 NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
@@ -251,15 +242,6 @@ sealed class SweetTulip : ModTile {
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
-
-            void dropItem(ushort itemType) {
-                int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
-                if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
-                }
-            }
-
-            dropItem((ushort)GetItemDrops(i, j).First().type);
 
             WorldGen.KillTile(i, j);
             if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
@@ -330,15 +312,6 @@ sealed class WeepingTulip : ModTile {
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
-
-            void dropItem(ushort itemType) {
-                int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
-                if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
-                }
-            }
-
-            dropItem((ushort)GetItemDrops(i, j).First().type);
 
             WorldGen.KillTile(i, j);
             if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
