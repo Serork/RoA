@@ -78,11 +78,7 @@ sealed class DryadStatue_Rubble : ModTile {
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinatePadding = 2;
-        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(124, 127, 140), CreateMapEntryName());
