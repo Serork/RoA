@@ -260,9 +260,9 @@ sealed class TulipFlower : NatureProjectile {
 
     public override void AI() {
         if (Projectile.localAI[0] == 0f) {
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 1.2f });
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 1.2f }, Projectile.Center);
 
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "LeavesAmbient") { Volume = 1.2f, MaxInstances = 1 });
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "LeavesAmbient") { Volume = 1.2f, MaxInstances = 1 }, Projectile.Center);
         }
 
         Projectile.localAI[0] += 1f;
