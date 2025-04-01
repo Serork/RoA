@@ -172,6 +172,9 @@ class WreathSlot : ModAccessorySlot {
     public static bool IsItemValidForSlot(Item item) => item.ModItem is BaseWreathItem;
 
     public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo) {
+        if (IsHidden()) {
+            return false;
+        }
         bool result = IsItemValidForSlot(item);
         if (result) {
             BeltButton.ToggleTo(true);
