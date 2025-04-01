@@ -27,6 +27,8 @@ sealed class TrailerCameraTest : ModSystem {
     private static int _durationHold;
     private static int _beforeTime;
 
+    internal static bool _pause;
+
     private static float EaseFunctionValue(float value1, float value2, float amount) {
         float result = MathHelper.Clamp(amount, 0f, 1f);
         //result = MathHelper.Hermite(value1, 0f, value2, 0f, result);
@@ -165,6 +167,16 @@ sealed class TrailerCameraTest : ModSystem {
             }
 
             _beforeTime = time;
+        }
+    }
+
+    private class PauseCameraCommand : ModCommand {
+        public override CommandType Type => CommandType.Chat;
+        public override string Command => "pause";
+        public override string Usage => "/pause";
+
+        public override void Action(CommandCaller caller, string input, string[] args) {
+            _pause = !_pause;
         }
     }
 

@@ -45,7 +45,7 @@ internal class AsymetricalPanModifier : ICameraModifier {
                 target = from = Vector2.Zero;
             }
 
-            if (timer < TotalDuration)
+            if (timer < TotalDuration && !TrailerCameraTest._pause)
                 timer++;
         }
     }
