@@ -174,7 +174,7 @@ sealed class SapSlime : ModNPC {
     public override void HitEffect(NPC.HitInfo hit) {
         int num39 = 8;
         float num40 = 1.1f;
-        short num41 = (short)ModContent.DustType<Galipot>();
+        short num41 = (short)ModContent.DustType<Dusts.Galipot>();
         if (NPC.life <= 0) {
             num40 = 1.5f;
             num39 = 40;
