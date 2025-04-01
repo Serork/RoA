@@ -6,6 +6,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.ID;
@@ -41,6 +42,20 @@ sealed class HellfireFracture : NatureProjectile {
         ShouldIncreaseWreathPoints = false;
     }
 
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        base.SafeSendExtraAI(writer);
+
+        writer.WriteVector2(_first);
+        writer.WriteVector2(_last);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        base.SafeReceiveExtraAI(reader);
+
+        _first = reader.ReadVector2();
+        _last = reader.ReadVector2();
+    }
+
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         float max = 4.5f;
@@ -53,6 +68,9 @@ sealed class HellfireFracture : NatureProjectile {
         if (Projectile.Opacity < 1f) {
             Projectile.Opacity += 0.1f;
         }
+        if (player.whoAmI != Main.myPlayer) {
+            return;
+        }
         Projectile? proj = GetParent();
         if (flag && proj != null && Projectile.ai[1] == 1f) {
             var slash = proj.As<HellfireClawsSlash>();
@@ -63,11 +81,12 @@ sealed class HellfireFracture : NatureProjectile {
                 Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 10f;
                 Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
                 Projectile.direction = player.direction;
+                Projectile.netUpdate = true;
             }
         }
-        else if (Projectile.ai[0] < 1f) {
-            Projectile.Kill();
-        }
+        //else if (Projectile.ai[0] < 1f) {
+        //    Projectile.Kill();
+        //}
     }
 
     private Projectile? GetParent() {

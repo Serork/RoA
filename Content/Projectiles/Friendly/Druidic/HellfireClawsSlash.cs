@@ -30,7 +30,8 @@ sealed class HellfireClawsSlash : ClawsSlash {
     private int _hitAmount;
     private float _knockBack;
     private float[] oldRot = new float[MAX];
-    private Projectile _projectile = null;
+    private bool _hit;
+    private int _proj = -1;
 
     public bool Charged { get; private set; } = true;
 
@@ -93,6 +94,8 @@ sealed class HellfireClawsSlash : ClawsSlash {
         writer.Write(_oldTimeleft);
         writer.Write(_oldItemUse);
         writer.Write(_oldItemAnimation);
+        writer.Write(_hit);
+        writer.Write(_proj);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
@@ -102,6 +105,8 @@ sealed class HellfireClawsSlash : ClawsSlash {
         _oldTimeleft = reader.ReadInt32();
         _oldItemUse = reader.ReadInt32();
         _oldItemAnimation = reader.ReadInt32();
+        _hit = reader.ReadBoolean();
+        _proj = reader.ReadInt32();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -117,6 +122,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
         Projectile.localNPCImmunity[target.whoAmI] = 10 + _hitAmount;
         Projectile.localAI[2] += 0.1f * Projectile.ai[0];
         if (!Hit) {
+            _hit = true;
             Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnHitNPC(Projectile, true);
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HellfireClaws") with { PitchVariance = 0.25f, Volume = Main.rand.NextFloat(0.75f, 0.85f) }, GetPos());
             if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -133,11 +139,11 @@ sealed class HellfireClawsSlash : ClawsSlash {
             }
             if (Projectile.localAI[1] == 0f) {
                 Projectile.localAI[1] = 1f;
-                if (_projectile == null && Projectile.owner == Main.myPlayer) {
-                    _projectile = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target),
+                if (_proj == -1 && Projectile.owner == Main.myPlayer) {
+                    _proj = Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target),
                         GetPos(MathHelper.PiOver4 * 0.5f),
                         Helper.VelocityToPoint(Main.player[Projectile.owner].Center, Main.MouseWorld, 1f),
-                        ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, 0f, Projectile.owner, ai2: Projectile.identity);
+                        ModContent.ProjectileType<HellfireFracture>(), Projectile.damage, 0f, Projectile.owner, ai2: Projectile.identity).identity;
                 }
             }
             if (Projectile.owner == Main.myPlayer) {
@@ -148,14 +154,6 @@ sealed class HellfireClawsSlash : ClawsSlash {
                 Projectile.netUpdate = true;
             }
             //UpdateMainCycle();
-        }
-        if (_projectile != null && _projectile.ai[0] < 5f) {
-            if (Projectile.localAI[0] < Projectile.ai[1] * 1.2f) {
-                _projectile.ai[1] = 1f;
-                _projectile.ai[0] += 1.5f;
-                _projectile.Opacity = 0f;
-                _projectile.netUpdate = true;
-            }
         }
     }
 
@@ -210,6 +208,19 @@ sealed class HellfireClawsSlash : ClawsSlash {
     }
 
     public override void SafePostAI() {
+        if (_hit) {
+            _hit = false;
+            Projectile projectile = Main.projectile[_proj];
+            if (projectile != null && projectile.ai[0] < 5f) {
+                if (Projectile.localAI[0] < Projectile.ai[1] * 1.2f) {
+                    projectile.ai[1] = 1f;
+                    projectile.ai[0] += 1.5f;
+                    projectile.Opacity = 0f;
+                    projectile.netUpdate = true;
+                }
+            }
+        }
+
         if (Projectile.localAI[0] >= Projectile.ai[1] * 0.3f && Projectile.localAI[0] < Projectile.ai[1] * 1.45f) {
             //for (int index = 0; index < MAX; index += 2) {
             //    int index2 = Math.Max(0, index - 2);
