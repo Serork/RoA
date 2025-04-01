@@ -2,22 +2,30 @@
 using Microsoft.Xna.Framework.Input;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Common.Druid.Forms;
+using RoA.Common.Networking.Packets;
+using RoA.Common.Networking;
+using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.Reflection;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.CameraSystem;
 sealed class TrailerCameraTest : ModSystem {
-    private bool _shifted = true;
+    private static bool _shifted = true;
 
     private static Point _point1, _point2;
     private static int _durationIn;
     private static int _durationOut;
     private static int _durationHold;
+    private static int _beforeTime;
 
     private static float EaseFunctionValue(float value1, float value2, float amount) {
         float result = MathHelper.Clamp(amount, 0f, 1f);
@@ -110,16 +118,90 @@ sealed class TrailerCameraTest : ModSystem {
         }
     }
 
-    public override void PostUpdatePlayers() {
-        if (Helper.JustPressed(Keys.F5)) {
+    private class StopCameraCommand : ModCommand {
+        public override CommandType Type => CommandType.Chat;
+        public override string Command => "stop";
+        public override string Usage => "/stop";
+
+        public override void Action(CommandCaller caller, string input, string[] args) {
+            CameraSystem.AsymetricalPanModifier.timer = 0;
+            CameraSystem.AsymetricalPanModifier.target = CameraSystem.AsymetricalPanModifier.from = Vector2.Zero;
+        }
+    }
+
+    private class StartCameraCommand : ModCommand {
+        public override CommandType Type => CommandType.Chat;
+        public override string Command => "start";
+        public override string Usage => "/start";
+
+        public override void Action(CommandCaller caller, string input, string[] args) {
             _shifted = false;
         }
+    }
 
+    private class Start2CameraCommand : ModCommand {
+        public override CommandType Type => CommandType.Chat;
+        public override string Command => "start2";
+        public override string Usage => "/start2 time";
+
+        public override void Action(CommandCaller caller, string input, string[] args) {
+            if (!int.TryParse(args[0], out int time)) {
+                throw new UsageException(args[0] + " is not an integer");
+            }
+
+            _shifted = false;
+            _beforeTime = time; 
+        }
+    }
+
+    private class BeforeStartTimerCameraCommand : ModCommand {
+        public override CommandType Type => CommandType.Chat;
+        public override string Command => "beforetimer";
+        public override string Usage => "/beforetimer time";
+
+        public override void Action(CommandCaller caller, string input, string[] args) {
+            if (!int.TryParse(args[0], out int time)) {
+                throw new UsageException(args[0] + " is not an integer");
+            }
+
+            _beforeTime = time;
+        }
+    }
+
+    public override void Load() {
+        On_SceneMetrics.ScanAndExportToMain += On_SceneMetrics_ScanAndExportToMain;
+    }
+
+    private void On_SceneMetrics_ScanAndExportToMain(On_SceneMetrics.orig_ScanAndExportToMain orig, SceneMetrics self, SceneMetricsScanSettings settings) {
+        if (CameraSystem.AsymetricalPanModifier.timer <= 0) {
+            orig(self, settings);
+            return;
+        }
+        Vector2? temp = settings.BiomeScanCenterPositionInWorld;
+        settings.BiomeScanCenterPositionInWorld = CameraSystem.AsymetricalPanModifier._temp;
+        orig(self, settings);
+        settings.BiomeScanCenterPositionInWorld = temp;
+    }
+
+    public override void PostUpdatePlayers() {
         if (!_shifted) {
+            if (_beforeTime > 0f) {
+                _beforeTime--;
+                if (_beforeTime % 60 == 0) {
+                    SoundEngine.PlaySound(SoundID.PlayerHit);
+                    foreach (Player activePlayer in Main.ActivePlayers) {
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(activePlayer, -1, activePlayer.Center), ignoreClient: activePlayer.whoAmI);
+                        }
+                    }
+                }
+                return;
+            }
+
             Point point1 = _point1;
             Point point2 = _point2;
             CameraSystem.AsymetricalPan(_durationOut, _durationHold, _durationIn,
-                point1.ToWorldCoordinates(), point2.ToWorldCoordinates(), EaseFunction);
+                point1.ToWorldCoordinates(), point2.ToWorldCoordinates(), Vector2.SmoothStep);
             _shifted = true;
         }
     }

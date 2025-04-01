@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -170,9 +171,28 @@ sealed class ExoticTulip : ModTile {
     }
 
     public override bool RightClick(int x, int y) {
-        WorldGen.KillTile(x, y, false, false, false);
+        Player player = Main.LocalPlayer;
+        if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
+            Tile tile = WorldGenHelper.GetTileSafely(i, j);
 
-        return true;
+            void dropItem(ushort itemType) {
+                int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
+                if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
+                }
+            }
+
+            dropItem((ushort)GetItemDrops(i, j).First().type);
+
+            WorldGen.KillTile(i, j);
+            if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -228,9 +248,28 @@ sealed class SweetTulip : ModTile {
     }
 
     public override bool RightClick(int x, int y) {
-        WorldGen.KillTile(x, y, false, false, false);
+        Player player = Main.LocalPlayer;
+        if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
+            Tile tile = WorldGenHelper.GetTileSafely(i, j);
 
-        return true;
+            void dropItem(ushort itemType) {
+                int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
+                if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
+                }
+            }
+
+            dropItem((ushort)GetItemDrops(i, j).First().type);
+
+            WorldGen.KillTile(i, j);
+            if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -287,9 +326,28 @@ sealed class WeepingTulip : ModTile {
         player.cursorItemIconID = GetItemDrops(i, j).Single().type;
     }
 
-    public override bool RightClick(int x, int y) {
-        WorldGen.KillTile(x, y, false, false, false);
+    public override bool RightClick(int i, int j) {
+        Player player = Main.LocalPlayer;
+        if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
+            Tile tile = WorldGenHelper.GetTileSafely(i, j);
 
-        return true;
+            void dropItem(ushort itemType) {
+                int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
+                if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
+                }
+            }
+
+            dropItem((ushort)GetItemDrops(i, j).First().type);
+
+            WorldGen.KillTile(i, j);
+            if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

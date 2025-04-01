@@ -24,7 +24,10 @@ sealed class PlayOtherItemSoundPacket : NetPacket {
         }
         int soundStyle = reader.ReadInt32();
         Vector2 position = reader.ReadVector2();
-        if (soundStyle == 1) {
+        if (soundStyle == -1) {
+            SoundEngine.PlaySound(SoundID.PlayerHit, position);
+        }
+        else if (soundStyle == 1) {
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsWave") { Volume = 0.75f }, position);
         }
         else if (soundStyle == 2) {

@@ -18,6 +18,8 @@ internal class AsymetricalPanModifier : ICameraModifier {
     public int timeHold = 0;
     public int timeIn = 0;
 
+    public Vector2 _temp;
+
     public int timer = 0;
     public Vector2 target = new(0, 0);
     public Vector2 from = new(0, 0);
@@ -64,33 +66,7 @@ internal class AsymetricalPanModifier : ICameraModifier {
                 cameraPosition.CameraPosition = offset + target;
             } //stay on target
 
-            if (Main.LocalPlayer.whoAmI == Main.myPlayer) {
-                Main.LocalPlayer.Center = cameraPosition.CameraPosition + -offset;
-            }
-        }
-    }
-
-    private class Test : ModPlayer {
-        private PlayerDrawLayer[] _layers;
-
-        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) {
-            _layers = PlayerDrawLayerLoader.GetDrawLayers(drawInfo);
-        }
-
-        public override void HideDrawLayers(PlayerDrawSet drawInfo) {
-            if (_layers == null) {
-                return;
-            }
-
-            if (Player.whoAmI == Main.myPlayer) {
-                if (CameraSystem.AsymetricalPanModifier.TotalDuration > 0 && CameraSystem.AsymetricalPanModifier.target != Vector2.Zero) {
-                    foreach (PlayerDrawLayer layer in _layers) {
-                        if (layer.FullName.Contains("Terraria") && !layer.FullName.Contains("Mount")) {
-                            layer.Hide();
-                        }
-                    }
-                }
-            }
+            _temp = cameraPosition.CameraPosition + -offset;
         }
     }
 
