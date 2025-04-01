@@ -48,10 +48,6 @@ sealed class FlederForm : BaseForm {
         }
 
         void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-            if (player.whoAmI != Main.myPlayer) {
-                return;
-            }
-
             bool flag = direction == IDoubleTap.TapDirection.Right | direction == IDoubleTap.TapDirection.Left;
             if (!flag) {
                 return;
@@ -196,13 +192,14 @@ sealed class FlederForm : BaseForm {
             }
         }
 
-        internal void UseFlederDash(IDoubleTap.TapDirection direction) {
-            if (ActiveDash) {
+        internal void UseFlederDash(IDoubleTap.TapDirection direction, bool server = false) {
+            var handler = Player.GetModPlayer<FlederFormHandler>();
+            if (handler.ActiveDash) {
                 return;
             }
 
-            _dashDirection = direction;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            handler._dashDirection = direction;
+            if (!server && Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new FlederFormPacket1(Player, direction));
             }
         }

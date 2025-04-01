@@ -74,7 +74,7 @@ sealed class WorshipperBonehelm : ModItem {
             if (handler.StateTimer <= 0) {
                 handler.StateTimer = STATETIME;
             }
-            _shouldSync = true;
+            handler._shouldSync = true;
         }
 
         public void RideHarpy(int harpyWhoAmI) {

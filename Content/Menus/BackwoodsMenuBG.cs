@@ -43,7 +43,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
             int i = numArray[index1];
             Main.instance.LoadBackground(i);
             float scale = 2.2f;
-            int num4 = (int)(Main.backgroundWidth[i] * (double)scale);
+            int num4 = (int)(Main.backgroundWidth[i] * (double)scale) + 1;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1f / num3);
             float fieldValue1 = typeof(Main).GetFieldValue<float>("screenOff", Main.instance);
             float fieldValue2 = typeof(Main).GetFieldValue<float>("scAdj", Main.instance);
@@ -58,8 +58,10 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
             }
             int num7 = Main.screenWidth / num4 + 2;
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
-                for (int index2 = 0; index2 < num7; ++index2)
-                    spriteBatch.Draw(TextureAssets.Background[i].Value, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + extraY), new Rectangle?(new Rectangle(0, 0, Main.backgroundWidth[i], Main.backgroundHeight[i])), color, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
+                for (int index2 = 0; index2 < num7; ++index2) {
+                    spriteBatch.Draw(TextureAssets.Background[i].Value, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + extraY),
+                        new Rectangle?(new Rectangle(0, 0, Main.backgroundWidth[i], Main.backgroundHeight[i])), color, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
+                }
             }
         }
 
@@ -89,7 +91,8 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
                 Vector2 position = new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f));
                 texture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsMid2").Value;
                 //spriteBatch.Draw(texture, position, new Rectangle(0, 0, texture.Width * 3, texture.Height * 3), color);
-                spriteBatch.Draw(texture, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + (int)(Main.screenHeight * 0.5f)), new Rectangle?(new Rectangle(0, 0, texture.Width, texture.Height)), color, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(texture, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + (int)(Main.screenHeight * 0.5f)), 
+                    new Rectangle?(new Rectangle(0, 0, texture.Width, 1160)), color, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
             }
         }
         float opacity = (color.R + color.G + color.B) / 255f / 3f;

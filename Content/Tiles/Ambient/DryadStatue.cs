@@ -39,7 +39,7 @@ sealed class DryadStatue : ModTile {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(200, 200, 200), CreateMapEntryName());
+        AddMapEntry(new Color(124, 127, 140), CreateMapEntryName());
 
         DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
         MineResist = 1.5f;
@@ -85,7 +85,7 @@ sealed class DryadStatue_Rubble : ModTile {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(200, 200, 200), CreateMapEntryName());
+        AddMapEntry(new Color(124, 127, 140), CreateMapEntryName());
 
         DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
 

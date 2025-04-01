@@ -108,7 +108,7 @@ sealed class FlederFormPacket1 : NetPacket {
 
         IDoubleTap.TapDirection direction = (IDoubleTap.TapDirection)reader.ReadSByte();
 
-        player.GetModPlayer<FlederFormHandler>().UseFlederDash(direction);
+        player.GetModPlayer<FlederFormHandler>().UseFlederDash(direction, true);
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new FlederFormPacket1(player, direction), ignoreClient: sender);
