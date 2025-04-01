@@ -172,13 +172,13 @@ sealed class SapSlime : ModNPC {
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
-        //if (NPC.life <= 0) {
-        //    for (int j = 0; j < 12; j++)
-        //        Dust.NewDust(NPC.position, NPC.width, NPC.height, 3, hitDirection, -1f, 0, new Color(252, 193, 45), 1f);
-        //}
-        //else
-        //    for (int i = 0; i < 3; i++)
-        //        Dust.NewDust(NPC.position, NPC.width, NPC.height, 3, hitDirection, -1f, 0, new Color(252, 193, 45), 1f);
+        if (NPC.life <= 0) {
+            for (int j = 0; j < 12; j++)
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, 3, hit.HitDirection, -1f, 0, new Color(252, 193, 45), 1f);
+        }
+        else
+            for (int i = 0; i < 3; i++)
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, 3, hit.HitDirection, -1f, 0, new Color(252, 193, 45), 1f);
     }
 
     /*public override void NPCLoot() {
