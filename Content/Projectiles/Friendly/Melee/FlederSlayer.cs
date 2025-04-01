@@ -78,6 +78,7 @@ sealed class FlederSlayer : ModProjectile {
         writer.Write(_direction);
         writer.Write(_init);
         writer.Write(_timeLeft);
+        writer.Write(_empoweredAttack);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
@@ -89,6 +90,7 @@ sealed class FlederSlayer : ModProjectile {
         _direction = reader.ReadInt32();
         _init = reader.ReadBoolean();
         _timeLeft = reader.ReadInt32();
+        _empoweredAttack = reader.ReadBoolean();
     }
 
     public override void CutTiles() {
@@ -278,9 +280,10 @@ sealed class FlederSlayer : ModProjectile {
                 player.bodyFrame.Y = player.bodyFrame.Height * 4;
             }
             else if (_timeLeft == min) {
-                if (_timingProgress >= 1.3f && _timingProgress <= 2.3f) {
+                if (_timingProgress >= 1.3f && _timingProgress <= 2.3f && !_empoweredAttack) {
                     _empoweredAttack = true;
                     _charge = 1f;
+                    Projectile.netUpdate = true;
                 }
 
                 SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
