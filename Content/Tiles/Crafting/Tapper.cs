@@ -157,16 +157,16 @@ partial class Tapper : ModTile {
                         return true;
                     }
                 }
-                else {
-                    //dropItem((ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>());
-                    Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                    WorldGen.KillTile(i, j);
-                    if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
-                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
-                    }
+                //else {
+                //    //dropItem((ushort)ModContent.ItemType<Items.Placeable.Crafting.Tapper>());
+                //    Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                //    WorldGen.KillTile(i, j);
+                //    if (!tile.HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+                //        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+                //    }
 
-                    return true;
-                }
+                //    return true;
+                //}
             }
         }
 

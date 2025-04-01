@@ -647,18 +647,18 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
                 ActionWithGem(i, j, true);
             }
         }
-        else {
-            if (HasGemInIt(i, j)) {
-                int item = Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
-                             GetGemDropID(i, j));
-                if (Main.netMode != NetmodeID.SinglePlayer)
-                    NetMessage.SendData(MessageID.SyncItem, number: item);
-            }
-            WorldGen.KillTile(i, j);
-            if (!Main.tile[i, j].HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
-                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
-            }
-        }
+        //else {
+        //    if (HasGemInIt(i, j)) {
+        //        int item = Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
+        //                     GetGemDropID(i, j));
+        //        if (Main.netMode != NetmodeID.SinglePlayer)
+        //            NetMessage.SendData(MessageID.SyncItem, number: item);
+        //    }
+        //    WorldGen.KillTile(i, j);
+        //    if (!Main.tile[i, j].HasTile && Main.netMode == NetmodeID.MultiplayerClient) {
+        //        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+        //    }
+        //}
 
         return true;
     }
