@@ -1723,11 +1723,11 @@ NFAHorns: {
 }
 
 NFAJacket: {
-	DisplayName: N.F.A.'s Smelly Jacket
+	DisplayName: N.F.A.'s Dress Shirt
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'The man's level of cool is unparalleled'
+		'By the order of my master I'm mandated to wear a shirt.'
 		'''
 }
 
