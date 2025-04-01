@@ -170,7 +170,7 @@ sealed class ExoticTulip : ModTile {
         player.cursorItemIconID = GetItemDrops(i, j).Single().type;
     }
 
-    public override bool RightClick(int x, int y) {
+    public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
@@ -247,7 +247,7 @@ sealed class SweetTulip : ModTile {
         player.cursorItemIconID = GetItemDrops(i, j).Single().type;
     }
 
-    public override bool RightClick(int x, int y) {
+    public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
