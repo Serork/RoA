@@ -391,7 +391,7 @@ sealed class BackwoodsVars : ModSystem {
                                     Main.tile[i - 1, k].TileFrameX = 44;
                                     Main.tile[i - 1, k].TileFrameY = 264;
                                 }
-                                Console.WriteLine(i + " " + j);
+                                //Console.WriteLine(i + " " + j);
                             }
 
                             if (num4 == 0) {
@@ -446,7 +446,7 @@ sealed class BackwoodsVars : ModSystem {
                                 Main.tile[i + 1, k].TileFrameX = 66;
                                 Main.tile[i + 1, k].TileFrameY = 264;
                             }
-                            Console.WriteLine(i + " " + j);
+                            //Console.WriteLine(i + " " + j);
                         }
 
                         if (num4 == 0) {
