@@ -1,34 +1,17 @@
--- By 'Starlife Team' --
+RoA is focused on adding highly polished content that seamlessly expands Terraria’s features, from exploration to combat. 
+The mod features unique mechanics and an immersive story which can be discovered organically through world structures, NPC dialogue and bestiary entries.
+Developed by the team behind Consolaria, Rise of Ages is designed to provide a nice, condensed experience rather than an overwhelming amount of surface-level content.
 
-From the creators of Consolaria, presenting 'Rise of Ages'!
+This "early access" version features a new Druid class and Backwoods biome with complete Pre-Hardmode progression, as well as a variety of miscellaneous content to spice up your playthrough, regardless of the class of your choice. 
 
---------------
+List of content: 
+- Backwoods. An ancient forest once inhabited by Dryads has fallen under a dark influence and holds many dangers for an unsuspecting adventurer, but its true power has been suppressed by the world evil...  
+- Druid. Attuning to primordial nature through hand-made Wreaths and controlling the environment, druids become stronger the longer the fight goes on, covering the battlefield in canopy and taking shape of wild beasts.
+- Fog. An eerie weather event that may occur after the rain covers the backwoods and its surrounding area in a thick layer of mist, reducing visibility and allowing enemies to catch you off-guard.
+- Lothor the Wild. The mightiest druid from an age long past, whose quest for immortality has gone very wrong.
+- Materials. Mercurium, Galipot and Leather can be obtained through unique and challenging mechanics, and provide a variety of new equipment options. 
+- Alchemy. The mod adds two new herbs and plenty of potions, as well as reworking most of the vanilla recipes. 
 
-!Attention! 
-This mod is in its 'Early Access' state. Do not expect to be overwhelmed by content.
-Well, to be fair, neither the full release is planned to be overflowing with content. Just a nice, condensed experience.
+After many years in the oven, we hope you enjoy!
 
---------------
-
-Release 1.0.0 of this mod adds:
-
-- A new Biome - 'The Backwoods'
-A gloomy forest with its land shaded by the tall and dense canopy. A home to feral wildlife and those who delve into the world of magic far much more 'primal'.
-
-- A new Class - 'The Druid'
-Step onto a new path, attunning with the primordial nature through the means of Wreaths, transform into wild creatures and fight, becoming stronger, the longer the quarrel goes on.
-
-- A new Boss - 'Lothor the Wild'
-It was difficult to put the soul together, but unfortunately, something went so wrong. And now this creature can't do anything, but hunt those who go too far.
-
-- And a handful of other things to spice up the gameplay.
-
---------------
-
-Discord: https://discord.gg/dickandballsdickandballs
-You are welcome to mod's discord server for more information and to report bugs. 
-Please help us make 'Rise of Ages' the best it can be!
-
-After so many years in the oven, we hope you enjoy!
-
-by Serork, has2r, peege.on, N.F.A. and cleo.
+by Serork, peege.on, has2r, N.F.A., cleo and Starlife team.
