@@ -248,7 +248,21 @@ sealed class DryadEntrance : ModSystem {
     }
 
     private void DryadEntranceLoomPlacement(GenerationProgress progress, GameConfiguration configuration) {
-        if (_loomPlacedInWorld || _bigRubblePosition == Point.Zero) {
+        if (_loomPlacedInWorld) {
+            bool flag = false;
+            for (int i = 0; i < Main.maxTilesX; i++) {
+                for (int j = 0; j < Main.maxTilesY; j++) {
+                    if (WorldGenHelper.ActiveTile(i, j, 304)) {
+                        flag = true;
+                    }
+                }
+            }
+            if (!flag) {
+                _loomPlacedInWorld = false;
+            }
+        }
+
+        if (_loomPlacedInWorld ||_bigRubblePosition == Point.Zero) {
             return;
         }
 
@@ -970,9 +984,7 @@ sealed class DryadEntrance : ModSystem {
                     WorldGen.PlaceTile(x2, y3 - 1, 187, mute: true, forced: false, -1, genRand.Next(50, 53) - 3);
                     if (Main.tile[x2, y3 - 1].TileType == 187) {
                         bigPlaced = true;
-                        if (_bigRubblePosition == Point.Zero) {
-                            _bigRubblePosition = new Point(x2, y3 - 1);
-                        }
+                        _bigRubblePosition = new Point(x2, y3 - 1);
                     }
                 }
             }
