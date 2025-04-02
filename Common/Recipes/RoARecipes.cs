@@ -939,6 +939,13 @@ sealed class RoARecipes : ModSystem {
 
         item = Recipe.Create(ModContent.ItemType<MercuriumNugget>());
         item.AddIngredient<Content.Items.Placeable.Crafting.MercuriumOre>(4);
+        item.AddIngredient(ItemID.EbonstoneBlock, 2);
+        item.AddTile(TileID.DemonAltar);
+        item.SortAfterFirstRecipesOf(ItemID.DemoniteBar);
+        item.Register();
+        item = Recipe.Create(ModContent.ItemType<MercuriumNugget>());
+        item.AddIngredient<Content.Items.Placeable.Crafting.MercuriumOre>(4);
+        item.AddIngredient(ItemID.CrimstoneBlock, 2);
         item.AddTile(TileID.DemonAltar);
         item.SortAfterFirstRecipesOf(ItemID.CrimtaneBar);
         item.Register();
