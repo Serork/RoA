@@ -344,7 +344,8 @@ sealed class PineCone : NatureItem {
                         num4 = genRand.Next(3);
                         bool flag10_1 = !GeneratedStorage.PineConeAddedToWorld;
                         bool flag11_1 = Main.tile[i, j].TileType == 147;
-                        if ((genRand.Next(3) < 2 || (flag10_1 && flag11_1)) && !flag2) {
+                        bool flag12_1 = genRand.Next(3) < 2;
+                        if ((flag12_1 || (flag10_1 && flag11_1)) && !flag2) {
                             if (flag11_1 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
                                 GeneratedStorage.PineConeAddedToWorld = true;
                                 num4 = 3;
@@ -354,7 +355,7 @@ sealed class PineCone : NatureItem {
                                 }
                             }
 
-                            if ((!flag10_1 && flag11_1) || !flag11_1 || flag10_1) {
+                            if ((flag10_1 && flag11_1) || flag12_1) {
                                 if (num4 == 0) {
                                     Main.tile[i - 1, k].TileFrameX = 44;
                                     Main.tile[i - 1, k].TileFrameY = 198;
@@ -402,7 +403,8 @@ sealed class PineCone : NatureItem {
                     bool flag10 = !GeneratedStorage.PineConeAddedToWorld;
                     bool flag11 = Main.tile[i, j].TileType == 147;
                     num4 = genRand.Next(3);
-                    if ((genRand.Next(3) < 2 || (flag10 && flag11)) && !flag2) {
+                    bool flag12 = genRand.Next(3) < 2;
+                    if ((flag12 || (flag10 && flag11)) && !flag2) {
                         if (flag11 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
                             GeneratedStorage.PineConeAddedToWorld = true;
                             num4 = 3;
@@ -412,7 +414,7 @@ sealed class PineCone : NatureItem {
                             }
                         }
 
-                        if ((!flag10 && flag11) || !flag11 || flag10) {
+                        if ((flag10 && flag11) || flag12) {
                             if (num4 == 0) {
                                 Main.tile[i + 1, k].TileFrameX = 66;
                                 Main.tile[i + 1, k].TileFrameY = 198;
