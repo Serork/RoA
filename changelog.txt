@@ -1,0 +1,2 @@
+- First hotfix yay!!
+- Fixed debug text appearing when using druidic forms
