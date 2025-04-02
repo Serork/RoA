@@ -211,7 +211,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
         if (_hit) {
             _hit = false;
             Projectile projectile = Main.projectile[_proj];
-            if (projectile != null && projectile.ai[0] < 5f) {
+            if (projectile != null && projectile.active && projectile.type == ModContent.ProjectileType<HellfireFracture>() && projectile.ai[0] < 5f) {
                 if (Projectile.localAI[0] < Projectile.ai[1] * 1.2f) {
                     projectile.ai[1] = 1f;
                     projectile.ai[0] += 1.5f;

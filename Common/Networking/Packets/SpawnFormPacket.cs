@@ -28,3 +28,22 @@ sealed class SpawnFormPacket : NetPacket {
         }
     }
 }
+
+sealed class SpawnFormPacket2 : NetPacket {
+    public SpawnFormPacket2(Player player) {
+        Writer.TryWriteSenderPlayer(player);
+    }
+
+    public override void Read(BinaryReader reader, int sender) {
+        if (!reader.TryReadSenderPlayer(sender, out var player)) {
+            return;
+        }
+
+        BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
+        handler._sync = 0;
+
+        if (Main.netMode == NetmodeID.Server) {
+            MultiplayerSystem.SendPacket(new SpawnFormPacket2(player), ignoreClient: sender);
+        }
+    }
+}
