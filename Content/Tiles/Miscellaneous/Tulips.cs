@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
@@ -9,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -88,7 +86,8 @@ sealed class GrowTulips : ILoadable {
                     }
                 }
             }
-            /*if (NPC.downedBoss3) */{
+            /*if (NPC.downedBoss3) */
+            {
                 if ((double)j > Main.worldSurface && (!Main.tile[i, j - 1].HasTile
                     /* || Main.tileCut[Main.tile[i, j - 1].TileType]*/)) {
                     int num2 = Utils.Clamp(i - num, 1, Main.maxTilesX - 1 - 1);

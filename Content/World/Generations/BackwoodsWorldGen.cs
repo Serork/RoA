@@ -58,16 +58,16 @@ sealed class BackwoodsWorldGen : ModSystem {
         //    genIndex -= 2;
         //}
         //else {
-            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Chests"));
-            genIndex += 2;
+        genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Chests"));
+        genIndex += 2;
         //}
         tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
 
         //if (hasSpirit) {
-            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Chests"));
-            genIndex += 2;
+        genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Chests"));
+        genIndex += 2;
 
-            tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
+        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
         //}
 
         //genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Spreading Grass"));

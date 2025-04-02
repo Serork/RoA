@@ -9,7 +9,6 @@ using RoA.Core.Utility;
 
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -55,7 +54,7 @@ sealed class KeywordSystem : ILoadable {
                     continue;
                 }
                 char[] checks = ['m', 'l', 'n'];
-                for (int i = 0; i < checkArray.Count; i++) { 
+                for (int i = 0; i < checkArray.Count; i++) {
                     char tag = checks[checkArray[i].Item1];
                     string keyword = checkArray[i].Item2;
                     tooltip.Text = Regex.Replace(tooltip.Text, $@"\b{keyword}\b", $"[kw/{tag}:" + keyword + "]");

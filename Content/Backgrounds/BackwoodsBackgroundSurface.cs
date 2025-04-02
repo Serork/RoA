@@ -94,7 +94,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         pushBGTopHack = menuOffset;
         pushBGTopHack += offset;
         pushBGTopHack += offset2;
-        float captureOffset = CaptureManager.Instance.IsCapturing && 
+        float captureOffset = CaptureManager.Instance.IsCapturing &&
             CaptureBiome.GetCaptureBiome(CaptureInterface.Settings.BiomeChoiceIndex).BackgroundIndex == ModContent.GetInstance<BackwoodsBackgroundSurface>().Slot ? 600f : 0f;
         if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
             captureOffset = 0;

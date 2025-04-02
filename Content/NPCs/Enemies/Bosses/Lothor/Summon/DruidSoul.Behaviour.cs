@@ -3,8 +3,6 @@
 using ReLogic.Utilities;
 
 using RoA.Common;
-using RoA.Common.Networking;
-using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;

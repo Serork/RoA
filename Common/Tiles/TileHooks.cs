@@ -22,7 +22,7 @@ sealed class TileHooks {
     }
 
     public interface IRequireMinHammerPower {
-        int MinHammer{ get; }
+        int MinHammer { get; }
     }
 
     public interface IGetTileDrawData {

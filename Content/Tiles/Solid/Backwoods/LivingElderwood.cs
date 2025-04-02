@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Dusts.Backwoods;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;

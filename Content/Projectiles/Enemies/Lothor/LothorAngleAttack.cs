@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
-using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;
 
-using System;
 using System.IO;
 
 using Terraria;

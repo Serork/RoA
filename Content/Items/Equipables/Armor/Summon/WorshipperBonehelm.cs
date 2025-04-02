@@ -1,8 +1,7 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid.Wreath;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Summon;

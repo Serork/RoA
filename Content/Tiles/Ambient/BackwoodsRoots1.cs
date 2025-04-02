@@ -1,14 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Tiles;
 using RoA.Content.Dusts.Backwoods;
 
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 

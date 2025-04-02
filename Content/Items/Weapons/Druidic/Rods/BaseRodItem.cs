@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
-using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;

@@ -69,7 +69,7 @@ sealed class HunterProjectile1 : ModProjectile {
             if (Projectile.owner == Main.myPlayer) {
                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Helper.VelocityToPoint(Projectile.Center,
                     flag ? player.Center : target.Center, 10f),
-                    ModContent.ProjectileType<HunterProjectile2>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
+                    ModContent.ProjectileType<HunterProjectile2>(), Projectile.damage, Projectile.knockBack, Projectile.owner,
                     ai2: !flag ? 1f : 0f);
             }
             Projectile.Kill();

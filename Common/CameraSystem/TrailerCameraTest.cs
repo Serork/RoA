@@ -1,16 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 
-using RoA.Common.BackwoodsSystems;
-using RoA.Common.Druid.Forms;
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
-using RoA.Content.Biomes.Backwoods;
+using RoA.Common.Networking.Packets;
 using RoA.Core;
-using RoA.Core.Utility;
-
-using System;
-using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -18,6 +10,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.CameraSystem;
+
+[Autoload(false)]
 sealed class TrailerCameraTest : ModSystem {
     private static bool _shifted = true;
 
@@ -56,129 +50,129 @@ sealed class TrailerCameraTest : ModSystem {
         }
     }
 
-    private class SetPoint1Command : ModCommand {
-        public override CommandType Type => CommandType.Chat;
-        public override string Command => "point1";
-        public override string Usage => "/point1";
+    //private class SetPoint1Command : ModCommand {
+    //    public override CommandType Type => CommandType.Chat;
+    //    public override string Command => "point1";
+    //    public override string Usage => "/point1";
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
-            Main.NewText(Main.LocalPlayer.Center.ToTileCoordinates());
+    //    public override void Action(CommandCaller caller, string input, string[] args) {
+    //        Main.NewText(Main.LocalPlayer.Center.ToTileCoordinates());
 
-            if (!int.TryParse(args[0], out int x)) {
-                throw new UsageException(args[0] + " is not an integer");
-            }
+    //        if (!int.TryParse(args[0], out int x)) {
+    //            throw new UsageException(args[0] + " is not an integer");
+    //        }
 
-            if (!int.TryParse(args[1], out int y)) {
-                throw new UsageException(args[1] + " is not an integer");
-            }
+    //        if (!int.TryParse(args[1], out int y)) {
+    //            throw new UsageException(args[1] + " is not an integer");
+    //        }
 
-            _point2 = new Point(x, y);
-        }
-    }
+    //        _point2 = new Point(x, y);
+    //    }
+    //}
 
-    private class SetPoint2Command : ModCommand {
-        public override CommandType Type => CommandType.Chat;
-        public override string Command => "point2";
-        public override string Usage => "/point2";
+    //private class SetPoint2Command : ModCommand {
+    //    public override CommandType Type => CommandType.Chat;
+    //    public override string Command => "point2";
+    //    public override string Usage => "/point2";
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
-            Main.NewText(Main.LocalPlayer.Center.ToTileCoordinates());
+    //    public override void Action(CommandCaller caller, string input, string[] args) {
+    //        Main.NewText(Main.LocalPlayer.Center.ToTileCoordinates());
 
-            if (!int.TryParse(args[0], out int x)) {
-                throw new UsageException(args[0] + " is not an integer");
-            }
+    //        if (!int.TryParse(args[0], out int x)) {
+    //            throw new UsageException(args[0] + " is not an integer");
+    //        }
 
-            if (!int.TryParse(args[1], out int y)) {
-                throw new UsageException(args[1] + " is not an integer");
-            }
+    //        if (!int.TryParse(args[1], out int y)) {
+    //            throw new UsageException(args[1] + " is not an integer");
+    //        }
 
-            _point1 = new Point(x, y);
-        }
-    }
+    //        _point1 = new Point(x, y);
+    //    }
+    //}
 
-    private class SetDurationInCommand : ModCommand {
-        public override CommandType Type => CommandType.Chat;
-        public override string Command => "duration";
-        public override string Usage => "/duration in out hold";
+    //private class SetDurationInCommand : ModCommand {
+    //    public override CommandType Type => CommandType.Chat;
+    //    public override string Command => "duration";
+    //    public override string Usage => "/duration in out hold";
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
-            if (!int.TryParse(args[0], out int durationIn)) {
-                throw new UsageException(args[0] + " is not an integer");
-            }
+    //    public override void Action(CommandCaller caller, string input, string[] args) {
+    //        if (!int.TryParse(args[0], out int durationIn)) {
+    //            throw new UsageException(args[0] + " is not an integer");
+    //        }
 
-            if (!int.TryParse(args[1], out int durationOut)) {
-                throw new UsageException(args[1] + " is not an integer");
-            }
+    //        if (!int.TryParse(args[1], out int durationOut)) {
+    //            throw new UsageException(args[1] + " is not an integer");
+    //        }
 
-            if (!int.TryParse(args[2], out int durationHold)) {
-                throw new UsageException(args[2] + " is not an integer");
-            }
+    //        if (!int.TryParse(args[2], out int durationHold)) {
+    //            throw new UsageException(args[2] + " is not an integer");
+    //        }
 
-            _durationIn = durationIn;
-            _durationOut = durationOut;
-            _durationHold = durationHold;
-        }
-    }
+    //        _durationIn = durationIn;
+    //        _durationOut = durationOut;
+    //        _durationHold = durationHold;
+    //    }
+    //}
 
-    private class StopCameraCommand : ModCommand {
-        public override CommandType Type => CommandType.Chat;
-        public override string Command => "stop";
-        public override string Usage => "/stop";
+    //private class StopCameraCommand : ModCommand {
+    //    public override CommandType Type => CommandType.Chat;
+    //    public override string Command => "stop";
+    //    public override string Usage => "/stop";
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
-            CameraSystem.AsymetricalPanModifier.timer = 0;
-            CameraSystem.AsymetricalPanModifier.target = CameraSystem.AsymetricalPanModifier.from = Vector2.Zero;
-        }
-    }
+    //    public override void Action(CommandCaller caller, string input, string[] args) {
+    //        CameraSystem.AsymetricalPanModifier.timer = 0;
+    //        CameraSystem.AsymetricalPanModifier.target = CameraSystem.AsymetricalPanModifier.from = Vector2.Zero;
+    //    }
+    //}
 
-    private class StartCameraCommand : ModCommand {
-        public override CommandType Type => CommandType.Chat;
-        public override string Command => "start";
-        public override string Usage => "/start";
+    //private class StartCameraCommand : ModCommand {
+    //    public override CommandType Type => CommandType.Chat;
+    //    public override string Command => "start";
+    //    public override string Usage => "/start";
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
-            _shifted = false;
-        }
-    }
+    //    public override void Action(CommandCaller caller, string input, string[] args) {
+    //        _shifted = false;
+    //    }
+    //}
 
-    private class Start2CameraCommand : ModCommand {
-        public override CommandType Type => CommandType.Chat;
-        public override string Command => "start2";
-        public override string Usage => "/start2 time";
+    //private class Start2CameraCommand : ModCommand {
+    //    public override CommandType Type => CommandType.Chat;
+    //    public override string Command => "start2";
+    //    public override string Usage => "/start2 time";
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
-            if (!int.TryParse(args[0], out int time)) {
-                throw new UsageException(args[0] + " is not an integer");
-            }
+    //    public override void Action(CommandCaller caller, string input, string[] args) {
+    //        if (!int.TryParse(args[0], out int time)) {
+    //            throw new UsageException(args[0] + " is not an integer");
+    //        }
 
-            _shifted = false;
-            _beforeTime = time; 
-        }
-    }
+    //        _shifted = false;
+    //        _beforeTime = time; 
+    //    }
+    //}
 
-    private class BeforeStartTimerCameraCommand : ModCommand {
-        public override CommandType Type => CommandType.Chat;
-        public override string Command => "beforetimer";
-        public override string Usage => "/beforetimer time";
+    //private class BeforeStartTimerCameraCommand : ModCommand {
+    //    public override CommandType Type => CommandType.Chat;
+    //    public override string Command => "beforetimer";
+    //    public override string Usage => "/beforetimer time";
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
-            if (!int.TryParse(args[0], out int time)) {
-                throw new UsageException(args[0] + " is not an integer");
-            }
+    //    public override void Action(CommandCaller caller, string input, string[] args) {
+    //        if (!int.TryParse(args[0], out int time)) {
+    //            throw new UsageException(args[0] + " is not an integer");
+    //        }
 
-            _beforeTime = time;
-        }
-    }
+    //        _beforeTime = time;
+    //    }
+    //}
 
-    private class PauseCameraCommand : ModCommand {
-        public override CommandType Type => CommandType.Chat;
-        public override string Command => "pause";
-        public override string Usage => "/pause";
+    //private class PauseCameraCommand : ModCommand {
+    //    public override CommandType Type => CommandType.Chat;
+    //    public override string Command => "pause";
+    //    public override string Usage => "/pause";
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
-            _pause = !_pause;
-        }
-    }
+    //    public override void Action(CommandCaller caller, string input, string[] args) {
+    //        _pause = !_pause;
+    //    }
+    //}
 
     public override void Load() {
         On_SceneMetrics.ScanAndExportToMain += On_SceneMetrics_ScanAndExportToMain;

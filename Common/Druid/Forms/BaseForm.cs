@@ -8,7 +8,6 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,8 +18,6 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RoA.Common.Druid.Forms;
 

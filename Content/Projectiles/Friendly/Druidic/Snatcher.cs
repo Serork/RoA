@@ -303,7 +303,7 @@ sealed class Snatcher : NatureProjectile {
                 }
             }
         }
-        if (Projectile.owner == Main.myPlayer && 
+        if (Projectile.owner == Main.myPlayer &&
             player.itemAnimation > player.itemAnimationMax - player.itemAnimationMax / 2 && !flag && !IsAttacking && !IsAttacking2) {
             Projectile.ai[2] = 5f;
 

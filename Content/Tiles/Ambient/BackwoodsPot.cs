@@ -8,8 +8,6 @@ using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
 using RoA.Core.Utility;
 
-using System.Collections.Generic;
-
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;

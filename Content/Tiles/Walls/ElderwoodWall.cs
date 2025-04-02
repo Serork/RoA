@@ -1,7 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Dusts.Backwoods;
-
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

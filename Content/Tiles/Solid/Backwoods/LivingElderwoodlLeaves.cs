@@ -7,8 +7,6 @@ using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
-using System.Collections.Generic;
-
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;

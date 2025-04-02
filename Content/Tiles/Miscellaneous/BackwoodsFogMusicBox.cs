@@ -31,7 +31,7 @@ sealed class BackwoodsFogMusicBox : MusicBox {
                     Texture2D highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight_Galipot").Value;
                     Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
                     Rectangle rect = new(0, 0, coordinateWidth, num12);
-                    Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, 
+                    Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f,
                         effects: spriteEffects, layerDepth: 0f);
                 }
             }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using StarlightRiver.Core.Systems.CameraSystem;
-
 using System;
 
 using Terraria;
@@ -10,6 +8,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.CameraSystem;
 
+[Autoload(false)]
 // starlight river
 public class CameraSystem : ModSystem {
     public static int shake = 0;

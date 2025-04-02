@@ -383,7 +383,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             values2[index2] = MathHelper.Lerp(values2[index2], rotation + value * 0.01f * -direction, progress * current);
             Vector2 offset = new Vector2((height / 4f + (value * (float)progress * current)) * direction, 0f).RotatedBy(rotation);
             Main.EntitySpriteDraw(texture, startPosition + offset - Main.screenPosition, frame,
-                color * opacity/*(1f - (!flag ? progress3 : value))*/, 
+                color * opacity/*(1f - (!flag ? progress3 : value))*/,
                 values2[index2], origin, scale, flip, 0);
 
             Vector2 diff2 = diff * height;

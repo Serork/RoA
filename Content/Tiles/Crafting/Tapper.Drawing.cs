@@ -16,8 +16,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-using static RoA.Common.Tiles.TileHooks;
-
 namespace RoA.Content.Tiles.Crafting;
 
 partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {

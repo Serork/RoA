@@ -19,8 +19,6 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static Terraria.Player;
-
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class BloodshedAxe : ModProjectile {

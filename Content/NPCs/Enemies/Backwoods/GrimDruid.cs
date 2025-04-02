@@ -367,7 +367,7 @@ sealed class GrimDruid : DruidNPC {
             SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
             Vector2 directionNormalized = Vector2.Normalize(Main.player[NPC.target].Center - NPC.Center);
             if (Main.netMode != NetmodeID.MultiplayerClient) {
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + 18 * NPC.direction, NPC.Center.Y), new Vector2(directionNormalized.X * 5, directionNormalized.Y * 5), ModContent.ProjectileType<GrimBranch>(), 
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + 18 * NPC.direction, NPC.Center.Y), new Vector2(directionNormalized.X * 5, directionNormalized.Y * 5), ModContent.ProjectileType<GrimBranch>(),
                     35 / 2, 1f, Main.myPlayer, 100, 0f);
             }
             return;

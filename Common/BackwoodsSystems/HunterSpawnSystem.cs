@@ -2,9 +2,7 @@
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Friendly;
-using RoA.Content.Projectiles;
 using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Core.Utility;
 
 using System.IO;
 

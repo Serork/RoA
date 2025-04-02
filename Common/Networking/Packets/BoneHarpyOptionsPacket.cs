@@ -1,5 +1,4 @@
-﻿using RoA.Common.Druid.Wreath;
-using RoA.Content.Items.Equipables.Armor.Summon;
+﻿using RoA.Content.Items.Equipables.Armor.Summon;
 
 using System.IO;
 

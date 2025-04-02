@@ -1,6 +1,4 @@
-﻿using Humanizer;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
@@ -249,7 +247,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
             spriteBatch.DrawString(FontAssets.MouseText.Value, stats.CurrentResource + "/" + stats.TotalResource,
                 reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2(vector2.X * 0.5f, 0f)) : (vector + new Vector2(vector2.X * 0.5f, 0f)), textColor, 0f,
-                new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f, 
+                new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f,
                 reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
             position.Y += 6;
         }

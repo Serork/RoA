@@ -1,9 +1,6 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Items.Placeable;
-
 using Terraria;
-using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -110,7 +107,7 @@ sealed class HedgehogTerrarium : ModTile {
                     hedgehogCageFrame[i]++;
                 }
             }
-           else {
+            else {
                 if (hedgehogCageFrameCounter[i] < 0) {
                     hedgehogCageFrameCounter[i]++;
                     if (hedgehogCageFrameCounter[i] >= -5) {

@@ -9,7 +9,6 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Placeable;
-using RoA.Content.Items.Placeable.Walls;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;
@@ -118,7 +117,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         private bool On_WorldGen_PlacePot(On_WorldGen.orig_PlacePot orig, int x, int y, ushort type, int style) {
             int potType = ModContent.TileType<BackwoodsPot>();
-            if (type != potType && !(style >= 25 && style <= 27) && 
+            if (type != potType && !(style >= 25 && style <= 27) &&
                 x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 100 && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 100
                 && y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 3) {
                 return WorldGen.PlacePot(x, y, (ushort)potType, WorldGen.genRand.Next(4));
@@ -202,7 +201,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         double strenth = _random.NextFloat(max, min) * 3;
         double step = strenth / 3;
         Vector2 direction = Vector2.One.RotatedByRandom(Math.PI) * _random.NextFloat(0f, 6.5f);
-        WorldGenHelper.TileWallRunner(i + (int)direction.X, j + (int)direction.Y, strenth, (int)step, 0, (ushort)ModContent.WallType<TealMossWall2>(), 
+        WorldGenHelper.TileWallRunner(i + (int)direction.X, j + (int)direction.Y, strenth, (int)step, 0, (ushort)ModContent.WallType<TealMossWall2>(),
             addTile: true, noYChange: true, onlyWall: true, shouldntHasTile: true, skipWalls: _elderwoodWallType);
     }
 
@@ -212,8 +211,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int min = (int)(_random.Next(4, 9) * 1.25);
         int max = (int)(_random.Next(1, 3) * 1.25);
         WorldUtils.Gen(new Point(i, j), new ShapeRoot(angle, k, min, max), Actions.Chain(
-            new Modifiers.SkipWalls(_elderwoodWallType, WallID.LihzahrdBrickUnsafe), 
-            new Modifiers.SkipWalls(SkipBiomeInvalidWallTypeToKill), 
+            new Modifiers.SkipWalls(_elderwoodWallType, WallID.LihzahrdBrickUnsafe),
+            new Modifiers.SkipWalls(SkipBiomeInvalidWallTypeToKill),
             new Actions.PlaceWall((ushort)ModContent.WallType<Tiles.Walls.BackwoodsRootWall2>(), false)));
     }
 
@@ -2032,7 +2031,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (!flag2) {
                     elderwoodWall |= Main.tile[i, j].WallType == _elderwoodWallType;
                 }
-                if (WorldGen.SolidTile(i, j, true) && Main.tile[i, j].TileType != ModContent.TileType<ElderwoodDoorClosed>() && Main.tile[i, j].LiquidAmount <= 0 && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock && 
+                if (WorldGen.SolidTile(i, j, true) && Main.tile[i, j].TileType != ModContent.TileType<ElderwoodDoorClosed>() && Main.tile[i, j].LiquidAmount <= 0 && Main.tile[i, j].Slope == 0 && !Main.tile[i, j].IsHalfBlock &&
                     _random.NextBool(Main.tile[i, j].TileType == _mossTileType || Main.tile[i, j].TileType == _stoneTileType ? 14 : Main.tile[i, j].TileType == _elderwoodTileType ?
                     elderwoodWall ? 1 : 8 : 10)) {
                     if (_random.NextChance(elderwoodWall ? 1 : 0.65)) {
@@ -2591,7 +2590,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        /*if (ModLoader.HasMod("SpiritMod"))*/ {
+        /*if (ModLoader.HasMod("SpiritMod"))*/
+        {
             for (int i = Left - 100; i <= Right + 100; i++) {
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
                     if (WorldGenHelper.ActiveTile(i, j, _dirtTileType)) {
@@ -4408,7 +4408,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         AddCliffIfNeeded(topLeftTileX, topRightTileX);
 
-        /*if (ModLoader.HasMod("SpiritMod")) */{
+        /*if (ModLoader.HasMod("SpiritMod")) */
+        {
             for (int i = Left - 100; i <= Right + 100; i++) {
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
                     if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt)) {

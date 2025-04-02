@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core;
 using RoA.Core.Utility;

@@ -3,12 +3,12 @@
 using System;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ModLoader;
 
 namespace RoA.Common.CameraSystem;
 
+[Autoload(false)]
 // starlight river
 internal class AsymetricalPanModifier : ICameraModifier {
     public Func<Vector2, Vector2, float, Vector2> EaseInFunction = Vector2.SmoothStep;
@@ -55,7 +55,7 @@ internal class AsymetricalPanModifier : ICameraModifier {
             var offset = new Vector2(-Main.screenWidth / 2f, -Main.screenHeight / 2f);
 
             if (timer <= timeOut) { //go out
-                Progress =  timer / (float)timeOut;
+                Progress = timer / (float)timeOut;
                 cameraPosition.CameraPosition = EaseOutFunction(from + offset, target + offset, Progress);
             }
             else if (timer >= TotalDuration - timeIn) { //go in

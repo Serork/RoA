@@ -9,7 +9,6 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Networking.Packets;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;

@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
-using RoA.Content.Items.Placeable;
 using RoA.Core.Utility;
 
 using Terraria;

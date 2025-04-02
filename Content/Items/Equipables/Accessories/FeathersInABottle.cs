@@ -87,7 +87,7 @@ sealed class FeathersInABottle : NatureItem {
                 variant = 1;
             }
             for (int i = 0; i < 4; i++) {
-                Dust dust = Dust.NewDustDirect(player.position + new Vector2(-34f, offsetY), 102, 32, ModContent.DustType<FeatherDust>(), -player.velocity.X * 0.5f, player.velocity.Y * 0.5f, variant, 
+                Dust dust = Dust.NewDustDirect(player.position + new Vector2(-34f, offsetY), 102, 32, ModContent.DustType<FeatherDust>(), -player.velocity.X * 0.5f, player.velocity.Y * 0.5f, variant,
                     default, 1.75f);
                 dust.velocity = dust.velocity * 0.5f - player.velocity * new Vector2(0.1f, 0.3f);
                 dust.customData = Main.rand.NextFloatRange(50f);

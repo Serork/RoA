@@ -16,7 +16,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
-sealed class TreeDryad : ModTile {  
+sealed class TreeDryad : ModTile {
     public static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
 
     public override void Load() {
