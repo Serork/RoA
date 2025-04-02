@@ -246,7 +246,7 @@ sealed class DryadEntrance : ModSystem {
     }
 
     private void DryadEntranceLoomPlacement(GenerationProgress progress, GameConfiguration configuration) {
-        if (_loomPlacedInWorld) {
+        if (_loomPlacedInWorld || _bigRubblePosition == Point.Zero) {
             return;
         }
 
