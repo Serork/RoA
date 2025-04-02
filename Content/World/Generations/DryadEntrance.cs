@@ -225,10 +225,12 @@ sealed class DryadEntrance : ModSystem {
     private static ushort PlaceholderTileType => (ushort)ModContent.TileType<LivingElderwood>();
     private static ushort PlaceholderWallType => (ushort)ModContent.WallType<ElderwoodWall3>();
 
-    public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
+    public override void PostWorldGen() {
         _bigRubblePosition = Point.Zero;
         _loomPlacedInWorld = false;
+    }
 
+    public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mount Caves"));
         tasks.RemoveAt(genIndex);
 
