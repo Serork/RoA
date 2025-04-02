@@ -354,7 +354,7 @@ sealed class PineCone : NatureItem {
                                 }
                             }
 
-                            if ((!flag10_1 && flag11_1) || !flag11_1) {
+                            if ((!flag10_1 && flag11_1) || !flag11_1 || flag10_1) {
                                 if (num4 == 0) {
                                     Main.tile[i - 1, k].TileFrameX = 44;
                                     Main.tile[i - 1, k].TileFrameY = 198;
@@ -412,7 +412,7 @@ sealed class PineCone : NatureItem {
                             }
                         }
 
-                        if ((!flag10 && flag11) || !flag11) {
+                        if ((!flag10 && flag11) || !flag11 || flag10) {
                             if (num4 == 0) {
                                 Main.tile[i + 1, k].TileFrameX = 66;
                                 Main.tile[i + 1, k].TileFrameY = 198;
