@@ -1,6 +1,6 @@
 [h1]Info[/h1]
 
-[b]RoA is focused on adding highly polished content that seamlessly expands Terraria’s features, from exploration to combat. 
+[b]RoA[/b] is focused on adding highly polished content that seamlessly expands Terraria’s features, from exploration to combat. 
 The mod features unique mechanics and an immersive story which can be discovered organically through world structures, NPC dialogue and bestiary entries.
 Developed by the team behind Consolaria, Rise of Ages is designed to provide a nice, condensed experience rather than an overwhelming amount of surface-level content.
 
