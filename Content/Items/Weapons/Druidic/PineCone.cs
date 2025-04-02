@@ -342,8 +342,10 @@ sealed class PineCone : NatureItem {
                             BackwoodsVars.AddBackwoodsTree(i - 1, k);
                         }
                         num4 = genRand.Next(3);
-                        if (genRand.Next(3) < 2 && !flag2) {
-                            if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
+                        bool flag10_1 = !GeneratedStorage.PineConeAddedToWorld;
+                        bool flag11_1 = Main.tile[i, j].TileType == 147;
+                        if ((genRand.Next(3) < 2 || (flag10_1 && flag11_1)) && !flag2) {
+                            if (flag11_1 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
                                 GeneratedStorage.PineConeAddedToWorld = true;
                                 num4 = 3;
                                 if (num4 == 3) {
@@ -352,19 +354,21 @@ sealed class PineCone : NatureItem {
                                 }
                             }
 
-                            if (num4 == 0) {
-                                Main.tile[i - 1, k].TileFrameX = 44;
-                                Main.tile[i - 1, k].TileFrameY = 198;
-                            }
+                            if ((!flag10_1 && flag11_1) || !flag11_1) {
+                                if (num4 == 0) {
+                                    Main.tile[i - 1, k].TileFrameX = 44;
+                                    Main.tile[i - 1, k].TileFrameY = 198;
+                                }
 
-                            if (num4 == 1) {
-                                Main.tile[i - 1, k].TileFrameX = 44;
-                                Main.tile[i - 1, k].TileFrameY = 220;
-                            }
+                                if (num4 == 1) {
+                                    Main.tile[i - 1, k].TileFrameX = 44;
+                                    Main.tile[i - 1, k].TileFrameY = 220;
+                                }
 
-                            if (num4 == 2) {
-                                Main.tile[i - 1, k].TileFrameX = 44;
-                                Main.tile[i - 1, k].TileFrameY = 242;
+                                if (num4 == 2) {
+                                    Main.tile[i - 1, k].TileFrameX = 44;
+                                    Main.tile[i - 1, k].TileFrameY = 242;
+                                }
                             }
                         }
                         else {
@@ -395,9 +399,11 @@ sealed class PineCone : NatureItem {
                     if (isPrimordialTree) {
                         BackwoodsVars.AddBackwoodsTree(i - 1, k);
                     }
+                    bool flag10 = !GeneratedStorage.PineConeAddedToWorld;
+                    bool flag11 = Main.tile[i, j].TileType == 147;
                     num4 = genRand.Next(3);
-                    if (genRand.Next(3) < 2 && !flag2) {
-                        if (Main.tile[i, j].TileType == 147 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
+                    if ((genRand.Next(3) < 2 || (flag10 && flag11)) && !flag2) {
+                        if (flag11 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
                             GeneratedStorage.PineConeAddedToWorld = true;
                             num4 = 3;
                             if (num4 == 3) {
@@ -406,19 +412,21 @@ sealed class PineCone : NatureItem {
                             }
                         }
 
-                        if (num4 == 0) {
-                            Main.tile[i + 1, k].TileFrameX = 66;
-                            Main.tile[i + 1, k].TileFrameY = 198;
-                        }
+                        if ((!flag10 && flag11) || !flag11) {
+                            if (num4 == 0) {
+                                Main.tile[i + 1, k].TileFrameX = 66;
+                                Main.tile[i + 1, k].TileFrameY = 198;
+                            }
 
-                        if (num4 == 1) {
-                            Main.tile[i + 1, k].TileFrameX = 66;
-                            Main.tile[i + 1, k].TileFrameY = 220;
-                        }
+                            if (num4 == 1) {
+                                Main.tile[i + 1, k].TileFrameX = 66;
+                                Main.tile[i + 1, k].TileFrameY = 220;
+                            }
 
-                        if (num4 == 2) {
-                            Main.tile[i + 1, k].TileFrameX = 66;
-                            Main.tile[i + 1, k].TileFrameY = 242;
+                            if (num4 == 2) {
+                                Main.tile[i + 1, k].TileFrameX = 66;
+                                Main.tile[i + 1, k].TileFrameY = 242;
+                            }
                         }
                     }
                     else {
