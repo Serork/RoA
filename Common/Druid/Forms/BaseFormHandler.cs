@@ -58,7 +58,7 @@ sealed class BaseFormHandler : ModPlayer {
             _currentForm = formInstance;
             //_sync++;
 
-            Main.NewText(123);
+            //Main.NewText(123);
 
             //Helper.NewMessage(_sync);
 
