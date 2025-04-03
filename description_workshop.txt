@@ -18,7 +18,7 @@ This "early access" version features a new Druid class and Backwoods biome with 
 [h1]F.A.Q.[/h1]
 
 [b]What are the plans for future updates?[/b]
-Our priority is to extend the Druid and Backwoods content into Hardmode to make the mod available for a complete playthrough. After that? Perhaps an expansion of the Underground Backwoods, and a deeper dive into the story that we are developing…
+Our priority is to extend the Druid and Backwoods content into Hardmode to make the mod available for a complete playthrough. After that? Perhaps an expansion of the Underground Backwoods, and a deeper dive into the story that we are developing...
 
 [b]Is the mod compatible with ___ ?[/b]
 Rise of Ages has been tested with most major mods, and does not cause any game-breaking issues. But beware of balancing mismatches - our content is designed around vanilla Terraria.
