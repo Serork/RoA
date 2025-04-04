@@ -23,7 +23,7 @@ sealed class BeachWreath2 : BaseWreathItem {
         float value = 0.1f * handler.ActualProgress4;
         player.endurance += value;
         if (player.GetModPlayer<WreathHandler>().IsFull1) {
-            player.moveSpeed += 0.1f;
+            player.moveSpeed += 0.15f;
         }
     }
 }

@@ -19,8 +19,11 @@ sealed class SnowWreath : BaseWreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        if (player.GetModPlayer<WreathHandler>().IsFull1) {
-            player.GetCritChance(DruidClass.NatureDamage) += 6;
+        float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
+        player.endurance += value;
+		
+		if (player.GetModPlayer<WreathHandler>().IsFull1) {
+            player.GetCritChance(DruidClass.NatureDamage) += 4;
         }
     }
 }

@@ -20,10 +20,15 @@ sealed class JungleWreath2 : BaseWreathItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
-        float value = 0.1f * handler.ActualProgress4;
+        
+		float value = 0.1f * handler.ActualProgress4;
         player.endurance += value;
-        if (handler.IsFull1) {
+        
+		if (handler.IsFull1) {
             player.GetModPlayer<JungleWreathPlayer>().poisonedSkin = true;
         }
+		
+		int thornsDamage = Main.getGoodWorld ? 45 : Main.expertMode ? 30 : 15;
+		if (player.thorns < 1f) player.thorns += thornsDamage;
     }
 }

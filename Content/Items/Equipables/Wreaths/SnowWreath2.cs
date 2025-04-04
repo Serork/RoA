@@ -23,7 +23,7 @@ sealed class SnowWreath2 : BaseWreathItem {
         float value = 0.1f * handler.ActualProgress4;
         player.endurance += value;
         if (handler.IsFull1) {
-            player.GetCritChance(DruidClass.NatureDamage) += 6;
+            player.GetCritChance(DruidClass.NatureDamage) += 8;
         }
     }
 }

@@ -19,7 +19,7 @@ sealed class TwigWreath : BaseWreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        float value = 0.1f * player.GetModPlayer<WreathHandler>().ActualProgress4;
+        float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
         player.endurance += value;
     }
 }

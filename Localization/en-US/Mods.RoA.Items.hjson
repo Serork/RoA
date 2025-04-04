@@ -271,34 +271,19 @@ ResiliencePotion: {
 	Tooltip: Decreases wreath discharge rate by 80%
 }
 
+//Wreaths
+
+TwigWreath: {
+	DisplayName: Twig Wreath
+	Tooltip: Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
+}
+
 ForestWreath: {
 	DisplayName: Forest Wreath I
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage
-		While wreath is charged:
-		Increases maximum life by 40
-		'''
-}
-
-TwigWreath: {
-	DisplayName: Twig Wreath
-	Tooltip:
-		'''
-		Wreath is charged by dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		'''
-}
-
-FenethsBlazingWreath: {
-	DisplayName: Feneth's Blazing Wreath
-	Tooltip:
-		'''
-		Wreath is charged by dealing nature damage, providing:
-		Up to 20% chance for attacks to grow burning fireblossom on enemies and the holder
-		While wreath is charged:
-		Increases nature knockback
-		Fireblossom explodes over time, spreading to enemies nearby
+		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
+		While wreath is charged, increases maximum life by 20
 		'''
 }
 
@@ -306,31 +291,8 @@ ForestWreath2: {
 	DisplayName: Forest Wreath II
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		While wreath is charged:
-		Increases maximum life by 40
-		'''
-}
-
-JungleWreath: {
-	DisplayName: Jungle Wreath I
-	Tooltip:
-		'''
-		Wreath is charged by dealing nature damage
-		While wreath is charged:
-		Attackers are poisoned
-		'''
-}
-
-JungleWreath2: {
-	DisplayName: Jungle Wreath II
-	Tooltip:
-		'''
-		Wreath is charged by dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		While wreath is charged:
-		Attackers are poisoned
+		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
+		While wreath is charged, increases maximum life by 40
 		'''
 }
 
@@ -338,9 +300,8 @@ SnowWreath: {
 	DisplayName: Snow Wreath I
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage
-		While wreath is charged:
-		Increases nature critical strike chance by 6%
+		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
+		While wreath is charged, increases nature critical strike chance by 4%
 		'''
 }
 
@@ -348,10 +309,53 @@ SnowWreath2: {
 	DisplayName: Snow Wreath II
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		While wreath is charged:
-		Increases nature critical strike chance by 6%
+		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
+		While wreath is charged, increases nature critical strike chance by 8%
+		'''
+}
+
+JungleWreath: {
+	DisplayName: Jungle Wreath I
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
+		While wreath is charged, attackers are poisoned
+		'''
+}
+
+JungleWreath2: {
+	DisplayName: Jungle Wreath II
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
+		While wreath is charged, attackers are poisoned
+		'''
+}
+
+BeachWreath: {
+	DisplayName: Beach Wreath I
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
+		While wreath is charged, increases movement speed by 7%
+		'''
+}
+
+BeachWreath2: {
+	DisplayName: Beach Wreath II
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
+		While wreath is charged,increases movement speed by 15%
+		'''
+}
+
+FenethsBlazingWreath: {
+	DisplayName: Feneth's Blazing Wreath
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 25% chance for attacks to grow burning fireblossom on foes and yourself
+		While wreath is charged, increases nature knockback and fireblossoms explode over time, spreading to nearby enemies 
 		'''
 }
 
@@ -1637,27 +1641,6 @@ LivingPalmGreaves: {
 LivingPalmHelmet: {
 	DisplayName: Living Palm Helmet
 	Tooltip: 4% increased nature base damage
-}
-
-BeachWreath: {
-	DisplayName: Beach Wreath I
-	Tooltip:
-		'''
-		Wreath is charged by dealing nature damage
-		While wreath is charged:
-		Increased movement speed by 10%
-		'''
-}
-
-BeachWreath2: {
-	DisplayName: Beach Wreath II
-	Tooltip:
-		'''
-		Wreath is charged by dealing nature damage, providing:
-		Up to 10% reduced damage taken
-		While wreath is charged:
-		Increased movement speed by 10%
-		'''
 }
 
 DullDaikatana: {
