@@ -2,6 +2,8 @@
 
 using RoA.Content.Tiles.Trees;
 
+using System;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -113,7 +115,7 @@ sealed class FertilizerOnBackwoodsTreeFix : GlobalProjectile {
             PrimordialSapling.GrowTree(x, y);
         }
         if (tile.TileType == TileID.Saplings) {
-            PrimordialSapling.GrowTree(x, y);
+            WorldGen.GrowTree(x, y);
         }
 
         return false;

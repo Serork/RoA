@@ -52,17 +52,356 @@ sealed class PineCone : NatureItem {
         Item.value = Item.sellPrice(0, 0, 15, 0);
     }
 
-    private static bool IsValidForPineConeDrop(int i, int j) {
-        bool result = i % 10 == 0 && j % 3 == 2;
-        return result;
-    }
-
     public override void Load() {
         On_WorldGen.GetCommonTreeFoliageData += On_WorldGen_GetCommonTreeFoliageData;
         On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
         On_WorldGen.GetTreeFrame += On_WorldGen_GetTreeFrame;
         On_WorldGen.GrowTree += On_WorldGen_GrowTree;
         On_WorldGen.KillTile_GetTreeDrops += On_WorldGen_KillTile_GetTreeDrops;
+        On_WorldGen.CheckTree += On_WorldGen_CheckTree;
+    }
+
+    private void On_WorldGen_CheckTree(On_WorldGen.orig_CheckTree orig, int i, int j) {
+        int num = -1;
+        int num2 = -1;
+        int num3 = -1;
+        int num4 = -1;
+        int type = Main.tile[i, j].TileType;
+        int frameX = Main.tile[i, j].TileFrameX;
+        int frameY = Main.tile[i, j].TileFrameY;
+        if (Main.tile[i - 1, j] != null && Main.tile[i - 1, j].HasTile)
+            num2 = Main.tile[i - 1, j].TileType;
+
+        if (Main.tile[i + 1, j] != null && Main.tile[i + 1, j].HasTile)
+            num3 = Main.tile[i + 1, j].TileType;
+
+        if (Main.tile[i, j - 1] != null && Main.tile[i, j - 1].HasTile)
+            num = Main.tile[i, j - 1].TileType;
+
+        if (Main.tile[i, j + 1] != null && Main.tile[i, j + 1].HasTile)
+            num4 = Main.tile[i, j + 1].TileType;
+
+        if (Main.tile[i - 1, j - 1] != null && Main.tile[i - 1, j - 1].HasTile)
+            _ = Main.tile[i - 1, j - 1].TileType;
+
+        if (Main.tile[i + 1, j - 1] != null && Main.tile[i + 1, j - 1].HasTile)
+            _ = Main.tile[i + 1, j - 1].TileType;
+
+        if (Main.tile[i - 1, j + 1] != null && Main.tile[i - 1, j + 1].HasTile)
+            _ = Main.tile[i - 1, j + 1].TileType;
+
+        if (Main.tile[i + 1, j + 1] != null && Main.tile[i + 1, j + 1].HasTile)
+            _ = Main.tile[i + 1, j + 1].TileType;
+
+        if (num4 == 23 || num4 == 661)
+            num4 = 2;
+
+        if (num4 == 477)
+            num4 = 2;
+
+        if (num4 == 60)
+            num4 = 2;
+
+        if (num4 == 70)
+            num4 = 2;
+
+        if (num4 == 109)
+            num4 = 2;
+
+        if (num4 == 147)
+            num4 = 2;
+
+        if (num4 == 199 || num4 == 662)
+            num4 = 2;
+
+        if (num4 == 492)
+            num4 = 2;
+
+        if (TileLoader.CanGrowModTree(num4))
+            num4 = 2;
+
+        if (num4 != 2 && num4 != type && ((Main.tile[i, j].TileFrameX == 0 && Main.tile[i, j].TileFrameY <= 130) || (Main.tile[i, j].TileFrameX == 22 && Main.tile[i, j].TileFrameY <= 130) || (Main.tile[i, j].TileFrameX == 44 && Main.tile[i, j].TileFrameY <= 130)))
+            WorldGen.KillTile(i, j);
+
+        if (Main.tile[i, j].TileFrameX >= 22 && Main.tile[i, j].TileFrameX <= 44 && Main.tile[i, j].TileFrameY >= 132 && Main.tile[i, j].TileFrameY <= 176) {
+            if (num4 != 2)
+                WorldGen.KillTile(i, j);
+            else if ((Main.tile[i, j].TileFrameX != 22 || num2 != type) && (Main.tile[i, j].TileFrameX != 44 || num3 != type))
+                WorldGen.KillTile(i, j);
+        }
+        else if ((Main.tile[i, j].TileFrameX == 88 && Main.tile[i, j].TileFrameY >= 0 && Main.tile[i, j].TileFrameY <= 44) || (Main.tile[i, j].TileFrameX == 66 && Main.tile[i, j].TileFrameY >= 66 && Main.tile[i, j].TileFrameY <= 130) || (Main.tile[i, j].TileFrameX == 110 && Main.tile[i, j].TileFrameY >= 66 && Main.tile[i, j].TileFrameY <= 110) || (Main.tile[i, j].TileFrameX == 132 && Main.tile[i, j].TileFrameY >= 0 && Main.tile[i, j].TileFrameY <= 176)) {
+            if (num2 == type && num3 == type) {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 110;
+                    Main.tile[i, j].TileFrameY = 66;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 110;
+                    Main.tile[i, j].TileFrameY = 88;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 110;
+                    Main.tile[i, j].TileFrameY = 110;
+                }
+            }
+            else if (num2 == type) {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 88;
+                    Main.tile[i, j].TileFrameY = 0;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 88;
+                    Main.tile[i, j].TileFrameY = 22;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 88;
+                    Main.tile[i, j].TileFrameY = 44;
+                }
+            }
+            else if (num3 == type) {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 66;
+                    Main.tile[i, j].TileFrameY = 66;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 66;
+                    Main.tile[i, j].TileFrameY = 88;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 66;
+                    Main.tile[i, j].TileFrameY = 110;
+                }
+            }
+            else {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 0;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 22;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 44;
+                }
+            }
+        }
+
+        if (Main.tile[i, j].TileFrameY >= 132 && Main.tile[i, j].TileFrameY <= 176 && (Main.tile[i, j].TileFrameX == 0 || Main.tile[i, j].TileFrameX == 66 || Main.tile[i, j].TileFrameX == 88)) {
+            if (num4 != 2)
+                WorldGen.KillTile(i, j);
+
+            if (num2 != type && num3 != type) {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 0;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 22;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 44;
+                }
+            }
+            else if (num2 != type) {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 132;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 154;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 0;
+                    Main.tile[i, j].TileFrameY = 176;
+                }
+            }
+            else if (num3 != type) {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 66;
+                    Main.tile[i, j].TileFrameY = 132;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 66;
+                    Main.tile[i, j].TileFrameY = 154;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 66;
+                    Main.tile[i, j].TileFrameY = 176;
+                }
+            }
+            else {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 88;
+                    Main.tile[i, j].TileFrameY = 132;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 88;
+                    Main.tile[i, j].TileFrameY = 154;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 88;
+                    Main.tile[i, j].TileFrameY = 176;
+                }
+            }
+        }
+
+        if ((Main.tile[i, j].TileFrameX == 66 && (Main.tile[i, j].TileFrameY == 0 || Main.tile[i, j].TileFrameY == 22 || Main.tile[i, j].TileFrameY == 44)) || (Main.tile[i, j].TileFrameX == 44 && (Main.tile[i, j].TileFrameY == 198 || Main.tile[i, j].TileFrameY == 220 || Main.tile[i, j].TileFrameY == 242 || Main.tile[i, j].TileFrameY == 264))) {
+            if (num3 != type)
+                WorldGen.KillTile(i, j);
+        }
+        else if ((Main.tile[i, j].TileFrameX == 88 && (Main.tile[i, j].TileFrameY == 66 || Main.tile[i, j].TileFrameY == 88 || Main.tile[i, j].TileFrameY == 110)) || (Main.tile[i, j].TileFrameX == 66 && (Main.tile[i, j].TileFrameY == 198 || Main.tile[i, j].TileFrameY == 220 || Main.tile[i, j].TileFrameY == 242 || Main.tile[i, j].TileFrameY == 264))) {
+            if (num2 != type)
+                WorldGen.KillTile(i, j);
+        }
+        else if (num4 == -1 || num4 == 23) {
+            WorldGen.KillTile(i, j);
+        }
+        else if (num != type && Main.tile[i, j].TileFrameY < 198 && ((Main.tile[i, j].TileFrameX != 22 && Main.tile[i, j].TileFrameX != 44) || Main.tile[i, j].TileFrameY < 132)) {
+            if (num2 == type || num3 == type) {
+                if (num4 == type) {
+                    if (num2 == type && num3 == type) {
+                        if (Main.tile[i, j].TileFrameNumber == 0) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 132;
+                        }
+
+                        if (Main.tile[i, j].TileFrameNumber == 1) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 154;
+                        }
+
+                        if (Main.tile[i, j].TileFrameNumber == 2) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 176;
+                        }
+                    }
+                    else if (num2 == type) {
+                        if (Main.tile[i, j].TileFrameNumber == 0) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 0;
+                        }
+
+                        if (Main.tile[i, j].TileFrameNumber == 1) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 22;
+                        }
+
+                        if (Main.tile[i, j].TileFrameNumber == 2) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 44;
+                        }
+                    }
+                    else if (num3 == type) {
+                        if (Main.tile[i, j].TileFrameNumber == 0) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 66;
+                        }
+
+                        if (Main.tile[i, j].TileFrameNumber == 1) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 88;
+                        }
+
+                        if (Main.tile[i, j].TileFrameNumber == 2) {
+                            Main.tile[i, j].TileFrameX = 132;
+                            Main.tile[i, j].TileFrameY = 110;
+                        }
+                    }
+                }
+                else if (num2 == type && num3 == type) {
+                    if (Main.tile[i, j].TileFrameNumber == 0) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 132;
+                    }
+
+                    if (Main.tile[i, j].TileFrameNumber == 1) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 154;
+                    }
+
+                    if (Main.tile[i, j].TileFrameNumber == 2) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 176;
+                    }
+                }
+                else if (num2 == type) {
+                    if (Main.tile[i, j].TileFrameNumber == 0) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 0;
+                    }
+
+                    if (Main.tile[i, j].TileFrameNumber == 1) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 22;
+                    }
+
+                    if (Main.tile[i, j].TileFrameNumber == 2) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 44;
+                    }
+                }
+                else if (num3 == type) {
+                    if (Main.tile[i, j].TileFrameNumber == 0) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 66;
+                    }
+
+                    if (Main.tile[i, j].TileFrameNumber == 1) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 88;
+                    }
+
+                    if (Main.tile[i, j].TileFrameNumber == 2) {
+                        Main.tile[i, j].TileFrameX = 154;
+                        Main.tile[i, j].TileFrameY = 110;
+                    }
+                }
+            }
+            else {
+                if (Main.tile[i, j].TileFrameNumber == 0) {
+                    Main.tile[i, j].TileFrameX = 110;
+                    Main.tile[i, j].TileFrameY = 0;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 1) {
+                    Main.tile[i, j].TileFrameX = 110;
+                    Main.tile[i, j].TileFrameY = 22;
+                }
+
+                if (Main.tile[i, j].TileFrameNumber == 2) {
+                    Main.tile[i, j].TileFrameX = 110;
+                    Main.tile[i, j].TileFrameY = 44;
+                }
+            }
+        }
+
+        if (Main.tile[i, j].TileFrameX != frameX && Main.tile[i, j].TileFrameY != frameY && frameX >= 0 && frameY >= 0) {
+            WorldGen.TileFrame(i - 1, j);
+            WorldGen.TileFrame(i + 1, j);
+            WorldGen.TileFrame(i, j - 1);
+            WorldGen.TileFrame(i, j + 1);
+        }
     }
 
     private void On_WorldGen_KillTile_GetTreeDrops(On_WorldGen.orig_KillTile_GetTreeDrops orig, int i, int j, Tile tileCache, ref bool bonusWood, ref int dropItem, ref int secondaryItem) {
@@ -346,7 +685,7 @@ sealed class PineCone : NatureItem {
                         bool flag11_1 = Main.tile[i, j].TileType == 147;
                         bool flag12_1 = genRand.Next(3) < 2;
                         if ((flag12_1 || (flag10_1 && flag11_1)) && !flag2) {
-                            if (flag11_1 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
+                            if (flag11_1 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(20))) {
                                 GeneratedStorage.PineConeAddedToWorld = true;
                                 num4 = 3;
                                 if (num4 == 3) {
@@ -405,7 +744,7 @@ sealed class PineCone : NatureItem {
                     num4 = genRand.Next(3);
                     bool flag12 = genRand.Next(3) < 2;
                     if ((flag12 || (flag10 && flag11)) && !flag2) {
-                        if (flag11 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(5))) {
+                        if (flag11 && (!GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(20))) {
                             GeneratedStorage.PineConeAddedToWorld = true;
                             num4 = 3;
                             if (num4 == 3) {
@@ -910,6 +1249,8 @@ sealed class PineCone : NatureItem {
     }
 
     private bool On_WorldGen_GetCommonTreeFoliageData(On_WorldGen.orig_GetCommonTreeFoliageData orig, int i, int j, int xoffset, ref int treeFrame, ref int treeStyle, out int floorY, out int topTextureFrameWidth, out int topTextureFrameHeight) {
+        return orig(i, j, xoffset, ref treeFrame, ref treeStyle, out floorY, out topTextureFrameWidth, out topTextureFrameHeight);
+
         _ = Main.tile[i, j];
         int num = i + xoffset;
         topTextureFrameWidth = 80;
