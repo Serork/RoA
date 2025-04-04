@@ -1,5 +1,7 @@
 ﻿using RoA.Common.Tiles;
 
+using System;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,7 +11,7 @@ namespace RoA.Content.Tiles.Plants;
 sealed class Cloudberry : PlantBase, TileHooks.IGrowPlantRandom {
     protected override int PlantDrop => DropItem;
 
-    protected override int[] AnchorValidTiles => [TileID.SnowBlock];
+    protected override int[] AnchorValidTiles => [147, 163, 164, 161, 200];
 
     protected override void SafeSetStaticDefaults() {
         AddMapEntry(new(235, 150, 12), CreateMapEntryName());
@@ -25,6 +27,6 @@ sealed class Cloudberry : PlantBase, TileHooks.IGrowPlantRandom {
             return;
         }
 
-        TryPlacePlant(i, j, Type, 0, validTiles: [TileID.SnowBlock]);
+        TryPlacePlant(i, j, Type, 0, validTiles: [147, 163, 164, 161, 200]);
     }
 }
