@@ -508,13 +508,6 @@ sealed class RoARecipes : ModSystem {
         item.SortAfter(temp);
         item.Register();
 
-        item = Recipe.Create(ModContent.ItemType<SapStream>());
-        item.AddRecipeGroup(RecipeGroupID.Wood, 10);
-        item.AddIngredient(ModContent.ItemType<Galipot>(), 5);
-        item.AddTile(TileID.WorkBenches);
-        item.SortAfter(temp);
-        item.Register();
-
         item = Recipe.Create(ModContent.ItemType<BrilliantBouquet>());
         item.AddIngredient(ModContent.ItemType<ExoticTulip>());
         item.AddIngredient(ModContent.ItemType<SweetTulip>());
