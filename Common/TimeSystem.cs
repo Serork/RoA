@@ -6,8 +6,6 @@ namespace RoA.Common;
 [Autoload(Side = ModSide.Client)]
 sealed class TimeSystem : ModSystem {
     public const float FULLDAYLENGTH = (float)(Main.nightLength + Main.dayLength);
-    public const float DAYLENGTH = 54000f;
-    public const float NIGHTLENGTH = 32400f;
     public const int TARGETFPS = 60;
 
     public static float RenderDeltaTime { get; private set; } = 1f / TARGETFPS;
