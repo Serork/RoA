@@ -4,6 +4,7 @@ using RoA.Common.Druid.Wreath;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Wreaths;
 
@@ -27,8 +28,43 @@ sealed class JungleWreath2 : BaseWreathItem {
 		if (handler.IsFull1) {
             player.GetModPlayer<JungleWreathPlayer>().poisonedSkin = true;
         }
-		
-		int thornsDamage = Main.getGoodWorld ? 45 : Main.expertMode ? 30 : 15;
-		if (player.thorns < 1f) player.thorns += thornsDamage;
+
+        player.GetModPlayer<JungleWreathThornsHandler>().IsEffectActive = true;
+    }
+
+    private class JungleWreathThornsHandler : ModPlayer {
+        public bool IsEffectActive;
+
+        public override void ResetEffects() => IsEffectActive = false;
+
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
+            if (!IsEffectActive) {
+                return;
+            }
+
+            if (Player.thorns < 1f) Player.thorns += 0.5f;
+
+            float num2 = Player.thorns;
+            Rectangle rectangle = new Rectangle((int)Player.position.X, (int)Player.position.Y, Player.width, Player.height);
+            Rectangle npcRect = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
+            bool num = Player.CanParryAgainst(rectangle, npcRect, npc.velocity);
+            float knockback = 10f;
+            if (Player.turtleThorns)
+                num2 = 2f;
+
+            if (num) {
+                num2 = 2f;
+                knockback = 5f;
+            }
+            if (Player.whoAmI == Main.myPlayer && num2 > 0f && !npc.dontTakeDamage) {
+                int damage = 15;
+                if (Main.masterMode)
+                    damage = 45;
+                else if (Main.expertMode)
+                    damage = 30;
+
+                Player.ApplyDamageToNPC(npc, damage, knockback, -hurtInfo.HitDirection, crit: false);
+            }
+        }
     }
 }
