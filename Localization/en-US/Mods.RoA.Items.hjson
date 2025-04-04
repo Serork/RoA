@@ -319,7 +319,7 @@ JungleWreath: {
 	Tooltip:
 		'''
 		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
-		While wreath is charged, attackers are poisoned
+		While wreath is charged, attackers take damage from poisonous thorns
 		'''
 }
 
@@ -328,7 +328,7 @@ JungleWreath2: {
 	Tooltip:
 		'''
 		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
-		While wreath is charged, attackers are poisoned
+		While wreath is charged, attackers take damage from poisonous thorns
 		'''
 }
 

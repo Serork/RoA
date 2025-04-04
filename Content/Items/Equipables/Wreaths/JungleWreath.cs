@@ -20,14 +20,13 @@ sealed class JungleWreath : BaseWreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
+        WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        
+		float value = 0.1f * handler.ActualProgress4;
         player.endurance += value;
-		
-		if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        
+		if (handler.IsFull1) {
             player.GetModPlayer<JungleWreathPlayer>().poisonedSkin = true;
-			
-			int thornsDamage = Main.getGoodWorld ? 30 : Main.expertMode ? 20 : 10;
-			if (player.thorns < 1f) player.thorns += thornsDamage;
         }
     }
 }
@@ -38,6 +37,30 @@ sealed class JungleWreathPlayer : ModPlayer {
     public override void ResetEffects() => poisonedSkin = false;
 
     public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
-        if (poisonedSkin) npc.AddBuff(BuffID.Poisoned, 300, false);
+        if (poisonedSkin) npc.AddBuff(BuffID.Poisoned, 150, false);
+		
+		if (Player.thorns < 1f) Player.thorns += 0.5f;
+
+            float num2 = Player.thorns;
+            Rectangle rectangle = new Rectangle((int)Player.position.X, (int)Player.position.Y, Player.width, Player.height);
+            Rectangle npcRect = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
+            bool num = Player.CanParryAgainst(rectangle, npcRect, npc.velocity);
+            float knockback = 10f;
+            if (Player.turtleThorns)
+                num2 = 2f;
+
+            if (num) {
+                num2 = 2f;
+                knockback = 5f;
+            }
+            if (Player.whoAmI == Main.myPlayer && num2 > 0f && !npc.dontTakeDamage) {
+                int damage = 10;
+                if (Main.masterMode)
+                    damage = 30;
+                else if (Main.expertMode)
+                    damage = 20;
+
+                Player.ApplyDamageToNPC(npc, damage, knockback, -hurtInfo.HitDirection, crit: false);
+            }
     }
 }

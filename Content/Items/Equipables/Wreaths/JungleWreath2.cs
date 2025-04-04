@@ -26,23 +26,20 @@ sealed class JungleWreath2 : BaseWreathItem {
         player.endurance += value;
         
 		if (handler.IsFull1) {
-            player.GetModPlayer<JungleWreathPlayer>().poisonedSkin = true;
+            player.GetModPlayer<JungleWreathPlayer2>().poisonedSkin2 = true;
         }
-
-        player.GetModPlayer<JungleWreathThornsHandler>().IsEffectActive = true;
     }
+}
 
-    private class JungleWreathThornsHandler : ModPlayer {
-        public bool IsEffectActive;
+sealed class JungleWreathPlayer2 : ModPlayer {
+    public bool poisonedSkin2;
 
-        public override void ResetEffects() => IsEffectActive = false;
+    public override void ResetEffects() => poisonedSkin2 = false;
 
-        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
-            if (!IsEffectActive) {
-                return;
-            }
-
-            if (Player.thorns < 1f) Player.thorns += 0.5f;
+    public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
+        if (poisonedSkin2) npc.AddBuff(BuffID.Poisoned, 300, false);
+		
+		if (Player.thorns < 1f) Player.thorns += 0.5f;
 
             float num2 = Player.thorns;
             Rectangle rectangle = new Rectangle((int)Player.position.X, (int)Player.position.Y, Player.width, Player.height);
@@ -65,6 +62,5 @@ sealed class JungleWreath2 : BaseWreathItem {
 
                 Player.ApplyDamageToNPC(npc, damage, knockback, -hurtInfo.HitDirection, crit: false);
             }
-        }
     }
 }
