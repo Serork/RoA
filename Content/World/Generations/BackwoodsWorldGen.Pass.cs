@@ -3839,6 +3839,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     public static void PlaceBackwoodsCattail(int i, int j) {
+        int right = BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX - 200;
+        int left = BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX + 200;
+        int x = i, num = j;
+        if (x < left || x > right || num < 50 || num > Main.maxTilesY - 50)
+            return;
+
+        if (num > BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + 200)
+            return;
+
         Point point = PlaceCattail(i, j);
         if (WorldGen.InWorld(point.X, point.Y)) {
             int num31 = _random.Next(14);
@@ -3871,6 +3880,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int num = j;
         int tileType = ModContent.TileType<BackwoodsLilypad>();
         if (x < 50 || x > Main.maxTilesX - 50 || num < 50 || num > Main.maxTilesY - 50)
+            return false;
+
+        if (x < left || x > right || num < 50 || num > Main.maxTilesY - 50)
+            return false;
+
+        if (num > BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + 200)
             return false;
 
         if (Main.tile[x, num].HasTile || Main.tile[x, num].LiquidAmount == 0 || Main.tile[x, num].LiquidType != 0)
