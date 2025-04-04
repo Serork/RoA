@@ -186,7 +186,7 @@ sealed class CrowdRaven : ModNPC {
                     NPC.ai[0] = 1f;
                     NPC.velocity.Y -= 6f;
                     NPC.direction = Main.rand.NextFromList(-1, 1);
-                    if (NPC.ai[3] == 1f && BackwoodsFogHandler.IsFogActive) {
+                    if (NPC.ai[3] == 1f && BackwoodsFogHandler.IsFogActive && NPC.downedBoss2) {
                         Ravencaller.SummonItself(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y);
                     }
                     NPC.netUpdate = true;
@@ -204,7 +204,7 @@ sealed class CrowdRaven : ModNPC {
                     NPC.ai[0] = 1f;
                     NPC.velocity.Y -= 6f;
                     NPC.direction = Main.rand.NextFromList(-1, 1);
-                    if (NPC.ai[3] == 1f && BackwoodsFogHandler.IsFogActive) {
+                    if (NPC.ai[3] == 1f && BackwoodsFogHandler.IsFogActive && NPC.downedBoss2) {
                         Ravencaller.SummonItself(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y);
                     }
                     NPC.netUpdate = true;
