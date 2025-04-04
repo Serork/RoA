@@ -153,7 +153,7 @@ sealed class GuideHelpTexts : ILoadable {
         while (true) {
             Main.helpText++;
             if (Language.Exists("GuideHelpText.Help_" + Main.helpText)) {
-                LocalizedText text = Language.GetText("GuideHelpTextSpecific.Help_" + Main.helpText);
+                LocalizedText text = Language.GetText("GuideHelpText.Help_" + Main.helpText);
                 if (text.CanFormatWith(obj)) {
                     Main.npcChatText = text.FormatWith(obj);
                     return;
