@@ -20,9 +20,8 @@ sealed class JungleWreath2 : BaseWreathItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
-        if (!handler.IsEmpty2) {
-            player.endurance += 0.1f;
-        }
+        float value = 0.1f * handler.ActualProgress4;
+        player.endurance += value;
         if (handler.IsFull1) {
             player.GetModPlayer<JungleWreathPlayer>().poisonedSkin = true;
         }
