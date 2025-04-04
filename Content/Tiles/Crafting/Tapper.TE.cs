@@ -16,7 +16,7 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Tiles.Crafting;
 
 class TapperTE : ModTileEntity {
-    private const double TIMETOBECOLLECTABLE = TimeSystem.DAYLENGTH; // half of day length
+    private const double TIMETOBECOLLECTABLE = TimeSystem.DAYLENGTH / 2.0; // half of day length
 
     private bool _sync;
 
