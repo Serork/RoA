@@ -152,8 +152,8 @@ sealed class GuideHelpTexts : ILoadable {
         object obj = Lang.CreateDialogSubstitutionObject();
         while (true) {
             Main.helpText++;
-            if (Language.Exists("GuideMain.helpText.Help_" + Main.helpText)) {
-                LocalizedText text = Language.GetText("GuideMain.helpText.Help_" + Main.helpText);
+            if (Language.Exists("GuideHelpText.Help_" + Main.helpText)) {
+                LocalizedText text = Language.GetText("GuideHelpTextSpecific.Help_" + Main.helpText);
                 if (text.CanFormatWith(obj)) {
                     Main.npcChatText = text.FormatWith(obj);
                     return;
@@ -239,7 +239,7 @@ sealed class GuideHelpTexts : ILoadable {
                     return;
                 }
                 if (Main.helpText == 55) {
-                    Main.npcChatText = Language.GetTextValue("GuideMain.helpText.Help_1065");
+                    Main.npcChatText = Language.GetTextValue("GuideHelpText.Help_1065");
                     return;
                 }
             }
