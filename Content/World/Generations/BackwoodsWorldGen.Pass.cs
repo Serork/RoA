@@ -1302,6 +1302,17 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
+        for (x = CenterX - 30; x < CenterX + 30; x++) {
+            for (y = BackwoodsVars.FirstTileYAtCenter - 10; y < BackwoodsVars.FirstTileYAtCenter + 30; y++) {
+                Tile tile = WorldGenHelper.GetTileSafely(x, y);
+                if (tile.HasTile) {
+                    if (tile.TileType == TileID.Trees && WorldGenHelper.GetTileSafely(x, y + 1).TileType == _elderwoodTileType) {
+                        WorldGen.KillTile(x, y);
+                    }
+                }
+            }
+        }
+
         BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
     }
 
