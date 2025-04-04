@@ -23,7 +23,9 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
-        player.GetKnockback(DruidClass.NatureDamage) += 0.5f;
+        if (handler.IsFull1) {
+            player.GetKnockback(DruidClass.NatureDamage) += 0.5f;
+        }
         player.GetModPlayer<FenethsBlazingWreathHandler>().IsEffectActive = true;
     }
 
@@ -45,7 +47,7 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
 
             int type = ModContent.ProjectileType<Fireblossom>();
             if (proj.type != ModContent.ProjectileType<FireblossomExplosion>() && proj.type != ModContent.ProjectileType<Fireblossom>() &&
-                IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
+                IsEffectActive && Main.rand.NextChance(0.2 * Player.GetModPlayer<WreathHandler>().ActualProgress4) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
                 Player.ownedProjectileCounts[type] < 10) {
                 Vector2 center = proj.Center;
                 if (center.Distance(Player.Center) < 100f || center.Distance(Player.RotatedRelativePoint(Player.MountedCenter, true)) < 100f) {
@@ -70,7 +72,7 @@ sealed class FenethsBlazingWreath : BaseWreathItem {
             }
 
             int type = ModContent.ProjectileType<Fireblossom>();
-            if (IsEffectActive && Main.rand.NextChance(0.2) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
+            if (IsEffectActive && Main.rand.NextChance(0.2 * Player.GetModPlayer<WreathHandler>().ActualProgress4) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
                 Player.ownedProjectileCounts[type] < 10) {
                 int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, 10 + item.damage / 2, item.knockBack,
                     Player.whoAmI, target.whoAmI, Player.itemLocation.X, Player.itemLocation.Y);
