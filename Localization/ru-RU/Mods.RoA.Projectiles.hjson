@@ -98,14 +98,14 @@ MercuriumFumes.DisplayName: Пары ртути
 MeltingStar.DisplayName: Плавящаяся звезда
 BloodyFeather.DisplayName: Кровавое перо
 QuicksilverBolt.DisplayName: Ртутный болт
-// TrackingBolt.DisplayName: Tracking Bolt
+TrackingBolt.DisplayName: Следопытный залп
 AmuletOfLifeWisps.DisplayName: Лечащие огоньки
 Fireblossom.DisplayName: Огнецвет
 FireblossomExplosion.DisplayName: Взрыв огнецвета
 VengefulSpirit.DisplayName: Мстительный дух
 CosmicMana.DisplayName: Небесная мана
 BoneHarpy.DisplayName: Гарпия-нежить
-// BoneHarpyFeather.DisplayName: Bone Harpy Feather
+BoneHarpyFeather.DisplayName: Перья гарпии-нежити
 // RagingBootsWave.DisplayName: Raging Boots Wave
 PettyBag.DisplayName: Мелочный мешок
 // TectonicCaneFlames.DisplayName: Tectonic Cane Flames
@@ -120,17 +120,17 @@ BloodshedAxeHeal.DisplayName: Топор кровопролития
 BloodshedAxe.DisplayName: Топор кровопролития
 BloodshedAxeEnergy.DisplayName: Топор кровопролития
 BloodShedAxesTarget.DisplayName: Топор кровопролития
-// ChemicalFlask.DisplayName: Chemical Flask
-// ToxicCrystal1.DisplayName: Toxic Crystal
-// ToxicCrystal2.DisplayName: Toxic Crystal
-// ToxicCrystal3.DisplayName: Toxic Crystal
-// ChemicalFlask2.DisplayName: Chemical Flask
-// LittleFleder.DisplayName: Little Fleder
+ChemicalFlask.DisplayName: Склянка с ядом
+ToxicCrystal1.DisplayName: Осколок склянки
+ToxicCrystal2.DisplayName: Осколок склянки
+ToxicCrystal3.DisplayName: Осколок склянки
+ChemicalFlask2.DisplayName: Склянка с ядом
+LittleFleder.DisplayName: Малыш-нетопырь
 Acorn.DisplayName: Жёлудь
 FlederSlayer.DisplayName: Бич нетопырей
-// WaveSlash.DisplayName: Wave Slash
+WaveSlash.DisplayName: Оглущающая волна
 BaneSpell.DisplayName: Похищение сущности
-// GoblinsDagger.DisplayName: Goblin Dagger
+GoblinsDagger.DisplayName: Goblin Dagger
 SmallMoon.DisplayName: Маленькая луна
 Vilethorn.DisplayName: "{$ProjectileName.VilethornBase}"
 VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
@@ -145,7 +145,7 @@ ArterialSprayProjectile3.DisplayName: Артериальный брызги
 // BookwormsProjectile.DisplayName: Bookworms
 // PlanetomaStaffProjectile.DisplayName: Planetoma Staff
 // PlanetomaStaffProjectile2.DisplayName: Planetoma Staff
-// MercuriumBoltProjectile.DisplayName: Mercurium Bolt
+MercuriumBoltProjectile.DisplayName: Ртутный осколок
 // HunterProjectile1.DisplayName: Hunting Rifle
 // HunterProjectile2.DisplayName: Hunting Rifle
 // HarmonizingBeam.DisplayName: Harmonizing Beam
@@ -153,9 +153,9 @@ GalipotArrowProjectile.DisplayName: Живичная стрела
 MercuriumBulletProjectile.DisplayName: Ртутная пуля
 GalipotStream2.DisplayName: Поток живицы
 MercuriumZipperProjectile.DisplayName: Ртутная молния
-// MercuriumCenserToxicFumes.DisplayName: Mercurium Censer Toxic Fumes
+MercuriumCenserToxicFumes.DisplayName: Пары ртутного кадила
 LargeBee.DisplayName: "{$ProjectileName.Bee}"
-// MercuriumZipper_Effect.DisplayName: Mercurium Zipper
-// MercuriumZipper_MercuriumCenserToxicFumes.DisplayName: Mercurium Zipper Toxic Fumes
-// PoisonBubble_Large.DisplayName: Poison Bubble
-// PoisonBubble_Small.DisplayName: Poison Bubble
+MercuriumZipper_Effect.DisplayName: Ртутная застёжка
+MercuriumZipper_MercuriumCenserToxicFumes.DisplayName: Пары ртутной застёжки
+PoisonBubble_Large.DisplayName: Ядовитый пузырь
+PoisonBubble_Small.DisplayName: Ядовитый пузырь
