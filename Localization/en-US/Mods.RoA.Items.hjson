@@ -874,7 +874,7 @@ BunnyPants: {
 
 FlinxFurUshanka: {
 	DisplayName: Flinx Fur Ushanka
-	Tooltip: ""
+	Tooltip: Increases summon damage by 4%
 }
 
 CopperAcolyteHat: {
@@ -1075,7 +1075,7 @@ WorshipperBonehelm: {
 	Tooltip:
 		'''
 		Increases your max number of minions by 1
-		8% increased minion damage
+		Increases summon damage by 8%
 		'''
 }
 
@@ -1083,14 +1083,14 @@ WorshipperGarb: {
 	DisplayName: Worshipper Garb
 	Tooltip:
 		'''
-		8% increased minion damage
+		Increases summon damage by 8%
 		10% increased movement speed
 		'''
 }
 
 WorshipperMantle: {
 	DisplayName: Worshipper Mantle
-	Tooltip: 18% increased minion damage
+	Tooltip: Increases summon damage by 12%
 }
 
 SentinelShield: {

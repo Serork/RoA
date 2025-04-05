@@ -874,7 +874,7 @@ BunnyPants: {
 
 FlinxFurUshanka: {
 	DisplayName: Ушанка из меха флинкса
-	// Tooltip: ""
+	Tooltip: Увеличивает урон прислужников на 4%
 }
 
 CopperAcolyteHat: {
@@ -1090,7 +1090,7 @@ WorshipperGarb: {
 
 WorshipperMantle: {
 	DisplayName: Мантия поклоняющегося
-	Tooltip: Увеличивает урон прислужников на 18%
+	Tooltip: Увеличивает урон прислужников на 12%
 }
 
 SentinelShield: {
