@@ -46,6 +46,7 @@ sealed class RagingBoots : NatureItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetModPlayer<RagingBootsAttackHandler>().IsEffectActive = true;
+        player.GetModPlayer<RagingBootsAttackHandler>().Boots = Item;
 
         player.moveSpeed += 0.05f;
         player.runAcceleration += 0.05f;
@@ -61,15 +62,19 @@ sealed class RagingBoots : NatureItem {
         private int _fallLength;
 
         public bool IsEffectActive;
+        public Item Boots;
 
-        public override void ResetEffects() => IsEffectActive = false;
+        public override void ResetEffects() {
+            IsEffectActive = false;
+            Boots = null;
+        }
 
         public override void PostUpdateEquips() {
             if (!IsEffectActive) {
                 return;
             }
 
-            Item item = Player.armor.FirstOrDefault(item => item.type == ModContent.ItemType<RagingBoots>());
+            Item item = Boots;
             if (item == null || item == default) {
                 return;
             }
