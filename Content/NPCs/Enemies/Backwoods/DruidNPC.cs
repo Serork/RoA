@@ -180,7 +180,7 @@ abstract class DruidNPC : RoANPC {
                     if (ShouldAttack()) {
                         AttackTimer += TimeSystem.LogicDeltaTime;
                     }
-                    if (NPC.justHit) {
+                    if (NPC.justHit && Main.expertMode) {
                         AttackTimer += TimeToRecoveryAfterGettingHit() * 0.2f;
                     }
                     //if (NPC.justHit && AttackTimer > -TimeToRecoveryAfterGettingHit()) {
