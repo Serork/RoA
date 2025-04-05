@@ -450,17 +450,17 @@ SlipperyGrenade: {
 
 LivingBorealWoodChestplate: {
 	DisplayName: Living Boreal Wood Chestplate
-	Tooltip: 4% increased nature potential damage
+	Tooltip: 4% increased nature critical strike chance
 }
 
 LivingBorealWoodGreaves: {
 	DisplayName: Living Boreal Wood Greaves
-	Tooltip: ""
+	Tooltip: 3% increased nature potential damage
 }
 
 LivingBorealWoodHelmet: {
 	DisplayName: Living Boreal Wood Helmet
-	Tooltip: 4% increased nature potential damage
+	Tooltip: 3% increased nature potential damage
 }
 
 LivingWoodChestplate: {
@@ -480,17 +480,17 @@ LivingWoodHelmet: {
 
 LivingMahoganyChestplate: {
 	DisplayName: Living Mahogany Chestplate
-	Tooltip: 6% increased nature potential damage
+	Tooltip: 4% increased nature base damage
 }
 
 LivingMahoganyGreaves: {
 	DisplayName: Living Mahogany Greaves
-	Tooltip: ""
+	Tooltip: 3% increased nature critical strike chance
 }
 
 LivingMahoganyHelmet: {
 	DisplayName: Living Mahogany Helmet
-	Tooltip: 4% increased nature critical strike chance
+	Tooltip: 3% increased nature critical strike chance
 }
 
 EbonwoodStaff: {
@@ -529,17 +529,17 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Living Everwood Breastplate
-	Tooltip: Increases defense by 3 when wreath is charged
+	Tooltip: When wreath is charged, increases defense by 4
 }
 
 LivingElderwoodCrown: {
 	DisplayName: Living Everwood Crown
-	Tooltip: 6% increased nature potential damage
+	Tooltip: 5% increased nature potential damage
 }
 
 LivingElderwoodGreaves: {
 	DisplayName: Living Everwood Greaves
-	Tooltip: 4% increased nature potential damage and critical strike chance
+	Tooltip: 5% increased nature base damage
 }
 
 DreadheartCorruptionChestplate: {
@@ -553,12 +553,12 @@ DreadheartCorruptionChestplate: {
 
 DreadheartCorruptionHelmet: {
 	DisplayName: Dreadheart Helmet
-	Tooltip: 4% increased nature critical strike chance
+	Tooltip: 5% increased nature critical strike chance
 }
 
 DreadheartCorruptionLeggings: {
 	DisplayName: Dreadheart Leggings
-	Tooltip: 4% increased nature critical strike chance
+	Tooltip: 5% increased nature critical strike chance
 }
 
 DreadheartCrimsonChestplate: {
@@ -572,12 +572,12 @@ DreadheartCrimsonChestplate: {
 
 DreadheartCrimsonHelmet: {
 	DisplayName: Dreadheart Helmet
-	Tooltip: 4% increased nature critical strike chance
+	Tooltip: 5% increased nature critical strike chance
 }
 
 DreadheartCrimsonLeggings: {
 	DisplayName: Dreadheart Leggings
-	Tooltip: 4% increased nature critical strike chance
+	Tooltip: 5% increased nature critical strike chance
 }
 
 TectonicCane: {
@@ -1630,17 +1630,17 @@ FenethStatue: {
 
 LivingPalmChestplate: {
 	DisplayName: Living Palm Chestplate
-	Tooltip: ""
+	Tooltip: 4% increased nature potential damage
 }
 
 LivingPalmGreaves: {
 	DisplayName: Living Palm Greaves
-	Tooltip: 4% increased nature base damage
+	Tooltip: 3% increased nature base damage
 }
 
 LivingPalmHelmet: {
 	DisplayName: Living Palm Helmet
-	Tooltip: 4% increased nature base damage
+	Tooltip: 3% increased nature base damage
 }
 
 DullDaikatana: {
