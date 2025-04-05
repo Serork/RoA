@@ -8,10 +8,12 @@ namespace RoA.Common.Players;
 
 public class RangedArmorSetPlayer : ModPlayer {
     public float ArrowConsumptionReduce { get; internal set; }
+    public float AllAmmoConsumptionReduce { get; internal set; }
     public bool TaurusArmorSet { get; internal set; }
 
     public override void ResetEffects() {
         ArrowConsumptionReduce = 0;
+        AllAmmoConsumptionReduce = 0;
         TaurusArmorSet = false;
     }
 
@@ -24,8 +26,13 @@ public class RangedArmorSetPlayer : ModPlayer {
         }
 
         public override bool CanConsumeAmmo(Item weapon, Item ammo, Player player) {
+            var handler = player.GetModPlayer<RangedArmorSetPlayer>();
             if (ammo.type == AmmoID.Arrow || ammo.type == AmmoID.Stake || AmmoID.Sets.IsArrow[ammo.type]) {
-                return Main.rand.NextFloat() > player.GetModPlayer<RangedArmorSetPlayer>().ArrowConsumptionReduce;
+                return Main.rand.NextFloat() > handler.ArrowConsumptionReduce;
+            }
+
+            if (handler.AllAmmoConsumptionReduce > 0f) {
+                return Main.rand.NextFloat() > handler.AllAmmoConsumptionReduce;
             }
 
             return base.CanConsumeAmmo(weapon, ammo, player);
