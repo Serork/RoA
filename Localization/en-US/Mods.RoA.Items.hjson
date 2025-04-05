@@ -346,7 +346,7 @@ BeachWreath2: {
 	Tooltip:
 		'''
 		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
-		While wreath is charged,increases movement speed by 15%
+		While wreath is charged, increases movement speed by 15%
 		'''
 }
 
