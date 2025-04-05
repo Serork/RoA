@@ -175,7 +175,7 @@ sealed class Fireblossom : NatureProjectile {
                 float num2 = (float)Main.rand.Next(75, 150) * 0.025f;
                 int time = (int)(60f * num2 * 2f);
                 if (flag) {
-                    targetPlayer.AddBuff(BuffID.OnFire, time);
+                    targetPlayer.AddBuff(ModContent.BuffType<OnFire>(), time);
                 }
                 else {
                     targetNPC.AddBuff(onFireForEnemiesType, time);
@@ -190,7 +190,7 @@ sealed class Fireblossom : NatureProjectile {
                 float num2 = (float)Main.rand.Next(75, 150) * 0.025f;
                 int time = (int)(60f * num2 * 2f);
                 if (flag) {
-                    targetPlayer.AddBuff(BuffID.OnFire, time);
+                    targetPlayer.AddBuff(ModContent.BuffType<OnFire>(), time);
                 }
                 else {
                     targetNPC.AddBuff(onFireForEnemiesType, time);
@@ -226,7 +226,7 @@ sealed class Fireblossom : NatureProjectile {
             Projectile.Center = new Vector2((int)center.X, (int)center.Y);
         }
         else {
-            if (!targetPlayer.HasBuff(BuffID.OnFire)) {
+            if (!targetPlayer.HasBuff(ModContent.BuffType<OnFire>())) {
                 Projectile.localAI[2] = !CanExplode ? Projectile.ai[2] * 0.015f : 2f;
             }
             targetPlayer.onFire = false;
@@ -279,7 +279,7 @@ sealed class Fireblossom : NatureProjectile {
         NPC targetNPC = flag ? null : Main.npc[(int)Projectile.ai[0]];
         Player targetPlayer = !flag ? null : Main.player[(int)Projectile.ai[0]];
         if (flag) {
-            targetPlayer.ClearBuff(BuffID.OnFire);
+            targetPlayer.ClearBuff(ModContent.BuffType<OnFire>());
         }
         else {
             targetNPC.ClearBuff(ModContent.BuffType<OnFire>());

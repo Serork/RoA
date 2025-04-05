@@ -1,4 +1,7 @@
-﻿using Terraria;
+﻿using RoA.Core.Utility;
+
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
@@ -10,7 +13,19 @@ sealed class OnFire : ModBuff {
         Main.pvpBuff[Type] = true;
     }
 
-    public override void Update(NPC npc, ref int buffIndex) => npc.GetGlobalNPC<OnFireNPC>().onFire = true;
+    public override void Update(NPC npc, ref int buffIndex) {
+        if (npc.HasBuff(BuffID.OnFire)) {
+            npc.ClearBuff(BuffID.OnFire);
+        }
+        npc.GetGlobalNPC<OnFireNPC>().onFire = true;
+    }
+
+    public override void Update(Player player, ref int buffIndex) {
+        if (player.HasBuff(BuffID.OnFire)) {
+            player.ClearBuff(BuffID.OnFire);
+        }
+        player.onFire = true;
+    }
 }
 
 sealed class OnFireNPC : GlobalNPC {
