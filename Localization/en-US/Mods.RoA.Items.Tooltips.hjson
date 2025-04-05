@@ -44,7 +44,7 @@ FlinxFurUshankaSetBonus: Provides immunity to chill and freezing effects
 AshwalkerHoodSetBonus:
 	'''
 	On Fire! debuff restores life instead
-	Double tap {0} to turn into Firebird
+	Double tap {0} to turn into a Firebird
 	'''
 AcolyteSetBonus: 40% increased magic damage when below 40 mana
 FlametrackerSetBonus: Magic weapons release an additional tracking bolt while at full mana that decreases target's defense
@@ -57,4 +57,4 @@ WorshipperSetBonus:
 	While idle, {1} on Harpy to ride it
 	'''
 DynastySetBonus: Attacking in close range provides a brief flutter of speed
-ElderwoodSetBonus: Provides a chance to reduce damage taken, but leaves you vulnerable afterwards
+ElderwoodSetBonus: Provides a chance to reduce damage taken at the cost of briefly reduced mobility

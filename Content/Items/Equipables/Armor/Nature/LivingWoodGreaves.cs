@@ -22,6 +22,6 @@ sealed class LivingWoodGreaves : NatureItem {
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.sellPrice(0, 0, 20, 0);
 
-        Item.defense = 2;
+        Item.defense = 3;
     }
 }

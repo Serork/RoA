@@ -351,7 +351,7 @@ BeachWreath2: {
 }
 
 FenethsBlazingWreath: {
-	DisplayName: Искрящийся венок Фенет
+	DisplayName: Искрящийся венок
 	Tooltip:
 		'''
 		Венок заполняется нанесением природного урона и даёт шанс вплоть до 25% на то, что атаки вырастят на вас и врагах бутоны огнецветов
@@ -1625,7 +1625,7 @@ BackwoodsStoneChest_Trapped: {
 
 FenethStatue: {
 	DisplayName: Статуя Фенет
-	Tooltip: ""
+	Tooltip: "'Пламенной мученице Ордена Света'"
 }
 
 LivingPalmChestplate: {
