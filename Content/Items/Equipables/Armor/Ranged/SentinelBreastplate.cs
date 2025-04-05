@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Armor.Ranged;
@@ -24,8 +25,7 @@ sealed class SentinelBreastplate : ModItem {
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
     }
-
-    public override void UpdateEquip(Player player)
-        => player.arrowDamage += 0.1f;
+	
+	public override void UpdateEquip(Player player) => player.GetDamage(DamageClass.Ranged) += 0.08f;
 }
 
