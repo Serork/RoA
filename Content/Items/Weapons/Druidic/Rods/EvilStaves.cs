@@ -21,7 +21,7 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
     public static void SetDefaultsInner(Item item) {
         item.SetSize(44);
         item.SetDefaultToUsable(-1, 44, useSound: SoundID.Item7);
-        item.SetWeaponValues(5, 4f);
+        item.SetWeaponValues(8, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(item, 28);
         NatureWeaponHandler.SetFillingRate(item, 0.2f);

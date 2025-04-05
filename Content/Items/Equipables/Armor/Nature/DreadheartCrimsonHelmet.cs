@@ -86,7 +86,7 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
             SoundEngine.PlaySound(SoundID.NPCHit32, Player.position);
             if (Player.whoAmI == Main.myPlayer) {
                 for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
-                    int insectDamage = 15;
+                    int insectDamage = 25;
                     float insectKnockback = 3f;
                     int damage = (int)Player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
                     insectKnockback = Player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
