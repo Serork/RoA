@@ -23,8 +23,6 @@ sealed class LivingBorealWoodGreaves : NatureItem {
 
         Item.defense = 2;
     }
-
-    public override void UpdateEquip(Player player) {
-
-    }
+	
+	public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.03f;
 }

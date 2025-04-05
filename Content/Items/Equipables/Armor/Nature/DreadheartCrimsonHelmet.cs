@@ -33,10 +33,10 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
         Item.rare = ItemRarityID.Green;
         Item.value = Item.sellPrice(0, 1, 0, 0);
 
-        Item.defense = 3;
+        Item.defense = 4;
     }
 
-    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
+    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 5;
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<DreadheartCrimsonChestplate>() && legs.type == ModContent.ItemType<DreadheartCrimsonLeggings>();
 
