@@ -120,15 +120,15 @@ BloodshedAxeHeal.DisplayName: Bloodshed Axe
 BloodshedAxe.DisplayName: Bloodshed Axe
 BloodshedAxeEnergy.DisplayName: Bloodshed Axe
 BloodShedAxesTarget.DisplayName: Bloodshed Axe
-ChemicalFlask.DisplayName: Chemical Flask
-ToxicCrystal1.DisplayName: Toxic Crystal
-ToxicCrystal2.DisplayName: Toxic Crystal
-ToxicCrystal3.DisplayName: Toxic Crystal
-ChemicalFlask2.DisplayName: Chemical Flask
+ChemicalFlask.DisplayName: Poisoned Flask
+ToxicCrystal1.DisplayName: Flask Shard
+ToxicCrystal2.DisplayName: Flask Shard
+ToxicCrystal3.DisplayName: Flask Shard
+ChemicalFlask2.DisplayName: Poisoned Flask
 LittleFleder.DisplayName: Little Fleder
 Acorn.DisplayName: Acorn
 FlederSlayer.DisplayName: Fleder Slayer
-WaveSlash.DisplayName: Wave Slash
+WaveSlash.DisplayName: Deafening Wave
 BaneSpell.DisplayName: Essence Drain
 GoblinsDagger.DisplayName: Goblin Dagger
 SmallMoon.DisplayName: Small Moon
