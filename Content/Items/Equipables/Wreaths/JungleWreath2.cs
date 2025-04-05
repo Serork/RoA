@@ -27,12 +27,12 @@ sealed class JungleWreath2 : BaseWreathItem {
         
 		if (handler.IsFull1) {
             if (player.thorns < 1f) player.thorns += 0.5f;
-            player.GetModPlayer<JungleWreathPlayer>().poisonedSkin2 = true;
+            player.GetModPlayer<JungleWreathPlayer2>().poisonedSkin2 = true;
         }
     }
 }
 
-sealed class JungleWreathPlayer : ModPlayer {
+sealed class JungleWreathPlayer2 : ModPlayer {
     public bool poisonedSkin2;
 
     public override void ResetEffects() => poisonedSkin2 = false;
