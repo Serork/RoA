@@ -506,9 +506,6 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     public static void ActionWithGem(int i, int j, bool remove = false, bool dropItem = true, bool makeDusts = false) {
         Player player = Main.LocalPlayer;
         Item item = player.GetSelectedItem();
-        if (!Main.mouseItem.IsEmpty()) {
-            item = Main.mouseItem;
-        }
         int Type = WorldGenHelper.GetTileSafely(i, j).TileType;
         int num3 = 0;
         int variant = 0;
@@ -628,6 +625,10 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     }
 
     public override bool RightClick(int i, int j) {
+        if (!Main.mouseItem.IsEmpty()) {
+            return base.RightClick(i, j);
+        }
+
         BeaconTE te = GetTE(i, j);
         if (te is null) {
             return false;
