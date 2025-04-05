@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Players;
+using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Data;
 using RoA.Core.Utility;
@@ -154,7 +155,8 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             seedStack = Main.rand.Next(1, 6);
         }
         else {
-            plantStack = 1;
+            bool flag = this is Cloudberry && IsGrown(i, j);
+            plantStack = flag ? 2 : 1;
             if (IsGrown(i, j) || (GetStage(i, j) != PlantStage.Planted && CanBloom())) {
                 seedStack = Main.rand.Next(1, 4);
             }
