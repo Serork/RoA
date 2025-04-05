@@ -153,9 +153,11 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             plantStack = Main.rand.Next(1, 3);
             seedStack = Main.rand.Next(1, 6);
         }
-        else if (IsGrown(i, j)) {
+        else {
             plantStack = 1;
-            seedStack = Main.rand.Next(1, 4);
+            if (IsGrown(i, j) || CanBloom()) {
+                seedStack = Main.rand.Next(1, 4);
+            }
         }
 
         if (plantStack > 0) {
