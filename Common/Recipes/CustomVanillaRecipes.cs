@@ -31,9 +31,9 @@ sealed class CustomVanillaRecipes : ModSystem {
         RecipeHelper.NewRecipe(ItemID.ThornsPotion, [ModContent.ItemType<Bonerose>()], [1], false, [ItemID.WormTooth]);
         RecipeHelper.NewRecipe(ItemID.WormholePotion, [ModContent.ItemType<MiracleMint>()], [1], false, [ItemID.Blinkroot]);
 
-        // items
-        RecipeHelper.NewRecipe(ItemID.WarAxeoftheNight, [ItemID.ShadowScale], [5], false);
-        RecipeHelper.NewRecipe(ItemID.BloodLustCluster, [ItemID.TissueSample], [5], false);
+        //// items
+        //RecipeHelper.NewRecipe(ItemID.WarAxeoftheNight, [ItemID.ShadowScale], [5], false);
+        //RecipeHelper.NewRecipe(ItemID.BloodLustCluster, [ItemID.TissueSample], [5], false);
 
         // other herb related items
         RecipeHelper.NewRecipe(ItemID.GarlandHat, [ModContent.ItemType<MiracleMint>()], [1], false);
