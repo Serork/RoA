@@ -1032,17 +1032,17 @@ FlametrackerPants: {
 
 SentinelBreastplate: {
 	DisplayName: Sentinel Breastplate
-	Tooltip: Increases arrow damage by 10%
+	Tooltip: Increases ranged damage by 7%
 }
 
 SentinelHelmet: {
 	DisplayName: Sentinel Helmet
-	Tooltip: 10% chance to not consume arrows
+	Tooltip: 15% chance to not consume ammo
 }
 
 SentinelLeggings: {
 	DisplayName: Sentinel Leggings
-	Tooltip: Increases arrow damage by 10%
+	Tooltip: Increases ranged damage by 7%
 }
 
 SentinelTaurusMask: {

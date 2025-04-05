@@ -1032,17 +1032,17 @@ FlametrackerPants: {
 
 SentinelBreastplate: {
 	DisplayName: Нагрудник дозорного
-	Tooltip: Увеличивает урон стрел на 10%
+	Tooltip: Увеличивает урон дальнего боя на 7%
 }
 
 SentinelHelmet: {
 	DisplayName: Шлем дозорного
-	Tooltip: Дает 10% шанс не потратить стрелы
+	Tooltip: Дает 15% шанс не потратить боеприпасы
 }
 
 SentinelLeggings: {
 	DisplayName: Поножи дозорного
-	Tooltip: Увеличивает урон стрел на 10%
+	Tooltip: Увеличивает урон дальнего боя на 7%
 }
 
 SentinelTaurusMask: {

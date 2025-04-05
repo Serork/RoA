@@ -26,6 +26,6 @@ sealed class SentinelBreastplate : ModItem {
         Item.value = Item.sellPrice(0, 0, 50, 0);
     }
 	
-	public override void UpdateEquip(Player player) => player.GetDamage(DamageClass.Ranged) += 0.08f;
+	public override void UpdateEquip(Player player) => player.GetDamage(DamageClass.Ranged) += 0.07f;
 }
 
