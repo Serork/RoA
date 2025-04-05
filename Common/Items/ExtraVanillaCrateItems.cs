@@ -5,6 +5,7 @@ using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Druidic;
+using RoA.Content.Items.Weapons.Druidic.Claws;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Summon;
@@ -20,6 +21,25 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         On_ItemDropDatabase.RegisterCrateDrops += On_ItemDropDatabase_RegisterCrateDrops;
         On_ItemDropDatabase.RegisterLockbox += On_ItemDropDatabase_RegisterLockbox;
         On_ItemDropDatabase.RegisterHerbBag += On_ItemDropDatabase_RegisterHerbBag;
+        On_ItemDropDatabase.RegisterObsidianLockbox += On_ItemDropDatabase_RegisterObsidianLockbox;
+    }
+
+    private void On_ItemDropDatabase_RegisterObsidianLockbox(On_ItemDropDatabase.orig_RegisterObsidianLockbox orig, ItemDropDatabase self) {
+        IItemDropRule ruleFlowerOfFireUnholyTrident = ItemDropRule.ByCondition(new Conditions.NotRemixSeed(), ItemID.FlowerofFire);
+        ruleFlowerOfFireUnholyTrident.OnFailedConditions(ItemDropRule.NotScalingWithLuck(ItemID.UnholyTrident), hideLootReport: true);
+
+        IItemDropRule[] obsidianLockBoxList = new IItemDropRule[]
+        {
+            ItemDropRule.NotScalingWithLuck(ItemID.DarkLance),
+            ItemDropRule.NotScalingWithLuck(ItemID.Sunfury),
+            ruleFlowerOfFireUnholyTrident,
+            ItemDropRule.NotScalingWithLuck(ItemID.Flamelash),
+            ItemDropRule.NotScalingWithLuck(ItemID.HellwingBow),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<HellfireClaws>())
+        };
+
+        self.RegisterToItem(ItemID.ObsidianLockbox, new OneFromRulesRule(1, obsidianLockBoxList));
+        self.RegisterToItem(ItemID.ObsidianLockbox, ItemDropRule.NotScalingWithLuck(ItemID.TreasureMagnet, 5));
     }
 
     private void On_ItemDropDatabase_RegisterHerbBag(On_ItemDropDatabase.orig_RegisterHerbBag orig, ItemDropDatabase self) {
