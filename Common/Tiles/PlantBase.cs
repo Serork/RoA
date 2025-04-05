@@ -169,8 +169,6 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         }
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = IsGrown(i, j) ? Main.rand.Next(3, 6) : IsGrowing(i, j) ? Main.rand.Next(2, 5) : Main.rand.Next(1, 3);
-
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
         spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
