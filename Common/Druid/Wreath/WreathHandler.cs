@@ -406,6 +406,12 @@ sealed class WreathHandler : ModPlayer {
         //}
     }
 
+    public override void PostUpdate() {
+        if (Player.dead && !IsChangingValue && CurrentResource > 0) {
+            ForcedHardReset();
+        }
+    }
+
     public override void PostUpdateEquips() {
         bool alt = ModContent.GetInstance<RoAClientConfig>().WreathSoundMode == RoAClientConfig.WreathSoundModes.Alt;
         if (_useAltSounds != alt) {
@@ -517,10 +523,6 @@ sealed class WreathHandler : ModPlayer {
 
         if (Player.IsLocal() && Player.GetSelectedItem().ModItem is NatureItem natureItem) {
             natureItem.WhileBeingHold(Player, Progress);
-        }
-
-        if (Player.dead) {
-            ForcedHardReset();
         }
     }
 
