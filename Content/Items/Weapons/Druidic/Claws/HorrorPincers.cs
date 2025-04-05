@@ -17,16 +17,16 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 sealed class HorrorPincers : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
-        Item.SetWeaponValues(14, 4f);
+        Item.SetWeaponValues(24, 3f);
 
         Item.rare = ItemRarityID.Blue;
 
         Item.value = Item.sellPrice(0, 0, 25, 0);
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 16, false, autoReuse: true);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 16);
-        NatureWeaponHandler.SetFillingRate(Item, 1f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 27);
+        NatureWeaponHandler.SetFillingRate(Item, 0.8f);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(112, 75, 140), new Color(130, 100, 210));

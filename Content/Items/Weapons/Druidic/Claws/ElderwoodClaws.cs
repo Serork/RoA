@@ -18,17 +18,17 @@ namespace RoA.Content.Items.Weapons.Druidic.Claws;
 sealed class ElderwoodClaws : BaseClawsItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
-        Item.SetWeaponValues(24, 3f);
+        Item.SetWeaponValues(14, 4f);
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
 
         Item.rare = ItemRarityID.Green;
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 16, false, autoReuse: true);
+        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 27);
-        NatureWeaponHandler.SetFillingRate(Item, 0.8f);
+        NatureWeaponHandler.SetPotentialDamage(Item, 16);
+        NatureWeaponHandler.SetFillingRate(Item, 1f);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));
