@@ -21,6 +21,14 @@ sealed class RagingBoots : NatureItem {
         Item.ResearchUnlockCount = 1;
     }
 
+    public override void ModifyTooltips(List<TooltipLine> tooltips) {
+        foreach (TooltipLine tooltip in tooltips) {
+            if (tooltip.Mod == "Terraria" && tooltip.Name == "Speed") {
+                tooltip.Hide();
+            }
+        }
+    }
+
     protected override void SafeSetDefaults() {
         Item.SetSize(26, 30);
 
