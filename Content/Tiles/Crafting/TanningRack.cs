@@ -28,7 +28,7 @@ sealed class TanningRack : ModTile {
     private void On_HouseBuilder_PlaceBiomeSpecificTool(On_HouseBuilder.orig_PlaceBiomeSpecificTool orig, HouseBuilder self, HouseBuilderContext context) {
         orig(self, context);
 
-        if (WorldGen.genRand.NextChance(0.075) && self.Type != HouseType.Ice) {
+        if (WorldGen.genRand.NextChance(0.1) && self.Type != HouseType.Ice) {
             bool flag2 = false;
             int type = ModContent.TileType<TanningRack>();
             foreach (Rectangle room2 in self.Rooms) {
