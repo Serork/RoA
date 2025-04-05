@@ -380,7 +380,6 @@ sealed class RoARecipes : ModSystem {
         // weapons
         item = Recipe.Create(ModContent.ItemType<GutwrenchingHooks>());
         item.AddIngredient(ItemID.CrimtaneBar, 10);
-		item.AddIngredient(ItemID.TissueSample, 5);
         item.AddTile(TileID.Anvils);
         item.SortAfterFirstRecipesOf(ItemID.CrimsonYoyo);
         item.Register();
@@ -419,7 +418,6 @@ sealed class RoARecipes : ModSystem {
         // weapons
         item = Recipe.Create(ModContent.ItemType<HorrorPincers>());
         item.AddIngredient(ItemID.DemoniteBar, 10);
-		item.AddIngredient(ItemID.ShadowScale, 5);
         item.AddTile(TileID.Anvils);
         item.SortAfterFirstRecipesOf(ItemID.CorruptYoyo);
         item.Register();

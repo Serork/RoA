@@ -22,6 +22,5 @@ sealed class BackwoodsStone : ModTile {
         AddMapEntry(new Color(53, 55, 54));
 
         MineResist = 1.25f;
-		MinPick = 65;
     }
 }

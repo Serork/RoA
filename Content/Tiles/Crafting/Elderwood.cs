@@ -24,7 +24,7 @@ sealed class Elderwood : ModTile {
         AddMapEntry(new Color(162, 82, 45), CreateMapEntryName());
 
         MineResist = 1.5f;
-        MinPick = 55;
+        MinPick = LivingElderwood.MINTILEREQUIRED;
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
