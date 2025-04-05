@@ -38,7 +38,7 @@ sealed class LuminousFlower : ModTile {
             num = 240;
 
             if (((double)j < Main.worldSurface && !WorldGen.remixWorldGen) && (!Main.tile[i, j - 1].HasTile ||
-                Main.tileCut[Main.tile[i, j - 1].TileType])) {
+                Main.tileCut[Main.tile[i, j - 1].TileType]) && unifiedRandom.NextChance(0.75)) {
                 int num2 = Utils.Clamp(i - num, 1, Main.maxTilesX - 1 - 1);
                 int num3 = Utils.Clamp(i + num, 1, Main.maxTilesX - 1 - 1);
                 int num4 = Utils.Clamp(j - num, 1, Main.maxTilesY - 1 - 1);
