@@ -265,6 +265,17 @@ sealed class Fireblossom : NatureProjectile {
                     dust2.noLight = true;
                 }
             }
+            else {
+                if (Main.rand.NextBool(3)) {
+                    int dust1 = Dust.NewDust(new Vector2(Projectile.position.X + Main.rand.NextFloat(0f, (float)Projectile.width * Projectile.scale), Projectile.Center.Y - (float)(Projectile.height / 2)), 4, 4, Main.rand.Next(2) == 0 ? ModContent.DustType<Dusts.Fireblossom>() : DustID.Asphalt);
+                    Dust dust2 = Main.dust[dust1];
+                    dust2.velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f);
+                    dust2.scale = (1f * (5f - dust2.velocity.Y)) / 5f * Projectile.scale;
+                    dust2.alpha = dust2.type == ModContent.DustType<Dusts.Fireblossom>() ? 255 - (int)MathHelper.Lerp(25f, 255f, Projectile.ai[1]) : Main.rand.Next(25, 101);
+                    dust2.noGravity = true;
+                    dust2.noLight = true;
+                }
+            }
         }
         else {
             Projectile.localAI[0] += 0.025f;
