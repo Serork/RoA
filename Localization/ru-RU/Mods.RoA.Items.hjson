@@ -450,17 +450,17 @@ SlipperyGrenade: {
 
 LivingBorealWoodChestplate: {
 	DisplayName: Живой таежный нагрудник
-	Tooltip: Увеличивает возможный природный урон на 4%
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
 }
 
 LivingBorealWoodGreaves: {
 	DisplayName: Живые таежные поножи
-	Tooltip: ""
+	Tooltip: Увеличивает возможный природный урон на 3%
 }
 
 LivingBorealWoodHelmet: {
 	DisplayName: Живой таежный шлем
-	Tooltip: Увеличивает возможный природный урон на 4%
+	Tooltip: Увеличивает возможный природный урон на 3%
 }
 
 LivingWoodChestplate: {
@@ -480,17 +480,17 @@ LivingWoodHelmet: {
 
 LivingMahoganyChestplate: {
 	DisplayName: Живой джунглевый нагрудник
-	Tooltip: Увеличивает возможный природный урона на 6%
+	Tooltip: Увеличивает начальный природный урон на 6%
 }
 
 LivingMahoganyGreaves: {
 	DisplayName: Живые джунглевые поножи
-	Tooltip: ""
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 3%
 }
 
 LivingMahoganyHelmet: {
 	DisplayName: Живой джунглевый шлем
-	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 3%
 }
 
 EbonwoodStaff: {
@@ -529,17 +529,17 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Живой чащобный нагрудник
-	Tooltip: Когда венок заполнен, увеличивает защиту на 3
+	Tooltip: Когда венок заполнен, увеличивает защиту на 4
 }
 
 LivingElderwoodCrown: {
 	DisplayName: Живая чащобня корона
-	Tooltip: Увеличивает возможный природный урон на 6%
+	Tooltip: Увеличивает возможный природный урон на 5%
 }
 
 LivingElderwoodGreaves: {
 	DisplayName: Живые чащобные поножи
-	Tooltip: Увеличивает возможный природный урон и шанс на критический удар природным уроном на 4%
+	Tooltip: Увеличивает начальный природный урон на 5%
 }
 
 DreadheartCorruptionChestplate: {
@@ -553,12 +553,12 @@ DreadheartCorruptionChestplate: {
 
 DreadheartCorruptionHelmet: {
 	DisplayName: Шлем с ужасным сердцем
-	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 5%
 }
 
 DreadheartCorruptionLeggings: {
 	DisplayName: Поножи с ужасным сердцем
-	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 5%
 }
 
 DreadheartCrimsonChestplate: {
@@ -572,12 +572,12 @@ DreadheartCrimsonChestplate: {
 
 DreadheartCrimsonHelmet: {
 	DisplayName: Шлем с ужасным сердцем
-	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 5%
 }
 
 DreadheartCrimsonLeggings: {
 	DisplayName: Поножи с ужасным сердцем
-	Tooltip: Увеличивает шанс на критический удар природным уроном на 4%
+	Tooltip: Увеличивает шанс на критический удар природным уроном на 5%
 }
 
 TectonicCane: {
@@ -874,7 +874,7 @@ BunnyPants: {
 
 FlinxFurUshanka: {
 	DisplayName: Ушанка из меха флинкса
-	// Tooltip: ""
+	Tooltip: Увеличивает урон прислужников на 4%
 }
 
 CopperAcolyteHat: {
@@ -1090,7 +1090,7 @@ WorshipperGarb: {
 
 WorshipperMantle: {
 	DisplayName: Мантия поклоняющегося
-	Tooltip: Увеличивает урон прислужников на 18%
+	Tooltip: Увеличивает урон прислужников на 12%
 }
 
 SentinelShield: {
@@ -1630,17 +1630,17 @@ FenethStatue: {
 
 LivingPalmChestplate: {
 	DisplayName: Живой пальмовый нагрудник
-	Tooltip: ""
+	Tooltip: Увеличивает возможный природный урон на 4%
 }
 
 LivingPalmGreaves: {
 	DisplayName: Живые пальмовые поножи
-	Tooltip: Увеличивает начальный природный урон на 4%
+	Tooltip: Увеличивает начальный природный урон на 3%
 }
 
 LivingPalmHelmet: {
 	DisplayName: Живой пальмовый шлем
-	Tooltip: Увеличивает начальный природный урон на 4%
+	Tooltip: Увеличивает начальный природный урон на 3%
 }
 
 DullDaikatana: {

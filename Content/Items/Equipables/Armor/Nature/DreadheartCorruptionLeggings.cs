@@ -22,8 +22,8 @@ sealed class DreadheartCorruptionLeggings : NatureItem {
         Item.rare = ItemRarityID.Green;
         Item.value = Item.sellPrice(0, 0, 45, 0);
 
-        Item.defense = 4;
+        Item.defense = 5;
     }
 
-    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
+    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 5;
 }

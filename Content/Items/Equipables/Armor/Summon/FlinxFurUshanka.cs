@@ -25,6 +25,10 @@ sealed class FlinxFurUshanka : ModItem {
         Item.defense = 1;
     }
 
+	public override void UpdateEquip(Player player) {
+        player.GetDamage(DamageClass.Summon) += 0.04f;
+    }
+	
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ItemID.FlinxFurCoat;
 
     public override void UpdateArmorSet(Player player) {

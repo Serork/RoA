@@ -29,7 +29,7 @@ sealed class LivingBorealWoodHelmet : NatureItem {
         Item.defense = 1;
     }
 
-    public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.04f;
+    public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.03f;
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingBorealWoodChestplate>() && legs.type == ModContent.ItemType<LivingBorealWoodGreaves>();
 

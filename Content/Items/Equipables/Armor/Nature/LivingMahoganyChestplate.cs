@@ -28,6 +28,6 @@ sealed class LivingMahoganyChestplate : NatureItem {
     }
 
     public override void UpdateEquip(Player player) {
-        player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
+        player.GetDamage(DruidClass.NatureDamage) += 0.04f;
     }
 }

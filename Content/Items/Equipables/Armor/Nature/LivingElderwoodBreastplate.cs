@@ -29,7 +29,7 @@ sealed class LivingElderwoodBreastplate : NatureItem {
 
     public override void UpdateEquip(Player player) {
         if (player.GetModPlayer<WreathHandler>().IsFull1) {
-            player.statDefense += 3;
+            player.statDefense += 4;
         }
     }
 }

@@ -33,11 +33,11 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.sellPrice(0, 0, 15, 0);
 
-        Item.defense = 1;
+        Item.defense = 2;
     }
 
     public override void UpdateEquip(Player player) {
-        player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
+        player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.05f;
     }
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingElderwoodBreastplate>() && legs.type == ModContent.ItemType<LivingElderwoodGreaves>();
