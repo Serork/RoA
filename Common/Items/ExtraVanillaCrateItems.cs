@@ -349,7 +349,7 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         IItemDropRule bc_seaweed = ItemDropRule.NotScalingWithLuck(ItemID.Seaweed, 20);
 
         IItemDropRule bc_sky = ItemDropRule.OneFromOptionsNotScalingWithLuck(1,
-            ItemID.LuckyHorseshoe, ItemID.CelestialMagnet, ItemID.Starfury, ItemID.ShinyRedBalloon, ModContent.ItemType<FeathersInABottle>());
+            ItemID.LuckyHorseshoe, ItemID.CelestialMagnet, ItemID.Starfury, ItemID.ShinyRedBalloon);
         IItemDropRule bc_cloud = ItemDropRule.NotScalingWithLuck(ItemID.Cloud, 2, 50, 100);
         IItemDropRule bc_fledgeWings = ItemDropRule.NotScalingWithLuck(ItemID.CreativeWings, 40, 1, 1);
         IItemDropRule bc_skyPaintings = ItemDropRule.OneFromOptionsNotScalingWithLuck(2, ItemID.HighPitch, ItemID.BlessingfromTheHeavens, ItemID.Constellation,

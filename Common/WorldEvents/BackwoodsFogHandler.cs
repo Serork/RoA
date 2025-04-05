@@ -41,6 +41,7 @@ sealed class BackwoodsFogHandler : ModSystem {
     }
 
     private static float _fogTime;
+    private static Vector2 _oldPosition;
 
     public static bool IsFogActive { get; private set; } = false;
     public static float Opacity { get; internal set; } = 0f;
@@ -193,8 +194,8 @@ sealed class BackwoodsFogHandler : ModSystem {
                 }
             }
 
-            if (Vector2.Distance(player.oldPosition, player.position) > 600f && !player.InModBiome<BackwoodsBiome>()) {
-                Opacity2 = Opacity = 0f;
+            if (player.whoAmI == Main.myPlayer && Vector2.Distance(_oldPosition, player.position) > 600f && !player.InModBiome<BackwoodsBiome>()) {
+                Opacity = Opacity2 = 0.01f;
             }
         }
 
@@ -222,6 +223,8 @@ sealed class BackwoodsFogHandler : ModSystem {
         else {
             Opacity = 0.75f;
         }
+
+        _oldPosition = Main.LocalPlayer.position;
     }
 
     private Rectangle GetTileWorkSpace() {
