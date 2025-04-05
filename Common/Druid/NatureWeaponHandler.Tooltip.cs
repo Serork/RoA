@@ -79,7 +79,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                 return;
             }
             int speedIndex = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Speed"));
-            if (speedIndex != -1 && item.useAnimation > 0) {
+            if (speedIndex != -1 && item.useAnimation > 0 && !item.accessory) {
                 tooltips.RemoveAt(speedIndex);
                 speedIndex -= 1;
                 tag = "BaseSpeed";

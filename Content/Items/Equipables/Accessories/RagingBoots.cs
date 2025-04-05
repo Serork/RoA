@@ -22,11 +22,11 @@ sealed class RagingBoots : NatureItem {
     }
 
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
-        foreach (TooltipLine tooltip in tooltips) {
-            if (tooltip.Mod == "Terraria" && tooltip.Name == "Speed") {
-                tooltip.Hide();
-            }
-        }
+        //foreach (TooltipLine tooltip in tooltips) {
+        //    if (tooltip.Mod == "Terraria" && tooltip.Name == "Speed") {
+        //        tooltip.Hide();
+        //    }
+        //}
     }
 
     protected override void SafeSetDefaults() {
