@@ -296,6 +296,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             startY = position.Y - height / 2;
             endY = startY + height;
         }
+        else {
+            v2 = Main.MouseScreen;
+        }
         if (v2.X > startX && v2.X < endX &&
             v2.Y > startY && v2.Y < endY) {
             if (!Main.mouseText) {
@@ -494,6 +497,9 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             endX = startX + width;
             startY = position.Y - height / 2;
             endY = startY + height;
+        }
+        else {
+            v2 = Main.MouseScreen;
         }
         if (v2.X > startX && v2.X < endX &&
             v2.Y > startY && v2.Y < endY) {
