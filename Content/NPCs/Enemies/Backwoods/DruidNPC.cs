@@ -181,20 +181,18 @@ abstract class DruidNPC : RoANPC {
                         AttackTimer += TimeSystem.LogicDeltaTime;
                     }
                     if (NPC.justHit) {
-                        AttackTimer += TimeToRecoveryAfterGettingHit() * 0.1f;
+                        AttackTimer += TimeToRecoveryAfterGettingHit() * 0.2f;
                     }
                     //if (NPC.justHit && AttackTimer > -TimeToRecoveryAfterGettingHit()) {
                     //    AttackTimer -= -TimeToRecoveryAfterGettingHit() * 0.25f;
                     //}
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
                         if (!player.dead && AttackTimer >= 0f) {
-                            if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
-                                AttackTimer = 0f;
-                                AttackType = Main.rand.Next(0, 2);
-                                ChangeToAttackState();
-                                ChangeState((int)States.Attacking);
-                                NPC.netUpdate = true;
-                            }
+                            AttackTimer = 0f;
+                            AttackType = Main.rand.Next(0, 2);
+                            ChangeToAttackState();
+                            ChangeState((int)States.Attacking);
+                            NPC.netUpdate = true;
                             return;
                         }
                     }
@@ -210,10 +208,11 @@ abstract class DruidNPC : RoANPC {
                 //if (NPC.justHit && !Attack) {
                 //    StateTimer = -TimeToRecoveryAfterGettingHit();
                 //}
-                if (NPC.velocity.Y > 0f) {
-                    ChangeState((int)States.Walking);
-                    return;
-                }
+                //if (NPC.velocity.Y > 0f) {
+                //    ChangeState((int)States.Walking);
+                //    return;
+                //}
+                NPC.knockBackResist = 0f;
                 if ((player.dead || AttackTimer < 0f) && !Attack) {
                     AttackTimer = -TimeToChangeState();
                     ChangeState((int)States.Walking);

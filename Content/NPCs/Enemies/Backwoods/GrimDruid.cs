@@ -53,7 +53,6 @@ sealed class GrimDruid : DruidNPC {
         NPC.lifeMax = 180;
         NPC.damage = 25;
         NPC.defense = 10;
-        NPC.knockBackResist = 0.35f;
 
         int width = 28; int height = 48;
         NPC.Size = new Vector2(width, height);
@@ -121,6 +120,8 @@ sealed class GrimDruid : DruidNPC {
     protected override (Func<bool>, float) ShouldBeAttacking() => (() => true, 450f);
 
     protected override void Walking() {
+        NPC.knockBackResist = 0.35f;
+
         NPC.aiStyle = NPC.ModNPC.AIType = -1;
 
         NPC npc = NPC;
