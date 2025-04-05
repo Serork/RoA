@@ -180,7 +180,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             return;
         }
 
-        if (!IsGrown(i, j) && Main.rand.NextBool(50)) {
+        if (!IsGrown(i, j) && Main.rand.NextBool(40)) {
             WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;
             if (Main.netMode != NetmodeID.SinglePlayer) {
                 NetMessage.SendTileSquare(-1, i, j, 1);
