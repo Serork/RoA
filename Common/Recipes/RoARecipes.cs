@@ -153,6 +153,12 @@ sealed class RoARecipes : ModSystem {
         item.SortAfterFirstRecipesOf(ItemID.HornetStaff);
         item.Register();
 
+        item = Recipe.Create(ModContent.ItemType<JewellersBelt>());
+        item.AddIngredient(ItemID.Leather, 10);
+        item.AddIngredient(ItemID.Chain, 2);
+        item.AddTile(TileID.WorkBenches);
+        item.SortBeforeFirstRecipesOf(ItemID.HeartLantern);
+        item.Register();
     }
 
     private static void AddCampfire() {
