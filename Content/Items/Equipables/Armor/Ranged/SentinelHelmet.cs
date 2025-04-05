@@ -30,7 +30,7 @@ sealed class SentinelHelmet : ModItem {
         Item.value = Item.sellPrice(0, 0, 30, 0);
     }
 
-    public override void UpdateEquip(Player player) => player.GetModPlayer<RangedArmorSetPlayer>().ArrowConsumptionReduce += 0.1f;
+    public override void UpdateEquip(Player player) => player.GetModPlayer<RangedArmorSetPlayer>().AllAmmoConsumptionReduce += 0.15f;
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<SentinelBreastplate>() && legs.type == ModContent.ItemType<SentinelLeggings>();
 
