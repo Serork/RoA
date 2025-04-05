@@ -1914,3 +1914,12 @@ DruidSoul: {
 		'A spirit surrendered awaiting an ancient ritual'
 		'''
 }
+
+/*JewellersPouch: {
+	DisplayName: Jeweller's Pouch
+	Tooltip:
+		'''
+		Large Gems do not drop when you die
+		Hide this to conceal the held Large Gems
+		'''
+}*/
