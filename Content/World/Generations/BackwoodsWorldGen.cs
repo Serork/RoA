@@ -22,10 +22,15 @@ sealed class BackwoodsWorldGen : ModSystem {
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         bool hasSpirit = ModLoader.HasMod("SpiritMod");
+        bool hasSpiritReforged = ModLoader.HasMod("SpiritReforged");
         bool hasRemnants = ModLoader.HasMod("Remnants");
 
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         genIndex += 6;
+        if (hasSpiritReforged) {
+            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Pyramids"));
+            genIndex += 2;
+        }
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new("Backwoods", LAYERWEIGHT));
 
         if (hasRemnants) {

@@ -4160,6 +4160,81 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+        if (ModLoader.HasMod("SpiritReforged")) {
+            for (int num696 = 3; num696 < Main.maxTilesX - 3; num696++) {
+                double num697 = (double)num696 / (double)Main.maxTilesX;
+                bool flag43 = true;
+                for (int num698 = 0; (double)num698 < Main.worldSurface; num698++) {
+                    if (flag43) {
+                        if (Main.tile[num696, num698].WallType == 2 || Main.tile[num696, num698].WallType == 40 || Main.tile[num696, num698].WallType == 64 || Main.tile[num696, num698].WallType == 86)
+                            Main.tile[num696, num698].WallType = 0;
+
+                        if (Main.tile[num696, num698].TileType != 53 && Main.tile[num696, num698].TileType != 112 && Main.tile[num696, num698].TileType != 234) {
+                            if (Main.tile[num696 - 1, num698].WallType == 2 || Main.tile[num696 - 1, num698].WallType == 40 || Main.tile[num696 - 1, num698].WallType == 40)
+                                Main.tile[num696 - 1, num698].WallType = 0;
+
+                            if ((Main.tile[num696 - 2, num698].WallType == 2 || Main.tile[num696 - 2, num698].WallType == 40 || Main.tile[num696 - 2, num698].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                                Main.tile[num696 - 2, num698].WallType = 0;
+
+                            if ((Main.tile[num696 - 3, num698].WallType == 2 || Main.tile[num696 - 3, num698].WallType == 40 || Main.tile[num696 - 3, num698].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                                Main.tile[num696 - 3, num698].WallType = 0;
+
+                            if (Main.tile[num696 + 1, num698].WallType == 2 || Main.tile[num696 + 1, num698].WallType == 40 || Main.tile[num696 + 1, num698].WallType == 40)
+                                Main.tile[num696 + 1, num698].WallType = 0;
+
+                            if ((Main.tile[num696 + 2, num698].WallType == 2 || Main.tile[num696 + 2, num698].WallType == 40 || Main.tile[num696 + 2, num698].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                                Main.tile[num696 + 2, num698].WallType = 0;
+
+                            if ((Main.tile[num696 + 3, num698].WallType == 2 || Main.tile[num696 + 3, num698].WallType == 40 || Main.tile[num696 + 3, num698].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                                Main.tile[num696 + 3, num698].WallType = 0;
+
+                            if (Main.tile[num696, num698].HasTile)
+                                flag43 = false;
+                        }
+                    }
+                    else if (Main.tile[num696, num698].WallType == 0 && Main.tile[num696, num698 + 1].WallType == 0 && Main.tile[num696, num698 + 2].WallType == 0 && Main.tile[num696, num698 + 3].WallType == 0 && Main.tile[num696, num698 + 4].WallType == 0 && Main.tile[num696 - 1, num698].WallType == 0 && Main.tile[num696 + 1, num698].WallType == 0 && Main.tile[num696 - 2, num698].WallType == 0 && Main.tile[num696 + 2, num698].WallType == 0 && !Main.tile[num696, num698].HasTile && !Main.tile[num696, num698 + 1].HasTile && !Main.tile[num696, num698 + 2].HasTile && !Main.tile[num696, num698 + 3].HasTile) {
+                        flag43 = true;
+                    }
+                }
+            }
+
+            for (int num699 = Main.maxTilesX - 5; num699 >= 5; num699--) {
+                double num700 = (double)num699 / (double)Main.maxTilesX;
+                bool flag44 = true;
+                for (int num701 = 0; (double)num701 < Main.worldSurface; num701++) {
+                    if (flag44) {
+                        if (Main.tile[num699, num701].WallType == 2 || Main.tile[num699, num701].WallType == 40 || Main.tile[num699, num701].WallType == 64)
+                            Main.tile[num699, num701].WallType = 0;
+
+                        if (Main.tile[num699, num701].TileType != 53) {
+                            if (Main.tile[num699 - 1, num701].WallType == 2 || Main.tile[num699 - 1, num701].WallType == 40 || Main.tile[num699 - 1, num701].WallType == 40)
+                                Main.tile[num699 - 1, num701].WallType = 0;
+
+                            if ((Main.tile[num699 - 2, num701].WallType == 2 || Main.tile[num699 - 2, num701].WallType == 40 || Main.tile[num699 - 2, num701].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                                Main.tile[num699 - 2, num701].WallType = 0;
+
+                            if ((Main.tile[num699 - 3, num701].WallType == 2 || Main.tile[num699 - 3, num701].WallType == 40 || Main.tile[num699 - 3, num701].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                                Main.tile[num699 - 3, num701].WallType = 0;
+
+                            if (Main.tile[num699 + 1, num701].WallType == 2 || Main.tile[num699 + 1, num701].WallType == 40 || Main.tile[num699 + 1, num701].WallType == 40)
+                                Main.tile[num699 + 1, num701].WallType = 0;
+
+                            if ((Main.tile[num699 + 2, num701].WallType == 2 || Main.tile[num699 + 2, num701].WallType == 40 || Main.tile[num699 + 2, num701].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                                Main.tile[num699 + 2, num701].WallType = 0;
+
+                            if ((Main.tile[num699 + 3, num701].WallType == 2 || Main.tile[num699 + 3, num701].WallType == 40 || Main.tile[num699 + 3, num701].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                                Main.tile[num699 + 3, num701].WallType = 0;
+
+                            if (Main.tile[num699, num701].HasTile)
+                                flag44 = false;
+                        }
+                    }
+                    else if (Main.tile[num699, num701].WallType == 0 && Main.tile[num699, num701 + 1].WallType == 0 && Main.tile[num699, num701 + 2].WallType == 0 && Main.tile[num699, num701 + 3].WallType == 0 && Main.tile[num699, num701 + 4].WallType == 0 && Main.tile[num699 - 1, num701].WallType == 0 && Main.tile[num699 + 1, num701].WallType == 0 && Main.tile[num699 - 2, num701].WallType == 0 && Main.tile[num699 + 2, num701].WallType == 0 && !Main.tile[num699, num701].HasTile && !Main.tile[num699, num701 + 1].HasTile && !Main.tile[num699, num701 + 2].HasTile && !Main.tile[num699, num701 + 3].HasTile) {
+                        flag44 = true;
+                    }
+                }
+            }
+        }
     }
 
     private void Step0_Setup() {
@@ -4241,6 +4316,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         SkipTilesByTileType(TileID.Sand, tileCountToCheck: tileCountToCheck * 2, offsetPositionDirectionOnCheck: -1);
 
         int mid = Main.maxTilesX / 2;
+        if (ModLoader.TryGetMod("SpiritReforged", out Mod mod)) {
+            SkipTilesByTileType(TileID.HardenedSand, tileCountToCheck: tileCountToCheck * 3, offsetPositionDirectionOnCheck: -1);
+            Rectangle savannaArea = (Rectangle)mod.Call("GetSavannaArea");
+            CenterX += -GenVars.dungeonSide * savannaArea.Width / 3;
+        }
         while (CenterX >= mid && CenterX < mid + _biomeWidth * 3) {
             CenterX++;
         }
