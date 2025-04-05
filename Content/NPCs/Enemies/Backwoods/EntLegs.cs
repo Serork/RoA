@@ -150,9 +150,9 @@ sealed class EntLegs : RoANPC {
                 });
                 //NPC.PseudoGolemAI(0.3f);
 
-                if (_attackTimer < 0f && NPC.velocity.Y < 0f) {
-                    NPC.velocity.Y = 0f;
-                }
+                //if (_attackTimer < 0f && NPC.velocity.Y < 0f) {
+                //    NPC.velocity.Y = 0f;
+                //}
                 if (NPC.HasValidTarget) {
                     if (!Main.player[NPC.target].dead && ++_attackTimer >= 300f && NPC.velocity.Y == 0f && Vector2.Distance(Main.player[NPC.target].position, NPC.position) < 500.0) {
                         if (Collision.CanHit(NPC, Main.player[NPC.target])) {
