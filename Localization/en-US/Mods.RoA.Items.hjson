@@ -874,7 +874,7 @@ BunnyPants: {
 
 FlinxFurUshanka: {
 	DisplayName: Flinx Fur Ushanka
-	Tooltip: Increases summon damage by 4%
+	Tooltip: Increases whip range by 10%
 }
 
 CopperAcolyteHat: {

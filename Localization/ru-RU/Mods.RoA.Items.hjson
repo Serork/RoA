@@ -533,7 +533,7 @@ LivingElderwoodBreastplate: {
 }
 
 LivingElderwoodCrown: {
-	DisplayName: Живая чащобня корона
+	DisplayName: Живая чащобная корона
 	Tooltip: Увеличивает возможный природный урон на 5%
 }
 
@@ -874,7 +874,7 @@ BunnyPants: {
 
 FlinxFurUshanka: {
 	DisplayName: Ушанка из меха флинкса
-	Tooltip: Увеличивает урон прислужников на 4%
+	Tooltip: Увеличивает радиус атаки хлыстов на 10%
 }
 
 CopperAcolyteHat: {
