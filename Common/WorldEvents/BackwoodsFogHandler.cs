@@ -162,6 +162,10 @@ sealed class BackwoodsFogHandler : ModSystem {
     public override void PostUpdatePlayers() {
         if (Opacity > 0f) {
             Player player = Main.LocalPlayer;
+            if (!player.InModBiome<BackwoodsBiome>() && Opacity < 0.01f) {
+                Opacity = 0f;
+                return;
+            }
             if (Main.netMode != NetmodeID.Server) {
                 if (player.position.Y / 16 < Main.worldSurface) {
                     if (Opacity2 < 0.75f) {
@@ -218,6 +222,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
 
         if (Opacity < 0.75f) {
+            Main.NewText(2);
             Opacity += 0.0175f * 0.15f;
         }
         else {
