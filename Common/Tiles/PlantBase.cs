@@ -178,11 +178,12 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
     public override bool IsTileSpelunkable(int i, int j) => IsGrown(i, j);
 
     public override void RandomUpdate(int i, int j) {
-        if (!CanBloom() && !Main.rand.NextBool(40)) {
+        bool flag = Main.rand.NextBool(40);
+        if (!CanBloom() && !flag) {
             return;
         }
 
-        if (!IsGrown(i, j) && Main.rand.NextBool(40)) {
+        if (!IsGrown(i, j) && (Main.rand.NextBool(40) || flag)) {
             WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;           
             if (Main.netMode != NetmodeID.SinglePlayer) {
                 NetMessage.SendTileSquare(-1, i, j, 1);
