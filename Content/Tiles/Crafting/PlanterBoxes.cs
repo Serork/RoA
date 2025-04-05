@@ -400,7 +400,7 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
             tile.TileFrameX = 54;
         }
 
-        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+        return false;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) {

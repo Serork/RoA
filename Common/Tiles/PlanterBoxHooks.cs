@@ -20,6 +20,7 @@ sealed class PlanterBoxHooks : ILoadable {
     public void Load(Mod mod) {
         //On_WorldGen.CheckAlch += CheckAlchPlanterBoxHack;
         On_WorldGen.CheckBanner += CheckBannerPlanterBoxHack;
+        On_WorldGen.Check1x2Top += On_WorldGen_Check1x2Top;
         //IL_WorldGen.PlantCheck += IL_WorldGen_PlantCheck;
         //// Terraria only uses this in PlaceTile, but this detour may be useful if other mods use it?
         On_WorldGen.IsFitToPlaceFlowerIn += IsFitToPlaceFlowerInPlanterBoxHack;
@@ -32,6 +33,18 @@ sealed class PlanterBoxHooks : ILoadable {
         On_WorldGen.PlantCheck += On_WorldGen_PlantCheck;
 
         On_WorldGen.PlaceTile += On_WorldGen_PlaceTile;
+    }
+
+    private void On_WorldGen_Check1x2Top(On_WorldGen.orig_Check1x2Top orig, int x, int j, ushort type) {
+        foreach (var m in RoA.Instance.GetContent<PlanterBoxes>()) {
+            TileID.Sets.Platforms[m.Type] = true;
+        }
+
+        orig(x, j, type);
+
+        foreach (var m in RoA.Instance.GetContent<PlanterBoxes>()) {
+            TileID.Sets.Platforms[m.Type] = false;
+        }
     }
 
     private void On_WorldGen_PlantCheck(On_WorldGen.orig_PlantCheck orig, int x, int y) {
@@ -583,7 +596,8 @@ sealed class PlanterBoxHooks : ILoadable {
                         if (!flag6 && (anchorBottom.type & AnchorType.PlatformNonHammered) == AnchorType.PlatformNonHammered && TileID.Sets.Platforms[tileSafely.TileType] && tileSafely.Slope == 0 && !tileSafely.IsHalfBlock)
                             flag6 = tileData2.isValidTileAnchor(tileSafely.TileType);
 
-                        if (!flag6 && (anchorBottom.type & AnchorType.PlanterBox) == AnchorType.PlanterBox && (tileSafely.TileType == 380 || tileSafely.TileType == ModContent.TileType<PlanterBoxes>()))
+                        if (!flag6 && (anchorBottom.type & AnchorType.PlanterBox) == AnchorType.PlanterBox && (tileSafely.TileType == 380 || 
+                            tileSafely.TileType == ModContent.TileType<PlanterBoxes>()))
                             flag6 = tileData2.isValidTileAnchor(tileSafely.TileType);
 
                         if (!flag6 && (anchorBottom.type & AnchorType.SolidSide) == AnchorType.SolidSide && Main.tileSolid[tileSafely.TileType] && !Main.tileSolidTop[tileSafely.TileType]) {
