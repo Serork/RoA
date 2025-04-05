@@ -222,7 +222,6 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
 
         if (Opacity < 0.75f) {
-            Main.NewText(2);
             Opacity += 0.0175f * 0.15f;
         }
         else {
