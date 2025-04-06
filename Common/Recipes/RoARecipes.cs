@@ -154,7 +154,7 @@ sealed class RoARecipes : ModSystem {
         item.Register();
 
         item = Recipe.Create(ModContent.ItemType<JewellersBelt>());
-        item.AddIngredient(ItemID.Leather, 10);
+        item.AddIngredient(ItemID.Leather, 8);
         item.AddIngredient(ItemID.Chain, 2);
         item.AddTile(TileID.WorkBenches);
         item.SortBeforeFirstRecipesOf(ItemID.HeartLantern);
