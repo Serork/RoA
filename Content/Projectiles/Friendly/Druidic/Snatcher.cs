@@ -444,8 +444,6 @@ sealed class Snatcher : NatureProjectile {
         _rotation = Utils.AngleLerp(_rotation, rotation, 0.05f - (0.04f * (_attackVector.Length() < 50f ? (_attackVector.Length() - 25f) / 25f : 1f)) + (IsAttacking ? Math.Min(1f, _lerpValue * 2f) : 0f));
         Projectile.rotation = _rotation;
 
-        Projectile.timeLeft = 2;
-
         if (IsAttacking) {
             if (++Projectile.frameCounter > 4) {
                 Projectile.frame++;
