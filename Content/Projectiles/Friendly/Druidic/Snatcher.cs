@@ -427,9 +427,9 @@ sealed class Snatcher : NatureProjectile {
         float lerp = Math.Min(0.015f + player.velocity.Length() * 0.001f, 0.1f) * 0.5f;
         if (target2.Length() > 1f && _attackVector.Length() < 1f) {
             Projectile.velocity = Helper.SmoothAngleLerp(Projectile.velocity.ToRotation(), target2.ToRotation(), lerp * 3.5f).ToRotationVector2().SafeNormalize(Vector2.Zero);
-            if (player.Distance(GetPos()) > 600f) {
-                Projectile.velocity = target2.ToRotation().ToRotationVector2().SafeNormalize(Vector2.Zero);
-            }
+        }
+        if (player.Distance(GetPos()) > 600f) {
+            Projectile.velocity = target2.ToRotation().ToRotationVector2().SafeNormalize(Vector2.Zero);
         }
         _targetVector2.X = Helper.Approach(_targetVector2.X, target.X, lerp);
         _targetVector2.Y = Helper.Approach(_targetVector2.Y, target.Y, lerp * 0.1f);
