@@ -175,7 +175,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 
-    public override bool IsTileSpelunkable(int i, int j) => IsGrown(i, j);
+    public override bool IsTileSpelunkable(int i, int j) => GetStage(i, j) != PlantStage.Planted;
 
     public override void RandomUpdate(int i, int j) {
         bool flag = Main.rand.NextBool(40);
