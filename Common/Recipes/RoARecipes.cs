@@ -1025,7 +1025,7 @@ sealed class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<Beacon>());
-        item.AddIngredient<Content.Items.Materials.MercuriumNugget>(10);
+        item.AddIngredient<Content.Items.Materials.MercuriumNugget>(8);
         item.AddIngredient(ItemID.Lens, 1);
         item.AddIngredient(ItemID.Wire, 5);
         item.AddTile(TileID.Anvils);
