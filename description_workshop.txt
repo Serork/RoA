@@ -8,14 +8,16 @@ This "early access" version features a new Druid class and Backwoods biome with 
 
 [h1]List of content[/h1]
 
+[list]
 [*] [b]Backwoods.[/b] An ancient forest once inhabited by Dryads has fallen under a dark influence and holds many dangers for an unsuspecting adventurer, but its true power has been suppressed by the world evil...  
 [*] [b]Druid.[/b] Attuning to primordial nature through hand-made Wreaths and controlling the environment, druids become stronger the longer the fight goes on, covering the battlefield in canopy and taking shape of wild beasts.
 [*] [b]Fog.[/b] An eerie weather event that may occur after the rain covers the backwoods and its surrounding area in a thick layer of mist, reducing visibility and allowing enemies to catch you off-guard.
 [*] [b]Lothor.[/b] A late Pre-Hardmode boss - the mightiest druid from an age long past, whose quest for immortality has gone very wrong.
 [*] [b]Materials.[/b] Mercurium, Galipot and Leather can be obtained through unique and challenging mechanics, and provide a variety of new equipment options. 
 [*] [b]Alchemy.[/b] The mod adds two new herbs and plenty of potions, as well as reworking most of the vanilla recipes. 
+[/list]
 
-Includes support for [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2669644269]Boss Checklist[/url], [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2927542027]Achievement Mod[/url][/b] and [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2985966860]Music Display[/url][/b].
+Includes support for [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2669644269]Boss Checklist[/url][/b], [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2927542027]Achievement Mod[/url][/b] and [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2985966860]Music Display[/url][/b].
 
 [h1]F.A.Q.[/h1]
 
