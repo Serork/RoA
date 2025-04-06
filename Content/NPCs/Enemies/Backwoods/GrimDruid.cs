@@ -86,7 +86,6 @@ sealed class GrimDruid : DruidNPC {
             if (NPC.Center.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 25) {
                 bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
                 if (!flag6 && Main.netMode != NetmodeID.MultiplayerClient) {
-                    Main.NewText(DownedBossSystem.DownedLothorBoss + " " + NPC.downedBoss2);
                     int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, type);
                     if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
                         NetMessage.SendData(MessageID.SyncNPC, number: npc);
