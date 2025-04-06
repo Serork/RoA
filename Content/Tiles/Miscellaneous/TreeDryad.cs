@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.NPCs;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
+using RoA.Content.World.Generations;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -25,7 +26,9 @@ sealed class TreeDryad : ModTile {
 
     private void On_Main_UpdateTime_SpawnTownNPCs(On_Main.orig_UpdateTime_SpawnTownNPCs orig) {
         orig();
-        Main.townNPCCanSpawn[NPCID.Dryad] = false;
+        if (DryadEntrance._dryadStructureGenerated) {
+            Main.townNPCCanSpawn[NPCID.Dryad] = false;
+        }
     }
 
     public override void SetStaticDefaults() {

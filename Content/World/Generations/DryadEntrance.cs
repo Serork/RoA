@@ -12,6 +12,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Terraria;
@@ -20,6 +21,7 @@ using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
@@ -29,6 +31,32 @@ sealed class DryadEntrance : ModSystem {
     private static int _dryadEntranceX, _dryadEntranceY;
     private static Point _bigRubblePosition = Point.Zero;
     private static bool _loomPlacedInWorld;
+    internal static bool _dryadStructureGenerated;
+
+    public override void ClearWorld() {
+        _dryadStructureGenerated = false;
+    }
+
+    public override void SaveWorldData(TagCompound tag) {
+        if (_dryadStructureGenerated) {
+            tag["_dryadStructureGenerated"] = true;
+        }
+    }
+
+    public override void LoadWorldData(TagCompound tag) {
+        _dryadStructureGenerated = tag.ContainsKey("_dryadStructureGenerated");
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        var flags = new BitsByte();
+        flags[0] = _dryadStructureGenerated;
+        writer.Write(flags);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        BitsByte flags = reader.ReadByte();
+        _dryadStructureGenerated = flags[0];
+    }
 
     public override void Load() {
         On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
@@ -878,6 +906,7 @@ sealed class DryadEntrance : ModSystem {
                     WorldGen.Place2xX(i, j, treeDryad, altered);
                     if (Main.tile[i, j].TileType == treeDryad) {
                         flag4 = true;
+                        _dryadStructureGenerated = true;
                     }
                 }
             }
