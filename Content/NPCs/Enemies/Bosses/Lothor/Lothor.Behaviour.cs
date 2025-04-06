@@ -1200,9 +1200,9 @@ sealed partial class Lothor : ModNPC {
 
         CurrentAIState = LothorAIState.SpittingAttack;
 
-        if (NPC.velocity.Y != 0f) {
-            return;
-        }
+        //if (NPC.velocity.Y != 0f) {
+        //    return;
+        //}
 
         int count = 6;
         int minFrame = 9;
