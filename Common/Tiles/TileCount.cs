@@ -12,8 +12,6 @@ sealed class TileCount : ModSystem {
     public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts) {
         BackwoodsTiles = tileCounts[ModContent.TileType<BackwoodsGrass>()] +
                          tileCounts[ModContent.TileType<BackwoodsStone>()] +
-                         tileCounts[ModContent.TileType<BackwoodsGreenMoss>()] +
-                         tileCounts[ModContent.TileType<LivingElderwood>()] +
-                         tileCounts[ModContent.TileType<LivingElderwoodlLeaves>()];
+                         tileCounts[ModContent.TileType<BackwoodsGreenMoss>()];
     }
 }

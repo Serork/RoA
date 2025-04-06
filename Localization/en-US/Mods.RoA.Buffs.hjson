@@ -5,7 +5,7 @@ Deceleration: {
 
 Skinning: {
 	DisplayName: Skinning
-	Description: Enemies have a chance to drop rawhides, which will spoil when the effect ends
+	Description: Creatures have a chance to drop rawhides, which will spoil when the effect ends
 }
 
 WreathCharged: {

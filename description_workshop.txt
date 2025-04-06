@@ -7,7 +7,6 @@ Developed by the team behind [url=https://steamcommunity.com/sharedfiles/filedet
 This "early access" version features a new Druid class and Backwoods biome with complete Pre-Hardmode progression, as well as a variety of miscellaneous content to spice up your playthrough, regardless of the class of your choice. 
 
 [h1]List of content[/h1]
-
 [list]
 [*] [b]Backwoods.[/b] An ancient forest once inhabited by Dryads has fallen under a dark influence and holds many dangers for an unsuspecting adventurer, but its true power has been suppressed by the world evil...  
 [*] [b]Druid.[/b] Attuning to primordial nature through hand-made Wreaths and controlling the environment, druids become stronger the longer the fight goes on, covering the battlefield in canopy and taking shape of wild beasts.
