@@ -347,7 +347,7 @@ sealed class Lumberjack : RoANPC {
                         }
                     }
                 }
-                if (tileChecks) {
+                if (tileChecks && !Main.tile[(int)(NPC.Center.X) / 16, (int)(NPC.Center.Y - 15f) / 16 - 1].HasUnactuatedTile) {
                     int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
                     int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
 

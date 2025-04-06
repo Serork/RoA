@@ -86,6 +86,7 @@ sealed class GrimDruid : DruidNPC {
             if (NPC.Center.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 25) {
                 bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
                 if (!flag6 && Main.netMode != NetmodeID.MultiplayerClient) {
+                    Main.NewText(DownedBossSystem.DownedLothorBoss + " " + NPC.downedBoss2);
                     int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, type);
                     if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
                         NetMessage.SendData(MessageID.SyncNPC, number: npc);
@@ -272,12 +273,14 @@ sealed class GrimDruid : DruidNPC {
                 }
             }
         }
-        if (tileChecks) {
-            int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
-            int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
+        int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
+        int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
+        int num194 = tileX;
+        int num195 = tileY;
+        if (tileChecks && !Main.tile[(int)(NPC.Center.X) / 16, (int)(NPC.Center.Y - 15f) / 16 - 1].HasUnactuatedTile) {
 
             {
-                if (NPC.velocity.X < 0f && NPC.direction == -1 || NPC.velocity.X > 0f && NPC.direction == 1) {
+                if (NPC.velocity.X < 0f && NPC.spriteDirection == -1 || NPC.velocity.X > 0f && NPC.spriteDirection == 1) {
                     bool JumpCheck(int tileX, int tileY) {
                         if (NPC.height >= 32 && Main.tile[tileX, tileY - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 2].TileType]) {
                             if (Main.tile[tileX, tileY - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 3].TileType]) {
