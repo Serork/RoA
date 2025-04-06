@@ -116,6 +116,9 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
                 spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             }
             int offsetY = flag2 ? !Main.tileSolidTop[WorldGenHelper.GetTileSafely(i, j + 1).TileType] ? 2 : 1 : 0;
+            if (WorldGenHelper.ActiveTile(i, j + 1, TileID.ClayPot)) {
+                offsetY += 1;
+            }
             Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
             texture ??= TextureAssets.Tile[Type].Value;
             spriteBatch.Draw(texture, new Vector2(i * 16f, j * 16f - 5f + offsetY) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition
