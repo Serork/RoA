@@ -161,8 +161,8 @@ sealed class SkinningNPC : GlobalNPC {
         int npcType = npc.type;
         bool critters = NPCID.Sets.CountsAsCritter[npcType] && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
             !NPCID.Sets.IsDragonfly[npcType]/* && !NPCID.Sets.TownCritter[npcType]*/ && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
-        bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType] &&
-            npc.aiStyle != 22;
+        bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.DeathSound == SoundID.NPCDeath1 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType]
+            && !npc.friendly && npc.aiStyle != 22;
         NPCsType type;
         type = critters ? NPCsType.Critters : enemies ? NPCsType.Enemies : NPCsType.None;
         if (type == NPCsType.None)
