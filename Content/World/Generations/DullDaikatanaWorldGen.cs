@@ -33,10 +33,10 @@ sealed class DullDaikatanaWorldGen : ModSystem {
             bool flag24 = false;
             int num437 = 0;
             while (!flag24) {
-                int num438 = genRand.Next(1, Main.maxTilesX);
+                int num438 = genRand.Next((int)(Main.maxTilesX * 0.17f), (int)(Main.maxTilesX * 0.83f));
                 int num439 = genRand.Next(Main.maxTilesY - 250, Main.maxTilesY - 30);
                 try {
-                    if (Main.tile[num438, num439].WallType == 14) {
+                    if (WorldGenHelper.GetTileSafely(num438, num439).WallType == 14) {
                         bool flag = true;
                         int check = 3;
                         for (int x = -check; x < check + 2; x++) {
@@ -44,7 +44,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                 break;
                             }
                             for (int y = -check; y < check + 2; y++) {
-                                if (Main.tile[num438 + x, num439 + y].HasTile) {
+                                if (WorldGenHelper.GetTileSafely(num438 + x, num439 + y).HasTile) {
                                     flag = false;
                                     break;
                                 }
@@ -59,7 +59,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                     break;
                                 }
                                 for (int y = -check; y < check + 2; y++) {
-                                    if (Main.tile[num438 + x, num439 + y].TileType == tileType) {
+                                    if (WorldGenHelper.GetTileSafely(num438 + x, num439 + y).TileType == tileType) {
                                         flag = false;
                                         break;
                                     }
@@ -82,24 +82,24 @@ sealed class DullDaikatanaWorldGen : ModSystem {
 
                             if (!_chairPlaced || (hasRemnants && genRand.NextBool(2))) {
                                 int y2 = num439;
-                                for (; !WorldGen.SolidTile(num438, y2) && !TileID.Sets.Platforms[Main.tile[num438, y2].TileType] && y2 < Main.maxTilesY - 20; y2++) {
+                                for (; !WorldGen.SolidTile(num438, y2) && !TileID.Sets.Platforms[WorldGenHelper.GetTileSafely(num438, y2).TileType] && y2 < Main.maxTilesY - 20; y2++) {
                                 }
                                 int x2 = num438 + 1;
                                 int x3 = x2;
                                 bool flag2 = false;
                                 int attempts = 10;
-                                while (attempts > 0 && (Main.tile[x2, y2 - 1].HasTile || Main.tile[x2, y2 - 2].HasTile)) {
+                                while (attempts > 0 && (WorldGenHelper.GetTileSafely(x2, y2 - 1).HasTile || WorldGenHelper.GetTileSafely(x2, y2 - 2).HasTile)) {
                                     flag2 = true;
                                     x2++;
                                     attempts--;
-                                    if (!Main.tile[x2, y2].HasTile) {
+                                    if (!WorldGenHelper.GetTileSafely(x2, y2).HasTile) {
                                         break;
                                     }
                                 }
                                 bool flag3 = false;
                                 if (attempts > 0) {
                                     WorldGenHelper.Place1x2(x2, y2 - 1, TileID.Chairs, 0, 0, paintID: PaintID.WhitePaint);
-                                    if (Main.tile[x2, y2 - 1].TileType == TileID.Chairs) {
+                                    if (WorldGenHelper.GetTileSafely(x2, y2 - 1).TileType == TileID.Chairs) {
                                         flag3 = true;
                                         _chairPlaced = true;
                                     }
@@ -107,11 +107,11 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                 if (!flag3) {
                                     x2 = x3;
                                     attempts = 10;
-                                    while (attempts > 0 && (Main.tile[x2, y2 - 1].HasTile || Main.tile[x2, y2 - 2].HasTile)) {
+                                    while (attempts > 0 && (WorldGenHelper.GetTileSafely(x2, y2 - 1).HasTile || WorldGenHelper.GetTileSafely(x2, y2 - 2).HasTile)) {
                                         flag2 = false;
                                         x2--;
                                         attempts--;
-                                        if (!Main.tile[x2, y2].HasTile) {
+                                        if (!WorldGenHelper.GetTileSafely(x2, y2).HasTile) {
                                             break;
                                         }
                                     }
@@ -122,7 +122,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                 }
                             }
                         }
-                        if (Main.tile[num438, num439].TileType == tileType) {
+                        if (WorldGenHelper.GetTileSafely(num438, num439).TileType == tileType) {
                             flag24 = true;
                         }
                         else {
