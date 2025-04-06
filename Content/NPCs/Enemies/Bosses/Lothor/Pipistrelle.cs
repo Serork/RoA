@@ -76,6 +76,7 @@ sealed class Pipistrelle : ModNPC {
         Vector2 origin = NPC.frame.Size() / 2f;
         float rotation = NPC.velocity.X * 0.085f;
         float max = 0.5f;
+        drawColor = NPC.GetNPCColorTintedByBuffs(drawColor);
         rotation = MathHelper.Clamp(rotation, -max, max);
         if (NPC.ai[2] != 1f) {
             Vector2 bestiaryOffset = Vector2.Zero;

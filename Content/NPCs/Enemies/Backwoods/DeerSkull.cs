@@ -432,7 +432,8 @@ public abstract class BaseHead : Worm {
         Rectangle sourceRectangle = new(0, 0, 54, 30);
         SpriteEffects effects = (SpriteEffects)(NPC.velocity.X < 0f).ToInt();
         Vector2 origin = new Vector2(NPC.direction != 1 ? 20 : 34, 22);
-        Main.EntitySpriteDraw(texture, drawPosition + new Vector2(5f * NPC.direction, 0f).RotatedBy(NPC.rotation), sourceRectangle, drawColor, NPC.rotation, origin, NPC.scale, effects);
+        Main.EntitySpriteDraw(texture, drawPosition + new Vector2(5f * NPC.direction, 0f).RotatedBy(NPC.rotation), sourceRectangle,
+            NPC.GetNPCColorTintedByBuffs(drawColor), NPC.rotation, origin, NPC.scale, effects);
 
         return false;
     }
@@ -452,7 +453,7 @@ public abstract class BaseBody : Worm {
         if (rib && NPC.direction == -1) {
             effects = SpriteEffects.FlipVertically;
         }
-        Main.EntitySpriteDraw(texture, drawPosition, sourceRectangle, drawColor, NPC.rotation - MathHelper.PiOver2 * NPC.direction + (rib ? MathHelper.PiOver2 : 0f),
+        Main.EntitySpriteDraw(texture, drawPosition, sourceRectangle, NPC.GetNPCColorTintedByBuffs(drawColor), NPC.rotation - MathHelper.PiOver2 * NPC.direction + (rib ? MathHelper.PiOver2 : 0f),
             origin, NPC.scale * (num <= 5 ? 0.85f : 1f),
             effects);
 
@@ -507,7 +508,7 @@ public abstract class BaseTail : Worm {
         Rectangle sourceRectangle = new(0, 0, 54, 48);
         SpriteEffects effects = (SpriteEffects)(NPC.direction == -1).ToInt();
         Vector2 origin = texture.Size() / 2f;
-        Main.EntitySpriteDraw(texture, drawPosition, sourceRectangle, drawColor, NPC.rotation, origin, NPC.scale, effects);
+        Main.EntitySpriteDraw(texture, drawPosition, sourceRectangle, NPC.GetNPCColorTintedByBuffs(drawColor), NPC.rotation, origin, NPC.scale, effects);
 
         return false;
     }

@@ -135,6 +135,7 @@ sealed class GrimDefender : ModNPC {
         Vector2 position = NPC.position - screenPos + offset;
         Vector2 origin = NPC.frame.Size() / 2f;
         SpriteEffects effects = NPC.spriteDirection != -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        drawColor = NPC.GetNPCColorTintedByBuffs(drawColor);
         if (NPC.IsABestiaryIconDummy) {
             Vector2 drawPosition = position + new Vector2(36f, -32f);
             Main.EntitySpriteDraw(texture, drawPosition, NPC.frame, drawColor, NPC.rotation, origin, NPC.scale, effects);

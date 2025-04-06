@@ -52,6 +52,7 @@ sealed partial class Lothor : ModNPC {
                 color = Color.Lerp(Helper.BuffColor(color, 0.3f, 0.3f, 0.3f, 1f), color, 0.6f);
             }
         }
+        drawColor = NPC.GetNPCColorTintedByBuffs(drawColor);
         enrage(ref drawColor);
         if (_drawColor == null) {
             _drawColor = color;
