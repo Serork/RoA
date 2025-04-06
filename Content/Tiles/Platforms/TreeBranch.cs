@@ -71,7 +71,7 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
 
         Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j), rightTile = WorldGenHelper.GetTileSafely(i + 1, j);
         if ((!rightTile.HasTile && !leftTile.HasTile) ||
-            (rightTile.TileType != TileID.Trees && leftTile.TileType != TileID.Trees)) {
+            (!PrimordialTree.IsPrimordialTree(i + 1, j) && !PrimordialTree.IsPrimordialTree(i - 1, j))) {
             WorldGen.KillTile(i, j);
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j, 1f);
