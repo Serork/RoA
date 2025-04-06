@@ -344,7 +344,7 @@ sealed class BloodshedAxe : ModProjectile {
         }
 
         if (_init && !_init2) {
-            player.direction = _direction;
+            player.ChangeDir(_direction);
             _init2 = true;
         }
     }

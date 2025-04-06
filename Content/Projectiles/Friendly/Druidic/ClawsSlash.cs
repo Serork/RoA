@@ -319,7 +319,7 @@ class ClawsSlash : NatureProjectile {
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsAttack"), player.Center);
         }
 
-        player.direction = (int)Projectile.ai[0];
+        player.ChangeDir((int)Projectile.ai[0]);
 
         if (player.inventory[player.selectedItem].ModItem is not BaseClawsItem) {
             Projectile.Kill();

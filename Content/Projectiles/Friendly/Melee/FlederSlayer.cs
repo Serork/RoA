@@ -131,7 +131,8 @@ sealed class FlederSlayer : ModProjectile {
             if (!_init) {
                 _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
                 Projectile.Center = player.MountedCenter;
-                Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
+                Projectile.direction = Projectile.spriteDirection = _direction;
+                player.ChangeDir(Projectile.spriteDirection);
                 _timeLeft = Projectile.timeLeft;
                 _init = true;
                 Projectile.netUpdate = true;
@@ -329,10 +330,12 @@ sealed class FlederSlayer : ModProjectile {
                     }
                     if (Projectile.ai[1] < 2f) {
                         if (player.controlLeft) {
-                            Projectile.spriteDirection = player.direction = -1;
+                            Projectile.spriteDirection = -1;
+                            player.ChangeDir(Projectile.spriteDirection);
                         }
                         if (player.controlRight) {
-                            Projectile.spriteDirection = player.direction = 1;
+                            Projectile.spriteDirection = 1;
+                            player.ChangeDir(Projectile.spriteDirection);
                         }
 
                         Projectile.spriteDirection = player.direction;
@@ -354,7 +357,7 @@ sealed class FlederSlayer : ModProjectile {
                     else if (Projectile.ai[1] == 2f) {
                         turnOnAvailable = false;
 
-                        player.direction = Projectile.spriteDirection;
+                        player.ChangeDir(Projectile.spriteDirection);
 
                         if (SoundEngine.TryGetActiveSound(_slot, out var sound2)) {
                             sound2.Volume -= 0.01f;
@@ -455,7 +458,7 @@ sealed class FlederSlayer : ModProjectile {
             _timeLeft--;
         }
         if (!turnOnAvailable && Projectile.owner == Main.myPlayer) {
-            player.direction = Projectile.spriteDirection;
+            player.ChangeDir(Projectile.spriteDirection);
         }
         Projectile.Center += _offset;
         int trailTimeLeft = 5;
@@ -474,7 +477,7 @@ sealed class FlederSlayer : ModProjectile {
         }
 
         if (_init && !_init2) {
-            player.direction = _direction;
+            player.ChangeDir(_direction);
             _init2 = true;
         }
     }
