@@ -150,12 +150,12 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
 
         int seedStack = 0;
 
+        bool flag = this is Cloudberry && IsGrown(i, j);
         if (nearestPlayer.active && (nearestPlayer.HeldItem.type == ItemID.StaffofRegrowth || nearestPlayer.HeldItem.type == ItemID.AcornAxe)) {
-            plantStack = Main.rand.Next(1, 3);
+            plantStack = (flag ? 2 : 1) * Main.rand.Next(1, 3);
             seedStack = Main.rand.Next(1, 6);
         }
         else {
-            bool flag = this is Cloudberry && IsGrown(i, j);
             plantStack = flag ? 2 : 1;
             if (IsGrown(i, j) || (GetStage(i, j) != PlantStage.Planted && CanBloom())) {
                 seedStack = Main.rand.Next(1, 4);
