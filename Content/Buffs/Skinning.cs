@@ -138,6 +138,8 @@ sealed class SkinningPlayer : ModPlayer {
                 int item2 = Item.NewItem(Player.GetSource_ItemUse(item), (int)vector.X, (int)vector.Y, 1, 1, ItemID.Leather, 1, noBroadcast: false, -1);
                 if (Main.netMode == NetmodeID.MultiplayerClient && item2 >= 0)
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item2, 1f);
+                item = new Item();
+                item.SetDefaults(ModContent.ItemType<AnimalLeather>());
                 Player.ApplyItemTime(item);
                 Player.SetItemAnimation(item.useAnimation);
                 SoundStyle leatherSound = new(ResourceManager.Sounds + "Leather") {
