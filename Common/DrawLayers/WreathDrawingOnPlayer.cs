@@ -83,7 +83,7 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
         Texture2D texture = asset.Value;
         Vector2 position = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - drawInfo.drawPlayer.legFrame.Width / 2 + drawInfo.drawPlayer.width / 2),
                                         (int)(drawInfo.Position.Y - Main.screenPosition.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect;
-        Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(wreathItem.ModItem is FenethsBlazingWreath ? Color.White : drawInfo.colorArmorLegs, drawInfo.shadow);
+        Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(wreathItem.ModItem is FenethsBlazingWreath ? Color.White * 0.6f : drawInfo.colorArmorLegs, drawInfo.shadow);
         immuneAlphaPure *= drawInfo.drawPlayer.stealth;
         DrawData drawData = new(texture,
                                 position + drawInfo.drawPlayer.PlayerMovementOffset(),

@@ -1,2 +1,41 @@
-- First hotfix yay!!
-- Fixed debug text appearing when using druidic forms
+- Druid and Everwood balancing:
+-- Rebalanced Druid armor stats. This mainly affects the Living Wood sets, with slight changes to other armors
+-- Reverted War Axe of the Night and Blood Lust Cluster recipe changes, making Everwood available post-Eye of Cthulhu
+-- Moved Horror Pincers and Gutwrenching Hooks forward in progression to swap with Everwood Claws, with stats changed accordingly
+-- Living Everwood Wand and Everwood Leaf Wand no longer drop when shaking Everwood trees
+-- Jungle Wreaths now also inflict damage upon attackers
+-- Slightly increased the base damage of Ebonwood and Shadewood Canes
+-- Increased Cacti Cane wreath charge rate 
+- Added Jeweller's Pouch - a new accessory which allows hiding the held Large Gems and keeps them from dropping on death
+- Sentinel armor now grants bonuses that affect all ranged weapons
+- Flinx Fur Ushanka now grants +10% whip range (previously no effect)
+- Worshipper Mantle now grants +12% summon damage (previously +18%)
+- Tappers now fill up slightly slower (50% -> 75% of the day duration)
+- Cloudberry bushes now drop two Cloudberries when fully grown and one when partially grown
+- Made Miracle Mint growth rate and item drops consistent with vanilla
+- Druid enemies no longer stop attacking when hit
+- Druid enemies now attack faster as they lose health (Expert mode only)
+- Ents no longer accelerate on sloped blocks
+- Backwoods generation no longer overlaps with Savannah from Spirit Reforged
+- Slighly increased the Tanning Rack's chance to appear in world generation
+- Reduced the Luminous Flower spawn rate
+- Increased the Firefly Mimic spawn rate
+- Miracle Mint planter box now supports hanging furniture
+- Ravencaller's Cloak shadow now moves up and down blocks smoothly
+- Snatchers created by Thorny Claws now teleport with the player correctly
+- Fog visuals now disappear immediately when teleporting to an unaffected location
+- Removed Feathers in a Bottle from crate drops
+- Added Hellfire Claws to Obsidian Lockbox drops
+- Raging Boots now display their modifier correctly
+- Disabled Tappers and Mercurium Beacons interacting with items held in the cursor
+- Slightly improved Blazing Wreath effect visuals and fixed them not displaying on the player while wearing the Ashwalker set
+- Fixed Overgrown Altar root generation breaking trees on rare occasions
+- Fixed some of the new Guide messages not displaying correctly
+- Fixed Ravencaller spawning before the Backwoods awaken
+- Fixed Wreath UI charge tooltip displaying incorrectly on certain window resolutions
+- Fixed incorrect Pine Cone drops
+- Fixed Backwoods vegetation appearing in regular caves
+- Fixed Sap Stream recipe appearing twice
+- Fixed Cloudberry only growing on snow blocks
+- Fixed Tappers causing the player to use the active item upon collecting Galipot
+- Updated localization

@@ -2,18 +2,20 @@
 
 [b]RoA[/b] is focused on adding highly polished content that seamlessly expands Terraria’s features, from exploration to combat. 
 The mod features unique mechanics and an immersive story which can be discovered organically through world structures, NPC dialogue and bestiary entries.
-Developed by the team behind Consolaria, Rise of Ages is designed to provide a nice, condensed experience rather than an overwhelming amount of surface-level content.
+Developed by the team behind [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2864843929]Consolaria[/url], Rise of Ages is designed to provide a nice, condensed experience rather than an overwhelming amount of surface-level content.
 
 This "early access" version features a new Druid class and Backwoods biome with complete Pre-Hardmode progression, as well as a variety of miscellaneous content to spice up your playthrough, regardless of the class of your choice. 
 
 [h1]List of content[/h1]
 
-- [b]Backwoods.[/b] An ancient forest once inhabited by Dryads has fallen under a dark influence and holds many dangers for an unsuspecting adventurer, but its true power has been suppressed by the world evil...  
-- [b]Druid.[/b] Attuning to primordial nature through hand-made Wreaths and controlling the environment, druids become stronger the longer the fight goes on, covering the battlefield in canopy and taking shape of wild beasts.
-- [b]Fog.[/b] An eerie weather event that may occur after the rain covers the backwoods and its surrounding area in a thick layer of mist, reducing visibility and allowing enemies to catch you off-guard.
-- [b]Lothor.[/b] The mightiest druid from an age long past, whose quest for immortality has gone very wrong.
-- [b]Materials.[/b] Mercurium, Galipot and Leather can be obtained through unique and challenging mechanics, and provide a variety of new equipment options. 
-- [b]Alchemy.[/b] The mod adds two new herbs and plenty of potions, as well as reworking most of the vanilla recipes. 
+[*] [b]Backwoods.[/b] An ancient forest once inhabited by Dryads has fallen under a dark influence and holds many dangers for an unsuspecting adventurer, but its true power has been suppressed by the world evil...  
+[*] [b]Druid.[/b] Attuning to primordial nature through hand-made Wreaths and controlling the environment, druids become stronger the longer the fight goes on, covering the battlefield in canopy and taking shape of wild beasts.
+[*] [b]Fog.[/b] An eerie weather event that may occur after the rain covers the backwoods and its surrounding area in a thick layer of mist, reducing visibility and allowing enemies to catch you off-guard.
+[*] [b]Lothor.[/b] A late Pre-Hardmode boss - the mightiest druid from an age long past, whose quest for immortality has gone very wrong.
+[*] [b]Materials.[/b] Mercurium, Galipot and Leather can be obtained through unique and challenging mechanics, and provide a variety of new equipment options. 
+[*] [b]Alchemy.[/b] The mod adds two new herbs and plenty of potions, as well as reworking most of the vanilla recipes. 
+
+Includes support for [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2669644269]Boss Checklist[/url], [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2927542027]Achievement Mod[/url][/b] and [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2985966860]Music Display[/url][/b].
 
 [h1]F.A.Q.[/h1]
 
@@ -31,7 +33,9 @@ Yes, otherwise you will be locked out of a major portion of the content. Small w
 
 [b]After many years in the oven, we hope you enjoy![/b]
 
-Created by Serork, peege.on, has2r, N.F.A., cleo. and Starlife team. Music by Croul & A44.
+Created by Serork, peege.on, has2r, N.F.A. and cleo. Music by Croul & A44.
+
+Contributors & former developers: Hasan, Flamorax, CKnight, MeuRan, Obesedog, Kazzinak, Nokilos, Insanis, shekel, Heretic, Efromomr, Veron, BRIPE, froglute, Feutor, Sparcdoctor and Vikri.
 
 [h1]Links[/h1]
 
