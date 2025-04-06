@@ -22,6 +22,7 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
     private const string REQUIREMENT = "_Outfit";
 
     private static readonly Dictionary<string, Asset<Texture2D>?> _wreathsOutfitTextures = [];
+    private static readonly Dictionary<string, Asset<Texture2D>?> _wreathsOutfitGlowmaskTextures = [];
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => true;
 
@@ -52,6 +53,10 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
             ModItem item = ItemLoader.GetItem(i);
             if (item is BaseWreathItem) {
                 _wreathsOutfitTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT));
+
+                if (item is BaseWreathItem.IWreathGlowMask) {
+                    _wreathsOutfitGlowmaskTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT + "_Glow"));
+                }
             }
         }
 
@@ -83,7 +88,7 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
         Texture2D texture = asset.Value;
         Vector2 position = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - drawInfo.drawPlayer.legFrame.Width / 2 + drawInfo.drawPlayer.width / 2),
                                         (int)(drawInfo.Position.Y - Main.screenPosition.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect;
-        Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(wreathItem.ModItem is FenethsBlazingWreath ? Color.White : drawInfo.colorArmorLegs, drawInfo.shadow);
+        Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(/*wreathItem.ModItem is FenethsBlazingWreath ? Color.White :*/ drawInfo.colorArmorLegs, drawInfo.shadow);
         immuneAlphaPure *= drawInfo.drawPlayer.stealth;
         DrawData drawData = new(texture,
                                 position + drawInfo.drawPlayer.PlayerMovementOffset(),
@@ -92,5 +97,21 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
             shader = wreathItemToShowHandler.DyeItem.dye
         };
         drawInfo.DrawDataCache.Add(drawData);
+        if (wreathItem.ModItem is BaseWreathItem.IWreathGlowMask wreathGlowMask) {
+            asset = _wreathsOutfitGlowmaskTextures[WeaponOverlay.GetItemNameForTexture(wreathItem)];
+            if (asset?.IsLoaded != true) {
+                return;
+            }
+            texture = asset.Value;
+            immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(wreathGlowMask.GlowColor, drawInfo.shadow);
+            immuneAlphaPure *= drawInfo.drawPlayer.stealth;
+            drawData = new(texture,
+                            position + drawInfo.drawPlayer.PlayerMovementOffset(),
+                            null,
+                            immuneAlphaPure, drawInfo.drawPlayer.legRotation, drawInfo.legVect, 1f, drawInfo.playerEffect, 0) {
+                shader = wreathItemToShowHandler.DyeItem.dye
+            };
+            drawInfo.DrawDataCache.Add(drawData);
+        }
     }
 }

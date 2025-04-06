@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+
+using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 
@@ -7,6 +9,10 @@ using static Terraria.GameContent.Creative.ItemFilters.AAccessories;
 namespace RoA.Content.Items.Equipables.Wreaths;
 
 abstract class BaseWreathItem : NatureItem {
+    internal interface IWreathGlowMask {
+        public Color GlowColor { get; }
+    }
+
     public override void Load() {
         On_ItemFilters.AAccessories.IsAnAccessoryOfType += AAccessories_IsAnAccessoryOfType;
     }
