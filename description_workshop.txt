@@ -31,6 +31,9 @@ Ask the Guide, use Recipe Browser or Boss Checklist. A wiki is coming soon. You 
 [b]Do I need to create a new world?[/b]
 Yes, otherwise you will be locked out of a major portion of the content. Small worlds work fine, but we recommend Medium and above.
 
+[b]Does the mod work in multiplayer?[/b]
+Yes!
+
 [b]After many years in the oven, we hope you enjoy![/b]
 
 Created by Serork, peege.on, has2r, N.F.A. and cleo. Music by Croul & A44.
