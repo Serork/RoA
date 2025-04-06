@@ -4,9 +4,11 @@ using RoA.Common.Druid;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
+[AutoloadEquip(EquipType.Neck)]
 sealed class DoubleFocusCharm : NatureItem {
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;

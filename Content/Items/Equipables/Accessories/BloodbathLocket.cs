@@ -14,6 +14,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
+[AutoloadEquip(EquipType.Neck)]
 sealed class BloodbathLocket : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Bloodbath Locket");
