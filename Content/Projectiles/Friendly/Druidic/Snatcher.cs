@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
@@ -347,8 +349,17 @@ sealed class Snatcher : NatureProjectile {
         Vector2 drawPosition = playerCenter + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * DIST;
         Vector2 endLocation = playerCenter + _targetVector2 + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * Math.Max(DIST * (1f - progress), 8f);
         Vector2 result = Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
+        if (player.Distance(result) > 200f) {
+            ResetAttackState();
+            _attackVector = Vector2.Zero;
+        }
         if (Projectile.Opacity > 0f) {
             Vector2 to = Vector2.Lerp(playerCenter, result, MathHelper.Clamp(result.Length() * (1f - Projectile.Opacity), 0f, 1f));
+            if (player.Distance(result) > 200f) {
+                to = player.MountedCenter;
+                ResetAttackState();
+                _attackVector = Vector2.Zero;
+            }
             return to;
         }
         return result;
@@ -428,13 +439,12 @@ sealed class Snatcher : NatureProjectile {
         if (target2.Length() > 1f && _attackVector.Length() < 1f) {
             Projectile.velocity = Helper.SmoothAngleLerp(Projectile.velocity.ToRotation(), target2.ToRotation(), lerp * 3.5f).ToRotationVector2().SafeNormalize(Vector2.Zero);
         }
-        if (player.Distance(GetPos()) > 600f) {
-            Projectile.velocity = target2.ToRotation().ToRotationVector2().SafeNormalize(Vector2.Zero);
-        }
         _targetVector2.X = Helper.Approach(_targetVector2.X, target.X, lerp);
         _targetVector2.Y = Helper.Approach(_targetVector2.Y, target.Y, lerp * 0.1f);
         _rotation = Utils.AngleLerp(_rotation, rotation, 0.05f - (0.04f * (_attackVector.Length() < 50f ? (_attackVector.Length() - 25f) / 25f : 1f)) + (IsAttacking ? Math.Min(1f, _lerpValue * 2f) : 0f));
         Projectile.rotation = _rotation;
+
+        Projectile.timeLeft = 2;
 
         if (IsAttacking) {
             if (++Projectile.frameCounter > 4) {
