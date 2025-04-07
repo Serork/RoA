@@ -6,6 +6,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RoA.Core;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
@@ -118,8 +119,6 @@ sealed class MoonSickle : NatureProjectile {
     public override bool OnTileCollide(Vector2 oldVelocity) {
         Projectile.netUpdate = true;
 
-        SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
-
         for (int num615 = 0; num615 < 5; num615++) {
             int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.AncientLight, Projectile.velocity.X, Projectile.velocity.Y, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
             Main.dust[num616].noGravity = true;
@@ -133,6 +132,7 @@ sealed class MoonSickle : NatureProjectile {
     }
 
     public override void OnKill(int timeLeft) {
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "MoonVanish") { PitchVariance = 0.1f }, Projectile.Center);
         for (int i = 0; i < 5; i++) {
             int dust3 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 24, 24, DustID.AncientLight, 0f, 0f, 0, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
             Main.dust[dust3].noGravity = true;

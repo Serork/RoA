@@ -1,23 +1,11 @@
-- Mercurium Beacon now requires 8 Mercurium Nuggets to craft (previously 10)
-- Jeweller's Pouch now requires 8 Leather to craft (previously 10)
-- Druid Soul spawn rate is no longer reduced after Lothor is defeated
-- Slightly increased the Firefly Mimic spawn rate again
-- Dryad now spawns correctly in worlds where the Dryad Coccoon structure hasn't been generated
-- Fixed a rare error caused by Dull Daikatana while generating a world with Remnants mod enabled (hopefully)
-- Hyenas from Spirit Reforged, and any other modded enemies will no longer drop refined Leather 
-- Mercurium Ore now applies Toxic Fumes correctly when held in a Spirit Reforged backpack
-- Fixed a variety of issues with Backwoods block transformation/corruption
-- Bloodbath Locket and Tarnished Charm now display on the character when worn
-- Improved the Bloodbath Locket sprite
-- Improved the Blazing Wreath glowmask
-- Spelunker Potion now highlights plants in the second phase of growth
-- Hunter Potion now highlights some enemies correctly
-- Cloudberry now drops more items when collected using the Staff of Regrowth
-- Miracle Mint now displays correctly when grown in a pot
-- Slightly increased the raw leather drop rate when using the Tanning Rack
-- Fixed the animation playing slowly while processing the only piece of leather in the stack at the Tanning rack
-- Increased the pool of enemies that drop raw leather when using the Tanning Rack
-- Fixed the character turning abruptly when using some weapons whilst on a rope
-- Lothor's spit attack no longer interrupts if he moves vertically
-- Some enemies' textures now are now tinted correctly whilst under the effect of certain debuffs
-- Fixed and improved some enemy behaviour
+- Giant Tree Sapling, Soul of the Woods and Firefly Pin now display on the character when worn
+- Bloodbath Locket player sprite now has a glowmask
+- Various glowmasks no longer break whilst using the Gravitation Potion
+- Clentaminator now correctly converts all Backwoods blocks
+- Bezoar now grants immunity to Toxic Fumes again (broken in the previous patch)
+- Wreath discharge sound no longer plays upon entering the world with a druid weapon in the first inventory slot
+- Sacrificial Sickle's crescent projectile now plays a different sound when destroyed
+- Crates from Spirit Reforged and other items will no longer drop refined Leather
+- Fixed Advanced World Generation breaking when generating the Backwoods
+- Fixed Jaw Trap becoming invisible but still functional when mined
+- Added a few custom colours for Moon Flower for friends and contributors
