@@ -177,21 +177,23 @@ sealed class KeywordSystem : ILoadable {
         if (flag2) {
             if (!Main.gameMenu || flag3) {
                 bool flag = false;
-                int num2 = 11;
-                for (int i = 0; i < Player.MaxBuffs; i++) {
-                    if (Main.player[Main.myPlayer].buffType[i] > 0) {
-                        _ = Main.player[Main.myPlayer].buffType[i];
-                        int x = 32 + i * 38;
-                        int num3 = 76;
-                        int num4 = i;
-                        while (num4 >= num2) {
-                            num4 -= num2;
-                            x = 32 + num4 * 38;
-                            num3 += 50;
-                        }
-                        int num = Main.player[Main.myPlayer].buffType[i];
-                        if (Main.mouseX < x + TextureAssets.Buff[num].Width() && Main.mouseY < num3 + TextureAssets.Buff[num].Height() && Main.mouseX > x && Main.mouseY > num3) {
-                            flag = true;
+                if (!(Main.gameMenu || Main.InGameUI.IsVisible)) {
+                    int num2 = 11;
+                    for (int i = 0; i < Player.MaxBuffs; i++) {
+                        if (Main.player[Main.myPlayer].buffType[i] > 0) {
+                            _ = Main.player[Main.myPlayer].buffType[i];
+                            int x = 32 + i * 38;
+                            int num3 = 76;
+                            int num4 = i;
+                            while (num4 >= num2) {
+                                num4 -= num2;
+                                x = 32 + num4 * 38;
+                                num3 += 50;
+                            }
+                            int num = Main.player[Main.myPlayer].buffType[i];
+                            if (Main.mouseX < x + TextureAssets.Buff[num].Width() && Main.mouseY < num3 + TextureAssets.Buff[num].Height() && Main.mouseX > x && Main.mouseY > num3) {
+                                flag = true;
+                            }
                         }
                     }
                 }
