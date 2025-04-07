@@ -701,7 +701,7 @@ static class WorldGenHelper {
         for (int i2 = -offset; i2 < offset; i2++) {
             for (int j2 = -offset; j2 < offset; j2++) {
                 int x = i + i2, y = j + j2;
-                if (ActiveTile(x, y, tileType)) {
+                if (WorldGen.InWorld(x, y) && ActiveTile(x, y, tileType)) {
                     tilesCount++;
                 }
             }

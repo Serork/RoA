@@ -7,6 +7,6 @@ namespace RoA.Common.Items;
 
 sealed class NoLeatherDropFromCratesAndOther : GlobalItem {
     public override void ModifyItemLoot(Item item, ItemLoot itemLoot) {
-        itemLoot.RemoveWhere((itemDrop) => itemDrop is CommonDrop commonDrop && commonDrop.itemId == ItemID.Leather);
+        itemLoot.RemoveWhere((itemDrop) => itemDrop is IItemDropRule && itemDrop is CommonDropNotScalingWithLuck drop && drop.itemId == ItemID.Leather);
     }
 }
