@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
+using RoA.Content.Tiles.Crafting;
+using RoA.Content.Tiles.Solid;
+using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -21,6 +24,78 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class OvergrownAltar : ModTile {
+    public override void Load() {
+        //On_WorldGen.SpreadGrass += On_WorldGen_SpreadGrass;
+
+        On_WorldGen.Convert += On_WorldGen_Convert;
+    }
+
+    private void On_WorldGen_Convert(On_WorldGen.orig_Convert orig, int i, int j, int conversionType, int size) {
+        for (int type = TileID.Count; type < TileLoader.TileCount; type++) {
+            if (type == ModContent.TileType<BackwoodsGrass>()) {
+                TileID.Sets.Conversion.Grass[type] = false;
+            }
+            if (type == ModContent.TileType<BackwoodsStone>()) {
+                TileID.Sets.Conversion.Stone[type] = false;
+            }
+            if (type == ModContent.TileType<BackwoodsStoneBrick>()) {
+                TileID.Sets.Conversion.Stone[type] = false;
+            }
+            if (type == ModContent.TileType<BackwoodsGreenMoss>()) {
+                TileID.Sets.Conversion.Moss[type] = false;
+            }
+            if (type == ModContent.TileType<BackwoodsGreenMossBrick>()) {
+                TileID.Sets.Conversion.MossBrick[type] = false;
+            }
+        }
+
+        orig(i, j, conversionType, size);
+
+        for (int type = TileID.Count; type < TileLoader.TileCount; type++) {
+            if (type == ModContent.TileType<BackwoodsGrass>()) {
+                TileID.Sets.Conversion.Grass[type] = true;
+            }
+            if (type == ModContent.TileType<BackwoodsStone>()) {
+                TileID.Sets.Conversion.Stone[type] = true;
+            }
+            if (type == ModContent.TileType<BackwoodsStoneBrick>()) {
+                TileID.Sets.Conversion.Stone[type] = true;
+            }
+            if (type == ModContent.TileType<BackwoodsGreenMoss>()) {
+                TileID.Sets.Conversion.Moss[type] = true;
+            }
+            if (type == ModContent.TileType<BackwoodsGreenMossBrick>()) {
+                TileID.Sets.Conversion.MossBrick[type] = true;
+            }
+        }
+    }
+
+    //private void On_WorldGen_SpreadGrass(On_WorldGen.orig_SpreadGrass orig, int i, int j, int dirt, int grass, bool repeat, TileColorCache color) {
+    //    if (grass == TileID.CorruptGrass || grass == TileID.CrimsonGrass || grass == TileID.CrimsonJungleGrass || grass == TileID.) {
+    //        Point origin = new(i, j);
+    //        int distance = 30;
+    //        double num = 20;
+    //        double num2 = num;
+    //        int leftX = (int)(origin.X - distance * 1);
+    //        int rightX = (int)(origin.X + distance * 1);
+    //        int topY = (int)(origin.Y - distance * 1);
+    //        int bottomY = (int)(origin.Y + distance * 1);
+    //        for (int x2 = leftX; x2 < rightX; x2++) {
+    //            for (int y2 = topY; y2 < bottomY; y2++) {
+    //                double num9 = Math.Abs((double)x2 - origin.X);
+    //                double num10 = Math.Abs((double)y2 - origin.Y);
+    //                if (Math.Sqrt(num9 * num9 + num10 * num10) < num2) {
+    //                    if (WorldGenHelper.ActiveTile(i, j, ModContent.TileType<OvergrownAltar>())) {
+    //                        return;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    orig(i, j, dirt, grass, repeat, color);
+    //}
+
     public override void SetStaticDefaults() {
         AnimationFrameHeight = 36;
 
