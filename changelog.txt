@@ -4,6 +4,9 @@
 - Slightly increased the Firefly Mimic spawn rate again
 - Dryad now spawns correctly in worlds where the Dryad Coccoon structure hasn't been generated
 - Fixed a rare error caused by Dull Daikatana while generating a world with Remnants mod enabled (hopefully)
+- Hyenas from Spirit Reforged, and any other modded enemies will no longer drop refined Leather 
+- Mercurium Ore now applies Toxic Fumes correctly when held in a Spirit Reforged backpack
+- Fixed a variety of issues with Backwoods block transformation/corruption
 - Bloodbath Locket and Tarnished Charm now display on the character when worn
 - Improved the Bloodbath Locket sprite
 - Improved the Blazing Wreath glowmask

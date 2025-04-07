@@ -866,7 +866,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             else {
                 chance *= 4;
             }
-            if (Main.rand.Next(chance) == 0) {
+            chance *= 3;
+            if (Main.rand.NextBool(chance)) {
                 tile = Main.tile[x, y + 1];
                 if (!WorldGen.SolidTile(tile) && !tile.AnyLiquid()) {
                     float windForVisuals = Main.WindForVisuals;
