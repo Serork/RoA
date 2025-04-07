@@ -73,7 +73,7 @@ sealed class SmallMoonPlayer : ModPlayer {
             smallMoonColor = new Color(190, 190, 140);
         }
 
-        if (Player.name.Equals("peege.on", StringComparison.CurrentCultureIgnoreCase)) smallMoonColor = Color.Indigo;
+        if (Player.name.Equals("peege.on", StringComparison.CurrentCultureIgnoreCase)) smallMoonColor = Player.underShirtColor;
         if (Player.name.Equals("has2r", StringComparison.CurrentCultureIgnoreCase)) smallMoonColor = Color.Indigo;
         if (ShouldBeRandom()) {
             if (_currentColor == null) {
