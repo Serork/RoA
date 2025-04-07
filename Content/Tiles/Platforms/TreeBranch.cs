@@ -66,7 +66,7 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
     public override void NearbyEffects(int i, int j, bool closer) {
-        if (!closer) {
+        if (!closer && Main.rand.NextBool(20)) {
             Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j), rightTile = WorldGenHelper.GetTileSafely(i + 1, j);
             if ((!rightTile.HasTile && !leftTile.HasTile) ||
                 (!PrimordialTree.IsPrimordialTree(i + 1, j) && !PrimordialTree.IsPrimordialTree(i - 1, j))) {
