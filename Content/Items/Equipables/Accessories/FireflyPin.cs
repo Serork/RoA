@@ -1,14 +1,55 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
 
 using RoA.Common.Druid;
 using RoA.Content.NPCs.Friendly;
+using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
+
+sealed class FireflyPinHandler : PlayerDrawLayer {
+    private static Asset<Texture2D> glowTexture;
+
+    public override void Load() => glowTexture = ModContent.Request<Texture2D>(GetType().Namespace.Replace(".", "/") + "/FireflyPin_Face_Glow");
+    public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
+
+    public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) {
+        return true;
+    }
+
+    protected override void Draw(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.drawPlayer.face != EquipLoader.GetEquipSlot(RoA.Instance, nameof(FireflyPin), EquipType.Face)) {
+            return;
+        }
+
+        if (drawInfo.shadow != 0f)
+            return;
+
+        var texture = glowTexture.Value;
+        Color color = Color.White;
+
+        float progress = (1f - MathHelper.Clamp(Helper.Wave(0f, 15f, speed: 5f), 0f, 1f));
+        drawInfo.DrawDataCache.Add(new DrawData(
+            texture,
+            drawInfo.drawPlayer.position.Floor() + drawInfo.drawPlayer.PlayerMovementOffset() - Main.screenPosition,
+            new Rectangle(0, progress < 0.5f ? drawInfo.drawPlayer.bodyFrame.Height : 0, drawInfo.drawPlayer.bodyFrame.Width, drawInfo.drawPlayer.bodyFrame.Height),
+            color * progress,
+            0f,
+            new Vector2(10),
+            1f,
+            drawInfo.playerEffect,
+            0
+        ));
+    }
+}
 
 [AutoloadEquip(EquipType.Face)]
 sealed class FireflyPin : NatureItem {
