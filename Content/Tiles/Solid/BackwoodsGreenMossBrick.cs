@@ -49,6 +49,7 @@ sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
 
         TileID.Sets.tileMossBrick[Type] = true;
 
+        TileID.Sets.Conversion.Stone[Type] = true;
         TileID.Sets.Conversion.MossBrick[Type] = true;
 
         TileID.Sets.Grass[Type] = true;
