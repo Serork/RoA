@@ -81,7 +81,7 @@ sealed class LothorMaskGlowing : ModSystem {
                             Vector2.UnitY * (player.gravDir == -1f ? -6f : 0f),
                              bodyFrame, immuneAlphaPure.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress,
                              player.fullRotation + drawInfo.drawPlayer.headRotation + Main.rand.NextFloatRange(0.05f) * lifeProgress,
-                             new Vector2(40f, 56f) / 2f, 1f, SpriteEffects.None, 0f);
+                             new Vector2(40f, 56f) / 2f, 1f, drawInfo.drawPlayer.direction == -1 ? SpriteEffects.None | SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
                     }
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(in snapshot);

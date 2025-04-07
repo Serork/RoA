@@ -46,7 +46,7 @@ sealed class FireflyPinHandler : PlayerDrawLayer {
             0f,
             new Vector2(10),
             1f,
-            SpriteEffects.None,
+            drawInfo.drawPlayer.direction == -1 ? SpriteEffects.None | SpriteEffects.FlipHorizontally : SpriteEffects.None,
             0
         ));
     }
