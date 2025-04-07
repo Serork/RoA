@@ -84,13 +84,11 @@ sealed class SmallMoonPlayer : ModPlayer {
             }
             smallMoonColor = GetLerpColor([_currentColor.Value, _nextColor.Value]);
         }
-        if (Player.name.Equals("cleo.", StringComparison.CurrentCultureIgnoreCase)) {
-            smallMoonColor = GetLerpColor([Color.Black, Color.White]);
-        }
         if (Player.name.Equals("HalfbornFan", StringComparison.CurrentCultureIgnoreCase)) {
             smallMoonColor = Main.DiscoColor;
         }
 
+        SetContributorColor("cleo.", [Color.Black, Color.White]);
         SetContributorColor("NotFurryAlex", [new Color(255, 33, 140), new Color(255, 216, 0), new Color(33, 177, 255)]);
         SetContributorColor("N.F.A.", [new Color(255, 33, 140), new Color(255, 216, 0), new Color(33, 177, 255)]);
         SetContributorColor("Heretic", [new Color(88, 1, 1), new Color(232, 140, 3)]);
