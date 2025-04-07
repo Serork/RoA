@@ -5,6 +5,7 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
+using System;
 using System.Linq;
 
 using Terraria;
@@ -25,7 +26,9 @@ class BackwoodsVines : ModTile {
         Main.tileNoFail[Type] = true;
         Main.tileNoAttach[Type] = true;
 
+        TileID.Sets.IsVine[Type] = true;
         TileID.Sets.VineThreads[Type] = true;
+        TileID.Sets.ReplaceTileBreakDown[Type] = true;
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         HitSound = SoundID.Grass;
@@ -76,6 +79,10 @@ class BackwoodsVines : ModTile {
             if (type == validType) {
                 return true;
             }
+        }
+        if (TileID.Sets.Grass[tileAbove.TileType] ||
+            TileID.Sets.IsVine[tileAbove.TileType]) {
+            return true;
         }
         if (type == Type) {
             return true;
