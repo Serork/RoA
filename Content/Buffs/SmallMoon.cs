@@ -103,6 +103,10 @@ sealed class SmallMoonPlayer : ModPlayer {
             smallMoonColor = GetLerpColor([new Color(71, 98, 255), Color.Blue]);
         }
 
+        if (Player.name.Equals("chaos sage", StringComparison.CurrentCultureIgnoreCase)) {
+            smallMoonColor = GetLerpColor([Color.White, Color.Red]);
+        }
+
         if (Player.name == string.Empty) smallMoonColor = Color.Transparent;
     }
 
