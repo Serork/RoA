@@ -131,7 +131,7 @@ sealed class BloodbathLocket : ModItem {
         }
         Lighting.AddLight(Item.Center, new Vector3(1f, 0.2f, 0.2f) * 0.35f * Helper.Wave(1f, 1.25f, 12f, 0.5f + whoAmI));
         if (Item.timeSinceItemSpawned % 12 == 0) {
-            Vector2 center = Item.Center + new Vector2(0f, Item.height * -0.1f);
+            Vector2 center = Item.Center;
             Vector2 direction = Main.rand.NextVector2CircularEdge(Item.width * 0.6f, Item.height * 0.6f);
             float distance = 0.3f + Main.rand.NextFloat() * 0.5f;
             Vector2 velocity = new(0f, -Main.rand.NextFloat() * 0.3f - 1.5f);
