@@ -71,6 +71,10 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
 
     private class MercuriumInInventoryHack : GlobalItem {
         public override void UpdateInventory(Item item, Player player) {
+            if (player.buffImmune[BuffID.Poisoned]) {
+                return;
+            }
+
             if (item.type == ModContent.ItemType<MercuriumOre>()) {
                 player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
             }
