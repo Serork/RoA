@@ -12,6 +12,8 @@ List of content:
 - Materials. Mercurium, Galipot and Leather can be obtained through unique and challenging mechanics, and provide a variety of new equipment options. 
 - Alchemy. The mod adds two new herbs and plenty of potions, as well as reworking most of the vanilla recipes. 
 
+And much more!
+
 Includes support for Boss Checklist, Achievement Mod and Music Display. Compatible with most major mods and multiplayer.
 
 After many years in the oven, we hope you enjoy!

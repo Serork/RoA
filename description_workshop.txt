@@ -15,6 +15,7 @@ This "early access" version features a new Druid class and Backwoods biome with 
 [*] [b]Materials.[/b] Mercurium, Galipot and Leather can be obtained through unique and challenging mechanics, and provide a variety of new equipment options. 
 [*] [b]Alchemy.[/b] The mod adds two new herbs and plenty of potions, as well as reworking most of the vanilla recipes. 
 [/list]
+[b]And much more![/b]
 
 Includes support for [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2669644269]Boss Checklist[/url][/b], [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2927542027]Achievement Mod[/url][/b] and [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2985966860]Music Display[/url][/b].
 
