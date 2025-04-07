@@ -84,7 +84,7 @@ sealed class SmallMoonPlayer : ModPlayer {
             }
             smallMoonColor = GetLerpColor([_currentColor.Value, _nextColor.Value]);
         }
-        if (Player.name == "cleo.") {
+        if (Player.name.Equals("cleo.", StringComparison.CurrentCultureIgnoreCase)) {
             smallMoonColor = GetLerpColor([Color.Black, Color.White]);
         }
         if (Player.name.Equals("HalfbornFan", StringComparison.CurrentCultureIgnoreCase)) {
