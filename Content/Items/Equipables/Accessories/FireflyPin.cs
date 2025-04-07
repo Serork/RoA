@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
+[AutoloadEquip(EquipType.Face)]
 sealed class FireflyPin : NatureItem {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Firefly Pin");
