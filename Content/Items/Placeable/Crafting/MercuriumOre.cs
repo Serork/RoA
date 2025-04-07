@@ -4,10 +4,17 @@ using RoA.Common;
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+using System;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System.Linq;
+using RoA.Content.Items.Weapons.Magic;
+using Terraria.ModLoader.Core;
+using System.Reflection;
 
 namespace RoA.Content.Items.Placeable.Crafting;
 
@@ -59,6 +66,14 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
             }
 
             return base.OnPickup(item, player);
+        }
+    }
+
+    private class MercuriumInInventoryHack : GlobalItem {
+        public override void UpdateInventory(Item item, Player player) {
+            if (item.type == ModContent.ItemType<MercuriumOre>()) {
+                player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
+            }
         }
     }
 
