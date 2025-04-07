@@ -428,9 +428,9 @@ static class WorldGenHelper {
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;
-    public static bool SmallWorld => Main.maxTilesX == 4200;
-    public static bool MediumWorld => Main.maxTilesX == 6400;
-    public static bool BigWorld => Main.maxTilesX == 8400;
+    public static bool SmallWorld => Main.maxTilesX >= 0 && Main.maxTilesX < 6400;
+    public static bool MediumWorld => Main.maxTilesX >= 6400 && Main.maxTilesX < 8400;
+    public static bool BigWorld => Main.maxTilesX >= 8400;
 
     public static ushort GetType(int i, int j) => GetTileSafely(i, j).TileType;
 
