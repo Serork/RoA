@@ -6,9 +6,11 @@ using RoA.Common.Druid.Wreath;
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
+[AutoloadEquip(EquipType.Waist)]
 sealed class GiantTreeSapling : NatureItem {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Giant Tree Sapling");
