@@ -1,12 +1,21 @@
-﻿using Terraria;
-using Terraria.GameContent.ItemDropRules;
+﻿using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Items;
 
-sealed class NoLeatherDropFromCratesAndOther : GlobalItem {
-    public override void ModifyItemLoot(Item item, ItemLoot itemLoot) {
-        itemLoot.RemoveWhere((itemDrop) => itemDrop is IItemDropRule && itemDrop is CommonDropNotScalingWithLuck drop && drop.itemId == ItemID.Leather);
+sealed class NoLeatherDropFromCratesAndOther : ILoadable {
+    void ILoadable.Load(Mod mod) {
+        On_CommonCode.DropItem_Vector2_IEntitySource_int_int += On_CommonCode_DropItem_Vector2_IEntitySource_int_int;
     }
+
+    private int On_CommonCode_DropItem_Vector2_IEntitySource_int_int(On_CommonCode.orig_DropItem_Vector2_IEntitySource_int_int orig, Microsoft.Xna.Framework.Vector2 position, Terraria.DataStructures.IEntitySource entitySource, int itemId, int stack) {
+        if (itemId == ItemID.Leather) {
+            return -1;
+        }
+
+        return orig(position, entitySource, itemId, stack);
+    }
+
+    void ILoadable.Unload() { }
 }
