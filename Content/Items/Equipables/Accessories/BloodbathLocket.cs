@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Cache;
+using RoA.Content.Items.Equipables.Vanity.Developer;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -13,6 +16,88 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
+
+sealed class BloodbathLocketGlowGlowing : ModSystem {
+    private Asset<Texture2D> _lothorGlowMaskTexture;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _lothorGlowMaskTexture = ModContent.Request<Texture2D>(GetType().Namespace.Replace(".", "/") + "/BloodbathLocket_Neck_Glow");
+    }
+
+    public override void Load() {
+        On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += On_PlayerDrawLayers_DrawPlayer_RenderAllLayers;
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+
+        if (!drawinfo.drawPlayer.GetModPlayer<BloodbathLocketGlowMaskHandler.BloodbathLocketGlowMaskHandler2>().ShouldDraw) {
+            return;
+        }
+
+        Player player = drawinfo.drawPlayer;
+        if (player.neck > 0) {
+            var drawInfo = drawinfo;
+            if (!(player.dead || player.invis || player.ShouldNotDraw)) {
+                SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+
+                Main.spriteBatch.BeginBlendState(BlendState.Additive);
+                Color color = Color.White;
+
+                for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
+                    Main.spriteBatch.Draw(
+                        _lothorGlowMaskTexture.Value,
+                        drawInfo.Position - Main.screenPosition +
+                            Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                            * Helper.Wave(0f, 3f, 12f, 0.5f + i2),
+                        drawInfo.drawPlayer.bodyFrame,
+                        color * 0.5f,
+                        0f,
+                        new Vector2(10),
+                        1f + Main.rand.NextFloatRange(0.05f),
+                        drawInfo.playerEffect,
+                        0
+                    );
+                }
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(in snapshot);
+            }
+        }
+    }
+}
+
+
+sealed class BloodbathLocketGlowMaskHandler : PlayerDrawLayer {
+    private static Asset<Texture2D> glowTexture;
+
+    internal class BloodbathLocketGlowMaskHandler2 : ModPlayer {
+        public bool ShouldDraw;
+    }
+
+    public override void Load() => glowTexture = ModContent.Request<Texture2D>(GetType().Namespace.Replace(".", "/") + "/BloodbathLocket_Neck_Glow");
+    public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.NeckAcc);
+
+    public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) {
+        return true;
+    }
+
+    protected override void Draw(ref PlayerDrawSet drawInfo) {
+        drawInfo.drawPlayer.GetModPlayer<BloodbathLocketGlowMaskHandler2>().ShouldDraw = false;
+
+        if (drawInfo.drawPlayer.neck != EquipLoader.GetEquipSlot(RoA.Instance, nameof(BloodbathLocket), EquipType.Neck)) {
+            return;
+        }
+
+        if (drawInfo.shadow != 0f)
+            return;
+
+        drawInfo.drawPlayer.GetModPlayer<BloodbathLocketGlowMaskHandler2>().ShouldDraw = true;
+    }
+}
 
 [AutoloadEquip(EquipType.Neck)]
 sealed class BloodbathLocket : ModItem {
