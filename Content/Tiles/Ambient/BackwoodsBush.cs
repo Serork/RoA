@@ -54,6 +54,12 @@ sealed class BackwoodsBush : ModTile {
         AddMapEntry(new Microsoft.Xna.Framework.Color(19, 82, 44));
     }
 
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        WorldGen.PlantCheck(i, j);
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+    }
+
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
         offsetY = -14;
         width = 34;

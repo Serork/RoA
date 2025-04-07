@@ -94,7 +94,7 @@ sealed class PlanterBoxHooks : ILoadable {
             _ = Main.tile[x + 1, y + 1].TileType;
 
         if ((num2 != 3 || num == 2 || num == 477 || num == 78 || (num == 380 || num == ModContent.TileType<PlanterBoxes>()) || num == 579) &&
-            (num2 != ModContent.TileType<BackwoodsPlants>() || num == ModContent.TileType<BackwoodsGrass>() || num == 78 || (num == 380 || num == ModContent.TileType<PlanterBoxes>())) && (num2 != 73 || num == 2 || num == 477 || num == 78 || (num == 380 || num == ModContent.TileType<PlanterBoxes>()) || num == 579) && (num2 != 24 || num == 23 || num == 661) && (num2 != 61 || num == 60) && (num2 != 74 || num == 60) && (num2 != 71 || num == 70) && (num2 != 110 || num == 109 || num == 492) && (num2 != 113 || num == 109 || num == 492) && (num2 != 201 || num == 199 || num == 662) && (num2 != 637 || num == 633))
+            ((num2 != ModContent.TileType<BackwoodsPlants>() && num2 != ModContent.TileType<BackwoodsBush>()) || num == ModContent.TileType<BackwoodsGrass>() || num == 78 || (num == 380 || num == ModContent.TileType<PlanterBoxes>())) && (num2 != 73 || num == 2 || num == 477 || num == 78 || (num == 380 || num == ModContent.TileType<PlanterBoxes>()) || num == 579) && (num2 != 24 || num == 23 || num == 661) && (num2 != 61 || num == 60) && (num2 != 74 || num == 60) && (num2 != 71 || num == 70) && (num2 != 110 || num == 109 || num == 492) && (num2 != 113 || num == 109 || num == 492) && (num2 != 201 || num == 199 || num == 662) && (num2 != 637 || num == 633))
             return;
 
         bool flag = false;
