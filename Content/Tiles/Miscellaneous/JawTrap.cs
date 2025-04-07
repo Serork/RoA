@@ -73,7 +73,14 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         }
 
         public override void Update() {
-            if (Find(Position.X, Position.Y) == -1) {
+            bool flag = WorldGenHelper.GetTileSafely(Position.X, Position.Y).TileType != ModContent.TileType<JawTrap>();
+            if (Find(Position.X, Position.Y) == -1 || flag) {
+                if (flag) {
+                    ModContent.GetInstance<JawTrapTE>().Kill(Position.X, Position.Y);
+                    if (Main.netMode != NetmodeID.SinglePlayer) {
+                        MultiplayerSystem.SendPacket(new RemoveJawTrapTileEntityOnServerPacket(Position.X, Position.Y));
+                    }
+                }
                 return;
             }
 
