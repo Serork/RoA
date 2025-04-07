@@ -73,8 +73,8 @@ sealed class SmallMoonPlayer : ModPlayer {
             smallMoonColor = new Color(190, 190, 140);
         }
 
-        if (Player.name == "peege.on") smallMoonColor = Player.underShirtColor;
-        if (Player.name == "has2r") smallMoonColor = Color.Indigo;
+        if (Player.name.Equals("peege.on", StringComparison.CurrentCultureIgnoreCase)) smallMoonColor = Color.Indigo;
+        if (Player.name.Equals("has2r", StringComparison.CurrentCultureIgnoreCase)) smallMoonColor = Color.Indigo;
         if (ShouldBeRandom()) {
             if (_currentColor == null) {
                 _currentColor = Color.Yellow;
@@ -87,22 +87,14 @@ sealed class SmallMoonPlayer : ModPlayer {
         if (Player.name == "cleo.") {
             smallMoonColor = GetLerpColor([Color.Black, Color.White]);
         }
-        if (Player.name == "NotFurryAlex") {
-            smallMoonColor = GetLerpColor([new Color(255, 33, 140), new Color(255, 216, 0), new Color(33, 177, 255)]);
-        }
-        if (Player.name == "N.F.A.") {
-            smallMoonColor = GetLerpColor([new Color(255, 33, 140), new Color(255, 216, 0), new Color(33, 177, 255)]);
-        }
-        if (Player.name == "Heretic") {
-            smallMoonColor = GetLerpColor([new Color(88, 1, 1), new Color(232, 140, 3)]);
-        }
-        if (Player.name == "HalfbornFan") {
+        if (Player.name.Equals("HalfbornFan", StringComparison.CurrentCultureIgnoreCase)) {
             smallMoonColor = Main.DiscoColor;
         }
-        if (Player.name == "BRIPE") {
-            smallMoonColor = GetLerpColor([new Color(71, 98, 255), Color.Blue]);
-        }
 
+        SetContributorColor("NotFurryAlex", [new Color(255, 33, 140), new Color(255, 216, 0), new Color(33, 177, 255)]);
+        SetContributorColor("N.F.A.", [new Color(255, 33, 140), new Color(255, 216, 0), new Color(33, 177, 255)]);
+        SetContributorColor("Heretic", [new Color(88, 1, 1), new Color(232, 140, 3)]);
+        SetContributorColor("BRIPE", [new Color(71, 98, 255), Color.Blue]);
         SetContributorColor("Chaos Sage", [Color.White, Color.Red]);
         SetContributorColor("KondiU", [new Color(50, 255, 0), new Color(255, 255, 255)]);
 
