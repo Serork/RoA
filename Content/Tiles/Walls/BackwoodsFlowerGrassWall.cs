@@ -12,6 +12,8 @@ class BackwoodsFlowerGrassWall : ModWall {
 
         HitSound = SoundID.Grass;
 
+        WallID.Sets.Conversion.Grass[Type] = true;
+
         WallID.Sets.WallSpreadStopsAtAir[Type] = true;
     }
 

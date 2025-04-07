@@ -7,6 +7,7 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Tiles.Crafting;
 using RoA.Content.Tiles.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Walls;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -50,6 +51,14 @@ sealed class OvergrownAltar : ModTile {
                     TileID.Sets.Conversion.MossBrick[type] = false;
                 }
             }
+            for (int type = WallID.Count; type < WallLoader.WallCount; type++) {
+                if (type == ModContent.WallType<BackwoodsGrassWall>()) {
+                    WallID.Sets.Conversion.Grass[type] = false;
+                }
+                if (type == ModContent.WallType<BackwoodsFlowerGrassWall>()) {
+                    WallID.Sets.Conversion.Grass[type] = false;
+                }
+            }
         }
 
         orig(i, j, conversionType, size);
@@ -71,6 +80,14 @@ sealed class OvergrownAltar : ModTile {
                 }
                 if (type == ModContent.TileType<BackwoodsGreenMossBrick>()) {
                     TileID.Sets.Conversion.MossBrick[type] = true;
+                }
+            }
+            for (int type = WallID.Count; type < WallLoader.WallCount; type++) {
+                if (type == ModContent.WallType<BackwoodsGrassWall>()) {
+                    WallID.Sets.Conversion.Grass[type] = true;
+                }
+                if (type == ModContent.WallType<BackwoodsFlowerGrassWall>()) {
+                    WallID.Sets.Conversion.Grass[type] = true;
                 }
             }
         }

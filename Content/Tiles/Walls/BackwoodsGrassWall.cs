@@ -12,6 +12,8 @@ sealed class BackwoodsGrassWall : ModWall {
 
         WallID.Sets.WallSpreadStopsAtAir[Type] = true;
 
+        WallID.Sets.Conversion.Grass[Type] = true;
+
         HitSound = SoundID.Grass;
     }
 
