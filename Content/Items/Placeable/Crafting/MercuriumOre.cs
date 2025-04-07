@@ -56,6 +56,8 @@ sealed class MercuriumOre : ModItem {
 }
 
 sealed class MercuriumOrePlayerHandler : ModPlayer {
+    private bool _updateInventory;
+
     private class MercuriumOreAchievement : GlobalItem {
         public override bool InstancePerEntity => true;
 
@@ -71,10 +73,8 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
 
     private class MercuriumInInventoryHack : GlobalItem {
         public override void UpdateInventory(Item item, Player player) {
-            if (item.type == ModContent.ItemType<MercuriumOre>()) {
-                if (!player.buffImmune[BuffID.Poisoned] && !player.HasBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>())) {
-                    player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
-                }
+            if (player.GetModPlayer<MercuriumOrePlayerHandler>()._updateInventory && item.type == ModContent.ItemType<MercuriumOre>()) {
+                player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
             }
         }
     }
@@ -84,6 +84,8 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
             return;
         }
 
+        _updateInventory = false;
+
         if (Player.buffImmune[BuffID.Poisoned]) {
             return;
         }
@@ -91,6 +93,9 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
         if (Player.HasBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>())) {
             return;
         }
+
+        _updateInventory = true;
+
         int type = ModContent.ItemType<MercuriumOre>();
         if (Player.HasItemInAnyInventory(type) || (Player.whoAmI == Main.myPlayer && Main.mouseItem.type == type) || Player.trashItem.type == type)
             Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
