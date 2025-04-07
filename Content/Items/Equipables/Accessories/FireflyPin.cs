@@ -37,9 +37,11 @@ sealed class FireflyPinHandler : PlayerDrawLayer {
         Color color = Color.White;
 
         float progress = (1f - MathHelper.Clamp(Helper.Wave(0f, 15f, speed: 5f), 0f, 1f));
+        Vector2 movementOffset = drawInfo.drawPlayer.bodyFrame.Y > 168 ? drawInfo.drawPlayer.PlayerMovementOffset() : Vector2.Zero;
         drawInfo.DrawDataCache.Add(new DrawData(
             texture,
-            drawInfo.drawPlayer.position.Floor() + new Vector2(0f, drawInfo.drawPlayer.gfxOffY) + drawInfo.drawPlayer.PlayerMovementOffset() - Main.screenPosition 
+            drawInfo.drawPlayer.position.Floor() + new Vector2(0f, drawInfo.drawPlayer.gfxOffY) +
+            movementOffset - Main.screenPosition 
             + Vector2.UnitY * (drawInfo.drawPlayer.gravDir == -1f ? drawInfo.drawPlayer.height / 2 + 6 : 0),
             new Rectangle(0, progress < 0.5f ? drawInfo.drawPlayer.bodyFrame.Height : 0, drawInfo.drawPlayer.bodyFrame.Width, drawInfo.drawPlayer.bodyFrame.Height),
             color * progress,
