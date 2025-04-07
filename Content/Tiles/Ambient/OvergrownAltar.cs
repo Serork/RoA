@@ -43,6 +43,7 @@ sealed class OvergrownAltar : ModTile {
                     TileID.Sets.Conversion.Stone[type] = false;
                 }
                 if (type == ModContent.TileType<BackwoodsGreenMoss>()) {
+                    Main.tileMoss[type] = false;
                     TileID.Sets.Conversion.Moss[type] = false;
                 }
                 if (type == ModContent.TileType<BackwoodsGreenMossBrick>()) {
@@ -65,6 +66,7 @@ sealed class OvergrownAltar : ModTile {
                     TileID.Sets.Conversion.Stone[type] = true;
                 }
                 if (type == ModContent.TileType<BackwoodsGreenMoss>()) {
+                    Main.tileMoss[type] = true;
                     TileID.Sets.Conversion.Moss[type] = true;
                 }
                 if (type == ModContent.TileType<BackwoodsGreenMossBrick>()) {
