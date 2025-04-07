@@ -10,14 +10,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class AnimalLeather : ModItem {
-    private class LeatherValueChanger : GlobalItem {
-        public override void SetDefaults(Item entity) {
-            if (entity.type == ItemID.Leather) {
-                entity.value = Item.sellPrice(0, 0, 1, 0);
-            }
-        }
-    }
-
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Animal Leather");
         Item.ResearchUnlockCount = 50;
