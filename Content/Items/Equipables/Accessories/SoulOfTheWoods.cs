@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
-[AutoloadEquip(EquipType.Neck)]
+[AutoloadEquip(EquipType.Neck )]
 sealed class SoulOfTheWoods : NatureItem {
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
