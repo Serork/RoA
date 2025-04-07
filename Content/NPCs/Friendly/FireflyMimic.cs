@@ -16,16 +16,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Friendly;
 
 sealed class FireflyMimic : ModNPC {
-    private class FireflyMimicActuallyMimic : GlobalNPC {
-        public override void OnSpawn(NPC npc, IEntitySource source) {
-            Player closestPlayer = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
-            if (npc.type == NPCID.Firefly && closestPlayer.RollLuck(30) == 0) {
-                NPC.NewNPCDirect(source, npc.position, ModContent.NPCType<FireflyMimic>());
-                npc.KillNPC();
-            }
-        }
-    }
-
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 4;
 
