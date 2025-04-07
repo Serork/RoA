@@ -245,7 +245,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void OnResetEffects() {
-        if (Player.whoAmI == Main.myPlayer && ShouldDrawItself) {
+        if (Player.whoAmI == Main.myPlayer && ShouldDrawItself && CurrentResource > 0) {
             if (_useAltSounds) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathNewDischarge") { PitchVariance = 0.1f, Volume = 0.6f }, Player.Center);
             else SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "WreathDischarge") { PitchVariance = 0.1f, Volume = 0.5f }, Player.Center);
         }
