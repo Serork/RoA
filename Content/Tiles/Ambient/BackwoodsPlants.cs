@@ -22,17 +22,24 @@ sealed class BackwoodsPlants : ModTile {
         TileID.Sets.SwaysInWindBasic[Type] = true;
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.SlowlyDiesInWater[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Style = 0;
-        TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<BackwoodsGrass>()];
+        //TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<BackwoodsGrass>()];
         TileObjectData.addTile(Type);
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
         HitSound = SoundID.Grass;
         AddMapEntry(new Microsoft.Xna.Framework.Color(19, 82, 44));
+    }
+
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        WorldGen.PlantCheck(i, j);
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
