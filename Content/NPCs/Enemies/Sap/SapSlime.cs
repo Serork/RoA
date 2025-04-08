@@ -21,6 +21,22 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.NPCs.Enemies.Sap;
 
 sealed class SapSlime : ModNPC {
+    public override void Load() {
+        On_Player.ApplyEquipFunctional += On_Player_ApplyEquipFunctional;
+    }
+
+    private void On_Player_ApplyEquipFunctional(On_Player.orig_ApplyEquipFunctional orig, Player self, Item currentItem, bool hideVisual) {
+        orig(self, currentItem, hideVisual);
+
+        int type = ModContent.NPCType<SapSlime>();
+        if (currentItem.type == ItemID.RoyalGel) {
+            self.npcTypeNoAggro[type] = true;
+        }
+        else {
+            self.npcTypeNoAggro[type] = false;
+        }
+    }
+
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Sap Slime");
         Main.npcFrameCount[NPC.type] = 3;
