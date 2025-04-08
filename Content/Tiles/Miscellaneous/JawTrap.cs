@@ -5,6 +5,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
 using RoA.Content.Buffs;
+using RoA.Content.Items.Placeable;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -189,10 +190,29 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX, ref frameY);
         Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
         texture ??= TextureAssets.Tile[type].Value;
+        Color color = Lighting.GetColor(i, j);
+        if (Main.LocalPlayer.dangerSense) {
+            if (color.R < byte.MaxValue)
+                color.R = byte.MaxValue;
+
+            if (color.G < 50)
+                color.G = 50;
+
+            if (color.B < 50)
+                color.B = 50;
+
+            if (!Main.gamePaused && Main.instance.IsActive && Main.rand.Next(30) == 0) {
+                int num = Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, 60, 0f, 0f, 100, default(Color), 0.3f);
+                Main.dust[num].fadeIn = 1f;
+                Main.dust[num].velocity *= 0.1f;
+                Main.dust[num].noLight = true;
+                Main.dust[num].noGravity = true;
+            }
+        }
         spriteBatch.Draw(texture,
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                               new Rectangle(frameX, frameY, width, height),
-                              Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                              color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
     }
 
     public override bool IsTileDangerous(int i, int j, Player player) => true;
