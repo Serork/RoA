@@ -46,15 +46,19 @@ sealed class SpoilLeatherHandler : GlobalItem {
     public int TimeToSpoil;
 
     public override void NetSend(Item item, BinaryWriter writer) {
-        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        writer.Write(handler.TimeToSpoil);
-        writer.Write(handler._sync);
+        if (item.ModItem is AnimalLeather) {
+            var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+            writer.Write(handler.TimeToSpoil);
+            writer.Write(handler._sync);
+        }
     }
 
     public override void NetReceive(Item item, BinaryReader reader) {
-        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        handler.TimeToSpoil = reader.ReadInt32();
-        handler._sync = reader.ReadBoolean();
+        if (item.ModItem is AnimalLeather) {
+            var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+            handler.TimeToSpoil = reader.ReadInt32();
+            handler._sync = reader.ReadBoolean();
+        }
     }
 
     public override void Load() {
