@@ -593,12 +593,15 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         float osc = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10f);
         Vector2 offset = -new Vector2(15f * (Projectile.localAI[2] - 0.5f), 0f).RotatedBy(Projectile.rotation);
         offset += Projectile.rotation.ToRotationVector2() * (-30f * (MathHelper.Clamp(Projectile.scale - 1.25f, 0f, 1f)));
-        Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) + offset;
+        Vector2 center = Projectile.Center;
+        Player player = Main.player[Projectile.owner];
+        Vector2 position = center - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) + offset;
         SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+        Vector2 shiftFix = -(Projectile.spriteDirection == -1 ? new Vector2(0, -2) : Vector2.Zero);
         if (flag) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(glowBladeTexture2D,
-                                Projectile.Center - velocityTo * 10f + new Vector2(osc, osc) + offset - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                                center - velocityTo * 10f + new Vector2(osc, osc) + offset - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) + shiftFix,
                                 glowRectangle,
                                 color * Projectile.Opacity * 0.6f * charge,
                                 Projectile.rotation + 0.78f,
@@ -607,9 +610,8 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                                 SpriteEffects.None,
                                 0f);
             spriteBatch.EndBlendState();
-            Vector2 shiftFix = Projectile.spriteDirection == -1 ? new Vector2(2, 0) : Vector2.Zero;
             spriteBatch.Draw(bladeTexture2D,
-                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f * charge % 1f)) * 3f * charge - shiftFix,
+                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f * charge % 1f)) * 3f * charge + shiftFix,
                             glowRectangle,
                             color * Projectile.Opacity * 0.3f * charge,
                             Projectile.rotation + 0.78f,
@@ -622,7 +624,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             spriteBatch.BeginBlendState(BlendState.AlphaBlend);
             for (int i = 1; i < Projectile.oldPos.Length - 1; i += 2) {
                 spriteBatch.Draw(bladeTexture2D,
-                            position - Projectile.Center + Projectile.oldPos[i],
+                            position - center + Projectile.oldPos[i],
                             glowRectangle,
                             color * ((Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length) * 0.3f * charge,
                                 Projectile.oldRot[i] + 0.78f,
@@ -658,7 +660,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         if (flag) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(glowTexture2D,
-                             position + velocityTo * 15f,
+                             position + velocityTo * 15f + shiftFix,
                              glowRectangle,
                              color * 0.35f * charge,
                              Projectile.rotation + 0.78f,
@@ -670,7 +672,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             Texture2D bloom = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Bloom0");
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(bloom,
-                             Projectile.Center + offset + Vector2.Normalize(Projectile.velocity) * 110f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                             center + shiftFix + offset + Vector2.Normalize(Projectile.velocity) * 110f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                              null,
                              color * Projectile.Opacity * 0.65f * charge,
                              Projectile.rotation + 0.78f,
@@ -684,7 +686,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         if (!flag) {
             spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(sparkTexture2D,
-                             Projectile.Center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                             center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                              null,
                              color * Projectile.Opacity * 1f * charge,
                              MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction,
@@ -693,7 +695,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              SpriteEffects.None,
                              0f);
             spriteBatch.Draw(sparkTexture2D,
-                             Projectile.Center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                             center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                              null,
                              color * Projectile.Opacity * 1f * charge,
                              MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction + MathHelper.PiOver2,
@@ -714,7 +716,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             position2 += Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 3f;
         }
         spriteBatch.Draw(sparkTexture2D,
-                            Projectile.Center + offset + position2 * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                            center + offset + position2 * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                             null,
                             color * Projectile.Opacity * 1f * opacity,
                             MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction,
@@ -723,7 +725,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                             SpriteEffects.None,
                             0f);
         spriteBatch.Draw(sparkTexture2D,
-                            Projectile.Center + offset + position2 * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                            center + offset + position2 * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                             null,
                             color * Projectile.Opacity * 1f * opacity,
                             MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction + MathHelper.PiOver2,
