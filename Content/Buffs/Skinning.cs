@@ -67,6 +67,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Expiry").Value;
         int height = texture.Height / 5;
         int usedFrame = (int)((TimeSystem.UpdateCount - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * 5f);
+        usedFrame = (int)MathHelper.Clamp(usedFrame, 0, 3);
         spriteBatch.Draw(texture, position + frame.Size().RotatedBy(num) * 0.2f * item.scale, 
             new Rectangle(0, height * usedFrame, texture.Width, height),
             drawColor, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
