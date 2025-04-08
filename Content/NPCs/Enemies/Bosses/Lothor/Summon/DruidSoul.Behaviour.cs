@@ -29,6 +29,7 @@ sealed partial class DruidSoul : RoANPC {
     private SlotId _lothorSummonSound;
     private bool _lothorSummonSoundPlayed;
     private float _canChangeDirectionAgain;
+    private bool _deathSoundPlayed;
 
     public bool ShouldConsumeItsEnergy { get; private set; }
 
@@ -109,17 +110,21 @@ sealed partial class DruidSoul : RoANPC {
             if (StateTimer >= 1f) {
                 if (LothorSummoningHandler.PreArrivedLothorBoss.Item1 || flag || player.dead || !player.InModBiome<BackwoodsBiome>() || NPC.CountNPCS(Type) > 1 || !NPC.downedBoss2) {
                     NPC.Opacity -= 0.005f;
+                    if (NPC.Opacity <= 0.1f && !_deathSoundPlayed) {
+                        _deathSoundPlayed = true;
+                        SoundEngine.PlaySound(SoundID.NPCDeath6 with { Pitch = 0.2f, Volume = 0.5f }, NPC.Center);
+                    }
                     if (NPC.Opacity <= 0f) {
                         NPC.KillNPC();
-
-                        SoundEngine.PlaySound(SoundID.NPCDeath6 with { Pitch = 0.2f, Volume = 0.5f }, NPC.Center);
                     }
                 }
                 else if (NPC.Opacity < 0.39) {
                     NPC.Opacity += 0.005f;
                 }
             }
+            return;
         }
+        _deathSoundPlayed = false;
     }
 
     private void UpdatePositionsAndRotation() {
