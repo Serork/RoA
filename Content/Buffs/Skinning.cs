@@ -88,17 +88,13 @@ sealed class SpoilLeatherHandler : GlobalItem {
             return;
         }
 
-        float num = item.velocity.X * 0.2f;
-        if (item.shimmered)
-            num = 0f;
-
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Expiry").Value;
         int height = texture.Height / 5;
         int frames = 5;
         int usedFrame = (int)(((ulong)Main.time - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);
         //usedFrame = (int)MathHelper.Clamp(usedFrame, 0, frames - 1);
-        spriteBatch.Draw(texture, position + TextureAssets.Item[item.type].Size().RotatedBy(num) * 0.2f * item.scale, 
+        spriteBatch.Draw(texture, position + TextureAssets.Item[item.type].Size() * 0.2f * item.scale, 
             new Rectangle(0, height * usedFrame, texture.Width, height),
             drawColor, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
     }
