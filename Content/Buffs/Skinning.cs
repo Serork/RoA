@@ -150,11 +150,11 @@ sealed class SpoilLeatherHandler : GlobalItem {
             return false;
         }
 
-        if (Main.IsFastForwardingTime()) {
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        if (Main.IsFastForwardingTime() || Main.time < handler.StartSpoilingTime) {
             SpoilLeather(ref item);
         }
 
-        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
         if (item.ModItem is AnimalLeather && (handler.StartSpoilingTime == 0 ||
             ((!Main.dayTime && Main.time > 32400.0 - handler.NeedToSpoilTime - 2) || (Main.dayTime && Main.time > 54000.0 - handler.NeedToSpoilTime - 2)))) {
             handler.StartSpoilingTime = (ulong)Main.time;
