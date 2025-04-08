@@ -22,6 +22,7 @@ using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Buffs;
 
@@ -40,22 +41,50 @@ sealed class Skinning : ModBuff {
 sealed class SpoilLeatherHandler : GlobalItem {
     public override bool InstancePerEntity => true;
 
-    private bool _sync;
-
     public ulong StartSpoilingTime;
 
-    public ulong NeedToSpoilTime => 300/*18000*/;
+    public ulong NeedToSpoilTime => 18000;
+
+    public override void SaveData(Item item, TagCompound tag) {
+        if (!IsValidToHandle(item)) {
+            return;
+        }
+
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        tag[nameof(handler.StartSpoilingTime)] = handler.StartSpoilingTime;
+    }
+
+    public override void LoadData(Item item, TagCompound tag) {
+        if (!IsValidToHandle(item)) {
+            return;
+        }
+
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        handler.StartSpoilingTime = tag.Get<ulong>(nameof(handler.StartSpoilingTime));
+    }
+
+    public static bool IsValidToHandle(Item item) => item.ModItem is AnimalLeather;
 
     public override void NetSend(Item item, BinaryWriter writer) {
-        if (item.ModItem is AnimalLeather) {
-            var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-            writer.Write(handler.StartSpoilingTime);
-            writer.Write(handler._sync);
+        if (!IsValidToHandle(item)) {
+            return;
         }
+
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        writer.Write(handler.StartSpoilingTime);    
+    }
+
+    public override void NetReceive(Item item, BinaryReader reader) {
+        if (!IsValidToHandle(item)) {
+            return;
+        }
+
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        handler.StartSpoilingTime = reader.ReadUInt64();
     }
 
     public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
-        if (item.ModItem is not AnimalLeather) {
+        if (!IsValidToHandle(item)) {
             return;
         }
 
@@ -66,42 +95,27 @@ sealed class SpoilLeatherHandler : GlobalItem {
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Expiry").Value;
         int height = texture.Height / 5;
-        int usedFrame = (int)((TimeSystem.UpdateCount - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * 5f);
-        usedFrame = (int)MathHelper.Clamp(usedFrame, 0, 3);
+        int frames = 5;
+        int usedFrame = (int)(((ulong)Main.time - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);
+        //usedFrame = (int)MathHelper.Clamp(usedFrame, 0, frames - 1);
         spriteBatch.Draw(texture, position + frame.Size().RotatedBy(num) * 0.2f * item.scale, 
             new Rectangle(0, height * usedFrame, texture.Width, height),
             drawColor, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
     }
 
-    public override void NetReceive(Item item, BinaryReader reader) {
-        if (item.ModItem is AnimalLeather) {
-            var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-            handler.StartSpoilingTime = reader.ReadUInt64();
-            handler._sync = reader.ReadBoolean();
-        }
-    }
-
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
-        //if (item.ModItem is not AnimalLeather) {
-        //    return;
-        //}
-        //var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        //if (handler.StartSpoilingTime == 0) {
-        //    return;
-        //}
-        //ulong minutes = handler.NeedToSpoilTime - (TimeSystem.UpdateCount - handler.StartSpoilingTime);
-        ////minutes /= 3600;
-        ////minutes += 1;
-        //string text = Language.GetText("Mods.RoA.ExpireLeather").WithFormatArgs(minutes).Value;
-        //tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
-    }
-
-    public override bool OnPickup(Item item, Player player) {
-        if (item.ModItem is AnimalLeather) {
-            item.GetGlobalItem<SpoilLeatherHandler>()._sync = true;
+        if (!IsValidToHandle(item)) {
+            return;
         }
-
-        return base.OnPickup(item, player);
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        if (handler.StartSpoilingTime == 0) {
+            return;
+        }
+        ulong ticks = handler.NeedToSpoilTime - ((ulong)Main.time - handler.StartSpoilingTime);
+        int minutes = (int)(ticks / 3600);
+        minutes += 1;
+        string text = Language.GetText($"Mods.RoA.ExpireLeather{(minutes <= 1 ? 2 : 1)}").WithFormatArgs(minutes).Value;
+        tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
     }
 
     private static void SpoilLeather(ref Item item) {
@@ -119,19 +133,12 @@ sealed class SpoilLeatherHandler : GlobalItem {
         if (!UpdateMe(item)) {
             return;
         }
-
-        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        if (!handler._sync) {
-            handler._sync = true;
-            if (Main.netMode != NetmodeID.MultiplayerClient) {
-                MultiplayerSystem.SendPacket(new LeatherSyncPacket(item.whoAmI, handler.StartSpoilingTime));
-            }
-        }
     }
 
     private static void TryToSpoil(ref Item item) {
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        bool flag = TimeSystem.UpdateCount > handler.StartSpoilingTime + handler.NeedToSpoilTime;
+        ulong time = handler.StartSpoilingTime + handler.NeedToSpoilTime;
+        bool flag = (ulong)Main.time > time;
         if (!flag) {
             return;
         }
@@ -139,13 +146,15 @@ sealed class SpoilLeatherHandler : GlobalItem {
     }
 
     internal static bool UpdateMe(Item item) {
-        if (item.ModItem is not AnimalLeather) {
+        if (!IsValidToHandle(item)) {
             return false;
         }
 
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        if (item.ModItem is AnimalLeather && handler.StartSpoilingTime == 0) {
-            handler.StartSpoilingTime = TimeSystem.UpdateCount;
+        if (item.ModItem is AnimalLeather && (handler.StartSpoilingTime == 0 ||
+            ((!Main.dayTime && Main.time > 32400.0 - handler.NeedToSpoilTime - 2) || (Main.dayTime && Main.time > 54000.0 - handler.NeedToSpoilTime - 2)))) {
+            handler.StartSpoilingTime = (ulong)Main.time;
+            return true;
         }
         TryToSpoil(ref item);
 

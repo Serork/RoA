@@ -11,4 +11,5 @@ ChecklistLothorSummon: Guide a Druid Soul, appearing occasionally from Grim Drui
 ManaWords: mana
 LifeWords: life;health
 WreathWords: wreath
-ExpireLeather: Expires in {0} minutes
+ExpireLeather1: Expires in {0} minutes
+ExpireLeather2: Expires in {0} minute
