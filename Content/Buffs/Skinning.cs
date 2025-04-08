@@ -110,7 +110,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         ulong ticks = handler.NeedToSpoilTime - (TimeSystem.UpdateCount - handler.StartSpoilingTime);
         int minutes = (int)(ticks / 3600);
         minutes += 1;
-        string text = Language.GetText($"Mods.RoA.ExpireLeather{(minutes <= 1 ? 2 : 1)}").WithFormatArgs(ticks).Value;
+        string text = Language.GetText($"Mods.RoA.ExpireLeather{(minutes <= 1 ? 2 : 1)}").WithFormatArgs(minutes).Value;
         tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
     }
 
