@@ -1,5 +1,5 @@
-﻿using Microsoft.Build.Utilities;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.CustomConditions;
@@ -8,7 +8,6 @@ using RoA.Common.Networking.Packets;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core;
-using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -17,12 +16,12 @@ using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace RoA.Content.Buffs;
 
@@ -55,6 +54,24 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
     }
 
+    public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+        if (item.ModItem is not AnimalLeather) {
+            return;
+        }
+
+        float num = item.velocity.X * 0.2f;
+        if (item.shimmered)
+            num = 0f;
+
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Expiry").Value;
+        int height = texture.Height / 5;
+        int usedFrame = (int)((TimeSystem.UpdateCount - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * 5f);
+        spriteBatch.Draw(texture, position + frame.Size().RotatedBy(num) * 0.2f * item.scale, 
+            new Rectangle(0, height * usedFrame, texture.Width, height),
+            drawColor, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
+    }
+
     public override void NetReceive(Item item, BinaryReader reader) {
         if (item.ModItem is AnimalLeather) {
             var handler = item.GetGlobalItem<SpoilLeatherHandler>();
@@ -64,18 +81,18 @@ sealed class SpoilLeatherHandler : GlobalItem {
     }
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
-        if (item.ModItem is not AnimalLeather) {
-            return;
-        }
-        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        if (handler.StartSpoilingTime == 0) {
-            return;
-        }
-        ulong minutes = handler.NeedToSpoilTime - (TimeSystem.UpdateCount - handler.StartSpoilingTime);
-        //minutes /= 3600;
-        //minutes += 1;
-        string text = Language.GetText("Mods.RoA.ExpireLeather").WithFormatArgs(minutes).Value;
-        tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
+        //if (item.ModItem is not AnimalLeather) {
+        //    return;
+        //}
+        //var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        //if (handler.StartSpoilingTime == 0) {
+        //    return;
+        //}
+        //ulong minutes = handler.NeedToSpoilTime - (TimeSystem.UpdateCount - handler.StartSpoilingTime);
+        ////minutes /= 3600;
+        ////minutes += 1;
+        //string text = Language.GetText("Mods.RoA.ExpireLeather").WithFormatArgs(minutes).Value;
+        //tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
     }
 
     public override bool OnPickup(Item item, Player player) {
