@@ -83,7 +83,7 @@ sealed class TanningRack : ModTile {
 
     public override bool RightClick(int i, int j) {
         Player player = Main.player[Main.myPlayer];
-        player.AddBuff(SkinningBuffType, SpoilLeatherHandler.TIMETOSPOIL);
+        player.AddBuff(SkinningBuffType, 18000);
         SoundStyle leatherSound = new(ResourceManager.Sounds + "Leather") {
             PitchVariance = 0.1f,
             Volume = 1.5f
