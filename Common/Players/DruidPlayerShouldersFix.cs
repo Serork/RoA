@@ -7,6 +7,8 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 sealed class DruidPlayerShouldersFix : ILoadable {
+    public interface IProjectileFixShoulderWhileActive { }
+
     void ILoadable.Load(Mod mod) {
         On_PlayerDrawSet.CreateCompositeData += On_PlayerDrawSet_CreateCompositeData;
     }
@@ -17,7 +19,7 @@ sealed class DruidPlayerShouldersFix : ILoadable {
             if (projectile.owner != self.drawPlayer.whoAmI) {
                 continue;
             }
-            if (projectile.ModProjectile is BaseRodProjectile) {
+            if (projectile.ModProjectile is BaseRodProjectile || projectile.ModProjectile is IProjectileFixShoulderWhileActive) {
                 self.drawPlayer.bodyFrame.Y = 0;
                 self.compShoulderOverFrontArm = true;
                 self.hideCompositeShoulders = false;

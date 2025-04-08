@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
 
 using RoA.Common.Cache;
+using RoA.Common.Players;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -21,7 +22,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
-sealed class FlederSlayer : ModProjectile {
+sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFixShoulderWhileActive {
     private TrailInfo[] _trails;
     private float _charge;
     private Vector2 _offset;

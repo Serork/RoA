@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Cache;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
@@ -21,7 +22,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
-sealed class BloodshedAxe : ModProjectile {
+sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFixShoulderWhileActive {
     public override bool? CanDamage() => Projectile.ai[1] >= 2f;
 
     private bool _powerUp;
