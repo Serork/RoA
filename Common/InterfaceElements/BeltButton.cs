@@ -13,6 +13,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -85,7 +86,7 @@ sealed class BeltButton() : InterfaceElement(RoA.ModName + ": Belt Button", Inte
                     _isUsedInternal = IsUsed;
                 }
                 Main.instance.MouseText(string.Concat(new object[] {
-                            IsUsed ? "Hide Wreath Slot" : "Show Wreath Slot"
+                            Language.GetTextValue("Mods.RoA.WreathUI")
                         }), 0, 0, -1, -1, -1, -1);
                 spriteBatch.Draw(texture, vector2 - Vector2.One * 2f, null, color, 0f, origin, scale, SpriteEffects.None, 0f);
             }
