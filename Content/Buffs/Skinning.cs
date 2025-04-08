@@ -92,7 +92,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Expiry").Value;
         int height = texture.Height / 5;
         int frames = 5;
-        int usedFrame = (int)(((ulong)Main.time - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);
+        int usedFrame = (int)((TimeSystem.UpdateCount - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);
         //usedFrame = (int)MathHelper.Clamp(usedFrame, 0, frames - 1);
         spriteBatch.Draw(texture, position + TextureAssets.Item[item.type].Size() * 0.2f * item.scale, 
             new Rectangle(0, height * usedFrame, texture.Width, height),
@@ -107,10 +107,10 @@ sealed class SpoilLeatherHandler : GlobalItem {
         if (handler.StartSpoilingTime == 0) {
             return;
         }
-        ulong ticks = handler.NeedToSpoilTime - ((ulong)Main.time - handler.StartSpoilingTime);
+        ulong ticks = handler.NeedToSpoilTime - (TimeSystem.UpdateCount - handler.StartSpoilingTime);
         int minutes = (int)(ticks / 3600);
         minutes += 1;
-        string text = Language.GetText($"Mods.RoA.ExpireLeather{(minutes <= 1 ? 2 : 1)}").WithFormatArgs(minutes).Value;
+        string text = Language.GetText($"Mods.RoA.ExpireLeather{(minutes <= 1 ? 2 : 1)}").WithFormatArgs(ticks).Value;
         tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
     }
 
@@ -134,7 +134,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
     private static void TryToSpoil(ref Item item) {
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
         ulong time = handler.StartSpoilingTime + handler.NeedToSpoilTime;
-        bool flag = (ulong)Main.time > time;
+        bool flag = TimeSystem.UpdateCount > time;
         if (!flag) {
             return;
         }
@@ -147,13 +147,13 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
 
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        if (Main.IsFastForwardingTime()) {
-            SpoilLeather(ref item);
-        }
+        //if (Main.IsFastForwardingTime()) {
+        //    SpoilLeather(ref item);
+        //}
 
-        if (item.ModItem is AnimalLeather && (handler.StartSpoilingTime == 0 ||
-            ((!Main.dayTime && Main.time > 32400.0 - handler.NeedToSpoilTime - 2) || (Main.dayTime && Main.time > 54000.0 - handler.NeedToSpoilTime - 2)))) {
-            handler.StartSpoilingTime = (ulong)Main.time;
+        if (item.ModItem is AnimalLeather && (handler.StartSpoilingTime == 0/* ||*/
+            /*((!Main.dayTime && Main.time > 32400.0 - handler.NeedToSpoilTime - 2) || (Main.dayTime && Main.time > 54000.0 - handler.NeedToSpoilTime - 2)))*/)) {
+            handler.StartSpoilingTime = TimeSystem.UpdateCount;
             return true;
         }
         TryToSpoil(ref item);

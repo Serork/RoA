@@ -1,9 +1,10 @@
-﻿using Terraria;
+﻿using System.IO;
+
+using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Common;
 
-[Autoload(Side = ModSide.Client)]
 sealed class TimeSystem : ModSystem {
     public const float FULLDAYLENGTH = (float)(Main.nightLength + Main.dayLength);
     public const int TARGETFPS = 60;
@@ -16,8 +17,16 @@ sealed class TimeSystem : ModSystem {
     public static float RealTime => (float)(Main.time + (Main.dayTime ? 0.0 : Main.dayLength));
     public static double TimeForVisualEffects => Main.timeForVisualEffects / TARGETFPS;
 
-    public override void PostUpdateEverything() {
+    public override void PostUpdatePlayers() {
         UpdateCount++;
         GlobalTime += LogicDeltaTime;
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        writer.Write(UpdateCount);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        UpdateCount = reader.ReadUInt64();
     }
 }
