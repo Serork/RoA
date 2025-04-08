@@ -147,14 +147,17 @@ sealed class SkinningPlayer : ModPlayer {
             if (Player.ItemTimeIsZero
                 && Player.itemAnimation > 0
                 && Player.controlUseItem) {
-                foreach (Item inventoryItem in Player.inventory)
-                    if (inventoryItem.type == item.type) {
-                        int removed = Math.Min(inventoryItem.stack, 1);
-                        inventoryItem.stack -= removed;
-                        if (inventoryItem.stack <= 0)
-                            inventoryItem.SetDefaults();
-                        break;
-                    }
+                //foreach (Item inventoryItem in Player.inventory)
+                //    if (inventoryItem.type == item.type) {
+                //        int removed = Math.Min(inventoryItem.stack, 1);
+                //        inventoryItem.stack -= removed;
+                //        if (inventoryItem.stack <= 0)
+                //            inventoryItem.SetDefaults();
+                //        break;
+                //    }
+                if (--item.stack <= 0) {
+                    item.TurnToAir();
+                }
                 Vector2 vector = Main.ReverseGravitySupport(Main.MouseScreen) + Main.screenPosition;
                 if (Main.SmartCursorIsUsed || PlayerInput.UsingGamepad)
                     vector = Player.Center;
@@ -164,6 +167,7 @@ sealed class SkinningPlayer : ModPlayer {
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item2, 1f);
                 item = new Item();
                 item.SetDefaults(ModContent.ItemType<AnimalLeather>());
+                item.timeSinceItemSpawned = 0;
                 Player.ApplyItemTime(item);
                 Player.SetItemAnimation(item.useAnimation);
                 SoundStyle leatherSound = new(ResourceManager.Sounds + "Leather") {
@@ -181,10 +185,15 @@ sealed class SkinningPlayer : ModPlayer {
 }
 
 sealed class SkinningNPC : GlobalNPC {
+    public override bool InstancePerEntity => true;
+
     public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
         SkinningDropCondition dropCondition = new();
         IItemDropRule conditionalRule = new LeadingConditionRule(dropCondition);
         int npcType = npc.type;
+        if (npc.ModNPC is not null && npc.ModNPC.Mod != RoA.Instance) {
+            return;
+        }
         bool critters = NPCID.Sets.CountsAsCritter[npcType] && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
             !NPCID.Sets.IsDragonfly[npcType]/* && !NPCID.Sets.TownCritter[npcType]*/ && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
         bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.DeathSound == SoundID.NPCDeath1 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType]
