@@ -102,10 +102,18 @@ sealed class SpoilLeatherHandler : GlobalItem {
     }
 
     public override void UpdateInventory(Item item, Player player) {
+        if (item.ModItem is not AnimalLeather) {
+            return;
+        }
+
         UpdateMe(item);
     }
 
     public override void PostUpdate(Item item) {
+        if (item.ModItem is not AnimalLeather) {
+            return;
+        }
+
         UpdateMe(item);
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
         if (!handler._sync) {
