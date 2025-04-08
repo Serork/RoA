@@ -98,7 +98,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         int frames = 5;
         int usedFrame = (int)(((ulong)Main.time - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);
         //usedFrame = (int)MathHelper.Clamp(usedFrame, 0, frames - 1);
-        spriteBatch.Draw(texture, position + frame.Size().RotatedBy(num) * 0.2f * item.scale, 
+        spriteBatch.Draw(texture, position + TextureAssets.Item[item.type].Size().RotatedBy(num) * 0.2f * item.scale, 
             new Rectangle(0, height * usedFrame, texture.Width, height),
             drawColor, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
     }
