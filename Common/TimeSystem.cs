@@ -2,6 +2,7 @@
 
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Common;
 
@@ -28,5 +29,17 @@ sealed class TimeSystem : ModSystem {
 
     public override void NetReceive(BinaryReader reader) {
         UpdateCount = reader.ReadUInt64();
+    }
+
+    public override void ClearWorld() {
+        UpdateCount = 0;
+    }
+
+    public override void SaveWorldData(TagCompound tag) {
+        tag[nameof(UpdateCount)] = UpdateCount;
+    }
+
+    public override void LoadWorldData(TagCompound tag) {
+        UpdateCount = tag.Get<ulong>(nameof(UpdateCount));
     }
 }
