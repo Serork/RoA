@@ -43,7 +43,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
 
     public ulong StartSpoilingTime;
 
-    public ulong NeedToSpoilTime => 18000;
+    public ulong NeedToSpoilTime => 1800;
 
     public override void SaveData(Item item, TagCompound tag) {
         if (!IsValidToHandle(item)) {
@@ -151,7 +151,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
 
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        if (Main.IsFastForwardingTime() || Main.time < handler.StartSpoilingTime) {
+        if (Main.IsFastForwardingTime()) {
             SpoilLeather(ref item);
         }
 
