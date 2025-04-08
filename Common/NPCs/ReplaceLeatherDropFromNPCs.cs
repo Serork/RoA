@@ -16,8 +16,7 @@ sealed class ReplaceLeatherDropFromNPCs : GlobalNPC {
             if (rule is CommonDrop drop && drop.itemId == ItemID.Leather) {
                 drop.itemId = ModContent.ItemType<AnimalLeather>();
                 drop.amountDroppedMinimum = drop.amountDroppedMaximum = 1;
-                drop.chanceNumerator = 1;
-                drop.chanceDenominator = 6;
+                drop.chanceNumerator /= 2;
             }
         }
     }
@@ -28,8 +27,7 @@ sealed class ReplaceLeatherDropFromNPCs : GlobalNPC {
             if (rule is CommonDrop drop && drop.itemId == ItemID.Leather) {
                 drop.itemId = ModContent.ItemType<AnimalLeather>();
                 drop.amountDroppedMinimum = drop.amountDroppedMaximum = 1;
-                drop.chanceNumerator = 1;
-                drop.chanceDenominator = 6;
+                drop.chanceNumerator /= 2;
             }
         }
     }
