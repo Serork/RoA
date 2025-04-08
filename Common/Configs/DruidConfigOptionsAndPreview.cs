@@ -235,7 +235,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
 
         int damage = 10;
         toolTipLine[numLines] = damage + item.DamageType.DisplayName.Value;
-        toolTipNames[numLines] = "Damage";
+        toolTipNames[numLines] = "Damage_Druid";
 
         numLines++;
     }
@@ -434,7 +434,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
                 ItemLoader.PreDrawTooltipLine(_hoverItem, drawableLines[k], ref num12);
 
                 if (drawableLines[k].Name != "ItemName" &&
-                    drawableLines[k].Name != "Damage" &&
+                    drawableLines[k].Name != "Damage_Druid" &&
                     drawableLines[k].Name != "DruidDamageTip" &&
                     drawableLines[k].Name != "PotentialDamage") {
                     continue;
@@ -755,7 +755,7 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
 
         int damage = 10;
         toolTipLine[numLines] = damage + item.DamageType.DisplayName.Value;
-        toolTipNames[numLines] = "Damage";
+        toolTipNames[numLines] = "Damage_Druid";
 
         numLines++;
     }
@@ -954,7 +954,7 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
                 ItemLoader.PreDrawTooltipLine(_hoverItem, drawableLines[k], ref num12);
 
                 if (drawableLines[k].Name != "ItemName" &&
-                    drawableLines[k].Name != "Damage" &&
+                    drawableLines[k].Name != "Damage_Druid" &&
                     drawableLines[k].Name != "DruidDamageTip" &&
                     drawableLines[k].Name != "PotentialDamage") {
                     continue;

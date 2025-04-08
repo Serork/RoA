@@ -18,7 +18,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             return;
         }
 
-        int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Damage"));
+        int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Damage") || tooltip.Name.Contains("Damage_Druid"));
         if (index != -1) {
             Player player = Main.LocalPlayer;
             string tag, tooltip;

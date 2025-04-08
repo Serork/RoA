@@ -237,7 +237,7 @@ TanningRack: {
 	DisplayName: Tanning Rack
 	Tooltip:
 		'''
-		Allows raw leather to be obtained from enemies
+		Allows raw leather to be obtained from creatures
 		It must be processed at the rack before spoiling
 		'''
 }

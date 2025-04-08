@@ -1,17 +1,20 @@
-﻿using Terraria.GameContent.ItemDropRules;
+﻿using RoA.Content.Items.Miscellaneous;
+
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Items;
 
-sealed class NoLeatherDropFromCratesAndOther : ILoadable {
+sealed class ReplaceLeatherDropFromCratesAndOther : ILoadable {
     void ILoadable.Load(Mod mod) {
         On_CommonCode.DropItem_Vector2_IEntitySource_int_int += On_CommonCode_DropItem_Vector2_IEntitySource_int_int;
     }
 
     private int On_CommonCode_DropItem_Vector2_IEntitySource_int_int(On_CommonCode.orig_DropItem_Vector2_IEntitySource_int_int orig, Microsoft.Xna.Framework.Vector2 position, Terraria.DataStructures.IEntitySource entitySource, int itemId, int stack) {
         if (itemId == ItemID.Leather) {
-            return -1;
+            itemId = ModContent.ItemType<AnimalLeather>();
+            stack = 1;
         }
 
         return orig(position, entitySource, itemId, stack);

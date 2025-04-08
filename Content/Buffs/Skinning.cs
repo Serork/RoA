@@ -29,90 +29,113 @@ sealed class Skinning : ModBuff {
     public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<SkinningPlayer>().skinning = true;
 }
 
+sealed class SpoilLeatherHandler : GlobalItem {
+    public const int TIMETOSPOIL = 18000;
+
+    public override bool InstancePerEntity => true;
+
+    public int TimeToSpoil;
+
+    public override void UpdateInventory(Item item, Player player) {
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        if (item.ModItem is AnimalLeather && handler.TimeToSpoil == 0) {
+            handler.TimeToSpoil = TIMETOSPOIL;
+        }
+        if (handler.TimeToSpoil > 1) {
+            handler.TimeToSpoil--;
+            return;
+        }
+        if (handler.TimeToSpoil == 1) {
+            item.type = (ushort)ModContent.ItemType<SpoiledRawhide>();
+            handler.TimeToSpoil = 0;
+        }
+    }
+}
+
 sealed class SkinningPlayer : ModPlayer {
     public bool skinning;
 
     public override void PostUpdateBuffs() {
-        static bool valid(Item item) {
-            return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
-        }
-        if (skinning) {
-            int type = (ushort)ModContent.BuffType<Skinning>();
-            if (Player.FindBuffIndex(type) != -1)
-                return;
-            goto reset;
-        }
-        else {
-            if (Player.whoAmI == Main.myPlayer && !Main.mouseItem.IsEmpty() && valid(Main.mouseItem)) {
-                int stack = Main.mouseItem.stack;
-                Main.mouseItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-                Main.mouseItem.stack = stack;
-            }
-            return;
-        }
-    reset:
-        skinning = false;
-        if (Player.chest >= 0) {
-            for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
-                Item item = Main.chest[Player.chest].item[i];
-                if (valid(item)) {
-                    int stack = item.stack;
-                    Main.chest[Player.chest].item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-                    Main.chest[Player.chest].item[i].stack = stack;
-                }
-            }
-        }
-        for (int i = 0; i < Player.bank.item.Length; i++) {
-            Item item = Player.bank.item[i];
-            if (valid(item)) {
-                int stack = item.stack;
-                Player.bank.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-                Player.bank.item[i].stack = stack;
-            }
-        }
-        for (int i = 0; i < Player.bank2.item.Length; i++) {
-            Item item = Player.bank2.item[i];
-            if (valid(item)) {
-                int stack = item.stack;
-                Player.bank2.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-                Player.bank2.item[i].stack = stack;
-            }
-        }
-        for (int i = 0; i < Player.bank3.item.Length; i++) {
-            Item item = Player.bank3.item[i];
-            if (valid(item)) {
-                int stack = item.stack;
-                Player.bank3.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-                Player.bank3.item[i].stack = stack;
-            }
-        }
-        for (int i = 0; i < Player.bank4.item.Length; i++) {
-            Item item = Player.bank3.item[i];
-            if (valid(item)) {
-                int stack = item.stack;
-                Player.bank4.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-                Player.bank4.item[i].stack = stack;
-            }
-        }
-        for (int i = 0; i < Player.inventory.Length; i++) {
-            Item item = Player.inventory[i];
-            if (valid(item)) {
-                int stack = item.stack;
-                Player.inventory[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-                Player.inventory[i].stack = stack;
-            }
-        }
-        Item trashItem = Player.trashItem;
-        if (valid(trashItem)) {
-            int stack = trashItem.stack;
-            Player.trashItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-            Player.trashItem.stack = stack;
-        }
-        if (Player.whoAmI == Main.myPlayer && valid(Main.mouseItem)) {
-            int stack = Main.mouseItem.stack;
-            Main.mouseItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-            Main.mouseItem.stack = stack;
-        }
+    //    static bool valid(Item item) {
+    //        return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
+    //    }
+    //    if (skinning) {
+    //        int type = (ushort)ModContent.BuffType<Skinning>();
+    //        if (Player.FindBuffIndex(type) != -1)
+    //            return;
+    //        goto reset;
+    //    }
+    //    else {
+    //        if (Player.whoAmI == Main.myPlayer && !Main.mouseItem.IsEmpty() && valid(Main.mouseItem)) {
+    //            int stack = Main.mouseItem.stack;
+    //            Main.mouseItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //            Main.mouseItem.stack = stack;
+    //        }
+    //        return;
+    //    }
+    //reset:
+    //    skinning = false;
+    //    if (Player.chest >= 0) {
+    //        for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
+    //            Item item = Main.chest[Player.chest].item[i];
+    //            if (valid(item)) {
+    //                int stack = item.stack;
+    //                Main.chest[Player.chest].item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //                Main.chest[Player.chest].item[i].stack = stack;
+    //            }
+    //        }
+    //    }
+    //    for (int i = 0; i < Player.bank.item.Length; i++) {
+    //        Item item = Player.bank.item[i];
+    //        if (valid(item)) {
+    //            int stack = item.stack;
+    //            Player.bank.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //            Player.bank.item[i].stack = stack;
+    //        }
+    //    }
+    //    for (int i = 0; i < Player.bank2.item.Length; i++) {
+    //        Item item = Player.bank2.item[i];
+    //        if (valid(item)) {
+    //            int stack = item.stack;
+    //            Player.bank2.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //            Player.bank2.item[i].stack = stack;
+    //        }
+    //    }
+    //    for (int i = 0; i < Player.bank3.item.Length; i++) {
+    //        Item item = Player.bank3.item[i];
+    //        if (valid(item)) {
+    //            int stack = item.stack;
+    //            Player.bank3.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //            Player.bank3.item[i].stack = stack;
+    //        }
+    //    }
+    //    for (int i = 0; i < Player.bank4.item.Length; i++) {
+    //        Item item = Player.bank3.item[i];
+    //        if (valid(item)) {
+    //            int stack = item.stack;
+    //            Player.bank4.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //            Player.bank4.item[i].stack = stack;
+    //        }
+    //    }
+    //    for (int i = 0; i < Player.inventory.Length; i++) {
+    //        Item item = Player.inventory[i];
+    //        if (valid(item)) {
+    //            int stack = item.stack;
+    //            Player.inventory[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //            Player.inventory[i].stack = stack;
+    //        }
+    //    }
+    //    Item trashItem = Player.trashItem;
+    //    if (valid(trashItem)) {
+    //        int stack = trashItem.stack;
+    //        Player.trashItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //        Player.trashItem.stack = stack;
+    //    }
+    //    if (Player.whoAmI == Main.myPlayer && valid(Main.mouseItem)) {
+    //        int stack = Main.mouseItem.stack;
+    //        Main.mouseItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+    //        Main.mouseItem.stack = stack;
+    //    }
     }
 
     public override void PostItemCheck() {
@@ -135,7 +158,8 @@ sealed class SkinningPlayer : ModPlayer {
                 Vector2 vector = Main.ReverseGravitySupport(Main.MouseScreen) + Main.screenPosition;
                 if (Main.SmartCursorIsUsed || PlayerInput.UsingGamepad)
                     vector = Player.Center;
-                int item2 = Item.NewItem(Player.GetSource_ItemUse(item), (int)vector.X, (int)vector.Y, 1, 1, ItemID.Leather, 1, noBroadcast: false, -1);
+                int stack = Main.rand.Next(2, 6);
+                int item2 = Item.NewItem(Player.GetSource_ItemUse(item), (int)vector.X, (int)vector.Y, 1, 1, ItemID.Leather, stack, noBroadcast: false, -1);
                 if (Main.netMode == NetmodeID.MultiplayerClient && item2 >= 0)
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item2, 1f);
                 item = new Item();

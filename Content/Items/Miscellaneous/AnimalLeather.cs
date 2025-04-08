@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Buffs;
 using RoA.Content.Tiles.Crafting;
 
 using Terraria;
@@ -9,12 +10,18 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
 
-sealed class AnimalLeather : ModItem {
+class AnimalLeather : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Animal Leather");
-        Item.ResearchUnlockCount = 50;
+        Item.ResearchUnlockCount = 10;
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[ItemID.Leather] = 50;
+    }
+
+    public override bool OnPickup(Player player) {
+        Item.GetGlobalItem<SpoilLeatherHandler>().TimeToSpoil = SpoilLeatherHandler.TIMETOSPOIL;
+
+        return base.OnPickup(player);
     }
 
     public override void SetDefaults() {
@@ -24,7 +31,8 @@ sealed class AnimalLeather : ModItem {
         Item.useAnimation = Item.useTime = 18;
         Item.useStyle = ItemUseStyleID.Swing;
 
-        Item.maxStack = Item.CommonMaxStack;
+        //Item.maxStack = Item.CommonMaxStack;
+        Item.maxStack = 1;
 
         Item.value = Item.sellPrice(0, 0, 0, 25);
     }
