@@ -43,7 +43,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
 
     public ulong StartSpoilingTime;
 
-    public ulong NeedToSpoilTime => 1800;
+    public ulong NeedToSpoilTime => 18000;
 
     public override void SaveData(Item item, TagCompound tag) {
         if (!IsValidToHandle(item)) {
