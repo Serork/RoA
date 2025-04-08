@@ -8,15 +8,15 @@ using Terraria;
 namespace RoA.Common.Networking.Packets;
 
 sealed class LeatherSyncPacket : NetPacket {
-    public LeatherSyncPacket(int whoAmI, int timeToSpoil) {
+    public LeatherSyncPacket(int whoAmI, ulong timeToSpoil) {
         Writer.Write(whoAmI);
         Writer.Write(timeToSpoil);
     }
 
     public override void Read(BinaryReader reader, int sender) {
         int whoAmI = reader.ReadInt32();
-        int timeToSpoil = reader.ReadInt32();
+        ulong timeToSpoil = reader.ReadUInt64();
         Item item = Main.item[whoAmI];
-        item.GetGlobalItem<SpoilLeatherHandler>().TimeToSpoil = timeToSpoil;
+        item.GetGlobalItem<SpoilLeatherHandler>().StartSpoilingTime = timeToSpoil;
     }
 }

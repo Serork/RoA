@@ -17,7 +17,9 @@ sealed class TimeSystem : ModSystem {
     public static double TimeForVisualEffects => Main.timeForVisualEffects / TARGETFPS;
 
     public override void PostUpdateEverything() {
-        UpdateCount++;
+        if (!Main.gameMenu && !Main.InGameUI.IsVisible) {
+            UpdateCount++;
+        }
         GlobalTime += LogicDeltaTime;
     }
 }

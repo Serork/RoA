@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Common.CustomConditions;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
@@ -37,18 +38,18 @@ sealed class Skinning : ModBuff {
 }
 
 sealed class SpoilLeatherHandler : GlobalItem {
-    public const int TIMETOSPOIL = 18000;
-
     public override bool InstancePerEntity => true;
 
     private bool _sync;
 
-    public int TimeToSpoil;
+    public ulong StartSpoilingTime;
+
+    public ulong NeedToSpoilTime => 300/*18000*/;
 
     public override void NetSend(Item item, BinaryWriter writer) {
         if (item.ModItem is AnimalLeather) {
             var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-            writer.Write(handler.TimeToSpoil);
+            writer.Write(handler.StartSpoilingTime);
             writer.Write(handler._sync);
         }
     }
@@ -56,13 +57,27 @@ sealed class SpoilLeatherHandler : GlobalItem {
     public override void NetReceive(Item item, BinaryReader reader) {
         if (item.ModItem is AnimalLeather) {
             var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-            handler.TimeToSpoil = reader.ReadInt32();
+            handler.StartSpoilingTime = reader.ReadUInt64();
             handler._sync = reader.ReadBoolean();
         }
     }
 
     public override void Load() {
-        On_ItemSlot.LeftClick_ItemArray_int_int += On_ItemSlot_LeftClick_ItemArray_int_int;
+        On_Player.OpenChest += On_Player_OpenChest;
+    }
+
+    private void On_Player_OpenChest(On_Player.orig_OpenChest orig, Player self, int x, int y, int newChest) {
+        orig(self, x, y, newChest);
+        for (int i = 0; i < Main.chest[self.chest].item.Length; i++) {
+            Item item = Main.chest[self.chest].item[i];
+            if (item.IsAir) {
+                continue;
+            }
+            if (item.ModItem is not AnimalLeather) {
+                continue;
+            }
+            TryToSpoil(ref item);
+        }
     }
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
@@ -70,22 +85,22 @@ sealed class SpoilLeatherHandler : GlobalItem {
             return;
         }
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        if (handler.TimeToSpoil == 0) {
+        if (handler.StartSpoilingTime == 0) {
             return;
         }
-        int minutes = handler.TimeToSpoil;
-        minutes /= 3600;
-        minutes += 1;
+        ulong minutes = handler.NeedToSpoilTime - (TimeSystem.UpdateCount - handler.StartSpoilingTime);
+        //minutes /= 3600;
+        //minutes += 1;
         string text = Language.GetText("Mods.RoA.ExpireLeather").WithFormatArgs(minutes).Value;
         tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
     }
 
-    private void On_ItemSlot_LeftClick_ItemArray_int_int(On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
-        orig(inv, context, slot);
-        if (inv != Main.LocalPlayer.inventory && inv[slot].ModItem is AnimalLeather) {
-            SpoilLeather(ref inv[slot]);
-        }
-    }
+    //private void On_ItemSlot_LeftClick_ItemArray_int_int(On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+    //    orig(inv, context, slot);
+    //    if (inv != Main.LocalPlayer.inventory && inv[slot].ModItem is AnimalLeather) {
+    //        SpoilLeather(ref inv[slot]);
+    //    }
+    //}
 
     public override bool OnPickup(Item item, Player player) {
         if (item.ModItem is AnimalLeather) {
@@ -96,46 +111,51 @@ sealed class SpoilLeatherHandler : GlobalItem {
     }
 
     private static void SpoilLeather(ref Item item) {
-        item = new Item();
         item.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-        item.GetGlobalItem<SpoilLeatherHandler>().TimeToSpoil = 0;
+        item.GetGlobalItem<SpoilLeatherHandler>().StartSpoilingTime = 0;
     }
 
     public override void UpdateInventory(Item item, Player player) {
-        if (item.ModItem is not AnimalLeather) {
+        if (!UpdateMe(item)) {
             return;
         }
-
-        UpdateMe(item);
     }
 
     public override void PostUpdate(Item item) {
-        if (item.ModItem is not AnimalLeather) {
+        if (!UpdateMe(item)) {
             return;
         }
 
-        UpdateMe(item);
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
         if (!handler._sync) {
             handler._sync = true;
             if (Main.netMode != NetmodeID.MultiplayerClient) {
-                MultiplayerSystem.SendPacket(new LeatherSyncPacket(item.whoAmI, handler.TimeToSpoil));
+                MultiplayerSystem.SendPacket(new LeatherSyncPacket(item.whoAmI, handler.StartSpoilingTime));
             }
         }
     }
 
-    internal static void UpdateMe(Item item) {
+    private static void TryToSpoil(ref Item item) {
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        if (item.ModItem is AnimalLeather && handler.TimeToSpoil == 0) {
-            handler.TimeToSpoil = TIMETOSPOIL;
-        }
-        if (handler.TimeToSpoil > 1) {
-            handler.TimeToSpoil--;
+        bool flag = TimeSystem.UpdateCount > handler.StartSpoilingTime + handler.NeedToSpoilTime;
+        if (!flag) {
             return;
         }
-        if (handler.TimeToSpoil == 1) {
-            SpoilLeather(ref item);
+        SpoilLeather(ref item);
+    }
+
+    internal static bool UpdateMe(Item item) {
+        if (item.ModItem is not AnimalLeather) {
+            return false;
         }
+
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        if (item.ModItem is AnimalLeather && handler.StartSpoilingTime == 0) {
+            handler.StartSpoilingTime = TimeSystem.UpdateCount;
+        }
+        TryToSpoil(ref item);
+
+        return true;
     }
 }
 
