@@ -10,6 +10,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Terraria;
@@ -40,7 +41,21 @@ sealed class SpoilLeatherHandler : GlobalItem {
 
     public override bool InstancePerEntity => true;
 
+    private bool _sync;
+
     public int TimeToSpoil;
+
+    public override void NetSend(Item item, BinaryWriter writer) {
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        writer.Write(handler.TimeToSpoil);
+        writer.Write(handler._sync);
+    }
+
+    public override void NetReceive(Item item, BinaryReader reader) {
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        handler.TimeToSpoil = reader.ReadInt32();
+        handler._sync = reader.ReadBoolean();
+    }
 
     public override void Load() {
         On_ItemSlot.LeftClick_ItemArray_int_int += On_ItemSlot_LeftClick_ItemArray_int_int;
@@ -64,10 +79,22 @@ sealed class SpoilLeatherHandler : GlobalItem {
     private void On_ItemSlot_LeftClick_ItemArray_int_int(On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
         orig(inv, context, slot);
         if (inv != Main.LocalPlayer.inventory && inv[slot].ModItem is AnimalLeather) {
-            inv[slot] = new Item();
-            inv[slot].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-            inv[slot].GetGlobalItem<SpoilLeatherHandler>().TimeToSpoil = 0;
+            SpoilLeather(ref inv[slot]);
         }
+    }
+
+    public override bool OnPickup(Item item, Player player) {
+        if (item.ModItem is AnimalLeather) {
+            item.GetGlobalItem<SpoilLeatherHandler>()._sync = true;
+        }
+
+        return base.OnPickup(item, player);
+    }
+
+    private static void SpoilLeather(ref Item item) {
+        item = new Item();
+        item.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+        item.GetGlobalItem<SpoilLeatherHandler>().TimeToSpoil = 0;
     }
 
     public override void UpdateInventory(Item item, Player player) {
@@ -76,6 +103,13 @@ sealed class SpoilLeatherHandler : GlobalItem {
 
     public override void PostUpdate(Item item) {
         UpdateMe(item);
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        if (!handler._sync) {
+            handler._sync = true;
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new LeatherSyncPacket(item.whoAmI, handler.TimeToSpoil));
+            }
+        }
     }
 
     internal static void UpdateMe(Item item) {
@@ -88,9 +122,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
             return;
         }
         if (handler.TimeToSpoil == 1) {
-            item = new Item();
-            item.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-            handler.TimeToSpoil = 0;
+            SpoilLeather(ref item);
         }
     }
 }
