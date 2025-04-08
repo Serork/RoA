@@ -95,13 +95,13 @@ class ClawsSlash : NatureProjectile {
             Vector2 offset = new(0.2f);
             Vector2 velocity = 1.5f * offset;
             Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
-            Color color = Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()));
+            Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()));
             if (ShouldFullBright) {
                 color = Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat());
             }
             color.A = 25;
             if (!ShouldFullBright) {
-                Point pos = target.Center.ToTileCoordinates();
+                Point pos = Projectile.Center.ToTileCoordinates();
                 float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.5f, 1f);
                 color *= brightness;
             }
@@ -129,13 +129,13 @@ class ClawsSlash : NatureProjectile {
             Vector2 offset = new(0.2f);
             Vector2 velocity = 1.5f * offset;
             Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
-            Color color = Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()));
+            Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()));
             if (ShouldFullBright) {
                 color = Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat());
             }
             color.A = 25;
             if (!ShouldFullBright) {
-                Point pos = target.Center.ToTileCoordinates();
+                Point pos = Projectile.Center.ToTileCoordinates();
                 float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.5f, 1f);
                 color *= brightness;
             }
