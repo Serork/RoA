@@ -185,8 +185,6 @@ sealed class SkinningPlayer : ModPlayer {
 }
 
 sealed class SkinningNPC : GlobalNPC {
-    public override bool InstancePerEntity => true;
-
     public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) {
         SkinningDropCondition dropCondition = new();
         IItemDropRule conditionalRule = new LeadingConditionRule(dropCondition);
