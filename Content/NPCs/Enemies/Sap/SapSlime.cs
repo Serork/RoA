@@ -28,12 +28,12 @@ sealed class SapSlime : ModNPC {
     private void On_Player_ApplyEquipFunctional(On_Player.orig_ApplyEquipFunctional orig, Player self, Item currentItem, bool hideVisual) {
         orig(self, currentItem, hideVisual);
 
+        if ((currentItem.expertOnly && !Main.expertMode) || (currentItem.masterOnly && !Main.masterMode))
+            return;
+
         int type = ModContent.NPCType<SapSlime>();
         if (currentItem.type == ItemID.RoyalGel) {
             self.npcTypeNoAggro[type] = true;
-        }
-        else {
-            self.npcTypeNoAggro[type] = false;
         }
     }
 

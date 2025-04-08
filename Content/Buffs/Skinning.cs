@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Build.Utilities;
+using Microsoft.Xna.Framework;
 
 using RoA.Common;
 using RoA.Common.CustomConditions;
@@ -62,24 +63,6 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
     }
 
-    public override void Load() {
-        On_Player.OpenChest += On_Player_OpenChest;
-    }
-
-    private void On_Player_OpenChest(On_Player.orig_OpenChest orig, Player self, int x, int y, int newChest) {
-        orig(self, x, y, newChest);
-        for (int i = 0; i < Main.chest[self.chest].item.Length; i++) {
-            Item item = Main.chest[self.chest].item[i];
-            if (item.IsAir) {
-                continue;
-            }
-            if (item.ModItem is not AnimalLeather) {
-                continue;
-            }
-            TryToSpoil(ref item);
-        }
-    }
-
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
         if (item.ModItem is not AnimalLeather) {
             return;
@@ -94,13 +77,6 @@ sealed class SpoilLeatherHandler : GlobalItem {
         string text = Language.GetText("Mods.RoA.ExpireLeather").WithFormatArgs(minutes).Value;
         tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
     }
-
-    //private void On_ItemSlot_LeftClick_ItemArray_int_int(On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
-    //    orig(inv, context, slot);
-    //    if (inv != Main.LocalPlayer.inventory && inv[slot].ModItem is AnimalLeather) {
-    //        SpoilLeather(ref inv[slot]);
-    //    }
-    //}
 
     public override bool OnPickup(Item item, Player player) {
         if (item.ModItem is AnimalLeather) {
@@ -162,10 +138,73 @@ sealed class SpoilLeatherHandler : GlobalItem {
 sealed class SkinningPlayer : ModPlayer {
     public bool skinning;
 
+    // welcome to terraria
+    private void UpdateAllLeatherInInventories() {
+        if (Player.whoAmI != Main.myPlayer) {
+            return;
+        }
+
+        if (Player.trashItem.ModItem is AnimalLeather)
+            SpoilLeatherHandler.UpdateMe(Player.trashItem);
+
+        //if (Main.mouseItem.type == 3822)
+        //    Main.mouseItem.TurnToAir();
+
+        //for (int i = 0; i < 59; i++) {
+        //    Item item = Player.inventory[i];
+        //    if (item.stack > 0 && item.ModItem is AnimalLeather)
+        //        SpoilLeatherHandler.UpdateMe(Player.trashItem);
+        //}
+
+        if (Player.chest == -2) {
+            Chest chest = Player.bank;
+            for (int j = 0; j < 40; j++) {
+                if (chest.item[j].stack > 0 && chest.item[j].ModItem is AnimalLeather)
+                    SpoilLeatherHandler.UpdateMe(chest.item[j]);
+            }
+        }
+
+        if (Player.chest == -4) {
+            Chest chest2 = Player.bank3;
+            for (int k = 0; k < 40; k++) {
+                if (chest2.item[k].stack > 0 && chest2.item[k].ModItem is AnimalLeather)
+                    SpoilLeatherHandler.UpdateMe(chest2.item[k]);
+            }
+        }
+
+        if (Player.chest == -5) {
+            Chest chest3 = Player.bank4;
+            for (int l = 0; l < 40; l++) {
+                if (chest3.item[l].stack > 0 && chest3.item[l].ModItem is AnimalLeather)
+                    SpoilLeatherHandler.UpdateMe(chest3.item[l]);
+            }
+        }
+
+        if (Player.chest == -3) {
+            Chest chest4 = Player.bank2;
+            for (int m = 0; m < 40; m++) {
+                if (chest4.item[m].stack > 0 && chest4.item[m].ModItem is AnimalLeather)
+                    SpoilLeatherHandler.UpdateMe(chest4.item[m]);
+            }
+        }
+
+        if (Player.chest <= -1)
+            return;
+
+        Chest chest5 = Main.chest[Player.chest];
+        for (int n = 0; n < 40; n++) {
+            if (chest5.item[n].stack > 0 && chest5.item[n].ModItem is AnimalLeather) {
+                SpoilLeatherHandler.UpdateMe(chest5.item[n]);
+                //chest5.item[n].TurnToAir();
+            }
+        }
+    }
+
     public override void PostUpdateBuffs() {
         if (!Main.mouseItem.IsAir && Main.mouseItem.ModItem is AnimalLeather) {
             SpoilLeatherHandler.UpdateMe(Main.mouseItem);
         }
+        UpdateAllLeatherInInventories();
     //    static bool valid(Item item) {
     //        return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
     //    }
