@@ -9,6 +9,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
@@ -16,7 +17,9 @@ using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace RoA.Content.Buffs;
 
@@ -24,6 +27,9 @@ sealed class Skinning : ModBuff {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Skinning");
         //Description.SetDefault("Enemies have a chance to drop rawhides, which will spoil when the effect ends");
+        Main.debuff[Type] = true;
+
+        BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
     }
 
     public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<SkinningPlayer>().skinning = true;
@@ -36,7 +42,43 @@ sealed class SpoilLeatherHandler : GlobalItem {
 
     public int TimeToSpoil;
 
+    public override void Load() {
+        On_ItemSlot.LeftClick_ItemArray_int_int += On_ItemSlot_LeftClick_ItemArray_int_int;
+    }
+
+    public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
+        if (item.ModItem is not AnimalLeather) {
+            return;
+        }
+        var handler = item.GetGlobalItem<SpoilLeatherHandler>();
+        if (handler.TimeToSpoil == 0) {
+            return;
+        }
+        int minutes = handler.TimeToSpoil;
+        minutes /= 3600;
+        minutes += 1;
+        string text = Language.GetText("Mods.RoA.ExpireLeather").WithFormatArgs(minutes).Value;
+        tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
+    }
+
+    private void On_ItemSlot_LeftClick_ItemArray_int_int(On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+        orig(inv, context, slot);
+        if (inv != Main.LocalPlayer.inventory && inv[slot].ModItem is AnimalLeather) {
+            inv[slot] = new Item();
+            inv[slot].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
+            inv[slot].GetGlobalItem<SpoilLeatherHandler>().TimeToSpoil = 0;
+        }
+    }
+
     public override void UpdateInventory(Item item, Player player) {
+        UpdateMe(item);
+    }
+
+    public override void PostUpdate(Item item) {
+        UpdateMe(item);
+    }
+
+    internal static void UpdateMe(Item item) {
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
         if (item.ModItem is AnimalLeather && handler.TimeToSpoil == 0) {
             handler.TimeToSpoil = TIMETOSPOIL;
@@ -46,7 +88,8 @@ sealed class SpoilLeatherHandler : GlobalItem {
             return;
         }
         if (handler.TimeToSpoil == 1) {
-            item.type = (ushort)ModContent.ItemType<SpoiledRawhide>();
+            item = new Item();
+            item.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
             handler.TimeToSpoil = 0;
         }
     }
@@ -56,6 +99,9 @@ sealed class SkinningPlayer : ModPlayer {
     public bool skinning;
 
     public override void PostUpdateBuffs() {
+        if (!Main.mouseItem.IsAir && Main.mouseItem.ModItem is AnimalLeather) {
+            SpoilLeatherHandler.UpdateMe(Main.mouseItem);
+        }
     //    static bool valid(Item item) {
     //        return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
     //    }

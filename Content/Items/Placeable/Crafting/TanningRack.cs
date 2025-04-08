@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Buffs;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -25,4 +27,6 @@ sealed class TanningRack : ModItem {
 
         Item.value = Item.sellPrice(0, 1, 0, 0);
     }
+
+    public override bool CanUseItem(Player player) => !player.HasBuff<Skinning>();
 }

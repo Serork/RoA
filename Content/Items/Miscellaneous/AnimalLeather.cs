@@ -19,7 +19,10 @@ class AnimalLeather : ModItem {
     }
 
     public override bool OnPickup(Player player) {
-        Item.GetGlobalItem<SpoilLeatherHandler>().TimeToSpoil = SpoilLeatherHandler.TIMETOSPOIL;
+        var handler = Item.GetGlobalItem<SpoilLeatherHandler>();
+        if (handler.TimeToSpoil == 0) {
+            handler.TimeToSpoil = SpoilLeatherHandler.TIMETOSPOIL;
+        }
 
         return base.OnPickup(player);
     }
