@@ -283,7 +283,7 @@ sealed class SkinningNPC : GlobalNPC {
             NPCsType.Critters => (ushort)ModContent.ItemType<AnimalLeather>(),
             NPCsType.Enemies => (ushort)ModContent.ItemType<RoughLeather>()
         };
-        IItemDropRule rule = ItemDropRule.Common(itemType, chanceDenominator: type == NPCsType.Critters ? 5 : 8);
+        IItemDropRule rule = ItemDropRule.Common(itemType, chanceDenominator: type == NPCsType.Critters ? 6 : 8);
         conditionalRule.OnSuccess(rule);
         npcLoot.Add(conditionalRule);
     }
