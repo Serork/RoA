@@ -1,7 +1,7 @@
-PotentialDamage: возможный урон
-DruidToolTipOption1: Урон растет с зарядом венка
+PotentialDamage: ед. максимального урона
+DruidToolTipOption1: Урон растет по мере заряда венка
 DruidToolTipOption3: заряда
-DruidToolTipOption4_1: начальный природный урон
+DruidToolTipOption4_1: ед. начального природного урона
 FillingRate1: Чрезвычайно низкая скорость заполнения венка
 FillingRate2: Очень низкая скорость заполнения венка
 FillingRate3: Низкая скорость заполнения венка
