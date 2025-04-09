@@ -617,12 +617,12 @@ MercuriumNugget: {
 
 MillionDollarPainting: {
 	DisplayName: Million Dollar Painting
-	Tooltip: "'V. F. D.'"
+	Tooltip: "'V.F.D.'"
 }
 
 TheLegend: {
 	DisplayName: The Legend
-	Tooltip: "'C. Knight'"
+	Tooltip: "'C.Knight'"
 }
 
 LuminousFlowerHat: {
