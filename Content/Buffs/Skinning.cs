@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -261,7 +262,7 @@ sealed class SkinningNPC : GlobalNPC {
         if (npc.ModNPC is not null && npc.ModNPC.Mod != RoA.Instance) {
             return;
         }
-        bool critters = NPCID.Sets.CountsAsCritter[npcType] && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
+        bool critters = (NPCID.Sets.CountsAsCritter[npcType] || npc.friendly) && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
             !NPCID.Sets.IsDragonfly[npcType]/* && !NPCID.Sets.TownCritter[npcType]*/ && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
         bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.DeathSound == SoundID.NPCDeath1 || npc.DeathSound == SoundID.NPCDeath31 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType]
             && !npc.friendly && npc.aiStyle != 22;
@@ -286,6 +287,7 @@ sealed class SkinningNPC : GlobalNPC {
         IItemDropRule rule = ItemDropRule.Common(itemType, chanceDenominator: type == NPCsType.Critters ? 6 : 8);
         conditionalRule.OnSuccess(rule);
         npcLoot.Add(conditionalRule);
+        Console.WriteLine(typeof(NPCID).GetFields(BindingFlags.Static | BindingFlags.Public).FirstOrDefault(x => x.GetValue(null) is short value && value == npc.type));
     }
 
     enum NPCsType {
