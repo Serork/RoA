@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
 using RoA.Content.Items.Miscellaneous;
+using RoA.Content.Items.Weapons.Magic;
 
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
@@ -16,11 +17,17 @@ sealed class ReplaceLeatherDropFromNPCs : GlobalNPC {
             if (rule is CommonDrop drop && drop.itemId == ItemID.Leather) {
                 drop.itemId = ModContent.ItemType<AnimalLeather>();
                 drop.amountDroppedMinimum = drop.amountDroppedMaximum = 1;
-                if (drop.chanceNumerator != 1 && drop.chanceDenominator != 1) {
-                    drop.chanceNumerator /= 2;
-                }
+                bool flag = false;
                 if (drop.chanceNumerator == 1 && drop.chanceDenominator == 1) {
                     drop.chanceDenominator = 2;
+                    flag = true;
+                }
+                if (drop.chanceNumerator == 1 && drop.chanceDenominator > 1) {
+                    drop.chanceDenominator *= 2;
+                    flag = true;
+                }
+                if (!flag && drop.chanceNumerator > 1 && drop.chanceDenominator > 1) {
+                    drop.chanceNumerator /= 2;
                 }
             }
         }
@@ -32,11 +39,17 @@ sealed class ReplaceLeatherDropFromNPCs : GlobalNPC {
             if (rule is CommonDrop drop && drop.itemId == ItemID.Leather) {
                 drop.itemId = ModContent.ItemType<AnimalLeather>();
                 drop.amountDroppedMinimum = drop.amountDroppedMaximum = 1;
-                if (drop.chanceNumerator != 1 && drop.chanceDenominator != 1) {
-                    drop.chanceNumerator /= 2;
-                }
+                bool flag = false;
                 if (drop.chanceNumerator == 1 && drop.chanceDenominator == 1) {
                     drop.chanceDenominator = 2;
+                    flag = true;
+                }
+                if (drop.chanceNumerator == 1 && drop.chanceDenominator > 1) {
+                    drop.chanceDenominator *= 2;
+                    flag = true;
+                }
+                if (!flag && drop.chanceNumerator > 1 && drop.chanceDenominator > 1) {
+                    drop.chanceNumerator /= 2;
                 }
             }
         }
