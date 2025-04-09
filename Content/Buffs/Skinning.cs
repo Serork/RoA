@@ -262,15 +262,15 @@ sealed class SkinningNPC : GlobalNPC {
         if (npc.ModNPC is not null && npc.ModNPC.Mod != RoA.Instance) {
             return;
         }
-        bool critters = (NPCID.Sets.CountsAsCritter[npcType] || npc.friendly) && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
-            !NPCID.Sets.IsDragonfly[npcType]/* && !NPCID.Sets.TownCritter[npcType]*/ && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
+        /*bool critters = (NPCID.Sets.CountsAsCritter[npcType] || npc.friendly) && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
+            !NPCID.Sets.IsDragonfly[npcType] && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
         bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.DeathSound == SoundID.NPCDeath1 || npc.DeathSound == SoundID.NPCDeath31 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType]
             && !npc.friendly && npc.aiStyle != 22;
         NPCsType type;
         type = critters ? NPCsType.Critters : enemies ? NPCsType.Enemies : NPCsType.None;
         if (type == NPCsType.None)
             return;
-        int[] invalidTypes = [677 /*faeling*/, NPCID.SandElemental, NPCID.DungeonSpirit,
+        int[] invalidTypes = [677, NPCID.SandElemental, NPCID.DungeonSpirit,
                               NPCID.Worm, NPCID.TruffleWorm, NPCID.TruffleWormDigger, NPCID.Grasshopper,
                               NPCID.Firefly, NPCID.EnchantedNightcrawler, NPCID.FairyCritterBlue, NPCID.FairyCritterGreen, NPCID.FairyCritterPink,
                               NPCID.Grubby, NPCID.LadyBug, NPCID.Lavafly, NPCID.LightningBug, NPCID.Maggot, NPCID.Snail, NPCID.GlowingSnail, NPCID.MagmaSnail, NPCID.SeaSnail,
@@ -284,7 +284,12 @@ sealed class SkinningNPC : GlobalNPC {
             NPCsType.Critters => (ushort)ModContent.ItemType<AnimalLeather>(),
             NPCsType.Enemies => (ushort)ModContent.ItemType<RoughLeather>()
         };
-        IItemDropRule rule = ItemDropRule.Common(itemType, chanceDenominator: type == NPCsType.Critters ? 6 : 8);
+        */
+        bool invalidType = npc.SpawnedFromStatue || npc.value == 0 || npc.boss || npc.HitSound == SoundID.NPCHit2 || npc.HitSound == SoundID.NPCHit4 || npc.HitSound == SoundID.NPCHit5 || npc.HitSound == SoundID.NPCHit30 || npc.HitSound == SoundID.NPCHit34 || npc.HitSound == SoundID.NPCHit36 || npc.HitSound == SoundID.NPCHit39 || npc.HitSound == SoundID.NPCHit41 || npc.HitSound == SoundID.NPCHit49 || npc.HitSound == SoundID.NPCHit54;
+        invalidType = invalidType || npc.FullName.Contains("Slime") || npc.FullName.Contains("Elemental") || npc.FullName.Contains("Golem") || npc.FullName.Contains("Dandelion") || npc.FullName.Contains("Skeleton") || npc.FullName.Contains("Skull");
+        if (invalidType) return;
+        int itemType = npc.aiStyle == 3 ? (ushort)ModContent.ItemType<RoughLeather>() : (ushort)ModContent.ItemType<AnimalLeather>();
+        IItemDropRule rule = ItemDropRule.Common(itemType, 8);
         conditionalRule.OnSuccess(rule);
         npcLoot.Add(conditionalRule);
         Console.WriteLine(typeof(NPCID).GetFields(BindingFlags.Static | BindingFlags.Public).FirstOrDefault(x => x.GetValue(null) is short value && value == npc.type));

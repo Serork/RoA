@@ -219,7 +219,7 @@ Galipot: {
 }
 
 AnimalLeather: {
-	DisplayName: Animal Rawhide
+	DisplayName: Coarse Rawhide
 	Tooltip: Can be processed at the Tanning Rack
 }
 
@@ -237,7 +237,7 @@ TanningRack: {
 	DisplayName: Tanning Rack
 	Tooltip:
 		'''
-		Allows raw leather to be obtained from creatures
+		Allows raw leather to be obtained from enemies
 		It must be processed at the rack before expiring
 		'''
 }

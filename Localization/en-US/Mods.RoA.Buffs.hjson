@@ -5,7 +5,7 @@ Deceleration: {
 
 Skinning: {
 	DisplayName: Skinning
-	Description: Creatures may drop rawhides, which must be processed before expiring
+	Description: Enemies may drop rawhides, which must be processed before expiring
 }
 
 WreathCharged: {
