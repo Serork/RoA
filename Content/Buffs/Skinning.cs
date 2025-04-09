@@ -28,8 +28,6 @@ namespace RoA.Content.Buffs;
 
 sealed class Skinning : ModBuff {
     public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Skinning");
-        //Description.SetDefault("Enemies have a chance to drop rawhides, which will spoil when the effect ends");
         Main.debuff[Type] = true;
 
         BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
@@ -93,7 +91,6 @@ sealed class SpoilLeatherHandler : GlobalItem {
         int height = texture.Height / 5;
         int frames = 5;
         int usedFrame = (int)((TimeSystem.UpdateCount - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);
-        //usedFrame = (int)MathHelper.Clamp(usedFrame, 0, frames - 1);
         spriteBatch.Draw(texture, position + TextureAssets.Item[item.type].Size() * 0.2f * item.scale, 
             new Rectangle(0, height * usedFrame, texture.Width, height),
             drawColor, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
@@ -110,7 +107,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         ulong ticks = handler.NeedToSpoilTime - (TimeSystem.UpdateCount - handler.StartSpoilingTime);
         int minutes = (int)(ticks / 3600);
         minutes += 1;
-        string text = Language.GetText($"Mods.RoA.ExpireLeather{(minutes <= 1 ? 2 : 1)}").WithFormatArgs(minutes).Value;
+        string text = Language.GetText($"Mods.RoA.ExpireLeather{(minutes <= 1 ? 2 : 1)}").WithFormatArgs(ticks).Value;
         tooltips.Add(new TooltipLine(Mod, "LeatherExpireTooltip", text));
     }
 
@@ -147,12 +144,8 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
 
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        //if (Main.IsFastForwardingTime()) {
-        //    SpoilLeather(ref item);
-        //}
 
-        if (item.ModItem is AnimalLeather && (handler.StartSpoilingTime == 0/* ||*/
-            /*((!Main.dayTime && Main.time > 32400.0 - handler.NeedToSpoilTime - 2) || (Main.dayTime && Main.time > 54000.0 - handler.NeedToSpoilTime - 2)))*/)) {
+        if (item.ModItem is AnimalLeather && handler.StartSpoilingTime == 0) {
             handler.StartSpoilingTime = TimeSystem.UpdateCount;
             return true;
         }
@@ -173,15 +166,6 @@ sealed class SkinningPlayer : ModPlayer {
 
         if (Player.trashItem.ModItem is AnimalLeather)
             SpoilLeatherHandler.UpdateMe(Player.trashItem);
-
-        //if (Main.mouseItem.type == 3822)
-        //    Main.mouseItem.TurnToAir();
-
-        //for (int i = 0; i < 59; i++) {
-        //    Item item = Player.inventory[i];
-        //    if (item.stack > 0 && item.ModItem is AnimalLeather)
-        //        SpoilLeatherHandler.UpdateMe(Player.trashItem);
-        //}
 
         if (Player.chest == -2) {
             Chest chest = Player.bank;
@@ -222,7 +206,6 @@ sealed class SkinningPlayer : ModPlayer {
         for (int n = 0; n < 40; n++) {
             if (chest5.item[n].stack > 0 && chest5.item[n].ModItem is AnimalLeather) {
                 SpoilLeatherHandler.UpdateMe(chest5.item[n]);
-                //chest5.item[n].TurnToAir();
             }
         }
     }
@@ -232,86 +215,6 @@ sealed class SkinningPlayer : ModPlayer {
             SpoilLeatherHandler.UpdateMe(Main.mouseItem);
         }
         UpdateAllLeatherInInventories();
-    //    static bool valid(Item item) {
-    //        return !item.IsEmpty() && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>());
-    //    }
-    //    if (skinning) {
-    //        int type = (ushort)ModContent.BuffType<Skinning>();
-    //        if (Player.FindBuffIndex(type) != -1)
-    //            return;
-    //        goto reset;
-    //    }
-    //    else {
-    //        if (Player.whoAmI == Main.myPlayer && !Main.mouseItem.IsEmpty() && valid(Main.mouseItem)) {
-    //            int stack = Main.mouseItem.stack;
-    //            Main.mouseItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //            Main.mouseItem.stack = stack;
-    //        }
-    //        return;
-    //    }
-    //reset:
-    //    skinning = false;
-    //    if (Player.chest >= 0) {
-    //        for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
-    //            Item item = Main.chest[Player.chest].item[i];
-    //            if (valid(item)) {
-    //                int stack = item.stack;
-    //                Main.chest[Player.chest].item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //                Main.chest[Player.chest].item[i].stack = stack;
-    //            }
-    //        }
-    //    }
-    //    for (int i = 0; i < Player.bank.item.Length; i++) {
-    //        Item item = Player.bank.item[i];
-    //        if (valid(item)) {
-    //            int stack = item.stack;
-    //            Player.bank.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //            Player.bank.item[i].stack = stack;
-    //        }
-    //    }
-    //    for (int i = 0; i < Player.bank2.item.Length; i++) {
-    //        Item item = Player.bank2.item[i];
-    //        if (valid(item)) {
-    //            int stack = item.stack;
-    //            Player.bank2.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //            Player.bank2.item[i].stack = stack;
-    //        }
-    //    }
-    //    for (int i = 0; i < Player.bank3.item.Length; i++) {
-    //        Item item = Player.bank3.item[i];
-    //        if (valid(item)) {
-    //            int stack = item.stack;
-    //            Player.bank3.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //            Player.bank3.item[i].stack = stack;
-    //        }
-    //    }
-    //    for (int i = 0; i < Player.bank4.item.Length; i++) {
-    //        Item item = Player.bank3.item[i];
-    //        if (valid(item)) {
-    //            int stack = item.stack;
-    //            Player.bank4.item[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //            Player.bank4.item[i].stack = stack;
-    //        }
-    //    }
-    //    for (int i = 0; i < Player.inventory.Length; i++) {
-    //        Item item = Player.inventory[i];
-    //        if (valid(item)) {
-    //            int stack = item.stack;
-    //            Player.inventory[i].SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //            Player.inventory[i].stack = stack;
-    //        }
-    //    }
-    //    Item trashItem = Player.trashItem;
-    //    if (valid(trashItem)) {
-    //        int stack = trashItem.stack;
-    //        Player.trashItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //        Player.trashItem.stack = stack;
-    //    }
-    //    if (Player.whoAmI == Main.myPlayer && valid(Main.mouseItem)) {
-    //        int stack = Main.mouseItem.stack;
-    //        Main.mouseItem.SetDefaults((ushort)ModContent.ItemType<SpoiledRawhide>());
-    //        Main.mouseItem.stack = stack;
-    //    }
     }
 
     public override void PostItemCheck() {
@@ -323,14 +226,6 @@ sealed class SkinningPlayer : ModPlayer {
             if (Player.ItemTimeIsZero
                 && Player.itemAnimation > 0
                 && Player.controlUseItem) {
-                //foreach (Item inventoryItem in Player.inventory)
-                //    if (inventoryItem.type == item.type) {
-                //        int removed = Math.Min(inventoryItem.stack, 1);
-                //        inventoryItem.stack -= removed;
-                //        if (inventoryItem.stack <= 0)
-                //            inventoryItem.SetDefaults();
-                //        break;
-                //    }
                 if (--item.stack <= 0) {
                     item.TurnToAir();
                 }
@@ -353,8 +248,6 @@ sealed class SkinningPlayer : ModPlayer {
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     MultiplayerSystem.SendPacket(new ItemAnimationPacket(Player, item.useAnimation));
                 }
-                //NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Player.whoAmI);
-                //NetMessage.SendData(41, -1, -1, null, Player.whoAmI);
             }
         }
     }

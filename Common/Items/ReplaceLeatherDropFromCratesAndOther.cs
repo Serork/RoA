@@ -1,5 +1,7 @@
-﻿using RoA.Content.Items.Miscellaneous;
+﻿using RoA.Content.Buffs;
+using RoA.Content.Items.Miscellaneous;
 
+using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,6 +17,11 @@ sealed class ReplaceLeatherDropFromCratesAndOther : ILoadable {
         if (itemId == ItemID.Leather) {
             itemId = ModContent.ItemType<AnimalLeather>();
             stack = 1;
+
+            int whoAmI = orig(position, entitySource, itemId, stack);
+            Main.item[whoAmI].GetGlobalItem<SpoilLeatherHandler>().StartSpoilingTime = TimeSystem.UpdateCount;
+
+            return whoAmI;
         }
 
         return orig(position, entitySource, itemId, stack);
