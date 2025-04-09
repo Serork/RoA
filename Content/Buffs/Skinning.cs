@@ -263,7 +263,7 @@ sealed class SkinningNPC : GlobalNPC {
         }
         bool critters = NPCID.Sets.CountsAsCritter[npcType] && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
             !NPCID.Sets.IsDragonfly[npcType]/* && !NPCID.Sets.TownCritter[npcType]*/ && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
-        bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.DeathSound == SoundID.NPCDeath1 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType]
+        bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.DeathSound == SoundID.NPCDeath1 || npc.DeathSound == SoundID.NPCDeath31 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType]
             && !npc.friendly && npc.aiStyle != 22;
         NPCsType type;
         type = critters ? NPCsType.Critters : enemies ? NPCsType.Enemies : NPCsType.None;
@@ -283,7 +283,7 @@ sealed class SkinningNPC : GlobalNPC {
             NPCsType.Critters => (ushort)ModContent.ItemType<AnimalLeather>(),
             NPCsType.Enemies => (ushort)ModContent.ItemType<RoughLeather>()
         };
-        IItemDropRule rule = ItemDropRule.Common(itemType, chanceDenominator: 8);
+        IItemDropRule rule = ItemDropRule.Common(itemType, chanceDenominator: type == NPCsType.Critters ? 5 : 8);
         conditionalRule.OnSuccess(rule);
         npcLoot.Add(conditionalRule);
     }
