@@ -190,7 +190,7 @@ sealed partial class RoA : Mod {
                     AchievementCategory.Explorer,
                     ResourceManager.AchievementsTextures + "Achievement_MineMercuriumNugget", null,
                     false, true,
-                    6.5f,
+                    13.75f,
                     new string[] { "Event_" + "MineMercuriumNugget" });
 
                 mod.Call("AddAchievement", Instance,
