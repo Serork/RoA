@@ -1,7 +1,7 @@
 //Actual Conditions
 FlederSlayer: Drops if Lothor the Wild is killed while enraged
 BackwoodsKeyCondition: Drops in the Hardmode Backwoods
-TanningRack: Mods.RoA.Conditions.TanningRack
+TanningRack: Drops when the player has Skinning buff
 InBackwoods: Mods.RoA.Conditions.InBackwoods
 BackwoodsBiome: Mods.RoA.Conditions.BackwoodsBiome
 HasSaddle: Mods.RoA.Conditions.HasSaddleCondition
