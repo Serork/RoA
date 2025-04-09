@@ -292,7 +292,6 @@ sealed class SkinningNPC : GlobalNPC {
         IItemDropRule rule = ItemDropRule.Common(itemType, 8);
         conditionalRule.OnSuccess(rule);
         npcLoot.Add(conditionalRule);
-        Console.WriteLine(typeof(NPCID).GetFields(BindingFlags.Static | BindingFlags.Public).FirstOrDefault(x => x.GetValue(null) is short value && value == npc.type));
     }
 
     enum NPCsType {
