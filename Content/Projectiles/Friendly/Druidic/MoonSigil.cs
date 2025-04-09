@@ -68,7 +68,7 @@ sealed class MoonSigil : NatureProjectile {
             cloneDrawOffset = Utils.Remap((float)Math.Sin(Main.GlobalTimeWrappedHourly * 5f), -1f, 1f, 0.5f, 5f);
 
             if (Main.rand.NextBool(5)) {
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X - 5f, Projectile.position.Y), 48, 48, DustID.AncientLight, 0f, 0f, 0, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
+                int dust = Dust.NewDust(new Vector2(Projectile.position.X - 5f, Projectile.position.Y) - Vector2.One * 3f, 48, 48, DustID.AncientLight, 0f, 0f, 0, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = false;
                 Main.dust[dust].velocity.Y -= 2f;
