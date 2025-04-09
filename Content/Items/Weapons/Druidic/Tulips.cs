@@ -57,7 +57,7 @@ sealed class WeepingTulip : NatureItem {
 
         position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 2);
-        for (int i = 0; i < 2; i++) {
+        if (Main.rand.NextChance(0.6)) {
             float offset2 = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
                     spawnPosition = position - randomOffset / 2f + randomOffset;
@@ -120,7 +120,7 @@ sealed class SweetTulip : NatureItem {
 
         position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 1);
-        for (int i = 0; i < 2; i++) {
+        if (Main.rand.NextChance(0.6)) {
             float offset2 = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
                     spawnPosition = position - randomOffset / 2f + randomOffset;
@@ -183,7 +183,7 @@ sealed class ExoticTulip : NatureItem {
 
         position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 0);
-        for (int i = 0; i < 2; i++) {
+        if (Main.rand.NextChance(0.6)) {
             float offset2 = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
                     spawnPosition = position - randomOffset / 2f + randomOffset;

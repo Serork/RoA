@@ -85,7 +85,7 @@ sealed class BrilliantBouquet : NatureItem {
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, petalType);
 
         position += velocity2 * amount / 7f;
-        for (int i = 0; i < 2; i++) {
+        if (Main.rand.NextChance(0.7)) {
             float offset2 = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
                     spawnPosition = position - randomOffset / 2f + randomOffset;

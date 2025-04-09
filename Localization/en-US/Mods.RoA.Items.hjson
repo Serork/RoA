@@ -238,7 +238,7 @@ TanningRack: {
 	Tooltip:
 		'''
 		Allows raw leather to be obtained from creatures
-		It must be processed at the rack before spoiling
+		It must be processed at the rack before expiring
 		'''
 }
 
@@ -1886,7 +1886,7 @@ RoyalQualityHoney: {
 	DisplayName: Royal Quality Honey
 	Tooltip:
 		'''
-		Increasing life regeneration provides a further honeyed boost
+		Increasing life regeneration provides a further honey boost
 		'Figs, cheese and a drizzle of honey'
 		'''
 }

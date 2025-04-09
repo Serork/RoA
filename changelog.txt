@@ -1,11 +1,13 @@
-- Giant Tree Sapling, Soul of the Woods and Firefly Pin now display on the character when worn
-- Bloodbath Locket player sprite now has a glowmask
-- Various glowmasks no longer break whilst using the Gravitation Potion
-- Clentaminator now correctly converts all Backwoods blocks
-- Bezoar now grants immunity to Toxic Fumes again (broken in the previous patch)
-- Wreath discharge sound no longer plays upon entering the world with a druid weapon in the first inventory slot
-- Sacrificial Sickle's crescent projectile now plays a different sound when destroyed
-- Crates from Spirit Reforged and other items will no longer drop refined Leather
-- Fixed Advanced World Generation breaking when generating the Backwoods
-- Fixed Jaw Trap becoming invisible but still functional when mined
-- Added a few custom colours for Moon Flower for friends and contributors
+- Tanning Rack has been reworked:
+-- Raw leather no longer expires when the buff runs out; each item has its own timer with an indicator
+-- Raw leather no longer stacks and drops less often, but gives a larger quantity of refined leather when processed
+-- Modded sources of refined leather now provide raw leather with the usual expiration time, regardless of the buff
+-- The buff can no longer be cancelled and the rack cannot be placed while under its effect to prevent exploits
+-- Localization and sounds have been updated
+- Fixed the game crashing upon opening the mod configuration while Starlight River is enabled
+- The Show/Hide Wreath Slot text is now localized and consistent with vanilla
+- Bloodshed Axe and Fleder Slayer no longer break the character's shoulder animation
+- Improved Sacrificial Sickle's Moon Sigil projectile visuals
+- Druid Soul now plays its death sound slightly earlier
+- Tulip weapons now create particles less often
+- Added a few more custom colours for Moon Flower for friends and contributors

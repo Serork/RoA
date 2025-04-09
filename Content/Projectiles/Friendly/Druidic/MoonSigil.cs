@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Core.Utility;
-
+using System;
 using System.IO;
 
 using Terraria;
@@ -40,8 +40,6 @@ sealed class MoonSigil : NatureProjectile {
 
         Projectile.penetrate = 6;
         Projectile.timeLeft = 10 * 60;
-
-        //base.SetDefaults();
     }
 
     public override bool? CanDamage() => false;
@@ -59,28 +57,26 @@ sealed class MoonSigil : NatureProjectile {
     }
 
     public override void AI() {
-        if (cloneDrawRotation < 120) cloneDrawRotation += 1f;
+        if (cloneDrawRotation < 360) cloneDrawRotation += 1f;
         else cloneDrawRotation = 0;
-        if (cloneDrawOffset > 0 && cloneDrawReturn == 0) {
-            cloneDrawOffset = cloneDrawOffset * 0.9f - 0.1f;
-        }
-        else if (cloneDrawOffset < 5 && cloneDrawReturn == -1) {
-            cloneDrawOffset += 0.01f + (5 - cloneDrawOffset) * 0.25f;
-        }
-        else if (cloneDrawOffset > 0 && cloneDrawReturn == 1) {
-            cloneDrawOffset -= 0.01f + (5 - cloneDrawOffset) * 0.25f;
-        }
-        else if (cloneDrawReturn != 0) cloneDrawReturn *= -1;
-        else cloneDrawReturn = -1;
 
-        if (cloneDrawAlpha < 0.8f) cloneDrawAlpha += 0.05f;
-        else if (Main.rand.Next(5) == 0) {
-            int dust = Dust.NewDust(new Vector2(Projectile.position.X - 5f, Projectile.position.Y), 48, 48, DustID.AncientLight, 0f, 0f, 0, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
-            Main.dust[dust].noGravity = true;
-            Main.dust[dust].noLight = false;
-            Main.dust[dust].velocity.Y -= 2f;
-            Main.dust[dust].velocity.X *= 0.1f;
+        if (cloneDrawOffset > 5f) {
+            cloneDrawOffset = cloneDrawOffset * 0.9f - 0.1f;
+            cloneDrawAlpha += 0.02f;
         }
+        else {
+            cloneDrawOffset = Utils.Remap((float)Math.Sin(Main.GlobalTimeWrappedHourly * 5f), -1f, 1f, 0.5f, 5f);
+
+            if (Main.rand.NextBool(5)) {
+                int dust = Dust.NewDust(new Vector2(Projectile.position.X - 5f, Projectile.position.Y), 48, 48, DustID.AncientLight, 0f, 0f, 0, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].noLight = false;
+                Main.dust[dust].velocity.Y -= 2f;
+                Main.dust[dust].velocity.X *= 0.1f;
+            }
+        }
+        Projectile.frame = (int)Utils.Remap((float)Math.Sin(Main.GlobalTimeWrappedHourly * 5f), -1f, 1f, 0f, 4f);
+
         if (Projectile.timeLeft == 595) SoundEngine.PlaySound(SoundID.Item82, Projectile.position);
         if (Projectile.timeLeft == 580) {
             for (int i = 0; i < 30; i++) {
@@ -91,26 +87,18 @@ sealed class MoonSigil : NatureProjectile {
                 Main.dust[dust3].velocity.X *= 0.1f;
             }
         }
-        Lighting.AddLight(Projectile.Center, 0.4f, 0.4f, 0.2f);
-        //Lighting.AddLight(Projectile.Center, cloneDrawAlpha, cloneDrawAlpha, cloneDrawAlpha * 0.5f);
-
-        if (++Projectile.frameCounter >= 12) {
-            Projectile.frameCounter = 0;
-            if (++Projectile.frame >= 4) {
-                Projectile.frame = 0;
-            }
-        }
+        Lighting.AddLight(Projectile.Center, 0.6f, 0.6f, 0.3f);
 
         if (Projectile.owner == Main.myPlayer) {
             _mousePosition = Main.player[Projectile.owner].GetViableMousePosition();
             Projectile.netUpdate = true;
         }
-        Vector2 mousePos = _mousePosition; // êîîðäû êóðñîðà íà ýêðàíå
-        Vector2 projectilePos = new Vector2(Projectile.position.X, Projectile.position.Y); // êîîðäû ëóíû
-        Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y); // íàïðàâëåíèå 
-        direction.Normalize(); // â äèàïàçîí îò 0 äî 1
-        direction *= 8; // ñêîðîñòü
-        Player player = Main.player[Projectile.owner]; // èãðîê
+        Vector2 mousePos = _mousePosition;
+        Vector2 projectilePos = new Vector2(Projectile.position.X, Projectile.position.Y);
+        Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);
+        direction.Normalize();
+        direction *= 8;
+        Player player = Main.player[Projectile.owner];
         if (player.ItemAnimationJustStarted && player.inventory[player.selectedItem].type == ModContent.ItemType<SacrificialSickleOfTheMoon>() && Projectile.timeLeft < 590) {
             for (int num615 = 0; num615 < 10; num615++) {
                 int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.AncientLight, direction.X, direction.Y, 100, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
