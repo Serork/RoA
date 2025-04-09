@@ -1,6 +1,7 @@
 //Actual Conditions
 FlederSlayer: Выпадает, если Лотор Лютый убит в состоянии ярости
 BackwoodsKeyCondition: Выпадает в сложном режиме в чаще
+TanningRack: Выпадает, когда игрок имеет Сбор скальпов 
 //Misc
 // InBackwoods: Mods.RoA.Conditions.InBackwoods
 // TanningRack: Mods.RoA.Conditions.TanningRack
