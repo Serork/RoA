@@ -32,12 +32,16 @@ sealed class MinAxeAndHammerSystem : ILoadable {
         On_Player.ItemCheck_UseMiningTools_TryHittingWall += On_Player_ItemCheck_UseMiningTools_TryHittingWall;
     }
 
-    private void On_Player_ItemCheck_UseMiningTools_TryHittingWall(On_Player.orig_ItemCheck_UseMiningTools_TryHittingWall orig, Player self, Item sItem, int wX, int wY) {
+    private void On_Player_ItemCheck_UseMiningTools_TryHittingWall(On_Player.orig_ItemCheck_UseMiningTools_TryHittingWall orig, Player self, Item sItem, int wX, int wY) { 
         if (Main.tile[wX, wY].WallType > 0 && (!Main.tile[wX, wY].HasTile || wX != Player.tileTargetX || wY != Player.tileTargetY ||
             (!Main.tileHammer[Main.tile[wX, wY].TileType] && !self.poundRelease)) && self.toolTime == 0 && self.itemAnimation > 0 && self.controlUseItem && sItem.hammer > 0 &&
             Player.CanPlayerSmashWall(wX, wY)) {
-            int damage = (int)((float)sItem.hammer * 1.5f);
             Tile tile = Main.tile[wX, wY];
+            if (WallLoader.GetWall(tile.WallType) is not TileHooks.IRequireMinHammerPower) {
+                orig(self, sItem, wX, wY);
+                return;
+            }
+            int damage = (int)((float)sItem.hammer * 1.5f);
             if (WallLoader.GetWall(tile.WallType) is TileHooks.IRequireMinHammerPower tileMinHammerPower) {
                 if (sItem.hammer < tileMinHammerPower.MinHammer) {
                     damage = 0;
@@ -54,10 +58,19 @@ sealed class MinAxeAndHammerSystem : ILoadable {
     }
 
     private void On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On_Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y) {
+        Tile tile = Main.tile[x, y];
+        if (tile.HasTile) {
+            if (TileLoader.GetTile(tile.TileType) is not TileHooks.IRequireMinHammerPower &&
+                TileLoader.GetTile(tile.TileType) is not TileHooks.IRequireMinAxePower &&
+                !PrimordialTree.IsPrimordialTree(x, y)) {
+                orig(self, sItem, out canHitWalls, x, y);
+                return;
+            }
+        }
+        
         int num = -1;
         int num2 = 0;
         canHitWalls = true;
-        Tile tile = Main.tile[x, y];
         if (!tile.HasTile)
             return;
 
