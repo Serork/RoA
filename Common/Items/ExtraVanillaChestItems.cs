@@ -50,10 +50,10 @@ sealed class ExtraVanillaChestItems : ModSystem {
         On_WorldGen.AddBuriedChest_int_int_int_bool_int_bool_ushort += On_WorldGen_AddBuriedChest_int_int_int_bool_int_bool_ushort;
         On_WorldGen.MakeDungeon += On_WorldGen_MakeDungeon;
         //On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
-        On_WorldGen.IslandHouse += On_WorldGen_IslandHouse;
+        //On_WorldGen.IslandHouse += On_WorldGen_IslandHouse;
     }
 
-    private void On_WorldGen_IslandHouse(On_WorldGen.orig_IslandHouse orig, int i, int j, int islandStyle) {
+    //private void On_WorldGen_IslandHouse(On_WorldGen.orig_IslandHouse orig, int i, int j, int islandStyle) {
         bool flag = WorldGen.crimson;
         if (WorldGen.drunkWorldGen)
             flag = GenVars.crimsonLeft && i < Main.maxTilesX / 2 || (!GenVars.crimsonLeft && i > Main.maxTilesX / 2 ? true : false);
