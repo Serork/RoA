@@ -414,8 +414,12 @@ sealed class PineCone : NatureItem {
 
                     if (Main.tile[i, k] != null) {
                         Tile tile = Main.tile[i, k];
-                        if ((tile.TileType == 2 || tile.TileType == 109 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 147 || tile.TileType == 199 || tile.TileType == 23 || tile.TileType == 633)
-                             || TileLoader.CanDropAcorn(tile.TileType)) {
+                        bool vanillaResult = false;
+                        if (tile.TileType == 2 || tile.TileType == 109 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 147 || tile.TileType == 199 || tile.TileType == 23 || tile.TileType == 633) {
+                            vanillaResult = true;
+                        }
+
+                        if (vanillaResult || TileLoader.CanDropAcorn(tile.TileType)) {
                             dropItem = 9;
                             secondaryItem = 27;
                         }
@@ -999,6 +1003,9 @@ sealed class PineCone : NatureItem {
     public extern static int TileDrawing_GetPalmTreeBiome(TileDrawing self, int tileX, int tileY);
 
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
+        orig(self);
+        return;
+
         Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
         Vector2 zero = Vector2.Zero;
         int num = 0;
