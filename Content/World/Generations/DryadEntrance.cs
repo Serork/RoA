@@ -59,7 +59,7 @@ sealed class DryadEntrance : ModSystem {
     }
 
     public override void Load() {
-        On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
+        //On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
     }
 
     private void On_WorldGen_GrowLivingTreePassageRoom(On_WorldGen.orig_GrowLivingTreePassageRoom orig, int minl, int minr, int Y) {
@@ -276,21 +276,19 @@ sealed class DryadEntrance : ModSystem {
     }
 
     private void DryadEntranceLoomPlacement(GenerationProgress progress, GameConfiguration configuration) {
-        if (_loomPlacedInWorld) {
-            bool flag = false;
-            for (int i = 0; i < Main.maxTilesX; i++) {
-                for (int j = 0; j < Main.maxTilesY; j++) {
-                    if (WorldGenHelper.ActiveTile(i, j, 304)) {
-                        flag = true;
-                    }
+        bool flag = false;
+        for (int i = 0; i < Main.maxTilesX; i++) {
+            for (int j = 0; j < Main.maxTilesY; j++) {
+                if (WorldGenHelper.ActiveTile(i, j, 304)) {
+                    flag = true;
                 }
             }
-            if (!flag) {
-                _loomPlacedInWorld = false;
-            }
         }
+        //if (!flag) {
+        //    _loomPlacedInWorld = false;
+        //}
 
-        if (_loomPlacedInWorld ||_bigRubblePosition == Point.Zero) {
+        if (flag/* || _bigRubblePosition == Point.Zero*/) {
             return;
         }
 
