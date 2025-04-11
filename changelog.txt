@@ -1,6 +1,5 @@
-- Reworked the pool of creatures that can drop raw leather; now it covers most enemies in the game, while more accurately excluding certain types like slimes and skeletons
-- Critters and enemies spawned from statues can no longer drop raw leather
-- Modded enemies now have a correct chance to drop raw leather
-- Raw leather dropped from modded crates now has a correct expiration time
-- Achievement for mining a Mercurium Nugget now displays at a further point in progression
-- Lothor the Wild's bestiary page now displays correctly on lower resolutions
+- Fixed Quick Mining from Quality of Terraria not working properly 
+- Fixed some modded trees not displaying their tops and not dropping items upon shaking 
+- Fixed the guaranteed Living Loom sometimes not spawning in the Dryad Coccoon when there are no giant trees in the world
+- Fixed Ent and Lumberjack gore being based on outdated sprites
+- Changed the use sounds for Bookworms
