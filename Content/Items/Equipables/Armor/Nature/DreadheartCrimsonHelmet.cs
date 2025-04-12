@@ -55,7 +55,7 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-        if (player.HasSetBonusFrom<DreadheartCrimsonHelmet>() && direction == IDoubleTap.TapDirection.Down && player.GetModPlayer<BaseFormHandler>().CanTransform) {
+        if (player.HasSetBonusFrom<DreadheartCrimsonHelmet>() && direction == Helper.CurrentDoubleTapDirectionForSetBonuses && player.GetModPlayer<BaseFormHandler>().CanTransform) {
             BaseFormHandler.ToggleForm<CrimsonInsectForm>(player);
         }
     }

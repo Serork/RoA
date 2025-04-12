@@ -36,9 +36,9 @@ sealed class DoubleTapHandler : ModPlayer, IPostSetupContent {
 
     private void KeyDoubleTap(int keyDir) {
         int direction = keyDir;
-        if (direction == 0 && Main.ReversedUpDownArmorSetBonuses) {
-            direction = 1;
-        }
+        //if (direction == 0 && Main.ReversedUpDownArmorSetBonuses) {
+        //    direction = 1;
+        //}
         foreach (IDoubleTap type in _doubleTapTypes) {
             type.OnDoubleTap(Player, (IDoubleTap.TapDirection)direction);
         }
