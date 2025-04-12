@@ -1674,7 +1674,11 @@ Has2rJacket: {
 
 Has2rMask: {
 	DisplayName: The Unspeakable One's Mask
-	Tooltip: "{$Mods.RoA.RoADev}"
+	Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'Strange is the night where black stars rise'
+		'''
 }
 
 Has2rPants: {
