@@ -1236,7 +1236,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(treeBranch) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
                     WorldGen.KillTile(i, j);
-                    WallBush2(i, j - 3, false);
+                    WallBush2(i, j - 1, false);
                     //if (_random.NextChance(0.35)) {
                     //    WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
                     //}
@@ -4627,7 +4627,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step6_SpreadGrass(bool flag = false) {
         int y = Math.Min(CenterY - EdgeY, (int)Main.worldSurface + 10);
         double randomnessY = y + 50.0;
-        for (int i = Left - 100; i < Right + 100; i++) {
+        for (int i = Left - 50; i < Right + 50; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Main.worldSurface; j++) {
                 randomnessY += (double)_random.NextFloat(-2f, 3f);
                 randomnessY = Math.Clamp(randomnessY, y + 30.0, y + 60.0);
