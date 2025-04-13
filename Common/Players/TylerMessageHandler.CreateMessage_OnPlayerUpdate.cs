@@ -48,7 +48,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
             if (player.statLife <= 0 && Main.rand.NextBool(10)) {
                 Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
             }
-			if (player.statLife <= 0 && Player.name == "Serork" || Player.name == "peege.on" || Player.name == "has2r") {
+			if (player.statLife <= 0 && (Player.name == "Serork" || Player.name == "peege.on" || Player.name == "has2r")) {
                 Create(MessageSource.Special, Player.Top, _messageVelocity);
             }
         }
