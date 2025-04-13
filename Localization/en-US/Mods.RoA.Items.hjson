@@ -239,6 +239,7 @@ TanningRack: {
 		'''
 		Allows raw leather to be obtained from enemies
 		It must be processed at the rack before expiring
+		Cannot be placed while the effect is active
 		'''
 }
 
