@@ -248,6 +248,10 @@ static class WorldGenHelper {
                 hashSet.Add(item);
                 list.Remove(item);
                 Tile tile = Main.tile[item.X, item.Y];
+                bool flag2 = shouldSpread(new Point(item.X, item.Y));
+                if (!flag2 && (shouldSpread(new Point(item.X - 5, item.Y)) || shouldSpread(new Point(item.X + 5, item.Y)))) {
+                    tile = Main.tile[item.X + WorldGen.genRand.Next(-5, 6), item.Y];
+                }
                 if (tile.WallType == num || ignoreWallTypes.Contains(num) || WallID.Sets.CannotBeReplacedByWallSpread[tile.WallType])
                     continue;
 
@@ -264,7 +268,7 @@ static class WorldGenHelper {
                         continue;
                     }
 
-                    if (!ignoreWallTypes.Contains(num) && shouldSpread(new Point(item.X, item.Y))) {
+                    if (!ignoreWallTypes.Contains(num) && flag2) {
                         tile.WallType = num;
                         onSpread();
                     }
@@ -311,7 +315,7 @@ static class WorldGenHelper {
                     }
                 }
                 else if (tile.HasTile) {
-                    if (!ignoreWallTypes.Contains(num) && shouldSpread(new Point(item.X, item.Y))) {
+                    if (!ignoreWallTypes.Contains(num) && flag2) {
                         tile.WallType = num;
                         onSpread();
                     }
