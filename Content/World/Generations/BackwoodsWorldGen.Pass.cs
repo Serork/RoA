@@ -4160,7 +4160,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
-        if (ModLoader.HasMod("SpiritReforged")) {
+        if (ModLoader.HasMod("SpiritReforged") || BackwoodsWorldGen._extraModSupport) {
             for (int num696 = 3; num696 < Main.maxTilesX - 3; num696++) {
                 double num697 = (double)num696 / (double)Main.maxTilesX;
                 bool flag43 = true;

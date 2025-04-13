@@ -18,6 +18,8 @@ namespace RoA.Content.World.Generations;
 sealed class BackwoodsWorldGen : ModSystem {
     private const float LAYERWEIGHT = 5000f;
 
+    internal static bool _extraModSupport;
+
     public static BackwoodsBiomePass BackwoodsWorldGenPass { get; private set; }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
@@ -26,7 +28,16 @@ sealed class BackwoodsWorldGen : ModSystem {
         bool hasRemnants = ModLoader.HasMod("Remnants");
 
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
-        genIndex += 6;
+        if (genIndex == -1) {
+            _extraModSupport = true;
+        }
+        else {
+            genIndex += 6;
+        }
+        if (_extraModSupport) {
+            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Pyramids"));
+            genIndex -= 1;
+        }
         if (hasSpiritReforged) {
             genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Pyramids"));
             genIndex += 2;
@@ -92,6 +103,10 @@ sealed class BackwoodsWorldGen : ModSystem {
         tasks.Insert(tasks.Count - 2, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast));
 
         tasks.Add(new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast1));
+    }
+
+    public override void PostWorldGen() {
+        _extraModSupport = false;
     }
 
     public override void Load() {
