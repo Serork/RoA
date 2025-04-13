@@ -101,7 +101,7 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
             Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
 
         if (Player.whoAmI == Main.myPlayer) {
-            if (Player.chest >= 0) {
+            if (Player.chest < -1) {
                 for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
                     Item item = Main.chest[Player.chest].item[i];
                     if (!item.IsEmpty() && item.type == ModContent.ItemType<MercuriumOre>()) {
