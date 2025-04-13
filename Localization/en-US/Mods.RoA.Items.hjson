@@ -1668,7 +1668,7 @@ Has2rJacket: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'And strange moons circle through the skies...'
+		'...And strange moons circle through the skies...'
 		'''
 }
 
@@ -1677,7 +1677,7 @@ Has2rMask: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Strange is the night where black stars rise'
+		'Strange is the night where black stars rise...'
 		'''
 }
 

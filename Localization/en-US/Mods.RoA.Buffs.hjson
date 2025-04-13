@@ -138,12 +138,12 @@ Burning: {
 
 ToxicFumes: {
 	DisplayName: Toxic Fumes
-	Description: Losing life, movement speed is reduced
+	Description: Noxious vapors of Mercurium Ore are filling your lungs
 }
 
 ToxicFumesNoTimeDisplay: {
 	DisplayName: Toxic Fumes
-	Description: Losing life, movement speed is reduced
+	Description: Noxious vapors of Mercurium Ore are filling your lungs
 }
 
 OniMask: {

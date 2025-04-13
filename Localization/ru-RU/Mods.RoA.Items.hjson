@@ -1668,7 +1668,7 @@ Has2rJacket: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'И луны странные кружат на небесах...'
+		'...И луны странные кружат на небесах...'
 		'''
 }
 
@@ -1677,7 +1677,7 @@ Has2rMask: {
 	/* Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Strange is the night where black stars rise'
+		'Strange is the night where black stars rise...'
 		''' */
 }
 
@@ -1686,8 +1686,7 @@ Has2rPants: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Но всех странней, как странная угроза,
-		Затерянная в вечности Каркоза.'
+		'...Но всех странней, как странная угроза, затерянная в вечности Каркоза.'
 		'''
 }
 
