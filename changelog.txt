@@ -1,5 +1,4 @@
-- Fixed Quick Mining from Quality of Terraria not working properly 
-- Fixed some modded trees not displaying their tops and not dropping items upon shaking 
-- Fixed the guaranteed Living Loom sometimes not spawning in the Dryad Coccoon when there are no giant trees in the world
-- Fixed Ent and Lumberjack gore being based on outdated sprites
-- Changed the use sounds for Bookworms
+- Added compatibility for Exxo Avalon Origins world generation
+- Fixed not being able to activate set bonuses by double tapping UP
+- Updated the description of the Toxic Fumes debuff to clarify its source
+- Opening a chest that contains Mercurium Ore no longer applies Toxic Fumes
