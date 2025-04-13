@@ -44,14 +44,12 @@ sealed partial class TylerMessageHandler : ModPlayer {
     }
 
     public override void OnHitAnything(float x, float y, Entity victim) {
-        //if (victim is NPC npc) {
-        //    if (npc.friendly && npc.life <= 0 && Main.rand.NextBool(20)) {
-        //        Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
-        //    }
-        //}
         if (victim is Player player) {
             if (player.statLife <= 0 && Main.rand.NextBool(10)) {
                 Create(MessageSource.KilledBunny, Player.Top, _messageVelocity);
+            }
+			if (player.statLife <= 0 && Player.name == "Serork" || Player.name == "peege.on" || Player.name == "has2r") {
+                Create(MessageSource.Special, Player.Top, _messageVelocity);
             }
         }
     }
