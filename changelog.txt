@@ -1,4 +1,2 @@
-- Added compatibility for Exxo Avalon Origins world generation
-- Fixed not being able to activate set bonuses by double tapping UP
-- Updated the description of the Toxic Fumes debuff to clarify its source
-- Opening a chest that contains Mercurium Ore no longer applies Toxic Fumes
+- Made a few minor improvements to Backwoods biome generation
+- Tanning Rack description now shows that it cannot be placed while under the effect
