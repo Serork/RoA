@@ -2605,7 +2605,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         /*if (ModLoader.HasMod("SpiritMod"))*/
         {
-            for (int i = Left - 100; i <= Right + 100; i++) {
+            for (int i = Left - 50; i <= Right + 50; i++) {
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
                     if (WorldGenHelper.ActiveTile(i, j, _dirtTileType)) {
                         WorldGenHelper.GetTileSafely(i, j).TileType = TileID.Dirt;
@@ -4520,7 +4520,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         /*if (ModLoader.HasMod("SpiritMod")) */
         {
-            for (int i = Left - 100; i <= Right + 100; i++) {
+            for (int i = Left - 50; i <= Right + 50; i++) {
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
                     if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt)) {
                         WorldGenHelper.GetTileSafely(i, j).TileType = _dirtTileType;
