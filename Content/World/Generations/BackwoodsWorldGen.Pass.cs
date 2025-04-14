@@ -386,8 +386,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (y > BackwoodsVars.FirstTileYAtCenter) {
             y = BackwoodsVars.FirstTileYAtCenter;
         }
-        y += 3;
-        WorldUtils.Gen(new Point(posX, y), new Shapes.Mound(20, 10), Actions.Chain(new Modifiers.Blotches(2, 1, 0.8), new Actions.SetTile(_dirtTileType), new Actions.SetFrames(frameNeighbors: true)));
+        WorldUtils.Gen(new Point(posX, y), new Shapes.Mound(20, 6), Actions.Chain(new Modifiers.Blotches(2, 1, 2, 4, 0.8), new Actions.SetTile(_dirtTileType), new Actions.SetFrames(frameNeighbors: true)));
     }
 
     private void Step_AddWebs() {
@@ -1574,8 +1573,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void WallBush2(int i, int j, bool ignoreWalls = true) {
-        int sizeX = 8;
-        int sizeY = 2;
+        int sizeX = 5;
+        int sizeY = 3;
         int sizeY2 = sizeY;
         while (sizeY2 > 0) {
             double progress = sizeX * ((double)sizeY2 / sizeY);
@@ -1588,13 +1587,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 for (int y = y1; y < y2; y++) {
                     double min = Math.Abs((double)(x - i)) + Math.Abs((double)(y - j));
                     double max = (double)sizeX * 0.5 * (1.0 + 3 * 0.025);
-                    for (int x3 = x - 1; x3 < x + 1; x3++) {
-                        for (int y3 = y - 1; y3 < y + 1; y3++) {
-                            if (ignoreWalls && (WorldGenHelper.ActiveTile(x3, y3, _leavesTileType) || WorldGenHelper.GetTileSafely(x3, y3).WallType == _elderwoodWallType)) {
-                                return;
-                            }
-                        }
-                    }
+                    //for (int x3 = x - 1; x3 < x + 1; x3++) {
+                    //    for (int y3 = y - 1; y3 < y + 1; y3++) {
+                    //        if (ignoreWalls && (WorldGenHelper.ActiveTile(x3, y3, _leavesTileType) || WorldGenHelper.GetTileSafely(x3, y3).WallType == _elderwoodWallType)) {
+                    //            return;
+                    //        }
+                    //    }
+                    //}
                     if (min < max && WorldGenHelper.GetTileSafely(x, y).WallType != _leavesWallType && (WorldGenHelper.GetTileSafely(x, y).WallType != _elderwoodWallType && (!WorldGen.SolidTile2(x, y) || WorldGenHelper.ActiveTile(x, y, _grassTileType)))) {
                         WorldGenHelper.ReplaceWall(x, y, _leavesWallType);
                     }
