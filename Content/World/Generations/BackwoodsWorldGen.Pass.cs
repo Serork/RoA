@@ -1236,7 +1236,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(treeBranch) && !WorldGenHelper.GetTileSafely(i - 1, j).ActiveTile(TileID.Trees) && !WorldGenHelper.GetTileSafely(i + 1, j).ActiveTile(TileID.Trees)) {
                     WorldGen.KillTile(i, j);
-                    WallBush2(i, j - 2, false);
+                    if (tile.WallType != _leavesWallType) {
+                        WallBush2(i, j - 2, false);
+                    }
                     //if (_random.NextChance(0.35)) {
                     //    WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
                     //}
@@ -2709,21 +2711,21 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int x = Left - 100; x <= Right + 100; x++) {
-            for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom + EdgeY + 10; y++) {
-                Tile tile = WorldGenHelper.GetTileSafely(x, y);
-                if (tile.HasTile) {
-                    for (int x2 = x - 1; x2 < x + 2; x2++) {
-                        for (int y2 = y - 1; y2 < y + 2; y2++) {
-                            WorldGen.SquareTileFrame(x2, y2);
-                        }
-                    }
-                    if (tile.TileType == TileID.WaterDrip && _random.NextChance(0.8)) {
-                        tile.HasTile = false;
-                    }
-                }
-            }
-        }
+        //for (int x = Left - 100; x <= Right + 100; x++) {
+        //    for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom + EdgeY + 10; y++) {
+        //        Tile tile = WorldGenHelper.GetTileSafely(x, y);
+        //        if (tile.HasTile) {
+        //            for (int x2 = x - 1; x2 < x + 2; x2++) {
+        //                for (int y2 = y - 1; y2 < y + 2; y2++) {
+        //                    WorldGen.SquareTileFrame(x2, y2);
+        //                }
+        //            }
+        //            if (tile.TileType == TileID.WaterDrip && _random.NextChance(0.8)) {
+        //                tile.HasTile = false;
+        //            }
+        //        }
+        //    }
+        //}
 
         if (!WorldGen.InWorld(_gatewayLocation.X, _gatewayLocation.Y, 30)) {
             return;
