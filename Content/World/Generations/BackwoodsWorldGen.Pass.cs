@@ -38,8 +38,6 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
-using static Mono.CompilerServices.SymbolWriter.CodeBlockEntry;
-
 namespace RoA.Content.World.Generations;
 
 // one hella mess
