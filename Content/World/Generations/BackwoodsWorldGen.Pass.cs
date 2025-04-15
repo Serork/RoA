@@ -559,9 +559,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 //    wallType = _dirtWallType;
                                 //}
 
-                                WorldGenHelper.CustomWall2(num300, num301, wallType, (point) => {
-                                    return point.X > Left - 25 - _random.Next(10) && point.X < Right + 25 + _random.Next(10);
-                                }, () => {
+                                WorldGenHelper.CustomWall2(num300, num301, wallType, Left - 25, Right + 25, () => {
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
                                 }, WallID.MudUnsafe, WallID.MudWallEcho, WallID.JungleUnsafe, WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4,
@@ -665,9 +663,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 //    wallType = _dirtWallType;
                                 //}
 
-                                WorldGenHelper.CustomWall2(num300, num301, wallType, (point) => {
-                                    return point.X > Left - 25 - _random.Next(5) && point.X < Right + 25 + _random.Next(5);
-                                }, () => {
+                                WorldGenHelper.CustomWall2(num300, num301, wallType, Left - 25, Right + 25, () => {
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
                                     WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
                                 }, WallID.MudUnsafe, WallID.MudWallEcho, WallID.JungleUnsafe, WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4,
