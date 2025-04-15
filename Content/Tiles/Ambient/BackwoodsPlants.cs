@@ -22,7 +22,7 @@ sealed class BackwoodsPlants : ModTile {
         TileID.Sets.SwaysInWindBasic[Type] = true;
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
-        TileID.Sets.SlowlyDiesInWater[Type] = true;
+        //TileID.Sets.SlowlyDiesInWater[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.StyleHorizontal = true;

@@ -3092,17 +3092,17 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom; j++) {
                     if (i > maxLeft + _random.NextFloat() * 15 && i < maxRight - _random.NextFloat() * 15) {
                         Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                        if (tile.ActiveTile(_mossTileType)) {
-                            Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
-                            Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j);
-                            if (aboveTile.ActiveTile(_mossTileType) && (leftTile.ActiveTile(_mossTileType) || leftTile.ActiveTile(_grassTileType))) {
-                                tile.TileType = _stoneTileType;
-                            }
-                            Tile belowTile = WorldGenHelper.GetTileSafely(i, j + 1);
-                            if (leftTile.ActiveTile(_mossTileType) && belowTile.Slope != SlopeType.Solid) {
-                                tile.TileType = _stoneTileType;
-                            }
-                        }
+                        //if (tile.ActiveTile(_mossTileType)) {
+                        //    Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
+                        //    Tile leftTile = WorldGenHelper.GetTileSafely(i - 1, j);
+                        //    if (aboveTile.ActiveTile(_mossTileType) && (leftTile.ActiveTile(_mossTileType) || leftTile.ActiveTile(_grassTileType))) {
+                        //        tile.TileType = _stoneTileType;
+                        //    }
+                        //    Tile belowTile = WorldGenHelper.GetTileSafely(i, j + 1);
+                        //    if (leftTile.ActiveTile(_mossTileType) && belowTile.Slope != SlopeType.Solid) {
+                        //        tile.TileType = _stoneTileType;
+                        //    }
+                        //}
                         if (tile.ActiveTile(TileID.Dirt)) {
                             Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                             if (aboveTile.ActiveTile(TileID.Trees)) {
@@ -4534,7 +4534,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void AddCliffIfNeeded(int topLeftTileX, int topRightTileX) {
         Point cliffTileCoords = Point.Zero;
-        cliffTileCoords.X = _toLeft ? topLeftTileX - 5 : (topRightTileX + 5);
+        cliffTileCoords.X = _toLeft ? topLeftTileX - 10 : (topRightTileX + 10);
         cliffTileCoords.Y = WorldGenHelper.GetFirstTileY2(cliffTileCoords.X, true, true);
         int lastSurfaceY = _biomeSurface.Last().Y;
         int cliffX = cliffTileCoords.X;
@@ -4573,6 +4573,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             while (_random.Next(0, 5) <= _random.Next(1, !flag ? 2 : 4)) {
                 startY++;
+                if (startY > lastSurfaceY) {
+                    break;
+                }
             }
             if ((_random.NextChance(0.75) && flag) || !flag) {
                 cliffX -= dir;
