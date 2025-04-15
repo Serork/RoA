@@ -3389,6 +3389,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+        WorldGen.gen = false;
         void settleLiquids() {
             Liquid.worldGenTilesIgnoreWater(ignoreSolids: true);
             Liquid.QuickWater(3);
@@ -3433,6 +3434,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Liquid.worldGenTilesIgnoreWater(ignoreSolids: false);
         }
         settleLiquids();
+        WorldGen.gen = true;
 
         HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
