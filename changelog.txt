@@ -1,2 +1,4 @@
-- Made a few minor improvements to Backwoods biome generation
-- Tanning Rack description now shows that it cannot be placed while under the effect
+- Made a few more minor improvements to Backwoods biome generation
+- Fixed Calamity's Sunken Sea biome being broken
+- Slightly increased the Druid Soul spawn chance (1/6 -> 1/5)
+- Druid Soul item now works correctly in multiplayer
