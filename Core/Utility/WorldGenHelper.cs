@@ -252,7 +252,6 @@ static class WorldGenHelper {
                     continue;
 
                 double fluff = 15.0;
-                double chance = item.X > maxX ? Math.Clamp(1.0 - Math.Abs(item.X - maxX) / fluff, 0.0, 1.0) : item.X < minX ? Math.Clamp(1.0 - Math.Abs(item.X - minX) / fluff, 0.0, 1.0) : 1.0;     
                 if (!SolidTile(item.X, item.Y)) {
                     bool flag = WallID.Sets.WallSpreadStopsAtAir[num];
                     if (flag && tile.WallType == 0) {
@@ -266,6 +265,11 @@ static class WorldGenHelper {
                         continue;
                     }
 
+                    double chance =
+                        item.X > maxX ?
+                        Math.Clamp(1.0 - (double)Math.Abs(item.X - maxX) / fluff, 0.0, 1.0) :
+                        item.X < minX ?
+                        Math.Clamp(1.0 - (double)Math.Abs(item.X - minX) / fluff, 0.0, 1.0) : 1.0;
                     if (!ignoreWallTypes.Contains(num) && WorldGen.genRand.NextChance(chance)) {
                         tile.WallType = num;
                         onSpread();
@@ -313,6 +317,11 @@ static class WorldGenHelper {
                     }
                 }
                 else if (tile.HasTile) {
+                    double chance =
+                        item.X > maxX ?
+                        Math.Clamp(1.0 - (double)Math.Abs(item.X - maxX) / fluff, 0.0, 1.0) :
+                        item.X < minX ?
+                        Math.Clamp(1.0 - (double)Math.Abs(item.X - minX) / fluff, 0.0, 1.0) : 1.0;
                     if (!ignoreWallTypes.Contains(num) && WorldGen.genRand.NextChance(chance)) {
                         tile.WallType = num;
                         onSpread();
