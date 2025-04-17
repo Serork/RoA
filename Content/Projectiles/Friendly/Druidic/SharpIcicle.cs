@@ -26,7 +26,7 @@ sealed class SharpIcicle : NatureProjectile {
         Projectile.timeLeft = 200;
         Projectile.penetrate = 2;
 
-        Projectile.Opacity = 0.5f;
+        Projectile.Opacity = 0f;
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
@@ -75,6 +75,11 @@ sealed class SharpIcicle : NatureProjectile {
             Main.dust[dust].velocity *= 0.5f;
             Main.dust[dust].scale *= 0.6f;
             Main.dust[dust].noLight = true;
+        }
+        else {
+            if (Projectile.Opacity < 0.5f) {
+                Projectile.Opacity += 0.125f;
+            }
         }
 
         if (player.whoAmI != Main.myPlayer) {
