@@ -137,6 +137,9 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             if (stage == PlantStage.Grown) {
                 addFrY += 2;
             }
+            else if (stage == PlantStage.Growing) {
+                addFrY += 2;
+            }
         }
     }
 
