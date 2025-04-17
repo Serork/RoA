@@ -347,9 +347,6 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
                 tile.TileType = tileTypeToGrow;
                 tile.HasTile = true;
                 tile.TileFrameX = (short)(plant.FrameWidth * style);
-                if (tileTypeToGrow == ModContent.TileType<Bonerose>()) {
-                    Main.LocalPlayer.position = new Point(i, j).ToWorldCoordinates();
-                }
                 if (Main.tile[i, j].HasTile && Main.netMode == NetmodeID.Server) {
                     NetMessage.SendTileSquare(-1, i, j);
                 }
