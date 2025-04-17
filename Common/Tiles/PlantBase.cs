@@ -73,7 +73,10 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
                         num5 = ((j != 0) ? tileData.DrawYOffset : (tileData.DrawYOffset - 2));
 
                     if (Main.tileSolidTop[Framing.GetTileSafely(num9, num10 + 1).TileType]) {
-                        num5 -= 2;
+                        num5 -= 0;
+                    }
+                    if (!Main.tileSolid[Framing.GetTileSafely(num9, num10 + 1).TileType]) {
+                        num5 += 2;
                     }
 
                     int num11 = op[i, j];
@@ -132,7 +135,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         }
         else if (Main.tileSolid[tile.TileType]) {
             if (stage == PlantStage.Grown) {
-                addFrY += 1;
+                addFrY += 2;
             }
         }
     }
@@ -222,13 +225,17 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             Tile belowTile = WorldGenHelper.GetTileSafely(i, j + 1);
             bool flag3 = !Main.tileSolid[belowTile.TileType];
             if (Main.tileSolidTop[belowTile.TileType] || flag3) {
-                offsetY += flag3 ? 3 : 2;
+                offsetY += flag3 ? 3 : 3;
+                offsetY -= 1;
+            }
+            else {
+                offsetY += 1;
             }
             int offsetX = 0;
             if (this is Bonerose && flag) {
                 offsetX = -2;
             }
-            offsetY -= 2;
+            //offsetY -= 2;
             Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
             texture ??= TextureAssets.Tile[Type].Value;
             spriteBatch.Draw(texture, new Vector2(i * 16f, j * 16f - 5f + offsetY) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition
