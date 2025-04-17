@@ -26,8 +26,21 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         addFrY -= 1;
 
         Tile tile = WorldGenHelper.GetTileSafely(x, y + 1);
+        var stage = GetStage(x, y);
         if (Main.tileSolidTop[tile.TileType]) {
             addFrY -= 1;
+
+            if (stage != PlantStage.Planted) {
+                addFrY += 3;
+                if (stage == PlantStage.Grown) {
+                    addFrY += 0;
+                }
+            }
+        }
+        else if (Main.tileSolid[tile.TileType]) {
+            if (stage == PlantStage.Grown) {
+                addFrY += 1;
+            }
         }
     }
 
@@ -52,9 +65,8 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
 
         TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
-        TileObjectData.newTile.DrawXOffset -= 4;
-        TileObjectData.newTile.DrawYOffset -= 2;
         TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.DrawYOffset -= 1;
         TileObjectData.newTile.AnchorValidTiles = AnchorValidTiles;
         TileObjectData.newTile.AnchorAlternateTiles = [TileID.ClayPot, TileID.PlanterBox];
         TileObjectData.newTile.UsesCustomCanPlace = true;
@@ -105,24 +117,31 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             return false;
         }
 
-        if (GetStage(i, j) == PlantStage.Planted/* && !AnchorValidTiles.Contains(WorldGenHelper.GetTileSafely(i, j + 1).TileType)*/) {
-            Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        Tile tile = WorldGenHelper.GetTileSafely(i, j);
+        if (GetStage(i, j) == PlantStage.Planted) {
             Vector2 origin = new Vector2(FrameWidth, 21) / 2f;
             bool flag = true;
-            bool flag2 = true/*Main.tileSolidTop[WorldGenHelper.GetTileSafely(i, j + 1).TileType]*/;
+            bool flag2 = true;
             SpriteEffects spriteEffects = flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             if (flag2) {
                 flag = flag2;
                 spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             }
             int offsetY = flag2 ? !Main.tileSolidTop[WorldGenHelper.GetTileSafely(i, j + 1).TileType] ? 2 : 1 : 0;
-            if (WorldGenHelper.ActiveTile(i, j + 1, TileID.ClayPot)) {
-                offsetY += 1;
+            Tile belowTile = WorldGenHelper.GetTileSafely(i, j + 1);
+            bool flag3 = !Main.tileSolid[belowTile.TileType];
+            if (Main.tileSolidTop[belowTile.TileType] || flag3) {
+                offsetY += flag3 ? 3 : 2;
             }
+            int offsetX = 0;
+            if (this is Bonerose && flag) {
+                offsetX = -2;
+            }
+            offsetY -= 2;
             Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
             texture ??= TextureAssets.Tile[Type].Value;
             spriteBatch.Draw(texture, new Vector2(i * 16f, j * 16f - 5f + offsetY) + (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition
-                + origin + new Vector2(flag ? -4f : 0f, 0f),
+                + origin + new Vector2(offsetX, 0f),
                 new Rectangle(tile.TileFrameX, tile.TileFrameY, FrameWidth, 21), Lighting.GetColor(i, j), 0f,
                 origin,
                 1f,
@@ -158,7 +177,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             plantStack = (flag ? 2 : 1) * Main.rand.Next(1, 3);
             seedStack = Main.rand.Next(1, 6);
         }
-        else {
+        else if (GetStage(i, j) != PlantStage.Planted) {
             plantStack = flag ? 2 : 1;
             if (IsGrown(i, j) || (GetStage(i, j) != PlantStage.Planted && CanBloom())) {
                 seedStack = Main.rand.Next(1, 4);
@@ -230,6 +249,9 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
                 tile.TileType = tileTypeToGrow;
                 tile.HasTile = true;
                 tile.TileFrameX = (short)(plant.FrameWidth * style);
+                if (tileTypeToGrow == ModContent.TileType<Bonerose>()) {
+                    Main.LocalPlayer.position = new Point(i, j).ToWorldCoordinates();
+                }
                 if (Main.tile[i, j].HasTile && Main.netMode == NetmodeID.Server) {
                     NetMessage.SendTileSquare(-1, i, j);
                 }
