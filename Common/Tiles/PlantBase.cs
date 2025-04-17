@@ -150,6 +150,7 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             return false;
         }
 
+
         return base.PreDraw(i, j, spriteBatch);
     }
 
