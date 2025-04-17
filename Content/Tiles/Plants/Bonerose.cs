@@ -31,9 +31,9 @@ sealed class Bonerose : PlantBase, TileHooks.IGrowPlantRandom {
             return;
         }
 
-        if (WorldGen.gen) {
-            return;
-        }
+        //if (WorldGen.gen) {
+        //    return;
+        //}
 
         if (!NPC.downedBoss3) {
             return;
