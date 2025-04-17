@@ -1,5 +1,6 @@
 ﻿using RoA.Content.Items.Miscellaneous;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,6 +11,7 @@ sealed class NoLeatherInShops : GlobalNPC {
         foreach (NPCShop.Entry entry in shop.ActiveEntries) {
             if (entry.Item.type == ItemID.Leather) {
                 entry.Item.SetDefaults(ModContent.ItemType<AnimalLeather>());
+                entry.Item.value = Item.sellPrice(0, 0, 0, 25);
             }
         }
     }
