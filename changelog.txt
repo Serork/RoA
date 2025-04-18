@@ -1,1 +1,2 @@
+- Made a few more minor improvements to Backwoods biome generation
 - Cloudberry and Bonerose are now randomly grown upon world generation
