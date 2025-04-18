@@ -55,8 +55,10 @@ sealed class LilPhoenixForm : BaseForm {
             _wasPreparing = true;
             _prepared = true;
             _charge = _charge2 = 0f;
-            Player.eocDash = 0;
-            Player.armorEffectDrawShadowEOCShield = true;
+            if (Player.GetModPlayer<BaseFormHandler>().IsConsideredAs<LilPhoenixForm>()) {
+                Player.eocDash = 0;
+                Player.armorEffectDrawShadowEOCShield = true;
+            }
         }
 
         internal void ClearProjectiles() {
