@@ -1,3 +1,4 @@
 - Made a few more minor improvements to Backwoods biome generation
 - Fixed Giant Tree Sapling being added to the living room's chests incorrectly
 - Cloudberry and Bonerose are now randomly grown upon world generation
+- Fixed the Shield of Cthulhu not dealing contact damage on dash
