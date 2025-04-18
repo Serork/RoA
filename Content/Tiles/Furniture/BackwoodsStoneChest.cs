@@ -38,7 +38,7 @@ sealed class BackwoodsStoneChest : ModTile {
         AdjTiles = [TileID.Containers];
 
         Color mapColor = new(95, 98, 113);
-        AddMapEntry(mapColor, CreateMapEntryName());
+        AddMapEntry(mapColor, CreateMapEntryName(), MapChestName);
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
         HitSound = SoundID.Dig;
 
