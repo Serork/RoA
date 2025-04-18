@@ -2396,7 +2396,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (!(!Main.tile[x2 - 1, y2].ActiveTile(placeholderTileType) || !Main.tile[x2 + 1, y2].ActiveTile(placeholderTileType) || !Main.tile[x2, y2 - 1].ActiveTile(placeholderTileType) || !Main.tile[x2, y2 + 1].ActiveTile(placeholderTileType) ||
                       !Main.tile[x2 - 1, y2 - 1].ActiveTile(placeholderTileType) || !Main.tile[x2 + 1, y2 - 1].ActiveTile(placeholderTileType) || !Main.tile[x2 + 1, y2 + 1].ActiveTile(placeholderTileType) || !Main.tile[x2 - 1, y2 + 1].ActiveTile(placeholderTileType)) &&
                       flag) {
-                    Tile tile = WorldGenHelper.GetTileSafely(x2, y2);
                     Point pointPosition = new(x2, y2);
                     if (tile.ActiveWall(placeholderWallType) && !killTiles.Contains(pointPosition)) {
                         killTiles.Add(pointPosition);
