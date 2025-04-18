@@ -8,6 +8,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -222,8 +223,7 @@ sealed class SkinningPlayer : ModPlayer {
         Item item = Player.inventory[Player.selectedItem];
         if (Player.whoAmI == Main.myPlayer && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>())
             && Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == (ushort)ModContent.TileType<TanningRack>()
-            && Player.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)Player.blockRange <= (float)Player.tileTargetX
-            && (Player.position.X + (float)Player.width) / 16f + (float)Player.tileRangeX + (float)item.tileBoost - 1f + (float)Player.blockRange >= (float)Player.tileTargetX && Player.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)Player.blockRange <= (float)Player.tileTargetY && (Player.position.Y + (float)Player.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)Player.blockRange >= (float)Player.tileTargetY) {
+            && Player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY)) {
             if (Player.ItemTimeIsZero
                 && Player.itemAnimation > 0
                 && Player.controlUseItem) {
