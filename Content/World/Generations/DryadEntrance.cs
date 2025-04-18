@@ -59,7 +59,7 @@ sealed class DryadEntrance : ModSystem {
     }
 
     public override void Load() {
-        //On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
+        On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
     }
 
     private void On_WorldGen_GrowLivingTreePassageRoom(On_WorldGen.orig_GrowLivingTreePassageRoom orig, int minl, int minr, int Y) {

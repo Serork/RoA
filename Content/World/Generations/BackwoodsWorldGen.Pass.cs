@@ -2366,9 +2366,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         List<Point> killTiles = [];
         for (int x2 = baseX - distance / 2; x2 < baseX + distance / 2; x2++) {
             for (int y2 = baseY - distance / 2; y2 < baseY + distance / 2; y2++) {
+                Tile tile = WorldGenHelper.GetTileSafely(x2, y2);
                 if (!Main.tile[x2 - 1, y2].ActiveTile2(placeholderTileType) || !Main.tile[x2 + 1, y2].ActiveTile2(placeholderTileType) || !Main.tile[x2, y2 - 1].ActiveTile2(placeholderTileType) || !Main.tile[x2, y2 + 1].ActiveTile2(placeholderTileType) ||
                     !Main.tile[x2 - 1, y2 - 1].ActiveTile2(placeholderTileType) || !Main.tile[x2 + 1, y2 - 1].ActiveTile2(placeholderTileType) || !Main.tile[x2 + 1, y2 + 1].ActiveTile2(placeholderTileType) || !Main.tile[x2 - 1, y2 + 1].ActiveTile2(placeholderTileType)) {
-                    Tile tile = WorldGenHelper.GetTileSafely(x2, y2);
                     if (tile.ActiveWall(placeholderWallType)) {
                         if (y2 < Main.worldSurface) {
                             WorldGenHelper.ReplaceWall(x2, y2, WallID.DirtUnsafe);
@@ -2377,6 +2377,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             WorldGen.KillWall(x2, y2);
                         }
                     }
+                }
+
+                if (tile.ActiveTile(placeholderTileType) && !tile.AnyWall() && y2 < Main.worldSurface) {
+                    tile.WallType = WallID.DirtUnsafe;
                 }
 
                 bool flag = true;
