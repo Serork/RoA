@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Miscellaneous;
+using RoA.Content.Items.Placeable.Crafting;
 
 using Terraria;
 using Terraria.ID;
@@ -10,7 +11,7 @@ sealed class NoLeatherInShops : GlobalNPC {
     public override void ModifyShop(NPCShop shop) {
         foreach (NPCShop.Entry entry in shop.ActiveEntries) {
             if (entry.Item.type == ItemID.Leather) {
-                entry.Item.SetDefaults(ModContent.ItemType<AnimalLeather>());
+                entry.Item.SetDefaults(ModContent.ItemType<TanningRack>());
             }
         }
     }

@@ -2,3 +2,7 @@
 - Fixed Calamity's Sunken Sea biome being broken
 - Slightly increased the Druid Soul spawn chance (1/6 -> 1/5)
 - Druid Soul item now works correctly in multiplayer
+- Fixed large Backwoods tree branches generating incorrectly 
+- A few Boneroses now appear in the Dungeon upon world generation 
+- Spiked Ice Cane projectiles now spawn more smoothly 
+- Modded NPC Leather trades are now replaced with the Tanning Rack
