@@ -1,1 +1,1 @@
-- Cloudberry and Bonerose now randomly grown upon world generation
+- Cloudberry and Bonerose are now randomly grown upon world generation
