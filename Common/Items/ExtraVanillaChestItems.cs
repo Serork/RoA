@@ -1888,7 +1888,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
                             bool flag15 = chestTileType == (ushort)ModContent.TileType<ElderwoodChest>();
                             if (flag15) {
-                                if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
+                                if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
                                     _oniMaskAdded = true;
                                     chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                     chest.item[num10].Prefix(-1);
@@ -2155,7 +2155,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             num10++;
 
                             if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
-                                if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
+                                if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
                                     _oniMaskAdded = true;
                                     chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                     chest.item[num10].Prefix(-1);
@@ -2374,7 +2374,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         }
 
                         if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
-                            if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
+                            if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
                                 _oniMaskAdded = true;
                                 chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                 chest.item[num10].Prefix(-1);
