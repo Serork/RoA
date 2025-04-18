@@ -563,8 +563,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                     WorldGenHelper.CustomWall2(num300, num301, wallType, Left - 25, Right + 25, () => {
                                         WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
                                         WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
-                                    }, WallID.MudUnsafe, WallID.MudWallEcho, WallID.JungleUnsafe, WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4,
-                                        WallID.Jungle1Echo, WallID.Jungle2Echo, WallID.Jungle3Echo, WallID.Jungle4Echo, WallID.Jungle, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite);
+                                    }, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite);
                                     //WorldGen.Spread.Wall2(num300, num301, wallType);
                                 }
                                 catch {
@@ -673,8 +672,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                     WorldGenHelper.CustomWall2(num300, num301, wallType, Left - 25, Right + 25, () => {
                                         WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
                                         WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
-                                    }, WallID.MudUnsafe, WallID.MudWallEcho, WallID.JungleUnsafe, WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4,
-                                     WallID.Jungle1Echo, WallID.Jungle2Echo, WallID.Jungle3Echo, WallID.Jungle4Echo, WallID.Jungle, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite);
+                                    }, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite);
                                     //WorldGen.Spread.Wall2(num300, num301, wallType);
                                 }
                                 catch {
