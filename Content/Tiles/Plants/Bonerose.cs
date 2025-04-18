@@ -39,6 +39,6 @@ sealed class Bonerose : PlantBase, TileHooks.IGrowPlantRandom {
             return;
         }
 
-        TryPlacePlant(i, j, Type, 0, checkRadius: 25, maxAlchNearby: 2, validTiles: [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick]);
+        TryPlacePlant(i, j, Type, WorldGen.genRand.Next(3), checkRadius: 25, maxAlchNearby: 2, validTiles: [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick]);
     }
 }

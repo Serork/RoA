@@ -1,2 +1,1 @@
-- Fixed Giant Tree Sapling being added to the living room's chests incorrectly
-- Fixed empty walls generating in the Backwoods root room at the surface level
+- Cloudberry and Bonerose now randomly grown upon world generation
