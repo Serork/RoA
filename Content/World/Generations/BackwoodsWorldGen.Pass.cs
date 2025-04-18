@@ -573,47 +573,51 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
 
-            for (int num306 = Left - 15; num306 < Right + 15; num306++) {
-                for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < y - 1.0; num307++) {
-                    if (Main.tile[num306, num307].WallType == 63 && _random.Next(10) == 0)
-                        Main.tile[num306, num307].WallType = _grassWallType;
+            for (int num306 = Left - 30; num306 < Right + 30; num306++) {
+                if (num306 > Left - _random.Next(15, 30) && num306 < Right + _random.Next(15, 30)) {
+                    for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < y - 1.0; num307++) {
+                        if (Main.tile[num306, num307].WallType == 63 && _random.Next(10) == 0)
+                            Main.tile[num306, num307].WallType = _grassWallType;
 
-                    if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
-                        bool flag9 = false;
-                        for (int num308 = num306 - 2; num308 <= num306 + 2; num308++) {
-                            for (int num309 = num307 - 2; num309 <= num307 + 2; num309++) {
-                                if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == _grassWallType) {
-                                    flag9 = true;
-                                    break;
+                        if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
+                            bool flag9 = false;
+                            for (int num308 = num306 - 2; num308 <= num306 + 2; num308++) {
+                                for (int num309 = num307 - 2; num309 <= num307 + 2; num309++) {
+                                    if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == _grassWallType) {
+                                        flag9 = true;
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        if (flag9) {
-                            WorldGen.grassSpread = 0;
-                            WorldGenHelper.CustomSpreadGrass(num306, num307, TileID.Dirt, _grassTileType, growUnderground: true);
-                            WorldGenHelper.CustomSpreadGrass(num306, num307, _dirtTileType, _grassTileType, growUnderground: true);
+                            if (flag9) {
+                                WorldGen.grassSpread = 0;
+                                WorldGenHelper.CustomSpreadGrass(num306, num307, TileID.Dirt, _grassTileType, growUnderground: true);
+                                WorldGenHelper.CustomSpreadGrass(num306, num307, _dirtTileType, _grassTileType, growUnderground: true);
+                            }
                         }
                     }
                 }
             }
 
-            for (int num306 = Left - 15; num306 < Right + 15; num306++) {
-                for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < y - 1.0; num307++) {
-                    if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
-                        bool flag9 = false;
-                        for (int num308 = num306 - 2; num308 <= num306 + 2; num308++) {
-                            for (int num309 = num307 - 2; num309 <= num307 + 2; num309++) {
-                                if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == _grassWallType) {
-                                    flag9 = true;
-                                    break;
+            for (int num306 = Left - 30; num306 < Right + 30; num306++) {
+                if (num306 > Left - _random.Next(15, 30) && num306 < Right + _random.Next(15, 30)) {
+                    for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < y - 1.0; num307++) {
+                        if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
+                            bool flag9 = false;
+                            for (int num308 = num306 - 2; num308 <= num306 + 2; num308++) {
+                                for (int num309 = num307 - 2; num309 <= num307 + 2; num309++) {
+                                    if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == _grassWallType) {
+                                        flag9 = true;
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        if (flag9) {
-                            WorldGen.grassSpread = 0;
-                            WorldGenHelper.CustomSpreadGrass(num306, num307, TileID.Dirt, _grassTileType, growUnderground: true);
-                            WorldGenHelper.CustomSpreadGrass(num306, num307, _dirtTileType, _grassTileType, growUnderground: true);
+                            if (flag9) {
+                                WorldGen.grassSpread = 0;
+                                WorldGenHelper.CustomSpreadGrass(num306, num307, TileID.Dirt, _grassTileType, growUnderground: true);
+                                WorldGenHelper.CustomSpreadGrass(num306, num307, _dirtTileType, _grassTileType, growUnderground: true);
+                            }
                         }
                     }
                 }
@@ -623,101 +627,107 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int count = 3 + 4 * (WorldGenHelper.WorldSize - 1);
             count += (int)(Main.worldSurface - BackwoodsVars.FirstTileYAtCenter) / 50;
             bool flag = false;
-            for (int num298 = Right; num298 > Left; num298--) {
-                for (int num299 = BackwoodsVars.FirstTileYAtCenter - 10; (double)num299 < y; num299++) {
-                    if (_random.Next(count > count / 2 ? 2 : 3) == 0 || _random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
-                        bool flag8 = false;
-                        int num300 = -1;
-                        int num301 = -1;
-                        bool flag10 = false;
-                        if (Main.tile[num298, num299].HasTile && Main.tile[num298, num299].TileType == _grassTileType && (Main.tile[num298, num299].WallType == _dirtWallType || Main.tile[num298, num299].WallType == _leavesWallType)) {
-                            for (int num302 = num298 - 1; num302 <= num298 + 1; num302++) {
-                                for (int num303 = num299 - 1; num303 <= num299 + 1; num303++) {
-                                    flag10 = !flag && _random.NextBool() && (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(5) || (count > count / 2 && _random.NextBool(4))) && count > 0));
-                                    if ((Main.tile[num302, num303].WallType == 0 || flag10) && !WorldGen.SolidTile(num302, num303)) {
-                                        flag8 = true;
-                                        flag = false;
+            for (int num298 = Right + 30; num298 > Left - 30; num298--) {
+                if (num298 < Right + _random.Next(15, 30) && num298 > Left - _random.Next(15, 30)) {
+                    for (int num299 = BackwoodsVars.FirstTileYAtCenter - 10; (double)num299 < y; num299++) {
+                        if (_random.Next(count > count / 2 ? 2 : 3) == 0 || _random.Next(count > count / 2 ? 2 : 3) == 0 || flag) {
+                            bool flag8 = false;
+                            int num300 = -1;
+                            int num301 = -1;
+                            bool flag10 = false;
+                            if (Main.tile[num298, num299].HasTile && Main.tile[num298, num299].TileType == _grassTileType && (Main.tile[num298, num299].WallType == _dirtWallType || Main.tile[num298, num299].WallType == _leavesWallType)) {
+                                for (int num302 = num298 - 1; num302 <= num298 + 1; num302++) {
+                                    for (int num303 = num299 - 1; num303 <= num299 + 1; num303++) {
+                                        flag10 = !flag && _random.NextBool() && (Main.tile[num302, num303].WallType == _dirtWallType && ((_random.NextBool(5) || (count > count / 2 && _random.NextBool(4))) && count > 0));
+                                        if ((Main.tile[num302, num303].WallType == 0 || flag10) && !WorldGen.SolidTile(num302, num303)) {
+                                            flag8 = true;
+                                            flag = false;
+                                        }
                                     }
                                 }
-                            }
 
-                            if (flag8) {
-                                for (int num304 = num298 - 2; num304 <= num298 + 2; num304++) {
-                                    for (int num305 = num299 - 2; num305 <= num299 + 2; num305++) {
-                                        if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 59 || Main.tile[num304, num305].WallType == _dirtWallType) && !WorldGen.SolidTile(num304, num305)) {
-                                            num300 = num304;
-                                            num301 = num305;
+                                if (flag8) {
+                                    for (int num304 = num298 - 2; num304 <= num298 + 2; num304++) {
+                                        for (int num305 = num299 - 2; num305 <= num299 + 2; num305++) {
+                                            if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 59 || Main.tile[num304, num305].WallType == _dirtWallType) && !WorldGen.SolidTile(num304, num305)) {
+                                                num300 = num304;
+                                                num301 = num305;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if (flag8 && num300 > -1 && num301 > -1 && WorldGen.countDirtTiles(num300, num301) < (flag10 ? 2000 : WorldGen.maxTileCount)) {
-                            try {
-                                ushort wallType = 63;
-                                if (flag10) {
-                                    count--;
+                            if (flag8 && num300 > -1 && num301 > -1 && WorldGen.countDirtTiles(num300, num301) < (flag10 ? 2000 : WorldGen.maxTileCount)) {
+                                try {
+                                    ushort wallType = 63;
+                                    if (flag10) {
+                                        count--;
+                                    }
+                                    //if (flag10 && Main.rand.NextBool()) {
+                                    //    wallType = _dirtWallType;
+                                    //}
+
+                                    WorldGenHelper.CustomWall2(num300, num301, wallType, Left - 25, Right + 25, () => {
+                                        WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
+                                        WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
+                                    }, WallID.MudUnsafe, WallID.MudWallEcho, WallID.JungleUnsafe, WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4,
+                                     WallID.Jungle1Echo, WallID.Jungle2Echo, WallID.Jungle3Echo, WallID.Jungle4Echo, WallID.Jungle, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite);
+                                    //WorldGen.Spread.Wall2(num300, num301, wallType);
                                 }
-                                //if (flag10 && Main.rand.NextBool()) {
-                                //    wallType = _dirtWallType;
-                                //}
-
-                                WorldGenHelper.CustomWall2(num300, num301, wallType, Left - 25, Right + 25, () => {
-                                    WorldGenHelper.CustomSpreadGrass(num300, num301, TileID.Dirt, _grassTileType, growUnderground: true);
-                                    WorldGenHelper.CustomSpreadGrass(num300, num301, _dirtTileType, _grassTileType, growUnderground: true);
-                                }, WallID.MudUnsafe, WallID.MudWallEcho, WallID.JungleUnsafe, WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4,
-                                 WallID.Jungle1Echo, WallID.Jungle2Echo, WallID.Jungle3Echo, WallID.Jungle4Echo, WallID.Jungle, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite);
-                                //WorldGen.Spread.Wall2(num300, num301, wallType);
-                            }
-                            catch {
+                                catch {
+                                }
                             }
                         }
                     }
                 }
             }
 
-            for (int num306 = Right + 15; num306 > Left - 15; num306--) {
-                for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < y - 1.0; num307++) {
-                    if (Main.tile[num306, num307].WallType == 63 && _random.Next(10) == 0)
-                        Main.tile[num306, num307].WallType = _grassWallType;
+            for (int num306 = Right + 30; num306 > Left - 30; num306--) {
+                if (num306 < Right + _random.Next(15, 30) && num306 > Left - _random.Next(15, 30)) {
+                    for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < y - 1.0; num307++) {
+                        if (Main.tile[num306, num307].WallType == 63 && _random.Next(10) == 0)
+                            Main.tile[num306, num307].WallType = _grassWallType;
 
-                    if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
-                        bool flag9 = false;
-                        for (int num308 = num306 - 2; num308 <= num306 + 2; num308++) {
-                            for (int num309 = num307 - 2; num309 <= num307 + 2; num309++) {
-                                if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == _grassWallType) {
-                                    flag9 = true;
-                                    break;
+                        if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
+                            bool flag9 = false;
+                            for (int num308 = num306 - 2; num308 <= num306 + 2; num308++) {
+                                for (int num309 = num307 - 2; num309 <= num307 + 2; num309++) {
+                                    if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == _grassWallType) {
+                                        flag9 = true;
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        if (flag9) {
-                            WorldGen.grassSpread = 0;
-                            WorldGenHelper.CustomSpreadGrass(num306, num307, TileID.Dirt, _grassTileType, growUnderground: true);
-                            WorldGenHelper.CustomSpreadGrass(num306, num307, _dirtTileType, _grassTileType, growUnderground: true);
+                            if (flag9) {
+                                WorldGen.grassSpread = 0;
+                                WorldGenHelper.CustomSpreadGrass(num306, num307, TileID.Dirt, _grassTileType, growUnderground: true);
+                                WorldGenHelper.CustomSpreadGrass(num306, num307, _dirtTileType, _grassTileType, growUnderground: true);
+                            }
                         }
                     }
                 }
             }
 
-            for (int num306 = Right + 15; num306 > Left - 15; num306--) {
-                for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < y - 1.0; num307++) {
-                    if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
-                        bool flag9 = false;
-                        for (int num308 = num306 - 2; num308 <= num306 + 2; num308++) {
-                            for (int num309 = num307 - 2; num309 <= num307 + 2; num309++) {
-                                if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == _grassWallType) {
-                                    flag9 = true;
-                                    break;
+            for (int num306 = Right + 30; num306 > Left - 30; num306--) {
+                if (num306 < Right + _random.Next(15, 30) && num306 > Left - _random.Next(15, 30)) {
+                    for (int num307 = WorldGenHelper.SafeFloatingIslandY; (double)num307 < y - 1.0; num307++) {
+                        if (Main.tile[num306, num307].HasTile && (Main.tile[num306, num307].TileType == 0 || Main.tile[num306, num307].TileType == _dirtTileType)) {
+                            bool flag9 = false;
+                            for (int num308 = num306 - 2; num308 <= num306 + 2; num308++) {
+                                for (int num309 = num307 - 2; num309 <= num307 + 2; num309++) {
+                                    if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == _grassWallType) {
+                                        flag9 = true;
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        if (flag9) {
-                            WorldGen.grassSpread = 0;
-                            WorldGenHelper.CustomSpreadGrass(num306, num307, TileID.Dirt, _grassTileType, growUnderground: true);
-                            WorldGenHelper.CustomSpreadGrass(num306, num307, _dirtTileType, _grassTileType, growUnderground: true);
+                            if (flag9) {
+                                WorldGen.grassSpread = 0;
+                                WorldGenHelper.CustomSpreadGrass(num306, num307, TileID.Dirt, _grassTileType, growUnderground: true);
+                                WorldGenHelper.CustomSpreadGrass(num306, num307, _dirtTileType, _grassTileType, growUnderground: true);
+                            }
                         }
                     }
                 }
