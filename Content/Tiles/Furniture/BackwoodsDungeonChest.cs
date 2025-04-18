@@ -68,6 +68,30 @@ sealed class BackwoodsDungeonChest : ModTile {
         TileObjectData.addTile(Type);
     }
 
+    public static string MapChestName(string name, int i, int j) {
+        int left = i;
+        int top = j;
+        Tile tile = Main.tile[i, j];
+        if (tile.TileFrameX % 36 != 0) {
+            left--;
+        }
+
+        if (tile.TileFrameY != 0) {
+            top--;
+        }
+
+        int chest = Chest.FindChest(left, top);
+        if (chest < 0) {
+            return Language.GetTextValue("LegacyChestType.0");
+        }
+
+        if (Main.chest[chest].name == string.Empty) {
+            return name;
+        }
+
+        return name + ": " + Main.chest[chest].name;
+    }
+
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
     public override ushort GetMapOption(int i, int j) => this.IsLockedChest(i, j) ? (ushort)0 : (ushort)1;
