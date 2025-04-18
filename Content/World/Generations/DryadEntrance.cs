@@ -220,7 +220,7 @@ sealed class DryadEntrance : ModSystem {
             contain = 4281;
             summonStaffAdded = true;
         }
-        if (!summonStaffAdded && genRand.Next(5) == 0) {
+        if (genRand.Next(5) == 0) {
             contain = ModContent.ItemType<GiantTreeSapling>();
         }
         if (!summonStaffAdded && !ExtraVanillaChestItems._giantTreeSaplingAdded) {
