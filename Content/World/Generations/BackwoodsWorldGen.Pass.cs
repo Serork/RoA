@@ -2418,6 +2418,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         foreach (Point killPos in killTiles) {
             WorldGen.KillTile(killPos.X, killPos.Y);
         }
+        for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
+            for (int y2 = baseY - distance; y2 < baseY + distance; y2++) {
+                Tile tile = WorldGenHelper.GetTileSafely(x2, y2);
+                bool flag3 = false;
+                for (int x22 = x2 - 1; x22 < x2 + 2; x22++) {
+                    for (int y22 = y2 - 1; y22 < y2 + 2; y22++) {
+                        if (Main.tile[x22, y22].WallType == placeholderWallType) {
+                            flag3 = true;
+                        }
+                    }
+                }
+                if ((tile.ActiveTile(placeholderTileType) || flag3) && !tile.AnyWall() && y2 < Main.worldSurface) {
+                    tile.WallType = WallID.DirtUnsafe;
+                }
+            }
+        }
 
         // place chest
         bool chestPlaced = false;
