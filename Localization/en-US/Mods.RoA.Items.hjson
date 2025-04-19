@@ -1931,7 +1931,7 @@ JewellersBelt: {
 
 AltarPlacer: {
 	DisplayName: Overgrown Altar
-	Tooltip: 
+	Tooltip:
 		'''
 		#TEST: PLACES AN OVERGROWN ALTAR
 		NOTE: THERE CAN BE ONLY 1 MAIN (IN THE BACKWOODS) OVERGROWN ALTAR IN THE WORLD
