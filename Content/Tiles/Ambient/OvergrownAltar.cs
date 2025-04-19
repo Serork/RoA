@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
-using RoA.Content.Tiles.Crafting;
 using RoA.Content.Tiles.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
@@ -15,10 +14,12 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
+using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -28,7 +29,73 @@ sealed class OvergrownAltar : ModTile {
     public override void Load() {
         //On_WorldGen.SpreadGrass += On_WorldGen_SpreadGrass;
 
+        On_WorldGen.PlaceTile += On_WorldGen_PlaceTile;
+        On_TileObject.Place += On_TileObject_Place;
         On_WorldGen.Convert += On_WorldGen_Convert;
+    }
+
+    private bool On_TileObject_Place(On_TileObject.orig_Place orig, TileObject toBePlaced) {
+        ushort type = (ushort)ModContent.TileType<OvergrownAltar>();
+        if (toBePlaced.type == type) {
+            TileObjectData tileData = TileObjectData.GetTileData(toBePlaced.type, toBePlaced.style, toBePlaced.alternate);
+            if (tileData == null)
+                return false;
+
+            WorldGen.PlaceTile(toBePlaced.xCoord + tileData.Origin.X, toBePlaced.yCoord + tileData.Origin.Y, type);
+        }
+
+        return orig(toBePlaced);
+    }
+
+    private bool On_WorldGen_PlaceTile(On_WorldGen.orig_PlaceTile orig, int i, int j, int Type, bool mute, bool forced, int plr, int style) {
+        ushort type = (ushort)ModContent.TileType<OvergrownAltar>();
+        if (Type == type) {
+            if (i >= 0 && j >= 0 && i < Main.maxTilesX && j < Main.maxTilesY) {
+                Tile tile = Main.tile[i, j];
+                if (forced || Collision.EmptyTile(i, j) || !Main.tileSolid[Type]) {
+                    if (tile.LiquidAmount > 0 || tile.CheckingLiquid) {
+                        switch (Type) {
+                            case 4:
+                                if (style != 8 && style != 11 && style != 17)
+                                    return false;
+                                break;
+                            case int _ when TileID.Sets.Torch[Type]:
+                                if (TileObjectData.GetTileData(Type, style).WaterPlacement != LiquidPlacement.Allowed)
+                                    return false;
+                                break;
+                            case 3:
+                            case int _ when TileID.Sets.TreeSapling[Type]:
+                            case 24:
+                            case 27:
+                            case 32:
+                            case 51:
+                            case 69:
+                            case 72:
+                            case 201:
+                            case 352:
+                            case 529:
+                            case 624:
+                            case 637:
+                            case 656:
+                                return false;
+                        }
+                    }
+                    if (TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] && (!tile.HasTile || !Main.tileFrameImportant[tile.TileType])) {
+                        tile.IsHalfBlock = false;
+                        tile.TileFrameY = 0;
+                        tile.TileFrameX = 0;
+                    }
+                    for (int xSize = 0; xSize < 3; xSize++) {
+                        for (int ySize = 0; ySize < 2; ySize++) {
+                            ModContent.GetInstance<OvergrownAltarTE>().Place(i + xSize - 1, j - 1 + ySize);
+                        }
+                    }
+                    return true;
+                }
+            }
+       }
+
+        return orig(i, j, Type, mute, forced, plr, style);
     }
 
     private void On_WorldGen_Convert(On_WorldGen.orig_Convert orig, int i, int j, int conversionType, int size) {
@@ -139,9 +206,11 @@ sealed class OvergrownAltar : ModTile {
 
         TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         TileID.Sets.PreventsSandfall[Type] = true;
+
         TileSets.ShouldKillTileBelow[Type] = false;
         TileSets.CanPlayerMineMe[Type] = false;
         TileSets.PreventsSlopesBelow[Type] = true;
+
         CanBeSlopedTileSystem.Included[Type] = true;
 
         AddMapEntry(new Color(197, 254, 143), CreateMapEntryName());
@@ -207,13 +276,12 @@ sealed class OvergrownAltar : ModTile {
             }
 
             float counting = MathHelper.Clamp(overgrownAltarTE.Counting, 0f, 0.98f);
-            //float value = (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f;
             float factor = counting;
             float strength = AltarHandler.GetAltarStrength();
             Color color = Lighting.GetColor(i, j);
             Tile tile = Main.tile[i, j];
             bool flag = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
-            int frame = /*5 - */(int)(factor * 6) + (flag || strength > 0.3f ? 6 : 0);
+            int frame = (int)(factor * 6) + (flag || strength > 0.3f ? 6 : 0);
             Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) {
                 zero = Vector2.Zero;
@@ -221,7 +289,7 @@ sealed class OvergrownAltar : ModTile {
             Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
             texture ??= TextureAssets.Tile[Type].Value;
             Rectangle rectangle = new(tile.TileFrameX, !NPC.downedBoss2 ? tile.TileFrameY + 36 * 2 : tile.TileFrameY + 36 * frame, 16, 16);
-            Vector2 position = new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero;
+            Vector2 position = new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2f) + zero;
             spriteBatch.Draw(texture, position, rectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             if (!NPC.downedBoss2) {
@@ -243,11 +311,8 @@ sealed class OvergrownAltar : ModTile {
                 spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
             float factor2 = mult;
-            //bool flag3 = Lothor.ShouldLothorBeDead();
-            if (factor2 > 0f/* || flag3*/) {
-                //float factor4 = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
-                //factor3 = (factor4 > 0.5f ? 1f - factor4 : factor4) + 0.5f;
-                factor3 = /*flag3 ? OvergrownCoords.Strength : */1f;
+            if (factor2 > 0f) {
+                factor3 = 1f;
                 spriteBatch.Draw(texture, position, rectangle, color2 * factor2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
                     spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3 * factor2, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);

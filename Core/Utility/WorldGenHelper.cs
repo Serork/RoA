@@ -1033,6 +1033,8 @@ static class WorldGenHelper {
                 NetMessage.SendData(34, -1, -1, null, 2, x, y, styleY);
         }
 
+        Main.NewText(flag2);
+
         if (flag2) {
             short num2 = (short)(54 * styleY);
             short num3 = (short)(54 * styleX);

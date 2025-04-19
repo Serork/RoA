@@ -1928,3 +1928,12 @@ JewellersBelt: {
 		Hide this to conceal the held Large Gems
 		'''
 }
+
+AltarPlacer: {
+	DisplayName: Overgrown Altar
+	Tooltip: 
+		'''
+		#TEST: PLACES AN OVERGROWN ALTAR
+		NOTE: THERE CAN BE ONLY 1 MAIN (IN THE BACKWOODS) OVERGROWN ALTAR IN THE WORLD
+		'''
+}
