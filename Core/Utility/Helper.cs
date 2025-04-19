@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 
 using RoA.Common;
 using RoA.Common.Druid;
+using RoA.Common.Players;
 using RoA.Content.Items.Weapons.Druidic.Claws;
 
 using System;
@@ -23,6 +24,8 @@ static class Helper {
 
     public static readonly Color GlowMaskColor = new Color(255, 255, 255, 0) * 0.8f;
     public static string ArmorSetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
+
+    public static IDoubleTap.TapDirection CurrentDoubleTapDirectionForSetBonuses => Main.ReversedUpDownArmorSetBonuses ? IDoubleTap.TapDirection.Top : IDoubleTap.TapDirection.Down;
 
     public static string FirstCharToUpper(string input) {
         return input.First().ToString().ToUpper() + input.Substring(1);

@@ -8,11 +8,13 @@ using RoA.Common.Networking.Packets;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -221,8 +223,7 @@ sealed class SkinningPlayer : ModPlayer {
         Item item = Player.inventory[Player.selectedItem];
         if (Player.whoAmI == Main.myPlayer && (item.type == (ushort)ModContent.ItemType<AnimalLeather>() || item.type == (ushort)ModContent.ItemType<RoughLeather>())
             && Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == (ushort)ModContent.TileType<TanningRack>()
-            && Player.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)Player.blockRange <= (float)Player.tileTargetX
-            && (Player.position.X + (float)Player.width) / 16f + (float)Player.tileRangeX + (float)item.tileBoost - 1f + (float)Player.blockRange >= (float)Player.tileTargetX && Player.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)Player.blockRange <= (float)Player.tileTargetY && (Player.position.Y + (float)Player.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)Player.blockRange >= (float)Player.tileTargetY) {
+            && Player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY)) {
             if (Player.ItemTimeIsZero
                 && Player.itemAnimation > 0
                 && Player.controlUseItem) {
@@ -261,15 +262,15 @@ sealed class SkinningNPC : GlobalNPC {
         if (npc.ModNPC is not null && npc.ModNPC.Mod != RoA.Instance) {
             return;
         }
-        bool critters = NPCID.Sets.CountsAsCritter[npcType] && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
-            !NPCID.Sets.IsDragonfly[npcType]/* && !NPCID.Sets.TownCritter[npcType]*/ && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
+        /*bool critters = (NPCID.Sets.CountsAsCritter[npcType] || npc.friendly) && !NPCID.Sets.GoldCrittersCollection.Contains(npcType) &&
+            !NPCID.Sets.IsDragonfly[npcType] && !npc.FullName.Contains("utterfly") && !npc.FullName.Contains("ragonfly");
         bool enemies = (NPCID.Sets.Zombies[npcType] || npc.DeathSound == SoundID.NPCDeath39 || npc.DeathSound == SoundID.NPCDeath1 || npc.DeathSound == SoundID.NPCDeath31 || npc.HitSound == SoundID.NPCHit27) && !NPCID.Sets.Skeletons[npcType]
             && !npc.friendly && npc.aiStyle != 22;
         NPCsType type;
         type = critters ? NPCsType.Critters : enemies ? NPCsType.Enemies : NPCsType.None;
         if (type == NPCsType.None)
             return;
-        int[] invalidTypes = [677 /*faeling*/, NPCID.SandElemental, NPCID.DungeonSpirit,
+        int[] invalidTypes = [677, NPCID.SandElemental, NPCID.DungeonSpirit,
                               NPCID.Worm, NPCID.TruffleWorm, NPCID.TruffleWormDigger, NPCID.Grasshopper,
                               NPCID.Firefly, NPCID.EnchantedNightcrawler, NPCID.FairyCritterBlue, NPCID.FairyCritterGreen, NPCID.FairyCritterPink,
                               NPCID.Grubby, NPCID.LadyBug, NPCID.Lavafly, NPCID.LightningBug, NPCID.Maggot, NPCID.Snail, NPCID.GlowingSnail, NPCID.MagmaSnail, NPCID.SeaSnail,
@@ -283,7 +284,12 @@ sealed class SkinningNPC : GlobalNPC {
             NPCsType.Critters => (ushort)ModContent.ItemType<AnimalLeather>(),
             NPCsType.Enemies => (ushort)ModContent.ItemType<RoughLeather>()
         };
-        IItemDropRule rule = ItemDropRule.Common(itemType, chanceDenominator: type == NPCsType.Critters ? 6 : 8);
+        */
+        bool invalidType = npc.SpawnedFromStatue || npc.value == 0 || npc.boss || npc.HitSound == SoundID.NPCHit2 || npc.HitSound == SoundID.NPCHit4 || npc.HitSound == SoundID.NPCHit5 || npc.HitSound == SoundID.NPCHit30 || npc.HitSound == SoundID.NPCHit34 || npc.HitSound == SoundID.NPCHit36 || npc.HitSound == SoundID.NPCHit39 || npc.HitSound == SoundID.NPCHit41 || npc.HitSound == SoundID.NPCHit49 || npc.HitSound == SoundID.NPCHit54;
+        invalidType = invalidType || npc.FullName.Contains("Slime") || npc.FullName.Contains("Elemental") || npc.FullName.Contains("Golem") || npc.FullName.Contains("Dandelion") || npc.FullName.Contains("Skeleton") || npc.FullName.Contains("Skull");
+        if (invalidType) return;
+        int itemType = npc.aiStyle == 3 ? (ushort)ModContent.ItemType<RoughLeather>() : (ushort)ModContent.ItemType<AnimalLeather>();
+        IItemDropRule rule = ItemDropRule.Common(itemType, 8);
         conditionalRule.OnSuccess(rule);
         npcLoot.Add(conditionalRule);
     }

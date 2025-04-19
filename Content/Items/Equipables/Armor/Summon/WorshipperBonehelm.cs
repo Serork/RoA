@@ -55,7 +55,7 @@ sealed class WorshipperBonehelm : ModItem {
             if (player.HasBuff(ModContent.BuffType<BoneHarpyAttackDebuff>())) {
                 return;
             }
-            if (direction != IDoubleTap.TapDirection.Down) {
+            if (direction != Helper.CurrentDoubleTapDirectionForSetBonuses) {
                 return;
             }
 

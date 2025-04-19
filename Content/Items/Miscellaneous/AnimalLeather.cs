@@ -2,6 +2,7 @@
 
 using RoA.Content.Buffs;
 using RoA.Content.Tiles.Crafting;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -42,6 +43,5 @@ class AnimalLeather : ModItem {
 
     public override bool CanUseItem(Player player)
         => Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile && Main.tile[Player.tileTargetX, Player.tileTargetY].TileType == (ushort)ModContent.TileType<TanningRack>()
-        && player.position.X / 16f - Player.tileRangeX - Item.tileBoost - player.blockRange <= Player.tileTargetX
-            && (player.position.X + player.width) / 16f + Player.tileRangeX + Item.tileBoost - 1f + player.blockRange >= Player.tileTargetX && player.position.Y / 16f - Player.tileRangeY - Item.tileBoost - player.blockRange <= Player.tileTargetY && (player.position.Y + player.height) / 16f + Player.tileRangeY + Item.tileBoost - 2f + player.blockRange >= Player.tileTargetY;
+        && player.WithinPlacementRange(Player.tileTargetX, Player.tileTargetY);
 }

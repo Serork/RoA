@@ -14,6 +14,27 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Consumables;
 
 sealed class DruidSoul : ModItem {
+    public override void Load() {
+        On_NPC.ReleaseNPC += On_NPC_ReleaseNPC;
+    }
+
+    private int On_NPC_ReleaseNPC(On_NPC.orig_ReleaseNPC orig, int x, int y, int Type, int Style, int who) {
+        if (Type == ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>()) {
+            int num = -1;
+            if (Main.netMode == 1) {
+                NetMessage.SendData(71, -1, -1, null, x, y, Type, Style);
+            }
+            else {
+                num = NPC.NewNPC(Main.player[who].GetSource_ReleaseEntity(), x, y, Type);
+                Main.npc[num].netUpdate = true;
+            }
+
+            return num;
+        }
+
+        return orig(x, y, Type, Style, who);
+    }
+
     public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.5f);
 
     public override void SetStaticDefaults() {

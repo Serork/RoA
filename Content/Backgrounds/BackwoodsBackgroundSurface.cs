@@ -89,7 +89,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         int menuOffset = 0;
         if (Main.gameMenu) {
             menuOffset -= offset2;
-            menuOffset -= 1200;
+            menuOffset -= 1300;
         }
         pushBGTopHack = menuOffset;
         pushBGTopHack += offset;

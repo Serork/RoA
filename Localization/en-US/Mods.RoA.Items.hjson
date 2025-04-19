@@ -219,7 +219,7 @@ Galipot: {
 }
 
 AnimalLeather: {
-	DisplayName: Animal Rawhide
+	DisplayName: Coarse Rawhide
 	Tooltip: Can be processed at the Tanning Rack
 }
 
@@ -237,8 +237,9 @@ TanningRack: {
 	DisplayName: Tanning Rack
 	Tooltip:
 		'''
-		Allows raw leather to be obtained from creatures
+		Allows raw leather to be obtained from enemies
 		It must be processed at the rack before expiring
+		Cannot be placed while the effect is active
 		'''
 }
 
@@ -1668,13 +1669,17 @@ Has2rJacket: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'And strange moons circle through the skies...'
+		'...And strange moons circle through the skies...'
 		'''
 }
 
 Has2rMask: {
 	DisplayName: The Unspeakable One's Mask
-	Tooltip: "{$Mods.RoA.RoADev}"
+	Tooltip:
+		'''
+		{$Mods.RoA.RoADev}
+		'Strange is the night where black stars rise...'
+		'''
 }
 
 Has2rPants: {
@@ -1921,5 +1926,14 @@ JewellersBelt: {
 		'''
 		Large Gems do not drop when you die
 		Hide this to conceal the held Large Gems
+		'''
+}
+
+AltarPlacer: {
+	DisplayName: Overgrown Altar
+	Tooltip:
+		'''
+		#TEST: PLACES AN OVERGROWN ALTAR
+		NOTE: THERE CAN BE ONLY 1 MAIN (IN THE BACKWOODS) OVERGROWN ALTAR IN THE WORLD
 		'''
 }

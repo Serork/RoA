@@ -197,463 +197,463 @@ sealed class BackwoodsVars : ModSystem {
     }
 
     // check out pine cone
-    private bool On_WorldGen_GrowTree(On_WorldGen.orig_GrowTree orig, int i, int y) {
-        int j;
-        for (j = y; TileID.Sets.TreeSapling[Main.tile[i, j].TileType]; j++) {
-        }
+    //private bool On_WorldGen_GrowTree(On_WorldGen.orig_GrowTree orig, int i, int y) {
+    //    int j;
+    //    for (j = y; TileID.Sets.TreeSapling[Main.tile[i, j].TileType]; j++) {
+    //    }
 
-        if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees)
-            return false;
+    //    if ((Main.tile[i - 1, j - 1].LiquidAmount != 0 || Main.tile[i, j - 1].LiquidAmount != 0 || Main.tile[i + 1, j - 1].LiquidAmount != 0) && !WorldGen.notTheBees)
+    //        return false;
 
-        UnifiedRandom genRand = WorldGen.genRand;
-        if (Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i, j].TileType) && ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i, j - 1].WallType)) && ((Main.tile[i - 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType)) || (Main.tile[i + 1, j].HasActuator && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType)))) {
-            TileColorCache cache = Main.tile[i, j].BlockColorAndCoating();
-            if (Main.tenthAnniversaryWorld && !WorldGen.gen)
-                cache.Color = (byte)genRand.Next(1, 13);
+    //    UnifiedRandom genRand = WorldGen.genRand;
+    //    if (Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i, j].TileType) && ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i, j - 1].WallType)) && ((Main.tile[i - 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType)) || (Main.tile[i + 1, j].HasActuator && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType)))) {
+    //        TileColorCache cache = Main.tile[i, j].BlockColorAndCoating();
+    //        if (Main.tenthAnniversaryWorld && !WorldGen.gen)
+    //            cache.Color = (byte)genRand.Next(1, 13);
 
-            bool isPrimordialTree = false;
-            if (Main.tile[i, j].TileType == ModContent.TileType<BackwoodsGrass>()) {
-                isPrimordialTree = true;
-            }
-            int num = 2;
-            int num2 = genRand.Next(5, 17);
-            int num3 = num2 + 4;
-            if (Main.tile[i, j].TileType == 60)
-                num3 += 5;
+    //        bool isPrimordialTree = false;
+    //        if (Main.tile[i, j].TileType == ModContent.TileType<BackwoodsGrass>()) {
+    //            isPrimordialTree = true;
+    //        }
+    //        int num = 2;
+    //        int num2 = genRand.Next(5, 17);
+    //        int num3 = num2 + 4;
+    //        if (Main.tile[i, j].TileType == 60)
+    //            num3 += 5;
 
-            bool flag = false;
-            if (Main.tile[i, j].TileType == 70 && WorldGen.EmptyTileCheck(i - num, i + num, j - num3, j - 3, 20) && WorldGen.EmptyTileCheck(i - 1, i + 1, j - 2, j - 1, 20))
-                flag = true;
+    //        bool flag = false;
+    //        if (Main.tile[i, j].TileType == 70 && WorldGen.EmptyTileCheck(i - num, i + num, j - num3, j - 3, 20) && WorldGen.EmptyTileCheck(i - 1, i + 1, j - 2, j - 1, 20))
+    //            flag = true;
 
-            if (WorldGen.EmptyTileCheck(i - num, i + num, j - num3, j - 1, 20))
-                flag = true;
+    //        if (WorldGen.EmptyTileCheck(i - num, i + num, j - num3, j - 1, 20))
+    //            flag = true;
 
-            if (flag) {
-                bool flag2 = Main.remixWorld && (double)j < Main.worldSurface;
-                bool flag3 = false;
-                bool flag4 = false;
-                int num4;
-                for (int k = j - num2; k < j; k++) {
-                    Tile tile = Main.tile[i, k];
-                    tile.TileFrameNumber = ((byte)genRand.Next(3));
-                    tile.HasTile = true;
-                    Main.tile[i, k].TileType = 5;
-                    Main.tile[i, k].UseBlockColors(cache);
-                    if (isPrimordialTree) {
-                        BackwoodsVars.AddBackwoodsTree(i, k);
-                    }
-                    num4 = genRand.Next(3);
-                    int num5 = genRand.Next(10);
-                    if (k == j - 1 || k == j - num2)
-                        num5 = 0;
+    //        if (flag) {
+    //            bool flag2 = Main.remixWorld && (double)j < Main.worldSurface;
+    //            bool flag3 = false;
+    //            bool flag4 = false;
+    //            int num4;
+    //            for (int k = j - num2; k < j; k++) {
+    //                Tile tile = Main.tile[i, k];
+    //                tile.TileFrameNumber = ((byte)genRand.Next(3));
+    //                tile.HasTile = true;
+    //                Main.tile[i, k].TileType = 5;
+    //                Main.tile[i, k].UseBlockColors(cache);
+    //                if (isPrimordialTree) {
+    //                    BackwoodsVars.AddBackwoodsTree(i, k);
+    //                }
+    //                num4 = genRand.Next(3);
+    //                int num5 = genRand.Next(10);
+    //                if (k == j - 1 || k == j - num2)
+    //                    num5 = 0;
 
-                    while (((num5 == 5 || num5 == 7) && flag3) || ((num5 == 6 || num5 == 7) && flag4)) {
-                        num5 = genRand.Next(10);
-                    }
+    //                while (((num5 == 5 || num5 == 7) && flag3) || ((num5 == 6 || num5 == 7) && flag4)) {
+    //                    num5 = genRand.Next(10);
+    //                }
 
-                    flag3 = false;
-                    flag4 = false;
-                    if (num5 == 5 || num5 == 7)
-                        flag3 = true;
+    //                flag3 = false;
+    //                flag4 = false;
+    //                if (num5 == 5 || num5 == 7)
+    //                    flag3 = true;
 
-                    if (num5 == 6 || num5 == 7)
-                        flag4 = true;
+    //                if (num5 == 6 || num5 == 7)
+    //                    flag4 = true;
 
-                    switch (num5) {
-                        case 1:
-                            if (num4 == 0) {
-                                Main.tile[i, k].TileFrameX = 0;
-                                Main.tile[i, k].TileFrameY = 66;
-                            }
-                            if (num4 == 1) {
-                                Main.tile[i, k].TileFrameX = 0;
-                                Main.tile[i, k].TileFrameY = 88;
-                            }
-                            if (num4 == 2) {
-                                Main.tile[i, k].TileFrameX = 0;
-                                Main.tile[i, k].TileFrameY = 110;
-                            }
-                            break;
-                        case 2:
-                            if (num4 == 0) {
-                                Main.tile[i, k].TileFrameX = 22;
-                                Main.tile[i, k].TileFrameY = 0;
-                            }
-                            if (num4 == 1) {
-                                Main.tile[i, k].TileFrameX = 22;
-                                Main.tile[i, k].TileFrameY = 22;
-                            }
-                            if (num4 == 2) {
-                                Main.tile[i, k].TileFrameX = 22;
-                                Main.tile[i, k].TileFrameY = 44;
-                            }
-                            break;
-                        case 3:
-                            if (num4 == 0) {
-                                Main.tile[i, k].TileFrameX = 44;
-                                Main.tile[i, k].TileFrameY = 66;
-                            }
-                            if (num4 == 1) {
-                                Main.tile[i, k].TileFrameX = 44;
-                                Main.tile[i, k].TileFrameY = 88;
-                            }
-                            if (num4 == 2) {
-                                Main.tile[i, k].TileFrameX = 44;
-                                Main.tile[i, k].TileFrameY = 110;
-                            }
-                            break;
-                        case 4:
-                            if (num4 == 0) {
-                                Main.tile[i, k].TileFrameX = 22;
-                                Main.tile[i, k].TileFrameY = 66;
-                            }
-                            if (num4 == 1) {
-                                Main.tile[i, k].TileFrameX = 22;
-                                Main.tile[i, k].TileFrameY = 88;
-                            }
-                            if (num4 == 2) {
-                                Main.tile[i, k].TileFrameX = 22;
-                                Main.tile[i, k].TileFrameY = 110;
-                            }
-                            break;
-                        case 5:
-                            if (num4 == 0) {
-                                Main.tile[i, k].TileFrameX = 88;
-                                Main.tile[i, k].TileFrameY = 0;
-                            }
-                            if (num4 == 1) {
-                                Main.tile[i, k].TileFrameX = 88;
-                                Main.tile[i, k].TileFrameY = 22;
-                            }
-                            if (num4 == 2) {
-                                Main.tile[i, k].TileFrameX = 88;
-                                Main.tile[i, k].TileFrameY = 44;
-                            }
-                            break;
-                        case 6:
-                            if (num4 == 0) {
-                                Main.tile[i, k].TileFrameX = 66;
-                                Main.tile[i, k].TileFrameY = 66;
-                            }
-                            if (num4 == 1) {
-                                Main.tile[i, k].TileFrameX = 66;
-                                Main.tile[i, k].TileFrameY = 88;
-                            }
-                            if (num4 == 2) {
-                                Main.tile[i, k].TileFrameX = 66;
-                                Main.tile[i, k].TileFrameY = 110;
-                            }
-                            break;
-                        case 7:
-                            if (num4 == 0) {
-                                Main.tile[i, k].TileFrameX = 110;
-                                Main.tile[i, k].TileFrameY = 66;
-                            }
-                            if (num4 == 1) {
-                                Main.tile[i, k].TileFrameX = 110;
-                                Main.tile[i, k].TileFrameY = 88;
-                            }
-                            if (num4 == 2) {
-                                Main.tile[i, k].TileFrameX = 110;
-                                Main.tile[i, k].TileFrameY = 110;
-                            }
-                            break;
-                        default:
-                            if (num4 == 0) {
-                                Main.tile[i, k].TileFrameX = 0;
-                                Main.tile[i, k].TileFrameY = 0;
-                            }
-                            if (num4 == 1) {
-                                Main.tile[i, k].TileFrameX = 0;
-                                Main.tile[i, k].TileFrameY = 22;
-                            }
-                            if (num4 == 2) {
-                                Main.tile[i, k].TileFrameX = 0;
-                                Main.tile[i, k].TileFrameY = 44;
-                            }
-                            break;
-                    }
+    //                switch (num5) {
+    //                    case 1:
+    //                        if (num4 == 0) {
+    //                            Main.tile[i, k].TileFrameX = 0;
+    //                            Main.tile[i, k].TileFrameY = 66;
+    //                        }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i, k].TileFrameX = 0;
+    //                            Main.tile[i, k].TileFrameY = 88;
+    //                        }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i, k].TileFrameX = 0;
+    //                            Main.tile[i, k].TileFrameY = 110;
+    //                        }
+    //                        break;
+    //                    case 2:
+    //                        if (num4 == 0) {
+    //                            Main.tile[i, k].TileFrameX = 22;
+    //                            Main.tile[i, k].TileFrameY = 0;
+    //                        }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i, k].TileFrameX = 22;
+    //                            Main.tile[i, k].TileFrameY = 22;
+    //                        }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i, k].TileFrameX = 22;
+    //                            Main.tile[i, k].TileFrameY = 44;
+    //                        }
+    //                        break;
+    //                    case 3:
+    //                        if (num4 == 0) {
+    //                            Main.tile[i, k].TileFrameX = 44;
+    //                            Main.tile[i, k].TileFrameY = 66;
+    //                        }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i, k].TileFrameX = 44;
+    //                            Main.tile[i, k].TileFrameY = 88;
+    //                        }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i, k].TileFrameX = 44;
+    //                            Main.tile[i, k].TileFrameY = 110;
+    //                        }
+    //                        break;
+    //                    case 4:
+    //                        if (num4 == 0) {
+    //                            Main.tile[i, k].TileFrameX = 22;
+    //                            Main.tile[i, k].TileFrameY = 66;
+    //                        }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i, k].TileFrameX = 22;
+    //                            Main.tile[i, k].TileFrameY = 88;
+    //                        }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i, k].TileFrameX = 22;
+    //                            Main.tile[i, k].TileFrameY = 110;
+    //                        }
+    //                        break;
+    //                    case 5:
+    //                        if (num4 == 0) {
+    //                            Main.tile[i, k].TileFrameX = 88;
+    //                            Main.tile[i, k].TileFrameY = 0;
+    //                        }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i, k].TileFrameX = 88;
+    //                            Main.tile[i, k].TileFrameY = 22;
+    //                        }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i, k].TileFrameX = 88;
+    //                            Main.tile[i, k].TileFrameY = 44;
+    //                        }
+    //                        break;
+    //                    case 6:
+    //                        if (num4 == 0) {
+    //                            Main.tile[i, k].TileFrameX = 66;
+    //                            Main.tile[i, k].TileFrameY = 66;
+    //                        }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i, k].TileFrameX = 66;
+    //                            Main.tile[i, k].TileFrameY = 88;
+    //                        }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i, k].TileFrameX = 66;
+    //                            Main.tile[i, k].TileFrameY = 110;
+    //                        }
+    //                        break;
+    //                    case 7:
+    //                        if (num4 == 0) {
+    //                            Main.tile[i, k].TileFrameX = 110;
+    //                            Main.tile[i, k].TileFrameY = 66;
+    //                        }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i, k].TileFrameX = 110;
+    //                            Main.tile[i, k].TileFrameY = 88;
+    //                        }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i, k].TileFrameX = 110;
+    //                            Main.tile[i, k].TileFrameY = 110;
+    //                        }
+    //                        break;
+    //                    default:
+    //                        if (num4 == 0) {
+    //                            Main.tile[i, k].TileFrameX = 0;
+    //                            Main.tile[i, k].TileFrameY = 0;
+    //                        }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i, k].TileFrameX = 0;
+    //                            Main.tile[i, k].TileFrameY = 22;
+    //                        }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i, k].TileFrameX = 0;
+    //                            Main.tile[i, k].TileFrameY = 44;
+    //                        }
+    //                        break;
+    //                }
 
-                    if (num5 == 5 || num5 == 7) {
-                        Tile tile2 = Main.tile[i - 1, k];
-                        tile2.HasTile = true;
-                        Main.tile[i - 1, k].TileType = 5;
-                        Main.tile[i - 1, k].UseBlockColors(cache);
-                        if (isPrimordialTree) {
-                            BackwoodsVars.AddBackwoodsTree(i - 1, k);
-                        }
-                        num4 = genRand.Next(3);
-                        if (genRand.Next(3) < 2 && !flag2) {
-                            if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(1))) {
-                                PineCone.GeneratedStorage.PineConeAddedToWorld = true;
-                                num4 = 3;
-                                if (num4 == 3) {
-                                    Main.tile[i - 1, k].TileFrameX = 44;
-                                    Main.tile[i - 1, k].TileFrameY = 264;
-                                }
-                                //Console.WriteLine(i + " " + j);
-                            }
+    //                if (num5 == 5 || num5 == 7) {
+    //                    Tile tile2 = Main.tile[i - 1, k];
+    //                    tile2.HasTile = true;
+    //                    Main.tile[i - 1, k].TileType = 5;
+    //                    Main.tile[i - 1, k].UseBlockColors(cache);
+    //                    if (isPrimordialTree) {
+    //                        BackwoodsVars.AddBackwoodsTree(i - 1, k);
+    //                    }
+    //                    num4 = genRand.Next(3);
+    //                    if (genRand.Next(3) < 2 && !flag2) {
+    //                        if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(1))) {
+    //                            PineCone.GeneratedStorage.PineConeAddedToWorld = true;
+    //                            num4 = 3;
+    //                            if (num4 == 3) {
+    //                                Main.tile[i - 1, k].TileFrameX = 44;
+    //                                Main.tile[i - 1, k].TileFrameY = 264;
+    //                            }
+    //                            //Console.WriteLine(i + " " + j);
+    //                        }
 
-                            if (num4 == 0) {
-                                Main.tile[i - 1, k].TileFrameX = 44;
-                                Main.tile[i - 1, k].TileFrameY = 198;
-                            }
+    //                        if (num4 == 0) {
+    //                            Main.tile[i - 1, k].TileFrameX = 44;
+    //                            Main.tile[i - 1, k].TileFrameY = 198;
+    //                        }
 
-                            if (num4 == 1) {
-                                Main.tile[i - 1, k].TileFrameX = 44;
-                                Main.tile[i - 1, k].TileFrameY = 220;
-                            }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i - 1, k].TileFrameX = 44;
+    //                            Main.tile[i - 1, k].TileFrameY = 220;
+    //                        }
 
-                            if (num4 == 2) {
-                                Main.tile[i - 1, k].TileFrameX = 44;
-                                Main.tile[i - 1, k].TileFrameY = 242;
-                            }
-                        }
-                        else {
-                            if (num4 == 0) {
-                                Main.tile[i - 1, k].TileFrameX = 66;
-                                Main.tile[i - 1, k].TileFrameY = 0;
-                            }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i - 1, k].TileFrameX = 44;
+    //                            Main.tile[i - 1, k].TileFrameY = 242;
+    //                        }
+    //                    }
+    //                    else {
+    //                        if (num4 == 0) {
+    //                            Main.tile[i - 1, k].TileFrameX = 66;
+    //                            Main.tile[i - 1, k].TileFrameY = 0;
+    //                        }
 
-                            if (num4 == 1) {
-                                Main.tile[i - 1, k].TileFrameX = 66;
-                                Main.tile[i - 1, k].TileFrameY = 22;
-                            }
+    //                        if (num4 == 1) {
+    //                            Main.tile[i - 1, k].TileFrameX = 66;
+    //                            Main.tile[i - 1, k].TileFrameY = 22;
+    //                        }
 
-                            if (num4 == 2) {
-                                Main.tile[i - 1, k].TileFrameX = 66;
-                                Main.tile[i - 1, k].TileFrameY = 44;
-                            }
-                        }
-                    }
+    //                        if (num4 == 2) {
+    //                            Main.tile[i - 1, k].TileFrameX = 66;
+    //                            Main.tile[i - 1, k].TileFrameY = 44;
+    //                        }
+    //                    }
+    //                }
 
-                    if (num5 != 6 && num5 != 7)
-                        continue;
+    //                if (num5 != 6 && num5 != 7)
+    //                    continue;
 
-                    tile = Main.tile[i + 1, k];
-                    tile.HasTile = true;
-                    Main.tile[i + 1, k].TileType = 5;
-                    Main.tile[i + 1, k].UseBlockColors(cache);
-                    if (isPrimordialTree) {
-                        BackwoodsVars.AddBackwoodsTree(i + 1, k);
-                    }
-                    num4 = genRand.Next(3);
-                    if (genRand.Next(3) < 2 && !flag2) {
-                        if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(1))) {
-                            PineCone.GeneratedStorage.PineConeAddedToWorld = true;
-                            num4 = 3;
-                            if (num4 == 3) {
-                                Main.tile[i + 1, k].TileFrameX = 66;
-                                Main.tile[i + 1, k].TileFrameY = 264;
-                            }
-                            //Console.WriteLine(i + " " + j);
-                        }
+    //                tile = Main.tile[i + 1, k];
+    //                tile.HasTile = true;
+    //                Main.tile[i + 1, k].TileType = 5;
+    //                Main.tile[i + 1, k].UseBlockColors(cache);
+    //                if (isPrimordialTree) {
+    //                    BackwoodsVars.AddBackwoodsTree(i + 1, k);
+    //                }
+    //                num4 = genRand.Next(3);
+    //                if (genRand.Next(3) < 2 && !flag2) {
+    //                    if (Main.tile[i, j].TileType == 147 && (!PineCone.GeneratedStorage.PineConeAddedToWorld || genRand.NextBool(1))) {
+    //                        PineCone.GeneratedStorage.PineConeAddedToWorld = true;
+    //                        num4 = 3;
+    //                        if (num4 == 3) {
+    //                            Main.tile[i + 1, k].TileFrameX = 66;
+    //                            Main.tile[i + 1, k].TileFrameY = 264;
+    //                        }
+    //                        //Console.WriteLine(i + " " + j);
+    //                    }
 
-                        if (num4 == 0) {
-                            Main.tile[i + 1, k].TileFrameX = 66;
-                            Main.tile[i + 1, k].TileFrameY = 198;
-                        }
+    //                    if (num4 == 0) {
+    //                        Main.tile[i + 1, k].TileFrameX = 66;
+    //                        Main.tile[i + 1, k].TileFrameY = 198;
+    //                    }
 
-                        if (num4 == 1) {
-                            Main.tile[i + 1, k].TileFrameX = 66;
-                            Main.tile[i + 1, k].TileFrameY = 220;
-                        }
+    //                    if (num4 == 1) {
+    //                        Main.tile[i + 1, k].TileFrameX = 66;
+    //                        Main.tile[i + 1, k].TileFrameY = 220;
+    //                    }
 
-                        if (num4 == 2) {
-                            Main.tile[i + 1, k].TileFrameX = 66;
-                            Main.tile[i + 1, k].TileFrameY = 242;
-                        }
-                    }
-                    else {
-                        if (num4 == 0) {
-                            Main.tile[i + 1, k].TileFrameX = 88;
-                            Main.tile[i + 1, k].TileFrameY = 66;
-                        }
+    //                    if (num4 == 2) {
+    //                        Main.tile[i + 1, k].TileFrameX = 66;
+    //                        Main.tile[i + 1, k].TileFrameY = 242;
+    //                    }
+    //                }
+    //                else {
+    //                    if (num4 == 0) {
+    //                        Main.tile[i + 1, k].TileFrameX = 88;
+    //                        Main.tile[i + 1, k].TileFrameY = 66;
+    //                    }
 
-                        if (num4 == 1) {
-                            Main.tile[i + 1, k].TileFrameX = 88;
-                            Main.tile[i + 1, k].TileFrameY = 88;
-                        }
+    //                    if (num4 == 1) {
+    //                        Main.tile[i + 1, k].TileFrameX = 88;
+    //                        Main.tile[i + 1, k].TileFrameY = 88;
+    //                    }
 
-                        if (num4 == 2) {
-                            Main.tile[i + 1, k].TileFrameX = 88;
-                            Main.tile[i + 1, k].TileFrameY = 110;
-                        }
-                    }
-                }
+    //                    if (num4 == 2) {
+    //                        Main.tile[i + 1, k].TileFrameX = 88;
+    //                        Main.tile[i + 1, k].TileFrameY = 110;
+    //                    }
+    //                }
+    //            }
 
-                int num6 = genRand.Next(3);
-                bool flag5 = false;
-                bool flag6 = false;
-                if (Main.tile[i - 1, j].HasUnactuatedTile && !Main.tile[i - 1, j].IsHalfBlock && Main.tile[i - 1, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType))
-                    flag5 = true;
+    //            int num6 = genRand.Next(3);
+    //            bool flag5 = false;
+    //            bool flag6 = false;
+    //            if (Main.tile[i - 1, j].HasUnactuatedTile && !Main.tile[i - 1, j].IsHalfBlock && Main.tile[i - 1, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType))
+    //                flag5 = true;
 
-                if (Main.tile[i + 1, j].HasUnactuatedTile && !Main.tile[i + 1, j].IsHalfBlock && Main.tile[i + 1, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType))
-                    flag6 = true;
+    //            if (Main.tile[i + 1, j].HasUnactuatedTile && !Main.tile[i + 1, j].IsHalfBlock && Main.tile[i + 1, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType))
+    //                flag6 = true;
 
-                if (!flag5) {
-                    if (num6 == 0)
-                        num6 = 2;
+    //            if (!flag5) {
+    //                if (num6 == 0)
+    //                    num6 = 2;
 
-                    if (num6 == 1)
-                        num6 = 3;
-                }
+    //                if (num6 == 1)
+    //                    num6 = 3;
+    //            }
 
-                if (!flag6) {
-                    if (num6 == 0)
-                        num6 = 1;
+    //            if (!flag6) {
+    //                if (num6 == 0)
+    //                    num6 = 1;
 
-                    if (num6 == 2)
-                        num6 = 3;
-                }
+    //                if (num6 == 2)
+    //                    num6 = 3;
+    //            }
 
-                if (flag5 && !flag6)
-                    num6 = 2;
+    //            if (flag5 && !flag6)
+    //                num6 = 2;
 
-                if (flag6 && !flag5)
-                    num6 = 1;
+    //            if (flag6 && !flag5)
+    //                num6 = 1;
 
-                if (num6 == 0 || num6 == 1) {
-                    Tile tile = Main.tile[i + 1, j - 1];
-                    tile.HasTile = true;
-                    Main.tile[i + 1, j - 1].TileType = 5;
-                    Main.tile[i + 1, j - 1].UseBlockColors(cache);
-                    if (isPrimordialTree) {
-                        BackwoodsVars.AddBackwoodsTree(i + 1, j - 1);
-                    }
-                    num4 = genRand.Next(3);
-                    if (num4 == 0) {
-                        Main.tile[i + 1, j - 1].TileFrameX = 22;
-                        Main.tile[i + 1, j - 1].TileFrameY = 132;
-                    }
+    //            if (num6 == 0 || num6 == 1) {
+    //                Tile tile = Main.tile[i + 1, j - 1];
+    //                tile.HasTile = true;
+    //                Main.tile[i + 1, j - 1].TileType = 5;
+    //                Main.tile[i + 1, j - 1].UseBlockColors(cache);
+    //                if (isPrimordialTree) {
+    //                    BackwoodsVars.AddBackwoodsTree(i + 1, j - 1);
+    //                }
+    //                num4 = genRand.Next(3);
+    //                if (num4 == 0) {
+    //                    Main.tile[i + 1, j - 1].TileFrameX = 22;
+    //                    Main.tile[i + 1, j - 1].TileFrameY = 132;
+    //                }
 
-                    if (num4 == 1) {
-                        Main.tile[i + 1, j - 1].TileFrameX = 22;
-                        Main.tile[i + 1, j - 1].TileFrameY = 154;
-                    }
+    //                if (num4 == 1) {
+    //                    Main.tile[i + 1, j - 1].TileFrameX = 22;
+    //                    Main.tile[i + 1, j - 1].TileFrameY = 154;
+    //                }
 
-                    if (num4 == 2) {
-                        Main.tile[i + 1, j - 1].TileFrameX = 22;
-                        Main.tile[i + 1, j - 1].TileFrameY = 176;
-                    }
-                }
+    //                if (num4 == 2) {
+    //                    Main.tile[i + 1, j - 1].TileFrameX = 22;
+    //                    Main.tile[i + 1, j - 1].TileFrameY = 176;
+    //                }
+    //            }
 
-                if (num6 == 0 || num6 == 2) {
-                    Tile tile = Main.tile[i - 1, j - 1];
-                    tile.HasTile = true;
-                    Main.tile[i - 1, j - 1].TileType = 5;
-                    Main.tile[i - 1, j - 1].UseBlockColors(cache);
-                    if (isPrimordialTree) {
-                        BackwoodsVars.AddBackwoodsTree(i - 1, j - 1);
-                    }
-                    num4 = genRand.Next(3);
-                    if (num4 == 0) {
-                        Main.tile[i - 1, j - 1].TileFrameX = 44;
-                        Main.tile[i - 1, j - 1].TileFrameY = 132;
-                    }
+    //            if (num6 == 0 || num6 == 2) {
+    //                Tile tile = Main.tile[i - 1, j - 1];
+    //                tile.HasTile = true;
+    //                Main.tile[i - 1, j - 1].TileType = 5;
+    //                Main.tile[i - 1, j - 1].UseBlockColors(cache);
+    //                if (isPrimordialTree) {
+    //                    BackwoodsVars.AddBackwoodsTree(i - 1, j - 1);
+    //                }
+    //                num4 = genRand.Next(3);
+    //                if (num4 == 0) {
+    //                    Main.tile[i - 1, j - 1].TileFrameX = 44;
+    //                    Main.tile[i - 1, j - 1].TileFrameY = 132;
+    //                }
 
-                    if (num4 == 1) {
-                        Main.tile[i - 1, j - 1].TileFrameX = 44;
-                        Main.tile[i - 1, j - 1].TileFrameY = 154;
-                    }
+    //                if (num4 == 1) {
+    //                    Main.tile[i - 1, j - 1].TileFrameX = 44;
+    //                    Main.tile[i - 1, j - 1].TileFrameY = 154;
+    //                }
 
-                    if (num4 == 2) {
-                        Main.tile[i - 1, j - 1].TileFrameX = 44;
-                        Main.tile[i - 1, j - 1].TileFrameY = 176;
-                    }
-                }
+    //                if (num4 == 2) {
+    //                    Main.tile[i - 1, j - 1].TileFrameX = 44;
+    //                    Main.tile[i - 1, j - 1].TileFrameY = 176;
+    //                }
+    //            }
 
-                num4 = genRand.Next(3);
-                switch (num6) {
-                    case 0:
-                        if (num4 == 0) {
-                            Main.tile[i, j - 1].TileFrameX = 88;
-                            Main.tile[i, j - 1].TileFrameY = 132;
-                        }
-                        if (num4 == 1) {
-                            Main.tile[i, j - 1].TileFrameX = 88;
-                            Main.tile[i, j - 1].TileFrameY = 154;
-                        }
-                        if (num4 == 2) {
-                            Main.tile[i, j - 1].TileFrameX = 88;
-                            Main.tile[i, j - 1].TileFrameY = 176;
-                        }
-                        break;
-                    case 1:
-                        if (num4 == 0) {
-                            Main.tile[i, j - 1].TileFrameX = 0;
-                            Main.tile[i, j - 1].TileFrameY = 132;
-                        }
-                        if (num4 == 1) {
-                            Main.tile[i, j - 1].TileFrameX = 0;
-                            Main.tile[i, j - 1].TileFrameY = 154;
-                        }
-                        if (num4 == 2) {
-                            Main.tile[i, j - 1].TileFrameX = 0;
-                            Main.tile[i, j - 1].TileFrameY = 176;
-                        }
-                        break;
-                    case 2:
-                        if (num4 == 0) {
-                            Main.tile[i, j - 1].TileFrameX = 66;
-                            Main.tile[i, j - 1].TileFrameY = 132;
-                        }
-                        if (num4 == 1) {
-                            Main.tile[i, j - 1].TileFrameX = 66;
-                            Main.tile[i, j - 1].TileFrameY = 154;
-                        }
-                        if (num4 == 2) {
-                            Main.tile[i, j - 1].TileFrameX = 66;
-                            Main.tile[i, j - 1].TileFrameY = 176;
-                        }
-                        break;
-                }
+    //            num4 = genRand.Next(3);
+    //            switch (num6) {
+    //                case 0:
+    //                    if (num4 == 0) {
+    //                        Main.tile[i, j - 1].TileFrameX = 88;
+    //                        Main.tile[i, j - 1].TileFrameY = 132;
+    //                    }
+    //                    if (num4 == 1) {
+    //                        Main.tile[i, j - 1].TileFrameX = 88;
+    //                        Main.tile[i, j - 1].TileFrameY = 154;
+    //                    }
+    //                    if (num4 == 2) {
+    //                        Main.tile[i, j - 1].TileFrameX = 88;
+    //                        Main.tile[i, j - 1].TileFrameY = 176;
+    //                    }
+    //                    break;
+    //                case 1:
+    //                    if (num4 == 0) {
+    //                        Main.tile[i, j - 1].TileFrameX = 0;
+    //                        Main.tile[i, j - 1].TileFrameY = 132;
+    //                    }
+    //                    if (num4 == 1) {
+    //                        Main.tile[i, j - 1].TileFrameX = 0;
+    //                        Main.tile[i, j - 1].TileFrameY = 154;
+    //                    }
+    //                    if (num4 == 2) {
+    //                        Main.tile[i, j - 1].TileFrameX = 0;
+    //                        Main.tile[i, j - 1].TileFrameY = 176;
+    //                    }
+    //                    break;
+    //                case 2:
+    //                    if (num4 == 0) {
+    //                        Main.tile[i, j - 1].TileFrameX = 66;
+    //                        Main.tile[i, j - 1].TileFrameY = 132;
+    //                    }
+    //                    if (num4 == 1) {
+    //                        Main.tile[i, j - 1].TileFrameX = 66;
+    //                        Main.tile[i, j - 1].TileFrameY = 154;
+    //                    }
+    //                    if (num4 == 2) {
+    //                        Main.tile[i, j - 1].TileFrameX = 66;
+    //                        Main.tile[i, j - 1].TileFrameY = 176;
+    //                    }
+    //                    break;
+    //            }
 
-                if (genRand.Next(13) != 0 && !flag2) {
-                    num4 = genRand.Next(3);
-                    if (num4 == 0) {
-                        Main.tile[i, j - num2].TileFrameX = 22;
-                        Main.tile[i, j - num2].TileFrameY = 198;
-                    }
+    //            if (genRand.Next(13) != 0 && !flag2) {
+    //                num4 = genRand.Next(3);
+    //                if (num4 == 0) {
+    //                    Main.tile[i, j - num2].TileFrameX = 22;
+    //                    Main.tile[i, j - num2].TileFrameY = 198;
+    //                }
 
-                    if (num4 == 1) {
-                        Main.tile[i, j - num2].TileFrameX = 22;
-                        Main.tile[i, j - num2].TileFrameY = 220;
-                    }
+    //                if (num4 == 1) {
+    //                    Main.tile[i, j - num2].TileFrameX = 22;
+    //                    Main.tile[i, j - num2].TileFrameY = 220;
+    //                }
 
-                    if (num4 == 2) {
-                        Main.tile[i, j - num2].TileFrameX = 22;
-                        Main.tile[i, j - num2].TileFrameY = 242;
-                    }
-                }
-                else {
-                    num4 = genRand.Next(3);
-                    if (num4 == 0) {
-                        Main.tile[i, j - num2].TileFrameX = 0;
-                        Main.tile[i, j - num2].TileFrameY = 198;
-                    }
+    //                if (num4 == 2) {
+    //                    Main.tile[i, j - num2].TileFrameX = 22;
+    //                    Main.tile[i, j - num2].TileFrameY = 242;
+    //                }
+    //            }
+    //            else {
+    //                num4 = genRand.Next(3);
+    //                if (num4 == 0) {
+    //                    Main.tile[i, j - num2].TileFrameX = 0;
+    //                    Main.tile[i, j - num2].TileFrameY = 198;
+    //                }
 
-                    if (num4 == 1) {
-                        Main.tile[i, j - num2].TileFrameX = 0;
-                        Main.tile[i, j - num2].TileFrameY = 220;
-                    }
+    //                if (num4 == 1) {
+    //                    Main.tile[i, j - num2].TileFrameX = 0;
+    //                    Main.tile[i, j - num2].TileFrameY = 220;
+    //                }
 
-                    if (num4 == 2) {
-                        Main.tile[i, j - num2].TileFrameX = 0;
-                        Main.tile[i, j - num2].TileFrameY = 242;
-                    }
-                }
+    //                if (num4 == 2) {
+    //                    Main.tile[i, j - num2].TileFrameX = 0;
+    //                    Main.tile[i, j - num2].TileFrameY = 242;
+    //                }
+    //            }
 
-                WorldGen.RangeFrame(i - 2, j - num2 - 1, i + 2, j + 1);
-                if (Main.netMode == 2)
-                    NetMessage.SendTileSquare(-1, i - 1, j - num2, 3, num2);
+    //            WorldGen.RangeFrame(i - 2, j - num2 - 1, i + 2, j + 1);
+    //            if (Main.netMode == 2)
+    //                NetMessage.SendTileSquare(-1, i - 1, j - num2, 3, num2);
 
-                return true;
-            }
-        }
+    //            return true;
+    //        }
+    //    }
 
-        return false;
-    }
+    //    return false;
+    //}
 
     public override void PostUpdateNPCs() {
         if (!_backwoodsAwake) {

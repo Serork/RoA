@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Food;
-using RoA.Content.Items.Placeable;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Tiles.Solid.Backwoods;
 
@@ -29,6 +28,14 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
     }
 
     private void On_WorldGen_ShakeTree(On_WorldGen.orig_ShakeTree orig, int i, int j) {
+        WorldGen.GetTreeBottom(i, j, out var x, out var y);
+        int num = y;
+        TreeTypes treeType = WorldGen.GetTreeType(Main.tile[x, y].TileType);
+        bool flag = Main.tile[x, y].TileType == ModContent.TileType<BackwoodsGrass>();
+        if (!flag) {
+            orig(i, j);
+            return;
+        }
         UnifiedRandom genRand = WorldGen.genRand;
         FieldInfo numTreeShakesReflect = typeof(WorldGen).GetField("numTreeShakes", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance);
         int numTreeShakes = (int)numTreeShakesReflect.GetValue(null);
@@ -38,10 +45,6 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
         if (numTreeShakes == maxTreeShakes)
             return;
 
-        WorldGen.GetTreeBottom(i, j, out var x, out var y);
-        int num = y;
-        TreeTypes treeType = WorldGen.GetTreeType(Main.tile[x, y].TileType);
-        bool flag = Main.tile[x, y].TileType == ModContent.TileType<BackwoodsGrass>();
         if (treeType == TreeTypes.None && !flag)
             return;
 

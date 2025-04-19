@@ -88,6 +88,7 @@ sealed class SerorkMask : ModItem {
                             }
                             drawData.position = new Vector2(drawData.position.X + num3, drawData.position.Y + num4);
                             drawData.shader = drawinfo.cHead;
+                            drawData.color = drawinfo.drawPlayer.GetImmuneAlphaPure(drawData.color, (float)drawinfo.shadow);
                             drawinfo.DrawDataCache.Add(drawData);
                         }
 
@@ -177,6 +178,7 @@ sealed class SerorkMask : ModItem {
                         }
                         drawData.position = new Vector2(drawData.position.X + num3, drawData.position.Y + num4);
                         drawData.shader = drawinfo.cLegs;
+                        drawData.color = drawinfo.drawPlayer.GetImmuneAlphaPure(drawData.color, (float)drawinfo.shadow);
                         drawinfo.DrawDataCache.Add(drawData);
                     }
 
@@ -263,6 +265,7 @@ sealed class SerorkMask : ModItem {
                         Rectangle value2 = item2.sourceRect.Value;
                         item2.sourceRect = value2;
                         item2.shader = drawinfo.cBody;
+                        item2.color = drawinfo.drawPlayer.GetImmuneAlphaPure(item2.color, (float)drawinfo.shadow);
                         drawinfo.DrawDataCache.Add(item2);
                     }
                     break;

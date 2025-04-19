@@ -15,6 +15,8 @@ using System.Linq;
 using RoA.Content.Items.Weapons.Magic;
 using Terraria.ModLoader.Core;
 using System.Reflection;
+using RoA.Content.Items.Miscellaneous;
+using Terraria.UI;
 
 namespace RoA.Content.Items.Placeable.Crafting;
 
@@ -101,9 +103,43 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
             Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
 
         if (Player.whoAmI == Main.myPlayer) {
-            if (Player.chest >= 0) {
-                for (int i = 0; i < Main.chest[Player.chest].item.Length; i++) {
-                    Item item = Main.chest[Player.chest].item[i];
+            if (Player.chest == -2) {
+                Chest chest = Player.bank;
+                for (int j = 0; j < 40; j++) {
+                    Item item = chest.item[j];
+                    if (!item.IsEmpty() && item.type == ModContent.ItemType<MercuriumOre>()) {
+                        Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
+                        break;
+                    }
+                }
+            }
+
+            if (Player.chest == -4) {
+                Chest chest2 = Player.bank3;
+                for (int k = 0; k < 40; k++) {
+                    Item item = chest2.item[k];
+                    if (!item.IsEmpty() && item.type == ModContent.ItemType<MercuriumOre>()) {
+                        Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
+                        break;
+                    }
+                }
+            }
+
+            if (Player.chest == -5) {
+                Chest chest3 = Player.bank4;
+                for (int l = 0; l < 40; l++) {
+                    Item item = chest3.item[l];
+                    if (!item.IsEmpty() && item.type == ModContent.ItemType<MercuriumOre>()) {
+                        Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
+                        break;
+                    }
+                }
+            }
+
+            if (Player.chest == -3) {
+                Chest chest4 = Player.bank2;
+                for (int m = 0; m < 40; m++) {
+                    Item item = chest4.item[m];
                     if (!item.IsEmpty() && item.type == ModContent.ItemType<MercuriumOre>()) {
                         Player.AddBuff(ModContent.BuffType<ToxicFumes>(), 2);
                         break;

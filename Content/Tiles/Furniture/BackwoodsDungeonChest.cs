@@ -40,7 +40,7 @@ sealed class BackwoodsDungeonChest : ModTile {
         AdjTiles = [TileID.Containers];
 
         Color mapColor = new(124, 127, 140);
-        AddMapEntry(mapColor, CreateMapEntryName());
+        AddMapEntry(mapColor, CreateMapEntryName(), MapChestName);
         AddMapEntry(mapColor, Language.GetText("Mods.RoA.Tiles.BackwoodsDungeonChest2.MapEntry"));
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
@@ -66,6 +66,30 @@ sealed class BackwoodsDungeonChest : ModTile {
                 TileID.RollingCactus
             ];
         TileObjectData.addTile(Type);
+    }
+
+    public static string MapChestName(string name, int i, int j) {
+        int left = i;
+        int top = j;
+        Tile tile = Main.tile[i, j];
+        if (tile.TileFrameX % 36 != 0) {
+            left--;
+        }
+
+        if (tile.TileFrameY != 0) {
+            top--;
+        }
+
+        int chest = Chest.FindChest(left, top);
+        if (chest < 0) {
+            return Language.GetTextValue("LegacyChestType.0");
+        }
+
+        if (Main.chest[chest].name == string.Empty) {
+            return name;
+        }
+
+        return name + ": " + Main.chest[chest].name;
     }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;

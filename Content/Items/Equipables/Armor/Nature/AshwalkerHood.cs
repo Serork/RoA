@@ -56,7 +56,7 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-        if (player.HasSetBonusFrom<AshwalkerHood>() && direction == IDoubleTap.TapDirection.Down && player.GetModPlayer<BaseFormHandler>().CanTransform) {
+        if (player.HasSetBonusFrom<AshwalkerHood>() && direction == Helper.CurrentDoubleTapDirectionForSetBonuses && player.GetModPlayer<BaseFormHandler>().CanTransform) {
             BaseFormHandler.ToggleForm<LilPhoenixForm>(player);
         }
     }

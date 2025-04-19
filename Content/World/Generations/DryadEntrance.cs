@@ -220,7 +220,7 @@ sealed class DryadEntrance : ModSystem {
             contain = 4281;
             summonStaffAdded = true;
         }
-        if (!summonStaffAdded && genRand.Next(5) == 0) {
+        if (genRand.Next(5) == 0) {
             contain = ModContent.ItemType<GiantTreeSapling>();
         }
         if (!summonStaffAdded && !ExtraVanillaChestItems._giantTreeSaplingAdded) {
@@ -276,21 +276,19 @@ sealed class DryadEntrance : ModSystem {
     }
 
     private void DryadEntranceLoomPlacement(GenerationProgress progress, GameConfiguration configuration) {
-        if (_loomPlacedInWorld) {
-            bool flag = false;
-            for (int i = 0; i < Main.maxTilesX; i++) {
-                for (int j = 0; j < Main.maxTilesY; j++) {
-                    if (WorldGenHelper.ActiveTile(i, j, 304)) {
-                        flag = true;
-                    }
+        bool flag = false;
+        for (int i = 0; i < Main.maxTilesX; i++) {
+            for (int j = 0; j < Main.maxTilesY; j++) {
+                if (WorldGenHelper.ActiveTile(i, j, 304)) {
+                    flag = true;
                 }
             }
-            if (!flag) {
-                _loomPlacedInWorld = false;
-            }
         }
+        //if (!flag) {
+        //    _loomPlacedInWorld = false;
+        //}
 
-        if (_loomPlacedInWorld ||_bigRubblePosition == Point.Zero) {
+        if (flag/* || _bigRubblePosition == Point.Zero*/) {
             return;
         }
 

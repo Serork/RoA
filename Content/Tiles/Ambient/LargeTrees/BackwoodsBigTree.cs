@@ -38,9 +38,9 @@ namespace RoA.Content.Tiles.Ambient.LargeTrees;
 
 sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePower, IResistToAxe {
     public override void PostTileFrame(int i, int j, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight) {
-        if (IsStart(i, j) && WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<BackwoodsGrass>()) {
-            WorldGen.KillTile(i, j);
-        }
+        //if (IsStart(i, j) && !WorldGenHelper.GetTileSafely(i, j + 1).ActiveTile(ModContent.TileType<BackwoodsGrass>())) {
+        //    WorldGen.KillTile(i, j);
+        //}
     }
 
     int IRequireMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;

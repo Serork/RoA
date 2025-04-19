@@ -50,247 +50,247 @@ sealed class ExtraVanillaChestItems : ModSystem {
         On_WorldGen.AddBuriedChest_int_int_int_bool_int_bool_ushort += On_WorldGen_AddBuriedChest_int_int_int_bool_int_bool_ushort;
         On_WorldGen.MakeDungeon += On_WorldGen_MakeDungeon;
         //On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
-        On_WorldGen.IslandHouse += On_WorldGen_IslandHouse;
+        //On_WorldGen.IslandHouse += On_WorldGen_IslandHouse;
     }
 
-    private void On_WorldGen_IslandHouse(On_WorldGen.orig_IslandHouse orig, int i, int j, int islandStyle) {
-        bool flag = WorldGen.crimson;
-        if (WorldGen.drunkWorldGen)
-            flag = GenVars.crimsonLeft && i < Main.maxTilesX / 2 || (!GenVars.crimsonLeft && i > Main.maxTilesX / 2 ? true : false);
+    //private void On_WorldGen_IslandHouse(On_WorldGen.orig_IslandHouse orig, int i, int j, int islandStyle) {
+    //    bool flag = WorldGen.crimson;
+    //    if (WorldGen.drunkWorldGen)
+    //        flag = GenVars.crimsonLeft && i < Main.maxTilesX / 2 || (!GenVars.crimsonLeft && i > Main.maxTilesX / 2 ? true : false);
 
-        byte type = 202;
-        byte wall = 82;
-        Vector2D vector2D = new Vector2D(i, j);
-        int num = 1;
-        if (WorldGen.genRand.Next(2) == 0)
-            num = -1;
+    //    byte type = 202;
+    //    byte wall = 82;
+    //    Vector2D vector2D = new Vector2D(i, j);
+    //    int num = 1;
+    //    if (WorldGen.genRand.Next(2) == 0)
+    //        num = -1;
 
-        int num2 = WorldGen.genRand.Next(7, 12);
-        int num3 = WorldGen.genRand.Next(5, 7);
-        vector2D.X = i + (num2 + 2) * num;
-        for (int k = j - 15; k < j + 30; k++) {
-            if (Main.tile[(int)vector2D.X, k].HasTile) {
-                vector2D.Y = k - 1;
-                break;
-            }
-        }
+    //    int num2 = WorldGen.genRand.Next(7, 12);
+    //    int num3 = WorldGen.genRand.Next(5, 7);
+    //    vector2D.X = i + (num2 + 2) * num;
+    //    for (int k = j - 15; k < j + 30; k++) {
+    //        if (Main.tile[(int)vector2D.X, k].HasTile) {
+    //            vector2D.Y = k - 1;
+    //            break;
+    //        }
+    //    }
 
-        vector2D.X = i;
-        int num4 = (int)(vector2D.X - num2 - 1.0);
-        int num5 = (int)(vector2D.X + num2 + 1.0);
-        int num6 = (int)(vector2D.Y - num3 - 1.0);
-        int num7 = (int)(vector2D.Y + 2.0);
-        if (num4 < 0)
-            num4 = 0;
+    //    vector2D.X = i;
+    //    int num4 = (int)(vector2D.X - num2 - 1.0);
+    //    int num5 = (int)(vector2D.X + num2 + 1.0);
+    //    int num6 = (int)(vector2D.Y - num3 - 1.0);
+    //    int num7 = (int)(vector2D.Y + 2.0);
+    //    if (num4 < 0)
+    //        num4 = 0;
 
-        if (num5 > Main.maxTilesX)
-            num5 = Main.maxTilesX;
+    //    if (num5 > Main.maxTilesX)
+    //        num5 = Main.maxTilesX;
 
-        if (num6 < 0)
-            num6 = 0;
+    //    if (num6 < 0)
+    //        num6 = 0;
 
-        if (num7 > Main.maxTilesY)
-            num7 = Main.maxTilesY;
+    //    if (num7 > Main.maxTilesY)
+    //        num7 = Main.maxTilesY;
 
-        for (int l = num4; l <= num5; l++) {
-            for (int m = num6 - 1; m < num7 + 1; m++) {
-                if (m != num6 - 1 || l != num4 && l != num5) {
-                    Tile tile = Main.tile[l, m];
-                    tile.HasTile = true;
-                    tile.LiquidAmount = 0;
-                    tile.TileType = type;
-                    tile.WallType = 0;
-                    tile.IsHalfBlock = false;
-                    tile.Slope = 0;
-                }
-            }
-        }
+    //    for (int l = num4; l <= num5; l++) {
+    //        for (int m = num6 - 1; m < num7 + 1; m++) {
+    //            if (m != num6 - 1 || l != num4 && l != num5) {
+    //                Tile tile = Main.tile[l, m];
+    //                tile.HasTile = true;
+    //                tile.LiquidAmount = 0;
+    //                tile.TileType = type;
+    //                tile.WallType = 0;
+    //                tile.IsHalfBlock = false;
+    //                tile.Slope = 0;
+    //            }
+    //        }
+    //    }
 
-        num4 = (int)(vector2D.X - num2);
-        num5 = (int)(vector2D.X + num2);
-        num6 = (int)(vector2D.Y - num3);
-        num7 = (int)(vector2D.Y + 1.0);
-        if (num4 < 0)
-            num4 = 0;
+    //    num4 = (int)(vector2D.X - num2);
+    //    num5 = (int)(vector2D.X + num2);
+    //    num6 = (int)(vector2D.Y - num3);
+    //    num7 = (int)(vector2D.Y + 1.0);
+    //    if (num4 < 0)
+    //        num4 = 0;
 
-        if (num5 > Main.maxTilesX)
-            num5 = Main.maxTilesX;
+    //    if (num5 > Main.maxTilesX)
+    //        num5 = Main.maxTilesX;
 
-        if (num6 < 0)
-            num6 = 0;
+    //    if (num6 < 0)
+    //        num6 = 0;
 
-        if (num7 > Main.maxTilesY)
-            num7 = Main.maxTilesY;
+    //    if (num7 > Main.maxTilesY)
+    //        num7 = Main.maxTilesY;
 
-        for (int n = num4; n <= num5; n++) {
-            for (int num8 = num6; num8 < num7; num8++) {
-                if ((num8 != num6 || n != num4 && n != num5) && Main.tile[n, num8].WallType == 0) {
-                    Tile tile = Main.tile[n, num8];
-                    tile.HasTile = false;
-                    Main.tile[n, num8].WallType = wall;
-                }
-            }
-        }
+    //    for (int n = num4; n <= num5; n++) {
+    //        for (int num8 = num6; num8 < num7; num8++) {
+    //            if ((num8 != num6 || n != num4 && n != num5) && Main.tile[n, num8].WallType == 0) {
+    //                Tile tile = Main.tile[n, num8];
+    //                tile.HasTile = false;
+    //                Main.tile[n, num8].WallType = wall;
+    //            }
+    //        }
+    //    }
 
-        int num9 = i + (num2 + 1) * num;
-        int num10 = (int)vector2D.Y;
-        for (int num11 = num9 - 2; num11 <= num9 + 2; num11++) {
-            Tile tile = Main.tile[num11, num10];
-            tile.HasTile = false;
-            tile = Main.tile[num11, num10 - 1];
-            tile.HasTile = false;
-            tile = Main.tile[num11, num10 - 2];
-            tile.HasTile = false;
-        }
+    //    int num9 = i + (num2 + 1) * num;
+    //    int num10 = (int)vector2D.Y;
+    //    for (int num11 = num9 - 2; num11 <= num9 + 2; num11++) {
+    //        Tile tile = Main.tile[num11, num10];
+    //        tile.HasTile = false;
+    //        tile = Main.tile[num11, num10 - 1];
+    //        tile.HasTile = false;
+    //        tile = Main.tile[num11, num10 - 2];
+    //        tile.HasTile = false;
+    //    }
 
-        if (WorldGen.remixWorldGen) {
-            if (flag)
-                WorldGen.PlaceTile(num9, num10, 10, mute: true, forced: false, -1, 5);
-            else
-                WorldGen.PlaceTile(num9, num10, 10, mute: true, forced: false, -1, 38);
-        }
-        else {
-            WorldGen.PlaceTile(num9, num10, 10, mute: true, forced: false, -1, 9);
-        }
+    //    if (WorldGen.remixWorldGen) {
+    //        if (flag)
+    //            WorldGen.PlaceTile(num9, num10, 10, mute: true, forced: false, -1, 5);
+    //        else
+    //            WorldGen.PlaceTile(num9, num10, 10, mute: true, forced: false, -1, 38);
+    //    }
+    //    else {
+    //        WorldGen.PlaceTile(num9, num10, 10, mute: true, forced: false, -1, 9);
+    //    }
 
-        num9 = i + (num2 + 1) * -num - num;
-        for (int num12 = num6; num12 <= num7 + 1; num12++) {
-            Tile tile = Main.tile[num9, num12];
-            tile.HasTile = true;
-            tile.LiquidAmount = 0;
-            tile.TileType = type;
-            tile.WallType = 0;
-            tile.IsHalfBlock = false;
-            tile.Slope = 0;
-        }
+    //    num9 = i + (num2 + 1) * -num - num;
+    //    for (int num12 = num6; num12 <= num7 + 1; num12++) {
+    //        Tile tile = Main.tile[num9, num12];
+    //        tile.HasTile = true;
+    //        tile.LiquidAmount = 0;
+    //        tile.TileType = type;
+    //        tile.WallType = 0;
+    //        tile.IsHalfBlock = false;
+    //        tile.Slope = 0;
+    //    }
 
-        int contain = 0;
-        int num13 = GenVars.skyIslandHouseCount;
-        if (num13 > 3) {
-            num13 = WorldGen.genRand.Next(4/*5*/);
-        }
+    //    int contain = 0;
+    //    int num13 = GenVars.skyIslandHouseCount;
+    //    if (num13 > 3) {
+    //        num13 = WorldGen.genRand.Next(4/*5*/);
+    //    }
 
-        //if (!_feathersBottleAdded) {
-        //    num13 = 4;
-        //    _feathersBottleAdded = true;
-        //}
+    //    //if (!_feathersBottleAdded) {
+    //    //    num13 = 4;
+    //    //    _feathersBottleAdded = true;
+    //    //}
 
-        switch (num13) {
-            case 0:
-                contain = 159;
-                break;
-            case 1:
-                contain = 65;
-                break;
-            case 2:
-                contain = 158;
-                break;
-            case 3:
-                contain = 2219;
-                break;
-                //case 4:
-                //    contain = ModContent.ItemType<FeathersInABottle>();
-                //    break;
-        }
+    //    switch (num13) {
+    //        case 0:
+    //            contain = 159;
+    //            break;
+    //        case 1:
+    //            contain = 65;
+    //            break;
+    //        case 2:
+    //            contain = 158;
+    //            break;
+    //        case 3:
+    //            contain = 2219;
+    //            break;
+    //            //case 4:
+    //            //    contain = ModContent.ItemType<FeathersInABottle>();
+    //            //    break;
+    //    }
 
-        if (WorldGen.getGoodWorldGen)
-            WorldGen.AddBuriedChest(i, num10 - 3, contain, notNearOtherChests: false, 2, trySlope: false, 0);
-        else
-            WorldGen.AddBuriedChest(i, num10 - 3, contain, notNearOtherChests: false, 13, trySlope: false, 0);
+    //    if (WorldGen.getGoodWorldGen)
+    //        WorldGen.AddBuriedChest(i, num10 - 3, contain, notNearOtherChests: false, 2, trySlope: false, 0);
+    //    else
+    //        WorldGen.AddBuriedChest(i, num10 - 3, contain, notNearOtherChests: false, 13, trySlope: false, 0);
 
-        if (islandStyle > 0) {
-            for (int num14 = 0; num14 < 100000; num14++) {
-                int num15 = i + WorldGen.genRand.Next(-50, 51);
-                int num16 = num10 + WorldGen.genRand.Next(21);
-                if ((num14 >= 50000 || Main.tile[num15, num16].TileType != 202) && !Main.tile[num15, num16].HasTile) {
-                    WorldGen.Place2xX(num15, num16, 207, islandStyle);
-                    if (Main.tile[num15, num16].HasTile) {
-                        WorldGen.SwitchFountain(num15, num16);
-                        break;
-                    }
-                }
-            }
-        }
+    //    if (islandStyle > 0) {
+    //        for (int num14 = 0; num14 < 100000; num14++) {
+    //            int num15 = i + WorldGen.genRand.Next(-50, 51);
+    //            int num16 = num10 + WorldGen.genRand.Next(21);
+    //            if ((num14 >= 50000 || Main.tile[num15, num16].TileType != 202) && !Main.tile[num15, num16].HasTile) {
+    //                WorldGen.Place2xX(num15, num16, 207, islandStyle);
+    //                if (Main.tile[num15, num16].HasTile) {
+    //                    WorldGen.SwitchFountain(num15, num16);
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //    }
 
-        GenVars.skyIslandHouseCount++;
-        if (!WorldGen.remixWorldGen) {
-            int num17 = i - num2 / 2 + 1;
-            int num18 = i + num2 / 2 - 1;
-            int num19 = 1;
-            if (num2 > 10)
-                num19 = 2;
+    //    GenVars.skyIslandHouseCount++;
+    //    if (!WorldGen.remixWorldGen) {
+    //        int num17 = i - num2 / 2 + 1;
+    //        int num18 = i + num2 / 2 - 1;
+    //        int num19 = 1;
+    //        if (num2 > 10)
+    //            num19 = 2;
 
-            int num20 = (num6 + num7) / 2 - 1;
-            for (int num21 = num17 - num19; num21 <= num17 + num19; num21++) {
-                for (int num22 = num20 - 1; num22 <= num20 + 1; num22++) {
-                    Main.tile[num21, num22].WallType = 21;
-                }
-            }
+    //        int num20 = (num6 + num7) / 2 - 1;
+    //        for (int num21 = num17 - num19; num21 <= num17 + num19; num21++) {
+    //            for (int num22 = num20 - 1; num22 <= num20 + 1; num22++) {
+    //                Main.tile[num21, num22].WallType = 21;
+    //            }
+    //        }
 
-            for (int num23 = num18 - num19; num23 <= num18 + num19; num23++) {
-                for (int num24 = num20 - 1; num24 <= num20 + 1; num24++) {
-                    Main.tile[num23, num24].WallType = 21;
-                }
-            }
-        }
+    //        for (int num23 = num18 - num19; num23 <= num18 + num19; num23++) {
+    //            for (int num24 = num20 - 1; num24 <= num20 + 1; num24++) {
+    //                Main.tile[num23, num24].WallType = 21;
+    //            }
+    //        }
+    //    }
 
-        int num25 = i + (num2 / 2 + 1) * -num;
-        if (WorldGen.remixWorldGen) {
-            if (flag) {
-                WorldGen.PlaceTile(num25, num7 - 1, 14, mute: true, forced: false, -1, 5);
-                WorldGen.PlaceTile(num25 - 2, num7 - 1, 15, mute: true, forced: false, 0, 8);
-                WorldGen.PlaceTile(num25 + 2, num7 - 1, 15, mute: true, forced: false, 0, 8);
-            }
-            else {
-                WorldGen.PlaceTile(num25, num7 - 1, 469, mute: true, forced: false, -1, 2);
-                WorldGen.PlaceTile(num25 - 2, num7 - 1, 15, mute: true, forced: false, 0, 38);
-                WorldGen.PlaceTile(num25 + 2, num7 - 1, 15, mute: true, forced: false, 0, 38);
-            }
-        }
-        else {
-            WorldGen.PlaceTile(num25, num7 - 1, 14, mute: true, forced: false, -1, 7);
-            WorldGen.PlaceTile(num25 - 2, num7 - 1, 15, mute: true, forced: false, 0, 10);
-            WorldGen.PlaceTile(num25 + 2, num7 - 1, 15, mute: true, forced: false, 0, 10);
-        }
+    //    int num25 = i + (num2 / 2 + 1) * -num;
+    //    if (WorldGen.remixWorldGen) {
+    //        if (flag) {
+    //            WorldGen.PlaceTile(num25, num7 - 1, 14, mute: true, forced: false, -1, 5);
+    //            WorldGen.PlaceTile(num25 - 2, num7 - 1, 15, mute: true, forced: false, 0, 8);
+    //            WorldGen.PlaceTile(num25 + 2, num7 - 1, 15, mute: true, forced: false, 0, 8);
+    //        }
+    //        else {
+    //            WorldGen.PlaceTile(num25, num7 - 1, 469, mute: true, forced: false, -1, 2);
+    //            WorldGen.PlaceTile(num25 - 2, num7 - 1, 15, mute: true, forced: false, 0, 38);
+    //            WorldGen.PlaceTile(num25 + 2, num7 - 1, 15, mute: true, forced: false, 0, 38);
+    //        }
+    //    }
+    //    else {
+    //        WorldGen.PlaceTile(num25, num7 - 1, 14, mute: true, forced: false, -1, 7);
+    //        WorldGen.PlaceTile(num25 - 2, num7 - 1, 15, mute: true, forced: false, 0, 10);
+    //        WorldGen.PlaceTile(num25 + 2, num7 - 1, 15, mute: true, forced: false, 0, 10);
+    //    }
 
-        Main.tile[num25 - 2, num7 - 1].TileFrameX += 18;
-        Main.tile[num25 - 2, num7 - 2].TileFrameX += 18;
-        if (!WorldGen.remixWorldGen) {
-            int i2 = num4 + 1;
-            int j2 = num6;
-            WorldGen.PlaceTile(i2, j2, 91, mute: true, forced: false, -1, WorldGen.genRand.Next(7, 10));
-            i2 = num5 - 1;
-            j2 = num6;
-            WorldGen.PlaceTile(i2, j2, 91, mute: true, forced: false, -1, WorldGen.genRand.Next(7, 10));
-            if (num > 0) {
-                i2 = num4;
-                j2 = num6 + 1;
-            }
-            else {
-                i2 = num5;
-                j2 = num6 + 1;
-            }
+    //    Main.tile[num25 - 2, num7 - 1].TileFrameX += 18;
+    //    Main.tile[num25 - 2, num7 - 2].TileFrameX += 18;
+    //    if (!WorldGen.remixWorldGen) {
+    //        int i2 = num4 + 1;
+    //        int j2 = num6;
+    //        WorldGen.PlaceTile(i2, j2, 91, mute: true, forced: false, -1, WorldGen.genRand.Next(7, 10));
+    //        i2 = num5 - 1;
+    //        j2 = num6;
+    //        WorldGen.PlaceTile(i2, j2, 91, mute: true, forced: false, -1, WorldGen.genRand.Next(7, 10));
+    //        if (num > 0) {
+    //            i2 = num4;
+    //            j2 = num6 + 1;
+    //        }
+    //        else {
+    //            i2 = num5;
+    //            j2 = num6 + 1;
+    //        }
 
-            WorldGen.PlaceTile(i2, j2, 91, mute: true, forced: false, -1, WorldGen.genRand.Next(7, 10));
-        }
+    //        WorldGen.PlaceTile(i2, j2, 91, mute: true, forced: false, -1, WorldGen.genRand.Next(7, 10));
+    //    }
 
-        if (islandStyle != 1)
-            return;
+    //    if (islandStyle != 1)
+    //        return;
 
-        int num26 = WorldGen.genRand.Next(3, 6);
-        for (int num27 = 0; num27 < 100000; num27++) {
-            int num28 = i + WorldGen.genRand.Next(-50, 51);
-            int num29 = num10 + WorldGen.genRand.Next(-10, 21);
-            if (!Main.tile[num28, num29].HasTile) {
-                WorldGen.GrowPalmTree(num28, num29 + 1);
-                if (Main.tile[num28, num29].HasTile)
-                    num26--;
-            }
+    //    int num26 = WorldGen.genRand.Next(3, 6);
+    //    for (int num27 = 0; num27 < 100000; num27++) {
+    //        int num28 = i + WorldGen.genRand.Next(-50, 51);
+    //        int num29 = num10 + WorldGen.genRand.Next(-10, 21);
+    //        if (!Main.tile[num28, num29].HasTile) {
+    //            WorldGen.GrowPalmTree(num28, num29 + 1);
+    //            if (Main.tile[num28, num29].HasTile)
+    //                num26--;
+    //        }
 
-            if (num26 <= 0)
-                break;
-        }
-    }
+    //        if (num26 <= 0)
+    //            break;
+    //    }
+    //}
 
     private void On_WorldGen_MakeDungeon(On_WorldGen.orig_MakeDungeon orig, int x, int y) {
         GenVars.dEnteranceX = 0;
@@ -1888,7 +1888,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
 
                             bool flag15 = chestTileType == (ushort)ModContent.TileType<ElderwoodChest>();
                             if (flag15) {
-                                if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
+                                if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
                                     _oniMaskAdded = true;
                                     chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                     chest.item[num10].Prefix(-1);
@@ -2155,7 +2155,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             num10++;
 
                             if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
-                                if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
+                                if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
                                     _oniMaskAdded = true;
                                     chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                     chest.item[num10].Prefix(-1);
@@ -2374,7 +2374,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                         }
 
                         if (chestTileType == (ushort)ModContent.TileType<ElderwoodChest>()) {
-                            if (!_oniMaskAdded || _oniMaskAdded && genRand.NextBool(5)) {
+                            if (!_oniMaskAdded || (_oniMaskAdded && genRand.NextBool(5))) {
                                 _oniMaskAdded = true;
                                 chest.item[num10].SetDefaults(ModContent.ItemType<OniMask>());
                                 chest.item[num10].Prefix(-1);

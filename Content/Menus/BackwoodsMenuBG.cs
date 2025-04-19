@@ -43,7 +43,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
             int i = numArray[index1];
             Main.instance.LoadBackground(i);
             float scale = 2.2f;
-            int num4 = (int)(Main.backgroundWidth[i] * (double)scale) + 1;
+            int num4 = (int)(Main.backgroundWidth[i] * (double)scale);
             SkyManager.Instance.DrawToDepth(spriteBatch, 1f / num3);
             float fieldValue1 = typeof(Main).GetFieldValue<float>("screenOff", Main.instance);
             float fieldValue2 = typeof(Main).GetFieldValue<float>("scAdj", Main.instance);

@@ -223,7 +223,7 @@ static class WorldGenHelper {
         return true;
     }
 
-    public static void CustomWall2(int x, int y, int wallType, Predicate<Point> shouldSpread, Action onSpread, params ushort[] ignoreWallTypes) {
+    public static void CustomWall2(int x, int y, int wallType, int minX, int maxX, Action onSpread, params ushort[] ignoreWallTypes) {
         if (!WorldGen.InWorld(x, y))
             return;
 
@@ -251,6 +251,7 @@ static class WorldGenHelper {
                 if (tile.WallType == num || ignoreWallTypes.Contains(num) || WallID.Sets.CannotBeReplacedByWallSpread[tile.WallType])
                     continue;
 
+                double fluff = 15.0;
                 if (!SolidTile(item.X, item.Y)) {
                     bool flag = WallID.Sets.WallSpreadStopsAtAir[num];
                     if (flag && tile.WallType == 0) {
@@ -264,7 +265,12 @@ static class WorldGenHelper {
                         continue;
                     }
 
-                    if (!ignoreWallTypes.Contains(num) && shouldSpread(new Point(item.X, item.Y))) {
+                    double chance =
+                        item.X > maxX ?
+                        Math.Clamp(1.0 - (double)Math.Abs(item.X - maxX) / fluff, 0.0, 1.0) :
+                        item.X < minX ?
+                        Math.Clamp(1.0 - (double)Math.Abs(item.X - minX) / fluff, 0.0, 1.0) : 1.0;
+                    if (!ignoreWallTypes.Contains(num) && WorldGen.genRand.NextChance(chance)) {
                         tile.WallType = num;
                         onSpread();
                     }
@@ -311,7 +317,12 @@ static class WorldGenHelper {
                     }
                 }
                 else if (tile.HasTile) {
-                    if (!ignoreWallTypes.Contains(num) && shouldSpread(new Point(item.X, item.Y))) {
+                    double chance =
+                        item.X > maxX ?
+                        Math.Clamp(1.0 - (double)Math.Abs(item.X - maxX) / fluff, 0.0, 1.0) :
+                        item.X < minX ?
+                        Math.Clamp(1.0 - (double)Math.Abs(item.X - minX) / fluff, 0.0, 1.0) : 1.0;
+                    if (!ignoreWallTypes.Contains(num) && WorldGen.genRand.NextChance(chance)) {
                         tile.WallType = num;
                         onSpread();
                     }
