@@ -1,1 +1,4 @@
-- 
+- Renamed chests now show their display name correctly 
+- Added Overgrown Altar Item for builders
+- Fixed Overgrown Altar not being placed by cheat tools (most likely)
+- Rod of the Quake now cut tiles as it should have been
