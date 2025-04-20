@@ -277,16 +277,14 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
             player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
         }
         else {
-            string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
             bool isLocked = IsLockedChest(left, top);
-            if (!isLocked) {
-                player.noThrow = 2;
-                player.cursorItemIconEnabled = true;
-                player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
-                player.cursorItemIconID = (ushort)ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest2>();
+            string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
+            player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
+            if (player.cursorItemIconText == defaultName) {
+                player.cursorItemIconID = !isLocked ? (ushort)ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest2>() : player.GetSelectedItem().type;
+
                 player.cursorItemIconText = "";
             }
-            //player.cursorItemIconText = "";
         }
     }
 

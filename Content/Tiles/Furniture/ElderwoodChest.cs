@@ -12,6 +12,7 @@ using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Net.Sockets;
 using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Furniture;
@@ -205,11 +206,14 @@ sealed class ElderwoodChest : ModTile {
             player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
         }
         else {
-            string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
             bool isLocked = IsLockedChest(left, top);
+            string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
             player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
-            player.cursorItemIconID = !isLocked ? (ushort)ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest>() : player.GetSelectedItem().type;
-            player.cursorItemIconText = "";
+            if (player.cursorItemIconText == defaultName) {
+                player.cursorItemIconID = !isLocked ? (ushort)ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest>() : player.GetSelectedItem().type;
+
+                player.cursorItemIconText = "";
+            }
         }
 
         player.noThrow = 2;

@@ -1,6 +1,9 @@
+using Humanizer;
+
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Miscellaneous;
+using RoA.Core.Utility;
 
 using System.Collections.Generic;
 
@@ -112,6 +115,8 @@ sealed class BackwoodsDungeonChest : ModTile {
     }
 
     public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual) {
+        dustType = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
+
         if (!NPC.downedPlantBoss) {
             return false;
         }
@@ -223,10 +228,12 @@ sealed class BackwoodsDungeonChest : ModTile {
             localPlayer.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
         }
         else {
+            bool isLocked = IsLockedChest(num1, num2);
             string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
             localPlayer.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
             if (localPlayer.cursorItemIconText == defaultName) {
-                localPlayer.cursorItemIconID = this.IsLockedChest(num1, num2) ? ModContent.ItemType<BackwoodsDungeonKey>() : ModContent.ItemType<Items.Placeable.Furniture.BackwoodsDungeonChest>();
+                localPlayer.cursorItemIconID = !isLocked ? (ushort)ModContent.ItemType<Items.Placeable.Furniture.BackwoodsDungeonChest>() : ModContent.ItemType<BackwoodsDungeonKey>();
+
                 localPlayer.cursorItemIconText = "";
             }
         }
