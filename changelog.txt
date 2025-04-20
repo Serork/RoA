@@ -2,3 +2,4 @@
 - Added Overgrown Altar Item for builders
 - Fixed Overgrown Altar not being placed by cheat tools (most likely)
 - Rod of the Quake now cut tiles as it should have been
+- Changed Horror Pincers, Gutwrenching Hooks and Everwood Claws rarities to match their progression

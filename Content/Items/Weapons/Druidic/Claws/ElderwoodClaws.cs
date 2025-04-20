@@ -21,7 +21,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
         Item.SetWeaponValues(14, 4f);
         Item.SetDefaultToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
 
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Blue;
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
 
