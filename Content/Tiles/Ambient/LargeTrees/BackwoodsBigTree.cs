@@ -132,6 +132,9 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
             BackwoodsVars.AllTreesWorldPositions.Remove(new Point(position.X, position.Y));
             BackwoodsVars.BackwoodsTreeCountInWorld--;
         }
+
+        BackwoodsVars.AllTreesWorldPositions.Clear();
+        BackwoodsVars.BackwoodsTreeCountInWorld = 0;
     }
 
     private bool On_WorldGen_CanKillTile_int_int_refBoolean(On_WorldGen.orig_CanKillTile_int_int_refBoolean orig, int i, int j, out bool blockDamaged) {
