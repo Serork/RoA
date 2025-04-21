@@ -149,9 +149,14 @@ sealed class Lumberjack : RoANPC {
                 }
                 break;
             case (float)States.Attacking:
-                NPC.frameCounter = 0.0;
-                double progress = (double)Helper.EaseInOut3(StateTimer);
-                CurrentFrame = 13 + (int)(8.0 * progress);
+                if (NPC.velocity.Y != 0f) {
+                    CurrentFrame = 3;
+                }
+                else {
+                    NPC.frameCounter = 0.0;
+                    double progress = (double)Helper.EaseInOut3(StateTimer);
+                    CurrentFrame = 13 + (int)(8.0 * progress);
+                }
                 break;
         }
         ChangeFrame((currentFrame, frameHeight));
