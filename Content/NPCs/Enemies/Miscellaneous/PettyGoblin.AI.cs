@@ -399,6 +399,28 @@ sealed partial class PettyGoblin : ModNPC {
             int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
             int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
             if (NPC.velocity.X < 0f && NPC.direction == -1 || NPC.velocity.X > 0f && NPC.direction == 1) {
+                void jumpIfPlayerAboveAndClose() {
+                    if (npc.velocity.Y == 0f && Main.expertMode && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
+                        if (npc.velocity.Y == 0f) {
+                            int num200 = 6;
+                            if (Main.player[npc.target].Bottom.Y > npc.Top.Y - (float)(num200 * 16)) {
+                                npc.velocity.Y = -7.9f;
+                            }
+                            else {
+                                int num201 = (int)(npc.Center.X / 16f);
+                                int num202 = (int)(npc.Bottom.Y / 16f) - 1;
+                                for (int num203 = num202; num203 > num202 - num200; num203--) {
+                                    if (Main.tile[num201, num203].HasUnactuatedTile && TileID.Sets.Platforms[Main.tile[num201, num203].TileType]) {
+                                        npc.velocity.Y = -7.9f;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                jumpIfPlayerAboveAndClose();
+
                 bool JumpCheck(int tileX, int tileY) {
                     if (NPC.height >= 32 && Main.tile[tileX, tileY - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 2].TileType]) {
                         if (Main.tile[tileX, tileY - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 3].TileType]) {
