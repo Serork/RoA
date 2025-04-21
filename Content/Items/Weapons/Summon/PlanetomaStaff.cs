@@ -217,6 +217,7 @@ sealed class PlanetomaStaffProjectile : ModProjectile {
 
 sealed class PlanetomaStaffProjectile2 : ModProjectile {
     private int _direction;
+    private Vector2 _previousCenter;
 
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Summon/PlanetomaSentryProjectile";
 
@@ -257,6 +258,10 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
     public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
 
     public override void AI() {
+        if (_previousCenter != Projectile.Center) {
+            _previousCenter = Projectile.Center;
+        }
+
         Projectile.Opacity = Utils.GetLerpValue(36000, 36000 - 10, Projectile.timeLeft, true);
 
         if (Projectile.owner == Main.myPlayer) {
@@ -291,9 +296,8 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
             //    Projectile.Kill();
             //    return;
             //}
-            Vector2 previousCenter = Projectile.Center;
             Projectile.Center = following.Center + (counter * ((float)Math.PI * 2f) + angle * (float)meInQueue).ToRotationVector2() * offset;
-            Projectile.rotation = (Projectile.Center - previousCenter).ToRotation();
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, (Projectile.Center - _previousCenter).ToRotation(), 0.5f);
         }
     }
 
