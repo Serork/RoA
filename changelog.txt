@@ -1,5 +1,5 @@
-- Renamed chests now show their display name correctly 
-- Changed Horror Pincers, Gutwrenching Hooks and Everwood Claws rarities to match their progression
-- Rod of the Quake now cut tiles as it should have been
-- Added Overgrown Altar Item for builders
-- Fixed Overgrown Altar not being placed by cheat tools (most likely)
+- Made a few minor improvements to Backwoods biome generation
+- Fixed and improved some enemy behaviour
+- Fixed spawn point being set incorrectly in some worlds upon creation
+- Fixed visual inconsistencies with Planetoma Staff projectile rotation
+- Adjusted Horror Pincers, Gutwrenching Hooks and Everwood Claws value to match their place in progression
