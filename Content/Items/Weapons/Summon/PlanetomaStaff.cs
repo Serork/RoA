@@ -262,8 +262,6 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
             _previousCenter = Projectile.Center;
         }
 
-        Projectile.Opacity = Utils.GetLerpValue(36000, 36000 - 10, Projectile.timeLeft, true);
-
         if (Projectile.owner == Main.myPlayer) {
             if (_direction == 0) {
                 _direction = (int)Main.rand.NextBool().ToDirectionInt();
@@ -297,8 +295,12 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
             //    return;
             //}
             Projectile.Center = following.Center + (counter * ((float)Math.PI * 2f) + angle * (float)meInQueue).ToRotationVector2() * offset;
-            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, (Projectile.Center - _previousCenter).ToRotation(), 0.5f);
+            if (Projectile.Opacity > 0f) {
+                Projectile.rotation = Utils.AngleLerp(Projectile.rotation, (Projectile.Center - _previousCenter).ToRotation(), 0.5f);
+            }
         }
+
+        Projectile.Opacity = Utils.GetLerpValue(36000, 36000 - 10, Projectile.timeLeft, true);
     }
 
     public override void OnKill(int timeLeft) {
