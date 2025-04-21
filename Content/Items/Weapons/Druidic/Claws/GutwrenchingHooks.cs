@@ -19,7 +19,7 @@ sealed class GutwrenchingHooks : BaseClawsItem {
 
         Item.rare = ItemRarityID.Green;
 
-        Item.value = Item.sellPrice(0, 0, 25, 0);
+        Item.value = Item.sellPrice(0, 0, 54, 0);
 
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 16, false, autoReuse: true);
 
