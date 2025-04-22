@@ -24,10 +24,6 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
             return;
         }
 
-        if (j < Main.worldSurface && !WorldGen.remixWorldGen) {
-            return;
-        }
-
         TryPlacePlant2(i, j, Type, 0, onPlaced: (position) => {
             int x = position.X, y = position.Y;
             ModContent.GetInstance<MiracleMintTE>().Place(x, y);
