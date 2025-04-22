@@ -23,7 +23,7 @@ sealed class Cloudberry : PlantBase, TileHooks.IGrowPlantRandom {
     }
 
     void TileHooks.IGrowPlantRandom.OnGlobalRandomUpdate(int i, int j) {
-        if (j >= Main.worldSurface) {
+        if (j >= Main.worldSurface && !Main.remixWorld) {
             return;
         }
 
