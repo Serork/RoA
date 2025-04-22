@@ -366,7 +366,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         bool flag = !Item.IsEmpty() && !ShouldntUpdateRotationAndDirection();
         if (flag) {
             Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
-            Owner.direction = Projectile.spriteDirection;
+            Owner.ChangeDir(Projectile.spriteDirection);
         }
         float armRotation = Projectile.rotation - MathHelper.PiOver4 * Owner.direction;
         if (Owner.gravDir == -1) {

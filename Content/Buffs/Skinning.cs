@@ -95,7 +95,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         int usedFrame = (int)((TimeSystem.UpdateCount - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);
         spriteBatch.Draw(texture, position + TextureAssets.Item[item.type].Size() * 0.2f * item.scale, 
             new Rectangle(0, height * usedFrame, texture.Width, height),
-            drawColor, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
+            drawColor, 0f, new Vector2(4f), scale, SpriteEffects.None, 0f);
     }
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
