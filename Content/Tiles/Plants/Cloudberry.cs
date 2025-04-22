@@ -27,6 +27,6 @@ sealed class Cloudberry : PlantBase, TileHooks.IGrowPlantRandom {
             return;
         }
 
-        TryPlacePlant(i, j, Type, WorldGen.genRand.Next(3), validTiles: [147, 163, 164, 161, 200]);
+        TryPlacePlant(i, j, Type, WorldGen.gen ? WorldGen.genRand.Next(3) : 0, validTiles: [147, 163, 164, 161, 200]);
     }
 }
