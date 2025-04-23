@@ -19,7 +19,7 @@ sealed class DownedBossSystem : ModSystem {
     // NOTE: The tag instance provided here is always empty by default.
     public override void SaveWorldData(TagCompound tag) {
         if (DownedLothorBoss) {
-            tag["downedLothorBoss"] = true;
+            tag[RoA.ModName + "downedLothorBoss"] = true;
         }
 
         // if (downedOtherBoss) {
@@ -28,7 +28,7 @@ sealed class DownedBossSystem : ModSystem {
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        DownedLothorBoss = tag.ContainsKey("downedLothorBoss");
+        DownedLothorBoss = tag.ContainsKey(RoA.ModName + "downedLothorBoss");
         // downedOtherBoss = tag.ContainsKey("downedOtherBoss");
     }
 

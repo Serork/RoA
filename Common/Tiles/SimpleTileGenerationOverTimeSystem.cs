@@ -69,16 +69,16 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
     public override void SaveWorldData(TagCompound tag) {
         foreach (KeyValuePair<byte, TileGenerationData> keyValuePair in _tileGenerationsInfo) {
             if (_generatedTiles[keyValuePair.Key]) {
-                tag[keyValuePair.Value.Instance.FullName] = true;
+                tag[RoA.ModName + keyValuePair.Value.Instance.FullName] = true;
             }
-            tag[keyValuePair.Value.Instance.FullName + "amount"] = _tileAmountToGenerate[keyValuePair.Key];
+            tag[RoA.ModName + keyValuePair.Value.Instance.FullName + "amount"] = _tileAmountToGenerate[keyValuePair.Key];
         }
     }
 
     public override void LoadWorldData(TagCompound tag) {
         foreach (KeyValuePair<byte, TileGenerationData> keyValuePair in _tileGenerationsInfo) {
-            _generatedTiles[keyValuePair.Key] = tag.ContainsKey(keyValuePair.Value.Instance.FullName);
-            _tileAmountToGenerate[keyValuePair.Key] = tag.GetByte(keyValuePair.Value.Instance.FullName + "amount");
+            _generatedTiles[keyValuePair.Key] = tag.ContainsKey(RoA.ModName + keyValuePair.Value.Instance.FullName);
+            _tileAmountToGenerate[keyValuePair.Key] = tag.GetByte(RoA.ModName + keyValuePair.Value.Instance.FullName + "amount");
         }
     }
 

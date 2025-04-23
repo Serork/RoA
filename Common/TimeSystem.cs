@@ -36,10 +36,10 @@ sealed class TimeSystem : ModSystem {
     }
 
     public override void SaveWorldData(TagCompound tag) {
-        tag[nameof(UpdateCount)] = UpdateCount;
+        tag[RoA.ModName + nameof(UpdateCount)] = UpdateCount;
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        UpdateCount = tag.Get<ulong>(nameof(UpdateCount));
+        UpdateCount = tag.Get<ulong>(RoA.ModName + nameof(UpdateCount));
     }
 }

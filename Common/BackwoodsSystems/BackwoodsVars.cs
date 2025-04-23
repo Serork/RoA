@@ -76,36 +76,36 @@ sealed class BackwoodsVars : ModSystem {
     public override void ClearWorld() => ResetAllFlags();
 
     public override void SaveWorldData(TagCompound tag) {
-        tag[nameof(FirstTileYAtCenter)] = FirstTileYAtCenter;
-        tag[nameof(BackwoodsTileForBackground)] = BackwoodsTileForBackground;
-        tag[nameof(_preDownedBossTimer)] = _preDownedBossTimer;
-        tag[nameof(_backwoodsAwake)] = _backwoodsAwake;
-        tag[nameof(BackwoodsCenterX)] = BackwoodsCenterX;
-        tag[nameof(BackwoodsCenterY)] = BackwoodsCenterY;
-        tag[nameof(BackwoodsHalfSizeX)] = BackwoodsHalfSizeX;
-        tag[nameof(BackwoodsSizeY)] = BackwoodsSizeY;
+        tag[RoA.ModName + nameof(FirstTileYAtCenter)] = FirstTileYAtCenter;
+        tag[RoA.ModName + nameof(BackwoodsTileForBackground)] = BackwoodsTileForBackground;
+        tag[RoA.ModName + nameof(_preDownedBossTimer)] = _preDownedBossTimer;
+        tag[RoA.ModName + nameof(_backwoodsAwake)] = _backwoodsAwake;
+        tag[RoA.ModName + nameof(BackwoodsCenterX)] = BackwoodsCenterX;
+        tag[RoA.ModName + nameof(BackwoodsCenterY)] = BackwoodsCenterY;
+        tag[RoA.ModName + nameof(BackwoodsHalfSizeX)] = BackwoodsHalfSizeX;
+        tag[RoA.ModName + nameof(BackwoodsSizeY)] = BackwoodsSizeY;
 
-        tag[nameof(BackwoodsTreeCountInWorld)] = BackwoodsTreeCountInWorld;
+        tag[RoA.ModName + nameof(BackwoodsTreeCountInWorld)] = BackwoodsTreeCountInWorld;
         for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-            tag[$"backwoodstreepositionX{i}"] = AllTreesWorldPositions[i].X;
-            tag[$"backwoodstreepositionY{i}"] = AllTreesWorldPositions[i].Y;
+            tag[RoA.ModName + $"backwoodstreepositionX{i}"] = AllTreesWorldPositions[i].X;
+            tag[RoA.ModName + $"backwoodstreepositionY{i}"] = AllTreesWorldPositions[i].Y;
         }
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        FirstTileYAtCenter = tag.GetInt(nameof(FirstTileYAtCenter));
-        BackwoodsTileForBackground = tag.GetInt(nameof(BackwoodsTileForBackground));
-        _preDownedBossTimer = tag.GetFloat(nameof(_preDownedBossTimer));
-        _backwoodsAwake = tag.GetBool(nameof(_backwoodsAwake));
-        BackwoodsCenterX = tag.GetInt(nameof(BackwoodsCenterX));
-        BackwoodsCenterY = tag.GetInt(nameof(BackwoodsCenterY));
-        BackwoodsHalfSizeX = tag.GetInt(nameof(BackwoodsHalfSizeX));
-        BackwoodsSizeY = tag.GetInt(nameof(BackwoodsSizeY));
+        FirstTileYAtCenter = tag.GetInt(RoA.ModName + nameof(FirstTileYAtCenter));
+        BackwoodsTileForBackground = tag.GetInt(RoA.ModName + nameof(BackwoodsTileForBackground));
+        _preDownedBossTimer = tag.GetFloat(RoA.ModName + nameof(_preDownedBossTimer));
+        _backwoodsAwake = tag.GetBool(RoA.ModName + nameof(_backwoodsAwake));
+        BackwoodsCenterX = tag.GetInt(RoA.ModName + nameof(BackwoodsCenterX));
+        BackwoodsCenterY = tag.GetInt(RoA.ModName + nameof(BackwoodsCenterY));
+        BackwoodsHalfSizeX = tag.GetInt(RoA.ModName + nameof(BackwoodsHalfSizeX));
+        BackwoodsSizeY = tag.GetInt(RoA.ModName + nameof(BackwoodsSizeY));
 
-        BackwoodsTreeCountInWorld = tag.GetInt(nameof(BackwoodsTreeCountInWorld));
+        BackwoodsTreeCountInWorld = tag.GetInt(RoA.ModName + nameof(BackwoodsTreeCountInWorld));
         for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-            int x = tag.GetInt($"backwoodstreepositionX{i}");
-            int y = tag.GetInt($"backwoodstreepositionY{i}");
+            int x = tag.GetInt(RoA.ModName + $"backwoodstreepositionX{i}");
+            int y = tag.GetInt(RoA.ModName + $"backwoodstreepositionY{i}");
             AllTreesWorldPositions.Add(new Point(x, y));
         }
     }

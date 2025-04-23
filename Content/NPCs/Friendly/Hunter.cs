@@ -532,11 +532,11 @@ sealed class Hunter : ModNPC {
         public bool JustTraded { get; private set; }
 
         public override void SaveData(TagCompound tag) {
-            tag[nameof(TradeCount)] = TradeCount;
+            tag[RoA.ModName + nameof(TradeCount)] = TradeCount;
         }
 
         public override void LoadData(TagCompound tag) {
-            TradeCount = tag.GetInt(nameof(TradeCount));
+            TradeCount = tag.GetInt(RoA.ModName + nameof(TradeCount));
         }
 
         internal void Trade1(bool state) {

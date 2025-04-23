@@ -185,13 +185,13 @@ sealed class AltarHandler : ModSystem {
     }
 
     public override void SaveWorldData(TagCompound tag) {
-        tag.Add(nameof(_altarPosition) + "x", _altarPosition.X);
-        tag.Add(nameof(_altarPosition) + "y", _altarPosition.Y);
-        tag.Add(nameof(_altarStrength), _altarStrength);
+        tag[RoA.ModName + nameof(_altarPosition) + "x"] = _altarPosition.X;
+        tag[RoA.ModName + nameof(_altarPosition) + "y"] = _altarPosition.Y;
+        tag[RoA.ModName + nameof(_altarStrength)] = _altarStrength;
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        _altarPosition = new Point(tag.GetInt(nameof(_altarPosition) + "x"), tag.GetInt(nameof(_altarPosition) + "y"));
-        _altarStrength = tag.GetFloat(nameof(_altarStrength));
+        _altarPosition = new Point(tag.GetInt(RoA.ModName + nameof(_altarPosition) + "x"), tag.GetInt(nameof(_altarPosition) + "y"));
+        _altarStrength = tag.GetFloat(RoA.ModName + nameof(_altarStrength));
     }
 }

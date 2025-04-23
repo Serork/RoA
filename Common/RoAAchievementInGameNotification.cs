@@ -26,32 +26,32 @@ sealed class RoAAchievementInGameNotification : IInGameNotification {
 
         public override void SaveData(TagCompound tag) {
             if (DefeatLothor) {
-                tag["DefeatLothor"] = true;
+                tag[RoA.ModName + "DefeatLothor"] = true;
             }
             if (MineMercuriumNugget) {
-                tag["MineMercuriumNugget"] = true;
+                tag[RoA.ModName + "MineMercuriumNugget"] = true;
             }
             if (OpenRootboundChest) {
-                tag["OpenRootboundChest"] = true;
+                tag[RoA.ModName + "OpenRootboundChest"] = true;
             }
             if (SurviveBackwoodsFog) {
-                tag["SurviveBackwoodsFog"] = true;
+                tag[RoA.ModName + "SurviveBackwoodsFog"] = true;
             }
             if (CraftDruidWreath) {
-                tag["CraftDruidWreath"] = true;
+                tag[RoA.ModName + "CraftDruidWreath"] = true;
             }
             if (DefeatLothorEnraged) {
-                tag["DefeatLothorEnraged"] = true;
+                tag[RoA.ModName + "DefeatLothorEnraged"] = true;
             }
         }
 
         public override void LoadData(TagCompound tag) {
-            DefeatLothor = tag.ContainsKey("DefeatLothor");
-            MineMercuriumNugget = tag.ContainsKey("MineMercuriumNugget");
-            OpenRootboundChest = tag.ContainsKey("OpenRootboundChest");
-            SurviveBackwoodsFog = tag.ContainsKey("SurviveBackwoodsFog");
-            CraftDruidWreath = tag.ContainsKey("CraftDruidWreath");
-            DefeatLothorEnraged = tag.ContainsKey("DefeatLothorEnraged");
+            DefeatLothor = tag.ContainsKey(RoA.ModName + "DefeatLothor");
+            MineMercuriumNugget = tag.ContainsKey(RoA.ModName + "MineMercuriumNugget");
+            OpenRootboundChest = tag.ContainsKey(RoA.ModName + "OpenRootboundChest");
+            SurviveBackwoodsFog = tag.ContainsKey(RoA.ModName + "SurviveBackwoodsFog");
+            CraftDruidWreath = tag.ContainsKey(RoA.ModName + "CraftDruidWreath");
+            DefeatLothorEnraged = tag.ContainsKey(RoA.ModName + "DefeatLothorEnraged");
         }
     }
 

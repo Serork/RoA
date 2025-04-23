@@ -139,11 +139,11 @@ sealed class ElathaAmulet : ModItem {
         }
 
         public override void SaveWorldData(TagCompound tag) {
-            tag[nameof(ElathaAmuletCooldown)] = ElathaAmuletCooldown;
+            tag[RoA.ModName + nameof(ElathaAmuletCooldown)] = ElathaAmuletCooldown;
         }
 
         public override void LoadWorldData(TagCompound tag) {
-            ElathaAmuletCooldown = tag.GetShort(nameof(ElathaAmuletCooldown));
+            ElathaAmuletCooldown = tag.GetShort(RoA.ModName + nameof(ElathaAmuletCooldown));
         }
     }
 
