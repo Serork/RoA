@@ -59,7 +59,9 @@ sealed partial class DruidSoul : RoANPC {
         NPC.velocity *= 1f - StateTimer;
 
         if (ConsumesItself()) {
-            ShouldConsumeItsEnergy = true;
+            if (!(LothorSummoningHandler.PreArrivedLothorBoss.Item1 || NPC.AnyNPCs(ModContent.NPCType<Lothor>()) || Main.player[NPC.target].dead || !Main.player[NPC.target].InModBiome<BackwoodsBiome>() || NPC.CountNPCS(Type) > 1 || !NPC.downedBoss2)) {
+                ShouldConsumeItsEnergy = true;
+            }
         }
         else if (ShouldConsumeItsEnergy) {
             Vector2 altarPosition = GetAltarPosition();
@@ -90,13 +92,14 @@ sealed partial class DruidSoul : RoANPC {
                 if (!tile.HasTile)
                     continue;
 
-                if (tile.TileType == ModContent.TileType<OvergrownAltar>()) {
-                    float num9 = NPC.Distance(new Vector2(i * 16 + 8, j * 16 + 8));
-                    if (num9 > num3) {
+                ushort altarType = (ushort)ModContent.TileType<OvergrownAltar>();
+                float num9 = NPC.Distance(new Vector2(i * 16 + 8, j * 16 + 8));
+                if (tile.TileType == altarType && Main.tile[i, j - 1].TileType == altarType && Main.tile[i - 1, j - 1].TileType == altarType && Main.tile[i + 1, j - 1].TileType == altarType) {
+                    if (num2 == -1 || num9 < num3) {
                         num2 = 1;
                         num3 = num9;
                         altarCoords.X = i;
-                        altarCoords.Y = j;
+                        altarCoords.Y = j - 1;
                     }
                 }
             }
