@@ -200,6 +200,9 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (Owner.gravDir == -1f) {
             rotationOffset -= MathHelper.PiOver2 * Owner.direction;
         }
+        if (Owner.direction == 1) {
+            position += -Vector2.UnitX * 2f;
+        }
         SpriteEffects effects = Owner.direction != 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         if (Owner.gravDir == -1f) {
             if (Owner.direction == 1) {
@@ -380,8 +383,11 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (flag) {
             float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
             float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;
-            if (rotation >= MathHelper.PiOver2) {
-                rotation = FacedLeft ? -MathHelper.PiOver4 : MathHelper.PiOver2;
+            if (!FacedLeft && rotation >= MathHelper.PiOver2) {
+                rotation = MathHelper.PiOver2;
+            }
+            if (FacedLeft && rotation <= 4.54f && rotation >= 4.51f) {
+                rotation = 4.55f;
             }
             float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);
             float min = MINROTATION;
