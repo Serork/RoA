@@ -88,13 +88,14 @@ sealed partial class DruidSoul : RoANPC {
         float num3 = -1f;
         for (int i = value.Left; i <= value.Right; i++) {
             for (int j = value.Top; j <= value.Bottom; j++)  {
-                Tile tile = Main.tile[i, j];
+                Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (!tile.HasTile)
                     continue;
 
                 ushort altarType = (ushort)ModContent.TileType<OvergrownAltar>();
                 float num9 = NPC.Distance(new Vector2(i * 16 + 8, j * 16 + 8));
-                if (tile.TileType == altarType && Main.tile[i, j - 1].TileType == altarType && Main.tile[i - 1, j - 1].TileType == altarType && Main.tile[i + 1, j - 1].TileType == altarType) {
+                if (tile.TileType == altarType && WorldGenHelper.GetTileSafely(i, j - 1).TileType == altarType &&
+                    WorldGenHelper.GetTileSafely(i - 1, j - 1).TileType == altarType && WorldGenHelper.GetTileSafely(i + 1, j - 1).TileType == altarType) {
                     if (num2 == -1 || num9 < num3) {
                         num2 = 1;
                         num3 = num9;
