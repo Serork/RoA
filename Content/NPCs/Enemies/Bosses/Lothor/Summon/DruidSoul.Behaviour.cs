@@ -6,6 +6,7 @@ using RoA.Common;
 using RoA.Common.VisualEffects;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Tiles.Ambient;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -48,6 +49,8 @@ sealed partial class DruidSoul : RoANPC {
     }
 
     public override void AI() {
+        SearchForNearbyAltar();
+
         NPC.ShowNameOnHover = NPC.Opacity > 0.38f;
 
         KillNPCIfIsntInBackwoods();
@@ -68,6 +71,43 @@ sealed partial class DruidSoul : RoANPC {
         UpdatePositionsAndRotation();
         NormalBehaviourHandler();
         AbsorbSoulHandler();
+    }
+
+    private bool GetNearbyAltarCoords(out Point altarCoords) {
+        altarCoords = default(Point);
+        Point point = NPC.Center.ToTileCoordinates();
+        Rectangle value = new Rectangle(point.X, point.Y, 1, 1);
+        value.Inflate(75, 50);
+        int num = 40;
+        Rectangle value2 = new Rectangle(0, 0, Main.maxTilesX, Main.maxTilesY);
+        value2.Inflate(-num, -num);
+        value = Rectangle.Intersect(value, value2);
+        int num2 = -1;
+        float num3 = -1f;
+        for (int i = value.Left; i <= value.Right; i++) {
+            for (int j = value.Top; j <= value.Bottom; j++)  {
+                Tile tile = Main.tile[i, j];
+                if (!tile.HasTile)
+                    continue;
+
+                if (tile.TileType == ModContent.TileType<OvergrownAltar>()) {
+                    float num9 = NPC.Distance(new Vector2(i * 16 + 8, j * 16 + 8));
+                    if (num9 > num3) {
+                        num2 = 1;
+                        num3 = num9;
+                        altarCoords.X = i;
+                        altarCoords.Y = j;
+                    }
+                }
+            }
+        }
+
+        return num2 != -1;
+    }
+
+    private void SearchForNearbyAltar() {
+        GetNearbyAltarCoords(out Point altarCoords);
+        AltarHandler.SetPosition(altarCoords);
     }
 
     private bool Appearance() {
@@ -496,6 +536,9 @@ sealed partial class DruidSoul : RoANPC {
                                     0.8f);
                 }
             }
+        }
+        if (!NPC.downedBoss2) {
+            return;
         }
         if (flag) {
             if (++NPC.ai[3] >= 130f) {

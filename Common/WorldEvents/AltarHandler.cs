@@ -23,9 +23,9 @@ sealed class AltarHandler : ModSystem {
     private static float _musicFade;
 
     internal static void SetPosition(Point altarPosition) {
-        if (!WorldGen.gen) {
-            return;
-        }
+        //if (!WorldGen.gen) {
+        //    return;
+        //}
 
         _altarPosition = altarPosition;
     }
