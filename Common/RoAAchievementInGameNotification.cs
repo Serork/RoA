@@ -26,32 +26,32 @@ sealed class RoAAchievementInGameNotification : IInGameNotification {
 
         public override void SaveData(TagCompound tag) {
             if (DefeatLothor) {
-                tag[RoA.ModName + "DefeatLothor"] = true;
+                tag["DefeatLothor"] = true;
             }
             if (MineMercuriumNugget) {
-                tag[RoA.ModName + "MineMercuriumNugget"] = true;
+                tag["MineMercuriumNugget"] = true;
             }
             if (OpenRootboundChest) {
-                tag[RoA.ModName + "OpenRootboundChest"] = true;
+                tag["OpenRootboundChest"] = true;
             }
             if (SurviveBackwoodsFog) {
-                tag[RoA.ModName + "SurviveBackwoodsFog"] = true;
+                tag["SurviveBackwoodsFog"] = true;
             }
             if (CraftDruidWreath) {
-                tag[RoA.ModName + "CraftDruidWreath"] = true;
+                tag["CraftDruidWreath"] = true;
             }
             if (DefeatLothorEnraged) {
-                tag[RoA.ModName + "DefeatLothorEnraged"] = true;
+                tag["DefeatLothorEnraged"] = true;
             }
         }
 
         public override void LoadData(TagCompound tag) {
-            DefeatLothor = tag.ContainsKey(RoA.ModName + "DefeatLothor");
-            MineMercuriumNugget = tag.ContainsKey(RoA.ModName + "MineMercuriumNugget");
-            OpenRootboundChest = tag.ContainsKey(RoA.ModName + "OpenRootboundChest");
-            SurviveBackwoodsFog = tag.ContainsKey(RoA.ModName + "SurviveBackwoodsFog");
-            CraftDruidWreath = tag.ContainsKey(RoA.ModName + "CraftDruidWreath");
-            DefeatLothorEnraged = tag.ContainsKey(RoA.ModName + "DefeatLothorEnraged");
+            DefeatLothor = tag.ContainsKey("DefeatLothor");
+            MineMercuriumNugget = tag.ContainsKey("MineMercuriumNugget");
+            OpenRootboundChest = tag.ContainsKey("OpenRootboundChest");
+            SurviveBackwoodsFog = tag.ContainsKey("SurviveBackwoodsFog");
+            CraftDruidWreath = tag.ContainsKey("CraftDruidWreath");
+            DefeatLothorEnraged = tag.ContainsKey("DefeatLothorEnraged");
         }
     }
 

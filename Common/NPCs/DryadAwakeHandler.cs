@@ -15,12 +15,12 @@ sealed class DryadAwakeHandler : ModSystem {
 
     public override void SaveWorldData(TagCompound tag) {
         if (DryadAwake) {
-            tag[RoA.ModName + "DryadAwake"] = true;
+            tag["DryadAwake"] = true;
         }
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        DryadAwake = tag.ContainsKey(RoA.ModName + "DryadAwake");
+        DryadAwake = tag.ContainsKey("DryadAwake");
     }
 
     public override void NetSend(BinaryWriter writer) {

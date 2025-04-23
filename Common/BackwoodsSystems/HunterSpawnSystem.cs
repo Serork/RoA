@@ -30,26 +30,26 @@ sealed class HunterSpawnSystem : ModSystem {
 
     public override void SaveWorldData(TagCompound tag) {
         if (HunterWasKilled) {
-            tag[RoA.ModName + nameof(HunterWasKilled)] = true;
+            tag[nameof(HunterWasKilled)] = true;
         }
 
         if (ShouldSpawnHunter) {
-            tag[RoA.ModName + nameof(ShouldSpawnHunter)] = true;
+            tag[nameof(ShouldSpawnHunter)] = true;
         }
         if (ShouldDespawnHunter) {
-            tag[RoA.ModName + nameof(ShouldDespawnHunter)] = true;
+            tag[nameof(ShouldDespawnHunter)] = true;
         }
         if (ShouldSpawnHunterAttack) {
-            tag[RoA.ModName + nameof(ShouldSpawnHunterAttack)] = true;
+            tag[nameof(ShouldSpawnHunterAttack)] = true;
         }
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        HunterWasKilled = tag.ContainsKey(RoA.ModName + nameof(HunterWasKilled));
+        HunterWasKilled = tag.ContainsKey(nameof(HunterWasKilled));
 
-        ShouldSpawnHunter = tag.ContainsKey(RoA.ModName + nameof(ShouldSpawnHunter));
-        ShouldDespawnHunter = tag.ContainsKey(RoA.ModName + nameof(ShouldDespawnHunter));
-        ShouldSpawnHunterAttack = tag.ContainsKey(RoA.ModName + nameof(ShouldSpawnHunterAttack));
+        ShouldSpawnHunter = tag.ContainsKey(nameof(ShouldSpawnHunter));
+        ShouldDespawnHunter = tag.ContainsKey(nameof(ShouldDespawnHunter));
+        ShouldSpawnHunterAttack = tag.ContainsKey(nameof(ShouldSpawnHunterAttack));
     }
 
     public override void NetSend(BinaryWriter writer) {

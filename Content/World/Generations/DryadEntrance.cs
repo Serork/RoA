@@ -39,12 +39,12 @@ sealed class DryadEntrance : ModSystem {
 
     public override void SaveWorldData(TagCompound tag) {
         if (_dryadStructureGenerated) {
-            tag[RoA.ModName + "_dryadStructureGenerated"] = true;
+            tag["_dryadStructureGenerated"] = true;
         }
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        _dryadStructureGenerated = tag.ContainsKey(RoA.ModName + "_dryadStructureGenerated");
+        _dryadStructureGenerated = tag.ContainsKey("_dryadStructureGenerated");
     }
 
     public override void NetSend(BinaryWriter writer) {

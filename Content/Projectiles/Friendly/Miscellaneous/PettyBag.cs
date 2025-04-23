@@ -30,11 +30,11 @@ sealed class PettyBag : InteractableProjectile {
         public HashSet<Item> BagItems { get; private set; } = [];
 
         public override void SaveData(TagCompound tag) {
-            tag[RoA.ModName + "bagitems"] = BagItems.ToList();
+            tag["bagitems"] = BagItems.ToList();
         }
 
         public override void LoadData(TagCompound tag) {
-            var bagitems = tag.GetList<TagCompound>(RoA.ModName + "bagitems").Select(ItemIO.Load).ToList();
+            var bagitems = tag.GetList<TagCompound>("bagitems").Select(ItemIO.Load).ToList();
             BagItems = [.. bagitems];
         }
 
