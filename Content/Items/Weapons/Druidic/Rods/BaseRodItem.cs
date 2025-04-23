@@ -380,8 +380,14 @@ abstract class BaseRodProjectile : NatureProjectile {
         if (flag) {
             float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
             float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;
+            if (rotation >= MathHelper.PiOver2) {
+                rotation = FacedLeft ? -MathHelper.PiOver4 : MathHelper.PiOver2;
+            }
             float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);
-            Helper.SmoothClamp(ref mouseRotation, FacedLeft ? MINROTATION : -MAXROTATION, FacedLeft ? MAXROTATION : -MINROTATION, rotationLerp);
+            float min = MINROTATION;
+            float max = MAXROTATION;
+            Main.NewText(123);
+            Helper.SmoothClamp(ref mouseRotation, FacedLeft ? min : -max * 0.7f, FacedLeft ? max : -min, rotationLerp);
             _rotation = mouseRotation;
         }
     }
