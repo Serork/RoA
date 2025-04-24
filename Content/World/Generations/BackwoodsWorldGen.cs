@@ -67,7 +67,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         }
 
         genIndex += 3;
-        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsLootRooms, 400f));
+        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
 
         //if (!hasSpirit) {
         //    genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
@@ -99,9 +99,10 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex += 1;
         tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsTilesReplacement));
 
-        tasks.Insert(genIndex + 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast0));
-        tasks.Insert(++genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast));
-        tasks.Insert(++genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast1));
+        tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast0));
+        tasks.Insert(tasks.Count - 2, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast));
+
+        tasks.Add(new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast1));
     }
 
     public override void PostWorldGen() {
