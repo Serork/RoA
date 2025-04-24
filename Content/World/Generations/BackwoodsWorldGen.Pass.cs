@@ -120,7 +120,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (type != potType && !(style >= 25 && style <= 27) &&
                 x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 100 && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 100
                 && y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 3) {
-                return WorldGen.PlacePot(x, y, (ushort)potType, WorldGen.genRand.Next(4));
+                return WorldGen.PlacePot(x, y, (ushort)potType, _random.Next(4));
             }
 
             return orig(x, y, type, style);
@@ -3306,18 +3306,18 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int num378 = 0; (double)num378 < num377; num378++) {
             for (int num379 = 0; num379 < 1150; num379++) {
                 if (WorldGen.noTrapsWorldGen) {
-                    int num380 = WorldGen.genRand.Next(Left - 20, Right + 20);
-                    int num381 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
+                    int num380 = _random.Next(Left - 20, Right + 20);
+                    int num381 = _random.Next((int)Main.worldSurface, Bottom);
 
                     if (((double)num381 > Main.worldSurface || Main.tile[num380, num381].WallType > 0) && WorldGen.placeTrap(num380, num381, 0))
                         break;
                 }
                 else {
-                    int num382 = WorldGen.genRand.Next(Left - 20, Right + 20);
-                    int num383 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
+                    int num382 = _random.Next(Left - 20, Right + 20);
+                    int num383 = _random.Next((int)Main.worldSurface, Bottom);
                     while (WorldGen.oceanDepths(num382, num383)) {
-                        num382 = WorldGen.genRand.Next(Left - 20, Right + 20);
-                        num383 = WorldGen.genRand.Next((int)Main.worldSurface, Bottom);
+                        num382 = _random.Next(Left - 20, Right + 20);
+                        num383 = _random.Next((int)Main.worldSurface, Bottom);
                     }
 
                     if (Main.tile[num382, num383].WallType == 0 && WorldGen.placeTrap(num382, num383, 0))
@@ -4202,19 +4202,19 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             if (Main.tile[num696 - 1, num698].WallType == 2 || Main.tile[num696 - 1, num698].WallType == 40 || Main.tile[num696 - 1, num698].WallType == 40)
                                 Main.tile[num696 - 1, num698].WallType = 0;
 
-                            if ((Main.tile[num696 - 2, num698].WallType == 2 || Main.tile[num696 - 2, num698].WallType == 40 || Main.tile[num696 - 2, num698].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                            if ((Main.tile[num696 - 2, num698].WallType == 2 || Main.tile[num696 - 2, num698].WallType == 40 || Main.tile[num696 - 2, num698].WallType == 40) && _random.Next(2) == 0)
                                 Main.tile[num696 - 2, num698].WallType = 0;
 
-                            if ((Main.tile[num696 - 3, num698].WallType == 2 || Main.tile[num696 - 3, num698].WallType == 40 || Main.tile[num696 - 3, num698].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                            if ((Main.tile[num696 - 3, num698].WallType == 2 || Main.tile[num696 - 3, num698].WallType == 40 || Main.tile[num696 - 3, num698].WallType == 40) && _random.Next(2) == 0)
                                 Main.tile[num696 - 3, num698].WallType = 0;
 
                             if (Main.tile[num696 + 1, num698].WallType == 2 || Main.tile[num696 + 1, num698].WallType == 40 || Main.tile[num696 + 1, num698].WallType == 40)
                                 Main.tile[num696 + 1, num698].WallType = 0;
 
-                            if ((Main.tile[num696 + 2, num698].WallType == 2 || Main.tile[num696 + 2, num698].WallType == 40 || Main.tile[num696 + 2, num698].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                            if ((Main.tile[num696 + 2, num698].WallType == 2 || Main.tile[num696 + 2, num698].WallType == 40 || Main.tile[num696 + 2, num698].WallType == 40) && _random.Next(2) == 0)
                                 Main.tile[num696 + 2, num698].WallType = 0;
 
-                            if ((Main.tile[num696 + 3, num698].WallType == 2 || Main.tile[num696 + 3, num698].WallType == 40 || Main.tile[num696 + 3, num698].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                            if ((Main.tile[num696 + 3, num698].WallType == 2 || Main.tile[num696 + 3, num698].WallType == 40 || Main.tile[num696 + 3, num698].WallType == 40) && _random.Next(2) == 0)
                                 Main.tile[num696 + 3, num698].WallType = 0;
 
                             if (Main.tile[num696, num698].HasTile)
@@ -4239,19 +4239,19 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             if (Main.tile[num699 - 1, num701].WallType == 2 || Main.tile[num699 - 1, num701].WallType == 40 || Main.tile[num699 - 1, num701].WallType == 40)
                                 Main.tile[num699 - 1, num701].WallType = 0;
 
-                            if ((Main.tile[num699 - 2, num701].WallType == 2 || Main.tile[num699 - 2, num701].WallType == 40 || Main.tile[num699 - 2, num701].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                            if ((Main.tile[num699 - 2, num701].WallType == 2 || Main.tile[num699 - 2, num701].WallType == 40 || Main.tile[num699 - 2, num701].WallType == 40) && _random.Next(2) == 0)
                                 Main.tile[num699 - 2, num701].WallType = 0;
 
-                            if ((Main.tile[num699 - 3, num701].WallType == 2 || Main.tile[num699 - 3, num701].WallType == 40 || Main.tile[num699 - 3, num701].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                            if ((Main.tile[num699 - 3, num701].WallType == 2 || Main.tile[num699 - 3, num701].WallType == 40 || Main.tile[num699 - 3, num701].WallType == 40) && _random.Next(2) == 0)
                                 Main.tile[num699 - 3, num701].WallType = 0;
 
                             if (Main.tile[num699 + 1, num701].WallType == 2 || Main.tile[num699 + 1, num701].WallType == 40 || Main.tile[num699 + 1, num701].WallType == 40)
                                 Main.tile[num699 + 1, num701].WallType = 0;
 
-                            if ((Main.tile[num699 + 2, num701].WallType == 2 || Main.tile[num699 + 2, num701].WallType == 40 || Main.tile[num699 + 2, num701].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                            if ((Main.tile[num699 + 2, num701].WallType == 2 || Main.tile[num699 + 2, num701].WallType == 40 || Main.tile[num699 + 2, num701].WallType == 40) && _random.Next(2) == 0)
                                 Main.tile[num699 + 2, num701].WallType = 0;
 
-                            if ((Main.tile[num699 + 3, num701].WallType == 2 || Main.tile[num699 + 3, num701].WallType == 40 || Main.tile[num699 + 3, num701].WallType == 40) && WorldGen.genRand.Next(2) == 0)
+                            if ((Main.tile[num699 + 3, num701].WallType == 2 || Main.tile[num699 + 3, num701].WallType == 40 || Main.tile[num699 + 3, num701].WallType == 40) && _random.Next(2) == 0)
                                 Main.tile[num699 + 3, num701].WallType = 0;
 
                             if (Main.tile[num699, num701].HasTile)
@@ -4759,7 +4759,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //                    break;
         //                }
         //            }
-        //            if (!flag2 && BackwoodsBigTree.TryGrowBigTree(i, j + 1, placeRand: WorldGen.genRand, ignoreAcorns: true, ignoreTrees: true, gen: true)) {
+        //            if (!flag2 && BackwoodsBigTree.TryGrowBigTree(i, j + 1, placeRand: _random, ignoreAcorns: true, ignoreTrees: true, gen: true)) {
         //                flag = true;
         //                break;
         //            }

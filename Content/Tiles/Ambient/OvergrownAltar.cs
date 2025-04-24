@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
@@ -10,8 +10,6 @@ using RoA.Content.Tiles.Walls;
 using RoA.Core;
 using RoA.Core.Utility;
 
-using System;
-
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -19,7 +17,6 @@ using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
-using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 

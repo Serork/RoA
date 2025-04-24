@@ -1931,8 +1931,5 @@ JewellersBelt: {
 
 AltarPlacer: {
 	DisplayName: Overgrown Altar
-	Tooltip:
-		'''
-		#TEST: PLACES AN OVERGROWN ALTAR
-		'''
+	Tooltip: "#TEST: PLACES AN OVERGROWN ALTAR"
 }

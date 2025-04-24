@@ -1931,8 +1931,5 @@ JewellersBelt: {
 
 AltarPlacer: {
 	DisplayName: Заросший алтарь
-	Tooltip:
-		'''
-		#ТЕСТ: РАЗМЕЩАЕТ ЗАРОСШИЙ АЛТАРЬ
-		'''
+	Tooltip: "#ТЕСТ: РАЗМЕЩАЕТ ЗАРОСШИЙ АЛТАРЬ"
 }
