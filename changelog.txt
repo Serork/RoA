@@ -1,1 +1,5 @@
-- Made a few plants adjustments
+- Expiry indicator now scales with inventory slot size 
+- Fixed druidic canes breaking player direction whilst using a rope 
+- Fixed druidic canes causing a bug if aimed directly below the player
+- Fixed Druid Soul not being able to find the altar due to mod conflicts
+- Made a few more plants adjustments
