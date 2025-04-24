@@ -73,7 +73,7 @@ sealed class SapSlime : ModNPC {
 
     private int GenerateItemInsideBody(bool isBallooned) {
         //if (Main.rand.NextBool(3)) {
-        WeightedRandom<int> weightedRandom = new();
+        WeightedRandom<int> weightedRandom = new(Main.rand);
         weightedRandom.Add(ModContent.ItemType<SlipperyBomb>());
         //weightedRandom.Add(ModContent.ItemType<SlipperyDynamite>(), 0.5);
         weightedRandom.Add(ModContent.ItemType<SlipperyGrenade>());

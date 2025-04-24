@@ -2248,7 +2248,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         else {
             baseX = posX;
         }
-        WeightedRandom<float> weightedRandom = new WeightedRandom<float>();
+        WeightedRandom<float> weightedRandom = new WeightedRandom<float>(WorldGen.genRand);
         weightedRandom.Add(0f + 0.1f * _random.NextFloat(), 0.25f);
         weightedRandom.Add(0.1f + 0.1f * _random.NextFloat(), 0.25f);
         weightedRandom.Add(0.35f + 0.1f * _random.NextFloat(), 0.75f);
@@ -4269,6 +4269,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step0_Setup() {
         _oneChestPlacedInBigTree = false;
         _wandsAdded = false;
+        _nextItemIndex = _nextItemIndex2 = 0;
 
         _backwoodsPlants.Clear();
         _biomeSurface.Clear();
