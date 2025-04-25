@@ -653,6 +653,8 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
+        Glow();
+
         _firstTimeEnrage = false;
 
         PlayRoarSound();
