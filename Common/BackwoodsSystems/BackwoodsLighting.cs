@@ -148,12 +148,12 @@ sealed class BackwoodsLighting : ModSystem {
     }
 
     public override void SaveWorldData(TagCompound tag) {
-        tag[nameof(Brightness)] = Brightness;
-        tag[nameof(Brightness2)] = Brightness2;
+        tag[RoA.ModName + nameof(Brightness)] = Brightness;
+        tag[RoA.ModName + nameof(Brightness2)] = Brightness2;
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        Brightness = tag.GetFloat(nameof(Brightness));
-        Brightness2 = tag.GetFloat(nameof(Brightness2));
+        Brightness = tag.GetFloat(RoA.ModName + nameof(Brightness));
+        Brightness2 = tag.GetFloat(RoA.ModName + nameof(Brightness2));
     }
 }
