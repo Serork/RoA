@@ -26,7 +26,7 @@ sealed class TreeDryad : ModTile {
 
     private void On_Main_UpdateTime_SpawnTownNPCs(On_Main.orig_UpdateTime_SpawnTownNPCs orig) {
         orig();
-        if (DryadEntrance._dryadStructureGenerated) {
+        if (DryadEntrance._dryadStructureGenerated && !DryadAwakeHandler.DryadAwake) {
             Main.townNPCCanSpawn[NPCID.Dryad] = false;
         }
     }
