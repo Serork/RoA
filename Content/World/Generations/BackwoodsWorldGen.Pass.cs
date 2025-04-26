@@ -1057,9 +1057,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             for (int i2 = -1; i2 < 1; i2++) {
                                 for (int j2 = -1; j2 < 1; j2++) {
                                     if (Math.Abs(i2) != Math.Abs(j2) &&
-                                        (WorldGenHelper.GetTileSafely(num207 + i2, num208 + j2).TileType == TileID.Sand ||
-                                        WorldGenHelper.GetTileSafely(num207 + i2, num208 + j2).TileType == TileID.Ebonsand ||
-                                        WorldGenHelper.GetTileSafely(num207 + i2, num208 + j2).TileType == TileID.Crimsand)) {
+                                        TileID.Sets.Suffocate[WorldGenHelper.GetTileSafely(num207 + i2, num208 + j2).TileType]) {
                                         flag = true;
                                         break;
                                     }
