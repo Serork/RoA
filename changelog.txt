@@ -1,5 +1,6 @@
-- Expiry indicator now scales with inventory slot size 
-- Fixed druidic canes breaking player direction whilst using a rope 
-- Fixed druidic canes causing a bug if aimed directly below the player
-- Fixed Druid Soul not being able to find the altar due to mod conflicts
-- Made a few more plants adjustments
+- Lothor now emits light upon spawning 
+- Lothor's scream attack no longer stops projectiles completely 
+- Fixed world seeds not replicating generated details correctly
+- Fixed the Dryad not respawning if killed before moving into a house 
+- Gems no longer generate on sand blocks in the Backwoods 
+- Backwoods Leaf blocks no longer merge with Backwoods Grass
