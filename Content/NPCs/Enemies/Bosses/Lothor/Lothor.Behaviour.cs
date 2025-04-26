@@ -955,7 +955,7 @@ sealed partial class Lothor : ModNPC {
         }
 
         foreach (Projectile projectile in Main.ActiveProjectiles) {
-            if (projectile.friendly && !projectile.minion && NPC.Distance(projectile.Center) <= maxDist) {
+            if (projectile.friendly && !projectile.minion && NPC.Distance(projectile.Center) <= maxDist && projectile.velocity.Length() > 0f) {
                 projectile.GetGlobalProjectile<ScreamProjectileHandler>().ApplyEffect();
                 projectile.damage -= projectile.damage / 5;
             }
