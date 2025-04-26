@@ -1052,8 +1052,23 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 num206 = ((num205 >= 3) ? ((num205 < 6) ? 1 : ((num205 < 8) ? 2 : ((num205 < 10) ? 3 : ((num205 >= 11) ? 5 : 4)))) : 0);
                 for (int num207 = num200 - num201; num207 < num200 + num202; num207++) {
                     for (int num208 = num199 - num203; num208 < num199 + num204; num208++) {
-                        if (!Main.tile[num207, num208].HasTile)
-                            WorldGen.PlaceTile(num207, num208, 178, mute: true, forced: false, -1, num206);
+                        if (!Main.tile[num207, num208].HasTile) {
+                            bool flag = false;
+                            for (int i2 = -1; i2 < 1; i2++) {
+                                for (int j2 = -1; j2 < 1; j2++) {
+                                    if (Math.Abs(i2) != Math.Abs(j2) &&
+                                        (WorldGenHelper.GetTileSafely(num207 + i2, num208 + j2).TileType == TileID.Sand ||
+                                        WorldGenHelper.GetTileSafely(num207 + i2, num208 + j2).TileType == TileID.Ebonsand ||
+                                        WorldGenHelper.GetTileSafely(num207 + i2, num208 + j2).TileType == TileID.Crimsand)) {
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!flag) {
+                                WorldGen.PlaceTile(num207, num208, 178, mute: true, forced: false, -1, num206);
+                            }
+                        }
                     }
                 }
             }
