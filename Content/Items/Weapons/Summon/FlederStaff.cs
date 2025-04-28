@@ -30,7 +30,7 @@ sealed class FlederStaff : ModItem {
         Item.useAnimation = Item.useTime = 28;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.UseSound = SoundID.Item65;
-        Item.autoReuse = false;
+        Item.autoReuse = true;
 
         Item.knockBack = 2f;
 
