@@ -31,6 +31,7 @@ sealed class FlederStaff : ModItem {
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.UseSound = SoundID.Item65;
         Item.autoReuse = true;
+        Item.reuseDelay = 2;
 
         Item.knockBack = 2f;
 
