@@ -1278,6 +1278,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             for (int j2 = j - 1; j2 < j + 2; j2++) {
                                 if (WorldGenHelper.ActiveTile(i2, j2, TileID.Dirt) || WorldGenHelper.ActiveTile(i2, j2, _dirtTileType)) {
                                     Main.tile[i2, j2].TileType = _grassTileType;
+                                    Main.tile[i2, j2].WallType = _grassWallType;
                                 }
                             }
                         }
@@ -1302,9 +1303,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = Framing.GetTileSafely(i, j);
                 if (WorldGenHelper.ActiveTile(i, j, AltarPlaceholderTileType)) {
                     WorldGenHelper.GetTileSafely(i, j).TileType = _grassTileType;
+                    WorldGenHelper.GetTileSafely(i, j).WallType = _grassWallType;
                 }
                 if (WorldGenHelper.ActiveTile(i, j, AltarPlaceholderTileType2)) {
-                    WorldGenHelper.GetTileSafely(i, j).TileType = _random.NextBool() ? TileID.Dirt : _grassTileType;
+                    bool flag = _random.NextBool();
+                    WorldGenHelper.GetTileSafely(i, j).TileType = flag ? TileID.Dirt : _grassTileType;
+                    if (!flag) {
+                        WorldGenHelper.GetTileSafely(i, j).WallType = _grassWallType;
+                    }
                 }
             }
         }
@@ -1315,6 +1321,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     (WorldGenHelper.ActiveTile(i, j + 1, _leavesTileType) || WorldGenHelper.ActiveTile(i, j + 1, _grassTileType)) &&
                     (WorldGenHelper.ActiveTile(i + 1, j, _grassTileType) || WorldGenHelper.ActiveTile(i + 1, j, _leavesTileType))) {
                     WorldGenHelper.ReplaceTile(i, j, _grassTileType);
+                    WorldGenHelper.GetTileSafely(i, j).WallType = _grassWallType;
                 }
                 // pots
                 if (WorldGen.SolidTile(i, j + 1) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(2)) {
