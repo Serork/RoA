@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Iced.Intel;
+
+using Microsoft.Xna.Framework;
 
 using ReLogic.Utilities;
 
@@ -45,9 +47,9 @@ namespace RoA.Content.World.Generations;
 sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, loadWeight) {
     public static readonly ushort[] SandInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone };
     public static readonly ushort[] SandInvalidWallTypesToKill = { WallID.SandstoneBrick, 187, 220, 222, 221, 275, 308, 310, 309, 216, 217, 219, 218, 304, 305, 307, 306, 216, 187, 304, 275 };
-    public static readonly ushort[] MidInvalidTileTypesToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone, TileID.Marble, TileID.Granite };
+    public static readonly ushort[] MidInvalidTileTypesToKill = { TileID.LihzahrdBrick, TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone, TileID.Marble, TileID.Granite };
     public static readonly ushort[] MidInvalidTileTypesToKill2 = { TileID.HardenedSand, TileID.Sandstone, TileID.Marble, TileID.Granite };
-    public static readonly ushort[] MidInvalidWallTypesToKill = { WallID.SandstoneBrick, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
+    public static readonly ushort[] MidInvalidWallTypesToKill = { WallID.LihzahrdBrickUnsafe, WallID.SandstoneBrick, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidReplaceWallTypes = { WallID.MudUnsafe, WallID.MudWallEcho, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
     public static readonly ushort[] SkipBiomeInvalidTileTypeToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone };
     public static readonly ushort[] SkipBiomeInvalidWallTypeToKill = { WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite };
@@ -237,7 +239,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 else if (WorldGen.getGoodWorldGen)
                     chance = 2;
 
-                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(chance) && _random.NextBool(chance) && flag) {
+                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(chance) && _random.NextBool(chance) && flag && !MidInvalidTileTypesToKill.Contains(WorldGenHelper.GetTileSafely(i, j + 1).TileType)) {
                     int x = i, y = j;
                     bool flag2 = false;
                     if (WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1) && !Main.tile[x, y - 1].HasTile && !Main.tile[x + 1, y - 1].HasTile &&
@@ -836,7 +838,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 bool flag3 = (elderwoodWall && _random.NextChance(0.75)) || tile.WallType == _elderwoodWallType;
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
-                    if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && tile.TileType != ModContent.TileType<ElderwoodDoorClosed>()) {
+                    if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && tile.TileType != ModContent.TileType<ElderwoodDoorClosed>() && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                         bool flag = true;
                         if (WorldGenHelper.GetTileSafely(i, j).WallType == WallID.LihzahrdBrickUnsafe || WorldGenHelper.GetTileSafely(i, j).WallType == WallID.LihzahrdBrick) {
                             flag = false;
@@ -875,7 +877,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 bool flag3 = (elderwoodWall && _random.NextChance(0.75)) || tile.WallType == _elderwoodWallType;
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
-                    if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && tile.TileType != ModContent.TileType<ElderwoodDoorClosed>()) {
+                    if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && tile.TileType != ModContent.TileType<ElderwoodDoorClosed>() && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                         bool flag = true;
                         if (WorldGenHelper.GetTileSafely(i, j).WallType == WallID.LihzahrdBrickUnsafe || WorldGenHelper.GetTileSafely(i, j).WallType == WallID.LihzahrdBrick) {
                             flag = false;
@@ -914,7 +916,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 bool flag3 = (elderwoodWall && _random.NextChance(0.75)) || tile.WallType == _elderwoodWallType;
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
-                    if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3)) {
+                    if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                         bool flag = true;
                         if (WorldGenHelper.GetTileSafely(i, j).WallType == WallID.LihzahrdBrickUnsafe || WorldGenHelper.GetTileSafely(i, j).WallType == WallID.LihzahrdBrick) {
                             flag = false;
@@ -953,7 +955,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
                 bool flag3 = (elderwoodWall && _random.NextChance(0.75)) || tile.WallType == _elderwoodWallType;
                 if ((_random.NextBool(flag3 ? 3 : 7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
-                    if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3)) {
+                    if (_random.NextBool(flag3 ? 1 : tile.TileType == _elderwoodTileType ? 2 : 4) && ((!flag3 && _random.NextChance(0.85)) || flag3) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                         bool flag = true;
                         if (WorldGenHelper.GetTileSafely(i, j).WallType == WallID.LihzahrdBrickUnsafe || WorldGenHelper.GetTileSafely(i, j).WallType == WallID.LihzahrdBrick) {
                             flag = false;
@@ -968,7 +970,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int i = Left - 100; i <= Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                if (tile.ActiveTile(_mossTileType) && WorldGen.SolidTile2(tile)) {
+                if (tile.ActiveTile(_mossTileType) && WorldGen.SolidTile2(tile) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                     WorldGen.PlaceTile(i, j - 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
                 }
             }
@@ -979,7 +981,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
-                if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) && WorldGen.SolidTile2(tile)) {
+                if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) && WorldGen.SolidTile2(tile) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                     if (_random.NextBool(4)) {
                         WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsSpecial3>(), _random.Next(4));
                     }
@@ -991,7 +993,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag2 = i > Right + 10 || i < Left - 10;
-                if ((_random.NextBool(7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
+                if ((_random.NextBool(7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                     if (_random.NextBool(4)) {
                         WorldGen.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsSpecial2>(), _random.Next(3));
                     }
@@ -1004,7 +1006,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_mossTileType)) {
                     bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
-                    if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) && WorldGen.SolidTile2(tile)) {
+                    if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) && WorldGen.SolidTile2(tile) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                         WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks3x2>(), _random.Next(6));
                     }
                 }
@@ -1015,7 +1017,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_mossTileType)) {
                     bool flag2 = j < BackwoodsVars.FirstTileYAtCenter + 20 || i > Right + 10 || i < Left - 10;
-                    if ((_random.NextBool(7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile)) {
+                    if ((_random.NextBool(7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                         WorldGen.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsRocks02>(), _random.Next(6));
                     }
                 }
@@ -1025,7 +1027,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 20; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                if (_random.NextBool(2) && tile.ActiveTile(_mossTileType) && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock && !aboveTile.HasTile) {
+                if (_random.NextBool(2) && tile.ActiveTile(_mossTileType) && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock && !aboveTile.HasTile && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                     tile = WorldGenHelper.GetTileSafely(i, j - 1);
                     tile.HasTile = true;
                     tile.TileFrameY = 0;
@@ -1324,7 +1326,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     WorldGenHelper.GetTileSafely(i, j).WallType = _grassWallType;
                 }
                 // pots
-                if (WorldGen.SolidTile(i, j + 1) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(2)) {
+                if (WorldGen.SolidTile(i, j + 1) && !MidInvalidTileTypesToKill.Contains(WorldGenHelper.GetTileSafely(i, j).TileType) && !Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType] && _random.NextBool(2)) {
                     WorldGen.PlacePot(i, j, _potTileType, _random.Next(4));
                 }
             }
