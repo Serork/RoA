@@ -412,7 +412,7 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    private BaseRodProjectile? GetHoldRodStaff() {
+    private BaseRodProjectile? GetHeldRodStaff() {
         BaseRodProjectile? rodProjectile = null;
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (projectile.owner != Player.whoAmI) {
@@ -506,7 +506,7 @@ sealed class WreathHandler : ModPlayer {
             Reset(true);
         }
         else if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
-            BaseRodProjectile? rodProjectile = GetHoldRodStaff();
+            BaseRodProjectile? rodProjectile = GetHeldRodStaff();
             bool flag = rodProjectile == null;
             bool flag2 = !flag && !rodProjectile.PreparingAttack;
             _stayTime -= TimeSystem.LogicDeltaTime * (flag2 ? 0.5f : 1f);
@@ -682,7 +682,7 @@ sealed class WreathHandler : ModPlayer {
         if (StartSlowlyIncreasingUntilFull) {
             value2 *= 0.15f;
         }
-        BaseRodProjectile? rodProjectile = GetHoldRodStaff();
+        BaseRodProjectile? rodProjectile = GetHeldRodStaff();
         if (rodProjectile != null && rodProjectile.PreparingAttack) {
             value2 *= 0.2f;
         }
