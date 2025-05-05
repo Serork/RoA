@@ -22,7 +22,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class FireblossomExplosion : NatureProjectile {
+sealed class FireblossomExplosion : DruidicProjectile {
     public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.Explosives}";
 
     protected override void SafeSetDefaults() {
@@ -44,7 +44,7 @@ sealed class FireblossomExplosion : NatureProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
-        ShouldIncreaseWreathPoints = false;
+        ShouldChargeWreath = false;
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -72,7 +72,7 @@ sealed class FireblossomExplosion : NatureProjectile {
     }
 }
 
-sealed class Fireblossom : NatureProjectile {
+sealed class Fireblossom : DruidicProjectile {
     private Vector2 _position;
 
     public override void SetStaticDefaults() {
@@ -123,7 +123,7 @@ sealed class Fireblossom : NatureProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
-        ShouldIncreaseWreathPoints = false;
+        ShouldChargeWreath = false;
     }
 
     private float Speed => MathHelper.Clamp(Projectile.localAI[2], 0f, 1.4f);

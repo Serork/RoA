@@ -11,7 +11,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class SharpIcicle : NatureProjectile {
+sealed class SharpIcicle : DruidicProjectile {
     protected override void SafeSetDefaults() {
         int width = 14, height = 18;
         Projectile.Size = new Vector2(width, height);

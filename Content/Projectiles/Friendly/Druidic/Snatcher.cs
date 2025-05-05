@@ -22,7 +22,7 @@ using Terraria.ID;
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
 // TODO: optimize (rewrite)
-sealed class Snatcher : NatureProjectile {
+sealed class Snatcher : DruidicProjectile {
     private const float DIST = 75f;
     private const ushort TIMELEFT = 300;
 
@@ -85,7 +85,7 @@ sealed class Snatcher : NatureProjectile {
         Projectile.timeLeft = TIMELEFT * 2;
         Projectile.penetrate = -1;
 
-        ShouldIncreaseWreathPoints = false;
+        ShouldChargeWreath = false;
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 30;

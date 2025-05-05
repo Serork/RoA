@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class RipePumpkin : NatureProjectile {
+sealed class RipePumpkin : DruidicProjectile {
     //private static Wiggler _rotateWiggler = Wiggler.Create(1f, 5.5f);
 
     private float _pulseScale = 3;

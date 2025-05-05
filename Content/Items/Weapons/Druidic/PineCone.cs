@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Druid;
 using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using System;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -9,19 +9,21 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items;
 
-sealed class NatureItems : ModSystem {
-    internal static HashSet<int> natureItems = [];
+sealed class CrossmodNatureContent : ModSystem {
+    internal static HashSet<int> natureItems = [], natureProjectiles = [];
 
-    public static void RegisterNatureItem(ModItem modItem) {
-        int type = modItem.Item.type;
-        natureItems.Add(type);
-    }
+    public static void RegisterNatureItem(Item item) => natureItems.Add(item.type);
+    public static void RegisterNatureProjectile(Projectile projectile) => natureProjectiles.Add(projectile.type);
 
-    public static bool IsItemNature(ModItem modItem) => modItem is not null && natureItems.Contains(modItem.Item.type);
+    public static bool IsItemNature(Item item) => natureItems.Contains(item.type);
+    public static bool IsProjectileNature(Projectile projectile) => natureProjectiles.Contains(projectile.type);
 
     public override void Unload() {
         natureItems.Clear();
         natureItems = null;
+
+        natureProjectiles.Clear();
+        natureProjectiles = null;
     }
 }
 

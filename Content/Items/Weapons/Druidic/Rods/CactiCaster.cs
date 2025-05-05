@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common.Druid;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Druidic;
-using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using System.IO;
@@ -119,7 +119,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 3);
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedItem, player) * 3);
 
         protected override bool DespawnWithProj() => true;
 

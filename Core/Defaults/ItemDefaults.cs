@@ -1,10 +1,11 @@
 ﻿using RoA.Content;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 
-namespace RoA.Core;
+namespace RoA.Core.Defaults;
 
 static class ItemDefaults {
     public static void SetSize(this Item item, int width, int height) {
@@ -13,6 +14,12 @@ static class ItemDefaults {
     }
 
     public static void SetSize(this Item item, int width) => item.width = item.height = width;
+
+    public static void MakeItemDruidicWeapon(this Item item) {
+        if (item.IsAWeapon()) {
+            item.SetDefaultToDruidicWeapon();
+        }
+    }
 
     public static void SetDefaultToDruidicWeapon(this Item item) => item.DamageType = DruidClass.NatureDamage;
 

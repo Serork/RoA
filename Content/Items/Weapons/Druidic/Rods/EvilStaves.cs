@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common.Druid;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Druidic;
-using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using System;
@@ -65,7 +65,7 @@ abstract class EvilStaffBase : BaseRodProjectile {
 
     protected override bool ShouldWaitUntilProjDespawns() => false;
 
-    protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(Item, player);
+    protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(AttachedItem, player);
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         base.SafeSendExtraAI(writer);

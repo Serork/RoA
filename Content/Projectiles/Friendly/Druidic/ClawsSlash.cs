@@ -25,7 +25,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-class ClawsSlash : NatureProjectile {
+class ClawsSlash : DruidicProjectile {
     private float _scale;
     private Color? _firstSlashColor = null, _secondSlashColor = null;
     private bool _soundPlayed;
@@ -34,7 +34,7 @@ class ClawsSlash : NatureProjectile {
 
     protected virtual bool SpawnSlashDust { get; } = true;
 
-    protected bool ShouldFullBright => Item != null && Item.type == ModContent.ItemType<HellfireClaws>();
+    protected bool ShouldFullBright => AttachedItem != null && AttachedItem.type == ModContent.ItemType<HellfireClaws>();
 
     protected Color? FirstSlashColor => _firstSlashColor;
     protected Color? SecondSlashColor => _secondSlashColor;

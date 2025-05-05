@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class ProtectiveRoots : NatureProjectile {
+sealed class ProtectiveRoots : DruidicProjectile {
     private float rotationTimer = 3.14f;
     private float rotationSpeed = 0.8f;
 

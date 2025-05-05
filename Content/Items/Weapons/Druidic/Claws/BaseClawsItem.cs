@@ -3,7 +3,7 @@
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Druidic;
-using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using Terraria;

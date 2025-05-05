@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class SacrificialSickle : NatureProjectile {
+sealed class SacrificialSickle : DruidicProjectile {
     private Vector2 _to;
     private float _rotation;
     private int _direction;

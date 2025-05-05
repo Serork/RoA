@@ -15,7 +15,7 @@ sealed class VilethornTip : Vilethorn {
         $"Terraria/Images/Projectile_{ProjectileID.VilethornTip}";
 }
 
-class Vilethorn : NatureProjectile {
+class Vilethorn : DruidicProjectile {
     public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? base.Texture : $"Terraria/Images/Projectile_{ProjectileID.VilethornBase}";
 
     protected override void SafeSetDefaults() {

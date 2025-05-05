@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common.Druid;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Druidic;
-using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using System;

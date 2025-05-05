@@ -208,7 +208,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
-        OnHitNPC(proj, target: target);
+        HandleOnHitNPCForDruidicProjectile(proj, target: target);
     }
 
     public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
@@ -223,24 +223,43 @@ sealed class WreathHandler : ModPlayer {
         MakeDustsOnHit();
     }
 
-    public void OnHitNPC(Projectile proj, bool nonDataReset = false, NPC target = null) {
+    internal void HandleOnHitNPCForDruidicProjectile(Projectile proj, bool nonDataReset = false, NPC target = null) {
         if (target != null && target.immortal) {
             return;
         }
-        if (!proj.IsDruidic(out NatureProjectile natureProjectile)) {
+
+        if (proj.ModProjectile is DruidicProjectile natureProjectile) {
+            if (!natureProjectile.ShouldChargeWreath && !nonDataReset) {
+                return;
+            }
+
+            ClawsReset(proj, nonDataReset);
+
+            IncreaseResourceValue(natureProjectile.WreathFillingFine);
+
+            if (_hitEffectTimer <= 0) {
+                MakeDustsOnHit();
+                _hitEffectTimer = 3;
+            }
+
             return;
         }
-        if (!natureProjectile.ShouldIncreaseWreathPoints && !nonDataReset) {
-            return;
+
+        try {
+            CrossmodNatureProjectileHandler handler = proj.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
+            if (!(!handler.ShouldChargeWreath && !nonDataReset)) {
+                ClawsReset(proj, nonDataReset);
+
+                IncreaseResourceValue(handler.WreathFillingFine);
+
+                if (_hitEffectTimer <= 0) {
+                    MakeDustsOnHit();
+                    _hitEffectTimer = 3;
+                }
+            }
         }
-
-        ClawsReset(natureProjectile, nonDataReset);
-
-        IncreaseResourceValue(natureProjectile.WreathPointsFine);
-
-        if (_hitEffectTimer <= 0) {
-            MakeDustsOnHit();
-            _hitEffectTimer = 3;
+        catch (Exception exception) {
+            throw new Exception(exception.Message);
         }
     }
 
@@ -258,10 +277,11 @@ sealed class WreathHandler : ModPlayer {
         OnWreathReset?.Invoke();
     }
 
-    private void ClawsReset(NatureProjectile natureProjectile, bool nonDataReset) {
+    private void ClawsReset(Projectile projectile, bool nonDataReset) {
+        Item attachedItem = projectile.ModProjectile is DruidicProjectile natureProjectile ? natureProjectile.AttachedItem : projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedItem;
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
-        if (playerUsingClaws && Player.ItemAnimationActive && natureProjectile.Item == selectedItem) {
+        if (playerUsingClaws && Player.ItemAnimationActive && attachedItem == selectedItem) {
             selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
             if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
@@ -509,7 +529,7 @@ sealed class WreathHandler : ModPlayer {
             BaseRodProjectile? rodProjectile = GetHeldRodStaff();
             bool flag = rodProjectile == null;
             bool flag2 = !flag && !rodProjectile.PreparingAttack;
-            _stayTime -= TimeSystem.LogicDeltaTime * (flag2 ? 0.5f : 1f);
+            _stayTime -= TimeSystem.LogicDeltaTime * (flag2 ? 0f : 1f);
         }
         else {
             if (_stayTime != 0f) {

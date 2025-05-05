@@ -12,7 +12,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
-sealed class MoonSigil : NatureProjectile {
+sealed class MoonSigil : DruidicProjectile {
     private int explosionCounter;
     private float cloneDrawRotation, cloneDrawAlpha, cloneDrawReturn;
     private float cloneDrawOffset = 200;

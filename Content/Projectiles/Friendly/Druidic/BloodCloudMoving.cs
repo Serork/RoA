@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class BloodCloudMoving : NatureProjectile {
+sealed class BloodCloudMoving : DruidicProjectile {
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 4;
     }

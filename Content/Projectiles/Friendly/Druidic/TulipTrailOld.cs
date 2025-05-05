@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class TulipTrailOld : NatureProjectile {
+sealed class TulipTrailOld : DruidicProjectile {
     private float _drawScale = 0.4f;
     private float _drawScaleMax;
     private bool _initialize = false;

@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class RootRing : NatureProjectile {
+sealed class RootRing : DruidicProjectile {
     private int _alpha = 255;
 
     private static float _factor;
@@ -41,7 +41,7 @@ sealed class RootRing : NatureProjectile {
         Projectile.usesIDStaticNPCImmunity = true;
         Projectile.idStaticNPCHitCooldown = 30;
 
-        ShouldIncreaseWreathPoints = false;
+        ShouldChargeWreath = false;
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {

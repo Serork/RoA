@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class TectonicCaneProjectile2 : NatureProjectile {
+sealed class TectonicCaneProjectile2 : DruidicProjectile {
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 2;
     }

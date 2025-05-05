@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Druidic;
-using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using System;
@@ -64,7 +64,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         protected override bool ShouldntUpdateRotationAndDirection() => false;
 
         protected override byte TimeAfterShootToExist(Player player) {
-            return (byte)(NatureWeaponHandler.GetUseSpeed(Item, player) * 3 * Math.Min(1f, _attackTimer / _attackTime));
+            return (byte)(NatureWeaponHandler.GetUseSpeed(AttachedItem, player) * 3 * Math.Min(1f, _attackTimer / _attackTime));
         }
 
         protected override void SafestOnSpawn(IEntitySource source) {

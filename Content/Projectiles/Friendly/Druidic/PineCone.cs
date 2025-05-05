@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class PineCone : NatureProjectile {
+sealed class PineCone : DruidicProjectile {
     protected override void SafeSetDefaults() {
         Projectile.Size = new Vector2(18, 26);
 

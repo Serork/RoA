@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class TulipPetalOld : NatureProjectile {
+sealed class TulipPetalOld : DruidicProjectile {
     private float _rotationTimer = MathHelper.Pi;
     private float _rotationSpeed = 2.5f;
     private bool _initialize = false;
@@ -302,7 +302,7 @@ sealed class TulipPetalOld : NatureProjectile {
         }
     }
 
-    private class WeepingTulipExplosion : NatureProjectile {
+    private class WeepingTulipExplosion : DruidicProjectile {
         public override string Texture => ResourceManager.EmptyTexture;
 
         public override bool PreDraw(ref Color lightColor) => false;
@@ -320,7 +320,7 @@ sealed class TulipPetalOld : NatureProjectile {
 
             Projectile.timeLeft = 10;
 
-            ShouldApplyItemDamage = false;
+            ShouldApplyAttachedItemDamage = false;
         }
 
         protected override void SafeOnSpawn(IEntitySource source) {

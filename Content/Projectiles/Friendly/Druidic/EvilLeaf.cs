@@ -16,7 +16,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class EvilLeaf : NatureProjectile {
+sealed class EvilLeaf : DruidicProjectile {
     private const int TIMELEFT = 400;
 
     private Vector2 _twigPosition;

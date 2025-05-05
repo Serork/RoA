@@ -65,7 +65,7 @@ abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
 
 abstract class BaseRodItem : BaseRodItem<BaseRodProjectile> { }
 
-abstract class BaseRodProjectile : NatureProjectile {
+abstract class BaseRodProjectile : DruidicProjectile {
     protected const float STARTROTATION = 1.4f;
     protected const float MINROTATION = -0.24f, MAXROTATION = 0.24f;
     protected const int TICKSTOREUSE = 30;
@@ -85,7 +85,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
     protected float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
-    protected Item HeldItem => Item;
+    protected Item HeldItem => AttachedItem;
     protected Texture2D HeldItemTexture => HeldItem.IsEmpty() ? null : TextureAssets.Item[HeldItem.type].Value;
 
     protected Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
@@ -243,10 +243,10 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     public sealed override void AI() {
-        if (Owner.whoAmI != Main.myPlayer && Projectile.localAI[2] == 0f && Item != null) {
+        if (Owner.whoAmI != Main.myPlayer && Projectile.localAI[2] == 0f && AttachedItem != null) {
             Projectile.localAI[2] = 1f;
 
-            SoundEngine.PlaySound(Item.UseSound, Owner.Center);
+            SoundEngine.PlaySound(AttachedItem.UseSound, Owner.Center);
         }
         //Main.NewText(NatureWeaponHandler.GetUseSpeed(Item, Owner));
 
@@ -279,7 +279,7 @@ abstract class BaseRodProjectile : NatureProjectile {
             if (!ShouldBeActiveAfterShoot()) {
                 ShouldBeActive = false;
             }
-            byte timeAfterShootToExist = (byte)(Item.IsEmpty() ? 0 : TimeAfterShootToExist(Owner));
+            byte timeAfterShootToExist = (byte)(AttachedItem.IsEmpty() ? 0 : TimeAfterShootToExist(Owner));
             if (ShouldWaitUntilProjDespawns()) {
                 if (timeAfterShootToExist != 0) {
                     _leftTimeToReuse = timeAfterShootToExist;
@@ -347,7 +347,7 @@ abstract class BaseRodProjectile : NatureProjectile {
             }
             Main.mouseLeftRelease = false;
             Owner.controlUseItem = false;
-            Owner.itemAnimation = Owner.itemTime = NatureWeaponHandler.GetUseSpeed(Item, Owner);
+            Owner.itemAnimation = Owner.itemTime = NatureWeaponHandler.GetUseSpeed(AttachedItem, Owner);
             Projectile.Kill();
         }
     }
@@ -355,7 +355,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     private void SetPosition() {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
         Projectile.Center = center;
-        bool flag = !Item.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        bool flag = !AttachedItem.IsEmpty() && !ShouldntUpdateRotationAndDirection();
         if (Projectile.IsOwnerMyPlayer(Owner) && flag) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
@@ -366,7 +366,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetDirection() {
-        bool flag = !Item.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        bool flag = !AttachedItem.IsEmpty() && !ShouldntUpdateRotationAndDirection();
         if (flag) {
             Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
             Owner.ChangeDir(Projectile.spriteDirection);
@@ -379,7 +379,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     private void SetRotation() {
-        bool flag = !Item.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        bool flag = !AttachedItem.IsEmpty() && !ShouldntUpdateRotationAndDirection();
         if (flag) {
             float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
             float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;

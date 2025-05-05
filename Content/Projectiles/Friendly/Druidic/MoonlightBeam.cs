@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class MoonlightBeam : NatureProjectile {
+sealed class MoonlightBeam : DruidicProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override void SetStaticDefaults() {

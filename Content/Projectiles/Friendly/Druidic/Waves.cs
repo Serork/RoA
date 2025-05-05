@@ -31,7 +31,7 @@ sealed class HemorrhageWave : Wave {
     public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(ModContent.BuffType<Hemorrhage>(), 180);
 }
 
-abstract class Wave : NatureProjectile {
+abstract class Wave : DruidicProjectile {
     public abstract Color UsedColor();
     public abstract (int, int, int) UsedDustTypes();
 
@@ -56,7 +56,7 @@ abstract class Wave : NatureProjectile {
         Projectile.ignoreWater = true;
         Projectile.localNPCHitCooldown = 100;
 
-        ShouldIncreaseWreathPoints = false;
+        ShouldChargeWreath = false;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {

@@ -123,7 +123,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
         Projectile.localAI[2] += 0.1f * Projectile.ai[0];
         if (!Hit) {
             _hit = true;
-            Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnHitNPC(Projectile, true);
+            Main.player[Projectile.owner].GetModPlayer<WreathHandler>().HandleOnHitNPCForDruidicProjectile(Projectile, true);
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "HellfireClaws") with { PitchVariance = 0.25f, Volume = Main.rand.NextFloat(0.75f, 0.85f) }, GetPos());
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new PlayHellfireSoundPacket(Main.player[Projectile.owner], GetPos()));

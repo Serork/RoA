@@ -20,7 +20,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class TectonicCaneProjectile : NatureProjectile {
+sealed class TectonicCaneProjectile : DruidicProjectile {
     public override void Load() {
         On_Collision.TileCollision += On_Collision_TileCollision;
     }

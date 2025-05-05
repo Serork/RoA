@@ -9,7 +9,7 @@ using Terraria.DataStructures;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class Bee : NatureProjectile {
+sealed class Bee : DruidicProjectile {
     public override string Texture => ResourceManager.ProjectileTextures + nameof(Bee);
 
     public override void SetStaticDefaults() {
@@ -38,13 +38,13 @@ sealed class Bee : NatureProjectile {
         Projectile.friendly = true;
         Projectile.hostile = false;
 
-        ShouldApplyItemDamage = false;
+        ShouldApplyAttachedItemDamage = false;
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
         base.SafeOnSpawn(source);
 
-        WreathPointsFine *= 6f;
+        WreathFillingFine *= 6f;
     }
 
     public override void AI() {

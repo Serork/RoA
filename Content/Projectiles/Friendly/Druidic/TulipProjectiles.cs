@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class TulipPetal : NatureProjectile {
+sealed class TulipPetal : DruidicProjectile {
     internal const byte PETALCOUNT = 4;
     internal const int HEIGHT = 30;
 
@@ -217,7 +217,7 @@ sealed class TulipPetal : NatureProjectile {
     }
 }
 
-sealed class TulipFlower : NatureProjectile {
+sealed class TulipFlower : DruidicProjectile {
     private byte UsedFrameX => (byte)Projectile.ai[0];
     private bool IsWeepingTulip => UsedFrameX == 2;
     public float Max => IsWeepingTulip ? 360f : 240f;
@@ -347,7 +347,7 @@ sealed class TulipFlower : NatureProjectile {
     }
 }
 
-sealed class Bone : NatureProjectile {
+sealed class Bone : DruidicProjectile {
     public override string Texture => $"Terraria/Images/Projectile_{21}";
 
     protected override void SafeSetDefaults() {

@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class EvilBranch : NatureProjectile {
+sealed class EvilBranch : DruidicProjectile {
     public override void OnKill(int timeLeft) {
         int max = 60;
         int y = -max;
@@ -104,7 +104,7 @@ sealed class EvilBranch : NatureProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
-        ShouldApplyItemDamage = false;
+        ShouldApplyAttachedItemDamage = false;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -204,7 +204,7 @@ sealed class EvilBranch : NatureProjectile {
                 }
                 direction *= -_direction;
                 Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
-                int projectile = Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(Item, Main.player[Projectile.owner]), Projectile.knockBack,
+                int projectile = Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(AttachedItem, Main.player[Projectile.owner]), Projectile.knockBack,
                     Projectile.owner, direction, Projectile.identity, index);
                 Main.projectile[projectile].As<EvilLeaf>().SetUpTwigPosition(leafTwigPosition);
                 index++;

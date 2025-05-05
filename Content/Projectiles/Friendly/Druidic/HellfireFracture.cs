@@ -14,7 +14,7 @@ using Terraria.Utilities;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class HellfireFracture : NatureProjectile {
+sealed class HellfireFracture : DruidicProjectile {
     private Vector2 _first, _last;
     private Color _color;
     private float _timer;
@@ -39,7 +39,7 @@ sealed class HellfireFracture : NatureProjectile {
 
         Projectile.timeLeft = 300;
 
-        ShouldIncreaseWreathPoints = false;
+        ShouldChargeWreath = false;
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {

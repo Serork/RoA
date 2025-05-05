@@ -10,7 +10,7 @@ using RoA.Core;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class MoonSickle : NatureProjectile {
+sealed class MoonSickle : DruidicProjectile {
     public override Color? GetAlpha(Color lightColor) => new Color(255, 255, 200, 200) * (1f - Projectile.alpha / 255f);
 
     private float rotationTimer = 3.14f * 2f;

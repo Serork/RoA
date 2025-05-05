@@ -5,7 +5,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class BloodRain : NatureProjectile {
+sealed class BloodRain : DruidicProjectile {
     protected override void SafeSetDefaults() {
         Projectile.ignoreWater = true;
         Projectile.width = 4;

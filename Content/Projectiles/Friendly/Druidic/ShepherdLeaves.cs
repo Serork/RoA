@@ -15,7 +15,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class ShepherdLeaves : NatureProjectile {
+sealed class ShepherdLeaves : DruidicProjectile {
     private Color _color;
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {

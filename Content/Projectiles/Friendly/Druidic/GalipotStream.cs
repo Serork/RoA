@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class GalipotStream : NatureProjectile {
+sealed class GalipotStream : DruidicProjectile {
     public bool IsActive => Projectile.ai[1] == 0f;
 
     public override void SetStaticDefaults() {
@@ -77,7 +77,7 @@ sealed class GalipotStream : NatureProjectile {
     }
 
     public override void AI() {
-        ShouldApplyItemDamage = Projectile.penetrate >= 2;
+        ShouldApplyAttachedItemDamage = Projectile.penetrate >= 2;
 
         bool flag2 = IsActive && Projectile.velocity.Length() > 0.5f;
 

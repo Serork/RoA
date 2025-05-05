@@ -25,10 +25,12 @@ namespace RoA.Content.Items.Special;
 sealed class SphereHandler : GlobalItem {
     private const float DISTTOALTAR = 150f;
 
-    private static List<int> _spheresToHandle = [ModContent.ItemType<SphereOfPyre>(), ModContent.ItemType<SphereOfCondor>(), ModContent.ItemType<SphereOfQuake>(),
-                                                 ModContent.ItemType<SphereOfAspiration>(), ModContent.ItemType<SphereOfStream>(), ModContent.ItemType<SphereOfShock>()];
+    private static IReadOnlyCollection<int> _spheresToHandle = [ModContent.ItemType<SphereOfPyre>(), ModContent.ItemType<SphereOfCondor>(), ModContent.ItemType<SphereOfQuake>(),
+                                                                ModContent.ItemType<SphereOfAspiration>(), ModContent.ItemType<SphereOfStream>(), ModContent.ItemType<SphereOfShock>()];
 
     public override bool InstancePerEntity => true;
+
+    public override bool AppliesToEntity(Item entity, bool lateInstantiation) => _spheresToHandle.Contains(entity.type);
 
     private int _breathCD, _breathCD2;
     private int _breath = 200, _breathMax = 200;
@@ -83,10 +85,7 @@ sealed class SphereHandler : GlobalItem {
     }
 
     public override void Unload() {
-        _spheresToHandle.Clear();
         _spheresToHandle = null;
-
-        _lerpColors.Clear();
         _lerpColors = null;
     }
 
@@ -413,7 +412,7 @@ sealed class SphereHandler : GlobalItem {
     #endregion
 
     #region SHOCK
-    private static List<Color> _lerpColors = [new Color(175, 241, 205), new Color(60, 222, 190)];
+    private static IReadOnlyCollection<Color> _lerpColors = [new Color(175, 241, 205), new Color(60, 222, 190)];
 
     private class LerpColorHandler : ModPlayer {
         private float _lerpColorProgress;
@@ -441,7 +440,7 @@ sealed class SphereHandler : GlobalItem {
         if (_spheresToHandle.Contains(Main.reforgeItem.type)) {
             if (text.Contains(Colors.AlphaDarken(Colors.CoinCopper).Hex3()) &&
                 text.Contains(Lang.inter[18].Value)) {
-                text = "[c/" + Main.LocalPlayer.GetModPlayer<LerpColorHandler>().GetLerpColor(_lerpColors).Hex3() + ":" + "???" + "] ";
+                text = "[c/" + Main.LocalPlayer.GetModPlayer<LerpColorHandler>().GetLerpColor(_lerpColors.ToList()).Hex3() + ":" + "???" + "] ";
             }
         }
 

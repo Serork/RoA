@@ -19,7 +19,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class Cacti : NatureProjectile {
+sealed class Cacti : DruidicProjectile {
     private enum State {
         Normal,
         Enchanted
@@ -280,7 +280,7 @@ sealed class Cacti : NatureProjectile {
         }
     }
 
-    private class CactiExplosion : NatureProjectile {
+    private class CactiExplosion : DruidicProjectile {
         public override string Texture => ResourceManager.EmptyTexture;
 
         public override bool PreDraw(ref Color lightColor) => false;

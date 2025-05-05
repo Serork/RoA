@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class PumpkinSeed : NatureProjectile {
+sealed class PumpkinSeed : DruidicProjectile {
     protected override void SafeSetDefaults() {
         int width = 10, height = 16;
         Projectile.Size = new Vector2(width, height);

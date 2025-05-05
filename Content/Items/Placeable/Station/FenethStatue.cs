@@ -1,4 +1,4 @@
-using RoA.Core;
+using RoA.Core.Defaults;
 
 using Terraria;
 using Terraria.ID;

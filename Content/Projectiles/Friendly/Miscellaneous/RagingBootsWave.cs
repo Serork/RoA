@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
-sealed class RagingBootsWave : NatureProjectile {
+sealed class RagingBootsWave : DruidicProjectile {
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 4;
     }
@@ -25,7 +25,7 @@ sealed class RagingBootsWave : NatureProjectile {
         Projectile.penetrate = -1;
         AIType = 14;
 
-        ShouldApplyItemDamage = false;
+        ShouldApplyAttachedItemDamage = false;
     }
 
     public override bool? CanCutTiles() => false;

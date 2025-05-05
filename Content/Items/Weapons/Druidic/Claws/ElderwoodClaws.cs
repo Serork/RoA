@@ -6,6 +6,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Druidic;
 using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using Terraria;

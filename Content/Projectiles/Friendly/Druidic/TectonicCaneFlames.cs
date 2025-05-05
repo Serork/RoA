@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class TectonicCaneFlames : NatureProjectile {
+sealed class TectonicCaneFlames : DruidicProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
     public override bool PreDraw(ref Color lightColor) => false;
 

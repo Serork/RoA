@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class ElderwoodWallProjectile : NatureProjectile {
+sealed class ElderwoodWallProjectile : DruidicProjectile {
     private const int MAX_TIMELEFT = 180;
     private const float EXTRA = 2f;
 
@@ -47,7 +47,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
 
         Projectile.hide = true;
 
-        ShouldIncreaseWreathPoints = false;
+        ShouldChargeWreath = false;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {

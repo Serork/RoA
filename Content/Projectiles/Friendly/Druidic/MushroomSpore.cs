@@ -11,7 +11,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Druidic;
 
-sealed class MushroomSpore : NatureProjectile {
+sealed class MushroomSpore : DruidicProjectile {
     private enum State {
         Direct,
         Float

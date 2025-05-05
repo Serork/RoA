@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
 using RoA.Core;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using System;
