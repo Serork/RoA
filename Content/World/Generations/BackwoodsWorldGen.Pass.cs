@@ -4664,7 +4664,19 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY;
-                if (j > minY - EdgeY && j < CenterY + EdgeY && tile.WallType == WallID.None) {
+                bool flag = true;
+                for (int checkX = i - 5; checkX < i + 6; checkX++) {
+                    if (!flag) {
+                        break;
+                    }
+                    for (int checkY = j - 5; checkY < j + 6; checkY++) {
+                        if (WorldGenHelper.GetTileSafely(checkX, checkY).WallType == WallID.CrimstoneUnsafe) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                }
+                if (j > minY - EdgeY && j < CenterY + EdgeY && tile.WallType == WallID.None && flag) {
                     tile.WallType = _dirtWallType;
                 }
             }
