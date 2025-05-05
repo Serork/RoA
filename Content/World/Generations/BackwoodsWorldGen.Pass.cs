@@ -1404,10 +1404,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                     }
                                     else {
                                         WorldGenHelper.ReplaceTile(i, j, _grassTileType);
+                                        WorldGenHelper.GetTileSafely(i, j).WallType = _grassWallType;
                                     }
                                 }
                                 if (WorldGenHelper.ActiveTile(i + i2, j + j2, TileID.Dirt)) {
                                     WorldGenHelper.ReplaceTile(i + i2, j + j2, _grassTileType);
+                                    WorldGenHelper.GetTileSafely(i + i2, j + j2).WallType = _grassWallType;
                                 }
                             }
                         }
