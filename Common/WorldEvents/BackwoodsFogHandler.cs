@@ -162,8 +162,12 @@ sealed class BackwoodsFogHandler : ModSystem {
     public override void PostUpdatePlayers() {
         if (Opacity > 0f) {
             Player player = Main.LocalPlayer;
+            VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
             if (!player.InModBiome<BackwoodsBiome>() && Opacity < 0.01f) {
                 Opacity = 0f;
+                if (Main.netMode != NetmodeID.Server) {
+                    localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero);
+                }
                 return;
             }
             if (Main.netMode != NetmodeID.Server) {
@@ -183,7 +187,6 @@ sealed class BackwoodsFogHandler : ModSystem {
                         Opacity2 = 0f;
                     }
                 }
-                VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
                 localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero);
             }
 

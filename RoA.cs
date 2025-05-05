@@ -2,6 +2,7 @@ using MonoMod.RuntimeDetour;
 
 using ReLogic.Content.Sources;
 
+using RoA.Common.Crossmod;
 using RoA.Common.Networking;
 using RoA.Core;
 
@@ -42,6 +43,8 @@ sealed partial class RoA : Mod {
         DoBossChecklistIntegration();
         DoMusicDisplayIntegration();
     }
+
+    public override object Call(params object[] args) => DruidModCalls.Call(args);
 
     public static Hook Detour(MethodInfo source, MethodInfo target) {
         Hook hook = new(source, target);
