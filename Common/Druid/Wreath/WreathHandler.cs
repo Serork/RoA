@@ -412,6 +412,20 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
+    private BaseRodProjectile? GetHoldRodStaff() {
+        BaseRodProjectile? rodProjectile = null;
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            if (projectile.owner != Player.whoAmI) {
+                continue;
+            }
+            if (projectile.ModProjectile is BaseRodProjectile baseRodProjectile) {
+                rodProjectile = baseRodProjectile;
+                break;
+            }
+        }
+        return rodProjectile;
+    }
+
     public override void PostUpdateEquips() {
         bool alt = ModContent.GetInstance<RoAClientConfig>().WreathSoundMode == RoAClientConfig.WreathSoundModes.Alt;
         if (_useAltSounds != alt) {
@@ -492,16 +506,7 @@ sealed class WreathHandler : ModPlayer {
             Reset(true);
         }
         else if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
-            BaseRodProjectile? rodProjectile = null;
-            foreach (Projectile projectile in Main.ActiveProjectiles) {
-                if (projectile.owner != Player.whoAmI) {
-                    continue;
-                }
-                if (projectile.ModProjectile is BaseRodProjectile baseRodProjectile) {
-                    rodProjectile = baseRodProjectile;
-                    break;
-                }
-            }
+            BaseRodProjectile? rodProjectile = GetHoldRodStaff();
             bool flag = rodProjectile == null;
             bool flag2 = !flag && !rodProjectile.PreparingAttack;
             _stayTime -= TimeSystem.LogicDeltaTime * (flag2 ? 0.5f : 1f);
@@ -676,6 +681,10 @@ sealed class WreathHandler : ModPlayer {
         float value2 = TimeSystem.LogicDeltaTime * _currentChangingMult * Math.Max((byte)1, _boost);
         if (StartSlowlyIncreasingUntilFull) {
             value2 *= 0.15f;
+        }
+        BaseRodProjectile? rodProjectile = GetHoldRodStaff();
+        if (rodProjectile != null && rodProjectile.PreparingAttack) {
+            value2 *= 0.2f;
         }
         _shouldSync = true;
         _currentChangingTime -= value2;
