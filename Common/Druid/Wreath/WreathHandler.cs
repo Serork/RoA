@@ -683,7 +683,7 @@ sealed class WreathHandler : ModPlayer {
             value2 *= 0.15f;
         }
         BaseRodProjectile? rodProjectile = GetHeldRodStaff();
-        if (rodProjectile != null && rodProjectile.PreparingAttack) {
+        if ((_shouldDecrease || _shouldDecrease2) && rodProjectile != null && rodProjectile.PreparingAttack) {
             value2 *= 0.2f;
         }
         _shouldSync = true;
