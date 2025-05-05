@@ -246,15 +246,17 @@ sealed class WreathHandler : ModPlayer {
         }
 
         try {
-            CrossmodNatureProjectileHandler handler = proj.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
-            if (!(!handler.ShouldChargeWreath && !nonDataReset)) {
-                ClawsReset(proj, nonDataReset);
+            if (CrossmodNatureContent.IsProjectileNature(proj)) {
+                CrossmodNatureProjectileHandler handler = proj.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
+                if (!(!handler.ShouldChargeWreath && !nonDataReset)) {
+                    ClawsReset(proj, nonDataReset);
 
-                IncreaseResourceValue(handler.WreathFillingFine);
+                    IncreaseResourceValue(handler.WreathFillingFine);
 
-                if (_hitEffectTimer <= 0) {
-                    MakeDustsOnHit();
-                    _hitEffectTimer = 3;
+                    if (_hitEffectTimer <= 0) {
+                        MakeDustsOnHit();
+                        _hitEffectTimer = 3;
+                    }
                 }
             }
         }

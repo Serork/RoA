@@ -76,6 +76,24 @@ public static class DruidModCalls {
                 DruidicProjectile.NatureProjectileSetValues(projectile, shouldChargeWreath ?? true, shouldApplyAttachedItemDamage ?? true, wreathFillingFine ?? 0f);
                 return success;
             }
+            if (message == "GetAttachedItemToDruidicProjectile") {
+                if (args[1] is not Projectile projectile) {
+                    throw new Exception($"{args[1]} is not projectile");
+                }
+                if (!CrossmodNatureContent.IsProjectileNature(projectile)) {
+                    throw new Exception($"Projectile is not nature");
+                }
+                return projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedItem;
+            }
+            if (message == "GetDruidicWeaponBasePotentialDamage") {
+                if (args[1] is not Item item) {
+                    throw new Exception($"{args[1]} is not Item");
+                }
+                if (args[2] is not Player player) {
+                    throw new Exception($"{args[2]} is not Player");
+                }
+                return NatureWeaponHandler.GetBasePotentialDamage(item, player);
+            }
         }
         catch (Exception e) {
             riseOfAges.Logger.Error($"Call Error: {e.StackTrace} {e.Message}");

@@ -116,12 +116,14 @@ abstract class DruidicProjectile : ModProjectile {
         }
 
         try {
-            CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
-            if (handler.ShouldChargeWreath) {
-                writer.Write(handler._syncAttachedItem);
-                if (handler._syncAttachedItem) {
-                    writer.Write(handler.WreathFillingFine);
-                    ItemIO.Send(handler.AttachedItem, writer, true);
+            if (CrossmodNatureContent.IsProjectileNature(projectile)) {
+                CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
+                if (handler.ShouldChargeWreath) {
+                    writer.Write(handler._syncAttachedItem);
+                    if (handler._syncAttachedItem) {
+                        writer.Write(handler.WreathFillingFine);
+                        ItemIO.Send(handler.AttachedItem, writer, true);
+                    }
                 }
             }
         }
@@ -145,12 +147,14 @@ abstract class DruidicProjectile : ModProjectile {
         }
 
         try {
-            CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
-            if (handler.ShouldChargeWreath) {
-                handler._syncAttachedItem = reader.ReadBoolean();
-                if (handler._syncAttachedItem) {
-                    handler.WreathFillingFine = reader.ReadSingle();
-                    handler.AttachedItem = ItemIO.Receive(reader, true);
+            if (CrossmodNatureContent.IsProjectileNature(projectile)) {
+                CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
+                if (handler.ShouldChargeWreath) {
+                    handler._syncAttachedItem = reader.ReadBoolean();
+                    if (handler._syncAttachedItem) {
+                        handler.WreathFillingFine = reader.ReadSingle();
+                        handler.AttachedItem = ItemIO.Receive(reader, true);
+                    }
                 }
             }
         }
@@ -193,16 +197,18 @@ abstract class DruidicProjectile : ModProjectile {
         }
 
         try {
-            CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
-            if (projectile.owner == Main.myPlayer) {
-                if (handler.ShouldChargeWreath) {
-                    Item item = projectile.GetOwnerAsPlayer().GetSelectedItem();
-                    if (!(item.IsEmpty() || !item.IsADruidicWeapon())) {
-                        handler.AttachedItem = item;
-                        float fillingRate = NatureWeaponHandler.GetFillingRate(handler.AttachedItem);
-                        handler.WreathFillingFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
-                        handler._syncAttachedItem = true;
-                        projectile.netUpdate = true;
+            if (CrossmodNatureContent.IsProjectileNature(projectile)) {
+                CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
+                if (projectile.owner == Main.myPlayer) {
+                    if (handler.ShouldChargeWreath) {
+                        Item item = projectile.GetOwnerAsPlayer().GetSelectedItem();
+                        if (!(item.IsEmpty() || !item.IsADruidicWeapon())) {
+                            handler.AttachedItem = item;
+                            float fillingRate = NatureWeaponHandler.GetFillingRate(handler.AttachedItem);
+                            handler.WreathFillingFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
+                            handler._syncAttachedItem = true;
+                            projectile.netUpdate = true;
+                        }
                     }
                 }
             }
@@ -237,17 +243,19 @@ abstract class DruidicProjectile : ModProjectile {
         }
 
         try {
-            CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
-            if (handler.ShouldChargeWreath) {
-                if (handler.AttachedItem != null) {
-                    if (handler.ShouldApplyAttachedItemDamage) {
-                        projectile.damage = NatureWeaponHandler.GetNatureDamage(handler.AttachedItem, Main.player[projectile.owner]);
+            if (CrossmodNatureContent.IsProjectileNature(projectile)) {
+                CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
+                if (handler.ShouldChargeWreath) {
+                    if (handler.AttachedItem != null) {
+                        if (handler.ShouldApplyAttachedItemDamage) {
+                            projectile.damage = NatureWeaponHandler.GetNatureDamage(handler.AttachedItem, Main.player[projectile.owner]);
+                        }
+                        handler._syncAttachedItem = false;
+                        projectile.netUpdate = true;
                     }
-                    handler._syncAttachedItem = false;
-                    projectile.netUpdate = true;
-                }
-                else {
-                    handler._syncAttachedItem = true;
+                    else {
+                        handler._syncAttachedItem = true;
+                    }
                 }
             }
         }
