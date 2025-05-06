@@ -18,12 +18,12 @@ namespace RoA.Common.Druid;
 
 sealed partial class NatureWeaponHandler : GlobalItem {
     private ushort _basePotentialDamage;
-    private float _fillingRate = 1f;
+    private float _fillingRateModifier = 1f;
     private ushort _basePotentialUseSpeed;
 
     internal DruidicPrefix ActivePrefix { get; set; }
 
-    public float FillingRate => _fillingRate;
+    public float FillingRateModifier => _fillingRateModifier;
     public ushort PotentialDamage => _basePotentialDamage;
 
     public override bool InstancePerEntity => true;
@@ -64,7 +64,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static float GetFillingRate(Item item) {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
         DruidicPrefix activePrefix = handler.ActivePrefix;
-        float result = handler._fillingRate;
+        float result = handler._fillingRateModifier;
         if (activePrefix != null) {
             result *= activePrefix._fillingRateMult;
         }
@@ -158,9 +158,9 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = potentialDamage/*(ushort)Math.Max(potentialDamage, GetItemDamage(item, Main.LocalPlayer))*/;
     public static void SetPotentialUseSpeed(Item item, ushort potentialUseTime) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialUseSpeed = potentialUseTime/*(ushort)Math.Min(potentialUseTime, GetItemUseTime(item))*/;
 
-    public static void SetFillingRate(Item item, float fillingRate) {
+    public static void SetFillingRateModifier(Item item, float fillingRateModifier) {
         NatureWeaponHandler self = item.GetGlobalItem<NatureWeaponHandler>();
-        self._fillingRate = Math.Clamp(fillingRate, 0f, 2f);
+        self._fillingRateModifier = Math.Clamp(fillingRateModifier, 0f, 2f);
     }
 
     public override void ModifyWeaponKnockback(Item item, Player player, ref StatModifier knockback) {

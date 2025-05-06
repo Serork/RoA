@@ -46,7 +46,7 @@ abstract class TulipBaseItem<T> : BaseRodItem<T> where T : BaseRodProjectile {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TulipFlower>();
 
     protected override void SafeSetDefaults() {
-        NatureWeaponHandler.SetFillingRate(Item, 0.12f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.12f);
     }
 }
 

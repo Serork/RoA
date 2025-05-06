@@ -28,7 +28,7 @@ sealed class CrimsonRod : NatureItem {
         Item.value = Item.sellPrice(0, 1, 50, 0);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 7);
-        NatureWeaponHandler.SetFillingRate(Item, 0.05f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.05f);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

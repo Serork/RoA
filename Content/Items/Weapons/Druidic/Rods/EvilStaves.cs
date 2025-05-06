@@ -24,7 +24,7 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
         item.SetWeaponValues(8, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(item, 28);
-        NatureWeaponHandler.SetFillingRate(item, 0.2f);
+        NatureWeaponHandler.SetFillingRateModifier(item, 0.2f);
 
         item.rare = ItemRarityID.Green;
 

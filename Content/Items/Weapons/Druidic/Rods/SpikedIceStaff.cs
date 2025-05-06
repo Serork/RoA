@@ -26,7 +26,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         Item.SetDefaultOthers(Item.sellPrice(silver: 15), ItemRarityID.Blue);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
-        NatureWeaponHandler.SetFillingRate(Item, 0.4f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.4f);
 
         Item.rare = ItemRarityID.Blue;
 

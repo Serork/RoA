@@ -26,6 +26,6 @@ sealed class Vilethorn : NatureItem {
         Item.value = Item.sellPrice(0, 1, 50, 0);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 9);
-        NatureWeaponHandler.SetFillingRate(Item, 0.06f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.06f);
     }
 }

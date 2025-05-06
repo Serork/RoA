@@ -29,7 +29,7 @@ sealed class ElderwoodClaws : BaseClawsItem {
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 16);
-        NatureWeaponHandler.SetFillingRate(Item, 1f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));

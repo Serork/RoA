@@ -39,7 +39,7 @@ sealed class RagingBoots : NatureItem {
         Item.accessory = true;
 
         NatureWeaponHandler.SetPotentialDamage(Item, 45);
-        NatureWeaponHandler.SetFillingRate(Item, 0.25f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.25f);
 
         Item.value = Item.sellPrice(0, 1, 75, 0);
     }

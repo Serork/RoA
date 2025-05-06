@@ -22,7 +22,7 @@ sealed class RipePumpkin : NatureItem {
         Item.SetDefaultOthers(Item.sellPrice(silver: 20), ItemRarityID.Blue);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 24);
-        NatureWeaponHandler.SetFillingRate(Item, 0.5f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.5f);
 
         Item.value = Item.sellPrice(0, 0, 20, 0);
     }

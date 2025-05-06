@@ -28,7 +28,7 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
         Item.SetWeaponValues(12, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 30);
-        NatureWeaponHandler.SetFillingRate(Item, 0.15f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.15f);
 
         Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(0, 0, 65, 0);

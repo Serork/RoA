@@ -50,7 +50,7 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
         Item.staff[Item.type] = true;
 
         NatureWeaponHandler.SetPotentialDamage(Item, 60);
-        NatureWeaponHandler.SetFillingRate(Item, 0.2f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
     }
 
     public override void MeleeEffects(Player player, Rectangle hitbox) {

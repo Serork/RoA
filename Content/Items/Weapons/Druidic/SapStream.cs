@@ -24,7 +24,7 @@ sealed class SapStream : NatureItem {
 
         Item.damage = 6;
         NatureWeaponHandler.SetPotentialDamage(Item, 16);
-        NatureWeaponHandler.SetFillingRate(Item, 0.25f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.25f);
 
         Item.rare = ItemRarityID.Blue;
         Item.UseSound = SoundID.Item20;

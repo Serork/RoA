@@ -47,7 +47,7 @@ sealed class PineCone : NatureItem {
         Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.White);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 28);
-        NatureWeaponHandler.SetFillingRate(Item, 0.8f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.8f);
 
         Item.value = Item.sellPrice(0, 0, 15, 0);
     }

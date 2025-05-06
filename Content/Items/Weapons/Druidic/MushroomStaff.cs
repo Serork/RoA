@@ -21,7 +21,7 @@ sealed class MushroomStaff : NatureItem {
         Item.SetDefaultOthers(Item.sellPrice(silver: 10), ItemRarityID.Blue);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 16);
-        NatureWeaponHandler.SetFillingRate(Item, 0.2f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
 
         Item.value = Item.sellPrice(0, 0, 20, 0);
     }

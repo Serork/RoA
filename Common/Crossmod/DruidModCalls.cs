@@ -29,31 +29,29 @@ public static class DruidModCalls {
                 item.MakeItemDruidicWeapon();
                 return success;
             }
-            if (message == "SetDruidicWeaponPotentialDamage") {
+            if (message == "SetDruidicWeaponValues") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
                 }
                 if (!CrossmodNatureContent.IsItemNature(item)) {
                     throw new Exception($"Item is not nature");
                 }
-                if (args[2] is not ushort damage) {
+                if (args[2] is not ushort potentialDamage) {
                     throw new Exception($"{args[2]} is not ushort");
                 }
-                NatureWeaponHandler.SetPotentialDamage(item, damage);
+                float? fillingRateModifier = args[3] as float?;
+                NatureWeaponHandler.SetPotentialDamage(item, potentialDamage);
+                NatureWeaponHandler.SetFillingRateModifier(item, fillingRateModifier ?? 1f);
                 return success;
             }
-            if (message == "SetDruidicWeaponFillingRate") {
+            if (message == "GetDruidicWeaponBasePotentialDamage") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
                 }
-                if (!CrossmodNatureContent.IsItemNature(item)) {
-                    throw new Exception($"Item is not nature");
+                if (args[2] is not Player player) {
+                    throw new Exception($"{args[2]} is not Player");
                 }
-                if (args[2] is not float fillingRate) {
-                    throw new Exception($"{args[2]} is not float");
-                }
-                NatureWeaponHandler.SetFillingRate(item, fillingRate);
-                return success;
+                return NatureWeaponHandler.GetBasePotentialDamage(item, player);
             }
             if (message == "MakeProjectileDruidicDamageable") {
                 if (args[1] is not Projectile projectile) {
@@ -94,15 +92,6 @@ public static class DruidModCalls {
                     throw new Exception($"Projectile is not nature");
                 }
                 return projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
-            }
-            if (message == "GetDruidicWeaponBasePotentialDamage") {
-                if (args[1] is not Item item) {
-                    throw new Exception($"{args[1]} is not Item");
-                }
-                if (args[2] is not Player player) {
-                    throw new Exception($"{args[2]} is not Player");
-                }
-                return NatureWeaponHandler.GetBasePotentialDamage(item, player);
             }
         }
         catch (Exception e) {

@@ -28,7 +28,7 @@ sealed class HellfireClaws : BaseClawsItem {
         Item.SetDefaultToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 34);
-        NatureWeaponHandler.SetFillingRate(Item, 1f);
+        NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
     public override bool CanUseItem(Player player) => base.CanUseItem(player) && player.ownedProjectileCounts[ModContent.ProjectileType<HellfireClawsSlash>()] < 1;
