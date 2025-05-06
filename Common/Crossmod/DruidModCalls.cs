@@ -44,6 +44,15 @@ public static class DruidModCalls {
                 NatureWeaponHandler.SetFillingRateModifier(item, fillingRateModifier ?? 1f);
                 return success;
             }
+            if (message == "GetDruidicWeaponBaseDamage") {
+                if (args[1] is not Item item) {
+                    throw new Exception($"{args[1]} is not Item");
+                }
+                if (args[2] is not Player player) {
+                    throw new Exception($"{args[2]} is not Player");
+                }
+                return NatureWeaponHandler.GetFinalBaseDamage(item, player);
+            }
             if (message == "GetDruidicWeaponBasePotentialDamage") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
@@ -53,12 +62,21 @@ public static class DruidModCalls {
                 }
                 return NatureWeaponHandler.GetBasePotentialDamage(item, player);
             }
-            if (message == "MakeProjectileDruidicDamageable") {
+            if (message == "GetDruidicWeaponCurrentDamage") {
+                if (args[1] is not Item item) {
+                    throw new Exception($"{args[1]} is not Item");
+                }
+                if (args[2] is not Player player) {
+                    throw new Exception($"{args[2]} is not Player");
+                }
+                return NatureWeaponHandler.GetNatureDamage(item, player);
+            }
+            if (message == "MakeProjectileDruidic") {
                 if (args[1] is not Projectile projectile) {
                     throw new Exception($"{args[1]} is not projectile");
                 }
                 CrossmodNatureContent.RegisterNatureProjectile(projectile);
-                projectile.MakeProjectileDruidicDamageable();
+                projectile.MakeProjectileDruidic();
                 return success;
             }
             if (message == "SetDruidicProjectileValues") {

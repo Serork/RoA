@@ -291,7 +291,7 @@ abstract class DruidicProjectile : ModProjectile {
     public sealed override void SetDefaults() {
         SafeSetDefaults();
 
-        Projectile.MakeProjectileDruidicDamageable();
+        Projectile.MakeProjectileDruidic();
 
         SafeSetDefaults2();
         SafeSetDefaults3();
