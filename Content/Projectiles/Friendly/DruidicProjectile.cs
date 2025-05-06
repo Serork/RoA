@@ -187,8 +187,10 @@ abstract class DruidicProjectile : ModProjectile {
                     }
                 }
             setWreathFillingRateFine:
-                float fillingRate = NatureWeaponHandler.GetFillingRate(natureProjectile.AttachedNatureWeapon);
-                natureProjectile.WreathFillingFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
+                if (natureProjectile.AttachedNatureWeapon != null) {
+                    float fillingRate = NatureWeaponHandler.GetFillingRate(natureProjectile.AttachedNatureWeapon);
+                    natureProjectile.WreathFillingFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
+                }
             }
             return;
         }
@@ -211,8 +213,10 @@ abstract class DruidicProjectile : ModProjectile {
                         }
                     }
                 setWreathFillingRateFine:
-                    float fillingRate = NatureWeaponHandler.GetFillingRate(handler.AttachedNatureWeapon);
-                    handler.WreathFillingFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
+                    if (handler.AttachedNatureWeapon != null) {
+                        float fillingRate = NatureWeaponHandler.GetFillingRate(handler.AttachedNatureWeapon);
+                        handler.WreathFillingFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
+                    }
                 }
             }
         }
