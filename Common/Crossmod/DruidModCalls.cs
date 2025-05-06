@@ -76,6 +76,16 @@ public static class DruidModCalls {
                 DruidicProjectile.NatureProjectileSetValues(projectile, shouldChargeWreath ?? true, shouldApplyAttachedItemDamage ?? true, wreathFillingFine ?? 0f);
                 return success;
             }
+            if (message == "SetAttachedItemToDruidicProjectile") {
+                if (args[1] is not Projectile projectile) {
+                    throw new Exception($"{args[1]} is not Projectile");
+                }
+                if (args[2] is not Item item) {
+                    throw new Exception($"{args[2]} is not Item");
+                }
+                DruidicProjectile.NatureProjectileSetItem(projectile, item);
+                return success;
+            }
             if (message == "GetAttachedItemToDruidicProjectile") {
                 if (args[1] is not Projectile projectile) {
                     throw new Exception($"{args[1]} is not projectile");
